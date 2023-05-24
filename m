@@ -2,86 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107E970EF90
-	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 09:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C2870EFF2
+	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 09:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239670AbjEXHiM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 May 2023 03:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S239656AbjEXHyY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 May 2023 03:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239861AbjEXHiL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 03:38:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA3AA;
-        Wed, 24 May 2023 00:38:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D31A63A1D;
-        Wed, 24 May 2023 07:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38090C433D2;
-        Wed, 24 May 2023 07:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684913887;
-        bh=Hbz8LEfGaSM02H3iNlB0mthVRySAG3og3BSuDmEKWfQ=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=RsujwDTA38sOCzbP6mo9BclpTmK6Ngysw2u951NSNd9DsKSy2KQ91nstwobR/85HK
-         EBQklxmOxubaVti2y3WGG+Dyra4GxlLKjNpd5JspoYf7pGt9Da25qdGegQtqUYvaAN
-         tabXzpnW6s56sBxjY9NPD1AjoAQI7LqPpyzwfu3QILxMgdHYD2VjIbbJQnabtyv3Nx
-         eFe6D2UuGMYyzh+wCBAAJtGDH/f880TuJgbLfjPFBx4hGD5slX+uvZP39ScVJ8ZB7e
-         TGZkCb6e9DxzdAr6PN4n2GaLtHsWTBja9NPnqPskYNrW0K1hlbBuu2BL7RMC4/c1ei
-         jWG9gvoUkZ9Jg==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235456AbjEXHyX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 03:54:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036CB93;
+        Wed, 24 May 2023 00:54:22 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O7j72e000529;
+        Wed, 24 May 2023 07:54:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=d5QAF16BJKDuMg4CE8wCgJ8dMnnIFqFme5RRke6iDFA=;
+ b=XEyL8zw10tjh/hvNzSk2aRRknxFC/Jzx7CglgwPl+o4F9J6gXLd0FkldvvZ+QF5DBplU
+ MkzdWKohEv94lBW583NzTdIRTXq7dmRJTLbjPf+VlsVF9GKKmW7WY1BBu+BkU+RVie55
+ LiSuJdSFklzWazs1ffSK2IfUFv0bTAxPns0TnQu8MTbaeYuawud/yxbmewcxdKAinfkH
+ z3jRK3Ng8c78ySGIGdPUrIrUHaEZmyotydXsnl437ht/90XmwjCO6IPhSRiWSUAeXoJg
+ r0Xe2RiO/cGsH7RJ2DRnKs00YP7+qDz0MO6nrsOmw8qCaqyk0jQEl/OAndDazXLOTvEf zQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qse4kgmmv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 07:54:18 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34O2v3Le000965;
+        Wed, 24 May 2023 07:54:15 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qppcf1hc6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 07:54:15 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34O7sCjo30802350
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 May 2023 07:54:12 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E66F020043;
+        Wed, 24 May 2023 07:54:11 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B53020040;
+        Wed, 24 May 2023 07:54:11 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 24 May 2023 07:54:11 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: [PATCH net-next] s390/ism: Set DMA coherent mask
+Date:   Wed, 24 May 2023 09:54:10 +0200
+Message-Id: <20230524075411.3734141-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IP9jPuNTbIrXKI-7-cVVuXaYW72dL7NF
+X-Proofpoint-ORIG-GUID: IP9jPuNTbIrXKI-7-cVVuXaYW72dL7NF
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 43/44] wireless: add HAS_IOPORT dependencies
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230522105049.1467313-44-schnelle@linux.ibm.com>
-References: <20230522105049.1467313-44-schnelle@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jouni Malinen <j@w1.fi>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-wireless@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168491387892.8984.13248048073287184221.kvalo@kernel.org>
-Date:   Wed, 24 May 2023 07:38:04 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_03,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=955
+ lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 phishscore=0
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305240064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+A future change will convert the DMA API implementation from the
+architecture specific arch/s390/pci/pci_dma.c to using the common code
+drivers/iommu/dma-iommu.c which the utilizes the same IOMMU hardware
+through the s390-iommu driver. Unlike the s390 specific DMA API this
+requires devices to correctly set the coherent mask to be allowed to use
+IOVAs >2^32 in dma_alloc_coherent(). This was however not done for ISM
+devices. ISM requires such addresses since currently the DMA aperture
+for PCI devices starts at 2^32 and all calls to dma_alloc_coherent()
+would thus fail.
 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
-> 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Acked-by: Kalle Valo <kvalo@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Link: https://lore.kernel.org/all/20230310-dma_iommu-v9-1-65bb8edd2beb@linux.ibm.com/
+Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+Note: This was previously sent and reviewed as part of multiple versions of the
+s390 DMA API conversion series which requires this change as a pre-requisite
+with the latest version at the Link. Sending separately to add the net-next
+prefix so this can be integrated.
 
-Now that the dependencies are in v6.4-rc1 my plan is to take this to
-wireless-next, is that ok for everyone?
+ drivers/s390/net/ism_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
+index 8acb9eba691b..1399b5dc646c 100644
+--- a/drivers/s390/net/ism_drv.c
++++ b/drivers/s390/net/ism_drv.c
+@@ -660,7 +660,7 @@ static int ism_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (ret)
+ 		goto err_disable;
+ 
+-	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
++	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (ret)
+ 		goto err_resource;
+ 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230522105049.1467313-44-schnelle@linux.ibm.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.39.2
 
