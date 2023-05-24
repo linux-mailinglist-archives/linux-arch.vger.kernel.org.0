@@ -2,86 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2AD70F5C1
-	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 13:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9C070F6F4
+	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 14:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjEXL6a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 May 2023 07:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S231735AbjEXMx5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 May 2023 08:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEXL63 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 07:58:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEB3135;
-        Wed, 24 May 2023 04:58:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 802D622168;
-        Wed, 24 May 2023 11:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684929505; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rH18iBwWnn9zYEQ2bRQgcgXCwVXM3ls6ER1KLLT/r60=;
-        b=WMTRqdgWgo5Xv1JGWXGXa/4leJ+kA3Fr2EvuxoJ+Aqe6NU5zbCpx8cdBkJRqivz3zlmCI8
-        fYweNr+iUlPQUznzgqAE9D1FG4L+KMokWqHKNGTedF59FJDkPiQa49qcPJoEz7QSNuY/TE
-        11uKzpPFgkG44/ySFC88vJeQKALxzNA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684929505;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rH18iBwWnn9zYEQ2bRQgcgXCwVXM3ls6ER1KLLT/r60=;
-        b=5OLIE73rOKr/k1ojPtkzX/HPu5nXWbAb/WgNuvY9KLod1eci7r+KTUnNLWeyZDjI8HJPtV
-        go+jXuaQCYw1m7Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F3D0D13425;
-        Wed, 24 May 2023 11:58:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cu/HOuD7bWSZVgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 11:58:24 +0000
-Message-ID: <18c33bf0-0c7e-7584-5149-33cf77b50b8a@suse.cz>
-Date:   Wed, 24 May 2023 13:58:24 +0200
+        with ESMTP id S231235AbjEXMx4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 08:53:56 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA0C9E
+        for <linux-arch@vger.kernel.org>; Wed, 24 May 2023 05:53:55 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-56204ac465fso12912717b3.2
+        for <linux-arch@vger.kernel.org>; Wed, 24 May 2023 05:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684932834; x=1687524834;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6k7CwLpjQ+oPFx1tTum0+p01nKq3VVI7v5cgsSAfjNo=;
+        b=uWMJa+LDM2gRpRToobsw29vCAykfT7ArF/5bmR543aY2MOzA64WG8PyYDRrSCbv5Ue
+         Dfvzo5iY0u8OwJh/Usa6lm7EdLSChTnGrEz2jzp6BvPcJkPqFwsqs3Qsp6m8MaB7rsVe
+         Q30nnGF4Q1X8bmtQY4DFlFDiPOWhATsr6lDlVzzEXe3o1eHyS2CHxzaE0yFSt2V70z+u
+         WJ3FVPyWSm6TsN+Z2cxQZKVi782dXQHli55PJmrocqVNgIsBmSnATCMvQI5VdFkx01cp
+         i42stvfX2iLo4xriYKEHP6QY07irj7VIOBgpyAqhKU4jfqvS3UKGZLvMfLg2TeD5ZZyf
+         GMiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684932834; x=1687524834;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6k7CwLpjQ+oPFx1tTum0+p01nKq3VVI7v5cgsSAfjNo=;
+        b=UFp7RFVh6FscU/b+O83e69DOusRIZV13EavbCoWdgTszoLPO/8/g3DoffGjU8NFFpz
+         ul84iDxGH6USlx5+LiVcLdpgiutSNCJeOU7gwoIYr1oCQZMU/CQdrP9t8xw+Q50066hw
+         zAnwIK01Bgc3zxU9G3VKBHpHO2Fd3OSXzBC7oLEiSP1dGXx4m0xESzRKqL875OSPrBO0
+         XfnT8QlVs2zsM9iteeOfR3qov4QziCgzis1mtXpjtxOOoatzBAXkeHeAIRkzp88LGkq9
+         mbOF16odnhhwaHjoIb/pGzq+V4uTu9nd282DNAjzC5PMbWZC7IETCumcRRYMwVBLkLYG
+         XlFw==
+X-Gm-Message-State: AC+VfDwQpZyZM6yNWILZslNLewbqBsTRTaoE2ZlRTOM1VTjG+GE5QmlJ
+        fBepkZgkj07ize0pXFojPQcB5UssRtShW3dUo+KZxg==
+X-Google-Smtp-Source: ACHHUZ6z6oKt9Hy3F5Ix9UnojbF6veGj5yOEPPCsEXLq14Lr8kcj2dPHJnCRCMemy7klqa4CHkog7mF+U8MQxAM2Elw=
+X-Received: by 2002:a0d:f6c3:0:b0:55a:18e2:cdf9 with SMTP id
+ g186-20020a0df6c3000000b0055a18e2cdf9mr14705166ywf.49.1684932834217; Wed, 24
+ May 2023 05:53:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 09/11] mm/slub: Fold slab_update_freelist()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 24 May 2023 14:53:43 +0200
+Message-ID: <CACRpkdahOz++MD7f=Bmq2f_nT=TQkY5f5vT5PL=YEB4R2B7Vcw@mail.gmail.com>
+Subject: [GIT PULL] Convert virt_to_phys() into static inlines
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.520976397@infradead.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230515080554.520976397@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Ungerer <gerg@linux-m68k.org>, linux-mm@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,171 +71,154 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/15/23 09:57, Peter Zijlstra wrote:
-> The two functions slab_update_freelist() and __slab_update_freelist()
-> are nearly identical, fold and add a boolean argument and rely on
-> constant propagation.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Hi Arnd,
 
-Something like that has been tried before and the result:
-https://lore.kernel.org/all/CAHk-=wiJLqL2cUhJbvpyPQpkbVOu1rVSzgO2=S2jC55hneLtfQ@mail.gmail.com/
+I am pretty confident of this branch now, so this needs some
+rotation in linux-next for the v6.5 kernel. No errors from zeroday!
+So please pull it into the arch tree for v6.5.
 
-Your parameter is not called 'locked' but 'irq_save' which is better, but
-that's just one detail.
+If it feels shaky anyway I can set up a separate branch to pull it
+into linux-next. I heard you have a way to shake out unknown
+issues with stuff like this using randconfigs...
 
-After your refactoring in 08/11 which puts most of the code into
-__update_freelist_fast() and _slow() I'd say the result is not so bad already.
+Yours,
+Linus Walleij
 
-BTW I have some suspicion that some SLUB code is based on assumptions that
-are no longer true these days. IIRC I've seen some microbenchmark results a
-while ago that showed that disabling/enabling irqs is surprisingly (to me)
-very cheap today, so maybe it's not so useful to keep doing the
-this_cpu_cmpxchg128 for the struct kmem_cache_cpu operations (less so for
-struct slab cmpxchg128 where actually different cpus may be involved). But
-it needs a closer look.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-> ---
->  mm/slub.c |   80 +++++++++++++++++++++-----------------------------------------
->  1 file changed, 28 insertions(+), 52 deletions(-)
-> 
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -559,53 +559,29 @@ __update_freelist_slow(struct slab *slab
->   * allocation/ free operation in hardirq context. Therefore nothing can
->   * interrupt the operation.
->   */
-> -static inline bool __slab_update_freelist(struct kmem_cache *s, struct slab *slab,
-> -		void *freelist_old, unsigned long counters_old,
-> -		void *freelist_new, unsigned long counters_new,
-> -		const char *n)
-> +static __always_inline
-> +bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
-> +			  void *freelist_old, unsigned long counters_old,
-> +			  void *freelist_new, unsigned long counters_new,
-> +			  bool irq_save, const char *n)
->  {
->  	bool ret;
->  
-> -	if (USE_LOCKLESS_FAST_PATH())
-> +	if (!irq_save && USE_LOCKLESS_FAST_PATH())
->  		lockdep_assert_irqs_disabled();
->  
->  	if (s->flags & __CMPXCHG_DOUBLE) {
->  		ret = __update_freelist_fast(slab, freelist_old, counters_old,
->  				            freelist_new, counters_new);
->  	} else {
-> -		ret = __update_freelist_slow(slab, freelist_old, counters_old,
-> -				            freelist_new, counters_new);
-> -	}
-> -	if (likely(ret))
-> -		return true;
-> -
-> -	cpu_relax();
-> -	stat(s, CMPXCHG_DOUBLE_FAIL);
-> -
-> -#ifdef SLUB_DEBUG_CMPXCHG
-> -	pr_info("%s %s: cmpxchg double redo ", n, s->name);
-> -#endif
-> -
-> -	return false;
-> -}
-> -
-> -static inline bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
-> -		void *freelist_old, unsigned long counters_old,
-> -		void *freelist_new, unsigned long counters_new,
-> -		const char *n)
-> -{
-> -	bool ret;
-> -
-> -	if (s->flags & __CMPXCHG_DOUBLE) {
-> -		ret = __update_freelist_fast(slab, freelist_old, counters_old,
-> -				            freelist_new, counters_new);
-> -	} else {
->  		unsigned long flags;
->  
-> -		local_irq_save(flags);
-> +		if (irq_save)
-> +			local_irq_save(flags);
->  		ret = __update_freelist_slow(slab, freelist_old, counters_old,
->  				            freelist_new, counters_new);
-> -		local_irq_restore(flags);
-> +		if (irq_save)
-> +			local_irq_restore(flags);
->  	}
->  	if (likely(ret))
->  		return true;
-> @@ -2250,10 +2226,10 @@ static inline void *acquire_slab(struct
->  	VM_BUG_ON(new.frozen);
->  	new.frozen = 1;
->  
-> -	if (!__slab_update_freelist(s, slab,
-> -			freelist, counters,
-> -			new.freelist, new.counters,
-> -			"acquire_slab"))
-> +	if (!slab_update_freelist(s, slab,
-> +				  freelist, counters,
-> +				  new.freelist, new.counters,
-> +				  false, "acquire_slab"))
->  		return NULL;
->  
->  	remove_partial(n, slab);
-> @@ -2577,9 +2553,9 @@ static void deactivate_slab(struct kmem_
->  
->  
->  	if (!slab_update_freelist(s, slab,
-> -				old.freelist, old.counters,
-> -				new.freelist, new.counters,
-> -				"unfreezing slab")) {
-> +				  old.freelist, old.counters,
-> +				  new.freelist, new.counters,
-> +				  true, "unfreezing slab")) {
->  		if (mode == M_PARTIAL)
->  			spin_unlock_irqrestore(&n->list_lock, flags);
->  		goto redo;
-> @@ -2633,10 +2609,10 @@ static void __unfreeze_partials(struct k
->  
->  			new.frozen = 0;
->  
-> -		} while (!__slab_update_freelist(s, slab,
-> -				old.freelist, old.counters,
-> -				new.freelist, new.counters,
-> -				"unfreezing slab"));
-> +		} while (!slab_update_freelist(s, slab,
-> +					       old.freelist, old.counters,
-> +					       new.freelist, new.counters,
-> +					       false, "unfreezing slab"));
->  
->  		if (unlikely(!new.inuse && n->nr_partial >= s->min_partial)) {
->  			slab->next = slab_to_discard;
-> @@ -3072,10 +3048,10 @@ static inline void *get_freelist(struct
->  		new.inuse = slab->objects;
->  		new.frozen = freelist != NULL;
->  
-> -	} while (!__slab_update_freelist(s, slab,
-> -		freelist, counters,
-> -		NULL, new.counters,
-> -		"get_freelist"));
-> +	} while (!slab_update_freelist(s, slab,
-> +				       freelist, counters,
-> +				       NULL, new.counters,
-> +				       false, "get_freelist"));
->  
->  	return freelist;
->  }
-> @@ -3666,9 +3642,9 @@ static void __slab_free(struct kmem_cach
->  		}
->  
->  	} while (!slab_update_freelist(s, slab,
-> -		prior, counters,
-> -		head, new.counters,
-> -		"__slab_free"));
-> +				       prior, counters,
-> +				       head, new.counters,
-> +				       true, "__slab_free"));
->  
->  	if (likely(!n)) {
->  
-> 
-> 
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+tags/virt-to-pfn-for-arch-v6.5
+
+for you to fetch changes up to 8968d8d2bb4f81035138966a18259859fb6bc1ee:
+
+  m68k/mm: Make pfn accessors static inlines (2023-05-24 14:41:55 +0200)
+
+----------------------------------------------------------------
+This is an attempt to harden the typing on virt_to_pfn()
+and pfn_to_virt().
+
+Making virt_to_pfn() a static inline taking a strongly typed
+(const void *) makes the contract of a passing a pointer of that
+type to the function explicit and exposes any misuse of the
+macro virt_to_pfn() acting polymorphic and accepting many types
+such as (void *), (unitptr_t) or (unsigned long) as arguments
+without warnings.
+
+For symmetry, we do the same with pfn_to_virt().
+
+The problem with this inconsistent typing was pointed out by
+Russell King:
+https://lore.kernel.org/linux-arm-kernel/YoJDKJXc0MJ2QZTb@shell.armlinux.org.uk/
+
+And confirmed by Andrew Morton:
+https://lore.kernel.org/linux-mm/20220701160004.2ffff4e5ab59a55499f4c736@linux-foundation.org/
+
+So the recognition of the problem is widespread.
+
+These platforms have been chosen as initial conversion targets:
+
+- ARM
+- ARM64/Aarch64
+- asm-generic (including for example x86)
+- m68k
+
+The idea is that if this goes in, it will block further misuse
+of the function signatures due to the large compile coverage,
+and then I can go in and fix the remaining architectures on a
+one-by-one basis.
+
+Some of the patches have been circulated before but were not
+picked up by subsystem maintainers, so now the arch tree is
+target for this series.
+
+It has passed zeroday builds after a lot of iterations in my
+personal tree, but there could be some randconfig outliers.
+New added or deeply hidden problems appear all the time so
+some minor fallout can be expected.
+
+----------------------------------------------------------------
+Linus Walleij (13):
+      fs/proc/kcore.c: Pass a pointer to virt_addr_valid()
+      m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+      ARC: init: Pass a pointer to virt_to_pfn() in init
+      riscv: mm: init: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page() in cifsglob
+      netfs: Pass a pointer to virt_to_page()
+      arm64: vdso: Pass (void *) to virt_to_page()
+      xen/netback: Pass (void *) to virt_to_page()
+      asm-generic/page.h: Make pfn accessors static inlines
+      ARM: mm: Make virt_to_pfn() a static inline
+      arm64: memory: Make virt_to_pfn() a static inline
+      m68k/mm: Make pfn accessors static inlines
+
+ arch/arc/mm/init.c                   |  2 +-
+ arch/arm/common/sharpsl_param.c      |  2 +-
+ arch/arm/include/asm/delay.h         |  2 +-
+ arch/arm/include/asm/io.h            |  2 +-
+ arch/arm/include/asm/memory.h        | 17 ++++++++++++-----
+ arch/arm/include/asm/page.h          |  4 ++--
+ arch/arm/include/asm/pgtable.h       |  2 +-
+ arch/arm/include/asm/proc-fns.h      |  2 --
+ arch/arm/include/asm/sparsemem.h     |  2 +-
+ arch/arm/include/asm/uaccess-asm.h   |  2 +-
+ arch/arm/include/asm/uaccess.h       |  2 +-
+ arch/arm/kernel/asm-offsets.c        |  2 +-
+ arch/arm/kernel/entry-armv.S         |  2 +-
+ arch/arm/kernel/entry-common.S       |  2 +-
+ arch/arm/kernel/entry-v7m.S          |  2 +-
+ arch/arm/kernel/head-nommu.S         |  3 +--
+ arch/arm/kernel/head.S               |  2 +-
+ arch/arm/kernel/hibernate.c          |  2 +-
+ arch/arm/kernel/suspend.c            |  2 +-
+ arch/arm/kernel/tcm.c                |  2 +-
+ arch/arm/kernel/vmlinux-xip.lds.S    |  3 +--
+ arch/arm/kernel/vmlinux.lds.S        |  3 +--
+ arch/arm/mach-berlin/platsmp.c       |  2 +-
+ arch/arm/mach-keystone/keystone.c    |  2 +-
+ arch/arm/mach-omap2/sleep33xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep43xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep44xx.S      |  2 +-
+ arch/arm/mach-pxa/gumstix.c          |  2 +-
+ arch/arm/mach-rockchip/sleep.S       |  2 +-
+ arch/arm/mach-sa1100/pm.c            |  2 +-
+ arch/arm/mach-shmobile/headsmp-scu.S |  2 +-
+ arch/arm/mach-shmobile/headsmp.S     |  2 +-
+ arch/arm/mach-socfpga/headsmp.S      |  2 +-
+ arch/arm/mach-spear/spear.h          |  2 +-
+ arch/arm/mm/cache-fa.S               |  1 -
+ arch/arm/mm/cache-v4wb.S             |  1 -
+ arch/arm/mm/dma-mapping.c            |  2 +-
+ arch/arm/mm/dump.c                   |  2 +-
+ arch/arm/mm/init.c                   |  2 +-
+ arch/arm/mm/kasan_init.c             |  1 -
+ arch/arm/mm/mmu.c                    |  2 +-
+ arch/arm/mm/physaddr.c               |  2 +-
+ arch/arm/mm/pmsa-v8.c                |  2 +-
+ arch/arm/mm/proc-v7.S                |  2 +-
+ arch/arm/mm/proc-v7m.S               |  2 +-
+ arch/arm/mm/pv-fixup-asm.S           |  2 +-
+ arch/arm64/include/asm/memory.h      |  9 ++++++++-
+ arch/arm64/kernel/vdso.c             |  2 +-
+ arch/m68k/include/asm/mcf_pgtable.h  |  3 +--
+ arch/m68k/include/asm/page_mm.h      | 11 +++++++++--
+ arch/m68k/include/asm/page_no.h      | 11 +++++++++--
+ arch/m68k/include/asm/sun3_pgtable.h |  4 ++--
+ arch/m68k/mm/mcfmmu.c                |  3 ++-
+ arch/m68k/mm/motorola.c              |  4 ++--
+ arch/m68k/mm/sun3mmu.c               |  2 +-
+ arch/m68k/sun3/dvma.c                |  2 +-
+ arch/m68k/sun3x/dvma.c               |  2 +-
+ arch/riscv/mm/init.c                 |  4 ++--
+ drivers/memory/ti-emif-sram-pm.S     |  2 +-
+ drivers/net/xen-netback/netback.c    |  2 +-
+ fs/cifs/cifsglob.h                   |  2 +-
+ fs/cifs/smbdirect.c                  |  2 +-
+ fs/netfs/iterator.c                  |  2 +-
+ fs/proc/kcore.c                      |  2 +-
+ include/asm-generic/page.h           | 12 ++++++++++--
+ 65 files changed, 109 insertions(+), 81 deletions(-)
