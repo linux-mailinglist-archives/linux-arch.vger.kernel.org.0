@@ -2,76 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0914B70F874
-	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 16:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C413A70F9EE
+	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 17:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235635AbjEXOR0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 May 2023 10:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        id S235471AbjEXPTh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 May 2023 11:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbjEXORZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 10:17:25 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6AE119;
-        Wed, 24 May 2023 07:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=swi01WUviSklMqidhqj5YrNHKiI8dOtJTzSmIt7zpos=; b=B2AHYaD6o5ODxeB/V4LaL/Ra35
-        R3sFANQ8pzWNBQpBISJXI7qInCwRzRd0TtNojhAt36sX/ARugssO9I2q59DDz0cG+K5O7tg4Na2jG
-        VWwgbodgo4M7j+tm1x6nx5jwlELdHqbOzNrIN8wIc2OiivkwZ7BFIdp7V2mB/vkZEK6Tsu9R96ZSa
-        SKqeqhs3sn46D6LXR2qD3bExMmyN3B91aTdq/+tdTuwZqdGgefm3GA3s6/6l9rLFz4IaiE1f/tjMM
-        utHx+LJU3hPxHKGsvRaZbD++FYNJ2hzEh8/Ek0r2ivDXaSDh0qmMpi/07pIZR8XcGlhhpCHK9i61R
-        iFvTUKgg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1pIk-00500q-1z;
-        Wed, 24 May 2023 14:17:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E65A63002C5;
-        Wed, 24 May 2023 16:17:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C6333200C8D22; Wed, 24 May 2023 16:17:17 +0200 (CEST)
-Date:   Wed, 24 May 2023 16:17:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, akiyks@gmail.com,
-        boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
-        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
-        linux-doc@vger.kernel.org, paulmck@kernel.org,
-        sstabellini@kernel.org, will@kernel.org
-Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
- comments
-Message-ID: <20230524141717.GM4253@hirez.programming.kicks-ass.net>
-References: <20230522122429.1915021-1-mark.rutland@arm.com>
- <20230522122429.1915021-25-mark.rutland@arm.com>
+        with ESMTP id S234386AbjEXPTg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 11:19:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289E5A9;
+        Wed, 24 May 2023 08:19:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B34C763D22;
+        Wed, 24 May 2023 15:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7791DC433D2;
+        Wed, 24 May 2023 15:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684941575;
+        bh=b0FUtTBTh0b230DQrrfvkGYuz7+7G3AZG0ETnEJJ3Ks=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=j95lgJ+Yohg9mfGqQLUxF28ayZCi5FdjRe7IMbm5LWz0NAMLBohM79jnUuVSB1i/a
+         FTCvpVGB7YInPhpPuHCYzxMXy5h9drvbtJG2wLav05hIkizeIYhG7qg7atk8iORKPI
+         VtfxNQYuthGSB4ujydCClupo9zOIt7U18gnUEfYCXLQ/YkGT5GujLJohcIgG39njBi
+         3zpofnDund8ZYF3xc7lTuoSI5dPQxpw3BX/ejTrvu9OajI/wNvmqmikBWdTv+GPoPl
+         9E3ZXGBlCYLrX5JWiApLZQGzAeSERTdUY2gp2HQ41dnyRnDjk8gjoOnXJuTRcdqrLR
+         ZGwTnvzO315AA==
+Date:   Wed, 24 May 2023 08:19:33 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230524081933.44dc8bea@kernel.org>
+In-Reply-To: <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+        <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+        <20230522133409.5c6e839a@kernel.org>
+        <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+        <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+        <20230523140844.5895d645@kernel.org>
+        <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+        <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522122429.1915021-25-mark.rutland@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:24:27PM +0100, Mark Rutland wrote:
->  include/linux/atomic/atomic-arch-fallback.h  | 1848 +++++++++++-
->  include/linux/atomic/atomic-instrumented.h   | 2771 +++++++++++++++++-
->  include/linux/atomic/atomic-long.h           |  925 +++++-
+On Wed, 24 May 2023 11:47:50 +0100 Luca Boccassi wrote:
+> > I will send SO_PEERPIDFD as an independent patch too, because it
+> > doesn't require this change with CONFIG_UNIX
+> > and we can avoid waiting until CONFIG_UNIX change will be merged.
+> > I've a feeling that the discussion around making CONFIG_UNIX  to be a
+> > boolean won't be easy and fast ;-)  
+> 
+> Thank you, that sounds great to me, I can start using SO_PEERPIDFD
+> independently of SCM_PIDFD, there's no hard dependency between the
+> two.
 
->  29 files changed, 5940 insertions(+), 7 deletions(-)
+How about you put the UNIX -> bool patch at the end of the series,
+(making it a 4 patch series) and if there's a discussion about it 
+I'll just skip it and apply the first 3 patches?
 
-So my biggest concern with all this is 5k+ lines of comments that GCC
-has to read and discard over and over and over.
-
-I'll see if I can measure a difference in compile time before and after
-this here patch.
+In the (IMHO more likely) case that there isn't a discussion it saves
+me from remembering to chase you to send that patch ;)
