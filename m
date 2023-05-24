@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E5470FAFD
-	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 17:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6563570FAFB
+	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 17:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbjEXP6n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 May 2023 11:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S237916AbjEXP6g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 May 2023 11:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237422AbjEXP6X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 11:58:23 -0400
+        with ESMTP id S233929AbjEXP6W (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 11:58:22 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86243E6A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58463E68;
         Wed, 24 May 2023 08:57:53 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QRG5n3LS7z4x4h;
-        Thu, 25 May 2023 01:57:01 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QRG5p0dMtz4x4j;
+        Thu, 25 May 2023 01:57:02 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1684943821;
-        bh=/FtYMyB7poZGUMvCE81c4lY8GXeGVKC0EWKKL9gy9gg=;
+        s=201909; t=1684943822;
+        bh=w1ziCHRmZ+NzR3Oi+dKcHn23ZtE+UFXtsVrSaX2bNME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HSFJzRRC6t+1mz+9xiS3Rf71C3a2AYali0O+P+1x7Epz6gpsOX6HGczug2tnxqi95
-         ayvei4RUBsdleHqMnfpH1LxF1hATCz1CumdxODlxM+ZetpAJfNkFiSVZDAKPzAGZqO
-         +gaIcdHCpN9tA7uL/2Qp41wa2eayO6MuJRBFx8jBF72K0Q9liUyljT6iPG8xlKQQFy
-         XrX5FO6BBBdaNFImGAnfEDtQn49Y4jyMQeF+R5xBcZ8d4ubxBswK4Wz6Bs62HLjC9M
-         H0RL0F33fWa7gP2ruGLZbacpViH7vuwAx95D/dtMEoti3ak+WFcIMV1g7q5eFhhCwW
-         KLsbCBKD+48Jg==
+        b=ayIaxsmIIYzbycIL+fpi+mYdCAKOdeI6bQPTFPl1lx5fCzjWPed9GDBRnPhFQLZEW
+         ooaF8fJc9GguiKuMXCVVZUvpMPvRGZ6r4HLZYRCi1DJGspid1sFCFN8fL0SfKBw3f2
+         +gsTzvva6khPfXn4N+JJKvrp+PTFkoKLyTKgad1+31KHo3ZJ+XDpB+rxaCtPNsINUf
+         0GK49Kick3SluL9xvAK6dIRcOGFu5Fv7gd+rtqqt7bEtufzYu8Bc7JfD5wsnL6tlAv
+         +QmloK2YRDgQKYzL/CQ0A0hSrkMKVurnoLDZ2/DYYpXepHjwrrntQOFUG9gJvldYjW
+         vO8R51bYiN0YQ==
 From:   Michael Ellerman <mpe@ellerman.id.au>
 To:     <linux-kernel@vger.kernel.org>
 Cc:     <linuxppc-dev@lists.ozlabs.org>, <linux-arch@vger.kernel.org>,
         <ldufour@linux.ibm.com>, <tglx@linutronix.de>, bp@alien8.de,
         dave.hansen@linux.intel.com, mingo@redhat.com, x86@kernel.org
-Subject: [PATCH 6/9] cpu/SMT: Allow enabling partial SMT states via sysfs
-Date:   Thu, 25 May 2023 01:56:27 +1000
-Message-Id: <20230524155630.794584-6-mpe@ellerman.id.au>
+Subject: [PATCH 7/9] powerpc/pseries: Initialise CPU hotplug callbacks earlier
+Date:   Thu, 25 May 2023 01:56:28 +1000
+Message-Id: <20230524155630.794584-7-mpe@ellerman.id.au>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230524155630.794584-1-mpe@ellerman.id.au>
 References: <20230524155630.794584-1-mpe@ellerman.id.au>
@@ -53,116 +53,113 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add support to the /sys/devices/system/cpu/smt/control interface for
-enabling a specified number of SMT threads per core, including partial
-SMT states where not all threads are brought online.
+As part of the generic HOTPLUG_SMT code, there is support for disabling
+secondary SMT threads at boot time, by passing "nosmt" on the kernel
+command line.
 
-The current interface accepts "on" and "off", to enable either 1 or all
-SMT threads per core.
+The way that is implemented is the secondary threads are brought partly
+online, and then taken back offline again. That is done to support x86
+CPUs needing certain initialisation done on all threads. However powerpc
+has similar needs, see commit d70a54e2d085 ("powerpc/powernv: Ignore
+smt-enabled on Power8 and later").
 
-This commit allows writing an integer, between 1 and the number of SMT
-threads supported by the machine. Writing 1 is a synonym for "off", 2 or
-more enables SMT with the specified number of threads.
+For that to work the powerpc CPU hotplug callbacks need to be registered
+before secondary CPUs are brought online, otherwise __cpu_disable()
+fails due to smp_ops->cpu_disable being NULL.
 
-When reading the file, if all threads are online "on" is returned, to
-avoid changing behaviour for existing users. If some other number of
-threads is online then the integer value is returned.
-
-There is a hook which allows arch code to control how many threads per
-core are supported. To retain the existing behaviour, the x86 hook only
-supports 1 thread or all threads.
+So split the basic initialisation into pseries_cpu_hotplug_init() which
+can be called early from setup_arch(). The DLPAR related initialisation
+can still be done later, because it needs to do allocations.
 
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- .../ABI/testing/sysfs-devices-system-cpu      |  1 +
- kernel/cpu.c                                  | 39 ++++++++++++++++---
- 2 files changed, 34 insertions(+), 6 deletions(-)
+ arch/powerpc/platforms/pseries/hotplug-cpu.c | 22 ++++++++++++--------
+ arch/powerpc/platforms/pseries/pseries.h     |  2 ++
+ arch/powerpc/platforms/pseries/setup.c       |  2 ++
+ 3 files changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index f54867cadb0f..3c4cfb59d495 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -555,6 +555,7 @@ Description:	Control Symmetric Multi Threading (SMT)
- 			 ================ =========================================
- 			 "on"		  SMT is enabled
- 			 "off"		  SMT is disabled
-+			 "<N>"		  SMT is enabled with N threads per core.
- 			 "forceoff"	  SMT is force disabled. Cannot be changed.
- 			 "notsupported"   SMT is not supported by the CPU
- 			 "notimplemented" SMT runtime toggling is not
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 72b9a03a4fef..aca23c7b4547 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2497,7 +2497,7 @@ static ssize_t
- __store_smt_control(struct device *dev, struct device_attribute *attr,
- 		    const char *buf, size_t count)
+diff --git a/arch/powerpc/platforms/pseries/hotplug-cpu.c b/arch/powerpc/platforms/pseries/hotplug-cpu.c
+index 1a3cb313976a..61fb7cb00880 100644
+--- a/arch/powerpc/platforms/pseries/hotplug-cpu.c
++++ b/arch/powerpc/platforms/pseries/hotplug-cpu.c
+@@ -845,15 +845,9 @@ static struct notifier_block pseries_smp_nb = {
+ 	.notifier_call = pseries_smp_notifier,
+ };
+ 
+-static int __init pseries_cpu_hotplug_init(void)
++void __init pseries_cpu_hotplug_init(void)
  {
--	int ctrlval, ret;
-+	int ctrlval, ret, num_threads, orig_threads;
+ 	int qcss_tok;
+-	unsigned int node;
+-
+-#ifdef CONFIG_ARCH_CPU_PROBE_RELEASE
+-	ppc_md.cpu_probe = dlpar_cpu_probe;
+-	ppc_md.cpu_release = dlpar_cpu_release;
+-#endif /* CONFIG_ARCH_CPU_PROBE_RELEASE */
  
- 	if (cpu_smt_control == CPU_SMT_FORCE_DISABLED)
- 		return -EPERM;
-@@ -2505,20 +2505,38 @@ __store_smt_control(struct device *dev, struct device_attribute *attr,
- 	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
- 		return -ENODEV;
+ 	rtas_stop_self_token = rtas_function_token(RTAS_FN_STOP_SELF);
+ 	qcss_tok = rtas_function_token(RTAS_FN_QUERY_CPU_STOPPED_STATE);
+@@ -862,12 +856,22 @@ static int __init pseries_cpu_hotplug_init(void)
+ 			qcss_tok == RTAS_UNKNOWN_SERVICE) {
+ 		printk(KERN_INFO "CPU Hotplug not supported by firmware "
+ 				"- disabling.\n");
+-		return 0;
++		return;
+ 	}
  
--	if (sysfs_streq(buf, "on"))
-+	if (sysfs_streq(buf, "on")) {
- 		ctrlval = CPU_SMT_ENABLED;
--	else if (sysfs_streq(buf, "off"))
-+		num_threads = cpu_smt_max_threads;
-+	} else if (sysfs_streq(buf, "off")) {
- 		ctrlval = CPU_SMT_DISABLED;
--	else if (sysfs_streq(buf, "forceoff"))
-+		num_threads = 1;
-+	} else if (sysfs_streq(buf, "forceoff")) {
- 		ctrlval = CPU_SMT_FORCE_DISABLED;
--	else
-+		num_threads = 1;
-+	} else if (kstrtoint(buf, 10, &num_threads) == 0) {
-+		if (num_threads == 1)
-+			ctrlval = CPU_SMT_DISABLED;
-+		else if (num_threads > 1 && topology_smt_threads_supported(num_threads))
-+			ctrlval = CPU_SMT_ENABLED;
-+		else
-+			return -EINVAL;
-+	} else {
- 		return -EINVAL;
-+	}
- 
- 	ret = lock_device_hotplug_sysfs();
- 	if (ret)
- 		return ret;
- 
--	if (ctrlval != cpu_smt_control) {
-+	orig_threads = cpu_smt_num_threads;
-+	cpu_smt_num_threads = num_threads;
+ 	smp_ops->cpu_offline_self = pseries_cpu_offline_self;
+ 	smp_ops->cpu_disable = pseries_cpu_disable;
+ 	smp_ops->cpu_die = pseries_cpu_die;
++}
 +
-+	if (num_threads > orig_threads) {
-+		ret = cpuhp_smt_enable();
-+	} else if (num_threads < orig_threads) {
-+		ret = cpuhp_smt_disable(ctrlval);
-+	} else if (ctrlval != cpu_smt_control) {
- 		switch (ctrlval) {
- 		case CPU_SMT_ENABLED:
- 			ret = cpuhp_smt_enable();
-@@ -2556,6 +2574,15 @@ static ssize_t control_show(struct device *dev,
- {
- 	const char *state = smt_states[cpu_smt_control];
- 
-+	/*
-+	 * If SMT is enabled but not all threads are enabled then show the
-+	 * number of threads. If all threads are enabled show "on". Otherwise
-+	 * show the state name.
-+	 */
-+	if (cpu_smt_control == CPU_SMT_ENABLED &&
-+	    cpu_smt_num_threads != cpu_smt_max_threads)
-+		return sysfs_emit(buf, "%d\n", cpu_smt_num_threads);
++static int __init pseries_dlpar_init(void)
++{
++	unsigned int node;
 +
- 	return snprintf(buf, PAGE_SIZE - 2, "%s\n", state);
++#ifdef CONFIG_ARCH_CPU_PROBE_RELEASE
++	ppc_md.cpu_probe = dlpar_cpu_probe;
++	ppc_md.cpu_release = dlpar_cpu_release;
++#endif /* CONFIG_ARCH_CPU_PROBE_RELEASE */
+ 
+ 	/* Processors can be added/removed only on LPAR */
+ 	if (firmware_has_feature(FW_FEATURE_LPAR)) {
+@@ -886,4 +890,4 @@ static int __init pseries_cpu_hotplug_init(void)
+ 
+ 	return 0;
  }
+-machine_arch_initcall(pseries, pseries_cpu_hotplug_init);
++machine_arch_initcall(pseries, pseries_dlpar_init);
+diff --git a/arch/powerpc/platforms/pseries/pseries.h b/arch/powerpc/platforms/pseries/pseries.h
+index f8bce40ebd0c..f8893ba46e83 100644
+--- a/arch/powerpc/platforms/pseries/pseries.h
++++ b/arch/powerpc/platforms/pseries/pseries.h
+@@ -75,11 +75,13 @@ static inline int dlpar_hp_pmem(struct pseries_hp_errorlog *hp_elog)
  
+ #ifdef CONFIG_HOTPLUG_CPU
+ int dlpar_cpu(struct pseries_hp_errorlog *hp_elog);
++void pseries_cpu_hotplug_init(void);
+ #else
+ static inline int dlpar_cpu(struct pseries_hp_errorlog *hp_elog)
+ {
+ 	return -EOPNOTSUPP;
+ }
++static inline void pseries_cpu_hotplug_init(void) { }
+ #endif
+ 
+ /* PCI root bridge prepare function override for pseries */
+diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
+index e2a57cfa6c83..41451b76c6e5 100644
+--- a/arch/powerpc/platforms/pseries/setup.c
++++ b/arch/powerpc/platforms/pseries/setup.c
+@@ -816,6 +816,8 @@ static void __init pSeries_setup_arch(void)
+ 	/* Discover PIC type and setup ppc_md accordingly */
+ 	smp_init_pseries();
+ 
++	// Setup CPU hotplug callbacks
++	pseries_cpu_hotplug_init();
+ 
+ 	if (radix_enabled() && !mmu_has_feature(MMU_FTR_GTSE))
+ 		if (!firmware_has_feature(FW_FEATURE_RPT_INVALIDATE))
 -- 
 2.40.1
 
