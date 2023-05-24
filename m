@@ -2,99 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0A770F3DF
-	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 12:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0480170F472
+	for <lists+linux-arch@lfdr.de>; Wed, 24 May 2023 12:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjEXKPB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 24 May 2023 06:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S229564AbjEXKnz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 May 2023 06:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbjEXKO2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 06:14:28 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25AF19C;
-        Wed, 24 May 2023 03:14:01 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-563b1e5f701so7030367b3.3;
-        Wed, 24 May 2023 03:14:01 -0700 (PDT)
+        with ESMTP id S231254AbjEXKny (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 06:43:54 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8CDC5
+        for <linux-arch@vger.kernel.org>; Wed, 24 May 2023 03:43:53 -0700 (PDT)
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 607344429D
+        for <linux-arch@vger.kernel.org>; Wed, 24 May 2023 10:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684925028;
+        bh=VcR2dM9dZkrtIAYuc+uEYt6q6RFFCfHdSpmFwxj+wQM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ICYhzP3alsOukQOEQWvvrws87UFBIOwILO305wzr8xWUwsG1L4ZC9c0oKite3wrPL
+         EseAWN1gLDwCqoX3G1/6Z8nMAfkDgMAPmA4HdaANqOUc7IlhRJsf+ZlnL3qXx8dKOT
+         9IuEpcRvvkymZJigK9A5WSkegXUrLgYF0YGQhSvn+RVQEMhmipANGe1WOoLhiOo6qK
+         HFnthkYPVbRSjYMocf5lqIbMy1ST66igp5lJXNyT2z7xUfmFcdb1jQOOI2VqKbahpi
+         rKzNsvbY31qL/+0z+2KTWUfYO+UFEU45GTtC6mykSut3tXiSaJ/0Rqcwj/bh/+nW0d
+         4mYdjt8HJCEYA==
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-561bad0999aso18630147b3.0
+        for <linux-arch@vger.kernel.org>; Wed, 24 May 2023 03:43:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684923241; x=1687515241;
+        d=1e100.net; s=20221208; t=1684925027; x=1687517027;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dz+M1KSdnKMmcmYWNiYwzrnxigtUcBsMNIJcHfr8PAI=;
-        b=EODiHjt3saZs4hjXdJNhncDhUm3GP1vzlSbpZoLSx/2MB/lvlKuACl3+m0Vyf60VZt
-         hb74BrPNr6fqm6I+9R50SQoDXcFGCFu74Ygp2qNvqXi2GKbE5i/jDYJNnJpcv3Orzs4c
-         GNc8U1+dpomTCqV7cGW4g76rMYpe9/bL8h71YkhLRfqBZCkjJ5k/iq4D/TDqHGKuou3a
-         p/iQQU0XIZkHow3ZVC0TaRgE3aFKBtXjtrhY0HI2w359vkmX04SVfjs7QmD0VP0wrzE1
-         DgmT0+LEgwQYYFWyIJ8M91B4X+701FEXFx22k/YGKU9Fj8QEf3kU6YumLuYHsqAphYoX
-         6HAA==
-X-Gm-Message-State: AC+VfDwUO84Z0rVKdXUZDn1NxzZ5GzdN1f5iFnAcQzxmLYEWiLRhZ6m3
-        cgxWkJr85k5dGikyEaIpgeJv0fBr2v3qDA==
-X-Google-Smtp-Source: ACHHUZ5brofOMn3v4R6LKJ2U1YBCt/oycnds4IROPRMg0s9JfkHzha4IpGPIJ6sTKk7MZq7w5oiwZQ==
-X-Received: by 2002:a0d:ea82:0:b0:55a:dd:9d2a with SMTP id t124-20020a0dea82000000b0055a00dd9d2amr15901097ywe.52.1684923240693;
-        Wed, 24 May 2023 03:14:00 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id z18-20020a0dd712000000b0054c0a8ceb2fsm3587427ywd.28.2023.05.24.03.13.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 03:13:59 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-563b1e5f701so7030217b3.3;
-        Wed, 24 May 2023 03:13:59 -0700 (PDT)
-X-Received: by 2002:a81:5ac3:0:b0:565:347a:46ee with SMTP id
- o186-20020a815ac3000000b00565347a46eemr6575440ywb.7.1684923239253; Wed, 24
- May 2023 03:13:59 -0700 (PDT)
+        bh=VcR2dM9dZkrtIAYuc+uEYt6q6RFFCfHdSpmFwxj+wQM=;
+        b=AiS5i4v14cYgfylVp23X2184D4HY+4bA+jEWp6V8zyDUHP/Gk7EdVE0GCl4O95xcm+
+         JGxD/JLV2tGhjNWn3KSqNWszgH9GittSgJIMN9gYQnuSbSdiwcuin0DqNcRIsuaqTYNR
+         W6zy7t3NjQaQyi/UpZ+wxsmlSRU10jZCUpvJlvl+Rs9aFVEqIE3YTYe83z7nNk5HqAy9
+         ixaQj9xq45PonUhD5yN0BRs13w4opnD4BbwV/o141sY8RAxN/vZgcrLlP7t4LOAre4xY
+         feRYMoAkW+MDNUayUBjkt6m3tTDeD/ZCTnqzGSs3suhxQs2UN6dFUPWwKUEqXE+Dd6oT
+         C1/w==
+X-Gm-Message-State: AC+VfDyUftHUG8+GfqDzP73xZUNSm+KziKSlYD3hVat40CbxrNIHRoja
+        DlqyxP4glCdGNl7vMVhFYL1nqcgznyeyL0PAToh1QLMJUiBjr9TLmzXUBsxstk4ah5i6ed2fiT3
+        EGycCftXzerAye9L/fNQPEudzHd2ad0bOka2fgutJ+kBsxqGdpgzmd0Q=
+X-Received: by 2002:a81:ab50:0:b0:561:179b:1276 with SMTP id d16-20020a81ab50000000b00561179b1276mr16277645ywk.26.1684925027356;
+        Wed, 24 May 2023 03:43:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4iOk/L3sMlt+J6yeXjbzBVkYzcNAS9i5TiiFe4XzBVBtPC3NhYAtD5clOw6pJbtiOOIbVSK/C8SNjWhkpcZOY=
+X-Received: by 2002:a81:ab50:0:b0:561:179b:1276 with SMTP id
+ d16-20020a81ab50000000b00561179b1276mr16277633ywk.26.1684925027137; Wed, 24
+ May 2023 03:43:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v3-0-a16c19c03583@linaro.org> <20230503-virt-to-pfn-v6-4-rc1-v3-12-a16c19c03583@linaro.org>
-In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v3-12-a16c19c03583@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 24 May 2023 12:13:47 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVFX6vtiiNgZyXTLmhcxdsyOwRL3kb3tDZ4E_LUN2MaeA@mail.gmail.com>
-Message-ID: <CAMuHMdVFX6vtiiNgZyXTLmhcxdsyOwRL3kb3tDZ4E_LUN2MaeA@mail.gmail.com>
-Subject: Re: [PATCH v3 12/12] m68k/mm: Make pfn accessors static inlines
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>, linux-mm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+ <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com> <20230523140844.5895d645@kernel.org>
+In-Reply-To: <20230523140844.5895d645@kernel.org>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 24 May 2023 12:43:36 +0200
+Message-ID: <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Luca Boccassi <bluca@debian.org>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
         linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 23, 2023 at 4:05 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> Making virt_to_pfn() a static inline taking a strongly typed
-> (const void *) makes the contract of a passing a pointer of that
-> type to the function explicit and exposes any misuse of the
-> macro virt_to_pfn() acting polymorphic and accepting many types
-> such as (void *), (unitptr_t) or (unsigned long) as arguments
-> without warnings.
+On Tue, May 23, 2023 at 11:08=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
 >
-> For symmetry, do the same with pfn_to_virt().
+> On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
+> > > I really would like to avoid that because it will just mean that some=
+one
+> > > else will abuse that function and then make an argument why we should
+> > > export the other function.
+> > >
+> > > I think it would be ok if we required that unix support is built in
+> > > because it's not unprecedented either and we're not breaking anything=
+.
+> > > Bpf has the same requirement:
+> > >
+> > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
+> > >   struct bpf_unix_iter_state {
+> > >           struct seq_net_private p;
+> > >           unsigned int cur_sk;
+> > >           unsigned int end_sk;
+> > >           unsigned int max_sk;
+> > >           struct sock **batch;
+> > >           bool st_bucket_done;
+> > >   };
+> > >
+> > > and
+> > >
+> > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defin=
+ed(CONFIG_PROC_FS)
+> > >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
+> > >                        struct unix_sock *unix_sk, uid_t uid)
 >
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Don't think we should bring BPF into arguments about uAPI consistency :S
+>
+> > Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
+> > ship with CONFIG_UNIX=3Dy, so a missing SCM_PIDFD in unlikely to have a
+> > widespread impact, and if it does, it might encourage someone to
+> > review their kconfig.
+>
+> IDK how you can argue that everyone sets UNIX to =3Dy so hiding SCM_PIDFD
+> is fine and at the same time not be okay with making UNIX a bool :S
+>
+> > As mentioned on the v5 thread, we are waiting for this API to get the
+> > userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
+> > really grateful if we could start with the simplest and most
+> > conservative approach (which seems to be the current one in v6 to me),
+> > and then eventually later decide whether to export more functions, or
+> > to deprecate CONFIG_UNIX=3Dm, or something else entirely, as that
+> > doesn't really affect the shape of the UAPI, just the details of its
+> > availability. Thank you.
+>
+> Just throw in a patch to make UNIX a bool and stop arguing then.
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Dear Jakub,
 
-Gr{oetje,eeting}s,
+Thanks for your attention to these patch series!
 
-                        Geert
+I'm ready to prepare/send a patch to make CONFIG_UNIX bool.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I will send SO_PEERPIDFD as an independent patch too, because it
+doesn't require this change with CONFIG_UNIX
+and we can avoid waiting until CONFIG_UNIX change will be merged.
+I've a feeling that the discussion around making CONFIG_UNIX  to be a
+boolean won't be easy and fast ;-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Kind regards,
+Alex
