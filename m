@@ -2,88 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DB5710D04
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 15:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6A5710DC4
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 16:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbjEYNLq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 09:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        id S241435AbjEYOAg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 10:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjEYNLp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 09:11:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B9CB2;
-        Thu, 25 May 2023 06:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9DEm7cVBdm52kK3UCzMVMzsLM3W+SSD9KxYzTiOP2os=; b=U1iALbTK7rHRU7VruFM7TO2E1Z
-        xvRWFPd1doSjCsYDCMHOsTa++oGrg2nEYlCWtLO9dvrCYG9N6QHsuU4eTucS5i/YzLpxsrSFrNYvb
-        TnGFukTMiMyFir0UB6XRsXp7+8l811BLakEig4nBp09A0rwnSvgUO8h8Obxd2EIXiNEj99e87oVpR
-        wwUrVPb3F/WC52qPGfwBWdAQ/yTLMvMbyc9o7/4SrP+Orf6KuaDzcBvOeSUSIZQtnSs2xNgAfKEGX
-        wAZb3MoIN8mFE7OLypmP7Jb+v5G1tAMXpGUnnBN6AvHH0VEO3mjcUXclEe3PAtmDJI25A1jXCr8Et
-        CiIKtoYQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2Ajx-00CD2j-1K; Thu, 25 May 2023 13:10:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6AAC3001AE;
-        Thu, 25 May 2023 15:10:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B530C20A78741; Thu, 25 May 2023 15:10:43 +0200 (CEST)
-Date:   Thu, 25 May 2023 15:10:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
-Message-ID: <20230525131043.GT83892@hirez.programming.kicks-ass.net>
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.453785148@infradead.org>
- <20230524093246.GP83892@hirez.programming.kicks-ass.net>
- <20230525102946.GE38236@hirez.programming.kicks-ass.net>
- <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
+        with ESMTP id S241445AbjEYOAf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 10:00:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F531A8;
+        Thu, 25 May 2023 07:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11766645FF;
+        Thu, 25 May 2023 14:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6CD96C4339E;
+        Thu, 25 May 2023 14:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685023221;
+        bh=gfRrbhhyEcqbLyZDyAZGcAkDAS8G/fyE/7edxRHWzWA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tFs1hrqMAOfe3D+3+g6imFRefaUOB1J+FtU3P2LhkbSR/PiRkavm8sFdT1CPgKbs1
+         K1JcAF61qCTDSr/Gi37M29/vn98Lt9AN0oWH1P2T49BKd5WKwyVqAxFPo0mc4v9Zhc
+         m42SMhyZvafGwLSTma8taYbhqev06FL8JwUWc/w/vDt2D/+auWB1Y5FvlifLV+9ccS
+         gsEtFkOKNz/mjjV6UpIrFqa7sdXgSmZv5l7OfrtwM/fHDptFuGboQw9Gdabhkovjro
+         ZAsIYaSO+nS9Idjqlrj0erH32LUcxiaoyiDufXA/nyw+5USvbph0wbDN10IRPdrENg
+         q5NjHmg2C5w9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4695CC395DF;
+        Thu, 25 May 2023 14:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] s390/ism: Set DMA coherent mask
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168502322128.12931.12742922917026189347.git-patchwork-notify@kernel.org>
+Date:   Thu, 25 May 2023 14:00:21 +0000
+References: <20230524075411.3734141-1-schnelle@linux.ibm.com>
+In-Reply-To: <20230524075411.3734141-1-schnelle@linux.ibm.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, wintera@linux.ibm.com,
+        wenjia@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, mjrosato@linux.ibm.com,
+        pmorel@linux.ibm.com, linux-s390@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,36 +61,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:52:06PM +0200, Arnd Bergmann wrote:
-> On Thu, May 25, 2023, at 12:29, Peter Zijlstra wrote:
-> > On Wed, May 24, 2023 at 11:32:47AM +0200, Peter Zijlstra wrote:
-> >> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
-> >
-> > This then also means I need to look at this_cpu_cmpxchg128 and
-> > this_cpu_cmoxchg64 behaviour when we dont have the CPUID feature.
-> >
-> > Because current verions seem to assume the instruction is present.
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Wed, 24 May 2023 09:54:10 +0200 you wrote:
+> A future change will convert the DMA API implementation from the
+> architecture specific arch/s390/pci/pci_dma.c to using the common code
+> drivers/iommu/dma-iommu.c which the utilizes the same IOMMU hardware
+> through the s390-iommu driver. Unlike the s390 specific DMA API this
+> requires devices to correctly set the coherent mask to be allowed to use
+> IOVAs >2^32 in dma_alloc_coherent(). This was however not done for ISM
+> devices. ISM requires such addresses since currently the DMA aperture
+> for PCI devices starts at 2^32 and all calls to dma_alloc_coherent()
+> would thus fail.
 > 
-> As far as I could tell when reviewing your series, this_cpu_cmpxchg64()
-> is always available on all architectures. Depending on compile-time
-> feature detection this would be either a native instruction that
-> is guaranteed to work, or the irq-disabled version. On x86, this
-> is handled at runtime with alternative_io().
-> 
-> this_cpu_cmpxchg128() clearly needed the system_has_cmpxchg128()
-> check, same as system_has_cmpxchg_double() today.
+> [...]
 
-So, having just dug through all that, on x86:
+Here is the summary with links:
+  - [net-next] s390/ism: Set DMA coherent mask
+    https://git.kernel.org/netdev/net-next/c/657d42cf5df6
 
-this_cpu_cmpxchg64() is:
-
- X86_CMPXCHG64=n -> fallback, irrespective of CX8
- X86_CMPXCHG64=y -> cmpxchg8b
- X86_64          -> cmpxchg
-
-
-I've changed it to be similar between 32bit and 64bit such that both:
-
-  cmpxchg#b when CX#, otherwise this_cpu_cmpxchg#b_emu
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
