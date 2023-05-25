@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD4C71189E
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 23:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4337118A2
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 23:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241239AbjEYVBA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 17:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S241058AbjEYVBF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 17:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjEYVA7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 17:00:59 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604D519C;
-        Thu, 25 May 2023 14:00:58 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-530638a60e1so7775a12.2;
-        Thu, 25 May 2023 14:00:58 -0700 (PDT)
+        with ESMTP id S232445AbjEYVBC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 17:01:02 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D9F1B0;
+        Thu, 25 May 2023 14:00:59 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53f448cde66so224a12.1;
+        Thu, 25 May 2023 14:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685048458; x=1687640458;
+        d=gmail.com; s=20221208; t=1685048459; x=1687640459;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uUEkNGDX6cV0iQXAiFNgFjvKJpYklaG2ZlRS0uxR5ls=;
-        b=DW4DzSXOAJLOeRF0iu9R3lD0WFtF3jtGW7qacMd4+bka2yvmy8GA9YJgnYThxgpsWe
-         0xzSvWUjLpozTCpKpRUpRRcolyUUtizjzM2WKTIlPv5CoJc3eaFzzxHZwlkKyqnVTLcI
-         PCWByPN99ekQtdSEFPOea+7eFoNUYEiui8cNcj3ylIF1MYDAw8dz9PdvylaYvi4yHym6
-         D8AOvQNLzvdBosadCjBUWCjq1WW1ZHDdGhw+KHMxPz7AZIKh3JMCew1BlAabLkFpAtpA
-         4yEorxwCA+KB+Cm0x36QqoKmIeG3hU4okiesEWRw3EnPN8ZqxiszGkloDo3BDNgKijCi
-         1wqA==
+        bh=plByf+i5Fok3NQ/XAuXTsKM1rTLN/fzcmyU+yIiV4ic=;
+        b=ky1DBxa8WM/81sXdcWNsMFPfMbMP9MSiSdnrHilDQ/bSg2mSQmbDjXxAj/wajJaFUp
+         2gHwA6b91A/ZdrHsNZAZV/2bMQXTNbmu9qNkC/KU0o1CB4hFllmUSgChAccRy4BFisHs
+         hhRd6ZfPQ5bTE1jlxQYbLXLkgZLIfV6YYgsMjhvW2xuU5vMy2ZmzUrBc+/kZRMeVcMKg
+         ff9XqIFg5W3W3DzqWq0SHrWXHHv2SgUDWGPxuba7+I5YkxQLmn1ay4zak4VMFOxDzlFF
+         5hQWwXHIqlw1J2bO7BYDEhq6PJu3rAiTxW0yUtTf9WOJj4FDfs0Aywdwxa4b9BY73ZPN
+         esRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685048458; x=1687640458;
+        d=1e100.net; s=20221208; t=1685048459; x=1687640459;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uUEkNGDX6cV0iQXAiFNgFjvKJpYklaG2ZlRS0uxR5ls=;
-        b=UzpZa0IQf1Qro4duA/DjNlaxBqsID7f+ZtQCga6peNKg3oQF2ziz3vsvs7p/o6VPzm
-         5ggUnf8b+9+lySotMZrME4DlyEC2tgGh2vwmtwC/iNOwGnDHDD8f2msGioP777aqewWo
-         2g5zm6KWDSgtBQ1GUqFhIhuI/UFNNBVJtXKpJzfNABgatLw14f6ClLgzojI3HpmoViB5
-         kXTtGBQuffYgn4K7h5aVfC8IaYEkQSCaOuzun4FMEqTAcdw1RqGsbdpOwHootl3g52Rm
-         ahDN/3WXAa+RgJx6CUativRvz7hcYKHmDB7qlkPS8reX4b4+pj16k0JAYN1sDzIv5wzh
-         EBWA==
-X-Gm-Message-State: AC+VfDw5+GaZKqfZsnmiHSr8A8M4J5tKdzK3Z1NjCGXX21R/HgdhhqCo
-        EwyYE4et1Ekj2evqRu+F/DQ=
-X-Google-Smtp-Source: ACHHUZ7KQoExLFsvdM0qFZVOei5matyori6x50UzHtK4vBxDTJK1mctzRVqVn/yv1v1i8h9CBTNb3A==
-X-Received: by 2002:a17:902:f7c6:b0:1ae:8892:7d27 with SMTP id h6-20020a170902f7c600b001ae88927d27mr2842006plw.42.1685048457437;
-        Thu, 25 May 2023 14:00:57 -0700 (PDT)
+        bh=plByf+i5Fok3NQ/XAuXTsKM1rTLN/fzcmyU+yIiV4ic=;
+        b=WMI2MKRo6aQegeV7QGyseWvYbH72NEEEvIjkHllQI1sOc2lsGzrZ5/esqKtD3mrS6j
+         2QSW0fkXrWhjwv1eEEPPIJpnfQsOKS2bU3xvk3jCKTuZpreA+6tm/fyTlJG6ia2vzuC3
+         PY99HicvJd+rtuSHo0c1GVUDgzJfhh3TEptrU7g1oPPAniO9TGosHiaZTlun6QrdGrM0
+         x6JNoVWlAisSgmjKNzz5xaPHzlIbILDocWinXkf5u7rfgRPwCws381FjUl9wKYKciB+3
+         1en1FpYZciPgbLLkREfHwVdvfSrcuNTDx2nXb2VcEHEagtk3trN9HifqOVP4hsgjoKO3
+         jW+g==
+X-Gm-Message-State: AC+VfDybzzIfzv80vN+i5u+YK9kgc9sGH6uIQZ1RahZ9w/Dn2Ifa8HJf
+        aO8cVc6OE4757UfMR3X82Dc=
+X-Google-Smtp-Source: ACHHUZ7UrhDd6a4VRrtTE4n7Efva9/49QNhzVnRsKhhDcKekFkWhLzvnIW2XMR2EkOUzCI4bsE9+IA==
+X-Received: by 2002:a17:903:32c3:b0:1af:9b8a:9c79 with SMTP id i3-20020a17090332c300b001af9b8a9c79mr3676440plr.34.1685048459053;
+        Thu, 25 May 2023 14:00:59 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170902c3d500b001ae8587d60csm1807673plj.265.2023.05.25.14.00.55
+        by smtp.gmail.com with ESMTPSA id j21-20020a170902c3d500b001ae8587d60csm1807673plj.265.2023.05.25.14.00.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 14:00:56 -0700 (PDT)
+        Thu, 25 May 2023 14:00:58 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     Steven Rostedt <rostedt@goodmis.org>,
@@ -62,11 +62,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         "Dave Hansen" <dave.hansen@linux.intel.com>,
         "Borislav Petkov" <bp@alien8.de>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Nadav Amit <namit@vmware.com>,
-        Marcin Nowakowski <marcin.nowakowski@mips.com>
-Subject: [PATCH v2 1/3] kprobes: Mark descendents of core_kernel_text as notrace
-Date:   Thu, 25 May 2023 14:00:38 -0700
-Message-Id: <20230525210040.3637-2-namit@vmware.com>
+        Nadav Amit <namit@vmware.com>
+Subject: [PATCH v2 2/3] compiler: inline does not imply notrace
+Date:   Thu, 25 May 2023 14:00:39 -0700
+Message-Id: <20230525210040.3637-3-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230525210040.3637-1-namit@vmware.com>
 References: <20230525210040.3637-1-namit@vmware.com>
@@ -84,148 +83,48 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Commit c0d80ddab899 ("kernel/extable.c: mark core_kernel_text notrace")
-disabled the tracing of core_kernel_text to avoid recursive calls. For
-the same reasons, all the functions in the dynamic extents of
-core_kernel_text should be marked as notrace.
+Functions that are marked as "inline" are currently also not tracable.
+This limits tracing functionality for many functions for no reason.
+Apparently, this has been done for two reasons.
 
-Cc: Marcin Nowakowski <marcin.nowakowski@mips.com>
+First, as described in commit 5963e317b1e9d2a ("ftrace/x86: Do not
+change stacks in DEBUG when calling lockdep"), it was intended to
+prevent some functions that cannot be traced from being traced as these
+functions were marked as inline (among others).
+
+Yet, this change has been done a decade ago, and according to Steven
+Rostedt, ftrace should have improved and hopefully resolved nested
+tracing issues by now. Arguably, if functions that should be traced -
+for instance since they are used during tracing - still exist, they
+should be marked as notrace explicitly.
+
+The second reason, which Steven raised, is that attaching "notrace" to
+"inline" prevented tracing differences between different configs, which
+caused various problem. This consideration is not very strong, and tying
+"inline" and "notrace" does not seem very beneficial. The "inline"
+keyword is just a hint, and many functions are currently not tracable
+due to this reason.
+
+Disconnect "inline" from "notrace".
+
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- arch/arm/kernel/process.c             | 2 +-
- arch/ia64/mm/init.c                   | 2 +-
- arch/x86/entry/vsyscall/vsyscall_64.c | 2 +-
- arch/x86/um/mem_32.c                  | 2 +-
- include/asm-generic/sections.h        | 6 +++---
- include/linux/kallsyms.h              | 6 +++---
- include/linux/mm.h                    | 2 +-
- 7 files changed, 11 insertions(+), 11 deletions(-)
+ include/linux/compiler_types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-index 0e8ff85890ad..a8c0d0a06664 100644
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -330,7 +330,7 @@ int in_gate_area(struct mm_struct *mm, unsigned long addr)
- 	return (addr >= gate_vma.vm_start) && (addr < gate_vma.vm_end);
- }
- 
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	return in_gate_area(NULL, addr);
- }
-diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-index 7f5353e28516..6dbd3acbe837 100644
---- a/arch/ia64/mm/init.c
-+++ b/arch/ia64/mm/init.c
-@@ -284,7 +284,7 @@ struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
- 	return &gate_vma;
- }
- 
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	if ((addr >= FIXADDR_USER_START) && (addr < FIXADDR_USER_END))
- 		return 1;
-diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-index e0ca8120aea8..2d1d09877f0c 100644
---- a/arch/x86/entry/vsyscall/vsyscall_64.c
-+++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-@@ -340,7 +340,7 @@ int in_gate_area(struct mm_struct *mm, unsigned long addr)
-  * context. It is less reliable than using a task's mm and may give
-  * false positives.
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 547ea1ff806e..bab3e25bbe3f 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -184,7 +184,7 @@ struct ftrace_likely_data {
+  * of extern inline functions at link time.
+  * A lot of inline functions can cause havoc with function tracing.
   */
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	return vsyscall_mode != NONE && (addr & PAGE_MASK) == VSYSCALL_ADDR;
- }
-diff --git a/arch/x86/um/mem_32.c b/arch/x86/um/mem_32.c
-index 29b2203bc82c..1f92840af2f3 100644
---- a/arch/x86/um/mem_32.c
-+++ b/arch/x86/um/mem_32.c
-@@ -28,7 +28,7 @@ struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
- 	return FIXADDR_USER_START ? &gate_vma : NULL;
- }
+-#define inline inline __gnu_inline __inline_maybe_unused notrace
++#define inline inline __gnu_inline __inline_maybe_unused
  
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	if (!FIXADDR_USER_START)
- 		return 0;
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index db13bb620f52..d519965b67bf 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -188,7 +188,7 @@ static inline bool is_kernel_rodata(unsigned long addr)
-  *
-  * Returns: true if the address is located in .init.text, false otherwise.
-  */
--static inline bool is_kernel_inittext(unsigned long addr)
-+static notrace inline bool is_kernel_inittext(unsigned long addr)
- {
- 	return addr >= (unsigned long)_sinittext &&
- 	       addr < (unsigned long)_einittext;
-@@ -203,7 +203,7 @@ static inline bool is_kernel_inittext(unsigned long addr)
-  * Returns: true if the address is located in .text, false otherwise.
-  * Note: an internal helper, only check the range of _stext to _etext.
-  */
--static inline bool __is_kernel_text(unsigned long addr)
-+static notrace inline bool __is_kernel_text(unsigned long addr)
- {
- 	return addr >= (unsigned long)_stext &&
- 	       addr < (unsigned long)_etext;
-@@ -219,7 +219,7 @@ static inline bool __is_kernel_text(unsigned long addr)
-  *       and range from __init_begin to __init_end, which can be outside
-  *       of the _stext to _end range.
-  */
--static inline bool __is_kernel(unsigned long addr)
-+static notrace inline bool __is_kernel(unsigned long addr)
- {
- 	return ((addr >= (unsigned long)_stext &&
- 	         addr < (unsigned long)_end) ||
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index fe3c9993b5bf..e11743e68124 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -24,21 +24,21 @@
- struct cred;
- struct module;
- 
--static inline int is_kernel_text(unsigned long addr)
-+static notrace inline int is_kernel_text(unsigned long addr)
- {
- 	if (__is_kernel_text(addr))
- 		return 1;
- 	return in_gate_area_no_mm(addr);
- }
- 
--static inline int is_kernel(unsigned long addr)
-+static notrace inline int is_kernel(unsigned long addr)
- {
- 	if (__is_kernel(addr))
- 		return 1;
- 	return in_gate_area_no_mm(addr);
- }
- 
--static inline int is_ksym_addr(unsigned long addr)
-+static notrace inline int is_ksym_addr(unsigned long addr)
- {
- 	if (IS_ENABLED(CONFIG_KALLSYMS_ALL))
- 		return is_kernel(addr);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 27ce77080c79..e71ea764659c 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3485,7 +3485,7 @@ static inline struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
- {
- 	return NULL;
- }
--static inline int in_gate_area_no_mm(unsigned long addr) { return 0; }
-+static notrace inline int in_gate_area_no_mm(unsigned long addr) { return 0; }
- static inline int in_gate_area(struct mm_struct *mm, unsigned long addr)
- {
- 	return 0;
+ /*
+  * gcc provides both __inline__ and __inline as alternate spellings of
 -- 
 2.25.1
 
