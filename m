@@ -2,106 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F04B710377
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 05:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAC27103A4
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 06:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjEYDvJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 May 2023 23:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S238441AbjEYEEs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 00:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237076AbjEYDu7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 May 2023 23:50:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD7FBE7;
-        Wed, 24 May 2023 20:50:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EEED1042;
-        Wed, 24 May 2023 20:51:42 -0700 (PDT)
-Received: from [10.162.43.6] (unknown [10.162.43.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E9CB93F6C4;
-        Wed, 24 May 2023 20:50:50 -0700 (PDT)
-Message-ID: <f428a035-4728-1007-e0d5-97988ffe33cc@arm.com>
-Date:   Thu, 25 May 2023 09:20:47 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+        with ESMTP id S237808AbjEYEEC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 00:04:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEF7E44;
+        Wed, 24 May 2023 21:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KuZ2KYM2jWDD/OX38Fvk42dRb2v8pjevr29ZRoRBdOE=; b=QSth0rOsvPstkMxGf0N/W1fbCv
+        fxciovskUNtLVdGWzlapH3lg1mlld7V5A55e0oNPXGtuY21XegqQFwQ2ErBlYfyaJW/+V1vA9XzJY
+        4EyQ/6TTYVfXsATxcyUXsVNUkbPZeiLRNtfKoZ1u1+FybgaHOJpkDX4O/c+aE/GZwHO5mhsRwTMC+
+        yUe303M/vscxDYFCRbCALvPSxlMf/oWGvny7Fw7ZqDqDTmrb1NubMAhXzVDd+A+qIVHPAelTz811R
+        dLEGrWEhlPV6Q1Pnd5MBi6sEfGpKLA/wildizYmbjXtXlcJL9S4yyCUpTBrMpENKcwDT7/MoVpErI
+        dlBgEGNQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q22Cg-00BpFW-B2; Thu, 25 May 2023 04:03:54 +0000
+Date:   Thu, 25 May 2023 05:03:54 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v4 29/36] mm: Remove page_mapping_file()
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Message-ID: <ZG7eKgwn8LHsOn+I@casper.infradead.org>
 References: <20230315051444.3229621-1-willy@infradead.org>
  <20230315051444.3229621-30-willy@infradead.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230315051444.3229621-30-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <f428a035-4728-1007-e0d5-97988ffe33cc@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f428a035-4728-1007-e0d5-97988ffe33cc@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
-> This function has no more users.
-
-On v6.4-rc3, there are still some users. Am I looking into a wrong
-tree/branch/tag ?
-
-~/workplace/linux$ git grep page_mapping_file
-arch/arc/mm/cache.c:    mapping = page_mapping_file(page);
-arch/arm/mm/copypage-v4mc.c:            __flush_dcache_page(page_mapping_file(from), from);
-arch/arm/mm/copypage-v6.c:              __flush_dcache_page(page_mapping_file(from), from);
-arch/arm/mm/copypage-xscale.c:          __flush_dcache_page(page_mapping_file(from), from);
-arch/arm/mm/fault-armv.c:       mapping = page_mapping_file(page);
-arch/arm/mm/flush.c:            mapping = page_mapping_file(page);
-arch/arm/mm/flush.c:    mapping = page_mapping_file(page);
-arch/csky/abiv1/cacheflush.c:   mapping = page_mapping_file(page);
-arch/csky/abiv1/cacheflush.c:   if (page_mapping_file(page)) {
-arch/mips/mm/cache.c:   struct address_space *mapping = page_mapping_file(page);
-arch/nios2/mm/cacheflush.c:     mapping = page_mapping_file(page);
-arch/nios2/mm/cacheflush.c:     mapping = page_mapping_file(page);
-arch/parisc/kernel/cache.c:     if (page_mapping_file(page) &&
-arch/parisc/kernel/cache.c:     struct address_space *mapping = page_mapping_file(page);
-arch/sh/mm/cache-sh4.c: struct address_space *mapping = page_mapping_file(page);
-arch/sh/mm/cache-sh7705.c:      struct address_space *mapping = page_mapping_file(page);
-arch/sparc/kernel/smp_64.c:                          page_mapping_file(page) != NULL));
-arch/sparc/kernel/smp_64.c:     if (page_mapping_file(page) != NULL &&
-arch/sparc/kernel/smp_64.c:                     if (page_mapping_file(page) != NULL)
-arch/sparc/kernel/smp_64.c:             if (page_mapping_file(page) != NULL)
-arch/sparc/mm/init_64.c:                             page_mapping_file(page) != NULL));
-arch/sparc/mm/init_64.c:        if (page_mapping_file(page) != NULL &&
-arch/sparc/mm/init_64.c:        mapping = page_mapping_file(page);
-arch/sparc/mm/tlb.c:            mapping = page_mapping_file(page);
-arch/xtensa/mm/cache.c: struct address_space *mapping = page_mapping_file(page);
-
+On Thu, May 25, 2023 at 09:20:47AM +0530, Anshuman Khandual wrote:
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  include/linux/pagemap.h | 8 --------
->  1 file changed, 8 deletions(-)
 > 
-> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-> index e56c2023aa0e..a87113055b9c 100644
-> --- a/include/linux/pagemap.h
-> +++ b/include/linux/pagemap.h
-> @@ -394,14 +394,6 @@ static inline struct address_space *page_file_mapping(struct page *page)
->  	return folio_file_mapping(page_folio(page));
->  }
->  
-> -/*
-> - * For file cache pages, return the address_space, otherwise return NULL
-> - */
-> -static inline struct address_space *page_mapping_file(struct page *page)
-> -{
-> -	return folio_flush_mapping(page_folio(page));
-> -}
-> -
->  /**
->   * folio_inode - Get the host inode for this folio.
->   * @folio: The folio.
+> On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
+> > This function has no more users.
+> 
+> On v6.4-rc3, there are still some users. Am I looking into a wrong
+> tree/branch/tag ?
+
+Did you apply patches 1-28 before grepping?
