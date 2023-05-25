@@ -2,90 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6A5710DC4
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 16:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592E0710DE9
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 16:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241435AbjEYOAg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 10:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S241549AbjEYOCx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 10:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241445AbjEYOAf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 10:00:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F531A8;
-        Thu, 25 May 2023 07:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11766645FF;
-        Thu, 25 May 2023 14:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6CD96C4339E;
-        Thu, 25 May 2023 14:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685023221;
-        bh=gfRrbhhyEcqbLyZDyAZGcAkDAS8G/fyE/7edxRHWzWA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tFs1hrqMAOfe3D+3+g6imFRefaUOB1J+FtU3P2LhkbSR/PiRkavm8sFdT1CPgKbs1
-         K1JcAF61qCTDSr/Gi37M29/vn98Lt9AN0oWH1P2T49BKd5WKwyVqAxFPo0mc4v9Zhc
-         m42SMhyZvafGwLSTma8taYbhqev06FL8JwUWc/w/vDt2D/+auWB1Y5FvlifLV+9ccS
-         gsEtFkOKNz/mjjV6UpIrFqa7sdXgSmZv5l7OfrtwM/fHDptFuGboQw9Gdabhkovjro
-         ZAsIYaSO+nS9Idjqlrj0erH32LUcxiaoyiDufXA/nyw+5USvbph0wbDN10IRPdrENg
-         q5NjHmg2C5w9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4695CC395DF;
-        Thu, 25 May 2023 14:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S241521AbjEYOCn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 10:02:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8372D1A1;
+        Thu, 25 May 2023 07:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685023335; x=1716559335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FLtz5z2b4ufY5t0xgFsw0GaGtQUkElO5inKmr9KYp8g=;
+  b=NKQKVvnThjh91cqzhMi3k8wi/7avFhlD4M/8tyyOlJgabiot2PzRNf0q
+   xLbXtqRzfGS7rH1ojG38CFTSM9xc1OREac+h44YqsfY62vO3V5CYBE8rg
+   GVmyq0FTABVFh7p45A4FJpbQ9qnlCSPLjMTjsKc3yvPNuAL0aYcHKoMNB
+   SkDXZfrhf16x4Msm6i//NyOpf313enZkop9gwk2/wRxAot57PYOVJ3frl
+   fEf93AWDQRRa3elyWZ2+9uNOACGBv2xCbjA1FWoSwG98NzASFEQJVpTgx
+   KXIqhgMoMiyl8LwIE0fopqLuk6crG0qLx2KvCj4qMrCsl1sfB7bGBbtai
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="asc'?scan'208";a="153916143"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 07:02:01 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 07:02:00 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 25 May 2023 07:01:59 -0700
+Date:   Thu, 25 May 2023 15:01:37 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v2 1/4] riscv: move options to keep entries sorted
+Message-ID: <20230525-helpless-rundown-47939298e75f@wendy>
+References: <20230523165502.2592-1-jszhang@kernel.org>
+ <20230523165502.2592-2-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] s390/ism: Set DMA coherent mask
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168502322128.12931.12742922917026189347.git-patchwork-notify@kernel.org>
-Date:   Thu, 25 May 2023 14:00:21 +0000
-References: <20230524075411.3734141-1-schnelle@linux.ibm.com>
-In-Reply-To: <20230524075411.3734141-1-schnelle@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, wintera@linux.ibm.com,
-        wenjia@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, mjrosato@linux.ibm.com,
-        pmorel@linux.ibm.com, linux-s390@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0SxiKJNDT1DzhBlm"
+Content-Disposition: inline
+In-Reply-To: <20230523165502.2592-2-jszhang@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello:
+--0SxiKJNDT1DzhBlm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+On Wed, May 24, 2023 at 12:54:59AM +0800, Jisheng Zhang wrote:
+> Recently, some commits break the entries order. Properly move their
+> locations to keep entries sorted.
+>=20
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-On Wed, 24 May 2023 09:54:10 +0200 you wrote:
-> A future change will convert the DMA API implementation from the
-> architecture specific arch/s390/pci/pci_dma.c to using the common code
-> drivers/iommu/dma-iommu.c which the utilizes the same IOMMU hardware
-> through the s390-iommu driver. Unlike the s390 specific DMA API this
-> requires devices to correctly set the coherent mask to be allowed to use
-> IOVAs >2^32 in dma_alloc_coherent(). This was however not done for ISM
-> devices. ISM requires such addresses since currently the DMA aperture
-> for PCI devices starts at 2^32 and all calls to dma_alloc_coherent()
-> would thus fail.
-> 
-> [...]
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Here is the summary with links:
-  - [net-next] s390/ism: Set DMA coherent mask
-    https://git.kernel.org/netdev/net-next/c/657d42cf5df6
+Thanks,
+Conor.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--0SxiKJNDT1DzhBlm
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9qQQAKCRB4tDGHoIJi
+0m+fAQDhxk9pYPQ9CMmp4SnJa1pOHiM29+sqXxmtN1nOODe35gEA261Bp8FpQngP
+XAxfBzQVFHzicU96pieUwmGOnyFNNAI=
+=wtvX
+-----END PGP SIGNATURE-----
+
+--0SxiKJNDT1DzhBlm--
