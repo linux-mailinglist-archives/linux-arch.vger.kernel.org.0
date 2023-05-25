@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1839711843
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 22:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443CC71187D
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 22:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241701AbjEYUjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 16:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S230502AbjEYUxi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 16:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241704AbjEYUjI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 16:39:08 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04975198;
-        Thu, 25 May 2023 13:39:06 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-babb985f9c8so207611276.1;
-        Thu, 25 May 2023 13:39:05 -0700 (PDT)
+        with ESMTP id S239398AbjEYUxh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 16:53:37 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3725135;
+        Thu, 25 May 2023 13:53:35 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5619032c026so2739997b3.1;
+        Thu, 25 May 2023 13:53:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685047145; x=1687639145;
+        d=gmail.com; s=20221208; t=1685048015; x=1687640015;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VbD1OYIGibvwFMRrdJMTdc4wGgHOsGEW6NjvtgF3JXU=;
-        b=hsCL+sMjCSPEeQwY9ipI1+Ugi88AzJEwmAmsO1IR16vD0JLbTTRj1EWY5Xyhze+GRV
-         OIRanM33HOk1xRjR7/GHHUD5lVS6HFpcFxeDfzeE8/I0OcBZz8czUxvwLPGCPl3ZI/jZ
-         DVqHoFaNkDaMUMuSYvpfhlO6EV7GylFCaeIZ84F6j+93L973raF6hD3O66C/pZ4eWLz+
-         QLbFT/lbaOp/9U1+H051UFvXelrd7lzOtz3vj1HsEWe84ksN1HTRbSJYJedE8uZu9k6u
-         F1jI+oM85Ujez7vT22bFzFiXTlvVTKRouPJkd38Xldm/McWaSi1VxP376ACeyocGF45q
-         tGcA==
+        bh=e72vGCwhPoa8gN25X6qmdDXVUsdWWJFQx8MjqDcoGDA=;
+        b=PRDb4uH8g3Vv6gZWsZ1gkHY+ANMWnqtSqEQNi+t68NKJyRAPGtGIjXS+o6ABKHZ7yv
+         q51K7Vr8Q1brsvSZQkdt4WeLJo6vXr04Grr6RxGrB/PY5E3pp1cBQWvGni0wb9TWYIbM
+         5FWOkPlw4M42rE2TxcMBGldDhB3WLqb55j0CqgwQEW0TmVHxxCeHx2Zs7VLCqGumlN8c
+         PmQWTAjBOIMu7fHadjtAjQF7IDQQLa3x/OUyFY2aJiBpGADt0K07OCNxrHer3KqiVV69
+         GxawL7cJdKwcX3ZUAGYa8EVBTKoLWza/yXtntrwGkP8KyxHL6U40gF5XovIoxt2V2Fr9
+         5Wvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685047145; x=1687639145;
+        d=1e100.net; s=20221208; t=1685048015; x=1687640015;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VbD1OYIGibvwFMRrdJMTdc4wGgHOsGEW6NjvtgF3JXU=;
-        b=RADtvWPTsty7u/8dYTbrx59pVlcjOflYMAwibH1KJ0csf/OTij88TOlCZfJ98vF3zJ
-         CcazhmYIBZpsDzoMMYBKj2zL13bsyrkcFLDBFb8erobK2fltBR5KO/K/oop0i9mbr/b8
-         ULiqlW257Ci0BA0E2psb/PVHL6oOQ37OOREPnvGCj24hHOfVtGjbTUu/YVuLd5oNcjgM
-         9O9BH72RmAB7YHTPCHvcVrqCcdenZHq1eF3h9XkYPGwJn+yl2w17gBP7zuTZVBE0AjsJ
-         NPjP6wKKsJaJFvokZ4nCW9I9BayTDA3WW6EEUEGL2P+CBsvL4VbBoYRAF5J/IgNWfReY
-         4uqQ==
-X-Gm-Message-State: AC+VfDxmsHN7otIBeoWqCEPSCDIfZ9noaEvwC6YuStLsIqPnY76jhknN
-        tHdKgtjfKkxCB1P9HS0/srEl6gQcmL0CMOwtBpui88jwvbK7GQ==
-X-Google-Smtp-Source: ACHHUZ4OcPsUwJDpZZlKfNKbpYbRuRkX6Q4UETTfFRyNyytwfdAtGP02e8IuqJSt1+a/7sd0aU+yePVkYawV73NLE1o=
-X-Received: by 2002:a25:d111:0:b0:ba8:4b48:1de0 with SMTP id
- i17-20020a25d111000000b00ba84b481de0mr4810389ybg.47.1685047145065; Thu, 25
- May 2023 13:39:05 -0700 (PDT)
+        bh=e72vGCwhPoa8gN25X6qmdDXVUsdWWJFQx8MjqDcoGDA=;
+        b=l90JmrOaZOXkoBsdhktrwpn3XrEl/jjYeJMgz6i+MdH9WsGjeB08++NnFb7CwyrNJ6
+         tXC8jcwfxHxDy59iWdaIt3RVQ+Ro4dQuX/rehxzA/qG5hwLyzi7eQmPq+uV8BVJ9I4LB
+         vngnvWCHPt+T+ICtj41g9K4VXfAIU9kUP5K/kTnm9i+Pmar222BLN8rLNKKrjF1LKrFI
+         N2Ld3sdgLPcsqOAwyqnbAaltsXzNMSOXCTSgtDentXPvLIrJxF1KN0B1o+Q4p0dO8VNx
+         pQDqCduwbS/nFeg97063NXmuDmpL/o535skw9KJO4Tj29N25kxjXbeJzHyx15GgyW3tq
+         5idQ==
+X-Gm-Message-State: AC+VfDzRpz8rywqMG6sXfKpWGiyCWE/Us9uX9OghUtxHrDQ/auR7F7M8
+        DH4Vle3t+J6hFXdNtsGjfQcAWvuEvExVCOLWqj+HThRu8vKL6A==
+X-Google-Smtp-Source: ACHHUZ6an6zID91jt8f3LQ4QGAvFJ9u++x53xf0fSCLXe0WivFCmGXJlgIcqvJgo7KICituWVYFJf3qgdSw5/O75Zdg=
+X-Received: by 2002:a81:4810:0:b0:55a:84c9:e952 with SMTP id
+ v16-20020a814810000000b0055a84c9e952mr1013445ywa.17.1685048014974; Thu, 25
+ May 2023 13:53:34 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230501192829.17086-1-vishal.moola@gmail.com>
- <20230501192829.17086-2-vishal.moola@gmail.com> <20230525085555.GV4967@kernel.org>
- <CAOzc2pxx489C26NnS9NHkUQY9PYiagzt-nYK6LnkJ1N3NYQWzg@mail.gmail.com> <20230525202011.GZ4967@kernel.org>
-In-Reply-To: <20230525202011.GZ4967@kernel.org>
+ <20230501192829.17086-6-vishal.moola@gmail.com> <20230525090956.GX4967@kernel.org>
+ <CAOzc2pxSH6GhBnAoSOjvYJk2VdMDFZi3H_1qGC5Cdyp3j4AzPQ@mail.gmail.com> <20230525202537.GA4967@kernel.org>
+In-Reply-To: <20230525202537.GA4967@kernel.org>
 From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Thu, 25 May 2023 13:38:54 -0700
-Message-ID: <CAOzc2pzGPBYL3S=noc1AAEtep04GexRmn2f_T3BPgVFZKaqXTg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/34] mm: Add PAGE_TYPE_OP folio functions
+Date:   Thu, 25 May 2023 13:53:24 -0700
+Message-ID: <CAOzc2pxD21mxisy-M5b_SDUv0MYwNHqaVDJnJpARuDG_HjCbOg@mail.gmail.com>
+Subject: Re: [PATCH v2 05/34] mm: add utility functions for ptdesc
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
@@ -71,50 +71,54 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 25, 2023 at 1:20=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
+On Thu, May 25, 2023 at 1:26=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
 te:
 >
-> On Thu, May 25, 2023 at 10:00:23AM -0700, Vishal Moola wrote:
-> > On Thu, May 25, 2023 at 1:56=E2=80=AFAM Mike Rapoport <rppt@kernel.org>=
+> On Thu, May 25, 2023 at 11:04:28AM -0700, Vishal Moola wrote:
+> > On Thu, May 25, 2023 at 2:10=E2=80=AFAM Mike Rapoport <rppt@kernel.org>=
  wrote:
+> > > > +
+> > > > +static inline struct ptdesc *ptdesc_alloc(gfp_t gfp, unsigned int =
+order)
+> > > > +{
+> > > > +     struct page *page =3D alloc_pages(gfp | __GFP_COMP, order);
+> > > > +
+> > > > +     return page_ptdesc(page);
+> > > > +}
+> > > > +
+> > > > +static inline void ptdesc_free(struct ptdesc *pt)
+> > > > +{
+> > > > +     struct page *page =3D ptdesc_page(pt);
+> > > > +
+> > > > +     __free_pages(page, compound_order(page));
+> > > > +}
 > > >
-> > > Hi,
-> > >
-> > > On Mon, May 01, 2023 at 12:27:56PM -0700, Vishal Moola (Oracle) wrote=
-:
-> > > > No folio equivalents for page type operations have been defined, so
-> > > > define them for later folio conversions.
-> > >
-> > > Can you please elaborate why would we need folios for page table desc=
-riptors?
+> > > The ptdesc_{alloc,free} API does not sound right to me. The name
+> > > ptdesc_alloc() implies the allocation of the ptdesc itself, rather th=
+an
+> > > allocation of page table page. The same goes for free.
 > >
-> > Thanks for the review!
-> >
-> > These macros are for callers that care about the page type, i.e. Table =
-and
-> > Buddy. Aside from accounting for those cases, the page tables don't use=
- folios.
-> > These are more for the cleanliness of those callers.
+> > I'm not sure I see the difference. Could you elaborate?
 >
-> But why using folio APIs for PageType will be cleaner than using page API=
-s?
-> Do you have an example?
+> I read ptdesc_alloc() as "allocate a ptdesc" rather than as "allocate a
+> page for page table and return ptdesc pointing to that page". Seems very
+> confusing to me already and it will be even more confusion when we'll sta=
+rt
+> allocating actual ptdescs.
 
-Ah, for example in mm/memory-failure.c there are a couple uses of PageTable=
-.
-Like the line :
-if (folio_test_slab(folio) || PageTable(&folio->page) ||
-folio_test_reserved(folio))
-where that PageTable(&folio->page) can now be written as folio_test_table(f=
-olio)
-instead.
+Hmm, I see what you're saying. I'm envisioning this function evolving into
+one that allocates a ptdesc later. I don't see why we would need to have bo=
+th a
+page table page AND ptdesc at any point, but that may be a lack of knowledg=
+e
+from my part.
 
-Also there are numerous uses of PageBuddy in mm/compaction.c that will
-likely need to be converted to folios as well.
+I was thinking later, if necessary, we could make another function
+(only to be used internally) to allocate page table pages.
