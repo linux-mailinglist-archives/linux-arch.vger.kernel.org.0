@@ -2,98 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592E0710DE9
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 16:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1EC71107D
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 18:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241549AbjEYOCx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 10:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
+        id S231964AbjEYQJT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 12:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241521AbjEYOCn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 10:02:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8372D1A1;
-        Thu, 25 May 2023 07:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685023335; x=1716559335;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FLtz5z2b4ufY5t0xgFsw0GaGtQUkElO5inKmr9KYp8g=;
-  b=NKQKVvnThjh91cqzhMi3k8wi/7avFhlD4M/8tyyOlJgabiot2PzRNf0q
-   xLbXtqRzfGS7rH1ojG38CFTSM9xc1OREac+h44YqsfY62vO3V5CYBE8rg
-   GVmyq0FTABVFh7p45A4FJpbQ9qnlCSPLjMTjsKc3yvPNuAL0aYcHKoMNB
-   SkDXZfrhf16x4Msm6i//NyOpf313enZkop9gwk2/wRxAot57PYOVJ3frl
-   fEf93AWDQRRa3elyWZ2+9uNOACGBv2xCbjA1FWoSwG98NzASFEQJVpTgx
-   KXIqhgMoMiyl8LwIE0fopqLuk6crG0qLx2KvCj4qMrCsl1sfB7bGBbtai
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="asc'?scan'208";a="153916143"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 07:02:01 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 25 May 2023 07:02:00 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 25 May 2023 07:01:59 -0700
-Date:   Thu, 25 May 2023 15:01:37 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        with ESMTP id S231451AbjEYQJR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 12:09:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0774CE4A;
+        Thu, 25 May 2023 09:08:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5360B61757;
+        Thu, 25 May 2023 16:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5F6C433EF;
+        Thu, 25 May 2023 16:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685030925;
+        bh=yLNmU6oM5rYoi5bPYZ/1slw69C0cgZhSY5hlcUA5fLw=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Bu7qXz//675tf5qYPE/GYQkvDL0wEkK4QF/4oVCwgjKzAF7dkBEN0QLTxDylDHISb
+         5RZrMsrBMGLWEmbz62O3KAnacy3+YjbfzuLTcVCgUvYPGfDg+toCJHFVJ4le5xcSmJ
+         a+9exhF5fAeDvnUbEBtH1ONGYujt5o/ThXx38F4nhgwwbSA/RHgx4/fJavoct6E1Ll
+         phsxg0+tMYGVUkFEfZdqU8gk31GNHA7fvw19BMPW6/Qts421gsq0kS+44mCI754Tt3
+         fnayGxDEg7B0q1k/ltESgbFqWmjF5sUnDEbb3v5ps4dzqN1Hja8KvDTK09v6B9HdzH
+         zbqQxOOExmERw==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Re: [v5,43/44] wifi: add HAS_IOPORT dependencies
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230522105049.1467313-44-schnelle@linux.ibm.com>
+References: <20230522105049.1467313-44-schnelle@linux.ibm.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jouni Malinen <j@w1.fi>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 1/4] riscv: move options to keep entries sorted
-Message-ID: <20230525-helpless-rundown-47939298e75f@wendy>
-References: <20230523165502.2592-1-jszhang@kernel.org>
- <20230523165502.2592-2-jszhang@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0SxiKJNDT1DzhBlm"
-Content-Disposition: inline
-In-Reply-To: <20230523165502.2592-2-jszhang@kernel.org>
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-wireless@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168503091986.22756.11469892190478443875.kvalo@kernel.org>
+Date:   Thu, 25 May 2023 16:08:41 +0000 (UTC)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---0SxiKJNDT1DzhBlm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Niklas Schnelle <schnelle@linux.ibm.com> wrote:
 
-On Wed, May 24, 2023 at 12:54:59AM +0800, Jisheng Zhang wrote:
-> Recently, some commits break the entries order. Properly move their
-> locations to keep entries sorted.
->=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Acked-by: Kalle Valo <kvalo@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Patch applied to wireless-next.git, thanks.
 
-Thanks,
-Conor.
+040a22191879 wifi: add HAS_IOPORT dependencies
 
---0SxiKJNDT1DzhBlm
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230522105049.1467313-44-schnelle@linux.ibm.com/
 
------BEGIN PGP SIGNATURE-----
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9qQQAKCRB4tDGHoIJi
-0m+fAQDhxk9pYPQ9CMmp4SnJa1pOHiM29+sqXxmtN1nOODe35gEA261Bp8FpQngP
-XAxfBzQVFHzicU96pieUwmGOnyFNNAI=
-=wtvX
------END PGP SIGNATURE-----
-
---0SxiKJNDT1DzhBlm--
