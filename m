@@ -2,82 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AD67105B2
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 08:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6652710812
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 10:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjEYGbt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 02:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S240515AbjEYI47 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 04:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbjEYGbr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 02:31:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40124197;
-        Wed, 24 May 2023 23:31:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1631E1042;
-        Wed, 24 May 2023 23:32:30 -0700 (PDT)
-Received: from [10.162.43.6] (unknown [10.162.43.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A4C43F762;
-        Wed, 24 May 2023 23:31:43 -0700 (PDT)
-Message-ID: <11c02123-4fd5-1f70-2791-2c793d45cef2@arm.com>
-Date:   Thu, 25 May 2023 12:01:40 +0530
+        with ESMTP id S240590AbjEYI4g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 04:56:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C08E10C1;
+        Thu, 25 May 2023 01:56:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A2564412;
+        Thu, 25 May 2023 08:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9425AC433EF;
+        Thu, 25 May 2023 08:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685004981;
+        bh=T3x6HsAO3RQbrXA8lAmGWzhIEFxQo3e/SuF/zmio4Hs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mRtUeUA+TIvgOPBLeDE0LEeluR6Lkzocki1ce4LxvGW3Kh74OsnmFoUFRRmQEOqgY
+         vPbs8UllpBsHYQNETyRPKHNQXbkjzvcZ/qcNMJMO2YSn7oQ9dFwS8Ece6KmReDjGKv
+         UHsfvGg5kn0tsbjmZAqeTwYppOTlzTxEsz6d+ZO+0GcrxaOJ0wF3N2ge6+B4EiqPJP
+         Rr14bkavs3kxuqVnqdy8wSuE2VMYBsI0nPEtl+gq6jIzwj54Hlj3QoMxeOG7OsIhLt
+         Fod2UUbjMqcZpiBjbvghJGsfjbRDVycHZQ/GoUx1cUGXfXrx/0id06caAMVPKwYBaI
+         blTpXwhMXt6qg==
+Date:   Thu, 25 May 2023 11:55:55 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 01/34] mm: Add PAGE_TYPE_OP folio functions
+Message-ID: <20230525085555.GV4967@kernel.org>
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-2-vishal.moola@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 32/36] mm: Use flush_icache_pages() in do_set_pmd()
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-33-willy@infradead.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230315051444.3229621-33-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230501192829.17086-2-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi,
 
+On Mon, May 01, 2023 at 12:27:56PM -0700, Vishal Moola (Oracle) wrote:
+> No folio equivalents for page type operations have been defined, so
+> define them for later folio conversions.
 
-On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
-> Push the iteration over each page down to the architectures (many
-> can flush the entire THP without iteration).
+Can you please elaborate why would we need folios for page table descriptors? 
+ 
+> Also changes the Page##uname macros to take in const struct page* since
+> we only read the memory here.
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 > ---
->  mm/memory.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  include/linux/page-flags.h | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 > 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index c5f1bf906d0c..6aa21e8f3753 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4209,7 +4209,6 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
->  	bool write = vmf->flags & FAULT_FLAG_WRITE;
->  	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
->  	pmd_t entry;
-> -	int i;
->  	vm_fault_t ret = VM_FAULT_FALLBACK;
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 1c68d67b832f..607b495d1b57 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -902,6 +902,8 @@ static inline bool is_page_hwpoison(struct page *page)
 >  
->  	if (!transhuge_vma_suitable(vma, haddr))
-> @@ -4242,8 +4241,7 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
->  	if (unlikely(!pmd_none(*vmf->pmd)))
->  		goto out;
+>  #define PageType(page, flag)						\
+>  	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
+> +#define folio_test_type(folio, flag)					\
+> +	((folio->page.page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
 >  
-> -	for (i = 0; i < HPAGE_PMD_NR; i++)
-> -		flush_icache_page(vma, page + i);
-> +	flush_icache_pages(vma, page, HPAGE_PMD_NR);
+>  static inline int page_type_has_type(unsigned int page_type)
+>  {
+> @@ -914,20 +916,34 @@ static inline int page_has_type(struct page *page)
+>  }
 >  
->  	entry = mk_huge_pmd(page, vma->vm_page_prot);
->  	if (write)
+>  #define PAGE_TYPE_OPS(uname, lname)					\
+> -static __always_inline int Page##uname(struct page *page)		\
+> +static __always_inline int Page##uname(const struct page *page)		\
+>  {									\
+>  	return PageType(page, PG_##lname);				\
+>  }									\
+> +static __always_inline int folio_test_##lname(const struct folio *folio)\
+> +{									\
+> +	return folio_test_type(folio, PG_##lname);			\
+> +}									\
+>  static __always_inline void __SetPage##uname(struct page *page)		\
+>  {									\
+>  	VM_BUG_ON_PAGE(!PageType(page, 0), page);			\
+>  	page->page_type &= ~PG_##lname;					\
+>  }									\
+> +static __always_inline void __folio_set_##lname(struct folio *folio)	\
+> +{									\
+> +	VM_BUG_ON_FOLIO(!folio_test_type(folio, 0), folio);		\
+> +	folio->page.page_type &= ~PG_##lname;				\
+> +}									\
+>  static __always_inline void __ClearPage##uname(struct page *page)	\
+>  {									\
+>  	VM_BUG_ON_PAGE(!Page##uname(page), page);			\
+>  	page->page_type |= PG_##lname;					\
+> -}
+> +}									\
+> +static __always_inline void __folio_clear_##lname(struct folio *folio)	\
+> +{									\
+> +	VM_BUG_ON_FOLIO(!folio_test_##lname(folio), folio);		\
+> +	folio->page.page_type |= PG_##lname;				\
+> +}									\
+>  
+>  /*
+>   * PageBuddy() indicates that the page is free and in the buddy system
+> -- 
+> 2.39.2
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
