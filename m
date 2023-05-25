@@ -2,87 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1EC71107D
-	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 18:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F21C711186
+	for <lists+linux-arch@lfdr.de>; Thu, 25 May 2023 19:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjEYQJT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 May 2023 12:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S240476AbjEYRAi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 May 2023 13:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjEYQJR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 12:09:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0774CE4A;
-        Thu, 25 May 2023 09:08:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5360B61757;
-        Thu, 25 May 2023 16:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5F6C433EF;
-        Thu, 25 May 2023 16:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685030925;
-        bh=yLNmU6oM5rYoi5bPYZ/1slw69C0cgZhSY5hlcUA5fLw=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=Bu7qXz//675tf5qYPE/GYQkvDL0wEkK4QF/4oVCwgjKzAF7dkBEN0QLTxDylDHISb
-         5RZrMsrBMGLWEmbz62O3KAnacy3+YjbfzuLTcVCgUvYPGfDg+toCJHFVJ4le5xcSmJ
-         a+9exhF5fAeDvnUbEBtH1ONGYujt5o/ThXx38F4nhgwwbSA/RHgx4/fJavoct6E1Ll
-         phsxg0+tMYGVUkFEfZdqU8gk31GNHA7fvw19BMPW6/Qts421gsq0kS+44mCI754Tt3
-         fnayGxDEg7B0q1k/ltESgbFqWmjF5sUnDEbb3v5ps4dzqN1Hja8KvDTK09v6B9HdzH
-         zbqQxOOExmERw==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229832AbjEYRAg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 May 2023 13:00:36 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE4A194;
+        Thu, 25 May 2023 10:00:35 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba86ec8047bso1164565276.3;
+        Thu, 25 May 2023 10:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685034035; x=1687626035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JHrTsqL0nqeqxBvVw7n3mE3d9UFJpL2j8If6jZFByTc=;
+        b=VEXX4D+/ehgygAWm5BmRxKMQVayX+huiD86BmHpUJbQZIavyZk8MqgFgBVJCgltW8G
+         DGf1XLm8HhYD7C5Ltu5hncRV4xkFiRLvjnKAKUZAVqhHyZU7uDae6IK3C5qSD3GFgpGy
+         OqLSmV63QlFHc9BLqOH+z3/46t/qsNvryv2gOmzRQJTarAzeFF3wkmaawd/u1vYzudf+
+         2OoFyE7ArYkSpPwfiPG4wUCBT5egkmxxlXwXAVhzZYomT8xAIzGjfTrChNVAlbK2FaKO
+         3t03QrSsNM3MzVGbAgb9jEqdKkZ/GGbY36ZIzPCKupNWpFQuCEQc+t41/FAd5d9jW5uu
+         ry0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685034035; x=1687626035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JHrTsqL0nqeqxBvVw7n3mE3d9UFJpL2j8If6jZFByTc=;
+        b=RMzZUDsJuZLFwgNW98WpKtE0ELbyAiHu1ZKZKNTR0WmqNKZKoXvuKYpCk0sAd8GvrV
+         tEVjLZNihwtsJ+7ELcn5/Wu7Z/OolSONBQfoJ7u7LFEU/MAHrbWrGxnpSWKDzwGwaHZF
+         xZVQp0L1WW/rhxbN8mihO+t9VO4Sdd5gPaYY3iiy0jsbJc3ODwR1p4qL1+r9DfYE0vDg
+         8JfEqi8GOlgYwmhHlIsEdsi6xnStaVP0X1QLzWNoxTKDiLFav7iIT382D0GIvKY7RwWN
+         JKybNMvOdXyF5xgzbl7nuMqVlgFEe8LZUoz/cgYMYonpSrmYxzynYgCn0ui0ItvfGR05
+         5/IQ==
+X-Gm-Message-State: AC+VfDx8+JIBFKYl9eFzTAc5/+skqsZNO5jo7VisB7gsMRGosQzcvIvb
+        9mgWXarQKat5ShyFN5Qo9hPWbhNEhfOoTFMT05y4MRzA
+X-Google-Smtp-Source: ACHHUZ47ymCJWriUjad8DQ05hIMcCKin/PTMMU7nNv3HHwEyV9e0xB3DhHdcf1Fkkg8cgW7lAUtL7p6ayG4dp+Ur5MI=
+X-Received: by 2002:a25:2487:0:b0:ba8:5ded:13f3 with SMTP id
+ k129-20020a252487000000b00ba85ded13f3mr4152229ybk.17.1685034034679; Thu, 25
+ May 2023 10:00:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [v5,43/44] wifi: add HAS_IOPORT dependencies
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230522105049.1467313-44-schnelle@linux.ibm.com>
-References: <20230522105049.1467313-44-schnelle@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jouni Malinen <j@w1.fi>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-wireless@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168503091986.22756.11469892190478443875.kvalo@kernel.org>
-Date:   Thu, 25 May 2023 16:08:41 +0000 (UTC)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-2-vishal.moola@gmail.com> <20230525085555.GV4967@kernel.org>
+In-Reply-To: <20230525085555.GV4967@kernel.org>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Thu, 25 May 2023 10:00:23 -0700
+Message-ID: <CAOzc2pxx489C26NnS9NHkUQY9PYiagzt-nYK6LnkJ1N3NYQWzg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/34] mm: Add PAGE_TYPE_OP folio functions
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+On Thu, May 25, 2023 at 1:56=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> Hi,
+>
+> On Mon, May 01, 2023 at 12:27:56PM -0700, Vishal Moola (Oracle) wrote:
+> > No folio equivalents for page type operations have been defined, so
+> > define them for later folio conversions.
+>
+> Can you please elaborate why would we need folios for page table descript=
+ors?
 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
-> 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Acked-by: Kalle Valo <kvalo@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Thanks for the review!
 
-Patch applied to wireless-next.git, thanks.
-
-040a22191879 wifi: add HAS_IOPORT dependencies
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230522105049.1467313-44-schnelle@linux.ibm.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+These macros are for callers that care about the page type, i.e. Table and
+Buddy. Aside from accounting for those cases, the page tables don't use fol=
+ios.
+These are more for the cleanliness of those callers.
