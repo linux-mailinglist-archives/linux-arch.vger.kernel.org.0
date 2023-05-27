@@ -2,157 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA10712961
-	for <lists+linux-arch@lfdr.de>; Fri, 26 May 2023 17:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3AE7713418
+	for <lists+linux-arch@lfdr.de>; Sat, 27 May 2023 12:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjEZPZn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 May 2023 11:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S232031AbjE0KmM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 May 2023 06:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjEZPZl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 May 2023 11:25:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEB310E4;
-        Fri, 26 May 2023 08:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=fzBUUGDSePeEiX9gwB0ZqI0CRSJxQ9nzVTEYiUKgGDE=; b=tnSiDcCvgJS2frnsNgMYmk1Lt7
-        nivbEypY3fFfz1VyUE8RweW7oW3gnI+I+XmlT3yKiVDDw9vuBR/BM5fRgWzRm/kuD1KAzFPuiG46J
-        Uop+W0XLrLNr7vBlw6CjJHnn1IxESBuoCUjq3n8slDwXiXh2ddvzaSIEJTJX1Bxvh0rZw/29BPxFw
-        0oryF1mbYJwKzqqJQ5bCEGZ9Ax+Nlt+gHnwzs8wpXtGkEMUIZa+uQAy+g4aNUhfMU7Iae/PqrKsxh
-        fUa8epXuIMDwCcYjHGBD1FRv4FCSpl+hQsjR00kt86g50aeN+EARJeNJScoCc7mL/i6hfnUtHAFAD
-        a9M4bJuQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2ZJL-002xeh-3B;
-        Fri, 26 May 2023 15:25:00 +0000
-Message-ID: <90e1b43d-92a4-50fc-e82d-4590a9651de1@infradead.org>
-Date:   Fri, 26 May 2023 08:24:57 -0700
+        with ESMTP id S229717AbjE0KmL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 May 2023 06:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF110A;
+        Sat, 27 May 2023 03:42:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EF3F60B67;
+        Sat, 27 May 2023 10:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE11AC433EF;
+        Sat, 27 May 2023 10:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685184129;
+        bh=Z4TeIapFpeS1e5WxOMUpOrDg87Rxe8ydQavxJsO0vug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qtjpACU3i7FVjLT023Ddg5iX1Sm9mYGyR9BAcAldcZGtkGi1IgPSjR20Gkom5YVFi
+         9GqwWTqSe6aCGE+Jk6r1lk9ASI1BqwfpG0h2HSrQ1BaMlG84/DZwyIoKGVbNuFJs46
+         KM/CX4KgN01bs8ctMAmNzdH3P/7vJMOVtl/spQpp1NeNWLVBfmoG8tubTTHEz78nbM
+         Mi5TzSK4O/LtfJpDtvhI5QLWzSn68VROvh7bVsKVmfCA0L8DXw2EUj7uC78b19+5Rx
+         6iPjAV5tMRrgS7SBBOhhGo75UiSObo7waKqxJ5uuMYjPYcI7MRtTbdg+ba8TB9jNgs
+         b+IpYHQpsYW9A==
+Date:   Sat, 27 May 2023 13:41:44 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vishal Moola <vishal.moola@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 05/34] mm: add utility functions for ptdesc
+Message-ID: <20230527104144.GH4967@kernel.org>
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-6-vishal.moola@gmail.com>
+ <20230525090956.GX4967@kernel.org>
+ <CAOzc2pxSH6GhBnAoSOjvYJk2VdMDFZi3H_1qGC5Cdyp3j4AzPQ@mail.gmail.com>
+ <20230525202537.GA4967@kernel.org>
+ <CAOzc2pxD21mxisy-M5b_SDUv0MYwNHqaVDJnJpARuDG_HjCbOg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
- comments
-Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
-        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
-        linux-doc@vger.kernel.org, paulmck@kernel.org,
-        sstabellini@kernel.org, will@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230522122429.1915021-1-mark.rutland@arm.com>
- <20230522122429.1915021-25-mark.rutland@arm.com>
- <96d6930b-78b1-4b4c-63e3-c385a764d6e3@gmail.com>
- <20230524141152.GL4253@hirez.programming.kicks-ass.net>
- <e76c924a-762c-061d-02b8-13be884ab344@gmail.com>
- <c9399722-b2df-52ee-cefe-338b118aeb1e@infradead.org>
- <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOzc2pxD21mxisy-M5b_SDUv0MYwNHqaVDJnJpARuDG_HjCbOg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 5/26/23 03:27, Akira Yokosawa wrote:
-> Hi Randy,
+On Thu, May 25, 2023 at 01:53:24PM -0700, Vishal Moola wrote:
+> On Thu, May 25, 2023 at 1:26 PM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > On Thu, May 25, 2023 at 11:04:28AM -0700, Vishal Moola wrote:
+> > > On Thu, May 25, 2023 at 2:10 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > > > > +
+> > > > > +static inline struct ptdesc *ptdesc_alloc(gfp_t gfp, unsigned int order)
+> > > > > +{
+> > > > > +     struct page *page = alloc_pages(gfp | __GFP_COMP, order);
+> > > > > +
+> > > > > +     return page_ptdesc(page);
+> > > > > +}
+> > > > > +
+> > > > > +static inline void ptdesc_free(struct ptdesc *pt)
+> > > > > +{
+> > > > > +     struct page *page = ptdesc_page(pt);
+> > > > > +
+> > > > > +     __free_pages(page, compound_order(page));
+> > > > > +}
+> > > >
+> > > > The ptdesc_{alloc,free} API does not sound right to me. The name
+> > > > ptdesc_alloc() implies the allocation of the ptdesc itself, rather than
+> > > > allocation of page table page. The same goes for free.
+> > >
+> > > I'm not sure I see the difference. Could you elaborate?
+> >
+> > I read ptdesc_alloc() as "allocate a ptdesc" rather than as "allocate a
+> > page for page table and return ptdesc pointing to that page". Seems very
+> > confusing to me already and it will be even more confusion when we'll start
+> > allocating actual ptdescs.
 > 
-> On 2023/05/26 13:51, Randy Dunlap wrote:
->> Hi Akira,
->>
->> On 5/25/23 20:17, Akira Yokosawa wrote:
->>> On Wed, 24 May 2023 16:11:52 +0200, Peter Zijlstra wrote:
->>>> On Wed, May 24, 2023 at 11:03:58PM +0900, Akira Yokosawa wrote:
->>>>
->>>>>> * All ops are described as an expression using their usual C operator.
->>>>>>   For example:
->>>>>>
->>>>>>   andnot: "Atomically updates @v to (@v & ~@i)"
->>>>>
->>>>> The kernel-doc script converts "~@i" into reST source of "~**i**",
->>>>> where the emphasis of i is not recognized by Sphinx.
->>>>>
->>>>> For the "@" to work as expected, please say "~(@i)" or "~ @i".
->>>>> My preference is the former.
->>>>
->>>> And here we start :-/ making the actual comment less readable because
->>>> retarded tooling.
->>>>
->>>>>>   inc:    "Atomically updates @v to (@v + 1)"
->>>>>>
->>>>>>   Which may be clearer to non-naative English speakers, and allows all
->>>>>                             non-native
->>>>>
->>>>>>   the operations to be described in the same style.
->>>>>>
->>>>>> * All conditional ops have their condition described as an expression
->>>>>>   using the usual C operators. For example:
->>>>>>
->>>>>>   add_unless: "If (@v != @u), atomically updates @v to (@v + @i)"
->>>>>>   cmpxchg:    "If (@v == @old), atomically updates @v to @new"
->>>>>>
->>>>>>   Which may be clearer to non-naative English speakers, and allows all
->>>>>
->>>>> Ditto.
->>>>
->>>> How about we just keep it as is, and all the rst and html weenies learn
->>>> to use a text editor to read code comments?
->>>
->>> :-) :-) :-)
->>>
->>> It turns out that kernel-doc is aware of !@var [1].
->>> Similar tricks can be added for ~@var.
->>> So let's keep it as is!
->>>
->>> I'll ask documentation forks for updating kernel-doc when this change
->>> is merged eventually.
->>
->> What do you mean by that?
->> What needs to be updated and how?
->  
-> I mean, scripts/kernel-doc needs to be updated so that "~@var"
-> is converted into "**~var**".
-> 
-> I think adding "~" to the substitution pattern added in [1] as follows
-> should do the trick (not well tested):
-> 
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index 2486689ffc7b..eb70c1fd4e86 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -64,7 +64,7 @@ my $type_constant = '\b``([^\`]+)``\b';
->  my $type_constant2 = '\%([-_\w]+)';
->  my $type_func = '(\w+)\(\)';
->  my $type_param = '\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
-> -my $type_param_ref = '([\!]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
-> +my $type_param_ref = '([\!~]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
->  my $type_fp_param = '\@(\w+)\(\)';  # Special RST handling for func ptr params
->  my $type_fp_param2 = '\@(\w+->\S+)\(\)';  # Special RST handling for structs with func ptr params
->  my $type_env = '(\$\w+)';
-> 
+> Hmm, I see what you're saying. I'm envisioning this function evolving into
+> one that allocates a ptdesc later. I don't see why we would need to have both a
+> page table page AND ptdesc at any point, but that may be a lack of knowledge
+> from my part.
 
-At a quick glance, that looks OK.
-I haven't had enough coffee yet to be able to read all of that regex though.
+Sorry if I wasn't clear, by "page table page" I meant the page (or memory
+for that matter) for actual page table rather than struct page describing
+that memory.
 
-Just submit the patch (when it is needed) to see what breaks. :)
+So what we allocate here is the actual memory for the page tables and not
+the memory for the metadata. That's why I think the name ptdesc_alloc is
+confusing.
+ 
+> I was thinking later, if necessary, we could make another function
+> (only to be used internally) to allocate page table pages.
 
->>
->>
->>> [1]: ee2aa7590398 ("scripts: kernel-doc: accept negation like !@var")
->>
-
-Thanks.
 -- 
-~Randy
+Sincerely yours,
+Mike.
