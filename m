@@ -2,384 +2,241 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CD6714C18
-	for <lists+linux-arch@lfdr.de>; Mon, 29 May 2023 16:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B983714C57
+	for <lists+linux-arch@lfdr.de>; Mon, 29 May 2023 16:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjE2Oes (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 May 2023 10:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S229687AbjE2OtU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 May 2023 10:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjE2Oeq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 May 2023 10:34:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21663A0;
-        Mon, 29 May 2023 07:34:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229555AbjE2OtT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 May 2023 10:49:19 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A32AD;
+        Mon, 29 May 2023 07:49:17 -0700 (PDT)
+Received: from tp8.. (mdns.lwn.net [45.79.72.68])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A53C06259C;
-        Mon, 29 May 2023 14:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94580C433D2;
-        Mon, 29 May 2023 14:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685370884;
-        bh=GJMlPkfiBRehYueIEr8g//eXbGFihHTHSmG8zMigUe0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xX0dqLt8Y01r+5+NFqeEhUEBzv1rVVNeNFAjfhv9asauDPVpSmOLGKrmLGGaGEBTT
-         P+JDISnbiJzkDgF//fD58BwkduXtWi99+qT20GpEfrqGr2uUrT8PpxBWhd8U08LS6m
-         PeWrnZG3Fu/1Z1cxw28ArgBGZ6Q6f0+Yk0oYZ9Lc=
-Date:   Mon, 29 May 2023 15:34:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 38/44] usb: pci-quirks: handle HAS_IOPORT dependencies
-Message-ID: <2023052910-motivator-angler-bed7@gregkh>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
- <20230522105049.1467313-39-schnelle@linux.ibm.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id 422375CC;
+        Mon, 29 May 2023 14:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 422375CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1685371757; bh=/v0EtjAL08P0l+jO97LPKlN6/djCz6AEB197d2V0gGQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZMscw/dNpaay54n3edEroNTwqiUWpirPRaYe1Y4xY2kVgcAsVRL6W01UmVbtBg4bY
+         emJh4IIUB8SrRKu7FtJ00aiaqKmUYDB5+R6/9xBCh6EGiaTA0ElNnbrVihR8SQisMz
+         2Wjq7Ew1zOdToy7eB5eHkYSLo5HsWANv7+W8QjPberoXXmVatKXiqdSLNljH2iWTYw
+         xQIyT09aEpXsEqZOGDV9wOcOPnECEb7yFiSjYozvxL+zPaOY6Gm+AanT7B8qvDucfd
+         0E4cPdua0iKYbdYcPT9cdWIhMa0z3DJzWJeJVKte8K4hlDzFlNethJ0lPRaP3Gyu+A
+         25eDqqfIGHxVQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     linux-doc@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v2 0/7] docs: Move Documentation/arm under Documentation/arch
+Date:   Mon, 29 May 2023 08:48:49 -0600
+Message-Id: <20230529144856.102755-1-corbet@lwn.net>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522105049.1467313-39-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:50:43PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. In the pci-quirks case the I/O port acceses are
-> used in the quirks for several AMD south bridges. Move unrelated
-> ASMEDIA quirks out of the way and introduce an additional config option
-> for the AMD quirks that depends on HAS_IOPORT.
+Architecture-specific documentation is being moved into Documentation/arch/
+as a way of cleaning up the top-level documentation directory and making
+the docs hierarchy more closely match the source hierarchy.  Move
+Documentation/arm into arch/ and fix all in-tree references.
 
-This is really messy and hard to review in one commit.  I know I got
-lost a bunch, and it's still messy:
+This is one of the more intrusive moves (if not *the* most intrusive), but
+the changes are all straighforward.
 
-> 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/usb/Kconfig           |  10 +++
->  drivers/usb/core/hcd-pci.c    |   2 +
->  drivers/usb/host/pci-quirks.c | 125 ++++++++++++++++++----------------
->  drivers/usb/host/pci-quirks.h |  30 ++++++--
->  4 files changed, 101 insertions(+), 66 deletions(-)
-> 
-> diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-> index 7f33bcc315f2..abf8c6cdea9e 100644
-> --- a/drivers/usb/Kconfig
-> +++ b/drivers/usb/Kconfig
-> @@ -91,6 +91,16 @@ config USB_PCI
->  	  If you have such a device you may say N here and PCI related code
->  	  will not be built in the USB driver.
->  
-> +config USB_PCI_AMD
-> +	bool "AMD PCI USB host support"
-> +	depends on USB_PCI && HAS_IOPORT
-> +	default X86 || MACH_LOONGSON64 || PPC_PASEMI
-> +	help
-> +	  Enable workarounds for USB implementation quirks in SB600/SB700/SB800
-> +	  and later south bridge implementations. These are common on x86 PCs
-> +	  with AMD CPUs but rarely used elsewhere, with the exception of a few
-> +	  powerpc and mips desktop machines.
+I'm happy to take these through the docs tree, but the potential for
+conflicts might be less if they go through an Arm tree instead.
 
-This is fine, make one commit for this, and then we can argue if you
-really need it. :)
+v2 changes:
+ - add tags
+ - remove ahead-of-its-time MAINTAINERS change
+ - proper changelog for patch #7
+ - IOW: nothing all that substantial.
 
-> +
->  if USB
->  
->  source "drivers/usb/core/Kconfig"
-> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> index ab2f3737764e..85a0aeae85cd 100644
-> --- a/drivers/usb/core/hcd-pci.c
-> +++ b/drivers/usb/core/hcd-pci.c
-> @@ -206,8 +206,10 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct hc_driver *driver)
->  		goto free_irq_vectors;
->  	}
->  
-> +#ifdef CONFIG_USB_PCI_AMD
->  	hcd->amd_resume_bug = (usb_hcd_amd_remote_wakeup_quirk(dev) &&
->  			driver->flags & (HCD_USB11 | HCD_USB3)) ? 1 : 0;
-> +#endif /* CONFIG_USB_PCI_AMD */
+Jonathan Corbet (7):
+  arm: docs: Move Arm documentation to Documentation/arch/
+  arm: update in-source documentation references
+  arm64: Update Documentation/arm references
+  mips: update a reference to a moved Arm Document
+  crypto: update some Arm documentation references
+  docs: update some straggling Documentation/arm references
+  dt-bindings: Update Documentation/arm references
 
-No #ifdef in .c files if at all possible please.  Why is this needed?
+ Documentation/{ => arch}/arm/arm.rst                         | 0
+ Documentation/{ => arch}/arm/booting.rst                     | 0
+ Documentation/{ => arch}/arm/cluster-pm-race-avoidance.rst   | 0
+ Documentation/{ => arch}/arm/features.rst                    | 0
+ Documentation/{ => arch}/arm/firmware.rst                    | 0
+ Documentation/{ => arch}/arm/google/chromebook-boot-flow.rst | 0
+ Documentation/{ => arch}/arm/index.rst                       | 0
+ Documentation/{ => arch}/arm/interrupts.rst                  | 0
+ Documentation/{ => arch}/arm/ixp4xx.rst                      | 0
+ Documentation/{ => arch}/arm/kernel_mode_neon.rst            | 0
+ Documentation/{ => arch}/arm/kernel_user_helpers.rst         | 0
+ Documentation/{ => arch}/arm/keystone/knav-qmss.rst          | 0
+ Documentation/{ => arch}/arm/keystone/overview.rst           | 0
+ Documentation/{ => arch}/arm/marvell.rst                     | 0
+ Documentation/{ => arch}/arm/mem_alignment.rst               | 0
+ Documentation/{ => arch}/arm/memory.rst                      | 0
+ Documentation/{ => arch}/arm/microchip.rst                   | 0
+ Documentation/{ => arch}/arm/netwinder.rst                   | 0
+ Documentation/{ => arch}/arm/nwfpe/index.rst                 | 0
+ Documentation/{ => arch}/arm/nwfpe/netwinder-fpe.rst         | 0
+ Documentation/{ => arch}/arm/nwfpe/notes.rst                 | 0
+ Documentation/{ => arch}/arm/nwfpe/nwfpe.rst                 | 0
+ Documentation/{ => arch}/arm/nwfpe/todo.rst                  | 0
+ Documentation/{ => arch}/arm/omap/dss.rst                    | 0
+ Documentation/{ => arch}/arm/omap/index.rst                  | 0
+ Documentation/{ => arch}/arm/omap/omap.rst                   | 0
+ Documentation/{ => arch}/arm/omap/omap_pm.rst                | 0
+ Documentation/{ => arch}/arm/porting.rst                     | 0
+ Documentation/{ => arch}/arm/pxa/mfp.rst                     | 0
+ Documentation/{ => arch}/arm/sa1100/assabet.rst              | 0
+ Documentation/{ => arch}/arm/sa1100/cerf.rst                 | 0
+ Documentation/{ => arch}/arm/sa1100/index.rst                | 0
+ Documentation/{ => arch}/arm/sa1100/lart.rst                 | 0
+ Documentation/{ => arch}/arm/sa1100/serial_uart.rst          | 0
+ .../{ => arch}/arm/samsung/bootloader-interface.rst          | 0
+ .../{ => arch}/arm/samsung/clksrc-change-registers.awk       | 0
+ Documentation/{ => arch}/arm/samsung/gpio.rst                | 0
+ Documentation/{ => arch}/arm/samsung/index.rst               | 0
+ Documentation/{ => arch}/arm/samsung/overview.rst            | 0
+ Documentation/{ => arch}/arm/setup.rst                       | 0
+ Documentation/{ => arch}/arm/spear/overview.rst              | 0
+ Documentation/{ => arch}/arm/sti/overview.rst                | 0
+ Documentation/{ => arch}/arm/sti/stih407-overview.rst        | 0
+ Documentation/{ => arch}/arm/sti/stih418-overview.rst        | 0
+ Documentation/{ => arch}/arm/stm32/overview.rst              | 0
+ .../{ => arch}/arm/stm32/stm32-dma-mdma-chaining.rst         | 0
+ Documentation/{ => arch}/arm/stm32/stm32f429-overview.rst    | 0
+ Documentation/{ => arch}/arm/stm32/stm32f746-overview.rst    | 0
+ Documentation/{ => arch}/arm/stm32/stm32f769-overview.rst    | 0
+ Documentation/{ => arch}/arm/stm32/stm32h743-overview.rst    | 0
+ Documentation/{ => arch}/arm/stm32/stm32h750-overview.rst    | 0
+ Documentation/{ => arch}/arm/stm32/stm32mp13-overview.rst    | 0
+ Documentation/{ => arch}/arm/stm32/stm32mp151-overview.rst   | 0
+ Documentation/{ => arch}/arm/stm32/stm32mp157-overview.rst   | 0
+ Documentation/{ => arch}/arm/sunxi.rst                       | 0
+ Documentation/{ => arch}/arm/sunxi/clocks.rst                | 0
+ Documentation/{ => arch}/arm/swp_emulation.rst               | 0
+ Documentation/{ => arch}/arm/tcm.rst                         | 0
+ Documentation/{ => arch}/arm/uefi.rst                        | 0
+ Documentation/{ => arch}/arm/vfp/release-notes.rst           | 0
+ Documentation/{ => arch}/arm/vlocks.rst                      | 0
+ Documentation/arch/index.rst                                 | 2 +-
+ Documentation/devicetree/bindings/arm/xen.txt                | 2 +-
+ Documentation/translations/zh_CN/{ => arch}/arm/Booting      | 4 ++--
+ .../zh_CN/{ => arch}/arm/kernel_user_helpers.txt             | 4 ++--
+ MAINTAINERS                                                  | 4 ++--
+ arch/arm/Kconfig                                             | 2 +-
+ arch/arm/common/mcpm_entry.c                                 | 2 +-
+ arch/arm/common/mcpm_head.S                                  | 2 +-
+ arch/arm/common/vlock.S                                      | 2 +-
+ arch/arm/include/asm/setup.h                                 | 2 +-
+ arch/arm/include/uapi/asm/setup.h                            | 2 +-
+ arch/arm/kernel/entry-armv.S                                 | 2 +-
+ arch/arm/mach-exynos/common.h                                | 2 +-
+ arch/arm/mach-sti/Kconfig                                    | 2 +-
+ arch/arm/mm/Kconfig                                          | 4 ++--
+ arch/arm/tools/mach-types                                    | 2 +-
+ arch/arm64/Kconfig                                           | 2 +-
+ arch/arm64/kernel/kuser32.S                                  | 2 +-
+ arch/mips/bmips/setup.c                                      | 5 ++++-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-cipher.c          | 2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-core.c            | 2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-hash.c            | 2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss.h                 | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c          | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c            | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c            | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c            | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-trng.c            | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c          | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c            | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c            | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c            | 2 +-
+ drivers/input/touchscreen/sun4i-ts.c                         | 2 +-
+ drivers/pwm/pwm-atmel.c                                      | 2 +-
+ drivers/pwm/pwm-pxa.c                                        | 2 +-
+ drivers/tty/serial/Kconfig                                   | 4 ++--
+ 97 files changed, 44 insertions(+), 41 deletions(-)
+ rename Documentation/{ => arch}/arm/arm.rst (100%)
+ rename Documentation/{ => arch}/arm/booting.rst (100%)
+ rename Documentation/{ => arch}/arm/cluster-pm-race-avoidance.rst (100%)
+ rename Documentation/{ => arch}/arm/features.rst (100%)
+ rename Documentation/{ => arch}/arm/firmware.rst (100%)
+ rename Documentation/{ => arch}/arm/google/chromebook-boot-flow.rst (100%)
+ rename Documentation/{ => arch}/arm/index.rst (100%)
+ rename Documentation/{ => arch}/arm/interrupts.rst (100%)
+ rename Documentation/{ => arch}/arm/ixp4xx.rst (100%)
+ rename Documentation/{ => arch}/arm/kernel_mode_neon.rst (100%)
+ rename Documentation/{ => arch}/arm/kernel_user_helpers.rst (100%)
+ rename Documentation/{ => arch}/arm/keystone/knav-qmss.rst (100%)
+ rename Documentation/{ => arch}/arm/keystone/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/marvell.rst (100%)
+ rename Documentation/{ => arch}/arm/mem_alignment.rst (100%)
+ rename Documentation/{ => arch}/arm/memory.rst (100%)
+ rename Documentation/{ => arch}/arm/microchip.rst (100%)
+ rename Documentation/{ => arch}/arm/netwinder.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/index.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/netwinder-fpe.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/notes.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/nwfpe.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/todo.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/dss.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/index.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/omap.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/omap_pm.rst (100%)
+ rename Documentation/{ => arch}/arm/porting.rst (100%)
+ rename Documentation/{ => arch}/arm/pxa/mfp.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/assabet.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/cerf.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/index.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/lart.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/serial_uart.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/bootloader-interface.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/clksrc-change-registers.awk (100%)
+ rename Documentation/{ => arch}/arm/samsung/gpio.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/index.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/setup.rst (100%)
+ rename Documentation/{ => arch}/arm/spear/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sti/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sti/stih407-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sti/stih418-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32-dma-mdma-chaining.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32f429-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32f746-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32f769-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32h743-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32h750-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32mp13-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32mp151-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32mp157-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sunxi.rst (100%)
+ rename Documentation/{ => arch}/arm/sunxi/clocks.rst (100%)
+ rename Documentation/{ => arch}/arm/swp_emulation.rst (100%)
+ rename Documentation/{ => arch}/arm/tcm.rst (100%)
+ rename Documentation/{ => arch}/arm/uefi.rst (100%)
+ rename Documentation/{ => arch}/arm/vfp/release-notes.rst (100%)
+ rename Documentation/{ => arch}/arm/vlocks.rst (100%)
+ rename Documentation/translations/zh_CN/{ => arch}/arm/Booting (98%)
+ rename Documentation/translations/zh_CN/{ => arch}/arm/kernel_user_helpers.txt (98%)
 
-And I hate ? : logic, please spell it out.
+-- 
+2.40.1
 
->  
->  	if (driver->flags & HCD_MEMORY) {
->  		/* EHCI, OHCI */
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index 2665832f9add..e0612f909fad 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-> @@ -60,6 +60,23 @@
->  #define EHCI_USBLEGCTLSTS	4		/* legacy control/status */
->  #define EHCI_USBLEGCTLSTS_SOOE	(1 << 13)	/* SMI on ownership change */
->  
-> +/* ASMEDIA quirk use */
-> +#define ASMT_DATA_WRITE0_REG	0xF8
-> +#define ASMT_DATA_WRITE1_REG	0xFC
-> +#define ASMT_CONTROL_REG	0xE0
-> +#define ASMT_CONTROL_WRITE_BIT	0x02
-> +#define ASMT_WRITEREG_CMD	0x10423
-> +#define ASMT_FLOWCTL_ADDR	0xFA30
-> +#define ASMT_FLOWCTL_DATA	0xBA
-> +#define ASMT_PSEUDO_DATA	0
-> +
-> +/* Intel quirk use */
-> +#define USB_INTEL_XUSB2PR      0xD0
-> +#define USB_INTEL_USB2PRM      0xD4
-> +#define USB_INTEL_USB3_PSSEN   0xD8
-> +#define USB_INTEL_USB3PRM      0xDC
-> +
-> +#ifdef CONFIG_USB_PCI_AMD
->  /* AMD quirk use */
->  #define	AB_REG_BAR_LOW		0xe0
->  #define	AB_REG_BAR_HIGH		0xe1
-> @@ -93,21 +110,6 @@
->  #define	NB_PIF0_PWRDOWN_0	0x01100012
->  #define	NB_PIF0_PWRDOWN_1	0x01100013
->  
-> -#define USB_INTEL_XUSB2PR      0xD0
-> -#define USB_INTEL_USB2PRM      0xD4
-> -#define USB_INTEL_USB3_PSSEN   0xD8
-> -#define USB_INTEL_USB3PRM      0xDC
-> -
-> -/* ASMEDIA quirk use */
-> -#define ASMT_DATA_WRITE0_REG	0xF8
-> -#define ASMT_DATA_WRITE1_REG	0xFC
-> -#define ASMT_CONTROL_REG	0xE0
-> -#define ASMT_CONTROL_WRITE_BIT	0x02
-> -#define ASMT_WRITEREG_CMD	0x10423
-> -#define ASMT_FLOWCTL_ADDR	0xFA30
-> -#define ASMT_FLOWCTL_DATA	0xBA
-> -#define ASMT_PSEUDO_DATA	0
-> -
->  /*
->   * amd_chipset_gen values represent AMD different chipset generations
->   */
-> @@ -458,50 +460,6 @@ void usb_amd_quirk_pll_disable(void)
->  }
->  EXPORT_SYMBOL_GPL(usb_amd_quirk_pll_disable);
->  
-> -static int usb_asmedia_wait_write(struct pci_dev *pdev)
-
-Moving these is odd, why?  They are just doing pci accesses.
-
-
-> -{
-> -	unsigned long retry_count;
-> -	unsigned char value;
-> -
-> -	for (retry_count = 1000; retry_count > 0; --retry_count) {
-> -
-> -		pci_read_config_byte(pdev, ASMT_CONTROL_REG, &value);
-> -
-> -		if (value == 0xff) {
-> -			dev_err(&pdev->dev, "%s: check_ready ERROR", __func__);
-> -			return -EIO;
-> -		}
-> -
-> -		if ((value & ASMT_CONTROL_WRITE_BIT) == 0)
-> -			return 0;
-> -
-> -		udelay(50);
-> -	}
-> -
-> -	dev_warn(&pdev->dev, "%s: check_write_ready timeout", __func__);
-> -	return -ETIMEDOUT;
-> -}
-> -
-> -void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev)
-> -{
-> -	if (usb_asmedia_wait_write(pdev) != 0)
-> -		return;
-> -
-> -	/* send command and address to device */
-> -	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_WRITEREG_CMD);
-> -	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_FLOWCTL_ADDR);
-> -	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
-> -
-> -	if (usb_asmedia_wait_write(pdev) != 0)
-> -		return;
-> -
-> -	/* send data to device */
-> -	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_FLOWCTL_DATA);
-> -	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_PSEUDO_DATA);
-> -	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
-> -}
-> -EXPORT_SYMBOL_GPL(usb_asmedia_modifyflowcontrol);
-> -
->  void usb_amd_quirk_pll_enable(void)
->  {
->  	usb_amd_quirk_pll(0);
-> @@ -630,7 +588,53 @@ bool usb_amd_pt_check_port(struct device *device, int port)
->  	return !(value & BIT(port_shift));
->  }
->  EXPORT_SYMBOL_GPL(usb_amd_pt_check_port);
-> +#endif /* CONFIG_USB_PCI_AMD */
->  
-> +static int usb_asmedia_wait_write(struct pci_dev *pdev)
-> +{
-> +	unsigned long retry_count;
-> +	unsigned char value;
-> +
-> +	for (retry_count = 1000; retry_count > 0; --retry_count) {
-> +
-> +		pci_read_config_byte(pdev, ASMT_CONTROL_REG, &value);
-> +
-> +		if (value == 0xff) {
-> +			dev_err(&pdev->dev, "%s: check_ready ERROR", __func__);
-> +			return -EIO;
-> +		}
-> +
-> +		if ((value & ASMT_CONTROL_WRITE_BIT) == 0)
-> +			return 0;
-> +
-> +		udelay(50);
-> +	}
-> +
-> +	dev_warn(&pdev->dev, "%s: check_write_ready timeout", __func__);
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev)
-> +{
-> +	if (usb_asmedia_wait_write(pdev) != 0)
-> +		return;
-> +
-> +	/* send command and address to device */
-> +	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_WRITEREG_CMD);
-> +	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_FLOWCTL_ADDR);
-> +	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
-> +
-> +	if (usb_asmedia_wait_write(pdev) != 0)
-> +		return;
-> +
-> +	/* send data to device */
-> +	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_FLOWCTL_DATA);
-> +	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_PSEUDO_DATA);
-> +	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
-> +}
-> +EXPORT_SYMBOL_GPL(usb_asmedia_modifyflowcontrol);
-> +
-> +#if defined(CONFIG_HAS_IOPORT) && defined(CONFIG_USB_UHCI_HCD)
-
-Is this really needed?  This feels wrong, why is ioport odd like this?
-
->  /*
->   * Make sure the controller is completely inactive, unable to
->   * generate interrupts or do DMA.
-> @@ -711,6 +715,7 @@ int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base)
->  	return 1;
->  }
->  EXPORT_SYMBOL_GPL(uhci_check_and_reset_hc);
-> +#endif /* defined(CONFIG_HAS_IOPORT && defined(CONFIG_USB_UHCI_HCD) */
->  
->  static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mask)
->  {
-> @@ -723,6 +728,7 @@ static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mask)
->  
->  static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	unsigned long base = 0;
->  	int i;
->  
-> @@ -737,6 +743,7 @@ static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
->  
->  	if (base)
->  		uhci_check_and_reset_hc(pdev, base);
-> +#endif /* CONFIG_HAS_IOPORT */
->  }
->  
->  static int mmio_resource_enabled(struct pci_dev *pdev, int idx)
-> diff --git a/drivers/usb/host/pci-quirks.h b/drivers/usb/host/pci-quirks.h
-> index e729de21fad7..8c87505f0abc 100644
-> --- a/drivers/usb/host/pci-quirks.h
-> +++ b/drivers/usb/host/pci-quirks.h
-> @@ -2,9 +2,10 @@
->  #ifndef __LINUX_USB_PCI_QUIRKS_H
->  #define __LINUX_USB_PCI_QUIRKS_H
->  
-> -#ifdef CONFIG_USB_PCI
->  void uhci_reset_hc(struct pci_dev *pdev, unsigned long base);
->  int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base);
-> +
-> +#ifdef CONFIG_USB_PCI_AMD
->  int usb_hcd_amd_remote_wakeup_quirk(struct pci_dev *pdev);
->  bool usb_amd_hang_symptom_quirk(void);
->  bool usb_amd_prefetch_quirk(void);
-> @@ -12,23 +13,38 @@ void usb_amd_dev_put(void);
->  bool usb_amd_quirk_pll_check(void);
->  void usb_amd_quirk_pll_disable(void);
->  void usb_amd_quirk_pll_enable(void);
-> -void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev);
-> -void usb_enable_intel_xhci_ports(struct pci_dev *xhci_pdev);
-> -void usb_disable_xhci_ports(struct pci_dev *xhci_pdev);
->  void sb800_prefetch(struct device *dev, int on);
->  bool usb_amd_pt_check_port(struct device *device, int port);
->  #else
-> -struct pci_dev;
-> +static inline bool usb_amd_hang_symptom_quirk(void)
-> +{
-> +	return false;
-> +};
-> +static inline bool usb_amd_prefetch_quirk(void)
-> +{
-> +	return false;
-> +}
-> +static inline bool usb_amd_quirk_pll_check(void)
-> +{
-> +	return false;
-> +}
->  static inline void usb_amd_quirk_pll_disable(void) {}
->  static inline void usb_amd_quirk_pll_enable(void) {}
-> -static inline void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev) {}
->  static inline void usb_amd_dev_put(void) {}
-> -static inline void usb_disable_xhci_ports(struct pci_dev *xhci_pdev) {}
->  static inline void sb800_prefetch(struct device *dev, int on) {}
->  static inline bool usb_amd_pt_check_port(struct device *device, int port)
->  {
->  	return false;
->  }
-> +#endif /* CONFIG_USB_PCI_AMD */
-> +
-> +#ifdef CONFIG_USB_PCI
-> +void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev);
-> +void usb_enable_intel_xhci_ports(struct pci_dev *xhci_pdev);
-> +void usb_disable_xhci_ports(struct pci_dev *xhci_pdev);
-> +#else
-> +static inline void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev) {}
-> +static inline void usb_disable_xhci_ports(struct pci_dev *xhci_pdev) {}
->  #endif  /* CONFIG_USB_PCI */
-
-Again, the changes here are hard to follow, why?
-
-Please break up into smaller pieces.
-
-thanks,
-
-greg k-h
