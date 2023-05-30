@@ -2,97 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD09F71643A
-	for <lists+linux-arch@lfdr.de>; Tue, 30 May 2023 16:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32BE716447
+	for <lists+linux-arch@lfdr.de>; Tue, 30 May 2023 16:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjE3OcI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 May 2023 10:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S232586AbjE3Ofm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 May 2023 10:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjE3OcG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 May 2023 10:32:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15533E40;
-        Tue, 30 May 2023 07:31:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A398A63174;
-        Tue, 30 May 2023 14:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADBFC433EF;
-        Tue, 30 May 2023 14:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685457102;
-        bh=2UrwCBvsEb03Pam8cIultJu53VoGUD/3FOgTl1c+Y/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dJyspx12pHz2lHcVcN3GA6XVe7qqTzzS50XBYdXCsdKUgbMT2EJwxdvDfc0pLdseB
-         cM08kIsBd/7aNqwuU5T+1k2BMtvO7XqbGfg3csGvPTwf3ItZpURfPyYMpPpXgkihZx
-         XqYyVZp+GdA0dkWXlfqyzQiAoktHp9+g3MsX68EY=
-Date:   Tue, 30 May 2023 15:31:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 33/41] tty: serial: handle HAS_IOPORT dependencies
-Message-ID: <2023053019-shuffle-gusty-9b6b@gregkh>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-34-schnelle@linux.ibm.com>
- <2023053059-self-mangle-30b6@gregkh>
- <891e6ac4-30ae-4b86-b692-3b6b7b8b4e57@app.fastmail.com>
+        with ESMTP id S230349AbjE3Ofl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 May 2023 10:35:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E40F8F;
+        Tue, 30 May 2023 07:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Hh6nfYGRw8Xo4sZYsBcKGggpg8AsAPYo0Fmyp3Zb2C8=; b=b7ZWeglVxXPgUC2IalnxW8QZFN
+        CJfyT1adD2qvortXSb64Dq95xjOfW+CqIcHD2hwXLUJgjM2Jcm0aCVkNEl+4D0d7kFi9tOPkvwR77
+        Q03x4AZfKAqK5Ex1sI8wMOmMNkdcJcJhl4cvNwxhtFGzTP86T5Ywi8TkmQumPO43FnAxmAXpVh8jL
+        owdx7z3MUDt0GBULgwunRwE/VKqfvaPMlGOjv+kvuj6RvfMdFLcd/k/dsM83oJvJK/bRwGDK1rO88
+        bxWkHdsOhI/x3kRHmUEkR6s92NeliMjQ1NcuYHcX4oDz9kVrTxXGNYdIQvBq8b8LERzqK1vDsiZ2p
+        ybOuykig==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q40RG-00Dqv4-1c;
+        Tue, 30 May 2023 14:35:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A59E7300194;
+        Tue, 30 May 2023 16:35:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 90029214873C1; Tue, 30 May 2023 16:35:04 +0200 (CEST)
+Date:   Tue, 30 May 2023 16:35:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH V6 01/14] x86/sev: Add a #HV exception handler
+Message-ID: <20230530143504.GA200197@hirez.programming.kicks-ass.net>
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-2-ltykernel@gmail.com>
+ <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
+ <d43c14d9-a149-860c-71d6-e5c62b7c356f@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <891e6ac4-30ae-4b86-b692-3b6b7b8b4e57@app.fastmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d43c14d9-a149-860c-71d6-e5c62b7c356f@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 30, 2023 at 01:53:50PM +0200, Arnd Bergmann wrote:
-> On Tue, May 30, 2023, at 12:48, Greg Kroah-Hartman wrote:
-> > On Tue, May 16, 2023 at 01:00:29PM +0200, Niklas Schnelle wrote:
-> >> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> >> not being declared. We thus need to add HAS_IOPORT as dependency for
-> >> those drivers using them unconditionally. For 8250 based drivers some
-> >> support MMIO only use so fence only the parts requiring I/O ports.
-> >
-> > Why can't you have dummy inb()/outb() so we don't need these #ifdefs all
-> > over the place in .c files?  Was that documented somewhere?  We do that
-> > for other driver/hardware apis, why are these so special they don't
-> > deserve that?
+On Tue, May 30, 2023 at 02:16:55PM +0200, Gupta, Pankaj wrote:
 > 
-> That was what our original approach did years ago, and Linus rightfully
-> rejected it. Almost every driver either requires inb()/outb() to do
-> anything, or it doesn't use them at all. The 8250 uart is one of the
-> few exceptions to this, as it has many variants.
-> It would be possible to separate this out more in the 8250 driver
-> as well and split it out into separate modules and indirect function
-> pointers, but that would be a larger rework and have a higher
-> risk of regressions.
+> > > Add a #HV exception handler that uses IST stack.
+> > > 
+> > 
+> > Urgh.. that is entirely insufficient. Like it doesn't even begin to
+> > start to cover things.
+> > 
+> > The whole existing VC IST stack abuse is already a nightmare and you're
+> > duplicating that.. without any explanation for why this would be needed
+> > and how it is correct.
+> > 
+> > Please try again.
 > 
-> Also, the 8250 driver is already full of #ifdef in .c files, 
+> #HV handler handles both #NMI & #MCE in the guest and nested #HV is never
+> raised by the hypervisor. 
 
-Yeah, just trying to hope it could be better :(
-
-Ok, I'll go queue up the v5 version of this patch now, thanks.
-
-greg k-h
+I thought all this confidental computing nonsense was about not trusting
+the hypervisor, so how come we're now relying on the hypervisor being
+sane?
