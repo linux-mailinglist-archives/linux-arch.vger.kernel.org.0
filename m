@@ -2,122 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46610715DF8
-	for <lists+linux-arch@lfdr.de>; Tue, 30 May 2023 13:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43C7715ECD
+	for <lists+linux-arch@lfdr.de>; Tue, 30 May 2023 14:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbjE3LzS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 May 2023 07:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S231334AbjE3MRR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 May 2023 08:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjE3LzR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 May 2023 07:55:17 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD3D1A2;
-        Tue, 30 May 2023 04:54:39 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 00BF85C0095;
-        Tue, 30 May 2023 07:54:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 30 May 2023 07:54:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685447652; x=1685534052; bh=P+
-        2rgMj4xQlfafj7GcrGEIKSMhcZ1qGdM9UbAgiRc6I=; b=KpZug7XlPd6I1x7Wff
-        6Ic267AhM0pU+D26WvjCTNFBtR5jNha0vLw0Sybpz69ElQGgG/O0nrMaKWa+/vuL
-        6M9VXXTLnngiS2Bbv1ZVDDEAWUtzXFukJ8dgBV7A8HM+RXiUqdAYspomQGRwwwTw
-        HyhOlZoWYHo1e3IqmlP6dAk7YU359IFgQPxT86FAaKuG95trapBtiZnIZSpZ2wzE
-        owCUYHf2Th8BujcrTPFuDhiNT3+sh77vC1OBB71hL5QLxerZgwb8lAYb6ASp8VjZ
-        7pDITToH5UCRIhbVCm9fD4ynEGi/0triFLIHyjpUMp2PUEIUOTpCie3SNXiY4V/x
-        O1vg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685447652; x=1685534052; bh=P+2rgMj4xQlfa
-        fj7GcrGEIKSMhcZ1qGdM9UbAgiRc6I=; b=NLT3WQ2MbghARrWk4NbyL1DxwXO50
-        Gotlj0w/VK/ciTqdYrcxqCy9MXNlXeczFqODZwJYCLwtATP/4KE4kl8xwkqPxH/z
-        Rm+kQOr1MSG97y11F+QzD3pIuOYLU1GiL0h70ee+fmWPxUvfXin8kNVOtQP9qAAE
-        1pRlkv+xGA066avXbTFi6gOTZ+NV7zbg7XchPCDogmVpc5tYk6Jdft9qjM2ivD+x
-        wfkzPQyxboBvnGt2TyOB/oMY2q2Q+Jqy09zZBP79bnYF0fjC5vZYUwTLM9fg0BDJ
-        5KYTL+mDdrpF10uw9EojQzlYWDBSEYZaozaDiMsaUdiGm8gvPNnJA2XeQ==
-X-ME-Sender: <xms:4-N1ZHDhYwy2kAER34t5oBMC6QTzaExrHrEu1Cs7uUIn_PVNOxF6NA>
-    <xme:4-N1ZNi4Rz7W56hfOfb21yEr6cEV1dn8c85d7fXudY53oU5pXhstSth_4y1jpoCXg
-    zrly5P4S3I14hdbrpM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedggeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5ON1ZCkcHKNbXQkDsNVzJTcFg4gOdRYhZszSrkzYXvz3-PM8-L-jdg>
-    <xmx:5ON1ZJw_9Hwas13sRVC4BIkyhesyohFKwGpi21LC28iXt1ZDpdzXsA>
-    <xmx:5ON1ZMQBOc1HE7tFs6TTm0ftNSBwewtof97h66F_bu9tnWnHB0qL5A>
-    <xmx:5ON1ZIqvkC7HuChiBDOnhAwP3yKfnmSDfYTF_NG-fbgP-rEaoUopEw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D80C0B60086; Tue, 30 May 2023 07:54:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <891e6ac4-30ae-4b86-b692-3b6b7b8b4e57@app.fastmail.com>
-In-Reply-To: <2023053059-self-mangle-30b6@gregkh>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-34-schnelle@linux.ibm.com>
- <2023053059-self-mangle-30b6@gregkh>
-Date:   Tue, 30 May 2023 13:53:50 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>
-Cc:     "Jiri Slaby" <jirislaby@kernel.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 33/41] tty: serial: handle HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231302AbjE3MRQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 May 2023 08:17:16 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240C4136;
+        Tue, 30 May 2023 05:17:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j53rtlWihx5vVUV2YO2XLdmr3qkGTJXQqdgEp/AwPBPWMsOwaULLj7+ObXuJ4GVuYcSe7PKTL4mkMex4CmlNSqNgiGkLumwUKUzNopNMa9yid+32X/gEuMhbTtONVLSKq9FKi/Nzd8cdOXN3gCdDxObEXNr3vdohDr4FtN1Yz5I49KwZCM2rWgT7WOtpMhBUc44p/XOTXqRf5tHEtDKDnVPf9TSWHmwLvuym52QBEhYcMWfWYRsQ3P/S0Gupw0LpFZ/v1+e8HxM9ZVQ9+3hSb2MLxaP+Z4JDp2lrf5oNYoxupDSIjh9bWlrfWAucPwL8VwUNATPNNK+uRCxQezAN2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QNQVhgg44HLZp6CP352q6L7RMlhsZtae8G/mtt2Y4ZI=;
+ b=EqMRYZXxxXBd4+hkYwbnv5t/0Sre3ua1s31nwZSJIG6pkF1lQrnMpI9aKHheBhFS39+wZwtks1dk8HSsgXVnk3X7NWLmYy+DVRfz+ETInk9SvDOxxsOxSZ9XbQyGANHTNhCyOC3BYsTlLxtYJDYnvPXSRPr3cgZMa6L1gKO/BvMse1ABv84HxQlLTeGF6w9HkvS1zGQth8ELHsvkxZtG8IGzrl1REy++jTf0tbcsp4Fr4ULOGsVGsNelkJYjN3SKwrc3WDbk2MO2g8hT99QVdNIIjnuD5LIjim6wb0+WkkxPjpbSzb8NINpwxblX2t0v1UEpkppxPM+fFInwCrJfQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QNQVhgg44HLZp6CP352q6L7RMlhsZtae8G/mtt2Y4ZI=;
+ b=ri1ee7APkLMoRiQ8C2VjvQQCHsJyxQJeTH4/oKLGcPUgASbHD73Xu3TLRTk3oILkUjQ93PHuH9YMmS6dsGDo1jO76wvatf8WEvZX2e2I19W3IvGri7W5qIHk77w6dN2actFI6Vfp0Wx2jtrtxo8m81Kylj2JcUsUHQiH9qovDXM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
+ DM8PR12MB5493.namprd12.prod.outlook.com (2603:10b6:8:3d::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.23; Tue, 30 May 2023 12:17:06 +0000
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::6220:7985:a611:c053]) by DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::6220:7985:a611:c053%4]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 12:17:05 +0000
+Message-ID: <d43c14d9-a149-860c-71d6-e5c62b7c356f@amd.com>
+Date:   Tue, 30 May 2023 14:16:55 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH V6 01/14] x86/sev: Add a #HV exception handler
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Tianyu Lan <ltykernel@gmail.com>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-2-ltykernel@gmail.com>
+ <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQBPR01CA0005.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01::13)
+ To DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|DM8PR12MB5493:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e67db6e-83f2-41aa-ddfa-08db6107c822
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +IaidBle5usX3k3lymGHVmqNf02YJtjr3ETThVJYg8Dkm3CrrSN3UejchDrfmZKE2Da7KZ8CuIjPiYjwTl3+vQLyD4+fFrjvps0y5o6yv5G+ioH8E2eVRFhoEguuaMRLRQdo9yW4xGofE+C9Oj2QngJph/N55l7ueKq7/PWmnHpDCnsWDBHy1iBOyyJx+40MqoOUpGmVAD2dya8rasXFlDhLjX41hgoxvJbVlo5KkhFZY4h51LsgPbzFyg2gf3eKm+bku7hygH8mUUYtKygdlL5McHShpqWDVMDaSDTSgufqNm4VqLPcefEUSooli4n2k0+01Z+L2X0kC1ucHH72W09b26gOAxxnkVe5SEW6Oad/b2TasLLhAnUAEgjEXKs+4+TlEtqUAiJbpSsfBkTfg6urSh8IdanZZ1b6hOurg/beyA7rPA6HMYEaCMYp+9dkVO9nmKkLMDs1JCBIMiCkn09Va1nclnsWuVGJcTQ+Brl1DhXmVcRPpgvDJ3aYAl7/5V8VmHhYZyV/p/OifQZTjx9L6B/jZ2YvGOPZnKhOsBbtbR7VO5Idfet6xMhjzWKKw8AUNbJ2lguII2zio6u9tx5lXCxXH3DBFp0D8TSyHz6B2If5dHhjSSItfteSBi+C+/ron3YIabyPk6HFE6e0rQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199021)(478600001)(110136005)(8676002)(5660300002)(7406005)(7416002)(8936002)(36756003)(2906002)(31696002)(86362001)(66476007)(66556008)(4326008)(66946007)(316002)(41300700001)(38100700002)(186003)(26005)(6512007)(6506007)(83380400001)(6486002)(6666004)(31686004)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a21HbFE0eXRGQWhZUXpBRHZUMVZYVWIzaGpQVmtwNTAwVkFtVTluK0JzMFh1?=
+ =?utf-8?B?M0lMNVpRanFrU3RKOTlvanZKRStha2Jwb0xoY2Zpa0xpblFwMU1aL2gycTBy?=
+ =?utf-8?B?V2tWdThyRTdlaGJzb2FUc2NhVVIzVkhuZ0JWbjJtQ3U3VUFFSDExVjFZQ1Jr?=
+ =?utf-8?B?T3FnRklybnJHNklBMFl6Mm9MY3RxTEdlT1RyUUVPSWoyUHZyOWMvQllpZGky?=
+ =?utf-8?B?Wk53QXdiZW9MdncySUxBbFE4YUZDMXRkUVA4ck9mK3pwdHRic0JWUEhMQmZu?=
+ =?utf-8?B?MTA4eVpPRlVjOWN0VEF0ZFN5bDBvRnI5UkhOaUNMTFJYbDZiQkQyTWhCMy9j?=
+ =?utf-8?B?R3RvaVNxNlFDTW1CVEUrSHliMk5Ia0VuUzdXNG81U3dYWGRGY01zbDNPeks0?=
+ =?utf-8?B?TExRR0pGODZVSFVpSk44UEJyNCs2RStaalBleEtCdG1ITCtLU0ZmQy9qSy9i?=
+ =?utf-8?B?b3NQSjBpMHVHblpJYVdXRTBwTUxkVW56OUIwLzFhcTlEWEtQWGRBZjBpTW5T?=
+ =?utf-8?B?Sit5SWxIWktqVkZQUHpSNjFGeU8yRjFqamdBVGdoT2tvNzdvWElFVGhRVGhN?=
+ =?utf-8?B?OUZlMVh2ZTJRN0NzK3VmRTBHRjVtZCtrMjdjVk90R3BMOTRtOERsNGpmNDd6?=
+ =?utf-8?B?eDJyTEp3Snp0NjVHSUlmSGt3L3hINWxFV3lCRm9QdTk0U0w1eTJsVXd2VTU4?=
+ =?utf-8?B?WkQ0VmxhMjRQeUM5VzZVdFpBRjQvSHJESWlSRGNxVTBqekVKNnM5dGZwVDV1?=
+ =?utf-8?B?UTF5eHZNZDY0UGs0WEsrYUgvVExBTlEvSHMxcy9yaFp3bWhWYnh2SnViS2Yz?=
+ =?utf-8?B?MUJVMVhiVk40QjZnL3dSZjA1dDliaTRldmU1Z3FBRmZua0JsQUVJdDZGUjkw?=
+ =?utf-8?B?WHFFUE5xNGR0V2ZtSnRrejZ3L3pzQzlqU1BVMzZRWmU3aHpxbWxSdDAwWW5Z?=
+ =?utf-8?B?dExva0ZBRWVKSXNOTVN5cEgxT01ORG9HZklOYnFCUGQ3U1VPSUhjN2xtU2hq?=
+ =?utf-8?B?dkJlMk5ObHAzNnorcEtBV2g2MExwOVBPTGV5TnVjLytLUlhLa3h2bmcxends?=
+ =?utf-8?B?TWVXYkF3RVRDUFV6Ujc4STlVY0VaY2IrYmtxRHREeldxZE9IRTR0dENMU0xo?=
+ =?utf-8?B?aEp3bkYzTlNnUW1WUG9BZnUzYis1ZWl6NXJ5bXB3bWUwd0NIYVc0aUUvaENq?=
+ =?utf-8?B?WXdDL0U1WlNNb2MxRDNTTERZanpHdTcrejArSWQ3R1VlRHRZeDFsR0FoOEx4?=
+ =?utf-8?B?NEZzeDlsUkRVZ1RncU0raFJoYlpjc2FYZ3FTTHpTWFM5TDNhb243V0o5Zzlp?=
+ =?utf-8?B?bjY4ak5xeTNrUHV3ZFhWaE02aENIOTNKeFdmNjFZWW4xM2VodkM5cFg2Q2hR?=
+ =?utf-8?B?TnIvK0ViRUlTY0crZ0tRTXpiL3BreFRacnhiRGFXSHVubXY5Z1ZHWUJna0wy?=
+ =?utf-8?B?V0tPQVhWZEhHZlBZNFpvM0NiVCtsTDJFU21kUld5d1lyYlRyYzZLQ0g2ajI1?=
+ =?utf-8?B?SGx1d205QjJkZEl0MFVjblVVZEduZkpIUlJLMGJ3eGgxeWhtUkNtZjBZbTNM?=
+ =?utf-8?B?cU5tY05VM0tmbjhRb0w2RHQ0SmN3Y01ZdWxjMFY2TU4vd2pWVU1IdUxYZEov?=
+ =?utf-8?B?bTFJOGI2d052bkl0aWV6bXNEV0RnNXZYcTNMSmc3alR0ak1JekRiV3FVUTdl?=
+ =?utf-8?B?U1Y4K3gwcS90NDlLMlVrMWh5dktMS1EzWjdpd1UrbXRtZDd0QVFFeE00czZQ?=
+ =?utf-8?B?RStheCtidDM2RTZ5OCtvYTR1UEY3a044QVNUYXpaNm1HWVB6KzZnZHVKQ1kz?=
+ =?utf-8?B?ZStJRFhQOWs1RGhtSEtVNlZ3b2ZUTjZJWHprQmR3UDBhd0ViUUpiSWdZRysr?=
+ =?utf-8?B?ZThmWC9tZk42MHJTZ05va1A2UjZqdzk2dUpGQ1R6cjM1ZHQwMm00RUZLTmxL?=
+ =?utf-8?B?TXhCdm9yQjA5WktRUW10RHlXWllHRmp2Y29EVU9ubmIxQkNyU09GLzQwY3Bv?=
+ =?utf-8?B?d2twZjc4VllsTlpKa3NDOXFFejRtcXJ0Q0JNeUdaTkQwaUYzWVphc0J0UDRs?=
+ =?utf-8?B?eFhUdFVXRVBtcDh3SmJkTVJLYTFPbjdkN1EwdnFZaWxnY2ZwVHZjR0tiTlBS?=
+ =?utf-8?Q?/ReWz0cfZqNgqXJGmSr/1dQBo?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e67db6e-83f2-41aa-ddfa-08db6107c822
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 12:17:05.6276
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2PRPKlCBtKM+O6naIUymFzhFM3kMO0FgiX6CdYrpr0c3LR3MtxVJyD9sTUAFPAmqtybfAGzJkyMSb+ycPZ2+7g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5493
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 30, 2023, at 12:48, Greg Kroah-Hartman wrote:
-> On Tue, May 16, 2023 at 01:00:29PM +0200, Niklas Schnelle wrote:
->> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
->> not being declared. We thus need to add HAS_IOPORT as dependency for
->> those drivers using them unconditionally. For 8250 based drivers some
->> support MMIO only use so fence only the parts requiring I/O ports.
->
-> Why can't you have dummy inb()/outb() so we don't need these #ifdefs all
-> over the place in .c files?  Was that documented somewhere?  We do that
-> for other driver/hardware apis, why are these so special they don't
-> deserve that?
 
-That was what our original approach did years ago, and Linus rightfully
-rejected it. Almost every driver either requires inb()/outb() to do
-anything, or it doesn't use them at all. The 8250 uart is one of the
-few exceptions to this, as it has many variants.
-It would be possible to separate this out more in the 8250 driver
-as well and split it out into separate modules and indirect function
-pointers, but that would be a larger rework and have a higher
-risk of regressions.
+>> Add a #HV exception handler that uses IST stack.
+>>
+> 
+> Urgh.. that is entirely insufficient. Like it doesn't even begin to
+> start to cover things.
+> 
+> The whole existing VC IST stack abuse is already a nightmare and you're
+> duplicating that.. without any explanation for why this would be needed
+> and how it is correct.
+> 
+> Please try again.
 
-Also, the 8250 driver is already full of #ifdef in .c files, 
+#HV handler handles both #NMI & #MCE in the guest and nested #HV is 
+never raised by the hypervisor. Next #HV exception is only raised by the 
+hypervisor when Guest acknowledges the pending #HV exception by clearing 
+"NoFurtherSignal” bit in the doorbell page.
 
-    Arnd
+There is still protection (please see hv_switch_off_ist()) to gracefully 
+exit the guest if by any chance a malicious hypervisor sends nested #HV. 
+This saves with most of the nested IST stack pitfalls with #NMI & #MCE, 
+also #DB is handled in noinstr code 
+block(exc_vmm_communication()->vc_is_db {...}) hence avoid any recursive 
+#DBs.
+
+Do you see anything else needs to be handled in #HV IST handling?
+
+Thanks,
+Pankaj
+
+
