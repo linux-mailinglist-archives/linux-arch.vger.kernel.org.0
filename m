@@ -2,160 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D6B715C72
-	for <lists+linux-arch@lfdr.de>; Tue, 30 May 2023 13:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46610715DF8
+	for <lists+linux-arch@lfdr.de>; Tue, 30 May 2023 13:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjE3LAs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 May 2023 07:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S231761AbjE3LzS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 May 2023 07:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjE3LAs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 May 2023 07:00:48 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CBD93;
-        Tue, 30 May 2023 04:00:46 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U9N1p8009764;
-        Tue, 30 May 2023 11:00:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=qPU+YaZDIpmEcX5qsYfSU3/wgZK56EKO1ll/Nw/ejVw=;
- b=DTZxvcrRkPXAG1nvvHiujzLEpnRJkmhpyjmm3PwoZ6/pIlf/bMusRXLeLnggVk19AOfS
- Wb110E23P/0Cj/1XX7hiSyRRGhVRlskUm9l5j/V5XuHK+WH/WIwzu2t0HJY14eHczA14
- glMcJkVii3Zqu78pxI6InKJdFdME/PG7jz9eXFqWfLRsBmQuL0dDtUi65uxb93wmBvY5
- 7wL2xGROhlwlFV3Bb2SMfcVORPrtd0jx9O9vpyKhjC2ZGl0Dc/Sgv4UXxyHWPFe4zwWT
- VnTM/Ra/7gcFf5g+Ln78uQVjcqInEyVliXcQc3hp1DJ/oY1y6b4F2sz3Df7pEqlBCPo8 rQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwefcj6kg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 11:00:31 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UAoNTS010089;
-        Tue, 30 May 2023 11:00:30 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwefcj6gu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 11:00:30 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34U2tkuY019252;
-        Tue, 30 May 2023 11:00:27 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qu9g5176j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 11:00:27 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UB0PC620316696
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 May 2023 11:00:25 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE82420043;
-        Tue, 30 May 2023 11:00:24 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8326D20040;
-        Tue, 30 May 2023 11:00:23 +0000 (GMT)
-Received: from [9.152.212.237] (unknown [9.152.212.237])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 30 May 2023 11:00:23 +0000 (GMT)
-Message-ID: <99527edd051571d230ddf7a1de38ec604b365403.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 36/41] usb: pci-quirks: handle HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Date:   Tue, 30 May 2023 13:00:22 +0200
-In-Reply-To: <20230516110038.2413224-37-schnelle@linux.ibm.com>
+        with ESMTP id S230517AbjE3LzR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 May 2023 07:55:17 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD3D1A2;
+        Tue, 30 May 2023 04:54:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 00BF85C0095;
+        Tue, 30 May 2023 07:54:13 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 30 May 2023 07:54:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685447652; x=1685534052; bh=P+
+        2rgMj4xQlfafj7GcrGEIKSMhcZ1qGdM9UbAgiRc6I=; b=KpZug7XlPd6I1x7Wff
+        6Ic267AhM0pU+D26WvjCTNFBtR5jNha0vLw0Sybpz69ElQGgG/O0nrMaKWa+/vuL
+        6M9VXXTLnngiS2Bbv1ZVDDEAWUtzXFukJ8dgBV7A8HM+RXiUqdAYspomQGRwwwTw
+        HyhOlZoWYHo1e3IqmlP6dAk7YU359IFgQPxT86FAaKuG95trapBtiZnIZSpZ2wzE
+        owCUYHf2Th8BujcrTPFuDhiNT3+sh77vC1OBB71hL5QLxerZgwb8lAYb6ASp8VjZ
+        7pDITToH5UCRIhbVCm9fD4ynEGi/0triFLIHyjpUMp2PUEIUOTpCie3SNXiY4V/x
+        O1vg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685447652; x=1685534052; bh=P+2rgMj4xQlfa
+        fj7GcrGEIKSMhcZ1qGdM9UbAgiRc6I=; b=NLT3WQ2MbghARrWk4NbyL1DxwXO50
+        Gotlj0w/VK/ciTqdYrcxqCy9MXNlXeczFqODZwJYCLwtATP/4KE4kl8xwkqPxH/z
+        Rm+kQOr1MSG97y11F+QzD3pIuOYLU1GiL0h70ee+fmWPxUvfXin8kNVOtQP9qAAE
+        1pRlkv+xGA066avXbTFi6gOTZ+NV7zbg7XchPCDogmVpc5tYk6Jdft9qjM2ivD+x
+        wfkzPQyxboBvnGt2TyOB/oMY2q2Q+Jqy09zZBP79bnYF0fjC5vZYUwTLM9fg0BDJ
+        5KYTL+mDdrpF10uw9EojQzlYWDBSEYZaozaDiMsaUdiGm8gvPNnJA2XeQ==
+X-ME-Sender: <xms:4-N1ZHDhYwy2kAER34t5oBMC6QTzaExrHrEu1Cs7uUIn_PVNOxF6NA>
+    <xme:4-N1ZNi4Rz7W56hfOfb21yEr6cEV1dn8c85d7fXudY53oU5pXhstSth_4y1jpoCXg
+    zrly5P4S3I14hdbrpM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedggeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:5ON1ZCkcHKNbXQkDsNVzJTcFg4gOdRYhZszSrkzYXvz3-PM8-L-jdg>
+    <xmx:5ON1ZJw_9Hwas13sRVC4BIkyhesyohFKwGpi21LC28iXt1ZDpdzXsA>
+    <xmx:5ON1ZMQBOc1HE7tFs6TTm0ftNSBwewtof97h66F_bu9tnWnHB0qL5A>
+    <xmx:5ON1ZIqvkC7HuChiBDOnhAwP3yKfnmSDfYTF_NG-fbgP-rEaoUopEw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D80C0B60086; Tue, 30 May 2023 07:54:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <891e6ac4-30ae-4b86-b692-3b6b7b8b4e57@app.fastmail.com>
+In-Reply-To: <2023053059-self-mangle-30b6@gregkh>
 References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-         <20230516110038.2413224-37-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RoYNAQzfs4hzLWpVSW9QBvJW5-_rdHBb
-X-Proofpoint-GUID: 1ioaldtOvqllQeBG5Mhj7Jp0JhIWJd04
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_06,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=721 clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305300087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230516110038.2413224-34-schnelle@linux.ibm.com>
+ <2023053059-self-mangle-30b6@gregkh>
+Date:   Tue, 30 May 2023 13:53:50 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>
+Cc:     "Jiri Slaby" <jirislaby@kernel.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 33/41] tty: serial: handle HAS_IOPORT dependencies
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2023-05-16 at 13:00 +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
-> not being declared. In the pci-quirks case the I/O port acceses are
-> used in the quirks for several AMD south bridges. Move unrelated
-> ASMEDIA quirks out of the way and introduce an additional config option
-> for the AMD quirks that depends on HAS_IOPORT.
->=20
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->       per-subsystem patches may be applied independently
->=20
->  drivers/usb/Kconfig           |  10 +++
->  drivers/usb/core/hcd-pci.c    |   2 +
->  drivers/usb/host/pci-quirks.c | 125 ++++++++++++++++++----------------
->  drivers/usb/host/pci-quirks.h |  30 ++++++--
->  4 files changed, 101 insertions(+), 66 deletions(-)
->=20
-> diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-> index 7f33bcc315f2..765093112ed8 100644
-> --- a/drivers/usb/Kconfig
-> +++ b/drivers/usb/Kconfig
->=20
----8<---
-> =20
->  static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mas=
-k)
->  {
-> @@ -723,6 +728,7 @@ static inline int io_type_enabled(struct pci_dev *pde=
-v, unsigned int mask)
-> =20
->  static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	unsigned long base =3D 0;
->  	int i;
-> =20
-> @@ -737,6 +743,7 @@ static void quirk_usb_handoff_uhci(struct pci_dev *pd=
-ev)
-> =20
->  	if (base)
->  		uhci_check_and_reset_hc(pdev, base);
+On Tue, May 30, 2023, at 12:48, Greg Kroah-Hartman wrote:
+> On Tue, May 16, 2023 at 01:00:29PM +0200, Niklas Schnelle wrote:
+>> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+>> not being declared. We thus need to add HAS_IOPORT as dependency for
+>> those drivers using them unconditionally. For 8250 based drivers some
+>> support MMIO only use so fence only the parts requiring I/O ports.
+>
+> Why can't you have dummy inb()/outb() so we don't need these #ifdefs all
+> over the place in .c files?  Was that documented somewhere?  We do that
+> for other driver/hardware apis, why are these so special they don't
+> deserve that?
 
-I got a kernel test robot message for the above function call being
-undefined on an ARM config. Will have to investigate the details but I
-think this is still missing a stub or an #ifdef here.
+That was what our original approach did years ago, and Linus rightfully
+rejected it. Almost every driver either requires inb()/outb() to do
+anything, or it doesn't use them at all. The 8250 uart is one of the
+few exceptions to this, as it has many variants.
+It would be possible to separate this out more in the 8250 driver
+as well and split it out into separate modules and indirect function
+pointers, but that would be a larger rework and have a higher
+risk of regressions.
 
-> +#endif /* CONFIG_HAS_IOPORT */
->  }
-> =20
->  static int mmio_resource_enabled(struct pci_dev *pdev, int idx)
----8<---
+Also, the 8250 driver is already full of #ifdef in .c files, 
+
+    Arnd
