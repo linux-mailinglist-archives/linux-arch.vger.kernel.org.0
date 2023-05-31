@@ -2,160 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1241C7184C4
-	for <lists+linux-arch@lfdr.de>; Wed, 31 May 2023 16:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5BA718543
+	for <lists+linux-arch@lfdr.de>; Wed, 31 May 2023 16:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237182AbjEaOWx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 May 2023 10:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S234333AbjEaOrw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 May 2023 10:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237301AbjEaOWc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 May 2023 10:22:32 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE2EE51;
-        Wed, 31 May 2023 07:21:49 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 44D65580177;
-        Wed, 31 May 2023 10:21:45 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 31 May 2023 10:21:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685542905; x=1685550105; bh=EB
-        qVSuczL8zsM7Z+quPoEDfVsyxlfcBd6Pp556uYrbw=; b=OzFEpTKSe5S3pZEmFP
-        KK1uM3LsgMCSyqEpKXgp8mQacr9rZEDCmrd2k8BVEDg3tEc7xY/t0qJaQdSDGOT2
-        bU9zqMXGeLUQtd2ZGrrNxWGkpEIaVxk071lBAmfAeMQCHDxFTt1RXc0tTa+8BNvc
-        dHGAYyoqxLWEz0DRWsqrZCl7jyQXG+IYTwZfBGL3jP6UuAq+xC/o+0owjbxmZ2CX
-        jKHn0znJCe5sFHF0XfK674YIkVcUuVTivSqn6lMR/WSjKrRbWWAoJGIngDeXfeY4
-        rj3t8KhnnMw/ULtpMFDj7NVn9Ce9QDTK6Kw9M2KCXxWhhGFtgzM636rI9Ixm3L54
-        I9vA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685542905; x=1685550105; bh=EBqVSuczL8zsM
-        7Z+quPoEDfVsyxlfcBd6Pp556uYrbw=; b=oHsmrYj795DmAa232WElXIyigX6QS
-        0lEvQFY80QEb+Xv0tRxVq8oUZFcRlC2iXWMf6A9EQv2H5cUZwOYXI3ksFh0MS95T
-        a/00JTDEw8+IydUghKJpXfKrc3inW8q2ucI7PDOEPvDnPWUUJno8vH4RJtk3SbTY
-        Xo+OOCRlKmOMcOOakCRfPh4R5icttoicQwN5NjWzxihP8oZl/jY89WgumqrZIZXm
-        4AoaMaI7N608rPOsEyznGm2POVWr2Onut7ICia06/ESVNpGopI564yXoSbydFLpg
-        hbe4TBBj3hxrtKP7i4wcLhqKNVYnyN+0hkR0iUv05alMTrQZU5p/u+1Vw==
-X-ME-Sender: <xms:91d3ZBqipQsTqKHY6NRTD4pyQkRXLNRO_yNlvk1OpXfTPQ31eLUkEA>
-    <xme:91d3ZDp9FwkAkFZcsZEtPeT3CVkRHmUMy4T3RxqVKzTCMhojIEgOsZyV2jdVmH5Ey
-    jaX7xNsSz1_QTWZOGA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekledgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:91d3ZOPFWq78uKB_gUsNnnF0OeIzGpfUdYgHxMmkoms0hJmzyG_XXA>
-    <xmx:91d3ZM6fl1ZFbJDMuACkoSnRzDO_6enBMAgadt8Tx1-uTxmtBRgJMQ>
-    <xmx:91d3ZA7jTUqIpcQxCcujApE4FZxs0WEfQdlu7IS1-X3dmHdmqcfy7g>
-    <xmx:-Vd3ZFWRn8mhzfxV02UCF_CEnRSQ6iF8oeqZ00eFXYcYhyAZq5xkxQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0E183B60086; Wed, 31 May 2023 10:21:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
-In-Reply-To: <20230531132323.722039569@infradead.org>
+        with ESMTP id S234081AbjEaOru (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 May 2023 10:47:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCBC5C5;
+        Wed, 31 May 2023 07:47:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76BE21042;
+        Wed, 31 May 2023 07:48:32 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.33.144])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8273A3F663;
+        Wed, 31 May 2023 07:47:41 -0700 (PDT)
+Date:   Wed, 31 May 2023 15:47:31 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH 00/12] Introduce cmpxchg128() -- aka. the demise of
+ cmpxchg_double()
+Message-ID: <ZHdeAwOM6ciFobkL@FVFF77S0Q05N.cambridge.arm.com>
 References: <20230531130833.635651916@infradead.org>
- <20230531132323.722039569@infradead.org>
-Date:   Wed, 31 May 2023 16:21:22 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Peter Zijlstra" <peterz@infradead.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Jonathan Corbet" <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
-        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Baolu Lu" <baolu.lu@linux.intel.com>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Pekka Enberg" <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Helge Deller" <deller@gmx.de>, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH 07/12] percpu: #ifndef __SIZEOF_INT128__
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531130833.635651916@infradead.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 31, 2023, at 15:08, Peter Zijlstra wrote:
-> Some 64bit architectures do not advertise __SIZEOF_INT128__ on all
-> supported compiler versions. Notably the HPPA64 only started doing
-> with GCC-11.
+On Wed, May 31, 2023 at 03:08:33PM +0200, Peter Zijlstra wrote:
+> Hi!
+> 
+> After much breaking of things, find here the improved version.
+> 
+> Since v3:
+> 
+>  - unbreak everything that does *NOT* have cmpxchg128()
+> 
+>    Notably this_cpu_cmpxchg_double() is used unconditionally by SLUB
+>    which means that this_cpu_try_cmpxchg128() needs to be unconditionally
+>    available on all 64bit architectures.
+> 
+>  - fixed up x86/x86_64 cmpxchg{8,16}b emulation for this_cpu_cmpxchg{64,128}()
+> 
+>  - introduce {raw,this}_cpu_try_cmpxchg*()
+> 
+>  - add fallback for !__SIZEOF_INT128__ 64bit architectures
+> 
+>    Sadly there are supported 64bit architecture/compiler combinations that do
+>    not have __SIZEOF_INT128__, specifically it was found that HPPA64 only added
+>    this with GCC-11.
+> 
+>    this is yuck, and ideally we'd simply raise compiler requirements, but this
+>    'works'.
 
-I checked the other compilers to be sure that anything else
-we support (gcc-5.1 and up) across all 64-bit architectures
-does support int128.
+The patches look good to me, and I used my local cross-build script to build
+test this with the kernel.org GCC 10.3.0 cross toolchain for all of the
+following arch/triplet/config combinations:
 
-It would be nice to have the hack more localized to parisc
-and guarded with a CONFIG_GCC_VERSION check so we can kill
-it off in the future, once we drop either gcc-10 or parisc
-support.
+  alpha           alpha-linux             defconfig
+  arc             arc-linux               defconfig
+  arm             arm-linux-gnueabi       multi_v4t_defconfig
+  arm             arm-linux-gnueabi       multi_v5_defconfig
+  arm             arm-linux-gnueabi       multi_v7_defconfig
+  arm             arm-linux-gnueabi       omap1_defconfig
+  arm64           aarch64-linux           defconfig
+  csky            csky-linux              defconfig
+  i386            i386-linux              defconfig
+  ia64            ia64-linux              defconfig
+  m68k            m68k-linux              defconfig
+  microblaze      microblaze-linux        defconfig
+  mips            mips-linux              32r1_defconfig
+  mips            mips-linux              32r2_defconfig
+  mips            mips-linux              32r6_defconfig
+  mips            mips64-linux            64r1_defconfig
+  mips            mips64-linux            64r2_defconfig
+  mips            mips64-linux            64r6_defconfig
+  nios2           nios2-linux             defconfig
+  openrisc        or1k-linux              defconfig
+  parisc          hppa-linux              generic-32bit_defconfig
+  parisc          hppa64-linux            generic-64bit_defconfig
+  powerpc         powerpc-linux           ppc40x_defconfig
+  powerpc         powerpc64-linux         ppc64_defconfig
+  powerpc         powerpc64-linux         ppc64e_defconfig
+  riscv           riscv32-linux           rv32_defconfig
+  riscv           riscv64-linux           defconfig
+  s390            s390-linux              defconfig
+  sh              sh4-linux               defconfig
+  sparc           sparc-linux             sparc32_defconfig
+  sparc           sparc64-linux           sparc64_defconfig
+  x86_64          x86_64-linux            defconfig
+  xtensa          xtensa-linux            defconfig
 
-> +#ifndef __SIZEOF_INT128__
-> +#define raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-> +({									\
-> +	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
-> +	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-> +	bool __ret;							\
-> +	if (!__builtin_memcmp(&__val, &__old, sizeof(pcp))) {		\
-> +		*__p = nval;						\
-> +		__ret = true;						\
-> +	} else {							\
-> +		*(ovalp) = __val;					\
-> +		__ret = false;						\
-> +	}								\
-> +	__ret;								\
-> +})
-> +
-> +#define raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)			\
-> +({									\
-> +	typeof(pcp) __old = (oval);					\
-> +	raw_cpu_generic_try_cmpxchg_memcpy(pcp, &__old, nval);		\
-> +	__old;								\
-> +})
+... and everything seemed happy.
 
-Instead of having this in include/asm-generic under
-!__SIZEOF_INT128__, could you just move this into the parisc
-files with a compiler version check?
+I've also boot-tested arm64 defconfig.
 
-     Arnd
+So FWIW, for the series:
+
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+
+> My plan is to re-add this to tip/locking/core and thus -next later this week.
+
+I'll need to rebase my kerneldoc series atop this, so getting this into a
+stable branch soon would be great!
+
+Thanks,
+Mark.
+
+> 
+> Also available at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+> 
+> ---
+>  Documentation/core-api/this_cpu_ops.rst     |   2 -
+>  arch/arm64/include/asm/atomic_ll_sc.h       |  56 +++---
+>  arch/arm64/include/asm/atomic_lse.h         |  39 ++---
+>  arch/arm64/include/asm/cmpxchg.h            |  48 ++----
+>  arch/arm64/include/asm/percpu.h             |  30 ++--
+>  arch/s390/include/asm/cmpxchg.h             |  32 +---
+>  arch/s390/include/asm/cpu_mf.h              |   2 +-
+>  arch/s390/include/asm/percpu.h              |  34 ++--
+>  arch/s390/kernel/perf_cpum_sf.c             |  16 +-
+>  arch/x86/include/asm/cmpxchg.h              |  25 ---
+>  arch/x86/include/asm/cmpxchg_32.h           |   2 +-
+>  arch/x86/include/asm/cmpxchg_64.h           |  63 ++++++-
+>  arch/x86/include/asm/percpu.h               | 102 ++++++-----
+>  arch/x86/lib/Makefile                       |   3 +-
+>  arch/x86/lib/cmpxchg16b_emu.S               |  43 +++--
+>  arch/x86/lib/cmpxchg8b_emu.S                |  67 ++++++--
+>  drivers/iommu/amd/amd_iommu_types.h         |   9 +-
+>  drivers/iommu/amd/iommu.c                   |  10 +-
+>  drivers/iommu/intel/irq_remapping.c         |   8 +-
+>  include/asm-generic/percpu.h                | 257 ++++++++++++++++++++++------
+>  include/crypto/b128ops.h                    |  14 +-
+>  include/linux/atomic/atomic-arch-fallback.h |  95 +++++++++-
+>  include/linux/atomic/atomic-instrumented.h  |  93 ++++++++--
+>  include/linux/dmar.h                        | 125 +++++++-------
+>  include/linux/percpu-defs.h                 |  45 ++---
+>  include/linux/slub_def.h                    |  12 +-
+>  include/linux/types.h                       |  12 ++
+>  include/uapi/linux/types.h                  |   4 +
+>  lib/crypto/curve25519-hacl64.c              |   2 -
+>  lib/crypto/poly1305-donna64.c               |   2 -
+>  mm/slab.h                                   |  53 +++++-
+>  mm/slub.c                                   | 139 +++++++++------
+>  scripts/atomic/gen-atomic-fallback.sh       |   4 +-
+>  scripts/atomic/gen-atomic-instrumented.sh   |  19 +-
+>  34 files changed, 952 insertions(+), 515 deletions(-)
+> 
