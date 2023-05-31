@@ -2,42 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900BA7181BC
-	for <lists+linux-arch@lfdr.de>; Wed, 31 May 2023 15:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8077181C9
+	for <lists+linux-arch@lfdr.de>; Wed, 31 May 2023 15:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbjEaN2c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 May 2023 09:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
+        id S236357AbjEaN2V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 May 2023 09:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbjEaN2V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 May 2023 09:28:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E48123;
-        Wed, 31 May 2023 06:28:20 -0700 (PDT)
+        with ESMTP id S234861AbjEaN2U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 May 2023 09:28:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69925101;
+        Wed, 31 May 2023 06:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=OYq3F8aZwPPC/Y8UsexFdal3aiucmNsqQObmCMz9zjE=; b=LIi2st653mrq+qr82jZjSZoSMu
-        b4IdGvoFjlZSfW2/JQDfIQgkhRmizDc+3i69fP7F75A4WAkEYw/JPtYzsJYXvDjOlO3lYqV3CTQG2
-        W5QHSm3lF3LRIXC6DORpHYE0GY/d/aV+oN7w/SrBOka2MUxnFUNUBPn6uIzvLTkgZCknrMs9/URJT
-        jHAuSX05RfqOvsyIyF/kFoW7hbFpLP/c+WXZHzxrpS37v59bTdQPKeQCwIDOzbrtY2xMJrtSDtp8c
-        jQSyhSMxk2M6L9+FSzaQWKUsmX61W6UzXzdaMQ0wKEbO8TRWRg4MO80O6dbE/9Vv3BMgIz9xTSMYB
-        XK7W6Mcg==;
+        bh=EFRjNdGkKmPs8t8EQjORBoOhY59fsy+w5h28GAZsB6Q=; b=UtVwkPrM/XC85pGt7r9J/NNpRu
+        UL+91AuyLHvjrvG49pQLde3FfNNUmo1htXYmBdQi6zGavV3SSWRcdYYRg2pT/RFAN1s0beaKp6uIt
+        qmsCYWl48JdxSnUcl0TZnP/DxO6Las7rvju+4B6BHlugr3GN/O1xwkrFbvEm1TcgBc0nFb02d74Q+
+        FugUvUwlkjaq40KU1RNfTvbPliEJmyGnO7N9Y8FQ1QTQ6NKNxRxIvQbmh4ObO5y3tSWG6QFsZealY
+        U6f5lhw6Luo8Kph7RKkJJmtoJB0hFyStxCRmgm2iCzUziTKBMxS0MFEMxeMLjZEeDlsmuqhPZCMlC
+        fkpnhqUg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q4LrH-007IJW-3w; Wed, 31 May 2023 13:27:23 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4LrG-00FTCc-1L;
+        Wed, 31 May 2023 13:27:22 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55A95300C0E;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55AC1300C4B;
         Wed, 31 May 2023 15:27:21 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 95BD0243B856F; Wed, 31 May 2023 15:27:16 +0200 (CEST)
-Message-ID: <20230531132323.722039569@infradead.org>
+        id 992BE243B8570; Wed, 31 May 2023 15:27:16 +0200 (CEST)
+Message-ID: <20230531132323.788955257@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 31 May 2023 15:08:40 +0200
+Date:   Wed, 31 May 2023 15:08:41 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     torvalds@linux-foundation.org
 Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
@@ -59,8 +60,9 @@ Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
         iommu@lists.linux.dev, linux-arch@vger.kernel.org,
         linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
         mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, linux-parisc@vger.kernel.org
-Subject: [PATCH 07/12] percpu: #ifndef __SIZEOF_INT128__
+        deller@gmx.de, linux-parisc@vger.kernel.org,
+        Vasant Hegde <vasant.hegde@amd.com>
+Subject: [PATCH 08/12] x86,amd_iommu: Replace cmpxchg_double()
 References: <20230531130833.635651916@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -74,110 +76,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Some 64bit architectures do not advertise __SIZEOF_INT128__ on all
-supported compiler versions. Notably the HPPA64 only started doing
-with GCC-11.
-
-Since the per-cpu ops are universally availably, and
-this_cpu_{,try_}cmpxchg128() is expected to be available on all 64bit
-architectures a wee bodge is in order.
-
-Sadly, while C reverts to memcpy() for assignment of POD types, it does
-not revert to memcmp() for for equality. Therefore frob that manually.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Vasant Hegde <vasant.hegde@amd.com>
 ---
- include/asm-generic/percpu.h |   56 +++++++++++++++++++++++++++++++++++++++++++
- include/linux/types.h        |    7 +++++
- 2 files changed, 63 insertions(+)
+ drivers/iommu/amd/amd_iommu_types.h |    9 +++++++--
+ drivers/iommu/amd/iommu.c           |   10 ++++------
+ 2 files changed, 11 insertions(+), 8 deletions(-)
 
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -313,6 +313,35 @@ do {									\
- #define raw_cpu_xchg_8(pcp, nval)	raw_cpu_generic_xchg(pcp, nval)
- #endif
+--- a/drivers/iommu/amd/amd_iommu_types.h
++++ b/drivers/iommu/amd/amd_iommu_types.h
+@@ -986,8 +986,13 @@ union irte_ga_hi {
+ };
  
-+#ifndef __SIZEOF_INT128__
-+#define raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-+({									\
-+	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
-+	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-+	bool __ret;							\
-+	if (!__builtin_memcmp(&__val, &__old, sizeof(pcp))) {		\
-+		*__p = nval;						\
-+		__ret = true;						\
-+	} else {							\
-+		*(ovalp) = __val;					\
-+		__ret = false;						\
-+	}								\
-+	__ret;								\
-+})
-+
-+#define raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)			\
-+({									\
-+	typeof(pcp) __old = (oval);					\
-+	raw_cpu_generic_try_cmpxchg_memcpy(pcp, &__old, nval);		\
-+	__old;								\
-+})
-+
-+#define raw_cpu_cmpxchg128(pcp, oval, nval) \
-+	raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
-+#define raw_cpu_try_cmpxchg128(pcp, ovalp, nval) \
-+	raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
-+#endif
-+
- #ifndef raw_cpu_try_cmpxchg_1
- #ifdef raw_cpu_cmpxchg_1
- #define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-@@ -503,6 +532,33 @@ do {									\
- #define this_cpu_xchg_8(pcp, nval)	this_cpu_generic_xchg(pcp, nval)
- #endif
+ struct irte_ga {
+-	union irte_ga_lo lo;
+-	union irte_ga_hi hi;
++	union {
++		struct {
++			union irte_ga_lo lo;
++			union irte_ga_hi hi;
++		};
++		u128 irte;
++	};
+ };
  
-+#ifndef __SIZEOF_INT128__
-+#define this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-+({									\
-+	bool __ret;							\
-+	unsigned long __flags;						\
-+	raw_local_irq_save(__flags);					\
-+	__ret = raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval);	\
-+	raw_local_irq_restore(__flags);					\
-+	__ret;								\
-+})
-+
-+#define this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)		\
-+({									\
-+	typeof(pcp) __ret;						\
-+	unsigned long __flags;						\
-+	raw_local_irq_save(__flags);					\
-+	__ret = raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval);	\
-+	raw_local_irq_restore(__flags);					\
-+	__ret;								\
-+})
-+
-+#define this_cpu_cmpxchg128(pcp, oval, nval) \
-+	this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
-+#define this_cpu_try_cmpxchg128(pcp, ovalp, nval) \
-+	this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
-+#endif
-+
- #ifndef this_cpu_try_cmpxchg_1
- #ifdef this_cpu_cmpxchg_1
- #define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -13,6 +13,13 @@
- #ifdef __SIZEOF_INT128__
- typedef __s128 s128;
- typedef __u128 u128;
-+#else
-+#ifdef CONFIG_64BIT
-+/* hack for this_cpu_cmpxchg128 */
-+typedef struct {
-+	u64 a, b;
-+} u128 __attribute__((aligned(16)));
-+#endif
- #endif
+ struct irq_2_irte {
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -3003,10 +3003,10 @@ static int alloc_irq_index(struct amd_io
+ static int modify_irte_ga(struct amd_iommu *iommu, u16 devid, int index,
+ 			  struct irte_ga *irte, struct amd_ir_data *data)
+ {
+-	bool ret;
+ 	struct irq_remap_table *table;
+-	unsigned long flags;
+ 	struct irte_ga *entry;
++	unsigned long flags;
++	u128 old;
  
- typedef u32 __kernel_dev_t;
+ 	table = get_irq_table(iommu, devid);
+ 	if (!table)
+@@ -3017,16 +3017,14 @@ static int modify_irte_ga(struct amd_iom
+ 	entry = (struct irte_ga *)table->table;
+ 	entry = &entry[index];
+ 
+-	ret = cmpxchg_double(&entry->lo.val, &entry->hi.val,
+-			     entry->lo.val, entry->hi.val,
+-			     irte->lo.val, irte->hi.val);
+ 	/*
+ 	 * We use cmpxchg16 to atomically update the 128-bit IRTE,
+ 	 * and it cannot be updated by the hardware or other processors
+ 	 * behind us, so the return value of cmpxchg16 should be the
+ 	 * same as the old value.
+ 	 */
+-	WARN_ON(!ret);
++	old = entry->irte;
++	WARN_ON(!try_cmpxchg128(&entry->irte, &old, irte->irte));
+ 
+ 	if (data)
+ 		data->ref = entry;
 
 
