@@ -2,72 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28044718BBC
-	for <lists+linux-arch@lfdr.de>; Wed, 31 May 2023 23:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942F7718BC0
+	for <lists+linux-arch@lfdr.de>; Wed, 31 May 2023 23:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjEaVXA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 May 2023 17:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
+        id S230119AbjEaVXt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 May 2023 17:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjEaVW7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 May 2023 17:22:59 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4CAB3;
-        Wed, 31 May 2023 14:22:58 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5147e8972a1so337517a12.0;
-        Wed, 31 May 2023 14:22:58 -0700 (PDT)
+        with ESMTP id S229629AbjEaVXs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 May 2023 17:23:48 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883B4B3;
+        Wed, 31 May 2023 14:23:47 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so7703875e87.2;
+        Wed, 31 May 2023 14:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685568177; x=1688160177;
+        d=gmail.com; s=20221208; t=1685568225; x=1688160225;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wQC0Taw9DGW/ijDYPQDBEhLOfb54DcOaqiw5dKW4RRw=;
-        b=fQbgXhP7vZD5Cb5UboaK4p5MsA/A1lgkFfndrv+/e6Xdt9DuyuFoNjaL9zWH1qYT8K
-         9H4c8AZT060gPZ4qDCi2b+rM/kjePV2T6Imlsc17d+sLCRR+86fQR75zjnq2I9yil0Tv
-         GV02WUh3oqGASMqxsvRnMBECZ20TovHpByejrsq8QjgwfCTtd9/p3y2Saso2RPn45O7D
-         mor9RvUFMe89ioFgsQ9qVPOKBP5ORxy8pnIocKTgdXne7HdJaxb5yVWqxYV8DglitDJG
-         ML38K61GcbMU1RVEiCAq4wcoCUt0nRaS+djaA5bo2qRQL1Jsszs8QOE7SEeSqBY2azdd
-         UYLw==
+        bh=/o7KHBWZ+J55ZTx2wkCBeVpg6ewT4ab9Dk0YMh5VnVQ=;
+        b=FLvgGKO/oMijXf1KYnSriKRqcF0Khz4UsHfadWLafI//gSZwBgh9OxypJBiBWgBA+l
+         /gquV9B3z8AW0P35EYtkBK6LSBDgJRm3oH5zSsypekY4x0+a51FVxXSireeZE2kFZ/ym
+         1tCMBT6WZG2i5WptFxX5yfTAiiR4CeV/oABWLsMbqu8wb2JWUs1WzndLDdjk0oIYhIjT
+         MGA3J7kH9nUeAmM3pBT6w68gWIbr6Arq3TdCesdyAlTiwr7YuvVW40DpM4b4s9AsPsR6
+         5ZiTRyg5Mc/mLF7m1i8aY6Miaa5PKp/FPb4YfoPJzWk4XBQ1wA8GbDiFjxaOAbXzAwNi
+         z2wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685568177; x=1688160177;
+        d=1e100.net; s=20221208; t=1685568225; x=1688160225;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wQC0Taw9DGW/ijDYPQDBEhLOfb54DcOaqiw5dKW4RRw=;
-        b=T82SmXIl6uMkylIKwqx9tDpzHm8Rof+9GXLristfgAjc1o1AMSSttybczfsvtiJoVP
-         /GDXU5qzwNR5Mvu0VKB45ioySYOBrjT4ovMZJw/1UCNdy02UeYddUTyvon2X0xay9wq7
-         5i4aVM0+SQUXkt3ONHjDsLNpzv4Lmh8U4T0uBEN3Xr4jB3gQkKiKWA0cQM5mbIJnxCJx
-         f/V5y9zfAVHm+W7pyvZsVDi/TlSLu6VVQuC9AeiNaQZt4fhujlpg/wFYSlwkiU4jdl+0
-         ksTgKulydltW3C9LRqFrh36Mm1AhTUZstD98T05uJW8icqsHbRRzsxUWfJ+EtJf8U4na
-         speA==
-X-Gm-Message-State: AC+VfDy4LAW4Vi9Nhvpu9Z9mkgxi2FJ5ycIW0Bjf/LcNC0TDxzgLj0YQ
-        AnoHbPexyPEotmCjFm8UbI+jsi1IFJapfg==
-X-Google-Smtp-Source: ACHHUZ58AfxanTFy84gvgH+WbnI8SDn1e0skiaPsqfAo0ulKz1ynaHRQnVTu+7rCnWtzRmHPssV4kw==
-X-Received: by 2002:a17:907:6d27:b0:96f:f50b:9b15 with SMTP id sa39-20020a1709076d2700b0096ff50b9b15mr6512573ejc.35.1685568176853;
-        Wed, 31 May 2023 14:22:56 -0700 (PDT)
+        bh=/o7KHBWZ+J55ZTx2wkCBeVpg6ewT4ab9Dk0YMh5VnVQ=;
+        b=R5GDIZzC4rKVrCRotqmHh86Pr8B2az1mISLC6c7LCvpeK4zuAn3Cgqnvi0jtBBOCMc
+         g0bkdwFV/Og3gZnDiSsTCWwPQ2Z9zUbqoinYJDpyr0ex8qweQ4YbazMeeIBrGhUCKeWf
+         ZZKTjMehaC1yT7v18kgbyjc8jT78Ti4a5rgG7H7mM/6+ywimA/wF0YXdSdukEfFj7Ndn
+         ty/UoEfBws2JOpSS+Ldo6hIfJEg2OQgjGD1SVDRzT9d6EbU77y5WoIGo/iDK/QMLSYOS
+         UdKx9OaqvIh/Z4WIic3LLYlvddHWKRfm5IiGGdHqAylprIKKrg+krvlkLNzliFQzuxWD
+         p3VQ==
+X-Gm-Message-State: AC+VfDylDacCf4hdCXdoxDHNFFY9v4aYIWRHSJ3v0nOEZ+bNWOSsNIre
+        eOtxIzfMTKgOBrtWJaSxHR4GBvk80u4lkNNQ
+X-Google-Smtp-Source: ACHHUZ4HSrzAKwWcEGlLlqcZKTHdB6wwjM/xqNb72tZZsHT76BgqQkER9rkEj+np4PSBiBEzo6O0Kg==
+X-Received: by 2002:a19:a413:0:b0:4ef:ec94:9674 with SMTP id q19-20020a19a413000000b004efec949674mr188296lfc.32.1685568224666;
+        Wed, 31 May 2023 14:23:44 -0700 (PDT)
 Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id lf4-20020a170907174400b0096f7500502csm9594497ejc.199.2023.05.31.14.22.55
+        by smtp.gmail.com with ESMTPSA id f25-20020aa7d859000000b00514b3dd8638sm2015646eds.67.2023.05.31.14.23.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 14:22:56 -0700 (PDT)
+        Wed, 31 May 2023 14:23:44 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Jonathan Corbet <corbet@lwn.net>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>,
-        linux-crypto@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 5/7] crypto: update some Arm documentation references
-Date:   Wed, 31 May 2023 23:22:55 +0200
-Message-ID: <2283368.ElGaqSPkdT@jernej-laptop>
-In-Reply-To: <20230529144856.102755-6-corbet@lwn.net>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-input@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] docs: update some straggling Documentation/arm references
+Date:   Wed, 31 May 2023 23:23:43 +0200
+Message-ID: <1852730.tdWV9SEqCh@jernej-laptop>
+In-Reply-To: <20230529144856.102755-7-corbet@lwn.net>
 References: <20230529144856.102755-1-corbet@lwn.net>
- <20230529144856.102755-6-corbet@lwn.net>
+ <20230529144856.102755-7-corbet@lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,23 +81,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dne ponedeljek, 29. maj 2023 ob 16:48:54 CEST je Jonathan Corbet napisal(a):
-> The Arm documentation has moved to Documentation/arch/arm; update a
-> set of references under crypto/allwinner to match.
-> 
-> Cc: Corentin Labbe <clabbe.montjoie@gmail.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
+Dne ponedeljek, 29. maj 2023 ob 16:48:55 CEST je Jonathan Corbet napisal(a):
+> The Arm documentation has moved to Documentation/arch/arm; update the
+> last remaining references to match.
+>=20
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > Cc: Chen-Yu Tsai <wens@csie.org>
 > Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
 > Cc: Samuel Holland <samuel@sholland.org>
-> Cc: linux-crypto@vger.kernel.org
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-input@vger.kernel.org
 > Cc: linux-sunxi@lists.linux.dev
+> Cc: linux-pwm@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
 > Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+> ---
+>  MAINTAINERS                          | 4 ++--
+>  drivers/input/touchscreen/sun4i-ts.c | 2 +-
 
+=46or sun4i-ts.c:
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
+
+>  drivers/pwm/pwm-atmel.c              | 2 +-
+>  drivers/pwm/pwm-pxa.c                | 2 +-
+>  drivers/tty/serial/Kconfig           | 4 ++--
+>  5 files changed, 7 insertions(+), 7 deletions(-)
+
 
 
