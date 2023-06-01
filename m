@@ -2,171 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33ED171F0F0
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 19:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A367671F40D
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 22:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbjFARjo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Jun 2023 13:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S232594AbjFAUnf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Jun 2023 16:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjFARjn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 13:39:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D304136;
-        Thu,  1 Jun 2023 10:39:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE33E64860;
-        Thu,  1 Jun 2023 17:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D9AC4339E;
-        Thu,  1 Jun 2023 17:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685641181;
-        bh=rOyxKwyKoD8JRFg4gUZg/5MsYAzctjBiJEmXXIw+2Pg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o/tcJHGXDGK+Cmz0WPMH9eqt4DXVRB87b+bOc4yCFZZx+pNoEHu0L6Kk/WHl5TZCQ
-         v4wg++ka5L5/koa89l5lEtczt9Lp/CS49/lq9S/D/gsV6IN2cJNGZcqlW9mzDWtgf8
-         kSPa6HE9uQjRqdmZMZGwEA+2H5w1XPFs1bwtf87IXl053GkxGBjbRGWwQEhiSemK34
-         SURRDqI9JYl4AuMZSjsgfbIzfuYI4ScXci6h+5ayJwzrwQeS7v4C8WHfjDAbGm6Wt7
-         HhKwh2oygRzaHVjZAo7rCNsfYsqW/i3EtbygDwQjD02rjzFKXYyUdDoEjObai2iibs
-         UOf6kgrQWTHWg==
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-45c6c6e0ab2so599177e0c.1;
-        Thu, 01 Jun 2023 10:39:41 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzzxOBgQs22Zp+fPZ5LbXE5al098PVjDPukZSVDJiG9ue70wnq0
-        mTIF1LqBegezr4klJ3rP77T6/6P+iMKs1xV/gVo=
-X-Google-Smtp-Source: ACHHUZ7saBfaT5uX7NLiJU4LIkIoXw37eBnBmjdUSiEWtD7RMOu14iPsR47csoQHy7I8rQlHKSda/v96q9Noy2qP/FE=
-X-Received: by 2002:aca:ead6:0:b0:398:2f7f:a5cd with SMTP id
- i205-20020acaead6000000b003982f7fa5cdmr1228908oih.24.1685641160132; Thu, 01
- Jun 2023 10:39:20 -0700 (PDT)
+        with ESMTP id S232572AbjFAUne (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 16:43:34 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617FF189;
+        Thu,  1 Jun 2023 13:43:32 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565a63087e9so13253237b3.2;
+        Thu, 01 Jun 2023 13:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685652211; x=1688244211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F1D8lVOaAVBWbT9t2RmOD+26281abLHxtrNSt32Ap24=;
+        b=qLgbJbj5g8WGk9vr+h5GU3VAGYoZuUQfYy+Jk03a6BWdaBQStekzq99EEhSRb/apVE
+         r1wG5klq4xTuvlp4fzfvGwGvXsPOH5Z+EGzZ3xDm5VuokYBfnX2Z7EeXpvrNqoMOmFfA
+         JBLO6CGLz8pEI44d71tWawLxUIyiVrcZLnzOInnX4NDx0adjPFt4WqdjoFpvwTeJeP42
+         YdR8VtfFc5+TjUwWFHzsShyWmg/NGqDFZTc1nDT9EKaeGOrhYp9pTMhkn6c++xEXcw0Z
+         7/JenW6z+3FLVb69Ur5a6g5NHDXYEBFsl6KltuWvHl5pgiI7Ar5zj9KICtB4zwOfTiPP
+         PMcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685652211; x=1688244211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F1D8lVOaAVBWbT9t2RmOD+26281abLHxtrNSt32Ap24=;
+        b=GOowg9yn12Q6SQlCdXA40g08sLFst1a8mGzJYQc/D+ZC9Cv2U4KHw5O8JXgIdyIf6t
+         CkDgwYmWXjjIQLVN66g8S46iRGAxfgeuACOMOXb1rjo+Nk38gC9zvNnX8Mu6Mtn7rOCK
+         60f9rGemU06TnD/1OlFLxVftsIaKncCha4VSdmCCYFyn7Cr0LAXaFscluQveBYHF8+Qw
+         jV8yv5Gjekgy4HnL13fOiqaUFg4vhGAs4al+h7471Q1JJ+74hIQyZo4ofSMyl3D+Zkdz
+         8JvBwdKQbUVTivEbq50q6u9owP0DcP1eS0gnbqbQ2fVxAvU2zI50G7f+mhB6C5Lr/RAS
+         axEg==
+X-Gm-Message-State: AC+VfDxPOzX26sLB2wS6GTh3JDg9tVa9nUNjVyyIL/vXD17t+m+HgPcY
+        of+dXb9FtqMQ8lyQ6dtTMD1JbR2mgvDN2u0MMj8olTx8p5Y=
+X-Google-Smtp-Source: ACHHUZ5DfuhGus+PqmBDfDw3I8CUwiopOPmtEZnOXp6mFa4otjE0OnORW5aklQp2qVjtyKAx2ImFFxSDC1ok71Q6xew=
+X-Received: by 2002:a0d:e84b:0:b0:565:f045:18c3 with SMTP id
+ r72-20020a0de84b000000b00565f04518c3mr10614817ywe.20.1685652211220; Thu, 01
+ Jun 2023 13:43:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org>
- <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net>
- <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de> <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
-In-Reply-To: <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 2 Jun 2023 02:38:43 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATxpUK+w=VAkhLZserLr4cMk2ffSr+qzzZwuZ6DKWA0mw@mail.gmail.com>
-Message-ID: <CAK7LNATxpUK+w=VAkhLZserLr4cMk2ffSr+qzzZwuZ6DKWA0mw@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of __SIZEOF_INT128__
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Helge Deller <deller@gmx.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+References: <20230531213032.25338-1-vishal.moola@gmail.com>
+ <20230531213032.25338-4-vishal.moola@gmail.com> <20230601151900.6f184e8c@thinkpad-T15>
+In-Reply-To: <20230601151900.6f184e8c@thinkpad-T15>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Thu, 1 Jun 2023 13:43:20 -0700
+Message-ID: <CAOzc2pyjLh_GV1PL7CPkkPGcASHULhir_rJgB+UhwzPgQZD8Bw@mail.gmail.com>
+Subject: Re: [PATCH v3 03/34] s390: Use pt_frag_refcount for pagetables
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org,
-        John David Anglin <dave.anglin@bell.net>,
-        Sam James <sam@gentoo.org>
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hugh Dickins <hughd@google.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 10:29=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Jun 1, 2023 at 6:19=E2=80=AFAM Gerald Schaefer
+<gerald.schaefer@linux.ibm.com> wrote:
 >
-> On Thu, Jun 1, 2023 at 6:32=E2=80=AFAM Helge Deller <deller@gmx.de> wrote=
-:
+>  On Wed, 31 May 2023 14:30:01 -0700
+> "Vishal Moola (Oracle)" <vishal.moola@gmail.com> wrote:
+>
+> > s390 currently uses _refcount to identify fragmented page tables.
+> > The page table struct already has a member pt_frag_refcount used by
+> > powerpc, so have s390 use that instead of the _refcount field as well.
+> > This improves the safety for _refcount and the page table tracking.
 > >
-> > I don't think we need to care about gcc-10 on parisc.
-> > Debian and Gentoo are the only supported distributions, while Debian
-> > requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at lea=
-st
-> > gcc-12 as well.
-> >
-> > So raising the gcc limit for parisc only (at least temporarily for now)
-> > should be fine and your workaround below wouldn't be necessary, right?
+> > This also allows us to simplify the tracking since we can once again us=
+e
+> > the lower byte of pt_frag_refcount instead of the upper byte of _refcou=
+nt.
 >
-> This absolutely sounds like the right option. Let's simplify the
-> problem space by just saying that parisc needs the newer compiler.
+> This would conflict with s390 impact of pte_free_defer() work from Hugh D=
+ickins
+> https://lore.kernel.org/lkml/35e983f5-7ed3-b310-d949-9ae8b130cdab@google.=
+com/
+> https://lore.kernel.org/lkml/6dd63b39-e71f-2e8b-7e0-83e02f3bcb39@google.c=
+om/
 >
-> Right now we have that "minimum gcc version" in a somewhat annoying
-> place: it's in the ./scripts/min-tool-version.sh file as a shell
-> script.
+> There he uses pt_frag_refcount, or rather pt_mm in the same union, to sav=
+e
+> the mm_struct for deferred pte_free().
 >
-> I wonder if we could move the gcc minimum version check into the
-> Kconfig file instead, and make it easier to let architectures override
-> the minimum version.
-
-Currently, it is invoked in the Kconfig time,
-but not directly in Kconfig files.
-
-scripts/Kconfig.include
- -> scripts/cc-version.sh
-    -> scripts/min-tool-version.sh
-
-It would be ugly if we wrote the equivalent code
-directly in Kconfig files.
-
-
+> I still need to look closer into both of your patch series, but so far it
+> seems that you have no hard functional requirement to switch from _refcou=
+nt
+> to pt_frag_refcount here, for s390.
 >
-> I don't quite know how to do that sanely, though. I don't think we
-> have a sane way to error out at Kconfig time (except by forcing some
-> syntax error inside an 'if' statement or something horrendously hacky
-> like that).
+> If this is correct, and you do not e.g. need this to make some other use
+> of _refcount, I would suggest to drop this patch.
 
-The parse stage can fail by $(error-if ) macro, but
-the evaluation stage never fails. I think it is a design.
+The goal of this preparation patch is to consolidate s390's usage of
+struct page fields so that struct ptdesc can be smaller. Its not particular=
+ly
+mandatory; leaving _refcount in ptdesc only increases the struct by
+8 bytes and can always be changed later.
 
-I think checking the compiler version during the parse stage
-makes sense given the current situation. The compiler version is
-fixed when Kconfig starts. If the compiler is found to be too old,
-there is no meaning to proceed.
+However it is a little annoying since s390 is the only architecture
+that egregiously uses space throughout struct page for their page
+tables, rather than just the page table struct. For example, s390
+gmap uses page->index which also aliases with pt_mm and
+pt_frag_refcount. I'm not sure if/how gmap page tables interact
+with s390 process page tables at all, but if it does that could
+potentially cause problems with Hugh's patch as well :(
 
-
-You suggested to choose a compiler in the Kconfig time:
-https://lore.kernel.org/lkml/CAHk-=3DwhdrvCkSWh=3DBRrwZwNo3=3DyLBXXM88NGx8V=
-EpP1VTgmkyQ@mail.gmail.com/
-
-When we achieve that, moving the min version to Kconfig files will be
-the right thing to do. Then, everything will be evaluated dynamically.
-
-
->
-> Added Masahiro to the (already overlong) participants list.
->
->                    Linus
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+I can add _refcount to ptdesc if we would like, but I still
+prefer if s390 could be simplified instead.
