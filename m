@@ -2,193 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1E9719E0E
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 15:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7B3719E38
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 15:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbjFAN2n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Jun 2023 09:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S234110AbjFANap (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Jun 2023 09:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbjFAN2X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 09:28:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C84E6D;
-        Thu,  1 Jun 2023 06:28:07 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351DDUYp018739;
-        Thu, 1 Jun 2023 13:27:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=bPE9AxXhG80C4torBNp1dgqNJL9dzxzABLAPHZlRU4c=;
- b=ZtVj7QfP7IaRKJkngAiqZPkdIdLpxo3dz9kg7bawD1r3/JUrkOoKmNZEAY6ztjsFWXjb
- Wzn+DNiWS9M9E3rhsdi32yPUbVTol70R/IVUPnTKmt2p0XGjXQCjbLanQFXwhNsO1CSX
- IytfDJRa+qAIHhkfdsFuAnOimhf1BSOu3dnsW1p6GIjGXlT8hrp3trb8UbfoiezhStlk
- rFQo/bqSV5X1i8u2Ka88dctnU8GImgNpK38EgNBjyT+zKak6AB0qvRbLvlsk9B7S+ctp
- B/XuUUulM9tRXQ74eBP6SMWxwAu/tZ8NZHcGWLrx8nFY791bKcvacMZSVNUQv58zhxbO NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxv1a8ksv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:27:36 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351DE17r022544;
-        Thu, 1 Jun 2023 13:27:36 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxv1a8krq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:27:35 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3510vbWW006682;
-        Thu, 1 Jun 2023 13:27:34 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qu94e2hyt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:27:33 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351DRV6j32113240
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Jun 2023 13:27:31 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97E5C2004B;
-        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A4AC20043;
-        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
-Received: from [9.144.159.119] (unknown [9.144.159.119])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
-Message-ID: <5752a488-be54-61a0-6d18-647456abc4ee@linux.ibm.com>
-Date:   Thu, 1 Jun 2023 15:27:30 +0200
+        with ESMTP id S234131AbjFANaT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 09:30:19 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10691B5
+        for <linux-arch@vger.kernel.org>; Thu,  1 Jun 2023 06:30:00 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9741a0fd134so123916566b.0
+        for <linux-arch@vger.kernel.org>; Thu, 01 Jun 2023 06:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685626197; x=1688218197;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M0MHDOHZ+ksADoGSH1YMQnsp1jrJ4XOCHJuXFHrOLiU=;
+        b=T4om4P1RzIZoDUAVXZfme2PWrAcGfnkYpcKpc1Y7uPZI1nrtTW6M2aIyr1jxBpJehV
+         t/UYXCla7eAZpAYIvPbOO1gJxyXcpJVKGQ9PP7aoyffGzkUhY1UJE0NOakbVsfv3pMZr
+         eAI8kMSEo+7AcJ5zsLNU7ObTZS/C2tzlxZv9Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685626197; x=1688218197;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M0MHDOHZ+ksADoGSH1YMQnsp1jrJ4XOCHJuXFHrOLiU=;
+        b=QWqVg5e1QFJaK+K8OgqKRRKFRfR43LBOZ4z0FQE1uCc4SdoEZfVTw7IhgxIXA8x/8n
+         e13Hh7LUAIToB/eChVxW1hnb82oIbQmXrtuN+vu/8iQD1MzB67LxvzIlsPaXqkcPciCh
+         utmxpRoIQFZj3lA8edYDlEGzZSoClEoh1/lOE7hT9ZHl/kqB9G22odigfAEu58l7Pvn8
+         zDQ5JFPPoBdR2S5ZXtGFtZxYpenJc8mZhsj6q8FS2u3pnlGn3LRLHIs8FCzH7X5H3PqO
+         wKX2h8ggwU4OY3q42kFv623MJVYldW96L+rm/JXt6XCpDQ0xrMTWN+dfbMHqB8A9n1d5
+         buXA==
+X-Gm-Message-State: AC+VfDw0ADCJ3FD+xqX3HOEQyWJS3Pz4KMlJrC7aNEE4S58FwsU050xu
+        Nspgg3kaZ/0M/rz7OLCdP80XVTICCJDTPdUt+fy8VwjX
+X-Google-Smtp-Source: ACHHUZ5Dy81eK4YJOMZQlqmsgjXuG6bCdbd4GPD3YQwxZAvKjgr/dStUZYO2WV25V3cnPKDK/O5vcg==
+X-Received: by 2002:a17:907:72d6:b0:96f:45cd:6c21 with SMTP id du22-20020a17090772d600b0096f45cd6c21mr2973238ejc.30.1685626197510;
+        Thu, 01 Jun 2023 06:29:57 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id k9-20020a17090666c900b0097073f1ed84sm10604629ejp.4.2023.06.01.06.29.56
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 06:29:57 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-30af56f5f52so793877f8f.1
+        for <linux-arch@vger.kernel.org>; Thu, 01 Jun 2023 06:29:56 -0700 (PDT)
+X-Received: by 2002:a17:907:2cc6:b0:973:fe5d:ef71 with SMTP id
+ hg6-20020a1709072cc600b00973fe5def71mr4787778ejc.14.1685626175454; Thu, 01
+ Jun 2023 06:29:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH 8/9] powerpc: Add HOTPLUG_SMT support
-To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        mingo@redhat.com, x86@kernel.org
-References: <20230524155630.794584-1-mpe@ellerman.id.au>
- <20230524155630.794584-8-mpe@ellerman.id.au>
-Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <20230524155630.794584-8-mpe@ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: eTDF-zGZ2zA_y9IcYigGwfomNzbW0tV5
-X-Proofpoint-ORIG-GUID: dun_0TqE2rOk885f52-ndoe6QkF9Vmkk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 phishscore=0
- clxscore=1011 malwarescore=0 adultscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010115
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org>
+ <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net>
+ <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
+In-Reply-To: <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 1 Jun 2023 09:29:18 -0400
+X-Gmail-Original-Message-ID: <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
+Message-ID: <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of __SIZEOF_INT128__
+To:     Helge Deller <deller@gmx.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        John David Anglin <dave.anglin@bell.net>,
+        Sam James <sam@gentoo.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 24/05/2023 17:56:29, Michael Ellerman wrote:
-> Add support for HOTPLUG_SMT, which enables the generic sysfs SMT support
-> files in /sys/devices/system/cpu/smt, as well as the "nosmt" boot
-> parameter.
+On Thu, Jun 1, 2023 at 6:32=E2=80=AFAM Helge Deller <deller@gmx.de> wrote:
+>
+> I don't think we need to care about gcc-10 on parisc.
+> Debian and Gentoo are the only supported distributions, while Debian
+> requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at least
+> gcc-12 as well.
+>
+> So raising the gcc limit for parisc only (at least temporarily for now)
+> should be fine and your workaround below wouldn't be necessary, right?
 
-Hi Michael,
+This absolutely sounds like the right option. Let's simplify the
+problem space by just saying that parisc needs the newer compiler.
 
-It seems that there is now a conflict between with the PPC 'smt-enabled'
-boot option.
+Right now we have that "minimum gcc version" in a somewhat annoying
+place: it's in the ./scripts/min-tool-version.sh file as a shell
+script.
 
-Booting the patched kernel with 'smt-enabled=4', later, change to the SMT
-level (for instance to 6) done through /sys/devices/system/cpu/smt/control
-are not applied. Nothing happens.
-Based on my early debug, I think the reasons is that cpu_smt_num_threads=8
-when entering __store_smt_control(). But I need to dig further.
+I wonder if we could move the gcc minimum version check into the
+Kconfig file instead, and make it easier to let architectures override
+the minimum version.
 
-BTW, should the 'smt-enabled' PPC specific option remain?
+I don't quite know how to do that sanely, though. I don't think we
+have a sane way to error out at Kconfig time (except by forcing some
+syntax error inside an 'if' statement or something horrendously hacky
+like that).
 
-Cheers,
-Laurent.
+Added Masahiro to the (already overlong) participants list.
 
-> Implement the recently added hooks to allow partial SMT states, allow
-> any number of threads per core.
-> 
-> Tie the config symbol to HOTPLUG_CPU, which enables it on the major
-> platforms that support SMT. If there are other platforms that want the
-> SMT support that can be tweaked in future.
-> 
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  arch/powerpc/Kconfig                |  1 +
->  arch/powerpc/include/asm/topology.h | 25 +++++++++++++++++++++++++
->  arch/powerpc/kernel/smp.c           |  3 +++
->  3 files changed, 29 insertions(+)
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 539d1f03ff42..5cf87ca10a9c 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -273,6 +273,7 @@ config PPC
->  	select HAVE_SYSCALL_TRACEPOINTS
->  	select HAVE_VIRT_CPU_ACCOUNTING
->  	select HAVE_VIRT_CPU_ACCOUNTING_GEN
-> +	select HOTPLUG_SMT			if HOTPLUG_CPU
->  	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
->  	select IOMMU_HELPER			if PPC64
->  	select IRQ_DOMAIN
-> diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
-> index 8a4d4f4d9749..1e9117a22d14 100644
-> --- a/arch/powerpc/include/asm/topology.h
-> +++ b/arch/powerpc/include/asm/topology.h
-> @@ -143,5 +143,30 @@ static inline int cpu_to_coregroup_id(int cpu)
->  #endif
->  #endif
->  
-> +#ifdef CONFIG_HOTPLUG_SMT
-> +#include <linux/cpu_smt.h>
-> +#include <asm/cputhreads.h>
-> +
-> +static inline bool topology_smt_supported(void)
-> +{
-> +	return threads_per_core > 1;
-> +}
-> +
-> +static inline bool topology_smt_threads_supported(unsigned int num_threads)
-> +{
-> +	return num_threads <= threads_per_core;
-> +}
-> +
-> +static inline bool topology_is_primary_thread(unsigned int cpu)
-> +{
-> +	return cpu == cpu_first_thread_sibling(cpu);
-> +}
-> +
-> +static inline bool topology_smt_thread_allowed(unsigned int cpu)
-> +{
-> +	return cpu_thread_in_core(cpu) < cpu_smt_num_threads;
-> +}
-> +#endif
-> +
->  #endif /* __KERNEL__ */
->  #endif	/* _ASM_POWERPC_TOPOLOGY_H */
-> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-> index 265801a3e94c..eed20b9253b7 100644
-> --- a/arch/powerpc/kernel/smp.c
-> +++ b/arch/powerpc/kernel/smp.c
-> @@ -1154,6 +1154,9 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
->  
->  	if (smp_ops && smp_ops->probe)
->  		smp_ops->probe();
-> +
-> +	// Initalise the generic SMT topology support
-> +	cpu_smt_check_topology(threads_per_core);
->  }
->  
->  void smp_prepare_boot_cpu(void)
-
+                   Linus
