@@ -2,43 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C65E7199E2
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 12:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F90719A25
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 12:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjFAKfE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Jun 2023 06:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S233102AbjFAKvM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Jun 2023 06:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbjFAKep (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 06:34:45 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9087A8E;
-        Thu,  1 Jun 2023 03:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1685615570; i=deller@gmx.de;
-        bh=G2fVWfFa8Mg7zk8fckBtVkE46aW59z85USR51MF7qtA=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=FmEhh+g+1DMt5R00VGwoA6elCJBKz5sYnrCS4k8pbs4FebbObsTMoS8ilG3++VVdP
-         gNj+IpkiOmplBoLThMFtiF09gwNBcv0lLa3SddmTzCjnQAcAsEV+gQ4IBtia3VTe0q
-         tAzyoTc4yp1UsMYHpvORsVDA4Z0vtf1JD1mZWgh9ltZBLhSBiHmnraCm4wJ38oQfL1
-         uPtjeboQwb5+cNsLX86hk7wLs9t+iTGic+maNc4YnIU/GKSF9v4CUlwOTClbhL7HfT
-         GkEVVU9TosKjG0dG5Lplx/pL7aKB6FeDQbKeezr5taz3oH5M4y6JrWRaSXYSXLdHbS
-         3tntj4pI5wyMQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.56.61] ([109.43.49.30]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mqb1W-1qQkp02L1k-00mYV1; Thu, 01
- Jun 2023 12:32:50 +0200
-Message-ID: <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
-Date:   Thu, 1 Jun 2023 12:32:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of
- __SIZEOF_INT128__
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S229589AbjFAKvL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 06:51:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AAD9D;
+        Thu,  1 Jun 2023 03:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sqOkmNSuBD7GBtb46itE8ZDvhkHRWIc2NbvPp9qeOiw=; b=KZkC2WT4XQMr05qEkGpBjCv7TG
+        Ak6b/9n5dS5ZPNEFM10/VvLJvSS1D5ylwPHzd2DaQkM+piIbsvAz/pGM04U57+k94ayIQeNYv/Zpr
+        p75C1W/ZCqWn3ZEDzShydO0ovDBfnP1AqQJwgcDzODs4ufgi5DRaXCvhf1ySS+x4TLywE5eK3nk8v
+        3XQKlVIoFYPn55+2ybBmZuzlaHrG7I/QAPJb5OtatUGXyIlhc26higj14zyA/1vT2iclbpfYPL3TA
+        Nx806QJ6JOI2IEjvEs6POHy4WF448K4MQtyi2wClcFurUdFMq5GGHx9JYbaGa2fFQNILHK/d8n61V
+        wBRZ/4Zw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4fsv-008IFd-Tl; Thu, 01 Jun 2023 10:50:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E2E913002F0;
+        Thu,  1 Jun 2023 12:50:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 96C9A21AA6F9B; Thu,  1 Jun 2023 12:50:21 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 12:50:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Will Deacon <will@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>,
@@ -74,37 +75,21 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-parisc@vger.kernel.org,
         John David Anglin <dave.anglin@bell.net>,
         Sam James <sam@gentoo.org>
+Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of
+ __SIZEOF_INT128__
+Message-ID: <20230601105021.GU4253@hirez.programming.kicks-ass.net>
 References: <20230531130833.635651916@infradead.org>
  <20230531132323.722039569@infradead.org>
  <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
  <20230601101409.GS4253@hirez.programming.kicks-ass.net>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230601101409.GS4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qA5DnM4FMT01IDeGOwln/QBbEhpU1XDaseD6BNrJd2GZ0tWK4QE
- 0yoTPW4Cs8Vtb3/jrIjTmQtVVNUdP3oXYDtFd4z2kq0x7GFNVrwG5gEaGKtm2ktl4Sd3zvp
- kxZFe+aVo2LRvUHYM94SCcI5Q+2GxcLHYu9LTSFdlRkYd2lDVuDk6B25dzssNg2eXbmZQ9f
- 0TxMAa4XkIBRA/JlzP4cw==
-UI-OutboundReport: notjunk:1;M01:P0:lEDV+OwbF54=;tqVeNJO4hsUSgmJjpmBUSoVfvY1
- P/H67S16xvXuBRLnk1x8/0oamZFGOOIFXOCJe/hmp8CSY77eEc61k7PxC47hbEI87zrTTLHFH
- dWEbnJsKLZlhk+5pY153PoS6l0SyGPAHVim7eKVrjxF1IXcFt6PFd5Vw+aE2QUnUut9h8jTrt
- Lq78XVCHJNdVnVPOJ47gp+5mkAIqZ6pWonbrlGATCpt+n7YpCCajAlAKSABpRGJjOoOdODf86
- mbdjdqFtOKhQ04CKFfgEyxLNXMYJVzCKf+9SGFTQe/omDQvuTYBYZOi2ceVwi6hH2ZxAiLY7G
- u20XwVk1X296jyJNemf6fgt6cmc7qArCvySvCtplxwnVnBZpfg4bhGRMCdOK1dwbdMNhiav2x
- /dycPeP0gpTyirVYPahuuzRj/g9O6bPOei6Tb1RDaPwoZDm4IFD+PNESrNHJyi/jrX/3NFu4x
- L+EWKh+v2YK6Q8Z4ViEGto3VXXk23pDZGs60enM93LX9ImtdpC4c1PqAYLweRHwPsvBPY6D0i
- bgNY5zxSa7nBXYhTH8oIwu71bBf237gaOpeqzYMcQTLrjv43F7VYzJpJPkM0mvPd3wkz9aiWf
- 4mw7PRUsxB3LwZhEm7ohSC6LPzYEHCjoYFHAyNOqsbdav6WfYZWi610L05paEqu4V1YOWv33S
- 8KLExn5u3Elk8eh4/xpS0HMIf4XUoZwDq1vDVtESK25wGc6HkRYkIl97wmW2TSPBc2Am1fTlb
- roglOE/2aTWHWoCN/qEH4yPzzYaSiJeSyzj+I4skyIkbhebChyE+RALqWDxTybIFJ1w2DfP2o
- anH6ZPyfZQ6d4BLKrKYuyEVPj6FtGAUtN+xLNu0C1FQJFgpdr1j6Txfz7cmh2SG1zaEyeKXQ4
- oXiPN6V3C8LedVzp/tvsi0kHrOtlI6iXIoTkBTy9WR2wsc3i777kCVAftkQkqBuYnkgkQ/rue
- 3QqTKVV3MwstFz1j8XAvezd2tOQ=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+ <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,131 +97,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/1/23 12:14, Peter Zijlstra wrote:
-> On Wed, May 31, 2023 at 04:21:22PM +0200, Arnd Bergmann wrote:
->
->> It would be nice to have the hack more localized to parisc
->> and guarded with a CONFIG_GCC_VERSION check so we can kill
->> it off in the future, once we drop either gcc-10 or parisc
->> support.
->
-> I vote for dropping parisc -- it's the only 64bit arch that doesn't have
-> sane atomics.
+On Thu, Jun 01, 2023 at 12:32:38PM +0200, Helge Deller wrote:
+> On 6/1/23 12:14, Peter Zijlstra wrote:
+> > On Wed, May 31, 2023 at 04:21:22PM +0200, Arnd Bergmann wrote:
+> > 
+> > > It would be nice to have the hack more localized to parisc
+> > > and guarded with a CONFIG_GCC_VERSION check so we can kill
+> > > it off in the future, once we drop either gcc-10 or parisc
+> > > support.
+> > 
+> > I vote for dropping parisc -- it's the only 64bit arch that doesn't have
+> > sane atomics.
+> 
+> Of course I'm against dropping parisc.
 
-Of course I'm against dropping parisc.
+:-)
 
-> Anyway, the below seems to work -- build tested with GCC-10.1
+> > Anyway, the below seems to work -- build tested with GCC-10.1
+> 
+> I don't think we need to care about gcc-10 on parisc.
+> Debian and Gentoo are the only supported distributions, while Debian
+> requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at least
+> gcc-12 as well.
+> 
+> So raising the gcc limit for parisc only (at least temporarily for now)
+> should be fine and your workaround below wouldn't be necessary, right?
 
-I don't think we need to care about gcc-10 on parisc.
-Debian and Gentoo are the only supported distributions, while Debian
-requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at least
-gcc-12 as well.
-
-So raising the gcc limit for parisc only (at least temporarily for now)
-should be fine and your workaround below wouldn't be necessary, right?
-
-Helge
-
-> ---
-> Subject: parisc/percpu: Work around the lack of __SIZEOF_INT128__
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Tue May 30 22:27:40 CEST 2023
->
-> HPPA64 is unique in not providing __SIZEOF_INT128__ across all
-> supported compilers, specifically it only started doing this with
-> GCC-11.
->
-> Since the per-cpu ops are universally availably, and
-> this_cpu_{,try_}cmpxchg128() is expected to be available on all 64bit
-> architectures a wee bodge is in order.
->
-> Sadly, while C reverts to memcpy() for assignment of POD types, it does
-> not revert to memcmp() for for equality. Therefore frob that manually.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->   arch/parisc/include/asm/percpu.h |   77 ++++++++++++++++++++++++++++++=
-+++++++++
->   1 file changed, 77 insertions(+)
->
-> --- /dev/null
-> +++ b/arch/parisc/include/asm/percpu.h
-> @@ -0,0 +1,77 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_PARISC_PERCPU_H
-> +#define _ASM_PARISC_PERCPU_H
-> +
-> +#include <linux/types.h>
-> +
-> +#if defined(CONFIG_64BIT) && CONFIG_GCC_VERSION < 1100000
-> +
-> +/*
-> + * GCC prior to 11 does not provide __SIZEOF_INT128__ on HPPA64
-> + * as such we need to provide an alternative implementation of
-> + * {raw,this}_cpu_{,try_}cmpxchg128().
-> + *
-> + * This obviously doesn't function as u128 should, but for the purpose
-> + * of per-cpu cmpxchg128 it might just do.
-> + */
-> +typedef struct {
-> +	u64 a, b;
-> +} u128 __attribute__((aligned(16)));
-> +
-> +#define raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-> +({									\
-> +	typeof(pcp) *__p =3D raw_cpu_ptr(&(pcp));				\
-> +	typeof(pcp) __val =3D *__p, __old =3D *(ovalp);			\
-> +	bool __ret;							\
-> +	if (!__builtin_memcmp(&__val, &__old, sizeof(pcp))) {		\
-> +		*__p =3D nval;						\
-> +		__ret =3D true;						\
-> +	} else {							\
-> +		*(ovalp) =3D __val;					\
-> +		__ret =3D false;						\
-> +	}								\
-> +	__ret;								\
-> +})
-> +
-> +#define raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)			\
-> +({									\
-> +	typeof(pcp) __old =3D (oval);					\
-> +	raw_cpu_generic_try_cmpxchg_memcpy(pcp, &__old, nval);		\
-> +	__old;								\
-> +})
-> +
-> +#define raw_cpu_cmpxchg128(pcp, oval, nval) \
-> +	raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
-> +#define raw_cpu_try_cmpxchg128(pcp, ovalp, nval) \
-> +	raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
-> +
-> +#define this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-> +({									\
-> +	bool __ret;							\
-> +	unsigned long __flags;						\
-> +	raw_local_irq_save(__flags);					\
-> +	__ret =3D raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval);	\
-> +	raw_local_irq_restore(__flags);					\
-> +	__ret;								\
-> +})
-> +
-> +#define this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)		\
-> +({									\
-> +	typeof(pcp) __ret;						\
-> +	unsigned long __flags;						\
-> +	raw_local_irq_save(__flags);					\
-> +	__ret =3D raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval);	\
-> +	raw_local_irq_restore(__flags);					\
-> +	__ret;								\
-> +})
-> +
-> +#define this_cpu_cmpxchg128(pcp, oval, nval) \
-> +	this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
-> +#define this_cpu_try_cmpxchg128(pcp, ovalp, nval) \
-> +	this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
-> +
-> +#endif /* !__SIZEOF_INT128__ */
-> +
-> +#include <asm-generic/percpu.h>
-> +
-> +#endif /* _ASM_PARISC_PERCPU_H */
-
+Correct, if you're willing to set minimum GCC version to 11 for parisc
+all is well and this patch can go play in the bit bucket.
