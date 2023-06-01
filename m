@@ -2,143 +2,257 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7B3719E38
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 15:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C554719FD5
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Jun 2023 16:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbjFANap (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Jun 2023 09:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S233834AbjFAOYk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Jun 2023 10:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbjFANaT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 09:30:19 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10691B5
-        for <linux-arch@vger.kernel.org>; Thu,  1 Jun 2023 06:30:00 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9741a0fd134so123916566b.0
-        for <linux-arch@vger.kernel.org>; Thu, 01 Jun 2023 06:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685626197; x=1688218197;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M0MHDOHZ+ksADoGSH1YMQnsp1jrJ4XOCHJuXFHrOLiU=;
-        b=T4om4P1RzIZoDUAVXZfme2PWrAcGfnkYpcKpc1Y7uPZI1nrtTW6M2aIyr1jxBpJehV
-         t/UYXCla7eAZpAYIvPbOO1gJxyXcpJVKGQ9PP7aoyffGzkUhY1UJE0NOakbVsfv3pMZr
-         eAI8kMSEo+7AcJ5zsLNU7ObTZS/C2tzlxZv9Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685626197; x=1688218197;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M0MHDOHZ+ksADoGSH1YMQnsp1jrJ4XOCHJuXFHrOLiU=;
-        b=QWqVg5e1QFJaK+K8OgqKRRKFRfR43LBOZ4z0FQE1uCc4SdoEZfVTw7IhgxIXA8x/8n
-         e13Hh7LUAIToB/eChVxW1hnb82oIbQmXrtuN+vu/8iQD1MzB67LxvzIlsPaXqkcPciCh
-         utmxpRoIQFZj3lA8edYDlEGzZSoClEoh1/lOE7hT9ZHl/kqB9G22odigfAEu58l7Pvn8
-         zDQ5JFPPoBdR2S5ZXtGFtZxYpenJc8mZhsj6q8FS2u3pnlGn3LRLHIs8FCzH7X5H3PqO
-         wKX2h8ggwU4OY3q42kFv623MJVYldW96L+rm/JXt6XCpDQ0xrMTWN+dfbMHqB8A9n1d5
-         buXA==
-X-Gm-Message-State: AC+VfDw0ADCJ3FD+xqX3HOEQyWJS3Pz4KMlJrC7aNEE4S58FwsU050xu
-        Nspgg3kaZ/0M/rz7OLCdP80XVTICCJDTPdUt+fy8VwjX
-X-Google-Smtp-Source: ACHHUZ5Dy81eK4YJOMZQlqmsgjXuG6bCdbd4GPD3YQwxZAvKjgr/dStUZYO2WV25V3cnPKDK/O5vcg==
-X-Received: by 2002:a17:907:72d6:b0:96f:45cd:6c21 with SMTP id du22-20020a17090772d600b0096f45cd6c21mr2973238ejc.30.1685626197510;
-        Thu, 01 Jun 2023 06:29:57 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id k9-20020a17090666c900b0097073f1ed84sm10604629ejp.4.2023.06.01.06.29.56
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 06:29:57 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-30af56f5f52so793877f8f.1
-        for <linux-arch@vger.kernel.org>; Thu, 01 Jun 2023 06:29:56 -0700 (PDT)
-X-Received: by 2002:a17:907:2cc6:b0:973:fe5d:ef71 with SMTP id
- hg6-20020a1709072cc600b00973fe5def71mr4787778ejc.14.1685626175454; Thu, 01
- Jun 2023 06:29:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org>
- <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net>
- <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
-In-Reply-To: <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 1 Jun 2023 09:29:18 -0400
-X-Gmail-Original-Message-ID: <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
-Message-ID: <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of __SIZEOF_INT128__
-To:     Helge Deller <deller@gmx.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        with ESMTP id S233865AbjFAOYj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Jun 2023 10:24:39 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6161FC;
+        Thu,  1 Jun 2023 07:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685629478; x=1717165478;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BaD1zw6V2jf+wne8NUiF1WEc49QRybnZ2yKptn30Dmk=;
+  b=g1aybGChwSwwHLtrLrIonUYSm1lYhIMMZTtMV4TPym8PLnzuLenQ5iHe
+   nNMYHLT0quEiRdF1lKyNG/Aeql87GJVSx6MCsQcp0n7kBbC7emNU5gC4J
+   +VSQmF/A3I+2fbt8d9bSDTMPO8zDM25CUSFd1adPzKJc2iMVzwDoZXYns
+   N7siqRkUQVx0wb9SPPGZ1wZ8TdC3t8ywtN+XkPPVaxBJeT91jaoq0bLGr
+   T5G898YHxNqpz4HZIHhYF3CPl02VXWoIgOlTrxXPvL+2Qng0uJUX+3DT8
+   uc/qTX0VgID7snj30MS2pH9rK0Wk3HlIrJU6zPsXfkCvl6ou3yXMFpqtt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="419088767"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="419088767"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:19:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657813870"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="657813870"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2023 07:19:17 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4j92-0002Lp-1h;
+        Thu, 01 Jun 2023 14:19:16 +0000
+Date:   Thu, 1 Jun 2023 22:18:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org,
-        John David Anglin <dave.anglin@bell.net>,
-        Sam James <sam@gentoo.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Matthew Wilcox <willy@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
+Message-ID: <202306011704.i8xMWKPl-lkp@intel.com>
+References: <20230531213032.25338-26-vishal.moola@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531213032.25338-26-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 6:32=E2=80=AFAM Helge Deller <deller@gmx.de> wrote:
->
-> I don't think we need to care about gcc-10 on parisc.
-> Debian and Gentoo are the only supported distributions, while Debian
-> requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at least
-> gcc-12 as well.
->
-> So raising the gcc limit for parisc only (at least temporarily for now)
-> should be fine and your workaround below wouldn't be necessary, right?
+Hi Vishal,
 
-This absolutely sounds like the right option. Let's simplify the
-problem space by just saying that parisc needs the newer compiler.
+kernel test robot noticed the following build errors:
 
-Right now we have that "minimum gcc version" in a somewhat annoying
-place: it's in the ./scripts/min-tool-version.sh file as a shell
-script.
+[auto build test ERROR on next-20230531]
+[cannot apply to akpm-mm/mm-everything s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus linus/master v6.4-rc4 v6.4-rc3 v6.4-rc2 v6.4-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I wonder if we could move the gcc minimum version check into the
-Kconfig file instead, and make it easier to let architectures override
-the minimum version.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230601-053454
+base:   next-20230531
+patch link:    https://lore.kernel.org/r/20230531213032.25338-26-vishal.moola%40gmail.com
+patch subject: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
+config: m68k-randconfig-r002-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011704.i8xMWKPl-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/915ab62dc3315fe0a0544fccb4ee5f3ee32694b5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230601-053454
+        git checkout 915ab62dc3315fe0a0544fccb4ee5f3ee32694b5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
 
-I don't quite know how to do that sanely, though. I don't think we
-have a sane way to error out at Kconfig time (except by forcing some
-syntax error inside an 'if' statement or something horrendously hacky
-like that).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011704.i8xMWKPl-lkp@intel.com/
 
-Added Masahiro to the (already overlong) participants list.
+All error/warnings (new ones prefixed by >>):
 
-                   Linus
+   In file included from arch/m68k/include/asm/pgalloc.h:12,
+                    from arch/m68k/mm/init.c:26:
+   arch/m68k/include/asm/mcf_pgalloc.h: In function 'pgd_alloc':
+>> arch/m68k/include/asm/mcf_pgalloc.h:83:59: error: 'GFP_NOWARN' undeclared (first use in this function); did you mean 'GFP_NOWAIT'?
+      83 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+         |                                                           ^~~~~~~~~~
+         |                                                           GFP_NOWAIT
+   arch/m68k/include/asm/mcf_pgalloc.h:83:59: note: each undeclared identifier is reported only once for each function it appears in
+   arch/m68k/include/asm/mcf_pgalloc.h: At top level:
+>> arch/m68k/include/asm/mcf_pgalloc.h:22:27: warning: 'ptdesc_address' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      22 |         return (pte_t *) (ptdesc_address(ptdesc));
+         |                           ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:17:33: warning: 'pagetable_alloc' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      17 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+         |                                 ^~~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:24: warning: 'virt_to_ptdesc' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |                        ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:9: warning: 'pagetable_free' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |         ^~~~~~~~~~~~~~
+--
+   In file included from arch/m68k/mm/mcfmmu.c:21:
+   arch/m68k/include/asm/mcf_pgalloc.h: In function 'pgd_alloc':
+>> arch/m68k/include/asm/mcf_pgalloc.h:83:59: error: 'GFP_NOWARN' undeclared (first use in this function); did you mean 'GFP_NOWAIT'?
+      83 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+         |                                                           ^~~~~~~~~~
+         |                                                           GFP_NOWAIT
+   arch/m68k/include/asm/mcf_pgalloc.h:83:59: note: each undeclared identifier is reported only once for each function it appears in
+   arch/m68k/mm/mcfmmu.c: At top level:
+   arch/m68k/mm/mcfmmu.c:36:13: warning: no previous prototype for 'paging_init' [-Wmissing-prototypes]
+      36 | void __init paging_init(void)
+         |             ^~~~~~~~~~~
+   arch/m68k/mm/mcfmmu.c: In function 'paging_init':
+   arch/m68k/mm/mcfmmu.c:41:37: warning: variable 'bootmem_end' set but not used [-Wunused-but-set-variable]
+      41 |         unsigned long next_pgtable, bootmem_end;
+         |                                     ^~~~~~~~~~~
+   arch/m68k/include/asm/mcf_pgalloc.h: At top level:
+>> arch/m68k/include/asm/mcf_pgalloc.h:22:27: warning: 'ptdesc_address' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      22 |         return (pte_t *) (ptdesc_address(ptdesc));
+         |                           ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:17:33: warning: 'pagetable_alloc' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      17 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+         |                                 ^~~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:24: warning: 'virt_to_ptdesc' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |                        ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:9: warning: 'pagetable_free' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |         ^~~~~~~~~~~~~~
+
+
+vim +83 arch/m68k/include/asm/mcf_pgalloc.h
+
+     7	
+     8	extern inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+     9	{
+  > 10		pagetable_free(virt_to_ptdesc(pte));
+    11	}
+    12	
+    13	extern const char bad_pmd_string[];
+    14	
+    15	extern inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+    16	{
+  > 17		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+    18	
+    19		if (!ptdesc)
+    20			return NULL;
+    21	
+  > 22		return (pte_t *) (ptdesc_address(ptdesc));
+    23	}
+    24	
+    25	extern inline pmd_t *pmd_alloc_kernel(pgd_t *pgd, unsigned long address)
+    26	{
+    27		return (pmd_t *) pgd;
+    28	}
+    29	
+    30	#define pmd_populate(mm, pmd, pte) (pmd_val(*pmd) = (unsigned long)(pte))
+    31	
+    32	#define pmd_populate_kernel pmd_populate
+    33	
+    34	static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pgtable,
+    35					  unsigned long address)
+    36	{
+    37		struct ptdesc *ptdesc = virt_to_ptdesc(pgtable);
+    38	
+    39		pagetable_pte_dtor(ptdesc);
+    40		pagetable_free(ptdesc);
+    41	}
+    42	
+    43	static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
+    44	{
+    45		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA, 0);
+    46		pte_t *pte;
+    47	
+    48		if (!ptdesc)
+    49			return NULL;
+    50		if (!pagetable_pte_ctor(ptdesc)) {
+    51			pagetable_free(ptdesc);
+    52			return NULL;
+    53		}
+    54	
+    55		pte = ptdesc_address(ptdesc);
+    56		pagetable_clear(pte);
+    57	
+    58		return pte;
+    59	}
+    60	
+    61	static inline void pte_free(struct mm_struct *mm, pgtable_t pgtable)
+    62	{
+    63		struct ptdesc *ptdesc = virt_to_ptdesc(ptdesc);
+    64	
+    65		pagetable_pte_dtor(ptdesc);
+    66		pagetable_free(ptdesc);
+    67	}
+    68	
+    69	/*
+    70	 * In our implementation, each pgd entry contains 1 pmd that is never allocated
+    71	 * or freed.  pgd_present is always 1, so this should never be called. -NL
+    72	 */
+    73	#define pmd_free(mm, pmd) BUG()
+    74	
+    75	static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+    76	{
+    77		pagetable_free(virt_to_ptdesc(pgd));
+    78	}
+    79	
+    80	static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+    81	{
+    82		pgd_t *new_pgd;
+  > 83		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+    84	
+    85		if (!ptdesc)
+    86			return NULL;
+    87		new_pgd = (pgd_t *) ptdesc_address(ptdesc);
+    88	
+    89		memcpy(new_pgd, swapper_pg_dir, PTRS_PER_PGD * sizeof(pgd_t));
+    90		memset(new_pgd, 0, PAGE_OFFSET >> PGDIR_SHIFT);
+    91		return new_pgd;
+    92	}
+    93	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
