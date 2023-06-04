@@ -2,112 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48248720A82
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Jun 2023 22:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1044721906
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Jun 2023 20:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236158AbjFBUon (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Jun 2023 16:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S231195AbjFDSCP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 4 Jun 2023 14:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbjFBUom (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Jun 2023 16:44:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05A1E43;
-        Fri,  2 Jun 2023 13:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1685738571; x=1686343371; i=deller@gmx.de;
- bh=EtVxm1q0lPS2fVvNyBPOHcvxtqGybgS/jj5fhYQ0wso=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=av33vA0fDg8Z/UAXc/ThaoXut1CaK/sOxgD2P0ojBoj1qIDA/9tulc7N+nnN6AuMCaWT6U/
- V6Xt0OrS0sLjGxFvN2fm4pUcp/bWMDm9Imu6k2JfFnUNwy41AyEjCqDEuCTeluDPtxFELeRAn
- hU5hRGcxqURtCcKKwm7u7ixIjZCt8X0Ss5YuIZBZYUyCzfYFqxv+MQIVEh4Vm9ICHIR26NfQR
- 4geRw6TNt/0Kl4FxQy5jMWncprbiojBXek8gHVsXaBfI6YyVzcG+Y8doDS53puRqAdry8616+
- GX//FxMVoV+JAv49G9yedD8DUktjiPFu78LE1Bo309piw4qsYx4Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.56.61] ([109.43.112.4]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMGRK-1po4AH280s-00JHiH; Fri, 02
- Jun 2023 22:42:51 +0200
-Message-ID: <467644b2-48e0-afcb-64df-044bfef1091e@gmx.de>
-Date:   Fri, 2 Jun 2023 22:42:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of
- __SIZEOF_INT128__
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        with ESMTP id S229886AbjFDSCO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Jun 2023 14:02:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5F7BD;
+        Sun,  4 Jun 2023 11:02:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01D0C6102C;
+        Sun,  4 Jun 2023 18:02:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AFCC433EF;
+        Sun,  4 Jun 2023 18:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685901732;
+        bh=tsgHg/5R2crKomKyj+7Pho6UFoS2AQKQ8Lkd87r9ko8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VPSCfy/0/VfmjnkJ26s0+N3hVhu4/HnrUCquzI2efOtUvDs/4Yi/JlPrsd6b8FGRP
+         TyJA63shtiLXlSp/yXjn24pXjiAID96auxASntrPNEF0UlR20gOlNB4B19siwHEReV
+         YXzZtRNHKcfkTKg5pZZ5yscqbcv2C/Cdn9lEK+oOgM8n5x0G0biqmaW1qSXevUP/64
+         VB8+4Sz9RdRD9EYH2/JGjHGVRbcSZyqYd/mWdQSJbck9euIo+KjHYtBIH+79oSfRrE
+         nIjjdTwBqhBroLQzxaKfpO5LPZ6XepshB3PXgabN5/RDVX1omJghFQYfI4eDAIRFVM
+         5NMZfTgqRNE4A==
+Date:   Sun, 4 Jun 2023 11:02:11 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Luca Boccassi <bluca@debian.org>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org,
-        John David Anglin <dave.anglin@bell.net>,
-        Sam James <sam@gentoo.org>
-References: <20230531130833.635651916@infradead.org>
- <20230531132323.722039569@infradead.org>
- <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
- <20230601101409.GS4253@hirez.programming.kicks-ass.net>
- <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
- <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
- <20230602143912.GI620383@hirez.programming.kicks-ass.net>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230602143912.GI620383@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:78zHS8/aoBMFCLCrh8NEXU3+Mi9dUj8jWsvJ4VEVpEUJQXsb9qg
- klluUMDHJMFGtTxpf5yHCCUToer+4drDAQNHQAgVuo2HQCUoRS2JKuO2hlIzeTb22N58bCn
- 8yjiDqiZVuqg3gAisVRWVDRtX7Hc6PybceJ1LJSdNjMWHXOtBKBZrzWHSU91N4DfP+8mnyM
- QSAG3bfiqm8ylM/aCgeMg==
-UI-OutboundReport: notjunk:1;M01:P0:wkQwUL8WRiw=;/Mf2bbmZX3J4GHZLVevV9vugLQW
- +vevBhHxQxZXsmO+8L6EOG/dEz/8oyfQfnS8wMnRTP+UZkW2Jeh5UROdSqwek1bSDc3hscquW
- juxUK9V8xf9t5FcAQDbZODfu5kKCtEssNh76o1+fCeNL32NLfl+p9rCrk8EvyceKupB9kOtVS
- Zqa1MJ/uMOsRK42oZB0Hk5wiqr1yfjDV9m1LgBSLNNrplu621iX8TL5gcIRsEl/cFBhpwMOdX
- BNtq5HJtd88nea87tEDpT53rNKNsGjzifJ8u6IMd3UP5Adhp6HiJwcPv3ifPV+iBPdBaFoGMc
- 4I6d6vqVRkP+le+e27uYMDuej7dMfA1eoefmxqS7+3MXqQfSXrAz5m8YPz6om/C8WdFXNfrq2
- TGEsP1DEsFMCEn9DK5mz9Fs/pyKSmtNBdHNOc6rrjYUJWdFFLgXFqgy0d8kkWPjkZ0BWcCPAA
- 9yBVYCRXvrrkoVM35zKJy/wM+uuqmrWbIfAG5Rzyrq5PUPN30TIKWLPiqeCJqIudsXFCrtZlt
- 9TPQTfEARXC84lZh93e5TzhkS6ofvWIBL84RG3pXlM+Z/Bfzbx7wyg84PAoAtEi7tC5x4T8lY
- XADZPaMtrDowkFDwq0f2CUNASHYZv3SDuKUaaomM9LkqoheIbfEsA0+x29VcW3Qb4jMEx2cRr
- RcsI5SwGCv/Ze2Ap4CIUYNYyCCL56PiF40vQN9nqQ4Ob9V9afxKnU4T74F5MNIYBTcSeEAm9b
- Dv2PgUjkUMmJWqS6wbLcAD6UVoBWxpixeBRJRZmMd47jiB42ghukw6uBY76L/5M09dUjKMxAc
- NpxBGg2MjVNl/5HupbhQr2chxUVvrYNBGVJXve8gPqdA+pVSM7dNTBufu+I7Ey1TE6xDBhYm8
- Gx8ST0Wd1cxeFWu/AQP5en8Fcs4Xsb39hbqI7LYqcHsqLiMtZAcZowCT5au3GGdPCHmSaa2Io
- N18lvg==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230604110211.3f6401c6@kernel.org>
+In-Reply-To: <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+        <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+        <20230522133409.5c6e839a@kernel.org>
+        <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+        <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+        <20230523140844.5895d645@kernel.org>
+        <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+        <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
+        <20230524081933.44dc8bea@kernel.org>
+        <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,56 +72,11 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/2/23 16:39, Peter Zijlstra wrote:
-> On Thu, Jun 01, 2023 at 09:29:18AM -0400, Linus Torvalds wrote:
->
->> Right now we have that "minimum gcc version" in a somewhat annoying
->> place: it's in the ./scripts/min-tool-version.sh file as a shell
->> script.
->
-> Something like so then?
->
-> ---
-> Subject: parisc: Raise minimal GCC version
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Fri Jun  2 16:33:54 CEST 2023
->
-> With 64bit builds depending on __SIZEOF_INT128__ raise the parisc
-> minimum compiler version to gcc-11.0.0.
->
-> All other 64bit architectures provide this from GCC-5.1.0 (and
-> probably before), except hppa64 which only started advertising this
-> with GCC-11.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Wed, 24 May 2023 17:45:25 +0200 Aleksandr Mikhalitsyn wrote:
+> > How about you put the UNIX -> bool patch at the end of the series,
+> > (making it a 4 patch series) and if there's a discussion about it
+> > I'll just skip it and apply the first 3 patches?  
+> 
+> Sure, I will do that!
 
-The patch raises the compiler for 32- and 64-bit parisc builds, but that's=
- OK.
-
-So:
-Acked-by: Helge Deller <deller@gmx.de>
-
-Thank you!
-Helge
-
-
-> ---
->   scripts/min-tool-version.sh |    6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
->
-> --- a/scripts/min-tool-version.sh
-> +++ b/scripts/min-tool-version.sh
-> @@ -17,7 +17,11 @@ binutils)
->   	echo 2.25.0
->   	;;
->   gcc)
-> -	echo 5.1.0
-> +	if [ "$SRCARCH" =3D parisc ]; then
-> +		echo 11.0.0
-> +	else
-> +		echo 5.1.0
-> +	fi
->   	;;
->   llvm)
->   	if [ "$SRCARCH" =3D s390 ]; then
-
+Hi Aleksandr! Did you disappear? Have I missed v7?
