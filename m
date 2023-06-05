@@ -2,90 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C549F721921
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Jun 2023 20:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB25722312
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Jun 2023 12:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjFDSH2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 4 Jun 2023 14:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
+        id S229611AbjFEKMm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Jun 2023 06:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjFDSH1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Jun 2023 14:07:27 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493F8CD
-        for <linux-arch@vger.kernel.org>; Sun,  4 Jun 2023 11:07:26 -0700 (PDT)
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229483AbjFEKMl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Jun 2023 06:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD11E9;
+        Mon,  5 Jun 2023 03:12:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4F4E63F59F
-        for <linux-arch@vger.kernel.org>; Sun,  4 Jun 2023 18:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1685902044;
-        bh=eXPLCKZ8Jj450duZJrO5FmwhWWg+s1j3KuC7Lhd1iI4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=SUSsViYRpII2cknGPbcjJxzJH7c6Uff+R2RQVbk8EO+tfNiLUcNOdDnRVryy3YSCM
-         07XOsRbwfXInNB2e9UD6/jnPZaXcwPEcP/cQksG4wBtKXYr+VH/k846ZQHaLRSoBfS
-         1wQuoW0VnyYvMEr05HnKoHmsI00ZJKbBzssPmcDtyhxSJcoP2NIkQOIAuVYQy785jo
-         c7JymZNXpwsKYYHq/RIYIdLSm3Ejx/GC1O4ZxdWabBQucoL6NGylI30JenPRx7fWlN
-         tNJbr6IJzzM54CMQbaiZW2cuVLlzWWwxy2C7bxdsm2ZHBJ5H23/aKugBpxCiOw+QBJ
-         rQMf8bRgUaFrQ==
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-568960f4596so69772107b3.1
-        for <linux-arch@vger.kernel.org>; Sun, 04 Jun 2023 11:07:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685902041; x=1688494041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eXPLCKZ8Jj450duZJrO5FmwhWWg+s1j3KuC7Lhd1iI4=;
-        b=EmBnhItPcQtny5yCNOjNpKPq/TXaLQRM6EOHxrPu3fYUAVZrl/3h/oh9yB7ZdA2LhJ
-         bjBOX4JVJ/kmFCYPWvEEYxWKQiaX7BBtGEhqZQ1E0r56eStsINgebgViqkud/7kNkYij
-         QcfHSQO3C6uv/zzfksAtzEcwJdb/gJIFtaqZGMp5ekrxy+XqkEMT65eb1qgdI0rHx+LI
-         07OzGw+cU8nYTK6KOLD40UNGCc940OoMgjeXxV8pDuUvfUOVIoVolDPJhkRV09d9Yf4c
-         krnYoV9q91+WcR0GTTtU/OgyUKRdBXm2boCoXvfpUk5DGyc4nU/yiYCGyuPxPFvn1rHB
-         IMow==
-X-Gm-Message-State: AC+VfDzPML918gEN6RLc1Kk5YDNDOkXLbJdE5UQA8t/mWcw40uKT4qtQ
-        7KYvr7fBD42QV0dV7DKTUqYOjHM5dNnXlIqH6VcyVIGZ/aZ3pNrNjT44hafesMisYveL1YjS+Tl
-        lImsccsP9N/1DZOU+8sRgN3xQG23N4x5qV8qXIdG3Liz8jNWw63/fk61qLSzkBWE=
-X-Received: by 2002:a25:210b:0:b0:b9d:7887:4423 with SMTP id h11-20020a25210b000000b00b9d78874423mr6768244ybh.16.1685902040981;
-        Sun, 04 Jun 2023 11:07:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ41k0JQ0Rgb4oamIPtOl2YDqXm2k+gWqhdlPbfMaObYYGP+EpFNoMd2Xr14SJFNxI1Y9SMEiabdS0cOpOTA3WE=
-X-Received: by 2002:a25:210b:0:b0:b9d:7887:4423 with SMTP id
- h11-20020a25210b000000b00b9d78874423mr6768237ybh.16.1685902040769; Sun, 04
- Jun 2023 11:07:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
- <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
- <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
- <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
- <20230524081933.44dc8bea@kernel.org> <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
- <20230604110211.3f6401c6@kernel.org>
-In-Reply-To: <20230604110211.3f6401c6@kernel.org>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Sun, 4 Jun 2023 20:07:09 +0200
-Message-ID: <CAEivzxeVeuFW+ADJFO-kCBtyn345nTX=T3aKTdwWY01JgsLPQg@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AACC362209;
+        Mon,  5 Jun 2023 10:12:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79CC4C433EF;
+        Mon,  5 Jun 2023 10:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685959959;
+        bh=WHTZMibVd/jYavGziw9IAH3KvXsQuHo9quoMZmILjDs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLcB4IgKZhO/0RLyFEf2w5Co9PbQLm5WJ8YixHzpu53FXyixWgNd16x/ZxNvM+EWH
+         kYdYDUKi+FMUdBzZEEvD0dLOxXg2GyqPgnZ5fZ13gWVqD1pKLwQYPZIzZAZ8WjGUKb
+         7y4e4MAeET0VDM9x3HcLhtAdGMZKS9A9/2i6TtpkMY7SZGChSFW9FriJUh7jqeAV3H
+         YS0bFpzYVrA5ahzI62pQ4M43nF8gq5MGvfH1eb7TzWDEgv4uRmaT8zhmtp5UYVUsny
+         aAcnP1Je/QOruZoUUr4T4z/JjTjNl/b8+08rSikGQEPxV/BfwSi848SQQc2EmuJ7gP
+         5YVk406HgHUuQ==
+Date:   Mon, 5 Jun 2023 12:12:35 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 11/41] i2c: add HAS_IOPORT dependencies
+Message-ID: <ZH21E3Obp+YPJHkl@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        Arnd Bergmann <arnd@kernel.org>, linux-i2c@vger.kernel.org
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-12-schnelle@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4tL/EgbFZOh0MjKH"
+Content-Disposition: inline
+In-Reply-To: <20230516110038.2413224-12-schnelle@linux.ibm.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,23 +83,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 4, 2023 at 8:02=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Wed, 24 May 2023 17:45:25 +0200 Aleksandr Mikhalitsyn wrote:
-> > > How about you put the UNIX -> bool patch at the end of the series,
-> > > (making it a 4 patch series) and if there's a discussion about it
-> > > I'll just skip it and apply the first 3 patches?
-> >
-> > Sure, I will do that!
->
-> Hi Aleksandr! Did you disappear? Have I missed v7?
 
-Dear Jakub,
+--4tL/EgbFZOh0MjKH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-of course I'm not, I've just got distracted with other things last
-week. Will send -v7 this week!
-Thanks for paying attention to the series ;-)
+On Tue, May 16, 2023 at 01:00:07PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>=20
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Kind regards,
-Alex
+What has changed since V3? I didn't get the coverletter...
+
+
+--4tL/EgbFZOh0MjKH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9tRMACgkQFA3kzBSg
+Kbbc+xAAqP7HS91nIrnCAA96c5zQ1oe7pFt0DHJGUlaejNCUnxEydd6fFseJiAna
+fmWKk7DsPTsB2bccl7khlpaiin8oLe8nQxY818fTPsS2mF9jlUSjf1BfZgu4fnVh
+bX76Q4KPhHyNZHOTg+9kr/dfCaQVWp1SWum9+fGFT4BmjuvLNaq+gMBI4oDCybMw
+7XvSKqjbxHkhTjNQKH1kcO++a3NHAwIO4raOY/TomHQewXBIwi6W0on+jYi5hHVo
+UjOSwBxpC/cepK5ubzp6latXWnr5cdY1an+OAGM4YkvEBvmiPgTOwlbzoVy3Ox7F
+WTqTuHfg99W1yHfosiowi1iHtWWK56TtzppJPQ3UaR7wF1PmX1ggCtGGOfJ2wfbh
+TS6F4lqnwSxXfAsav5J756eGVkq48+zuPh3kMtuZ2lRtIbI71nZQdCzsmDfqmzAs
+1T/rtRHWlKV2gMNehHp3BwIN2hI0BlCk0jZaCgMx/zERCdy6VaV8PWk4ZLKLZI/j
+kcBqfRMcKzd+OGw1s7wY3zPqNCNfaeH4VTM4aN0AlQAsbx5Qg2CuPeuirgTSPgRD
+2dZKzjuO1cQcPAGYoiAQ/MKrCuvU3MoSgX3/yVgXQePBWaTOOIiJdmKMluQpM7T1
+A7LvVZiCQiOOYRUSC5WrS9v6LnB+Hkn41t3i+UdW5y64d4CtMYI=
+=3QWP
+-----END PGP SIGNATURE-----
+
+--4tL/EgbFZOh0MjKH--
