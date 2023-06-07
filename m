@@ -2,123 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D026B72707A
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Jun 2023 23:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545C9727263
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jun 2023 00:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjFGVVU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Jun 2023 17:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S229822AbjFGW4W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Jun 2023 18:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjFGVVU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jun 2023 17:21:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DABC1984;
-        Wed,  7 Jun 2023 14:21:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6CEA6488A;
-        Wed,  7 Jun 2023 21:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B6EC433D2;
-        Wed,  7 Jun 2023 21:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686172878;
-        bh=jSlEKrCnMK95pETVHXEKH30RppvMmXwHnRIAJknEjUM=;
-        h=From:Date:Subject:To:Cc:From;
-        b=gJdnOvtTm3qZwrlGnx/agmFkFlojWgz2nJIaWWcgj1exOo3F19P5F3ej0gTkJfLtK
-         PH09tXlsjrcX23Fkor3z+4Oz9hYwzEwJ11TKAFLwh/hviAt4xrQiyg3tvOOUaA2odh
-         ZY84y3mh4FY5sn+V1Hef3B1o7cd5ZwXvboL/EAdZq3xr+HX9fcD62fAE1hhKLpb6Tu
-         HPZRLhfaOCCoqjIh+/vnApqwAvy/Jje4UxFHlyX/i/7ocueef60FvfYYkCNZJGU3b4
-         bewoMXcm6M28KgXLwZzHYH4teKZyQ3kcyiokp8rXpF2vFy1kUO4Tg+zo7OHgWqYdA6
-         8SILOHmkAMqdA==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 07 Jun 2023 14:20:59 -0700
-Subject: [PATCH] percpu: Fix self-assignment of __old in
- raw_cpu_generic_try_cmpxchg()
+        with ESMTP id S229532AbjFGW4L (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Jun 2023 18:56:11 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4DC270F
+        for <linux-arch@vger.kernel.org>; Wed,  7 Jun 2023 15:55:54 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso2563280a12.1
+        for <linux-arch@vger.kernel.org>; Wed, 07 Jun 2023 15:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686178553; x=1688770553;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=d8ALJgWgHzWLVbYqm5Xun40Trrtx9u26PJxgDpuM+opU1kagifpoMF3E49HbI3GY2V
+         wVrEz/8VMNXOa34mGDXKD+N7lGOv2QGCP2gi2Pc2YR15Cm6aBUEYMKdxMAaBdTZps5JD
+         wHIIcg7iFPDm6hq2Anc8eetPMFV7Dmp3k3ChvztUfrQawEncim7LlPLb1dcX0GFSQa2Z
+         MpCDoaZndeCwrh4lYpSlY+MIxLpkoT0dvzpzNzmwq8ANq48/S89YAmvR6lG4ID6DJkmg
+         UQBMvZ4NUlogSfe/ccOin4LQnm3S/JQ2MwxZLa7FvZbQYk7vl4nSPeVW9A3WoEossLXw
+         Xp4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686178553; x=1688770553;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=OxsOhD1sSOlJzAe8o0zTZFnTSFtJQu+6cpTdShlFDyDqs6o0/ZPUbFhIOu3x4xRNCy
+         RuXlG6AoXbOiDc+z0EqRIbS69rN/z+DWwFtUPxAnWyD/Gp6IhHBalKa/uhJm9lJxtOid
+         or3rQ4LqRwI156/RFZEZU4kojPkVxBT41+HeYkIHPgf8R0yZ9d2bAVjGdervKe4LiGAr
+         a89Y0M9llCdG9J1QP+zfcX8HWiRMEqNYQsierDsLRlGIwXsbgadKjNme2fXDqxnWwLPa
+         /Hs9fGXEDHoJaficAQY5vE/1KLmYBqVMsA/AQ9kPio1VZpnxn2jSi1jxKG6nKWZM57Ib
+         w74w==
+X-Gm-Message-State: AC+VfDyiNyJUd19HCNSv31EoGeNcWVY3UxGUAVANjHkxkBdShCwbjoBA
+        S1Ru8TF/K/HsfLuXv0rY63gu6L8bnLeFNbwplTE=
+X-Google-Smtp-Source: ACHHUZ5lc5uNG0II8N/7owu97MNYayebO2FU5BOHITGRdvZTCXANx0Yi1fv5Th/dfzvi0zTuZAaSCLE67mXxoPl8ud4=
+X-Received: by 2002:a17:907:8a08:b0:973:ad8f:ef9b with SMTP id
+ sc8-20020a1709078a0800b00973ad8fef9bmr8009971ejc.5.1686178552696; Wed, 07 Jun
+ 2023 15:55:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-v1-1-8f0a3d930d43@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALr0gGQC/5XOQQ6CMBCF4auQrp1YqErwKsQ07TC0E2NpWhUM4
- e4Wb+DyX7wvbxWZElMW12oVid6ceQol6kMl0JvgCHgoLRrZKHmRLYy8QPZmmGYODjhAMrPG+NK
- OQqFQP9NH4yMu6B2c287Wsh6VVJ0opDWZwCYT0O+oPR3/4qzB+87ERGX3e93ftu0LMaPdpcUAA
- AA=
-To:     peterz@infradead.org
-Cc:     mark.rutland@arm.com, arnd@arndb.de, ndesaulniers@google.com,
-        trix@redhat.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2305; i=nathan@kernel.org;
- h=from:subject:message-id; bh=jSlEKrCnMK95pETVHXEKH30RppvMmXwHnRIAJknEjUM=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkNX85eNOfhDjcKuLy2JurVr61OW50+rKrcYHno8Ilzn
- AILwmrVO0pZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEarQY/hdoJqv95NH523yh
- MTbcNuy6y4dr93aXT/n52WqjdPPVk62MDCfvfrb5LPFxxnGzrafiry/wYdZbxXv/CZv6lzfPN5j
- /28wOAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
+ 15:55:52 -0700 (PDT)
+Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
+From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
+        <successikolo@gmail.com>
+Date:   Wed, 7 Jun 2023 15:55:52 -0700
+Message-ID: <CADFNGJ8EwbrtVXBod+yuxOPvcNStu1uNZVywED0Ra-jpG92ATw@mail.gmail.com>
+Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [successikolo[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-After commit c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()"),
-clang built ARCH=arm and ARCH=arm64 kernels with CONFIG_INIT_STACK_NONE
-started panicking on boot in alloc_vmap_area():
+UNITED NATION DEPUTY SECRETARY-GENERAL.
 
-  [    0.000000] kernel BUG at mm/vmalloc.c:1638!
-  [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-  [    0.000000] Modules linked in:
-  [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc2-ARCH+ #1
-  [    0.000000] Hardware name: linux,dummy-virt (DT)
-  [    0.000000] pstate: 200000c9 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  [    0.000000] pc : alloc_vmap_area+0x7ec/0x7f8
-  [    0.000000] lr : alloc_vmap_area+0x7e8/0x7f8
+This is to official inform you that we have been having meetings for
+the past three (3) weeks which ended two days ago with MR. JIM YONG
+KIM the world bank president and other seven continent presidents on
+the congress we treated on solution to scam victim problems.
 
-Compiling mm/vmalloc.c with W=2 reveals an instance of -Wshadow, which
-helps uncover that through macro expansion, '__old = *(ovalp)' in
-raw_cpu_generic_try_cmpxchg() can become '__old = *(&__old)' through
-raw_cpu_generic_cmpxchg(), which results in garbage being assigned to
-the inner __old and the cmpxchg not working properly.
+ Note: we have decided to contact you following the reports we
+received from anti-fraud international monitoring group your
+name/email has been submitted to us therefore the united nations have
+agreed to compensate you with the sum of (USD$ 1.5 Million) this
+compensation is also including international business that failed you
+in the past due to government problems etc.
 
-Add an extra underscore to __old in raw_cpu_generic_try_cmpxchg() so
-that there is no more self-assignment, which resolves the panics.
+ We have arranged your payment through our ATM Master Card and
+deposited it in DHL Office to deliver it to you which is the latest
+instruction from the World Bank president MR. JIM YONG KIM, For your
+information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
+he
+only money you will send to DHL office south Korea is
+($500). for security keeping fee, U.N coordinator already paid for
+others charges fees for delivery except the security keeping fee, the
+director of DHL refused to collect the security keeping fee from U.N
+coordinator, the Director of DHL office said that they don=E2=80=99t know
+exactly time you will contact them to reconfirm your details to avoid
+counting demur-rage that is why they refused collecting the ($500) .
+for security keeping fee.
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1868
-Debugged-by: Nick Desaulniers <ndesaulniers@google.com>
-Fixes: c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- include/asm-generic/percpu.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Therefore be advice to contact DHL Office agent south Korea. Rev:John
+Lee Tae-seok
+who is in position to deliver your ATM
+Master Card to your location address, contact DHL Office immediately
+with the bellow email & phone number as listed below.
 
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index 68c410e85cd7..94cbd50cc870 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -101,9 +101,9 @@ do {									\
- #define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
- ({									\
- 	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
--	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-+	typeof(pcp) __val = *__p, ___old = *(ovalp);			\
- 	bool __ret;							\
--	if (__val == __old) {						\
-+	if (__val == ___old) {						\
- 		*__p = nval;						\
- 		__ret = true;						\
- 	} else {							\
+ Contact name: John Lee Tae-seok
 
----
-base-commit: ef558b4b7bbbf7e115c87e4da21ce86444d6ec3b
-change-id: 20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-579b101f3039
+ Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+ Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
 
+ read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
+
+ Make sure you reconfirmed DHL Office your details ASAP as stated
+below to avoid wrong delivery.
+
+ Your full name..........
+
+ Home address:.........
+
+ Your country...........
+
+ Your city..............
+
+ Telephone......
+
+ Occupation:.......
+
+ Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+
+ Let us know as soon as possible you receive your ATM MasterCard
+for proper verification.
+
+ Regards,
+
+ Mrs Vivian kakadu.
+
+ DEPUTY SECRETARY-GENERAL (U.N)
