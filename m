@@ -2,126 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C84728972
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jun 2023 22:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE1B72905F
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jun 2023 08:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbjFHUa1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Jun 2023 16:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S229808AbjFIGvM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Jun 2023 02:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbjFHUaJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Jun 2023 16:30:09 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35BC30C6
-        for <linux-arch@vger.kernel.org>; Thu,  8 Jun 2023 13:29:29 -0700 (PDT)
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 38D323F484
-        for <linux-arch@vger.kernel.org>; Thu,  8 Jun 2023 20:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686256147;
-        bh=qREPRnbFoZDSkGcbr3ixpo6NMxfZ+kQ8GXlQeYCh42M=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Htu1rTcgCJMupUbMIPAxKJSnF+9Yt/X34k0Ym4wrXFPF+UtR0NEQURwtHAwtelFbF
-         1OfyNLo1U7xdIuoEcCt3EQuxy6UABjTMBq2tSqQ6MU57QFi5y1e8ZGUb7J+i5fOowy
-         P0YxTYEJt4Yu3FmuORL9EEngbNjckwJzWEmGtflH8xJloZd9piTwHLqoQKE0lewy9X
-         vnahNcmYXnGBcxc//iMNE/1FJFOHJXoqSf5NbSNo+WCKZkHAa3BJ2RoXGA506bjsmb
-         fJ45dmwh6rkirFQvqf/C94OsuxRFNQZFhDylcItyYD/li7e8PupwxIPAsGEgduTPmw
-         oq+DcpeT7udHQ==
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-39c872c8da4so82524b6e.2
-        for <linux-arch@vger.kernel.org>; Thu, 08 Jun 2023 13:29:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686256146; x=1688848146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qREPRnbFoZDSkGcbr3ixpo6NMxfZ+kQ8GXlQeYCh42M=;
-        b=KwmHV6grfsv/5kWsjWNsglBDV578z2eyQrH5DLi4WEnvZqB05ZORCzx4s0EgyKOugb
-         nK5bjU+cJZ+eHMwGqfs6/x4w4EKNkXB5LdHNcutNCClw50/Qd/aHImQfg99j0dytB1J7
-         ZYs4uAFmwpfLK3hjEW9mcaKAbnsBe/8GcTy9Fa7oPqSTqM8oO4D985oAc7FNgMoaqiAr
-         PQ0z8QgqhVire01qSXP8z1AbaLkAYzlTOz7+C467WHmYbImkD4i3RI90DJ/aD9eQm1q9
-         ZSwbLk0Pxnb21H8VOsQ64dBzx3rfQH/TjrLqu9JFpJl063pBoOewNDXgC99bUvBEjtGv
-         vGMQ==
-X-Gm-Message-State: AC+VfDyMRuA8+reJ+tKHxj0WZuYq201fLrT8dzh1M3AxW/BO1e8hFlOl
-        JoztSUJg6sU/fSR2C/CC2A2snV+lOhBpbV2BVa0mp1/GmCg3WrXYqjTNs9gOOPA6pQHDh45q6r3
-        hVmD1m6ouJAm+VrFsa2d2PdeUpqepc6267ZeFgXMOYUMmkaSPlBjSQXU=
-X-Received: by 2002:a05:6808:1382:b0:39c:9433:97ad with SMTP id c2-20020a056808138200b0039c943397admr595873oiw.36.1686256146045;
-        Thu, 08 Jun 2023 13:29:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ72K6gWbgyk1dbG1psn5iv219LzIs2MMeLeVtQcb1DQ4+7XfA+UeHix9z/VOcUqfx86K9lSQiK1HTQioy3qmrc=
-X-Received: by 2002:a05:6808:1382:b0:39c:9433:97ad with SMTP id
- c2-20020a056808138200b0039c943397admr595861oiw.36.1686256145821; Thu, 08 Jun
- 2023 13:29:05 -0700 (PDT)
+        with ESMTP id S229482AbjFIGvK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jun 2023 02:51:10 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0DA81BEB;
+        Thu,  8 Jun 2023 23:51:02 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxrOrVy4JkcfAAAA--.2919S3;
+        Fri, 09 Jun 2023 14:51:01 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuTSy4Jk8QsKAA--.30794S3;
+        Fri, 09 Jun 2023 14:51:00 +0800 (CST)
+Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
+To:     Arnd Bergmann <arnd@arndb.de>
+References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
+ <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
+ <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
+ <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+        linux-ia64@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-parisc@vger.kernel.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
+Date:   Fri, 9 Jun 2023 14:50:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
- <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
- <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
- <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
- <20230524081933.44dc8bea@kernel.org> <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
- <20230604110211.3f6401c6@kernel.org> <CAEivzxeVeuFW+ADJFO-kCBtyn345nTX=T3aKTdwWY01JgsLPQg@mail.gmail.com>
-In-Reply-To: <CAEivzxeVeuFW+ADJFO-kCBtyn345nTX=T3aKTdwWY01JgsLPQg@mail.gmail.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Thu, 8 Jun 2023 22:28:54 +0200
-Message-ID: <CAEivzxfpih_5ES-pC=jdH4D8H2KN4qJqngC35Ce9KNUnjT2ddg@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8AxZuTSy4Jk8QsKAA--.30794S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Cr1UWFy8Kr1kJFy7Kr47KFX_yoW5JFyrpF
+        4UGF1j9r4kAr1fAFn2yw4jqa4Fyws7KF1aq3s0gryxJFs0gFyrtry29w4agFWqvr18Jr4j
+        93yUXFy5uay0yFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUmlb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
+        wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxV
+        AFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr
+        1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjxU7uc_DUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 4, 2023 at 8:07=E2=80=AFPM Aleksandr Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> On Sun, Jun 4, 2023 at 8:02=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
-rote:
-> >
-> > On Wed, 24 May 2023 17:45:25 +0200 Aleksandr Mikhalitsyn wrote:
-> > > > How about you put the UNIX -> bool patch at the end of the series,
-> > > > (making it a 4 patch series) and if there's a discussion about it
-> > > > I'll just skip it and apply the first 3 patches?
-> > >
-> > > Sure, I will do that!
-> >
-> > Hi Aleksandr! Did you disappear? Have I missed v7?
->
-> Dear Jakub,
->
-> of course I'm not, I've just got distracted with other things last
-> week. Will send -v7 this week!
-> Thanks for paying attention to the series ;-)
->
-> Kind regards,
-> Alex
 
-Dear Jakub,
 
-I've sent -v7:
-https://lore.kernel.org/all/20230608202628.837772-1-aleksandr.mikhalitsyn@c=
-anonical.com/
+On 06/08/2023 08:56 PM, Arnd Bergmann wrote:
+> On Thu, Jun 8, 2023, at 09:04, Tiezhu Yang wrote:
+>> On 05/09/2023 05:37 PM, Arnd Bergmann wrote:
+>>> On Tue, May 9, 2023, at 09:05, Tiezhu Yang wrote:
+>>>
+>>> I think we are completely safe on the architectures that were
+>>> added since the linux-3.x days (arm64, riscv, csky, openrisc,
+>>> loongarch, nios2, and hexagon), but for the older ones there
+>>> is a regression risk. Especially on targets that are not that
+>>> actively maintained (sparc, alpha, ia64, sh, ...) there is
+>>> a good chance that users are stuck on ancient toolchains.
+>>> It's probably also a safe assumption that anyone with an older
+>>> libc version won't be using the latest kernel headers, so
+>>> I think we can still do this across architectures if both
+>>> glibc and musl already require a compiler that is new enough,
+>>> or alternatively if we know that the kernel headers require
+>>> a new compiler for other reasons and nobody has complained.
+>>>
+>>> For glibc, it looks the minimum compiler version was raised
+>>> from gcc-5 to gcc-8 four years ago, so we should be fine.
+>>>
+>>> In musl, the documentation states that at least gcc-3.4 or
+>>> clang-3.2 are required, which probably predate the
+>>> __SIZEOF_LONG__ macro. On the other hand, musl was only
+>>> released in 2011, and building musl itself explicitly
+>>> does not require kernel uapi headers, so this may not
+>>> be too critical.
+>>>
+>>> There is also uClibc, but I could not find any minimum
+>>> supported compiler version for that. Most commonly, this
+>>> one is used for cross-build environments, so it's also
+>>> less likely to have libc/gcc/headers being wildly out of
+>>> sync. Not sure.
+>>>
+>>>       Arnd
+>>>
+>>> [1] https://sourceware.org/pipermail/libc-alpha/2019-January/101010.html
+>>>
+>>
+>> Thanks Arnd for the detailed reply.
+>> Any more comments? What should I do in the next step?
+>
+> I think the summary is "it's probably fine", but I don't know
+> for sure, and it may not be worth the benefit.
 
-Kind regards,
-Alex
+Thank you, it is very clear now.
+
+> Maybe you can prepare a v2 that only does this for the newer
+> architectures I mentioned above, with and an explanation and
+> link to my above reply in the file comments?
+
+Only arm64, riscv and loongarch belong to the newer architectures
+which are related with this change, I am not sure it is necessary
+to "unify" uapi bitsperlong.h for them.
+
+Anyway, let me try, I will send a new version, maybe this is going
+to progress in the right direction.
+
+Thanks,
+Tiezhu
+
