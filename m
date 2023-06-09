@@ -2,177 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BA47297DF
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jun 2023 13:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC1F729AFB
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jun 2023 15:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239274AbjFILKl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Jun 2023 07:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S240378AbjFINFS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Jun 2023 09:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbjFILKO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jun 2023 07:10:14 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026AB2115;
-        Fri,  9 Jun 2023 04:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686309013; x=1717845013;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1Bm+HKznjWvTnKT7ys8/7kIdAyqCt3IzGxh9BOlmOlo=;
-  b=EWfYZCYNfaV/VQBGJS/OIouQIQAslIiYMun26zqV/nySUHtSrK6NGM1r
-   C+YEfSUk03fS731UW2dYinzhWBTQaXh0qXGxBujD1N+lVymyJyTNxNPf3
-   t1hJ7tUaNmHh4o9PTwXoaMr7qN423FH7zjiDo0cfj8WuY38bbpLdUPpoT
-   a+DDfO0BeogfMW0Rv1LcNT8woUeWEdmNUDJN0oeyVr6PzLQHkTkSo8kcE
-   lsG7cxCNv2ANQW3/T0KJHp15cAtgMwqRQfxI/kRu8PDjkgwYpgVjlG8f5
-   cvjZTaMB6KB4Uz5eo5GhHl20W16cLFMnh/dx5Eir5LY6aUp9s1BHq9upE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="355065921"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="355065921"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 04:10:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="834618560"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="834618560"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 09 Jun 2023 04:10:08 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7a0N-0008xA-1A;
-        Fri, 09 Jun 2023 11:10:07 +0000
-Date:   Fri, 9 Jun 2023 19:09:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
-        Baoquan He <bhe@redhat.com>, Brian Cain <bcain@quicinc.com>,
-        linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <202306091859.NhlW2nny-lkp@intel.com>
-References: <20230609075528.9390-3-bhe@redhat.com>
+        with ESMTP id S232498AbjFINFR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Jun 2023 09:05:17 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9EF2D70;
+        Fri,  9 Jun 2023 06:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1686315913;
+        bh=hT63nSeqfXe+w/wcTH/EVqDDlEdDBDYjRZhYbxbpM9E=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=npo+qrCHsIrTavth6RFp9whOgzBlVXmzRzYXUH+dxBlx16fsDq62B5M0BsrtN4VtJ
+         1fdfpCWNVPfQBRPxlsk/T5jnywsDDxzlQF9T3tubgjW3v4DrYce6kTsX/rRJiWMx5i
+         hBEItCRBrPuBf/r8DMY+d6WFyBryIiRnxabHdAlU=
+Received: from [192.168.124.11] (unknown [113.140.11.3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 48AE16638D;
+        Fri,  9 Jun 2023 09:05:09 -0400 (EDT)
+Message-ID: <5de9d69817138f2ccae0867b5ccb602dcfa007a3.camel@xry111.site>
+Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+        linux-ia64@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-parisc@vger.kernel.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        loongson-kernel@lists.loongnix.cn
+Date:   Fri, 09 Jun 2023 21:05:07 +0800
+In-Reply-To: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
+References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
+         <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
+         <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
+         <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
+         <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609075528.9390-3-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Baoquan,
+On Fri, 2023-06-09 at 14:50 +0800, Tiezhu Yang wrote:
 
-kernel test robot noticed the following build errors:
+/* snip */
 
-[auto build test ERROR on akpm-mm/mm-everything]
+> > > > In musl, the documentation states that at least gcc-3.4 or
+> > > > clang-3.2 are required, which probably predate the
+> > > > __SIZEOF_LONG__ macro.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
-patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch akpm-mm mm-everything
-        git checkout akpm-mm/mm-everything
-        b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
+Indeed, I've digged some history and __SIZEOF_LONG__ was added into GCC-
+4.3 (in 2008).  And I didn't realize the bitsperlong.h in tools
+directory is a copy from uapi.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
+> > > > On the other hand, musl was only
+> > > > released in 2011, and building musl itself explicitly
+> > > > does not require kernel uapi headers, so this may not
+> > > > be too critical.
 
-All errors (new ones prefixed by >>):
+> Only arm64, riscv and loongarch belong to the newer architectures
+> which are related with this change, I am not sure it is necessary
+> to "unify" uapi bitsperlong.h for them.
 
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:339:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:339:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:339:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
-    1078 | void iounmap(volatile void __iomem *addr);
-         |      ^
-   arch/hexagon/include/asm/io.h:30:13: note: previous declaration is here
-      30 | extern void iounmap(const volatile void __iomem *addr);
-         |             ^
-   6 warnings and 1 error generated.
-   make[2]: *** [scripts/Makefile.build:114: arch/hexagon/kernel/asm-offsets.s] Error 1 shuffle=2830738586
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1287: prepare0] Error 2 shuffle=2830738586
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2 shuffle=2830738586
-   make: Target 'prepare' not remade because of errors.
+At least it will stop the engineers working on "the next architecture"
+from adding an unneeded bitsperlong.h :).
 
 
-vim +/iounmap +1078 include/asm-generic/io.h
-
-18e780b4e6ab89 Kefeng Wang       2022-06-07  1075  
-abc5992b9dd0ba Kefeng Wang       2022-06-07  1076  void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-abc5992b9dd0ba Kefeng Wang       2022-06-07  1077  			   unsigned long prot);
-80b0ca98f91ddb Christoph Hellwig 2019-08-13 @1078  void iounmap(volatile void __iomem *addr);
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1079  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
