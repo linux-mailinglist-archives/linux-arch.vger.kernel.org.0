@@ -2,48 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1778672AE92
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Jun 2023 22:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D36C72AEED
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Jun 2023 23:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjFJUNV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 10 Jun 2023 16:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S229746AbjFJVKG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 10 Jun 2023 17:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjFJUNU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Jun 2023 16:13:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455CA359D;
-        Sat, 10 Jun 2023 13:13:19 -0700 (PDT)
+        with ESMTP id S229477AbjFJVKF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Jun 2023 17:10:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A483584;
+        Sat, 10 Jun 2023 14:10:04 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686427997;
+        s=2020; t=1686431402;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2FyW3Bj3MP4r2QbMriRspWC1T3TG2cIZbpm8o1sYXRk=;
-        b=Bd6rcV9NAKZ2jF9T8IY/r60E4T8w90YHhU5xFpw/hpWHfXb8L6JiuDXY0t79Yll+2GT6qE
-        xrQyfEHRFmUxuDwx1/hyEMammkYISdlkOp8umKeLO+o4AnucWOKnN3HM0OxQQL/XA0ywIy
-        jHqvlI6q6CItsjeO85N9m0vwdlI0qw4BBxATVqzRnrzmnuXkZGICP3+ltYVrg+XNfQ8PH1
-        ZntGRksKEHGrc3g3thOpY0E4eqXRzpz0bQI1NqI/3iDCzmd14sewUC7kzvRe7xLNc7k3EH
-        LI7pUFpw5cBoVrnoMRc/G/yBYTw2YrVP6uWDa4mT9GS4MqLzrE6VkQ91ePn82w==
+        bh=OrTOePfREEciLtXfuUl8hDBbpqxfuVX9i8krldtKOAY=;
+        b=mIxLEuMfpk7GLDEgCpK9RyCRztksQ2KR3hAfMuUhrBxRYYleSd5DnOtm7ueortcishYe19
+        1S3NCaeWweymMMTeajLKGDRPfP6A7h+cWuuhPVjqs7xab9LdbEqCXXM9RS68w8R9XqB9BZ
+        4PIW8qLbXp5ciqzVsEtE8EjSTrCKdENU4gb1cv+to6rZdVsEOkMBGKWAnh98pBszQtxgnU
+        8lDkey+xZts7l6QsZXD7ia8QVzlPSzO5t8Y2MCiAUCK2vDl0fvFbTRyc46SewJAEaTFzZn
+        nix/DX0ipblz/7S2xlwnlD01kFvYdf0DBWi6eAE0b/adb7YBwsNvqK4ZKPcZYw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686427997;
+        s=2020e; t=1686431402;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2FyW3Bj3MP4r2QbMriRspWC1T3TG2cIZbpm8o1sYXRk=;
-        b=bgPUpEic0mpyby3BGyAvEpiW4XSnGc6In+X8PMucBYAVIRaPTCmQlzaXQV9yZA55ZBey2P
-        6Kr948u6T/TlPVBw==
-To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        ldufour@linux.ibm.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        mingo@redhat.com, x86@kernel.org
-Subject: Re: [PATCH 6/9] cpu/SMT: Allow enabling partial SMT states via sysfs
-In-Reply-To: <87r0qj84fr.ffs@tglx>
+        bh=OrTOePfREEciLtXfuUl8hDBbpqxfuVX9i8krldtKOAY=;
+        b=euWjH8gK9tkmFZKPMC2SdGkEjWDHeY4U+j35rBJnG7zt2xQX5s8P3nel+NXuc2olh8obYc
+        hsPx70kBtP45khAg==
+To:     Laurent Dufour <ldufour@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, x86@kernel.org,
+        dave.hansen@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 8/9] powerpc: Add HOTPLUG_SMT support
+In-Reply-To: <6e86aedb-9349-afd4-0bcb-1949e828f997@linux.ibm.com>
 References: <20230524155630.794584-1-mpe@ellerman.id.au>
- <20230524155630.794584-6-mpe@ellerman.id.au> <87r0qj84fr.ffs@tglx>
-Date:   Sat, 10 Jun 2023 22:13:17 +0200
-Message-ID: <87o7ln849u.ffs@tglx>
+ <20230524155630.794584-8-mpe@ellerman.id.au>
+ <5752a488-be54-61a0-6d18-647456abc4ee@linux.ibm.com>
+ <6e86aedb-9349-afd4-0bcb-1949e828f997@linux.ibm.com>
+Date:   Sat, 10 Jun 2023 23:10:02 +0200
+Message-ID: <87h6rf81n9.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,46 +60,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 10 2023 at 22:09, Thomas Gleixner wrote:
+On Thu, Jun 01 2023 at 18:19, Laurent Dufour wrote:
+> @@ -435,12 +435,17 @@ void __init cpu_smt_disable(bool force)
+>   * The decision whether SMT is supported can only be done after the full
+>   * CPU identification. Called from architecture code.
+>   */
+> -void __init cpu_smt_check_topology(unsigned int num_threads)
+> +void __init cpu_smt_check_topology(unsigned int num_threads,
+> +				   unsigned int max_threads)
+>  {
+>  	if (!topology_smt_supported())
+>  		cpu_smt_control = CPU_SMT_NOT_SUPPORTED;
+>  
+> -	cpu_smt_max_threads = num_threads;
+> +	cpu_smt_max_threads = max_threads;
+> +
+> +	WARN_ON(num_threads > max_threads);
+> +	if (num_threads > max_threads)
+> +		num_threads = max_threads;
 
-> On Thu, May 25 2023 at 01:56, Michael Ellerman wrote:
->> There is a hook which allows arch code to control how many threads per
->
-> Can you please write out architecture in changelogs and comments?
->
-> I know 'arch' is commonly used but while my brain parser tolerates
-> 'arch_' prefixes it raises an exception on 'arch' in prose as 'arch' is
-> a regular word with a completely different meaning. Changelogs and
-> comments are not space constraint.
->
->> @@ -2505,20 +2505,38 @@ __store_smt_control(struct device *dev, struct device_attribute *attr,
->>  	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
->>  		return -ENODEV;
->>  
->> -	if (sysfs_streq(buf, "on"))
->> +	if (sysfs_streq(buf, "on")) {
->>  		ctrlval = CPU_SMT_ENABLED;
->> -	else if (sysfs_streq(buf, "off"))
->> +		num_threads = cpu_smt_max_threads;
->> +	} else if (sysfs_streq(buf, "off")) {
->>  		ctrlval = CPU_SMT_DISABLED;
->> -	else if (sysfs_streq(buf, "forceoff"))
->> +		num_threads = 1;
->> +	} else if (sysfs_streq(buf, "forceoff")) {
->>  		ctrlval = CPU_SMT_FORCE_DISABLED;
->> -	else
->> +		num_threads = 1;
->> +	} else if (kstrtoint(buf, 10, &num_threads) == 0) {
->> +		if (num_threads == 1)
->> +			ctrlval = CPU_SMT_DISABLED;
->> +		else if (num_threads > 1 && topology_smt_threads_supported(num_threads))
+This does not work. The call site does:
 
-Why does this not simply check cpu_smt_max_threads?
+> +	cpu_smt_check_topology(smt_enabled_at_boot, threads_per_core);
 
-		else if (num_threads > 1 && num_threads <= cpu_smt_max_threads)
+smt_enabled_at_boot is 0 when 'smt-enabled=off', which is not what the
+hotplug core expects. If SMT is disabled it brings up the primary
+thread, which means cpu_smt_num_threads = 1.
 
-cpu_smt_max_threads should have been established already, no?
+This needs more thoughts to avoid a completely inconsistent duct tape
+mess.
+
+Btw, the command line parser and the variable smt_enabled_at_boot being
+type int allow negative number of threads too... Maybe not what you want.
 
 Thanks,
 
         tglx
+
+
+
+
