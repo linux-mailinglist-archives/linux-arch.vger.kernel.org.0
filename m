@@ -2,62 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57F672B0AB
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Jun 2023 09:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7840272B186
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Jun 2023 13:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjFKH6b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Jun 2023 03:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S230482AbjFKLLv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 11 Jun 2023 07:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjFKH6a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Jun 2023 03:58:30 -0400
+        with ESMTP id S229483AbjFKLLu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Jun 2023 07:11:50 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B962D4B
-        for <linux-arch@vger.kernel.org>; Sun, 11 Jun 2023 00:57:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F0B10FB
+        for <linux-arch@vger.kernel.org>; Sun, 11 Jun 2023 04:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686470262;
+        s=mimecast20190719; t=1686481862;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=yNeQCbj8pV3SB38pUZmjA+ecb2r5qadTlgkidFMl7tU=;
-        b=H2FnJnAU6+4BPLgHWFvwz4QxtQX4I6JEbyNH7NqUTKMRYUX/kMp/PikWiHtQcGNAsPsaOG
-        MHvdLMWY8uv6fULeKtynTgFSl4r1wVHJs4FMcu4Vmm3WVMJPdxNsPnJ/c2zQnMMS3p8cHC
-        00arV1EUCqaoI27EfrVRvjhnTital8o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=CgXm+AiFJcRmjwuY2Z+gDuIRL5r60V1wcsJLPwSbtVk=;
+        b=biVYJIK6fcRWMn1AqdrFOjYw8t0cAXP7GbVBE0UndTMs0gxsP3MywUnv/nsAWNfVEZgAAM
+        NjbyjEhxViSloIzHfo/lfieVD02ss7hDX7k81h/AAPXMLq2Aq/xSNUtyhci8tYSVc0+L7V
+        wfUID4jWCYh1yE9JPH+uEsMa9VDARFQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-DkUqp_jjOe6hP2QQpRYblQ-1; Sun, 11 Jun 2023 03:57:39 -0400
-X-MC-Unique: DkUqp_jjOe6hP2QQpRYblQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-591-YfFmB5m3O6qTxAx_kQjAkw-1; Sun, 11 Jun 2023 07:10:59 -0400
+X-MC-Unique: YfFmB5m3O6qTxAx_kQjAkw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31B181C06909;
-        Sun, 11 Jun 2023 07:57:38 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E0F9811E85;
+        Sun, 11 Jun 2023 11:10:58 +0000 (UTC)
 Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0C891400E6C9;
-        Sun, 11 Jun 2023 07:57:35 +0000 (UTC)
-Date:   Sun, 11 Jun 2023 15:57:32 +0800
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C3BB10DF8;
+        Sun, 11 Jun 2023 11:10:55 +0000 (UTC)
+Date:   Sun, 11 Jun 2023 19:10:44 +0800
 From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
         linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@lst.de, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-        deller@gmx.de, Brian Cain <bcain@quicinc.com>,
-        linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZIV+bD1ksJz0CTz2@MiWiFi-R3L-srv>
-References: <20230609075528.9390-3-bhe@redhat.com>
- <202306091859.NhlW2nny-lkp@intel.com>
- <ZIQzrRo0JhfBLDes@MiWiFi-R3L-srv>
- <20230611054019.GL52412@kernel.org>
+        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
+        willy@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v6 10/19] s390: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZIWrtFMUnRfVP5h0@MiWiFi-R3L-srv>
+References: <20230609075528.9390-11-bhe@redhat.com>
+ <202306100105.8GHnoMCP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230611054019.GL52412@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+In-Reply-To: <202306100105.8GHnoMCP-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,162 +69,81 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/11/23 at 08:40am, Mike Rapoport wrote:
+On 06/10/23 at 01:42am, kernel test robot wrote:
 > Hi Baoquan,
 > 
-> On Sat, Jun 10, 2023 at 04:26:21PM +0800, Baoquan He wrote:
-> > On 06/09/23 at 07:09pm, kernel test robot wrote:
-> > > Hi Baoquan,
-> > > 
-> > > kernel test robot noticed the following build errors:
-> > > 
-> > > [auto build test ERROR on akpm-mm/mm-everything]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > > patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
-> > > patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-> > > config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
-> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > > reproduce (this is a W=1 build):
-> > >         mkdir -p ~/bin
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-> > >         git fetch akpm-mm mm-everything
-> > >         git checkout akpm-mm/mm-everything
-> > >         b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
-> > 
-> > Thanks for reporting. I reproduced them on my local machine. Below patch
-> > can fix them. And by the way, I also saw the clone3 warning, and have to 
-> > made change in scripts/checksyscalls.sh to mute it, wondering how you
-> > handle it in your testing.
+> kernel test robot noticed the following build errors:
 > 
-> I think the warning kbuild reported is rather this one:
+> [auto build test ERROR on akpm-mm/mm-everything]
 > 
-> >> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
->     1078 | void iounmap(volatile void __iomem *addr);
->          |      ^
-
-This one is reported as error. The old iounmap() declaration has a const,
-while the standard one doesn't have. So I just remove the old one to use
-the standard one.
-
-Another one is warning about PCI_IOBASE. Because inb/w/l and outb/w/l is
-redefined in asm-generic/io.h, and it uses PCI_IOBASE which is defniend
-as NULL in asm-generic/io.h if ARCH doesn't have its own PCI_IOBASE
-definition. Then the warning is triggered. So I define macro to override
-the standard inb/w/l and outb/w/l.
-
-#ifndef PCI_IOBASE
-#define PCI_IOBASE ((void __iomem *)0)
-#endif
-
-
-> > ------
-> > stdin>:1520:2: warning: syscall clone3 not implemented [-W#warnings]
-> >  1520 | #warning syscall clone3 not implemented
-> >       |  ^
-> > 1 warning generated.
-> > 
-> > ------
-> > diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-> > index 1e5d2eeb726d..3a369b78edb7 100755
-> > --- a/scripts/checksyscalls.sh
-> > +++ b/scripts/checksyscalls.sh
-> > @@ -148,6 +148,7 @@ cat << EOF
-> >  #define __IGNORE_nanosleep
-> >  #define __IGNORE_io_getevents
-> >  #define __IGNORE_recvmmsg
-> > +#define __IGNORE_clone3
-> >  #endif
-> > 
-> > 
-> > From 6a86f4360a61a2b7b4d71172e5c03be554367553 Mon Sep 17 00:00:00 2001
-> > From: root <root@dell-pem620-01.dell2.lab.eng.bos.redhat.com>
-> > Date: Fri, 9 Jun 2023 21:21:36 -0400
-> > Subject: [PATCH] hexagon: mm: fix warning in asm/io.h
-> > Content-type: text/plain
-> > 
-> > Remove the old iounmap() declaration which is not consistent with the
-> > standard one in asm-generic/io.h, let's use the standard one.
-> > 
-> > And also add macro definition of inb/w/l and outb/w/l to override
-> > the definition of them in asm-generic/io.h.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > ---
-> >  arch/hexagon/include/asm/io.h | 8 ++++++--
-> >  scripts/checksyscalls.sh      | 1 +
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
-> > index dcd9cbbf5934..efe9cb00ebf8 100644
-> > --- a/arch/hexagon/include/asm/io.h
-> > +++ b/arch/hexagon/include/asm/io.h
-> > @@ -27,8 +27,6 @@
-> >  extern int remap_area_pages(unsigned long start, unsigned long phys_addr,
-> >  				unsigned long end, unsigned long flags);
-> >  
-> > -extern void iounmap(const volatile void __iomem *addr);
-> > -
-> >  /* Defined in lib/io.c, needed for smc91x driver. */
-> >  extern void __raw_readsw(const void __iomem *addr, void *data, int wordlen);
-> >  extern void __raw_writesw(void __iomem *addr, const void *data, int wordlen);
-> > @@ -207,16 +205,19 @@ static inline void memset_io(volatile void __iomem *addr, int value,
-> >   *
-> >   * Operates on "I/O bus I/O space"
-> >   */
-> > +#define inb inb
-> >  static inline u8 inb(unsigned long port)
-> >  {
-> >  	return readb(_IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define inw inw
-> >  static inline u16 inw(unsigned long port)
-> >  {
-> >  	return readw(_IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define inl inl
-> >  static inline u32 inl(unsigned long port)
-> >  {
-> >  	return readl(_IO_BASE + (port & IO_SPACE_LIMIT));
-> > @@ -227,16 +228,19 @@ static inline u32 inl(unsigned long port)
-> >   * @data: data to write to
-> >   * @addr:  address in I/O space
-> >   */
-> > +#define outb outb
-> >  static inline void outb(u8 data, unsigned long port)
-> >  {
-> >  	writeb(data, _IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define outw outw
-> >  static inline void outw(u16 data, unsigned long port)
-> >  {
-> >  	writew(data, _IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define outl outl
-> >  static inline void outl(u32 data, unsigned long port)
-> >  {
-> >  	writel(data, _IO_BASE + (port & IO_SPACE_LIMIT));
-> > 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230609075528.9390-11-bhe%40redhat.com
+> patch subject: [PATCH v6 10/19] s390: mm: Convert to GENERIC_IOREMAP
+> config: s390-defconfig (https://download.01.org/0day-ci/archive/20230610/202306100105.8GHnoMCP-lkp@intel.com/config)
+> compiler: s390-linux-gcc (GCC) 12.3.0
+> reproduce (this is a W=1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>         git fetch akpm-mm mm-everything
+>         git checkout akpm-mm/mm-everything
+>         b4 shazam https://lore.kernel.org/r/20230609075528.9390-11-bhe@redhat.com
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/
 > 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+
+Thanks for reporting.
+
+I tried to reproduce with above steps, while failed with below message.
+Later I got a s390x machine to reproduce the failure, and made a fix in
+below patch.
+
+[root@dell-pem620-01 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+Compiler will be installed in /root/0day
+lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
+/root/linux                                                                                          
+tar Jxf /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz -C /root/0day
+Please update: libc6 or glibc
+ldd /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc
+/root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc: /lib64/libc.so.6: version `GLIBC_2.36' not found (required by /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc)
+setup_crosstool failed
+
+
+From 26aedf424dac7e58dd1389e554cfe0693e2b371f Mon Sep 17 00:00:00 2001
+From: Baoquan He <bhe@redhat.com>
+Date: Sun, 11 Jun 2023 18:37:43 +0800
+Subject: [PATCH] s390: mm: fix building error when converting to
+ GENERIC_IOREMAP
+Content-type: text/plain
+
+We should always include <asm/io.h> in ARCH, but not <asm-generic/io.h>
+directly. Otherwise, macro defined by ARCH won't be seen and could cause
+building error.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306100105.8GHnoMCP-lkp@intel.com/
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ arch/s390/kernel/perf_cpum_sf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/s390/kernel/perf_cpum_sf.c b/arch/s390/kernel/perf_cpum_sf.c
+index 7ef72f5ff52e..b0269f3881aa 100644
+--- a/arch/s390/kernel/perf_cpum_sf.c
++++ b/arch/s390/kernel/perf_cpum_sf.c
+@@ -22,7 +22,7 @@
+ #include <asm/irq.h>
+ #include <asm/debug.h>
+ #include <asm/timex.h>
+-#include <asm-generic/io.h>
++#include <asm/io.h>
+ 
+ /* Minimum number of sample-data-block-tables:
+  * At least one table is required for the sampling buffer structure.
+-- 
+2.34.1
 
