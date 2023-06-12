@@ -2,148 +2,484 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7840272B186
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Jun 2023 13:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FB772B937
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Jun 2023 09:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjFKLLv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Jun 2023 07:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S235897AbjFLHwh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 03:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjFKLLu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Jun 2023 07:11:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F0B10FB
-        for <linux-arch@vger.kernel.org>; Sun, 11 Jun 2023 04:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686481862;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CgXm+AiFJcRmjwuY2Z+gDuIRL5r60V1wcsJLPwSbtVk=;
-        b=biVYJIK6fcRWMn1AqdrFOjYw8t0cAXP7GbVBE0UndTMs0gxsP3MywUnv/nsAWNfVEZgAAM
-        NjbyjEhxViSloIzHfo/lfieVD02ss7hDX7k81h/AAPXMLq2Aq/xSNUtyhci8tYSVc0+L7V
-        wfUID4jWCYh1yE9JPH+uEsMa9VDARFQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-YfFmB5m3O6qTxAx_kQjAkw-1; Sun, 11 Jun 2023 07:10:59 -0400
-X-MC-Unique: YfFmB5m3O6qTxAx_kQjAkw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S235905AbjFLHwS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 03:52:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF173AA5;
+        Mon, 12 Jun 2023 00:51:08 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E0F9811E85;
-        Sun, 11 Jun 2023 11:10:58 +0000 (UTC)
-Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C3BB10DF8;
-        Sun, 11 Jun 2023 11:10:55 +0000 (UTC)
-Date:   Sun, 11 Jun 2023 19:10:44 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v6 10/19] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZIWrtFMUnRfVP5h0@MiWiFi-R3L-srv>
-References: <20230609075528.9390-11-bhe@redhat.com>
- <202306100105.8GHnoMCP-lkp@intel.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D02CF6605907;
+        Mon, 12 Jun 2023 08:49:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686556185;
+        bh=sZV3vy5beFL4O6X7GVvMpgys5fopQokCK2LuolaOs8o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=giYjGQM77cifb1v7jjPz4UXekvjMfShu9XjBJhyAWNUGny/zVOGR4wMHk2s08/WcM
+         XX7C9CDHRuK5As0YzyKX29ziCEyzvZV2/Ik1X+ROeebmowodAcA/uvH9EAoTCP5AQ2
+         UE69jcKiizcXeqZezCOtiI59ztRKzMe4Srv4zrlzpg4oIoCzTmX+33TehOHYE2PJ+Y
+         DbIsZWeu6VOBVl9gzsCtgVr9cQgValaM6ldq2w8JbMW2QvCWjpaCkyUi8e+M2+5FFQ
+         hOmamWlVIZyw3x44On9LMHSTENUkb2w7hcrRKdnCDIhBu483EioSzcDZ0wNW9xs27N
+         rZaobtINcObPQ==
+Message-ID: <af02f7c3-4832-c23b-4454-29db8e519b8d@collabora.com>
+Date:   Mon, 12 Jun 2023 09:49:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202306100105.8GHnoMCP-lkp@intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 4/9] virt: geniezone: Add irqchip support for virtual
+ interrupt injection
+To:     Yi-De Wu <yi-de.wu@mediatek.com>,
+        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        David Bradil <dbrazdil@google.com>,
+        Jade Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>,
+        Willix Yeh <chi-shen.yeh@mediatek.com>
+References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
+ <20230609085214.31071-5-yi-de.wu@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230609085214.31071-5-yi-de.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/10/23 at 01:42am, kernel test robot wrote:
-> Hi Baoquan,
+Il 09/06/23 10:52, Yi-De Wu ha scritto:
+> From: "Yingshiuan Pan" <yingshiuan.pan@mediatek.com>
 > 
-> kernel test robot noticed the following build errors:
+> Enable GenieZone to handle virtual interrupt injection request.
 > 
-> [auto build test ERROR on akpm-mm/mm-everything]
+> Signed-off-by: Yingshiuan Pan <yingshiuan.pan@mediatek.com>
+> Signed-off-by: Liju Chen <liju-clr.chen@mediatek.com>
+> Signed-off-by: Yi-De Wu <yi-de.wu@mediatek.com>
+> ---
+>   arch/arm64/geniezone/Makefile           |  2 +-
+>   arch/arm64/geniezone/vgic.c             | 89 +++++++++++++++++++++++++
+>   arch/arm64/include/uapi/asm/gzvm_arch.h |  4 ++
+>   drivers/virt/geniezone/Makefile         |  2 +-
+>   drivers/virt/geniezone/gzvm_common.h    | 12 ++++
+>   drivers/virt/geniezone/gzvm_irqchip.c   | 13 ++++
+>   drivers/virt/geniezone/gzvm_vm.c        | 77 +++++++++++++++++++++
+>   include/linux/gzvm_drv.h                |  4 ++
+>   include/uapi/linux/gzvm.h               | 53 +++++++++++++++
+>   9 files changed, 254 insertions(+), 2 deletions(-)
+>   create mode 100644 arch/arm64/geniezone/vgic.c
+>   create mode 100644 drivers/virt/geniezone/gzvm_common.h
+>   create mode 100644 drivers/virt/geniezone/gzvm_irqchip.c
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230609075528.9390-11-bhe%40redhat.com
-> patch subject: [PATCH v6 10/19] s390: mm: Convert to GENERIC_IOREMAP
-> config: s390-defconfig (https://download.01.org/0day-ci/archive/20230610/202306100105.8GHnoMCP-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 12.3.0
-> reproduce (this is a W=1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
->         git fetch akpm-mm mm-everything
->         git checkout akpm-mm/mm-everything
->         b4 shazam https://lore.kernel.org/r/20230609075528.9390-11-bhe@redhat.com
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/
-> 
+> diff --git a/arch/arm64/geniezone/Makefile b/arch/arm64/geniezone/Makefile
+> index 69b0a4abeab0..0e4f1087f9de 100644
+> --- a/arch/arm64/geniezone/Makefile
+> +++ b/arch/arm64/geniezone/Makefile
+> @@ -4,6 +4,6 @@
+>   #
+>   include $(srctree)/drivers/virt/geniezone/Makefile
+>   
+> -gzvm-y += vm.o vcpu.o
+> +gzvm-y += vm.o vcpu.o vgic.o
+>   
+>   obj-$(CONFIG_MTK_GZVM) += gzvm.o
+> diff --git a/arch/arm64/geniezone/vgic.c b/arch/arm64/geniezone/vgic.c
+> new file mode 100644
+> index 000000000000..9fe5049be122
+> --- /dev/null
+> +++ b/arch/arm64/geniezone/vgic.c
+> @@ -0,0 +1,89 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 MediaTek Inc.
+> + */
+> +
+> +#include <linux/irqchip/arm-gic-v3.h>
+> +#include <linux/gzvm.h>
+> +#include <linux/gzvm_drv.h>
+> +#include "gzvm_arch_common.h"
+> +
+> +/* is_irq_valid() - Check the irq number and irq_type are matched */
 
-Thanks for reporting.
+/**
+  * is_irq_valid() - Check if the IRQ number and type are matched
+  * @irq:      interrupt number
+  * @irq_type: interrupt type
+  */
 
-I tried to reproduce with above steps, while failed with below message.
-Later I got a s390x machine to reproduce the failure, and made a fix in
-below patch.
+> +static bool is_irq_valid(u32 irq, u32 irq_type)
+> +{
+> +	switch (irq_type) {
+> +	case GZVM_IRQ_TYPE_CPU:
+> +		/*  0 ~ 15: SGI */
+> +		if (likely(irq <= GZVM_IRQ_CPU_FIQ))
+> +			return true;
+> +		break;
+> +	case GZVM_IRQ_TYPE_PPI:
+> +		/* 16 ~ 31: PPI */
+> +		if (likely(irq >= GZVM_VGIC_NR_SGIS && irq < GZVM_VGIC_NR_PRIVATE_IRQS))
+> +			return true;
+> +		break;
+> +	case GZVM_IRQ_TYPE_SPI:
+> +		/* 32 ~ : SPT */
+> +		if (likely(irq >= GZVM_VGIC_NR_PRIVATE_IRQS))
+> +			return true;
+> +		break;
+> +	default:
+> +		return false;
+> +	}
+> +	return false;
+> +}
+> +
+> +/**
+> + * gzvm_vgic_inject_irq() - Inject virtual interrupt to a VM
+> + * @vcpu_idx: vcpu index, only valid if PPI
+> + * @irq: irq number
+> + * @level: 1 if true else 0
+> + */
+> +static int gzvm_vgic_inject_irq(struct gzvm *gzvm, unsigned int vcpu_idx, u32 irq_type,
+> +				u32 irq, bool level)
+> +{
+> +	unsigned long a1 = assemble_vm_vcpu_tuple(gzvm->vm_id, vcpu_idx);
+> +	struct arm_smccc_res res;
+> +
+> +	if (!unlikely(is_irq_valid(irq, irq_type)))
+> +		return -EINVAL;
+> +
+> +	gzvm_hypcall_wrapper(MT_HVC_GZVM_IRQ_LINE, a1, irq, level,
+> +			     0, 0, 0, 0, &res);
+> +	if (res.a0) {
+> +		pr_err("Failed to set IRQ level (%d) to irq#%u on vcpu %d with ret=%d\n",
+> +		       level, irq, vcpu_idx, (int)res.a0);
+> +		return -EFAULT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * gzvm_vgic_inject_spi() - Inject virtual spi interrupt
+> + *
+> + * @spi_irq: This is spi interrupt number (starts from 0 instead of 32)
+> + *
+> + * Return 0 if succeed else other negative values indicating each errors
+> + */
+> +static int gzvm_vgic_inject_spi(struct gzvm *gzvm, unsigned int vcpu_idx,
+> +				u32 spi_irq, bool level)
+> +{
+> +	return gzvm_vgic_inject_irq(gzvm, 0, GZVM_IRQ_TYPE_SPI,
+> +				    spi_irq + GZVM_VGIC_NR_PRIVATE_IRQS, level);
+> +}
+> +
+> +int gzvm_arch_create_device(gzvm_id_t vm_id, struct gzvm_create_device *gzvm_dev)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	return gzvm_hypcall_wrapper(MT_HVC_GZVM_CREATE_DEVICE, vm_id,
+> +				    virt_to_phys(gzvm_dev), 0, 0, 0, 0, 0, &res);
+> +}
+> +
+> +int gzvm_arch_inject_irq(struct gzvm *gzvm, unsigned int vcpu_idx, u32 irq_type,
+> +			 u32 irq, bool level)
+> +{
+> +	/* default use spi */
+> +	return gzvm_vgic_inject_spi(gzvm, vcpu_idx, irq, level);
+> +}
+> diff --git a/arch/arm64/include/uapi/asm/gzvm_arch.h b/arch/arm64/include/uapi/asm/gzvm_arch.h
+> index e45e8e9e1bea..efee0354711e 100644
+> --- a/arch/arm64/include/uapi/asm/gzvm_arch.h
+> +++ b/arch/arm64/include/uapi/asm/gzvm_arch.h
+> @@ -46,4 +46,8 @@
+>   #define GZVM_REG_ARM_CORE		(0x0010 << GZVM_REG_ARM_COPROC_SHIFT)
+>   #define GZVM_REG_ARM_CORE_REG(name)	(offsetof(struct gzvm_regs, name) / sizeof(__u32))
+>   
+> +#define GZVM_VGIC_NR_SGIS		16
+> +#define GZVM_VGIC_NR_PPIS		16
+> +#define GZVM_VGIC_NR_PRIVATE_IRQS	(GZVM_VGIC_NR_SGIS + GZVM_VGIC_NR_PPIS)
+> +
+>   #endif /* __GZVM_ARCH_H__ */
+> diff --git a/drivers/virt/geniezone/Makefile b/drivers/virt/geniezone/Makefile
+> index 8ebf2db0c970..67ba3ed76ea7 100644
+> --- a/drivers/virt/geniezone/Makefile
+> +++ b/drivers/virt/geniezone/Makefile
+> @@ -7,5 +7,5 @@
+>   GZVM_DIR ?= ../../../drivers/virt/geniezone
+>   
+>   gzvm-y := $(GZVM_DIR)/gzvm_main.o $(GZVM_DIR)/gzvm_vm.o \
+> -	  $(GZVM_DIR)/gzvm_vcpu.o
+> +	  $(GZVM_DIR)/gzvm_vcpu.o $(GZVM_DIR)/gzvm_irqchip.o
+>   
+> diff --git a/drivers/virt/geniezone/gzvm_common.h b/drivers/virt/geniezone/gzvm_common.h
+> new file mode 100644
+> index 000000000000..d0e39ded79e6
+> --- /dev/null
+> +++ b/drivers/virt/geniezone/gzvm_common.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 MediaTek Inc.
+> + */
+> +
+> +#ifndef __GZ_COMMON_H__
+> +#define __GZ_COMMON_H__
+> +
+> +int gzvm_irqchip_inject_irq(struct gzvm *gzvm, unsigned int vcpu_idx,
+> +			    u32 irq_type, u32 irq, bool level);
+> +
+> +#endif /* __GZVM_COMMON_H__ */
+> diff --git a/drivers/virt/geniezone/gzvm_irqchip.c b/drivers/virt/geniezone/gzvm_irqchip.c
+> new file mode 100644
+> index 000000000000..134bca3ab247
+> --- /dev/null
+> +++ b/drivers/virt/geniezone/gzvm_irqchip.c
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 MediaTek Inc.
+> + */
+> +
+> +#include <linux/gzvm_drv.h>
+> +#include "gzvm_common.h"
+> +
+> +int gzvm_irqchip_inject_irq(struct gzvm *gzvm, unsigned int vcpu_idx,
+> +			    u32 irq_type, u32 irq, bool level)
+> +{
+> +	return gzvm_arch_inject_irq(gzvm, vcpu_idx, irq_type, irq, level);
+> +}
+> diff --git a/drivers/virt/geniezone/gzvm_vm.c b/drivers/virt/geniezone/gzvm_vm.c
+> index f777c3bdb5ac..0cab67b0bdf8 100644
+> --- a/drivers/virt/geniezone/gzvm_vm.c
+> +++ b/drivers/virt/geniezone/gzvm_vm.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/slab.h>
+>   #include <linux/gzvm_drv.h>
+> +#include "gzvm_common.h"
+>   
+>   static DEFINE_MUTEX(gzvm_list_lock);
+>   static LIST_HEAD(gzvm_list);
+> @@ -250,6 +251,68 @@ gzvm_vm_ioctl_set_memory_region(struct gzvm *gzvm,
+>   	return register_memslot_addr_range(gzvm, memslot);
+>   }
+>   
+> +static int gzvm_vm_ioctl_irq_line(struct gzvm *gzvm,
+> +				  struct gzvm_irq_level *irq_level)
+> +{
+> +	u32 irq = irq_level->irq;
+> +	unsigned int irq_type, vcpu_idx, irq_num;
 
-[root@dell-pem620-01 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-Compiler will be installed in /root/0day
-lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
-/root/linux                                                                                          
-tar Jxf /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz -C /root/0day
-Please update: libc6 or glibc
-ldd /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc
-/root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc: /lib64/libc.so.6: version `GLIBC_2.36' not found (required by /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc)
-setup_crosstool failed
+Is there any reason why you're not using fixed size types here?
 
+> +	bool level = irq_level->level;
+> +
+> +	irq_type = (irq >> GZVM_IRQ_TYPE_SHIFT) & GZVM_IRQ_TYPE_MASK;
+> +	vcpu_idx = (irq >> GZVM_IRQ_VCPU_SHIFT) & GZVM_IRQ_VCPU_MASK;
 
-From 26aedf424dac7e58dd1389e554cfe0693e2b371f Mon Sep 17 00:00:00 2001
-From: Baoquan He <bhe@redhat.com>
-Date: Sun, 11 Jun 2023 18:37:43 +0800
-Subject: [PATCH] s390: mm: fix building error when converting to
- GENERIC_IOREMAP
-Content-type: text/plain
+Why aren't you using bitfield macros here?
 
-We should always include <asm/io.h> in ARCH, but not <asm-generic/io.h>
-directly. Otherwise, macro defined by ARCH won't be seen and could cause
-building error.
+#define GZVM_IRQ_LINE_TYPE	GENMASK(27, 24)
+#define ..........
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306100105.8GHnoMCP-lkp@intel.com/
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/s390/kernel/perf_cpum_sf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+irq_type = FIELD_GET(GZVM_IRQ_LINE_TYPE, irq);
+vcpu_idx = FIELD_GET(GZVM_IRQ_LINE_VCPU, irq);
+vcpu2_idx = FIELD_GET(GZVM_IRQ_LINE_VCPU, irq) * (GZVM_IRQ_VCPU_MASK + 1);
+irq_num = FIELD_GET(GZVM_IRQ_LINE_NUM, irq);
 
-diff --git a/arch/s390/kernel/perf_cpum_sf.c b/arch/s390/kernel/perf_cpum_sf.c
-index 7ef72f5ff52e..b0269f3881aa 100644
---- a/arch/s390/kernel/perf_cpum_sf.c
-+++ b/arch/s390/kernel/perf_cpum_sf.c
-@@ -22,7 +22,7 @@
- #include <asm/irq.h>
- #include <asm/debug.h>
- #include <asm/timex.h>
--#include <asm-generic/io.h>
-+#include <asm/io.h>
- 
- /* Minimum number of sample-data-block-tables:
-  * At least one table is required for the sampling buffer structure.
--- 
-2.34.1
+return gzvm_irqchip_inject_irq(gzvm, vcpu_idx + vcpu2_idx, irq_type, irq_num,
+			       level);
+
+> +	vcpu_idx += ((irq >> GZVM_IRQ_VCPU2_SHIFT) & GZVM_IRQ_VCPU2_MASK) *
+> +		(GZVM_IRQ_VCPU_MASK + 1);
+> +	irq_num = (irq >> GZVM_IRQ_NUM_SHIFT) & GZVM_IRQ_NUM_MASK;
+> +
+> +	return gzvm_irqchip_inject_irq(gzvm, vcpu_idx, irq_type, irq_num,
+> +				       level);
+> +}
+> +
+> +static int gzvm_vm_ioctl_create_device(struct gzvm *gzvm, void __user *argp)
+> +{
+> +	struct gzvm_create_device *gzvm_dev;
+> +	void *dev_data = NULL;
+> +	int ret;
+> +
+> +	gzvm_dev = (struct gzvm_create_device *)alloc_pages_exact(PAGE_SIZE,
+> +								  GFP_KERNEL);
+> +	if (!gzvm_dev)
+> +		return -ENOMEM;
+> +	if (copy_from_user(gzvm_dev, argp, sizeof(*gzvm_dev))) {
+> +		ret = -EFAULT;
+> +		goto err_free_dev;
+> +	}
+> +
+> +	if (gzvm_dev->attr_addr != 0 && gzvm_dev->attr_size != 0) {
+> +		size_t attr_size = gzvm_dev->attr_size;
+> +		void __user *attr_addr = (void __user *)gzvm_dev->attr_addr;
+> +
+> +		/* Size of device specific data should not be over a page. */
+> +		if (attr_size > PAGE_SIZE)
+> +			return -EINVAL;
+> +
+> +		dev_data = alloc_pages_exact(attr_size, GFP_KERNEL);
+> +		if (!dev_data) {
+> +			ret = -ENOMEM;
+> +			goto err_free_dev;
+> +		}
+> +
+> +		if (copy_from_user(dev_data, attr_addr, attr_size)) {
+> +			ret = -EFAULT;
+> +			goto err_free_dev_data;
+> +		}
+> +		gzvm_dev->attr_addr = virt_to_phys(dev_data);
+> +	}
+> +
+> +	ret = gzvm_arch_create_device(gzvm->vm_id, gzvm_dev);
+> +err_free_dev_data:
+> +	if (dev_data)
+> +		free_pages_exact(dev_data, 0);
+> +err_free_dev:
+> +	free_pages_exact(gzvm_dev, 0);
+> +	return ret;
+> +}
+> +
+>   static int gzvm_vm_ioctl_enable_cap(struct gzvm *gzvm,
+>   				    struct gzvm_enable_cap *cap,
+>   				    void __user *argp)
+> @@ -284,6 +347,20 @@ static long gzvm_vm_ioctl(struct file *filp, unsigned int ioctl,
+>   		ret = gzvm_vm_ioctl_set_memory_region(gzvm, &userspace_mem);
+>   		break;
+>   	}
+> +	case GZVM_IRQ_LINE: {
+> +		struct gzvm_irq_level irq_event;
+> +
+> +		ret = -EFAULT;
+> +		if (copy_from_user(&irq_event, argp, sizeof(irq_event)))
+> +			goto out;
+> +
+> +		ret = gzvm_vm_ioctl_irq_line(gzvm, &irq_event);
+> +		break;
+> +	}
+> +	case GZVM_CREATE_DEVICE: {
+> +		ret = gzvm_vm_ioctl_create_device(gzvm, argp);
+> +		break;
+> +	}
+>   	case GZVM_ENABLE_CAP: {
+>   		struct gzvm_enable_cap cap;
+>   
+> diff --git a/include/linux/gzvm_drv.h b/include/linux/gzvm_drv.h
+> index 7768bd35113a..842a026df9f3 100644
+> --- a/include/linux/gzvm_drv.h
+> +++ b/include/linux/gzvm_drv.h
+> @@ -109,6 +109,10 @@ int gzvm_arch_create_vcpu(gzvm_id_t vm_id, int vcpuid, void *run);
+>   int gzvm_arch_vcpu_run(struct gzvm_vcpu *vcpu, __u64 *exit_reason);
+>   int gzvm_arch_destroy_vcpu(gzvm_id_t vm_id, int vcpuid);
+>   
+> +int gzvm_arch_create_device(gzvm_id_t vm_id, struct gzvm_create_device *gzvm_dev);
+> +int gzvm_arch_inject_irq(struct gzvm *gzvm, unsigned int vcpu_idx, u32 irq_type,
+> +			 u32 irq, bool level);
+> +
+>   extern struct miscdevice *gzvm_debug_dev;
+>   
+>   #endif /* __GZVM_DRV_H__ */
+> diff --git a/include/uapi/linux/gzvm.h b/include/uapi/linux/gzvm.h
+> index 38b3f20114ab..279b52192366 100644
+> --- a/include/uapi/linux/gzvm.h
+> +++ b/include/uapi/linux/gzvm.h
+> @@ -61,6 +61,59 @@ struct gzvm_userspace_memory_region {
+>   #define GZVM_SET_USER_MEMORY_REGION _IOW(GZVM_IOC_MAGIC, 0x46, \
+>   					 struct gzvm_userspace_memory_region)
+>   
+> +/* for GZVM_IRQ_LINE, irq field index values */
+> +#define GZVM_IRQ_VCPU2_SHIFT		28
+> +#define GZVM_IRQ_VCPU2_MASK		0xf
+> +#define GZVM_IRQ_TYPE_SHIFT		24
+> +#define GZVM_IRQ_TYPE_MASK		0xf
+> +#define GZVM_IRQ_VCPU_SHIFT		16
+> +#define GZVM_IRQ_VCPU_MASK		0xff
+> +#define GZVM_IRQ_NUM_SHIFT		0
+> +#define GZVM_IRQ_NUM_MASK		0xffff
+> +
+> +/* irq_type field */
+> +#define GZVM_IRQ_TYPE_CPU		0
+> +#define GZVM_IRQ_TYPE_SPI		1
+> +#define GZVM_IRQ_TYPE_PPI		2
+> +
+> +/* out-of-kernel GIC cpu interrupt injection irq_number field */
+> +#define GZVM_IRQ_CPU_IRQ		0
+> +#define GZVM_IRQ_CPU_FIQ		1
+> +
+> +struct gzvm_irq_level {
+> +	union {
+> +		__u32 irq;
+> +		__s32 status;
+> +	};
+> +	__u32 level;
+> +};
+> +
+> +#define GZVM_IRQ_LINE              _IOW(GZVM_IOC_MAGIC,  0x61, \
+> +					struct gzvm_irq_level)
+> +
+> +enum gzvm_device_type {
+> +	GZVM_DEV_TYPE_ARM_VGIC_V3_DIST,
+> +	GZVM_DEV_TYPE_ARM_VGIC_V3_REDIST,
+> +	GZVM_DEV_TYPE_MAX,
+> +};
+> +
+
+Please use kerneldoc.
+
+> +struct gzvm_create_device {
+> +	__u32 dev_type;			/* device type */
+> +	__u32 id;			/* out: device id */
+> +	__u64 flags;			/* device specific flags */
+> +	__u64 dev_addr;			/* device ipa address in VM's view */
+> +	__u64 dev_reg_size;		/* device register range size */
+> +	/*
+> +	 * If user -> kernel, this is user virtual address of device specific
+> +	 * attributes (if needed). If kernel->hypervisor, this is ipa.
+> +	 */
+> +	__u64 attr_addr;
+> +	__u64 attr_size;		/* size of device specific attributes */
+> +};
+> +
+> +#define GZVM_CREATE_DEVICE	   _IOWR(GZVM_IOC_MAGIC,  0xe0, \
+> +					struct gzvm_create_device)
+> +
+>   /**
+>    * ioctls for vcpu fds
+>    */
+
+Regards,
+Angelo
 
