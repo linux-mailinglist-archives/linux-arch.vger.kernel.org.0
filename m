@@ -2,116 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE93772BB97
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Jun 2023 11:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3785F72BC36
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Jun 2023 11:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjFLJDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Jun 2023 05:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
+        id S234681AbjFLJ0T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 05:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFLJC1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 05:02:27 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B7219AB
-        for <linux-arch@vger.kernel.org>; Mon, 12 Jun 2023 01:59:28 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id af79cd13be357-75ec6ae7ffaso310115385a.2
-        for <linux-arch@vger.kernel.org>; Mon, 12 Jun 2023 01:59:28 -0700 (PDT)
+        with ESMTP id S234999AbjFLJZW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 05:25:22 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40873C19
+        for <linux-arch@vger.kernel.org>; Mon, 12 Jun 2023 02:19:39 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9d619103dso268781cf.1
+        for <linux-arch@vger.kernel.org>; Mon, 12 Jun 2023 02:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686560367; x=1689152367;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=udMb5vmbnzKeYF+uhRJyDPkoUsUtpYvMhzpQU9v4Emw=;
-        b=VBPd4R/l7owkryOiqKleS18B7QN/h7sMestTsfq19/fQKe41wLAHs0M28XjG58+gWY
-         /QhySNjh+cwBQsi2JYl3kfH2yj6pIsEg/gNtI7tYB2kPo2ghxyXogYLMSzBYg7h6mHKq
-         lps6YFtoralS3pXHYTBAREIrmMOhMED5d8kHIRRNeM+HVm0dfT3x23mV+0AbygYIzRDS
-         RbEzS6ozc1aS1vxqF0xgUo1fKmdHk9+C3P7sRqUhApie9a3aZXx1UQGhfxM4KTK47lS9
-         ZcQ8NxhUzd4xbmuyfM+F4ohP9Af8GufF5TYgcSHYj1Sp3H+CzLe5b7PsrVA8X32BWwtM
-         M2NA==
+        d=google.com; s=20221208; t=1686561579; x=1689153579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9+9DO9QvRcGmz6N/mHMV0b4yXmnNikrhC006i06Umx0=;
+        b=cqk//FV3ozIay6AgBNV5ob1IDy2+IOpYTfQi6FcibkQDiT/uOOWw5DYoOxBe5QSMDk
+         BMk3XiRl+yus4FWheCEWRwNUsEPhfCjmqUvZVJF6Nm820rpz0mQQvvAbWi0+3j4kzTme
+         p5MwCU3ZIrIvExqTao/NqZ+v+X0VWL4WXY3Zey77F0JOE3os2m3q5NUe/u5/kedBM7pN
+         Ukz79VjzETQ3uce0SO4JmCYXK4ICfW1MuWGdzHNftYaGOQH+ZB7ICyIi64LOyTq+Bza7
+         jSVvBo0w/U935/0Q2u5m11awIybDHitnEjlHWwCWcES82RFO0ZwSFBlHxsVdECTWxLdl
+         +GEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686560367; x=1689152367;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=udMb5vmbnzKeYF+uhRJyDPkoUsUtpYvMhzpQU9v4Emw=;
-        b=T/Cal7QThhrLJ8nwu4PpzJ3Ar0adhpSXq4+J1h5Ayuv+t1OildYxcxpejyydMIPyi6
-         ARLL6eZSom5416hrebwhrKHHl/D8L8eEEG3fTa3TV2H+z/vfEOspOZC1M0jClX+ghtxD
-         hjxkW2D96ZLd7gTMYDZtkMMlFZ3XjOUTjKjFBQP0ynVYxoQNSkn5i2QEUyO76X83mkc5
-         MZM5G1B2inDa8LYQIqOHGr0q8dAyQAiKzMLg3q/xqprd0SKSqDPnkQ/g114A9cz/rup+
-         gyCsShr1x228F+om6LcGFn2wyBvLr89zwjNKGctfDarRPQwfbomNd25v8ny37laVKXA4
-         CuvA==
-X-Gm-Message-State: AC+VfDwSTU0Yn2TBljtcy4dE3qDSn8RoevPsQkfDxCEACEbIaR/tGrhG
-        1n4A1ahHVwmjXn2ZZ+DeKXWOvmKHADqbPqUSiwk=
-X-Google-Smtp-Source: ACHHUZ5yQlmjjZ1Orl7B5mFqvYqADAM/MoutFK6d+W8RE7d7gqY8SB3GtWw8yOpt7fylU8HIzD4WGFRF1zBG7+0dXeQ=
-X-Received: by 2002:a05:620a:4309:b0:75e:c8d7:dc68 with SMTP id
- u9-20020a05620a430900b0075ec8d7dc68mr9777207qko.62.1686560367270; Mon, 12 Jun
- 2023 01:59:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686561579; x=1689153579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9+9DO9QvRcGmz6N/mHMV0b4yXmnNikrhC006i06Umx0=;
+        b=fu99eJJOgEfnFU2NDt/7lrMnm+rtVBkB27wOOEyqp9PABZnFFmef+KWZY8lbKbiPX9
+         /ALXVWu0VQjS10i5UaEl5rwT0VFKe+2CZHS5mvnXBj8fsSu866FPax/WC/82AXf8sel1
+         IaWDJAEJmYtJ7Y5hRKp/Zs9Shp+1o4V6vlwfGxyedq1h1e9nFoHR2yrKCQB8g/yIgo9L
+         dIqhe3V0At3BQB8+5lVwnNkuZohXTnJCdC6uQxBW52pws7ub73+jj8aUGA+uB6j9Bosg
+         sah5G3tP4qqQkPocbHxZ+lU4WKtAm1kJpfvg0fb4D41Y5qvGk1igY6e9sp5HAr0Qd7e1
+         1Ivw==
+X-Gm-Message-State: AC+VfDyhYHp7oPIVxnXWafvk/cXh0wwLhcQG0sMDrswQL7boEugvmFrh
+        kgbK3kAEC8WnVdBuVljzuj4v0ynS5uOROOIdiY35dg==
+X-Google-Smtp-Source: ACHHUZ6LI9YR9875qLIDvFSYBsHw1lc1NTBArmTCYMoCsG/VIQfxhlpZWokElhVbYmiE7Ww2KbVzZ7HLqQig6PHW0h0=
+X-Received: by 2002:a05:622a:14c7:b0:3f6:97b4:1a4d with SMTP id
+ u7-20020a05622a14c700b003f697b41a4dmr219703qtx.23.1686561578849; Mon, 12 Jun
+ 2023 02:19:38 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab0:35d4:0:b0:786:6524:cddd with HTTP; Mon, 12 Jun 2023
- 01:59:26 -0700 (PDT)
-Reply-To: trustfundsloancompany50@gmail.com
-From:   Mrs Donna <kasdpaul@gmail.com>
-Date:   Mon, 12 Jun 2023 10:59:26 +0200
-Message-ID: <CAGu963Ha5b6G6qbKpWUV0L6hczDErhhie3mS9MXX_A=QZ+QRbg@mail.gmail.com>
-Subject: Re..
-To:     undisclosed-recipients:;
+References: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com> <20230608202628.837772-2-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230608202628.837772-2-aleksandr.mikhalitsyn@canonical.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 12 Jun 2023 11:19:27 +0200
+Message-ID: <CANn89iLhQYHLxGYefhzVOxWx7BA_qk4uxuPjvZOGGnaJNESYXQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:744 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [trustfundsloancompany50[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kasdpaul[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-X-Spam-Level: ******
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-LOAN AS FAST AS POSSIBLE WITHIN 2DAYS
-,
-Do you need an urgent loan at 2%? To pay your bills? if yes contact us
-today at: trustfundsloancompany50@gmail.com
+On Thu, Jun 8, 2023 at 10:26=E2=80=AFPM Alexander Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIAL=
+S,
+> but it contains pidfd instead of plain pid, which allows programmers not
+> to care about PID reuse problem.
+>
+> We mask SO_PASSPIDFD feature if CONFIG_UNIX is not builtin because
+> it depends on a pidfd_prepare() API which is not exported to the kernel
+> modules.
+>
+> Idea comes from UAPI kernel group:
+> https://uapi-group.org/kernel-features/
+>
+> Big thanks to Christian Brauner and Lennart Poettering for productive
+> discussions about this.
+>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: Luca Boccassi <bluca@debian.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Tested-by: Luca Boccassi <bluca@debian.org>
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Reviewed-by: Christian Brauner <brauner@kernel.org>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
+>
+> ---
 
-FILL BELOW LOAN APPLICATION FORM
-
-Name:
-Country:
-State:
-Phone Number:
-Age:
-ID Card:
-Occupation:
-Amount Needed as a Loan:
-Duration:
-
-NOTE THAT All Email should be forwarded to:
-trustfundsloancompany50@gmail.com
+Reviewed-by: Eric Dumazet <edumazet@google.com>
