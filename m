@@ -2,98 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40DA72DACA
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 09:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8AD72DB4C
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 09:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238862AbjFMH3M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 13 Jun 2023 03:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S239948AbjFMHn3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Jun 2023 03:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjFMH3L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 03:29:11 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D13AA;
-        Tue, 13 Jun 2023 00:29:10 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so5348185276.0;
-        Tue, 13 Jun 2023 00:29:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686641350; x=1689233350;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gKEzJjzBKla4S0x8jxwIAxVSx314J/aF9PC4BBXNBUc=;
-        b=O/Qgik+keNnu5W/ripF9MuXw5uie4lrFN7GFG0ipslGi3ZQee/TgWENlvdMee5Gpqo
-         0+o31MhB6jqzNKVbgTiickkV71vfZbCYnr7kfGcuyUkfP9ZPGGZXxVKkKl6g4FR7GjN9
-         lkfoKHdeLiVE976H1HTNyVI+jLeAsREXo678dQWLSFslceozZqf8rcXbzQQQgkz/fBYz
-         yPojg2j9jHpPE8vkoTswAsvl9kQEpWMX6Z9R7Su60NwfLoJSuWIVCHGiNmYDCpDlOv/b
-         iLZj1ATjunJm8lGaGq2Qi3npr4/R/Zmau1WE+dUPJ44FHMMtZPpF1cysRy25xngbMtGn
-         RdGQ==
-X-Gm-Message-State: AC+VfDxdvE1X10rWnv8Uu+OqfpsF0hWuZuuThD1NcrzycNc/SbxN562x
-        iOUDikmDRR6YWpgq/pFjH9xd9KPAiDIt1Q==
-X-Google-Smtp-Source: ACHHUZ4yyzfk2dKTO7/ChlMLJuq/byIx5/VbZj9Su9mWsasd4QMjz/UO+qc8km3I9JTUtbNCjoFjyA==
-X-Received: by 2002:a25:420f:0:b0:bcd:7017:5893 with SMTP id p15-20020a25420f000000b00bcd70175893mr926167yba.24.1686641349766;
-        Tue, 13 Jun 2023 00:29:09 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id r123-20020a25c181000000b00babd2eef59dsm2983215ybf.27.2023.06.13.00.29.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 00:29:08 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-56d378b75f0so17179997b3.1;
-        Tue, 13 Jun 2023 00:29:08 -0700 (PDT)
-X-Received: by 2002:a0d:d611:0:b0:56d:ddc:cdbb with SMTP id
- y17-20020a0dd611000000b0056d0ddccdbbmr1077781ywd.25.1686641348561; Tue, 13
- Jun 2023 00:29:08 -0700 (PDT)
+        with ESMTP id S239060AbjFMHn2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 03:43:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2485D1B3;
+        Tue, 13 Jun 2023 00:43:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABBAA61A7E;
+        Tue, 13 Jun 2023 07:43:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3123C433D2;
+        Tue, 13 Jun 2023 07:43:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686642205;
+        bh=rQ3t6NfGFNVjHV4alVdkayNOjig6+FetCPJVDvnXdVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EmgFk7vr3nHxTez4jl8DokEm1PYRmgvE7snzzuTVuCLvmQTe+waWvzsrNg2YyG2t2
+         dkrmMDVIr2A31ldRN7QSWK101Moy9a8TbIiySC8Q3yVlslcYtUZi5f1jfqLZnEaKvW
+         b516jUoG37yToBvhzp/x728l6UTI7G+StXPAYCCNUlZbNV/K/A/Xg3RhMcFygsteZz
+         W+HGrlT8JEWjdyCwUufHmlB2EhKbecTEbfAo0CW+uhzY26gxJq6lNj+PVWZa7M41L0
+         ZvvaRRO+LXQPCGXiDbfCWeVy4lmwb33+qWxNDe+qju3u1P6F0GqzVBHpSdCTqGpG9J
+         6ZJOk0KXi5+aw==
+Date:   Tue, 13 Jun 2023 10:42:45 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, broonie@kernel.org
+Subject: Re: [PATCH v9 03/42] mm: Make pte_mkwrite() take a VMA
+Message-ID: <20230613074245.GQ52412@kernel.org>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20230612210423.18611-1-vishal.moola@gmail.com> <20230612210423.18611-26-vishal.moola@gmail.com>
-In-Reply-To: <20230612210423.18611-26-vishal.moola@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Jun 2023 09:28:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUk2OM+j_j8XSkMxRnNqmKy3qwUA8Mq-RA+p+ByfY-+4g@mail.gmail.com>
-Message-ID: <CAMuHMdUk2OM+j_j8XSkMxRnNqmKy3qwUA8Mq-RA+p+ByfY-+4g@mail.gmail.com>
-Subject: Re: [PATCH v4 25/34] m68k: Convert various functions to use ptdescs
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:05 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
-> As part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents, convert various page table functions to use ptdescs.
->
-> Some of the functions use the *get*page*() helper functions. Convert
-> these to use pagetable_alloc() and ptdesc_address() instead to help
-> standardize page tables further.
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+On Mon, Jun 12, 2023 at 05:10:29PM -0700, Rick Edgecombe wrote:
+> The x86 Shadow stack feature includes a new type of memory called shadow
+> stack. This shadow stack memory has some unusual properties, which requires
+> some core mm changes to function properly.
+> 
+> One of these unusual properties is that shadow stack memory is writable,
+> but only in limited ways. These limits are applied via a specific PTE
+> bit combination. Nevertheless, the memory is writable, and core mm code
+> will need to apply the writable permissions in the typical paths that
+> call pte_mkwrite(). Future patches will make pte_mkwrite() take a VMA, so
+> that the x86 implementation of it can know whether to create regular
+> writable memory or shadow stack memory.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Nit:                             ^ mappings?
+ 
+> But there are a couple of challenges to this. Modifying the signatures of
+> each arch pte_mkwrite() implementation would be error prone because some
+> are generated with macros and would need to be re-implemented. Also, some
+> pte_mkwrite() callers operate on kernel memory without a VMA.
+> 
+> So this can be done in a three step process. First pte_mkwrite() can be
+> renamed to pte_mkwrite_novma() in each arch, with a generic pte_mkwrite()
+> added that just calls pte_mkwrite_novma(). Next callers without a VMA can
+> be moved to pte_mkwrite_novma(). And lastly, pte_mkwrite() and all callers
+> can be changed to take/pass a VMA.
+> 
+> In a previous patches, pte_mkwrite() was renamed pte_mkwrite_novma() and
+> callers that don't have a VMA were changed to use pte_mkwrite_novma(). So
 
-Gr{oetje,eeting}s,
+Maybe
+This is the third step so pte_mkwrite() was renamed to pte_mkwrite_novma()
+and ...
 
-                        Geert
+> now change pte_mkwrite() to take a VMA and change the remaining callers to
+> pass a VMA. Apply the same changes for pmd_mkwrite().
+> 
+> No functional change.
+> 
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
