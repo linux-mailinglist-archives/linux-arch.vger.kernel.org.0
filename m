@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C03E72D5B6
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E3772D5E4
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238954AbjFMAMy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Jun 2023 20:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S238469AbjFMAN4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 20:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238870AbjFMAMf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:35 -0400
+        with ESMTP id S238907AbjFMAMh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:37 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5A81728;
-        Mon, 12 Jun 2023 17:12:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89F918C;
+        Mon, 12 Jun 2023 17:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686615146; x=1718151146;
+  t=1686615148; x=1718151148;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VxsR8A3vgFZdU2Uya7vVGhJBClJyO0tAkA+BqmUO8Zs=;
-  b=MAkibPwx6HjXO50QeclLoNDH6D2TGh73wITGile4ozU9mHcxnH+PheEm
-   qOjOV8daMbTI/KuLiGHq4DTFRyRxFm676WzWhjn4w9iO9g845IDe9z26b
-   fLqErGBXzqHHP/1PSPelFvMbtbKi/g/NPubKjam5QPWQAuZRmOJWDXiDi
-   DjWXx/G850tGLUankXiSV3sx/AD+jF9uujteIqChg2rfcgOqef46XIszU
-   jmuYjA/lcME4NaA6VS+8A3AViz/M9lJ7dOR1FP9CBYfFijfQsY8GfK1O3
-   lk4CwotlRYtaR+WONZpp2wd+jlQh8t2dx/ZYGlXPs7xRyo1an1mbNDzBZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556998"
+  bh=oZdKPqbrR7Qk+U72in77o4gzn1lGdOYqXWRfhhqI1mg=;
+  b=lgizI1y9RJzdU8F/vZYEjcUSqeNizgbKGojD/5jhzbPP3PcuX5KnK5ii
+   d/2nrGuUDxwfwyVKQUDkAbyv7TKi8qxI/vYQ2b/n99dj7A/zOXjLrImpZ
+   lfG9XL7xBRXCqA1RJWGow0wK5i5z6koEgmo4WpKvdszPcFKWDjAc3Hkqs
+   KCjqo1bzNVoDPWIyAdRtbYYdcTUPyu/SdPJmRN0jjhpx+0BgsPieHRGkQ
+   YYibl6hyWXN8w302fN7uD9GD+Ht1vCJGpaum2tCC8HD058UT+e+hmoACy
+   JOFWG9QIsSVGqUO1pEV9V4eI55Mqn3cF7AGnyUiqWxM9Rd/D8BWm+u3Ed
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361557020"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361556998"
+   d="scan'208";a="361557020"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671026"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671031"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835671026"
+   d="scan'208";a="835671031"
 Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
   by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:20 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
@@ -70,9 +70,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         torvalds@linux-foundation.org, broonie@kernel.org
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: [PATCH v9 15/42] x86/mm: Check shadow stack page fault errors
-Date:   Mon, 12 Jun 2023 17:10:41 -0700
-Message-Id: <20230613001108.3040476-16-rick.p.edgecombe@intel.com>
+Subject: [PATCH v9 16/42] mm: Add guard pages around a shadow stack.
+Date:   Mon, 12 Jun 2023 17:10:42 -0700
+Message-Id: <20230613001108.3040476-17-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
@@ -88,41 +88,56 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The CPU performs "shadow stack accesses" when it expects to encounter
-shadow stack mappings. These accesses can be implicit (via CALL/RET
-instructions) or explicit (instructions like WRSS).
+The x86 Control-flow Enforcement Technology (CET) feature includes a new
+type of memory called shadow stack. This shadow stack memory has some
+unusual properties, which requires some core mm changes to function
+properly.
 
-Shadow stack accesses to shadow-stack mappings can result in faults in
-normal, valid operation just like regular accesses to regular mappings.
-Shadow stacks need some of the same features like delayed allocation, swap
-and copy-on-write. The kernel needs to use faults to implement those
-features.
+The architecture of shadow stack constrains the ability of userspace to
+move the shadow stack pointer (SSP) in order to prevent corrupting or
+switching to other shadow stacks. The RSTORSSP instruction can move the
+SSP to different shadow stacks, but it requires a specially placed token
+in order to do this. However, the architecture does not prevent
+incrementing the stack pointer to wander onto an adjacent shadow stack. To
+prevent this in software, enforce guard pages at the beginning of shadow
+stack VMAs, such that there will always be a gap between adjacent shadow
+stacks.
 
-The architecture has concepts of both shadow stack reads and shadow stack
-writes. Any shadow stack access to non-shadow stack memory will generate
-a fault with the shadow stack error code bit set.
+Make the gap big enough so that no userspace SSP changing operations
+(besides RSTORSSP), can move the SSP from one stack to the next. The
+SSP can be incremented or decremented by CALL, RET  and INCSSP. CALL and
+RET can move the SSP by a maximum of 8 bytes, at which point the shadow
+stack would be accessed.
 
-This means that, unlike normal write protection, the fault handler needs
-to create a type of memory that can be written to (with instructions that
-generate shadow stack writes), even to fulfill a read access. So in the
-case of COW memory, the COW needs to take place even with a shadow stack
-read. Otherwise the page will be left (shadow stack) writable in
-userspace. So to trigger the appropriate behavior, set FAULT_FLAG_WRITE
-for shadow stack accesses, even if the access was a shadow stack read.
+The INCSSP instruction can also increment the shadow stack pointer. It
+is the shadow stack analog of an instruction like:
 
-For the purpose of making this clearer, consider the following example.
-If a process has a shadow stack, and forks, the shadow stack PTEs will
-become read-only due to COW. If the CPU in one process performs a shadow
-stack read access to the shadow stack, for example executing a RET and
-causing the CPU to read the shadow stack copy of the return address, then
-in order for the fault to be resolved the PTE will need to be set with
-shadow stack permissions. But then the memory would be changeable from
-userspace (from CALL, RET, WRSS, etc). So this scenario needs to trigger
-COW, otherwise the shared page would be changeable from both processes.
+        addq    $0x80, %rsp
 
-Shadow stack accesses can also result in errors, such as when a shadow
-stack overflows, or if a shadow stack access occurs to a non-shadow-stack
-mapping. Also, generate the errors for invalid shadow stack accesses.
+However, there is one important difference between an ADD on %rsp and
+INCSSP. In addition to modifying SSP, INCSSP also reads from the memory
+of the first and last elements that were "popped". It can be thought of
+as acting like this:
+
+READ_ONCE(ssp);       // read+discard top element on stack
+ssp += nr_to_pop * 8; // move the shadow stack
+READ_ONCE(ssp-8);     // read+discard last popped stack element
+
+The maximum distance INCSSP can move the SSP is 2040 bytes, before it
+would read the memory. Therefore, a single page gap will be enough to
+prevent any operation from shifting the SSP to an adjacent stack, since
+it would have to land in the gap at least once, causing a fault.
+
+This could be accomplished by using VM_GROWSDOWN, but this has a
+downside. The behavior would allow shadow stacks to grow, which is
+unneeded and adds a strange difference to how most regular stacks work.
+
+In the maple tree code, there is some logic for retrying the unmapped
+area search if a guard gap is violated. This retry should happen for
+shadow stack guard gap violations as well. This logic currently only
+checks for VM_GROWSDOWN for start gaps. Since shadow stacks also have
+a start gap as well, create an new define VM_STARTGAP_FLAGS to hold
+all the VM flag bits that have start gaps, and make mmap use it.
 
 Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -134,72 +149,118 @@ Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/trap_pf.h |  2 ++
- arch/x86/mm/fault.c            | 22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+v9:
+ - Add logic needed to still have guard gaps with maple tree.
+---
+ include/linux/mm.h | 54 ++++++++++++++++++++++++++++++++++++++++------
+ mm/mmap.c          |  4 ++--
+ 2 files changed, 50 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/trap_pf.h b/arch/x86/include/asm/trap_pf.h
-index 10b1de500ab1..afa524325e55 100644
---- a/arch/x86/include/asm/trap_pf.h
-+++ b/arch/x86/include/asm/trap_pf.h
-@@ -11,6 +11,7 @@
-  *   bit 3 ==				1: use of reserved bit detected
-  *   bit 4 ==				1: fault was an instruction fetch
-  *   bit 5 ==				1: protection keys block access
-+ *   bit 6 ==				1: shadow stack access fault
-  *   bit 15 ==				1: SGX MMU page-fault
-  */
- enum x86_pf_error_code {
-@@ -20,6 +21,7 @@ enum x86_pf_error_code {
- 	X86_PF_RSVD	=		1 << 3,
- 	X86_PF_INSTR	=		1 << 4,
- 	X86_PF_PK	=		1 << 5,
-+	X86_PF_SHSTK	=		1 << 6,
- 	X86_PF_SGX	=		1 << 15,
- };
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index fb17cbd531ac..535c58d3b2e4 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -342,7 +342,36 @@ extern unsigned int kobjsize(const void *objp);
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
  
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index e4399983c50c..fe68119ce2cc 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1118,8 +1118,22 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
- 				       (error_code & X86_PF_INSTR), foreign))
- 		return 1;
+ #ifdef CONFIG_X86_USER_SHADOW_STACK
+-# define VM_SHADOW_STACK	VM_HIGH_ARCH_5 /* Should not be set with VM_SHARED */
++/*
++ * This flag should not be set with VM_SHARED because of lack of support
++ * core mm. It will also get a guard page. This helps userspace protect
++ * itself from attacks. The reasoning is as follows:
++ *
++ * The shadow stack pointer(SSP) is moved by CALL, RET, and INCSSPQ. The
++ * INCSSP instruction can increment the shadow stack pointer. It is the
++ * shadow stack analog of an instruction like:
++ *
++ *   addq $0x80, %rsp
++ *
++ * However, there is one important difference between an ADD on %rsp
++ * and INCSSP. In addition to modifying SSP, INCSSP also reads from the
++ * memory of the first and last elements that were "popped". It can be
++ * thought of as acting like this:
++ *
++ * READ_ONCE(ssp);       // read+discard top element on stack
++ * ssp += nr_to_pop * 8; // move the shadow stack
++ * READ_ONCE(ssp-8);     // read+discard last popped stack element
++ *
++ * The maximum distance INCSSP can move the SSP is 2040 bytes, before
++ * it would read the memory. Therefore a single page gap will be enough
++ * to prevent any operation from shifting the SSP to an adjacent stack,
++ * since it would have to land in the gap at least once, causing a
++ * fault.
++ *
++ * Prevent using INCSSP to move the SSP between shadow stacks by
++ * having a PAGE_SIZE guard gap.
++ */
++# define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+ #else
+ # define VM_SHADOW_STACK	VM_NONE
+ #endif
+@@ -405,6 +434,8 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_STACK_DEFAULT_FLAGS VM_DATA_DEFAULT_FLAGS
+ #endif
  
-+	/*
-+	 * Shadow stack accesses (PF_SHSTK=1) are only permitted to
-+	 * shadow stack VMAs. All other accesses result in an error.
-+	 */
-+	if (error_code & X86_PF_SHSTK) {
-+		if (unlikely(!(vma->vm_flags & VM_SHADOW_STACK)))
-+			return 1;
-+		if (unlikely(!(vma->vm_flags & VM_WRITE)))
-+			return 1;
-+		return 0;
-+	}
++#define VM_STARTGAP_FLAGS (VM_GROWSDOWN | VM_SHADOW_STACK)
 +
- 	if (error_code & X86_PF_WRITE) {
- 		/* write, present and write, not present: */
-+		if (unlikely(vma->vm_flags & VM_SHADOW_STACK))
-+			return 1;
- 		if (unlikely(!(vma->vm_flags & VM_WRITE)))
- 			return 1;
- 		return 0;
-@@ -1311,6 +1325,14 @@ void do_user_addr_fault(struct pt_regs *regs,
+ #ifdef CONFIG_STACK_GROWSUP
+ #define VM_STACK	VM_GROWSUP
+ #else
+@@ -3235,15 +3266,26 @@ struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr)
+ 	return mtree_load(&mm->mm_mt, addr);
+ }
  
- 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
++static inline unsigned long stack_guard_start_gap(struct vm_area_struct *vma)
++{
++	if (vma->vm_flags & VM_GROWSDOWN)
++		return stack_guard_gap;
++
++	/* See reasoning around the VM_SHADOW_STACK definition */
++	if (vma->vm_flags & VM_SHADOW_STACK)
++		return PAGE_SIZE;
++
++	return 0;
++}
++
+ static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
+ {
++	unsigned long gap = stack_guard_start_gap(vma);
+ 	unsigned long vm_start = vma->vm_start;
  
-+	/*
-+	 * Read-only permissions can not be expressed in shadow stack PTEs.
-+	 * Treat all shadow stack accesses as WRITE faults. This ensures
-+	 * that the MM will prepare everything (e.g., break COW) such that
-+	 * maybe_mkwrite() can create a proper shadow stack PTE.
-+	 */
-+	if (error_code & X86_PF_SHSTK)
-+		flags |= FAULT_FLAG_WRITE;
- 	if (error_code & X86_PF_WRITE)
- 		flags |= FAULT_FLAG_WRITE;
- 	if (error_code & X86_PF_INSTR)
+-	if (vma->vm_flags & VM_GROWSDOWN) {
+-		vm_start -= stack_guard_gap;
+-		if (vm_start > vma->vm_start)
+-			vm_start = 0;
+-	}
++	vm_start -= gap;
++	if (vm_start > vma->vm_start)
++		vm_start = 0;
+ 	return vm_start;
+ }
+ 
+diff --git a/mm/mmap.c b/mm/mmap.c
+index afdf5f78432b..d4793600a8d4 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1570,7 +1570,7 @@ static unsigned long unmapped_area(struct vm_unmapped_area_info *info)
+ 	gap = mas.index;
+ 	gap += (info->align_offset - gap) & info->align_mask;
+ 	tmp = mas_next(&mas, ULONG_MAX);
+-	if (tmp && (tmp->vm_flags & VM_GROWSDOWN)) { /* Avoid prev check if possible */
++	if (tmp && (tmp->vm_flags & VM_STARTGAP_FLAGS)) { /* Avoid prev check if possible */
+ 		if (vm_start_gap(tmp) < gap + length - 1) {
+ 			low_limit = tmp->vm_end;
+ 			mas_reset(&mas);
+@@ -1622,7 +1622,7 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
+ 	gap -= (gap - info->align_offset) & info->align_mask;
+ 	gap_end = mas.last;
+ 	tmp = mas_next(&mas, ULONG_MAX);
+-	if (tmp && (tmp->vm_flags & VM_GROWSDOWN)) { /* Avoid prev check if possible */
++	if (tmp && (tmp->vm_flags & VM_STARTGAP_FLAGS)) { /* Avoid prev check if possible */
+ 		if (vm_start_gap(tmp) <= gap_end) {
+ 			high_limit = vm_start_gap(tmp);
+ 			mas_reset(&mas);
 -- 
 2.34.1
 
