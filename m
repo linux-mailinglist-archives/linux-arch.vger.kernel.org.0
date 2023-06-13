@@ -2,39 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E59972E250
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 13:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B0272E2E4
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 14:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235713AbjFML4H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Jun 2023 07:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S241780AbjFMM15 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Jun 2023 08:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbjFML4G (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 07:56:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86070C5;
-        Tue, 13 Jun 2023 04:56:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19A6D63561;
-        Tue, 13 Jun 2023 11:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACCDC433D2;
-        Tue, 13 Jun 2023 11:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686657360;
-        bh=Y55L/ifTD+Az3stG2Sj9E0dJ66FX1dAYyv7iV54FE38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cJlSzc9cAgm+2yPlvuu8gZ/T9bYn86hE9l2Db7NKeGcKpGhGvt7nMuKa9vtZJwAT7
-         0Pmee1IYLv6zI2hlTDbTl6kEbzuR1MPKb0GXqZkfxDGQN3LMMHlPbOmipHaUitPNM4
-         jBKIhm7wEHcU4eP3gK1FD9EmtjFk8kbAc+SOmOedWRYnvFr4EU/ZjtWIc91Cnva7MV
-         hqMk3ik2IP8ek/EQJOmpQZqBnsvWOCw6XrnSMmjExBuNtmzzbjCyLNhYBa1kXiNB4P
-         nkM/bQf3AFb+1byGT0Q1A0J92v6m3KwLTngcBazzoy7js0bJb/+ns83TVxjGjk/Ojs
-         japRf5kSxwZmg==
-Date:   Tue, 13 Jun 2023 12:55:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        with ESMTP id S242426AbjFMM1z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 08:27:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F070F1998
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 05:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686659219;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x4X42epITHEmHx9Rdq7WZvtJt4reSEJsGpXTx4uakPs=;
+        b=XnHIVU90C9TJ+dH5iLKcGln4N+lzVrbOu5uj9N85J15wwf4z10nruD+dGMcniFwEbHmk7J
+        lHqVWWDwwSjfFAlkhuZEh3i956u4PWyXakr9CaL1RFFbLTbOyagldGAbMpSdR0WEY9Ty6Z
+        P0oxgRVuraXBH5frWwz/MY1wNqSs+/s=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-46-1YzaqSo5PjmyHFFR2jX40w-1; Tue, 13 Jun 2023 08:26:58 -0400
+X-MC-Unique: 1YzaqSo5PjmyHFFR2jX40w-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30e3fb5d1a4so2131708f8f.3
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 05:26:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686659217; x=1689251217;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x4X42epITHEmHx9Rdq7WZvtJt4reSEJsGpXTx4uakPs=;
+        b=PJuoE0Jw1A/HSje3DPb2Os1iD6pxBofr5EVzFFqRLGw15ewPFhpBz5BFFGZ9LWTBny
+         M5oGuZseJza1YEk+GvBSenliH3L3oSU2IJpMRUMr+OfXab0R7wMW79bzoEEAPpKFl9ke
+         HxU/s7q2qk+BI5S78tFacLgnKwUjWfirCMB0jxlLmLnYTisA72qQevUCDnKO3F4Q+ob7
+         f75YNRf7ZpH+NfqPnkcOUf3trsH0mJ7ggUl/6uVQDPE2nKOdn8yScHSmk6mo0bAcPfCn
+         w5FtiioxC1IaYWZUepLvjgR3Wj5V9GqhVO2b18fCyCSWpLtfrw/Se0WvzE6D9CM/TAfl
+         EY5Q==
+X-Gm-Message-State: AC+VfDzKZMcGTO3R6xgixJNGpntzXV2SS3xiyCCcduENNx5iDAIH7nvI
+        p5BO41yZz80b+rmQ3xjyZeFnSrTrWOVb3OX4/zulhdlc6y0jDEiKNXSSEuBcZCElescglSaUF5w
+        PabFqvkuL/WvuNaKa8XRgxg==
+X-Received: by 2002:a5d:6acd:0:b0:30f:b7b4:3e55 with SMTP id u13-20020a5d6acd000000b0030fb7b43e55mr6371731wrw.19.1686659216769;
+        Tue, 13 Jun 2023 05:26:56 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4yteTIZOrnVCopzRkUBsfyPnfoDVYPpW9xv2sO4EBsmO+rg3naLzU0Pz+CwjSuscU8Zw+bFQ==
+X-Received: by 2002:a5d:6acd:0:b0:30f:b7b4:3e55 with SMTP id u13-20020a5d6acd000000b0030fb7b43e55mr6371694wrw.19.1686659216382;
+        Tue, 13 Jun 2023 05:26:56 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c710:ff00:1a06:80f:733a:e8c6? (p200300cbc710ff001a06080f733ae8c6.dip0.t-ipconnect.de. [2003:cb:c710:ff00:1a06:80f:733a:e8c6])
+        by smtp.gmail.com with ESMTPSA id i1-20020adff301000000b002f28de9f73bsm15275419wro.55.2023.06.13.05.26.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 05:26:55 -0700 (PDT)
+Message-ID: <497e571e-e4de-7634-7da6-683599a4bbba@redhat.com>
+Date:   Tue, 13 Jun 2023 14:26:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v9 01/42] mm: Rename arch pte_mkwrite()'s to
+ pte_mkwrite_novma()
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -61,23 +92,30 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
+        debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, broonie@kernel.org
+Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        Michal Simek <monstr@monstr.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kfP6EvgSuUvXOsjA"
-Content-Disposition: inline
-In-Reply-To: <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+ <20230613001108.3040476-2-rick.p.edgecombe@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230613001108.3040476-2-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,44 +123,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 13.06.23 02:10, Rick Edgecombe wrote:
+> The x86 Shadow stack feature includes a new type of memory called shadow
+> stack. This shadow stack memory has some unusual properties, which requires
+> some core mm changes to function properly.
+> 
+> One of these unusual properties is that shadow stack memory is writable,
+> but only in limited ways. These limits are applied via a specific PTE
+> bit combination. Nevertheless, the memory is writable, and core mm code
+> will need to apply the writable permissions in the typical paths that
+> call pte_mkwrite(). Future patches will make pte_mkwrite() take a VMA, so
+> that the x86 implementation of it can know whether to create regular
+> writable memory or shadow stack memory.
+> 
+> But there are a couple of challenges to this. Modifying the signatures of
+> each arch pte_mkwrite() implementation would be error prone because some
+> are generated with macros and would need to be re-implemented. Also, some
+> pte_mkwrite() callers operate on kernel memory without a VMA.
+> 
+> So this can be done in a three step process. First pte_mkwrite() can be
+> renamed to pte_mkwrite_novma() in each arch, with a generic pte_mkwrite()
+> added that just calls pte_mkwrite_novma(). Next callers without a VMA can
+> be moved to pte_mkwrite_novma(). And lastly, pte_mkwrite() and all callers
+> can be changed to take/pass a VMA.
+> 
+> Start the process by renaming pte_mkwrite() to pte_mkwrite_novma() and
+> adding the pte_mkwrite() wrapper in linux/pgtable.h. Apply the same
+> pattern for pmd_mkwrite(). Since not all archs have a pmd_mkwrite_novma(),
+> create a new arch config HAS_HUGE_PAGE that can be used to tell if
+> pmd_mkwrite() should be defined. Otherwise in the !HAS_HUGE_PAGE cases the
+> compiler would not be able to find pmd_mkwrite_novma().
+> 
+> No functional change.
+> 
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-alpha@vger.kernel.org
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: linux-ia64@vger.kernel.org
+> Cc: loongarch@lists.linux.dev
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: Michal Simek <monstr@monstr.eu>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: openrisc@lists.librecores.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Link: https://lore.kernel.org/lkml/CAHk-=wiZjSu7c9sFYZb3q04108stgHff2wfbokGCCgW7riz+8Q@mail.gmail.com/
+> ---
+> Hi Non-x86 Arch’s,
+> 
+> x86 has a feature that allows for the creation of a special type of
+> writable memory (shadow stack) that is only writable in limited specific
+> ways. Previously, changes were proposed to core MM code to teach it to
+> decide when to create normally writable memory or the special shadow stack
+> writable memory, but David Hildenbrand suggested[0] to change
+> pXX_mkwrite() to take a VMA, so awareness of shadow stack memory can be
+> moved into x86 code. Later Linus suggested a less error-prone way[1] to go
+> about this after the first attempt had a bug.
+> 
+> Since pXX_mkwrite() is defined in every arch, it requires some tree-wide
+> changes. So that is why you are seeing some patches out of a big x86
+> series pop up in your arch mailing list. There is no functional change.
+> After this refactor, the shadow stack series goes on to use the arch
+> helpers to push arch memory details inside arch/x86 and other arch's
+> with upcoming shadow stack features.
+> 
+> Testing was just 0-day build testing.
+> 
+> Hopefully that is enough context. Thanks!
+> 
+> [0] https://lore.kernel.org/lkml/0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com/
+> [1] https://lore.kernel.org/lkml/CAHk-=wiZjSu7c9sFYZb3q04108stgHff2wfbokGCCgW7riz+8Q@mail.gmail.com/
+> ---
 
---kfP6EvgSuUvXOsjA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: David Hildenbrand <david@redhat.com>
 
-On Mon, Jun 12, 2023 at 05:10:49PM -0700, Rick Edgecombe wrote:
+-- 
+Cheers,
 
-> +Enabling arch_prctl()'s
-> +=======================
-> +
-> +Elf features should be enabled by the loader using the below arch_prctl's. They
-> +are only supported in 64 bit user applications. These operate on the features
-> +on a per-thread basis. The enablement status is inherited on clone, so if the
-> +feature is enabled on the first thread, it will propagate to all the thread's
-> +in an app.
+David / dhildenb
 
-I appreciate it's very late in the development of this series but given
-that there are very similar features on both arm64 and riscv would it
-make sense to make these just regular prctl()s, arch_prctl() isn't used
-on other architectures and it'd reduce the amount of arch specific work
-that userspace needs to do if the interface is shared.
-
-It should also be possible to support both interfaces for x86 I guess,
-though that feels like askng for trouble.
-
---kfP6EvgSuUvXOsjA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIWUMACgkQJNaLcl1U
-h9Decwf/Sfj1gjBXiige5kMFXXsGESCn0ysC4UryS29Y6kt4AZaDRY4e+Sav+q1E
-HJvMz1T1PvtW/of626ohvIdHHQfnw/cgBY8fiJty2koBqH3rLv49GkdgFBqGQadw
-i6mt0r8Iic3mgMA0U0vKYbaVRH3XFW57t/wHv/s0ZXymAp/gfHVEu19h/mJ5Q6Id
-VcxOUUbwLG8iAQqf4LeFqinIuDMF/RLh8ww2N7qfmZAjtZjVR1sK9EZEL3wi7rPf
-TXkYE2ytzOBsdr20PSk0IPDn6THMit+hJN13KtV+fC1CR4pUrPpV34smNhxLdKz4
-w23fBr1HzZUByK5stGOoiP+mPWjeqQ==
-=Bwcu
------END PGP SIGNATURE-----
-
---kfP6EvgSuUvXOsjA--
