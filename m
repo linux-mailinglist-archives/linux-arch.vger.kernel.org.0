@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9333C72D5D6
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831C172D5DC
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbjFMAM3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Jun 2023 20:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
+        id S238793AbjFMAM2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 20:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238629AbjFMAMY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:24 -0400
+        with ESMTP id S238592AbjFMAMX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:23 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0B01981;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8371173F;
         Mon, 12 Jun 2023 17:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1686615138; x=1718151138;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sARsUThnVYVYYqaKHA46gpgv7OakP1T/BusMzOfelkg=;
-  b=YwIeoSXkzRjb3keq9ckb0SycQRpJv0oOyV6yZB2MS/xN57lRQ2dT7MC0
-   0rAty46XsY3JhLO22NCzJQrDT/gwW4qJgh6o6XAeGNjUA1JpJobNMwnnk
-   hGARQxAjxORBPNQlyUdD/uQM9Q9yc34v/SD1tadyB2kTp5nEKN3NokHXC
-   wGCkkgYsrb5QxjBKyPAECjnfOZeuIriytnqUxemsd2mdH7ZE0wz3YFmSd
-   zh8bONtzu7dOVuZe2e2EzqIKCgxZPNJbfs0JJ3+xgJRsL+qegCZ42oZB2
-   ubFwRFS0w0hjc89e18lJ7ytUU61X6oIyOgBraGc/OddEiFhxt+58QlXXv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556836"
+  bh=YP96Yn7FdNN68fPWKmeUZZw0SU1yEnE0kYU9/y2Lvpc=;
+  b=QefwEUnAhkJ5xF6fSIomS1+EFsRVdKxpgTDF6YIqTUjTxp1QLWoEDZgU
+   Ut4C46TN409YUgx2wYW23j+eUexqKg+lgZzfvmE1z5fR36mxceMNqFHHq
+   a2IPzXlEkksvNKvkuKDC69SHpzFYFoubFjXwZ8oFHQ6hxiR+Eto7Vlws5
+   cyhcqXPmQa+ztulNzwkrRbGsymXV79MYeiJ67J1jNEe0DyXMyOM14UddW
+   2NzNIrPVGdzrsC+Uaed8ONPncvdhQMqVyByAWkI041ZXXYVwxDBbVq20V
+   7JMZsORUM1yMQGT07MmegA2/NprzxMZBvlwfKQrtsPbdEjWycVyJPuelV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556844"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361556836"
+   d="scan'208";a="361556844"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835670996"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671000"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835670996"
+   d="scan'208";a="835671000"
 Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:13 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:14 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -70,9 +70,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         torvalds@linux-foundation.org, broonie@kernel.org
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: [PATCH v9 08/42] x86/cpufeatures: Add CPU feature flags for shadow stacks
-Date:   Mon, 12 Jun 2023 17:10:34 -0700
-Message-Id: <20230613001108.3040476-9-rick.p.edgecombe@intel.com>
+Subject: [PATCH v9 09/42] x86/mm: Move pmd_write(), pud_write() up in the file
+Date:   Mon, 12 Jun 2023 17:10:35 -0700
+Message-Id: <20230613001108.3040476-10-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
@@ -88,97 +88,73 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The Control-Flow Enforcement Technology contains two related features,
-one of which is Shadow Stacks. Future patches will utilize this feature
-for shadow stack support in KVM, so add a CPU feature flags for Shadow
-Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
-
-To protect shadow stack state from malicious modification, the registers
-are only accessible in supervisor mode. This implementation
-context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
-on XSAVES.
-
-The shadow stack feature, enumerated by the CPUID bit described above,
-encompasses both supervisor and userspace support for shadow stack. In
-near future patches, only userspace shadow stack will be enabled. In
-expectation of future supervisor shadow stack support, create a software
-CPU capability to enumerate kernel utilization of userspace shadow stack
-support. This user shadow stack bit should depend on the HW "shstk"
-capability and that logic will be implemented in future patches.
+To prepare the introduction of _PAGE_SAVED_DIRTY, move pmd_write() and
+pud_write() up in the file, so that they can be used by other
+helpers below.  No functional changes.
 
 Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/cpufeatures.h       | 2 ++
- arch/x86/include/asm/disabled-features.h | 8 +++++++-
- arch/x86/kernel/cpu/cpuid-deps.c         | 1 +
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/pgtable.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index cb8ca46213be..d7215c8b7923 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -308,6 +308,7 @@
- #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
- #define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
- #define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
-+#define X86_FEATURE_USER_SHSTK		(11*32+23) /* Shadow stack support for user mode applications */
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 112e6060eafa..768ee46782c9 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -160,6 +160,18 @@ static inline int pte_write(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_RW;
+ }
  
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-@@ -380,6 +381,7 @@
- #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
- #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
- #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
-+#define X86_FEATURE_SHSTK		(16*32+ 7) /* "" Shadow stack */
- #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
- #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
- #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index fafe9be7a6f4..b9c7eae2e70f 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -105,6 +105,12 @@
- # define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
- #endif
- 
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+#define DISABLE_USER_SHSTK	0
-+#else
-+#define DISABLE_USER_SHSTK	(1 << (X86_FEATURE_USER_SHSTK & 31))
-+#endif
++#define pmd_write pmd_write
++static inline int pmd_write(pmd_t pmd)
++{
++	return pmd_flags(pmd) & _PAGE_RW;
++}
 +
- /*
-  * Make sure to add features to the correct mask
-  */
-@@ -120,7 +126,7 @@
- #define DISABLED_MASK9	(DISABLE_SGX)
- #define DISABLED_MASK10	0
- #define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET| \
--			 DISABLE_CALL_DEPTH_TRACKING)
-+			 DISABLE_CALL_DEPTH_TRACKING|DISABLE_USER_SHSTK)
- #define DISABLED_MASK12	(DISABLE_LAM)
- #define DISABLED_MASK13	0
- #define DISABLED_MASK14	0
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index f6748c8bd647..e462c1d3800a 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -81,6 +81,7 @@ static const struct cpuid_dep cpuid_deps[] = {
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
- 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
-+	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
- 	{}
- };
++#define pud_write pud_write
++static inline int pud_write(pud_t pud)
++{
++	return pud_flags(pud) & _PAGE_RW;
++}
++
+ static inline int pte_huge(pte_t pte)
+ {
+ 	return pte_flags(pte) & _PAGE_PSE;
+@@ -1120,12 +1132,6 @@ extern int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ 				  unsigned long address, pmd_t *pmdp);
  
+ 
+-#define pmd_write pmd_write
+-static inline int pmd_write(pmd_t pmd)
+-{
+-	return pmd_flags(pmd) & _PAGE_RW;
+-}
+-
+ #define __HAVE_ARCH_PMDP_HUGE_GET_AND_CLEAR
+ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm, unsigned long addr,
+ 				       pmd_t *pmdp)
+@@ -1155,12 +1161,6 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
+ }
+ 
+-#define pud_write pud_write
+-static inline int pud_write(pud_t pud)
+-{
+-	return pud_flags(pud) & _PAGE_RW;
+-}
+-
+ #ifndef pmdp_establish
+ #define pmdp_establish pmdp_establish
+ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
 -- 
 2.34.1
 
