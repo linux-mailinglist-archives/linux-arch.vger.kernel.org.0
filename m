@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B69772D5ED
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E785072D5CE
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238599AbjFMAMY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S238636AbjFMAMY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Mon, 12 Jun 2023 20:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFMAMN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:13 -0400
+        with ESMTP id S229869AbjFMAMO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:14 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90FE197;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F095B19B;
         Mon, 12 Jun 2023 17:12:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1686615132; x=1718151132;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=p3wIDF2hCv3eUQbed5EBHWb3M5fOtv++6fox2OA9QBk=;
-  b=WEe03L+dip8DerGbMMAGDK4Ow/Xw3dy+cm3Ti1gMWsu0r8R69pWiUPgo
-   yHvJlcXbTuopsQg2EcCGEDgz70Kdl9QU+6uBcXFqur2ZIud2W2/HSF2L8
-   GJF34qaIjUY1hH2/iOaPR2Ra5fqOnTyKPQD7My8Al5sqDtO6B/U5kiZ2p
-   br+WLfaTzzdY3gmGGdF3C4RicDik8cpHfEjxNDgBRUMWq7J2sye/PfL4+
-   wBzTIn1f9weZPypHBlSu1KwlfZ8/6I2kqDTZ04buk+VO2LbNe0/fopnEX
-   Ev26Em8f0ik2wR0lsoFrX0bOhClFj9zptlCu3RsbTBmwGt9GpsHX/3lyi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556717"
+  bh=tDE8EspiBAdPvpd4BkDoYawjxYWlY+HjRp9EjAaWS/U=;
+  b=fCT1br1C/pf5ZkfVJejD1weJCG6FHypSMBy2efglxfDp/2Ck+CUXiu0w
+   BWztVo6lEsqrwDqrk6NdNd+hEJ7eVUyqGQzMROCLsYGWAAxVEEscz8mFP
+   W4xqPTRhtdBZbCsdi46QAwc6rqDCaMDVtVAtQKH9qLR/uL9of1knlk6jw
+   AFInAMvK7XEM8JvWuo8TwEdq5JMArbChQGmUB35QPR75h+FUNeANvB+12
+   jo5riqGU+yD3LAS0LtDs4Q9tBqYd2FmYczfnBueV4otLx9Wa5q4aZJWhm
+   To1xgjw/mRRudqf14CYQU1Zzgg9rwl1w8MWktgr2J5lgxwBJAOtVjubYR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556728"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361556717"
+   d="scan'208";a="361556728"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835670975"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835670979"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835670975"
+   d="scan'208";a="835670979"
 Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
   by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:08 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
@@ -68,10 +68,12 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
         torvalds@linux-foundation.org, broonie@kernel.org
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v9 03/42] mm: Make pte_mkwrite() take a VMA
-Date:   Mon, 12 Jun 2023 17:10:29 -0700
-Message-Id: <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: [PATCH v9 04/42] mm: Re-introduce vm_flags to do_mmap()
+Date:   Mon, 12 Jun 2023 17:10:30 -0700
+Message-Id: <20230613001108.3040476-5-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
@@ -87,280 +89,155 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The x86 Shadow stack feature includes a new type of memory called shadow
-stack. This shadow stack memory has some unusual properties, which requires
-some core mm changes to function properly.
+From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-One of these unusual properties is that shadow stack memory is writable,
-but only in limited ways. These limits are applied via a specific PTE
-bit combination. Nevertheless, the memory is writable, and core mm code
-will need to apply the writable permissions in the typical paths that
-call pte_mkwrite(). Future patches will make pte_mkwrite() take a VMA, so
-that the x86 implementation of it can know whether to create regular
-writable memory or shadow stack memory.
+There was no more caller passing vm_flags to do_mmap(), and vm_flags was
+removed from the function's input by:
 
-But there are a couple of challenges to this. Modifying the signatures of
-each arch pte_mkwrite() implementation would be error prone because some
-are generated with macros and would need to be re-implemented. Also, some
-pte_mkwrite() callers operate on kernel memory without a VMA.
+    commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
 
-So this can be done in a three step process. First pte_mkwrite() can be
-renamed to pte_mkwrite_novma() in each arch, with a generic pte_mkwrite()
-added that just calls pte_mkwrite_novma(). Next callers without a VMA can
-be moved to pte_mkwrite_novma(). And lastly, pte_mkwrite() and all callers
-can be changed to take/pass a VMA.
+There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
+do_mmap().  Thus, re-introduce vm_flags to do_mmap().
 
-In a previous patches, pte_mkwrite() was renamed pte_mkwrite_novma() and
-callers that don't have a VMA were changed to use pte_mkwrite_novma(). So
-now change pte_mkwrite() to take a VMA and change the remaining callers to
-pass a VMA. Apply the same changes for pmd_mkwrite().
-
-No functional change.
-
-Suggested-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Peter Collingbourne <pcc@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+Tested-by: John Allen <john.allen@amd.com>
+Tested-by: Kees Cook <keescook@chromium.org>
 ---
- Documentation/mm/arch_pgtable_helpers.rst |  6 ++++--
- include/linux/mm.h                        |  2 +-
- include/linux/pgtable.h                   |  4 ++--
- mm/debug_vm_pgtable.c                     | 12 ++++++------
- mm/huge_memory.c                          | 10 +++++-----
- mm/memory.c                               |  4 ++--
- mm/migrate.c                              |  2 +-
- mm/migrate_device.c                       |  2 +-
- mm/mprotect.c                             |  2 +-
- mm/userfaultfd.c                          |  2 +-
- 10 files changed, 24 insertions(+), 22 deletions(-)
+ fs/aio.c           |  2 +-
+ include/linux/mm.h |  3 ++-
+ ipc/shm.c          |  2 +-
+ mm/mmap.c          | 10 +++++-----
+ mm/nommu.c         |  4 ++--
+ mm/util.c          |  2 +-
+ 6 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/mm/arch_pgtable_helpers.rst b/Documentation/mm/arch_pgtable_helpers.rst
-index 69ce1f2aa4d1..c82e3ee20e51 100644
---- a/Documentation/mm/arch_pgtable_helpers.rst
-+++ b/Documentation/mm/arch_pgtable_helpers.rst
-@@ -46,7 +46,8 @@ PTE Page Table Helpers
- +---------------------------+--------------------------------------------------+
- | pte_mkclean               | Creates a clean PTE                              |
- +---------------------------+--------------------------------------------------+
--| pte_mkwrite               | Creates a writable PTE                           |
-+| pte_mkwrite               | Creates a writable PTE of the type specified by  |
-+|                           | the VMA.                                         |
- +---------------------------+--------------------------------------------------+
- | pte_mkwrite_novma         | Creates a writable PTE, of the conventional type |
- |                           | of writable.                                     |
-@@ -121,7 +122,8 @@ PMD Page Table Helpers
- +---------------------------+--------------------------------------------------+
- | pmd_mkclean               | Creates a clean PMD                              |
- +---------------------------+--------------------------------------------------+
--| pmd_mkwrite               | Creates a writable PMD                           |
-+| pmd_mkwrite               | Creates a writable PMD of the type specified by  |
-+|                           | the VMA.                                         |
- +---------------------------+--------------------------------------------------+
- | pmd_mkwrite_novma         | Creates a writable PMD, of the conventional type |
- |                           | of writable.                                     |
+diff --git a/fs/aio.c b/fs/aio.c
+index b0b17bd098bb..4a7576989719 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -558,7 +558,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
+ 
+ 	ctx->mmap_base = do_mmap(ctx->aio_ring_file, 0, ctx->mmap_size,
+ 				 PROT_READ | PROT_WRITE,
+-				 MAP_SHARED, 0, &unused, NULL);
++				 MAP_SHARED, 0, 0, &unused, NULL);
+ 	mmap_write_unlock(mm);
+ 	if (IS_ERR((void *)ctx->mmap_base)) {
+ 		ctx->mmap_size = 0;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 27ce77080c79..43701bf223d3 100644
+index 43701bf223d3..9ec20cbb20c1 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1284,7 +1284,7 @@ void free_compound_page(struct page *page);
- static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
- {
- 	if (likely(vma->vm_flags & VM_WRITE))
--		pte = pte_mkwrite(pte);
-+		pte = pte_mkwrite(pte, vma);
- 	return pte;
- }
- 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index ae271a307584..0f3cf726812a 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -508,14 +508,14 @@ extern pud_t pudp_huge_clear_flush(struct vm_area_struct *vma,
- #endif
- 
- #ifndef pte_mkwrite
--static inline pte_t pte_mkwrite(pte_t pte)
-+static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *vma)
- {
- 	return pte_mkwrite_novma(pte);
- }
- #endif
- 
- #if defined(CONFIG_HAS_HUGE_PAGE) && !defined(pmd_mkwrite)
--static inline pmd_t pmd_mkwrite(pmd_t pmd)
-+static inline pmd_t pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
- {
- 	return pmd_mkwrite_novma(pmd);
- }
-diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index c54177aabebd..107e293904d3 100644
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -109,10 +109,10 @@ static void __init pte_basic_tests(struct pgtable_debug_args *args, int idx)
- 	WARN_ON(!pte_same(pte, pte));
- 	WARN_ON(!pte_young(pte_mkyoung(pte_mkold(pte))));
- 	WARN_ON(!pte_dirty(pte_mkdirty(pte_mkclean(pte))));
--	WARN_ON(!pte_write(pte_mkwrite(pte_wrprotect(pte))));
-+	WARN_ON(!pte_write(pte_mkwrite(pte_wrprotect(pte), args->vma)));
- 	WARN_ON(pte_young(pte_mkold(pte_mkyoung(pte))));
- 	WARN_ON(pte_dirty(pte_mkclean(pte_mkdirty(pte))));
--	WARN_ON(pte_write(pte_wrprotect(pte_mkwrite(pte))));
-+	WARN_ON(pte_write(pte_wrprotect(pte_mkwrite(pte, args->vma))));
- 	WARN_ON(pte_dirty(pte_wrprotect(pte_mkclean(pte))));
- 	WARN_ON(!pte_dirty(pte_wrprotect(pte_mkdirty(pte))));
- }
-@@ -153,7 +153,7 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
- 	pte = pte_mkclean(pte);
- 	set_pte_at(args->mm, args->vaddr, args->ptep, pte);
- 	flush_dcache_page(page);
--	pte = pte_mkwrite(pte);
-+	pte = pte_mkwrite(pte, args->vma);
- 	pte = pte_mkdirty(pte);
- 	ptep_set_access_flags(args->vma, args->vaddr, args->ptep, pte, 1);
- 	pte = ptep_get(args->ptep);
-@@ -199,10 +199,10 @@ static void __init pmd_basic_tests(struct pgtable_debug_args *args, int idx)
- 	WARN_ON(!pmd_same(pmd, pmd));
- 	WARN_ON(!pmd_young(pmd_mkyoung(pmd_mkold(pmd))));
- 	WARN_ON(!pmd_dirty(pmd_mkdirty(pmd_mkclean(pmd))));
--	WARN_ON(!pmd_write(pmd_mkwrite(pmd_wrprotect(pmd))));
-+	WARN_ON(!pmd_write(pmd_mkwrite(pmd_wrprotect(pmd), args->vma)));
- 	WARN_ON(pmd_young(pmd_mkold(pmd_mkyoung(pmd))));
- 	WARN_ON(pmd_dirty(pmd_mkclean(pmd_mkdirty(pmd))));
--	WARN_ON(pmd_write(pmd_wrprotect(pmd_mkwrite(pmd))));
-+	WARN_ON(pmd_write(pmd_wrprotect(pmd_mkwrite(pmd, args->vma))));
- 	WARN_ON(pmd_dirty(pmd_wrprotect(pmd_mkclean(pmd))));
- 	WARN_ON(!pmd_dirty(pmd_wrprotect(pmd_mkdirty(pmd))));
- 	/*
-@@ -253,7 +253,7 @@ static void __init pmd_advanced_tests(struct pgtable_debug_args *args)
- 	pmd = pmd_mkclean(pmd);
- 	set_pmd_at(args->mm, vaddr, args->pmdp, pmd);
- 	flush_dcache_page(page);
--	pmd = pmd_mkwrite(pmd);
-+	pmd = pmd_mkwrite(pmd, args->vma);
- 	pmd = pmd_mkdirty(pmd);
- 	pmdp_set_access_flags(args->vma, vaddr, args->pmdp, pmd, 1);
- 	pmd = READ_ONCE(*args->pmdp);
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 624671aaa60d..37dd56b7b3d1 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -551,7 +551,7 @@ __setup("transparent_hugepage=", setup_transparent_hugepage);
- pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
- {
- 	if (likely(vma->vm_flags & VM_WRITE))
--		pmd = pmd_mkwrite(pmd);
-+		pmd = pmd_mkwrite(pmd, vma);
- 	return pmd;
- }
- 
-@@ -1572,7 +1572,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 	pmd = pmd_modify(oldpmd, vma->vm_page_prot);
- 	pmd = pmd_mkyoung(pmd);
- 	if (writable)
--		pmd = pmd_mkwrite(pmd);
-+		pmd = pmd_mkwrite(pmd, vma);
- 	set_pmd_at(vma->vm_mm, haddr, vmf->pmd, pmd);
- 	update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
- 	spin_unlock(vmf->ptl);
-@@ -1924,7 +1924,7 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	/* See change_pte_range(). */
- 	if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) && !pmd_write(entry) &&
- 	    can_change_pmd_writable(vma, addr, entry))
--		entry = pmd_mkwrite(entry);
-+		entry = pmd_mkwrite(entry, vma);
- 
- 	ret = HPAGE_PMD_NR;
- 	set_pmd_at(mm, addr, pmd, entry);
-@@ -2234,7 +2234,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		} else {
- 			entry = mk_pte(page + i, READ_ONCE(vma->vm_page_prot));
- 			if (write)
--				entry = pte_mkwrite(entry);
-+				entry = pte_mkwrite(entry, vma);
- 			if (anon_exclusive)
- 				SetPageAnonExclusive(page + i);
- 			if (!young)
-@@ -3271,7 +3271,7 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 	if (pmd_swp_soft_dirty(*pvmw->pmd))
- 		pmde = pmd_mksoft_dirty(pmde);
- 	if (is_writable_migration_entry(entry))
--		pmde = pmd_mkwrite(pmde);
-+		pmde = pmd_mkwrite(pmde, vma);
- 	if (pmd_swp_uffd_wp(*pvmw->pmd))
- 		pmde = pmd_mkuffd_wp(pmde);
- 	if (!is_migration_entry_young(entry))
-diff --git a/mm/memory.c b/mm/memory.c
-index f69fbc251198..c1b6fe944c20 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4100,7 +4100,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	entry = mk_pte(&folio->page, vma->vm_page_prot);
- 	entry = pte_sw_mkyoung(entry);
- 	if (vma->vm_flags & VM_WRITE)
--		entry = pte_mkwrite(pte_mkdirty(entry));
-+		entry = pte_mkwrite(pte_mkdirty(entry), vma);
- 
- 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
- 			&vmf->ptl);
-@@ -4796,7 +4796,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	pte = pte_modify(old_pte, vma->vm_page_prot);
- 	pte = pte_mkyoung(pte);
- 	if (writable)
--		pte = pte_mkwrite(pte);
-+		pte = pte_mkwrite(pte, vma);
- 	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
- 	update_mmu_cache(vma, vmf->address, vmf->pte);
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 01cac26a3127..8b46b722f1a4 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -219,7 +219,7 @@ static bool remove_migration_pte(struct folio *folio,
- 		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
- 			pte = pte_mkdirty(pte);
- 		if (is_writable_migration_entry(entry))
--			pte = pte_mkwrite(pte);
-+			pte = pte_mkwrite(pte, vma);
- 		else if (pte_swp_uffd_wp(*pvmw.pte))
- 			pte = pte_mkuffd_wp(pte);
- 
-diff --git a/mm/migrate_device.c b/mm/migrate_device.c
-index d30c9de60b0d..df3f5e9d5f76 100644
---- a/mm/migrate_device.c
-+++ b/mm/migrate_device.c
-@@ -646,7 +646,7 @@ static void migrate_vma_insert_page(struct migrate_vma *migrate,
- 		}
- 		entry = mk_pte(page, vma->vm_page_prot);
- 		if (vma->vm_flags & VM_WRITE)
--			entry = pte_mkwrite(pte_mkdirty(entry));
-+			entry = pte_mkwrite(pte_mkdirty(entry), vma);
+@@ -3133,7 +3133,8 @@ extern unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	struct list_head *uf);
+ extern unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	unsigned long len, unsigned long prot, unsigned long flags,
+-	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
++	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
++	struct list_head *uf);
+ extern int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			 unsigned long start, size_t len, struct list_head *uf,
+ 			 bool downgrade);
+diff --git a/ipc/shm.c b/ipc/shm.c
+index 60e45e7045d4..576a543b7cff 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -1662,7 +1662,7 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
+ 			goto invalid;
  	}
  
- 	ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 92d3d3ca390a..afdb6723782e 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -198,7 +198,7 @@ static long change_pte_range(struct mmu_gather *tlb,
- 			if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) &&
- 			    !pte_write(ptent) &&
- 			    can_change_pte_writable(vma, addr, ptent))
--				ptent = pte_mkwrite(ptent);
-+				ptent = pte_mkwrite(ptent, vma);
+-	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL);
++	addr = do_mmap(file, addr, size, prot, flags, 0, 0, &populate, NULL);
+ 	*raddr = addr;
+ 	err = 0;
+ 	if (IS_ERR_VALUE(addr))
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 13678edaa22c..afdf5f78432b 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1221,11 +1221,11 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
+  */
+ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			unsigned long len, unsigned long prot,
+-			unsigned long flags, unsigned long pgoff,
+-			unsigned long *populate, struct list_head *uf)
++			unsigned long flags, vm_flags_t vm_flags,
++			unsigned long pgoff, unsigned long *populate,
++			struct list_head *uf)
+ {
+ 	struct mm_struct *mm = current->mm;
+-	vm_flags_t vm_flags;
+ 	int pkey = 0;
  
- 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
- 			if (pte_needs_flush(oldpte, ptent))
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index e97a0b4889fc..6dea7f57026e 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -72,7 +72,7 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
- 	if (page_in_cache && !vm_shared)
- 		writable = false;
- 	if (writable)
--		_dst_pte = pte_mkwrite(_dst_pte);
-+		_dst_pte = pte_mkwrite(_dst_pte, dst_vma);
- 	if (flags & MFILL_ATOMIC_WP)
- 		_dst_pte = pte_mkuffd_wp(_dst_pte);
+ 	validate_mm(mm);
+@@ -1286,7 +1286,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	 * to. we assume access permissions have been handled by the open
+ 	 * of the memory object, so we don't do any here.
+ 	 */
+-	vm_flags = calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
++	vm_flags |= calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
+ 			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
  
+ 	if (flags & MAP_LOCKED)
+@@ -2903,7 +2903,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 
+ 	file = get_file(vma->vm_file);
+ 	ret = do_mmap(vma->vm_file, start, size,
+-			prot, flags, pgoff, &populate, NULL);
++			prot, flags, 0, pgoff, &populate, NULL);
+ 	fput(file);
+ out:
+ 	mmap_write_unlock(mm);
+diff --git a/mm/nommu.c b/mm/nommu.c
+index f670d9979a26..138826c4a872 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -1002,6 +1002,7 @@ unsigned long do_mmap(struct file *file,
+ 			unsigned long len,
+ 			unsigned long prot,
+ 			unsigned long flags,
++			vm_flags_t vm_flags,
+ 			unsigned long pgoff,
+ 			unsigned long *populate,
+ 			struct list_head *uf)
+@@ -1009,7 +1010,6 @@ unsigned long do_mmap(struct file *file,
+ 	struct vm_area_struct *vma;
+ 	struct vm_region *region;
+ 	struct rb_node *rb;
+-	vm_flags_t vm_flags;
+ 	unsigned long capabilities, result;
+ 	int ret;
+ 	VMA_ITERATOR(vmi, current->mm, 0);
+@@ -1029,7 +1029,7 @@ unsigned long do_mmap(struct file *file,
+ 
+ 	/* we've determined that we can make the mapping, now translate what we
+ 	 * now know into VMA flags */
+-	vm_flags = determine_vm_flags(file, prot, flags, capabilities);
++	vm_flags |= determine_vm_flags(file, prot, flags, capabilities);
+ 
+ 
+ 	/* we're going to need to record the mapping */
+diff --git a/mm/util.c b/mm/util.c
+index dd12b9531ac4..8e7fc6cacab4 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -540,7 +540,7 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 	if (!ret) {
+ 		if (mmap_write_lock_killable(mm))
+ 			return -EINTR;
+-		ret = do_mmap(file, addr, len, prot, flag, pgoff, &populate,
++		ret = do_mmap(file, addr, len, prot, flag, 0, pgoff, &populate,
+ 			      &uf);
+ 		mmap_write_unlock(mm);
+ 		userfaultfd_unmap_complete(mm, &uf);
 -- 
 2.34.1
 
