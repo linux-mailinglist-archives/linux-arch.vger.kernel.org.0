@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED1472D604
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB1472D628
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239366AbjFMAQZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Jun 2023 20:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S239383AbjFMAQ4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 20:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238914AbjFMAPq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:15:46 -0400
+        with ESMTP id S238840AbjFMAQQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:16:16 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03EC269D;
-        Mon, 12 Jun 2023 17:13:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037C0173F;
+        Mon, 12 Jun 2023 17:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686615202; x=1718151202;
+  t=1686615209; x=1718151209;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=L2W4szzCW+qvvywxGcp6uHsWCFDTi4NqV9MxxSUxhGY=;
-  b=m2hAgSCIvSKQe7x+o4sP0P0iMTZ8eLiENIOoIE8RAIkvuslNZ2qYuvTF
-   +yfZfxnyqMLDiH4LSV3hezfYsQoTKxUx6OVJEpST/sv1yMeeZUSiGbz2L
-   liCpQVq4v6XmO4n91rEpMHUONW3w2v2cBAJlmAzK3VGeUU/a6TL4wB5gb
-   ug+NDKdeVH6SdRMYAyMthq34o7fifKHJDOZaF/lN1h3yBiDbNYIu+g4mV
-   MoBhjFnDP3SimoTpcO8FCtbBqqcFiK4hR+I4jDd38dlxZKTPERcvx7Zz2
-   J6wII4D/38ew+5WTtadegZ8G7XCiuYOj7sByjMp2SlLrqP80BdLwTT8K+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361557243"
+  bh=FpsnqDmskVtuVWeAVhUxFxlMXuwPJqlBrZTKKFCDs5Y=;
+  b=R6xK0VOk/CsKnPanl4rMbdEeh3v8uOxWqtL/Ssrl1fxL6P8qC444KXCo
+   VO64BplBrjLIBbY2uer5dHGOecGDsRrFpOW+bT+yJSO2vxXhNgguXfq1Z
+   SIezcfqlI2nGtaNj4d3gQr/GmtxzNrMUi9wtkiuwneTP2OiTRMSdqnEQa
+   EY5u6mpQqNAZeUoO5OqG4x/BRfsRI2CMSqROi+7oaz/xZJggAXi1A5SOJ
+   laxjpkUHP0jsdKehMuVS27OzGthsbrEJwxmqLZL5hsPBQDytMkOXCXRAY
+   qWGhnEJ2DIBg5mQxKOHNv7x0/jzWZeyJt4t8MR5as9TW4av/hNLpi3K0m
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361557269"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361557243"
+   d="scan'208";a="361557269"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:29 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671072"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671078"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835671072"
+   d="scan'208";a="835671078"
 Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:28 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:29 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -69,9 +69,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
         torvalds@linux-foundation.org, broonie@kernel.org
 Cc:     rick.p.edgecombe@intel.com, Pengfei Xu <pengfei.xu@intel.com>
-Subject: [PATCH v9 25/42] x86/fpu: Add helper for modifying xstate
-Date:   Mon, 12 Jun 2023 17:10:51 -0700
-Message-Id: <20230613001108.3040476-26-rick.p.edgecombe@intel.com>
+Subject: [PATCH v9 26/42] x86: Introduce userspace API for shadow stack
+Date:   Mon, 12 Jun 2023 17:10:52 -0700
+Message-Id: <20230613001108.3040476-27-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
@@ -87,28 +87,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Just like user xfeatures, supervisor xfeatures can be active in the
-registers or present in the task FPU buffer. If the registers are
-active, the registers can be modified directly. If the registers are
-not active, the modification must be performed on the task FPU buffer.
+Add three new arch_prctl() handles:
 
-When the state is not active, the kernel could perform modifications
-directly to the buffer. But in order for it to do that, it needs
-to know where in the buffer the specific state it wants to modify is
-located. Doing this is not robust against optimizations that compact
-the FPU buffer, as each access would require computing where in the
-buffer it is.
+ - ARCH_SHSTK_ENABLE/DISABLE enables or disables the specified
+   feature. Returns 0 on success or a negative value on error.
 
-The easiest way to modify supervisor xfeature data is to force restore
-the registers and write directly to the MSRs. Often times this is just fine
-anyway as the registers need to be restored before returning to userspace.
-Do this for now, leaving buffer writing optimizations for the future.
+ - ARCH_SHSTK_LOCK prevents future disabling or enabling of the
+   specified feature. Returns 0 on success or a negative value
+   on error.
 
-Add a new function fpregs_lock_and_load() that can simultaneously call
-fpregs_lock() and do this restore. Also perform some extra sanity
-checks in this function since this will be used in non-fpu focused code.
+The features are handled per-thread and inherited over fork(2)/clone(2),
+but reset on exec().
 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Kees Cook <keescook@chromium.org>
@@ -117,59 +109,174 @@ Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/fpu/api.h |  9 +++++++++
- arch/x86/kernel/fpu/core.c     | 18 ++++++++++++++++++
- 2 files changed, 27 insertions(+)
+ arch/x86/include/asm/processor.h  |  6 +++++
+ arch/x86/include/asm/shstk.h      | 21 +++++++++++++++
+ arch/x86/include/uapi/asm/prctl.h |  6 +++++
+ arch/x86/kernel/Makefile          |  2 ++
+ arch/x86/kernel/process_64.c      |  6 +++++
+ arch/x86/kernel/shstk.c           | 44 +++++++++++++++++++++++++++++++
+ 6 files changed, 85 insertions(+)
+ create mode 100644 arch/x86/include/asm/shstk.h
+ create mode 100644 arch/x86/kernel/shstk.c
 
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 503a577814b2..aadc6893dcaa 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -82,6 +82,15 @@ static inline void fpregs_unlock(void)
- 		preempt_enable();
- }
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index a1e4fa58b357..407d5551b6a7 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -28,6 +28,7 @@ struct vm86;
+ #include <asm/unwind_hints.h>
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
++#include <asm/shstk.h>
  
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+@@ -475,6 +476,11 @@ struct thread_struct {
+ 	 */
+ 	u32			pkru;
+ 
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++	unsigned long		features;
++	unsigned long		features_locked;
++#endif
++
+ 	/* Floating point and extended processor state */
+ 	struct fpu		fpu;
+ 	/*
+diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
+new file mode 100644
+index 000000000000..ec753809f074
+--- /dev/null
++++ b/arch/x86/include/asm/shstk.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_SHSTK_H
++#define _ASM_X86_SHSTK_H
++
++#ifndef __ASSEMBLY__
++#include <linux/types.h>
++
++struct task_struct;
++
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++long shstk_prctl(struct task_struct *task, int option, unsigned long features);
++void reset_thread_features(void);
++#else
++static inline long shstk_prctl(struct task_struct *task, int option,
++			       unsigned long arg2) { return -EINVAL; }
++static inline void reset_thread_features(void) {}
++#endif /* CONFIG_X86_USER_SHADOW_STACK */
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* _ASM_X86_SHSTK_H */
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index e8d7ebbca1a4..1cd44ecc9ce0 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -23,9 +23,15 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
+ 
++/* Don't use 0x3001-0x3004 because of old glibcs */
++
+ #define ARCH_GET_UNTAG_MASK		0x4001
+ #define ARCH_ENABLE_TAGGED_ADDR		0x4002
+ #define ARCH_GET_MAX_TAG_BITS		0x4003
+ #define ARCH_FORCE_TAGGED_SVA		0x4004
+ 
++#define ARCH_SHSTK_ENABLE		0x5001
++#define ARCH_SHSTK_DISABLE		0x5002
++#define ARCH_SHSTK_LOCK			0x5003
++
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index abee0564b750..6b6bf47652ee 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -147,6 +147,8 @@ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
+ obj-$(CONFIG_X86_CET)			+= cet.o
+ 
++obj-$(CONFIG_X86_USER_SHADOW_STACK)	+= shstk.o
++
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 3d181c16a2f6..0f89aa0186d1 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -515,6 +515,8 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
+ 		load_gs_index(__USER_DS);
+ 	}
+ 
++	reset_thread_features();
++
+ 	loadsegment(fs, 0);
+ 	loadsegment(es, _ds);
+ 	loadsegment(ds, _ds);
+@@ -894,6 +896,10 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 		else
+ 			return put_user(LAM_U57_BITS, (unsigned long __user *)arg2);
+ #endif
++	case ARCH_SHSTK_ENABLE:
++	case ARCH_SHSTK_DISABLE:
++	case ARCH_SHSTK_LOCK:
++		return shstk_prctl(task, option, arg2);
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+new file mode 100644
+index 000000000000..41ed6552e0a5
+--- /dev/null
++++ b/arch/x86/kernel/shstk.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * FPU state gets lazily restored before returning to userspace. So when in the
-+ * kernel, the valid FPU state may be kept in the buffer. This function will force
-+ * restore all the fpu state to the registers early if needed, and lock them from
-+ * being automatically saved/restored. Then FPU state can be modified safely in the
-+ * registers, before unlocking with fpregs_unlock().
++ * shstk.c - Intel shadow stack support
++ *
++ * Copyright (c) 2021, Intel Corporation.
++ * Yu-cheng Yu <yu-cheng.yu@intel.com>
 + */
-+void fpregs_lock_and_load(void);
 +
- #ifdef CONFIG_X86_DEBUG_FPU
- extern void fpregs_assert_state_consistent(void);
- #else
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index caf33486dc5e..f851558b673f 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -753,6 +753,24 @@ void switch_fpu_return(void)
- }
- EXPORT_SYMBOL_GPL(switch_fpu_return);
- 
-+void fpregs_lock_and_load(void)
++#include <linux/sched.h>
++#include <linux/bitops.h>
++#include <asm/prctl.h>
++
++void reset_thread_features(void)
 +{
-+	/*
-+	 * fpregs_lock() only disables preemption (mostly). So modifying state
-+	 * in an interrupt could screw up some in progress fpregs operation.
-+	 * Warn about it.
-+	 */
-+	WARN_ON_ONCE(!irq_fpu_usable());
-+	WARN_ON_ONCE(current->flags & PF_KTHREAD);
-+
-+	fpregs_lock();
-+
-+	fpregs_assert_state_consistent();
-+
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-+		fpregs_restore_userregs();
++	current->thread.features = 0;
++	current->thread.features_locked = 0;
 +}
 +
- #ifdef CONFIG_X86_DEBUG_FPU
- /*
-  * If current FPU state according to its tracking (loaded FPU context on this
++long shstk_prctl(struct task_struct *task, int option, unsigned long features)
++{
++	if (option == ARCH_SHSTK_LOCK) {
++		task->thread.features_locked |= features;
++		return 0;
++	}
++
++	/* Don't allow via ptrace */
++	if (task != current)
++		return -EINVAL;
++
++	/* Do not allow to change locked features */
++	if (features & task->thread.features_locked)
++		return -EPERM;
++
++	/* Only support enabling/disabling one feature at a time. */
++	if (hweight_long(features) > 1)
++		return -EINVAL;
++
++	if (option == ARCH_SHSTK_DISABLE) {
++		return -EINVAL;
++	}
++
++	/* Handle ARCH_SHSTK_ENABLE */
++	return -EINVAL;
++}
 -- 
 2.34.1
 
