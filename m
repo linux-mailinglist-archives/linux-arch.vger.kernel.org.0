@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11E072D5D0
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B48872D5D9
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238874AbjFMAMf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Jun 2023 20:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S238592AbjFMAMx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 20:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238738AbjFMAM0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:26 -0400
+        with ESMTP id S238845AbjFMAMe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:34 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6C9F0;
-        Mon, 12 Jun 2023 17:12:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FC51730;
+        Mon, 12 Jun 2023 17:12:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686615142; x=1718151142;
+  t=1686615146; x=1718151146;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qno7FNbVCOlU0l2tsMlcvtzg5iSqFMH8Q3FgqO3yA3s=;
-  b=HQRuUlSox7Nv4w8nTyOBqx3/ZuiQHHppNSrNzzabwGyn30BldrP+ftmG
-   kg+hWfBNLPIXsfkxqD55ZDOnylyC9LjyIGgnwwcfraLeNgRscX9h6KCno
-   +mt/7Tq2xLyrKoK8bgA+iyqq2znz8MGvf/oU174MrggH4Ab2c8lIQtoYc
-   TvcqvENX8sEdZZ5nnjECZgeg5biSBxZiJjBJXK+fjbU/+NRiq7enCkbEq
-   8oLJliAvQz6yeERjjLOOvfD1dcBK4viqdFyv3/UaRyF1iVAFvdDBm86RM
-   h2f6WSpDWvFYM8CL8iUQqHNjYthEU6SvO1xtmtUu9K7/F+c9i3TrN3UCp
+  bh=svMWn5R9eThoiar+k0qdORAiS7Vwyk8B+BTeN3eLytc=;
+  b=n8if8qdQukN6W8TFmTvv6muKDj4494uFDuN6u1F5bMSfjuF5qAXnnQTP
+   ucPwzsXPUCkf/zNUJ/SubFkseQj/EOOSA1UaozanhV5uAp/yJukoXs6ha
+   mnAjNh4Fw0yRlMxyzgKtEw0vmz3/QQxLIRsAUrelYmH+XNIH9W+gx6Ja6
+   BUbd26SHCizexRqcNBjfg/vpzbfjZ/NeuIuKlUV3bGLj8GYEiCCOGdH3L
+   uJfwABlj6Fj9E6OX7umvycvJ+eD0Qp86f5lYriCkbUrqmekNIZjAO1yFT
+   zM5j3yvLZ40VVMPqFe6poR5uhFC/MHWQadrCOEnwjns+FcE21gQQ4GdoU
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556946"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556974"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361556946"
+   d="scan'208";a="361556974"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:19 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671016"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671022"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835671016"
+   d="scan'208";a="835671022"
 Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:18 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:19 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -70,9 +70,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         torvalds@linux-foundation.org, broonie@kernel.org
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: [PATCH v9 13/42] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
-Date:   Mon, 12 Jun 2023 17:10:39 -0700
-Message-Id: <20230613001108.3040476-14-rick.p.edgecombe@intel.com>
+Subject: [PATCH v9 14/42] mm: Introduce VM_SHADOW_STACK for shadow stack memory
+Date:   Mon, 12 Jun 2023 17:10:40 -0700
+Message-Id: <20230613001108.3040476-15-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
@@ -88,76 +88,93 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-New processors that support Shadow Stack regard Write=0,Dirty=1 PTEs as
-shadow stack pages.
+From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-In normal cases, it can be helpful to create Write=1 PTEs as also Dirty=1
-if HW dirty tracking is not needed, because if the Dirty bit is not already
-set the CPU has to set Dirty=1 when the memory gets written to. This
-creates additional work for the CPU. So traditional wisdom was to simply
-set the Dirty bit whenever you didn't care about it. However, it was never
-really very helpful for read-only kernel memory.
+New hardware extensions implement support for shadow stack memory, such
+as x86 Control-flow Enforcement Technology (CET). Add a new VM flag to
+identify these areas, for example, to be used to properly indicate shadow
+stack PTEs to the hardware.
 
-When CR4.CET=1 and IA32_S_CET.SH_STK_EN=1, some instructions can write to
-such supervisor memory. The kernel does not set IA32_S_CET.SH_STK_EN, so
-avoiding kernel Write=0,Dirty=1 memory is not strictly needed for any
-functional reason. But having Write=0,Dirty=1 kernel memory doesn't have
-any functional benefit either, so to reduce ambiguity between shadow stack
-and regular Write=0 pages, remove Dirty=1 from any kernel Write=0 PTEs.
+Shadow stack VMA creation will be tightly controlled and limited to
+anonymous memory to make the implementation simpler and since that is all
+that is required. The solution will rely on pte_mkwrite() to create the
+shadow stack PTEs, so it will not be required for vm_get_page_prot() to
+learn how to create shadow stack memory. For this reason document that
+VM_SHADOW_STACK should not be mixed with VM_SHARED.
 
-Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/pgtable_types.h | 8 +++++---
- arch/x86/mm/pat/set_memory.c         | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ Documentation/filesystems/proc.rst | 1 +
+ fs/proc/task_mmu.c                 | 3 +++
+ include/linux/mm.h                 | 8 ++++++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index ee6f8e57e115..26f07d6d5758 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -222,10 +222,12 @@ enum page_cache_mode {
- #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
- #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 7897a7dafcbc..6ccb57089a06 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -566,6 +566,7 @@ encoded manner. The codes are the following:
+     mt    arm64 MTE allocation tags are enabled
+     um    userfaultfd missing tracking
+     uw    userfaultfd wr-protect tracking
++    ss    shadow stack page
+     ==    =======================================
  
--#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
--#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
-+#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|   0|   0|___G)
-+#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|   0|   0|___G)
-+#define __PAGE_KERNEL		 (__PP|__RW|   0|___A|__NX|___D|   0|___G)
-+#define __PAGE_KERNEL_EXEC	 (__PP|__RW|   0|___A|   0|___D|   0|___G)
- #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
--#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|___D|   0|___G)
-+#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|   0|   0|___G)
- #define __PAGE_KERNEL_LARGE	 (__PP|__RW|   0|___A|__NX|___D|_PSE|___G)
- #define __PAGE_KERNEL_LARGE_EXEC (__PP|__RW|   0|___A|   0|___D|_PSE|___G)
- #define __PAGE_KERNEL_WP	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __WP)
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 7159cf787613..fc627acfe40e 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2073,12 +2073,12 @@ int set_memory_nx(unsigned long addr, int numpages)
+ Note that there is no guarantee that every flag and associated mnemonic will
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 420510f6a545..38b19a757281 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -711,6 +711,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+ 		[ilog2(VM_UFFD_MINOR)]	= "ui",
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++		[ilog2(VM_SHADOW_STACK)] = "ss",
++#endif
+ 	};
+ 	size_t i;
  
- int set_memory_ro(unsigned long addr, int numpages)
- {
--	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW), 0);
-+	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW | _PAGE_DIRTY), 0);
- }
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6f52c1e7c640..fb17cbd531ac 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -319,11 +319,13 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_HIGH_ARCH_BIT_2	34	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_3	35	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_4	36	/* bit only usable on 64-bit architectures */
++#define VM_HIGH_ARCH_BIT_5	37	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_0	BIT(VM_HIGH_ARCH_BIT_0)
+ #define VM_HIGH_ARCH_1	BIT(VM_HIGH_ARCH_BIT_1)
+ #define VM_HIGH_ARCH_2	BIT(VM_HIGH_ARCH_BIT_2)
+ #define VM_HIGH_ARCH_3	BIT(VM_HIGH_ARCH_BIT_3)
+ #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
++#define VM_HIGH_ARCH_5	BIT(VM_HIGH_ARCH_BIT_5)
+ #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
  
- int set_memory_rox(unsigned long addr, int numpages)
- {
--	pgprot_t clr = __pgprot(_PAGE_RW);
-+	pgprot_t clr = __pgprot(_PAGE_RW | _PAGE_DIRTY);
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+@@ -339,6 +341,12 @@ extern unsigned int kobjsize(const void *objp);
+ #endif
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
  
- 	if (__supported_pte_mask & _PAGE_NX)
- 		clr.pgprot |= _PAGE_NX;
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++# define VM_SHADOW_STACK	VM_HIGH_ARCH_5 /* Should not be set with VM_SHARED */
++#else
++# define VM_SHADOW_STACK	VM_NONE
++#endif
++
+ #if defined(CONFIG_X86)
+ # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
+ #elif defined(CONFIG_PPC)
 -- 
 2.34.1
 
