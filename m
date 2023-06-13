@@ -2,67 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEC472E2FF
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 14:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76FC72E329
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 14:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242418AbjFMM3Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Jun 2023 08:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S242368AbjFMMiW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Jun 2023 08:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242467AbjFMM3L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 08:29:11 -0400
+        with ESMTP id S242206AbjFMMiV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 08:38:21 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6D419A7
-        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 05:28:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D85E1734
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 05:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686659298;
+        s=mimecast20190719; t=1686659854;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5APAgmZrGjFJ9+U0RvJUaGvdr2gWc6sxi+r6310cnNs=;
-        b=NpemX1ocFWDM1Jmyz+nrK9ZpYU08wE6iscEdj7w6KetAsPrCRPOR33uj2YzQ+NGDI9xFxG
-        ofMbFgb7TFJdjLQXR1lYykQMCz2ht40lWsGpbzukhJ1tg5tLu5Plik83oCOioTshUpSdnP
-        ahg0K99Jrlx1aaB+llVMNNOx/TmtlU0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-385-TkC6q7nFOUSu4aCQPFw6Dw-1; Tue, 13 Jun 2023 08:28:17 -0400
-X-MC-Unique: TkC6q7nFOUSu4aCQPFw6Dw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30fc9cfe82eso580161f8f.1
-        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 05:28:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686659296; x=1689251296;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5APAgmZrGjFJ9+U0RvJUaGvdr2gWc6sxi+r6310cnNs=;
-        b=EFwDsZhiVUTqPYMXyg3jTinSxxYGIbjZQJnO/etd6ZyL/Rx7oy0e1sl8xxciFWl0vH
-         5wCZ1I9EYBLCS7Zq/Vd3SJXOGnxvAeYGDVIMhi8YdysxhB9jAiJV03verJ5TNIJSeLDu
-         2Kp+khAzNBrz6bATfcMfYD3ix8Iy/sZhJiXgO9EtgabDDKny9QNdaWXEWZCunUkyyXGx
-         4bPDiaVM/dKnbWnwWZT3h8bQ6dJoSChRc2SQNgpNBaDWiD1W62fJCPm0w+YSR+am2Kgc
-         kruZnUsj3yNPAPk7NoiyIAikOso+2BTqeReqdId4WKeKj0T0vGvN2AudL7xAg7McKaXb
-         V2xg==
-X-Gm-Message-State: AC+VfDzKjxBSDKcf7vTDbbH0Jhm2ZThJzzR+gIbOUEpiEMJo2unsIXCd
-        QkQ19TCiBm1eg/SP25nsdS32upPtV1sexb1cUhhA74qYKU6Hm1yLHjwrauY2p8E4PkXomvXDxWP
-        C6400xIxTIgbRePKxA0tgrw==
-X-Received: by 2002:a05:6000:10c7:b0:30a:eae0:106c with SMTP id b7-20020a05600010c700b0030aeae0106cmr7102014wrx.10.1686659296198;
-        Tue, 13 Jun 2023 05:28:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ61EMABfB7hkEtd8rE3feiAmwo8GaJnsqM5qFYcE5rkOiMq3BqizYRb/VE1CFB4BKMLKA5RWQ==
-X-Received: by 2002:a05:6000:10c7:b0:30a:eae0:106c with SMTP id b7-20020a05600010c700b0030aeae0106cmr7101998wrx.10.1686659295754;
-        Tue, 13 Jun 2023 05:28:15 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c710:ff00:1a06:80f:733a:e8c6? (p200300cbc710ff001a06080f733ae8c6.dip0.t-ipconnect.de. [2003:cb:c710:ff00:1a06:80f:733a:e8c6])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d4342000000b0030e5c8d55f2sm15258101wrr.6.2023.06.13.05.28.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 05:28:15 -0700 (PDT)
-Message-ID: <65805965-c6a2-ce0c-fb11-5277e5976120@redhat.com>
-Date:   Tue, 13 Jun 2023 14:28:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 03/42] mm: Make pte_mkwrite() take a VMA
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        bh=+b1T4bP+M0GcWXoHUW/q06urYQjMJ7X0Y1cHVDwah1s=;
+        b=iU5l5P3mQrs21f/coiRrildbjcLeSBoc8kChpUlDImVN+OGleMVLc3AlR9mFGL3kS8isjs
+        cWK3Tk3UczAXeNdEZwMPp/roT76JyB9QReUzka0fpkPOtyUe4Ef6WsMUpTsEzSTAlTNF/d
+        3bVM1EWFtCX0169+KJ+4y3nNmd31x14=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-NQoKV6qBNHuOgzR9uwg-rw-1; Tue, 13 Jun 2023 08:37:31 -0400
+X-MC-Unique: NQoKV6qBNHuOgzR9uwg-rw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A8B3185A5BA;
+        Tue, 13 Jun 2023 12:37:27 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 652C41121315;
+        Tue, 13 Jun 2023 12:37:20 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -75,7 +51,6 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
         "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
@@ -90,66 +65,58 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, broonie@kernel.org
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
+        <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
+Date:   Tue, 13 Jun 2023 14:37:18 +0200
+In-Reply-To: <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk> (Mark
+        Brown's message of "Tue, 13 Jun 2023 12:55:48 +0100")
+Message-ID: <87y1knh729.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 13.06.23 02:10, Rick Edgecombe wrote:
-> The x86 Shadow stack feature includes a new type of memory called shadow
-> stack. This shadow stack memory has some unusual properties, which requires
-> some core mm changes to function properly.
-> 
-> One of these unusual properties is that shadow stack memory is writable,
-> but only in limited ways. These limits are applied via a specific PTE
-> bit combination. Nevertheless, the memory is writable, and core mm code
-> will need to apply the writable permissions in the typical paths that
-> call pte_mkwrite(). Future patches will make pte_mkwrite() take a VMA, so
-> that the x86 implementation of it can know whether to create regular
-> writable memory or shadow stack memory.
-> 
-> But there are a couple of challenges to this. Modifying the signatures of
-> each arch pte_mkwrite() implementation would be error prone because some
-> are generated with macros and would need to be re-implemented. Also, some
-> pte_mkwrite() callers operate on kernel memory without a VMA.
-> 
-> So this can be done in a three step process. First pte_mkwrite() can be
-> renamed to pte_mkwrite_novma() in each arch, with a generic pte_mkwrite()
-> added that just calls pte_mkwrite_novma(). Next callers without a VMA can
-> be moved to pte_mkwrite_novma(). And lastly, pte_mkwrite() and all callers
-> can be changed to take/pass a VMA.
-> 
-> In a previous patches, pte_mkwrite() was renamed pte_mkwrite_novma() and
-> callers that don't have a VMA were changed to use pte_mkwrite_novma(). So
-> now change pte_mkwrite() to take a VMA and change the remaining callers to
-> pass a VMA. Apply the same changes for pmd_mkwrite().
-> 
-> No functional change.
-> 
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> ---
+* Mark Brown:
 
-Acked-by: David Hildenbrand <david@redhat.com>
+> On Mon, Jun 12, 2023 at 05:10:49PM -0700, Rick Edgecombe wrote:
+>
+>> +Enabling arch_prctl()'s
+>> +=======================
+>> +
+>> +Elf features should be enabled by the loader using the below arch_prctl's. They
+>> +are only supported in 64 bit user applications. These operate on the features
+>> +on a per-thread basis. The enablement status is inherited on clone, so if the
+>> +feature is enabled on the first thread, it will propagate to all the thread's
+>> +in an app.
+>
+> I appreciate it's very late in the development of this series but given
+> that there are very similar features on both arm64 and riscv would it
+> make sense to make these just regular prctl()s, arch_prctl() isn't used
+> on other architectures and it'd reduce the amount of arch specific work
+> that userspace needs to do if the interface is shared.
 
-Hopefully we'll get this landed soon :)
+Has the Arm feature been fully disclosed?
 
--- 
-Cheers,
+I would expect the integration with stack switching and unwinding
+differs between architectures even if the core mechanism is similar.
+It's probably tempting to handle shadow stack placement differently,
+too.
 
-David / dhildenb
+Thanks,
+Florian
 
