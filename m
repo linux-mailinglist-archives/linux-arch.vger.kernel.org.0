@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C685C72D5E0
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A7472D5E2
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 02:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238755AbjFMAM0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Jun 2023 20:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S238556AbjFMAMn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Jun 2023 20:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237807AbjFMAMW (ORCPT
+        with ESMTP id S238475AbjFMAMW (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Jun 2023 20:12:22 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A6A19F;
-        Mon, 12 Jun 2023 17:12:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A79171C;
+        Mon, 12 Jun 2023 17:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686615133; x=1718151133;
+  t=1686615134; x=1718151134;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HsIyEUzZjyBgsbaXIFC6qpwhsPOWh1g+KPlkVPDuH8M=;
-  b=U8wH8LhsGtKZUHBcEkduZ4nQxDxYGp/RRA3NNcR0f538h25SL7Kazd8w
-   W1LeUkIXENSJmrPyyf4P6GPVl4Nvr7mlFLUAQ4ENyzwhEK0QKP4GHEnbx
-   duiqB68RpY9NYuyBMPKn8eOVu7k1axQoe0+lINjv7xq0re9LIYB5CMASC
-   YNjB4pSNEUWN3DgYyaZXSBb+6eRTjA8TDAx0MIQ9hvBEH4KM25KaHrLXC
-   jck7ynSAZwsWBoOpIEIOx+4M8VaeN3tmAAqRrCna8Z1DMFuzGGCv9xQDN
-   eUnd7gK8NlW20M06T0Qj6VGl5rHUh2kD/yn33VZ/BTS+CFdUJKPYTa9Kn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556752"
+  bh=VIRIy8IvN5ZfY5u3MVh2ThurjhiZOJC7RcXup7TqiYM=;
+  b=J5dsVrvsQoEiGXjU2/F2mZxHX9Wtgd8eR1tZAx8sTiWaU7g0Nl12dqYK
+   WC3qIDwv9pTqoHO0SUKRtQbFVgJJXVmXRdQq776vDZ4XBTtUinn7yXkpX
+   ERI5enbupURzIofkxsAzQJggymoC2YwNLTDDS+h4d2p1nfMoSJCBZc/Kg
+   eavVqt6vEYuEaRlEVK9WIqidIFBhMoFKjW197xXJdbTN5Yq4FpZ4taULP
+   CCWpLI0rtXeHOqMTe1e4WkxVbWxAAihvoerV/Tg1OhCah5+fCvni+h7rs
+   76q2oZ2nMw/rCfj7YwiGzBlGan0ehh2rHw5r0hr9f0ABIGqfzZ0iSoLJv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556774"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361556752"
+   d="scan'208";a="361556774"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:10 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835670984"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835670988"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835670984"
+   d="scan'208";a="835670988"
 Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:09 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:10 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -69,11 +69,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
         torvalds@linux-foundation.org, broonie@kernel.org
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Pengfei Xu <pengfei.xu@intel.com>
-Subject: [PATCH v9 05/42] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
-Date:   Mon, 12 Jun 2023 17:10:31 -0700
-Message-Id: <20230613001108.3040476-6-rick.p.edgecombe@intel.com>
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: [PATCH v9 06/42] x86/shstk: Add Kconfig option for shadow stack
+Date:   Mon, 12 Jun 2023 17:10:32 -0700
+Message-Id: <20230613001108.3040476-7-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
@@ -89,48 +88,93 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Shadow stack provides protection for applications against function return
+address corruption. It is active when the processor supports it, the
+kernel has CONFIG_X86_SHADOW_STACK enabled, and the application is built
+for the feature. This is only implemented for the 64-bit kernel. When it
+is enabled, legacy non-shadow stack applications continue to work, but
+without protection.
 
-The x86 Control-flow Enforcement Technology (CET) feature includes a new
-type of memory called shadow stack. This shadow stack memory has some
-unusual properties, which requires some core mm changes to function
-properly.
+Since there is another feature that utilizes CET (Kernel IBT) that will
+share implementation with shadow stacks, create CONFIG_CET to signify
+that at least one CET feature is configured.
 
-Future patches will introduce a new VM flag VM_SHADOW_STACK that will be
-VM_HIGH_ARCH_BIT_5. VM_HIGH_ARCH_BIT_1 through VM_HIGH_ARCH_BIT_4 are
-bits 32-36, and bit 37 is the unrelated VM_UFFD_MINOR_BIT. For the sake
-of order, make all VM_HIGH_ARCH_BITs stay together by moving
-VM_UFFD_MINOR_BIT from 37 to 38. This will allow VM_SHADOW_STACK to be
-introduced as 37.
-
+Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Acked-by: Peter Xu <peterx@redhat.com>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/mm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/Kconfig           | 24 ++++++++++++++++++++++++
+ arch/x86/Kconfig.assembler |  5 +++++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9ec20cbb20c1..6f52c1e7c640 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -370,7 +370,7 @@ extern unsigned int kobjsize(const void *objp);
- #endif
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab123a8ee..ce460d6b4e25 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1852,6 +1852,11 @@ config CC_HAS_IBT
+ 		  (CC_IS_CLANG && CLANG_VERSION >= 140000)) && \
+ 		  $(as-instr,endbr64)
  
- #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
--# define VM_UFFD_MINOR_BIT	37
-+# define VM_UFFD_MINOR_BIT	38
- # define VM_UFFD_MINOR		BIT(VM_UFFD_MINOR_BIT)	/* UFFD minor faults */
- #else /* !CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
- # define VM_UFFD_MINOR		VM_NONE
++config X86_CET
++	def_bool n
++	help
++	  CET features configured (Shadow stack or IBT)
++
+ config X86_KERNEL_IBT
+ 	prompt "Indirect Branch Tracking"
+ 	def_bool y
+@@ -1859,6 +1864,7 @@ config X86_KERNEL_IBT
+ 	# https://github.com/llvm/llvm-project/commit/9d7001eba9c4cb311e03cd8cdc231f9e579f2d0f
+ 	depends on !LD_IS_LLD || LLD_VERSION >= 140000
+ 	select OBJTOOL
++	select X86_CET
+ 	help
+ 	  Build the kernel with support for Indirect Branch Tracking, a
+ 	  hardware support course-grain forward-edge Control Flow Integrity
+@@ -1952,6 +1958,24 @@ config X86_SGX
+ 
+ 	  If unsure, say N.
+ 
++config X86_USER_SHADOW_STACK
++	bool "X86 userspace shadow stack"
++	depends on AS_WRUSS
++	depends on X86_64
++	select ARCH_USES_HIGH_VMA_FLAGS
++	select X86_CET
++	help
++	  Shadow stack protection is a hardware feature that detects function
++	  return address corruption.  This helps mitigate ROP attacks.
++	  Applications must be enabled to use it, and old userspace does not
++	  get protection "for free".
++
++	  CPUs supporting shadow stacks were first released in 2020.
++
++	  See Documentation/x86/shstk.rst for more information.
++
++	  If unsure, say N.
++
+ config EFI
+ 	bool "EFI runtime service support"
+ 	depends on ACPI
+diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
+index b88f784cb02e..8ad41da301e5 100644
+--- a/arch/x86/Kconfig.assembler
++++ b/arch/x86/Kconfig.assembler
+@@ -24,3 +24,8 @@ config AS_GFNI
+ 	def_bool $(as-instr,vgf2p8mulb %xmm0$(comma)%xmm1$(comma)%xmm2)
+ 	help
+ 	  Supported by binutils >= 2.30 and LLVM integrated assembler
++
++config AS_WRUSS
++	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
++	help
++	  Supported by binutils >= 2.31 and LLVM integrated assembler
 -- 
 2.34.1
 
