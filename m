@@ -2,225 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83A572E943
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 19:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD9D72EA30
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 19:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjFMRRg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Jun 2023 13:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S229899AbjFMRpJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Jun 2023 13:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjFMRRf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 13:17:35 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C9AE79;
-        Tue, 13 Jun 2023 10:17:33 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DH9KgO024010;
-        Tue, 13 Jun 2023 17:17:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MuX/s0te/QSTHMjPRIUCcvq4Q6ofXoMYiJTfW+gFUaw=;
- b=GOpbQ+w3nuKmSXPPMhXr5U8p7aK4qUg3X0651b+xC8oU0xIHFKYtaPvzDqfT1ohQpI0c
- lDU+23KKBtC+c4zTWU7JcLVErFqrEanlnwpVtfcpcNQpDvIpURb/eFB0nhhnVUr9PDXG
- 4ESztoA/X+O0VO1jlfZ5sCqMNJP8YqTMf3dp1xfdCVCFo/RMHUDdd/bZiXWhwE/qvw90
- eEkTpjduvo3KEs1ePYqP1WF+1roHcXQmst/BW4++3YJBYbgHXF02PdKfKnnB+wCDU1Pa
- 7H5oatbkVevtUaPK1VQbnaJKyQZ9hNTmU9icAhApdX9It/hXnz7kci0d1Dzc0YtYSndW sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r6v94rmx8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 17:17:00 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35DHA9eb028079;
-        Tue, 13 Jun 2023 17:16:59 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r6v94rmwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 17:16:59 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35D8o1hA017849;
-        Tue, 13 Jun 2023 17:16:57 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3r4gedsr5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 17:16:57 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35DHGtkY21037798
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Jun 2023 17:16:55 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20EF120043;
-        Tue, 13 Jun 2023 17:16:55 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B42F2004E;
-        Tue, 13 Jun 2023 17:16:54 +0000 (GMT)
-Received: from [9.171.1.146] (unknown [9.171.1.146])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Jun 2023 17:16:54 +0000 (GMT)
-Message-ID: <d42e9452-8210-a06a-4c91-6c2f1d038a61@linux.ibm.com>
-Date:   Tue, 13 Jun 2023 19:16:54 +0200
+        with ESMTP id S231836AbjFMRpI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 13:45:08 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A65F12C
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 10:45:07 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so7541751e87.1
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 10:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686678305; x=1689270305;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kcOW2YayMm3xjw1cJ1qlGpr/UGWPmxOrQJ2QJLZKMzE=;
+        b=BO7ZUfWA7Mcu3phYwW5mZInQjZHoVgxsQb79z5ZPy5A+s8LJsNUTZ0amyH7D3ic4k2
+         e76yc1f9t8ir5cQMmEdhE4SmRSf3sUwzR2RNHGO+z+BNGdFL5/+JrFv9ob8gPSOMmFUg
+         PEMKLtmM11yURVs+Im7PLWNTPGon5DtiRZr4I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686678305; x=1689270305;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kcOW2YayMm3xjw1cJ1qlGpr/UGWPmxOrQJ2QJLZKMzE=;
+        b=J8J8Oq9zcEyMt0HS5LAXVp/AQ1bEO6YEMXdKHIyUNEP15QWlz3gsfEuQlxIJpM8xYy
+         GvNFP8IWHmmde89NDaKA5p7LLuxEgeMjYWuFTbO6p4bKQ/OfG7OOfSmUpttRABwVh1BM
+         GEqR91LF4eLJxn58GxkQUU4KHBlEUWujGtHfeBbGi4hysZLUxplvR9zJ8mbjN6oXfEnQ
+         KlptX/ZJfU9EdPw0Y+R4QOH+yEpyXNoKlm37R22mEhbpUtqxpCYFn05exGe86NV//YRC
+         KAgURvR4pm83ubba6Ui+cl5dUaAUXrFKcxGsUew//iPP0Nhk50FL3Z2+7MZMhzd+T/Cv
+         sCuA==
+X-Gm-Message-State: AC+VfDz8aS8GIUzb+QSd9gqzQM7YYAIbcAysIMmQncRWRBB4U3/yZVm1
+        q5Yj/zLGqbQR0SdTaoTHZnwacqjUK0InKQDEpxgGdu4G
+X-Google-Smtp-Source: ACHHUZ6Xij5xgJAQFDcjzqbxPMEuyNepSbfcT7Kfge7MLC9n9XfBrXuTJHIdM1FeN9p/yFEOey2ZKQ==
+X-Received: by 2002:a05:6512:478:b0:4f5:bc59:6f21 with SMTP id x24-20020a056512047800b004f5bc596f21mr8010363lfd.12.1686678305449;
+        Tue, 13 Jun 2023 10:45:05 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id b14-20020ac247ee000000b004f611dd9935sm1841538lfp.152.2023.06.13.10.45.02
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 10:45:03 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f658a17aa4so6432660e87.0
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 10:45:02 -0700 (PDT)
+X-Received: by 2002:a05:6512:548:b0:4ef:ec6a:198c with SMTP id
+ h8-20020a056512054800b004efec6a198cmr6103911lfl.26.1686678301549; Tue, 13 Jun
+ 2023 10:45:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH 3/9] cpu/SMT: Store the current/max number of threads
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, x86@kernel.org,
-        dave.hansen@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        linuxppc-dev@lists.ozlabs.org
-References: <20230524155630.794584-1-mpe@ellerman.id.au>
- <20230524155630.794584-3-mpe@ellerman.id.au> <87fs6z80w5.ffs@tglx>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <87fs6z80w5.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UUQofGuwuSBBIoz8cSy_Gu6pnGgH1Vh-
-X-Proofpoint-ORIG-GUID: T86cnNWOeg0f_uTNpCq-hakyXXApSFqc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_19,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306130151
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com> <c239d2c4f7e369690866db455813cac359731e1d.camel@intel.com>
+In-Reply-To: <c239d2c4f7e369690866db455813cac359731e1d.camel@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 13 Jun 2023 10:44:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
+Message-ID: <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
+Subject: Re: [PATCH v9 00/42] Shadow stacks for userspace
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/06/2023 23:26:18, Thomas Gleixner wrote:
-> On Thu, May 25 2023 at 01:56, Michael Ellerman wrote:
->>  #ifdef CONFIG_HOTPLUG_SMT
->>  enum cpuhp_smt_control cpu_smt_control __read_mostly = CPU_SMT_ENABLED;
->> +static unsigned int cpu_smt_max_threads __ro_after_init;
->> +unsigned int cpu_smt_num_threads;
-> 
-> Why needs this to be global? cpu_smt_control is pointlessly global already.
+On Mon, Jun 12, 2023 at 8:12=E2=80=AFPM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> Sure. I probably should have included that upfront. Here is a github
+> repo:
+> https://github.com/rpedgeco/linux/tree/user_shstk_v9
+>
+> I went ahead and included the tags[0] from last time in case that's
+> useful, but unfortunately the github web interface is not very
+> conducive to viewing the tag-based segmentation of the series. If
+> having it in a korg repo would be useful, please let me know.
 
-I agree that cpu_smt_*_threads should be static.
+Oh, kernel.org vs github doesn't matter. I'm not actually merging this
+yet, I'm just doing a fetch to then easily be able to look at it
+locally in different formats.
 
-Howwever, regarding cpu_smt_control, it is used in 2 places in the x86 code:
- - arch/x86/power/hibernate.c in arch_resume_nosmt()
- - arch/x86/kernel/cpu/bugs.c in spectre_v2_user_select_mitigation()
+I tend to like seeing small things in my MUA just because then I don't
+switch back-and-forth between reading email and some gitk workflow,
+and it is easy to just scan through the series and reply all inthe
+MUA.
 
-An accessor function may be introduced to read that value in these 2
-functions, but I'm wondering if that's really the best option.
+But when it's some bigger piece, just doing a "git fetch" and then
+being able to dissect it locally is really convenient.
 
-Unless there is a real need to change this through this series, I think
-cpu_smt_control can remain global.
+Having worked with patches for three decades, I can read diffs in my
+sleep - but it's still quite useful to say "give me the patches just
+for *this* file" to just see how some specific area changed without
+having to look at the other parts.
 
-Thomas, are you ok with that?
+Or for example, that whole pte_mkwrite -> pte_mkwrite_novma patch is
+much denser and more legible with color-coding and the --word-diff.
 
-> 
->>  void __init cpu_smt_disable(bool force)
->>  {
->> @@ -433,10 +435,18 @@ void __init cpu_smt_disable(bool force)
->>   * The decision whether SMT is supported can only be done after the full
->>   * CPU identification. Called from architecture code.
->>   */
->> -void __init cpu_smt_check_topology(void)
->> +void __init cpu_smt_check_topology(unsigned int num_threads)
->>  {
->>  	if (!topology_smt_supported())
->>  		cpu_smt_control = CPU_SMT_NOT_SUPPORTED;
->> +
->> +	cpu_smt_max_threads = num_threads;
->> +
->> +	// May already be disabled by nosmt command line parameter
->> +	if (cpu_smt_control != CPU_SMT_ENABLED)
->> +		cpu_smt_num_threads = 1;
->> +	else
->> +		cpu_smt_num_threads = num_threads;
-> 
-> Taking Laurents findings into account this should be something like
-> the incomplete below.
-> 
-> x86 would simply invoke cpu_smt_set_num_threads() with both arguments as
-> smp_num_siblings while PPC can funnel its command line parameter through
-> the num_threads argument.
+Anyway, I'm scanning through it right now. No comments yet, I only
+just got started.
 
-I do prefer cpu_smt_set_num_threads() also.
-
-Thanks,
-Laurent
-
-> 
-> Thanks,
-> 
->         tglx
-> ---
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -414,6 +414,8 @@ void __weak arch_smt_update(void) { }
->  
->  #ifdef CONFIG_HOTPLUG_SMT
->  enum cpuhp_smt_control cpu_smt_control __read_mostly = CPU_SMT_ENABLED;
-> +static unsigned int cpu_smt_max_threads __ro_after_init;
-> +static unsigned int cpu_smt_num_threads = UINT_MAX;
->  
->  void __init cpu_smt_disable(bool force)
->  {
-> @@ -427,24 +429,31 @@ void __init cpu_smt_disable(bool force)
->  		pr_info("SMT: disabled\n");
->  		cpu_smt_control = CPU_SMT_DISABLED;
->  	}
-> +	cpu_smt_num_threads = 1;
->  }
->  
->  /*
->   * The decision whether SMT is supported can only be done after the full
->   * CPU identification. Called from architecture code.
->   */
-> -void __init cpu_smt_check_topology(void)
-> +void __init cpu_smt_set_num_threads(unsigned int max_threads, unsigned int num_threads)
->  {
-> -	if (!topology_smt_supported())
-> +	if (max_threads == 1)
->  		cpu_smt_control = CPU_SMT_NOT_SUPPORTED;
-> -}
->  
-> -static int __init smt_cmdline_disable(char *str)
-> -{
-> -	cpu_smt_disable(str && !strcmp(str, "force"));
-> -	return 0;
-> +	cpu_smt_max_threads = max_threads;
-> +
-> +	/*
-> +	 * If SMT has been disabled via the kernel command line or SMT is
-> +	 * not supported, set cpu_smt_num_threads to 1 for consistency.
-> +	 * If enabled, take the architecture requested number of threads
-> +	 * to bring up into account.
-> +	 */
-> +	if (cpu_smt_control != CPU_SMT_ENABLED)
-> +		cpu_smt_num_threads = 1;
-> +	else if (num_threads < cpu_smt_num_threads)
-> +		cpu_smt_num_threads = num_threads;
->  }
-> -early_param("nosmt", smt_cmdline_disable);
->  
->  static inline bool cpu_smt_allowed(unsigned int cpu)
->  {
-> @@ -463,6 +472,13 @@ static inline bool cpu_smt_allowed(unsig
->  	return !cpumask_test_cpu(cpu, &cpus_booted_once_mask);
->  }
->  
-> +static int __init smt_cmdline_disable(char *str)
-> +{
-> +	cpu_smt_disable(str && !strcmp(str, "force"));
-> +	return 0;
-> +}
-> +early_param("nosmt", smt_cmdline_disable);
-> +
->  /* Returns true if SMT is not supported of forcefully (irreversibly) disabled */
->  bool cpu_smt_possible(void)
->  {
-
+              Linus
