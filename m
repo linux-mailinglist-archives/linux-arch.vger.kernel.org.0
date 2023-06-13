@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FE872EA62
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 19:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E9F72EA6B
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jun 2023 20:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239940AbjFMR7N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Jun 2023 13:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S240086AbjFMSB1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Jun 2023 14:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238536AbjFMR7I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 13:59:08 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8409D10F7
-        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 10:59:07 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-970056276acso873955766b.2
-        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 10:59:07 -0700 (PDT)
+        with ESMTP id S240059AbjFMSB0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Jun 2023 14:01:26 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AB410F7
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 11:01:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977c8423dccso1409275866b.1
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 11:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686679146; x=1689271146;
+        d=linux-foundation.org; s=google; t=1686679284; x=1689271284;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u8Y88yptodPeuMRnHzLyyoqql+qi0tUT2B3rKlKiInQ=;
-        b=gJfuJuWGwzTahQhP6SWhrbswhYanOSZIHfq8cGSpgZBaO3kwizWtUG5ctcp9nrBJYL
-         xkgK4N6g8yoRvrNVhtZd9AF79QMqvnE4eDaxStQTYgr8cZm3ryZpQw5jeNjiD4n3tWy/
-         /Bsh516rx13mY7nrp+yZP0XiCksnfRlj067+E=
+        bh=KU2BO0gcHFt44DuEFTAO2c7xYdpyPStn/nzoWP1HBD4=;
+        b=SnD/cIvkfzkqGRNok796WXoGsXUdU9sBvSlP3oy/xAInYIN4thPyu4Gkh5f25KIQzD
+         kONlO2rVUq+fMN3sZJaQK2IkftDpIUDOGRzchL9XxMoJSKDvY59g1M/V2uLyrrOUsGdY
+         oCqeB+EzF91QHL+M6667rJrDl8cXulO0Bycg8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686679146; x=1689271146;
+        d=1e100.net; s=20221208; t=1686679284; x=1689271284;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u8Y88yptodPeuMRnHzLyyoqql+qi0tUT2B3rKlKiInQ=;
-        b=aaIlzbXJtreoK+5Li5Pr8Bbe+aKN+lpSH4PWBS+tkSRmZXI3vO8qZchf1Snw9ANe+B
-         FC6Mo6Y5oTuENjLa/ufNcTegVN4oNeIiLGJYWvlxALDXRMQLGd5orvdZGGnhWqoY1i+f
-         jJlyj0w5e7+ryJDNRbd7Sh4o9BD/js59D7utGikiguTUZfoEWE5VNWRsaCVctMnZzO5r
-         Z4E4anh1Jvvvd+Yp7spw5a52clpv4jyskP8SQQ538hFUsLBTDB3hnmqoY+umjNotnW41
-         RlKN/CWBnVh0eU9DE3rQbG9r2spWig5aTrXJY1Adr+fkkVrTOyuNW7v/xL905ry88zy1
-         ts+g==
-X-Gm-Message-State: AC+VfDxI5e8fOUnxVMEXWoiC7dAwYyeslZfNgMHLTBosUBJTos6bzku5
-        /sdaLB+2XG4mn87JLuiHGxFSJAHMMf/i0cCBz3twyZ6p
-X-Google-Smtp-Source: ACHHUZ6mTFgzIb6zPDNnGlkHv0fWz4bg3tnhQ5ViIkYqKsIGdTM0mE/ZP2ac0GPE8ryapGjqK0SIug==
-X-Received: by 2002:a17:907:9704:b0:978:337e:c41a with SMTP id jg4-20020a170907970400b00978337ec41amr11974121ejc.14.1686679145915;
-        Tue, 13 Jun 2023 10:59:05 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id w23-20020a1709064a1700b00978723f594bsm6860253eju.101.2023.06.13.10.59.03
+        bh=KU2BO0gcHFt44DuEFTAO2c7xYdpyPStn/nzoWP1HBD4=;
+        b=TnEmMU+NfdMcP5Y8e3ELbfHFDUV3/nrL+2in7N+oXWq1uY0k1AitJ+q2nS+QzRhl72
+         +t/iK+BpWTiFrvB6xQ9VdUQG6b9cFrca4xQ3nwnuw7BPxJ8t8vGjO46y4DCsWYDPvGTd
+         aF2O8sU9RjUhmdvfF9svyJZfV1RjT78yVlkXdoTP6TtTxs3rWC0QHHX+2oj57LV7xDe4
+         VJdF6xmeKau79XAvla53jp0XKSgbXdcyTHiGx6CbbuPlliLjNdDzSmlFxjADZCziLG5M
+         aSzYBydgmto5gTW/YBmS0ojlGIFmRLiF4IiZiYARwEGvukEvEqBEVIHV1xiJTMdCMqd0
+         Ocag==
+X-Gm-Message-State: AC+VfDzJ7Uu/QNFWhr+Sx3Z1b1WswS3vkn/qGpAXcbqa3XVVhoKCGRV2
+        BymnsoJoO7hS54XvLNLuJ4kQ+yuuu8WjYw3bGW9jP4LM
+X-Google-Smtp-Source: ACHHUZ5X7cw4k192Fo+BIX2SDun4eFM1o/aRclPRd/WDdhbNHxNrbIDPgb82ag6VV9ETaLFGsogg0A==
+X-Received: by 2002:a17:907:7292:b0:977:cc28:d974 with SMTP id dt18-20020a170907729200b00977cc28d974mr14362741ejc.14.1686679283864;
+        Tue, 13 Jun 2023 11:01:23 -0700 (PDT)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
+        by smtp.gmail.com with ESMTPSA id u20-20020a17090617d400b009745b0cb326sm6879485eje.109.2023.06.13.11.01.19
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 10:59:04 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-30ae95c4e75so5768677f8f.2
-        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 10:59:03 -0700 (PDT)
-X-Received: by 2002:adf:e546:0:b0:306:41d3:fcb9 with SMTP id
- z6-20020adfe546000000b0030641d3fcb9mr8013110wrm.27.1686679143465; Tue, 13 Jun
- 2023 10:59:03 -0700 (PDT)
+        Tue, 13 Jun 2023 11:01:21 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-977c8423dccso1409262666b.1
+        for <linux-arch@vger.kernel.org>; Tue, 13 Jun 2023 11:01:19 -0700 (PDT)
+X-Received: by 2002:a17:907:7d92:b0:969:9c0c:4c97 with SMTP id
+ oz18-20020a1709077d9200b009699c0c4c97mr13719822ejc.1.1686679279617; Tue, 13
+ Jun 2023 11:01:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com> <20230613001108.3040476-11-rick.p.edgecombe@intel.com>
-In-Reply-To: <20230613001108.3040476-11-rick.p.edgecombe@intel.com>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com> <20230613001108.3040476-12-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230613001108.3040476-12-rick.p.edgecombe@intel.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 13 Jun 2023 10:58:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgUz9BzHd7Ne1_bUa+4rWoTZanqkQvm4iJt=D7QpE3djw@mail.gmail.com>
-Message-ID: <CAHk-=wgUz9BzHd7Ne1_bUa+4rWoTZanqkQvm4iJt=D7QpE3djw@mail.gmail.com>
-Subject: Re: [PATCH v9 10/42] x86/mm: Introduce _PAGE_SAVED_DIRTY
+Date:   Tue, 13 Jun 2023 11:01:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh-PfXhVb7Atk+G8SNjFSvqDWu37KPFR-ssuM-j_o93Kg@mail.gmail.com>
+Message-ID: <CAHk-=wh-PfXhVb7Atk+G8SNjFSvqDWu37KPFR-ssuM-j_o93Kg@mail.gmail.com>
+Subject: Re: [PATCH v9 11/42] x86/mm: Update ptep/pmdp_set_wrprotect() for _PAGE_SAVED_DIRTY
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -103,40 +103,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Small nit.
-
 On Mon, Jun 12, 2023 at 5:14=E2=80=AFPM Rick Edgecombe
 <rick.p.edgecombe@intel.com> wrote:
 >
-> +static inline unsigned long mksaveddirty_shift(unsigned long v)
-> +{
-> +       unsigned long cond =3D !(v & (1 << _PAGE_BIT_RW));
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1189,7 +1189,17 @@ static inline pte_t ptep_get_and_clear_full(struct=
+ mm_struct *mm,
+>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
+>                                       unsigned long addr, pte_t *ptep)
+>  {
+> -       clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
+> +       /*
+> +        * Avoid accidentally creating shadow stack PTEs
+> +        * (Write=3D0,Dirty=3D1).  Use cmpxchg() to prevent races with
+> +        * the hardware setting Dirty=3D1.
+> +        */
+> +       pte_t old_pte, new_pte;
 > +
-> +       v |=3D ((v >> _PAGE_BIT_DIRTY) & cond) << _PAGE_BIT_SAVED_DIRTY;
-> +       v &=3D ~(cond << _PAGE_BIT_DIRTY);
+> +       old_pte =3D READ_ONCE(*ptep);
+> +       do {
+> +               new_pte =3D pte_wrprotect(old_pte);
+> +       } while (!try_cmpxchg((long *)&ptep->pte, (long *)&old_pte, *(lon=
+g *)&new_pte));
+>  }
 
-I assume you checked that the compiler does the right thing here?
+Thanks. Much nicer with this all being done just one way and no need
+for ifdeffery on config options and runtime static branches.
 
-Because the above is kind of an odd way to do things, I feel.
-
-You use boolean operators and then work with an "unsigned long" and
-then shift things by hand. So you're kind of mixing two different
-mental models.
-
-To me, it would be more natural to do that 'cond' calculation as
-
-        unsigned long cond =3D (~v >> _PAGE_BIT_RW) & 1;
-
-and keep everything in the "bitops" domain.
-
-I suspect - and hope - that the compiler is smart enough to turn that
-boolean test into just the shift, but if that's the intent, why not
-just write it with that in mind and not have that "both ways" model?
-
-> +static inline unsigned long clear_saveddirty_shift(unsigned long v)
-> +{
-> +       unsigned long cond =3D !!(v & (1 << _PAGE_BIT_RW));
-
-Same comment here.
-
-             Linus
+                  Linus
