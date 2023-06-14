@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF60730B97
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jun 2023 01:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95765730B9E
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jun 2023 01:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235356AbjFNXee (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Jun 2023 19:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S229516AbjFNXfS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Jun 2023 19:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFNXee (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jun 2023 19:34:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1901BD4;
-        Wed, 14 Jun 2023 16:34:33 -0700 (PDT)
+        with ESMTP id S237103AbjFNXfP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jun 2023 19:35:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C5F1BD4;
+        Wed, 14 Jun 2023 16:35:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCDB960DFC;
-        Wed, 14 Jun 2023 23:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B75ABC433C0;
-        Wed, 14 Jun 2023 23:34:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 841FF61274;
+        Wed, 14 Jun 2023 23:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8900AC433C8;
+        Wed, 14 Jun 2023 23:35:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686785672;
-        bh=9vAVA0vgFk7ZYI1wt4Vl5FRDTi/wrA+OF5wp7ML/pow=;
+        s=k20201202; t=1686785712;
+        bh=vacjCPiU5N8qvuuprIt6J0bOdVwOCc4CraBBI0wBsjA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AiI6WTDAzKwrOxtz6nWJfROnB1o1cyZzVocJOvEv8rNr3DjJoaRxjnyl6KI1/azc7
-         dnNjrbFqUc9BNT3gfLjxvYgGEoa/q8LZv/7/yKnnmFDxWDSmY81UsfknYZaSh0lC/p
-         vTSl1mqWphg9hn6sB7tlbwNgjyoaf9+/fdlO0P8lH9PLRI1rvbRYSumKTyrNsiz887
-         zbFYdFN05Yy8WyzQ6HIUAMRSOGfEyPmVf1zlx4UM3La5NgbKBGrF30zc40THSrsbDC
-         sSqEi0WaYlSbqhSMQPcV8yqqyxelVF2OWZp+dG+Qv50nvA8Qfi9Ju1mVwxbpCJLNWM
-         4H9tyl1pq2taw==
-Date:   Thu, 15 Jun 2023 00:34:20 +0100
+        b=eCc3lU9QvRreg8CWsym97621Y1HdoB5z0BuzFeiN07u9LL/m9q37r2V5D4RRnOW84
+         wjDU5qd+v0wR6BUZOEJO1LP6ZB3iJ2PGQTUCUrDtEUCo4kplur+s+ce1ytQwa0CYL0
+         3PsoGx+B4VeF2QCFMI33lfUN48CkkNS8MssSv/CGaV2YmN22V3495CK5i0X0cGe4jD
+         OOAlXyMYeRPIWk6DwaTGG5NXmUPGRljP+ep0lFLLVAe6utCSVBno0fer/rzrxtPP5w
+         4PsPrpZNYwrAXe1AgFqm2GKUVkAmpWSY4VeYue4CyAkSRdtT5vZx77zeg9rvfEOBqf
+         505cofmZyOrhg==
+Date:   Thu, 15 Jun 2023 00:35:01 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -63,20 +63,19 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v9 16/42] mm: Add guard pages around a shadow stack.
-Message-ID: <6e2cd47f-f541-4a94-87f8-79204144fc8d@sirena.org.uk>
+        torvalds@linux-foundation.org, Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v9 17/42] mm: Warn on shadow stack memory in wrong vma
+Message-ID: <9583dff0-08aa-40e2-943f-f046f0402058@sirena.org.uk>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-17-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-18-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vtj6G0y/iCDsSROv"
+        protocol="application/pgp-signature"; boundary="BSjLtFoBpX+dhkhM"
 Content-Disposition: inline
-In-Reply-To: <20230613001108.3040476-17-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230613001108.3040476-18-rick.p.edgecombe@intel.com>
 X-Cookie: You are false data.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,11 +85,11 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---vtj6G0y/iCDsSROv
+--BSjLtFoBpX+dhkhM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jun 12, 2023 at 05:10:42PM -0700, Rick Edgecombe wrote:
+On Mon, Jun 12, 2023 at 05:10:43PM -0700, Rick Edgecombe wrote:
 > The x86 Control-flow Enforcement Technology (CET) feature includes a new
 > type of memory called shadow stack. This shadow stack memory has some
 > unusual properties, which requires some core mm changes to function
@@ -98,19 +97,19 @@ On Mon, Jun 12, 2023 at 05:10:42PM -0700, Rick Edgecombe wrote:
 
 Reviewed-by: Mark Brown <broonie@kernel.org>
 
---vtj6G0y/iCDsSROv
+--BSjLtFoBpX+dhkhM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSKTnsACgkQJNaLcl1U
-h9CzQQf+PdMiX9VT9eldMSx+qFLvi4hp6EiOa28TOPpP8QZF5bcajoksvMbUkcbb
-gExx3xen7iFsntlX0l5r+UPsRz2CyKJz/fxmINrDCb1hqMfNVe96DRfuGgeOY8jh
-MvmdWEzlta5AvmXAS9FhfMHscsbTJY3gZI4UHPrA2utcPHxqvi5fAjpLR1k/mIW6
-gEyaNn/fOdNDsKp4SGpK5y+QpErsKT0MKFRkjI7wqgksLWthdtVKCVZu5rErCh9l
-Gtaiw+fFOI844jDoRBfzMyC01XmM0MSNMa/oARvenJ7VbE987k/Wr43yhXeUv8uC
-CELrSSB6sp2FNqnFX7cMVEwMKcGe9w==
-=ND6N
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSKTqQACgkQJNaLcl1U
+h9DuIwf/UNc+nTY+UZmszCtFLLJzZY0v0k0woxLukAJtCYOMzWbzgUU3HMn/am0V
+y6ZoQODYns2OC5PQ1aHhORTs/srWbZDqABYUr4+Rg4tNPosfLoidutRExFLGvd1P
+tUU2Gkp+mCwzUbJN5KyUU0J1LSxWHzoJAqgomJGzhc2vSVtoF+KS2X9R5UdnfIE9
+T8DSw5VeYuzKGVPMQVzRs4cVNIuj5/94wEEyGHXEO/dOos8ECuoPkzkfLmDTtb50
+dylLaW7InFIA/HIXTPE1JwkFSomJePTZSlmngmAA91Andk6pvQ1PkKQayGqbqyXW
+kXqXqHJKtZE5tF1vFNHCKQJMNHQl6A==
+=Zsa+
 -----END PGP SIGNATURE-----
 
---vtj6G0y/iCDsSROv--
+--BSjLtFoBpX+dhkhM--
