@@ -2,58 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A2672FF59
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Jun 2023 15:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9120672FFB3
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Jun 2023 15:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244798AbjFNNCr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Jun 2023 09:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S244926AbjFNNN5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Jun 2023 09:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244078AbjFNNCq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jun 2023 09:02:46 -0400
+        with ESMTP id S244795AbjFNNNz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jun 2023 09:13:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21F0199C;
-        Wed, 14 Jun 2023 06:02:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF7268B;
+        Wed, 14 Jun 2023 06:13:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5675564215;
-        Wed, 14 Jun 2023 13:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8321C433CB;
-        Wed, 14 Jun 2023 13:02:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C76F1639C3;
+        Wed, 14 Jun 2023 13:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E57C433C0;
+        Wed, 14 Jun 2023 13:12:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686747764;
-        bh=Z0S2d/Eru6a8jIIub+wJj2QGnnAEIe7xODp5r4XEjY4=;
+        s=k20201202; t=1686748385;
+        bh=x8Up71mCwqWQG8AsnfE4/2MdVJDUJadORPWbH0I1tuE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ij1kaX2f2DmI7HK85FkEb/euMvHbhk1Yl6Bfkym5Y/V3n55SCcwdtHPiMl/Uaznfq
-         /JPBcReV4N5cCfLGrjl0lmP3t1/xIRQ0sNu8SuNRKfJvFTG3ehEI7XrnyZzzj/mq5Z
-         LIzsfSZJkFEA+VFk5od8SUJmz7a2MZahKi7y83tUViVFyHKqtoU7QmKJKuQUMruG+3
-         ZBcXEtH/BdXI8p8nle54zxP2rJXEAQvrH6UElVJeso6ar3qrgbKRU7tK7ulw5ExB7M
-         3MJes9iMWx7TD3tX2qF3/3jOSJV75iRXzB8fjYUsip9RPr0GERlktBmW7yBKguUpKQ
-         +EDy1u2Ox8vrA==
-Date:   Wed, 14 Jun 2023 16:02:07 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v4 01/34] mm: Add PAGE_TYPE_OP folio functions
-Message-ID: <20230614130207.GZ52412@kernel.org>
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
- <20230612210423.18611-2-vishal.moola@gmail.com>
+        b=NmGuG1scUFZKhFQNFytyrqQs4QH8kSngMWTDWQhh/IAxUShNkfAlHA0mYatvTs83/
+         jOKmBA00V+we+EzssIXOd/Qz6QecVS5ksEJeq0J3SvWSO8bj5PSDHbZgMaN95IeN8R
+         P733m+ruVwxdOGQxxq0YxO2HZWTkeNUJANSmfjGDgbvalwxGKpo4E3gTq3Iv5L2IZO
+         zKhN1qUc4PaKfYBJnBHQfjM3sPbtik1D4+Ru3w0XxYPIZqDW9YzPa4GikNGjqHoBr8
+         valRm0kUucRd4MnoMTxBiQVaEQ6kAsOzmbiwXIMM0TI99Z7h0v4MW5wcMejZM+cOhR
+         a/QxJGFDHl0Uw==
+Date:   Wed, 14 Jun 2023 14:12:53 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <898e952a-be97-4424-b889-4f766e3e0cd4@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
+ <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
+ <87y1knh729.fsf@oldenburg.str.redhat.com>
+ <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
+ <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
+ <fc2ebfcf-8d91-4f07-a119-2aaec3aa099f@sirena.org.uk>
+ <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4ibPQ7ywZvQ2KqFY"
 Content-Disposition: inline
-In-Reply-To: <20230612210423.18611-2-vishal.moola@gmail.com>
+In-Reply-To: <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
+X-Cookie: At participating locations only.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,76 +105,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 02:03:50PM -0700, Vishal Moola (Oracle) wrote:
-> No folio equivalents for page type operations have been defined, so
-> define them for later folio conversions.
-> 
-> Also changes the Page##uname macros to take in const struct page* since
-> we only read the memory here.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+--4ibPQ7ywZvQ2KqFY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
->  include/linux/page-flags.h | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index 92a2063a0a23..e99a616b9bcd 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -908,6 +908,8 @@ static inline bool is_page_hwpoison(struct page *page)
->  
->  #define PageType(page, flag)						\
->  	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
-> +#define folio_test_type(folio, flag)					\
-> +	((folio->page.page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
->  
->  static inline int page_type_has_type(unsigned int page_type)
->  {
-> @@ -920,20 +922,34 @@ static inline int page_has_type(struct page *page)
->  }
->  
->  #define PAGE_TYPE_OPS(uname, lname)					\
-> -static __always_inline int Page##uname(struct page *page)		\
-> +static __always_inline int Page##uname(const struct page *page)		\
->  {									\
->  	return PageType(page, PG_##lname);				\
->  }									\
-> +static __always_inline int folio_test_##lname(const struct folio *folio)\
-> +{									\
-> +	return folio_test_type(folio, PG_##lname);			\
-> +}									\
->  static __always_inline void __SetPage##uname(struct page *page)		\
->  {									\
->  	VM_BUG_ON_PAGE(!PageType(page, 0), page);			\
->  	page->page_type &= ~PG_##lname;					\
->  }									\
-> +static __always_inline void __folio_set_##lname(struct folio *folio)	\
-> +{									\
-> +	VM_BUG_ON_FOLIO(!folio_test_type(folio, 0), folio);		\
-> +	folio->page.page_type &= ~PG_##lname;				\
-> +}									\
->  static __always_inline void __ClearPage##uname(struct page *page)	\
->  {									\
->  	VM_BUG_ON_PAGE(!Page##uname(page), page);			\
->  	page->page_type |= PG_##lname;					\
-> -}
-> +}									\
-> +static __always_inline void __folio_clear_##lname(struct folio *folio)	\
-> +{									\
-> +	VM_BUG_ON_FOLIO(!folio_test_##lname(folio), folio);		\
-> +	folio->page.page_type |= PG_##lname;				\
-> +}									\
->  
->  /*
->   * PageBuddy() indicates that the page is free and in the buddy system
-> -- 
-> 2.40.1
-> 
-> 
+On Tue, Jun 13, 2023 at 07:57:37PM +0000, Edgecombe, Rick P wrote:
 
--- 
-Sincerely yours,
-Mike.
+> For alt shadow stack's, this is what I came up with:
+> https://lore.kernel.org/lkml/20220929222936.14584-40-rick.p.edgecombe@intel.com/
+
+> Unfortunately it can't work automatically with sigaltstack(). Since it
+> has to be a new thing anyway, it's been left for the future. I guess
+> that might have a better chance of being cross arch.
+
+Yeah, I've not seen and can't think of anything that's entirely
+satisfactory either.  Like Szabolcs says I do think we need a story on
+this.
+
+> BTW, last time this series accidentally broke an arm config and made it
+> all the way through the robots up to Linus. Would you mind giving
+> patches 1-3 a check?
+
+I'm in the middle of importing the whole series into my development
+branch, but note that I'm only really working with arm64 not arm so
+might miss stuff the bots would hit.  Hopefully there should be some
+Tested-bys coming for arm64 anyway.
+
+--4ibPQ7ywZvQ2KqFY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSJvNQACgkQJNaLcl1U
+h9CPyQf/Y4GwjTyNGgoEGlusyMBRxull9v6onRkwCcTUbLHk6Nmd68eA186L2jZS
+kTkjXNcM67CHwcz3xw1W/1T4uXcitQqHeNznnES31wFwPnJYZzDJSF3RfyhC3WXk
+eh9so9SyTG2SO/AK4CUgdhSph0eYMo2o606r/S+4mWiThEC6sMK/5Wly6vVmM4mm
+dAHJecna4winLvCpMTb5gW/khUtn5Bc3w58b/45FoVytXFnMV65H+Q/WIsySPl2J
+pHH93UeI0zJXXKzhm6iSQBFjRmLa18i7o0k456fIKYxFYknblATaeJvSXC4YhCtA
+zVN7zhOEPqONu5RRMukB6WRZgpm3tw==
+=ErsU
+-----END PGP SIGNATURE-----
+
+--4ibPQ7ywZvQ2KqFY--
