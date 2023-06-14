@@ -2,66 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063DD72F848
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Jun 2023 10:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DB572F84E
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Jun 2023 10:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243770AbjFNIuq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Jun 2023 04:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S243775AbjFNIvG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Jun 2023 04:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243543AbjFNIui (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jun 2023 04:50:38 -0400
+        with ESMTP id S234921AbjFNIvB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Jun 2023 04:51:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426391FDD
-        for <linux-arch@vger.kernel.org>; Wed, 14 Jun 2023 01:49:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1981BD2
+        for <linux-arch@vger.kernel.org>; Wed, 14 Jun 2023 01:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686732590;
+        s=mimecast20190719; t=1686732618;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3Rsvso4l9koDuzHwHgyAvlpKhmbENWcT5E1vZaroQkI=;
-        b=bJE29uX7quBtQ5uksAwivZhMHH7Y7oV2uI9QsjIqJSu1Z4w+WGMSDcl5OLrvhxB9FNAp3k
-        8n15jOum4zP8tas6oWh2NUuKDwQvQnuCfiChLN4GtbF47yapI1vUSTY/+fS+mQ3VZHyLbm
-        j2lbGIYwSzmkjo+xbp4tI7ZJVCcySfA=
+        bh=5B5lUZSMuFMfr+ki8+YhMEK1JVBx4VqBUAAdrrVgwzA=;
+        b=hxSN69zsSWGrEQJ5q9QLKHwy6wctoeLSJZ91Opv4NejCs3KBXrDzeFv5IdPUGwPv4Eesg9
+        8aPbPwFCPK8657vDGHSQgH1T+4nz8X1OtKCyrM0P5fvr296cW/OwAosCHFTGyoIgtzp9Xo
+        NVsqt3gyNR4XlmU6aRn4KN8r8OnPGcA=
 Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
  [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-48-rRWE7mpbPw-Bd7_13bqXCQ-1; Wed, 14 Jun 2023 04:49:48 -0400
-X-MC-Unique: rRWE7mpbPw-Bd7_13bqXCQ-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4edb90ccaadso5073469e87.3
-        for <linux-arch@vger.kernel.org>; Wed, 14 Jun 2023 01:49:47 -0700 (PDT)
+ us-mta-534-oWrgbljQN22agwacmAISmA-1; Wed, 14 Jun 2023 04:50:09 -0400
+X-MC-Unique: oWrgbljQN22agwacmAISmA-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f76712f950so336913e87.0
+        for <linux-arch@vger.kernel.org>; Wed, 14 Jun 2023 01:50:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686732586; x=1689324586;
+        d=1e100.net; s=20221208; t=1686732607; x=1689324607;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Rsvso4l9koDuzHwHgyAvlpKhmbENWcT5E1vZaroQkI=;
-        b=i4fYyiu2F6J3B+iTyKyinqTCFu6a9UZIttak+V2BPRTEb3sPSGE7CtukyZjr3qQYyw
-         WilOkBI9IFWGKvjhLevCLTqsNxKd9xbcIA9LffeV6WkmO+1rftXsoAUFLiZHFY8FNMcv
-         W+EkxhxLcLgLqbl1aZhvu16Y3MMamlvc9TmRILKd52tLUY5Z75/nY2ZOk4Tu5Pp8BHcy
-         iEvGJJ2GMoGFRg8oLKa9VZi6eQnBaCaBin4nkUepIfDxZBs7iO+i4UV5OOwahal/QpkN
-         uEGX397c46td4kW+/ZLqHHOyI0/puAWuUcSewMySdekA3euO4010koxdE1IpJo3TjEix
-         yaBA==
-X-Gm-Message-State: AC+VfDzqSbvv1jJ0fmjW2lMRVA/Z9ICrS20nVHLTkiZWkHjtY5LFTU/p
-        rBwpE8ASJGUgOF+KmTTvE2yc2okI1LHBjHCDfsBj42UiD0FH2aTLuFW/VA7epuotiG5z38IByPT
-        +kD6kJA5DoqrgZoHA55MX7A==
-X-Received: by 2002:a19:4312:0:b0:4f4:b28f:6b9c with SMTP id q18-20020a194312000000b004f4b28f6b9cmr6502160lfa.29.1686732586585;
-        Wed, 14 Jun 2023 01:49:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4r4XW6g5a7gzGlx/YsBE42/ZrV5TBz6ylOyFXzEPjbNlpThttCQBG7uP9TbF88yZOz/A7BQg==
-X-Received: by 2002:a19:4312:0:b0:4f4:b28f:6b9c with SMTP id q18-20020a194312000000b004f4b28f6b9cmr6502133lfa.29.1686732586113;
-        Wed, 14 Jun 2023 01:49:46 -0700 (PDT)
+        bh=5B5lUZSMuFMfr+ki8+YhMEK1JVBx4VqBUAAdrrVgwzA=;
+        b=bRuSTY+pHYR6+fCzywnzTuZZ7qUT/RhTtZU6FcW/VaZARm9svcYc1H/SJ5DjfsMLkz
+         9cDlDQMQ16AsZczrGPZmqQEcTMf2AoYBcZGp7jME10wr3Kiz4gajIQMbTSn0QhLbKI18
+         vu9MHx43pJKpOWAhm3bh6A5Z+0eFxQQiTkoPlQLbcZWSJKuTvvUM4G9ITUOsxuyS10Vr
+         //jmXp8XzOMEWsf5ibynRSYH6zEC+WO1AOoomvJVwgBxrHXaFC77ZyGsuytrsblYqYvg
+         E4lvZ5rCqFfjU1nN0Equb2+c5NtLvuQ5hzatOr0PZkrz98syADMH55nUb5yqo7KK7SlO
+         biSw==
+X-Gm-Message-State: AC+VfDyN1vfsy4C8NEbEbbxujcMR+s4rf9GoVFOw0QlxoZUihVg8ULAm
+        07nhrGpJtJHJ2/ocKZpLdC7EjkLEt4PUZTZDmQT/z4m+Vw7Bv0Onx+JCnTYjGJHPyq5MNbBNpSq
+        y43zXjKfVB0Y0DgdpovHbiw==
+X-Received: by 2002:a19:5001:0:b0:4f2:769a:120e with SMTP id e1-20020a195001000000b004f2769a120emr7189231lfb.2.1686732607637;
+        Wed, 14 Jun 2023 01:50:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4QcwYxgnMHB8zt+5nd3J5mySSLf2a3UMLrVPLHrR3mI+MG14rCyMyhPKMJcoHtf3oiHRZR5Q==
+X-Received: by 2002:a19:5001:0:b0:4f2:769a:120e with SMTP id e1-20020a195001000000b004f2769a120emr7189170lfb.2.1686732607272;
+        Wed, 14 Jun 2023 01:50:07 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c704:b200:7d03:23db:ad5:2d21? (p200300cbc704b2007d0323db0ad52d21.dip0.t-ipconnect.de. [2003:cb:c704:b200:7d03:23db:ad5:2d21])
-        by smtp.gmail.com with ESMTPSA id g26-20020a7bc4da000000b003f60e143d38sm16709642wmk.11.2023.06.14.01.49.43
+        by smtp.gmail.com with ESMTPSA id n5-20020a05600c294500b003f7ec896cefsm16882043wmd.8.2023.06.14.01.50.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 01:49:45 -0700 (PDT)
-Message-ID: <20afbea8-fef7-55de-20af-8497273bf11f@redhat.com>
-Date:   Wed, 14 Jun 2023 10:49:43 +0200
+        Wed, 14 Jun 2023 01:50:06 -0700 (PDT)
+Message-ID: <42a95041-e1a7-f343-8432-e2ce07af4e9e@redhat.com>
+Date:   Wed, 14 Jun 2023 10:50:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v9 04/42] mm: Re-introduce vm_flags to do_mmap()
+Subject: Re: [PATCH v9 05/42] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
 Content-Language: en-US
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         "H . Peter Anvin" <hpa@zytor.com>,
@@ -94,13 +94,13 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         debug@rivosinc.com, szabolcs.nagy@arm.com,
         torvalds@linux-foundation.org, broonie@kernel.org
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Pengfei Xu <pengfei.xu@intel.com>
 References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-5-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-6-rick.p.edgecombe@intel.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20230613001108.3040476-5-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230613001108.3040476-6-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -117,27 +117,48 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On 13.06.23 02:10, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> There was no more caller passing vm_flags to do_mmap(), and vm_flags was
-> removed from the function's input by:
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
 > 
->      commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
-> 
-> There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
-> do_mmap().  Thus, re-introduce vm_flags to do_mmap().
+> Future patches will introduce a new VM flag VM_SHADOW_STACK that will be
+> VM_HIGH_ARCH_BIT_5. VM_HIGH_ARCH_BIT_1 through VM_HIGH_ARCH_BIT_4 are
+> bits 32-36, and bit 37 is the unrelated VM_UFFD_MINOR_BIT. For the sake
+> of order, make all VM_HIGH_ARCH_BITs stay together by moving
+> VM_UFFD_MINOR_BIT from 37 to 38. This will allow VM_SHADOW_STACK to be
+> introduced as 37.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 > Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Reviewed-by: Peter Collingbourne <pcc@google.com>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: Peter Xu <peterx@redhat.com>
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
 > Tested-by: Kees Cook <keescook@chromium.org>
+> ---
+>   include/linux/mm.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 9ec20cbb20c1..6f52c1e7c640 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -370,7 +370,7 @@ extern unsigned int kobjsize(const void *objp);
+>   #endif
+>   
+>   #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+> -# define VM_UFFD_MINOR_BIT	37
+> +# define VM_UFFD_MINOR_BIT	38
+>   # define VM_UFFD_MINOR		BIT(VM_UFFD_MINOR_BIT)	/* UFFD minor faults */
+>   #else /* !CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+>   # define VM_UFFD_MINOR		VM_NONE
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Cheers,
