@@ -2,84 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7F8731D0A
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jun 2023 17:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92BA731D08
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jun 2023 17:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245543AbjFOPtg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Jun 2023 11:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S240387AbjFOPtb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Jun 2023 11:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241506AbjFOPtK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Jun 2023 11:49:10 -0400
+        with ESMTP id S240607AbjFOPtC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Jun 2023 11:49:02 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE4410F6;
-        Thu, 15 Jun 2023 08:49:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DD52960;
+        Thu, 15 Jun 2023 08:49:00 -0700 (PDT)
 Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FFHRua017986;
-        Thu, 15 Jun 2023 15:48:43 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FFHMOg017877;
+        Thu, 15 Jun 2023 15:48:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=vAESfYiUgFlG0VehISjUQT1kTyQXfPi8wsTE9qOj1f4=;
- b=VzYOIwlocaTsGY8UYypIyZK4oYoRKxVzFQPdahLtTECYYJCKxzJg2hhmM8A77VzxJO07
- Uh8bvMvBILmtBSdR1Wd+kVMI/iJBWyz0MuwssI1m6ReL4UpYbcDN2D2Elt3k59bOI30m
- JBbYEB7c6PapgLpV/fEfMdCYvpL6f8808eMK30+uRr+Fany7kAps9E55fzr83+k0fOHT
- QbZqqUPbd2MPyKTNDClJevoJri/u2l/HLUnBxJvl2tpnAcYlxsBZtA4XCKvEueaEENEz
- +IZQpfLqVsJ4ein4Vtt+wBulFdySWaiEEus6kOgRP7kHB+RsSEm5/XFWwL1rJbJ/M57W SA== 
+ bh=Z3BXx87NONENKyRCVCG4NKF1gcn0Sn0umYhm4oYj4BE=;
+ b=m+WunK/IOHWMbgZzY32kuxcQDnvGTp2wdGf0N5XWp9lvmn8+O7REY9SL+wjg7wjnREBY
+ l51RIDawtCIERuv4y/kGq+w1ZkkVutMI5eMG2+taOF1RebzOQM761auH/krVI9dRLBQ8
+ 0Ag0sd0a+vqiUO57dq+sO0XWooI9tXdnoiOqXH6Q9/V520g10GVhDP5BU3fT9i7eBNuS
+ qovrS2IK/7Gn8lmKNeXE0YdDwskiXw+Xr4dtEURMa4mPBuS+rojBsd3SX/QUAhVPle0n
+ 8OR4eujVdYCXiQB+wc63+o0IKKZaQfgnqlOgWdT0qJnh9ZM3zfYBJRUUMf6Z6W30TJGB hg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r855fh84b-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r855fh7uu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 15:48:41 +0000
+        Thu, 15 Jun 2023 15:48:33 +0000
 Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35FFfvra004653;
-        Thu, 15 Jun 2023 15:47:29 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r855fh3up-1
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35FFg3CH005425;
+        Thu, 15 Jun 2023 15:47:25 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r855fh3vk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 15:47:29 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35F7rvKr012019;
-        Thu, 15 Jun 2023 15:46:39 GMT
+        Thu, 15 Jun 2023 15:47:25 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35F5j377026971;
+        Thu, 15 Jun 2023 15:46:40 GMT
 Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r4gt4tqne-1
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3r4gt52r2s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 15:46:39 +0000
+        Thu, 15 Jun 2023 15:46:40 +0000
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35FFkbW164291220
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35FFkbgF61931940
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 15 Jun 2023 15:46:37 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3F4A920040;
+        by IMSVA (Postfix) with ESMTP id C7C302004D;
         Thu, 15 Jun 2023 15:46:37 +0000 (GMT)
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B9AF32004B;
-        Thu, 15 Jun 2023 15:46:36 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4F92520043;
+        Thu, 15 Jun 2023 15:46:37 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.144.159.119])
         by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Jun 2023 15:46:36 +0000 (GMT)
+        Thu, 15 Jun 2023 15:46:37 +0000 (GMT)
 From:   Laurent Dufour <ldufour@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, x86@kernel.org,
         linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
         npiggin@gmail.com, christophe.leroy@csgroup.eu, tglx@linutronix.de,
         dave.hansen@linux.intel.com, mingo@redhat.com, bp@alien8.de
-Subject: [PATCH 01/10] cpu/SMT: Move SMT prototypes into cpu_smt.h
-Date:   Thu, 15 Jun 2023 17:46:26 +0200
-Message-ID: <20230615154635.13660-2-ldufour@linux.ibm.com>
+Subject: [PATCH 02/10] cpu/SMT: Move smt/control simple exit cases earlier
+Date:   Thu, 15 Jun 2023 17:46:27 +0200
+Message-ID: <20230615154635.13660-3-ldufour@linux.ibm.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230615154635.13660-1-ldufour@linux.ibm.com>
 References: <20230615154635.13660-1-ldufour@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uCAd7BX21IwQmzyAFF9xULLhr02GPa4z
-X-Proofpoint-ORIG-GUID: FKW92goDgVVNvWMKCg7WMpvOK6hqDALH
+X-Proofpoint-GUID: FAcxk4wfwW8CUIwp5TqzGbT7Q6rnTN1S
+X-Proofpoint-ORIG-GUID: U67IZCq5D10t0m1mh1XSjryU96tz66Bq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-15_12,2023-06-15_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
  spamscore=0 malwarescore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=671 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501
  clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2306150136
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,124 +94,50 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Michael Ellerman <mpe@ellerman.id.au>
 
-A subsequent patch would like to use the cpuhp_smt_control enum as part
-of the interface between generic and arch code.
+Move the simple exit cases, ie. which don't depend on the value written,
+earlier in the function. That makes it clearer that regardless of the
+input those states can not be transitioned out of.
 
-Currently that leads to circular header dependencies. So split the enum
-and related declarations into a separate header.
+That does have a user-visible effect, in that the error returned will
+now always be EPERM/ENODEV for those states, regardless of the value
+written. Previously writing an invalid value would return EINVAL even
+when in those states.
 
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- arch/x86/include/asm/topology.h |  2 ++
- include/linux/cpu.h             | 25 +------------------------
- include/linux/cpu_smt.h         | 29 +++++++++++++++++++++++++++++
- kernel/cpu.c                    |  1 +
- 4 files changed, 33 insertions(+), 24 deletions(-)
- create mode 100644 include/linux/cpu_smt.h
+ kernel/cpu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 458c891a8273..66927a59e822 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -136,6 +136,8 @@ static inline int topology_max_smt_threads(void)
- 	return __max_smt_threads;
- }
- 
-+#include <linux/cpu_smt.h>
-+
- int topology_update_package_map(unsigned int apicid, unsigned int cpu);
- int topology_update_die_map(unsigned int dieid, unsigned int cpu);
- int topology_phys_to_logical_pkg(unsigned int pkg);
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 8582a7142623..40548f3c201c 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -18,6 +18,7 @@
- #include <linux/compiler.h>
- #include <linux/cpumask.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/cpu_smt.h>
- 
- struct device;
- struct device_node;
-@@ -202,30 +203,6 @@ void cpuhp_report_idle_dead(void);
- static inline void cpuhp_report_idle_dead(void) { }
- #endif /* #ifdef CONFIG_HOTPLUG_CPU */
- 
--enum cpuhp_smt_control {
--	CPU_SMT_ENABLED,
--	CPU_SMT_DISABLED,
--	CPU_SMT_FORCE_DISABLED,
--	CPU_SMT_NOT_SUPPORTED,
--	CPU_SMT_NOT_IMPLEMENTED,
--};
--
--#if defined(CONFIG_SMP) && defined(CONFIG_HOTPLUG_SMT)
--extern enum cpuhp_smt_control cpu_smt_control;
--extern void cpu_smt_disable(bool force);
--extern void cpu_smt_check_topology(void);
--extern bool cpu_smt_possible(void);
--extern int cpuhp_smt_enable(void);
--extern int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval);
--#else
--# define cpu_smt_control		(CPU_SMT_NOT_IMPLEMENTED)
--static inline void cpu_smt_disable(bool force) { }
--static inline void cpu_smt_check_topology(void) { }
--static inline bool cpu_smt_possible(void) { return false; }
--static inline int cpuhp_smt_enable(void) { return 0; }
--static inline int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval) { return 0; }
--#endif
--
- extern bool cpu_mitigations_off(void);
- extern bool cpu_mitigations_auto_nosmt(void);
- 
-diff --git a/include/linux/cpu_smt.h b/include/linux/cpu_smt.h
-new file mode 100644
-index 000000000000..722c2e306fef
---- /dev/null
-+++ b/include/linux/cpu_smt.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_CPU_SMT_H_
-+#define _LINUX_CPU_SMT_H_
-+
-+enum cpuhp_smt_control {
-+	CPU_SMT_ENABLED,
-+	CPU_SMT_DISABLED,
-+	CPU_SMT_FORCE_DISABLED,
-+	CPU_SMT_NOT_SUPPORTED,
-+	CPU_SMT_NOT_IMPLEMENTED,
-+};
-+
-+#if defined(CONFIG_SMP) && defined(CONFIG_HOTPLUG_SMT)
-+extern enum cpuhp_smt_control cpu_smt_control;
-+extern void cpu_smt_disable(bool force);
-+extern void cpu_smt_check_topology(void);
-+extern bool cpu_smt_possible(void);
-+extern int cpuhp_smt_enable(void);
-+extern int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval);
-+#else
-+# define cpu_smt_control               (CPU_SMT_NOT_IMPLEMENTED)
-+static inline void cpu_smt_disable(bool force) { }
-+static inline void cpu_smt_check_topology(void) { }
-+static inline bool cpu_smt_possible(void) { return false; }
-+static inline int cpuhp_smt_enable(void) { return 0; }
-+static inline int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval) { return 0; }
-+#endif
-+
-+#endif /* _LINUX_CPU_SMT_H_ */
 diff --git a/kernel/cpu.c b/kernel/cpu.c
-index f4a2c5845bcb..237394e0574a 100644
+index 237394e0574a..c67049bb3fc8 100644
 --- a/kernel/cpu.c
 +++ b/kernel/cpu.c
-@@ -413,6 +413,7 @@ static void lockdep_release_cpus_lock(void)
- void __weak arch_smt_update(void) { }
+@@ -2482,6 +2482,12 @@ __store_smt_control(struct device *dev, struct device_attribute *attr,
+ {
+ 	int ctrlval, ret;
  
- #ifdef CONFIG_HOTPLUG_SMT
++	if (cpu_smt_control == CPU_SMT_FORCE_DISABLED)
++		return -EPERM;
 +
- enum cpuhp_smt_control cpu_smt_control __read_mostly = CPU_SMT_ENABLED;
++	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
++		return -ENODEV;
++
+ 	if (sysfs_streq(buf, "on"))
+ 		ctrlval = CPU_SMT_ENABLED;
+ 	else if (sysfs_streq(buf, "off"))
+@@ -2491,12 +2497,6 @@ __store_smt_control(struct device *dev, struct device_attribute *attr,
+ 	else
+ 		return -EINVAL;
  
- void __init cpu_smt_disable(bool force)
+-	if (cpu_smt_control == CPU_SMT_FORCE_DISABLED)
+-		return -EPERM;
+-
+-	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
+-		return -ENODEV;
+-
+ 	ret = lock_device_hotplug_sysfs();
+ 	if (ret)
+ 		return ret;
 -- 
 2.41.0
 
