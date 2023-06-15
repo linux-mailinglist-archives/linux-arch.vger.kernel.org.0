@@ -2,131 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BB17317EF
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jun 2023 13:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D2A7318B8
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jun 2023 14:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344680AbjFOL4F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Jun 2023 07:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        id S1344847AbjFOMQo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Jun 2023 08:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344681AbjFOLzi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Jun 2023 07:55:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3194C3B;
-        Thu, 15 Jun 2023 04:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686829815; x=1718365815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3RJds68CeRUAh9CjCeooHStP2ZZs8S1f7llk301nLC4=;
-  b=eANIyaf+aI4ll6z510SStXdIpZefrrT7k8+HB13IxorMOK6UxssPcRvx
-   ZEkJDlv2WtdZv7PkiJLBhlm2tsrCzitkVeHuFsoidSH4fHgVYA/oBEkt1
-   lQYckrhn23fDyOWBw8dlf50K1MqBDMHWGQGHUnn//5LQaNkEOOhs0lmLY
-   VaZseGi23AwR9WD2uGi6wZhqBhoKInxHSP3x+yN3CfvNnxq15iV1ZZJAc
-   o8wSNGf7Z97E46DnsFm4WQC2uuMzJzRCDR69PucIlssSLLA/oDORfhAyc
-   2edb6dQvP/c1MQHUFxFlWzIWXQuv7t0auxvoJ27Fw4RrM1pCAlBof4IR6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362272390"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="362272390"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 04:47:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="959164073"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="959164073"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2023 04:47:33 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9lRs-0001pa-1g;
-        Thu, 15 Jun 2023 11:47:32 +0000
-Date:   Thu, 15 Jun 2023 19:47:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yi-De Wu <yi-de.wu@mediatek.com>,
-        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
-        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        David Bradil <dbrazdil@google.com>,
-        Jade Shih <jades.shih@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ivan Tseng <ivan.tseng@mediatek.com>,
-        My Chuang <my.chuang@mediatek.com>,
-        Shawn Hsiao <shawn.hsiao@mediatek.com>,
-        PeiLun Suei <peilun.suei@mediatek.com>,
-        Liju Chen <liju-clr.chen@mediatek.com>,
-        Willix Yeh <chi-shen.yeh@mediatek.com>
-Subject: Re: [PATCH v4 1/9] docs: geniezone: Introduce GenieZone hypervisor
-Message-ID: <202306151938.M7471qHi-lkp@intel.com>
-References: <20230609085214.31071-2-yi-de.wu@mediatek.com>
+        with ESMTP id S1344849AbjFOMP7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Jun 2023 08:15:59 -0400
+Received: from mail.sitirkam.com (mail.aurorateknoglobal.com [103.126.10.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF782967;
+        Thu, 15 Jun 2023 05:15:15 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id CBFD64E7BE89;
+        Thu, 15 Jun 2023 08:32:09 +0700 (WIB)
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9PEOXuiK4TdS; Thu, 15 Jun 2023 08:32:09 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id AAB384E7BAAC;
+        Thu, 15 Jun 2023 08:32:00 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sitirkam.com AAB384E7BAAC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sitirkam.com;
+        s=B8AB377C-ED3B-11EA-8736-9248CAEF674E; t=1686792720;
+        bh=q7vDHy+gLAr4GKZUDI+hjt8I93kvW09nNmGJORUTyfg=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=N3NjQucfB1d8dBLppq5WOh9bTmxlsSrZrD1Gp71hr+LTWwbArUSVM7dMpgM62Owhl
+         W7LBChAaU70l8BlUjF4S2JZZJFtwsCOBwua8836eYRoa8Lqqpa2Hw04ZGd/1B/v+a5
+         fzJQU7cq6lc5swJnNLTYAWsmOIHSXKVid9vWBYGNfM538yXPWLew+hTSVQtaFH/o0M
+         nMiRwINVYUTxeSu7wJyzj0uVbDnMICisnE5XL3+d5nhoQOYiunftxFKReM8NRDd5sG
+         yowX8M3Y2OHoU/sj3hD5ZHU9YTzZ6ncO5H4tm5/qRcWb21gS098lmuJcQk7NSpD31f
+         UgRlXu+cxXLwQ==
+X-Virus-Scanned: amavisd-new at mail.sitirkam.com
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id g4cxxQwKGqiU; Thu, 15 Jun 2023 08:32:00 +0700 (WIB)
+Received: from [185.169.4.111] (unknown [185.169.4.111])
+        by mail.sitirkam.com (Postfix) with ESMTPSA id 30EFE4E7BABB;
+        Thu, 15 Jun 2023 08:31:54 +0700 (WIB)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609085214.31071-2-yi-de.wu@mediatek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <admin@sitirkam.com>
+From:   "Maria-Elisabeth Schaeffler" <admin@sitirkam.com>
+Date:   Wed, 14 Jun 2023 18:34:01 -0700
+Reply-To: schaefflermariaelisabeth1941@gmail.com
+Message-Id: <20230615013155.30EFE4E7BABB@mail.sitirkam.com>
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Yi-De,
+Your email account has been selected for a donation of =E2=82=AC1,700,000. =
+Please contact me for more information.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on arnd-asm-generic/master lwn/docs-next linus/master v6.4-rc6 next-20230615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230609-165552
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230609085214.31071-2-yi-de.wu%40mediatek.com
-patch subject: [PATCH v4 1/9] docs: geniezone: Introduce GenieZone hypervisor
-reproduce:
-        git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-        git fetch arm64 for-next/core
-        git checkout arm64/for-next/core
-        b4 shazam https://lore.kernel.org/r/20230609085214.31071-2-yi-de.wu@mediatek.com
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306151938.M7471qHi-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/virt/geniezone/introduction.rst:28: WARNING: Bullet list ends without a blank line; unexpected unindent.
->> Documentation/virt/geniezone/introduction.rst: WARNING: document isn't included in any toctree
-
-vim +28 Documentation/virt/geniezone/introduction.rst
-
-    26	
-    27	- vCPU Management
-  > 28	VM manager aims to provide vCPUs on the basis of time sharing on physical CPUs.
-    29	It requires Linux kernel in host VM for vCPU scheduling and VM power management.
-    30	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mrs Maria Elisabeth Schaeffler
+CEO SCHAEFFLER.
