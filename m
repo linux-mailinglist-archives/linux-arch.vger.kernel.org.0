@@ -2,80 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E126C733A89
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jun 2023 22:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111A5733AFF
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Jun 2023 22:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344428AbjFPUMS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Jun 2023 16:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S1344677AbjFPUin (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Jun 2023 16:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjFPUMR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Jun 2023 16:12:17 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690A30DD;
-        Fri, 16 Jun 2023 13:12:12 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3B0865C0267;
-        Fri, 16 Jun 2023 16:12:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 16 Jun 2023 16:12:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686946331; x=1687032731; bh=Rm
-        LztWLM37AdaYSXw8tQ2a76FOwFNZm7vLlBDDTP5Ow=; b=2VBUCoze57ug/WQZWE
-        +fRGxJti20jG+9NX5klMvd4/zlggCW8ZTBsEEZS86jjUOBS+mcUohBfIRpH+z6iU
-        K8QXGs185V2K+pG/8QQ8wXhGcKL0pmzS+NtFh69kPGd/b6wMbgC4tqff/mkv2WPY
-        4BfdCQsnKZ894zHPSU2uTRn14v1XcDUBYKfKREORjBdloWGIjzOzRkgf+Fq7dwTA
-        KJn2kpfhlHqFBQhbb57pzvDAMkrkcHj+vp7pUB7h1jIva7oiFMHJThun9sKXgaqf
-        AgERsM44EIrH5Jl/rudgQ9IPhkGR+OaaEauHNV/ALe7WLttoAhp1GS0MWEd3ZHer
-        HBDA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686946331; x=1687032731; bh=RmLztWLM37Ada
-        YSXw8tQ2a76FOwFNZm7vLlBDDTP5Ow=; b=VFax/KJrWvA5Q4DLXaZGCDsdITX/4
-        degmUN9PFETQl/lctiIheD/gaCKCDFd0JAejKx7d2tu7RAGTf8zlZnYG1lnYg0XA
-        c2BBfDm0zF790m4S5AWVbcOaBllwSwQVs/J5+RGwTQVTYFvAsrWCA/nqHQsRGbPh
-        hbdHhmjCDaK4MDNBn5UdwfsuMo/zyOCvhX/Efgvts9gkrqS3gi28MFLKk3xfSJhJ
-        Aax2ZhnjA35aI0r4zWUKDZhX4EBTdotPp/XhjwbzvSeqmq/K5oqrD+GK2wOkRxh9
-        33DyuH4KWFMgT57Rjj9ycQ2HxdCBWq1dVbFxUsOpRtw0a+U15Ir+Vu7Dg==
-X-ME-Sender: <xms:GsKMZFRwcuowJFOS9ieO4BJQhOObnNcwosn0l8BPTzevlTUKV1r9TQ>
-    <xme:GsKMZOxnC1GNPqFtR946esg8mFf2wYicm9Tv9Rb_xhAS6wwOHkNLcosP1nNpEc5nr
-    iCTLT9B7ZW6LOSL_Sc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvgedgudegiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:G8KMZK2fKS6_HCgZWP8RAItexCfIsRH_-25wBI-IC2yND9Hjh1csdg>
-    <xmx:G8KMZNDWjYssAQLldSmdP9qQmK5mNQpt6vjQ5sL_2ClAJRK7BRPKdA>
-    <xmx:G8KMZOgaZ37AaanX7y3cNwlB__gaBaT5YNwyjTPvkmL9Kw6Oz_x1BQ>
-    <xmx:G8KMZCbsGm2LNedV9FGwbYZzzhAWG6hECy1ROF43YFa6UIHJ4GXjDA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DAC82B60086; Fri, 16 Jun 2023 16:12:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
-Mime-Version: 1.0
-Message-Id: <c2f3656f-b831-4009-8ee6-a2430c4ac8c7@app.fastmail.com>
-In-Reply-To: <20230616183120.1706378-1-sohil.mehta@intel.com>
-References: <20230616183120.1706378-1-sohil.mehta@intel.com>
-Date:   Fri, 16 Jun 2023 22:11:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Sohil Mehta" <sohil.mehta@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] syscalls: Fix file path names in the header comments
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        with ESMTP id S235280AbjFPUih (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Jun 2023 16:38:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802C3AA0;
+        Fri, 16 Jun 2023 13:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fw74FAZhkocnJnJyLR/WQNNOz26kiObyhL++hGG0nWw=; b=QBNdm8qv6j/A/iWrMKfpB6M7G8
+        dX02GHdjAg9rPGckqaKAq0nuLHgnEOZOUcT5iS1KFKrWFBJlTrkF2I4g5N2YgCfsexrQECwyFoHPp
+        z6yd+/vIl/PequagU7pGV8UNE2yhdOrdkDT+t3SJSVONZj6Q1cQWhoxiK+7FUVh/Fb17OdOH8kjtt
+        OWIuj2P4ze5K/i70TfCVLOSJSXO+Ry9WEoIoy6BlMNh0EJ1wlu/c8zXDIuEPPIicVlz2AV+6m8LDv
+        lA4vOEDBJYuPKGoF8lu2OSuuFhx10iSF/LiB0UcYpqrALuMFJM02PbH03w+/bd9OLb/nrxdqasmpe
+        J/m6D//w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qAGD7-009Lj7-EI; Fri, 16 Jun 2023 20:38:21 +0000
+Date:   Fri, 16 Jun 2023 21:38:21 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
+Message-ID: <ZIzIPQBXvnMtQekj@casper.infradead.org>
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-5-vishal.moola@gmail.com>
+ <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,26 +65,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 16, 2023, at 20:31, Sohil Mehta wrote:
-> Some of the syscall definitions have moved due to the original source
-> file being moved into a sub-directory. Update the file path names to
-> reflect that.
->
-> A couple of syscalls such as lookup_dcookie() and nfsservctl() don't
-> have a syscall definition anymore. Clear the filename and leave the
-> original subsystem name intact for reference.
->
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+On Thu, Jun 15, 2023 at 12:57:19AM -0700, Hugh Dickins wrote:
+> Probably just trivial collisions in most architectures, which either
+> of us can easily adjust to the other; powerpc likely to be more awkward,
+> but fairly easily resolved; s390 quite a problem.
+> 
+> I've so far been unable to post a v2 of my series (and powerpc and s390
+> were stupidly wrong in the v1), because a good s390 patch is not yet
+> decided - Gerald Schaefer and I are currently working on that, on the
+> s390 list (I took off most Ccs until we are settled and I can post v2).
+> 
+> As you have no doubt found yourself, s390 has sophisticated handling of
+> free half-pages already, and I need to add rcu_head usage in there too:
+> it's tricky to squeeze it all in, and ptdesc does not appear to help us
+> in any way (though mostly it's just changing some field names, okay).
+> 
+> If ptdesc were actually allowing a flexible structure which architectures
+> could add into, that would (in some future) be nice; but of course at
+> present it's still fitting it all into one struct page, and mandating
+> new restrictions which just make an architecture's job harder.
 
-Thanks for going through these!
+The intent is to get ptdescs to be dynamically allocated at some point
+in the ~2-3 years out future when we have finished the folio project ...
+which is not a terribly helpful thing for me to say.
 
-> Arguably, having filenames in comments might not be the best idea.  If the
-> intention is to make it easier to find a syscall definition, it is probably
-> faster to just use 'git grep SYSCALL_DEFINE | grep <syscall_name>'.  Please let
-> me know if it would be preferable to just get rid of these comments all
-> together.
+I have three suggestions, probably all dreadful:
 
-It's probably not worth trying to keep the comments in sync, I'd be in
-favor of just removing them all.
+1. s390 could change its behaviour to always allocate page tables in
+pairs.  That is, it fills in two pmd_t entries any time it takes a fault
+in either of them.
 
-     Arnd
+2. We could allocate two or four pages at a time for s390 to allocate
+2kB pages from.  That gives us a lot more space to store RCU heads.
+
+3. We could use s390 as a guinea-pig for dynamic ptdesc allocation.
+Every time we allocate a struct page, we have a slab cache for an
+s390-special definition of struct ptdesc, we allocate a ptdesc and store
+a pointer to that in compound_head.
+
+We could sweeten #3 by doing that not just for s390 but also for every
+configuration which has ALLOC_SPLIT_PTLOCKS today.  That would get rid
+of the ambiguity between "is ptl a pointer or a lock".
+
+> But I've no desire to undo powerpc's use of pt_frag_refcount:
+> just warning that we may want to undo any use of it in s390.
+
+I would dearly love ppc & s390 to use the _same_ scheme to solve the
+same problem.
