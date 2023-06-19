@@ -2,247 +2,248 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E7E733B84
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jun 2023 23:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B59734B70
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jun 2023 07:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345661AbjFPV27 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Jun 2023 17:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S229679AbjFSFsq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Jun 2023 01:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjFPV25 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Jun 2023 17:28:57 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5F235A5;
-        Fri, 16 Jun 2023 14:28:56 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57012b2973eso14367907b3.2;
-        Fri, 16 Jun 2023 14:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686950935; x=1689542935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S8f4Qp7cwj4O2kdf7qLqLnrTRkxhB0m+8FmgrZaxSBc=;
-        b=kDqKbU7P9edSk/BgMH9xSstpKqVCZCkotk48bdhsv9CQedo7tgzNx594G7ZL6GQuxg
-         jA1o2JPcz0QDYMp8Gk7IfVIBu/Qb0pO39azZ5F7HLfZC1IgCGAp3b3idtV3rR/BwTQDN
-         x0xETay6eu3ghZcxBbeBHYOXCm+0UdQ18fM+kmxKxAuiYRqF/zWkw4LlfaXk/Ol9POup
-         f5e5C/WGoi8jmqXjJwP7rx3T/q8TLMKNW53qsepy7E0u9eKRuHWvS7CgQ60QFJLvcMrS
-         P+YDUzuxecN+sqBu1rA+X9cuH9CB9q1H/97ksOSagJnc4ZVXc8JgbNn89oLF/7saT6Tn
-         z99g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686950935; x=1689542935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S8f4Qp7cwj4O2kdf7qLqLnrTRkxhB0m+8FmgrZaxSBc=;
-        b=ZrXo6OGWoVcQQbpgSbyYmx/wep0NhiK1CbM5FA33HDEZhjFAYw6cpaTSwH2pl4EIZ4
-         uqHvBSbe+yg5iRF4pulMPHrmfDZqn82BubWlNex2re7YRiI8fSyoROaFxuEegUAgLIz5
-         1/zBxI6dFB6mvJR8PSP+kM0XLTJIh8bae3D1kf8uZ0BmPLVWZYISOGk6jEO+5Psy3jDG
-         XAHZosySLp+lcb3KgOOHA/4cP3Jrw6t/W7sYW16eKnJQXS4c6t014uDv3qve/2HHLULL
-         7UX2qrrpfztAc2KkUnBkfSpKyo7ntriTw10HOnd3UKus2hnk0CtDDJjrdk0NxXNxeExU
-         0hEw==
-X-Gm-Message-State: AC+VfDxXqdrtJTkK2x9HIV+45N/Muj9IZabhuAv0GNkviw0qbN2+vX37
-        3pSRG1hCidM3bEqy7HTqAnD5MASoi8d1d9cH3fNMh2CJTIoP+A==
-X-Google-Smtp-Source: ACHHUZ7/iv7DGmrSbI7dWoycmh8dvViREYGBrKV5KnrTS1VkZy/HhcudLLxyAMIf5U1P44XX8eoY39CR0V8jmRNeXMA=
-X-Received: by 2002:a81:6c02:0:b0:56c:f684:b4f0 with SMTP id
- h2-20020a816c02000000b0056cf684b4f0mr2990065ywc.27.1686950935072; Fri, 16 Jun
- 2023 14:28:55 -0700 (PDT)
+        with ESMTP id S229553AbjFSFsq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Jun 2023 01:48:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DA61A8;
+        Sun, 18 Jun 2023 22:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1687153678; x=1687758478; i=deller@gmx.de;
+ bh=3bpv0Sq84qpeiKzwxZGQAnzIVxWHnuEFv0IZNw09BQY=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=erSM4FKBEmuXAlZ59doRaUwk8EwhueZdegMbzKP+QhYfRbKi2Lhx6IofVmpVONNpLiug8S9
+ p9r/TQNwzg7ALvwtjSEt2eAVTxoxtjpWbGuGVq+kfsr1FEcVW+VeiAdDHm6b7PHYLJcg4oz+8
+ 9/bEgLbRWcQY5XecBZ3JfLlA9SQvZ7N+vT8/gC9Cnk1GspNb5VoEWWGJ3uJfQ8eRrBZ6wgzVF
+ U3aA8LhWNS6bl1L3ql9uXRIfiyeF0DBr6U3H3zlvszQH2R9m5m0NyHlSsZX7l0ZfFx8D6YVaj
+ bKq0mb9A4vX9/hTOvFX0Ub0iwCmKhvxq3LYymljnrcRVvVbyvTdA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.144.204]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtfJX-1ppBXV0PpH-00v9sa; Mon, 19
+ Jun 2023 07:47:58 +0200
+Message-ID: <75a0786d-d3ec-05e2-6505-188c3d181b83@gmx.de>
+Date:   Mon, 19 Jun 2023 07:47:52 +0200
 MIME-Version: 1.0
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
- <20230612210423.18611-5-vishal.moola@gmail.com> <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
-In-Reply-To: <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Fri, 16 Jun 2023 14:28:44 -0700
-Message-ID: <CAOzc2pwhoF=XNCoe-+w2Z5MRoRJGvTfSr56HV00OGitEBMtPcw@mail.gmail.com>
-Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 14/19] parisc: mm: Convert to GENERIC_IOREMAP
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
+        willy@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@ACULAB.COM, shorne@gmail.com,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org
+References: <20230609075528.9390-1-bhe@redhat.com>
+ <20230609075528.9390-15-bhe@redhat.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230609075528.9390-15-bhe@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:4xBnCYot+P9hRdTSapi4CiX5gBlJsUOVbaNVW1eypzPZ2gwUQ1i
+ BEO8XT+RYH8BNM/68eCkJfLORi3jHcTAU4Hme7siRfX6+VG12ljyon+Tz4qCuW1a2QgFrXk
+ uSq6Cq3S4uEQxotyGWHAkKGN/etzWeES+801teEI00aZ0oVpYpucJxVgpHwCIyXu0ZHkOIP
+ 6yXBZFVFsD6XwSxRed+4A==
+UI-OutboundReport: notjunk:1;M01:P0:br2Bb9rJ1aI=;vxRiu6N5Lpq4NJtTWUikbA7SH2c
+ 4634vVbd2iDsJjV4erZSRwYVHH/DNTf8WnEwDhLJPlifzIGU/pJlxJremwNCQnpQOrVYouym7
+ l55UvXiLNYb4ZNWek9Fmi0lQYQK9Zy8DWf5tsCxKDzPbYxSZ13HpVsJ4B1QvHwEFkB6bK/8iH
+ g+dk9NU5GhB97NVa8Uj3DahDQrVfjEd0EzEMh6gogmwlFwRV3iZYyFSZ8264aAZ8bfXlLJEoY
+ 8v2eKCqw1WoUWanNovFK3iytd19Ej5h5a5mLhHw2CmeQcfauoRq9liajYm4ooGaGvHDt1AunP
+ jcl1aMC3zBepd2AllaptPyDCliZFBr3I6zJ7M+0tIf7nQKtfjkNdM0L3DpZP8Gsdl2ZjiXdU5
+ iKu8w6qLvePxRQoomI1GzPSMlsGV8/806ZuhpzMvB1eISBocjSv86kWluMLAiQFgddxNdLLbT
+ QUbnUPn4o8kYagcnh5pARO0SF6AyMSjAmLyzmxmzl8My0iCcaSpz6c1VJGTln2wD2BHNcGOAQ
+ x2cLa+eKo+pf6vd9jq2Ns6bQmztJk8iurCA6Maoxexu13uSu7Nfb9tUZ1QXTVug6YiLnrqvtk
+ frQZsL7D6FHB/I0DADoCed1uGagiJUEQ13Wj7APly8/ut3N8nL6g9IbqxI6FYoaT0R3RV7doD
+ 6ecjieXYxMCFHEpYD/5gWWw+7rL75Yy7zBU+2/qc/MoevH9txTTF27KHjDktFP00n6X7oK+CA
+ 29EX8pZ1wE6iuEZdTeKFC1JfLjPzhYSfCE0ywjrCLi8QAYfcfqAgNTAsdzqO+oKM96MYc3egL
+ jcVRqv98AIIDmSKMF3/rqfnL1/sZvI7ILYC4uj9kTju5YtfvmQA6O7CdnrxxaQl6LKAwpTBhB
+ V8DB6wQa4F2/SkpW00PuMxBm1Syip8kAfeMatbOJj1PqfOmKT9tCCWPfG0/oDMOhQmKFoZUal
+ Z+smTtB2T6GEy5dIVC2iI+XXth4=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:57=E2=80=AFAM Hugh Dickins <hughd@google.com> wr=
-ote:
+On 6/9/23 09:55, Baoquan He wrote:
+> By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
+> generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
+> and iounmap() are all visible and available to arch. Arch needs to
+> provide wrapper functions to override the generic versions if there's
+> arch specific handling in its ioremap_prot(), ioremap() or iounmap().
+> This change will simplify implementation by removing duplicated codes
+> with generic_ioremap_prot() and generic_iounmap(), and has the equivalen=
+t
+> functioality as before.
 >
-> On Mon, 12 Jun 2023, Vishal Moola (Oracle) wrote:
+> Here, add wrapper function ioremap_prot() for parisc's special operation
+> when iounmap().
 >
-> > Currently, page table information is stored within struct page. As part
-> > of simplifying struct page, create struct ptdesc for page table
-> > information.
-> >
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
->
-> Vishal, as I think you have already guessed, your ptdesc series and
-> my pte_free_defer() "mm: free retracted page table by RCU" series are
-> on a collision course.
->
-> Probably just trivial collisions in most architectures, which either
-> of us can easily adjust to the other; powerpc likely to be more awkward,
-> but fairly easily resolved; s390 quite a problem.
->
-> I've so far been unable to post a v2 of my series (and powerpc and s390
-> were stupidly wrong in the v1), because a good s390 patch is not yet
-> decided - Gerald Schaefer and I are currently working on that, on the
-> s390 list (I took off most Ccs until we are settled and I can post v2).
->
-> As you have no doubt found yourself, s390 has sophisticated handling of
-> free half-pages already, and I need to add rcu_head usage in there too:
-> it's tricky to squeeze it all in, and ptdesc does not appear to help us
-> in any way (though mostly it's just changing some field names, okay).
->
-> If ptdesc were actually allowing a flexible structure which architectures
-> could add into, that would (in some future) be nice; but of course at
-> present it's still fitting it all into one struct page, and mandating
-> new restrictions which just make an architecture's job harder.
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
 
-A goal of ptdescs is to make architecture's jobs simpler and standardized.
-Unfortunately, ptdescs are nowhere near isolated from struct page yet.
-This version of struct ptdesc contains the exact number of fields architect=
-ures
-need right now, just reorganized to be located next to each other. It *prob=
-ably*
-shouldn't make an architectures job harder, aside from discouraging their u=
-se
-of yet even more members of struct page.
+Acked-by: Helge Deller <deller@gmx.de> # parisc
 
-> Some notes on problematic fields below FYI.
->
-> > ---
-> >  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 51 insertions(+)
-> >
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index c5a51481bbb9..330de96ebfd6 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct =
-vm_area_struct *vma,
-> >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
-> >  #endif /* CONFIG_MMU */
-> >
-> > +
-> > +/**
-> > + * struct ptdesc - Memory descriptor for page tables.
-> > + * @__page_flags: Same as page flags. Unused for page tables.
-> > + * @pt_list: List of used page tables. Used for s390 and x86.
-> > + * @_pt_pad_1: Padding that aliases with page's compound head.
-> > + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
-> > + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap on=
-ly.
-> > + * @pt_mm: Used for x86 pgds.
-> > + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and =
-s390 only.
-> > + * @ptl: Lock for the page table.
-> > + *
-> > + * This struct overlays struct page for now. Do not modify without a g=
-ood
-> > + * understanding of the issues.
-> > + */
-> > +struct ptdesc {
-> > +     unsigned long __page_flags;
-> > +
-> > +     union {
-> > +             struct list_head pt_list;
->
-> I shall be needing struct rcu_head rcu_head (or pt_rcu_head or whatever,
-> if you prefer) in this union too.  Sharing the lru or pt_list with rcu_he=
-ad
-> is what's difficult to get right and efficient on s390 - and if ptdesc ga=
-ve
-> us an independent rcu_head for each page table, that would be a blessing!
-> but sadly not, it still has to squeeze into a struct page.
+Thanks!
+Helge
 
-I can add a pt_rcu_head along with a comment to deter aliasing issues :)
-Independent rcu_heads aren't coming any time soon though :(
+> ---
+> v5->v6:
+>    Remove the stale paragraph related to ARCH_HAS_IOREMAP_WC adding in
+>    log - Mike
+>
+>   arch/parisc/Kconfig          |  1 +
+>   arch/parisc/include/asm/io.h | 15 ++++++---
+>   arch/parisc/mm/ioremap.c     | 62 +++---------------------------------
+>   3 files changed, 15 insertions(+), 63 deletions(-)
+>
+> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+> index 967bde65dd0e..315cc42b1a2c 100644
+> --- a/arch/parisc/Kconfig
+> +++ b/arch/parisc/Kconfig
+> @@ -36,6 +36,7 @@ config PARISC
+>   	select GENERIC_ATOMIC64 if !64BIT
+>   	select GENERIC_IRQ_PROBE
+>   	select GENERIC_PCI_IOMAP
+> +	select GENERIC_IOREMAP
+>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>   	select GENERIC_SMP_IDLE_THREAD
+>   	select GENERIC_ARCH_TOPOLOGY if SMP
+> diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+> index c05e781be2f5..366537042465 100644
+> --- a/arch/parisc/include/asm/io.h
+> +++ b/arch/parisc/include/asm/io.h
+> @@ -125,12 +125,17 @@ static inline void gsc_writeq(unsigned long long v=
+al, unsigned long addr)
+>   /*
+>    * The standard PCI ioremap interfaces
+>    */
+> -void __iomem *ioremap(unsigned long offset, unsigned long size);
+> -#define ioremap_wc			ioremap
+> -#define ioremap_uc			ioremap
+> -#define pci_iounmap			pci_iounmap
+> +#define ioremap_prot ioremap_prot
+> +
+> +#define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY | \
+> +		       _PAGE_ACCESSED | _PAGE_NO_CACHE)
+>
+> -extern void iounmap(const volatile void __iomem *addr);
+> +#define ioremap_wc(addr, size)  \
+> +	ioremap_prot((addr), (size), _PAGE_IOREMAP)
+> +#define ioremap_uc(addr, size)  \
+> +	ioremap_prot((addr), (size), _PAGE_IOREMAP)
+> +
+> +#define pci_iounmap			pci_iounmap
+>
+>   void memset_io(volatile void __iomem *addr, unsigned char val, int cou=
+nt);
+>   void memcpy_fromio(void *dst, const volatile void __iomem *src, int co=
+unt);
+> diff --git a/arch/parisc/mm/ioremap.c b/arch/parisc/mm/ioremap.c
+> index 345ff0b66499..fd996472dfe7 100644
+> --- a/arch/parisc/mm/ioremap.c
+> +++ b/arch/parisc/mm/ioremap.c
+> @@ -13,25 +13,9 @@
+>   #include <linux/io.h>
+>   #include <linux/mm.h>
+>
+> -/*
+> - * Generic mapping function (not visible outside):
+> - */
+> -
+> -/*
+> - * Remap an arbitrary physical address space into the kernel virtual
+> - * address space.
+> - *
+> - * NOTE! We need to allow non-page-aligned mappings too: we will obviou=
+sly
+> - * have to convert them into an offset in a page-aligned mapping, but t=
+he
+> - * caller shouldn't need to know that small detail.
+> - */
+> -void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
+> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+> +			   unsigned long prot)
+>   {
+> -	void __iomem *addr;
+> -	struct vm_struct *area;
+> -	unsigned long offset, last_addr;
+> -	pgprot_t pgprot;
+> -
+>   #ifdef CONFIG_EISA
+>   	unsigned long end =3D phys_addr + size - 1;
+>   	/* Support EISA addresses */
+> @@ -40,11 +24,6 @@ void __iomem *ioremap(unsigned long phys_addr, unsign=
+ed long size)
+>   		phys_addr |=3D F_EXTEND(0xfc000000);
+>   #endif
+>
+> -	/* Don't allow wraparound or zero size */
+> -	last_addr =3D phys_addr + size - 1;
+> -	if (!size || last_addr < phys_addr)
+> -		return NULL;
+> -
+>   	/*
+>   	 * Don't allow anybody to remap normal RAM that we're using..
+>   	 */
+> @@ -62,39 +41,6 @@ void __iomem *ioremap(unsigned long phys_addr, unsign=
+ed long size)
+>   		}
+>   	}
+>
+> -	pgprot =3D __pgprot(_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY |
+> -			  _PAGE_ACCESSED | _PAGE_NO_CACHE);
+> -
+> -	/*
+> -	 * Mappings have to be page-aligned
+> -	 */
+> -	offset =3D phys_addr & ~PAGE_MASK;
+> -	phys_addr &=3D PAGE_MASK;
+> -	size =3D PAGE_ALIGN(last_addr + 1) - phys_addr;
+> -
+> -	/*
+> -	 * Ok, go for it..
+> -	 */
+> -	area =3D get_vm_area(size, VM_IOREMAP);
+> -	if (!area)
+> -		return NULL;
+> -
+> -	addr =3D (void __iomem *) area->addr;
+> -	if (ioremap_page_range((unsigned long)addr, (unsigned long)addr + size=
+,
+> -			       phys_addr, pgprot)) {
+> -		vunmap(addr);
+> -		return NULL;
+> -	}
+> -
+> -	return (void __iomem *) (offset + (char __iomem *)addr);
+> -}
+> -EXPORT_SYMBOL(ioremap);
+> -
+> -void iounmap(const volatile void __iomem *io_addr)
+> -{
+> -	unsigned long addr =3D (unsigned long)io_addr & PAGE_MASK;
+> -
+> -	if (is_vmalloc_addr((void *)addr))
+> -		vunmap((void *)addr);
+> +	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
+>   }
+> -EXPORT_SYMBOL(iounmap);
+> +EXPORT_SYMBOL(ioremap_prot);
 
-> > +             struct {
-> > +                     unsigned long _pt_pad_1;
-> > +                     pgtable_t pmd_huge_pte;
-> > +             };
-> > +     };
-> > +     unsigned long _pt_s390_gaddr;
-> > +
-> > +     union {
-> > +             struct mm_struct *pt_mm;
-> > +             atomic_t pt_frag_refcount;
->
-> Whether s390 will want pt_mm is not yet decided: I want to use it,
-> Gerald prefers to go without it; but if we do end up using it,
-> then pt_frag_refcount is a luxury we would have to give up.
-
-I don't like the use of pt_mm for s390 either. s390 uses space equivalent
-to all five words allocated in the page table struct (albeit in various pla=
-ces
-of struct page). Using extra space (especially allocated for unrelated
-reasons) just because it exists makes things more complicated and
-confusing, and s390 is already confusing enough as a result of that.
-
-If having access to pt_mm is necessary I can drop the
-pt_frag_refcount patch, but I'd rather avoid it.
-
-> s390 does very well already with its _refcount tricks, and I'd expect
-> powerpc's simpler but more wasteful implementation to work as well
-> with _refcount too - I know that a few years back, powerpc did misuse
-> _refcount (it did not allow for speculative accesses, thought it had
-> sole ownership of that field); but s390 copes well with that, and I
-> expect powerpc can do so too, without the luxury of pt_frag_refcount.
->
-> But I've no desire to undo powerpc's use of pt_frag_refcount:
-> just warning that we may want to undo any use of it in s390.
->
-> I thought I had more issues to mention, probably Gerald will
-> remind me of a whole new unexplored dimension! gmap perhaps.
->
-> Hugh
->
-> > +     };
-> > +
-> > +#if ALLOC_SPLIT_PTLOCKS
-> > +     spinlock_t *ptl;
-> > +#else
-> > +     spinlock_t ptl;
-> > +#endif
-> > +};
-> > +
-> > +#define TABLE_MATCH(pg, pt)                                          \
-> > +     static_assert(offsetof(struct page, pg) =3D=3D offsetof(struct pt=
-desc, pt))
-> > +TABLE_MATCH(flags, __page_flags);
-> > +TABLE_MATCH(compound_head, pt_list);
-> > +TABLE_MATCH(compound_head, _pt_pad_1);
-> > +TABLE_MATCH(pmd_huge_pte, pmd_huge_pte);
-> > +TABLE_MATCH(mapping, _pt_s390_gaddr);
-> > +TABLE_MATCH(pt_mm, pt_mm);
-> > +TABLE_MATCH(ptl, ptl);
-> > +#undef TABLE_MATCH
-> > +static_assert(sizeof(struct ptdesc) <=3D sizeof(struct page));
-> > +
-> >  /*
-> >   * No-op macros that just return the current protection value. Defined=
- here
-> >   * because these macros can be used even if CONFIG_MMU is not defined.
-> > --
-> > 2.40.1
