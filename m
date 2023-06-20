@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9B3736F31
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 16:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAAE736FB3
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 17:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbjFTOwR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jun 2023 10:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S233549AbjFTPDz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jun 2023 11:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjFTOwR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 10:52:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D671733
-        for <linux-arch@vger.kernel.org>; Tue, 20 Jun 2023 07:51:28 -0700 (PDT)
+        with ESMTP id S233563AbjFTPDj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 11:03:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58626199E
+        for <linux-arch@vger.kernel.org>; Tue, 20 Jun 2023 08:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687272687;
+        s=mimecast20190719; t=1687273081;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iujXwuftdxXImWSWSI9VizTXy4E1fvuK20wksczwI/k=;
-        b=iLZstAJrrnz8zZ+K4hUWA5A7sOvAkgN6dDPENCDwN6ygWihUl7g0DK4FlSkNTLIJ1GJ5iu
-        nnFW/FbHIyrMyTbiritPc3nutuXiPL7t8PuQL3vVnI2cB3QQU37wS7H60fSMGYc3y1ahTP
-        kOk30GrDLiKCzPY/5IxVpV/6RBzr9gE=
+        bh=IMVWP9uUwreYp41lBQlzx9rQqv8YUX+d+4RkZ35R+cQ=;
+        b=gYUphafO6nGT/p1sVxqEYFC7CeZjjn7z3SxnyWibd9PIQMIJNBmgLBUEYDGfOlK/Q0In8g
+        J2/boEFCrxi9iB7mnEhV5cVfQuo6PzpfAMXGTkXDLKWkTcJ0VuBnaX6h/Tge2gWhxh8AyW
+        9Q621TiQoixEkMooeLXJzDmdCHwLXBg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-x-AozXEzMu217ZwsSukKWg-1; Tue, 20 Jun 2023 10:51:23 -0400
-X-MC-Unique: x-AozXEzMu217ZwsSukKWg-1
+ us-mta-582-PGZ8P0JHPzaSP3c_R985HA-1; Tue, 20 Jun 2023 10:54:43 -0400
+X-MC-Unique: PGZ8P0JHPzaSP3c_R985HA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71CC488D51C;
-        Tue, 20 Jun 2023 14:46:42 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFAFA18E0072;
+        Tue, 20 Jun 2023 14:46:51 +0000 (UTC)
 Received: from ypodemsk.tlv.csb (unknown [10.39.195.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 905379E9C;
-        Tue, 20 Jun 2023 14:46:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E04889E9C;
+        Tue, 20 Jun 2023 14:46:42 +0000 (UTC)
 From:   Yair Podemsky <ypodemsk@redhat.com>
 To:     mtosatti@redhat.com, ppandit@redhat.com, david@redhat.com,
         linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
@@ -57,9 +57,9 @@ To:     mtosatti@redhat.com, ppandit@redhat.com, david@redhat.com,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     ypodemsk@redhat.com
-Subject: [PATCH v2 1/2] arch: Introduce ARCH_HAS_CPUMASK_BITS
-Date:   Tue, 20 Jun 2023 17:46:17 +0300
-Message-Id: <20230620144618.125703-2-ypodemsk@redhat.com>
+Subject: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI only to MM CPUs
+Date:   Tue, 20 Jun 2023 17:46:18 +0300
+Message-Id: <20230620144618.125703-3-ypodemsk@redhat.com>
 In-Reply-To: <20230620144618.125703-1-ypodemsk@redhat.com>
 References: <20230620144618.125703-1-ypodemsk@redhat.com>
 MIME-Version: 1.0
@@ -67,108 +67,125 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Some architectures set and maintain the mm_cpumask bits when loading
-or removing process from cpu.
-This Kconfig will mark those to allow different behavior between
-kernels that maintain the mm_cpumask and those that do not.
+Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+indiscriminately, this causes unnecessary work and delays notable in
+real-time use-cases and isolated cpus.
+This patch will limit this IPI on systems with ARCH_HAS_CPUMASK_BITS,
+Where the IPI will only be sent to cpus referencing the affected mm.
 
 Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
 ---
- arch/Kconfig         | 8 ++++++++
- arch/arm/Kconfig     | 1 +
- arch/powerpc/Kconfig | 1 +
- arch/s390/Kconfig    | 1 +
- arch/sparc/Kconfig   | 1 +
- arch/x86/Kconfig     | 1 +
- 6 files changed, 13 insertions(+)
+ include/asm-generic/tlb.h |  4 ++--
+ mm/khugepaged.c           |  4 ++--
+ mm/mmu_gather.c           | 17 ++++++++++++-----
+ 3 files changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 205fd23e0cad..953fbfa5a2ad 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1466,6 +1466,14 @@ config ARCH_HAS_NONLEAF_PMD_YOUNG
- 	  address translations. Page table walkers that clear the accessed bit
- 	  may use this capability to reduce their search space.
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index b46617207c93..0b6ba17cc8d3 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -222,7 +222,7 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+ #define tlb_needs_table_invalidate() (true)
+ #endif
  
-+config ARCH_HAS_CPUMASK_BITS
-+	bool
-+	help
-+	  Architectures that select this option set bits on the mm_cpumask
-+	  to mark which cpus loaded the mm, The mask can then be used to
-+	  control mm specific actions such as tlb_flush.
-+
-+
- source "kernel/gcov/Kconfig"
+-void tlb_remove_table_sync_one(void);
++void tlb_remove_table_sync_one(struct mm_struct *mm);
  
- source "scripts/gcc-plugins/Kconfig"
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 0fb4b218f665..cd20e96bc1dc 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -70,6 +70,7 @@ config ARM
- 	select GENERIC_SMP_IDLE_THREAD
- 	select HARDIRQS_SW_RESEND
- 	select HAS_IOPORT
-+	select ARCH_HAS_CPUMASK_BITS
- 	select HAVE_ARCH_AUDITSYSCALL if AEABI && !OABI_COMPAT
- 	select HAVE_ARCH_BITREVERSE if (CPU_32v7M || CPU_32v7) && !CPU_32v6
- 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index bff5820b7cda..c9218722aa2f 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -156,6 +156,7 @@ config PPC
- 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UACCESS_FLUSHCACHE
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_CPUMASK_BITS
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 6dab9c1be508..60bf29bc3f87 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -84,6 +84,7 @@ config S390
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_VDSO_DATA
-+	select ARCH_HAS_CPUMASK_BITS
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_INLINE_READ_LOCK
- 	select ARCH_INLINE_READ_LOCK_BH
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 8535e19062f6..e8bf4d769306 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -99,6 +99,7 @@ config SPARC64
- 	select ARCH_HAS_PTE_SPECIAL
- 	select PCI_DOMAINS if PCI
- 	select ARCH_HAS_GIGANTIC_PAGE
-+	select ARCH_HAS_CPUMASK_BITS
- 	select HAVE_SOFTIRQ_ON_OWN_STACK
- 	select HAVE_SETUP_PER_CPU_AREA
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 53bab123a8ee..b351421695f3 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -185,6 +185,7 @@ config X86
- 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
- 	select HAVE_ARCH_STACKLEAK
- 	select HAVE_ARCH_TRACEHOOK
-+	select ARCH_HAS_CPUMASK_BITS
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD if X86_64
- 	select HAVE_ARCH_USERFAULTFD_WP         if X86_64 && USERFAULTFD
+ #else
+ 
+@@ -230,7 +230,7 @@ void tlb_remove_table_sync_one(void);
+ #error tlb_needs_table_invalidate() requires MMU_GATHER_RCU_TABLE_FREE
+ #endif
+ 
+-static inline void tlb_remove_table_sync_one(void) { }
++static inline void tlb_remove_table_sync_one(struct mm_struct *mm) { }
+ 
+ #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+ 
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 6b9d39d65b73..3e5cb079d268 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1166,7 +1166,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	_pmd = pmdp_collapse_flush(vma, address, pmd);
+ 	spin_unlock(pmd_ptl);
+ 	mmu_notifier_invalidate_range_end(&range);
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 
+ 	spin_lock(pte_ptl);
+ 	result =  __collapse_huge_page_isolate(vma, address, pte, cc,
+@@ -1525,7 +1525,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 				addr + HPAGE_PMD_SIZE);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 	pmd = pmdp_collapse_flush(vma, addr, pmdp);
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 	mmu_notifier_invalidate_range_end(&range);
+ 	mm_dec_nr_ptes(mm);
+ 	page_table_check_pte_clear_range(mm, addr, pmd);
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index ea9683e12936..692d8175a88e 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -191,7 +191,13 @@ static void tlb_remove_table_smp_sync(void *arg)
+ 	/* Simply deliver the interrupt */
+ }
+ 
+-void tlb_remove_table_sync_one(void)
++#ifdef CONFIG_ARCH_HAS_CPUMASK_BITS
++#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
++#else
++#define REMOVE_TABLE_IPI_MASK cpu_online_mask
++#endif /* CONFIG_ARCH_HAS_CPUMASK_BITS */
++
++void tlb_remove_table_sync_one(struct mm_struct *mm)
+ {
+ 	/*
+ 	 * This isn't an RCU grace period and hence the page-tables cannot be
+@@ -200,7 +206,8 @@ void tlb_remove_table_sync_one(void)
+ 	 * It is however sufficient for software page-table walkers that rely on
+ 	 * IRQ disabling.
+ 	 */
+-	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
++	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
++			NULL, true);
+ }
+ 
+ static void tlb_remove_table_rcu(struct rcu_head *head)
+@@ -237,9 +244,9 @@ static inline void tlb_table_invalidate(struct mmu_gather *tlb)
+ 	}
+ }
+ 
+-static void tlb_remove_table_one(void *table)
++static void tlb_remove_table_one(struct mm_struct *mm, void *table)
+ {
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 	__tlb_remove_table(table);
+ }
+ 
+@@ -262,7 +269,7 @@ void tlb_remove_table(struct mmu_gather *tlb, void *table)
+ 		*batch = (struct mmu_table_batch *)__get_free_page(GFP_NOWAIT | __GFP_NOWARN);
+ 		if (*batch == NULL) {
+ 			tlb_table_invalidate(tlb);
+-			tlb_remove_table_one(table);
++			tlb_remove_table_one(tlb->mm, table);
+ 			return;
+ 		}
+ 		(*batch)->nr = 0;
+---
+v2: replaced no REMOVE_TABLE_IPI_MASK REMOVE_TABLE_IPI_MASK to cpu_online_mask
 -- 
 2.39.3
 
