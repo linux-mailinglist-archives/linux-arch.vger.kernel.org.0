@@ -2,168 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAAA7377D8
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 01:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422CA7377F2
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 01:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjFTXKg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jun 2023 19:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S229629AbjFTXeV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jun 2023 19:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFTXKf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 19:10:35 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD71703;
-        Tue, 20 Jun 2023 16:10:33 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5701eaf0d04so54950507b3.2;
-        Tue, 20 Jun 2023 16:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687302633; x=1689894633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nozU+u202dwuRZdJGKz18i7nEQxa/ZPqnuIXPcARxTk=;
-        b=Srt/QiH6vSlV6ltPf9H8KdAeCpbz7L591o99Craxfn8w/jM66I5hACYYF7kGTNoYRf
-         37MNDI/F8R1g44q3mAPdvv0ch2USGp6Xr2QpXeRs4zwys088B20V4rigZMbQAUtCAcnv
-         ujlqxNx2s65vbfsZd3k+2DjIHKhHJIWAfpgn7QYgmI+NGmP+FiWPPp675PKwGH44ORfj
-         zOUT1l13zV/ZQbeHYvFRsincMrSLLgcM09n9imSEGZWNpBzKYFGwq1+DONOYFih8u36L
-         jrVhBZXiCnjwgLIXcNbQ+C7KfkKQcJy9rAKazTyykVFlz02AVb/RzeIKJrXQdve86D2m
-         bp4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687302633; x=1689894633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nozU+u202dwuRZdJGKz18i7nEQxa/ZPqnuIXPcARxTk=;
-        b=Pta0kUzRGAU+JrRjYT+RwFONfEG+W5Hwm06qfLyu8fXbixMliXRDsIpsppHLmAPDv2
-         wHFZZtNrit0aowNbHCUmxDxC7lf4kAC9RnM0YIeCK/Bcqzd1FGrbibk82PMWHrwOI/19
-         f/JzISR5R2UZhlUqpeXmjzTA3si9IZeSfmnWYktk9/tzW5vnxvVMdoN2zYG4sBGS6+wq
-         CukGAILbev5abKqY7m6213DunVoQ5eEPR9m/tf+p+b4VM84E1IYNUw9BKB4pxrBx4V3v
-         DHIe5Ps5oyxXI6vKosCcvtDixIDfihSC37NhzJ7O5KMnxQHCcKvpWVRCWo0ORFka8ls6
-         cMQg==
-X-Gm-Message-State: AC+VfDx/kpwyGx1O2YaT7K8DemrtKlCqBrztqeFShTEm9FLXJqQfONlJ
-        bymyTJAOKBLZJOj6B1hlg82vtfMAAq0H25/6IY4MYfZxk1A=
-X-Google-Smtp-Source: ACHHUZ7+vWx7il1X3ew5mkzUq07+yx6XfH7tiB7mbTeTUr9bW7PRwJQYCTYOe/jG083Yaru2U6b3dhZd45Wu7Dtq2+o=
-X-Received: by 2002:a0d:dfcb:0:b0:570:89bf:6f10 with SMTP id
- i194-20020a0ddfcb000000b0057089bf6f10mr9653803ywe.25.1687302632746; Tue, 20
- Jun 2023 16:10:32 -0700 (PDT)
+        with ESMTP id S229516AbjFTXeU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 19:34:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE2C170A;
+        Tue, 20 Jun 2023 16:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687304059; x=1718840059;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4p6fgptBfYm9lNriizCwBuqL8+VvZ2ABtujsr03ZCJo=;
+  b=fD7GQoQNEbsu3puNr7fQohOXatF+Xve7gpetXbwWYJZHcVhUvXrt2i5r
+   vcaiVXh8AAjHDKxuLaFQVK/qBh8YiR9QHvcUzolzUv5PuubFNmhacht2B
+   RecZ/nBFt6UlWiz6DBzJEVihaChgPy7EUqdGwl8kQiRBTEMdp7ZCsyBUD
+   FpeqkrffPIzGYxjhl/b4v/0G8PDFHDHZUoMGv2qeqBXLJc0Cm4ztkucdo
+   R8CYj80455B3u8yYqOGPAA1qYZnaS1+hwpjSsgV4pY5lDBFXDCxNLCs4q
+   f6ShiDW3p57XMUgRLRyRwN13iG4bJhbHlnx/ZPHqMyTcyn7SWgzjRAC5N
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340352261"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="340352261"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:34:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888427785"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="888427785"
+Received: from rashmigh-mobl.amr.corp.intel.com (HELO [10.255.228.28]) ([10.255.228.28])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:34:08 -0700
+Message-ID: <90ff7c36-9b2e-c791-dc26-3644b9ff20df@intel.com>
+Date:   Tue, 20 Jun 2023 16:34:08 -0700
 MIME-Version: 1.0
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
- <20230612210423.18611-5-vishal.moola@gmail.com> <ZIxXw9ERkYv+ipdd@nvidia.com>
- <CAOzc2pwMW64O0m4Zu4zVFTY+qCJRK7V+7niN_t1m7pLaJrtb2A@mail.gmail.com> <ZJIwpO68kc3zMB/c@nvidia.com>
-In-Reply-To: <ZJIwpO68kc3zMB/c@nvidia.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Tue, 20 Jun 2023 16:10:22 -0700
-Message-ID: <CAOzc2pwNc-9bRbAV8=_yROU5uq96q6v-dEfcYuzJyDrRygNsbA@mail.gmail.com>
-Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        rick.p.edgecombe@intel.com
+References: <20230620154830.25442-1-decui@microsoft.com>
+ <20230620154830.25442-2-decui@microsoft.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230620154830.25442-2-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 4:05=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Tue, Jun 20, 2023 at 01:01:39PM -0700, Vishal Moola wrote:
-> > On Fri, Jun 16, 2023 at 5:38=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com=
-> wrote:
-> > >
-> > > On Mon, Jun 12, 2023 at 02:03:53PM -0700, Vishal Moola (Oracle) wrote=
-:
-> > > > Currently, page table information is stored within struct page. As =
-part
-> > > > of simplifying struct page, create struct ptdesc for page table
-> > > > information.
-> > > >
-> > > > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> > > > ---
-> > > >  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++=
-++++
-> > > >  1 file changed, 51 insertions(+)
-> > > >
-> > > > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > > > index c5a51481bbb9..330de96ebfd6 100644
-> > > > --- a/include/linux/pgtable.h
-> > > > +++ b/include/linux/pgtable.h
-> > > > @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(str=
-uct vm_area_struct *vma,
-> > > >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
-> > > >  #endif /* CONFIG_MMU */
-> > > >
-> > > > +
-> > > > +/**
-> > > > + * struct ptdesc - Memory descriptor for page tables.
-> > > > + * @__page_flags: Same as page flags. Unused for page tables.
-> > > > + * @pt_list: List of used page tables. Used for s390 and x86.
-> > > > + * @_pt_pad_1: Padding that aliases with page's compound head.
-> > > > + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
-> > > > + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gma=
-p only.
-> > > > + * @pt_mm: Used for x86 pgds.
-> > > > + * @pt_frag_refcount: For fragmented page table tracking. Powerpc =
-and s390 only.
-> > > > + * @ptl: Lock for the page table.
-> > > > + *
-> > > > + * This struct overlays struct page for now. Do not modify without=
- a good
-> > > > + * understanding of the issues.
-> > > > + */
-> > > > +struct ptdesc {
-> > > > +     unsigned long __page_flags;
-> > > > +
-> > > > +     union {
-> > > > +             struct list_head pt_list;
-> > > > +             struct {
-> > > > +                     unsigned long _pt_pad_1;
-> > > > +                     pgtable_t pmd_huge_pte;
-> > > > +             };
-> > > > +     };
-> > > > +     unsigned long _pt_s390_gaddr;
-> > > > +
-> > > > +     union {
-> > > > +             struct mm_struct *pt_mm;
-> > > > +             atomic_t pt_frag_refcount;
-> > > > +     };
-> > > > +
-> > > > +#if ALLOC_SPLIT_PTLOCKS
-> > > > +     spinlock_t *ptl;
-> > > > +#else
-> > > > +     spinlock_t ptl;
-> > > > +#endif
-> > > > +};
-> > >
-> > > I think you should include the memcg here too? It needs to be valid
-> > > for a ptdesc, even if we don't currently deref it through the ptdesc
-> > > type.
-> >
-> > Yes, thanks for catching that! I'll add it to v5.
-> >
-> > > Also, do you see a way to someday put a 'struct rcu_head' into here?
-> >
-> > Eventually, when they're being dynamically allocated independent of
-> > struct page. Although at that point I'm not sure if we'll need one.
->
-> Sooner than dynamic struct page?
->
-> Probably it can overlap pt_list in alot of arches?
+On 6/20/23 08:48, Dexuan Cui wrote:
+> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> +	const int max_retries_per_page = 3;
+> +	struct tdx_hypercall_args args;
+> +	u64 map_fail_paddr, ret;
+> +	int retry_count = 0;
+>  
+>  	if (!enc) {
+>  		/* Set the shared (decrypted) bits: */
+> @@ -718,12 +720,49 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  		end   |= cc_mkdec(0);
+>  	}
+>  
+> -	/*
+> -	 * Notify the VMM about page mapping conversion. More info about ABI
+> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> -	 * section "TDG.VP.VMCALL<MapGPA>"
+> -	 */
+> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> +	while (retry_count < max_retries_per_page) {
+> +		memset(&args, 0, sizeof(args));
+> +		args.r10 = TDX_HYPERCALL_STANDARD;
+> +		args.r11 = TDVMCALL_MAP_GPA;
+> +		args.r12 = start;
+> +		args.r13 = end - start;
+> +
 
-Ah yes, there will be one if v5 overlapping with pt_list
-(it already does in struct page anyways).
+What's wrong with:
+
+	while (retry_count < max_retries_per_page) {
+		struct tdx_hypercall_args args = {
+			.r10 = TDX_HYPERCALL_STANDARD,
+			.r11 = TDVMCALL_MAP_GPA,
+			.r12 = start,
+			.r13 = end - start };
+
+?
+
+Or maybe with the brackets slightly differently arranged.
+
+Why'd you declare all the variables outside the while() loop anyway?
