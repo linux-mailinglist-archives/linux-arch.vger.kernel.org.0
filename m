@@ -2,151 +2,212 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB0D73766A
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 23:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496887377CC
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 01:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjFTVIh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jun 2023 17:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S229989AbjFTXFQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jun 2023 19:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFTVIg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 17:08:36 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0950810F4
-        for <linux-arch@vger.kernel.org>; Tue, 20 Jun 2023 14:08:35 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1aa291b3fc7so2368554fac.1
-        for <linux-arch@vger.kernel.org>; Tue, 20 Jun 2023 14:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687295314; x=1689887314;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WmQQrNKBdrthlpawxC6xSdaVyb+Lurpl8t3TyJczrHw=;
-        b=eu8qAVzcVZ8viHWEn7DJKQysOyHmyN3H358TpGlWOUq5rxusTRo5WvKJvwfkIAiC7e
-         y8+IjksmtlSZE+llEeSTVW1JGeFoshOOW2tRaT17CmyyZw/HhqK5fvMGi2zQYoGhxnBz
-         8qr/i9D+fjBbGnjTbB/WayODTELNKjEtRust9SgKeAryQdSeLh+RqIMFBZyeUgQmi28E
-         P4Gf7tpI/jEUkm8uH4sGRiTycLmKS5QTRkMBK7NCFmvnRYkK/41BvGkKyv/CBAFAc7dY
-         VU7klFXImiTY9qwJChlkdax0uD5zErezTXP3Ub7lCADlqhIDW3DVw8PFtZi3igb4B3sH
-         kXRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687295314; x=1689887314;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WmQQrNKBdrthlpawxC6xSdaVyb+Lurpl8t3TyJczrHw=;
-        b=YwdVaxZvbrNK0qYRnDZWaDcGomeHvRn5E+Jg4f2tYk172ZClw5yicQBBhuLUA8Z9KH
-         0vwLUER9cHtHxnIi9Hd5Q3UQLmxt86FYnRoECuNhYvam0mFLVWgQxqi3DzFpzplnV60Q
-         86gYGWXv3bfVB+NudiRC3/6puBvCoyQ1oIO1CwTYzH69Pvdnaa8QOmflqpWdS2U9JawH
-         vuM/6c3djHIsE/eZRTn+J8fZhqHlvdMT1kYCReckz97Cs5jjHjac/00PPMiNq0UwK4uL
-         1Zk609Z8yx7MitE+bB4XsUCHQ5L6Yx5xcQzu2anGL8PzKJh8d5QxgqtBYxnfAv21Lsdx
-         6sGA==
-X-Gm-Message-State: AC+VfDxVcl0wjJ/eIIFaNTZftxDJVxU1nfTsxjn7WwJ06ebMwjPnwFel
-        IsapjOLcVC0mmOsdpC1F8nle3g==
-X-Google-Smtp-Source: ACHHUZ4q7GAPvNl9PhSyjVJz8XZjp4tybptAmSud0iv4ZRcmwfCg4iYtk4YoFllY6NDuIZ/YAfkmsg==
-X-Received: by 2002:a05:6870:2206:b0:1ad:f52:81c7 with SMTP id i6-20020a056870220600b001ad0f5281c7mr109198oaf.17.1687295314287;
-        Tue, 20 Jun 2023 14:08:34 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id t12-20020a17090ad50c00b0025e2b703adesm1863846pju.41.2023.06.20.14.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 14:08:33 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 14:08:33 -0700 (PDT)
-X-Google-Original-Date: Tue, 20 Jun 2023 14:07:54 PDT (-0700)
-Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-In-Reply-To: <CAKwvOdm4FLSq41WTzmPqCeNh-WBX1_rtKpT3zwyGez7bZ-jE7w@mail.gmail.com>
-CC:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     ndesaulniers@google.com
-Message-ID: <mhng-3ceb19b1-0af6-451e-816d-8ab5c68b5fea@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        with ESMTP id S229916AbjFTXFO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 19:05:14 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA20CD;
+        Tue, 20 Jun 2023 16:05:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cAsqsJZKEBx38D1P5a7N1Jr3Rbd4OczRiaO89yYo9WPjer3aJHQG/2F2lA5FjQKCisiK4oPu8LHQuEnEVill/d8/Yo1NsGh3+YisL+t55VevPgvMiW933XI46Wp32QWAVUKk/ZHTQQVdb+ltWYn7ypHG2qfeJaD9djIUUqP0QY0QkJXf8t7GyawAJGdGqSBTHHz1ASQ0dg4XjUcmuwFCDBN6Uro8+k9f5bJ8TbZHZNutcWMUDSta1wffvwH6yPeRw+yOpY74HVjbZSKm9k+LI7OHRLw1hnvARfRhvLQ9NorPel8k3uXbHTtXwy7xY3rT4mR3NDunydAczqZdP1LYlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ltTIiBtZe5keN/2eRCeT5n726rQ4ogdJ3lncN2+uErk=;
+ b=fcShjhjxkC7z2voYps6ZEdhCmACMsHBTr7lVigip++2wFKMK4WRmTBsEuPswBqiBpHGnXkIo4dv5ZN+1ZViXzqmrt+s40TWOmWp5kpBt5nQf2ake9dgABmCWWslWK34Yu1arNIaL/elBy9l22iyeT2We8aAeR9/xQuYiOc5xPz9uhoo6icyFy/nhl+v55xB5Ic8e2eChQu+Nzeo/SJlw1BhrX5r5gussacUU1Xo/gWFyj74ntecvf5sPdszA+Y+1Gz0xlJigLO6oqwR3NavBMForHMKXB+rP46h42KCk76sz5bTs2JCxN1vfqq8/11uFUyssSlV7cbqcosPz3ucBgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ltTIiBtZe5keN/2eRCeT5n726rQ4ogdJ3lncN2+uErk=;
+ b=QlGuaa3Qx7T1/sBNlW/z3ccnCwjn/R1SShPsOeCqw4kB5ojYj5pPLBiAkHc0PKwg209K+9Fxl6ilpmMV18URVAeC5u9+Os/y1rDR2dcxrej0URZf0CtriqhjJI7vGFWn0vFCjCBS1k3a/16ldDjXUJvcQ2x3EzFgz/MSiU0DiEmwGq2FemrFz74ERGE0l3qZNL6eyQPSU2eTCraX7zcfbwGCkCJUAqt0CLVrEko/134SAirS55HhAEoeREwIN/pe3w/PA0sGx26Y4OvpPUjZxfBoQojIo1hQ5ZgiQ5aZnrQftdnMcwnBU1hl0vibL0jSfKtZ3JjEwzP4yejLH5os6g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SA0PR12MB7002.namprd12.prod.outlook.com (2603:10b6:806:2c0::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 23:05:10 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6500.031; Tue, 20 Jun 2023
+ 23:05:10 +0000
+Date:   Tue, 20 Jun 2023 20:05:08 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Vishal Moola <vishal.moola@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
+Message-ID: <ZJIwpO68kc3zMB/c@nvidia.com>
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-5-vishal.moola@gmail.com>
+ <ZIxXw9ERkYv+ipdd@nvidia.com>
+ <CAOzc2pwMW64O0m4Zu4zVFTY+qCJRK7V+7niN_t1m7pLaJrtb2A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAOzc2pwMW64O0m4Zu4zVFTY+qCJRK7V+7niN_t1m7pLaJrtb2A@mail.gmail.com>
+X-ClientProxiedBy: YT4PR01CA0117.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d7::23) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA0PR12MB7002:EE_
+X-MS-Office365-Filtering-Correlation-Id: af9c6ca0-8ecf-460c-f580-08db71e2cc0f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oo9DFPA5oeloN7xGzm07ngwHI/ma6YfGkq+TcV/QsCbfwAqOIODlMtDRpQMrh9zEQGtQ+2oQjjkwlnQQXb62Omc/6I0UdBVTBTu4yVDlxRDExk5c7ph1JGMXJ6FivilmsF3weqmwT35SXe88V+T9l3YeJOLlj1iD4jz9FKaWiw81SokUYq8CyJc3EcFLZWJ+817+fFWNAZKDZbMeB0MbbPN01Fa2jQdMcozgtJnFDAzGODsS/4Xq5NvRmbmDEeqL0prbZBATb+eHL1tq6OyrHKD5mjkzk/PLCnudynSetLxSv7fh42hsTTAn8xRomjD3I+IHbBg40gYrkVwiLBNxIATmy1rOtcKuM7IYdc3g7Dsj8/1S8SMpEpz/KzRGvcJxLN9NlSwhtRNMb2iz5Bnm5culwdwSeNnQMIZEaYi/WIbdbl6bvJTbKs0aM+6IxYPhMrHAKKJSe2N1U8PawFmLWg8TeXGDZWqZ880mbBnQyC+kSHnKZqjicg5mgZMLA9JHln0s/h7EsX7oOtKe8QzimYF4prgC4F2eLGnsvche018B1Q5yuJ9cUdiAkZkUFxA8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199021)(6486002)(478600001)(83380400001)(186003)(6512007)(6506007)(53546011)(2616005)(36756003)(26005)(86362001)(38100700002)(8676002)(5660300002)(8936002)(316002)(2906002)(41300700001)(4326008)(6916009)(66476007)(66556008)(66946007)(7416002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?azBzSlhoQzNXeWJjSzROZjl0OWxseUdGajZVK3Y5RjZWWUE1b1dLRjNzeThw?=
+ =?utf-8?B?MG1pZ3Q1NDFLU0RNVnFCeDdHWEdkUVl6UVZqVUIrUmpXY0E3SndpQ2tPNHBC?=
+ =?utf-8?B?NUhzdDRua2dUd3FMVGsybEx1eUs1TmMrY1o0MFUwcVptQ0xRTEdTdmRMRm01?=
+ =?utf-8?B?K1IxRXdwQmxUTno0QlMvejF4MGRWM2xHdGhSN3U3WDZrQXFpdEY5Rk5TQWpy?=
+ =?utf-8?B?aHZTSHNrdnlJRVczWXZ3a0F5TGFrSGV3L1o0ZURpRDlnSXdJWDhUMTk5YlRa?=
+ =?utf-8?B?WjNRa3U1eWlWSU1lNmpRSDEvYmVOTU1kdXFCQ0t0cDk4am9SemxEMU0xTllm?=
+ =?utf-8?B?RUxnVzRJellGRXFoSFVlQzJPR0xVSEdCc3UrRmZvL2RwUWVwd2xhNlhxTFg3?=
+ =?utf-8?B?R0ZNRFV5bjBhbXRldXFXUks4Q1JYQUJuQms1WHBFT29sOFkwbUVtbktNbkpU?=
+ =?utf-8?B?cEVRU2xBaHlHSnExcEd3VWNQNmZRU2diSEs4OGRJaFJhdmw5dVh3ZlRCRlJD?=
+ =?utf-8?B?eXNtZDdOQzJOTXdrZHJWeVNGWkJPVStNU0x0NGFMTDVGZlJ4QUhWaXVsSjMr?=
+ =?utf-8?B?dFZIMVNrMEtYOSthOEl3QTZsVEE4U0lTdVI4T0FhNXVFbjc5MXZaQ3p2WTg1?=
+ =?utf-8?B?UG5EcWdIRHIxWDdXOVBTQkdoUVhuaEluZnRMVDJmOHZ6a1lrbFAxYWkyN0k4?=
+ =?utf-8?B?V1VCSVRIV29rVTBISjdrSnY2WmNRZ2x2Y2N6cHpBdlo3SWJxbVZpd2pEVXl6?=
+ =?utf-8?B?U2ZtTWFkU3RGSU1MUTBMU3FWeEVJbVVuLzhFLzBzZ3NxZzBITXFhNDUvdGNY?=
+ =?utf-8?B?OUg3RkMvL2xQSEt2Z1lIcVVVd0F1UnFaNmFtdVplR2dEdTFiS3lWbVdMQU13?=
+ =?utf-8?B?eDFCaHhhNFkvajVRUGp1MnRYY0JYVDVyc1VabVBwWmVld3R6UWQ3bXpIRUU2?=
+ =?utf-8?B?Ti9qQ005c3Q4YWVhZnRhZ2F6S1ZZK0hYUDcvUkltRlFPcVZNanVXZDdFTHcr?=
+ =?utf-8?B?aFA0ZGczT2wvbUJFUW1QRFhjWnhkeVlEN3dwVWVsUG91eHVRZ1dEenN4WEdi?=
+ =?utf-8?B?VHhhMmJMbXJCelMzMkN5TTM2ZTRaU21aWUE3YzFRR2gwa21ocUpManlKc1JJ?=
+ =?utf-8?B?RzVZc1Fpb3QwN3lWMCs3c2d6cll3ODM1RFBLWmZ1Q1dXckhnc3FFdCtVVWhu?=
+ =?utf-8?B?THZlM0xHYzU1KzNOZ2pBNlpjd0JudmZYV2RXYkY0R2RvN0lYTUczL2hyaWtR?=
+ =?utf-8?B?UElsQWFoMTJEbHZ1aVJFQmdKNW45cW9VcklKME5XMEVCWHJoZWhGSURXU0ND?=
+ =?utf-8?B?Qy95OXlabjhMSW4zSi9WbXFjWkRSWlJ2ZjVxT05GQkhlOW9IV0ZZNHppM3Z5?=
+ =?utf-8?B?MDJ6WlovU3BxcnFwZU03TXNKNHcrVzErQTNKZFY4UnB2c2UzWE80bWJxZDMr?=
+ =?utf-8?B?V21Ocjd4YTVrbDJQeTh4a2hDdzA3cVdQMWRFamF4TUsrLy95M3dQSDZmVlBa?=
+ =?utf-8?B?VEo2RHhwaWZreDRBdkJ6Ryt3WExIbzZXOTB6MHhLcXMweFY5UkwxcGdQcGt5?=
+ =?utf-8?B?SzRVUUF4eDdrcUVvRWNNVjZsRllEK3dqaUlTL0lNRW5hd2pHcFRCUHdITGJG?=
+ =?utf-8?B?WEkvSHVXdEpjNVYyMHo3WVhCbWloUlJCRjUrdllmeExOTkJNSGpTaWc4RE1S?=
+ =?utf-8?B?RGZ1aGlCY1I3RlZhT1JpNFlNM0x5bU0rMHNZa0pzS3NBZThSQUs4bW80cFc4?=
+ =?utf-8?B?VzFkaXNmS2VGaVhaTFV4WWZqcWk5RHhoV0JEcFJ4MUdnQTZLQ2I0T29vWkhZ?=
+ =?utf-8?B?Ym9GdFdQZFZpanJpSlA5c21Ra1lBVnl6SXRRdFgvQk94NENwaERTcWo5aDJZ?=
+ =?utf-8?B?cUhMVmFJUkZmRUpWNUdFWHUxaXhobXRMbHVWbVFLL2pQazRuaXRvcUM4Nmlm?=
+ =?utf-8?B?N2ZCTE9OSjBhbjJmb24zT09qQzNjTzFVM05xbU42S3NLWlJxTmorU1BHSXh6?=
+ =?utf-8?B?SnNJY2Q0WjVucEQ5bTZlTGw4WERsdHlXZEJkRGwvbEx5K0VEeG0xdUJCcXBS?=
+ =?utf-8?B?WFgxSTRneE4xWlhQc0hwbmpuMktPclkzYkViYm0zQVU2VXQxZk43VUI1c28r?=
+ =?utf-8?Q?9vgoPf+W0tynJua4GrNJ45e8y?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af9c6ca0-8ecf-460c-f580-08db71e2cc0f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 23:05:10.4928
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R+LKfZovjZy61f+HGv7RJ64nxAoBBBqUKUgPMSNcpJkcIbEmsgeezoq6nuoAuxkm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7002
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 20 Jun 2023 13:47:07 PDT (-0700), ndesaulniers@google.com wrote:
-> On Tue, Jun 20, 2023 at 4:41 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>
->> On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
->> > On Tue, Jun 20, 2023 at 4:13 PM Conor Dooley <conor@kernel.org> wrote:
->> >>
->> >> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
->> >> > On Mon, Jun 19, 2023 at 6:06 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->> >> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
->> >> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
->> >> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
->> >> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
->> >>
->> >> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
->> >> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
->> >> > > >> series is based on 6.4-rc2.
->> >> > > >
->> >> > > > Thanks.
->> >> > >
->> >> > > Sorry to be so slow here, but I think this is causing LLD to hang on
->> >> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
->> >> > > other things I have in flight still.
->> >> >
->> >> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
->> >> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab.org/
->> >>
->> >> Just FYI Nick, there's been some concurrent work here from different
->> >> people working on the same thing & the v3 you linked (from Zhangjin) was
->> >> superseded by this v2 (from Jisheng).
->> >
->> > Ah! I've been testing the deprecated patch set, sorry I just looked on
->> > lore for "dead code" on riscv-linux and grabbed the first thread,
->> > without noticing the difference in authors or new version numbers for
->> > distinct series. ok, nevermind my noise.  I'll follow up with the
->> > correct patch set, sorry!
->>
->> Ya, I hadn't even noticed the v3 because I pretty much only look at
->> patchwork these days.  Like we talked about in IRC, I'm going to go test
->> the merge of this one and see what's up -- I've got it staged at
->> <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=1bd2963b21758a773206a1cb67c93e7a8ae8a195>,
->> though that won't be a stable hash if it's actually broken...
->
-> Ok, https://lore.kernel.org/linux-riscv/20230523165502.2592-1-jszhang@kernel.org/
-> built for me.  If you're seeing a hang, please let me know what
-> version of LLD you're using and I'll build that tag from source to see
-> if I can reproduce, then bisect if so.
->
-> $ ARCH=riscv LLVM=1 /usr/bin/time -v make -j128 allmodconfig vmlinux
-> ...
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 2:35.68
-> ...
->
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com> # build
+On Tue, Jun 20, 2023 at 01:01:39PM -0700, Vishal Moola wrote:
+> On Fri, Jun 16, 2023 at 5:38 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > On Mon, Jun 12, 2023 at 02:03:53PM -0700, Vishal Moola (Oracle) wrote:
+> > > Currently, page table information is stored within struct page. As part
+> > > of simplifying struct page, create struct ptdesc for page table
+> > > information.
+> > >
+> > > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > > ---
+> > >  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 51 insertions(+)
+> > >
+> > > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > > index c5a51481bbb9..330de96ebfd6 100644
+> > > --- a/include/linux/pgtable.h
+> > > +++ b/include/linux/pgtable.h
+> > > @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
+> > >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
+> > >  #endif /* CONFIG_MMU */
+> > >
+> > > +
+> > > +/**
+> > > + * struct ptdesc - Memory descriptor for page tables.
+> > > + * @__page_flags: Same as page flags. Unused for page tables.
+> > > + * @pt_list: List of used page tables. Used for s390 and x86.
+> > > + * @_pt_pad_1: Padding that aliases with page's compound head.
+> > > + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
+> > > + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap only.
+> > > + * @pt_mm: Used for x86 pgds.
+> > > + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and s390 only.
+> > > + * @ptl: Lock for the page table.
+> > > + *
+> > > + * This struct overlays struct page for now. Do not modify without a good
+> > > + * understanding of the issues.
+> > > + */
+> > > +struct ptdesc {
+> > > +     unsigned long __page_flags;
+> > > +
+> > > +     union {
+> > > +             struct list_head pt_list;
+> > > +             struct {
+> > > +                     unsigned long _pt_pad_1;
+> > > +                     pgtable_t pmd_huge_pte;
+> > > +             };
+> > > +     };
+> > > +     unsigned long _pt_s390_gaddr;
+> > > +
+> > > +     union {
+> > > +             struct mm_struct *pt_mm;
+> > > +             atomic_t pt_frag_refcount;
+> > > +     };
+> > > +
+> > > +#if ALLOC_SPLIT_PTLOCKS
+> > > +     spinlock_t *ptl;
+> > > +#else
+> > > +     spinlock_t ptl;
+> > > +#endif
+> > > +};
+> >
+> > I think you should include the memcg here too? It needs to be valid
+> > for a ptdesc, even if we don't currently deref it through the ptdesc
+> > type.
+> 
+> Yes, thanks for catching that! I'll add it to v5.
+> 
+> > Also, do you see a way to someday put a 'struct rcu_head' into here?
+> 
+> Eventually, when they're being dynamically allocated independent of
+> struct page. Although at that point I'm not sure if we'll need one.
 
-OK, it triggered enough of a rebuild that it might take a bit for 
-anything to filter out.
+Sooner than dynamic struct page?
 
-Thanks!
+Probably it can overlap pt_list in alot of arches?
 
->
->>
->> >
->> >>
->> >> Cheers,
->> >> Conor.
->> >
->> >
->> >
->> > --
->> > Thanks,
->> > ~Nick Desaulniers
->
->
->
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+Jason
