@@ -2,48 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0540273743A
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 20:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8579E73745D
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 20:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjFTSbv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jun 2023 14:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S229740AbjFTSem (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jun 2023 14:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjFTSbt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 14:31:49 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BEE19AD;
-        Tue, 20 Jun 2023 11:31:32 -0700 (PDT)
+        with ESMTP id S229665AbjFTSel (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 14:34:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D410C2;
+        Tue, 20 Jun 2023 11:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687285892; x=1718821892;
+  t=1687286079; x=1718822079;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=MGK1v29PlpQ4gM+C4AVD7bAgauo2HgqlxyHUJfasklE=;
-  b=JdplwFrkdpQJ9xkLf+JaDG9YL3ukiu7IIUZmpNlNg0M6dB3TE4o8QMFQ
-   Mj2uWNATEqcMbD6SMYWiR6ZdiVlAQ+Q9dBcCZCbsqsAhnRbow/9LoGQF+
-   A4YtSBJZ6QaevrCa8JxJki/N/BSh5QDjtN5125n6Rq6B+XqVGfNU9VxSK
-   qTJR17BTo3ugfWxRmiXdpLyCc2fDRWBxuk3QGCjUG6+QtAVaau5bkUEcU
-   Ac0eai/F6j20EFAebr3PUllQAcPIKNI1dCg3PGfv6/2/BIRWrE424l0PS
-   0MErYx/lpvyQd9rJy5OUdSJ7KbDOj1Gm/GXjB2F3kAW+7s2plzzs6oQzh
+  bh=7wOYvg1PU199MGs3s9q0fJPuRo9zPR+Rxyq5xsvig9s=;
+  b=fNfm000NvG30KuV79I1/O/qHl7r8GxEZ5uVLVzl4dyiwLeJuqphaj5jt
+   E2RVHj2Gt8WfS9XiSbpOxSJU2gQoNHAw6y4rwwQTV/1i5D3MOJ+UoycuP
+   flJisCPgeOsREcG2fYcXszrq4dsS6vUiI7tzx0371FSSlXsRgA/Jjl+PI
+   oq3s7chx32cO5bXFAC1EfjfMaML7aeFmqKniuvQwZwEq7+ECewTJBvSS5
+   xFSuyIwc3L0O1PF77tSdlXb9cbgmUXGW5SM0lmQxO8A0mwp630nqXIe5E
+   pm0E+3YOgPRU9J1AJ9YGupUmTRmWTY+towwa2So5xZr+QgmCD+XgvSf7c
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344693992"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340291597"
 X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="344693992"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:30:52 -0700
+   d="scan'208";a="340291597"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:34:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888347339"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="960883657"
 X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="888347339"
+   d="scan'208";a="960883657"
 Received: from oyloh-mobl.amr.corp.intel.com (HELO [10.209.25.231]) ([10.209.25.231])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:30:51 -0700
-Message-ID: <49cb0f01-f1c2-8812-7f2f-9a70ff576085@linux.intel.com>
-Date:   Tue, 20 Jun 2023 11:30:51 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:34:18 -0700
+Message-ID: <d20baf1e-a736-667f-2082-0c0539013f2b@linux.intel.com>
+Date:   Tue, 20 Jun 2023 11:34:17 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v8 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+Subject: Re: [PATCH v8 2/2] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Content-Language: en-US
 To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
         arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
         dan.j.williams@intel.com, dave.hansen@intel.com,
@@ -57,17 +59,16 @@ To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
 Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
         rick.p.edgecombe@intel.com
 References: <20230620154830.25442-1-decui@microsoft.com>
- <20230620154830.25442-2-decui@microsoft.com>
-Content-Language: en-US
+ <20230620154830.25442-3-decui@microsoft.com>
 From:   Sathyanarayanan Kuppuswamy 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230620154830.25442-2-decui@microsoft.com>
+In-Reply-To: <20230620154830.25442-3-decui@microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,150 +78,113 @@ X-Mailing-List: linux-arch@vger.kernel.org
 Hi,
 
 On 6/20/23 8:48 AM, Dexuan Cui wrote:
-> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
-> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
-> operation for the pages in the region starting at the GPA specified
-> in R11.
+> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
+> allocates buffers using vzalloc(), and needs to share the buffers with the
+> host OS by calling set_memory_decrypted(), which is not working for
+> vmalloc() yet. Add the support by handling the pages one by one.
 > 
-> When a fully enlightened TDX guest runs on Hyper-V, Hyper-V can return
-> the retry error when set_memory_decrypted() is called to decrypt up to
-> 1GB of swiotlb bounce buffers.
-> 
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 > Signed-off-by: Dexuan Cui <decui@microsoft.com>
 > ---
-> 
->  arch/x86/coco/tdx/tdx.c           | 63 +++++++++++++++++++++++++------
->  arch/x86/include/asm/shared/tdx.h |  2 +
->  2 files changed, 53 insertions(+), 12 deletions(-)
+
+Looks good to me.
+
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+>  arch/x86/coco/tdx/tdx.c | 35 +++++++++++++++++++++++++++++------
+>  1 file changed, 29 insertions(+), 6 deletions(-)
 > 
 > Changes in v2:
->   Used __tdx_hypercall() directly in tdx_map_gpa().
->   Added a max_retry_cnt of 1000.
->   Renamed a few variables, e.g., r11 -> map_fail_paddr.
+>   Changed tdx_enc_status_changed() in place.
 > 
 > Changes in v3:
->   Changed max_retry_cnt from 1000 to 3.
+>   No change since v2.
 > 
 > Changes in v4:
->   __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT) -> __tdx_hypercall_ret()
->   Added Kirill's Acked-by.
+>   Added Kirill's Co-developed-by since Kirill helped to improve the
+>     code by adding tdx_enc_status_changed_phys().
+> 
+>   Thanks Kirill for the clarification on load_unaligned_zeropad()!
 > 
 > Changes in v5:
+>   Added Kirill's Signed-off-by.
 >   Added Michael's Reviewed-by.
 > 
 > Changes in v6: None.
 > 
-> Changes in v7:
->   Addressed Dave's comments:
->   see https://lwn.net/ml/linux-kernel/SA1PR21MB1335736123C2BCBBFD7460C3BF46A@SA1PR21MB1335.namprd21.prod.outlook.com
+> Changes in v7: None.
+>   Note: there was a race between set_memory_encrypted() and
+>   load_unaligned_zeropad(), which has been fixed by the 3 patches of
+>   Kirill in the x86/tdx branch of the tip tree.
 > 
 > Changes in v8:
 >   Rebased to tip.git's master branch.
 > 
 > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 1d6b863c42b0..0c198ab73aa7 100644
+> index 0c198ab73aa7..a313d5ab42f1 100644
 > --- a/arch/x86/coco/tdx/tdx.c
 > +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -703,14 +703,16 @@ static bool tdx_cache_flush_required(void)
+> @@ -8,6 +8,7 @@
+>  #include <linux/export.h>
+>  #include <linux/io.h>
+> +#include <linux/mm.h>
+>  #include <asm/coco.h>
+>  #include <asm/tdx.h>
+>  #include <asm/vmx.h>
+>  #include <asm/insn.h>
+> @@ -752,6 +753,19 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>  	return false;
 >  }
 >  
+> +static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
+> +					bool enc)
+> +{
+> +	if (!tdx_map_gpa(start, end, enc))
+> +		return false;
+> +
+> +	/* shared->private conversion requires memory to be accepted before use */
+> +	if (enc)
+> +		return tdx_accept_memory(start, end);
+> +
+> +	return true;
+> +}
+> +
 >  /*
-> - * Inform the VMM of the guest's intent for this physical page: shared with
-> - * the VMM or private to the guest.  The VMM is expected to change its mapping
-> - * of the page in response.
-> + * Notify the VMM about page mapping conversion. More info about ABI
-> + * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> + * section "TDG.VP.VMCALL<MapGPA>".
+>   * Inform the VMM of the guest's intent for this physical page: shared with
+>   * the VMM or private to the guest.  The VMM is expected to change its mapping
+> @@ -759,15 +773,24 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
 >   */
-> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>  static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
 >  {
 > -	phys_addr_t start = __pa(vaddr);
 > -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-> +	const int max_retries_per_page = 3;
-
-Add some details about why you chose 3? Maybe you can also use macro for it.
-
-> +	struct tdx_hypercall_args args;
-> +	u64 map_fail_paddr, ret;
-> +	int retry_count = 0;
+> +	unsigned long start = vaddr;
+> +	unsigned long end = start + numpages * PAGE_SIZE;
 >  
->  	if (!enc) {
->  		/* Set the shared (decrypted) bits: */
-> @@ -718,12 +720,49 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->  		end   |= cc_mkdec(0);
->  	}
->  
-> -	/*
-> -	 * Notify the VMM about page mapping conversion. More info about ABI
-> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> -	 * section "TDG.VP.VMCALL<MapGPA>"
-> -	 */
-> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-> +	while (retry_count < max_retries_per_page) {
-> +		memset(&args, 0, sizeof(args));
-> +		args.r10 = TDX_HYPERCALL_STANDARD;
-> +		args.r11 = TDVMCALL_MAP_GPA;
-> +		args.r12 = start;
-> +		args.r13 = end - start;
-> +
-> +		ret = __tdx_hypercall_ret(&args);
-> +		if (ret != TDVMCALL_STATUS_RETRY)
-> +			return !ret;
-> +		/*
-> +		 * The guest must retry the operation for the pages in the
-> +		 * region starting at the GPA specified in R11. R11 comes
-> +		 * from the untrusted VMM. Sanity check it.
-> +		 */
-> +		map_fail_paddr = args.r11;
-
-Do you really need map_fail_paddr? Why not directly use args.r11?
-
-> +		if (map_fail_paddr < start || map_fail_paddr >= end)
-> +			return false;
-> +
-> +		/* "Consume" a retry without forward progress */
-> +		if (map_fail_paddr == start) {
-> +			retry_count++;
-> +			continue;
-> +		}
-> +
-> +		start = map_fail_paddr;
-> +		retry_count = 0;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +/*
-> + * Inform the VMM of the guest's intent for this physical page: shared with
-> + * the VMM or private to the guest.  The VMM is expected to change its mapping
-> + * of the page in response.
-> + */
-> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-> +{
-> +	phys_addr_t start = __pa(vaddr);
-> +	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-> +
-> +	if (!tdx_map_gpa(start, end, enc))
+> -	if (!tdx_map_gpa(start, end, enc))
+> +	if (offset_in_page(start) != 0)
 >  		return false;
 >  
->  	/* shared->private conversion requires memory to be accepted before use */
-> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-> index 90ea813c4b99..9db89a99ae5b 100644
-> --- a/arch/x86/include/asm/shared/tdx.h
-> +++ b/arch/x86/include/asm/shared/tdx.h
-> @@ -24,6 +24,8 @@
->  #define TDVMCALL_MAP_GPA		0x10001
->  #define TDVMCALL_REPORT_FATAL_ERROR	0x10003
->  
-> +#define TDVMCALL_STATUS_RETRY		1
+> -	/* shared->private conversion requires memory to be accepted before use */
+> -	if (enc)
+> -		return tdx_accept_memory(start, end);
+> +	if (!is_vmalloc_addr((void *)start))
+> +		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
 > +
->  #ifndef __ASSEMBLY__
+> +	while (start < end) {
+> +		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
+> +		phys_addr_t end_pa = start_pa + PAGE_SIZE;
+> +
+> +		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
+> +			return false;
+> +
+> +		start += PAGE_SIZE;
+> +	}
 >  
->  /*
+>  	return true;
+>  }
 
 -- 
 Sathyanarayanan Kuppuswamy
