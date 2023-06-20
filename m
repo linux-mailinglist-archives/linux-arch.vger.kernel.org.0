@@ -2,174 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383E573753B
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 21:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534B4737589
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jun 2023 22:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjFTTo6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Jun 2023 15:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S229806AbjFTUBx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Jun 2023 16:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjFTTof (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 15:44:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352EF1727;
-        Tue, 20 Jun 2023 12:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687290249; x=1718826249;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=f+w6go31yHxWwSLI+NSniMCiVZ2yAZABHchBThsxXBo=;
-  b=m3YCqcyxsES9cy5IidULcMU5tezC1C0e5MevCDQ/w4gTNbjcyEgqxMtp
-   ejeizZW3H8Gk24Bw6UzZ9mLoAA9O2v10QOfN1vPF/06K2ve2N2bvo0mg8
-   tihofQ6oDN2No3WDk14yZ3SYBWz+McYlYF2TJ2NbGf551qOLWngC/ZW0J
-   0jDZ92acKJTL4m0bw7yIeTUAYHe+ob0MhXJy7A0NG/9xBkOs2hV00paXg
-   c1irsbjIMcB/hLI/f4G1uJrnkF53NDf4tYHhFi4qOlEBrd9VEYAAuUaAY
-   Xoki/FzD3KAWCdgDtiIlUrSft3zd+52B47bB4mS6YbynBGgWrG6yHKAZy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344710193"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="344710193"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 12:44:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888366294"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="888366294"
-Received: from oyloh-mobl.amr.corp.intel.com (HELO [10.209.25.231]) ([10.209.25.231])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 12:44:06 -0700
-Message-ID: <17ea653f-215d-0bd4-e8b0-5188e5a5ffbd@linux.intel.com>
-Date:   Tue, 20 Jun 2023 12:44:06 -0700
+        with ESMTP id S229655AbjFTUBw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Jun 2023 16:01:52 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A28F1726;
+        Tue, 20 Jun 2023 13:01:50 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b5853a140cso1903733a34.2;
+        Tue, 20 Jun 2023 13:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687291309; x=1689883309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q4F3qXm8x1AVi+0TrKGx40m/sFxYrt6Lj9IeE/BrpeU=;
+        b=g8Wha6YZBIQ4F35wQ8P6Y0c98+3LfOEjAen8YviDIN/VpMlvLwu/TwEQtEhwi2wLbk
+         4/b97qENpIhbKycIE1G3aUVCeb+vz/rCN/gI0l10ch7iG8C6c3ywB5bQ5tQe6ryGYXul
+         5XkEWnvnLWIaJ1vsJQRh6tPgKWpuL7AyPHBFZQZGhCATWoDKR1D2YRUNFvvEx6dCnM6X
+         zMyQcs2OOhmWkXYBbd2Z3eHBKxjZIMZIeFLBGw0YYdvfY15fMS5Ra2rC/awJj+k/fir6
+         OMXeho7/p64d1/Gcc6dtEtZlx65PVhnR78rxvmM8tH1fn8015FZgY0Ml6WWkfDm6BXzA
+         dR7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687291309; x=1689883309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q4F3qXm8x1AVi+0TrKGx40m/sFxYrt6Lj9IeE/BrpeU=;
+        b=JQLKRzwQ7nZhKyR6Ozm4YrJP4sRWt23EaikeHuf4S1Z0Op843eoHbLLGN8Wna9YdTh
+         1lrwwOypHlcPXDzhFblTdVU9ddkbvjV4S5qYufCOlbwZIdTA6v5sbENpdmP8fJ7i1PIu
+         BTFcMdi/5piXgvOaDNlIaVdMZaE5mMJB4Wp0IpGU/LAxHPWhgFCKAQ8GGnQQsv67B6uI
+         5xxxvSQzoFEF24E2HX4BxivM2wuNl+z1wvsSpwxlLmEZuguGrLrZFIzpzTicdvDFvj5A
+         tNT8Rea/ULBdqckZ6kL/0rkCSo7e3bESeM21f4gbxdFzC1J1Gu/R3XAN5hJ+fz8qmCCy
+         h8pg==
+X-Gm-Message-State: AC+VfDxMXl+I7JyUgVRyXYGYsnxIeO9OUuQAsPZTPW5Fi0Fkb5jvVdlt
+        Y24iengrTZF5lNy88ri4sXDe9KcJir/Sg78vvxEpwokn
+X-Google-Smtp-Source: ACHHUZ4Hj3uSYs4sk8lvmBdlBVPXrs6qDttIob0+AqgPuiIWdgPfm9A1hihEUgTK87y6a2gHhIBkt791vtKGzbzprm8=
+X-Received: by 2002:a05:6358:f0e:b0:12b:ed05:18bb with SMTP id
+ b14-20020a0563580f0e00b0012bed0518bbmr8612256rwj.27.1687291309110; Tue, 20
+ Jun 2023 13:01:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v8 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
-References: <20230620154830.25442-1-decui@microsoft.com>
- <20230620154830.25442-2-decui@microsoft.com>
- <49cb0f01-f1c2-8812-7f2f-9a70ff576085@linux.intel.com>
- <SA1PR21MB13359EB1A88FC676C2269318BF5CA@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <SA1PR21MB13359EB1A88FC676C2269318BF5CA@SA1PR21MB1335.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-5-vishal.moola@gmail.com> <ZIxXw9ERkYv+ipdd@nvidia.com>
+In-Reply-To: <ZIxXw9ERkYv+ipdd@nvidia.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Tue, 20 Jun 2023 13:01:39 -0700
+Message-ID: <CAOzc2pwMW64O0m4Zu4zVFTY+qCJRK7V+7niN_t1m7pLaJrtb2A@mail.gmail.com>
+Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Fri, Jun 16, 2023 at 5:38=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> On Mon, Jun 12, 2023 at 02:03:53PM -0700, Vishal Moola (Oracle) wrote:
+> > Currently, page table information is stored within struct page. As part
+> > of simplifying struct page, create struct ptdesc for page table
+> > information.
+> >
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 51 insertions(+)
+> >
+> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > index c5a51481bbb9..330de96ebfd6 100644
+> > --- a/include/linux/pgtable.h
+> > +++ b/include/linux/pgtable.h
+> > @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct =
+vm_area_struct *vma,
+> >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
+> >  #endif /* CONFIG_MMU */
+> >
+> > +
+> > +/**
+> > + * struct ptdesc - Memory descriptor for page tables.
+> > + * @__page_flags: Same as page flags. Unused for page tables.
+> > + * @pt_list: List of used page tables. Used for s390 and x86.
+> > + * @_pt_pad_1: Padding that aliases with page's compound head.
+> > + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
+> > + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap on=
+ly.
+> > + * @pt_mm: Used for x86 pgds.
+> > + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and =
+s390 only.
+> > + * @ptl: Lock for the page table.
+> > + *
+> > + * This struct overlays struct page for now. Do not modify without a g=
+ood
+> > + * understanding of the issues.
+> > + */
+> > +struct ptdesc {
+> > +     unsigned long __page_flags;
+> > +
+> > +     union {
+> > +             struct list_head pt_list;
+> > +             struct {
+> > +                     unsigned long _pt_pad_1;
+> > +                     pgtable_t pmd_huge_pte;
+> > +             };
+> > +     };
+> > +     unsigned long _pt_s390_gaddr;
+> > +
+> > +     union {
+> > +             struct mm_struct *pt_mm;
+> > +             atomic_t pt_frag_refcount;
+> > +     };
+> > +
+> > +#if ALLOC_SPLIT_PTLOCKS
+> > +     spinlock_t *ptl;
+> > +#else
+> > +     spinlock_t ptl;
+> > +#endif
+> > +};
+>
+> I think you should include the memcg here too? It needs to be valid
+> for a ptdesc, even if we don't currently deref it through the ptdesc
+> type.
 
-On 6/20/23 12:23 PM, Dexuan Cui wrote:
->> From: Sathyanarayanan Kuppuswamy
->> Sent: Tuesday, June 20, 2023 11:31 AM
->>> ...
->>> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages,
->> bool enc)
->>> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
->>>  {
->>> -	phys_addr_t start = __pa(vaddr);
->>> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
->>> +	const int max_retries_per_page = 3;
->>
->> Add some details about why you chose 3? Maybe you can also use macro for it.
-> 
-> It's a small number recommended by Kirill:
-> https://lwn.net/ml/linux-kernel/20221208194800.n27ak4xj6pmyny46@box.shutemov.name/
-> 
-> The spec doesn't define a max retry count. Normally I guess a max retry count
-> of 2 should be enough, at least for Hyper-V according to my testing.
-> 
-> Maybe we can add a comment like this:
-> 
-> /* Retrying the hypercall a second time should succeed; use 3 just in case. */
-> 
-> Does this look good to all?
+Yes, thanks for catching that! I'll add it to v5.
 
-Looks fine to me.
+> Also, do you see a way to someday put a 'struct rcu_head' into here?
 
-> 
->>> +	struct tdx_hypercall_args args;
->>> +	u64 map_fail_paddr, ret;
->>> +	int retry_count = 0;
->>>
->>>  	if (!enc) {
->>>  		/* Set the shared (decrypted) bits: */
->>> @@ -718,12 +720,49 @@ static bool tdx_enc_status_changed(unsigned long
->> vaddr, int numpages, bool enc)
->>>  		end   |= cc_mkdec(0);
->>>  	}
->>>
->>> -	/*
->>> -	 * Notify the VMM about page mapping conversion. More info about ABI
->>> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
->>> -	 * section "TDG.VP.VMCALL<MapGPA>"
->>> -	 */
->>> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
->>> +	while (retry_count < max_retries_per_page) {
->>> +		memset(&args, 0, sizeof(args));
->>> +		args.r10 = TDX_HYPERCALL_STANDARD;
->>> +		args.r11 = TDVMCALL_MAP_GPA;
->>> +		args.r12 = start;
->>> +		args.r13 = end - start;
->>> +
->>> +		ret = __tdx_hypercall_ret(&args);
->>> +		if (ret != TDVMCALL_STATUS_RETRY)
->>> +			return !ret;
->>> +		/*
->>> +		 * The guest must retry the operation for the pages in the
->>> +		 * region starting at the GPA specified in R11. R11 comes
->>> +		 * from the untrusted VMM. Sanity check it.
->>> +		 */
->>> +		map_fail_paddr = args.r11;
->>
->> Do you really need map_fail_paddr? Why not directly use args.r11?
->>
->>> +		if (map_fail_paddr < start || map_fail_paddr >= end)
->>> +			return false;
-> 
-> Originally, I used r11. 
-> 
-> Dave says " 'r11' needs a real, logical name":
-> https://lwn.net/ml/linux-kernel/6bb65614-d420-49d3-312f-316dc8ca4cc4@intel.com/
+Eventually, when they're being dynamically allocated independent of
+struct page. Although at that point I'm not sure if we'll need one.
 
-Got it.
-
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> Thanks,
+> Jason
