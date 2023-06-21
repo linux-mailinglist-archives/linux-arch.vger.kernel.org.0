@@ -2,211 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0671738CFE
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 19:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFF6738D75
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 19:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjFURXo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Jun 2023 13:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S231225AbjFURnk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Jun 2023 13:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjFURXn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 13:23:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEF9E2;
-        Wed, 21 Jun 2023 10:23:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E87261631;
-        Wed, 21 Jun 2023 17:23:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA3DC433C8;
-        Wed, 21 Jun 2023 17:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687368221;
-        bh=yquFxCzQam6Y0drsElmHkL74h8to6Lc1Q2IiL+YJBRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VyD8mhPrmxeglu2dnz/8SmT+coOR9iR5uk8FmdNuRrxKhyL8t1ZQtB1Een+krCxgq
-         S542OLkbv/0FYm+E+fjlqpQczQuH1sCIkI5ebQovYoOKtC1jV78HRMKsewYN9Ww9EP
-         Oy08TLNkeBptOphsCGOcfq4h4L8ugR0MA6yltGok1ovy7LhVdkB5KWUIfqGB5ODW9W
-         gY1JiGGwhbLmmugoqB3h0vUfUig1mJPL/WI+jDzO8Fo3KVqdSwqAHD3gzX1CUjYPH3
-         pQlgKRJDzYStrDEfzxGQ0SNvvkkbGx7GW56CiNwks3hIXoEpqDTmeqJvD6RaHkF1oX
-         lAFoCWrNjoE1w==
-Date:   Wed, 21 Jun 2023 18:23:37 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     ndesaulniers@google.com, jszhang@kernel.org, llvm@lists.linux.dev,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230621-quickly-unimpeded-898caf8aeb53@spud>
-References: <mhng-8caf7779-aa9e-496a-b2ee-2e6d6d1d76ff@palmer-ri-x1c9a>
- <mhng-861ea8a6-c92c-4a78-a1a6-dfb4df554aee@palmer-ri-x1c9a>
- <20230621-hungrily-pancake-9e1ff5b0b02a@spud>
+        with ESMTP id S230481AbjFURnb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 13:43:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4912683;
+        Wed, 21 Jun 2023 10:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687369388; x=1718905388;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=LVptCrukcCrf+ulAXv9iJ2UzZRi1STprNI7mWSySJig=;
+  b=fCEMW8Pv79l+5VjM3UXkHi80A8kTMJtGyELw8Am/KWZ3Dz7X3oeaD+P8
+   RvKHDQIrg2Z8Cao83ZDt9z4r8+k+xIGNSHxrFQgna0m9qFVTFCfdeblKi
+   zTWkwXD+6Y+7ntwZoonr7gDAji2eC1OyNdITkzvtEZFujGIBkB2QhPtJ6
+   u8L2C8p90A69bKzAXXQ5jxejkq4iL6kzzBB/PZK5041o89MrdY2TGZuw/
+   gDYZpQjzt0zLMNqVSiLNl0sQ2HuDbxMcdOuturMqzhEfuDZiUwuh9bjdj
+   QSn0Be9HgXxwizBSxnYn8ZYIVSpwg/Yqc5BEfb+Klv78ObVEo2a/+BQqb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="339870177"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="339870177"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:42:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="1044816796"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="1044816796"
+Received: from rmathew-mobl2.amr.corp.intel.com (HELO [10.212.134.235]) ([10.212.134.235])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:42:16 -0700
+Message-ID: <680fadba-9104-3914-5175-e207fd3d9246@intel.com>
+Date:   Wed, 21 Jun 2023 10:42:16 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LluipYX8HrWs/U5U"
-Content-Disposition: inline
-In-Reply-To: <20230621-hungrily-pancake-9e1ff5b0b02a@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to MM CPUs
+Content-Language: en-US
+To:     Yair Podemsky <ypodemsk@redhat.com>, mtosatti@redhat.com,
+        ppandit@redhat.com, david@redhat.com, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        keescook@chromium.org, paulmck@kernel.org, frederic@kernel.org,
+        will@kernel.org, peterz@infradead.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        linus.walleij@linaro.org, akpm@linux-foundation.org,
+        sebastian.reichel@collabora.com, rppt@kernel.org,
+        aneesh.kumar@linux.ibm.com, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230620144618.125703-1-ypodemsk@redhat.com>
+ <20230620144618.125703-3-ypodemsk@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230620144618.125703-3-ypodemsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 6/20/23 07:46, Yair Podemsky wrote:
+> -void tlb_remove_table_sync_one(void)
+> +#ifdef CONFIG_ARCH_HAS_CPUMASK_BITS
+> +#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
+> +#else
+> +#define REMOVE_TABLE_IPI_MASK cpu_online_mask
+> +#endif /* CONFIG_ARCH_HAS_CPUMASK_BITS */
+> +
+> +void tlb_remove_table_sync_one(struct mm_struct *mm)
+>  {
+>  	/*
+>  	 * This isn't an RCU grace period and hence the page-tables cannot be
+> @@ -200,7 +206,8 @@ void tlb_remove_table_sync_one(void)
+>  	 * It is however sufficient for software page-table walkers that rely on
+>  	 * IRQ disabling.
+>  	 */
+> -	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
+> +	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
+> +			NULL, true);
+>  }
 
---LluipYX8HrWs/U5U
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That "REMOVE_TABLE_IPI_MASK" thing is pretty confusing.  It *looks* like
+a constant.  It does *NOT* look at all like it consumes 'mm'.  Worst
+case, just create a local variable:
 
-On Wed, Jun 21, 2023 at 05:42:08PM +0100, Conor Dooley wrote:
-> On Wed, Jun 21, 2023 at 07:53:59AM -0700, Palmer Dabbelt wrote:
-> > On Tue, 20 Jun 2023 17:13:17 PDT (-0700), Palmer Dabbelt wrote:
-> > > On Tue, 20 Jun 2023 14:08:33 PDT (-0700), Palmer Dabbelt wrote:
-> > >> On Tue, 20 Jun 2023 13:47:07 PDT (-0700), ndesaulniers@google.com wr=
-ote:
-> > >>> On Tue, Jun 20, 2023 at 4:41=E2=80=AFPM Palmer Dabbelt <palmer@dabb=
-elt.com> wrote:
-> > >>>>
-> > >>>> On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com =
-wrote:
-> > >>>> > On Tue, Jun 20, 2023 at 4:13=E2=80=AFPM Conor Dooley <conor@kern=
-el.org> wrote:
-> > >>>> >>
-> > >>>> >> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrot=
-e:
-> > >>>> >> > On Mon, Jun 19, 2023 at 6:06=E2=80=AFPM Palmer Dabbelt <palme=
-r@dabbelt.com> wrote:
-> > >>>> >> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wr=
-ote:
-> > >>>> >> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.=
-org wrote:
-> > >>>> >> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt=
- wrote:
-> > >>>> >> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kerne=
-l.org wrote:
-> > >>>> >>
-> > >>>> >> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings=
- caused by
-> > >>>> >> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge =
-easy, this
-> > >>>> >> > > >> series is based on 6.4-rc2.
-> > >>>> >> > > >
-> > >>>> >> > > > Thanks.
-> > >>>> >> > >
-> > >>>> >> > > Sorry to be so slow here, but I think this is causing LLD t=
-o hang on
-> > >>>> >> > > allmodconfig.  I'm still getting to the bottom of it, there=
-'s a few
-> > >>>> >> > > other things I have in flight still.
-> > >>>> >> >
-> > >>>> >> > Confirmed with v3 on mainline (linux-next is pretty red at th=
-e moment).
-> > >>>> >> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-fa=
-lcon@tinylab.org/
-> > >>>> >>
-> > >>>> >> Just FYI Nick, there's been some concurrent work here from diff=
-erent
-> > >>>> >> people working on the same thing & the v3 you linked (from Zhan=
-gjin) was
-> > >>>> >> superseded by this v2 (from Jisheng).
-> > >>>> >
-> > >>>> > Ah! I've been testing the deprecated patch set, sorry I just loo=
-ked on
-> > >>>> > lore for "dead code" on riscv-linux and grabbed the first thread,
-> > >>>> > without noticing the difference in authors or new version number=
-s for
-> > >>>> > distinct series. ok, nevermind my noise.  I'll follow up with the
-> > >>>> > correct patch set, sorry!
-> > >>>>
-> > >>>> Ya, I hadn't even noticed the v3 because I pretty much only look at
-> > >>>> patchwork these days.  Like we talked about in IRC, I'm going to g=
-o test
-> > >>>> the merge of this one and see what's up -- I've got it staged at
-> > >>>> <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/=
-commit/?h=3Dfor-next&id=3D1bd2963b21758a773206a1cb67c93e7a8ae8a195>,
-> > >>>> though that won't be a stable hash if it's actually broken...
-> > >>>
-> > >>> Ok, https://lore.kernel.org/linux-riscv/20230523165502.2592-1-jszha=
-ng@kernel.org/
-> > >>> built for me.  If you're seeing a hang, please let me know what
-> > >>> version of LLD you're using and I'll build that tag from source to =
-see
-> > >>> if I can reproduce, then bisect if so.
-> > >>>
-> > >>> $ ARCH=3Driscv LLVM=3D1 /usr/bin/time -v make -j128 allmodconfig vm=
-linux
-> > >>> ...
-> > >>>         Elapsed (wall clock) time (h:mm:ss or m:ss): 2:35.68
-> > >>> ...
-> > >>>
-> > >>> Tested-by: Nick Desaulniers <ndesaulniers@google.com> # build
-> > >>
-> > >> OK, it triggered enough of a rebuild that it might take a bit for
-> > >> anything to filter out.
-> > >
-> > > I'm on LLVM 16.0.2
-> > >
-> > >     $ git describe
-> > >     llvmorg-16.0.2
-> > >     $ git log | head -n1
-> > >     commit 18ddebe1a1a9bde349441631365f0472e9693520
-> > >
-> > > that seems to hang for me -- or at least run for an hour without
-> > > completing, so I assume it's hung.  I'm not wed to 16.0.2, it just
-> > > happens to be the last time I bumped the toolchain.  I'm moving to
-> > > 16.0.5 to see if that changes anything.
-> >=20
-> > That also takes at least an hour to link.  I tried running on LLVM trun=
-k=20
-> > from last night
-> >=20
-> >     $ git log | head -n1
-> >     commit 5e9173c43a9b97c8614e36d6f754317f731e71e9
-> >=20
-> > and that completed.  Just as a curiosity I tried to re-spin it to see=
-=20
-> > how long it takes, and it's been running for 23 minutes so far.
->=20
-> After some misdirection through stupid user error, I have also
-> reproduced this for an LLVM=3D1 build w/ llvmorg-16.0.0
->=20
-> > So I'm no longer actually sure there's a hang, just something slow. =20
-> > That's even more of a grey area, but I think it's sane to call a 1-hour=
-=20
-> > link time a regression -- unless it's expected that this is just very=
-=20
-> > slow to link?
->=20
-> I dunno, if it was only a thing for allyesconfig, then whatever - but
-> it's gonna significantly increase build times for any large kernels if LLD
-> is this much slower than LD. Regression in my book.
->=20
-> I'm gonna go and experiment with mixed toolchain builds, I'll report
-> back..
+	if (IS_ENABLED(CONFIG_ARCH_HAS_CPUMASK_BITS))
+		ipi_mask = mm_cpumask(mm);
+	else
+		ipi_mask = cpu_online_mask;
 
-Probably as expected, swapping out LLD for LD linked normally & using
-gcc-13.1 + LLD hit the same problems with linking.
+	on_each_cpu_mask(ipi_mask, ...);
 
-Cheers,
-Conor.
+That's a billion times more clear and it'll compile down to the same thing.
 
---LluipYX8HrWs/U5U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJMyGAAKCRB4tDGHoIJi
-0kNtAQCUK3HR+LPtaX0t0fhwjTV6Iy1hq0wHj2ZSniC9zB8LqQEA1+QCkN4UMDxo
-xey8uu74KLBByxak6tlmOfRttzCSJwY=
-=60qR
------END PGP SIGNATURE-----
-
---LluipYX8HrWs/U5U--
+I do think the CONFIG_ARCH_HAS_CPUMASK_BITS naming is also pretty
+confusing, but I don't have any better suggestions.  Maybe something
+with "MM_CPUMASK" in it?
