@@ -2,233 +2,246 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F71738FD5
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 21:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CE3738FF1
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 21:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjFUTOx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Jun 2023 15:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S229632AbjFUTVn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Jun 2023 15:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjFUTO1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 15:14:27 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020025.outbound.protection.outlook.com [52.101.61.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626651FD2;
-        Wed, 21 Jun 2023 12:14:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fRfertxwGGTgE3YtGWvHtM0/6LsFV23e0co2ZNRVFBfii5Xb3cR0ov8wpUCZMPvlV6KHDB8Lr76iE7V2kkoReOsBCg/csOg9nrjZ4sjtQdNbe0vTWC3QqzGFVM9xbSsG4f7pkmLSnEfMHLrthUOlM/IuqwUQSAldl1lHMvXRFHIaREdlqtDpY8lX2oHh8SH8vysxfnSunm6Z0FXs5T6ifsxyH3HRQ6P1HyqhtKlU/DioBuXDD30UavcsB60XF4aNWcQYOWHRx84IlS7CUuEV06qjLrOriL2ur6l8dHyf4mKhzJlGfhRdY50QrydTFSssZBpupwcT2IBZdpBqnHVCEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6MsDwaOwi/CgW6Yr7aTJR5hfbE35O5E4fDtBHbmSzLM=;
- b=F9z9XC9j1Es0xUCk8KHkG2RAya12XDr5JIlDNjkyjkkOVsLvNBck/7PwmORKl0SFJ76+9b+tx+OU1ZMD9spuw5hyOS2AW7eNnSTNQZpssYDZ8K52YoqyOLb+2NeI8+cYsJ0zhIQTJPn4knMPZnPbSXs4isnEDPgkpJ4TfkXJeRTXw7wC9owc3yF4leiJ+1ZHovDNfFpHxuQFqgQXHy1OqRbtDmtoJg6I491H1NGzrIVYIHbC1XLXrjEHKX9aQrkuvuKEbKzOrcbGUVNVRm+R1JGULoa1wD/WaYPlfdNz//C8UmIRfm/w7fEKZO71nY7anv8Kgj41XTDKMMJtoecqNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6MsDwaOwi/CgW6Yr7aTJR5hfbE35O5E4fDtBHbmSzLM=;
- b=D7w7yn7V84PqMW8YRmeBl0IDbXY8sNkVXMzUvUGntgsOsJMpcRtcWRsElfsZP7tfo7CyYIPcwYyLzE1cDYRfd58ASTeqvasQaVb2DH47nhWxWz6WcWNiVjSk0P9Mbtm3oyt1dJuU+j4oaFvXFZGCyogki6PrlbWAB91hLvmRLgQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23) by MW6PR21MB4009.namprd21.prod.outlook.com
- (2603:10b6:303:23f::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.11; Wed, 21 Jun
- 2023 19:13:56 +0000
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::e673:bfeb:d3c1:7682]) by BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::e673:bfeb:d3c1:7682%3]) with mapi id 15.20.6544.008; Wed, 21 Jun 2023
- 19:13:56 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        rick.p.edgecombe@intel.com, Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH v9 2/2] x86/tdx: Support vmalloc() for tdx_enc_status_changed()
-Date:   Wed, 21 Jun 2023 12:13:17 -0700
-Message-Id: <20230621191317.4129-3-decui@microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230621191317.4129-1-decui@microsoft.com>
-References: <20230621191317.4129-1-decui@microsoft.com>
-Content-Type: text/plain
-X-ClientProxiedBy: CY5PR15CA0072.namprd15.prod.outlook.com
- (2603:10b6:930:18::34) To BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23)
+        with ESMTP id S229505AbjFUTVk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 15:21:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE79D;
+        Wed, 21 Jun 2023 12:21:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E18A6168A;
+        Wed, 21 Jun 2023 19:21:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530D6C433C0;
+        Wed, 21 Jun 2023 19:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687375296;
+        bh=dXl/RcITYryeZDp/bcQ5wJ7/OYXFDVjxEVm67BCHVZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qvsYqzA5QWIMPhJaQm+yBP+QxYh0+8vZjVBb6WWe4CedNcVdeci9dJ55DW57FAWlH
+         v8h77PSL8j7tiWr/EWfYm0kjUtUtJ7x0O8kK2jLCao9kYL5VQXpoQEgaoVfQ6PQxHd
+         P6rwvXUHOA+W0sa6wF9T6klertLGMbXpEFJWrlEX2Cirbdw1lEIPRi9cIhX+PMlojc
+         AHzY/67zJtoa+bh5OVu1uMVGSA9PY91VUZ330171wKCtbyAycNIbNB6R99iacR0h0e
+         xWKrUyx+06M8Lp/695TzkCE/sY5ma5sfThgWJNWEGXO88Mqt1JUwwGV+qs1QgB+krz
+         UfItkGn73Ul4Q==
+Date:   Wed, 21 Jun 2023 19:21:33 +0000
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
+        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        deller@gmx.de, glaubitz@physik.fu-berlin.de,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+Message-ID: <20230621192133.GB842758@dev-arch.thelio-3990X>
+References: <20230620131356.25440-11-bhe@redhat.com>
+ <202306211329.ticOJCSv-lkp@intel.com>
+ <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|MW6PR21MB4009:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d2cde4b-9ac2-43d2-d9c5-08db728ba90f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sKAS1oQ0cig8LvQ53SsPDTtVRK8EiDWPjlDcli2S1eKzl9jaCNlJoi+5egQXHxIAhF/PRCNPO7rn+ZqOwR0rRqpGux2icp3N+iFfqGbLyRToGMnFifk2FWvBEvfcJRxIfujSZ/K9xnP290mp2q6LDfLNJHMnf4bAxVyudzkOEGbGQEnJQOTRwmcsxVCKXdDvTe90tCVwcKTCKEDlrLTv/ZMOflncTNQ71xm/KkLyH4KtZkdtywQSfLb8KHlvG+c7UtIvFsEssDFWDDT9ElBn8njtkiYEXIfJIL7/nSjnWMViAc+k2iM+XWQJaxExXAT2DcsvTNN+yfPJZaN5J+8KT1YVM0uEi4nSCq+q/t8B+1lLZby31eZEddMonvS1hYQK8t8aVYjLP/7uO4IaVLozF90eMna/EwKJ7WtbjOSUlCgl1OZPfYdraVgPie6rqm/aEpyBQg4kNQKbfBURkDTVCIbrAr4yRa3ECLbF7HJ2QyDPwih6uPhr0COV6y/2EItP9/bB68bqLeUyXc9m/wydYR6eMd/P0Ap23vQaxOCCT/wfw82sNLchsjGwX0Duv3E01/2g4Mp23eA19ugHiD/ka5diiArbOlg41S8ShLI6NzDpfJbSSNCNbCFliBB/MimZ0xH282yFUrNCdkfZtU05Wg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(346002)(376002)(396003)(451199021)(86362001)(38100700002)(316002)(4326008)(66556008)(66476007)(66946007)(41300700001)(8676002)(5660300002)(8936002)(2906002)(7416002)(186003)(6636002)(107886003)(6512007)(1076003)(6506007)(36756003)(83380400001)(2616005)(478600001)(921005)(82950400001)(82960400001)(52116002)(6486002)(10290500003)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FnkuaCvo8sSqxioUBA+KV0fpRr9lHudjT9eaKEhQbH6gAM/GW0pl6dYVbiqa?=
- =?us-ascii?Q?vc4tgM4s6q49EIb/pdFySVzW41WQe7gXGcM4sCBTi2699CGgVzFkrdZxQ2iG?=
- =?us-ascii?Q?6BC5Q/PKoZYYX0rVGgnoYQI/+evs37I8KyiJ4qASFxWLfW9X9UUEGf5ziF8k?=
- =?us-ascii?Q?/keUsj7GloevfQm6D+h+vdspMtA/z0RTKfZ7cO1o1Np8XnyMOgd9FvJ0/gNW?=
- =?us-ascii?Q?uRLSdrroyc/6Dj0jJR/HswQE0FEczZHSp99ipVIvpHaWrwlqfuq8Yv3agSzk?=
- =?us-ascii?Q?LI4B3nBQ/b7WA4llEz/58RTdNz1mhvahP6UGT3PVRDJaUGbZTObh1u6O9lXH?=
- =?us-ascii?Q?OInrZ9eaLsCb1YyMb8PTZ4Tezt355GtZOMIN4rx+b3up8Y+5m4KSwUfOVbuu?=
- =?us-ascii?Q?YIuyHp8pLdpiz9uubBFN+Bpikxsap6ZOkMcMrO6lt7W55XhfZJCw/St6vtgH?=
- =?us-ascii?Q?MkNcFy2IQkbZDhCTFt8F2jaC8jLoMSRd7cLTzJb5owCGVlFUbT0KLakv0+rJ?=
- =?us-ascii?Q?FQvNb81oXXN5GhG+KSFCYZ4n55aURvHUaae74xyt5uDCQw7y9vfmxNkSEyNz?=
- =?us-ascii?Q?q+zZgiF0yGgY9WzDd5Du9TsC2K/gCMajxMqs9gB2sbigY8Xl3VstE510KUgr?=
- =?us-ascii?Q?XKu7f1eXaafABX+Ix/mKoTtA9pYCVqD/rnMCU8TVeQ+Qq7YxadNX0BPjr4Ze?=
- =?us-ascii?Q?coQZKlt+uYADWJAttCXjb24Kj3oYc0ISECO7HRbPcNLvl/RmUnWmn8W5Azs+?=
- =?us-ascii?Q?9aCNxxFhXJ6iWSl7Tuah/nEyFeLZtzpNtKycHB2LPir2rqIi0jV1mrn74IVk?=
- =?us-ascii?Q?rcyJS9o+sNiz/d2v8X+DnITDEoUFhPliyitPBd81aMlpCR5Ij5PM0N96gtjK?=
- =?us-ascii?Q?WhtPochwpho0qoi1x9nCXbS9OAgtwUpTl6bsvhNGu5YLLE/RYm+EEYILWPCk?=
- =?us-ascii?Q?s3+T+CNQ7ar/9LGwtLGKqH8iixOYEoIiGJcLIsXPQoehsgfOWkiJnnO1HMWy?=
- =?us-ascii?Q?qEH74xVecw07U4pC7BK3mNbafdZmuBx3p28sfvbcAkPpQL+x81CuJWOnh5av?=
- =?us-ascii?Q?XQKGVb/b1btmSa/H+JPCkGKi/rz1Y6oitvIOiJGCgTg72569kV0Uz3sQ4LNY?=
- =?us-ascii?Q?L700JUk6Du65rZ6GN3/qC8Oyj58/ZNicLL4W/Eg1LbVAexoIbnx0vRTMBetl?=
- =?us-ascii?Q?xputZ88xNPbQ09j5mbvM4kFS6TeJlj+QaVUz9i03lxHqO/f0T++6MG9hKCCB?=
- =?us-ascii?Q?bmEeTWHvypQVNemTTZ1uqRaHFVj0/Q+WgVbdr2N7tDfsnwF9MqQnSdRGkNzV?=
- =?us-ascii?Q?L/j6i8RcA9uT1H2C0j0vLbsU8j3nfJE0y5DUXjbpdTkTMUQM0FWEVAqMI8t1?=
- =?us-ascii?Q?wKIpSd56MUDrlxNOntVHlf959RoUgU6OntFqmyoEnimiLnZQ3N5A83ZLdMom?=
- =?us-ascii?Q?0S+2AHu14aVdocco7DDcOWS47oxmz89Em3BKkWYzYoKqpq+K/CH8//XNqu4B?=
- =?us-ascii?Q?65OwAMaMY/betBCDn25PgEQWCZo7k4T6XpLHkbQe9H76hd1dCzMsrgw0iDEC?=
- =?us-ascii?Q?RjsIIAfwC4IddHRUuSShNAuQoe5SEFPLq9M02v3gTSA5ITnlCXRpmKClmfWb?=
- =?us-ascii?Q?/8rIgTsWtbezm9C7OqwXxUISBzOdiLXh7XcBunrg2AUJ?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d2cde4b-9ac2-43d2-d9c5-08db728ba90f
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 19:13:56.6864
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zANK5JI9ACo4H0Q4YjockXZTSCjzWf58Q4Ob2eUXS9CwwX7DPUXZNnzfF9vPbeZRlOpm3l3UrLO/LwBesLy8bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR21MB4009
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
-allocates buffers using vzalloc(), and needs to share the buffers with the
-host OS by calling set_memory_decrypted(), which is not working for
-vmalloc() yet. Add the support by handling the pages one by one.
+On Wed, Jun 21, 2023 at 06:41:09PM +0800, Baoquan He wrote:
+> Hi,
+> 
+> On 06/21/23 at 01:43pm, kernel test robot wrote:
+> > Hi Baoquan,
+> > 
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on akpm-mm/mm-everything]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
+> > patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+> > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
+> > compiler: s390-linux-gcc (GCC) 12.3.0
+> > reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/reproduce)
+> 
+> Thanks for reporting this.
+> 
+> I followed steps in above reproduce link, it failed as below. Please
+> help check if anything is missing.
+> 
+> [root@intel-knightslanding-lb-02 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+> Compiler will be installed in /root/0day
+> lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
+> /root/linux                                                                                          
+> tar Jxf /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz -C /root/0day
+> Please update: libc6 or glibc
+> ldd /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc
+> /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc: /lib64/libc.so.6: version `GLIBC_2.36' not found (required by /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc)
+> setup_crosstool failed
 
-Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Dexuan Cui <decui@microsoft.com>
----
- arch/x86/coco/tdx/tdx.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+Certain recent versions of the kernel.org crosstool toolchains were
+built against a pretty recent glibc so attempting to run it on a system
+with an older glibc will result in the error above:
 
-Changes in v2:
-  Changed tdx_enc_status_changed() in place.
+https://lore.kernel.org/87mt2eoopo.fsf@kernel.org/
 
-Changes in v3:
-  No change since v2.
+Arnd resolved this and reuploaded the binaries, I suspect the Intel
+folks need to mirror the updated tarballs to 01.org:
 
-Changes in v4:
-  Added Kirill's Co-developed-by since Kirill helped to improve the
-    code by adding tdx_enc_status_changed_phys().
+https://lore.kernel.org/e9601db2-ff7d-4490-abd5-8d3c5946e108@app.fastmail.com/
 
-  Thanks Kirill for the clarification on load_unaligned_zeropad()!
+According to make.cross, you can override the URL it uses with a
+variable, you could try removing these files
 
-Changes in v5:
-  Added Kirill's Signed-off-by.
-  Added Michael's Reviewed-by.
+  /root/0day/gcc-12.3.0-nolibc/s390-linux
+  /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
 
-Changes in v6: None.
+and running
 
-Changes in v7: None.
-  Note: there was a race between set_memory_encrypted() and
-  load_unaligned_zeropad(), which has been fixed by the 3 patches of
-  Kirill in the x86/tdx branch of the tip tree.
+  $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 URL=https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
 
-Changes in v8:
-  Rebased to tip.git's master branch.
+to see if that works now.
 
-Changes in v9:
-  Added Kuppuswamy Sathyanarayanan's Reviewed-by.
+Cheers,
+Nathan
 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 746075d20cd2..c1a2423a8159 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -7,6 +7,7 @@
- #include <linux/cpufeature.h>
- #include <linux/export.h>
- #include <linux/io.h>
-+#include <linux/mm.h>
- #include <asm/coco.h>
- #include <asm/tdx.h>
- #include <asm/vmx.h>
-@@ -753,6 +754,19 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
- 	return false;
- }
- 
-+static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
-+					bool enc)
-+{
-+	if (!tdx_map_gpa(start, end, enc))
-+		return false;
-+
-+	/* shared->private conversion requires memory to be accepted before use */
-+	if (enc)
-+		return tdx_accept_memory(start, end);
-+
-+	return true;
-+}
-+
- /*
-  * Inform the VMM of the guest's intent for this physical page: shared with
-  * the VMM or private to the guest.  The VMM is expected to change its mapping
-@@ -760,15 +774,24 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
-  */
- static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
- {
--	phys_addr_t start = __pa(vaddr);
--	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-+	unsigned long start = vaddr;
-+	unsigned long end = start + numpages * PAGE_SIZE;
- 
--	if (!tdx_map_gpa(start, end, enc))
-+	if (offset_in_page(start) != 0)
- 		return false;
- 
--	/* shared->private conversion requires memory to be accepted before use */
--	if (enc)
--		return tdx_accept_memory(start, end);
-+	if (!is_vmalloc_addr((void *)start))
-+		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
-+
-+	while (start < end) {
-+		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
-+		phys_addr_t end_pa = start_pa + PAGE_SIZE;
-+
-+		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
-+			return false;
-+
-+		start += PAGE_SIZE;
-+	}
- 
- 	return true;
- }
--- 
-2.25.1
-
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
+> > 
+> > All error/warnings (new ones prefixed by >>):
+> > 
+> >    drivers/tty/ipwireless/main.c: In function 'ipwireless_probe':
+> >    drivers/tty/ipwireless/main.c:115:30: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
+> >      115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
+> >          |                              ^~~~~~~
+> >          |                              iounmap
+> > >> drivers/tty/ipwireless/main.c:115:28: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+> >      115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
+> >          |                            ^
+> >    drivers/tty/ipwireless/main.c:139:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+> >      139 |         ipw->attr_memory = ioremap(p_dev->resource[3]->start,
+> >          |                          ^
+> >    In file included from include/linux/io.h:13,
+> >                     from drivers/tty/ipwireless/main.c:26:
+> >    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
+> >       29 | #define iounmap iounmap
+> >          |                 ^~~~~~~
+> >    drivers/tty/ipwireless/main.c:155:9: note: in expansion of macro 'iounmap'
+> >      155 |         iounmap(ipw->attr_memory);
+> >          |         ^~~~~~~
+> >    cc1: some warnings being treated as errors
+> > --
+> >    drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'mhz_mfc_config':
+> > >> drivers/net/ethernet/smsc/smc91c92_cs.c:447:17: error: implicit declaration of function 'ioremap'; did you mean 'ifr_map'? [-Werror=implicit-function-declaration]
+> >      447 |     smc->base = ioremap(link->resource[2]->start,
+> >          |                 ^~~~~~~
+> >          |                 ifr_map
+> > >> drivers/net/ethernet/smsc/smc91c92_cs.c:447:15: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+> >      447 |     smc->base = ioremap(link->resource[2]->start,
+> >          |               ^
+> >    In file included from include/linux/scatterlist.h:9,
+> >                     from include/linux/dma-mapping.h:11,
+> >                     from include/linux/skbuff.h:28,
+> >                     from include/net/net_namespace.h:43,
+> >                     from include/linux/netdevice.h:38,
+> >                     from drivers/net/ethernet/smsc/smc91c92_cs.c:38:
+> >    drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'smc91c92_release':
+> >    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
+> >       29 | #define iounmap iounmap
+> >          |                 ^~~~~~~
+> >    drivers/net/ethernet/smsc/smc91c92_cs.c:962:17: note: in expansion of macro 'iounmap'
+> >      962 |                 iounmap(smc->base);
+> >          |                 ^~~~~~~
+> >    cc1: some warnings being treated as errors
+> > --
+> >    drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_config':
+> >    drivers/net/ethernet/xircom/xirc2ps_cs.c:843:28: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
+> >      843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
+> >          |                            ^~~~~~~
+> >          |                            iounmap
+> > >> drivers/net/ethernet/xircom/xirc2ps_cs.c:843:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+> >      843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
+> >          |                          ^
+> >    In file included from include/linux/scatterlist.h:9,
+> >                     from include/linux/dma-mapping.h:11,
+> >                     from include/linux/skbuff.h:28,
+> >                     from include/linux/if_ether.h:19,
+> >                     from include/linux/ethtool.h:18,
+> >                     from drivers/net/ethernet/xircom/xirc2ps_cs.c:77:
+> >    drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_release':
+> >    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
+> >       29 | #define iounmap iounmap
+> >          |                 ^~~~~~~
+> >    drivers/net/ethernet/xircom/xirc2ps_cs.c:934:25: note: in expansion of macro 'iounmap'
+> >      934 |                         iounmap(local->dingo_ccr - 0x0800);
+> >          |                         ^~~~~~~
+> >    cc1: some warnings being treated as errors
+> > 
+> > 
+> > vim +447 drivers/net/ethernet/smsc/smc91c92_cs.c
+> > 
+> > b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  422  
+> > fba395eee7d3f3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2006-03-31  423  static int mhz_mfc_config(struct pcmcia_device *link)
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  424  {
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  425      struct net_device *dev = link->priv;
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  426      struct smc_private *smc = netdev_priv(dev);
+> > b5cb259e7fac55 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  427      unsigned int offset;
+> > b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  428      int i;
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  429  
+> > 00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  430      link->config_flags |= CONF_ENABLE_SPKR | CONF_ENABLE_IRQ |
+> > 00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  431  	    CONF_AUTO_SET_IO;
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  432  
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  433      /* The Megahertz combo cards have modem-like CIS entries, so
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  434         we have to explicitly try a bunch of port combinations. */
+> > b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  435      if (pcmcia_loop_config(link, mhz_mfc_config_check, NULL))
+> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  436  	    return -ENODEV;
+> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  437  
+> > 9a017a910346af drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  438      dev->base_addr = link->resource[0]->start;
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  439  
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  440      /* Allocate a memory window, for accessing the ISR */
+> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  441      link->resource[2]->flags = WIN_DATA_WIDTH_8|WIN_MEMORY_TYPE_AM|WIN_ENABLE;
+> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  442      link->resource[2]->start = link->resource[2]->end = 0;
+> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  443      i = pcmcia_request_window(link, link->resource[2], 0);
+> > 4c89e88bfde6a3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-03  444      if (i != 0)
+> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  445  	    return -ENODEV;
+> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  446  
+> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28 @447      smc->base = ioremap(link->resource[2]->start,
+> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  448  		    resource_size(link->resource[2]));
+> > 7feabb6412ea23 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-29  449      offset = (smc->manfid == MANFID_MOTOROLA) ? link->config_base : 0;
+> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  450      i = pcmcia_map_mem_page(link, link->resource[2], offset);
+> > 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  451      if ((i == 0) &&
+> > 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  452  	(smc->manfid == MANFID_MEGAHERTZ) &&
+> > 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  453  	(smc->cardid == PRODID_MEGAHERTZ_EM3288))
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  454  	    mhz_3288_power(link);
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  455  
+> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  456      return 0;
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  457  }
+> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  458  
+> > 
+> > -- 
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests/wiki
+> > 
+> 
