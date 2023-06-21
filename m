@@ -2,47 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A8373820C
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 13:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8559C7381A9
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 13:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbjFUKpZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Jun 2023 06:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S230118AbjFUKuC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Jun 2023 06:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbjFUKoy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 06:44:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF4910FF
-        for <linux-arch@vger.kernel.org>; Wed, 21 Jun 2023 03:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687344081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SfWcdf1P06wr9dZtmw5KwqOofKgTdxLYKDeKIiQRFzU=;
-        b=i6d/tXN6y93tVFYYA2lK3MEmZA4fkvVFJcww0PAW3Ym+L+lYdswqW5cY14voRuZ8Eciv6z
-        75OKnrD8Z6p5cnyey5onhECdGL7HdhDTYSE3v2nYvy50/PhoHyfii53wThAXqNZmwBZT2y
-        rSmizgz9c50zJwB7xxldFioIk+tHgKc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-390-ExH6W32dN0CP7jEMOW8naQ-1; Wed, 21 Jun 2023 06:41:17 -0400
-X-MC-Unique: ExH6W32dN0CP7jEMOW8naQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84D3A800CA9;
-        Wed, 21 Jun 2023 10:41:16 +0000 (UTC)
-Received: from localhost (ovpn-12-166.pek2.redhat.com [10.72.12.166])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D3D1C1ED97;
-        Wed, 21 Jun 2023 10:41:14 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 18:41:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        hch@lst.de, christophe.leroy@csgroup.eu, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
+        with ESMTP id S231251AbjFUKtY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 06:49:24 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A9C26AB;
+        Wed, 21 Jun 2023 03:47:54 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LAjYaY017268;
+        Wed, 21 Jun 2023 10:46:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=cUvEvxNf99OC0k88ySjrYQUKcc+sx5zZabmgOf1+tQk=;
+ b=dT9A36wxNF/H18bNyOoBZYiquvFEk5T7bETkEdtci+/xi1HuMFM4LPMUwnxEHAYrtzWY
+ u2AHpiQPNEzDPr0sNpkyIRYkxnYX7yoUmATVM9Dv8r8D00+iLh8XK6n8Fl5YleeWreeK
+ vHDmwt+ClSr3AK0Qpw/aN3JRnOXjM/Ub175vCXQGS59DqaM9phpl8AqdpEIcJSIdYCsN
+ dIuCdZBSTklaaL4ONKYehmIVM3ph32UVdfnpPhCHRbd53zNfNZ2ntNWxPxOoguTaIwwJ
+ 1lLPPN+Xo5LJXK3bF+xy7pzIbdYkyfKcOyNArFcNyKaVMjyYhIH0djS4uqF25m46BlfM Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rbyqwg0d0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 10:46:39 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35LAkNuD019302;
+        Wed, 21 Jun 2023 10:46:39 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rbyqwg0ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 10:46:39 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35L6SRWT029025;
+        Wed, 21 Jun 2023 10:46:37 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r94f52q3c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 10:46:37 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35LAkXYg45351266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 10:46:34 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D805720043;
+        Wed, 21 Jun 2023 10:46:33 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E40C20040;
+        Wed, 21 Jun 2023 10:46:33 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 21 Jun 2023 10:46:33 +0000 (GMT)
+Date:   Wed, 21 Jun 2023 12:46:31 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
+        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
         wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
         David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
         nathan@kernel.org, glaubitz@physik.fu-berlin.de,
@@ -52,176 +72,55 @@ Cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
 Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
+Message-ID: <ZJLVB3CtS+3TodSp@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 References: <20230620131356.25440-11-bhe@redhat.com>
  <202306211329.ticOJCSv-lkp@intel.com>
-MIME-Version: 1.0
+ <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306211329.ticOJCSv-lkp@intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OXagYCuSxnkmVraMyxn6CTM15jQ9_mss
+X-Proofpoint-GUID: RQXGZsLdt6bFdFgkPFHjWxpGHSmnLbys
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_07,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Wed, Jun 21, 2023 at 06:41:09PM +0800, Baoquan He wrote:
 
-On 06/21/23 at 01:43pm, kernel test robot wrote:
-> Hi Baoquan,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
-> patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 12.3.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/reproduce)
+Hi Baoquan,
 
-Thanks for reporting this.
+> > [auto build test ERROR on akpm-mm/mm-everything]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
+> > patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+> > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
+> > compiler: s390-linux-gcc (GCC) 12.3.0
+> > reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/reproduce)
+> 
+> Thanks for reporting this.
+> 
+> I followed steps in above reproduce link, it failed as below. Please
+> help check if anything is missing.
 
-I followed steps in above reproduce link, it failed as below. Please
-help check if anything is missing.
+Could it be because you locally have the fix you posted aganst v6?
 
-[root@intel-knightslanding-lb-02 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-Compiler will be installed in /root/0day
-lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
-/root/linux                                                                                          
-tar Jxf /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz -C /root/0day
-Please update: libc6 or glibc
-ldd /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc
-/root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc: /lib64/libc.so.6: version `GLIBC_2.36' not found (required by /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc)
-setup_crosstool failed
-
-
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
-> 
-> All error/warnings (new ones prefixed by >>):
-> 
->    drivers/tty/ipwireless/main.c: In function 'ipwireless_probe':
->    drivers/tty/ipwireless/main.c:115:30: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
->      115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
->          |                              ^~~~~~~
->          |                              iounmap
-> >> drivers/tty/ipwireless/main.c:115:28: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->      115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
->          |                            ^
->    drivers/tty/ipwireless/main.c:139:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->      139 |         ipw->attr_memory = ioremap(p_dev->resource[3]->start,
->          |                          ^
->    In file included from include/linux/io.h:13,
->                     from drivers/tty/ipwireless/main.c:26:
->    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
->       29 | #define iounmap iounmap
->          |                 ^~~~~~~
->    drivers/tty/ipwireless/main.c:155:9: note: in expansion of macro 'iounmap'
->      155 |         iounmap(ipw->attr_memory);
->          |         ^~~~~~~
->    cc1: some warnings being treated as errors
-> --
->    drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'mhz_mfc_config':
-> >> drivers/net/ethernet/smsc/smc91c92_cs.c:447:17: error: implicit declaration of function 'ioremap'; did you mean 'ifr_map'? [-Werror=implicit-function-declaration]
->      447 |     smc->base = ioremap(link->resource[2]->start,
->          |                 ^~~~~~~
->          |                 ifr_map
-> >> drivers/net/ethernet/smsc/smc91c92_cs.c:447:15: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->      447 |     smc->base = ioremap(link->resource[2]->start,
->          |               ^
->    In file included from include/linux/scatterlist.h:9,
->                     from include/linux/dma-mapping.h:11,
->                     from include/linux/skbuff.h:28,
->                     from include/net/net_namespace.h:43,
->                     from include/linux/netdevice.h:38,
->                     from drivers/net/ethernet/smsc/smc91c92_cs.c:38:
->    drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'smc91c92_release':
->    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
->       29 | #define iounmap iounmap
->          |                 ^~~~~~~
->    drivers/net/ethernet/smsc/smc91c92_cs.c:962:17: note: in expansion of macro 'iounmap'
->      962 |                 iounmap(smc->base);
->          |                 ^~~~~~~
->    cc1: some warnings being treated as errors
-> --
->    drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_config':
->    drivers/net/ethernet/xircom/xirc2ps_cs.c:843:28: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
->      843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
->          |                            ^~~~~~~
->          |                            iounmap
-> >> drivers/net/ethernet/xircom/xirc2ps_cs.c:843:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->      843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
->          |                          ^
->    In file included from include/linux/scatterlist.h:9,
->                     from include/linux/dma-mapping.h:11,
->                     from include/linux/skbuff.h:28,
->                     from include/linux/if_ether.h:19,
->                     from include/linux/ethtool.h:18,
->                     from drivers/net/ethernet/xircom/xirc2ps_cs.c:77:
->    drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_release':
->    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
->       29 | #define iounmap iounmap
->          |                 ^~~~~~~
->    drivers/net/ethernet/xircom/xirc2ps_cs.c:934:25: note: in expansion of macro 'iounmap'
->      934 |                         iounmap(local->dingo_ccr - 0x0800);
->          |                         ^~~~~~~
->    cc1: some warnings being treated as errors
-> 
-> 
-> vim +447 drivers/net/ethernet/smsc/smc91c92_cs.c
-> 
-> b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  422  
-> fba395eee7d3f3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2006-03-31  423  static int mhz_mfc_config(struct pcmcia_device *link)
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  424  {
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  425      struct net_device *dev = link->priv;
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  426      struct smc_private *smc = netdev_priv(dev);
-> b5cb259e7fac55 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  427      unsigned int offset;
-> b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  428      int i;
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  429  
-> 00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  430      link->config_flags |= CONF_ENABLE_SPKR | CONF_ENABLE_IRQ |
-> 00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  431  	    CONF_AUTO_SET_IO;
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  432  
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  433      /* The Megahertz combo cards have modem-like CIS entries, so
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  434         we have to explicitly try a bunch of port combinations. */
-> b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  435      if (pcmcia_loop_config(link, mhz_mfc_config_check, NULL))
-> dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  436  	    return -ENODEV;
-> dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  437  
-> 9a017a910346af drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  438      dev->base_addr = link->resource[0]->start;
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  439  
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  440      /* Allocate a memory window, for accessing the ISR */
-> cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  441      link->resource[2]->flags = WIN_DATA_WIDTH_8|WIN_MEMORY_TYPE_AM|WIN_ENABLE;
-> cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  442      link->resource[2]->start = link->resource[2]->end = 0;
-> cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  443      i = pcmcia_request_window(link, link->resource[2], 0);
-> 4c89e88bfde6a3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-03  444      if (i != 0)
-> dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  445  	    return -ENODEV;
-> dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  446  
-> cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28 @447      smc->base = ioremap(link->resource[2]->start,
-> cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  448  		    resource_size(link->resource[2]));
-> 7feabb6412ea23 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-29  449      offset = (smc->manfid == MANFID_MOTOROLA) ? link->config_base : 0;
-> cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  450      i = pcmcia_map_mem_page(link, link->resource[2], offset);
-> 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  451      if ((i == 0) &&
-> 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  452  	(smc->manfid == MANFID_MEGAHERTZ) &&
-> 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  453  	(smc->cardid == PRODID_MEGAHERTZ_EM3288))
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  454  	    mhz_3288_power(link);
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  455  
-> dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  456      return 0;
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  457  }
-> ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  458  
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
-
+Thansk!
