@@ -2,94 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC62737D0D
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 10:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8B0737E81
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Jun 2023 11:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjFUHoe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Jun 2023 03:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S229758AbjFUIkX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Jun 2023 04:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjFUHod (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 03:44:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971A610D;
-        Wed, 21 Jun 2023 00:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XIUg3gDajjXx1L9B+6vEGFUgDSherxnnB+qfdlVJNWU=; b=P4wD/i70lrhaTSBrIAiJA1ZJw4
-        Q6Q6jj7EaLa5t9YFa47VdKWDJfVTyYN3lQ0GXxuvHgEUZP0PWzJVNfKdnaFahJYDMSXhG8X2Odb47
-        IEYEKArt2e4aY7U7kesU85LQpAKjdy484CGV92R8iAsWzNcL/oGQy8MmRoyYQi4EMKxH6VExImUAr
-        T42Z/1JwMe5xnRb7wjg65ARU47dJMomPDfxxJrkdtta/lmPJ/5iyuHMpCWw5k4JG2izlKzW9XejsZ
-        L3g4lEcetUs1uGuta7zyI3tfPv1wTYXeeTxVWCCKUBfUHRh69yyy9eghCAPLDPBq5pU8JRIYnmsUx
-        P4K8pevA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBsVC-00HIVK-1L;
-        Wed, 21 Jun 2023 07:43:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B475300222;
-        Wed, 21 Jun 2023 09:43:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E49482BD11718; Wed, 21 Jun 2023 09:43:37 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 09:43:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yair Podemsky <ypodemsk@redhat.com>
-Cc:     mtosatti@redhat.com, ppandit@redhat.com, david@redhat.com,
-        linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, keescook@chromium.org, paulmck@kernel.org,
-        frederic@kernel.org, will@kernel.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        linus.walleij@linaro.org, akpm@linux-foundation.org,
-        sebastian.reichel@collabora.com, rppt@kernel.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] send tlb_remove_table_smp_sync IPI only to
- necessary CPUs
-Message-ID: <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
-References: <20230620144618.125703-1-ypodemsk@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620144618.125703-1-ypodemsk@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231815AbjFUIj5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Jun 2023 04:39:57 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E206D26AD;
+        Wed, 21 Jun 2023 01:39:12 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxBsUvt5JkrhEAAA--.126S3;
+        Wed, 21 Jun 2023 16:39:11 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax3c4st5JkmlAAAA--.2097S2;
+        Wed, 21 Jun 2023 16:39:09 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v2 0/2] Unify uapi bitsperlong.h
+Date:   Wed, 21 Jun 2023 16:39:06 +0800
+Message-Id: <1687336748-4898-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Ax3c4st5JkmlAAAA--.2097S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Zr48Jr1fWw43WFWDury7twc_yoW8ur1DpF
+        93ArnxWF45CrWayw1rta4jqryUJ397Gr4jgay2qry8XrWIvF1UGrsYkrs3Ca47JayUXFn5
+        urn3Gry5G3WDK3XCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        XVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+        6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+        AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU8CksDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 05:46:16PM +0300, Yair Podemsky wrote:
-> Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
-> indiscriminately, this causes unnecessary work and delays notable in
-> real-time use-cases and isolated cpus.
-> By limiting the IPI to only be sent to cpus referencing the effected
-> mm.
-> a config to differentiate architectures that support mm_cpumask from
-> those that don't will allow safe usage of this feature.
-> 
-> changes from -v1:
-> - Previous version included a patch to only send the IPI to CPU's with
-> context_tracking in the kernel space, this was removed due to race 
-> condition concerns.
-> - for archs that do not maintain mm_cpumask the mask used should be
->  cpu_online_mask (Peter Zijlstra).
->  
+v2:
+  -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
+     __aarch64__, __riscv, __loongarch__, thanks Ruoyao
+  -- Update the code comment and commit message
 
-Would it not be much better to fix the root cause? As per the last time,
-there's patches that cure the thp abuse of this.
+v1:
+  -- Rebase on 6.4-rc6
+  -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
+  -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
+
+Here is the RFC patch:
+https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn/
+
+Tiezhu Yang (2):
+  asm-generic: Unify uapi bitsperlong.h for arm64, riscv and loongarch
+  tools arch: Remove uapi bitsperlong.h of hexagon and microblaze
+
+ arch/arm64/include/uapi/asm/bitsperlong.h          | 24 -------------------
+ arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
+ arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -----------
+ include/uapi/asm-generic/bitsperlong.h             | 11 +++++++++
+ tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 -------------------
+ tools/arch/hexagon/include/uapi/asm/bitsperlong.h  | 27 ----------------------
+ .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
+ .../arch/microblaze/include/uapi/asm/bitsperlong.h |  2 --
+ tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -----------
+ tools/include/uapi/asm-generic/bitsperlong.h       | 12 ++++++++++
+ tools/include/uapi/asm/bitsperlong.h               |  6 -----
+ 11 files changed, 23 insertions(+), 129 deletions(-)
+ delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
+
+-- 
+2.1.0
+
