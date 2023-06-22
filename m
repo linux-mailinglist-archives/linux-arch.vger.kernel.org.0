@@ -2,53 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9121B73A0A2
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 14:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48BD73A216
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 15:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjFVMO3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jun 2023 08:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S229548AbjFVNnP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jun 2023 09:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjFVMO3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 08:14:29 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252A7171C;
-        Thu, 22 Jun 2023 05:14:28 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230334AbjFVNmv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 09:42:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064B9199F
+        for <linux-arch@vger.kernel.org>; Thu, 22 Jun 2023 06:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687441319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eFmMS1U29te7tFKtgkPWLc+o83wVHmxe900XZpUTdy8=;
+        b=VXSWyha5A0K+hGTtHOfyj1ddSw1Zuf598TweVHP/NDk2iG0t0ieK53CSIJIg/LvLY9ibQF
+        O47IKH+OelrQDZb1IwMshCf1Y8uZTyruzbUT/atQlKTTgk9bL6agLprEF1mehqlfQUsWcX
+        psi4R//+YBixC2ghiVm9n8SNQSK2xmw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-gHPWKO21MFaNd35SQfD9XQ-1; Thu, 22 Jun 2023 09:41:52 -0400
+X-MC-Unique: gHPWKO21MFaNd35SQfD9XQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmznY1RHFz4x04;
-        Thu, 22 Jun 2023 22:14:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1687436066;
-        bh=VyK+T7wpYZieXhcDB/H+1KJ1YxNx6190VxkOIlmBktI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=hnaboYieOfnnuNB8OHVEabPqrovQFXHSe6l2zxpfBrXLYGFjlm8ZAWrxhhS7y1Vap
-         0LtUYWtUif9PeV4IJlza3hqmWjOAA6FDMPe82TRMsPXMHygXkmmy0nLi0PGTZogalO
-         cP9U+cgif/Co9lGKBZO64O/wkTk9rYnW1J+5KH6+xnoZK/A3PZuzsOa0GtIffF+K87
-         W/1TMd+p4WA6T31KCxfkPzYI0Qu7AOxq6j+d1yaoH8/0ZONecNmkI6LCOL+V3Bf/eG
-         kxGSgTH5KZQ+wXxPjI98JWHeAJnyudGZqhd6tx1eq7I/kwj3q3rDhPob6NCpGP5NEV
-         8nHc9uYWGeTrg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de
-Subject: Re: [PATCH 07/10] cpu/SMT: Allow enabling partial SMT states via sysfs
-In-Reply-To: <87legb7tdz.ffs@tglx>
-References: <20230615154635.13660-1-ldufour@linux.ibm.com>
- <20230615154635.13660-8-ldufour@linux.ibm.com> <87legb7tdz.ffs@tglx>
-Date:   Thu, 22 Jun 2023 22:14:24 +1000
-Message-ID: <87sfajofrz.fsf@mail.lhotse>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2FA8104458A;
+        Thu, 22 Jun 2023 13:41:48 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9FD83112132C;
+        Thu, 22 Jun 2023 13:41:47 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 7AF94400E05F5; Thu, 22 Jun 2023 09:47:22 -0300 (-03)
+Date:   Thu, 22 Jun 2023 09:47:22 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Yair Podemsky <ypodemsk@redhat.com>, ppandit@redhat.com,
+        david@redhat.com, linux@armlinux.org.uk, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        keescook@chromium.org, paulmck@kernel.org, frederic@kernel.org,
+        will@kernel.org, ardb@kernel.org, samitolvanen@google.com,
+        juerg.haefliger@canonical.com, arnd@arndb.de,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        linus.walleij@linaro.org, akpm@linux-foundation.org,
+        sebastian.reichel@collabora.com, rppt@kernel.org,
+        aneesh.kumar@linux.ibm.com, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] send tlb_remove_table_smp_sync IPI only to
+ necessary CPUs
+Message-ID: <ZJRC2s4sIuJ9V3A0@tpad>
+References: <20230620144618.125703-1-ypodemsk@redhat.com>
+ <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,43 +80,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
-> On Thu, Jun 15 2023 at 17:46, Laurent Dufour wrote:
->>  
->> -	if (ctrlval != cpu_smt_control) {
->> +	orig_threads = cpu_smt_num_threads;
->> +	cpu_smt_num_threads = num_threads;
->> +
->> +	if (num_threads > orig_threads) {
->> +		ret = cpuhp_smt_enable();
->> +	} else if (num_threads < orig_threads) {
->> +		ret = cpuhp_smt_disable(ctrlval);
->> +	} else if (ctrlval != cpu_smt_control) {
->>  		switch (ctrlval) {
->>  		case CPU_SMT_ENABLED:
->>  			ret = cpuhp_smt_enable();
->
-> This switch() is still as pointless as in the previous version.
->
-> OFF -> ON, ON -> OFF, ON -> FORCE_OFF are covered by the num_threads
-> comparisons.
->
-> So the only case where (ctrlval != cpu_smt_control) is relevant is the
-> OFF -> FORCE_OFF transition because in that case the number of threads
-> is not changing.
->
->           force_off = ctrlval != cpu_smt_control && ctrval == CPU_SMT_FORCE_DISABLED;
->
-> 	  if (num_threads > orig_threads)
-> 		  ret = cpuhp_smt_enable();
-> 	  else if (num_threads < orig_threads || force_off)
-> 		  ret = cpuhp_smt_disable(ctrlval);
->
-> Should just work, no?
+On Wed, Jun 21, 2023 at 09:43:37AM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 05:46:16PM +0300, Yair Podemsky wrote:
+> > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+> > indiscriminately, this causes unnecessary work and delays notable in
+> > real-time use-cases and isolated cpus.
+> > By limiting the IPI to only be sent to cpus referencing the effected
+> > mm.
+> > a config to differentiate architectures that support mm_cpumask from
+> > those that don't will allow safe usage of this feature.
+> > 
+> > changes from -v1:
+> > - Previous version included a patch to only send the IPI to CPU's with
+> > context_tracking in the kernel space, this was removed due to race 
+> > condition concerns.
+> > - for archs that do not maintain mm_cpumask the mask used should be
+> >  cpu_online_mask (Peter Zijlstra).
+> >  
+> 
+> Would it not be much better to fix the root cause? As per the last time,
+> there's patches that cure the thp abuse of this.
 
-Yes, I think so.
+The other case where the IPI can happen is:
 
-I'll fold that in and do a respin of this series for 6.6 in the next
-week or two.
+CPU-0                                   CPU-1
 
-cheers
+tlb_remove_table
+tlb_remove_table_sync_one
+IPI
+                                        local_irq_disable
+                                        gup_fast
+                                        local_irq_enable
+
+
+So its not only the THP case.
+
