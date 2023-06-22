@@ -2,79 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0DF73A45C
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 17:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C14673A461
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 17:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjFVPKD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jun 2023 11:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S229853AbjFVPK6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jun 2023 11:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjFVPKB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 11:10:01 -0400
+        with ESMTP id S230185AbjFVPK5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 11:10:57 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A280A2;
-        Thu, 22 Jun 2023 08:10:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579B7E9;
+        Thu, 22 Jun 2023 08:10:56 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 7B1773200258;
-        Thu, 22 Jun 2023 11:09:56 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id A09673200906;
+        Thu, 22 Jun 2023 11:10:55 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 11:09:57 -0400
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 11:10:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687446596; x=1687532996; bh=UF
-        Ik7GqKMTQQbMewPZ3JZd1cKUV2IvhZU7QLYY4nLQk=; b=VqXzuiAnU40BIyTBrS
-        9/SRN8hrv7scO6zI3Wgs3SMHosS7t3TIJr1SBen8U4HVEj75R1HMftaR11UagFuI
-        dQDwOO6WznyWPpjHfiZA/qhgUCvAGQy5BbZaxLT8/yzptS5v9ubV79kwpAGGxQuM
-        DE1SwgGx2/ZH4LHcTmR8+ATYG4+1ChyqonunUcwENZ8WIemWrIms+PVug0q2eEMY
-        TSR/0Lv+VsDmf75Ax2ZUYJHD9iEFh1NOs/D996wZlKS3iocCzmdyaCf0ugaZ8754
-        mkrP5Erd8AZHVvjwPj+SwlMzINCbTf+N7Ax13yVW7pywBRzZV7toq41p/Zg6HRml
-        8+aA==
+        :subject:subject:to:to; s=fm1; t=1687446655; x=1687533055; bh=kS
+        XI+uQYHYT8Q1kKiqztNgYBfy24UhpC3AiD8ORZzxM=; b=se6zjqV6CdQJdKuGhf
+        faZk9MDhVtJffoT2bC4EQ2cFwn1svcGmJCCPihk13VJO2trC7X6O0NZqjCSVAIaA
+        QUfrPFKcPM988sd8PlRydcH5cimUwqNLOkmH9a5CrjGOHeAgQ4S2jjWyCK/i/qWQ
+        oV0NjaydskKaEd2vzC1oqCg8RFG5ArRNIujo73mhhlfVkej2BWaY+urKLKoFpSeI
+        HTJePBf60nkXcmY8G/BzaeIuyPTUWrucidj6xLEqovC8ClXyHtRVHN4RcmFj0uK6
+        1ASngYo+cq8UzhlD/fBj2qMsRMj3S5YOge2Viw0R6uPMSM4KbRLfy1uzpMB9KHYb
+        la1Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687446596; x=1687532996; bh=UFIk7GqKMTQQb
-        MewPZ3JZd1cKUV2IvhZU7QLYY4nLQk=; b=GDkxVJy0ljSrkyo6YnDKY4pFJLdfF
-        2IiwBq716JjjpA1//mgjXXP5rcXOZixDJgoknebyqw1EqT2D2QU8dP8YL2NcTi1O
-        IcPYk8faxiG7shlcm1dGUo/6sDJPCw3Xx0CSF1UrFWPh0CpWGKFhWKa1eSkHxUvZ
-        hQKxsPVNrue7m49ASD49SHR8b6Ycrxepba23aSdmT5JPYAnwwLCp85qf4tpFV9QC
-        s7uZrWeg6Rcr0aeiWooXqJ01AnWywTF72j+hj2YO3Lel+WKAuW51T7GBsJGC4tEX
-        zBWePkKQBus17YZIOFzKmp68jsxY9m/bGzWsIxe3JfxKnYUSnioOb56VA==
-X-ME-Sender: <xms:QmSUZLkPh6E0UqDs8VS6ZyRN4qZgBuUFafXc6Are0ycgDlrH6NDVqg>
-    <xme:QmSUZO0DJFPef8z4dg0gEklyqcQOteSgU8sjn_ihzdZQGYc5BSSDYBjdql0sceTKV
-    t-Mz_Lh8TLjXlZnyUY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgkeegucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1687446655; x=1687533055; bh=kSXI+uQYHYT8Q
+        1kKiqztNgYBfy24UhpC3AiD8ORZzxM=; b=Lt++QUV810u20rxuZGi6AZYNz+5/S
+        VTW5LnfFNJ9CxuFK31wEjel0AJSqU7noxBK9mo+FyTNtZuXzFStU4Yd+yPsQZLqH
+        fPcd1hSdn2Oh2hGfp3pOUFMQTwuLJ2H+mdfMuhaWbXUeo5Whmc2+Zt4de0FALiym
+        0BFpphQJeF2sb9DhBjC3bcZMuVorI9bE1t/mjZfq1TT6W7AdskPahE4FLjoI57Hu
+        Aqn+UT7mRRuJ/uWI8X+eaMP5hhQnK9Fz5M2ykSJTe339Kmwp5zlkPTYZK1hUl4Jm
+        0i7FC/PYcLZWi5QWnUy2IBHH7z2ihxeMLlWOz3EK2hYZ5b0qSuE3WET4A==
+X-ME-Sender: <xms:fmSUZBrjTesmxWlKOcnFidiiblDaY9b1NJjjqG3CnFFmZjc28R0l_A>
+    <xme:fmSUZDoqIVoU9EFZyTF-d_siHHbPrdf-EXH9jLZnESoUywHOnLYb729Ej0XYRwjEI
+    JeuV9aqmB_oFDUovUY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgkeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
     nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QmSUZBryuN3fCOL33LL87iiMJqMuPdQ374jsU4AyA3x_IUnaAeTNqw>
-    <xmx:QmSUZDndHZJxE8ISniqoZMrjyBRb3ilM9dINXYaxUJ00LFwhgi62PA>
-    <xmx:QmSUZJ0rSKbadaLwaeA2sIbRM2gI4zZSyduBaxYgvlWuucs5KccdXw>
-    <xmx:RGSUZGlj-v19qlVP4kskwEzbSFARUROY_1DQ0zqqUTkr7VMXuaT54Q>
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:fmSUZONu51x9nccl-pi6e1bqti3C_CeyDcpFJyeCymPp1M65ykySlw>
+    <xmx:fmSUZM6UUdTzZS05_OiqaGnAhOxQ2NKIQbGle9QUhwsaGGp4VPO1aQ>
+    <xmx:fmSUZA40mcA4Qq66bkA4wph7qn9tvt5mOkDc5PV8sxNlSBsy_LZHYw>
+    <xmx:f2SUZOQrDZnvq2vVWlyzYquhyDSBjg_4_sscJ0QOP6VvVzLOEs9xKg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7DFC4B60089; Thu, 22 Jun 2023 11:09:54 -0400 (EDT)
+        id C9DC4B60086; Thu, 22 Jun 2023 11:10:54 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
 Mime-Version: 1.0
-Message-Id: <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
-In-Reply-To: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
-Date:   Thu, 22 Jun 2023 17:09:34 +0200
+Message-Id: <388c9fbb-2782-4990-b432-eeb999308869@app.fastmail.com>
+In-Reply-To: <20230621223600.1348693-1-sohil.mehta@intel.com>
+References: <e1a2665d-2e11-7722-a7ae-ef534829ed37@intel.com>
+ <20230621223600.1348693-1-sohil.mehta@intel.com>
+Date:   Thu, 22 Jun 2023 17:10:34 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 0/2] Unify uapi bitsperlong.h
+To:     "Sohil Mehta" <sohil.mehta@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] syscalls: Remove file path comments from headers
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -86,26 +84,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 16:13, Tiezhu Yang wrote:
-> v3:
->   -- Check the definition of __BITS_PER_LONG first at
->      the beginning of uapi/asm-generic/bitsperlong.h
+On Thu, Jun 22, 2023, at 00:36, Sohil Mehta wrote:
+> Source file locations for syscall definitions can change over a period
+> of time. File paths in comments get stale and are hard to maintain long
+> term. Also, their usefulness is questionable since it would be easier to
+> locate a syscall definition using the SYSCALL_DEFINEx() macro.
 >
-> v2:
->   -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
->      __aarch64__, __riscv, __loongarch__, thanks Ruoyao
->   -- Update the code comment and commit message
+> Remove all source file path comments from the syscall headers. Also,
+> equalize the uneven line spacing (some of which is introduced due to the
+> deletions).
 >
-> v1:
->   -- Rebase on 6.4-rc6
->   -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
->   -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
->
-> Here is the RFC patch:
-> https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn/
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> ---
+>  include/linux/compat.h                  |  82 ++------------
+>  include/linux/syscalls.h                | 140 +++---------------------
+>  include/uapi/asm-generic/unistd.h       | 129 +++++-----------------
+>  kernel/sys_ni.c                         | 110 +------------------
+>  tools/include/uapi/asm-generic/unistd.h | 129 +++++-----------------
+>  5 files changed, 85 insertions(+), 505 deletions(-)
 
-I've applied these to the asm-generic tree now
-
-Thanks,
+Applied to the asm-generic tree, thanks!
 
    Arnd
