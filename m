@@ -2,116 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48BD73A216
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 15:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB78573A137
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 14:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjFVNnP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jun 2023 09:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S230098AbjFVMu0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jun 2023 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjFVNmv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 09:42:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064B9199F
-        for <linux-arch@vger.kernel.org>; Thu, 22 Jun 2023 06:41:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687441319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eFmMS1U29te7tFKtgkPWLc+o83wVHmxe900XZpUTdy8=;
-        b=VXSWyha5A0K+hGTtHOfyj1ddSw1Zuf598TweVHP/NDk2iG0t0ieK53CSIJIg/LvLY9ibQF
-        O47IKH+OelrQDZb1IwMshCf1Y8uZTyruzbUT/atQlKTTgk9bL6agLprEF1mehqlfQUsWcX
-        psi4R//+YBixC2ghiVm9n8SNQSK2xmw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-gHPWKO21MFaNd35SQfD9XQ-1; Thu, 22 Jun 2023 09:41:52 -0400
-X-MC-Unique: gHPWKO21MFaNd35SQfD9XQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2FA8104458A;
-        Thu, 22 Jun 2023 13:41:48 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9FD83112132C;
-        Thu, 22 Jun 2023 13:41:47 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 7AF94400E05F5; Thu, 22 Jun 2023 09:47:22 -0300 (-03)
-Date:   Thu, 22 Jun 2023 09:47:22 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Yair Podemsky <ypodemsk@redhat.com>, ppandit@redhat.com,
-        david@redhat.com, linux@armlinux.org.uk, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, frederic@kernel.org,
-        will@kernel.org, ardb@kernel.org, samitolvanen@google.com,
-        juerg.haefliger@canonical.com, arnd@arndb.de,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        linus.walleij@linaro.org, akpm@linux-foundation.org,
-        sebastian.reichel@collabora.com, rppt@kernel.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org,
+        with ESMTP id S229437AbjFVMuZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 08:50:25 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ECD41BC5;
+        Thu, 22 Jun 2023 05:50:22 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxfceMQ5Rkv28AAA--.693S3;
+        Thu, 22 Jun 2023 20:50:20 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWM2LQ5RkrxwCAA--.11455S3;
+        Thu, 22 Jun 2023 20:50:19 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
+ riscv and loongarch
+To:     kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>
+References: <1687336748-4898-2-git-send-email-yangtiezhu@loongson.cn>
+ <202306220334.C80BpATp-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] send tlb_remove_table_smp_sync IPI only to
- necessary CPUs
-Message-ID: <ZJRC2s4sIuJ9V3A0@tpad>
-References: <20230620144618.125703-1-ypodemsk@redhat.com>
- <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <27295ba8-f57e-61c1-9cc4-f2207fd97ae0@loongson.cn>
+Date:   Thu, 22 Jun 2023 20:50:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202306220334.C80BpATp-lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8CxWM2LQ5RkrxwCAA--.11455S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtF1ktrWrtFWDtr1xCF13Jrc_yoW3Wrb_A3
+        4aywsrGr1S9Fyqqws8CwsaqFyDJayUC3sruwn5Jw4DGFWIkw48Jws3W3srJF4kKrZxtw13
+        ZasYqr9Yyw17KosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
+        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU89iSPUUUU
+        U==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:43:37AM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 20, 2023 at 05:46:16PM +0300, Yair Podemsky wrote:
-> > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
-> > indiscriminately, this causes unnecessary work and delays notable in
-> > real-time use-cases and isolated cpus.
-> > By limiting the IPI to only be sent to cpus referencing the effected
-> > mm.
-> > a config to differentiate architectures that support mm_cpumask from
-> > those that don't will allow safe usage of this feature.
-> > 
-> > changes from -v1:
-> > - Previous version included a patch to only send the IPI to CPU's with
-> > context_tracking in the kernel space, this was removed due to race 
-> > condition concerns.
-> > - for archs that do not maintain mm_cpumask the mask used should be
-> >  cpu_online_mask (Peter Zijlstra).
-> >  
-> 
-> Would it not be much better to fix the root cause? As per the last time,
-> there's patches that cure the thp abuse of this.
-
-The other case where the IPI can happen is:
-
-CPU-0                                   CPU-1
-
-tlb_remove_table
-tlb_remove_table_sync_one
-IPI
-                                        local_irq_disable
-                                        gup_fast
-                                        local_irq_enable
 
 
-So its not only the THP case.
+On 06/22/2023 04:04 AM, kernel test robot wrote:
+> Hi Tiezhu,
+>
+> kernel test robot noticed the following build warnings:
+>
+
+...
+
+>    In file included from include/asm-generic/bitsperlong.h:5:
+>>> include/uapi/asm-generic/bitsperlong.h:13:9: warning: '__BITS_PER_LONG' macro redefined [-Wmacro-redefined]
+
+Oh, thanks for the report, I am sorry.
+
+In order to silence the build warning, it should check the definition
+of __BITS_PER_LONG first at the beginning of bitsperlong.h, like this:
+
+#ifndef __BITS_PER_LONG
+
+#if defined(__CHAR_BIT__) && defined(__SIZEOF_LONG__)
+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
+#else
+#define __BITS_PER_LONG 32
+#endif
+
+#endif
+
+I will test and then send v3 later.
+
+Thanks,
+Tiezhu
 
