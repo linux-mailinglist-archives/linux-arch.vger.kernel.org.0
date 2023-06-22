@@ -2,175 +2,202 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD9A73A964
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 22:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99A073A9CA
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Jun 2023 22:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjFVURp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jun 2023 16:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S231334AbjFVU6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Jun 2023 16:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFVURo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 16:17:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3461BFE;
-        Thu, 22 Jun 2023 13:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687465063; x=1719001063;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=/9P4Z1JxasUX78KsvxpVXpRGA8I3xehHwXGpN1yU4qY=;
-  b=RoGzXKBhksyiuWgE0muc6m2e/Evvj2mbXsvfn7rig7jD5/0WKveCh42O
-   wL7O6EQn7iAo8EQ1RrSwykyaHUkE9elv2adRJcewoVEz+xDsKZgN6CfaG
-   6zKwFy8A/g5YVOkKfLQHvOLOiOLBwozf9M6h9uKN03Dk51PsdeGXvkdmY
-   //XYO1xmfGPfVkhXbu+WjutDGzHtI/aoAkfloshaNQTJU9fcrErNiY0BK
-   GMAsJV75yFTWnAr8Jk3PZqUsGVtjcvdtBm+scg9F4j+1jXYYyobgP+4YX
-   AX6Ndq411LqPB61DWB+6V+nJEGYfcfmMgzwALZNMiG6SBu84dOkmbsopT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="345363392"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="345363392"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 13:17:22 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="749475552"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="749475552"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2023 13:17:22 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 22 Jun 2023 13:17:21 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 22 Jun 2023 13:17:21 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 22 Jun 2023 13:17:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=THRLkDzAWmYUcAwfxRDv9LsT/C/y1qhe2oNxxxF6lcJD0S8X7hOvKOiwqkmhWctxTeGRQhmBWX0AaCtm2uAhVGoGRzhS3AS6DnWXN70imN3bvYokrQT1Q8XygJDHzyb76J8JGTYKUHG2aGvn7VJobdbE2b3qjwX/qGC5/joL8BAgFdfZIM7Pns/lyxGjp4dga4WVrmVpmBe5onKI6cakAWEKxxdzavj8NB0wer62M0H9v+Xcs21YuSU4c5ZP1XBQeHJIzgKdC5o1Hw32EQJcC5lRQXZjxy4KlsZXGwu1GO5rvV/TDuN66yX97EhmFMg3X9JAChuA5HO+pobSAFswjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c0hGgO4LVzsKhdEuOUNKLHpihF8tzgOIHe5FXWZgrUA=;
- b=UhTsmuecrmZyPJgObbrzH6gRQc71qLcTHGfhr0mAOp+vdxuOqr0s2kRbrKkMYOMkUPz6xmrQDuRrZrpYnojqz4vRx4Cg+jGMHYjmj2gJfOmkkP4q2Wb3fzLUvlkJZwpTt7lc3WeNIu/g2Z6J4y74mb5LGY76KnYGWuUspcsLu0RtP+AyeMkK7dhBs+gaDqGVbVTp7gjhei11Vh/NW8BzO+L//cmkLBplNL+CaSk/YD9ts1F3ASDFGz+bCIJKDBQlrlr2kU4UiSh0rR8mhXEM07JYD19TK1DgdjABveXXVMM5C+Lj5TGMv4VF6NyFaKqyNArTlB/6HwRPvEWF2nTYVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by IA1PR11MB6417.namprd11.prod.outlook.com (2603:10b6:208:3ab::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 20:17:19 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::455f:e688:3955:28b2]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::455f:e688:3955:28b2%7]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
- 20:17:19 +0000
-Message-ID: <038984b4-9e95-bc4b-e763-95bf24426f07@intel.com>
-Date:   Thu, 22 Jun 2023 13:17:17 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] syscalls: Remove file path comments from headers
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <e1a2665d-2e11-7722-a7ae-ef534829ed37@intel.com>
- <20230621223600.1348693-1-sohil.mehta@intel.com>
- <388c9fbb-2782-4990-b432-eeb999308869@app.fastmail.com>
-Content-Language: en-US
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <388c9fbb-2782-4990-b432-eeb999308869@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR03CA0026.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::31) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+        with ESMTP id S229832AbjFVU6k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 16:58:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D52685;
+        Thu, 22 Jun 2023 13:58:01 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bff0beb2d82so2082570276.2;
+        Thu, 22 Jun 2023 13:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687467476; x=1690059476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q4Ig2n4cGI8BP25CqcNRq43JhOmkIIdJVFlb5elIpOA=;
+        b=mqvv9g7FTX6YZrTAez67m8G0SADgQWX+ct2Q2ktq+TbKMG/cOnFNL1HUEejNSN9nds
+         9vEK9L2HpCPHz3mnLHm7QE7bazoap9KPjRBuUT4kw6MBU7tHylSDou09veevPp+Qm5tI
+         J6+0hmA98DudaYxzAoNczqxDp5g6z2tqapGcR3NSEAPAgqMiM1eNh+iIzBq7ayejKjj9
+         5MP9SwhVaQTCo1G312fdQXe7vTjboPcFBobNzdFt65RtUbRTWvFRUfh7ZZb+Tak5rboQ
+         uGsNAcBwqdQTtsTo7UoikA/hvdu33PxWnma34tmu5wLmqc0vL2bNnLhMWuiaLjOulKtx
+         4JUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687467476; x=1690059476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q4Ig2n4cGI8BP25CqcNRq43JhOmkIIdJVFlb5elIpOA=;
+        b=T8nREzyu0AIfFz+bk+HY0hPF5qMPGhi9FDohPgTWUfDGef1LEKtVyqXgZZPWTjno/S
+         pS/jUOva9BpdIJnYSrniU5E0wWJK+t3tsNS/qJWTHPprMxLmV0nGLLX95DhINFln19GP
+         gBjDSr5vF5YEuq4pAebIZoudxZepfqB59eb+08+S8ykjdvHIMuNuc2PcJ46tqPIWUir0
+         qf/5/qmTrPvc8ssR8O9x2U25h9sFm5Oxbjo0SrV+Mqis16Iccct90PoG8U00n1uLKsvP
+         dTnFnVKfGV5lpcoNKcQa/s2GSEZRZKkYydbRlfTxAiPrA1pFw2m240TDKGrByWIkBLDR
+         DkCg==
+X-Gm-Message-State: AC+VfDyxX+BxUqykjOGGFvggnQsQ3N6NrZUQvVMBv+6hqRqS9iE6gDnR
+        UcQ/Cc05ZRrrowQD/L/hTfk=
+X-Google-Smtp-Source: ACHHUZ5QdSwF+iokSIDxxYwBaWLG1oGIRpritBhsZ3H79UKVTTkrzsNTtfFGV/ude8v+TVUUcB2uCQ==
+X-Received: by 2002:a05:6902:92:b0:bba:558e:df05 with SMTP id h18-20020a056902009200b00bba558edf05mr14486764ybs.10.1687467476004;
+        Thu, 22 Jun 2023 13:57:56 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::36])
+        by smtp.googlemail.com with ESMTPSA id d18-20020a5b0c52000000b00bc501a1b062sm1684937ybr.42.2023.06.22.13.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 13:57:55 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v5 00/33] Split ptdesc from struct page
+Date:   Thu, 22 Jun 2023 13:57:12 -0700
+Message-Id: <20230622205745.79707-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|IA1PR11MB6417:EE_
-X-MS-Office365-Filtering-Correlation-Id: 194f2aeb-6539-47ad-16c5-08db735dadf0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qp+ewwlR862bEozL8HNYbmACdf0o+6ADFd0Gnw/WNvFzL4wk4l/lQMIzc+do3cwdnPm02TIiiqqCxe+koqiCdoKs8vmc9tAzEuGfmrylL5HwbeT+ni0t6xOHpMh+RlzYY97k4F5UehlcAx2zWRTNLww07Fwdq3YTjG9Kt4YnWHb21+zCwteDVki0lb0gEurxS7ehOXwgD42C+Ug/y1IiASsOCs8kvrng5tsP7mn8HJXlsstTmVX+cbgxxDmb7UuFyDc4/DuHTWoqW4hNy1k/hlrMdDhT0UV47fXa1M/XTikx3bkdpu1pmpsGEqscUmC+leuuvyIlS5lDEJaORT+VqnZJWp56LM6Em75V+mwI3LwDZPJ1PfnpyMIIAB2Vt+7CK7uy0CFrrs99MsGT7nyb7ZyKw5GgXEEW6oDX8M67gxDbHClHFid8C0WbDuCaiObjmgHpZAedD0jYQlWdL7hNCZBGrMsmPv5SpVSSk0qSLoQ8FuervGi8ATtvYk0wFkXP66dQ2leGbzyRYO/gsONpd4dDaGlSKSVUSudFauqfi1tL4Ouzohq1RJlU9qMvjh8Wrs9GD9xjYVBxraCCEmRagLdGZ3aX5jIZe1l9Rb9hMZGIbUpoYn659fBDCL3qKbYwWfE2UUpXQAyogqVEdxWHvA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(366004)(396003)(376002)(346002)(451199021)(86362001)(2616005)(478600001)(31696002)(186003)(6486002)(41300700001)(4326008)(316002)(53546011)(31686004)(66476007)(6506007)(6512007)(26005)(66556008)(6916009)(66946007)(8936002)(8676002)(36756003)(44832011)(5660300002)(38100700002)(2906002)(4744005)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UWNEd0kzN285bGFhTHZxN0hWSXBDUHIrTThlZG5KM1AzMUo2RElqT016Ykk0?=
- =?utf-8?B?Z3h4RHIrbHJBNEE5TElQbG1zdUJmS0xvQ1UxVlBPRXBITzZDMEZUVWZBSk9o?=
- =?utf-8?B?WTFoMUNzUXdtNk1haEFOek1mdVd2WlY5TzJSdHpMUFlRbjFHZmtSSjVmRzgr?=
- =?utf-8?B?cTVxSTJKMDB5SVhMc2lIOHBJMFZnNmN1T3hXQ2V6QldzVE81Mll3M0NmZzlO?=
- =?utf-8?B?RWRTSXJaalVnUUZ6Ly9UUEdWeWRVcXpIMDdCSVNhYkdienhob1VIRGVuVmxa?=
- =?utf-8?B?clA1SFBibDN0Y3J5bk8zMkZBRjdpM1k2OUh6RjErdXdjK1VMeTA4c1NNbU5y?=
- =?utf-8?B?SW9TK3JydFl2QkJuMkJycjA1SzNHR1RpaW5pNkx5UHpYM1lXZE9CQVJYZmZD?=
- =?utf-8?B?bUl3eUtpRnRLbEVhOSt4aGU3eU1SeldvL3lrUU9zQkx6eWxjMEhvck90Uld4?=
- =?utf-8?B?YkEwa3N6UVNoY0Q1ZWl3TWg2aEcvcm1WMWt0WE9VMU0zaXo5TVF2N3E5WlRw?=
- =?utf-8?B?NXpZN01ZUFltRDR0VkdNdmI0andvcTlGS2RHK05CZDVvR3lrV3RPT2dXRjhs?=
- =?utf-8?B?dTljc1RZNkc0UHY3VFNsZkFQTVowNm10NkNHdU1kNy9MMTFSV2xTQmFnV0xJ?=
- =?utf-8?B?YzV5NjVHVHkwSGdyZUJMZXhuZDZCSDNkT2tzVTVOTlFEeitUTWJsdkRrK1Vw?=
- =?utf-8?B?Ym5YZ2JXTjdWWjdCdjFodk9LemFMRnBJdjR6UmtnWFIyRVlWcGM2MHVWRzJC?=
- =?utf-8?B?WGNwa2VMbms0MHgxYnUwTGQzdkpYQ2d4NTJMZ3FjLzN4cjJObTk3TUdxNlZU?=
- =?utf-8?B?RVhiQjRXMUhiejlVOC9BQ3ZzaFd5ZFJsY3RDVGZtWlZKMTh1RXRRYkVwNzdI?=
- =?utf-8?B?RjlJWU1GaTBqUzdmUW5TODBOc2xiUEdpMUxienR4T2dNVDRNbjJVS2UzY09S?=
- =?utf-8?B?SVlCZFhYVHp0bmZ2T3lSelVraVdGMmZ1aWJqeE4xR1EzUTlBTXNnUE1wZ0ln?=
- =?utf-8?B?N0JiRHFJODA4bjBWZE5pN2lSOWlmZE41WUF2NnZjZnlOQzdZS2RValkzSmsw?=
- =?utf-8?B?TXFoZy9oanZnYk51d0oxQUZXeWtER2srYVhkc2lyMWNJckg3MXcwbGxwTnNM?=
- =?utf-8?B?UlQ3UWdxUHRYMWExQXYrNEhTZjdmOHJNSDhmelNVOWtpZEZ3STQxZDhiUi9X?=
- =?utf-8?B?WmtpYlc4TXFENlpSTEJtdVFhRitYdEJqcWYyejAxRUZJNW40NlM2TkZXb0hD?=
- =?utf-8?B?WUpTckwxRzUvSnVjQndYTWo5NHM5TGNVbm1McXBjc3BCL1RYNFBwdHFPNnBO?=
- =?utf-8?B?R3VkaTRtTWFKZnBWRUlGYXBycWs1dFlrcDhIN2tmekpDa21ZM3NGRERJalR1?=
- =?utf-8?B?UjFZdCt4S0tnbDMyS0FHVVhKeVVHOGtNWkg5Y2g1a0VoQ1Z0amRmK0t3c0o2?=
- =?utf-8?B?V2ptbW5UdkVSeGxWVkQzTGR6MDVoelR2ZStVNjBha0w3emljaGJ5L0owWnlB?=
- =?utf-8?B?VXl3RVVpK0xqQ29WN0ZwaGlmMUFKci84UEZkWFcydlhXMkRMWjV0czEySzc1?=
- =?utf-8?B?ZUsrdnBSZHBJZDdCaDVPQi8zeks3cTNZM2FXKy9ZdlRtNWJLWnRmdkIwdmlH?=
- =?utf-8?B?VEZJNnY0bC92eG5RWHNEa0l0TGJuMjhkbW4xT2lnVmZ4WVBlUFpIancramE3?=
- =?utf-8?B?aU5RYkRPRkpsaklWNGFkSEFkNjBiYnl4b0VHaGNRN0lZeXBBY3ZRY3V4clhJ?=
- =?utf-8?B?MDhRZVdlZXFJenAzdTNLQjVubEdxdjUzY1VDdGEwL240R0FXTGYwcnA1bEQy?=
- =?utf-8?B?Z0sxZWl0VjNUY21TcEJzUTFycHhsamNTMndnZXlxY3pBMFZoYXNPTk1LQ3NQ?=
- =?utf-8?B?WGZ1dStkdUxnRHBzVHNickcrZSs2a3Z6K2dDa3dvek5Ud21GMk5pTVVKWnlu?=
- =?utf-8?B?S2FYb0JIY2RFYTJYQ1VKZkRhcnJ4SFBjUDhaN2QyS2JOVnJNNFZMcVlNRlBV?=
- =?utf-8?B?M241aUJuMXZ1eWd3eXZMZDZ0ZStSQVp3dWhaVENDUmJEUXJweDlVbVBrQ0ly?=
- =?utf-8?B?K3B0VlVQc1VIbUE2Y0tTSkN4R3JjNUlSVkQrbFFvdVBWais3Y3NNWGtjNmRs?=
- =?utf-8?Q?Sr1OCMYPusIEn0oJQ0Y6h3JMf?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 194f2aeb-6539-47ad-16c5-08db735dadf0
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 20:17:19.1815
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8r690u2jfhrxOQBaRBr3NfwHhOhcT5lrjKzdZYtku0fRrzFgtiExrpV2QH/MtbOin2ZjFpsFtQzSKS4RByL/LQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6417
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/22/2023 8:10 AM, Arnd Bergmann wrote:
-> Applied to the asm-generic tree, thanks!
-> 
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
 
-Great, thanks for the quick response.
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
 
-While going through the comments, I was wondering if we have a
-definition of what constitutes a deprecated syscall vs an obsolete one?
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
 
-For deprecated we have some information saying:
-> /*
->  * Deprecated system calls which are still defined in
->  * include/uapi/asm-generic/unistd.h and wanted by >= 1 arch
->  */
+This is rebased on next-20230621.
 
-But, I couldn't find anything for obsolete system calls.
+There is a minor conflict with patch 24 and the mm-unstable tree in
+arch/m68k/mm/motorola.c - The end result of applying the patch should
+be the same.
 
-Sohil
+
+v5:
+  More Acked-bys :)
+  Cleanup some documentation wording and formatting
+  Add pt_rcu_head to ptdesc
+  Add memcg to ptdesc (and align it with struct page)
+  Ensure all get_free_page() callers prohibit HIGHMEM for 32 bit support.
+  Renamed folio_{set, clear}_table() to folio_{set, clear}_pgtable()
+  Removed pagetable_clear() as it is not necessary right now
+  pagetable_free() now sets page->mapping = NULL
+  Dropped s390 _refcount to _pt_frag_refcount conversion patch
+
+Vishal Moola (Oracle) (33):
+  mm: Add PAGE_TYPE_OP folio functions
+  s390: Use _pt_s390_gaddr for gmap address tracking
+  pgtable: Create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() to pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various gmap functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: Remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
+
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   7 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++-
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  43 ++--
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  32 +--
+ arch/mips/mm/pgtable.c                        |   8 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 +--
+ arch/powerpc/mm/pgtable-frag.c                |  46 ++--
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/gmap.c                           | 207 ++++++++++--------
+ arch/s390/mm/pgalloc.c                        | 108 ++++-----
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +-
+ arch/x86/mm/pgtable.c                         |  47 ++--
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  88 +++++---
+ include/asm-generic/tlb.h                     |  11 +
+ include/linux/mm.h                            | 153 +++++++++----
+ include/linux/mm_types.h                      |  14 --
+ include/linux/page-flags.h                    |  30 ++-
+ include/linux/pgtable.h                       |  77 +++++++
+ mm/memory.c                                   |   8 +-
+ 39 files changed, 684 insertions(+), 453 deletions(-)
+
+-- 
+2.40.1
+
