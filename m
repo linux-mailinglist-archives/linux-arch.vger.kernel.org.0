@@ -2,83 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2590C73B24D
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Jun 2023 10:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EBB73B6F6
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Jun 2023 14:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjFWIHO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Jun 2023 04:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S229666AbjFWMRg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Jun 2023 08:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjFWIHN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Jun 2023 04:07:13 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913211BE2;
-        Fri, 23 Jun 2023 01:07:12 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 00E905C00AE;
-        Fri, 23 Jun 2023 04:07:12 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 23 Jun 2023 04:07:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687507631; x=1687594031; bh=dB
-        4MvOq9La9HYoQdGbRIWUCrkjRx1qjCnmDH5dNdClE=; b=G5BssPj+eEkx8Shb0G
-        Ra49Nv1ek5YqpZn1Iu8uQ5sW/Mzh4xpqaDgzsai96WZNF5DCeuEBLdEzRXFo1Scx
-        mHQs0EmOYrfw+0oeXUdZox7G+C1wT3JWIGQFws3lvHHy6bR8/WddyjS61sTQvDDw
-        zrw5eZBDmGp5CHsNBOty++lsKVll+PvdhvHQW26H8vdfqAI3Awp44PpxLRGIXDo3
-        VStlEyLTlQXbHNnjU5t74+0HSNQrXzTvBSC8HyW7ktK/LwOpdTTolr4m0X+Dy0T4
-        MHsnn21IazSXnL6MSE91q33pIaCuKDasx78DrFRfaMOXCHaZJ1ftxvfBjmyfFwol
-        fuRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687507631; x=1687594031; bh=dB4MvOq9La9HY
-        oQdGbRIWUCrkjRx1qjCnmDH5dNdClE=; b=Soh679IQEAvAnobbwqge9pp41xyd0
-        OpfLpxy7QQDcqvcBdDWF1QGXZwKsGM2XBDIaRPUScNW/v8hvqlcumCFdjqaWQtU6
-        D7w4l5HeZTS0lUaUq76qJI3rIvgwGkX9TX5/M/xDJo3WtEYzjpgWP5EavAxq6+xa
-        FuD+TQGmhPRqiw885VwPyhRvvlceh/7XFN3Gb+uR/jC3gRa0KWacmC9Jfn29Tvj5
-        Vh8hdp38gMRhLBQlFxxy2TIEVSArCiHQqUapqGzd/pIkqycprPU6ZnQ07uEwdD8W
-        9mMywpP24UoxU5gO+J5LsRfD2bJFQVii64qs1WO76Tkgcy/5Yd1dxngEA==
-X-ME-Sender: <xms:r1KVZCuY4G181ZfyY6IXV7c1N4lNEKOP-boUrpzPGJLUUvUDvyp6rQ>
-    <xme:r1KVZHeI8WrNr4_M2VrTpfQWe_02pMI2ptAq7N9RRKls0lVLFfd-JWZr2kE3lFg-i
-    IOmkzd8leyE3jS6boE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeetffen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggv
-X-ME-Proxy: <xmx:r1KVZNxchoBFqmwWO9TFxyLxhAjyhqKFRNkxQFjm5anZfl2d9a2NXQ>
-    <xmx:r1KVZNOdVhhThXWJPfMbo_iaXbTiZUJ4xDLiDRyNkOIYq-a0aQmYtg>
-    <xmx:r1KVZC-JdOMDiHd31tzkbLjwn897Q9qibueH5CzCZrPMWqUUrbs7GA>
-    <xmx:r1KVZIlwBudg0ddG76MtTezUOssMFCiKj2QgIC0no3IKHRFW1PotcA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BF51BB60086; Fri, 23 Jun 2023 04:07:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <0344615b-5148-4641-a99c-ef75a387b261@app.fastmail.com>
-In-Reply-To: <038984b4-9e95-bc4b-e763-95bf24426f07@intel.com>
-References: <e1a2665d-2e11-7722-a7ae-ef534829ed37@intel.com>
- <20230621223600.1348693-1-sohil.mehta@intel.com>
- <388c9fbb-2782-4990-b432-eeb999308869@app.fastmail.com>
- <038984b4-9e95-bc4b-e763-95bf24426f07@intel.com>
-Date:   Fri, 23 Jun 2023 10:06:51 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Sohil Mehta" <sohil.mehta@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] syscalls: Remove file path comments from headers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        with ESMTP id S229449AbjFWMRf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Jun 2023 08:17:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70931BE4;
+        Fri, 23 Jun 2023 05:17:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 767EF61A39;
+        Fri, 23 Jun 2023 12:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAB1C433C0;
+        Fri, 23 Jun 2023 12:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687522653;
+        bh=+7+qY2pMjJYzB9xElhuCVbaU19w3qgAqAoglFmxdPOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hDEa6UrV+PRl4gVbTIs/hZdUDvZIr/H1xBTlK856m60e8pDuMAFgtOA4E3Z+w3z2D
+         L5qHQY1QuSFJyDb835gTkZn9vNoLgcUDeS567rvnfVqqQmxnm/U87TD/gujZr5Sawj
+         W10+cvRXWfs9IHCtOP66qOmtqejcXkPuYGHArVW+bdHP9aRvqAkXM0pDMmVl6Df3If
+         +SXba9qDA+VmFbFbl1P5my5mcIug+uUU/y6LYNbRZ+HRwXY55CCmpQk5FAd/mQA6V6
+         RfNnSnFbUxxfGDa4ALqAaV256v8TnBRhKXif0TKoHSuCMYPNVzOMh8o7h99c36o31G
+         Jt4nQ1NE2izFA==
+Date:   Fri, 23 Jun 2023 13:17:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 16/42] mm: Add guard pages around a shadow stack.
+Message-ID: <ZJWNWeqQ8ON9NNfs@finisterre.sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-17-rick.p.edgecombe@intel.com>
+ <ZJSRD1xZauOW3jFO@casper.infradead.org>
+ <ba77d21492e2631072f51328413d227f31dd78ae.camel@intel.com>
+ <20230623074000.GG52412@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6xcRS/HNRY4aTkhh"
+Content-Disposition: inline
+In-Reply-To: <20230623074000.GG52412@kernel.org>
+X-Cookie: Slow day.  Practice crawling.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,31 +102,56 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 22:17, Sohil Mehta wrote:
-> On 6/22/2023 8:10 AM, Arnd Bergmann wrote:
->> Applied to the asm-generic tree, thanks!
->> 
->
-> Great, thanks for the quick response.
->
-> While going through the comments, I was wondering if we have a
-> definition of what constitutes a deprecated syscall vs an obsolete one?
->
-> For deprecated we have some information saying:
->> /*
->>  * Deprecated system calls which are still defined in
->>  * include/uapi/asm-generic/unistd.h and wanted by >= 1 arch
->>  */
->
-> But, I couldn't find anything for obsolete system calls.
 
-I don't think we've ever defined the two terms properly,
-I would assume they are used interchangeably here. If we wanted
-a definition, 'obsolete' could mean syscalls that are no longer
-used by current software while 'deprecated' are those that
-are still called by glibc and others on the architectures that
-provide them but are emulated through modern variants on other
-architectures. Without any documentation on the topic, or a
-definite list, other interpretations are equally possible.
+--6xcRS/HNRY4aTkhh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-     Arnd
+On Fri, Jun 23, 2023 at 10:40:00AM +0300, Mike Rapoport wrote:
+> On Thu, Jun 22, 2023 at 06:27:40PM +0000, Edgecombe, Rick P wrote:
+
+> > Yes, I couldn't find another place for it. This was the reasoning:
+> > https://lore.kernel.org/lkml/07deaffc10b1b68721bbbce370e145d8fec2a494.c=
+amel@intel.com/
+
+> > Did you have any particular place in mind?
+
+> Since it's near CONFIG_X86_USER_SHADOW_STACK the comment in mm.h could be=
+=20
+
+> /*
+>  * VMA is used for shadow stack and implies guard pages.
+>  * See arch/x86/kernel/shstk.c for details
+>  */
+
+> and the long reasoning comment can be moved near alloc_shstk in
+> arch/x86/kernel/shstk.h
+
+This isn't an x86 specific concept, arm64 has a very similar extension
+called Guarded Control Stack (which I should be publishing changes for
+in the not too distant future) and riscv also has something.  For arm64
+I'm using the generic mm changes wholesale, we have a similar need for
+guard pages around the GCS and while the mechanics of accessing are
+different the requirement ends up being the same.  Perhaps we could just
+rewrite the comment to say that guard pages prevent over/underflow of
+the stack by userspace and that a single page is sufficient for all
+current architectures, with the details of the working for x86 put in
+some x86 specific place?
+
+--6xcRS/HNRY4aTkhh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSVjVUACgkQJNaLcl1U
+h9BV1ggAgSOn8u1kb6HeUhHTldAbqy+XWNhMN9/fILZ0CP9sw4vUhTHZa0SfygRu
+BJ/QiMVJ00xJd26NTnXoK5gLBGmz3qDSpX6JxHhytRM2zLh1KS8tZkEYS9kehwrl
+Iiqgg53zg31Ir/5LJ7PsBQ6SAd4rfE5aZKG8NAR653jLr2SRMEd3BUx8ZJj6/Re/
+MpKQfBwU9ltLLEOS6xI0+f0YibTkxPcKp9+zMXWi5+xDCCxdhPxpcFok7ZcBpaOj
+2ay7LhRYRsKziXpV3Y4RorbiXt7zgehqryMShTvoTswU2LbkxdP95Ob3nHVTRW+s
+P+ACzWi6uNUFXQ1Ko44YzoQboSpPPA==
+=ssEI
+-----END PGP SIGNATURE-----
+
+--6xcRS/HNRY4aTkhh--
