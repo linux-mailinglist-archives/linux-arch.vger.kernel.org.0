@@ -2,136 +2,177 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39E073AF1E
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Jun 2023 05:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8B973B1D1
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Jun 2023 09:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjFWDjG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Jun 2023 23:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S230379AbjFWHlA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Jun 2023 03:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjFWDjE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Jun 2023 23:39:04 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2510F4;
-        Thu, 22 Jun 2023 20:39:03 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6300f6ab032so2275386d6.2;
-        Thu, 22 Jun 2023 20:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687491543; x=1690083543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQCkd4lI+x6yZWQGbIGjk8nvglDFNi+aN+K8MOcwH6c=;
-        b=obkzvxCGresnf5FRfVrvj4b/znqPUmGMMwKvIvfk8JFNu1deF5iG2IClXFSs/hqBes
-         0DchAnN9jcxuJK+1+ZKd23RORLAtCB1aaCRRAW/OhJcfqCqUQNLBzTBpbxJmpuWbKfjS
-         GHJW8WsTLXwJYS5PMKJOMqwGF/WhlRObHMiD0r0si8DOzKdhQ3DRjzuP54tE28VCyLvh
-         LV9mOcap4BQfgiSa4vCLx3tJr5yWQgnZ2UsTStLz9NxYkxX8IS7oFayaE3MrbO0dEpB/
-         K0gDAaORiA1jbA+zNdWb4SjSRPyF9Y1hEdIFkFam1bjGmw9MYsZEQu4LxQURWeFd5nOn
-         uaSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687491543; x=1690083543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQCkd4lI+x6yZWQGbIGjk8nvglDFNi+aN+K8MOcwH6c=;
-        b=ZfJrInugmkS/UKtvFOlT79aPxal+88tkbnvrasUdO+GOBbGPPJJJ2jMdcDXCRbLuBe
-         /xy+dLj90SvvjkBFBhmliS5sjwTd60+3VzF1n2qt9xGpJZp+lfS4zjJ7dzR8WNeq3Xi8
-         p9LcnC1v+HtWvLXjKLqIreDv9YxYSFW5rHqQz2W8ayMR5sP1rN8PE7qBI5zNQGdKV0Ax
-         IQwrNKkdURvrnI6wketgPOucEDQrUHP0dp/MB4KBtpGXoF4BAdRqKy5yakGdPXbDTIVm
-         Q1VTFI/3Kktk/R3MeInRbcQZupZKoFmLvmI2B8S/T6vjz8aTI6asgM/s0/dSS3ikXhy2
-         bZeg==
-X-Gm-Message-State: AC+VfDw2TN1V+6uv5bzAbj+dVg8oKFrfG7i09+o86M08c3V4gG4Jfvye
-        aPnRUfpwyHQnyMw5F3Y/dreR6fsdQ8Ui4yrO3F4=
-X-Google-Smtp-Source: ACHHUZ4TEnCYuyVXkOaJkrxqOvUh5TaEibt2frAQVMu4v4pRBqRYzpLpvZ5Z+pdQLYqT/hxYRfdn3rRiaTS4M+MnTIo=
-X-Received: by 2002:a05:6214:29c8:b0:62d:f35c:a477 with SMTP id
- gh8-20020a05621429c800b0062df35ca477mr28990227qvb.1.1687491542761; Thu, 22
- Jun 2023 20:39:02 -0700 (PDT)
+        with ESMTP id S229726AbjFWHk7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Jun 2023 03:40:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95281988;
+        Fri, 23 Jun 2023 00:40:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ADF1617E8;
+        Fri, 23 Jun 2023 07:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1A5AC433C9;
+        Fri, 23 Jun 2023 07:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687506056;
+        bh=GzKdhhzyZ+iRj8RsJgARuHLY4EfLvN1z9hAE+ocFSf4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gVLTca81VyzmWJPHZ1XRM8wpGx91F1ehz6zWo5RgDcGgnNrGRYv7gwb4L8wSaGQy6
+         58p0kAqTEBX2B+ZhmkdkRtK4OvS0N3nBtO/44NvxnRTtG37M80tqbPxBCpuGVBVrYX
+         Lc19vX6RLlULkBWswy35J1yqets3vasDgQMBrgRL0Zn8iEhGuVJhxJ7pgB+M1uwTSc
+         DFIOaUc/RIZzLpDYhxqAvr1dmKC+B3faD6nBtFLTYETHitmbTxBp0g06mbo6hSa9eN
+         zfW1VF5vpbIaUC/aVJixw/BgmmMoectkQsyn5DDvCQHDrA4bEgMdkhqgO/a0SXycWj
+         q5TvSNFtlbpug==
+Date:   Fri, 23 Jun 2023 10:40:00 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "willy@infradead.org" <willy@infradead.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 16/42] mm: Add guard pages around a shadow stack.
+Message-ID: <20230623074000.GG52412@kernel.org>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-17-rick.p.edgecombe@intel.com>
+ <ZJSRD1xZauOW3jFO@casper.infradead.org>
+ <ba77d21492e2631072f51328413d227f31dd78ae.camel@intel.com>
 MIME-Version: 1.0
-References: <20230620144618.125703-1-ypodemsk@redhat.com> <20230620144618.125703-3-ypodemsk@redhat.com>
- <10050BB1-15A4-4E84-B900-B21500B2079B@gmail.com>
-In-Reply-To: <10050BB1-15A4-4E84-B900-B21500B2079B@gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 22 Jun 2023 20:38:51 -0700
-Message-ID: <CAHbLzko2rNj8jdHVUw+kxF8Pz7b3o4im1ndoLbW611e2T3-LzA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to MM CPUs
-To:     Nadav Amit <nadav.amit@gmail.com>, Jann Horn <jannh@google.com>
-Cc:     Yair Podemsky <ypodemsk@redhat.com>, mtosatti@redhat.com,
-        ppandit@redhat.com, David Hildenbrand <david@redhat.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        agordeev@linux.ibm.com,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        svens@linux.ibm.com, "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        Arnd Bergmann <arnd@arndb.de>, rmk+kernel@armlinux.org.uk,
-        geert+renesas@glider.be, linus.walleij@linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        sebastian.reichel@collabora.com, Mike Rapoport <rppt@kernel.org>,
-        aneesh.kumar@linux.ibm.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba77d21492e2631072f51328413d227f31dd78ae.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:02=E2=80=AFAM Nadav Amit <nadav.amit@gmail.com> =
-wrote:
->
-> >
-> > On Jun 20, 2023, at 7:46 AM, Yair Podemsky <ypodemsk@redhat.com> wrote:
-> >
-> > @@ -1525,7 +1525,7 @@ static void collapse_and_free_pmd(struct mm_struc=
-t *mm, struct vm_area_struct *v
-> >                               addr + HPAGE_PMD_SIZE);
-> >       mmu_notifier_invalidate_range_start(&range);
-> >       pmd =3D pmdp_collapse_flush(vma, addr, pmdp);
-> > -     tlb_remove_table_sync_one();
-> > +     tlb_remove_table_sync_one(mm);
->
-> Can=E2=80=99t pmdp_collapse_flush() have one additional argument =E2=80=
-=9Cfreed_tables=E2=80=9D
-> that it would propagate, for instance on x86 to flush_tlb_mm_range() ?
-> Then you would not need tlb_remove_table_sync_one() to issue an additiona=
-l
-> IPI, no?
->
-> It just seems that you might still have 2 IPIs in many cases instead of
-> one, and unless I am missing something, I don=E2=80=99t see why.
+On Thu, Jun 22, 2023 at 06:27:40PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2023-06-22 at 19:21 +0100, Matthew Wilcox wrote:
+> > On Mon, Jun 12, 2023 at 05:10:42PM -0700, Rick Edgecombe wrote:
+> > > +++ b/include/linux/mm.h
+> > > @@ -342,7 +342,36 @@ extern unsigned int kobjsize(const void
+> > > *objp);
+> > >   #endif /* CONFIG_ARCH_HAS_PKEYS */
+> > >   
+> > >   #ifdef CONFIG_X86_USER_SHADOW_STACK
+> > > -# define VM_SHADOW_STACK       VM_HIGH_ARCH_5 /* Should not be set
+> > > with VM_SHARED */
+> > > +/*
+> > > + * This flag should not be set with VM_SHARED because of lack of
+> > > support
+> > > + * core mm. It will also get a guard page. This helps userspace
+> > > protect
+> > > + * itself from attacks. The reasoning is as follows:
+> > > + *
+> > > + * The shadow stack pointer(SSP) is moved by CALL, RET, and
+> > > INCSSPQ. The
+> > > + * INCSSP instruction can increment the shadow stack pointer. It
+> > > is the
+> > > + * shadow stack analog of an instruction like:
+> > > + *
+> > > + *   addq $0x80, %rsp
+> > > + *
+> > > + * However, there is one important difference between an ADD on
+> > > %rsp
+> > > + * and INCSSP. In addition to modifying SSP, INCSSP also reads
+> > > from the
+> > > + * memory of the first and last elements that were "popped". It
+> > > can be
+> > > + * thought of as acting like this:
+> > > + *
+> > > + * READ_ONCE(ssp);       // read+discard top element on stack
+> > > + * ssp += nr_to_pop * 8; // move the shadow stack
+> > > + * READ_ONCE(ssp-8);     // read+discard last popped stack element
+> > > + *
+> > > + * The maximum distance INCSSP can move the SSP is 2040 bytes,
+> > > before
+> > > + * it would read the memory. Therefore a single page gap will be
+> > > enough
+> > > + * to prevent any operation from shifting the SSP to an adjacent
+> > > stack,
+> > > + * since it would have to land in the gap at least once, causing a
+> > > + * fault.
+> > > + *
+> > > + * Prevent using INCSSP to move the SSP between shadow stacks by
+> > > + * having a PAGE_SIZE guard gap.
+> > > + */
+> > > +# define VM_SHADOW_STACK       VM_HIGH_ARCH_5
+> > >   #else
+> > >   # define VM_SHADOW_STACK      VM_NONE
+> > >   #endif
+> > 
+> > This is a lot of very x86-specific language in a generic header file.
+> > I'm sure there's a better place for all this text.
+> 
+> Yes, I couldn't find another place for it. This was the reasoning:
+> https://lore.kernel.org/lkml/07deaffc10b1b68721bbbce370e145d8fec2a494.camel@intel.com/
+> 
+> Did you have any particular place in mind?
 
-The tlb_remove_table_sync_one() is used to serialize against fast GUP
-for the architectures which don't broadcast TLB flush by IPI, for
-example, arm64, etc. It may incur one extra IPI for x86 and some
-others, but x86 virtualization needs this since the guest may not
-flush TLB by sending IPI IIUC. So if the one extra IPI is really a
-problem, we may be able to define an arch-specific function to deal
-with it, for example, a pv ops off the top of my head. But I'm not a
-virtualization expert, I'm not entirely sure whether it is the best
-way or not.  But the complexity seems overkilling TBH since khugepaged
-is usually not called that often.
+Since it's near CONFIG_X86_USER_SHADOW_STACK the comment in mm.h could be 
 
->
->
+/*
+ * VMA is used for shadow stack and implies guard pages.
+ * See arch/x86/kernel/shstk.c for details
+ */
+
+and the long reasoning comment can be moved near alloc_shstk in
+arch/x86/kernel/shstk.h
+
+-- 
+Sincerely yours,
+Mike.
