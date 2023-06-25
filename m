@@ -2,125 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8FC73CF82
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Jun 2023 10:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1C973D0F3
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Jun 2023 14:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjFYIve convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sun, 25 Jun 2023 04:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S232039AbjFYMg1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Jun 2023 08:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjFYIve (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jun 2023 04:51:34 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C691A1;
-        Sun, 25 Jun 2023 01:51:32 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-56fff21c2ebso23288107b3.3;
-        Sun, 25 Jun 2023 01:51:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687683092; x=1690275092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e/Aydrd9oAz9wF8VtbGA6a+XUUai3n6kkWsRZbAgo9o=;
-        b=EToGb3kw23gL6uvmfczy9Pb030gjqgDY3WM/320p+VDjjw6fjvV7psyFaHZZTNqrlD
-         CE+KU+vw+7B6pMrX/K6HQv3sHffmg486Gq/ClfbP09wvlP/nKTdvVuv7QwsMaUoz6OZX
-         kewK35SWStj52QKRzq1KFZsrzyx6iaXoI2uNVdsS2wQfjZ3nbYTlm9w52Wqo8d1WoyHa
-         MNPa4heDCNE0nCHNItwNmb4y1hV6KQkSKdgpeIRILUe/TI7lM2CTKFMlQg28j4vJLVK7
-         KX4N4hQKNQ4OsCj9LGja6r0vmyx/4MgnTBEX6QhOHwSDdhyVEBaA/N2ZaQuFBWJR/mkX
-         1hLw==
-X-Gm-Message-State: AC+VfDxts1GSIRtpyXYjzoqXlFQhTAZ7RP5sYwbON/fuN6N2FnWnSpBa
-        VM/itUwTOZ1L4uVRMOWMvm9imvQ1SCw/tg==
-X-Google-Smtp-Source: ACHHUZ7z1PhP7sGNjjYSngHvzCnTNMSJ9xFk2xpE+56ixmWKFrYFRjyioXpkMledeFyaGAG1LXdJfQ==
-X-Received: by 2002:a0d:d98d:0:b0:56f:e7b0:1753 with SMTP id b135-20020a0dd98d000000b0056fe7b01753mr24877426ywe.17.1687683091890;
-        Sun, 25 Jun 2023 01:51:31 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id p5-20020a817405000000b005739aebb692sm725874ywc.61.2023.06.25.01.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Jun 2023 01:51:31 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bd6d9d7da35so2325348276.0;
-        Sun, 25 Jun 2023 01:51:30 -0700 (PDT)
-X-Received: by 2002:a25:cc02:0:b0:c13:f86d:3324 with SMTP id
- l2-20020a25cc02000000b00c13f86d3324mr3724376ybf.14.1687683090555; Sun, 25 Jun
- 2023 01:51:30 -0700 (PDT)
+        with ESMTP id S231747AbjFYMg1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jun 2023 08:36:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121CA103;
+        Sun, 25 Jun 2023 05:36:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA7960BAF;
+        Sun, 25 Jun 2023 12:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2920C433C8;
+        Sun, 25 Jun 2023 12:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687696585;
+        bh=u3i402/+JTuZyHnSMXBRgVRh6kqJvvV5masbo58+O08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ka0ZF8isPRWjYVco5Sw5TNcvkSZTVTrEp8AETGNcpMawvMVSvoaNlUznpStREkG5R
+         cjSybVyDKf7VWOvr/BvZyDXfFlNY18IcfQfbOmebwqguKQ7MJnqgBpXkcPCi6h41kG
+         WhoPgDxdPW6AV5vcceiC3wEqFdnALkkt1ISx0MkW9Q8pQ7Tg5t9TI2Fg15fkEZnend
+         rD4a5N6XFJwuAx/ALR4sZebkuOQMX1uzXEvOh/yOZ15S88vA1VvfgVMlocnrOabSTH
+         z64jTsDxtz0/QAdfdHRHBgoC8Fqv4NRrGdbVed2iTwxlU4diY6O3TMrM+4KM8v7njl
+         c5Jl0QGnpr44g==
+Date:   Sun, 25 Jun 2023 20:24:56 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, bjorn@kernel.org,
+        Conor Dooley <conor@kernel.org>, llvm@lists.linux.dev,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Message-ID: <ZJgyGD8ZSjVmiprB@xhacker>
+References: <20230622215327.GA1135447@dev-arch.thelio-3990X>
+ <mhng-6c34765c-126d-4e6c-8904-e002d49a4336@palmer-ri-x1c9a>
+ <20230622231803.GA1790165@dev-arch.thelio-3990X>
+ <ZJXTwqZIkXLxXaSi@google.com>
 MIME-Version: 1.0
-References: <20230622205745.79707-1-vishal.moola@gmail.com> <20230622205745.79707-25-vishal.moola@gmail.com>
-In-Reply-To: <20230622205745.79707-25-vishal.moola@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 25 Jun 2023 10:51:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU2ZM1oJ7=Br6nezLpxjDQo_07N3T-adOupDm0Jntp=Qg@mail.gmail.com>
-Message-ID: <CAMuHMdU2ZM1oJ7=Br6nezLpxjDQo_07N3T-adOupDm0Jntp=Qg@mail.gmail.com>
-Subject: Re: [PATCH v5 24/33] m68k: Convert various functions to use ptdescs
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZJXTwqZIkXLxXaSi@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Vishal,
+On Fri, Jun 23, 2023 at 10:17:54AM -0700, Nick Desaulniers wrote:
+> On Thu, Jun 22, 2023 at 11:18:03PM +0000, Nathan Chancellor wrote:
+> > If you wanted to restrict it to just LD_IS_BFD in arch/riscv/Kconfig,
+> > that would be fine with me too.
+> > 
+> >   select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if LD_IS_BFD
+> 
+> Hi Jisheng, would you mind sending a v3 with the attached patch applied
+> on top / at the end of your series?
 
-On Thu, Jun 22, 2023 at 10:58 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
-> As part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents, convert various page table functions to use ptdescs.
->
-> Some of the functions use the *get*page*() helper functions. Convert
-> these to use pagetable_alloc() and ptdesc_address() instead to help
-> standardize page tables further.
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Hi Nick, Nathan, Palmer,
 
-Thanks for your patch!
+I saw the series has been applied to riscv-next, so I'm not sure which
+solution would it be, Palmer to apply Nick's patch to riscv-next or
+I to send out v3, any suggestion is appreciated.
 
-> --- a/arch/m68k/include/asm/mcf_pgalloc.h
-> +++ b/arch/m68k/include/asm/mcf_pgalloc.h
+Thanks
+> 
+> > 
+> > Nick said he would work on a report for the LLVM side, so as long as
+> > this issue is handled in some way to avoid regressing LLD builds until
+> > it is resolved, I don't think there is anything else for the kernel to
+> > do. We like to have breadcrumbs via issue links, not sure if the report
+> > will be internal to Google or on LLVM's issue tracker though;
+> > regardless, we will have to touch this block to add a version check
+> > later, at which point we can add a link to the fix in LLD.
+> 
+> https://github.com/ClangBuiltLinux/linux/issues/1881
 
->  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
->  {
->         pgd_t *new_pgd;
-> +       struct ptdesc *ptdesc = pagetable_alloc((GFP_DMA | GFP_NOWARN) &
+> From 3e5e010958ee41b9fb408cfade8fb017c2fe7169 Mon Sep 17 00:00:00 2001
+> From: Nick Desaulniers <ndesaulniers@google.com>
+> Date: Fri, 23 Jun 2023 10:06:17 -0700
+> Subject: [PATCH] riscv: disable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for LLD
+> 
+> Linking allyesconfig with ld.lld-17 with CONFIG_DEAD_CODE_ELIMINATION=y
+> takes hours.  Assuming this is a performance regression that can be
+> fixed, tentatively disable this for now so that allyesconfig builds
+> don't start timing out.  If and when there's a fix to ld.lld, this can
+> be converted to a version check instead so that users of older but still
+> supported versions of ld.lld don't hurt themselves by enabling
+> CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1881
+> Reported-by: Palmer Dabbelt <palmer@dabbelt.com>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Hi Jisheng, would you mind sending a v3 with this patch on top/at the
+> end of your patch series?
+> 
+>  arch/riscv/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 8effe5bb7788..0573991e9b78 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -116,7 +116,8 @@ config RISCV
+>  	select HAVE_KPROBES if !XIP_KERNEL
+>  	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+>  	select HAVE_KRETPROBES if !XIP_KERNEL
+> -	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+> +	# https://github.com/ClangBuiltLinux/linux/issues/1881
+> +	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
+>  	select HAVE_MOVE_PMD
+>  	select HAVE_MOVE_PUD
+>  	select HAVE_PCI
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
 
-0-day already told you for v3 that GFP_NOWARN does not exist.
-Please try cross-compiling your changes:
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-> +                       ~__GFP_HIGHMEM, 0);
->
-> -       new_pgd = (pgd_t *)__get_free_page(GFP_DMA | __GFP_NOWARN);
-> -       if (!new_pgd)
-> +       if (!ptdesc)
->                 return NULL;
-> +       new_pgd = ptdesc_address(ptdesc);
-> +
->         memcpy(new_pgd, swapper_pg_dir, PTRS_PER_PGD * sizeof(pgd_t));
->         memset(new_pgd, 0, PAGE_OFFSET >> PGDIR_SHIFT);
->         return new_pgd;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
