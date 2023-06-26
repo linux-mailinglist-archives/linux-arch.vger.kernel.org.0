@@ -2,418 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AA973D924
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Jun 2023 10:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E99973DAD4
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Jun 2023 11:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjFZIIb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jun 2023 04:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S229817AbjFZJIl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jun 2023 05:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjFZIIZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 04:08:25 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BE4E53;
-        Mon, 26 Jun 2023 01:08:23 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-313ec24b36bso293177f8f.0;
-        Mon, 26 Jun 2023 01:08:23 -0700 (PDT)
+        with ESMTP id S229601AbjFZJIL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 05:08:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C7835A4;
+        Mon, 26 Jun 2023 02:05:24 -0700 (PDT)
+X-UUID: 942a9d4a140011ee9cb5633481061a41-20230626
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=qTo60WSjk+w5lS3tIG0TZtrkdhohAxs2AtOXt78tjF0=;
+        b=ruEmkTU2rZjSdxQkWXE6C1ljXnVF2hiWeMbfCIc6mpIXQPHEOP7KN1SeH5iSQLTci5JSy6I2Hy4rQnT2Ok5Kjq0gEvByQOagc1PWLSigiQraCQh2vrqkk7z+PO1HCz0YNKcNuTmTjEt8RVKynoPClq7OvfWVG/DSv60ejxo9vYA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:85ca0e19-b131-4046-b465-51ead23ab62f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.27,REQID:85ca0e19-b131-4046-b465-51ead23ab62f,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:01c9525,CLOUDID:882d7d3f-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:230626170522OURT7ZVS,BulkQuantity:0,Recheck:0,SF:29|28|17|19|48|102,
+        TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:
+        0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,
+        TF_CID_SPAM_ULS
+X-UUID: 942a9d4a140011ee9cb5633481061a41-20230626
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+        (envelope-from <yi-de.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1925276763; Mon, 26 Jun 2023 17:05:21 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 26 Jun 2023 17:05:20 +0800
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 26 Jun 2023 17:05:20 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mdlm8yKdPLkuto+mIMgDwdP7iDRSZzQ+bujavkhKpY6UxomYXM2ExfoncOsnak20TW/0Ky61UCm2HInnHUXGB30AvdcD7gCE7/wbu9xjCU6n5JtP0tIiWnDOJJnStZzP7afj79pxcckfLhMjvnXWMUH6omOQoOz3WfolLV4OFCklhOHpZ5MAvjZiOpnTvY4gTVHVqQZfztBPOPtF/q7IYMOO/n79uw/SdSZJy8f2gkvo82GpQ/BbL4zYt83Yh11m456oIMqPCp6Ab+hBSVEvKlNNNb6MBilpzRnGVCsZHGdM1Dg6lO/sm3M3knfAzmR9BpJ/I/6EKrUIVhAv2oIW0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qTo60WSjk+w5lS3tIG0TZtrkdhohAxs2AtOXt78tjF0=;
+ b=oNtKwP6cpXHBUVFKU7ZmmD9/l9fu+PYxYPKZJ/UtIq4/qcTaaPj/swQ+rnD2Nmm5AwBhkk3NrtsVR4PFrzLhZrFzF6SK1Tdv5TDl6cQbp4KEY3j0eT/L32DYSLTdUxiprR8g44fSeyR8Bgbf2h9XM1kTO+5Rs0XbK+8RfaO39AD8VHwDWv6YlmPkENaA/M7SeTmAK7VFX/nQ3HOxpnKHPCNH9HJdOkVcsafzn9UtQYfl1Ug0O6mI1Ahz3hNppkibijumL7hVCatfTwrh4im2zkr0qU78v6clrlPNLSR/KsiHr8l9K/+KdKbVZc+F4HtdD8HXE/j556pv31TVs3MqAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687766902; x=1690358902;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lR9uR4LOeGZi3JSeuBmGvQnkQG6VZQCikIFxZLeRDho=;
-        b=XjwPWcsUSuBmv7UxZon833KFLcuf3ep90HG7J7PLTzaAZqlzOarkTCisbenekXUjcI
-         WupMUd4Z8npsr9duwWF4YV0PAgS7PWQMRGpHs6vaPhiOH6nT/gNdCKHiDqHvlQEeKOmU
-         oLpN7ms273iO+XFQME2Vj2cUABFAuJEckmqg8JbvrttamnADCl79rJKaa0RuE/2dzdAk
-         0LhxRHHRZo17P9XwIPjH+/d0Z0VMFzrGcNeRHzzTmE8YEMExqy+HwtX7KroR/2ajJMuj
-         h8faiU2NwCMpDg8+JmJEQ2jRQj6JJ29iR0O3erky+R009kvgWiUyxs9Yo90FVkMVbcK9
-         GoFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687766902; x=1690358902;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lR9uR4LOeGZi3JSeuBmGvQnkQG6VZQCikIFxZLeRDho=;
-        b=e+eemuWN2S977YWfXL9FCV3aNJhFEfloONxpogNt8/8iPdnWqA0hJ4MWc6r2iRt67i
-         7kAgbHxebUpqpjE+bnxfhPLEXjOG7Mb1F63txTJhp9JPb9bgdeBZyfU3M7uLfrTi6mwS
-         l/gM07O6vN36XvogC7U0lXnujia8b7S79QOLz6VL1aaYtjbXAS2hSxFJOIT10qWCUAJU
-         pIioz+XP3PFFY0teOjsaJtslk309veQU+CGcnOCOhOlo0fAqj4PUOjiRzXmDyAcH93YI
-         kleiMzvRP5CsEqPYEsOXkvGZS4g9H+6MbncmmoJ5jedOnvh0RzWwgYH15q+W/BwThjqk
-         sCjw==
-X-Gm-Message-State: AC+VfDz1jtJ49qHZTH6AtutXSSkHiG+pfFwvOU8SSN2JMl1QIGhUY6u1
-        ubSKzY8VKo6W8d/WI7xTg4U=
-X-Google-Smtp-Source: ACHHUZ5PuTA/ZN67zVbtCQY+/DHF9OoEyH+dK8n2tigkPjMLvmOkyrpvswhqVLd55n4IdJWiB8XhtQ==
-X-Received: by 2002:a5d:5907:0:b0:313:ee56:a6f4 with SMTP id v7-20020a5d5907000000b00313ee56a6f4mr2740248wrd.3.1687766901499;
-        Mon, 26 Jun 2023 01:08:21 -0700 (PDT)
-Received: from localhost.localdomain (vpn-fn-225.net.ed.ac.uk. [192.41.114.225])
-        by smtp.gmail.com with ESMTPSA id f1-20020a5d5681000000b0030647449730sm6618077wrv.74.2023.06.26.01.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 01:08:21 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 09:08:23 +0100
-From:   Karim Manaouil <kmanaouil.dev@gmail.com>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        markhemm@googlemail.com, viro@zeniv.linux.org.uk, david@redhat.com,
-        mike.kravetz@oracle.com, andreyknvl@gmail.com,
-        dave.hansen@intel.com, luto@kernel.org, brauner@kernel.org,
-        arnd@arndb.de, ebiederm@xmission.com, catalin.marinas@arm.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
-        vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
-        neilb@suse.de, maz@kernel.org
-Subject: Re: [PATCH RFC v2 3/4] mm/ptshare: Create new mm struct for page
- table sharing
-Message-ID: <CA+uifjO9Q26cS_kYT0ftx0JQnQJ4QMd27tAtPR3s1voDHzet8w@mail.gmail.com>
-References: <cover.1682453344.git.khalid.aziz@oracle.com>
- <1fd52581f4e4960a4d07cb9784d56659ec139d3c.1682453344.git.khalid.aziz@oracle.com>
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qTo60WSjk+w5lS3tIG0TZtrkdhohAxs2AtOXt78tjF0=;
+ b=IIT2A70GUSjxaKKzMTYg9OVVXeRJdrq+l0SRTlpcfFVFive6bgaXtWPDEYUkp70zYRB03mwO6DcFEneOgB/9Zw7B4wLRqLqzsFl+XkCY8buS/yvWdNgTTLd9WA2ML1CAGAaYRpMM6F1bxk2lZ2V3CRyxALU9QVK4FFy5EpJvhLI=
+Received: from SI2PR03MB6167.apcprd03.prod.outlook.com (2603:1096:4:14f::8) by
+ KL1PR03MB5636.apcprd03.prod.outlook.com (2603:1096:820:54::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.26; Mon, 26 Jun 2023 09:05:18 +0000
+Received: from SI2PR03MB6167.apcprd03.prod.outlook.com
+ ([fe80::18a:8f94:379c:982d]) by SI2PR03MB6167.apcprd03.prod.outlook.com
+ ([fe80::18a:8f94:379c:982d%7]) with mapi id 15.20.6521.026; Mon, 26 Jun 2023
+ 09:05:18 +0000
+From:   =?utf-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>
+To:     "robh@kernel.org" <robh@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        =?utf-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_tsoni@quicinc.com" <quic_tsoni@quicinc.com>,
+        =?utf-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
+        <shawn.hsiao@mediatek.com>,
+        =?utf-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
+        <PeiLun.Suei@mediatek.com>,
+        =?utf-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
+        <Liju-clr.Chen@mediatek.com>,
+        =?utf-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
+        <jades.shih@mediatek.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?utf-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
+        <Yingshiuan.Pan@mediatek.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        =?utf-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
+        <Ze-yu.Wang@mediatek.com>, "will@kernel.org" <will@kernel.org>,
+        =?utf-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
+        <ivan.tseng@mediatek.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: hypervisor: Add MediaTek GenieZone
+ hypervisor
+Thread-Topic: [PATCH v2 2/7] dt-bindings: hypervisor: Add MediaTek GenieZone
+ hypervisor
+Thread-Index: AQHZeb1mU9LdvrjJWkKKQBIpP+78BK9BPBGAgBUKZACARuC1AA==
+Date:   Mon, 26 Jun 2023 09:05:17 +0000
+Message-ID: <14c0381be38ea40fcd03104bff32bcaa09b920d3.camel@mediatek.com>
+References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
+         <20230428103622.18291-3-yi-de.wu@mediatek.com>
+         <20230428212411.GA292303-robh@kernel.org>
+         <ec4cae2e6da4a64bc3983ffdde03f51e185d3609.camel@mediatek.com>
+In-Reply-To: <ec4cae2e6da4a64bc3983ffdde03f51e185d3609.camel@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SI2PR03MB6167:EE_|KL1PR03MB5636:EE_
+x-ms-office365-filtering-correlation-id: 166e73a6-93ae-40ca-546d-08db76247662
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Cby96yAGcELHN50aYU2bFvbhWGYYf6MXomwm+sATyY42Xaz1vyTeezO6oE9kCv9y6atY6nvHcJ3FThpnAgGj4R8QFCZZTEHql07QHB31TlFeLrsAyeWJxdKYwiYWzecLH0nv58JyWquRwdF8Q755hihgLoFkzaszbmh5PTy1w/ScALON+o7uaxctDcjo+0QHdVtoz5Z6nJordk1Jfc1fs2pS/NfllNOJsu3QOhHk7SiAy/tVivxKGy+9wNm+R3f4eVzO1iORWxbQPVjSkf0TGn2k3Ohmo14+C83PPzXcno3Z0MT32LUNrjA0OOhNhkRC1ReaWgDVZDDUVZ0vN8Wtudr8YsTI2ipuHza/KCrdocWT9G4+aV6IDRJaS9ZTURmZXitmGj6XAW24YbNBwDjMybFpu91PmkUJ+ahUM6Ts2dj3NjBggbvKlsM3VPig38LaDcWpSUCqLubNbXKGBfRK0LmvT93CjZ1NPfO9ey/t9E5p+EAKio1YZf4oOIeIP9DNbX1G6ph2vgYA0drApgQQ70YPMmokldQFrVtc3KD65KLPf/6alDrJvFWbRwSYG0DA7+VQabzyHp8x1X8eZhO0qxIF1rIajASX/OmPwzGAwNC72y+6Yp7G3xTj2dCyiPB+tPXBh295uv9DjG68vSQ+V5XDZ8WWjtValsekVZQHCYrhjyNGA35+QqHYypahpqZX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB6167.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(39860400002)(396003)(136003)(346002)(451199021)(26005)(36756003)(85182001)(5660300002)(7416002)(6916009)(66476007)(316002)(8936002)(8676002)(76116006)(41300700001)(38070700005)(64756008)(86362001)(4326008)(66556008)(66446008)(38100700002)(122000001)(91956017)(66946007)(107886003)(6486002)(966005)(6506007)(2906002)(6512007)(186003)(478600001)(71200400001)(54906003)(2616005)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?alp3UzhRdmpqQlNQRXF1d3F1THFlL3FFSDZmYUR6VU52bTRrYncxUUFUTTlp?=
+ =?utf-8?B?SzlNRXoyUHZYSEpPRzJLem9jeldoY0VYdXFIeEhqUDBLWFpwQWRvUTFCbTRy?=
+ =?utf-8?B?OEpJQXVqSGQzSGZYQkY5bW9ncTZyTFYwNmFqQVRDNWxiRWRkbG5OUU5zU3pJ?=
+ =?utf-8?B?cHFlT1A3ZXIrcEZtRkN5clVGRi9JVktxcXNQODkvK1NFaGVQdmFrQmp6eEIy?=
+ =?utf-8?B?cW9oSTYzTlU0b3NrVkdXYlFPVzNCbWQ4aGdzb3VaZzBmdmxzQktHM01SWHc0?=
+ =?utf-8?B?dXpEemFDVTBBS0J2L3AvRGd3bUFaV3g0SkgrN0tuODcxU3JTbmgwcnhmMGky?=
+ =?utf-8?B?YjdnaUdSWUdnb3hBcVpLOVgxYVpYTHloQ1pZek9DWHc3WklhZURpRUl1OUw1?=
+ =?utf-8?B?ZUpLMjlRWGo2Y2E3M3gyekxyTHg5YTh0Tnc0Y0lTdGF3bVJXQm9SZ3h0RTJR?=
+ =?utf-8?B?NTc4c2pXdDRjb0pVdCsyT3RNZHZjbkhVeUQwcjVpYzc2Y09YS01ORUFzSWJT?=
+ =?utf-8?B?dXh6MS9qV0FrQTU2TVFtTzgzc2loNDdhUGxIUTZVZEdwLzNTalJ2TEJJVkY1?=
+ =?utf-8?B?RlVpNTNEQzREN05kUmxQKzhHOXhycFlORXhMcXFIRlZxL2dSaGJXQjhBK2ly?=
+ =?utf-8?B?M3BGYWxtSmhsV0paSktnUnVaL2QyQU1MMUoyUUhjNUFOTWREbmZyU28xVmdi?=
+ =?utf-8?B?aDVRdU1rN2lTNDU0UjN1bkhpOXpKVTEwdW9zUkZiZFR6d2IzbXFvRDNkWVp1?=
+ =?utf-8?B?bGNCUmtrdDlnYTNIT0ZuSWtJanRUdU5LdE5aUnVMWUNDcjJPU09qYjJvN1hn?=
+ =?utf-8?B?WThxUTNOR3VWZytoTklpUFNHbnE2RXpiUWZaT0pJZmpTRnBMUUVram9GTHFh?=
+ =?utf-8?B?Zzh4TE9PaGdlYy9vdVc3YzhOL2pDc1BOQ1JwTDl2RkErUVZJM1RoUk5IMmRI?=
+ =?utf-8?B?U0g4ZW9DQWlhZVNLL3lFYjNEUlNoYzhhNG9qWUJoK0pacnA1Q1BTWm83UjFY?=
+ =?utf-8?B?OGpYQ1FVQTNFUzk0dlEvYmp4R0R5NHNxTDNDM0xRVERNUmdqeXRVcFhQZnNj?=
+ =?utf-8?B?ME1rd0VrOC9zNnFCdFE2R0lUd2xvcVU0SkJmbGt2QmZsMzFwcXl4aDJmdmtn?=
+ =?utf-8?B?ZVBjL1hUc3FQZlVXaW9vNXBiREs4YllyQ1R2d28zNHM4K2FIMko4ZU16endn?=
+ =?utf-8?B?UHA3Mmc5TmFRMFVmK3F0WmRVRUhra0Y4R0Myb0tkNFBETWNJdTZvRVgxaE5z?=
+ =?utf-8?B?WUFKeXdRTEFMMVhnYXZBcGx1aThVQVlPTVVESmhnYzZwa2hTUjBCbFlhSzhs?=
+ =?utf-8?B?U0xPMjh5c0pESExUcytuWnlDK3lSZXB5OEJSQWp3ZjkwemlBNTVFL3VxemFp?=
+ =?utf-8?B?WXJyWVRKTUh1UFNnSUNDak9vNEtPVVlkbDJ6ckNBb1U2K2hVMDRia0lSZ2t5?=
+ =?utf-8?B?Y21oTmFYazNKWkxmWUNMYVNqYmUzUlMxZFBrdkN0NUxnRnpQZHBHTnVHbXBl?=
+ =?utf-8?B?QTFEUEJFU2s4NWZDU3FHRURkWmo2MmVFM0Fla0NPemdyYjh3ZlZSNGMvaVJR?=
+ =?utf-8?B?b1UreFpwSWh5a1lsR2RKa1pvTCttUDVDQVZDa0dKYTk2ME45YndxeGUzaDZv?=
+ =?utf-8?B?enpxWkFPOW5BOFBiSVAxUnlHRkVSZjZqMzEwVkNXOXc4V2tRNDV2ZklaZFNT?=
+ =?utf-8?B?dzRvancxdHpnc05nc09jQkxiRmVTVlJwT09BeVVaZkZ5L08zTHhQZGlneitt?=
+ =?utf-8?B?cW1VRFV3S2dZNWpBZDBlREVUSFVtSHhrQWlLdERSNjVPU0hOZzA0c3VsUEtI?=
+ =?utf-8?B?WVBGL01aMHVnWlFPeGNjbFE2eDB2UzRVckQ5ZHFhUjVORGx2ZWFuQzBraDU1?=
+ =?utf-8?B?WjRudTVOSDA5M0pYeldpZnJBeWFHOFVHOFRQR3JJei85bW94OUFBbmtPVlBG?=
+ =?utf-8?B?WS9va2VnZ3VJT0hveUtub01RZnJBSXRoU1YvbTRrNlBGVFVOaWoxTHlLK2xt?=
+ =?utf-8?B?b3NqYnFoVTNqbXhQcHZXTkNhcE9GcC9uWHFlTi9kTi94ZThabVNESnA4TXlS?=
+ =?utf-8?B?bU83L3VDQkFOQ2JCRUgwRzdUSllnUmdmZE5sRWJBRnBRbUJWcFdMcnMwVklI?=
+ =?utf-8?B?ZG9DYjJ1aGsxZGptQk5sNWM3bW5LVXhiUko3eVFwZkVBNzFUYmVkUTM5ZHFh?=
+ =?utf-8?B?SlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A309B4673F256348A0007667DEEB7CC3@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1fd52581f4e4960a4d07cb9784d56659ec139d3c.1682453344.git.khalid.aziz@oracle.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB6167.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 166e73a6-93ae-40ca-546d-08db76247662
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2023 09:05:17.9845
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8u40hYTmGgIqFHd2lGucpdZXHGcE6ivdjVxSR1ZBNua5qNz36RCOnuSwCX9V6KCqhwlxU0dAiiHft1sp22pt4w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB5636
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 10:49:50AM -0600, Khalid Aziz wrote:
-> When a process passes MAP_SHARED_PT flag to mmap(), create a new mm
-> struct to hold the shareable page table entries for the newly mapped
-> region.  This new mm is not associated with a task.  Its lifetime is
-> until the last shared mapping is deleted.  This patch also adds a
-> new pointer "ptshare_data" to struct address_space which points to
-> the data structure that will contain pointer to this newly created
-> mm along with properties of the shared mapping. ptshare_data
-> maintains a refcount for the shared mapping so that it can be
-> cleaned up upon last unmap.
->
-> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  include/linux/fs.h |   2 +
->  mm/Makefile        |   2 +-
->  mm/internal.h      |  14 +++++
->  mm/mmap.c          |  72 ++++++++++++++++++++++++++
->  mm/ptshare.c       | 126 +++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 215 insertions(+), 1 deletion(-)
->  create mode 100644 mm/ptshare.c
->
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index c85916e9f7db..db8d3257c712 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -422,6 +422,7 @@ extern const struct address_space_operations empty_aops;
->   * @private_lock: For use by the owner of the address_space.
->   * @private_list: For use by the owner of the address_space.
->   * @private_data: For use by the owner of the address_space.
-> + * @ptshare_data: For shared page table use
->   */
->  struct address_space {
->       struct inode            *host;
-> @@ -443,6 +444,7 @@ struct address_space {
->       spinlock_t              private_lock;
->       struct list_head        private_list;
->       void                    *private_data;
-> +     void                    *ptshare_data;
->  } __attribute__((aligned(sizeof(long)))) __randomize_layout;
->       /*
->        * On most architectures that alignment is already the case; but
-> diff --git a/mm/Makefile b/mm/Makefile
-> index 8e105e5b3e29..d9bb14fdf220 100644
-> --- a/mm/Makefile
-> +++ b/mm/Makefile
-> @@ -40,7 +40,7 @@ mmu-y                       := nommu.o
->  mmu-$(CONFIG_MMU)    := highmem.o memory.o mincore.o \
->                          mlock.o mmap.o mmu_gather.o mprotect.o mremap.o \
->                          msync.o page_vma_mapped.o pagewalk.o \
-> -                        pgtable-generic.o rmap.o vmalloc.o
-> +                        pgtable-generic.o rmap.o vmalloc.o ptshare.o
->
->
->  ifdef CONFIG_CROSS_MEMORY_ATTACH
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 4d60d2d5fe19..3efb8738e26f 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -1047,4 +1047,18 @@ static inline bool vma_is_shared(const struct vm_area_struct *vma)
->  {
->       return vma->vm_flags & VM_SHARED_PT;
->  }
-> +
-> +/*
-> + * mm/ptshare.c
-> + */
-> +struct ptshare_data {
-> +     struct mm_struct *mm;
-> +     refcount_t refcnt;
-> +     unsigned long start;
-> +     unsigned long size;
-> +     unsigned long mode;
-> +};
-
-Why does ptshare_data contain the start address, size and mode of the
-mapping? Does it mean ptshare_data can represent only a single mapping
-of the file (the one that begins at ptshare_data->start)? What if we
-want to share multiple different mappings of the same file (which may
-or may not intersect)?
-
-If we choose to use the VMAs in host_mm for that, will this possibly create
-a lot of special-cased VMA handling?
-
-> +int ptshare_new_mm(struct file *file, struct vm_area_struct *vma);
-> +void ptshare_del_mm(struct vm_area_struct *vm);
-> +int ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma);
->  #endif       /* __MM_INTERNAL_H */
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 8b46d465f8d4..c5e9b7f6de90 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1382,6 +1382,60 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
->           ((vm_flags & VM_LOCKED) ||
->            (flags & (MAP_POPULATE | MAP_NONBLOCK)) == MAP_POPULATE))
->               *populate = len;
-> +
-> +#if VM_SHARED_PT
-> +     /*
-> +      * Check if this mapping is a candidate for page table sharing
-> +      * at PMD level. It is if following conditions hold:
-> +      *      - It is not anonymous mapping
-> +      *      - It is not hugetlbfs mapping (for now)
-> +      *      - flags conatins MAP_SHARED or MAP_SHARED_VALIDATE and
-> +      *        MAP_SHARED_PT
-> +      *      - Start address is aligned to PMD size
-> +      *      - Mapping size is a multiple of PMD size
-> +      */
-> +     if (ptshare && file && !is_file_hugepages(file)) {
-> +             struct vm_area_struct *vma;
-> +
-> +             vma = find_vma(mm, addr);
-> +             if (!((vma->vm_start | vma->vm_end) & (PMD_SIZE - 1))) {
-> +                     struct ptshare_data *info = file->f_mapping->ptshare_data;
-
-This is racy with another process trying to share the same mapping of
-the file. It's also racy with the removal (this process can get a
-pointer to ptshare_data that's currently being freed).
-
-> +                     /*
-> +                      * If this mapping has not been set up for page table
-> +                      * sharing yet, do so by creating a new mm to hold the
-> +                      * shared page tables for this mapping
-> +                      */
-> +                     if (info == NULL) {
-> +                             int ret;
-> +
-> +                             ret = ptshare_new_mm(file, vma);
-> +                             if (ret < 0)
-> +                                     return ret;
-> +
-> +                             info = file->f_mapping->ptshare_data;
-> +                             ret = ptshare_insert_vma(info->mm, vma);
-> +                             if (ret < 0)
-> +                                     addr = ret;
-> +                             else
-> +                                     vm_flags_set(vma, VM_SHARED_PT);
-
-Creation might race with another process.
-
-> +                     } else {
-> +                             /*
-> +                              * Page tables will be shared only if the
-> +                              * file is mapped in with the same permissions
-> +                              * across all mappers with same starting
-> +                              * address and size
-> +                              */
-> +                             if (((prot & info->mode) == info->mode) &&
-> +                                     (addr == info->start) &&
-> +                                     (len == info->size)) {
-> +                                     vm_flags_set(vma, VM_SHARED_PT);
-> +                                     refcount_inc(&info->refcnt);
-> +                             }
-> +                     }
-> +             }
-> +     }
-> +#endif
-> +
->       return addr;
->  }
->
-> @@ -2495,6 +2549,22 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
->       if (end == start)
->               return -EINVAL;
->
-> +     /*
-> +      * Check if this vma uses shared page tables
-> +      */
-> +     vma = find_vma_intersection(mm, start, end);
-> +     if (vma && unlikely(vma_is_shared(vma))) {
-> +             struct ptshare_data *info = NULL;
-> +
-> +             if (vma->vm_file && vma->vm_file->f_mapping)
-> +                     info = vma->vm_file->f_mapping->ptshare_data;
-> +             /* Don't allow partial munmaps */
-> +             if (info && ((start != info->start) || (len != info->size)))
-> +                     return -EINVAL;
-> +             ptshare_del_mm(vma);
-> +     }
-> +
-> +
->        /* arch_unmap() might do unmaps itself.  */
->       arch_unmap(mm, start, end);
->
-> @@ -2664,6 +2734,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
->                       }
->               }
->
-> +             if (vm_flags & VM_SHARED_PT)
-> +                     vm_flags_set(vma, VM_SHARED_PT);
->               vm_flags = vma->vm_flags;
->       } else if (vm_flags & VM_SHARED) {
->               error = shmem_zero_setup(vma);
-> diff --git a/mm/ptshare.c b/mm/ptshare.c
-> new file mode 100644
-> index 000000000000..f6784268958c
-> --- /dev/null
-> +++ b/mm/ptshare.c
-> @@ -0,0 +1,126 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Share page table entries when possible to reduce the amount of extra
-> + * memory consumed by page tables
-> + *
-> + * Copyright (C) 2022 Oracle Corp. All rights reserved.
-> + * Authors:  Khalid Aziz <khalid.aziz@oracle.com>
-> + *           Matthew Wilcox <willy@infradead.org>
-> + */
-> +
-> +#include <linux/mm.h>
-> +#include <linux/fs.h>
-> +#include <asm/pgalloc.h>
-> +#include "internal.h"
-> +
-> +/*
-> + * Create a new mm struct that will hold the shared PTEs. Pointer to
-> + * this new mm is stored in the data structure ptshare_data which also
-> + * includes a refcount for any current references to PTEs in this new
-> + * mm. This refcount is used to determine when the mm struct for shared
-> + * PTEs can be deleted.
-> + */
-> +int
-> +ptshare_new_mm(struct file *file, struct vm_area_struct *vma)
-> +{
-> +     struct mm_struct *new_mm;
-> +     struct ptshare_data *info = NULL;
-> +     int retval = 0;
-> +     unsigned long start = vma->vm_start;
-> +     unsigned long len = vma->vm_end - vma->vm_start;
-> +
-> +     new_mm = mm_alloc();
-> +     if (!new_mm) {
-> +             retval = -ENOMEM;
-> +             goto err_free;
-> +     }
-> +     new_mm->mmap_base = start;
-> +     new_mm->task_size = len;
-> +     if (!new_mm->task_size)
-> +             new_mm->task_size--;
-> +
-> +     info = kzalloc(sizeof(*info), GFP_KERNEL);
-> +     if (!info) {
-> +             retval = -ENOMEM;
-> +             goto err_free;
-> +     }
-> +     info->mm = new_mm;
-> +     info->start = start;
-> +     info->size = len;
-> +     refcount_set(&info->refcnt, 1);
-> +     file->f_mapping->ptshare_data = info;
-
-Racy assignement. It can lead to a memory leak if another process does
-the same concurrently and assigns before or after this one. The new_mm
-and ptshare_data of one of them will be lost.
-
-I think this whole process needs to be protected with i_mmap lock.
-
-> +
-> +     return retval;
-> +
-> +err_free:
-> +     if (new_mm)
-> +             mmput(new_mm);
-> +     kfree(info);
-> +     return retval;
-> +}
-> +
-> +/*
-> + * insert vma into mm holding shared page tables
-> + */
-> +int
-> +ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma)
-> +{
-> +     struct vm_area_struct *new_vma;
-> +     int err = 0;
-> +
-> +     new_vma = vm_area_dup(vma);
-> +     if (!new_vma)
-> +             return -ENOMEM;
-> +
-> +     new_vma->vm_file = NULL;
-> +     /*
-> +      * This new vma belongs to host mm, so clear the VM_SHARED_PT
-> +      * flag on this so we know this is the host vma when we clean
-> +      * up page tables. Do not use THP for page table shared regions
-> +      */
-> +     vm_flags_clear(new_vma, (VM_SHARED | VM_SHARED_PT));
-> +     vm_flags_set(new_vma, VM_NOHUGEPAGE);
-> +     new_vma->vm_mm = mm;
-> +
-> +     err = insert_vm_struct(mm, new_vma);
-> +     if (err)
-> +             return -ENOMEM;
-> +
-> +     return err;
-> +}
-> +
-> +/*
-> + * Free the mm struct created to hold shared PTEs and associated data
-> + * structures
-> + */
-> +static inline void
-> +free_ptshare_mm(struct ptshare_data *info)
-> +{
-> +     mmput(info->mm);
-> +     kfree(info);
-> +}
-> +
-> +/*
-> + * This function is called when a reference to the shared PTEs in mm
-> + * struct is dropped. It updates refcount and checks to see if last
-> + * reference to the mm struct holding shared PTEs has been dropped. If
-> + * so, it cleans up the mm struct and associated data structures
-> + */
-> +void
-> +ptshare_del_mm(struct vm_area_struct *vma)
-> +{
-> +     struct ptshare_data *info;
-> +     struct file *file = vma->vm_file;
-> +
-> +     if (!file || (!file->f_mapping))
-> +             return;
-> +     info = file->f_mapping->ptshare_data;
-> +     WARN_ON(!info);
-> +     if (!info)
-> +             return;
-> +
-> +     if (refcount_dec_and_test(&info->refcnt)) {
-> +             free_ptshare_mm(info);
-> +             file->f_mapping->ptshare_data = NULL;
-
-Maybe those two should be reordered (after keeping a pointer to
-ptshare_data). Then setting f_mapping->ptshare_data to NULL can
-be performed under a lock and freeing ptshare and host_mm can be
-done without a lock.
-
-Cheers
-Karim
+T24gRnJpLCAyMDIzLTA1LTEyIGF0IDE0OjQyICswODAwLCBZaS1EZSBXdSB3cm90ZToNCj4gT24g
+RnJpLCAyMDIzLTA0LTI4IGF0IDE2OjI0IC0wNTAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4gPiBF
+eHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2ht
+ZW50cw0KPiA+IHVudGlsDQo+ID4geW91IGhhdmUgdmVyaWZpZWQgdGhlIHNlbmRlciBvciB0aGUg
+Y29udGVudC4NCj4gPiANCj4gPiANCj4gPiBPbiBGcmksIEFwciAyOCwgMjAyMyBhdCAwNjozNjox
+N1BNICswODAwLCBZaS1EZSBXdSB3cm90ZToNCj4gPiA+IEZyb206ICJZaW5nc2hpdWFuIFBhbiIg
+PHlpbmdzaGl1YW4ucGFuQG1lZGlhdGVrLmNvbT4NCj4gPiA+IA0KPiA+ID4gQWRkIGRvY3VtZW50
+YXRpb24gZm9yIEdlbmllWm9uZShnenZtKSBub2RlLiBUaGlzIG5vZGUgaW5mb3Jtcw0KPiA+ID4g
+Z3p2bQ0KPiA+ID4gZHJpdmVyIHRvIHN0YXJ0IHByb2JpbmcgaWYgZ2VuaWV6b25lIGh5cGVydmlz
+b3IgaXMgYXZhaWxhYmxlIGFuZA0KPiA+ID4gYWJsZSB0byBkbyB2aXJ0dWFsIG1hY2hpbmUgb3Bl
+cmF0aW9ucy4NCj4gPiANCj4gPiBXaHkgY2FuJ3QgdGhlIGRyaXZlciBqdXN0IHRyeSBhbmQgZG8g
+dmlydHVhbCBtYWNoaW5lIG9wZXJhdGlvbnMgdG8NCj4gPiBzZWUNCj4gPiBpZiB0aGUgaHlwZXJ2
+aXNvciBpcyB0aGVyZT8gSU9XLCBtYWtlIHlvdXIgc29mdHdhcmUgaW50ZXJmYWNlcw0KPiA+IGRp
+c2NvdmVyYWJsZS4gRFQgaXMgZm9yIG5vbi1kaXNjb3ZlcmFibGUgaGFyZHdhcmUuDQo+ID4gDQo+
+ID4gUm9iDQo+IA0KPiBDYW4gZG8sIG91ciBoeXBlcnZpc29yIGlzIGRpc2NvdmVyYWJsZSB0aHJv
+dWdoIGludm9raW5nIHByb2JpbmcNCj4gaHlwZXJjYWxsLCBhbmQgd2UgdXNlIHRoZSBkZXZpY2Ug
+dHJlZSB0byBwcmV2ZW50IHVubmVjZXNzYXJ5IG1vZHVsZQ0KPiBsb2FkaW5nIG9uIGFsbCBzeXN0
+ZW1zLg0KDQpoaSBSb2IsDQoNCldlJ2QgbGlrZSB0byBjb250aW51ZSB3aXRoIHRoZSBhcmd1bWVu
+dCB3aGV0aGVyIHRvIHVzZSBkdCBoZXJlLiBBcyBwZXINCm91ciBwcmV2aW91cyBkaXNjdXNzaW9u
+LCB3ZSBrbmV3IHRoYXQgZHQgaXMgZm9yIG5vbi1kaXNjb3ZlcmFibGUNCmhhcmR3YXJlLiBIb3dl
+dmVyLCBwcm9iaW5nIG9uIGFsbCBkZXZpY2VzIGNvdWxkIHBvc3NpYmx5IHJhaXNlIHRoZQ0Kd29y
+cmllcyBhYm91dCBwb2xsdXRpbmcgb3RoZXIgdXNlcnMgd2l0aCByZWR1bmRhbnQgc3lzdGVtIG92
+ZXJoZWFkIGluDQpvdXIgdjQgcGF0Y2hlc1sxXS4NCg0KQXJlIHRoZXJlIGFueSBjb25jZXJucyBm
+cm9tIHlvdXIgc2lkZSBpZiB3ZSB3ZXJlIHRvIHRha2UgdGhlIGR0IGJhY2sgaW4NCnY1IHBhdGNo
+ZXMgYW5kIGtlZXAgaXQgYXMgc2ltcGxlIGFzIHBvc3NpYmxlIGp1c3QgdG8gaW5pdGlhbGl6ZSBv
+dXINCmh5cGVydmlzb3IgZXhjbHVzaXZlbHk/IFNvbWV0aGluZyBzaW1pbGFyIHRvIHdoYXQgd2Ug
+cHJvcG9zZWQNCmJlZm9yZVsyXS4NCg0KUmVmZXJlbmNlOg0KWzFdIA0KaHR0cHM6Ly9sb3JlLmtl
+cm5lbC5vcmcvbGttbC8yZmUwYzdmOS01NWZjLWFlNjMtMzYzMS04NTI2YTAyMTJjY2RAbGluYXJv
+Lm9yZy8NClsyXSANCmh0dHBzOi8vYW5kcm9pZC1yZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9jL2tl
+cm5lbC9jb21tb24vKy8yNDQ3NTQ3LzEuLjIvZHJpdmVycy92aXJ0L2dlbmllem9uZS9nenZtX21h
+aW4uYyNiMTEyDQoNClJlZ2FyZHMsDQo=
