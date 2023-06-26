@@ -2,297 +2,418 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA4373D601
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Jun 2023 04:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AA973D924
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Jun 2023 10:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjFZCqI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Jun 2023 22:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S229937AbjFZIIb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jun 2023 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjFZCqH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Jun 2023 22:46:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED4C1A6
-        for <linux-arch@vger.kernel.org>; Sun, 25 Jun 2023 19:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687747518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+sW7gYbyomXlaISFUC6EgejmKO1/ILu0IheXlcjPjyk=;
-        b=clac/rwryv9O8UWHFDct4KllhjiKwjfvQtiNVlfj29zakP9x9cTstrejSU22ihcWDHrVFF
-        ufQLnGn1JcKF6WOrNO0mtCEKb61jDEDxC0v8dj8L08AQMCyHQ4UzYtEPINTMYsTfXCPzf3
-        07XzIYfbaPZH9r1XFEL7iN1SGas3BzI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-FuIKwq6rN9OcRg5vXZBuKA-1; Sun, 25 Jun 2023 22:45:11 -0400
-X-MC-Unique: FuIKwq6rN9OcRg5vXZBuKA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BCA76800B35;
-        Mon, 26 Jun 2023 02:45:10 +0000 (UTC)
-Received: from localhost (ovpn-12-53.pek2.redhat.com [10.72.12.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B366C492B01;
-        Mon, 26 Jun 2023 02:45:08 +0000 (UTC)
-Date:   Mon, 26 Jun 2023 10:45:03 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
-        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-        deller@gmx.de, nathan@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Subject: Re: [PATCH v7 12/19] sh: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZJj7r+FCPu/tWDyV@MiWiFi-R3L-srv>
-References: <20230620131356.25440-1-bhe@redhat.com>
- <20230620131356.25440-13-bhe@redhat.com>
- <20fdf89dde5eee365ab15d9f4753e3c9fc43d46e.camel@physik.fu-berlin.de>
+        with ESMTP id S229895AbjFZIIZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 04:08:25 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BE4E53;
+        Mon, 26 Jun 2023 01:08:23 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-313ec24b36bso293177f8f.0;
+        Mon, 26 Jun 2023 01:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687766902; x=1690358902;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lR9uR4LOeGZi3JSeuBmGvQnkQG6VZQCikIFxZLeRDho=;
+        b=XjwPWcsUSuBmv7UxZon833KFLcuf3ep90HG7J7PLTzaAZqlzOarkTCisbenekXUjcI
+         WupMUd4Z8npsr9duwWF4YV0PAgS7PWQMRGpHs6vaPhiOH6nT/gNdCKHiDqHvlQEeKOmU
+         oLpN7ms273iO+XFQME2Vj2cUABFAuJEckmqg8JbvrttamnADCl79rJKaa0RuE/2dzdAk
+         0LhxRHHRZo17P9XwIPjH+/d0Z0VMFzrGcNeRHzzTmE8YEMExqy+HwtX7KroR/2ajJMuj
+         h8faiU2NwCMpDg8+JmJEQ2jRQj6JJ29iR0O3erky+R009kvgWiUyxs9Yo90FVkMVbcK9
+         GoFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687766902; x=1690358902;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lR9uR4LOeGZi3JSeuBmGvQnkQG6VZQCikIFxZLeRDho=;
+        b=e+eemuWN2S977YWfXL9FCV3aNJhFEfloONxpogNt8/8iPdnWqA0hJ4MWc6r2iRt67i
+         7kAgbHxebUpqpjE+bnxfhPLEXjOG7Mb1F63txTJhp9JPb9bgdeBZyfU3M7uLfrTi6mwS
+         l/gM07O6vN36XvogC7U0lXnujia8b7S79QOLz6VL1aaYtjbXAS2hSxFJOIT10qWCUAJU
+         pIioz+XP3PFFY0teOjsaJtslk309veQU+CGcnOCOhOlo0fAqj4PUOjiRzXmDyAcH93YI
+         kleiMzvRP5CsEqPYEsOXkvGZS4g9H+6MbncmmoJ5jedOnvh0RzWwgYH15q+W/BwThjqk
+         sCjw==
+X-Gm-Message-State: AC+VfDz1jtJ49qHZTH6AtutXSSkHiG+pfFwvOU8SSN2JMl1QIGhUY6u1
+        ubSKzY8VKo6W8d/WI7xTg4U=
+X-Google-Smtp-Source: ACHHUZ5PuTA/ZN67zVbtCQY+/DHF9OoEyH+dK8n2tigkPjMLvmOkyrpvswhqVLd55n4IdJWiB8XhtQ==
+X-Received: by 2002:a5d:5907:0:b0:313:ee56:a6f4 with SMTP id v7-20020a5d5907000000b00313ee56a6f4mr2740248wrd.3.1687766901499;
+        Mon, 26 Jun 2023 01:08:21 -0700 (PDT)
+Received: from localhost.localdomain (vpn-fn-225.net.ed.ac.uk. [192.41.114.225])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5d5681000000b0030647449730sm6618077wrv.74.2023.06.26.01.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 01:08:21 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 09:08:23 +0100
+From:   Karim Manaouil <kmanaouil.dev@gmail.com>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org,
+        markhemm@googlemail.com, viro@zeniv.linux.org.uk, david@redhat.com,
+        mike.kravetz@oracle.com, andreyknvl@gmail.com,
+        dave.hansen@intel.com, luto@kernel.org, brauner@kernel.org,
+        arnd@arndb.de, ebiederm@xmission.com, catalin.marinas@arm.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
+        vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
+        neilb@suse.de, maz@kernel.org
+Subject: Re: [PATCH RFC v2 3/4] mm/ptshare: Create new mm struct for page
+ table sharing
+Message-ID: <CA+uifjO9Q26cS_kYT0ftx0JQnQJ4QMd27tAtPR3s1voDHzet8w@mail.gmail.com>
+References: <cover.1682453344.git.khalid.aziz@oracle.com>
+ <1fd52581f4e4960a4d07cb9784d56659ec139d3c.1682453344.git.khalid.aziz@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20fdf89dde5eee365ab15d9f4753e3c9fc43d46e.camel@physik.fu-berlin.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1fd52581f4e4960a4d07cb9784d56659ec139d3c.1682453344.git.khalid.aziz@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/25/23 at 11:12pm, John Paul Adrian Glaubitz wrote:
-> Hi Baoquan!
-> 
-> On Tue, 2023-06-20 at 21:13 +0800, Baoquan He wrote:
-> > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> > and iounmap() are all visible and available to arch. Arch needs to
-> > provide wrapper functions to override the generic versions if there's
-> > arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> > This change will simplify implementation by removing duplicated codes
->                                                                   ^^^^^
-> Nit-pick: It should be "code", not "codes".
+On Wed, Apr 26, 2023 at 10:49:50AM -0600, Khalid Aziz wrote:
+> When a process passes MAP_SHARED_PT flag to mmap(), create a new mm
+> struct to hold the shareable page table entries for the newly mapped
+> region.  This new mm is not associated with a task.  Its lifetime is
+> until the last shared mapping is deleted.  This patch also adds a
+> new pointer "ptshare_data" to struct address_space which points to
+> the data structure that will contain pointer to this newly created
+> mm along with properties of the shared mapping. ptshare_data
+> maintains a refcount for the shared mapping so that it can be
+> cleaned up upon last unmap.
+>
+> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
+> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  include/linux/fs.h |   2 +
+>  mm/Makefile        |   2 +-
+>  mm/internal.h      |  14 +++++
+>  mm/mmap.c          |  72 ++++++++++++++++++++++++++
+>  mm/ptshare.c       | 126 +++++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 215 insertions(+), 1 deletion(-)
+>  create mode 100644 mm/ptshare.c
+>
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index c85916e9f7db..db8d3257c712 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -422,6 +422,7 @@ extern const struct address_space_operations empty_aops;
+>   * @private_lock: For use by the owner of the address_space.
+>   * @private_list: For use by the owner of the address_space.
+>   * @private_data: For use by the owner of the address_space.
+> + * @ptshare_data: For shared page table use
+>   */
+>  struct address_space {
+>       struct inode            *host;
+> @@ -443,6 +444,7 @@ struct address_space {
+>       spinlock_t              private_lock;
+>       struct list_head        private_list;
+>       void                    *private_data;
+> +     void                    *ptshare_data;
+>  } __attribute__((aligned(sizeof(long)))) __randomize_layout;
+>       /*
+>        * On most architectures that alignment is already the case; but
+> diff --git a/mm/Makefile b/mm/Makefile
+> index 8e105e5b3e29..d9bb14fdf220 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -40,7 +40,7 @@ mmu-y                       := nommu.o
+>  mmu-$(CONFIG_MMU)    := highmem.o memory.o mincore.o \
+>                          mlock.o mmap.o mmu_gather.o mprotect.o mremap.o \
+>                          msync.o page_vma_mapped.o pagewalk.o \
+> -                        pgtable-generic.o rmap.o vmalloc.o
+> +                        pgtable-generic.o rmap.o vmalloc.o ptshare.o
+>
+>
+>  ifdef CONFIG_CROSS_MEMORY_ATTACH
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 4d60d2d5fe19..3efb8738e26f 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -1047,4 +1047,18 @@ static inline bool vma_is_shared(const struct vm_area_struct *vma)
+>  {
+>       return vma->vm_flags & VM_SHARED_PT;
+>  }
+> +
+> +/*
+> + * mm/ptshare.c
+> + */
+> +struct ptshare_data {
+> +     struct mm_struct *mm;
+> +     refcount_t refcnt;
+> +     unsigned long start;
+> +     unsigned long size;
+> +     unsigned long mode;
+> +};
 
-Will change.
+Why does ptshare_data contain the start address, size and mode of the
+mapping? Does it mean ptshare_data can represent only a single mapping
+of the file (the one that begins at ptshare_data->start)? What if we
+want to share multiple different mappings of the same file (which may
+or may not intersect)?
 
-> 
-> I'll review and test the rest tomorrow. There are quite some changes.
+If we choose to use the VMAs in host_mm for that, will this possibly create
+a lot of special-cased VMA handling?
 
-That would be great, thanks a lot for your help.
+> +int ptshare_new_mm(struct file *file, struct vm_area_struct *vma);
+> +void ptshare_del_mm(struct vm_area_struct *vm);
+> +int ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma);
+>  #endif       /* __MM_INTERNAL_H */
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 8b46d465f8d4..c5e9b7f6de90 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1382,6 +1382,60 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+>           ((vm_flags & VM_LOCKED) ||
+>            (flags & (MAP_POPULATE | MAP_NONBLOCK)) == MAP_POPULATE))
+>               *populate = len;
+> +
+> +#if VM_SHARED_PT
+> +     /*
+> +      * Check if this mapping is a candidate for page table sharing
+> +      * at PMD level. It is if following conditions hold:
+> +      *      - It is not anonymous mapping
+> +      *      - It is not hugetlbfs mapping (for now)
+> +      *      - flags conatins MAP_SHARED or MAP_SHARED_VALIDATE and
+> +      *        MAP_SHARED_PT
+> +      *      - Start address is aligned to PMD size
+> +      *      - Mapping size is a multiple of PMD size
+> +      */
+> +     if (ptshare && file && !is_file_hugepages(file)) {
+> +             struct vm_area_struct *vma;
+> +
+> +             vma = find_vma(mm, addr);
+> +             if (!((vma->vm_start | vma->vm_end) & (PMD_SIZE - 1))) {
+> +                     struct ptshare_data *info = file->f_mapping->ptshare_data;
 
-> 
-> > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> > functioality as before.
-> > 
-> > Here, add wrapper functions ioremap_prot() and iounmap() for SuperH's
-> > special operation when ioremap() and iounmap().
-> > 
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> > Cc: Rich Felker <dalias@libc.org>
-> > Cc: linux-sh@vger.kernel.org
-> > ---
-> >  arch/sh/Kconfig          |  1 +
-> >  arch/sh/include/asm/io.h | 40 +++++--------------------
-> >  arch/sh/mm/ioremap.c     | 65 +++++++---------------------------------
-> >  3 files changed, 20 insertions(+), 86 deletions(-)
-> > 
-> > diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-> > index 9652d367fc37..f326985e46e0 100644
-> > --- a/arch/sh/Kconfig
-> > +++ b/arch/sh/Kconfig
-> > @@ -28,6 +28,7 @@ config SUPERH
-> >  	select GENERIC_SMP_IDLE_THREAD
-> >  	select GUP_GET_PXX_LOW_HIGH if X2TLB
-> >  	select HAS_IOPORT if HAS_IOPORT_MAP
-> > +	select GENERIC_IOREMAP if MMU
-> >  	select HAVE_ARCH_AUDITSYSCALL
-> >  	select HAVE_ARCH_KGDB
-> >  	select HAVE_ARCH_SECCOMP_FILTER
-> > diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
-> > index 270e7952950c..b3a26b405c8d 100644
-> > --- a/arch/sh/include/asm/io.h
-> > +++ b/arch/sh/include/asm/io.h
-> > @@ -266,40 +266,16 @@ unsigned long long poke_real_address_q(unsigned long long addr,
-> >  #endif
-> >  
-> >  #ifdef CONFIG_MMU
-> > -void iounmap(void __iomem *addr);
-> > -void __iomem *__ioremap_caller(phys_addr_t offset, unsigned long size,
-> > -			       pgprot_t prot, void *caller);
-> > -
-> > -static inline void __iomem *ioremap(phys_addr_t offset, unsigned long size)
-> > -{
-> > -	return __ioremap_caller(offset, size, PAGE_KERNEL_NOCACHE,
-> > -			__builtin_return_address(0));
-> > -}
-> > -
-> > -static inline void __iomem *
-> > -ioremap_cache(phys_addr_t offset, unsigned long size)
-> > -{
-> > -	return __ioremap_caller(offset, size, PAGE_KERNEL,
-> > -			__builtin_return_address(0));
-> > -}
-> > -#define ioremap_cache ioremap_cache
-> > -
-> > -#ifdef CONFIG_HAVE_IOREMAP_PROT
-> > -static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
-> > -		unsigned long flags)
-> > -{
-> > -	return __ioremap_caller(offset, size, __pgprot(flags),
-> > -			__builtin_return_address(0));
-> > -}
-> > -#endif /* CONFIG_HAVE_IOREMAP_PROT */
-> > +/*
-> > + * I/O memory mapping functions.
-> > + */
-> > +#define ioremap_prot ioremap_prot
-> > +#define iounmap iounmap
-> >  
-> > -#else /* CONFIG_MMU */
-> > -static inline void __iomem *ioremap(phys_addr_t offset, size_t size)
-> > -{
-> > -	return (void __iomem *)(unsigned long)offset;
-> > -}
-> > +#define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL_NOCACHE)
-> >  
-> > -static inline void iounmap(volatile void __iomem *addr) { }
-> > +#define ioremap_cache(addr, size)  \
-> > +	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
-> >  #endif /* CONFIG_MMU */
-> >  
-> >  #define ioremap_uc	ioremap
-> > diff --git a/arch/sh/mm/ioremap.c b/arch/sh/mm/ioremap.c
-> > index 21342581144d..c33b3daa4ad1 100644
-> > --- a/arch/sh/mm/ioremap.c
-> > +++ b/arch/sh/mm/ioremap.c
-> > @@ -72,22 +72,11 @@ __ioremap_29bit(phys_addr_t offset, unsigned long size, pgprot_t prot)
-> >  #define __ioremap_29bit(offset, size, prot)		NULL
-> >  #endif /* CONFIG_29BIT */
-> >  
-> > -/*
-> > - * Remap an arbitrary physical address space into the kernel virtual
-> > - * address space. Needed when the kernel wants to access high addresses
-> > - * directly.
-> > - *
-> > - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
-> > - * have to convert them into an offset in a page-aligned mapping, but the
-> > - * caller shouldn't need to know that small detail.
-> > - */
-> > -void __iomem * __ref
-> > -__ioremap_caller(phys_addr_t phys_addr, unsigned long size,
-> > -		 pgprot_t pgprot, void *caller)
-> > +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> > +			   unsigned long prot)
-> >  {
-> > -	struct vm_struct *area;
-> > -	unsigned long offset, last_addr, addr, orig_addr;
-> >  	void __iomem *mapped;
-> > +	pgprot_t pgprot = __pgprot(prot);
-> >  
-> >  	mapped = __ioremap_trapped(phys_addr, size);
-> >  	if (mapped)
-> > @@ -97,11 +86,6 @@ __ioremap_caller(phys_addr_t phys_addr, unsigned long size,
-> >  	if (mapped)
-> >  		return mapped;
-> >  
-> > -	/* Don't allow wraparound or zero size */
-> > -	last_addr = phys_addr + size - 1;
-> > -	if (!size || last_addr < phys_addr)
-> > -		return NULL;
-> > -
-> >  	/*
-> >  	 * If we can't yet use the regular approach, go the fixmap route.
-> >  	 */
-> > @@ -112,34 +96,14 @@ __ioremap_caller(phys_addr_t phys_addr, unsigned long size,
-> >  	 * First try to remap through the PMB.
-> >  	 * PMB entries are all pre-faulted.
-> >  	 */
-> > -	mapped = pmb_remap_caller(phys_addr, size, pgprot, caller);
-> > +	mapped = pmb_remap_caller(phys_addr, size, pgprot,
-> > +			__builtin_return_address(0));
-> >  	if (mapped && !IS_ERR(mapped))
-> >  		return mapped;
-> >  
-> > -	/*
-> > -	 * Mappings have to be page-aligned
-> > -	 */
-> > -	offset = phys_addr & ~PAGE_MASK;
-> > -	phys_addr &= PAGE_MASK;
-> > -	size = PAGE_ALIGN(last_addr+1) - phys_addr;
-> > -
-> > -	/*
-> > -	 * Ok, go for it..
-> > -	 */
-> > -	area = get_vm_area_caller(size, VM_IOREMAP, caller);
-> > -	if (!area)
-> > -		return NULL;
-> > -	area->phys_addr = phys_addr;
-> > -	orig_addr = addr = (unsigned long)area->addr;
-> > -
-> > -	if (ioremap_page_range(addr, addr + size, phys_addr, pgprot)) {
-> > -		vunmap((void *)orig_addr);
-> > -		return NULL;
-> > -	}
-> > -
-> > -	return (void __iomem *)(offset + (char *)orig_addr);
-> > +	return generic_ioremap_prot(phys_addr, size, pgprot);
-> >  }
-> > -EXPORT_SYMBOL(__ioremap_caller);
-> > +EXPORT_SYMBOL(ioremap_prot);
-> >  
-> >  /*
-> >   * Simple checks for non-translatable mappings.
-> > @@ -158,10 +122,9 @@ static inline int iomapping_nontranslatable(unsigned long offset)
-> >  	return 0;
-> >  }
-> >  
-> > -void iounmap(void __iomem *addr)
-> > +void iounmap(volatile void __iomem *addr)
-> >  {
-> >  	unsigned long vaddr = (unsigned long __force)addr;
-> > -	struct vm_struct *p;
-> >  
-> >  	/*
-> >  	 * Nothing to do if there is no translatable mapping.
-> > @@ -172,21 +135,15 @@ void iounmap(void __iomem *addr)
-> >  	/*
-> >  	 * There's no VMA if it's from an early fixed mapping.
-> >  	 */
-> > -	if (iounmap_fixed(addr) == 0)
-> > +	if (iounmap_fixed((void __iomem *)addr) == 0)
-> >  		return;
-> >  
-> >  	/*
-> >  	 * If the PMB handled it, there's nothing else to do.
-> >  	 */
-> > -	if (pmb_unmap(addr) == 0)
-> > +	if (pmb_unmap((void __iomem *)addr) == 0)
-> >  		return;
-> >  
-> > -	p = remove_vm_area((void *)(vaddr & PAGE_MASK));
-> > -	if (!p) {
-> > -		printk(KERN_ERR "%s: bad address %p\n", __func__, addr);
-> > -		return;
-> > -	}
-> > -
-> > -	kfree(p);
-> > +	generic_iounmap(addr);
-> >  }
-> >  EXPORT_SYMBOL(iounmap);
-> 
-> -- 
->  .''`.  John Paul Adrian Glaubitz
-> : :' :  Debian Developer
-> `. `'   Physicist
->   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-> 
+This is racy with another process trying to share the same mapping of
+the file. It's also racy with the removal (this process can get a
+pointer to ptshare_data that's currently being freed).
 
+> +                     /*
+> +                      * If this mapping has not been set up for page table
+> +                      * sharing yet, do so by creating a new mm to hold the
+> +                      * shared page tables for this mapping
+> +                      */
+> +                     if (info == NULL) {
+> +                             int ret;
+> +
+> +                             ret = ptshare_new_mm(file, vma);
+> +                             if (ret < 0)
+> +                                     return ret;
+> +
+> +                             info = file->f_mapping->ptshare_data;
+> +                             ret = ptshare_insert_vma(info->mm, vma);
+> +                             if (ret < 0)
+> +                                     addr = ret;
+> +                             else
+> +                                     vm_flags_set(vma, VM_SHARED_PT);
+
+Creation might race with another process.
+
+> +                     } else {
+> +                             /*
+> +                              * Page tables will be shared only if the
+> +                              * file is mapped in with the same permissions
+> +                              * across all mappers with same starting
+> +                              * address and size
+> +                              */
+> +                             if (((prot & info->mode) == info->mode) &&
+> +                                     (addr == info->start) &&
+> +                                     (len == info->size)) {
+> +                                     vm_flags_set(vma, VM_SHARED_PT);
+> +                                     refcount_inc(&info->refcnt);
+> +                             }
+> +                     }
+> +             }
+> +     }
+> +#endif
+> +
+>       return addr;
+>  }
+>
+> @@ -2495,6 +2549,22 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+>       if (end == start)
+>               return -EINVAL;
+>
+> +     /*
+> +      * Check if this vma uses shared page tables
+> +      */
+> +     vma = find_vma_intersection(mm, start, end);
+> +     if (vma && unlikely(vma_is_shared(vma))) {
+> +             struct ptshare_data *info = NULL;
+> +
+> +             if (vma->vm_file && vma->vm_file->f_mapping)
+> +                     info = vma->vm_file->f_mapping->ptshare_data;
+> +             /* Don't allow partial munmaps */
+> +             if (info && ((start != info->start) || (len != info->size)))
+> +                     return -EINVAL;
+> +             ptshare_del_mm(vma);
+> +     }
+> +
+> +
+>        /* arch_unmap() might do unmaps itself.  */
+>       arch_unmap(mm, start, end);
+>
+> @@ -2664,6 +2734,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+>                       }
+>               }
+>
+> +             if (vm_flags & VM_SHARED_PT)
+> +                     vm_flags_set(vma, VM_SHARED_PT);
+>               vm_flags = vma->vm_flags;
+>       } else if (vm_flags & VM_SHARED) {
+>               error = shmem_zero_setup(vma);
+> diff --git a/mm/ptshare.c b/mm/ptshare.c
+> new file mode 100644
+> index 000000000000..f6784268958c
+> --- /dev/null
+> +++ b/mm/ptshare.c
+> @@ -0,0 +1,126 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Share page table entries when possible to reduce the amount of extra
+> + * memory consumed by page tables
+> + *
+> + * Copyright (C) 2022 Oracle Corp. All rights reserved.
+> + * Authors:  Khalid Aziz <khalid.aziz@oracle.com>
+> + *           Matthew Wilcox <willy@infradead.org>
+> + */
+> +
+> +#include <linux/mm.h>
+> +#include <linux/fs.h>
+> +#include <asm/pgalloc.h>
+> +#include "internal.h"
+> +
+> +/*
+> + * Create a new mm struct that will hold the shared PTEs. Pointer to
+> + * this new mm is stored in the data structure ptshare_data which also
+> + * includes a refcount for any current references to PTEs in this new
+> + * mm. This refcount is used to determine when the mm struct for shared
+> + * PTEs can be deleted.
+> + */
+> +int
+> +ptshare_new_mm(struct file *file, struct vm_area_struct *vma)
+> +{
+> +     struct mm_struct *new_mm;
+> +     struct ptshare_data *info = NULL;
+> +     int retval = 0;
+> +     unsigned long start = vma->vm_start;
+> +     unsigned long len = vma->vm_end - vma->vm_start;
+> +
+> +     new_mm = mm_alloc();
+> +     if (!new_mm) {
+> +             retval = -ENOMEM;
+> +             goto err_free;
+> +     }
+> +     new_mm->mmap_base = start;
+> +     new_mm->task_size = len;
+> +     if (!new_mm->task_size)
+> +             new_mm->task_size--;
+> +
+> +     info = kzalloc(sizeof(*info), GFP_KERNEL);
+> +     if (!info) {
+> +             retval = -ENOMEM;
+> +             goto err_free;
+> +     }
+> +     info->mm = new_mm;
+> +     info->start = start;
+> +     info->size = len;
+> +     refcount_set(&info->refcnt, 1);
+> +     file->f_mapping->ptshare_data = info;
+
+Racy assignement. It can lead to a memory leak if another process does
+the same concurrently and assigns before or after this one. The new_mm
+and ptshare_data of one of them will be lost.
+
+I think this whole process needs to be protected with i_mmap lock.
+
+> +
+> +     return retval;
+> +
+> +err_free:
+> +     if (new_mm)
+> +             mmput(new_mm);
+> +     kfree(info);
+> +     return retval;
+> +}
+> +
+> +/*
+> + * insert vma into mm holding shared page tables
+> + */
+> +int
+> +ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma)
+> +{
+> +     struct vm_area_struct *new_vma;
+> +     int err = 0;
+> +
+> +     new_vma = vm_area_dup(vma);
+> +     if (!new_vma)
+> +             return -ENOMEM;
+> +
+> +     new_vma->vm_file = NULL;
+> +     /*
+> +      * This new vma belongs to host mm, so clear the VM_SHARED_PT
+> +      * flag on this so we know this is the host vma when we clean
+> +      * up page tables. Do not use THP for page table shared regions
+> +      */
+> +     vm_flags_clear(new_vma, (VM_SHARED | VM_SHARED_PT));
+> +     vm_flags_set(new_vma, VM_NOHUGEPAGE);
+> +     new_vma->vm_mm = mm;
+> +
+> +     err = insert_vm_struct(mm, new_vma);
+> +     if (err)
+> +             return -ENOMEM;
+> +
+> +     return err;
+> +}
+> +
+> +/*
+> + * Free the mm struct created to hold shared PTEs and associated data
+> + * structures
+> + */
+> +static inline void
+> +free_ptshare_mm(struct ptshare_data *info)
+> +{
+> +     mmput(info->mm);
+> +     kfree(info);
+> +}
+> +
+> +/*
+> + * This function is called when a reference to the shared PTEs in mm
+> + * struct is dropped. It updates refcount and checks to see if last
+> + * reference to the mm struct holding shared PTEs has been dropped. If
+> + * so, it cleans up the mm struct and associated data structures
+> + */
+> +void
+> +ptshare_del_mm(struct vm_area_struct *vma)
+> +{
+> +     struct ptshare_data *info;
+> +     struct file *file = vma->vm_file;
+> +
+> +     if (!file || (!file->f_mapping))
+> +             return;
+> +     info = file->f_mapping->ptshare_data;
+> +     WARN_ON(!info);
+> +     if (!info)
+> +             return;
+> +
+> +     if (refcount_dec_and_test(&info->refcnt)) {
+> +             free_ptshare_mm(info);
+> +             file->f_mapping->ptshare_data = NULL;
+
+Maybe those two should be reordered (after keeping a pointer to
+ptshare_data). Then setting f_mapping->ptshare_data to NULL can
+be performed under a lock and freeing ptshare and host_mm can be
+done without a lock.
+
+Cheers
+Karim
