@@ -2,155 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD31873F877
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 11:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8771273F8B8
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 11:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjF0JNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 05:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S229655AbjF0J2J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 05:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjF0JNY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 05:13:24 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8BFD;
-        Tue, 27 Jun 2023 02:13:23 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35R96B9i008761;
-        Tue, 27 Jun 2023 09:13:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=eRYl3tInGhDOkzzXnyLKjP4RygjUjtbP4SrRO0c+vWQ=;
- b=qDMffMBt8L6VJlwG8tURp2ZwilOX9K/rqLsrvTLNcHcNumo5bXR85n2fT0V+E8EjUk5Y
- MlWgFliseuH0ILUWdMKcO74nbfFS/WBE7JHU1CjKECJJGNRi3wHYo6DeppuQ3OdJdQrn
- Vbi1W3l1URgOENUohIs1eHwzBsJ1jkOe8pkB2S/b45Od2XToIs9s3TTdIAJ5lmd7Dpv/
- Kr47XyYy/CdcVx1PLxDAOnJIcagSMolnzSck45iCfK6vIL0+ZJ4rMkjXu9OHE0C6CyVN
- /LX4QweXpJ/o2Jw3gyZosKjZq3kQrz/FcGOCH/SxTFGXM6U/+vnhzy9/MS8svLtRjepB 3Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfvq8rabp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 09:13:03 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35R96GKB009302;
-        Tue, 27 Jun 2023 09:13:03 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfvq8raar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 09:13:03 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35R3BSQ5025785;
-        Tue, 27 Jun 2023 09:13:00 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rdqre1bqm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 09:13:00 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35R9CwrH65798408
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 09:12:58 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A85F2004B;
-        Tue, 27 Jun 2023 09:12:58 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7F0C20040;
-        Tue, 27 Jun 2023 09:12:57 +0000 (GMT)
-Received: from [9.152.212.248] (unknown [9.152.212.248])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 09:12:57 +0000 (GMT)
-Message-ID: <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for
- HAS_IOPORT=n
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S229568AbjF0J2I (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 05:28:08 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A86F1737;
+        Tue, 27 Jun 2023 02:28:02 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id DAE255C0213;
+        Tue, 27 Jun 2023 05:27:58 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 27 Jun 2023 05:27:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1687858078; x=1687944478; bh=Xl7RK4t97evjZO5aZJujPG/k7nUDLC5JaHH
+        QUcJEi/Y=; b=CzkmzfkVGZCqQGoJ6mSms6ZwFk0RtDf0pOT4kI9NyDeggfeUk8Q
+        IJzwsEEBrriomwZG2+Fjelj4G+mlKlbi1kPhwdiKMsifIyBZDdqML5zkS+WD7Bwp
+        0DWN1aF/eusaLFKYf4MlTDOkkx6Uo9nH1cRy468cZB096kH7pua6xyuvv2m3QhdI
+        oQNn0LTtuM2qvdHXLcOiESEXHnkUroLh2bZUkpAfo9d0CylOkczYmtNQ7DI6iBfw
+        Ov/CcAEV3cgDd9hqIGJ5V1ux2z62lBKESDAaa917XLnNv3NXT5o+3vK7pNEgVTcs
+        tdirOUFWwYa73aR5Kz1ONasOCKrN9gsCmSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687858078; x=1687944478; bh=Xl7RK4t97evjZO5aZJujPG/k7nUDLC5JaHH
+        QUcJEi/Y=; b=QTR04SvqjqdNJ+Oeij+MQps0muW6x00SsJYc2fpbkqk48EKaNnr
+        9PFtsZvX6w6Hzb4yn1RSBtaKGv/T/ILmQTPrleoqlnjsUVsdLwP9QN4Bh2a5P0ip
+        5xClbTPiNw6j1oz+9V3bySwurJdZa54d9ww3GknwGAkwcEqzpP2PvplB1kwJ1Q8P
+        0mYHtyYWce4nzCXpIk0XExAg2eTxUqvI3gFXUGsPabBX7tCZPOpwtDFFN+hAL8Bi
+        v2PGC+8Y/hTTFvgH3InLozh5PnR43W1L+6K5/2V6PKanu3Iun4GIGsVb5DvgBuMa
+        +kGT+GIpSMhBQejOtyMDTWANAyyXArUHz1Q==
+X-ME-Sender: <xms:nquaZD9eEjWIoL4oOqtY8Kffivf2Nd0Jreq_N2vSgSY0ZcBSqx03BQ>
+    <xme:nquaZPvWiOVyNU-AiWftJvTwaiehfQsvry05BRPVKY9wzwyiPHWUiOkIxGrJ0h0Qo
+    IYQ9H5YB-eCNiMh6Uk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehhedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeetteeljeejgeeivdevhffhieefteekheevffevudeijeejgeduhedtvdff
+    hefgheenucffohhmrghinhepghhoohhglhgvshhouhhrtggvrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggs
+    rdguvg
+X-ME-Proxy: <xmx:nquaZBBjLX0cgwn5zP7qKWwTzJUzqBW7GbHyYxG84DbhQOqQzHnTlQ>
+    <xmx:nquaZPf59oqN1VkHubuBN5PRV_2BXtLJUd8onFgKNiklQtW5J67mBA>
+    <xmx:nquaZIMctO32Jbf8F02Qo590imv-jdOzba3vOCGx5St4IvlTs5UDzw>
+    <xmx:nquaZHPg43M9_NN3zTiycGfiW1-RXcEvxJm5wMrk73jiOJoKsx48vw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 27A8CB60086; Tue, 27 Jun 2023 05:27:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <d0bca239-2711-4268-a36c-7c3434982ab1@app.fastmail.com>
+In-Reply-To: <6120750daede4eb40fb4d44ed68ba58e5716e038.camel@mediatek.com>
+References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
+ <20230609085214.31071-6-yi-de.wu@mediatek.com>
+ <1a15767c-0518-3763-e8cb-e271df82f87c@collabora.com>
+ <6120750daede4eb40fb4d44ed68ba58e5716e038.camel@mediatek.com>
+Date:   Tue, 27 Jun 2023 11:27:34 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Yi-De_Wu_=28=E5=90=B3=E4=B8=80=E5=BE=B7=29?= 
+        <Yi-De.Wu@mediatek.com>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        =?UTF-8?Q?Yingshiuan_Pan_=28=E6=BD=98=E7=A9=8E=E8=BB=92=29?= 
+        <Yingshiuan.Pan@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        =?UTF-8?Q?Ze-yu_Wang_=28=E7=8E=8B=E6=BE=A4=E5=AE=87=29?= 
+        <Ze-yu.Wang@mediatek.com>, "Will Deacon" <will@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        =?UTF-8?Q?MY_Chuang_=28=E8=8E=8A=E6=98=8E=E8=BA=8D=29?= 
+        <MY.Chuang@mediatek.com>, "Trilok Soni" <quic_tsoni@quicinc.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?PeiLun_Suei_=28=E9=9A=8B=E5=9F=B9=E5=80=AB=29?= 
+        <PeiLun.Suei@mediatek.com>,
+        =?UTF-8?Q?Liju-clr_Chen_=28=E9=99=B3=E9=BA=97=E5=A6=82=29?= 
+        <Liju-clr.Chen@mediatek.com>,
+        =?UTF-8?Q?Jades_Shih_=28=E6=96=BD=E5=90=91=E7=8E=A8=29?= 
+        <jades.shih@mediatek.com>, "Conor Dooley" <conor+dt@kernel.org>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Shawn_Hsiao_=28=E8=95=AD=E5=BF=97=E7=A5=A5=29?= 
+        <shawn.hsiao@mediatek.com>,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Date:   Tue, 27 Jun 2023 11:12:57 +0200
-In-Reply-To: <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
-         <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fZujSueKmVHDxjYCpP51RL3hPXVzRXrP
-X-Proofpoint-ORIG-GUID: XqQNy_k3bnezF-iSHCzgIlhzyUZTuwmi
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        =?UTF-8?Q?Ivan_Tseng_=28=E6=9B=BE=E5=BF=97=E8=BB=92=29?= 
+        <ivan.tseng@mediatek.com>,
+        =?UTF-8?Q?Chi-shen_Yeh_=28=E8=91=89=E5=A5=87=E8=BB=92=29?= 
+        <Chi-shen.Yeh@mediatek.com>
+Subject: Re: [PATCH v4 5/9] virt: geniezone: Add irqfd support
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_05,2023-06-26_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 adultscore=0
- clxscore=1011 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
-> On Mon, May 22, 2023, at 12:50, Niklas Schnelle wrote:
->=20
-> > A few patches have already been applied but I've kept those which are n=
-ot yet
-> > in v6.4-rc3.
-> >=20
-> > This version is based on v6.4-rc3 and is also available on my kernel.or=
-g tree
-> > in the has_ioport_v5:
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
->=20
-> I think it would be best if as many patches as possible get merged
-> into v6.5 through the individidual subsystems, though I can take
-> whatever is left through the asm-generic tree.
->=20
-> Since the goal is to have maintainers pick up part of this, I would
-> recommend splitting the series per subsystem, having either a
-> separate patch or a small series for each maintainer that should
-> pick them up.
->=20
-> More importantly, I think you should rebase the series against
-> linux-next in order to find and drop the patches that are queued
-> up for 6.5 already. The patches will be applied into branches
-> that are based on 6.4-rc of course, but basing on linux-next
-> is usually the easiest when targeting multiple maintainer
-> trees.
->=20
-> Maybe let's give it another week to have more maintainers pick
-> up stuff from v5, and then send out a v6 as separate submissions.
->=20
->     Arnd
+On Tue, Jun 27, 2023, at 09:54, Yi-De Wu (=E5=90=B3=E4=B8=80=E5=BE=B7) w=
+rote:
 
-Hi Arnd and All,
+>> ..snip..=20
+>> > diff --git a/drivers/virt/geniezone/gzvm_main.c b/drivers/virt/geni=
+ezone/gzvm_main.c > index 230970cb0953..e62c046d76b3 100644 > --- a/driv=
+ers/virt/geniezone/gzvm_main.c > +++ b/drivers/virt/geniezone/gzvm_main.=
+c > @@ -113,11 +113,12 @@ static int gzvm_drv_probe(void) >   return ret=
+; >   gzvm_debug_dev =3D &gzvm_dev; >   > -return 0; > +return gzvm_drv_=
+irqfd_init();=20
+>> ret =3D gzvm_drv_irqfd_init(); if (ret) return ret;=20
 
-I'm sorry there hasn't been an updated in a long time and we're missing
-v6.5. I've been quite busy with other work and life. Speaking of, I
-will be mostly out for around a month starting some time mid to end
-July as, if all goes well, I'm expecting to become a dad. That said, I
-haven't forgotten about this and your overall plan of sending per-
-subsystem patches sounds good, just haven't had the time to also
-incorporate the feedback.
+Something went wrong with the quoting up here, please make sure to
+use plaintext email instead of html.
 
-Thanks,
-Niklas
+>> return 0;=20
+>
+> We're wondering the pros and cons for this coding style.
+> Could you kindly give us some hint for possibly we could miss it somew=
+here.
+>
+> Some other suggestion had been made by AOSP reviewer on the very line=20
+> mentioned. As a consequence, we'd like to dig in the rationale behind=20
+> such debate.
+> https://android-review.googlesource.com/c/kernel/common/+/2574178/comm=
+ent/f23bbd52_e3b14396/
+
+I think most developers prefer the shorter form here, and I've
+seen cleanup patches actually changing the longer version to that.
+
+     Arnd
