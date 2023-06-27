@@ -2,236 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E51E73F243
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 05:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B831773F2A4
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 05:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjF0DUM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jun 2023 23:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S230076AbjF0D2v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jun 2023 23:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjF0DTz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 23:19:55 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348DB30DC;
-        Mon, 26 Jun 2023 20:16:24 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5704ddda6dfso44581037b3.1;
-        Mon, 26 Jun 2023 20:16:24 -0700 (PDT)
+        with ESMTP id S229699AbjF0D2Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 23:28:16 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C241FFA;
+        Mon, 26 Jun 2023 20:22:52 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55779047021so1649640a12.3;
+        Mon, 26 Jun 2023 20:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687835778; x=1690427778;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UurGuuLzED1CKQ5+YtAa+uldlNlkULcrhOlEPtYgkts=;
-        b=Bw6j1qqbA7rK2Dm84VNEOP66RtUUiWxR5Sye2bW+eq3uYQIAY2EgG1iwdb2DLJnhG8
-         GeCT0K/ZwJIKUih4HIgcFRg+mw1EU/RmQtL9RCws+bBmnGeSgMwKEqV8Sq7OOh2ekNKy
-         KxZzPsUUwTKcYY2uR69y6/3CJ/yQh13J76r7SLJTov+ctRLrvX63ZMz8HGYd0YBMtxPR
-         d4bJ4wdUGuyrpgX3PWgY/0ePtHqJFHhYHpUgd8NRua4eh9nOB+MqmDgdNijgrl/iljgo
-         W4AbA6WKPV5xVJmow0GDfY5w1hM9Ipzkd6LQ2xSzFc3wc9cyZI8JF3nhcsteILote3wU
-         0FOQ==
+        d=gmail.com; s=20221208; t=1687836171; x=1690428171;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tgGCeKYSgX5ONiSOB6zmaLXgvW+aPX+dovxZk+0yplI=;
+        b=GALPKXkbiNlMMUse1NEHvAmZlPFXXLnNu9Ag2REzXgGs7MAVVWh3OHijWErFH5zqfY
+         CawAe+8CtBaGyoSYiaqpIQQkX4iSFtFe2P5odLl8Eo1QP/mqwAq0ZBsBg2MhBJ4JLvRj
+         Y5q8XTywNBjlHTb4PPFy9wGcfTVqbXU5bItkpTgZXYPDu9elDS26SjEst+DB+KW4rxzB
+         4tjun2dFWIJDh/1yDBJdnPRD1lVGc3KkXYisHkcOEiBZ1nvRKEuVdZ6JS9OWoZcRhC0j
+         HeXHj3cagbj23P9ytwPsEjuITSiUiVSMYOhtKiUWSx7ak437Bx6P4H5d7A4N99T2Y8hZ
+         u3EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687835778; x=1690427778;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UurGuuLzED1CKQ5+YtAa+uldlNlkULcrhOlEPtYgkts=;
-        b=af1itiHR6wgEmwEBh7daAjn0+QnPL0aIOJeH/42dqHJ7izsvOgGtaTrEi8Qx/g6EM7
-         VUCXORqHuoPzcEe5E406AXoVRTARVgCmSbUz0W90KyUOlGAtBZPdFS4RU3fj5GHSYiAg
-         /dUjfWC0F7QAp+WQhAATl7Ng/ycVim8cx8BBIqm0x3cU49FFT7kfcpKYycJNs8HlnaEs
-         44B0IqoQiuY3cGPXO8gixtO2G7ijn/NHktUfiB2+r2MA+v+gI79PHrQNjhSGrk4iAY3c
-         9BS40qav+IVT+avM629KZ/j+Va8Dcj/1li57/T4uhXF00opX0cTmWBYW46qi3dwsow4F
-         KESA==
-X-Gm-Message-State: AC+VfDw24mj6LQ4th4upi/cYvjjQZKF1kh5rYyEKkNPQskVsFy5PhdoV
-        vuD4N6tZ4ZLW0UwIa6oDUr0=
-X-Google-Smtp-Source: ACHHUZ48cJY/DPvk+Kk12K3DwipJ5tKtap76NQbk/m6+l8TYs0OHWXs1Miee1fTjpWtp4A4P8vJjEA==
-X-Received: by 2002:a81:4e88:0:b0:565:ba4b:aa81 with SMTP id c130-20020a814e88000000b00565ba4baa81mr32811368ywb.45.1687835777737;
-        Mon, 26 Jun 2023 20:16:17 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id s4-20020a0dd004000000b0057399b3bd26sm1614798ywd.33.2023.06.26.20.16.15
+        d=1e100.net; s=20221208; t=1687836171; x=1690428171;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tgGCeKYSgX5ONiSOB6zmaLXgvW+aPX+dovxZk+0yplI=;
+        b=FvHXLZH4rcd+wN+BrMg4C7N7DYH2Mh0+Oo8m1sRsVzbMvGSqni7Jx59nqf2FPZDAsp
+         0kN2NmCoNccsMdWAaFFw8cPWxrqZFSiptVgDc1LHnqW6uuuXXO5x0STTpNahHOobkEul
+         Y/9rD6C8w5pIVP9Ai09CITCerJGlCY+oGmrGgcr9MCgYcxFeD2zU9kzgFY1dn2QDdFSi
+         l13xSebhh2gM+7ktZh1nzo3rgDlXWV/2+ELhDoP1xF/88JqnfCI1tteedVV6m7Asicjl
+         HnTrCBoyJknR17mhbuJThuFLsPkva4VmHdWy7IVBMuWqOEQ74IlWvse6S6k8GXdcAGeD
+         nKyg==
+X-Gm-Message-State: AC+VfDyeXQfP3XL8FNOqzhxayvqeWLUIY+KS2y4uRXkDduDlLGn5wbjF
+        swZh48mhvAYoTcXLRQ4Ynr8=
+X-Google-Smtp-Source: ACHHUZ60QnnCcLDGoPIP1qsnU2mo1shYfR/zJY/uGFOKsRbz8XfE3h7PsAaYrR9wgCLiy9WMvZFCqA==
+X-Received: by 2002:a17:90a:1cb:b0:25e:a5b2:846d with SMTP id 11-20020a17090a01cb00b0025ea5b2846dmr18388882pjd.27.1687836171531;
+        Mon, 26 Jun 2023 20:22:51 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:37:c5e9:2003:6c97:8057])
+        by smtp.gmail.com with ESMTPSA id mm12-20020a17090b358c00b0025ec54be16asm618756pjb.2.2023.06.26.20.22.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 20:16:17 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH v6 33/33] mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
-Date:   Mon, 26 Jun 2023 20:14:31 -0700
-Message-Id: <20230627031431.29653-34-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230627031431.29653-1-vishal.moola@gmail.com>
-References: <20230627031431.29653-1-vishal.moola@gmail.com>
+        Mon, 26 Jun 2023 20:22:50 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com
+Subject: [PATCH V2 0/9] x86/hyperv: Add AMD sev-snp enlightened guest support on hyperv
+Date:   Mon, 26 Jun 2023 23:22:38 -0400
+Message-Id: <20230627032248.2170007-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These functions are no longer necessary. Remove them and cleanup
-Documentation referencing them.
+From: Tianyu Lan <tiala@microsoft.com>
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/mm/split_page_table_lock.rst    | 12 +++++------
- .../zh_CN/mm/split_page_table_lock.rst        | 14 ++++++-------
- include/linux/mm.h                            | 20 -------------------
- 3 files changed, 13 insertions(+), 33 deletions(-)
+Hyper-V provides two modes for running SEV-SNP VMs:
 
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index a834fad9de12..e4f6972eb6c0 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -58,7 +58,7 @@ Support of split page table lock by an architecture
- ===================================================
+1) In vTOM mode with a paravisor (see Section 15.36.8 of [1])
+2) In "fully enlightened" mode with normal "C" bit control
+   over page encryption, and no paravisor
  
- There's no need in special enabling of PTE split page table lock: everything
--required is done by pgtable_pte_page_ctor() and pgtable_pte_page_dtor(), which
-+required is done by pagetable_pte_ctor() and pagetable_pte_dtor(), which
- must be called on PTE table allocation / freeing.
- 
- Make sure the architecture doesn't use slab allocator for page table
-@@ -68,8 +68,8 @@ This field shares storage with page->ptl.
- PMD split lock only makes sense if you have more than two page table
- levels.
- 
--PMD split lock enabling requires pgtable_pmd_page_ctor() call on PMD table
--allocation and pgtable_pmd_page_dtor() on freeing.
-+PMD split lock enabling requires pagetable_pmd_ctor() call on PMD table
-+allocation and pagetable_pmd_dtor() on freeing.
- 
- Allocation usually happens in pmd_alloc_one(), freeing in pmd_free() and
- pmd_free_tlb(), but make sure you cover all PMD table allocation / freeing
-@@ -77,7 +77,7 @@ paths: i.e X86_PAE preallocate few PMDs on pgd_alloc().
- 
- With everything in place you can set CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK.
- 
--NOTE: pgtable_pte_page_ctor() and pgtable_pmd_page_ctor() can fail -- it must
-+NOTE: pagetable_pte_ctor() and pagetable_pmd_ctor() can fail -- it must
- be handled properly.
- 
- page->ptl
-@@ -97,7 +97,7 @@ trick:
-    split lock with enabled DEBUG_SPINLOCK or DEBUG_LOCK_ALLOC, but costs
-    one more cache line for indirect access;
- 
--The spinlock_t allocated in pgtable_pte_page_ctor() for PTE table and in
--pgtable_pmd_page_ctor() for PMD table.
-+The spinlock_t allocated in pagetable_pte_ctor() for PTE table and in
-+pagetable_pmd_ctor() for PMD table.
- 
- Please, never access page->ptl directly -- use appropriate helper.
-diff --git a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-index 4fb7aa666037..a2c288670a24 100644
---- a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-+++ b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-@@ -56,16 +56,16 @@ Hugetlb特定的辅助函数:
- 架构对分页表锁的支持
- ====================
- 
--没有必要特别启用PTE分页表锁：所有需要的东西都由pgtable_pte_page_ctor()
--和pgtable_pte_page_dtor()完成，它们必须在PTE表分配/释放时被调用。
-+没有必要特别启用PTE分页表锁：所有需要的东西都由pagetable_pte_ctor()
-+和pagetable_pte_dtor()完成，它们必须在PTE表分配/释放时被调用。
- 
- 确保架构不使用slab分配器来分配页表：slab使用page->slab_cache来分配其页
- 面。这个区域与page->ptl共享存储。
- 
- PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
--启用PMD分页锁需要在PMD表分配时调用pgtable_pmd_page_ctor()，在释放时调
--用pgtable_pmd_page_dtor()。
-+启用PMD分页锁需要在PMD表分配时调用pagetable_pmd_ctor()，在释放时调
-+用pagetable_pmd_dtor()。
- 
- 分配通常发生在pmd_alloc_one()中，释放发生在pmd_free()和pmd_free_tlb()
- 中，但要确保覆盖所有的PMD表分配/释放路径：即X86_PAE在pgd_alloc()中预先
-@@ -73,7 +73,7 @@ PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
- 一切就绪后，你可以设置CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK。
- 
--注意：pgtable_pte_page_ctor()和pgtable_pmd_page_ctor()可能失败--必
-+注意：pagetable_pte_ctor()和pagetable_pmd_ctor()可能失败--必
- 须正确处理。
- 
- page->ptl
-@@ -90,7 +90,7 @@ page->ptl用于访问分割页表锁，其中'page'是包含该表的页面struc
-    的指针并动态分配它。这允许在启用DEBUG_SPINLOCK或DEBUG_LOCK_ALLOC的
-    情况下使用分页锁，但由于间接访问而多花了一个缓存行。
- 
--PTE表的spinlock_t分配在pgtable_pte_page_ctor()中，PMD表的spinlock_t
--分配在pgtable_pmd_page_ctor()中。
-+PTE表的spinlock_t分配在pagetable_pte_ctor()中，PMD表的spinlock_t
-+分配在pagetable_pmd_ctor()中。
- 
- 请不要直接访问page->ptl - -使用适当的辅助函数。
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 0e4d5f6d10e5..dc0f19f35424 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2873,11 +2873,6 @@ static inline bool pagetable_pte_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pte_page_ctor(struct page *page)
--{
--	return pagetable_pte_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -2887,11 +2882,6 @@ static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pte_page_dtor(struct page *page)
--{
--	pagetable_pte_dtor(page_ptdesc(page));
--}
--
- pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
- static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
- {
-@@ -2993,11 +2983,6 @@ static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pmd_page_ctor(struct page *page)
--{
--	return pagetable_pmd_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -3007,11 +2992,6 @@ static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pmd_page_dtor(struct page *page)
--{
--	pagetable_pmd_dtor(page_ptdesc(page));
--}
--
- /*
-  * No scalability reason to split PUD locks yet, but follow the same pattern
-  * as the PMD locks to make it easier if we decide to.  The VM should not be
+For #1, the paravisor runs in VMPL 0, while Linux runs in VMPL 2
+(see Section 15.36.7 of [1]). The paravisor is typically provided
+by Hyper-V and handles most of the SNP-related functionality. As
+such, most of the SNP functionality in the Linux guest is bypassed.
+The guest operates in vTOM mode, where encryption is enabled by default.
+The guest must still request page transitions between private and shared,
+but there is relatively less SNP machinery required in the guest. Support
+for this mode of operation first went upstream in the 5.15 kernel.
+
+For #2, this patch set provides the initial support. The existing
+SEV-SNP machinery in the kernel is fully used, but Hyper-V specific
+updates are required to properly share Hyper-V communication pages
+between the guest and host and to start APs at boot time.
+
+In either mode, Hyper-V requires that the guest implement the SEV-SNP
+Restricted Interrupt Injection feature (see Section 15.36.16 of [1],
+and Section 5 of [2]). Without this feature, the guest is subject to
+attack by a compromised hypervisor that can inject any exception at
+any time, such as injecting an interrupt while the guest has interrupts
+disabled. In vTOM mode, Restricted Interrupt Injection is implemented
+by the paravisor, so no Linux guest changes are required. But in fully
+enlightened mode, the Linux guest must provide the implementation.
+
+This patch set is derived from an earlier patch set that includes both
+the Hyper-V specific changes and Restricted Interrupt Injection support.[3]
+But it is now limited to only the Hyper-V specific changes. The Restricted
+Interrupt Injection support will come later in a separate patch set.
+
+
+[1] https://www.amd.com/system/files/TechDocs/24593.pdf
+[2] https://www.amd.com/system/files/TechDocs/56421-guest-hypervisor-communication-block-standardization.pdf
+[3] https://lore.kernel.org/lkml/20230515165917.1306922-1-ltykernel@gmail.com/
+
+Change since v1:
+       * vTOM case uses paravisor_present flag and
+       	 HV_ISOLATION_TYPE_SNP type.
+       * Rework some patches' change log
+       * Fix some comments in the patches
+       
+Tianyu Lan (9):
+  x86/hyperv: Add sev-snp enlightened guest static key
+  x86/hyperv: Set Virtual Trust Level in VMBus init message
+  x86/hyperv: Mark Hyper-V vp assist page unencrypted in SEV-SNP
+    enlightened guest
+  drivers: hv: Mark percpu hvcall input arg page unencrypted in SEV-SNP
+    enlightened guest
+  x86/hyperv: Use vmmcall to implement Hyper-V hypercall in  sev-snp
+    enlightened guest
+  clocksource: hyper-v: Mark hyperv tsc page unencrypted in sev-snp
+    enlightened guest
+  x86/hyperv: Initialize cpu and memory for SEV-SNP enlightened guest
+  x86/hyperv: Add smp support for SEV-SNP guest
+  x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+
+ arch/x86/hyperv/hv_init.c          |  52 +++++++-
+ arch/x86/hyperv/ivm.c              | 199 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |   7 +
+ arch/x86/include/asm/mshyperv.h    |  73 +++++++++--
+ arch/x86/kernel/cpu/mshyperv.c     |  42 +++++-
+ drivers/clocksource/hyperv_timer.c |   2 +-
+ drivers/hv/connection.c            |   1 +
+ drivers/hv/hv.c                    |  57 ++++++++-
+ drivers/hv/hv_common.c             |  19 +++
+ include/asm-generic/hyperv-tlfs.h  |   1 +
+ include/asm-generic/mshyperv.h     |  13 +-
+ include/linux/hyperv.h             |   4 +-
+ 12 files changed, 445 insertions(+), 25 deletions(-)
+
 -- 
-2.40.1
+2.25.1
 
