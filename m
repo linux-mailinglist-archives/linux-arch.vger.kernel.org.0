@@ -2,76 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846717402A3
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 19:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F18740318
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 20:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbjF0RwQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 13:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S230273AbjF0SVE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 14:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjF0RwM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 13:52:12 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ECA116;
-        Tue, 27 Jun 2023 10:52:11 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b73b839025so2711579a34.1;
-        Tue, 27 Jun 2023 10:52:11 -0700 (PDT)
+        with ESMTP id S230400AbjF0SVD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 14:21:03 -0400
+Received: from mailrelay3-1.pub.mailoutpod2-cph3.one.com (mailrelay3-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:402::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B15510FB
+        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 11:21:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687888331; x=1690480331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ya0gjT04wvrkPEwxsIo0SrjOZFrw43ACMJ5aI2sBKGs=;
-        b=jU0XSQm/UgQNqhqQcjqaxOHJKL3Tu8GM/GwEobHZGDkP+x8DVdgSjRkU85h/Lj/+te
-         oZwK4Q1yO37Pzbn1i7oZRsd+yfivOXZX9DLv/iX+OOzSZ/17s4ytR4cUrCKbaq8ScVjb
-         y4NBy98BQyt8WGI73+o5s1aq7cUaSdPW95ULfQ6FlPkdUprfA5PQkMvKjJsZAGVBcKqi
-         qlieckJVpQyRqbWlQMoi71Q4k95ldkAZz69rpAi1h8kLQ3wxt3idqYMSWF1Mqn3mJooy
-         Rs2GGbK0m2G7LUgnIAcus/1X+0dgeX1Usy3dZ/2MF2ihQvsHs5fE8nG3/WrSESAbmo+3
-         LPFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687888331; x=1690480331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ya0gjT04wvrkPEwxsIo0SrjOZFrw43ACMJ5aI2sBKGs=;
-        b=BClq6JrQuM47FlWCzs6sAdrEGWCtgUm+VlHM9T3OnEKRPjE2kmh2hE5KnJcZHweXXr
-         tq4H2UYY2HVKco3Vqop+fYFwxJ86/yuvr6Q54JZnXogQl2DnWkrTWwBvDxhUcJyReYR2
-         pehqYrbFeNBtO7ucehjplZomGvmgBzD3lUmvTgn8Yx3wZ9pXHhJw/AKsncT/RX/oK+Yi
-         VY+2IeZJDh6KupaVgt8GRZsOrndYipxMOMI8J0dFCQ+CZzn7RRNoh0wB3SDezlfvWjOL
-         MDUn+IPWHN/jTvQ3jmSxQkQelP4aEf4RM9ev9BdmTLpfyw0YrHmkEcNOkv5v4eiPNnGN
-         4sOg==
-X-Gm-Message-State: AC+VfDwXerydJMSOvU1bRnm6IqTO1JFH1qEalun7GQmUpBnV4BnOacDH
-        GRMGhxs9+UgL0ev+ucmr8TetFg3Qm940wtZbXyk=
-X-Google-Smtp-Source: ACHHUZ60PXVLGXFjCZbPL4+H89P+QaultgII2fPTXJpRhifF/y6voZRlslPkfFetToA56imkT1WhjHNqMU1RYiBUm6M=
-X-Received: by 2002:a05:6359:d23:b0:133:a55:7e26 with SMTP id
- gp35-20020a0563590d2300b001330a557e26mr5444430rwb.7.1687888330839; Tue, 27
- Jun 2023 10:52:10 -0700 (PDT)
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=kcOM4/Wbu+ytgUTsuXGCBTLUq9C4K7TLK3Sk/wcjAaA=;
+        b=q/BW6qwUmG/DBoBAJH9ZLHEWeOHY+VrN7laFR4Vrd9HPwW1zykNYORqnfyd44r3Q+ncDrbE7icGEI
+         d1uWAUaw7t6bisk8FY8eLYbrWOHCMGZwOeSwvsMt+djmSeKXHRNJ+N46bzWTix0KUsHg2prPs0HmqZ
+         2d7Dj6pxKVAY3fMXvUqVGL22pGb5Kbr1ZLrqvamwyHnAxA0wXid3D/i8RtUUsAHwwT96+30anx4a8a
+         jz6hnQe04klv35aU215cRM5Xq7WhjUuNzBbK/QKJ6AIpQ1OVvrQgU/PnB7zHPFflHRzG3JLRPHcCRu
+         osRLDwr8BOrwNIOW/DMk5G4dnIXn4pQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=kcOM4/Wbu+ytgUTsuXGCBTLUq9C4K7TLK3Sk/wcjAaA=;
+        b=70X7t5hJxYRaTpiZRm6uZhYE0omt4ewkVRUZ+hLcIxuNWRDPj+glykMqi6lkFgWD/z+G5DAF5UTAV
+         jNAWiGiDg==
+X-HalOne-ID: 5babceb7-1517-11ee-92ec-b90637070a9d
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay3 (Halon) with ESMTPSA
+        id 5babceb7-1517-11ee-92ec-b90637070a9d;
+        Tue, 27 Jun 2023 18:20:57 +0000 (UTC)
+Date:   Tue, 27 Jun 2023 20:20:56 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     davem@davemloft.net, arnd@arndb.de, linux@roeck-us.net,
+        deller@gmx.de, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] arch/sparc: Add module license and description for fbdev
+ helpers
+Message-ID: <20230627182056.GA110138@ravnborg.org>
+References: <20230627145843.31794-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-References: <20230627031431.29653-1-vishal.moola@gmail.com>
- <20230627031431.29653-4-vishal.moola@gmail.com> <ZJsJT9dLtxaKlxVb@x1n>
-In-Reply-To: <ZJsJT9dLtxaKlxVb@x1n>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Tue, 27 Jun 2023 10:51:59 -0700
-Message-ID: <CAOzc2pw2U2XvMcaEdy18UYe=5=PeCBn_qLR_3ns8_nWvgSSDQw@mail.gmail.com>
-Subject: Re: [PATCH v6 03/33] pgtable: Create struct ptdesc
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627145843.31794-1-tzimmermann@suse.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,43 +61,21 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 9:07=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Mon, Jun 26, 2023 at 08:14:01PM -0700, Vishal Moola (Oracle) wrote:
-> > Currently, page table information is stored within struct page. As part
-> > of simplifying struct page, create struct ptdesc for page table
-> > information.
-> >
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > ---
-> >  include/linux/pgtable.h | 68 +++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 68 insertions(+)
-> >
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index 5063b482e34f..d46cb709ce08 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -987,6 +987,74 @@ static inline void ptep_modify_prot_commit(struct =
-vm_area_struct *vma,
-> >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
-> >  #endif /* CONFIG_MMU */
-> >
-> > +
-> > +/**
-> > + * struct ptdesc -    Memory descriptor for page tables.
-> > + * @__page_flags:     Same as page flags. Unused for page tables.
-> > + * @pt_rcu_head:      For freeing page table pages.
-> > + * @pt_list:          List of used page tables. Used for s390 and x86.
-> > + * @_pt_pad_1:        Padding that aliases with page's compound head.
-> > + * @pmd_huge_pte:     Protected by ptdesc->ptl, used for THPs.
-> > + * @_pt_s390_gaddr:   Aliases with page's mapping. Used for s390 gmap =
-only.
->
-> Should some arch-specific bits (and a few others) always under some
-> #ifdefs, so it shouldn't appear on other archs?
+On Tue, Jun 27, 2023 at 04:58:20PM +0200, Thomas Zimmermann wrote:
+> Add MODULE_LICENSE() and MODULE_DESCRIPTION() for fbdev helpers
+> on sparc. Fixes the following error:
+> 
+> ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Closes: https://lore.kernel.org/dri-devel/c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net/
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Fixes: 4eec0b3048fc ("arch/sparc: Implement fb_is_primary_device() in source file")
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: sparclinux@vger.kernel.org
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
-Right now this struct completely overlays struct page, so the padding as
-well as any arch-specific fields have to stay. Whenever we get ptdescs
-independent of struct page we can cleanup any unnecessary fields, as
-well as omit unnecessary fields from unrelated architectures.
+	Sam
