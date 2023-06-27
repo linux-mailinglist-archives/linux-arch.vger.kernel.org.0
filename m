@@ -2,143 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3B673F8C3
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 11:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AC673FA9A
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 12:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjF0JaQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 05:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S229690AbjF0K5i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 06:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjF0JaP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 05:30:15 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05FC1987;
-        Tue, 27 Jun 2023 02:30:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0B6C65C01D5;
-        Tue, 27 Jun 2023 05:30:14 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 27 Jun 2023 05:30:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687858214; x=1687944614; bh=d/
-        8PAsCjbmMqsAZVfulXX8NLMmKaUcPEmXDNbRBP/iY=; b=r1/VlKLwjWRKxQKnr7
-        EeN5vuWsH4K5/M6jVqZVzAX8NjH3CgUzYePswdMd4UHACyZ6z8wdcg3YNz4Ffh5D
-        0T3XhcLN7bzWS8GtCL2kTxtY7s1YooHQ6ecW7RflD0T1TxJ1gi44wpVlRmI59dM7
-        2+/OSFs0BJ+RNkf+nbQ/Qa7WsYSCopCzYKPN2fnBbcCZO5kzmWt6EqBSrdYyl9LT
-        IDwSkH5LpjAzAzIj9KbMye2XTf/J9cKSz362tawBRK3z3kRZXFzTBXuxPBXKjPT5
-        UFxnpAJ4wttOZ90/adZrMDwV5d3z/C4IHHpq/URcUthI7ADS93ElS1UPXmV7Jirq
-        Fb5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687858214; x=1687944614; bh=d/8PAsCjbmMqs
-        AZVfulXX8NLMmKaUcPEmXDNbRBP/iY=; b=rCwudNcaAgAQJUVmw90VYxVfNvqm7
-        fy9DLhi/W77KBRwMHSFoxQXqU5fshBRCW3xOsT4GMGeWdb99ohRMzLpPyDhEQ06S
-        GFZZOrcdu0lJz3PFTKbqMkuYwyiYPso5m7o0Ja+66aNM+r9TAk3wHvgPNq/a8gR2
-        xd0t4kkOqPvXTlubXsYycTioiz50fnlqftXe6owfCdnWyTZYOgq5Ye2RnwoG/9JF
-        tW9ASyerDLMkCZ8hShqfgWoqbPs7VzvEyK4sio5jPFHWnBFMpCXttyQnHaDFC76H
-        mOnmYK6q43iVruVYfva6NXn1XGnnUveYyYewtcVCNQsaXun9FJsaN/Alg==
-X-ME-Sender: <xms:JayaZBitbYQs-Nbz28YFL0hH-f0e91zEr79uEZ1IirHIFTpGCjBsPA>
-    <xme:JayaZGBfTJaZktWQBIp1RUSjIN5yKIGrJm4THO0JeCCOpqZRSPrFGn8hfnT8TUcct
-    FDjcdDzbHv8a2_4hIA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehhedgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JayaZBE0FcAdCnr77YYyC4hha2Hm-2JikOM2MHIazIgLtw6DXchElg>
-    <xmx:JayaZGTdXdg0D5cq1tbQYM304eIeHx8lNL_d9G-BpuLbYqjr7gOAsw>
-    <xmx:JayaZOzfUoFjL_pt_6oCsyRCWL5__Cj3BSwdnysopAOk-ai5cDh0OA>
-    <xmx:JqyaZLhyZFgVQY0ouFIpf6Ake8BSf-89DyB_m7aWKn-7mfbBV0Rbiw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7CBBCB60083; Tue, 27 Jun 2023 05:30:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <8c50cf74-fd21-4b86-8ac8-1445ff242d48@app.fastmail.com>
-In-Reply-To: <20230609085214.31071-6-yi-de.wu@mediatek.com>
-References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
- <20230609085214.31071-6-yi-de.wu@mediatek.com>
-Date:   Tue, 27 Jun 2023 11:29:52 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?Yi-De_Wu_=28=E5=90=B3=E4=B8=80=E5=BE=B7=29?= 
-        <yi-de.wu@mediatek.com>,
-        =?UTF-8?Q?Yingshiuan_Pan_=28=E6=BD=98=E7=A9=8E=E8=BB=92=29?= 
-        <yingshiuan.pan@mediatek.com>,
-        =?UTF-8?Q?Ze-yu_Wang_=28=E7=8E=8B=E6=BE=A4=E5=AE=87=29?= 
-        <ze-yu.wang@mediatek.com>, "Jonathan Corbet" <corbet@lwn.net>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Trilok Soni" <quic_tsoni@quicinc.com>,
-        "dbrazdil@google.com" <dbrazdil@google.com>,
-        =?UTF-8?Q?Jades_Shih_=28=E6=96=BD=E5=90=91=E7=8E=A8=29?= 
-        <jades.shih@mediatek.com>, "Miles Chen" <miles.chen@mediatek.com>,
-        =?UTF-8?Q?Ivan_Tseng_=28=E6=9B=BE=E5=BF=97=E8=BB=92=29?= 
-        <ivan.tseng@mediatek.com>,
-        =?UTF-8?Q?MY_Chuang_=28=E8=8E=8A=E6=98=8E=E8=BA=8D=29?= 
-        <my.chuang@mediatek.com>,
-        =?UTF-8?Q?Shawn_Hsiao_=28=E8=95=AD=E5=BF=97=E7=A5=A5=29?= 
-        <shawn.hsiao@mediatek.com>,
-        =?UTF-8?Q?PeiLun_Suei_=28=E9=9A=8B=E5=9F=B9=E5=80=AB=29?= 
-        <peilun.suei@mediatek.com>,
-        =?UTF-8?Q?Liju-clr_Chen_=28=E9=99=B3=E9=BA=97=E5=A6=82=29?= 
-        <liju-clr.chen@mediatek.com>,
-        =?UTF-8?Q?Chi-shen_Yeh_=28=E8=91=89=E5=A5=87=E8=BB=92=29?= 
-        <chi-shen.yeh@mediatek.com>
-Subject: Re: [PATCH v4 5/9] virt: geniezone: Add irqfd support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229568AbjF0K5h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 06:57:37 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7308A1BE4;
+        Tue, 27 Jun 2023 03:57:36 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b7e66ff65fso25942895ad.0;
+        Tue, 27 Jun 2023 03:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687863456; x=1690455456;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pr8SROad9OO/4TJb06TdXZu2wTOX69wCmDgB0z/3wFo=;
+        b=l/IkUZk50vSHN3AQH7gUq03hB0XIreUXuIfURSbu/oF9s5vb9vwupArgjGwTvTJYUj
+         oyvOvyOoFwhCRQ1RdqYjYWtJ5h2eCGzIH0h9CBeS6zXcs6m0nnYxHXphRd06m96UN5KP
+         Ib1dipSC7y0Rlc1CBgq/PfUzV9C+gS6bz4uBGNSQNU/i8uTsNMmkaZ1Mauk7hbxkpAB1
+         forzL8bXSw+0WyVQaWl43/NHWzV0flibgtNTBmTpvSOCTbtfi4iehqZNLhXaHHIeEO8f
+         s7E5PXboYH7wu7Zi1XlWw4wFaqfu4brwqGVOzPf7fr5FCPWDQGoIcnHpy1zKIMumG2C5
+         y7Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687863456; x=1690455456;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Pr8SROad9OO/4TJb06TdXZu2wTOX69wCmDgB0z/3wFo=;
+        b=Ojz6xmZQMFddQwQNi0PPL6PsNXH2hJzt+acecVtL3PNiHAactkmtt7OALbaK69wMR8
+         2fX8vbW65OtxHaR+uSaEMrSPejmGNRmy3shzViHT7LN+05oFC8Ed1aalxuapGX06CiWB
+         YAs882og35R8t8f+9bgkNIZSiwHoBq4MlozcoEmG6nJk9qDAydxFawXXW0oLpgctMF7P
+         hwFGp8eDTvbDWuCG6fgc/lPLe+pEKWvieUBJg2qYlg3B2DDoAjj4nTCwGdozm5DmVXeJ
+         YrG09IgX3uEMq6XWo7Byq+LBZuN6cq+5CqdtgsX/FaUOVD8LTmmoa833eP9Vx5uzyA+x
+         24bg==
+X-Gm-Message-State: AC+VfDyuZGG3R0gjEmEjsyEE6YhcHlfHveB6K0i/CjmO6VlVuR5AFocq
+        UiMf/czFbdZcGKBwJq+f1h8=
+X-Google-Smtp-Source: ACHHUZ45ML7mn6h4txTGqQ3XW4VvhA9f/9IqPZLQT1fRUb6npg2JGsOM8Kh2YvtT57JI4a9F2DRx7w==
+X-Received: by 2002:a17:903:41c7:b0:1b5:5ad6:ce9d with SMTP id u7-20020a17090341c700b001b55ad6ce9dmr12334679ple.50.1687863455767;
+        Tue, 27 Jun 2023 03:57:35 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id s24-20020a170902b19800b001ab18eaf90esm5703663plr.158.2023.06.27.03.57.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 03:57:35 -0700 (PDT)
+Message-ID: <d06bb33e-047f-c849-de6a-246bc361c7af@gmail.com>
+Date:   Tue, 27 Jun 2023 18:57:28 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [EXTERNAL] Re: [PATCH 5/9] x86/hyperv: Use vmmcall to implement
+ Hyper-V hypercall in sev-snp enlightened guest
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com, Tianyu Lan <tiala@microsoft.com>,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com
+References: <20230601151624.1757616-1-ltykernel@gmail.com>
+ <20230601151624.1757616-6-ltykernel@gmail.com>
+ <20230608132127.GK998233@hirez.programming.kicks-ass.net>
+ <8b93aa93-903f-3a69-77f9-0c6b694d826b@gmail.com>
+In-Reply-To: <8b93aa93-903f-3a69-77f9-0c6b694d826b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 9, 2023, at 10:52, Yi-De Wu wrote:
+
+On 6/8/2023 11:15 PM, Tianyu Lan wrote:
+> On 6/8/2023 9:21 PM, Peter Zijlstra wrote:
+>> On Thu, Jun 01, 2023 at 11:16:18AM -0400, Tianyu Lan wrote:
+>>> From: Tianyu Lan <tiala@microsoft.com>
+>>>
+>>> In sev-snp enlightened guest, Hyper-V hypercall needs
+>>> to use vmmcall to trigger vmexit and notify hypervisor
+>>> to handle hypercall request.
+>>>
+>>> There is no x86 SEV SNP feature flag support so far and
+>>> hardware provides MSR_AMD64_SEV register to check SEV-SNP
+>>> capability with MSR_AMD64_SEV_ENABLED bit. ALTERNATIVE can't
+>>> work without SEV-SNP x86 feature flag. May add later when
+>>> the associated flag is introduced.
+>>>
+>>> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+>>> ---
+>>>   arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
+>>>   1 file changed, 33 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/arch/x86/include/asm/mshyperv.h 
+>>> b/arch/x86/include/asm/mshyperv.h
+>>> index 31c476f4e656..d859d7c5f5e8 100644
+>>> --- a/arch/x86/include/asm/mshyperv.h
+>>> +++ b/arch/x86/include/asm/mshyperv.h
+>>> @@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, 
+>>> void *input, void *output)
+>>>       u64 hv_status;
+>>>   #ifdef CONFIG_X86_64
+>>> -    if (!hv_hypercall_pg)
+>>> -        return U64_MAX;
+>>> +    if (hv_isolation_type_en_snp()) {
+>>> +        __asm__ __volatile__("mov %4, %%r8\n"
+>>> +                     "vmmcall"
+>>> +                     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+>>> +                       "+c" (control), "+d" (input_address)
+>>> +                     :  "r" (output_address)
+>>> +                     : "cc", "memory", "r8", "r9", "r10", "r11");
+>>> +    } else {
+>>> +        if (!hv_hypercall_pg)
+>>> +            return U64_MAX;
+>>> -    __asm__ __volatile__("mov %4, %%r8\n"
+>>> -                 CALL_NOSPEC
+>>> -                 : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+>>> -                   "+c" (control), "+d" (input_address)
+>>> -                 :  "r" (output_address),
+>>> -                THUNK_TARGET(hv_hypercall_pg)
+>>> -                 : "cc", "memory", "r8", "r9", "r10", "r11");
+>>> +        __asm__ __volatile__("mov %4, %%r8\n"
+>>> +                     CALL_NOSPEC
+>>> +                     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+>>> +                       "+c" (control), "+d" (input_address)
+>>> +                     :  "r" (output_address),
+>>> +                    THUNK_TARGET(hv_hypercall_pg)
+>>> +                     : "cc", "memory", "r8", "r9", "r10", "r11");
+>>> +    }
+>>>   #else
+>>
+>> Remains unanswered:
+>>
+>> https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.kernel.org%2Fr%2F20230516102912.GG2587705%2540hirez.programming.kicks-ass.net&data=05%7C01%7CTianyu.Lan%40microsoft.com%7C60a576eb67634ffa27b108db68234d5a%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638218273105649705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=MFj67DON0K%2BUoUJbeaIA5oVTxyrzO3fb5DbxYgDWwX0%3D&reserved=0
+>>
+>> Would this not generate better code with an alternative?
 > 
->  /**
->   * gzvm_hypercall_wrapper()
-> @@ -72,6 +73,11 @@ static inline gzvm_vcpu_id_t 
-> get_vcpuid_from_tuple(unsigned int tuple)
->  	return (gzvm_vcpu_id_t)(tuple & 0xffff);
->  }
 > 
-> +struct gzvm_vcpu_hwstate {
-> +	__u32 nr_lrs;
-> +	__u64 lr[GIC_V3_NR_LRS];
-> +};
+> Hi Peter:
+>      Thanks to review. I put the explaination in the change log.
+> 
+> "There is no x86 SEV SNP feature(X86_FEATURE_SEV_SNP) flag
+> support so far and hardware provides MSR_AMD64_SEV register
+> to check SEV-SNP capability with MSR_AMD64_SEV_ENABLED bit
+> ALTERNATIVE can't work without SEV-SNP x86 feature flag."
+> There is no cpuid leaf bit to check AMD SEV-SNP feature.
+> 
+> After some Hyper-V doesn't provides SEV and SEV-ES guest before and so
+> may reuse X86_FEATURE_SEV and X86_FEATURE_SEV_ES flag as alternative
+> feature check for Hyper-V SEV-SNP guest. Will refresh patch.
+> 
 
-This is not a good definition for a hardware data structure, as there
-is architecture specific implicit padding between the two members.
+Hi Peter:
+      I tried using alternative for "vmmcall" and CALL_NOSPEC in a single
+Inline assembly. The output is different in the SEV-SNP mode. When SEV-
+SNP is enabled, thunk_target is not required. While it's necessary in
+the non SEV-SNP mode. Do you have any idea how to differentiate outputs 
+in the single Inline assembly which just like alternative works for
+assembler template.
 
-Better add an explicit '__u32 __pad;' in the middle to make it clear
-what the actual layout is and make it portable.
-
-If this is an interface to the hypervisor, it should probably also
-use explicit endianess, using __le32 and __le64 instead of __u32
-and __u64, along with the corresponding accessors.
-
-      Arnd
