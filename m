@@ -2,57 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E7D73F409
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 07:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A22273F522
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 09:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjF0Frx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 01:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S229681AbjF0HPX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 03:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjF0Frw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 01:47:52 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F62199A;
-        Mon, 26 Jun 2023 22:47:51 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-55ae2075990so878589a12.0;
-        Mon, 26 Jun 2023 22:47:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687844871; x=1690436871;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bjTPMlxWt9nC/sXrGsrew1h8LID7KP4FRrxfXfknacs=;
-        b=CKCXCuWl0gYpQ4q8YGqBYIHt4kiR1AhHpEiDPYQrq6u+C1EcCN199Rf+TEI2yZgN+R
-         yHF4vksLQaZZNCW1AKLUCeBUhO/zz1T+Q9/6Dn0kQ15ZW6K5TqPmtUB9rSpHUKgxZgiA
-         HSTUVKDZ4xM6L9+zGQEVzY8EH5rZJBCsvXHjcbbzvbKrE2StJxwwReSDEN5b3GfPvLfH
-         eqtt0xPcEOboGwjNakJZJtyOpw0n8CltvqJLvaWUUnjMuBH5yNe38AlJDiG6mzZTOhDy
-         hB/teSyin+eBzVwUgFatWumtP7LykGuBvZNNj+IJUNFfPVWNZBZUcFVQKEBMH4tHKOww
-         HTig==
+        with ESMTP id S230016AbjF0HPW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 03:15:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58EF1BE8
+        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 00:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687850074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N1scKhPxxz/YxysE64BuheSdyQmgV4XhiinPf6icWX8=;
+        b=Dn/UUUaYUbwjIQ68CDVKfTpiqL3HVvDYjn8rQZkyUA8eNqQO6LCQ/4zOQJK7dJVYbVVVyr
+        UN/cVIcuku792pRTFsNpUKEBqx+imPELoNIZypUwSqq3rjs7/KceX7XOvthKDTekoc2Rph
+        bI4CMZbD419KTcuqOOYsw1OhLXkM9S8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-502-qlRZ2P4sNgCGJCrH5eHPCg-1; Tue, 27 Jun 2023 03:14:33 -0400
+X-MC-Unique: qlRZ2P4sNgCGJCrH5eHPCg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3fa979d0c32so8080515e9.2
+        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 00:14:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687844871; x=1690436871;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bjTPMlxWt9nC/sXrGsrew1h8LID7KP4FRrxfXfknacs=;
-        b=GYVx6PWmU+/VmvNJ8sqNuHVis88KHPHnEOcYeAbmUKT9xM9Rls2xsi5t3N3jA0Qfib
-         rZol5NRrr7TLoIvhypjUBHs2zgJ4u9Sw+63P+jZ+TCVNonmPnj69un6cqurgfW/NcS/4
-         zipBcXQYerAxnbGgSi4EGKiXNNeZykYdXOOIxR46gPdO3X6Fe9+E3AVWn0HiYzgLYzw/
-         RAVxfFgi6gAqstPvHsm5rb136eG/KkAHVIMOltLGkR+S15InXR/C26ZxaLfIdreP1MOR
-         OZa/cH1NAtThikPyfUrT7vCIUSSPz0ag0fyrIh72qnYGOYdIvpTlVxcy7qU2uFDaJDzx
-         Keng==
-X-Gm-Message-State: AC+VfDzCEArQfB+fV3qnQDN9zOm1V5uhJuk2AriRZ28InydskPHV7JQC
-        b3ZG6xhcaLKQObwYrYicvhk=
-X-Google-Smtp-Source: ACHHUZ7JjW8b6fgOe+JthCsQbs9/NjABXgCew6ba8g3n2m02um8mxuD9LeyNll8XOwuywhMwRgh5kw==
-X-Received: by 2002:a05:6a20:7491:b0:126:8ddd:d786 with SMTP id p17-20020a056a20749100b001268dddd786mr5575003pzd.46.1687844870738;
-        Mon, 26 Jun 2023 22:47:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id je5-20020a170903264500b001b8004ff609sm3033756plb.270.2023.06.26.22.47.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 22:47:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 26 Jun 2023 22:47:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+        d=1e100.net; s=20221208; t=1687850072; x=1690442072;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N1scKhPxxz/YxysE64BuheSdyQmgV4XhiinPf6icWX8=;
+        b=GEzrN5/pvKaFeiEo0v+NrCbnJIxp4PZLzM43nPOvqNevq+U4osMQoBua89KvBXZxWg
+         onDrAtlkgsC+ZuKqsakApjDQQB3CawiN1Hq38a0WiBUvp2QvDO4f8wB7ILbhO7ZLEoqj
+         2efwuO6RehJykdrd+2j4BUp68VFP5PciX/22VEYM/y6Vz1M5dyXQom0M2YaY0WNCZNCg
+         UOg3Blx1eFvFRsCxojlZw6eADvx9da5ggrOUBeAWz9sxWwO0b5TDowi6LL40FlSGNT1A
+         lkPzSFhnU38oIyeG7qCOJLR1IQ0eQNp8Nqzo3slsF6hFy0l6a1y12YNjQiWUE4ciYbOK
+         PkuQ==
+X-Gm-Message-State: AC+VfDz4ZwF9McBcK9JcMkb9lhyYTbeInO1lRU00jeM64lpGDwex1jJX
+        A7NVxo4WxbP0VWwbkDDVkDUkZ+rXfLKzqb8btl80FYbMBXxl+iplSlDZMvDTnAtwEfhep0tVasg
+        LoKE9wtnwF7hLBqPKIFMqzg==
+X-Received: by 2002:a05:600c:3655:b0:3fa:9d0f:f1e1 with SMTP id y21-20020a05600c365500b003fa9d0ff1e1mr2936766wmq.35.1687850072225;
+        Tue, 27 Jun 2023 00:14:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6HIpOGvancvhac5jw2GR0kOhKc72MxDndtCuN9HZ1pSF+uaoBl/D52ddajPiSHV9uK1Eb9sw==
+X-Received: by 2002:a05:600c:3655:b0:3fa:9d0f:f1e1 with SMTP id y21-20020a05600c365500b003fa9d0ff1e1mr2936755wmq.35.1687850071891;
+        Tue, 27 Jun 2023 00:14:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:4900:68b3:e93b:e07a:558b? (p200300cbc737490068b3e93be07a558b.dip0.t-ipconnect.de. [2003:cb:c737:4900:68b3:e93b:e07a:558b])
+        by smtp.gmail.com with ESMTPSA id 21-20020a05600c22d500b003f96d10eafbsm9778433wmg.12.2023.06.27.00.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 00:14:31 -0700 (PDT)
+Message-ID: <ac1c162c-07d8-6084-44ca-a2c1a4183df2@redhat.com>
+Date:   Tue, 27 Jun 2023 09:14:29 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 00/33] Split ptdesc from struct page
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -63,94 +75,70 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
         xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Dinh Nguyen <dinguyen@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v5 26/33] nios2: Convert __pte_free_tlb() to use ptdescs
-Message-ID: <13bab37c-0f0a-431a-8b67-4379bf4dc541@roeck-us.net>
-References: <20230622205745.79707-1-vishal.moola@gmail.com>
- <20230622205745.79707-27-vishal.moola@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622205745.79707-27-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Jonas Bonn <jonas@southpole.se>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20230627031431.29653-1-vishal.moola@gmail.com>
+ <e8992eee-4140-427e-bacb-9449f346318@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <e8992eee-4140-427e-bacb-9449f346318@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 01:57:38PM -0700, Vishal Moola (Oracle) wrote:
-> Part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents.
+On 27.06.23 06:44, Hugh Dickins wrote:
+> On Mon, 26 Jun 2023, Vishal Moola (Oracle) wrote:
 > 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+>> The MM subsystem is trying to shrink struct page. This patchset
+>> introduces a memory descriptor for page table tracking - struct ptdesc.
+> ...
+>>   39 files changed, 686 insertions(+), 455 deletions(-)
+> 
+> I don't see the point of this patchset: to me it is just obfuscation of
+> the present-day tight relationship between page table and struct page.
+> 
+> Matthew already explained:
+> 
+>> The intent is to get ptdescs to be dynamically allocated at some point
+>> in the ~2-3 years out future when we have finished the folio project ...
+> 
+> So in a kindly mood, I'd say that this patchset is ahead of its time.
+> But I can certainly adapt to it, if everyone else sees some point to it.
 
-This patch causes all nios2 builds to fail.
+I share your thoughts, that code churn which will help eventually in the 
+far, far future (not wanting to sound too pessimistic, but it's not 
+going to be there tomorrow ;) ).
 
-Building nios2:allnoconfig ... failed
---------------
-Error log:
-<stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-In file included from mm/memory.c:85:
-mm/memory.c: In function 'free_pte_range':
-arch/nios2/include/asm/pgalloc.h:33:17: error: implicit declaration of function 'pagetable_pte_dtor'; did you mean 'pgtable_pte_page_dtor'? [-Werror=implicit-function-declaration]
-   33 |                 pagetable_pte_dtor(page_ptdesc(pte));                   \
-      |                 ^~~~~~~~~~~~~~~~~~
-include/asm-generic/tlb.h:666:17: note: in expansion of macro '__pte_free_tlb'
-  666 |                 __pte_free_tlb(tlb, ptep, address);             \
-      |                 ^~~~~~~~~~~~~~
-mm/memory.c:193:9: note: in expansion of macro 'pte_free_tlb'
-  193 |         pte_free_tlb(tlb, token, addr);
-      |         ^~~~~~~~~~~~
-arch/nios2/include/asm/pgalloc.h:33:36: error: implicit declaration of function 'page_ptdesc' [-Werror=implicit-function-declaration]
-   33 |                 pagetable_pte_dtor(page_ptdesc(pte));                   \
-      |                                    ^~~~~~~~~~~
-include/asm-generic/tlb.h:666:17: note: in expansion of macro '__pte_free_tlb'
-  666 |                 __pte_free_tlb(tlb, ptep, address);             \
-      |                 ^~~~~~~~~~~~~~
-mm/memory.c:193:9: note: in expansion of macro 'pte_free_tlb'
-  193 |         pte_free_tlb(tlb, token, addr);
-      |         ^~~~~~~~~~~~
-arch/nios2/include/asm/pgalloc.h:34:17: error: implicit declaration of function 'tlb_remove_page_ptdesc'; did you mean 'tlb_remove_page_size'? [-Werror=implicit-function-declaration]
-   34 |                 tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));      \
-      |                 ^~~~~~~~~~~~~~~~~~~~~~
-include/asm-generic/tlb.h:666:17: note: in expansion of macro '__pte_free_tlb'
-  666 |                 __pte_free_tlb(tlb, ptep, address);             \
-      |                 ^~~~~~~~~~~~~~
-mm/memory.c:193:9: note: in expansion of macro 'pte_free_tlb'
-  193 |         pte_free_tlb(tlb, token, addr);
+However, if it's just the same as the other conversions we already did 
+(e.g., struct slab), then I guess there is no reason to stop now -- the 
+obfuscation already happened.
 
-> ---
->  arch/nios2/include/asm/pgalloc.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/nios2/include/asm/pgalloc.h b/arch/nios2/include/asm/pgalloc.h
-> index ecd1657bb2ce..ce6bb8e74271 100644
-> --- a/arch/nios2/include/asm/pgalloc.h
-> +++ b/arch/nios2/include/asm/pgalloc.h
-> @@ -28,10 +28,10 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
->  
->  extern pgd_t *pgd_alloc(struct mm_struct *mm);
->  
-> -#define __pte_free_tlb(tlb, pte, addr)				\
-> -	do {							\
-> -		pgtable_pte_page_dtor(pte);			\
-> -		tlb_remove_page((tlb), (pte));			\
-> +#define __pte_free_tlb(tlb, pte, addr)					\
-> +	do {								\
-> +		pagetable_pte_dtor(page_ptdesc(pte));			\
-> +		tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));	\
->  	} while (0)
->  
->  #endif /* _ASM_NIOS2_PGALLOC_H */
-> -- 
-> 2.40.1
-> 
-> 
+... or is there a difference regarding this conversion and the previous 
+ones?
+
+-- 
+Cheers,
+
+David / dhildenb
+
