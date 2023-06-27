@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E7B73F2B3
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 05:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B018E73F2B7
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 05:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjF0D3B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jun 2023 23:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        id S230169AbjF0D3D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Jun 2023 23:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjF0D2V (ORCPT
+        with ESMTP id S229623AbjF0D2V (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 23:28:21 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B627C2117;
-        Mon, 26 Jun 2023 20:22:59 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25ec175b86bso2944648a91.1;
-        Mon, 26 Jun 2023 20:22:59 -0700 (PDT)
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344622115;
+        Mon, 26 Jun 2023 20:23:01 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-25f0e0bbcaaso1934878a91.3;
+        Mon, 26 Jun 2023 20:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687836179; x=1690428179;
+        d=gmail.com; s=20221208; t=1687836180; x=1690428180;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WavXlIUDaiNvQ7Jhn4eQcl+B7LwqPDg8ntyEa3A0jyM=;
-        b=LSRiUlnVbD1yG2LtgeNbwA5zFxbzqYOZMJQQOSULLaJJLryLZPpcKSTWUqJvZt4Qme
-         OQc7BpsRmxlvTFgL8eFXT26zQTRFpN7CL7Eg2ZApv1ea3T1bM2OwHzOP+qQo/DMiMydl
-         m5k1OTpGQz9kXiIzwZC6JoLBfQ+S4hVOGciYKWnEICaM8jJuWqahZu03anyCH1Vn37fU
-         MLPDgVVy5G9paXDSIQ8wPTof6jMTMmyVPmgeKV8soGX/dB8tEkOWyMj+IiFhVedctgis
-         jEaAe44y9o7UZhiQyYGQshMWn/x2Oe8wl5xg7bTgGHalCuVBxEdtKL7+WjGk9m1vj5FR
-         lrqw==
+        bh=1RKpz5HBE9JLrRBFLWv7AJFc4wm2/SCXversK+BtfEc=;
+        b=akngYKBlJ50MAGPqRAGc1r0u1GU6Eqd/kAPm+PCdK8pSl+BholJ8W5Lz/XKnrwxX/f
+         XnfqQZCHFL4E3BVGKY1SMlHs+NQCxB9766HYFgLJNBCA3n+GCUq9PX3hcptZdmN/GDK0
+         eTp9qy4HkSuMUg7ntO6H+3RPeDxLRQiG7+OJP1ePF1Yv3QhuQVsG52hTKdJaNcqZSxNK
+         BKLbEut+IXrScoi0AeaKz3UqI2w/QVgciZFaj/fKtxcWnAi1BRBz1StRmLXlilAAK0uy
+         8I6YPeJAJwukwzJWe+IQJvM4W19WDMFMZ+Grkr6xjMFE0uoIkwKl4JiHb6muyR0mc1Xq
+         nP7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687836179; x=1690428179;
+        d=1e100.net; s=20221208; t=1687836180; x=1690428180;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WavXlIUDaiNvQ7Jhn4eQcl+B7LwqPDg8ntyEa3A0jyM=;
-        b=Yft2M8fpU/CZR2uz/wJU1xx6NVZ5hzyZFAkLFzJ9kZ4q2zpeje+1G9yzxolnSJ9LXw
-         JrMh2cQs/yH2Nh54J0fun595XDsNAmT9iKBhw6Fd4qwefTkSvMZaXt4VYcjU2fTRJZOJ
-         I2sAcpee9e5wN2a/bk1cDfZ/0u6SrIopt6CQyJx0FM5UXl93DhlOcKtUHb2Yw0esDNpy
-         ql8h6O6rH16C46rGmMh36jaCwDQRaXr5mUW5yg5XKgsaVbNsWyq/8K6tyzI8JQ0hcNjo
-         rwUjNzZ0TWqcOvKzNtmBMYgMo0SdK9078LOEUHS3+CUDbQt9bLPMr276r3Vgm2THr+99
-         zN6Q==
-X-Gm-Message-State: AC+VfDzUcukr1s652cTi9FhkFcJUbq8XSc+XhfHkDVfbiSOEBLZlpdTJ
-        E1Ths7hfs0OnFbLn8+9rdMw=
-X-Google-Smtp-Source: ACHHUZ4bHFbhEu7fAz1E4ESsRByJd1Jqm4+f+OnoVMcgMllJUT9JvSYVvsUX0CQFnJ2sh+bC/iHADg==
-X-Received: by 2002:a17:90a:19ca:b0:25f:20f:2f7d with SMTP id 10-20020a17090a19ca00b0025f020f2f7dmr23774243pjj.2.1687836179114;
-        Mon, 26 Jun 2023 20:22:59 -0700 (PDT)
+        bh=1RKpz5HBE9JLrRBFLWv7AJFc4wm2/SCXversK+BtfEc=;
+        b=KZ5lrT1SWyVJJc4vNXmzflQch5kP/Y35+31v3Xhx0X+p3q5aacs/+sol4vKtNQFqjs
+         9QMk+eYyiGnGCVVbkEChKzDeP9Ictr+DBDNmlHwAV3i9z9OVm+yRj+f/qwlYeve4vHBg
+         43RB0gp+kgcY3ilsDTVjwBOQrCR14ynAqgYEWOo5az+kbLIHNS9lVLsbbkYIDeiWTzMU
+         1hVAj7wGjEH33tvvSpQea61ztlAMulC5xkKOFezVNyiZctWzDgPkJQNPq9nzinBg/LjZ
+         /CNbXpftntwT9IBGdetvzOLZQZGjrZHiNW2NEkiq9dma/zikBDXjyAn8AZLuBGIoAMWJ
+         6d4Q==
+X-Gm-Message-State: AC+VfDz5o/OZTZJai/t7Z+Ta1Kj9xy52gdbqy7QyenfciypMcrMPPXPL
+        eaUazSZmgh9rKP2EU3pHayw=
+X-Google-Smtp-Source: ACHHUZ61fTXrRa2PBCfDuHA3HaSxtIC2ROCo1URXZD186AaP5V7GRRgKnQ/505qIAD0Sk4grMj0tZA==
+X-Received: by 2002:a17:90a:354:b0:263:14fc:f9a6 with SMTP id 20-20020a17090a035400b0026314fcf9a6mr787598pjf.14.1687836180547;
+        Mon, 26 Jun 2023 20:23:00 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:37:c5e9:2003:6c97:8057])
-        by smtp.gmail.com with ESMTPSA id mm12-20020a17090b358c00b0025ec54be16asm618756pjb.2.2023.06.26.20.22.58
+        by smtp.gmail.com with ESMTPSA id mm12-20020a17090b358c00b0025ec54be16asm618756pjb.2.2023.06.26.20.22.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 20:22:58 -0700 (PDT)
+        Mon, 26 Jun 2023 20:23:00 -0700 (PDT)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
@@ -58,9 +58,9 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
 Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         vkuznets@redhat.com
-Subject: [PATCH V2 5/9] x86/hyperv: Use vmmcall to implement Hyper-V hypercall in  sev-snp enlightened guest
-Date:   Mon, 26 Jun 2023 23:22:43 -0400
-Message-Id: <20230627032248.2170007-6-ltykernel@gmail.com>
+Subject: [PATCH V2 6/9] clocksource: hyper-v: Mark hyperv tsc page unencrypted in sev-snp enlightened guest
+Date:   Mon, 26 Jun 2023 23:22:44 -0400
+Message-Id: <20230627032248.2170007-7-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230627032248.2170007-1-ltykernel@gmail.com>
 References: <20230627032248.2170007-1-ltykernel@gmail.com>
@@ -78,85 +78,27 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-In sev-snp enlightened guest, Hyper-V hypercall needs
-to use vmmcall to trigger vmexit and notify hypervisor
-to handle hypercall request.
+Hyper-V tsc page is shared with hypervisor and mark the page
+unencrypted in sev-snp enlightened guest when it's used.
 
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
- arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
- 1 file changed, 33 insertions(+), 11 deletions(-)
+ drivers/clocksource/hyperv_timer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 31c476f4e656..d859d7c5f5e8 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
- 	u64 hv_status;
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index bcd9042a0c9f..66e29a19770b 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -376,7 +376,7 @@ EXPORT_SYMBOL_GPL(hv_stimer_global_cleanup);
+ static union {
+ 	struct ms_hyperv_tsc_page page;
+ 	u8 reserved[PAGE_SIZE];
+-} tsc_pg __aligned(PAGE_SIZE);
++} tsc_pg __bss_decrypted __aligned(PAGE_SIZE);
  
- #ifdef CONFIG_X86_64
--	if (!hv_hypercall_pg)
--		return U64_MAX;
-+	if (hv_isolation_type_en_snp()) {
-+		__asm__ __volatile__("mov %4, %%r8\n"
-+				     "vmmcall"
-+				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-+				       "+c" (control), "+d" (input_address)
-+				     :  "r" (output_address)
-+				     : "cc", "memory", "r8", "r9", "r10", "r11");
-+	} else {
-+		if (!hv_hypercall_pg)
-+			return U64_MAX;
- 
--	__asm__ __volatile__("mov %4, %%r8\n"
--			     CALL_NOSPEC
--			     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
--			       "+c" (control), "+d" (input_address)
--			     :  "r" (output_address),
--				THUNK_TARGET(hv_hypercall_pg)
--			     : "cc", "memory", "r8", "r9", "r10", "r11");
-+		__asm__ __volatile__("mov %4, %%r8\n"
-+				     CALL_NOSPEC
-+				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-+				       "+c" (control), "+d" (input_address)
-+				     :  "r" (output_address),
-+					THUNK_TARGET(hv_hypercall_pg)
-+				     : "cc", "memory", "r8", "r9", "r10", "r11");
-+	}
- #else
- 	u32 input_address_hi = upper_32_bits(input_address);
- 	u32 input_address_lo = lower_32_bits(input_address);
-@@ -104,7 +113,13 @@ static inline u64 _hv_do_fast_hypercall8(u64 control, u64 input1)
- 	u64 hv_status;
- 
- #ifdef CONFIG_X86_64
--	{
-+	if (hv_isolation_type_en_snp()) {
-+		__asm__ __volatile__(
-+				"vmmcall"
-+				: "=a" (hv_status), ASM_CALL_CONSTRAINT,
-+				"+c" (control), "+d" (input1)
-+				:: "cc", "r8", "r9", "r10", "r11");
-+	} else {
- 		__asm__ __volatile__(CALL_NOSPEC
- 				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
- 				       "+c" (control), "+d" (input1)
-@@ -149,7 +164,14 @@ static inline u64 _hv_do_fast_hypercall16(u64 control, u64 input1, u64 input2)
- 	u64 hv_status;
- 
- #ifdef CONFIG_X86_64
--	{
-+	if (hv_isolation_type_en_snp()) {
-+		__asm__ __volatile__("mov %4, %%r8\n"
-+				     "vmmcall"
-+				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-+				       "+c" (control), "+d" (input1)
-+				     : "r" (input2)
-+				     : "cc", "r8", "r9", "r10", "r11");
-+	} else {
- 		__asm__ __volatile__("mov %4, %%r8\n"
- 				     CALL_NOSPEC
- 				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+ static struct ms_hyperv_tsc_page *tsc_page = &tsc_pg.page;
+ static unsigned long tsc_pfn;
 -- 
 2.25.1
 
