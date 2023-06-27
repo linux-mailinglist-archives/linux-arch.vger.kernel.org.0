@@ -2,84 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C57273FBAB
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 14:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3896373FC3B
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 14:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjF0MFf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 08:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S230363AbjF0Myy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 08:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjF0MFd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 08:05:33 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8E41A2;
-        Tue, 27 Jun 2023 05:05:32 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9888E1EC069A;
-        Tue, 27 Jun 2023 14:05:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687867530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GxpWEkp2YtwsKbgrIeKECyl8PncOwwMXHndCVDighMw=;
-        b=U8Gn7Fg+0VWB5vAtvK5OdZ4NflNcU5m5g2YdWCD1uQasjbF+unzPTkAzxLQRyuNwUkI0QK
-        fdst5UYbWYQIyIXlXcIEis0JkA5kcepz6dr6XmT/M/dQNfiVQu5Vs2RiSeFp03JaFQg/W9
-        YbW7JjwH/DANglUGpEA0i4UGHQDj4vY=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VSbxOFp3a_Dg; Tue, 27 Jun 2023 12:05:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687867527; bh=GxpWEkp2YtwsKbgrIeKECyl8PncOwwMXHndCVDighMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fy6n217BvE4EsBuujdU16jKoz8ZgDNMPHlbQ0fFVIMjbNSKLoiV1LGKh1CTdzgUFG
-         qCTaR3dYbkcBIs5DVl9537rbIos7ZxeeV1CyDWbnr6pZXE/JC52/swy57cK/NHFCJW
-         PKPcM8Z5cLD2PR5QQ/HETt6/VLgY4glVdP6rkYQzqEttsVMmEfHkiVXePsZwEmEkCV
-         Y4TR7Y/EYO1SpC9mDVodMLp8AVHx0sdwnQj5s53IHq7ki+sQktQjneHwTWpvV2yiKd
-         9m658EItUPms9uIYNK7D2tUxdlzmLH2ifGxYWYHgJO7wkb36qgUDLioFHU1BbhKBIK
-         AGg1y+Xf7sR6MuShgj8NYu/Uuea4XdjS5EGlhgwKHxML1Sbtuz6unJ17Hl2VAXgmbw
-         zC6hSrMVz/2TvommXGjfKqVpjokoAjfTEmLlR1hr6HP7jGgrY7kxylxhuOStYhV+Hb
-         YBFp6oUzp8LKUnwL7dDgzybKH3T7bzT2YI/K4ABPRYzYPWMAj4eXXLkh8uF8JN17Ff
-         k21Te3/Yr1QDqDXqOCHdeQ43NJTpsmGMWBEmFDaU8nq7g5RduhhaheAaD8lH7Mzn9+
-         H0EoUya+XPEk5O1xzvwC5HvgzDdBhEX5Bs/sdq0QyMAe7h0G2ObAzwUGwH6jfCLEgz
-         R0KW4ujg9MTPhzkPXmYsW8ng=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2FF2D40E0033;
-        Tue, 27 Jun 2023 12:05:08 +0000 (UTC)
-Date:   Tue, 27 Jun 2023 14:05:02 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, daniel.lezcano@linaro.org,
-        arnd@arndb.de, michael.h.kelley@microsoft.com,
-        Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com
-Subject: Re: [EXTERNAL] Re: [PATCH 5/9] x86/hyperv: Use vmmcall to implement
- Hyper-V hypercall in sev-snp enlightened guest
-Message-ID: <20230627120502.GFZJrQbgSgOhj/44pW@fat_crate.local>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-6-ltykernel@gmail.com>
- <20230608132127.GK998233@hirez.programming.kicks-ass.net>
- <8b93aa93-903f-3a69-77f9-0c6b694d826b@gmail.com>
- <d06bb33e-047f-c849-de6a-246bc361c7af@gmail.com>
- <20230627115002.GW83892@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230627115002.GW83892@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        with ESMTP id S229841AbjF0Mys (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 08:54:48 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5A92944;
+        Tue, 27 Jun 2023 05:54:44 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 431B65C01D0;
+        Tue, 27 Jun 2023 08:54:41 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 27 Jun 2023 08:54:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687870481; x=1687956881; bh=Il
+        Bb3apajPhN/l8gLah0GaLHQYTfmUxtdLJ9RjV0BfI=; b=WkeCwVfZDHVMO+MpRb
+        KzlnGYLTGdhc1hJmjiKDRwOnBqY2z57Fr1SxMUgz4dZHSy1xQpRRl6qC2xd/7wFH
+        8tAqeoMAxB4pLt4DXMtRlHf4mhSBuvFc1IMYjq2qxlugPMOcAfrLM/Kfo77GF06n
+        DAfYNxEHCyvF4d6MEyBBzeyTWxr4Koc5ThhTwfuUR+lFPBC8AfIIHqh2XMlk6uid
+        5CgOD2s7t1mrb0n1+GpBKyBSRiTX2TXVTmFSbYbaXPbFmJVEwmrsxsKL+OSW62rj
+        kZ7/e/XUkQ8H76giweWQ5DoaVBoyanNntQj/mTH5WIjFnrKqyZjvHeeARDjeQm5e
+        lsGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687870481; x=1687956881; bh=IlBb3apajPhN/
+        l8gLah0GaLHQYTfmUxtdLJ9RjV0BfI=; b=f7sKexIVSPqInL2fcESgFKBXUNLbZ
+        fbD34+KA5c4+wcPw8jTCxQhd3oOgXYGQM9NbadInyZl4pOYmoIzMDPjbBeszcQPu
+        SxZeU3FhAEzQ/5rrt8YXLxgqFf2ftb6DdXqpNqrQpBUT/+a+s8eJ2gykl+fp2tM/
+        WMIdDriRJHdUe/jw0NqutnuGELpUs86lWRarkWgZQ/FFV2d+X8HOfj0fhSe+Vomr
+        hWsXsrkRF2tGouQpiOG691IgreX8jr6PUjwdd1TNeqO3lO/DwyLrHN5SXxujXJPN
+        2YhcEV0QSzN09zkyvcCC0pvnYxJkRenFSkU1ZtPK01QRJlJBEmmyT7qjA==
+X-ME-Sender: <xms:ENyaZKlStiUDI71v2z9eXPoBbJj_fXA2caEiaeEy4HkhkgGl9ZSLjQ>
+    <xme:ENyaZB0kp-ZdUWg9T17Ui9KVmvNL7hWsmyw-NMJRlePGPvq6Jq3aIVTOBlTolSeGr
+    xF2cBHVNQxkxlfWuS8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdduhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ENyaZIrGuMf4xHJ5grbl2j-xIZbft02DGFwUPv2zKTFPG7PZBEGAVQ>
+    <xmx:ENyaZOnwJwSma7IIF8Tht0fh9-D_9xWKeu3re7VUnCPgi41mKRFyKA>
+    <xmx:ENyaZI2tgggHmEUBUc0-IMGjg9S2uDm79jIRukj0auBxhRjii2n1VQ>
+    <xmx:EdyaZCM3E-tfO0_X23ZOyyNU-xH-9ocLC9K38h6hwDCGHss4_cYZMw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7B94FB60086; Tue, 27 Jun 2023 08:54:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
+In-Reply-To: <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
+ <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
+Date:   Tue, 27 Jun 2023 14:53:59 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "Richard Cochran" <richardcochran@gmail.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for HAS_IOPORT=n
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,26 +98,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 01:50:02PM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 27, 2023 at 06:57:28PM +0800, Tianyu Lan wrote:
-> 
-> > > "There is no x86 SEV SNP feature(X86_FEATURE_SEV_SNP) flag
-> 
-> I'm sure we can arrange such a feature if we need it, this isn't rocket
-> science. Boris?
+On Tue, Jun 27, 2023, at 11:12, Niklas Schnelle wrote:
+> On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
+>> 
+>> Maybe let's give it another week to have more maintainers pick
+>> up stuff from v5, and then send out a v6 as separate submissions.
+>> 
+>>     Arnd
+>
+> Hi Arnd and All,
+>
+> I'm sorry there hasn't been an updated in a long time and we're missing
+> v6.5. I've been quite busy with other work and life. Speaking of, I
+> will be mostly out for around a month starting some time mid to end
+> July as, if all goes well, I'm expecting to become a dad. That said, I
+> haven't forgotten about this and your overall plan of sending per-
+> subsystem patches sounds good, just haven't had the time to also
+> incorporate the feedback.
 
-https://lore.kernel.org/r/20230612042559.375660-7-michael.roth@amd.com
+Ok, thanks for letting us know. I just checked to see that about half
+of your series has already made it into linux-next and is likely to
+be part of v6.5 or already in v6.4.
 
-> This seems to work; it's a bit magical for having a nested ALTERNATIVE
-> but the output seems correct (the outer alternative comes last in
-> .altinstructions and thus has precedence). Sure the [thunk_target] input
-> goes unsed in one of the alteratives, but who cares.
+Maybe you can start out by taking a pass at just resending the ones
+that don't need any changes and can just get picked up after -rc1,
+and then I'll try to have a look at whatever remains after that.
 
-I'd like to avoid the nested alternative if not really necessary. I.e.,
-a static_call should work here too no?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+    Arnd
