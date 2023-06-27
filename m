@@ -2,121 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8771273F8B8
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 11:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3B673F8C3
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 11:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjF0J2J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 05:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S230063AbjF0JaQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 05:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjF0J2I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 05:28:08 -0400
+        with ESMTP id S230238AbjF0JaP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 05:30:15 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A86F1737;
-        Tue, 27 Jun 2023 02:28:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05FC1987;
+        Tue, 27 Jun 2023 02:30:14 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id DAE255C0213;
-        Tue, 27 Jun 2023 05:27:58 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 0B6C65C01D5;
+        Tue, 27 Jun 2023 05:30:14 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 27 Jun 2023 05:27:58 -0400
+  by compute6.internal (MEProxy); Tue, 27 Jun 2023 05:30:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1687858078; x=1687944478; bh=Xl7RK4t97evjZO5aZJujPG/k7nUDLC5JaHH
-        QUcJEi/Y=; b=CzkmzfkVGZCqQGoJ6mSms6ZwFk0RtDf0pOT4kI9NyDeggfeUk8Q
-        IJzwsEEBrriomwZG2+Fjelj4G+mlKlbi1kPhwdiKMsifIyBZDdqML5zkS+WD7Bwp
-        0DWN1aF/eusaLFKYf4MlTDOkkx6Uo9nH1cRy468cZB096kH7pua6xyuvv2m3QhdI
-        oQNn0LTtuM2qvdHXLcOiESEXHnkUroLh2bZUkpAfo9d0CylOkczYmtNQ7DI6iBfw
-        Ov/CcAEV3cgDd9hqIGJ5V1ux2z62lBKESDAaa917XLnNv3NXT5o+3vK7pNEgVTcs
-        tdirOUFWwYa73aR5Kz1ONasOCKrN9gsCmSA==
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687858214; x=1687944614; bh=d/
+        8PAsCjbmMqsAZVfulXX8NLMmKaUcPEmXDNbRBP/iY=; b=r1/VlKLwjWRKxQKnr7
+        EeN5vuWsH4K5/M6jVqZVzAX8NjH3CgUzYePswdMd4UHACyZ6z8wdcg3YNz4Ffh5D
+        0T3XhcLN7bzWS8GtCL2kTxtY7s1YooHQ6ecW7RflD0T1TxJ1gi44wpVlRmI59dM7
+        2+/OSFs0BJ+RNkf+nbQ/Qa7WsYSCopCzYKPN2fnBbcCZO5kzmWt6EqBSrdYyl9LT
+        IDwSkH5LpjAzAzIj9KbMye2XTf/J9cKSz362tawBRK3z3kRZXFzTBXuxPBXKjPT5
+        UFxnpAJ4wttOZ90/adZrMDwV5d3z/C4IHHpq/URcUthI7ADS93ElS1UPXmV7Jirq
+        Fb5A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1687858078; x=1687944478; bh=Xl7RK4t97evjZO5aZJujPG/k7nUDLC5JaHH
-        QUcJEi/Y=; b=QTR04SvqjqdNJ+Oeij+MQps0muW6x00SsJYc2fpbkqk48EKaNnr
-        9PFtsZvX6w6Hzb4yn1RSBtaKGv/T/ILmQTPrleoqlnjsUVsdLwP9QN4Bh2a5P0ip
-        5xClbTPiNw6j1oz+9V3bySwurJdZa54d9ww3GknwGAkwcEqzpP2PvplB1kwJ1Q8P
-        0mYHtyYWce4nzCXpIk0XExAg2eTxUqvI3gFXUGsPabBX7tCZPOpwtDFFN+hAL8Bi
-        v2PGC+8Y/hTTFvgH3InLozh5PnR43W1L+6K5/2V6PKanu3Iun4GIGsVb5DvgBuMa
-        +kGT+GIpSMhBQejOtyMDTWANAyyXArUHz1Q==
-X-ME-Sender: <xms:nquaZD9eEjWIoL4oOqtY8Kffivf2Nd0Jreq_N2vSgSY0ZcBSqx03BQ>
-    <xme:nquaZPvWiOVyNU-AiWftJvTwaiehfQsvry05BRPVKY9wzwyiPHWUiOkIxGrJ0h0Qo
-    IYQ9H5YB-eCNiMh6Uk>
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687858214; x=1687944614; bh=d/8PAsCjbmMqs
+        AZVfulXX8NLMmKaUcPEmXDNbRBP/iY=; b=rCwudNcaAgAQJUVmw90VYxVfNvqm7
+        fy9DLhi/W77KBRwMHSFoxQXqU5fshBRCW3xOsT4GMGeWdb99ohRMzLpPyDhEQ06S
+        GFZZOrcdu0lJz3PFTKbqMkuYwyiYPso5m7o0Ja+66aNM+r9TAk3wHvgPNq/a8gR2
+        xd0t4kkOqPvXTlubXsYycTioiz50fnlqftXe6owfCdnWyTZYOgq5Ye2RnwoG/9JF
+        tW9ASyerDLMkCZ8hShqfgWoqbPs7VzvEyK4sio5jPFHWnBFMpCXttyQnHaDFC76H
+        mOnmYK6q43iVruVYfva6NXn1XGnnUveYyYewtcVCNQsaXun9FJsaN/Alg==
+X-ME-Sender: <xms:JayaZBitbYQs-Nbz28YFL0hH-f0e91zEr79uEZ1IirHIFTpGCjBsPA>
+    <xme:JayaZGBfTJaZktWQBIp1RUSjIN5yKIGrJm4THO0JeCCOpqZRSPrFGn8hfnT8TUcct
+    FDjcdDzbHv8a2_4hIA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehhedgudehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeetteeljeejgeeivdevhffhieefteekheevffevudeijeejgeduhedtvdff
-    hefgheenucffohhmrghinhepghhoohhglhgvshhouhhrtggvrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggs
-    rdguvg
-X-ME-Proxy: <xmx:nquaZBBjLX0cgwn5zP7qKWwTzJUzqBW7GbHyYxG84DbhQOqQzHnTlQ>
-    <xmx:nquaZPf59oqN1VkHubuBN5PRV_2BXtLJUd8onFgKNiklQtW5J67mBA>
-    <xmx:nquaZIMctO32Jbf8F02Qo590imv-jdOzba3vOCGx5St4IvlTs5UDzw>
-    <xmx:nquaZHPg43M9_NN3zTiycGfiW1-RXcEvxJm5wMrk73jiOJoKsx48vw>
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:JayaZBE0FcAdCnr77YYyC4hha2Hm-2JikOM2MHIazIgLtw6DXchElg>
+    <xmx:JayaZGTdXdg0D5cq1tbQYM304eIeHx8lNL_d9G-BpuLbYqjr7gOAsw>
+    <xmx:JayaZOzfUoFjL_pt_6oCsyRCWL5__Cj3BSwdnysopAOk-ai5cDh0OA>
+    <xmx:JqyaZLhyZFgVQY0ouFIpf6Ake8BSf-89DyB_m7aWKn-7mfbBV0Rbiw>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 27A8CB60086; Tue, 27 Jun 2023 05:27:58 -0400 (EDT)
+        id 7CBBCB60083; Tue, 27 Jun 2023 05:30:13 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
 Mime-Version: 1.0
-Message-Id: <d0bca239-2711-4268-a36c-7c3434982ab1@app.fastmail.com>
-In-Reply-To: <6120750daede4eb40fb4d44ed68ba58e5716e038.camel@mediatek.com>
+Message-Id: <8c50cf74-fd21-4b86-8ac8-1445ff242d48@app.fastmail.com>
+In-Reply-To: <20230609085214.31071-6-yi-de.wu@mediatek.com>
 References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
  <20230609085214.31071-6-yi-de.wu@mediatek.com>
- <1a15767c-0518-3763-e8cb-e271df82f87c@collabora.com>
- <6120750daede4eb40fb4d44ed68ba58e5716e038.camel@mediatek.com>
-Date:   Tue, 27 Jun 2023 11:27:34 +0200
+Date:   Tue, 27 Jun 2023 11:29:52 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     =?UTF-8?Q?Yi-De_Wu_=28=E5=90=B3=E4=B8=80=E5=BE=B7=29?= 
-        <Yi-De.Wu@mediatek.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
+        <yi-de.wu@mediatek.com>,
         =?UTF-8?Q?Yingshiuan_Pan_=28=E6=BD=98=E7=A9=8E=E8=BB=92=29?= 
-        <Yingshiuan.Pan@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <yingshiuan.pan@mediatek.com>,
         =?UTF-8?Q?Ze-yu_Wang_=28=E7=8E=8B=E6=BE=A4=E5=AE=87=29?= 
-        <Ze-yu.Wang@mediatek.com>, "Will Deacon" <will@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        =?UTF-8?Q?MY_Chuang_=28=E8=8E=8A=E6=98=8E=E8=BA=8D=29?= 
-        <MY.Chuang@mediatek.com>, "Trilok Soni" <quic_tsoni@quicinc.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?PeiLun_Suei_=28=E9=9A=8B=E5=9F=B9=E5=80=AB=29?= 
-        <PeiLun.Suei@mediatek.com>,
-        =?UTF-8?Q?Liju-clr_Chen_=28=E9=99=B3=E9=BA=97=E5=A6=82=29?= 
-        <Liju-clr.Chen@mediatek.com>,
-        =?UTF-8?Q?Jades_Shih_=28=E6=96=BD=E5=90=91=E7=8E=A8=29?= 
-        <jades.shih@mediatek.com>, "Conor Dooley" <conor+dt@kernel.org>,
-        "dbrazdil@google.com" <dbrazdil@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Shawn_Hsiao_=28=E8=95=AD=E5=BF=97=E7=A5=A5=29?= 
-        <shawn.hsiao@mediatek.com>,
+        <ze-yu.wang@mediatek.com>, "Jonathan Corbet" <corbet@lwn.net>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        =?UTF-8?Q?Jades_Shih_=28=E6=96=BD=E5=90=91=E7=8E=A8=29?= 
+        <jades.shih@mediatek.com>, "Miles Chen" <miles.chen@mediatek.com>,
         =?UTF-8?Q?Ivan_Tseng_=28=E6=9B=BE=E5=BF=97=E8=BB=92=29?= 
         <ivan.tseng@mediatek.com>,
+        =?UTF-8?Q?MY_Chuang_=28=E8=8E=8A=E6=98=8E=E8=BA=8D=29?= 
+        <my.chuang@mediatek.com>,
+        =?UTF-8?Q?Shawn_Hsiao_=28=E8=95=AD=E5=BF=97=E7=A5=A5=29?= 
+        <shawn.hsiao@mediatek.com>,
+        =?UTF-8?Q?PeiLun_Suei_=28=E9=9A=8B=E5=9F=B9=E5=80=AB=29?= 
+        <peilun.suei@mediatek.com>,
+        =?UTF-8?Q?Liju-clr_Chen_=28=E9=99=B3=E9=BA=97=E5=A6=82=29?= 
+        <liju-clr.chen@mediatek.com>,
         =?UTF-8?Q?Chi-shen_Yeh_=28=E8=91=89=E5=A5=87=E8=BB=92=29?= 
-        <Chi-shen.Yeh@mediatek.com>
+        <chi-shen.yeh@mediatek.com>
 Subject: Re: [PATCH v4 5/9] virt: geniezone: Add irqfd support
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,34 +117,28 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 27, 2023, at 09:54, Yi-De Wu (=E5=90=B3=E4=B8=80=E5=BE=B7) w=
-rote:
+On Fri, Jun 9, 2023, at 10:52, Yi-De Wu wrote:
+> 
+>  /**
+>   * gzvm_hypercall_wrapper()
+> @@ -72,6 +73,11 @@ static inline gzvm_vcpu_id_t 
+> get_vcpuid_from_tuple(unsigned int tuple)
+>  	return (gzvm_vcpu_id_t)(tuple & 0xffff);
+>  }
+> 
+> +struct gzvm_vcpu_hwstate {
+> +	__u32 nr_lrs;
+> +	__u64 lr[GIC_V3_NR_LRS];
+> +};
 
->> ..snip..=20
->> > diff --git a/drivers/virt/geniezone/gzvm_main.c b/drivers/virt/geni=
-ezone/gzvm_main.c > index 230970cb0953..e62c046d76b3 100644 > --- a/driv=
-ers/virt/geniezone/gzvm_main.c > +++ b/drivers/virt/geniezone/gzvm_main.=
-c > @@ -113,11 +113,12 @@ static int gzvm_drv_probe(void) >   return ret=
-; >   gzvm_debug_dev =3D &gzvm_dev; >   > -return 0; > +return gzvm_drv_=
-irqfd_init();=20
->> ret =3D gzvm_drv_irqfd_init(); if (ret) return ret;=20
+This is not a good definition for a hardware data structure, as there
+is architecture specific implicit padding between the two members.
 
-Something went wrong with the quoting up here, please make sure to
-use plaintext email instead of html.
+Better add an explicit '__u32 __pad;' in the middle to make it clear
+what the actual layout is and make it portable.
 
->> return 0;=20
->
-> We're wondering the pros and cons for this coding style.
-> Could you kindly give us some hint for possibly we could miss it somew=
-here.
->
-> Some other suggestion had been made by AOSP reviewer on the very line=20
-> mentioned. As a consequence, we'd like to dig in the rationale behind=20
-> such debate.
-> https://android-review.googlesource.com/c/kernel/common/+/2574178/comm=
-ent/f23bbd52_e3b14396/
+If this is an interface to the hypervisor, it should probably also
+use explicit endianess, using __le32 and __le64 instead of __u32
+and __u64, along with the corresponding accessors.
 
-I think most developers prefer the shorter form here, and I've
-seen cleanup patches actually changing the longer version to that.
-
-     Arnd
+      Arnd
