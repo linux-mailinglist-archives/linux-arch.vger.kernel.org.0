@@ -2,143 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A22273F522
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 09:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD31873F877
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 11:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjF0HPX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 03:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
+        id S231811AbjF0JNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 05:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjF0HPW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 03:15:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58EF1BE8
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 00:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687850074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N1scKhPxxz/YxysE64BuheSdyQmgV4XhiinPf6icWX8=;
-        b=Dn/UUUaYUbwjIQ68CDVKfTpiqL3HVvDYjn8rQZkyUA8eNqQO6LCQ/4zOQJK7dJVYbVVVyr
-        UN/cVIcuku792pRTFsNpUKEBqx+imPELoNIZypUwSqq3rjs7/KceX7XOvthKDTekoc2Rph
-        bI4CMZbD419KTcuqOOYsw1OhLXkM9S8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-502-qlRZ2P4sNgCGJCrH5eHPCg-1; Tue, 27 Jun 2023 03:14:33 -0400
-X-MC-Unique: qlRZ2P4sNgCGJCrH5eHPCg-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3fa979d0c32so8080515e9.2
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 00:14:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687850072; x=1690442072;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N1scKhPxxz/YxysE64BuheSdyQmgV4XhiinPf6icWX8=;
-        b=GEzrN5/pvKaFeiEo0v+NrCbnJIxp4PZLzM43nPOvqNevq+U4osMQoBua89KvBXZxWg
-         onDrAtlkgsC+ZuKqsakApjDQQB3CawiN1Hq38a0WiBUvp2QvDO4f8wB7ILbhO7ZLEoqj
-         2efwuO6RehJykdrd+2j4BUp68VFP5PciX/22VEYM/y6Vz1M5dyXQom0M2YaY0WNCZNCg
-         UOg3Blx1eFvFRsCxojlZw6eADvx9da5ggrOUBeAWz9sxWwO0b5TDowi6LL40FlSGNT1A
-         lkPzSFhnU38oIyeG7qCOJLR1IQ0eQNp8Nqzo3slsF6hFy0l6a1y12YNjQiWUE4ciYbOK
-         PkuQ==
-X-Gm-Message-State: AC+VfDz4ZwF9McBcK9JcMkb9lhyYTbeInO1lRU00jeM64lpGDwex1jJX
-        A7NVxo4WxbP0VWwbkDDVkDUkZ+rXfLKzqb8btl80FYbMBXxl+iplSlDZMvDTnAtwEfhep0tVasg
-        LoKE9wtnwF7hLBqPKIFMqzg==
-X-Received: by 2002:a05:600c:3655:b0:3fa:9d0f:f1e1 with SMTP id y21-20020a05600c365500b003fa9d0ff1e1mr2936766wmq.35.1687850072225;
-        Tue, 27 Jun 2023 00:14:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6HIpOGvancvhac5jw2GR0kOhKc72MxDndtCuN9HZ1pSF+uaoBl/D52ddajPiSHV9uK1Eb9sw==
-X-Received: by 2002:a05:600c:3655:b0:3fa:9d0f:f1e1 with SMTP id y21-20020a05600c365500b003fa9d0ff1e1mr2936755wmq.35.1687850071891;
-        Tue, 27 Jun 2023 00:14:31 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c737:4900:68b3:e93b:e07a:558b? (p200300cbc737490068b3e93be07a558b.dip0.t-ipconnect.de. [2003:cb:c737:4900:68b3:e93b:e07a:558b])
-        by smtp.gmail.com with ESMTPSA id 21-20020a05600c22d500b003f96d10eafbsm9778433wmg.12.2023.06.27.00.14.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 00:14:31 -0700 (PDT)
-Message-ID: <ac1c162c-07d8-6084-44ca-a2c1a4183df2@redhat.com>
-Date:   Tue, 27 Jun 2023 09:14:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v6 00/33] Split ptdesc from struct page
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        with ESMTP id S231748AbjF0JNY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 05:13:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8BFD;
+        Tue, 27 Jun 2023 02:13:23 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35R96B9i008761;
+        Tue, 27 Jun 2023 09:13:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=eRYl3tInGhDOkzzXnyLKjP4RygjUjtbP4SrRO0c+vWQ=;
+ b=qDMffMBt8L6VJlwG8tURp2ZwilOX9K/rqLsrvTLNcHcNumo5bXR85n2fT0V+E8EjUk5Y
+ MlWgFliseuH0ILUWdMKcO74nbfFS/WBE7JHU1CjKECJJGNRi3wHYo6DeppuQ3OdJdQrn
+ Vbi1W3l1URgOENUohIs1eHwzBsJ1jkOe8pkB2S/b45Od2XToIs9s3TTdIAJ5lmd7Dpv/
+ Kr47XyYy/CdcVx1PLxDAOnJIcagSMolnzSck45iCfK6vIL0+ZJ4rMkjXu9OHE0C6CyVN
+ /LX4QweXpJ/o2Jw3gyZosKjZq3kQrz/FcGOCH/SxTFGXM6U/+vnhzy9/MS8svLtRjepB 3Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfvq8rabp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 09:13:03 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35R96GKB009302;
+        Tue, 27 Jun 2023 09:13:03 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rfvq8raar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 09:13:03 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35R3BSQ5025785;
+        Tue, 27 Jun 2023 09:13:00 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rdqre1bqm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 09:13:00 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35R9CwrH65798408
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Jun 2023 09:12:58 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A85F2004B;
+        Tue, 27 Jun 2023 09:12:58 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7F0C20040;
+        Tue, 27 Jun 2023 09:12:57 +0000 (GMT)
+Received: from [9.152.212.248] (unknown [9.152.212.248])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Jun 2023 09:12:57 +0000 (GMT)
+Message-ID: <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for
+ HAS_IOPORT=n
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20230627031431.29653-1-vishal.moola@gmail.com>
- <e8992eee-4140-427e-bacb-9449f346318@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <e8992eee-4140-427e-bacb-9449f346318@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Date:   Tue, 27 Jun 2023 11:12:57 +0200
+In-Reply-To: <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+         <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fZujSueKmVHDxjYCpP51RL3hPXVzRXrP
+X-Proofpoint-ORIG-GUID: XqQNy_k3bnezF-iSHCzgIlhzyUZTuwmi
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_05,2023-06-26_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 adultscore=0
+ clxscore=1011 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306270086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 27.06.23 06:44, Hugh Dickins wrote:
-> On Mon, 26 Jun 2023, Vishal Moola (Oracle) wrote:
-> 
->> The MM subsystem is trying to shrink struct page. This patchset
->> introduces a memory descriptor for page table tracking - struct ptdesc.
-> ...
->>   39 files changed, 686 insertions(+), 455 deletions(-)
-> 
-> I don't see the point of this patchset: to me it is just obfuscation of
-> the present-day tight relationship between page table and struct page.
-> 
-> Matthew already explained:
-> 
->> The intent is to get ptdescs to be dynamically allocated at some point
->> in the ~2-3 years out future when we have finished the folio project ...
-> 
-> So in a kindly mood, I'd say that this patchset is ahead of its time.
-> But I can certainly adapt to it, if everyone else sees some point to it.
+On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
+> On Mon, May 22, 2023, at 12:50, Niklas Schnelle wrote:
+>=20
+> > A few patches have already been applied but I've kept those which are n=
+ot yet
+> > in v6.4-rc3.
+> >=20
+> > This version is based on v6.4-rc3 and is also available on my kernel.or=
+g tree
+> > in the has_ioport_v5:
+> >=20
+> > https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
+>=20
+> I think it would be best if as many patches as possible get merged
+> into v6.5 through the individidual subsystems, though I can take
+> whatever is left through the asm-generic tree.
+>=20
+> Since the goal is to have maintainers pick up part of this, I would
+> recommend splitting the series per subsystem, having either a
+> separate patch or a small series for each maintainer that should
+> pick them up.
+>=20
+> More importantly, I think you should rebase the series against
+> linux-next in order to find and drop the patches that are queued
+> up for 6.5 already. The patches will be applied into branches
+> that are based on 6.4-rc of course, but basing on linux-next
+> is usually the easiest when targeting multiple maintainer
+> trees.
+>=20
+> Maybe let's give it another week to have more maintainers pick
+> up stuff from v5, and then send out a v6 as separate submissions.
+>=20
+>     Arnd
 
-I share your thoughts, that code churn which will help eventually in the 
-far, far future (not wanting to sound too pessimistic, but it's not 
-going to be there tomorrow ;) ).
+Hi Arnd and All,
 
-However, if it's just the same as the other conversions we already did 
-(e.g., struct slab), then I guess there is no reason to stop now -- the 
-obfuscation already happened.
+I'm sorry there hasn't been an updated in a long time and we're missing
+v6.5. I've been quite busy with other work and life. Speaking of, I
+will be mostly out for around a month starting some time mid to end
+July as, if all goes well, I'm expecting to become a dad. That said, I
+haven't forgotten about this and your overall plan of sending per-
+subsystem patches sounds good, just haven't had the time to also
+incorporate the feedback.
 
-... or is there a difference regarding this conversion and the previous 
-ones?
-
--- 
-Cheers,
-
-David / dhildenb
-
+Thanks,
+Niklas
