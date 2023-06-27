@@ -2,85 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D9A740065
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 18:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA3174012D
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 18:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjF0QJP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 12:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S232462AbjF0QbC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 12:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjF0QJO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 12:09:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8222D7C
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 09:07:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687882068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hJDOCrbidQ6SQFQe4MgEFJjZ7UTNPrXFah4ZUMjVF/Y=;
-        b=Cc0KwX7LyXS8JYv5xGW2+kada08T3uFyGsb8yTCVnIZMX4XtJxbocE5Ojds0u20/K+87is
-        myxitS0nc+jnkl3smPQ3i2/vDsQnyna8j92dy+nE2BauC8pcvPB3aet2VXVwCWMCIfP96f
-        FZgTv+82jeH/NQ6orFj0L1Qu8UqSMoQ=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-637-FTxZtKNcNEO7E7PsfA0kqw-1; Tue, 27 Jun 2023 12:07:46 -0400
-X-MC-Unique: FTxZtKNcNEO7E7PsfA0kqw-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-765ad67e690so36465785a.1
-        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 09:07:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687882066; x=1690474066;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hJDOCrbidQ6SQFQe4MgEFJjZ7UTNPrXFah4ZUMjVF/Y=;
-        b=H/nMB+BhPeGUg6B5HnmwtMe7aQOA2wh/6aZnGVhide0pLpIDq8j368d/LlcCp8IyBP
-         s1/LwH4ojLwbVNkYHjTXZ0+1kDFsS5mjAswk2QQYB2BCJkgAhUzJu8rqR4WIPI3xq11J
-         ZDy5MwaOaCnB13ejPyi0CB8eC7Df8KbZVcA5SaENg9VsFKKeTynKB4VOICzBRvSMo1zi
-         rCHT+hXY2KhQhUFBk+jpCQBLx2esuBMfrz4whdlFz2f7O86ZaPWmztcD5mS8bOj40wlK
-         PVOuyxZClO2q+UWc7+wqXQ/Wg2xbLoLEg3WhPAN/0JXWGVsjb78AryWJvKnQxyqe1xXc
-         GFWw==
-X-Gm-Message-State: AC+VfDw9td5hynZsbKhPYHdER8dGLC+chxiWs8MZmEW3bWOfHJGZIa8n
-        uD344sBHjQ+Q6uoVpqUIggF0+edJljbp1bhVuRWxHuwvNw0sZlE+m/RNx5Xieu2hciJX1O5OKcI
-        +d2lFVMwqc9VaaKafoAxJaQ==
-X-Received: by 2002:a05:620a:4007:b0:765:7b61:46fc with SMTP id h7-20020a05620a400700b007657b6146fcmr12614172qko.7.1687882066183;
-        Tue, 27 Jun 2023 09:07:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7UY1eApNq4tXkhQSQVDzyCNrRRXMA0KLJ6oWun1WyljocOJD3jbWnq1iikbRngPAZ/IFjT9Q==
-X-Received: by 2002:a05:620a:4007:b0:765:7b61:46fc with SMTP id h7-20020a05620a400700b007657b6146fcmr12614153qko.7.1687882065917;
-        Tue, 27 Jun 2023 09:07:45 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05620a13b500b0075ecdc937ffsm1342302qki.41.2023.06.27.09.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 09:07:45 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 12:07:43 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v6 03/33] pgtable: Create struct ptdesc
-Message-ID: <ZJsJT9dLtxaKlxVb@x1n>
-References: <20230627031431.29653-1-vishal.moola@gmail.com>
- <20230627031431.29653-4-vishal.moola@gmail.com>
+        with ESMTP id S232466AbjF0Qar (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 12:30:47 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951FCC9
+        for <linux-arch@vger.kernel.org>; Tue, 27 Jun 2023 09:30:13 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id E6E6C379;
+        Tue, 27 Jun 2023 16:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E6E6C379
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1687883413; bh=/ZcQ3VBksclJ+kE6vi0pQ0UiDtjqAu7AqGY4z7Lt0Ds=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Qr4SamHcVU9yaI3T0Z0nYr7ZxVKf1GgqcvAAfRDU9BI+N2hqXEPQc/s1XvzTpPaQ8
+         nnRIzcvuKGIUURCIpBcZRfgN1Bqv61MCJ4QcfoZM4VawSyaldUXA5dN51ysr6n3ncI
+         rBVCpUFNdGeOoAhC4ErqQhXEyih6hYAzzBmOAYZammoi9oNw3WnspEVN9Dg7Pqqp/r
+         YXTwt4IxSICc+5ARIGjQDJaGeXC5VvcqfOS9dl1QxWk5uuawl4JiEgwJtbSbc89H/j
+         ObW6Gv6Fp8xz0okt6pCVZDiu1j3HdntaOYtQINas8/S0ECUsZ/oMdfFyrw+p0H6BXI
+         Gya6JNxrZ1YRA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: [GIT PULL] Move Arm documentation under Documentation/arch
+Date:   Tue, 27 Jun 2023 10:30:12 -0600
+Message-ID: <878rc4euln.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230627031431.29653-4-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,81 +49,196 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 08:14:01PM -0700, Vishal Moola (Oracle) wrote:
-> Currently, page table information is stored within struct page. As part
-> of simplifying struct page, create struct ptdesc for page table
-> information.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  include/linux/pgtable.h | 68 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index 5063b482e34f..d46cb709ce08 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -987,6 +987,74 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
->  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
->  #endif /* CONFIG_MMU */
->  
-> +
-> +/**
-> + * struct ptdesc -    Memory descriptor for page tables.
-> + * @__page_flags:     Same as page flags. Unused for page tables.
-> + * @pt_rcu_head:      For freeing page table pages.
-> + * @pt_list:          List of used page tables. Used for s390 and x86.
-> + * @_pt_pad_1:        Padding that aliases with page's compound head.
-> + * @pmd_huge_pte:     Protected by ptdesc->ptl, used for THPs.
-> + * @_pt_s390_gaddr:   Aliases with page's mapping. Used for s390 gmap only.
+The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
 
-Should some arch-specific bits (and a few others) always under some
-#ifdefs, so it shouldn't appear on other archs?
+  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
 
-> + * @pt_mm:            Used for x86 pgds.
-> + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and s390 only.
-> + * @ptl:              Lock for the page table.
-> + * @__page_type:      Same as page->page_type. Unused for page tables.
-> + * @_refcount:        Same as page refcount. Used for s390 page tables.
-> + * @pt_memcg_data:    Memcg data. Tracked for page tables here.
-> + *
-> + * This struct overlays struct page for now. Do not modify without a good
-> + * understanding of the issues.
-> + */
-> +struct ptdesc {
-> +	unsigned long __page_flags;
-> +
-> +	union {
-> +		struct rcu_head pt_rcu_head;
-> +		struct list_head pt_list;
-> +		struct {
-> +			unsigned long _pt_pad_1;
-> +			pgtable_t pmd_huge_pte;
-> +		};
-> +	};
-> +	unsigned long _pt_s390_gaddr;
-> +
-> +	union {
-> +		struct mm_struct *pt_mm;
-> +		atomic_t pt_frag_refcount;
-> +	};
-> +
-> +	union {
-> +		unsigned long _pt_pad_2;
-> +#if ALLOC_SPLIT_PTLOCKS
-> +		spinlock_t *ptl;
-> +#else
-> +		spinlock_t ptl;
-> +#endif
-> +	};
-> +	unsigned int __page_type;
-> +	atomic_t _refcount;
-> +#ifdef CONFIG_MEMCG
-> +	unsigned long pt_memcg_data;
-> +#endif
-> +};
+are available in the Git repository at:
 
--- 
-Peter Xu
+  git://git.lwn.net/linux.git tags/docs-arm-move
 
+for you to fetch changes up to f8c25662028b38f31f55f9c5d8da45a75dbf094a:
+
+  dt-bindings: Update Documentation/arm references (2023-06-16 08:32:06 -0600)
+
+----------------------------------------------------------------
+Move the Arm architecture documentation under Documentation/arch/.  This
+brings some order to the documentation directory, declutters the top-level
+directory, and makes the documentation organization more closely match that
+of the source.
+
+This series touches a lot of files, but it's all just path changes; no
+conflicts that I know of.  I have acks for everything except the core
+move, no objections heard.
+
+----------------------------------------------------------------
+Jonathan Corbet (7):
+      arm: docs: Move Arm documentation to Documentation/arch/
+      arm: update in-source documentation references
+      arm64: Update Documentation/arm references
+      mips: update a reference to a moved Arm Document
+      crypto: update some Arm documentation references
+      docs: update some straggling Documentation/arm references
+      dt-bindings: Update Documentation/arm references
+
+ Documentation/{ => arch}/arm/arm.rst                                 | 0
+ Documentation/{ => arch}/arm/booting.rst                             | 0
+ Documentation/{ => arch}/arm/cluster-pm-race-avoidance.rst           | 0
+ Documentation/{ => arch}/arm/features.rst                            | 0
+ Documentation/{ => arch}/arm/firmware.rst                            | 0
+ Documentation/{ => arch}/arm/google/chromebook-boot-flow.rst         | 0
+ Documentation/{ => arch}/arm/index.rst                               | 0
+ Documentation/{ => arch}/arm/interrupts.rst                          | 0
+ Documentation/{ => arch}/arm/ixp4xx.rst                              | 0
+ Documentation/{ => arch}/arm/kernel_mode_neon.rst                    | 0
+ Documentation/{ => arch}/arm/kernel_user_helpers.rst                 | 0
+ Documentation/{ => arch}/arm/keystone/knav-qmss.rst                  | 0
+ Documentation/{ => arch}/arm/keystone/overview.rst                   | 0
+ Documentation/{ => arch}/arm/marvell.rst                             | 0
+ Documentation/{ => arch}/arm/mem_alignment.rst                       | 0
+ Documentation/{ => arch}/arm/memory.rst                              | 0
+ Documentation/{ => arch}/arm/microchip.rst                           | 0
+ Documentation/{ => arch}/arm/netwinder.rst                           | 0
+ Documentation/{ => arch}/arm/nwfpe/index.rst                         | 0
+ Documentation/{ => arch}/arm/nwfpe/netwinder-fpe.rst                 | 0
+ Documentation/{ => arch}/arm/nwfpe/notes.rst                         | 0
+ Documentation/{ => arch}/arm/nwfpe/nwfpe.rst                         | 0
+ Documentation/{ => arch}/arm/nwfpe/todo.rst                          | 0
+ Documentation/{ => arch}/arm/omap/dss.rst                            | 0
+ Documentation/{ => arch}/arm/omap/index.rst                          | 0
+ Documentation/{ => arch}/arm/omap/omap.rst                           | 0
+ Documentation/{ => arch}/arm/omap/omap_pm.rst                        | 0
+ Documentation/{ => arch}/arm/porting.rst                             | 0
+ Documentation/{ => arch}/arm/pxa/mfp.rst                             | 0
+ Documentation/{ => arch}/arm/sa1100/assabet.rst                      | 0
+ Documentation/{ => arch}/arm/sa1100/cerf.rst                         | 0
+ Documentation/{ => arch}/arm/sa1100/index.rst                        | 0
+ Documentation/{ => arch}/arm/sa1100/lart.rst                         | 0
+ Documentation/{ => arch}/arm/sa1100/serial_uart.rst                  | 0
+ Documentation/{ => arch}/arm/samsung/bootloader-interface.rst        | 0
+ Documentation/{ => arch}/arm/samsung/clksrc-change-registers.awk     | 0
+ Documentation/{ => arch}/arm/samsung/gpio.rst                        | 0
+ Documentation/{ => arch}/arm/samsung/index.rst                       | 0
+ Documentation/{ => arch}/arm/samsung/overview.rst                    | 0
+ Documentation/{ => arch}/arm/setup.rst                               | 0
+ Documentation/{ => arch}/arm/spear/overview.rst                      | 0
+ Documentation/{ => arch}/arm/sti/overview.rst                        | 0
+ Documentation/{ => arch}/arm/sti/stih407-overview.rst                | 0
+ Documentation/{ => arch}/arm/sti/stih418-overview.rst                | 0
+ Documentation/{ => arch}/arm/stm32/overview.rst                      | 0
+ Documentation/{ => arch}/arm/stm32/stm32-dma-mdma-chaining.rst       | 0
+ Documentation/{ => arch}/arm/stm32/stm32f429-overview.rst            | 0
+ Documentation/{ => arch}/arm/stm32/stm32f746-overview.rst            | 0
+ Documentation/{ => arch}/arm/stm32/stm32f769-overview.rst            | 0
+ Documentation/{ => arch}/arm/stm32/stm32h743-overview.rst            | 0
+ Documentation/{ => arch}/arm/stm32/stm32h750-overview.rst            | 0
+ Documentation/{ => arch}/arm/stm32/stm32mp13-overview.rst            | 0
+ Documentation/{ => arch}/arm/stm32/stm32mp151-overview.rst           | 0
+ Documentation/{ => arch}/arm/stm32/stm32mp157-overview.rst           | 0
+ Documentation/{ => arch}/arm/sunxi.rst                               | 0
+ Documentation/{ => arch}/arm/sunxi/clocks.rst                        | 0
+ Documentation/{ => arch}/arm/swp_emulation.rst                       | 0
+ Documentation/{ => arch}/arm/tcm.rst                                 | 0
+ Documentation/{ => arch}/arm/uefi.rst                                | 0
+ Documentation/{ => arch}/arm/vfp/release-notes.rst                   | 0
+ Documentation/{ => arch}/arm/vlocks.rst                              | 0
+ Documentation/arch/index.rst                                         | 2 +-
+ Documentation/devicetree/bindings/arm/xen.txt                        | 2 +-
+ Documentation/translations/zh_CN/{ => arch}/arm/Booting              | 4 ++--
+ .../translations/zh_CN/{ => arch}/arm/kernel_user_helpers.txt        | 4 ++--
+ MAINTAINERS                                                          | 4 ++--
+ arch/arm/Kconfig                                                     | 2 +-
+ arch/arm/common/mcpm_entry.c                                         | 2 +-
+ arch/arm/common/mcpm_head.S                                          | 2 +-
+ arch/arm/common/vlock.S                                              | 2 +-
+ arch/arm/include/asm/setup.h                                         | 2 +-
+ arch/arm/include/uapi/asm/setup.h                                    | 2 +-
+ arch/arm/kernel/entry-armv.S                                         | 2 +-
+ arch/arm/mach-exynos/common.h                                        | 2 +-
+ arch/arm/mach-sti/Kconfig                                            | 2 +-
+ arch/arm/mm/Kconfig                                                  | 4 ++--
+ arch/arm/tools/mach-types                                            | 2 +-
+ arch/arm64/Kconfig                                                   | 2 +-
+ arch/arm64/kernel/kuser32.S                                          | 2 +-
+ arch/mips/bmips/setup.c                                              | 5 ++++-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-cipher.c                  | 2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-core.c                    | 2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-hash.c                    | 2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss.h                         | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c                  | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c                    | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c                    | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c                    | 2 +-
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-trng.c                    | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c                  | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c                    | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c                    | 2 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c                    | 2 +-
+ drivers/input/touchscreen/sun4i-ts.c                                 | 2 +-
+ drivers/pwm/pwm-atmel.c                                              | 2 +-
+ drivers/pwm/pwm-pxa.c                                                | 2 +-
+ drivers/tty/serial/Kconfig                                           | 4 ++--
+ 97 files changed, 44 insertions(+), 41 deletions(-)
+ rename Documentation/{ => arch}/arm/arm.rst (100%)
+ rename Documentation/{ => arch}/arm/booting.rst (100%)
+ rename Documentation/{ => arch}/arm/cluster-pm-race-avoidance.rst (100%)
+ rename Documentation/{ => arch}/arm/features.rst (100%)
+ rename Documentation/{ => arch}/arm/firmware.rst (100%)
+ rename Documentation/{ => arch}/arm/google/chromebook-boot-flow.rst (100%)
+ rename Documentation/{ => arch}/arm/index.rst (100%)
+ rename Documentation/{ => arch}/arm/interrupts.rst (100%)
+ rename Documentation/{ => arch}/arm/ixp4xx.rst (100%)
+ rename Documentation/{ => arch}/arm/kernel_mode_neon.rst (100%)
+ rename Documentation/{ => arch}/arm/kernel_user_helpers.rst (100%)
+ rename Documentation/{ => arch}/arm/keystone/knav-qmss.rst (100%)
+ rename Documentation/{ => arch}/arm/keystone/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/marvell.rst (100%)
+ rename Documentation/{ => arch}/arm/mem_alignment.rst (100%)
+ rename Documentation/{ => arch}/arm/memory.rst (100%)
+ rename Documentation/{ => arch}/arm/microchip.rst (100%)
+ rename Documentation/{ => arch}/arm/netwinder.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/index.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/netwinder-fpe.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/notes.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/nwfpe.rst (100%)
+ rename Documentation/{ => arch}/arm/nwfpe/todo.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/dss.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/index.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/omap.rst (100%)
+ rename Documentation/{ => arch}/arm/omap/omap_pm.rst (100%)
+ rename Documentation/{ => arch}/arm/porting.rst (100%)
+ rename Documentation/{ => arch}/arm/pxa/mfp.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/assabet.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/cerf.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/index.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/lart.rst (100%)
+ rename Documentation/{ => arch}/arm/sa1100/serial_uart.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/bootloader-interface.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/clksrc-change-registers.awk (100%)
+ rename Documentation/{ => arch}/arm/samsung/gpio.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/index.rst (100%)
+ rename Documentation/{ => arch}/arm/samsung/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/setup.rst (100%)
+ rename Documentation/{ => arch}/arm/spear/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sti/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sti/stih407-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sti/stih418-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32-dma-mdma-chaining.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32f429-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32f746-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32f769-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32h743-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32h750-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32mp13-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32mp151-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/stm32/stm32mp157-overview.rst (100%)
+ rename Documentation/{ => arch}/arm/sunxi.rst (100%)
+ rename Documentation/{ => arch}/arm/sunxi/clocks.rst (100%)
+ rename Documentation/{ => arch}/arm/swp_emulation.rst (100%)
+ rename Documentation/{ => arch}/arm/tcm.rst (100%)
+ rename Documentation/{ => arch}/arm/uefi.rst (100%)
+ rename Documentation/{ => arch}/arm/vfp/release-notes.rst (100%)
+ rename Documentation/{ => arch}/arm/vlocks.rst (100%)
+ rename Documentation/translations/zh_CN/{ => arch}/arm/Booting (98%)
+ rename Documentation/translations/zh_CN/{ => arch}/arm/kernel_user_helpers.txt (98%)
