@@ -2,130 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814C473F2BC
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 05:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA59C73F3A8
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 06:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjF0D3I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Jun 2023 23:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S231372AbjF0EqY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 00:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjF0D2W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Jun 2023 23:28:22 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8392126;
-        Mon, 26 Jun 2023 20:23:05 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-54fb23ff7d3so1993391a12.0;
-        Mon, 26 Jun 2023 20:23:05 -0700 (PDT)
+        with ESMTP id S231196AbjF0Epu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 00:45:50 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153F72109
+        for <linux-arch@vger.kernel.org>; Mon, 26 Jun 2023 21:44:21 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-573491c4deeso42692897b3.0
+        for <linux-arch@vger.kernel.org>; Mon, 26 Jun 2023 21:44:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687836184; x=1690428184;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mOH4gSPEIhpTW98QIj0wv6cpCR35fy8xVOmhHBHDwaY=;
-        b=ANaNPobi1LlQxW0wdCG0Glnw3AHYwUIa8Qg4DBjBLvScG0WBKr8qCsf7Mz+18u/WU3
-         6dnIcVY47eOtyjpkaJW2cwyZTRkxtt7WjcP/1r2C0JYR4nlZbgTajeasbRLIeXdjnpSr
-         pgJH+0iCGnFXJZLFj9ubxwQZlVh4ApQop/80AwlYke3TSc+1HoTIcvK2Zd16Aa9T/UoJ
-         aGzVTEb5uixiEWDzFa45ZsAj19OfxlC6Vgvv3g8/E5CrvvsVDH0Uf6cISC2eKl79G1MX
-         o8q2alCiD3y1+06C69O4r2j5dX0F85D1sY52ObLUgxLFJWE3Iw+tDzOboKE2N/izIfNQ
-         1juQ==
+        d=google.com; s=20221208; t=1687841060; x=1690433060;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dVtrcXbE5qXWKdJhq2ArhetT4KPRpQBwbjTOuMnTdxE=;
+        b=501HLYHctmk8sIJeTmzxhRx3/mgKpv1jRi1zyxe6IKd5PzvxEUvUlafEKoDqL6yZVr
+         8LPzltfzYfOsnNGE3T6BklB22lAMitCgdhFuhtcXDNR8cn90bt0hxS6/rFyMCnKABSjm
+         /oRswCkgkHFa78/d8yQxqLAP7w+UcywLgaNVEk0kQUj/E5gzTgG4U1Ib/QTJ68K6B1lq
+         DHiArvPKR0yaKTV4AcdaFGyA0a3QVzlRHTqcAyQmjJhyBDsZIisDj9Axezm4VTj3plhb
+         Dus4mDTAcMi1b8nttzH3dDwb6//iZcVcKmqu+MryYnw/GG09jfr1xcEP4Qfwx6utRJkj
+         zVzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687836184; x=1690428184;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mOH4gSPEIhpTW98QIj0wv6cpCR35fy8xVOmhHBHDwaY=;
-        b=QozppQlYoYy/1RyqNBMof2wLBCn+nw5LmSRh44AhD92KPT3+IBF/tJYRB3kf0yQg2T
-         szVu3GVp4kTnXIO2gCv+Q6NPKi6WZd3nECeUPeKj8MR+7gQU72AVo836OOytkcEdWjo1
-         ynR6f+5vrVfVessoJcDIlUICmr8G0LPw51XCIbCepNC2qb4mwPJs1PEJq+f9AONuhLQX
-         HsQSmK7wIIZKyvEMozc/993M/qvMAh4ATrLkG/Uvn/Md9UwA4opkHmK+F/R6xp4ov49g
-         QK/Fniw/pjWHQLCWk41EYnE2gnb2t3uIrLoPWD4/PiGhjzxqG62yr9zZrt+e2WKjiG3F
-         qvlQ==
-X-Gm-Message-State: AC+VfDxCTL7rGs6XmZCFC7L296/xXnXxsCn9jLGANa2wjt0QtsY3cG7R
-        /qlxkRsKJsAQMMSWAePurQA=
-X-Google-Smtp-Source: ACHHUZ649XFt14nTD0RKbS7T8HGDXk/ibxTGnSCTsUZF4ntA/4vA54PzrAunHYoMJoD3+SXkrRSECw==
-X-Received: by 2002:a17:90a:1906:b0:25e:ae0f:7311 with SMTP id 6-20020a17090a190600b0025eae0f7311mr20920818pjg.23.1687836184513;
-        Mon, 26 Jun 2023 20:23:04 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:37:c5e9:2003:6c97:8057])
-        by smtp.gmail.com with ESMTPSA id mm12-20020a17090b358c00b0025ec54be16asm618756pjb.2.2023.06.26.20.23.03
+        d=1e100.net; s=20221208; t=1687841060; x=1690433060;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dVtrcXbE5qXWKdJhq2ArhetT4KPRpQBwbjTOuMnTdxE=;
+        b=RW/W/JPSq0Yf6ySGD4/6Oz86QyKJtsMLSuSU0lTacHMCUqISTBiAphg6UytYnM5NGt
+         HfdpEQU/PwfDRbdx6Q29urRe9YjNp6SH/2YocGsYBcQv6Sk6IoI1YQP93djRv4kvkBsh
+         kebXLM3Ma2CcAOodt+FryZGJHradCQ09TRnT/V84IUYUuGp+xfHngvLQdaQDuJc5jhjk
+         Dr7ExcckNuHPFz7TqvHufyM+chjBM24xsQO6H3eGFmPiIiZV1+4A6eGoRtIO52Bl5Yyh
+         VPoH1v3f0WuRqSeFB7yuTGBEJdLUYL0XpRn3Xz2GUkvV1TXxAcydedA0V6e3lVcX8nDX
+         fzAA==
+X-Gm-Message-State: AC+VfDx/eK3lsX6heygZ1bkAgjGT04W5UzOPIxOzEQS/61zGkIbFugtP
+        oT97dKqtlrjimBDNDvniWuiJNw==
+X-Google-Smtp-Source: ACHHUZ4LBcIHJ/ynOcwzWzKYI9Mk2cjEWGfgZGpKdMoBZ7/XKupPMOzNiMbSCmgeKveyN334gs70/g==
+X-Received: by 2002:a81:7bc2:0:b0:56d:43cb:da98 with SMTP id w185-20020a817bc2000000b0056d43cbda98mr29864359ywc.29.1687841059932;
+        Mon, 26 Jun 2023 21:44:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id j8-20020a252308000000b00bf44703efd3sm1487805ybj.6.2023.06.26.21.44.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 20:23:04 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com
-Subject: [PATCH V2 9/9] x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
-Date:   Mon, 26 Jun 2023 23:22:47 -0400
-Message-Id: <20230627032248.2170007-10-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230627032248.2170007-1-ltykernel@gmail.com>
-References: <20230627032248.2170007-1-ltykernel@gmail.com>
+        Mon, 26 Jun 2023 21:44:19 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 21:44:08 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v6 00/33] Split ptdesc from struct page
+In-Reply-To: <20230627031431.29653-1-vishal.moola@gmail.com>
+Message-ID: <e8992eee-4140-427e-bacb-9449f346318@google.com>
+References: <20230627031431.29653-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <tiala@microsoft.com>
+On Mon, 26 Jun 2023, Vishal Moola (Oracle) wrote:
 
-Add Hyperv-specific handling for faults caused by VMMCALL
-instructions.
+> The MM subsystem is trying to shrink struct page. This patchset
+> introduces a memory descriptor for page table tracking - struct ptdesc.
+...
+>  39 files changed, 686 insertions(+), 455 deletions(-)
 
-Signed-off-by: Tianyu Lan <tiala@microsoft.com>
----
- arch/x86/kernel/cpu/mshyperv.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+I don't see the point of this patchset: to me it is just obfuscation of
+the present-day tight relationship between page table and struct page.
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 8e1d9ed6a1e0..ba9a3a65f664 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -32,6 +32,7 @@
- #include <asm/nmi.h>
- #include <clocksource/hyperv_timer.h>
- #include <asm/numa.h>
-+#include <asm/svm.h>
- 
- /* Is Linux running as the root partition? */
- bool hv_root_partition;
-@@ -577,6 +578,20 @@ static bool __init ms_hyperv_msi_ext_dest_id(void)
- 	return eax & HYPERV_VS_PROPERTIES_EAX_EXTENDED_IOAPIC_RTE;
- }
- 
-+static void hv_sev_es_hcall_prepare(struct ghcb *ghcb, struct pt_regs *regs)
-+{
-+	/* RAX and CPL are already in the GHCB */
-+	ghcb_set_rcx(ghcb, regs->cx);
-+	ghcb_set_rdx(ghcb, regs->dx);
-+	ghcb_set_r8(ghcb, regs->r8);
-+}
-+
-+static bool hv_sev_es_hcall_finish(struct ghcb *ghcb, struct pt_regs *regs)
-+{
-+	/* No checking of the return state needed */
-+	return true;
-+}
-+
- const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
- 	.name			= "Microsoft Hyper-V",
- 	.detect			= ms_hyperv_platform,
-@@ -584,4 +599,6 @@ const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
- 	.init.x2apic_available	= ms_hyperv_x2apic_available,
- 	.init.msi_ext_dest_id	= ms_hyperv_msi_ext_dest_id,
- 	.init.init_platform	= ms_hyperv_init_platform,
-+	.runtime.sev_es_hcall_prepare = hv_sev_es_hcall_prepare,
-+	.runtime.sev_es_hcall_finish = hv_sev_es_hcall_finish,
- };
--- 
-2.25.1
+Matthew already explained:
 
+> The intent is to get ptdescs to be dynamically allocated at some point
+> in the ~2-3 years out future when we have finished the folio project ...
+
+So in a kindly mood, I'd say that this patchset is ahead of its time.
+But I can certainly adapt to it, if everyone else sees some point to it.
+
+Hugh
