@@ -2,50 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C47401CB
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 18:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E186740205
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Jun 2023 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjF0Q6A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Jun 2023 12:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S231319AbjF0RUh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Jun 2023 13:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjF0Q57 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 12:57:59 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E0B210CF;
-        Tue, 27 Jun 2023 09:57:58 -0700 (PDT)
-Received: from [192.168.0.5] (75-172-40-221.tukw.qwest.net [75.172.40.221])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8E0AB20AECAD;
-        Tue, 27 Jun 2023 09:57:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8E0AB20AECAD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687885077;
-        bh=eol4JTI8wX7UZd7+77Z/kmpFdoWKbnYccggCXyonl54=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=Rf/SKH6AuhCao/hUPpDgvhXY9tPNBcqsAfto61A7Hi+M6nAYk7+vuM1eFP42las0C
-         Ur/FuwQCc2K2gL63xVM3q8VVOW3pCtdlIsLh8xcsSBn6Ymwg44L5UPXZofizGQzpEG
-         HzVUI/8RCXiQWIBIkKX8BUxzA7DmRy6ICmThIlpQ=
-Message-ID: <df9d5443-b563-c4c8-1038-6a01c132a132@linux.microsoft.com>
-Date:   Tue, 27 Jun 2023 09:58:05 -0700
+        with ESMTP id S231146AbjF0RUg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Jun 2023 13:20:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D249198;
+        Tue, 27 Jun 2023 10:20:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85125611EE;
+        Tue, 27 Jun 2023 17:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E19DC433C9;
+        Tue, 27 Jun 2023 17:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687886433;
+        bh=yG+a22abZ9SzUNQMe+8vtxSHNs6hg3hQ7bJmtKEfq6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hyU4+sm92oSYzUVPRTJlX+Fe8+ttP3U+br5Qu6kTbNbf5lZfR+LqFTbGiYEKIV8Q+
+         5RtK9Vqc8+8DspI54cUVWQ4w14eVSy2+Rv5XCiYaU6R+cA3pp+bjTUBvPBsuxG8/R+
+         5XDChTIqMS7+mQbhSiOPUMCfEr82Rp5khktKM6IqzLhSB7J7tunqkGu8E55EYQkF3+
+         mRES0K7flwKd7TMmFAgchyy7qWWCZpdIVYnU15tNXlY1LFxI8enQ8GdFiHvchx76Fp
+         B6X9WIMAwaBYF4kJZrpLfqjsBEN5q10onKUXCktEh8nnAM3zv8+2mKEcK5AetxE/4j
+         uk99KdZ6KzwgA==
+Date:   Tue, 27 Jun 2023 18:20:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v9 28/42] x86/shstk: Add user-mode shadow stack support
+Message-ID: <76a87cdf-4d4f-4b3f-b01f-0540eab71ac7@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] Drivers: hv: Change hv_free_hyperv_page() to take void
- * argument
-Content-Language: en-US
-To:     Kameron Carr <kameroncarr@linux.microsoft.com>, arnd@arndb.de,
-        decui@microsoft.com, haiyangz@microsoft.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wei.liu@kernel.org
-References: <1687558189-19734-1-git-send-email-kameroncarr@linux.microsoft.com>
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <1687558189-19734-1-git-send-email-kameroncarr@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5kInKYAEl4EdyhTr"
+Content-Disposition: inline
+In-Reply-To: <20230613001108.3040476-29-rick.p.edgecombe@intel.com>
+X-Cookie: Money is the root of all wealth.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,120 +85,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-On 6/23/2023 3:09 PM, Kameron Carr wrote:
-> Currently hv_free_hyperv_page() takes an unsigned long argument, which
-> is inconsistent with the void * return value from the corresponding
-> hv_alloc_hyperv_page() function and variants. This creates unnecessary
-> extra casting.
-> 
-> Change the hv_free_hyperv_page() argument type to void *.
-> Also remove redundant casts from invocations of
-> hv_alloc_hyperv_page() and variants.
-> 
-> Signed-off-by: Kameron Carr <kameroncarr@linux.microsoft.com>
-> ---
-> V1 -> V2: Added Signed-off-by
-> 
->  drivers/hv/connection.c        | 13 ++++++-------
->  drivers/hv/hv_common.c         | 10 +++++-----
->  include/asm-generic/mshyperv.h |  2 +-
->  3 files changed, 12 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index 5978e9d..ebf15f3 100644
-> --- a/drivers/hv/connection.c
-> +++ b/drivers/hv/connection.c
-> @@ -209,8 +209,7 @@ int vmbus_connect(void)
->  	 * Setup the vmbus event connection for channel interrupt
->  	 * abstraction stuff
->  	 */
-> -	vmbus_connection.int_page =
-> -	(void *)hv_alloc_hyperv_zeroed_page();
-> +	vmbus_connection.int_page = hv_alloc_hyperv_zeroed_page();
->  	if (vmbus_connection.int_page == NULL) {
->  		ret = -ENOMEM;
->  		goto cleanup;
-> @@ -225,8 +224,8 @@ int vmbus_connect(void)
->  	 * Setup the monitor notification facility. The 1st page for
->  	 * parent->child and the 2nd page for child->parent
->  	 */
-> -	vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
-> -	vmbus_connection.monitor_pages[1] = (void *)hv_alloc_hyperv_page();
-> +	vmbus_connection.monitor_pages[0] = hv_alloc_hyperv_page();
-> +	vmbus_connection.monitor_pages[1] = hv_alloc_hyperv_page();
->  	if ((vmbus_connection.monitor_pages[0] == NULL) ||
->  	    (vmbus_connection.monitor_pages[1] == NULL)) {
->  		ret = -ENOMEM;
-> @@ -333,15 +332,15 @@ void vmbus_disconnect(void)
->  		destroy_workqueue(vmbus_connection.work_queue);
->  
->  	if (vmbus_connection.int_page) {
-> -		hv_free_hyperv_page((unsigned long)vmbus_connection.int_page);
-> +		hv_free_hyperv_page(vmbus_connection.int_page);
->  		vmbus_connection.int_page = NULL;
->  	}
->  
->  	set_memory_encrypted((unsigned long)vmbus_connection.monitor_pages[0], 1);
->  	set_memory_encrypted((unsigned long)vmbus_connection.monitor_pages[1], 1);
->  
-> -	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[0]);
-> -	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[1]);
-> +	hv_free_hyperv_page(vmbus_connection.monitor_pages[0]);
-> +	hv_free_hyperv_page(vmbus_connection.monitor_pages[1]);
->  	vmbus_connection.monitor_pages[0] = NULL;
->  	vmbus_connection.monitor_pages[1] = NULL;
->  }
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index 542a1d5..6a2258f 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -115,12 +115,12 @@ void *hv_alloc_hyperv_zeroed_page(void)
->  }
->  EXPORT_SYMBOL_GPL(hv_alloc_hyperv_zeroed_page);
->  
-> -void hv_free_hyperv_page(unsigned long addr)
-> +void hv_free_hyperv_page(void *addr)
->  {
->  	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
-> -		free_page(addr);
-> +		free_page((unsigned long)addr);
->  	else
-> -		kfree((void *)addr);
-> +		kfree(addr);
->  }
->  EXPORT_SYMBOL_GPL(hv_free_hyperv_page);
->  
-> @@ -253,7 +253,7 @@ static void hv_kmsg_dump_unregister(void)
->  	atomic_notifier_chain_unregister(&panic_notifier_list,
->  					 &hyperv_panic_report_block);
->  
-> -	hv_free_hyperv_page((unsigned long)hv_panic_page);
-> +	hv_free_hyperv_page(hv_panic_page);
->  	hv_panic_page = NULL;
->  }
->  
-> @@ -270,7 +270,7 @@ static void hv_kmsg_dump_register(void)
->  	ret = kmsg_dump_register(&hv_kmsg_dumper);
->  	if (ret) {
->  		pr_err("Hyper-V: kmsg dump register error 0x%x\n", ret);
-> -		hv_free_hyperv_page((unsigned long)hv_panic_page);
-> +		hv_free_hyperv_page(hv_panic_page);
->  		hv_panic_page = NULL;
->  	}
->  }
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-> index 402a8c1..a8f4b65 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -190,7 +190,7 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
->  
->  void *hv_alloc_hyperv_page(void);
->  void *hv_alloc_hyperv_zeroed_page(void);
-> -void hv_free_hyperv_page(unsigned long addr);
-> +void hv_free_hyperv_page(void *addr);
->  
->  /**
->   * hv_cpu_number_to_vp_number() - Map CPU to VP.
+--5kInKYAEl4EdyhTr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Mon, Jun 12, 2023 at 05:10:54PM -0700, Rick Edgecombe wrote:
+
+> +static void unmap_shadow_stack(u64 base, u64 size)
+> +{
+> +	while (1) {
+> +		int r;
+> +
+> +		r = vm_munmap(base, size);
+> +
+> +		/*
+> +		 * vm_munmap() returns -EINTR when mmap_lock is held by
+> +		 * something else, and that lock should not be held for a
+> +		 * long time.  Retry it for the case.
+> +		 */
+> +		if (r == -EINTR) {
+> +			cond_resched();
+> +			continue;
+> +		}
+
+This looks generic, not even shadow stack specific - was there any
+discussion of making it a vm_munmap_retry() (that's not a great name...)
+or similar?  I didn't see any in old versions of the thread but I
+might've missed something.
+
+--5kInKYAEl4EdyhTr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSbGlUACgkQJNaLcl1U
+h9BqNQf9HqQNIAUg29S+cA0RcGv/d0uACrgRR/Ug+8CHXDUGAdslLvPRGSp8km6O
+OA3sMI3JNRbsr4+QP5B8PduPbTiiePjlyNOfMrxz2oSChLugzh8gH+q7a4GtFc+T
+1AsfYswcEu8GMSy7zWw//Wq8JPfNX51jxYggMohGwEtFjgZmvT1RZAaKyZwf3UKd
+kYYChaAWrKWCe9lREGDuscGs1Udhg5nbpLJMgcKNDuBTJRn5UUZoMNY84TvuvNqm
+hy/IpJZ8m7d/utTLzzbJS3nPy6oQoFIo2riYi2hCRNZPtDvjko8UJ9uNJCbZOp3i
+gswqwIVtf/sJIXp0+Zi+a0WuiSOwdg==
+=nPJT
+-----END PGP SIGNATURE-----
+
+--5kInKYAEl4EdyhTr--
