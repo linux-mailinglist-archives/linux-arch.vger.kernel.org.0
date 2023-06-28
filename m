@@ -2,67 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7561B740AE0
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Jun 2023 10:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E1F740CE4
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Jun 2023 11:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbjF1IMb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jun 2023 04:12:31 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:51718 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233751AbjF1IJv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jun 2023 04:09:51 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A58C8612EC;
-        Wed, 28 Jun 2023 05:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 189D7C433C0;
-        Wed, 28 Jun 2023 05:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687930816;
-        bh=DndRpF+hdE1dFRA04LFJEcmBY3VAr0k7bSTXF94LsmM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=js7jriuJoICr/LKxWUVqR0plwSQASa2WhMv7jBsPTtubL3AnoFVKs3TtEFWfuSEU+
-         uIGHFe6Ny6uvRY9TQ8l9I1WwuIj3K+Se+cnR0ABPgJ/0LLj10HwxirCa0oPqHthIWS
-         N1/JnmVZxKYjA3U0C9N56aXiNWgIzEG7hzbeBlVOv/cW9ERbREuEyToCiDLNWT5J/Z
-         yF2hcmFJ1D9QeJd26f5y5qBfN70avGmBptxDC3Kybp35VPdsVijsegcHP4ckX8+2gP
-         /7g6cJ/KtR47U9YAEIkjnizJa0ICq59Qh/XxZKGJQMgEGi9t8bwT0CWKATRRKr9HNl
-         glohx0Hw0E2Fg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05292C39563;
-        Wed, 28 Jun 2023 05:40:16 +0000 (UTC)
-Subject: Re: [GIT PULL] Move arm64 documentation under Documentation/arch
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <871qhwemuu.fsf@meer.lwn.net>
-References: <871qhwemuu.fsf@meer.lwn.net>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <871qhwemuu.fsf@meer.lwn.net>
-X-PR-Tracked-Remote: git://git.lwn.net/linux.git tags/docs-arm64-move
-X-PR-Tracked-Commit-Id: f40f97aaf7fa6222f4ec073c24fb14f04ffb6f80
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6aeadf7896bff4ca230702daba8788455e6b866e
-Message-Id: <168793081600.877.1311315093424436546.pr-tracker-bot@kernel.org>
-Date:   Wed, 28 Jun 2023 05:40:16 +0000
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+        id S230339AbjF1J1g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Jun 2023 05:27:36 -0400
+Received: from mail.lokoho.com ([217.61.105.98]:44538 "EHLO mail.lokoho.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231545AbjF1Hz5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Jun 2023 03:55:57 -0400
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id F3FA982EE9; Wed, 28 Jun 2023 08:53:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1687938789; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=HhBlDFkWJhd3OXJ9E2jLMkXAiDdOLHLLTRRWdxpCr7JGQwhe4hPa3Gz7nFJLjmwlL
+         70pdWL1bObWIIvgoGu6W4qAS6PazLBw6RpmZBgHBBj31uGg261ddkDgwVPqEZmvCR4
+         NjvXzUsqhjJHI6TsHMMIwg6gncz+okIvgaMxtH4SSFq+RuP4wbOwjOPErPyPIFsywn
+         N5e6dLuso0809ovJvMWG4ZrzPASJ6MdfEVR5BabwJpuuUCctL13Pdw3+JPskKxvlMz
+         RMO9FmmaudxgMiX8aiNHiE2VbBTAC8r3fQ/TLj+XsGMgWpRLnwPOZzdxhN8fj1ECRq
+         Ubp/1DB7k/upQ==
+Received: by mail.lokoho.com for <linux-arch@vger.kernel.org>; Wed, 28 Jun 2023 07:50:51 GMT
+Message-ID: <20230628074502-0.1.6x.2sirn.0.cneufn4nb0@lokoho.com>
+Date:   Wed, 28 Jun 2023 07:50:51 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-arch@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Tue, 27 Jun 2023 13:17:29 -0600:
+Dzie=C5=84 dobry,
 
-> git://git.lwn.net/linux.git tags/docs-arm64-move
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6aeadf7896bff4ca230702daba8788455e6b866e
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Thank you!
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Pozdrawiam
+Adam Charachuta
