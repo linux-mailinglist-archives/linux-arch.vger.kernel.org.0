@@ -2,121 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675B874276A
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 15:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF2674277A
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 15:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjF2Nb6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jun 2023 09:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S232099AbjF2NdW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jun 2023 09:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjF2Nby (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 09:31:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7E31FCB;
-        Thu, 29 Jun 2023 06:31:53 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TDSkeu011219;
-        Thu, 29 Jun 2023 13:31:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=ZwvJ0eEbncN/kOCHI+wZaTlZPHMLkO5x//AAsn1W7tw=;
- b=f2nihmCB0lv1o6hd0yn36xLbBfrjudJSsnmBK+uxpj9/AGaa+gMA2O3rfhTEZGhRQ5bo
- e98bJF4vKIfIqVKrDfSz/3mhrneJplKoD9jgSeeBgbnpw2wK3j6+F/cBlVnPByqNoKwX
- vgFJo2kpvkPD6WXGjUhyplSOotHQ7IiV90Hg/JrGLL3E7dz8unjOPWdJOvfas0ABzUrG
- qTQgtc3AmOlvOrdZSOH+0ykRGOT8TVSoz1o9IQjH+aphdwSm4o+CMdfiI7VH1PzmrpVE
- e7vg7/XbpSguo8arfAb6KYe5JrajatVsbdSI7nr1KRsf8BidBdOzlhrqGwOfMQtIJ0hi sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhavhg1q6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 13:31:41 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35TDU8dt015383;
-        Thu, 29 Jun 2023 13:31:41 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhavhg1nx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 13:31:41 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35T9H6GI002392;
-        Thu, 29 Jun 2023 13:31:38 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr453c4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 13:31:38 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TDVaG662193990
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Jun 2023 13:31:36 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02F0520043;
-        Thu, 29 Jun 2023 13:31:36 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6C8120040;
-        Thu, 29 Jun 2023 13:31:33 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.91.77])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Jun 2023 13:31:33 +0000 (GMT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH v2 0/9]  Introduce SMT level and add PowerPC support
-From:   Sachin Sant <sachinp@linux.ibm.com>
-In-Reply-To: <87edluh6ce.fsf@mail.lhotse>
-Date:   Thu, 29 Jun 2023 19:01:22 +0530
-Cc:     Laurent Dufour <ldufour@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch@vger.kernel.org, dave.hansen@linux.intel.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        npiggin@gmail.com, tglx@linutronix.de
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E68433D6-F103-4B58-A0DC-AD1099F8CC05@linux.ibm.com>
-References: <20230628100558.43482-1-ldufour@linux.ibm.com>
- <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
- <87edluh6ce.fsf@mail.lhotse>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: p9fIrhzuknG-wZ6s0tbFa0qN0XHpWfsu
-X-Proofpoint-ORIG-GUID: bil4KbMF-Z02xwvfg-W4hlsa2BwW-7Kw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- adultscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306290122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232094AbjF2NdL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 09:33:11 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B835730F6;
+        Thu, 29 Jun 2023 06:33:10 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id B1FAF2B00152;
+        Thu, 29 Jun 2023 09:33:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Jun 2023 09:33:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688045588; x=1688052788; bh=fz
+        Ep5wc1N4xfnU7pMFQwstMWnCUW1KpffY9nt8n1q0E=; b=LcvTxzhqR3NoPlUVvK
+        OSmh2HXq0TKY72TPC0mGFyZL0KXvjsqnUtwwDauvmZMJLb5NJHO5zC7uiIPaXimT
+        gzsidicsFWLRov6t4tFnhjdpszLK6hNyyqPfbDn62gWWs0Kof8U6fw258RVzajax
+        TvEI9fr4nmLUhZ9eWf5cl+Gznh5JCGNWo9vfb9WqVUcXA4M4zI8VmRSOc4Rpqa2j
+        5ha9dObpeYiBRXh4uBF8Bo02V+0ZfPpN2oP/dF7iFMYdXyANDgvRcnqLaw0UQ7TO
+        r1HYR4swvYxxa9cMKtxPWwjmkzaxBCii0Km30Ly6pgOJfleJm4wepJ/1GiUa/suS
+        Y7xQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688045588; x=1688052788; bh=fzEp5wc1N4xfn
+        U7pMFQwstMWnCUW1KpffY9nt8n1q0E=; b=fyh1ajjE7le9b8SLHXPaGdLDEYcOx
+        QNrQVUJ3xaaQqLGBpnORFKOR91qIZo0pC/rbPTctQCecVgWTu8aWuxe/ayiMwhSL
+        eDIob7sa1BmbCpUowwbQwkuGz16jQSanIvdHA2EF8BgyO4NL3hh0u77vR4TeuGFE
+        rEtOhAHeEVwheX+0G+0z5POYm6ret69YXQ+gaXS7thrMG3c0vVj9IaYGsJsEflu+
+        T4OjKxK0ew2/nKXrZblbKAcre4LFmDxtHNMO5w/ZzKHZCdES6wCDDurx5azbCNGj
+        6s0XP9I64f1KhHJXsIN9/c95TfKYzHJGQZmAuCAxQNaTiAIrzIxu8sIYA==
+X-ME-Sender: <xms:E4idZMV1TZ_T3L1OGgGxaQRXCeYkusfJugarzOR0X6ER7zo3j4U1ig>
+    <xme:E4idZAk_XBsf0yPJLS4HpxcfDS_SBW2sZXTpRIz4s9V7CixPu3dvFPi20dtIgIIa2
+    EHaTmwg_vHZ_84GcAE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdeiiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:FIidZAZFlWj2vEUzG_yB4LQnW0oUG11rZN2F6kzw5SfbSjBKBBEZoA>
+    <xmx:FIidZLUz_b3eHtwof1uextcVJM0xyoPgF2i-WcMz6_OXQ7y-P6HUTw>
+    <xmx:FIidZGlmYz7ER4kw5lF5QmjaRS8oj89uk5aCJueQwjKRM0mTbynAxA>
+    <xmx:FIidZMqKRdv8aLoKEdCQCimSiWgxSqTvj2Xx6DnlK7ipqUPmlhTCgMzDnO4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DA5E4B60086; Thu, 29 Jun 2023 09:33:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <4d711508-c299-49f2-8691-e75d68f2485e@app.fastmail.com>
+In-Reply-To: <20230629121952.10559-1-tzimmermann@suse.de>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+Date:   Thu, 29 Jun 2023 15:31:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Helge Deller" <deller@gmx.de>, "Daniel Vetter" <daniel@ffwll.ch>,
+        "Dave Airlie" <airlied@gmail.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-mips@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongarch@lists.linux.dev,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 00/12] arch,fbdev: Move screen_info into arch/
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jun 29, 2023, at 13:45, Thomas Zimmermann wrote:
+> The variables screen_info and edid_info provide information about
+> the system's screen, and possibly EDID data of the connected display.
+> Both are defined and set by architecture code. But both variables are
+> declared in non-arch header files. Dependencies are at bease loosely
+> tracked. To resolve this, move the global state screen_info and its
+> companion edid_info into arch/. Only declare them on architectures
+> that define them. List dependencies on the variables in the Kconfig
+> files. Also clean up the callers.
+>
+> Patch 1 to 4 resolve a number of unnecessary include statements of
+> <linux/screen_info.h>. The header should only be included in source
+> files that access struct screen_info.
+>
+> Patches 5 to 7 move the declaration of screen_info and edid_info to
+> <asm-generic/screen_info.h>. Architectures that provide either set
+> a Kconfig token to enable them.
+>
+> Patches 8 to 9 make users of screen_info depend on the architecture's
+> feature.
+>
+> Finally, patches 10 to 12 rework fbdev's handling of firmware EDID
+> data to make use of existing helpers and the refactored edid_info.
+>
+> Tested on x86-64. Built for a variety of platforms.
 
->>=20
->> Without this option but changing SMT level during runtime using
->> ppc64_cpu =E2=80=94smt=3D<level>, the SMT level is not retained after
->> cpu core add.
->=20
-> That's because ppc64_cpu is not using the sysfs SMT control file, it's
-> just onlining/offlining threads manually.
->=20
-> If you run:
-> $ ppc64_cpu --smt=3D4=20
->=20
-> And then also do:
->=20
-> $ echo 4 > /sys/devices/system/cpu/smt/control
->=20
-> It should work as expected?
+This all looks like a nice cleanup!
 
-Thanks Michael. Yes this works. The SMT level is preserved
-after a core add.
+> Future directions: with the patchset in place, it will become possible
+> to provide screen_info and edid_info only if there are users. Some
+> architectures do this by testing for CONFIG_VT, CONFIG_DUMMY_CONSOLE,
+> etc. A more uniform approach would be nice. We should also attempt
+> to minimize access to the global screen_info as much as possible. To
+> do so, some drivers, such as efifb and vesafb, would require an update.
+> The firmware's EDID data could possibly made available outside of fbdev.
+> For example, the simpledrm and ofdrm drivers could provide such data
+> to userspace compositors.
 
-- Sachin
+I suspect that most architectures that provide a screen_info only
+have this in order to compile the framebuffer drivers, and provide
+hardcoded data that does not even reflect any real hardware.
+
+We can probably reduce the number of architectures that do this
+a lot, especially if we get EFI out of the picture.
+
+      Arnd
