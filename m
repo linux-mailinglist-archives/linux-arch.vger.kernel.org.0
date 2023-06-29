@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264267425D1
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 14:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0700A7425D7
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 14:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjF2MUR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jun 2023 08:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S231919AbjF2MUS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jun 2023 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjF2MT6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 08:19:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFE23583;
-        Thu, 29 Jun 2023 05:19:57 -0700 (PDT)
+        with ESMTP id S232113AbjF2MT7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 08:19:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607CA1FD8;
+        Thu, 29 Jun 2023 05:19:58 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4BAC6216DC;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CBF141FD66;
         Thu, 29 Jun 2023 12:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1688041196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IXGU5X8lHgcy0xSrc3ZVVAstecW58Mhx3eVBaUQt3EA=;
-        b=LkHGO7baJX3zJX0cf+a+c/FoUp4pImvT9g1shyK677YQqnqHTwkq2/nbPfpIMVxGT5xDkj
-        aT1pTu4l3b7vpn/6c2VUCblTNZr1fAjD/lJ0StGaPRg75StQdS4Z+R+XnN2JzWnH/E34VU
-        zK/QygQuma782ceDLn96pVDkn5oZtOU=
+        bh=dI1kzUuKD59kYjvBY6wFpwuLP1T5iqiK0PZL3S9tS+4=;
+        b=iOn4KP8zx9qPUKtbQYB/3UuemmzcIp1jKec6IhGp4JnfO4Zc3Qon64c22j4rYtRaUYgve5
+        sr75PQ8iy2XZULzepyxG8DgzelksuLJRjEhAS/DO7S2Ysp725W5TaLjeeV8vgf+fFhfKEZ
+        7AYRAgxOMdWjSM+8Ou37M9XmyDJGHm0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1688041196;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IXGU5X8lHgcy0xSrc3ZVVAstecW58Mhx3eVBaUQt3EA=;
-        b=5mRgVk1/pVfSDoygZItWVKC6R0IzmCwK6ZL98BBiHU3NrlL4mP9k6A6PayShKVnBSPBC2x
-        88su8LwJ20TmyWBQ==
+        bh=dI1kzUuKD59kYjvBY6wFpwuLP1T5iqiK0PZL3S9tS+4=;
+        b=BL/25Txh4w4sSCwBtjxZWN/dcdEjEYYqC2SO2/bckqsruuNu5moVIyXmc/8QJu230txCAq
+        mYmRl8mkEdvMruCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD9EE13905;
-        Thu, 29 Jun 2023 12:19:55 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 535A113A43;
+        Thu, 29 Jun 2023 12:19:56 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id CAVJMet2nWRlVAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 12:19:55 +0000
+        id gDVLE+x2nWRlVAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 12:19:56 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     arnd@arndb.de, deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
 Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
@@ -60,11 +60,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-staging@lists.linux.dev, linux-arch@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>
-Subject: [PATCH 02/12] fbdev/sm712fb: Do not include <linux/screen_info.h>
-Date:   Thu, 29 Jun 2023 13:45:41 +0200
-Message-ID: <20230629121952.10559-3-tzimmermann@suse.de>
+        Ard Biesheuvel <ardb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Subject: [PATCH 03/12] sysfb: Do not include <linux/screen_info.h> from sysfb header
+Date:   Thu, 29 Jun 2023 13:45:42 +0200
+Message-ID: <20230629121952.10559-4-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230629121952.10559-1-tzimmermann@suse.de>
 References: <20230629121952.10559-1-tzimmermann@suse.de>
@@ -80,51 +81,32 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sm712fb's dependency on <linux/screen_info.h> is artificial in that
-it only uses struct screen_info for its internals. Replace the use of
-struct screen_info with a custom data structure and remove the include
-of <linux/screen_info.h>.
+The header file <linux/sysfb.h> does not need anything from
+<linux/screen_info.h>. Declare struct screen_info and remove
+the include statements.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Teddy Wang <teddy.wang@siliconmotion.com>
-Cc: Helge Deller <deller@gmx.de>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Javier Martinez Canillas <javierm@redhat.com>
 ---
- drivers/video/fbdev/sm712fb.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ include/linux/sysfb.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/sm712fb.c b/drivers/video/fbdev/sm712fb.c
-index b7ad3c644e138..f929091da4e77 100644
---- a/drivers/video/fbdev/sm712fb.c
-+++ b/drivers/video/fbdev/sm712fb.c
-@@ -27,12 +27,17 @@
- #include <linux/uaccess.h>
- #include <linux/module.h>
- #include <linux/console.h>
+diff --git a/include/linux/sysfb.h b/include/linux/sysfb.h
+index c1ef5fc60a3cb..19cb803dd5ecd 100644
+--- a/include/linux/sysfb.h
++++ b/include/linux/sysfb.h
+@@ -9,7 +9,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/platform_data/simplefb.h>
 -#include <linux/screen_info.h>
- 
- #include <linux/pm.h>
- 
- #include "sm712.h"
- 
-+struct smtcfb_screen_info {
-+	u16 lfb_width;
-+	u16 lfb_height;
-+	u16 lfb_depth;
-+};
 +
- /*
-  * Private structure
-  */
-@@ -829,7 +834,7 @@ static const struct modeinit vgamode[] = {
- 	},
- };
++struct screen_info;
  
--static struct screen_info smtc_scr_info;
-+static struct smtcfb_screen_info smtc_scr_info;
- 
- static char *mode_option;
- 
+ enum {
+ 	M_I17,		/* 17-Inch iMac */
 -- 
 2.41.0
 
