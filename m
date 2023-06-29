@@ -2,76 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91AC7426E6
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 15:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B4A74271E
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 15:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjF2NDr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jun 2023 09:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S231634AbjF2NSN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jun 2023 09:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2NDq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 09:03:46 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550722D52;
-        Thu, 29 Jun 2023 06:03:45 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 66FAB3200645;
-        Thu, 29 Jun 2023 09:03:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 29 Jun 2023 09:03:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688043823; x=1688130223; bh=UU
-        HaYOR2mXOloOMHF3WLMCOR1A2U5vkl9suJPqtiWo0=; b=MrZKZHz8n89eIUCcId
-        WXghgyhn+F5Y91JfHNG7h6bRVjajE8fTPAAhjd5yTneIb4wXSmpq1LbKXeSmewdI
-        sjdK3BzECiJ9VsNHc2PNHRoZhm3xRYAm+niXcO3LaQQU4MhSkHRgNL7KekTbhGST
-        XCtAL/9vFB8aEMmwPzbk/lKYaOw3o3ta7pbwYVJoUl4935nDF9T6MZnBnxl2NyE7
-        45XG/pQFMaOjg4FsJiuQ0OJjKw2rT3OTyLreg4EK69iWblkKDeRqN9hM0nHAreco
-        4RI2C7HjAM7m3bAIxsusNPU7K1/tqKHlRAu78xIkM/MvkFfL8/VzpTp9irh6eiv1
-        BUyA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688043823; x=1688130223; bh=UUHaYOR2mXOlo
-        OMHF3WLMCOR1A2U5vkl9suJPqtiWo0=; b=cw+4bxWp1SCuh1Fepi9QaF0if2xkJ
-        4cVNwE6L2Y8B0BZ4j9mhs/w9CTABQ9uk/lLli7KdPcxXX5GNTfzwwEySah2SpLb8
-        3Aufg0geWX/HnfgPaOANO2QzCTk7sUuxlOKDej+fIqwnaRnTlWOjf1PvCQRQ1mQ0
-        CXujhLdJDB5jYKlNYIPiNMNvbVyuShIxf7Z2hPXbTAnwB8HTZUAxnS+3doFVCZfS
-        gmb4I1VMLKW5DeH4sul6m4UUqvsEZj5uqrhNhN+sCrKAZmp5/84QBsLfhkM2pVjK
-        QvJS+nuvgBir+CxBeaUMXNbGK4UqHWvJ/CRH9X+edp1kdt3CdxMbNaTXQ==
-X-ME-Sender: <xms:LYGdZOq2TpawqJ5rcDQl-TvNYIKOBNcc63CcDTHs0UU3pE4KkHwh1g>
-    <xme:LYGdZMo5iIttoKNQaIT32FwSEWYOJDX_-UwXYprTiITOax-dB2xadnn_Y1hKqN7ha
-    cHQKsG5M8brTfEdBXo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:LYGdZDNvhDZcJ-jDbXTMaWoNKmBbSBNcy2uRZgtNFh1MzbDGFksadw>
-    <xmx:LYGdZN6WMjR_fUrNppdGMumaaDtgzsSApBXQPQgtgxJNMBei27ypFw>
-    <xmx:LYGdZN50AYLZULabQ_Jig231bC7Vx4KpoK0e9OOcKrHZim3ZsVHbfA>
-    <xmx:L4GdZBqp6nvVSArw-43ExHftquS0CkQLQgd4Fa_QbQ4vBbx75zyQIw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 688DEB60086; Thu, 29 Jun 2023 09:03:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <b31f42c1-4283-4793-b448-f7b9326be5d4@app.fastmail.com>
-In-Reply-To: <20230629121952.10559-7-tzimmermann@suse.de>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
- <20230629121952.10559-7-tzimmermann@suse.de>
-Date:   Thu, 29 Jun 2023 15:03:20 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>, "Daniel Vetter" <daniel@ffwll.ch>,
-        "Dave Airlie" <airlied@gmail.com>
+        with ESMTP id S231270AbjF2NSM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 09:18:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A43213D;
+        Thu, 29 Jun 2023 06:18:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2AA752185E;
+        Thu, 29 Jun 2023 13:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688044690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K5LR3H2yhcLZRfkUpcC1pYuRSidZ3cqdCZg/hSroVmk=;
+        b=iMfm+/ekl0xfXphQ8TVMKTrT9ToRvi4MYfuPCVZZAy+JWtEwFNQpmWYIMp1ahVk0VzxEMc
+        9vdJjhaRzuPHB0EZlpDS2j4gGqL462DXX3aZ/YckBYoB9WMBTuLu9QNIxB5UgNdqSpVH7z
+        52WX/ny9kEUHZSPElxwmGtlhnjwzsns=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688044690;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K5LR3H2yhcLZRfkUpcC1pYuRSidZ3cqdCZg/hSroVmk=;
+        b=xp7w81/HcKGr6AkcZ0NPWLrSaMy4em6tA16DRyZDyCoK4iK4hZmFtiZeOi0hbEeJ4JV0Im
+        oIingQYV0eMXi6Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C7381139FF;
+        Thu, 29 Jun 2023 13:18:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6reCL5CEnWRzcwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 13:18:08 +0000
+Message-ID: <90726a74-69db-3f8e-819d-3a1a10e98992@suse.de>
+Date:   Thu, 29 Jun 2023 15:18:07 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 06/12] arch: Declare screen_info in <asm/screen_info.h>
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
         "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
@@ -82,99 +66,185 @@ Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
         linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
-        "Brian Cain" <bcain@quicinc.com>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         "David S . Miller" <davem@davemloft.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chris Zankel" <chris@zankel.net>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "Kees Cook" <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Frederic Weisbecker" <frederic@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Sami Tolvanen" <samitolvanen@google.com>,
-        "Juerg Haefliger" <juerg.haefliger@canonical.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Sebastian Reichel" <sebastian.reichel@collabora.com>,
-        "Mike Rapoport" <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Mike Rapoport <rppt@kernel.org>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [PATCH 06/12] arch: Declare screen_info in <asm/screen_info.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Zi Yan <ziy@nvidia.com>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-7-tzimmermann@suse.de>
+ <b31f42c1-4283-4793-b448-f7b9326be5d4@app.fastmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <b31f42c1-4283-4793-b448-f7b9326be5d4@app.fastmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------lHNoVt04HU1vaNtq3nK0adnX"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 29, 2023, at 13:45, Thomas Zimmermann wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------lHNoVt04HU1vaNtq3nK0adnX
+Content-Type: multipart/mixed; boundary="------------NaZYgX4ZbucliJsCgNaPg0G7";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+ Daniel Vetter <daniel@ffwll.ch>, Dave Airlie <airlied@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ guoren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Dinh Nguyen <dinguyen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S . Miller" <davem@davemloft.net>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+ Kees Cook <keescook@chromium.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Ard Biesheuvel <ardb@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Juerg Haefliger <juerg.haefliger@canonical.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Niklas Schnelle <schnelle@linux.ibm.com>,
+ Russell King <rmk+kernel@armlinux.org.uk>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Mike Rapoport <rppt@kernel.org>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Zi Yan <ziy@nvidia.com>
+Message-ID: <90726a74-69db-3f8e-819d-3a1a10e98992@suse.de>
+Subject: Re: [PATCH 06/12] arch: Declare screen_info in <asm/screen_info.h>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-7-tzimmermann@suse.de>
+ <b31f42c1-4283-4793-b448-f7b9326be5d4@app.fastmail.com>
+In-Reply-To: <b31f42c1-4283-4793-b448-f7b9326be5d4@app.fastmail.com>
 
-> diff --git a/include/asm-generic/screen_info.h 
-> b/include/asm-generic/screen_info.h
-> new file mode 100644
-> index 0000000000000..6fd0e50fabfcd
-> --- /dev/null
-> +++ b/include/asm-generic/screen_info.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _ASM_GENERIC_SCREEN_INFO_H
-> +#define _ASM_GENERIC_SCREEN_INFO_H
-> +
-> +#include <uapi/linux/screen_info.h>
-> +
-> +#if defined(CONFIG_ARCH_HAS_SCREEN_INFO)
-> +extern struct screen_info screen_info;
-> +#endif
-> +
-> +#endif /* _ASM_GENERIC_SCREEN_INFO_H */
-> diff --git a/include/linux/screen_info.h b/include/linux/screen_info.h
-> index eab7081392d50..c764b9a51c24b 100644
-> --- a/include/linux/screen_info.h
-> +++ b/include/linux/screen_info.h
-> @@ -4,6 +4,6 @@
-> 
->  #include <uapi/linux/screen_info.h>
-> 
-> -extern struct screen_info screen_info;
-> +#include <asm/screen_info.h>
-> 
+--------------NaZYgX4ZbucliJsCgNaPg0G7
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-What is the purpose of adding a file in asm-generic? If all
-architectures use the same generic file, I'd just leave the
-declaration in include/linux/. I wouldn't bother adding the
-#ifdef either, but I can see how that helps turn a link
-error into an earlier compile error.
+SGkNCg0KQW0gMjkuMDYuMjMgdW0gMTU6MDMgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
+biBUaHUsIEp1biAyOSwgMjAyMywgYXQgMTM6NDUsIFRob21hcyBaaW1tZXJtYW5uIHdyb3Rl
+Og0KPiANCj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2FzbS1nZW5lcmljL3NjcmVlbl9pbmZv
+LmgNCj4+IGIvaW5jbHVkZS9hc20tZ2VuZXJpYy9zY3JlZW5faW5mby5oDQo+PiBuZXcgZmls
+ZSBtb2RlIDEwMDY0NA0KPj4gaW5kZXggMDAwMDAwMDAwMDAwMC4uNmZkMGU1MGZhYmZjZA0K
+Pj4gLS0tIC9kZXYvbnVsbA0KPj4gKysrIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy9zY3JlZW5f
+aW5mby5oDQo+PiBAQCAtMCwwICsxLDEyIEBADQo+PiArLyogU1BEWC1MaWNlbnNlLUlkZW50
+aWZpZXI6IEdQTC0yLjAgKi8NCj4+ICsNCj4+ICsjaWZuZGVmIF9BU01fR0VORVJJQ19TQ1JF
+RU5fSU5GT19IDQo+PiArI2RlZmluZSBfQVNNX0dFTkVSSUNfU0NSRUVOX0lORk9fSA0KPj4g
+Kw0KPj4gKyNpbmNsdWRlIDx1YXBpL2xpbnV4L3NjcmVlbl9pbmZvLmg+DQo+PiArDQo+PiAr
+I2lmIGRlZmluZWQoQ09ORklHX0FSQ0hfSEFTX1NDUkVFTl9JTkZPKQ0KPj4gK2V4dGVybiBz
+dHJ1Y3Qgc2NyZWVuX2luZm8gc2NyZWVuX2luZm87DQo+PiArI2VuZGlmDQo+PiArDQo+PiAr
+I2VuZGlmIC8qIF9BU01fR0VORVJJQ19TQ1JFRU5fSU5GT19IICovDQo+PiBkaWZmIC0tZ2l0
+IGEvaW5jbHVkZS9saW51eC9zY3JlZW5faW5mby5oIGIvaW5jbHVkZS9saW51eC9zY3JlZW5f
+aW5mby5oDQo+PiBpbmRleCBlYWI3MDgxMzkyZDUwLi5jNzY0YjlhNTFjMjRiIDEwMDY0NA0K
+Pj4gLS0tIGEvaW5jbHVkZS9saW51eC9zY3JlZW5faW5mby5oDQo+PiArKysgYi9pbmNsdWRl
+L2xpbnV4L3NjcmVlbl9pbmZvLmgNCj4+IEBAIC00LDYgKzQsNiBAQA0KPj4NCj4+ICAgI2lu
+Y2x1ZGUgPHVhcGkvbGludXgvc2NyZWVuX2luZm8uaD4NCj4+DQo+PiAtZXh0ZXJuIHN0cnVj
+dCBzY3JlZW5faW5mbyBzY3JlZW5faW5mbzsNCj4+ICsjaW5jbHVkZSA8YXNtL3NjcmVlbl9p
+bmZvLmg+DQo+Pg0KPiANCj4gV2hhdCBpcyB0aGUgcHVycG9zZSBvZiBhZGRpbmcgYSBmaWxl
+IGluIGFzbS1nZW5lcmljPyBJZiBhbGwNCj4gYXJjaGl0ZWN0dXJlcyB1c2UgdGhlIHNhbWUg
+Z2VuZXJpYyBmaWxlLCBJJ2QganVzdCBsZWF2ZSB0aGUNCj4gZGVjbGFyYXRpb24gaW4gaW5j
+bHVkZS9saW51eC8uIEkgd291bGRuJ3QgYm90aGVyIGFkZGluZyB0aGUNCg0KVGhhdCBhcHBl
+YXJzIGEgYml0ICd1bi1jbGVhbicgZm9yIHNvbWV0aGluZyB0aGF0IGlzIGRlZmluZWQgaW4g
+DQphcmNoaXRlY3R1cmU/IEJ1dCBPSywgSSB3b3VsZCBub3Qgb2JqZWN0Lg0KDQo+ICNpZmRl
+ZiBlaXRoZXIsIGJ1dCBJIGNhbiBzZWUgaG93IHRoYXQgaGVscHMgdHVybiBhIGxpbmsNCj4g
+ZXJyb3IgaW50byBhbiBlYXJsaWVyIGNvbXBpbGUgZXJyb3IuDQoNClllcywgdGhhdCdzIGlu
+dGVudGlvbmFsLiBJZiB0aGVyZSdzIGEgS2NvbmZpZyB0b2tlbiBhbnl3YXksIHdlIGNhbiBh
+bHNvIA0KZmFpbCBlYXJseSBkdXJpbmcgdGhlIGJ1aWxkLg0KDQpCZXN0IHJlZ2FyZHMNClRo
+b21hcw0KDQo+IA0KPiAgICAgICAgQXJuZA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
+cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
+YW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55
+DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGll
+biBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-      Arnd
+--------------NaZYgX4ZbucliJsCgNaPg0G7--
+
+--------------lHNoVt04HU1vaNtq3nK0adnX
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSdhI8FAwAAAAAACgkQlh/E3EQov+C6
+/A/9E2UeLuAYO4oVzr7MYxtHJqgMeXKL3iCmAlD5a1SYNi1ixD68cwakP+lI9m4szzDGyNU/sRYL
+Ce3i8WGXgRm991Ydm+ztZ8FO/ph9XOVhq7RFKwEYNy70l+7R56mDOd1ciNpH3MLjEfhoBJ5Xj0cD
+rPf/74n/ptJpdYGsFRJSqo+xj78uWljJdj9YQ6bpUNhOIFAJn+a91kvcreTWoVwBfaXlWevy3dHR
+lAFUpk+Ji1uldEboHSHzFB3V6FQ7odxZ/oW0ykURjjf2TyqrA4MwLtjZQYJqSr6i0cN1Qfn/IR1o
+CHZFJKzcQXgF+jqdXdEmgS3pDi+jmR7paLHGwX0pdlcczcjPuAJ9b0MqjQ5De1mJ1qNTKZCMUHrm
+n6BW6VGyUn4n7x/hieov6MXbqJkEXu9dAJgzNR9SQ/5Dszfwn8IJOGS3plNsPJSBYA1ZRAGmv5mv
+VtscxfEkzLP1f5IM+ukfQ4lfSC+P9B3jbsa6DqQfcr1IBMQiJkbK6XKI9TQwLqxfWlgkdUfjgp4d
+lDwmJfyb7JLxdMktscgr1rlA1KE/jlHX9wxTazYoUnY5uBtdeYco9NNe2fhvRv+c4mfJknGVZ/dR
+F72VPBGenSKLgGoPamSowIKZJ/CpjEecYs7IcjmIoSLJ01STOBrZDRjz8iMNHR7pdZRLjuUSHY+B
+wjM=
+=ZHT8
+-----END PGP SIGNATURE-----
+
+--------------lHNoVt04HU1vaNtq3nK0adnX--
