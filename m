@@ -2,99 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351BE741C8E
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 01:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD08742209
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 10:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjF1Xnu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Jun 2023 19:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S232296AbjF2IXL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jun 2023 04:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjF1Xnt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Jun 2023 19:43:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7577610EC;
-        Wed, 28 Jun 2023 16:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=mkpKticynoUGDZ1Tdpq3P9FZu5kxXQf0JefJvMLgJuA=; b=eVGM60hxW/1oCROBhJRKbbF9pd
-        /WHGc+o+pb+fkeVze6GKs3Hcu2mjtmWM/4oUGYCU0t+UbFMtrvvcjHSl/cglLWbeBdgmG30OqcMNt
-        S2Pr1+dHNTd4T3qFeiVwQeps/R+LjlmcLTRsuZ8NdhZsmraeYrB2Kel7p0VxJ6+7q7EgMQ6Wx6ank
-        P+yHcdGkzLdLPcfc5husZ1HslNubmokchQy4wGscGAVnBMae971Q/C5VLDp5JrfEWC1X5YToHzDHK
-        +ikxlG8dV0EOrjRrjMKr08rEq8iFClaMjdpXxuLncvJrq9YBnHim1BxRohfVxP5cT8JFsbmDDx9YM
-        9l9IY3yQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEeow-00H298-0w;
-        Wed, 28 Jun 2023 23:43:34 +0000
-Message-ID: <08e273fc-49c5-dd09-1c9e-d85a080767f9@infradead.org>
-Date:   Wed, 28 Jun 2023 16:43:27 -0700
+        with ESMTP id S232403AbjF2IWb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 04:22:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C032974;
+        Thu, 29 Jun 2023 01:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65640614FE;
+        Thu, 29 Jun 2023 08:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53985C433C0;
+        Thu, 29 Jun 2023 08:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688026847;
+        bh=eix3asqgstSKaRDosqnGq1xt2TLM2YGz1j/+D6LUbUw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Li0ft4GpCx4QdjFx8Bu0MQQmbfINFOTqPW1UsMc2jx6iV2r5mI+jgoR1BT03Ekiv/
+         rNAh00T4LGxnPFaYaFYEJUeYMpjSkM5eX2vu5W5RYeqDDNG1/Nwsmts9edq2mbUxik
+         2uGZJVbqK6FnUezh+J1lnsFy8p8nF1VXy67qHcTGIT5vX6x04UmwLVNE5klSIvdTgS
+         Jh+kWdtbvGhEfTkZeUOBpuAJkliug8/4V1T5aYfNC4MlsAPttJU9rx5yNjIfFO/6K0
+         FPky9KXaVEq7VJgeg0KfUuKVP77C0qgeTgSoy67ARCVZPu84Qz8U3d4utxOdoV9n2t
+         nWYqdv2ygrGxg==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.co,
+        zong.li@sifive.com, atishp@atishpatra.org, alex@ghiti.fr,
+        jszhang@kernel.org, bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] riscv: pageattr: Fixup synchronization problem between init_mm and active_mm
+Date:   Thu, 29 Jun 2023 04:20:32 -0400
+Message-Id: <20230629082032.3481237-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] syscalls: Cleanup references to sys_lookup_dcookie()
-Content-Language: en-US
-To:     Sohil Mehta <sohil.mehta@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sergei Trofimovich <slyich@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Brian Gerst <brgerst@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-References: <20230628230935.1196180-1-sohil.mehta@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230628230935.1196180-1-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,54 +54,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+From: Guo Ren <guoren@linux.alibaba.com>
 
+The machine_kexec() uses set_memory_x to add the executable attribute to the
+page table entry of control_code_buffer. It only modifies the init_mm but not
+the current->active_mm. The current kexec process won't use init_mm directly,
+and it depends on minor_pagefault, which is removed by commit 7d3332be011e4
+("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") of 64BIT. So,
+when it met pud mapping on an MMU_SV39 machine, it caused the following:
 
-On 6/28/23 16:09, Sohil Mehta wrote:
-> commit 'be65de6b03aa ("fs: Remove dcookies support")' removed the
-> syscall definition for lookup_dcookie.  However, syscall tables still
-> point to the old sys_lookup_dcookie() definition. Update syscall tables
-> of all architectures to directly point to sys_ni_syscall() instead.
-> 
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+ kexec_core: Starting new kernel
+ Will call new kernel at 00300000 from hart id 0
+ FDT image at 747c7000
+ Bye...
+ Unable to handle kernel paging request at virtual address ffffffda23b0d000
+ Oops [#1]
+ Modules linked in:
+ CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+ Hardware name: Sophgo Mango (DT)
+ epc : 0xffffffda23b0d000
+  ra : machine_kexec+0xa6/0xb0
+ epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+  gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+  t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+  s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+  a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+  a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+  s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+  s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+  s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+  s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+  t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+ status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Yes, Using set_memory_x API after boot has the limitation, and at least we
+should synchronize the current->active_mm to fix the problem.
 
-Thanks.
+Fixes: d3ab332a5021 ("riscv: add ARCH_HAS_SET_MEMORY support")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+ arch/riscv/mm/pageattr.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> ---
-> This patch has a dependency on another patch that has been applied to the
-> asm-generic tree:
-> https://lore.kernel.org/lkml/20230621223600.1348693-1-sohil.mehta@intel.com/
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl              | 2 +-
->  arch/arm/tools/syscall.tbl                          | 2 +-
->  arch/arm64/include/asm/unistd32.h                   | 4 ++--
->  arch/ia64/kernel/syscalls/syscall.tbl               | 2 +-
->  arch/m68k/kernel/syscalls/syscall.tbl               | 2 +-
->  arch/microblaze/kernel/syscalls/syscall.tbl         | 2 +-
->  arch/mips/kernel/syscalls/syscall_n32.tbl           | 2 +-
->  arch/mips/kernel/syscalls/syscall_n64.tbl           | 2 +-
->  arch/mips/kernel/syscalls/syscall_o32.tbl           | 2 +-
->  arch/parisc/kernel/syscalls/syscall.tbl             | 2 +-
->  arch/powerpc/kernel/syscalls/syscall.tbl            | 2 +-
->  arch/s390/kernel/syscalls/syscall.tbl               | 2 +-
->  arch/sh/kernel/syscalls/syscall.tbl                 | 2 +-
->  arch/sparc/kernel/syscalls/syscall.tbl              | 2 +-
->  arch/x86/entry/syscalls/syscall_32.tbl              | 2 +-
->  arch/x86/entry/syscalls/syscall_64.tbl              | 2 +-
->  arch/xtensa/kernel/syscalls/syscall.tbl             | 2 +-
->  include/linux/compat.h                              | 1 -
->  include/linux/syscalls.h                            | 1 -
->  include/uapi/asm-generic/unistd.h                   | 2 +-
->  kernel/sys_ni.c                                     | 2 --
->  tools/include/uapi/asm-generic/unistd.h             | 2 +-
->  tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 2 +-
->  tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 2 +-
->  tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 2 +-
->  tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 2 +-
->  26 files changed, 24 insertions(+), 28 deletions(-)
-> 
-
-
+diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+index ea3d61de065b..23d169c4ee81 100644
+--- a/arch/riscv/mm/pageattr.c
++++ b/arch/riscv/mm/pageattr.c
+@@ -123,6 +123,13 @@ static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+ 				     &masks);
+ 	mmap_write_unlock(&init_mm);
+ 
++	if (current->active_mm != &init_mm) {
++		mmap_write_lock(current->active_mm);
++		ret =  walk_page_range_novma(current->active_mm, start, end,
++					     &pageattr_ops, NULL, &masks);
++		mmap_write_unlock(current->active_mm);
++	}
++
+ 	flush_tlb_kernel_range(start, end);
+ 
+ 	return ret;
 -- 
-~Randy
+2.36.1
+
