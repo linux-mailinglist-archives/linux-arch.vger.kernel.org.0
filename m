@@ -2,146 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C9074273E
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 15:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE861742757
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 15:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbjF2NWG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jun 2023 09:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S230446AbjF2N0q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jun 2023 09:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjF2NWF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 09:22:05 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134A52707;
-        Thu, 29 Jun 2023 06:22:04 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id D62232B00081;
-        Thu, 29 Jun 2023 09:22:00 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 29 Jun 2023 09:22:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688044920; x=1688052120; bh=sQ
-        O+tpzU86Ruad95sakzckO3PnIV53aaJirVNNGwiuo=; b=4uqnQG/Z1UuyNyyAek
-        0XEemltl5YoKfbuyK7idzOfGbk2sj8tW5sPhftwy7vAcMTe/lNT1CqLxPHHTqxXl
-        b+N4aIXSme583rtEDLHRQQE5RZfTFsD+lTdYY9RefCbOfAlhciUTlKT5u2JXw4I4
-        ztOXsWSrHvNADHnJ68PH1ClsbIkWEIcWMVseJvPUcBCt/bCpX9x+rZSZZO6oAAQb
-        x9SWYdHJXxBC2SICSWUYB8JczQyliaPFo8FiWTtVLKrXWw/KnLs9i/+IAnqxZm8k
-        yqkPPTEwfMl+/IelpxRjc4jeyf7SfLboZoIPnpuMmrGUGm6Jvxy4MC7RByrwgGdC
-        yACQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688044920; x=1688052120; bh=sQO+tpzU86Rua
-        d95sakzckO3PnIV53aaJirVNNGwiuo=; b=IbgfMem7uDuQxpPEGhflBncHobvLW
-        vpdJgB9HlfrxSWZohr0Jpjmu+TTjCXIaQB0uQ+13MlfVT0itNPNX4vwmIqNieKC6
-        gPv4iflQLslU6lXHYDAvAm799+KHkiXlvXfZM777AHY2iwxEls+3U9z2bO1yeOef
-        wFpfTxWZmsHuvogMZSyJmnFyjemy8yi74cXqbPUy2ZTBAZ4KqNqWtoYlOjGYmlQy
-        PMPbNhtV1XvXdYg2lSN5WBQIEaNfObSZgMdkW8nfVQEunQCLpApHo/cwzRobpAQN
-        ZuHALvp9USqwqc7dcNooNTZaYpKwAFukGjJYFDScEYkfK4BGpwxbvs5wA==
-X-ME-Sender: <xms:eIWdZK2mhUMZoeD5ScJng_-Mw9sdRxOEu_Lgqc28dk7bZK70NYedTw>
-    <xme:eIWdZNGBGclYv6j7-IGwscmhWxPIRk4Bebhe_u_lemBUmyA0MfekuVd4tn5XkkmLX
-    tzaa5AupcGn4LfNDF0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:eIWdZC5kimzqKYQ1BPs7CvQbOgpGEss3M0RxRwWrIroNsq9V3om0TA>
-    <xmx:eIWdZL1nORBRiFJwbEufwbgzn_wdP_V0r9RSWhxWObhMpewEM8zlHA>
-    <xmx:eIWdZNG9JECFzRVSW1lGw4WP0yMQisPFaCR0eAsEec1IlVvAdRAh7Q>
-    <xmx:eIWdZPlLPgVMB-Zms1gBZ7XMicph5Ie9iaKcHZPRTF7XioY1Fsly84JuoI4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F305FB60086; Thu, 29 Jun 2023 09:21:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
-In-Reply-To: <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
- <20230629121952.10559-8-tzimmermann@suse.de>
- <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
- <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
-Date:   Thu, 29 Jun 2023 15:21:39 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>, "Daniel Vetter" <daniel@ffwll.ch>,
-        "Dave Airlie" <airlied@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        with ESMTP id S231929AbjF2N0k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 09:26:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B098C2D4A;
+        Thu, 29 Jun 2023 06:26:39 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TDGKLk015851;
+        Thu, 29 Jun 2023 13:26:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=QsIE4YvZg+MuKCPLsytxLGBxlXmOrHMoeFDnva0uOEY=;
+ b=ELtgLYVfVrWbrHzSUpHP46dmIfUtiIsPOaTfZ/v7RTnGLVViRBe7AZdaRf7qpZiKh19m
+ jSbKFimF+R3TTmfzEzM/47DqzdwRKqHtQYEJP3m1fKltkkfPq0SzDFRTM0gAmBvVPjo7
+ G21LYQPfzbhqtCmb6VpNBPV+Y3/fcVykD99woxFt74d0fTbnYKfdVVpvZJHshPLA6wMq
+ PCDo7akSZcg9x8PYqPv3Aze2NC4jdGf5ZMvBz4D1MgCrhrIowYqmA9F94lAIEbiHUz+q
+ a3/j1AHSLhflgYNardOulyKefteNmn1Asu0xJBAKd4A2Ll240unw1VC8domCzeK9tsp1 aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhapqr7mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 13:26:18 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35TDGZfU017050;
+        Thu, 29 Jun 2023 13:26:17 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhapqr7kn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 13:26:17 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35T3p0UE004735;
+        Thu, 29 Jun 2023 13:26:15 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr453c1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 13:26:15 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TDQDxd41484622
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Jun 2023 13:26:13 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 087F32004B;
+        Thu, 29 Jun 2023 13:26:13 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09C7720040;
+        Thu, 29 Jun 2023 13:26:12 +0000 (GMT)
+Received: from [9.171.48.121] (unknown [9.171.48.121])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Jun 2023 13:26:11 +0000 (GMT)
+Message-ID: <cf4f1ec3873b6c4b92ddb347d5bd3c2e2f03bf00.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for
+ HAS_IOPORT=n
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Frederic Weisbecker" <frederic@kernel.org>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Sami Tolvanen" <samitolvanen@google.com>,
-        "Juerg Haefliger" <juerg.haefliger@canonical.com>
-Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Date:   Thu, 29 Jun 2023 15:26:11 +0200
+In-Reply-To: <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+         <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
+         <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
+         <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: BxIZCkNvLWM-htSxEtD_VuqrJkpEhI2T
+X-Proofpoint-GUID: ukF1eiTpCrqXSEgzF4YcIcJY7PrWlXJe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306290117
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 29, 2023, at 15:01, Thomas Zimmermann wrote:
-> Am 29.06.23 um 14:35 schrieb Arnd Bergmann:
->> On Thu, Jun 29, 2023, at 13:45, Thomas Zimmermann wrote:
->>> The global variable edid_info contains the firmware's EDID information
->>> as an extension to the regular screen_info on x86. Therefore move it to
->>> <asm/screen_info.h>.
->>>
->>> Add the Kconfig token ARCH_HAS_EDID_INFO to guard against access on
->>> architectures that don't provide edid_info. Select it on x86.
->> 
->> I'm not sure we need another symbol in addition to
->> CONFIG_FIRMWARE_EDID. Since all the code behind that
->> existing symbol is also x86 specific, would it be enough
->> to just add either 'depends on X86' or 'depends on X86 ||
->> COMPILE_TEST' there?
->
-> FIRMWARE_EDID is a user-selectable feature, while ARCH_HAS_EDID_INFO 
-> announces an architecture feature. They do different things.
+On Tue, 2023-06-27 at 14:53 +0200, Arnd Bergmann wrote:
+> On Tue, Jun 27, 2023, at 11:12, Niklas Schnelle wrote:
+> > On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
+> > >=20
+> > > Maybe let's give it another week to have more maintainers pick
+> > > up stuff from v5, and then send out a v6 as separate submissions.
+> > >=20
+> > >     Arnd
+> >=20
+> > Hi Arnd and All,
+> >=20
+> > I'm sorry there hasn't been an updated in a long time and we're missing
+> > v6.5. I've been quite busy with other work and life. Speaking of, I
+> > will be mostly out for around a month starting some time mid to end
+> > July as, if all goes well, I'm expecting to become a dad. That said, I
+> > haven't forgotten about this and your overall plan of sending per-
+> > subsystem patches sounds good, just haven't had the time to also
+> > incorporate the feedback.
+>=20
+> Ok, thanks for letting us know. I just checked to see that about half
+> of your series has already made it into linux-next and is likely to
+> be part of v6.5 or already in v6.4.
+>=20
+> Maybe you can start out by taking a pass at just resending the ones
+> that don't need any changes and can just get picked up after -rc1,
+> and then I'll try to have a look at whatever remains after that.
+>=20
+>     Arnd
 
-I still have trouble seeing the difference.
 
-> Right now, ARCH_HAS_EDID_INFO only works on the old BIOS-based VESA 
-> systems. In the future, I want to add support for EDID data from EFI and 
-> OF as well. It would be stored in edid_info. I assume that the new 
-> symbol will become useful then.
+Oh yeah looks better than I anticipated. I seem to have picked an odd
+base commit for "tty: serial: .." because of which Greg couldn't apply
+it so res-ending + rebase might be enough for that. By my count it
+looks like only "usb: pci-quirksL ..." needs real work and possibly the
+"drm: .." part though the discussion around cirrus doesn't look like it
+would require much work. So I'll do rebase/re-send of the easy ones
+tomorrow/next week.
 
-I don't see why an OF based system would have the same limitation
-as legacy BIOS with supporting only a single monitor, if we need
-to have a generic representation of EDID data in DT, that would
-probably be in a per device property anyway.
-
-I suppose you could use FIRMWARE_EDID on EFI or OF systems without
-the need for a global edid_info structure, but that would not
-share any code with the current fb_firmware_edid() function.
-
-     Arnd
+Thanks,
+Niklas
