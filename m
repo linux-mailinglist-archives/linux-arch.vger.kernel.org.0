@@ -2,143 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3974742608
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 14:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818B9742542
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Jun 2023 14:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjF2MUg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Jun 2023 08:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S229469AbjF2MEm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Jun 2023 08:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjF2MUH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 08:20:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC9F359F;
-        Thu, 29 Jun 2023 05:20:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CC89C2189A;
-        Thu, 29 Jun 2023 12:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688041202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q1EPhwvEq31eQQzrYtIsQXTt/XpY0djP9Otjk0JmQCc=;
-        b=Dub84nZmbr1BGiuBX3aLZCTa/8FoWtNS4BzLIrTk5qvczeKCFX53em1kSbWeLcAyIspbMx
-        j6KHULUkYWyNqKDLvuCO97srdnBXPf6V9M5RJtPm/H/f0wvATtksA3VMvLECaNAMn8RMxS
-        gxDb1nO4bNmBncRGAjcZ0s/8rYkvx4Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688041202;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q1EPhwvEq31eQQzrYtIsQXTt/XpY0djP9Otjk0JmQCc=;
-        b=3Y1jfeE0PeJBr+WAivUH1Npe9jamuIgzZi4hsiB1oUlsIjSgHaYMy5c5OmGy6U7+S8zHKp
-        tX1gbKFXmHiTluBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 59C8213905;
-        Thu, 29 Jun 2023 12:20:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EFS5FPJ2nWRlVAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 12:20:02 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     arnd@arndb.de, deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-hyperv@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-arch@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 12/12] fbdev/core: Define empty fb_firmware_edid() in <linux/fb.h>
-Date:   Thu, 29 Jun 2023 13:45:51 +0200
-Message-ID: <20230629121952.10559-13-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230629121952.10559-1-tzimmermann@suse.de>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
+        with ESMTP id S230198AbjF2MEl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Jun 2023 08:04:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65AA2D71;
+        Thu, 29 Jun 2023 05:04:39 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TBlb6h014110;
+        Thu, 29 Jun 2023 12:04:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=FFcWFhPXK4s5EhufV5iP50/C3C+p/BQChJ9YUO6Wogs=;
+ b=UNx7oT3DvlVOz5pk0UY8ZUpqPKoFDq2aQ2IEiLqdDzzbU88NCWYMTrXnxeR8wZT4+7aY
+ oCCoMwdpI6hdRAlbBAjVyZt2nUfK4D4qoscePARhmUZWDb/Klm7VezQhLdj0lJ448bk3
+ XIl8dvniU9fHssKeXijLtp+KcPUNkWI/E1pC6LpGz4Wgt3YDq47xbGLvpriAT3u7HvqA
+ G3lgfvriY6mWun8GxVKvlv/XHflxW1nXadnFB9mPY28zJs6RiyS2bMe6ZEeKJI7WkmxY
+ IvrjGI/T/xy109Hf8o9kzgZHACMWYQz49vfC8GE7p9w1RjzLjlsAvdk4Fcz0uB5nl/AC xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rh9d28bk3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 12:04:13 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35TC0k2k030829;
+        Thu, 29 Jun 2023 12:04:12 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rh9d28bhn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 12:04:12 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35TBYLAi011422;
+        Thu, 29 Jun 2023 12:04:09 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3rdr452ge1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 12:04:09 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TC47JX19268186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Jun 2023 12:04:07 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3781C20043;
+        Thu, 29 Jun 2023 12:04:07 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C468320040;
+        Thu, 29 Jun 2023 12:04:06 +0000 (GMT)
+Received: from [9.144.158.239] (unknown [9.144.158.239])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Jun 2023 12:04:06 +0000 (GMT)
+Message-ID: <91dc3a14-4f1b-ebff-69d7-ff15469b5dcb@linux.ibm.com>
+Date:   Thu, 29 Jun 2023 14:04:06 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v2 0/9] Introduce SMT level and add PowerPC support
+Content-Language: fr
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Sachin Sant <sachinp@linux.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arch@vger.kernel.org, dave.hansen@linux.intel.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
+        npiggin@gmail.com, tglx@linutronix.de
+References: <20230628100558.43482-1-ldufour@linux.ibm.com>
+ <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
+ <87edluh6ce.fsf@mail.lhotse>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87edluh6ce.fsf@mail.lhotse>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0UOBMfegDE_I71F22zNx5oVM0tK1OamE
+X-Proofpoint-GUID: UpmLjj2GgeXEOoGf8Ebdt0bsAN_eXqAi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306290108
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Move the empty declaration of fb_firmware_edid() to <linux/fb.h>.
-Follow common style and avoid the overhead of exporting the symbol.
-No functional changes.
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Randy Dunlap <rdunlap@infradead.org>
----
- drivers/video/fbdev/core/fbmon.c |  7 +------
- include/linux/fb.h               | 10 +++++++++-
- 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/video/fbdev/core/fbmon.c b/drivers/video/fbdev/core/fbmon.c
-index 9ae063021e431..d45bd8a18c2f2 100644
---- a/drivers/video/fbdev/core/fbmon.c
-+++ b/drivers/video/fbdev/core/fbmon.c
-@@ -1496,13 +1496,8 @@ const unsigned char *fb_firmware_edid(struct fb_info *info)
- 
- 	return edid;
- }
--#else
--const unsigned char *fb_firmware_edid(struct fb_info *info)
--{
--	return NULL;
--}
--#endif
- EXPORT_SYMBOL(fb_firmware_edid);
-+#endif
- 
- EXPORT_SYMBOL(fb_parse_edid);
- EXPORT_SYMBOL(fb_edid_to_monspecs);
-diff --git a/include/linux/fb.h b/include/linux/fb.h
-index 5ffd2223326bf..e949532ffc109 100644
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -761,7 +761,6 @@ extern int fb_get_mode(int flags, u32 val, struct fb_var_screeninfo *var,
- extern int fb_validate_mode(const struct fb_var_screeninfo *var,
- 			    struct fb_info *info);
- extern int fb_parse_edid(unsigned char *edid, struct fb_var_screeninfo *var);
--extern const unsigned char *fb_firmware_edid(struct fb_info *info);
- extern void fb_edid_to_monspecs(unsigned char *edid,
- 				struct fb_monspecs *specs);
- extern void fb_destroy_modedb(struct fb_videomode *modedb);
-@@ -774,6 +773,15 @@ extern int of_get_fb_videomode(struct device_node *np,
- extern int fb_videomode_from_videomode(const struct videomode *vm,
- 				       struct fb_videomode *fbmode);
- 
-+#if defined(CONFIG_FIRMWARE_EDID)
-+const unsigned char *fb_firmware_edid(struct fb_info *info);
-+#else
-+static inline const unsigned char *fb_firmware_edid(struct fb_info *info)
-+{
-+	return NULL;
-+}
-+#endif
-+
- /* drivers/video/modedb.c */
- #define VESA_MODEDB_SIZE 43
- #define DMT_SIZE 0x50
--- 
-2.41.0
+Le 29/06/2023 à 13:10, Michael Ellerman a écrit :
+> Sachin Sant <sachinp@linux.ibm.com> writes:
+>>> On 28-Jun-2023, at 3:35 PM, Laurent Dufour <ldufour@linux.ibm.com> wrote:
+>>>
+>>> I'm taking over the series Michael sent previously [1] which is smartly
+>>> reviewing the initial series I sent [2].  This series is addressing the
+>>> comments sent by Thomas and me on the Michael's one.
+>>>
+>>> Here is a short introduction to the issue this series is addressing:
+>>>
+>>> When a new CPU is added, the kernel is activating all its threads. This
+>>> leads to weird, but functional, result when adding CPU on a SMT 4 system
+>>> for instance.
+>>>
+>>> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+>>> active (system has been booted with the 'smt-enabled=4' kernel option):
+>>>
+>>> ltcden3-lp12:~ # ppc64_cpu --info
+>>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>>
+>>> This mixed SMT level may confused end users and/or some applications.
+>>>
+>>
+>> Thanks for the patches Laurent.
+>>
+>> Is the SMT level retained even when dynamically changing SMT values?
+>> I am observing difference in behaviour with and without smt-enabled
+>> kernel command line option.
+>>
+>> When smt-enabled= option is specified SMT level is retained across
+>> cpu core remove and add.
+>>
+>> Without this option but changing SMT level during runtime using
+>> ppc64_cpu —smt=<level>, the SMT level is not retained after
+>> cpu core add.
+> 
+> That's because ppc64_cpu is not using the sysfs SMT control file, it's
+> just onlining/offlining threads manually.
+> 
+> If you run:
+>   $ ppc64_cpu --smt=4
+> 
+> And then also do:
+> 
+>   $ echo 4 > /sys/devices/system/cpu/smt/control
+> 
+> It should work as expected?
+> 
+> ppc64_cpu will need to be updated to do that automatically.
 
+Hi Sachin and Michael,
+
+Yes, ppc64_cpu will need an update, and I have a patch ready to be sent 
+once this series will be accepted.
+
+By the way, I've a fix for the build issue reported against the patch 
+6/9. I'll send a v3 soon.
+
+Cheers,
+
+Laurent.
