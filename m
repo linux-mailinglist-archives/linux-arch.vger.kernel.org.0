@@ -2,134 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC7A743A4D
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 13:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43685743A9B
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 13:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjF3LHd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jun 2023 07:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S232797AbjF3LQS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jun 2023 07:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjF3LHD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 07:07:03 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB95F3C1E;
-        Fri, 30 Jun 2023 04:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688123097; x=1688727897; i=deller@gmx.de;
- bh=JTAkm9zWSXYW3bYkAJ2/xf1xYzWy+u1+1FqR3OLzr7g=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=GwI0k2Pmsws8bHhe8mwbBWIwpmvxSlY1zbJ0KjOoey92YhBTQK898xzm5poYGwLIgENVqGW
- o5Rqe5qCHDjxGknkQRtk4ZryM2iM4+FDLXVIdkDadBl8jAhrSrsI639Je/QbDWcFhaJ4gA0l6
- vkuw0jhbFV8SVNESpahtXih+nci6Qi+oIZObE/4GEaw2QqNXqS3tEinSeds784oRHOdINgLOu
- 3OSFqnpnN4MX5sw+w7VVnqNpTcAAvpfZ5dTREpvLKryOLh0B1cmj9ZcxxHuEMFkzq6bxBhcRZ
- VEEe9ihNudEu8l+1TYXXkNwUHTJavgLRnc4Gjw6OUKRUWvAgkmWg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.148.7]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MAfYm-1qLlVw3s9w-00B21a; Fri, 30
- Jun 2023 13:04:57 +0200
-Message-ID: <46428dfc-af3f-7adf-54d7-44ece1589400@gmx.de>
-Date:   Fri, 30 Jun 2023 13:04:55 +0200
+        with ESMTP id S232494AbjF3LQR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 07:16:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C610B;
+        Fri, 30 Jun 2023 04:16:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD1DB61721;
+        Fri, 30 Jun 2023 11:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D38CC433B6;
+        Fri, 30 Jun 2023 11:16:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688123775;
+        bh=Qg6mtJKrAYAKJ/g+ZZims8G6rMhWUl/iHHzBDRbgkt8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FAt/tTKQD2GJsTXXg46D0dmIOpXB7x8kqbM9hJKn6kR3dWvDwvb1piYc0BJDmWRM7
+         CJ5AnqZSgnE3r8jXkawG7AlPkd70Pxa8eStDuoq8haB+WZIogBI8fk8hjHeCGLrdKQ
+         /ja/9udU6YLY8jqGJfbBUn6PHCSmKdiP4I5bE6vVrA2tIw+MPtm2Mmg610+bLdj01a
+         8MHmsGuFDLMg+pDfxWVJ8dG2+7ES27HIqTaUWzI1EEV3iY3PX/jaX5eqBZpfS6wnzI
+         Gaw6Sv5LliIFsCQ/Ei+/KtrPL0VNPGZx+klbvhVVyBH24/3xceTHmlfosoBbQK3Yn1
+         RQfTQ8BY1j4wg==
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3fbc244d307so12348455e9.1;
+        Fri, 30 Jun 2023 04:16:15 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzAXtxfBeZJNeKCWvEW9wy3Ok1CpFLRFx4+P81vgYtUnFC/ifRg
+        k3lCfohQfLbW9Mr+/DB8ONzlnZBkU917vSjmt1k=
+X-Google-Smtp-Source: ACHHUZ40bhVMwu6PtmLXC7PKR9i31qcI1Ik0b5RtktK7GbB/gRM2EyRl/TpExinoDJ8sTXblct7BlMBvZcymTfy6wuI=
+X-Received: by 2002:a05:600c:21c5:b0:3f9:c0f8:de72 with SMTP id
+ x5-20020a05600c21c500b003f9c0f8de72mr1790329wmj.7.1688123773271; Fri, 30 Jun
+ 2023 04:16:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arch/sparc: Add module license and description for fbdev
- helpers
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, davem@davemloft.net,
-        arnd@arndb.de, linux@roeck-us.net, sam@ravnborg.org
-Cc:     sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230627145843.31794-1-tzimmermann@suse.de>
- <a290cf05-8f6b-3b88-32fc-66f6a173d5c4@gmx.de>
- <4673a16d-0ca1-5c3e-b3f3-f8da34482f65@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <4673a16d-0ca1-5c3e-b3f3-f8da34482f65@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20230222033021.983168-1-guoren@kernel.org> <20230222033021.983168-5-guoren@kernel.org>
+ <ZJ2PBosSQtSX28Mf@wychelm>
+In-Reply-To: <ZJ2PBosSQtSX28Mf@wychelm>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 30 Jun 2023 07:16:01 -0400
+X-Gmail-Original-Message-ID: <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
+Message-ID: <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
+Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Vincent Chen <vincent.chen@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:GpDf/glZ/op2vHNLSVe2IzWbunuky48dacBsU/sgzs7NNgSSXiE
- zj0HWz1Fk86VPeOC9YD+geLBsP8MCo91cdLQpguYIJNmMxFkijexZV2ItSsQtmTrNWw+jaU
- x/vnxsOlM+MlHlgZkr7IG1ZQMSpXXSIuxHLE/A8Npsmnie5aNWajnIE7Y3GCrNA1iFaxeqn
- G9ZLq0fKeHFAO5R7GUv9Q==
-UI-OutboundReport: notjunk:1;M01:P0:Hy9U4Px+sQk=;ne892Uf0ugpNRmk7bdCLgiWfJP2
- mGHenELoP4pa4wKxSsZFFbKWPUCgrfaY82PB/WMASZ9YwnGlGtPHnLktj+PSG/un0nkF9R6VM
- SNxMlzsJtnmtIth5fBm7VnX6ugxb5ipP293koxakiAAMjvBX6snWyAgouJXw1Tt96Jnbasxqz
- ttKnVvMZsExweqRPtqLLgXbwAMp0N4/EcIxxun8o0M9HMhjdH0nWn7mW/vrEXbzWlHtkCz5er
- HoBTH8eC6676hqRKVbByCLz6xHFJvJ8TvsMdEpCYyiDVz3zduc0r/Rydreb6FYqitJzls4p5m
- o174kjeiPbFM6AQFI8ai5L0djg5aIMsLf2ZujejdAMmYDyCusyI9uizviD0m1gfY0GXX6ZRO4
- iah5N5Zf/+t3xveVwCv+BhpWltu0Sq4FHHNPUrg6dmrTX1Mou/VKZuwbGU4m+SYoGOkN/r8mW
- 2v7ijIfR2WURetB4FdSuiWmoMQXt6GZGBO7QtOxgXs/a90FGJxO9uy+7XEyBZ6JX30ihhGVvd
- N2imHY4DE4F5EnWmDnG2iLmnXLWlZ0cCJqRUfDQ1RPAjlQ8Wt/PCYIjWT2aQENV3wEpwIMc+z
- ljjC7OVMQEvY4P+Ok1Pf96bmsGWIhmKj0/Ur06bR2Y9wxb8Kal7dtcf8bjYNEdHCd2EQMki6N
- x7/eJcf/YC4KNpRD6sVhMC/xjguVXCwWpWzsf1SH9EjBmoqaoPwc4F8VBgf05ZBcdCGPepMhb
- ZODTuHHCn+kkEprNkaSEeIEbiismSRhNJJsPhXnJjmIETGuR0tjtBi78O/bJJraCSgZVYitoS
- FWh+yHXV4lva7Jr7hN7mlPVQ22fFbNwyxgI1MFZeU9qIKwKLAMqUZlgeYN//QCcYmwUKwvlhG
- RdrOMicij2zxupigQzcKsVgwGmFvF6ovEqWzLGrPH9rIRYhspQI2jLDP3ydDz1Lxkt15oCgsd
- xGynig==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/30/23 12:58, Thomas Zimmermann wrote:
-> Hi Helge
+On Thu, Jun 29, 2023 at 10:02=E2=80=AFAM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
 >
-> Am 30.06.23 um 11:43 schrieb Helge Deller:
->> On 6/27/23 16:58, Thomas Zimmermann wrote:
->>> Add MODULE_LICENSE() and MODULE_DESCRIPTION() for fbdev helpers
->>> on sparc. Fixes the following error:
->>>
->>> ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
->>>
->>> Reported-by: Guenter Roeck <linux@roeck-us.net>
->>> Closes: https://lore.kernel.org/dri-devel/c525adc9-6623-4660-8718-e0c9=
-311563b8@roeck-us.net/
->>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
->>> Fixes: 4eec0b3048fc ("arch/sparc: Implement fb_is_primary_device() in =
-source file")
->>> Cc: "David S. Miller" <davem@davemloft.net>
->>> Cc: Helge Deller <deller@gmx.de>
->>> Cc: Sam Ravnborg <sam@ravnborg.org>
->>> Cc: sparclinux@vger.kernel.org
->>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->>> ---
->>> =C2=A0 arch/sparc/video/fbdev.c | 3 +++
->>> =C2=A0 1 file changed, 3 insertions(+)
->>
->> I've queued it up in the fbdev git tree but will drop it anytime
->> if someone prefers to take this patch through another tree....
+> On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > This patch converts riscv to use the generic entry infrastructure from
+> > kernel/entry/*. The generic entry makes maintainers' work easier and
+> > codes more elegant. Here are the changes:
+> >
+> >  - More clear entry.S with handle_exception and ret_from_exception
+> >  - Get rid of complex custom signal implementation
+> >  - Move syscall procedure from assembly to C, which is much more
+> >    readable.
+> >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+> >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+> >  - Use the standard preemption code instead of custom
+> >
+> > Suggested-by: Huacai Chen <chenhuacai@kernel.org>
+> > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> > Tested-by: Yipeng Zou <zouyipeng@huawei.com>
+> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Ben Hutchings <ben@decadent.org.uk>
 >
-> It's in drm-misc-next-fixes already.
+> Apologies for the late feedback but I've been swamped lately and only
+> recently got round to running the full kgdb test suite on the v6.4
+> series.
+>
+> The kgdb test suite includes a couple of tests that verify that the
+> system resumes after breakpointing due to a BUG():
+> https://github.com/daniel-thompson/kgdbtest/blob/master/tests/test_kdb_fa=
+ult_injection.py#L24-L45
+>
+> These tests have regressed on riscv between v6.3 and v6.4 and a bisect
+> is pointing at this patch. With these changes in place then, after kdb
+> resumes the system, the BUG() message is printed as normal but then
+> immediately fails. From the backtrace it looks like the new entry/exit
+> code cannot advance past a compiled breakpoint instruction:
+> ~~~
+> PANIC: Fatal exception in interrupt
+It comes from:
+void die(struct pt_regs *regs, ...
+{
+...
+if (in_interrupt())
+        panic("Fatal exception in interrupt");
+...
 
-Ok, I'll drop it.
-Thanks!
-Helge
+We could add a dump_backtrace to see what happened:
+if (in_interrupt()) {
++      dump_backtrace(regs, NULL, KERN_DEFAULT);
+        panic("Fatal exception in interrupt");
+}
 
-> Best regards
-> Thomas
->
->>
->> Thanks!
->> Helge
->>
->>
->>>
->>> diff --git a/arch/sparc/video/fbdev.c b/arch/sparc/video/fbdev.c
->>> index 25837f128132d..bff66dd1909a4 100644
->>> --- a/arch/sparc/video/fbdev.c
->>> +++ b/arch/sparc/video/fbdev.c
->>> @@ -21,3 +21,6 @@ int fb_is_primary_device(struct fb_info *info)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->>> =C2=A0 }
->>> =C2=A0 EXPORT_SYMBOL(fb_is_primary_device);
->>> +
->>> +MODULE_DESCRIPTION("Sparc fbdev helpers");
->>> +MODULE_LICENSE("GPL");
->>
->
 
+
+>
+> Entering kdb (current=3D0xff60000001a2a280, pid 104) on processor 1 due t=
+o
+> NonMask
+> able Interrupt @ 0xffffffff800bb3c4
+> [1]kdb> bt
+> Stack traceback for pid 104
+> 0xff60000001a2a280      104       92  1    1   R  0xff60000001a2ac50
+> *echo
+> CPU: 1 PID: 104 Comm: echo Tainted: G      D
+> 6.3.0-rc1-00003-gf0bddf50586d #119
+> Hardware name: riscv-virtio,qemu (DT)
+> Call Trace:
+> [<ffffffff800050dc>] dump_backtrace+0x1c/0x24
+> [<ffffffff808458f8>] show_stack+0x2c/0x38
+> [<ffffffff80851b00>] dump_stack_lvl+0x3c/0x54
+> [<ffffffff80851b2c>] dump_stack+0x14/0x1c
+> [<ffffffff800bc4b8>] kdb_dump_stack_on_cpu+0x64/0x66
+> [<ffffffff800c3d2a>] kdb_show_stack+0x82/0x88
+> [<ffffffff800c3dc0>] kdb_bt1+0x90/0xf2
+> [<ffffffff800c4206>] kdb_bt+0x34c/0x384
+> [<ffffffff800c1d28>] kdb_parse+0x27a/0x618
+> [<ffffffff800c2566>] kdb_main_loop+0x3b2/0x8fa
+> [<ffffffff800c4c5a>] kdb_stub+0x1ba/0x3a8
+> [<ffffffff800bbba8>] kgdb_cpu_enter+0x342/0x5ba
+> [<ffffffff800bc3da>] kgdb_handle_exception+0xe0/0x11a
+> [<ffffffff8000810c>] kgdb_riscv_notify+0x86/0xb4
+> [<ffffffff8002f210>] notify_die+0x6a/0xa6
+> [<ffffffff80004db0>] handle_break+0x70/0xe0
+> [<ffffffff80852462>] do_trap_break+0x48/0x5c
+> [<ffffffff80003598>] ret_from_exception+0x0/0x64
+> [<ffffffff800bb3c4>] kgdb_compiled_break+0x0/0x14
+> ~~~
+>
+>
+> Daniel.
+
+
+
+--=20
+Best Regards
+ Guo Ren
