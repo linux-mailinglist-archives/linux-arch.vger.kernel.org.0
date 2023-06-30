@@ -2,94 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF126743CF1
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 15:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8FF743DE8
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 16:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjF3Nlq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jun 2023 09:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S232667AbjF3OvL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jun 2023 10:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF3Nlo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 09:41:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CAC1FE8;
-        Fri, 30 Jun 2023 06:41:44 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UDdIk3032149;
-        Fri, 30 Jun 2023 13:41:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=xwH/eozai20u7sAwuHHlqWlOvsC3TABxXs/tL2Cg9DA=;
- b=VjcJ/37/x89iaOmH+hBIBwAU4D18JtkGmpu1fCBjDBjKWxK/Tim+O1b6wAwP3ol1pAQ6
- UlFQBigpYNqshpbnqEufROSIhoVcIa/ELIpc48a7qnbcgZ5X9iex7Fw+7cMWXcqt5mLO
- u98WMywlo9L18GxbD9XnfRq4HjsHAiR1TtbesZJp4bYyTIrUvAgu3hXOV+zicuUM4FWU
- eK20xoB/eYT3a8ZSTTTNyXU58TzohAYbGTO/hs9jk4UORQenlWxz3arPwr/1jahKvhAz
- ul0ALMKtcvvaYc9qglCqq9YSO3Sp/Ik2+Kwt53trpxISRLESevMtxMhzvyzugGk2MNZq ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhyvggabr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:41:30 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35UDeYJR005027;
-        Fri, 30 Jun 2023 13:41:30 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhyvgga9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:41:30 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35UBai0J007667;
-        Fri, 30 Jun 2023 13:41:27 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr45464a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:41:27 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35UDfPXP24379926
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 13:41:25 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37A262004F;
-        Fri, 30 Jun 2023 13:41:25 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A5D220040;
-        Fri, 30 Jun 2023 13:41:24 +0000 (GMT)
-Received: from [9.171.36.134] (unknown [9.171.36.134])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Jun 2023 13:41:24 +0000 (GMT)
-Message-ID: <beda2b05-db6f-54a8-719b-7f4888647791@linux.ibm.com>
-Date:   Fri, 30 Jun 2023 15:41:24 +0200
+        with ESMTP id S232251AbjF3OvL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 10:51:11 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C7499
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jun 2023 07:51:06 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fb4146e8ceso22036925e9.0
+        for <linux-arch@vger.kernel.org>; Fri, 30 Jun 2023 07:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688136665; x=1690728665;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BS2JmbhlyqV1OiBMiMoAD4fmogA6urExoXH6/e0E3h4=;
+        b=r0DgVkeZAqiFtjYGYh+cknwVQBEtLfnC5sZNiOyABoThCH8ldigsmwYGel71TW6ayK
+         U7XBpXuCupru6Uz5UShxj8RskB4XUfH3CKMP+c6gbzbivRgJHyaj/6a8FouKUfJJM0Fk
+         RhscgVFoXjV1y9QrnD7dtyZFyjX6Eh5KV+W2Y8gO6v15FSMeYfYqA6hyd4aFGxsCRWDJ
+         NaG+2oN75OrnmRipkSxaU04hLt4XzFmg8fkd7fx0T3zoHACv3yIJQHxTsiZ1zhrxH/03
+         EKrsf2SywVav379o3ChacWdkvxNoN7OHo1V/Osw2igZpuBt8ghHZ/hIpks3cT50ZJsBv
+         MEkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688136665; x=1690728665;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BS2JmbhlyqV1OiBMiMoAD4fmogA6urExoXH6/e0E3h4=;
+        b=LCOGb8Ilt8ub8FaCkbgTEAMk+m8O5OiI3tTjZmZeG6RNiNy/jPKR3T7mdOMKvgWByJ
+         7XzmUqs4z5EhW/nMbb0xKuZqyt8kLQx/a7d8CUFWJ9/B9QR5GiEy2sebaHi4qTA/1RmS
+         ZX9fJsKPdvPCESgCZq/HCgg0QzIlsmTOJ+J9JrKVVubNaXDmG84aQ0iaRUm8uWBrDtar
+         M6BGh4cnB6ibyUvpvl+prMWPFUccM2BopLZxkbYrx8yIDODx6ly/jKySS2gAoVIZNgkE
+         bJtcUh+CQq+it4+7jBKDABPkFwEnCtY2gciLrhuUuGu7DiXv2kKnKZ+otgJNrifALAa3
+         Ib8A==
+X-Gm-Message-State: ABy/qLYyYJE5cQikzn2M01DuVu/xh/5+O2129E3+zmQ6+wvTYiWBglJj
+        d79WmYxLYC7/EU2t0x0mPGl1TDeIkj7R/KDIu4QecQ==
+X-Google-Smtp-Source: APBJJlG2KkRBOgQGWJcnvkQGMMpO0goqwAJnB68ElefWSP7c7I5ZBP4Nhen9dPkukyNSN9SiT1GpMw==
+X-Received: by 2002:a5d:46c5:0:b0:314:1c0d:8a55 with SMTP id g5-20020a5d46c5000000b003141c0d8a55mr2049864wrs.35.1688136664927;
+        Fri, 30 Jun 2023 07:51:04 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id u18-20020a5d6ad2000000b00313e90d1d0dsm16587678wrw.112.2023.06.30.07.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 07:51:04 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 15:50:56 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Vincent Chen <vincent.chen@sifive.com>
+Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
+Message-ID: <20230630145056.GB2872423@aspen.lan>
+References: <20230222033021.983168-1-guoren@kernel.org>
+ <20230222033021.983168-5-guoren@kernel.org>
+ <ZJ2PBosSQtSX28Mf@wychelm>
+ <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
+ <CAJF2gTTRViivgy3njDc1k7A-jaSFUsyo2VPg2JwEAwx=H3mR4w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v3 0/9] Introduce SMT level and add PowerPC support
-Content-Language: fr
-To:     Sachin Sant <sachinp@linux.ibm.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch@vger.kernel.org, dave.hansen@linux.intel.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        npiggin@gmail.com, tglx@linutronix.de
-References: <20230629143149.79073-1-ldufour@linux.ibm.com>
- <58662E98-81B0-4553-9A75-4CA033720BE3@linux.ibm.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <58662E98-81B0-4553-9A75-4CA033720BE3@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kxEkzWPYxh7O2TCf2GQC8nQYJyPGRtgF
-X-Proofpoint-GUID: FY7QyRFyjNxYcWjk8u6p3xbJ6rrKhpXd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 bulkscore=0 spamscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 clxscore=1015 impostorscore=0
- mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306300116
+In-Reply-To: <CAJF2gTTRViivgy3njDc1k7A-jaSFUsyo2VPg2JwEAwx=H3mR4w@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,58 +85,117 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 07:22:40AM -0400, Guo Ren wrote:
+> On Fri, Jun 30, 2023 at 7:16 AM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > On Thu, Jun 29, 2023 at 10:02 AM Daniel Thompson
+> > <daniel.thompson@linaro.org> wrote:
+> > >
+> > > On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
+> > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > >
+> > > > This patch converts riscv to use the generic entry infrastructure from
+> > > > kernel/entry/*. The generic entry makes maintainers' work easier and
+> > > > codes more elegant. Here are the changes:
+> > > >
+> > > >  - More clear entry.S with handle_exception and ret_from_exception
+> > > >  - Get rid of complex custom signal implementation
+> > > >  - Move syscall procedure from assembly to C, which is much more
+> > > >    readable.
+> > > >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+> > > >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+> > > >  - Use the standard preemption code instead of custom
+> > > >
+> > > > Suggested-by: Huacai Chen <chenhuacai@kernel.org>
+> > > > Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> > > > Tested-by: Yipeng Zou <zouyipeng@huawei.com>
+> > > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > > Cc: Ben Hutchings <ben@decadent.org.uk>
+> > >
+> > > Apologies for the late feedback but I've been swamped lately and only
+> > > recently got round to running the full kgdb test suite on the v6.4
+> > > series.
+> > >
+> > > The kgdb test suite includes a couple of tests that verify that the
+> > > system resumes after breakpointing due to a BUG():
+> > > https://github.com/daniel-thompson/kgdbtest/blob/master/tests/test_kdb_fault_injection.py#L24-L45
+> > >
+> > > These tests have regressed on riscv between v6.3 and v6.4 and a bisect
+> > > is pointing at this patch. With these changes in place then, after kdb
+> > > resumes the system, the BUG() message is printed as normal but then
+> > > immediately fails. From the backtrace it looks like the new entry/exit
+> > > code cannot advance past a compiled breakpoint instruction:
+> > > ~~~
+> > > PANIC: Fatal exception in interrupt
+> > It comes from:
+> > void die(struct pt_regs *regs, ...
+> > {
+> > ...
+> > if (in_interrupt())
+> >         panic("Fatal exception in interrupt");
+> > ...
+> >
+> > We could add a dump_backtrace to see what happened:
+> > if (in_interrupt()) {
+> > +      dump_backtrace(regs, NULL, KERN_DEFAULT);
+> Sorry, it should be:
+> +        dump_backtrace(NULL, NULL, KERN_DEFAULT);
+> We need current stack info, not exception context.
+
+I added this... and I also stopped kgdb from intercepting the panic()
+since that interferes with the console output from dump_backtrace().
+
+~~~
+# /bin/echo BUG > /sys/kernel/debug/provoke-crash/DIRECT
+[    3.380565] lkdtm: Performing direct entry BUG
+
+Entering kdb (current=0xff6000000380ab00, pid 98) on processor 0 due to NonMaskable Interrupt @ 0xffffffff8064b844
+kdb> go
+Catastrophic error detected
+kdb_continue_catastrophic=0, type go a second time if you really want to continue
+kdb> go
+Catastrophic error detected
+kdb_continue_catastrophic=0, attempting to continue
+[    3.381411] ------------[ cut here ]------------
+[    3.381454] kernel BUG at drivers/misc/lkdtm/bugs.c:78!
+[    3.381609] Kernel BUG [#1]
+[    3.381632] Modules linked in:
+[    3.381734] CPU: 0 PID: 98 Comm: echo Not tainted 6.4.0-rc6-00004-ge6e9d4598760-dirty #126
+[    3.381817] Hardware name: riscv-virtio,qemu (DT)
+[    3.381885] epc : lkdtm_BUG+0x6/0x8
+[    3.381959]  ra : lkdtm_do_action+0x10/0x1c
+[    3.381978] epc : ffffffff8064b844 ra : ffffffff8064afb4 sp : ff200000008c3d30
+[    3.381991]  gp : ffffffff810665a0 tp : ff6000000380ab00 t0 : 6500000000000000
+[    3.382002]  t1 : 0000000000000001 t2 : 6550203a6d74646b s0 : ff200000008c3d40
+[    3.382012]  s1 : ff60000003988000 a0 : ffffffff80fc0260 a1 : ff6000003ffad788
+[    3.382023]  a2 : ff6000003ffb9530 a3 : 0000000000000000 a4 : 0000000000000000
+[    3.382034]  a5 : ffffffff8064b83e a6 : 0000000000000050 a7 : 0000000000040000
+[    3.382045]  s2 : 0000000000000004 s3 : ffffffff80fc0260 s4 : ff200000008c3e70
+[    3.382056]  s5 : ff600000033223a8 s6 : 00000000000f0cc0 s7 : ff60000002211000
+[    3.382066]  s8 : 00ffffffafc50c08 s9 : 00ffffffafc4b9b8 s10: 0000000000000000
+[    3.382077]  s11: 0000000000000001 t3 : 461f715700000000 t4 : 0000000000000002
+[    3.382087]  t5 : 0000000000000000 t6 : ff200000008c3b58
+[    3.382097] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
+[    3.382139] [<ffffffff8064b844>] lkdtm_BUG+0x6/0x8
+[    3.382245] Code: 0513 9245 b097 0039 80e7 7f20 bf39 1141 e422 0800 (9002) 1141
+[    3.594697] ---[ end trace 0000000000000000 ]---
+
+At this point we expect a shell prompt since we should have taken the BUG(),
+killed the echo process and returned to the shell. However in v6.4 we get the
+following instead (including the instrumentation you asked for):
+
+[    3.594801] [<ffffffff80005e3a>] dump_backtrace+0x1c/0x24
+[    3.594826] [<ffffffff800059f0>] die+0x228/0x238
+[    3.594835] [<ffffffff80005b38>] handle_break+0x9a/0xe0
+[    3.594843] [<ffffffff809f30d6>] do_trap_break+0x48/0x5c
+[    3.594854] [<ffffffff80003ee4>] ret_from_exception+0x0/0x64
+[    3.594862] [<ffffffff8064b844>] lkdtm_BUG+0x6/0x8
+[    3.594959] Kernel panic - not syncing: Fatal exception in interrupt
+[    3.595005] SMP: stopping secondary CPUs
+[    3.596444] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+~~~
 
 
-Le 30/06/2023 à 15:32, Sachin Sant a écrit :
-> 
-> 
->> On 29-Jun-2023, at 8:01 PM, Laurent Dufour <ldufour@linux.ibm.com> wrote:
->>
->> I'm taking over the series Michael sent previously [1] which is smartly
->> reviewing the initial series I sent [2].  This series is addressing the
->> comments sent by Thomas and me on the Michael's one.
->>
->> Here is a short introduction to the issue this series is addressing:
->>
->> When a new CPU is added, the kernel is activating all its threads. This
->> leads to weird, but functional, result when adding CPU on a SMT 4 system
->> for instance.
->>
->> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
->> active (system has been booted with the 'smt-enabled=4' kernel option):
->>
->> ltcden3-lp12:~ # ppc64_cpu --info
->> Core   0:    0*    1*    2*    3*    4     5     6     7
->> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
->>
->> This mixed SMT level may confused end users and/or some applications.
->>
->> There is no SMT level recorded in the kernel (common code), neither in user
->> space, as far as I know. Such a level is helpful when adding new CPU or
->> when optimizing the energy efficiency (when reactivating CPUs).
->>
->> When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT level
->> (cpu_smt_num_threads) and few callbacks allowing the architecture code to
->> fine control this value, setting a max and a "at boot" level, and
->> controling whether a thread should be onlined or not.
->>
->> v3:
->>   Fix a build error in the patch 6/9
-> 
-> Successfully tested the V3 version on a Power10 LPAR. Add/remove of
-> processor core worked correctly, preserving the SMT level (on a kernel
-> booted with smt-enabled= parameter)
-> 
-> Laurent (Thanks!) also provided a patch to update the ppc64_cpu &
-> lparstat utility. With patched ppc64_cpu utility verified that SMT level
-> changed at runtime was preserved across processor core add (on
-> a kernel booted without smt-enabled= parameter)
-> 
-> Based on these test results
-> 
-> Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-
-Thanks a lot, Sachin!
-
-Once this series is accepted, I'll send the series to update ppc64_cpu.
-
+Daniel.
