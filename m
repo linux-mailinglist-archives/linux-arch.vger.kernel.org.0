@@ -2,115 +2,209 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A39743893
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 11:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74387438DA
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 12:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjF3JpW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jun 2023 05:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S232981AbjF3KBo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jun 2023 06:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbjF3JpP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 05:45:15 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDB6125;
-        Fri, 30 Jun 2023 02:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688118226; x=1688723026; i=deller@gmx.de;
- bh=PuRc/kjIJIbi993cRBfu1ZPq5Cu+mGWLjbyY6TAcpcA=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=C0Sy+tSwxrPYRv9san4TkYmJ9Dn+Zn/QhAAE8heytRtUXj8d3liwcblnTUw+JcsTRqQyWaX
- deacT3vvvm7dCWGouuMASxV+UkZ4rrNfFCaJkhfedFYvmfUEE69soeRjLw40NMtSeuEW0N590
- 3/Rwh4OlEc8gl9Gs+AImVHQvJHtQQiJhMZzIWGaLDCgQnI+dJDuzhHUTxjJXgVQWvhvJJKFNt
- 0FmG9Z0iPCyqP2pfbjZk5SVvI3JKqoZyrtqP6nodohy2va+jRKTxmU2pVehC2cklL2t4+6kDw
- IdA58xtjG70KckDIVqnXNsCqxvVp/+Z2uG9rO/F1GuiYz8XQyrYQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.148.7]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbAgq-1pddzW0xho-00baOz; Fri, 30
- Jun 2023 11:43:46 +0200
-Message-ID: <a290cf05-8f6b-3b88-32fc-66f6a173d5c4@gmx.de>
-Date:   Fri, 30 Jun 2023 11:43:43 +0200
+        with ESMTP id S233024AbjF3KBI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 06:01:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A53A93;
+        Fri, 30 Jun 2023 03:01:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2ED561714;
+        Fri, 30 Jun 2023 10:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EB9C433C0;
+        Fri, 30 Jun 2023 10:01:01 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.5
+Date:   Fri, 30 Jun 2023 18:00:37 +0800
+Message-Id: <20230630100037.1071320-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arch/sparc: Add module license and description for fbdev
- helpers
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, davem@davemloft.net,
-        arnd@arndb.de, linux@roeck-us.net, sam@ravnborg.org
-Cc:     sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230627145843.31794-1-tzimmermann@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230627145843.31794-1-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:yFwZer+4cG2YpT/RBVobGYrSKl6RpD8WYAB8kDxZX2pgR9rx+6b
- 5+LkQKy3oY54y/yHI4nwyqoH6f99IdAmhTOsm5LWc9c6u94GPdYJ9pta8KYqD3VOqnMdeEm
- goMGdoHfztRcoGowJPelswASZm+/obYDXSwFpk47AfqWXhOHaT4M64mv3wYHijMGtzirl21
- lFjjJKreU7Rpj7h3ZXFPg==
-UI-OutboundReport: notjunk:1;M01:P0:QPJwbdBNydc=;z2kDlcTPmJhN2ALEqfEsK8CRWrt
- LjgtAsskQHWMNsYqjsFa6VIaUOeggBH0vIjEL0d9JR8BhwamjFBT0v+3GZX3CEEJpRFrc5RY6
- ehaq3kYd386+nmrMp7lPr+k9cEWXjP9bofQqDzUaTmJcjmxU+jg9dQNB304YMsahq5jUTHqvD
- omSkmQGefbKGYT7frdUq5X3efy+lC66Xb4bcwGIIMmIe3ykUOLXu88beyNjfdl5OzraE6BZlX
- 83VjGrCxPRkZ/b6ooIXidw7UdCB+pCHjRwB+/noiCEcaQVt2LiUo/MzHYvILC9JBn8VKRXvvO
- 0VUcXfba1qZfMV/wRlONo2LPSiaPdeek0opXQOTlMOTfxgClqPHqwRvXEVPeQyGgPo996V+gG
- pYIccEzS+yqJG6WGJY91AMF1D4N93a0jxsaElUcD+7TaUFNxCfPaYm6N1ZgPmW6j1AytczpI8
- NEBEuggsQcF9YcoC/mTwxWGaS6VBD2Rw9YwhzkZzRdL/rAwGREaXLwEfW6tVTzrPNwk7WWGek
- sXMkbAhe5OYYdh2Rgu2Zz0HNBMyQ/M7hCyKeQAtKV6vqhjqz1Zl5tsefuYSdf2BF+3AP+kHYt
- d7IIQQsRsQjwBXCNuIROBSc5piYS3HfuyUyOXEYsA914FdLyG1lbViAhOV3z0R6Ss+1IBkEtX
- Ood4/20Jagmoues4FnND7qIfWOCHWxoVvVWRCAsLYc4VTwtLdOMne5Qj18RHK8S2A6TtDd2b4
- lKh+D+GMdIlpcKzVd619djOwF67YSXOsxw0KR1sLpZCLNYSc0xsmudmqCEggkyCfjJu2DV9Ge
- 6PSVGyhf5WctJ2PvW/rC9+CpV407z2KQBs4nI/znfoZOIwcQ/IBPK3TSUJEKcxMPUzdRGRiqY
- QJka7ZJSRrSpix0grFnDOZSXboZPtK0EXg4t6GP2MBpzalP44FaGVXjENfEVRQ1AEW4y9F4p9
- ntyjEw==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/27/23 16:58, Thomas Zimmermann wrote:
-> Add MODULE_LICENSE() and MODULE_DESCRIPTION() for fbdev helpers
-> on sparc. Fixes the following error:
->
-> ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
->
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Closes: https://lore.kernel.org/dri-devel/c525adc9-6623-4660-8718-e0c931=
-1563b8@roeck-us.net/
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Fixes: 4eec0b3048fc ("arch/sparc: Implement fb_is_primary_device() in so=
-urce file")
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: sparclinux@vger.kernel.org
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->   arch/sparc/video/fbdev.c | 3 +++
->   1 file changed, 3 insertions(+)
+The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
 
-I've queued it up in the fbdev git tree but will drop it anytime
-if someone prefers to take this patch through another tree....
+  Linux 6.4 (2023-06-25 16:29:58 -0700)
 
-Thanks!
-Helge
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.5
 
->
-> diff --git a/arch/sparc/video/fbdev.c b/arch/sparc/video/fbdev.c
-> index 25837f128132d..bff66dd1909a4 100644
-> --- a/arch/sparc/video/fbdev.c
-> +++ b/arch/sparc/video/fbdev.c
-> @@ -21,3 +21,6 @@ int fb_is_primary_device(struct fb_info *info)
->   	return 0;
->   }
->   EXPORT_SYMBOL(fb_is_primary_device);
-> +
-> +MODULE_DESCRIPTION("Sparc fbdev helpers");
-> +MODULE_LICENSE("GPL");
+for you to fetch changes up to 5ee35c769663cb1c5f26e12cad84904dc3002de8:
 
+  LoongArch: Remove five DIE_* definitions in kdebug.h (2023-06-29 20:58:44 +0800)
+
+----------------------------------------------------------------
+LoongArch changes for v6.5
+
+1, Preliminary ClangBuiltLinux enablement;
+2, Add support to clone a time namespace;
+3, Add vector extensions support;
+4, Add SMT (Simultaneous Multi-Threading) support;
+5, Support dbar with different hints;
+6, Introduce hardware page table walker;
+7, Add jump-label implementation;
+8, Add rethook and uprobes support;
+9, Some bug fixes and other small changes.
+
+----------------------------------------------------------------
+Binbin Zhou (2):
+      dt-bindings: interrupt-controller: Add Loongson EIOINTC
+      irqchip/loongson-eiointc: Add DT init support
+
+Dan Carpenter (1):
+      LoongArch: Delete unnecessary debugfs checking
+
+Haoran Jiang (1):
+      LoongArch: Replace kretprobe with rethook
+
+Huacai Chen (6):
+      Merge 'irq/loongarch-fixes-6.5' into loongarch-next
+      LoongArch: Set CPU#0 as the io master for FDT
+      LoongArch: Add vector extensions support
+      LoongArch: Add SMT (Simultaneous Multi-Threading) support
+      LoongArch: Support dbar with different hints
+      LoongArch: Introduce hardware page table walker
+
+Jianmin Lv (3):
+      irqchip/loongson-pch-pic: Fix initialization of HT vector register
+      irqchip/loongson-liointc: Fix IRQ trigger polarity
+      irqchip/loongson-eiointc: Fix irq affinity setting during resume
+
+Liu Peibao (1):
+      irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
+
+Tiezhu Yang (8):
+      LoongArch: Add support to clone a time namespace
+      LoongArch: Select HAVE_DEBUG_KMEMLEAK to support kmemleak
+      LoongArch: Move three functions from kprobes.c to inst.c
+      LoongArch: Check for AMO instructions in insns_not_supported()
+      LoongArch: Add larch_insn_gen_break() to generate break insns
+      LoongArch: Use larch_insn_gen_break() for kprobes
+      LoongArch: Add uprobes support
+      LoongArch: Remove five DIE_* definitions in kdebug.h
+
+WANG Rui (3):
+      LoongArch: Add guard for the larch_insn_gen_xxx functions
+      LoongArch: Calculate various sizes in the linker script
+      LoongArch: extable: Also recognize ABI names of registers
+
+WANG Xuerui (8):
+      LoongArch: Prepare for assemblers with proper FCSR class support
+      LoongArch: Make the CPUCFG&CSR ops simple aliases of compiler built-ins
+      LoongArch: Simplify the invtlb wrappers
+      LoongArch: Tweak CFLAGS for Clang compatibility
+      LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
+      LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
+      LoongArch: Mark Clang LTO as working
+      Makefile: Add loongarch target flag for Clang compilation
+
+Yinbo Zhu (2):
+      irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
+      LoongArch: Export some arch-specific pm interfaces
+
+Youling Tang (1):
+      LoongArch: Add jump-label implementation
+
+ .../interrupt-controller/loongson,eiointc.yaml     |  59 ++++
+ .../features/core/jump-labels/arch-support.txt     |   2 +-
+ .../features/debug/kmemleak/arch-support.txt       |   2 +-
+ arch/loongarch/Kconfig                             |  72 +++-
+ arch/loongarch/Makefile                            |  23 +-
+ arch/loongarch/include/asm/Kbuild                  |   1 -
+ arch/loongarch/include/asm/acpi.h                  |  13 +-
+ arch/loongarch/include/asm/asmmacro.h              | 393 +++++++++++++++++++++
+ arch/loongarch/include/asm/barrier.h               | 130 +++----
+ arch/loongarch/include/asm/cpu-features.h          |   2 +-
+ arch/loongarch/include/asm/cpu-info.h              |   1 +
+ arch/loongarch/include/asm/cpu.h                   |   2 +
+ arch/loongarch/include/asm/fpregdef.h              |   7 +
+ arch/loongarch/include/asm/fpu.h                   | 185 +++++++++-
+ arch/loongarch/include/asm/gpr-num.h               |  30 ++
+ arch/loongarch/include/asm/inst.h                  |  55 ++-
+ arch/loongarch/include/asm/io.h                    |   2 +-
+ arch/loongarch/include/asm/jump_label.h            |  50 +++
+ arch/loongarch/include/asm/kdebug.h                |   5 -
+ arch/loongarch/include/asm/kprobes.h               |   5 +-
+ arch/loongarch/include/asm/loongarch.h             |  76 ++--
+ arch/loongarch/include/asm/module.h                |   2 +-
+ arch/loongarch/include/asm/page.h                  |   1 +
+ arch/loongarch/include/asm/percpu.h                |   6 +-
+ arch/loongarch/include/asm/pgtable.h               |   4 +-
+ arch/loongarch/include/asm/qspinlock.h             |  18 +
+ arch/loongarch/include/asm/suspend.h               |  10 +
+ arch/loongarch/include/asm/tlb.h                   |  46 ++-
+ arch/loongarch/include/asm/uprobes.h               |  36 ++
+ arch/loongarch/include/asm/vdso/gettimeofday.h     |   9 +-
+ arch/loongarch/include/asm/vdso/vdso.h             |  32 +-
+ arch/loongarch/include/uapi/asm/hwcap.h            |   1 +
+ arch/loongarch/include/uapi/asm/ptrace.h           |  16 +-
+ arch/loongarch/include/uapi/asm/sigcontext.h       |  18 +
+ arch/loongarch/kernel/Makefile                     |   8 +-
+ arch/loongarch/kernel/acpi.c                       |  32 ++
+ arch/loongarch/kernel/cpu-probe.c                  |  16 +
+ arch/loongarch/kernel/efi-header.S                 |   6 +-
+ arch/loongarch/kernel/fpu.S                        | 270 ++++++++++++++
+ arch/loongarch/kernel/head.S                       |   8 +-
+ arch/loongarch/kernel/inst.c                       |  83 ++++-
+ arch/loongarch/kernel/jump_label.c                 |  22 ++
+ arch/loongarch/kernel/kprobes.c                    |  96 +----
+ arch/loongarch/kernel/proc.c                       |   2 +
+ arch/loongarch/kernel/process.c                    |  12 +-
+ arch/loongarch/kernel/ptrace.c                     | 110 ++++++
+ arch/loongarch/kernel/rethook.c                    |  28 ++
+ arch/loongarch/kernel/rethook.h                    |   8 +
+ .../{kprobes_trampoline.S => rethook_trampoline.S} |   6 +-
+ arch/loongarch/kernel/signal.c                     | 326 ++++++++++++++++-
+ arch/loongarch/kernel/smp.c                        |  27 +-
+ arch/loongarch/kernel/traps.c                      |  95 ++++-
+ arch/loongarch/kernel/unaligned.c                  |   2 -
+ arch/loongarch/kernel/uprobes.c                    | 153 ++++++++
+ arch/loongarch/kernel/vdso.c                       |  98 ++++-
+ arch/loongarch/kernel/vmlinux.lds.S                |   9 +
+ arch/loongarch/lib/dump_tlb.c                      |   6 +-
+ arch/loongarch/mm/tlb.c                            |  21 +-
+ arch/loongarch/mm/tlbex.S                          |  27 +-
+ arch/loongarch/power/suspend.c                     |   8 +-
+ arch/loongarch/vdso/Makefile                       |   7 +-
+ arch/loongarch/vdso/vgetcpu.c                      |   2 +-
+ drivers/acpi/Kconfig                               |   2 +-
+ drivers/irqchip/irq-loongson-eiointc.c             | 135 +++++--
+ drivers/irqchip/irq-loongson-liointc.c             |  13 +-
+ drivers/irqchip/irq-loongson-pch-pic.c             |  10 +-
+ scripts/Makefile.clang                             |   1 +
+ 67 files changed, 2549 insertions(+), 414 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+ create mode 100644 arch/loongarch/include/asm/jump_label.h
+ create mode 100644 arch/loongarch/include/asm/qspinlock.h
+ create mode 100644 arch/loongarch/include/asm/suspend.h
+ create mode 100644 arch/loongarch/include/asm/uprobes.h
+ create mode 100644 arch/loongarch/kernel/jump_label.c
+ create mode 100644 arch/loongarch/kernel/rethook.c
+ create mode 100644 arch/loongarch/kernel/rethook.h
+ rename arch/loongarch/kernel/{kprobes_trampoline.S => rethook_trampoline.S} (93%)
+ create mode 100644 arch/loongarch/kernel/uprobes.c
