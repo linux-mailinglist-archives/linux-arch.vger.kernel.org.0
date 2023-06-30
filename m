@@ -2,209 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74387438DA
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 12:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6600743A1B
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 12:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjF3KBo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jun 2023 06:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S232470AbjF3K6X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jun 2023 06:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbjF3KBI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 06:01:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A53A93;
-        Fri, 30 Jun 2023 03:01:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S231245AbjF3K6L (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 06:58:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B088358A;
+        Fri, 30 Jun 2023 03:58:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2ED561714;
-        Fri, 30 Jun 2023 10:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EB9C433C0;
-        Fri, 30 Jun 2023 10:01:01 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.5
-Date:   Fri, 30 Jun 2023 18:00:37 +0800
-Message-Id: <20230630100037.1071320-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 519B91FD71;
+        Fri, 30 Jun 2023 10:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688122688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2CwTpDXeyLmBKUlds2ElaCuZL15ny16KA33WqVd3m78=;
+        b=iMQyE5ictp9N6kFgnFU/DKY7qAbWO7P35oJSQbBOn4snVKzmiKJdjeUMIVm5T3YHQhdQ4R
+        HVOGuh0ss2MMvauuwHmWiwrUy5Tl3nGNyd8LIazsqaQsTPRdCS/0Ah2tqb4M8myJC/CFf2
+        W5TOrKlbHAToQgpphxrzWyDwqeSrbg8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688122688;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2CwTpDXeyLmBKUlds2ElaCuZL15ny16KA33WqVd3m78=;
+        b=0vCor6ANznmzLSCl29v+7NlDOQ0Dl1v17DMqTRs5xQE7E01xsDYEUngaBwR2VB5CfolvBJ
+        WFvGVgUMYoSVTJDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D220138F8;
+        Fri, 30 Jun 2023 10:58:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n/IYBkC1nmQtGgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 30 Jun 2023 10:58:08 +0000
+Message-ID: <4673a16d-0ca1-5c3e-b3f3-f8da34482f65@suse.de>
+Date:   Fri, 30 Jun 2023 12:58:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] arch/sparc: Add module license and description for fbdev
+ helpers
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>, davem@davemloft.net, arnd@arndb.de,
+        linux@roeck-us.net, sam@ravnborg.org
+Cc:     sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230627145843.31794-1-tzimmermann@suse.de>
+ <a290cf05-8f6b-3b88-32fc-66f6a173d5c4@gmx.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <a290cf05-8f6b-3b88-32fc-66f6a173d5c4@gmx.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------31QIJC0szw3TXVlFhNmmvLw9"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------31QIJC0szw3TXVlFhNmmvLw9
+Content-Type: multipart/mixed; boundary="------------P0nSPZg40R8rR7WaalzGUXp3";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Helge Deller <deller@gmx.de>, davem@davemloft.net, arnd@arndb.de,
+ linux@roeck-us.net, sam@ravnborg.org
+Cc: sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <4673a16d-0ca1-5c3e-b3f3-f8da34482f65@suse.de>
+Subject: Re: [PATCH] arch/sparc: Add module license and description for fbdev
+ helpers
+References: <20230627145843.31794-1-tzimmermann@suse.de>
+ <a290cf05-8f6b-3b88-32fc-66f6a173d5c4@gmx.de>
+In-Reply-To: <a290cf05-8f6b-3b88-32fc-66f6a173d5c4@gmx.de>
 
-  Linux 6.4 (2023-06-25 16:29:58 -0700)
+--------------P0nSPZg40R8rR7WaalzGUXp3
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-are available in the Git repository at:
+SGkgSGVsZ2UNCg0KQW0gMzAuMDYuMjMgdW0gMTE6NDMgc2NocmllYiBIZWxnZSBEZWxsZXI6
+DQo+IE9uIDYvMjcvMjMgMTY6NTgsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gQWRk
+IE1PRFVMRV9MSUNFTlNFKCkgYW5kIE1PRFVMRV9ERVNDUklQVElPTigpIGZvciBmYmRldiBo
+ZWxwZXJzDQo+PiBvbiBzcGFyYy4gRml4ZXMgdGhlIGZvbGxvd2luZyBlcnJvcjoNCj4+DQo+
+PiBFUlJPUjogbW9kcG9zdDogbWlzc2luZyBNT0RVTEVfTElDRU5TRSgpIGluIGFyY2gvc3Bh
+cmMvdmlkZW8vZmJkZXYubw0KPj4NCj4+IFJlcG9ydGVkLWJ5OiBHdWVudGVyIFJvZWNrIDxs
+aW51eEByb2Vjay11cy5uZXQ+DQo+PiBDbG9zZXM6IA0KPj4gaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvZHJpLWRldmVsL2M1MjVhZGM5LTY2MjMtNDY2MC04NzE4LWUwYzkzMTE1NjNiOEBy
+b2Vjay11cy5uZXQvDQo+PiBTdWdnZXN0ZWQtYnk6IEFybmQgQmVyZ21hbm4gPGFybmRAYXJu
+ZGIuZGU+DQo+PiBGaXhlczogNGVlYzBiMzA0OGZjICgiYXJjaC9zcGFyYzogSW1wbGVtZW50
+IGZiX2lzX3ByaW1hcnlfZGV2aWNlKCkgaW4gDQo+PiBzb3VyY2UgZmlsZSIpDQo+PiBDYzog
+IkRhdmlkIFMuIE1pbGxlciIgPGRhdmVtQGRhdmVtbG9mdC5uZXQ+DQo+PiBDYzogSGVsZ2Ug
+RGVsbGVyIDxkZWxsZXJAZ214LmRlPg0KPj4gQ2M6IFNhbSBSYXZuYm9yZyA8c2FtQHJhdm5i
+b3JnLm9yZz4NCj4+IENjOiBzcGFyY2xpbnV4QHZnZXIua2VybmVsLm9yZw0KPj4gU2lnbmVk
+LW9mZi1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+PiAt
+LS0NCj4+IMKgIGFyY2gvc3BhcmMvdmlkZW8vZmJkZXYuYyB8IDMgKysrDQo+PiDCoCAxIGZp
+bGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspDQo+IA0KPiBJJ3ZlIHF1ZXVlZCBpdCB1cCBp
+biB0aGUgZmJkZXYgZ2l0IHRyZWUgYnV0IHdpbGwgZHJvcCBpdCBhbnl0aW1lDQo+IGlmIHNv
+bWVvbmUgcHJlZmVycyB0byB0YWtlIHRoaXMgcGF0Y2ggdGhyb3VnaCBhbm90aGVyIHRyZWUu
+Li4uDQoNCkl0J3MgaW4gZHJtLW1pc2MtbmV4dC1maXhlcyBhbHJlYWR5Lg0KDQpCZXN0IHJl
+Z2FyZHMNClRob21hcw0KDQo+IA0KPiBUaGFua3MhDQo+IEhlbGdlDQo+IA0KPiANCj4+DQo+
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9zcGFyYy92aWRlby9mYmRldi5jIGIvYXJjaC9zcGFyYy92
+aWRlby9mYmRldi5jDQo+PiBpbmRleCAyNTgzN2YxMjgxMzJkLi5iZmY2NmRkMTkwOWE0IDEw
+MDY0NA0KPj4gLS0tIGEvYXJjaC9zcGFyYy92aWRlby9mYmRldi5jDQo+PiArKysgYi9hcmNo
+L3NwYXJjL3ZpZGVvL2ZiZGV2LmMNCj4+IEBAIC0yMSwzICsyMSw2IEBAIGludCBmYl9pc19w
+cmltYXJ5X2RldmljZShzdHJ1Y3QgZmJfaW5mbyAqaW5mbykNCj4+IMKgwqDCoMKgwqAgcmV0
+dXJuIDA7DQo+PiDCoCB9DQo+PiDCoCBFWFBPUlRfU1lNQk9MKGZiX2lzX3ByaW1hcnlfZGV2
+aWNlKTsNCj4+ICsNCj4+ICtNT0RVTEVfREVTQ1JJUFRJT04oIlNwYXJjIGZiZGV2IGhlbHBl
+cnMiKTsNCj4+ICtNT0RVTEVfTElDRU5TRSgiR1BMIik7DQo+IA0KDQotLSANClRob21hcyBa
+aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5i
+ZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0Rv
+bmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.5
+--------------P0nSPZg40R8rR7WaalzGUXp3--
 
-for you to fetch changes up to 5ee35c769663cb1c5f26e12cad84904dc3002de8:
+--------------31QIJC0szw3TXVlFhNmmvLw9
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-  LoongArch: Remove five DIE_* definitions in kdebug.h (2023-06-29 20:58:44 +0800)
+-----BEGIN PGP SIGNATURE-----
 
-----------------------------------------------------------------
-LoongArch changes for v6.5
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSetT8FAwAAAAAACgkQlh/E3EQov+CN
+Qg/+KlH96aEpdTWE4I10bRtY7YDL6RLCkgbhpnCgX6Fg2dkONKQY//FRqfzfh1GVqQZ9EJo4Gsbm
+mcjQ60tJBrDN2/lRYJkx/VYRwy7ANhh9tEhPGZ4CqdV4P7zdTU1QcYx47ayMiyZPLzUw4q3YF1vY
+j0RwKvWFcPvmV//UEh4OlkSvgk+g+5lxJgmw/ixNl/Trodh+TTfrO890dgFWdXbMkfipebBkYVDO
+BiwivkMu2YXtb/qGl+To4q0l0z7U9iV7riAUAQcAFn9BQqMpDOThDO1OxTVxVjH43eBtRSjK/Tyt
+s/tRm+piiiOGVDrhMv4i4KbeEsO/AaZ/qRIq87hwG0w9pai85RsXRN5L52KoEUhLbQ7Ylm+p/KHW
+zhWTcx3Pv6DK0JLqPDNseUR6v9Z7EBoS8pphWpF7uBQm7+DmAyWVRVBg/iNxLlydZ8KywvobZyl4
+5hGagbaf0BJcdgma+fkRghsZq9/MbMJXwiEJAUcsuOq8zSNUHcOTxn5Qb+C/xwDUK2iAWFjzqQxx
+qOtWb77dtCIuWFtR1Ox8N4/RChcmuYQzSZxv93Xpp30WR3O/177yDnuOGlOJKTjCGU/FhVcfag/6
+Tl54qmWWPhApmYrTmCSGtO0a4YtfSfKDEa3tySn6Rs2yZA1l68TcDKIqwFZfnsAm4+XENF3O/6DL
+ArQ=
+=pTBo
+-----END PGP SIGNATURE-----
 
-1, Preliminary ClangBuiltLinux enablement;
-2, Add support to clone a time namespace;
-3, Add vector extensions support;
-4, Add SMT (Simultaneous Multi-Threading) support;
-5, Support dbar with different hints;
-6, Introduce hardware page table walker;
-7, Add jump-label implementation;
-8, Add rethook and uprobes support;
-9, Some bug fixes and other small changes.
-
-----------------------------------------------------------------
-Binbin Zhou (2):
-      dt-bindings: interrupt-controller: Add Loongson EIOINTC
-      irqchip/loongson-eiointc: Add DT init support
-
-Dan Carpenter (1):
-      LoongArch: Delete unnecessary debugfs checking
-
-Haoran Jiang (1):
-      LoongArch: Replace kretprobe with rethook
-
-Huacai Chen (6):
-      Merge 'irq/loongarch-fixes-6.5' into loongarch-next
-      LoongArch: Set CPU#0 as the io master for FDT
-      LoongArch: Add vector extensions support
-      LoongArch: Add SMT (Simultaneous Multi-Threading) support
-      LoongArch: Support dbar with different hints
-      LoongArch: Introduce hardware page table walker
-
-Jianmin Lv (3):
-      irqchip/loongson-pch-pic: Fix initialization of HT vector register
-      irqchip/loongson-liointc: Fix IRQ trigger polarity
-      irqchip/loongson-eiointc: Fix irq affinity setting during resume
-
-Liu Peibao (1):
-      irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
-
-Tiezhu Yang (8):
-      LoongArch: Add support to clone a time namespace
-      LoongArch: Select HAVE_DEBUG_KMEMLEAK to support kmemleak
-      LoongArch: Move three functions from kprobes.c to inst.c
-      LoongArch: Check for AMO instructions in insns_not_supported()
-      LoongArch: Add larch_insn_gen_break() to generate break insns
-      LoongArch: Use larch_insn_gen_break() for kprobes
-      LoongArch: Add uprobes support
-      LoongArch: Remove five DIE_* definitions in kdebug.h
-
-WANG Rui (3):
-      LoongArch: Add guard for the larch_insn_gen_xxx functions
-      LoongArch: Calculate various sizes in the linker script
-      LoongArch: extable: Also recognize ABI names of registers
-
-WANG Xuerui (8):
-      LoongArch: Prepare for assemblers with proper FCSR class support
-      LoongArch: Make the CPUCFG&CSR ops simple aliases of compiler built-ins
-      LoongArch: Simplify the invtlb wrappers
-      LoongArch: Tweak CFLAGS for Clang compatibility
-      LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
-      LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
-      LoongArch: Mark Clang LTO as working
-      Makefile: Add loongarch target flag for Clang compilation
-
-Yinbo Zhu (2):
-      irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
-      LoongArch: Export some arch-specific pm interfaces
-
-Youling Tang (1):
-      LoongArch: Add jump-label implementation
-
- .../interrupt-controller/loongson,eiointc.yaml     |  59 ++++
- .../features/core/jump-labels/arch-support.txt     |   2 +-
- .../features/debug/kmemleak/arch-support.txt       |   2 +-
- arch/loongarch/Kconfig                             |  72 +++-
- arch/loongarch/Makefile                            |  23 +-
- arch/loongarch/include/asm/Kbuild                  |   1 -
- arch/loongarch/include/asm/acpi.h                  |  13 +-
- arch/loongarch/include/asm/asmmacro.h              | 393 +++++++++++++++++++++
- arch/loongarch/include/asm/barrier.h               | 130 +++----
- arch/loongarch/include/asm/cpu-features.h          |   2 +-
- arch/loongarch/include/asm/cpu-info.h              |   1 +
- arch/loongarch/include/asm/cpu.h                   |   2 +
- arch/loongarch/include/asm/fpregdef.h              |   7 +
- arch/loongarch/include/asm/fpu.h                   | 185 +++++++++-
- arch/loongarch/include/asm/gpr-num.h               |  30 ++
- arch/loongarch/include/asm/inst.h                  |  55 ++-
- arch/loongarch/include/asm/io.h                    |   2 +-
- arch/loongarch/include/asm/jump_label.h            |  50 +++
- arch/loongarch/include/asm/kdebug.h                |   5 -
- arch/loongarch/include/asm/kprobes.h               |   5 +-
- arch/loongarch/include/asm/loongarch.h             |  76 ++--
- arch/loongarch/include/asm/module.h                |   2 +-
- arch/loongarch/include/asm/page.h                  |   1 +
- arch/loongarch/include/asm/percpu.h                |   6 +-
- arch/loongarch/include/asm/pgtable.h               |   4 +-
- arch/loongarch/include/asm/qspinlock.h             |  18 +
- arch/loongarch/include/asm/suspend.h               |  10 +
- arch/loongarch/include/asm/tlb.h                   |  46 ++-
- arch/loongarch/include/asm/uprobes.h               |  36 ++
- arch/loongarch/include/asm/vdso/gettimeofday.h     |   9 +-
- arch/loongarch/include/asm/vdso/vdso.h             |  32 +-
- arch/loongarch/include/uapi/asm/hwcap.h            |   1 +
- arch/loongarch/include/uapi/asm/ptrace.h           |  16 +-
- arch/loongarch/include/uapi/asm/sigcontext.h       |  18 +
- arch/loongarch/kernel/Makefile                     |   8 +-
- arch/loongarch/kernel/acpi.c                       |  32 ++
- arch/loongarch/kernel/cpu-probe.c                  |  16 +
- arch/loongarch/kernel/efi-header.S                 |   6 +-
- arch/loongarch/kernel/fpu.S                        | 270 ++++++++++++++
- arch/loongarch/kernel/head.S                       |   8 +-
- arch/loongarch/kernel/inst.c                       |  83 ++++-
- arch/loongarch/kernel/jump_label.c                 |  22 ++
- arch/loongarch/kernel/kprobes.c                    |  96 +----
- arch/loongarch/kernel/proc.c                       |   2 +
- arch/loongarch/kernel/process.c                    |  12 +-
- arch/loongarch/kernel/ptrace.c                     | 110 ++++++
- arch/loongarch/kernel/rethook.c                    |  28 ++
- arch/loongarch/kernel/rethook.h                    |   8 +
- .../{kprobes_trampoline.S => rethook_trampoline.S} |   6 +-
- arch/loongarch/kernel/signal.c                     | 326 ++++++++++++++++-
- arch/loongarch/kernel/smp.c                        |  27 +-
- arch/loongarch/kernel/traps.c                      |  95 ++++-
- arch/loongarch/kernel/unaligned.c                  |   2 -
- arch/loongarch/kernel/uprobes.c                    | 153 ++++++++
- arch/loongarch/kernel/vdso.c                       |  98 ++++-
- arch/loongarch/kernel/vmlinux.lds.S                |   9 +
- arch/loongarch/lib/dump_tlb.c                      |   6 +-
- arch/loongarch/mm/tlb.c                            |  21 +-
- arch/loongarch/mm/tlbex.S                          |  27 +-
- arch/loongarch/power/suspend.c                     |   8 +-
- arch/loongarch/vdso/Makefile                       |   7 +-
- arch/loongarch/vdso/vgetcpu.c                      |   2 +-
- drivers/acpi/Kconfig                               |   2 +-
- drivers/irqchip/irq-loongson-eiointc.c             | 135 +++++--
- drivers/irqchip/irq-loongson-liointc.c             |  13 +-
- drivers/irqchip/irq-loongson-pch-pic.c             |  10 +-
- scripts/Makefile.clang                             |   1 +
- 67 files changed, 2549 insertions(+), 414 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
- create mode 100644 arch/loongarch/include/asm/jump_label.h
- create mode 100644 arch/loongarch/include/asm/qspinlock.h
- create mode 100644 arch/loongarch/include/asm/suspend.h
- create mode 100644 arch/loongarch/include/asm/uprobes.h
- create mode 100644 arch/loongarch/kernel/jump_label.c
- create mode 100644 arch/loongarch/kernel/rethook.c
- create mode 100644 arch/loongarch/kernel/rethook.h
- rename arch/loongarch/kernel/{kprobes_trampoline.S => rethook_trampoline.S} (93%)
- create mode 100644 arch/loongarch/kernel/uprobes.c
+--------------31QIJC0szw3TXVlFhNmmvLw9--
