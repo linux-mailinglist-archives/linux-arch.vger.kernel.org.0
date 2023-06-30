@@ -2,189 +2,222 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A3E743AB9
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 13:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88900743AD5
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 13:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbjF3LW6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jun 2023 07:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231967AbjF3L3k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jun 2023 07:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbjF3LW5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 07:22:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE80AC0;
-        Fri, 30 Jun 2023 04:22:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AD8961727;
-        Fri, 30 Jun 2023 11:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014F5C433B6;
-        Fri, 30 Jun 2023 11:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688124174;
-        bh=HIgffZnOosSIcjOP1dB+R/SNrBLEPOgvVYTtQ+OoMbc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iC9Y0Eb2Z2MrXa6Y0C3L0itdnUhM4boFSN3EVF2hfwwESwXo2f0xnysTU4DH55i8q
-         LPRCqB1weLDnb1l/6wVnR26XX6yvfBBjDiwiCnWAD+1Q8tj7lgbNPv9QNYG3oXhCYi
-         jhoRAa0IscmrtkjZetLnY0SUfy6bT1P9ix6uoengTcF8SfJxq6sRNwBBw6YKmaHmat
-         Hk+finD67UsNPxNmVWFr5EqEGCImxrkyJfW4S0fSJo6AEaxNGlsb1/ODu+nXFEyQHL
-         DDaDryi0GmannFjCqZzQhFhLnJK/4U5QqwMzl9zCmtDH7+5Z/gF0qyEkmHLaUvG2DI
-         YLz91LavDYzNw==
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fb4146e8deso21799755e9.0;
-        Fri, 30 Jun 2023 04:22:53 -0700 (PDT)
-X-Gm-Message-State: ABy/qLa7F0EXPppSbihLT1r4Fb/1QDkAsvTj4CwfD6AKtaGaYkAu9c7+
-        kIs72V3WZCiDdGX4O+KdJrnpsWFdul48ZW66ehk=
-X-Google-Smtp-Source: APBJJlEl3R3agomzm6d8TGvRI5Iv/j9uIUWV2C5RvtxdK+YCyx2E8/q4piZNcSGztOcV2x6OLVr/LPL52UVCqEccBUc=
-X-Received: by 2002:a7b:c3c1:0:b0:3fb:c77e:80f6 with SMTP id
- t1-20020a7bc3c1000000b003fbc77e80f6mr1426408wmj.36.1688124172132; Fri, 30 Jun
- 2023 04:22:52 -0700 (PDT)
+        with ESMTP id S231778AbjF3L3j (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 07:29:39 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EFFC0;
+        Fri, 30 Jun 2023 04:29:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VmIQKDt_1688124573;
+Received: from 30.240.105.188(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VmIQKDt_1688124573)
+          by smtp.aliyun-inc.com;
+          Fri, 30 Jun 2023 19:29:34 +0800
+Message-ID: <e43c47c9-2bf7-b34d-0d30-83902543ae32@linux.alibaba.com>
+Date:   Fri, 30 Jun 2023 19:29:31 +0800
 MIME-Version: 1.0
-References: <20230222033021.983168-1-guoren@kernel.org> <20230222033021.983168-5-guoren@kernel.org>
- <ZJ2PBosSQtSX28Mf@wychelm> <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
-In-Reply-To: <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 30 Jun 2023 07:22:40 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTTRViivgy3njDc1k7A-jaSFUsyo2VPg2JwEAwx=H3mR4w@mail.gmail.com>
-Message-ID: <CAJF2gTTRViivgy3njDc1k7A-jaSFUsyo2VPg2JwEAwx=H3mR4w@mail.gmail.com>
-Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>,
-        Vincent Chen <vincent.chen@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
+ processes (Previously mshare)
+Content-Language: en-US
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1682453344.git.khalid.aziz@oracle.com>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 7:16=E2=80=AFAM Guo Ren <guoren@kernel.org> wrote:
->
-> On Thu, Jun 29, 2023 at 10:02=E2=80=AFAM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> >
-> > On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > This patch converts riscv to use the generic entry infrastructure fro=
-m
-> > > kernel/entry/*. The generic entry makes maintainers' work easier and
-> > > codes more elegant. Here are the changes:
-> > >
-> > >  - More clear entry.S with handle_exception and ret_from_exception
-> > >  - Get rid of complex custom signal implementation
-> > >  - Move syscall procedure from assembly to C, which is much more
-> > >    readable.
-> > >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
-> > >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mod=
-e
-> > >  - Use the standard preemption code instead of custom
-> > >
-> > > Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> > > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> > > Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Cc: Ben Hutchings <ben@decadent.org.uk>
-> >
-> > Apologies for the late feedback but I've been swamped lately and only
-> > recently got round to running the full kgdb test suite on the v6.4
-> > series.
-> >
-> > The kgdb test suite includes a couple of tests that verify that the
-> > system resumes after breakpointing due to a BUG():
-> > https://github.com/daniel-thompson/kgdbtest/blob/master/tests/test_kdb_=
-fault_injection.py#L24-L45
-> >
-> > These tests have regressed on riscv between v6.3 and v6.4 and a bisect
-> > is pointing at this patch. With these changes in place then, after kdb
-> > resumes the system, the BUG() message is printed as normal but then
-> > immediately fails. From the backtrace it looks like the new entry/exit
-> > code cannot advance past a compiled breakpoint instruction:
-> > ~~~
-> > PANIC: Fatal exception in interrupt
-> It comes from:
-> void die(struct pt_regs *regs, ...
-> {
-> ...
-> if (in_interrupt())
->         panic("Fatal exception in interrupt");
-> ...
->
-> We could add a dump_backtrace to see what happened:
-> if (in_interrupt()) {
-> +      dump_backtrace(regs, NULL, KERN_DEFAULT);
-Sorry, it should be:
-+        dump_backtrace(NULL, NULL, KERN_DEFAULT);
-We need current stack info, not exception context.
+Hi Khalid
+
+I see this patch has send out in April, and wanna to ask about the 
+status of this RFC now (IMHO, it seems that the code has some places to 
+fix/do). This feature is useful to save much memory on pgtables, so we 
+also want to use this optimization in our databases if upstream accept that.
+
+BTW, in the past few weeks, I made some adjustments to simplify and meet 
+with our databases base on your code, e.g. multi-vmas share same shadow 
+mm, madvise, and memory compaction. if you are interested, I can provide 
+a detailed codes.
 
 
->         panic("Fatal exception in interrupt");
-> }
->
->
->
-> >
-> > Entering kdb (current=3D0xff60000001a2a280, pid 104) on processor 1 due=
- to
-> > NonMask
-> > able Interrupt @ 0xffffffff800bb3c4
-> > [1]kdb> bt
-> > Stack traceback for pid 104
-> > 0xff60000001a2a280      104       92  1    1   R  0xff60000001a2ac50
-> > *echo
-> > CPU: 1 PID: 104 Comm: echo Tainted: G      D
-> > 6.3.0-rc1-00003-gf0bddf50586d #119
-> > Hardware name: riscv-virtio,qemu (DT)
-> > Call Trace:
-> > [<ffffffff800050dc>] dump_backtrace+0x1c/0x24
-> > [<ffffffff808458f8>] show_stack+0x2c/0x38
-> > [<ffffffff80851b00>] dump_stack_lvl+0x3c/0x54
-> > [<ffffffff80851b2c>] dump_stack+0x14/0x1c
-> > [<ffffffff800bc4b8>] kdb_dump_stack_on_cpu+0x64/0x66
-> > [<ffffffff800c3d2a>] kdb_show_stack+0x82/0x88
-> > [<ffffffff800c3dc0>] kdb_bt1+0x90/0xf2
-> > [<ffffffff800c4206>] kdb_bt+0x34c/0x384
-> > [<ffffffff800c1d28>] kdb_parse+0x27a/0x618
-> > [<ffffffff800c2566>] kdb_main_loop+0x3b2/0x8fa
-> > [<ffffffff800c4c5a>] kdb_stub+0x1ba/0x3a8
-> > [<ffffffff800bbba8>] kgdb_cpu_enter+0x342/0x5ba
-> > [<ffffffff800bc3da>] kgdb_handle_exception+0xe0/0x11a
-> > [<ffffffff8000810c>] kgdb_riscv_notify+0x86/0xb4
-> > [<ffffffff8002f210>] notify_die+0x6a/0xa6
-> > [<ffffffff80004db0>] handle_break+0x70/0xe0
-> > [<ffffffff80852462>] do_trap_break+0x48/0x5c
-> > [<ffffffff80003598>] ret_from_exception+0x0/0x64
-> > [<ffffffff800bb3c4>] kgdb_compiled_break+0x0/0x14
-> > ~~~
-> >
-> >
-> > Daniel.
->
->
->
-> --
-> Best Regards
->  Guo Ren
+Thanks,
 
+-wrw
 
-
---
-Best Regards
- Guo Ren
+On 2023/4/27 00:49, Khalid Aziz wrote:
+> Memory pages shared between processes require a page table entry
+> (PTE) for each process. Each of these PTE consumes some of the
+> memory and as long as number of mappings being maintained is small
+> enough, this space consumed by page tables is not objectionable.
+> When very few memory pages are shared between processes, the number
+> of page table entries (PTEs) to maintain is mostly constrained by
+> the number of pages of memory on the system.  As the number of
+> shared pages and the number of times pages are shared goes up,
+> amount of memory consumed by page tables starts to become
+> significant. This issue does not apply to threads. Any number of
+> threads can share the same pages inside a process while sharing the
+> same PTEs. Extending this same model to sharing pages across
+> processes can eliminate this issue for sharing across processes as
+> well.
+>
+> Some of the field deployments commonly see memory pages shared
+> across 1000s of processes. On x86_64, each page requires a PTE that
+> is only 8 bytes long which is very small compared to the 4K page
+> size. When 2000 processes map the same page in their address space,
+> each one of them requires 8 bytes for its PTE and together that adds
+> up to 8K of memory just to hold the PTEs for one 4K page. On a
+> database server with 300GB SGA, a system crash was seen with
+> out-of-memory condition when 1500+ clients tried to share this SGA
+> even though the system had 512GB of memory. On this server, in the
+> worst case scenario of all 1500 processes mapping every page from
+> SGA would have required 878GB+ for just the PTEs. If these PTEs
+> could be shared, amount of memory saved is very significant.
+>
+> This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
+> This flag can be specified along with MAP_SHARED by a process to
+> hint to kernel that it wishes to share page table entries for this
+> file mapping mmap region with other processes. Any other process
+> that mmaps the same file with MAP_SHARED_PT flag can then share the
+> same page table entries. Besides specifying MAP_SHARED_PT flag, the
+> processes must map the files at a PMD aligned address with a size
+> that is a multiple of PMD size and at the same virtual addresses.
+> This last requirement of same virtual addresses can possibly be
+> relaxed if that is the consensus.
+>
+> When mmap() is called with MAP_SHARED_PT flag, a new host mm struct
+> is created to hold the shared page tables. Host mm struct is not
+> attached to a process. Start and size of host mm are set to the
+> start and size of the mmap region and a VMA covering this range is
+> also added to host mm struct. Existing page table entries from the
+> process that creates the mapping are copied over to the host mm
+> struct. All processes mapping this shared region are considered
+> guest processes. When a guest process mmap's the shared region, a vm
+> flag VM_SHARED_PT is added to the VMAs in guest process. Upon a page
+> fault, VMA is checked for the presence of VM_SHARED_PT flag. If the
+> flag is found, its corresponding PMD is updated with the PMD from
+> host mm struct so the PMD will point to the page tables in host mm
+> struct. vm_mm pointer of the VMA is also updated to point to host mm
+> struct for the duration of fault handling to ensure fault handling
+> happens in the context of host mm struct. When a new PTE is
+> created, it is created in the host mm struct page tables and the PMD
+> in guest mm points to the same PTEs.
+>
+> This is a basic working implementation. It will need to go through
+> more testing and refinements. Some notes and questions:
+>
+> - PMD size alignment and size requirement is currently hard coded
+>    in. Is there a need or desire to make this more flexible and work
+>    with other alignments/sizes? PMD size allows for adapting this
+>    infrastructure to form the basis for hugetlbfs page table sharing
+>    as well. More work will be needed to make that happen.
+>
+> - Is there a reason to allow a userspace app to query this size and
+>    alignment requirement for MAP_SHARED_PT in some way?
+>
+> - Shared PTEs means mprotect() call made by one process affects all
+>    processes sharing the same mapping and that behavior will need to
+>    be documented clearly. Effect of mprotect call being different for
+>    processes using shared page tables is the primary reason to
+>    require an explicit opt-in from userspace processes to share page
+>    tables. With a transparent sharing derived from MAP_SHARED alone,
+>    changed effect of mprotect can break significant number of
+>    userspace apps. One could work around that by unsharing whenever
+>    mprotect changes modes on shared mapping but that introduces
+>    complexity and the capability to execute a single mprotect to
+>    change modes across 1000's of processes sharing a mapped database
+>    is a feature explicitly asked for by database folks. This
+>    capability has significant performance advantage when compared to
+>    mechanism of sending messages to every process using shared
+>    mapping to call mprotect and change modes in each process, or
+>    using traps on permissions mismatch in each process.
+>
+> - This implementation does not allow unmapping page table shared
+>    mappings partially. Should that be supported in future?
+>
+> Some concerns in this RFC:
+>
+> - When page tables for a process are freed upon process exit,
+>    pmd_free_tlb() gets called at one point to free all PMDs allocated
+>    by the process. For a shared page table, shared PMDs can not be
+>    released when a guest process exits. These shared PMDs are
+>    released when host mm struct is released upon end of last
+>    reference to page table shared region hosted by this mm. For now
+>    to stop PMDs being released, this RFC introduces following change
+>    in mm/memory.c which works but does not feel like the right
+>    approach. Any suggestions for a better long term approach will be
+>    very appreciated:
+>
+> @@ -210,13 +221,19 @@ static inline void free_pmd_range(struct mmu_gather *tlb,
+> pud_t *pud,
+>
+>          pmd = pmd_offset(pud, start);
+>          pud_clear(pud);
+> -       pmd_free_tlb(tlb, pmd, start);
+> -       mm_dec_nr_pmds(tlb->mm);
+> +       if (shared_pte) {
+> +               tlb_flush_pud_range(tlb, start, PAGE_SIZE);
+> +               tlb->freed_tables = 1;
+> +       } else {
+> +               pmd_free_tlb(tlb, pmd, start);
+> +               mm_dec_nr_pmds(tlb->mm);
+> +       }
+>   }
+>
+>   static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
+>
+> - This implementation requires an additional VM flag. Since all lower
+>    32 bits are currently in use, the new VM flag must come from upper
+>    32 bits which restricts this feature to 64-bit processors.
+>
+> - This feature is implemented for file mappings only. Is there a
+>    need to support it for anonymous memory as well?
+>
+> - Accounting for MAP_SHARED_PT mapped filepages in a process and
+>    pagetable bytes is not quite accurate yet in this RFC and will be
+>    fixed in the non-RFC version of patches.
+>
+> I appreciate any feedback on these patches and ideas for
+> improvements before moving these patches out of RFC stage.
+>
+>
+> Changes from RFC v1:
+> - Broken the patches up into smaller patches
+> - Fixed a few bugs related to freeing PTEs and PMDs incorrectly
+> - Cleaned up the code a bit
+>
+>
+> Khalid Aziz (4):
+>    mm/ptshare: Add vm flag for shared PTE
+>    mm/ptshare: Add flag MAP_SHARED_PT to mmap()
+>    mm/ptshare: Create new mm struct for page table sharing
+>    mm/ptshare: Add page fault handling for page table shared regions
+>
+>   include/linux/fs.h                     |   2 +
+>   include/linux/mm.h                     |   8 +
+>   include/trace/events/mmflags.h         |   3 +-
+>   include/uapi/asm-generic/mman-common.h |   1 +
+>   mm/Makefile                            |   2 +-
+>   mm/internal.h                          |  21 ++
+>   mm/memory.c                            | 105 ++++++++--
+>   mm/mmap.c                              |  88 +++++++++
+>   mm/ptshare.c                           | 263 +++++++++++++++++++++++++
+>   9 files changed, 476 insertions(+), 17 deletions(-)
+>   create mode 100644 mm/ptshare.c
+>
