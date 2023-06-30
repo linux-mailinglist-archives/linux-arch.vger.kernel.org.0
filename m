@@ -2,222 +2,190 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88900743AD5
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 13:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92FF743B91
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Jun 2023 14:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjF3L3k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Jun 2023 07:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S233058AbjF3MHG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Jun 2023 08:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjF3L3j (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 07:29:39 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EFFC0;
-        Fri, 30 Jun 2023 04:29:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VmIQKDt_1688124573;
-Received: from 30.240.105.188(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VmIQKDt_1688124573)
-          by smtp.aliyun-inc.com;
-          Fri, 30 Jun 2023 19:29:34 +0800
-Message-ID: <e43c47c9-2bf7-b34d-0d30-83902543ae32@linux.alibaba.com>
-Date:   Fri, 30 Jun 2023 19:29:31 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
- processes (Previously mshare)
-Content-Language: en-US
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1682453344.git.khalid.aziz@oracle.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232981AbjF3MG0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Jun 2023 08:06:26 -0400
+X-Greylist: delayed 725 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 05:05:52 PDT
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A41449E;
+        Fri, 30 Jun 2023 05:05:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C8F845842A1;
+        Fri, 30 Jun 2023 07:53:45 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 30 Jun 2023 07:53:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688126025; x=1688133225; bh=ya
+        Hy0NgB4QI7znLtjDpufXmMXzZcSHw23m7h8BkLYBc=; b=10KOp+CzUmojO7ZSQ7
+        q9c3tAJBmOd76hg6sonOk40OjKAR6/QOPiz7XUomr8IP6aN19s7N9Q20gnTBA8OU
+        H+ET1KWhVc0oqozGAYUdc7B70SAPMdGIyEmEipUjQs98dHfF9mAUgsaeXHru8OlA
+        Z6b+3BUsGbAouqrpsuvP8THkbsAzAbWArrjQjssrDfLJHYAxMJ1nD0US1BwUxLpH
+        Khsbp9i0wfMK4NjF83UPBZQU2Xe9X8o6q5JmvVGPeBGgXYJSti5i4d4Vr++XzGjN
+        1deBUgFU/w8tfA/bjpGKl2V8A3IgBHPWHWftg2j80IDtUUtjFI/5ldbjH9jVYmeY
+        G2pw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688126025; x=1688133225; bh=yaHy0NgB4QI7z
+        nLtjDpufXmMXzZcSHw23m7h8BkLYBc=; b=VLzmPefoROKUnYgyH59xLO28GGD4n
+        I4lte/pn3WzX95H4eQRtTSBAb90fH5FqIscW92NizI9x3K9rvYkB4k9q6ajV1EbD
+        VxE8AOWeA5gd3Truhe/A9kaDx6LrP7Tl4Y9XFamiioeruNo4WJqflkjaHJ0nsHcv
+        J2r4IJGTVqOt1B1dMbybj/sbd/LzIbl5CzvfvEtuw8uPdvo7PAFEKVHhv2+1X9Xd
+        qEBjQf6xoQoJmFw77YwpNSZG5Kn1KzEpYegVmCRAHDr3owvr/EeqaPrEmVGD6Gmw
+        mfm5v+sxS/9Ml4UMUnNpdnRbqLCJ6zjTnHpvZojc13GhJnUu+kDlq3vDg==
+X-ME-Sender: <xms:SMKeZCxMqe5zxyzHHEyo_jowh1NvQkg3HAWm1oxMk5pEwCXuDt8nPQ>
+    <xme:SMKeZOQSC2GjFmKEVBEJ34bdcsM63u6r5Bbn1HzIVxPff5ENjvEYekcilieyCztL0
+    OOiy6d_8S9V2AG4VWM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:SMKeZEU7QF7lH3eivuj7P9AQVrp-KepGLUxX15AeZTjz07bNrMm_5Q>
+    <xmx:SMKeZIimGJWbUJHe4AXjoJoG2-DRyW8QkepPJWqWF6Y-rgF7svHorw>
+    <xmx:SMKeZEDcwFLycbP_cRSrtSET1YHYJvelMIMgwIjYVgEhFWn2ec6cwQ>
+    <xmx:ScKeZMj8q19ja7k4QwyGQviRl-VaDcpKWJEn2nnWWhOtIymUXjLwrw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 94900B60093; Fri, 30 Jun 2023 07:53:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <dd5aa01e-afad-48d2-bf4c-4a58b74f1644@app.fastmail.com>
+In-Reply-To: <ef7b3899-7d18-8018-47fa-aac0efaa61f4@suse.de>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-8-tzimmermann@suse.de>
+ <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
+ <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
+ <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
+ <ef7b3899-7d18-8018-47fa-aac0efaa61f4@suse.de>
+Date:   Fri, 30 Jun 2023 13:53:24 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Helge Deller" <deller@gmx.de>, "Daniel Vetter" <daniel@ffwll.ch>,
+        "Dave Airlie" <airlied@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Frederic Weisbecker" <frederic@kernel.org>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Sami Tolvanen" <samitolvanen@google.com>,
+        "Juerg Haefliger" <juerg.haefliger@canonical.com>
+Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Khalid
+On Fri, Jun 30, 2023, at 09:46, Thomas Zimmermann wrote:
+> Am 29.06.23 um 15:21 schrieb Arnd Bergmann:
+>> On Thu, Jun 29, 2023, at 15:01, Thomas Zimmermann wrote:
+>>> Am 29.06.23 um 14:35 schrieb Arnd Bergmann:
+>>>> On Thu, Jun 29, 2023, at 13:45, Thomas Zimmermann wrote:
+>
+>>>
+>>> FIRMWARE_EDID is a user-selectable feature, while ARCH_HAS_EDID_INFO
+>>> announces an architecture feature. They do different things.
+>> 
+>> I still have trouble seeing the difference.
+>
+> The idea here is that ARCH_HAS_ signals the architecture's support for 
+> the feature.  Drivers set 'depends on' in their Kconfig.
+>
+> Another Kconfig token, VIDEO_SCREEN_INFO or FIRMWARE_EDID, would then 
+> actually enable the feature.  Drivers select VIDEO_SCREEN_INFO or 
+> FIRMWARE_EDID and the architectures contains code like
 
-I see this patch has send out in April, and wanna to ask about the 
-status of this RFC now (IMHO, it seems that the code has some places to 
-fix/do). This feature is useful to save much memory on pgtables, so we 
-also want to use this optimization in our databases if upstream accept that.
+Fair enough. In that case, I guess FIRMWARE_EDID will just depend on
+ARCH_HAS_EDID_INFO, or possibly "depends on FIRMWARE_EDID || EFI"
+after it starts calling into an EFI specific function, right?
 
-BTW, in the past few weeks, I made some adjustments to simplify and meet 
-with our databases base on your code, e.g. multi-vmas share same shadow 
-mm, madvise, and memory compaction. if you are interested, I can provide 
-a detailed codes.
+> #ifdef VIDEO_SCREEN_INFO
+> struct screen_info screen_info = {
+> 	/* set values here */
+> }
+> #endif
+>
+> This allows us to disable code that requires screen_info/edid_info, but 
+> also disable screen_info/edid_info unless such code has been enabled in 
+> the kernel config.
+>
+> Some architectures currently mimic this by guarding screen_info with 
+> ifdef CONFIG_VT or similar. I'd like to make this more flexible. The 
+> cost of a few more internal Kconfig tokens seems negligible.
 
+I definitely get it for the screen_info, which needs the complexity.
+For ARCHARCH_HAS_EDID_INFO I would hope that it's never selected by
+anything other than x86, so I would still go with just a dependency
+on x86 for simplicity, but I don't mind having the extra symbol if that
+keeps it more consistent with how the screen_info is handled.
 
-Thanks,
+>> I suppose you could use FIRMWARE_EDID on EFI or OF systems without
+>> the need for a global edid_info structure, but that would not
+>> share any code with the current fb_firmware_edid() function.
+>
+> The current code is build on top of screen_info and edid_info. I'd 
+> preferably not replace that, if possible.
 
--wrw
+One way I could imagine this looking in the end would be
+something like
 
-On 2023/4/27 00:49, Khalid Aziz wrote:
-> Memory pages shared between processes require a page table entry
-> (PTE) for each process. Each of these PTE consumes some of the
-> memory and as long as number of mappings being maintained is small
-> enough, this space consumed by page tables is not objectionable.
-> When very few memory pages are shared between processes, the number
-> of page table entries (PTEs) to maintain is mostly constrained by
-> the number of pages of memory on the system.  As the number of
-> shared pages and the number of times pages are shared goes up,
-> amount of memory consumed by page tables starts to become
-> significant. This issue does not apply to threads. Any number of
-> threads can share the same pages inside a process while sharing the
-> same PTEs. Extending this same model to sharing pages across
-> processes can eliminate this issue for sharing across processes as
-> well.
->
-> Some of the field deployments commonly see memory pages shared
-> across 1000s of processes. On x86_64, each page requires a PTE that
-> is only 8 bytes long which is very small compared to the 4K page
-> size. When 2000 processes map the same page in their address space,
-> each one of them requires 8 bytes for its PTE and together that adds
-> up to 8K of memory just to hold the PTEs for one 4K page. On a
-> database server with 300GB SGA, a system crash was seen with
-> out-of-memory condition when 1500+ clients tried to share this SGA
-> even though the system had 512GB of memory. On this server, in the
-> worst case scenario of all 1500 processes mapping every page from
-> SGA would have required 878GB+ for just the PTEs. If these PTEs
-> could be shared, amount of memory saved is very significant.
->
-> This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
-> This flag can be specified along with MAP_SHARED by a process to
-> hint to kernel that it wishes to share page table entries for this
-> file mapping mmap region with other processes. Any other process
-> that mmaps the same file with MAP_SHARED_PT flag can then share the
-> same page table entries. Besides specifying MAP_SHARED_PT flag, the
-> processes must map the files at a PMD aligned address with a size
-> that is a multiple of PMD size and at the same virtual addresses.
-> This last requirement of same virtual addresses can possibly be
-> relaxed if that is the consensus.
->
-> When mmap() is called with MAP_SHARED_PT flag, a new host mm struct
-> is created to hold the shared page tables. Host mm struct is not
-> attached to a process. Start and size of host mm are set to the
-> start and size of the mmap region and a VMA covering this range is
-> also added to host mm struct. Existing page table entries from the
-> process that creates the mapping are copied over to the host mm
-> struct. All processes mapping this shared region are considered
-> guest processes. When a guest process mmap's the shared region, a vm
-> flag VM_SHARED_PT is added to the VMAs in guest process. Upon a page
-> fault, VMA is checked for the presence of VM_SHARED_PT flag. If the
-> flag is found, its corresponding PMD is updated with the PMD from
-> host mm struct so the PMD will point to the page tables in host mm
-> struct. vm_mm pointer of the VMA is also updated to point to host mm
-> struct for the duration of fault handling to ensure fault handling
-> happens in the context of host mm struct. When a new PTE is
-> created, it is created in the host mm struct page tables and the PMD
-> in guest mm points to the same PTEs.
->
-> This is a basic working implementation. It will need to go through
-> more testing and refinements. Some notes and questions:
->
-> - PMD size alignment and size requirement is currently hard coded
->    in. Is there a need or desire to make this more flexible and work
->    with other alignments/sizes? PMD size allows for adapting this
->    infrastructure to form the basis for hugetlbfs page table sharing
->    as well. More work will be needed to make that happen.
->
-> - Is there a reason to allow a userspace app to query this size and
->    alignment requirement for MAP_SHARED_PT in some way?
->
-> - Shared PTEs means mprotect() call made by one process affects all
->    processes sharing the same mapping and that behavior will need to
->    be documented clearly. Effect of mprotect call being different for
->    processes using shared page tables is the primary reason to
->    require an explicit opt-in from userspace processes to share page
->    tables. With a transparent sharing derived from MAP_SHARED alone,
->    changed effect of mprotect can break significant number of
->    userspace apps. One could work around that by unsharing whenever
->    mprotect changes modes on shared mapping but that introduces
->    complexity and the capability to execute a single mprotect to
->    change modes across 1000's of processes sharing a mapped database
->    is a feature explicitly asked for by database folks. This
->    capability has significant performance advantage when compared to
->    mechanism of sending messages to every process using shared
->    mapping to call mprotect and change modes in each process, or
->    using traps on permissions mismatch in each process.
->
-> - This implementation does not allow unmapping page table shared
->    mappings partially. Should that be supported in future?
->
-> Some concerns in this RFC:
->
-> - When page tables for a process are freed upon process exit,
->    pmd_free_tlb() gets called at one point to free all PMDs allocated
->    by the process. For a shared page table, shared PMDs can not be
->    released when a guest process exits. These shared PMDs are
->    released when host mm struct is released upon end of last
->    reference to page table shared region hosted by this mm. For now
->    to stop PMDs being released, this RFC introduces following change
->    in mm/memory.c which works but does not feel like the right
->    approach. Any suggestions for a better long term approach will be
->    very appreciated:
->
-> @@ -210,13 +221,19 @@ static inline void free_pmd_range(struct mmu_gather *tlb,
-> pud_t *pud,
->
->          pmd = pmd_offset(pud, start);
->          pud_clear(pud);
-> -       pmd_free_tlb(tlb, pmd, start);
-> -       mm_dec_nr_pmds(tlb->mm);
-> +       if (shared_pte) {
-> +               tlb_flush_pud_range(tlb, start, PAGE_SIZE);
-> +               tlb->freed_tables = 1;
-> +       } else {
-> +               pmd_free_tlb(tlb, pmd, start);
-> +               mm_dec_nr_pmds(tlb->mm);
-> +       }
->   }
->
->   static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
->
-> - This implementation requires an additional VM flag. Since all lower
->    32 bits are currently in use, the new VM flag must come from upper
->    32 bits which restricts this feature to 64-bit processors.
->
-> - This feature is implemented for file mappings only. Is there a
->    need to support it for anonymous memory as well?
->
-> - Accounting for MAP_SHARED_PT mapped filepages in a process and
->    pagetable bytes is not quite accurate yet in this RFC and will be
->    fixed in the non-RFC version of patches.
->
-> I appreciate any feedback on these patches and ideas for
-> improvements before moving these patches out of RFC stage.
->
->
-> Changes from RFC v1:
-> - Broken the patches up into smaller patches
-> - Fixed a few bugs related to freeing PTEs and PMDs incorrectly
-> - Cleaned up the code a bit
->
->
-> Khalid Aziz (4):
->    mm/ptshare: Add vm flag for shared PTE
->    mm/ptshare: Add flag MAP_SHARED_PT to mmap()
->    mm/ptshare: Create new mm struct for page table sharing
->    mm/ptshare: Add page fault handling for page table shared regions
->
->   include/linux/fs.h                     |   2 +
->   include/linux/mm.h                     |   8 +
->   include/trace/events/mmflags.h         |   3 +-
->   include/uapi/asm-generic/mman-common.h |   1 +
->   mm/Makefile                            |   2 +-
->   mm/internal.h                          |  21 ++
->   mm/memory.c                            | 105 ++++++++--
->   mm/mmap.c                              |  88 +++++++++
->   mm/ptshare.c                           | 263 +++++++++++++++++++++++++
->   9 files changed, 476 insertions(+), 17 deletions(-)
->   create mode 100644 mm/ptshare.c
->
+struct screen_info *fb_screen_info(struct device *dev)
+{
+      struct screen_info *si = NULL;
+
+      if (IS_ENABLED(CONFIG_EFI))
+            si = efi_get_screen_info(dev);
+
+      if (IS_ENABLED(CONFIG_ARCH_HAS_SCREEN_INFO) && !si)
+            si = screen_info;
+
+      return si;
+}
+
+corresponding to fb_firmware_edid(). With this, any driver
+that wants to access screen_info would call this function
+instead of using the global pointer, plus either NULL pointer
+check or a CONFIG_ARCH_HAS_SCREEN_INFO dependency.
+
+This way we could completely eliminate the global screen_info
+on arm64, riscv, and loongarch but still use the efi and
+hyperv framebuffer/drm drivers.
+
+    Arnd
