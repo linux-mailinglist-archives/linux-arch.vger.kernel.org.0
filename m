@@ -2,73 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA13745A4C
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jul 2023 12:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EA1745D7E
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jul 2023 15:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjGCKbF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jul 2023 06:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S229793AbjGCNdP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jul 2023 09:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjGCKal (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jul 2023 06:30:41 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B33319B7
-        for <linux-arch@vger.kernel.org>; Mon,  3 Jul 2023 03:30:05 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc0981756so40072285e9.0
-        for <linux-arch@vger.kernel.org>; Mon, 03 Jul 2023 03:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688380185; x=1690972185;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=msJWpyA7yo6ChYj6KxpLPwqEqEdFIUqzWnqvB6326h8=;
-        b=uG7u5pKuhtwVbr2UgzP8QRIsfl1iHAteUv24U80QoHbW76XH60V8ImE2VNBLxQa9Qq
-         kLRpwlK6YtuNENBihvqHpD6PyWaah6uVndRmhCfpY/XXqkgmtI/BwUInZ8BSkTfG/Dao
-         18RUARVnFlz7VWwr0WMyVF8SsKwfdStnu625yEymLkZ2+Kj86OmvzzI8YUNG7JLtpSGp
-         HEsvosPWjYgwvL8q8M9NlgK/Mj6nmGfLdNG759I8DxJ2cICoqAa9ihOBTlJF9w24ph2d
-         TbkH2F7e9NyNZM63JA/5/MZmRvOX3RU0Jb+i7iMf+YaKFCuFhigY9yyshw65JxqmZDgQ
-         EZpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688380185; x=1690972185;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=msJWpyA7yo6ChYj6KxpLPwqEqEdFIUqzWnqvB6326h8=;
-        b=R66ZUqUwLXBDWfvPmku6ID6nbK/ZX+2Zx1cBbwHFmov/G73npfSxvBxuGTDTxEGhbK
-         qphZ3Vh/A90thbuOupnoVzCaUbHYwRUDy9uyJzEChcMSo90FKdRXlUOSQVrs2LzoYCcw
-         GDURPLMNlgxOGgG317kwtuaqnCPskvhTmPPKoWdWUgt1XPoAeZCYxJF6BCoI4jBh8s1t
-         /+w1QL2dwDWqnuu4ViJghk1gDtdDwK/v4McvPO5rTqbAqqLkmiaC+rUdjUGtUUTLSela
-         wbiOJFR/KiG6MVmn/c78sgKGRrfhSdaRn58fnx6kI+r8y0xdVOy0y3/SntJOKgWKWJaM
-         NbkQ==
-X-Gm-Message-State: ABy/qLb3hw2Th9Wu9H7U01jmAlvR5jcc03dyUO0UAJh/Yj7QSgOQTMjP
-        hQaEZg+OcKr/oGbPtkLwuVLONwGkNO1DOpo20Enjjw==
-X-Google-Smtp-Source: APBJJlHzl6eBn9aWNVBkstLjO2nceNNNQ/v7qgOzbBPVd6Bz/h0VoFqe818reHfXXfYJfj+v9+U3ow==
-X-Received: by 2002:a05:600c:22c4:b0:3fb:d1c1:9b79 with SMTP id 4-20020a05600c22c400b003fbd1c19b79mr4086786wmg.30.1688380184737;
-        Mon, 03 Jul 2023 03:29:44 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id q18-20020adfcd92000000b003140f47224csm12786759wrj.15.2023.07.03.03.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 03:29:43 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 11:29:41 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-Message-ID: <20230703102941.GA4328@aspen.lan>
-References: <20230702025708.784106-1-guoren@kernel.org>
+        with ESMTP id S231757AbjGCNdF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jul 2023 09:33:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B804310D4;
+        Mon,  3 Jul 2023 06:32:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D38D60F3C;
+        Mon,  3 Jul 2023 13:32:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88351C433C7;
+        Mon,  3 Jul 2023 13:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688391151;
+        bh=7qlSX9Nell5J7ysbWiOfRWUhTOykTgPNeRvu7kTYWFI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z+7keICwZsDZYvzIbUYbAjua4wVC7WpRTZjY+p0UqCOPQWrv55HZV17LbtFu8q55z
+         w7+nnoVSS94ACBMalD0MKTnRFPFU8Lo8gOJYLxh/7fFg8lK8+z+7ucOmuceABT2LbP
+         OXt0TLl2OgWesEtsAtwwdogHYkJAqX6uxcjqLNOnN4FJ/q4GQ94xo2jHCEL0RlmBjG
+         3HH9mfElWZu57e7nhMbgJKjDoRJ7NCGaeytE3WK+/Oau36Zx6m+PH6EyMFWK9dN/+P
+         O5o5DDMYh20KrcIyUUvLmMh9lCta8zIFQh0t07Nl5P0Z5JSBTdsqs9+tHNT3DtqWGF
+         BFhK3s1ZBvHeQ==
+Date:   Mon, 3 Jul 2023 14:32:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <d8ade3c0-f256-48dd-9969-d5e55dadd0e4@sirena.org.uk>
+References: <ZJFukYxRbU1MZlQn@arm.com>
+ <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
+ <ZJLgp29mM3BLb3xa@arm.com>
+ <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
+ <ZJQR7slVHvjeCQG8@arm.com>
+ <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
+ <ZJR545en+dYx399c@arm.com>
+ <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
+ <ZJ2sTu9QRmiWNISy@arm.com>
+ <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3loSgCLP1vFHrOSe"
 Content-Disposition: inline
-In-Reply-To: <20230702025708.784106-1-guoren@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
+X-Cookie: Please go away.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +108,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> The irqentry_nmi_enter/exit would force the current context into in_interrupt.
-> That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
-> debug the kernel.
->
-> Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
-> of the kernel side.
 
-<snip>
+--3loSgCLP1vFHrOSe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
-> Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: stable@vger.kernel.org
+On Sun, Jul 02, 2023 at 06:03:42PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2023-06-29 at 17:07 +0100, szabolcs.nagy@arm.com wrote:
 
-I pushed this though the kgdb test suite that originally found the
-problem (although it didn't occur to me when I reported it that
-the problem was nothing to do with kgdb ;-) ). So FWIW:
+> > which means x86 linux will likely end up maintaining two incompatible
+> > abis and the future one will need user code and build system changes,
+> > not just runtime changes. it is not a small incremental change to add
+> > alt shadow stack support for example.
 
-Tested-by: Daniel Thompson <daniel.thompson@linaro.org>
+> > i don't think the maintenance burden of two shadow stack abis is the
+> > right path for arm64 to follow, so the shadow stack semantics will
+> > likely become divergent not common across targets.
 
+> Unfortunately we are at a bit of an information asymmetry here because
+> the ARM spec and patches are not public. It may be part of the cause of
+> the confusion.
 
-Daniel.
+While the descriptive text bit of the spec is not yet integrated into
+the ARM the architecture XML describing the instructions and system
+registers is there, the document is numbered DDI0601:
+
+    https://developer.arm.com/documentation/ddi0601/
+
+The GCS specific instructions and system registers are all named
+beginning with GCS, it's aarch64 only.
+
+Hopefully I should have something out next week for the kernel.
+
+--3loSgCLP1vFHrOSe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSizeIACgkQJNaLcl1U
+h9D3Wwf/baVnu4r+oxpjrck31M4SQYopy428bSNBHaGoVHcoFSNJEIBylX2Zcrp+
+c+z0gkJRAjSvAfpT1mqWkw96gSlqLrDzUS6VClhMu0JZwkfmoNiqXwO2iK1jV5w9
+9ZMxbCYtfA6pSN8DHwhVkEJO1+9sI6iUJrWsXXcQBRFEeWwkeKpR8CeYL4F8hpdl
+4sOC1f2UeEJ82Rm6WPJ/ZNY/pTaGF3CWRP2WfoewkBwzMw9TevsYXdQAIOooFCOT
+5ukjmiLiGw2IuYux8Y0Gb1ZaOiOI/W95yow0cPBDS9YGj7y6ZbZqIa5PVfK1Smwf
+1QRf+xHUlAz6eiCCxHK2lZZqEP4vOw==
+=6QcV
+-----END PGP SIGNATURE-----
+
+--3loSgCLP1vFHrOSe--
