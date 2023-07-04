@@ -2,58 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7927F746B7D
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 10:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07172746B91
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 10:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjGDIHD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 4 Jul 2023 04:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
+        id S230493AbjGDIKK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 4 Jul 2023 04:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjGDIHA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 04:07:00 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1A4E59;
-        Tue,  4 Jul 2023 01:06:59 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5728df0a7d9so66371597b3.1;
-        Tue, 04 Jul 2023 01:06:59 -0700 (PDT)
+        with ESMTP id S230421AbjGDIKH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 04:10:07 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0E11AB;
+        Tue,  4 Jul 2023 01:10:03 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-c5ce57836b8so522648276.1;
+        Tue, 04 Jul 2023 01:10:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688458018; x=1691050018;
+        d=1e100.net; s=20221208; t=1688458202; x=1691050202;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=69rbrhXB4oWUM7pAO59rDdo5f0XmrS1v1x4eD2FmWm4=;
-        b=KCmmjc3CHaoaRBp/bGL9KQ2ITgrjyRHOqUmAcoeVWjbCH0Qahf5oFBq1K3HxIJcuDT
-         qiKZU5DaV02g8e1676A4xmwpFQFjRp2/704Cxv2kHktLQ+BdJIjcD1vxQQ5kC6Wa219p
-         ZZfbeWWQUPb9WG0ktLIkoH2v6c6cvWvTB+47S+XbURTIVUf0/nymij7BSWxq4poB0tFl
-         EG/ww9b8VhWms7v1l1VN5CPczJpZjyNsQMjoGwPknWXf0MdcvXeK2FUS03HUQse5Hjz9
-         WqU8a+cKpspQqnD2AHi/cAF/b3/JE6xyVl2fDuMRJ82NKd2X3fwE1nj9sTxsoR7qU7I0
-         nZEQ==
-X-Gm-Message-State: ABy/qLYGmzsL+hwjX3xVJYdwprssYMFrDXmIggcD37VyJpvKtMmDC2yo
-        DtlvhIE8FEbOy7n3TUcOl+GUJ4fIa0wozw==
-X-Google-Smtp-Source: APBJJlGxmg6GiLNGGzmZ8z7ANYYhRXI3vGLSx4smTWQWmnxUW28QZH4iuzYbBVR3WPtmcjj8ISuBNg==
-X-Received: by 2002:a0d:d545:0:b0:57a:fb9:73c2 with SMTP id x66-20020a0dd545000000b0057a0fb973c2mr3087077ywd.27.1688458018589;
-        Tue, 04 Jul 2023 01:06:58 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id t201-20020a8183d2000000b005731dbd4928sm5456450ywf.69.2023.07.04.01.06.57
+        bh=EZaghZGIezMc1/PkmeAtxZOh9fnJXXLlPyB7qIylXMg=;
+        b=Z1ixxmIhB0U1L1L3bzXFXtdQ1KCUGV+6qKIFBQEtfhB5aKrJP0UbNk5Car7KRuLOf3
+         9Ffseu65MbFkjyJGQDqJ5W/BeXUTxd3e1FGjrjrz0A5gOp1HDulwmQuwCL3jRD+dI4Fq
+         NsG7j64TZCCWXPcGeulrwP1bDee1FaSVggrF3z84SvlA+oGZSPkfF01rljcNnsQmq+r/
+         0vB8cRwpGmy9QIDYtH/7TcbVLWQ/Icsa6VKk23vlcTYTci40yjT8Nr7L7fhmbA59D0zj
+         sxyZO8nLhCXmAtkBkxxi9YEILWIcAA2iKdq+0Ah0bRLQLvIH01gaWT4ZwQtvuNG4vEUd
+         B4cQ==
+X-Gm-Message-State: ABy/qLaUc60jZSRrvieT4r5hWTw3GVuM4IA9Ce2s3Wnvgwj/eJXvVyyu
+        p04KIbcvuGScck37FVHCRdwCFg/wyU23TQ==
+X-Google-Smtp-Source: APBJJlGoN3ZvP01aca/ywxaZlXZSm8xv9annihVBORAZo/QcThiji0GcCL0m9PNHVHTU6KrcTdZn5g==
+X-Received: by 2002:a25:d10:0:b0:c5d:f2af:5a24 with SMTP id 16-20020a250d10000000b00c5df2af5a24mr791407ybn.14.1688458202598;
+        Tue, 04 Jul 2023 01:10:02 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id i1-20020a25b201000000b00c4788bfe468sm1761021ybj.1.2023.07.04.01.10.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 01:06:57 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-c5e67d75e0cso210032276.2;
-        Tue, 04 Jul 2023 01:06:57 -0700 (PDT)
-X-Received: by 2002:a5b:d4c:0:b0:bd5:ddcd:bc9e with SMTP id
- f12-20020a5b0d4c000000b00bd5ddcdbc9emr11705615ybr.17.1688458017342; Tue, 04
- Jul 2023 01:06:57 -0700 (PDT)
+        Tue, 04 Jul 2023 01:10:01 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c5ce57836b8so522612276.1;
+        Tue, 04 Jul 2023 01:10:01 -0700 (PDT)
+X-Received: by 2002:a25:ad18:0:b0:c12:179f:b78e with SMTP id
+ y24-20020a25ad18000000b00c12179fb78emr11890369ybi.28.1688458200854; Tue, 04
+ Jul 2023 01:10:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com> <20230522105049.1467313-31-schnelle@linux.ibm.com>
-In-Reply-To: <20230522105049.1467313-31-schnelle@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com> <20230522105049.1467313-4-schnelle@linux.ibm.com>
+In-Reply-To: <20230522105049.1467313-4-schnelle@linux.ibm.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 Jul 2023 10:06:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUAkRB9z2cqq6XBDKi-8zLyKxdw_PaT_TwLj78S5B6J8g@mail.gmail.com>
-Message-ID: <CAMuHMdUAkRB9z2cqq6XBDKi-8zLyKxdw_PaT_TwLj78S5B6J8g@mail.gmail.com>
-Subject: Re: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
+Date:   Tue, 4 Jul 2023 10:09:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXBgh8NTBmZkqoR+ZZM=C=bREVM1KCk4xNC-4BWjSAHOw@mail.gmail.com>
+Message-ID: <CAMuHMdXBgh8NTBmZkqoR+ZZM=C=bREVM1KCk4xNC-4BWjSAHOw@mail.gmail.com>
+Subject: Re: [PATCH v5 03/44] char: add HAS_IOPORT dependencies
 To:     Niklas Schnelle <schnelle@linux.ibm.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
@@ -66,7 +64,7 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-rtc@vger.kernel.org
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -90,27 +88,24 @@ On Mon, May 22, 2023 at 12:51 PM Niklas Schnelle <schnelle@linux.ibm.com> wrot
 > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Thanks for your patch, which is now commit 8bb12adb214b2d7c ("rtc:
+Thanks for your patch, which is now commit 1fbb0b203574bb16 ("char:
 add HAS_IOPORT dependencies") upstream.
 
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
+> --- a/drivers/char/Kconfig
+> +++ b/drivers/char/Kconfig
+
+> @@ -340,7 +341,7 @@ config NVRAM
 >
->  config RTC_DRV_BQ4802
->         tristate "TI BQ4802"
-> -       depends on HAS_IOMEM
-> +       depends on HAS_IOMEM && HAS_IOPORT
+>  config DEVPORT
+>         bool "/dev/port character device"
+> -       depends on ISA || PCI
+> +       depends on HAS_IOPORT
+>         default y
 >         help
->           If you say Y here you will get support for the TI
->           BQ4802 RTC chip.
+>           Say Y here if you want to support the /dev/port device. The /dev/port
 
-This driver can use either iomem or ioport.
-By adding a dependency on HAS_IOPORT, it can no longer be used
-on platforms that provide HAS_IOMEM only.
-
-Probably the driver should be refactored to make it use only
-the accessors that are available.
+FTR, this change makes DEVPORT show up on Atari with ATARI_ROM_ISA=y.
+I guess it doesn't matter much, though.
 
 Gr{oetje,eeting}s,
 
