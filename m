@@ -2,180 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9E2746FF8
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 13:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475BE7471A4
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 14:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjGDLea (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jul 2023 07:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S230011AbjGDMqk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 4 Jul 2023 08:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjGDLe3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 07:34:29 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2083.outbound.protection.outlook.com [40.107.7.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2928C10C1;
-        Tue,  4 Jul 2023 04:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nIfnUgvnL7AJDCGu42BP6KxU0+paF86x5RF6VikbUJM=;
- b=FgWJ9wkwxv8ul4qSsgcFZ1FBIao+fmm+H7T6wS+DGwJ86nDesi/YCQhwykWeW/KYP22Cz4p8VQCWN2qjQ/PWsxD+JQ42B+I329yutkzf3fKXu9B8tYbHeS0QpPgU8A8pCk5cVhzQ32CKsOrJjXbMFOnFxtF9Ks8lVSa8BQ2PHdM=
-Received: from FR3P281CA0138.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:95::17)
- by DU0PR08MB10365.eurprd08.prod.outlook.com (2603:10a6:10:40b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 11:34:24 +0000
-Received: from VI1EUR03FT054.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:d10:95:cafe::d0) by FR3P281CA0138.outlook.office365.com
- (2603:10a6:d10:95::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
- Transport; Tue, 4 Jul 2023 11:34:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VI1EUR03FT054.mail.protection.outlook.com (100.127.144.193) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.18 via Frontend Transport; Tue, 4 Jul 2023 11:34:24 +0000
-Received: ("Tessian outbound e2424c13b707:v142"); Tue, 04 Jul 2023 11:34:23 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: dbc53054c0979844
-X-CR-MTA-TID: 64aa7808
-Received: from 6cabc2462c2a.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 03E7BAA6-8E7A-4AD8-B309-93357F5228B1.1;
-        Tue, 04 Jul 2023 11:34:16 +0000
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 6cabc2462c2a.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 04 Jul 2023 11:34:16 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YUzi61KHV45aiF3LMxUK3Z2AyfGh4xlkRFb+Ligu8hToOaObuHB0DzHpfrGya1jTbV4HJ5DJf5eK7lMBDaDjdaHf53bbUBTLZpRXSR1Mwx8MwOmLjtDhiDX9ANxnf5tDlFLr34OKUfjlUG3Eg8jyxmiA4LFUvFBShbb5YF0rlq1q/qs/qc9BG1UuQoJ2E69cy3ZmMZZdo2VwNRuoNh2q6p7ft1bqjlngl5jPDoDWnAvdSJVrh0MN+FuiQZeR47CKBBOnLk+wTw19wb7iv3GxL6fdM9sjWkO0/eaZ0N+ycduB9eSanuqC8JLA6iVcRnVZI2d5O8hJLtUChJRtJp4ZNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nIfnUgvnL7AJDCGu42BP6KxU0+paF86x5RF6VikbUJM=;
- b=WOV7T9IgH2/gSwo/gDgOlGMmyXQ3nWYIZ9ZPCHRE5X13A7T/2COqJwFYE45QCPPDguMqtBh2IO1XKph7EqTFlIqm0w5Z3lu8iPpiLmsz2p+9Enmq1QHCQseFhDff4ywwHeVyZ/zUHa+282AWbUqRrJ/DSoVRE7WG6fbG9yj4voSvZiOdINK/vSoyivHvWKb6IXWvOYzNZvOec6bJEuBIr6OJ1LO5J4upJARd59djLdngMR342CBm9bZKdeMycGJi7zJt1XmPodusNbI4fzAlJ17L9OE5kf7/Iym9/9/xzf00HcI19MwHbZP+I60kFxGCy6wJwKpCoPETWIkFJclBDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nIfnUgvnL7AJDCGu42BP6KxU0+paF86x5RF6VikbUJM=;
- b=FgWJ9wkwxv8ul4qSsgcFZ1FBIao+fmm+H7T6wS+DGwJ86nDesi/YCQhwykWeW/KYP22Cz4p8VQCWN2qjQ/PWsxD+JQ42B+I329yutkzf3fKXu9B8tYbHeS0QpPgU8A8pCk5cVhzQ32CKsOrJjXbMFOnFxtF9Ks8lVSa8BQ2PHdM=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by GV2PR08MB10382.eurprd08.prod.outlook.com (2603:10a6:150:b9::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 11:34:12 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 11:34:12 +0000
-Date:   Tue, 4 Jul 2023 12:33:44 +0100
-From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZKQDmK5nfa8xV9JM@arm.com>
-References: <ZJLgp29mM3BLb3xa@arm.com>
- <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
- <ZJQR7slVHvjeCQG8@arm.com>
- <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
- <ZJR545en+dYx399c@arm.com>
- <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
- <ZJ2sTu9QRmiWNISy@arm.com>
- <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
- <ZKMRFNSYQBC6S+ga@arm.com>
- <87r0pox236.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87r0pox236.fsf@oldenburg.str.redhat.com>
-X-ClientProxiedBy: SN7PR04CA0152.namprd04.prod.outlook.com
- (2603:10b6:806:125::7) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        with ESMTP id S230099AbjGDMqj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 08:46:39 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2A5FC;
+        Tue,  4 Jul 2023 05:46:38 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5701eaf0d04so63442037b3.2;
+        Tue, 04 Jul 2023 05:46:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688474797; x=1691066797;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WsNvAMnSUofmRnmSjEUJ3mWWbVeL8c/aa7qR+cnWQFc=;
+        b=bpKdjo0PJRGD2hslPW3U84g02EoL7z+pWsCPBA/wA12i/bUeGyvtK5WEfhykj/Uive
+         PhJ/B/5K6XYew87tIKJ3BD6DTv6Deq29L9m0p0gxwEFiXO+Plby3qVI6PBzE2wJ44tB8
+         2fOPuuq0Jf61KLpXUY5gNTimBYVvRSEjHYc0SFDqxHD9QMGqRhj8FpT1b+C+OcUwFIeZ
+         th6GJrYWsoAC11fzDXQ2U/lix6+QTWo1KvCdHw1S4MOuCbSZ8lPbCPsW8k8s/6K3reSK
+         1mkd18WdOisYhkL+RAdY63biIPGAAJCLr2ocpHJ5YcZMXafijsxkA/GkGeWgWha4QN8r
+         cVJA==
+X-Gm-Message-State: ABy/qLaKwFcD/ouzeyyFTDel4+Qj1r+jSDM+S+XeeM9WRmq739QKKVoP
+        32yTkjNEnlwPR8GJIt/iKOFqWhTP0idt1w==
+X-Google-Smtp-Source: APBJJlEprUem1w4DutjWd/uw6IbAAIX0kkVfJEgSSavd8k2WOgnGt02uBNTvdhN7a1/CrM3xu0Of9g==
+X-Received: by 2002:a25:ce8c:0:b0:c18:bbaa:754 with SMTP id x134-20020a25ce8c000000b00c18bbaa0754mr10944507ybe.51.1688474797062;
+        Tue, 04 Jul 2023 05:46:37 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id g64-20020a25a4c6000000b00ba73c26f0d6sm4895523ybi.15.2023.07.04.05.46.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 05:46:35 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-c581c758ad8so1754570276.1;
+        Tue, 04 Jul 2023 05:46:35 -0700 (PDT)
+X-Received: by 2002:a25:6d02:0:b0:c5c:35d0:1c0f with SMTP id
+ i2-20020a256d02000000b00c5c35d01c0fmr1671423ybc.20.1688474795342; Tue, 04 Jul
+ 2023 05:46:35 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|GV2PR08MB10382:EE_|VI1EUR03FT054:EE_|DU0PR08MB10365:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2575e2bf-3517-4122-7548-08db7c829e41
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: nBvPP1pD1a8nO3X6DnV0/UbTmQ66F3xL1qLQpj0RiCXc9ujA6Zdw9I05ChWRDJJe+gy5WokAuwTVs2+vXjehqONuW8KQtpgo8ASfWxNnIspdDCzbNECyqnl65Em3VaOCRvKiB85n+1z40/TDfH8x4NcSdkqPQzSxduMJVb0Lf37K/tCzoAU2SXd+Arbsde25kWaogi0Qdbm6luaev10BMw+1IR5uvem7VXFgEac5PFybd/AatKYupgrFOfpWwb5Id52eKz3FkKq1c2Tnvcks59EPpQHohwg8J7vwILnagXsCtbbkwRPJbobuW8i2h2dEcpA6nMDt2Y6gZls9EqBx7aKrXPCPsSrVooiFLM8yvUWW6sLNIN9HiPhakiwTvXKPxtdPyfXHurhRT7QBQbH6TPFlF5q2Sl76YIEaDGa7eMoTiMy3gcxrw1DEYEeSj6lyCSzEq4isigh0tCfrcVlmpRFLzb0zQOO0yuLhGkMXxqFxTeLKtELz3TtKQ/EOeFkvh1n5jhPL102CEJEGeU7gZVo+Is776XponzKbk0oqKsNYDT/dzQ0shzbFfyBbUB55
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199021)(66476007)(316002)(66946007)(2906002)(6916009)(66556008)(4326008)(38100700002)(6512007)(26005)(186003)(6506007)(6486002)(6666004)(478600001)(54906003)(2616005)(83380400001)(8936002)(7416002)(7406005)(5660300002)(86362001)(36756003)(44832011)(8676002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB10382
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR03FT054.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 44b814ea-d6b5-412f-22f9-08db7c8296e1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9ME3poT1IClXY3U5KrxeIgTRbmlAEPnlejBwEvpab8WGUp9NjlPR+dTv4q27FQymaW3wYnBc/rfocZ0sQPVV0erCPHSGsZS5I/oyRQPD9ZL8QzETBcEhrbdJHujbVsERLbwC3Ilaf3I9jKxl5ALrOzDXxyUjqzlZ0dzoUANO4Rz3Kt9t+ADUV+tVdsBwh4eXXuBNIAxUFqh7bKn+2JNGsk2FJxO1wTUZAf21h3eP8K+KX3haj8PLdFe8hh61x2dvmQTjBiBFgwEL3Tei85NM4vfcSuFL/GA3S835K22Ua9X6y1TvxlJp59e2Gh+mzgfvN93UJqGe2GbHpXvOmQXQE1TrmwYbQWUYdD2cxmCxd1kdGG8YoZaFmIhQyFwfv5sVGOk14ll9f+g/DYV7T/Ne87JAVTnpO13gU+9AKnNfk8wvFcvutbFFIGCIiG+Xomq0Jc42OleeWPRMzZimEGNPhBWj3Pcn8YFq0UnNPMWAv0tkbio2POe9VbB7QDQSBfAwC5n6Ui5Q3f9SyauhtEXliBiq+6btB5TwFmD7mMmbcGLT80YMTW0uxR0uS1jxlaCT2dPkfBq4wVeHSoAUuuBn1djEh5MjRb1KVtOhAi1txQ/Amr9yq0f0HDkrhJLMjJZvq+YRhoA4eBtwONBR6gqnPKlQ3qgh4wgxsLhq6kelN3XdzTPILd3olhBL1EoNyXgSgHhIvp8vS+u6S8D4fs6Vad/lJ9gfLLMP1xgwoBIeEyaMJS8Nzy2oIjG6BSWfZtM5
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(44832011)(70206006)(4326008)(36756003)(450100002)(70586007)(478600001)(316002)(2906002)(8676002)(8936002)(6862004)(5660300002)(336012)(41300700001)(40460700003)(54906003)(86362001)(40480700001)(6486002)(36860700001)(6512007)(82310400005)(6666004)(6506007)(26005)(186003)(2616005)(82740400003)(83380400001)(356005)(47076005)(81166007)(107886003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 11:34:24.3396
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2575e2bf-3517-4122-7548-08db7c829e41
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR03FT054.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB10365
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-31-schnelle@linux.ibm.com> <CAMuHMdUAkRB9z2cqq6XBDKi-8zLyKxdw_PaT_TwLj78S5B6J8g@mail.gmail.com>
+ <28a513fd-1e7c-4772-a3c1-f312938459ed@app.fastmail.com>
+In-Reply-To: <28a513fd-1e7c-4772-a3c1-f312938459ed@app.fastmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Jul 2023 14:46:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWEx0F=fNei4Bz_JPkuvoaN-+zk08h0i8KnSi_VjO615g@mail.gmail.com>
+Message-ID: <CAMuHMdWEx0F=fNei4Bz_JPkuvoaN-+zk08h0i8KnSi_VjO615g@mail.gmail.com>
+Subject: Re: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -183,48 +82,64 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 07/03/2023 20:49, Florian Weimer wrote:
-> * szabolcs:
-> 
-> >> alt shadow stack cannot be transparent to existing software anyway, it
+Hi Arnd,
+
+On Tue, Jul 4, 2023 at 1:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Tue, Jul 4, 2023, at 10:06, Geert Uytterhoeven wrote:
+> > On Mon, May 22, 2023 at 12:51 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> >> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> >> not being declared. We thus need to add HAS_IOPORT as dependency for
+> >> those drivers using them.
+> >>
+> >> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> >> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> >> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > >
-> > maybe not in glibc, but a libc can internally use alt shadow stack
-> > in sigaltstack instead of exposing a separate sigaltshadowstack api.
-> > (this is what a strict posix conform implementation has to do to
-> > support shadow stacks), leaking shadow stacks is not a correctness
-> > issue unless it prevents the program working (the shadow stack for
-> > the main thread likely wastes more memory than all the alt stack
-> > leaks. if the leaks become dominant in a thread the sigaltstack
-> > libc api can just fail).
-> 
-> It should be possible in theory to carve out pages from sigaltstack and
-> push a shadow stack page and a guard page as part of the signal frame.
-> As far as I understand it, the signal frame layout is not ABI, so it's
-> possible to hide arbitrary stuff in it.  I'm just saying that it looks
-> possible, not that it's a good idea.
-> 
-> Perhaps that's not realistic with 64K pages, though.
+> > Thanks for your patch, which is now commit 8bb12adb214b2d7c ("rtc:
+> > add HAS_IOPORT dependencies") upstream.
+> >
+> >> --- a/drivers/rtc/Kconfig
+> >> +++ b/drivers/rtc/Kconfig
+> >> @@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
+> >>
+> >>  config RTC_DRV_BQ4802
+> >>         tristate "TI BQ4802"
+> >> -       depends on HAS_IOMEM
+> >> +       depends on HAS_IOMEM && HAS_IOPORT
+> >>         help
+> >>           If you say Y here you will get support for the TI
+> >>           BQ4802 RTC chip.
+> >
+> > This driver can use either iomem or ioport.
+> > By adding a dependency on HAS_IOPORT, it can no longer be used
+> > on platforms that provide HAS_IOMEM only.
+>
+> You are correct, we could allow building this driver even
+> without IOPORT and make it use ioport_map() or an #ifdef.
+>
+> > Probably the driver should be refactored to make it use only
+> > the accessors that are available.
+>
+> Since the driver itself has no DT support, it looks like the
+> only way it can be used is from the sparc64/ultra45 wrapper,
+> but that architecture always provides CONFIG_IOPORT, so I
+> don't think it makes any difference in the end. We can change
+> this again if another user comes up.
 
-interesting idea, but it would not work transparently:
+Correct, I made the same reasoning after sending my previous email...
 
-the user expects the alt stack memory to be usable as normal
-memory after longjmping out of a signal handler.
+> It might be good to know whether the machine uses a memory or
+> I/O resource in its device tree.
 
-this would break code in practice e.g. when a malloced alt
-stack is passed to free(), the contract there is to not
-allow changes to the underlying mapping (affects malloc
-interposition so not possible to paper over inside the
-libc malloc).
+Indeed.
 
-so signal entry cannot change the mappings of alt stack.
+Gr{oetje,eeting}s,
 
-i think kernel internal alt shadow stack allocation works
-in practice where their lifetime is the same as the thread
-lifetime. it is sketchy as os interface but doing it in
-userspace should be fine i think (it's policy what kind of
-sigaltstack usage is allowed). the kernel is easier in the
-sense that if there is actual sigreturn then the alt shadow
-stack can be freed, while libc cannot catch this case (at
-least not easily). leaked shadow stack can also have
-security implication but reuse of old alt shadow stack
-sounds like a minor issue in practice.
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
