@@ -2,172 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D074746E7C
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 12:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3EA746FD6
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 13:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjGDKYC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jul 2023 06:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S230385AbjGDLZu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jul 2023 07:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjGDKYB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 06:24:01 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0175135;
-        Tue,  4 Jul 2023 03:23:59 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-991ef0b464cso980836466b.0;
-        Tue, 04 Jul 2023 03:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688466238; x=1691058238;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vx7ppah8AFGnktLnnie0w36X7NdKzmPV1iXgMAT5r4s=;
-        b=mOwGBPhiUibe9TZEveAD5uwTEzZO42X9132eJViv6MRt+PGT9b5GJMp5GwYq7tV296
-         vsqRJpvLfzby4/86k//5QIA5DHCQdyL8tawK4VrDht4jCbFfP6nSi/mx8DyFGlqQ8ar5
-         1jSxs6wI61xswGUk2RQwyh8WuHWiwzPuEFF/KpNMRkaXAM7RhbTrnXaqs4x3RZQR0gKP
-         /KKfv0mm92IddImVSz+aZ9cBN4qn5gjpBw2ZfOUe3Df1KzcFIXSKyC2z0E3VxwoJbdzw
-         NrvthTtklqwh1ZBSsYNuj2Nuv6aeNsi72NbC8TEotLJ55UI4etsuJdyqfjPWdy/yrmg/
-         gTxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688466238; x=1691058238;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vx7ppah8AFGnktLnnie0w36X7NdKzmPV1iXgMAT5r4s=;
-        b=ViONMvyYl5hMuiezcFknb+BronyhMACWUzP9NntLuLQBhsgUhEOaEL83RBTLiCk1Bm
-         FiPDn0xJnG/kFZPapQaWXmlxGkKpBgvtHmpV4wLaHX6KzmiokFFAztvtvVTY4jlXTtLu
-         1CLjdaY/UH7jmlJfALqyCZAqQnrObR2QBy8lvntWBHxqCweKZWqQxjMgp8hd6du0rOK/
-         xbUp6E+Se155QP3E7RGzPPVc4HkArw0Wn0fDxDDP80kLdRS/V6/61b7+jB/yex5Vj2Fc
-         df0hRv4QMqSCFdrGixluLy0HCMPpl4ustxjGWVoLRpMGcwTntx/jrBQ1P8wIxrWeNHgP
-         ZURw==
-X-Gm-Message-State: ABy/qLZvPgToqlExv8qIifdrItxbTqB/zIB+VuIvaWctFzWHxDH12YIz
-        gOT0j9RFt/dyazy8Rd/uQryImQDmA1+lFBmqyRI=
-X-Google-Smtp-Source: APBJJlEAlGOxHf9AN/Vw4ySd7uIusXyxdktq7C6hpD1W72WxF0+WYXaZ3XEi4FK7aHV0ixLwVlFpErv9bnrqsTnnl+4=
-X-Received: by 2002:a17:906:c3a4:b0:98d:4ae:8db9 with SMTP id
- t36-20020a170906c3a400b0098d04ae8db9mr11136259ejz.19.1688466238030; Tue, 04
- Jul 2023 03:23:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <87ttukdcow.fsf@laura> <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-From:   Jonathan Wakely <jwakely.gcc@gmail.com>
-Date:   Tue, 4 Jul 2023 11:23:46 +0100
-Message-ID: <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Olivier Dion <odion@efficios.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rnk@google.com, Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230156AbjGDLZt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 07:25:49 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7969D;
+        Tue,  4 Jul 2023 04:25:48 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2BC8A5C0393;
+        Tue,  4 Jul 2023 07:25:48 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Jul 2023 07:25:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1688469948; x=1688556348; bh=EqlpD8ctHndfSnkUlREzHKZC65GCu4q4Tsy
+        hQ+ThTmI=; b=ggVhmnDy4OR3yU2/Lnq7+qH5v1CDYfosvqFClzK7RAkdyi1PRft
+        DjfINRwwEB2g4RqBozaK7iOPx4dX1NinelFLcddjDnfJnuHCpavnPn+RMkpHwPjZ
+        vzohlHfsDyAKTCpvkQjA1asVREd9ds+HuudOMl6ISubKTKCLABCecJFXdolfCkBK
+        BijdTjlJlCaub41V7gerSzBlwcxIuQh8DIJEtZUushcYbs96t4bRSIfYDS277iQI
+        BG2RWYgRxZUFRgNpuFz/XRYB4jpIFyE6lmYOtNj3ddqq5HzZTHtJTXSHege/nX4G
+        JpbOLmh7roJuP//VQuzNxo44ltEez7Fklog==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1688469948; x=1688556348; bh=EqlpD8ctHndfSnkUlREzHKZC65GCu4q4Tsy
+        hQ+ThTmI=; b=VeMVfZIenI9jWN3jHWfyUc1R9e+WfmmsZoD0L0RVkdNlgZuQd/+
+        L1l8szSOaRkosMjJvDMaRdL5FWQ1+E5KpJQdNrN/tygAm2X/+d9cqSWk/fiqCj6z
+        L8vy7OBYPB5NMvdWODQIxMQhlRm2ZvDIFPk3yNeWT0XEwcNVjVBGzdDmVw4zr6gx
+        wL1+YqSMHtHIBcJP8XtRFhpkY0R1TzpZGr87LX1ozrtAbLBtUZCZmvZ69Npgy/+E
+        Zr9lQIv/bjDiZSwFgPoWZAgztTCLkpc0LxTFJsUpKjnNhCRGXNe2mdF8O0nGb7zA
+        AvhGxoL3bjs1g9jDPlJfRjsGPMeZ8zPqaGw==
+X-ME-Sender: <xms:uwGkZGWYXvoVQ5NQxYBJgSSl6DQ7V-Ezq_7r6q9VP-K-N-4znf3C-A>
+    <xme:uwGkZCm9Q_LRoRQVfA-Dg-WKuTKznPGs01Qep6h9ko3KVl6ATE9B4GlNsG7iWMmRc
+    rM9-DUTO_oS9iAptW0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
+    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:uwGkZKa49un1WKhFFE7BiSjINF75DUy1nPGHxyH0ymtvdW2JHXMEKg>
+    <xmx:uwGkZNUu3bn1p58vjtrV-gPYJe0IMXqbDeLdXLjrzY6xFrM9oxOKlQ>
+    <xmx:uwGkZAkT4PlLehBP1H9k5VKTBjaMCP8qJG5-7wRaG_cLFmBmEEkwCw>
+    <xmx:vAGkZK1ogmP1K0dcsmqQ_8XkGO-O5j3sGwmsxt9qblHj6ibSKaQyMw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 23982B6008D; Tue,  4 Jul 2023 07:25:47 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
+Mime-Version: 1.0
+Message-Id: <28a513fd-1e7c-4772-a3c1-f312938459ed@app.fastmail.com>
+In-Reply-To: <CAMuHMdUAkRB9z2cqq6XBDKi-8zLyKxdw_PaT_TwLj78S5B6J8g@mail.gmail.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-31-schnelle@linux.ibm.com>
+ <CAMuHMdUAkRB9z2cqq6XBDKi-8zLyKxdw_PaT_TwLj78S5B6J8g@mail.gmail.com>
+Date:   Tue, 04 Jul 2023 13:25:22 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>
+Cc:     "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 4 Jul 2023 at 10:47, Peter Zijlstra wrote:
+On Tue, Jul 4, 2023, at 10:06, Geert Uytterhoeven wrote:
+> Hi Niklas,
 >
-> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+> On Mon, May 22, 2023 at 12:51=E2=80=AFPM Niklas Schnelle <schnelle@lin=
+ux.ibm.com> wrote:
+>> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frie=
+nds
+>> not being declared. We thus need to add HAS_IOPORT as dependency for
+>> those drivers using them.
+>>
+>> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+>> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 >
-> >   int x = 0;
-> >   int y = 0;
-> >   int r0, r1;
-> >
-> >   int dummy;
-> >
-> >   void t0(void)
-> >   {
-> >           __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
-> >
-> >           __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
-> >           __atomic_thread_fence(__ATOMIC_SEQ_CST);
-> >
-> >           r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
-> >   }
-> >
-> >   void t1(void)
-> >   {
-> >           __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
-> >           __atomic_thread_fence(__ATOMIC_SEQ_CST);
-> >           r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
-> >   }
-> >
-> >   // BUG_ON(r0 == 0 && r1 == 0)
-> >
-> > On x86-64 (gcc 13.1 -O2) we get:
-> >
-> >   t0():
-> >           movl    $1, x(%rip)
-> >           movl    $1, %eax
-> >           xchgl   dummy(%rip), %eax
-> >           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
-> >           movl    y(%rip), %eax
-> >           movl    %eax, r0(%rip)
-> >           ret
-> >   t1():
-> >           movl    $1, y(%rip)
-> >           lock orq $0, (%rsp)
-> >           movl    x(%rip), %eax
-> >           movl    %eax, r1(%rip)
-> >           ret
+> Thanks for your patch, which is now commit 8bb12adb214b2d7c ("rtc:
+> add HAS_IOPORT dependencies") upstream.
 >
-> So I would expect the compilers to do better here. It should know those
-> __atomic_thread_fence() thingies are superfluous and simply not emit
-> them. This could even be done as a peephole pass later, where it sees
-> consecutive atomic ops and the second being a no-op.
+>> --- a/drivers/rtc/Kconfig
+>> +++ b/drivers/rtc/Kconfig
+>> @@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
+>>
+>>  config RTC_DRV_BQ4802
+>>         tristate "TI BQ4802"
+>> -       depends on HAS_IOMEM
+>> +       depends on HAS_IOMEM && HAS_IOPORT
+>>         help
+>>           If you say Y here you will get support for the TI
+>>           BQ4802 RTC chip.
+>
+> This driver can use either iomem or ioport.
+> By adding a dependency on HAS_IOPORT, it can no longer be used
+> on platforms that provide HAS_IOMEM only.
 
-Right, I don't see why we need a whole set of new built-ins that say
-"this fence isn't needed if the adjacent atomic op already implies a
-fence". If the adjacent atomic op already implies a fence for a given
-ISA, then the compiler should already be able to elide the explicit
-fence.
+You are correct, we could allow building this driver even
+without IOPORT and make it use ioport_map() or an #ifdef.
 
-So just write your code with the explicit fence, and rely on the
-compiler to optimize it properly. Admittedly, today's compilers don't
-do that optimization well, but they also don't support your proposed
-built-ins, so you're going to have to wait for compilers to make
-improvements either way.
+> Probably the driver should be refactored to make it use only
+> the accessors that are available.
 
-https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4455.html
-discusses that compilers could (and should) optimize around atomics
-better.
+Since the driver itself has no DT support, it looks like the
+only way it can be used is from the sparc64/ultra45 wrapper,
+but that architecture always provides CONFIG_IOPORT, so I
+don't think it makes any difference in the end. We can change
+this again if another user comes up.
 
->
-> > On x86-64 (clang 16 -O2) we get:
-> >
-> >   t0():
-> >           movl    $1, x(%rip)
-> >           movl    $1, %eax
-> >           xchgl   %eax, dummy(%rip)
-> >           mfence                    ;; Redundant with previous exchange.
->
-> And that's just terrible :/ Nobody should be using MFENCE for this. And
-> using MFENCE after a LOCK prefixes instruction (implicit in this case)
-> is just fail, because I don't think C++ atomics cover MMIO and other
-> such 'lovely' things.
->
-> >           movl    y(%rip), %eax
-> >           movl    %eax, r0(%rip)
-> >           retq
-> >   t1():
-> >           movl    $1, y(%rip)
-> >           mfence
-> >           movl    x(%rip), %eax
-> >           movl    %eax, r1(%rip)
-> >           retq
->
+It might be good to know whether the machine uses a memory or
+I/O resource in its device tree.
+
+      Arnd
