@@ -2,124 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C787476EC
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 18:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925DE74779F
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jul 2023 19:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjGDQkg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jul 2023 12:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S231921AbjGDRTc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jul 2023 13:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjGDQkf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 12:40:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CF810D8;
-        Tue,  4 Jul 2023 09:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rt0Sgef/0mx0ZYOvMVPEM6yNpv3ovZQ+3Nf5gB6MWzc=; b=rBDJ16SWf0Ay6zMTwd7f3d6kAy
-        qL6gCNlEfMBkK0U+jU0qBzOfVEhTXG/Jv0AuHH3G28F0sguOTd83Pszb1jR+PaLG5s56Umax07fky
-        V+iLFsLcxqEwkx3CI+pXhlpUSnVO+D96+/aU9xo4KoKnlqy9OpOKBBhZC+Vpw6TFOGUgslA1GZTkZ
-        SBEi2TSZLYKwyfiKoMzYJyrNhynZiXZMtVBtouqBeRApWVW9F5b6hYk8oICgkC4wCyIR5RqJ6hssZ
-        ZWjQWEW9UvhulmSJ8hJiipJeZ+BV+g0ahag6kXdsU0gmmWJLGcd55LQxknsw7phyM1cb1bgZs3jD+
-        /FUXh9nA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qGj4R-009J9Z-4f; Tue, 04 Jul 2023 16:40:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 270993002E1;
-        Tue,  4 Jul 2023 18:40:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 081F120292D0E; Tue,  4 Jul 2023 18:40:04 +0200 (CEST)
-Date:   Tue, 4 Jul 2023 18:40:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-Message-ID: <20230704164003.GB83892@hirez.programming.kicks-ass.net>
-References: <20230702025708.784106-1-guoren@kernel.org>
+        with ESMTP id S229793AbjGDRTa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jul 2023 13:19:30 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B0F10D7;
+        Tue,  4 Jul 2023 10:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1688491164;
+        bh=XoqjGAAisrMB/Pfyua6e1oRHYcJ+y87IfUpKWBoC9wk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=N2D2FNXOyS0ABkYSbbOai7GzSARmAlho0m8eLsvqFxANOIuMOhO1LxydQEjhJqWyn
+         s4diZvaronIi3ssoqSJLXbG2Evq/maxxdpiOJUSEh/lXO8vRT9kOiXIgk6/vlSH72L
+         SoAmwZR1oFltK2T3OZT7oqpbU9kE+AnZRPw+R71IXS3aARtVDA+vkBW3RoghrODyGA
+         LNHHXSzwcvpj5hUxSspofjvrHBgPIgFJeLfkY/HYpuR6P21DoPavis1F8YwgHyI9Cm
+         lKxMFY44J/zevh4FFKsVftiCQZvvfa9EmOv/54AsOL+YBt7uD0VDfqyCww4cIbuzEA
+         6CZ5BEHfIqYSw==
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QwTzv6tQ7z1C97;
+        Tue,  4 Jul 2023 13:19:23 -0400 (EDT)
+From:   Olivier Dion <odion@efficios.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+In-Reply-To: <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+Organization: EfficiOS
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+Date:   Tue, 04 Jul 2023 13:19:23 -0400
+Message-ID: <87ilazd278.fsf@laura>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230702025708.784106-1-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> The irqentry_nmi_enter/exit would force the current context into in_interrupt.
-> That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
-> debug the kernel.
-> 
-> Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
-> of the kernel side.
+On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+>> This is a request for comments on extending the atomic builtins API to
+>> help avoiding redundant memory barriers.  Indeed, there are
+>
+> What atomic builtins API are you talking about?  The kernel's?  That's 
+> what it sounded like when I first read this sentence -- why else post 
+> your message on a kernel mailing list?
 
-This doesn't explain much if anything :/
+Good point, we meant the `__atomic' builtins from GCC and Clang.  Sorry
+for the confusion.
 
-I'm confused (probably because I don't know RISC-V very well), what's
-EBREAK and how does it happen?
+[...]
 
-Specifically, if EBREAK can happen inside an local_irq_disable() region,
-then the below change is actively wrong. Any exception/interrupt that
-can happen while local_irq_disable() must be treated like an NMI.
+>> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
+>> have implicit memory barriers before/after the operations [1-2], while
+>> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
+>> do not have any ordering guarantees of an atomic thread fence
+>> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+>
+> After reading what you wrote below, I realized that the API you're 
+> thinking of modifying is the one used by liburcu for user programs.  
+> It's a shame you didn't mention this in either the subject line or the 
+> first few paragraphs of the email; that would have made understanding 
+> the message a little easier.
 
-If that makes kdb unhappy, fix kdb.
+Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
+the toolchain's atomic builtins and not the LKMM itself.  The reason why
+we've reached out to the Linux kernel developers is because the
+original Userspace RCU uatomic API is based on the LKMM.
 
-> Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
-> Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/riscv/kernel/traps.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index efc6b649985a..ed0eb9452f9e 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -18,6 +18,7 @@
->  #include <linux/irq.h>
->  #include <linux/kexec.h>
->  #include <linux/entry-common.h>
-> +#include <linux/context_tracking.h>
->  
->  #include <asm/asm-prototypes.h>
->  #include <asm/bug.h>
-> @@ -257,11 +258,11 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
->  
->  		irqentry_exit_to_user_mode(regs);
->  	} else {
-> -		irqentry_state_t state = irqentry_nmi_enter(regs);
-> +		enum ctx_state prev_state = exception_enter();
->  
->  		handle_break(regs);
->  
-> -		irqentry_nmi_exit(regs, state);
-> +		exception_exit(prev_state);
->  	}
->  }
->  
-> -- 
-> 2.36.1
-> 
+> In any case, your proposal seems reasonable to me at first glance, with 
+> two possible exceptions:
+>
+> 1.	I can see why you have special fences for before/after load, 
+> 	store, and rmw operations.  But why clear?  In what way is 
+> 	clearing an atomic variable different from storing a 0 in it?
+
+We could indeed group the clear with the store.
+
+We had two approaches in mind:
+
+  a) A before/after pair by category of operation:
+
+     - load
+     - store
+     - RMW
+  
+  b) A before/after pair for every operation:
+
+     - load
+     - store
+     - exchange
+     - compare_exchange
+     - {add,sub,and,xor,or,nand}_fetch
+     - fetch_{add,sub,and,xor,or,nand}
+     - test_and_set
+     - clear
+
+If we go for the grouping in a), we have to take into account that the
+barriers emitted need to cover the worse case scenario.  As an example,
+Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
+returned value is not used.
+
+Therefore, for the grouping in a), all RMW would need to emit a memory
+barrier (with Clang on x86-64).  But with the scheme in b), we can emit
+the barrier explicitly for the exchange operation.  We however question
+the usefulness of this kind of optimization made by the compiler, since
+a user should use a store operation instead.
+
+> 2.	You don't have a special fence for use after initializing an 
+> 	atomic.  This operation can be treated specially, because at the 
+> 	point where an atomic is initialized, it generally has not yet 
+> 	been made visible to any other threads.
+
+I assume that you're referring to something like std::atomic_init from
+C++11 and deprecated in C++20?  I do not see any scenario on any
+architecture where a compiler would emit an atomic operation for the
+initialization of an atomic variable.  If a memory barrier is required
+in this situation, then an explicit one can be emitted using the
+existing API.
+
+In our case -- with the compiler's atomic builtins -- the initialization
+of a variable can be done without any atomic operations and does not
+require any memory barrier.  This is a consequence of being capable of
+working with integral-scalar/pointer type without an atomic qualifier.
+
+> Therefore the fence which would normally appear after a store (or
+> clear) generally need not appear after an initialization, and you
+> might want to add a special API to force the generation of such a
+> fence.
+
+I am puzzled by this.  Initialization of a shared variable does not need
+to be atomic until its publication.  Could you expand on this?
+
+Thanks for the feedback,
+	Olivier
+
+-- 
+Olivier Dion
+EfficiOS Inc.
+https://www.efficios.com
