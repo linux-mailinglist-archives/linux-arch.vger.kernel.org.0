@@ -2,138 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A487486A8
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jul 2023 16:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3717486D9
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jul 2023 16:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjGEOnq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jul 2023 10:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S232728AbjGEOwT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Jul 2023 10:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232642AbjGEOno (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jul 2023 10:43:44 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FA71723;
-        Wed,  5 Jul 2023 07:43:34 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8ad9eede0so8036825ad.1;
-        Wed, 05 Jul 2023 07:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688568213; x=1691160213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JU+as7wi3eWeTFoM78W/MqGEZzj4O8MVzCBXBVMDvTE=;
-        b=CDviufEV0708sItf7c2FKXs4Jfh5YrsBI5pHDUqAWLyDcd53zSNBPcoXBLPuuUXTH0
-         ptCs47ERg/pFhIRrt3Jc60JmJX/7wPV2FNsGT2xnhpBX/EF5HloGSLijrlRcGhk/qPHP
-         3ATxszMjeg6fsrz/NB7zi39ZpD9++HpqERXRQQnxKqp4o++EdRmK0A0mSJfrIv0cNTSU
-         k7Fh+DBpLDEnkyPkXrFxbMX5lrJxtpfnCZGAkOsLVIuERmXQw8SkVp8L5ZFoSljBNbty
-         0dGLBtN9XHEywpg7kMAFcKwtpsZ0M4GgvbNXV78zc2wLaOTh6RgYfrkbNyVHYWvGlgoj
-         RMIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688568213; x=1691160213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JU+as7wi3eWeTFoM78W/MqGEZzj4O8MVzCBXBVMDvTE=;
-        b=LZgY2jHTtCjxgvxO4rf6Gk3j/sow86+rlfVvQ0kiCttzVjNQieAFNn+dt1fsZvEAjH
-         QOpAMbfGsLp/dH0ZUDQ1loxMFSc4maeXbzpejGeTijuIhcPpw+rdiaEBLqB5Y4b9ywOM
-         ZYIxptVZTd2PGk3VC30ztkF7ZM/niFWaxIunu6QQEBEObYr9gCWl/IGNrUn1Dg+I6ncf
-         MRngIgVCPnHjYQEt2VNGFdwEZvSdDwBf49P7TqNCsDI1E84QkD25smL6iF2eyaY/Y5Ew
-         x61wJg1/NWjekv1o+FS5fq2GkrhPhc8fHb2+M5eHNQhCNnJJ2dSEKO/t/hqAePTh1Oth
-         Fc3Q==
-X-Gm-Message-State: ABy/qLYFhuQEAD9Z9/fNBxjtreI3GghDo1f6N2LxbsAxGyLfE3VzcqgM
-        uXGbCJS6E+lsWWSTaoi6v9tMod7Iy2RVew==
-X-Google-Smtp-Source: APBJJlFPaTaZfq7+Sz5pIUtEQPN4UM27g9oO2o1OevevI5ribpX1uyVE8K/jeL4+S3Ctqyt3W5B3CA==
-X-Received: by 2002:a17:902:c40c:b0:1b8:8dbd:e1a0 with SMTP id k12-20020a170902c40c00b001b88dbde1a0mr12991090plk.13.1688568213440;
-        Wed, 05 Jul 2023 07:43:33 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170902868300b001b04b1bd774sm19078415plo.208.2023.07.05.07.43.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 07:43:33 -0700 (PDT)
-Message-ID: <ecd0aa48-90a4-50cb-7a4e-b7a6419576ce@gmail.com>
-Date:   Wed, 5 Jul 2023 22:43:24 +0800
+        with ESMTP id S232426AbjGEOwP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jul 2023 10:52:15 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B871712;
+        Wed,  5 Jul 2023 07:52:13 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365EoPVE000512;
+        Wed, 5 Jul 2023 14:51:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=zkE1J8q+iy0ZXdF2gFz55muLXm0WMv33WDOv1sOQgLw=;
+ b=itG5mPtzCEEVrsUSV+AOZT7wssASwzKx3Y1t3zHBNC2ht0+sHnDdV1rmo/WBzWvvVrfe
+ +QWcb1U1bAo+g0EPXuCF2YoBzAhMgJnCHP/W+IvmXMN7exUIqvhf4oo5Yg1/SBErJB4M
+ CRrqwOsYiICUDGXh9yowgqkpC7g8zEZRkLOKy2FG3SFnx49HO7PByCbSvwsHGWoMnmuo
+ YDv/KxDljrQPTQfAOU/j/ssHmpgoIkCGCO6P8PjR8YDWsFdcklZ9+sio38tOc16XwWkK
+ pvivoBFqhr1EwctCYrOfd6fYFqZAL6SSCvut7aoHCkAae6bdb6y0mcSLiWcRvFlWLEu5 Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rnabx0nut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 14:51:51 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 365EgJjv013773;
+        Wed, 5 Jul 2023 14:51:50 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rnabx0nua-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 14:51:50 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3652RRYu009805;
+        Wed, 5 Jul 2023 14:51:48 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3rjbs4tnj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 14:51:48 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 365Epkt743909410
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jul 2023 14:51:46 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B9612004B;
+        Wed,  5 Jul 2023 14:51:46 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 008C620040;
+        Wed,  5 Jul 2023 14:51:45 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.171.79.178])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jul 2023 14:51:44 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, rui.zhang@intel.com
+Subject: [PATCH v4 00/10] Introduce SMT level and add PowerPC support
+Date:   Wed,  5 Jul 2023 16:51:33 +0200
+Message-ID: <20230705145143.40545-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: flHjRsTJgwwkIgOH1wpae1j0NbjDUp3i
+X-Proofpoint-GUID: Eh1q-CdM5eBF0snqoGpamWwoUMXWJ7un
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V2 1/9] x86/hyperv: Add sev-snp enlightened guest static
- key
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>
-References: <20230627032248.2170007-1-ltykernel@gmail.com>
- <20230627032248.2170007-2-ltykernel@gmail.com>
- <BYAPR21MB1688570E8D0D0C49B68DD548D72EA@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB1688570E8D0D0C49B68DD548D72EA@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_06,2023-07-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ impostorscore=0 phishscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307050131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/4/2023 10:17 PM, Michael Kelley (LINUX) wrote:
-> From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, June 26, 2023 8:23 PM
->>
->> Introduce static key isolation_type_en_snp for enlightened
->> sev-snp guest check.
->>
->> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
->> ---
->>   arch/x86/hyperv/ivm.c           | 11 +++++++++++
->>   arch/x86/include/asm/mshyperv.h |  3 +++
->>   arch/x86/kernel/cpu/mshyperv.c  |  9 +++++++--
->>   drivers/hv/hv_common.c          |  6 ++++++
->>   include/asm-generic/mshyperv.h  | 12 +++++++++---
->>   5 files changed, 36 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
->> index cc92388b7a99..5d3ee3124e00 100644
->> --- a/arch/x86/hyperv/ivm.c
->> +++ b/arch/x86/hyperv/ivm.c
->> @@ -409,3 +409,14 @@ bool hv_isolation_type_snp(void)
->>   {
->>   	return static_branch_unlikely(&isolation_type_snp);
->>   }
->> +
->> +DEFINE_STATIC_KEY_FALSE(isolation_type_en_snp);
->> +/*
->> + * hv_isolation_type_en_snp - Check system runs in the AMD SEV-SNP based
->> + * isolation enlightened VM.
->> + */
->> +bool hv_isolation_type_en_snp(void)
->> +{
->> +	return static_branch_unlikely(&isolation_type_en_snp);
->> +}
->> +
-> 
-> Vitaly had suggested some renaming of this and related variables and
-> functions, which you had agreed to do.  But I don't see that renaming
-> reflected in this patch or throughout the full patch set.
-> 
+I'm taking over the series Michael sent previously [1] which is smartly
+reviewing the initial series I sent [2].  This series is addressing the
+comments sent by Thomas and me on the Michael's one.
 
-Hi Michael:
-	Thanks for your review. I am preparing a separating patchset to rework 
-hv_isolation_type_en_snp() and hv_isolation_type_snp() according to 
-Vitaly suggestion because it will touch more files and not affect 
-SEV-SNP function.
+Here is a short introduction to the issue this series is addressing:
 
-Thanks.
+When a new CPU is added, the kernel is activating all its threads. This
+leads to weird, but functional, result when adding CPU on a SMT 4 system
+for instance.
+
+Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+active (system has been booted with the 'smt-enabled=4' kernel option):
+
+ltcden3-lp12:~ # ppc64_cpu --info
+Core   0:    0*    1*    2*    3*    4     5     6     7
+Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+
+This mixed SMT level may confused end users and/or some applications.
+
+There is no SMT level recorded in the kernel (common code), neither in user
+space, as far as I know. Such a level is helpful when adding new CPU or
+when optimizing the energy efficiency (when reactivating CPUs).
+
+When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT level
+(cpu_smt_num_threads) and few callbacks allowing the architecture code to
+fine control this value, setting a max and a "at boot" level, and
+controling whether a thread should be onlined or not.
+
+v4:
+  Rebase on top of 6.5's updates
+  Remove a dependancy against the X86's symbol cpu_primary_thread_mask
+v3:
+  Fix a build error in the patch 6/9
+v2:
+  As Thomas suggested,
+    Reword some commit's description
+    Remove topology_smt_supported()
+    Remove topology_smt_threads_supported()
+    Introduce CONFIG_SMT_NUM_THREADS_DYNAMIC
+    Remove switch() in __store_smt_control()
+  Update kernel-parameters.txt
+
+[1] https://lore.kernel.org/linuxppc-dev/20230524155630.794584-1-mpe@ellerman.id.au/
+[2] https://lore.kernel.org/linuxppc-dev/20230331153905.31698-1-ldufour@linux.ibm.com/
+
+
+Laurent Dufour (2):
+  cpu/hotplug: remove dependancy against cpu_primary_thread_mask
+  cpu/SMT: Remove topology_smt_supported()
+
+Michael Ellerman (8):
+  cpu/SMT: Move SMT prototypes into cpu_smt.h
+  cpu/SMT: Move smt/control simple exit cases earlier
+  cpu/SMT: Store the current/max number of threads
+  cpu/SMT: Create topology_smt_thread_allowed()
+  cpu/SMT: Allow enabling partial SMT states via sysfs
+  powerpc/pseries: Initialise CPU hotplug callbacks earlier
+  powerpc: Add HOTPLUG_SMT support
+  powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   1 +
+ .../admin-guide/kernel-parameters.txt         |   4 +-
+ arch/Kconfig                                  |   3 +
+ arch/powerpc/Kconfig                          |   2 +
+ arch/powerpc/include/asm/topology.h           |  15 ++
+ arch/powerpc/kernel/smp.c                     |   8 +-
+ arch/powerpc/platforms/pseries/hotplug-cpu.c  |  30 ++--
+ arch/powerpc/platforms/pseries/pseries.h      |   2 +
+ arch/powerpc/platforms/pseries/setup.c        |   2 +
+ arch/x86/include/asm/topology.h               |   4 +-
+ arch/x86/kernel/cpu/common.c                  |   2 +-
+ arch/x86/kernel/smpboot.c                     |   8 -
+ include/linux/cpu.h                           |  25 +--
+ include/linux/cpu_smt.h                       |  33 ++++
+ kernel/cpu.c                                  | 142 +++++++++++++-----
+ 15 files changed, 196 insertions(+), 85 deletions(-)
+ create mode 100644 include/linux/cpu_smt.h
+
+-- 
+2.41.0
+
