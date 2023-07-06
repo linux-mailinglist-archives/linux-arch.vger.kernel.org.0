@@ -2,138 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C307C74A158
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jul 2023 17:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDD174A1A4
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jul 2023 17:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjGFPrC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jul 2023 11:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
+        id S232995AbjGFP4Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jul 2023 11:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjGFPrB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jul 2023 11:47:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37A419B7
-        for <linux-arch@vger.kernel.org>; Thu,  6 Jul 2023 08:46:21 -0700 (PDT)
+        with ESMTP id S232954AbjGFP4Y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jul 2023 11:56:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D76E19A7
+        for <linux-arch@vger.kernel.org>; Thu,  6 Jul 2023 08:55:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688658381;
+        s=mimecast20190719; t=1688658938;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7Tl0uNK3iTFKABiIz7zb0nAC1GuwS9Iddx7rewdSaxU=;
-        b=BcZW9/s8qf/8IseG6MVfGuIvHVrYJPc+C8Cbp1DZ9ITSDBn2JDYu2sQtgHZO5zezjudZMB
-        rJwHU81TRj/R22W73hQj9OFkHHsQAvzkIZERTf1YK+g1/x5qSvb710jbEE+ZTRTN39btNE
-        i5pBviySDHNSo+U8+MsEdMrTd62u3W4=
+        bh=ui06ZFcdz1qWSBPR+h//NKg4GSrZKXagBPNy6hALhkE=;
+        b=JkdmxKEB19rrZaUtLDGv1tAoHGeTjZffhJ+I+m5UJLtPJ89w+tL3E4wKo+GS8mA0Ps12zM
+        dKgKnH7vhZ8ZQvDaioT97LIcfSmWBTFo2gQKvEHy6xzyHZ1MviHv8/iFW81qALddqX0oTY
+        31U4iEIWOI0W/hpACcjFpaSm+87pZGM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-113-ySB3notAN_2JJ180Qz1p8g-1; Thu, 06 Jul 2023 11:46:19 -0400
-X-MC-Unique: ySB3notAN_2JJ180Qz1p8g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-470-umXMLVFUPOSZJu0jyKXHNA-1; Thu, 06 Jul 2023 11:55:35 -0400
+X-MC-Unique: umXMLVFUPOSZJu0jyKXHNA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F2CF858F1E;
-        Thu,  6 Jul 2023 15:46:18 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BE6B8F5CF0;
-        Thu,  6 Jul 2023 15:46:09 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0DBE185A791;
+        Thu,  6 Jul 2023 15:55:33 +0000 (UTC)
+Received: from localhost (ovpn-12-39.pek2.redhat.com [10.72.12.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3345492C13;
+        Thu,  6 Jul 2023 15:55:32 +0000 (UTC)
+Date:   Thu, 6 Jul 2023 23:55:29 +0800
 From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org, arnd@arndb.de,
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
         hch@lst.de, christophe.leroy@csgroup.eu, rppt@kernel.org,
         willy@infradead.org, agordeev@linux.ibm.com,
         wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        shorne@gmail.com, David.Laight@ACULAB.COM, deller@gmx.de,
+        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
         nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Baoquan He <bhe@redhat.com>, linux-arch@vger.kernel.org
-Subject: [PATCH v8 05/19] mm: ioremap: allow ARCH to have its own ioremap method definition
-Date:   Thu,  6 Jul 2023 23:45:06 +0800
-Message-Id: <20230706154520.11257-6-bhe@redhat.com>
-In-Reply-To: <20230706154520.11257-1-bhe@redhat.com>
-References: <20230706154520.11257-1-bhe@redhat.com>
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZKbj8Tr15cQtjEy5@MiWiFi-R3L-srv>
+References: <20230620131356.25440-11-bhe@redhat.com>
+ <202306211329.ticOJCSv-lkp@intel.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306211329.ticOJCSv-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Architectures can be converted to GENERIC_IOREMAP, to take standard
-ioremap_xxx() and iounmap() way. But some ARCH-es could have specific
-handling for ioremap_prot(), ioremap() and iounmap(), than standard
-methods.
+Hi,
 
-In oder to convert these ARCH-es to take GENERIC_IOREMAP method, allow
-these architecutres to have their own ioremap_prot(), ioremap() and
-iounmap() definitions.
+On 06/21/23 at 01:43pm, kernel test robot wrote:
+> Hi Baoquan,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
+> patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Cc: linux-arch@vger.kernel.org
----
- include/asm-generic/io.h | 3 +++
- mm/ioremap.c             | 4 ++++
- 2 files changed, 7 insertions(+)
+I can confirm these reproted errors have nothing to do with my patch. I
+got a s390 system and build the latest kernel from linus's master branch
+with above config, all these failures have been existing there. I have
+made patches to fix them by adding dependency on HAS_IOMEM for drivers.
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index a7ca2099ba19..39244c3ee797 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1081,11 +1081,14 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- void iounmap(volatile void __iomem *addr);
- void generic_iounmap(volatile void __iomem *addr);
- 
-+#ifndef ioremap
-+#define ioremap ioremap
- static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
- {
- 	/* _PAGE_IOREMAP needs to be supplied by the architecture */
- 	return ioremap_prot(addr, size, _PAGE_IOREMAP);
- }
-+#endif
- #endif /* !CONFIG_MMU || CONFIG_GENERIC_IOREMAP */
- 
- #ifndef ioremap_wc
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index db6234b9db59..9f34a8f90b58 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -46,12 +46,14 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
- 	return (void __iomem *)(vaddr + offset);
- }
- 
-+#ifndef ioremap_prot
- void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 			   unsigned long prot)
- {
- 	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
- }
- EXPORT_SYMBOL(ioremap_prot);
-+#endif
- 
- void generic_iounmap(volatile void __iomem *addr)
- {
-@@ -64,8 +66,10 @@ void generic_iounmap(volatile void __iomem *addr)
- 		vunmap(vaddr);
- }
- 
-+#ifndef iounmap
- void iounmap(volatile void __iomem *addr)
- {
- 	generic_iounmap(addr);
- }
- EXPORT_SYMBOL(iounmap);
-+#endif
--- 
-2.34.1
+I would suggest lkp adjusts script to test the base firstly so that a
+reliable base is provided to avoid confusion.
+
+Thanks
+Baoquan
 
