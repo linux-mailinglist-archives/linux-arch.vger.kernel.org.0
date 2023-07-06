@@ -2,132 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4E0748DC6
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jul 2023 21:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BD7749763
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jul 2023 10:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbjGET3p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jul 2023 15:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S229892AbjGFIVH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jul 2023 04:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbjGET3l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jul 2023 15:29:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4610F171A;
-        Wed,  5 Jul 2023 12:29:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D55F0616DA;
-        Wed,  5 Jul 2023 19:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C56C433C7;
-        Wed,  5 Jul 2023 19:29:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688585377;
-        bh=58E9A5hdZBNfXmya5PCeY7HXsUfb3Ff8zPeemokngEs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V6wbGg/+57CYKEHYV+uixfWNCh/9v+4zU9M8fxtJrep+XywpzBRieTW8SdVm9jWsX
-         8jnjQD9t6n3OZ6QZ9WB+iDJtUxpwv4c4vTBDNFuur048merbY3/wMo+JC/gdG//GRH
-         r99TXiptTgZrvYpA/9uhlHueIHq3uh2J3uw1f2qLVev5pb4hgVIef5bwl/E1njRHS2
-         iJUh76lOuAH4VvAXROqmZWUY9lHdifDf21yCH3pEKbRMUA6D6smgR4NpOJuGnIgqnv
-         7TmA4xrsUSHXI6oRcIUVw0x1Ed4fpu1ZjvuoEI2k2jUowmOlwyxOoTwvTs9I2i3JmU
-         pJEZZt2lDYEVA==
-Date:   Wed, 5 Jul 2023 20:29:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ccce9d4a-90fe-465a-88ae-ea1416770c77@sirena.org.uk>
-References: <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
- <2a30ac58-d970-45c3-87d2-55396c0a83f9@sirena.org.uk>
- <0a9ade13b989ea881fd43fabbe5de1d248cf4218.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="itt77taXQv6vqcOz"
-Content-Disposition: inline
-In-Reply-To: <0a9ade13b989ea881fd43fabbe5de1d248cf4218.camel@intel.com>
-X-Cookie: Don't feed the bats tonight.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229775AbjGFIVG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jul 2023 04:21:06 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A655171A;
+        Thu,  6 Jul 2023 01:21:02 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9DE245C007E;
+        Thu,  6 Jul 2023 04:21:01 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Jul 2023 04:21:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1688631661; x=1688718061; bh=55VJm6qtHlPp+fjYk7l6T/ue2
+        9vLnD16rjDAkrZPCsQ=; b=miCAnMlkETGEKIiXQn1XzT5/4isbkBlG74gQNg1KR
+        /4YDilL3K5hfcwIMeEDRE0V3Qvsntxu1kxz8iNbk0/LJ/bNahC5uaEK1FF893qkm
+        bHXmbL7xtpiwoiLwA8ZA/lEQtDFTwz/BypxWsmT2yRn3PaPHsSfuWIBsgeSAknLe
+        oNaYwC3Rlm+I8zojHCaEScHwMkOKyVjV7/w/XLxpCEkW31QcY/R5A76mbiWP/svp
+        mbCA0B/a9wEkPhKs7ajBM5MR8dTVwFzH6MP5JvYWcfxw4oNLjHAJcYpy+58amwaA
+        4mmznDbyVxLYgJpuvci4ppnoA3bcSJ3LC1hkbDgqfH4zg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1688631661; x=1688718061; bh=55VJm6qtHlPp+fjYk7l6T/ue29vLnD16rjD
+        AkrZPCsQ=; b=pV+kskFaHzqpfS59bdwLgORcyVGSm0aygpOezNUt3cs9gHbazvL
+        HZspQrorWeNDExKSXpzk5Nl7ch6mDdi/sqc1xNpXIDiZuYvOSVEaxJ6MOwX71p6z
+        ax8lbME3R/dY3I1beJMD1KqYfw1xrf7RxlSkUiUD/eyPt1LXfNTL1Jx32G8Grj2B
+        DyMJnozHNgArbdzDr1Bq2Vut2WA/Z3wmNQduML8I2Dn3Uuy8f5gtr9FXNFd86vbg
+        VHCa5N3KtSoEp4zku6wlAeR5Hz2+lMxn04EnI7jIWUxSJgpoo6apV3x65KOtuxue
+        Q7e6tkR9y5fYxrvjWU0+How9qUFYvLXeZFA==
+X-ME-Sender: <xms:bHmmZCwiwxiLK1X9WZoBZcjvpP7VuoNALcRaZ4XDQJYI5wzxjG6RWA>
+    <xme:bHmmZOQwT8zk7fMlguW5SrjroqnyVWj4jmikTPLQGfhA_X98fUHTjNAClRfPwgel8
+    0UcwgRtu4cHteTk8Qo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelgddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:bHmmZEUBNeWSsnViheE8zbA-w2tm8qHio_afBwMGEyYN3U5SxPfCQg>
+    <xmx:bHmmZIj0NH2ZxZSkXD-wiIh6voAZh1r9r88nL5GPvCfgQMGM_BgaTA>
+    <xmx:bHmmZEAS4nzeHTWHe7PTeu5zU3yp1tKhiiM2jI47odFhPt7xuU-S1Q>
+    <xmx:bXmmZHMnJvvm4kyv8BoCnWwx6g1DybRzT2A9ux0zr92FDeiIYN5ZJg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D0BDFB60086; Thu,  6 Jul 2023 04:21:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <9a23db59-1f53-4a24-87d7-a59293972a29@app.fastmail.com>
+Date:   Thu, 06 Jul 2023 10:20:39 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Sohil Mehta" <sohil.mehta@intel.com>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Subject: [GIT PULL] asm-generic updates for 6.5
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
 
---itt77taXQv6vqcOz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
 
-On Wed, Jul 05, 2023 at 07:17:25PM +0000, Edgecombe, Rick P wrote:
+are available in the Git repository at:
 
-> Ah, interesting, thanks for the extra info. So which features is glibc
-> planning to use? (probably more of a question for Szabolcs). Are push
-> and pop controllable separately?
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.5
 
-Push and pop are one control, you get both or neither.
+for you to fetch changes up to 4dd595c34c4bb22c16a76206a18c13e4e194335d:
 
-I'll defer to Szabolcs on glibc plans.
+  syscalls: Remove file path comments from headers (2023-06-22 17:10:09 +0200)
 
---itt77taXQv6vqcOz
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+asm-generic updates for 6.5
 
------BEGIN PGP SIGNATURE-----
+These are cleanups for architecture specific header files:
 
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSlxJQACgkQJNaLcl1U
-h9Dl3gf4pyfBTQGKNG7L2/ecpPEphYcpapfkYdEFAnsVKJ2aZlrgdUGX+h5iB+eV
-OIUnTjkuQDFCJ47C3ORYsCtSAbkRe13XbVaYXbOWjB6eJjzgs9LncuKK4aunziJj
-mLuY0uRzDE7JbGH94ds/eFOuFHaFPTsd+ZnDEE7ajHueHolhNxgLJZqN8TJhuQ6u
-8cNXaAu3CGKgwoLKXh/VaYQQ2LOAivBeFXzDoXKCZGSBpAeAIrkWQj2EoxcAu7BN
-pVXE5n3Wq2pwAwPWF0fFaIxHM6FKYcDsPM7u5Sbf0vqDC5MxLxr8kNfzO+7gK9g+
-TuGmuQ73sTVmtQZrEqVpN69B27mf
-=80j0
------END PGP SIGNATURE-----
+ - the comments in include/linux/syscalls.h have gone out of sync
+   and are really pointless, so these get removed
 
---itt77taXQv6vqcOz--
+ - The asm/bitsperlong.h header no longer needs to be architecture
+   specific on modern compilers, so use a generic version for newer
+   architectures that use new enough userspace compilers
+
+ - A cleanup for virt_to_pfn/virt_to_bus to have proper type
+   checking, forcing the use of pointers
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      Merge tag 'virt-to-pfn-for-arch-v6.5-2' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator into asm-generic
+
+Linus Walleij (12):
+      fs/proc/kcore.c: Pass a pointer to virt_addr_valid()
+      m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+      ARC: init: Pass a pointer to virt_to_pfn() in init
+      riscv: mm: init: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page() in cifsglob
+      netfs: Pass a pointer to virt_to_page()
+      xen/netback: Pass (void *) to virt_to_page()
+      asm-generic/page.h: Make pfn accessors static inlines
+      ARM: mm: Make virt_to_pfn() a static inline
+      arm64: memory: Make virt_to_pfn() a static inline
+      m68k/mm: Make pfn accessors static inlines
+
+Sohil Mehta (1):
+      syscalls: Remove file path comments from headers
+
+Tiezhu Yang (2):
+      asm-generic: Unify uapi bitsperlong.h for arm64, riscv and loongarch
+      tools arch: Remove uapi bitsperlong.h of hexagon and microblaze
+
+ arch/arc/mm/init.c                                 |   2 +-
+ arch/arm/common/sharpsl_param.c                    |   2 +-
+ arch/arm/include/asm/delay.h                       |   2 +-
+ arch/arm/include/asm/io.h                          |   2 +-
+ arch/arm/include/asm/memory.h                      |  17 ++-
+ arch/arm/include/asm/page.h                        |   4 +-
+ arch/arm/include/asm/pgtable.h                     |   2 +-
+ arch/arm/include/asm/proc-fns.h                    |   2 -
+ arch/arm/include/asm/sparsemem.h                   |   2 +-
+ arch/arm/include/asm/uaccess-asm.h                 |   2 +-
+ arch/arm/include/asm/uaccess.h                     |   2 +-
+ arch/arm/kernel/asm-offsets.c                      |   2 +-
+ arch/arm/kernel/entry-armv.S                       |   2 +-
+ arch/arm/kernel/entry-common.S                     |   2 +-
+ arch/arm/kernel/entry-v7m.S                        |   2 +-
+ arch/arm/kernel/head-nommu.S                       |   3 +-
+ arch/arm/kernel/head.S                             |   2 +-
+ arch/arm/kernel/hibernate.c                        |   2 +-
+ arch/arm/kernel/suspend.c                          |   2 +-
+ arch/arm/kernel/tcm.c                              |   2 +-
+ arch/arm/kernel/vmlinux-xip.lds.S                  |   3 +-
+ arch/arm/kernel/vmlinux.lds.S                      |   3 +-
+ arch/arm/mach-berlin/platsmp.c                     |   2 +-
+ arch/arm/mach-keystone/keystone.c                  |   2 +-
+ arch/arm/mach-omap2/sleep33xx.S                    |   2 +-
+ arch/arm/mach-omap2/sleep43xx.S                    |   2 +-
+ arch/arm/mach-omap2/sleep44xx.S                    |   2 +-
+ arch/arm/mach-pxa/gumstix.c                        |   2 +-
+ arch/arm/mach-rockchip/sleep.S                     |   2 +-
+ arch/arm/mach-sa1100/pm.c                          |   2 +-
+ arch/arm/mach-shmobile/headsmp-scu.S               |   2 +-
+ arch/arm/mach-shmobile/headsmp.S                   |   2 +-
+ arch/arm/mach-socfpga/headsmp.S                    |   2 +-
+ arch/arm/mach-spear/spear.h                        |   2 +-
+ arch/arm/mm/cache-fa.S                             |   1 -
+ arch/arm/mm/cache-v4wb.S                           |   1 -
+ arch/arm/mm/dma-mapping.c                          |   2 +-
+ arch/arm/mm/dump.c                                 |   2 +-
+ arch/arm/mm/init.c                                 |   2 +-
+ arch/arm/mm/kasan_init.c                           |   1 -
+ arch/arm/mm/mmu.c                                  |   2 +-
+ arch/arm/mm/physaddr.c                             |   2 +-
+ arch/arm/mm/pmsa-v8.c                              |   2 +-
+ arch/arm/mm/proc-v7.S                              |   2 +-
+ arch/arm/mm/proc-v7m.S                             |   2 +-
+ arch/arm/mm/pv-fixup-asm.S                         |   2 +-
+ arch/arm64/include/asm/memory.h                    |   9 +-
+ arch/arm64/include/uapi/asm/bitsperlong.h          |  24 ----
+ arch/loongarch/include/uapi/asm/bitsperlong.h      |   9 --
+ arch/m68k/include/asm/mcf_pgtable.h                |   3 +-
+ arch/m68k/include/asm/page_mm.h                    |  11 +-
+ arch/m68k/include/asm/page_no.h                    |  11 +-
+ arch/m68k/include/asm/sun3_pgtable.h               |   4 +-
+ arch/m68k/mm/mcfmmu.c                              |   3 +-
+ arch/m68k/mm/motorola.c                            |   4 +-
+ arch/m68k/mm/sun3mmu.c                             |   2 +-
+ arch/m68k/sun3/dvma.c                              |   2 +-
+ arch/m68k/sun3x/dvma.c                             |   2 +-
+ arch/riscv/include/uapi/asm/bitsperlong.h          |  14 ---
+ arch/riscv/mm/init.c                               |   4 +-
+ drivers/memory/ti-emif-sram-pm.S                   |   2 +-
+ drivers/net/xen-netback/netback.c                  |   2 +-
+ fs/netfs/iterator.c                                |   2 +-
+ fs/proc/kcore.c                                    |   2 +-
+ fs/smb/client/cifsglob.h                           |   2 +-
+ fs/smb/client/smbdirect.c                          |   2 +-
+ include/asm-generic/page.h                         |  12 +-
+ include/linux/compat.h                             |  82 ++----------
+ include/linux/syscalls.h                           | 140 +++------------------
+ include/uapi/asm-generic/bitsperlong.h             |  13 +-
+ include/uapi/asm-generic/unistd.h                  | 129 +++++--------------
+ kernel/sys_ni.c                                    | 110 +---------------
+ tools/arch/arm64/include/uapi/asm/bitsperlong.h    |  24 ----
+ tools/arch/hexagon/include/uapi/asm/bitsperlong.h  |  27 ----
+ .../arch/loongarch/include/uapi/asm/bitsperlong.h  |   9 --
+ .../arch/microblaze/include/uapi/asm/bitsperlong.h |   2 -
+ tools/arch/riscv/include/uapi/asm/bitsperlong.h    |  14 ---
+ tools/include/uapi/asm-generic/bitsperlong.h       |  14 ++-
+ tools/include/uapi/asm-generic/unistd.h            | 129 +++++--------------
+ tools/include/uapi/asm/bitsperlong.h               |   6 -
+ 80 files changed, 218 insertions(+), 716 deletions(-)
+ delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
