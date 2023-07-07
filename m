@@ -2,47 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EBD74B48F
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jul 2023 17:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC8474B5BF
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jul 2023 19:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjGGPqA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jul 2023 11:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S229600AbjGGR0O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jul 2023 13:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjGGPp7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jul 2023 11:45:59 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209F1BF4;
-        Fri,  7 Jul 2023 08:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Sbue8uRujdfGf15vt4de2yZ6JUgInnsREPoZVJderQQ=; b=DnEXpIFT0PgJN2YOy+8MTlp/11
-        yOSSIOasFRVBy2ZRej2Cs0zE7gH2sBSuU+7WStq5iYCb5rSGqEwfEezf7VGmHbTiryPxUP5EECc0w
-        SNr0vnNR8zv83zLeWiBlkARHRvxEzL7pXf9aWN23zXLiCB7B2bgpTj7bFj++G/bTC14cSb+jXRetR
-        3OI24q6VzExGvCnX+rJmpmG62TC9RI9RwwKKc5SoDerbcqt3aFCKNgVj0aA+kprMx4soLR1SZaXh/
-        XWdOy0cKvOg5vdN5Z965slmgRJ3bRT8Hv5Z1hRf2IGrwUqoC/fjabYxuPaHnPbiuYMj3PYnWpwEZN
-        IoaDe3dA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHneF-00F9FP-0y;
-        Fri, 07 Jul 2023 15:45:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A2DA5300222;
-        Fri,  7 Jul 2023 17:45:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8DC7724B204C3; Fri,  7 Jul 2023 17:45:28 +0200 (CEST)
-Date:   Fri, 7 Jul 2023 17:45:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Olivier Dion <odion@efficios.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
-        Alan Stern <stern@rowland.harvard.edu>,
+        with ESMTP id S229502AbjGGR0N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jul 2023 13:26:13 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C5D2695;
+        Fri,  7 Jul 2023 10:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1688750730;
+        bh=U4pVnVRpmpXfIqV7cJuo7sgBurUuFKflAnJ53taBTfU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JkC77+orgeKep1j+yDMZZQGX6/Cp9HpVF8d+JFNTqXRiuysh+AIhvF2P0DPoOsAPu
+         gxfP8/qL0vlGKuAF3ruEC8SjouEfUiB0EimaPdqnLhpipVgZbJcYDz4K/J2aOfGMvo
+         Q3okW5ZGdCkUqvmWH3cRHg2y8rF96TggGN0upqh5cTVxGxI9D6ntldHEz+ffTK31LF
+         k1xPzNU1+p5c5+aUpU/ZLajBJfG3c0bfWhzI9PGWAjbCjUygO0rHx7fcpvqBO4L3KQ
+         V1LX89P5B1IMvjRmv/Mwx9swMu9PbPg5U3afQ3FHx4zZa7GG3n2r6rxurJjPQ3OzMq
+         bX6Wnt4bcrYBw==
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QyKzZ5jhKz1G7F;
+        Fri,  7 Jul 2023 13:25:30 -0400 (EDT)
+From:   Olivier Dion <odion@efficios.com>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rnk@google.com, Alan Stern <stern@rowland.harvard.edu>,
         Andrea Parri <parri.andrea@gmail.com>,
         Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         David Howells <dhowells@redhat.com>,
@@ -51,113 +42,153 @@ Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+        Tom Rix <trix@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        gcc@gcc.gnu.org, llvm@lists.linux.dev
 Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
  Consistency Model (LKMM) and C11/C++11 atomics
-Message-ID: <20230707154528.GC2883469@hirez.programming.kicks-ass.net>
+In-Reply-To: <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com>
+Organization: EfficiOS
 References: <87ttukdcow.fsf@laura>
- <20230704094627.GS4253@hirez.programming.kicks-ass.net>
- <87cz13hl7t.fsf@laura>
+ <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com>
+Date:   Fri, 07 Jul 2023 13:25:30 -0400
+Message-ID: <87y1jrfxbp.fsf@laura>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87cz13hl7t.fsf@laura>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 10:04:06AM -0400, Olivier Dion wrote:
-> On Tue, 04 Jul 2023, Peter Zijlstra <peterz@infradead.org> wrote:
-> > On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
-> [...]
-> >> On x86-64 (gcc 13.1 -O2) we get:
-> >> 
-> >>   t0():
-> >>           movl    $1, x(%rip)
-> >>           movl    $1, %eax
-> >>           xchgl   dummy(%rip), %eax
-> >>           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
-> >>           movl    y(%rip), %eax
-> >>           movl    %eax, r0(%rip)
-> >>           ret
-> >>   t1():
-> >>           movl    $1, y(%rip)
-> >>           lock orq $0, (%rsp)
-> >>           movl    x(%rip), %eax
-> >>           movl    %eax, r1(%rip)
-> >>           ret
-> >
-> > So I would expect the compilers to do better here. It should know those
-> > __atomic_thread_fence() thingies are superfluous and simply not emit
-> > them. This could even be done as a peephole pass later, where it sees
-> > consecutive atomic ops and the second being a no-op.
-> 
-> Indeed, a peephole optimization could work for this Dekker, if the
-> compiler adds the pattern for it.  However, AFAIK, a peephole can not be
-> applied when the two fences are in different basic blocks.  For example,
-> only emitting a fence on a compare_exchange success.  This limitation
-> implies that the optimization can not be done across functions/modules
-> (shared libraries).
+On Fri, 07 Jul 2023, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com> wr=
+ote:
+[...]
+>> This is a request for comments on extending the atomic builtins API to
+>> help avoiding redundant memory barriers.  Indeed, there are
+>> discrepancies between the Linux kernel consistency memory model (LKMM)
+>> and the C11/C++11 memory consistency model [0].  For example,
+>> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
+>> have implicit memory barriers before/after the operations [1-2], while
+>> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
+>> do not have any ordering guarantees of an atomic thread fence
+>> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+>
+>
+> The issues run quite a bit deeper than this. The two models have two
+> completely different perspectives that are quite much incompatible.
 
-LTO FTW :-)
+Agreed.  Our intent is not to close the gap completely, but to reduce
+the gap between the two models, by supporting the "full barrier
+before/after" semantic of LKMM in the C11/C++11 memory model.
 
-> For example, it would be interesting to be able to
-> promote an acquire fence of a pthread_mutex_lock() to a full fence on
-> weakly ordered architectures while preventing a redundant fence on
-> strongly ordered architectures.
+> I think all you can really do is bridge the gap at the level of the
+> generated assembly.  I.e., don't bridge the gap between LKMM and the
+> C11 MCM. Bridge the gap between the assembly code generated by C11
+> atomics and the one generated by LKMM. But I'm not sure that's really
+> the task here.
 
-That's a very non-trivial thing to do. I know Linux has
-smp_mb__after_spinlock() and that x86 has it a no-op, but even on x86
-adding a full fence after a lock has observable differences IIRC.
+We have considered analyzing the assembler output of different
+toolchain's versions to generate manually our own before/after fences.
+However, nothing prevents a toolchain from changing the emitted
+assembler in the future, which would make things fragile.  The only
+thing that is guaranteed to not change is the definitions in the
+standard (C11/C++11).  Anything else is fair game for optimizations.
 
-Specifically, the actual store that acquires the lock is not well
-ordered vs the critical section itself for non-trivial spinlock
-implementations (notably qspinlock).
+>> [...] For example, to make Read-Modify-Write (RMW) operations match
+>> the Linux kernel "full barrier before/after" semantics, the liburcu's
+>> uatomic API has to emit both a SEQ_CST RMW operation and a subsequent
+>> thread fence SEQ_CST, which leads to duplicated barriers in some cases.
+>
+> Does it have to though? Can't you just do e.g. an release RMW
+> operation followed by an after_atomic=C2=A0 fence?  And for loads, a
+> SEQ_CST fence followed by an acquire load? Analogously (but: mirrored)
+> for stores.
 
-For RCU you mostly care about RCsc locks (IIRC), and upgrading unlock is
-a 'simpler' (IMO) approach to achieve that (which is what RCU does with
-smp_mb_after_unlock_lock()).
+That would not improve anything for RMW.  Consider the following example
+and its resulting assembler on x86-64 gcc 13.1 -O2:
 
-> We know that at least Clang has such peephole optimizations for some
-> architecture backends.  It seems however that they do not recognize
-> lock-prefixed instructions as fence.
+	int exchange(int *x, int y)
+	{
+		int r =3D __atomic_exchange_n(x, y, __ATOMIC_RELEASE);
+		__atomic_thread_fence(__ATOMIC_SEQ_CST);
 
-They seem confused in general for emitting MFENCE.
+		return r;
+	}
 
-> AFAIK, GCC does not have that kind
-> of optimization.
+        exchange:
+	       	movl    %esi, %eax
+	       	xchgl   (%rdi), %eax
+	       	lock orq $0, (%rsp) ;; Redundant with previous exchange
+       		ret
 
-> We are also aware that some research has been done on this topic [0].
-> The idea is to use PRE for elimiation of redundant fences.  This would
-> work across multiple basic blocks, although the paper focus on
-> intra-procedural eliminations.  However, it seems that the latest work
-> on that [1] has never been completed [2].
-> 
-> Our proposed approach provides a mean for the user to express -- and
-> document -- the wanted semantic in the source code.  This allows the
-> compiler to only emit wanted fences, therefore not relying on
-> architecture specific backend optimizations.  In other words, this
-> applies even on unoptimized binaries.
+also that would make the exchange weaker, in the sense of the C11/C++11
+memory model, by losing its acquire and its sequential consistency
+semantics.
 
-I'm not a tool person, but if I were, I'd be very hesitant to add
-__builtin functions that 'conflict'/'overlap' with what an optimizer
-should be able to do.
+[...]
+>>     // Always NOP.
+>>    __atomic_thread_fence_{before,after}_rmw(int rmw_memorder,
+>>                                             int fence_memorder)
+>
+>
+> I currently don't feel comfortable adding such extensions to LKMM (or a=20
+> compiler API for that matter).
 
-Either way around you need work done on the compilers, and I'm thinking
-'fixing' the optimizer will benefit far more people than adding
-__builtin's.
+There's no plan to add such extensions to LKMM but only to extend the
+current atomic builtins API of toolchains.
 
-Then again, I'm not a tools person, so you don't need to convince me.
-But one of the selling points of the whole Atomics as a language feature
-was that whole optimizer angle. Otherwise you might as well do as we do,
-inline asm the world.
+> You mentioned that the goal is to check some code written using LKMM
+> primitives with TSAN due to some formal requirements. What exactly do
+> these requirements entail? Do you need to check the code exactly as it
+> will be executed (modulo the TSAN instrumentation)? Is it an option to
+> map to normal builtins with suboptimal performance just for the
+> verification purpose, but then run the slightly more optimized
+> original code later?
 
-I'll shut up now, thanks for that PRE reference [0], that seems a fun
-read for when I'm bored.
+We aim to validate with TSAN the code that will run during production,
+minus TSAN itself.
+
+> Specifically for TSAN's ordering requirements, you may need to make
+> LKMM's RMWs into acq+rel with an extra mb, even if all that extra
+> ordering isn't necessary at the assembler level.
+>
+>
+> Also note that no matter what you do, due to the two different
+> perspectives, TSAN's hb relation may introduce false positive data
+> races w.r.t. LKMM.=C2=A0 For example, if the happens-before ordering is
+> guaranteed through pb starting with coe/fre.
+
+This is why we have implemented our primitives and changed our
+algorithms so that they use the acquire/release semantics of the
+C11/C++11 memory model.
+
+> Without thinking too hard, it seems to me no matter what fences and
+> barriers you introduce, TSAN will not see this kind of ordering and
+> consider the situation a data race.
+
+We have come to the same conclusion, mainly because TSAN does not
+support thread fence in its verifications.  This is why we have
+implemented an annotation layer that group relaxed memory accesses into
+a single acquire/release event.  This layer, makes TSAN aware of the
+happen-before relations of the RCU implementations -- and lock-free data
+structures -- in Userspace RCU.
+
+This came with a downside of introducing redundant fences on strongly
+ordered architectures because of the usage of atomic builtins of the
+C11/C++11 memory model which does not provide any means for expressing
+fully-ordered atomic operations without relying on explicit thread fences.
+
+[...]
+
+	Thanks,
+        Olivier
+--=20
+Olivier Dion
+EfficiOS Inc.
+https://www.efficios.com
