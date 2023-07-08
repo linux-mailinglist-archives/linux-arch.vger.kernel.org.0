@@ -2,72 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A03F74BA93
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jul 2023 02:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEAF74BCF3
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jul 2023 11:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbjGHAdb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jul 2023 20:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S230107AbjGHJBO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jul 2023 05:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjGHAda (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jul 2023 20:33:30 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3051BF5;
-        Fri,  7 Jul 2023 17:33:28 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-314417861b9so2598264f8f.0;
-        Fri, 07 Jul 2023 17:33:28 -0700 (PDT)
+        with ESMTP id S229496AbjGHJBN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jul 2023 05:01:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7631723;
+        Sat,  8 Jul 2023 02:01:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-992acf67388so308664766b.1;
+        Sat, 08 Jul 2023 02:01:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688776407; x=1691368407;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=blTNE5LO7YyFeZT8Qi4VxrAELo4nV45IRw/nlx7k0yw=;
-        b=gqDiZ4Yu/zOVBSWjvqSKCXSdeLUwpGl5K4w1TULo5zJy3gfFpxOC6IzriDWVaMIVcS
-         tBK+rcV6Mhhs2RS3cT6w188IQJfjEShq2kw3o1aYi43lNNz7LhdCWLqpYbvMorY1weF1
-         cxK9oy9MVoqD+bwZLE4R+TdlmFbfb/F5VPfzwpSEqRj1lwiSGWcLYChH+zvjnYc/V8vO
-         b3TUpaKljoJ9zFH/MKevxpFx0IXRrXC/1AJl3xf05KgckuJNXVfeQP3Ych73TFtszGKB
-         4wgekWWBdR1IhDeE3+EQahXmibXegxBIeTaWeOaaOshWKrg7KT4CkhSD9gzV7lsG1TDk
-         GZDQ==
+        d=gmail.com; s=20221208; t=1688806870; x=1691398870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LsGY/iGtzaIgMwA9b3Ok3/pViuvT9eB2lCiEe6DAXmw=;
+        b=ZC9DXKQ4BCjmzF3p8pBZiMSzsDXlNUajNpgzbgfdEtdK3LaC1ilz7ERZEOO3wEXYtO
+         nedwYopczXsFZFxEDFH56U4HhmY5nnWxnzRiWbwLKPslIkGvcrut7zp8pUyBFf1lId5n
+         t+Sy72MHM4qeyZXeDmnZQiqzMVSqYXjlzIHl1tha3BDw4CVjC4BknFu1dC03RFTVkiTs
+         KqunWm00CvMHfOH655Q3VrboGu0bCWdEfUt4tqQ7Mlrf8rdHcpA+7iVyQv+orO/BOef6
+         ZFNyvFHHjxsMWN6gG5EXxKEDP4L3QsRDvTWrnbUSFuGPHmIuWV1piHPT+lOx9nbeoLla
+         d20w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688776407; x=1691368407;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=blTNE5LO7YyFeZT8Qi4VxrAELo4nV45IRw/nlx7k0yw=;
-        b=EXb6NYt9sf/uhSyaS8dnPoI9qWF59l3643WQKyhhpA6zO5WSMRUcv/8P+0j0Wv8Ufm
-         O/gFUAuRLdND17pVuHB49g403l8wPrK0CM/k4xUYfi6JNCuc+W0psHll37QhnBx6cW+U
-         xfZVbHbU9jh1hRQSk5jaRJqvMIAvSj5SOKYErnD5iQzNC+rH/PknbvTjMtHVN0IzaLSD
-         8fi4wA2CHczDBSvnnb6LtksARqZOBBaxrNAYhJRtnw3Hiu0pSR25YS+Djp+bZWWyCA7E
-         h70A3zWCHA1oHaq26G+dnihZ9eeTsRLmIlBUGdnItmJbAMw6bsHATx3jZNsluC/AF21d
-         U+YA==
-X-Gm-Message-State: ABy/qLZSflin5HbjrrZVctROpItEmutwKjabm1pJemBhvycdoVss2IfN
-        g41toLMY/wgiCqzPP/uTN3iw8HXbD4BaX+Gb
-X-Google-Smtp-Source: APBJJlFbxGp9ywXlUDVJkA+GQPoOU92fZ9LH17UbGO+iSwV9v1HefzM3DaG83y3UzMhuKGrCVgDe8g==
-X-Received: by 2002:a5d:6d49:0:b0:313:f61c:42b2 with SMTP id k9-20020a5d6d49000000b00313f61c42b2mr5143685wri.69.1688776407259;
-        Fri, 07 Jul 2023 17:33:27 -0700 (PDT)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id s16-20020a5d4ed0000000b0031411e46af3sm5613028wrv.97.2023.07.07.17.33.26
+        d=1e100.net; s=20221208; t=1688806870; x=1691398870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LsGY/iGtzaIgMwA9b3Ok3/pViuvT9eB2lCiEe6DAXmw=;
+        b=TLLGtG6TKlXAfecn4KZQ5gLROpWGt1BEN0KBzKHUmUi0v12TDIrOEinO6HPMJIODFL
+         U1cTYqCPvgFXJpYzqSGWQSsvbNPvzbQ0z71le217omS2Umf1U22jnshgXyeEmwmN2Ysw
+         jzCqjRapERz8z+o5ctUH0X+3Rpf5nJ6lVhL8GuNIYKH7/YdZVrLZhSd4cHtdtb8S7EtW
+         ULXpt02K5qz+UAp52FT4TBk4NT7/cHhl2FXs7FWh0JjRtbeTrAQic+A7B5jLPN1k/rzy
+         C2FOTgOsCkGojpforOyiZLwtn1xBbns0X0LelZQlBDJ+MCaabxNtBprHIoCPg6mksSk6
+         qkTw==
+X-Gm-Message-State: ABy/qLY1YLWQRIa0FezQ5blGh7rBXEN+1wGdWXdkiFjNUj7ABAAKB0zC
+        Hpw2Sh88zpW0Cc4jxVTZ0jM=
+X-Google-Smtp-Source: APBJJlGWA9cXPwJQzLfRKpd7yjMu6208psGsPf4ABVaoF4bcrbXZqLcg/CAKOOeOxS8x9SRa1CJCVQ==
+X-Received: by 2002:a17:906:3c46:b0:98d:d6b2:3377 with SMTP id i6-20020a1709063c4600b0098dd6b23377mr5344497ejg.30.1688806870400;
+        Sat, 08 Jul 2023 02:01:10 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id g10-20020a17090613ca00b00992ae4cf3c1sm3204313ejc.186.2023.07.08.02.01.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 17:33:26 -0700 (PDT)
-Date:   Sat, 8 Jul 2023 01:33:26 +0100
-From:   Stafford Horne <shorne@gmail.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
-        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, deller@gmx.de,
-        nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: Re: [PATCH v7 09/19] openrisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZKiu1hjMPHRTYBLy@antec>
-References: <20230620131356.25440-1-bhe@redhat.com>
- <20230620131356.25440-10-bhe@redhat.com>
+        Sat, 08 Jul 2023 02:01:09 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Charlemagne Lasse <charlemagnelasse@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH 1/2] locking/arch: Avoid variable shadowing in local_try_cmpxchg()
+Date:   Sat,  8 Jul 2023 11:00:36 +0200
+Message-ID: <20230708090048.63046-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620131356.25440-10-bhe@redhat.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,142 +83,81 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 09:13:46PM +0800, Baoquan He wrote:
-> By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> and iounmap() are all visible and available to arch. Arch needs to
-> provide wrapper functions to override the generic versions if there's
-> arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> This change will simplify implementation by removing duplicated codes
-> with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> functioality as before.
-> 
-> For openrisc, the current ioremap() and iounmap() are the same as
-> generic version. After taking GENERIC_IOREMAP way, the old ioremap()
-> and iounmap() can be completely removed.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: openrisc@lists.librecores.org
-> ---
->  arch/openrisc/Kconfig          |  1 +
->  arch/openrisc/include/asm/io.h | 11 ++++----
->  arch/openrisc/mm/ioremap.c     | 49 ----------------------------------
->  3 files changed, 7 insertions(+), 54 deletions(-)
-> 
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index c7f282f60f64..fd9bb76a610b 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -21,6 +21,7 @@ config OPENRISC
->  	select GENERIC_IRQ_PROBE
->  	select GENERIC_IRQ_SHOW
->  	select GENERIC_PCI_IOMAP
-> +	select GENERIC_IOREMAP
->  	select GENERIC_CPU_DEVICES
->  	select HAVE_PCI
->  	select HAVE_UID16
-> diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-> index ee6043a03173..5a6f0f16a5ce 100644
-> --- a/arch/openrisc/include/asm/io.h
-> +++ b/arch/openrisc/include/asm/io.h
-> @@ -15,6 +15,8 @@
->  #define __ASM_OPENRISC_IO_H
->  
->  #include <linux/types.h>
-> +#include <asm/pgalloc.h>
-> +#include <asm/pgtable.h>
->  
->  /*
->   * PCI: We do not use IO ports in OpenRISC
-> @@ -27,11 +29,10 @@
->  #define PIO_OFFSET		0
->  #define PIO_MASK		0
->  
-> -#define ioremap ioremap
-> -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
-> -
-> -#define iounmap iounmap
-> -extern void iounmap(volatile void __iomem *addr);
-> +/*
-> + * I/O memory mapping functions.
-> + */
-> +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
->  
->  #include <asm-generic/io.h>
->  
-> diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-> index cdbcc7e73684..91c8259d4b7e 100644
-> --- a/arch/openrisc/mm/ioremap.c
-> +++ b/arch/openrisc/mm/ioremap.c
-> @@ -22,55 +22,6 @@
->  
->  extern int mem_init_done;
->  
-> -/*
-> - * Remap an arbitrary physical address space into the kernel virtual
-> - * address space. Needed when the kernel wants to access high addresses
-> - * directly.
-> - *
-> - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
-> - * have to convert them into an offset in a page-aligned mapping, but the
-> - * caller shouldn't need to know that small detail.
-> - */
-> -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
-> -{
-> -	phys_addr_t p;
-> -	unsigned long v;
-> -	unsigned long offset, last_addr;
-> -	struct vm_struct *area = NULL;
-> -
-> -	/* Don't allow wraparound or zero size */
-> -	last_addr = addr + size - 1;
-> -	if (!size || last_addr < addr)
-> -		return NULL;
-> -
-> -	/*
-> -	 * Mappings have to be page-aligned
-> -	 */
-> -	offset = addr & ~PAGE_MASK;
-> -	p = addr & PAGE_MASK;
-> -	size = PAGE_ALIGN(last_addr + 1) - p;
-> -
-> -	area = get_vm_area(size, VM_IOREMAP);
-> -	if (!area)
-> -		return NULL;
-> -	v = (unsigned long)area->addr;
-> -
-> -	if (ioremap_page_range(v, v + size, p,
-> -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
-> -		vfree(area->addr);
-> -		return NULL;
-> -	}
-> -
-> -	return (void __iomem *)(offset + (char *)v);
-> -}
-> -EXPORT_SYMBOL(ioremap);
-> -
-> -void iounmap(volatile void __iomem *addr)
-> -{
-> -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
-> -}
-> -EXPORT_SYMBOL(iounmap);
-> -
+Several architectures define arch_try_local_cmpxchg macro using
+internal temporary variables named ___old, __old or _old. Remove
+temporary varible in local_try_cmpxchg to avoid variable shadowing.
 
-Hello,
+No functional change intended.
 
-Thanks for the patch, I was able to test this booting openrisc and running a few
-glibc tests and see no issues.  Also the code cleanup looks good to me.
+Fixes: d994f2c8e241 ("locking/arch: Wire up local_try_cmpxchg()")
+Reported-by: Charlemagne Lasse <charlemagnelasse@gmail.com>
+Closes: https://lore.kernel.org/lkml/CAFGhKbyxtuk=LoW-E3yLXgcmR93m+Dfo5-u9oQA_YC5Fcy_t9g@mail.gmail.com/
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jun Yi <yijun@loongson.cn>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/loongarch/include/asm/local.h | 4 ++--
+ arch/mips/include/asm/local.h      | 4 ++--
+ arch/x86/include/asm/local.h       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 83e995b30e47..c49675852bdc 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -63,8 +63,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index 5daf6fe8e3e9..e6ae3df0349d 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -101,8 +101,8 @@ static __inline__ long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+index 56d4ef604b91..635132a12778 100644
+--- a/arch/x86/include/asm/local.h
++++ b/arch/x86/include/asm/local.h
+@@ -127,8 +127,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ /* Always has a lock prefix */
+-- 
+2.41.0
 
->  /**
->   * OK, this one's a bit tricky... ioremap can get called before memory is
->   * initialized (early serial console does this) and will want to alloc a page
-> -- 
-> 2.34.1
-> 
