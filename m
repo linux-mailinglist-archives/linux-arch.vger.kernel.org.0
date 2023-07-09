@@ -2,211 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4698674C1D3
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jul 2023 12:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F10274C1E5
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jul 2023 12:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjGIKMC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Jul 2023 06:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        id S230189AbjGIK20 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Jul 2023 06:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjGIKMC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jul 2023 06:12:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BCF9C
-        for <linux-arch@vger.kernel.org>; Sun,  9 Jul 2023 03:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688897473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ov3JfUvGcvY/gub0yO+OM0+NYIpkg7qweTL0CdVo1Bg=;
-        b=WWEGEl+jXXHGo87jQ2aZ2TPnOTC+EkJeqaT/o6kWtht/UI/98N5ehBbdBMssN6WPJ/TTdX
-        3OSQ1Oq96fMghdbYzy1vNUU3Na+/O7puc9ZN4f/vc34+Km/10bIpcblZEynQZWWDVHbjg4
-        Oo3jNLk4nie5EDTmTZJb1ftqBTgoxBY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-ZPfXDT6uPQy1mNFrnfZTpw-1; Sun, 09 Jul 2023 06:11:12 -0400
-X-MC-Unique: ZPfXDT6uPQy1mNFrnfZTpw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229973AbjGIK2Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jul 2023 06:28:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D1C12A;
+        Sun,  9 Jul 2023 03:28:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D9DC104458E;
-        Sun,  9 Jul 2023 10:11:11 +0000 (UTC)
-Received: from localhost (ovpn-12-38.pek2.redhat.com [10.72.12.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0119D111F3CB;
-        Sun,  9 Jul 2023 10:11:09 +0000 (UTC)
-Date:   Sun, 9 Jul 2023 18:11:06 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
-        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, deller@gmx.de,
-        nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: Re: [PATCH v7 09/19] openrisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZKqHuhNt7ElIqaqe@MiWiFi-R3L-srv>
-References: <20230620131356.25440-1-bhe@redhat.com>
- <20230620131356.25440-10-bhe@redhat.com>
- <ZKiu1hjMPHRTYBLy@antec>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD09060BBE;
+        Sun,  9 Jul 2023 10:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD141C433C8;
+        Sun,  9 Jul 2023 10:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688898503;
+        bh=3sPwX4GVTHH+apYt2dKBk43WvXcfJBHi7r9smnLvACE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lYtFlNfTAA3tzzCsF5XPl5cdaF4pDoSIR4OXiGBZwf1uVoC0y/782/ax77YFkq+dx
+         HneYNDBK60xClp0GRzi2efpbIArOF+5gCm81Hp4PVvQiE9EUotpox3RlJhp1e6MCqS
+         7G+2zA5VaMB0WO4sfXCbHViLzpvPhFWmDLeDSCCYu0iee/Zo2WuAbjhDrKZZRuQN72
+         AL1dr44g8+MKXM8LvXjAoCdiwgZLjt7sT3ezMhkX4oX6Ahkbz0lnyAqhqTaw5ALV9Z
+         Vxm6gqbMi3NBaEY6rF7/4wmzaI+VxTWoJklhOsH922ffrHGk0JZldKIn0gm6OXNlCx
+         HzQJNAG5kA61g==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] riscv: support PREEMPT_DYNAMIC with static keys
+Date:   Sun,  9 Jul 2023 18:16:53 +0800
+Message-Id: <20230709101653.720-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKiu1hjMPHRTYBLy@antec>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 07/08/23 at 01:33am, Stafford Horne wrote:
-> On Tue, Jun 20, 2023 at 09:13:46PM +0800, Baoquan He wrote:
-> > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> > and iounmap() are all visible and available to arch. Arch needs to
-> > provide wrapper functions to override the generic versions if there's
-> > arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> > This change will simplify implementation by removing duplicated codes
-> > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> > functioality as before.
-> > 
-> > For openrisc, the current ioremap() and iounmap() are the same as
-> > generic version. After taking GENERIC_IOREMAP way, the old ioremap()
-> > and iounmap() can be completely removed.
-> > 
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > Cc: Stafford Horne <shorne@gmail.com>
-> > Cc: Jonas Bonn <jonas@southpole.se>
-> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> > Cc: openrisc@lists.librecores.org
-> > ---
-> >  arch/openrisc/Kconfig          |  1 +
-> >  arch/openrisc/include/asm/io.h | 11 ++++----
-> >  arch/openrisc/mm/ioremap.c     | 49 ----------------------------------
-> >  3 files changed, 7 insertions(+), 54 deletions(-)
-> > 
-> > diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> > index c7f282f60f64..fd9bb76a610b 100644
-> > --- a/arch/openrisc/Kconfig
-> > +++ b/arch/openrisc/Kconfig
-> > @@ -21,6 +21,7 @@ config OPENRISC
-> >  	select GENERIC_IRQ_PROBE
-> >  	select GENERIC_IRQ_SHOW
-> >  	select GENERIC_PCI_IOMAP
-> > +	select GENERIC_IOREMAP
-> >  	select GENERIC_CPU_DEVICES
-> >  	select HAVE_PCI
-> >  	select HAVE_UID16
-> > diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-> > index ee6043a03173..5a6f0f16a5ce 100644
-> > --- a/arch/openrisc/include/asm/io.h
-> > +++ b/arch/openrisc/include/asm/io.h
-> > @@ -15,6 +15,8 @@
-> >  #define __ASM_OPENRISC_IO_H
-> >  
-> >  #include <linux/types.h>
-> > +#include <asm/pgalloc.h>
-> > +#include <asm/pgtable.h>
-> >  
-> >  /*
-> >   * PCI: We do not use IO ports in OpenRISC
-> > @@ -27,11 +29,10 @@
-> >  #define PIO_OFFSET		0
-> >  #define PIO_MASK		0
-> >  
-> > -#define ioremap ioremap
-> > -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
-> > -
-> > -#define iounmap iounmap
-> > -extern void iounmap(volatile void __iomem *addr);
-> > +/*
-> > + * I/O memory mapping functions.
-> > + */
-> > +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
-> >  
-> >  #include <asm-generic/io.h>
-> >  
-> > diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-> > index cdbcc7e73684..91c8259d4b7e 100644
-> > --- a/arch/openrisc/mm/ioremap.c
-> > +++ b/arch/openrisc/mm/ioremap.c
-> > @@ -22,55 +22,6 @@
-> >  
-> >  extern int mem_init_done;
-> >  
-> > -/*
-> > - * Remap an arbitrary physical address space into the kernel virtual
-> > - * address space. Needed when the kernel wants to access high addresses
-> > - * directly.
-> > - *
-> > - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
-> > - * have to convert them into an offset in a page-aligned mapping, but the
-> > - * caller shouldn't need to know that small detail.
-> > - */
-> > -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
-> > -{
-> > -	phys_addr_t p;
-> > -	unsigned long v;
-> > -	unsigned long offset, last_addr;
-> > -	struct vm_struct *area = NULL;
-> > -
-> > -	/* Don't allow wraparound or zero size */
-> > -	last_addr = addr + size - 1;
-> > -	if (!size || last_addr < addr)
-> > -		return NULL;
-> > -
-> > -	/*
-> > -	 * Mappings have to be page-aligned
-> > -	 */
-> > -	offset = addr & ~PAGE_MASK;
-> > -	p = addr & PAGE_MASK;
-> > -	size = PAGE_ALIGN(last_addr + 1) - p;
-> > -
-> > -	area = get_vm_area(size, VM_IOREMAP);
-> > -	if (!area)
-> > -		return NULL;
-> > -	v = (unsigned long)area->addr;
-> > -
-> > -	if (ioremap_page_range(v, v + size, p,
-> > -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
-> > -		vfree(area->addr);
-> > -		return NULL;
-> > -	}
-> > -
-> > -	return (void __iomem *)(offset + (char *)v);
-> > -}
-> > -EXPORT_SYMBOL(ioremap);
-> > -
-> > -void iounmap(volatile void __iomem *addr)
-> > -{
-> > -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
-> > -}
-> > -EXPORT_SYMBOL(iounmap);
-> > -
-> 
-> Hello,
-> 
-> Thanks for the patch, I was able to test this booting openrisc and running a few
-> glibc tests and see no issues.  Also the code cleanup looks good to me.
-> 
-> Acked-by: Stafford Horne <shorne@gmail.com>
+Currently, each architecture can support PREEMPT_DYNAMIC through
+either static calls or static keys. To support PREEMPT_DYNAMIC on
+riscv, we face three choices:
 
-Thanks a lot, Stafford. 
+1. only add static calls support to riscv
+As Mark pointed out in commit 99cf983cc8bc ("sched/preempt: Add
+PREEMPT_DYNAMIC using static keys"), static keys "...should have
+slightly lower overhead than non-inline static calls, as this
+effectively inlines each trampoline into the start of its callee. This
+may avoid redundant work, and may integrate better with CFI schemes."
+So even we add static calls(without inline static calls) to riscv,
+static keys is still a better choice.
 
-I later posted v8 to add update for hexagon and s390, this is the link:
-https://lore.kernel.org/all/20230706154520.11257-10-bhe@redhat.com/T/#u
+2. add static calls and inline static calls to riscv
+Per my understanding, inline static calls requires objtool support
+which is not easy.
 
-Thanks
+3. use static keys
+
+While riscv doesn't have static calls support, it supports static keys
+perfectly. So this patch selects HAVE_PREEMPT_DYNAMIC_KEY to enable
+support for PREEMPT_DYNAMIC on riscv, so that the preemption model can
+be chosen at boot time. It also patches asm-generic/preempt.h, mainly
+to add __preempt_schedule() and __preempt_schedule_notrace() macros
+for PREEMPT_DYNAMIC case. Other architectures which use generic
+preempt.h can also benefit from this patch by simply selecting
+HAVE_PREEMPT_DYNAMIC_KEY to enable PREEMPT_DYNAMIC if they supports
+static keys.
+
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ arch/riscv/Kconfig            |  1 +
+ include/asm-generic/preempt.h | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 4c07b9189c86..bdea2e5a9f34 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -129,6 +129,7 @@ config RISCV
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
++	select HAVE_PREEMPT_DYNAMIC_KEY if !XIP_KERNEL
+ 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RETHOOK if !XIP_KERNEL
+diff --git a/include/asm-generic/preempt.h b/include/asm-generic/preempt.h
+index b4d43a4af5f7..1f476aec7e4c 100644
+--- a/include/asm-generic/preempt.h
++++ b/include/asm-generic/preempt.h
+@@ -80,9 +80,21 @@ static __always_inline bool should_resched(int preempt_offset)
+ 
+ #ifdef CONFIG_PREEMPTION
+ extern asmlinkage void preempt_schedule(void);
+-#define __preempt_schedule() preempt_schedule()
+ extern asmlinkage void preempt_schedule_notrace(void);
++
++#ifdef CONFIG_PREEMPT_DYNAMIC
++
++void dynamic_preempt_schedule(void);
++void dynamic_preempt_schedule_notrace(void);
++#define __preempt_schedule()		dynamic_preempt_schedule()
++#define __preempt_schedule_notrace()	dynamic_preempt_schedule_notrace()
++
++#else /* CONFIG_PREEMPT_DYNAMIC */
++
++#define __preempt_schedule() preempt_schedule()
+ #define __preempt_schedule_notrace() preempt_schedule_notrace()
++
++#endif /* CONFIG_PREEMPT_DYNAMIC */
+ #endif /* CONFIG_PREEMPTION */
+ 
+ #endif /* __ASM_PREEMPT_H */
+-- 
+2.40.1
 
