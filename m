@@ -2,79 +2,214 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC4C74E16E
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 00:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F49E74E19A
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 00:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjGJWfg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 18:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S230131AbjGJW5B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 18:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjGJWfd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 18:35:33 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346D9E59
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:34:57 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c595cadae4bso5724511276.1
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689028463; x=1691620463;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQJYRa4cYbFlxJ1mDmha+0HxPANtp6LWuy6ed2Yjbu4=;
-        b=CetzuFarHJgPUiGBwDAWLpdzt0w3V9hQbqMPhuZfIenfXirykHD2HLGYdWQSkINvJh
-         xJG2uW65yyAAb+o06RvuUp3WpLKZAzNYnV7EddNjt5dfXFCFq8AZmqCWdcr58enYZIQE
-         n5JK8gg0yI5kVZJS/Tnc0gRJy7edUPwC0tcHLkojiMtzkNIt/J3L+ITk1kszc47h7Vz7
-         7HfhvqbXuGyD3D189Y0m4jp9NOnOMRg/24QxNfglicfLYXQlHIKScA6XdF716DYeVEDF
-         C2/NnZaF4OaiJaWHPvY80aoJTwZFVHVTEJFSi6QbKnAMO9h++YLyvxmo53PBx0z1bgkV
-         UbJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689028463; x=1691620463;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQJYRa4cYbFlxJ1mDmha+0HxPANtp6LWuy6ed2Yjbu4=;
-        b=jfnOcMdj4kJtDJhzF1iP1j/B8qquRa8zw/Y1kFixyF3EqnYqlyzsTIzq7FRSpXi5ZF
-         Kyi0waNxkzu/r/2HFxYVkM78uEAfrgEhlGNWpEwwFv7avvNVQVv3BjGukWXF+Ku5U5RW
-         aQcRItrL7cvhu0ALNWPaG/PlrTzeqySZz4giYO1U4kIWPhGs8WPWpBIBdK1q0uQ5yQNF
-         5dtEFN+gC4OcxU0nRM7AHje5gOv1o/7NisLSVQi/eXylIV5no45LvkkfnVfcadiMrf5A
-         qyNOqlTstuO0hziSTmtLf83N29UfOs6gybVjZT5RlWDGBeRUC/GAeWYOBZ2kGR/p2Hiu
-         x0xQ==
-X-Gm-Message-State: ABy/qLayrmuZYfy4ta641rl2VrqsQ8R1s8Uo8YzxgC2QHRex+CIqNnbA
-        Yp1XqR522ScfjyHKRMP1gIu6JXY9R5v9mbKriQ==
-X-Google-Smtp-Source: APBJJlHJiw9FD0eEFF7lSrjMDR+hUHliNX9UFzA9i3ufkboc97+XMgqpqjgotP7HgV453EARzYkdxteZjWVekbKkug==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:4c0f:bfb6:9942:8c53])
- (user=almasrymina job=sendgmr) by 2002:a25:4252:0:b0:c6f:6ffe:f904 with SMTP
- id p79-20020a254252000000b00c6f6ffef904mr50579yba.9.1689028463039; Mon, 10
- Jul 2023 15:34:23 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:33:01 -0700
-In-Reply-To: <20230710223304.1174642-1-almasrymina@google.com>
-Mime-Version: 1.0
-References: <20230710223304.1174642-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
-Message-ID: <20230710223304.1174642-11-almasrymina@google.com>
-Subject: [RFC PATCH 10/10] memory-provider: add dmabuf devmem provider
-From:   Mina Almasry <almasrymina@google.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, jgg@ziepe.ca
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        with ESMTP id S229576AbjGJW5A (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 18:57:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B3BFB;
+        Mon, 10 Jul 2023 15:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689029818; x=1720565818;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=b0FuC0dT2v791y/700VzRmGtCdMGIieC8HEsH1khSBI=;
+  b=LCl8NHOHkQ3+FZ+RWwCDkXzXckWZndSMLj1RpsjabvwD/eEbm6FAi/eT
+   WE0CKzUatIoxa8XMXE+j6RVW2+iCpqd5nQnOHctGmZHEKwA5moo981Zae
+   3EXlw+Rbu9fzVabaEDZWYbZit7FPg3aerBX57mhIgunxFk+lhhYwWpqCU
+   kX+Tx3cnoOKs6B8JqN1SGZ5s1iQ4sE4OAEjKLpFkdmqDdbRlekoDFDvS9
+   8LXVUzuQaO/gbT6LiAfq0nhcPQ6gEMRtDmobmPF1pgQcu28sfd7Wjv89+
+   p5AsmenNxnCOQCMJGMn8m8Giu++zlwET5ciEHPgYh+YvgeMaIS4MiODyu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="349282174"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="349282174"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 15:56:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="790952791"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="790952791"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2023 15:56:56 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 15:56:55 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 15:56:55 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 10 Jul 2023 15:56:55 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 10 Jul 2023 15:56:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h8uhrAq9z9gqjNjXBAuP2vSW3XgruVWOdg9H8AWNuW7NdjyJb2DG1+mbo3PNC11RtmGg4KOXH04lQ+9E6TIV4p4Iymtq0Q3mBAVGyV3YsGloOWZhzeRMGVMgwdUkSYJ1IMWvwq+0Cbc8iHWnD3SljbA0GVU3MrTYMXjP6TqLQu8qbmKTj0XlRzINjIzl3d71SEsFff9rw2FmBXJ3ayBx0rYnBbYXfD7WHelI/IPNnGOcuMrSFabjfIaI8/sfboQ+HNrMWLlGErf9z7Noq9pIRWJgZTDW5LGl+v9ovJ0crcJHYAk9R+F3PJJiNFmj7bKQ0TyTGejKdac8NSgTqpSm0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b0FuC0dT2v791y/700VzRmGtCdMGIieC8HEsH1khSBI=;
+ b=ZMfjX85wUrJQL6nWHZWM9ViTGQCBpDGNN4CiD4tePrH0LoEhxT2vMcG0rVTFKCxJCl5yB2abuK+ecHJeRUfByN0GZTIKaWxw0/b7DK/Yo3AHZ7u92IJhbLZES4Pv9XMi6ILY1Soiylcvmzn2b/hg9ErvM4msKzmAalBCqPzao6Hrao9jZ+NMT4GWuSo2FQ99V8nWm+toFTjSSLCOcKDXZntpCeKj2ANskDxOPrAfrPxNwM8YxcAqyUxXo3xE8L5x7ce95I6aFUI7GQIjzqo+Zn0mL9KJu+grdhQL52OoG36LiU6jWGrl4lWT9WFM+AJzOsfAGuFaT/bdyLIpDDLf2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
+ by PH7PR11MB6857.namprd11.prod.outlook.com (2603:10b6:510:1ed::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 22:56:51 +0000
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::ac6b:a101:ff02:a1bb]) by MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::ac6b:a101:ff02:a1bb%3]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 22:56:51 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "Lutomirski, Andy" <luto@kernel.org>
+CC:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Thread-Topic: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Thread-Index: AQHZnYvD++9jHqJtDEOZ5j0eN4/f+6+IoOQAgAALyMOAACwFgIAAIG6AgAAMtoCAACGsAIAA96CAgABofQCAB1K5gIAAhUGAgAEVRoCAAKx+AIABDK+AgAB6bICAAPF/AIAAZrmAgAAVNICAAG62AIAKh/oAgATXZwCAAZabAIADLBsAgAEz1ACAAFjMgIABYAUAgAAlDACABKrzgIAAZTSA
+Date:   Mon, 10 Jul 2023 22:56:51 +0000
+Message-ID: <1c0460a2042480b6a2d4cc1f6b99b27ab1371f3a.camel@intel.com>
+References: <ZJR545en+dYx399c@arm.com>
+         <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
+         <ZJ2sTu9QRmiWNISy@arm.com>
+         <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
+         <ZKMRFNSYQBC6S+ga@arm.com>
+         <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
+         <ZKa8jB4lOik/aFn2@arm.com>
+         <68b7f983ffd3b7c629940b6c6ee9533bb55d9a13.camel@intel.com>
+         <ZKguVAZe+DGA1VEv@arm.com>
+         <1c2f524cbaff886ce782bf3a3f95756197bc1e27.camel@intel.com>
+         <ZKw3zSKxCug0IbC1@arm.com>
+In-Reply-To: <ZKw3zSKxCug0IbC1@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|PH7PR11MB6857:EE_
+x-ms-office365-filtering-correlation-id: 3d12b36b-a385-4426-1348-08db8198f328
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +XLpLOZssCdO5xXbZ0kp+7+cHJV5M3n53D07oxVtqALKuoOhf19rQkh2Np4dyt6/n7ItY9y4m8lfLk95r1qPp64itAhR6YBYWRjC6RKzOrGWPgOPTuCXZTQs6ZymjswBKFEbve1YsP5WVSxajeJ7u1W5eZyMYB7TkM/7tTeln5y0MCVietemE8d719y3OY05V2jtt/4FSxhFnGiZtOhkg5r4D1ha7bEo03cVcnw2WWPPlKgGEq/PEsv00MqlfMPvhK6PpPm+nhOnV1vQaVa0b0Lf9+ctfgtn3raxIGGYVKmfqNcutv+Cz3lrwrES+ifjH76ww4MjxxL9ibHROIBVq5LoG4qi8ht1Q1pUG0/B+6qm7MGBAaR+9FKVuT/DyY9bCjG5KgyS518Rgj4wMq3JC1GCGPhkt3t4iTb8fKvXRsI3LbxuqpsX11kbdSdJrVbDdKYrBBpKDnqbID3iZH1Hg/zUR+8W0KGP8w7e6avzOii0sXzxBpVjBbcyYOF0gAtuHcIS1ismpdkfl6e0yILKW2YeRXyPhKfvIVHEwNJ8Ac5oGpVFTWipwL/9qX9p4oelHuciibQNgfIZeRcDGv9uAzvDvdzM/6IT1ZAiX0To1r3BKVcY1lxjmt/jpSSLRgVG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199021)(186003)(26005)(2616005)(6512007)(6506007)(83380400001)(41300700001)(4326008)(64756008)(66446008)(316002)(2906002)(66556008)(7416002)(7406005)(5660300002)(66946007)(8936002)(8676002)(66476007)(478600001)(6486002)(76116006)(71200400001)(110136005)(54906003)(91956017)(36756003)(122000001)(38070700005)(38100700002)(86362001)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NVkxUDdCVWRzSmdmZmxHMXFFQXN6Z0xJV1BBQUh0Zmc0V3BoYVFKV1pPR1ZC?=
+ =?utf-8?B?Q0pxRFNMb1J3bDVvVmUvdUxSUFlHdFhGSDBhbk51c2ZSUXRYN1owSTNzdzND?=
+ =?utf-8?B?YkFwZnNmdE9VNGExc1dZYjV3RGxFQjduRlMxdC9hQ3JUdS94UUpiWDFFdUZs?=
+ =?utf-8?B?ZTIrODU3OEs0bDZPTDVCcEFiQXk3eGR1NjdNenQ2TlJHWExUbm5WYlQwbDBE?=
+ =?utf-8?B?Q0VtenduYnk1QVhHNlMzSHp3aU45UHo3b05hN2RNNFlhQU4yTnpnVVBPUVlu?=
+ =?utf-8?B?RUVrZVFNQmZMOUFuVzkzVHpWVDh6Y3Q2bVR6YWZMQWlEeVYzUDZuVlJCYmpx?=
+ =?utf-8?B?bEFpRFlHSGF1bTJ5dlk5TVNMQjEvTkpJbDJXbHFkTWMzMjRCSkFvUEd4bkpB?=
+ =?utf-8?B?N1NGTU90R3VIQmJLaXZsLzN3RUJmSFdObHlZeTlRcVpwL3IxcE1Xam9vY0ov?=
+ =?utf-8?B?TUNVY0F1RTExSDBPQ2xkdUdiUkEvWEVSTXYwUkx0aDJXeWU0V3gxeU5TTmVZ?=
+ =?utf-8?B?RnU4UjhheW5DZE03ankxMHVkQnU3NmlmZVpISm5RUTdocTUrMWZDYmpxKzVS?=
+ =?utf-8?B?WEhaT0pPbnlTTWU0WC9idWVQSC9ZV0RXMlhodmJNWmVWQlIxbzV2RmdWUnJF?=
+ =?utf-8?B?Rm1UcW9tRG1ETHB3WUJIVElqcXE4Wm9Gb1RuSnN3VzBpYnk3T2VYVTFuY0ZC?=
+ =?utf-8?B?SVptdkF3cmpWeUw0b3NIRVRuVngrWWZTdzAvTklHcmc1RGUrZ1E5U0ZBMFFK?=
+ =?utf-8?B?Mm5MVHBUem00MTBXeWFpMzkzNG5OQlREQmlyMmNaUmx2c1Q0bVg4dE5tU2RK?=
+ =?utf-8?B?cnlyMzdzamZoeVVvRHlwd1ZteDJyMXgwZ1ZXMUtuMVpmU1hGWWduSVh5Sjdu?=
+ =?utf-8?B?OGtVQ05TN1BsTXIzZTNocG56VitDR0tSS2hyZDFWMDIxMW9jSVlnY3lENDlk?=
+ =?utf-8?B?Z0l5Y1NhV3V0MnBKT05KbzNFcFJ4Z0lzR3Bvc2g5d1F0M2ZuME1nWFNSVmtx?=
+ =?utf-8?B?Q1pkS0k5Rko2Slc5L2NMS0hGKy9Ba3RFSFhTSEVUN29VT20vRmxYZTR4Z2k2?=
+ =?utf-8?B?Ni9XaG9tVXlmTElXbjBsN0Fzczd3WWJaR3dKdUJ1cUc4ZCt3NmYxc0Z4VTNh?=
+ =?utf-8?B?dzA2VWdJckJjSkJPUnQzUDZkYkZUMG1BSjZUV3ZDLyt1QlNaQi83NHRpMHZL?=
+ =?utf-8?B?akhsZWR2OHBuTW9vWnJPSnJnbFQzM0ZJT2ZBSk1IOTFEZzl3VmhFNFFGOUEw?=
+ =?utf-8?B?WkxNZklHSU1TQnQwTnh1K0p6NHBTVmxzNGg3WXN4eENyRDJ6a2s4Mlo0OW8r?=
+ =?utf-8?B?c3QwN0hLQWhJU1RuZmE5UXpPeE9aMHpGWlFXbTVsaW9FdmhXQVk2OXJ2bEc5?=
+ =?utf-8?B?elNibjBEVEVIMTNwcjZrejhIS1YwWSs3WUx1NFRNbnVmOG1pOUVHMWFPUndV?=
+ =?utf-8?B?QzBOSFpUMEkvbEJtSnNtQlIzOEd1SVBpdjFLRVE0YXdGNlN2OVJRM0dqZUFW?=
+ =?utf-8?B?OE5MdUt1azJrMWpaTmhZNmxhK0prYXFJSStiWUZPaHg0dVNBZzlEanVCQTA1?=
+ =?utf-8?B?UGo5RGNZTFBMM2lXSlljUUxDK0JHMFlIRXozUFpSYzlzMi95VmFJZDI2VXFX?=
+ =?utf-8?B?Z2JWN2JBaGhaemxldStud3owWVZEL1BOTGFLVHo0cG9FUVNIWi90Q0pMTXdY?=
+ =?utf-8?B?RnVyT3ZVdDZJVkd2ZnozdkM1dnp5MEF5Q1hEMEkrVGRCL0J2MlUzei8veWNw?=
+ =?utf-8?B?TzdpMVdUWTJkYzJNMktlS2FtcEY2TktVc1JxZkc3NlkwKzhPU3I3SGJkRndl?=
+ =?utf-8?B?UzZGZ2RlRVFZak81UU5GUkUvYzI1L0hzMEpFbVpIdURnVEZwNU1CaXlJLzMx?=
+ =?utf-8?B?Qndxem5zc3JldnJFbXBYalNDK2RCMXU5WDZLeHVsZWZQcGFCQy9WV1pKSkpN?=
+ =?utf-8?B?dWlUUStpekNoTWs4R1Rxd1JVaEt3bVEvMGt2VXFTVloyOEpVK3dPdzlHcDJy?=
+ =?utf-8?B?aVY5bXRCdzZQUHR6ZVNMa2oxK1RLbjBLK0FqMmJkU09UZGtrUUpGdFh1UDZ5?=
+ =?utf-8?B?VkZ6Nkg0UHUrYWp6N1hLOWdoZGZldVBPaTEyWk03KzdEc0FxZkFDamZ1bDJs?=
+ =?utf-8?B?SE1QQUd1RW5vODRKOEhFL3VpSXNYWkZ4bkpMcjg4RWl4dSttQndmRlNJQUZF?=
+ =?utf-8?B?SXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8EED5CBA8210704195AF8B55DD29E0F0@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d12b36b-a385-4426-1348-08db8198f328
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 22:56:51.6968
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QQ3GcwIrwWZGc0ocb0gM9cNcqq5xhuaYMuXuZfhTd0ml/KkFEudtqppaHffBenAmAQZpk78igljmmhLaR5l3ICyqZ+5tyRo5143kjqPFMpw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6857
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,275 +217,93 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use Jakub's memory provider PoC API:
-https://github.com/kuba-moo/linux/tree/pp-providers
-
-To implement a dmabuf devmem memory provider. The provider allocates
-NET_RX dmabuf pages to the page pool. This abstracts any custom memory
-allocation or freeing changes for devmem TCP from drivers using the
-page pool.
-
-The memory provider allocates NET_RX pages from the
-dmabuf pages provided by the driver. These pages are ZONE_DEVICE pages
-with the sg dma_addrs stored in the zone_device_data entry in the page.
-The page pool entries in struct page are in a union with the ZONE_DEVICE
-entries, and - without special handling - the page pool would
-accidentally overwrite the data in the ZONE_DEVICE fields.
-
-To solve this, the memory provider converts the page from a ZONE_DEVICE
-page to a ZONE_NORMAL page upon giving it to the page pool, and converts
-it back to ZONE_DEVICE page upon getting it back from the page pool.
-This is safe to do because the NET_RX pages are dmabuf pages created to
-hold the dma_addr in the dma_buf_map_attachement sg_table entries, and
-are only used with code that handles them specifically.
-
-However, since dmabuf pages can now also be page pool page, we need
-to update 2 places to detect this correctly:
-
-1. is_dma_buf_page() needs to be updated to correctly detect dmabuf
-   pages after they've been inserted into the pool.
-
-2. dma_buf_page_to_dma_addr() needs to be updated. For page pool pages,
-   the dma_addr exists in page->dma_addr. For non page pool pages, the
-   dma_addr exists in page->zone_device_data.
-
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- include/linux/dma-buf.h |  29 ++++++++++-
- include/net/page_pool.h |  20 ++++++++
- net/core/page_pool.c    | 104 ++++++++++++++++++++++++++++++++++++----
- 3 files changed, 143 insertions(+), 10 deletions(-)
-
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 93228a2fec47..896359fa998d 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -692,15 +692,26 @@ static inline bool is_dma_buf_pages_file(struct file *file)
- 
- struct page *dma_buf_pages_net_rx_alloc(struct dma_buf_pages *priv);
- 
-+static inline bool is_dma_buf_page_net_rx(struct page *page)
-+{
-+	struct dma_buf_pages *priv;
-+
-+	return (is_page_pool_page(page) && (priv = page->pp->mp_priv) &&
-+		priv->pgmap.ops == &dma_buf_pgmap_ops);
-+}
-+
- static inline bool is_dma_buf_page(struct page *page)
- {
- 	return (is_zone_device_page(page) && page->pgmap &&
--		page->pgmap->ops == &dma_buf_pgmap_ops);
-+		page->pgmap->ops == &dma_buf_pgmap_ops) ||
-+	       is_dma_buf_page_net_rx(page);
- }
- 
- static inline dma_addr_t dma_buf_page_to_dma_addr(struct page *page)
- {
--	return (dma_addr_t)page->zone_device_data;
-+	return is_dma_buf_page_net_rx(page) ?
-+		       (dma_addr_t)page->dma_addr :
-+		       (dma_addr_t)page->zone_device_data;
- }
- 
- static inline int dma_buf_map_sg(struct device *dev, struct scatterlist *sg,
-@@ -718,6 +729,16 @@ static inline int dma_buf_map_sg(struct device *dev, struct scatterlist *sg,
- 
- 	return nents;
- }
-+
-+static inline bool is_dma_buf_pages_priv(void *ptr)
-+{
-+	struct dma_buf_pages *priv = (struct dma_buf_pages *)ptr;
-+
-+	if (!priv || priv->pgmap.ops != &dma_buf_pgmap_ops)
-+		return false;
-+
-+	return true;
-+}
- #else
- static inline bool is_dma_buf_page(struct page *page)
- {
-@@ -745,6 +766,10 @@ static inline struct page *dma_buf_pages_net_rx_alloc(struct dma_buf_pages *priv
- 	return NULL;
- }
- 
-+static inline bool is_dma_buf_pages_priv(void *ptr)
-+{
-+	return false;
-+}
- #endif
- 
- 
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 7b6668479baf..a57757a13cc8 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -157,6 +157,7 @@ enum pp_memory_provider_type {
- 	PP_MP_HUGE_SPLIT, /* 2MB, online page alloc */
- 	PP_MP_HUGE, /* 2MB, all memory pre-allocated */
- 	PP_MP_HUGE_1G, /* 1G pages, MEP, pre-allocated */
-+	PP_MP_DMABUF_DEVMEM, /* dmabuf devmem provider */
- };
- 
- struct pp_memory_provider_ops {
-@@ -170,6 +171,7 @@ extern const struct pp_memory_provider_ops basic_ops;
- extern const struct pp_memory_provider_ops hugesp_ops;
- extern const struct pp_memory_provider_ops huge_ops;
- extern const struct pp_memory_provider_ops huge_1g_ops;
-+extern const struct pp_memory_provider_ops dmabuf_devmem_ops;
- 
- struct page_pool {
- 	struct page_pool_params p;
-@@ -420,4 +422,22 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
- 		page_pool_update_nid(pool, new_nid);
- }
- 
-+static inline bool is_page_pool_page(struct page *page)
-+{
-+	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
-+	 * in order to preserve any existing bits, such as bit 0 for the
-+	 * head page of compound page and bit 1 for pfmemalloc page, so
-+	 * mask those bits for freeing side when doing below checking,
-+	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
-+	 * to avoid recycling the pfmemalloc page.
-+	 */
-+	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
-+		return false;
-+
-+	if (!page->pp)
-+		return false;
-+
-+	return true;
-+}
-+
- #endif /* _NET_PAGE_POOL_H */
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index df3f431fcff3..e626d4e309c1 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -236,6 +236,9 @@ static int page_pool_init(struct page_pool *pool,
- 	case PP_MP_HUGE_1G:
- 		pool->mp_ops = &huge_1g_ops;
- 		break;
-+	case PP_MP_DMABUF_DEVMEM:
-+		pool->mp_ops = &dmabuf_devmem_ops;
-+		break;
- 	default:
- 		err = -EINVAL;
- 		goto free_ptr_ring;
-@@ -975,14 +978,7 @@ bool page_pool_return_skb_page(struct page *page, bool napi_safe)
- 
- 	page = compound_head(page);
- 
--	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
--	 * in order to preserve any existing bits, such as bit 0 for the
--	 * head page of compound page and bit 1 for pfmemalloc page, so
--	 * mask those bits for freeing side when doing below checking,
--	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
--	 * to avoid recycling the pfmemalloc page.
--	 */
--	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
-+	if (!is_page_pool_page(page))
- 		return false;
- 
- 	pp = page->pp;
-@@ -1538,3 +1534,95 @@ const struct pp_memory_provider_ops huge_1g_ops = {
- 	.alloc_pages		= mp_huge_1g_alloc_pages,
- 	.release_page		= mp_huge_1g_release,
- };
-+
-+/*** "Dmabuf devmem page" ***/
-+
-+/* Dmabuf devmem memory provider allocates DMA_BUF_PAGES_NET_RX pages which are
-+ * backing the dma_buf_map_attachment() from the NIC to the device memory.
-+ *
-+ * These pages are wrappers around the dma_addr of the sg entries in the
-+ * sg_table returned from dma_buf_map_attachment(). They can be passed to the
-+ * networking stack, which will generate devmem skbs from them and process them
-+ * correctly.
-+ */
-+static int mp_dmabuf_devmem_init(struct page_pool *pool)
-+{
-+	struct dma_buf_pages *priv;
-+
-+	priv = pool->mp_priv;
-+	if (!is_dma_buf_pages_priv(priv))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static void mp_dmabuf_devmem_destroy(struct page_pool *pool)
-+{
-+}
-+
-+static struct page *mp_dmabuf_devmem_alloc_pages(struct page_pool *pool,
-+						 gfp_t gfp)
-+{
-+	struct dma_buf_pages *priv = pool->mp_priv;
-+	dma_addr_t dma_addr;
-+	struct page *page;
-+
-+	page = dma_buf_pages_net_rx_alloc(priv);
-+	if (!page)
-+		return page;
-+
-+	/* It shouldn't be possible for the allocation to give us a page not
-+	 * belonging to this page_pool's pgmap.
-+	 */
-+	BUG_ON(page->pgmap != &priv->pgmap);
-+
-+	/* netdev_rxq_alloc_dma_buf_page() allocates a ZONE_DEVICE page.
-+	 * Prepare to convert it into a page_pool page. We need to hold pgmap
-+	 * and zone_device_data (which holds the dma_addr).
-+	 *
-+	 * DMA_BUF_PAGES_NET_RX are dmabuf pages created specifically to wrap
-+	 * the dma_addr of the sg_table into a struct page. These pages are
-+	 * used by code specifically equipped to handle them, so this
-+	 * conversation from ZONE_DEVICE page to page pool page should be safe.
-+	 */
-+	dma_addr = (dma_addr_t)page->zone_device_data;
-+
-+	set_page_zone(page, ZONE_NORMAL);
-+	page->pp_magic = 0;
-+	page_pool_set_pp_info(pool, page);
-+
-+	page->dma_addr = dma_addr;
-+
-+	return page;
-+}
-+
-+static bool mp_dmabuf_devmem_release_page(struct page_pool *pool,
-+		struct page *page)
-+{
-+	struct dma_buf_pages *priv = pool->mp_priv;
-+	unsigned long dma_addr = page->dma_addr;
-+
-+	page_pool_clear_pp_info(page);
-+
-+	/* As the page pool releases the page, restore it back to a ZONE_DEVICE
-+	 * page so it gets freed according to the
-+	 * page->pgmap->ops->page_free().
-+	 */
-+	set_page_zone(page, ZONE_DEVICE);
-+	page->zone_device_data = (void*)dma_addr;
-+	page->pgmap = &priv->pgmap;
-+	put_page(page);
-+
-+	/* Return false here as we don't want the page pool touching the page
-+	 * after it's released to us.
-+	 */
-+	return false;
-+}
-+
-+const struct pp_memory_provider_ops dmabuf_devmem_ops = {
-+	.init			= mp_dmabuf_devmem_init,
-+	.destroy		= mp_dmabuf_devmem_destroy,
-+	.alloc_pages		= mp_dmabuf_devmem_alloc_pages,
-+	.release_page		= mp_dmabuf_devmem_release_page,
-+};
-+EXPORT_SYMBOL(dmabuf_devmem_ops);
--- 
-2.41.0.390.g38632f3daf-goog
-
+T24gTW9uLCAyMDIzLTA3LTEwIGF0IDE3OjU0ICswMTAwLCBzemFib2xjcy5uYWd5QGFybS5jb20g
+d3JvdGU6DQo+ID4gU29tZSBtYWlscyBiYWNrLCBJIGxpc3RlZCB0aGUgdGhyZWUgdGhpbmdzIHlv
+dSBtaWdodCBiZSBhc2tpbmcgZm9yDQo+ID4gZnJvbQ0KPiA+IHRoZSBrZXJuZWwgc2lkZSBhbmQg
+cG9pbnRlZGx5IGFza2VkIHlvdSB0byBjbGFyaWZ5LiBUaGUgb25seSBvbmUNCj4gPiB5b3UNCj4g
+PiBzdGlsbCB3ZXJlIHdpc2hpbmcgZm9yIHVwIGZyb250IHdhcyAiTGVhdmUgYSB0b2tlbiBvbiBz
+d2l0Y2hpbmcgdG8NCj4gPiBhbg0KPiA+IGFsdCBzaGFkb3cgc3RhY2suIg0KPiA+IA0KPiA+IEJ1
+dCBob3cgeW91IHdhbnQgdG8gdXNlIHRoaXMgaW52b2x2ZXMgYSBsb3Qgb2YgZGV0YWlscyBmb3Ig
+aG93DQo+ID4gZ2xpYmMNCj4gPiB3aWxsIHdvcmsgKGF1dG9tYXRpYyBzaGFkb3cgc3RhY2sgZm9y
+IHNpZ2FsdHN0YWNrLCBzY2FuLXJlc3RvcmUtDQo+ID4gaW5jc3NwLA0KPiA+IGV0YykuIEkgdGhp
+bmsgeW91IGZpcnN0IG5lZWQgdG8gZ2V0IHRoZSBzdG9yeSBzdHJhaWdodCB3aXRoIG90aGVyDQo+
+ID4gbGliYw0KPiA+IGRldmVsb3BlcnMsIG90aGVyd2lzZSB0aGlzIGlzIGp1c3QgYnJhaW5zdG9y
+bWluZy4gSSdtIG5vdCBhIGdsaWJjDQo+ID4gY29udHJpYnV0b3IsIHNvIHdpbm5pbmcgbWUgb3Zl
+ciBpcyBvbmx5IGhhbGYgdGhlIGJhdHRsZS4NCj4gPiANCj4gPiBPbmx5IGFmdGVyIHRoYXQgaXMg
+c2V0dGxlZCBkbyB3ZSBnZXQgdG8gdGhlIHByb2JsZW0gb2YgdGhlIG9sZA0KPiA+IGxpYmdjYw0K
+PiA+IHVud2luZGVycywgYW5kIGhvdyBpdCBpcyBhIGNoYWxsZW5nZSB0byBldmVuIGFkZCBhbHQg
+c2hhZG93IHN0YWNrDQo+ID4gZ2l2ZW4NCj4gPiBnbGliYydzIHBsYW5zIGFuZCB0aGUgZXhpc3Rp
+bmcgYmluYXJpZXMuDQo+ID4gDQo+ID4gT25jZSB0aGF0IGlzIHNvbHZlZCB3ZSBhcmUgYXQgdGhl
+IG92ZXJmbG93IHByb2JsZW0sIGFuZCB0aGUgY3VycmVudA0KPiA+IHN0YXRlIG9mIHRoaW5raW5n
+IG9uIHRoYXQgaXMgImknbSBmYWlybHkgc3VyZSB0aGlzIGNhbiBiZSBkb25lIChidXQNCj4gPiBp
+bmRlZWQgY29tcGxpY2F0ZWQpIi4NCj4gPiANCj4gPiBTbyBJIHRoaW5rIHdlIGFyZSBzdGlsbCBt
+aXNzaW5nIGFueSBhY3Rpb25hYmxlIHJlcXVlc3RzIHRoYXQgc2hvdWxkDQo+ID4gaG9sZCB0aGlz
+IHVwLg0KPiA+IA0KPiA+IElzIHRoaXMgYSByZWFzb25hYmxlIHN1bW1hcnk/DQo+IA0KPiBub3Qg
+ZW50aXJlbHkuDQo+IA0KPiB0aGUgaGlnaCBsZXZlbCByZXF1aXJlbWVudCBpcyBhIGRlc2lnbiB0
+aGF0DQo+IA0KPiBhKSBkb2VzIG5vdCBicmVhayBtYW55IGV4aXN0aW5nIHNpZ2FsdHN0YWNrIHVz
+ZXMsDQo+IA0KPiBiKSBhbGxvd3MgaW1wbGVtZW50aW5nIGp1bXAgYW5kIHVud2luZCB0aGF0IHN1
+cHBvcnQgdGhlDQo+IMKgwqAgcmVsZXZhbnQgdXNlLWNhc2VzIGFyb3VuZCBzaWduYWxzIGFuZCBz
+dGFjayBzd2l0Y2hlcw0KPiDCoMKgIHdpdGggbWluaW1hbCB1c2Vyc3BhY2UgY2hhbmdlcy4NCg0K
+UGxlYXNlIG9wZW4gYSBkaXNjdXNzaW9uIHdpdGggdGhlIG90aGVyIGdsaWJjIGRldmVsb3BlcnMg
+dGhhdCBoYXZlIGJlZW4NCmludm9sdmVkIHdpdGggc2hhZG93IHN0YWNrIHJlZ2FyZGluZyB0aGlz
+IHN1YmplY3QoYikuIFBsZWFzZSBpbmNsdWRlIG1lDQooYW5kIHByb2JhYmx5IEFuZHlMIHdvdWxk
+IGJlIGludGVyZXN0ZWQ/KS4gSSB0aGluayB3ZSd2ZSB0YWxrZWQgaXQNCnRocm91Z2ggYXMgbXVj
+aCBhcyB5b3UgYW5kIEkgY2FuIGF0IHRoaXMgcG9pbnQuIExldCdzIGF0IGxlYXN0IHN0YXJ0IGEN
+Cm5ldyBtb3JlIGZvY3VzZWQgdGhyZWFkIG9uIHRoZSAidW53aW5kIGFjcm9zcyBzdGFja3MiIHBy
+b2JsZW0uIEFuZCBhbHNvDQpnZXQgc29tZSBjb25zZW5zdXMgb24gdGhlIHdpc2RvbSBvZiB0aGUg
+cmVsYXRlZCBzdWdnZXN0aW9uIHRvIGxlYWsNCnNoYWRvdyBzdGFja3MgaW4gb3JkZXIgdG8gdHJh
+bnNwYXJlbnRseSBzdXBwb3J0IGV4aXN0aW5nIHBvc2l4IEFQSXMuDQoNCj4gDQo+IHdoZXJlIChi
+KSBoYXMgbm90aGluZyB0byBhZGQgdG8gdjEgYWJpOiBleGlzdGluZyB1bndpbmQNCj4gYmluYXJp
+ZXMgbWVhbiB0aGlzIG5lZWRzIGEgdjIgYWJpLiAodGhlIHBvaW50IG9mIGRpc2N1c3NpbmcNCj4g
+djIgYWhlYWQgb2YgdGltZSBpcyB0byB1bmRlcnN0YW5kIHRoZSBjb3N0IG9mIHYyIGFuZCB0aGUN
+Cj4gZGl2ZXJnZW5jZSB3cnQgdGFyZ2V0cyB3aXRob3V0IGFiaSBjb21wYXQgaXNzdWUuKQ0KPiAN
+Cj4gZm9yIChhKSBteSBhY3Rpb25hYmxlIHN1Z2dlc3Rpb24gd2FzIHRvIGFjY291bnQgYWx0c3Rh
+Y2sNCj4gd2hlbiBzaXppbmcgc2hhZG93IHN0YWNrcy4gdG8gZG9jdW1lbnQgYW4gYWx0c3RhY2sg
+Y2FsbA0KPiBkZXB0aCBsaW1pdCBvbiB0aGUgbGliYyBsZXZlbCAoZS5nLiBmaXhlZCAxMDAgaXMg
+ZmluZSkgd2UNCj4gbmVlZCBndWFyYW50ZWVzIGZyb20gdGhlIGtlcm5lbC4gKGNvbnNpZGVyIHJl
+Y3Vyc2l2ZSBjYWxscw0KPiBvdmVyZmxvd2luZyB0aGUgc3RhY2sgd2l0aCBhbHRzdGFjayBjcmFz
+aCBoYW5kbGVyOiBmb3IgdGhpcw0KPiB0byBiZSByZWxpYWJsZSBzaGFkb3cgc3RhY2sgc2l6ZSA+
+IHN0YWNrIHNpemUgaXMgbmVlZGVkLg0KPiBidXQgdGhlIGRpZmYgY2FuIGJlIHRpbnkgZS5nLiAx
+IHBhZ2UgaXMgZW5vdWdoLikNCj4gDQo+IHlvdXIgcHJldmlvdXMgMyBhY3Rpb25hYmxlIGl0ZW0g
+bGlzdCB3YXMNCj4gDQo+IDEuIGFkZCB0b2tlbiB3aGVuIGhhbmRsaW5nIHNpZ25hbHMgb24gYWx0
+c3RhY2suDQo+IA0KPiB0aGlzIGZhbGxzIHVuZGVyIChiKS4geW91ciBzdW1tYXJ5IGlzIGNvcnJl
+Y3QgdGhhdCB0aGlzDQo+IHJlcXVpcmVzIHNvcnRpbmcgb3V0IG1hbnkgZmlkZGx5IGRldGFpbHMu
+DQo+IA0KPiAyLiB0b3Agb2Ygc3RhY2sgdG9rZW4uDQo+IA0KPiB0aGlzIGNhbiB3b3JrIGRpZmZl
+cmVudGx5IGFjcm9zcyB0YXJnZXRzIHNvIGkgaGF2ZSBub3RoaW5nDQo+IGFnYWluc3QgdGhlIHg4
+NiB2MSBhYmksIGJ1dCBvbiBhcm02NCB3ZSBwbGFuIHRvIGhhdmUgdGhpcy4NCj4gDQo+IDMuIG1v
+cmUgc2hhZG93IHN0YWNrIHNpemluZyBwb2xpY2llcy4NCj4gDQo+IHRoaXMgY2FuIGJlIGRvbmUg
+aW4gdGhlIGZ1dHVyZSBleGNlcHQgdGhlIGRlZmF1bHQgcG9saWN5DQo+IHNob3VsZCBiZSBmaXhl
+ZCBmb3IgKGEpIGFuZCBhIHNtYWxsZXIgc2l6ZSBpbnRyb2R1Y2VzIHRoZQ0KPiBvdmVyZmxvdyBp
+c3N1ZSB3aGljaCBtYXkgcmVxdWlyZSB2Mi4NCj4gDQo+IGluIHNob3J0IHRoZSBvbmx5IGltcG9y
+dGFudCBjaGFuZ2UgZm9yIHYxIGlzIHNoc3RrIHNpemluZy4NCg0KSSB0cmllZCBzZWFyY2hpbmcg
+dGhyb3VnaCB0aGlzIGxvbmcgdGhyZWFkIGFuZCBBRkFJQ1QgdGhpcyBpcyBhIG5ldw0KaWRlYS4g
+U29ycnkgaWYgSSBtaXNzZWQgc29tZXRoaW5nLCBidXQgeW91ciBwcmV2aW91cyBhbnN3ZXIgb24g
+dGhpcygzKQ0Kc2VlbWVkIGNvbmNlcm5lZCB3aXRoIHRoZSBvcHBvc2l0ZSBwcm9ibGVtIChvdmVy
+c2l6ZWQgc2hhZG93IHN0YWNrcykuDQoNClF1b3RlZCBmcm9tIGEgcGFzdCBtYWlsOg0KT24gTW9u
+LCAyMDIzLTA3LTAzIGF0IDE5OjE5ICswMTAwLCBzemFib2xjcy5uYWd5QGFybS5jb20gd3JvdGU6
+DQo+IGkgdGhpbmsgaXQgY2FuIGJlIGFkZGVkIGxhdGVyLg0KPiANCj4gYnV0IGl0IG1heSBiZSBp
+bXBvcnRhbnQgZm9yIGRlcGxveW1lbnQgb24gc29tZSBwbGF0Zm9ybXMsIHNpbmNlIGENCj4gbGli
+YyAob3Igb3RoZXIgbGFuZ3VhZ2UgcnVudGltZSkgbWF5IHdhbnQgdG8gc2V0IHRoZSBzaGFkb3cg
+c3RhY2sNCj4gc2l6ZSBkaWZmZXJlbnRseSB0aGFuIHRoZSBrZXJuZWwgZGVmYXVsdCwgYmVjYXVz
+ZQ0KPiANCj4gLSBsYW5ndWFnZXMgYWxsb2NhdGluZyBsYXJnZSBhcnJheXMgb24gdGhlIHN0YWNr
+DQo+ICAgKHRvbyBiaWcgc2hhZG93IHN0YWNrIGNhbiBjYXVzZSBPT00gd2l0aCBvdmVyY29tbWl0
+IG9mZiBhbmQNCj4gICBybGltaXRzIGNhbiBiZSBoaXQgbGlrZSBSTElNSVRfREFUQSwgUkxJTUlU
+X0FTIGJlY2F1c2Ugb2YgaXQpDQo+IA0KPiAtIHRpbnkgdGhyZWFkIHN0YWNrIGJ1dCBiaWcgc2ln
+YWx0c3RhY2sgKG11c2wgbGliYywgZ28pLg0KDQpTbyB5b3UgY2FuIHByb2JhYmx5IHNlZSBob3cg
+SSBnb3QgdGhlIGltcHJlc3Npb24gdGhhdCAzIHdhcyBjbG9zZWQuDQoNCkJ1dCBhbnl3YXlzLCBv
+aywgc28gaWYgd2UgYWRkIGEgcGFnZSB0byBldmVyeSB0aHJlYWQgYWxsb2NhdGVkIHNoYWRvdw0K
+c3RhY2ssIHRoZW4geW91IGNhbiBndWFyYW50ZWUgdGhhdCBhbiBhbHQgc3RhY2sgY2FuIGhhdmUg
+c29tZSByb29tIHRvDQpoYW5kbGUgYXQgbGVhc3QgYSBzaW5nbGUgYWx0IHN0YWNrIHNpZ25hbCwg
+ZXZlbiBpbiB0aGUgY2FzZSBvZg0KZXhoYXVzdGluZyB0aGUgZW50aXJlIHN0YWNrIGJ5IHJlY3Vy
+c2l2ZWx5IG1ha2luZyBjYWxscyBhbmQgcHVzaGluZw0Kbm90aGluZyBlbHNlIHRvIHRoZSBzdGFj
+ay4gU1NfQVVUT0RJU0FSTSByZW1haW5zIGEgYml0IG11ZGR5Lg0KDQpBbHNvIGdsaWJjIHdvdWxk
+IGhhdmUgdG8gc2l6ZSB1Y29udGV4dCBzaGFkb3cgc3RhY2tzIHdpdGggYW4gYWRkaXRpb25hbA0K
+cGFnZSBhcyB3ZWxsLiBJIHRoaW5rIGl0IHdvdWxkIGJlIGdvb2QgdG8gZ2V0IHNvbWUgb3RoZXIg
+c2lnbnMgb2YNCmludGVyZXN0IG9uIHRoaXMgdHdlYWsgZHVlIHRvIHRoZSByZXF1aXJlbWVudHMg
+Zm9yIGdsaWJjIHRvIHBhcnRpY2lwYXRlDQpvbiB0aGUgc2NoZW1lLiBDYW4geW91IGdhdGhlciB0
+aGF0IHF1aWNrbHksIHNvIHdlIGNhbiBnZXQgdGhpcyBhbGwNCnByZXBwZWQgYWdhaW4/DQoNClRv
+IG1lICh1bmxlc3MgSSdtIG1pc3Npbmcgc29tZXRoaW5nKSwgaXQgc2VlbXMgbGlrZSBjb21wbGlj
+YXRpbmcgdGhlDQplcXVhdGlvbiBmb3IgcHJvYmFibHkgbm8gcmVhbCB3b3JsZCBiZW5lZml0IGR1
+ZSB0byB0aGUgbG93IGNoYW5jZXMgb2YNCmV4aGF1c3RpbmcgYSBzaGFkb3cgc3RhY2suIEJ1dCBp
+ZiB0aGVyZSBpcyBjb25zZW5zdXMgb24gdGhlIGdsaWJjIHNpZGUsDQp0aGVuIEknbSBoYXBweSB0
+byBtYWtlIHRoZSBjaGFuZ2UgdG8gZmluYWxseSBzZXR0bGUgdGhpcyBkaXNjdXNzaW9uLg0KDQo=
