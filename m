@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2E474DFB0
+	by mail.lfdr.de (Postfix) with ESMTP id 46FDB74DFAE
 	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 22:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbjGJUpR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 16:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S232922AbjGJUpN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 16:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjGJUo6 (ORCPT
+        with ESMTP id S230200AbjGJUo6 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 16:44:58 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4C8E78;
-        Mon, 10 Jul 2023 13:43:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32278E7A;
+        Mon, 10 Jul 2023 13:43:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=WrqzHXPjiFBpxLGjYvBy8RYTw/0aGQBc23U0HQPGcW8=; b=sIIIXaBAvEZhZh4uxJnWMQ5+Pc
-        npP0DZ6HmpXBCr26kwW6ZIWEIYBFLBKcCXU9TqGQNOXKmiqEN+jKNSC8Z9HX/cPYfE7m02dacuYud
-        wKh6ttMmQBuM/rIifVS2Pz+d0ohGhEqc3T2T0iJTuUH7KQi8v/ym+tGS9rOCyaeXObjgR3QqJOHxm
-        8vIsImmc1dsWvnj/nSgi/1LxdYBySXkzS4DtzFU2k+ESBlnDRke/Ba9/+XMiz+v+soCRM0C5X4N3V
-        tTqXfiq7fdOrx9OF8KiFD8hBxpdxBn9jN5+qDoBsFptNWgNjIxDZgn9D7oQBpla75++vL/cMKYYnN
-        6r8rSi/Q==;
+        bh=3MITzrjsscz3EOfHnUvCpgkBiqSORw5f6CrRiwc69RA=; b=c4AwRiQVrDhrNfG53FzdnE3K+f
+        r0ZI918ORvWE+/rlklI90tC0rTzLt/bZqIrIPosed6W8sSGZxn5juLhXXar5zemsZK9Vcqxkkq584
+        hDoHHqbFMo7S/5Kft9b2sm/K+b4TNB+bz5U1evgEm9J9ZpskVhypF9jwxVDDkfidplEasdsIZjYqO
+        hH7enTDz4wEm9cPzJr4rkEdVKpTkoNXBC4520HuxwPXnYULE3dtoqo3/DlkNRUpSSrtJge5TyrO3P
+        66GSziBTrEilNJlA1FCPqBoUjxKyXL04BGstWBXnLIjizU1uhiKJbsmRFrSuJbkOfbXM/ZC6jW7yK
+        Q5ywJ05w==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIxjV-00EurW-Bs; Mon, 10 Jul 2023 20:43:45 +0000
+        id 1qIxjV-00Eurk-IK; Mon, 10 Jul 2023 20:43:45 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-arch@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v5 36/38] mm: Convert do_set_pte() to set_pte_range()
-Date:   Mon, 10 Jul 2023 21:43:37 +0100
-Message-Id: <20230710204339.3554919-37-willy@infradead.org>
+Subject: [PATCH v5 37/38] filemap: Batch PTE mappings
+Date:   Mon, 10 Jul 2023 21:43:38 +0100
+Message-Id: <20230710204339.3554919-38-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230710204339.3554919-1-willy@infradead.org>
 References: <20230710204339.3554919-1-willy@infradead.org>
@@ -51,131 +51,116 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yin Fengwei <fengwei.yin@intel.com>
 
-set_pte_range() allows to setup page table entries for a specific
-range.  It takes advantage of batched rmap update for large folio.
-It now takes care of calling update_mmu_cache_range().
+Call set_pte_range() once per contiguous range of the folio instead
+of once per page.  This batches the updates to mm counters and the
+rmap.
+
+With a will-it-scale.page_fault3 like app (change file write
+fault testing to read fault testing. Trying to upstream it to
+will-it-scale at [1]) got 15% performance gain on a 48C/96T
+Cascade Lake test box with 96 processes running against xfs.
+
+Perf data collected before/after the change:
+  18.73%--page_add_file_rmap
+          |
+           --11.60%--__mod_lruvec_page_state
+                     |
+                     |--7.40%--__mod_memcg_lruvec_state
+                     |          |
+                     |           --5.58%--cgroup_rstat_updated
+                     |
+                      --2.53%--__mod_lruvec_state
+                                |
+                                 --1.48%--__mod_node_page_state
+
+  9.93%--page_add_file_rmap_range
+         |
+          --2.67%--__mod_lruvec_page_state
+                    |
+                    |--1.95%--__mod_memcg_lruvec_state
+                    |          |
+                    |           --1.57%--cgroup_rstat_updated
+                    |
+                     --0.61%--__mod_lruvec_state
+                               |
+                                --0.54%--__mod_node_page_state
+
+The running time of __mode_lruvec_page_state() is reduced about 9%.
+
+[1]: https://github.com/antonblanchard/will-it-scale/pull/37
 
 Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- Documentation/filesystems/locking.rst |  2 +-
- include/linux/mm.h                    |  3 ++-
- mm/filemap.c                          |  3 +--
- mm/memory.c                           | 37 +++++++++++++++++----------
- 4 files changed, 28 insertions(+), 17 deletions(-)
+ mm/filemap.c | 43 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 29 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
-index ed148919e11a..211a03053992 100644
---- a/Documentation/filesystems/locking.rst
-+++ b/Documentation/filesystems/locking.rst
-@@ -661,7 +661,7 @@ locked. The VM will unlock the page.
- Filesystem should find and map pages associated with offsets from "start_pgoff"
- till "end_pgoff". ->map_pages() is called with the RCU lock held and must
- not block.  If it's not possible to reach a page without blocking,
--filesystem should skip it. Filesystem should use do_set_pte() to setup
-+filesystem should skip it. Filesystem should use set_pte_range() to setup
- page table entry. Pointer to entry associated with the page is passed in
- "pte" field in vm_fault structure. Pointers to entries for other offsets
- should be calculated relative to "pte".
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9687b48dfb1b..525a7e16850a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1314,7 +1314,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
- }
- 
- vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
--void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
-+void set_pte_range(struct vm_fault *vmf, struct folio *folio,
-+		struct page *page, unsigned int nr, unsigned long addr);
- 
- vm_fault_t finish_fault(struct vm_fault *vmf);
- vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
 diff --git a/mm/filemap.c b/mm/filemap.c
-index bdc1e0b811bf..c06e9d331416 100644
+index c06e9d331416..014b73eb96a1 100644
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -3501,8 +3501,7 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
- 			ret = VM_FAULT_NOPAGE;
+@@ -3480,11 +3480,12 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+ 	struct file *file = vma->vm_file;
+ 	struct page *page = folio_page(folio, start);
+ 	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
+-	unsigned int ref_count = 0, count = 0;
++	unsigned int count = 0;
++	pte_t *old_ptep = vmf->pte;
  
- 		ref_count++;
--		do_set_pte(vmf, page, addr);
--		update_mmu_cache(vma, addr, vmf->pte);
-+		set_pte_range(vmf, folio, page, 1, addr);
- 	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
+ 	do {
+-		if (PageHWPoison(page))
+-			continue;
++		if (PageHWPoison(page + count))
++			goto skip;
  
- 	/* Restore the vmf->pte */
-diff --git a/mm/memory.c b/mm/memory.c
-index ebb4138acdb2..e712e5fda56e 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4323,15 +4323,24 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
- }
- #endif
- 
--void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
-+/**
-+ * set_pte_range - Set a range of PTEs to point to pages in a folio.
-+ * @vmf: Fault decription.
-+ * @folio: The folio that contains @page.
-+ * @page: The first page to create a PTE for.
-+ * @nr: The number of PTEs to create.
-+ * @addr: The first address to create a PTE for.
-+ */
-+void set_pte_range(struct vm_fault *vmf, struct folio *folio,
-+		struct page *page, unsigned int nr, unsigned long addr)
- {
- 	struct vm_area_struct *vma = vmf->vma;
- 	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
- 	bool write = vmf->flags & FAULT_FLAG_WRITE;
--	bool prefault = vmf->address != addr;
-+	bool prefault = in_range(vmf->address, addr, nr * PAGE_SIZE);
- 	pte_t entry;
- 
--	flush_icache_page(vma, page);
-+	flush_icache_pages(vma, page, nr);
- 	entry = mk_pte(page, vma->vm_page_prot);
- 
- 	if (prefault && arch_wants_old_prefaulted_pte())
-@@ -4345,14 +4354,18 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
- 		entry = pte_mkuffd_wp(entry);
- 	/* copy-on-write page */
- 	if (write && !(vma->vm_flags & VM_SHARED)) {
--		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
--		page_add_new_anon_rmap(page, vma, addr);
--		lru_cache_add_inactive_or_unevictable(page, vma);
-+		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr);
-+		VM_BUG_ON_FOLIO(nr != 1, folio);
-+		folio_add_new_anon_rmap(folio, vma, addr);
-+		folio_add_lru_vma(folio, vma);
- 	} else {
--		inc_mm_counter(vma->vm_mm, mm_counter_file(page));
--		page_add_file_rmap(page, vma, false);
-+		add_mm_counter(vma->vm_mm, mm_counter_file(page), nr);
-+		folio_add_file_rmap_range(folio, page, nr, vma, false);
- 	}
--	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
-+	set_ptes(vma->vm_mm, addr, vmf->pte, entry, nr);
-+
-+	/* no need to invalidate: a not-present page won't be cached */
-+	update_mmu_cache_range(vmf, vma, addr, vmf->pte, nr);
- }
- 
- static bool vmf_pte_changed(struct vm_fault *vmf)
-@@ -4420,11 +4433,9 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
- 
- 	/* Re-check under ptl */
- 	if (likely(!vmf_pte_changed(vmf))) {
--		do_set_pte(vmf, page, vmf->address);
+ 		if (mmap_miss > 0)
+ 			mmap_miss--;
+@@ -3494,20 +3495,34 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+ 		 * handled in the specific fault path, and it'll prohibit the
+ 		 * fault-around logic.
+ 		 */
+-		if (!pte_none(*vmf->pte))
+-			continue;
 -
--		/* no need to invalidate: a not-present page won't be cached */
--		update_mmu_cache(vma, vmf->address, vmf->pte);
-+		struct folio *folio = page_folio(page);
+-		if (vmf->address == addr)
+-			ret = VM_FAULT_NOPAGE;
++		if (!pte_none(vmf->pte[count]))
++			goto skip;
  
-+		set_pte_range(vmf, folio, page, 1, vmf->address);
- 		ret = 0;
- 	} else {
- 		update_mmu_tlb(vma, vmf->address, vmf->pte);
+-		ref_count++;
+-		set_pte_range(vmf, folio, page, 1, addr);
+-	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
++		count++;
++		continue;
++skip:
++		if (count) {
++			set_pte_range(vmf, folio, page, count, addr);
++			folio_ref_add(folio, count);
++			if (in_range(vmf->address, addr, count))
++				ret = VM_FAULT_NOPAGE;
++		}
+ 
+-	/* Restore the vmf->pte */
+-	vmf->pte -= nr_pages;
++		count++;
++		page += count;
++		vmf->pte += count;
++		addr += count * PAGE_SIZE;
++		count = 0;
++	} while (--nr_pages > 0);
++
++	if (count) {
++		set_pte_range(vmf, folio, page, count, addr);
++		folio_ref_add(folio, count);
++		if (in_range(vmf->address, addr, count))
++			ret = VM_FAULT_NOPAGE;
++	}
+ 
+-	folio_ref_add(folio, ref_count);
++	vmf->pte = old_ptep;
+ 	WRITE_ONCE(file->f_ra.mmap_miss, mmap_miss);
+ 
+ 	return ret;
 -- 
 2.39.2
 
