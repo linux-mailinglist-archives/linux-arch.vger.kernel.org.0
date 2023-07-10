@@ -2,45 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EEF74DF19
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 22:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5903C74DF2A
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 22:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjGJUTJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 16:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S230399AbjGJUY1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 16:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjGJUTI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 16:19:08 -0400
+        with ESMTP id S230465AbjGJUYX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 16:24:23 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F4D1B2;
-        Mon, 10 Jul 2023 13:18:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4CB198;
+        Mon, 10 Jul 2023 13:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZV6+5ZsIhvZLlZYDqAT59X7+VfV8F+fbtD5fCX3g0W4=; b=Wzn841NyYIQXYIGiYDX2X1Mlck
-        ty00EO4KYM+P78vdrMuP+kSnJ9pdEET8QYE2b2HTKE3DxkC2q0pXkBBsBoUd9svobF1qlOYzv8vRB
-        LjwRC8d6N18vRNG65WRc6STmGx0iaAG9+J9CJzVIgyxu62BCnI1ne5Wsch1yBbavgGMQtnhqQoMTz
-        L9s3GyZckfG2X+PHIS45QaUJcA6yoUncxCy8dnLyIrtV1SoriXmeRrlr+ayu435XVzY6NuDy9c97p
-        6NIZ3ZpIqVIU3Op+B0OrYzkXHNKjImuG4/u6g2n8w6dwK+R9GS6Q8eWGmzU7TLdTgdJJUwC0470o3
-        FYVQxhgQ==;
+        bh=G0ut9Msx8avXgkOpqAa+A7Dar6d8OWfnht1FICkF8CU=; b=FOqO3cdm12VAe6nUmn7GX8ljm1
+        IVWHYgztJseuOAdpb0Kl7UTesY1zGNKYMs5e5EBFqrZ0ooTqGXwH4QeLUQbdv8JXL7fENKqEe6VjM
+        SQXo/iyUUboIV1vXsJOTyGvNvvsYwJ5gWy8hUjxBQylojeQqUVVDk4Ovc3cmoCOmdphg5mAVEP7Uf
+        kRZ+dXmJA1uRht41tVmc5AzHGP5F+rFYYcIAo7BH8Z6T/u7Q9ThfhPZILyYI1SpBKAx3x4ScvmVJX
+        IrVLMuAKMIcKwmG/6tZECnJSU/lD3HpvUDf7IhlthMI3jSUs6ymuZ6XM25REdQ3J2tYwnjueQOVet
+        T7JE38Vg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIxLP-00Etis-16; Mon, 10 Jul 2023 20:18:51 +0000
-Date:   Mon, 10 Jul 2023 21:18:50 +0100
+        id 1qIxQd-00Etrn-OE; Mon, 10 Jul 2023 20:24:15 +0000
+Date:   Mon, 10 Jul 2023 21:24:15 +0100
 From:   Matthew Wilcox <willy@infradead.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 17/36] nios2: Implement the new page table range API
-Message-ID: <ZKxnqmk3sstOtDZQ@casper.infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v4 20/36] powerpc: Implement the new page table range API
+Message-ID: <ZKxo79JYjEvMGAW3@casper.infradead.org>
 References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-18-willy@infradead.org>
- <ZBGZKTP7BGhvS9Oo@kernel.org>
- <ce464a86-b75e-3488-bab0-cbea1b3e2572@kernel.org>
+ <20230315051444.3229621-21-willy@infradead.org>
+ <1743d96f-8efe-0127-2cae-7368ce0eb2e6@csgroup.eu>
+ <c7f08247-8bcd-184c-5e06-91f91257f1f6@csgroup.eu>
+ <ZBPizB6TmDp0psOl@casper.infradead.org>
+ <eb8ad2f2-06ae-4daf-5163-11b950e640ad@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ce464a86-b75e-3488-bab0-cbea1b3e2572@kernel.org>
+In-Reply-To: <eb8ad2f2-06ae-4daf-5163-11b950e640ad@csgroup.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,29 +57,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 05:45:54PM -0500, Dinh Nguyen wrote:
+On Sat, Mar 18, 2023 at 09:19:04AM +0000, Christophe Leroy wrote:
+> void set_ptes(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> 		pte_t pte, unsigned int nr)
+> {
+> 	pgprot_t prot;
+> 	unsigned long pfn;
+> 	/*
+> 	 * Make sure hardware valid bit is not set. We don't do
+> 	 * tlb flush for this update.
+> 	 */
+> 	VM_WARN_ON(pte_hw_valid(*ptep) && !pte_protnone(*ptep));
 > 
+> 	/* Note: mm->context.id might not yet have been assigned as
+> 	 * this context might not have been activated yet when this
+> 	 * is called.
+> 	 */
+> 	pte = set_pte_filter(pte);
 > 
-> On 3/15/23 05:08, Mike Rapoport wrote:
-> > On Wed, Mar 15, 2023 at 05:14:25AM +0000, Matthew Wilcox (Oracle) wrote:
-> > > Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
-> > > flush_dcache_folio().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
-> > > from being per-page to per-folio.
-> > > 
-> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > Cc: Dinh Nguyen <dinguyen@kernel.org>
-> > 
-> > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > 
-> 
-> Applied!
+> 	prot = pte_pgprot(pte);
+> 	pfn = pte_pfn(pte);
+> 	/* Perform the setting of the PTE */
+> 	for (;;) {
+> 		__set_pte_at(mm, addr, ptep, pfn_pte(pfn, prot), 0);
+> 		if (--nr == 0)
+> 			break;
+> 		ptep++;
+> 		pfn++;
+> 		addr += PAGE_SIZE;
+> 	}
+> }
 
-Sorry, what?  You can't pick this patch out of the middle of a series
-and apply it!  This needs various earlier patches to work.  And then
-later patches depend on this one having been applied, so if we were to
-go the route of "please arch maintainers apply each of these patches",
-it'd take over a year to get them all in.
-
-As I said in the cover letter, this will all go in through the mm tree.
-So what I want from arch maintainers is an Acked-by/Reviewed-by/Tested-by,
-and then Andrew will apply the whole set.
+I'd rather the per-arch code were as similar to each other and the
+generic implementation as possible.  Fewer bugs that way and easier
+for other people to make changes that have to touch every architecture
+in the future.
