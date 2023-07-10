@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8C574DFA1
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 22:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2E474DFB0
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 22:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbjGJUpK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 16:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S233042AbjGJUpR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 16:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjGJUo5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 16:44:57 -0400
+        with ESMTP id S230017AbjGJUo6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 16:44:58 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC36E77;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4C8E78;
         Mon, 10 Jul 2023 13:43:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=tse6c+PyGQiNNj587rPbXI3VeCMysTQLdbxkBMTFw2U=; b=ByTAb8QLCEfj5LUw8NRweblA0g
-        IWcJ9mcvelPbcUNEc/gRgpW6n4ttTTktmyu3V7EmrnW0an+1JIqhmeCeyRQBWmDPJuFHUwjzFDWpo
-        XAB1S/E03sxX4yFKmTZaX+54W5iyrUP3Co8NFiKEQfVqMdDBwutG450DZAYzgF4pCRF6XxL4ZmNwA
-        N9WKG1uQmnB8U8rygg5WlNYdy5feYokVBgqd+1DtKuYcoWmWh+pL3pdz30uR+RgEeTguP6cjlmefw
-        71UTFiAkQLzksnwO8aPUFBJy4ZdRrZcfBsOz5IlsZVF5NRmRO55SF3NP3Vg1E93vlS+J6o3/PcAqu
-        a09WvaTg==;
+        bh=WrqzHXPjiFBpxLGjYvBy8RYTw/0aGQBc23U0HQPGcW8=; b=sIIIXaBAvEZhZh4uxJnWMQ5+Pc
+        npP0DZ6HmpXBCr26kwW6ZIWEIYBFLBKcCXU9TqGQNOXKmiqEN+jKNSC8Z9HX/cPYfE7m02dacuYud
+        wKh6ttMmQBuM/rIifVS2Pz+d0ohGhEqc3T2T0iJTuUH7KQi8v/ym+tGS9rOCyaeXObjgR3QqJOHxm
+        8vIsImmc1dsWvnj/nSgi/1LxdYBySXkzS4DtzFU2k+ESBlnDRke/Ba9/+XMiz+v+soCRM0C5X4N3V
+        tTqXfiq7fdOrx9OF8KiFD8hBxpdxBn9jN5+qDoBsFptNWgNjIxDZgn9D7oQBpla75++vL/cMKYYnN
+        6r8rSi/Q==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIxjV-00EurO-7T; Mon, 10 Jul 2023 20:43:45 +0000
+        id 1qIxjV-00EurW-Bs; Mon, 10 Jul 2023 20:43:45 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-arch@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v5 35/38] rmap: add folio_add_file_rmap_range()
-Date:   Mon, 10 Jul 2023 21:43:36 +0100
-Message-Id: <20230710204339.3554919-36-willy@infradead.org>
+Subject: [PATCH v5 36/38] mm: Convert do_set_pte() to set_pte_range()
+Date:   Mon, 10 Jul 2023 21:43:37 +0100
+Message-Id: <20230710204339.3554919-37-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230710204339.3554919-1-willy@infradead.org>
 References: <20230710204339.3554919-1-willy@infradead.org>
@@ -51,119 +51,131 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yin Fengwei <fengwei.yin@intel.com>
 
-folio_add_file_rmap_range() allows to add pte mapping to a specific
-range of file folio. Comparing to page_add_file_rmap(), it batched
-updates __lruvec_stat for large folio.
+set_pte_range() allows to setup page table entries for a specific
+range.  It takes advantage of batched rmap update for large folio.
+It now takes care of calling update_mmu_cache_range().
 
 Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/rmap.h |  2 ++
- mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
- 2 files changed, 48 insertions(+), 14 deletions(-)
+ Documentation/filesystems/locking.rst |  2 +-
+ include/linux/mm.h                    |  3 ++-
+ mm/filemap.c                          |  3 +--
+ mm/memory.c                           | 37 +++++++++++++++++----------
+ 4 files changed, 28 insertions(+), 17 deletions(-)
 
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index b87d01660412..a3825ce81102 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
- 		unsigned long address);
- void page_add_file_rmap(struct page *, struct vm_area_struct *,
- 		bool compound);
-+void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
-+		struct vm_area_struct *, bool compound);
- void page_remove_rmap(struct page *, struct vm_area_struct *,
- 		bool compound);
- 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 2668f5ea3534..642b3ad8bb1a 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1306,31 +1306,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
+diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+index ed148919e11a..211a03053992 100644
+--- a/Documentation/filesystems/locking.rst
++++ b/Documentation/filesystems/locking.rst
+@@ -661,7 +661,7 @@ locked. The VM will unlock the page.
+ Filesystem should find and map pages associated with offsets from "start_pgoff"
+ till "end_pgoff". ->map_pages() is called with the RCU lock held and must
+ not block.  If it's not possible to reach a page without blocking,
+-filesystem should skip it. Filesystem should use do_set_pte() to setup
++filesystem should skip it. Filesystem should use set_pte_range() to setup
+ page table entry. Pointer to entry associated with the page is passed in
+ "pte" field in vm_fault structure. Pointers to entries for other offsets
+ should be calculated relative to "pte".
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9687b48dfb1b..525a7e16850a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1314,7 +1314,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
  }
  
- /**
-- * page_add_file_rmap - add pte mapping to a file page
-- * @page:	the page to add the mapping to
-+ * folio_add_file_rmap_range - add pte mapping to page range of a folio
-+ * @folio:	The folio to add the mapping to
-+ * @page:	The first page to add
-+ * @nr_pages:	The number of pages which will be mapped
-  * @vma:	the vm area in which the mapping is added
-  * @compound:	charge the page as compound or small page
-  *
-+ * The page range of folio is defined by [first_page, first_page + nr_pages)
-+ *
-  * The caller needs to hold the pte lock.
-  */
--void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
--		bool compound)
-+void folio_add_file_rmap_range(struct folio *folio, struct page *page,
-+			unsigned int nr_pages, struct vm_area_struct *vma,
-+			bool compound)
- {
--	struct folio *folio = page_folio(page);
- 	atomic_t *mapped = &folio->_nr_pages_mapped;
--	int nr = 0, nr_pmdmapped = 0;
--	bool first;
-+	unsigned int nr_pmdmapped = 0, first;
-+	int nr = 0;
+ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
+-void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
++void set_pte_range(struct vm_fault *vmf, struct folio *folio,
++		struct page *page, unsigned int nr, unsigned long addr);
  
--	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
-+	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
+ vm_fault_t finish_fault(struct vm_fault *vmf);
+ vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
+diff --git a/mm/filemap.c b/mm/filemap.c
+index bdc1e0b811bf..c06e9d331416 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3501,8 +3501,7 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+ 			ret = VM_FAULT_NOPAGE;
  
- 	/* Is page being mapped by PTE? Is this its first map to be added? */
- 	if (likely(!compound)) {
--		first = atomic_inc_and_test(&page->_mapcount);
--		nr = first;
--		if (first && folio_test_large(folio)) {
--			nr = atomic_inc_return_relaxed(mapped);
--			nr = (nr < COMPOUND_MAPPED);
--		}
-+		do {
-+			first = atomic_inc_and_test(&page->_mapcount);
-+			if (first && folio_test_large(folio)) {
-+				first = atomic_inc_return_relaxed(mapped);
-+				first = (first < COMPOUND_MAPPED);
-+			}
-+
-+			if (first)
-+				nr++;
-+		} while (page++, --nr_pages > 0);
- 	} else if (folio_test_pmd_mappable(folio)) {
- 		/* That test is redundant: it's for safety or to optimize out */
+ 		ref_count++;
+-		do_set_pte(vmf, page, addr);
+-		update_mmu_cache(vma, addr, vmf->pte);
++		set_pte_range(vmf, folio, page, 1, addr);
+ 	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
  
-@@ -1359,6 +1367,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
- 	mlock_vma_folio(folio, vma, compound);
+ 	/* Restore the vmf->pte */
+diff --git a/mm/memory.c b/mm/memory.c
+index ebb4138acdb2..e712e5fda56e 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4323,15 +4323,24 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
  }
+ #endif
  
+-void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
 +/**
-+ * page_add_file_rmap - add pte mapping to a file page
-+ * @page:	the page to add the mapping to
-+ * @vma:	the vm area in which the mapping is added
-+ * @compound:	charge the page as compound or small page
-+ *
-+ * The caller needs to hold the pte lock.
++ * set_pte_range - Set a range of PTEs to point to pages in a folio.
++ * @vmf: Fault decription.
++ * @folio: The folio that contains @page.
++ * @page: The first page to create a PTE for.
++ * @nr: The number of PTEs to create.
++ * @addr: The first address to create a PTE for.
 + */
-+void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
-+		bool compound)
-+{
-+	struct folio *folio = page_folio(page);
-+	unsigned int nr_pages;
++void set_pte_range(struct vm_fault *vmf, struct folio *folio,
++		struct page *page, unsigned int nr, unsigned long addr)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
+ 	bool write = vmf->flags & FAULT_FLAG_WRITE;
+-	bool prefault = vmf->address != addr;
++	bool prefault = in_range(vmf->address, addr, nr * PAGE_SIZE);
+ 	pte_t entry;
+ 
+-	flush_icache_page(vma, page);
++	flush_icache_pages(vma, page, nr);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+ 
+ 	if (prefault && arch_wants_old_prefaulted_pte())
+@@ -4345,14 +4354,18 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+ 		entry = pte_mkuffd_wp(entry);
+ 	/* copy-on-write page */
+ 	if (write && !(vma->vm_flags & VM_SHARED)) {
+-		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+-		page_add_new_anon_rmap(page, vma, addr);
+-		lru_cache_add_inactive_or_unevictable(page, vma);
++		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr);
++		VM_BUG_ON_FOLIO(nr != 1, folio);
++		folio_add_new_anon_rmap(folio, vma, addr);
++		folio_add_lru_vma(folio, vma);
+ 	} else {
+-		inc_mm_counter(vma->vm_mm, mm_counter_file(page));
+-		page_add_file_rmap(page, vma, false);
++		add_mm_counter(vma->vm_mm, mm_counter_file(page), nr);
++		folio_add_file_rmap_range(folio, page, nr, vma, false);
+ 	}
+-	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
++	set_ptes(vma->vm_mm, addr, vmf->pte, entry, nr);
 +
-+	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
-+
-+	if (likely(!compound))
-+		nr_pages = 1;
-+	else
-+		nr_pages = folio_nr_pages(folio);
-+
-+	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
-+}
-+
- /**
-  * page_remove_rmap - take down pte mapping from a page
-  * @page:	page to remove mapping from
++	/* no need to invalidate: a not-present page won't be cached */
++	update_mmu_cache_range(vmf, vma, addr, vmf->pte, nr);
+ }
+ 
+ static bool vmf_pte_changed(struct vm_fault *vmf)
+@@ -4420,11 +4433,9 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
+ 
+ 	/* Re-check under ptl */
+ 	if (likely(!vmf_pte_changed(vmf))) {
+-		do_set_pte(vmf, page, vmf->address);
+-
+-		/* no need to invalidate: a not-present page won't be cached */
+-		update_mmu_cache(vma, vmf->address, vmf->pte);
++		struct folio *folio = page_folio(page);
+ 
++		set_pte_range(vmf, folio, page, 1, vmf->address);
+ 		ret = 0;
+ 	} else {
+ 		update_mmu_tlb(vma, vmf->address, vmf->pte);
 -- 
 2.39.2
 
