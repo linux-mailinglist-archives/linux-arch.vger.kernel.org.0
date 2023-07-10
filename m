@@ -2,101 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A66E74D105
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 11:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5B874D913
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 16:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjGJJI6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 05:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S233267AbjGJOdk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 10:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjGJJIk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 05:08:40 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306A9C3;
-        Mon, 10 Jul 2023 02:08:39 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A8hs1S028697;
-        Mon, 10 Jul 2023 09:08:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=6I47qqc5Vkl3hKjR5sH6y/ymC6xY3IFvu3Wy0nPK6v8=;
- b=hfjLiMvnmjttmzh9pdwt2oavXBFDiSq9HyqoBnd9cN3OZQzDV0OVjaC6oqpzKtX9AWXE
- mZgoNrWfzSleqPzUA2n35epIkcg6JGVC+s0/OWWYLpj4FGPUOfGoMGuwDjmvz9B/Y7He
- ovg93HtEuDh2/9K+qZWBzjqpJ6mldvXFMExlqvjfrsOVtLrCs3yq/5zXxy22Jr1s6QCB
- +mF//AIsDeZ3C64dWOCeRfCB4fs1d2Rq519nPvZ9bcKFnZkpjziJa+oD4iMlCIka9lFQ
- SwxplljyzsPMax0k/vdS0GpN/bcGVb/mbHvRwpckcmlqf8Jdirw1N2b0+bA8NIc59UTC XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rreqsrppf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:08:11 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36A8isEn030917;
-        Mon, 10 Jul 2023 09:08:10 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rreqsrpkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:08:10 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36A4oQF7031029;
-        Mon, 10 Jul 2023 09:08:07 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rpye594t8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:08:06 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36A984b441615704
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jul 2023 09:08:04 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C44020040;
-        Mon, 10 Jul 2023 09:08:04 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 33D7D2004B;
-        Mon, 10 Jul 2023 09:08:04 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jul 2023 09:08:04 +0000 (GMT)
-Message-ID: <ff068ea8-c731-3763-066b-2503ffddd0e8@linux.ibm.com>
-Date:   Mon, 10 Jul 2023 11:08:03 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v4 00/10] Introduce SMT level and add PowerPC support
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230705145143.40545-1-ldufour@linux.ibm.com>
- <c66e3e800a7d257ef7a90749fe567f056f4c3ace.camel@intel.com>
-Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <c66e3e800a7d257ef7a90749fe567f056f4c3ace.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fxSR7G-W2yRtj5FOOq2Crrc1RbAtqDXy
-X-Proofpoint-ORIG-GUID: MtIfwe2cYP4IfnB_g9wKAdATOPbCWP7z
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229793AbjGJOdj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 10:33:39 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED766F2;
+        Mon, 10 Jul 2023 07:33:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4R05n06lh5z9xFQh;
+        Mon, 10 Jul 2023 22:22:28 +0800 (CST)
+Received: from [10.81.201.45] (unknown [10.81.201.45])
+        by APP2 (Coremail) with SMTP id GxC2BwCnVz6VFqxk3ZpTBA--.64987S2;
+        Mon, 10 Jul 2023 15:33:09 +0100 (CET)
+Message-ID: <75caf089-be17-a518-6efa-bd17d96d4451@huaweicloud.com>
+Date:   Mon, 10 Jul 2023 16:32:55 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_05,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- mlxlogscore=999 lowpriorityscore=0 mlxscore=0 bulkscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307100082
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+To:     Olivier Dion <odion@efficios.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rnk@google.com, Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        gcc@gcc.gnu.org, llvm@lists.linux.dev
+References: <87ttukdcow.fsf@laura>
+ <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com> <87y1jrfxbp.fsf@laura>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <87y1jrfxbp.fsf@laura>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwCnVz6VFqxk3ZpTBA--.64987S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AryxWr48Ww18tF45CF17Jrb_yoW3JrWrpF
+        WYk3Wvkw1ktwn7Z3WkA3W7Z3y3AayrJ3y5JF95Kr18Aw1Ygw1xKr4xKrW5uFZrJrs7Jw12
+        qr4jywnru3WUZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -104,117 +79,162 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
+Am 7/7/2023 um 7:25 PM schrieb Olivier Dion:
+> On Fri, 07 Jul 2023, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com> wrote:
+> [...]
+>>> This is a request for comments on extending the atomic builtins API to
+>>> help avoiding redundant memory barriers.  Indeed, there are
+>>> discrepancies between the Linux kernel consistency memory model (LKMM)
+>>> and the C11/C++11 memory consistency model [0].  For example,
+>>> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
+>>> have implicit memory barriers before/after the operations [1-2], while
+>>> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
+>>> do not have any ordering guarantees of an atomic thread fence
+>>> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+>>
+>> The issues run quite a bit deeper than this. The two models have two
+>> completely different perspectives that are quite much incompatible.
+> Agreed.  Our intent is not to close the gap completely, but to reduce
+> the gap between the two models, by supporting the "full barrier
+> before/after" semantic of LKMM in the C11/C++11 memory model.
 
-Le 09/07/2023 à 17:25, Zhang, Rui a écrit :
-> Hi, Laurent,
-> 
-> I ran into a boot hang regression with latest upstream code, and it
-> took me a while to bisect the offending commit and workaround it.
-> 
-> Now I have tested this patch series on an Intel RaptorLake Hybrid
-> platform (4 Pcores with HT and 4 Ecores without HT), and it works as
-> expected.
-> 
-> So, for patch 1~7 in this series,
-> 
-> Tested-by: Zhang Rui <rui.zhang@intel.com>
 
-Thanks Rui!
+I think what you're trying to achieve has nothing to do with the gap at 
+all. (But do check out the IMM paper https://plv.mpi-sws.org/imm/ for 
+what is involved in bridging the gap between LKMM-like and C11-like models).
 
-> thanks,
-> rui
-> 
-> On Wed, 2023-07-05 at 16:51 +0200, Laurent Dufour wrote:
->> I'm taking over the series Michael sent previously [1] which is
->> smartly
->> reviewing the initial series I sent [2].  This series is addressing
->> the
->> comments sent by Thomas and me on the Michael's one.
+What you're trying to achieve is to certify some urcu algorithms, 
+without making the code unnecessarily slower.
+Your problem is that the algorithm is implemented using the LKMM API, 
+and you want to check it with a tool (TSAN) meant to (dynamically) 
+analyze C11 code that relies on a subset of C11's memory model.
+
+What I still don't understand is whether using TSAN as-is is a formal 
+requirement from the certification you are trying to achieve, or whether 
+you could either slightly modify the TSAN toolchain to give answers 
+consistent with the behavior on LKMM, or use a completely different tool.
+
+For example, you could eliminate the worry about the unnecessary 
+barriers by including the extra barriers only in the TSAN' (modified 
+TSAN) analysis.
+In that case TSAN' adds additional, redundant barriers in some cases 
+during the analysis process, but those barriers would be gone the moment 
+you stop using TSAN'.
+
+You would need to argue that this additional instrumentation doesn't 
+hide any data races, but I suspect that wouldn't be too hard.
+
+Another possibility is to use a tool like Dat3M that supports LKMM to 
+try and verify your code, but I'm not sure if these tools are 
+feature-complete enough to verify the specific algorithms you have in 
+mind (e.g., mixed-size accesses are an issue, and Paul told me there's a 
+few of those in (U)RCU. But maybe the cost of changing the code to 
+full-sized accesses might be cheaper than relying on extra barriers.)
+
+
+FWIW your current solution of adding a whole class of fences to 
+essentially C11 and the toolchain, and modifying the code to use these 
+fences, isn't a way I would want to take.
+
+
+>> I think all you can really do is bridge the gap at the level of the
+>> generated assembly.  I.e., don't bridge the gap between LKMM and the
+>> C11 MCM. Bridge the gap between the assembly code generated by C11
+>> atomics and the one generated by LKMM. But I'm not sure that's really
+>> the task here.
+> [...]
+> However, nothing prevents a toolchain from changing the emitted
+> assembler in the future, which would make things fragile.  The only
+> thing that is guaranteed to not change is the definitions in the
+> standard (C11/C++11).  Anything else is fair game for optimizations.
+
+Not quite. If you rely on the LKMM API to generate the final code, you 
+can definitely prove that the LKMM API implementation has a C11-like 
+memory model abstraction.
+For example, you might be able to prove that the LKMM implementation of 
+a strong xchg guarantees at least the same ordering as a seq_cst fence ; 
+seq_cst xchg ; seq_cst fence sequence in C11.
+I don't think it's that fragile since 1) it's a manually written 
+volatile assembler mapping, so there's not really a lot the toolchains 
+can do about it and 2) the LKMM implementation of atomics rarely 
+changes, and should still have similar guarantees after the change.
+
+The main issue will be as we discussed before and below that TSAN will 
+still trigger false positives.
+
+
+>>> [...] For example, to make Read-Modify-Write (RMW) operations match
+>>> the Linux kernel "full barrier before/after" semantics, the liburcu's
+>>> uatomic API has to emit both a SEQ_CST RMW operation and a subsequent
+>>> thread fence SEQ_CST, which leads to duplicated barriers in some cases.
+>> Does it have to though? Can't you just do e.g. an release RMW
+>> operation followed by an after_atomic  fence?  And for loads, a
+>> SEQ_CST fence followed by an acquire load? Analogously (but: mirrored)
+>> for stores.
+> That would not improve anything for RMW.  Consider the following example
+> and its resulting assembler on x86-64 gcc 13.1 -O2:
+>
+> 	int exchange(int *x, int y)
+> 	{
+> 		int r = __atomic_exchange_n(x, y, __ATOMIC_RELEASE);
+> 		__atomic_thread_fence(__ATOMIC_SEQ_CST);
+>
+> 		return r;
+> 	}
+>
+>          exchange:
+> 	       	movl    %esi, %eax
+> 	       	xchgl   (%rdi), %eax
+> 	       	lock orq $0, (%rsp) ;; Redundant with previous exchange
+>         		ret
+
+
+I specifically meant the after_atomic fence from LKMM, which will 
+compile to nothing on x86 (not even a compiler barrier).
+However, at that point I also wasn't clear on what you're trying to 
+achieve. I see now that using LKMM barriers doesn't help you here.
+
+
+
+>> You mentioned that the goal is to check some code written using LKMM
+>> primitives with TSAN due to some formal requirements. What exactly do
+>> these requirements entail? Do you need to check the code exactly as it
+>> will be executed (modulo the TSAN instrumentation)? Is it an option to
+>> map to normal builtins with suboptimal performance just for the
+>> verification purpose, but then run the slightly more optimized
+>> original code later?
+> We aim to validate with TSAN the code that will run during production,
+> minus TSAN itself.
+>
+>> Specifically for TSAN's ordering requirements, you may need to make
+>> LKMM's RMWs into acq+rel with an extra mb, even if all that extra
+>> ordering isn't necessary at the assembler level.
 >>
->> Here is a short introduction to the issue this series is addressing:
 >>
->> When a new CPU is added, the kernel is activating all its threads.
->> This
->> leads to weird, but functional, result when adding CPU on a SMT 4
->> system
->> for instance.
->>
->> Here the newly added CPU 1 has 8 threads while the other one has 4
->> threads
->> active (system has been booted with the 'smt-enabled=4' kernel
->> option):
->>
->> ltcden3-lp12:~ # ppc64_cpu --info
->> Core   0:    0*    1*    2*    3*    4     5     6     7
->> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
->>
->> This mixed SMT level may confused end users and/or some applications.
->>
->> There is no SMT level recorded in the kernel (common code), neither
->> in user
->> space, as far as I know. Such a level is helpful when adding new CPU
->> or
->> when optimizing the energy efficiency (when reactivating CPUs).
->>
->> When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT
->> level
->> (cpu_smt_num_threads) and few callbacks allowing the architecture
->> code to
->> fine control this value, setting a max and a "at boot" level, and
->> controling whether a thread should be onlined or not.
->>
->> v4:
->>    Rebase on top of 6.5's updates
->>    Remove a dependancy against the X86's symbol
->> cpu_primary_thread_mask
->> v3:
->>    Fix a build error in the patch 6/9
->> v2:
->>    As Thomas suggested,
->>      Reword some commit's description
->>      Remove topology_smt_supported()
->>      Remove topology_smt_threads_supported()
->>      Introduce CONFIG_SMT_NUM_THREADS_DYNAMIC
->>      Remove switch() in __store_smt_control()
->>    Update kernel-parameters.txt
->>
->> [1]
->> https://lore.kernel.org/linuxppc-dev/20230524155630.794584-1-mpe@ellerman.id.au/
->> [2]
->> https://lore.kernel.org/linuxppc-dev/20230331153905.31698-1-ldufour@linux.ibm.com/
->>
->>
->> Laurent Dufour (2):
->>    cpu/hotplug: remove dependancy against cpu_primary_thread_mask
->>    cpu/SMT: Remove topology_smt_supported()
->>
->> Michael Ellerman (8):
->>    cpu/SMT: Move SMT prototypes into cpu_smt.h
->>    cpu/SMT: Move smt/control simple exit cases earlier
->>    cpu/SMT: Store the current/max number of threads
->>    cpu/SMT: Create topology_smt_thread_allowed()
->>    cpu/SMT: Allow enabling partial SMT states via sysfs
->>    powerpc/pseries: Initialise CPU hotplug callbacks earlier
->>    powerpc: Add HOTPLUG_SMT support
->>    powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
->>
->>   .../ABI/testing/sysfs-devices-system-cpu      |   1 +
->>   .../admin-guide/kernel-parameters.txt         |   4 +-
->>   arch/Kconfig                                  |   3 +
->>   arch/powerpc/Kconfig                          |   2 +
->>   arch/powerpc/include/asm/topology.h           |  15 ++
->>   arch/powerpc/kernel/smp.c                     |   8 +-
->>   arch/powerpc/platforms/pseries/hotplug-cpu.c  |  30 ++--
->>   arch/powerpc/platforms/pseries/pseries.h      |   2 +
->>   arch/powerpc/platforms/pseries/setup.c        |   2 +
->>   arch/x86/include/asm/topology.h               |   4 +-
->>   arch/x86/kernel/cpu/common.c                  |   2 +-
->>   arch/x86/kernel/smpboot.c                     |   8 -
->>   include/linux/cpu.h                           |  25 +--
->>   include/linux/cpu_smt.h                       |  33 ++++
->>   kernel/cpu.c                                  | 142 +++++++++++++---
->> --
->>   15 files changed, 196 insertions(+), 85 deletions(-)
->>   create mode 100644 include/linux/cpu_smt.h
->>
-> 
+>> Also note that no matter what you do, due to the two different
+>> perspectives, TSAN's hb relation may introduce false positive data
+>> races w.r.t. LKMM.  For example, if the happens-before ordering is
+>> guaranteed through pb starting with coe/fre.
+> This is why we have implemented our primitives and changed our
+> algorithms so that they use the acquire/release semantics of the
+> C11/C++11 memory model.
+>
+>> Without thinking too hard, it seems to me no matter what fences and
+>> barriers you introduce, TSAN will not see this kind of ordering and
+>> consider the situation a data race.
+> We have come to the same conclusion, mainly because TSAN does not
+> support thread fence in its verifications.
+
+That's also a concern (although I thought they fixed that a year or two 
+ago, but I must be mistaken).
+
+What I mean is that even if TSAN appropriately used all fences for 
+hb-analysis, and even if you added strong fences all over your code, 
+there are (as far as I can see) still cases where TSAN will tell you 
+there's a data race (on C11) but there isn't one on LKMM.
+
+
+good luck
+
+jonas
+
