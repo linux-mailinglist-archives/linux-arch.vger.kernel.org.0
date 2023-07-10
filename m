@@ -2,55 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2C774E137
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 00:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DB674E13E
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 00:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjGJWdk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 18:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S229658AbjGJWdv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 18:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjGJWdj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 18:33:39 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AA81B8
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:33:36 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-573d70da2afso55016247b3.2
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:33:36 -0700 (PDT)
+        with ESMTP id S230351AbjGJWds (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 18:33:48 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27CBE40
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:33:45 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56cf9a86277so60594947b3.3
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:33:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689028416; x=1691620416;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vww/pYdC1DJeva2AfnXbGu4C5u6TgbMhBMBTAdXoxfg=;
-        b=tYuqkf1i1ML5V4o25T0vWw2AWYvTHmOdYjkPseY2zygasjrULUgRP0lpwslZq4BlNn
-         r1p4R05iJaCaBeDKpj43UQs0ywurMXa8xm/jLGob/nvAh3tjpHM1PVLFapsJwR/ka1YV
-         OCsLUyi/uoR6UBz4oCwsZPYuOl7NB6tSRitea5cmk6T+xQOOyfhtosCAuCmmHP3pASl3
-         FTJcJXa6DUCUieE5FhnpIjd11iJE7Eyy6HtGjsye3wuVkng9TA1g9wlYGDtVF3B0KaVO
-         3HzZZK95D11PQUMva7mNWvWl66mMUrB5ooxHO0g24qTp1JovuF4cWpSDU4WzfBUUTKLM
-         wSig==
+        d=google.com; s=20221208; t=1689028425; x=1691620425;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3XnWoX3mq+b99bSYScr9hgrqKqfzZzVVDFO4lEAixo=;
+        b=aKK4x+BPpAO/YJnlbxEPDSQ7Or5Frwhwee2iD2GBEfe1fPtmZVHgx7xOzFYwlpwBd0
+         CIAhwJFzySe6vd1iF5hHC7H5Bx4ikw2GiXtyeS+3mlpQ9IGJE/tNmOre93nGmlNqG7go
+         H7sT0O60Au84IyYseY02KCEXg7RyIWAeAXh7dCgGut854L9f3xU2dkEJqjFqZYXmGFlG
+         Joyc0e+Us0w0oYp3zs6SdDLqnd4mFFLgNGOx2cS/wRtoXMK+OGZP1jT/03NO1qBDNTNY
+         VajQypKncfQ8ybRP4+obiiz7E94H3YhLRSSy4tUt/CNwfeshxUkcAM5tsYxecciDD/PR
+         1PlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689028416; x=1691620416;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vww/pYdC1DJeva2AfnXbGu4C5u6TgbMhBMBTAdXoxfg=;
-        b=HOUKNePi/Ub2U9aAu85Y3eNx59P7gt6ADlXcvfXntT63XGL0saZJ7f/Ivwn7qwOOBp
-         LAzY1Mo1hnOBg90HaSyL0iydFDLpV90KgWdzQvKqirDmKEyLYIEDxWv6hGxUSMWfPHRi
-         wiDLTzmyHTMi5e63NeCrF0C12kL8dPHGFGh4U73mTpPyWFIzmTpTBtnZpzFW7NCnvFMt
-         e6KjBHIetYwj2wCjzp4PukmB103i1otI+9wrUOKC7xiXiLKGuk+k0mfKZ2GjuGYHWNpm
-         mi4BllYzv+j8RYEX6kdSc0x0xl314zMapMyRb2cvG4YthUEMJnXdQOFO4+kaI1KewWK8
-         PeBQ==
-X-Gm-Message-State: ABy/qLZBZNKRTmUbwptbvmgp0ridmhi8hLvRrU1P+EqUR6o7f8UJC2WT
-        lfeMMIYG41TVvAFLxkY+ddMQ8/0YLORWAcUxCA==
-X-Google-Smtp-Source: APBJJlEO8eLcuFuH8wVnMQWAHkbzZWQHuwFwsGmDwYpzfNPSGiEWAwrAUfjiTOVp1l1HiHVrM6vyb9Q+AKeZ71Ccyg==
+        d=1e100.net; s=20221208; t=1689028425; x=1691620425;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3XnWoX3mq+b99bSYScr9hgrqKqfzZzVVDFO4lEAixo=;
+        b=EZ9cptIfALkJk8Ku2103HI8P6Aaxp51u/VJhB5ny5HXS/cL/iFLg87nDEHUZ+8RShK
+         h+Pdz/jT7VJ53XEz7Icr3RJh3fL/xxVVEBmO4jyO8HBYOulX9+cq+GS+3B/YXTKFnWCW
+         3O3uRrLFog8KHkRCXPdtvTKUZjvQOoAg2G6wlhjDP7ZdHhaBt2zagab9TZ9JzDos1Oyr
+         xl2tfrMXDQ0sW3NstPTbwJTpfgZ1WmsSS+OlkLlgIVRKOVlWL/sOmS1q1xF7Z0wy5Oh8
+         Lm1LwZPI0zUxATHAnFFM10ONU6Z97fGaJsa83MgajcO6OybnhPemxvlb0GT2f59+ljVm
+         Xjgg==
+X-Gm-Message-State: ABy/qLbyIRCinwZ+c/yKGl2KR4IZieIu6L8OVFVzSrs7JLjJR4GqiJ/a
+        xYl60N1c/Jaa8tqhlXeWYOp37JULPcX1lodKWw==
+X-Google-Smtp-Source: APBJJlH/b3oD7gi2ZFJXKajzk/Ysv+e4OCddKdR0c+g1aGsA92FGsICZLym7YRNcyjFr1h3bBzs5D0UkTD/ZG9VMLw==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:4c0f:bfb6:9942:8c53])
- (user=almasrymina job=sendgmr) by 2002:a81:ad44:0:b0:565:9e73:f937 with SMTP
- id l4-20020a81ad44000000b005659e73f937mr67586ywk.4.1689028416099; Mon, 10 Jul
- 2023 15:33:36 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:32:51 -0700
+ (user=almasrymina job=sendgmr) by 2002:a81:cf0c:0:b0:570:b1:ca37 with SMTP id
+ u12-20020a81cf0c000000b0057000b1ca37mr97547ywi.5.1689028424874; Mon, 10 Jul
+ 2023 15:33:44 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:32:52 -0700
+In-Reply-To: <20230710223304.1174642-1-almasrymina@google.com>
 Mime-Version: 1.0
+References: <20230710223304.1174642-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
-Message-ID: <20230710223304.1174642-1-almasrymina@google.com>
-Subject: [RFC PATCH 00/10] Device Memory TCP
+Message-ID: <20230710223304.1174642-2-almasrymina@google.com>
+Subject: [RFC PATCH 01/10] dma-buf: add support for paged attachment mappings
 From:   Mina Almasry <almasrymina@google.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
@@ -70,221 +71,433 @@ Cc:     Mina Almasry <almasrymina@google.com>,
         Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
         Shuah Khan <shuah@kernel.org>, jgg@ziepe.ca
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* TL;DR:
+Currently dmabuf p2p memory doesn't present itself in the form of struct
+pages and the memory can't be easily used with code that expects memory
+in that form. Add support for paged attachment mappings. We use existing
+dmabuf APIs to create a mapped attachment (dma_buf_attach() &
+dma_buf_map_attachment()), and we create struct pages for this mapping.
+We write the dma_addr's from the sg_table into the created pages. These
+pages can then be passed into code that expects struct pages and can
+largely operate on these pages with minimal modifications:
 
-Device memory TCP (devmem TCP) is a proposal for transferring data to and/o=
-r
-from device memory efficiently, without bouncing the data to a host memory
-buffer.
+1. The pages need not be dma mapped. The dma addr can be queried from
+   page->zone_device_data and used directly.
+2. The pages are not kmappable.
 
-* Problem:
+Add a new ioctl that enables the user to create a struct page backed
+dmabuf attachment mapping. This ioctl returns a new file descriptor
+which represents the dmabuf pages. The pages are freed when (a) the
+user closes the file, and (b) the struct pages backing the dmabuf are
+no longer in use. Once the pages are no longer in use, the mapped
+attachment is removed.
 
-A large amount of data transfers have device memory as the source and/or
-destination. Accelerators drastically increased the volume of such transfer=
-s.
-Some examples include:
-- ML accelerators transferring large amounts of training data from storage =
-into
-  GPU/TPU memory. In some cases ML training setup time can be as long as 50=
-% of
-  TPU compute time, improving data transfer throughput & efficiency can hel=
-p
-  improving GPU/TPU utilization.
+The support added in this patch should be generic - the pages are created
+by the base code, but the user specifies the type of page to create using
+the dmabuf_create_pages_info->type flag. The base code hands of any
+handling specific to the use case of the ops of that page type.
 
-- Distributed training, where ML accelerators, such as GPUs on different ho=
-sts,
-  exchange data among them.
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+---
+ drivers/dma-buf/dma-buf.c    | 223 +++++++++++++++++++++++++++++++++++
+ include/linux/dma-buf.h      |  90 ++++++++++++++
+ include/uapi/linux/dma-buf.h |   9 ++
+ 3 files changed, 322 insertions(+)
 
-- Distributed raw block storage applications transfer large amounts of data=
- with
-  remote SSDs, much of this data does not require host processing.
-
-Today, the majority of the Device-to-Device data transfers the network are
-implemented as the following low level operations: Device-to-Host copy,
-Host-to-Host network transfer, and Host-to-Device copy.
-
-The implementation is suboptimal, especially for bulk data transfers, and c=
-an
-put significant strains on system resources, such as host memory bandwidth,
-PCIe bandwidth, etc. One important reason behind the current state is the
-kernel=E2=80=99s lack of semantics to express device to network transfers.=
-=C2=A0
-
-* Proposal:
-
-In this patch series we attempt to optimize this use case by implementing
-socket APIs that enable the user to:
-
-1. send device memory across the network directly, and
-2. receive incoming network packets directly into device memory.
-
-Packet _payloads_ go directly from the NIC to device memory for receive and=
- from
-device memory to NIC for transmit.
-Packet _headers_ go to/from host memory and are processed by the TCP/IP sta=
-ck
-normally. The NIC _must_ support header split to achieve this.
-
-Advantages:
-
-- Alleviate host memory bandwidth pressure, compared to existing
- network-transfer + device-copy semantics.
-
-- Alleviate PCIe BW pressure, by limiting data transfer to the lowest level
-  of the PCIe tree, compared to traditional path which sends data through t=
-he
-  root complex.
-
-With this proposal we're able to reach ~96.6% line rate speeds with data se=
-nt
-and received directly from/to device memory.
-
-* Patch overview:
-
-** Part 1: struct paged device memory
-
-Currently the standard for device memory sharing is DMABUF, which doesn't
-generate struct pages. On the other hand, networking stack (skbs, drivers, =
-and
-page pool) operate on pages. We have 2 options:
-
-1. Generate struct pages for dmabuf device memory, or,
-2. Modify the networking stack to understand a new memory type.
-
-This proposal implements option #1. We implement a small framework to gener=
-ate
-struct pages for an sg_table returned from dma_buf_map_attachment(). The su=
-pport
-added here should be generic and easily extended to other use cases interes=
-ted
-in struct paged device memory. We use this framework to generate pages that=
- can
-be used in the networking stack.
-
-** Part 2: recvmsg() & sendmsg() APIs
-
-We define user APIs for the user to send and receive these dmabuf pages.
-
-** part 3: support for unreadable skb frags
-
-Dmabuf pages are not accessible by the host; we implement changes throughpu=
-t the
-networking stack to correctly handle skbs with unreadable frags.
-
-** part 4: page pool support
-
-We piggy back on Jakub's page pool memory providers idea:
-https://github.com/kuba-moo/linux/tree/pp-providers
-
-It allows the page pool to define a memory provider that provides the
-page allocation and freeing. It helps abstract most of the device memory TC=
-P
-changes from the driver.
-
-This is not strictly necessary, the driver can choose to allocate dmabuf pa=
-ges
-and use them directly without going through the page pool (if acceptable to
-their maintainers).
-
-Not included with this RFC is the GVE devmem TCP support, just to
-simplify the review. Code available here if desired:
-https://github.com/mina/linux/tree/tcpdevmem
-
-This RFC is built on top of v6.4-rc7 with Jakub's pp-providers changes
-cherry-picked.
-
-* NIC dependencies:
-
-1. (strict) Devmem TCP require the NIC to support header split, i.e. the
-   capability to split incoming packets into a header + payload and to put
-   each into a separate buffer. Devmem TCP works by using dmabuf pages
-   for the packet payload, and host memory for the packet headers.
-
-2. (optional) Devmem TCP works better with flow steering support & RSS supp=
-ort,
-   i.e. the NIC's ability to steer flows into certain rx queues. This allow=
-s the
-   sysadmin to enable devmem TCP on a subset of the rx queues, and steer
-   devmem TCP traffic onto these queues and non devmem TCP elsewhere.
-
-The NIC I have access to with these properties is the GVE with DQO support
-running in Google Cloud, but any NIC that supports these features would suf=
-fice.
-I may be able to help reviewers bring up devmem TCP on their NICs.
-
-* Testing:
-
-The series includes a udmabuf kselftest that show a simple use case of
-devmem TCP and validates the entire data path end to end without
-a dependency on a specific dmabuf provider.
-
-Not included in this series is our devmem TCP benchmark, which
-transfers data to/from GPU dmabufs directly.
-
-With this implementation & benchmark we're able to reach ~96.6% line rate
-speeds with 4 GPU/NIC pairs running bi-direction traffic, with all the
-packet payloads going straight to the GPU memory (no host buffer bounce).
-
-** Test Setup
-
-Kernel: v6.4-rc7, with this RFC and Jakub's memory provider API
-cherry-picked locally.
-
-Hardware: Google Cloud A3 VMs.
-
-NIC: GVE with header split & RSS & flow steering support.
-
-Benchmark: custom devmem TCP benchmark not yet open sourced.
-
-Mina Almasry (10):
-  dma-buf: add support for paged attachment mappings
-  dma-buf: add support for NET_RX pages
-  dma-buf: add support for NET_TX pages
-  net: add support for skbs with unreadable frags
-  tcp: implement recvmsg() RX path for devmem TCP
-  net: add SO_DEVMEM_DONTNEED setsockopt to release RX pages
-  tcp: implement sendmsg() TX path for for devmem tcp
-  selftests: add ncdevmem, netcat for devmem TCP
-  memory-provider: updates core provider API for devmem TCP
-  memory-provider: add dmabuf devmem provider
-
- drivers/dma-buf/dma-buf.c              | 444 ++++++++++++++++
- include/linux/dma-buf.h                | 142 +++++
- include/linux/netdevice.h              |   1 +
- include/linux/skbuff.h                 |  34 +-
- include/linux/socket.h                 |   1 +
- include/net/page_pool.h                |  21 +
- include/net/sock.h                     |   4 +
- include/net/tcp.h                      |   6 +-
- include/uapi/asm-generic/socket.h      |   6 +
- include/uapi/linux/dma-buf.h           |  12 +
- include/uapi/linux/uio.h               |  10 +
- net/core/datagram.c                    |   3 +
- net/core/page_pool.c                   | 111 +++-
- net/core/skbuff.c                      |  81 ++-
- net/core/sock.c                        |  47 ++
- net/ipv4/tcp.c                         | 262 +++++++++-
- net/ipv4/tcp_input.c                   |  13 +-
- net/ipv4/tcp_ipv4.c                    |   8 +
- net/ipv4/tcp_output.c                  |   5 +-
- net/packet/af_packet.c                 |   4 +-
- tools/testing/selftests/net/.gitignore |   1 +
- tools/testing/selftests/net/Makefile   |   1 +
- tools/testing/selftests/net/ncdevmem.c | 693 +++++++++++++++++++++++++
- 23 files changed, 1868 insertions(+), 42 deletions(-)
- create mode 100644 tools/testing/selftests/net/ncdevmem.c
-
---=20
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index aa4ea8530cb3..50b1d813cf5c 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -22,6 +22,7 @@
+ #include <linux/module.h>
+ #include <linux/seq_file.h>
+ #include <linux/sync_file.h>
++#include <linux/pci.h>
+ #include <linux/poll.h>
+ #include <linux/dma-resv.h>
+ #include <linux/mm.h>
+@@ -442,12 +443,16 @@ static long dma_buf_import_sync_file(struct dma_buf *dmabuf,
+ }
+ #endif
+ 
++static long dma_buf_create_pages(struct file *file,
++				 struct dma_buf_create_pages_info *create_info);
++
+ static long dma_buf_ioctl(struct file *file,
+ 			  unsigned int cmd, unsigned long arg)
+ {
+ 	struct dma_buf *dmabuf;
+ 	struct dma_buf_sync sync;
+ 	enum dma_data_direction direction;
++	struct dma_buf_create_pages_info create_info;
+ 	int ret;
+ 
+ 	dmabuf = file->private_data;
+@@ -484,6 +489,12 @@ static long dma_buf_ioctl(struct file *file,
+ 	case DMA_BUF_SET_NAME_A:
+ 	case DMA_BUF_SET_NAME_B:
+ 		return dma_buf_set_name(dmabuf, (const char __user *)arg);
++	case DMA_BUF_CREATE_PAGES:
++		if (copy_from_user(&create_info, (void __user *)arg,
++				   sizeof(create_info)))
++			return -EFAULT;
++
++		return dma_buf_create_pages(file, &create_info);
+ 
+ #if IS_ENABLED(CONFIG_SYNC_FILE)
+ 	case DMA_BUF_IOCTL_EXPORT_SYNC_FILE:
+@@ -1613,6 +1624,218 @@ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
+ }
+ EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap_unlocked, DMA_BUF);
+ 
++static int dma_buf_pages_release(struct inode *inode, struct file *file)
++{
++	struct dma_buf_pages *priv = file->private_data;
++
++	if (priv->type_ops->dma_buf_pages_release)
++		priv->type_ops->dma_buf_pages_release(priv, file);
++
++	percpu_ref_kill(&priv->pgmap.ref);
++	/* Drop initial ref after percpu_ref_kill(). */
++	percpu_ref_put(&priv->pgmap.ref);
++
++	return 0;
++}
++
++static void dma_buf_page_free(struct page *page)
++{
++	struct dma_buf_pages *priv;
++	struct dev_pagemap *pgmap;
++
++	pgmap = page->pgmap;
++	priv = container_of(pgmap, struct dma_buf_pages, pgmap);
++
++	if (priv->type_ops->dma_buf_page_free)
++		priv->type_ops->dma_buf_page_free(priv, page);
++}
++
++const struct dev_pagemap_ops dma_buf_pgmap_ops = {
++	.page_free	= dma_buf_page_free,
++};
++EXPORT_SYMBOL_GPL(dma_buf_pgmap_ops);
++
++const struct file_operations dma_buf_pages_fops = {
++	.release	= dma_buf_pages_release,
++};
++EXPORT_SYMBOL_GPL(dma_buf_pages_fops);
++
++#ifdef CONFIG_ZONE_DEVICE
++static void dma_buf_pages_destroy(struct percpu_ref *ref)
++{
++	struct dma_buf_pages *priv;
++	struct dev_pagemap *pgmap;
++
++	pgmap = container_of(ref, struct dev_pagemap, ref);
++	priv = container_of(pgmap, struct dma_buf_pages, pgmap);
++
++	if (priv->type_ops->dma_buf_pages_destroy)
++		priv->type_ops->dma_buf_pages_destroy(priv);
++
++	kvfree(priv->pages);
++	kfree(priv);
++
++	dma_buf_unmap_attachment(priv->attachment, priv->sgt, priv->direction);
++	dma_buf_detach(priv->dmabuf, priv->attachment);
++	dma_buf_put(priv->dmabuf);
++	pci_dev_put(priv->pci_dev);
++}
++
++static long dma_buf_create_pages(struct file *file,
++				 struct dma_buf_create_pages_info *create_info)
++{
++	int err, fd, i, pg_idx;
++	struct scatterlist *sg;
++	struct dma_buf_pages *priv;
++	struct file *new_file;
++
++	fd = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
++	if (fd < 0) {
++		err = fd;
++		goto out_err;
++	}
++
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv) {
++		err = -ENOMEM;
++		goto out_put_fd;
++	}
++
++	priv->pgmap.type = MEMORY_DEVICE_PRIVATE;
++	priv->pgmap.ops = &dma_buf_pgmap_ops;
++	init_completion(&priv->pgmap.done);
++
++	/* This refcount is incremented every time a page in priv->pages is
++	 * allocated, and decremented every time a page is freed. When
++	 * it drops to 0, the dma_buf_pages can be destroyed. An initial ref is
++	 * held and the dma_buf_pages is not destroyed until that is dropped.
++	 */
++	err = percpu_ref_init(&priv->pgmap.ref, dma_buf_pages_destroy, 0,
++			      GFP_KERNEL);
++	if (err)
++		goto out_free_priv;
++
++	/* Initial ref to be dropped after percpu_ref_kill(). */
++	percpu_ref_get(&priv->pgmap.ref);
++
++	priv->pci_dev = pci_get_domain_bus_and_slot(
++		0, create_info->pci_bdf[0],
++		PCI_DEVFN(create_info->pci_bdf[1], create_info->pci_bdf[2]));
++	if (!priv->pci_dev) {
++		err = -ENODEV;
++		goto out_exit_percpu_ref;
++	}
++
++	priv->dmabuf = dma_buf_get(create_info->dma_buf_fd);
++	if (IS_ERR(priv->dmabuf)) {
++		err = PTR_ERR(priv->dmabuf);
++		goto out_put_pci_dev;
++	}
++
++	if (priv->dmabuf->size % PAGE_SIZE != 0) {
++		err = -EINVAL;
++		goto out_put_dma_buf;
++	}
++
++	priv->attachment = dma_buf_attach(priv->dmabuf, &priv->pci_dev->dev);
++	if (IS_ERR(priv->attachment)) {
++		err = PTR_ERR(priv->attachment);
++		goto out_put_dma_buf;
++	}
++
++	priv->num_pages = priv->dmabuf->size / PAGE_SIZE;
++	priv->pages = kvmalloc_array(priv->num_pages, sizeof(struct page),
++				     GFP_KERNEL);
++	if (!priv->pages) {
++		err = -ENOMEM;
++		goto out_detach_dma_buf;
++	}
++
++	for (i = 0; i < priv->num_pages; i++) {
++		struct page *page = &priv->pages[i];
++
++		mm_zero_struct_page(page);
++		set_page_zone(page, ZONE_DEVICE);
++		set_page_count(page, 1);
++		page->pgmap = &priv->pgmap;
++	}
++
++	priv->direction = DMA_BIDIRECTIONAL;
++	priv->sgt = dma_buf_map_attachment(priv->attachment, priv->direction);
++	if (IS_ERR(priv->sgt)) {
++		err = PTR_ERR(priv->sgt);
++		goto out_free_pages;
++	}
++
++	/* write each dma addresses from sgt to each page */
++	pg_idx = 0;
++	for_each_sgtable_dma_sg(priv->sgt, sg, i) {
++		size_t len = sg_dma_len(sg);
++		dma_addr_t dma_addr = sg_dma_address(sg);
++
++		BUG_ON(!PAGE_ALIGNED(len));
++		while (len > 0) {
++			priv->pages[pg_idx].zone_device_data = (void *)dma_addr;
++			pg_idx++;
++			dma_addr += PAGE_SIZE;
++			len -= PAGE_SIZE;
++		}
++	}
++
++	new_file = anon_inode_getfile("[dma_buf_pages]", &dma_buf_pages_fops,
++				      (void *)priv, O_RDWR | O_CLOEXEC);
++	if (IS_ERR(new_file)) {
++		err = PTR_ERR(new_file);
++		goto out_unmap_dma_buf;
++	}
++
++	priv->type = create_info->type;
++	priv->create_flags = create_info->create_flags;
++
++	switch (priv->type) {
++	default:
++		err = -EINVAL;
++		goto out_put_new_file;
++	}
++
++	if (priv->type_ops->dma_buf_pages_init) {
++		err = priv->type_ops->dma_buf_pages_init(priv, new_file);
++		if (err)
++			goto out_put_new_file;
++	}
++
++	fd_install(fd, new_file);
++	return fd;
++
++out_put_new_file:
++	fput(new_file);
++out_unmap_dma_buf:
++	dma_buf_unmap_attachment(priv->attachment, priv->sgt, priv->direction);
++out_free_pages:
++	kvfree(priv->pages);
++out_detach_dma_buf:
++	dma_buf_detach(priv->dmabuf, priv->attachment);
++out_put_dma_buf:
++	dma_buf_put(priv->dmabuf);
++out_put_pci_dev:
++	pci_dev_put(priv->pci_dev);
++out_exit_percpu_ref:
++	percpu_ref_exit(&priv->pgmap.ref);
++out_free_priv:
++	kfree(priv);
++out_put_fd:
++	put_unused_fd(fd);
++out_err:
++	return err;
++}
++#else
++static long dma_buf_create_pages(struct file *file,
++				 struct dma_buf_create_pages_info *create_info)
++{
++	return -ENOTSUPP;
++}
++#endif
++
+ #ifdef CONFIG_DEBUG_FS
+ static int dma_buf_debug_show(struct seq_file *s, void *unused)
+ {
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index 3f31baa3293f..5789006180ea 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -540,6 +540,36 @@ struct dma_buf_export_info {
+ 	void *priv;
+ };
+ 
++struct dma_buf_pages;
++
++struct dma_buf_pages_type_ops {
++	int (*dma_buf_pages_init)(struct dma_buf_pages *priv,
++				  struct file *file);
++	void (*dma_buf_pages_release)(struct dma_buf_pages *priv,
++				      struct file *file);
++	void (*dma_buf_pages_destroy)(struct dma_buf_pages *priv);
++	void (*dma_buf_page_free)(struct dma_buf_pages *priv,
++				  struct page *page);
++};
++
++struct dma_buf_pages {
++	/* fields for dmabuf */
++	struct dma_buf *dmabuf;
++	struct dma_buf_attachment *attachment;
++	struct sg_table *sgt;
++	struct pci_dev *pci_dev;
++	enum dma_data_direction direction;
++
++	/* fields for dma-buf pages */
++	size_t num_pages;
++	struct page *pages;
++	struct dev_pagemap pgmap;
++
++	unsigned int type;
++	const struct dma_buf_pages_type_ops *type_ops;
++	__u64 create_flags;
++};
++
+ /**
+  * DEFINE_DMA_BUF_EXPORT_INFO - helper macro for exporters
+  * @name: export-info name
+@@ -631,4 +661,64 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map);
+ void dma_buf_vunmap(struct dma_buf *dmabuf, struct iosys_map *map);
+ int dma_buf_vmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map);
+ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map);
++
++#ifdef CONFIG_DMA_SHARED_BUFFER
++extern const struct file_operations dma_buf_pages_fops;
++extern const struct dev_pagemap_ops dma_buf_pgmap_ops;
++
++static inline bool is_dma_buf_pages_file(struct file *file)
++{
++	return file->f_op == &dma_buf_pages_fops;
++}
++
++static inline bool is_dma_buf_page(struct page *page)
++{
++	return (is_zone_device_page(page) && page->pgmap &&
++		page->pgmap->ops == &dma_buf_pgmap_ops);
++}
++
++static inline dma_addr_t dma_buf_page_to_dma_addr(struct page *page)
++{
++	return (dma_addr_t)page->zone_device_data;
++}
++
++static inline int dma_buf_map_sg(struct device *dev, struct scatterlist *sg,
++				 int nents, enum dma_data_direction dir)
++{
++	struct scatterlist *s;
++	int i;
++
++	for_each_sg(sg, s, nents, i) {
++		struct page *pg = sg_page(s);
++
++		s->dma_address = dma_buf_page_to_dma_addr(pg);
++		sg_dma_len(s) = s->length;
++	}
++
++	return nents;
++}
++#else
++static inline bool is_dma_buf_page(struct page *page)
++{
++	return false;
++}
++
++static inline bool is_dma_buf_pages_file(struct file *file)
++{
++	return false;
++}
++
++static inline dma_addr_t dma_buf_page_to_dma_addr(struct page *page)
++{
++	return 0;
++}
++
++static inline int dma_buf_map_sg(struct device *dev, struct scatterlist *sg,
++				 int nents, enum dma_data_direction dir)
++{
++	return 0;
++}
++#endif
++
++
+ #endif /* __DMA_BUF_H__ */
+diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+index 5a6fda66d9ad..d0f63a2ab7e4 100644
+--- a/include/uapi/linux/dma-buf.h
++++ b/include/uapi/linux/dma-buf.h
+@@ -179,4 +179,13 @@ struct dma_buf_import_sync_file {
+ #define DMA_BUF_IOCTL_EXPORT_SYNC_FILE	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_export_sync_file)
+ #define DMA_BUF_IOCTL_IMPORT_SYNC_FILE	_IOW(DMA_BUF_BASE, 3, struct dma_buf_import_sync_file)
+ 
++struct dma_buf_create_pages_info {
++	__u8 pci_bdf[3];
++	__s32 dma_buf_fd;
++	__u32 type;
++	__u64 create_flags;
++};
++
++#define DMA_BUF_CREATE_PAGES	_IOW(DMA_BUF_BASE, 4, struct dma_buf_create_pages_info)
++
+ #endif
+-- 
 2.41.0.390.g38632f3daf-goog
 
