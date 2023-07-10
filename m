@@ -2,143 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C8674CF5B
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 10:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A66E74D105
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 11:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjGJIC3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 04:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S229563AbjGJJI6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 05:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjGJIC2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 04:02:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B054A6;
-        Mon, 10 Jul 2023 01:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=yNHDpzzYjieskAxABdDoEsqYSB5/uS6TUrXGMxgOO98=; b=N99m4nozzqxFHNBeNmFnfuL0Yp
-        +A521LWm9TiYTqrAsIYVfa3VHL0b9r5GMrproiVKMHVOP6TE4Cy8w/TftoGRFFiaDE38kqnMcjsDH
-        xeUABEteMR+PZlpoHFfw+Qz0DCKQnPO0MK7fC3o85tgPx7g1tthDfgRVNUrjUEFHYVZ6vjXBHamOJ
-        cu4xFA/boDgzrKZD8/iF4a0jqsJ1XQdes6nuQLeD7eWIgQeuaGyB7BVs5ACRMjnCrN9/thpPP4JxP
-        8bfYNPFbswyKbBnUGgHpYfBUErFA4J839MBBYWAF1b+sPPpl8i7JwdDotUHM+5p+JBnDzLgFVyg/4
-        HwAW5SBA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIlqF-000jDT-0v;
-        Mon, 10 Jul 2023 08:01:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AFEC1300274;
-        Mon, 10 Jul 2023 10:01:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6346D29984D29; Mon, 10 Jul 2023 10:01:52 +0200 (CEST)
-Date:   Mon, 10 Jul 2023 10:01:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-Message-ID: <20230710080152.GA3028865@hirez.programming.kicks-ass.net>
-References: <20230702025708.784106-1-guoren@kernel.org>
- <20230704164003.GB83892@hirez.programming.kicks-ass.net>
- <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        with ESMTP id S232113AbjGJJIk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 05:08:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306A9C3;
+        Mon, 10 Jul 2023 02:08:39 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A8hs1S028697;
+        Mon, 10 Jul 2023 09:08:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6I47qqc5Vkl3hKjR5sH6y/ymC6xY3IFvu3Wy0nPK6v8=;
+ b=hfjLiMvnmjttmzh9pdwt2oavXBFDiSq9HyqoBnd9cN3OZQzDV0OVjaC6oqpzKtX9AWXE
+ mZgoNrWfzSleqPzUA2n35epIkcg6JGVC+s0/OWWYLpj4FGPUOfGoMGuwDjmvz9B/Y7He
+ ovg93HtEuDh2/9K+qZWBzjqpJ6mldvXFMExlqvjfrsOVtLrCs3yq/5zXxy22Jr1s6QCB
+ +mF//AIsDeZ3C64dWOCeRfCB4fs1d2Rq519nPvZ9bcKFnZkpjziJa+oD4iMlCIka9lFQ
+ SwxplljyzsPMax0k/vdS0GpN/bcGVb/mbHvRwpckcmlqf8Jdirw1N2b0+bA8NIc59UTC XA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rreqsrppf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 09:08:11 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36A8isEn030917;
+        Mon, 10 Jul 2023 09:08:10 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rreqsrpkx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 09:08:10 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36A4oQF7031029;
+        Mon, 10 Jul 2023 09:08:07 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rpye594t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 09:08:06 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36A984b441615704
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jul 2023 09:08:04 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C44020040;
+        Mon, 10 Jul 2023 09:08:04 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33D7D2004B;
+        Mon, 10 Jul 2023 09:08:04 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Jul 2023 09:08:04 +0000 (GMT)
+Message-ID: <ff068ea8-c731-3763-066b-2503ffddd0e8@linux.ibm.com>
+Date:   Mon, 10 Jul 2023 11:08:03 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v4 00/10] Introduce SMT level and add PowerPC support
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc:     "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230705145143.40545-1-ldufour@linux.ibm.com>
+ <c66e3e800a7d257ef7a90749fe567f056f4c3ace.camel@intel.com>
+Content-Language: en-US
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <c66e3e800a7d257ef7a90749fe567f056f4c3ace.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fxSR7G-W2yRtj5FOOq2Crrc1RbAtqDXy
+X-Proofpoint-ORIG-GUID: MtIfwe2cYP4IfnB_g9wKAdATOPbCWP7z
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_05,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307100082
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jul 09, 2023 at 10:30:22AM +0800, Guo Ren wrote:
-> On Wed, Jul 5, 2023 at 12:40 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > The irqentry_nmi_enter/exit would force the current context into in_interrupt.
-> > > That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
-> > > debug the kernel.
-> > >
-> > > Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
-> > > of the kernel side.
-> >
-> > This doesn't explain much if anything :/
-> >
-> > I'm confused (probably because I don't know RISC-V very well), what's
-> > EBREAK and how does it happen?
-> EBREAK is just an instruction of riscv which would rise breakpoint exception.
-> 
-> 
-> >
-> > Specifically, if EBREAK can happen inside an local_irq_disable() region,
-> > then the below change is actively wrong. Any exception/interrupt that
-> > can happen while local_irq_disable() must be treated like an NMI.
-> When the ebreak happend out of local_irq_disable region, but
-> __nmi_enter forces handle_break() into in_interupt() state. So how
 
-And why is that a problem? I think I'm missing something fundamental
-here...
 
-> about:
+Le 09/07/2023 à 17:25, Zhang, Rui a écrit :
+> Hi, Laurent,
 > 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index f910dfccbf5d..69f7043a98b9 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -18,6 +18,7 @@
->  #include <linux/irq.h>
->  #include <linux/kexec.h>
->  #include <linux/entry-common.h>
-> +#include <linux/context_tracking.h>
+> I ran into a boot hang regression with latest upstream code, and it
+> took me a while to bisect the offending commit and workaround it.
 > 
->  #include <asm/asm-prototypes.h>
->  #include <asm/bug.h>
-> @@ -285,12 +286,18 @@ asmlinkage __visible __trap_section void
-> do_trap_break(struct pt_regs *regs)
->                 handle_break(regs);
+> Now I have tested this patch series on an Intel RaptorLake Hybrid
+> platform (4 Pcores with HT and 4 Ecores without HT), and it works as
+> expected.
 > 
->                 irqentry_exit_to_user_mode(regs);
-> -       } else {
-> +       } else if (in_interrupt()){
->                 irqentry_state_t state = irqentry_nmi_enter(regs);
+> So, for patch 1~7 in this series,
 > 
->                 handle_break(regs);
-> 
->                 irqentry_nmi_exit(regs, state);
-> +       } else {
-> +               enum ctx_state prev_state = exception_enter();
-> +
-> +               handle_break(regs);
-> +
-> +               exception_exit(prev_state);
->         }
->  }
+> Tested-by: Zhang Rui <rui.zhang@intel.com>
 
-That's wrong. If you want to make it conditional, you have to look at
-!(regs->status & SR_IE) (that's the interrupt enable flag of the
-interrupted context, right?)
+Thanks Rui!
 
-When you hit an EBREAK when IRQs were disabled, you must be NMI like.
-
-But making it conditional like this makes it really hard to write a
-handler though, it basically must assume it will be NMI contetx (because
-it can't know) so there is no point in sometimes not doing NMI context.
+> thanks,
+> rui
+> 
+> On Wed, 2023-07-05 at 16:51 +0200, Laurent Dufour wrote:
+>> I'm taking over the series Michael sent previously [1] which is
+>> smartly
+>> reviewing the initial series I sent [2].  This series is addressing
+>> the
+>> comments sent by Thomas and me on the Michael's one.
+>>
+>> Here is a short introduction to the issue this series is addressing:
+>>
+>> When a new CPU is added, the kernel is activating all its threads.
+>> This
+>> leads to weird, but functional, result when adding CPU on a SMT 4
+>> system
+>> for instance.
+>>
+>> Here the newly added CPU 1 has 8 threads while the other one has 4
+>> threads
+>> active (system has been booted with the 'smt-enabled=4' kernel
+>> option):
+>>
+>> ltcden3-lp12:~ # ppc64_cpu --info
+>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>
+>> This mixed SMT level may confused end users and/or some applications.
+>>
+>> There is no SMT level recorded in the kernel (common code), neither
+>> in user
+>> space, as far as I know. Such a level is helpful when adding new CPU
+>> or
+>> when optimizing the energy efficiency (when reactivating CPUs).
+>>
+>> When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT
+>> level
+>> (cpu_smt_num_threads) and few callbacks allowing the architecture
+>> code to
+>> fine control this value, setting a max and a "at boot" level, and
+>> controling whether a thread should be onlined or not.
+>>
+>> v4:
+>>    Rebase on top of 6.5's updates
+>>    Remove a dependancy against the X86's symbol
+>> cpu_primary_thread_mask
+>> v3:
+>>    Fix a build error in the patch 6/9
+>> v2:
+>>    As Thomas suggested,
+>>      Reword some commit's description
+>>      Remove topology_smt_supported()
+>>      Remove topology_smt_threads_supported()
+>>      Introduce CONFIG_SMT_NUM_THREADS_DYNAMIC
+>>      Remove switch() in __store_smt_control()
+>>    Update kernel-parameters.txt
+>>
+>> [1]
+>> https://lore.kernel.org/linuxppc-dev/20230524155630.794584-1-mpe@ellerman.id.au/
+>> [2]
+>> https://lore.kernel.org/linuxppc-dev/20230331153905.31698-1-ldufour@linux.ibm.com/
+>>
+>>
+>> Laurent Dufour (2):
+>>    cpu/hotplug: remove dependancy against cpu_primary_thread_mask
+>>    cpu/SMT: Remove topology_smt_supported()
+>>
+>> Michael Ellerman (8):
+>>    cpu/SMT: Move SMT prototypes into cpu_smt.h
+>>    cpu/SMT: Move smt/control simple exit cases earlier
+>>    cpu/SMT: Store the current/max number of threads
+>>    cpu/SMT: Create topology_smt_thread_allowed()
+>>    cpu/SMT: Allow enabling partial SMT states via sysfs
+>>    powerpc/pseries: Initialise CPU hotplug callbacks earlier
+>>    powerpc: Add HOTPLUG_SMT support
+>>    powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
+>>
+>>   .../ABI/testing/sysfs-devices-system-cpu      |   1 +
+>>   .../admin-guide/kernel-parameters.txt         |   4 +-
+>>   arch/Kconfig                                  |   3 +
+>>   arch/powerpc/Kconfig                          |   2 +
+>>   arch/powerpc/include/asm/topology.h           |  15 ++
+>>   arch/powerpc/kernel/smp.c                     |   8 +-
+>>   arch/powerpc/platforms/pseries/hotplug-cpu.c  |  30 ++--
+>>   arch/powerpc/platforms/pseries/pseries.h      |   2 +
+>>   arch/powerpc/platforms/pseries/setup.c        |   2 +
+>>   arch/x86/include/asm/topology.h               |   4 +-
+>>   arch/x86/kernel/cpu/common.c                  |   2 +-
+>>   arch/x86/kernel/smpboot.c                     |   8 -
+>>   include/linux/cpu.h                           |  25 +--
+>>   include/linux/cpu_smt.h                       |  33 ++++
+>>   kernel/cpu.c                                  | 142 +++++++++++++---
+>> --
+>>   15 files changed, 196 insertions(+), 85 deletions(-)
+>>   create mode 100644 include/linux/cpu_smt.h
+>>
+> 
