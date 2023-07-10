@@ -2,285 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E8074DBAC
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 18:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729B974DC2C
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jul 2023 19:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjGJQzq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 12:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S232397AbjGJRUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 13:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjGJQzn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 12:55:43 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2041.outbound.protection.outlook.com [40.107.8.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF2F187;
-        Mon, 10 Jul 2023 09:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b52kxjIbzKwFn0WYm3LjTdw2O3lOH9P+tsnbMSn4c3o=;
- b=Q7PVmz6V31vZ6DchfQsbT5TzCPTr3yHt7TcK2+adS7seBq6OamDqr1d9AlIYcAMB+cidBlOBl1nBflJfbfGffYB9T4/jWmwbelkQBzHpBFq1Kv47+nKwHyFylMweyMpu/RDLB1Zcw4ICiUARXFILvF+IhfCT9I0jQ/UYRwefMXg=
-Received: from DB8PR03CA0030.eurprd03.prod.outlook.com (2603:10a6:10:be::43)
- by DB5PR08MB10096.eurprd08.prod.outlook.com (2603:10a6:10:4aa::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
- 2023 16:55:04 +0000
-Received: from DBAEUR03FT021.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:be:cafe::2e) by DB8PR03CA0030.outlook.office365.com
- (2603:10a6:10:be::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30 via Frontend
- Transport; Mon, 10 Jul 2023 16:55:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT021.mail.protection.outlook.com (100.127.142.184) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.18 via Frontend Transport; Mon, 10 Jul 2023 16:55:04 +0000
-Received: ("Tessian outbound f9124736ff4f:v145"); Mon, 10 Jul 2023 16:55:03 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: ac1b14dc7dceaa16
-X-CR-MTA-TID: 64aa7808
-Received: from f0426a1ec8f0.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 561E077A-9C4C-417B-8EEB-CDD0D27B6C78.1;
-        Mon, 10 Jul 2023 16:54:56 +0000
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id f0426a1ec8f0.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Mon, 10 Jul 2023 16:54:56 +0000
+        with ESMTP id S232359AbjGJRUh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 13:20:37 -0400
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020027.outbound.protection.outlook.com [52.101.56.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7EF128;
+        Mon, 10 Jul 2023 10:20:36 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bv38UvGdzw8yEokfG7qSRHYkJsmEXCfV4ZWwmrrdIKPxKW1Is+4lGs11B2YM+T8m5tKC6kh6bEGXUWpUJ2F9jTlUOrMeC9e8gXmu/y/G8E1NyWL0K4q5XSi4plzbDP6+LMvPAzi8NhXGCZtT1cvf7r+7uOUnwfwTbwr6x2cscn8yq3FiNiOOiFO1evevyP6+64nrNq18m8gJFXa1Ir6a1BzqRbXLo7S5bbZle7tq8MPHA0qnsZmnIa6cGoPBWC5S7yJr4pt+xGQpsfzMZ1YxIsFT4DCx4XrTruKigRWqHLMFQrD0WoaC4ymfBIFJzxvFmsqM2iPfooKKdZFptPkihA==
+ b=koGy4WCn2juc4D9ovzx3ZCKCYLiFVthtag4H4qOpd5fhLAHNKBHdI4VBpiIIxtEhVk35XB5Of69cljZ1zkqtunaGYpaDPcqE7J78+OUsdDjvKcBXYIKN41DYo7QA8lw6mgYDzZqkDIIR1n+ETGsU/NciJfrwaPdttgHgrE+gH6G7D8THCIpb8A9OlZtYylGu3vK/04yiqgQzT6s3189i9a8GZLA+q/iBVIqtbT3/3Y9onb+IuEi62ge9WnI8huFgdWFLQHiGX/bWX4KrytvHG4LJUDtiwwWyWltF2rRYqqMIOUhyHAXojBmzigEtW9JuCFwOQaRlblpPzx3ofiEpvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b52kxjIbzKwFn0WYm3LjTdw2O3lOH9P+tsnbMSn4c3o=;
- b=HgMTEgsEknOH4tbhCl6vu/xnM4Uk0TvrnDFAYd8RoKACd0eQfZFs4kHshyPdUbYvIupesIpnGEAy+H2ox5Wa2gNNZjoVTkrjCkO9z8p07/CWDoOXL2/DNyggcUPaLLYOFgPfGTL6Ja4lcWuU4YwbeknsOKpkSMZslXNOy4EJezgb9ZGwofj4vGBjweN1Um6LT5l49UOfqabP+pOO6bZv0pdg6BDlZjUQin7/jk9V6Jp3EC5eQ3Y/jnUFS0S24i4oLrb9m1w7UHRsqUUHzvcY0lg+5Np6Qnx0cbmQyvE4rLgvbf47Ebj9L6oiGh7/UfamKHueu4OOZlUKYeKd67D8Nw==
+ bh=HNo4sehsNFZJYkmI9cgiZceIAYbtHkQujVvN08U5e5o=;
+ b=BmYAAuYOrrTKBdqtE1jdlbaiWINSIJCYzfQ4OwRlEOFvDeAOpjrlJXDfT2qRHhODXNA6nNMDVHofl515kHR61CFB62taPH8FbLHL0X2RH9+bUFAL4xeBacQ3dnRyPLC5jtE1UhuKgbxiI4mDrlgaZ1is6nJXgJWFQ0IE7vJACXK4Amj9y31UYP8Vri4Ggf+mNfL69kAf/xpfHL4B2loKbbGDZe6fOrUQsf1/yoJbKiKTz1HFlda6gaCbqJq0iRUROwkMgex0t7eSUC3l4xY2gjz8EmCUglC2QbDzuj/pBHViGrKRrCovrMJHddOaBt02CXWLg4p6oz4LFMfON3NhJA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b52kxjIbzKwFn0WYm3LjTdw2O3lOH9P+tsnbMSn4c3o=;
- b=Q7PVmz6V31vZ6DchfQsbT5TzCPTr3yHt7TcK2+adS7seBq6OamDqr1d9AlIYcAMB+cidBlOBl1nBflJfbfGffYB9T4/jWmwbelkQBzHpBFq1Kv47+nKwHyFylMweyMpu/RDLB1Zcw4ICiUARXFILvF+IhfCT9I0jQ/UYRwefMXg=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by AS8PR08MB10345.eurprd08.prod.outlook.com (2603:10a6:20b:57d::21) with
+ bh=HNo4sehsNFZJYkmI9cgiZceIAYbtHkQujVvN08U5e5o=;
+ b=IW9ZyLRgBmnzI25BUqDUUdPq+ufESwOS7Yk8FhYemlFClks6vfu1DAiF+sZoxRLqzaUaB3v6TW+ix/Dw261qGCYGADExfbc1530ysMCO6C2y0rrodWX9LRwL8qUSmzAKX7ZjsXQpWPmJNrhR7KmZlJuInuVw0caYB8eh/sqItu8=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by DS7PR21MB3525.namprd21.prod.outlook.com (2603:10b6:8:92::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
- 2023 16:54:54 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 16:54:54 +0000
-Date:   Mon, 10 Jul 2023 17:54:37 +0100
-From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>
-Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.6; Mon, 10 Jul
+ 2023 17:20:32 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::718a:bd58:c08f:f54d]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::718a:bd58:c08f:f54d%4]) with mapi id 15.20.6609.003; Mon, 10 Jul 2023
+ 17:20:32 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZKw3zSKxCug0IbC1@arm.com>
-References: <ZJR545en+dYx399c@arm.com>
- <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
- <ZJ2sTu9QRmiWNISy@arm.com>
- <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
- <ZKMRFNSYQBC6S+ga@arm.com>
- <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
- <ZKa8jB4lOik/aFn2@arm.com>
- <68b7f983ffd3b7c629940b6c6ee9533bb55d9a13.camel@intel.com>
- <ZKguVAZe+DGA1VEv@arm.com>
- <1c2f524cbaff886ce782bf3a3f95756197bc1e27.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1c2f524cbaff886ce782bf3a3f95756197bc1e27.camel@intel.com>
-X-ClientProxiedBy: LO4P265CA0005.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2ad::17) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        "bp@alien8.de" <bp@alien8.de>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
+Subject: RE: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
+Thread-Topic: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
+Thread-Index: AQHZqesomMpIPtubN0K/S6c9+nGnj6+gi4RwgBLE6uA=
+Date:   Mon, 10 Jul 2023 17:20:32 +0000
+Message-ID: <SA1PR21MB133517719A03FCE05A9251C0BF30A@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230621191317.4129-1-decui@microsoft.com>
+ <ZJx2cm1HaMEcNIYy@liuwe-devbox-debian-v2>
+ <SA1PR21MB133517262C2D1DFB881BE8B2BF24A@SA1PR21MB1335.namprd21.prod.outlook.com>
+In-Reply-To: <SA1PR21MB133517262C2D1DFB881BE8B2BF24A@SA1PR21MB1335.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9b79af80-4a3e-40cf-8e4e-0deac849eee3;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-28T18:38:05Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DS7PR21MB3525:EE_
+x-ms-office365-filtering-correlation-id: ce9a62ea-b732-4b28-1d6a-08db8169f77b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KpIrwYNztoTspE5GBrDkDMdj3L2QF8bAt/UmuAc8OYU60GiprI3z3IF8wrKHG0LG78sA416VGFNId722a4o/m99yeROe7SELQV1iWRzdlMThxRMi8d8n6BCOcbJQCACwbnW2RUyjaFZHghYOxEtvXh3qEf3iilvcgWwjegr6XuWTEQM/dWt5OYawMFzulOGG+fjdqIXkDZZoDntpJ/zMq0590Ca11ElJcLvs3sckcOltzW4QSLFKLBj4flJbbLROekqdTV1au2Qs+lJkG2ShFXu78GA2JhuSd78DwqvZIgJw92RNyIUn/2Kpi1t1NvsLitilc4/4MjFGpbkGwf88uAyvKoX2f1DdSZDNuv3TAoKekyyuUen856Xg/eR3K1Bv0Ij+nMWZychZZSkj2DcBZE7lOvzzmrt8umZmfGxs6Uu6Dlsp9A9tvuLumQSx88RTzteVakR5yBro2QGnVqAAPm8+PSlgDxl6j++V6197hCrom8NtN8u/gAg9JPmBctmj+hluNLiTNecBUvYH9bIG2f0iZQlnb7tMUJ9LvzJy4GIYCzCM6aM1JvV1soQo+3B0XktJmR/1F3FmvfGKxld7Ilm4hX05TN851GGK3I9BbzKK1BW4MtkMv4ceePHGVU2hsVx8PgI7C30gpAwqr8OtLv+XPXfupliQ2TK2k0skB5Y=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199021)(71200400001)(33656002)(10290500003)(478600001)(55016003)(9686003)(186003)(26005)(53546011)(6506007)(7696005)(2906002)(316002)(41300700001)(38100700002)(4326008)(66556008)(66476007)(66446008)(66946007)(64756008)(122000001)(76116006)(82950400001)(82960400001)(7416002)(5660300002)(86362001)(38070700005)(8936002)(8676002)(52536014)(54906003)(110136005)(8990500004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fqe9FbYSg8T17C4OE60C2GHcZVTfIa2Kb6j8mY0Yl3HBB2Dcp1G3w/HFESP6?=
+ =?us-ascii?Q?m+8kylR8cnzcNDfxuP3/DVhAWGet5HiPnUT7pZMVAQmgwrbYL4G0Lf0jMBwo?=
+ =?us-ascii?Q?++DHIUwc2GKU1ogAmxrUjj3uLnaWuALJjF0J2JNLJO/cqxHq3TEvH2/JUw7B?=
+ =?us-ascii?Q?po0xaIAUfSG4G2tCBHjqtNMsXctqOx/btXTjQcFtbSlC8JXa3ZTpLjSnlCln?=
+ =?us-ascii?Q?lLyUkRffsVoX34aAgR14ipBQVmqbQ9L+j3ymXr2IeXFA5iQSjbfMI0XxzjR/?=
+ =?us-ascii?Q?e/7292ccpbRGgFR7tK/asfCx3EuzPkUQAoF0x1+/kr2vb3buaN5+SmMs6Zh7?=
+ =?us-ascii?Q?xSAHTKvWkCwJIVxmCffpOptwf4uKc3dABmb8nt3RJTXi7zcYoLfH0F7613Lt?=
+ =?us-ascii?Q?YdUpdQPI9V3Aiz+P9yqDiL/KIRwNehNUZ+2ptbYXmAN64f3EgNsu7z0p31h2?=
+ =?us-ascii?Q?pOqe5a8Z0N/rvWBkDifPHGrnCpqVxieDRTfo+00lxNzmk+OF8/72JPH+rxI+?=
+ =?us-ascii?Q?7PUXv8aHnsQBDQqta0DkQ8aaoNXPsBtY6g5XC+CtNKBVZSbY5l4Exd3bIji9?=
+ =?us-ascii?Q?BhgPbnu5aB7Rv4A2I1U2w8PQUjkkPxJNjNijXCeHNWxtJrkQ87AIOpzlECkD?=
+ =?us-ascii?Q?UNEHFxdC76XJyNvu3bsHZfnU7NWa7U5O9oNINoBlW7mHwBzoAEF5J7vXgobN?=
+ =?us-ascii?Q?sAQIoStNg+uZzoMIMeZFKvmuTmZ/S+JZsDWbgmV9e+y4D/S7gJ0bbotUVcj/?=
+ =?us-ascii?Q?RJVk0vsrYqz08JgMIyqzwTwQrfZxDuHX+rQVlNkJ+khMf83ZspB1U/OOCXzm?=
+ =?us-ascii?Q?jC2OYVbDGJSyhR6wU1CdvBkW5Q5PevGqKLjIv7jBqke3NG0GR49pVdx7qRAX?=
+ =?us-ascii?Q?ApryYmS4gCwzJrLvGxqd7D/je4bG4xUuVi+GHQzxK2bM9Xlu4wubjDGdFrG0?=
+ =?us-ascii?Q?VWwyu+IiUeAEKDfJSjBhYG5shq0eppk+6FNzTFYd+5VtAodELcAtOySjg3VN?=
+ =?us-ascii?Q?eeHOVLHXIwuBfru8dPASUKdf+yna4xdLIsIE/lsSG4bn8/hMAuoOp1BXmoyd?=
+ =?us-ascii?Q?P6zuHGWcWvJHNNYqI1SrVn42ms/LbGE3cO1z9EFzBeyU1FFKu/4hL16Gabsa?=
+ =?us-ascii?Q?bLk77zAP02Ci7tyTQyixqy+YtF1KlkpS45rg7scp1c+3DN5R4RHZGOOx9GOf?=
+ =?us-ascii?Q?cn0amdkOL74xvtqqzCHwF7XhNaOZ4+RI4BxAEUxb6PZmy4ko118sETUmnFnw?=
+ =?us-ascii?Q?nSafqlexQFa0D6fNoaVuA211boF02RWXA43dLQTpfvdUCE3GsnpV2rVQHzQA?=
+ =?us-ascii?Q?ceJWjBokSzgxIf6TbsmQDRi9Mn4LTtwIhWQuI/wiZTgvYhhCcd1CgdaqiXTM?=
+ =?us-ascii?Q?431ZgSleD0ghrw4i3BprWmJytRSe0ELRf/qNHe7fTLv9TLZ1aQVLpsB8zd8n?=
+ =?us-ascii?Q?//T/em3ufM7lwOlKsbeBgTwagYQnpIaetglEFFBEmgR4u9heoovt9KKzOfLw?=
+ =?us-ascii?Q?tiz3mRmhotyppFUGmAEKy3Al+iTuVpW2TuqOVlRT45msN7QQdlPJkaq1j8Sg?=
+ =?us-ascii?Q?1tLJw83ZWKRQ8TK89r9AwTvgPIVG+6GxmYCnFU8J?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS8PR08MB10345:EE_|DBAEUR03FT021:EE_|DB5PR08MB10096:EE_
-X-MS-Office365-Filtering-Correlation-Id: 184477e6-a80d-4fef-0330-08db8166687e
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: oW4Qi92VkPAyncIJaMc5/GkNdY7ixx3sNE9sR6k3xm2R3DjcDHAR19us0fRhGEyxgTCMZJIewwypXajzW7BK6nuiy9EgeuyUMPOtGUrjFVNGfpNZX6k3AcFwGQUxPskDTpl8Jslv2wcnIRX9jXWOymFoVcyeC6+ahmfbAINTCWkcU7iG4TzjUNOzTCxohNyN0l9VURILsqqowD9b7yhYUPh2hEaFXdGZnMyxnrqfNBqD2jzq4qdm3ICRHjjxZXx2oRPQ4ZVEXNShIKBVs7sUOXpVZkVPvgko6mg25RteUI/+QDGJonlH9pR4wRZz3lgprivN+nksUpGPiJCiiXPc8RDwh9PCITKIBe789EPe7xc1xLRDiiwPCXiaWs6xw+dKoasEoIba2SKaJfBxNMtfxJVtUd6g+AvyTPvnuDf089hDqOG3zfs1mQ0WeUk3qZ4/DHhRVa2HIOurXHNVRkPY6FK2WMbwbx2AqeCXuk9Drgfv2CpspMhyQ3ryG/ykl3NeHpGJPXlaYGCYfV7EU2cnPFjfaOaDv8ePlRXBUINdmFJGOqxsNY2VQuD32eY+XrU1
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(136003)(396003)(346002)(451199021)(6666004)(6486002)(478600001)(110136005)(54906003)(2616005)(83380400001)(36756003)(86362001)(2906002)(66946007)(186003)(6506007)(26005)(6512007)(38100700002)(8936002)(8676002)(4326008)(66476007)(41300700001)(66556008)(316002)(5660300002)(7416002)(7406005);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB10345
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT021.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: df91ed88-ba0d-47fe-2815-08db816660af
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YS/IhEVpgiHbZ1ZGDo2ZwCfR83itoC6AkR243bcokxW8u2YEDWJeIGRsVJnxEG+Dmg2JLhN3Ro1aBcn9TFkaQlZ2h1ddIq2h5eZpty4+3seOxHdY14bObb4gDLhDADI4DV2VO6Jr9oJ5MCUHriAJILhVbKnpT3meDgbA0pC+rDF50GA/4okhiSp1sXsuzCSvfM6LvXHHDS+dtY936eXQaeuCxvfNm44j3NZnxdZLp1DLZtZEUqBZ430TCo8n1j/8Z/rmnUY9w6a7LQwPx7f3kDK2sby9tTKZllaUVypAY59I7PrfnnBzJK/uVKgPG4UF3T4vv1AADZd3WkLeASkQkte1BVzSHbr7rOOhDMsJT0lSewM0MkRjtSGt3slBetFrJ4cFyVvLvLFO6T7cHIAAPRq0KCCkhS/rfi18wfBwDSV/l86oi1pI0gQf4emIQrZ78DsZleHMRaN8lXt4/ZSyEj0H+xT9gk0KZZy05Mrt839SyGRg5Vb2F8Mov7UX5VQMwBRzrpovzf5kI7xieQbzL4K4FI9AliiVRjsxLgxC8NOblmETm8ep0swHafMzjWqDkmxnJCElO++hCoR0IFAvOA/OIQNudxsySM3q44XSBXJKwFzd+jnx5JZnDp5YeR4sFgdIm+GKQ1Ph4T8orlF6sipmyvkPB5feU9RHaZPRm4tANR/ojCxpajea6Wy2zL60HuRBvcUZx3Zr1BcW2hTe6q7BQFA9LlwF7f8QqUS1AR7rDFHRzFpb3/xJuTWSHdGg
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(40470700004)(46966006)(36840700001)(478600001)(6666004)(6486002)(110136005)(54906003)(450100002)(36860700001)(47076005)(83380400001)(36756003)(40460700003)(86362001)(40480700001)(2616005)(2906002)(70206006)(82310400005)(336012)(70586007)(26005)(6506007)(107886003)(186003)(6512007)(81166007)(82740400003)(8676002)(356005)(5660300002)(4326008)(316002)(41300700001)(8936002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 16:55:04.1543
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce9a62ea-b732-4b28-1d6a-08db8169f77b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 17:20:32.6222
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 184477e6-a80d-4fef-0330-08db8166687e
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT021.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR08MB10096
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lpg4NqrN5LAEsb0Cnwd1lu5pWj3KOvul1usOZyTO/KPO/juwXW3IXz53yxyNn0H8YLgT2vxHX9eqwEY5hu1wKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3525
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 07/07/2023 17:37, Edgecombe, Rick P wrote:
-> On Fri, 2023-07-07 at 16:25 +0100, szabolcs.nagy@arm.com wrote:
-> > > Separate from all of this...now that all the constraints are
-> > > clearer,
-> > > if you have changed your mind on whether this series is ready,
-> > > could
-> > > you comment at the top of this thread something to that effect? I'm
-> > > imagining not many are reading so far down at this point.
-> > > 
-> > > For my part, I think we should go forward with what we have on the
-> > > kernel side, unless glibc/gcc developers would like to start by
-> > > deprecating the existing binaries. I just talked with HJ, and he
-> > > has
-> > > not changed his plans around this. If anyone else in that community
-> > > has
-> > > (Florian?), please speak up. But otherwise I think it's better to
-> > > start
-> > > getting real world feedback and grow based on that.
-> > > 
-> > 
-> > the x86 v1 abi tries to be compatible with existing unwinders.
-> > (are there other binaries that constrains v1? portable code
-> > should be fine as they rely on libc which we can still change)
-> > 
-> > i will have to discuss the arm plan with the arm kernel devs.
-> > the ugly bit i want to avoid on arm is to have to reimplement
-> > unwind and jump ops to make alt shadow stack work in a v2 abi.
-> > 
-> > i think the worse bit of the x86 v1 abi is that crash handlers
-> > don't work reliably (e.g. a crash on a tiny makecontext stack
-> > with the usual sigaltstack crash handler can unrecoverably fail
-> > during crash handling). i guess this can be somewhat mitigated
-> > by both linux and libc adding an extra page to the shadow stack
-> > size to guarantee that alt stack handlers with certain depth
-> > always work.
-> 
-> Some mails back, I listed the three things you might be asking for from
-> the kernel side and pointedly asked you to clarify. The only one you
-> still were wishing for up front was "Leave a token on switching to an
-> alt shadow stack."
-> 
-> But how you want to use this involves a lot of details for how glibc
-> will work (automatic shadow stack for sigaltstack, scan-restore-incssp,
-> etc). I think you first need to get the story straight with other libc
-> developers, otherwise this is just brainstorming. I'm not a glibc
-> contributor, so winning me over is only half the battle.
-> 
-> Only after that is settled do we get to the problem of the old libgcc
-> unwinders, and how it is a challenge to even add alt shadow stack given
-> glibc's plans and the existing binaries.
-> 
-> Once that is solved we are at the overflow problem, and the current
-> state of thinking on that is "i'm fairly sure this can be done (but
-> indeed complicated)".
-> 
-> So I think we are still missing any actionable requests that should
-> hold this up.
-> 
-> Is this a reasonable summary?
+> From: Dexuan Cui <decui@microsoft.com>
+> Sent: Wednesday, June 28, 2023 11:45 AM
+> To: Wei Liu <wei.liu@kernel.org>
+> ...
+> > From: Wei Liu <wei.liu@kernel.org>
+> > Sent: Wednesday, June 28, 2023 11:06 AM
+> > To: Dexuan Cui <decui@microsoft.com>
+> > Subject: Re: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx
+> > part)
+> >
+> > On Wed, Jun 21, 2023 at 12:13:15PM -0700, Dexuan Cui wrote:
+> > > The two patches are based on today's tip.git's master branch.
+> > >
+> > > Note: the two patches don't apply to the current x86/tdx branch, whic=
+h
+> > > doesn't have commit 75d090fd167a ("x86/tdx: Add unaccepted memory
+> > support").
+> > >
+> > > As Dave suggested, I moved some local variables of tdx_map_gpa() to
+> > > inside the loop. I added Sathyanarayanan's Reviewed-by.
+> > >
+> > > Please review.
+> > > ...
+> > > Dexuan Cui (2):
+> > >   x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+> > >   x86/tdx: Support vmalloc() for tdx_enc_status_changed()
+> > ...
+> > Dexuan, do you expect these to go through the Hyper-V tree?
+> >
+> > Thanks,
+> > Wei.
+>=20
+> I suppose Dave and/or other x86 folks would like the 2 patches to go
+> through the tip tree if the patches look good.
+>=20
+> Hi Dave, any comments on the patches?
 
-not entirely.
+Hi Dave, would you please take a look at the 2 patches?
 
-the high level requirement is a design that
+The patches have got Reviewed-by/Acked-by from Kirill, Sathyanarayanan
+and Michael.
+The patches can still apply cleanly on today's tip tree's master branch.
+=20
+Thanks,
+Dexuan
 
-a) does not break many existing sigaltstack uses,
-
-b) allows implementing jump and unwind that support the
-   relevant use-cases around signals and stack switches
-   with minimal userspace changes.
-
-where (b) has nothing to add to v1 abi: existing unwind
-binaries mean this needs a v2 abi. (the point of discussing
-v2 ahead of time is to understand the cost of v2 and the
-divergence wrt targets without abi compat issue.)
-
-for (a) my actionable suggestion was to account altstack
-when sizing shadow stacks. to document an altstack call
-depth limit on the libc level (e.g. fixed 100 is fine) we
-need guarantees from the kernel. (consider recursive calls
-overflowing the stack with altstack crash handler: for this
-to be reliable shadow stack size > stack size is needed.
-but the diff can be tiny e.g. 1 page is enough.)
-
-your previous 3 actionable item list was
-
-1. add token when handling signals on altstack.
-
-this falls under (b). your summary is correct that this
-requires sorting out many fiddly details.
-
-2. top of stack token.
-
-this can work differently across targets so i have nothing
-against the x86 v1 abi, but on arm64 we plan to have this.
-
-3. more shadow stack sizing policies.
-
-this can be done in the future except the default policy
-should be fixed for (a) and a smaller size introduces the
-overflow issue which may require v2.
-
-in short the only important change for v1 is shstk sizing.
