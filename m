@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EC274E162
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 00:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD1274E168
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 00:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjGJWe7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jul 2023 18:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S230519AbjGJWfc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jul 2023 18:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjGJWe5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 18:34:57 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA010C0
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:34:23 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c5a17bfb38bso4295271276.3
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:34:23 -0700 (PDT)
+        with ESMTP id S230266AbjGJWfa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jul 2023 18:35:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D538010FF
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:34:51 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5707177ff8aso57554057b3.2
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jul 2023 15:34:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689028450; x=1691620450;
+        d=google.com; s=20221208; t=1689028455; x=1691620455;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZRt6IHRVYwjrDgVxc5BdSo0qSi/7hDrkUlzlo5nha0=;
-        b=F1oYk6PYa7tb7uIVT7ncRImo9dzRRTMW5Ebj/UOQML5cCAoP1bLxMrobu7CbsW0S0Y
-         /G53r5rrIvyYyG7hi6OPzXlzkrD5CGMaY2hGiwXxL/WiSz79VteXRkiY81i7pEKLwp3l
-         17i21BWEE+TiQROAnL1CRW8Ot45TQa2M7Zp54xbYqCQ+Shk7eiW886z2C/Mfw+okEbQ3
-         +Ztb3SAnWz8mhB7hcleaQBtg3wQ1hi2zzpD2QPLMozZVO5zAIhJQh5CKSeVrTq/Oq2dZ
-         VwWPCjINgVuULzor/doPFvcq/lk4R/bGAoXL66l0NggTBvJcD8v6CnyLUTPM0bsChWTJ
-         PBKA==
+        bh=oKO6sogguZyjcmLGJ/hPDJOveqN84Swf5N5/pg86eqs=;
+        b=Xc1Br1GD5LT+ysV69O+uNAFOOUAbf02O+HrvNnkbfJ1izSzFy6Ok06vRSUdPziTGaE
+         +3glhnpZcNM+j4eKCMIQwzsvEIs7TUtCF6YQ7B3LB5UhdlozLITb0gWXFx15pEiIQwHB
+         lb1XngFtKIZWG1x07iobyzwkMGwrncaUqi7OjBAV9mfOg4lMhlt3qQue+doX9PnCJO43
+         rujdU8bT5yD1p9K7vmBkF+fpO8gWOxm5COgUqgl1cz9uYCBrniBM+9z6RMAxOXhqziPJ
+         biD0LDnt/JaMQ2Wj+vQZk9IEDe9NJK+hbJMwVlywjwf9Mrl5ow415UQIgWSBJjmiua/K
+         kleg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689028450; x=1691620450;
+        d=1e100.net; s=20221208; t=1689028455; x=1691620455;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZRt6IHRVYwjrDgVxc5BdSo0qSi/7hDrkUlzlo5nha0=;
-        b=EZvlsKY4BSw1vL07s0tZtV7qV7uTqTvq7S6DOs+YYPhHSSEXUO33uB3KQPuIzVX7Q+
-         ekJlLrRWMSH7j+OQZQ8tc/kIgRDl6qiQHVb2QFGkgBQX01+vwx0rz+KI+xgmDmdDRveb
-         Ejdb+nXw3w2AFc3sr0QkC0V3cb4wQ3FxeEZkyDA/M510e2KauKolRWNxDxZDOr6ZcstV
-         YdumBNR3S3xPjxkk4rY6GHnHwrhUC1hLLXFTH3DzNzZtsEAIk+fQlHpyR6B/rXr6TaT/
-         ajwt/nE0OQcsCOay0rWwm7i71uSROGt3PYXqjX4wrGc00wfAHeaDzLJGH1FLbVF4wd/R
-         SxOg==
-X-Gm-Message-State: ABy/qLbtX1YatFqeoWmn5ix7H1pNBq6xO519vqiWk0LWOQ8d2P4F3WYI
-        P82oZ2nwULzUnBDg+HCjr9ewWiylhIEc9Cqynw==
-X-Google-Smtp-Source: APBJJlGwcwSQfIa1k2C4AKA9b3D+Y30QHjPYL3qtWa/GF75GmX5sDpCzR7Nk3qYThT2cxoPLhXyLaIWlt8Ip9FM82g==
+        bh=oKO6sogguZyjcmLGJ/hPDJOveqN84Swf5N5/pg86eqs=;
+        b=X28gxibUUcd6Y+PAXB8BGzh0HAAGDPg5OUKHigM0MCO09xBxImDOvA/7QTbu7A9YyV
+         gTvqWBz1NE/sYi2ihVSgEo40y8K5m3xIgGe04+JSyiZdYsArRCIjbWdRxhdQUih5uLqk
+         yk9a/MsjAIhSKPwv7apkhZp/IK3qH+j5KD440zTsdeX7NWPJJaWZkbIZLzUlFMFLUE36
+         VyEaz3jx87VSVTwVpF9hztln6WpykjH4X+1C4JrRHSfurmPS9qUIEvuXAeCmLxN8ZrW1
+         3nJccHvqupaMi1+/BLcPt5UfFe7DhB5L1xsYgSnDkJpGAkrCq5leffHCKTheqQmnxXwY
+         XFrg==
+X-Gm-Message-State: ABy/qLYAfziWZCjctBCfrVDxbeNh9HOhy6p99gQlsLs1l6bZeBGN9KXs
+        IninyUQH+6NjNzzo+8E2kqAUuWIeve6wLrPVxA==
+X-Google-Smtp-Source: APBJJlG5e3EZCuprxXAZBHD12ycHywImC9zBDIViU2VYzdwhsM3l+IXw2PlsHbyEhMIScVpgSI4Mos+P/4wWIVOHRw==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:4c0f:bfb6:9942:8c53])
- (user=almasrymina job=sendgmr) by 2002:a25:c902:0:b0:c61:7151:6727 with SMTP
- id z2-20020a25c902000000b00c6171516727mr76617ybf.10.1689028449938; Mon, 10
- Jul 2023 15:34:09 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:32:58 -0700
+ (user=almasrymina job=sendgmr) by 2002:a81:d305:0:b0:56d:2a88:49e5 with SMTP
+ id y5-20020a81d305000000b0056d2a8849e5mr98145ywi.2.1689028455695; Mon, 10 Jul
+ 2023 15:34:15 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:32:59 -0700
 In-Reply-To: <20230710223304.1174642-1-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20230710223304.1174642-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
-Message-ID: <20230710223304.1174642-8-almasrymina@google.com>
-Subject: [RFC PATCH 07/10] tcp: implement sendmsg() TX path for for devmem tcp
+Message-ID: <20230710223304.1174642-9-almasrymina@google.com>
+Subject: [RFC PATCH 08/10] selftests: add ncdevmem, netcat for devmem TCP
 From:   Mina Almasry <almasrymina@google.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
@@ -72,263 +72,755 @@ Cc:     Mina Almasry <almasrymina@google.com>,
         Shuah Khan <shuah@kernel.org>, jgg@ziepe.ca
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For device memory TCP, we let the user provide the kernel with a cmsg
-container 2 items:
+ncdevmem is a devmem TCP netcat. It works similarly to netcat, but it
+sends and receives data using the devmem TCP APIs. It uses udmabuf as
+the dmabuf provider. It is compatible with a regular netcat running on
+a peer, or a ncdevmem running on a peer.
 
-1. the dmabuf pages fd that the user would like to send data from.
-2. the offset into this dmabuf that the user would like to start sending
-   from.
-
-In tcp_sendmsg_locked(), if this cmsg is provided, we send the data
-using the dmabuf NET_TX pages bio_vec.
-
-Also provide drivers with a new skb_devmem_frag_dma_map() helper. This
-helper is similar to skb_frag_dma_map(), but it first checks whether the
-frag being mapped is backed by dmabuf NET_TX pages, and provides the
-correct dma_addr if so.
+In addition to normal netcat support, ncdevmem has a validation mode,
+where it sends a specific pattern and validates this pattern on the
+receiver side to ensure data integrity.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- include/linux/skbuff.h | 19 +++++++++--
- include/net/sock.h     |  2 ++
- net/core/skbuff.c      |  8 ++---
- net/core/sock.c        |  6 ++++
- net/ipv4/tcp.c         | 73 +++++++++++++++++++++++++++++++++++++++++-
- 5 files changed, 101 insertions(+), 7 deletions(-)
+ tools/testing/selftests/net/.gitignore |   1 +
+ tools/testing/selftests/net/Makefile   |   1 +
+ tools/testing/selftests/net/ncdevmem.c | 693 +++++++++++++++++++++++++
+ 3 files changed, 695 insertions(+)
+ create mode 100644 tools/testing/selftests/net/ncdevmem.c
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index f5e03aa84160..ad4e7bfcab07 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -1660,8 +1660,8 @@ static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
- }
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index f27a7338b60e..1153ba177f1b 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -16,6 +16,7 @@ ipsec
+ ipv6_flowlabel
+ ipv6_flowlabel_mgr
+ msg_zerocopy
++ncdevmem
+ nettest
+ psock_fanout
+ psock_snd
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index c12df57d5539..ea5ccbd99d3b 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -84,6 +84,7 @@ TEST_GEN_FILES += ip_local_port_range
+ TEST_GEN_FILES += bind_wildcard
+ TEST_PROGS += test_vxlan_mdb.sh
+ TEST_PROGS += test_bridge_neigh_suppress.sh
++TEST_GEN_FILES += ncdevmem
  
- int skb_zerocopy_iter_stream(struct sock *sk, struct sk_buff *skb,
--			     struct msghdr *msg, int len,
--			     struct ubuf_info *uarg);
-+			     struct msghdr *msg, struct iov_iter *iov_iter,
-+			     int len, struct ubuf_info *uarg);
+ TEST_FILES := settings
  
- /* Internal */
- #define skb_shinfo(SKB)	((struct skb_shared_info *)(skb_end_pointer(SKB)))
-@@ -3557,6 +3557,21 @@ static inline dma_addr_t skb_frag_dma_map(struct device *dev,
- 			    skb_frag_off(frag) + offset, size, dir);
- }
- 
-+/* Similar to skb_frag_dma_map, but handles devmem skbs correctly. */
-+static inline dma_addr_t skb_devmem_frag_dma_map(struct device *dev,
-+						 const struct sk_buff *skb,
-+						 const skb_frag_t *frag,
-+						 size_t offset, size_t size,
-+						 enum dma_data_direction dir)
+diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
+new file mode 100644
+index 000000000000..4f62f22bf763
+--- /dev/null
++++ b/tools/testing/selftests/net/ncdevmem.c
+@@ -0,0 +1,693 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#define __EXPORTED_HEADERS__
++
++#include <linux/uio.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <stdbool.h>
++#include <string.h>
++#include <errno.h>
++#define __iovec_defined
++#include <fcntl.h>
++#include <malloc.h>
++
++#include <arpa/inet.h>
++#include <sys/socket.h>
++#include <sys/mman.h>
++#include <sys/ioctl.h>
++#include <sys/syscall.h>
++
++#include <linux/memfd.h>
++#include <linux/if.h>
++#include <linux/dma-buf.h>
++#include <linux/udmabuf.h>
++
++#define PAGE_SHIFT 12
++#define PAGE_SIZE 4096
++#define TEST_PREFIX "ncdevmem"
++#define NUM_PAGES 16000
++
++#ifndef MSG_SOCK_DEVMEM
++#define MSG_SOCK_DEVMEM 0x2000000
++#endif
++
++/*
++ * tcpdevmem netcat. Works similarly to netcat but does device memory TCP
++ * instead of regular TCP. Uses udmabuf to mock a dmabuf provider.
++ *
++ * Usage:
++ *
++ * * Without validation:
++ *
++ *	On server:
++ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -l \
++ *		-p 5201
++ *
++ *	On client:
++ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -p 5201
++ *
++ * * With Validation:
++ *	On server:
++ *	ncdevmem -s <server IP> -c <client IP> -l -f eth1 -n 0000:06:00.0 \
++ *		-p 5202 -v 1
++ *
++ *	On client:
++ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -p 5202 \
++ *		-v 100000
++ *
++ * Note this is compatible with regular netcat. i.e. the sender or receiver can
++ * be replaced with regular netcat to test the RX or TX path in isolation.
++ */
++
++static char *server_ip = "192.168.1.4";
++static char *client_ip = "192.168.1.2";
++static char *port = "5201";
++static size_t do_validation = 0;
++static int queue_num = 15;
++static char *ifname = "eth1";
++static char *nic_pci_addr = "0000:06:00.0";
++static unsigned int iterations = 0;
++
++void print_bytes(void *ptr, size_t size)
 +{
-+	if (unlikely(skb->devmem && is_dma_buf_page(skb_frag_page(frag)))) {
-+		dma_addr_t dma_addr =
-+			dma_buf_page_to_dma_addr(skb_frag_page(frag));
-+		return dma_addr + skb_frag_off(frag) + offset;
++	unsigned char *p = ptr;
++	int i;
++	for (i = 0; i < size; i++) {
++		printf("%02hhX ", p[i]);
 +	}
-+	return skb_frag_dma_map(dev, frag, offset, size, dir);
++	printf("\n");
 +}
 +
- static inline struct sk_buff *pskb_copy(struct sk_buff *skb,
- 					gfp_t gfp_mask)
- {
-diff --git a/include/net/sock.h b/include/net/sock.h
-index c615666ff19a..733865f89635 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1890,6 +1890,8 @@ struct sockcm_cookie {
- 	u64 transmit_time;
- 	u32 mark;
- 	u32 tsflags;
-+	u32 devmem_fd;
-+	u32 devmem_offset;
- };
- 
- static inline void sockcm_init(struct sockcm_cookie *sockc,
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 9b83da794641..b1e28e7ad6a8 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -1685,8 +1685,8 @@ void msg_zerocopy_put_abort(struct ubuf_info *uarg, bool have_uref)
- EXPORT_SYMBOL_GPL(msg_zerocopy_put_abort);
- 
- int skb_zerocopy_iter_stream(struct sock *sk, struct sk_buff *skb,
--			     struct msghdr *msg, int len,
--			     struct ubuf_info *uarg)
-+			     struct msghdr *msg, struct iov_iter *iov_iter,
-+			     int len, struct ubuf_info *uarg)
- {
- 	struct ubuf_info *orig_uarg = skb_zcopy(skb);
- 	int err, orig_len = skb->len;
-@@ -1697,12 +1697,12 @@ int skb_zerocopy_iter_stream(struct sock *sk, struct sk_buff *skb,
- 	if (orig_uarg && uarg != orig_uarg)
- 		return -EEXIST;
- 
--	err = __zerocopy_sg_from_iter(msg, sk, skb, &msg->msg_iter, len);
-+	err = __zerocopy_sg_from_iter(msg, sk, skb, iov_iter, len);
- 	if (err == -EFAULT || (err == -EMSGSIZE && skb->len == orig_len)) {
- 		struct sock *save_sk = skb->sk;
- 
- 		/* Streams do not free skb on error. Reset to prev state. */
--		iov_iter_revert(&msg->msg_iter, skb->len - orig_len);
-+		iov_iter_revert(iov_iter, skb->len - orig_len);
- 		skb->sk = sk;
- 		___pskb_trim(skb, orig_len);
- 		skb->sk = save_sk;
-diff --git a/net/core/sock.c b/net/core/sock.c
-index f9b9d9ec7322..854624bee5d0 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2813,6 +2813,12 @@ int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
- 			return -EINVAL;
- 		sockc->transmit_time = get_unaligned((u64 *)CMSG_DATA(cmsg));
- 		break;
-+	case SCM_DEVMEM_OFFSET:
-+		if (cmsg->cmsg_len != CMSG_LEN(2 * sizeof(u32)))
-+			return -EINVAL;
-+		sockc->devmem_fd = ((u32 *)CMSG_DATA(cmsg))[0];
-+		sockc->devmem_offset = ((u32 *)CMSG_DATA(cmsg))[1];
-+		break;
- 	/* SCM_RIGHTS and SCM_CREDENTIALS are semantically in SOL_UNIX. */
- 	case SCM_RIGHTS:
- 	case SCM_CREDENTIALS:
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index a894b8a9dbb0..85d6cdc832ef 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -280,6 +280,7 @@
- #include <asm/ioctls.h>
- #include <net/busy_poll.h>
- #include <linux/dma-buf.h>
-+#include <uapi/linux/dma-buf.h>
- 
- /* Track pending CMSGs. */
- enum {
-@@ -1216,6 +1217,52 @@ int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *copied,
- 	return err;
- }
- 
-+static int tcp_prepare_devmem_data(struct msghdr *msg, int devmem_fd,
-+				   unsigned int devmem_offset,
-+				   struct file **devmem_file,
-+				   struct iov_iter *devmem_tx_iter, size_t size)
++void print_nonzero_bytes(void *ptr, size_t size)
 +{
-+	struct dma_buf_pages *priv;
-+	int err = 0;
++	unsigned char *p = ptr;
++	unsigned int i;
++	for (i = 0; i < size; i++) {
++		if (p[i])
++			printf("%c", p[i]);
++	}
++	printf("\n");
++}
 +
-+	*devmem_file = fget_raw(devmem_fd);
-+	if (!*devmem_file) {
-+		err = -EINVAL;
-+		goto err;
++void initialize_validation(void *line, size_t size)
++{
++	static unsigned char seed = 1;
++	unsigned char *ptr = line;
++	for (size_t i = 0; i < size; i++) {
++		ptr[i] = seed;
++		seed++;
++		if (seed == 254)
++			seed = 0;
++	}
++}
++
++void validate_buffer(void *line, size_t size)
++{
++	static unsigned char seed = 1;
++	int errors = 0;
++
++	unsigned char *ptr = line;
++	for (size_t i = 0; i < size; i++) {
++		if (ptr[i] != seed) {
++			fprintf(stderr,
++				"Failed validation: expected=%u, "
++				"actual=%u, index=%lu\n",
++				seed, ptr[i], i);
++			errors++;
++			if (errors > 20)
++				exit(1);
++		}
++		seed++;
++		if (seed == 254)
++			seed = 0;
 +	}
 +
-+	if (!is_dma_buf_pages_file(*devmem_file)) {
-+		err = -EBADF;
-+		goto err_fput;
++	fprintf(stdout, "Validated buffer\n");
++}
++
++/* Triggers a driver reset...
++ *
++ * The proper way to do this is probably 'ethtool --reset', but I don't have
++ * that supported on my current test bed. I resort to changing this
++ * configuration in the driver which also causes a driver reset...
++ */
++static void reset_flow_steering()
++{
++	char command[256];
++	memset(command, 0, sizeof(command));
++	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple off",
++		 "eth1");
++	system(command);
++
++	memset(command, 0, sizeof(command));
++	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple on",
++		 "eth1");
++	system(command);
++}
++
++static void configure_flow_steering()
++{
++	char command[256];
++	memset(command, 0, sizeof(command));
++	snprintf(command, sizeof(command),
++		 "sudo ethtool -N %s flow-type tcp4 src-ip %s dst-ip %s "
++		 "src-port %s dst-port %s queue %d",
++		 ifname, client_ip, server_ip, port, port, queue_num);
++	system(command);
++}
++
++/* Triggers a device reset, which causes the dmabuf pages binding to take
++ * effect. A better and more generic way to do this may be ethtool --reset.
++ */
++static void trigger_device_reset()
++{
++	char command[256];
++	memset(command, 0, sizeof(command));
++	snprintf(command, sizeof(command),
++		 "sudo ethtool --set-priv-flags %s enable-header-split off",
++		 ifname);
++	system(command);
++
++	memset(command, 0, sizeof(command));
++	snprintf(command, sizeof(command),
++		 "sudo ethtool --set-priv-flags %s enable-header-split on",
++		 ifname);
++	system(command);
++}
++
++static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
++{
++	struct udmabuf_create create;
++	int ret;
++
++	*devfd = open("/dev/udmabuf", O_RDWR);
++	if (*devfd < 0) {
++		fprintf(stderr,
++			"%s: [skip,no-udmabuf: Unable to access DMA "
++			"buffer device file]\n",
++			TEST_PREFIX);
++		exit(70);
 +	}
 +
-+	priv = (*devmem_file)->private_data;
-+	if (!priv) {
-+		WARN_ONCE(!priv, "dma_buf_pages_file has no private_data");
-+		err = -EINTR;
-+		goto err_fput;
++	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
++	if (*memfd < 0) {
++		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(72);
 +	}
 +
-+	if (!(priv->type & DMA_BUF_PAGES_NET_TX))
-+		return -EINVAL;
-+
-+	if (devmem_offset + size > priv->dmabuf->size) {
-+		err = -ENOSPC;
-+		goto err_fput;
++	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(73);
 +	}
 +
-+	*devmem_tx_iter = priv->net_tx.iter;
-+	iov_iter_advance(devmem_tx_iter, devmem_offset);
++	ret = ftruncate(*memfd, dmabuf_size);
++	if (ret == -1) {
++		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(74);
++	}
++
++	memset(&create, 0, sizeof(create));
++
++	create.memfd = *memfd;
++	create.offset = 0;
++	create.size = dmabuf_size;
++	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
++	if (*buf < 0) {
++		printf("%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
++		exit(75);
++	}
++}
++
++
++int do_server()
++{
++	struct dma_buf_create_pages_info pages_create_info = { 0 };
++	int devfd, memfd, buf, buf_pages, ret;
++	size_t dmabuf_size;
++
++	dmabuf_size = getpagesize() * NUM_PAGES;
++
++	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
++
++	pages_create_info.dma_buf_fd = buf;
++	pages_create_info.type = DMA_BUF_PAGES_NET_RX;
++	pages_create_info.create_flags = (1 << queue_num);
++
++	ret = sscanf(nic_pci_addr, "0000:%hhx:%hhx.%hhx",
++		     &pages_create_info.pci_bdf[0],
++		     &pages_create_info.pci_bdf[1],
++		     &pages_create_info.pci_bdf[2]);
++
++	if (ret != 3) {
++		printf("%s: [FAIL, parse fail]\n", TEST_PREFIX);
++		exit(76);
++	}
++
++	buf_pages = ioctl(buf, DMA_BUF_CREATE_PAGES, &pages_create_info);
++	if (buf_pages < 0) {
++		perror("create pages");
++		exit(77);
++	}
++
++	char *buf_mem = NULL;
++	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
++		       buf, 0);
++	if (buf_mem == MAP_FAILED) {
++		perror("mmap()");
++		exit(1);
++	}
++
++	/* Need to trigger the NIC to reallocate its RX pages, otherwise the
++	 * bind doesn't take effect.
++	 */
++	trigger_device_reset();
++
++	sleep(1);
++
++	reset_flow_steering();
++	configure_flow_steering();
++
++	struct sockaddr_in server_sin;
++	server_sin.sin_family = AF_INET;
++	server_sin.sin_port = htons(atoi(port));
++
++	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
++	if (socket < 0) {
++		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
++		exit(79);
++	}
++
++	int socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
++	if (socket < 0) {
++		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
++		exit(76);
++	}
++
++	int opt = 1;
++	ret = setsockopt(socket_fd, SOL_SOCKET,
++			 SO_REUSEADDR | SO_REUSEPORT | SO_ZEROCOPY, &opt,
++			 sizeof(opt));
++	if (ret) {
++		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
++		       strerror(errno));
++		exit(76);
++	}
++
++	printf("binding to address %s:%d\n", server_ip,
++	       ntohs(server_sin.sin_port));
++
++	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
++	if (ret) {
++		printf("%s: [FAIL, bind]: %s\n", TEST_PREFIX, strerror(errno));
++		exit(76);
++	}
++
++	ret = listen(socket_fd, 1);
++	if (ret) {
++		printf("%s: [FAIL, listen]: %s\n", TEST_PREFIX,
++		       strerror(errno));
++		exit(76);
++	}
++
++	struct sockaddr_in client_addr;
++	socklen_t client_addr_len = sizeof(client_addr);
++
++	char buffer[256];
++
++	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
++		  sizeof(buffer));
++	printf("Waiting or connection on %s:%d\n", buffer,
++	       ntohs(server_sin.sin_port));
++	int client_fd = accept(socket_fd, &client_addr, &client_addr_len);
++
++	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
++		  sizeof(buffer));
++	printf("Got connection from %s:%d\n", buffer,
++	       ntohs(client_addr.sin_port));
++
++	char iobuf[819200];
++	char ctrl_data[sizeof(int) * 20000];
++
++	size_t total_received = 0;
++	size_t i = 0;
++	size_t page_aligned_frags = 0;
++	size_t non_page_aligned_frags = 0;
++	while (1) {
++		bool is_devmem = false;
++		printf("\n\n");
++
++		struct msghdr msg = { 0 };
++		struct iovec iov = { .iov_base = iobuf,
++				     .iov_len = sizeof(iobuf) };
++		msg.msg_iov = &iov;
++		msg.msg_iovlen = 1;
++		msg.msg_control = ctrl_data;
++		msg.msg_controllen = sizeof(ctrl_data);
++		ssize_t ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
++		printf("recvmsg ret=%ld\n", ret);
++		if (ret < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
++			continue;
++		}
++		if (ret < 0) {
++			perror("recvmsg");
++			continue;
++		}
++		if (ret == 0) {
++			printf("client exited\n");
++			goto cleanup;
++		}
++
++		i++;
++		struct cmsghdr *cm = NULL;
++		struct cmsg_devmem *cmsg_devmem = NULL;
++		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
++			if (cm->cmsg_level != SOL_SOCKET ||
++			    (cm->cmsg_type != SCM_DEVMEM_OFFSET &&
++			     cm->cmsg_type != SCM_DEVMEM_HEADER)) {
++				fprintf(stdout, "skipping non-devmem cmsg\n");
++				continue;
++			}
++
++			cmsg_devmem = (struct cmsg_devmem *)CMSG_DATA(cm);
++			is_devmem = true;
++
++			if (cm->cmsg_type == SCM_DEVMEM_HEADER) {
++				// TODO: process data copied from skb's linear
++				// buffer.
++				fprintf(stdout,
++					"SCM_DEVMEM_HEADER. "
++					"cmsg_devmem->frag_size=%u\n",
++					cmsg_devmem->frag_size);
++
++				continue;
++			}
++
++			struct devmemtoken token = { cmsg_devmem->frag_token,
++						     1 };
++
++			total_received += cmsg_devmem->frag_size;
++			printf("received frag_page=%u, in_page_offset=%u,"
++			       " frag_offset=%u, frag_size=%u, token=%u"
++			       " total_received=%lu\n",
++			       cmsg_devmem->frag_offset >> PAGE_SHIFT,
++			       cmsg_devmem->frag_offset % PAGE_SIZE,
++			       cmsg_devmem->frag_offset, cmsg_devmem->frag_size,
++			       cmsg_devmem->frag_token, total_received);
++
++			if (cmsg_devmem->frag_size % PAGE_SIZE)
++				non_page_aligned_frags++;
++			else
++				page_aligned_frags++;
++
++			struct dma_buf_sync sync = { 0 };
++			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
++			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
++
++			if (do_validation)
++				validate_buffer(
++					((unsigned char *)buf_mem) +
++						cmsg_devmem->frag_offset,
++					cmsg_devmem->frag_size);
++			else
++				print_nonzero_bytes(
++					((unsigned char *)buf_mem) +
++						cmsg_devmem->frag_offset,
++					cmsg_devmem->frag_size);
++
++			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
++			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
++
++			ret = setsockopt(client_fd, SOL_SOCKET,
++					 SO_DEVMEM_DONTNEED, &token,
++					 sizeof(token));
++			if (ret) {
++				perror("SO_DEVMEM_DONTNEED");
++				exit(1);
++			}
++		}
++		if (!is_devmem)
++			printf("flow steering error\n");
++
++		printf("total_received=%lu\n", total_received);
++	}
++
++cleanup:
++	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
++
++	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
++		page_aligned_frags, non_page_aligned_frags);
++
++	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
++		page_aligned_frags, non_page_aligned_frags);
++
++	munmap(buf_mem, dmabuf_size);
++	close(client_fd);
++	close(socket_fd);
++	close(buf_pages);
++	close(buf);
++	close(memfd);
++	close(devfd);
++	trigger_device_reset();
 +
 +	return 0;
-+
-+err_fput:
-+	fput(*devmem_file);
-+	*devmem_file = NULL;
-+err:
-+	return err;
 +}
 +
- int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
-@@ -1227,6 +1274,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 	int process_backlog = 0;
- 	bool zc = false;
- 	long timeo;
-+	struct file *devmem_file = NULL;
-+	struct iov_iter devmem_tx_iter;
- 
- 	flags = msg->msg_flags;
- 
-@@ -1295,6 +1344,14 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 		}
- 	}
- 
-+	if (sockc.devmem_fd) {
-+		err = tcp_prepare_devmem_data(msg, sockc.devmem_fd,
-+					      sockc.devmem_offset, &devmem_file,
-+					      &devmem_tx_iter, size);
-+		if (err)
-+			goto out_err;
++int do_client()
++{
++	printf("doing client\n");
++
++	struct dma_buf_create_pages_info pages_create_info = { 0 };
++	int devfd, memfd, buf, buf_pages, ret;
++	size_t dmabuf_size;
++
++	dmabuf_size = getpagesize() * NUM_PAGES;
++
++	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
++
++	pages_create_info.dma_buf_fd = buf;
++	pages_create_info.type = DMA_BUF_PAGES_NET_TX;
++
++	ret = sscanf(nic_pci_addr, "0000:%hhx:%hhx.%hhx",
++		     &pages_create_info.pci_bdf[0],
++		     &pages_create_info.pci_bdf[1],
++		     &pages_create_info.pci_bdf[2]);
++
++	if (ret != 3) {
++		printf("%s: [FAIL, parse fail]\n", TEST_PREFIX);
++		exit(76);
 +	}
 +
- 	/* This should be in poll */
- 	sk_clear_bit(SOCKWQ_ASYNC_NOSPACE, sk);
- 
-@@ -1408,7 +1465,17 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 					goto wait_for_space;
- 			}
- 
--			err = skb_zerocopy_iter_stream(sk, skb, msg, copy, uarg);
-+			if (devmem_file) {
-+				err = skb_zerocopy_iter_stream(sk, skb, msg,
-+							       &devmem_tx_iter,
-+							       copy, uarg);
-+				if (err > 0)
-+					iov_iter_advance(&msg->msg_iter, err);
-+			} else {
-+				err = skb_zerocopy_iter_stream(sk, skb, msg,
-+							       &msg->msg_iter,
-+							       copy, uarg);
++	buf_pages = ioctl(buf, DMA_BUF_CREATE_PAGES, &pages_create_info);
++	if (buf_pages < 0) {
++		perror("create pages");
++		exit(77);
++	}
++
++	char *buf_mem = NULL;
++	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
++		       buf, 0);
++	if (buf_mem == MAP_FAILED) {
++		perror("mmap()");
++		exit(1);
++	}
++
++	struct sockaddr_in server_sin;
++	server_sin.sin_family = AF_INET;
++	server_sin.sin_port = htons(atoi(port));
++
++	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
++	if (socket < 0) {
++		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
++		exit(79);
++	}
++
++	int socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
++	if (socket < 0) {
++		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
++		exit(76);
++	}
++
++	int opt = 1;
++	ret = setsockopt(socket_fd, SOL_SOCKET,
++			 SO_REUSEADDR | SO_REUSEPORT | SO_ZEROCOPY, &opt,
++			 sizeof(opt));
++	if (ret) {
++		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
++		       strerror(errno));
++		exit(76);
++	}
++
++	struct sockaddr_in client_sin;
++	client_sin.sin_family = AF_INET;
++	client_sin.sin_port = htons(atoi(port));
++
++	ret = inet_pton(client_sin.sin_family, client_ip, &client_sin.sin_addr);
++	if (socket < 0) {
++		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
++		exit(79);
++	}
++
++	ret = bind(socket_fd, &client_sin, sizeof(client_sin));
++	if (ret) {
++		printf("%s: [FAIL, bind]: %s\n", TEST_PREFIX, strerror(errno));
++		exit(76);
++	}
++
++	ret = setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt, sizeof(opt));
++	if (ret) {
++		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
++		       strerror(errno));
++		exit(76);
++	}
++
++	ret = connect(socket_fd, &server_sin, sizeof(server_sin));
++	if (ret) {
++		printf("%s: [FAIL, connect]: %s\n", TEST_PREFIX,
++		       strerror(errno));
++		exit(76);
++	}
++
++	char *line = NULL;
++	size_t line_size = 0;
++	size_t len = 0;
++
++	size_t i = 0;
++	while (!iterations || i < iterations) {
++		i++;
++		free(line);
++		line = NULL;
++		if (do_validation) {
++			line = malloc(do_validation);
++			if (!line) {
++				fprintf(stderr, "Failed to allocate\n");
++				exit(1);
 +			}
- 			if (err == -EMSGSIZE || err == -EEXIST) {
- 				tcp_mark_push(tp, skb);
- 				goto new_segment;
-@@ -1462,6 +1529,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 	}
- out_nopush:
- 	net_zcopy_put(uarg);
-+	if (devmem_file)
-+		fput(devmem_file);
- 	return copied + copied_syn;
- 
- do_error:
-@@ -1470,6 +1539,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 	if (copied + copied_syn)
- 		goto out;
- out_err:
-+	if (devmem_file)
-+		fput(devmem_file);
- 	net_zcopy_put_abort(uarg, true);
- 	err = sk_stream_error(sk, flags, err);
- 	/* make sure we wake any epoll edge trigger waiter */
++			memset(line, 0, do_validation);
++			initialize_validation(line, do_validation);
++			line_size = do_validation;
++		} else {
++			line_size = getline(&line, &len, stdin);
++		}
++
++		if (line_size < 0)
++			continue;
++
++		fprintf(stdout, "DEBUG: read line_size=%lu\n", line_size);
++
++		struct dma_buf_sync sync = { 0 };
++		sync.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_START;
++		ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
++
++		memset(buf_mem, 0, dmabuf_size);
++		memcpy(buf_mem, line, line_size);
++
++		if (do_validation)
++			validate_buffer(buf_mem, line_size);
++
++		struct iovec iov = { .iov_base = NULL, .iov_len = line_size };
++
++		struct msghdr msg = { 0 };
++
++		msg.msg_iov = &iov;
++		msg.msg_iovlen = 1;
++
++		char ctrl_data[CMSG_SPACE(sizeof(int) * 2)];
++		msg.msg_control = ctrl_data;
++		msg.msg_controllen = sizeof(ctrl_data);
++
++		struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
++		cmsg->cmsg_level = SOL_SOCKET;
++		cmsg->cmsg_type = SCM_DEVMEM_OFFSET;
++		cmsg->cmsg_len = CMSG_LEN(sizeof(int) * 2);
++		*((int *)CMSG_DATA(cmsg)) = buf_pages;
++		((int *)CMSG_DATA(cmsg))[1] = 0;
++
++		ret = sendmsg(socket_fd, &msg, MSG_ZEROCOPY);
++		if (ret < 0)
++			perror("sendmsg");
++		else
++			fprintf(stdout, "DEBUG: sendmsg_ret=%d\n", ret);
++
++		sync.flags = DMA_BUF_SYNC_WRITE | DMA_BUF_SYNC_END;
++		ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
++
++		// sleep for a bit before we overwrite the dmabuf that's being
++		// sent.
++		if (do_validation)
++			sleep(1);
++	}
++
++	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
++
++	while (1)
++		sleep(10);
++
++	munmap(buf_mem, dmabuf_size);
++
++	free(line);
++	close(socket_fd);
++	close(buf_pages);
++	close(buf);
++	close(memfd);
++	close(devfd);
++	trigger_device_reset();
++
++	return 0;
++}
++
++int main(int argc, char *argv[])
++{
++	int is_server = 0, opt;
++
++	// put ':' in the starting of the
++	// string so that program can
++	//distinguish between '?' and ':'
++	while ((opt = getopt(argc, argv, "ls:c:p:v:q:f:n:i:")) != -1) {
++		switch (opt) {
++		case 'l':
++			is_server = 1;
++			break;
++		case 's':
++			server_ip = optarg;
++			break;
++		case 'c':
++			client_ip = optarg;
++			break;
++		case 'p':
++			port = optarg;
++			break;
++		case 'v':
++			do_validation = atoll(optarg);
++			break;
++		case 'q':
++			queue_num = atoi(optarg);
++			break;
++		case 'f':
++			ifname = optarg;
++			break;
++		case 'n':
++			nic_pci_addr = optarg;
++			break;
++		case 'i':
++			iterations = atoll(optarg);
++			break;
++		case '?':
++			printf("unknown option: %c\n", optopt);
++			break;
++		}
++	}
++
++	// optind is for the extra arguments
++	// which are not parsed
++	for (; optind < argc; optind++) {
++		printf("extra arguments: %s\n", argv[optind]);
++	}
++
++	if (is_server)
++		return do_server();
++
++	return do_client();
++}
 -- 
 2.41.0.390.g38632f3daf-goog
 
