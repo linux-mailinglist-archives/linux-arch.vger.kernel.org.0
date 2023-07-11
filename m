@@ -2,91 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CC174EF5D
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 14:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CCB74EF61
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 14:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjGKMvG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jul 2023 08:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
+        id S232167AbjGKMvY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jul 2023 08:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKMvF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 08:51:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0CB98;
-        Tue, 11 Jul 2023 05:51:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S231603AbjGKMvX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 08:51:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9DDE6C;
+        Tue, 11 Jul 2023 05:51:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6579F2232B;
-        Tue, 11 Jul 2023 12:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689079863; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=nS/Yg6QEzXBrMLnDzymRUQ3/vdKmPN/jkAyJcBvJ29o=;
-        b=p93uIXjeRBxJ68aujj1J5E2pAOpi/T4Yf+t/nq10zsj265N4q8ugZJUe9nmZkMcW6oK32w
-        fFcro0PiyITrAK5w7vzSa/AZ+haqvRL5yTk9x/1KsK16zHOkdTcqwLXIIjEMttOwS3UmVF
-        Eiue+dUnY4FPlORNmsS8A/nbMxFyDLY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 415671391C;
-        Tue, 11 Jul 2023 12:51:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +rebDjdQrWRGRQAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Tue, 11 Jul 2023 12:51:03 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     arnd@arndb.de
-Cc:     keescook@chromium.org, will@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH] vmlinux.lds.h: Remove a reference to no longer used sections .text..refcount
-Date:   Tue, 11 Jul 2023 14:50:54 +0200
-Message-Id: <20230711125054.9000-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94D1D614BF;
+        Tue, 11 Jul 2023 12:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555A7C433C7;
+        Tue, 11 Jul 2023 12:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689079879;
+        bh=v+qEn9CoklXqxP1Sa+MFkzpKjgr7E+g5iZSiirA+nSs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fUjSfsi7J0u/QQbtQMCDtiEKTIE7W5W0WBpPNSQMzTFUcRkYSb04jbHJs21fv800g
+         EThrQaUqs7NsBFe05IcCLgYzLYXYWoW8KeI98C2YcabyFUIYGnWFvDeTxCtiBR76jr
+         w/Zr0d0700gwvjaTe1JlnCUhU8AS5VndNnODqvgRp53hJh/zIs47unszqpTHBzrQaK
+         1xiXUMMc6WfSsUWm4s9ZEif1kEg2vCGCmP2azN/sbKPrUei4Ggr2CXmDG8Mzu44IK0
+         429B8vdVSRgfpn5E02EAVJjTXmzixyzoj9+S/Iq6iOYedIetr84v91WQhSf1jA/jj4
+         7ALpPYBl5adoQ==
+Date:   Tue, 11 Jul 2023 14:51:01 +0200
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        christian@brauner.io, Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        David Howells <dhowells@redhat.com>, fenghua.yu@intel.com,
+        firoz.khan@linaro.org, Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
+        Kim Phillips <kim.phillips@arm.com>, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linuxppc-dev@lists.ozlabs.org, Andy Lutomirski <luto@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>, paul.burton@mips.com,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Zijlstra <peterz@infradead.org>, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, tycho@tycho.ws,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
+Message-ID: <ZK1QNRidZuGcfOSd@example.org>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+ <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
+ <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sections .text..refcount were previously used to hold an error path code
-for fast refcount overflow protection on x86, see commit 7a46ec0e2f48
-("locking/refcounts, x86/asm: Implement fast refcount overflow
-protection") and commit 564c9cc84e2a ("locking/refcounts, x86/asm: Use
-unique .text section for refcount exceptions").
+On Tue, Jul 11, 2023 at 01:52:01PM +0200, Christian Brauner wrote:
+> On Tue, Jul 11, 2023 at 01:42:19PM +0200, Arnd Bergmann wrote:
+> > On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
+> > > From: Palmer Dabbelt <palmer@sifive.com>
+> > >
+> > > On the userspace side fchmodat(3) is implemented as a wrapper
+> > > function which implements the POSIX-specified interface. This
+> > > interface differs from the underlying kernel system call, which does not
+> > > have a flags argument. Most implementations require procfs [1][2].
+> > >
+> > > There doesn't appear to be a good userspace workaround for this issue
+> > > but the implementation in the kernel is pretty straight-forward.
+> > >
+> > > The new fchmodat4() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
+> > > unlike existing fchmodat.
+> > >
+> > > [1] 
+> > > https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
+> > > [2] 
+> > > https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
+> > >
+> > > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+> > > Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> > 
+> > I don't know the history of why we ended up with the different
+> > interface, or whether this was done intentionally in the kernel
+> > or if we want this syscall.
+> > 
+> > Assuming this is in fact needed, I double-checked that the
+> > implementation looks correct to me and is portable to all the
+> > architectures, without the need for a compat wrapper.
+> > 
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> The system call itself is useful afaict. But please,
+> 
+> s/fchmodat4/fchmodat2/
 
-The code was replaced and removed in commit fb041bb7c0a9
-("locking/refcount: Consolidate implementations of refcount_t") and no
-sections .text..refcount are present since then.
+Sure. I will.
 
-Remove then a relic referencing these sections from TEXT_TEXT to avoid
-confusing people, like me. This is a non-functional change.
+> With very few exceptions we don't version by argument number but by
+> revision and we should stick to one scheme:
+> 
+> openat()->openat2()
+> eventfd()->eventfd2()
+> clone()/clone2()->clone3()
+> dup()->dup2()->dup3() // coincides with nr of arguments
+> pipe()->pipe2() // coincides with nr of arguments
+> renameat()->renameat2()
+> 
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- include/asm-generic/vmlinux.lds.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 0587354ba678..9c59409104f6 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -578,7 +578,6 @@
- 		*(.text.unlikely .text.unlikely.*)			\
- 		*(.text.unknown .text.unknown.*)			\
- 		NOINSTR_TEXT						\
--		*(.text..refcount)					\
- 		*(.ref.text)						\
- 		*(.text.asan.* .text.tsan.*)				\
- 	MEM_KEEP(init.text*)						\
 -- 
-2.35.3
+Rgrds, legion
 
