@@ -2,125 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D209F74ED45
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 13:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FF674ED4A
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 13:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjGKLvc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jul 2023 07:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S231208AbjGKLwU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jul 2023 07:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjGKLvb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 07:51:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1439711D;
-        Tue, 11 Jul 2023 04:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PH6oczCY2S48OMHioiU/D8QJo1+dj2ecfu0k752Tjj4=; b=wRboR8jjgvVd53fKMCoUzQJhAv
-        UQg72sFHXt/ZytZ49FJZOtXcj8j0NFIrz/oEIzSAxkrZUYtTXxZ+ur3YI3Ykm9ajtTdyfCknWelDq
-        FN2K77ByWsqtnsWWD8MK71e4Jezf11ZM2i47WZNCz7mfSpJUl75xQvzq8T8VTbbUIza6zlPCNNcN5
-        txA1/+XtTFP+MazM7XYSBh04hR24n7PIJzoAlfjocivkjaqWKTAUKSZDrzS/C3y3yuPqIKq3GXlkW
-        p6PB2D80HvcliTu/Vqw3t7VvDxVFdGC0MsemgAy8IqVjJFCAfI4zYdClvlnxVWX+vkuR2xvWbGfnw
-        udGnAVeg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJBtm-00FgYd-Oo; Tue, 11 Jul 2023 11:51:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        with ESMTP id S229612AbjGKLwS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 07:52:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AE6B1;
+        Tue, 11 Jul 2023 04:52:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 36BB0300222;
-        Tue, 11 Jul 2023 13:51:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1F640243429D0; Tue, 11 Jul 2023 13:51:17 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 13:51:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD68D61461;
+        Tue, 11 Jul 2023 11:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B5DC433C8;
+        Tue, 11 Jul 2023 11:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689076336;
+        bh=FEYwsW8eEVWKaDxjSpsLJzH203pRDz88SghdcKEI1Cc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=djo5kRUxcwGp9ZdqEH8AfNMhg0qsCG7bCvPx452SCCqbjaEm9+RUsFZgu/4Zib58z
+         5wxZbVUvaLPjWynxuO9RjNWPxwRPiLlpBdpq7u67qP6VP0a5PV7Uq/N8eVnqF7Ktse
+         bN/LatBa45dmE7fM0H3vOwVGIv+ESV5MlxzwYjjKXjjGFgQCBBr1R1dqqxW1RDhTHc
+         BWhV6dQRSlMUIxiZQOE2JLF8NE1hMXxoZ08a4cE6AuaFymusAbOhm10YCvIc5/7Agj
+         whDEvFt+uIB5AOK9f11RR8rXlvAFr5opLcAF5l/puWqcOG6Aj8zCTnMsnaYx+/nGRM
+         iFCAZ/+dDnSMg==
+Date:   Tue, 11 Jul 2023 13:52:01 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        christian@brauner.io, Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        David Howells <dhowells@redhat.com>, fenghua.yu@intel.com,
+        firoz.khan@linaro.org, Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
+        Kim Phillips <kim.phillips@arm.com>, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linuxppc-dev@lists.ozlabs.org, Andy Lutomirski <luto@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>, paul.burton@mips.com,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Zijlstra <peterz@infradead.org>, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v5 28/38] x86: Implement the new page table range API
-Message-ID: <20230711115117.GL3062772@hirez.programming.kicks-ass.net>
-References: <20230710204339.3554919-1-willy@infradead.org>
- <20230710204339.3554919-29-willy@infradead.org>
+        Tony Luck <tony.luck@intel.com>, tycho@tycho.ws,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
+Message-ID: <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+ <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230710204339.3554919-29-willy@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 09:43:29PM +0100, Matthew Wilcox (Oracle) wrote:
-> Add PFN_PTE_SHIFT and a noop update_mmu_cache_range().
-
-And it silently removes set_pte_at() :/ What's happening here ?!?
-
--ENOCONTEXT
-
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> ---
->  arch/x86/include/asm/pgtable.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+On Tue, Jul 11, 2023 at 01:42:19PM +0200, Arnd Bergmann wrote:
+> On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
+> > From: Palmer Dabbelt <palmer@sifive.com>
+> >
+> > On the userspace side fchmodat(3) is implemented as a wrapper
+> > function which implements the POSIX-specified interface. This
+> > interface differs from the underlying kernel system call, which does not
+> > have a flags argument. Most implementations require procfs [1][2].
+> >
+> > There doesn't appear to be a good userspace workaround for this issue
+> > but the implementation in the kernel is pretty straight-forward.
+> >
+> > The new fchmodat4() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
+> > unlike existing fchmodat.
+> >
+> > [1] 
+> > https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
+> > [2] 
+> > https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
+> >
+> > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
 > 
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index c6242bc58a71..9818f13bfa09 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -185,6 +185,8 @@ static inline int pte_special(pte_t pte)
->  
->  static inline u64 protnone_mask(u64 val);
->  
-> +#define PFN_PTE_SHIFT	PAGE_SHIFT
-> +
->  static inline unsigned long pte_pfn(pte_t pte)
->  {
->  	phys_addr_t pfn = pte_val(pte);
-> @@ -1020,13 +1022,6 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
->  	return res;
->  }
->  
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pte)
-> -{
-> -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
-> -	set_pte(ptep, pte);
-> -}
-> -
->  static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
->  			      pmd_t *pmdp, pmd_t pmd)
->  {
-> @@ -1292,6 +1287,11 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->  		unsigned long addr, pte_t *ptep)
->  {
->  }
-> +static inline void update_mmu_cache_range(struct vm_fault *vmf,
-> +		struct vm_area_struct *vma, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr)
-> +{
-> +}
->  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
->  		unsigned long addr, pmd_t *pmd)
->  {
-> -- 
-> 2.39.2
+> I don't know the history of why we ended up with the different
+> interface, or whether this was done intentionally in the kernel
+> or if we want this syscall.
 > 
+> Assuming this is in fact needed, I double-checked that the
+> implementation looks correct to me and is portable to all the
+> architectures, without the need for a compat wrapper.
+> 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+The system call itself is useful afaict. But please,
+
+s/fchmodat4/fchmodat2/
+
+With very few exceptions we don't version by argument number but by
+revision and we should stick to one scheme:
+
+openat()->openat2()
+eventfd()->eventfd2()
+clone()/clone2()->clone3()
+dup()->dup2()->dup3() // coincides with nr of arguments
+pipe()->pipe2() // coincides with nr of arguments
+renameat()->renameat2()
