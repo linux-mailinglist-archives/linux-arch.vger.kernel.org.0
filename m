@@ -2,50 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D560174EF16
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 14:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E681474EF53
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 14:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjGKMho (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jul 2023 08:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S231648AbjGKMuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jul 2023 08:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjGKMhm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 08:37:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD33171B;
-        Tue, 11 Jul 2023 05:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KlnB2tfvK6zA01tMfE90usFEigtkyKBwlIV/RGlhbEc=; b=CkKrD0bRwFnd4JjbmnZV9d1FGE
-        NFbm5ssns3ISKSsdZDQ5sCU7+tQkCpLVQbHcT0E/1gtjNJkJTIevFzmqkbyZuf1Mj4AqYOmSED1oY
-        umjsfhCQO+J+P/dyQz4emavUaIQwzN4mUBFwsi/OFX3cVouA7VRKiagiMcPVCvFMD7FjQfkcDwm25
-        tWFIT6suFiVLnOgPzk18GpdH6f+xuVcN9BSpLD1MAVUNtarIxQMweeF7hG7KZ/7x361aB1MTP5PJw
-        uVeSSiX9aso+xhA1lEWInzX6tudKcEoN9mbD8Gb7qNTipA3Ko7qBwt9lK1qJVIWREeGv+eZ3IukD8
-        dskKbcOw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJCbT-00Fid1-AK; Tue, 11 Jul 2023 12:36:27 +0000
-Date:   Tue, 11 Jul 2023 13:36:27 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v5 00/38] New page table range API
-Message-ID: <ZK1My5hQYC2Kb6G1@casper.infradead.org>
-References: <20230710204339.3554919-1-willy@infradead.org>
- <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
+        with ESMTP id S229637AbjGKMuL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 08:50:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AE098;
+        Tue, 11 Jul 2023 05:50:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A8FC614C8;
+        Tue, 11 Jul 2023 12:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36E0C433C8;
+        Tue, 11 Jul 2023 12:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689079809;
+        bh=dNf0h22e3NNw5WnIyQMA79RXwcCjXd4yUaNvlYSmEks=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cNjPPHJCjkBuTo31uxO23EaD7iBmnxEZwpJnZPbX4Xt0szcj8ZgyO+hFXrziDLnmJ
+         WJfKsnZYW2NOQL3/ej8bLyiHu3o1cYgHqGtMbPw/xU5DUyrh9wH/uRCTzT6nteqM17
+         ih0fj7MI3xs3DsWKDpGWHK/svwtx6ndwsmveTHwe5/53fRS3olzp6tBliGqf9sdGX9
+         kN9/UPhMXhRiCAx1fAJd0t7sk9E2Jrj7YEssyG4k1JXRDx+YpYchn3i5vwcM7u3hPP
+         uyPhDJtpjTnpxvOXge4E7SaouWn3esU19tKAKmZoLjNyYWqbKP+E5Cdjp80IatCv7m
+         LrjabKUWygppA==
+Date:   Tue, 11 Jul 2023 14:49:50 +0200
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, Palmer Dabbelt <palmer@sifive.com>,
+        James.Bottomley@hansenpartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        dhowells@redhat.com, fenghua.yu@intel.com, firoz.khan@linaro.org,
+        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
+        kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, paul.burton@mips.com, paulus@samba.org,
+        peterz@infradead.org, ralf@linux-mips.org, rth@twiddle.net,
+        schwidefsky@de.ibm.com, sparclinux@vger.kernel.org,
+        stefan@agner.ch, tglx@linutronix.de, tony.luck@intel.com,
+        tycho@tycho.ws, will@kernel.org, x86@kernel.org,
+        ysato@users.sourceforge.jp
+Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
+Message-ID: <ZK1P7kkjTvSU8M++@example.org>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+ <ZK1K1BOf43JOJWMx@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <ZK1K1BOf43JOJWMx@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,36 +81,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 11:07:06AM +0200, Christian Borntraeger wrote:
-> Am 10.07.23 um 22:43 schrieb Matthew Wilcox (Oracle):
-> > This patchset changes the API used by the MM to set up page table entries.
-> > The four APIs are:
-> >      set_ptes(mm, addr, ptep, pte, nr)
-> >      update_mmu_cache_range(vma, addr, ptep, nr)
-> >      flush_dcache_folio(folio)
-> >      flush_icache_pages(vma, page, nr)
-> > 
-> > flush_dcache_folio() isn't technically new, but no architecture
-> > implemented it, so I've done that for them.  The old APIs remain around
-> > but are mostly implemented by calling the new interfaces.
-> > 
-> > The new APIs are based around setting up N page table entries at once.
-> > The N entries belong to the same PMD, the same folio and the same VMA,
-> > so ptep++ is a legitimate operation, and locking is taken care of for
-> > you.  Some architectures can do a better job of it than just a loop,
-> > but I have hesitated to make too deep a change to architectures I don't
-> > understand well.
-> > 
-> > One thing I have changed in every architecture is that PG_arch_1 is now a
-> > per-folio bit instead of a per-page bit.  This was something that would
-> > have to happen eventually, and it makes sense to do it now rather than
-> > iterate over every page involved in a cache flush and figure out if it
-> > needs to happen.
+On Tue, Jul 11, 2023 at 01:28:04PM +0100, Matthew Wilcox wrote:
+> On Tue, Jul 11, 2023 at 01:25:43PM +0200, Alexey Gladkov wrote:
+> > -static int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+> > +static int do_fchmodat4(int dfd, const char __user *filename, umode_t mode, int lookup_flags)
 > 
-> I think we do use PG_arch_1 on s390 for our secure page handling and
-> making this perf folio instead of physical page really seems wrong
-> and it probably breaks this code.
+> This function can still be called do_fchmodat(); we don't need to
+> version internal functions.
 
-Per-page flags are going away in the next few years, so you're going to
-need a new design.  s390 seems to do a lot of unusual things.  I wish
-you'd talk to the rest of us more.
+Yes. I tried not to change too much when adopting a patch. In the new
+version, I will return the old name. Thanks.
+
+-- 
+Rgrds, legion
+
