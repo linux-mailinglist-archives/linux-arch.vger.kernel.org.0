@@ -2,93 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF54374F9BD
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 23:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4398F74FA88
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jul 2023 00:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjGKVae (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jul 2023 17:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S231348AbjGKWDn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jul 2023 18:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjGKVad (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 17:30:33 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732D5E77
-        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 14:30:32 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b9ecf0cb4cso9840845ad.2
-        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 14:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689111032; x=1691703032;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vppmwRRbyi5GVcqEuzCwPvW7VSP+pm8Knc+bGCD6gFQ=;
-        b=juHvMnq0uCdj1HrRrOHCtvwCA9TetWPKCCAqRCWccouGKKaqd02BVbQ7UQ36p5PJt5
-         iv7CfkmNlhEj7Bgo8J/R+bjVipGnHcitAhpid5NVPXlIMYXs0xfCSMhiil55sQ2gx1FY
-         6PX1x5/5QqPiZLJITUBToOOzNPzNKyvODmJjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689111032; x=1691703032;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vppmwRRbyi5GVcqEuzCwPvW7VSP+pm8Knc+bGCD6gFQ=;
-        b=jxpmVJMgqYA3AmtXYLYPmhAeLKgEJLakzDPGKwzUgcP8tIHWALAVUsgshjIOgVoc1E
-         VsoAPyI8bCjrU+8PlEEPd+GS/IL6BXoMSK3fswNAlpU8yOzc6altVQmCYwBcaZ7T1TbP
-         EjugMUzi2xBkczCLeaavW9ome91KHTVOhhLlmYRLWnydMhaWtwxiZsR/FG7/9E7U8Rd5
-         JtOJ3xl226cWhnv3ZtSzKNpBfAimmf0Tes2I9FbLnbBcUzJ4KC/Lqv5VqS89kuuvM9Pb
-         K8B37C9nKyx2qamgb3zQFEkjTqlIRmSQY8uvUTkwFWVr3pcAWeMGGpHEnA3GFme9bd5/
-         hxxw==
-X-Gm-Message-State: ABy/qLa2YJZss/NvVqoFuEGMIHHwrn9DGauXULzi0Zh9p9BVkuaHHxMa
-        tKrniSSYHoMR4WGZcaYwTsKDvQ==
-X-Google-Smtp-Source: APBJJlFyso7NqCnY006Lit+lDEdWaICt+E2jnc/okglEaclfY4HCJ6PPxwcl4jkaSABEJ7oX78F+Kw==
-X-Received: by 2002:a17:902:da89:b0:1b8:5541:9d5b with SMTP id j9-20020a170902da8900b001b855419d5bmr14314325plx.17.1689111031869;
-        Tue, 11 Jul 2023 14:30:31 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b001b9c5e07bc3sm43847plw.238.2023.07.11.14.30.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 14:30:31 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     arnd@arndb.de, Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Kees Cook <keescook@chromium.org>, will@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vmlinux.lds.h: Remove a reference to no longer used sections .text..refcount
-Date:   Tue, 11 Jul 2023 14:30:22 -0700
-Message-Id: <168911102014.3161793.10168759191370577926.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230711125054.9000-1-petr.pavlu@suse.com>
-References: <20230711125054.9000-1-petr.pavlu@suse.com>
+        with ESMTP id S229551AbjGKWDm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 18:03:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A50D170C;
+        Tue, 11 Jul 2023 15:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ruHFUTBYjMeb32nlu48tPWaF8pJMw/xDaOvIEKoJxjs=; b=dM0kbTdzbqKGUs8PimqMlhNiuL
+        9K4ZZr2jq02N7HlVgZJqCrsXNsqTj6GnaTbU8l/IjScJNP6nakX2h0eCO+bC333AGt7nU/hvME/Lj
+        ZHVdPns8UL3cG9OrzULU08YpFnZGnmAjWcNiDKuWfUwxQv1RqOmOCHD3fX4RJTaARboBTqyXv6dHZ
+        8udt53NgleBXCmfQNQEp22OAtqArpSuFhdiJTOSQIrSPtxCceljxvAiJLDr6q9/hhcD6V5kDiDN+r
+        3avXUTIcn9afQ0u+MWJAaiMKgXRUqGsbdTmuRtkfYVLg+w2KIXqkL0lYcqc1RUQhDqk3Fi0X2Vn0v
+        hEDneSog==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qJLSM-00G5VK-9M; Tue, 11 Jul 2023 22:03:38 +0000
+Date:   Tue, 11 Jul 2023 23:03:38 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH v5 00/38] New page table range API
+Message-ID: <ZK3Ruo6g4fujTrOY@casper.infradead.org>
+References: <20230710204339.3554919-1-willy@infradead.org>
+ <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
+ <ZK1My5hQYC2Kb6G1@casper.infradead.org>
+ <20230711172440.77504856@p-imbrenda>
+ <20230711095233.aa74320d729c1da818a6a4ed@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711095233.aa74320d729c1da818a6a4ed@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-On Tue, 11 Jul 2023 14:50:54 +0200, Petr Pavlu wrote:
-> Sections .text..refcount were previously used to hold an error path code
-> for fast refcount overflow protection on x86, see commit 7a46ec0e2f48
-> ("locking/refcounts, x86/asm: Implement fast refcount overflow
-> protection") and commit 564c9cc84e2a ("locking/refcounts, x86/asm: Use
-> unique .text section for refcount exceptions").
+On Tue, Jul 11, 2023 at 09:52:33AM -0700, Andrew Morton wrote:
+> On Tue, 11 Jul 2023 17:24:40 +0200 Claudio Imbrenda <imbrenda@linux.ibm.com> wrote:
 > 
-> The code was replaced and removed in commit fb041bb7c0a9
-> ("locking/refcount: Consolidate implementations of refcount_t") and no
-> sections .text..refcount are present since then.
+> > On Tue, 11 Jul 2023 13:36:27 +0100
+> > Matthew Wilcox <willy@infradead.org> wrote:
+> > 
+> > > On Tue, Jul 11, 2023 at 11:07:06AM +0200, Christian Borntraeger wrote:
+> > > > Am 10.07.23 um 22:43 schrieb Matthew Wilcox (Oracle):  
+> > > > > This patchset changes the API used by the MM to set up page table entries.
+> > > > > The four APIs are:
+> > > > >      set_ptes(mm, addr, ptep, pte, nr)
+> > > > >      update_mmu_cache_range(vma, addr, ptep, nr)
+> > > > >      flush_dcache_folio(folio)
+> > > > >      flush_icache_pages(vma, page, nr)
+> > > > > 
+> > > > > flush_dcache_folio() isn't technically new, but no architecture
+> > > > > implemented it, so I've done that for them.  The old APIs remain around
+> > > > > but are mostly implemented by calling the new interfaces.
+> > > > > 
+> > > > > The new APIs are based around setting up N page table entries at once.
+> > > > > The N entries belong to the same PMD, the same folio and the same VMA,
+> > > > > so ptep++ is a legitimate operation, and locking is taken care of for
+> > > > > you.  Some architectures can do a better job of it than just a loop,
+> > > > > but I have hesitated to make too deep a change to architectures I don't
+> > > > > understand well.
+> > > > > 
+> > > > > One thing I have changed in every architecture is that PG_arch_1 is now a
+> > > > > per-folio bit instead of a per-page bit.  This was something that would
+> > > > > have to happen eventually, and it makes sense to do it now rather than
+> > > > > iterate over every page involved in a cache flush and figure out if it
+> > > > > needs to happen.  
+> > > > 
+> > > > I think we do use PG_arch_1 on s390 for our secure page handling and
+> > > > making this perf folio instead of physical page really seems wrong
+> > > > and it probably breaks this code.  
+> > > 
+> > > Per-page flags are going away in the next few years, so you're going to
+> > 
+> > For each 4k physical page frame, we need to keep track whether it is
+> > secure or not.
+> > 
+> > A bit in struct page seems the most logical choice. If that's not
+> > possible anymore, how would you propose we should do?
+> > 
+> > > need a new design.  s390 seems to do a lot of unusual things.  I wish
+> > 
+> > s390 is an unusual architecture. we are working on un-weirding our
+> > code, but it takes time
+> > 
 > 
-> [...]
+> This issue sounds fatal for this version of this patchset?
 
-Applied, thanks!
-
-[1/1] vmlinux.lds.h: Remove a reference to no longer used sections .text..refcount
-      https://git.kernel.org/kees/c/5fc522485598
-
-Best regards,
--- 
-Kees Cook
-
+It's only declared as being per-folio in the cover letter to this
+patchset.  I haven't done anything that will prohibit s390 from using it
+the way they do now.  So it's not fatal, but it sounds like the
+in_range() macro might be ...
