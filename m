@@ -2,52 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CFB74E86A
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 09:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA38C74E86C
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 09:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjGKHyk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jul 2023 03:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
+        id S230302AbjGKHzm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jul 2023 03:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjGKHyk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 03:54:40 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F53DF7
-        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 00:54:38 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-31297125334so3862022f8f.0
-        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 00:54:38 -0700 (PDT)
+        with ESMTP id S229742AbjGKHzk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 03:55:40 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92BBF7
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 00:55:39 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbea14700bso55060155e9.3
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 00:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689062077; x=1691654077;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkPK/GMPSBp/4g2qtcrJmujy1568nlXOGlV287FaDRc=;
-        b=K19Nrzp1xAN9FNNb8XRkpzz0wzk3pqohF7q8+RkvdexxFbKKM7d+ucdX6H3xvRoCoo
-         IAvl+ydAs/IUYirGbQwvOuyp4A0dkj0s/nO7Wc0g1z2W/DpIfxDUlqKRDsMZPbh+6SZG
-         UCe4MHkpZvEjCz72zHCdheewAIwOwYPwkVsqdEE4tkrDZGuGTwCnzvidF2fVjDqYCvIA
-         qBjO2GW0gO8pham8mPm4K1v0bW74ZtjwGzEIJCFFnbFQdOXWS+dnNjbtCeWOne6Ej7AW
-         hqxv8/DVt4rvAqBoBN53nUXsUuqopDb/uAEA2da0pu6momATMv5C5drS+dFGgJdqinm7
-         l2Mw==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689062138; x=1691654138;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/EU/iMG6yg29uBo51A2iBmY9OZkda2o1/b9d0LOiq1U=;
+        b=NCoKYaeiv1nFsZu1kkN9IKONZ0ywf8MrhYyLoYAG7Q6i/1MQkq4oT+ftSJXO49RKyX
+         ACt2ggo37pYi+8YgPL8PJ6dxHo9tA4/bLupo3TXiy9URZ4wDKkU28wB9BygUOld8z2e/
+         3zc8DUiMdWOgQtJ0Ndn4UV5Li6hfcg8Kga3ZZhjNakNirjxP7y+vfmb9LrM9PCGhIPob
+         Hdzs0ngha48Jpks5P0qe+0HhpMg4tmNZJB4wqnH4M1bv2Zwy3CCAuPi3okrxJTIKbojW
+         InsOcPcSYd20w6iszei4mg1pDK4LCzlrLwfCY1fjznaJUncNDxte3J8oxZxhilbHxfFV
+         6g/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689062077; x=1691654077;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkPK/GMPSBp/4g2qtcrJmujy1568nlXOGlV287FaDRc=;
-        b=Fl6mavGhlnfC0CjqEv3LYr3S/G+o9mULn825xTNoCLOaspzdEQo3B5ymgI7S4LGcYR
-         LJqaw/ATqx6Y41E0uVCG1GUUcCwm0/+i9DWourqmsMTLZgQjhz8qHmzJEb6Oiy1LabxE
-         B1dm8lQikZnuyJaO9SXs9KnCUsB1SYItv8aDJmZaFYKOxmrp64Qxcf2Pi1A194MhTF61
-         LOr0jV2Hqxd6Jvb/7ZOv56Tj/KDCY+b2Qi3a9Obwc+T6207XpRoI/i8jIYcXctdtVR+B
-         iK3+MjSs/6MVi+ZQVxJq63+3DNz+eQtvJVtgauF5UPlLI2V8Ly7p8xbkz+CU/7oOelGn
-         WkVw==
-X-Gm-Message-State: ABy/qLZMJqymMFComEnR36183lTvzHcCmPVnrINK7T7pL6AZP+KFLkpc
-        0UHR/8xbWGEMcS+aFbVBxvTmmbF7d4lbXahSd9o=
-X-Google-Smtp-Source: APBJJlH0eknonRxAkA8j5z+QdOB01QLG+MwLKDfRYjX56LEKFmW17Z4Edj1lXAEKj0Nz8QWKQj+7hA==
-X-Received: by 2002:a5d:6947:0:b0:314:2736:ba3e with SMTP id r7-20020a5d6947000000b003142736ba3emr17296610wrw.3.1689062076885;
-        Tue, 11 Jul 2023 00:54:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689062138; x=1691654138;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/EU/iMG6yg29uBo51A2iBmY9OZkda2o1/b9d0LOiq1U=;
+        b=eQM0FoQrDzyygYMdhPiQNkpslRglcSpgpg//ixpqaL1MXqIs2vw41Nz6m2+nqITE7l
+         gn5zQBXITmLBYAmcq91RiWpBGXM8Y2u4J0phKKkbiqBAxh9pTGfC1hpHNArlUQk34e6s
+         Q/+b4Xgp39VtJE2fez+2OQ3/e+oSInTtCKFfk6+iGXMpK40QRv2Xgv5bX5ptYsnywiHr
+         sH88H05k42mRO69Zdfvus0iQQjAv4Yu8a0uh8jjzvG0cnXPmosp/CU6A+ZvfC7IFaRWq
+         bw0zgYnUVnCykVDhvUPqHo20xQN9v8cNmZ8Ip8LzHTwNxpU9v5gIU9IyCdXI5Jrq/Mzf
+         SYbA==
+X-Gm-Message-State: ABy/qLahWOrj/q5uZd7sI+2hESr9u0OcQEcy1SycZGQICZH/YNlLE1Zh
+        mQv2Id8vEyR4qKZPaucmxVkLbw==
+X-Google-Smtp-Source: APBJJlFW7UA1mVn1ZcXadTPXanJoND7bXUx+Kn681JHSgt5iPRc/xDSnmY7M3nrypuHmGJz4jg4M6g==
+X-Received: by 2002:a05:600c:b5a:b0:3fc:60:7dbf with SMTP id k26-20020a05600c0b5a00b003fc00607dbfmr9944380wmr.41.1689062138206;
+        Tue, 11 Jul 2023 00:55:38 -0700 (PDT)
 Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id i6-20020a5d55c6000000b003145521f4e5sm1481156wrw.116.2023.07.11.00.54.36
+        by smtp.gmail.com with ESMTPSA id f19-20020a7bcc13000000b003fa973e6612sm12317248wmh.44.2023.07.11.00.55.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 00:54:36 -0700 (PDT)
+        Tue, 11 Jul 2023 00:55:38 -0700 (PDT)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Will Deacon <will@kernel.org>,
         "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
@@ -62,10 +63,12 @@ To:     Will Deacon <will@kernel.org>,
         linux-mm@kvack.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH 0/4] riscv: tlb flush improvements
-Date:   Tue, 11 Jul 2023 09:54:30 +0200
-Message-Id: <20230711075434.10936-1-alexghiti@rivosinc.com>
+Subject: [PATCH 1/4] riscv: Improve flush_tlb()
+Date:   Tue, 11 Jul 2023 09:54:31 +0200
+Message-Id: <20230711075434.10936-2-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230711075434.10936-1-alexghiti@rivosinc.com>
+References: <20230711075434.10936-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,36 +80,73 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This series optimizes the tlb flushes on riscv which used to simply
-flush the whole tlb whatever the size of the range to flush or the size
-of the stride.
+For now, flush_tlb() simply calls flush_tlb_mm() which results in a
+flush of the whole TLB. So let's use mmu_gather fields to provide a more
+fine-grained flush of the TLB.
 
-Patch 3 introduces a threshold that is microarchitecture specific and
-will very likely be modified by vendors, not sure though which mechanism
-we'll use to do that (dt? alternatives? vendor initialization code?).
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
+ arch/riscv/include/asm/tlb.h      | 6 +++++-
+ arch/riscv/include/asm/tlbflush.h | 3 +++
+ arch/riscv/mm/tlbflush.c          | 7 +++++++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
-Next steps would be to implement:
-- svinval extension as Mayuresh did here [1]
-- BATCHED_UNMAP_TLB_FLUSH (I'll wait for arm64 patchset to land)
-- MMU_GATHER_RCU_TABLE_FREE
-- MMU_GATHER_MERGE_VMAS
-
-Any other idea welcome.
-
-[1] https://lore.kernel.org/linux-riscv/20230623123849.1425805-1-mchitale@ventanamicro.com/
-
-Alexandre Ghiti (4):
-  riscv: Improve flush_tlb()
-  riscv: Improve flush_tlb_range() for hugetlb pages
-  riscv: Make __flush_tlb_range() loop over pte instead of flushing the
-    whole tlb
-  riscv: Improve flush_tlb_kernel_range()
-
- arch/riscv/include/asm/tlb.h      |  6 +-
- arch/riscv/include/asm/tlbflush.h | 12 ++--
- arch/riscv/mm/tlbflush.c          | 93 +++++++++++++++++++++++++++----
- 3 files changed, 94 insertions(+), 17 deletions(-)
-
+diff --git a/arch/riscv/include/asm/tlb.h b/arch/riscv/include/asm/tlb.h
+index 120bcf2ed8a8..3373dcf0f413 100644
+--- a/arch/riscv/include/asm/tlb.h
++++ b/arch/riscv/include/asm/tlb.h
+@@ -15,7 +15,11 @@ static void tlb_flush(struct mmu_gather *tlb);
+ 
+ static inline void tlb_flush(struct mmu_gather *tlb)
+ {
+-	flush_tlb_mm(tlb->mm);
++	if (tlb->fullmm || tlb->need_flush_all)
++		flush_tlb_mm(tlb->mm);
++	else
++		flush_tlb_mm_range(tlb->mm, tlb->start, tlb->end,
++				   tlb_get_unmap_size(tlb));
+ }
+ 
+ #endif /* _ASM_RISCV_TLB_H */
+diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
+index a09196f8de68..f5c4fb0ae642 100644
+--- a/arch/riscv/include/asm/tlbflush.h
++++ b/arch/riscv/include/asm/tlbflush.h
+@@ -32,6 +32,8 @@ static inline void local_flush_tlb_page(unsigned long addr)
+ #if defined(CONFIG_SMP) && defined(CONFIG_MMU)
+ void flush_tlb_all(void);
+ void flush_tlb_mm(struct mm_struct *mm);
++void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
++			unsigned long end, unsigned int page_size);
+ void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr);
+ void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+ 		     unsigned long end);
+@@ -52,6 +54,7 @@ static inline void flush_tlb_range(struct vm_area_struct *vma,
+ }
+ 
+ #define flush_tlb_mm(mm) flush_tlb_all()
++#define flush_tlb_mm_range(mm, start, end, page_size) flush_tlb_all()
+ #endif /* !CONFIG_SMP || !CONFIG_MMU */
+ 
+ /* Flush a range of kernel pages */
+diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+index 77be59aadc73..fa03289853d8 100644
+--- a/arch/riscv/mm/tlbflush.c
++++ b/arch/riscv/mm/tlbflush.c
+@@ -132,6 +132,13 @@ void flush_tlb_mm(struct mm_struct *mm)
+ 	__flush_tlb_range(mm, 0, -1, PAGE_SIZE);
+ }
+ 
++void flush_tlb_mm_range(struct mm_struct *mm,
++			unsigned long start, unsigned long end,
++			unsigned int page_size)
++{
++	__flush_tlb_range(mm, start, end - start, page_size);
++}
++
+ void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
+ {
+ 	__flush_tlb_range(vma->vm_mm, addr, PAGE_SIZE, PAGE_SIZE);
 -- 
 2.39.2
 
