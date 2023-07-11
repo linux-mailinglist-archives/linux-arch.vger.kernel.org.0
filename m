@@ -2,185 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C7874EC46
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 13:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0721474ECB0
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jul 2023 13:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjGKLHa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jul 2023 07:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S231871AbjGKL2I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jul 2023 07:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjGKLH2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 07:07:28 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B7CC0;
-        Tue, 11 Jul 2023 04:07:26 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D008120008;
-        Tue, 11 Jul 2023 11:07:22 +0000 (UTC)
-Message-ID: <95c4e875-02f1-6239-bb62-41b709d21541@ghiti.fr>
-Date:   Tue, 11 Jul 2023 13:07:22 +0200
+        with ESMTP id S230391AbjGKL2D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jul 2023 07:28:03 -0400
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98E7133
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jul 2023 04:28:01 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-223-P9VisGTbPgGWqvxb_D7cHg-1; Tue, 11 Jul 2023 07:26:13 -0400
+X-MC-Unique: P9VisGTbPgGWqvxb_D7cHg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A4AF10504C9;
+        Tue, 11 Jul 2023 11:26:13 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.45.225.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B08863F3C;
+        Tue, 11 Jul 2023 11:25:59 +0000 (UTC)
+From:   Alexey Gladkov <legion@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Cc:     James.Bottomley@HansenPartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        dhowells@redhat.com, fenghua.yu@intel.com, firoz.khan@linaro.org,
+        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
+        kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, palmer@sifive.com, paul.burton@mips.com,
+        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
+        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
+        x86@kernel.org, ysato@users.sourceforge.jp
+Subject: [PATCH v3 0/5] Add a new fchmodat4() syscall
+Date:   Tue, 11 Jul 2023 13:25:41 +0200
+Message-Id: <cover.1689074739.git.legion@kernel.org>
+In-Reply-To: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2] riscv: kexec: Fixup synchronization problem between
- init_mm and active_mm
-To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.com,
-        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
-        bjorn@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-References: <20230710054029.2026124-1-guoren@kernel.org>
-Content-Language: en-US
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230710054029.2026124-1-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Guo,
+This patch set adds fchmodat4(), a new syscall. The actual
+implementation is super simple: essentially it's just the same as
+fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
+I've attempted to make this match "man 2 fchmodat" as closely as
+possible, which says EINVAL is returned for invalid flags (as opposed to
+ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
+I have a sketch of a glibc patch that I haven't even compiled yet, but
+seems fairly straight-forward:
 
+    diff --git a/sysdeps/unix/sysv/linux/fchmodat.c b/sysdeps/unix/sysv/linux/fchmodat.c
+    index 6d9cbc1ce9e0..b1beab76d56c 100644
+    --- a/sysdeps/unix/sysv/linux/fchmodat.c
+    +++ b/sysdeps/unix/sysv/linux/fchmodat.c
+    @@ -29,12 +29,36 @@
+     int
+     fchmodat (int fd, const char *file, mode_t mode, int flag)
+     {
+    -  if (flag & ~AT_SYMLINK_NOFOLLOW)
+    -    return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
+    -#ifndef __NR_lchmod		/* Linux so far has no lchmod syscall.  */
+    +  /* There are four paths through this code:
+    +      - The flags are zero.  In this case it's fine to call fchmodat.
+    +      - The flags are non-zero and glibc doesn't have access to
+    +	__NR_fchmodat4.  In this case all we can do is emulate the error codes
+    +	defined by the glibc interface from userspace.
+    +      - The flags are non-zero, glibc has __NR_fchmodat4, and the kernel has
+    +	fchmodat4.  This is the simplest case, as the fchmodat4 syscall exactly
+    +	matches glibc's library interface so it can be called directly.
+    +      - The flags are non-zero, glibc has __NR_fchmodat4, but the kernel does
+    +	not.  In this case we must respect the error codes defined by the glibc
+    +	interface instead of returning ENOSYS.
+    +    The intent here is to ensure that the kernel is called at most once per
+    +    library call, and that the error types defined by glibc are always
+    +    respected.  */
+    +
+    +#ifdef __NR_fchmodat4
+    +  long result;
+    +#endif
+    +
+    +  if (flag == 0)
+    +    return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
+    +
+    +#ifdef __NR_fchmodat4
+    +  result = INLINE_SYSCALL (fchmodat4, 4, fd, file, mode, flag);
+    +  if (result == 0 || errno != ENOSYS)
+    +    return result;
+    +#endif
+    +
+       if (flag & AT_SYMLINK_NOFOLLOW)
+         return INLINE_SYSCALL_ERROR_RETURN_VALUE (ENOTSUP);
+    -#endif
 
-On 10/07/2023 07:40, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> The machine_kexec() uses set_memory_x to modify the direct mapping
-> attributes from RW to RWX. But set_memory_x only changes the init_mm's
-> attributes, not current->active_mm, so when kexec jumps into
-> control_buffer, the instruction page fault happens, and there is no
-> minor_pagefault for it, then panic.
+    -  return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
+    +  return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
+     }
 
+I've never added a new syscall before so I'm not really sure what the
+proper procedure to follow is.  Based on the feedback from my v1 patch
+set it seems this is somewhat uncontroversial.  At this point I don't
+think there's anything I'm missing, though note that I haven't gotten
+around to testing it this time because the diff from v1 is trivial for
+any platform I could reasonably test on.  The v1 patches suggest a
+simple test case, but I didn't re-run it because I don't want to reboot
+my laptop.
 
-I think it needs more details like this:
+Changes since v2 [20190717012719.5524-1-palmer@sifive.com]:
 
-"The current implementation of set_memory_x does not split hugepages in 
-the linear mapping and then when a PGD mapping is used, the whole PGD is 
-marked as executable. But changing the permissions at the PGD level must 
-be propagated to all the page tables."
+* Rebased to master.
+* The lookup_flags passed to sys_fchmodat4 as suggested by Al Viro.
+* Selftest added.
 
+Changes since v1 [20190531191204.4044-1-palmer@sifive.com]:
 
->
-> The bug is found on an MMU_sv39 machine, and the direct mapping used a
-> 1GB PUD, the pgd entries. Here is the bug output:
->
->   kexec_core: Starting new kernel
->   Will call new kernel at 00300000 from hart id 0
->   FDT image at 747c7000
->   Bye...
->   Unable to handle kernel paging request at virtual address ffffffda23b0d000
->   Oops [#1]
->   Modules linked in:
->   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
->   Hardware name: Sophgo Mango (DT)
->   epc : 0xffffffda23b0d000
->    ra : machine_kexec+0xa6/0xb0
->   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
->    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
->    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
->    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
->    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
->    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
->    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
->    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
->    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
->    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
->    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
->   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
->
-> The solution is to fix machine_kexec() to remap control code page outside
-> the linear mapping.
+* All architectures are now supported, which support squashed into a
+  single patch.
+* The do_fchmodat() helper function has been removed, in favor of directly
+  calling do_fchmodat4().
+* The patches are based on 5.2 instead of 5.1.
 
+---
 
-"Given the current flaw in the set_memory_x implementation, the simplest 
-solution is to ..."
+Alexey Gladkov (1):
+  selftests: add fchmodat4(2) selftest
 
+Palmer Dabbelt (4):
+  Non-functional cleanup of a "__user * filename"
+  fs: Add fchmodat4()
+  arch: Register fchmodat4, usually as syscall 451
+  tools headers UAPI: Sync files changed by new fchmodat4 syscall
 
->
-> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Alexandre Ghiti <alex@ghiti.fr>
-> ---
-> Changelog:
-> V2:
->   - Use vm_map_ram instead of modifying set_memory_x
->   - Correct Fixes tag
-> ---
->   arch/riscv/include/asm/kexec.h    |  1 +
->   arch/riscv/kernel/machine_kexec.c | 14 ++++++++++----
->   2 files changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
-> index 2b56769cb530..17456e91476e 100644
-> --- a/arch/riscv/include/asm/kexec.h
-> +++ b/arch/riscv/include/asm/kexec.h
-> @@ -41,6 +41,7 @@ crash_setup_regs(struct pt_regs *newregs,
->   struct kimage_arch {
->   	void *fdt; /* For CONFIG_KEXEC_FILE */
->   	unsigned long fdt_addr;
-> +	void *control_code_buffer;
->   };
->   
->   extern const unsigned char riscv_kexec_relocate[];
-> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
-> index 2d139b724bc8..eeb209775107 100644
-> --- a/arch/riscv/kernel/machine_kexec.c
-> +++ b/arch/riscv/kernel/machine_kexec.c
-> @@ -86,7 +86,14 @@ machine_kexec_prepare(struct kimage *image)
->   
->   	/* Copy the assembler code for relocation to the control page */
->   	if (image->type != KEXEC_TYPE_CRASH) {
-> -		control_code_buffer = page_address(image->control_code_page);
-> +		control_code_buffer = vm_map_ram(&image->control_code_page,
-> +						 KEXEC_CONTROL_PAGE_SIZE/PAGE_SIZE,
-> +						 NUMA_NO_NODE);
-> +		if (control_code_buffer == NULL) {
-> +			pr_err("Failed to vm_map control page\n");
-> +			return -ENOMEM;
-> +		}
-> +
->   		control_code_buffer_sz = page_size(image->control_code_page);
->   
->   		if (unlikely(riscv_kexec_relocate_size > control_code_buffer_sz)) {
-> @@ -97,8 +104,7 @@ machine_kexec_prepare(struct kimage *image)
->   		memcpy(control_code_buffer, riscv_kexec_relocate,
->   			riscv_kexec_relocate_size);
->   
-> -		/* Mark the control page executable */
-> -		set_memory_x((unsigned long) control_code_buffer, 1);
-> +		internal->control_code_buffer = control_code_buffer;
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/open.c                                     |  18 ++-
+ include/linux/syscalls.h                      |   4 +-
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ tools/include/uapi/asm-generic/unistd.h       |   5 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   1 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   1 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   1 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/fchmodat4/.gitignore  |   2 +
+ tools/testing/selftests/fchmodat4/Makefile    |   6 +
+ .../selftests/fchmodat4/fchmodat4_test.c      | 151 ++++++++++++++++++
+ 29 files changed, 207 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/fchmodat4/.gitignore
+ create mode 100644 tools/testing/selftests/fchmodat4/Makefile
+ create mode 100644 tools/testing/selftests/fchmodat4/fchmodat4_test.c
 
-
-Where is this mapping marked as executable? I see that vm_map_ram() maps 
-the pages as PAGE_KERNEL, which does not set PAGE_EXEC.
-
-
->   	}
->   
->   	return 0;
-> @@ -211,7 +217,7 @@ machine_kexec(struct kimage *image)
->   	unsigned long this_cpu_id = __smp_processor_id();
->   	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
->   	unsigned long fdt_addr = internal->fdt_addr;
-> -	void *control_code_buffer = page_address(image->control_code_page);
-> +	void *control_code_buffer = internal->control_code_buffer;
->   	riscv_kexec_method kexec_method = NULL;
->   
->   #ifdef CONFIG_SMP
-
-
-Otherwise, you can add:
-
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thanks,
-
-Alex
+-- 
+2.33.8
 
