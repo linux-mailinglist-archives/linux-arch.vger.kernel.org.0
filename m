@@ -2,255 +2,216 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F043B750A38
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jul 2023 15:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A922750B36
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jul 2023 16:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjGLN7E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jul 2023 09:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S230402AbjGLOny (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jul 2023 10:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjGLN7B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jul 2023 09:59:01 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029281BC2
-        for <linux-arch@vger.kernel.org>; Wed, 12 Jul 2023 06:58:55 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3a3df1ee4a3so3578985b6e.3
-        for <linux-arch@vger.kernel.org>; Wed, 12 Jul 2023 06:58:54 -0700 (PDT)
+        with ESMTP id S232184AbjGLOnw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jul 2023 10:43:52 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58EF1992
+        for <linux-arch@vger.kernel.org>; Wed, 12 Jul 2023 07:43:50 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso4202834b3a.3
+        for <linux-arch@vger.kernel.org>; Wed, 12 Jul 2023 07:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1689170334; x=1691762334;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689173030; x=1691765030;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WtiPPmkimlf1cfbcZtKGy3NvKyESLQgOrGfUSB0R+RM=;
-        b=D7vYLwD0d+cm+/50I06d5LTEFId3x/YrwBjY/a4xVK74mteWzgneFjalmuxORj52ca
-         gWxFHvKbOR5pmot+DxeOlx30OJ+VfVBw+Ar/YySRZsMUe1eviZctwGugnI4l7kp60lbQ
-         4NpaToE7ZtAebZrtqGNE0FRpXhOUIvaH5YPWepcTfypqK1iZ7aJOKELncvKCegDE9MUX
-         MogrWsUyN/O3Q6STv9oJoXhzselyzbhBTRHOOepN/FHbrbYs135kip5JLwjzW0YJDdfz
-         pfFHkxAfNaXnv6NFsXwi7SNcwWVhCW3J3hG5CJjIsaVc1zTs/cqsdKljqWy3CrC6vf7t
-         xQmA==
+        bh=ceMjwisW+ab8NqZ500BBUyHWe9aEsqGZ9FsaMuVtg+Y=;
+        b=jkPcgt5Dy+IC0k/EsLIi7/BcYygeQIjWSbV3+3FmrgcKalXgnhmVXLStYiDmAmpySG
+         CFqzwdTGJs5rP6AR/MAGZMNaDmi0Sxa19w22SHUDVEKNyHGRkpjPh904WKNDQDG0/HSY
+         65KTXNDO4fqdbccpflanCIA2p1sBQzjLgtOf2Zee39crPyJHZzPcklKJmcd2CLu4vJXo
+         mwKg+TFXzpLYNXO/nRbzaxokRzNw0Iz4KzC6uvGhYrfnR2y/9NCfumiFK3A1xvxMvL65
+         dtKG+1Uqo87VGHpMvK7MZSPCZbxkP/mO+MTrVnZNO4cYwKJugMAETlRYG08uU8L4SYY/
+         qasA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689170334; x=1691762334;
+        d=1e100.net; s=20221208; t=1689173030; x=1691765030;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WtiPPmkimlf1cfbcZtKGy3NvKyESLQgOrGfUSB0R+RM=;
-        b=GDP3SksDBmDRmgwJ9HM9BIOdHdstw7FnYvtM19l5wa9G5x5Ho/xcXhR8dj0FFSCGgV
-         vTQ/ogxuBaOIELS8oJYqArsSuqozVAN9EyFf3iE/buooQjR4EJ/mHQT1EhxPSvJa5SZw
-         +G4hvTLZI3VoAi8JBdytIaCT6LTphn+M4atoun6Xy3dvuT/LHP8/sF5ryIiZjS0IM/cX
-         84Cj2fvCdSwAFUBzAfvURnjBWn5gzqjJ+Vj12TUcpRklU9sXvzPlNPHUagqdSxa6fI7s
-         kCn9ZtyTCqW5I9Chwiyi2FYXmB0zyJrewX2rySJsIVl0JGZeHhtHXKF5OplF8aDaqJpm
-         bKRQ==
-X-Gm-Message-State: ABy/qLYL2C+feLla3npExskoTMquT1hYbPjQ604VOYaslWt8rgNxWAym
-        /Cqvo9+gKgB3sY/WC+Z68fEaSA==
-X-Google-Smtp-Source: APBJJlEDKV1lafoYvKOBZ1aTJjv6CVXylfJX/ok+2beQDlkAS+AoMoK8n/64bLsknN7G9FdyH8JNSw==
-X-Received: by 2002:a05:6358:4311:b0:133:f39:5e8f with SMTP id r17-20020a056358431100b001330f395e8fmr6770464rwc.10.1689170334098;
-        Wed, 12 Jul 2023 06:58:54 -0700 (PDT)
+        bh=ceMjwisW+ab8NqZ500BBUyHWe9aEsqGZ9FsaMuVtg+Y=;
+        b=f/bXv6e9XG+fhzLzoa8+hfl3BklR6z4L+nxsFBf6hIziZJzApZV7vebEmUbiqDCdz3
+         IzTqKwqVzQ9LmkJLkXlliLF4uQdLiPTiBowjLyMor2w2qnkProsO8tlG/LgtQ/SKP6JB
+         7o659X0dNU9VVwUhLy5zqszXYMSNaNYtLsqcAEi7TKIzsBypRw11TDCRQsH+vQg8V2D7
+         IVFoCM2nFM8xMiZeOVCl4f0vnqbIwzSG6z3PEKq1TZGsRCnBxbxVKdCMzOshTcuwWO36
+         /ZiTpyvOZwgz8xX+j0zwS4JPir2THyVmZQwlAgzuyDwU3xwCSU/PIQhsTyT3kOEmoaYW
+         8pDA==
+X-Gm-Message-State: ABy/qLaT8gdG0cMrARq76w3UDUViv34/HLm9BOaqf+l7a6nsyZF81WDU
+        37FzkeoNzBKhcumtYXk470Vo5Q==
+X-Google-Smtp-Source: APBJJlGBwe2qfhUnKQIlzRfXecJ9MpSW3/DQVLGNsTikl9RzTTpPOfZ4GrFHGm0hpMEFF17vPLlNog==
+X-Received: by 2002:a05:6a20:729f:b0:132:7fb3:3325 with SMTP id o31-20020a056a20729f00b001327fb33325mr4105171pzk.59.1689173030066;
+        Wed, 12 Jul 2023 07:43:50 -0700 (PDT)
 Received: from localhost ([50.38.6.230])
-        by smtp.gmail.com with ESMTPSA id f13-20020a63380d000000b0052858b41008sm3560696pga.87.2023.07.12.06.58.53
+        by smtp.gmail.com with ESMTPSA id d9-20020a639909000000b0054f9936accesm3652942pge.55.2023.07.12.07.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 06:58:53 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 06:58:53 -0700 (PDT)
-X-Google-Original-Date: Wed, 12 Jul 2023 06:58:07 PDT (-0700)
-Subject:     Re: [PATCH v5 22/38] riscv: Implement the new page table range API
-In-Reply-To: <20230710204339.3554919-23-willy@infradead.org>
-CC:     akpm@linux-foundation.org, willy@infradead.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, alexghiti@rivosinc.com,
-        rppt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     willy@infradead.org
-Message-ID: <mhng-1a169eaf-69a5-4d1b-bda7-f707f5f98dd7@palmer-ri-x1c9a>
+        Wed, 12 Jul 2023 07:43:49 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 07:43:49 -0700 (PDT)
+X-Google-Original-Date: Wed, 12 Jul 2023 07:43:02 PDT (-0700)
+Subject:     Re: [PATCH V2] riscv: kexec: Fixup synchronization problem between init_mm and active_mm
+In-Reply-To: <95c4e875-02f1-6239-bb62-41b709d21541@ghiti.fr>
+CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
+        bjorn@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     alex@ghiti.fr
+Message-ID: <mhng-5d9d9723-1dc1-4429-a477-eb4ece20bb87@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 10 Jul 2023 13:43:23 PDT (-0700), willy@infradead.org wrote:
-> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
-> Change the PG_dcache_clean flag from being per-page to per-folio.
+On Tue, 11 Jul 2023 04:07:22 PDT (-0700), alex@ghiti.fr wrote:
+> Hi Guo,
 >
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>
+> On 10/07/2023 07:40, guoren@kernel.org wrote:
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> The machine_kexec() uses set_memory_x to modify the direct mapping
+>> attributes from RW to RWX. But set_memory_x only changes the init_mm's
+>> attributes, not current->active_mm, so when kexec jumps into
+>> control_buffer, the instruction page fault happens, and there is no
+>> minor_pagefault for it, then panic.
+>
+>
+> I think it needs more details like this:
+>
+> "The current implementation of set_memory_x does not split hugepages in
+> the linear mapping and then when a PGD mapping is used, the whole PGD is
+> marked as executable. But changing the permissions at the PGD level must
+> be propagated to all the page tables."
+>
+>
+>>
+>> The bug is found on an MMU_sv39 machine, and the direct mapping used a
+>> 1GB PUD, the pgd entries. Here is the bug output:
+>>
+>>   kexec_core: Starting new kernel
+>>   Will call new kernel at 00300000 from hart id 0
+>>   FDT image at 747c7000
+>>   Bye...
+>>   Unable to handle kernel paging request at virtual address ffffffda23b0d000
+>>   Oops [#1]
+>>   Modules linked in:
+>>   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+>>   Hardware name: Sophgo Mango (DT)
+>>   epc : 0xffffffda23b0d000
+>>    ra : machine_kexec+0xa6/0xb0
+>>   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+>>    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+>>    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+>>    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+>>    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+>>    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+>>    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+>>    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+>>    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+>>    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+>>    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+>>   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
+>>
+>> The solution is to fix machine_kexec() to remap control code page outside
+>> the linear mapping.
+>
+>
+> "Given the current flaw in the set_memory_x implementation, the simplest
+> solution is to ..."
+>
+>
+>>
+>> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>> Cc: Alexandre Ghiti <alex@ghiti.fr>
+>> ---
+>> Changelog:
+>> V2:
+>>   - Use vm_map_ram instead of modifying set_memory_x
+>>   - Correct Fixes tag
+>> ---
+>>   arch/riscv/include/asm/kexec.h    |  1 +
+>>   arch/riscv/kernel/machine_kexec.c | 14 ++++++++++----
+>>   2 files changed, 11 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
+>> index 2b56769cb530..17456e91476e 100644
+>> --- a/arch/riscv/include/asm/kexec.h
+>> +++ b/arch/riscv/include/asm/kexec.h
+>> @@ -41,6 +41,7 @@ crash_setup_regs(struct pt_regs *newregs,
+>>   struct kimage_arch {
+>>   	void *fdt; /* For CONFIG_KEXEC_FILE */
+>>   	unsigned long fdt_addr;
+>> +	void *control_code_buffer;
+>>   };
+>>
+>>   extern const unsigned char riscv_kexec_relocate[];
+>> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+>> index 2d139b724bc8..eeb209775107 100644
+>> --- a/arch/riscv/kernel/machine_kexec.c
+>> +++ b/arch/riscv/kernel/machine_kexec.c
+>> @@ -86,7 +86,14 @@ machine_kexec_prepare(struct kimage *image)
+>>
+>>   	/* Copy the assembler code for relocation to the control page */
+>>   	if (image->type != KEXEC_TYPE_CRASH) {
+>> -		control_code_buffer = page_address(image->control_code_page);
+>> +		control_code_buffer = vm_map_ram(&image->control_code_page,
+>> +						 KEXEC_CONTROL_PAGE_SIZE/PAGE_SIZE,
+>> +						 NUMA_NO_NODE);
+>> +		if (control_code_buffer == NULL) {
+>> +			pr_err("Failed to vm_map control page\n");
+>> +			return -ENOMEM;
+>> +		}
+>> +
+>>   		control_code_buffer_sz = page_size(image->control_code_page);
+>>
+>>   		if (unlikely(riscv_kexec_relocate_size > control_code_buffer_sz)) {
+>> @@ -97,8 +104,7 @@ machine_kexec_prepare(struct kimage *image)
+>>   		memcpy(control_code_buffer, riscv_kexec_relocate,
+>>   			riscv_kexec_relocate_size);
+>>
+>> -		/* Mark the control page executable */
+>> -		set_memory_x((unsigned long) control_code_buffer, 1);
+>> +		internal->control_code_buffer = control_code_buffer;
+>
+>
+> Where is this mapping marked as executable? I see that vm_map_ram() maps
+> the pages as PAGE_KERNEL, which does not set PAGE_EXEC.
+>
+>
+>>   	}
+>>
+>>   	return 0;
+>> @@ -211,7 +217,7 @@ machine_kexec(struct kimage *image)
+>>   	unsigned long this_cpu_id = __smp_processor_id();
+>>   	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+>>   	unsigned long fdt_addr = internal->fdt_addr;
+>> -	void *control_code_buffer = page_address(image->control_code_page);
+>> +	void *control_code_buffer = internal->control_code_buffer;
+>>   	riscv_kexec_method kexec_method = NULL;
+>>
+>>   #ifdef CONFIG_SMP
+>
+>
+> Otherwise, you can add:
+>
 > Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: linux-riscv@lists.infradead.org
-> ---
->  arch/riscv/include/asm/cacheflush.h | 19 +++++++--------
->  arch/riscv/include/asm/pgtable.h    | 38 +++++++++++++++++++----------
->  arch/riscv/mm/cacheflush.c          | 13 +++-------
->  3 files changed, 37 insertions(+), 33 deletions(-)
 >
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index 8091b8bf4883..0d8c92c5dfb7 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -15,20 +15,19 @@ static inline void local_flush_icache_all(void)
+> Thanks,
 >
->  #define PG_dcache_clean PG_arch_1
->
-> -static inline void flush_dcache_page(struct page *page)
-> +static inline void flush_dcache_folio(struct folio *folio)
->  {
-> -	/*
-> -	 * HugeTLB pages are always fully mapped and only head page will be
-> -	 * set PG_dcache_clean (see comments in flush_icache_pte()).
-> -	 */
-> -	if (PageHuge(page))
-> -		page = compound_head(page);
-> -
-> -	if (test_bit(PG_dcache_clean, &page->flags))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	if (test_bit(PG_dcache_clean, &folio->flags))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
->  }
-> +#define flush_dcache_folio flush_dcache_folio
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->
-> +static inline void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
-> +
->  /*
->   * RISC-V doesn't have an instruction to flush parts of the instruction cache,
->   * so instead we just flush the whole thing.
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 2137e36595b3..c8f897ed5fd0 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -445,8 +445,9 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->
->
->  /* Commit new configuration to MMU hardware */
-> -static inline void update_mmu_cache(struct vm_area_struct *vma,
-> -	unsigned long address, pte_t *ptep)
-> +static inline void update_mmu_cache_range(struct vm_fault *vmf,
-> +		struct vm_area_struct *vma, unsigned long address,
-> +		pte_t *ptep, unsigned int nr)
->  {
->  	/*
->  	 * The kernel assumes that TLBs don't cache invalid entries, but
-> @@ -455,8 +456,11 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->  	 * Relying on flush_tlb_fix_spurious_fault would suffice, but
->  	 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
->  	 */
-> -	local_flush_tlb_page(address);
-> +	while (nr--)
-> +		local_flush_tlb_page(address + nr * PAGE_SIZE);
->  }
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(NULL, vma, addr, ptep, 1)
->
->  #define __HAVE_ARCH_UPDATE_MMU_TLB
->  #define update_mmu_tlb update_mmu_cache
-> @@ -487,8 +491,7 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
->
->  void flush_icache_pte(pte_t pte);
->
-> -static inline void __set_pte_at(struct mm_struct *mm,
-> -	unsigned long addr, pte_t *ptep, pte_t pteval)
-> +static inline void __set_pte_at(pte_t *ptep, pte_t pteval)
->  {
->  	if (pte_present(pteval) && pte_exec(pteval))
->  		flush_icache_pte(pteval);
-> @@ -496,17 +499,26 @@ static inline void __set_pte_at(struct mm_struct *mm,
->  	set_pte(ptep, pteval);
->  }
->
-> -static inline void set_pte_at(struct mm_struct *mm,
-> -	unsigned long addr, pte_t *ptep, pte_t pteval)
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, pte_t pteval, unsigned int nr)
->  {
-> -	page_table_check_ptes_set(mm, addr, ptep, pteval, 1);
-> -	__set_pte_at(mm, addr, ptep, pteval);
-> +	page_table_check_ptes_set(mm, addr, ptep, pteval, nr);
-> +
-> +	for (;;) {
-> +		__set_pte_at(ptep, pteval);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +		pte_val(pteval) += 1 << _PAGE_PFN_SHIFT;
-> +	}
->  }
-> +#define set_ptes set_ptes
->
->  static inline void pte_clear(struct mm_struct *mm,
->  	unsigned long addr, pte_t *ptep)
->  {
-> -	__set_pte_at(mm, addr, ptep, __pte(0));
-> +	__set_pte_at(ptep, __pte(0));
->  }
->
->  #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
-> @@ -515,7 +527,7 @@ static inline int ptep_set_access_flags(struct vm_area_struct *vma,
->  					pte_t entry, int dirty)
->  {
->  	if (!pte_same(*ptep, entry))
-> -		set_pte_at(vma->vm_mm, address, ptep, entry);
-> +		__set_pte_at(ptep, entry);
->  	/*
->  	 * update_mmu_cache will unconditionally execute, handling both
->  	 * the case that the PTE changed and the spurious fault case.
-> @@ -688,14 +700,14 @@ static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
->  				pmd_t *pmdp, pmd_t pmd)
->  {
->  	page_table_check_pmd_set(mm, addr, pmdp, pmd);
-> -	return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
-> +	return __set_pte_at((pte_t *)pmdp, pmd_pte(pmd));
->  }
->
->  static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
->  				pud_t *pudp, pud_t pud)
->  {
->  	page_table_check_pud_set(mm, addr, pudp, pud);
-> -	return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
-> +	return __set_pte_at((pte_t *)pudp, pud_pte(pud));
->  }
->
->  #ifdef CONFIG_PAGE_TABLE_CHECK
-> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> index fbc59b3f69f2..f1387272a551 100644
-> --- a/arch/riscv/mm/cacheflush.c
-> +++ b/arch/riscv/mm/cacheflush.c
-> @@ -82,18 +82,11 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
->  #ifdef CONFIG_MMU
->  void flush_icache_pte(pte_t pte)
->  {
-> -	struct page *page = pte_page(pte);
-> +	struct folio *folio = page_folio(pte_page(pte));
->
-> -	/*
-> -	 * HugeTLB pages are always fully mapped, so only setting head page's
-> -	 * PG_dcache_clean flag is enough.
-> -	 */
-> -	if (PageHuge(page))
-> -		page = compound_head(page);
-> -
-> -	if (!test_bit(PG_dcache_clean, &page->flags)) {
-> +	if (!test_bit(PG_dcache_clean, &folio->flags)) {
->  		flush_icache_all();
-> -		set_bit(PG_dcache_clean, &page->flags);
-> +		set_bit(PG_dcache_clean, &folio->flags);
->  	}
->  }
->  #endif /* CONFIG_MMU */
+> Alex
 
-Sorry I missed this earlier.  IIRC it ended up somewhere, but
-
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-
-anyway.  Thanks!
+Thanks for looking at this.  Guo: do you have a re-spit that fixes the 
+issues Alex pointed out?  Sorry if I just missed it.
