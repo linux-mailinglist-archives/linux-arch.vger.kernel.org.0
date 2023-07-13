@@ -2,107 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B96D752418
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jul 2023 15:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A59752627
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jul 2023 17:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234884AbjGMNme (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Jul 2023 09:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S230323AbjGMPIY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Jul 2023 11:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbjGMNmb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jul 2023 09:42:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF150E4F;
-        Thu, 13 Jul 2023 06:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eqRFjEfnQpKX3SCwpqVqk5MwPZ2HabqrXxJtbeOAy2Y=; b=Xpm1APX1flTFZG414QOtZyFKnZ
-        XZBeRsaIEzyZfvFraA3stqUA2/UbL54AdKEFB+YFck5dODAOwA4k41eWWwLWsgZwoL1ESKsTR+JEB
-        qPXiqSPVl4SVXOItL3fULoS6vqFOJRZkbdE2j9PPZ9qSq5PDb1pocBH6M6GYG3ZDPueKcKm/8/uPg
-        lOGhsoeZM+ARDzp4/K+xXoJlYN9P3BMDpvKX5OnSNFOFq8PDZNz4Zc2ZO1YrEtObG2IUwAVSYIYXJ
-        g43md3NOFX+J50BWHA43iAphI20mVnWgzi+bR/i913Yh0j0WnfUcmaRqX2QPr7bvlBolFXHd79J4X
-        rjzKr0XA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJwaQ-000Bur-DA; Thu, 13 Jul 2023 13:42:26 +0000
-Date:   Thu, 13 Jul 2023 14:42:26 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v5 00/38] New page table range API
-Message-ID: <ZK//Qnfhx+ihtvlO@casper.infradead.org>
-References: <20230710204339.3554919-1-willy@infradead.org>
- <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
- <ZK1My5hQYC2Kb6G1@casper.infradead.org>
- <56ca93af-67dc-9d10-d27e-00c8d7c20f1b@linux.ibm.com>
+        with ESMTP id S232788AbjGMPIW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jul 2023 11:08:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C36171D;
+        Thu, 13 Jul 2023 08:08:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88AE661913;
+        Thu, 13 Jul 2023 15:08:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60042C433C8;
+        Thu, 13 Jul 2023 15:08:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689260895;
+        bh=/s9DM0WYSYkcaRxPKtiHE/0AYumFu9IKb/nX7sNm8VQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lpvqajWyTmo8KpeKW5zwo3j8fvID2kloajzWQKzDtV07Kk5l3OUwU5/kOpLa5dOn4
+         cSZH0q+gYxLSy2Op9rSPpYTs47/EeXU45gV3x7n89P8eR+t6sGS+s99ZE3GcLd7Jpj
+         Q7/qduU1fLPSAIM0Ph+2g0LWfu7G/gll7ut19qYTgAg39xRI5KcqvbTLAx2ENjr4HH
+         Y4oyyzJa2Wh0jpODTlpQVi1zeqk1cGhsWrxRNdP1mU4eqsrihxefh1RQyKry4WHjGT
+         6SHI6cuE4Wev9ywD/DNcBjzQf+lpfzQ7FkFOei1M9RSjuuBbe4WbJQq3O7VLsrWhh+
+         OunKGldQyVXuQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.com,
+        zong.li@sifive.com, atishp@atishpatra.org, alex@ghiti.fr
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH V3] riscv: kexec: Fixup synchronization problem between init_mm and active_mm
+Date:   Thu, 13 Jul 2023 11:07:58 -0400
+Message-Id: <20230713150758.2956316-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56ca93af-67dc-9d10-d27e-00c8d7c20f1b@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 12:42:44PM +0200, Christian Borntraeger wrote:
-> 
-> 
-> Am 11.07.23 um 14:36 schrieb Matthew Wilcox:
-> > On Tue, Jul 11, 2023 at 11:07:06AM +0200, Christian Borntraeger wrote:
-> > > Am 10.07.23 um 22:43 schrieb Matthew Wilcox (Oracle):
-> > > > This patchset changes the API used by the MM to set up page table entries.
-> > > > The four APIs are:
-> > > >       set_ptes(mm, addr, ptep, pte, nr)
-> > > >       update_mmu_cache_range(vma, addr, ptep, nr)
-> > > >       flush_dcache_folio(folio)
-> > > >       flush_icache_pages(vma, page, nr)
-> > > > 
-> > > > flush_dcache_folio() isn't technically new, but no architecture
-> > > > implemented it, so I've done that for them.  The old APIs remain around
-> > > > but are mostly implemented by calling the new interfaces.
-> > > > 
-> > > > The new APIs are based around setting up N page table entries at once.
-> > > > The N entries belong to the same PMD, the same folio and the same VMA,
-> > > > so ptep++ is a legitimate operation, and locking is taken care of for
-> > > > you.  Some architectures can do a better job of it than just a loop,
-> > > > but I have hesitated to make too deep a change to architectures I don't
-> > > > understand well.
-> > > > 
-> > > > One thing I have changed in every architecture is that PG_arch_1 is now a
-> > > > per-folio bit instead of a per-page bit.  This was something that would
-> > > > have to happen eventually, and it makes sense to do it now rather than
-> > > > iterate over every page involved in a cache flush and figure out if it
-> > > > needs to happen.
-> > > 
-> > > I think we do use PG_arch_1 on s390 for our secure page handling and
-> > > making this perf folio instead of physical page really seems wrong
-> > > and it probably breaks this code.
-> > 
-> > Per-page flags are going away in the next few years, so you're going to
-> > need a new design.  s390 seems to do a lot of unusual things.  I wish
-> > you'd talk to the rest of us more.
-> 
-> I understand you point from a logical point of view, but a 4k page frame
-> is also a hardware defined memory region. And I think not only for us.
-> How do you want to implement hardware poisoning for example?
-> Marking the whole folio with PG_hwpoison seems wrong.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-For hardware poison, we can't use the page for any other purpose any more.
-So one of the 16 types of pointer is for hardware poison.  That doesn't
-seem like it's a solution that could work for secure/insecure pages?
+The machine_kexec() uses set_memory_x to modify the direct mapping
+attributes from RW to RWX. The current implementation of set_memory_x
+does not split hugepages in the linear mapping and then when a PGD
+mapping is used, the whole PGD is marked as executable. But changing
+the permissions at the PGD level must be propagated to all the page
+tables. When kexec jumps into control_buffer, the instruction page
+fault happens, and there is no minor_pagefault for it, then panic.
 
-But what I'm really wondering is why you need to transition pages
-between secure/insecure on a 4kB boundary.  What's the downside to doing
-it on a 16kB or 64kB boundary, or whatever size has been allocated?
+The bug is found on an MMU_sv39 machine, and the direct mapping used a
+1GB PUD, the pgd entries. Here is the bug output:
+
+ kexec_core: Starting new kernel
+ Will call new kernel at 00300000 from hart id 0
+ FDT image at 747c7000
+ Bye...
+ Unable to handle kernel paging request at virtual address ffffffda23b0d000
+ Oops [#1]
+ Modules linked in:
+ CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+ Hardware name: Sophgo Mango (DT)
+ epc : 0xffffffda23b0d000
+  ra : machine_kexec+0xa6/0xb0
+ epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+  gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+  t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+  s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+  a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+  a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+  s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+  s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+  s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+  s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+  t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+ status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
+
+Given the current flaw in the set_memory_x implementation, the simplest
+solution is to fix machine_kexec() to remap control code page outside
+the linear mapping.
+
+Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+Changelog:
+V3:
+ - Resume set_memory_x to set the _PAGE_EXEC attribute
+ - Optimize the commit log with Alexandre advice
+
+V2:
+ - Use vm_map_ram instead of modifying set_memory_x
+ - Correct Fixes tag
+---
+ arch/riscv/include/asm/kexec.h    |  1 +
+ arch/riscv/kernel/machine_kexec.c | 13 +++++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
+index 2b56769cb530..17456e91476e 100644
+--- a/arch/riscv/include/asm/kexec.h
++++ b/arch/riscv/include/asm/kexec.h
+@@ -41,6 +41,7 @@ crash_setup_regs(struct pt_regs *newregs,
+ struct kimage_arch {
+ 	void *fdt; /* For CONFIG_KEXEC_FILE */
+ 	unsigned long fdt_addr;
++	void *control_code_buffer;
+ };
+ 
+ extern const unsigned char riscv_kexec_relocate[];
+diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+index 2d139b724bc8..83b499178902 100644
+--- a/arch/riscv/kernel/machine_kexec.c
++++ b/arch/riscv/kernel/machine_kexec.c
+@@ -86,7 +86,14 @@ machine_kexec_prepare(struct kimage *image)
+ 
+ 	/* Copy the assembler code for relocation to the control page */
+ 	if (image->type != KEXEC_TYPE_CRASH) {
+-		control_code_buffer = page_address(image->control_code_page);
++		control_code_buffer = vm_map_ram(&image->control_code_page,
++						 KEXEC_CONTROL_PAGE_SIZE/PAGE_SIZE,
++						 NUMA_NO_NODE);
++		if (control_code_buffer == NULL) {
++			pr_err("Failed to vm_map control page\n");
++			return -ENOMEM;
++		}
++
+ 		control_code_buffer_sz = page_size(image->control_code_page);
+ 
+ 		if (unlikely(riscv_kexec_relocate_size > control_code_buffer_sz)) {
+@@ -99,6 +106,8 @@ machine_kexec_prepare(struct kimage *image)
+ 
+ 		/* Mark the control page executable */
+ 		set_memory_x((unsigned long) control_code_buffer, 1);
++
++		internal->control_code_buffer = control_code_buffer;
+ 	}
+ 
+ 	return 0;
+@@ -211,7 +220,7 @@ machine_kexec(struct kimage *image)
+ 	unsigned long this_cpu_id = __smp_processor_id();
+ 	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+ 	unsigned long fdt_addr = internal->fdt_addr;
+-	void *control_code_buffer = page_address(image->control_code_page);
++	void *control_code_buffer = internal->control_code_buffer;
+ 	riscv_kexec_method kexec_method = NULL;
+ 
+ #ifdef CONFIG_SMP
+-- 
+2.36.1
 
