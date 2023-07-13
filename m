@@ -2,73 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7E3750F98
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jul 2023 19:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC95751F2A
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jul 2023 12:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjGLRX6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jul 2023 13:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S232129AbjGMKnE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Jul 2023 06:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbjGLRX5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jul 2023 13:23:57 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4981410C7
-        for <linux-arch@vger.kernel.org>; Wed, 12 Jul 2023 10:23:56 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-668704a5b5bso6466908b3a.0
-        for <linux-arch@vger.kernel.org>; Wed, 12 Jul 2023 10:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1689182636; x=1691774636;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9tQ2ZbbyLLdcDDhvAxA5qEVgxy8o1H8UkklbLpk31ig=;
-        b=hZjwQME8K62afCa/lKxAV5oDAQbtGEBFMc9MArh/PEz7oE9G6vUVAfOnb/9R4vBGxK
-         1p1NcH+qnX13Ru4H4jouGvPcdhK1h6k+qCLXI8YVgtZPBu4W+jMhiqB+u/ZVxaEw0Hp6
-         ihr02PgYKEWNMlwcQfr2/i7L4yiGRocd/mcHeDedHPSxJpwwaeiIvvgp1H7KSoPD7f+8
-         o0jddnMArxfV1MgrK7mGxmRLv6ix4n+Nl1ki4KAFn1VZOXE1Fc/kMqnaq33dhWTBTKYY
-         g2APClzhteWp3vYwyHS6lDvUJbrZdjwu2siZMPrkDOwHRcHeAF+ln9H611Ur9MnJmfCJ
-         lZFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689182636; x=1691774636;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9tQ2ZbbyLLdcDDhvAxA5qEVgxy8o1H8UkklbLpk31ig=;
-        b=THHkuCSl0w8AxSGe5eyd/A3rXEBe+ih02c583Vy/T8br2vZdfCV0MNqswOuLlYAScX
-         OohCqbosthpbe1QKQaYfoDckHo5JnkLEHaT/xL18osN6zHn88MnhSYAKEGbQeEOUbaVS
-         SOotKg5+N1jvUd+9BL+RAd9lRiOCEDs0yxp67kSimtCWDiRff/XOop+DgCEAZ6htUD5d
-         WJvy26eaB+QKg+Hz7aaJuNLWvhn+k6Idp9STbrRVQHlQQrJBirHsE0XHF51CY4vKeAAb
-         Zf037OtC0absXt+Ays+smfxGxmO/DTtLV8VMe4c9O5f82+jyu+adyaL6hIWD32VZ/eun
-         C+zA==
-X-Gm-Message-State: ABy/qLbad1aF9uYf2Uu396XQ/Tx9y9HpgSClOTxmZ6pVyz66MAXsEAu1
-        58wzhmicMDCTzu4sAKzvMxlbSg==
-X-Google-Smtp-Source: APBJJlGtz88dgA9P7FtTfAm49xR0+wVRjyt/ZcPAukIFsqkezm35JqgXO0FcyxCpfwYFDyT4jJgTMg==
-X-Received: by 2002:a05:6a00:84d:b0:682:54b9:1093 with SMTP id q13-20020a056a00084d00b0068254b91093mr25574401pfk.15.1689182635685;
-        Wed, 12 Jul 2023 10:23:55 -0700 (PDT)
-Received: from localhost ([50.38.6.230])
-        by smtp.gmail.com with ESMTPSA id ey24-20020a056a0038d800b00666add7f047sm3821151pfb.207.2023.07.12.10.23.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 10:23:55 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 10:23:55 -0700 (PDT)
-X-Google-Original-Date: Wed, 12 Jul 2023 10:23:08 PDT (-0700)
-Subject:     Re: [PATCH 0/4] riscv: tlb flush improvements
-In-Reply-To: <20230712-frying-unaired-e3acb5150e8b@spud>
-CC:     alex@ghiti.fr, Conor Dooley <conor.dooley@microchip.com>,
-        alexghiti@rivosinc.com, Will Deacon <will@kernel.org>,
-        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
-        npiggin@gmail.com, peterz@infradead.org, mchitale@ventanamicro.com,
-        vincent.chen@sifive.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-c59b13d7-fec1-4203-87f0-be6ac124580e@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        with ESMTP id S234236AbjGMKnE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jul 2023 06:43:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22B81FDE;
+        Thu, 13 Jul 2023 03:43:01 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36DALboQ023181;
+        Thu, 13 Jul 2023 10:42:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8BufaUFC4lq+i0mb7tum+tW3iSrvIdyYFfiCKGJV2Qk=;
+ b=UWoYASnDlKVaItp/McDdVJ7xToFqq7bV2TMwidsakp9z61MBv99gGJNVx52W/4MRHqkj
+ DbOGTFGGOve11J04Ncw6vAzYmJQnuBgQ4C05isIoQFvnqD0bJvSpmZvXIssFAakdiN51
+ T/1qH7T7MwuIZWhXh/RdRUA7lEAoCJyQXVw34FY9kqbeMrFv4PvRajPk071PadjA1NDW
+ nc7KCFIiMOrpOnYvu0g0bAmDvTOnl0xVnjsdTjiI8bSi7mRfiHcXNiRnVAJd8Dj8IFnx
+ VbX2wlkBCUdOMKZOgquzh1xWJ5GO8o701DeAkU5+yR3t66R4feT8p3uhAzcW+fmT2HK9 FQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rtfeugh64-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jul 2023 10:42:51 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36D1vZKw012770;
+        Thu, 13 Jul 2023 10:42:49 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rpye5aauq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jul 2023 10:42:49 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36DAgjN027263496
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jul 2023 10:42:45 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 631402004B;
+        Thu, 13 Jul 2023 10:42:45 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EEB552004F;
+        Thu, 13 Jul 2023 10:42:44 +0000 (GMT)
+Received: from [9.171.85.252] (unknown [9.171.85.252])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Jul 2023 10:42:44 +0000 (GMT)
+Message-ID: <56ca93af-67dc-9d10-d27e-00c8d7c20f1b@linux.ibm.com>
+Date:   Thu, 13 Jul 2023 12:42:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 00/38] New page table range API
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>
+References: <20230710204339.3554919-1-willy@infradead.org>
+ <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
+ <ZK1My5hQYC2Kb6G1@casper.infradead.org>
+Content-Language: en-US
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <ZK1My5hQYC2Kb6G1@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iA3442D4Wv-j8LnOlc5uYmBlAGOt8UUj
+X-Proofpoint-ORIG-GUID: iA3442D4Wv-j8LnOlc5uYmBlAGOt8UUj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-13_04,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=425 impostorscore=0
+ suspectscore=0 adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307130092
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,62 +92,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 12 Jul 2023 10:19:47 PDT (-0700), Conor Dooley wrote:
-> On Wed, Jul 12, 2023 at 05:18:00PM +0200, Alexandre Ghiti wrote:
->> On 12/07/2023 09:08, Conor Dooley wrote:
->> > On Tue, Jul 11, 2023 at 09:54:30AM +0200, Alexandre Ghiti wrote:
->> > > This series optimizes the tlb flushes on riscv which used to simply
->> > > flush the whole tlb whatever the size of the range to flush or the size
->> > > of the stride.
->> > > 
->> > > Patch 3 introduces a threshold that is microarchitecture specific and
->> > > will very likely be modified by vendors, not sure though which mechanism
->> > > we'll use to do that (dt? alternatives? vendor initialization code?).
->> 
->> 
->> @Conor any idea how to achieve this?
->
-> It's in my queue of things to look at, just been prioritising the
-> extension related stuff the last few days. Hopefully I'll have a chance
-> to think about this tomorrow.. Famous last words probably.
->
->> > > Next steps would be to implement:
->> > > - svinval extension as Mayuresh did here [1]
->> > > - BATCHED_UNMAP_TLB_FLUSH (I'll wait for arm64 patchset to land)
->> > > - MMU_GATHER_RCU_TABLE_FREE
->> > > - MMU_GATHER_MERGE_VMAS
->> > > 
->> > > Any other idea welcome.
->> > > 
->> > > [1] https://lore.kernel.org/linux-riscv/20230623123849.1425805-1-mchitale@ventanamicro.com/
->> > > 
->> > > Alexandre Ghiti (4):
->> > >    riscv: Improve flush_tlb()
->> > >    riscv: Improve flush_tlb_range() for hugetlb pages
->> > >    riscv: Make __flush_tlb_range() loop over pte instead of flushing the
->> > >      whole tlb
->> > The whole series does not build on nommu & this one adds a build warning
->> > for regular builds:
->> > +      1 ../arch/riscv/mm/tlbflush.c:32:15: warning: symbol 'tlb_flush_all_threshold' was not declared. Should it be static?
->> > 
->> > Cheers,
->> > Conor.
->> 
->> 
->> I'll fix the nommu build, sorry about that. Weird I missed this warning,
->> that's an LLVM build right? That variable will need to overwritten by the
->> vendors, so that should not be static (but it will depend on what solution
->> we implement).
->
-> Just make it static until we actually have a vendor implementation of
-> this stuff please, since we don't know what that will look like yet.
 
-It's just a performance issue, right?  IIRC the SiFive errata wasn't 
-actually based on how many TLB flushes happen, they're just broken in 
-general so it was a probability thing.
 
-If that's the case I agree we can just start with something arbitrary to 
-start and then figure out how to set the tunable later.  It's probably 
-going to be workload-specific too, so we'll probably end up with both a 
-firmware default and a userspace override (maybe a sys entry or 
-whatever).
+Am 11.07.23 um 14:36 schrieb Matthew Wilcox:
+> On Tue, Jul 11, 2023 at 11:07:06AM +0200, Christian Borntraeger wrote:
+>> Am 10.07.23 um 22:43 schrieb Matthew Wilcox (Oracle):
+>>> This patchset changes the API used by the MM to set up page table entries.
+>>> The four APIs are:
+>>>       set_ptes(mm, addr, ptep, pte, nr)
+>>>       update_mmu_cache_range(vma, addr, ptep, nr)
+>>>       flush_dcache_folio(folio)
+>>>       flush_icache_pages(vma, page, nr)
+>>>
+>>> flush_dcache_folio() isn't technically new, but no architecture
+>>> implemented it, so I've done that for them.  The old APIs remain around
+>>> but are mostly implemented by calling the new interfaces.
+>>>
+>>> The new APIs are based around setting up N page table entries at once.
+>>> The N entries belong to the same PMD, the same folio and the same VMA,
+>>> so ptep++ is a legitimate operation, and locking is taken care of for
+>>> you.  Some architectures can do a better job of it than just a loop,
+>>> but I have hesitated to make too deep a change to architectures I don't
+>>> understand well.
+>>>
+>>> One thing I have changed in every architecture is that PG_arch_1 is now a
+>>> per-folio bit instead of a per-page bit.  This was something that would
+>>> have to happen eventually, and it makes sense to do it now rather than
+>>> iterate over every page involved in a cache flush and figure out if it
+>>> needs to happen.
+>>
+>> I think we do use PG_arch_1 on s390 for our secure page handling and
+>> making this perf folio instead of physical page really seems wrong
+>> and it probably breaks this code.
+> 
+> Per-page flags are going away in the next few years, so you're going to
+> need a new design.  s390 seems to do a lot of unusual things.  I wish
+> you'd talk to the rest of us more.
+
+I understand you point from a logical point of view, but a 4k page frame
+is also a hardware defined memory region. And I think not only for us.
+How do you want to implement hardware poisoning for example?
+Marking the whole folio with PG_hwpoison seems wrong.
