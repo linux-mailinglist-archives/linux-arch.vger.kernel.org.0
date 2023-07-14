@@ -2,85 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F22754380
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 21:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91F6754393
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 22:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236604AbjGNT4k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Jul 2023 15:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S232966AbjGNUKr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 Jul 2023 16:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbjGNT4g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 15:56:36 -0400
+        with ESMTP id S235873AbjGNUKq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 16:10:46 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057753AB8;
-        Fri, 14 Jul 2023 12:56:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AE030DC;
+        Fri, 14 Jul 2023 13:10:45 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id DEDF05C009D;
-        Fri, 14 Jul 2023 15:56:25 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 30F825C0079;
+        Fri, 14 Jul 2023 16:10:45 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 14 Jul 2023 15:56:25 -0400
+  by compute6.internal (MEProxy); Fri, 14 Jul 2023 16:10:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1689364585; x=1689450985; bh=bIDbQfxsNuvf3d9r/rOpxa+WmMoPtn+8jD3
-        nk1eOuRM=; b=SGMembvX6/sAHfuOugqH9axbat/QoJ0k31uIq0vHq0+0ZRq9/bm
-        OXE4fsjATB99uYFbcAOqgiYTHo/G6oDsB/CtG/4tOHM+S4lOaCWbNGhHggOsAJTg
-        R9x3L8nKHjrq8GlGVIJ3q52beg3LfkH49h4safD8f3/9/UWoGrvEiu/G8GQeWhsj
-        QBINygCvMVi3GocH49248OkLx/g7BcAV1u7sIyM14bQ44Jjn/2m2h0UISKDEyaOz
-        LiZL8ngaiTLV0m38ocWnY5LlNGr8kj6VSMgo6BbX4AuPvRR9+inBIg2TDeq3EBVa
-        XU1pvnDy1aQqp4RoKfvE7UAdu5l/KSmdn0g==
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1689365445; x=1689451845; bh=ga
+        PAQwdntztGOLiPMplHfdyiMwn46B6kS3SDmZfmT/c=; b=UiKsC+oQ9U1WlYM6OM
+        gjGTV5NlSKJ22DSJQxmr+HBVOSOGXloGZmwlhzDuax0qJokzwunmP/B0LXXBU+IB
+        O5GHqtXClcmby/8dk1dOt0wDSE0YCwEdNKUw85M12ayhrJvwI/XFd7L8fB0r0KLW
+        6ppr3flC4Ohao7nTDQi4zDjOfZhI/he1yFCvFyLbPaI1cabqFLsnmA8R4B7xN5Kf
+        st6Veg2HjO79Rmtw9ck4kxHWASjyJpi3VE0pP8UFCF5mFL+tXMZzJl8/3WXgBmhM
+        rSWQsuu9g/6Ag5BiIk1+k9nd0WBulErAF1X6M1/QwMrnHYUrt4NAxO5IMdSQvwFx
+        12yg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1689364585; x=1689450985; bh=bIDbQfxsNuvf3d9r/rOpxa+WmMoPtn+8jD3
-        nk1eOuRM=; b=OQUfHU85i/3qDShDvTCgfTD7feljdTJdTsnuo5ejQBoyPs0P2uv
-        Z8yhnO9uqNgQP4P4ilW2vOODiZuuT114HqvMR+jVhEzUGMPzGFNZb9y/2mM11JH3
-        iSO1XktS3kXfIxO1sn/yYGVQonR1mWZCYIIOrqoVRNzaSTphNKiVsgzIBPIScgWb
-        Z9v0Zo8pgQ6o2JVPgvhPnhBB/uIl9i84xc840h50R0HRvBf8iSsayfWcg5bT1Eec
-        vVXCtmEw6o+6btBP99+xmA290mk9/QTtkdDPF9AJWxPcVzskgP+PvHPr+w/oRip3
-        0GmREp6JTbBoHvyZLHHMGxmDM7Lx70sI4ew==
-X-ME-Sender: <xms:aKixZINAaHZB2npjlr6kbwwcGSVaR5zGuNyYmH16wvpA4A1Iul-Z-A>
-    <xme:aKixZO9FE28zzxsHMXwW1FYewcFTJPhJbLC0HpzLgAg6Gu9oCDArV6KFkUHtSfJNl
-    EUoJjSEoSDY6FTMNnw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfeeigddugeefucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1689365445; x=1689451845; bh=gaPAQwdntztGO
+        LiPMplHfdyiMwn46B6kS3SDmZfmT/c=; b=CEpTsjWAXMkWHu/nvKovCbJVDQqHv
+        zREI/E6uIabljXUQ8ZBMe8VuLogoRgEpRyaXQz6qKWmHeLqZkNs1ieI/wwknAGcT
+        QhbGPjoBnW67h8jwrl+z5PnArYZxRPB0JvQ62X76k77L0DCNXD+gUdeoTES4+zFL
+        bx1yFpIovfcz0MXJak4v50wzu4iaIrYCDf/XN+vu4wIdTyz83PLUZdsTl2uicc/8
+        OgkJ+Qvl3fXHOAMjg2BLTFb4VVhqdHTl1qGVDS+2D3YyrlXPOekL7bHBDd8Xixrp
+        9LkzBLAGHWNvVMo/v7+aqnnsOXzEA+aJ9N3iNjhgReKxm622an0xo8kdg==
+X-ME-Sender: <xms:xKuxZOtHnPjkwPcsmcuUjwfZGI4HMP8yMHyEjJDAFtzH7tJWmUOMQA>
+    <xme:xKuxZDfdwaFOVGVD_mq1tGj_AQeCGPtN6EEZMXSzFIhf2DBIpVFyZy4rGoSyc2izB
+    xeuB27M_rbyPjFGYZ8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfeeigddugeeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:aKixZPTYvU0vcmCP_r2Hf20okR3zUmuZi9AmprKDUWqxyEYbhddrMw>
-    <xmx:aKixZAsElIgnNOVEibh3rfmvgRbV4aiLiBiVdTJDz0occUAMdxRP6Q>
-    <xmx:aKixZAdfD6MDZtpCirPQ9q2-7iBk7Zcv9Ts7-dfZxNFt69I6d2fbWA>
-    <xmx:aaixZHzmJD_NpvGaWn6kqZWRXRbs2qeuuJsh2383wclZmbiiFdiBMw>
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:xKuxZJzyXqST3REgFwmwOHxUqFQZRh6kkOrES2sfJMpDc6-6bMr2Aw>
+    <xmx:xKuxZJPgGH9A-KdDAWuSbRrY-P0mcSBmlEPgfQTOuH_nOqOawjIAXg>
+    <xmx:xKuxZO90IzV7N655TTDcHdQTwDDZiehTq96qDnSnaTCRIFJfmQ5DDA>
+    <xmx:xauxZAft0YinFoFu7ewMVQ3d0Ex_PyHim0ayqH-oY3piRVaLdaZBxg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 66359B60086; Fri, 14 Jul 2023 15:56:24 -0400 (EDT)
+        id 9D4C8B60086; Fri, 14 Jul 2023 16:10:44 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
 Mime-Version: 1.0
-Message-Id: <bf997965-71d1-4949-8cbc-de46ac6a1283@app.fastmail.com>
-In-Reply-To: <CAP-5=fWmPQ9vtH1t9pSPCPBiOFxQQe43C7Bk4amLS08ASAnwGg@mail.gmail.com>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
- <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
- <CAP-5=fWmPQ9vtH1t9pSPCPBiOFxQQe43C7Bk4amLS08ASAnwGg@mail.gmail.com>
-Date:   Fri, 14 Jul 2023 21:56:04 +0200
+Message-Id: <d8366484-63d7-4e7c-b02d-7354aa69c444@app.fastmail.com>
+In-Reply-To: <20230714144749.GA3261758@hirez.programming.kicks-ass.net>
+References: <20230714133859.305719029@infradead.org>
+ <20230714141218.879715585@infradead.org>
+ <c5a09710-a7a1-43df-ac25-42e8f3983f9c@app.fastmail.com>
+ <20230714144749.GA3261758@hirez.programming.kicks-ass.net>
+Date:   Fri, 14 Jul 2023 22:10:10 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ian Rogers" <irogers@google.com>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 0/2] Unify uapi bitsperlong.h
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To:     "Peter Zijlstra" <peterz@infradead.org>
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Jens Axboe" <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Darren Hart" <dvhart@infradead.org>, dave@stgolabs.net,
+        andrealmeid@igalia.com,
+        "Andrew Morton" <akpm@linux-foundation.org>, urezki@gmail.com,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Lorenzo Stoakes" <lstoakes@gmail.com>, linux-api@vger.kernel.org,
+        linux-mm@kvack.org, Linux-Arch <linux-arch@vger.kernel.org>,
+        malteskarupke@web.de
+Subject: Re: [RFC][PATCH 04/10] futex: Add sys_futex_wake()
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -92,63 +95,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 14, 2023, at 20:34, Ian Rogers wrote:
-> On Thu, Jun 22, 2023 at 8:10=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->>
->> On Thu, Jun 22, 2023, at 16:13, Tiezhu Yang wrote:
->> > v3:
->> >   -- Check the definition of __BITS_PER_LONG first at
->> >      the beginning of uapi/asm-generic/bitsperlong.h
+On Fri, Jul 14, 2023, at 16:47, Peter Zijlstra wrote:
+> On Fri, Jul 14, 2023 at 04:26:45PM +0200, Arnd Bergmann wrote:
+>> On Fri, Jul 14, 2023, at 15:39, Peter Zijlstra wrote:
 >> >
+>> > +++ b/include/linux/syscalls.h
+>> > @@ -563,6 +563,9 @@ asmlinkage long sys_set_robust_list(stru
+>> >  asmlinkage long sys_futex_waitv(struct futex_waitv *waiters,
+>> >  				unsigned int nr_futexes, unsigned int flags,
+>> >  				struct __kernel_timespec __user *timeout, clockid_t clockid);
+>> > +
+>> > +asmlinkage long sys_futex_wake(void __user *uaddr, int nr, unsigned 
+>> > int flags, u64 mask);
+>> > +
+>> 
+>> You can't really use 'u64' arguments in portable syscalls, it causes
+>> a couple of problems, both with defining the user space wrappers,
+>> and with compat mode.
+>> 
+>> Variants that would work include:
+>> 
+>> - using 'unsigned long' instead of 'u64'
+>> - passing 'mask' by reference, as in splice()
+>> - passing the mask in two u32-bit arguments like in llseek()
+>> 
+>> Not sure if any of the above work for you.
 >
-> Thanks for doing this cleanup! I just wanted to report an issue I ran
-> into with building the Linux perf tool. The header guard in:
-> tools/include/asm-generic/bitsperlong.h
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/tools/include/asm-generic/bitsperlong.h
->
-> Caused an issue with building:
-> tools/perf/util/cs-etm.c
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/tools/perf/util/cs-etm.c
->
-> The issue was that cs-etm.c would #include a system header, which
-> would transitively include a header with the same header guard. This
-> led to the tools/include/asm-generic/bitsperlong.h being ignored and
-> the compilation of tools/perf/util/cs-etm.c failing due to a missing
-> define. My local workaround is:
->
-> ```
-> diff --git a/tools/include/asm-generic/bitsperlong.h
-> b/tools/include/asm-generic/bitsperlong.h
-> index 2093d56ddd11..88508a35cb45 100644
-> --- a/tools/include/asm-generic/bitsperlong.h
-> +++ b/tools/include/asm-generic/bitsperlong.h
-> @@ -1,6 +1,6 @@
-> /* SPDX-License-Identifier: GPL-2.0 */
-> -#ifndef __ASM_GENERIC_BITS_PER_LONG
-> -#define __ASM_GENERIC_BITS_PER_LONG
-> +#ifndef __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG
-> +#define __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG
-> #include <uapi/asm-generic/bitsperlong.h>
-> @@ -21,4 +21,4 @@
-> #define small_const_nbits(nbits) \
-> (__builtin_constant_p(nbits) && (nbits) <=3D BITS_PER_LONG && (nbits) =
-> 0)
-> -#endif /* __ASM_GENERIC_BITS_PER_LONG */
-> +#endif /* __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG */
-> ```
->
-> I'm not sure if a wider fix is necessary for this, but I thought it
-> worthwhile to report that there are potential issues. I don't think we
-> can use #pragma once, as an alternative to header guards, to avoid
-> this kind of name collision.
+> Durr, I was hoping they'd use register pairs, but yeah I can see how
+> that would be very hard to do in generic code.
 
-Thanks for the report! I think the correct fix is to update
-the tools/include/ headers to have the same change as the kernel
-itself. I don't know why we end up including both, that sounds
-like a separate issue but should normally be harmless as long
-as the contents are the same.
+It kind of works to just use register pairs, the actual problem
+you run into here is that:
 
-      Arnd
+- depending on the architecture, the register pairs need to be
+  even/odd pairs, so there are two different ways that 32-bit
+  architectures handle it
+
+- The compat handler needs to explicitly name the registers that
+  are used, so to make your version above work correctly, we'd
+  need three entry points, for native 64-bit, compat 32-bit
+  odd/even pairs and compat 32-bit even/odd pairs.
+
+> Hurmph.. using 2 u32s is unfortunate on 64bit, while unsigned long
+> would limit 64bit futexes to 64bit machines (perhaps not too bad).
+>
+> Using unsigned long would help with the futex_wait() thing as well.
+>
+> I'll ponder things a bit.
+>
+> Obviously I only did build x86_64 ;-)
+
+I suspect that restricting the futexes to native work size is
+ok since many 32-bit architectures don't have 64-bit atomic
+instructions anyway (armv6k+ and i586tsc+ being the obvious
+exceptions), so userspace code that relies on it becomes
+nonportable.
+
+    Arnd
