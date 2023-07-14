@@ -2,100 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A580753EC9
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 17:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCD475429E
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 20:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235256AbjGNP03 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Jul 2023 11:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S236530AbjGNSe4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 Jul 2023 14:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbjGNP02 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 11:26:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360CF1BD4;
-        Fri, 14 Jul 2023 08:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PW9O2dLBokh6X5owFYBB430L2RtltUnavOejKbrhHjw=; b=ZCqnWZPYXmbMaF2DqtjhPvKQ16
-        J6Rf7d1jC7H8suBMEHYrmniHqFcRDiN81vJ+fM+fZ44fBnZoyWOon1gXoAYlnXdA/ECLmmxNuY4WV
-        62sOQXTtVigQ8wLY3D0NVG0xH4CVDxDfsCllPO3D3yGJtZJdlrniuicm0VKq4iyjDoK5D3RJOhElb
-        VbnBr3WMk2arYGI937L8JNlvR/ykRURCEgX/HMQeZONb5WG5HVLzggQ9rQAC+qUXdKVB6IR61SH/h
-        r2AgXVtnjROhAYpz23dCq/AWZzC/2MA3iEQeRhKGbhF9Sy+HCxb0oAQ5l0wP2YOF2irmmw/uTjpzF
-        Scb8Pkkw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qKKgR-006JOI-2P;
-        Fri, 14 Jul 2023 15:26:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5638A3001E7;
-        Fri, 14 Jul 2023 17:26:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3EF2121372896; Fri, 14 Jul 2023 17:26:15 +0200 (CEST)
-Date:   Fri, 14 Jul 2023 17:26:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     tglx@linutronix.de, axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de
-Subject: Re: [RFC][PATCH 05/10] mm: Add vmalloc_huge_node()
-Message-ID: <20230714152615.GE3261758@hirez.programming.kicks-ass.net>
-References: <20230714133859.305719029@infradead.org>
- <20230714141218.947137012@infradead.org>
- <ZLFdstLtPGcNsLGL@casper.infradead.org>
- <20230714150948.GC3261758@hirez.programming.kicks-ass.net>
- <ZLFlq3T13G2Zb7ey@casper.infradead.org>
+        with ESMTP id S236456AbjGNSey (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 14:34:54 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA512D7B
+        for <linux-arch@vger.kernel.org>; Fri, 14 Jul 2023 11:34:51 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-3460770afe2so14495ab.1
+        for <linux-arch@vger.kernel.org>; Fri, 14 Jul 2023 11:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689359690; x=1691951690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MoxXHdLDuf7uBFW6SzS0r7koKHamZIMQJhfLSozBhPo=;
+        b=CoJVUT8LU2AtfsX0295LW0wALbl6vjYJVVvw4PYNsoOUACUrTE5e7vF2/JNBuTVytu
+         1YN5mfJ5LmOjGrkFWCjokami+/m/20rMXkXJE+kyg8lWJV1fM/eT2A5BSdTJVC10fUVP
+         m/jcur+F1HfXOrnBNG3g4Z19YMly7vmf9OEGqCUncUEzhxkpRosdoOP4mfNJoabA4aFt
+         bFSjNtQ8UDmaME5akhRaiUq6QjCF6ow/oqaG67xGj8OmK0bkihegJlrVL02S3uaHb+gx
+         KJOLY1eELEHcsQjQJkzgzu2IlUsCPPJn84DLtUo2c4kVvsCgeYxQ7CLrtnN9yNYVzjuO
+         7vsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689359690; x=1691951690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MoxXHdLDuf7uBFW6SzS0r7koKHamZIMQJhfLSozBhPo=;
+        b=PNRuLboPaa7HSlXgT4woVapkDefdjE+hyxiviURjBLAFdP1HpqjIV45pJ9hPah7T+z
+         Pl9WWDL6gi12LekR2EqNFvbwHVTP+p62MFiR40JmBH8bOMrb7OQDQb6+SFBn52Y/D8l7
+         lc0eKgoCXu7HeA1lEfoaj6/6gpl3rWVpZA2PwLXuGL1xu17TbKcBxdkojNcZdHYrsvZQ
+         v/DJIn3W7q60RCdOEqb3rL+FotkD7VWpW2ma7A/WZHWuwp/zFt3Td1PyKyl401jM6eaR
+         ZiXZorGWmjh5Xfihb67WUJOMH4HLea606YAdYbeONBXhBw+O7Is8mfBQ6x+RUULRUkmb
+         Pl/w==
+X-Gm-Message-State: ABy/qLZqwKpNsOussZJVWzyVdMbc+oID8miTD5LAr50CXgu2GL/SUwir
+        v+IcXsdONbuamU/7yLeHZbqPovwD9kWBZJOCUDWoPQ==
+X-Google-Smtp-Source: APBJJlFBXB7QiI9ztuQ6QNS2GQgouY4NGeveevYonN6Nbqt7+SK1nGopO9WtPJnQWR/2BpnoHFgPXaVz7Pqdzg6CKF4=
+X-Received: by 2002:a05:6e02:1a61:b0:33d:8f9f:9461 with SMTP id
+ w1-20020a056e021a6100b0033d8f9f9461mr972322ilv.18.1689359690226; Fri, 14 Jul
+ 2023 11:34:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZLFlq3T13G2Zb7ey@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn> <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
+In-Reply-To: <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 14 Jul 2023 11:34:38 -0700
+Message-ID: <CAP-5=fWmPQ9vtH1t9pSPCPBiOFxQQe43C7Bk4amLS08ASAnwGg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Unify uapi bitsperlong.h
+To:     Arnd Bergmann <arnd@arndb.de>, Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 04:11:39PM +0100, Matthew Wilcox wrote:
-> ... or just don't change vmalloc_huge()?
+On Thu, Jun 22, 2023 at 8:10=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Thu, Jun 22, 2023, at 16:13, Tiezhu Yang wrote:
+> > v3:
+> >   -- Check the definition of __BITS_PER_LONG first at
+> >      the beginning of uapi/asm-generic/bitsperlong.h
+> >
 
-Yeah, that, everything else just adds more lines without read benefit. I
-eneded up with the below.
+Thanks for doing this cleanup! I just wanted to report an issue I ran
+into with building the Linux perf tool. The header guard in:
+tools/include/asm-generic/bitsperlong.h
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/include/asm-generic/bitsperlong.h
 
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -152,6 +152,7 @@ extern void *__vmalloc_node_range(unsign
- void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
- 		int node, const void *caller) __alloc_size(1);
- void *vmalloc_huge(unsigned long size, gfp_t gfp_mask) __alloc_size(1);
-+void *vmalloc_huge_node(unsigned long size, gfp_t gfp_mask, int node) __alloc_size(1);
- 
- extern void *__vmalloc_array(size_t n, size_t size, gfp_t flags) __alloc_size(1, 2);
- extern void *vmalloc_array(size_t n, size_t size) __alloc_size(1, 2);
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -3416,6 +3416,13 @@ void *vmalloc(unsigned long size)
- }
- EXPORT_SYMBOL(vmalloc);
- 
-+void *vmalloc_huge_node(unsigned long size, gfp_t gfp_mask, int node)
-+{
-+	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-+				    gfp_mask, PAGE_KERNEL, VM_ALLOW_HUGE_VMAP,
-+				    node, __builtin_return_address(0));
-+}
-+
- /**
-  * vmalloc_huge - allocate virtually contiguous memory, allow huge pages
-  * @size:      allocation size
+Caused an issue with building:
+tools/perf/util/cs-etm.c
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/perf/util/cs-etm.c
+
+The issue was that cs-etm.c would #include a system header, which
+would transitively include a header with the same header guard. This
+led to the tools/include/asm-generic/bitsperlong.h being ignored and
+the compilation of tools/perf/util/cs-etm.c failing due to a missing
+define. My local workaround is:
+
+```
+diff --git a/tools/include/asm-generic/bitsperlong.h
+b/tools/include/asm-generic/bitsperlong.h
+index 2093d56ddd11..88508a35cb45 100644
+--- a/tools/include/asm-generic/bitsperlong.h
++++ b/tools/include/asm-generic/bitsperlong.h
+@@ -1,6 +1,6 @@
+/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __ASM_GENERIC_BITS_PER_LONG
+-#define __ASM_GENERIC_BITS_PER_LONG
++#ifndef __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG
++#define __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG
+#include <uapi/asm-generic/bitsperlong.h>
+@@ -21,4 +21,4 @@
+#define small_const_nbits(nbits) \
+(__builtin_constant_p(nbits) && (nbits) <=3D BITS_PER_LONG && (nbits) > 0)
+-#endif /* __ASM_GENERIC_BITS_PER_LONG */
++#endif /* __LINUX_TOOLS_ASM_GENERIC_BITS_PER_LONG */
+```
+
+I'm not sure if a wider fix is necessary for this, but I thought it
+worthwhile to report that there are potential issues. I don't think we
+can use #pragma once, as an alternative to header guards, to avoid
+this kind of name collision.
+
+Thanks,
+Ian
+
+
+> > v2:
+> >   -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
+> >      __aarch64__, __riscv, __loongarch__, thanks Ruoyao
+> >   -- Update the code comment and commit message
+> >
+> > v1:
+> >   -- Rebase on 6.4-rc6
+> >   -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
+> >   -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
+> >
+> > Here is the RFC patch:
+> > https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-ya=
+ngtiezhu@loongson.cn/
+>
+> I've applied these to the asm-generic tree now
+>
+> Thanks,
+>
+>    Arnd
