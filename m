@@ -2,42 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3B0753CDA
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 16:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDBE753CE7
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 16:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbjGNOQh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Jul 2023 10:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S235981AbjGNOQr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 Jul 2023 10:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbjGNOQg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 10:16:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E8E30C0;
-        Fri, 14 Jul 2023 07:16:35 -0700 (PDT)
+        with ESMTP id S235510AbjGNOQn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 10:16:43 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50B730C0;
+        Fri, 14 Jul 2023 07:16:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=JH41pDo7+Jk4qffVzaO2p6sCO6Nd3BbMmWUDDzgZdtk=; b=svWkhtHF2Xpvm5S2/jG0ESgpOR
-        TrBT7MXzx1VRkZJl6Z6JFy0pTLtfdLkAEIKsOMTFwQdkIcyy7ECVjFqE40I2iJe1vrTASfja+qtM8
-        WDZzYWTGTFQE6iD8ojO/zPWX2v5OoL4npt+I6MnajImZXMT3MMTG8Etf217dclTq1BWGZGQyPj8vI
-        cckrPl4lyNHyA0T5FPLyqSrU5OeSoDbhmhEhc3Q+AzAlgex4F5uq1gNKB6i32P1QVfvRGn5o+/Qo9
-        SmMRrS031NkgiHkFCkG/Lg0t6+kVO2fNi2Q9P/DCCL+60sQ/32+jDCeaEmgLQ+HU5c+7wxd2+P8im
-        H4FxABfQ==;
+        bh=98fwNtpV0Bbvya3mBoauq7smkVWN16/6yjAoJPAxLCQ=; b=k0AkkJTwfkefz5URce2ntHKAIC
+        6CkN91KKm1sEDmU8seNl1uV4Im1FILXye+5BHlydSaZELYf9BNA3/k7+QifPdr1WwzxLzYcvHvf6T
+        P1AJrThlTJ4nWZgI8kec0ij5yNMrSO/t5B/BJ5VDAX+AR7E+PAaN9ykyCq7vT6csjBMqdhA19nELp
+        lEz1sIwnXytxoy8hFGNf0qkpI0+Ch+wz56SHgu5eT13eNOFZ9pHKXoHl5VNSgkeZfGyJrfRhvnzkm
+        2UMzg2C3u8KfvGSkocm2zB5m0xp474j8eyUMo0BZX3hXkqvYrbCtZ7F7zHwbFS4yTB9IgE5FV80uX
+        dly3b80w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qKJah-0016z2-4F; Fri, 14 Jul 2023 14:16:15 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qKJah-006Iiw-21;
+        Fri, 14 Jul 2023 14:16:16 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A3DB730057E;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A0834300362;
         Fri, 14 Jul 2023 16:16:13 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 60EA0213728AD; Fri, 14 Jul 2023 16:16:13 +0200 (CEST)
-Message-ID: <20230714141218.746077262@infradead.org>
+        id 691B3213728B7; Fri, 14 Jul 2023 16:16:13 +0200 (CEST)
+Message-ID: <20230714141218.813185695@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 14 Jul 2023 15:39:01 +0200
+Date:   Fri, 14 Jul 2023 15:39:02 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     tglx@linutronix.de, axboe@kernel.dk
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -47,7 +48,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         malteskarupke@web.de
-Subject: [RFC][PATCH 02/10] futex: Extend the FUTEX2 flags
+Subject: [RFC][PATCH 03/10] futex: Flag conversion
 References: <20230714133859.305719029@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,51 +62,148 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add the definition for the missing but always intended extra sizes,
-and add a NUMA flag for the planned numa extention.
+Futex has 3 sets of flags:
+
+ - legacy futex op bits
+ - futex2 flags
+ - internal flags
+
+Add a few helpers to convert from the API flags into the internal
+flags.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/uapi/linux/futex.h |    7 ++++---
- kernel/futex/syscalls.c    |    4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ kernel/futex/futex.h    |   48 +++++++++++++++++++++++++++++++++++++++++++++---
+ kernel/futex/syscalls.c |   21 +++++++++++++--------
+ kernel/futex/waitwake.c |    4 ++--
+ 3 files changed, 60 insertions(+), 13 deletions(-)
 
---- a/include/uapi/linux/futex.h
-+++ b/include/uapi/linux/futex.h
-@@ -46,10 +46,11 @@
- /*
-  * Flags for futex2 syscalls.
+--- a/kernel/futex/futex.h
++++ b/kernel/futex/futex.h
+@@ -16,8 +16,15 @@
+  * Futex flags used to encode options to functions and preserve them across
+  * restarts.
   */
--			/*	0x00 */
--			/*	0x01 */
-+#define FUTEX2_8		0x00
-+#define FUTEX2_16		0x01
- #define FUTEX2_32		0x02
--			/*	0x04 */
-+#define FUTEX2_64		0x03
-+#define FUTEX2_NUMA		0x04
- 			/*	0x08 */
- 			/*	0x10 */
- 			/*	0x20 */
++#define FLAGS_SIZE_8		0x00
++#define FLAGS_SIZE_16		0x01
++#define FLAGS_SIZE_32		0x02
++#define FLAGS_SIZE_64		0x03
++
++#define FLAGS_SIZE_MASK		0x03
++
+ #ifdef CONFIG_MMU
+-# define FLAGS_SHARED		0x01
++# define FLAGS_SHARED		0x10
+ #else
+ /*
+  * NOMMU does not have per process address space. Let the compiler optimize
+@@ -25,8 +32,43 @@
+  */
+ # define FLAGS_SHARED		0x00
+ #endif
+-#define FLAGS_CLOCKRT		0x02
+-#define FLAGS_HAS_TIMEOUT	0x04
++#define FLAGS_CLOCKRT		0x20
++#define FLAGS_HAS_TIMEOUT	0x40
++#define FLAGS_NUMA		0x80
++
++/* FUTEX_ to FLAGS_ */
++static inline unsigned int futex_to_flags(unsigned int op)
++{
++	unsigned int flags = FLAGS_SIZE_32;
++
++	if (!(op & FUTEX_PRIVATE_FLAG))
++		flags |= FLAGS_SHARED;
++
++	if (op & FUTEX_CLOCK_REALTIME)
++		flags |= FLAGS_CLOCKRT;
++
++	return flags;
++}
++
++/* FUTEX2_ to FLAGS_ */
++static inline unsigned int futex2_to_flags(unsigned int flags2)
++{
++	unsigned int flags = flags2 & FUTEX2_64;
++
++	if (!(flags2 & FUTEX2_PRIVATE))
++		flags |= FLAGS_SHARED;
++
++	if (flags2 & FUTEX2_NUMA)
++		flags |= FLAGS_NUMA;
++
++	return flags;
++}
++
++static inline unsigned int futex_size(unsigned int flags)
++{
++	unsigned int size = flags & FLAGS_SIZE_MASK;
++	return 1 << size; /* {0,1,2,3} -> {1,2,4,8} */
++}
+ 
+ #ifdef CONFIG_FAIL_FUTEX
+ extern bool should_fail_futex(bool fshared);
 --- a/kernel/futex/syscalls.c
 +++ b/kernel/futex/syscalls.c
-@@ -183,7 +183,7 @@ SYSCALL_DEFINE6(futex, u32 __user *, uad
- 	return do_futex(uaddr, op, val, tp, uaddr2, (unsigned long)utime, val3);
- }
+@@ -85,15 +85,12 @@ SYSCALL_DEFINE3(get_robust_list, int, pi
+ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
+ 		u32 __user *uaddr2, u32 val2, u32 val3)
+ {
++	unsigned int flags = futex_to_flags(op);
+ 	int cmd = op & FUTEX_CMD_MASK;
+-	unsigned int flags = 0;
  
--#define FUTEX2_MASK (FUTEX2_32 | FUTEX2_PRIVATE)
-+#define FUTEX2_MASK (FUTEX2_64 | FUTEX2_PRIVATE)
+-	if (!(op & FUTEX_PRIVATE_FLAG))
+-		flags |= FLAGS_SHARED;
+-
+-	if (op & FUTEX_CLOCK_REALTIME) {
+-		flags |= FLAGS_CLOCKRT;
+-		if (cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI &&
++	if (flags & FLAGS_CLOCKRT) {
++		if (cmd != FUTEX_WAIT_BITSET &&
++		    cmd != FUTEX_WAIT_REQUEUE_PI &&
+ 		    cmd != FUTEX_LOCK_PI2)
+ 			return -ENOSYS;
+ 	}
+@@ -201,6 +198,8 @@ static int futex_parse_waitv(struct fute
+ 	unsigned int i;
  
- /**
-  * futex_parse_waitv - Parse a waitv array from userspace
-@@ -207,7 +207,7 @@ static int futex_parse_waitv(struct fute
- 		if ((aux.flags & ~FUTEX2_MASK) || aux.__reserved)
+ 	for (i = 0; i < nr_futexes; i++) {
++		unsigned int bits, flags;
++
+ 		if (copy_from_user(&aux, &uwaitv[i], sizeof(aux)))
+ 			return -EFAULT;
+ 
+@@ -210,7 +209,13 @@ static int futex_parse_waitv(struct fute
+ 		if ((aux.flags & FUTEX2_64) != FUTEX2_32)
  			return -EINVAL;
  
--		if (!(aux.flags & FUTEX2_32))
-+		if ((aux.flags & FUTEX2_64) != FUTEX2_32)
- 			return -EINVAL;
+-		futexv[i].w.flags = aux.flags;
++		flags = futex2_to_flags(aux.flags);
++		bits = 8 * futex_size(flags);
++
++		if (bits < 64 && aux.val >> bits)
++			return -EINVAL;
++
++		futexv[i].w.flags = flags;
+ 		futexv[i].w.val = aux.val;
+ 		futexv[i].w.uaddr = aux.uaddr;
+ 		futexv[i].q = futex_q_init;
+--- a/kernel/futex/waitwake.c
++++ b/kernel/futex/waitwake.c
+@@ -419,11 +419,11 @@ static int futex_wait_multiple_setup(str
+ 	 */
+ retry:
+ 	for (i = 0; i < count; i++) {
+-		if ((vs[i].w.flags & FUTEX_PRIVATE_FLAG) && retry)
++		if (!(vs[i].w.flags & FLAGS_SHARED) && retry)
+ 			continue;
  
- 		futexv[i].w.flags = aux.flags;
+ 		ret = get_futex_key(u64_to_user_ptr(vs[i].w.uaddr),
+-				    !(vs[i].w.flags & FUTEX_PRIVATE_FLAG),
++				    vs[i].w.flags & FLAGS_SHARED,
+ 				    &vs[i].q.key, FUTEX_READ);
+ 
+ 		if (unlikely(ret))
 
 
