@@ -2,43 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296AB753CF1
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 16:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7260D753CD6
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 16:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235798AbjGNOQu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Jul 2023 10:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S235710AbjGNOQg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 Jul 2023 10:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbjGNOQp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 10:16:45 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC7230C8;
-        Fri, 14 Jul 2023 07:16:42 -0700 (PDT)
+        with ESMTP id S234555AbjGNOQf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 10:16:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6852912E;
+        Fri, 14 Jul 2023 07:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=50j8lu0fq8DZ70IkYc8oVFT5B2TMdBpxV7U6GuBpl7Q=; b=RAyQOPIKt+lXLX555aDpPJzUC9
-        L7EOxKUfSVd10nX0K16zDGniwOxKc30Cd/+xG8LzFUBBkCLdSF5xP40Cevv5Y/l6dyWqJa+dVphas
-        6Gr3l8Rz6zoUJVtRlBiLy943qRAqpj/vIhSitOCh6gTyqaAbRgo3JiXP+Dc7K9WePvtmFiCyQfKj8
-        RCN4PcykMUeb1gdeFB8LRCRweSK248CKdk4wGCboxrybdoWYOf/v45Z/R/lBU7b2/xNeycJx/kjtz
-        pIi/tFYgUgJFMSvi1VEusccqOJXl+n6NkSpusiNz4nBzjjmriQXxNwJcJZ5QOUmUYPapDvpPLr6Ya
-        W0DmGT1Q==;
+        bh=GuDJ92pMIScKKU1gBauDG1HK4VUsLXyIVGMSjzGcY4Y=; b=vBKCfPzsXlmZQm0fbY9sm4XN73
+        kHbqhYPRg24KF+nwElURpqsTJDlryKmDUOG3hRkpWvd0PhoT+M+UUAAfZagygwwYN+EQF96rxRzwh
+        y6Ksh55FaQO2qES2eZnYAQMF0W7I/N7hS39vamjL/ghCgcLWgEwlM2yccrC8KGWmH4aRt4oV3JFNS
+        hotzaBdyxJlbgmQPxYdyPurXiCwYhcjscrxIqsdlOamEmJ65hOEFV33r2X0xNYQURheEouIYUgXH7
+        LZl2gTROHDF1JASKWhc+5uERTwqfjo5eGhlgZOjCV9CM0JpWWZtTMWyghP3XtRYjLU3AJZkGy2PqC
+        A1aFb12A==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qKJah-006Iix-2B;
-        Fri, 14 Jul 2023 14:16:16 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qKJah-0016z8-NN; Fri, 14 Jul 2023 14:16:15 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B27AC300E86;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B952E301A2F;
         Fri, 14 Jul 2023 16:16:14 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 8732D245EFFAA; Fri, 14 Jul 2023 16:16:13 +0200 (CEST)
-Message-ID: <20230714141219.215288670@infradead.org>
+        id 8BA61245EFFAB; Fri, 14 Jul 2023 16:16:13 +0200 (CEST)
+Message-ID: <20230714141219.282650897@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 14 Jul 2023 15:39:08 +0200
+Date:   Fri, 14 Jul 2023 15:39:09 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     tglx@linutronix.de, axboe@kernel.dk
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -48,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         malteskarupke@web.de
-Subject: [RFC][PATCH 09/10] futex: Enable FUTEX2_{8,16}
+Subject: [HACK][PATCH 10/10] futex: Munge size and numa into the legacy interface
 References: <20230714133859.305719029@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,86 +61,92 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When futexes are no longer u32 aligned, the lower offset bits are no
-longer available to put type info in. However, since offset is the
-offset within a page, there are plenty bits available on the top end.
+Avert your eyes...
 
-After that, pass flags into futex_get_value_locked() for WAIT and
-disallow FUTEX2_64 instead of mandating FUTEX2_32.
+Arguably just the NUMA thing wouldn't be too bad.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/futex.h   |   11 ++++++-----
- kernel/futex/syscalls.c |    4 ++--
- kernel/futex/waitwake.c |    4 ++--
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ include/uapi/linux/futex.h |   15 ++++++++++++---
+ kernel/futex/futex.h       |    9 ++++++++-
+ kernel/futex/syscalls.c    |   18 ++++++++++++++++++
+ 3 files changed, 38 insertions(+), 4 deletions(-)
 
---- a/include/linux/futex.h
-+++ b/include/linux/futex.h
-@@ -16,18 +16,19 @@ struct task_struct;
-  * The key type depends on whether it's a shared or private mapping.
-  * Don't rearrange members without looking at hash_futex().
-  *
-- * offset is aligned to a multiple of sizeof(u32) (== 4) by definition.
-- * We use the two low order bits of offset to tell what is the kind of key :
-+ * offset is the position within a page and is in the range [0, PAGE_SIZE).
-+ * The high bits of the offset indicate what kind of key this is:
-  *  00 : Private process futex (PTHREAD_PROCESS_PRIVATE)
-  *       (no reference on an inode or mm)
-  *  01 : Shared futex (PTHREAD_PROCESS_SHARED)
-  *	mapped on a file (reference on the underlying inode)
-  *  10 : Shared futex (PTHREAD_PROCESS_SHARED)
-  *       (but private mapping on an mm, and reference taken on it)
--*/
-+ */
+--- a/include/uapi/linux/futex.h
++++ b/include/uapi/linux/futex.h
+@@ -23,9 +23,18 @@
+ #define FUTEX_CMP_REQUEUE_PI	12
+ #define FUTEX_LOCK_PI2		13
  
--#define FUT_OFF_INODE    1 /* We set bit 0 if key has a reference on inode */
--#define FUT_OFF_MMSHARED 2 /* We set bit 1 if key has a reference on mm */
-+#define FUT_OFF_INODE    (PAGE_SIZE << 0)
-+#define FUT_OFF_MMSHARED (PAGE_SIZE << 1)
-+#define FUT_OFF_SIZE	 (PAGE_SIZE << 2)
+-#define FUTEX_PRIVATE_FLAG	128
+-#define FUTEX_CLOCK_REALTIME	256
+-#define FUTEX_CMD_MASK		~(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME)
++#define FUTEX_PRIVATE_FLAG	(1 << 7)
++#define FUTEX_CLOCK_REALTIME	(1 << 8)
++#define FUTEX_NUMA		(1 << 9)
++#define FUTEX_SIZE_32		(0 << 10) /* backwards compat */
++#define FUTEX_SIZE_64		(1 << 10)
++#define FUTEX_SIZE_8		(2 << 10)
++#define FUTEX_SIZE_16		(3 << 10)
++
++#define FUTEX_CMD_MASK		~(FUTEX_PRIVATE_FLAG	|	\
++				  FUTEX_CLOCK_REALTIME	|	\
++				  FUTEX_NUMA		|	\
++				  FUTEX_SIZE_16)
  
- union futex_key {
- 	struct {
+ #define FUTEX_WAIT_PRIVATE	(FUTEX_WAIT | FUTEX_PRIVATE_FLAG)
+ #define FUTEX_WAKE_PRIVATE	(FUTEX_WAKE | FUTEX_PRIVATE_FLAG)
+--- a/kernel/futex/futex.h
++++ b/kernel/futex/futex.h
+@@ -39,7 +39,7 @@
+ /* FUTEX_ to FLAGS_ */
+ static inline unsigned int futex_to_flags(unsigned int op)
+ {
+-	unsigned int flags = FLAGS_SIZE_32;
++	unsigned int sz, flags = 0;
+ 
+ 	if (!(op & FUTEX_PRIVATE_FLAG))
+ 		flags |= FLAGS_SHARED;
+@@ -47,6 +47,13 @@ static inline unsigned int futex_to_flag
+ 	if (op & FUTEX_CLOCK_REALTIME)
+ 		flags |= FLAGS_CLOCKRT;
+ 
++	if (op & FUTEX_NUMA)
++		flags |= FLAGS_NUMA;
++
++	/* { 2,3,0,1 } -> { 0,1,2,3 } */
++	sz = ((op + FUTEX_SIZE_8) & FUTEX_SIZE_16) >> 10;
++	flags |= sz;
++
+ 	return flags;
+ }
+ 
 --- a/kernel/futex/syscalls.c
 +++ b/kernel/futex/syscalls.c
-@@ -206,7 +206,7 @@ static int futex_parse_waitv(struct fute
- 		if ((aux.flags & ~FUTEX2_MASK) || aux.__reserved)
- 			return -EINVAL;
+@@ -95,6 +95,24 @@ long do_futex(u32 __user *uaddr, int op,
+ 			return -ENOSYS;
+ 	}
  
--		if ((aux.flags & FUTEX2_64) != FUTEX2_32)
-+		if ((aux.flags & FUTEX2_64) == FUTEX2_64)
- 			return -EINVAL;
- 
- 		flags = futex2_to_flags(aux.flags);
-@@ -334,7 +334,7 @@ SYSCALL_DEFINE4(futex_wake,
- 	if (flags & ~FUTEX2_MASK)
- 		return -EINVAL;
- 
--	if ((flags & FUTEX2_64) != FUTEX2_32)
-+	if ((flags & FUTEX2_64) == FUTEX2_64)
- 		return -EINVAL;
- 
- 	flags = futex2_to_flags(flags);
---- a/kernel/futex/waitwake.c
-+++ b/kernel/futex/waitwake.c
-@@ -439,7 +439,7 @@ static int futex_wait_multiple_setup(str
- 		u32 val = vs[i].w.val;
- 
- 		hb = futex_q_lock(q);
--		ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
-+		ret = futex_get_value_locked(&uval, uaddr, flags);
- 
- 		if (!ret && uval == val) {
- 			/*
-@@ -607,7 +607,7 @@ int futex_wait_setup(u32 __user *uaddr,
- retry_private:
- 	*hb = futex_q_lock(q);
- 
--	ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
-+	ret = futex_get_value_locked(&uval, uaddr, flags);
- 
- 	if (ret) {
- 		futex_q_unlock(*hb);
++	/* can't support u64 with a u32 based interface */
++	if ((flags & FLAGS_SIZE_MASK) == FLAGS_SIZE_64)
++		return -ENOSYS;
++
++	switch (cmd) {
++	case FUTEX_WAIT:
++	case FUTEX_WAIT_BITSET:
++	case FUTEX_WAKE:
++	case FUTEX_WAKE_BITSET:
++		/* u8, u16, u32 */
++		break;
++
++	default:
++		/* only u32 for now */
++		if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
++			return -ENOSYS;
++	}
++
+ 	switch (cmd) {
+ 	case FUTEX_WAIT:
+ 		val3 = FUTEX_BITSET_MATCH_ANY;
 
 
