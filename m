@@ -2,151 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7260D753CD6
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 16:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7A5753D46
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jul 2023 16:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbjGNOQg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Jul 2023 10:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S235470AbjGNO1k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 Jul 2023 10:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234555AbjGNOQf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 10:16:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6852912E;
-        Fri, 14 Jul 2023 07:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=GuDJ92pMIScKKU1gBauDG1HK4VUsLXyIVGMSjzGcY4Y=; b=vBKCfPzsXlmZQm0fbY9sm4XN73
-        kHbqhYPRg24KF+nwElURpqsTJDlryKmDUOG3hRkpWvd0PhoT+M+UUAAfZagygwwYN+EQF96rxRzwh
-        y6Ksh55FaQO2qES2eZnYAQMF0W7I/N7hS39vamjL/ghCgcLWgEwlM2yccrC8KGWmH4aRt4oV3JFNS
-        hotzaBdyxJlbgmQPxYdyPurXiCwYhcjscrxIqsdlOamEmJ65hOEFV33r2X0xNYQURheEouIYUgXH7
-        LZl2gTROHDF1JASKWhc+5uERTwqfjo5eGhlgZOjCV9CM0JpWWZtTMWyghP3XtRYjLU3AJZkGy2PqC
-        A1aFb12A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qKJah-0016z8-NN; Fri, 14 Jul 2023 14:16:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B952E301A2F;
-        Fri, 14 Jul 2023 16:16:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 8BA61245EFFAB; Fri, 14 Jul 2023 16:16:13 +0200 (CEST)
-Message-ID: <20230714141219.282650897@infradead.org>
-User-Agent: quilt/0.66
-Date:   Fri, 14 Jul 2023 15:39:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     tglx@linutronix.de, axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de
-Subject: [HACK][PATCH 10/10] futex: Munge size and numa into the legacy interface
+        with ESMTP id S235417AbjGNO1g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 10:27:36 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1133C14;
+        Fri, 14 Jul 2023 07:27:12 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 05934320094C;
+        Fri, 14 Jul 2023 10:27:07 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 14 Jul 2023 10:27:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1689344827; x=1689431227; bh=u5
+        ipAH4K0NlmFos4pkZwsy4Cy+qhc8YEhRBvZpa54NA=; b=NVDxZZVQVdpDVPqMKF
+        5D21skUCKYkBUX497oLptmP4rm9ICbEKrL3/5o+aefL42+DszscNov6Sfg1O1oO+
+        HyZcRFc2l0D9E8L2ljfTyZEC0je25cILkj/SbcX9sec1bZzujiS/c/qUpKVt2Hxv
+        6VGve5GLs5640rZYzr1+XX2nqpAE6TumggKWqyPPibpMRqEaogZ4u6jTEr3tsR0R
+        ZcCd8h54KnIXnVlbnFxbbx6itIuJ7NLVXgIkBVJGQ/MTe3L2FwyAUDrWcq8jvABZ
+        nclMpn0mHQMre0DfXOAm5IudfTcgMdLYhcsx28XlTakAQFXYCCiJ9QaMPdI4Bzp0
+        KVPg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1689344827; x=1689431227; bh=u5ipAH4K0NlmF
+        os4pkZwsy4Cy+qhc8YEhRBvZpa54NA=; b=coRg7x1pxfRs2SC9fY5YA59F+siDT
+        6kOl1drANxJlueREdmaiFWHCiyyvyhzXlj9NiaIHH2Tt6876pe5/xvWRUbr2JIhv
+        Ur8Y0fDRofH+vFA3ILQuRieNJ77P4KrjpL7i9HHwV4rOHmReGS6AhrxnRAFHQHde
+        4Q+BCBTOykfF94B/+2za0O+96x+Xkc6GZRkHgfQsuUtC6i8KFDyFi37rV+SxsLjI
+        eQ0GbaFsfeFFALg59LnFlGWGyBgWgiqHVjP6qefjUz7p2Vrt333mCwi2y4NXk43n
+        nDY4Dtm8i3tjIPs263JDEWZlpObxB1G7iYlM0wFH3Kf0sEMPQHvWLD8uA==
+X-ME-Sender: <xms:OluxZC9DTx8Y8-wywcFqtpsskU0D37co4wcnbbUUHKWimDNo7TjG7A>
+    <xme:OluxZCvxZYTiE3jfJy1gwHDY-3f59jg_JOsE8Zwzuhj_pkPQyfdAgTWsplCeYdajm
+    QiujwdcIRtfAekmdB4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfeeigdejjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:OluxZICpGItmE8gfLHTOGNvfLMwZpHl5XTXoPCQvOx313FjyL5e-TA>
+    <xmx:OluxZKeXrOjQy0cgy4DxY_TA4TvKwlPxdqrA4YcHebgQynYRuaRcqw>
+    <xmx:OluxZHNg9P2Nj0YH2WQC5JcDggvfROI_cXobdTjmKEto0od7fh6iXw>
+    <xmx:O1uxZFs-HwGyC7FXsyYG3dQR9GPrMfGT1EIX3fF6jZBYdshTZXJMaw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9F37AB60092; Fri, 14 Jul 2023 10:27:06 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <c5a09710-a7a1-43df-ac25-42e8f3983f9c@app.fastmail.com>
+In-Reply-To: <20230714141218.879715585@infradead.org>
 References: <20230714133859.305719029@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+ <20230714141218.879715585@infradead.org>
+Date:   Fri, 14 Jul 2023 16:26:45 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Jens Axboe" <axboe@kernel.dk>
+Cc:     linux-kernel@vger.kernel.org, "Ingo Molnar" <mingo@redhat.com>,
+        "Darren Hart" <dvhart@infradead.org>, dave@stgolabs.net,
+        andrealmeid@igalia.com,
+        "Andrew Morton" <akpm@linux-foundation.org>, urezki@gmail.com,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Lorenzo Stoakes" <lstoakes@gmail.com>, linux-api@vger.kernel.org,
+        linux-mm@kvack.org, Linux-Arch <linux-arch@vger.kernel.org>,
+        malteskarupke@web.de
+Subject: Re: [RFC][PATCH 04/10] futex: Add sys_futex_wake()
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Avert your eyes...
+On Fri, Jul 14, 2023, at 15:39, Peter Zijlstra wrote:
+>
+> +++ b/include/linux/syscalls.h
+> @@ -563,6 +563,9 @@ asmlinkage long sys_set_robust_list(stru
+>  asmlinkage long sys_futex_waitv(struct futex_waitv *waiters,
+>  				unsigned int nr_futexes, unsigned int flags,
+>  				struct __kernel_timespec __user *timeout, clockid_t clockid);
+> +
+> +asmlinkage long sys_futex_wake(void __user *uaddr, int nr, unsigned 
+> int flags, u64 mask);
+> +
 
-Arguably just the NUMA thing wouldn't be too bad.
+You can't really use 'u64' arguments in portable syscalls, it causes
+a couple of problems, both with defining the user space wrappers,
+and with compat mode.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/uapi/linux/futex.h |   15 ++++++++++++---
- kernel/futex/futex.h       |    9 ++++++++-
- kernel/futex/syscalls.c    |   18 ++++++++++++++++++
- 3 files changed, 38 insertions(+), 4 deletions(-)
+Variants that would work include:
 
---- a/include/uapi/linux/futex.h
-+++ b/include/uapi/linux/futex.h
-@@ -23,9 +23,18 @@
- #define FUTEX_CMP_REQUEUE_PI	12
- #define FUTEX_LOCK_PI2		13
- 
--#define FUTEX_PRIVATE_FLAG	128
--#define FUTEX_CLOCK_REALTIME	256
--#define FUTEX_CMD_MASK		~(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME)
-+#define FUTEX_PRIVATE_FLAG	(1 << 7)
-+#define FUTEX_CLOCK_REALTIME	(1 << 8)
-+#define FUTEX_NUMA		(1 << 9)
-+#define FUTEX_SIZE_32		(0 << 10) /* backwards compat */
-+#define FUTEX_SIZE_64		(1 << 10)
-+#define FUTEX_SIZE_8		(2 << 10)
-+#define FUTEX_SIZE_16		(3 << 10)
-+
-+#define FUTEX_CMD_MASK		~(FUTEX_PRIVATE_FLAG	|	\
-+				  FUTEX_CLOCK_REALTIME	|	\
-+				  FUTEX_NUMA		|	\
-+				  FUTEX_SIZE_16)
- 
- #define FUTEX_WAIT_PRIVATE	(FUTEX_WAIT | FUTEX_PRIVATE_FLAG)
- #define FUTEX_WAKE_PRIVATE	(FUTEX_WAKE | FUTEX_PRIVATE_FLAG)
---- a/kernel/futex/futex.h
-+++ b/kernel/futex/futex.h
-@@ -39,7 +39,7 @@
- /* FUTEX_ to FLAGS_ */
- static inline unsigned int futex_to_flags(unsigned int op)
- {
--	unsigned int flags = FLAGS_SIZE_32;
-+	unsigned int sz, flags = 0;
- 
- 	if (!(op & FUTEX_PRIVATE_FLAG))
- 		flags |= FLAGS_SHARED;
-@@ -47,6 +47,13 @@ static inline unsigned int futex_to_flag
- 	if (op & FUTEX_CLOCK_REALTIME)
- 		flags |= FLAGS_CLOCKRT;
- 
-+	if (op & FUTEX_NUMA)
-+		flags |= FLAGS_NUMA;
-+
-+	/* { 2,3,0,1 } -> { 0,1,2,3 } */
-+	sz = ((op + FUTEX_SIZE_8) & FUTEX_SIZE_16) >> 10;
-+	flags |= sz;
-+
- 	return flags;
- }
- 
---- a/kernel/futex/syscalls.c
-+++ b/kernel/futex/syscalls.c
-@@ -95,6 +95,24 @@ long do_futex(u32 __user *uaddr, int op,
- 			return -ENOSYS;
- 	}
- 
-+	/* can't support u64 with a u32 based interface */
-+	if ((flags & FLAGS_SIZE_MASK) == FLAGS_SIZE_64)
-+		return -ENOSYS;
-+
-+	switch (cmd) {
-+	case FUTEX_WAIT:
-+	case FUTEX_WAIT_BITSET:
-+	case FUTEX_WAKE:
-+	case FUTEX_WAKE_BITSET:
-+		/* u8, u16, u32 */
-+		break;
-+
-+	default:
-+		/* only u32 for now */
-+		if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
-+			return -ENOSYS;
-+	}
-+
- 	switch (cmd) {
- 	case FUTEX_WAIT:
- 		val3 = FUTEX_BITSET_MATCH_ANY;
+- using 'unsigned long' instead of 'u64'
+- passing 'mask' by reference, as in splice()
+- passing the mask in two u32-bit arguments like in llseek()
 
+Not sure if any of the above work for you.
 
+       Arnd
