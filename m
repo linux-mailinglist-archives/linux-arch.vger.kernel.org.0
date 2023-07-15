@@ -2,157 +2,262 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9DC7545E2
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Jul 2023 03:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A15275489D
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Jul 2023 15:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjGOBAa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Jul 2023 21:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S229487AbjGONMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 Jul 2023 09:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGOBAa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Jul 2023 21:00:30 -0400
-Received: from m1340.mail.163.com (m1340.mail.163.com [220.181.13.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35C022D68;
-        Fri, 14 Jul 2023 18:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=kkZ9RjR7KQKJrM1KYMvj+FXbCavvmVv0K3K41WkQlag=; b=K
-        Oae8Z7TYJZLw0zBGtoGX8QlWVRMvewvs9I93wcXNrwPOLiRV45WHCiKxqVPB6jEp
-        owLue/BEfiCTTIfkytTzzrowdjgHoLWUirBn8DS1YTc8OGGRP+IIxE9Px0FMiuy+
-        dVnYWD+ttNLxSx/FyUK0p5hDHwgIpzr9c43NYalkro=
-Received: from xingxg2008$163.com ( [221.218.137.29] ) by
- ajax-webmail-wmsvr40 (Coremail) ; Sat, 15 Jul 2023 08:59:32 +0800 (CST)
-X-Originating-IP: [221.218.137.29]
-Date:   Sat, 15 Jul 2023 08:59:32 +0800 (CST)
-From:   xingxg2008 <xingxg2008@163.com>
-To:     guoren@kernel.org
-Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, zong.li@sifive.com,
-        atishp@atishpatra.org, alex@ghiti.fr, jszhang@kernel.org,
+        with ESMTP id S229472AbjGONL7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Jul 2023 09:11:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E612120;
+        Sat, 15 Jul 2023 06:11:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D0B660BA1;
+        Sat, 15 Jul 2023 13:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3903C433C9;
+        Sat, 15 Jul 2023 13:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689426716;
+        bh=17PQtY6d3Z0UbdwCJ17vdKznTHGmxUohmQTVsIBYpBs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fMqVelIFeJNsfrXxYZyoEa5TzfnGtS8YtXAARmrgZ9exu3QuJlLTsV3RqkVAb3zgo
+         Q4HJhxjBs6KBP/ZmDAFXhuP8OgYg5bxapmq+zhW5SAErY4zM4EmqiXO5ofx1s9SAMT
+         yi1Ev07YZn4uNOshhe0PgjP4ozqx6fFZ1jzjvt1+LlBfinC0XpJSVd23PI1jUYMoUG
+         lTi+yzyhGmDvQ+y/AcOU0i2FVZVlhaeGyakCUbs7o1UK0fZgTnIwSZU7YKKgYFXY+e
+         HAWbIlGP/tAnRAhFWlivf5uVVwaw1NKM4spx2tUoYdrGRt4sM95PbKjZA/kPjj/klo
+         IJXdegrRmfvsQ==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5217ad95029so335952a12.2;
+        Sat, 15 Jul 2023 06:11:56 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZ4ysu+wXMGNfaNPDqO595Vm2ki/8gdHzs+0xQoPzjJk9B+mn3a
+        /rIVL9FrLslbFrWrTLHWGZid4MzTts44Lw6Wf1k=
+X-Google-Smtp-Source: APBJJlGnMWUgYPQOzvBFlFwDpTv0Wej1AnaGlKZCCGg1taFtxTrREIF+lLqN/PBP32+xCf7GwYR//QlmJ/MR59cyDCY=
+X-Received: by 2002:aa7:d605:0:b0:50b:c085:1991 with SMTP id
+ c5-20020aa7d605000000b0050bc0851991mr7484346edr.19.1689426715003; Sat, 15 Jul
+ 2023 06:11:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <95c4e875-02f1-6239-bb62-41b709d21541@ghiti.fr>
+ <mhng-5d9d9723-1dc1-4429-a477-eb4ece20bb87@palmer-ri-x1c9a> <CAJF2gTT4aANEzOQBSOgvFBwNxp5AAd_oTKfecC8d5mmH7YUhhA@mail.gmail.com>
+In-Reply-To: <CAJF2gTT4aANEzOQBSOgvFBwNxp5AAd_oTKfecC8d5mmH7YUhhA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 15 Jul 2023 21:11:43 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ+9DcJk3WVp7D5g+0Fxev8U6PHhQqVJtwdB0gQN_GQ6A@mail.gmail.com>
+Message-ID: <CAJF2gTQ+9DcJk3WVp7D5g+0Fxev8U6PHhQqVJtwdB0gQN_GQ6A@mail.gmail.com>
+Subject: Re: [PATCH V2] riscv: kexec: Fixup synchronization problem between
+ init_mm and active_mm
+To:     Palmer Dabbelt <palmer@rivosinc.com>, xingxg2008@163.com
+Cc:     alex@ghiti.fr, Paul Walmsley <paul.walmsley@sifive.com>,
+        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
         bjorn@kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Guo Ren" <guoren@linux.alibaba.com>,
-        "Alexandre Ghiti" <alexghiti@rivosinc.com>
-Subject: Re:[PATCH V4] riscv: kexec: Fixup synchronization problem between
- init_mm and active_mm
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <20230714103659.3146949-1-guoren@kernel.org>
-References: <20230714103659.3146949-1-guoren@kernel.org>
-X-NTES-SC: AL_QuyTC/+TvU8s5CScbOkXmUcahe83XMKzuPsm3o9SPZE0gink4CQqd31DGlzJwsGUMji2shq6YAhk9spDZbdUQZjRdzE5JbEfzzBDQn1lL58r
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <6b766b2b.2e5.189570f5ee6.Coremail.xingxg2008@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: KMGowADHCmZ077FkZVEDAA--.26192W
-X-CM-SenderInfo: p0lqw5bjsqimi6rwjhhfrp/xtbBbBStM1c7PxAewQAAs6
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        guoren@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ClRlc3RlZC1ieTogWGluZyBYaWFvZ3VhbmcgPHhpbmd4ZzIwMDhAMTYzLmNvbT4KClRoZSBwYXRj
-aCB3b3JrcyBmaW5lIG9uIExpbnV4IDYuNS1SQzEgd2hpY2ggcnVucyBvbiBTT1BIR08KU0cyMDQy
-IEVWQiB0aGF0IGhhcyA2NCBSSVNDLVYgY29yZXMuCgoKCgpBdCAyMDIzLTA3LTE0IDE4OjM2OjU5
-LCBndW9yZW5Aa2VybmVsLm9yZyB3cm90ZToKPkZyb206IEd1byBSZW4gPGd1b3JlbkBsaW51eC5h
-bGliYWJhLmNvbT4KPgo+VGhlIG1hY2hpbmVfa2V4ZWMoKSB1c2VzIHNldF9tZW1vcnlfeCB0byBt
-b2RpZnkgdGhlIGRpcmVjdCBtYXBwaW5nCj5hdHRyaWJ1dGVzIGZyb20gUlcgdG8gUldYLiBUaGUg
-Y3VycmVudCBpbXBsZW1lbnRhdGlvbiBvZiBzZXRfbWVtb3J5X3gKPmRvZXMgbm90IHNwbGl0IGh1
-Z2VwYWdlcyBpbiB0aGUgbGluZWFyIG1hcHBpbmcgYW5kIHRoZW4gd2hlbiBhIFBHRAo+bWFwcGlu
-ZyBpcyB1c2VkLCB0aGUgd2hvbGUgUEdEIGlzIG1hcmtlZCBhcyBleGVjdXRhYmxlLiBCdXQgY2hh
-bmdpbmcKPnRoZSBwZXJtaXNzaW9ucyBhdCB0aGUgUEdEIGxldmVsIG11c3QgYmUgcHJvcGFnYXRl
-ZCB0byBhbGwgdGhlIHBhZ2UKPnRhYmxlcy4gV2hlbiBrZXhlYyBqdW1wcyBpbnRvIGNvbnRyb2xf
-YnVmZmVyLCB0aGUgaW5zdHJ1Y3Rpb24gcGFnZQo+ZmF1bHQgaGFwcGVucywgYW5kIHRoZXJlIGlz
-IG5vIG1pbm9yX3BhZ2VmYXVsdCBmb3IgaXQsIHRoZW4gcGFuaWMuCj4KPlRoZSBidWcgaXMgZm91
-bmQgb24gYW4gTU1VX3N2MzkgbWFjaGluZSwgYW5kIHRoZSBkaXJlY3QgbWFwcGluZyB1c2VkIGEK
-PjFHQiBQVUQsIHRoZSBwZ2QgZW50cmllcy4gSGVyZSBpcyB0aGUgYnVnIG91dHB1dDoKPgo+IGtl
-eGVjX2NvcmU6IFN0YXJ0aW5nIG5ldyBrZXJuZWwKPiBXaWxsIGNhbGwgbmV3IGtlcm5lbCBhdCAw
-MDMwMDAwMCBmcm9tIGhhcnQgaWQgMAo+IEZEVCBpbWFnZSBhdCA3NDdjNzAwMAo+IEJ5ZS4uLgo+
-IFVuYWJsZSB0byBoYW5kbGUga2VybmVsIHBhZ2luZyByZXF1ZXN0IGF0IHZpcnR1YWwgYWRkcmVz
-cyBmZmZmZmZkYTIzYjBkMDAwCj4gT29wcyBbIzFdCj4gTW9kdWxlcyBsaW5rZWQgaW46Cj4gQ1BV
-OiAwIFBJRDogNTMgQ29tbTogdWluaXQgTm90IHRhaW50ZWQgNi40LjAtcmM2ICMxNQo+IEhhcmR3
-YXJlIG5hbWU6IFNvcGhnbyBNYW5nbyAoRFQpCj4gZXBjIDogMHhmZmZmZmZkYTIzYjBkMDAwCj4g
-IHJhIDogbWFjaGluZV9rZXhlYysweGE2LzB4YjAKPiBlcGMgOiBmZmZmZmZkYTIzYjBkMDAwIHJh
-IDogZmZmZmZmZmY4MDAwODI3MiBzcCA6IGZmZmZmZmM4MGMxNzNkMTAKPiAgZ3AgOiBmZmZmZmZm
-ZjgxNTBlMWUwIHRwIDogZmZmZmZmZDkwNzNkMmM0MCB0MCA6IDAwMDAwMDAwMDAwMDAwMDAKPiAg
-dDEgOiAwMDAwMDAwMDAwMDAwMDQyIHQyIDogNjU2NzYxNmQ2OTIwNTQ0NCBzMCA6IGZmZmZmZmM4
-MGMxNzNkNTAKPiAgczEgOiBmZmZmZmZkOTA3NmM0ODAwIGEwIDogZmZmZmZmZDkwNzZjNDgwMCBh
-MSA6IDAwMDAwMDAwMDAzMDAwMDAKPiAgYTIgOiAwMDAwMDAwMDc0N2M3MDAwIGEzIDogMDAwMDAw
-MDAwMDAwMDAwMCBhNCA6IGZmZmZmZmQ4MDAwMDAwMDAKPiAgYTUgOiAwMDAwMDAwMDAwMDAwMDAw
-IGE2IDogZmZmZmZmZDkwMzYxOWM0MCBhNyA6IGZmZmZmZmZmZmZmZmZmZmYKPiAgczIgOiBmZmZm
-ZmZkYTIzYjBkMDAwIHMzIDogMDAwMDAwMDAwMDMwMDAwMCBzNCA6IDAwMDAwMDAwNzQ3YzcwMDAK
-PiAgczUgOiAwMDAwMDAwMDAwMDAwMDAwIHM2IDogMDAwMDAwMDAwMDAwMDAwMCBzNyA6IDAwMDAw
-MDAwMDAwMDAwMDAKPiAgczggOiAwMDAwMDAwMDAwMDAwMDAwIHM5IDogMDAwMDAwMDAwMDAwMDAw
-MCBzMTA6IDAwMDAwMDAwMDAwMDAwMDAKPiAgczExOiAwMDAwMDAzZjk0MDAwMWEwIHQzIDogZmZm
-ZmZmZmY4MTUzNTFhZiB0NCA6IGZmZmZmZmZmODE1MzUxYWYKPiAgdDUgOiBmZmZmZmZmZjgxNTM1
-MWIwIHQ2IDogZmZmZmZmYzgwYzE3M2I1MAo+IHN0YXR1czogMDAwMDAwMDIwMDAwMDEwMCBiYWRh
-ZGRyOiBmZmZmZmZkYTIzYjBkMDAwIGNhdXNlOiAwMDAwMDAwMDAwMDAwMDBjCj4KPkdpdmVuIHRo
-ZSBjdXJyZW50IGZsYXcgaW4gdGhlIHNldF9tZW1vcnlfeCBpbXBsZW1lbnRhdGlvbiwgdGhlIHNp
-bXBsZXN0Cj5zb2x1dGlvbiBpcyB0byBmaXggbWFjaGluZV9rZXhlYygpIHRvIHJlbWFwIGNvbnRy
-b2wgY29kZSBwYWdlIG91dHNpZGUKPnRoZSBsaW5lYXIgbWFwcGluZy4gQmVjYXVzZSB0aGUgY29u
-dHJvbCBjb2RlIGJ1ZmZlciB3YXMgbW92ZWQgZnJvbSB0aGUKPmRpcmVjdCBtYXBwaW5nIGFyZWEg
-dG8gdGhlIHZtYWxsb2MgbG9jYXRpb24sIHdlIG5lZWQgYW4gYWRkaXRpb25hbAo+dmFfdmFfb2Zm
-c2V0IHRvIGZpeCB1cCB2YV9wYV9vZmZzZXQuCj4KPkZpeGVzOiAzMzM1MDY4Zjg3MjEgKCJyaXNj
-djogVXNlIFBVRC9QNEQvUEdEIHBhZ2VzIGZvciB0aGUgbGluZWFyIG1hcHBpbmciKQo+UmV2aWV3
-ZWQtYnk6IEFsZXhhbmRyZSBHaGl0aSA8YWxleGdoaXRpQHJpdm9zaW5jLmNvbT4KPlJlcG9ydGVk
-LWJ5OiBYaW5nIFhpYW9HdWFuZyA8eGluZ3hnMjAwOEAxNjMuY29tPgo+U2lnbmVkLW9mZi1ieTog
-R3VvIFJlbiA8Z3VvcmVuQGxpbnV4LmFsaWJhYmEuY29tPgo+U2lnbmVkLW9mZi1ieTogR3VvIFJl
-biA8Z3VvcmVuQGtlcm5lbC5vcmc+Cj4tLS0KPkNoYW5nZWxvZzoKPlY0Ogo+IC0gRml4dXAgdmFf
-cGFfb2Zmc2V0IHdpdGggYWRkaXRpb25hbCB2YV92YV9vZmZzZXQuCj4gLSBBZGQgUmVwb3J0ZWQt
-YnkgdGFnLgo+Cj5WMzoKPiAtIFJlc3VtZSBzZXRfbWVtb3J5X3ggdG8gc2V0IHRoZSBfUEFHRV9F
-WEVDIGF0dHJpYnV0ZQo+IC0gT3B0aW1pemUgdGhlIGNvbW1pdCBsb2cgd2l0aCBBbGV4YW5kcmUg
-YWR2aWNlCj4KPlYyOgo+IC0gVXNlIHZtX21hcF9yYW0gaW5zdGVhZCBvZiBtb2RpZnlpbmcgc2V0
-X21lbW9yeV94Cj4gLSBDb3JyZWN0IEZpeGVzIHRhZwo+LS0tCj4gYXJjaC9yaXNjdi9pbmNsdWRl
-L2FzbS9rZXhlYy5oICAgIHwgIDEgKwo+IGFyY2gvcmlzY3Yva2VybmVsL21hY2hpbmVfa2V4ZWMu
-YyB8IDE4ICsrKysrKysrKysrKysrKy0tLQo+IDIgZmlsZXMgY2hhbmdlZCwgMTYgaW5zZXJ0aW9u
-cygrKSwgMyBkZWxldGlvbnMoLSkKPgo+ZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3YvaW5jbHVkZS9h
-c20va2V4ZWMuaCBiL2FyY2gvcmlzY3YvaW5jbHVkZS9hc20va2V4ZWMuaAo+aW5kZXggMmI1Njc2
-OWNiNTMwLi4xNzQ1NmU5MTQ3NmUgMTAwNjQ0Cj4tLS0gYS9hcmNoL3Jpc2N2L2luY2x1ZGUvYXNt
-L2tleGVjLmgKPisrKyBiL2FyY2gvcmlzY3YvaW5jbHVkZS9hc20va2V4ZWMuaAo+QEAgLTQxLDYg
-KzQxLDcgQEAgY3Jhc2hfc2V0dXBfcmVncyhzdHJ1Y3QgcHRfcmVncyAqbmV3cmVncywKPiBzdHJ1
-Y3Qga2ltYWdlX2FyY2ggewo+IAl2b2lkICpmZHQ7IC8qIEZvciBDT05GSUdfS0VYRUNfRklMRSAq
-Lwo+IAl1bnNpZ25lZCBsb25nIGZkdF9hZGRyOwo+Kwl2b2lkICpjb250cm9sX2NvZGVfYnVmZmVy
-Owo+IH07Cj4gCj4gZXh0ZXJuIGNvbnN0IHVuc2lnbmVkIGNoYXIgcmlzY3Zfa2V4ZWNfcmVsb2Nh
-dGVbXTsKPmRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2L2tlcm5lbC9tYWNoaW5lX2tleGVjLmMgYi9h
-cmNoL3Jpc2N2L2tlcm5lbC9tYWNoaW5lX2tleGVjLmMKPmluZGV4IDJkMTM5YjcyNGJjOC4uNjBj
-MWVmM2MyMjMyIDEwMDY0NAo+LS0tIGEvYXJjaC9yaXNjdi9rZXJuZWwvbWFjaGluZV9rZXhlYy5j
-Cj4rKysgYi9hcmNoL3Jpc2N2L2tlcm5lbC9tYWNoaW5lX2tleGVjLmMKPkBAIC04Niw3ICs4Niwx
-NCBAQCBtYWNoaW5lX2tleGVjX3ByZXBhcmUoc3RydWN0IGtpbWFnZSAqaW1hZ2UpCj4gCj4gCS8q
-IENvcHkgdGhlIGFzc2VtYmxlciBjb2RlIGZvciByZWxvY2F0aW9uIHRvIHRoZSBjb250cm9sIHBh
-Z2UgKi8KPiAJaWYgKGltYWdlLT50eXBlICE9IEtFWEVDX1RZUEVfQ1JBU0gpIHsKPi0JCWNvbnRy
-b2xfY29kZV9idWZmZXIgPSBwYWdlX2FkZHJlc3MoaW1hZ2UtPmNvbnRyb2xfY29kZV9wYWdlKTsK
-PisJCWNvbnRyb2xfY29kZV9idWZmZXIgPSB2bV9tYXBfcmFtKCZpbWFnZS0+Y29udHJvbF9jb2Rl
-X3BhZ2UsCj4rCQkJCQkJIEtFWEVDX0NPTlRST0xfUEFHRV9TSVpFL1BBR0VfU0laRSwKPisJCQkJ
-CQkgTlVNQV9OT19OT0RFKTsKPisJCWlmIChjb250cm9sX2NvZGVfYnVmZmVyID09IE5VTEwpIHsK
-PisJCQlwcl9lcnIoIkZhaWxlZCB0byB2bV9tYXAgY29udHJvbCBwYWdlXG4iKTsKPisJCQlyZXR1
-cm4gLUVOT01FTTsKPisJCX0KPisKPiAJCWNvbnRyb2xfY29kZV9idWZmZXJfc3ogPSBwYWdlX3Np
-emUoaW1hZ2UtPmNvbnRyb2xfY29kZV9wYWdlKTsKPiAKPiAJCWlmICh1bmxpa2VseShyaXNjdl9r
-ZXhlY19yZWxvY2F0ZV9zaXplID4gY29udHJvbF9jb2RlX2J1ZmZlcl9zeikpIHsKPkBAIC05OSw2
-ICsxMDYsOCBAQCBtYWNoaW5lX2tleGVjX3ByZXBhcmUoc3RydWN0IGtpbWFnZSAqaW1hZ2UpCj4g
-Cj4gCQkvKiBNYXJrIHRoZSBjb250cm9sIHBhZ2UgZXhlY3V0YWJsZSAqLwo+IAkJc2V0X21lbW9y
-eV94KCh1bnNpZ25lZCBsb25nKSBjb250cm9sX2NvZGVfYnVmZmVyLCAxKTsKPisKPisJCWludGVy
-bmFsLT5jb250cm9sX2NvZGVfYnVmZmVyID0gY29udHJvbF9jb2RlX2J1ZmZlcjsKPiAJfQo+IAo+
-IAlyZXR1cm4gMDsKPkBAIC0yMTEsNyArMjIwLDEwIEBAIG1hY2hpbmVfa2V4ZWMoc3RydWN0IGtp
-bWFnZSAqaW1hZ2UpCj4gCXVuc2lnbmVkIGxvbmcgdGhpc19jcHVfaWQgPSBfX3NtcF9wcm9jZXNz
-b3JfaWQoKTsKPiAJdW5zaWduZWQgbG9uZyB0aGlzX2hhcnRfaWQgPSBjcHVpZF90b19oYXJ0aWRf
-bWFwKHRoaXNfY3B1X2lkKTsKPiAJdW5zaWduZWQgbG9uZyBmZHRfYWRkciA9IGludGVybmFsLT5m
-ZHRfYWRkcjsKPi0Jdm9pZCAqY29udHJvbF9jb2RlX2J1ZmZlciA9IHBhZ2VfYWRkcmVzcyhpbWFn
-ZS0+Y29udHJvbF9jb2RlX3BhZ2UpOwo+Kwl2b2lkICpjb250cm9sX2NvZGVfYnVmZmVyID0gaW50
-ZXJuYWwtPmNvbnRyb2xfY29kZV9idWZmZXI7Cj4rCXVuc2lnbmVkIGxvbmcgdmFfdmFfb2Zmc2V0
-ID0KPisJCQkodW5zaWduZWQgbG9uZykgcGFnZV9hZGRyZXNzKGltYWdlLT5jb250cm9sX2NvZGVf
-cGFnZSkKPisJCSAgICAgIC0gKHVuc2lnbmVkIGxvbmcpIGNvbnRyb2xfY29kZV9idWZmZXI7Cj4g
-CXJpc2N2X2tleGVjX21ldGhvZCBrZXhlY19tZXRob2QgPSBOVUxMOwo+IAo+ICNpZmRlZiBDT05G
-SUdfU01QCj5AQCAtMjM0LDYgKzI0Niw2IEBAIG1hY2hpbmVfa2V4ZWMoc3RydWN0IGtpbWFnZSAq
-aW1hZ2UpCj4gCS8qIEp1bXAgdG8gdGhlIHJlbG9jYXRpb24gY29kZSAqLwo+IAlwcl9ub3RpY2Uo
-IkJ5ZS4uLlxuIik7Cj4gCWtleGVjX21ldGhvZChmaXJzdF9pbmRfZW50cnksIGp1bXBfYWRkciwg
-ZmR0X2FkZHIsCj4tCQkgICAgIHRoaXNfaGFydF9pZCwga2VybmVsX21hcC52YV9wYV9vZmZzZXQp
-Owo+KwkJICAgICB0aGlzX2hhcnRfaWQsIGtlcm5lbF9tYXAudmFfcGFfb2Zmc2V0IC0gdmFfdmFf
-b2Zmc2V0KTsKPiAJdW5yZWFjaGFibGUoKTsKPiB9Cj4tLSAKPjIuMzYuMQo=
+On Thu, Jul 13, 2023 at 11:11=E2=80=AFPM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Wed, Jul 12, 2023 at 10:43=E2=80=AFAM Palmer Dabbelt <palmer@rivosinc.=
+com> wrote:
+> >
+> > On Tue, 11 Jul 2023 04:07:22 PDT (-0700), alex@ghiti.fr wrote:
+> > > Hi Guo,
+> > >
+> > >
+> > > On 10/07/2023 07:40, guoren@kernel.org wrote:
+> > >> From: Guo Ren <guoren@linux.alibaba.com>
+> > >>
+> > >> The machine_kexec() uses set_memory_x to modify the direct mapping
+> > >> attributes from RW to RWX. But set_memory_x only changes the init_mm=
+'s
+> > >> attributes, not current->active_mm, so when kexec jumps into
+> > >> control_buffer, the instruction page fault happens, and there is no
+> > >> minor_pagefault for it, then panic.
+> > >
+> > >
+> > > I think it needs more details like this:
+> > >
+> > > "The current implementation of set_memory_x does not split hugepages =
+in
+> > > the linear mapping and then when a PGD mapping is used, the whole PGD=
+ is
+> > > marked as executable. But changing the permissions at the PGD level m=
+ust
+> > > be propagated to all the page tables."
+> > >
+> > >
+> > >>
+> > >> The bug is found on an MMU_sv39 machine, and the direct mapping used=
+ a
+> > >> 1GB PUD, the pgd entries. Here is the bug output:
+> > >>
+> > >>   kexec_core: Starting new kernel
+> > >>   Will call new kernel at 00300000 from hart id 0
+> > >>   FDT image at 747c7000
+> > >>   Bye...
+> > >>   Unable to handle kernel paging request at virtual address ffffffda=
+23b0d000
+> > >>   Oops [#1]
+> > >>   Modules linked in:
+> > >>   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+> > >>   Hardware name: Sophgo Mango (DT)
+> > >>   epc : 0xffffffda23b0d000
+> > >>    ra : machine_kexec+0xa6/0xb0
+> > >>   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+> > >>    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+> > >>    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+> > >>    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+> > >>    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+> > >>    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+> > >>    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+> > >>    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+> > >>    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+> > >>    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+> > >>    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+> > >>   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 00000000=
+0000000c
+> > >>
+> > >> The solution is to fix machine_kexec() to remap control code page ou=
+tside
+> > >> the linear mapping.
+> > >
+> > >
+> > > "Given the current flaw in the set_memory_x implementation, the simpl=
+est
+> > > solution is to ..."
+> > >
+> > >
+> > >>
+> > >> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear ma=
+pping")
+> > >> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > >> Signed-off-by: Guo Ren <guoren@kernel.org>
+> > >> Cc: Alexandre Ghiti <alex@ghiti.fr>
+> > >> ---
+> > >> Changelog:
+> > >> V2:
+> > >>   - Use vm_map_ram instead of modifying set_memory_x
+> > >>   - Correct Fixes tag
+> > >> ---
+> > >>   arch/riscv/include/asm/kexec.h    |  1 +
+> > >>   arch/riscv/kernel/machine_kexec.c | 14 ++++++++++----
+> > >>   2 files changed, 11 insertions(+), 4 deletions(-)
+> > >>
+> > >> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm=
+/kexec.h
+> > >> index 2b56769cb530..17456e91476e 100644
+> > >> --- a/arch/riscv/include/asm/kexec.h
+> > >> +++ b/arch/riscv/include/asm/kexec.h
+> > >> @@ -41,6 +41,7 @@ crash_setup_regs(struct pt_regs *newregs,
+> > >>   struct kimage_arch {
+> > >>      void *fdt; /* For CONFIG_KEXEC_FILE */
+> > >>      unsigned long fdt_addr;
+> > >> +    void *control_code_buffer;
+> > >>   };
+> > >>
+> > >>   extern const unsigned char riscv_kexec_relocate[];
+> > >> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/m=
+achine_kexec.c
+> > >> index 2d139b724bc8..eeb209775107 100644
+> > >> --- a/arch/riscv/kernel/machine_kexec.c
+> > >> +++ b/arch/riscv/kernel/machine_kexec.c
+> > >> @@ -86,7 +86,14 @@ machine_kexec_prepare(struct kimage *image)
+> > >>
+> > >>      /* Copy the assembler code for relocation to the control page *=
+/
+> > >>      if (image->type !=3D KEXEC_TYPE_CRASH) {
+> > >> -            control_code_buffer =3D page_address(image->control_cod=
+e_page);
+> > >> +            control_code_buffer =3D vm_map_ram(&image->control_code=
+_page,
+> > >> +                                             KEXEC_CONTROL_PAGE_SIZ=
+E/PAGE_SIZE,
+> > >> +                                             NUMA_NO_NODE);
+> > >> +            if (control_code_buffer =3D=3D NULL) {
+> > >> +                    pr_err("Failed to vm_map control page\n");
+> > >> +                    return -ENOMEM;
+> > >> +            }
+> > >> +
+> > >>              control_code_buffer_sz =3D page_size(image->control_cod=
+e_page);
+> > >>
+> > >>              if (unlikely(riscv_kexec_relocate_size > control_code_b=
+uffer_sz)) {
+> > >> @@ -97,8 +104,7 @@ machine_kexec_prepare(struct kimage *image)
+> > >>              memcpy(control_code_buffer, riscv_kexec_relocate,
+> > >>                      riscv_kexec_relocate_size);
+> > >>
+> > >> -            /* Mark the control page executable */
+> > >> -            set_memory_x((unsigned long) control_code_buffer, 1);
+> > >> +            internal->control_code_buffer =3D control_code_buffer;
+> > >
+> > >
+> > > Where is this mapping marked as executable? I see that vm_map_ram() m=
+aps
+> > > the pages as PAGE_KERNEL, which does not set PAGE_EXEC.
+> > >
+> > >
+> > >>      }
+> > >>
+> > >>      return 0;
+> > >> @@ -211,7 +217,7 @@ machine_kexec(struct kimage *image)
+> > >>      unsigned long this_cpu_id =3D __smp_processor_id();
+> > >>      unsigned long this_hart_id =3D cpuid_to_hartid_map(this_cpu_id)=
+;
+> > >>      unsigned long fdt_addr =3D internal->fdt_addr;
+> > >> -    void *control_code_buffer =3D page_address(image->control_code_=
+page);
+> > >> +    void *control_code_buffer =3D internal->control_code_buffer;
+> > >>      riscv_kexec_method kexec_method =3D NULL;
+> > >>
+> > >>   #ifdef CONFIG_SMP
+> > >
+> > >
+> > > Otherwise, you can add:
+> > >
+> > > Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > >
+> > > Thanks,
+> > >
+> > > Alex
+> >
+> > Thanks for looking at this.  Guo: do you have a re-spit that fixes the
+> > issues Alex pointed out?  Sorry if I just missed it.
+> Sorry for the late reply. Here is the patch of v3:
+> https://lore.kernel.org/linux-riscv/20230713150758.2956316-1-guoren@kerne=
+l.org/
+@Palmer Dabbelt
+
+Above V3 has been abandoned; I've updated it to V4:
+https://lore.kernel.org/linux-riscv/20230714103659.3146949-1-guoren@kernel.=
+org/
+
+Xing Xiaoguang has tested it:
+https://lore.kernel.org/lkml/6b766b2b.2e5.189570f5ee6.Coremail.xingxg2008@1=
+63.com/
+
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+
+
+
+--=20
+Best Regards
+ Guo Ren
