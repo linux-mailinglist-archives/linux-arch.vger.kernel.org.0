@@ -2,177 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7A57568CA
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jul 2023 18:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6718D7569A2
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jul 2023 18:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbjGQQOg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Jul 2023 12:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S231992AbjGQQwB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Jul 2023 12:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjGQQOX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jul 2023 12:14:23 -0400
+        with ESMTP id S231623AbjGQQv5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jul 2023 12:51:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A916010E3;
-        Mon, 17 Jul 2023 09:14:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32F7170D;
+        Mon, 17 Jul 2023 09:51:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C5BA61153;
-        Mon, 17 Jul 2023 16:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A259DC43397;
-        Mon, 17 Jul 2023 16:14:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 063A661181;
+        Mon, 17 Jul 2023 16:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812EAC433C7;
+        Mon, 17 Jul 2023 16:51:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689610457;
-        bh=Sx44thNjRKhLP9P5+or0VlNLH7j5C5I07ogs5/16HhY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=T80r1gPbXjv1SoRVNtZ7HW9NItzws0okoDQBuQEbaeOo3VBY+9GQ8qWSpRT5mMLEk
-         n65oQS6Sm6H/4UxywXaocN/LNB8vaeNQ1CQ+8OUs5Ke/YL8gIbktTjKe/EVrHECAHy
-         3HMTD9R6rdXzMnbXPCJYHlUvp1oS+QjXru7blRzLu6e8e4XuDfmmBriUCxBOjsKCvq
-         S0m+k6ERQEPs+ftiZFthFTBhDUYvxAny+jbaFR3BtmgcvsL16VUvrYfVJPgWr5u6K3
-         MBt3Uxpms6QbZLAQpMP8RItQwnXZ9GG6sNAlxvjv3EWb8HQ32Pw6lDTNv9t9h5ls5U
-         OzJUm6TbHM7Lg==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so7365980e87.3;
-        Mon, 17 Jul 2023 09:14:17 -0700 (PDT)
-X-Gm-Message-State: ABy/qLbI718QoeGWzNqImWlNbJTsZHBLcKHsf1L327MqrzB09cnh7Np+
-        VdRSdQqNMLR7PW+wRFvv+aGGC28TfkhBPNprRm0=
-X-Google-Smtp-Source: APBJJlGSRK/NccnTlgPIrL/sVQ3Gt+l6oXdva756uEn+PlB77r9xvayYmDWddY+owMdYJMgTGcAOq61mjkUYKNA4wIg=
-X-Received: by 2002:a19:8c44:0:b0:4fb:8de9:ac13 with SMTP id
- i4-20020a198c44000000b004fb8de9ac13mr8170427lfj.23.1689610455595; Mon, 17 Jul
- 2023 09:14:15 -0700 (PDT)
+        s=k20201202; t=1689612706;
+        bh=GDoZ+CsfFo9PibsTP4iZm+ttTgfHxn11DDJbAlCFH8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZEoHMX2JdQeUVyNkgdWBKI6yr5pe/INc5DfODCru+00fN8J5XJg/01FraxC5Uf+FG
+         XLGyykcZarElT+yfQ88/qw3rxbdtmQwlMm4MVMWcjVA8W1BzI++pek5YZKKBwI7XR6
+         Vc/WH98m5BnS7DdeM2++eaKr94hk2O0k89Bc1b9ybe/FsHvQBWZ/9PaJFm5XUvbhPh
+         78TOOOqQ+Nd6w2oOqOYhgVZm+Y7ykGxydEmczeSZwjlePi5nZMkHrFdDg9hL8zxSio
+         SCc95tvYUaXDed+x2C7VwVXHcnKo0+0JBdhxm/Vl4xw/gxBOwJrvOMJAyCgSMZ+3MK
+         +O+f2UpDtYbxQ==
+Date:   Mon, 17 Jul 2023 17:51:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "torvalds@linuxfoundation.org" <torvalds@linuxfoundation.org>,
+        "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v9 01/42] mm: Rename arch pte_mkwrite()'s to
+ pte_mkwrite_novma()
+Message-ID: <285d346e-14e7-4f43-9b5b-faded6205142@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-2-rick.p.edgecombe@intel.com>
+ <b389274a-abed-40dc-8e33-7ce922ea9b61@sirena.org.uk>
+ <87acbb49fa83b0e3f261315a531e105da9e5b9d6.camel@intel.com>
 MIME-Version: 1.0
-References: <20230702025708.784106-1-guoren@kernel.org> <20230704164003.GB83892@hirez.programming.kicks-ass.net>
- <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
- <20230710080152.GA3028865@hirez.programming.kicks-ass.net>
- <CAJF2gTTt23iSDG_m4ihPhXhYDrz3Xnih=KGLx_ayBLbzPqaTaQ@mail.gmail.com> <20230717104508.GF4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230717104508.GF4253@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 18 Jul 2023 00:14:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQDVq0zedQ+55oX=gGSqb5OkDUoN1ipVu8RUQ5U_e=a9Q@mail.gmail.com>
-Message-ID: <CAJF2gTQDVq0zedQ+55oX=gGSqb5OkDUoN1ipVu8RUQ5U_e=a9Q@mail.gmail.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="klyEM8Lfv/18WVhb"
+Content-Disposition: inline
+In-Reply-To: <87acbb49fa83b0e3f261315a531e105da9e5b9d6.camel@intel.com>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 6:45=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Mon, Jul 17, 2023 at 07:33:25AM +0800, Guo Ren wrote:
-> > On Mon, Jul 10, 2023 at 4:02=E2=80=AFPM Peter Zijlstra <peterz@infradea=
-d.org> wrote:
-> > >
-> > > On Sun, Jul 09, 2023 at 10:30:22AM +0800, Guo Ren wrote:
-> > > > On Wed, Jul 5, 2023 at 12:40=E2=80=AFAM Peter Zijlstra <peterz@infr=
-adead.org> wrote:
-> > > > >
-> > > > > On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote=
-:
-> > > > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > > > >
-> > > > > > The irqentry_nmi_enter/exit would force the current context int=
-o in_interrupt.
-> > > > > > That would trigger the kernel to dead panic, but the kdb still =
-needs "ebreak" to
-> > > > > > debug the kernel.
-> > > > > >
-> > > > > > Move irqentry_nmi_enter/exit to exception_enter/exit could corr=
-ect handle_break
-> > > > > > of the kernel side.
-> > > > >
-> > > > > This doesn't explain much if anything :/
-> > > > >
-> > > > > I'm confused (probably because I don't know RISC-V very well), wh=
-at's
-> > > > > EBREAK and how does it happen?
-> > > > EBREAK is just an instruction of riscv which would rise breakpoint =
-exception.
-> > > >
-> > > >
-> > > > >
-> > > > > Specifically, if EBREAK can happen inside an local_irq_disable() =
-region,
-> > > > > then the below change is actively wrong. Any exception/interrupt =
-that
-> > > > > can happen while local_irq_disable() must be treated like an NMI.
-> > > > When the ebreak happend out of local_irq_disable region, but
-> > > > __nmi_enter forces handle_break() into in_interupt() state. So how
-> > >
-> > > And why is that a problem? I think I'm missing something fundamental
-> > > here...
-> > The irqentry_nmi_enter() would force the current context to get
-> > in_interrupt=3Dtrue, although ebreak happens in the context which is
-> > in_interrupt=3Dfalse.
-> > A lot of checking codes, such as:
-> >         if (in_interrupt())
-> >                 panic("Fatal exception in interrupt");
->
-> Why would you do that?!?
->
-> Are you're trying to differentiate between an exception and an
-> interrupt?
->
-> You *could* have ebreak in an interrupt, right? So why panic the machine
-> if that happens?
 
-Do you mean the below patch? Yes, it could fix up.
+--klyEM8Lfv/18WVhb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index f910dfccbf5d..92899db6696b 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -85,8 +85,6 @@ void die(struct pt_regs *regs, const char *str)
-        spin_unlock_irqrestore(&die_lock, flags);
-        oops_exit();
+On Mon, Jul 17, 2023 at 03:55:50PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2023-07-14 at 23:57 +0100, Mark Brown wrote:
 
--       if (in_interrupt())
--               panic("Fatal exception in interrupt");
-        if (panic_on_oops)
-                panic("Fatal exception");
-        if (ret !=3D NOTIFY_STOP)
-diff --git a/kernel/exit.c b/kernel/exit.c
-index edb50b4c9972..a46a1aef66ce 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -940,8 +940,6 @@ void __noreturn make_task_dead(int signr)
-        struct task_struct *tsk =3D current;
-        unsigned int limit;
+> > The same issue seems to apply with the version that was in -next
+> > based
+> > on v6.4-rc4 too.
 
--       if (unlikely(in_interrupt()))
--               panic("Aiee, killing interrupt handler!");
-        if (unlikely(!tsk->pid))
-                panic("Attempted to kill the idle task!");
+> The version in your branch is not the same as the version in tip (which
+> had a squashed build fix). I was able to reproduce the build error with
+> your branch. But not with the one in tip rebased on v6.5-rc1. So can
+> you try this version:
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/shstk&id=899223d69ce9f338056f4c41ef870d70040fc860
 
-But how does x86 deal with it without kernel/exit.c modifcation?
+Ah, I'd not seen that patch or that tip had been rebased - I'd actually
+been using literally the branch from tip as my base at whatever point I
+last noticed it changing up until I rebased onto -rc1.
 
->
-> > It would make the kernel panic, but we don't panic; we want back to the=
- shell.
-> > eg:
-> > echo BUG > /sys/kernel/debug/provoke-crash/DIRECT
->
->
->
+--klyEM8Lfv/18WVhb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
---=20
-Best Regards
- Guo Ren
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS1cZIACgkQJNaLcl1U
+h9DfWwf/Qv2sx8Qywn2HA+F1wJsVWOOqaPIZzIVBQ5Kg2bysQK3YMNLLZWKdXMsh
+sTgXGVlr5oANLjP/hYxvcaxk16N1y51q6PuBh4lJN1w37tEdph1ZIcSejQY/jKpf
+fKFWHZ++2w+lXvIOB/7rYQe+XutmQzCVmL0Cod8zxf2UhC4WJe9/3RCKxi6rfxuV
+NXldTW7h7dqnurbev4TX4npwjcetNGofPUer7VZD7o1vRKXvX9VLG42UbeV4cu+g
+ICKZmGwC9G23gWg0Ql2QkeOr43PLBo4AocKhyO6B22uYLOrA8BQHJUrbnD4ZUyD+
+4rWq0iWXOnrixnw11LOSSIVZ2HkwmQ==
+=SaIl
+-----END PGP SIGNATURE-----
+
+--klyEM8Lfv/18WVhb--
