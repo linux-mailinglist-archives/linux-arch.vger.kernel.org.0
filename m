@@ -2,67 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28777560CE
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jul 2023 12:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7947561CB
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jul 2023 13:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjGQKpn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Jul 2023 06:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S230059AbjGQLnG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Jul 2023 07:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGQKpm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jul 2023 06:45:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB4D11C;
-        Mon, 17 Jul 2023 03:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=QwEVqapqGt5c5zaKWTZ1oqQBp+aqsZVTLEsdAj1XcXc=; b=KfCbhY1d2N38BQhLoS0cjcwf70
-        APYBflKw7faaRf0xF+22LOt7LWcTL6BiIZJbP9gsvGlUvD233G9fYmlEDCEQ05UmZ6bdE5eWhKDwY
-        wq8T1q++Ytsc/QON+PEtavQh4vGyYUNP5/MG+owXZijRVskGujtyBQP79W3sVA9/En1sJktXXP+U/
-        2kKcc/v+WP+dF9wwC7K49GtNC+JpS7LOoVXmXZwe8c71u/paZkipy6WfF91+0uk0KuHMFbdKXF3NF
-        Ma2l6FPIAAHR/FoQ9bjQA2odhvAdkxVis6y1BprdTbUeHLfcLkx+KDOGvJ59XhOQwce8VRdfC2lip
-        UMFlIyZw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qLLj4-0095fw-0L;
-        Mon, 17 Jul 2023 10:45:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8B49930020C;
-        Mon, 17 Jul 2023 12:45:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 667FE2463D7EF; Mon, 17 Jul 2023 12:45:08 +0200 (CEST)
-Date:   Mon, 17 Jul 2023 12:45:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-Message-ID: <20230717104508.GF4253@hirez.programming.kicks-ass.net>
-References: <20230702025708.784106-1-guoren@kernel.org>
- <20230704164003.GB83892@hirez.programming.kicks-ass.net>
- <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
- <20230710080152.GA3028865@hirez.programming.kicks-ass.net>
- <CAJF2gTTt23iSDG_m4ihPhXhYDrz3Xnih=KGLx_ayBLbzPqaTaQ@mail.gmail.com>
+        with ESMTP id S230261AbjGQLm4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jul 2023 07:42:56 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D12EE4F;
+        Mon, 17 Jul 2023 04:42:52 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4Kqp1Psbz67Lnh;
+        Mon, 17 Jul 2023 19:39:34 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 17 Jul
+ 2023 12:42:48 +0100
+Date:   Mon, 17 Jul 2023 12:42:47 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        "Kees Cook" <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <kvmarm@lists.linux.dev>,
+        <linux-fsdevel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 04/35] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <20230717124247.00001f1c@Huawei.com>
+In-Reply-To: <20230716-arm64-gcs-v1-4-bf567f93bba6@kernel.org>
+References: <20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org>
+        <20230716-arm64-gcs-v1-4-bf567f93bba6@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTTt23iSDG_m4ihPhXhYDrz3Xnih=KGLx_ayBLbzPqaTaQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,56 +74,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 07:33:25AM +0800, Guo Ren wrote:
-> On Mon, Jul 10, 2023 at 4:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Sun, Jul 09, 2023 at 10:30:22AM +0800, Guo Ren wrote:
-> > > On Wed, Jul 5, 2023 at 12:40 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
-> > > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > > >
-> > > > > The irqentry_nmi_enter/exit would force the current context into in_interrupt.
-> > > > > That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
-> > > > > debug the kernel.
-> > > > >
-> > > > > Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
-> > > > > of the kernel side.
-> > > >
-> > > > This doesn't explain much if anything :/
-> > > >
-> > > > I'm confused (probably because I don't know RISC-V very well), what's
-> > > > EBREAK and how does it happen?
-> > > EBREAK is just an instruction of riscv which would rise breakpoint exception.
-> > >
-> > >
-> > > >
-> > > > Specifically, if EBREAK can happen inside an local_irq_disable() region,
-> > > > then the below change is actively wrong. Any exception/interrupt that
-> > > > can happen while local_irq_disable() must be treated like an NMI.
-> > > When the ebreak happend out of local_irq_disable region, but
-> > > __nmi_enter forces handle_break() into in_interupt() state. So how
-> >
-> > And why is that a problem? I think I'm missing something fundamental
-> > here...
-> The irqentry_nmi_enter() would force the current context to get
-> in_interrupt=true, although ebreak happens in the context which is
-> in_interrupt=false.
-> A lot of checking codes, such as:
->         if (in_interrupt())
->                 panic("Fatal exception in interrupt");
+On Sun, 16 Jul 2023 22:51:00 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-Why would you do that?!?
+> Add some documentation of the userspace ABI for Guarded Control Stacks.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+Hi Mark,
 
-Are you're trying to differentiate between an exception and an
-interrupt?
+Nice document.  All I could find on a first read was one typo...
 
-You *could* have ebreak in an interrupt, right? So why panic the machine
-if that happens?
+...
 
-> It would make the kernel panic, but we don't panic; we want back to the shell.
-> eg:
-> echo BUG > /sys/kernel/debug/provoke-crash/DIRECT
+> +7.  ptrace extensions
+> +---------------------
+> +
+> +* A new regset NT_ARM_GCS is defined for use with PTRACE_GETREGSET and
+> +  PTRACE_SETREGSET.
+> +
+> +* Due to the complexity surrounding allocation and deallocation of stakcs and
 
+stacks
 
+> +  lack of practical application changes to the GCS configuration via ptrace
+> +  are not supported.
+> +
 
