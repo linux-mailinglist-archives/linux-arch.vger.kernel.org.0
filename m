@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8928757238
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Jul 2023 05:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821D675723B
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Jul 2023 05:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjGRDYJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Jul 2023 23:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S230084AbjGRDYP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Jul 2023 23:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbjGRDXh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jul 2023 23:23:37 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3E7170B;
-        Mon, 17 Jul 2023 20:23:20 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a3c78ede4bso3912688b6e.2;
-        Mon, 17 Jul 2023 20:23:20 -0700 (PDT)
+        with ESMTP id S231207AbjGRDXq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jul 2023 23:23:46 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B78171B;
+        Mon, 17 Jul 2023 20:23:22 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-5634d8d1db0so3225640eaf.0;
+        Mon, 17 Jul 2023 20:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689650600; x=1692242600;
+        d=gmail.com; s=20221208; t=1689650601; x=1692242601;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vTr/U5pjToUGm5/dOth80Sxi8/cWirKNMTqOirinpDc=;
-        b=Sa0g/M0N0nnZVlCVfBTBHOApjjhUK3i/Qmow17A913aTK3wKo/PdVrsvd2AzfA/+rL
-         Z2wvQgwyTvoNWQWGXjvnII6VbYGq8WCcaI402x3vHL/jmNFYjSSTefNgfj9bnbMNAHVP
-         aRbfXhDLkEcPxCpShrUxkr1E+MjeqyEBB7+upJSvF7DcykXHlUB/OYe/gb6a4JFBvmZT
-         Kakm6gcY4SG37IeVRbJfTr6xzKBbarj6Ze/G+MUlQF3kgFVHLylGmyBvC2EocU4O6hgi
-         t7mOZ8crCqjeEA5Nxb/wf80ZISIixWOqcMoyh0HI2dsfZhN+6OQVzEBvtckmVP82UlLw
-         +CFw==
+        bh=bSMrDEwxkhYrlz2QgyYImrZKuicJf1LqTrgFv+twk64=;
+        b=PIBfVH4lx4su5LTNvllbFqSeHldg6NPwn0x1M9u78QkqGGgoCrJUuTKhbiBmLanV2u
+         Z6xU5Pah2k+8BJYh88dh+wAN5FeQVK2yMK3ASi4KlH7n4MBBYfhamIbC7/r28vT6nA7J
+         5jp1p+JbC++/p0TmzVTUgMZjPBDrqLtHdNxHDtp15n07Mr0aHFcEmQJ3pyP9Ix23UaLK
+         bKb7Lj0d5OzVPAZFgIAX9QY+bTDQhVOl1hQfesyeh+hbIuXTry1LL4dqKxoA3hgcbp+g
+         k/nlAPoHdJV85JEbUhnJDVouKVzQ0DrB9y8oX8+5hbyytEhtfaGUqfRtso6uk4+zBoZP
+         gzEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689650600; x=1692242600;
+        d=1e100.net; s=20221208; t=1689650601; x=1692242601;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vTr/U5pjToUGm5/dOth80Sxi8/cWirKNMTqOirinpDc=;
-        b=JNPNFLP4XrmEo3r2OIOKK9KuBNXkXrbb/yHvyt4OM8wNeJJ+YqLlRNE/E1dap2DXX+
-         uyUxlWTFYnca3/jCB/XWA3Khdez3X+61k2XajZgMbfVuhHl51jU9vEj6899ye5BVHEB4
-         +k5HWCqpH5nAv6wyh5eoF9Jkj1mX8ZPaAEvx/how8OVTh4m3hguobUA4NXi5GsplJnRL
-         M7ClnQ8yieWzOtT/kICuP1xykXZQSvCdzHWXTp6drxChZDLtm1ck/O5B+kqDYz9gyocB
-         h9dCa0EbE/8GfZhJkYPDpfDOeMMPm6Jy0BUugk0I+cmB4FLv7fWKb7u0pfzQCdx7ScL0
-         3FZg==
-X-Gm-Message-State: ABy/qLbJcP3PQKhJffgYsddLK4PYk5YT9BZqgVBv7x08yZESPWjVacef
-        xVviAvSiwcDjkFewBENKluYEASeMN2bFaA==
-X-Google-Smtp-Source: APBJJlETVWCGoKJRej2wJodgNIfKQdPnIYVe2YeK8CG9M4QarO+qVKSsVzryZMaAnEHHOvdev2ieTw==
-X-Received: by 2002:a05:6808:1384:b0:3a4:1f76:bdfb with SMTP id c4-20020a056808138400b003a41f76bdfbmr15725583oiw.14.1689650600108;
-        Mon, 17 Jul 2023 20:23:20 -0700 (PDT)
+        bh=bSMrDEwxkhYrlz2QgyYImrZKuicJf1LqTrgFv+twk64=;
+        b=faVJr7d9uCOdCZ1tKVViy7AhCFDO56PEhhwdgaiazlpzlpbJykg5p9Vl+bzAcxJm60
+         IPFm2hFmEdC1tYRi5elkOBLHFI64ylnHKUydaR634J2wFddvM5tlUrpWlJHtQmszacbo
+         M2C2WWE6UMPvK5YW/UQtFPZCBAd870RWoMdxh606VXVh21/MHOAiZ8I0tU5kb48y0bRB
+         TCJ7Dny5pXILhivwRKG/2IlkxYM2R7DElcD7/sYx37yhMl8rgRlH18GqXUbetrySGwnO
+         gsL20m88pKrejKYtOC6JOeRQ2DePocn2Mvy7SHHLyRW/I9zdB9ZgLvK79d+wr0HbR7Jd
+         wU7g==
+X-Gm-Message-State: ABy/qLYaYVoeDwdR/5V0nh6/0J1vVuwxtlJ6nedlZd93MycVdoFgZKP2
+        ROW5fta73DUVI08IKeC0hUg=
+X-Google-Smtp-Source: APBJJlHEeTZWvAn8Q9W86MaZ8eS7GKrzqZfkP3AsMB7N5Ek9MRV9jW2DJUAgCljsFOjJ2EeRyq3ijQ==
+X-Received: by 2002:aca:bb0b:0:b0:3a3:78dc:8c4c with SMTP id l11-20020acabb0b000000b003a378dc8c4cmr12856863oif.46.1689650601176;
+        Mon, 17 Jul 2023 20:23:21 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:37:c5e9:2003:6c97:8057])
-        by smtp.gmail.com with ESMTPSA id s92-20020a17090a2f6500b00263f41a655esm504040pjd.43.2023.07.17.20.23.18
+        by smtp.gmail.com with ESMTPSA id s92-20020a17090a2f6500b00263f41a655esm504040pjd.43.2023.07.17.20.23.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 20:23:19 -0700 (PDT)
+        Mon, 17 Jul 2023 20:23:20 -0700 (PDT)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
@@ -58,9 +58,9 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
 Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         vkuznets@redhat.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH V3 7/9] x86/hyperv: Initialize cpu and memory for SEV-SNP enlightened guest
-Date:   Mon, 17 Jul 2023 23:23:01 -0400
-Message-Id: <20230718032304.136888-8-ltykernel@gmail.com>
+Subject: [PATCH V3 8/9] x86/hyperv: Add smp support for SEV-SNP guest
+Date:   Mon, 17 Jul 2023 23:23:02 -0400
+Message-Id: <20230718032304.136888-9-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230718032304.136888-1-ltykernel@gmail.com>
 References: <20230718032304.136888-1-ltykernel@gmail.com>
@@ -68,8 +68,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,204 +78,216 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-Hyper-V enlightened guest doesn't have boot loader support.
-Boot Linux kernel directly from hypervisor with data (kernel
-image, initrd and parameter page) and memory for boot up that
-is initialized via AMD SEV PSP protocol (Please reference
-Section 4.5 Launching a Guest of [1]).
+In the AMD SEV-SNP guest, AP needs to be started up via sev es
+save area and Hyper-V requires to call HVCALL_START_VP hypercall
+to pass the gpa of sev es save area with AP's vp index and VTL(Virtual
+trust level) parameters. Override wakeup_secondary_cpu_64 callback
+with hv_snp_boot_ap.
 
-Kernel needs to read processor and memory info from EN_SEV_
-SNP_PROCESSOR/MEM_INFO_ADDR address which are populated by
-Hyper-V. The data is prepared by hypervisor via SNP_
-LAUNCH_UPDATE with page type SNP_PAGE_TYPE_UNMEASURED and
-Initialize smp cpu related ops, validate system memory and
-add them into e820 table.
-
-[1]: https://www.amd.com/system/files/TechDocs/56860.pdf
 Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
-Change since v2:
-	* Update change log.
----
- arch/x86/hyperv/ivm.c           | 93 +++++++++++++++++++++++++++++++++
- arch/x86/include/asm/mshyperv.h | 17 ++++++
- arch/x86/kernel/cpu/mshyperv.c  |  3 ++
- 3 files changed, 113 insertions(+)
+ arch/x86/hyperv/ivm.c             | 95 +++++++++++++++++++++++++++++++
+ arch/x86/include/asm/mshyperv.h   |  9 +++
+ arch/x86/kernel/cpu/mshyperv.c    | 13 ++++-
+ include/asm-generic/hyperv-tlfs.h |  1 +
+ 4 files changed, 116 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index b2b5cb19fac9..ede47c8264e0 100644
+index ede47c8264e0..2eda4e69849d 100644
 --- a/arch/x86/hyperv/ivm.c
 +++ b/arch/x86/hyperv/ivm.c
-@@ -18,6 +18,11 @@
- #include <asm/mshyperv.h>
- #include <asm/hypervisor.h>
- #include <asm/mtrr.h>
-+#include <asm/coco.h>
-+#include <asm/io_apic.h>
-+#include <asm/sev.h>
-+#include <asm/realmode.h>
-+#include <asm/e820/api.h>
+@@ -23,11 +23,15 @@
+ #include <asm/sev.h>
+ #include <asm/realmode.h>
+ #include <asm/e820/api.h>
++#include <asm/desc.h>
  
  #ifdef CONFIG_AMD_MEM_ENCRYPT
  
-@@ -58,6 +63,8 @@ union hv_ghcb {
+ #define GHCB_USAGE_HYPERV_CALL	1
  
- static u16 hv_ghcb_version __ro_after_init;
- 
-+static u32 processor_count;
++static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted __aligned(PAGE_SIZE);
++static u8 ap_start_stack[PAGE_SIZE] __aligned(PAGE_SIZE);
 +
- u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size)
- {
- 	union hv_ghcb *hv_ghcb;
-@@ -357,6 +364,92 @@ static bool hv_is_private_mmio(u64 addr)
- 	return false;
+ union hv_ghcb {
+ 	struct ghcb ghcb;
+ 	struct {
+@@ -450,6 +454,97 @@ __init void hv_sev_init_mem_and_cpu(void)
+ 	}
  }
  
-+static __init void hv_snp_get_smp_config(unsigned int early)
++#define hv_populate_vmcb_seg(seg, gdtr_base)			\
++do {								\
++	if (seg.selector) {					\
++		seg.base = 0;					\
++		seg.limit = HV_AP_SEGMENT_LIMIT;		\
++		seg.attrib = *(u16 *)(gdtr_base + seg.selector + 5);	\
++		seg.attrib = (seg.attrib & 0xFF) | ((seg.attrib >> 4) & 0xF00); \
++	}							\
++} while (0)							\
++
++int hv_snp_boot_ap(int cpu, unsigned long start_ip)
 +{
-+	/*
-+	 * The "early" parameter can be true only if old-style AMD
-+	 * Opteron NUMA detection is enabled, which should never be
-+	 * the case for an SEV-SNP guest.  See CONFIG_AMD_NUMA.
-+	 * For safety, just do nothing if "early" is true.
-+	 */
-+	if (early)
-+		return;
++	struct sev_es_save_area *vmsa = (struct sev_es_save_area *)
++		__get_free_page(GFP_KERNEL | __GFP_ZERO);
++	struct desc_ptr gdtr;
++	u64 ret, rmp_adjust, retry = 5;
++	struct hv_enable_vp_vtl *start_vp_input;
++	unsigned long flags;
++
++	native_store_gdt(&gdtr);
++
++	vmsa->gdtr.base = gdtr.address;
++	vmsa->gdtr.limit = gdtr.size;
++
++	asm volatile("movl %%es, %%eax;" : "=a" (vmsa->es.selector));
++	hv_populate_vmcb_seg(vmsa->es, vmsa->gdtr.base);
++
++	asm volatile("movl %%cs, %%eax;" : "=a" (vmsa->cs.selector));
++	hv_populate_vmcb_seg(vmsa->cs, vmsa->gdtr.base);
++
++	asm volatile("movl %%ss, %%eax;" : "=a" (vmsa->ss.selector));
++	hv_populate_vmcb_seg(vmsa->ss, vmsa->gdtr.base);
++
++	asm volatile("movl %%ds, %%eax;" : "=a" (vmsa->ds.selector));
++	hv_populate_vmcb_seg(vmsa->ds, vmsa->gdtr.base);
++
++	vmsa->efer = native_read_msr(MSR_EFER);
++
++	asm volatile("movq %%cr4, %%rax;" : "=a" (vmsa->cr4));
++	asm volatile("movq %%cr3, %%rax;" : "=a" (vmsa->cr3));
++	asm volatile("movq %%cr0, %%rax;" : "=a" (vmsa->cr0));
++
++	vmsa->xcr0 = 1;
++	vmsa->g_pat = HV_AP_INIT_GPAT_DEFAULT;
++	vmsa->rip = (u64)secondary_startup_64_no_verify;
++	vmsa->rsp = (u64)&ap_start_stack[PAGE_SIZE];
 +
 +	/*
-+	 * There is no firmware and ACPI MADT table support in
-+	 * in the Hyper-V SEV-SNP enlightened guest. Set smp
-+	 * related config variable here.
++	 * Set the SNP-specific fields for this VMSA:
++	 *   VMPL level
++	 *   SEV_FEATURES (matches the SEV STATUS MSR right shifted 2 bits)
 +	 */
-+	while (num_processors < processor_count) {
-+		early_per_cpu(x86_cpu_to_apicid, num_processors) = num_processors;
-+		early_per_cpu(x86_bios_cpu_apicid, num_processors) = num_processors;
-+		physid_set(num_processors, phys_cpu_present_map);
-+		set_cpu_possible(num_processors, true);
-+		set_cpu_present(num_processors, true);
-+		num_processors++;
++	vmsa->vmpl = 0;
++	vmsa->sev_features = sev_status >> 2;
++
++	/*
++	 * Running at VMPL0 allows the kernel to change the VMSA bit for a page
++	 * using the RMPADJUST instruction. However, for the instruction to
++	 * succeed it must target the permissions of a lesser privileged
++	 * (higher numbered) VMPL level, so use VMPL1 (refer to the RMPADJUST
++	 * instruction in the AMD64 APM Volume 3).
++	 */
++	rmp_adjust = RMPADJUST_VMSA_PAGE_BIT | 1;
++	ret = rmpadjust((unsigned long)vmsa, RMP_PG_SIZE_4K,
++			rmp_adjust);
++	if (ret != 0) {
++		pr_err("RMPADJUST(%llx) failed: %llx\n", (u64)vmsa, ret);
++		return ret;
 +	}
-+}
 +
-+__init void hv_sev_init_mem_and_cpu(void)
-+{
-+	struct memory_map_entry *entry;
-+	struct e820_entry *e820_entry;
-+	u64 e820_end;
-+	u64 ram_end;
-+	u64 page;
++	local_irq_save(flags);
++	start_vp_input =
++		(struct hv_enable_vp_vtl *)ap_start_input_arg;
++	memset(start_vp_input, 0, sizeof(*start_vp_input));
++	start_vp_input->partition_id = -1;
++	start_vp_input->vp_index = cpu;
++	start_vp_input->target_vtl.target_vtl = ms_hyperv.vtl;
++	*(u64 *)&start_vp_input->vp_context = __pa(vmsa) | 1;
 +
-+	/*
-+	 * Hyper-V enlightened snp guest boots kernel
-+	 * directly without bootloader. So roms, bios
-+	 * regions and reserve resources are not available.
-+	 * Set these callback to NULL.
-+	 */
-+	x86_platform.legacy.rtc			= 0;
-+	x86_platform.legacy.reserve_bios_regions = 0;
-+	x86_platform.set_wallclock		= set_rtc_noop;
-+	x86_platform.get_wallclock		= get_rtc_noop;
-+	x86_init.resources.probe_roms		= x86_init_noop;
-+	x86_init.resources.reserve_resources	= x86_init_noop;
-+	x86_init.mpparse.find_smp_config	= x86_init_noop;
-+	x86_init.mpparse.get_smp_config		= hv_snp_get_smp_config;
++	do {
++		ret = hv_do_hypercall(HVCALL_START_VP,
++				      start_vp_input, NULL);
++	} while (hv_result(ret) == HV_STATUS_TIME_OUT && retry--);
 +
-+	/*
-+	 * Hyper-V SEV-SNP enlightened guest doesn't support ioapic
-+	 * and legacy APIC page read/write. Switch to hv apic here.
-+	 */
-+	disable_ioapic_support();
++	local_irq_restore(flags);
 +
-+	/* Get processor and mem info. */
-+	processor_count = *(u32 *)__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
-+	entry = (struct memory_map_entry *)__va(EN_SEV_SNP_MEM_INFO_ADDR);
-+
-+	/*
-+	 * There is no bootloader/EFI firmware in the SEV SNP guest.
-+	 * E820 table in the memory just describes memory for kernel,
-+	 * ACPI table, cmdline, boot params and ramdisk. The dynamic
-+	 * data(e.g, vcpu number and the rest memory layout) needs to
-+	 * be read from EN_SEV_SNP_PROCESSOR_INFO_ADDR.
-+	 */
-+	for (; entry->numpages != 0; entry++) {
-+		e820_entry = &e820_table->entries[
-+				e820_table->nr_entries - 1];
-+		e820_end = e820_entry->addr + e820_entry->size;
-+		ram_end = (entry->starting_gpn +
-+			   entry->numpages) * PAGE_SIZE;
-+
-+		if (e820_end < entry->starting_gpn * PAGE_SIZE)
-+			e820_end = entry->starting_gpn * PAGE_SIZE;
-+
-+		if (e820_end < ram_end) {
-+			pr_info("Hyper-V: add e820 entry [mem %#018Lx-%#018Lx]\n", e820_end, ram_end - 1);
-+			e820__range_add(e820_end, ram_end - e820_end,
-+					E820_TYPE_RAM);
-+			for (page = e820_end; page < ram_end; page += PAGE_SIZE)
-+				pvalidate((unsigned long)__va(page), RMP_PG_SIZE_4K, true);
-+		}
-+	}
++	if (!hv_result_success(ret))
++		pr_err("HvCallStartVirtualProcessor failed: %llx\n", ret);
++	return ret;
 +}
 +
  void __init hv_vtom_init(void)
  {
  	/*
 diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 025eda129d99..e57df590846a 100644
+index e57df590846a..c5a3c29fad01 100644
 --- a/arch/x86/include/asm/mshyperv.h
 +++ b/arch/x86/include/asm/mshyperv.h
-@@ -50,6 +50,21 @@ extern bool hv_isolation_type_en_snp(void);
- 
- extern union hv_ghcb * __percpu *hv_ghcb_pg;
+@@ -65,6 +65,13 @@ struct memory_map_entry {
+ 	u32 reserved;
+ };
  
 +/*
-+ * Hyper-V puts processor and memory layout info
-+ * to this address in SEV-SNP enlightened guest.
++ * DEFAULT INIT GPAT and SEGMENT LIMIT value in struct VMSA
++ * to start AP in enlightened SEV guest.
 + */
-+#define EN_SEV_SNP_PROCESSOR_INFO_ADDR  0x802000
-+#define EN_SEV_SNP_MEM_INFO_ADDR	0x802018
-+
-+struct memory_map_entry {
-+	u64 starting_gpn;
-+	u64 numpages;
-+	u16 type;
-+	u16 flags;
-+	u32 reserved;
-+};
++#define HV_AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
++#define HV_AP_SEGMENT_LIMIT		0xffffffff
 +
  int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
  int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
  int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
-@@ -234,12 +249,14 @@ void hv_ghcb_msr_read(u64 msr, u64 *value);
- bool hv_ghcb_negotiate_protocol(void);
+@@ -250,6 +257,7 @@ bool hv_ghcb_negotiate_protocol(void);
  void __noreturn hv_ghcb_terminate(unsigned int set, unsigned int reason);
  void hv_vtom_init(void);
-+void hv_sev_init_mem_and_cpu(void);
+ void hv_sev_init_mem_and_cpu(void);
++int hv_snp_boot_ap(int cpu, unsigned long start_ip);
  #else
  static inline void hv_ghcb_msr_write(u64 msr, u64 value) {}
  static inline void hv_ghcb_msr_read(u64 msr, u64 *value) {}
- static inline bool hv_ghcb_negotiate_protocol(void) { return false; }
+@@ -257,6 +265,7 @@ static inline bool hv_ghcb_negotiate_protocol(void) { return false; }
  static inline void hv_ghcb_terminate(unsigned int set, unsigned int reason) {}
  static inline void hv_vtom_init(void) {}
-+static inline void hv_sev_init_mem_and_cpu(void) {}
+ static inline void hv_sev_init_mem_and_cpu(void) {}
++static int hv_snp_boot_ap(int cpu, unsigned long start_ip) {}
  #endif
  
  extern bool hv_isolation_type_snp(void);
 diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 5398fb2f4d39..d3bb921ee7fe 100644
+index d3bb921ee7fe..8e1d9ed6a1e0 100644
 --- a/arch/x86/kernel/cpu/mshyperv.c
 +++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -529,6 +529,9 @@ static void __init ms_hyperv_init_platform(void)
- 	if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
- 		mark_tsc_unstable("running on Hyper-V");
+@@ -295,6 +295,16 @@ static void __init hv_smp_prepare_cpus(unsigned int max_cpus)
  
+ 	native_smp_prepare_cpus(max_cpus);
+ 
++	/*
++	 *  Override wakeup_secondary_cpu_64 callback for SEV-SNP
++	 *  enlightened guest.
++	 */
 +	if (hv_isolation_type_en_snp())
-+		hv_sev_init_mem_and_cpu();
++		apic->wakeup_secondary_cpu_64 = hv_snp_boot_ap;
 +
- 	hardlockup_detector_disable();
- }
++	if (!hv_root_partition)
++		return;
++
+ #ifdef CONFIG_X86_64
+ 	for_each_present_cpu(i) {
+ 		if (i == 0)
+@@ -502,8 +512,7 @@ static void __init ms_hyperv_init_platform(void)
  
+ # ifdef CONFIG_SMP
+ 	smp_ops.smp_prepare_boot_cpu = hv_smp_prepare_boot_cpu;
+-	if (hv_root_partition)
+-		smp_ops.smp_prepare_cpus = hv_smp_prepare_cpus;
++	smp_ops.smp_prepare_cpus = hv_smp_prepare_cpus;
+ # endif
+ 
+ 	/*
+diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+index f4e4cc4f965f..fdac4a1714ec 100644
+--- a/include/asm-generic/hyperv-tlfs.h
++++ b/include/asm-generic/hyperv-tlfs.h
+@@ -223,6 +223,7 @@ enum HV_GENERIC_SET_FORMAT {
+ #define HV_STATUS_INVALID_PORT_ID		17
+ #define HV_STATUS_INVALID_CONNECTION_ID		18
+ #define HV_STATUS_INSUFFICIENT_BUFFERS		19
++#define HV_STATUS_TIME_OUT                      120
+ #define HV_STATUS_VTL_ALREADY_ENABLED		134
+ 
+ /*
 -- 
 2.25.1
 
