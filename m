@@ -2,131 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13919759CEE
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jul 2023 19:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01795759E3A
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jul 2023 21:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjGSR5S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Jul 2023 13:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S229804AbjGSTJM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Jul 2023 15:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGSR5S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Jul 2023 13:57:18 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2C1FED
-        for <linux-arch@vger.kernel.org>; Wed, 19 Jul 2023 10:57:14 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b89e10d356so46034245ad.3
-        for <linux-arch@vger.kernel.org>; Wed, 19 Jul 2023 10:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1689789434; x=1690394234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4FVEMGAeC4A4acfilWsGklHz88eR5z5EWRCCV9Kst0I=;
-        b=0Q1tzUOb9vYJXHmPeDryrYB5A4pEESrmEqXYj9Hg+90Z5+QCPv2ecrkofZgQVHrh2Q
-         2SmV6ESktQAtsjCYVJZhJojTRHsrQLvYLqNH0EoTgXcN4+EyUGH6ZSXKFYb02Y0hiirh
-         icie1/r4QjaO+Xr/8VrDJJ+t8iIcRUo2snH46DM7aXAbB12rMZS46rJ2h5Z2q3coLAKN
-         GMT7GgUwcUUW4SpZr+6zG8X6fnKROWImTBv7u2v/1CdFXwNuMSzJvhzr6uNXEVsoU8p0
-         jr3ynj+/29rinW5TGGhTFa+uF7yLH222PS2w2a9Iu7qAlX2Am1gjapUEui6PcMe/HT1i
-         pwCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689789434; x=1690394234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4FVEMGAeC4A4acfilWsGklHz88eR5z5EWRCCV9Kst0I=;
-        b=JipQST9O99GXVgklE4UAULjJNdeV1sETEYyehnl6jvgBs9JrNlmLftrSjTCEaG/tqb
-         S05zvGLNXDWQBKU9z3vxXHiTv+klRzSjgjMyPUL52fW6lsVI2J1NRxpejDLot+Sbk1x1
-         6vGw5GSQFC5kRc7qQpS78IPVm8uS128e1+uBfOaomJgAo2P49TRknypmTMOrSeYcaIfD
-         EzudEz/jjY1YuQ0De+Xf32nhGgttcyzhoHamtI14G0OliZXKYJTrqK0szRfENFW/XzVw
-         qTPEdJazl/hf1FoutlMDg4fn7362FOq2EzsRmTbah7BIDzrCDnJ9PfjBOTmpwzAwvrhb
-         mHVQ==
-X-Gm-Message-State: ABy/qLZ++ISMp8CvXUy+sEFTwi6nkG6HrAFT6ivh0Jfh9TlAiNlbjPZc
-        aZgByVzjcGHLjcYCQLKZFsLXEw==
-X-Google-Smtp-Source: APBJJlEsVXT/riHHb217/IRnC4FkTdrL+WEIRgGEaqW1QkKPQqx7J9SZ2+4YPKCL/Z0Wz9JzjQeyoQ==
-X-Received: by 2002:a17:90a:d598:b0:264:97a:2ba6 with SMTP id v24-20020a17090ad59800b00264097a2ba6mr4560333pju.7.1689789434001;
-        Wed, 19 Jul 2023 10:57:14 -0700 (PDT)
-Received: from hermes.local (204-195-127-207.wavecable.com. [204.195.127.207])
-        by smtp.gmail.com with ESMTPSA id nw17-20020a17090b255100b00263f41a655esm1415304pjb.43.2023.07.19.10.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 10:57:13 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 10:57:11 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, David Ahern <dsahern@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [RFC PATCH 00/10] Device Memory TCP
-Message-ID: <20230719105711.448f8cad@hermes.local>
-In-Reply-To: <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
-References: <20230710223304.1174642-1-almasrymina@google.com>
-        <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
-        <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
-        <ZLbUpdNYvyvkD27P@ziepe.ca>
-        <20230718111508.6f0b9a83@kernel.org>
-        <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org>
-        <20230718112940.2c126677@kernel.org>
-        <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org>
-        <20230718154503.0421b4cd@kernel.org>
-        <CAHS8izPORN=r2-hzYSgN4s_Aoo2dnwoJXrU5Hu=43sb8zsWyhQ@mail.gmail.com>
+        with ESMTP id S229535AbjGSTJL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Jul 2023 15:09:11 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDB1199A;
+        Wed, 19 Jul 2023 12:09:09 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 93BEF520165;
+        Wed, 19 Jul 2023 21:09:07 +0200 (CEST)
+Received: from lxhi-064.domain (10.72.94.1) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.27; Wed, 19 Jul
+ 2023 21:09:07 +0200
+Date:   Wed, 19 Jul 2023 21:09:02 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <n.schier@avm.de>,
+        SzuWei Lin <szuweilin@google.com>
+CC:     <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <Matthias.Thomae@de.bosch.com>,
+        <yyankovskyi@de.adit-jv.com>, <Dirk.Behme@de.bosch.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH 3/5] kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}
+Message-ID: <20230719190902.GA11207@lxhi-064.domain>
+References: <20220109181529.351420-1-masahiroy@kernel.org>
+ <20220109181529.351420-3-masahiroy@kernel.org>
+ <YdwZe9DHJZUaa6aO@buildd.core.avm.de>
+ <20230623144544.GA24871@lxhi-065>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230623144544.GA24871@lxhi-065>
+X-Originating-IP: [10.72.94.1]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 19 Jul 2023 08:10:58 -0700
-Mina Almasry <almasrymina@google.com> wrote:
+Hello Yamada-san,
 
-> On Tue, Jul 18, 2023 at 3:45=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> >
-> > On Tue, 18 Jul 2023 16:35:17 -0600 David Ahern wrote: =20
-> > > I do not see how 1 RSS context (or more specifically a h/w Rx queue) =
-can
-> > > be used properly with memory from different processes (or dma-buf
-> > > references). =20
->=20
-> Right, my experience with dma-bufs from GPUs are that they're
-> allocated from the userspace and owned by the process that allocated
-> the backing GPU memory and generated the dma-buf from it. I.e., we're
-> limited to 1 dma-buf per RX queue. If we enable binding multiple
-> dma-bufs to the same RX queue, we have a problem, because AFAIU the
-> NIC can't decide which dma-buf to put the packet into (it hasn't
-> parsed the packet's destination yet).
->=20
-> > > When the process dies, that memory needs to be flushed from
-> > > the H/W queues. Queues with interlaced submissions make that more
-> > > complicated. =20
-> > =20
->=20
-> When the process dies, do we really want to flush the memory from the
-> hardware queues? The drivers I looked at don't seem to have a function
-> to flush the rx queues alone, they usually do an entire driver reset
-> to achieve that. Not sure if that's just convenience or there is some
-> technical limitation there. Do we really want  to trigger a driver
-> reset at the event a userspace process crashes?
+On Fri, Jun 23, 2023 at 04:45:44PM +0200, Eugeniu Rosca wrote:
+> Hello Yamada-san,
+> Hello Nicolas,
+> Cc: SzuWei Lin (committer of the patch in AOSP [1])
+> Cc: Kbuild
+> 
+> On Mon, Jan 10, 2022 at 12:33:15PM +0100, Nicolas Schier wrote:
+> > On Mon, Jan 10, 2022 at 03:15:27AM +0900, Masahiro Yamada wrote:
+> > > GZIP-compressed files end with 4 byte data that represents the size
+> > > of the original input. The decompressors (the self-extracting kernel)
+> > > exploit it to know the vmlinux size beforehand. To mimic the GZIP's
+> > > trailer, Kbuild provides cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}.
+> > > Unfortunately these macros are used everywhere despite the appended
+> > > size data is only useful for the decompressors.
+> > > 
+> > > There is no guarantee that such hand-crafted trailers are safely ignored.
+> > > In fact, the kernel refuses compressed initramdisks with the garbage
+> > > data. That is why usr/Makefile overrides size_append to make it no-op.
+> > > 
+> > > To limit the use of such broken compressed files, this commit renames
+> > > the existing macros as follows:
+> > > 
+> > >   cmd_bzip2   --> cmd_bzip2_with_size
+> > >   cmd_lzma    --> cmd_lzma_with_size
+> > >   cmd_lzo     --> cmd_lzo_with_size
+> > >   cmd_lz4     --> cmd_lz4_with_size
+> > >   cmd_xzkern  --> cmd_xzkern_with_size
+> > >   cmd_zstd22  --> cmd_zstd22_with_size
+> > > 
+> > > To keep the decompressors working, I updated the following Makefiles
+> > > accordingly:
+> > > 
+> > >   arch/arm/boot/compressed/Makefile
+> > >   arch/h8300/boot/compressed/Makefile
+> > >   arch/mips/boot/compressed/Makefile
+> > >   arch/parisc/boot/compressed/Makefile
+> > >   arch/s390/boot/compressed/Makefile
+> > >   arch/sh/boot/compressed/Makefile
+> > >   arch/x86/boot/compressed/Makefile
+> > > 
+> > > I reused the current macro names for the normal usecases; they produce
+> > > the compressed data in the proper format.
+> > > 
+> > > I did not touch the following:
+> > > 
+> > >   arch/arc/boot/Makefile
+> > >   arch/arm64/boot/Makefile
+> > >   arch/csky/boot/Makefile
+> > >   arch/mips/boot/Makefile
+> > >   arch/riscv/boot/Makefile
+> > >   arch/sh/boot/Makefile
+> > >   kernel/Makefile
+> > > 
+> > > This means those Makefiles will stop appending the size data.
+> > > 
+> > > I dropped the 'override size_append' hack from usr/Makefile.
+> > > 
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > 
+> > Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> 
+> If you don't mind, I would like to report another instance of
+> "/bin/sh: Argument list too long" while building some out-of-tree *ko
+> in a number of downstream v5.15.78+ kernels containing [1].
+> 
+> For some time now, we've been living with ugly hacks to overcome it.
+> 
+> Fortunately, recent git bisecting efforts apparently reveal that
+> current v5.17-rc1 commit (and its backports in downstream) look to
+> act as the culprit (confirmed on several host machines). So, I
+> started to have some hopes of a long-term solution and hence
+> sharing the findings as a first step.
+> 
+> I am not entirely clear how to properly trace this behavior, since no
+> amount of "make V=1/V=2" uncovers more details. Purely by accident, I
+> looked into the top/htop output (while running the repro) and
+> noticed several processes doing:
+> 
+> /bin/sh -c dec_size=0; for F in <humongous list of filenames>; do \
+>   fsize=$(sh /abs/path/to/scripts/file-size.sh $F); \
+>   dec_size=$(expr $dec_size + $fsize); done; printf "%08x\n" $dec_size \
+>   | sed 's/\(..\)/\1 /g' | { read ch0 ch1 ch2 ch3; for ch in \
+>   $ch3 $ch2 $ch1 $ch0; do printf '%s%03o' '\\' $((0x$ch)); done; }
+> 
+> As it was the case in the recent report [2], the above command seems
+> to require/assume generous amount of space for the shell arguments.
+> 
+> I still haven't compared the exact traces before and after this commit,
+> to quantify by how much the shell argument list is increased (TODO).
+> 
+> Another aspect is that current commit seems to introduce the
+> regression in a multi-threaded make only. The issue is apparently
+> masked by 'make -j1' (TBC), which adds another level of complexity.
+> 
+> Unfortunately, the build use-case is highly tailored to downstream
+> and is not repeatable against vanilla out of the box.
+> 
+> I will continue to increase my understanding behind what's happening.
+> In case there are already any suggestions, would appreciate those.
 
-Naive idea.
-Would it be possible for process to use mmap() on the GPU memory and then
-do zero copy TCP receive some how? Or is this what is being proposed.
+JFYI, we've got confirmation from Qualcomm Customer Support interface
+that reverting [1] heals the issue on QC end as well. However, it looks
+like none of us has clear understanding how to properly
+troubleshoot/trace/compare the behavior before and after the commit.
+
+I would happily follow any suggestions.
+
+> [1] https://android.googlesource.com/kernel/common/+/bc6d3d83539512
+>     ("UPSTREAM: kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}")
+> 
+> [2] https://lore.kernel.org/linux-kbuild/20230616194505.GA27753@lxhi-065/
+
+-- 
+Best regards,
+Eugeniu Rosca
