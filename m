@@ -2,87 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB162758B5B
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jul 2023 04:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB34758E3B
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jul 2023 09:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjGSCbS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Jul 2023 22:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S230281AbjGSHAL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Jul 2023 03:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGSCbR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Jul 2023 22:31:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E797F1BC3;
-        Tue, 18 Jul 2023 19:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689733876; x=1721269876;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oGVTTbOxHRTNujTz3s1LeziHKKP7JTarTS3cQdLkg0Y=;
-  b=IzVRd8Ve768anOphKD3wStT5443OfOf9eV+fqvX5UTjAwMoGC8B5iUSr
-   sNF3k5AOTHNItTtmCBYv2367M9rjX1ZjGLtR/c9PvW297I5GwK7ZhEOfL
-   0Q4kd5yp1gE2Ypdwh3n2OhG5QDM3uNzZlLXdppnRC98EnuzUZnJ3z2yaB
-   30LYh0X4wQLPqKlcAO8CouWTdEB8XbHW4F+ekRdgPtzuFtVjTT/1eCADg
-   JrrHw5feCThvIBziGa3TLB2p5cDji8rSPSTYQ/xC2kmivW5EcyqlVzaMo
-   xvOyt5ok9wQTMuXE3VwJ/XTNCwq4/9peEHyu+8biuWDjVdkiGy+d+QxyS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="452734279"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="452734279"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:31:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="793844259"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="793844259"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.6.77]) ([10.93.6.77])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:31:09 -0700
-Message-ID: <e3d2c81f-16e9-9a62-9fcb-d9552c3f12d2@intel.com>
-Date:   Wed, 19 Jul 2023 10:31:06 +0800
+        with ESMTP id S229918AbjGSHAK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Jul 2023 03:00:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E341F10A;
+        Wed, 19 Jul 2023 00:00:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78A0F61275;
+        Wed, 19 Jul 2023 07:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93359C433C7;
+        Wed, 19 Jul 2023 07:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689750008;
+        bh=HDeq1/IS5rQ4pnF29vgg6/9UWwbJAWwzrpsSqnIsDaw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BlcMRpZXnKySXsRU/BLq7GNtkEcIqOSpQtkb9tE+IHnV5dfCtpRdy8Vot8NgHZKEP
+         5icYatEmT1Aeu0O4/z2ZhmvRY5EgFlT6p3jxOlyN+gCF8vtHejFG7QaBqMOZaRjBr5
+         hqrDu9imKG4cshkQ0M33xGa+SEspuW5tYh4BSy562wAcV2CAlsgDziRsbcWcnHz1t1
+         An8hZxwQ24hbu7bfU+NbBXcNxbf9sxSvTcQWrlM7H0NI+6fcaRXGG4nwEEo3EL2d6N
+         ZSFNO42cUZMlt9PtQjmqMU4BDQ2dcYRxqdryZnYIsKeKzbVFt7GawtHarwukr6Dy3m
+         paPXR9B6ffsBQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, David.Laight@ACULAB.COM, will@kernel.org,
+        peterz@infradead.org, mingo@redhat.com, longman@redhat.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] asm-generic: ticket-lock: Optimize arch_spin_value_unlocked
+Date:   Wed, 19 Jul 2023 03:00:01 -0400
+Message-Id: <20230719070001.795010-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v9 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        rick.p.edgecombe@intel.com
-References: <20230621191317.4129-1-decui@microsoft.com>
- <20230621191317.4129-2-decui@microsoft.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230621191317.4129-2-decui@microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/22/2023 3:13 AM, Dexuan Cui wrote:
-> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
-> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
-> operation for the pages in the region starting at the GPA specified
-> in R11.
-> 
-> When a fully enlightened TDX guest runs on Hyper-V, Hyper-V can return
-> the retry error when set_memory_decrypted() is called to decrypt up to
-> 1GB of swiotlb bounce buffers.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-just out of curiosity, what size does Hyper-v handle at most in one call?
+Using arch_spinlock_is_locked would cause another unnecessary memory
+access to the contended value. Although it won't cause a significant
+performance gap in most architectures, the arch_spin_value_unlocked
+argument contains enough information. Thus, remove unnecessary
+atomic_read in arch_spin_value_unlocked().
+
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: David Laight <David.Laight@ACULAB.COM>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+Changelog:
+This patch is separate from:
+https://lore.kernel.org/linux-riscv/20220808071318.3335746-1-guoren@kernel.org/
+
+Peter & David have commented on it:
+https://lore.kernel.org/linux-riscv/YsK4Z9w0tFtgkni8@hirez.programming.kicks-ass.net/
+---
+ include/asm-generic/spinlock.h | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+index fdfebcb050f4..90803a826ba0 100644
+--- a/include/asm-generic/spinlock.h
++++ b/include/asm-generic/spinlock.h
+@@ -68,11 +68,18 @@ static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+ 	smp_store_release(ptr, (u16)val + 1);
+ }
+ 
++static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
++{
++	u32 val = lock.counter;
++
++	return ((val >> 16) == (val & 0xffff));
++}
++
+ static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+ {
+-	u32 val = atomic_read(lock);
++	arch_spinlock_t val = READ_ONCE(*lock);
+ 
+-	return ((val >> 16) != (val & 0xffff));
++	return !arch_spin_value_unlocked(val);
+ }
+ 
+ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+@@ -82,11 +89,6 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+ 	return (s16)((val >> 16) - (val & 0xffff)) > 1;
+ }
+ 
+-static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+-{
+-	return !arch_spin_is_locked(&lock);
+-}
+-
+ #include <asm/qrwlock.h>
+ 
+ #endif /* __ASM_GENERIC_SPINLOCK_H */
+-- 
+2.36.1
+
