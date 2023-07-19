@@ -2,73 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5987588A9
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jul 2023 00:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB162758B5B
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jul 2023 04:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjGRWpJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Jul 2023 18:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
+        id S229513AbjGSCbS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Jul 2023 22:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjGRWpH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Jul 2023 18:45:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D91993;
-        Tue, 18 Jul 2023 15:45:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACBC8612D2;
-        Tue, 18 Jul 2023 22:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73956C433C9;
-        Tue, 18 Jul 2023 22:45:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689720305;
-        bh=QPRDZN417wjG3/qI9dDTrKSyuqoeFrA3S2sudllzHvw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=I7ocP0MTAirrwG4O3BO3sgJtAZf1AJsUW77twR7BAnv8XpKWfEiykdbxMVfJitMQz
-         wsO9R5ARS30sZ610w8glfUqSp2ATk8XKuYDTOzbCrBdafDcnsXZAs1mURzqD6ROGQS
-         oC/bzDXWaeXLzVz14Pz2NEZwox6r1Jq4t4LrfLeMLvi2XoFw7Fyi4DlO0VaF4qdICI
-         BzPyOlM+XEviMn/WFmV6C00aKMV99Sqm/uyXjIqhbqAEJ8BLdzqi0fVaFTXzBJshI6
-         Zs4+zXH8p0XWCVCAu77Oj41p/FZCoid5iSNxgf4LxA128Zmt79ALiEDRVuAms9Zzam
-         lCnJHtFJp0Rqg==
-Date:   Tue, 18 Jul 2023 15:45:03 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Mina Almasry <almasrymina@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [RFC PATCH 00/10] Device Memory TCP
-Message-ID: <20230718154503.0421b4cd@kernel.org>
-In-Reply-To: <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org>
-References: <20230710223304.1174642-1-almasrymina@google.com>
-        <12393cd2-4b09-4956-fff0-93ef3929ee37@kernel.org>
-        <CAHS8izNPTwtk+zN7XYt-+ycpT+47LMcRrYXYh=suTXCZQ6-rVQ@mail.gmail.com>
-        <ZLbUpdNYvyvkD27P@ziepe.ca>
-        <20230718111508.6f0b9a83@kernel.org>
-        <35f3ec37-11fe-19c8-9d6f-ae5a789843cb@kernel.org>
-        <20230718112940.2c126677@kernel.org>
-        <eb34f812-a866-a1a3-9f9b-7d5054d17609@kernel.org>
+        with ESMTP id S229452AbjGSCbR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Jul 2023 22:31:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E797F1BC3;
+        Tue, 18 Jul 2023 19:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689733876; x=1721269876;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oGVTTbOxHRTNujTz3s1LeziHKKP7JTarTS3cQdLkg0Y=;
+  b=IzVRd8Ve768anOphKD3wStT5443OfOf9eV+fqvX5UTjAwMoGC8B5iUSr
+   sNF3k5AOTHNItTtmCBYv2367M9rjX1ZjGLtR/c9PvW297I5GwK7ZhEOfL
+   0Q4kd5yp1gE2Ypdwh3n2OhG5QDM3uNzZlLXdppnRC98EnuzUZnJ3z2yaB
+   30LYh0X4wQLPqKlcAO8CouWTdEB8XbHW4F+ekRdgPtzuFtVjTT/1eCADg
+   JrrHw5feCThvIBziGa3TLB2p5cDji8rSPSTYQ/xC2kmivW5EcyqlVzaMo
+   xvOyt5ok9wQTMuXE3VwJ/XTNCwq4/9peEHyu+8biuWDjVdkiGy+d+QxyS
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="452734279"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="452734279"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:31:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="793844259"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="793844259"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.6.77]) ([10.93.6.77])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:31:09 -0700
+Message-ID: <e3d2c81f-16e9-9a62-9fcb-d9552c3f12d2@intel.com>
+Date:   Wed, 19 Jul 2023 10:31:06 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v9 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com,
+        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
+        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        rick.p.edgecombe@intel.com
+References: <20230621191317.4129-1-decui@microsoft.com>
+ <20230621191317.4129-2-decui@microsoft.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230621191317.4129-2-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +75,14 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 18 Jul 2023 16:35:17 -0600 David Ahern wrote:
-> I do not see how 1 RSS context (or more specifically a h/w Rx queue) can
-> be used properly with memory from different processes (or dma-buf
-> references). When the process dies, that memory needs to be flushed from
-> the H/W queues. Queues with interlaced submissions make that more
-> complicated.
+On 6/22/2023 3:13 AM, Dexuan Cui wrote:
+> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
+> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
+> operation for the pages in the region starting at the GPA specified
+> in R11.
+> 
+> When a fully enlightened TDX guest runs on Hyper-V, Hyper-V can return
+> the retry error when set_memory_decrypted() is called to decrypt up to
+> 1GB of swiotlb bounce buffers.
 
-Agreed, one process, one control path socket.
-
-FWIW the rtnetlink use of netlink is very basic. genetlink already has
-some infra which allows associate state with a user socket and cleaning
-it up when the socket gets closed. This needs some improvements. A bit
-of a chicken and egg problem, I can't make the improvements until there
-are families making use of it, and nobody will make use of it until
-it's in tree... But the basics are already in place and I can help with
-building it out.
-
-> I guess the devil is in the details; I look forward to the evolution of
-> the patches.
-
-+1
+just out of curiosity, what size does Hyper-v handle at most in one call?
