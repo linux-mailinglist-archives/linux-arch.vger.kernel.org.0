@@ -2,62 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247C675D1FE
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 20:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911DD75D54E
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 22:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjGUSzB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jul 2023 14:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S229682AbjGUUBW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jul 2023 16:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjGUSzA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 14:55:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2393930EA;
-        Fri, 21 Jul 2023 11:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ML1sh8TENxoaFJqhR/+bKvkhp/DWbd2eeba6Xp6ZoLU=; b=FtKuy4lx7z5YbW7WPpf1Cujgu5
-        eGcSoztbPnzwRQqJI2ZmyNi2yud6JAxPyYuzl1m7Mn4kBqR3GTkl5toBXpD6K9X/Yi2R4QepAedTL
-        /FXcJSJ0tlEJ4ozi68mxpsZgcSdT93pewQPc6C0wW6yUuZhpExe8eyMCxrbq5QcChZADmDtHtMRtT
-        ZBvVsj56+s816Shypra2AZ+zYJUTed8vzB4sGjGQ08b13EDMDhaBIzobCegh9hsSFuCdR+9dUlUaC
-        xRBGa46ZX4/9GW7YRaMQP8SYDBoneaNPYNVfYz8iQmok5rSK5JXOOHNkmtxDpwEalyOHHPNuQ1wud
-        gFkY8Pew==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qMvH3-001NJY-Dt; Fri, 21 Jul 2023 18:54:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 67CA03001E7;
-        Fri, 21 Jul 2023 20:54:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4DCB030C3FB86; Fri, 21 Jul 2023 20:54:45 +0200 (CEST)
-Date:   Fri, 21 Jul 2023 20:54:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, dave@stgolabs.net,
-        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-        urezki@gmail.com, Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-api@vger.kernel.org, linux-mm@kvack.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, malteskarupke@web.de
-Subject: Re: [PATCH v1 05/14] futex: Add sys_futex_wake()
-Message-ID: <20230721185445.GS4253@hirez.programming.kicks-ass.net>
-References: <20230721102237.268073801@infradead.org>
- <20230721105744.022509272@infradead.org>
- <2a1f8ae6-ed2b-4fe8-85af-df64e9c84794@app.fastmail.com>
+        with ESMTP id S229610AbjGUUBV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 16:01:21 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D594130EF;
+        Fri, 21 Jul 2023 13:00:58 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E21221C0002;
+        Fri, 21 Jul 2023 20:00:53 +0000 (UTC)
+Message-ID: <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr>
+Date:   Fri, 21 Jul 2023 22:00:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a1f8ae6-ed2b-4fe8-85af-df64e9c84794@app.fastmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] riscv: mm: Fixup spurious fault of kernel vaddr
+Content-Language: en-US
+To:     Guo Ren <guoren@kernel.org>
+Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, falcon@tinylab.org,
+        bjorn@kernel.org, conor.dooley@microchip.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230721145121.1854104-1-guoren@kernel.org>
+ <5e5be2d4-c563-6beb-b5f5-df47edeebc83@ghiti.fr>
+ <CAJF2gTQMAVUtC6_ftEwp=EeYR_O7yzfGYmxwrqcO6+hn2J32bA@mail.gmail.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <CAJF2gTQMAVUtC6_ftEwp=EeYR_O7yzfGYmxwrqcO6+hn2J32bA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alex@ghiti.fr
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,53 +45,103 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 05:41:20PM +0200, Arnd Bergmann wrote:
-> On Fri, Jul 21, 2023, at 12:22, Peter Zijlstra wrote:
-> > --- a/arch/arm/tools/syscall.tbl
-> > +++ b/arch/arm/tools/syscall.tbl
-> > @@ -465,3 +465,4 @@
-> >  449	common	futex_waitv			sys_futex_waitv
-> >  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> >  451	common	cachestat			sys_cachestat
-> > +452	common	futex_wake			sys_futex_wake
-> 
-> This clashes with __NR_fchmodat2 in linux-next, which also wants number 452.
 
-Yeah, I fully expected some collisions :/ Unavoidable.
+On 21/07/2023 18:08, Guo Ren wrote:
+> On Fri, Jul 21, 2023 at 11:19 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>>
+>> On 21/07/2023 16:51, guoren@kernel.org wrote:
+>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>
+>>> RISC-V specification permits the caching of PTEs whose V (Valid)
+>>> bit is clear. Operating systems must be written to cope with this
+>>> possibility, but implementers are reminded that eagerly caching
+>>> invalid PTEs will reduce performance by causing additional page
+>>> faults.
+>>>
+>>> So we must keep vmalloc_fault for the spurious page faults of kernel
+>>> virtual address from an OoO machine.
+>>>
+>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>> ---
+>>>    arch/riscv/mm/fault.c | 3 +--
+>>>    1 file changed, 1 insertion(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+>>> index 85165fe438d8..f662c9eae7d4 100644
+>>> --- a/arch/riscv/mm/fault.c
+>>> +++ b/arch/riscv/mm/fault.c
+>>> @@ -258,8 +258,7 @@ void handle_page_fault(struct pt_regs *regs)
+>>>         * only copy the information from the master page table,
+>>>         * nothing more.
+>>>         */
+>>> -     if ((!IS_ENABLED(CONFIG_MMU) || !IS_ENABLED(CONFIG_64BIT)) &&
+>>> -         unlikely(addr >= VMALLOC_START && addr < VMALLOC_END)) {
+>>> +     if (unlikely(addr >= TASK_SIZE)) {
+>>>                vmalloc_fault(regs, code, addr);
+>>>                return;
+>>>        }
+>>
+>> Can you share what you are trying to fix here?
+> We met a spurious page fault panic on an OoO machine.
+>
+> 1. The processor speculative execution brings the V=0 entries into the
+> TLB in the kernel virtual address.
+> 2. Linux kernel installs the kernel virtual address with the page, and V=1
+> 3. When kernel code access the kernel virtual address, it would raise
+> a page fault as the V=0 entry in the tlb.
+> 4. No vmalloc_fault, then panic.
+>
+>> I have a fix (that's currently running our CI) for commit 7d3332be011e
+>> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") that
+>> implements flush_cache_vmap() since we lost the vmalloc_fault.
+> Could you share that patch?
 
-> > --- a/arch/arm64/include/asm/unistd32.h
-> > +++ b/arch/arm64/include/asm/unistd32.h
-> > @@ -909,6 +909,8 @@ __SYSCALL(__NR_futex_waitv, sys_futex_wa
-> >  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-> >  #define __NR_cachestat 451
-> >  __SYSCALL(__NR_cachestat, sys_cachestat)
-> > +#define __NR_futex_wake 452
-> > +__SYSCALL(__NR_futex_wake, sys_futex_wake)
-> > 
-> >  /*
-> >   * Please add new compat syscalls above this comment and update
-> 
-> Unfortunately, changing this file still requires updating __NR_compat_syscalls
-> in arch/arm64/include/asm/unistd.h as well.
 
-Bah I missed that. I'll go fix it up. Thanks!
+Here we go:
 
-> > --- a/kernel/sys_ni.c
-> > +++ b/kernel/sys_ni.c
-> > @@ -87,6 +87,7 @@ COND_SYSCALL_COMPAT(set_robust_list);
-> >  COND_SYSCALL(get_robust_list);
-> >  COND_SYSCALL_COMPAT(get_robust_list);
-> >  COND_SYSCALL(futex_waitv);
-> > +COND_SYSCALL(futex_wake);
-> >  COND_SYSCALL(kexec_load);
-> >  COND_SYSCALL_COMPAT(kexec_load);
-> >  COND_SYSCALL(init_module);
-> 
-> This is fine for the moment, but I wonder if we should start making
-> futex mandatory at some point. Right now, sparc32 with CONFIG_SMP
-> cannot support futex because of the lack of atomics in early
-> sparc processors, but sparc32 glibc actually requires futexes
-> and consequently only works on uniprocessor machines, on sparc64
-> compat mode, or on Leon3 with out of tree patches.
 
-PARISC is another 'fun' case. 
+Author: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Fri Jul 21 08:43:44 2023 +0000
+
+     riscv: Implement flush_cache_vmap()
+
+     The RISC-V kernel needs a sfence.vma after a page table 
+modification: we
+     used to rely on the vmalloc fault handling to emit an sfence.vma, but
+     commit 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
+     vmalloc/modules area") got rid of this path for 64-bit kernels, so 
+now we
+     need to explicitly emit a sfence.vma in flush_cache_vmap().
+
+     Note that we don't need to implement flush_cache_vunmap() as the 
+generic
+     code should emit a flush tlb after unmapping a vmalloc region.
+
+     Fixes: 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for 
+vmalloc/modules area")
+     Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+diff --git a/arch/riscv/include/asm/cacheflush.h 
+b/arch/riscv/include/asm/cacheflush.h
+index 8091b8bf4883..b93ffddf8a61 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -37,6 +37,10 @@ static inline void flush_dcache_page(struct page *page)
+  #define flush_icache_user_page(vma, pg, addr, len) \
+         flush_icache_mm(vma->vm_mm, 0)
+
++#ifdef CONFIG_64BIT
++#define flush_cache_vmap(start, end) flush_tlb_kernel_range(start, end)
++#endif
++
+  #ifndef CONFIG_SMP
+
+  #define flush_icache_all() local_flush_icache_all()
+
+
+Let me know if that works for you!
+
+
+>
+>
