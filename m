@@ -2,72 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848D975CC5D
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 17:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFAF75CC87
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 17:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjGUPsA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jul 2023 11:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S232351AbjGUPun (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jul 2023 11:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbjGUPr4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 11:47:56 -0400
+        with ESMTP id S232288AbjGUPua (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 11:50:30 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1756C10C3;
-        Fri, 21 Jul 2023 08:47:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9D93A9F;
+        Fri, 21 Jul 2023 08:50:20 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 3C0F13200991;
-        Fri, 21 Jul 2023 11:47:53 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id B987D3200991;
+        Fri, 21 Jul 2023 11:50:17 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Jul 2023 11:47:54 -0400
+  by compute6.internal (MEProxy); Fri, 21 Jul 2023 11:50:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1689954472; x=1690040872; bh=Bv
-        QYir1TgtFJ0697wOUYpEwh4jkIy8qXO/mCyyCNVlQ=; b=ZFzNJsmblah8v7+tzm
-        pvg9g9dqG78Pn972Bj1F9+KdCSDjD3uCQRDbYndZTShRtg30fkvYoGTX8P5lCB46
-        amLI52y80joBeKH6pyCgpfjdaq0xPRw7e2W30qv4Ij55F8YeiOKSnasFJW4MGuCv
-        oTnQkGeeoPWcGXdS6GihL2mTvgvJSb14frr/X8stZ0DZyj/x5Th5eWypwQN+RyFN
-        FqUrhyyKa672B3D4H3rqyaXoXIhaeatnIHVcWCGuIjuiGm+yEoB+LnolbrxCrt+J
-        /Ludj38mG9YTSkcsHT57dP3tMIP0UAiU4rfPIvFGZOXOhHdoVedfDlqiz4gV5QXV
-        7oSg==
+        :subject:subject:to:to; s=fm2; t=1689954617; x=1690041017; bh=y5
+        4uRtwGDGLZ7GqFD8k0STYKrRWoOfjzVI0Vx/9N7dk=; b=nmtvSspkC3uTez9C5F
+        gHx6BkI71eZke/2pCOmXoo9R+nw834+h68niYapL2YcDYZTV7v4cwTRmyZcdXOcY
+        KrQuqSGezKIqEhB4A6fStMmqm0v8xqhAh0mLAs0z0q//J0WnUfI0oVN2XbxIcZ/H
+        hhDV76NAFZvzmI7D3oG2Br+pfFjDnbTtLO3TEaGkUhNWVndiZc3r/oAXR69KjxwY
+        Jx2BZTyH1FxBVPsICvOAp+qZ0g4Sne3q2nZ574aC9G571kABlAT+sZGZzR3aXoyM
+        20BEmVZmNL1WK2xtGN32J7On7Ox6AWbOsaVTRU0lAd6H8wBEoN9p3TJ7rNK9ycy8
+        vHrw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1689954472; x=1690040872; bh=BvQYir1TgtFJ0
-        697wOUYpEwh4jkIy8qXO/mCyyCNVlQ=; b=2cpUgxQHdTe/oGeCxgK/z1dXdvf0r
-        nI+DJk6sCYQkGXyawb5ZLMqaVBDvd4ux5LwWHEfbwULXqJQOK/cseoRhc0eTTMF2
-        32Xr6K7VYAMBkTdtPFBSrsYOpL/hbhOrAmtx24BYkby0b6gGWl7MKFPBhcmFF6gb
-        E0PP4klBMjk6e8WkGZ7Kcrn2Y5sncq/JzkKLFAfOdAvw+xGfY5MQY/OWYlfTV5Vp
-        Xa+gvtB4HtjIu/zx1jkyCKHkuVsAYxsZ7XS9WXxDBP3r0FL8OWf4zt/nreHyPMaf
-        fxo5yvljEbV0XiZpxIdaT26boEgMjEzY0XDt+pTEl7bCgHSGoIrz7xkPA==
-X-ME-Sender: <xms:qKi6ZO-jxfly8qW6kFEU9JH9FrMa5Z-nf7jOh5A50xabFGNht8Wv1g>
-    <xme:qKi6ZOuiuZR8Q6zB1ULRn_aG3zzK1gT8J6gH07juS1u6zIuZ3eOXvT98DQHFhkPXx
-    NeRBnAuuVjt7KoR4ko>
+        :x-sasl-enc; s=fm3; t=1689954617; x=1690041017; bh=y54uRtwGDGLZ7
+        GqFD8k0STYKrRWoOfjzVI0Vx/9N7dk=; b=bGsTsXOCon+ZBCXtUCj/eDlR9j61u
+        rHJIfPhr5/ybw5vUU9zKOEO/b//GxNqMOsco4UDG1G9RaYhSetOH1ano73x5qkIj
+        cteH4C9VBo260gomlOkA9uIQppC9Yd0VTylUBNpvQI+VTuId6UClbiHnkcX6Epk7
+        tDYgaptF6WWBKZPuk+yRz40MVcbaFg4GBO+5rTqeamdYzBXuUMoDeOX5fQkFiB4z
+        bIKT2x7pF6kBCoTCFUZNUq5LZeLNDvZ1l66oF7l3PKh1naMmUxqpncZtWO732gaM
+        CDsElA6lr8zbAklFstzeZc8xOL5gLDOC2ZhCRLIgWdDieUCPyulBC0oDw==
+X-ME-Sender: <xms:Oam6ZBBX6io6V7cIVIQik9cm1u34HV5Z-hRCE5nDKB1fPVO6PqgMeg>
+    <xme:Oam6ZPiNtTq1Vk5ngSAUhy-XGwwPN7YhGZLoTTyPljUqepsNMNU1pFBJ1aCP_nR_s
+    rLi5fYTp3ERafCw_XQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedvgdekkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
     ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
     gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    ffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
     hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:qKi6ZEDYbQ3ZaQqvLfmVOn5-x8ABZ0E_blMq66LZK6KoTAaU25ZdfQ>
-    <xmx:qKi6ZGf_8Yf3u8ntgFwnARHozfhSue9QNtQh5gB1P6gDmRFo6NbW5w>
-    <xmx:qKi6ZDMNuE7QKBHLnpF2bQd6vMsFGXVewYMVM0s4t80b7Rj1GvTE8g>
-    <xmx:qKi6ZBvSi12HgiCr0t7VlhHhAaI6RR7tLTcdE1Q0eW4A6cyfbfuQbA>
+X-ME-Proxy: <xmx:Oam6ZMma2gQ28KGq2DnaCyR8KIJZ_Jw_ieq6NH5x9hHOB6L2QVd5CQ>
+    <xmx:Oam6ZLzpU7wX92qUDFb0TMzqzbddSpNZN6fxUo5j_cf-P9ethYLNuQ>
+    <xmx:Oam6ZGQxTVFWibPvd-XNNEmK70GRtPNYNJ2oHnAZK0yfstMITyO8oQ>
+    <xmx:Oam6ZADgHZNctbChEFxSLf4tIv2Y2EWNf99CrGan2ATgDbEXUiGZ-Q>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 297B9B60089; Fri, 21 Jul 2023 11:47:52 -0400 (EDT)
+        id 01364B6008D; Fri, 21 Jul 2023 11:50:16 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
 Mime-Version: 1.0
-Message-Id: <6a49b585-05d0-4b79-b5ab-d710f5d6d598@app.fastmail.com>
-In-Reply-To: <20230721105743.819362688@infradead.org>
+Message-Id: <59ba1179-d166-4bae-b7b6-c1084471192e@app.fastmail.com>
+In-Reply-To: <20230721102237.268073801@infradead.org>
 References: <20230721102237.268073801@infradead.org>
- <20230721105743.819362688@infradead.org>
-Date:   Fri, 21 Jul 2023 17:47:31 +0200
+Date:   Fri, 21 Jul 2023 17:49:56 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Peter Zijlstra" <peterz@infradead.org>,
         "Thomas Gleixner" <tglx@linutronix.de>,
@@ -80,7 +79,7 @@ Cc:     linux-kernel@vger.kernel.org, "Ingo Molnar" <mingo@redhat.com>,
         "Lorenzo Stoakes" <lstoakes@gmail.com>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, Linux-Arch <linux-arch@vger.kernel.org>,
         malteskarupke@web.de
-Subject: Re: [PATCH v1 02/14] futex: Extend the FUTEX2 flags
+Subject: Re: [PATCH v1 00/14] futex: More futex2 bits
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -93,23 +92,27 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Jul 21, 2023, at 12:22, Peter Zijlstra wrote:
->   * futex_parse_waitv - Parse a waitv array from userspace
-> @@ -207,7 +207,12 @@ static int futex_parse_waitv(struct fute
->  		if ((aux.flags & ~FUTEX2_MASK) || aux.__reserved)
->  			return -EINVAL;
-> 
-> -		if (!(aux.flags & FUTEX2_32))
-> +		if (!IS_ENABLED(CONFIG_64BIT) || in_compat_syscall()) {
-> +			if ((aux.flags & FUTEX2_64) == FUTEX2_64)
-> +				return -EINVAL;
-> +		}
-> +
-> +		if ((aux.flags & FUTEX2_64) != FUTEX2_32)
->  			return -EINVAL;
+> Hi,
+>
+> New version of the futex2 patches. These are actually tested and appear to work
+> as expected.
+>
+> I'm hoping to get at least the first 3 patches merged such that Jens can base
+> the io_uring futex patches on them.
+>
+>
+> Changes since v0:
+>  - switched over to 'unsigned long' for values (Arnd)
+>  - unshare vmalloc_huge() (Willy)
+>  - added wait/requeue syscalls
+>  - fixed NUMA to support sparse nodemask
+>  - added FUTEX2_n vs FUTEX2_NUMA check to ensure
+>    the node_id fits in the futex
+>  - added selftests
+>  - fixed a ton of silly bugs
 
-This looks slightly confusing, how about defining another
-FUTEX2_SIZEMASK (or similar) macro to clarify that
-"aux.flags & FUTEX2_64" is a mask operation that can
-match the FUTEX2_{8,16,32,64} values?
+The changes look good to me, and the ABI should be fine without
+special compat handler now. I sent a couple of minor comments, but
+nothing important.
 
-       Arnd
+     Arnd
