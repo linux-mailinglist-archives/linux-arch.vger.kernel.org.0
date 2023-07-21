@@ -2,42 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520C875C6BC
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 14:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6226D75CA58
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 16:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjGUMRG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jul 2023 08:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        id S230496AbjGUOnF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jul 2023 10:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjGUMRF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 08:17:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD61D30C7;
-        Fri, 21 Jul 2023 05:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5PS40R3k/WtSAiwAETN7aeanCVo4MyLNg3uSnAAedI8=; b=TxOHpAHGpLJBGmu1TgPgQJ9djs
-        tkakXwliMQBgD/Q/rGnbZliHw3eGXj5g93St8GOHjJ31j01BaRvXkzFgqwWV6/zUoXNE3CqSeFIVc
-        DrPQSnG1YaZFPs5Nb3wNJK/c0X2PuwDaMB71nsTM5oUCXPdGeQsLtRArqGumtJ6/TCCnH2ei7M11o
-        T2TXNRrKfFsKkE1th0kXHKusb8xABSQQTw83t0cBa8z7DKfTA97nPw1lbOlXbjKMUedAPULZ4UNok
-        y5jsWckcBkqN8wfJ6yyelWqsMnJtUZRIxecbV2jCkSZhbnLuULmlp8MoHSFgKjdr8fsCIOG7+4J7W
-        GZhqVS6A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qMp3o-0016AW-Oi; Fri, 21 Jul 2023 12:16:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BF9E73001E7;
-        Fri, 21 Jul 2023 14:16:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8B4C0264557F8; Fri, 21 Jul 2023 14:16:38 +0200 (CEST)
-Date:   Fri, 21 Jul 2023 14:16:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     tglx@linutronix.de, axboe@kernel.dk
+        with ESMTP id S231855AbjGUOmz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 10:42:55 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E8C35AF
+        for <linux-arch@vger.kernel.org>; Fri, 21 Jul 2023 07:42:46 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-78706966220so19452939f.1
+        for <linux-arch@vger.kernel.org>; Fri, 21 Jul 2023 07:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689950565; x=1690555365;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UdDHMIe9cztVUm68exPMuhOaghi2gznh0/5nfFVFao4=;
+        b=Iw2r8lt3EXE/lGJI+Z+TgbWkqdCuKO2xgSx5o8bmML8JjgAavmXg1Gq6ZaHuWhxt45
+         VvliDNpZgJr2cdlOGgYFDaW7zgv8FWGcMq9otkJWFVQp9pI7WQ0HyDNWopuSJLb6jxXw
+         xpUVBg9uCjXXnH2nfZSMzTckgj36b70IRJf/qgnD5oFEZM3waIb36a7TrUulAzqKDre7
+         g6pEvkKU3M6o2M2XsBg7fXhCD63lSsArv+5t9CwTRqSv/HHmGPQTPDpWQsDfFt5s57E/
+         otFznxO9gm1N/9tGZ79U3SYpFrhoEHorvXTo3QPKtXwqwbEydF+2UHawVPZW+a69kW+p
+         /STQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689950565; x=1690555365;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdDHMIe9cztVUm68exPMuhOaghi2gznh0/5nfFVFao4=;
+        b=Q9pdZnkP6OS78wtI+f3D96Ko0nv1thOnunNNAW88aaVDVigUM3PDRvh5t85h0FNPwL
+         UAJpV5n1qss+uuMj6WT4Hu1N8y7C+MSEMVYFgy4rcnxqGvi1kaMRq+7k2/iIv31N0Zao
+         f0LLxs3pzTlavsSIt1VdJn8dWhs8aPmiznH++aSrOZwZlVsm+6PGzRl4T7ROWeqAJaJ3
+         JCVOrPhKrhhsqwFLQhfvvDu9+MiUCDTqGOTDneN+DCKGQGZ0dUgZCJcg+Xd7h6JC+1Nz
+         T+saTQFZvwd8y7BUXQhg0twSgSEunr6rM05QVUTfI34ctYU0RcSmvtLvMbtQfNoOl2d5
+         rSkg==
+X-Gm-Message-State: ABy/qLZQxf5eHKvrLvxUI0kbNZnVdZ7oyUw63k9JOHMSD6DL8xvW0dRm
+        ZGiaUADmYyx7992mW9ZF91D/fg==
+X-Google-Smtp-Source: APBJJlEExOyixeH70jR2MtHJXYkNWk5o6Fv6eRLxjUzamtH1I6IPD96oIUz9hnM/aNDVt+3ptMz7rg==
+X-Received: by 2002:a6b:b4d5:0:b0:788:2d78:813c with SMTP id d204-20020a6bb4d5000000b007882d78813cmr2070896iof.0.1689950565765;
+        Fri, 21 Jul 2023 07:42:45 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id y15-20020a5d94cf000000b00786cf14a8absm1134207ior.43.2023.07.21.07.42.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jul 2023 07:42:45 -0700 (PDT)
+Message-ID: <8ab771e5-a8a7-8588-7877-76c9658afcd3@kernel.dk>
+Date:   Fri, 21 Jul 2023 08:42:43 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 00/14] futex: More futex2 bits
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>, tglx@linutronix.de
 Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
         dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
         Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com,
@@ -45,63 +64,32 @@ Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         malteskarupke@web.de
-Subject: Re: [PATCH v1 11/14] futex: Implement FUTEX2_NUMA
-Message-ID: <20230721121638.GH3630545@hirez.programming.kicks-ass.net>
 References: <20230721102237.268073801@infradead.org>
- <20230721105744.434742902@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230721105744.434742902@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230721102237.268073801@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 12:22:48PM +0200, Peter Zijlstra wrote:
-> @@ -217,32 +259,55 @@ static u64 get_inode_sequence_number(str
->   *
->   * lock_page() might sleep, the caller should not hold a spinlock.
->   */
-> -int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
-> +int get_futex_key(void __user *uaddr, unsigned int flags, union futex_key *key,
->  		  enum futex_access rw)
->  {
->  	unsigned long address = (unsigned long)uaddr;
->  	struct mm_struct *mm = current->mm;
->  	struct page *page, *tail;
->  	struct address_space *mapping;
-> +	int node, err, size, ro = 0;
->  	bool fshared;
->  
->  	fshared = flags & FLAGS_SHARED;
-> +	size = futex_size(flags);
->  
->  	/*
->  	 * The futex address must be "naturally" aligned.
->  	 */
->  	key->both.offset = address % PAGE_SIZE;
-> +	if (unlikely((address % size) != 0))
->  		return -EINVAL;
+On 7/21/23 4:22?AM, Peter Zijlstra wrote:
+> Hi,
+> 
+> New version of the futex2 patches. These are actually tested and appear to work
+> as expected.
+> 
+> I'm hoping to get at least the first 3 patches merged such that Jens can base
+> the io_uring futex patches on them.
 
-This enforces u32 alignment for:
+First 4 now, as we'll need the validate patch as well!
 
-struct futex_numa_32 {
-	u32 val;
-	u32 node;
-};
+-- 
+Jens Axboe
 
-Or do we want to enfore u64 alignment for that?
-
->  	address -= key->both.offset;
->  
-> +	if (flags & FLAGS_NUMA)
-> +		size *= 2;
-> +
-> +	if (unlikely(!access_ok(uaddr, size)))
->  		return -EFAULT;
