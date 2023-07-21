@@ -2,127 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601A175D66D
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jul 2023 23:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3436D75D7FD
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Jul 2023 01:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjGUVYA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jul 2023 17:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S229640AbjGUX7Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jul 2023 19:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjGUVX7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 17:23:59 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E087430D0;
-        Fri, 21 Jul 2023 14:23:54 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 03BE53200A01;
-        Fri, 21 Jul 2023 17:23:52 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Jul 2023 17:23:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1689974632; x=1690061032; bh=BX
-        A5sL4xRNZhXccbqClwUqLOYCKhWLZB5FjhdMOfEyY=; b=KIWSyr1gDGjK5zOe64
-        CjDoz6RYdvcy0EBMoGa/JdfwjIzcqn5BmUC9VCIKCw7NxZMfzt4z2Sa84XokZDHh
-        D5UuaQEEeYlymRrPIp66kpzRRSIN/at++4LkuoNgOyR36Zhoc2rjzZ6KZwYlymge
-        0tEakJnvKGwlsyAYsg//PGS89t+lvztpDAo0kUyXnjMz+9ZC+0uLqc+K5RNwntKx
-        Gv4AtsdcWzrAu4+yHh6VG7qXSeDWQ6aUHOw9xXjD0B3LCrKYHsAEJxG7xDVfwk77
-        6c+ZATLarJtSVzeAZdXzWXe2gYcEAzdls5VstykuKCV2YIwUkjQZhYbH48/ar0VE
-        GnEg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1689974632; x=1690061032; bh=BXA5sL4xRNZhX
-        ccbqClwUqLOYCKhWLZB5FjhdMOfEyY=; b=vEJWu1BeTLrHTDMqWmtuHU4Q7AyYu
-        bd8BzeEIVML4QdPofZ/ZZS/RiGJ7LajTTSg3Jh4Btcxb8MpOjEvRkI+e6vsbr8LR
-        Xn04DY3Kw9A6lpnISSTN91IJNkl7vxl/pHY7Xpa1/ijV4Vd2dgRWUTO4yiBo6vBP
-        o2t8luG+lIf2+QaZyTrkrSqeE8ODIv4qfkSyUqYe7dXhj9pXGKhuWplSBI6tJX90
-        40jy6Am6cz1J5/XK8dCLFZ0vxqmM0bBY8wl1uSeV23QAX0b6xHvqVgGpKPjhuAX/
-        Ratl1Lx/lLyWcmFJUlA34do5XZDDiuieSs3trLcZWPLSwApDUc7KqmOfw==
-X-ME-Sender: <xms:Zve6ZALfqNq7Boo-zlWow6j4YQVVpwJ6n2VTG9_w2rHQkxzr1Jd1Ug>
-    <xme:Zve6ZALcEGyJrX1fMorzJpL7fm9KJ8iwG3jLymrlKgg_lNggQsEr33PceJbwBZswX
-    2zCuwhLa00g1l65kkc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedvgdduheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Zve6ZAvRD67NV8bRZceXBiW0I78r3rj81xwHdEjWA7cKSKBvI9rmxw>
-    <xmx:Zve6ZNZPk9cKLCJc-8FK0gGXw2E2jldMOWVP7ZSkdCx3-pJY0heFyg>
-    <xmx:Zve6ZHYG_4xReXGC1gpXGr2qv_yBjlzI8HI8RER7c8kgIqRlKH2psw>
-    <xmx:aPe6ZDowLks1ypP3hCXSITwNPyMclEPm4oa37yepuDYmsz4MUs7yQQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C7204B60089; Fri, 21 Jul 2023 17:23:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <02045e07-0f9a-49bf-b6ca-354cb67678f8@app.fastmail.com>
-In-Reply-To: <20230721185445.GS4253@hirez.programming.kicks-ass.net>
-References: <20230721102237.268073801@infradead.org>
- <20230721105744.022509272@infradead.org>
- <2a1f8ae6-ed2b-4fe8-85af-df64e9c84794@app.fastmail.com>
- <20230721185445.GS4253@hirez.programming.kicks-ass.net>
-Date:   Fri, 21 Jul 2023 23:23:27 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Peter Zijlstra" <peterz@infradead.org>
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Jens Axboe" <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Darren Hart" <dvhart@infradead.org>, dave@stgolabs.net,
-        andrealmeid@igalia.com,
-        "Andrew Morton" <akpm@linux-foundation.org>, urezki@gmail.com,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "Lorenzo Stoakes" <lstoakes@gmail.com>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, Linux-Arch <linux-arch@vger.kernel.org>,
-        malteskarupke@web.de
-Subject: Re: [PATCH v1 05/14] futex: Add sys_futex_wake()
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229533AbjGUX7X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 19:59:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CA630ED;
+        Fri, 21 Jul 2023 16:59:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCEF460DFD;
+        Fri, 21 Jul 2023 23:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F274C43397;
+        Fri, 21 Jul 2023 23:59:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689983961;
+        bh=nL7Uxf9LHyedJ5ptAy4FvNEgMCaUaf2n0tlV63dMa9k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RvnXTCVRk34PGdj+bQvssXz4LeOTC+DbWn8hWfk6WgWbWND9AtlpCfjopnv+euggV
+         vE8kYSRXU833jaRO2ZlxJl84gWNnom23X2yWT8z7pPD2isr9/cgLT/FiI0YyfHBR2p
+         NswU/R7uhIvd1bN1IOnsn1lR2/ymplpwRJORCDWP6s5EstIQ8QATgP5FiwDZC+bTXa
+         zjfC+yB1or+WAbbYrjtIFALfbB7s+sP2b60SaxjVSy9cWTNvPwqaEBLleB3iMNoUmB
+         fusZPNJxS0iDH1lHEf8HD+vhR1+3KbVEM0FhBiVGah/Ua0ghF+1SlR1GhDUy3RBfXJ
+         ViSBGV542tikg==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-51e566b1774so3080420a12.1;
+        Fri, 21 Jul 2023 16:59:21 -0700 (PDT)
+X-Gm-Message-State: ABy/qLaQ5cz1cjR660oKFFlr7E0qZhbuuUeZyZNgM71Nr+1TvS3ZbeBG
+        iu33SvEXEXwNYrorYvaGwxf8ts/cwzsRkNX3Ncw=
+X-Google-Smtp-Source: APBJJlHBERULY9uAI2Af2Xh5LWL+8JllED/iDuB/6zed6hakhaHaL7B3C2jZUryHRlWbwy9LE0TlZntWen33Js4NvTg=
+X-Received: by 2002:a50:fc16:0:b0:51e:5cab:feb9 with SMTP id
+ i22-20020a50fc16000000b0051e5cabfeb9mr2715190edr.33.1689983959307; Fri, 21
+ Jul 2023 16:59:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230721145121.1854104-1-guoren@kernel.org> <5e5be2d4-c563-6beb-b5f5-df47edeebc83@ghiti.fr>
+ <CAJF2gTQMAVUtC6_ftEwp=EeYR_O7yzfGYmxwrqcO6+hn2J32bA@mail.gmail.com> <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr>
+In-Reply-To: <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Jul 2023 19:59:07 -0400
+X-Gmail-Original-Message-ID: <CAJF2gTT8JV5f4Fm1F-XgfAhNWNXJquVW8-uCK-b4Qy0xztrGLA@mail.gmail.com>
+Message-ID: <CAJF2gTT8JV5f4Fm1F-XgfAhNWNXJquVW8-uCK-b4Qy0xztrGLA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: mm: Fixup spurious fault of kernel vaddr
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, falcon@tinylab.org,
+        bjorn@kernel.org, conor.dooley@microchip.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 21, 2023, at 20:54, Peter Zijlstra wrote:
-> On Fri, Jul 21, 2023 at 05:41:20PM +0200, Arnd Bergmann wrote:
->> On Fri, Jul 21, 2023, at 12:22, Peter Zijlstra wrote:
->> > --- a/kernel/sys_ni.c
->> > +++ b/kernel/sys_ni.c
->> > @@ -87,6 +87,7 @@ COND_SYSCALL_COMPAT(set_robust_list);
->> >  COND_SYSCALL(get_robust_list);
->> >  COND_SYSCALL_COMPAT(get_robust_list);
->> >  COND_SYSCALL(futex_waitv);
->> > +COND_SYSCALL(futex_wake);
->> >  COND_SYSCALL(kexec_load);
->> >  COND_SYSCALL_COMPAT(kexec_load);
->> >  COND_SYSCALL(init_module);
->> 
->> This is fine for the moment, but I wonder if we should start making
->> futex mandatory at some point. Right now, sparc32 with CONFIG_SMP
->> cannot support futex because of the lack of atomics in early
->> sparc processors, but sparc32 glibc actually requires futexes
->> and consequently only works on uniprocessor machines, on sparc64
->> compat mode, or on Leon3 with out of tree patches.
+On Fri, Jul 21, 2023 at 4:01=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> wro=
+te:
 >
-> PARISC is another 'fun' case.
+>
+> On 21/07/2023 18:08, Guo Ren wrote:
+> > On Fri, Jul 21, 2023 at 11:19=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr=
+> wrote:
+> >>
+> >> On 21/07/2023 16:51, guoren@kernel.org wrote:
+> >>> From: Guo Ren <guoren@linux.alibaba.com>
+> >>>
+> >>> RISC-V specification permits the caching of PTEs whose V (Valid)
+> >>> bit is clear. Operating systems must be written to cope with this
+> >>> possibility, but implementers are reminded that eagerly caching
+> >>> invalid PTEs will reduce performance by causing additional page
+> >>> faults.
+> >>>
+> >>> So we must keep vmalloc_fault for the spurious page faults of kernel
+> >>> virtual address from an OoO machine.
+> >>>
+> >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> >>> Signed-off-by: Guo Ren <guoren@kernel.org>
+> >>> ---
+> >>>    arch/riscv/mm/fault.c | 3 +--
+> >>>    1 file changed, 1 insertion(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> >>> index 85165fe438d8..f662c9eae7d4 100644
+> >>> --- a/arch/riscv/mm/fault.c
+> >>> +++ b/arch/riscv/mm/fault.c
+> >>> @@ -258,8 +258,7 @@ void handle_page_fault(struct pt_regs *regs)
+> >>>         * only copy the information from the master page table,
+> >>>         * nothing more.
+> >>>         */
+> >>> -     if ((!IS_ENABLED(CONFIG_MMU) || !IS_ENABLED(CONFIG_64BIT)) &&
+> >>> -         unlikely(addr >=3D VMALLOC_START && addr < VMALLOC_END)) {
+> >>> +     if (unlikely(addr >=3D TASK_SIZE)) {
+> >>>                vmalloc_fault(regs, code, addr);
+> >>>                return;
+> >>>        }
+> >>
+> >> Can you share what you are trying to fix here?
+> > We met a spurious page fault panic on an OoO machine.
+> >
+> > 1. The processor speculative execution brings the V=3D0 entries into th=
+e
+> > TLB in the kernel virtual address.
+> > 2. Linux kernel installs the kernel virtual address with the page, and =
+V=3D1
+> > 3. When kernel code access the kernel virtual address, it would raise
+> > a page fault as the V=3D0 entry in the tlb.
+> > 4. No vmalloc_fault, then panic.
+> >
+> >> I have a fix (that's currently running our CI) for commit 7d3332be011e
+> >> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") that
+> >> implements flush_cache_vmap() since we lost the vmalloc_fault.
+> > Could you share that patch?
+>
+>
+> Here we go:
+>
+>
+> Author: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Date:   Fri Jul 21 08:43:44 2023 +0000
+>
+>      riscv: Implement flush_cache_vmap()
+>
+>      The RISC-V kernel needs a sfence.vma after a page table
+> modification: we
+>      used to rely on the vmalloc fault handling to emit an sfence.vma, bu=
+t
+>      commit 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
+>      vmalloc/modules area") got rid of this path for 64-bit kernels, so
+> now we
+>      need to explicitly emit a sfence.vma in flush_cache_vmap().
+>
+>      Note that we don't need to implement flush_cache_vunmap() as the
+> generic
+>      code should emit a flush tlb after unmapping a vmalloc region.
+>
+>      Fixes: 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
+> vmalloc/modules area")
+>      Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>
+> diff --git a/arch/riscv/include/asm/cacheflush.h
+> b/arch/riscv/include/asm/cacheflush.h
+> index 8091b8bf4883..b93ffddf8a61 100644
+> --- a/arch/riscv/include/asm/cacheflush.h
+> +++ b/arch/riscv/include/asm/cacheflush.h
+> @@ -37,6 +37,10 @@ static inline void flush_dcache_page(struct page *page=
+)
+>   #define flush_icache_user_page(vma, pg, addr, len) \
+>          flush_icache_mm(vma->vm_mm, 0)
+>
+> +#ifdef CONFIG_64BIT
+> +#define flush_cache_vmap(start, end) flush_tlb_kernel_range(start, end)
+> +#endif
+I don't want that, and flush_tlb_kernel_range is flush_tlb_all. In
+addition, it would call IPI, which is a performance killer.
 
-I had to look up how that works, but as far as I can tell, the
-parisc code actually has a chance of working, as the userspace
-atomics go through the light-weight syscall that shares a hashed
-lock with the actual futex syscall. On sparc32 I think it's
-worse because userspace assumes that atomic instructions are
-supported while the kernel assumes they are not.
+What's the problem of spurious fault replay? It only costs a
+local_tlb_flush with vaddr.
 
-        Arnd
+> +
+>   #ifndef CONFIG_SMP
+>
+>   #define flush_icache_all() local_flush_icache_all()
+>
+>
+> Let me know if that works for you!
+>
+>
+> >
+> >
+
+--
+Best Regards
+ Guo Ren
