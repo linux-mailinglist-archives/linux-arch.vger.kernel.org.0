@@ -2,53 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3436D75D7FD
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Jul 2023 01:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6735A75D805
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Jul 2023 02:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjGUX7Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jul 2023 19:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S230347AbjGVAHK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jul 2023 20:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjGUX7X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 19:59:23 -0400
+        with ESMTP id S229533AbjGVAHI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 20:07:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CA630ED;
-        Fri, 21 Jul 2023 16:59:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CB912F;
+        Fri, 21 Jul 2023 17:07:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCEF460DFD;
-        Fri, 21 Jul 2023 23:59:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F274C43397;
-        Fri, 21 Jul 2023 23:59:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 276B561DB5;
+        Sat, 22 Jul 2023 00:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C929C433CB;
+        Sat, 22 Jul 2023 00:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689983961;
-        bh=nL7Uxf9LHyedJ5ptAy4FvNEgMCaUaf2n0tlV63dMa9k=;
+        s=k20201202; t=1689984426;
+        bh=2aLCwDO4RNMyvWiQ7Gf0WYxWlcoqijS/87EfNa8tSV0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RvnXTCVRk34PGdj+bQvssXz4LeOTC+DbWn8hWfk6WgWbWND9AtlpCfjopnv+euggV
-         vE8kYSRXU833jaRO2ZlxJl84gWNnom23X2yWT8z7pPD2isr9/cgLT/FiI0YyfHBR2p
-         NswU/R7uhIvd1bN1IOnsn1lR2/ymplpwRJORCDWP6s5EstIQ8QATgP5FiwDZC+bTXa
-         zjfC+yB1or+WAbbYrjtIFALfbB7s+sP2b60SaxjVSy9cWTNvPwqaEBLleB3iMNoUmB
-         fusZPNJxS0iDH1lHEf8HD+vhR1+3KbVEM0FhBiVGah/Ua0ghF+1SlR1GhDUy3RBfXJ
-         ViSBGV542tikg==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-51e566b1774so3080420a12.1;
-        Fri, 21 Jul 2023 16:59:21 -0700 (PDT)
-X-Gm-Message-State: ABy/qLaQ5cz1cjR660oKFFlr7E0qZhbuuUeZyZNgM71Nr+1TvS3ZbeBG
-        iu33SvEXEXwNYrorYvaGwxf8ts/cwzsRkNX3Ncw=
-X-Google-Smtp-Source: APBJJlHBERULY9uAI2Af2Xh5LWL+8JllED/iDuB/6zed6hakhaHaL7B3C2jZUryHRlWbwy9LE0TlZntWen33Js4NvTg=
-X-Received: by 2002:a50:fc16:0:b0:51e:5cab:feb9 with SMTP id
- i22-20020a50fc16000000b0051e5cabfeb9mr2715190edr.33.1689983959307; Fri, 21
- Jul 2023 16:59:19 -0700 (PDT)
+        b=sytF87HZUS79ob+llm+N9vmsbE1uo+OoabhgXAc0wMfW5sroqffqiKJp998P7YirM
+         MqP3GpyU5oVw+zkx+T9Z8QOuv0jJVDvevFs/7CfA9DMWB5EEbL13xWYr92SQjnfOI7
+         MELetoicsrlAXGm3PpNoIq0XMFdRXlmMJCooOywt+q9SqEkBB8a7NdeOwEJ37tcudV
+         Eiq5EwU4VMvnNoQXaUJa2wuMgerZ6u3uZe531Wzd3MWD6xLKK5zDmSTGsOepyDT855
+         rx5B+YNdmMpztelTiV9I7NLP5KR13vNoHoRwoWKOzIy3cOnSJ0N1nvHrNT8WXvCR+Z
+         FCdxC9/1rhgxA==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-521dc8ae899so2927436a12.3;
+        Fri, 21 Jul 2023 17:07:06 -0700 (PDT)
+X-Gm-Message-State: ABy/qLYI2cGd5e+qv/5v//giIaVKO9uq7Gk6wixK0FM0psMM4VxwAE+N
+        XDNpAfBylp93GRI228FmniTRNZWLHFmeLMirspQ=
+X-Google-Smtp-Source: APBJJlGcl9QezTiSJ9T9tJT9wWdf04lQ1BB1CWTh4SzgFKovP1Pgqgko53wXBujeXOHWsKdTLL5xW76oF812EC/743c=
+X-Received: by 2002:aa7:d991:0:b0:521:d83e:8db2 with SMTP id
+ u17-20020aa7d991000000b00521d83e8db2mr2589897eds.39.1689984424762; Fri, 21
+ Jul 2023 17:07:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230721145121.1854104-1-guoren@kernel.org> <5e5be2d4-c563-6beb-b5f5-df47edeebc83@ghiti.fr>
- <CAJF2gTQMAVUtC6_ftEwp=EeYR_O7yzfGYmxwrqcO6+hn2J32bA@mail.gmail.com> <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr>
-In-Reply-To: <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr>
+References: <20230716152033.3713581-1-guoren@kernel.org> <bb296a8e-4f84-f45d-8f46-5acfa73022d9@ghiti.fr>
+In-Reply-To: <bb296a8e-4f84-f45d-8f46-5acfa73022d9@ghiti.fr>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Jul 2023 19:59:07 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTT8JV5f4Fm1F-XgfAhNWNXJquVW8-uCK-b4Qy0xztrGLA@mail.gmail.com>
-Message-ID: <CAJF2gTT8JV5f4Fm1F-XgfAhNWNXJquVW8-uCK-b4Qy0xztrGLA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: mm: Fixup spurious fault of kernel vaddr
+Date:   Fri, 21 Jul 2023 20:06:53 -0400
+X-Gmail-Original-Message-ID: <CAJF2gTTBbHDr4yD=aeof_h1WM6b_CD-yJcs6R5g=jt4-NdAR8w@mail.gmail.com>
+Message-ID: <CAJF2gTTBbHDr4yD=aeof_h1WM6b_CD-yJcs6R5g=jt4-NdAR8w@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Add HAVE_IOREMAP_PROT support
 To:     Alexandre Ghiti <alex@ghiti.fr>
 Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, falcon@tinylab.org,
         bjorn@kernel.org, conor.dooley@microchip.com,
@@ -66,121 +65,112 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 4:01=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> wro=
+On Mon, Jul 17, 2023 at 5:07=E2=80=AFAM Alexandre Ghiti <alex@ghiti.fr> wro=
 te:
 >
+> Hi Guo,
 >
-> On 21/07/2023 18:08, Guo Ren wrote:
-> > On Fri, Jul 21, 2023 at 11:19=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr=
-> wrote:
-> >>
-> >> On 21/07/2023 16:51, guoren@kernel.org wrote:
-> >>> From: Guo Ren <guoren@linux.alibaba.com>
-> >>>
-> >>> RISC-V specification permits the caching of PTEs whose V (Valid)
-> >>> bit is clear. Operating systems must be written to cope with this
-> >>> possibility, but implementers are reminded that eagerly caching
-> >>> invalid PTEs will reduce performance by causing additional page
-> >>> faults.
-> >>>
-> >>> So we must keep vmalloc_fault for the spurious page faults of kernel
-> >>> virtual address from an OoO machine.
-> >>>
-> >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> >>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> >>> ---
-> >>>    arch/riscv/mm/fault.c | 3 +--
-> >>>    1 file changed, 1 insertion(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> >>> index 85165fe438d8..f662c9eae7d4 100644
-> >>> --- a/arch/riscv/mm/fault.c
-> >>> +++ b/arch/riscv/mm/fault.c
-> >>> @@ -258,8 +258,7 @@ void handle_page_fault(struct pt_regs *regs)
-> >>>         * only copy the information from the master page table,
-> >>>         * nothing more.
-> >>>         */
-> >>> -     if ((!IS_ENABLED(CONFIG_MMU) || !IS_ENABLED(CONFIG_64BIT)) &&
-> >>> -         unlikely(addr >=3D VMALLOC_START && addr < VMALLOC_END)) {
-> >>> +     if (unlikely(addr >=3D TASK_SIZE)) {
-> >>>                vmalloc_fault(regs, code, addr);
-> >>>                return;
-> >>>        }
-> >>
-> >> Can you share what you are trying to fix here?
-> > We met a spurious page fault panic on an OoO machine.
+> On 16/07/2023 17:20, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > 1. The processor speculative execution brings the V=3D0 entries into th=
-e
-> > TLB in the kernel virtual address.
-> > 2. Linux kernel installs the kernel virtual address with the page, and =
-V=3D1
-> > 3. When kernel code access the kernel virtual address, it would raise
-> > a page fault as the V=3D0 entry in the tlb.
-> > 4. No vmalloc_fault, then panic.
-> >
-> >> I have a fix (that's currently running our CI) for commit 7d3332be011e
-> >> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") that
-> >> implements flush_cache_vmap() since we lost the vmalloc_fault.
-> > Could you share that patch?
+> > Add pte_pgprot macro, then riscv could have HAVE_IOREMAP_PROT,
+> > which will enable generic_access_phys() code, it is useful for
+> > debug, eg, gdb.
 >
 >
-> Here we go:
->
->
-> Author: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Date:   Fri Jul 21 08:43:44 2023 +0000
->
->      riscv: Implement flush_cache_vmap()
->
->      The RISC-V kernel needs a sfence.vma after a page table
-> modification: we
->      used to rely on the vmalloc fault handling to emit an sfence.vma, bu=
-t
->      commit 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
->      vmalloc/modules area") got rid of this path for 64-bit kernels, so
-> now we
->      need to explicitly emit a sfence.vma in flush_cache_vmap().
->
->      Note that we don't need to implement flush_cache_vunmap() as the
-> generic
->      code should emit a flush tlb after unmapping a vmalloc region.
->
->      Fixes: 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
-> vmalloc/modules area")
->      Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
-> diff --git a/arch/riscv/include/asm/cacheflush.h
-> b/arch/riscv/include/asm/cacheflush.h
-> index 8091b8bf4883..b93ffddf8a61 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -37,6 +37,10 @@ static inline void flush_dcache_page(struct page *page=
-)
->   #define flush_icache_user_page(vma, pg, addr, len) \
->          flush_icache_mm(vma->vm_mm, 0)
->
-> +#ifdef CONFIG_64BIT
-> +#define flush_cache_vmap(start, end) flush_tlb_kernel_range(start, end)
-> +#endif
-I don't want that, and flush_tlb_kernel_range is flush_tlb_all. In
-addition, it would call IPI, which is a performance killer.
+> I don't understand, we already have the generic ioremap_prot()
+> implementation since we select GENERIC_IOREMAP: shouldn't
+> HAVE_IOREMAP_PROT imply that we have our own implementation?
+They are different! See arch/arm64/Kconfig, which selects all of them.
 
-What's the problem of spurious fault replay? It only costs a
-local_tlb_flush with vaddr.
+HAVE_IOREMAP_PROT would enable your drivers/char/mem.c
+generic_access_phys of mmap_mem_ops.
 
-> +
->   #ifndef CONFIG_SMP
->
->   #define flush_icache_all() local_flush_icache_all()
->
->
-> Let me know if that works for you!
->
->
-> >
-> >
+It's a small function enabling.
 
---
+>
+> Thanks,
+>
+> Alex
+>
+>
+> > Because generic_access_phys() would call ioremap_prot()->
+> > pgprot_nx() to disable excutable attribute, add definition
+> > of pgprot_nx() for riscv.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >   .../features/vm/ioremap_prot/arch-support.txt     |  2 +-
+> >   arch/riscv/Kconfig                                |  1 +
+> >   arch/riscv/include/asm/pgtable.h                  | 15 ++++++++++++++=
++
+> >   3 files changed, 17 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/features/vm/ioremap_prot/arch-support.txt b/=
+Documentation/features/vm/ioremap_prot/arch-support.txt
+> > index a24149e59d73..ea8c8a361455 100644
+> > --- a/Documentation/features/vm/ioremap_prot/arch-support.txt
+> > +++ b/Documentation/features/vm/ioremap_prot/arch-support.txt
+> > @@ -21,7 +21,7 @@
+> >       |    openrisc: | TODO |
+> >       |      parisc: | TODO |
+> >       |     powerpc: |  ok  |
+> > -    |       riscv: | TODO |
+> > +    |       riscv: |  ok  |
+> >       |        s390: |  ok  |
+> >       |          sh: |  ok  |
+> >       |       sparc: | TODO |
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 4c07b9189c86..15900fa20797 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -117,6 +117,7 @@ config RISCV
+> >       select HAVE_FUNCTION_ERROR_INJECTION
+> >       select HAVE_GCC_PLUGINS
+> >       select HAVE_GENERIC_VDSO if MMU && 64BIT
+> > +     select HAVE_IOREMAP_PROT
+> >       select HAVE_IRQ_TIME_ACCOUNTING
+> >       select HAVE_KPROBES if !XIP_KERNEL
+> >       select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/=
+pgtable.h
+> > index 75970ee2bda2..c9552a161f90 100644
+> > --- a/arch/riscv/include/asm/pgtable.h
+> > +++ b/arch/riscv/include/asm/pgtable.h
+> > @@ -415,6 +415,11 @@ static inline pte_t pte_mkhuge(pte_t pte)
+> >       return pte;
+> >   }
+> >
+> > +static inline pgprot_t pte_pgprot(pte_t pte)
+> > +{
+> > +     return __pgprot(pte_val(pte) & ~_PAGE_PFN_MASK);
+> > +}
+> > +
+> >   #ifdef CONFIG_NUMA_BALANCING
+> >   /*
+> >    * See the comment in include/asm-generic/pgtable.h
+> > @@ -573,6 +578,16 @@ static inline int ptep_clear_flush_young(struct vm=
+_area_struct *vma,
+> >       return ptep_test_and_clear_young(vma, address, ptep);
+> >   }
+> >
+> > +#define pgprot_nx pgprot_nx
+> > +static inline pgprot_t pgprot_nx(pgprot_t _prot)
+> > +{
+> > +     unsigned long prot =3D pgprot_val(_prot);
+> > +
+> > +     prot &=3D ~_PAGE_EXEC;
+> > +
+> > +     return __pgprot(prot);
+> > +}
+> > +
+> >   #define pgprot_noncached pgprot_noncached
+> >   static inline pgprot_t pgprot_noncached(pgprot_t _prot)
+> >   {
+
+
+
+--=20
 Best Regards
  Guo Ren
