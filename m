@@ -2,213 +2,250 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0488775D8B7
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Jul 2023 03:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D47775DD61
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Jul 2023 18:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjGVB35 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jul 2023 21:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S229509AbjGVQJ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 22 Jul 2023 12:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbjGVB3y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jul 2023 21:29:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F94A3C01;
-        Fri, 21 Jul 2023 18:29:52 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36M1RjGa015517;
-        Sat, 22 Jul 2023 01:29:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=YvapDlgEUzhYWt9kSo8gs1KQpSfobdwO/63wrHbPhWU=;
- b=csljY8xGK+xqVZd9kL9pb1hsEQS9UU02KLfZ7LjBQU+8xp/QkTeyqMVgLT+RfJgsSmbv
- NNq7U4CqUNqBoiyV8+ovGLlM6surnstAdWBmRT0V0TbP5KfGmx8NsOeauf7pnck7gspB
- 0rtpquf2QMwDDfh0AoN+qWLHTHiLii7bh8Ux5X7qOWTzrlybTOrt8dtRr0Z2FYQT+pk7
- ddMXf2SbkElQaVWC8NZBvdE2WO8DLFjSTc58XYAm42QMqemfByKfagPNqDmE9GHAXZiP
- v91Uy/FGSfwbG95fDDGqjhtrSk+BVzMa3LtWhcnrd+Njaxa1d9vuykDVxh13I4GkmS5B zg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ryfyf2sqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Jul 2023 01:29:30 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36M1TLt0013205
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Jul 2023 01:29:21 GMT
-Received: from [10.110.24.156] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 21 Jul
- 2023 18:29:19 -0700
-Message-ID: <ed76cf3a-cf53-03ae-ef64-0f94ecb51242@quicinc.com>
-Date:   Fri, 21 Jul 2023 18:29:19 -0700
+        with ESMTP id S229505AbjGVQJ2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Jul 2023 12:09:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055F21FDF;
+        Sat, 22 Jul 2023 09:09:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8807360B9E;
+        Sat, 22 Jul 2023 16:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E104AC433CA;
+        Sat, 22 Jul 2023 16:09:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690042163;
+        bh=XlqnUjAAGQf18Gzjf58M0ZJvZ/hG9R61k0ineAbK0yg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z91QhgNtkHOANe90yfLX/U5hOUMAiNke/OL9/j3Ht5B+07iM3DUhz+gU4C9IK1oZX
+         0rtJwRflazO3Amf7alGhySqNvdMl71k+O38CLyVXJmdCq3cnmnejzrrPuTPE76mHDz
+         HrdBYObfkXMjvsaPbS3C0yl9rL70+AfOLxBavegUKVqmgvvLJj/StAtjOoxigV9z45
+         c5UwUGBFRbEUFUFcI33UlkibL4uSWi1kkoBdPlMjgvkQXeez/3pcusQV3OOw9GbMAM
+         pdNO4g4rzDguYM9rea01xtvlRUM/PGqd0QkK/iI/7tIQuKZIHJCc4dvScW5IprzgYk
+         64lCFMkJ5hvqA==
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3a1ebb85f99so2233347b6e.2;
+        Sat, 22 Jul 2023 09:09:23 -0700 (PDT)
+X-Gm-Message-State: ABy/qLaF6fVt8kGdu5yZne94i4KPH+78n1M2sH5P/Jm17wRm9pqrE4p6
+        z2FYg7FszbWrFYbhs0o1n+wDaadHraq14BQ5E4A=
+X-Google-Smtp-Source: APBJJlHPpDv+VZ/4EYRfVhQzoIs3NEngzOUyMzM44psYtjM7fttRbAl0kW4RVp/GLWrbeOmB94cCdQ6/mjWWf/CvBmo=
+X-Received: by 2002:a05:6808:7c5:b0:3a0:4ff2:340 with SMTP id
+ f5-20020a05680807c500b003a04ff20340mr5280903oij.57.1690042163139; Sat, 22 Jul
+ 2023 09:09:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/9] virt: geniezone: Add GenieZone hypervisor support
-Content-Language: en-US
-To:     =?UTF-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        =?UTF-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
-        <Yingshiuan.Pan@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        =?UTF-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
-        <Ze-yu.Wang@mediatek.com>, "will@kernel.org" <will@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        =?UTF-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        =?UTF-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
-        <PeiLun.Suei@mediatek.com>,
-        =?UTF-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
-        <Liju-clr.Chen@mediatek.com>,
-        =?UTF-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
-        <jades.shih@mediatek.com>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "dbrazdil@google.com" <dbrazdil@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
-        <shawn.hsiao@mediatek.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        =?UTF-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
-        <ivan.tseng@mediatek.com>,
-        =?UTF-8?B?Q2hpLXNoZW4gWWVoICjokYnlpYfou5Ip?= 
-        <Chi-shen.Yeh@mediatek.com>
-References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
- <20230609085214.31071-3-yi-de.wu@mediatek.com>
- <2fe0c7f9-55fc-ae63-3631-8526a0212ccd@linaro.org>
- <ea531ba80db67cccb03ea173e714fe868f869e91.camel@mediatek.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <ea531ba80db67cccb03ea173e714fe868f869e91.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KmU9ARhqeji_KEvAO7GLvlFq471SDz7_
-X-Proofpoint-ORIG-GUID: KmU9ARhqeji_KEvAO7GLvlFq471SDz7_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-21_12,2023-07-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- mlxscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 clxscore=1011 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307220011
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220109181529.351420-1-masahiroy@kernel.org> <20220109181529.351420-3-masahiroy@kernel.org>
+ <YdwZe9DHJZUaa6aO@buildd.core.avm.de> <20230623144544.GA24871@lxhi-065> <20230719190902.GA11207@lxhi-064.domain>
+In-Reply-To: <20230719190902.GA11207@lxhi-064.domain>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 23 Jul 2023 01:08:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQhn28Wbb97+U_3n0EwoKnonjFoY3OnKcE7aqnSgRc4ow@mail.gmail.com>
+Message-ID: <CAK7LNAQhn28Wbb97+U_3n0EwoKnonjFoY3OnKcE7aqnSgRc4ow@mail.gmail.com>
+Subject: Re: [PATCH 3/5] kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Nicolas Schier <n.schier@avm.de>,
+        SzuWei Lin <szuweilin@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Matthias.Thomae@de.bosch.com,
+        yyankovskyi@de.adit-jv.com, Dirk.Behme@de.bosch.com,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/21/2023 1:46 AM, Yi-De Wu (吳一德) wrote:
-> On Fri, 2023-06-09 at 17:22 +0200, Krzysztof Kozlowski wrote:
->>   	
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>   On 09/06/2023 10:52, Yi-De Wu wrote:
->>> From: "Yingshiuan Pan" <yingshiuan.pan@mediatek.com>
->>>
->>> GenieZone is MediaTek hypervisor solution, and it is running in EL2
->>> stand alone as a type-I hypervisor. This patch exports a set of
->> ioctl
->>> interfaces for userspace VMM (e.g., crosvm) to operate guest VMs
->>> lifecycle (creation and destroy) on GenieZone.
->>
->> ...
->>
->>> +static int gzvm_drv_probe(void)
->>> +{
->>> +int ret;
->>> +
->>> +if (gzvm_arch_probe() != 0) {
->>> +pr_err("Not found available conduit\n");
->>> +return -ENODEV;
->>> +}
->>> +
->>> +ret = misc_register(&gzvm_dev);
->>> +if (ret)
->>> +return ret;
->>> +gzvm_debug_dev = &gzvm_dev;
->>> +
->>> +return 0;
->>> +}
->>> +
->>> +static int gzvm_drv_remove(void)
->>> +{
->>> +destroy_all_vm();
->>> +misc_deregister(&gzvm_dev);
->>> +return 0;
->>> +}
->>> +
->>> +static int gzvm_dev_init(void)
->>> +{
->>> +return gzvm_drv_probe();
->>
->> So for every system and architecture you want to: probe, run some SMC
->> and then print error that it is not othe system you wanted.
->>
->> I don't think this is what we want. You basically pollute all of
->> other
->> users just to have your hypervisor guest additions...
->>
->>
->> Best regards,
->> Krzysztof
-> 
-> 
-> hi Krzysztof,
-> 
-> After some back-and-forth discussion[1][2][3][4][5], we'd like to bring
-> bakc all the attension of related issues in this thread.
-> 
-> We're going to restore the dt solution on our next version, which means
-> we would maintain a simple dt for discovering the hypervisor node and
-> probe for the status of the device when needed.
+On Thu, Jul 20, 2023 at 4:09=E2=80=AFAM Eugeniu Rosca <erosca@de.adit-jv.co=
+m> wrote:
+>
+> Hello Yamada-san,
+>
+> On Fri, Jun 23, 2023 at 04:45:44PM +0200, Eugeniu Rosca wrote:
+> > Hello Yamada-san,
+> > Hello Nicolas,
+> > Cc: SzuWei Lin (committer of the patch in AOSP [1])
+> > Cc: Kbuild
+> >
+> > On Mon, Jan 10, 2022 at 12:33:15PM +0100, Nicolas Schier wrote:
+> > > On Mon, Jan 10, 2022 at 03:15:27AM +0900, Masahiro Yamada wrote:
+> > > > GZIP-compressed files end with 4 byte data that represents the size
+> > > > of the original input. The decompressors (the self-extracting kerne=
+l)
+> > > > exploit it to know the vmlinux size beforehand. To mimic the GZIP's
+> > > > trailer, Kbuild provides cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}.
+> > > > Unfortunately these macros are used everywhere despite the appended
+> > > > size data is only useful for the decompressors.
+> > > >
+> > > > There is no guarantee that such hand-crafted trailers are safely ig=
+nored.
+> > > > In fact, the kernel refuses compressed initramdisks with the garbag=
+e
+> > > > data. That is why usr/Makefile overrides size_append to make it no-=
+op.
+> > > >
+> > > > To limit the use of such broken compressed files, this commit renam=
+es
+> > > > the existing macros as follows:
+> > > >
+> > > >   cmd_bzip2   --> cmd_bzip2_with_size
+> > > >   cmd_lzma    --> cmd_lzma_with_size
+> > > >   cmd_lzo     --> cmd_lzo_with_size
+> > > >   cmd_lz4     --> cmd_lz4_with_size
+> > > >   cmd_xzkern  --> cmd_xzkern_with_size
+> > > >   cmd_zstd22  --> cmd_zstd22_with_size
+> > > >
+> > > > To keep the decompressors working, I updated the following Makefile=
+s
+> > > > accordingly:
+> > > >
+> > > >   arch/arm/boot/compressed/Makefile
+> > > >   arch/h8300/boot/compressed/Makefile
+> > > >   arch/mips/boot/compressed/Makefile
+> > > >   arch/parisc/boot/compressed/Makefile
+> > > >   arch/s390/boot/compressed/Makefile
+> > > >   arch/sh/boot/compressed/Makefile
+> > > >   arch/x86/boot/compressed/Makefile
+> > > >
+> > > > I reused the current macro names for the normal usecases; they prod=
+uce
+> > > > the compressed data in the proper format.
+> > > >
+> > > > I did not touch the following:
+> > > >
+> > > >   arch/arc/boot/Makefile
+> > > >   arch/arm64/boot/Makefile
+> > > >   arch/csky/boot/Makefile
+> > > >   arch/mips/boot/Makefile
+> > > >   arch/riscv/boot/Makefile
+> > > >   arch/sh/boot/Makefile
+> > > >   kernel/Makefile
+> > > >
+> > > > This means those Makefiles will stop appending the size data.
+> > > >
+> > > > I dropped the 'override size_append' hack from usr/Makefile.
+> > > >
+> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > ---
+> > >
+> > > Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> >
+> > If you don't mind, I would like to report another instance of
+> > "/bin/sh: Argument list too long" while building some out-of-tree *ko
+> > in a number of downstream v5.15.78+ kernels containing [1].
+> >
+> > For some time now, we've been living with ugly hacks to overcome it.
+> >
+> > Fortunately, recent git bisecting efforts apparently reveal that
+> > current v5.17-rc1 commit (and its backports in downstream) look to
+> > act as the culprit (confirmed on several host machines). So, I
+> > started to have some hopes of a long-term solution and hence
+> > sharing the findings as a first step.
+> >
+> > I am not entirely clear how to properly trace this behavior, since no
+> > amount of "make V=3D1/V=3D2" uncovers more details. Purely by accident,=
+ I
+> > looked into the top/htop output (while running the repro) and
+> > noticed several processes doing:
+> >
+> > /bin/sh -c dec_size=3D0; for F in <humongous list of filenames>; do \
+> >   fsize=3D$(sh /abs/path/to/scripts/file-size.sh $F); \
+> >   dec_size=3D$(expr $dec_size + $fsize); done; printf "%08x\n" $dec_siz=
+e \
+> >   | sed 's/\(..\)/\1 /g' | { read ch0 ch1 ch2 ch3; for ch in \
+> >   $ch3 $ch2 $ch1 $ch0; do printf '%s%03o' '\\' $((0x$ch)); done; }
+> >
+> > As it was the case in the recent report [2], the above command seems
+> > to require/assume generous amount of space for the shell arguments.
+> >
+> > I still haven't compared the exact traces before and after this commit,
+> > to quantify by how much the shell argument list is increased (TODO).
+> >
+> > Another aspect is that current commit seems to introduce the
+> > regression in a multi-threaded make only. The issue is apparently
+> > masked by 'make -j1' (TBC), which adds another level of complexity.
+> >
+> > Unfortunately, the build use-case is highly tailored to downstream
+> > and is not repeatable against vanilla out of the box.
+> >
+> > I will continue to increase my understanding behind what's happening.
+> > In case there are already any suggestions, would appreciate those.
+>
+> JFYI, we've got confirmation from Qualcomm Customer Support interface
+> that reverting [1] heals the issue on QC end as well. However, it looks
+> like none of us has clear understanding how to properly
+> troubleshoot/trace/compare the behavior before and after the commit.
+>
+> I would happily follow any suggestions.
+>
+> > [1] https://android.googlesource.com/kernel/common/+/bc6d3d83539512
+> >     ("UPSTREAM: kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}")
+> >
+> > [2] https://lore.kernel.org/linux-kbuild/20230616194505.GA27753@lxhi-06=
+5/
+>
+> --
+> Best regards,
+> Eugeniu Rosca
 
-.. see the comment below.
-
-> 
-> The reasons are listed below for the record.
-> - Although dt is for hardware, it's difficult to discover a specific
-> hypervisor without probing on all subsystem and thus pollute all of
-> other users[4] as a consequence.
-
-I don't understand. Patches will help here to understand what exactly 
-you are referring here.
-
-> - The GenieZone hypervisor could be considered as a vendor model to
-> assist platform virtualization whose implementation is independent from
-> Linuxism.
-
-Then why we are adding this hypervisor support in Linux?
-
-> 
-> Please let us if there're any other concerns.
-> 
-> Reference
-> 
-> [1]
-> https://android-review.googlesource.com/c/kernel/common/+/2447547/comment/495502f3_bb52344b/
-
-Why we look at the ACK patches here on the LKML? Please submit them here 
-if you would like to discuss and review?
-
----Trilok Soni
 
 
+
+
+The only suspicious code I found in the Android common kernel
+is the following line in scripts/Makefile.lib
+
+
+
+quiet_cmd_zstd =3D ZSTD    $@
+      cmd_zstd =3D { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } >=
+ $@
+
+
+
+
+
+
+
+If you see the corresponding line in the mainline kernel,
+it looks as follows:
+
+
+quiet_cmd_zstd =3D ZSTD    $@
+      cmd_zstd =3D cat $(real-prereqs) | $(ZSTD) -19 > $@
+
+
+
+
+
+
+
+
+7ce7e984ab2b218d6e92d5165629022fe2daf9ee depends on
+64d8aaa4ef388b22372de4dc9ce3b9b3e5f45b6c
+
+
+But, Android common kernel back-ported only
+7ce7e984ab2b218d6e92d5165629022fe2daf9ee
+
+
+
+Please backport 64d8aaa4ef388b22372de4dc9ce3b9b3e5f45b6c
+and see if the problem goes away.
+
+
+--=20
+Best Regards
+Masahiro Yamada
