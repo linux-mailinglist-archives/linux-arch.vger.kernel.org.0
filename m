@@ -2,236 +2,200 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A0E760866
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jul 2023 06:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EC57608BB
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jul 2023 06:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbjGYE0i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jul 2023 00:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S231714AbjGYElv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jul 2023 00:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbjGYEY7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jul 2023 00:24:59 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AE83A9E;
-        Mon, 24 Jul 2023 21:22:13 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-c5f98fc4237so4297297276.2;
-        Mon, 24 Jul 2023 21:22:13 -0700 (PDT)
+        with ESMTP id S231712AbjGYElu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jul 2023 00:41:50 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7391BC3
+        for <linux-arch@vger.kernel.org>; Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d0b597e7ac1so2729923276.1
+        for <linux-arch@vger.kernel.org>; Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690258933; x=1690863733;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ge3Da1dLlbVImV5jdD/HZRx7aISFPvIvfEGvqleo2SA=;
-        b=pXw/al5n2PZt63hoen8XWII6rt0WFX5sgjX7qQn8gv0HWFLKnKq3bevtOzYUASugG2
-         pCxGKJOC5ggVyKCT1VDrwsaEi6MlyxwOLjAg/45BvYDi6yzh+q0BBiRQroW3z59gIlxT
-         qmaJpZ1xyAeP6+U8sI1TI5+kmnURZAb3iR8avL4fKbvg/gsoUc7EkqlV+0gnf4rSHbHI
-         2YWk0HYiOFW33a4FYfPo9WrS1QN1IRD+XWbKqzPIeVg52ry9QdQcyg/270EcS7s+RywF
-         +5wAnQbinAMNk/Lv6GIEnBeoT41AhvsJSWE+pPOymAwrKRfCNfM+KV2MhemhV91wxD/d
-         2Dxw==
+        d=google.com; s=20221208; t=1690260106; x=1690864906;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4tFc7lI8l/TAp6N4SH/RnjHMrhDjcjpOS0NvhRjK3tI=;
+        b=syg9IyMH/gqJY1k4LT3S6JMx0fSLcgE37Cs+8KWCUO35fKCYg0MuLIIi0nsu37jtyV
+         JWnNbNndjflxoqEknhV3drMoPO1rLP5Mf2NwuEGG3uNqc6WCc3lC70F16ZnEeLC+MDXA
+         tlBtkvCExRePxNsWSrYSlIqtWo9fJaFXM7OzUrScUdzQ6XIpjZwJMknKg/XaSKKfA+Pp
+         NHjPm93xL9xpQDR+q+3gjlysNDu5FD2n2xMli6SN590GUy6WkS3ghg4fMC/PcVORHv0z
+         7pZwaHoSCWcs0DC0U/7aDMkjw3lDyZjRkGaSMnnCoKZ6Eh2nJ1AJW7AcIEll2MImoPAy
+         2Dhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690258933; x=1690863733;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ge3Da1dLlbVImV5jdD/HZRx7aISFPvIvfEGvqleo2SA=;
-        b=ZJgwjojMFrUkhqVdZv5s6naEd7LJxtcud+29xqko+pUIRUCHxx2WB8XNwxY5M4jBBm
-         7C3cL//Vg1v8aAiJJhKZ1gco4myuApZHjVm2D9I35/T8rmcSJpYt7/1wNSXjLg2+7qau
-         8kj8tbuGnDmh2g/LJ3h8ZtpC49dqBGXE/kw0DCzR5c3VRAPpQR4MleavnhGix6frDt+G
-         61qagQ86qHRiiMhK8upIWtrrC0pp/o76QwDfYWrN7mfwajq9CD5i1PD2t/NBsIlsFqvj
-         9XqJAFXpMbRQ/0wLY6zXLUbWzkoqZFWB25vU3bzcUSgW0GgsOOzPcagmvqv4i2YeCbKI
-         c7jg==
-X-Gm-Message-State: ABy/qLYhKGt3PY1+38YOfvAqmU0WFrUr6DTXIqBs4DfHWWGBF2bYizH8
-        maTv8RpLoR6xo+VpMtLYPuQ=
-X-Google-Smtp-Source: APBJJlGduGUsku2y340xQfxyEpNx6ubFn5qWJpFMniISafhH3MH0EHub+91fIwUA2U73/kY7XLKlHQ==
-X-Received: by 2002:a25:5087:0:b0:d0e:2e5c:2f80 with SMTP id e129-20020a255087000000b00d0e2e5c2f80mr4416565ybb.64.1690258932878;
-        Mon, 24 Jul 2023 21:22:12 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id h9-20020a25b189000000b00d0db687ef48sm1175540ybj.61.2023.07.24.21.22.11
+        d=1e100.net; s=20221208; t=1690260106; x=1690864906;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4tFc7lI8l/TAp6N4SH/RnjHMrhDjcjpOS0NvhRjK3tI=;
+        b=K2z/WROcn1x8vdbpwL69PuNQhPHJPQVYXWj3NtJ2xdppUHtpy/TNmdpz/y1LMGsMJa
+         Baj/xhZHgfkT0tYK+EFoNFkA7+fn5aCx+16MK9XRCKzbLXVRvgxFM7A6azE2kPhyZrrc
+         5/S5rzb602Klnzs0YO0Ro69ApIp96Y9AyeYQt8LzgajxuWLOF/v9oIeDvvD9/HWhMsuE
+         RTIKyFfmAC27Btk5E3jPy8s/SN2orY+AAGYcjUhhG+BGFOaJD7bEUV9L7W8KQiGnX6rJ
+         NtwWIVr/4MFtqmLf1M+Z2KYOBKbCdDsb+Ai3qL8BRdCE2wK9Dx/eSfQRYO9M6usExCIW
+         FfZw==
+X-Gm-Message-State: ABy/qLZ5kkRoTL1qc4pSxjvAjJRK470LdVdwJmeO60/Ja6eop5rfcdJJ
+        UtHWVkT0QcZNk5KFKxF3E2grwg==
+X-Google-Smtp-Source: APBJJlHQLTh3cgEYO+DVAD/fw8XSxxaq77z0mK7JibK/JjnN3wjA/kyDdlXYpJW7FLCpf9E01rW5SQ==
+X-Received: by 2002:a25:2342:0:b0:d0d:2d17:3f11 with SMTP id j63-20020a252342000000b00d0d2d173f11mr5304231ybj.17.1690260106082;
+        Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id z16-20020a25e310000000b00c71e4833957sm2656725ybd.63.2023.07.24.21.41.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:22:12 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH mm-unstable v7 31/31] mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
-Date:   Mon, 24 Jul 2023 21:20:51 -0700
-Message-Id: <20230725042051.36691-32-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Mon, 24 Jul 2023 21:41:45 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 21:41:36 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH mm-unstable v7 00/31] Split ptdesc from struct page
 In-Reply-To: <20230725042051.36691-1-vishal.moola@gmail.com>
+Message-ID: <5296514f-cdd1-9526-2e83-a21e76e86e5@google.com>
 References: <20230725042051.36691-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These functions are no longer necessary. Remove them and cleanup
-Documentation referencing them.
+On Mon, 24 Jul 2023, Vishal Moola (Oracle) wrote:
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/mm/split_page_table_lock.rst    | 12 +++++------
- .../zh_CN/mm/split_page_table_lock.rst        | 14 ++++++-------
- include/linux/mm.h                            | 20 -------------------
- 3 files changed, 13 insertions(+), 33 deletions(-)
+> The MM subsystem is trying to shrink struct page. This patchset
+> introduces a memory descriptor for page table tracking - struct ptdesc.
+> 
+> This patchset introduces ptdesc, splits ptdesc from struct page, and
+> converts many callers of page table constructor/destructors to use ptdescs.
+> 
+> Ptdesc is a foundation to further standardize page tables, and eventually
+> allow for dynamic allocation of page tables independent of struct page.
+> However, the use of pages for page table tracking is quite deeply
+> ingrained and varied across archictectures, so there is still a lot of
+> work to be done before that can happen.
 
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index a834fad9de12..e4f6972eb6c0 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -58,7 +58,7 @@ Support of split page table lock by an architecture
- ===================================================
- 
- There's no need in special enabling of PTE split page table lock: everything
--required is done by pgtable_pte_page_ctor() and pgtable_pte_page_dtor(), which
-+required is done by pagetable_pte_ctor() and pagetable_pte_dtor(), which
- must be called on PTE table allocation / freeing.
- 
- Make sure the architecture doesn't use slab allocator for page table
-@@ -68,8 +68,8 @@ This field shares storage with page->ptl.
- PMD split lock only makes sense if you have more than two page table
- levels.
- 
--PMD split lock enabling requires pgtable_pmd_page_ctor() call on PMD table
--allocation and pgtable_pmd_page_dtor() on freeing.
-+PMD split lock enabling requires pagetable_pmd_ctor() call on PMD table
-+allocation and pagetable_pmd_dtor() on freeing.
- 
- Allocation usually happens in pmd_alloc_one(), freeing in pmd_free() and
- pmd_free_tlb(), but make sure you cover all PMD table allocation / freeing
-@@ -77,7 +77,7 @@ paths: i.e X86_PAE preallocate few PMDs on pgd_alloc().
- 
- With everything in place you can set CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK.
- 
--NOTE: pgtable_pte_page_ctor() and pgtable_pmd_page_ctor() can fail -- it must
-+NOTE: pagetable_pte_ctor() and pagetable_pmd_ctor() can fail -- it must
- be handled properly.
- 
- page->ptl
-@@ -97,7 +97,7 @@ trick:
-    split lock with enabled DEBUG_SPINLOCK or DEBUG_LOCK_ALLOC, but costs
-    one more cache line for indirect access;
- 
--The spinlock_t allocated in pgtable_pte_page_ctor() for PTE table and in
--pgtable_pmd_page_ctor() for PMD table.
-+The spinlock_t allocated in pagetable_pte_ctor() for PTE table and in
-+pagetable_pmd_ctor() for PMD table.
- 
- Please, never access page->ptl directly -- use appropriate helper.
-diff --git a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-index 4fb7aa666037..a2c288670a24 100644
---- a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-+++ b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-@@ -56,16 +56,16 @@ Hugetlb特定的辅助函数:
- 架构对分页表锁的支持
- ====================
- 
--没有必要特别启用PTE分页表锁：所有需要的东西都由pgtable_pte_page_ctor()
--和pgtable_pte_page_dtor()完成，它们必须在PTE表分配/释放时被调用。
-+没有必要特别启用PTE分页表锁：所有需要的东西都由pagetable_pte_ctor()
-+和pagetable_pte_dtor()完成，它们必须在PTE表分配/释放时被调用。
- 
- 确保架构不使用slab分配器来分配页表：slab使用page->slab_cache来分配其页
- 面。这个区域与page->ptl共享存储。
- 
- PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
--启用PMD分页锁需要在PMD表分配时调用pgtable_pmd_page_ctor()，在释放时调
--用pgtable_pmd_page_dtor()。
-+启用PMD分页锁需要在PMD表分配时调用pagetable_pmd_ctor()，在释放时调
-+用pagetable_pmd_dtor()。
- 
- 分配通常发生在pmd_alloc_one()中，释放发生在pmd_free()和pmd_free_tlb()
- 中，但要确保覆盖所有的PMD表分配/释放路径：即X86_PAE在pgd_alloc()中预先
-@@ -73,7 +73,7 @@ PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
- 一切就绪后，你可以设置CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK。
- 
--注意：pgtable_pte_page_ctor()和pgtable_pmd_page_ctor()可能失败--必
-+注意：pagetable_pte_ctor()和pagetable_pmd_ctor()可能失败--必
- 须正确处理。
- 
- page->ptl
-@@ -90,7 +90,7 @@ page->ptl用于访问分割页表锁，其中'page'是包含该表的页面struc
-    的指针并动态分配它。这允许在启用DEBUG_SPINLOCK或DEBUG_LOCK_ALLOC的
-    情况下使用分页锁，但由于间接访问而多花了一个缓存行。
- 
--PTE表的spinlock_t分配在pgtable_pte_page_ctor()中，PMD表的spinlock_t
--分配在pgtable_pmd_page_ctor()中。
-+PTE表的spinlock_t分配在pagetable_pte_ctor()中，PMD表的spinlock_t
-+分配在pagetable_pmd_ctor()中。
- 
- 请不要直接访问page->ptl - -使用适当的辅助函数。
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bd3d99d81984..e4e34ecbc2ea 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2913,11 +2913,6 @@ static inline bool pagetable_pte_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pte_page_ctor(struct page *page)
--{
--	return pagetable_pte_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -2927,11 +2922,6 @@ static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pte_page_dtor(struct page *page)
--{
--	pagetable_pte_dtor(page_ptdesc(page));
--}
--
- pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
- static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
- {
-@@ -3038,11 +3028,6 @@ static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pmd_page_ctor(struct page *page)
--{
--	return pagetable_pmd_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -3052,11 +3037,6 @@ static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pmd_page_dtor(struct page *page)
--{
--	pagetable_pmd_dtor(page_ptdesc(page));
--}
--
- /*
-  * No scalability reason to split PUD locks yet, but follow the same pattern
-  * as the PMD locks to make it easier if we decide to.  The VM should not be
--- 
-2.40.1
+Others may differ, but it remains the case that I see no point to this
+patchset, until the minimal descriptor that replaces struct page is
+working, and struct page then becomes just overhead.  Until that time,
+let architectures continue to use struct page as they do - whyever not?
 
+Hugh
+
+> 
+> This is rebased on mm-unstable.
+> 
+> v7:
+>   Drop s390 gmap ptdesc conversions - gmap is unecessary complication
+>     that can be dealt with later
+>   Be more thorough with ptdesc struct sanity checks and comments
+>   Rebase onto mm-unstable
+> 
+> Vishal Moola (Oracle) (31):
+>   mm: Add PAGE_TYPE_OP folio functions
+>   pgtable: Create struct ptdesc
+>   mm: add utility functions for ptdesc
+>   mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
+>   mm: Convert ptlock_alloc() to use ptdescs
+>   mm: Convert ptlock_ptr() to use ptdescs
+>   mm: Convert pmd_ptlock_init() to use ptdescs
+>   mm: Convert ptlock_init() to use ptdescs
+>   mm: Convert pmd_ptlock_free() to use ptdescs
+>   mm: Convert ptlock_free() to use ptdescs
+>   mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+>   powerpc: Convert various functions to use ptdescs
+>   x86: Convert various functions to use ptdescs
+>   s390: Convert various pgalloc functions to use ptdescs
+>   mm: Remove page table members from struct page
+>   pgalloc: Convert various functions to use ptdescs
+>   arm: Convert various functions to use ptdescs
+>   arm64: Convert various functions to use ptdescs
+>   csky: Convert __pte_free_tlb() to use ptdescs
+>   hexagon: Convert __pte_free_tlb() to use ptdescs
+>   loongarch: Convert various functions to use ptdescs
+>   m68k: Convert various functions to use ptdescs
+>   mips: Convert various functions to use ptdescs
+>   nios2: Convert __pte_free_tlb() to use ptdescs
+>   openrisc: Convert __pte_free_tlb() to use ptdescs
+>   riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+>   sh: Convert pte_free_tlb() to use ptdescs
+>   sparc64: Convert various functions to use ptdescs
+>   sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+>   um: Convert {pmd, pte}_free_tlb() to use ptdescs
+>   mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
+> 
+>  Documentation/mm/split_page_table_lock.rst    |  12 +-
+>  .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+>  arch/arm/include/asm/tlb.h                    |  12 +-
+>  arch/arm/mm/mmu.c                             |   7 +-
+>  arch/arm64/include/asm/tlb.h                  |  14 +-
+>  arch/arm64/mm/mmu.c                           |   7 +-
+>  arch/csky/include/asm/pgalloc.h               |   4 +-
+>  arch/hexagon/include/asm/pgalloc.h            |   8 +-
+>  arch/loongarch/include/asm/pgalloc.h          |  27 ++--
+>  arch/loongarch/mm/pgtable.c                   |   7 +-
+>  arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
+>  arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+>  arch/m68k/mm/motorola.c                       |   4 +-
+>  arch/mips/include/asm/pgalloc.h               |  32 ++--
+>  arch/mips/mm/pgtable.c                        |   8 +-
+>  arch/nios2/include/asm/pgalloc.h              |   8 +-
+>  arch/openrisc/include/asm/pgalloc.h           |   8 +-
+>  arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+>  arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
+>  arch/powerpc/mm/pgtable-frag.c                |  56 +++----
+>  arch/riscv/include/asm/pgalloc.h              |   8 +-
+>  arch/riscv/mm/init.c                          |  16 +-
+>  arch/s390/include/asm/pgalloc.h               |   4 +-
+>  arch/s390/include/asm/tlb.h                   |   4 +-
+>  arch/s390/mm/pgalloc.c                        | 128 +++++++--------
+>  arch/sh/include/asm/pgalloc.h                 |   9 +-
+>  arch/sparc/mm/init_64.c                       |  17 +-
+>  arch/sparc/mm/srmmu.c                         |   5 +-
+>  arch/um/include/asm/pgalloc.h                 |  18 +--
+>  arch/x86/mm/pgtable.c                         |  47 +++---
+>  arch/x86/xen/mmu_pv.c                         |   2 +-
+>  include/asm-generic/pgalloc.h                 |  88 +++++-----
+>  include/asm-generic/tlb.h                     |  11 ++
+>  include/linux/mm.h                            | 151 +++++++++++++-----
+>  include/linux/mm_types.h                      |  18 ---
+>  include/linux/page-flags.h                    |  30 +++-
+>  include/linux/pgtable.h                       |  80 ++++++++++
+>  mm/memory.c                                   |   8 +-
+>  38 files changed, 585 insertions(+), 384 deletions(-)
+> 
+> -- 
+> 2.40.1
