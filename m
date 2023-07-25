@@ -2,122 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226D3761F9C
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jul 2023 18:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667197621AB
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jul 2023 20:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjGYQxf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jul 2023 12:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S232079AbjGYSlL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jul 2023 14:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjGYQwu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jul 2023 12:52:50 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF04212C;
-        Tue, 25 Jul 2023 09:52:28 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4R9NMl0vV4z9sT1;
-        Tue, 25 Jul 2023 18:51:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-        t=1690303875;
+        with ESMTP id S232098AbjGYSlF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jul 2023 14:41:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460632135
+        for <linux-arch@vger.kernel.org>; Tue, 25 Jul 2023 11:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690310412;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=oXu7I2w2GulAbsjkAbhBaZ0d5Ez9Ymu2aocx4QCikLk=;
-        b=kSmWzfYu0h5RiTQdQhuOq6it0MoOiZSf3kDgxT/+cq1LY2gaqgps8UYFoHqeIEJZu3gl3Y
-        6NfO6pwEzKCD/FvCRHx/mqdIegvQ/xl7XBtbCWyNeZKkLoJYNVo2fbFaa337PF09aPHP6s
-        Pl0K38zR38aZQ86S1uv2GiAEqLJIYLuc9RjcsgJwCXiQ911NIuvw8DS1OGefalEOwy3G4n
-        KQ6maBX4klVBvsIqPSP4EVbp/eKJmPJVCbjW7W/CHYeRncxiKGHJavwOxVN7JsO5FrBQZc
-        nb3oLM1e0fdNJTRxem86wTiDhq20paUp4CP7Y3BaHa+ddyDai81fX7CP4bOPqg==
-Date:   Wed, 26 Jul 2023 02:50:50 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        James.Bottomley@hansenpartnership.com, acme@kernel.org,
+        bh=7ss2tzNf07FPnrLqdDtf+Er94L4qFrw/j0drlGJAUJI=;
+        b=YSIn69pvwAyZ3JYlybhobQc6T92rzTFidJ4FPLp38mGc5WpsMeKk4SVGh1nW01XKn8c2Wu
+        7rbV0H9GjxXx2GHU66iM8LZ4tnsG8lwCJnUCMOFbNl/Tznn8yJaGS+IvJBI/tYxUoSffgQ
+        U/X3r840asW/1zt3FJVmNNxh1hmGuRY=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-8oo2ft68MBSY5EtXE1nj0w-1; Tue, 25 Jul 2023 14:40:05 -0400
+X-MC-Unique: 8oo2ft68MBSY5EtXE1nj0w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 844A21C3408F;
+        Tue, 25 Jul 2023 18:40:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.242])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5BBCD4094DC1;
+        Tue, 25 Jul 2023 18:39:52 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <87fs5c3rbl.fsf@oldenburg3.str.redhat.com>
+References: <87fs5c3rbl.fsf@oldenburg3.str.redhat.com> <cover.1689092120.git.legion@kernel.org> <cover.1689074739.git.legion@kernel.org> <104971.1690300714@warthog.procyon.org.uk>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     dhowells@redhat.com, Alexey Gladkov <legion@kernel.org>,
+        James.Bottomley@HansenPartnership.com, acme@kernel.org,
         alexander.shishkin@linux.intel.com, axboe@kernel.dk,
         benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
         catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
         davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
-        fenghua.yu@intel.com, fweimer@redhat.com, geert@linux-m68k.org,
-        glebfm@altlinux.org, gor@linux.ibm.com, hare@suse.com,
-        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
-        kim.phillips@arm.com, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        luto@kernel.org, mattst88@gmail.com, mingo@redhat.com,
-        monstr@monstr.eu, mpe@ellerman.id.au, namhyung@kernel.org,
-        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
-        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
-        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
-        x86@kernel.org, ysato@users.sourceforge.jp,
+        fenghua.yu@intel.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, hpa@zytor.com,
+        ink@jurassic.park.msu.ru, jhogan@kernel.org, kim.phillips@arm.com,
+        ldv@altlinux.org, linux-alpha@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, paulus@samba.org, peterz@infradead.org,
+        ralf@linux-mips.org, sparclinux@vger.kernel.org, stefan@agner.ch,
+        tglx@linutronix.de, tony.luck@intel.com, tycho@tycho.ws,
+        will@kernel.org, x86@kernel.org, ysato@users.sourceforge.jp,
         LKML <linux-kernel@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
 Subject: Re: Add fchmodat2() - or add a more general syscall?
-Message-ID: <u7lakye7ikvyu6g2ktxbzixt5hnvqtzt5s4g72j74tgg4bwlpu@7pcqd4ah5tah>
-References: <cover.1689092120.git.legion@kernel.org>
- <cover.1689074739.git.legion@kernel.org>
- <104971.1690300714@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sqz3gv5iaglclup7"
-Content-Disposition: inline
-In-Reply-To: <104971.1690300714@warthog.procyon.org.uk>
-X-Rspamd-Queue-Id: 4R9NMl0vV4z9sT1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <107289.1690310391.1@warthog.procyon.org.uk>
+Date:   Tue, 25 Jul 2023 19:39:51 +0100
+Message-ID: <107290.1690310391@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Florian Weimer <fweimer@redhat.com> wrote:
 
---sqz3gv5iaglclup7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > Rather than adding a fchmodat2() syscall, should we add a
+> > "set_file_attrs()" syscall that takes a mask and allows you to set a bunch
+> > of stuff all in one go?  Basically, an interface to notify_change() in the
+> > kernel that would allow several stats to be set atomically.  This might be
+> > of particular interest to network filesystems.
+> 
+> Do you mean atomically as in compare-and-swap (update only if old values
+> match), or just a way to update multiple file attributes with a single
+> system call?
 
-On 2023-07-25, David Howells <dhowells@redhat.com> wrote:
-> Rather than adding a fchmodat2() syscall, should we add a "set_file_attrs=
-()"
-> syscall that takes a mask and allows you to set a bunch of stuff all in o=
-ne
-> go?  Basically, an interface to notify_change() in the kernel that would =
-allow
-> several stats to be set atomically.  This might be of particular interest=
- to
-> network filesystems.
+I was thinking more in terms of the latter.  AFAIK, there aren't any network
+filesystems support a CAS interface on file attributes like that.  To be able
+to do a CAS operation, we'd need to pass in the old values as well as the new.
 
-Presumably looking something like statx(2) (except hopefully with
-extensible structs this time :P)? I think that could also be useful, but
-given this is a fairly straight-forward syscall addition (and it also
-would resolve the AT_EMPTY_PATH issue for chmod as well as simplify the
-glibc wrapper), I think it makes sense to take this and we can do
-set_statx(2) separately?
+Another thing we could look at is doing "create_and_set_attrs()", possibly
+allowing it to take a list of xattrs also.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+David
 
---sqz3gv5iaglclup7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZL/9agAKCRAol/rSt+lE
-b9muAP9aP2TUmAAHS6rOFH9Gf6v2e1/S/NcOkGphCidcAt2ZiwEAzjtee/kbCs2+
-akroOcjwVI11LFf34VRyguX0zOzOWQ4=
-=pGFN
------END PGP SIGNATURE-----
-
---sqz3gv5iaglclup7--
