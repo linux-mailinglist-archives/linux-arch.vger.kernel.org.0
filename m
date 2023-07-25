@@ -2,79 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6410F760B4C
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jul 2023 09:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF9B760B8F
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jul 2023 09:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjGYHQh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 25 Jul 2023 03:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S232583AbjGYHV3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 25 Jul 2023 03:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjGYHQf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jul 2023 03:16:35 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF312D;
-        Tue, 25 Jul 2023 00:16:32 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-583f036d50bso23921037b3.3;
-        Tue, 25 Jul 2023 00:16:32 -0700 (PDT)
+        with ESMTP id S232355AbjGYHUp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jul 2023 03:20:45 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031D12691;
+        Tue, 25 Jul 2023 00:18:35 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bff89873d34so4361726276.2;
+        Tue, 25 Jul 2023 00:18:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690269391; x=1690874191;
+        d=1e100.net; s=20221208; t=1690269514; x=1690874314;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cJjDsseCku7rw4c3XWBJPjjfZ2OLqB4Q28CEWAPlCas=;
-        b=hVQgl7DJn5GMlVxdjbl2+VQHv/xf18JajW1kmjJZJSajwKgmpvI4WnQFNuFrN6Kut4
-         GT5Et9fFsFo12XxQqaujQ4J+n8o3+fD9UH64LXzwqYAjKJXXULdTqQ8B4kOMVZo3YVDI
-         q5IT8zU1iLniV5tVgsao0GvWUOM58b+tcfTurz/v4/l+EJ6TZ7puiGmuvJ3eK3Kw8XLX
-         yTtuhIpuWw6/E45ha48s1YccW9z0uuxUs95lQMKV98Y3OHCMiLVP32qsMngUQj5lmyl3
-         nTThflP9pjqEwbHY3bKdonTWOW9i+KkfCdWzb3hRhj2Vnkzrj59bDYrBWumdJ4HmycNt
-         zu2g==
-X-Gm-Message-State: ABy/qLao/3eJ40JY7/2WDUcsy767G4pg3s4vipoIUxV0DGufrxZSA9sh
-        sZuL08BUJbvdndkxbBFyyya1Ez6mYXzdcYuw
-X-Google-Smtp-Source: APBJJlGGkYf3TOwXUHFzKgPD8ivkikovqfooPElc9ajMbqNe2UaqmvOSsqb2a9wDw8jy7t1AOf/MZg==
-X-Received: by 2002:a0d:d646:0:b0:577:1909:ee16 with SMTP id y67-20020a0dd646000000b005771909ee16mr12409284ywd.30.1690269391390;
-        Tue, 25 Jul 2023 00:16:31 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id k67-20020a0dfa46000000b005619cfb1b88sm3383079ywf.52.2023.07.25.00.16.29
+        bh=Lrkzr5cvjosFI//uEK1aHD1IOI0Bz2cNenZQg3FVc4w=;
+        b=fWhA9EWkD+ZEMuguAwoinNGH5j2OKtAcX8crgSN3YSu8rQqB9ekCcCWLwn/wYo1sWg
+         5nS8J3BYlClh9iorqt2nRwBbOly+5qFPdM1exxr8KrZXiXTLW+q+QkPbhJJRloWVbFhn
+         mQfVgi+TyrMFRX1WpeeEHgE+9cHDXPWaeqawyCEWYiBqEpRQkM1JEsjwpwSlb2jIfpEe
+         ICqU70Uzl6nyEI7JTZsfpXqBEs1jfhnCPBgpYKPiog3uFj+TUxi74Z5tAZXYEJfEZ00c
+         Ro9uit+6vmSpq0qHbd7B01aI+N9TVPaz8IkwCI846FjiIxN1HrQZn0P9KPg+bZLS95jR
+         vf4Q==
+X-Gm-Message-State: ABy/qLYOJPN++EAiPEl3aAvkRPh8Ykj6IZoirUVQa6LXDPVgny6PhPYi
+        r8sR5zN+huNT/SWRjAM1dKaZps2pWfgCwzbM
+X-Google-Smtp-Source: APBJJlFquI1pzW4cOH7f/kUyoqhPEI+V/dnUi9VjzK5/UaKxKuFCfZv6Ns89iB5d/mpXmnVNXJN9tg==
+X-Received: by 2002:a5b:90b:0:b0:d1a:2488:5fb6 with SMTP id a11-20020a5b090b000000b00d1a24885fb6mr84600ybq.52.1690269513992;
+        Tue, 25 Jul 2023 00:18:33 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id y1-20020a056902052100b00d0fe6cb4741sm1003858ybs.25.2023.07.25.00.18.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 00:16:29 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so5822765276.3;
-        Tue, 25 Jul 2023 00:16:29 -0700 (PDT)
-X-Received: by 2002:a25:10c5:0:b0:c91:717e:7658 with SMTP id
- 188-20020a2510c5000000b00c91717e7658mr10654915ybq.2.1690269388936; Tue, 25
- Jul 2023 00:16:28 -0700 (PDT)
+        Tue, 25 Jul 2023 00:18:31 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bff89873d34so4361683276.2;
+        Tue, 25 Jul 2023 00:18:31 -0700 (PDT)
+X-Received: by 2002:a25:b07:0:b0:d07:bce0:be77 with SMTP id
+ 7-20020a250b07000000b00d07bce0be77mr6021730ybl.61.1690269511226; Tue, 25 Jul
+ 2023 00:18:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1689074739.git.legion@kernel.org> <cover.1689092120.git.legion@kernel.org>
- <a677d521f048e4ca439e7080a5328f21eb8e960e.1689092120.git.legion@kernel.org>
-In-Reply-To: <a677d521f048e4ca439e7080a5328f21eb8e960e.1689092120.git.legion@kernel.org>
+References: <20230628230935.1196180-1-sohil.mehta@intel.com> <20230710185124.3848462-1-sohil.mehta@intel.com>
+In-Reply-To: <20230710185124.3848462-1-sohil.mehta@intel.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 25 Jul 2023 09:16:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXzYxo83AXfWWVyp2fL3fcEUNgbG5aSZuA62FwO2i3jDg@mail.gmail.com>
-Message-ID: <CAMuHMdXzYxo83AXfWWVyp2fL3fcEUNgbG5aSZuA62FwO2i3jDg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] arch: Register fchmodat2, usually as syscall 452
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, Palmer Dabbelt <palmer@sifive.com>,
-        James.Bottomley@hansenpartnership.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
-        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
-        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
-        dhowells@redhat.com, fenghua.yu@intel.com, fweimer@redhat.com,
-        glebfm@altlinux.org, gor@linux.ibm.com, hare@suse.com,
-        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
-        kim.phillips@arm.com, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+Date:   Tue, 25 Jul 2023 09:18:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX4HAMD5PA8OOsTGvx_1LuUw=Stegtcb9KQFVa-CP3T_w@mail.gmail.com>
+Message-ID: <CAMuHMdX4HAMD5PA8OOsTGvx_1LuUw=Stegtcb9KQFVa-CP3T_w@mail.gmail.com>
+Subject: Re: [PATCH v2] syscalls: Cleanup references to sys_lookup_dcookie()
+To:     Sohil Mehta <sohil.mehta@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sergei Trofimovich <slyich@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        luto@kernel.org, mattst88@gmail.com, mingo@redhat.com,
-        monstr@monstr.eu, mpe@ellerman.id.au, namhyung@kernel.org,
-        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
-        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
-        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
-        x86@kernel.org, ysato@users.sourceforge.jp
+        sparclinux@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -87,17 +114,21 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 6:25 PM Alexey Gladkov <legion@kernel.org> wrote:
-> From: Palmer Dabbelt <palmer@sifive.com>
+On Mon, Jul 10, 2023 at 8:52 PM Sohil Mehta <sohil.mehta@intel.com> wrote:
+> commit 'be65de6b03aa ("fs: Remove dcookies support")' removed the
+> syscall definition for lookup_dcookie.  However, syscall tables still
+> point to the old sys_lookup_dcookie() definition. Update syscall tables
+> of all architectures to directly point to sys_ni_syscall() instead.
 >
-> This registers the new fchmodat2 syscall in most places as nuber 452,
-> with alpha being the exception where it's 562.  I found all these sites
-> by grepping for fspick, which I assume has found me everything.
->
-> Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> Acked-by: Namhyung Kim <namhyung@kernel.org> # for perf
+> ---
+> v2:
+> - Rebased to v6.5-rc1. No other dependencies.
+> - Added acquired tags.
 
->  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+>  arch/m68k/kernel/syscalls/syscall.tbl               | 2 +-
 
 Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
