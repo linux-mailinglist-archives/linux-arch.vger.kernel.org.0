@@ -2,150 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C9C7637EE
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jul 2023 15:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B2C7637FC
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jul 2023 15:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbjGZNqO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Jul 2023 09:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S230477AbjGZNrV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Jul 2023 09:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbjGZNqN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Jul 2023 09:46:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A72712C;
-        Wed, 26 Jul 2023 06:46:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB1D61A4F;
-        Wed, 26 Jul 2023 13:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A6EC433C7;
-        Wed, 26 Jul 2023 13:46:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690379171;
-        bh=YMmxomfMr9G4i/xBDFo8a+tJ6BzX3X5lQtLwpyL37dM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iLrm54/OyVAkeX7XRTdQI6vJKk7fvA9E8WFuxeM1GUgON2oCeY1wjM8yTYrtIi4IQ
-         Oo3FMgcMnRzknsY84kWAeTJ0inxm7fg97Q/tOUTzG6ZMmI5ATwnzUC945HbXcM2RRW
-         HKanW7qmiSF3lCZhc3wQfBbpJJOtev2Fm0SsXZJptqvFFvEwrKyC1aKGldedLK/9Vz
-         62DImdurXvwbmhgOteOs/aXLApFhcpwiLDIG+sQUeQFLsagl1k2OVSVn88v78BFAcl
-         Vj6NEoPbw1eyE9ZIq7xYhoiahGzuo+q0Lii/UprIQXPLwFPgjeIIKj3g1kimIqX0ng
-         b/060n7yg03AQ==
-Date:   Wed, 26 Jul 2023 15:45:56 +0200
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, James.Bottomley@hansenpartnership.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        axboe@kernel.dk, benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        bp@alien8.de, catalin.marinas@arm.com, christian@brauner.io,
-        dalias@libc.org, davem@davemloft.net, deepa.kernel@gmail.com,
-        deller@gmx.de, dhowells@redhat.com, fenghua.yu@intel.com,
-        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, hpa@zytor.com,
-        ink@jurassic.park.msu.ru, jhogan@kernel.org, kim.phillips@arm.com,
-        ldv@altlinux.org, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
-        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
-        namhyung@kernel.org, paulus@samba.org, peterz@infradead.org,
-        ralf@linux-mips.org, sparclinux@vger.kernel.org, stefan@agner.ch,
-        tglx@linutronix.de, tony.luck@intel.com, tycho@tycho.ws,
-        will@kernel.org, x86@kernel.org, ysato@users.sourceforge.jp,
-        Palmer Dabbelt <palmer@sifive.com>
-Subject: Re: [PATCH v4 2/5] fs: Add fchmodat2()
-Message-ID: <ZMEjlDNJkFpYERr1@example.org>
-References: <cover.1689074739.git.legion@kernel.org>
- <cover.1689092120.git.legion@kernel.org>
- <f2a846ef495943c5d101011eebcf01179d0c7b61.1689092120.git.legion@kernel.org>
- <njnhwhgmsk64e6vf3ur7fifmxlipmzez3r5g7ejozsrkbwvq7w@tu7w3ieystcq>
+        with ESMTP id S232892AbjGZNrU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Jul 2023 09:47:20 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071B12132;
+        Wed, 26 Jul 2023 06:47:14 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6686ef86110so3921563b3a.2;
+        Wed, 26 Jul 2023 06:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690379233; x=1690984033;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OEBKhKypwi18xxxSmsgWv/sCzbnXlTbhCGDL5CnIwBs=;
+        b=oAG8YTthjsWVst5LYf9Yoh23BB4vaB5UxkzszQpivFMLZ7ZJTQBmTsgUrPMeg5shCe
+         iB3lRuUcFe3GhugNGsqkHi1JTuVJPJDecXnF3Q+rv1msYgPJSDjk1NIMWydK8cnCPTM7
+         gRj6JlUm6GZNvLJSXA7sG9+ZauWIeG5Rb1IQA7UxQJ/97RGz4Em0aCFgjNEuAWRwl3ol
+         kT09WO10Ba0KrSx7nXuXmKTyV98R9yXXmQytmq/KO5shc9bdKOR3uPq+ZEvg+H7I7+SB
+         vzGbYPg4HODpIT1vGFrfSIapB86zcJe3BK1fCq5e78J4m/VlSKCO1TG0F7dLqgS0Rgnt
+         anzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690379233; x=1690984033;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OEBKhKypwi18xxxSmsgWv/sCzbnXlTbhCGDL5CnIwBs=;
+        b=lwjMVz7ADWyIrtw4whlPlVK08KbMGWLfjt8RoWzqLK8kmpKM0TOe7hKaLGkYr326Bq
+         ri91OmqHtrgQYq5q+1njr8pfYAVQSoGlDpi2R+kgPEQWSKm65oDze2fUup02Lyd81ht/
+         /GSD3rRdIDVTT8ftoUhWt67viT0GAFDztV2NVvUzhjNEqZuFRiPghafzUbcfqVLX1Gsz
+         5EK/8tAMVTV8Zus2CKvj2eRDmu712dP87lDRCu5WPJ8EWRf39wOHpZoS5J6iapR/j+Rs
+         O5NodcxlCV1Sa2KTA/64p1EYt+ZxJ/VeX6rH3QwxNJLVxOFwvM8lpvot/t328tmmm5oN
+         Nb4Q==
+X-Gm-Message-State: ABy/qLZrW4QfEklEXU7YKzDpY1jbXd1ihADQbvKGB/HIu/i6QfOr7eUf
+        Bd8KDYiJBSTd92HoZqmTOfs=
+X-Google-Smtp-Source: APBJJlG6byCNG8nM2Kh9w7hx73fBCHkLxoIk8j7UuPR1teP4xJ942NmwS+sWdAOXSVUiefiebxDOWA==
+X-Received: by 2002:a05:6a00:1798:b0:686:a10b:e8b with SMTP id s24-20020a056a00179800b00686a10b0e8bmr2557408pfg.8.1690379233356;
+        Wed, 26 Jul 2023 06:47:13 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id d6-20020aa78146000000b0066a31111ccdsm2068292pfn.65.2023.07.26.06.47.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jul 2023 06:47:12 -0700 (PDT)
+Message-ID: <89c9f27c-f539-ef75-dc67-bdb0a8480c4b@gmail.com>
+Date:   Wed, 26 Jul 2023 21:47:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <njnhwhgmsk64e6vf3ur7fifmxlipmzez3r5g7ejozsrkbwvq7w@tu7w3ieystcq>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH V3 5/9] x86/hyperv: Use vmmcall to implement Hyper-V
+ hypercall in sev-snp enlightened guest
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>
+References: <20230718032304.136888-1-ltykernel@gmail.com>
+ <20230718032304.136888-6-ltykernel@gmail.com>
+ <BYAPR21MB16882FAEDEFAED59208ED9E0D700A@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB16882FAEDEFAED59208ED9E0D700A@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 02:36:25AM +1000, Aleksa Sarai wrote:
-> On 2023-07-11, Alexey Gladkov <legion@kernel.org> wrote:
-> > On the userspace side fchmodat(3) is implemented as a wrapper
-> > function which implements the POSIX-specified interface. This
-> > interface differs from the underlying kernel system call, which does not
-> > have a flags argument. Most implementations require procfs [1][2].
-> > 
-> > There doesn't appear to be a good userspace workaround for this issue
-> > but the implementation in the kernel is pretty straight-forward.
-> > 
-> > The new fchmodat2() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
-> > unlike existing fchmodat.
-> > 
-> > [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
-> > [2] https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
-> > 
-> > Co-developed-by: Palmer Dabbelt <palmer@sifive.com>
-> > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  fs/open.c                | 18 ++++++++++++++----
-> >  include/linux/syscalls.h |  2 ++
-> >  2 files changed, 16 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/fs/open.c b/fs/open.c
-> > index 0c55c8e7f837..39a7939f0d00 100644
-> > --- a/fs/open.c
-> > +++ b/fs/open.c
-> > @@ -671,11 +671,11 @@ SYSCALL_DEFINE2(fchmod, unsigned int, fd, umode_t, mode)
-> >  	return err;
-> >  }
-> >  
-> > -static int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
-> > +static int do_fchmodat(int dfd, const char __user *filename, umode_t mode, int lookup_flags)
+On 7/26/2023 11:44 AM, Michael Kelley (LINUX) wrote:
+>> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+>> index 2fa38e9f6207..025eda129d99 100644
+>> --- a/arch/x86/include/asm/mshyperv.h
+>> +++ b/arch/x86/include/asm/mshyperv.h
+>> @@ -64,12 +64,12 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+>>   	if (!hv_hypercall_pg)
+>>   		return U64_MAX;
+>>
+>> -	__asm__ __volatile__("mov %4, %%r8\n"
+>> -			     CALL_NOSPEC
+>> +	__asm__ __volatile__("mov %[output], %%r8\n"
+>> +			     ALTERNATIVE("vmmcall", CALL_NOSPEC, X86_FEATURE_SEV_ES)
+> Since this code is for SEV-SNP, what's the thinking behind using
+> X86_FEATURE_SEV_ES in the ALTERNATIVE statements?   Don't you need
+> to use X86_FEATURE_SEV_SNP (which is being added in another patch set that
+> Boris Petkov pointed out).
+
+Hi Michael:
+	Thanks for your review. The patch mentioned by Boris has not been 
+merged and so still use X86_FEATURE_SEV_ES here. We may replace the 
+feature flag with X86_FEATURE_SEV_SNP after it's upstreamed.
+
 > 
-> I think it'd be much neater to do the conversion of AT_ flags here and
-> pass 0 as a flags argument for all of the wrappers (this is how most of
-> the other xyz(), fxyz(), fxyzat() syscall wrappers are done IIRC).
-
-I just addressed the Al Viro's suggestion.
-
-https://lore.kernel.org/lkml/20190717014802.GS17978@ZenIV.linux.org.uk/
-
-> >  {
-> >  	struct path path;
-> >  	int error;
-> > -	unsigned int lookup_flags = LOOKUP_FOLLOW;
-> > +
-> >  retry:
-> >  	error = user_path_at(dfd, filename, lookup_flags, &path);
-> >  	if (!error) {
-> > @@ -689,15 +689,25 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
-> >  	return error;
-> >  }
-> >  
-> > +SYSCALL_DEFINE4(fchmodat2, int, dfd, const char __user *, filename,
-> > +		umode_t, mode, int, flags)
-> > +{
-> > +	if (unlikely(flags & ~AT_SYMLINK_NOFOLLOW))
-> > +		return -EINVAL;
+> Also, does this patch depend on Peter Zijlstra's patch to support nested
+> ALTERNATIVE statements?  If so, that needs to be called out, probably in
+> the cover letter.  Peter's patch doesn't yet appear in linux-next.
 > 
-> We almost certainly want to support AT_EMPTY_PATH at the same time.
-> Otherwise userspace will still need to go through /proc when trying to
-> chmod a file handle they have.
 
-I'm not sure I understand. Can you explain what you mean?
-
--- 
-Rgrds, legion
-
+It may work without Peterz's patch. Please see 
+https://lkml.org/lkml/2023/6/27/520.
+Peterz's patch optimizes ALTERNATIVE_n implementation with nested 
+expression.
