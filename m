@@ -2,50 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF98765125
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jul 2023 12:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490A976515F
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jul 2023 12:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbjG0K3D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Jul 2023 06:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
+        id S234032AbjG0KiU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Jul 2023 06:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234672AbjG0K2U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Jul 2023 06:28:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0428126B8;
-        Thu, 27 Jul 2023 03:27:57 -0700 (PDT)
+        with ESMTP id S233332AbjG0KiO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Jul 2023 06:38:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2AB26A6;
+        Thu, 27 Jul 2023 03:38:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F0261E1D;
-        Thu, 27 Jul 2023 10:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FC3C433C8;
-        Thu, 27 Jul 2023 10:27:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5B8761DD3;
+        Thu, 27 Jul 2023 10:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2484BC433C7;
+        Thu, 27 Jul 2023 10:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690453676;
-        bh=deaD8pujkpTtajMkrzG6FDy9HzkESG69/qNzMXZtjw0=;
+        s=k20201202; t=1690454292;
+        bh=wh4ycVHyDy/meMpcFy2ujkA7FnfZIbKiF964oBpVy5w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I7SQDE13fzKBcFUp5ePMk9YUxZ5LwkMwJzEhJh5gygi5y3Ao4HYQUhpzqZ+RcAGng
-         bn4vp/EfbLNeCzrahJPNrwO1OBRujz9xBo7+Gwbo3boim4OhzbOb3qoiVHBiAMEaWJ
-         PUG9ntl7QrNnL9tqEWTP/FDqYRjBLv6Pe+hC4010c/XsSyQFDc2T5KRE4F0CEfvhIP
-         4kdpLRFtj8U5bMLrtJSUPNEcwdIVIx3V75HfNd2zboybu6ykt1PDPjB308ZqP7GtZB
-         ns0n3LOD64u1iaWvsMh+b+uKRfMRf5JlVFDa1qQYJ082NdSiyLNQ81rIjYiYhPr8X+
-         TOPX0LSqgemIg==
-Date:   Thu, 27 Jul 2023 12:27:42 +0200
+        b=la4Lmi/DhdfArnUIJ/DbZ78SFqaneHcZNAsl7vyC6Bp1sh+e4HQI8e4jBnieO39j6
+         Rmq90io/GLqGoqqH4KkgjJEuKDDwP558rmmvSt0FVF7KhEbTHcezlFb9UppkdHYSda
+         jhi/dMRwdDkMKonZJKiGKFXJNLOHTIEijgJrGqqlhNsPV0MkiTVFgniC59vxFaHMe+
+         /PgQ2nYibh/PpeGMNXJPhBkYhxE3bGCCuiviuqMrlry/Jp24MyFm3S6udZz5sJhaZ+
+         s1t/etXhC/mU8K1VZK7pw57PG4j5iKPd/L4jWewp3rgGuvPk9cYY28p/tSjAv5ikoK
+         B2c9Xn3Ycs/Lg==
+Date:   Thu, 27 Jul 2023 12:37:58 +0200
 From:   Christian Brauner <brauner@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Alexey Gladkov <legion@kernel.org>,
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Palmer Dabbelt <palmer@sifive.com>,
         James.Bottomley@hansenpartnership.com, acme@kernel.org,
         alexander.shishkin@linux.intel.com, axboe@kernel.dk,
         benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
         catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
         davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
-        fenghua.yu@intel.com, fweimer@redhat.com, geert@linux-m68k.org,
-        glebfm@altlinux.org, gor@linux.ibm.com, hare@suse.com,
-        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
-        kim.phillips@arm.com, ldv@altlinux.org,
+        dhowells@redhat.com, fenghua.yu@intel.com, fweimer@redhat.com,
+        geert@linux-m68k.org, glebfm@altlinux.org, gor@linux.ibm.com,
+        hare@suse.com, hpa@zytor.com, ink@jurassic.park.msu.ru,
+        jhogan@kernel.org, kim.phillips@arm.com, ldv@altlinux.org,
         linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
@@ -56,22 +59,19 @@ Cc:     David Howells <dhowells@redhat.com>,
         paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
         sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
         tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
-        x86@kernel.org, ysato@users.sourceforge.jp,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: Add fchmodat2() - or add a more general syscall?
-Message-ID: <20230727-kassieren-aneinander-052b18a84546@brauner>
-References: <cover.1689092120.git.legion@kernel.org>
- <cover.1689074739.git.legion@kernel.org>
- <104971.1690300714@warthog.procyon.org.uk>
- <20230727035710.GA15127@sol.localdomain>
+        x86@kernel.org, ysato@users.sourceforge.jp
+Subject: Re: [PATCH v4 3/5] arch: Register fchmodat2, usually as syscall 452
+Message-ID: <20230727-fangen-olympiade-85fcbdaf03d7@brauner>
+References: <cover.1689074739.git.legion@kernel.org>
+ <cover.1689092120.git.legion@kernel.org>
+ <a677d521f048e4ca439e7080a5328f21eb8e960e.1689092120.git.legion@kernel.org>
+ <nbtxxotfsotuiepm7r4tegc4hy5qxe4dfjuqq7rm6qkkevooxh@4hacgjwit4or>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230727035710.GA15127@sol.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <nbtxxotfsotuiepm7r4tegc4hy5qxe4dfjuqq7rm6qkkevooxh@4hacgjwit4or>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,21 +80,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 08:57:10PM -0700, Eric Biggers wrote:
-> On Tue, Jul 25, 2023 at 04:58:34PM +0100, David Howells wrote:
-> > Rather than adding a fchmodat2() syscall, should we add a "set_file_attrs()"
-> > syscall that takes a mask and allows you to set a bunch of stuff all in one
-> > go?  Basically, an interface to notify_change() in the kernel that would allow
-> > several stats to be set atomically.  This might be of particular interest to
-> > network filesystems.
+On Wed, Jul 26, 2023 at 02:43:41AM +1000, Aleksa Sarai wrote:
+> On 2023-07-11, Alexey Gladkov <legion@kernel.org> wrote:
+> > From: Palmer Dabbelt <palmer@sifive.com>
 > > 
-> > David
-> > 
+> > This registers the new fchmodat2 syscall in most places as nuber 452,
+> > with alpha being the exception where it's 562.  I found all these sites
+> > by grepping for fspick, which I assume has found me everything.
 > 
-> fchmodat2() is a simple addition that fits well with the existing syscalls.
-> It fixes an oversight in fchmodat().
-> 
-> IMO we should just add fchmodat2(), and not get sidetracked by trying to add
-> some super-generalized syscall instead.  That can always be done later.
+> Shouldn't this patch be squashed with the patch that adds the syscall?
+> At least, that's how I've usually seen it done...
 
-Agreed.
+Depends. Iirc, someone said they'd prefer for doing it in one patch
+in some circumstances on some system call we added years ago. But otoh,
+having the syscall wiring done separately makes it easy for arch
+maintainers to ack only the wiring up part. Both ways are valid imho.
+(cachestat() did it for x86 and then all the others separately. So
+really it seems a bit all over the place depending on the scenario.)
