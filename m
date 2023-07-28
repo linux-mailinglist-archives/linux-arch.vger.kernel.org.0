@@ -2,107 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B721D766ECD
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Jul 2023 15:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCDE766F56
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Jul 2023 16:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234696AbjG1NwP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Jul 2023 09:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S235637AbjG1OWc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Jul 2023 10:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbjG1NwO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jul 2023 09:52:14 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6F32D57;
-        Fri, 28 Jul 2023 06:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1690552333; x=1722088333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=13yUOGGfMfswl4RW/YVIRSa8RvBKZJkyMPeM4Uwztbc=;
-  b=e6736ybDF52saJEtkI1Nv+VCrxASeBeCyw9HzplhRlqxGy5xKPlO0cgD
-   +H2X3xUy6XZE5FI+GaAFa2uNEiJi1OG0zEIjwiRsQhvFguwlwiS3dMpH/
-   puXOyQZCWSbBVM1n1mkw5QYHNv2mJFr31rYjeLF4EGX4WSidY3lptM7jX
-   JyZZapClJMqb3LW4JoW3o5bYIMXjd+wrjApsqe0Kw3M5bR4EPqDsh7KME
-   KwZa+YlCyg38kmJJ1iMuEYAx/BXH1hHaJ3hyx6ovgwSYoQbMRPrWwUV2V
-   W90g0BJkMhCw5VgskiH9TvX25kxS00ekyCduniQr3K2bF8W6oy5Qp4cHI
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="asc'?scan'208";a="163744085"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2023 06:52:12 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Jul 2023 06:52:08 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 28 Jul 2023 06:52:06 -0700
-Date:   Fri, 28 Jul 2023 14:51:31 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-arch@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/4] riscv: Make __flush_tlb_range() loop over pte
- instead of flushing the whole tlb
-Message-ID: <20230728-snout-defiance-082befdeaa51@wendy>
-References: <20230727185553.980262-1-alexghiti@rivosinc.com>
- <20230727185553.980262-4-alexghiti@rivosinc.com>
- <20230728-f2cd8ddd252c2ece2e438790@orel>
+        with ESMTP id S235602AbjG1OWb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jul 2023 10:22:31 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C784422B;
+        Fri, 28 Jul 2023 07:22:08 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-56401f1da3dso1030262a12.0;
+        Fri, 28 Jul 2023 07:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690554128; x=1691158928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yaHDfRPeOYEFoHO/IUNE0JLDV+4mnu7twVsVbad4hws=;
+        b=TCkoVpnoq7rWVgCt4u3ufL0iy8Y5iTREf6qhy36uqb4y2aJAyZXxCXigZh/xyysfpX
+         /3kqX8pP1ws104T9gEKexu+X0pg9Hxl7t0JP4HK4caRtY2h8o2TeCevpLQ3ruCQVF21n
+         Qr+stlczafmHz67i9bz5hWVkdDqxuczyZc/aj6yJQG2pNtGo1u6wr0m2mQkt+DOos1+s
+         5RFf+ScKzX3qIzano3KtS7q/43p68BLv3aDdYUp9Id6EvYTlVJk+oHmWZqA7vDxGf+gY
+         A1Hme/hP2kWPxbhOh8wWk2sxp59nEwzwiHK7dliE9CX2qTk3rj1SNQVnhsUJF7nKKM4s
+         XQ4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690554128; x=1691158928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yaHDfRPeOYEFoHO/IUNE0JLDV+4mnu7twVsVbad4hws=;
+        b=CMOLMhxsyp5ISccbDi6rM3c2Unw7X2D0ZgsY0zxR9kpp06PIHPdvxebWc0IqrGYTx6
+         0Nu+ukvaTvEeytUZJQHiZivycnVfRxbN12yIhlOZ8DgBBCPv55egM2C7WIKvu0l2fOoa
+         sLNFBC69Lyo6u19xN3YrEJe4EP/GZIENr6qfqKYY6y3HyjcfOCTOJ9Fie5bMsLyEZbr1
+         jU2Sax2H3y9UC/aFLDFe6JnlpOf5frI30SvrR5IZGpb2uJ4VTeajvzBqIL46YbWfbPVV
+         /VpEi61uyEXO1mKRXhPsW02ckUCs5Rf86Gm7QTKmxOlY7DJ5InDL03VWg3JFKXpIu/en
+         j/3Q==
+X-Gm-Message-State: ABy/qLZ1Szpw7rpjkKUmit0r8hZCP/MhfWCNYCB0pZhsaJf40pZAlm2O
+        q5Bwh2L7eAAE+5JM6ZQUBqQ=
+X-Google-Smtp-Source: APBJJlF89ELEa4ed3usCbf4UmNMKfQ5ivHg7Rz8sOUofytiRiDTG5MwXDPheALvyHG5drlWsb7u9qA==
+X-Received: by 2002:a17:90a:c205:b0:263:f776:8ba3 with SMTP id e5-20020a17090ac20500b00263f7768ba3mr1655996pjt.9.1690554127611;
+        Fri, 28 Jul 2023 07:22:07 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id ev16-20020a17090aead000b002684b837d88sm2690605pjb.14.2023.07.28.07.22.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 07:22:07 -0700 (PDT)
+Message-ID: <29fa53c5-7374-0b64-d135-54c968498685@gmail.com>
+Date:   Fri, 28 Jul 2023 22:21:59 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="avaIEXfS61g8yoTO"
-Content-Disposition: inline
-In-Reply-To: <20230728-f2cd8ddd252c2ece2e438790@orel>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH V2] x86/hyperv: Rename hv_isolation_type_snp/en_snp() to
+ isol_type_snp_paravisor/enlightened()
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "arnd@arndb.de" <arnd@arndb.de>
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>
+References: <20230726124900.300258-1-ltykernel@gmail.com>
+ <BYAPR21MB168896AAD24E773B92DD2B10D706A@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB168896AAD24E773B92DD2B10D706A@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---avaIEXfS61g8yoTO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/28/2023 10:53 AM, Michael Kelley (LINUX) wrote:
+>> @@ -268,7 +268,7 @@ static inline void hv_sev_init_mem_and_cpu(void) {}
+>>   static int hv_snp_boot_ap(int cpu, unsigned long start_ip) {}
+>>   #endif
+>>
+>> -extern bool hv_isolation_type_snp(void);
+>> +extern bool hv_isol_type_snp_paravisor(void);
+> This declaration of hv_isolation_type_snp() also occurs twice
+> in include/asm-generic/mshyperv.h.  I think this one can be
+> dropped entirely rather than renamed since
+> include/asm-generic/mshyperv.h is #include'd at the bottom of
+> this file, and there is no user in between.
+> 
+> hv_isolation_type_snp() is used in several architecture
+> independent source code files, so having it declared in
+> include/asm-generic/mshyperv.h makes sense rather than
+> being in an architecture-specific version of mshyperv.h.
+> 
 
-On Fri, Jul 28, 2023 at 03:32:35PM +0200, Andrew Jones wrote:
-> On Thu, Jul 27, 2023 at 08:55:52PM +0200, Alexandre Ghiti wrote:
-
-> > +	else if (size =3D=3D (unsigned long)-1)
->=20
-> The more we scatter this -1 around, especially now that we also need to
-> cast it, the more I think we should introduce a #define for it.
-
-Please.
-
---avaIEXfS61g8yoTO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMPH4wAKCRB4tDGHoIJi
-0pcKAP98p/ImDQ/uxeHvVZf6GCqG6+uNVE4h+qEzQF4LDzyZJAEAu/5LBu9gRRSH
-/J59XOyZqO6G+WA6CW2Eh+46AhRzmwc=
-=3/WE
------END PGP SIGNATURE-----
-
---avaIEXfS61g8yoTO--
+Agree. Will update in the next version.
