@@ -2,65 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AD2767C93
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Jul 2023 08:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B870F767D09
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Jul 2023 10:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjG2Gka (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Jul 2023 02:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S230310AbjG2IBm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Jul 2023 04:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjG2Gk3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jul 2023 02:40:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F5C3C33;
-        Fri, 28 Jul 2023 23:40:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 117FE602F9;
-        Sat, 29 Jul 2023 06:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B7D1C433CC;
-        Sat, 29 Jul 2023 06:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690612824;
-        bh=CI7Q0bSDUFRUz5cf9sJg74y/advLjvwEO/S6YAFjxfw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CBfmnuZM1ZSR7LImwbKgGLQsckvfNz7liIxag4nE02UbpntxGjR8a7FEmF+gKfXRr
-         Uk2hEInl+V0gbQgudGV8lRpMbF7SWOPxX6n4kr6HPsDqa2M+R1U2IVQL5HShYSJINu
-         TxXbHEq47Y6zpM2SGjrwD4qJCTLYPvISBAFn9nZ2KuMTvTivxmJnMBBZtJnEEKFyen
-         TKLY1swNOvPHa6QJAMn+bqPy1xzPX/DOnaEubvgSdlDouqxOeSAMiyZ6ks7umlpsCM
-         +ydvOBMtRDiP9bnrCONQh+GFXg5yM+fxAlKXF82FyjPrbYEIqsdqrWgCqP+/IQ5mLH
-         rQn6T73G4MxiA==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5227e5d9d96so3539957a12.2;
-        Fri, 28 Jul 2023 23:40:24 -0700 (PDT)
-X-Gm-Message-State: ABy/qLalu73x1DrPUmAy8F27rNi81OXC5lk5wC4Fs3p0aMetQM0rP8X0
-        Lr6Rn8ORcKIAESgnfes43Fdrh7eBc3czm8SCiNU=
-X-Google-Smtp-Source: APBJJlG1ZyrqEWpx7V6NBWjihkT4/lIOFuimVeUmJacRzB1mUXBSuY0J4QdEtuDygLNwFdsmH5hnmCxSpoxqnLz2eUg=
-X-Received: by 2002:aa7:da41:0:b0:51e:3d13:4a12 with SMTP id
- w1-20020aa7da41000000b0051e3d134a12mr3494100eds.34.1690612822528; Fri, 28 Jul
- 2023 23:40:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230721145121.1854104-1-guoren@kernel.org> <5e5be2d4-c563-6beb-b5f5-df47edeebc83@ghiti.fr>
- <CAJF2gTQMAVUtC6_ftEwp=EeYR_O7yzfGYmxwrqcO6+hn2J32bA@mail.gmail.com>
- <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr> <CAJF2gTT8JV5f4Fm1F-XgfAhNWNXJquVW8-uCK-b4Qy0xztrGLA@mail.gmail.com>
- <292abea1-59b7-13d4-0b27-ac00f7e7f20e@ghiti.fr>
-In-Reply-To: <292abea1-59b7-13d4-0b27-ac00f7e7f20e@ghiti.fr>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 29 Jul 2023 14:40:11 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQZhdQCFyz0eJo6VnLZzPDxK5WNRJqpr=BRLsdCdjG2gA@mail.gmail.com>
-Message-ID: <CAJF2gTQZhdQCFyz0eJo6VnLZzPDxK5WNRJqpr=BRLsdCdjG2gA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: mm: Fixup spurious fault of kernel vaddr
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, falcon@tinylab.org,
-        bjorn@kernel.org, conor.dooley@microchip.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229646AbjG2IBl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jul 2023 04:01:41 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C71F26B8;
+        Sat, 29 Jul 2023 01:01:40 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C5A83320084E;
+        Sat, 29 Jul 2023 04:01:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 29 Jul 2023 04:01:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1690617698; x=1690704098; bh=it
+        VztlhsdL+TgE9iBCuYgyv0QZn1iL7TtRpdZyaCyBM=; b=K3GKtYlR7bONoMs4wU
+        CtMwcBikuXune0t+aupcKbSwA4l3JefblqM5Bcbol9fRmprrs9u4912e0lGX3ILK
+        V/yQI8s81nl0XsCw8yY0fXLgkOT6sFtYgdkKK4nwBorUkM7jECQgf4z1bpB7BHeO
+        hn05aiGWl0AwWVSvSn8s91zQZ+db77RD5ksoPFyYjqk7ImL5Le3PqANFvvXxL4Hc
+        trXh8GlrZBvwLyGNgtOIvjjo++yQkMp0ilkmDQ7T8rtc4kR+xZ9KsXOoxvwngWcA
+        lA1MWEWSbKV6oGPtbl2SrQPLNWV8FWm/xFUl9lBUfT80SMLpx3+W8a5ucfrYE+2G
+        4sGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1690617698; x=1690704098; bh=itVztlhsdL+Tg
+        E9iBCuYgyv0QZn1iL7TtRpdZyaCyBM=; b=0EOha8fZdjiqo0sg0OE922E1vqSVw
+        +ceoOUMLM5u2ACPky1JbpH8YFeYIC9agJHTtN010wkgUVVd/5bTEuk7MEmjG6X9T
+        WYLgjJHPGw+oOf2iM9Dxs9ywojkZCfUtLD97U76zgO2VvZc/fMRMnkxaV3HJmESZ
+        lXjPgMewH0qsUQr66Pu+dFdOiBPQgM5NAB9+UXpy/p7/76T4RN8ONL2TobOg10lH
+        olf6mBp5b0HljZG8Kp1GAf5kKpruxSQZQdDCO6/2LVBKYAiHJ8iPaIh5mEjHfrqr
+        bYhmUnDByaTnHkJ3/fHKgCZ4iZYhyoTwG4C05f48271jY6XskqHF6UUDg==
+X-ME-Sender: <xms:YMfEZOgmoC8fMwpRtqguwWHfyQKl-7UeMtBC39dsAe0c9t1lQpunHw>
+    <xme:YMfEZPAc-3--76K-fdqkti-PMOKtC-XfagYouBNBru_pv3eykbqlBfsyMGGLDt_ng
+    oJ-Ab7KZ-AD42FgVN0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrieejgdduvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:YMfEZGFKi96I8nhFNkV3ostG1V7qBlsT9acoWLLwjt3ANUqmr4KuZg>
+    <xmx:YMfEZHQ9cdqcX_EWp_CR_hsrViZG93sHzHy4j5gjJf2YvFjqFFJwtQ>
+    <xmx:YMfEZLwmoTryi4H9-c7XvfYgbgMjl0olpaD042Rzmw0TDIdChPYApw>
+    <xmx:YsfEZCmNleOV9eCoTRRqHQb7sxX1hOhGi7FevuE1mprIUcWcq3xOQQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 14AD1B6008D; Sat, 29 Jul 2023 04:01:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+Mime-Version: 1.0
+Message-Id: <e7a792d9-39b9-440a-9c22-99e25b25a396@app.fastmail.com>
+In-Reply-To: <20230728234429.GA611252@dev-arch.thelio-3990X>
+References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
+ <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
+ <20230727213648.GA354736@dev-arch.thelio-3990X>
+ <1777400a-4d9c-4bdb-9d3b-f8808ef054cc@app.fastmail.com>
+ <20230728173103.GA1299743@dev-arch.thelio-3990X>
+ <a2fa1a31-e8bb-4659-9631-398b564e7c2b@app.fastmail.com>
+ <20230728234429.GA611252@dev-arch.thelio-3990X>
+Date:   Sat, 29 Jul 2023 09:59:23 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nathan Chancellor" <nathan@kernel.org>
+Cc:     "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v3 1/2] asm-generic: Unify uapi bitsperlong.h for arm64, riscv and
+ loongarch
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,200 +94,82 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sorry for the late reply, Alexandre. I'm busy with other suffs.
+On Sat, Jul 29, 2023, at 01:44, Nathan Chancellor wrote:
+> On Fri, Jul 28, 2023 at 10:56:38PM +0200, Arnd Bergmann wrote:
 
-On Mon, Jul 24, 2023 at 5:05=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> wro=
-te:
+>     DESCEND objtool
+>   In file included from 
+> /usr/include/aarch64-linux-gnu/asm/bitsperlong.h:1,
+>                    from /usr/include/asm-generic/int-ll64.h:12,
+>                    from /usr/include/asm-generic/types.h:7,
+>                    from /usr/include/aarch64-linux-gnu/asm/types.h:1,
+>                    from /linux-stable/tools/include/linux/types.h:13,
+>                    from 
+> /linux-stable/tools/arch/x86/include/asm/orc_types.h:9,
+>                    from /linux-stable/scripts/sorttable.h:96,
+>                    from /linux-stable/scripts/sorttable.c:201:
+>   /linux-stable/tools/include/asm-generic/bitsperlong.h:14:2: error: 
+> #error Inconsistent word size. Check asm/bitsperlong.h
+>      14 | #error Inconsistent word size. Check asm/bitsperlong.h
+>         |  ^~~~~
+>   make[3]: *** [/linux-stable/scripts/Makefile.host:114: 
+> scripts/sorttable] Error 1
+>   ...
 >
+>> I also noticed that your command line includes CROSS_COMPILE=x86_64-linux-
+>> rather than CROSS_COMPILE=x86_64-linux-gnu-
 >
-> On 22/07/2023 01:59, Guo Ren wrote:
-> > On Fri, Jul 21, 2023 at 4:01=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr>=
- wrote:
-> >>
-> >> On 21/07/2023 18:08, Guo Ren wrote:
-> >>> On Fri, Jul 21, 2023 at 11:19=E2=80=AFPM Alexandre Ghiti <alex@ghiti.=
-fr> wrote:
-> >>>> On 21/07/2023 16:51, guoren@kernel.org wrote:
-> >>>>> From: Guo Ren <guoren@linux.alibaba.com>
-> >>>>>
-> >>>>> RISC-V specification permits the caching of PTEs whose V (Valid)
-> >>>>> bit is clear. Operating systems must be written to cope with this
-> >>>>> possibility, but implementers are reminded that eagerly caching
-> >>>>> invalid PTEs will reduce performance by causing additional page
-> >>>>> faults.
-> >>>>>
-> >>>>> So we must keep vmalloc_fault for the spurious page faults of kerne=
-l
-> >>>>> virtual address from an OoO machine.
-> >>>>>
-> >>>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> >>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> >>>>> ---
-> >>>>>     arch/riscv/mm/fault.c | 3 +--
-> >>>>>     1 file changed, 1 insertion(+), 2 deletions(-)
-> >>>>>
-> >>>>> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> >>>>> index 85165fe438d8..f662c9eae7d4 100644
-> >>>>> --- a/arch/riscv/mm/fault.c
-> >>>>> +++ b/arch/riscv/mm/fault.c
-> >>>>> @@ -258,8 +258,7 @@ void handle_page_fault(struct pt_regs *regs)
-> >>>>>          * only copy the information from the master page table,
-> >>>>>          * nothing more.
-> >>>>>          */
-> >>>>> -     if ((!IS_ENABLED(CONFIG_MMU) || !IS_ENABLED(CONFIG_64BIT)) &&
-> >>>>> -         unlikely(addr >=3D VMALLOC_START && addr < VMALLOC_END)) =
-{
-> >>>>> +     if (unlikely(addr >=3D TASK_SIZE)) {
-> >>>>>                 vmalloc_fault(regs, code, addr);
-> >>>>>                 return;
-> >>>>>         }
-> >>>> Can you share what you are trying to fix here?
-> >>> We met a spurious page fault panic on an OoO machine.
-> >>>
-> >>> 1. The processor speculative execution brings the V=3D0 entries into =
-the
-> >>> TLB in the kernel virtual address.
-> >>> 2. Linux kernel installs the kernel virtual address with the page, an=
-d V=3D1
-> >>> 3. When kernel code access the kernel virtual address, it would raise
-> >>> a page fault as the V=3D0 entry in the tlb.
-> >>> 4. No vmalloc_fault, then panic.
-> >>>
-> >>>> I have a fix (that's currently running our CI) for commit 7d3332be01=
-1e
-> >>>> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") tha=
-t
-> >>>> implements flush_cache_vmap() since we lost the vmalloc_fault.
-> >>> Could you share that patch?
-> >>
-> >> Here we go:
-> >>
-> >>
-> >> Author: Alexandre Ghiti <alexghiti@rivosinc.com>
-> >> Date:   Fri Jul 21 08:43:44 2023 +0000
-> >>
-> >>       riscv: Implement flush_cache_vmap()
-> >>
-> >>       The RISC-V kernel needs a sfence.vma after a page table
-> >> modification: we
-> >>       used to rely on the vmalloc fault handling to emit an sfence.vma=
-, but
-> >>       commit 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
-> >>       vmalloc/modules area") got rid of this path for 64-bit kernels, =
-so
-> >> now we
-> >>       need to explicitly emit a sfence.vma in flush_cache_vmap().
-> >>
-> >>       Note that we don't need to implement flush_cache_vunmap() as the
-> >> generic
-> >>       code should emit a flush tlb after unmapping a vmalloc region.
-> >>
-> >>       Fixes: 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
-> >> vmalloc/modules area")
-> >>       Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> >>
-> >> diff --git a/arch/riscv/include/asm/cacheflush.h
-> >> b/arch/riscv/include/asm/cacheflush.h
-> >> index 8091b8bf4883..b93ffddf8a61 100644
-> >> --- a/arch/riscv/include/asm/cacheflush.h
-> >> +++ b/arch/riscv/include/asm/cacheflush.h
-> >> @@ -37,6 +37,10 @@ static inline void flush_dcache_page(struct page *p=
-age)
-> >>    #define flush_icache_user_page(vma, pg, addr, len) \
-> >>           flush_icache_mm(vma->vm_mm, 0)
-> >>
-> >> +#ifdef CONFIG_64BIT
-> >> +#define flush_cache_vmap(start, end) flush_tlb_kernel_range(start, en=
-d)
-> >> +#endif
-> > I don't want that, and flush_tlb_kernel_range is flush_tlb_all. In
-> > addition, it would call IPI, which is a performance killer.
->
->
-> At the moment, flush_tlb_kernel_range() indeed calls flush_tlb_all() but
-> that needs to be fixed, see my last patchset
-> https://lore.kernel.org/linux-riscv/20230711075434.10936-1-alexghiti@rivo=
-sinc.com/.
->
-> But can you at least check that this fixes your issue? It would be
-> interesting to see if the problem comes from vmalloc or something else.
-It could solve my issue.
+> Right, as I was reproducing this with your kernel.org GCC for
+> CROSS_COMPILE and Fedora's GCC for HOSTCC, since I wanted to make sure
+> this was not some issue with clang (which it does not appear to be).
 
->
->
-> > What's the problem of spurious fault replay? It only costs a
-> > local_tlb_flush with vaddr.
->
->
-> We had this exact discussion internally this week, and the fault replay
-> seems like a solution. But that needs to be thought carefully: the
-> vmalloc fault was removed for a reason (see Bjorn commit log), tracing
-> functions can use vmalloc() in the path of the vmalloc fault, causing an
-> infinite trap loop. And here you are simply re-enabling this problem.
-Thx for mentioning it, and I will solve it in the next version of the patch=
-:
+Ok, it's beginning to make more sense to me now. I see
+that the tools/arch/x86/include/asm/orc_types.h comes from
+the x86_64 target build and is intentional, as sorttable.c
+needs to access the ORC information. Here the Makefile does
 
--static inline void vmalloc_fault(struct pt_regs *regs, int code,
-unsigned long addr)
-+static void notrace vmalloc_fault(struct pt_regs *regs, int code,
-unsigned long addr)
+ifdef CONFIG_UNWINDER_ORC
+ifeq ($(ARCH),x86_64)
+ARCH := x86
+endif
+HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
+HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
+endif
 
-> In
-> addition, this patch makes vmalloc_fault() catch *all* kernel faults in
-> the kernel address space, so any genuine kernel fault would loop forever
-> in vmalloc_fault().
-We check whether kernel vaddr is valid by the page_table, not range.
-I'm sure "the any genuine kernel fault would loop forever in
-vmalloc_fault()" is about what? Could you give an example?
+in order to get the ORC definitions from asm/orc_types.h, but
+then it looks like it also gets the uapi/asm/bitsperlong.h
+header from there which contains
 
->
->
-> For now, the simplest solution is to implement flush_cache_vmap()
-> because riscv needs a sfence.vma when adding a new mapping, and if
-It's not a local_tlb_flush, and it would ipi broadcast all harts.
-on_each_cpu(__ipi_flush_tlb_all, NULL, 1);
+#if defined(__x86_64__) && !defined(__ILP32__)
+# define __BITS_PER_LONG 64
+#else
+# define __BITS_PER_LONG 32
+#endif
 
-That's too horrible.
+and this would set __BITS_PER_LONG to 32 on arm64.
 
-Some custom drivers or test codes may care about it.
+However, I don't see this actually being included on my
+machine. Can you dump the sorttable.c preprocessor output
+with your setup, using -fdirectives-only, so we can see
+which of the two (__BITS_PER_LONG or BITS_PER_LONG) is
+actually wrong and triggers the sanity check?
 
-> that's a "performance killer", let's measure that and implement
-> something like this patch is trying to do. I may be wrong, but there
-> aren't many new kernel mappings that would require a call to
-> flush_cache_vmap() so I disagree with the performance killer argument,
-> but happy to be proven otherwise!
+What I see on my machine is that both definitions come
+from the local tools/include/ headers, not from the
+installed system headers, so I'm still doing something
+wrong in my installation:
 
-1. I agree to pre-allocate pgd entries. It's good for performance, but
-don't do that when Sv32.
-2. We still need vmalloc_fault to match ISA spec requirements. (Some
-vendors' microarchitectures (e.g., T-HEAD c910) could prevent V=3D0 into
-TLB when PTW, then they don't need it.)
-3. Only when vmalloc_fault can't solve the problem, then let's think
-about the flush_cache_vmap() solution.
+./tools/include/uapi/asm-generic/bitsperlong.h
+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
 
->
-> Thanks,
->
-> Alex
->
->
-> >
-> >> +
-> >>    #ifndef CONFIG_SMP
-> >>
-> >>    #define flush_icache_all() local_flush_icache_all()
-> >>
-> >>
-> >> Let me know if that works for you!
-> >>
-> >>
-> >>>
-> > --
-> > Best Regards
-> >   Guo Ren
+./tools/include/asm-generic/bitsperlong.h
+#define BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
 
+Neither of these files actually contains the sanity
+check in linux-6.5-rc3, and comparing these is clearly
+nonsensical, as they are defined the same way (rather
+than checking CONFIG_64BIT), but also I don't see why
+there is both a uapi/ version and a non-uapi version
+in what is meant to be a userspace header.
 
-
---
-Best Regards
- Guo Ren
+     Arnd
