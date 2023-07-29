@@ -2,186 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BF876791A
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Jul 2023 01:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A82B767997
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Jul 2023 02:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbjG1Xoh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Jul 2023 19:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S231314AbjG2Ad1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Jul 2023 20:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjG1Xog (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jul 2023 19:44:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDDB4231;
-        Fri, 28 Jul 2023 16:44:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C236D62208;
-        Fri, 28 Jul 2023 23:44:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A074C433C8;
-        Fri, 28 Jul 2023 23:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690587872;
-        bh=cWmX8dje9L/t2n0sGzkMqdIweI7HyRrXvW9fatE/XmQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sEVL1iBujhtX6KL8vieDNOZRit8WKLYgDPzlWjysDVvATw3dW3wMmAmqcv34C7gRX
-         ixTPaqduG6ZU+yDJxPY0C3oJHXRYtTeQkkOUf9/047ZjrYURNDRWQxHlx+8tFetvl2
-         gs+UByaUwQOUX/PxL/HkxJI+P/D5LLLhEY4Z47Iw2CkDYTcr+cSKgchC9Dlz7hUZsj
-         QKcn/9LAtdOSVe1jtA2tZfPMnMi/QT++V+KxpJ0wvSvygmtVpqvsfWgZUqK1Vq7pfT
-         lrP2XQW+jWAq9IE9uEO62ZFYFgeVg9jPpJiFVb0TnAFo2Jznnfl5w2gzg6V/begJs8
-         lhnvdL500Uy1A==
-Date:   Fri, 28 Jul 2023 16:44:29 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
- riscv and loongarch
-Message-ID: <20230728234429.GA611252@dev-arch.thelio-3990X>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
- <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
- <20230727213648.GA354736@dev-arch.thelio-3990X>
- <1777400a-4d9c-4bdb-9d3b-f8808ef054cc@app.fastmail.com>
- <20230728173103.GA1299743@dev-arch.thelio-3990X>
- <a2fa1a31-e8bb-4659-9631-398b564e7c2b@app.fastmail.com>
+        with ESMTP id S229481AbjG2Ad0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jul 2023 20:33:26 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26B82135
+        for <linux-arch@vger.kernel.org>; Fri, 28 Jul 2023 17:33:24 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bbc64f9a91so21630125ad.0
+        for <linux-arch@vger.kernel.org>; Fri, 28 Jul 2023 17:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1690590804; x=1691195604;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ahyJuXZ5mL1EHkAmnBhtpjxq5pGjH0m9c44cFqu9RR8=;
+        b=xpUdgokS5I3D2dS83HRiHhZiG56m5FAIJgE/jlbqlE+gYcIRkpxvSi/pZSlUi7sy2z
+         bnqqAIfSeRVJ95s1lcZAuogwJigMtlZdlSs+YHeoYBnYTHfZR6Zk4ahWvPG1AaLULQhY
+         gO+eJNi8wd3w5WbQ9DO9D/sOeD3bA9T5kHZwOM7wmJcQvePox0iYtRM8wYAC7n/dDaqK
+         X7P0sDk/dcUAgQAqq7D+U55LcixXdO1mjn96aqshgDPBbaKb46v56++fUbVWhXcdTM5a
+         esvqsFXNPN843wzsRhz3BzbNQN9oUX4Gbmjl8FepRs+P4u+4Q+dnrBblDHu1hpf9MbwM
+         y3zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690590804; x=1691195604;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ahyJuXZ5mL1EHkAmnBhtpjxq5pGjH0m9c44cFqu9RR8=;
+        b=SlRZVkzpwWTnGsyzvSqanZo8wnT25QPdwtagnhvQZx9bmvzLPMSUkMaOBpoEYmV5ZV
+         MgPjYMbCs8KL9UgtqqKohk/axXl7KTO5MCReRNcWDVuJhwKHbi4bHUNae8FQhJijbZps
+         SK+qDaG1xP1FLwUqDNxLU57jYlG4Pdpa7/eZP1TReSgvKm2032juA4p375/zfv4M2iLf
+         Ajb2g+yRf2e7v+WG+xxSNJhIlmaeH+z7Dvs9bkcNCLrzOImM/V/Ylg+suQ4g2odJ7g7V
+         O+00lYlPOwMg8O0kZlzl/FnBt5/L1PmTBBWdCW6kNTI8JdwnIajCryto0c6EEzIrdM4j
+         2tUQ==
+X-Gm-Message-State: ABy/qLZ1LKwO29h8aRu8W7mIziZwSQ54R7eeC25K1fqwp2771avrj5QQ
+        FES3FTZ5Jcp748cVfPawAuHTbA==
+X-Google-Smtp-Source: APBJJlFS9zLP1c6phrba+UHvupDG9E3d4F06JGpS2iM7oXYYOuggQ3ope9iTdf44U6BdBCqfanr6PA==
+X-Received: by 2002:a17:902:9a06:b0:1bb:edd5:4644 with SMTP id v6-20020a1709029a0600b001bbedd54644mr2869632plp.68.1690590804391;
+        Fri, 28 Jul 2023 17:33:24 -0700 (PDT)
+Received: from x1 ([2601:1c2:1800:f680:ab2e:71c2:3a28:319c])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902ea0d00b001b9be3b94e5sm4140174plg.303.2023.07.28.17.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jul 2023 17:33:24 -0700 (PDT)
+Date:   Fri, 28 Jul 2023 17:33:22 -0700
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     guoren@kernel.org
+Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, falcon@tinylab.org,
+        bjorn@kernel.org, conor.dooley@microchip.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2 0/2] riscv: stack: Fixup independent softirq/irq stack
+ for CONFIG_FRAME_POINTER=n
+Message-ID: <ZMReUsAVmwcDwEhe@x1>
+References: <20230716001506.3506041-1-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a2fa1a31-e8bb-4659-9631-398b564e7c2b@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230716001506.3506041-1-guoren@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 10:56:38PM +0200, Arnd Bergmann wrote:
-> On Fri, Jul 28, 2023, at 19:31, Nathan Chancellor wrote:
-> > On Fri, Jul 28, 2023 at 01:00:30PM +0200, Arnd Bergmann wrote:
-> >>
-> >> of the uapi version. The sanity check in the kernel-side header
-> >> is intended to cross-check the CONFIG_64BIT value against the
-> >> __BITS_PER_LONG constant from the header.
-> >> 
-> >> My first guess would be that this only worked by accident if the headers
-> >> defaulted to "#define __BITS_PER_LONG 32" in and #undef CONFIG_64BIT"
-> >> when include/generated/autoconf.h, but now the __BITS_PER_LONG value
-> >> is actually correct.
-> >
-> > That seems like a reasonable theory. I am still busy looking into other
-> > things today but I can try to double back to this on Monday if you don't
-> > make any progress.
+On Sat, Jul 15, 2023 at 08:15:04PM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> I tried reproducing this today on arm64 Debian with linux-6.5-rc3
-> and clang-14.0.6 but I don't see the problem here. With 'make V=1'
-> I see command for building scripts/sorttable is
+> The independent softirq/irq stack uses s0 to save & restore sp, but s0
+> would be corrupted when CONFIG_FRAME_POINTER=n. So add s0 in the clobber
+> list to fix the problem.
 > 
-> clang -Wp,-MMD,scripts/.sorttable.d -Wall -Wmissing-prototypes \
->  -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11   \
->  -I./tools/include -I./tools/arch/x86/include -DUNWINDER_ORC_ENABLED \
->  -o scripts/sorttable scripts/sorttable.c   -lpthread
+> <+0>:     addi    sp,sp,-32
+> <+2>:     sd      s0,16(sp)
+> <+4>:     sd      s1,8(sp)
+> <+6>:     sd      ra,24(sp)
+> <+8>:     sd      s2,0(sp)
+> <+10>:    mv      s0,a0		--> compiler allocate s0 for a0 when CONFIG_FRAME_POINTER=n
+> <+12>:    jal     ra,0xffffffff800bc0ce <irqentry_enter>
+> <+16>:    ld      a5,56(tp) # 0x38
+> <+20>:    lui     a4,0x4
+> <+22>:    mv      s1,a0
+> <+24>:    xor     a5,a5,sp
+> <+28>:    bgeu    a5,a4,0xffffffff800bc092 <do_irq+88>
+> <+32>:    auipc   s2,0x5d
+> <+36>:    ld      s2,1118(s2) # 0xffffffff801194b8 <irq_stack_ptr>
+> <+40>:    add     s2,s2,a4
+> <+42>:    addi    sp,sp,-8
+> <+44>:    sd      ra,0(sp)
+> <+46>:    addi    sp,sp,-8
+> <+48>:    sd      s0,0(sp)
+> <+50>:    addi    s0,sp,16	--> our code clobber the s0
+> <+52>:    mv      sp,s2
+> <+54>:    mv      a0,s0		--> a0 got wrong value for handle_riscv_irq 
+> <+56>:    jal     ra,0xffffffff800bbb3a <handle_riscv_irq>
 > 
-> which does create an arm64 executable but includes the x86 headers,
-> which is clearly a bug by itself, it just doesn't trigger the problem
-> for me.
+> Changelog:
+> V2
+>  - Fixup compile error with CONFIG_FRAME_POINTER=y
+>  - FIxup stable@vger.kernel.org tag
+> 
+> Guo Ren (2):
+>   riscv: stack: Fixup independent irq stack for CONFIG_FRAME_POINTER=n
+>   riscv: stack: Fixup independent softirq stack for
+>     CONFIG_FRAME_POINTER=n
+> 
+>  arch/riscv/kernel/irq.c   | 3 +++
+>  arch/riscv/kernel/traps.c | 3 +++
+>  2 files changed, 6 insertions(+)
+> 
+> -- 
+> 2.36.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-I could not initially reproduce this on Debian either but I figured out
-why that might be: the default include paths on Debian look different
-from Fedora so just doing 'headers_install' into /usr will not reproduce
-this. If I add '-H' to that GCC command, Debian shows (I highlighted the
-key difference):
+Tested-by: Drew Fustini <dfustini@baylibre.com>
 
-  . /linux-stable/scripts/sorttable.h
-  .. /linux-stable/tools/arch/x86/include/asm/orc_types.h
-  ... /linux-stable/tools/include/linux/types.h
-  .... /usr/lib/gcc/aarch64-linux-gnu/12/include/stdbool.h
-  .... /usr/lib/gcc/aarch64-linux-gnu/12/include/stddef.h
-  .... /usr/include/aarch64-linux-gnu/asm/types.h
-  ..... /usr/include/asm-generic/types.h
-  ...... /usr/include/asm-generic/int-ll64.h
-  ....... /usr/include/aarch64-linux-gnu/asm/bitsperlong.h <-
-  ........ /linux-stable/tools/include/asm-generic/bitsperlong.h
-  ......... /linux-stable/tools/include/uapi/asm-generic/bitsperlong.h
+Xi Ruoyao noticed that the mainline kernel crashed when using a kernel
+config with CONFIG_FRAME_POINTER=n. I was able to reproduce this [1].
+Emil suggested I trying this patche series. I can confirm that this
+resolves the kernel crash on the Sipeed Lichee Pi4a [2].
 
-Whereas Fedora shows:
+Thanks,
+Drew
 
-  . /linux-stable/scripts/sorttable.h
-  .. /linux-stable/tools/arch/x86/include/asm/orc_types.h
-  ... /linux-stable/tools/include/linux/types.h
-  .... /usr/lib/gcc/aarch64-redhat-linux/13/include/stdbool.h
-  .... /usr/lib/gcc/aarch64-redhat-linux/13/include/stddef.h
-  .... /usr/include/asm/types.h
-  ..... /usr/include/asm-generic/types.h
-  ...... /usr/include/asm-generic/int-ll64.h
-  ....... /usr/include/asm/bitsperlong.h <-
-  ........ /linux-stable/tools/include/asm-generic/bitsperlong.h
-  ......... /linux-stable/tools/include/uapi/asm-generic/bitsperlong.h
-
-Running 'gcc -fsyntax-only -v -x c /dev/null' shows:
-
-Debian:
-
-  #include <...> search starts here:
-   /usr/lib/gcc/aarch64-linux-gnu/12/include
-   /usr/local/include
-   /usr/include/aarch64-linux-gnu
-   /usr/include
-  End of search list.
-
-Fedora:
-
-  #include <...> search starts here:
-   /usr/lib/gcc/aarch64-redhat-linux/13/include
-   /usr/local/include
-   /usr/include
-  End of search list.
-
-It looks like Debian installs the architecture asm files into an
-architecture specific subdirectory, which headers_install does not know
-about, so the new "problematic" bitsperlong.h file gets installed to the
-default location but the older one actually gets used because it has
-higher priority in the include search path.
-
-https://salsa.debian.org/kernel-team/linux/-/blob/36b9562acea404ecdc2911aeb2c4539402f441a3/debian/rules.real#L334-336
-
-If I install/manipulate the headers as Debian does, I can reproduce this
-issue in a fresh Debian container.
-
-  # make -C /linux -j$(nproc) INSTALL_HDR_PATH=/usr O=/build headers_install
-  # rm -fr /usr/include/aarch64-linux-gnu/asm
-  # mv -v /usr/include/asm /usr/include/aarch64-linux-gnu
-  # make -C /linux-stable -j$(nproc) ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- O=/build mrproper defconfig prepare
-  ...
-    DESCEND objtool
-  In file included from /usr/include/aarch64-linux-gnu/asm/bitsperlong.h:1,
-                   from /usr/include/asm-generic/int-ll64.h:12,
-                   from /usr/include/asm-generic/types.h:7,
-                   from /usr/include/aarch64-linux-gnu/asm/types.h:1,
-                   from /linux-stable/tools/include/linux/types.h:13,
-                   from /linux-stable/tools/arch/x86/include/asm/orc_types.h:9,
-                   from /linux-stable/scripts/sorttable.h:96,
-                   from /linux-stable/scripts/sorttable.c:201:
-  /linux-stable/tools/include/asm-generic/bitsperlong.h:14:2: error: #error Inconsistent word size. Check asm/bitsperlong.h
-     14 | #error Inconsistent word size. Check asm/bitsperlong.h
-        |  ^~~~~
-  make[3]: *** [/linux-stable/scripts/Makefile.host:114: scripts/sorttable] Error 1
-  ...
-
-> I also noticed that your command line includes CROSS_COMPILE=x86_64-linux-
-> rather than CROSS_COMPILE=x86_64-linux-gnu-
-
-Right, as I was reproducing this with your kernel.org GCC for
-CROSS_COMPILE and Fedora's GCC for HOSTCC, since I wanted to make sure
-this was not some issue with clang (which it does not appear to be).
-
-Cheers,
-Nathan
+[1] https://lore.kernel.org/linux-riscv/ZMNojqwLxcG8FcHN@x1/
+[2] https://lore.kernel.org/linux-riscv/ZMQAqUfb0y%2FigQs2@x1/
