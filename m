@@ -2,64 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA037694C5
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 13:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A01769554
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 13:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjGaL1b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 07:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S232054AbjGaL4F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 07:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjGaL1a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 07:27:30 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E518F125;
-        Mon, 31 Jul 2023 04:27:24 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Dxg_CamsdkXjgNAA--.31654S3;
-        Mon, 31 Jul 2023 19:27:22 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx7yOXmsdk11lCAA--.2410S3;
-        Mon, 31 Jul 2023 19:27:19 +0800 (CST)
-Message-ID: <cd1a8791-a524-8813-c70d-2adb4e6c5471@loongson.cn>
-Date:   Mon, 31 Jul 2023 19:27:19 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH V2] asm-generic: ticket-lock: Optimize
- arch_spin_value_unlocked
+        with ESMTP id S232077AbjGaL4D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 07:56:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881FBE68;
+        Mon, 31 Jul 2023 04:55:59 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36VBdaI6022016;
+        Mon, 31 Jul 2023 11:55:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=qHBp4S0vXvjXdtL9T2yqLOyzOu6JR+RCmAuqtz3oATI=;
+ b=PRL2Py6acpx6CEWblmiyaSymSgQTSspw5jTVmUoT/zaNCgUT34P/T+pVy9UT+M4jFq1d
+ LcIJqj84lO1cS2kmZCwGkj3ZO0GH6VRpISKyR0vgJ2i1A3R3cN0ni5JM0MfkyhGFUAIj
+ 3K1Bj9wrOzVnlC15vzu9+YiOuOUWWPejvduUN+o0EMeIxgYubz2WIXC2W6z+dznXbJaB
+ IEf7NDwVOsnA9RuTVnksVqbItvLZ2XvSOjo+Oyn5JhFeQsAsRZ7I5DWIWQeymii+paUo
+ CmZp6aiHlk5LHyoKCwEH6nooWwwWCDfKVHmz3q7WUJlyAqJRb6snSOtSEpKENsi480+3 +w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s6bj11mty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 11:55:33 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36VBeaa3026148;
+        Mon, 31 Jul 2023 11:55:32 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s6bj11msy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 11:55:32 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36VB8GSU015538;
+        Mon, 31 Jul 2023 11:55:31 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3s5e3mjt2u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 11:55:30 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36VBtSqK23528166
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jul 2023 11:55:29 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2BEB20043;
+        Mon, 31 Jul 2023 11:55:28 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 676AB20040;
+        Mon, 31 Jul 2023 11:55:28 +0000 (GMT)
+Received: from [9.144.146.219] (unknown [9.144.146.219])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jul 2023 11:55:28 +0000 (GMT)
+Message-ID: <c2ac9fce-8967-6b5a-8cc3-ff5de5150a09@linux.ibm.com>
+Date:   Mon, 31 Jul 2023 13:55:28 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/10] Introduce SMT level and add PowerPC support
+To:     Thomas Gleixner <tglx@linutronix.de>, linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        dave.hansen@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        rui.zhang@intel.com
+References: <20230705145143.40545-1-ldufour@linux.ibm.com>
+ <87tttoqxft.ffs@tglx>
 Content-Language: en-US
-To:     guoren@kernel.org, David.Laight@ACULAB.COM, will@kernel.org,
-        peterz@infradead.org, mingo@redhat.com, longman@redhat.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-References: <20230731023308.3748432-1-guoren@kernel.org>
-From:   bibo mao <maobibo@loongson.cn>
-In-Reply-To: <20230731023308.3748432-1-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87tttoqxft.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -WSL2ggfwRiYmP9_bsW-zeZdPnGYqxSI
+X-Proofpoint-GUID: 3GAGWt4nw0RLj7-HH_Q5bFHD7idPBBwp
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx7yOXmsdk11lCAA--.2410S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFW5Zw13CrWDAF4rWF18Xrc_yoW8Kw1Upr
-        98CFs3AF47CFykZFZFyF42vr1rJwsF9r18ur90gwn2yFsrX3s5KanY9rn0vr1jk3WxKrsx
-        XFW2gFy5uayjyFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-31_05,2023-07-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 clxscore=1011
+ adultscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307310104
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,72 +98,23 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-在 2023/7/31 10:33, guoren@kernel.org 写道:
-> From: Guo Ren <guoren@linux.alibaba.com>
+Le 28/07/2023 à 09:58, Thomas Gleixner a écrit :
+> Laurent, Michael!
 > 
-> The arch_spin_value_unlocked would cause an unnecessary memory
-> access to the contended value. Although it won't cause a significant
-> performance gap in most architectures, the arch_spin_value_unlocked
-> argument contains enough information. Thus, remove unnecessary
-> atomic_read in arch_spin_value_unlocked().
+> On Wed, Jul 05 2023 at 16:51, Laurent Dufour wrote:
+>> I'm taking over the series Michael sent previously [1] which is smartly
+>> reviewing the initial series I sent [2].  This series is addressing the
+>> comments sent by Thomas and me on the Michael's one.
 > 
-> The caller of arch_spin_value_unlocked() could benefit from this
-> change. Currently, the only caller is lockref.
+> Thanks for getting this into shape.
 > 
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: David Laight <David.Laight@ACULAB.COM>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> ---
-> Changelog
-> V2:
->  - Fixup commit log with Waiman advice.
->  - Add Waiman comment in the commit msg.
-> ---
->  include/asm-generic/spinlock.h | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+> I've merged it into:
 > 
-> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-> index fdfebcb050f4..90803a826ba0 100644
-> --- a/include/asm-generic/spinlock.h
-> +++ b/include/asm-generic/spinlock.h
-> @@ -68,11 +68,18 @@ static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
->  	smp_store_release(ptr, (u16)val + 1);
->  }
->  
-> +static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> +{
-> +	u32 val = lock.counter;
-> +
-> +	return ((val >> 16) == (val & 0xffff));
-> +}
-I do not know much about lock, will it be cached in register without memory
-access again like READ_ONCE or atomic_read?
+>     git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+> 
+> and tagged it at patch 7 for consumption into the powerpc tree, so the
+> powerpc specific changes can be applied there on top:
+> 
+>     git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp-core-for-ppc-23-07-28
 
-Regards
-Bibo Mao
-> +
->  static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
->  {
-> -	u32 val = atomic_read(lock);
-> +	arch_spinlock_t val = READ_ONCE(*lock);
->  
-> -	return ((val >> 16) != (val & 0xffff));
-> +	return !arch_spin_value_unlocked(val);
->  }
->  
->  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
-> @@ -82,11 +89,6 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
->  	return (s16)((val >> 16) - (val & 0xffff)) > 1;
->  }
->  
-> -static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> -{
-> -	return !arch_spin_is_locked(&lock);
-> -}
-> -
->  #include <asm/qrwlock.h>
->  
->  #endif /* __ASM_GENERIC_SPINLOCK_H */
-
+Thanks Thomas!
