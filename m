@@ -2,86 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066587698DC
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 16:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E28769AA1
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 17:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbjGaOAn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 10:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S230527AbjGaPRV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 11:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbjGaOAN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 10:00:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3541459D7;
-        Mon, 31 Jul 2023 06:55:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S230511AbjGaPRU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 11:17:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C52BC3
+        for <linux-arch@vger.kernel.org>; Mon, 31 Jul 2023 08:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690816601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YrcN1VyVujE5NV1Jsx3JBmyoizH+WJVWnxVoH1kYdAE=;
+        b=CaxApuka9MM9/GjvD46vFd2JR5EDvGQmGoeXLh9ln9vi708H91+50BJVtxqklWP3bnSDbP
+        LEvEmEL6eStT8yOWLy5LibKy6B2fvzR+5rJ53bbsy6O/rOmBOQyoKx2pB0z94SJ7CIXmRb
+        aBWA3AYhiQCxEgaXbSIG6iL60BKpsGI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-B6tkADYpOJuBdZ0urqYKvg-1; Mon, 31 Jul 2023 11:16:35 -0400
+X-MC-Unique: B6tkADYpOJuBdZ0urqYKvg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A9261156;
-        Mon, 31 Jul 2023 13:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCDCC433CA;
-        Mon, 31 Jul 2023 13:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690811675;
-        bh=o3F0gqwirOzTh8gwGkZMmsXM7Yu/yi+gPnGo/AGnFQM=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=HyAHUFnAoBom0QscdVUThlaenRfRJNHjJi4pUFQt6fi4OceNUG2x7+Fxv8wi74Hqw
-         QRUL9N5YXGPQ4uFBGPWcs3iNCbsR9FiKa8DQLjF8X0N3/RGocVPsljC3mKSD+xd6+L
-         M9FBHJrbsBxv40rc4Uy950yo3vO6FEROOSWCRAKavHF6jDbda49RiJK5k7kVhkF4vp
-         iivUqIPVfFFFdvUBH7wyRSK3o60UIqKj0RbaQcXeu73jOGBbnEr6NbDLe6mPCMhBif
-         oXlIbZiT3f5QoDJ0khYc5lKBVfyzvkYFET5gUENWHoBWxSg5P3MbbPAmeGGNvSj2TC
-         L3puIhC1WPl9g==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 31 Jul 2023 14:43:45 +0100
-Subject: [PATCH v3 36/36] kselftest/arm64: Enable GCS for the FP stress
- tests
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDE17185A794;
+        Mon, 31 Jul 2023 15:16:34 +0000 (UTC)
+Received: from [10.22.10.62] (unknown [10.22.10.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DDCBC57965;
+        Mon, 31 Jul 2023 15:16:34 +0000 (UTC)
+Message-ID: <c603e7f1-a562-6826-1c86-995c8127abee@redhat.com>
+Date:   Mon, 31 Jul 2023 11:16:34 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V2] asm-generic: ticket-lock: Optimize
+ arch_spin_value_unlocked
+Content-Language: en-US
+To:     guoren@kernel.org, David.Laight@ACULAB.COM, will@kernel.org,
+        peterz@infradead.org, mingo@redhat.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230731023308.3748432-1-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230731023308.3748432-1-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230731-arm64-gcs-v3-36-cddf9f980d98@kernel.org>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
-In-Reply-To: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3085; i=broonie@kernel.org;
- h=from:subject:message-id; bh=o3F0gqwirOzTh8gwGkZMmsXM7Yu/yi+gPnGo/AGnFQM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkx7wwuaNHiH/sh5dlS0FVcNvX1DXqSpJdJDB2Ri4e
- iAhgMa6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZMe8MAAKCRAk1otyXVSH0Mp1B/
- 0a+OKNFEJ0bztbW9lvAaTwmG1BsE4DkLYJj+vztq4EdwjuzZ2sKbuAQxCrVcctCfGJyoDCe8GqOWJ6
- kvpPeNhYj7QUkoRLgNyJ7B072TG36hcpuBLiGoXM6UJoE19BZmVj7JwKVFXj5QyNC764GpgvPfpfRo
- +fx434lX+B1wJTFgGzBQAFrmBTItmcEg8FOzDy0nOLC15FpK4ywvATHTfZ4RBwC7U89hqK7/54g64L
- yI9I5OWAZDyTbXPqQi40k87aQ3ttphHmtn3Kg1xBZO+10EWR2Vjh88ikRALs5S/ZtYcYAOXbBhrM8V
- 6l/GNj9nQU6x77IOKlayvZxRfjMmSW
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,98 +66,73 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-While it's a bit off topic for them the floating point stress tests do give
-us some coverage of context thrashing cases, and also of active signal
-delivery separate to the relatively complicated framework in the actual
-signals tests. Have the tests enable GCS on startup, ignoring failures so
-they continue to work as before on systems without GCS.
+On 7/30/23 22:33, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The arch_spin_value_unlocked would cause an unnecessary memory
+> access to the contended value. Although it won't cause a significant
+> performance gap in most architectures, the arch_spin_value_unlocked
+> argument contains enough information. Thus, remove unnecessary
+> atomic_read in arch_spin_value_unlocked().
+>
+> The caller of arch_spin_value_unlocked() could benefit from this
+> change. Currently, the only caller is lockref.
+>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: David Laight <David.Laight@ACULAB.COM>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> ---
+> Changelog
+> V2:
+>   - Fixup commit log with Waiman advice.
+>   - Add Waiman comment in the commit msg.
+> ---
+>   include/asm-generic/spinlock.h | 16 +++++++++-------
+>   1 file changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> index fdfebcb050f4..90803a826ba0 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -68,11 +68,18 @@ static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+>   	smp_store_release(ptr, (u16)val + 1);
+>   }
+>   
+> +static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> +{
+> +	u32 val = lock.counter;
+> +
+> +	return ((val >> 16) == (val & 0xffff));
+> +}
+> +
+>   static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+>   {
+> -	u32 val = atomic_read(lock);
+> +	arch_spinlock_t val = READ_ONCE(*lock);
+>   
+> -	return ((val >> 16) != (val & 0xffff));
+> +	return !arch_spin_value_unlocked(val);
+>   }
+>   
+>   static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+> @@ -82,11 +89,6 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>   	return (s16)((val >> 16) - (val & 0xffff)) > 1;
+>   }
+>   
+> -static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> -{
+> -	return !arch_spin_is_locked(&lock);
+> -}
+> -
+>   #include <asm/qrwlock.h>
+>   
+>   #endif /* __ASM_GENERIC_SPINLOCK_H */
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/assembler.h   | 15 +++++++++++++++
- tools/testing/selftests/arm64/fp/fpsimd-test.S |  2 ++
- tools/testing/selftests/arm64/fp/sve-test.S    |  2 ++
- tools/testing/selftests/arm64/fp/za-test.S     |  2 ++
- tools/testing/selftests/arm64/fp/zt-test.S     |  2 ++
- 5 files changed, 23 insertions(+)
+I am fine with the current change. However, modern optimizing compiler 
+should be able to avoid the redundant memory read anyway. So this patch 
+may not have an impact from the performance point of view.
 
-diff --git a/tools/testing/selftests/arm64/fp/assembler.h b/tools/testing/selftests/arm64/fp/assembler.h
-index 9b38a0da407d..7012f9f796de 100644
---- a/tools/testing/selftests/arm64/fp/assembler.h
-+++ b/tools/testing/selftests/arm64/fp/assembler.h
-@@ -65,4 +65,19 @@ endfunction
- 	bl	puts
- .endm
- 
-+#define PR_SET_SHADOW_STACK_STATUS      72
-+# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
-+
-+.macro enable_gcs
-+	// Run with GCS
-+	mov	x0, PR_SET_SHADOW_STACK_STATUS
-+	mov	x1, PR_SHADOW_STACK_ENABLE
-+	mov	x2, xzr
-+	mov	x3, xzr
-+	mov	x4, xzr
-+	mov	x5, xzr
-+	mov	x8, #__NR_prctl
-+	svc	#0
-+.endm
-+
- #endif /* ! ASSEMBLER_H */
-diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-index 8b960d01ed2e..b16fb7f42e3e 100644
---- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
-+++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-@@ -215,6 +215,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index 4328895dfc87..486634bc7def 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -378,6 +378,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// Irritation signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-index 9dcd70911397..f789694fa3ea 100644
---- a/tools/testing/selftests/arm64/fp/za-test.S
-+++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -231,6 +231,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
-index d63286397638..ea5e55310705 100644
---- a/tools/testing/selftests/arm64/fp/zt-test.S
-+++ b/tools/testing/selftests/arm64/fp/zt-test.S
-@@ -200,6 +200,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-
--- 
-2.30.2
+Acked-by: Waiman Long <longman@redhat.com>
 
