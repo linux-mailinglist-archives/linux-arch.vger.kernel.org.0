@@ -2,236 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69FC769ED5
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E128769F10
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjGaRIf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 13:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S230064AbjGaROl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 13:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjGaRHP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:07:15 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD8F2693;
-        Mon, 31 Jul 2023 10:04:49 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d05a63946e0so4860579276.1;
-        Mon, 31 Jul 2023 10:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690823082; x=1691427882;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ge3Da1dLlbVImV5jdD/HZRx7aISFPvIvfEGvqleo2SA=;
-        b=ioOMbbu3JES3j1Jj+JW3855XW3Ov65AQm8O9lv95JxDcPPS6IwntjHfsaaLCwjHL5b
-         OuA4j3AMcOeG2v6VKrbkSXabyBKoN8KuyYIoDCC1YD5I/RC4KqKt3ITSQwKezbQCp/8J
-         AR8EjEBjRuz0BKnlQIU6Pu2fINdNhuBPDReykf5gMLB8b4rp/cimT4edf9bEDyME9O7d
-         VFOstOotn1+dDzfuistQZkRoPkOh7Uzd/ZqgsVXJ0Zgg3bR5ReggCo1obemCJNhIS+t9
-         Ue+OH0jfGRqmyKjIxlmOMTrVnVAvQzQZxHF6PwZledF5BBiAWirHuHl+9jo5QzXuxUnf
-         6Gng==
+        with ESMTP id S234745AbjGaROX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:14:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023624690
+        for <linux-arch@vger.kernel.org>; Mon, 31 Jul 2023 10:09:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690823359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o7Je1Tw1wJWhPdYNICmrH5qTgNEkZ25/eHgF0fwCa/s=;
+        b=J8AWeTjQNi8pOWsWpAHwvrfeaYtDu+ly6Fy6gt/T6QfNDbRmw1xB/clG2Pv9u6K37OtKPk
+        9ECc4v7sROrYXXmB2oUZQ+DuFAqff7GhdLz8Owy4F0mRuQ3ZS8R6fwkRGRVu0nisoJ+Naz
+        v+fI9FEuDM92iPAVZLtHd1rRkFa+/5Q=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-616-BqrOutMFM9uUQe33WehzyQ-1; Mon, 31 Jul 2023 13:06:08 -0400
+X-MC-Unique: BqrOutMFM9uUQe33WehzyQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3fe13881511so13004915e9.3
+        for <linux-arch@vger.kernel.org>; Mon, 31 Jul 2023 10:06:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690823082; x=1691427882;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ge3Da1dLlbVImV5jdD/HZRx7aISFPvIvfEGvqleo2SA=;
-        b=PSIJHtMB7s/Dj9rf1thAEZSfWNs3gayjtIWr9+LprdbDpVCcXFowHbYacLHJpwYW1R
-         zwppfAQV3vKnkwFogS++QGyR6TcpJKV49e3W5CU4Iyx282HFtnDF+mpJ7PBazGQHvbDX
-         8dIl0ZAnY0/k0taLm2yEze4axRUizMSx1cRFXqGRicts/SH3LiN3ryFtkSPaeVSmj33O
-         LR7T+IOac4u4RhoxE+27kh/WbHCXV/JjTbk2tGZPJwDbHbWKA2WNSoxcPWjthdoClt7G
-         2hvKW56QHsUa5xb/zrQF5SGvpLddMs/BIJNOibKhknpf9ZU/TMOj6zJU+qkEcM6xx5CS
-         ocdA==
-X-Gm-Message-State: ABy/qLbdmjI1GfR79vyr3q+E7txt1fQVQw0CgRBC4OIf8WAQBqLjmdYA
-        ZtJJ2VIN0yA4L4yDlQ5WsLw=
-X-Google-Smtp-Source: APBJJlF0vgCAeh2GJq7nS2h9EAm5JTHFkJPU6wpVfPXTMfmv7gc4qDUX7Q6WDvp5wiH1WM3Qyv6c4g==
-X-Received: by 2002:a25:d68d:0:b0:d0f:ea4b:1dff with SMTP id n135-20020a25d68d000000b00d0fea4b1dffmr10302787ybg.8.1690823081905;
-        Mon, 31 Jul 2023 10:04:41 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id x31-20020a25ac9f000000b00c832ad2e2eesm2511833ybi.60.2023.07.31.10.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 10:04:41 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH mm-unstable v8 31/31] mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
-Date:   Mon, 31 Jul 2023 10:03:32 -0700
-Message-Id: <20230731170332.69404-32-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230731170332.69404-1-vishal.moola@gmail.com>
-References: <20230731170332.69404-1-vishal.moola@gmail.com>
+        d=1e100.net; s=20221208; t=1690823167; x=1691427967;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o7Je1Tw1wJWhPdYNICmrH5qTgNEkZ25/eHgF0fwCa/s=;
+        b=Tg+GOf5nFIxNwHe2WQgUTF3qO03OZnfsE/6kSb3hsKkzIYQ5OuAD6/TXqD6mtuCswP
+         WlTcEw0Ik7e4T0nGa7y5W9fondvxE39HA57jQ9lyAuNLt71NsgKwA77pBe7aIDeRUkYJ
+         xW6fgNWTSs+0/vQMKMJCPpsTsAWWVDBSXjNknAHx3WvOqOPj11ZblBSMw/0h6MwNwhn6
+         Rjv0vLcYUNrprh3saCF3yeb8+ttu0fN/mqevbp5Qp9hkhIWCQKYWLg0r7eG08XRo/0Yu
+         0+mNNpsX0S1PO8NJal+sphDJ1yQSWAuhDN2QueBbHcuArBR6wZT0yoSWjsVAOkEUVyMD
+         C/IQ==
+X-Gm-Message-State: ABy/qLbXvTPHf9davYDGxwpmfCHzgIDsD/RiPLq0vogMePVjrZlkg7pb
+        IphDFoYWY2rQGPGPWlsbnrZmJoZbBADHXMj8oraHNj7dnOEg4DdTwnzvzyRznqPTgDjYbCLuY9n
+        NHmAAXXMYdCfjqutRY3Y4YA==
+X-Received: by 2002:a05:600c:260e:b0:3fe:1548:264f with SMTP id h14-20020a05600c260e00b003fe1548264fmr433539wma.22.1690823166978;
+        Mon, 31 Jul 2023 10:06:06 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH2MTM3zZh6fdgvplx34o1m2GIuXvVYoFmP83+z8cxLJsJsTDtauV6QKq2/5/U7uWp78AAGYQ==
+X-Received: by 2002:a05:600c:260e:b0:3fe:1548:264f with SMTP id h14-20020a05600c260e00b003fe1548264fmr433518wma.22.1690823166457;
+        Mon, 31 Jul 2023 10:06:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c723:4c00:5c85:5575:c321:cea3? (p200300cbc7234c005c855575c321cea3.dip0.t-ipconnect.de. [2003:cb:c723:4c00:5c85:5575:c321:cea3])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05600c22c300b003fe13c3ece7sm7762180wmg.10.2023.07.31.10.06.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 10:06:06 -0700 (PDT)
+Message-ID: <b046ce32-2f47-d415-ad40-8be2cc0d5991@redhat.com>
+Date:   Mon, 31 Jul 2023 19:06:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        "xuyu@linux.alibaba.com" <xuyu@linux.alibaba.com>
+References: <cover.1682453344.git.khalid.aziz@oracle.com>
+ <74fe50d9-9be9-cc97-e550-3ca30aebfd13@linux.alibaba.com>
+ <ZMeoHoM8j/ric0Bh@casper.infradead.org>
+ <ae3bbfba-4207-ec5b-b4dd-ea63cb52883d@redhat.com>
+ <9faea1cf-d3da-47ff-eb41-adc5bd73e5ca@linux.alibaba.com>
+ <d3d03475-7977-fc55-188d-7df350ee0f29@redhat.com>
+ <ZMfjmhaqVZyZNNMW@casper.infradead.org>
+ <c1f3c78d-b1eb-5c1c-83aa-35901800498f@redhat.com>
+ <ZMfnNpQIkXXs1W02@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
+ processes (Previously mshare)
+In-Reply-To: <ZMfnNpQIkXXs1W02@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These functions are no longer necessary. Remove them and cleanup
-Documentation referencing them.
+On 31.07.23 18:54, Matthew Wilcox wrote:
+> On Mon, Jul 31, 2023 at 06:48:47PM +0200, David Hildenbrand wrote:
+>> On 31.07.23 18:38, Matthew Wilcox wrote:
+>>> On Mon, Jul 31, 2023 at 06:30:22PM +0200, David Hildenbrand wrote:
+>>>> Assume we do do the page table sharing at mmap time, if the flags are right.
+>>>> Let's focus on the most common:
+>>>>
+>>>> mmap(memfd, PROT_READ | PROT_WRITE, MAP_SHARED)
+>>>>
+>>>> And doing the same in each and every process.
+>>>
+>>> That may be the most common in your usage, but for a database, you're
+>>> looking at two usage scenarios.  Postgres calls mmap() on the database
+>>> file itself so that all processes share the kernel page cache.
+>>> Some Commercial Databases call mmap() on a hugetlbfs file so that all
+>>> processes share the same userspace buffer cache.  Other Commecial
+>>> Databases call shmget() / shmat() with SHM_HUGETLB for the exact
+>>> same reason.
+>>
+>> I remember you said that postgres might be looking into using shmem as well,
+>> maybe I am wrong.
+> 
+> No, I said that postgres was also interested in sharing page tables.
+> I don't think they have any use for shmem.
+> 
+>> memfd/hugetlb/shmem could all be handled alike, just "arbitrary filesystems"
+>> would require more work.
+> 
+> But arbitrary filesystems was one of the origin use cases; where the
+> database is stored on a persistent memory filesystem, and neither the
+> kernel nor userspace has a cache.  The Postgres & Commercial Database
+> use-cases collapse into the same case, and we want to mmap the files
+> directly and share the page tables.
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/mm/split_page_table_lock.rst    | 12 +++++------
- .../zh_CN/mm/split_page_table_lock.rst        | 14 ++++++-------
- include/linux/mm.h                            | 20 -------------------
- 3 files changed, 13 insertions(+), 33 deletions(-)
+Yes, and transparent page table sharing can be achieved otherwise.
 
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index a834fad9de12..e4f6972eb6c0 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -58,7 +58,7 @@ Support of split page table lock by an architecture
- ===================================================
- 
- There's no need in special enabling of PTE split page table lock: everything
--required is done by pgtable_pte_page_ctor() and pgtable_pte_page_dtor(), which
-+required is done by pagetable_pte_ctor() and pagetable_pte_dtor(), which
- must be called on PTE table allocation / freeing.
- 
- Make sure the architecture doesn't use slab allocator for page table
-@@ -68,8 +68,8 @@ This field shares storage with page->ptl.
- PMD split lock only makes sense if you have more than two page table
- levels.
- 
--PMD split lock enabling requires pgtable_pmd_page_ctor() call on PMD table
--allocation and pgtable_pmd_page_dtor() on freeing.
-+PMD split lock enabling requires pagetable_pmd_ctor() call on PMD table
-+allocation and pagetable_pmd_dtor() on freeing.
- 
- Allocation usually happens in pmd_alloc_one(), freeing in pmd_free() and
- pmd_free_tlb(), but make sure you cover all PMD table allocation / freeing
-@@ -77,7 +77,7 @@ paths: i.e X86_PAE preallocate few PMDs on pgd_alloc().
- 
- With everything in place you can set CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK.
- 
--NOTE: pgtable_pte_page_ctor() and pgtable_pmd_page_ctor() can fail -- it must
-+NOTE: pagetable_pte_ctor() and pagetable_pmd_ctor() can fail -- it must
- be handled properly.
- 
- page->ptl
-@@ -97,7 +97,7 @@ trick:
-    split lock with enabled DEBUG_SPINLOCK or DEBUG_LOCK_ALLOC, but costs
-    one more cache line for indirect access;
- 
--The spinlock_t allocated in pgtable_pte_page_ctor() for PTE table and in
--pgtable_pmd_page_ctor() for PMD table.
-+The spinlock_t allocated in pagetable_pte_ctor() for PTE table and in
-+pagetable_pmd_ctor() for PMD table.
- 
- Please, never access page->ptl directly -- use appropriate helper.
-diff --git a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-index 4fb7aa666037..a2c288670a24 100644
---- a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-+++ b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-@@ -56,16 +56,16 @@ Hugetlb特定的辅助函数:
- 架构对分页表锁的支持
- ====================
- 
--没有必要特别启用PTE分页表锁：所有需要的东西都由pgtable_pte_page_ctor()
--和pgtable_pte_page_dtor()完成，它们必须在PTE表分配/释放时被调用。
-+没有必要特别启用PTE分页表锁：所有需要的东西都由pagetable_pte_ctor()
-+和pagetable_pte_dtor()完成，它们必须在PTE表分配/释放时被调用。
- 
- 确保架构不使用slab分配器来分配页表：slab使用page->slab_cache来分配其页
- 面。这个区域与page->ptl共享存储。
- 
- PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
--启用PMD分页锁需要在PMD表分配时调用pgtable_pmd_page_ctor()，在释放时调
--用pgtable_pmd_page_dtor()。
-+启用PMD分页锁需要在PMD表分配时调用pagetable_pmd_ctor()，在释放时调
-+用pagetable_pmd_dtor()。
- 
- 分配通常发生在pmd_alloc_one()中，释放发生在pmd_free()和pmd_free_tlb()
- 中，但要确保覆盖所有的PMD表分配/释放路径：即X86_PAE在pgd_alloc()中预先
-@@ -73,7 +73,7 @@ PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
- 一切就绪后，你可以设置CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK。
- 
--注意：pgtable_pte_page_ctor()和pgtable_pmd_page_ctor()可能失败--必
-+注意：pagetable_pte_ctor()和pagetable_pmd_ctor()可能失败--必
- 须正确处理。
- 
- page->ptl
-@@ -90,7 +90,7 @@ page->ptl用于访问分割页表锁，其中'page'是包含该表的页面struc
-    的指针并动态分配它。这允许在启用DEBUG_SPINLOCK或DEBUG_LOCK_ALLOC的
-    情况下使用分页锁，但由于间接访问而多花了一个缓存行。
- 
--PTE表的spinlock_t分配在pgtable_pte_page_ctor()中，PMD表的spinlock_t
--分配在pgtable_pmd_page_ctor()中。
-+PTE表的spinlock_t分配在pagetable_pte_ctor()中，PMD表的spinlock_t
-+分配在pagetable_pmd_ctor()中。
- 
- 请不要直接访问page->ptl - -使用适当的辅助函数。
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bd3d99d81984..e4e34ecbc2ea 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2913,11 +2913,6 @@ static inline bool pagetable_pte_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pte_page_ctor(struct page *page)
--{
--	return pagetable_pte_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -2927,11 +2922,6 @@ static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pte_page_dtor(struct page *page)
--{
--	pagetable_pte_dtor(page_ptdesc(page));
--}
--
- pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
- static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
- {
-@@ -3038,11 +3028,6 @@ static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pmd_page_ctor(struct page *page)
--{
--	return pagetable_pmd_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -3052,11 +3037,6 @@ static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pmd_page_dtor(struct page *page)
--{
--	pagetable_pmd_dtor(page_ptdesc(page));
--}
--
- /*
-  * No scalability reason to split PUD locks yet, but follow the same pattern
-  * as the PMD locks to make it easier if we decide to.  The VM should not be
+I guess what you imply is that they want to share page tables and have a 
+single mprotect(PROT_READ) to modify the shared page tables.
+
+> 
+>>> This is why I proposed mshare().  Anyone can use it for anything.
+>>> We have such a diverse set of users who want to do stuff with shared
+>>> page tables that we should not be tying it to memfd or any other
+>>> filesystem.  Not to mention that it's more flexible; you can map
+>>> individual 4kB files into it and still get page table sharing.
+>>
+>> That's not what the current proposal does, or am I wrong?
+> 
+> I think you're wrong, but I haven't had time to read the latest patches.
+> 
+
+Maybe I misunderstood what the MAP_SHARED_PT actually does.
+
+"
+This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
+This flag can be specified along with MAP_SHARED by a process to
+hint to kernel that it wishes to share page table entries for this
+file mapping mmap region with other processes. Any other process
+that mmaps the same file with MAP_SHARED_PT flag can then share the
+same page table entries. Besides specifying MAP_SHARED_PT flag, the
+processes must map the files at a PMD aligned address with a size
+that is a multiple of PMD size and at the same virtual addresses.
+This last requirement of same virtual addresses can possibly be
+relaxed if that is the consensus.
+"
+
+Reading this, I'm confused how 4k files would interact with the PMD size 
+requirement.
+
+Probably I got it all wrong.
+
+>> Also, I'm curious, is that a real requirement in the database world?
+> 
+> I don't know.  It's definitely an advantage that falls out of the design
+> of mshare.
+
+Okay, just checking if there is an important use case I'm missing, I'm 
+also not aware of any.
+
+
+Anyhow, I have other work to do. Happy to continue the discussion 
+someone is actually working on this (again).
+
 -- 
-2.40.1
+Cheers,
+
+David / dhildenb
 
