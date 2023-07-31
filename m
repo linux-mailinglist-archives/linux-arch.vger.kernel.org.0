@@ -2,84 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94007690A2
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 10:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405A87691F3
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 11:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjGaIqq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 04:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S229748AbjGaJnL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 05:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbjGaIqT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 04:46:19 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7291BEC;
-        Mon, 31 Jul 2023 01:45:09 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3177f520802so2774894f8f.1;
-        Mon, 31 Jul 2023 01:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690793108; x=1691397908;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qlJcOZ0rPLmWhlyeSLW4YJJZ3jh5RfWXKohPhf857cA=;
-        b=Y3kzUSwFc9LW4htnoLpe2K1AqS9YOGys/MCvvcEvqWqdLcheaqCk64k3/c1S6FN5fl
-         xMR+3AyUncRkt+LhG1uRKSal1YrXieIIvhiJwSJqAniTMgdFz3sXlcc5yuLGvzJQXdUO
-         HsEclnYkzsvmXVyGO18pkXlAfEJmS1dYIDRg6yXoLbDRpIrk7DZIH9dsgbMyt1ETEJIB
-         1VpIYLCrp8hHdB06PSfWZV3GthxF+z6E77vr8dD+463XqePAO1Z5vEz+tqGa8e1s5DMn
-         aRx3eBY9fp1yEz6VYjB2fLQG803r4N8bO2AK0j4ViXA0suToAseAG81E6XfxB1xSzF8m
-         /qkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690793108; x=1691397908;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qlJcOZ0rPLmWhlyeSLW4YJJZ3jh5RfWXKohPhf857cA=;
-        b=ggNzDJuCkK9td+CniPSF9Zu+dknlurcrZI+NNlqy/ZamM+TV+q7Kzxdz0giiCa3PFy
-         IaXiZKKp9uJ7MQ+2JIkXSL9dpqzIplpOJtRqt1N8gFooX/s7j9j0leJwZot6Evj8KqA4
-         cuCiyb53YJ6YptfutR9fojaYXW1QmCQMVtnRILOK2fLd7u03Vd8utfqYuz+iHupBzPFb
-         U856qUa1P/Rt0uka8e4KztAoUpk34FJzFSvLzAsmHhtYmt478PTqYcOOkvhx3c+LqMvd
-         C9WzsLvKEAOUYmMvyEfgCp0iAHlWMCe4pJKvAdH8ya/indv+EC1DEwhOWyd0Wp//6lbx
-         e+wQ==
-X-Gm-Message-State: ABy/qLZ8CxFJERNqhONWx01jk8HkqO0lAXRWReQGuaHMeIwzN382DI07
-        L6lq4tA3hY0eDet2hnworp8=
-X-Google-Smtp-Source: APBJJlF//uW16wr5DhKIiufGXX42sZb/Y9SPMirVZ8h/SfajlB/u2cIdGloIW+7LRiKCEW8RncsHSg==
-X-Received: by 2002:adf:f9d1:0:b0:317:67d1:cdf2 with SMTP id w17-20020adff9d1000000b0031767d1cdf2mr7472435wrr.32.1690793107560;
-        Mon, 31 Jul 2023 01:45:07 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id v18-20020a5d43d2000000b003177074f830sm12325080wrr.59.2023.07.31.01.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 01:45:07 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] locking/arch: Rewrite local_add_unless as static inline function
-Date:   Mon, 31 Jul 2023 10:42:23 +0200
-Message-ID: <20230731084458.28096-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S230061AbjGaJnK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 05:43:10 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B36EEB;
+        Mon, 31 Jul 2023 02:43:07 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5145220015;
+        Mon, 31 Jul 2023 09:43:03 +0000 (UTC)
+Message-ID: <177e6ac4-bee1-b99b-8d3c-ad022f396b48@ghiti.fr>
+Date:   Mon, 31 Jul 2023 11:43:02 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] riscv: mm: Fixup spurious fault of kernel vaddr
+To:     Guo Ren <guoren@kernel.org>
+Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, falcon@tinylab.org,
+        bjorn@kernel.org, conor.dooley@microchip.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230721145121.1854104-1-guoren@kernel.org>
+ <5e5be2d4-c563-6beb-b5f5-df47edeebc83@ghiti.fr>
+ <CAJF2gTQMAVUtC6_ftEwp=EeYR_O7yzfGYmxwrqcO6+hn2J32bA@mail.gmail.com>
+ <87bfcd33-9741-4d6c-8b7a-1d1ee2dce61b@ghiti.fr>
+ <CAJF2gTT8JV5f4Fm1F-XgfAhNWNXJquVW8-uCK-b4Qy0xztrGLA@mail.gmail.com>
+ <292abea1-59b7-13d4-0b27-ac00f7e7f20e@ghiti.fr>
+ <CAJF2gTQZhdQCFyz0eJo6VnLZzPDxK5WNRJqpr=BRLsdCdjG2gA@mail.gmail.com>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <CAJF2gTQZhdQCFyz0eJo6VnLZzPDxK5WNRJqpr=BRLsdCdjG2gA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-GND-Sasl: alex@ghiti.fr
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,258 +49,227 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Rewrite local_add_unless as a static inline function with boolean
-return value, similar to arch_atomic_add_unless arch fallbacks.
 
-The function is currently unused.
+On 29/07/2023 08:40, Guo Ren wrote:
+> Sorry for the late reply, Alexandre. I'm busy with other suffs.
+>
+> On Mon, Jul 24, 2023 at 5:05 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>>
+>> On 22/07/2023 01:59, Guo Ren wrote:
+>>> On Fri, Jul 21, 2023 at 4:01 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>>>> On 21/07/2023 18:08, Guo Ren wrote:
+>>>>> On Fri, Jul 21, 2023 at 11:19 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>>>>>> On 21/07/2023 16:51, guoren@kernel.org wrote:
+>>>>>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>>>>>
+>>>>>>> RISC-V specification permits the caching of PTEs whose V (Valid)
+>>>>>>> bit is clear. Operating systems must be written to cope with this
+>>>>>>> possibility, but implementers are reminded that eagerly caching
+>>>>>>> invalid PTEs will reduce performance by causing additional page
+>>>>>>> faults.
+>>>>>>>
+>>>>>>> So we must keep vmalloc_fault for the spurious page faults of kernel
+>>>>>>> virtual address from an OoO machine.
+>>>>>>>
+>>>>>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>>>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>>>>>> ---
+>>>>>>>      arch/riscv/mm/fault.c | 3 +--
+>>>>>>>      1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+>>>>>>> index 85165fe438d8..f662c9eae7d4 100644
+>>>>>>> --- a/arch/riscv/mm/fault.c
+>>>>>>> +++ b/arch/riscv/mm/fault.c
+>>>>>>> @@ -258,8 +258,7 @@ void handle_page_fault(struct pt_regs *regs)
+>>>>>>>           * only copy the information from the master page table,
+>>>>>>>           * nothing more.
+>>>>>>>           */
+>>>>>>> -     if ((!IS_ENABLED(CONFIG_MMU) || !IS_ENABLED(CONFIG_64BIT)) &&
+>>>>>>> -         unlikely(addr >= VMALLOC_START && addr < VMALLOC_END)) {
+>>>>>>> +     if (unlikely(addr >= TASK_SIZE)) {
+>>>>>>>                  vmalloc_fault(regs, code, addr);
+>>>>>>>                  return;
+>>>>>>>          }
+>>>>>> Can you share what you are trying to fix here?
+>>>>> We met a spurious page fault panic on an OoO machine.
+>>>>>
+>>>>> 1. The processor speculative execution brings the V=0 entries into the
+>>>>> TLB in the kernel virtual address.
+>>>>> 2. Linux kernel installs the kernel virtual address with the page, and V=1
+>>>>> 3. When kernel code access the kernel virtual address, it would raise
+>>>>> a page fault as the V=0 entry in the tlb.
+>>>>> 4. No vmalloc_fault, then panic.
+>>>>>
+>>>>>> I have a fix (that's currently running our CI) for commit 7d3332be011e
+>>>>>> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") that
+>>>>>> implements flush_cache_vmap() since we lost the vmalloc_fault.
+>>>>> Could you share that patch?
+>>>> Here we go:
+>>>>
+>>>>
+>>>> Author: Alexandre Ghiti <alexghiti@rivosinc.com>
+>>>> Date:   Fri Jul 21 08:43:44 2023 +0000
+>>>>
+>>>>        riscv: Implement flush_cache_vmap()
+>>>>
+>>>>        The RISC-V kernel needs a sfence.vma after a page table
+>>>> modification: we
+>>>>        used to rely on the vmalloc fault handling to emit an sfence.vma, but
+>>>>        commit 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
+>>>>        vmalloc/modules area") got rid of this path for 64-bit kernels, so
+>>>> now we
+>>>>        need to explicitly emit a sfence.vma in flush_cache_vmap().
+>>>>
+>>>>        Note that we don't need to implement flush_cache_vunmap() as the
+>>>> generic
+>>>>        code should emit a flush tlb after unmapping a vmalloc region.
+>>>>
+>>>>        Fixes: 7d3332be011e ("riscv: mm: Pre-allocate PGD entries for
+>>>> vmalloc/modules area")
+>>>>        Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>>>>
+>>>> diff --git a/arch/riscv/include/asm/cacheflush.h
+>>>> b/arch/riscv/include/asm/cacheflush.h
+>>>> index 8091b8bf4883..b93ffddf8a61 100644
+>>>> --- a/arch/riscv/include/asm/cacheflush.h
+>>>> +++ b/arch/riscv/include/asm/cacheflush.h
+>>>> @@ -37,6 +37,10 @@ static inline void flush_dcache_page(struct page *page)
+>>>>     #define flush_icache_user_page(vma, pg, addr, len) \
+>>>>            flush_icache_mm(vma->vm_mm, 0)
+>>>>
+>>>> +#ifdef CONFIG_64BIT
+>>>> +#define flush_cache_vmap(start, end) flush_tlb_kernel_range(start, end)
+>>>> +#endif
+>>> I don't want that, and flush_tlb_kernel_range is flush_tlb_all. In
+>>> addition, it would call IPI, which is a performance killer.
+>>
+>> At the moment, flush_tlb_kernel_range() indeed calls flush_tlb_all() but
+>> that needs to be fixed, see my last patchset
+>> https://lore.kernel.org/linux-riscv/20230711075434.10936-1-alexghiti@rivosinc.com/.
+>>
+>> But can you at least check that this fixes your issue? It would be
+>> interesting to see if the problem comes from vmalloc or something else.
+> It could solve my issue.
+>
+>>
+>>> What's the problem of spurious fault replay? It only costs a
+>>> local_tlb_flush with vaddr.
+>>
+>> We had this exact discussion internally this week, and the fault replay
+>> seems like a solution. But that needs to be thought carefully: the
+>> vmalloc fault was removed for a reason (see Bjorn commit log), tracing
+>> functions can use vmalloc() in the path of the vmalloc fault, causing an
+>> infinite trap loop. And here you are simply re-enabling this problem.
+> Thx for mentioning it, and I will solve it in the next version of the patch:
+>
+> -static inline void vmalloc_fault(struct pt_regs *regs, int code,
+> unsigned long addr)
+> +static void notrace vmalloc_fault(struct pt_regs *regs, int code,
+> unsigned long addr)
 
-Cc: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Jun Yi <yijun@loongson.cn>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- arch/alpha/include/asm/local.h     | 33 +++++++++++++++---------------
- arch/loongarch/include/asm/local.h | 27 ++++++++++++++----------
- arch/mips/include/asm/local.h      | 27 ++++++++++++++----------
- arch/powerpc/include/asm/local.h   | 12 +++++------
- arch/x86/include/asm/local.h       | 33 +++++++++++++++---------------
- 5 files changed, 70 insertions(+), 62 deletions(-)
 
-diff --git a/arch/alpha/include/asm/local.h b/arch/alpha/include/asm/local.h
-index 0fcaad642cc3..88eb398947a5 100644
---- a/arch/alpha/include/asm/local.h
-+++ b/arch/alpha/include/asm/local.h
-@@ -65,28 +65,27 @@ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
- #define local_xchg(l, n) (xchg_local(&((l)->a.counter), (n)))
- 
- /**
-- * local_add_unless - add unless the number is a given value
-+ * local_add_unless - add unless the number is already a given value
-  * @l: pointer of type local_t
-  * @a: the amount to add to l...
-  * @u: ...unless l is equal to u.
-  *
-- * Atomically adds @a to @l, so long as it was not @u.
-- * Returns non-zero if @l was not @u, and zero otherwise.
-+ * Atomically adds @a to @l, if @v was not already @u.
-+ * Returns true if the addition was done.
-  */
--#define local_add_unless(l, a, u)				\
--({								\
--	long c, old;						\
--	c = local_read(l);					\
--	for (;;) {						\
--		if (unlikely(c == (u)))				\
--			break;					\
--		old = local_cmpxchg((l), c, c + (a));	\
--		if (likely(old == c))				\
--			break;					\
--		c = old;					\
--	}							\
--	c != (u);						\
--})
-+static __inline__ bool
-+local_add_unless(local_t *l, long a, long u)
-+{
-+	long c = local_read(l);
-+
-+	do {
-+		if (unlikely(c == u))
-+			return false;
-+	} while (!local_try_cmpxchg(l, &c, c + a));
-+
-+	return true;
-+}
-+
- #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
- 
- #define local_add_negative(a, l) (local_add_return((a), (l)) < 0)
-diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
-index 83e995b30e47..15bc3579f16c 100644
---- a/arch/loongarch/include/asm/local.h
-+++ b/arch/loongarch/include/asm/local.h
-@@ -70,22 +70,27 @@ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
- #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
- 
- /**
-- * local_add_unless - add unless the number is a given value
-+ * local_add_unless - add unless the number is already a given value
-  * @l: pointer of type local_t
-  * @a: the amount to add to l...
-  * @u: ...unless l is equal to u.
-  *
-- * Atomically adds @a to @l, so long as it was not @u.
-- * Returns non-zero if @l was not @u, and zero otherwise.
-+ * Atomically adds @a to @l, if @v was not already @u.
-+ * Returns true if the addition was done.
-  */
--#define local_add_unless(l, a, u)				\
--({								\
--	long c, old;						\
--	c = local_read(l);					\
--	while (c != (u) && (old = local_cmpxchg((l), c, c + (a))) != c) \
--		c = old;					\
--	c != (u);						\
--})
-+static inline bool
-+local_add_unless(local_t *l, long a, long u)
-+{
-+	long c = local_read(l);
-+
-+	do {
-+		if (unlikely(c == u))
-+			return false;
-+	} while (!local_try_cmpxchg(l, &c, c + a));
-+
-+	return true;
-+}
-+
- #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
- 
- #define local_dec_return(l) local_sub_return(1, (l))
-diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
-index 5daf6fe8e3e9..90435158a083 100644
---- a/arch/mips/include/asm/local.h
-+++ b/arch/mips/include/asm/local.h
-@@ -108,22 +108,27 @@ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
- #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
- 
- /**
-- * local_add_unless - add unless the number is a given value
-+ * local_add_unless - add unless the number is already a given value
-  * @l: pointer of type local_t
-  * @a: the amount to add to l...
-  * @u: ...unless l is equal to u.
-  *
-- * Atomically adds @a to @l, so long as it was not @u.
-- * Returns non-zero if @l was not @u, and zero otherwise.
-+ * Atomically adds @a to @l, if @v was not already @u.
-+ * Returns true if the addition was done.
-  */
--#define local_add_unless(l, a, u)				\
--({								\
--	long c, old;						\
--	c = local_read(l);					\
--	while (c != (u) && (old = local_cmpxchg((l), c, c + (a))) != c) \
--		c = old;					\
--	c != (u);						\
--})
-+static __inline__ bool
-+local_add_unless(local_t *l, long a, long u)
-+{
-+	long c = local_read(l);
-+
-+	do {
-+		if (unlikely(c == u))
-+			return false;
-+	} while (!local_try_cmpxchg(l, &c, c + a));
-+
-+	return true;
-+}
-+
- #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
- 
- #define local_dec_return(l) local_sub_return(1, (l))
-diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
-index 45492fb5bf22..ec6ced6d7ced 100644
---- a/arch/powerpc/include/asm/local.h
-+++ b/arch/powerpc/include/asm/local.h
-@@ -115,23 +115,23 @@ static __inline__ long local_xchg(local_t *l, long n)
- }
- 
- /**
-- * local_add_unless - add unless the number is a given value
-+ * local_add_unless - add unless the number is already a given value
-  * @l: pointer of type local_t
-  * @a: the amount to add to v...
-  * @u: ...unless v is equal to u.
-  *
-- * Atomically adds @a to @l, so long as it was not @u.
-- * Returns non-zero if @l was not @u, and zero otherwise.
-+ * Atomically adds @a to @l, if @v was not already @u.
-+ * Returns true if the addition was done.
-  */
--static __inline__ int local_add_unless(local_t *l, long a, long u)
-+static __inline__ bool local_add_unless(local_t *l, long a, long u)
- {
- 	unsigned long flags;
--	int ret = 0;
-+	bool ret = false;
- 
- 	powerpc_local_irq_pmu_save(flags);
- 	if (l->v != u) {
- 		l->v += a;
--		ret = 1;
-+		ret = true;
- 	}
- 	powerpc_local_irq_pmu_restore(flags);
- 
-diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
-index 56d4ef604b91..46ce92d4e556 100644
---- a/arch/x86/include/asm/local.h
-+++ b/arch/x86/include/asm/local.h
-@@ -135,28 +135,27 @@ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
- #define local_xchg(l, n) (xchg(&((l)->a.counter), (n)))
- 
- /**
-- * local_add_unless - add unless the number is a given value
-+ * local_add_unless - add unless the number is already a given value
-  * @l: pointer of type local_t
-  * @a: the amount to add to l...
-  * @u: ...unless l is equal to u.
-  *
-- * Atomically adds @a to @l, so long as it was not @u.
-- * Returns non-zero if @l was not @u, and zero otherwise.
-+ * Atomically adds @a to @l, if @v was not already @u.
-+ * Returns true if the addition was done.
-  */
--#define local_add_unless(l, a, u)				\
--({								\
--	long c, old;						\
--	c = local_read((l));					\
--	for (;;) {						\
--		if (unlikely(c == (u)))				\
--			break;					\
--		old = local_cmpxchg((l), c, c + (a));		\
--		if (likely(old == c))				\
--			break;					\
--		c = old;					\
--	}							\
--	c != (u);						\
--})
-+static __always_inline bool
-+local_add_unless(local_t *l, long a, long u)
-+{
-+	long c = local_read(l);
-+
-+	do {
-+		if (unlikely(c == u))
-+			return false;
-+	} while (!local_try_cmpxchg(l, &c, c + a));
-+
-+	return true;
-+}
-+
- #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
- 
- /* On x86_32, these are no better than the atomic variants.
--- 
-2.41.0
+That does not solve the problem, since it should be any function called 
+from the trap entry to vmalloc_fault() that needs to be marked a 
+notrace. But it's not only tracing, it's all code that could vmalloc() 
+something in the page fault path before reaching vmalloc_fault().
 
+I have been rethinking about that,  it is very unlikely but the problem 
+could happen, even if the microarchitecture does not cache invalid 
+entries (but it's way more likely to happen when invalid entries are 
+cached in the TLB)...And the only way I can think of to get rid of it is 
+a preventive sfence.vma.
+
+
+>
+>> In
+>> addition, this patch makes vmalloc_fault() catch *all* kernel faults in
+>> the kernel address space, so any genuine kernel fault would loop forever
+>> in vmalloc_fault().
+> We check whether kernel vaddr is valid by the page_table, not range.
+> I'm sure "the any genuine kernel fault would loop forever in
+> vmalloc_fault()" is about what? Could you give an example?
+
+
+In the patch you propose, vmalloc_fault() would intercept all faults 
+triggered on kernel addresses, even protection traps. vmalloc_fault() 
+only checks the presence of the faulting entry in the kernel page table, 
+not its permissions. So any protection trap on kernel addresses would 
+loop forever in vmalloc_fault().
+
+
+>
+>>
+>> For now, the simplest solution is to implement flush_cache_vmap()
+>> because riscv needs a sfence.vma when adding a new mapping, and if
+> It's not a local_tlb_flush, and it would ipi broadcast all harts.
+> on_each_cpu(__ipi_flush_tlb_all, NULL, 1);
+>
+> That's too horrible.
+>
+> Some custom drivers or test codes may care about it.
+
+
+Yes, and there is vmap stack too...
+
+
+>
+>> that's a "performance killer", let's measure that and implement
+>> something like this patch is trying to do. I may be wrong, but there
+>> aren't many new kernel mappings that would require a call to
+>> flush_cache_vmap() so I disagree with the performance killer argument,
+>> but happy to be proven otherwise!
+> 1. I agree to pre-allocate pgd entries. It's good for performance, but
+> don't do that when Sv32.
+
+
+Nothing changes for sv32, vmalloc_fault() is still there (but to me, 
+there is still the problem with vmalloc() done before reaching 
+vmalloc_fault()).
+
+
+> 2. We still need vmalloc_fault to match ISA spec requirements. (Some
+> vendors' microarchitectures (e.g., T-HEAD c910) could prevent V=0 into
+> TLB when PTW, then they don't need it.)
+
+
+I disagree, even if invalid entries are not cached in the TLB, there 
+still exists a small window where we could take a trap on a newly 
+created vmalloc mapping which would require vmalloc_fault(). Or to 
+prevent that, we need flush_cache_vmap().
+
+
+> 3. Only when vmalloc_fault can't solve the problem, then let's think
+> about the flush_cache_vmap() solution.
+
+
+To me, vmalloc_fault() can't solve the problem, even when invalid 
+entries are not cached in the TLB. So I agree with you that 
+flush_cache_vmap() is not that great, but I don't see any other 
+straightforward solution here. Maybe a very early sfence.vma in the page 
+fault path, before anything gets called, but we need a solution for 6.5.
+
+
+>
+>> Thanks,
+>>
+>> Alex
+>>
+>>
+>>>> +
+>>>>     #ifndef CONFIG_SMP
+>>>>
+>>>>     #define flush_icache_all() local_flush_icache_all()
+>>>>
+>>>>
+>>>> Let me know if that works for you!
+>>>>
+>>>>
+>>> --
+>>> Best Regards
+>>>    Guo Ren
+>
+>
+> --
+> Best Regards
+>   Guo Ren
