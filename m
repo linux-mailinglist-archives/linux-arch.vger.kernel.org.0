@@ -2,57 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D87769F4D
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA6C769F89
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbjGaRUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 13:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S229964AbjGaRfj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 13:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbjGaRU1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:20:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1C4188;
-        Mon, 31 Jul 2023 10:19:19 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690823957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3WycB7deeH4N77XCxYSpDoyHgigBfOsfA/l1DUt3Iq4=;
-        b=CbnDJQkP/pRhO94W3xehr4PIUumrBKh2h6k85o7yyZ5qis1q4WPoliddjQPJG5g8/N23Zr
-        y6MSYqVeDkn8CB8FAlMKJUTzjaXBWYqhYsqodZDZ1bn7pZ5bzvfUbjsfUt4Iy6HUXcbG8/
-        CJx34EEd8ZpGhFg4wUmRhysaNTIK/4k+jzbmC99MPG7tdPZVWnoi0rIQph+XDhfkNODwLb
-        rGuuHIQsV9/BiPLQbmjrHgecHwKXe05bD/Qfxg6qGVZk4g5x/6aiaisSfJim1PwIT8zXF8
-        MzS9KyZPGMfHmVODWj+WSagf4wuzhAXh2kZy8SZFMO/FcsPIdhDRRJWQBfvRjg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690823957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3WycB7deeH4N77XCxYSpDoyHgigBfOsfA/l1DUt3Iq4=;
-        b=9I5o68k9/KxZ19MCx1ZzRCsGVutxiHRYG6O9NIimZJuwyP42OYwcF9OKIaljbBRwdxSFgy
-        /pBIstsXYJxooQAw==
-To:     Peter Zijlstra <peterz@infradead.org>, axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
+        with ESMTP id S229660AbjGaRfj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:35:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831551A7;
+        Mon, 31 Jul 2023 10:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lTOWnu3zwzGzxXTifAzpar25WacWZCvrAPjR7GRF9q0=; b=YKElOls1NCOo+4DlFr9uqupgpf
+        7vEWbot+ei7BWq4dkDtwLfWKp+2dtn6S4r6EOefuqdwZJC85+IL0h9cl5CMve6pUz6J9gt7rhmQZF
+        rfW+nTk166umsFArqx52ffgKGkb8NtHKNPQdTgY/ZOBBlL1ZN7UE9qWVRn81MJEI+lpHPKRQO1RJS
+        GLITUOZGb0i0SGhGdmcnwJeF2ImMEqw3POjOqsaZdUSDvHGHSmZ//X6uRdu9qKrJmTeR8A4AEMYQR
+        1RSjKVjC0vlfRHA0UFOgq556OUO195+Ib5zEtYHxRwYpTfLda6+BuE+6YpEN6rPK869Q469RVkoIW
+        uqIih4TQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qQWnd-002vRm-4V; Mon, 31 Jul 2023 17:35:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3CE39300134;
+        Mon, 31 Jul 2023 19:35:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F39B1203C0B01; Mon, 31 Jul 2023 19:35:15 +0200 (CEST)
+Date:   Mon, 31 Jul 2023 19:35:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
+        Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com,
+        hch@infradead.org, lstoakes@gmail.com,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         malteskarupke@web.de
-Subject: Re: [PATCH v1 09/14] futex: Add sys_futex_requeue()
-In-Reply-To: <20230721105744.298661259@infradead.org>
+Subject: Re: [PATCH v1 02/14] futex: Extend the FUTEX2 flags
+Message-ID: <20230731173515.GP29590@hirez.programming.kicks-ass.net>
 References: <20230721102237.268073801@infradead.org>
- <20230721105744.298661259@infradead.org>
-Date:   Mon, 31 Jul 2023 19:19:17 +0200
-Message-ID: <87sf94m222.ffs@tglx>
+ <20230721105743.819362688@infradead.org>
+ <87edkonjrk.ffs@tglx>
+ <87v8e0m26q.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8e0m26q.ffs@tglx>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,27 +65,34 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 21 2023 at 12:22, Peter Zijlstra wrote:
-> +/*
-> + * sys_futex_requeue - Requeue a waiter from one futex to another
-> + * @waiters:	array describing the source and destination futex
-> + * @flags:	unused
-> + * @nr_wake:	number of futexes to wake
-> + * @nr_requeue:	number of futexes to requeue
-> + *
-> + * Identical to the traditional FUTEX_CMP_REQUEUE op, except it is part of the
-> + * futex2 family of calls.
-> + */
-> +
-> +SYSCALL_DEFINE4(futex_requeue,
-> +		struct futex_waitv __user *, waiters,
-> +		unsigned int, flags,
-> +		int, nr_wake,
-> +		int, nr_requeue)
-> +{
-> +	struct futex_vector futexes[2];
-> +	u32 cmpval;
+On Mon, Jul 31, 2023 at 07:16:29PM +0200, Thomas Gleixner wrote:
+> On Mon, Jul 31 2023 at 18:11, Thomas Gleixner wrote:
+> > On Fri, Jul 21 2023 at 12:22, Peter Zijlstra wrote:
+> >> -#define FUTEX2_MASK (FUTEX2_32 | FUTEX2_PRIVATE)
+> >> +#define FUTEX2_MASK (FUTEX2_64 | FUTEX2_PRIVATE)
+> >>  
+> >>  /**
+> >>   * futex_parse_waitv - Parse a waitv array from userspace
+> >> @@ -207,7 +207,12 @@ static int futex_parse_waitv(struct fute
+> >>  		if ((aux.flags & ~FUTEX2_MASK) || aux.__reserved)
+> >>  			return -EINVAL;
+> >
+> > With the above aux.flags with FUTEX2_32 set will result in -EINVAL. I
+> > don't think that's intentional.
+> 
+> Also if you allow 64bit wide futexes, how is that supposed to work with
+> the existing code, which clearly expects a 32bit uval throughout the
+> place?
 
-So this is explictely u32. I'm completely confused vs. the 64 bit futex
-size variant enablement earlier in the series by now.
+Not allowed yet, these patches only allow 8,16,32. I still need to audit
+the whole futex core and do 'u32 -> unsigned long' (and everything else
+that follows from that), and only when that's done can the futex2
+syscalls allow FUTEX2_64 on 64bit archs.
+
+So for now, these patches:
+
+  - add the FUTEX2_64 flag,
+  - add 'unsigned long' interface such that
+    64bit can potentiall use it,
+  - explicitly disallow having it set.
 
