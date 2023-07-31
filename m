@@ -2,57 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C34769F8B
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B97769F94
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbjGaRg0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 13:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
+        id S230467AbjGaRjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 13:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjGaRgZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:36:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33451A7;
-        Mon, 31 Jul 2023 10:36:24 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690824982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iFf50TJmeKBJp8QFVacRBeJgY/I84fMWpugiLSkN2d0=;
-        b=sniaLJjU9khAD/zHKPICJex4h/W1UTe8KR4cp/RPdiVDPzRAFxo6US8Cdk2noeDT7T75WD
-        xFGgh+YZpmXu+CC6kd+8wl+oqCWe+vfe5w/f8+8RDJtb9ut+PI2ZCtSZ1VHR4ZSvMMknvb
-        CABTIObaYdIIbbS8TwAZ83yTuujof1JjdtF7Q8zFdVl3Bu32mOgEmhg9xoVhXFomk54AuQ
-        gEQk1K3riDtf5IYeLNtUcAHDz3djZFzJFtGf/3P7Dln4zK0+fdepJEpmreCcQ+/Po50hyy
-        FwZ+im0VEcR6R1j6qTkTtkvxHF0eN7N6z+HmS6FA1Erlj15b9s+P8DOSJdyQrQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690824982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iFf50TJmeKBJp8QFVacRBeJgY/I84fMWpugiLSkN2d0=;
-        b=Cw3umMTe1MDbI7v/AYOO9l3z7Lq/XpIXoigLOz6Wy828nDvlximePUklxfgQRXPmJMrasA
-        ENUcHEe3LhopAxBg==
-To:     Peter Zijlstra <peterz@infradead.org>, axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
+        with ESMTP id S230483AbjGaRjJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:39:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7D0C7;
+        Mon, 31 Jul 2023 10:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FWxe5J1hE38eMUz7xvskScrwN5CGj61RpGiQj1KfL8k=; b=N/PvmfIJka0LmTfamlvuygudrb
+        JsbinBTLLKNiq37bm5mPPAVv09JhACMF/0Xkb7VJbrwYVu2oOHZydYjUI0rzG51C7GloDM58pGP/B
+        O8NPzkWqqzqXbvkiENP+6mMw9GWCP9lDcxrYAFFg/59l8TWowq+Yg3BkjPBLmqd4TpOJkMUKx7vOq
+        5MwhUEpkM23PYPrSMEL6LXc1d9KYsimAjG90HseJwi5J+UGUNqABkgUocYhXWXtTfZ9X8UkfhJubJ
+        RjyPZo/De79puk4DXLKnGKryAlMAHfcK30fNBlCKVn/aIYrErIJTcA0NngTqsHMNyNtFvVaiHWrkQ
+        ZzwQOeXQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qQWrA-002vaJ-91; Mon, 31 Jul 2023 17:38:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51E00300134;
+        Mon, 31 Jul 2023 19:38:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 366B5203C0B01; Mon, 31 Jul 2023 19:38:56 +0200 (CEST)
+Date:   Mon, 31 Jul 2023 19:38:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
+        Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com,
+        hch@infradead.org, lstoakes@gmail.com,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         malteskarupke@web.de
-Subject: Re: [PATCH v1 11/14] futex: Implement FUTEX2_NUMA
-In-Reply-To: <20230721105744.434742902@infradead.org>
+Subject: Re: [PATCH v1 09/14] futex: Add sys_futex_requeue()
+Message-ID: <20230731173856.GQ29590@hirez.programming.kicks-ass.net>
 References: <20230721102237.268073801@infradead.org>
- <20230721105744.434742902@infradead.org>
-Date:   Mon, 31 Jul 2023 19:36:21 +0200
-Message-ID: <87pm48m19m.ffs@tglx>
+ <20230721105744.298661259@infradead.org>
+ <87sf94m222.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sf94m222.ffs@tglx>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,121 +64,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 21 2023 at 12:22, Peter Zijlstra wrote:
->  struct futex_hash_bucket *futex_hash(union futex_key *key)
->  {
-> -	u32 hash = jhash2((u32 *)key, offsetof(typeof(*key), both.offset) / 4,
-> +	u32 hash = jhash2((u32 *)key,
-> +			  offsetof(typeof(*key), both.offset) / sizeof(u32),
->  			  key->both.offset);
-> +	int node = key->both.node;
->  
-> -	return &futex_queues[hash & (futex_hashsize - 1)];
-> +	if (node == -1) {
-> +		/*
-> +		 * In case of !FLAGS_NUMA, use some unused hash bits to pick a
-> +		 * node -- this ensures regular futexes are interleaved across
-> +		 * the nodes and avoids having to allocate multiple
-> +		 * hash-tables.
-> +		 *
-> +		 * NOTE: this isn't perfectly uniform, but it is fast and
-> +		 * handles sparse node masks.
-> +		 */
-> +		node = (hash >> futex_hashshift) % nr_node_ids;
+On Mon, Jul 31, 2023 at 07:19:17PM +0200, Thomas Gleixner wrote:
+> On Fri, Jul 21 2023 at 12:22, Peter Zijlstra wrote:
+> > +/*
+> > + * sys_futex_requeue - Requeue a waiter from one futex to another
+> > + * @waiters:	array describing the source and destination futex
+> > + * @flags:	unused
+> > + * @nr_wake:	number of futexes to wake
+> > + * @nr_requeue:	number of futexes to requeue
+> > + *
+> > + * Identical to the traditional FUTEX_CMP_REQUEUE op, except it is part of the
+> > + * futex2 family of calls.
+> > + */
+> > +
+> > +SYSCALL_DEFINE4(futex_requeue,
+> > +		struct futex_waitv __user *, waiters,
+> > +		unsigned int, flags,
+> > +		int, nr_wake,
+> > +		int, nr_requeue)
+> > +{
+> > +	struct futex_vector futexes[2];
+> > +	u32 cmpval;
+> 
+> So this is explictely u32. I'm completely confused vs. the 64 bit futex
+> size variant enablement earlier in the series by now.
 
-Is nr_node_ids guaranteed to be stable after init? It's marked
-__read_mostly, but not __ro_after_init.
+As per the previous email; these patches only enable the syscall part of
+64bit futexes, they do not convert the core, and per futex_flags_valid()
+(patches 4 and 13), explicitly disallow having FUTEX2_64 set.
 
-> +		if (!node_possible(node)) {
-> +			node = find_next_bit_wrap(node_possible_map.bits,
-> +						  nr_node_ids, node);
-> +		}
-> +	}
-> +
-> +	return &futex_queues[node][hash & (futex_hashsize - 1)];
->  }
->  	fshared = flags & FLAGS_SHARED;
-> +	size = futex_size(flags);
->  
->  	/*
->  	 * The futex address must be "naturally" aligned.
->  	 */
->  	key->both.offset = address % PAGE_SIZE;
-> -	if (unlikely((address % sizeof(u32)) != 0))
-> +	if (unlikely((address % size) != 0))
->  		return -EINVAL;
 
-Hmm. Shouldn't that have changed with the allowance of the 1 and 2 byte
-futexes?
+-       /* Only 32bit futexes are implemented -- for now */
+-       if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
++       /* 64bit futexes aren't implemented -- yet */
++       if ((flags & FLAGS_SIZE_MASK) == FLAGS_SIZE_64)
+		return false;
 
->  	address -= key->both.offset;
->  
-> -	if (unlikely(!access_ok(uaddr, sizeof(u32))))
-> +	if (flags & FLAGS_NUMA)
-> +		size *= 2;
-> +
-> +	if (unlikely(!access_ok(uaddr, size)))
->  		return -EFAULT;
->  
->  	if (unlikely(should_fail_futex(fshared)))
->  		return -EFAULT;
->  
-> +	key->both.node = -1;
 
-Please put this into an else path.
-
-> +	if (flags & FLAGS_NUMA) {
-> +		void __user *naddr = uaddr + size/2;
-
-size / 2;
-
-> +
-> +		if (futex_get_value(&node, naddr, flags))
-> +			return -EFAULT;
-> +
-> +		if (node == -1) {
-> +			node = numa_node_id();
-> +			if (futex_put_value(node, naddr, flags))
-> +				return -EFAULT;
-> +		}
-> +
-> +		if (node >= MAX_NUMNODES || !node_possible(node))
-> +			return -EINVAL;
-
-That's clearly an else path too. No point in checking whether
-numa_node_id() is valid. 
-
-> +		key->both.node = node;
-> +	}
->  
-> +static inline unsigned int futex_size(unsigned int flags)
-> +{
-> +	unsigned int size = flags & FLAGS_SIZE_MASK;
-> +	return 1 << size; /* {0,1,2,3} -> {1,2,4,8} */
-> +}
-> +
->  static inline bool futex_flags_valid(unsigned int flags)
->  {
->  	/* Only 64bit futexes for 64bit code */
-> @@ -77,13 +83,19 @@ static inline bool futex_flags_valid(uns
->  	if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
->  		return false;
->  
-> -	return true;
-> -}
-> +	/*
-> +	 * Must be able to represent both NUMA_NO_NODE and every valid nodeid
-> +	 * in a futex word.
-> +	 */
-> +	if (flags & FLAGS_NUMA) {
-> +		int bits = 8 * futex_size(flags);
-> +		u64 max = ~0ULL;
-> +		max >>= 64 - bits;
-Your newline key is broken, right?
-> +		if (nr_node_ids >= max)
-> +			return false;
-> +	}
-
-Thanks,
-
-        tglx
