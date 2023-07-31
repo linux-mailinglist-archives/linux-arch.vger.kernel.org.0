@@ -2,39 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A93A76A29C
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 23:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE0576A2E7
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 23:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjGaV0V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 17:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S229679AbjGaVez (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 17:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGaV0T (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 17:26:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054271BC9;
-        Mon, 31 Jul 2023 14:26:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1690838776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IOyZYQGm0MoJgeRcATNSzytWw/GODfx4yBoXl9xBt9w=;
-        b=VQcvH21ri/7cJfk/ZgUC2zYyZE+Hx4attzSE9v0589Ifq+jW+nD+wFl1T/60qr3m9zkWCX
-        DHQe7BreeLeAutwnpdzDa0EDjn0/rJ5E10tI0/0v48Zshmw7MiebjO/P98KPFSjGaJZQNl
-        uBa5yvXG3ohh01KBZtHoNIaiRp259ax2gbCe3TUJngxgFsTFZBr0FWRONsTZDDqNnPyEuG
-        OpomVeyo0Bgf4v+S8vI9glRFKST2AFyn2NyXvx+zp9SG2Az8BQh2VeSpGWOHBnvcvOOqRr
-        CnV1doy/p+GLbpRp72Dg5ld1bZDsfPj9LM/HFFW7YkY3KRUOuSMKVgJ4jxzkcA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1690838776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IOyZYQGm0MoJgeRcATNSzytWw/GODfx4yBoXl9xBt9w=;
-        b=XmYoW7zSEC4HRRi4m8F7ZhuIprmQqfj2BrCLP75+CPmEHHaMZUWwuj4+xo3jB3OQCtguMF
-        SIrPickUz5GdkADg==
-To:     Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S229454AbjGaVey (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 17:34:54 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77625130;
+        Mon, 31 Jul 2023 14:34:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wgnR5bAqL2xpttjtPlBIH4TwsFtkouzs/SF7LfIw4XQ=; b=cGwctQdtUKzHZtGCTBUljHHpAF
+        Gyl9ukMe9e3MBczirXiF1/uR4DvnO/D84pT8HNnCnkT48x4TW4nczA9lFALEOxUwLo1oq/1o5CQO7
+        QzRi715jiHWfqwdsYA3zmCyzUpBStsy4ATFsOl82DLdq7xbzyIPfxy6pOI8Kf5LPeFPrqpQnROW5H
+        9LGnhvTkARlC1P44faAzLBGpnIUTvTd2GQbmU/KCD4zVa+ziRperTNnNINfcDtk3UIhe8AbjsHAkq
+        tsTTNwTojYd2oIL3msBz2uFrPDNJR0kIOX7yFddyHevyYN4Zt56jZB27bAs6E7Gw/zy0cqgm94lUX
+        Vf7M7X6Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQaWM-00D5kz-0W;
+        Mon, 31 Jul 2023 21:33:42 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 50B143002CE;
+        Mon, 31 Jul 2023 23:33:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1F5EB213D004E; Mon, 31 Jul 2023 23:33:41 +0200 (CEST)
+Date:   Mon, 31 Jul 2023 23:33:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org, mingo@redhat.com,
         dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
         Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com,
@@ -42,120 +46,103 @@ Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org, mingo@redhat.com,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         malteskarupke@web.de
-Subject: Re: [PATCH v1 11/14] futex: Implement FUTEX2_NUMA
-In-Reply-To: <20230731180320.GR29590@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH v1 02/14] futex: Extend the FUTEX2 flags
+Message-ID: <20230731213341.GB51835@hirez.programming.kicks-ass.net>
 References: <20230721102237.268073801@infradead.org>
- <20230721105744.434742902@infradead.org> <87pm48m19m.ffs@tglx>
- <20230731180320.GR29590@hirez.programming.kicks-ass.net>
-Date:   Mon, 31 Jul 2023 23:26:15 +0200
-Message-ID: <875y5zn56w.ffs@tglx>
+ <20230721105743.819362688@infradead.org>
+ <87edkonjrk.ffs@tglx>
+ <87mszcm0zw.ffs@tglx>
+ <20230731192012.GA11704@hirez.programming.kicks-ass.net>
+ <87a5vbn5r0.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a5vbn5r0.ffs@tglx>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 31 2023 at 20:03, Peter Zijlstra wrote:
-> On Mon, Jul 31, 2023 at 07:36:21PM +0200, Thomas Gleixner wrote:
->> Hmm. Shouldn't that have changed with the allowance of the 1 and 2 byte
->> futexes?
->
-> That patches comes after this.. :-)
+On Mon, Jul 31, 2023 at 11:14:11PM +0200, Thomas Gleixner wrote:
+> On Mon, Jul 31 2023 at 21:20, Peter Zijlstra wrote:
+> > -#define FUTEX2_MASK (FUTEX2_64 | FUTEX2_PRIVATE)
+> > +#define FUTEX2_MASK (FUTEX2_SIZE_MASK | FUTEX2_PRIVATE)
+> 
+> Along with some comment which documents that the size "flags" constitute
+> a number field and not flags in the sense of binary flags.
+> 
+> And please name these size constants so it really becomes obvious:
+> 
+> #define FUTEX2_SIZE_U32		2
 
-Futexes are really cursed :)
+So you want them named:
 
-> But I do have an open question here; do we want FUTEX2_NUMA futexes
-> aligned at futex_size or double that? That is, what do we want the
-> alignment of:
->
-> struct futex_numa_32 {
-> 	u32 val;
-> 	u32 node;
-> };
->
-> to be? Having that u64 aligned will guarantee these two values end up in
-> the same page, having them u32 aligned (as per this patch) allows for
-> them to be split.
+#define FUTEX2_SIZE_U8		0x00
+#define FUTEX2_SIZE_U16		0x01
+#define FUTEX2_SIZE_U32		0x02
+#define FUTEX2_SIZE_U64		0x03
 
-Same page and same cacheline.
+#define FUTEX2_SIZE_MASK	0x03
 
-> The current paths don't care, we don't hold locks, but perhaps it makes
-> sense to be conservative.
+Sure, can do.
 
-I think it makes sense.
+> >  /**
+> >   * futex_parse_waitv - Parse a waitv array from userspace
+> > @@ -208,11 +208,11 @@ static int futex_parse_waitv(struct fute
+> >  			return -EINVAL;
+> >  
+> >  		if (!IS_ENABLED(CONFIG_64BIT) || in_compat_syscall()) {
+> > -			if ((aux.flags & FUTEX2_64) == FUTEX2_64)
+> > +			if ((aux.flags & FUTEX2_SIZE_MASK) == FUTEX2_64)
+> >  				return -EINVAL;
+> >  		}
+> 
+> That should be part of the actual 64bit futex enablement, no?
 
->> >  	address -= key->both.offset;
->> >  
->> > -	if (unlikely(!access_ok(uaddr, sizeof(u32))))
->> > +	if (flags & FLAGS_NUMA)
->> > +		size *= 2;
->> > +
->> > +	if (unlikely(!access_ok(uaddr, size)))
->> >  		return -EFAULT;
->> >  
->> >  	if (unlikely(should_fail_futex(fshared)))
->> >  		return -EFAULT;
->> >  
->> > +	key->both.node = -1;
->> 
->> Please put this into an else path.
->
-> Can do, but I figured the compiler could figure it out through dead
-> store elimitation or somesuch pass.
+The 'unsigned long' thing is part of the syscalls, which is why I had it
+now.
 
-Sure, but taste disagrees and it simply makes the code more obvious.
+>   
+> > -		if ((aux.flags & FUTEX2_64) != FUTEX2_32)
+> > +		if ((aux.flags & FUTEX2_SIZE_MASK) != FUTEX2_32)
+> >  			return -EINVAL;
+> 
+> In hindsight I think it was as mistake just to have this __u32 flags
+> field in the new interface. Soemthing like the incomplete below might be
+> retrofittable, no?
+> 
+> --- a/include/uapi/linux/futex.h
+> +++ b/include/uapi/linux/futex.h
+> @@ -74,7 +74,12 @@
+>  struct futex_waitv {
+>  	__u64 val;
+>  	__u64 uaddr;
+> -	__u32 flags;
+> +	union {
+> +		__u32	flags;
+> +		__u32	size	: 2,
+> +				: 5,
+> +			private	: 1;
+> +	};
+>  	__u32 __reserved;
+>  };
 
->> > +	if (flags & FLAGS_NUMA) {
->> > +		void __user *naddr = uaddr + size/2;
->> 
->> size / 2;
->> 
->> > +
->> > +		if (futex_get_value(&node, naddr, flags))
->> > +			return -EFAULT;
->> > +
->> > +		if (node == -1) {
->> > +			node = numa_node_id();
->> > +			if (futex_put_value(node, naddr, flags))
->> > +				return -EFAULT;
->> > +		}
->> > +
->> > +		if (node >= MAX_NUMNODES || !node_possible(node))
->> > +			return -EINVAL;
->> 
->> That's clearly an else path too. No point in checking whether
->> numa_node_id() is valid.
->
-> No, this also checks if the value we read from userspace is valid.
->
-> Only when the value we read from userspace is -1 do we set
-> numa_node_id(), otherwise we take the value as read, which then must be
-> a valid value.
+Durr, I'm not sure I remember if that does the right thing across
+architectures -- might just work. But I'm fairly sure this isn't the
+only case of a field in a flags thing in our APIs. Although obviously I
+can't find another case in a hurry :/
 
-Right, but:
+Also, sys_futex_{wake,wait}() have this thing as a syscall argument,
+surely you don't want to put this union there as well?
 
-	if (node == -1) {
-		node = numa_node_id();
-		if (futex_put_value(node, naddr, flags))
-			return -EFAULT;
-	} else if (node >= MAX_NUMNODES || !node_possible(node)) {
-		return -EINVAL;
-        }
+I'd much prefer to just keep the 'unsigned int flags' thing and perhaps
+put a comment on-top of the '#define FUTEX2_*' thingies. Note that
+having it a field instead of a bunch of flags makes sense, since you can
+only have a single size, not a combination of sizes.
 
-makes it clear that the path where @node read from user space is != -1
-needs to be validated, while your version checks the result of
-
-      node = numa_node_id();
-
-too, which does not make sense to me. Yes, it works, but ...
-
-Thanks,
-
-        tglx
 
