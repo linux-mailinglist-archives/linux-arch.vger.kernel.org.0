@@ -2,106 +2,192 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD73769D34
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 18:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69BE769DAA
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 19:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjGaQya (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 12:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
+        id S233851AbjGaREG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 13:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjGaQy3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 12:54:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA3B19AF;
-        Mon, 31 Jul 2023 09:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PjItUIkCI0I/tP6BHRrvgMnMVmybDiMWc/8ahzNK1Yo=; b=AjwLXfW0vRm7dfkKk8o/DHhOWH
-        c7hxfSfIc/MOQZveHcyB03KDci4sBZV4+M2L8SqC3mmgrCcss8AzbRnXRWPncy0cdiMkHsAOv13jF
-        vD23leXiiOWfvnMo8iBJX0pyRTvm/mEUfML5QXvdEhRxaSHvCtUY22JWv4ZwpUAKpwAGn8xT2GvML
-        jpxvL8cn4O0WwkN6FivsK17oxbScAkGTLWQ4jgGn/jrFrZMdddPtTZcaGN6mKv7qt07/wzkbXN37V
-        VRI6zgclVkLsQgU7GlYAeYAH+Ojt+AjBGDdU59n2xwERE/lx6dKka7b+ttU4ceBAS2sOpeRKvRAi8
-        3Y0B18Sw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qQW9u-002kk1-Q7; Mon, 31 Jul 2023 16:54:15 +0000
-Date:   Mon, 31 Jul 2023 17:54:14 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        "xuyu@linux.alibaba.com" <xuyu@linux.alibaba.com>
-Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
- processes (Previously mshare)
-Message-ID: <ZMfnNpQIkXXs1W02@casper.infradead.org>
-References: <cover.1682453344.git.khalid.aziz@oracle.com>
- <74fe50d9-9be9-cc97-e550-3ca30aebfd13@linux.alibaba.com>
- <ZMeoHoM8j/ric0Bh@casper.infradead.org>
- <ae3bbfba-4207-ec5b-b4dd-ea63cb52883d@redhat.com>
- <9faea1cf-d3da-47ff-eb41-adc5bd73e5ca@linux.alibaba.com>
- <d3d03475-7977-fc55-188d-7df350ee0f29@redhat.com>
- <ZMfjmhaqVZyZNNMW@casper.infradead.org>
- <c1f3c78d-b1eb-5c1c-83aa-35901800498f@redhat.com>
+        with ESMTP id S233750AbjGaRDr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 13:03:47 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F5219B2;
+        Mon, 31 Jul 2023 10:03:38 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d299ed34bacso3970037276.1;
+        Mon, 31 Jul 2023 10:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690823018; x=1691427818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ryTLkHDnIGhrwoqJrwF4w+CKAk7Or3iQY3ycYEnzI1s=;
+        b=FItEz4g6fK8MUe9in0y5zvq54vvv6vRus4MvaXB5z0kFF5Wd4GxyLG45TIMFtswPBZ
+         o5hWJRASIfXbLHcyuajDu2shNzEC3fqz1lq+2UGzWjNRBxNrOGPJc7+FeZHb270T76uP
+         DVP8E3UCWoa73Cj1cemt4q3bHNezkBDrcXpoGHgWYyrjCA03wHK6cuEEIp3IlP9F3vH7
+         B0WVEfhX/KMZdz2qP55P02W/l5cO6EeJ2/dVRRpuTUrHoGO/LbskVtPeDS55S32mzgKs
+         4t8PJ/VzqvancbDUNXdKozgYa+ZBjOr6Csg18HLyiAYJhBTxnGsnAH6C4GyD3p+69e1s
+         v6hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690823018; x=1691427818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ryTLkHDnIGhrwoqJrwF4w+CKAk7Or3iQY3ycYEnzI1s=;
+        b=gzhVoyvYDJs9gKmo5xuqZJNf1xG3zrd6wIMa985SDjbJiiTBODFNJsfGhqt41Qlhmv
+         q+xcOntZlYdapLx7Bniw1u6Km0cLB9W1wXWOCu/NqlfIZaC2V9AhFXhfhSyjj+BpdKF3
+         +zO7lBn7U3diDytMHOMygX7e+3ODBeNC0G1Fr8PAJqTR2Kj6cUGFlXTWVeEGJ4QdECes
+         VoPxgcc+0R2d8HgQBFyT1nlLsb1/3+69mKrS71kT/WKA4MFQv2p0Qy/btC5MvCRJP4I/
+         8BikIrVNr3wy+ASlevkZ4qjDrt6hFtY5+Rs8IBwN/hOiJCw3j3PFi70S6mPzjDUSKWI/
+         UN4g==
+X-Gm-Message-State: ABy/qLbeR2hEQZ8OEzY9oaVv54CV5ydNtMnJ3vCzwokplZGYbZFL8vfb
+        6mXw5GLuEhJBDCUlEdDBMeY=
+X-Google-Smtp-Source: APBJJlF+dh42RzdYn0EXh+W1YGBDbhVTCkZUXnYcADIxILBW8gkVGvh5Vx2rhlYPGGopBifzCd0Ntg==
+X-Received: by 2002:a25:d1d0:0:b0:d1c:5a9a:48d2 with SMTP id i199-20020a25d1d0000000b00d1c5a9a48d2mr11161535ybg.19.1690823017725;
+        Mon, 31 Jul 2023 10:03:37 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
+        by smtp.googlemail.com with ESMTPSA id x31-20020a25ac9f000000b00c832ad2e2eesm2511833ybi.60.2023.07.31.10.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 10:03:37 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH mm-unstable v8 00/31] Split ptdesc from struct page
+Date:   Mon, 31 Jul 2023 10:03:01 -0700
+Message-Id: <20230731170332.69404-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1f3c78d-b1eb-5c1c-83aa-35901800498f@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 06:48:47PM +0200, David Hildenbrand wrote:
-> On 31.07.23 18:38, Matthew Wilcox wrote:
-> > On Mon, Jul 31, 2023 at 06:30:22PM +0200, David Hildenbrand wrote:
-> > > Assume we do do the page table sharing at mmap time, if the flags are right.
-> > > Let's focus on the most common:
-> > > 
-> > > mmap(memfd, PROT_READ | PROT_WRITE, MAP_SHARED)
-> > > 
-> > > And doing the same in each and every process.
-> > 
-> > That may be the most common in your usage, but for a database, you're
-> > looking at two usage scenarios.  Postgres calls mmap() on the database
-> > file itself so that all processes share the kernel page cache.
-> > Some Commercial Databases call mmap() on a hugetlbfs file so that all
-> > processes share the same userspace buffer cache.  Other Commecial
-> > Databases call shmget() / shmat() with SHM_HUGETLB for the exact
-> > same reason.
-> 
-> I remember you said that postgres might be looking into using shmem as well,
-> maybe I am wrong.
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
 
-No, I said that postgres was also interested in sharing page tables.
-I don't think they have any use for shmem.
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
 
-> memfd/hugetlb/shmem could all be handled alike, just "arbitrary filesystems"
-> would require more work.
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
 
-But arbitrary filesystems was one of the origin use cases; where the
-database is stored on a persistent memory filesystem, and neither the
-kernel nor userspace has a cache.  The Postgres & Commercial Database
-use-cases collapse into the same case, and we want to mmap the files
-directly and share the page tables.
+This is rebased on mm-unstable.
 
-> > This is why I proposed mshare().  Anyone can use it for anything.
-> > We have such a diverse set of users who want to do stuff with shared
-> > page tables that we should not be tying it to memfd or any other
-> > filesystem.  Not to mention that it's more flexible; you can map
-> > individual 4kB files into it and still get page table sharing.
-> 
-> That's not what the current proposal does, or am I wrong?
+v8:
+  Fix some compiler issues
 
-I think you're wrong, but I haven't had time to read the latest patches.
+v7:
+  Drop s390 gmap ptdesc conversions - gmap is unecessary complication
+    that can be dealt with later
+  Be more thorough with ptdesc struct sanity checks and comments
+  Rebase onto mm-unstable
 
-> Also, I'm curious, is that a real requirement in the database world?
+Vishal Moola (Oracle) (31):
+  mm: Add PAGE_TYPE_OP folio functions
+  pgtable: Create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: Remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
 
-I don't know.  It's definitely an advantage that falls out of the design
-of mshare.
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   7 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++--
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  32 ++--
+ arch/mips/mm/pgtable.c                        |   8 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
+ arch/powerpc/mm/pgtable-frag.c                |  58 +++----
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/pgalloc.c                        | 128 +++++++--------
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +--
+ arch/x86/mm/pgtable.c                         |  47 +++---
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  88 +++++-----
+ include/asm-generic/tlb.h                     |  11 ++
+ include/linux/mm.h                            | 151 +++++++++++++-----
+ include/linux/mm_types.h                      |  18 ---
+ include/linux/page-flags.h                    |  30 +++-
+ include/linux/pgtable.h                       |  80 ++++++++++
+ mm/memory.c                                   |   8 +-
+ 38 files changed, 586 insertions(+), 385 deletions(-)
+
+-- 
+2.40.1
+
