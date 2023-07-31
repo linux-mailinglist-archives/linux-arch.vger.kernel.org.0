@@ -2,42 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03042768AD2
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 06:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94007690A2
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jul 2023 10:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjGaEfK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jul 2023 00:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S231857AbjGaIqq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jul 2023 04:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjGaEfJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 00:35:09 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF170E7F;
-        Sun, 30 Jul 2023 21:35:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VoXl0.9_1690778102;
-Received: from 30.27.83.39(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VoXl0.9_1690778102)
-          by smtp.aliyun-inc.com;
-          Mon, 31 Jul 2023 12:35:03 +0800
-Message-ID: <74fe50d9-9be9-cc97-e550-3ca30aebfd13@linux.alibaba.com>
-Date:   Mon, 31 Jul 2023 12:35:00 +0800
+        with ESMTP id S230241AbjGaIqT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jul 2023 04:46:19 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7291BEC;
+        Mon, 31 Jul 2023 01:45:09 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3177f520802so2774894f8f.1;
+        Mon, 31 Jul 2023 01:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690793108; x=1691397908;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qlJcOZ0rPLmWhlyeSLW4YJJZ3jh5RfWXKohPhf857cA=;
+        b=Y3kzUSwFc9LW4htnoLpe2K1AqS9YOGys/MCvvcEvqWqdLcheaqCk64k3/c1S6FN5fl
+         xMR+3AyUncRkt+LhG1uRKSal1YrXieIIvhiJwSJqAniTMgdFz3sXlcc5yuLGvzJQXdUO
+         HsEclnYkzsvmXVyGO18pkXlAfEJmS1dYIDRg6yXoLbDRpIrk7DZIH9dsgbMyt1ETEJIB
+         1VpIYLCrp8hHdB06PSfWZV3GthxF+z6E77vr8dD+463XqePAO1Z5vEz+tqGa8e1s5DMn
+         aRx3eBY9fp1yEz6VYjB2fLQG803r4N8bO2AK0j4ViXA0suToAseAG81E6XfxB1xSzF8m
+         /qkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690793108; x=1691397908;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qlJcOZ0rPLmWhlyeSLW4YJJZ3jh5RfWXKohPhf857cA=;
+        b=ggNzDJuCkK9td+CniPSF9Zu+dknlurcrZI+NNlqy/ZamM+TV+q7Kzxdz0giiCa3PFy
+         IaXiZKKp9uJ7MQ+2JIkXSL9dpqzIplpOJtRqt1N8gFooX/s7j9j0leJwZot6Evj8KqA4
+         cuCiyb53YJ6YptfutR9fojaYXW1QmCQMVtnRILOK2fLd7u03Vd8utfqYuz+iHupBzPFb
+         U856qUa1P/Rt0uka8e4KztAoUpk34FJzFSvLzAsmHhtYmt478PTqYcOOkvhx3c+LqMvd
+         C9WzsLvKEAOUYmMvyEfgCp0iAHlWMCe4pJKvAdH8ya/indv+EC1DEwhOWyd0Wp//6lbx
+         e+wQ==
+X-Gm-Message-State: ABy/qLZ8CxFJERNqhONWx01jk8HkqO0lAXRWReQGuaHMeIwzN382DI07
+        L6lq4tA3hY0eDet2hnworp8=
+X-Google-Smtp-Source: APBJJlF//uW16wr5DhKIiufGXX42sZb/Y9SPMirVZ8h/SfajlB/u2cIdGloIW+7LRiKCEW8RncsHSg==
+X-Received: by 2002:adf:f9d1:0:b0:317:67d1:cdf2 with SMTP id w17-20020adff9d1000000b0031767d1cdf2mr7472435wrr.32.1690793107560;
+        Mon, 31 Jul 2023 01:45:07 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id v18-20020a5d43d2000000b003177074f830sm12325080wrr.59.2023.07.31.01.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 01:45:07 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] locking/arch: Rewrite local_add_unless as static inline function
+Date:   Mon, 31 Jul 2023 10:42:23 +0200
+Message-ID: <20230731084458.28096-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
- processes (Previously mshare)
-Content-Language: en-US
-To:     willy@infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        "xuyu@linux.alibaba.com" <xuyu@linux.alibaba.com>
-References: <cover.1682453344.git.khalid.aziz@oracle.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,180 +87,258 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Matthew
+Rewrite local_add_unless as a static inline function with boolean
+return value, similar to arch_atomic_add_unless arch fallbacks.
 
-May I ask you another question about mshare under this RFC? I remember 
-you said you will redesign the mshare to per-vma not per-mapping 
-(apologize if remember wrongly) in last time MM alignment session. And I 
-also refer to you to re-code this part in our internal version (based on 
-this RFC). It seems that per VMA will can simplify the structure of 
-pgtable sharing, even doesn't care the different permission of file 
-mapping. these are advantages (maybe) that I can imagine. But IMHO, It 
-seems not a strongly reason to switch per-mapping to per-vma.
+The function is currently unused.
 
-And I can't imagine other considerations of upstream. Can you share the 
-reason why redesigning in a per-vma way, due to integation with 
-hugetlbfs pgtable sharing or anonymous page sharing?
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jun Yi <yijun@loongson.cn>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/alpha/include/asm/local.h     | 33 +++++++++++++++---------------
+ arch/loongarch/include/asm/local.h | 27 ++++++++++++++----------
+ arch/mips/include/asm/local.h      | 27 ++++++++++++++----------
+ arch/powerpc/include/asm/local.h   | 12 +++++------
+ arch/x86/include/asm/local.h       | 33 +++++++++++++++---------------
+ 5 files changed, 70 insertions(+), 62 deletions(-)
 
-Thanks for your time.
+diff --git a/arch/alpha/include/asm/local.h b/arch/alpha/include/asm/local.h
+index 0fcaad642cc3..88eb398947a5 100644
+--- a/arch/alpha/include/asm/local.h
++++ b/arch/alpha/include/asm/local.h
+@@ -65,28 +65,27 @@ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
+ #define local_xchg(l, n) (xchg_local(&((l)->a.counter), (n)))
+ 
+ /**
+- * local_add_unless - add unless the number is a given value
++ * local_add_unless - add unless the number is already a given value
+  * @l: pointer of type local_t
+  * @a: the amount to add to l...
+  * @u: ...unless l is equal to u.
+  *
+- * Atomically adds @a to @l, so long as it was not @u.
+- * Returns non-zero if @l was not @u, and zero otherwise.
++ * Atomically adds @a to @l, if @v was not already @u.
++ * Returns true if the addition was done.
+  */
+-#define local_add_unless(l, a, u)				\
+-({								\
+-	long c, old;						\
+-	c = local_read(l);					\
+-	for (;;) {						\
+-		if (unlikely(c == (u)))				\
+-			break;					\
+-		old = local_cmpxchg((l), c, c + (a));	\
+-		if (likely(old == c))				\
+-			break;					\
+-		c = old;					\
+-	}							\
+-	c != (u);						\
+-})
++static __inline__ bool
++local_add_unless(local_t *l, long a, long u)
++{
++	long c = local_read(l);
++
++	do {
++		if (unlikely(c == u))
++			return false;
++	} while (!local_try_cmpxchg(l, &c, c + a));
++
++	return true;
++}
++
+ #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
+ 
+ #define local_add_negative(a, l) (local_add_return((a), (l)) < 0)
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 83e995b30e47..15bc3579f16c 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -70,22 +70,27 @@ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+ 
+ /**
+- * local_add_unless - add unless the number is a given value
++ * local_add_unless - add unless the number is already a given value
+  * @l: pointer of type local_t
+  * @a: the amount to add to l...
+  * @u: ...unless l is equal to u.
+  *
+- * Atomically adds @a to @l, so long as it was not @u.
+- * Returns non-zero if @l was not @u, and zero otherwise.
++ * Atomically adds @a to @l, if @v was not already @u.
++ * Returns true if the addition was done.
+  */
+-#define local_add_unless(l, a, u)				\
+-({								\
+-	long c, old;						\
+-	c = local_read(l);					\
+-	while (c != (u) && (old = local_cmpxchg((l), c, c + (a))) != c) \
+-		c = old;					\
+-	c != (u);						\
+-})
++static inline bool
++local_add_unless(local_t *l, long a, long u)
++{
++	long c = local_read(l);
++
++	do {
++		if (unlikely(c == u))
++			return false;
++	} while (!local_try_cmpxchg(l, &c, c + a));
++
++	return true;
++}
++
+ #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
+ 
+ #define local_dec_return(l) local_sub_return(1, (l))
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index 5daf6fe8e3e9..90435158a083 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -108,22 +108,27 @@ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+ 
+ /**
+- * local_add_unless - add unless the number is a given value
++ * local_add_unless - add unless the number is already a given value
+  * @l: pointer of type local_t
+  * @a: the amount to add to l...
+  * @u: ...unless l is equal to u.
+  *
+- * Atomically adds @a to @l, so long as it was not @u.
+- * Returns non-zero if @l was not @u, and zero otherwise.
++ * Atomically adds @a to @l, if @v was not already @u.
++ * Returns true if the addition was done.
+  */
+-#define local_add_unless(l, a, u)				\
+-({								\
+-	long c, old;						\
+-	c = local_read(l);					\
+-	while (c != (u) && (old = local_cmpxchg((l), c, c + (a))) != c) \
+-		c = old;					\
+-	c != (u);						\
+-})
++static __inline__ bool
++local_add_unless(local_t *l, long a, long u)
++{
++	long c = local_read(l);
++
++	do {
++		if (unlikely(c == u))
++			return false;
++	} while (!local_try_cmpxchg(l, &c, c + a));
++
++	return true;
++}
++
+ #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
+ 
+ #define local_dec_return(l) local_sub_return(1, (l))
+diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
+index 45492fb5bf22..ec6ced6d7ced 100644
+--- a/arch/powerpc/include/asm/local.h
++++ b/arch/powerpc/include/asm/local.h
+@@ -115,23 +115,23 @@ static __inline__ long local_xchg(local_t *l, long n)
+ }
+ 
+ /**
+- * local_add_unless - add unless the number is a given value
++ * local_add_unless - add unless the number is already a given value
+  * @l: pointer of type local_t
+  * @a: the amount to add to v...
+  * @u: ...unless v is equal to u.
+  *
+- * Atomically adds @a to @l, so long as it was not @u.
+- * Returns non-zero if @l was not @u, and zero otherwise.
++ * Atomically adds @a to @l, if @v was not already @u.
++ * Returns true if the addition was done.
+  */
+-static __inline__ int local_add_unless(local_t *l, long a, long u)
++static __inline__ bool local_add_unless(local_t *l, long a, long u)
+ {
+ 	unsigned long flags;
+-	int ret = 0;
++	bool ret = false;
+ 
+ 	powerpc_local_irq_pmu_save(flags);
+ 	if (l->v != u) {
+ 		l->v += a;
+-		ret = 1;
++		ret = true;
+ 	}
+ 	powerpc_local_irq_pmu_restore(flags);
+ 
+diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+index 56d4ef604b91..46ce92d4e556 100644
+--- a/arch/x86/include/asm/local.h
++++ b/arch/x86/include/asm/local.h
+@@ -135,28 +135,27 @@ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ #define local_xchg(l, n) (xchg(&((l)->a.counter), (n)))
+ 
+ /**
+- * local_add_unless - add unless the number is a given value
++ * local_add_unless - add unless the number is already a given value
+  * @l: pointer of type local_t
+  * @a: the amount to add to l...
+  * @u: ...unless l is equal to u.
+  *
+- * Atomically adds @a to @l, so long as it was not @u.
+- * Returns non-zero if @l was not @u, and zero otherwise.
++ * Atomically adds @a to @l, if @v was not already @u.
++ * Returns true if the addition was done.
+  */
+-#define local_add_unless(l, a, u)				\
+-({								\
+-	long c, old;						\
+-	c = local_read((l));					\
+-	for (;;) {						\
+-		if (unlikely(c == (u)))				\
+-			break;					\
+-		old = local_cmpxchg((l), c, c + (a));		\
+-		if (likely(old == c))				\
+-			break;					\
+-		c = old;					\
+-	}							\
+-	c != (u);						\
+-})
++static __always_inline bool
++local_add_unless(local_t *l, long a, long u)
++{
++	long c = local_read(l);
++
++	do {
++		if (unlikely(c == u))
++			return false;
++	} while (!local_try_cmpxchg(l, &c, c + a));
++
++	return true;
++}
++
+ #define local_inc_not_zero(l) local_add_unless((l), 1, 0)
+ 
+ /* On x86_32, these are no better than the atomic variants.
+-- 
+2.41.0
 
-On 2023/4/27 00:49, Khalid Aziz wrote:
-> Memory pages shared between processes require a page table entry
-> (PTE) for each process. Each of these PTE consumes some of the
-> memory and as long as number of mappings being maintained is small
-> enough, this space consumed by page tables is not objectionable.
-> When very few memory pages are shared between processes, the number
-> of page table entries (PTEs) to maintain is mostly constrained by
-> the number of pages of memory on the system.  As the number of
-> shared pages and the number of times pages are shared goes up,
-> amount of memory consumed by page tables starts to become
-> significant. This issue does not apply to threads. Any number of
-> threads can share the same pages inside a process while sharing the
-> same PTEs. Extending this same model to sharing pages across
-> processes can eliminate this issue for sharing across processes as
-> well.
->
-> Some of the field deployments commonly see memory pages shared
-> across 1000s of processes. On x86_64, each page requires a PTE that
-> is only 8 bytes long which is very small compared to the 4K page
-> size. When 2000 processes map the same page in their address space,
-> each one of them requires 8 bytes for its PTE and together that adds
-> up to 8K of memory just to hold the PTEs for one 4K page. On a
-> database server with 300GB SGA, a system crash was seen with
-> out-of-memory condition when 1500+ clients tried to share this SGA
-> even though the system had 512GB of memory. On this server, in the
-> worst case scenario of all 1500 processes mapping every page from
-> SGA would have required 878GB+ for just the PTEs. If these PTEs
-> could be shared, amount of memory saved is very significant.
->
-> This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
-> This flag can be specified along with MAP_SHARED by a process to
-> hint to kernel that it wishes to share page table entries for this
-> file mapping mmap region with other processes. Any other process
-> that mmaps the same file with MAP_SHARED_PT flag can then share the
-> same page table entries. Besides specifying MAP_SHARED_PT flag, the
-> processes must map the files at a PMD aligned address with a size
-> that is a multiple of PMD size and at the same virtual addresses.
-> This last requirement of same virtual addresses can possibly be
-> relaxed if that is the consensus.
->
-> When mmap() is called with MAP_SHARED_PT flag, a new host mm struct
-> is created to hold the shared page tables. Host mm struct is not
-> attached to a process. Start and size of host mm are set to the
-> start and size of the mmap region and a VMA covering this range is
-> also added to host mm struct. Existing page table entries from the
-> process that creates the mapping are copied over to the host mm
-> struct. All processes mapping this shared region are considered
-> guest processes. When a guest process mmap's the shared region, a vm
-> flag VM_SHARED_PT is added to the VMAs in guest process. Upon a page
-> fault, VMA is checked for the presence of VM_SHARED_PT flag. If the
-> flag is found, its corresponding PMD is updated with the PMD from
-> host mm struct so the PMD will point to the page tables in host mm
-> struct. vm_mm pointer of the VMA is also updated to point to host mm
-> struct for the duration of fault handling to ensure fault handling
-> happens in the context of host mm struct. When a new PTE is
-> created, it is created in the host mm struct page tables and the PMD
-> in guest mm points to the same PTEs.
->
-> This is a basic working implementation. It will need to go through
-> more testing and refinements. Some notes and questions:
->
-> - PMD size alignment and size requirement is currently hard coded
->    in. Is there a need or desire to make this more flexible and work
->    with other alignments/sizes? PMD size allows for adapting this
->    infrastructure to form the basis for hugetlbfs page table sharing
->    as well. More work will be needed to make that happen.
->
-> - Is there a reason to allow a userspace app to query this size and
->    alignment requirement for MAP_SHARED_PT in some way?
->
-> - Shared PTEs means mprotect() call made by one process affects all
->    processes sharing the same mapping and that behavior will need to
->    be documented clearly. Effect of mprotect call being different for
->    processes using shared page tables is the primary reason to
->    require an explicit opt-in from userspace processes to share page
->    tables. With a transparent sharing derived from MAP_SHARED alone,
->    changed effect of mprotect can break significant number of
->    userspace apps. One could work around that by unsharing whenever
->    mprotect changes modes on shared mapping but that introduces
->    complexity and the capability to execute a single mprotect to
->    change modes across 1000's of processes sharing a mapped database
->    is a feature explicitly asked for by database folks. This
->    capability has significant performance advantage when compared to
->    mechanism of sending messages to every process using shared
->    mapping to call mprotect and change modes in each process, or
->    using traps on permissions mismatch in each process.
->
-> - This implementation does not allow unmapping page table shared
->    mappings partially. Should that be supported in future?
->
-> Some concerns in this RFC:
->
-> - When page tables for a process are freed upon process exit,
->    pmd_free_tlb() gets called at one point to free all PMDs allocated
->    by the process. For a shared page table, shared PMDs can not be
->    released when a guest process exits. These shared PMDs are
->    released when host mm struct is released upon end of last
->    reference to page table shared region hosted by this mm. For now
->    to stop PMDs being released, this RFC introduces following change
->    in mm/memory.c which works but does not feel like the right
->    approach. Any suggestions for a better long term approach will be
->    very appreciated:
->
-> @@ -210,13 +221,19 @@ static inline void free_pmd_range(struct mmu_gather *tlb,
-> pud_t *pud,
->
->          pmd = pmd_offset(pud, start);
->          pud_clear(pud);
-> -       pmd_free_tlb(tlb, pmd, start);
-> -       mm_dec_nr_pmds(tlb->mm);
-> +       if (shared_pte) {
-> +               tlb_flush_pud_range(tlb, start, PAGE_SIZE);
-> +               tlb->freed_tables = 1;
-> +       } else {
-> +               pmd_free_tlb(tlb, pmd, start);
-> +               mm_dec_nr_pmds(tlb->mm);
-> +       }
->   }
->
->   static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
->
-> - This implementation requires an additional VM flag. Since all lower
->    32 bits are currently in use, the new VM flag must come from upper
->    32 bits which restricts this feature to 64-bit processors.
->
-> - This feature is implemented for file mappings only. Is there a
->    need to support it for anonymous memory as well?
->
-> - Accounting for MAP_SHARED_PT mapped filepages in a process and
->    pagetable bytes is not quite accurate yet in this RFC and will be
->    fixed in the non-RFC version of patches.
->
-> I appreciate any feedback on these patches and ideas for
-> improvements before moving these patches out of RFC stage.
->
->
-> Changes from RFC v1:
-> - Broken the patches up into smaller patches
-> - Fixed a few bugs related to freeing PTEs and PMDs incorrectly
-> - Cleaned up the code a bit
->
->
-> Khalid Aziz (4):
->    mm/ptshare: Add vm flag for shared PTE
->    mm/ptshare: Add flag MAP_SHARED_PT to mmap()
->    mm/ptshare: Create new mm struct for page table sharing
->    mm/ptshare: Add page fault handling for page table shared regions
->
->   include/linux/fs.h                     |   2 +
->   include/linux/mm.h                     |   8 +
->   include/trace/events/mmflags.h         |   3 +-
->   include/uapi/asm-generic/mman-common.h |   1 +
->   mm/Makefile                            |   2 +-
->   mm/internal.h                          |  21 ++
->   mm/memory.c                            | 105 ++++++++--
->   mm/mmap.c                              |  88 +++++++++
->   mm/ptshare.c                           | 263 +++++++++++++++++++++++++
->   9 files changed, 476 insertions(+), 17 deletions(-)
->   create mode 100644 mm/ptshare.c
->
