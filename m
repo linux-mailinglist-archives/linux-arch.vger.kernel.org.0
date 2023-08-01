@@ -2,78 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACBE76BD40
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Aug 2023 21:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AF776BDB6
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Aug 2023 21:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbjHATFd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Aug 2023 15:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S231970AbjHAT2H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Aug 2023 15:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbjHATFb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 15:05:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA126A4;
-        Tue,  1 Aug 2023 12:05:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4F461590;
-        Tue,  1 Aug 2023 19:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61AAC433C8;
-        Tue,  1 Aug 2023 19:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690916725;
-        bh=XaEyLOjcTNwc9YeWlOJYScuIZzeMlhSmUXhkTyWOcdo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=grHpsCade+4hhBefcy1y7pfmLc1TAcGI5yfjr3ji+PPlfsj7KES8fDhea9q6wXLgD
-         xrGOW3viFBiZ2vyLfNwKC2X7e0UTc1/jdT+BIQoV/8PnGuJGh7RiYNNQpAaJGGf11f
-         CdB8b0Gn5nYSkS4o8WfpNo99u2ppuAN14a1C5I5IwjPlP7/PUzBYiYFueK9jOe6o1g
-         wKWlPPFaossUwjpE/h96bWJrEMfGbGHML66oQ9wJRkAletVZCNSjo4mwx9aKbjnxmW
-         /wU5qh51gu/TWRN8ejWFeGscGFLY08HjeLHMeUYNUquMcFllxGCj3PCG7S0rJoDSlE
-         IMkXmWaTTxdrg==
-Date:   Tue, 1 Aug 2023 20:05:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 11/36] arm64/mm: Map pages for guarded control stack
-Message-ID: <1cbd6d5a-0e58-4a3f-b7e5-bbab09f03c5d@sirena.org.uk>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230731-arm64-gcs-v3-11-cddf9f980d98@kernel.org>
- <20230801170231.GC2607694@kernel.org>
+        with ESMTP id S231786AbjHAT2G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 15:28:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C3F10E;
+        Tue,  1 Aug 2023 12:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gaut94wtJvcD0zi3q7k4JYT7+QEi/Ua5L41+y8I+W9A=; b=FWrX0z28U3EqiQJrIFfM/btNnD
+        h0r6Q0OJ3rp5KMXJorNilcAfp8f3kEIhltT8RjmJWCxZ+EUksczMNZPOLsVqYa8HvYCGAKxjvRc6Z
+        ZHXdgNjBBXysu78uR2VE4uvd/UnmJTUo3BNeWLgbqgStaLTfK4lAPj83qDQEU85kHEyUSozuXFVlJ
+        y1i8KQOzRWSaUDKfxEWBhsPHwkBEDJQPlrogyIqDoeihbK6N8zE1PqhZkxC3zwUdvdzanaPkJK5nq
+        VdvR8Yc4tHO6vQgiV2CjJtdAth0lqVMHIYcwyP+9RxH1FNA2UhNOA8i99+Whl9iPkLdc/nlZ850V3
+        puAflRfA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qQv2I-00AacX-ID; Tue, 01 Aug 2023 19:28:02 +0000
+Date:   Tue, 1 Aug 2023 20:28:02 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        "xuyu@linux.alibaba.com" <xuyu@linux.alibaba.com>
+Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
+ processes (Previously mshare)
+Message-ID: <ZMlcwrCMdZIBWT90@casper.infradead.org>
+References: <cover.1682453344.git.khalid.aziz@oracle.com>
+ <74fe50d9-9be9-cc97-e550-3ca30aebfd13@linux.alibaba.com>
+ <ZMeoHoM8j/ric0Bh@casper.infradead.org>
+ <ae3bbfba-4207-ec5b-b4dd-ea63cb52883d@redhat.com>
+ <9faea1cf-d3da-47ff-eb41-adc5bd73e5ca@linux.alibaba.com>
+ <d3d03475-7977-fc55-188d-7df350ee0f29@redhat.com>
+ <ZMfjmhaqVZyZNNMW@casper.infradead.org>
+ <dcf5dbff-df95-0b5e-964e-6e55c843d977@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zPbhvjZzJERchlQs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230801170231.GC2607694@kernel.org>
-X-Cookie: I thought YOU silenced the guard!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <dcf5dbff-df95-0b5e-964e-6e55c843d977@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,45 +57,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Aug 01, 2023 at 02:53:02PM +0800, Rongwei Wang wrote:
+> 
+> On 2023/8/1 00:38, Matthew Wilcox wrote:
+> > On Mon, Jul 31, 2023 at 06:30:22PM +0200, David Hildenbrand wrote:
+> > > Assume we do do the page table sharing at mmap time, if the flags are right.
+> > > Let's focus on the most common:
+> > > 
+> > > mmap(memfd, PROT_READ | PROT_WRITE, MAP_SHARED)
+> > > 
+> > > And doing the same in each and every process.
+> > That may be the most common in your usage, but for a database, you're
+> > looking at two usage scenarios.  Postgres calls mmap() on the database
+> > file itself so that all processes share the kernel page cache.
+> > Some Commercial Databases call mmap() on a hugetlbfs file so that all
+> > processes share the same userspace buffer cache.  Other Commecial
+> > Databases call shmget() / shmat() with SHM_HUGETLB for the exact
+> > same reason.
+> > 
+> > This is why I proposed mshare().  Anyone can use it for anything.
+> 
+> Hi Matthew
+> 
+> I'm a little confused about this mshare(). Which one is the mshare() you
+> refer to here, previous mshare() based on filesystem or this RFC v2 posted
+> by Khalid?
+> 
+> IMHO, they have much difference between previously mshare() and
+> MAP_SHARED_PT now.
 
---zPbhvjZzJERchlQs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Aug 01, 2023 at 08:02:31PM +0300, Mike Rapoport wrote:
-> On Mon, Jul 31, 2023 at 02:43:20PM +0100, Mark Brown wrote:
-
-> >  {
-> > -	pteval_t prot = pgprot_val(protection_map[vm_flags &
-> > +	pteval_t prot;
-> > +
-> > +	/*
-> > +	 * If this is a GCS then only interpret VM_WRITE.
-> > +	 *
-> > +	 * TODO: Just make protection_map[] bigger?  Nothing seems
-> > +	 * ideal here.
-> > +	 */
-
-> I think extending protection_map and updating adjust_protection_map() is
-> cleaner and probably faster.
-
-That was my initial thought but then I immediately started second
-guessing myself about review comments.  Hopefully Will or Catalin will
-weigh in.
-
---zPbhvjZzJERchlQs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTJV2sACgkQJNaLcl1U
-h9AlrwgAheuf8ghyBKWYbkyMEXdB+oQMSgcGlnFgC7nJJfw06f2XaVrBNE+6Swjh
-pgt+0RrRPIXZHhZXP3vHWP0yM/pgwS3o0K+/jolpahP+ieFfiJa5X4GTuGzPYZiq
-6XYZEXkdOtuuyx3McLXU4Eet7PsnmqDolbBcr2pV1oyvRj6zWbdfv+SYoL8DX6bA
-kUGWitWitEXi8bMTvWWg23s1MoFXLYxUWDZVwCl89aIipWnICzUze6O9FVMsfYJ1
-h8ITi9V3QFo5uKkn1MySOUPaK7TI+VKZhAJMaNEQmCHMFXTkQhpp1jJvY4FFRVi2
-rUxmpnOLBLA3hsMLGXV+tSV8S9P65g==
-=kTpO
------END PGP SIGNATURE-----
-
---zPbhvjZzJERchlQs--
+I haven't read this version of the patchset.  I'm describing the original
+idea, not what it may have turned into.  As far as I'm concerned, we're
+still trying to decide what functionality we actually want, not arguing
+about whether this exact patchset has the correct number of tab indents
+to be merged.
