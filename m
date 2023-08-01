@@ -2,158 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3178576A7C2
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Aug 2023 06:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB7676A89E
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Aug 2023 08:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjHAEFW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Aug 2023 00:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S230273AbjHAGDI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Aug 2023 02:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjHAEFV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 00:05:21 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C708185;
-        Mon, 31 Jul 2023 21:05:18 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Bx5fB7hMhkEtkNAA--.32917S3;
-        Tue, 01 Aug 2023 12:05:15 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLCN5hMhkAoVDAA--.26035S3;
-        Tue, 01 Aug 2023 12:05:14 +0800 (CST)
-Message-ID: <0126bfcf-fb5c-6243-a2f3-2aab01b38279@loongson.cn>
-Date:   Tue, 1 Aug 2023 12:05:13 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH V2] asm-generic: ticket-lock: Optimize
- arch_spin_value_unlocked
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>, guoren@kernel.org,
-        David.Laight@ACULAB.COM, will@kernel.org, peterz@infradead.org,
-        mingo@redhat.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-References: <20230731023308.3748432-1-guoren@kernel.org>
- <c603e7f1-a562-6826-1c86-995c8127abee@redhat.com>
- <2437ac29-29f0-34f9-b7cb-f0e294db7dc6@loongson.cn>
- <f34ddf7f-3ed9-6118-8106-eb9df110c44c@redhat.com>
-From:   bibo mao <maobibo@loongson.cn>
-In-Reply-To: <f34ddf7f-3ed9-6118-8106-eb9df110c44c@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxLCN5hMhkAoVDAA--.26035S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGryfWr1fZr1xArW5WF1kXrc_yoWrZw17pr
-        1kGF15JryUCr1kAF1Utr1jqry8tw47Kw1UXr1DGF1UJFsrXr1Yga18Xr90gr1jyw4xJr4U
-        Jr1jqry7Zr1UJrcCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229698AbjHAGDH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 02:03:07 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86528127;
+        Mon, 31 Jul 2023 23:03:05 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 775BF3200904;
+        Tue,  1 Aug 2023 02:03:03 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 01 Aug 2023 02:03:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1690869782; x=1690956182; bh=qk
+        yMf1jROQESc+dKhHjjFPnh08dBcae/QUx9x+GbCtI=; b=XAaP+/+UOTnwvVemks
+        YopMYaMcMUz0s+743h6XRCTAg2WKOijp29Zjj1ombpCZS+VMsL/qqBEmiUPz/qpA
+        ZIp5w4IeU4KKI0hzCExJW5ycpG4u6w5jrjiPCcFNQib/TBeHIOOEKekZYElsdKHa
+        nym0UgIN/QbDR8yXjVyt5EsfgXyoV80wTGbOO56BIhBLmNYu+X6EJiwwXhehGm9l
+        icdLq9ZoN9ZMmbKEd7smNtbj6enzC7nGJ+ReduVHIUrxUYoy4zczCxOVXYe/CYv0
+        3V7RPMAzPqShh0g4GPkA+WB1+1CT2k3qd+2/jvfVtGh1YpIRNwi19QYgmIkiHHGS
+        /geA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1690869782; x=1690956182; bh=qkyMf1jROQESc
+        +dKhHjjFPnh08dBcae/QUx9x+GbCtI=; b=V8jBjh1HxL7d/irNHDlnPPAOnn6gQ
+        MnBvXgkw8Kcsf1Ltw7zPbvfQEvDmi3MDuBRbd6yRrihNN27JsQiQmndqVrk0KnEe
+        9QjBQvMytcV5UaWbAdRKPxW5njka3m4UO2GNnIDZQ2CqWGPfAeKnKoscDashq3WX
+        hfkeptDhapzV5twxlCT24zS7/OmFfXu9dUZ0E3cZM7Xvp1P1Dn+nnZZDUUC/P26G
+        1H+yRk3EgoF+Kp4ky9CyjAgCWz38M7a2+Ojjy4mUP1oXqN6ES1boPJJYdz0FkANM
+        lcea4fXYdTo0p1MdB64OvRuyj4yb502ox+17D7EnRMCVDIcV4eJLJGSdQ==
+X-ME-Sender: <xms:FaDIZPXoQWDYyYcXI7aYyWNtgvXfQuUWLCk6S_GiRblQ8EEsihgL_g>
+    <xme:FaDIZHlqLrMACy7aKb5HsWLRRjf-0hKJxTSexGjiZxBjkUOF4tgBLPtvnnTrs9zXy
+    oZ5aidxIVy2DrEd8EI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeehgddutdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:FaDIZLZjWAsnldLMF8roNWDifXJ4QxIQXGXSF5yGCd7Uf3tPOaTmTA>
+    <xmx:FaDIZKVk40KF_pmKQnslC9CpYAjXYYevFS-G2yhvjX_4wlgzwCuPhA>
+    <xmx:FaDIZJncneE9pXFtFULPv5Kms_B050h3hbu8RJfxDF1t7RUmhlBjbw>
+    <xmx:FqDIZLmQSvKyItu5zGcPmO9aT1Vur76WzvC-PJl_GDzdtfVGUI2vAQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A0937B60089; Tue,  1 Aug 2023 02:03:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+Mime-Version: 1.0
+Message-Id: <2d9c843f-e884-47d3-a825-6402db0a2cb8@app.fastmail.com>
+In-Reply-To: <87y1ivln1v.ffs@tglx>
+References: <20230721102237.268073801@infradead.org>
+ <20230721105743.819362688@infradead.org> <87edkonjrk.ffs@tglx>
+ <87mszcm0zw.ffs@tglx>
+ <20230731192012.GA11704@hirez.programming.kicks-ass.net>
+ <87a5vbn5r0.ffs@tglx>
+ <20230731213341.GB51835@hirez.programming.kicks-ass.net>
+ <87y1ivln1v.ffs@tglx>
+Date:   Tue, 01 Aug 2023 08:02:21 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>
+Cc:     "Jens Axboe" <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Darren Hart" <dvhart@infradead.org>, dave@stgolabs.net,
+        andrealmeid@igalia.com,
+        "Andrew Morton" <akpm@linux-foundation.org>, urezki@gmail.com,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Lorenzo Stoakes" <lstoakes@gmail.com>, linux-api@vger.kernel.org,
+        linux-mm@kvack.org, Linux-Arch <linux-arch@vger.kernel.org>,
+        malteskarupke@web.de
+Subject: Re: [PATCH v1 02/14] futex: Extend the FUTEX2 flags
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-在 2023/8/1 09:59, Waiman Long 写道:
-> On 7/31/23 21:37, bibo mao wrote:
+On Tue, Aug 1, 2023, at 00:43, Thomas Gleixner wrote:
+> On Mon, Jul 31 2023 at 23:33, Peter Zijlstra wrote:
+>> On Mon, Jul 31, 2023 at 11:14:11PM +0200, Thomas Gleixner wrote:
+>>> --- a/include/uapi/linux/futex.h
+>>> +++ b/include/uapi/linux/futex.h
+>>> @@ -74,7 +74,12 @@
+>>>  struct futex_waitv {
+>>>  	__u64 val;
+>>>  	__u64 uaddr;
+>>> -	__u32 flags;
+>>> +	union {
+>>> +		__u32	flags;
+>>> +		__u32	size	: 2,
+>>> +				: 5,
+>>> +			private	: 1;
+>>> +	};
+>>>  	__u32 __reserved;
+>>>  };
 >>
->> 在 2023/7/31 23:16, Waiman Long 写道:
->>> On 7/30/23 22:33, guoren@kernel.org wrote:
->>>> From: Guo Ren <guoren@linux.alibaba.com>
->>>>
->>>> The arch_spin_value_unlocked would cause an unnecessary memory
->>>> access to the contended value. Although it won't cause a significant
->>>> performance gap in most architectures, the arch_spin_value_unlocked
->>>> argument contains enough information. Thus, remove unnecessary
->>>> atomic_read in arch_spin_value_unlocked().
->>>>
->>>> The caller of arch_spin_value_unlocked() could benefit from this
->>>> change. Currently, the only caller is lockref.
->>>>
->>>> Signed-off-by: Guo Ren <guoren@kernel.org>
->>>> Cc: Waiman Long <longman@redhat.com>
->>>> Cc: David Laight <David.Laight@ACULAB.COM>
->>>> Cc: Peter Zijlstra <peterz@infradead.org>
->>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->>>> ---
->>>> Changelog
->>>> V2:
->>>>    - Fixup commit log with Waiman advice.
->>>>    - Add Waiman comment in the commit msg.
->>>> ---
->>>>    include/asm-generic/spinlock.h | 16 +++++++++-------
->>>>    1 file changed, 9 insertions(+), 7 deletions(-)
->>>>
->>>> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
->>>> index fdfebcb050f4..90803a826ba0 100644
->>>> --- a/include/asm-generic/spinlock.h
->>>> +++ b/include/asm-generic/spinlock.h
->>>> @@ -68,11 +68,18 @@ static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
->>>>        smp_store_release(ptr, (u16)val + 1);
->>>>    }
->>>>    +static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
->>>> +{
->>>> +    u32 val = lock.counter;
->>>> +
->>>> +    return ((val >> 16) == (val & 0xffff));
->>>> +}
->>>> +
->>>>    static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
->>>>    {
->>>> -    u32 val = atomic_read(lock);
->>>> +    arch_spinlock_t val = READ_ONCE(*lock);
->>>>    -    return ((val >> 16) != (val & 0xffff));
->>>> +    return !arch_spin_value_unlocked(val);
->>>>    }
->>>>      static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
->>>> @@ -82,11 +89,6 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
->>>>        return (s16)((val >> 16) - (val & 0xffff)) > 1;
->>>>    }
->>>>    -static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
->>>> -{
->>>> -    return !arch_spin_is_locked(&lock);
->>>> -}
->>>> -
->>>>    #include <asm/qrwlock.h>
->>>>      #endif /* __ASM_GENERIC_SPINLOCK_H */
->>> I am fine with the current change. However, modern optimizing compiler should be able to avoid the redundant memory read anyway. So this patch may not have an impact from the performance point of view.
->> arch_spin_value_unlocked is called with lockref like this:
->>
->> #define CMPXCHG_LOOP(CODE, SUCCESS) do {                                        \
->>          int retry = 100;                                                        \
->>          struct lockref old;                                                     \
->>          BUILD_BUG_ON(sizeof(old) != 8);                                         \
->>          old.lock_count = READ_ONCE(lockref->lock_count);                        \
->>          while (likely(arch_spin_value_unlocked(old.lock.rlock.raw_lock))) {     \
->>
->> With modern optimizing compiler, Is it possible that old value of
->> old.lock.rlock.raw_lock is cached in register, despite that try_cmpxchg64_relaxed
->> modifies the memory of old.lock_count with new value?
-> 
-> What I meant is that the call to arch_spin_value_unlocked() as it is today will not generate 2 memory reads of the same location with or without the patch. Of course, a new memory read will be needed after a failed cmpxchg().
-yeap, it can solve the issue with a new memory read after a failed cmpxchg().
+>> Durr, I'm not sure I remember if that does the right thing across
+>> architectures -- might just work. But I'm fairly sure this isn't the
+>> only case of a field in a flags thing in our APIs. Although obviously
+>> I can't find another case in a hurry :/
+>
+> I know, but that doesn't make these things more readable and neither an
+> argument against doing it for futex2 :)
+...
+>
+> Still that explicit bitfield does neither need comments nor does it
+> leave room for interpretation.
 
-Regards
-Bibo Mao
-> 
-> Cheers,
-> Longman
+It may be clear to the compiler, but without comments or
+looking up psABI documentation I certainly wouldn't know
+immediately which bits of the flags word overlay the bitfields
+for a given combination of __BIG_ENDIAN/__LITTLE_ENDIAN
+and __BIG_ENDIAN_BITFIELD/__LITTLE_ENDIAN_BITFIELD or
+architectures with unusual struct alignment requirements
+(m68k or arm-oabi).
 
+I'd prefer to completely avoid the bitfield here. Maybe having
+exclusive flags for each width would be less confusing, at the
+cost of needing two more flag bits and a slightly more complicated
+sanity check, or we could take an extra byte out of the __reserved
+field to store the length.
+
+       Arnd
