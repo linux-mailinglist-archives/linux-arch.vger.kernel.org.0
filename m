@@ -2,256 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347D876BBA4
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Aug 2023 19:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C26076BBC3
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Aug 2023 19:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjHARtn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Aug 2023 13:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S230386AbjHAR5V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Aug 2023 13:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjHARtm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 13:49:42 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D37FE61;
-        Tue,  1 Aug 2023 10:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690912175; x=1722448175;
-  h=date:from:to:cc:subject:message-id;
-  bh=+hiKzgVIdfd4Ul1Hh9n+HHx4lcITo+xaMCT5DwRKcdI=;
-  b=DbgE+L+aSFuNbba4hCdg3L5E3LxJ7AuIkABL6fWSc+/V/pGv8kjpNi5/
-   tvKBl7zDI+YXNU2mX3UaG5HP3MnFQkn4wK+QS1G9kgPM2FdGfO+amDYxz
-   SyGYNZOICCs05rNl4qDLxNps4qYx9nxUZuKI6590ubxmdbNxguHv6jBwg
-   M/XReCa6aPMGaOr2Iqgy38iSrMG+hsWTdz/OGFo9vdWhO8UNIgSZIxGra
-   HuldsSwXAvARKqU+jXqr8VCs79AYI826xJbmZBSmXoq85kYVggxTvORXX
-   SFYwpEn7dTf6RtMrLzuDnfk0gH46pxzTIeQBNOr5bkSEQdAwPyFX4tbip
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="369368299"
-X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="369368299"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 10:49:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="794275606"
-X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="794275606"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Aug 2023 10:49:32 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qQtUx-0000UD-2k;
-        Tue, 01 Aug 2023 17:49:31 +0000
-Date:   Wed, 02 Aug 2023 01:49:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [linux-next:master] BUILD REGRESSION
- a734662572708cf062e974f659ae50c24fc1ad17
-Message-ID: <202308020108.zBWJNwcE-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229485AbjHAR5V (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 13:57:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D11FCB;
+        Tue,  1 Aug 2023 10:57:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AD526165F;
+        Tue,  1 Aug 2023 17:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A047AC433C8;
+        Tue,  1 Aug 2023 17:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690912639;
+        bh=F8CAARuNUeaGEa3yA1waQoVFs2zc6rvh3zubyIWd+RI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JZJMaAT42SQFAM85RnUbpnm4my8uLLOgrzrpv9ey5F7iOsTiCZBEwwsQMLRUS80/H
+         gICFBbZERF2JfuNbCyCasY1N2jUMSPr8iIihwDf950iYsquKfhXkKiL5b+msCXfHuc
+         B0hu58CMAQA41AZ35HEN4GzCtnJS9SRnAzeUVfmqmxuG8PriXB+8iNnYQ9IBFlhh0g
+         5LHahWPZHyPVmmgOLHdeR6Ip9wxGlCVC4KZ6u6/MqfCxXMrpYZItw3hBiaTqg1xfTN
+         tUOKRiTjydZGF6wuuwu94EdSvPU1tYZYsAoggPLjahr6Dr1QtlFVqW2D4lr8QT0Spn
+         skZg6nLYjJM5w==
+Date:   Tue, 1 Aug 2023 18:57:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>
+Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
+Message-ID: <55c629cc-0545-460b-91cb-2ebdb8ae9051@sirena.org.uk>
+References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
+ <20230731-arm64-gcs-v3-21-cddf9f980d98@kernel.org>
+ <5461c56cf4896f18bddaa66c3beec7b909fc8fb9.camel@intel.com>
+ <0a6c90d6-f790-4036-a364-d4761fdd0e95@sirena.org.uk>
+ <e827138f9d8800e3db158831bca88d1ea8b559af.camel@intel.com>
+ <21d7e814-8608-40ce-b5d3-401f2110ad91@sirena.org.uk>
+ <a9ea33d31aad0c45eab41b0dcbd4913d863cc930.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WYhsHyqynSPadbUB"
+Content-Disposition: inline
+In-Reply-To: <a9ea33d31aad0c45eab41b0dcbd4913d863cc930.camel@intel.com>
+X-Cookie: I thought YOU silenced the guard!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: a734662572708cf062e974f659ae50c24fc1ad17  Add linux-next specific files for 20230801
 
-Error/Warning reports:
+--WYhsHyqynSPadbUB
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/oe-kbuild-all/202307251531.p8ZLFTMZ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202308020154.Xrcb9bWT-lkp@intel.com
+On Tue, Aug 01, 2023 at 05:07:00PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2023-08-01 at 15:01 +0100, Mark Brown wrote:
 
-Error/Warning: (recently discovered and may have been fixed)
+> > > It could be a different flag, like SHADOW_STACK_SET_TOKEN_MARKER,
+> > > or it
+> > > could be SHADOW_STACK_SET_MARKER, and callers could pass
+> > > (SHADOW_STACK_SET_TOKEN | SHADOW_STACK_SET_MARKER) to get what you
+> > > have
+> > > implemented here. What do you think?
 
-../lib/gcc/loongarch64-linux/12.3.0/plugin/include/config/loongarch/loongarch-opts.h:31:10: fatal error: loongarch-def.h: No such file or directory
-clang-16: error: unknown argument: '-msym32'
-drivers/i2c/busses/i2c-virtio.c:270:3: error: field designator 'freeze' does not refer to any field in type 'struct virtio_driver'
-drivers/i2c/busses/i2c-virtio.c:271:3: error: field designator 'restore' does not refer to any field in type 'struct virtio_driver'
-drivers/regulator/max77857-regulator.c:312:16: error: initializer element is not a compile-time constant
-include/asm-generic/io.h:1137:20: error: static declaration of 'ioport_map' follows non-static declaration
-include/asm-generic/io.h:1147:22: error: static declaration of 'ioport_unmap' follows non-static declaration
-include/asm-generic/io.h:636:15: error: redefinition of 'inb_p'
-include/asm-generic/io.h:644:15: error: redefinition of 'inw_p'
-include/asm-generic/io.h:652:15: error: redefinition of 'inl_p'
-include/asm-generic/io.h:660:16: error: redefinition of 'outb_p'
-include/asm-generic/io.h:668:16: error: redefinition of 'outw_p'
-include/asm-generic/io.h:676:16: error: redefinition of 'outl_p'
-include/asm-generic/io.h:689:14: error: redefinition of 'insb'
-include/asm-generic/io.h:697:14: error: redefinition of 'insw'
-include/asm-generic/io.h:705:14: error: redefinition of 'insl'
-include/asm-generic/io.h:713:15: error: redefinition of 'outsb'
-include/asm-generic/io.h:722:15: error: redefinition of 'outsw'
-include/asm-generic/io.h:731:15: error: redefinition of 'outsl'
+> > For arm64 code this would mean that it would be possible (and fairly
+> > easy) to create stacks which don't have a termination record which
+> > would
+> > make life harder for unwinders to rely on.=A0 I don't think this is
+> > insurmountable, creating manually shouldn't be the standard and it'll
+> > already be an issue on x86 anyway.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+> If you are going to support optionally writing to shadow stacks (which
+> x86 needed for CRIU, and also seems like a nice thing for several other
+> reasons), you are already at that point. Can't you also do a bunch of
+> gcspopm's to the top of the GCS stack, and have no marker to hit before
+> the end of the stack? (maybe not in GCS, I don't know...)
 
-sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
-{standard input}: Warning: end of file not at end of a line; newline inserted
-{standard input}:1095: Error: pcrel too far
+It's definitely possible to use writes or pops to achive the same
+effect, it's just that it's less likely to be something that happens
+through simple oversight than missing a flag off the initial map call
+would be.
 
-Error/Warning ids grouped by kconfigs:
+> > The other minor issue is that the current arm64 marker is all bits 0
+> > so by itself for arm64 _MARKER would have no perceptible impact, it
+> > would only serve to push the token down a slot in the stack (I'm
+> > guessing that's the intended meaning?).
 
-gcc_recent_errors
-|-- loongarch-allmodconfig
-|   `-- lib-gcc-loongarch64-linux-..-plugin-include-config-loongarch-loongarch-opts.h:fatal-error:loongarch-def.h:No-such-file-or-directory
-|-- sh-allmodconfig
-|   |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-|   |-- standard-input:Error:pcrel-too-far
-|   `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-`-- sh-randconfig-r023-20230731
-    |-- include-asm-generic-io.h:error:redefinition-of-inb_p
-    |-- include-asm-generic-io.h:error:redefinition-of-inl_p
-    |-- include-asm-generic-io.h:error:redefinition-of-insb
-    |-- include-asm-generic-io.h:error:redefinition-of-insl
-    |-- include-asm-generic-io.h:error:redefinition-of-insw
-    |-- include-asm-generic-io.h:error:redefinition-of-inw_p
-    |-- include-asm-generic-io.h:error:redefinition-of-outb_p
-    |-- include-asm-generic-io.h:error:redefinition-of-outl_p
-    |-- include-asm-generic-io.h:error:redefinition-of-outsb
-    |-- include-asm-generic-io.h:error:redefinition-of-outsl
-    |-- include-asm-generic-io.h:error:redefinition-of-outsw
-    |-- include-asm-generic-io.h:error:redefinition-of-outw_p
-    |-- include-asm-generic-io.h:error:static-declaration-of-ioport_map-follows-non-static-declaration
-    `-- include-asm-generic-io.h:error:static-declaration-of-ioport_unmap-follows-non-static-declaration
-clang_recent_errors
-|-- hexagon-allmodconfig
-|   |-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-freeze-does-not-refer-to-any-field-in-type-struct-virtio_driver
-|   |-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-restore-does-not-refer-to-any-field-in-type-struct-virtio_driver
-|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
-|-- hexagon-randconfig-r015-20230731
-|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
-|-- i386-randconfig-i012-20230731
-|   |-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-freeze-does-not-refer-to-any-field-in-type-struct-virtio_driver
-|   `-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-restore-does-not-refer-to-any-field-in-type-struct-virtio_driver
-`-- mips-sb1250_swarm_defconfig
-    `-- clang:error:unknown-argument:msym32
+> Pushing the token down a frame is what flags=3D=3D0 does in this patch,
+> right?
 
-elapsed time: 725m
+Yes, exactly - if we make the top of stack record optional then if that
+flag is omitted we'd not do that.
 
-configs tested: 111
-configs skipped: 5
+> You don't have to support all the flags actually, you could just
+> support the one mode you already have and reject all other
+> combinations... Then it matches between arch's, and you still have the
+> guaranteed-ish end marker.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r026-20230731   gcc  
-arc                              alldefconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230731   gcc  
-arc                  randconfig-r033-20230731   gcc  
-arc                  randconfig-r043-20230731   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                            mmp2_defconfig   clang
-arm                  randconfig-r046-20230731   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230731   gcc  
-arm64                randconfig-r021-20230731   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r001-20230731   clang
-hexagon              randconfig-r022-20230731   clang
-hexagon              randconfig-r041-20230731   clang
-hexagon              randconfig-r045-20230731   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230731   gcc  
-i386         buildonly-randconfig-r005-20230731   gcc  
-i386         buildonly-randconfig-r006-20230731   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230731   gcc  
-i386                 randconfig-i002-20230731   gcc  
-i386                 randconfig-i003-20230731   gcc  
-i386                 randconfig-i004-20230731   gcc  
-i386                 randconfig-i005-20230731   gcc  
-i386                 randconfig-i006-20230731   gcc  
-i386                 randconfig-i011-20230731   clang
-i386                 randconfig-i012-20230731   clang
-i386                 randconfig-i013-20230731   clang
-i386                 randconfig-i014-20230731   clang
-i386                 randconfig-i015-20230731   clang
-i386                 randconfig-i016-20230731   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r014-20230731   gcc  
-m68k                 randconfig-r025-20230731   gcc  
-microblaze           randconfig-r002-20230731   gcc  
-microblaze           randconfig-r023-20230731   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      maltaaprp_defconfig   clang
-mips                   sb1250_swarm_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r024-20230731   gcc  
-nios2                randconfig-r035-20230731   gcc  
-nios2                randconfig-r036-20230731   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230731   gcc  
-parisc               randconfig-r031-20230731   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r013-20230731   clang
-riscv                randconfig-r042-20230731   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r034-20230731   gcc  
-s390                 randconfig-r044-20230731   clang
-sh                               allmodconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r011-20230731   gcc  
-sparc                randconfig-r012-20230731   gcc  
-sparc64              randconfig-r015-20230731   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230731   gcc  
-x86_64       buildonly-randconfig-r002-20230731   gcc  
-x86_64       buildonly-randconfig-r003-20230731   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230731   clang
-x86_64               randconfig-x002-20230731   clang
-x86_64               randconfig-x003-20230731   clang
-x86_64               randconfig-x004-20230731   clang
-x86_64               randconfig-x005-20230731   clang
-x86_64               randconfig-x006-20230731   clang
-x86_64               randconfig-x011-20230731   gcc  
-x86_64               randconfig-x012-20230731   gcc  
-x86_64               randconfig-x013-20230731   gcc  
-x86_64               randconfig-x014-20230731   gcc  
-x86_64               randconfig-x015-20230731   gcc  
-x86_64               randconfig-x016-20230731   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+Sure, though if we're going to the trouble of checking for the flag we
+probably may as well implement it.  I guess x86 is locked in at this
+point by existing userspace.  I guess I'll implement it assuming nobody
+=66rom userspace complains, it's trivial for a kernel.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> So the question is not what mode should arm support, but should we have
+> the flags match between x86 and ARM?
+
+The flags should definitely match, no disagreement there.
+
+--WYhsHyqynSPadbUB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTJR3QACgkQJNaLcl1U
+h9D+HQf/dMO4oPMfSYgpJfSkqjyeMhvngNszJ/vg3XKaq4EJAEMgOh+p9YWNYPyv
+uBQnGou+Mr2N+ymg2pLC4+WNybCoXsyaVeF/84elK+awSuCxD9GhjtrjqnteBAWg
+Cjy3FqvlmXwV2AHcXeYANCjGN6BJhmbUKcJp+jwyEU+PNxMrGY4Fyos1o7DlgcDo
+udN5QQnR8fZ4Xjyv5ZcHWeUX0e5TsB+1e9MK8AOIRkpI52cfHU8u/HSNfOHs5an7
+Ugb2wl/4tUWdslzaD4LLg+znjSCYjZ2c0uuIuigxAeFfSDhsFG9C2CiIEaa13iCj
+rrMq656MkRtw4gwfJ7HGsycFpraatg==
+=HHRV
+-----END PGP SIGNATURE-----
+
+--WYhsHyqynSPadbUB--
