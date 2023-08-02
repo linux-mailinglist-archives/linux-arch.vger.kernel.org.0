@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7635976D43A
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9CB76D43F
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjHBQvc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 12:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S233295AbjHBQvw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 12:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbjHBQvM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:51:12 -0400
+        with ESMTP id S233215AbjHBQvZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:51:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C283C2F;
-        Wed,  2 Aug 2023 09:50:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8762830ED;
+        Wed,  2 Aug 2023 09:50:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24AB46194E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8EAE61A43;
+        Wed,  2 Aug 2023 16:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C843C433C8;
         Wed,  2 Aug 2023 16:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C33EC433C7;
-        Wed,  2 Aug 2023 16:50:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690995039;
-        bh=ZxSSeBb/S16STGNIjLgLnRd4gdTK7GWBFlxeOcsXSwE=;
+        s=k20201202; t=1690995055;
+        bh=Ex6OYX3JGNnUHd85CnRKWsm8lmD+bGAwdtplvxxj8PY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Re6hHhbVV1BPv0jkxSRI9lbIULPSLrArCk6YQsxBcILuiJJmeoU/B3uTrAvZW8Hsd
-         NESYQvpaFa3FeTrzeq5alcZ+8qf3hCjwa1dYlRqVehWgABTIjXr0SOjxmkO5qRpSNq
-         1qIXDIaUuS+1gRLf0ruSHeazVgAk3gjiR9cBr17jFfhwbqsItlZSZChiEXW9Aeudck
-         ng8PI4CEgU7l6nTNJRMMj0DoG12Gwuhgv8z9TUe+XHbdIBKHy1e11wN96y5M4+BC+R
-         XiHmg97d52zUNBHlHhFRH+ttLsm02XcUzSw/7ie2wcPZp3vbS+OXOV8lwqhgE8Ytdi
-         cNN+zltkvBpng==
+        b=um7BNA7itHG6dHP1/TJ2qBnWLjq8LpHkLPRfh1qtGRbNzY7ZAXLFTcYLA+tJ6mLLP
+         jKEjkHopqqvN+oHeq15IcuNa1QsUbkSzrWjKAT649fqQW0PuY/YQ88ATN23zqp/W/7
+         ThJSk6zBrbelucVEcgJ2wvGt3ZI1/ZpuTm/yvaQP8PajaVwGcVRMnHlM+LlFwPd9XO
+         uQwO0jbLuHeszx11KXEt6scpahkYLC+c19wzJR8sVOlcF/PbRo/yUHnKdSgpxrwXmH
+         3zvGNqg+OtbF1LKbaLWUWXqGWaXGQEWygJ9D7So5hpuqI7YGXBR91UK6+tb74VvBC9
+         Hz1m3QjgRrJ+Q==
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -47,9 +47,9 @@ Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH V10 11/19] RISC-V: paravirt: pvqspinlock: KVM: Implement kvm_sbi_ext_pvlock_kick_cpu()
-Date:   Wed,  2 Aug 2023 12:46:53 -0400
-Message-Id: <20230802164701.192791-12-guoren@kernel.org>
+Subject: [PATCH V10 12/19] RISC-V: paravirt: pvqspinlock: Add nopvspin kernel parameter
+Date:   Wed,  2 Aug 2023 12:46:54 -0400
+Message-Id: <20230802164701.192791-13-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230802164701.192791-1-guoren@kernel.org>
 References: <20230802164701.192791-1-guoren@kernel.org>
@@ -67,53 +67,55 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-We only need to call the kvm_vcpu_kick() and bring target_vcpu
-from the halt state. No irq raised, no other request, just a pure
-vcpu_kick.
+Disables the qspinlock slow path using PV optimizations which
+allow the hypervisor to 'idle' the guest on lock contention.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/kvm/vcpu_sbi_pvlock.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt |  2 +-
+ arch/riscv/kernel/paravirt.c                    | 13 +++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kvm/vcpu_sbi_pvlock.c b/arch/riscv/kvm/vcpu_sbi_pvlock.c
-index 544a456c5041..914fc58aedfe 100644
---- a/arch/riscv/kvm/vcpu_sbi_pvlock.c
-+++ b/arch/riscv/kvm/vcpu_sbi_pvlock.c
-@@ -12,6 +12,24 @@
- #include <asm/sbi.h>
- #include <asm/kvm_vcpu_sbi.h>
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index de6b7ee752cd..1a8878f6bfbd 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3820,7 +3820,7 @@
+ 			as generic guest with no PV drivers. Currently support
+ 			XEN HVM, KVM, HYPER_V and VMWARE guest.
  
-+static int kvm_sbi_ext_pvlock_kick_cpu(struct kvm_vcpu *vcpu)
+-	nopvspin	[X86,XEN,KVM]
++	nopvspin	[X86,XEN,KVM,RISC-V]
+ 			Disables the qspinlock slow path using PV optimizations
+ 			which allow the hypervisor to 'idle' the guest on lock
+ 			contention.
+diff --git a/arch/riscv/kernel/paravirt.c b/arch/riscv/kernel/paravirt.c
+index 1bacb2cf3872..b55c3d3c0c17 100644
+--- a/arch/riscv/kernel/paravirt.c
++++ b/arch/riscv/kernel/paravirt.c
+@@ -165,8 +165,21 @@ DEFINE_STATIC_CALL(pv_queued_spin_unlock, native_queued_spin_unlock);
+ EXPORT_SYMBOL(__SCK__pv_queued_spin_lock_slowpath);
+ EXPORT_SYMBOL(__SCK__pv_queued_spin_unlock);
+ 
++static bool nopvspin;
++static __init int parse_nopvspin(char *arg)
 +{
-+	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-+	struct kvm *kvm = vcpu->kvm;
-+	struct kvm_vcpu *target;
-+
-+	target = kvm_get_vcpu_by_id(kvm, cp->a0);
-+	if (!target)
-+		return SBI_ERR_INVALID_PARAM;
-+
-+	kvm_vcpu_kick(target);
-+
-+	if (READ_ONCE(target->ready))
-+		kvm_vcpu_yield_to(target);
-+
-+	return SBI_SUCCESS;
++       nopvspin = true;
++       return 0;
 +}
++early_param("nopvspin", parse_nopvspin);
 +
- static int kvm_sbi_ext_pvlock_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 				      struct kvm_vcpu_sbi_return *retdata)
+ void __init pv_qspinlock_init(void)
  {
-@@ -21,6 +39,7 @@ static int kvm_sbi_ext_pvlock_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
++	if (nopvspin) {
++		pr_info("PV qspinlocks disabled\n");
++		return;
++	}
++
+ 	if (num_possible_cpus() == 1)
+ 		return;
  
- 	switch (funcid) {
- 	case SBI_EXT_PVLOCK_KICK_CPU:
-+		ret = kvm_sbi_ext_pvlock_kick_cpu(vcpu);
- 		break;
- 	default:
- 		ret = SBI_ERR_NOT_SUPPORTED;
 -- 
 2.36.1
 
