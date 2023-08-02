@@ -2,124 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAFB76C780
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 09:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663FB76C960
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 11:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbjHBHxh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 03:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
+        id S231915AbjHBJV6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 05:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233853AbjHBHxJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 03:53:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEE73AA7;
-        Wed,  2 Aug 2023 00:51:00 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3727efrU023604;
-        Wed, 2 Aug 2023 07:50:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=WUG9XLUVxLD7YIOS1nqOLP6cSeDLTC0hGYP99dM8eH0=;
- b=bM5ub1zz1WkYeipfcRZrFYrWldGUj2gfIAAKnMOEOACR5ozS4+lO+fWTth6HVudw4u8/
- eCi6uTohMkcnFfIEORufE4EG04WbZaLgky2xu6RY8UlvqpTrDLsI0Hop9SvyIvMGLaIE
- a3kKq43chLqb6Y/XkmK7h4Ah9XVmC4wkE0yO6OIK3WW0kfO/kf6x8W2PeNql4lUBurBs
- rru86ne+R8yAeH0RRZ4xfR8ZhU7UbGRiZ2UoQgbhDytfBOp6+6Q5C5ds6rZ2t9Oa82na
- 3XPFxNHBvpK2S5IaH+1nkDi87xqguPKWUU5qzgqKSv4XqLOiaA4QyY+PITG1VDW+Linr YA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s7jtbgb28-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Aug 2023 07:50:47 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3727okDX028336;
-        Wed, 2 Aug 2023 07:50:46 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s7jtbgb1p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Aug 2023 07:50:46 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3725lVkV017127;
-        Wed, 2 Aug 2023 07:50:45 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3s5fajt96q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Aug 2023 07:50:45 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3727ogS439584194
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Aug 2023 07:50:42 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADF9B20043;
-        Wed,  2 Aug 2023 07:50:42 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53D6E20040;
-        Wed,  2 Aug 2023 07:50:42 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.233])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed,  2 Aug 2023 07:50:42 +0000 (GMT)
-Date:   Wed, 2 Aug 2023 09:50:41 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
- regardless of endianness
-Message-ID: <20230802075041.6227-A-hca@linux.ibm.com>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
- <847747a8-b773-4b7b-8c14-b8ef4ba7c022@app.fastmail.com>
+        with ESMTP id S230396AbjHBJVz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 05:21:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49060AC;
+        Wed,  2 Aug 2023 02:21:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B10CD618BF;
+        Wed,  2 Aug 2023 09:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249FEC433C8;
+        Wed,  2 Aug 2023 09:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690968112;
+        bh=J2tG/ScQRlNnbtP1aLVjnAnya21Uxa58M8ute6dFW0c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a0SxWMrQPIaK7W+vyl8W74wM/RpUfkJYTI89L0qS0ZML7dpEglRtG5r+jcxC1IT2e
+         Z+fEknXE4N0Ip+NFG8Qly4pBAHpAlhJ6R2j48D9MjdcD43qrSWgNNn7nM6kGqZ1/zS
+         yNyB4NH7rRIo6BSWKP2Vud3xznCRi3WhspWPVAsDYasVkqLtXKugQToGQahuVIaq+M
+         tHuiuIlsX1U85iahLWnXmSiCLnvepittiz3axvYsvqFiiFhDDTvfxxo/kYNTguwus3
+         wpN1WPf0b3A64En2R534kwhsysetABQ47XPJW1SLQLThyVQQXoQKcv7hvvOdT6hCby
+         efjqgYxjs2keQ==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6b9e478e122so5787814a34.1;
+        Wed, 02 Aug 2023 02:21:52 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZI3KvFmJc5bfMzFrpSOnRwNdtiDvR1jkxSQJe/7imEayZTmEyf
+        YoHJgBi0/OdZYtpxHuC4KTU312lTJVpXcxEAUpg=
+X-Google-Smtp-Source: APBJJlH3c324ht1eos/YhELsl6hmz9tCdWDPwW3/3TMSZ1rYLOZtuFOITsxrCpyDvWQqeVRKE0+zOSsUjG3zFVlE0yg=
+X-Received: by 2002:a05:6870:9107:b0:1bb:7f9f:2fc5 with SMTP id
+ o7-20020a056870910700b001bb7f9f2fc5mr17842152oae.17.1690968111305; Wed, 02
+ Aug 2023 02:21:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <847747a8-b773-4b7b-8c14-b8ef4ba7c022@app.fastmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mHE9DXdOLlfh0U8erF_iRnnf87LWW2mN
-X-Proofpoint-ORIG-GUID: nV5PTDj8_7vOlCsetG4JPZrIcfMJb1U7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-02_03,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1011 phishscore=0 suspectscore=0 mlxscore=0
- mlxlogscore=579 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308020067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220109181529.351420-1-masahiroy@kernel.org> <20220109181529.351420-3-masahiroy@kernel.org>
+ <YdwZe9DHJZUaa6aO@buildd.core.avm.de> <20230623144544.GA24871@lxhi-065>
+ <20230719190902.GA11207@lxhi-064.domain> <CAK7LNAQhn28Wbb97+U_3n0EwoKnonjFoY3OnKcE7aqnSgRc4ow@mail.gmail.com>
+ <20230725092433.GA57787@lxhi-064.domain>
+In-Reply-To: <20230725092433.GA57787@lxhi-064.domain>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 2 Aug 2023 18:21:14 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR4rJwrT2KLjLw-AbBvhO38xCZigC9C+DUVkn_5JM-KyQ@mail.gmail.com>
+Message-ID: <CAK7LNAR4rJwrT2KLjLw-AbBvhO38xCZigC9C+DUVkn_5JM-KyQ@mail.gmail.com>
+Subject: Re: [PATCH 3/5] kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Nicolas Schier <n.schier@avm.de>,
+        SzuWei Lin <szuweilin@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Matthias.Thomae@de.bosch.com,
+        yyankovskyi@de.adit-jv.com, Dirk.Behme@de.bosch.com,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Content-Type: multipart/mixed; boundary="0000000000009b1ced0601ed3171"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 02, 2023 at 07:59:48AM +0200, Arnd Bergmann wrote:
-> On Wed, Aug 2, 2023, at 03:07, Linus Torvalds wrote:
-> > On Tue, 1 Aug 2023 at 15:22, <ndesaulniers@google.com> wrote:
-> 
-> > Who ends up being affected by this? Powerpc does its own
-> > word-at-a-time thing because the big-endian case is nasty and you can
-> > do better with special instructions that they have.
-> 
-> powerpc needs the same patch though.
-> 
-> > Who else is even BE any more? Some old 32-bit arm setup?
-> >
-> > I think the patch is fine, but I guess I'd like to know that people
-> > who are affected actually don't see any code generation changes (or
-> > possibly see improvements from not turning it into a bool until later)
-> 
-> s390 is the main one here, maintainers added to Cc.
+--0000000000009b1ced0601ed3171
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The generated code on s390 is identical with and without the patch
-using gcc 13.2.
-So this looks fine from my point of view.
+On Tue, Jul 25, 2023 at 6:24=E2=80=AFPM Eugeniu Rosca <erosca@de.adit-jv.co=
+m> wrote:
+>
+> Hello Yamada-san,
+>
+> Appreciate your willingness to support. Some findings below.
+>
+> On Sun, Jul 23, 2023 at 01:08:46AM +0900, Masahiro Yamada wrote:
+> > On Thu, Jul 20, 2023 at 4:09=E2=80=AFAM Eugeniu Rosca <erosca@de.adit-j=
+v.com> wrote:
+> > > On Fri, Jun 23, 2023 at 04:45:44PM +0200, Eugeniu Rosca wrote:
+>
+> [..]
+>
+> > > > I will continue to increase my understanding behind what's happenin=
+g.
+> > > > In case there are already any suggestions, would appreciate those.
+> > >
+> > > JFYI, we've got confirmation from Qualcomm Customer Support interface
+> > > that reverting [1] heals the issue on QC end as well. However, it loo=
+ks
+> > > like none of us has clear understanding how to properly
+> > > troubleshoot/trace/compare the behavior before and after the commit.
+> > >
+> > > I would happily follow any suggestions.
+> > >
+> > > > [1] https://android.googlesource.com/kernel/common/+/bc6d3d83539512
+> > > >     ("UPSTREAM: kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd2=
+2}")
+> > > >
+> > > > [2] https://lore.kernel.org/linux-kbuild/20230616194505.GA27753@lxh=
+i-065/
+>
+> [..]
+>
+> > Please backport 64d8aaa4ef388b22372de4dc9ce3b9b3e5f45b6c
+> > and see if the problem goes away.
+>
+> Unfortunately, the problem remains after backporting the above commit.
+>
+> After some more bisecting and some more trial-and-error, I finally came
+> up with a reproduction scenario against vanilla. It also shows that
+> after reverting 7ce7e984ab2b21 ("kbuild: rename
+> cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}"), the problem goes away.
+>
+> It takes <30 seconds to reproduce the issue on my machine (on 2nd run).
+>
+> In order to make the test self-sufficient, it also clones the Linux
+> sources (only during 1st run, with --depth 1, for minimal footprint),
+> hence ~1.8 GB free space is required in /tmp .
+>
+> The repro.sh script:
+>  =3D> https://gist.github.com/erosca/1372fdc24126dc98031444613450c494
+>
+> Output against vanilla on 1st run (always OK, matches real-life case):
+>  =3D> https://gist.github.com/erosca/0f5b8e0a00a256d80f0c8a6364d81568
+>
+> Output against vanilla on 2nd/Nth run (NOK: Argument list too long):
+>  =3D> https://gist.github.com/erosca/e5c2c6479cc32244cc38d308deea4cf5
+>
+> Output against vanilla + revert_of_7ce7e984ab2b2 on Nth run (always OK):
+>  =3D> https://gist.github.com/erosca/57e114f92ea20132e19fc7f5a46e7c65
+>
+> Would it be possible to get your thoughts on the above?
+>
+> --
+> Best regards,
+> Eugeniu Rosca
+
+
+
+
+
+Indeed, reverting 7ce7e984ab2b218d6e92d5165629022fe2daf9ee
+makes qcom's external module build successfully
+(but rebuilding is super slow).
+
+Interestingly, revert 7ce7e984ab2b218d6e92d5165629022fe2daf9ee
+then apply the attached patch, then
+'Argument list too long' will come back.
+
+So, this is unrelated to the actual build commands.
+
+
+
+
+I suspect bare 'export', which expands all variables
+while apparently most of them are not meant exported.
+
+
+
+Insert the following in your reproducer, then it will work.
+
+
+# qcom's audio-kernel sprinkles 'export' everywhere.
+# Remove bare use of 'export'
+find "$ABS_KMOD" -name Kbuild | xargs sed -i '/export$/d'
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
+
+--0000000000009b1ced0601ed3171
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-Add-dummy-commands-to-make-qcom-s-external-module-fa.patch"
+Content-Disposition: attachment; 
+	filename="0001-Add-dummy-commands-to-make-qcom-s-external-module-fa.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lktimmix0>
+X-Attachment-Id: f_lktimmix0
+
+RnJvbSBhMWQ2NDEyMzg4NTFkYmRlMDBhMzdiN2IyMDNiMTEwZTc4NmVkZDFkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXNhaGlybyBZYW1hZGEgPG1hc2FoaXJveUBrZXJuZWwub3Jn
+PgpEYXRlOiBXZWQsIDIgQXVnIDIwMjMgMTg6MTE6MzIgKzA5MDAKU3ViamVjdDogW1BBVENIXSBB
+ZGQgZHVtbXkgY29tbWFuZHMgdG8gbWFrZSBxY29tJ3MgZXh0ZXJuYWwgbW9kdWxlIGZhaWwKClJl
+dmVydCA3Y2U3ZTk4NGFiMmIyMThkNmU5MmQ1MTY1NjI5MDIyZmUyZGFmOWVlIGFuZAphcHBseSB0
+aGlzIGluc3RlYWQuCgpJIHNlZQoKL2Jpbi9zaDogQXJndW1lbnQgbGlzdCB0b28gbG9uZwoKU2ln
+bmVkLW9mZi1ieTogTWFzYWhpcm8gWWFtYWRhIDxtYXNhaGlyb3lAa2VybmVsLm9yZz4KLS0tCiBz
+Y3JpcHRzL01ha2VmaWxlLmxpYiB8IDMzICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KwogMSBmaWxlIGNoYW5nZWQsIDMzIGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9zY3JpcHRz
+L01ha2VmaWxlLmxpYiBiL3NjcmlwdHMvTWFrZWZpbGUubGliCmluZGV4IDIyNzBlZDgxOWEyOS4u
+YzQ4MTAxOGQxYjVmIDEwMDY0NAotLS0gYS9zY3JpcHRzL01ha2VmaWxlLmxpYgorKysgYi9zY3Jp
+cHRzL01ha2VmaWxlLmxpYgpAQCAtNTU5LDMgKzU1OSwzNiBAQCBkZWZpbmUgZmlsZWNoa19vZmZz
+ZXRzCiAJIGVjaG8gIiI7IFwKIAkgZWNobyAiI2VuZGlmIgogZW5kZWYKKworCisjIFRoZXNlIGR1
+bW15IGNvbW1hbmRzIGFyZSBub3QgdXNlZCBhbnl3aGVyZSwgYnV0CisjIG1ha2UgcWNvbSdzIGV4
+dGVybmFsIG1vZHVsZSBmYWlsIHRvIGJ1aWxkLgorIyBxY29tJ3MgTWFrZWZpbGUgdXNlIGJhcmUg
+J2V4cG9ydCcuCisjIEhhdmluZyBtb3JlIGFuZCBtb3JlIHNoZWxsIGNvbW1hbmRzIG1heSBmbG9v
+ZCB2YXJpYWJsZSBleHBhbnNpb25zLgorCitxdWlldF9jbWRfZHVtbXkxID0gRk9PICAgICRACisg
+ICAgICBjbWRfZHVtbXkxID0gY2F0ICQocmVhbC1wcmVyZXFzKSA+ICRACisKK3F1aWV0X2NtZF9k
+dW1teTIgPSBGT08gICAgJEAKKyAgICAgIGNtZF9kdW1teTIgPSBjYXQgJChyZWFsLXByZXJlcXMp
+ID4gJEAKKworcXVpZXRfY21kX2R1bW15MyA9IEZPTyAgICAkQAorICAgICAgY21kX2R1bW15MyA9
+IGNhdCAkKHJlYWwtcHJlcmVxcykgPiAkQAorCitxdWlldF9jbWRfZHVtbXk0ID0gRk9PICAgICRA
+CisgICAgICBjbWRfZHVtbXk0ID0gY2F0ICQocmVhbC1wcmVyZXFzKSA+ICRACisKK3F1aWV0X2Nt
+ZF9kdW1teTUgPSBGT08gICAgJEAKKyAgICAgIGNtZF9kdW1teTUgPSBjYXQgJChyZWFsLXByZXJl
+cXMpID4gJEAKKworcXVpZXRfY21kX2R1bW15NiA9IEZPTyAgICAkQAorICAgICAgY21kX2R1bW15
+NiA9IGNhdCAkKHJlYWwtcHJlcmVxcykgPiAkQAorCitxdWlldF9jbWRfZHVtbXk3ID0gRk9PICAg
+ICRACisgICAgICBjbWRfZHVtbXk3ID0gY2F0ICQocmVhbC1wcmVyZXFzKSA+ICRACisKK3F1aWV0
+X2NtZF9kdW1teTggPSBGT08gICAgJEAKKyAgICAgIGNtZF9kdW1teTggPSBjYXQgJChyZWFsLXBy
+ZXJlcXMpID4gJEAKKworcXVpZXRfY21kX2R1bW15OSA9IEZPTyAgICAkQAorICAgICAgY21kX2R1
+bW15OSA9IGNhdCAkKHJlYWwtcHJlcmVxcykgPiAkQAotLSAKMi4zOS4yCgo=
+--0000000000009b1ced0601ed3171--
