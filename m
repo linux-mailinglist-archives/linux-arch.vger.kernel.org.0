@@ -2,129 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E6576D154
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 17:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F63976D37D
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbjHBPOe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 11:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S229480AbjHBQP6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 12:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbjHBPOU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 11:14:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5970530C6;
-        Wed,  2 Aug 2023 08:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=nv6mG4/l7H3PNgCsHrZF/ygxFjAa7ZRftAbjaaMLtfU=; b=qzVcnmGnCsgZ+JOYQS6BahTO8Y
-        4fDBiRQz18mhL7VWDmt+dEhAq3Sa5V5SKNqJlpEUHzHABS6JtgC5YuZl2PoExrpyD8AaocAYrVL0F
-        kZOD8nQ41FvXgl/QA/ZuvG8dBS9zKlb18eK+B21iVqCHpxywaoE23ictHd/iNF3rIOD2HGkDTJIvx
-        kfl4cXXMk7Ue0xHMPdyStav5FoVJ0PeXiJjv0ATED/kYh0KKVQOz6g64xjsWqMVN5kNRgcOMcklQ1
-        D/q8Qnz61oyymYEfIzTuQ6/SOMDCbqbF4Eo9VoW5m98bWEzT4szSXsV1wTLL2S1QdgPKFh0BO1pgB
-        5MH2+1ZA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qRDYC-00FfmP-GT; Wed, 02 Aug 2023 15:14:12 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 38/38] mm: Call update_mmu_cache_range() in more page fault handling paths
-Date:   Wed,  2 Aug 2023 16:14:06 +0100
-Message-Id: <20230802151406.3735276-39-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230802151406.3735276-1-willy@infradead.org>
-References: <20230802151406.3735276-1-willy@infradead.org>
+        with ESMTP id S230512AbjHBQP5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:15:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E161982;
+        Wed,  2 Aug 2023 09:15:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67D74619CB;
+        Wed,  2 Aug 2023 16:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6689FC433C9;
+        Wed,  2 Aug 2023 16:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690992955;
+        bh=aFB7V+3UZPnXI2t7HCSOEac0MGFqyimdDX0kPkq9PJY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FcGDg/QoAgueCnjJ9htQ21ACnmhEnP0HCMC52BIWD717UyZgx8nRkDxGhxFbuZHHP
+         Vt8nmloqhzQ+kreiqcdM9z98m0TUC5I9yHpVh5PWkbLEae7niNndRzm4U25INskyXG
+         nzo/QO+8fgzpwBW95+RmRGtEJ3Qm8P9llSmcyrpA8p3KOd2xpU10b4Sus2IaauQN7R
+         sm0wC3ji2L1BnZ4zwgIuy8XM7MMba58e+JO07lbDb/HKmEdXgaBK7iW8pA45ACUMhL
+         Y50QJvBdQVgDP+eSoVsMvKTVcBd2W+A+PJd1m53TzNJPriX3GsPFin+4iPM90jal3t
+         jP7BzbnsPCqvw==
+Date:   Wed, 2 Aug 2023 09:15:53 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ndesaulniers@google.com, Arnd Bergmann <arnd@arndb.de>,
+        Tom Rix <trix@redhat.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
+ regardless of endianness
+Message-ID: <20230802161553.GA2108867@dev-arch.thelio-3990X>
+References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
+ <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Pass the vm_fault to the architecture to help it make smarter decisions
-about which PTEs to insert into the TLB.
+On Tue, Aug 01, 2023 at 06:07:08PM -0700, Linus Torvalds wrote:
+> I think the patch is fine, but I guess I'd like to know that people
+> who are affected actually don't see any code generation changes (or
+> possibly see improvements from not turning it into a bool until later)
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- mm/memory.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
+With both clang 18.0.0 (tip of tree) and GCC 13.1.0, I don't see any
+actual code generation changes in fs/namei.o with this configuration.
+I'd be pretty surprised if any of the other uses of has_zero() show any
+changes, I at least checked lib/string.o with that configuration and
+s390 and did not see anything.
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 621716109627..236c46e85dc2 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2997,7 +2997,7 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
- 
- 		entry = pte_mkyoung(vmf->orig_pte);
- 		if (ptep_set_access_flags(vma, addr, vmf->pte, entry, 0))
--			update_mmu_cache(vma, addr, vmf->pte);
-+			update_mmu_cache_range(vmf, vma, addr, vmf->pte, 1);
- 	}
- 
- 	/*
-@@ -3174,7 +3174,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
- 	entry = pte_mkyoung(vmf->orig_pte);
- 	entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	if (ptep_set_access_flags(vma, vmf->address, vmf->pte, entry, 1))
--		update_mmu_cache(vma, vmf->address, vmf->pte);
-+		update_mmu_cache_range(vmf, vma, vmf->address, vmf->pte, 1);
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
- 	count_vm_event(PGREUSE);
- }
-@@ -3298,7 +3298,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		 */
- 		BUG_ON(unshare && pte_write(entry));
- 		set_pte_at_notify(mm, vmf->address, vmf->pte, entry);
--		update_mmu_cache(vma, vmf->address, vmf->pte);
-+		update_mmu_cache_range(vmf, vma, vmf->address, vmf->pte, 1);
- 		if (old_folio) {
- 			/*
- 			 * Only after switching the pte to the new page may
-@@ -4181,7 +4181,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	}
- 
- 	/* No need to invalidate - it was non-present before */
--	update_mmu_cache(vma, vmf->address, vmf->pte);
-+	update_mmu_cache_range(vmf, vma, vmf->address, vmf->pte, 1);
- unlock:
- 	if (vmf->pte)
- 		pte_unmap_unlock(vmf->pte, vmf->ptl);
-@@ -4305,7 +4305,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
- 
- 	/* No need to invalidate - it was non-present before */
--	update_mmu_cache(vma, vmf->address, vmf->pte);
-+	update_mmu_cache_range(vmf, vma, vmf->address, vmf->pte, 1);
- unlock:
- 	if (vmf->pte)
- 		pte_unmap_unlock(vmf->pte, vmf->ptl);
-@@ -4994,7 +4994,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	if (writable)
- 		pte = pte_mkwrite(pte);
- 	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
--	update_mmu_cache(vma, vmf->address, vmf->pte);
-+	update_mmu_cache_range(vmf, vma, vmf->address, vmf->pte, 1);
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
- 	goto out;
- }
-@@ -5165,7 +5165,8 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
- 	entry = pte_mkyoung(entry);
- 	if (ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,
- 				vmf->flags & FAULT_FLAG_WRITE)) {
--		update_mmu_cache(vmf->vma, vmf->address, vmf->pte);
-+		update_mmu_cache_range(vmf, vmf->vma, vmf->address,
-+				vmf->pte, 1);
- 	} else {
- 		/* Skip spurious TLB flush for retried page fault */
- 		if (vmf->flags & FAULT_FLAG_TRIED)
--- 
-2.40.1
+As far as I can tell, arm and arm64 with CONFIG_CPU_BIG_ENDIAN=y are the
+only configurations that can hit the particular bit of code with the
+generic big endian has_zero() implementation because the version of
+hash_name() that uses has_zero() in this manner is only used when
+CONFIG_DCACHE_WORD_ACCESS is set, which only arm, arm64, powerpc (little
+endian), and x86 select.
 
+arch/arm/Kconfig:49:         select DCACHE_WORD_ACCESS if HAVE_EFFICIENT_UNALIGNED_ACCESS
+arch/arm64/Kconfig:121:        select DCACHE_WORD_ACCESS
+arch/powerpc/Kconfig:183:        select DCACHE_WORD_ACCESS                if PPC64 && CPU_LITTLE_ENDIAN
+arch/x86/Kconfig:140:        select DCACHE_WORD_ACCESS                if !KMSAN
+arch/x86/um/Kconfig:12:         select DCACHE_WORD_ACCESS
+
+So seems like a pretty low risk patch to me but I could be missing
+something.
+
+Cheers,
+Nathan
