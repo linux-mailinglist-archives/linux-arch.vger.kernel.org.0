@@ -2,88 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F63976D37D
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D660976D3A0
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbjHBQP6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 12:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S231187AbjHBQ2A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 12:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjHBQP5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:15:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E161982;
-        Wed,  2 Aug 2023 09:15:56 -0700 (PDT)
+        with ESMTP id S231265AbjHBQ17 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:27:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E79210D;
+        Wed,  2 Aug 2023 09:27:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67D74619CB;
-        Wed,  2 Aug 2023 16:15:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6689FC433C9;
-        Wed,  2 Aug 2023 16:15:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A52361A3E;
+        Wed,  2 Aug 2023 16:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6D2C433C8;
+        Wed,  2 Aug 2023 16:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690992955;
-        bh=aFB7V+3UZPnXI2t7HCSOEac0MGFqyimdDX0kPkq9PJY=;
+        s=k20201202; t=1690993674;
+        bh=IypduYRdhJJTtTi/vdjRUEIIDyW7f/veSqGdfghGaM4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FcGDg/QoAgueCnjJ9htQ21ACnmhEnP0HCMC52BIWD717UyZgx8nRkDxGhxFbuZHHP
-         Vt8nmloqhzQ+kreiqcdM9z98m0TUC5I9yHpVh5PWkbLEae7niNndRzm4U25INskyXG
-         nzo/QO+8fgzpwBW95+RmRGtEJ3Qm8P9llSmcyrpA8p3KOd2xpU10b4Sus2IaauQN7R
-         sm0wC3ji2L1BnZ4zwgIuy8XM7MMba58e+JO07lbDb/HKmEdXgaBK7iW8pA45ACUMhL
-         Y50QJvBdQVgDP+eSoVsMvKTVcBd2W+A+PJd1m53TzNJPriX3GsPFin+4iPM90jal3t
-         jP7BzbnsPCqvw==
-Date:   Wed, 2 Aug 2023 09:15:53 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ndesaulniers@google.com, Arnd Bergmann <arnd@arndb.de>,
-        Tom Rix <trix@redhat.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
- regardless of endianness
-Message-ID: <20230802161553.GA2108867@dev-arch.thelio-3990X>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+        b=oOEm7306/htJKG4CId0R41FGls9huoRDB8SC5RAspSExEJWc+HyVpGhFGv4Wg+PCF
+         DNKER8c6sgtmUjA+ZIyHRtYIYq7s1L8BFIQctpG47gXwN8Vk7wWF9EhSMrNWfwBrKa
+         xvHTe4Pf4ZHfn6zJaolp23r8l3t+iwOVtR8qQQwVdEQ3yiLL1IIdDsYkwudrO92YiE
+         FYGqNhGsI2AB015N0akL8QNC7MUhH864UCZeGRUpoIjIcQa5QkuuS1mcndY8IYStIr
+         JLUyc346bw68jZ6ki7rhKVwxWbLrfo45Bl68nj4Ylkf3MXxPTk91QSuMRGtzpudBB6
+         QKxmNsVU4IKRg==
+Date:   Wed, 2 Aug 2023 17:27:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
+Message-ID: <475f31e1-0f6f-44a9-b93a-540c1d43e1bb@sirena.org.uk>
+References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
+ <20230731-arm64-gcs-v3-21-cddf9f980d98@kernel.org>
+ <5461c56cf4896f18bddaa66c3beec7b909fc8fb9.camel@intel.com>
+ <0a6c90d6-f790-4036-a364-d4761fdd0e95@sirena.org.uk>
+ <e827138f9d8800e3db158831bca88d1ea8b559af.camel@intel.com>
+ <21d7e814-8608-40ce-b5d3-401f2110ad91@sirena.org.uk>
+ <a9ea33d31aad0c45eab41b0dcbd4913d863cc930.camel@intel.com>
+ <55c629cc-0545-460b-91cb-2ebdb8ae9051@sirena.org.uk>
+ <7d03be1277a5f4be23df35ca96f4d6cd77735e2b.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QS3kL7vV2OH5bUkc"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7d03be1277a5f4be23df35ca96f4d6cd77735e2b.camel@intel.com>
+X-Cookie: Humpty Dumpty was pushed.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 06:07:08PM -0700, Linus Torvalds wrote:
-> I think the patch is fine, but I guess I'd like to know that people
-> who are affected actually don't see any code generation changes (or
-> possibly see improvements from not turning it into a bool until later)
 
-We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
-With both clang 18.0.0 (tip of tree) and GCC 13.1.0, I don't see any
-actual code generation changes in fs/namei.o with this configuration.
-I'd be pretty surprised if any of the other uses of has_zero() show any
-changes, I at least checked lib/string.o with that configuration and
-s390 and did not see anything.
+--QS3kL7vV2OH5bUkc
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As far as I can tell, arm and arm64 with CONFIG_CPU_BIG_ENDIAN=y are the
-only configurations that can hit the particular bit of code with the
-generic big endian has_zero() implementation because the version of
-hash_name() that uses has_zero() in this manner is only used when
-CONFIG_DCACHE_WORD_ACCESS is set, which only arm, arm64, powerpc (little
-endian), and x86 select.
+On Tue, Aug 01, 2023 at 08:57:59PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2023-08-01 at 18:57 +0100, Mark Brown wrote:
 
-arch/arm/Kconfig:49:         select DCACHE_WORD_ACCESS if HAVE_EFFICIENT_UNALIGNED_ACCESS
-arch/arm64/Kconfig:121:        select DCACHE_WORD_ACCESS
-arch/powerpc/Kconfig:183:        select DCACHE_WORD_ACCESS                if PPC64 && CPU_LITTLE_ENDIAN
-arch/x86/Kconfig:140:        select DCACHE_WORD_ACCESS                if !KMSAN
-arch/x86/um/Kconfig:12:         select DCACHE_WORD_ACCESS
+> > Sure, though if we're going to the trouble of checking for the flag
+> > we
+> > probably may as well implement it.=A0 I guess x86 is locked in at this
+> > point by existing userspace.=A0 I guess I'll implement it assuming
+> > nobody
+> > from userspace complains, it's trivial for a kernel.
 
-So seems like a pretty low risk patch to me but I could be missing
-something.
+> To make sure we are on the same page: What I'm saying is say we do
+> something like add another flag SHADOW_STACK_SET_MARKER that means add
+> a marker at the end (making the token off by one frame). Then you can
+> just reject any flags !=3D (SHADOW_STACK_SET_MARKER |
+> SHADOW_STACK_SET_TOKEN) value, and leave the rest of the code as is. So
+> not really implementing anything new.=A0
 
-Cheers,
-Nathan
+> Then x86 could use the same flag meanings if/when it implements end
+> markers. If it doesn't seem worth it, it's not a big deal on my end.
+> Just seemed that they were needlessly diverging.
+
+Yes, my understanding of the flags is the same.  I'll definitely
+implement omitting the cap since there's an actual use case for that
+(extending an existing stack, it's marginally safer to not have any
+opportunity to pivot into the newly allocated region).
+
+--QS3kL7vV2OH5bUkc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTKhAAACgkQJNaLcl1U
+h9AuNwf/eOsxbj3CCh77urZ2bbcgtkDnG2gOY0uK7lM+wipr3GCiDM6ySyjpMrSm
+8tfpAV/QhsCNxV2mHJIbUdNW1v+94GUDf7fzu9+pHKrjZpAfWfo6X7KOPFiJaGgB
+hHeQd7CNvTJNIwSPjgjHEvjsnp39rstVvNFaonSi/9GXlnt3HSqXPr/awnfCoArZ
+eC+NqtyAQ3x/cc8oW9e5cvylNTjXAWg+2QNNXnVVsX6KQkbPXMI6VnQocQBHNCRo
+V25MLEEvRVtpXVUihvLkRuA5ILxM/k6sDHhRjaqgIHDyDIAKplJXwIjSLoMEroq3
+gZY23CL6NCYvjjFyc6XZbpALl9hrUg==
+=/CYh
+-----END PGP SIGNATURE-----
+
+--QS3kL7vV2OH5bUkc--
