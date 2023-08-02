@@ -2,158 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DE276D462
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AD276D599
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 19:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjHBQxw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 12:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S233879AbjHBRix (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 13:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjHBQx0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:53:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575FE3C34;
-        Wed,  2 Aug 2023 09:52:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45269619CB;
-        Wed,  2 Aug 2023 16:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DBBC433C7;
-        Wed,  2 Aug 2023 16:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690995166;
-        bh=qLA1GcmlLqlS/G9GD0l2jo6tFZm2YFKYDFEvmq8fWH0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JbRaMX5uUEpDntEj6CsADqaoo1o4xqrMsuZKpnZpuW5guztpTHECFifz6plIF2Cu1
-         pAwRR3jKsuDGKUrKsJxrpPlwr62BM3MwxqtvFJHl6JAgVCy/PTe8vVbCP/v/thApXy
-         SJEhn0XoAeXpAmovhqc4Gqxz6e/FvjMsSg1F9G3/e8C3Tz+3zFH67PmNy9Hs2iz1AX
-         HuV0tdgWXi+sqV+Pf53/SuZXZdsE+0uuZbRCaIzwmjSCDMV9miPlEDcM3GfjH8Cj6v
-         MoA6RM5MjLl4wlZDm2DxW7Y6GONu+AlThJhHsvT6rBGHa0YSTPiYOmT7lthvsH9tu0
-         oa46fefL6iKdg==
-From:   guoren@kernel.org
-To:     paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn
-Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH V10 19/19] locking/qspinlock: riscv: Add Compact NUMA-aware lock support
-Date:   Wed,  2 Aug 2023 12:47:01 -0400
-Message-Id: <20230802164701.192791-20-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230802164701.192791-1-guoren@kernel.org>
-References: <20230802164701.192791-1-guoren@kernel.org>
+        with ESMTP id S232439AbjHBRic (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 13:38:32 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B283F198B
+        for <linux-arch@vger.kernel.org>; Wed,  2 Aug 2023 10:38:04 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fe1344b707so130431e87.1
+        for <linux-arch@vger.kernel.org>; Wed, 02 Aug 2023 10:38:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1690997882; x=1691602682;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WyQdxgtNMG4RTFo6glKNGilpjeAOgHu/v44MBJ5lr6g=;
+        b=FdGjw6HXHhZ6+Vw2hxfQAMrStQiiadvB/SsztWB+Hfj84Tz9a8e6TDptPNV8ihiSnl
+         yZIQWFAs0/daQGqP59TJy+VoE7dMwfj3h/DxzVCR8pbqJY9pllhuUbq/kjebn38H5GAv
+         zuFWmAEuAcogVpDQ4n1F3tMwwoQYRfOQzigX0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690997882; x=1691602682;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WyQdxgtNMG4RTFo6glKNGilpjeAOgHu/v44MBJ5lr6g=;
+        b=kF3kIU4xVx9l8L9w6d1IqqQRxRkNLahD300q7jYrE091/ezadIa1O4uys0Bv5Yh2kO
+         YMYGV5pAevuS75lWUnml6sOJtAFRW6/twfI1u4g5gLg+uVLj2kYwNIiIHBR+XWJGUSmP
+         pF1m8sy9RG0Pe50UVolaxHLWrrfbGOadfm7/AjC+a0I7+/MRiczFzjtf06sjgCRlQoMt
+         gKU1Amhxxi/GD04IS99hnxfcUwOUwP/8nUYund2F6hg7NNOclktkUF/OoAeYeTKbJLgq
+         SjjkGFCCLoy1frBMJaoGghokoSSEqbUo1MjWVyLNna/OlWq38/mv5YyU6VTr/A6KwrGT
+         Vuig==
+X-Gm-Message-State: ABy/qLZy/1lH1ClUs+9pYXeYD4XDkMBrAr1a8P+uxwWuzuLLfsWaJkUl
+        u0scAc1hb/UteA1eqb1T3zwddacw4LT2cBf8IxxHBETJ
+X-Google-Smtp-Source: APBJJlHaaBmZIgcMTsTca/yyPjnecF4TH4PkGe13ws2heOjkIrXtj7y/Lnn0FsRUI2oQnyMmoLYUmg==
+X-Received: by 2002:a05:6512:104b:b0:4f9:92c7:401d with SMTP id c11-20020a056512104b00b004f992c7401dmr5831792lfb.30.1690997881964;
+        Wed, 02 Aug 2023 10:38:01 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id r13-20020aa7d58d000000b005227b065a78sm8984207edq.70.2023.08.02.10.38.01
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 10:38:01 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-317744867a6so57930f8f.1
+        for <linux-arch@vger.kernel.org>; Wed, 02 Aug 2023 10:38:01 -0700 (PDT)
+X-Received: by 2002:a5d:608c:0:b0:315:9021:6dc3 with SMTP id
+ w12-20020a5d608c000000b0031590216dc3mr4961506wrt.27.1690997880674; Wed, 02
+ Aug 2023 10:38:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
+ <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com> <20230802161553.GA2108867@dev-arch.thelio-3990X>
+In-Reply-To: <20230802161553.GA2108867@dev-arch.thelio-3990X>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 2 Aug 2023 10:37:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
+Message-ID: <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
+Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
+ regardless of endianness
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Will Deacon <will.deacon@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     ndesaulniers@google.com, Arnd Bergmann <arnd@arndb.de>,
+        Tom Rix <trix@redhat.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Wed, 2 Aug 2023 at 09:16, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
 
-Connect riscv to Compact NUMA-aware lock (CNA), which uses
-PRARAVIRT_SPINLOCKS static_call hooks. See numa_spinlock= of
-Documentation/admin-guide/kernel-parameters.txt for trying.
+Oh Christ. I didn't even realize that arm64 allowed a BE config.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/Kconfig                 | 18 ++++++++++++++++++
- arch/riscv/include/asm/qspinlock.h |  5 +++++
- arch/riscv/kernel/paravirt.c       | 12 +++++++++++-
- 3 files changed, 34 insertions(+), 1 deletion(-)
+The config option goes back to 2013 - are there actually BE user space
+implementations around?
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 13f345b54581..ff483ccd26b9 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -800,6 +800,24 @@ config PARAVIRT_SPINLOCKS
- 
- 	  If you are unsure how to answer this question, answer Y.
- 
-+config NUMA_AWARE_SPINLOCKS
-+	bool "Numa-aware spinlocks"
-+	depends on NUMA
-+	depends on QUEUED_SPINLOCKS
-+	depends on 64BIT
-+	# For now, we depend on PARAVIRT_SPINLOCKS to make the patching work.
-+	depends on PARAVIRT_SPINLOCKS
-+	default y
-+	help
-+	  Introduce NUMA (Non Uniform Memory Access) awareness into
-+	  the slow path of spinlocks.
-+
-+	  In this variant of qspinlock, the kernel will try to keep the lock
-+	  on the same node, thus reducing the number of remote cache misses,
-+	  while trading some of the short term fairness for better performance.
-+
-+	  Say N if you want absolute first come first serve fairness.
-+
- endmenu # "Kernel features"
- 
- menu "Boot options"
-diff --git a/arch/riscv/include/asm/qspinlock.h b/arch/riscv/include/asm/qspinlock.h
-index 003e9560a0d1..e6f2a0621af0 100644
---- a/arch/riscv/include/asm/qspinlock.h
-+++ b/arch/riscv/include/asm/qspinlock.h
-@@ -12,6 +12,11 @@ void native_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
- void __pv_init_lock_hash(void);
- void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
- 
-+#ifdef CONFIG_NUMA_AWARE_SPINLOCKS
-+bool cna_configure_spin_lock_slowpath(void);
-+void __cna_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-+#endif
-+
- static inline void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- {
- 	static_call(pv_queued_spin_lock_slowpath)(lock, val);
-diff --git a/arch/riscv/kernel/paravirt.c b/arch/riscv/kernel/paravirt.c
-index cc80e968ab13..9466f693a98c 100644
---- a/arch/riscv/kernel/paravirt.c
-+++ b/arch/riscv/kernel/paravirt.c
-@@ -193,8 +193,10 @@ void __init pv_qspinlock_init(void)
- 	if (num_possible_cpus() == 1)
- 		return;
- 
--	if(sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)
-+	if(sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM) {
-+		goto cna_qspinlock;
- 		return;
-+	}
- 
- 	if (!sbi_probe_extension(SBI_EXT_PVLOCK))
- 		return;
-@@ -204,5 +206,13 @@ void __init pv_qspinlock_init(void)
- 
- 	static_call_update(pv_queued_spin_lock_slowpath, __pv_queued_spin_lock_slowpath);
- 	static_call_update(pv_queued_spin_unlock, __pv_queued_spin_unlock);
-+	return;
-+
-+cna_qspinlock:
-+#ifdef CONFIG_NUMA_AWARE_SPINLOCKS
-+	if (cna_configure_spin_lock_slowpath())
-+		static_call_update(pv_queued_spin_lock_slowpath,
-+					__cna_queued_spin_lock_slowpath);
-+#endif
- }
- #endif
--- 
-2.36.1
+People, why do we do that? That's positively crazy. BE is dead and
+should be relegated to legacy platforms. There are no advantages to
+being different just for the sake of being different - any "security
+by obscurity" argument would be far outweighed by the inconvenience to
+actual users.
 
+Yes, yes, I know the aarch64 architecture technically allows BE
+implementations - and apparently you can even do it by exception
+level, which I had to look up. But do any actually exist?
+
+Does the kernel even work right in BE mode? It's really easy to miss
+some endianness check when all the actual hardware and use is LE, and
+when (for example) instruction encoding and IO is then always LE
+anyway.
+
+> With both clang 18.0.0 (tip of tree) and GCC 13.1.0, I don't see any
+> actual code generation changes in fs/namei.o with this configuration.
+
+Ok, since the main legacy platform confirmed that, I'll just apply
+that patch directly.
+
+I'll also do the powerpc version that Arnd pointed to at the same
+time, since it seems silly to pick these off one at a time. It too
+should just be 'unsigned long', so that the two values can be bitwise
+or'ed together without any questions.
+
+              Linus
