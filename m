@@ -2,109 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0430476C1E0
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 03:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D0B76C51C
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 08:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjHBBHa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Aug 2023 21:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
+        id S231510AbjHBGAX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 02:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjHBBH3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Aug 2023 21:07:29 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660C51BCF
-        for <linux-arch@vger.kernel.org>; Tue,  1 Aug 2023 18:07:28 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5222c5d71b8so8864470a12.2
-        for <linux-arch@vger.kernel.org>; Tue, 01 Aug 2023 18:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1690938447; x=1691543247;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FXkdVovEwsRXfv+Dg7OQg7KZYMXc3NVjQ9UsNbCmbkM=;
-        b=h2oAqqiZHA1I7+7KJ4qkiD6c+sb34x9IKFRrWiIgIKCjYGnQ9LY5YfGQeIXDkWDb7n
-         gaC4QjEwJE9EC56qPqcn+iDm0F8zZ/suBTIWB7KirvXY9IApXagyXhHGhA16U9vBIiRf
-         g4LVUfyHUdi2IVB2eTF2vDKxmPMNA7awbpXws=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690938447; x=1691543247;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FXkdVovEwsRXfv+Dg7OQg7KZYMXc3NVjQ9UsNbCmbkM=;
-        b=luHiv4U2avD12gIf/+2I9SuNDO+irjdALsDsFqjC7ai9UrShIo8NIs1u0shR1fHSq+
-         Vjk3zlNVyfXswyWjsCftZzBeW2qChW/eobQQdmmzVpDxCJ144KKqU6sVvZLJZSKAcz4N
-         mbf7Hz4uYT+kdbR1P+qz1SDwWVnDAhAq3O9Gztqs/RsmxklCvJBthpJs7rgkCV6M72wt
-         kfMJ7TNwDUqIYTO8S8BVxkaHW5OGTQMkC051fLNxTpPS3GPfSV3ThuSDQBz8Ppibveok
-         IQ4wzIgz4kGpkAlAFZyl06zOQm6rMic3F3k0VLeYpvzN+g20/Jup0aVwEu5VpgPWkrB0
-         rYjA==
-X-Gm-Message-State: ABy/qLbuV8yv8yE5+lXqGUc7ke7BsnHR0SOtWks6dgkAH+kc1CtQ8DRA
-        KAw2/5RT0l3Hp4pCeXa9DQ3JN6gHpsC6Eqo1iVgIs7oZ
-X-Google-Smtp-Source: APBJJlE7Wq3XIHi3RYupKj3ZpEIVAkjQs41P27n53vzzTA3LS5ybT09cqShIFjNz/Fy9Peb3vK8wfw==
-X-Received: by 2002:aa7:c589:0:b0:522:2f8c:8953 with SMTP id g9-20020aa7c589000000b005222f8c8953mr3369695edq.39.1690938446721;
-        Tue, 01 Aug 2023 18:07:26 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id y11-20020aa7d50b000000b0051df67eaf62sm7714625edq.42.2023.08.01.18.07.25
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Aug 2023 18:07:26 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so8898761a12.1
-        for <linux-arch@vger.kernel.org>; Tue, 01 Aug 2023 18:07:25 -0700 (PDT)
-X-Received: by 2002:aa7:df18:0:b0:522:289d:8dcd with SMTP id
- c24-20020aa7df18000000b00522289d8dcdmr3129466edy.35.1690938445668; Tue, 01
- Aug 2023 18:07:25 -0700 (PDT)
-MIME-Version: 1.0
+        with ESMTP id S232118AbjHBGAU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 02:00:20 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD24C213D;
+        Tue,  1 Aug 2023 23:00:13 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E63BD320094E;
+        Wed,  2 Aug 2023 02:00:10 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 02 Aug 2023 02:00:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1690956010; x=1691042410; bh=Yt
+        vb0mJTCqFvSWUzjrpJ3J+FljcDta2FuHCw3g9+xyM=; b=X8GskQHKcF/CLu6sH9
+        eHdMyaeNGKePN3uazuZn7+yG1MgasXQeSW+4D5a9qh01PZJ7ruxAhWLUmqLv/5A1
+        W6H07qlbCkDckdcSq23RL5reCF4qGn2CJ7AFFzvrvuiIyF6avFGWDuPiIDTDDza7
+        sITrpD0bLEVEOugi610GvCf2CpcRN/uAN7rFDfopQ9Kls2M+mvohHTIgclscWePT
+        IzeLsuUrotGQT+H+7RNajuQNxx1XCoa1DvJJ5Hga0P3V/DrFgmlN48jWyzxywzvR
+        EIsEeQt1j8VMOaYXXdnLEFTpd/PIDbv3gVRDO2Rf4qW2CutL5wCa7f3aFyUesjBm
+        qnXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1690956010; x=1691042410; bh=Ytvb0mJTCqFvS
+        WUzjrpJ3J+FljcDta2FuHCw3g9+xyM=; b=rVZI7NEq96ProyK7mRRMmZ9uNP1XY
+        U60ejYdcwBAhAR8FRm0b43P47NNM4476RHXJVqz/nect8HFS32ww2FrZLZfDJNFj
+        nTnKfBQ8SOHjto76Bp9hInu8Z2aQgIa95Tj0/F+hnsevQld0WJob9UOapGSFOrr5
+        N+cc0kc4CXtrZ9sb+emUOVvGisqm5TaiFNe0yyVC4BFqIe069x7BSdzhm3i9GTlL
+        AxvGwPLPUCK3283/Shk2fhcVU6K8QFI2TOkxy+6PQD4C/MzdLPr25hYGQV6ncCu9
+        K1tQdzUC8qIQLrxnIQQcYoqNk6IjHludpZUC7nMTg3HpQ+ejVpLz7Nv/A==
+X-ME-Sender: <xms:6fDJZAxUer9v1pqOKwDKxJPmHD6m2WEnq-gFKAVMUjSs92lscT1I2w>
+    <xme:6fDJZEStnpkvBnfb_iENwlU_lnFYxbd-7Ho7ravoYFk-448ZPHdfLsBkq7D46yGlE
+    bia4TPj1nkIiLw9Bhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeejgddutddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:6fDJZCU2S6Lh3XFdHrkVmf5T2UyWJ4LVI0770K80Yb5gBkjxojhaXA>
+    <xmx:6fDJZOi3qvEj8IktGXtLSuF7DBXnlsvyVKHFAUaYBLa9QLkaV2_Mxw>
+    <xmx:6fDJZCCCDj2SyFda5G2C6Lr1Bd-i411TdgCr_MhafwfaBdfxVAY9sw>
+    <xmx:6vDJZDK3c5_EB4fgcQFgzX4-go5CWzYwLeKaw7J7u6zkYYoyze36mQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D5750B60089; Wed,  2 Aug 2023 02:00:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+Mime-Version: 1.0
+Message-Id: <847747a8-b773-4b7b-8c14-b8ef4ba7c022@app.fastmail.com>
+In-Reply-To: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
 References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
-In-Reply-To: <20230801-bitwise-v1-1-799bec468dc4@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Aug 2023 18:07:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
-Message-ID: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
- regardless of endianness
-To:     ndesaulniers@google.com
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+ <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+Date:   Wed, 02 Aug 2023 07:59:48 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>
+Cc:     "Nathan Chancellor" <nathan@kernel.org>,
+        "Tom Rix" <trix@redhat.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Vasily Gorbik" <gor@linux.ibm.com>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+        "Sven Schnelle" <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero regardless
+ of endianness
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 1 Aug 2023 at 15:22, <ndesaulniers@google.com> wrote:
+On Wed, Aug 2, 2023, at 03:07, Linus Torvalds wrote:
+> On Tue, 1 Aug 2023 at 15:22, <ndesaulniers@google.com> wrote:
+
+> Who ends up being affected by this? Powerpc does its own
+> word-at-a-time thing because the big-endian case is nasty and you can
+> do better with special instructions that they have.
+
+powerpc needs the same patch though.
+
+> Who else is even BE any more? Some old 32-bit arm setup?
 >
-> Compiling big-endian targets with Clang produces the diagnostic:
->
-> fs/namei.c:2173:13: warning: use of bitwise '|' with boolean operands
-> [-Wbitwise-instead-of-logical]
-> } while (!(has_zero(a, &adata, &constants) | has_zero(b, &bdata, &constants)));
+> I think the patch is fine, but I guess I'd like to know that people
+> who are affected actually don't see any code generation changes (or
+> possibly see improvements from not turning it into a bool until later)
 
-Gaah.
+s390 is the main one here, maintainers added to Cc.
 
-Yes, I think that 'has_zero()' should return the 'unsigned long' bits
-on big-endian too, because I do think we always want the bit ops, and
-turn it into a boolean only at the very end.
+Atheros and Realtek MIPS are older but still shipping in low-end
+network equipment, and there are still users on old embedded
+big-endian mips (broadcom, cavium, intel/lantiq and arm
+(intel ixp4xx) hardware. All modern Arm hardware (v6/v7/v8/v9)
+can do both big-endian and little-endian, but actual user numbers
+for big-endian are close to zero -- I have not heard from anyone
+actually using it in years.
 
-> It appears that when has_zero was introduced, two definitions were
-> produced with different signatures (in particular different return types).
+And then there was a lot of the old-school workstation/server
+hardware (m68k, mips, parisc and sparc, not alpha/ia64) that is
+mostly big-endian and still maintained to some degree.
 
-Big-endian was kind of a later addition, and while that file is called
-"generic", it's really "little-endian has an easier time of this all,
-but let's do the 'generic' file for the more complicated case".
-
-Who ends up being affected by this? Powerpc does its own
-word-at-a-time thing because the big-endian case is nasty and you can
-do better with special instructions that they have.
-
-Who else is even BE any more? Some old 32-bit arm setup?
-
-I think the patch is fine, but I guess I'd like to know that people
-who are affected actually don't see any code generation changes (or
-possibly see improvements from not turning it into a bool until later)
-
-            Linus
+      Arnd
