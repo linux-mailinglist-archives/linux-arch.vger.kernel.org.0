@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C320776D44C
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A8776D454
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbjHBQwo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 12:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S231200AbjHBQxO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 12:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjHBQwQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:52:16 -0400
+        with ESMTP id S232164AbjHBQwg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:52:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81E33C34;
-        Wed,  2 Aug 2023 09:51:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033AE30E9;
+        Wed,  2 Aug 2023 09:51:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BD1C61A3E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F80261908;
+        Wed,  2 Aug 2023 16:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8079C433C8;
         Wed,  2 Aug 2023 16:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B42C433C8;
-        Wed,  2 Aug 2023 16:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690995086;
-        bh=1/GsGHwmBv8uH+dMkqUv9IEb/BPlKAA9d7hlqgNtS/w=;
+        s=k20201202; t=1690995103;
+        bh=JHp6Qjv2j2L5yGDwaLMLoclwEyHeCzWtLnvdae52dY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WjEKhwxTykGowm9ZIjdHGLeI/AhTS0fwaekb++vJl1EBhZj0uTbvwoTA6Nva8ivX/
-         VavcZY4KiNAy1NF8+diCDFt3/LnkTYMsCc5vgegL3MI9LGArnb96JGQtIZm9D6hCHV
-         iy1r+Fg6640k5qONYfPBeFyx25cFaoF799+WquNgLGDLeus6Vzl0wEgr35NwYJzQTl
-         xWLjI9wCXkHllFQXic4zh6NB3qBQ746warrABJTL9JMCj64UsNKKC8uJX2otK6yblb
-         JxNUFElHUiNTPpBqwJCePYvh83fH5f/4baqwXva0qpsFD/AJy3kqRerGvW5Brm0E2Y
-         M3uIfGIt6q+QA==
+        b=XGxIQYG3X/Qxf61mdxd0nkNtxlOKIqUxTzKy2Iy5j9R40n6pMtZuxEMoTnmWzPFal
+         6erBZnxtXplixtxjAI14gHKWh7bWpa+VYQnSylkL8twtIZeBjO9M0mQN8lqqbhSkUm
+         rM51X8dPdeolxLSAOeSQTFOT1WC9gSfUIiKTue36Dswah4389rsBzD7Mp67PcCVRZq
+         nLiD0M2LIXm0Xib4XjMwxXVBCgkRVCNvq/y/XCkHgQA3b7flv1XlZgfv1nzyUnrkM3
+         W6T5DBCZCxBxhktENBH7MTh3tvUN99FApLkFhO6yITo5mBMZMsZIuBi7bEMHDk3ijR
+         miiinner3tOnw==
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -47,9 +47,9 @@ Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH V10 14/19] RISC-V: paravirt: pvqspinlock: Add xchg8 & cmpxchg_small support
-Date:   Wed,  2 Aug 2023 12:46:56 -0400
-Message-Id: <20230802164701.192791-15-guoren@kernel.org>
+Subject: [PATCH V10 15/19] RISC-V: paravirt: pvqspinlock: Add SBI implementation
+Date:   Wed,  2 Aug 2023 12:46:57 -0400
+Message-Id: <20230802164701.192791-16-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230802164701.192791-1-guoren@kernel.org>
 References: <20230802164701.192791-1-guoren@kernel.org>
@@ -67,261 +67,72 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The pvqspinlock needs additional sub-word atomic operations. Here
-is the list:
- - xchg8 (RCsc)
- - cmpxchg8/16_relaxed
- - cmpxchg8/16_release (Rcpc)
- - cmpxchg8_acquire (RCpc)
- - cmpxchg8 (RCsc)
-
-Although paravirt qspinlock doesn't have the native_qspinlock
-fairness, giving a strong forward progress guarantee to these
-atomic semantics could prevent unnecessary tries, which would
-cause cache line bouncing.
+Implement pv_kick with SBI implementation, and add SBI_EXT_PVLOCK
+extension detection.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/cmpxchg.h | 177 +++++++++++++++++++++++++++++++
- 1 file changed, 177 insertions(+)
+ arch/riscv/include/asm/sbi.h | 6 ++++++
+ arch/riscv/kernel/paravirt.c | 7 ++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 3ab37215ed86..2fd797c04e7a 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -103,12 +103,37 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
- 					    _x_, sizeof(*(ptr)));	\
- })
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index b7ced34b79a3..26b4ec039f32 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -31,6 +31,7 @@ enum sbi_ext_id {
+ 	SBI_EXT_SRST = 0x53525354,
+ 	SBI_EXT_PMU = 0x504D55,
+ 	SBI_EXT_STA = 0x535441,
++	SBI_EXT_PVLOCK = 0xAB0401,
  
-+static inline ulong __xchg8(ulong new, void *ptr)
-+{
-+	ulong ret, tmp;
-+	ulong shif = ((ulong)ptr & 3) * 8;
-+	ulong mask = 0xff << shif;
-+	ulong *__ptr = (ulong *)((ulong)ptr & ~3);
-+
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	or   %1, %1, %z4\n"
-+		"	sc.w.rl %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+			"fence w, rw\n"
-+		: "=&r" (ret), "=&r" (tmp), "+A" (*__ptr)
-+		: "rJ" (~mask), "rJ" (new << shif)
-+		: "memory");
-+
-+	return (ulong)((ret & mask) >> shif);
-+}
-+
- #define __arch_xchg(ptr, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
- 	__typeof__(*(ptr)) __ret;					\
- 	switch (size) {							\
-+	case 1:								\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__xchg8((ulong)__new, __ptr);			\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"	amoswap.w.aqrl %0, %2, %1\n"		\
-@@ -140,6 +165,51 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
-  * store NEW in MEM.  Return the initial value in MEM.  Success is
-  * indicated by comparing RETURN with OLD.
-  */
-+static inline ulong __cmpxchg_small_relaxed(void *ptr, ulong old,
-+					    ulong new, ulong size)
-+{
-+	ulong shift;
-+	ulong ret, mask, temp;
-+	volatile ulong *ptr32;
-+
-+	/* Mask inputs to the correct size. */
-+	mask = GENMASK((size * BITS_PER_BYTE) - 1, 0);
-+	old &= mask;
-+	new &= mask;
-+
-+	/*
-+	 * Calculate a shift & mask that correspond to the value we wish to
-+	 * compare & exchange within the naturally aligned 4 byte integer
-+	 * that includes it.
-+	 */
-+	shift = (ulong)ptr & 0x3;
-+	shift *= BITS_PER_BYTE;
-+	old <<= shift;
-+	new <<= shift;
-+	mask <<= shift;
-+
-+	/*
-+	 * Calculate a pointer to the naturally aligned 4 byte integer that
-+	 * includes our byte of interest, and load its value.
-+	 */
-+	ptr32 = (volatile ulong *)((ulong)ptr & ~0x3);
-+
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	bne  %1, %z5, 1f\n"
-+		"	and  %1, %0, %z4\n"
-+		"	or   %1, %1, %z6\n"
-+		"	sc.w %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+		"1:\n"
-+		: "=&r" (ret), "=&r" (temp), "+A" (*ptr32)
-+		: "rJ" (mask), "rJ" (~mask), "rJ" (old), "rJ" (new)
-+		: "memory");
-+
-+	return (ret & mask) >> shift;
-+}
-+
- #define __cmpxchg_relaxed(ptr, old, new, size)				\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
-@@ -148,6 +218,11 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
- 	__typeof__(*(ptr)) __ret;					\
- 	register unsigned int __rc;					\
- 	switch (size) {							\
-+	case 1:								\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__cmpxchg_small_relaxed(__ptr, (ulong)__old,	\
-+					(ulong)__new, (ulong)size);	\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
-@@ -184,6 +259,52 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
- 					_o_, _n_, sizeof(*(ptr)));	\
- })
+ 	/* Experimentals extensions must lie within this range */
+ 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
+@@ -244,6 +245,11 @@ enum sbi_pmu_ctr_type {
+ /* Flags defined for counter stop function */
+ #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
  
-+static inline ulong __cmpxchg_small_acquire(void *ptr, ulong old,
-+					    ulong new, ulong size)
-+{
-+	ulong shift;
-+	ulong ret, mask, temp;
-+	volatile ulong *ptr32;
++/* SBI PVLOCK (kick cpu out of wfi) */
++enum sbi_ext_pvlock_fid {
++	SBI_EXT_PVLOCK_KICK_CPU = 0,
++};
 +
-+	/* Mask inputs to the correct size. */
-+	mask = GENMASK((size * BITS_PER_BYTE) - 1, 0);
-+	old &= mask;
-+	new &= mask;
-+
-+	/*
-+	 * Calculate a shift & mask that correspond to the value we wish to
-+	 * compare & exchange within the naturally aligned 4 byte integer
-+	 * that includes it.
-+	 */
-+	shift = (ulong)ptr & 0x3;
-+	shift *= BITS_PER_BYTE;
-+	old <<= shift;
-+	new <<= shift;
-+	mask <<= shift;
-+
-+	/*
-+	 * Calculate a pointer to the naturally aligned 4 byte integer that
-+	 * includes our byte of interest, and load its value.
-+	 */
-+	ptr32 = (volatile ulong *)((ulong)ptr & ~0x3);
-+
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	bne  %1, %z5, 1f\n"
-+		"	and  %1, %0, %z4\n"
-+		"	or   %1, %1, %z6\n"
-+		"	sc.w %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+		RISCV_ACQUIRE_BARRIER
-+		"1:\n"
-+		: "=&r" (ret), "=&r" (temp), "+A" (*ptr32)
-+		: "rJ" (mask), "rJ" (~mask), "rJ" (old), "rJ" (new)
-+		: "memory");
-+
-+	return (ret & mask) >> shift;
-+}
-+
- #define __cmpxchg_acquire(ptr, old, new, size)				\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
-@@ -192,6 +313,12 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
- 	__typeof__(*(ptr)) __ret;					\
- 	register unsigned int __rc;					\
- 	switch (size) {							\
-+	case 1:								\
-+	case 2:								\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__cmpxchg_small_acquire(__ptr, (ulong)__old,	\
-+					(ulong)__new, (ulong)size);	\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
-@@ -230,6 +357,51 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
- 					_o_, _n_, sizeof(*(ptr)));	\
- })
+ /* SBI STA (steal-time accounting) extension */
+ enum sbi_ext_sta_fid {
+ 	SBI_EXT_STA_STEAL_TIME_SET_SHMEM = 0,
+diff --git a/arch/riscv/kernel/paravirt.c b/arch/riscv/kernel/paravirt.c
+index b55c3d3c0c17..564d64f11e4f 100644
+--- a/arch/riscv/kernel/paravirt.c
++++ b/arch/riscv/kernel/paravirt.c
+@@ -136,6 +136,8 @@ int __init pv_time_init(void)
  
-+static inline ulong __cmpxchg_small(void *ptr, ulong old,
-+				    ulong new, ulong size)
-+{
-+	ulong shift;
-+	ulong ret, mask, temp;
-+	volatile ulong *ptr32;
+ void pv_kick(int cpu)
+ {
++	sbi_ecall(SBI_EXT_PVLOCK, SBI_EXT_PVLOCK_KICK_CPU,
++		  cpuid_to_hartid_map(cpu), 0, 0, 0, 0, 0);
+ 	return;
+ }
+ 
+@@ -150,7 +152,7 @@ void pv_wait(u8 *ptr, u8 val)
+ 	if (READ_ONCE(*ptr) != val)
+ 		goto out;
+ 
+-	/* wait_for_interrupt(); */
++	wait_for_interrupt();
+ out:
+ 	local_irq_restore(flags);
+ }
+@@ -186,6 +188,9 @@ void __init pv_qspinlock_init(void)
+ 	if(sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)
+ 		return;
+ 
++	if (!sbi_probe_extension(SBI_EXT_PVLOCK))
++		return;
 +
-+	/* Mask inputs to the correct size. */
-+	mask = GENMASK((size * BITS_PER_BYTE) - 1, 0);
-+	old &= mask;
-+	new &= mask;
-+
-+	/*
-+	 * Calculate a shift & mask that correspond to the value we wish to
-+	 * compare & exchange within the naturally aligned 4 byte integer
-+	 * that includes it.
-+	 */
-+	shift = (ulong)ptr & 0x3;
-+	shift *= BITS_PER_BYTE;
-+	old <<= shift;
-+	new <<= shift;
-+	mask <<= shift;
-+
-+	/*
-+	 * Calculate a pointer to the naturally aligned 4 byte integer that
-+	 * includes our byte of interest, and load its value.
-+	 */
-+	ptr32 = (volatile ulong *)((ulong)ptr & ~0x3);
-+
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	bne  %1, %z5, 1f\n"
-+		"	and  %1, %0, %z4\n"
-+		"	or   %1, %1, %z6\n"
-+		"	sc.w.rl %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+		"	fence w, rw\n"
-+		"1:\n"
-+		: "=&r" (ret), "=&r" (temp), "+A" (*ptr32)
-+		: "rJ" (mask), "rJ" (~mask), "rJ" (old), "rJ" (new)
-+		: "memory");
-+
-+	return (ret & mask) >> shift;
-+}
- #define __cmpxchg(ptr, old, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
-@@ -238,6 +410,11 @@ static inline ulong __xchg16_relaxed(ulong new, void *ptr)
- 	__typeof__(*(ptr)) __ret;					\
- 	register unsigned int __rc;					\
- 	switch (size) {							\
-+	case 1:								\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__cmpxchg_small(__ptr, (ulong)__old,		\
-+					(ulong)__new, (ulong)size);	\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
+ 	pr_info("PV qspinlocks enabled\n");
+ 	__pv_init_lock_hash();
+ 
 -- 
 2.36.1
 
