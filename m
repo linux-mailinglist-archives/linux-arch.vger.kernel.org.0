@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A181876D415
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408C876D41D
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Aug 2023 18:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjHBQtY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 12:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S231844AbjHBQt0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 12:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjHBQtF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C912D78;
-        Wed,  2 Aug 2023 09:48:46 -0700 (PDT)
+        with ESMTP id S232583AbjHBQtH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 12:49:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C436173A;
+        Wed,  2 Aug 2023 09:49:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A51C61A3C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74D47619D7;
+        Wed,  2 Aug 2023 16:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D0EC433C8;
         Wed,  2 Aug 2023 16:48:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D8BC433CA;
-        Wed,  2 Aug 2023 16:48:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690994925;
-        bh=XpJMmQpizgl+1q4faLgZyV4Sr5SWoDQzo87jc2k0hEU=;
+        s=k20201202; t=1690994940;
+        bh=aihpQWSsOm2PcncftaveeMsJLoT6t46RobNm6fedvI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rgxujrsdn7f+bcZFJbQ7fNjqz5y2CrBgF0JiPl0DEbMPu20EiePiHkH95Lmot58DW
-         LviM3KysginZdajdwkNuvDoxVNN9RrLMOjPSuZ2jRVFlm0Qny2n4KMliWznJBLtDdM
-         PysXqLOrB6cwwXJ7jKWDbYVbH0jnEiJgiskSOUOEj3Oeoj/ZstrC+OQYehdAcghRJK
-         G7L0DezO+mrmdTlz+SbrU0xEuUAXSYjh3wFuhnVhocrtahkE+ip2vFt+KKjTcY8dze
-         FrXIL/40ohIWf2ObIM0DmN2LJ5i1atvvrNMdz0WAJ+g3S86+2/6kXwSMt708WfOkjC
-         iMkIyJYOTzcAA==
+        b=gbOQExxxuCtl7NH7eEJ6hZqSndwRoPGdr6xkLNldxD4i6d4f0tfBTN5SijbtBjNvx
+         fdi8poo5hOLsGtXmkhJcW1h9mQKVPkjqiGLD7kBl5pDcvzZgngOHIN7AMts+s5i3Qj
+         fdBVjn6mxmEqIbXZUouDJ4xRfdc78I8Z3VWhBuxUmvUAX/2fkI46rYY93zJKRTAnfZ
+         8qSJXsZETG38yrWe6xpLlaUj5vllcbH/4ubvCaSE6xiccTKV+nHZLKQAqK1nkFTZ7J
+         igQd0L4wWlGyOVq+znHVp7JrBhdfRkz+eb4jb9ntBJcSScgyImGIJd8jyTdlAD3Kq6
+         BC8aj1j1UYJXw==
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -47,18 +47,18 @@ Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH V10 04/19] riscv: qspinlock: Add basic queued_spinlock support
-Date:   Wed,  2 Aug 2023 12:46:46 -0400
-Message-Id: <20230802164701.192791-5-guoren@kernel.org>
+Subject: [PATCH V10 05/19] riscv: qspinlock: Introduce combo spinlock
+Date:   Wed,  2 Aug 2023 12:46:47 -0400
+Message-Id: <20230802164701.192791-6-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230802164701.192791-1-guoren@kernel.org>
 References: <20230802164701.192791-1-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,192 +67,210 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The requirements of qspinlock have been documented by commit:
-a8ad07e5240c ("asm-generic: qspinlock: Indicate the use of mixed-size
-atomics").
+Combo spinlock could support queued and ticket in one Linux Image and
+select them during boot time via errata mechanism. Here is the func
+size (Bytes) comparison table below:
 
-Although RISC-V ISA gives out a weaker forward guarantee LR/SC, which
-doesn't satisfy the requirements of qspinlock above, it won't prevent
-some riscv vendors from implementing a strong fwd guarantee LR/SC in
-microarchitecture to match xchg_tail requirement. T-HEAD C9xx processor
-is the one.
+TYPE			: COMBO | TICKET | QUEUED
+arch_spin_lock		: 106	| 60     | 50
+arch_spin_unlock	: 54    | 36     | 26
+arch_spin_trylock	: 110   | 72     | 54
+arch_spin_is_locked	: 48    | 34     | 20
+arch_spin_is_contended	: 56    | 40     | 24
+rch_spin_value_unlocked	: 48    | 34     | 24
 
-We've tested the patch on SOPHGO sg2042 & th1520 and passed the stress
-test on Fedora & Ubuntu & OpenEuler ... Here is the performance
-comparison between qspinlock and ticket_lock on sg2042 (64 cores):
+One example of disassemble combo arch_spin_unlock:
+   0xffffffff8000409c <+14>:    nop                # detour slot
+   0xffffffff800040a0 <+18>:    fence   rw,w       # queued spinlock start
+   0xffffffff800040a4 <+22>:    sb      zero,0(a4) # queued spinlock end
+   0xffffffff800040a8 <+26>:    ld      s0,8(sp)
+   0xffffffff800040aa <+28>:    addi    sp,sp,16
+   0xffffffff800040ac <+30>:    ret
+   0xffffffff800040ae <+32>:    lw      a5,0(a4)   # ticket spinlock start
+   0xffffffff800040b0 <+34>:    sext.w  a5,a5
+   0xffffffff800040b2 <+36>:    fence   rw,w
+   0xffffffff800040b6 <+40>:    addiw   a5,a5,1
+   0xffffffff800040b8 <+42>:    slli    a5,a5,0x30
+   0xffffffff800040ba <+44>:    srli    a5,a5,0x30
+   0xffffffff800040bc <+46>:    sh      a5,0(a4)   # ticket spinlock end
+   0xffffffff800040c0 <+50>:    ld      s0,8(sp)
+   0xffffffff800040c2 <+52>:    addi    sp,sp,16
+   0xffffffff800040c4 <+54>:    ret
 
-sysbench test=threads threads=32 yields=100 lock=8 (+13.8%):
-  queued_spinlock 0.5109/0.00
-  ticket_spinlock 0.5814/0.00
-
-perf futex/hash (+6.7%):
-  queued_spinlock 1444393 operations/sec (+- 0.09%)
-  ticket_spinlock 1353215 operations/sec (+- 0.15%)
-
-perf futex/wake-parallel (+8.6%):
-  queued_spinlock (waking 1/64 threads) in 0.0253 ms (+-2.90%)
-  ticket_spinlock (waking 1/64 threads) in 0.0275 ms (+-3.12%)
-
-perf futex/requeue (+4.2%):
-  queued_spinlock Requeued 64 of 64 threads in 0.0785 ms (+-0.55%)
-  ticket_spinlock Requeued 64 of 64 threads in 0.0818 ms (+-4.12%)
-
-System Benchmarks (+6.4%)
-  queued_spinlock:
-    System Benchmarks Index Values               BASELINE       RESULT    INDEX
-    Dhrystone 2 using register variables         116700.0  628613745.4  53865.8
-    Double-Precision Whetstone                       55.0     182422.8  33167.8
-    Execl Throughput                                 43.0      13116.6   3050.4
-    File Copy 1024 bufsize 2000 maxblocks          3960.0    7762306.2  19601.8
-    File Copy 256 bufsize 500 maxblocks            1655.0    3417556.8  20649.9
-    File Copy 4096 bufsize 8000 maxblocks          5800.0    7427995.7  12806.9
-    Pipe Throughput                               12440.0   23058600.5  18535.9
-    Pipe-based Context Switching                   4000.0    2835617.7   7089.0
-    Process Creation                                126.0      12537.3    995.0
-    Shell Scripts (1 concurrent)                     42.4      57057.4  13456.9
-    Shell Scripts (8 concurrent)                      6.0       7367.1  12278.5
-    System Call Overhead                          15000.0   33308301.3  22205.5
-                                                                       ========
-    System Benchmarks Index Score                                       12426.1
-
-  ticket_spinlock:
-    System Benchmarks Index Values               BASELINE       RESULT    INDEX
-    Dhrystone 2 using register variables         116700.0  626541701.9  53688.2
-    Double-Precision Whetstone                       55.0     181921.0  33076.5
-    Execl Throughput                                 43.0      12625.1   2936.1
-    File Copy 1024 bufsize 2000 maxblocks          3960.0    6553792.9  16550.0
-    File Copy 256 bufsize 500 maxblocks            1655.0    3189231.6  19270.3
-    File Copy 4096 bufsize 8000 maxblocks          5800.0    7221277.0  12450.5
-    Pipe Throughput                               12440.0   20594018.7  16554.7
-    Pipe-based Context Switching                   4000.0    2571117.7   6427.8
-    Process Creation                                126.0      10798.4    857.0
-    Shell Scripts (1 concurrent)                     42.4      57227.5  13497.1
-    Shell Scripts (8 concurrent)                      6.0       7329.2  12215.3
-    System Call Overhead                          15000.0   30766778.4  20511.2
-                                                                       ========
-    System Benchmarks Index Score                                       11670.7
-
-The qspinlock has a significant improvement on SOPHGO SG2042 64
-cores platform than the ticket_lock.
+The qspinlock is smaller and faster than ticket-lock when all are in
+fast-path, and combo spinlock could provide a compatible Linux Image
+for different micro-arch design (weak/strict fwd guarantee) processors.
 
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/riscv/Kconfig                | 16 ++++++++++++++++
- arch/riscv/include/asm/Kbuild     |  3 ++-
- arch/riscv/include/asm/cmpxchg.h  | 24 ++++++++++++++++++++++++
- arch/riscv/include/asm/spinlock.h | 17 +++++++++++++++++
- 4 files changed, 59 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/include/asm/spinlock.h
+ arch/riscv/Kconfig                |  9 +++-
+ arch/riscv/include/asm/hwcap.h    |  1 +
+ arch/riscv/include/asm/spinlock.h | 87 ++++++++++++++++++++++++++++++-
+ arch/riscv/kernel/cpufeature.c    | 10 ++++
+ 4 files changed, 104 insertions(+), 3 deletions(-)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 93ff677d2be5..e89a3bea3dc1 100644
+index e89a3bea3dc1..119e774a3dcf 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -438,6 +438,22 @@ config NODES_SHIFT
- 	  Specify the maximum number of NUMA Nodes available on the target
- 	  system.  Increases memory reserved to accommodate various tables.
+@@ -440,7 +440,7 @@ config NODES_SHIFT
  
-+choice
-+	prompt "RISC-V spinlock type"
-+	default RISCV_TICKET_SPINLOCKS
+ choice
+ 	prompt "RISC-V spinlock type"
+-	default RISCV_TICKET_SPINLOCKS
++	default RISCV_COMBO_SPINLOCKS
+ 
+ config RISCV_TICKET_SPINLOCKS
+ 	bool "Using ticket spinlock"
+@@ -452,6 +452,13 @@ config RISCV_QUEUED_SPINLOCKS
+ 	help
+ 	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
+ 	  Otherwise, stay at ticket-lock.
 +
-+config RISCV_TICKET_SPINLOCKS
-+	bool "Using ticket spinlock"
-+
-+config RISCV_QUEUED_SPINLOCKS
-+	bool "Using queued spinlock"
++config RISCV_COMBO_SPINLOCKS
++	bool "Using combo spinlock"
 +	depends on SMP && MMU
 +	select ARCH_USE_QUEUED_SPINLOCKS
 +	help
-+	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
-+	  Otherwise, stay at ticket-lock.
-+endchoice
-+
- config RISCV_ALTERNATIVE
- 	bool
- 	depends on !XIP_KERNEL
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 504f8b7e72d4..a0dc85e4a754 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -2,10 +2,11 @@
- generic-y += early_ioremap.h
- generic-y += flat.h
- generic-y += kvm_para.h
-+generic-y += mcs_spinlock.h
- generic-y += parport.h
--generic-y += spinlock.h
- generic-y += spinlock_types.h
- generic-y += qrwlock.h
- generic-y += qrwlock_types.h
-+generic-y += qspinlock.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 2f4726d3cfcc..d12231d752a4 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -11,12 +11,36 @@
- #include <asm/barrier.h>
- #include <asm/fence.h>
++	  Select queued spinlock or ticket-lock via errata.
+ endchoice
  
-+static inline ulong __xchg16_relaxed(ulong new, void *ptr)
+ config RISCV_ALTERNATIVE
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index f041bfa7f6a0..08ae75a694c2 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -54,6 +54,7 @@
+ #define RISCV_ISA_EXT_ZIFENCEI		41
+ #define RISCV_ISA_EXT_ZIHPM		42
+ 
++#define RISCV_ISA_EXT_XTICKETLOCK	63
+ #define RISCV_ISA_EXT_MAX		64
+ #define RISCV_ISA_EXT_NAME_LEN_MAX	32
+ 
+diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+index c644a92d4548..9eb3ad31e564 100644
+--- a/arch/riscv/include/asm/spinlock.h
++++ b/arch/riscv/include/asm/spinlock.h
+@@ -7,11 +7,94 @@
+ #define _Q_PENDING_LOOPS	(1 << 9)
+ #endif
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++#include <asm-generic/ticket_spinlock.h>
++
++#undef arch_spin_is_locked
++#undef arch_spin_is_contended
++#undef arch_spin_value_unlocked
++#undef arch_spin_lock
++#undef arch_spin_trylock
++#undef arch_spin_unlock
++
++#include <asm-generic/qspinlock.h>
++#include <asm/hwcap.h>
++
++#undef arch_spin_is_locked
++#undef arch_spin_is_contended
++#undef arch_spin_value_unlocked
++#undef arch_spin_lock
++#undef arch_spin_trylock
++#undef arch_spin_unlock
++
++#define COMBO_DETOUR				\
++	asm_volatile_goto(ALTERNATIVE(		\
++		"nop",				\
++		"j %l[ticket_spin_lock]",	\
++		0,				\
++		RISCV_ISA_EXT_XTICKETLOCK,	\
++		CONFIG_RISCV_COMBO_SPINLOCKS)	\
++		: : : : ticket_spin_lock);
++
++static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
 +{
-+	ulong ret, tmp;
-+	ulong shif = ((ulong)ptr & 2) ? 16 : 0;
-+	ulong mask = 0xffff << shif;
-+	ulong *__ptr = (ulong *)((ulong)ptr & ~2);
-+
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	or   %1, %1, %z4\n"
-+		"	sc.w %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+		: "=&r" (ret), "=&r" (tmp), "+A" (*__ptr)
-+		: "rJ" (~mask), "rJ" (new << shif)
-+		: "memory");
-+
-+	return (ulong)((ret & mask) >> shif);
++	COMBO_DETOUR
++	queued_spin_lock(lock);
++	return;
++ticket_spin_lock:
++	ticket_spin_lock(lock);
 +}
 +
- #define __xchg_relaxed(ptr, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
- 	__typeof__(*(ptr)) __ret;					\
- 	switch (size) {							\
-+	case 2:								\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__xchg16_relaxed((ulong)__new, __ptr);		\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"	amoswap.w %0, %2, %1\n"			\
-diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-new file mode 100644
-index 000000000000..c644a92d4548
---- /dev/null
-+++ b/arch/riscv/include/asm/spinlock.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	return queued_spin_trylock(lock);
++ticket_spin_lock:
++	return ticket_spin_trylock(lock);
++}
 +
-+#ifndef __ASM_RISCV_SPINLOCK_H
-+#define __ASM_RISCV_SPINLOCK_H
++static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	queued_spin_unlock(lock);
++	return;
++ticket_spin_lock:
++	ticket_spin_unlock(lock);
++}
 +
-+#ifdef CONFIG_QUEUED_SPINLOCKS
-+#define _Q_PENDING_LOOPS	(1 << 9)
-+#endif
++static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
++{
++	COMBO_DETOUR
++	return queued_spin_value_unlocked(lock);
++ticket_spin_lock:
++	return ticket_spin_value_unlocked(lock);
++}
 +
-+#ifdef CONFIG_QUEUED_SPINLOCKS
-+#include <asm/qspinlock.h>
++static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	return queued_spin_is_locked(lock);
++ticket_spin_lock:
++	return ticket_spin_is_locked(lock);
++}
++
++static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	return queued_spin_is_contended(lock);
++ticket_spin_lock:
++	return ticket_spin_is_contended(lock);
++}
++#else /* CONFIG_RISCV_COMBO_SPINLOCKS */
++
+ #ifdef CONFIG_QUEUED_SPINLOCKS
+ #include <asm/qspinlock.h>
+-#include <asm/qrwlock.h>
+ #else
+-#include <asm-generic/spinlock.h>
++#include <asm-generic/ticket_spinlock.h>
+ #endif
+ 
++#endif /* CONFIG_RISCV_COMBO_SPINLOCKS */
++
 +#include <asm/qrwlock.h>
-+#else
-+#include <asm-generic/spinlock.h>
++
+ #endif /* __ASM_RISCV_SPINLOCK_H */
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index bdcf460ea53d..e65b0e54152d 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -324,6 +324,16 @@ void __init riscv_fill_hwcap(void)
+ 		set_bit(RISCV_ISA_EXT_ZICSR, isainfo->isa);
+ 		set_bit(RISCV_ISA_EXT_ZIFENCEI, isainfo->isa);
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++		/*
++		 * The RISC-V Linux used queued spinlock at first; then, we used ticket_lock
++		 * as default or queued spinlock by choice. Because ticket_lock would dirty
++		 * spinlock value, the only way is to change from queued_spinlock to
++		 * ticket_spinlock, but can not be vice.
++		 */
++		set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
 +#endif
 +
-+#endif /* __ASM_RISCV_SPINLOCK_H */
+ 		/*
+ 		 * These ones were as they were part of the base ISA when the
+ 		 * port & dt-bindings were upstreamed, and so can be set
 -- 
 2.36.1
 
