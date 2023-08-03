@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516A776DC7B
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 02:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F0976DC7E
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 02:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjHCARn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 20:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S230523AbjHCASH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 20:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjHCARn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 20:17:43 -0400
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D65E119;
-        Wed,  2 Aug 2023 17:17:42 -0700 (PDT)
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-563dc551518so197811a12.2;
-        Wed, 02 Aug 2023 17:17:42 -0700 (PDT)
+        with ESMTP id S231315AbjHCASG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 20:18:06 -0400
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AB426AB;
+        Wed,  2 Aug 2023 17:18:04 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-686efb9ee0cso336356b3a.3;
+        Wed, 02 Aug 2023 17:18:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691021861; x=1691626661;
+        d=1e100.net; s=20221208; t=1691021884; x=1691626684;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7db6IHR4VgW4O1B0LAU9DcUtTze9BS4NCLZNZDmp/K4=;
-        b=HzkBqKd7Hx+VNThzg2UMy1KHbVM8jkaGJbxLNSyaWauQSzzCm7mpYuiWYYhFIDQA8i
-         W8EgbPhgkikgWNpXbZl7PKbjlvLHTRrN8sBdPySh/nOKOtXOys4DiYELZ1Jjxm0tWyoh
-         6D2R5epX6fGfWSSDcJ1xMimHbpg6WXuIWBxOtfU48mCZ3BdFSRBaPOarujv8jWPYdIN8
-         ZhpHCBSKSFfHdJKkitV1UOMw0Ut3EXGYQZ1tB0sWZRXhCGH5MXkXSBjTF33jc0qE8kUR
-         nEeuLXtK+QgfyDKvlyhFe9C77kEwicfxsA4WwAh+jouLTBm5qkIJikfp3UTBpCyB7r8/
-         HkEw==
-X-Gm-Message-State: ABy/qLYEVFl+2QFmzMDUOTlLqpL+XrlgsqK4EQ5cND9yydkyEZLQ2j0p
-        RJbQsuS6Awta1a0KE10XMQg=
-X-Google-Smtp-Source: APBJJlGAikLzs5rznPbc1HMLxW2mzP3T84uayHyWFvfQpIXch48oKdSx/YpdU1ZYC6EnXyOFW9tf5A==
-X-Received: by 2002:a05:6a20:430b:b0:13a:52ce:13cc with SMTP id h11-20020a056a20430b00b0013a52ce13ccmr19297029pzk.51.1691021861700;
-        Wed, 02 Aug 2023 17:17:41 -0700 (PDT)
+        bh=jl6QX9DmIEcRSeA7Z1ipMoamYcKnhNBiYALRkxXWQ2c=;
+        b=Nw7k98uvSlfeMEXRtTW5WwirVACKZArLs8BSCgBxa5Yw9WHX0wrNOeAq49oTc2CEXL
+         1L3/w6B9shYUiTELt/mFo8jPT+lkOSCKA8jtLV5+m8/aRvm61NW27qeRrBxTHZ/h1TUi
+         kv9kBWarzyyYpldisv8r3pF9EX1f3xUGNWxg34MD2Doj4ZYvCj5TsVWLBvXEK6sNLZI3
+         ZA09kanI2DS9qQr8QNGhdAZHkjzmi4Av+cdAOwT22d4ioMKdYyZ33ARiMi8NJzkksEgh
+         axDXCbhR9aaA6aBrLMysDEYO7JmJy4eq2W3T6CmFypDe3Zj2MCceK/MBj5XJEYHoYB28
+         56oA==
+X-Gm-Message-State: ABy/qLbYGE/2sQHTOrqOMwJxD2KH43j0iJvLPEz0Zfpc0+WzUv7CMxZF
+        hKx+q7AqkHKbmS6nA1ehxSUSCvfZ6l4=
+X-Google-Smtp-Source: APBJJlF95ql1YXjtX59H4uiRbC0bKPcjVn1nFK62f1myuPyudDMBv4h+vze8rn0coQQDxK1hQO5+oA==
+X-Received: by 2002:a05:6a00:1a08:b0:668:81c5:2f8a with SMTP id g8-20020a056a001a0800b0066881c52f8amr19808839pfv.17.1691021883751;
+        Wed, 02 Aug 2023 17:18:03 -0700 (PDT)
 Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id j13-20020a633c0d000000b0056416526a5csm10533218pga.59.2023.08.02.17.17.40
+        by smtp.gmail.com with ESMTPSA id s9-20020aa78d49000000b00687260020b1sm7392848pfe.72.2023.08.02.17.18.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 17:17:41 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 00:17:35 +0000
+        Wed, 02 Aug 2023 17:18:02 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 00:17:56 +0000
 From:   Wei Liu <wei.liu@kernel.org>
 To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
 Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,15 +50,15 @@ Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tianyu.Lan@microsoft.com, vkuznets@redhat.com, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         hpa@zytor.com, will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH 10/15] x86: hyperv: Add mshv_handler irq handler and
- setup function
-Message-ID: <ZMryH+IqkudHqcrF@liuwe-devbox-debian-v2>
+Subject: Re: [PATCH 11/15] Drivers: hv: export vmbus_isr, hv_context and
+ hv_post_message
+Message-ID: <ZMryNGICsouiTfOt@liuwe-devbox-debian-v2>
 References: <1690487690-2428-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1690487690-2428-11-git-send-email-nunodasneves@linux.microsoft.com>
+ <1690487690-2428-12-git-send-email-nunodasneves@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1690487690-2428-11-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1690487690-2428-12-git-send-email-nunodasneves@linux.microsoft.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
@@ -70,10 +70,9 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 12:54:45PM -0700, Nuno Das Neves wrote:
-> This will handle SYNIC interrupts such as intercepts, doorbells, and
-> scheduling messages intended for the mshv driver.
+On Thu, Jul 27, 2023 at 12:54:46PM -0700, Nuno Das Neves wrote:
+> These will be used by the mshv_vtl driver.
 > 
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Acked-by: Wei Liu <wei.liu@kernel.org>
