@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E470276DC8C
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 02:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B09376DCA4
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 02:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjHCAXk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 20:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S231350AbjHCA1Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 20:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjHCAXj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 20:23:39 -0400
+        with ESMTP id S229624AbjHCA1Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 20:27:25 -0400
 Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EE511D;
-        Wed,  2 Aug 2023 17:23:38 -0700 (PDT)
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-686f090310dso371878b3a.0;
-        Wed, 02 Aug 2023 17:23:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641502D43;
+        Wed,  2 Aug 2023 17:27:24 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-686be3cbea0so1049778b3a.0;
+        Wed, 02 Aug 2023 17:27:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691022218; x=1691627018;
+        d=1e100.net; s=20221208; t=1691022444; x=1691627244;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gmVePWus/D2ZSIv2TlvDrcFpCMCiW/1/xN8nusTSum4=;
-        b=co76xerCqMWH8tdYDT/w0Kp01+ZGeOztoF+Kf0QrXJgbCakhjq44LC5CGjbDwDZSQC
-         mRYnP7G5qCSdPM7f/H/8dumoYtmeIKQoXEjcdurklfi5umgzaF0N1mvF4xO6ZMzoWmrU
-         J/7tUuW8IoBQ3gtSKVWXUg2BLFojHvs+gYoQmLmPj1q2YFuxTD016Gkg+Cl45MxH+Nwn
-         PLC/Ji2MHButkWG3fVTciICbi5I9wD46hY1MQygfCFXrIpkQxeYfI087Xq/m/rpmVK2e
-         ZGNsEeQw3eNwgHkcnAXiwb6SF1vCoOhnj6qnqjdzFyQyO8J9KaPCfq70yziwQ7EFKXQW
-         lA0g==
-X-Gm-Message-State: ABy/qLaLOUO0tgRwcIMENUpP9xwCTKeBo4eKIkz7xIsZ0zqgcjD9yXne
-        JM7m8RSxaAQDXGMU35yGWWnv91rp6H8=
-X-Google-Smtp-Source: APBJJlElxh1W6wNXf7GhFS8b/QMqghSfbgpkibvNXkhK40jke5XiUp1npsujtjeyRUZK+f64tfqstw==
-X-Received: by 2002:a05:6a20:85:b0:13b:cc09:a547 with SMTP id 5-20020a056a20008500b0013bcc09a547mr15593305pzg.36.1691022218125;
-        Wed, 02 Aug 2023 17:23:38 -0700 (PDT)
+        bh=9Lskf6Kmvdo5rNLLWiPUjd2IE5xw/oTMaLuczEbQhS8=;
+        b=PVLlTXrHj2j7G6Oaem5puBWo4sa3zsCsc6ONebulUh1FCWbj+Wih8JoD1s/TQGOTc3
+         66xh0gYPpJi8xEdt2q2v6Wd5rxD8RW8z0IZz1PwV5gzPYwtuIqKxocFePZrjvr42iNd/
+         O99nV7bHkrpXCKnNKZxf62WcYdfLupAGYJz6M9UyjkgMw7FCqHDHeLIaoLS+7Qpgg9s0
+         MPKqlIVjwIkuaONb/JUMu0063jMzyF1U4fVPr5EiCOBzB9DywOlNm8GCIXNvr3fb/mwc
+         +hZOIQNGaKaxM6Os+SIQgT+Gxar/owa9N4gLOVRLsmCRZ+KE2/IUYKnywlz7TSVD6lVU
+         EN4g==
+X-Gm-Message-State: ABy/qLb4A6wRMlhraBMgu0dtgzOAf6DyGgh8pJCwfHAIphUe4nKDWgyS
+        b8hUO0tNlk6y1tmaAaYw0/Q=
+X-Google-Smtp-Source: APBJJlEGgf2GNwyqWjoX3d9ZyhSdZlkOI2Cv/gkvnCTjPjVifQkmQBFdGpu93sHaitQVjHkSw6jT+w==
+X-Received: by 2002:a05:6a20:7f94:b0:13a:3bd6:2530 with SMTP id d20-20020a056a207f9400b0013a3bd62530mr22654337pzj.1.1691022443866;
+        Wed, 02 Aug 2023 17:27:23 -0700 (PDT)
 Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id p26-20020a63741a000000b0056433b1b996sm7696281pgc.45.2023.08.02.17.23.34
+        by smtp.gmail.com with ESMTPSA id 35-20020a630b23000000b00551df489590sm11855251pgl.12.2023.08.02.17.27.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 17:23:37 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 00:23:29 +0000
+        Wed, 02 Aug 2023 17:27:23 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 00:27:17 +0000
 From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>, corbet@lwn.net
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
 Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arch@vger.kernel.org, mikelley@microsoft.com,
@@ -50,14 +50,15 @@ Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tianyu.Lan@microsoft.com, vkuznets@redhat.com, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         hpa@zytor.com, will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH 12/15] Documentation: Reserve ioctl number for mshv driver
-Message-ID: <ZMrzgeETgsn1iTfe@liuwe-devbox-debian-v2>
+Subject: Re: [PATCH 13/15] uapi: hyperv: Add mshv driver headers hvhdk.h,
+ hvhdk_mini.h, hvgdk.h, hvgdk_mini.h
+Message-ID: <ZMr0ZVG/YfSywSA0@liuwe-devbox-debian-v2>
 References: <1690487690-2428-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1690487690-2428-13-git-send-email-nunodasneves@linux.microsoft.com>
+ <1690487690-2428-14-git-send-email-nunodasneves@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1690487690-2428-13-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1690487690-2428-14-git-send-email-nunodasneves@linux.microsoft.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -68,27 +69,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This needs an ack from Jonathan.
-
-On Thu, Jul 27, 2023 at 12:54:47PM -0700, Nuno Das Neves wrote:
+On Thu, Jul 27, 2023 at 12:54:48PM -0700, Nuno Das Neves wrote:
+> Containing hypervisor ABI definitions to use in mshv driver.
+> 
+> Version numbers for each file:
+> hvhdk.h		25212
+> hvhdk_mini.h	25294
+> hvgdk.h		25125
+> hvgdk_mini.h	25294
+> 
+> These are unstable interfaces and as such must be compiled independently
+> from published interfaces found in hyperv-tlfs.h.
+> 
+> These are in uapi because they will be used in the mshv ioctl API.
+> 
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  Documentation/userspace-api/ioctl/ioctl-number.rst | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> index 0a1882e296ae..ca6b82419118 100644
-> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> @@ -355,6 +355,8 @@ Code  Seq#    Include File                                           Comments
->  0xB6  all    linux/fpga-dfl.h
->  0xB7  all    uapi/linux/remoteproc_cdev.h                            <mailto:linux-remoteproc@vger.kernel.org>
->  0xB7  all    uapi/linux/nsfs.h                                       <mailto:Andrei Vagin <avagin@openvz.org>>
-> +0xB8  all    uapi/linux/mshv.h                                       Microsoft Hypervisor VM management APIs
-> +                                                                     <mailto:linux-hyperv@vger.kernel.org>
->  0xC0  00-0F  linux/usb/iowarrior.h
->  0xCA  00-0F  uapi/misc/cxl.h
->  0xCA  10-2F  uapi/misc/ocxl.h
-> -- 
-> 2.25.1
-> 
+
+Acked-by: Wei Liu <wei.liu@kernel.org>
