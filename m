@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BFC76DBDB
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 01:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6131476DBE6
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 02:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjHBXzt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Aug 2023 19:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S231996AbjHCADB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Aug 2023 20:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjHBXzs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 19:55:48 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B030D2;
-        Wed,  2 Aug 2023 16:55:47 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-686c06b806cso256328b3a.2;
-        Wed, 02 Aug 2023 16:55:47 -0700 (PDT)
+        with ESMTP id S229626AbjHCADB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Aug 2023 20:03:01 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB411731;
+        Wed,  2 Aug 2023 17:02:59 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-686bc261111so277116b3a.3;
+        Wed, 02 Aug 2023 17:02:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691020547; x=1691625347;
+        d=1e100.net; s=20221208; t=1691020979; x=1691625779;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=04WSNLnGL1RlIxiFfe2FPIMTqJKLrjY2eoaxW6L3Pac=;
-        b=IA2VkofCziDyV9f1/+RtJSmCmAHG85SwA114cN0Uo5mmwu+F1iIW008HrBrflSfq8s
-         vepz5K+JW5+ob/nvFqPVhH8wzff7KTZdaiowohLsKxAPMBvH5cNGL8dVq4C7pR/hMzvz
-         L2irTRy4y+pAza6N0fVdyxs+2Kz3dExcapMLvRl01yBc4wflu+MdH5A6rXaRJfikZtWN
-         A5iVNRUI2vqTcH0iBFQ4NFKc+it/4vnxjXeZc9LxJCPpH+uiU8K8RDtGANYDBE8+nvUn
-         lcAOifze9c27bBYfalEoCEKAL9zSQRFyotEBjhVcGHtx7F5MaO38YKRtCtE1E93KBYsF
-         GpbA==
-X-Gm-Message-State: ABy/qLbS0tU/yW/ZyRfjONqqQq++SXr3Cwwj8800G5Y3Jq8uW/2O3V88
-        fQexq6Ft6D3gJjPXOfiJzoo=
-X-Google-Smtp-Source: APBJJlFWTcGYXexaDucziuAfMKB+btsaoAOoADwW8N+C12urcSjOVDKrGLFWnyOJotiJtqjlQBKG/w==
-X-Received: by 2002:a05:6a20:7289:b0:13e:da98:966a with SMTP id o9-20020a056a20728900b0013eda98966amr4491297pzk.5.1691020547251;
-        Wed, 02 Aug 2023 16:55:47 -0700 (PDT)
+        bh=N9CwBqCkJJkFodz0e9zF6rJm2UPzRnIufx2MpQdm96Q=;
+        b=B6Us1mQkqu0GIvD01Uv/bZHFDgTDJeI1elr1AJ3cUHDroPLNcwwx8hHdWODAbG9CLf
+         mmhsCR8CZr8dT/2pmwzJ5szQh0cJMM77u6UhxR75PwOl3s5ONT+jr86BnQJw/qVGEnst
+         9NdEM+Ty9iTCNMWK7QMS7ILemxGMUW7s1laqd1o6lSq2llHkRNTjreYMoxvVyK/pet0t
+         47PkXoJWtmso5FBi2++v7tZ79n4J7nUzFWgm2mQB8ew6877Swc7E8UgeeHkvI/yWFNFk
+         96GirWp0NX0yDHO0fzEdvSebklwrWnB2D01jW63BRDaq8xzTeZ8LGpz20+3mDh0mJmF1
+         scsw==
+X-Gm-Message-State: ABy/qLYmlUqb1I2w0TedPijVZzl6Fnm9nivnX1G8IXKcmmmQkIvEvQ2G
+        Vte4BFVGJx0LX+ALBzXa3js=
+X-Google-Smtp-Source: APBJJlF4/m+JIyqsbWA/RyQRnjYu3pWp5k9gc382/2oDqfRWxzP8LIk8iaLh784YbKWRY5vRe1Kp8w==
+X-Received: by 2002:a05:6a20:7da6:b0:138:c:ed04 with SMTP id v38-20020a056a207da600b00138000ced04mr19488645pzj.39.1691020979101;
+        Wed, 02 Aug 2023 17:02:59 -0700 (PDT)
 Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b001adf6b21c77sm12954728plx.107.2023.08.02.16.55.46
+        by smtp.gmail.com with ESMTPSA id j8-20020a62b608000000b00687790191a2sm1642773pff.58.2023.08.02.17.02.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 16:55:46 -0700 (PDT)
-Date:   Wed, 2 Aug 2023 23:55:40 +0000
+        Wed, 02 Aug 2023 17:02:58 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 00:02:52 +0000
 From:   Wei Liu <wei.liu@kernel.org>
 To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
 Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,17 +50,18 @@ Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tianyu.Lan@microsoft.com, vkuznets@redhat.com, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         hpa@zytor.com, will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH 05/15] hyperv: Move hv_connection_id to hyperv-tlfs
-Message-ID: <ZMrs/BgDzxlLL0VX@liuwe-devbox-debian-v2>
+Subject: Re: [PATCH 07/15] Drivers: hv: Move hv_call_deposit_pages and
+ hv_call_create_vp to common code
+Message-ID: <ZMrurNRcshHdpJ9k@liuwe-devbox-debian-v2>
 References: <1690487690-2428-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1690487690-2428-6-git-send-email-nunodasneves@linux.microsoft.com>
+ <1690487690-2428-8-git-send-email-nunodasneves@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1690487690-2428-6-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1690487690-2428-8-git-send-email-nunodasneves@linux.microsoft.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,63 +69,13 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 12:54:40PM -0700, Nuno Das Neves wrote:
-> This structure should be in hyperv-tlfs.h anyway, since it is part of
-> the TLFS document.
-
-Missing blank line here.
-
-> The definition conflicts with one added in hvgdk.h as part of the mshv
-> driver so must be moved to hyperv-tlfs.h.
+On Thu, Jul 27, 2023 at 12:54:42PM -0700, Nuno Das Neves wrote:
+> These hypercalls are not arch-specific.
+...
+> Move them to common code.
 > 
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  include/asm-generic/hyperv-tlfs.h | 9 +++++++++
->  include/linux/hyperv.h            | 9 ---------
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index 373f26efa18a..8fc5e5a9d7cb 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -845,4 +845,13 @@ struct hv_mmio_write_input {
->  	u8 data[HV_HYPERCALL_MMIO_MAX_DATA_LENGTH];
->  } __packed;
->  
-> +/* Define connection identifier type. */
-> +union hv_connection_id {
-> +	u32 asu32;
-> +	struct {
-> +		u32 id:24;
-> +		u32 reserved:8;
-> +	} u;
-> +};
-> +
 
-Missing __packed here, but since this is already aligned it probably
-doesn't matter much.
+Pure code movement so:
 
->  #endif
-> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-> index bfbc37ce223b..f90de5abcd50 100644
-> --- a/include/linux/hyperv.h
-> +++ b/include/linux/hyperv.h
-> @@ -748,15 +748,6 @@ struct vmbus_close_msg {
->  	struct vmbus_channel_close_channel msg;
->  };
->  
-> -/* Define connection identifier type. */
-> -union hv_connection_id {
-> -	u32 asu32;
-> -	struct {
-> -		u32 id:24;
-> -		u32 reserved:8;
-> -	} u;
-> -};
-> -
->  enum vmbus_device_type {
->  	HV_IDE = 0,
->  	HV_SCSI,
-> -- 
-> 2.25.1
-> 
+Acked-by: Wei Liu <wei.liu@kernel.org>
