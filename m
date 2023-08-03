@@ -2,140 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106B376E781
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 13:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8492B76E8F3
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Aug 2023 15:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbjHCL52 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Aug 2023 07:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S234158AbjHCNAm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Aug 2023 09:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbjHCL50 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Aug 2023 07:57:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567FD2D71;
-        Thu,  3 Aug 2023 04:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=cO/uLPmilqipGwZoOwvAvBoyxkuyIOj2yUkU6KfTz7s=; b=qHllbgqNWzBcNIH4ZGYGaAGIW0
-        khm+1RvfI+4PbyLkbFmvrTIC6/VmgVC27qgb4qIxoElmksURq9oAYXYRuiXQl/Q7iyZyqCiI0+JHj
-        UJccFnJTHT5Ssw0mFm7Xmqew0JTIPqTMLGbDD7VCy5DuXp5BFcGCRaUX5MWCXPWk51/JxORUVVoLp
-        N9/eUDaTN447e2aA8Grnwx1BKJaLdkYs6wjwkyRR4c+EXbxQ8celhv9RvoAZKTLB1Lr86D9gSoAHV
-        qi9SNsSrgkap72uU35CGStE4sBIQdmLWFwphElzj2Gu9nx3poPpnTx1Aa5O6keODRFYciXB43NUfJ
-        tnrt6g6A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qRWw8-00GnqP-1a;
-        Thu, 03 Aug 2023 11:56:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2A774300301;
-        Thu,  3 Aug 2023 13:56:11 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F21A6205EA3E6; Thu,  3 Aug 2023 13:56:10 +0200 (CEST)
-Date:   Thu, 3 Aug 2023 13:56:10 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-Subject: Re: [PATCH v15 3/6] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <20230803115610.GC214207@hirez.programming.kicks-ass.net>
-References: <20210514200743.3026725-1-alex.kogan@oracle.com>
- <20210514200743.3026725-4-alex.kogan@oracle.com>
- <ZMrjPWdWhEhwpZDo@gmail.com>
- <20230803085004.GF212435@hirez.programming.kicks-ass.net>
- <CAJF2gTQFZEpHK45hd9HXxHxJc4gaCuDQ4wZ2adDzHwGQjA6VFw@mail.gmail.com>
+        with ESMTP id S234036AbjHCNAk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Aug 2023 09:00:40 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38F11712;
+        Thu,  3 Aug 2023 06:00:39 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8b4749013so8095535ad.2;
+        Thu, 03 Aug 2023 06:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691067639; x=1691672439;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ne4TLOkbOjf1MkMkI08KdCgdWtyARI72DRJ1ahPA7Lg=;
+        b=hFey5S88VtrEj8gHmZzWxck98y+If6caA2T8qnAZkJ4duvjNkDzWWvcFEw/uspdv1X
+         wD909xuUDRoQrQNpiHSLdRLZFriZDRvwOiKmkduwJ/kahZ22t59tHpZak9YzHIedp9hg
+         4exCm1UfhAwy9Geeh5yuFeA2Wem+KZowfiT7EVhdWDgjjUaVbE8nV8fXdufVzS2h5dcH
+         lKahNstvLkEJSry6FNlRSsneeYNI7kFkzZTmeU1O+VhTC7eYPGgFf1w1Re/dYov6Ox9I
+         NzdEyNEL1gV6qv2uPri+ROXf0dRLmwYIOOjSZAra0jXjh8NQZabvgjARx8v0dLaz/64x
+         Ij+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691067639; x=1691672439;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ne4TLOkbOjf1MkMkI08KdCgdWtyARI72DRJ1ahPA7Lg=;
+        b=cjcN8AKJlu7b6BxOSvyGdwklfy1elMFZ1cmnIE0bOIyYMOlPCuIgBDnQ/Uv/zukpQ2
+         hL7PPQbrZV/LwQ3m4BGlSCx0jhwx5vSvWKD7pIhBhL4VoqGR32jorXxZFNoekK1D2R3x
+         ZWnICgi5xhfBsExyia1ePWfTsPvu+7ScGHhRQfBAEdw0t1RikGjA4FvsGynmdu7SK87l
+         VyYLyyLNAAxJEx+oYLLs9Aisc6cJ87mFaD05byR6nyDW5EEVbjjkN2v6yoGUC0/I4ZPX
+         J6e8IYpooKXL7J8uLUS/uVxBCshgSp4vOeLgd12AhbmMjEEpO+VsRkLtEDJefTdvfpsM
+         KItQ==
+X-Gm-Message-State: ABy/qLZgRz88xPacqEkSYhCUF0vBYeoSpISreNgtxmAlja0POtIAD4iS
+        c1YbNuxVzPZhrLdNFsnLQtj3U1r/zyc=
+X-Google-Smtp-Source: APBJJlFjk8oBOgHwouxONCLHTACkD4p2a6yaYuNz3BKom3qdfdhJRvnnBf3GbKpUGgyT1J5gs6W8Bg==
+X-Received: by 2002:a17:902:9045:b0:1bb:bbd4:aadf with SMTP id w5-20020a170902904500b001bbbbd4aadfmr15609107plz.61.1691067638758;
+        Thu, 03 Aug 2023 06:00:38 -0700 (PDT)
+Received: from [192.168.1.100] (bb220-255-255-44.singnet.com.sg. [220.255.255.44])
+        by smtp.gmail.com with ESMTPSA id iz20-20020a170902ef9400b001b9ecee9f81sm14369433plb.129.2023.08.03.06.00.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Aug 2023 06:00:38 -0700 (PDT)
+Message-ID: <cf3085ba-5b2e-c048-20bf-4b9a54443cc8@gmail.com>
+Date:   Thu, 3 Aug 2023 21:00:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTQFZEpHK45hd9HXxHxJc4gaCuDQ4wZ2adDzHwGQjA6VFw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v6 01/38] minmax: Add in_range() macro
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230802151406.3735276-1-willy@infradead.org>
+ <20230802151406.3735276-2-willy@infradead.org>
+Content-Language: en-US
+From:   Phi Nguyen <phind.uet@gmail.com>
+In-Reply-To: <20230802151406.3735276-2-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 03, 2023 at 06:28:51PM +0800, Guo Ren wrote:
-> On Thu, Aug 3, 2023 at 4:50 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Aug 02, 2023 at 07:14:05PM -0400, Guo Ren wrote:
-> >
-> > > The pv_ops is belongs to x86 custom frame work, and it prevent other
-> > > architectures connect to the CNA spinlock.
-> >
-> > static_call() exists as a arch neutral variant of this.
-> Emm... we have used static_call() in the riscv queued_spin_lock_:
-> https://lore.kernel.org/all/20230802164701.192791-20-guoren@kernel.org/
+On 8/2/2023 11:13 PM, Matthew Wilcox (Oracle) wrote:
+> diff --git a/include/linux/minmax.h b/include/linux/minmax.h
+> index 798c6963909f..83aebc244cba 100644
+> --- a/include/linux/minmax.h
+> +++ b/include/linux/minmax.h
+> @@ -3,6 +3,7 @@
+>   #define _LINUX_MINMAX_H
+>   
+>   #include <linux/const.h>
+> +#include <linux/types.h>
+>   
+>   /*
+>    * min()/max()/clamp() macros must accomplish three things:
+> @@ -222,6 +223,32 @@
+>    */
+>   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+>   
+> +static inline bool in_range64(u64 val, u64 start, u64 len)
+> +{
+> +	return (val - start) < len;
+> +}
+> +
+> +static inline bool in_range32(u32 val, u32 start, u32 len)
+> +{
+> +	return (val - start) < len;
+> +}
+> +
 
-Yeah, I think I saw that land in the INBOX, just haven't had time to
-look at it.
-
-> But we met a compile problem:
-> 
->   GEN     .vmlinux.objs
->   MODPOST Module.symvers
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [arch/riscv/kvm/kvm.ko]
-> undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock"
-> [kernel/locking/locktorture.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [mm/z3fold.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock"
-> [fs/nfs_common/grace.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [fs/quota/quota_v1.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [fs/quota/quota_v2.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock"
-> [fs/quota/quota_tree.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [fs/fuse/virtiofs.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [fs/dlm/dlm.ko] undefined!
-> ERROR: modpost: "__SCK__pv_queued_spin_unlock" [fs/fscache/fscache.ko]
-> undefined!
-> WARNING: modpost: suppressed 839 unresolved symbol warnings because
-> there were too many)
-> /home/guoren/source/kernel/linux/scripts/Makefile.modpost:144: recipe
-> for target 'Module.symvers' failed
-> 
-> Our solution is:
-> EXPORT_SYMBOL(__SCK__pv_queued_spin_unlock);
-> 
-> What do you think about it?
-
-Could be you're not using static_call_mod() to go with
-EXPORT_STATIC_CALL_TRAMP()
-
-> > > I'm working on riscv qspinlock on sg2042 64 cores 2/4 NUMA nodes
-> > > platforms. Here are the patches about riscv CNA qspinlock:
-> > > https://lore.kernel.org/linux-riscv/20230802164701.192791-19-guoren@kernel.org/
-> > >
-> > > What's the next plan for this patch series? I think the two-queue design
-> > > has satisfied most platforms with two NUMA nodes.
-> >
-> > What has been your reason for working on CNA? What lock has been so
-> > contended you need this?
-> I wrote the reason here:
-> https://lore.kernel.org/all/20230802164701.192791-1-guoren@kernel.org/
-> 
-> The target platform is: https://www.sophon.ai/
-> 
-> The two NUMA nodes platform has come out, so we want to measure the
-> benefit of CNA qspinlock.
-
-CNA should only show a benefit when there is strong inter-node
-contention, and in that case it is typically best to fix the kernel side
-locking.
-
-Hence the question as to what lock prompted you to look at this.
+I think these two functions return wrong result if val is smaller than 
+start and len is big enough.
