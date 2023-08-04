@@ -2,104 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7D176FBEB
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Aug 2023 10:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D4176FCE6
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Aug 2023 11:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbjHDI0W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Aug 2023 04:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S229650AbjHDJJF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Aug 2023 05:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbjHDI0Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 04:26:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF830C4;
-        Fri,  4 Aug 2023 01:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=kq8uP/RsR+7bhx2IAz3Uus90BPpjASz0BJ8o6o6e7xE=; b=SNGpYDKg1GXgROFtj1qyUocW3P
-        DzcvRBVkASTUm6mXfZdgI3BUnzEiHK/Q+AEKzO5zToLgvHE+HqjW9bvreC63GMRO1b7tjWmZvAiMz
-        /CaRLE+JSwa/qCAhTdHSUHMn1hrJyVBiKWLdKAICfk8Qt2NMTrVOk8Z282jbj6iNUZosKzJbrGaj1
-        aOVheZ9mqZFSL0FPM44NEnhGTCy/6Kg5d8Xw8Hbxf3s1wWEP6x+rww4kA+Lq8QmiOITY5pkVHe4ol
-        v555T12C38JxBrNGeAKdxqqvPWMDbTBAyOmXllytT/bGYC01oqcehuHJnI7EuMBraHqoov81MTB+/
-        KNIiPj3Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qRq7o-000EKt-1D;
-        Fri, 04 Aug 2023 08:25:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CA22F30007E;
-        Fri,  4 Aug 2023 10:25:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A7AF42107C443; Fri,  4 Aug 2023 10:25:31 +0200 (CEST)
-Date:   Fri, 4 Aug 2023 10:25:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-Subject: Re: [PATCH v15 3/6] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <20230804082531.GL212435@hirez.programming.kicks-ass.net>
-References: <20210514200743.3026725-1-alex.kogan@oracle.com>
- <20210514200743.3026725-4-alex.kogan@oracle.com>
- <ZMrjPWdWhEhwpZDo@gmail.com>
- <20230803085004.GF212435@hirez.programming.kicks-ass.net>
- <CAJF2gTQFZEpHK45hd9HXxHxJc4gaCuDQ4wZ2adDzHwGQjA6VFw@mail.gmail.com>
- <20230803115610.GC214207@hirez.programming.kicks-ass.net>
- <CAJF2gTQkZ_dVgrdyxRjb=HHgMkBxCkJy0cX_C-FF_ZSQ1ODj-g@mail.gmail.com>
+        with ESMTP id S229634AbjHDJIm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 05:08:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2314C10;
+        Fri,  4 Aug 2023 02:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1691139970; x=1722675970;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HRKkBCsgZa2tr3CPFdaWMT/tn1Xo0mpaNu//7DKF8jQ=;
+  b=rvxVGSbsFUxsVILqw32k908RCiy4CoZPKuUupl9K71kB8BfEO9vzfXqq
+   gks9IsZql3vkagVHAn/v3TNiUEqWZOzZRcBC/6DkRiBF1qpM2oYTbEUG3
+   NJ+A8Rv8RnU0Kn44Lm/JKFFeHhAh4T/TxjIZsBWWWj5rT6Ofkt8yW8xq3
+   YXKZlz9/J30YtHK9er9oASJiNIEwqCGNV7LIaJjUpKk7YJHQYZAvv0fHa
+   I6aqo7WbhNkTNncAM9/EUoOcop+pdHAc/L/mfQsyosNXpzYyKURiScsUR
+   FdkD7HF0B+ZtYlUriVKqL9SCYkV2qsXZBFRQ/IqV1TOO/xJw/oFnVVHRQ
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
+   d="asc'?scan'208";a="239780302"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2023 02:06:08 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 4 Aug 2023 02:06:06 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 4 Aug 2023 02:06:01 -0700
+Date:   Fri, 4 Aug 2023 10:05:25 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <guoren@kernel.org>
+CC:     <paul.walmsley@sifive.com>, <anup@brainfault.org>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <will@kernel.org>,
+        <palmer@rivosinc.com>, <longman@redhat.com>,
+        <boqun.feng@gmail.com>, <tglx@linutronix.de>, <paulmck@kernel.org>,
+        <rostedt@goodmis.org>, <rdunlap@infradead.org>,
+        <catalin.marinas@arm.com>, <xiaoguang.xing@sophgo.com>,
+        <bjorn@rivosinc.com>, <alexghiti@rivosinc.com>,
+        <keescook@chromium.org>, <greentime.hu@sifive.com>,
+        <ajones@ventanamicro.com>, <jszhang@kernel.org>, <wefu@redhat.com>,
+        <wuwei2016@iscas.ac.cn>, <linux-arch@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-doc@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <linux-csky@vger.kernel.org>, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce
+ ERRATA_THEAD_QSPINLOCK
+Message-ID: <20230804-refract-avalanche-9adb6b4b74e9@wendy>
+References: <20230802164701.192791-1-guoren@kernel.org>
+ <20230802164701.192791-8-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ElWjm7UHbiNPE9YP"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTQkZ_dVgrdyxRjb=HHgMkBxCkJy0cX_C-FF_ZSQ1ODj-g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230802164701.192791-8-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 04, 2023 at 09:33:48AM +0800, Guo Ren wrote:
-> On Thu, Aug 3, 2023 at 7:57 PM Peter Zijlstra <peterz@infradead.org> wrote:
+--ElWjm7UHbiNPE9YP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > CNA should only show a benefit when there is strong inter-node
-> > contention, and in that case it is typically best to fix the kernel side
-> > locking.
-> >
-> > Hence the question as to what lock prompted you to look at this.
-> I met the long lock queue situation when the hardware gave an overly
-> aggressive store queue merge buffer delay mechanism. See:
-> https://lore.kernel.org/linux-riscv/20230802164701.192791-8-guoren@kernel.org/
+Hey Guo Ren,
 
-*groan*, so you're using it to work around 'broken' hardware :-(
+On Wed, Aug 02, 2023 at 12:46:49PM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> According to qspinlock requirements, RISC-V gives out a weak LR/SC
+> forward progress guarantee which does not satisfy qspinlock. But
+> many vendors could produce stronger forward guarantee LR/SC to
+> ensure the xchg_tail could be finished in time on any kind of
+> hart. T-HEAD is the vendor which implements strong forward
+> guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+> with errata help.
+>=20
+> T-HEAD early version of processors has the merge buffer delay
+> problem, so we need ERRATA_WRITEONCE to support qspinlock.
+>=20
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/Kconfig.errata              | 13 +++++++++++++
+>  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
+>  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
+>  arch/riscv/include/asm/vendorid_list.h |  3 ++-
+>  arch/riscv/kernel/cpufeature.c         |  3 ++-
+>  5 files changed, 61 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+> index 4745a5c57e7c..eb43677b13cc 100644
+> --- a/arch/riscv/Kconfig.errata
+> +++ b/arch/riscv/Kconfig.errata
+> @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
+> =20
+>  	  If you don't know what to do here, say "Y".
+> =20
+> +config ERRATA_THEAD_QSPINLOCK
+> +	bool "Apply T-Head queued spinlock errata"
+> +	depends on ERRATA_THEAD
+> +	default y
+> +	help
+> +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
+> +	  match the xchg_tail requirement of qspinlock.
+> +
+> +	  This will apply the QSPINLOCK errata to handle the non-standard
+> +	  behavior via using qspinlock instead of ticket_lock.
 
-Wouldn't that hardware have horrifically bad lock throughput anyway?
-Everybody would end up waiting on that store buffer delay.
+Whatever about the acceptability of anything else in this series,
+having _stronger_ guarantees is not an erratum, is it? We should not
+abuse the errata stuff for this IMO.
 
-> This also let me consider improving the efficiency of the long lock
-> queue release. For example, if the queue is like this:
-> 
-> (Node0 cpu0) -> (Node1 cpu64) -> (Node0 cpu1) -> (Node1 cpu65) ->
-> (Node0 cpu2) -> (Node1 cpu66) -> ...
-> 
-> Then every mcs_unlock would cause a cross-NUMA transaction. But if we
-> could make the queue like this:
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index f8dbbe1bbd34..d9694fe40a9a 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
+>  		 * spinlock value, the only way is to change from queued_spinlock to
+>  		 * ticket_spinlock, but can not be vice.
+>  		 */
+> -		if (!force_qspinlock) {
+> +		if (!force_qspinlock &&
+> +		    !riscv_has_errata_thead_qspinlock()) {
+>  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
 
-See, this is where the ARM64 WFE would come in handy; I don't suppose
-RISC-V has anything like that?
+Is this a generic vendor extension (lol @ that misnomer) or is it an
+erratum? Make your mind up please. As has been said on other series, NAK
+to using march/vendor/imp IDs for feature probing.
 
-Also, by the time you have 6 waiters, I'd say the lock is terribly
-contended and you should look at improving the lockinh scheme.
+I've got some thoughts on other parts of this series too, but I'm not
+going to spend time on it unless the locking people and Palmer ascent
+to this series.
+
+Cheers,
+Conor.
+
+--ElWjm7UHbiNPE9YP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMy/VQAKCRB4tDGHoIJi
+0i4WAQCzkmqln57/kLaRZPtx560Zn+aRbe3oPrmbNsnASM/znAEAsOJHnqt7ygoV
+utG4AXklmHWnwsLM0Qs5463EGKimzwY=
+=9hTn
+-----END PGP SIGNATURE-----
+
+--ElWjm7UHbiNPE9YP--
