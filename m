@@ -2,136 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F1C7702CC
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Aug 2023 16:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BC577044E
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Aug 2023 17:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjHDOSD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Aug 2023 10:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S232001AbjHDPXB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Aug 2023 11:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjHDORv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 10:17:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B601BF0;
-        Fri,  4 Aug 2023 07:17:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A27A6204D;
-        Fri,  4 Aug 2023 14:17:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCF80C433CA;
-        Fri,  4 Aug 2023 14:17:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691158668;
-        bh=XOMEnaMMSL3CqE/LSd5NwPaO6bkV1p4efai/On8GWMU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YJ9ZVKFXuMvU9jN8cGYFFCbVsijtcNPQvE3nAPEh1zXFyEs31ENciokcj9op5KPM1
-         2GIxDQLdftxl8UP+sLhUPFeDFNHjE5KjSV+NdH09uPIpgvNQ1lhYA9Lr+rZ8KlLQEt
-         Pu8T61HsCbJS0hqdjKIzJ3la83CdAO25xdAgV4OoiHbu+oFL+ZKX+Aon7UyuTnzqUT
-         tk8m68sPAtV+L6gcV/k9Fg+TdCRI8Okhiwlx2ZbSt1/TTagnRVilD0iCGr6mBSYZB3
-         1ToGAKogWmdItexiDMDRRgcz1aGRSsNAEej744AtiAPVq0s4WOIWcLbnaOj8J8c5so
-         A2izOHzaDn8TQ==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so2733383a12.1;
-        Fri, 04 Aug 2023 07:17:48 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxNxekksW5cb202c2spGPjJG9vtZcimVrNzaH8KnXoeOrb7A0rR
-        X/MLRWux/UiQODdwdAj+A55crLeBBh+Tamm5hcQ=
-X-Google-Smtp-Source: AGHT+IEtpb590jscikeglR8mRq02iSDzeZOKMQDtqS4cBTFF5hOCoQ1z1y96QzEByLl9kNQ4Xnq7A1Qf3CMHCFh9taw=
-X-Received: by 2002:aa7:cd51:0:b0:51f:f1a4:edc6 with SMTP id
- v17-20020aa7cd51000000b0051ff1a4edc6mr1628091edw.37.1691158667132; Fri, 04
- Aug 2023 07:17:47 -0700 (PDT)
+        with ESMTP id S231998AbjHDPXA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 11:23:00 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1965149EB;
+        Fri,  4 Aug 2023 08:22:57 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bb8a89b975so15263815ad.1;
+        Fri, 04 Aug 2023 08:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691162576; x=1691767376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZKT51FiIG/jADTR6ZwhJgUzQz0lXZlfjB4qfN7TtFMA=;
+        b=LgVupe8BUCkSq2TYgdUfTD8KvZ+1km7i2BgmfH3fot3UqjKMQlElJ/rORqbZLm8AlJ
+         ZQAW5g1LwA8SehbjIqMt07GJEPEuUc02i0Oel54nDzgzp7lnzp9jahMsUsQtDIIpMLvJ
+         La2yIQO68g8I4T3oYK/zjj8SwCfAZCwxMOZkyvJv9zBkhUMMoZKF6Kv30eoHgwzsJlic
+         fa39LJYKJNLKxcmc+0ljEUv8kOqPqSHZ1inB8PcLg0iKnCx7PuQ+0QG4w+WXmrMRJjIm
+         mKvgBdon8MsEyUV8VI/y4SCvdT9QCBVSZYcxNoJWUjzdbQTiWbHA6McivnQkCfkOA4Ai
+         gzDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691162576; x=1691767376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZKT51FiIG/jADTR6ZwhJgUzQz0lXZlfjB4qfN7TtFMA=;
+        b=Cf0boX5gyUJUlDh6too2NVrPh0BuN/mxD6Z5RZBPfmF+jer0Kyg4kBNFZHJDkK7t3j
+         SVzXBEClLuPgK6Car9Z+eu8BS2hW4jaZ5JbozV9UPoDkOjlYmzKe+ApUluRgjnalqjuA
+         MTFvl8jHJd/p9hNAH5UlsGNcVWrYapZCEEluVC5bcVu9SwxplmYGRg+MmrmSrlexS15K
+         sp6tTniuGcWgaVAUd5sCqqR8F/HRTyDLnkS2ZJ58H1CQIoZ0r8/aUEgbZd4Gqb0vy1cK
+         FuxbeqAL1uwhF0HAGYLwcOLebbYiq6QmPF7uF21DOSaj/cu5lpvt7JCQ2pRDhU7Fphod
+         kjRQ==
+X-Gm-Message-State: AOJu0YymnpFFGJMGhYL2QDoweKXYgq6A5pRxtx4o/7XP4fZOW9Ig962h
+        7kQaJ6hc6+nTItSfyruFlCY=
+X-Google-Smtp-Source: AGHT+IGDwpxERBz0T+Ye0CQ8gbyUjzUKBh2CRok0ropOPneel0Eg4K+EYe9Sf9moeYm5lu1u80ZA3Q==
+X-Received: by 2002:a17:902:c1c9:b0:1bc:32f2:812a with SMTP id c9-20020a170902c1c900b001bc32f2812amr1833697plc.27.1691162576353;
+        Fri, 04 Aug 2023 08:22:56 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:f:a0bf:7946:90be:721b])
+        by smtp.gmail.com with ESMTPSA id s21-20020a170902989500b001aaf2e8b1eesm1891325plp.248.2023.08.04.08.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Aug 2023 08:22:55 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com
+Subject: [PATCH V4 0/9] x86/hyperv: Add AMD sev-snp enlightened guest support on hyperv
+Date:   Fri,  4 Aug 2023 11:22:44 -0400
+Message-Id: <20230804152254.686317-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210514200743.3026725-1-alex.kogan@oracle.com>
- <20210514200743.3026725-4-alex.kogan@oracle.com> <ZMrjPWdWhEhwpZDo@gmail.com>
- <20230803085004.GF212435@hirez.programming.kicks-ass.net> <CAJF2gTQFZEpHK45hd9HXxHxJc4gaCuDQ4wZ2adDzHwGQjA6VFw@mail.gmail.com>
- <20230803115610.GC214207@hirez.programming.kicks-ass.net> <CAJF2gTQkZ_dVgrdyxRjb=HHgMkBxCkJy0cX_C-FF_ZSQ1ODj-g@mail.gmail.com>
- <20230804082531.GL212435@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230804082531.GL212435@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 4 Aug 2023 10:17:35 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTQ77R1embGm4kR5THcYnzk0zOJ9LOn1z=z2g7FuFN239g@mail.gmail.com>
-Message-ID: <CAJF2gTQ77R1embGm4kR5THcYnzk0zOJ9LOn1z=z2g7FuFN239g@mail.gmail.com>
-Subject: Re: [PATCH v15 3/6] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 4, 2023 at 4:26=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
-> wrote:
->
-> On Fri, Aug 04, 2023 at 09:33:48AM +0800, Guo Ren wrote:
-> > On Thu, Aug 3, 2023 at 7:57=E2=80=AFPM Peter Zijlstra <peterz@infradead=
-.org> wrote:
->
-> > > CNA should only show a benefit when there is strong inter-node
-> > > contention, and in that case it is typically best to fix the kernel s=
-ide
-> > > locking.
-> > >
-> > > Hence the question as to what lock prompted you to look at this.
-> > I met the long lock queue situation when the hardware gave an overly
-> > aggressive store queue merge buffer delay mechanism. See:
-> > https://lore.kernel.org/linux-riscv/20230802164701.192791-8-guoren@kern=
-el.org/
->
-> *groan*, so you're using it to work around 'broken' hardware :-(
-Yes, the hardware needs to be improved, and it couldn't depend on
-WRITE_ONCE() hack. But from another view, if we tell the hardware this
-is a WRITE_ONCE(), this store instruction should be observed by
-sibling cores immediately, then the hardware could optimize the
-behavior in the store queue. (All modern processors have a store queue
-beyond the cache, and there is latency between the store queue and the
-cache.) So:
+From: Tianyu Lan <tiala@microsoft.com>
 
-How about adding an instruction of "st.aqrl" for WRITE_ONCE()? Which
-makes the WRITE_ONCE() become the RCsc synchronization point.
+Hyper-V provides two modes for running SEV-SNP VMs:
 
->
-> Wouldn't that hardware have horrifically bad lock throughput anyway?
-> Everybody would end up waiting on that store buffer delay.
-This problem is only found in the lock torture case, and only one
-entry left in the store buffer would cause the problem. We are now
-widely stress testing userspace parallel applications to find a second
-case. Yes, we must be careful to treat this.
+1) In vTOM mode with a paravisor (see Section 15.36.8 of [1])
+2) In "fully enlightened" mode with normal "C" bit control
+   over page encryption, and no paravisor
+ 
+For #1, the paravisor runs in VMPL 0, while Linux runs in VMPL 2
+(see Section 15.36.7 of [1]). The paravisor is typically provided
+by Hyper-V and handles most of the SNP-related functionality. As
+such, most of the SNP functionality in the Linux guest is bypassed.
+The guest operates in vTOM mode, where encryption is enabled by default.
+The guest must still request page transitions between private and shared,
+but there is relatively less SNP machinery required in the guest. Support
+for this mode of operation first went upstream in the 5.15 kernel.
 
->
-> > This also let me consider improving the efficiency of the long lock
-> > queue release. For example, if the queue is like this:
-> >
-> > c -> c -> (Node0 cpu1) -> (Node1 cpu65) ->
-> > (Node0 cpu2) -> (Node1 cpu66) -> ...
-> >
-> > Then every mcs_unlock would cause a cross-NUMA c. But if we
-> > could make the queue like this:
->
-> See, this is where the ARM64 WFE would come in handy; I don't suppose
-> RISC-V has anything like that?
-Em... arm64 smp_cond_load only could save power consumption or release
-the pipeline resources of an SMT processor. When (Node1 cpu64) is in
-the WFE state, it still needs (Node0 cpu1) to write the value to give
-a cross-NUMA signal. So I didn't see what WFE related to reducing
-cross-Numa transactions, or I missed something. Sorry
+For #2, this patch set provides the initial support. The existing
+SEV-SNP machinery in the kernel is fully used, but Hyper-V specific
+updates are required to properly share Hyper-V communication pages
+between the guest and host and to start APs at boot time.
 
->
-> Also, by the time you have 6 waiters, I'd say the lock is terribly
-> contended and you should look at improving the lockinh scheme.
---
-Best Regards
- Guo Ren
+In either mode, Hyper-V requires that the guest implement the SEV-SNP
+Restricted Interrupt Injection feature (see Section 15.36.16 of [1],
+and Section 5 of [2]). Without this feature, the guest is subject to
+attack by a compromised hypervisor that can inject any exception at
+any time, such as injecting an interrupt while the guest has interrupts
+disabled. In vTOM mode, Restricted Interrupt Injection is implemented
+by the paravisor, so no Linux guest changes are required. But in fully
+enlightened mode, the Linux guest must provide the implementation.
+
+This patch set is derived from an earlier patch set that includes both
+the Hyper-V specific changes and Restricted Interrupt Injection support.[3]
+But it is now limited to only the Hyper-V specific changes. The Restricted
+Interrupt Injection support will come later in a separate patch set.
+
+
+[1] https://www.amd.com/system/files/TechDocs/24593.pdf
+[2] https://www.amd.com/system/files/TechDocs/56421-guest-hypervisor-communication-block-standardization.pdf
+[3] https://lore.kernel.org/lkml/20230515165917.1306922-1-ltykernel@gmail.com/
+
+Change since v3:
+       * Fix fossil comment
+
+Change since v2:
+       * Update Change log.
+       * Rework Hyper-V hypercall implementation.
+
+Change since v1:
+       * vTOM case uses paravisor_present flag and
+       	 HV_ISOLATION_TYPE_SNP type.
+       * Rework some patches' change log
+       * Fix some comments in the patches
+
+Tianyu Lan (9):
+  x86/hyperv: Add sev-snp enlightened guest static key
+  x86/hyperv: Set Virtual Trust Level in VMBus init message
+  x86/hyperv: Mark Hyper-V vp assist page unencrypted in SEV-SNP
+    enlightened guest
+  drivers: hv: Mark percpu hvcall input arg page unencrypted in SEV-SNP
+    enlightened guest
+  x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
+    enlightened guest
+  clocksource: hyper-v: Mark hyperv tsc page unencrypted in sev-snp
+    enlightened guest
+  x86/hyperv: Add smp support for SEV-SNP guest
+  x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+  x86/hyperv: Initialize cpu and memory for SEV-SNP enlightened guest
+
+ arch/x86/hyperv/hv_init.c          |  52 +++++++-
+ arch/x86/hyperv/ivm.c              | 199 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |   7 +
+ arch/x86/include/asm/mshyperv.h    |  56 ++++++--
+ arch/x86/kernel/cpu/mshyperv.c     |  42 +++++-
+ drivers/clocksource/hyperv_timer.c |   2 +-
+ drivers/hv/connection.c            |   1 +
+ drivers/hv/hv.c                    |  57 ++++++++-
+ drivers/hv/hv_common.c             |  19 +++
+ include/asm-generic/hyperv-tlfs.h  |   1 +
+ include/asm-generic/mshyperv.h     |  13 +-
+ include/linux/hyperv.h             |   4 +-
+ 12 files changed, 426 insertions(+), 27 deletions(-)
+
+-- 
+2.25.1
+
