@@ -2,85 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8309876FBBF
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Aug 2023 10:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7D176FBEB
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Aug 2023 10:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjHDINg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Aug 2023 04:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S234547AbjHDI0W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Aug 2023 04:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbjHDINd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 04:13:33 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95994687
-        for <linux-arch@vger.kernel.org>; Fri,  4 Aug 2023 01:13:30 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bc3d94d40fso15388335ad.3
-        for <linux-arch@vger.kernel.org>; Fri, 04 Aug 2023 01:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691136810; x=1691741610;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VL7MGYaWLHKrafJNpDNrQV+kq/3HdTXOCqcOC2etLW4=;
-        b=CJLYGjD0bhLHh1OXkkRsreZPkeVsxE7+g11O/hc8izookwuSJgZi9I/8JSNHysqXmK
-         9eIDgpbjmiXH+IZ9+bUuoPUZagmJcvLEUULJN0R5fE/lmyhtXs8CDzi3T152BXMjoxcN
-         7kaoXRTCpVWYZnWuspUM74X52V0EsOSSPhB/Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691136810; x=1691741610;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VL7MGYaWLHKrafJNpDNrQV+kq/3HdTXOCqcOC2etLW4=;
-        b=JSXhYcCqHRuw88xIH2P/5kFVinZ1xRtIZbMxxY9whlr6epEK0ybGda6UJgLJJLgmSW
-         +ju0E0SL/lT7JxbkdIMCPK2dxe8k3yiSh93X0rqrSAsqNpO5W7WB0umgn8/Yi+zV0R9S
-         ZfeAD/3H9WwipH/Ywl7/uOOoF60uFJgjjAy+FlOfR4TXKgrBf09/hZ3MH7oagJJB4mxi
-         oQh222YjLrivfE3j6kNOugvYTiPDibuw1ha7kUOJOGKQp04yF9HQbOQwJn6VWmNPir4p
-         EPfKxyKVNqCn9fx2Vdpa3fmJb098NIJozO2Q+NXgoO0KQ2huBgSYmQZyIOcUaunVRua5
-         3//g==
-X-Gm-Message-State: AOJu0Ywy5BnnkdrWjNRmrnOsLipidlRMB1wEChPlYQ55PbO0e1DqXhbN
-        daDoMZKtaxYQAjnkooUUyM7X9g==
-X-Google-Smtp-Source: AGHT+IE83P9NE4z3R7foSEJsWYLcP/0QXiKnenMC8MJ7cfoR2ZxY4Mv/zhfiFYz+DdY0Sn/WVJ3P5g==
-X-Received: by 2002:a17:902:bb82:b0:1bc:4030:1fb6 with SMTP id m2-20020a170902bb8200b001bc40301fb6mr1099637pls.21.1691136810155;
-        Fri, 04 Aug 2023 01:13:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ji5-20020a170903324500b001bc445e249asm1128036plb.124.2023.08.04.01.13.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 01:13:29 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 01:13:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        yj.chiang@mediatek.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v5 04/10] ARM: syscall: always store
- thread_info->abi_syscall
-Message-ID: <202308040113.5A35E32B4B@keescook>
-References: <20210726141141.2839385-1-arnd@kernel.org>
- <20210726141141.2839385-5-arnd@kernel.org>
- <202308031551.034F346@keescook>
+        with ESMTP id S234580AbjHDI0Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 04:26:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF830C4;
+        Fri,  4 Aug 2023 01:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=kq8uP/RsR+7bhx2IAz3Uus90BPpjASz0BJ8o6o6e7xE=; b=SNGpYDKg1GXgROFtj1qyUocW3P
+        DzcvRBVkASTUm6mXfZdgI3BUnzEiHK/Q+AEKzO5zToLgvHE+HqjW9bvreC63GMRO1b7tjWmZvAiMz
+        /CaRLE+JSwa/qCAhTdHSUHMn1hrJyVBiKWLdKAICfk8Qt2NMTrVOk8Z282jbj6iNUZosKzJbrGaj1
+        aOVheZ9mqZFSL0FPM44NEnhGTCy/6Kg5d8Xw8Hbxf3s1wWEP6x+rww4kA+Lq8QmiOITY5pkVHe4ol
+        v555T12C38JxBrNGeAKdxqqvPWMDbTBAyOmXllytT/bGYC01oqcehuHJnI7EuMBraHqoov81MTB+/
+        KNIiPj3Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qRq7o-000EKt-1D;
+        Fri, 04 Aug 2023 08:25:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CA22F30007E;
+        Fri,  4 Aug 2023 10:25:31 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A7AF42107C443; Fri,  4 Aug 2023 10:25:31 +0200 (CEST)
+Date:   Fri, 4 Aug 2023 10:25:31 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
+        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
+        longman@redhat.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com
+Subject: Re: [PATCH v15 3/6] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+Message-ID: <20230804082531.GL212435@hirez.programming.kicks-ass.net>
+References: <20210514200743.3026725-1-alex.kogan@oracle.com>
+ <20210514200743.3026725-4-alex.kogan@oracle.com>
+ <ZMrjPWdWhEhwpZDo@gmail.com>
+ <20230803085004.GF212435@hirez.programming.kicks-ass.net>
+ <CAJF2gTQFZEpHK45hd9HXxHxJc4gaCuDQ4wZ2adDzHwGQjA6VFw@mail.gmail.com>
+ <20230803115610.GC214207@hirez.programming.kicks-ass.net>
+ <CAJF2gTQkZ_dVgrdyxRjb=HHgMkBxCkJy0cX_C-FF_ZSQ1ODj-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202308031551.034F346@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJF2gTQkZ_dVgrdyxRjb=HHgMkBxCkJy0cX_C-FF_ZSQ1ODj-g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 03, 2023 at 04:17:24PM -0700, Kees Cook wrote:
-> Anyway, I'll keep debugging this, but figured I'd mention it in case
-> anyone else had been seeing issues in here.
+On Fri, Aug 04, 2023 at 09:33:48AM +0800, Guo Ren wrote:
+> On Thu, Aug 3, 2023 at 7:57 PM Peter Zijlstra <peterz@infradead.org> wrote:
 
-Okay, I think I have a working patch now. Sent here:
-https://lore.kernel.org/lkml/20230804071045.never.134-kees@kernel.org/
+> > CNA should only show a benefit when there is strong inter-node
+> > contention, and in that case it is typically best to fix the kernel side
+> > locking.
+> >
+> > Hence the question as to what lock prompted you to look at this.
+> I met the long lock queue situation when the hardware gave an overly
+> aggressive store queue merge buffer delay mechanism. See:
+> https://lore.kernel.org/linux-riscv/20230802164701.192791-8-guoren@kernel.org/
 
--- 
-Kees Cook
+*groan*, so you're using it to work around 'broken' hardware :-(
+
+Wouldn't that hardware have horrifically bad lock throughput anyway?
+Everybody would end up waiting on that store buffer delay.
+
+> This also let me consider improving the efficiency of the long lock
+> queue release. For example, if the queue is like this:
+> 
+> (Node0 cpu0) -> (Node1 cpu64) -> (Node0 cpu1) -> (Node1 cpu65) ->
+> (Node0 cpu2) -> (Node1 cpu66) -> ...
+> 
+> Then every mcs_unlock would cause a cross-NUMA transaction. But if we
+> could make the queue like this:
+
+See, this is where the ARM64 WFE would come in handy; I don't suppose
+RISC-V has anything like that?
+
+Also, by the time you have 6 waiters, I'd say the lock is terribly
+contended and you should look at improving the lockinh scheme.
