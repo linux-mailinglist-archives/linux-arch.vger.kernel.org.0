@@ -2,87 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69DB770C6F
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Aug 2023 01:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BC8770C8C
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Aug 2023 02:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjHDXeq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Aug 2023 19:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S229554AbjHEAAe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Aug 2023 20:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjHDXeq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 19:34:46 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D72B3AAF;
-        Fri,  4 Aug 2023 16:34:45 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1bfb91ac4edso325456fac.3;
-        Fri, 04 Aug 2023 16:34:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691192084; x=1691796884;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bgaGHeK+x45T0uBposuXNDHy4W2O36LVGsjSTOp7FtE=;
-        b=OaIZKfpTQ6JY4Pun04bkWu9FsvWrOkqI8yRtyUh2xRRbQ7P3MYrkKUn3uFGoFV5XJY
-         V4LkMZUHy8VeW4L6pF/XEpW11x9K7SKqrtFICl+WdqrqPgBl7DyXssY6xM1yyo9oJhII
-         IR/Lc+e+rsi4IuVZz7uU2g31ukGFrtHnsU7wWrlsHrkLd9eKHUaNY7rjcbvPuDP96GVA
-         mLTt+rTEBFwlU7/0711xMeaWBPrjnnkNgUV2LFoNHTh0snnHXzwhr3FO5/ORD2ZwFp2d
-         4rWeBQOZgzzkK4DHS2CCZv+DKy96AbQKk9AQfXD6Ug11tqjvRDwtKOg6XxoAWaI3IoEY
-         7mBw==
-X-Gm-Message-State: AOJu0YwR7eAfgNMWTOXE4DDG1IyaDi1gq59gTAhcyEEIMoFQxhYRFWS9
-        gJD58s3vUzERlqkfPeySJzU=
-X-Google-Smtp-Source: AGHT+IGigyJq1KYItR+aET9WOFeEcJw+NoDrzW16pCsPvcDQA8z9KX6n2UWJILpHQfBge/3ViL0W6Q==
-X-Received: by 2002:a05:6870:3288:b0:1bb:4d4e:ea69 with SMTP id q8-20020a056870328800b001bb4d4eea69mr3758911oac.54.1691192084434;
-        Fri, 04 Aug 2023 16:34:44 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id ev6-20020a17090aeac600b00268b9862343sm4637377pjb.24.2023.08.04.16.34.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 16:34:43 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 23:34:36 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com, Tianyu Lan <tiala@microsoft.com>,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com
-Subject: Re: [PATCH V4 0/9] x86/hyperv: Add AMD sev-snp enlightened guest
- support on hyperv
-Message-ID: <ZM2LDKrcXvVUVta9@liuwe-devbox-debian-v2>
-References: <20230804152254.686317-1-ltykernel@gmail.com>
+        with ESMTP id S229515AbjHEAAd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Aug 2023 20:00:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1084EE4;
+        Fri,  4 Aug 2023 17:00:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE5FC6217E;
+        Sat,  5 Aug 2023 00:00:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B14C433C7;
+        Sat,  5 Aug 2023 00:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691193630;
+        bh=5Btpzxhwy1py8ALbN0tM+A7Ge6dF3mwFVy6nXkQlmKo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eHg8q74soKjL8GBTtjCMrgfDMcNwEBGBZQcjVtWxmuWQzyH/AsT5nCzjSXTywS6mu
+         dFbDR2LBLY+QOfey7Vui25pzACNvo2FECm5AoGpXSGRJURWuZiFDtGxPlgWCcPRj2x
+         pxPxeKjf1qHhkFmuT4hnCsH/THkv7ihf6TGeeFnyatlcmbsYrJWgUqVbo6KsPE9xV8
+         H+N+ZDrOY2AkzCHj9q26v5KXLTB6f+RNHB68ZZhlY7iZLwCaA2WL2MjlHzjQ35ocMd
+         fx6WR5SNuqKFv7kgo9HNzgfnSOW5UZuOj7LKAUFCnzVYYnk/tBQUxZ/Pf8927DoA4W
+         m4wfZvN2V71Jw==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so42541641fa.0;
+        Fri, 04 Aug 2023 17:00:30 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwwjZ9nseoaow2ZaYZRX1daGXyH6+m26QGzQDIcBKjI/P/FLI1Z
+        NoTptb4XnHHR0OgvBXJ0DkregoTQhXy4VXFBwyk=
+X-Google-Smtp-Source: AGHT+IEKI58N3NWiaE/N0pKPD7u3M2jBQakRchM73rux7MoJqLdEL20FtKq2N2P/Wc72GvEC8LJRvGgtDJZzCAph1jo=
+X-Received: by 2002:a19:915c:0:b0:4fa:21d4:b3ca with SMTP id
+ y28-20020a19915c000000b004fa21d4b3camr2229529lfj.2.1691193628194; Fri, 04 Aug
+ 2023 17:00:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230804152254.686317-1-ltykernel@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230614013018.2168426-1-guoren@kernel.org> <20230614013018.2168426-2-guoren@kernel.org>
+ <ZM1tGgcJg0silFaJ@zx2c4.com> <CAHmME9p3VoZco0+io6pZDnzKVdnP4vr4XWNaAPXGew+1RmfVig@mail.gmail.com>
+ <20230804-hut-morbidity-126fc9158f38@spud>
+In-Reply-To: <20230804-hut-morbidity-126fc9158f38@spud>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 4 Aug 2023 20:00:16 -0400
+X-Gmail-Original-Message-ID: <CAJF2gTQncTuXZ=QO_F4MGFLWEe8yrTHPVzr7_-axa-Mx7LDyFA@mail.gmail.com>
+Message-ID: <CAJF2gTQncTuXZ=QO_F4MGFLWEe8yrTHPVzr7_-axa-Mx7LDyFA@mail.gmail.com>
+Subject: Re: [PATCH -next V13 1/3] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+To:     Conor Dooley <conor@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, arnd@arndb.de,
+        palmer@rivosinc.com, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, bjorn@kernel.org, cleger@rivosinc.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 04, 2023 at 11:22:44AM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
-[...]
-> Tianyu Lan (9):
->   x86/hyperv: Add sev-snp enlightened guest static key
->   x86/hyperv: Set Virtual Trust Level in VMBus init message
->   x86/hyperv: Mark Hyper-V vp assist page unencrypted in SEV-SNP
->     enlightened guest
->   drivers: hv: Mark percpu hvcall input arg page unencrypted in SEV-SNP
->     enlightened guest
->   x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
->     enlightened guest
->   clocksource: hyper-v: Mark hyperv tsc page unencrypted in sev-snp
->     enlightened guest
->   x86/hyperv: Add smp support for SEV-SNP guest
->   x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+On Fri, Aug 4, 2023 at 5:41=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
+e:
+>
+> On Fri, Aug 04, 2023 at 11:28:17PM +0200, Jason A. Donenfeld wrote:
+> > On Fri, Aug 4, 2023 at 11:28=E2=80=AFPM Jason A. Donenfeld <Jason@zx2c4=
+.com> wrote:
+> > >
+> > > Hi Guo,
+> > >
+> > > On Tue, Jun 13, 2023 at 09:30:16PM -0400, guoren@kernel.org wrote:
+> > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > >
+> > > > Add independent irq stacks for percpu to prevent kernel stack overf=
+lows.
+> > > > It is also compatible with VMAP_STACK by arch_alloc_vmap_stack.
+> > > >
+> > > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > > Cc: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
+> > >
+> > > This patch broke the WireGuard test suite. I've attached the .config
+> > > file that it uses. I'm able to fix it by setting CONFIG_EXPERT=3Dy an=
+d
+> > > CONFIG_IRQ_STACKS=3Dn to essentially reverse the effect of this patch=
+. But
+> > > I'd rather not do that.
+> > >
+> > > Any idea what's up?
+>
+> Given your config, I suspect you're hitting the issue that is resolved
+> by Guo Ren's series:
+> https://lore.kernel.org/linux-riscv/20230716001506.3506041-1-guoren@kerne=
+l.org/
+Thx Conor's reply.
 
-I applied all but the last patch to hyperv-next. Thanks.
+>
+> Hopefully that's it,
+> Conor.
+>
+> > >
+> > > Thanks,
+> > > Jason
+> >
+> > And, err, I guess I failed to describe what's broken exactly. Here's
+> > what happens:
+> >
+> > timeout --foreground 20m qemu-system-riscv64 \
+> >        -nodefaults \
+> >        -nographic \
+> >        -smp 4 \
+> >        -cpu rv64 -machine virt \
+> >        -m 256M \
+> >        -serial stdio \
+> >        -chardev
+> > file,path=3D/home/zx2c4/Projects/wireguard-linux/tools/testing/selftest=
+s/wireguard/qemu/build/riscv64/result,id=3Dresult
+> > \
+> >        -device virtio-serial-device -device virtserialport,chardev=3Dre=
+sult \
+> >        -no-reboot \
+> >        -monitor none \
+> >        -kernel /home/zx2c4/Projects/wireguard-linux/tools/testing/selft=
+ests/wireguard/qemu/build/riscv64/kernel/arch/riscv/boot/Image
+> >
+> > OpenSBI v1.2
+> >   ____                    _____ ____ _____
+> >  / __ \                  / ____|  _ \_   _|
+> > | |  | |_ __   ___ _ __ | (___ | |_) || |
+> > | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+> > | |__| | |_) |  __/ | | |____) | |_) || |_
+> >  \____/| .__/ \___|_| |_|_____/|____/_____|
+> >        | |
+> >        |_|
+> >
+> > Platform Name             : riscv-virtio,qemu
+> > Platform Features         : medeleg
+> > Platform HART Count       : 4
+> > Platform IPI Device       : aclint-mswi
+> > Platform Timer Device     : aclint-mtimer @ 10000000Hz
+> > Platform Console Device   : uart8250
+> > Platform HSM Device       : ---
+> > Platform PMU Device       : ---
+> > Platform Reboot Device    : sifive_test
+> > Platform Shutdown Device  : sifive_test
+> > Firmware Base             : 0x80000000
+> > Firmware Size             : 236 KB
+> > Runtime SBI Version       : 1.0
+> >
+> > Domain0 Name              : root
+> > Domain0 Boot HART         : 0
+> > Domain0 HARTs             : 0*,1*,2*,3*
+> > Domain0 Region00          : 0x0000000002000000-0x000000000200ffff (I)
+> > Domain0 Region01          : 0x0000000080000000-0x000000008003ffff ()
+> > Domain0 Region02          : 0x0000000000000000-0xffffffffffffffff (R,W,=
+X)
+> > Domain0 Next Address      : 0x0000000080200000
+> > Domain0 Next Arg1         : 0x000000008fe00000
+> > Domain0 Next Mode         : S-mode
+> > Domain0 SysReset          : yes
+> >
+> > Boot HART ID              : 0
+> > Boot HART Domain          : root
+> > Boot HART Priv Version    : v1.12
+> > Boot HART Base ISA        : rv64imafdch
+> > Boot HART ISA Extensions  : time,sstc
+> > Boot HART PMP Count       : 16
+> > Boot HART PMP Granularity : 4
+> > Boot HART PMP Address Bits: 54
+> > Boot HART MHPM Count      : 16
+> > Boot HART MIDELEG         : 0x0000000000001666
+> > Boot HART MEDELEG         : 0x0000000000f0b509
+> > [terminates/hangs here]
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
->   x86/hyperv: Initialize cpu and memory for SEV-SNP enlightened guest
 
+
+--=20
+Best Regards
+ Guo Ren
