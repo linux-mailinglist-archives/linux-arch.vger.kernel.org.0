@@ -2,86 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE23C772B18
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Aug 2023 18:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8A6772DF9
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Aug 2023 20:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjHGQg6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Aug 2023 12:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S229739AbjHGShD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Aug 2023 14:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjHGQgz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 12:36:55 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D310510EC;
-        Mon,  7 Aug 2023 09:36:37 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so5572559a12.2;
-        Mon, 07 Aug 2023 09:36:37 -0700 (PDT)
+        with ESMTP id S229667AbjHGShC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 14:37:02 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2257E171A;
+        Mon,  7 Aug 2023 11:37:01 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fe48a2801bso7957831e87.1;
+        Mon, 07 Aug 2023 11:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691426196; x=1692030996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PZNcpOl8CEiyqW/ZOb/0XcvAH0YrJ+P7c3vLK34uSAU=;
-        b=p+tvWBWwjHGrwcist+ERw9YfHaq9zpl05ImB2qAvYkl732NZFX8xD9wURvjqtCVJ1j
-         f5qbn/zlJNV6GNzz6n8+mAMJaBmpwk6+UVEKF6KWKUWEFm/F9u8VY8GQrgo2LxfeBZvN
-         Q25ySkdvCjrYg1Bcz4X891+wn78TNlj5vCAcuaen/d9ZcFRwWOOdiM/IHn+hB+Sp5QbU
-         7KEoIxqB/oC0PKxqJkad8mWMRJdrUlFbGS3ml6DKgWCGfEOr7lCPVn0QEw8jmqV+iO3y
-         DCv0CWe6Fi+dWUg+QwUzhxPuhEjT/J6XbuR1v14rXzF9ymm5RSsS8aqzuc3ChKdKQDuo
-         ZzhA==
+        d=gmail.com; s=20221208; t=1691433419; x=1692038219;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+8Yj5qVDFXyAwTzwIhUHgilERDq5+y/zb0F33+hQJss=;
+        b=aC7i6pch1TzHViEGULhCEXWGI4hxO2x6M7+ndIV80XDAQwJ0tZrwKMxEKKvR9QIF0Q
+         SC/zpjyjOdvLv9V5BTdm46CpIOh6ipPKDr8laEK8Hb/0MzVMDH16eyQIOLE6X3XDxoQ6
+         n47m0dGkG2Bzh0oZHRyqQDLDaTlnfdDFqMtwoCcLIUmnFb+NlFlDKzCW349+3H6fFwkh
+         q10K2LDvEz6z+75odwoYtFyUq4xTxKJ9IoXDo30GFHgtZI7yw2czpabwz312NZj4ft2x
+         830GPizrX0eb2VfTZyAw/n8whJ6RAiHKktl27kj74swBF53oBppcCIDHW4LU0FhoZTjI
+         ZQvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691426196; x=1692030996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PZNcpOl8CEiyqW/ZOb/0XcvAH0YrJ+P7c3vLK34uSAU=;
-        b=JjAjKbDeZO893tIgkR9/2K2GVtOchnw880mvLGo+xwXPDxxf2LEwiaXpoR9qxuD2Zp
-         IfUaW60xxVUyxpQilWu0aGQePqiM2NjBkZu579qZgXzU6PSRf5cR9BNu1X5iwtybmziU
-         DQFef0t4pr0UMYju30CLOsW30f06/eOUYjuEJrNy9FEkZdJkW6+sDunfF5R+Af9bYWCn
-         duBRUI8h+f03/YL1qWLNOfnx4cUxZ/WD1wJD6Izwh91fWmjAdg3y2PFjuXaj5YAHv9c3
-         epncSJ5rs/mRaQj59QDGLvbRHtka8AHVEZi5RbXczEnlFsYlv5kIo6msYhSYf1j9lK92
-         e1Yw==
-X-Gm-Message-State: AOJu0YxS0W68qAaSvksOxFLngM6Xb8HCC4+c3Bj61IKZnKWu9MFApcMt
-        UU2XUW7U1YvOTUcwt48tNZqNCkSekrmZQ4IXKAM=
-X-Google-Smtp-Source: AGHT+IG6xEN7hWZW963ar6a6y/IZv7TEMEGaFqOpr/N9QzXhbQky+esm5rTRkDEeHyn3BVgzlYOqaXCi0RXhkI/5nGE=
-X-Received: by 2002:aa7:c7d9:0:b0:522:2711:863 with SMTP id
- o25-20020aa7c7d9000000b0052227110863mr9220038eds.1.1691426196109; Mon, 07 Aug
- 2023 09:36:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691433419; x=1692038219;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+8Yj5qVDFXyAwTzwIhUHgilERDq5+y/zb0F33+hQJss=;
+        b=GzAy6un6K9ywsh04A8m2PAz9cbwfmP+dPQMNKHyxYA8Pkuw34Mzpq9AJ6qqZ1NJSHB
+         Q6h5sgfRPbPX5Oh6RYrpVPhPbWBcGqk+QGZC+92dK5BL6xEnrSQS6/5TDh/rRXa2g2Rk
+         Ib7aO6aRDpevnwtdG32EwDwS9uZPw6UVOVgVazQ6NJND+6UTB76S/DkIoFnufYmZ6LAC
+         IFMEgwFPkMrA6XcT5AE8j+i47k7DLGwQ6i/qpkpZzHRIgpWbSdBw2xIPhWZc+c+QplNI
+         Oid+oZmmVe0DXPodj94+UuOCc+dN+3OByj6khf5SjKflu4mTgIseIegywvsiJI+SRkv/
+         82xQ==
+X-Gm-Message-State: AOJu0YworlTvzPkYIjtZp7bgW8xaVIOuy83hL+xyQkq5hFPhT805WfYM
+        2upNu3OOEutzCVBM3ERO2yE=
+X-Google-Smtp-Source: AGHT+IH3qxFu9sZKMc/iwCfmahwlUDyDWE0sqNuD9k9uePaao6ObXkQBAJPG9IeQt4jjirXZzaPEcg==
+X-Received: by 2002:ac2:5e23:0:b0:4fb:7675:1c16 with SMTP id o3-20020ac25e23000000b004fb76751c16mr6284536lfg.49.1691433418994;
+        Mon, 07 Aug 2023 11:36:58 -0700 (PDT)
+Received: from f (cst-prg-21-219.cust.vodafone.cz. [46.135.21.219])
+        by smtp.gmail.com with ESMTPSA id a25-20020a50ff19000000b0050488d1d376sm5523914edu.0.2023.08.07.11.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 11:36:58 -0700 (PDT)
+Date:   Mon, 7 Aug 2023 20:36:55 +0200
+From:   Mateusz Guzik <mjguzik@gmail.com>
+To:     guoren@kernel.org
+Cc:     David.Laight@ACULAB.COM, will@kernel.org, peterz@infradead.org,
+        mingo@redhat.com, longman@redhat.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2] asm-generic: ticket-lock: Optimize
+ arch_spin_value_unlocked
+Message-ID: <20230807183655.kbnjtvbi4jfrcrce@f>
+References: <20230731023308.3748432-1-guoren@kernel.org>
 MIME-Version: 1.0
-References: <20230731084458.28096-1-ubizjak@gmail.com> <4d4dd1e8-042a-561a-4ffc-529638cb0780@csgroup.eu>
-In-Reply-To: <4d4dd1e8-042a-561a-4ffc-529638cb0780@csgroup.eu>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Mon, 7 Aug 2023 18:36:24 +0200
-Message-ID: <CAFULd4YByT++kV21nZGE+ME9B2KQtQYNRz6Ar2awoLws-JznUw@mail.gmail.com>
-Subject: Re: [PATCH] locking/arch: Rewrite local_add_unless as static inline function
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230731023308.3748432-1-guoren@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,21 +73,63 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 6:13=E2=80=AFPM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 31/07/2023 =C3=A0 10:42, Uros Bizjak a =C3=A9crit :
-> > Rewrite local_add_unless as a static inline function with boolean
-> > return value, similar to arch_atomic_add_unless arch fallbacks.
-> >
-> > The function is currently unused.
->
-> Is it worth keeping the function if it is not used ?
+On Sun, Jul 30, 2023 at 10:33:08PM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> The arch_spin_value_unlocked would cause an unnecessary memory
+> access to the contended value. Although it won't cause a significant
+> performance gap in most architectures, the arch_spin_value_unlocked
+> argument contains enough information. Thus, remove unnecessary
+> atomic_read in arch_spin_value_unlocked().
+> 
+> The caller of arch_spin_value_unlocked() could benefit from this
+> change. Currently, the only caller is lockref.
+> 
 
-We already have plenty of these kinds of unused locking functions in
-arch/*/include/asm/atomic.h, so I thought we could leave this one as
-well.
+Have you verified you are getting an extra memory access from this in
+lockref? What architecture is it?
 
-Uros.
+I have no opinion about the patch itself, I will note though that the
+argument to the routine is *not* the actual memory-shared lockref,
+instead it's something from the local copy obtained with READ_ONCE
+from the real thing. So I would be surprised if the stock routine was
+generating accesses to that sucker.
+
+Nonetheless, if the patched routine adds nasty asm, that would be nice
+to sort out.
+
+FWIW on x86-64 qspinlock is used (i.e. not the stuff you are patching)
+and I verified there are only 2 memory accesses -- the initial READ_ONCE
+and later cmpxchg. I don't know which archs *don't* use qspinlock.
+
+It also turns out generated asm is quite atrocious and cleaning it up
+may yield a small win under more traffic. Maybe I'll see about it later
+this week.
+
+For example, disassembling lockref_put_return:
+<+0>:     mov    (%rdi),%rax            <-- initial load, expected
+<+3>:     mov    $0x64,%r8d
+<+9>:     mov    %rax,%rdx
+<+12>:    test   %eax,%eax              <-- retries loop back here
+					<-- this is also the unlocked
+					    check
+<+14>:    jne    0xffffffff8157aba3 <lockref_put_return+67>
+<+16>:    mov    %rdx,%rsi
+<+19>:    mov    %edx,%edx
+<+21>:    sar    $0x20,%rsi
+<+25>:    lea    -0x1(%rsi),%ecx        <-- new.count--;
+<+28>:    shl    $0x20,%rcx
+<+32>:    or     %rcx,%rdx
+<+35>:    test   %esi,%esi
+<+37>:    jle    0xffffffff8157aba3 <lockref_put_return+67>
+<+39>:    lock cmpxchg %rdx,(%rdi)      <-- the attempt to change
+<+44>:    jne    0xffffffff8157ab9a <lockref_put_return+58>
+<+46>:    shr    $0x20,%rdx
+<+50>:    mov    %rdx,%rax
+<+53>:    jmp    0xffffffff81af8540 <__x86_return_thunk>
+<+58>:    mov    %rax,%rdx
+<+61>:    sub    $0x1,%r8d              <-- retry count check
+<+65>:    jne    0xffffffff8157ab6c <lockref_put_return+12> <-- go back
+<+67>:    mov    $0xffffffff,%eax
+<+72>:    jmp    0xffffffff81af8540 <__x86_return_thunk>
+
