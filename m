@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E88772E62
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Aug 2023 21:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59622772E67
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Aug 2023 21:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjHGTA0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Aug 2023 15:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S230212AbjHGTBO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Aug 2023 15:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjHGTAZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 15:00:25 -0400
+        with ESMTP id S230397AbjHGTBN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 15:01:13 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1E710F6;
-        Mon,  7 Aug 2023 12:00:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D9710F6;
+        Mon,  7 Aug 2023 12:01:04 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1691434823;
+        s=2020; t=1691434863;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Sjw4cSUjNL/q8ajSLPjc5AEn3VQI4EuB25tHGD5K1UQ=;
-        b=B8oIAA9wCOVrL3GA6hvcsjMrElEl6hLOHrz0Pe+VB0+wKr86a95yQKpfysM2jfrQAStpYU
-        j5xIRnaOcBvyuIYhEYz4Yi0k+zLYwq9Ss3Bzbe6ivmt288iVn5H/74uFuOVcl0p9TKMSwx
-        gC9mJuJ4JepS4CiBXCsUXq12r4mZgmVlxNr6K6vqCpjOx69qf7X+w5C5I08noMLR+HU82a
-        S+Obrbr0g8VQDdyaTaC0Rdli1u6HtYtIxinOqVP2JrbHo+zFY1+dItNU8L4E3/+MDmyIL1
-        mLT9bcbilTk/YoJNlelQPczE1Sldzidy0ZCDqluEjmSRgGlCrm+xRIS1Tvl1dA==
+        bh=PiEO6NIg937sHypTir7yOojP64nd2ALRT50aoFEoOKE=;
+        b=aRMOu91uWxeBHc0c5zj3O7oyeJF6oDdT1EyR5h7WrTTzf+CO+0+TsrPvMMXzzF/c/cAGgT
+        VmDwoBk6Q4ikJaceHZNqt5dEz9Lz2SYkSRh3Cwg4RaUFJfpRWmkBowHcJ6Jbk5kQc/Thsa
+        8x2+ECWWXS9YdJ6EbbLYl3gealZKnFKDb7sgJMktY4PFoBhmOdKSkNcoPQb6XUjV+eZB/I
+        ywjWJGE5JwIU6sfVAGXzZPiEK/YSQFmcKF/K1IhKLVoIxtvOgNqJpc88czhsRl+W9tbNQ4
+        u070GWDsR2iDI1Ba6LQMaD4enUiH422v35w/G+p8etMzxLxiIsTVBXEYMk5pDA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1691434823;
+        s=2020e; t=1691434863;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Sjw4cSUjNL/q8ajSLPjc5AEn3VQI4EuB25tHGD5K1UQ=;
-        b=o78RTxUAakCGYH/QRc/fD8D0FCuhykp7DaxVY8AQvyd3X5uWqr6sN0Ooy1XtP5gEEpxMma
-        1L6qS7Lp1fDEEuBw==
+        bh=PiEO6NIg937sHypTir7yOojP64nd2ALRT50aoFEoOKE=;
+        b=A2M+a4twJBCcb93nTtEUneYkth3jS4pDLuUf5S3P3d34tZ3PuyJpRyolmPD5fFxqytuM26
+        NqIIyIvXp0HK2MDQ==
 To:     Peter Zijlstra <peterz@infradead.org>, axboe@kernel.dk
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
@@ -41,13 +41,13 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de, Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH  v2 05/14] futex: Add sys_futex_wake()
-In-Reply-To: <20230807123323.090897260@infradead.org>
+        malteskarupke@web.de
+Subject: Re: [PATCH  v2 08/14] futex: Add flags2 argument to futex_requeue()
+In-Reply-To: <20230807123323.297438324@infradead.org>
 References: <20230807121843.710612856@infradead.org>
- <20230807123323.090897260@infradead.org>
-Date:   Mon, 07 Aug 2023 21:00:22 +0200
-Message-ID: <87o7jiu189.ffs@tglx>
+ <20230807123323.297438324@infradead.org>
+Date:   Mon, 07 Aug 2023 21:01:02 +0200
+Message-ID: <87leemu175.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,13 +61,11 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Mon, Aug 07 2023 at 14:18, Peter Zijlstra wrote:
 
-> To complement sys_futex_waitv() add sys_futex_wake(). This syscall
-> implements what was previously known as FUTEX_WAKE_BITSET except it
-> uses 'unsigned long' for the bitmask and takes FUTEX2 flags.
+> In order to support mixed size requeue, add a second flags argument to
+> the internal futex_requeue() function.
 >
-> The 'unsigned long' allows FUTEX2_SIZE_U64 on 64bit platforms.
+> No functional change intended.
 >
 > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
