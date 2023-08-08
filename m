@@ -2,243 +2,291 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974CC773591
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Aug 2023 02:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B766477365E
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Aug 2023 04:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjHHAwi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Aug 2023 20:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S230372AbjHHCMe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Aug 2023 22:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjHHAwi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 20:52:38 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DC3170B;
-        Mon,  7 Aug 2023 17:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1Z7LbxffltbPK1SHo7fxmLCfBnUSIOxwbsQyOLgeTiM=; b=CvAPVbIdkOl7UYswYzmU74xVVS
-        XyjwUWRqWPGxovxX1GsoEzR6Xa3VSDYNRmkw81fkMog8jEpL8xbYMEOWL2rruiwTQ2XbCHP9tDZ1J
-        MDrKtpx/owH55NmEOPcsFZB5Xi/vcenF8IIDF9ZGVUuyguUK/I2WMGWBtOFapIskEE7vKRfNZuPq3
-        otA2sGbIDLzwQx1PzGu9hqocdTAqJjU+7bOJ/bZrylT0owjevMf3T9t84rXIoTKEGBNbx7r5UBivQ
-        S24JILUF8XekC+4K1hSeYWl7r2YQLIDktntBUdKmRT4K26ok3Kg+mABGBlF21o9q9DvU1X6WXB2/w
-        mHLKesRg==;
-Received: from [177.45.63.19] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qTAxZ-00FAcr-T1; Tue, 08 Aug 2023 02:52:30 +0200
-Message-ID: <c4998f14-2804-4291-efe4-f42d07cd9343@igalia.com>
-Date:   Mon, 7 Aug 2023 21:52:18 -0300
+        with ESMTP id S229621AbjHHCMd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 22:12:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE91711;
+        Mon,  7 Aug 2023 19:12:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E3AC62377;
+        Tue,  8 Aug 2023 02:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A6CC433C9;
+        Tue,  8 Aug 2023 02:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691460748;
+        bh=VRkYha2WcYiFCfW1jnh2VzYnyzSI0BELp4Vbm5rvuJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kIDPQ2tkRoESMxlHw70sgk7jaT2faK4xi7GqlRBnpsnrfAGVWf56MAMy5koAx3fEu
+         rc8orB5Jl57n/+LS4Q+M8wXPJlijTHZ/Mf+BbCq7fRz0uH9WVui1WSDJbW/sdv74h6
+         hpcz6wB9Nf+Kae77HrB87LBryEUzWLuy8NCpFfX9qOy/CmCuFW+WeZJHruny88kTUU
+         g+w7Yzys9y9TwUPJEJ4M+eT+sn+F/H3G+VIWsU/UsSfzSpmjECNB4p90XnDdXv0hcn
+         A0ZPCj9ITwAzmSiKqhaCLUy9pW4lcrGn647Zu7X+t/8052h+2ejyG/w7z2f/x1Cre8
+         vHXMHucz3xXmA==
+Date:   Mon, 7 Aug 2023 22:12:15 -0400
+From:   Guo Ren <guoren@kernel.org>
+To:     Stefan O'Rear <sorear@fastmail.com>
+Cc:     paul.walmsley@sifive.com, Anup Patel <anup@brainfault.org>,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>, longman@redhat.com,
+        boqun.feng@gmail.com, tglx@linutronix.de, paulmck@kernel.org,
+        rostedt@goodmis.org, rdunlap@infradead.org,
+        catalin.marinas@arm.com, Conor Dooley <conor.dooley@microchip.com>,
+        xiaoguang.xing@sophgo.com,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        alexghiti@rivosinc.com, Kees Cook <keescook@chromium.org>,
+        greentime.hu@sifive.com, Andrew Jones <ajones@ventanamicro.com>,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        guoren@kernel.org
+Subject: Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce
+ ERRATA_THEAD_QSPINLOCK
+Message-ID: <ZNGkf88lhPt7fdhH@gmail.com>
+References: <20230802164701.192791-1-guoren@kernel.org>
+ <20230802164701.192791-8-guoren@kernel.org>
+ <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/14] futex: Flag conversion
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        dvhart@infradead.org, dave@stgolabs.net, tglx@linutronix.de,
-        Andrew Morton <akpm@linux-foundation.org>, axboe@kernel.dk,
-        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de
-References: <20230807121843.710612856@infradead.org>
- <20230807123322.952568452@infradead.org>
-From:   =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20230807123322.952568452@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Em 07/08/2023 09:18, Peter Zijlstra escreveu:
-> Futex has 3 sets of flags:
+On Mon, Aug 07, 2023 at 01:23:34AM -0400, Stefan O'Rear wrote:
+> On Wed, Aug 2, 2023, at 12:46 PM, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > According to qspinlock requirements, RISC-V gives out a weak LR/SC
+> > forward progress guarantee which does not satisfy qspinlock. But
+> > many vendors could produce stronger forward guarantee LR/SC to
+> > ensure the xchg_tail could be finished in time on any kind of
+> > hart. T-HEAD is the vendor which implements strong forward
+> > guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+> > with errata help.
+> >
+> > T-HEAD early version of processors has the merge buffer delay
+> > problem, so we need ERRATA_WRITEONCE to support qspinlock.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/Kconfig.errata              | 13 +++++++++++++
+> >  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
+> >  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
+> >  arch/riscv/include/asm/vendorid_list.h |  3 ++-
+> >  arch/riscv/kernel/cpufeature.c         |  3 ++-
+> >  5 files changed, 61 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+> > index 4745a5c57e7c..eb43677b13cc 100644
+> > --- a/arch/riscv/Kconfig.errata
+> > +++ b/arch/riscv/Kconfig.errata
+> > @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
+> > 
+> >  	  If you don't know what to do here, say "Y".
+> > 
+> > +config ERRATA_THEAD_QSPINLOCK
+> > +	bool "Apply T-Head queued spinlock errata"
+> > +	depends on ERRATA_THEAD
+> > +	default y
+> > +	help
+> > +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
+> > +	  match the xchg_tail requirement of qspinlock.
+> > +
+> > +	  This will apply the QSPINLOCK errata to handle the non-standard
+> > +	  behavior via using qspinlock instead of ticket_lock.
+> > +
+> > +	  If you don't know what to do here, say "Y".
 > 
->   - legacy futex op bits
->   - futex2 flags
->   - internal flags
+> If this is to be applied, I would like to see a detailed explanation somewhere,
+> preferably with citations, of:
 > 
-> Add a few helpers to convert from the API flags into the internal
-> flags.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> (a) The memory model requirements for qspinlock
+These were written in commit: a8ad07e5240 ("asm-generic: qspinlock: Indicate the use of
+mixed-size atomics"). For riscv, the most controversial point is xchg_tail()
+implementation for native queued spinlock.
 
-Reviewed-by: André Almeida <andrealmeid@igalia.com>
+> (b) Why, with arguments, RISC-V does not architecturally meet (a)
+In the spec "Eventual Success of Store-Conditional Instructions":
+"By contrast, if other harts or devices continue to write to that reservation set, it is
+not guaranteed that any hart will exit its LR/SC loop."
 
-> ---
->   kernel/futex/futex.h    |   63 +++++++++++++++++++++++++++++++++++++++++++++---
->   kernel/futex/syscalls.c |   24 ++++++------------
->   kernel/futex/waitwake.c |    4 +--
->   3 files changed, 71 insertions(+), 20 deletions(-)
-> 
-> --- a/kernel/futex/futex.h
-> +++ b/kernel/futex/futex.h
-> @@ -5,6 +5,7 @@
->   #include <linux/futex.h>
->   #include <linux/rtmutex.h>
->   #include <linux/sched/wake_q.h>
-> +#include <linux/compat.h>
->   
->   #ifdef CONFIG_PREEMPT_RT
->   #include <linux/rcuwait.h>
-> @@ -16,8 +17,15 @@
->    * Futex flags used to encode options to functions and preserve them across
->    * restarts.
->    */
-> +#define FLAGS_SIZE_8		0x00
-> +#define FLAGS_SIZE_16		0x01
-> +#define FLAGS_SIZE_32		0x02
-> +#define FLAGS_SIZE_64		0x03
-> +
+1. The arch_spinlock_t is 32-bit width, and it contains LOCK_PENDING
+   part and IDX_TAIL part.
+    - LOCK:     lock holder
+    - PENDING:  next waiter (Only once per contended situation)
+    - IDX:      nested context (normal, hwirq, softirq, nmi)
+    - TAIL:     last contended cpu
+   The xchg_tail operate on IDX_TAIL part, so there is no guarantee on "NO"
+   "other harts or devices continue to write to that reservation set".
 
-Minor nit: for consistent, I would go with SIZE_U8, instead of SIZE_8
+2. When you do lock torture test, you may see a long contended ring queue:
+                                                                xchg_tail
+                                                                    +-----> CPU4 (big core)
+                                                                    |
+   CPU3 (lock holder) -> CPU1 (mcs queued) -> CPU2 (mcs queued) ----+-----> CPU0 (little core)
+    |                                                               |
+    |                                                               +-----> CPU5 (big core)
+    |                                                               |
+    +--locktorture release lock (spin_unlock) and spin_lock again --+-----> CPU3 (big core)
 
-> +#define FLAGS_SIZE_MASK		0x03
-> +
->   #ifdef CONFIG_MMU
-> -# define FLAGS_SHARED		0x01
-> +# define FLAGS_SHARED		0x10
->   #else
->   /*
->    * NOMMU does not have per process address space. Let the compiler optimize
-> @@ -25,8 +33,57 @@
->    */
->   # define FLAGS_SHARED		0x00
->   #endif
-> -#define FLAGS_CLOCKRT		0x02
-> -#define FLAGS_HAS_TIMEOUT	0x04
-> +#define FLAGS_CLOCKRT		0x20
-> +#define FLAGS_HAS_TIMEOUT	0x40
-> +#define FLAGS_NUMA		0x80
-> +
-> +/* FUTEX_ to FLAGS_ */
-> +static inline unsigned int futex_to_flags(unsigned int op)
-> +{
-> +	unsigned int flags = FLAGS_SIZE_32;
-> +
-> +	if (!(op & FUTEX_PRIVATE_FLAG))
-> +		flags |= FLAGS_SHARED;
-> +
-> +	if (op & FUTEX_CLOCK_REALTIME)
-> +		flags |= FLAGS_CLOCKRT;
-> +
-> +	return flags;
-> +}
-> +
-> +/* FUTEX2_ to FLAGS_ */
-> +static inline unsigned int futex2_to_flags(unsigned int flags2)
-> +{
-> +	unsigned int flags = flags2 & FUTEX2_SIZE_MASK;
-> +
-> +	if (!(flags2 & FUTEX2_PRIVATE))
-> +		flags |= FLAGS_SHARED;
-> +
-> +	if (flags2 & FUTEX2_NUMA)
-> +		flags |= FLAGS_NUMA;
-> +
-> +	return flags;
-> +}
-> +
-> +static inline bool futex_flags_valid(unsigned int flags)
-> +{
-> +	/* Only 64bit futexes for 64bit code */
-> +	if (!IS_ENABLED(CONFIG_64BIT) || in_compat_syscall()) {
-> +		if ((flags & FLAGS_SIZE_MASK) == FLAGS_SIZE_64)
-> +			return false;
-> +	}
-> +
-> +	/* Only 32bit futexes are implemented -- for now */
-> +	if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
-> +		return false;
-> +
-> +	return true;
-> +} > +
-> +static inline unsigned int futex_size(unsigned int flags)
-> +{
-> +	return 1 << (flags & FLAGS_SIZE_MASK);
-> +}
->   
->   #ifdef CONFIG_FAIL_FUTEX
->   extern bool should_fail_futex(bool fshared);
-> --- a/kernel/futex/syscalls.c
-> +++ b/kernel/futex/syscalls.c
-> @@ -1,6 +1,5 @@
->   // SPDX-License-Identifier: GPL-2.0-or-later
->   
-> -#include <linux/compat.h>
->   #include <linux/syscalls.h>
->   #include <linux/time_namespace.h>
->   
-> @@ -85,15 +84,12 @@ SYSCALL_DEFINE3(get_robust_list, int, pi
->   long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
->   		u32 __user *uaddr2, u32 val2, u32 val3)
->   {
-> +	unsigned int flags = futex_to_flags(op);
->   	int cmd = op & FUTEX_CMD_MASK;
-> -	unsigned int flags = 0;
->   
-> -	if (!(op & FUTEX_PRIVATE_FLAG))
-> -		flags |= FLAGS_SHARED;
-> -
-> -	if (op & FUTEX_CLOCK_REALTIME) {
-> -		flags |= FLAGS_CLOCKRT;
-> -		if (cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI &&
-> +	if (flags & FLAGS_CLOCKRT) {
-> +		if (cmd != FUTEX_WAIT_BITSET &&
-> +		    cmd != FUTEX_WAIT_REQUEUE_PI &&
->   		    cmd != FUTEX_LOCK_PI2)
->   			return -ENOSYS;
->   	}
-> @@ -201,21 +197,19 @@ static int futex_parse_waitv(struct fute
->   	unsigned int i;
->   
->   	for (i = 0; i < nr_futexes; i++) {
-> +		unsigned int flags;
-> +
->   		if (copy_from_user(&aux, &uwaitv[i], sizeof(aux)))
->   			return -EFAULT;
->   
->   		if ((aux.flags & ~FUTEX2_VALID_MASK) || aux.__reserved)
->   			return -EINVAL;
->   
-> -		if (!IS_ENABLED(CONFIG_64BIT) || in_compat_syscall()) {
-> -			if ((aux.flags & FUTEX2_SIZE_MASK) == FUTEX2_SIZE_U64)
-> -				return -EINVAL;
-> -		}
-> -
-> -		if ((aux.flags & FUTEX2_SIZE_MASK) != FUTEX2_SIZE_U32)
-> +		flags = futex2_to_flags(aux.flags);
-> +		if (!futex_flags_valid(flags))
->   			return -EINVAL;
->   
-> -		futexv[i].w.flags = aux.flags;
-> +		futexv[i].w.flags = flags;
->   		futexv[i].w.val = aux.val;
->   		futexv[i].w.uaddr = aux.uaddr;
->   		futexv[i].q = futex_q_init;
-> --- a/kernel/futex/waitwake.c
-> +++ b/kernel/futex/waitwake.c
-> @@ -419,11 +419,11 @@ static int futex_wait_multiple_setup(str
->   	 */
->   retry:
->   	for (i = 0; i < count; i++) {
-> -		if ((vs[i].w.flags & FUTEX_PRIVATE_FLAG) && retry)
-> +		if (!(vs[i].w.flags & FLAGS_SHARED) && retry)
->   			continue;
->   
->   		ret = get_futex_key(u64_to_user_ptr(vs[i].w.uaddr),
-> -				    !(vs[i].w.flags & FUTEX_PRIVATE_FLAG),
-> +				    vs[i].w.flags & FLAGS_SHARED,
->   				    &vs[i].q.key, FUTEX_READ);
->   
->   		if (unlikely(ret))
+    If CPU0 doesn't have a strong fwd guarantee, xhg_tail is consistently failed.
+
+> (c) Why, with arguments, T-HEAD C9xx meets (a)
+> (d) Why at least one other architecture which defines ARCH_USE_QUEUED_SPINLOCKS
+>     meets (a)
+I can't give the C9xx microarch implementation detail. But many
+open-source riscv cores have provided strong forward progress guarantee
+LR/SC implementation [1] [2]. But I would say these implementations are
+too rude, which makes LR send a cacheline unique interconnect request.
+It satisfies xchg_tail but not cmpxchg & cond_load. CPU vendors should
+carefully consider your LR/SC fwd guarantee implementation.
+
+[1]: https://github.com/riscv-boom/riscv-boom/blob/v3.0.0/src/main/scala/lsu/dcache.scala#L650
+[2]: https://github.com/OpenXiangShan/XiangShan/blob/v1.0/src/main/scala/xiangshan/cache/MainPipe.scala#L470
+
 > 
+> As far as I can tell, the RISC-V guarantees concerning constrained LR/SC loops
+> (livelock freedom but no starvation freedom) are exactly the same as those in
+> Armv8 (as of 0487F.c) for equivalent loops, and xchg_tail compiles to a
+> constrained LR/SC loop with guaranteed eventual success (with -O1).  Clearly you
+> disagree; I would like to see your perspective.
+For Armv8, I would use LSE for the lock-contended scenario. Ref this
+commit 0ea366f5e1b6: ("arm64: atomics: prefetch the destination word for
+write prior to stxr").
+
 > 
+> -s
+> 
+> > +
+> >  endmenu # "CPU errata selection"
+> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > index 881729746d2e..d560dc45c0e7 100644
+> > --- a/arch/riscv/errata/thead/errata.c
+> > +++ b/arch/riscv/errata/thead/errata.c
+> > @@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
+> >  	return false;
+> >  }
+> > 
+> > +static bool errata_probe_qspinlock(unsigned int stage,
+> > +				   unsigned long arch_id, unsigned long impid)
+> > +{
+> > +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * The queued_spinlock torture would get in livelock without
+> > +	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
+> > +	 * processors.
+> > +	 */
+> > +	if (arch_id == 0 && impid == 0 &&
+> > +	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
+> > +		return false;
+> > +
+> > +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  static u32 thead_errata_probe(unsigned int stage,
+> >  			      unsigned long archid, unsigned long impid)
+> >  {
+> > @@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
+> >  	if (errata_probe_write_once(stage, archid, impid))
+> >  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+> > 
+> > +	if (errata_probe_qspinlock(stage, archid, impid))
+> > +		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
+> > +
+> >  	return cpu_req_errata;
+> >  }
+> > 
+> > diff --git a/arch/riscv/include/asm/errata_list.h 
+> > b/arch/riscv/include/asm/errata_list.h
+> > index fbb2b8d39321..a696d18d1b0d 100644
+> > --- a/arch/riscv/include/asm/errata_list.h
+> > +++ b/arch/riscv/include/asm/errata_list.h
+> > @@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
+> >  	: "=r" (__ovl) :						\
+> >  	: "memory")
+> > 
+> > +static __always_inline bool
+> > +riscv_has_errata_thead_qspinlock(void)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> > +		asm_volatile_goto(
+> > +		ALTERNATIVE(
+> > +		"j	%l[l_no]", "nop",
+> > +		THEAD_VENDOR_ID,
+> > +		ERRATA_THEAD_QSPINLOCK,
+> > +		CONFIG_ERRATA_THEAD_QSPINLOCK)
+> > +		: : : : l_no);
+> > +	} else {
+> > +		goto l_no;
+> > +	}
+> > +
+> > +	return true;
+> > +l_no:
+> > +	return false;
+> > +}
+> > +
+> >  #endif /* __ASSEMBLY__ */
+> > 
+> >  #endif
+> > diff --git a/arch/riscv/include/asm/vendorid_list.h 
+> > b/arch/riscv/include/asm/vendorid_list.h
+> > index 73078cfe4029..1f1d03877f5f 100644
+> > --- a/arch/riscv/include/asm/vendorid_list.h
+> > +++ b/arch/riscv/include/asm/vendorid_list.h
+> > @@ -19,7 +19,8 @@
+> >  #define	ERRATA_THEAD_CMO 1
+> >  #define	ERRATA_THEAD_PMU 2
+> >  #define	ERRATA_THEAD_WRITE_ONCE 3
+> > -#define	ERRATA_THEAD_NUMBER 4
+> > +#define	ERRATA_THEAD_QSPINLOCK 4
+> > +#define	ERRATA_THEAD_NUMBER 5
+> >  #endif
+> > 
+> >  #endif
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index f8dbbe1bbd34..d9694fe40a9a 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
+> >  		 * spinlock value, the only way is to change from queued_spinlock to
+> >  		 * ticket_spinlock, but can not be vice.
+> >  		 */
+> > -		if (!force_qspinlock) {
+> > +		if (!force_qspinlock &&
+> > +		    !riscv_has_errata_thead_qspinlock()) {
+> >  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
+> >  		}
+> >  #endif
+> > -- 
+> > 2.36.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
