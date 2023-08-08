@@ -2,291 +2,261 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B766477365E
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Aug 2023 04:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A5D773B1E
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Aug 2023 17:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjHHCMe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Aug 2023 22:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S230005AbjHHPnC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Aug 2023 11:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjHHCMd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Aug 2023 22:12:33 -0400
+        with ESMTP id S229804AbjHHPlj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Aug 2023 11:41:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE91711;
-        Mon,  7 Aug 2023 19:12:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A192110;
+        Mon,  7 Aug 2023 20:30:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E3AC62377;
-        Tue,  8 Aug 2023 02:12:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A6CC433C9;
-        Tue,  8 Aug 2023 02:12:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9AF2623F2;
+        Tue,  8 Aug 2023 03:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3696FC433C8;
+        Tue,  8 Aug 2023 03:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691460748;
-        bh=VRkYha2WcYiFCfW1jnh2VzYnyzSI0BELp4Vbm5rvuJ0=;
+        s=k20201202; t=1691465404;
+        bh=zSDhmwKgIhKelnYTgRVV9zIIN7PXUWMhiTRCcrb4LGA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kIDPQ2tkRoESMxlHw70sgk7jaT2faK4xi7GqlRBnpsnrfAGVWf56MAMy5koAx3fEu
-         rc8orB5Jl57n/+LS4Q+M8wXPJlijTHZ/Mf+BbCq7fRz0uH9WVui1WSDJbW/sdv74h6
-         hpcz6wB9Nf+Kae77HrB87LBryEUzWLuy8NCpFfX9qOy/CmCuFW+WeZJHruny88kTUU
-         g+w7Yzys9y9TwUPJEJ4M+eT+sn+F/H3G+VIWsU/UsSfzSpmjECNB4p90XnDdXv0hcn
-         A0ZPCj9ITwAzmSiKqhaCLUy9pW4lcrGn647Zu7X+t/8052h+2ejyG/w7z2f/x1Cre8
-         vHXMHucz3xXmA==
-Date:   Mon, 7 Aug 2023 22:12:15 -0400
+        b=DsbIqFVPmu413TZ0gFOuGI65PMKM/G5VoBo06r5nhYADaPrk8LnN1YWlHnOCfIEIw
+         MersF64VL7CRGcpZys1EnToQ8ofF1J+mDF28YaZpAWjGtGZuL7jT55qJqOXc7XAJrL
+         CLI8feqKbuWFMWrQsbOsr5PfUloQeP3MFkCj+R4Bw5jSnjKw0wd5Nt8qTWCdwT1sfJ
+         my9VFS0jYb7n4ceMRRm1PA6qjvBUCVhFUuqaxNHq7CwEVhKOek7lrEa3O58TL/rupl
+         7om4yNqQtS9jkPEzfLxWpqfvfRSz8W59g5121I3eJY2y5WDkE/FsiKSv+qNaG5tKQN
+         qE9KUGs5lip1w==
+Date:   Mon, 7 Aug 2023 23:29:56 -0400
 From:   Guo Ren <guoren@kernel.org>
-To:     Stefan O'Rear <sorear@fastmail.com>
-Cc:     paul.walmsley@sifive.com, Anup Patel <anup@brainfault.org>,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>, longman@redhat.com,
-        boqun.feng@gmail.com, tglx@linutronix.de, paulmck@kernel.org,
-        rostedt@goodmis.org, rdunlap@infradead.org,
-        catalin.marinas@arm.com, Conor Dooley <conor.dooley@microchip.com>,
-        xiaoguang.xing@sophgo.com,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        alexghiti@rivosinc.com, Kees Cook <keescook@chromium.org>,
-        greentime.hu@sifive.com, Andrew Jones <ajones@ventanamicro.com>,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        guoren@kernel.org
-Subject: Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce
- ERRATA_THEAD_QSPINLOCK
-Message-ID: <ZNGkf88lhPt7fdhH@gmail.com>
-References: <20230802164701.192791-1-guoren@kernel.org>
- <20230802164701.192791-8-guoren@kernel.org>
- <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
+To:     Mateusz Guzik <mjguzik@gmail.com>, will@kernel.org
+Cc:     David.Laight@aculab.com, guoren@kernel.org, peterz@infradead.org,
+        mingo@redhat.com, longman@redhat.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2] asm-generic: ticket-lock: Optimize
+ arch_spin_value_unlocked
+Message-ID: <ZNG2tHFOABSXGCVi@gmail.com>
+References: <20230731023308.3748432-1-guoren@kernel.org>
+ <20230807183655.kbnjtvbi4jfrcrce@f>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230807183655.kbnjtvbi4jfrcrce@f>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 01:23:34AM -0400, Stefan O'Rear wrote:
-> On Wed, Aug 2, 2023, at 12:46 PM, guoren@kernel.org wrote:
+On Mon, Aug 07, 2023 at 08:36:55PM +0200, Mateusz Guzik wrote:
+> On Sun, Jul 30, 2023 at 10:33:08PM -0400, guoren@kernel.org wrote:
 > > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > According to qspinlock requirements, RISC-V gives out a weak LR/SC
-> > forward progress guarantee which does not satisfy qspinlock. But
-> > many vendors could produce stronger forward guarantee LR/SC to
-> > ensure the xchg_tail could be finished in time on any kind of
-> > hart. T-HEAD is the vendor which implements strong forward
-> > guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
-> > with errata help.
-> >
-> > T-HEAD early version of processors has the merge buffer delay
-> > problem, so we need ERRATA_WRITEONCE to support qspinlock.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/Kconfig.errata              | 13 +++++++++++++
-> >  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
-> >  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
-> >  arch/riscv/include/asm/vendorid_list.h |  3 ++-
-> >  arch/riscv/kernel/cpufeature.c         |  3 ++-
-> >  5 files changed, 61 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-> > index 4745a5c57e7c..eb43677b13cc 100644
-> > --- a/arch/riscv/Kconfig.errata
-> > +++ b/arch/riscv/Kconfig.errata
-> > @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
 > > 
-> >  	  If you don't know what to do here, say "Y".
+> > The arch_spin_value_unlocked would cause an unnecessary memory
+> > access to the contended value. Although it won't cause a significant
+> > performance gap in most architectures, the arch_spin_value_unlocked
+> > argument contains enough information. Thus, remove unnecessary
+> > atomic_read in arch_spin_value_unlocked().
 > > 
-> > +config ERRATA_THEAD_QSPINLOCK
-> > +	bool "Apply T-Head queued spinlock errata"
-> > +	depends on ERRATA_THEAD
-> > +	default y
-> > +	help
-> > +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
-> > +	  match the xchg_tail requirement of qspinlock.
-> > +
-> > +	  This will apply the QSPINLOCK errata to handle the non-standard
-> > +	  behavior via using qspinlock instead of ticket_lock.
-> > +
-> > +	  If you don't know what to do here, say "Y".
+> > The caller of arch_spin_value_unlocked() could benefit from this
+> > change. Currently, the only caller is lockref.
+> > 
 > 
-> If this is to be applied, I would like to see a detailed explanation somewhere,
-> preferably with citations, of:
+> Have you verified you are getting an extra memory access from this in
+> lockref? What architecture is it?
+For riscv, this patch could optimize the lock_ref on the same compiling
+condition:
+ - After lifting data dependencies, the compiler optimizes the prologue
+   behavior, thus the callee-register-saved path becomes optional. This
+   is a significant improvement on the lock_ref() self.
+ - Compare the "98: & 9c:" lines before the patch and the "88:" line
+   after the patch. We saved two memory accesses not only one load.
+
+========================================================================
+Before the patch:
+void lockref_get(struct lockref *lockref)
+{
+  78:   fd010113                add     sp,sp,-48
+  7c:   02813023                sd      s0,32(sp)
+  80:   02113423                sd      ra,40(sp)
+  84:   03010413                add     s0,sp,48
+
+0000000000000088 <.LBB296>:
+        CMPXCHG_LOOP(
+  88:   00053783                ld      a5,0(a0)
+
+000000000000008c <.LBB265>:
+}
+
+static __always_inline int ticket_spin_is_locked(arch_spinlock_t *lock)
+{
+        u32 val = atomic_read(&lock->val);
+        return ((val >> 16) != (val & 0xffff));
+  8c:   00010637                lui     a2,0x10
+
+0000000000000090 <.LBE265>:
+  90:   06400593                li      a1,100
+
+0000000000000094 <.LBB274>:
+  94:   fff60613                add     a2,a2,-1 # ffff <.LLST8+0xf49a>
+
+0000000000000098 <.L8>:
+  98:   fef42423                sw      a5,-24(s0)
+
+000000000000009c <.LBB269>:
+  9c:   fe842703                lw      a4,-24(s0)
+
+00000000000000a0 <.LBE269>:
+  a0:   0107569b                srlw    a3,a4,0x10
+  a4:   00c77733                and     a4,a4,a2
+  a8:   04e69063                bne     a3,a4,e8 <.L12>
+
+00000000000000ac <.LBB282>:
+  ac:   4207d693                sra     a3,a5,0x20
+  b0:   02079713                sll     a4,a5,0x20
+  b4:   0016869b                addw    a3,a3,1
+  b8:   02069693                sll     a3,a3,0x20
+  bc:   02075713                srl     a4,a4,0x20
+  c0:   00d76733                or      a4,a4,a3
+
+00000000000000c4 <.L0^B1>:
+  c4:   100536af                lr.d    a3,(a0)
+  c8:   00f69863                bne     a3,a5,d8 <.L1^B1>
+  cc:   1ae5382f                sc.d.rl a6,a4,(a0)
+  d0:   fe081ae3                bnez    a6,c4 <.L0^B1>
+  d4:   0330000f                fence   rw,rw
+
+00000000000000d8 <.L1^B1>:
+  d8:   02d78a63                beq     a5,a3,10c <.L7>
+
+00000000000000dc <.LBE292>:
+  dc:   fff5859b                addw    a1,a1,-1
+
+00000000000000e0 <.LBB293>:
+  e0:   00068793                mv      a5,a3
+
+00000000000000e4 <.LBE293>:
+  e4:   fa059ae3                bnez    a1,98 <.L8>
+
+00000000000000e8 <.L12>:
+
+========================================================================
+After the patch:
+void lockref_get(struct lockref *lockref)
+{
+        CMPXCHG_LOOP(
+  78:   00053783                ld      a5,0(a0)
+
+000000000000007c <.LBB212>:
+
+static __always_inline int ticket_spin_value_unlocked(arch_spinlock_t
+lock)
+{
+        u32 val = lock.val.counter;
+
+        return ((val >> 16) == (val & 0xffff));
+  7c:   00010637                lui     a2,0x10
+
+0000000000000080 <.LBE212>:
+  80:   06400593                li      a1,100
+
+0000000000000084 <.LBB216>:
+  84:   fff60613                add     a2,a2,-1 # ffff <.LLST8+0xf4aa>
+
+0000000000000088 <.L8>:
+  88:   0007871b                sext.w  a4,a5
+
+000000000000008c <.LBB217>:
+  8c:   0107d69b                srlw    a3,a5,0x10
+  90:   00c77733                and     a4,a4,a2
+  94:   04e69063                bne     a3,a4,d4 <.L12>
+
+0000000000000098 <.LBB218>:
+  98:   4207d693                sra     a3,a5,0x20
+  9c:   02079713                sll     a4,a5,0x20
+  a0:   0016869b                addw    a3,a3,1
+  a4:   02069693                sll     a3,a3,0x20
+  a8:   02075713                srl     a4,a4,0x20
+  ac:   00d76733                or      a4,a4,a3
+
+00000000000000b0 <.L0^B1>:
+  b0:   100536af                lr.d    a3,(a0)
+  b4:   00f69863                bne     a3,a5,c4 <.L1^B1>
+  b8:   1ae5382f                sc.d.rl a6,a4,(a0)
+  bc:   fe081ae3                bnez    a6,b0 <.L0^B1>
+  c0:   0330000f                fence   rw,rw
+
+00000000000000c4 <.L1^B1>:
+  c4:   04d78a63                beq     a5,a3,118 <.L18>
+
+00000000000000c8 <.LBE228>:
+  c8:   fff5859b                addw    a1,a1,-1
+
+00000000000000cc <.LBB229>:
+  cc:   00068793                mv      a5,a3
+
+00000000000000d0 <.LBE229>:
+  d0:   fa059ce3                bnez    a1,88 <.L8>
+
+00000000000000d4 <.L12>:
+{
+  d4:   fe010113                add     sp,sp,-32
+  d8:   00113c23                sd      ra,24(sp)
+  dc:   00813823                sd      s0,16(sp)
+  e0:   02010413                add     s0,sp,32
+========================================================================
+
 > 
-> (a) The memory model requirements for qspinlock
-These were written in commit: a8ad07e5240 ("asm-generic: qspinlock: Indicate the use of
-mixed-size atomics"). For riscv, the most controversial point is xchg_tail()
-implementation for native queued spinlock.
-
-> (b) Why, with arguments, RISC-V does not architecturally meet (a)
-In the spec "Eventual Success of Store-Conditional Instructions":
-"By contrast, if other harts or devices continue to write to that reservation set, it is
-not guaranteed that any hart will exit its LR/SC loop."
-
-1. The arch_spinlock_t is 32-bit width, and it contains LOCK_PENDING
-   part and IDX_TAIL part.
-    - LOCK:     lock holder
-    - PENDING:  next waiter (Only once per contended situation)
-    - IDX:      nested context (normal, hwirq, softirq, nmi)
-    - TAIL:     last contended cpu
-   The xchg_tail operate on IDX_TAIL part, so there is no guarantee on "NO"
-   "other harts or devices continue to write to that reservation set".
-
-2. When you do lock torture test, you may see a long contended ring queue:
-                                                                xchg_tail
-                                                                    +-----> CPU4 (big core)
-                                                                    |
-   CPU3 (lock holder) -> CPU1 (mcs queued) -> CPU2 (mcs queued) ----+-----> CPU0 (little core)
-    |                                                               |
-    |                                                               +-----> CPU5 (big core)
-    |                                                               |
-    +--locktorture release lock (spin_unlock) and spin_lock again --+-----> CPU3 (big core)
-
-    If CPU0 doesn't have a strong fwd guarantee, xhg_tail is consistently failed.
-
-> (c) Why, with arguments, T-HEAD C9xx meets (a)
-> (d) Why at least one other architecture which defines ARCH_USE_QUEUED_SPINLOCKS
->     meets (a)
-I can't give the C9xx microarch implementation detail. But many
-open-source riscv cores have provided strong forward progress guarantee
-LR/SC implementation [1] [2]. But I would say these implementations are
-too rude, which makes LR send a cacheline unique interconnect request.
-It satisfies xchg_tail but not cmpxchg & cond_load. CPU vendors should
-carefully consider your LR/SC fwd guarantee implementation.
-
-[1]: https://github.com/riscv-boom/riscv-boom/blob/v3.0.0/src/main/scala/lsu/dcache.scala#L650
-[2]: https://github.com/OpenXiangShan/XiangShan/blob/v1.0/src/main/scala/xiangshan/cache/MainPipe.scala#L470
-
+> I have no opinion about the patch itself, I will note though that the
+> argument to the routine is *not* the actual memory-shared lockref,
+> instead it's something from the local copy obtained with READ_ONCE
+> from the real thing. So I would be surprised if the stock routine was
+> generating accesses to that sucker.
 > 
-> As far as I can tell, the RISC-V guarantees concerning constrained LR/SC loops
-> (livelock freedom but no starvation freedom) are exactly the same as those in
-> Armv8 (as of 0487F.c) for equivalent loops, and xchg_tail compiles to a
-> constrained LR/SC loop with guaranteed eventual success (with -O1).  Clearly you
-> disagree; I would like to see your perspective.
-For Armv8, I would use LSE for the lock-contended scenario. Ref this
-commit 0ea366f5e1b6: ("arm64: atomics: prefetch the destination word for
-write prior to stxr").
-
+> Nonetheless, if the patched routine adds nasty asm, that would be nice
+> to sort out.
 > 
-> -s
+> FWIW on x86-64 qspinlock is used (i.e. not the stuff you are patching)
+> and I verified there are only 2 memory accesses -- the initial READ_ONCE
+> and later cmpxchg. I don't know which archs *don't* use qspinlock.
 > 
-> > +
-> >  endmenu # "CPU errata selection"
-> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> > index 881729746d2e..d560dc45c0e7 100644
-> > --- a/arch/riscv/errata/thead/errata.c
-> > +++ b/arch/riscv/errata/thead/errata.c
-> > @@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
-> >  	return false;
-> >  }
-> > 
-> > +static bool errata_probe_qspinlock(unsigned int stage,
-> > +				   unsigned long arch_id, unsigned long impid)
-> > +{
-> > +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
-> > +		return false;
-> > +
-> > +	/*
-> > +	 * The queued_spinlock torture would get in livelock without
-> > +	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
-> > +	 * processors.
-> > +	 */
-> > +	if (arch_id == 0 && impid == 0 &&
-> > +	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
-> > +		return false;
-> > +
-> > +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> > +		return true;
-> > +
-> > +	return false;
-> > +}
-> > +
-> >  static u32 thead_errata_probe(unsigned int stage,
-> >  			      unsigned long archid, unsigned long impid)
-> >  {
-> > @@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
-> >  	if (errata_probe_write_once(stage, archid, impid))
-> >  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
-> > 
-> > +	if (errata_probe_qspinlock(stage, archid, impid))
-> > +		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
-> > +
-> >  	return cpu_req_errata;
-> >  }
-> > 
-> > diff --git a/arch/riscv/include/asm/errata_list.h 
-> > b/arch/riscv/include/asm/errata_list.h
-> > index fbb2b8d39321..a696d18d1b0d 100644
-> > --- a/arch/riscv/include/asm/errata_list.h
-> > +++ b/arch/riscv/include/asm/errata_list.h
-> > @@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
-> >  	: "=r" (__ovl) :						\
-> >  	: "memory")
-> > 
-> > +static __always_inline bool
-> > +riscv_has_errata_thead_qspinlock(void)
-> > +{
-> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
-> > +		asm_volatile_goto(
-> > +		ALTERNATIVE(
-> > +		"j	%l[l_no]", "nop",
-> > +		THEAD_VENDOR_ID,
-> > +		ERRATA_THEAD_QSPINLOCK,
-> > +		CONFIG_ERRATA_THEAD_QSPINLOCK)
-> > +		: : : : l_no);
-> > +	} else {
-> > +		goto l_no;
-> > +	}
-> > +
-> > +	return true;
-> > +l_no:
-> > +	return false;
-> > +}
-> > +
-> >  #endif /* __ASSEMBLY__ */
-> > 
-> >  #endif
-> > diff --git a/arch/riscv/include/asm/vendorid_list.h 
-> > b/arch/riscv/include/asm/vendorid_list.h
-> > index 73078cfe4029..1f1d03877f5f 100644
-> > --- a/arch/riscv/include/asm/vendorid_list.h
-> > +++ b/arch/riscv/include/asm/vendorid_list.h
-> > @@ -19,7 +19,8 @@
-> >  #define	ERRATA_THEAD_CMO 1
-> >  #define	ERRATA_THEAD_PMU 2
-> >  #define	ERRATA_THEAD_WRITE_ONCE 3
-> > -#define	ERRATA_THEAD_NUMBER 4
-> > +#define	ERRATA_THEAD_QSPINLOCK 4
-> > +#define	ERRATA_THEAD_NUMBER 5
-> >  #endif
-> > 
-> >  #endif
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index f8dbbe1bbd34..d9694fe40a9a 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
-> >  		 * spinlock value, the only way is to change from queued_spinlock to
-> >  		 * ticket_spinlock, but can not be vice.
-> >  		 */
-> > -		if (!force_qspinlock) {
-> > +		if (!force_qspinlock &&
-> > +		    !riscv_has_errata_thead_qspinlock()) {
-> >  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
-> >  		}
-> >  #endif
-> > -- 
-> > 2.36.1
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> It also turns out generated asm is quite atrocious and cleaning it up
+> may yield a small win under more traffic. Maybe I'll see about it later
+> this week.
+> 
+> For example, disassembling lockref_put_return:
+> <+0>:     mov    (%rdi),%rax            <-- initial load, expected
+> <+3>:     mov    $0x64,%r8d
+> <+9>:     mov    %rax,%rdx
+> <+12>:    test   %eax,%eax              <-- retries loop back here
+> 					<-- this is also the unlocked
+> 					    check
+> <+14>:    jne    0xffffffff8157aba3 <lockref_put_return+67>
+> <+16>:    mov    %rdx,%rsi
+> <+19>:    mov    %edx,%edx
+> <+21>:    sar    $0x20,%rsi
+> <+25>:    lea    -0x1(%rsi),%ecx        <-- new.count--;
+> <+28>:    shl    $0x20,%rcx
+> <+32>:    or     %rcx,%rdx
+> <+35>:    test   %esi,%esi
+> <+37>:    jle    0xffffffff8157aba3 <lockref_put_return+67>
+> <+39>:    lock cmpxchg %rdx,(%rdi)      <-- the attempt to change
+> <+44>:    jne    0xffffffff8157ab9a <lockref_put_return+58>
+> <+46>:    shr    $0x20,%rdx
+> <+50>:    mov    %rdx,%rax
+> <+53>:    jmp    0xffffffff81af8540 <__x86_return_thunk>
+> <+58>:    mov    %rax,%rdx
+> <+61>:    sub    $0x1,%r8d              <-- retry count check
+> <+65>:    jne    0xffffffff8157ab6c <lockref_put_return+12> <-- go back
+> <+67>:    mov    $0xffffffff,%eax
+> <+72>:    jmp    0xffffffff81af8540 <__x86_return_thunk>
+> 
