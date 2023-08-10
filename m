@@ -2,80 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8D8777DB4
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 18:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB02777E18
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 18:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236682AbjHJQHr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Aug 2023 12:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S232817AbjHJQWs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Aug 2023 12:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236695AbjHJQHd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 12:07:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2217C49FE;
-        Thu, 10 Aug 2023 09:06:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF223661D0;
-        Thu, 10 Aug 2023 16:05:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDCAC433CA;
-        Thu, 10 Aug 2023 16:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691683516;
-        bh=3dqXqxLfF0EBUTIcyGpG0Y9ki6xtjmzbbUkts8u5Ikg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M3iKU92fRFQ5ebgkTvsvwFRj8QHGGGfCT7avNetLStA0oCGGNiMdq5s1BU8wM99Wq
-         cpLnFaNt5Y/WyIo/3u3hcU8KPqIxozR1VglUeMDq2sISkdEnj+wwOSJf5AiYhtT/2t
-         SlMvoi2pAG8JQpJHfXVLKoIXBMd/GoSC3dKXIxNGFzZv2lBL0ArZI8WA6y2eAtJcRX
-         2yzhhaPLgupPXHj9POOF9o54cYVHYP/0Hy8nP/kWQ2V3qULt/iXLK2gYREqJTs0WZH
-         k57P/Xu/0fJfpnylthHNhnuqqHv1d5rI1cRLVMcxAkA8mAVUExfN6T2BKpjM/k5CMd
-         yEHBV303fFSGA==
-Date:   Thu, 10 Aug 2023 17:05:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/36] arm64/gcs: Provide support for GCS in userspace
-Message-ID: <137de09e-6341-4c97-96ca-116e40c9cb8b@sirena.org.uk>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230801141319.GC26253@willie-the-truck>
- <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
- <20230808133857.GC2369@willie-the-truck>
- <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
- <20230810094016.GA5365@willie-the-truck>
+        with ESMTP id S229871AbjHJQWr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 12:22:47 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6F9A8;
+        Thu, 10 Aug 2023 09:22:47 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1bdaeb0f29aso2876975ad.2;
+        Thu, 10 Aug 2023 09:22:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691684566; x=1692289366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LBxuuRBGx37tQ5XIQd6hBtuu9RLCe7TcvWshiqvJ6Ig=;
+        b=hgQ8PWMkP2K0rSExr6a+qhX3F0ukmJLk0DfQrMX1iZo+xMyjKV9CoZegiNwm+EcG+r
+         zJbcpKajI7y/wOrYxn+4CTSYBa+rUKUg6kHN8bfWMB1iblfeFHeDKSsshGJhRKLAkElF
+         ejsC3aZtMvpojv5MhEsuJfIp4KENrn5ODkvDR+l/5ANrP2Cky6o9GIohuhthkV6umPf7
+         32dAvU0TjigyGZ+tWhm8zVhyJsdVXVEzndpZTF97gZ1uGQuLkBzLQbshAg/oTAz58itK
+         M4gc0zvUwbNGRbczqVL42RQtQ9U6fuS6EFUsGw6XUAsbxeJ5PhMD479ITmKOn1RFKMiv
+         j4Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691684566; x=1692289366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LBxuuRBGx37tQ5XIQd6hBtuu9RLCe7TcvWshiqvJ6Ig=;
+        b=iOcWVnjqO6k4bmTI6zPV8z9guLXTFkPwLdAam5CnLJdsUP7TErL3GinLpybHortwGG
+         Y3lr7AxKV1o4iOKlO1EuagFly5HFr2wST5xzwmiCLF0qqAAgOHFTeqj/RBsdXBvNzGiZ
+         y/brzYYGHsoce5KxDGdLYx58iG5QPadfQUbfF54lOdCzms2Jr9Z0lmH9lPCdTjyVlZnn
+         KWh7dbDqGEJh8IhDekhjaU0nOOzebqG2lkxM+p9m0IdOlWPM1j+6FCI57luzt1voKV5A
+         Me6XFGh/rgSkA30PpKMtXnd0YY5EHwJ3Lx+6y2ibx7bCxX09wXNnzyAzc6ykYAfZYkk+
+         QLOQ==
+X-Gm-Message-State: AOJu0Yzb0ZPrqkL8zVAPQUh0qqtAX0cHFvsIK3dHxcYPE6PV43fBnpmq
+        BdaV5ZHjtyIoJgl18gpASko=
+X-Google-Smtp-Source: AGHT+IGz0JmplIzBvF6jsyASn31jPQ/ydbP+pgRBs/DbtZZx8p0q2kZlCd/dGEz0nBARuWJVoVjFAg==
+X-Received: by 2002:a17:902:bd4c:b0:1b1:99c9:8ce1 with SMTP id b12-20020a170902bd4c00b001b199c98ce1mr2330144plx.51.1691684566496;
+        Thu, 10 Aug 2023 09:22:46 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id y6-20020a17090322c600b001b9c960ffeasm1981122plg.47.2023.08.10.09.22.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Aug 2023 09:22:46 -0700 (PDT)
+Message-ID: <da667608-a8aa-f5b8-1621-de29b3f19272@gmail.com>
+Date:   Fri, 11 Aug 2023 00:22:36 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5H6oHgjZfBXx+cAU"
-Content-Disposition: inline
-In-Reply-To: <20230810094016.GA5365@willie-the-truck>
-X-Cookie: Reunite Gondwondaland!
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [EXTERNAL] [PATCH V2 2/9] x86/hyperv: Set Virtual Trust Level in
+ VMBus init message
+To:     Wei Liu <wei.liu@kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>
+References: <20230627032248.2170007-1-ltykernel@gmail.com>
+ <20230627032248.2170007-3-ltykernel@gmail.com>
+ <PUZP153MB0749BAAA8E288D76938704A5BE2DA@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+ <ZNB3m6Qiml7JDTQ7@liuwe-devbox-debian-v2>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <ZNB3m6Qiml7JDTQ7@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,128 +92,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 8/7/2023 12:48 PM, Wei Liu wrote:
+> On Fri, Jul 07, 2023 at 09:07:54AM +0000, Saurabh Singh Sengar wrote:
+>>
+>>
+>>> +
+>>> +	ret = hv_do_hypercall(control, input, output);
+>>> +	if (hv_result_success(ret))
+>>> +		vtl = output->as64.low & HV_X64_VTL_MASK;
+>>> +	else
+>>> +		pr_err("Hyper-V: failed to get VTL! %lld", ret);
+>>
+>> In case of error this function will return vtl=0, which can be the valid value of vtl.
+>> I suggest we initialize vtl with -1 so and then check for its return.
+>>
+>> This could be a good utility function which can be used for any Hyper-V VTL system, so think
+>> of making it global ?
+>>
+> 
+> Tianyu -- your thought on this?
 
---5H6oHgjZfBXx+cAU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In current user cases, the guest only runs in VTL0 and Hyper-V may
+return VTL error in some cases but kernel still may run with 0 as VTL.
 
-On Thu, Aug 10, 2023 at 10:40:16AM +0100, Will Deacon wrote:
-> On Tue, Aug 08, 2023 at 09:25:11PM +0100, Mark Brown wrote:
-
-> > I'm not sure that your assumption that the only people would would
-> > consider deploying this are those who have deployed SCS is a valid one,
-> > SCS users are definitely part of the mix but GCS is expected to be much
-> > more broadly applicable.  As you say SCS is very invasive, requires a
-> > rebuild of everything with different code generated and as Szabolcs
-> > outlined has ABI challenges for general distros.  Any code built (or
-> > JITed) with anything other than clang is going to require some explicit
-> > support to do SCS (eg, the kernel's SCS support does nothing for
-> > assembly code) and there's a bunch of runtime support.  It's very much a
-> > specialist feature, mainly practical in well controlled somewhat
-> > vertical systems - I've not seen any suggestion that general purpose
-> > distros are considering using it.
-
-> I've also seen no suggestion that general purpose distros are considering
-> GCS -- that's what I'm asking about here, and also saying that we shouldn=
-'t
-> rush in an ABI without confidence that it actually works beyond unit tests
-> (although it's great that you wrote selftests!).
-
-It defintely works substantially beyond selftests.  For the actual
-distros there's definitely interest out there, gated on upstreaming.
-
-> > In contrast in the case of GCS one of the nice features is that for most
-> > code it's very much non-invasive, much less so than things like PAC/BTI
-> > and SCS, which means that the audience is much wider than it is for SCS
-> > - it's a *much* easier sell for general purpose distros to enable GCS
-> > than to enable SCS.
-
-> This sounds compelling, but has anybody tried running significant parts o=
-f a
-> distribution (e.g. running Debian source package tests, booting Android,
-> using a browser, running QEMU) with GCS enabled? I can well imagine
-> non-trivial applications violating both assumptions of the architecture a=
-nd
-> the ABI.
-
-Android is the main full userspace that people have been working with,
-we've not run into anything ABI related yet that I'm aware of - there is
-one thing that's being chased down but we're fairly confident that is a
-bug somewhere rather than the ABI being unsuitable.
-
-> > > If not, why are we bothering? If so, how much of that distribution has
-> > > been brought up and how does the "dynamic linker or other startup cod=
-e"
-> > > decide what to do?
-
-> > There is active interest in the x86 shadow stack support from distros,
-> > GCS is a lot earlier on in the process but isn't fundamentally different
-> > so it is expected that this will translate.  There is also a chicken and
-> > egg thing where upstream support gates a lot of people's interest, what
-> > people will consider carrying out of tree is different to what they'll
-> > enable.=20
-
-> I'm not saying we should wait until distros are committed, but Arm should
-> be able to do that work on a fork, exactly like we did for the arm64
-> bringup. We have the fastmodel, so running interesting stuff with GCS
-> enabled should be dead easy, no?
-
-Right, this is happening but your pushback seemed to be "why would
-anyone even consider deploying this?" rather than "could anyone deploy
-this?", tests on forks can help a bit with the first question but your
-concern seemed more at the level of even getting people to look at the
-work rather than just rejecting it out of hand.
-
-> > The majority of the full distro work at this point is on the x86 side
-> > given the hardware availability, we are looking at that within Arm of
-> > course.  I'm not aware of any huge blockers we have encountered thus
-> > far.
-
-> Ok, so it sounds like you've started something then? How far have you got?
-
-I'd say thus far text mode embedded/server type stuff is looking pretty
-good, especially for C stuff - setjmp/longjmp and an unwinder cover a
-*lot*.  We do need to do more here, especially GUI stuff, but it's
-progressing well thus far.
-
-> While we'd be daft not to look at what the x86 folks are doing, I don't
-> think we should rely solely on them to inform the design for arm64 when
-> it should be relatively straightforward to prototype the distro work on
-> the model. There's also no rush to land the kernel changes given that
-> GCS hardware doesn't exist.
-
-Sure, but we're also in the position where there's only been the very
-beginnings of kernel review and obviously that's very important too and
-there's often really substantial lead times on that, plus the potential
-for need for redoing all the testing if there's issues identified.  I'd
-hope to at least be able to get to a point where the major concern
-people have is testing.  Another goal here is to feed any concerns we do
-have into what's happening with x86 and RISC-V so that we have as much
-alignment as possible in how this is supposed to work on Linux, that'll
-make everyone's life easier.
-
-In terms of timescales given that users with generic distros are a big
-part of the expected audience while we're well in advance of where it's
-actually going to be used we do need to be mindful of lead times in
-getting support into the software users are likely to want to run so
-they've got something they can use when they do get hardware.  We don't
-need to rush into anything, but we should probably use that time for
-careful consideration.
-
---5H6oHgjZfBXx+cAU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTVCrIACgkQJNaLcl1U
-h9BHVwgAgSbEUGUic59Pll+iHR6rMHH93h8r1BQCHM7w3dxRlH4WQAvF84q/FUw2
-BvNcZc0s34e1gGq9GO3VlDPB0v1oMiJOjyjZ4V147fI5yH9YpEN93CoddrH+4Q9Z
-hN/7EJ0PHxL/eaJM5EKzuAYo3iWQGg1IQRQ4XQugjYa4ID2KHo9OWVXpMTq+swnQ
-pgGXC+k61Wjov3YeJwwBcZc8b9Ev2QE0T09jigsR6IRmYS+nD+LQWi2s9Utb7b+v
-CE8pnWa10JCf8Or6Pft32TX975ZpuvLHvEoHdRlUHZqpl96Nj5yj9ZFX2q3Efvg1
-veMSeRwi5FXGa41z5bay9s/8jeTTMg==
-=NmPw
------END PGP SIGNATURE-----
-
---5H6oHgjZfBXx+cAU--
+I just sent out v5 and set VTL to 0 by default if fail to get VTL from
+Hyper-V and give out a warning log. The get_vtl() is only called on 
+enlightened SEV-SNP guest. If there is new case that needs handle the 
+error from Hyper-V when call VTL hvcall, we may add the logic later.
