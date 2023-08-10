@@ -2,83 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034DC777E4C
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 18:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1F3777EB4
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 19:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbjHJQaZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Aug 2023 12:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+        id S231915AbjHJRBe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Aug 2023 13:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbjHJQaX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 12:30:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A962728;
-        Thu, 10 Aug 2023 09:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 982BB63C09;
-        Thu, 10 Aug 2023 16:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC34C433C7;
-        Thu, 10 Aug 2023 16:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691685019;
-        bh=6q/Y46TIpsSPhXSxrFEF/VLkfW3O+0fXt+mKjW7zycU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QBTjQqGMrvrEx1cPGNDE6eBGCUIGSu7QfnO9qJ2fxmYvkPqU3uHCMgyBgqQTf/an2
-         Z+gn6DD3Hyi2/XpbY+JVY1qMgaDWQl+2hnwz0tVPTFJ/aQbIQmVZ1kcfhhPjRdTHQE
-         pJIv156HmhMPVc4rUaGTnBIRVcIwyce9fqtZavbwMLCcXcb+iIRAvB+N8r6TXlneb4
-         UD2iv++wxJLA1MWi34RB4oGLv7/wnHhRqPZEFzgBWFZI+EWK5VqP8eJGXk5oRzCMEx
-         VVvgWtIxSwNXI117isSSjrqm7FKpRTocaPXB2KmulJEbsgbDl0ASgz97yEvHnqUTRR
-         0d2hwTU0pEbDg==
-Date:   Thu, 10 Aug 2023 17:30:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <e676deee-fc7a-4f7f-8605-41b4af274c81@sirena.org.uk>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
- <ZNOhjrYleGBR6Pbs@arm.com>
- <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
- <ZNSmFmYFHDw3NvvP@arm.com>
- <4e215e53-c7d1-4338-8df9-3f9bf783ced9@sirena.org.uk>
- <ZNTnTGb341TSMuvA@arm.com>
+        with ESMTP id S229470AbjHJRBd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 13:01:33 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211EC268E;
+        Thu, 10 Aug 2023 10:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+8cb/lhV+x8UwVjoJQYGCnkcCuUk06gy5cDVFa9lP4Y=; b=hsrqEwj5uFEl/A5N0NsIkOKko7
+        VBHWm8seX0TywTYIz6PrrK4tDN+b292bTV8mrnhY9V9o2xntn1fKqNdnx9TfNCnjRf7bW5kNVHpwL
+        lTSU5/Icyjn9S1KEQxca+JR/WtQFa1Ifc+UH3LC/DEzrKTtHDpIG5ciNNwrrV37wPVduwRvFMxDFf
+        WMwxsAeXae6gquIRGZKoL1wWIBeM5LvnbdvjoOUfvvZEg0NKD+hH5K6TFs7Moe+a9qOEaurTJYWSy
+        ItDAauA5HLg82zjn6oOGfImeRSP1QTlzDYJ83GceVZKFr4w3G7hTmHfNSMtLyrUcp8fVHbYOBgFqy
+        lVrrCDEA==;
+Received: from [191.193.179.209] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1qU92L-00Gl8h-Vp; Thu, 10 Aug 2023 19:01:26 +0200
+Message-ID: <3bcdb026-8558-43ca-80c1-776216dcd86c@igalia.com>
+Date:   Thu, 10 Aug 2023 14:01:20 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N3GIhup1qS9ZN5af"
-Content-Disposition: inline
-In-Reply-To: <ZNTnTGb341TSMuvA@arm.com>
-X-Cookie: Reunite Gondwondaland!
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 05/14] futex: Add sys_futex_wake()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        dvhart@infradead.org, dave@stgolabs.net, tglx@linutronix.de,
+        axboe@kernel.dk, Andrew Morton <akpm@linux-foundation.org>,
+        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        malteskarupke@web.de, Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20230807121843.710612856@infradead.org>
+ <20230807123323.090897260@infradead.org>
+ <071c02ae-a74d-46d8-990b-262264b62caf@igalia.com>
+ <20230810121341.GX212435@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+From:   =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20230810121341.GX212435@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,50 +62,87 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---N3GIhup1qS9ZN5af
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Thu, Aug 10, 2023 at 02:34:04PM +0100, Szabolcs Nagy wrote:
-> The 08/10/2023 12:41, Mark Brown wrote:
+Em 10/08/2023 09:13, Peter Zijlstra escreveu:
+> On Wed, Aug 09, 2023 at 07:25:19PM -0300, André Almeida wrote:
+>> Hi Peter,
+>>
+>> Em 07/08/2023 09:18, Peter Zijlstra escreveu:
+>>> To complement sys_futex_waitv() add sys_futex_wake(). This syscall
+>>> implements what was previously known as FUTEX_WAKE_BITSET except it
+>>> uses 'unsigned long' for the bitmask and takes FUTEX2 flags.
+>>>
+>>> The 'unsigned long' allows FUTEX2_SIZE_U64 on 64bit platforms.
+>>>
+>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>>> ---
+>>
+>> [...]
+>>
+>>> +/*
+>>> + * sys_futex_wake - Wake a number of futexes
+>>> + * @uaddr:	Address of the futex(es) to wake
+>>> + * @mask:	bitmask
+>>> + * @nr:		Number of the futexes to wake
+>>> + * @flags:	FUTEX2 flags
+>>> + *
+>>> + * Identical to the traditional FUTEX_WAKE_BITSET op, except it is part of the
+>>> + * futex2 family of calls.
+>>> + */
+>>> +
+>>> +SYSCALL_DEFINE4(futex_wake,
+>>> +		void __user *, uaddr,
+>>> +		unsigned long, mask,
+>>> +		int, nr,
+>>> +		unsigned int, flags)
+>>> +{
+>>
+>> Do you think we could have a
+>>
+>> 	if (!nr)
+>> 		return 0;
+>>
+>> here? Otherwise, calling futex_wake(&f, 0, flags) will wake 1 futex (if
+>> available), which is a strange undocumented behavior in my opinion.
+> 
+> Oh 'cute' that.. yeah, but how about I put it ...
+> 
+>>> +	if (flags & ~FUTEX2_VALID_MASK)
+>>> +		return -EINVAL;
+>>> +
+>>> +	flags = futex2_to_flags(flags);
+>>> +	if (!futex_flags_valid(flags))
+>>> +		return -EINVAL;
+>>> +
+>>> +	if (!futex_validate_input(flags, mask))
+>>> +		return -EINVAL;
+> 
+> here, because otherwise we get:
+> 
+> 	sys_futex_wake(&f, 0xFFFF, 0, FUTEX2_SIZE_U8)
+> 
+> to return 0, even though that is 'obviously' nonsensical and should
+> return -EINVAL. Or even garbage flags would be 'accepted'.
+> 
+> (because 0xFFFF is larger than U8 can accomodate)
+> 
 
-> > I agree that it's going to be excessive for pretty much all
-> > applications, I adjusted it to match x86 as part of the general effort
-> > to avoid divergence and because I was a bit concerned about non-PCS
-> > cases (eg, JITed code) potentially running into trouble, especially with
+That make sense to me, but we would also want to validate the value of 
+f, if it's NULL or something strange to return -EINVAL... but this 
+happens only inside get_futex_key()...
 
-> is that even possible?
+To make this right, I think we would need to move this verification to 
+the syscall validation part:
 
-> 16byte alignment is not a convention but architectural:
-> access via unaligned sp traps (at least in userspace).
+	if (unlikely((address % sizeof(u32)) != 0))
+		return -EINVAL;
 
-> it is possible to use bl such that the stack is not involved
-> e.g. if there is no bl/ret pairing, but if we base the gcs
-> size on the stack size then i'd expect one stack frame per
-> bl/ret pair with 16byte alignment, or is there a programming
-> model possible that uses 8byte stack per bl?
+	if (unlikely(!access_ok(uaddr, sizeof(u32))))
+		return -EFAULT;
 
-That's definitely what I'd expect most of the time.  You'd need to be
-tracking what needs pushing in some other register but it's possible.
-Quite why you'd do this is a separate question, I think I'm being overly
-cautious worrying about anyone actually having done it but it wouldn't
-be the first time I was surprised by someone doing something unexpected.
-Like I say I think it's excessive and was erring on the side of being
-conservative.
+And have u32 replaced with the proper size being used.
 
---N3GIhup1qS9ZN5af
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTVEI4ACgkQJNaLcl1U
-h9A4Awf/bx8Lj3RQIsL13zO6Rcr8idtjPSrfssjIBQQtk+Ytcou3d6I0srD7ZcYS
-KIOrfTZRe8dRpA45iRARURQA9vzzzeS2pMY0bviaHVPz0kbfeiJ8x/PXOgLOHMkX
-EV2us3XQYCNpiGAozGpIK5m8GntmZotF3bJtqK8PDxzf+ujeo361xNzQFcBX7js/
-YNED0FhW8OeI/+z7ztalZM26vZw05bE2MwbJmazHCO6L/flUyNSyrk+otZdC71s0
-UEVhosgX4Ba4KFRmDBvl5JiCIohdEI+k5S3vJOAZiLauPFRDQuFlrNvs1SGkHcMv
-WbwxA1SwHdT5GRMpJCXjvIAWhkckqg==
-=j9pJ
------END PGP SIGNATURE-----
-
---N3GIhup1qS9ZN5af--
+>>> +
+>>> +	return futex_wake(uaddr, flags, nr, mask);
+>>> +}
