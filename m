@@ -2,86 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF7E77737C
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 10:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380827774C8
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 11:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjHJI4e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Aug 2023 04:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S232434AbjHJJk2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Aug 2023 05:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjHJI4d (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 04:56:33 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2049.outbound.protection.outlook.com [40.107.21.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64311211F;
-        Thu, 10 Aug 2023 01:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mi1qf36m/mTqKe3vJloNVLdrTzLce1aT1KSvGuMJKoA=;
- b=Z4Gz82LdjRLjfKpHxCI3NFLjtyswerHSbuodFMasB/abw50nZtODKQY58hUIwTlcWr2yolXnrqHkpy05jkSIbu63hyqmJaZKS6MhDVcMNnIt+atMKHGIrPe6a6IUricOckUyAU6Ykw2t7wx7Txzn3y+85zcLjZyN5+h8ioU+rXU=
-Received: from AM6P192CA0028.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:83::41)
- by DBAPR08MB5574.eurprd08.prod.outlook.com (2603:10a6:10:1ab::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 08:56:29 +0000
-Received: from AM7EUR03FT040.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:209:83:cafe::e) by AM6P192CA0028.outlook.office365.com
- (2603:10a6:209:83::41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30 via Frontend
- Transport; Thu, 10 Aug 2023 08:56:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT040.mail.protection.outlook.com (100.127.140.128) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6678.19 via Frontend Transport; Thu, 10 Aug 2023 08:56:28 +0000
-Received: ("Tessian outbound 95df046a2e2c:v145"); Thu, 10 Aug 2023 08:56:28 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 53f5cf8641134430
-X-CR-MTA-TID: 64aa7808
-Received: from 27ff08b2fa1b.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 6B8C4B36-B788-475D-9893-4184938AA0D8.1;
-        Thu, 10 Aug 2023 08:56:18 +0000
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 27ff08b2fa1b.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 10 Aug 2023 08:56:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AOz+Uy1nqfe00bCYkivjZog8AS0gqkbjm9v5h+W+JC4NO7C9FANLx6vQvhcDK1ZeAx8EfxCNZEdgTutNtDynhexZo67a3W0AdkVGf4GjMof6g6P8COx4Xq5TBCTDbFOMb1Avy4OLu3La3IAdFDHErlyLURI45NnB2TvfuneAd7qLS5Yr539kdpOprqZHBdxPuNniqhoLG4tbbpRotKKCg4066YzegYsTdtA9/SBPlPFAXExKGQxmbJr/5OLIDTlKdehMNq+hwOogPa47Yb5ZrWdoF9AH/uGGIb0FLtAgMGMT1QP0WMhdNPmAGopLOB8xJWy1WSimc86EMvWYqel2Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mi1qf36m/mTqKe3vJloNVLdrTzLce1aT1KSvGuMJKoA=;
- b=MHXi2Nv04vPQnBXwDcH9TCL1ajWaGkkGQymNfaOjLOm6qQHp9sZG0kXPIWjYvJNcHWrEKRaZaLUoyUI3LAkHE1XOIdLXq3eyKS+mY9JO+ueVJhfAnahEujOwqg+6iP3ystF6mGa6JORCf6BqxHJbMsDS+zzax/ZQQYME7ti1OM3lyZPGzWc3QRL5M+W+9ksRkBTuB+weJ/nr0AAsctJWZn4Y26ln4ZRqhwK3TASrMLPHuT+TZkBt40sZl+wdEaZaQwOsVDs53r/yqZUk3JyWuZEJ78jDFOsWGcb0gDls6AKhi46bXnY95ME+vCnDpEVaMtziOIZcv0Oi2XwRKwE20g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mi1qf36m/mTqKe3vJloNVLdrTzLce1aT1KSvGuMJKoA=;
- b=Z4Gz82LdjRLjfKpHxCI3NFLjtyswerHSbuodFMasB/abw50nZtODKQY58hUIwTlcWr2yolXnrqHkpy05jkSIbu63hyqmJaZKS6MhDVcMNnIt+atMKHGIrPe6a6IUricOckUyAU6Ykw2t7wx7Txzn3y+85zcLjZyN5+h8ioU+rXU=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by AS2PR08MB9618.eurprd08.prod.outlook.com (2603:10a6:20b:609::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 08:56:14 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2%7]) with mapi id 15.20.6652.028; Thu, 10 Aug 2023
- 08:56:14 +0000
-Date:   Thu, 10 Aug 2023 09:55:50 +0100
-From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S231667AbjHJJk1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 05:40:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AA4DA;
+        Thu, 10 Aug 2023 02:40:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E27D964D2C;
+        Thu, 10 Aug 2023 09:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD45C433C7;
+        Thu, 10 Aug 2023 09:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691660425;
+        bh=sIPt3F3NESEzK1OvlyyFT5VyVQ7tE7yPYubqQGStCqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IP8wHcn150hnKrZvepWZRu/bnQUdsnKp47dRm/aFoEOE+zmmb5oelBi/0ntmITG0C
+         GxnEh1vJB+bmqUgUZKCZWFGgq0598Qp8ItPgtUCT4ebSzjj73B7qiveA8tSUG6bUIu
+         X/zQebJJjEdNCt3iFsoJV3655xdL6Fznj/O9YYQHvX5KTm0sh/0EwK6DahGuoDdcfa
+         r+qksmi5gW/78J957YpZKYdhGAZe0GI/talrbTnfFLtOQIC+iOS5UQS8oTWDkGFm0a
+         XZlgficEyzqu70VQik1EX2X8tFZCvnFML8NGJHla/35zm9SYh9XelgwUQ7xVTiRz1S
+         QcqAzpTWxhy5Q==
+Date:   Thu, 10 Aug 2023 10:40:16 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Andrew Morton <akpm@linux-foundation.org>,
         Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -94,6 +49,7 @@ Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
         Deepak Gupta <debug@rivosinc.com>,
         Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
         "H.J. Lu" <hjl.tools@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -103,52 +59,21 @@ Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <ZNSmFmYFHDw3NvvP@arm.com>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
- <ZNOhjrYleGBR6Pbs@arm.com>
- <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
-X-ClientProxiedBy: SA1P222CA0098.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:35e::8) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+Subject: Re: [PATCH v3 00/36] arm64/gcs: Provide support for GCS in userspace
+Message-ID: <20230810094016.GA5365@willie-the-truck>
+References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
+ <20230801141319.GC26253@willie-the-truck>
+ <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
+ <20230808133857.GC2369@willie-the-truck>
+ <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS2PR08MB9618:EE_|AM7EUR03FT040:EE_|DBAPR08MB5574:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5302a8c4-aff1-4116-661a-08db997faf87
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: YPww17Wa3xYHTX2cruJRFvAl9IrbdGyP1ACX4Nq5+AgfGbjQ7LA1uGnijNORkie0hxQFfdSG3SRJ5uB6pIqrYq3QbpOXrEFtH/2twI4qOo7gSDsG4PReXJeDPzY6x9QiL162gTKJxZjXrJ5rxtZJi06vf48vwSYLtGb/tVDuAMxogn/UIA1PKGhB+5Ty89tcx9otAw6Gu0hY0aDwVJwAiPQVeZyy2Tn5wS5po1klv8+RyooCTIngJD/Y0NqeWCCr3DOqyhxzx8rIdCxEm8L6rx/R0YG6WRynWpbFbY1kXUjvm/hLC7ZNDyNNcB82jOt/xtBK16CG35RGL21qTsoIH1lug2rimF4gT9JmO5f2RXDInJ+d97BhzhhgQ7J1rS1ayeU3r4Q/PVZP6xzDSCF6EJ5laBq/+l/Q9D9ElFyo6ObgKF4PQdGZAG9rozafCUKU+mJwTY+gq8mm0OAq5XGOBXVJ2QBKro1pPnoFZaPh34Xx6Y9o+8T0TpvijWljXEKm6GVtskaRObAbiSREabvKE9EpaJDAMQeUpHF/j+fWv5ZIzO4pPju/Ghp4UtWlIcn1
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(346002)(376002)(39860400002)(136003)(451199021)(186006)(1800799006)(36756003)(6666004)(478600001)(110136005)(66556008)(6506007)(6636002)(66946007)(26005)(54906003)(66476007)(6486002)(4326008)(316002)(2906002)(7416002)(41300700001)(8676002)(5660300002)(38100700002)(86362001)(8936002)(83380400001)(2616005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9618
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT040.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 6fd1b402-1226-45b2-c901-08db997fa69d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 62RJUCtXw9xHSauy1JMs81PfhWMWKiOk1y4uOanDpyIzC55vGkq2RIqeR5gHlhdUfHOSaPkjU6i0pHDgwnR3fMb5iwqAA5Eg/aOzU7vRPtaASrxddKvx/MXXK28CWGUWm3bvnuhhcaJ9L1HlQNqE3IYWr/WU4wbb0M6DbFodvntREOuo1idqQxdBUqdcr95KWMEwDba8F/TTvWM/GSW6EiSIvs24mqnLtjxdpYLVc3NlE0yylSQ6+veqmxAjE5n2sgf+tglrK/UyOhHgYsulUiA1n3N2+d/F+IOFUYLZszOSh1SXcdZ00Crls3FVXx2XpGNzbh9x95ieZ/p9attRGZAo6P9iufNDfvAEU214kSVC7Un//ELT7Rh3GAjtaroJBHUSIO+cw3xikwoVbRraXi5CZV5EHFm/XvS7DSsg5SL5KNcDG325gvj2snuNJzeomkvB7EKviJfm4Y63kNIqorJZzrK+RdVJYWqGm11ImhSHmbZ5ljExLpQNuwiLy29ECUpTjEt6gycxtehk8OYQoMWf31mFmFLOInVRvrwMb7lTr+zM8jczsu12vfV3cXdfiR7vOQ4gTz2yEH2NMI3dH76ngKrBAvyMaiK8fPzZc3TkuRCGcqdVlbBmJ3UFW3Hk0Z5x9MLXy7YIrF3zv07dSeWuiu+Xr54ZBKLT83FDQK1IggaDlugLa/ghkhR0SYBrHWXrdmc+C3UKRcNOsEZO8CCEzsgcfQqVXv0QmFP3+AY=
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(39860400002)(346002)(186006)(82310400008)(1800799006)(451199021)(40470700004)(46966006)(36840700001)(4326008)(6636002)(450100002)(47076005)(36860700001)(70206006)(70586007)(41300700001)(83380400001)(2616005)(40480700001)(6486002)(5660300002)(6666004)(110136005)(54906003)(86362001)(8676002)(8936002)(82740400003)(356005)(81166007)(2906002)(478600001)(107886003)(6512007)(40460700003)(26005)(6506007)(36756003)(316002)(336012);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 08:56:28.6589
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5302a8c4-aff1-4116-661a-08db997faf87
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT040.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR08MB5574
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -156,30 +81,147 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 08/09/2023 16:34, Mark Brown wrote:
-> On Wed, Aug 09, 2023 at 03:24:14PM +0100, Catalin Marinas wrote:
-> > On Mon, Aug 07, 2023 at 11:00:08PM +0100, Mark Brown wrote:
-> > > +* When GCS is enabled for a thread a new Guarded Control Stack will be
-> > > +  allocated for it of size RLIMIT_STACK / 2 or 2 gigabytes, whichever is
-> > > +  smaller.
+On Tue, Aug 08, 2023 at 09:25:11PM +0100, Mark Brown wrote:
+> On Tue, Aug 08, 2023 at 02:38:58PM +0100, Will Deacon wrote:
 > 
-> > Is this number based on the fact that a function call would only push
-> > the LR to GCS while standard function prologue pushes at least two
-> > registers?
+> > But seriously, I think the question is more about what this brings us
+> > *on top of* SCS, since for the forseeable future folks that care about
+> > this stuff (like Android) will be using SCS. GCS on its own doesn't make
+> > sense to me, given the recompilation effort to remove SCS and the lack
+> > of hardware, so then you have to look at what it brings in addition to
+> > GCS and balance that against the performance cost.
 > 
-> It's actually based on bitrot that I'd initially chosen a smaller value
-> since it's likely that functions will push at least something as you
-> suggest, the patches now just use RLIMIT_STACK.  I'll fix.
+> > Given that, is anybody planning to ship a distribution with this enabled?
+> 
+> I'm not sure that your assumption that the only people would would
+> consider deploying this are those who have deployed SCS is a valid one,
+> SCS users are definitely part of the mix but GCS is expected to be much
+> more broadly applicable.  As you say SCS is very invasive, requires a
+> rebuild of everything with different code generated and as Szabolcs
+> outlined has ABI challenges for general distros.  Any code built (or
+> JITed) with anything other than clang is going to require some explicit
+> support to do SCS (eg, the kernel's SCS support does nothing for
+> assembly code) and there's a bunch of runtime support.  It's very much a
+> specialist feature, mainly practical in well controlled somewhat
+> vertical systems - I've not seen any suggestion that general purpose
+> distros are considering using it.
 
-the pcs requires 16byte aligned stack frames, with 8byte per gcs entry
-there is no need for same gcs size as stack size in userspace.
+I've also seen no suggestion that general purpose distros are considering
+GCS -- that's what I'm asking about here, and also saying that we shouldn't
+rush in an ABI without confidence that it actually works beyond unit tests
+(although it's great that you wrote selftests!).
 
-you can argue about a fixed size small increment (stacksize/2 + inc)
-for signal handling on alt stack and special tokens, but stack size is
-overkill i think.
+> In contrast in the case of GCS one of the nice features is that for most
+> code it's very much non-invasive, much less so than things like PAC/BTI
+> and SCS, which means that the audience is much wider than it is for SCS
+> - it's a *much* easier sell for general purpose distros to enable GCS
+> than to enable SCS.
 
-fwiw my current makecontext patch uses roundup(stacksize/2+160).
-(threads guaranteed to have about 300bytes of data on the stack in glibc
-so if gcs is stacksize/2, that accounts for the increment. this is for
-the theoretical case when an empty thread just tries to overflow the
-stack and then handle the fault on sigaltstack.)
+This sounds compelling, but has anybody tried running significant parts of a
+distribution (e.g. running Debian source package tests, booting Android,
+using a browser, running QEMU) with GCS enabled? I can well imagine
+non-trivial applications violating both assumptions of the architecture and
+the ABI.
+
+> For the majority of programs all the support that is needed is in the
+> kernel and libgcc/libc, there's no impact on the code generation.  There
+> are no extra instructions in the normal flow which will impact systems
+> without the feature, and there are no extra registers in use, so even if
+> the binaries are run on a system without GCS or for some reason someone
+> decides that it's best to turn the feature off on a system that is capable
+> of using it the fact that it's just using the existing bl/ret pairs means
+> that there is minimal overhead.  This all means that it's much more
+> practical to deploy in general purpose distros.  On the other hand when
+> active it affects all code, this improves coverage but the improved
+> coverage can be a worry.
+> 
+> I can see that systems that have gone through all the effort of enabling
+> SCS might not rush to implement GCS, though there should be no harm in
+> having the two features running side by side beyond the doubled memory
+> requirements so you can at least have a transition plan (GCS does have
+> some allowances which enable hardware to mitigate some of the memory
+> bandwidth requirements at least).  You do still get the benefit of the
+> additional hardware protections GCS offers, and the coverage of all
+> branch and ret instructions will be of interest both for security and
+> for unwinders.  It's definitely offers less of an incremental
+> improvement on top of SCS than it is without SCS though.
+> 
+> GCS and SCS are comparable features in terms of the protection they aim
+> to add but their system integration impacts are different.
+
+Again, this sounds plausible but I don't see any data to back it up so I
+don't really have a feeling as to how true it is.
+
+> > If not, why are we bothering? If so, how much of that distribution has
+> > been brought up and how does the "dynamic linker or other startup code"
+> > decide what to do?
+> 
+> There is active interest in the x86 shadow stack support from distros,
+> GCS is a lot earlier on in the process but isn't fundamentally different
+> so it is expected that this will translate.  There is also a chicken and
+> egg thing where upstream support gates a lot of people's interest, what
+> people will consider carrying out of tree is different to what they'll
+> enable. 
+
+I'm not saying we should wait until distros are committed, but Arm should
+be able to do that work on a fork, exactly like we did for the arm64
+bringup. We have the fastmodel, so running interesting stuff with GCS
+enabled should be dead easy, no?
+
+> Architecture specific feedback on the implementation can also be fed back
+> into the still ongoing review of the ABI that is being established for
+> x86, there will doubtless be pushback about variations between
+> architectures from userspace people.
+> 
+> The userspace decision about enablement will primarily be driven by an
+> ELF marking which the dynamic linker looks at to determine if the
+> binaries it is loading can support GCS, a later dlopen() can either
+> refuse to load an additional library if the process currently has GCS
+> enabled, ignore the issue and hope things work out (there's a good
+> chance they will but obviously that's not safe) or (more complicatedly)
+> go round all the threads and disable GCS before proceeding.  The main
+> reason any sort of rebuild is required for most code is to add the ELF
+> marking, there will be a compiler option to select it.  Static binaries
+> should know if everything linked into them is GCS compatible and enable
+> GCS if appropriate in their startup code.
+> 
+> The majority of the full distro work at this point is on the x86 side
+> given the hardware availability, we are looking at that within Arm of
+> course.  I'm not aware of any huge blockers we have encountered thus
+> far.
+
+Ok, so it sounds like you've started something then? How far have you got?
+
+> It is fair to say that there's less active interest on the arm64 side
+> since as you say the feature is quite a way off making it's way into
+> hardware, though there are also long lead times on getting the full
+> software stack to end users and kernel support becomes a blocker for
+> the userspace stack.
+>
+> 
+> > After the mess we had with BTI and mprotect(), I'm hesitant to merge
+> > features like this without knowing that the ABI can stand real code.
+> 
+> The equivalent x86 feature is in current hardware[1], there has been
+> some distro work (I believe one of the issues x86 has had is coping with
+> a distro which shipped an early out of tree ABI, that experience has
+> informed the current ABI which as the cover letter says we are following
+> closely).  AIUI the biggest blocker on userspace work for x86 right now
+> is landing the kernel side of things so that everyone else has a stable
+> ABI to work from and don't need to carry out of tree patches, I've heard
+> frustration expressed at the deployment being held up.  IIRC Fedora were
+> on the leading edge in terms of active interest, they tend to be given
+> that they're one of the most quickly iterating distros.  
+> 
+> This definitely does rely fairly heavily on the x86 experience for
+> confidence in the ABI, and to be honest one of the big unknowns at this
+> point is if you or Catalin will have opinions on how things are being
+> done.
+
+While we'd be daft not to look at what the x86 folks are doing, I don't
+think we should rely solely on them to inform the design for arm64 when
+it should be relatively straightforward to prototype the distro work on
+the model. There's also no rush to land the kernel changes given that
+GCS hardware doesn't exist.
+
+Will
