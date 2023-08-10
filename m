@@ -2,89 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB02777E18
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 18:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034DC777E4C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbjHJQWs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Aug 2023 12:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S235761AbjHJQaZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Aug 2023 12:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjHJQWr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 12:22:47 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6F9A8;
-        Thu, 10 Aug 2023 09:22:47 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1bdaeb0f29aso2876975ad.2;
-        Thu, 10 Aug 2023 09:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691684566; x=1692289366;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LBxuuRBGx37tQ5XIQd6hBtuu9RLCe7TcvWshiqvJ6Ig=;
-        b=hgQ8PWMkP2K0rSExr6a+qhX3F0ukmJLk0DfQrMX1iZo+xMyjKV9CoZegiNwm+EcG+r
-         zJbcpKajI7y/wOrYxn+4CTSYBa+rUKUg6kHN8bfWMB1iblfeFHeDKSsshGJhRKLAkElF
-         ejsC3aZtMvpojv5MhEsuJfIp4KENrn5ODkvDR+l/5ANrP2Cky6o9GIohuhthkV6umPf7
-         32dAvU0TjigyGZ+tWhm8zVhyJsdVXVEzndpZTF97gZ1uGQuLkBzLQbshAg/oTAz58itK
-         M4gc0zvUwbNGRbczqVL42RQtQ9U6fuS6EFUsGw6XUAsbxeJ5PhMD479ITmKOn1RFKMiv
-         j4Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691684566; x=1692289366;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LBxuuRBGx37tQ5XIQd6hBtuu9RLCe7TcvWshiqvJ6Ig=;
-        b=iOcWVnjqO6k4bmTI6zPV8z9guLXTFkPwLdAam5CnLJdsUP7TErL3GinLpybHortwGG
-         Y3lr7AxKV1o4iOKlO1EuagFly5HFr2wST5xzwmiCLF0qqAAgOHFTeqj/RBsdXBvNzGiZ
-         y/brzYYGHsoce5KxDGdLYx58iG5QPadfQUbfF54lOdCzms2Jr9Z0lmH9lPCdTjyVlZnn
-         KWh7dbDqGEJh8IhDekhjaU0nOOzebqG2lkxM+p9m0IdOlWPM1j+6FCI57luzt1voKV5A
-         Me6XFGh/rgSkA30PpKMtXnd0YY5EHwJ3Lx+6y2ibx7bCxX09wXNnzyAzc6ykYAfZYkk+
-         QLOQ==
-X-Gm-Message-State: AOJu0Yzb0ZPrqkL8zVAPQUh0qqtAX0cHFvsIK3dHxcYPE6PV43fBnpmq
-        BdaV5ZHjtyIoJgl18gpASko=
-X-Google-Smtp-Source: AGHT+IGz0JmplIzBvF6jsyASn31jPQ/ydbP+pgRBs/DbtZZx8p0q2kZlCd/dGEz0nBARuWJVoVjFAg==
-X-Received: by 2002:a17:902:bd4c:b0:1b1:99c9:8ce1 with SMTP id b12-20020a170902bd4c00b001b199c98ce1mr2330144plx.51.1691684566496;
-        Thu, 10 Aug 2023 09:22:46 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id y6-20020a17090322c600b001b9c960ffeasm1981122plg.47.2023.08.10.09.22.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 09:22:46 -0700 (PDT)
-Message-ID: <da667608-a8aa-f5b8-1621-de29b3f19272@gmail.com>
-Date:   Fri, 11 Aug 2023 00:22:36 +0800
+        with ESMTP id S236289AbjHJQaX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 12:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A962728;
+        Thu, 10 Aug 2023 09:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 982BB63C09;
+        Thu, 10 Aug 2023 16:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC34C433C7;
+        Thu, 10 Aug 2023 16:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691685019;
+        bh=6q/Y46TIpsSPhXSxrFEF/VLkfW3O+0fXt+mKjW7zycU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QBTjQqGMrvrEx1cPGNDE6eBGCUIGSu7QfnO9qJ2fxmYvkPqU3uHCMgyBgqQTf/an2
+         Z+gn6DD3Hyi2/XpbY+JVY1qMgaDWQl+2hnwz0tVPTFJ/aQbIQmVZ1kcfhhPjRdTHQE
+         pJIv156HmhMPVc4rUaGTnBIRVcIwyce9fqtZavbwMLCcXcb+iIRAvB+N8r6TXlneb4
+         UD2iv++wxJLA1MWi34RB4oGLv7/wnHhRqPZEFzgBWFZI+EWK5VqP8eJGXk5oRzCMEx
+         VVvgWtIxSwNXI117isSSjrqm7FKpRTocaPXB2KmulJEbsgbDl0ASgz97yEvHnqUTRR
+         0d2hwTU0pEbDg==
+Date:   Thu, 10 Aug 2023 17:30:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <e676deee-fc7a-4f7f-8605-41b4af274c81@sirena.org.uk>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
+ <ZNOhjrYleGBR6Pbs@arm.com>
+ <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+ <ZNSmFmYFHDw3NvvP@arm.com>
+ <4e215e53-c7d1-4338-8df9-3f9bf783ced9@sirena.org.uk>
+ <ZNTnTGb341TSMuvA@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [EXTERNAL] [PATCH V2 2/9] x86/hyperv: Set Virtual Trust Level in
- VMBus init message
-To:     Wei Liu <wei.liu@kernel.org>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>
-References: <20230627032248.2170007-1-ltykernel@gmail.com>
- <20230627032248.2170007-3-ltykernel@gmail.com>
- <PUZP153MB0749BAAA8E288D76938704A5BE2DA@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
- <ZNB3m6Qiml7JDTQ7@liuwe-devbox-debian-v2>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <ZNB3m6Qiml7JDTQ7@liuwe-devbox-debian-v2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="N3GIhup1qS9ZN5af"
+Content-Disposition: inline
+In-Reply-To: <ZNTnTGb341TSMuvA@arm.com>
+X-Cookie: Reunite Gondwondaland!
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,30 +85,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/7/2023 12:48 PM, Wei Liu wrote:
-> On Fri, Jul 07, 2023 at 09:07:54AM +0000, Saurabh Singh Sengar wrote:
->>
->>
->>> +
->>> +	ret = hv_do_hypercall(control, input, output);
->>> +	if (hv_result_success(ret))
->>> +		vtl = output->as64.low & HV_X64_VTL_MASK;
->>> +	else
->>> +		pr_err("Hyper-V: failed to get VTL! %lld", ret);
->>
->> In case of error this function will return vtl=0, which can be the valid value of vtl.
->> I suggest we initialize vtl with -1 so and then check for its return.
->>
->> This could be a good utility function which can be used for any Hyper-V VTL system, so think
->> of making it global ?
->>
-> 
-> Tianyu -- your thought on this?
 
-In current user cases, the guest only runs in VTL0 and Hyper-V may
-return VTL error in some cases but kernel still may run with 0 as VTL.
+--N3GIhup1qS9ZN5af
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I just sent out v5 and set VTL to 0 by default if fail to get VTL from
-Hyper-V and give out a warning log. The get_vtl() is only called on 
-enlightened SEV-SNP guest. If there is new case that needs handle the 
-error from Hyper-V when call VTL hvcall, we may add the logic later.
+On Thu, Aug 10, 2023 at 02:34:04PM +0100, Szabolcs Nagy wrote:
+> The 08/10/2023 12:41, Mark Brown wrote:
+
+> > I agree that it's going to be excessive for pretty much all
+> > applications, I adjusted it to match x86 as part of the general effort
+> > to avoid divergence and because I was a bit concerned about non-PCS
+> > cases (eg, JITed code) potentially running into trouble, especially with
+
+> is that even possible?
+
+> 16byte alignment is not a convention but architectural:
+> access via unaligned sp traps (at least in userspace).
+
+> it is possible to use bl such that the stack is not involved
+> e.g. if there is no bl/ret pairing, but if we base the gcs
+> size on the stack size then i'd expect one stack frame per
+> bl/ret pair with 16byte alignment, or is there a programming
+> model possible that uses 8byte stack per bl?
+
+That's definitely what I'd expect most of the time.  You'd need to be
+tracking what needs pushing in some other register but it's possible.
+Quite why you'd do this is a separate question, I think I'm being overly
+cautious worrying about anyone actually having done it but it wouldn't
+be the first time I was surprised by someone doing something unexpected.
+Like I say I think it's excessive and was erring on the side of being
+conservative.
+
+--N3GIhup1qS9ZN5af
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTVEI4ACgkQJNaLcl1U
+h9A4Awf/bx8Lj3RQIsL13zO6Rcr8idtjPSrfssjIBQQtk+Ytcou3d6I0srD7ZcYS
+KIOrfTZRe8dRpA45iRARURQA9vzzzeS2pMY0bviaHVPz0kbfeiJ8x/PXOgLOHMkX
+EV2us3XQYCNpiGAozGpIK5m8GntmZotF3bJtqK8PDxzf+ujeo361xNzQFcBX7js/
+YNED0FhW8OeI/+z7ztalZM26vZw05bE2MwbJmazHCO6L/flUyNSyrk+otZdC71s0
+UEVhosgX4Ba4KFRmDBvl5JiCIohdEI+k5S3vJOAZiLauPFRDQuFlrNvs1SGkHcMv
+WbwxA1SwHdT5GRMpJCXjvIAWhkckqg==
+=j9pJ
+-----END PGP SIGNATURE-----
+
+--N3GIhup1qS9ZN5af--
