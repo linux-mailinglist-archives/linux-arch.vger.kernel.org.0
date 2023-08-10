@@ -2,156 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042287779AB
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 15:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137DD777D91
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 18:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjHJNei (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Aug 2023 09:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S236442AbjHJQF1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Aug 2023 12:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbjHJNeh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 09:34:37 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2041.outbound.protection.outlook.com [40.107.20.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38252106;
-        Thu, 10 Aug 2023 06:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1+P9sNH71xdSnZ55Qo8IbTCdoxxs3507AZMmWWiXwUw=;
- b=F4+wkQUcBHKCO/A4R1XJta6zjFmSKXiFu9mKNvAJXJD+5dYMfB52TEBZ6ra5Ez+33wCxefCVHGH+N5kqq43Ng9LYKyP+/70CiPEjGLqjCj4xveTZ2nX2lLT6IRVkeIRlEsHWE+SWY18qp7tr56vtklxG8WFt2XAlTTjCQmELJ3I=
-Received: from DB8P191CA0018.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:130::28)
- by PAVPR08MB9040.eurprd08.prod.outlook.com (2603:10a6:102:32d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 13:34:32 +0000
-Received: from DBAEUR03FT020.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:130:cafe::9a) by DB8P191CA0018.outlook.office365.com
- (2603:10a6:10:130::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30 via Frontend
- Transport; Thu, 10 Aug 2023 13:34:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT020.mail.protection.outlook.com (100.127.143.27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6678.20 via Frontend Transport; Thu, 10 Aug 2023 13:34:32 +0000
-Received: ("Tessian outbound 169aaa6bf2b7:v175"); Thu, 10 Aug 2023 13:34:31 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 6232d1537c072f4d
-X-CR-MTA-TID: 64aa7808
-Received: from 4f57aa4cdd8d.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id F6073716-51A2-4679-AE41-BE0783E28F7A.1;
-        Thu, 10 Aug 2023 13:34:23 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 4f57aa4cdd8d.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 10 Aug 2023 13:34:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CatSmqqjzAZCflAR1k5JOY+OJ96XDQulOzQC1575kYhYLTj4QTFtfQas4aOilIt+pqQbF/b/rc3l5jMFeOsfh0Mrkulmx8zBKX+AZGSuVu/oCb0pgCh95J0SW3kULmNoqE0BcZ2SH2MTH9hy3VLukE09xHAUZduu59tlOqSqkoqcwH7A1P+97mNDSBw90t3ASrYGLaQYha8mb4qeVxTlvYZ3XJFXviYprmyXhSypKhC6HL9yAjIKPi8uWcqAkGh/Mgoska5RFt9AGiKoH6CsbukU9FkmrTylA+bFH+DYp/FQxjWV0+8qNTGWBy1EGwGQTe1u1GqLgCx7PzI2t6CiAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1+P9sNH71xdSnZ55Qo8IbTCdoxxs3507AZMmWWiXwUw=;
- b=MEFpRYa0KQ/mEvv2vLSq+IH4Sn2FzsHR/Ks7ajfKrUGQVjj5kiXInFwhZ7cUoBbpvFC/6J56et8gQ0r1UP71DnfnFPJH5fqfOoxTVsIaSB1dMQfZneXgrBZ+h2x/Va+YQZXhuNZ6JXVEODF9QI7mGZ2eH+JfIJW1vnGoMZjpFlU/5a9f4oUY6z4/6bQfTo6ZvG+msVVI9AjXgm6mbBvWRqLdaysevDjAdbb6dhMXtxQksO0R2GYV1DqK/Q2XDbmSI0G7+1aJjZsye+3eF4V416Ax6SPTtPstIMwU/1GQNWn69kOqlo5oxECrffJ2+i7YmzBTWmOdRcwcaCDfIba1GQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1+P9sNH71xdSnZ55Qo8IbTCdoxxs3507AZMmWWiXwUw=;
- b=F4+wkQUcBHKCO/A4R1XJta6zjFmSKXiFu9mKNvAJXJD+5dYMfB52TEBZ6ra5Ez+33wCxefCVHGH+N5kqq43Ng9LYKyP+/70CiPEjGLqjCj4xveTZ2nX2lLT6IRVkeIRlEsHWE+SWY18qp7tr56vtklxG8WFt2XAlTTjCQmELJ3I=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from PAXPR08MB7172.eurprd08.prod.outlook.com (2603:10a6:102:20a::19)
- by DU0PR08MB9251.eurprd08.prod.outlook.com (2603:10a6:10:41a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Thu, 10 Aug
- 2023 13:34:18 +0000
-Received: from PAXPR08MB7172.eurprd08.prod.outlook.com
- ([fe80::5a76:5272:2887:31cb]) by PAXPR08MB7172.eurprd08.prod.outlook.com
- ([fe80::5a76:5272:2887:31cb%3]) with mapi id 15.20.6652.029; Thu, 10 Aug 2023
- 13:34:18 +0000
-Date:   Thu, 10 Aug 2023 14:34:04 +0100
-From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <ZNTnTGb341TSMuvA@arm.com>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
- <ZNOhjrYleGBR6Pbs@arm.com>
- <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
- <ZNSmFmYFHDw3NvvP@arm.com>
- <4e215e53-c7d1-4338-8df9-3f9bf783ced9@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4e215e53-c7d1-4338-8df9-3f9bf783ced9@sirena.org.uk>
-X-ClientProxiedBy: LO4P123CA0359.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18d::22) To PAXPR08MB7172.eurprd08.prod.outlook.com
- (2603:10a6:102:20a::19)
+        with ESMTP id S236418AbjHJQE6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 12:04:58 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFD4359D;
+        Thu, 10 Aug 2023 09:04:18 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bc34b32785so8202905ad.3;
+        Thu, 10 Aug 2023 09:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691683458; x=1692288258;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+SF3zl+41agUIJM1O+gfEeVKPjmemuCif+mwIFH9rTo=;
+        b=KqpQ0z8Ti+5O1OhHON2G2g8Yi68CISYwscSZk+hMCO1qDfrwUIFODn+iq6elxrV3xY
+         YdvC6NjsX8VhdP9Q3/agD6Y+t8NU/gzNpnFtlmhLavueSTvPoMCJ70QqLM3xTQWmyqUd
+         TJxkR3UkLjQYhERaBSpQa6DBh4TvrzyWqxdUhB0cEA1qywRxBJYgxVUQb1JsnoRqD97/
+         fjHJBJxYPu991as0MGXXNglPdesWCF0hRV+3+gKwmNONCllKZxCDFLidfmKcglwfG7C5
+         Tb+RY2qeu5QPms8TmjYBN4Q62MwCwiBo/bvA2ceRtuFMUz9m+gYNE+iRJ6LnMT1SKqlP
+         Xg6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691683458; x=1692288258;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+SF3zl+41agUIJM1O+gfEeVKPjmemuCif+mwIFH9rTo=;
+        b=U7o3tDQQQ/s7Ax1ixzFBY3LLX/48b0ZyecbFIkQH/2V2ISDqZ6vl410yp9v6Y0s5rF
+         fzUNJWvYyPd4GXIKobTCs9ZRBzHL16aEkJ9r34g26sjrPb0R2sf31QiKR0LwZpuVYMYR
+         z7rUL11onkYzL4NUW//Eb/4rBojqtZCu8KfEnFXpLoEcjTzo/uJAYSwooVhhN5BXJBRd
+         mPWZO88GgJzORLPrg3oBBcv8EQfL0rHnn08s21/3J8k8c/wa95LJoch1frfxHh+i/a8u
+         4dXjyZN02qLSGqBvFsx+RcdFZ7UuyfSKHGXI+9Xm/Je8brabQ0Gbn1nNeU53w8vvlaSR
+         tMrw==
+X-Gm-Message-State: AOJu0YzKP5u/zl01d5a3qFEE3mdu3PHJ6Tads/d8WWcRZMgH+KlM+p8q
+        jLe3fgD92vJmn2oyJkzJHis=
+X-Google-Smtp-Source: AGHT+IERCcvEDw2pKF0cSddJ8O9j63OatCR5sYqSdwi0B65DvV6sgtIFx2CDTMiC/jLgW16c9Ua0Tg==
+X-Received: by 2002:a17:902:9a91:b0:1bc:9c49:f8ce with SMTP id w17-20020a1709029a9100b001bc9c49f8cemr2407104plp.4.1691683458189;
+        Thu, 10 Aug 2023 09:04:18 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:0:c620:2003:6c97:8057])
+        by smtp.gmail.com with ESMTPSA id r4-20020a1709028bc400b001b895a17429sm1948821plo.280.2023.08.10.09.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 09:04:16 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com
+Subject: [PATCH V5 0/8] x86/hyperv: Add AMD sev-snp enlightened guest support on hyperv
+Date:   Thu, 10 Aug 2023 12:04:03 -0400
+Message-Id: <20230810160412.820246-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: PAXPR08MB7172:EE_|DU0PR08MB9251:EE_|DBAEUR03FT020:EE_|PAVPR08MB9040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3714343f-bb19-4792-422d-08db99a6878a
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: 1u+TtOmUJAeU4mMlYJ++WwKp0ZjgMJfsb2Oh+2S4sGn9ZcSvZU638r2FbTdRMQwmBe5G/jZi1Fx/3iIpOqgmOgYHR+96qrID5w2MoPvWPKFhgxfC0jdItUrjnDomx+Yr35LLYvbtxthEcGZS7oPOdJKlxhG9QXld4XWHyusWOgA/IacC84b53xiiwCVUJGWPg7zp4iQkBUIM9ZdT74G4i0OOn//oqUPJEhC6H5Ail1RGCpa1FoEZjC8rBWOmB6gpg7GmgWNjqeqnHke9IJCBmOFd7nTYDhROopD/6GKTudqEbTcYmfWwsthg3EIPSBU3uECP80JzZVST8mt00FMpySLk27f01ojn5sdIDQkczIWizzTSDvnAV3nn85SRc1jX2V+uQc2vo02vQILlPaG0WWVkpjntYBf1WpmYuNv+IMCn3ooNR39QJFg7io0zbckytpnOJs+dCrkOcslFJT6Fg6py/qncFbsk58jEp8BCrypuoctfil+TLlgbfr0c8140QdP1o3XoIynwPGxoCfLie4j9CpFePYXpbupkulDSf8h+RmkWpEC+VAUNCiRL4qTD
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR08MB7172.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(396003)(366004)(136003)(451199021)(1800799006)(186006)(8676002)(8936002)(6506007)(26005)(41300700001)(36756003)(83380400001)(2906002)(2616005)(38100700002)(86362001)(7416002)(66556008)(6916009)(66476007)(66946007)(6512007)(4326008)(54906003)(6486002)(478600001)(5660300002)(6666004)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9251
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT020.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: f616eb5a-34c7-49ec-379e-08db99a67f62
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /I9ZRMQIfU4v6PqCOsLIcu8GKocjgKh1otJ7fFBM4lwmShl3G8dsHFoacfUZT6zsIrAzUJTvJZoHMfN/bplW5I1OuYTsHweNa+PnglivI4Kbl/vjJHZX2tIbh/oVs+N+UyPhUphHVpzGucBHUqZPA/hTxqguZj7eK1WakDnsjqF3DmZSw+hwc3/4E8FaTLGRnrdD9W2wtTM1gYLJCEP1q3DDyc9jLMWLAT9TpQQrasP6NmMMEJuE493l6eSJ6ah4WkpOBCL5J2yiidNP+TT1/NPbWLmfl1JbB6CZKPA/tjArb3kFkGPFb9VrA6ccsBJgBj12trXxLnWSfI4wUR+BNn0I2fWabKpMMb8Uz8G+kfysAv8vgNXy5MUNRwFvdU+N3qK3k4MVJVJP0yC2G+U5WYinte9CqRhV3qZVNeKI3qWX/4dJF7yNIVLHhfRF03Z+1eW+ZDG9q5nOCE+FgWPeljECPFjTIWe77IcfYAAhkOJN3uRWnPmwMvslgfF51rKQzTB9crQjDEqjmHYeGJMF7ApJBRcrN0CoUHFJw/DtlLWvRERRkEEq2+YY2PCv4a9pfo3c+UPl3TKvoIvrsJ0tEWrNB/twpNlAU9OTCxoi2Bgs17MHxR+zybxgYAc5J07czwCQTd89lbpsP8g7llYcTchMvLmUrhljxHBjh+DAIOBTLdE5hmygZ99jtD5FPSXwzneIoF+eElSBVlU6AzvzTpy8gAWIL3RJBY8jeWh+ROU=
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(136003)(1800799006)(186006)(451199021)(82310400008)(46966006)(40470700004)(36840700001)(40460700003)(40480700001)(107886003)(336012)(6506007)(450100002)(26005)(478600001)(6666004)(70206006)(70586007)(54906003)(36756003)(83380400001)(47076005)(36860700001)(2616005)(41300700001)(316002)(4326008)(6512007)(6486002)(2906002)(86362001)(6862004)(356005)(81166007)(5660300002)(8936002)(82740400003)(8676002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2023 13:34:32.0350
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3714343f-bb19-4792-422d-08db99a6878a
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT020.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9040
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,34 +73,91 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 08/10/2023 12:41, Mark Brown wrote:
-> On Thu, Aug 10, 2023 at 09:55:50AM +0100, Szabolcs Nagy wrote:
-> > The 08/09/2023 16:34, Mark Brown wrote:
-> 
-> > > It's actually based on bitrot that I'd initially chosen a smaller value
-> > > since it's likely that functions will push at least something as you
-> > > suggest, the patches now just use RLIMIT_STACK.  I'll fix.
-> 
-> > the pcs requires 16byte aligned stack frames, with 8byte per gcs entry
-> > there is no need for same gcs size as stack size in userspace.
-> 
-> I agree that it's going to be excessive for pretty much all
-> applications, I adjusted it to match x86 as part of the general effort
-> to avoid divergence and because I was a bit concerned about non-PCS
-> cases (eg, JITed code) potentially running into trouble, especially with
+From: Tianyu Lan <tiala@microsoft.com>
 
-is that even possible?
+*** BLURB HERE ***
+Hyper-V provides two modes for running SEV-SNP VMs:
 
-16byte alignment is not a convention but architectural:
-access via unaligned sp traps (at least in userspace).
+1) In vTOM mode with a paravisor (see Section 15.36.8 of [1])
+2) In "fully enlightened" mode with normal "C" bit control
+   over page encryption, and no paravisor
+ 
+For #1, the paravisor runs in VMPL 0, while Linux runs in VMPL 2
+(see Section 15.36.7 of [1]). The paravisor is typically provided
+by Hyper-V and handles most of the SNP-related functionality. As
+such, most of the SNP functionality in the Linux guest is bypassed.
+The guest operates in vTOM mode, where encryption is enabled by default.
+The guest must still request page transitions between private and shared,
+but there is relatively less SNP machinery required in the guest. Support
+for this mode of operation first went upstream in the 5.15 kernel.
 
-it is possible to use bl such that the stack is not involved
-e.g. if there is no bl/ret pairing, but if we base the gcs
-size on the stack size then i'd expect one stack frame per
-bl/ret pair with 16byte alignment, or is there a programming
-model possible that uses 8byte stack per bl?
+For #2, this patch set provides the initial support. The existing
+SEV-SNP machinery in the kernel is fully used, but Hyper-V specific
+updates are required to properly share Hyper-V communication pages
+between the guest and host and to start APs at boot time.
 
-> smaller stack limits.  It's not an issue I have super strong opinions on
-> though, as you can see I had implemented it both ways at various times.
+In either mode, Hyper-V requires that the guest implement the SEV-SNP
+Restricted Interrupt Injection feature (see Section 15.36.16 of [1],
+and Section 5 of [2]). Without this feature, the guest is subject to
+attack by a compromised hypervisor that can inject any exception at
+any time, such as injecting an interrupt while the guest has interrupts
+disabled. In vTOM mode, Restricted Interrupt Injection is implemented
+by the paravisor, so no Linux guest changes are required. But in fully
+enlightened mode, the Linux guest must provide the implementation.
 
+This patch set is derived from an earlier patch set that includes both
+the Hyper-V specific changes and Restricted Interrupt Injection support.[3]
+But it is now limited to only the Hyper-V specific changes. The Restricted
+Interrupt Injection support will come later in a separate patch set.
+
+[1] https://www.amd.com/system/files/TechDocs/24593.pdf
+[2] https://www.amd.com/system/files/TechDocs/56421-guest-hypervisor-communication-block-standardization.pdf
+[3] https://lore.kernel.org/lkml/20230515165917.1306922-1-ltykernel@gmail.com/
+
+Change since v4:
+       * Fix compile error on the ARM or other platform.
+
+Change since v3:
+       * Fix fossil comment
+
+Change since v2:
+       * Update Change log.
+       * Rework Hyper-V hypercall implementation.
+
+Change since v1:
+       * vTOM case uses paravisor_present flag and
+       	 HV_ISOLATION_TYPE_SNP type.
+       * Rework some patches' change log
+       * Fix some comments in the patches
+
+Tianyu Lan (8):
+  x86/hyperv: Add sev-snp enlightened guest static key
+  x86/hyperv: Set Virtual Trust Level in VMBus init message
+  x86/hyperv: Mark Hyper-V vp assist page unencrypted in SEV-SNP
+    enlightened guest
+  drivers: hv: Mark percpu hvcall input arg page unencrypted in SEV-SNP
+    enlightened guest
+  x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
+    enlightened guest
+  clocksource: hyper-v: Mark hyperv tsc page unencrypted in sev-snp
+    enlightened guest
+  x86/hyperv: Add smp support for SEV-SNP guest
+  x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+
+ arch/x86/hyperv/hv_init.c          |  55 +++++++++++++-
+ arch/x86/hyperv/ivm.c              | 111 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |   7 ++
+ arch/x86/include/asm/mshyperv.h    |  43 +++++++----
+ arch/x86/kernel/cpu/mshyperv.c     |  43 +++++++++--
+ drivers/clocksource/hyperv_timer.c |   2 +-
+ drivers/hv/connection.c            |   1 +
+ drivers/hv/hv.c                    |  57 ++++++++++++++-
+ drivers/hv/hv_common.c             |  19 +++++
+ include/asm-generic/hyperv-tlfs.h  |   1 +
+ include/asm-generic/mshyperv.h     |  14 +++-
+ include/linux/hyperv.h             |   4 +-
+ 12 files changed, 330 insertions(+), 27 deletions(-)
+
+-- 
+2.25.1
 
