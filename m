@@ -2,80 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5B2776ECC
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 05:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4B377703C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Aug 2023 08:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjHJDyl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Aug 2023 23:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S229783AbjHJGXy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Aug 2023 02:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjHJDyj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Aug 2023 23:54:39 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49141703;
-        Wed,  9 Aug 2023 20:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1691639678;
-        bh=BqIWgvq5uC7Yvr8B5ZIRSSaxOGFLY8twcji8cfVK2zY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ESjXVToXL8DWZNYSs5/lY+ubN/opLxzFv5Pr0jaXNdnPDr08CUWXmRXpudspnpG2x
-         GeH+tXInv6RpRdDQUS5oqKJl9xTJ/clzG5cZhCF9zV03D04iPAEAtuhZg2x/hKh1bm
-         kr2og4MR4sS68IheXv0AUbM1cGIaolBye2jSoSE8=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        with ESMTP id S229470AbjHJGXx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Aug 2023 02:23:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F15010F5;
+        Wed,  9 Aug 2023 23:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1691648628;
+        bh=+TYDQF4gFd96ccfrWjufrvQOFIeyCG4Q5lehMbfQqog=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VZSvdTymJAcg2dhkhY6LCgYsVwsw9A5QrnKpL6dMKn7HNGZ6GWxfjRNQUN6ZDxzxV
+         DPJpT8u2JghUGDAUE/u8DerstDePcocOZXK5c5gRR7Mxry3J9GOqU6wwp71+DIlMiU
+         JNQr6Q6HPsGvVXNEuwrZfbnUKDK1ulIb/Fx+oEvAy49cJPDALhgOCLffbx1fHQs53Q
+         zIE5adQjKK/70sfhrB/Swg2bneIF1RrGqhtjMrJCyALL46jg7H5uvDxUTTMRgemcIh
+         8whjhcq/X7Y1S0KQ1qB54die4eM3UsFEN8J07EPwjkXyJUb2A15cDzEMAGRFjnFktN
+         oyADssb8SVH6A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 87E8A659AD;
-        Wed,  9 Aug 2023 23:54:34 -0400 (EDT)
-Message-ID: <96a02f30fe68da4551f883599631f15a8978190d.camel@xry111.site>
-Subject: Re: [PATCH V2] LoongArch: Fix module relocation error with binutils
- 2.41
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        WANG Xuerui <git@xen0n.name>, stable@vger.kernel.org
-Date:   Thu, 10 Aug 2023 11:54:31 +0800
-In-Reply-To: <CAAhV-H6JTbuK+ypvrUi21KOYcTOWmTKbwxK_D8M5y9XaXfJK4A@mail.gmail.com>
-References: <20230710050024.2519893-1-chenhuacai@loongson.cn>
-         <ce4cee2d76340d1776560c124c1894080ded13bb.camel@xry111.site>
-         <292e6aa6b9399c8dd53562f51237090bcd6d19c5.camel@xry111.site>
-         <CAAhV-H6JTbuK+ypvrUi21KOYcTOWmTKbwxK_D8M5y9XaXfJK4A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RLxhL5cHsz4wbP;
+        Thu, 10 Aug 2023 16:23:46 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        dave.hansen@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        rui.zhang@intel.com
+Subject: Re: [PATCH v4 00/10] Introduce SMT level and add PowerPC support
+In-Reply-To: <87tttoqxft.ffs@tglx>
+References: <20230705145143.40545-1-ldufour@linux.ibm.com>
+ <87tttoqxft.ffs@tglx>
+Date:   Thu, 10 Aug 2023 16:23:46 +1000
+Message-ID: <87msyzbekt.fsf@mail.lhotse>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 2023-08-10 at 11:34 +0800, Huacai Chen wrote:
-> On Thu, Aug 10, 2023 at 11:21=E2=80=AFAM Xi Ruoyao <xry111@xry111.site> w=
-rote:
-> >=20
-> > On Thu, 2023-08-10 at 11:20 +0800, Xi Ruoyao wrote:
-> > > Can we backport this patch into stable?=C2=A0 It fixes a build error =
-with
-> > > binutils >=3D 2.41.
-> >=20
-> > Correction: not a build error, but all modules won't load if built with
-> > binutils >=3D 2.41 without the patch.
-> Generally we can backport, but I don't think there are users who use
-> the old kernels. :)
+Thomas Gleixner <tglx@linutronix.de> writes:
+> Laurent, Michael!
+>
+> On Wed, Jul 05 2023 at 16:51, Laurent Dufour wrote:
+>> I'm taking over the series Michael sent previously [1] which is smartly
+>> reviewing the initial series I sent [2].  This series is addressing the
+>> comments sent by Thomas and me on the Michael's one.
+>
+> Thanks for getting this into shape.
+>
+> I've merged it into:
+>
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+>
+> and tagged it at patch 7 for consumption into the powerpc tree, so the
+> powerpc specific changes can be applied there on top:
+>
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp-core-for-ppc-23-07-28
 
-The problem is 6.4.x is not "so old": 6.4.9 is actually the latest
-kernel release.  6.5.0 is not released yet.
+Thanks. I've merged this and applied the powerpc patches on top.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+I've left it sitting in my topic/cpu-smt branch for the build bots to
+chew on:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/cpu-smt
+
+I'll plan to merge it into my next in the next day or two.
+
+cheers
