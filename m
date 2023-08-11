@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB07779156
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 16:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A068177915A
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 16:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbjHKOEG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Aug 2023 10:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S234487AbjHKOEK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Aug 2023 10:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235805AbjHKOEF (ORCPT
+        with ESMTP id S235829AbjHKOEF (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 10:04:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B05710E4;
-        Fri, 11 Aug 2023 07:04:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69432D78;
+        Fri, 11 Aug 2023 07:04:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C408D67368;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B6076735E;
+        Fri, 11 Aug 2023 14:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5FE0C433CC;
         Fri, 11 Aug 2023 14:03:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F368CC433C9;
-        Fri, 11 Aug 2023 14:03:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691762639;
-        bh=1bMXyvoJWAnWRA0OT2v/oEuLQrJAr/mI1Zeo9rXeZ1w=;
+        s=k20201202; t=1691762641;
+        bh=DhAl8HXBxHnrafao1NZ+4HVKfS5+Q+yRkDdvMwW757U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JFg49Hu5DNwyNGwn6+X5k4CSMpFKXl6HdAY+m8LjwiTMyHb+RyUGus60FLoEucFF+
-         ke+hqsgNP3iphbK7yObfbhFB7/1yyR/e1WP1SlSE9yIpfymznvgV65vP9SkuFDnoat
-         EHoh+buXPp4/etPuIK918VZRX4tV4CMJW/MNmX/Yqy49wB8zoLPrU74VlTBjK2f49E
-         XqAQ1VMkJZmZp+lq7e/hKsKwqI3NQRjChWacO2SZlhtBeJ8050mvCpA2WSUtQcazJw
-         K4Z4LJPX36Pd5y81rtsVicZuJtBj4nsHMUHtBY9R0Z39m3hu9fsO1LoxXOhnNDk68r
-         0CUTOvNcxLz2w==
+        b=UBTE4peUFMl8fwF6tR3VJPzYHvfo3jb8bZ+yRNVQnXQGLDZEN1Swf9sM0erOcJR0y
+         PpmV8zhkk6ArFJDNH9zv+TL3rp8FIZHMSU/X8x2JBBr/cYfMNkTELTNIQguT2zvqWl
+         0QVL9k4OJz0DhHtiWIVw/t1+epfnq0QthNNrpuUoDJqmxrnHHYtRjLUCF+p4SDc7zH
+         d2fx76ieptOkXuqscbtuiA777WspE0SMX8JKMoeN4I++xaSK8rGVcwfqQ/rktBMvKh
+         t6bmHPI0qTDn99Akt9Q+3xJxoeyMbXStVufQCfYyf7RG8iJ4u0PWK8m0+hH3CKe2ep
+         PPWw7tnoLYRrQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -41,9 +41,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 8/9] extrawarn: enable more warnings in W=2
-Date:   Fri, 11 Aug 2023 16:03:26 +0200
-Message-Id: <20230811140327.3754597-9-arnd@kernel.org>
+Subject: [PATCH 9/9] [RFC] extrawarn: enable more W=1 warnings by default
+Date:   Fri, 11 Aug 2023 16:03:27 +0200
+Message-Id: <20230811140327.3754597-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230811140327.3754597-1-arnd@kernel.org>
 References: <20230811140327.3754597-1-arnd@kernel.org>
@@ -60,57 +60,79 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-These four warning options are always disabled, but actually meet the
-criteria for W=2, as they are sometimes useful and not prohibitively
-noisy:
+A number of warning options from the W=1 set are completely clean in current
+kernels, so we should just enable them by default, including a lot of warnings
+that are part of -Wextra, so just turn on -Wextra by default.
 
- -Wformat-security
- -Wframe-address
- -Waddress-of-packed-member
- -Wtrigraphs
+The -Woverride-init, -Wvoid-pointer-to-enum-cast and
+-Wmissing-format-attribute warnings are part of -Wextra but still produce
+some legitimate warnings that need to be fixed, so leave them at the
+W=1 level but turn them off otherwise.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- scripts/Makefile.extrawarn | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ scripts/Makefile.extrawarn | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
 diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 8fd76da9042f8..1e6822b22c260 100644
+index 1e6822b22c260..9185d69727542 100644
 --- a/scripts/Makefile.extrawarn
 +++ b/scripts/Makefile.extrawarn
-@@ -13,10 +13,6 @@ KBUILD_CFLAGS += -Werror=implicit-function-declaration
- KBUILD_CFLAGS += -Werror=implicit-int
- KBUILD_CFLAGS += -Werror=return-type
- KBUILD_CFLAGS += -Werror=strict-prototypes
--KBUILD_CFLAGS += -Wno-format-security
--KBUILD_CFLAGS += -Wno-trigraphs
--KBUILD_CFLAGS += $(call cc-disable-warning,frame-address,)
--KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
+@@ -72,6 +72,12 @@ KBUILD_CFLAGS += $(call cc-option,-Werror=designated-init)
+ # Warn if there is an enum types mismatch
+ KBUILD_CFLAGS += $(call cc-option,-Wenum-conversion)
  
- ifneq ($(CONFIG_FRAME_WARN),0)
- KBUILD_CFLAGS += -Wframe-larger-than=$(CONFIG_FRAME_WARN)
-@@ -157,6 +153,10 @@ KBUILD_CFLAGS += -Wmissing-field-initializers
- KBUILD_CFLAGS += -Wtype-limits
- KBUILD_CFLAGS += $(call cc-option, -Wmaybe-uninitialized)
- KBUILD_CFLAGS += $(call cc-option, -Wunused-macros)
-+KBUILD_CFLAGS += $(call cc-option, -Waddress-of-packed-member)
-+KBUILD_CFLAGS += $(call cc-option, -Wframe-address)
-+KBUILD_CFLAGS += -Wformat-security
-+KBUILD_CFLAGS += -Wtrigraphs
++KBUILD_CFLAGS += -Wextra
++KBUILD_CFLAGS += -Wunused -Wno-unused-parameter
++KBUILD_CFLAGS += -Wold-style-definition
++KBUILD_CFLAGS += -Wmissing-include-dirs
++KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
++
+ # backward compatibility
+ KBUILD_EXTRA_WARN ?= $(KBUILD_ENABLE_EXTRA_GCC_CHECKS)
  
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CFLAGS += -Winitializer-overrides
-@@ -169,6 +169,10 @@ else
- # The following turn off the warnings enabled by -Wextra
- KBUILD_CFLAGS += -Wno-missing-field-initializers
- KBUILD_CFLAGS += -Wno-type-limits
-+KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
-+KBUILD_CFLAGS += $(call cc-disable-warning, frame-address)
-+KBUILD_CFLAGS += -Wno-format-security
-+KBUILD_CFLAGS += -Wno-trigraphs
+@@ -86,16 +92,11 @@ export KBUILD_EXTRA_WARN
+ #
+ ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
  
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CFLAGS += -Wno-initializer-overrides
+-KBUILD_CFLAGS += -Wextra -Wunused -Wno-unused-parameter
+ KBUILD_CFLAGS += -Wmissing-declarations
+-KBUILD_CFLAGS += $(call cc-option, -Wrestrict)
+ KBUILD_CFLAGS += -Wmissing-format-attribute
+ KBUILD_CFLAGS += -Wmissing-prototypes
+-KBUILD_CFLAGS += -Wold-style-definition
+-KBUILD_CFLAGS += -Wmissing-include-dirs
+ KBUILD_CFLAGS += $(call cc-option, -Wunused-but-set-variable)
+ KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
+-KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
+ KBUILD_CFLAGS += $(call cc-option, -Wformat-overflow)
+ KBUILD_CFLAGS += $(call cc-option, -Wformat-truncation)
+ KBUILD_CFLAGS += $(call cc-option, -Wstringop-overflow)
+@@ -110,8 +111,7 @@ else
+ # Suppress them by using -Wno... except for W=1.
+ KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
+ KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+-KBUILD_CFLAGS += $(call cc-disable-warning, restrict)
+-KBUILD_CFLAGS += $(call cc-disable-warning, packed-not-aligned)
++KBUILD_CFLAGS += $(call cc-disable-warning, missing-format-attribute)
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow)
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation)
+ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+@@ -131,12 +131,10 @@ ifeq ($(call clang-min-version, 120000),y)
+ KBUILD_CFLAGS += -Wformat-insufficient-args
+ endif
+ endif
+-KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+-KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+-KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+-KBUILD_CFLAGS += $(call cc-disable-warning, cast-function-type-strict)
++KBUILD_CFLAGS += -Wno-void-pointer-to-enum-cast
+ else
+ KBUILD_CFLAGS += -Wno-main
++KBUILD_CFLAGS += -Wno-override-init
+ endif
+ 
+ endif
 -- 
 2.39.2
 
