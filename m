@@ -2,119 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE657788CD
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 10:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7222A778D99
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 13:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjHKIOH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Aug 2023 04:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S230010AbjHKLZk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Aug 2023 07:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234208AbjHKIOF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 04:14:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3552E40;
-        Fri, 11 Aug 2023 01:14:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3980566C38;
-        Fri, 11 Aug 2023 08:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7A8C433C7;
-        Fri, 11 Aug 2023 08:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691741644;
-        bh=u6fedBM9agpcTxzP58hu43k6kTnun9wA5e3PHON/06Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BlW8bUif/oTaTotkaTHv2LA1YzD/ucVAjurIWVqPezwywEibD/bOhL58GIRiXa84G
-         A2C+V8bRr8zekOtjT33dUnJC8aCCNvYRsKnMfv/Q7Df1JAbHFya5pxWTfEG04CpYsg
-         HRjT1d4VscxPh6Xw/bJfujvLfhIq7nHmXocMzlMNG6eb7/7mXZVK87LPLmzQHc08M5
-         mpy8KuSBeC8Z4z037/7gMesnmHe5bi9ZKrjpGqAw/5MhwCovpQJa2suvjd2WBcJEcs
-         OgAvGhdm4VCerYeggtiA9gi828ewo9joMUxzwu7Dfq6O0bwdJxzLVoC4GMb1HS90Iq
-         CViP/coKGmVOw==
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-52164adea19so2124858a12.1;
-        Fri, 11 Aug 2023 01:14:04 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yyv2OxvAQGOxZme7J2DN6gaJ0tUCt5t3rSA7Z24VDgvexBa0vEu
-        Kp3VBg8zOsnksHIhz00fbdkhrJTqCH9JBbeLsAg=
-X-Google-Smtp-Source: AGHT+IGAmP3sn0k5vf+8I24TmrkwhkhrAuPpXvWjZxe9a0CQ/MrG2MfyK6uVRzN32dMmeomcNvtwIlvxsyqit1ZiJ2M=
-X-Received: by 2002:a05:6402:8d3:b0:523:38eb:395d with SMTP id
- d19-20020a05640208d300b0052338eb395dmr1091985edz.9.1691741641195; Fri, 11 Aug
- 2023 01:14:01 -0700 (PDT)
+        with ESMTP id S233751AbjHKLZj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 07:25:39 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DB3C3;
+        Fri, 11 Aug 2023 04:25:37 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id C9870520442;
+        Fri, 11 Aug 2023 13:25:35 +0200 (CEST)
+Received: from lxhi-087 (10.72.93.211) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.27; Fri, 11 Aug
+ 2023 13:25:35 +0200
+Date:   Fri, 11 Aug 2023 13:25:30 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Nicolas Schier <n.schier@avm.de>,
+        SzuWei Lin <szuweilin@google.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <Matthias.Thomae@de.bosch.com>,
+        <yyankovskyi@de.adit-jv.com>, <Dirk.Behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH 3/5] kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}
+Message-ID: <20230811112530.GA453409@lxhi-087>
+References: <20220109181529.351420-1-masahiroy@kernel.org>
+ <20220109181529.351420-3-masahiroy@kernel.org>
+ <YdwZe9DHJZUaa6aO@buildd.core.avm.de>
+ <20230623144544.GA24871@lxhi-065>
+ <20230719190902.GA11207@lxhi-064.domain>
+ <CAK7LNAQhn28Wbb97+U_3n0EwoKnonjFoY3OnKcE7aqnSgRc4ow@mail.gmail.com>
+ <20230725092433.GA57787@lxhi-064.domain>
+ <CAK7LNAR4rJwrT2KLjLw-AbBvhO38xCZigC9C+DUVkn_5JM-KyQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230811030750.1335526-1-guoren@kernel.org> <cf25b0f4-ee4b-40bd-a928-afdc4cad5c2e@app.fastmail.com>
-In-Reply-To: <cf25b0f4-ee4b-40bd-a928-afdc4cad5c2e@app.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 11 Aug 2023 16:13:47 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ9vJZrDJ32nzq67XmYOqtXjYdsx=L2ob9yGP94fM-G5w@mail.gmail.com>
-Message-ID: <CAJF2gTQ9vJZrDJ32nzq67XmYOqtXjYdsx=L2ob9yGP94fM-G5w@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fixup -Wmissing-prototypes warning
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAR4rJwrT2KLjLw-AbBvhO38xCZigC9C+DUVkn_5JM-KyQ@mail.gmail.com>
+X-Originating-IP: [10.72.93.211]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 3:33=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Fri, Aug 11, 2023, at 05:07, guoren@kernel.org wrote:
-> >
-> > Link: https://lore.kernel.org/lkml/20230810141947.1236730-17-arnd@kerne=
-l.org/
-> > Reported-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
->
-> Thanks for addressing these!
->
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->
-> > --- a/arch/csky/kernel/vdso/vgettimeofday.c
-> > +++ b/arch/csky/kernel/vdso/vgettimeofday.c
-> > @@ -3,24 +3,35 @@
-> >  #include <linux/time.h>
-> >  #include <linux/types.h>
-> >
-> > +extern
-> > +int __vdso_clock_gettime(clockid_t clock,
-> > +                      struct old_timespec32 *ts);
-> >  int __vdso_clock_gettime(clockid_t clock,
-> >                        struct old_timespec32 *ts)
-> >  {
-> >       return __cvdso_clock_gettime32(clock, ts);
-> >  }
-> >
->
-> This works, but it would be a bit nicer to move the
-> declarations into a header. I see that we already handle
-I know you concern, but I didn't find a proper header file. So I
-copied riscv solution, let's solve that in riscv first, then csky
-would follow up. Thx.
+Hello Yamada-san,
 
-> this in three different ways across x86, arm and arm64,
-> and you picked method from x86 (and loongarch) here, so
-> I can't really complain.
->
-> What we should probably have instead is a new header
-> in include/vdso/ that  declares the functions for
-> every architecture.
->
->       Arnd
+Appreciate your generous support, which allowed finding the root-cause.
 
+On Wed, Aug 02, 2023 at 06:21:14PM +0900, Masahiro Yamada wrote:
 
+[..]
 
---=20
-Best Regards
- Guo Ren
+> Indeed, reverting 7ce7e984ab2b218d6e92d5165629022fe2daf9ee
+> makes qcom's external module build successfully
+> (but rebuilding is super slow).
+
+Same observation.
+
+> 
+> Interestingly, revert 7ce7e984ab2b218d6e92d5165629022fe2daf9ee
+> then apply the attached patch, then
+> 'Argument list too long' will come back.
+> 
+> So, this is unrelated to the actual build commands.
+> 
+> I suspect bare 'export', which expands all variables
+> while apparently most of them are not meant exported.
+
+Indeed, that seems to be the case and more evidence supports this:
+
+ * Several pre-existing commits point out to the same root-cause:
+
+    https://git.codelinaro.org/clo/la/platform/vendor/qcom/opensource/audio-kernel-ar/-/commit/4025a25a2479fc34
+    ("makefile: kona: remove make export <all variables> instances")
+
+    https://github.com/sonyxperiadev/kernel-techpack-audio/commit/02f00754120df2
+    ("audio-kernel: Fix build time issue")
+
+ * The more recent GNU Make 4.4.1 (called with -ddd) reveals more
+    details just before hitting 'Argument list too long':
+
+    scripts/Makefile.lib:431: not recursively expanding size_append to export to shell function
+    scripts/Makefile.lib:447: not recursively expanding cmd_file_size to export to shell function
+    scripts/Makefile.lib:453: not recursively expanding cmd_bzip2_with_size to export to shell function
+    scripts/Makefile.lib:462: not recursively expanding cmd_lzma_with_size to export to shell function
+    scripts/Makefile.lib:468: not recursively expanding cmd_lzo_with_size to export to shell function
+    scripts/Makefile.lib:474: not recursively expanding cmd_lz4_with_size to export to shell function
+    scripts/Makefile.lib:520: not recursively expanding cmd_xzkern_with_size to export to shell function
+    scripts/Makefile.lib:549: not recursively expanding cmd_zstd22_with_size to export to shell function
+
+    The "not recursively expanding" messages above come from GNU
+    make commit https://gnu.googlesource.com/make/+/7d484017077089a
+    ("[SV 63016] Don't fail exporting to $(shell ...)"), which appears
+    to be saying that our issue is caused by exporting a makefile
+    variable which contains the 'shell' directive in its definition.
+
+    I think it would be too much of a burden for Kbuild not to make use
+    of any variables using the 'shell' keyword, so I tend to agree that
+    defending against bare 'export' statements in Kbuild is rather not
+    feasible and it should be fixed in the makefiles of out-of-tree *ko.
+
+> Insert the following in your reproducer, then it will work.
+
+Thanks for the demo code snippet.
+
+-- 
+Best regards,
+Eugeniu Rosca
