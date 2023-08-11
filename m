@@ -2,119 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BB97791BA
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 16:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573507791C3
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 16:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjHKOXX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Aug 2023 10:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S230189AbjHKOZY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Aug 2023 10:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjHKOXW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 10:23:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C85E53;
-        Fri, 11 Aug 2023 07:23:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9695665A33;
-        Fri, 11 Aug 2023 14:23:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85887C433C8;
-        Fri, 11 Aug 2023 14:23:14 +0000 (UTC)
-Date:   Fri, 11 Aug 2023 15:23:12 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 09/36] arm64/mm: Allocate PIE slots for EL0 guarded
- control stack
-Message-ID: <ZNZEUEqJuHrdEa/c@arm.com>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229544AbjHKOZX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 10:25:23 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6D119;
+        Fri, 11 Aug 2023 07:25:23 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2C42A3200312;
+        Fri, 11 Aug 2023 10:25:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 11 Aug 2023 10:25:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1691763918; x=1691850318; bh=5c
+        6RTvdTmKWpcq36ZI4/Jll0f5FJRONuVWAOVMcdyZA=; b=NV9GVabCdS4Me4GuXY
+        u4nvDRWi7muIxDdC4WfKD3LVTcBujZjALzx7OoBGsH6cvj+6EbeAHY3NxOFbtL6c
+        D5MwpkTiWXZBR3x58HoY+9+lPgctHmEe3t8cj5nyfyrKV05cL4zQOVwJQX+BU1oj
+        gMsDadPtiL61ADa2oTkz5FpIP/QGVT2sFKFZAeMB7nymNJcrBtuyng24nRQKluLL
+        2ZEAVIitBskOZdybpJe4mJSy0orPoEcuukWBszQr9ym8oqxPlYKpdbkelqkKsWkO
+        ygJt368WM2qj0H8XMhcBc1/7Yb6zu0hm25HdVkz7+/3BgVyrFnp6KWh1FD+QcQSq
+        uR8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691763918; x=1691850318; bh=5c6RTvdTmKWpc
+        q36ZI4/Jll0f5FJRONuVWAOVMcdyZA=; b=s1GYVQER/Rzbazc07DUVxudjSXFS1
+        TBORcO1deWZan21mriSHkG3eeoMURqVU1zN9WxRPHyN2+0+yZLTLmx26eZlu0FVq
+        rUFZiACLIL1vqwa48Rnj0SJR9snFDbGN91eUXMOVIUMUQGpIUNdLQSmQQCzdRM7I
+        3Sot37b+lh7y2pg74d87ieNYn5vT6uCf6xHW4O3eaCbqc7YdS/RLd8o3CXSzNX2d
+        +t2nyFVkjoUAtJY4MdcfeJZ3aD0R2mdnULjP+PZdap8Afq0KtrCEfLX4fRCNflSb
+        djFqJo0uaef4hKzUqyw4Jmtt967LtPFkjjGNhPjbjXQtnaU4nQpEvpXow==
+X-ME-Sender: <xms:zUTWZIZoCxnrN3vDXYZjQbrevkEuxHeSJlgDt-K0jRm08sDvn9yWXA>
+    <xme:zUTWZDYBQsF9NmyJPBlx6KiIef3ncEfNmqEoqmbpbRbLNvOFUSYgdvEPqD9RUJ3sd
+    07dYsRJM4AeWMFKpeg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrleekgdejgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:zkTWZC9gWX-guaLgP-0S2u1O8ycB6wNHVlyEbi2Ajcx4nh0QeIUImw>
+    <xmx:zkTWZCqarzeAigWbMacwOuHQ_9uJ5IgOV6FVfVwkIr5LmXYA6YwQog>
+    <xmx:zkTWZDokQkGwpt7J8ECwgZZVG3BxPTPX5Wan1pe8iHc76XR4mUnIwA>
+    <xmx:zkTWZPJEplSs-jFwiEc-IQgd84vXGeog79RmANVdQSSGemKFMFIOjg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E1834B60089; Fri, 11 Aug 2023 10:25:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <9311a5ee-a859-4601-a8ef-b0f95176327e@app.fastmail.com>
+In-Reply-To: <20230811141421.GA3948268@dev-arch.thelio-3990X>
+References: <20230811140327.3754597-1-arnd@kernel.org>
+ <20230811140327.3754597-2-arnd@kernel.org>
+ <20230811141421.GA3948268@dev-arch.thelio-3990X>
+Date:   Fri, 11 Aug 2023 16:23:17 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nathan Chancellor" <nathan@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        "Guenter Roeck" <linux@roeck-us.net>, "Lee Jones" <lee@kernel.org>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        linux-kbuild@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 1/9] Kbuild: only pass -fno-inline-functions-called-once for gcc
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 11:00:14PM +0100, Mark Brown wrote:
-> diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
-> index eed814b00a38..b157ae0420ed 100644
-> --- a/arch/arm64/include/asm/pgtable-prot.h
-> +++ b/arch/arm64/include/asm/pgtable-prot.h
-> @@ -131,15 +131,23 @@ extern bool arm64_use_ng_mappings;
->  /* 6:                                PTE_PXN | PTE_WRITE            */
->  /* 7: PAGE_SHARED_EXEC               PTE_PXN | PTE_WRITE | PTE_USER */
->  /* 8: PAGE_KERNEL_ROX      PTE_UXN                                  */
-> -/* 9:                      PTE_UXN |                       PTE_USER */
-> +/* 9: PAGE_GCS_RO          PTE_UXN |                       PTE_USER */
->  /* a: PAGE_KERNEL_EXEC     PTE_UXN |           PTE_WRITE            */
-> -/* b:                      PTE_UXN |           PTE_WRITE | PTE_USER */
-> +/* b: PAGE_GCS             PTE_UXN |           PTE_WRITE | PTE_USER */
->  /* c: PAGE_KERNEL_RO       PTE_UXN | PTE_PXN                        */
->  /* d: PAGE_READONLY        PTE_UXN | PTE_PXN |             PTE_USER */
->  /* e: PAGE_KERNEL          PTE_UXN | PTE_PXN | PTE_WRITE            */
->  /* f: PAGE_SHARED          PTE_UXN | PTE_PXN | PTE_WRITE | PTE_USER */
->  
-> +#define _PAGE_GCS	(_PAGE_DEFAULT | PTE_UXN | PTE_WRITE | PTE_USER)
-> +#define _PAGE_GCS_RO	(_PAGE_DEFAULT | PTE_UXN | PTE_USER)
-> +
-> +#define PAGE_GCS	__pgprot(_PAGE_GCS)
-> +#define PAGE_GCS_RO	__pgprot(_PAGE_GCS_RO)
-> +
->  #define PIE_E0	( \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_GCS)  | \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)   | \
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_EXECONLY),      PIE_X_O) | \
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_READONLY_EXEC), PIE_RX)  | \
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED_EXEC),   PIE_RWX) | \
-> @@ -147,6 +155,8 @@ extern bool arm64_use_ng_mappings;
->  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED),        PIE_RW))
->  
->  #define PIE_E1	( \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_RW)      | \
-> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)      | \
+On Fri, Aug 11, 2023, at 16:14, Nathan Chancellor wrote:
+> On Fri, Aug 11, 2023 at 04:03:19PM +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> clang ignores the -fno-inline-functions-called-once option, but warns
+>> when building with -Wignored-optimization-argument enabled:
+>> 
+>> clang: error: optimization flag '-fno-inline-functions-called-once' is not supported [-Werror,-Wignored-optimization-argument]
+>> 
+>> Move it back to using cc-option for this one.
+>> 
+>> Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> How can this even be hit with clang, as CONFIG_DEBUG_SECTION_MISMATCH
+> was changed to depend on GCC in the same commit?
 
-Had some thoughts on this. Why do we need the EL1 GCS attributes to map
-to RW? The instructions we'd use to write the shadow stack are the GCS
-'T' variants that run as user already.
+Good question, I have not noticed that part, but I'm pretty
+sure I keep hitting this issue. I'll drop it from my
+series to see if I can reproduce it.
 
-The only instructions we have in the kernel that would run as EL1 on a
-user address are the exclusives (futex code or the old deprecated
-emulation but we don't care about them in this context). So I wonder
-whether the kernel PIE entry could simply be PIE_NONE_O. Would this be
-too restrictive for future uses? Given the coherency between a GCS
-access and a standard data access, we may want to restrict it now until
-we have a use-case.
+Maybe what happens is that this triggers when changing from
+gcc to clang in an output directory, the stake CONFIG_*
+symbols are still evaluated while parsing the initial
+Makefile but then cause problems.
 
--- 
-Catalin
+     Arnd
