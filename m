@@ -2,86 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8567791AE
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 16:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BB97791BA
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Aug 2023 16:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234124AbjHKOTr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Aug 2023 10:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S229657AbjHKOXX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Aug 2023 10:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234404AbjHKOTq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 10:19:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667E32D72;
-        Fri, 11 Aug 2023 07:19:46 -0700 (PDT)
+        with ESMTP id S232453AbjHKOXW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Aug 2023 10:23:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C85E53;
+        Fri, 11 Aug 2023 07:23:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0D28673A8;
-        Fri, 11 Aug 2023 14:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8675C433C7;
-        Fri, 11 Aug 2023 14:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691763585;
-        bh=i7VU3I34lw3GcD4uAQQPNUafbDtJahwjek8NOngMtko=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lDxsTCV3Yx7LfhjfdrPo/ISrE/LJSNhDKDFIJ+anH+dJLGjefDnC7zgNofIkUmGcv
-         z9AhM1JpbMt0ICdxj67iEtzJoIrdaEMroxU8htuhV4E60nlN6fQ885lmWPc8uuBleP
-         tley7EfmGe8OzOSbsCa0OQgiJXw8mz4ysW2SWyvV/FCobOBR3KIIc1eY0ZYfGiLPBI
-         5M0LGJAl6Zw1+4NRwPSEEp1snaU0dlh0edy4GsBr/iIIzwdA6wz/R/KC0WWK96Fp45
-         +GrhgdLU5uD79cR77/U0ePA2lBXRpnvZmDUiSnWBKO0uXSJGeljgXN9CmRkhMyB4Hs
-         q0aNMdfhZwyiQ==
-Date:   Fri, 11 Aug 2023 07:19:43 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 2/9] Kbuild: consolidate warning flags in
- scripts/Makefile.extrawarn
-Message-ID: <20230811141943.GB3948268@dev-arch.thelio-3990X>
-References: <20230811140327.3754597-1-arnd@kernel.org>
- <20230811140327.3754597-3-arnd@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9695665A33;
+        Fri, 11 Aug 2023 14:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85887C433C8;
+        Fri, 11 Aug 2023 14:23:14 +0000 (UTC)
+Date:   Fri, 11 Aug 2023 15:23:12 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 09/36] arm64/mm: Allocate PIE slots for EL0 guarded
+ control stack
+Message-ID: <ZNZEUEqJuHrdEa/c@arm.com>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230811140327.3754597-3-arnd@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230807-arm64-gcs-v4-9-68cfa37f9069@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 04:03:20PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Warning options are enabled and disabled in inconsistent ways and
-> inconsistent locations. Start rearranging those by moving all options
-> into Makefile.extrawarn.
-> 
-> This should not change any behavior, but makes sure we can group them
-> in a way that ensures that each warning that got temporarily disabled
-> is turned back on at an appropriate W=1 level later on.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  Makefile                   | 88 -------------------------------------
->  scripts/Makefile.extrawarn | 90 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 90 insertions(+), 88 deletions(-)
+On Mon, Aug 07, 2023 at 11:00:14PM +0100, Mark Brown wrote:
+> diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+> index eed814b00a38..b157ae0420ed 100644
+> --- a/arch/arm64/include/asm/pgtable-prot.h
+> +++ b/arch/arm64/include/asm/pgtable-prot.h
+> @@ -131,15 +131,23 @@ extern bool arm64_use_ng_mappings;
+>  /* 6:                                PTE_PXN | PTE_WRITE            */
+>  /* 7: PAGE_SHARED_EXEC               PTE_PXN | PTE_WRITE | PTE_USER */
+>  /* 8: PAGE_KERNEL_ROX      PTE_UXN                                  */
+> -/* 9:                      PTE_UXN |                       PTE_USER */
+> +/* 9: PAGE_GCS_RO          PTE_UXN |                       PTE_USER */
+>  /* a: PAGE_KERNEL_EXEC     PTE_UXN |           PTE_WRITE            */
+> -/* b:                      PTE_UXN |           PTE_WRITE | PTE_USER */
+> +/* b: PAGE_GCS             PTE_UXN |           PTE_WRITE | PTE_USER */
+>  /* c: PAGE_KERNEL_RO       PTE_UXN | PTE_PXN                        */
+>  /* d: PAGE_READONLY        PTE_UXN | PTE_PXN |             PTE_USER */
+>  /* e: PAGE_KERNEL          PTE_UXN | PTE_PXN | PTE_WRITE            */
+>  /* f: PAGE_SHARED          PTE_UXN | PTE_PXN | PTE_WRITE | PTE_USER */
+>  
+> +#define _PAGE_GCS	(_PAGE_DEFAULT | PTE_UXN | PTE_WRITE | PTE_USER)
+> +#define _PAGE_GCS_RO	(_PAGE_DEFAULT | PTE_UXN | PTE_USER)
+> +
+> +#define PAGE_GCS	__pgprot(_PAGE_GCS)
+> +#define PAGE_GCS_RO	__pgprot(_PAGE_GCS_RO)
+> +
+>  #define PIE_E0	( \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_GCS)  | \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)   | \
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_EXECONLY),      PIE_X_O) | \
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_READONLY_EXEC), PIE_RX)  | \
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED_EXEC),   PIE_RWX) | \
+> @@ -147,6 +155,8 @@ extern bool arm64_use_ng_mappings;
+>  	PIRx_ELx_PERM(pte_pi_index(_PAGE_SHARED),        PIE_RW))
+>  
+>  #define PIE_E1	( \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS),           PIE_RW)      | \
+> +	PIRx_ELx_PERM(pte_pi_index(_PAGE_GCS_RO),        PIE_R)      | \
 
-This shuffle seems reasonable to me. Would it make sense to rename the
-Makefile from Makefile.extrawarn to just Makefile.warn or
-Makefile.warnings? They are still "extra" warnings but to me, the
-meaning of the Makefile is changing so it seems reasonable to drop the
-"extra" part.
+Had some thoughts on this. Why do we need the EL1 GCS attributes to map
+to RW? The instructions we'd use to write the shadow stack are the GCS
+'T' variants that run as user already.
 
-Cheers,
-Nathan
+The only instructions we have in the kernel that would run as EL1 on a
+user address are the exclusives (futex code or the old deprecated
+emulation but we don't care about them in this context). So I wonder
+whether the kernel PIE entry could simply be PIE_NONE_O. Would this be
+too restrictive for future uses? Given the coherency between a GCS
+access and a standard data access, we may want to restrict it now until
+we have a use-case.
+
+-- 
+Catalin
