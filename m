@@ -2,202 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A919A779E85
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Aug 2023 11:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9AB779E8D
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Aug 2023 11:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbjHLJWQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Aug 2023 05:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S236266AbjHLJ3O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Aug 2023 05:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbjHLJWP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Aug 2023 05:22:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51CB19A4;
-        Sat, 12 Aug 2023 02:22:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E9A616D5;
-        Sat, 12 Aug 2023 09:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0997C433CD;
-        Sat, 12 Aug 2023 09:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691832137;
-        bh=oHIFOopjVGe8FRO9TZMz66M6aCivcLPiQR1CNa+qj+0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pHDsbngl1SnZP9SXkyteQ8PW3kfgj7S0Thj0P0Q5tUj14AyvxMSce1tSts5dug1wS
-         TEqeQDdGe8xa7/pfC2yIh6RPi4+OFSnNoUWUqfiPTAggM9eXpZIJfkR+MfW5/U3KGA
-         2Uw3EwFwIvWvlah/VndW9US8VJeaCvlO51jl3y1T9lfTvPtQkJf5oy/FH0TXkdDBec
-         PQn2cl3GNwfLAlXsUTIRX5CDyFwHnA4fbwxDxp2l21hDceju7DalBp8+cQ1Lh/W9F9
-         OAKlICSVLp9VoZrj6CteFewa8KPfB1TQOmXZGGFmxu0ASqqvntBKDbHXxeNuh3gO+V
-         A0a1zXFgIovLA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-56c711a889dso2152768eaf.0;
-        Sat, 12 Aug 2023 02:22:17 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyfV2mSby+JJ3DWclQNn6/TxkwwKeK9q6HN6EiK3coY/03aj2C0
-        uW/jMNDxEufOqPs2ckzfH+WWmRBIaUGql/IfHAQ=
-X-Google-Smtp-Source: AGHT+IGcjFblVs5iueZt0jloI0eEW2UYSMxFW+5k21ToY/ZPYjVLpxSMmhmrM8/SoBHwLqjx+lcyHgjFnIZDNlcGPz8=
-X-Received: by 2002:a4a:8382:0:b0:566:f8ee:fa67 with SMTP id
- h2-20020a4a8382000000b00566f8eefa67mr3867888oog.0.1691832136859; Sat, 12 Aug
- 2023 02:22:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230811140327.3754597-1-arnd@kernel.org> <20230811140327.3754597-4-arnd@kernel.org>
-In-Reply-To: <20230811140327.3754597-4-arnd@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 12 Aug 2023 18:21:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT0BZ107ngRNQvVO4DjOKj8AOrD2860rOgQ84WP9QfaFw@mail.gmail.com>
-Message-ID: <CAK7LNAT0BZ107ngRNQvVO4DjOKj8AOrD2860rOgQ84WP9QfaFw@mail.gmail.com>
+        with ESMTP id S231649AbjHLJ3N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Aug 2023 05:29:13 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D233DA;
+        Sat, 12 Aug 2023 02:29:16 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D61135C00D7;
+        Sat, 12 Aug 2023 05:29:13 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 12 Aug 2023 05:29:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1691832553; x=1691918953; bh=ycCh0iRFEDX650t2q02zbosoMHwrgpHymlC
+        M61ZT6eQ=; b=Ixm/SqIUOckP/MxJJGfoqvNc+XcPAmKsv48ABv5RshTYQ23HkfE
+        Y8N95y1f2774roeBDPb7JmQvsdNZgk6OheIVPpi9dc2NXu7/Da5w7lFRmXK9EjpK
+        7qvGUqcMw/K7NY7a53f7WJVvk/4hBed9plRmUfA4K7jUTcUhUvlE9VhGDbgq/Auq
+        5MhRPfx3dB1LQwEjpG4XPCkDr24OWPvgmyVKpRzQEDBP1Zg7HcIX5ggnP1Mk2zGj
+        8H0PsoIcRXA0vwO/TdQnlSd4YOpUUkekVZqGlx7S8jgKHHriVX26FRO2taCpnDOu
+        tQt9eLZdlseaz2WEOSMdCTtraHwgznYRrxA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1691832553; x=1691918953; bh=ycCh0iRFEDX650t2q02zbosoMHwrgpHymlC
+        M61ZT6eQ=; b=hHCRU9i6T4vg06KHMwPR74hLYeYBlL7+aZHkKcm5+4WqmoA6Cam
+        fzzPTZckcs8IumnH5j46kpwpaSY/kWuFyMx7fRJTzKWzhSnpFLe336wDkG6t2stU
+        PixVUAioMqrDrTlfAHxk6iODmq7RVGj6aTSJl4TFla+sG/N1rZRh3JY3GkfBXNBL
+        6EOaVsVql8WPIY+9QmsQt1EemWRudJ66KJuE56YcViaIw9O7GzOlSMhQPiskpgr7
+        GlN5BEZLGRwIA4fn4zhgt4PevQut7IQLulBUSksM9TNqQ0uVlmOjKS8rrWjOMOzF
+        5hCErpTFgPKM0FnH+3a/tu58dLHxz3CDXPA==
+X-ME-Sender: <xms:6FDXZJJzkuxGXtCTh7MvqRlKbPMQ2wbF_sPoV3SMtSBtrjbYdgBMvQ>
+    <xme:6FDXZFJ9vrwKnDejiOjVrikXOsGxq96alqgAx2bvlP_phUBMoHEtQqUX39y7xawBf
+    Y7N_tooTeILqmiWVcY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddttddgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:6FDXZBtgqxyY8c9ZcGBq-ZZxvDa1SytbixWrjUlIxa5b_ZbrOyqeTA>
+    <xmx:6FDXZKaZF3X5DSyl24w_LNOVwa6JK0O0Z-6ZB-LRP1bewXNBhNUJUQ>
+    <xmx:6FDXZAZUY-QQEvHX-jeiXLuqIiR2PO8ssZK0cML_nTGCULUGbBSLIQ>
+    <xmx:6VDXZA4A6uQ3Rd-5A73JjMw9hzy6TZ58R4pvPOt4q-VlX5LAiYKndg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3A579B60089; Sat, 12 Aug 2023 05:29:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <6574626d-3853-4ef5-a481-5c03894e4ba2@app.fastmail.com>
+In-Reply-To: <CAK7LNAT0BZ107ngRNQvVO4DjOKj8AOrD2860rOgQ84WP9QfaFw@mail.gmail.com>
+References: <20230811140327.3754597-1-arnd@kernel.org>
+ <20230811140327.3754597-4-arnd@kernel.org>
+ <CAK7LNAT0BZ107ngRNQvVO4DjOKj8AOrD2860rOgQ84WP9QfaFw@mail.gmail.com>
+Date:   Sat, 12 Aug 2023 11:28:51 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        "Guenter Roeck" <linux@roeck-us.net>, "Lee Jones" <lee@kernel.org>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        linux-kbuild@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
 Subject: Re: [PATCH 3/9] Kbuild: avoid duplicate warning options
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Aug 12, 2023 at 5:50=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+On Sat, Aug 12, 2023, at 11:21, Masahiro Yamada wrote:
+> On Sat, Aug 12, 2023 at 5:50=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
+> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> GCC manual says -Wall implies -Wmaybe-uninitialized.
 >
-> Some warning options are disabled at one place and then conditionally
-> re-enabled later in scripts/Makefile.extrawarn.
+> If you move -Wno-maybe-uninitialize to the "W !=3D 2" part,
+> -Wmaybe-uninitialized is unneeded in the 'W =3D=3D 2" part.
 >
-> For consistency, rework this file so each of those warnings only
-> gets etiher enabled or disabled based on the W=3D flags but not both.
+> Maybe, the same applies to -Wunused-but-set-parameter.
 >
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  scripts/Makefile.extrawarn | 43 +++++++++++++++++++++++---------------
->  1 file changed, 26 insertions(+), 17 deletions(-)
+> Shall we drop warnings implied by another, or
+> is it clearer to explicitly add either -Wfoo or -Wno-foo?
 >
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 9cc0e52ebd7eb..8afbe4706ff11 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -56,20 +56,12 @@ KBUILD_CFLAGS +=3D -Wno-pointer-sign
->  # globally built with -Wcast-function-type.
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wcast-function-type)
->
-> -# disable stringop warnings in gcc 8+
-> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, stringop-truncation)
-> -
->  # We'll want to enable this eventually, but it's not going away for 5.7 =
-at least
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, stringop-overflow)
->
->  # Another good warning that we'll want to enable eventually
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, restrict)
->
-> -# Enabled with W=3D2, disabled by default as noisy
-> -ifdef CONFIG_CC_IS_GCC
-> -KBUILD_CFLAGS +=3D -Wno-maybe-uninitialized
-> -endif
-> -
->  # The allocators already balk at large sizes, so silence the compiler
->  # warnings for bounds checks involving those possible values. While
->  # -Wno-alloc-size-larger-than would normally be used here, earlier versi=
-ons
-> @@ -96,8 +88,6 @@ KBUILD_CFLAGS +=3D $(call cc-option,-Werror=3Ddesignate=
-d-init)
->  # Warn if there is an enum types mismatch
->  KBUILD_CFLAGS +=3D $(call cc-option,-Wenum-conversion)
->
-> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, packed-not-aligned)
-> -
->  # backward compatibility
->  KBUILD_EXTRA_WARN ?=3D $(KBUILD_ENABLE_EXTRA_GCC_CHECKS)
->
-> @@ -122,11 +112,6 @@ KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-but-se=
-t-variable)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-const-variable)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wpacked-not-aligned)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-truncation)
-> -# The following turn off the warnings enabled by -Wextra
-> -KBUILD_CFLAGS +=3D -Wno-missing-field-initializers
-> -KBUILD_CFLAGS +=3D -Wno-sign-compare
-> -KBUILD_CFLAGS +=3D -Wno-type-limits
-> -KBUILD_CFLAGS +=3D -Wno-shift-negative-value
->
->  KBUILD_CPPFLAGS +=3D -Wundef
->  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN1
-> @@ -135,9 +120,12 @@ else
->
->  # Some diagnostics enabled by default are noisy.
->  # Suppress them by using -Wno... except for W=3D1.
-> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
-> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
-> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, packed-not-aligned)
-> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, stringop-truncation)
->
->  ifdef CONFIG_CC_IS_CLANG
-> -KBUILD_CFLAGS +=3D -Wno-initializer-overrides
->  # Clang before clang-16 would warn on default argument promotions.
->  ifneq ($(call clang-min-version, 160000),y)
->  # Disable -Wformat
-> @@ -151,7 +139,6 @@ ifeq ($(call clang-min-version, 120000),y)
->  KBUILD_CFLAGS +=3D -Wformat-insufficient-args
->  endif
->  endif
-> -KBUILD_CFLAGS +=3D -Wno-sign-compare
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, pointer-to-enum-cast)
->  KBUILD_CFLAGS +=3D -Wno-tautological-constant-out-of-range-compare
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unaligned-access)
-> @@ -173,8 +160,25 @@ KBUILD_CFLAGS +=3D -Wtype-limits
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wmaybe-uninitialized)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-macros)
->
-> +ifdef CONFIG_CC_IS_CLANG
-> +KBUILD_CFLAGS +=3D -Winitializer-overrides
-> +endif
-> +
->  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN2
->
-> +else
-> +
-> +# The following turn off the warnings enabled by -Wextra
-> +KBUILD_CFLAGS +=3D -Wno-missing-field-initializers
-> +KBUILD_CFLAGS +=3D -Wno-type-limits
-> +KBUILD_CFLAGS +=3D -Wno-shift-negative-value
-> +
-> +ifdef CONFIG_CC_IS_CLANG
-> +KBUILD_CFLAGS +=3D -Wno-initializer-overrides
-> +else
-> +KBUILD_CFLAGS +=3D -Wno-maybe-uninitialized
+> If desired, we can do such a clean-up later, though.
 
+Right, we can probably drop that, I've gone back and forth
+on this how to handle these. Some of the warnings are
+handled differently between gcc and clang, or differently
+between compiler versions, where they are sometimes
+implied and sometimes need to be specified explicitly.
 
+What I've tried to do here is to do the change in the least
+invasive way to ensure that this larger patch does not
+change the behavior. My preference would be for you
+to merge it like this unless you see a bug, and then
+do another cleanup pass where we remove the ones implied
+by either -Wall or -Wextra on all known versions.
 
+I'll be on vacation the next few weeks starting on
+Tuesday and will be able to reply to emails, but won't
+have a chance to sufficiently test any significant
+reworks of my series before the merge window.
 
-GCC manual says -Wall implies -Wmaybe-uninitialized.
-
-If you move -Wno-maybe-uninitialize to the "W !=3D 2" part,
--Wmaybe-uninitialized is unneeded in the 'W =3D=3D 2" part.
-
-Maybe, the same applies to -Wunused-but-set-parameter.
-
-Shall we drop warnings implied by another, or
-is it clearer to explicitly add either -Wfoo or -Wno-foo?
-
-If desired, we can do such a clean-up later, though.
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+    Arnd
