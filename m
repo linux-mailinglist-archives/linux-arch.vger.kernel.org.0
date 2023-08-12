@@ -2,52 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8D1779FE3
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Aug 2023 14:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D992E77A015
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Aug 2023 15:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjHLMFL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Aug 2023 08:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S232167AbjHLNLc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Aug 2023 09:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjHLMFK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Aug 2023 08:05:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BCA93;
-        Sat, 12 Aug 2023 05:05:13 -0700 (PDT)
+        with ESMTP id S229555AbjHLNLb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Aug 2023 09:11:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AE7172E;
+        Sat, 12 Aug 2023 06:11:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C003618D1;
-        Sat, 12 Aug 2023 12:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADA47C433CD;
-        Sat, 12 Aug 2023 12:05:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74D0861934;
+        Sat, 12 Aug 2023 13:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60C5C433CC;
+        Sat, 12 Aug 2023 13:11:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691841912;
-        bh=SMUP+MK3xtF3YXZGKSEMQ9XcM9KfyYtk/JTYo544pNk=;
+        s=k20201202; t=1691845893;
+        bh=XsDo0pkeZK+z6y3fi0H6lYEULXb9ybhcxEMY5esRyyc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WdiqiSbOqwaWwxPVdKynTNX3Y7LlJ9IhVJPvZATGIgywQmbKfRIZgVoHKIXG9hJzV
-         316nqsifbqUMl21fwHiAwMLFJ9ecp54CIynOQw1OssslzGrpRKUeS8YQqWbwZPsh86
-         MFM2lRd9hApnlR0wH9n4q6/C6sH6TY9mayCBCvGq1FwTtvdaZ6Q/+skb3XFldF5AEY
-         IeDSpx42ucuz1JooE/GbXRWUS2hBCW7toYPN12VkIVra5lGzIAnvEfzdGSprBgq9Qw
-         QZYlxCBukv1A18Z5qSt9pBXYyIaI40Mx3mXjYyWbPkJsW+Ej8FCMUi5vnfO943jaCd
-         0gXX8sP0AemEQ==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56ce936f7c0so2195329eaf.3;
-        Sat, 12 Aug 2023 05:05:12 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzT5hAPA66+hoSkOb6xtu+vXc9Ror8FwqzBhwvRnHJ6GGfiYw5m
-        /394MdJL3Qt84gUIdRvHnyt4AFEpxtIBU0OuEmg=
-X-Google-Smtp-Source: AGHT+IGol+2y7f9YRu4c0bvYKKhR7ejSYGRxgORzf+/fWofgkROAxCPQxiOQ8o35BBnOMung8rhmeveaQl/+f1qtE1U=
-X-Received: by 2002:a4a:275b:0:b0:56d:2d49:13c2 with SMTP id
- w27-20020a4a275b000000b0056d2d4913c2mr3100452oow.4.1691841911971; Sat, 12 Aug
- 2023 05:05:11 -0700 (PDT)
+        b=ZR9rST1E1jYtIjBQ1C7okGzxzK7USgPTh87NQHBK53WxjTRhwDrtsIM/LUfjomQtg
+         cz3/zUbgJCQsHaOk35Z8WU9EFgFM80BaP2em+Gx5Po7O2UVK+s/tSYQz5H0AQWBUnH
+         kV3dADBNYAmwFdVjceLvjzdZzkV/T44o8KhZWHuTJp+JeJJn/SMDF8Z/bvEeWaBIcH
+         5TBNy3VfLI0A81RQya7yHoa5t/8ePzWfE9s6potJAUjlBPoTMlEKhk3EFI/1+/uO51
+         ae29U2Qm/1NWk+Ldtj1BXSeLR9wbeR7oGTx13iQOmJKNz3aiVDel5iE6tP01IBtHSw
+         NNpWDv5hEjQLQ==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6bca857accbso2667859a34.0;
+        Sat, 12 Aug 2023 06:11:33 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwfD8S/ZuD+Opc4rtCvuGWnQqQ0zcgyJ7I2SKRdepQfFR/cTxrq
+        p2CRrGJMZbgwLVE1J9oSD2LoGtb+CLjHU37uMng=
+X-Google-Smtp-Source: AGHT+IGeGJeMjyb6mjg59iZwFZuQbxhausX7lvWYmaSPCqoOVpE8I3+3hmpGGSRfq+p9sGpuYpZW4ebntvZBPzFDRTs=
+X-Received: by 2002:a05:6871:6a5:b0:19f:4dc2:428e with SMTP id
+ l37-20020a05687106a500b0019f4dc2428emr5747947oao.14.1691845893103; Sat, 12
+ Aug 2023 06:11:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230811140327.3754597-1-arnd@kernel.org> <20230811140327.3754597-5-arnd@kernel.org>
-In-Reply-To: <20230811140327.3754597-5-arnd@kernel.org>
+References: <20230811140327.3754597-1-arnd@kernel.org> <20230811140327.3754597-6-arnd@kernel.org>
+In-Reply-To: <20230811140327.3754597-6-arnd@kernel.org>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 12 Aug 2023 21:04:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASfNM9D=U_SjG5FoOy-=rrGKCRUJS_RB-XFa7oTpEuy-g@mail.gmail.com>
-Message-ID: <CAK7LNASfNM9D=U_SjG5FoOy-=rrGKCRUJS_RB-XFa7oTpEuy-g@mail.gmail.com>
-Subject: Re: [PATCH 4/9] extrawarn: don't turn off -Wshift-negative-value for gcc-9
+Date:   Sat, 12 Aug 2023 22:10:54 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASuTOwHA0zz8MqxPdt5snMstpSY7==0o6kmU-RML3nioQ@mail.gmail.com>
+Message-ID: <CAK7LNASuTOwHA0zz8MqxPdt5snMstpSY7==0o6kmU-RML3nioQ@mail.gmail.com>
+Subject: Re: [PATCH 5/9] extrawarn: enable format and stringop overflow
+ warnings in W=1
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -58,78 +59,75 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Aug 12, 2023 at 5:00=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+On Sat, Aug 12, 2023 at 10:50=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
+ote:
 >
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> The warning does nothing for newer versions of gcc since -fno-strict-over=
-flow
-> is used, on old versions it warns about lines that would be undefined
-> otherwise:
+> The stringop and format warnings got disabled globally when they were
+> newly introduced in commit bd664f6b3e376 ("disable new gcc-7.1.1 warnings
+> for now"), 217c3e0196758 ("disable stringop truncation warnings for now")
+> and 5a76021c2eff7 ("gcc-10: disable 'stringop-overflow' warning for now")=
+.
 >
-> fs/isofs/util.c: In function 'iso_date':
-> fs/isofs/util.c:40:14: error: left shift of negative value [-Werror=3Dshi=
-ft-negative-value]
->     tz |=3D (-1 << 8);
->               ^~
-> drivers/video/fbdev/tdfxfb.c: In function 'tdfxfb_probe':
-> drivers/video/fbdev/tdfxfb.c:1482:17: error: left shift of negative value=
- [-Werror=3Dshift-negative-value]
->       (PAGE_MASK << 1);
->                  ^~
-> drivers/tty/serial/8250/8250_core.c: In function 'serial8250_request_rsa_=
-resource':
-> drivers/tty/serial/8250/8250_core.c:350:38: error: left shift of negative=
- value [-Werror=3Dshift-negative-value]
->   unsigned long start =3D UART_RSA_BASE << up->port.regshift;
->                                       ^~
-> drivers/tty/serial/8250/8250_core.c: In function 'serial8250_release_rsa_=
-resource':
-> drivers/tty/serial/8250/8250_core.c:371:39: error: left shift of negative=
- value [-Werror=3Dshift-negative-value]
->   unsigned long offset =3D UART_RSA_BASE << up->port.regshift;
->                                        ^~
-> drivers/clk/mvebu/dove-divider.c: In function 'dove_set_clock':
-> drivers/clk/mvebu/dove-divider.c:145:14: error: left shift of negative va=
-lue [-Werror=3Dshift-negative-value]
->   mask =3D ~(~0 << dc->div_bit_size) << dc->div_bit_start;
->               ^~
-> drivers/block/drbd/drbd_main.c: In function 'dcbp_set_pad_bits':
-> drivers/block/drbd/drbd_main.c:1098:37: error: left shift of negative val=
-ue [-Werror=3Dshift-negative-value]
->   p->encoding =3D (p->encoding & (~0x7 << 4)) | (n << 4);
+> In all cases, the sentiment at the time was that the warnings are
+> useful, and we actually addressed a number of real bugs based on
+> them, but we never managed to eliminate them all because even the
+> build bots using W=3D1 builds only see the -Wstringop-truncation
+> warnings that are enabled at that level.
 >
-> Disable these conditionally to keep the command line a little shorter.
+> Move these into the W=3D1 section to give them a larger build coverage
+> and actually eliminate them over time.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  scripts/Makefile.extrawarn | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 87bfe153198f1..ec528972371fa 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -16,8 +16,6 @@ KBUILD_CFLAGS +=3D -Werror=3Dstrict-prototypes
+>  KBUILD_CFLAGS +=3D -Wno-format-security
+>  KBUILD_CFLAGS +=3D -Wno-trigraphs
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning,frame-address,)
+> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-truncation)
+> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-overflow)
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, address-of-packed-member)
+>
+>  ifneq ($(CONFIG_FRAME_WARN),0)
+> @@ -56,9 +54,6 @@ KBUILD_CFLAGS +=3D -Wno-pointer-sign
+>  # globally built with -Wcast-function-type.
+>  KBUILD_CFLAGS +=3D $(call cc-option, -Wcast-function-type)
+>
+> -# We'll want to enable this eventually, but it's not going away for 5.7 =
+at least
+> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, stringop-overflow)
+> -
+>  # Another good warning that we'll want to enable eventually
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, restrict)
+>
+> @@ -111,6 +106,9 @@ KBUILD_CFLAGS +=3D -Wmissing-include-dirs
+>  KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-but-set-variable)
+>  KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-const-variable)
+>  KBUILD_CFLAGS +=3D $(call cc-option, -Wpacked-not-aligned)
+> +KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-overflow)
+> +KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-truncation)
 
 
-
-Just a nit for the commit subject and description.
-
-It mentions only gcc, but also affects clang.
-
-
-
-
-Is the following a better subject?
-
-  extrawarn: don't turn off -Wshift-negative-value for gcc-9+ or clang
-
-or
-
-  extrawarn: turn off -Wshift-negative-value only for gcc < 9
-
-
+These are redundant because -Wall implies
+-Wformat-overflow and -Wformat-truncation
+according to the GCC manual.
 
 
 
