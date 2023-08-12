@@ -2,53 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D992E77A015
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Aug 2023 15:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F4377A01C
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Aug 2023 15:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjHLNLc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Aug 2023 09:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S231918AbjHLNUr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Aug 2023 09:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjHLNLb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Aug 2023 09:11:31 -0400
+        with ESMTP id S229555AbjHLNUq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Aug 2023 09:20:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AE7172E;
-        Sat, 12 Aug 2023 06:11:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3F212D;
+        Sat, 12 Aug 2023 06:20:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74D0861934;
-        Sat, 12 Aug 2023 13:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60C5C433CC;
-        Sat, 12 Aug 2023 13:11:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1E146224B;
+        Sat, 12 Aug 2023 13:20:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B962C433CD;
+        Sat, 12 Aug 2023 13:20:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691845893;
-        bh=XsDo0pkeZK+z6y3fi0H6lYEULXb9ybhcxEMY5esRyyc=;
+        s=k20201202; t=1691846449;
+        bh=KiVWzwXffBabZj7CaC7L9spu8MLm1nLoW46GmfuHr5s=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZR9rST1E1jYtIjBQ1C7okGzxzK7USgPTh87NQHBK53WxjTRhwDrtsIM/LUfjomQtg
-         cz3/zUbgJCQsHaOk35Z8WU9EFgFM80BaP2em+Gx5Po7O2UVK+s/tSYQz5H0AQWBUnH
-         kV3dADBNYAmwFdVjceLvjzdZzkV/T44o8KhZWHuTJp+JeJJn/SMDF8Z/bvEeWaBIcH
-         5TBNy3VfLI0A81RQya7yHoa5t/8ePzWfE9s6potJAUjlBPoTMlEKhk3EFI/1+/uO51
-         ae29U2Qm/1NWk+Ldtj1BXSeLR9wbeR7oGTx13iQOmJKNz3aiVDel5iE6tP01IBtHSw
-         NNpWDv5hEjQLQ==
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6bca857accbso2667859a34.0;
-        Sat, 12 Aug 2023 06:11:33 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwfD8S/ZuD+Opc4rtCvuGWnQqQ0zcgyJ7I2SKRdepQfFR/cTxrq
-        p2CRrGJMZbgwLVE1J9oSD2LoGtb+CLjHU37uMng=
-X-Google-Smtp-Source: AGHT+IGeGJeMjyb6mjg59iZwFZuQbxhausX7lvWYmaSPCqoOVpE8I3+3hmpGGSRfq+p9sGpuYpZW4ebntvZBPzFDRTs=
-X-Received: by 2002:a05:6871:6a5:b0:19f:4dc2:428e with SMTP id
- l37-20020a05687106a500b0019f4dc2428emr5747947oao.14.1691845893103; Sat, 12
- Aug 2023 06:11:33 -0700 (PDT)
+        b=uDsgi91R7OO5cmIqME2rfwo/u+9X6sdMXifhh2eW56E/9QHFZ8buOri1KRG/jt+G6
+         8+QbJCClsDsl3SoV9tFc3Cv07ACdjrY43V6J82KYjrWN+j6Nf+o+1DHSXdav+UwH1b
+         E+t2eL3o1+i4HI/sIEy9aEkaFfJgpFUSov1mjkfsF83aZ9Xb4xsf+zKCUrl9rUczuk
+         Ub5O998ndmWR0lS73BW0Vomw1cq5n4wuCpFET9oJiIGfU+8QHRsYlttxiuA2VZ4WTG
+         eFMh4mR28MXXv0+6rLeMYOU4RhwNWOVHLA4EdU/EZAbMHFhuutweNHmeeOqOq+ERdx
+         yfGLLBpOGB3PA==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1c4c5375329so357371fac.2;
+        Sat, 12 Aug 2023 06:20:49 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzYEmw7cioUmP6HTh82tOjmN81rFcJ6L6QauRrDywCGQFsltOcc
+        pty4a71jH17E46qGwTPBxE7ievGzy2FYtF2g+Go=
+X-Google-Smtp-Source: AGHT+IHoxEQlqrIU4O3r11MseHpu1yyRFBIkG9En7CKCXXTtmG0Q429l28yOXSom5BW0J5S5cdaQyIGpzfnCB8QYgXk=
+X-Received: by 2002:a05:6870:b4ac:b0:1bf:8c9a:9a2c with SMTP id
+ y44-20020a056870b4ac00b001bf8c9a9a2cmr4873526oap.15.1691846448497; Sat, 12
+ Aug 2023 06:20:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230811140327.3754597-1-arnd@kernel.org> <20230811140327.3754597-6-arnd@kernel.org>
-In-Reply-To: <20230811140327.3754597-6-arnd@kernel.org>
+References: <20230811140327.3754597-1-arnd@kernel.org> <20230811140327.3754597-7-arnd@kernel.org>
+In-Reply-To: <20230811140327.3754597-7-arnd@kernel.org>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 12 Aug 2023 22:10:54 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASuTOwHA0zz8MqxPdt5snMstpSY7==0o6kmU-RML3nioQ@mail.gmail.com>
-Message-ID: <CAK7LNASuTOwHA0zz8MqxPdt5snMstpSY7==0o6kmU-RML3nioQ@mail.gmail.com>
-Subject: Re: [PATCH 5/9] extrawarn: enable format and stringop overflow
- warnings in W=1
+Date:   Sat, 12 Aug 2023 22:20:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmwOE0YD0BGKTgbqwiMWjX-b=f8WwyFCnv-b9hi9SmXA@mail.gmail.com>
+Message-ID: <CAK7LNARmwOE0YD0BGKTgbqwiMWjX-b=f8WwyFCnv-b9hi9SmXA@mail.gmail.com>
+Subject: Re: [PATCH 6/9] extrawarn: move -Wrestrict into W=1 warnings
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -68,68 +67,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Aug 12, 2023 at 10:50=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
+On Sat, Aug 12, 2023 at 4:40=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> The stringop and format warnings got disabled globally when they were
-> newly introduced in commit bd664f6b3e376 ("disable new gcc-7.1.1 warnings
-> for now"), 217c3e0196758 ("disable stringop truncation warnings for now")
-> and 5a76021c2eff7 ("gcc-10: disable 'stringop-overflow' warning for now")=
-.
->
-> In all cases, the sentiment at the time was that the warnings are
-> useful, and we actually addressed a number of real bugs based on
-> them, but we never managed to eliminate them all because even the
-> build bots using W=3D1 builds only see the -Wstringop-truncation
-> warnings that are enabled at that level.
->
-> Move these into the W=3D1 section to give them a larger build coverage
-> and actually eliminate them over time.
+> There are few of these, so enable them whenever W=3D1 is enabled.
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  scripts/Makefile.extrawarn | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+>  scripts/Makefile.extrawarn | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 >
 > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 87bfe153198f1..ec528972371fa 100644
+> index ec528972371fa..8abe90270b335 100644
 > --- a/scripts/Makefile.extrawarn
 > +++ b/scripts/Makefile.extrawarn
-> @@ -16,8 +16,6 @@ KBUILD_CFLAGS +=3D -Werror=3Dstrict-prototypes
->  KBUILD_CFLAGS +=3D -Wno-format-security
->  KBUILD_CFLAGS +=3D -Wno-trigraphs
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning,frame-address,)
-> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-truncation)
-> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-overflow)
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, address-of-packed-member)
->
->  ifneq ($(CONFIG_FRAME_WARN),0)
-> @@ -56,9 +54,6 @@ KBUILD_CFLAGS +=3D -Wno-pointer-sign
+> @@ -54,9 +54,6 @@ KBUILD_CFLAGS +=3D -Wno-pointer-sign
 >  # globally built with -Wcast-function-type.
 >  KBUILD_CFLAGS +=3D $(call cc-option, -Wcast-function-type)
 >
-> -# We'll want to enable this eventually, but it's not going away for 5.7 =
-at least
-> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, stringop-overflow)
+> -# Another good warning that we'll want to enable eventually
+> -KBUILD_CFLAGS +=3D $(call cc-disable-warning, restrict)
 > -
->  # Another good warning that we'll want to enable eventually
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, restrict)
+>  # The allocators already balk at large sizes, so silence the compiler
+>  # warnings for bounds checks involving those possible values. While
+>  # -Wno-alloc-size-larger-than would normally be used here, earlier versi=
+ons
+> @@ -99,6 +96,7 @@ ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
 >
-> @@ -111,6 +106,9 @@ KBUILD_CFLAGS +=3D -Wmissing-include-dirs
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-but-set-variable)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wunused-const-variable)
->  KBUILD_CFLAGS +=3D $(call cc-option, -Wpacked-not-aligned)
-> +KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-overflow)
-> +KBUILD_CFLAGS +=3D $(call cc-option, -Wformat-truncation)
+>  KBUILD_CFLAGS +=3D -Wextra -Wunused -Wno-unused-parameter
+>  KBUILD_CFLAGS +=3D -Wmissing-declarations
+> +KBUILD_CFLAGS +=3D $(call cc-option, -Wrestrict)
 
 
-These are redundant because -Wall implies
--Wformat-overflow and -Wformat-truncation
-according to the GCC manual.
+Like the previous patch, -Wall implies -Wrestrict.
+
+I'd like to remove it as we can save cc-option call.
 
 
+
+
+>  KBUILD_CFLAGS +=3D -Wmissing-format-attribute
+>  KBUILD_CFLAGS +=3D -Wmissing-prototypes
+>  KBUILD_CFLAGS +=3D -Wold-style-definition
+> @@ -120,6 +118,7 @@ else
+>  # Suppress them by using -Wno... except for W=3D1.
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
+> +KBUILD_CFLAGS +=3D $(call cc-disable-warning, restrict)
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, packed-not-aligned)
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-overflow)
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, format-truncation)
+> --
+> 2.39.2
+>
 
 
 --=20
