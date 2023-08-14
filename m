@@ -2,35 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0977877B90A
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Aug 2023 14:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D39C77B984
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Aug 2023 15:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjHNMvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Aug 2023 08:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
+        id S229886AbjHNNPN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Aug 2023 09:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjHNMuy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Aug 2023 08:50:54 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B076DE5E;
-        Mon, 14 Aug 2023 05:50:51 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3C48537B;
-        Mon, 14 Aug 2023 12:50:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3C48537B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1692017451; bh=Y7np9sBzz3ulx4HSM0NvWuYOFiMGgmI3bxnlJ4kzrzg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=N6/AGRbeJW50Rlr8/b5roDoQ69Th4jn001HwPl3porEmJ3OtMIcJg+wNcwOdkex9e
-         AOMdP3yG/XwvoXVHCWv0vA12qj6IQva7f4RuzJtF2kX5X5sdd8dcfLFPl/5BikhIYp
-         51x85myRx98jhcm83HWKMA8YgG98eZ6xoK6OcvZAhXrOWRVYg/DxX4NF4obpU5MkER
-         9CRKn3OhMguWCiSJyHFeH/XbEF1xkVsZAG4HKp2byjgIA4sghdR2KRsKp0oD3h9/yy
-         RcL61vvcwgVgui5Mkg0BbKWyYUg3yAaVeYSJ6EK6BkNrVX1LTggAVUlrHIOr+bx4db
-         hzdU12X1nV+rw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Yanteng Si <siyanteng@loongson.cn>, Gang Li <gang.li@linux.dev>
+        with ESMTP id S230078AbjHNNOs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Aug 2023 09:14:48 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBB1AE77;
+        Mon, 14 Aug 2023 06:14:45 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.245])
+        by gateway (Coremail) with SMTP id _____8DxVujEKNpkOTcYAA--.14309S3;
+        Mon, 14 Aug 2023 21:14:44 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.109.245])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxviO_KNpkvQBaAA--.49407S3;
+        Mon, 14 Aug 2023 21:14:41 +0800 (CST)
+Message-ID: <97c18b17-047d-4ec9-8698-8d4afffbc27b@loongson.cn>
+Date:   Mon, 14 Aug 2023 21:14:39 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v1] docs/zh_CN: add zh_CN translation for
+ memory-barriers.txt
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Gang Li <gang.li@linux.dev>
 Cc:     Alex Shi <alexs@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -47,89 +44,108 @@ Cc:     Alex Shi <alexs@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
         Daniel Lustig <dlustig@nvidia.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH RESEND v1] docs/zh_CN: add zh_CN translation for
- memory-barriers.txt
-In-Reply-To: <479156cf-1bdb-421a-8dab-0db8ff73012b@loongson.cn>
 References: <20230811080851.84497-1-gang.li@linux.dev>
  <2f519a69-8f12-4c07-bf20-6776a5ada256@loongson.cn>
  <f8de40bf-1743-793f-7723-232adbfab623@linux.dev>
  <479156cf-1bdb-421a-8dab-0db8ff73012b@loongson.cn>
-Date:   Mon, 14 Aug 2023 06:50:50 -0600
-Message-ID: <87o7j9wzx1.fsf@meer.lwn.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <87o7j9wzx1.fsf@meer.lwn.net>
+From:   Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <87o7j9wzx1.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxviO_KNpkvQBaAA--.49407S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFWkCF13ur4fKF1fJry7Arc_yoW8tr43pa
+        yrAF4q9F4DJrZrCw1Iyr1YkryrK3ySkw45W34DAryvkr90vr1rKr4ft398CFyvgr1kGFy2
+        vr42y343Zr15JagCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
+        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
+        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0L0ePUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Yanteng Si <siyanteng@loongson.cn> writes:
 
-> =E5=9C=A8 2023/8/14 10:40, Gang Li =E5=86=99=E9=81=93:
->> Hi,
->>
->> On 2023/8/12 19:00, Yanteng Si wrote:
->>> =E5=9C=A8 2023/8/11 16:08, Gang Li =E5=86=99=E9=81=93:
->>>> +=E8=AF=91=E6=B3=A8=EF=BC=9A
->>>> +=E6=9C=AC=E6=96=87=E4=BB=85=E4=B8=BA=E6=96=B9=E4=BE=BF=E6=B1=89=E8=AF=
-=AD=E9=98=85=E8=AF=BB=EF=BC=8C=E4=B8=8D=E4=BF=9D=E8=AF=81=E4=B8=8E=E8=8B=B1=
-=E6=96=87=E7=89=88=E6=9C=AC=E5=90=8C=E6=AD=A5;
->>>> +=E8=8B=A5=E6=9C=89=E7=96=91=E9=97=AE=EF=BC=8C=E8=AF=B7=E9=98=85=E8=AF=
-=BB=E8=8B=B1=E6=96=87=E7=89=88=E6=9C=AC;
->>>> +=E8=8B=A5=E6=9C=89=E7=BF=BB=E8=AF=91=E9=97=AE=E9=A2=98=EF=BC=8C=E8=AF=
-=B7=E9=80=9A=E7=9F=A5=E8=AF=91=E8=80=85=EF=BC=9B
->>>> +=E8=8B=A5=E6=83=B3=E4=BF=AE=E6=94=B9=E6=96=87=E6=A1=A3=EF=BC=8C=E4=B9=
-=9F=E8=AF=B7=E5=85=88=E4=BF=AE=E6=94=B9=E8=8B=B1=E6=96=87=E7=89=88=E6=9C=AC=
-=E3=80=82
+在 2023/8/14 20:50, Jonathan Corbet 写道:
+> Yanteng Si <siyanteng@loongson.cn> writes:
+>
+>> 在 2023/8/14 10:40, Gang Li 写道:
+>>> Hi,
 >>>
->>> In fact, we already have an easier way to do this, just include=20
->>> disclaimer-zh_CN.
+>>> On 2023/8/12 19:00, Yanteng Si wrote:
+>>>> 在 2023/8/11 16:08, Gang Li 写道:
+>>>>> +译注：
+>>>>> +本文仅为方便汉语阅读，不保证与英文版本同步;
+>>>>> +若有疑问，请阅读英文版本;
+>>>>> +若有翻译问题，请通知译者；
+>>>>> +若想修改文档，也请先修改英文版本。
+>>>> In fact, we already have an easier way to do this, just include
+>>>> disclaimer-zh_CN.
+>>>>
+>>>> If you observe the files under .../zh_CN/, they all have a similar
+>>>> header, and we can completely follow them.
+>>>>
+>>> Thanks. I just noticed that there are txt files under
+>>> "zh_CN/arch/arm64/" and "zh_CN/video4linux/". They have the same
+>>> header, and I will
+>>> refer to them in v2.
 >>>
->>> If you observe the files under .../zh_CN/, they all have a similar=20
->>> header, and we can completely follow them.
+>>>> But you should also have noticed that memory-barriers are not a
+>>>> standard rst file and will not be built, which will result in it only
+>>>> staying in the development tree.
+>>>> It won't appear at:
+>>> https://docs.kernel.org
+>>> https://www.kernel.org/doc/html/latest/
 >>>
->> Thanks. I just noticed that there are txt files under=20
->> "zh_CN/arch/arm64/" and "zh_CN/video4linux/". They have the same=20
->> header, and I will
->> refer to them in v2.
->>
->>> But you should also have noticed that memory-barriers are not a=20
->>> standard rst file and will not be built, which will result in it only=20
->>> staying in the development tree.
->>> It won't appear at:
->> https://docs.kernel.org
->> https://www.kernel.org/doc/html/latest/
->>
->> But people can still access the txt document in this way:
->> https://www.kernel.org/doc/Documentation/memory-barriers.txt
->>
->>> Finally, this patch is too huge and we may need some time to review it.
+>>> But people can still access the txt document in this way:
+>>> https://www.kernel.org/doc/Documentation/memory-barriers.txt
 >>>
->> Of course. Would it be more convenient if I split the file into multiple
->> patches and send them as one series?
-> You didn't have to.
->
->
-> If you want to send a series, you can refactor the original document=20
-> into rst format and make it the first patch of the series.
->
-> Just like:
->
-> [PATCH=C2=A0 v2 0/2] docs: Refactor=C2=A0memory-barriers.txt and translat=
-e it into=20
-> Chinese
->
-> [PATCH=C2=A0 v2 1/2] docs: convert memory-barriers.txt to RST
+>>>> Finally, this patch is too huge and we may need some time to review it.
+>>>>
+>>> Of course. Would it be more convenient if I split the file into multiple
+>>> patches and send them as one series?
+>> You didn't have to.
+>>
+>>
+>> If you want to send a series, you can refactor the original document
+>> into rst format and make it the first patch of the series.
+>>
+>> Just like:
+>>
+>> [PATCH  v2 0/2] docs: Refactor memory-barriers.txt and translate it into
+>> Chinese
+>>
+>> [PATCH  v2 1/2] docs: convert memory-barriers.txt to RST
+> For $REASONS, memory-barriers.txt is staying as .txt, thus, as Gang Li
+> pointed out, the wrapper page that pulls it in.  The proper solution is
+> to create a wrapper for the translated .txt file as well.
 
-For $REASONS, memory-barriers.txt is staying as .txt, thus, as Gang Li
-pointed out, the wrapper page that pulls it in.  The proper solution is
-to create a wrapper for the translated .txt file as well.
+Okay.
+
+
+Hi Gang,
+
+
+As Jon said, you need to create a wrapper for the translated 
+memory-barriers.txt.
+
 
 Thanks,
 
-jon
+Yanteng
+
