@@ -2,126 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FAD77D4BB
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Aug 2023 23:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC6277D5BB
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Aug 2023 00:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjHOVCQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Aug 2023 17:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S237945AbjHOV6G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Aug 2023 17:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbjHOVCI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Aug 2023 17:02:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98B0F2;
-        Tue, 15 Aug 2023 14:02:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E96A656EB;
-        Tue, 15 Aug 2023 21:02:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEC6C433C9;
-        Tue, 15 Aug 2023 21:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692133326;
-        bh=cyy9dMmZpCKf0kwV7gSnc6iwwZGFtG1+94Uv3PmsMU4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bqt6Z6qZREPwPFwBqdMZB2kGJkkZypRmE9bwxc/FX8l6pnZwrXqDF3bNuPrbnNof+
-         Zbk1pTJchswaB67AS8Nj1Fds9Y0G2RQA9I45EqR3l7nWywG7yppNaZroed7qaeEEAZ
-         33mA8BkQ+gc93Br35uBf/91KWeipdjt2HZOsVUK2Ux2Vxd9ZCygGsOHP3hrhNO5jUy
-         2VYsEWdiWM2RoeaISTVoMt6DhY/pcivI+RFTbrq8SXdIqqMaMX6HRMevIxKwi4XifW
-         48vwEdEv9oFNrQbuyJP6Pq9qrvMreh/m17TY8MRUHS9jLxuBTcpwnJXfg4G673G6/2
-         25g2vLFO2qOfA==
-Date:   Tue, 15 Aug 2023 22:01:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v4 21/36] arm64/mm: Implement map_shadow_stack()
-Message-ID: <496b9d81-c4c8-471d-9be0-3a0c8fbab436@sirena.org.uk>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-21-68cfa37f9069@kernel.org>
- <8a7bb14f808ab9da413c11f281041375d9a54b01.camel@intel.com>
+        with ESMTP id S234192AbjHOV5e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Aug 2023 17:57:34 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3989D1FDC;
+        Tue, 15 Aug 2023 14:57:33 -0700 (PDT)
+Received: from [192.168.0.5] (71-212-112-68.tukw.qwest.net [71.212.112.68])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 39D36211F5F1;
+        Tue, 15 Aug 2023 14:57:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 39D36211F5F1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1692136652;
+        bh=qTgOWQ6rlqLWDIt+xECvqDYP7UBleUA7wutt7s/+/aE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=q4UFBAWAnqP5SnzURd49DQE4tzTZO/DcFJYzj0OsMipnQDqVCO57h7wx8lbBPLaOp
+         90zwqvRX2aF34zoEjM5cbHoqzhl8InV9dvSSl1KWHEdCigoq0gUs0KoKc7KhyRa1Aj
+         ZIjGXS8ae3qqfch/jagch3PjKYVp/ooO3ywZg35I=
+Message-ID: <9ff9b099-9c6b-4636-8bbc-1825f132c712@linux.microsoft.com>
+Date:   Tue, 15 Aug 2023 14:57:31 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dU1pnpOPTrUAVGE+"
-Content-Disposition: inline
-In-Reply-To: <8a7bb14f808ab9da413c11f281041375d9a54b01.camel@intel.com>
-X-Cookie: Darth Vader sleeps with a Teddywookie.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/15] mshyperv: Introduce hv_get_hypervisor_version
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, mikelley@microsoft.com,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
+        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
+        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        will@kernel.org, catalin.marinas@arm.com
+References: <1690487690-2428-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1690487690-2428-3-git-send-email-nunodasneves@linux.microsoft.com>
+ <ZMrpSJvedrLqg6xK@liuwe-devbox-debian-v2>
+Content-Language: en-US
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <ZMrpSJvedrLqg6xK@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 8/2/2023 4:39 PM, Wei Liu wrote:
+> On Thu, Jul 27, 2023 at 12:54:37PM -0700, Nuno Das Neves wrote:
+>> x86_64 and arm64 implementations to get the hypervisor version
+>> information.
+>> Also introduce hv_hypervisor_version_info structure to simplify parsing
+>> the fields.
+>> Replace the existing parsing when printing the version numbers.
+> 
+> The line wrapping looks odd. When you resend, please fix it. If you
+> meant to use multiple paragraphs, please insert a blank line between
+> them.
+> 
 
---dU1pnpOPTrUAVGE+
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, I'll fix it.
 
-On Tue, Aug 15, 2023 at 08:42:52PM +0000, Edgecombe, Rick P wrote:
-> On Mon, 2023-08-07 at 23:00 +0100, Mark Brown wrote:
-> > +=A0=A0=A0=A0=A0=A0=A0if (flags & ~(SHADOW_STACK_SET_TOKEN |
-> > SHADOW_STACK_SET_MARKER))
-> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0return -EINVAL;
-
-> Thanks for adding SHADOW_STACK_SET_MARKER. I don't see where it is
-> defined in these patches though. Might have been left out on accident?
-
-I added it to the dependency patches I've got which pull bits out of the
-x86 series prior to you having rebased it, the ABI bits are mixed in
-with the x86 architecture changes which I didn't feel like dealing with
-the rebasing for so I pulled out the ABI portions.  I'll resolve this
-properly when I rebase back onto the x86 series (ideally after the next
-merge window it'll be in mainline!).  For these that'll probably boil
-down to adding defines to prctl.h for the generic prctl API.
-
---dU1pnpOPTrUAVGE+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTb58UACgkQJNaLcl1U
-h9Bc4Af/Xi/XuQ8BuGwUsA64+0G15WTAgvnaEr6smr1t4oyMFuQMUHjd7iBjOThm
-PV/FOTfozLwcOPBbBklofnYUDiI04WMQKwGbdr7Zi1+GFR6+EN7hirIWkuuvQlL5
-NKBQjm5eyQL/yYYt4BJ6hRDbRNoCsRtT6zZHwZJpMXiv+nVQBOZlasA6cZ0TgBO3
-HkA5PardmuhDrB+yavSIm9rV91v8lOpnDP5q3yF8ShV6Il1n6n8cY4FsnTaXQfpk
-dYkB1QCKNAiqGdIWRgeV11iWfrslrXztH2Z94tOjqgbLti1lmf9XEIoX4Wk9Juu8
-JF1NdrdhL8X0X+5VS1Mt4bHie2rizQ==
-=r3Gb
------END PGP SIGNATURE-----
-
---dU1pnpOPTrUAVGE+--
