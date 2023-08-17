@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A8277FC46
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Aug 2023 18:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8097E77FD5C
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Aug 2023 19:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243390AbjHQQlu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Aug 2023 12:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S1354166AbjHQR5L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Aug 2023 13:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353712AbjHQQlp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 12:41:45 -0400
+        with ESMTP id S1354163AbjHQR5D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 13:57:03 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E3DDF7;
-        Thu, 17 Aug 2023 09:41:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE971FD;
+        Thu, 17 Aug 2023 10:57:01 -0700 (PDT)
 Received: from [192.168.0.5] (71-212-112-68.tukw.qwest.net [71.212.112.68])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4ED97211F7B4;
-        Thu, 17 Aug 2023 09:41:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4ED97211F7B4
+        by linux.microsoft.com (Postfix) with ESMTPSA id B0B4A211F7B7;
+        Thu, 17 Aug 2023 10:57:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B0B4A211F7B7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1692290503;
-        bh=PhqN4PucaHQXTvLiBBBtzGfGBYANCAr3QrybNH//oIs=;
+        s=default; t=1692295021;
+        bh=fhtTpFYAMv833lQqJ6qJ8d9Ged09vSUMPZ70BIl7LAo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=itdHj1aiMIT16YHCnTWRgVpKNpWOzSgQMMO/YS/CzaOZIknaPbjPJIvJ6K8CKFTjV
-         T1y32/y0aflFFuWFcdmQtlC/2SXjWszW7sGIUVVyRHnAv+SXZgawUnFXQt59Ek81Nt
-         J56jglGEbkyrhV34NmE029C/7rfxwNSreERr/zBg=
-Message-ID: <075cff41-fe21-48a8-bdc4-03b13a4ee973@linux.microsoft.com>
-Date:   Thu, 17 Aug 2023 09:41:44 -0700
+        b=LXHg/W29TS59LwUP3n+sp1QoALQZsTgWtf53m3WQC6VWJ+BJEriZMBWp+B59fzoDS
+         EdkcAAzjZs3w8LRRvpuw1m606KN1KdLQ2LQakAMDHzpDn8nBYpBXk6152pxRRTz1BI
+         /1hWzX4aikb8SKgHS9F7J77r57WfsfR/hwD99Eec=
+Message-ID: <e8d95099-0477-4930-8a87-d4abacd1587f@linux.microsoft.com>
+Date:   Thu, 17 Aug 2023 10:57:01 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/15] asm-generic: hyperv: Use mshv headers
- conditionally. Add asm-generic/hyperv-defs.h
+Subject: Re: [PATCH 15/15] Drivers: hv: Add modules to expose /dev/mshv to
+ VMMs running on Hyper-V
 Content-Language: en-US
 To:     Wei Liu <wei.liu@kernel.org>
 Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -44,10 +44,10 @@ Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         will@kernel.org, catalin.marinas@arm.com
 References: <1690487690-2428-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1690487690-2428-15-git-send-email-nunodasneves@linux.microsoft.com>
- <ZMr5ebxAqfjHPkVb@liuwe-devbox-debian-v2>
+ <1690487690-2428-16-git-send-email-nunodasneves@linux.microsoft.com>
+ <ZMsBjAmPdqZdNPEF@liuwe-devbox-debian-v2>
 From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <ZMr5ebxAqfjHPkVb@liuwe-devbox-debian-v2>
+In-Reply-To: <ZMsBjAmPdqZdNPEF@liuwe-devbox-debian-v2>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -60,110 +60,182 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/2/2023 5:48 PM, Wei Liu wrote:
-> On Thu, Jul 27, 2023 at 12:54:49PM -0700, Nuno Das Neves wrote:
->> In order to keep unstable hyper-v interfaces independent of
->> hyperv-tlfs.h, hvhdk.h must replace hyperv-tlfs.h eveywhere it will be
->> used in the mshv driver.
+On 8/2/2023 6:23 PM, Wei Liu wrote:
+> On Thu, Jul 27, 2023 at 12:54:50PM -0700, Nuno Das Neves wrote:
+>> Add mshv, mshv_root, and mshv_vtl modules.
+>> - mshv provides /dev/mshv and common code, and is the parent module
+>> - mshv_root provides APIs for creating and managing child partitions
+>> - mshv_vtl provides VTL (Virtual Trust Level) support for VMMs
 > 
-> Please properly capitalize "Hyper-V" when it is used as a term.
+> Please provide a slightly more detailed description of what these
+> modules do. This is huge patch after all. People doing code archaeology
+> will appreciate a better commit message.
 > 
-Will fix, thanks.
+> For example (please correct if I'm wrong):
+> 
+> Module mshv provides /dev/mshv and common code, and is the parent module
+> to the other two modules. At its core, it implements an eventfd frame
+> work, and defines some helper functions for the other modules.
+> 
+> Module mshv_root provides APIs for creating and managing child
+> partitions. It defines abstractions for vcpus, partitions and other
+> things related to running a guest inside the kernel. It also exposes
+> user space interfaces for the VMMs.
+> 
+> Module mshv_vtl provides VTL (Virtual Trust Level) support for VMMs. It
+> allows the VMM to run in a higher trust level than the guest but still
+> within the same context as the guest. This is a useful feature for in
+> guest emulation for better isolation and performance.
+> 
 
->> Add hyperv-defs.h to replace some inclusions of hyperv-tlfs.h.
->> It includes hyperv-tlfs.h or hvhdk.h depending on a compile-time constant
->> HV_HYPERV_DEFS which will be defined in the mshv driver.
+Thanks - I will provide some more detail, including what you described.
+
+I will make a couple of changes - the eventfd framework is in mshv_root,
+not mshv. I will amend the mshv_vtl part a little for clarity.
+
 >>
 >> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 >> ---
->>  arch/arm64/include/asm/mshyperv.h |  2 +-
->>  arch/x86/include/asm/mshyperv.h   |  3 +--
->>  drivers/hv/hyperv_vmbus.h         |  1 -
->>  include/asm-generic/hyperv-defs.h | 26 ++++++++++++++++++++++++++
->>  include/asm-generic/mshyperv.h    |  2 +-
->>  include/linux/hyperv.h            |  2 +-
->>  6 files changed, 30 insertions(+), 6 deletions(-)
->>  create mode 100644 include/asm-generic/hyperv-defs.h
+>>  drivers/hv/Kconfig             |   54 +
+>>  drivers/hv/Makefile            |   21 +
+>>  drivers/hv/hv_call.c           |  119 ++
+>>  drivers/hv/mshv.h              |  156 +++
+>>  drivers/hv/mshv_eventfd.c      |  758 ++++++++++++
+>>  drivers/hv/mshv_eventfd.h      |   80 ++
+>>  drivers/hv/mshv_main.c         |  208 ++++
+>>  drivers/hv/mshv_msi.c          |  129 +++
+>>  drivers/hv/mshv_portid_table.c |   84 ++
+>>  drivers/hv/mshv_root.h         |  194 ++++
+>>  drivers/hv/mshv_root_hv_call.c | 1064 +++++++++++++++++
+>>  drivers/hv/mshv_root_main.c    | 1964 ++++++++++++++++++++++++++++++++
+>>  drivers/hv/mshv_synic.c        |  689 +++++++++++
+>>  drivers/hv/mshv_vtl.h          |   52 +
+>>  drivers/hv/mshv_vtl_main.c     | 1541 +++++++++++++++++++++++++
+>>  drivers/hv/xfer_to_guest.c     |   28 +
+>>  include/uapi/linux/mshv.h      |  298 +++++
+>>  17 files changed, 7439 insertions(+)
+>>  create mode 100644 drivers/hv/hv_call.c
+>>  create mode 100644 drivers/hv/mshv.h
+>>  create mode 100644 drivers/hv/mshv_eventfd.c
+>>  create mode 100644 drivers/hv/mshv_eventfd.h
+>>  create mode 100644 drivers/hv/mshv_main.c
+>>  create mode 100644 drivers/hv/mshv_msi.c
+>>  create mode 100644 drivers/hv/mshv_portid_table.c
+>>  create mode 100644 drivers/hv/mshv_root.h
+>>  create mode 100644 drivers/hv/mshv_root_hv_call.c
+>>  create mode 100644 drivers/hv/mshv_root_main.c
+>>  create mode 100644 drivers/hv/mshv_synic.c
+>>  create mode 100644 drivers/hv/mshv_vtl.h
+>>  create mode 100644 drivers/hv/mshv_vtl_main.c
+>>  create mode 100644 drivers/hv/xfer_to_guest.c
+>>  create mode 100644 include/uapi/linux/mshv.h
 >>
-> [...]
->> diff --git a/include/asm-generic/hyperv-defs.h b/include/asm-generic/hyperv-defs.h
->> new file mode 100644
->> index 000000000000..ac6fcba35c8c
->> --- /dev/null
->> +++ b/include/asm-generic/hyperv-defs.h
->> @@ -0,0 +1,26 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef _ASM_GENERIC_HYPERV_DEFS_H
->> +#define _ASM_GENERIC_HYPERV_DEFS_H
->> +
->> +/*
->> + * There are cases where Microsoft Hypervisor ABIs are needed which may not be
->> + * stable or present in the Hyper-V TLFS document. E.g. the mshv_root driver.
->> + *
->> + * As these interfaces are unstable and may differ from hyperv-tlfs.h, they
->> + * must be kept separate and independent.
->> + *
->> + * However, code from files that depend on hyperv-tlfs.h (such as mshyperv.h)
->> + * is still needed, so work around the issue by conditionally including the
->> + * correct definitions.
->> + *
->> + * Note: Since they are independent of each other, there are many definitions
->> + * duplicated in both hyperv-tlfs.h and uapi/hyperv/hv*.h files.
->> + */
+>> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+>> index 00242107d62e..b150d686e902 100644
+>> --- a/drivers/hv/Kconfig
+>> +++ b/drivers/hv/Kconfig
+>> @@ -54,4 +54,58 @@ config HYPERV_BALLOON
+>>  	help
+>>  	  Select this option to enable Hyper-V Balloon driver.
+>>  
+>> +config MSHV
+>> +	tristate "Microsoft Hypervisor root partition interfaces: /dev/mshv"
+>> +	depends on X86_64 && HYPERV
+>> +	select EVENTFD
+>> +	select MSHV_VFIO
 > 
-> Is this because we accidentally introduced some host only, unstable
-> interfaces to hyperv-tlfs.h? Is the long term plan to drop those from
-> hyperv-tlfs.h and further separate the helper functions?
+> This is not needed yet, right? I think this is just dead code right now.
+> 
+> It can be introduced when we start upstreaming the VFIO bits.
+> 
+
+Right. Removed, along with config MSHV_VFIO below.
+
+>> +	select MSHV_XFER_TO_GUEST_WORK
+>> +	help
+>> +	  Select this option to enable core functionality for managing guest
+>> +	  virtual machines running under the Microsoft Hypervisor.
+>> +
+>> +	  The interfaces are provided via a device named /dev/mshv.
+>> +
+>> +	  To compile this as a module, choose M here.
+>> +
+>> +	  If unsure, say N.
+>> +
+>> +config MSHV_ROOT
+>> +	tristate "Microsoft Hyper-V root partition APIs driver"
+>> +	depends on MSHV
+>> +	help
+>> +	  Select this option to provide /dev/mshv interfaces specific to
+>> +	  running as the root partition on Microsoft Hypervisor.
+>> +
+>> +	  To compile this as a module, choose M here.
+>> +
+>> +	  If unsure, say N.
+>> +
+>> +config MSHV_VTL
+>> +	tristate "Microsoft Hyper-V VTL driver"
+>> +	depends on MSHV
+>> +	select HYPERV_VTL_MODE
+>> +	select TRANSPARENT_HUGEPAGE
+>> +	help
+>> +	  Select this option to enable Hyper-V VTL driver.
+>> +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+>> +	  enlightenments offered to host and guest partitions which enables
+>> +	  the creation and management of new security boundaries within
+>> +	  operating system software.
+>> +
+>> +	  VSM achieves and maintains isolation through Virtual Trust Levels
+>> +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+>> +	  being more privileged than lower levels. VTL0 is the least privileged
+>> +	  level, and currently only other level supported is VTL2.
+>> +
+>> +	  To compile this as a module, choose M here.
+>> +
+>> +	  If unsure, say N.
+> 
+> The changes to the function which indicates if output pages are needed
+> should be in this patch.
+> 
+
+Yes - I will add it in this patch.
+
+>> +
+>> +config MSHV_VFIO
+>> +	bool
+>> +
+>> +config MSHV_XFER_TO_GUEST_WORK
+>> +	bool
+>> +
+>>  endmenu
+>> diff --git a/drivers/hv/Makefile b/drivers/hv/Makefile
+>> index d76df5c8c2a9..113c79cfadb9 100644
+>> --- a/drivers/hv/Makefile
+>> +++ b/drivers/hv/Makefile
+>> @@ -2,10 +2,31 @@
+>>  obj-$(CONFIG_HYPERV)		+= hv_vmbus.o
+>>  obj-$(CONFIG_HYPERV_UTILS)	+= hv_utils.o
+>>  obj-$(CONFIG_HYPERV_BALLOON)	+= hv_balloon.o
+>> +obj-$(CONFIG_DXGKRNL)		+= dxgkrnl/
+> 
+> This is not yet upstreamed. It shouldn't be here. Does this not break
+> the build for you?
+> 
+Oops! Nope, it doesn't seem to break the build... Anyway, removed.
+
+> The rest is basically a copy of what was posted many moons before plus
+> some VTL stuff, and new code for the root scheduler and async hypercall
+> support. I've probably gone through some versions of this code already,
+> so I only skim the code.
+> 
+> Since this is a Microsoft only driver, I don't expect to get much review
+> from the community -- the last few rounds were quiet. I will however let
+> this patch series float for a while before taking any further actions
+> just in case.
+> 
+> If people are interested in specific bits of the code in the driver,
+> please let Nuno and I know.
 > 
 > Thanks,
 > Wei.
-> 
-
-We do have some host-only interfaces in hyperv-tlfs.h that should not be there.
-E.g. the create LP/VP hypercall inputs. We should drop them.
-
-However, even if we fix that problem, the new headers still have conflicting
-definitions, so need to be independent.
-E.g. enum hv_message_type has many more members in the new headers.
-
-We don't want to put anything not in the TLFS doc into hyperv-tlfs.h, even if it
-can be ignored by the guest code.
-
->> +#ifdef HV_HYPERV_DEFS
->> +#include <uapi/hyperv/hvhdk.h>
->> +#else
->> +#include <asm/hyperv-tlfs.h>
->> +#endif
->> +
->> +#endif /* _ASM_GENERIC_HYPERV_DEFS_H */
->> +
->> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
->> index 2b20994d809e..e86b6f51fb64 100644
->> --- a/include/asm-generic/mshyperv.h
->> +++ b/include/asm-generic/mshyperv.h
->> @@ -25,7 +25,7 @@
->>  #include <linux/cpumask.h>
->>  #include <linux/nmi.h>
->>  #include <asm/ptrace.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <asm-generic/hyperv-defs.h>
->>  
->>  #define VTPM_BASE_ADDRESS 0xfed40000
->>  
->> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
->> index f90de5abcd50..66ed8b3e5d89 100644
->> --- a/include/linux/hyperv.h
->> +++ b/include/linux/hyperv.h
->> @@ -24,7 +24,7 @@
->>  #include <linux/mod_devicetable.h>
->>  #include <linux/interrupt.h>
->>  #include <linux/reciprocal_div.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <asm-generic/hyperv-defs.h>
->>  
->>  #define MAX_PAGE_BUFFER_COUNT				32
->>  #define MAX_MULTIPAGE_BUFFER_COUNT			32 /* 128K */
->> -- 
->> 2.25.1
->>
 
