@@ -2,108 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59F377FE5E
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Aug 2023 21:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5870F77FF15
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Aug 2023 22:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354234AbjHQTNS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Aug 2023 15:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S1352943AbjHQUbd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Aug 2023 16:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354660AbjHQTNH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 15:13:07 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC18B30F5;
-        Thu, 17 Aug 2023 12:13:01 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id DA0272B000A7;
-        Thu, 17 Aug 2023 15:12:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 17 Aug 2023 15:12:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1692299575; x=1692306775; bh=8N
-        3fcRqMeYpQORi75idt9jBtxUIXfyeGBjXy4rU5wEI=; b=oTPX8wzxeeUGvdQBkH
-        TOWq0EE9ZJQ/gbiTTA07cTQ5aW+H+/LR2GfQY0Zzvd2yvQc5mGDA/WGoeHBUdAYB
-        aNLex+ylJmJ0k6AAPXTcpFKxJEqBZPlCrAJ1ZfbchQROZwyRcbhPAmiURBIGFsUg
-        g/0wh5mSx7sOO82zVnbhAmr/a7QIjLYJdOW6WFLMjXQ394wBSnTMkbpgg/K9l9I+
-        MLaLtO+DqfafeDx71PWBMiIAgpXhtZd0d+K/14h7Sb8h6ZrafjexxOGoZyyStxoq
-        Aip0sN31pr5IoOrVDknP8jo8iQDyZ+TtJx0sAzB1qy4QZ2z/vKqSv+FWzEhuL+Gj
-        KT/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1692299575; x=1692306775; bh=8N3fcRqMeYpQO
-        Ri75idt9jBtxUIXfyeGBjXy4rU5wEI=; b=tIM48M6KwL+tfQhbTRSjUjcNo/QmK
-        hE6PFnORPOFkxVv7SbWUkErsmQdG3iQGx264JOJCnyeJfBJtYf2oiVm+nn76sjE4
-        d3GJwAXieL+aqdrxNfTAGFp3nENheSThWscv3633rgs5KLRbl3H/DfuPD67vPfcx
-        NTch6b9VIZg92ywHlpCKq+NmII7vbSdnpJJi4NXgj5zxHu/xZ6A+HXlaF61jk6dc
-        kr+zOu+c8mnjmC/kQGdFM1ToCeuEB1R2NOXVVRib9vFxyunIKDxr5z50kGXy8r3G
-        YYS0KEH1RjCh81pK7GstlpzP/VBI/RQER2yl6JIsk4cLrckgo7l+W5y9Q==
-X-ME-Sender: <xms:NXHeZFc8-Ax3IMEGl3SAyI7MyHUFDUd9ixXFRgLimap5hS35HQBHBQ>
-    <xme:NXHeZDP3EearUjW2fmHb67P7QVxyMfjUo7U0DavzJ0ufcFpq-Icq-JT2OypqJmNcr
-    7BkbeJp_BehuRUVJwQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudduuddgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:NXHeZOhqIi7cDYyjgiTPFGy-_XqUoD5g9LFygaxN20Pbo3kKWyLfZA>
-    <xmx:NXHeZO9gd5Oc3tX5P2R47ZPFshKL_cdiXIDUQju4g83DOvRhceXOGg>
-    <xmx:NXHeZBvEguU7eNsbYe7VH-0iJMmFZJC-arBOGQhz4vgCXSKEqQ7q4w>
-    <xmx:N3HeZFQz3sdsz0yQF_5zqYLvqsK3SpOKDPNn7797K3_g0Wyk8TdlA_VpqoQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 63B99B60089; Thu, 17 Aug 2023 15:12:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <5242d72c-78ce-42e2-bc7e-8c0195aaf769@app.fastmail.com>
-In-Reply-To: <54ed1ce4b29346803bd732aac560a74896d1ecfe.1692288018.git.geert@linux-m68k.org>
-References: <cover.1692288018.git.geert@linux-m68k.org>
- <54ed1ce4b29346803bd732aac560a74896d1ecfe.1692288018.git.geert@linux-m68k.org>
-Date:   Thu, 17 Aug 2023 21:12:31 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Russell King" <linux@armlinux.org.uk>,
+        with ESMTP id S1354910AbjHQUbC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 16:31:02 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E2635B8;
+        Thu, 17 Aug 2023 13:30:49 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.75.135) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 17 Aug
+ 2023 23:30:45 +0300
+Subject: Re: [PATCH 6/9] ata: pata_buddha: Remove #include <asm/ide.h>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Russell King <linux@armlinux.org.uk>,
         "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         "David S . Miller" <davem@davemloft.net>,
-        "Sergey Shtylyov" <s.shtylyov@omp.ru>,
-        "Damien Le Moal" <dlemoal@kernel.org>,
-        "Christoph Hellwig" <hch@lst.de>, "Jens Axboe" <axboe@kernel.dk>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] asm-generic: Remove ide_iops.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Arnd Bergmann <arnd@arndb.de>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <sparclinux@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-m68k@lists.linux-m68k.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1692288018.git.geert@linux-m68k.org>
+ <0e03e9d36c80f9d6702191fb202ce7b56360bf49.1692288018.git.geert@linux-m68k.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <c5e25ff3-c178-7ef4-f354-a3788b2b2c1c@omp.ru>
+Date:   Thu, 17 Aug 2023 23:30:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <0e03e9d36c80f9d6702191fb202ce7b56360bf49.1692288018.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.75.135]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 08/17/2023 20:16:19
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 179312 [Aug 17 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 526 526 7a6a9b19f6b9b3921b5701490f189af0e0cd5310
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;178.176.75.135:7.1.2
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: {rdns complete}
+X-KSE-AntiSpam-Info: {fromrtbl complete}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.135
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=none header.from=omp.ru;spf=none
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 08/17/2023 20:19:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 8/17/2023 6:04:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 17, 2023, at 18:07, Geert Uytterhoeven wrote:
-> The last user of ide_iops.h was removed in commit b7fb14d3ac63117e
-> ("ide: remove the legacy ide driver") in v5.14.
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
->  include/asm-generic/ide_iops.h | 39 ----------------------------------
->  1 file changed, 39 deletions(-)
+On 8/17/23 7:07 PM, Geert Uytterhoeven wrote:
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+> The Buddha, Catweasel, and X-Surf PATA driver does not need anything
+> from <asm/ide.h>.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
+
+MBR, Sergey
