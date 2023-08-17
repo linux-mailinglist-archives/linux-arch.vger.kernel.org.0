@@ -2,176 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3C278009F
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 00:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96BD78016F
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 01:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355548AbjHQWCY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Aug 2023 18:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S1355937AbjHQXCb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Aug 2023 19:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355509AbjHQWCE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 18:02:04 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 156B230F1;
-        Thu, 17 Aug 2023 15:02:02 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 42250211F928;
-        Thu, 17 Aug 2023 15:02:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 42250211F928
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1692309720;
-        bh=VWQPdnoO2AKnlcVCBK2uWcpOSyiq2ea2s0AoxyvchiU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a7luczd2a2mcxfkBlPHQEVvd/0/nsxFjznSFmp6L/KvT4tc9IzoYLRF14yxckw/1Z
-         l+0fBI3hKrheDNI2XJqYemtL1OOgfvQffTlsjg3jg+iOmCwm646rOFN70cx8k9wtvZ
-         J7TUdSzTzvtoVlzxwr0uwwUQTSB+1eyMvbagUYGk=
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S1355891AbjHQXCF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 19:02:05 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B04E48;
+        Thu, 17 Aug 2023 16:02:04 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1bc3d94d40fso2777735ad.3;
+        Thu, 17 Aug 2023 16:02:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692313324; x=1692918124;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SwtAWZyaQZccFsvrQPELO3aY17uRAQUdwXsYLsWxG84=;
+        b=IuvWzEElfJ+wiUBT+a71rux5kompS9TLuhSyoAzS67Vac7ERhMy7QPFqLVWA84T4Pl
+         4NxfXzJJTyb6ACUEPaCaTmz1DnF7g3ONT69tZL31Fkh0MkJd86qBV5NXlENDlhGl3Fg6
+         GI8hvJf8xCJpUr09hDx4+MGPxWqj190mQX9Gq6bJyPDtfOri7gVMIOwUPLFHQCS39yEI
+         qaZrMDF1prhSw1+JdF7tcbv7mGx0hQOrJ/aBPG3+NxHR9FTq1S170krhIRL4L8Xbh0Ss
+         1rqk04t1JIaa07rEbveoFmsEkF/0RjB2JBRYdhaPjsDrNPlZsrhLhuIcH49pb8JOljE1
+         89iw==
+X-Gm-Message-State: AOJu0YyF1bpmNvTZ61efcsBiXd10Rx9saF0Uq+UgtmeeCLtuAClILu3a
+        8RgiB9pU0lMMejDdOVcFtro=
+X-Google-Smtp-Source: AGHT+IG2BFK2vmrhXuy5TCdio2ggF+9peVt2is7fV6FO/H95rTuj26QpxJj97gw/YuQUb7+KJafrLg==
+X-Received: by 2002:a17:902:d510:b0:1b6:c229:c350 with SMTP id b16-20020a170902d51000b001b6c229c350mr1154091plg.18.1692313324012;
+        Thu, 17 Aug 2023 16:02:04 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id jg1-20020a17090326c100b001bb04755212sm290077plb.228.2023.08.17.16.02.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 16:02:03 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 23:01:46 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Cc:     patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
-        wei.liu@kernel.org, haiyangz@microsoft.com, decui@microsoft.com,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        haiyangz@microsoft.com, decui@microsoft.com,
         apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
         ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
         stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
         vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        will@kernel.org, catalin.marinas@arm.com
-Subject: [PATCH v2 14/15] asm-generic: hyperv: Use mshv headers conditionally. Add asm-generic/hyperv-defs.h
-Date:   Thu, 17 Aug 2023 15:01:50 -0700
-Message-Id: <1692309711-5573-15-git-send-email-nunodasneves@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
+        will@kernel.org, catalin.marinas@arm.com,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 13/15] uapi: hyperv: Add mshv driver headers hvhdk.h,
+ hvhdk_mini.h, hvgdk.h, hvgdk_mini.h
+Message-ID: <ZN6m2gVmtVStuEfA@liuwe-devbox-debian-v2>
 References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+ <1692309711-5573-14-git-send-email-nunodasneves@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1692309711-5573-14-git-send-email-nunodasneves@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add hyperv-defs.h to replace some inclusions of hyperv-tlfs.h.
+On Thu, Aug 17, 2023 at 03:01:49PM -0700, Nuno Das Neves wrote:
+> Containing hypervisor ABI definitions to use in mshv driver.
+> 
+> Version numbers for each file:
+> hvhdk.h		25212
+> hvhdk_mini.h	25294
+> hvgdk.h		25125
+> hvgdk_mini.h	25294
+> 
+> These are unstable interfaces and as such must be compiled independently
+> from published interfaces found in hyperv-tlfs.h.
+> 
+> These are in uapi because they will be used in the mshv ioctl API.
+> 
+> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
 
-It includes hyperv-tlfs.h or hvhdk.h depending on a compile-time constant
-HV_HYPERV_DEFS which will be defined in the mshv driver.
+There were some concerns raised internally about the stability of the
+APIs when they are put into UAPI.
 
-This is needed to keep unstable Hyper-V interfaces independent of
-hyperv-tlfs.h. This ensures hvhdk.h replaces hyperv-tlfs.h in the mshv driver,
-even via indirect includes.
+I think this is still okay, for a few reasons:
 
-Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
----
- arch/arm64/include/asm/mshyperv.h |  2 +-
- arch/x86/include/asm/mshyperv.h   |  3 +--
- drivers/hv/hyperv_vmbus.h         |  1 -
- include/asm-generic/hyperv-defs.h | 26 ++++++++++++++++++++++++++
- include/asm-generic/mshyperv.h    |  2 +-
- include/linux/hyperv.h            |  2 +-
- 6 files changed, 30 insertions(+), 6 deletions(-)
- create mode 100644 include/asm-generic/hyperv-defs.h
+  1. When KVM was first introduced into the kernel tree, it was
+     experimental. It was only made stable after some time.
+  2. There are other experimental or unstable APIs in UAPI. They
+     are clearly marked so.
+  3. The coda file system, which has been in tree since 2008, has a
+     header file in UAPI which clearly marks as experimental.
 
-diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
-index 20070a847304..8ec14caf3d4f 100644
---- a/arch/arm64/include/asm/mshyperv.h
-+++ b/arch/arm64/include/asm/mshyperv.h
-@@ -20,7 +20,7 @@
- 
- #include <linux/types.h>
- #include <linux/arm-smccc.h>
--#include <asm/hyperv-tlfs.h>
-+#include <asm-generic/hyperv-defs.h>
- 
- /*
-  * Declare calls to get and set Hyper-V VP register values on ARM64, which
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 79ffc7913016..c009e9c71445 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -6,10 +6,9 @@
- #include <linux/nmi.h>
- #include <linux/msi.h>
- #include <asm/io.h>
--#include <asm/hyperv-tlfs.h>
- #include <asm/nospec-branch.h>
- #include <asm/paravirt.h>
--#include <asm/mshyperv.h>
-+#include <asm-generic/hyperv-defs.h>
- 
- /*
-  * Hyper-V always provides a single IO-APIC at this MMIO address.
-diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-index 85f3c08bb42b..49529f0b8b99 100644
---- a/drivers/hv/hyperv_vmbus.h
-+++ b/drivers/hv/hyperv_vmbus.h
-@@ -15,7 +15,6 @@
- #include <linux/list.h>
- #include <linux/bitops.h>
- #include <asm/sync_bitops.h>
--#include <asm/hyperv-tlfs.h>
- #include <linux/atomic.h>
- #include <linux/hyperv.h>
- #include <linux/interrupt.h>
-diff --git a/include/asm-generic/hyperv-defs.h b/include/asm-generic/hyperv-defs.h
-new file mode 100644
-index 000000000000..ac6fcba35c8c
---- /dev/null
-+++ b/include/asm-generic/hyperv-defs.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_GENERIC_HYPERV_DEFS_H
-+#define _ASM_GENERIC_HYPERV_DEFS_H
-+
-+/*
-+ * There are cases where Microsoft Hypervisor ABIs are needed which may not be
-+ * stable or present in the Hyper-V TLFS document. E.g. the mshv_root driver.
-+ *
-+ * As these interfaces are unstable and may differ from hyperv-tlfs.h, they
-+ * must be kept separate and independent.
-+ *
-+ * However, code from files that depend on hyperv-tlfs.h (such as mshyperv.h)
-+ * is still needed, so work around the issue by conditionally including the
-+ * correct definitions.
-+ *
-+ * Note: Since they are independent of each other, there are many definitions
-+ * duplicated in both hyperv-tlfs.h and uapi/hyperv/hv*.h files.
-+ */
-+#ifdef HV_HYPERV_DEFS
-+#include <uapi/hyperv/hvhdk.h>
-+#else
-+#include <asm/hyperv-tlfs.h>
-+#endif
-+
-+#endif /* _ASM_GENERIC_HYPERV_DEFS_H */
-+
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 2b20994d809e..e86b6f51fb64 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -25,7 +25,7 @@
- #include <linux/cpumask.h>
- #include <linux/nmi.h>
- #include <asm/ptrace.h>
--#include <asm/hyperv-tlfs.h>
-+#include <asm-generic/hyperv-defs.h>
- 
- #define VTPM_BASE_ADDRESS 0xfed40000
- 
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index f90de5abcd50..66ed8b3e5d89 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -24,7 +24,7 @@
- #include <linux/mod_devicetable.h>
- #include <linux/interrupt.h>
- #include <linux/reciprocal_div.h>
--#include <asm/hyperv-tlfs.h>
-+#include <asm-generic/hyperv-defs.h>
- 
- #define MAX_PAGE_BUFFER_COUNT				32
- #define MAX_MULTIPAGE_BUFFER_COUNT			32 /* 128K */
--- 
-2.25.1
+All in all introducing a set of unstable / experimental APIs under UAPI
+is not unheard of. Rules could've changed now, but I don't find any
+document under Documentation/.
 
+I think it will be valuable to have this driver in tree sooner rather
+than later, so that it can evolve with Linux kernel, and we can in turn
+go back to the hypervisor side to gradually stabilize the APIs.
+
+Greg, I'm told that you may have a strong opinion in this area. Please
+let me know what you think about this.
+
+KY, do you have an opinion here?
+
+Thanks,
+Wei.
