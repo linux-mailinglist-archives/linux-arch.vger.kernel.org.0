@@ -2,113 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADDD77EF5A
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Aug 2023 05:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E264477EF68
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Aug 2023 05:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347763AbjHQDEm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Aug 2023 23:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S1347807AbjHQDPj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Aug 2023 23:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347732AbjHQDEO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Aug 2023 23:04:14 -0400
-Received: from out-33.mta1.migadu.com (out-33.mta1.migadu.com [95.215.58.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A415610FF
-        for <linux-arch@vger.kernel.org>; Wed, 16 Aug 2023 20:04:12 -0700 (PDT)
-Message-ID: <5c3829b0-1844-23b9-c708-88095d510954@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1692241449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tnrzOKIT2G97aygX0TXgfM6PIy16jcjv8My4Su4wFVc=;
-        b=ej8uXug0Cd6LaTksy+HPPAsoH6A1KatkKy5VHgqAzAqspajnt1FXaWA6YDqZp5eVuei3Xo
-        XXdIoGQDD9PPo69A1QLkSaOGrb/mfKJ/95q2MyjAAZmKJgwdHqmpwzHZZK/tCKDWZKLxr5
-        UI0B+BISlAfu/u1DEzX5IA08JjtXXq8=
-Date:   Thu, 17 Aug 2023 11:03:59 +0800
+        with ESMTP id S1347825AbjHQDPc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Aug 2023 23:15:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BBB1724;
+        Wed, 16 Aug 2023 20:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=P/kFyzCr/eSDaJkbY0OlCILEe1j9xWTLXn/yJLAYIu4=; b=A9+ZOyBLxgvkefgcCG3G+GbFOc
+        t3Q4LPTtkkpyh0LBpbAFdc+3lhG3pcvB3Tuy2cTe9/M//iW+Sx1QS7+tpwHS9HCucIDpD/RDGCGIr
+        FphyIapebkE7eEjeEnFtOi+9dwumQAvsQRYGjE0GEiZ5WBo53AxtXkFjlluHJQQSFYe1ZQ0mwCfpK
+        6X/okD9sKE4Z8iWegd56l1SCJXl6wUSJ5Uk04klLzVcTy3SNTh8mgr2aL00kPfkoj1Td2N2/Azxck
+        21ORjXTS2+GmCUfbeyQtLCC4mizooGziW6L1eBdD4Ta+hfKURTJGkPtTMCT5Ht16ny8Gi1C8JbRXm
+        mdreectQ==;
+Received: from [2601:1c2:980:9ec0::1a0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qWTTi-000tOI-Mm; Thu, 17 Aug 2023 03:15:18 +0000
+Message-ID: <86e329b1-c8d7-47bf-8be8-3326daf74eb5@infradead.org>
+Date:   Wed, 16 Aug 2023 20:15:09 -0700
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND v1] docs/zh_CN: add zh_CN translation for
- memory-barriers.txt
-Content-Language: en-US
-To:     Yanteng Si <siyanteng@loongson.cn>,
-        Patrick Yingxi Pan <pyxchina92929@gmail.com>
-Cc:     seakeel@gmail.com, Alex Shi <alexs@kernel.org>,
-        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
+To:     20230816055010.31534-1-rdunlap@infradead.org
+Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        Vineet Gupta <vgupta@kernel.org>,
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
-References: <20230811080851.84497-1-gang.li@linux.dev>
- <CANJ3EgExk-TC=qx0Dn7wA-RfTE-h3E_E+i1MctvhvV-VEUJFnQ@mail.gmail.com>
- <CANJ3EgGNQhGdppzYWxLOoJ9kqdCVxOOCi89-6qq638fyqnm2fA@mail.gmail.com>
- <24cf55ad-e40c-4d7c-9007-2906b26d74c2@loongson.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Gang Li <gang.li@linux.dev>
-In-Reply-To: <24cf55ad-e40c-4d7c-9007-2906b26d74c2@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <38e1a01b-1e8b-7c66-bafc-fc5861f08da9@gmail.com>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <38e1a01b-1e8b-7c66-bafc-fc5861f08da9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2023/8/16 11:06, Yanteng Si wrote:
-> 
-> 在 2023/8/15 19:08, Patrick Yingxi Pan 写道:
->> I haven't read over the entire text yet, but I've found a couple of 
->> places
->> where it goes __slightly__ beyond naive translation. The added paragraphs
->> seem to be supplementary remarks which I believe will help understanding
->> to some degree. But will they make future maintenance harder by breaking
->> the one-to-one correspondence between the two versions? After all the
->> original version is perfectly understandable without the remarks.
-> 
-> Yes, this can cause some maintenance headaches, but we can label it in a 
-> suitable way：
-> 
-> .. note::
-> 
->        译者xxx， bulabulabula.......
-> 
->        (eg: vim Documentation/translations/zh_CN/core-api/cachetlb.rst 
-> +189)
-> 
-> 
-> Or simply in this way：
-> 
-> （译者注： bulabulabula.......）
-> 
+Hi Jesse,
 
-
-Good advice.
-
+On 8/16/23 15:45, Jesse Taube wrote:
+> Hi, Randy
+> 
+>> diff -- a/init/Kconfig b/init/Kconfig
+>> --- a/init/Kconfig
+>> +++ b/init/Kconfig
+>> @@ -1790,14 +1790,6 @@ config DEBUG_RSEQ
 >>
->> In some other places, the translation lost some information which can
->> (and should) be fixed easily.
+>>        If unsure, say N.
+>>
+>> -config EMBEDDED
+>> -    bool "Embedded system"
+>> -    select EXPERT
+>> -    help
+>> -      This option should be enabled if compiling the kernel for
+>> -      an embedded system so certain expert options are available
+>> -      for configuration.
 > 
-> You're right！ translations with missing information are not accepted by 
-> readers.
-> 
-> faithfulness > expressiveness > elegance    信 > 达 > 雅
-> 
+> Wouldn't removing this break many out of tree configs?
 
-Since both of you agree to preserve the original meaning in English as
-much as possible, and I'm not strongly insisting on "elegance" either,
-we can eliminate this overly modified translation method in v2.
+I'm not familiar with out-of-tree configs.
+Do you have some examples of some that use CONFIG_EMBEDDED?
+(not distros)
+
+> Should there be a warning here to update change it instead of removal?
+
+kconfig doesn't have a warning mechanism AFAIK.
+Do you have an idea of how this would work?
+
+We could make a smaller change to init/Kconfig, like so:
+
+ config EMBEDDED
+-	bool "Embedded system"
++	bool "Embedded system (DEPRECATED)"
+ 	select EXPERT
+ 	help
+-	  This option should be enabled if compiling the kernel for
+-	  an embedded system so certain expert options are available
+-	  for configuration.
++	  This option is being removed after Linux 6.6.
++	  Use EXPERT instead of EMBEDDED.
+
+but there is no way to produce a warning message. I.e., even with this
+change, the message will probably be overlooked.
+
+---
+~Randy
+
