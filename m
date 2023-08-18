@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B1B7801CC
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 01:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A707802AA
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 02:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356155AbjHQXny (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Aug 2023 19:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S1356712AbjHRARr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Aug 2023 20:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356184AbjHQXnx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 19:43:53 -0400
+        with ESMTP id S1356740AbjHRARr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 20:17:47 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55EC635A7;
-        Thu, 17 Aug 2023 16:43:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CB0CA8;
+        Thu, 17 Aug 2023 17:17:46 -0700 (PDT)
 Received: from [10.16.85.5] (unknown [131.107.8.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1B4BF211F7BF;
-        Thu, 17 Aug 2023 16:43:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1B4BF211F7BF
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1FA82211F7C3;
+        Thu, 17 Aug 2023 17:17:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1FA82211F7C3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1692315830;
-        bh=SvpYja/c9jhYTVgBr6bqBPMX6EwsdHtUjssCTNc905I=;
+        s=default; t=1692317865;
+        bh=csV7ZACSrVEacKGzoMpSrcR2rZW6i0vHTyutS2HuYhQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n54pAAluDm4ITp73Rwu5QC1UVpr0ytnb154C4vANZa0ThPTwOXUHMGp8stqYQrTo/
-         5ZVc3nOqbPxZiRy0C/mguB8JIF8Wx5Wzl32jAMcquOFhnTHjFLQG76pw37YL7j4Ol4
-         5k0v96Q76WcxGyqavWhYM24cLUTMvDeN4oNlOab8=
-Message-ID: <b3ce3163-aebf-4dd6-b08c-b09a1224b2cb@linux.microsoft.com>
-Date:   Thu, 17 Aug 2023 16:43:49 -0700
+        b=GMcz4iOZDKGKi5T6TPN8LXOuLnZwfuhRF6slYzWNZ3CNDZt35mPHqto+WCDesTJOH
+         j3p+vlN0u5aHCvPgin5TWoVd7YDSDiEAc+lOgBQTOkxJBbT+MPqKunE0/nWs5+29Ba
+         7k6p4KRxwnb/O0P6f9w8vq3C5w6ln9q5ppo+HAf8=
+Message-ID: <8161aa90-5535-4ef9-ad30-1655746a1053@linux.microsoft.com>
+Date:   Thu, 17 Aug 2023 17:17:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/15] mshyperv: Introduce hv_get_hypervisor_version
- function
+Subject: Re: [PATCH v2 03/15] mshyperv: Introduce
+ numa_node_to_proximity_domain_info
 Content-Language: en-US
 To:     Dave Hansen <dave.hansen@intel.com>, linux-hyperv@vger.kernel.org,
         linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -44,10 +44,10 @@ Cc:     patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         will@kernel.org, catalin.marinas@arm.com
 References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1692309711-5573-3-git-send-email-nunodasneves@linux.microsoft.com>
- <0d18816a-c46e-ac7e-b98f-ef3dba1c356e@intel.com>
+ <1692309711-5573-4-git-send-email-nunodasneves@linux.microsoft.com>
+ <3b1ca61c-fa3f-a802-6705-a8c1f37ad58f@intel.com>
 From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <0d18816a-c46e-ac7e-b98f-ef3dba1c356e@intel.com>
+In-Reply-To: <3b1ca61c-fa3f-a802-6705-a8c1f37ad58f@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -60,52 +60,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/17/2023 4:14 PM, Dave Hansen wrote:
+On 8/17/2023 4:22 PM, Dave Hansen wrote:
 > On 8/17/23 15:01, Nuno Das Neves wrote:
->> +int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
+>> +static inline union hv_proximity_domain_info
+>> +numa_node_to_proximity_domain_info(int node)
 >> +{
->> +	hv_get_vpreg_128(HV_REGISTER_HYPERVISOR_VERSION,
->> +			 (struct hv_get_vp_registers_output *)info);
+>> +	union hv_proximity_domain_info proximity_domain_info;
 >> +
->> +	return 0;
->> +}
-> ...
->> +int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
->> +{
->> +	unsigned int hv_max_functions;
->> +
->> +	hv_max_functions = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
->> +	if (hv_max_functions < HYPERV_CPUID_VERSION) {
->> +		pr_err("%s: Could not detect Hyper-V version\n",
->> +			__func__);
->> +		return -ENODEV;
+>> +	if (node != NUMA_NO_NODE) {
+>> +		proximity_domain_info.domain_id = node_to_pxm(node);
+>> +		proximity_domain_info.flags.reserved = 0;
+>> +		proximity_domain_info.flags.proximity_info_valid = 1;
+>> +		proximity_domain_info.flags.proximity_preferred = 1;
+>> +	} else {
+>> +		proximity_domain_info.as_uint64 = 0;
 >> +	}
 >> +
->> +	info->eax = cpuid_eax(HYPERV_CPUID_VERSION);
->> +	info->ebx = cpuid_ebx(HYPERV_CPUID_VERSION);
->> +	info->ecx = cpuid_ecx(HYPERV_CPUID_VERSION);
->> +	info->edx = cpuid_edx(HYPERV_CPUID_VERSION);
->> +
->> +	return 0;
+>> +	return proximity_domain_info;
 >> +}
 > 
-> I can't help but notice that the ARM version does *one* call to the
-> hardware while the x86 version does CPUID four different times, once to
-> get *EACH* register and throwing away the other three registers each
-> time.  Also recall that CPUID is a big, fat architecturally serializing
-> instruction.  This isn't a fast path, but CPUID is about as slow as you get.
+> Pop quiz: What are the rules for the 30 bits of uninitialized data of
+> proximity_domain_info.flags in the (node != NUMA_NO_NODE) case?
 > 
+> I actually don't know off the top of my head.  I generally avoid
+> bitfields, but if they were normal stack-allocated variable space,
+> they'd be garbage.
 
-Good point, it is quite wasteful. I just went and checked cpuid.h, and of
-course there is a generic cpuid() function that can get all 4 at once.
-I will update it to use this in the next version. Thanks!
+I'm not sure what you are getting at here - all the fields are
+initialized.
 
-> Is there any reason you can't just have an x86 version of
-> hv_get_vpreg_128() that gets the 128 bits bytes of data that comes back
-> in the 4 CPUID registers?
 > 
-> That might even let you share some more code.
+> I'd also *much* rather see the "as_uint64 = 0" coded up as a memset() or
+> even explicitly zeroing all the same variables as the other half of the
+> if().  As it stands, it's not 100% obvious that proximity_domain_info is
+> 64 bits and that .as_uint64=0 zeroes the whole thing.  It *WOULD* be
+> totally obvious if it were a memset().
 
-Unfortunately, for some reason the hypervisor only lets you get this data via
-CPUID on x86_64, and via hypercall - i.e. hv_get_vpreg_128() - on ARM64.
+I agree that it could be made clearer with memset().
+Now that I'm thinking about it, hv_proximity_domain_info should really
+just be a struct...then zeroing it is just:
 
+	struct hv_proximity_domain_info proximity_domain_info = {};
+
+and I can remove the else branch and zeroing the reserved bits.
