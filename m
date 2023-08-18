@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6E57815D1
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Aug 2023 01:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D5D7815D4
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Aug 2023 01:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242646AbjHRX1A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Aug 2023 19:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S242594AbjHRXbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 19:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242652AbjHRX04 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 19:26:56 -0400
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5DF4205;
-        Fri, 18 Aug 2023 16:26:55 -0700 (PDT)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6887918ed20so1325699b3a.2;
-        Fri, 18 Aug 2023 16:26:55 -0700 (PDT)
+        with ESMTP id S242456AbjHRXbL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 19:31:11 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4E6E4C;
+        Fri, 18 Aug 2023 16:31:10 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1bc0d39b52cso11320905ad.2;
+        Fri, 18 Aug 2023 16:31:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692401215; x=1693006015;
+        d=1e100.net; s=20221208; t=1692401470; x=1693006270;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FsfLkqBQqdxaRuo7uj/qF8hlDrHgr+MRrYHL1O0X1hM=;
-        b=IVk6QHRYefiIdxJEgwXwiOP6/eHles59jC7n1utQI2n9PQ5mSM7KvhMyEpZNU7e0YK
-         QiHw77QhIcjwNXjFuAE/e5xRFZj1yPOExmKqvGN7myi/gPPkTiMOYKA4tc6Kfe1lUIrG
-         h/PeVbVeCTshkvbIvjeUcLjdiTaFWfx0pLTYJU+rhEr/smD/hV2sBmMGOErKcyAjHnKa
-         wt9AeOSVTEc6apqktbAKtMhhMPgzwCb8NgA3hCgWeXL/HhHf44VyZAKOxoBE24hvg6RE
-         ktHkvQ9g6zHIby+VTIw6fKXjFCI9LQWdMXknbekqpsbqxc1+r3Zca9pet3O+0i7RDXbU
-         6tXQ==
-X-Gm-Message-State: AOJu0Yxkmr68Tb/mypoX8utq7bvEaFRtCzIvWDklEAiwn1b/QCvwZaj8
-        ye/z+K1zK52xufikQAs0Mtp15+H7b7Q=
-X-Google-Smtp-Source: AGHT+IGWjyNpgrOJ/NI64D+xsix0f/F8Hn5mj10s4nYBcvXzKG4Z2V+m193dmTs1JWaRTUKcpzhssQ==
-X-Received: by 2002:a05:6a21:498e:b0:13f:5234:24ce with SMTP id ax14-20020a056a21498e00b0013f523424cemr692055pzc.28.1692401214839;
-        Fri, 18 Aug 2023 16:26:54 -0700 (PDT)
+        bh=X0VrumJjXJtBH0MCiqRAB25wxy5fETy8C315CEQSkOI=;
+        b=O1uk9GNOIpHfJ4FywIHwXawtEMTIhGkv66O2F+O19NiDM8Ai9qq/Iy/wvlKpLNSX6e
+         WAt0yvNTDngqfvQkUf8M+HZjWCdvXLEZsN5IonLj1LYkoxwi1knEcHSvHAbRkVpemGCx
+         MWG5CZpJFsHLa6vQW4bd0h4RZnC9QH73CbZ3Le4cQ8rR6AQ0v7crc5CDTlqO5cfZGqQk
+         Fw/cnEj4XDmm7K3zS59vZE6z39Hph/lA8YLsYF5SvJ+DZ5S+jODkaZQhbsOvJkgQ+Kei
+         xheLgXVOcBu8mxhGVxsSn1Piuw/S5TKycSb7c9am/Oa85P5JPWyofRbnN44wzr1I3BqX
+         b1Ww==
+X-Gm-Message-State: AOJu0YxyideC79Hx/LAFGz9N3rT3zLfJvOr0V0+PKqo9SI5YHtA+dPju
+        I2lmHHwCLxvjHPEVtbWVScA=
+X-Google-Smtp-Source: AGHT+IHTQ4leX3gaB2UBapnVqB5I/AgZBLaIfW34OqI1+sD+yGPUlnFWei0O+z0QrwTB+gAkYxdWRw==
+X-Received: by 2002:a17:903:11c6:b0:1bb:98a0:b78a with SMTP id q6-20020a17090311c600b001bb98a0b78amr830369plh.18.1692401470267;
+        Fri, 18 Aug 2023 16:31:10 -0700 (PDT)
 Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id m18-20020aa78a12000000b00688701c3941sm2022882pfa.111.2023.08.18.16.26.53
+        by smtp.gmail.com with ESMTPSA id c11-20020a170902724b00b001bb515e6b39sm2273755pll.306.2023.08.18.16.31.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 16:26:54 -0700 (PDT)
-Date:   Fri, 18 Aug 2023 23:26:36 +0000
+        Fri, 18 Aug 2023 16:31:09 -0700 (PDT)
+Date:   Fri, 18 Aug 2023 23:30:52 +0000
 From:   Wei Liu <wei.liu@kernel.org>
 To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
 Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -51,31 +51,35 @@ Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH v2 08/15] Drivers: hv: Introduce per-cpu event ring tail
-Message-ID: <ZN/+LD2KMa8ANMiA@liuwe-devbox-debian-v2>
+Subject: Re: [PATCH v2 14/15] asm-generic: hyperv: Use mshv headers
+ conditionally. Add asm-generic/hyperv-defs.h
+Message-ID: <ZN//LCO3mVzC4gv9@liuwe-devbox-debian-v2>
 References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1692309711-5573-9-git-send-email-nunodasneves@linux.microsoft.com>
+ <1692309711-5573-15-git-send-email-nunodasneves@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1692309711-5573-9-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1692309711-5573-15-git-send-email-nunodasneves@linux.microsoft.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 03:01:44PM -0700, Nuno Das Neves wrote:
-> Add a pointer hv_synic_eventring_tail to track the tail pointer for the
-> SynIC event ring buffer for each SINT.
+On Thu, Aug 17, 2023 at 03:01:50PM -0700, Nuno Das Neves wrote:
+> Add hyperv-defs.h to replace some inclusions of hyperv-tlfs.h.
 > 
-> This will be used by the mshv driver, but must be tracked independently
-> since the driver module could be removed and re-inserted.
+> It includes hyperv-tlfs.h or hvhdk.h depending on a compile-time constant
+> HV_HYPERV_DEFS which will be defined in the mshv driver.
+> 
+> This is needed to keep unstable Hyper-V interfaces independent of
+> hyperv-tlfs.h. This ensures hvhdk.h replaces hyperv-tlfs.h in the mshv driver,
+> even via indirect includes.
 > 
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Acked-by: Wei Liu <wei.liu@kernel.org>
