@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD12780A16
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 12:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C227780A18
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 12:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359520AbjHRK37 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Aug 2023 06:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S1359734AbjHRKaA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 06:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359550AbjHRK32 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 06:29:28 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BAF198C;
-        Fri, 18 Aug 2023 03:29:26 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bdcb800594so5927555ad.1;
-        Fri, 18 Aug 2023 03:29:26 -0700 (PDT)
+        with ESMTP id S1359618AbjHRK33 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 06:29:29 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F77026A8;
+        Fri, 18 Aug 2023 03:29:28 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bdbbede5d4so6037485ad.2;
+        Fri, 18 Aug 2023 03:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692354566; x=1692959366;
+        d=gmail.com; s=20221208; t=1692354568; x=1692959368;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6tg/WlOvlpiXnsdatHaWLqr2unTXdpH6z+9IeOlMJUo=;
-        b=KGFlVVH5lIUVHLwknjT29c3Yj87s8NgV9eJePvucvx4xXzoZMyJdKU027NoYMLGuet
-         Pc4whgfw22YkdY7llDjlBpnuDFNJk2uaVZl4+C8Ok1guMSZCVPwqzuaf3QNky1CQtqux
-         AW+8EgOONSyRMHvllpft7dr4cdY9NIOeH4uM8uVKdqwuc6JtxLUgg4CptxzcaDqhCR/X
-         PUfU5J+5EetSA0o9o73CiuZlwJDjpiTxhDJogan23ydEuVR2ZnxM5T/GRodISwiEpLNP
-         GWlPAu7HnyjIrPI0kgvgFUqibphF2mLF/PYjc9y3nnKE/6RTADDOPX2+929ow7WvTpUl
-         xu9w==
+        bh=pvSAuyt/NrMOTkfJms1m8PkJx0KwhqwmDNJRjHSleGc=;
+        b=Oz3rKM1lWvWy+AIVc9/yDP1ZjuE+F3I5CsucO0ID3/0mwy4DsPkFQYpbHUoHye+8aM
+         2NxWw2xWYYVNuEjYiNE7DXrjh4MC6wnT9WDeqBN04+QeuuHRYbalXj87B5LhQcXaMWhp
+         JzwXoCIG528tEQX79umhpHD+6C9u9jrs7rv5Wn7et/ZXNIBcuEOb0aq+Y8iCI1MxYxhO
+         PB6JfVv9TZG9asx3LNmB8WfINN4Tu6NN7Keb1OIEtGArViwSe1s9cG+HRE9hVfmfS1QD
+         XMmKhvMBUSeoVFHXQDHFNwrN1EjcXKMWR9XtVlR6H1jXtBDi0Jo1gGl54dMowNixq51o
+         D3iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692354566; x=1692959366;
+        d=1e100.net; s=20221208; t=1692354568; x=1692959368;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6tg/WlOvlpiXnsdatHaWLqr2unTXdpH6z+9IeOlMJUo=;
-        b=XCvFHHjo6gl+vcnsOem1mqtUDO0LsW/gqCtuM5Cc9R6BEkNJFzimg+FYEtFA80LFyB
-         1TfuL/LvUp/zCpy8MCrTmen+3sU/4Zi5UyIMF6nj06qaIUIBZGzciNDZuW6xwd0bY2bo
-         Wzw94pqJsg5lKP2IwP2HrPjh/qmg5uD1uvWprarcSF4O4+5r0rc9KbS3gs2A7N5Vka1b
-         kXllHFLvgBctw8b3/ZR91kuV6pUEl8VNdNTNXm2w9PYfyfIDc1OxdzTjVkDASgdsvz9U
-         vUkXj9uOtJpVo1ricjgVqwt9N9/8FldlHuZv9vjHDFFrRnkzv0ho4EUdherSFHoo+MY5
-         Pykg==
-X-Gm-Message-State: AOJu0YwTuzxzKdVS6heq7IL2IQpMfpyGKICya9jOINDSuIG3erf2V7gZ
-        zDff0KasuIAEZcYYBbrCmNc=
-X-Google-Smtp-Source: AGHT+IFK3BuCsjqvOCfNuDGK8cLpk2EgzxkDIy8WRaKIepP+z2cP8z+lVgsiwOr6JVs9njagpF7v0Q==
-X-Received: by 2002:a17:902:ee89:b0:1bd:c338:ae14 with SMTP id a9-20020a170902ee8900b001bdc338ae14mr2038099pld.12.1692354566227;
-        Fri, 18 Aug 2023 03:29:26 -0700 (PDT)
+        bh=pvSAuyt/NrMOTkfJms1m8PkJx0KwhqwmDNJRjHSleGc=;
+        b=BmSMR79T02sZHgzXHuBGRkmWUWRhB7HAon26+6s8oycUW/pDbeyzzt+4yadGwy9myj
+         7DD/GSsHTNqBBVWHXuQIFbWYCl7AGDSYARMw9bMeCPNJesJkST4V1q8Ki7rn77cEs/8c
+         264FH0qmSR8PFzXS3Uf8Q4LzuhISjHAmgPLhY8fo2Q2SPYj/FIit3Kj9DSHefiNi0MiX
+         JW4KjfI1ihslF/pFDK1HCCs5YMORcIVFBdSDYgR0MhpBQdFmnpjjnVH58rWPzJr9Ozs9
+         nHCU+wvqftHmXACc402zXKwLhxM01smSoimRD36Bwdkwxpru+jrfOhdUm0G2oyqReuUQ
+         2Hfg==
+X-Gm-Message-State: AOJu0Yx2k2Fx+RKB9EJO93M1hUhvyyxUduWRMarlO3VEwh3HFKS4wYWl
+        HdDjhwFRx9PFqdKrZ9m8l5oViUnb5rBhfijH
+X-Google-Smtp-Source: AGHT+IHAkOwWF9WSnHVQ9FkpQWycpjwO4WCI2N6V/cm0vEBNFRbNHsf3BeqLlr6n/eN5KhYVRKd8Gg==
+X-Received: by 2002:a17:902:d38d:b0:1bc:16bc:9f66 with SMTP id e13-20020a170902d38d00b001bc16bc9f66mr2157093pld.12.1692354567685;
+        Fri, 18 Aug 2023 03:29:27 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:7:4545:4938:97f0:2e1f])
-        by smtp.gmail.com with ESMTPSA id f1-20020a17090274c100b001b9be79729csm1386766plt.165.2023.08.18.03.29.25
+        by smtp.gmail.com with ESMTPSA id f1-20020a17090274c100b001b9be79729csm1386766plt.165.2023.08.18.03.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 03:29:25 -0700 (PDT)
+        Fri, 18 Aug 2023 03:29:27 -0700 (PDT)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
@@ -58,9 +58,9 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
 Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         vkuznets@redhat.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH v7 2/8] x86/hyperv: Set Virtual Trust Level in VMBus init message
-Date:   Fri, 18 Aug 2023 06:29:12 -0400
-Message-Id: <20230818102919.1318039-3-ltykernel@gmail.com>
+Subject: [PATCH v7 3/8] x86/hyperv: Mark Hyper-V vp assist page unencrypted in SEV-SNP enlightened guest
+Date:   Fri, 18 Aug 2023 06:29:13 -0400
+Message-Id: <20230818102919.1318039-4-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230818102919.1318039-1-ltykernel@gmail.com>
 References: <20230818102919.1318039-1-ltykernel@gmail.com>
@@ -78,141 +78,51 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-SEV-SNP guests on Hyper-V can run at multiple Virtual Trust
-Levels (VTL).  During boot, get the VTL at which we're running
-using the GET_VP_REGISTERs hypercall, and save the value
-for future use.  Then during VMBus initialization, set the VTL
-with the saved value as required in the VMBus init message.
+hv vp assist page needs to be shared between SEV-SNP guest and Hyper-V.
+So mark the page unencrypted in the SEV-SNP guest.
 
 Reviewed-by: Dexuan Cui <decui@microsoft.com>
 Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
-* Change since v5:
-       Remove hvcall input parameter page  check
-
-* Change since v3:
-       Call get_vtl() when SEV-SNP is available and set vtl to 0
-       by default if fail to get VTL from Hyper-V.
-* Change since v2:
-       Update the change log.
----
- arch/x86/hyperv/hv_init.c          | 34 ++++++++++++++++++++++++++++++
- arch/x86/include/asm/hyperv-tlfs.h |  7 ++++++
- drivers/hv/connection.c            |  1 +
- include/asm-generic/mshyperv.h     |  1 +
- include/linux/hyperv.h             |  4 ++--
- 5 files changed, 45 insertions(+), 2 deletions(-)
+ arch/x86/hyperv/hv_init.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 6c04b52f139b..318010eb9f9e 100644
+index 318010eb9f9e..bcfbcda8b050 100644
 --- a/arch/x86/hyperv/hv_init.c
 +++ b/arch/x86/hyperv/hv_init.c
-@@ -378,6 +378,36 @@ static void __init hv_get_partition_id(void)
- 	local_irq_restore(flags);
- }
+@@ -18,6 +18,7 @@
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
+ #include <asm/idtentry.h>
++#include <asm/set_memory.h>
+ #include <linux/kexec.h>
+ #include <linux/version.h>
+ #include <linux/vmalloc.h>
+@@ -106,8 +107,21 @@ static int hv_cpu_init(unsigned int cpu)
+ 		 * in hv_cpu_die(), otherwise a CPU may not be stopped in the
+ 		 * case of CPU offlining and the VM will hang.
+ 		 */
+-		if (!*hvp)
++		if (!*hvp) {
+ 			*hvp = __vmalloc(PAGE_SIZE, GFP_KERNEL | __GFP_ZERO);
++
++			/*
++			 * Hyper-V should never specify a VM that is a Confidential
++			 * VM and also running in the root partition. Root partition
++			 * is blocked to run in Confidential VM. So only decrypt assist
++			 * page in non-root partition here.
++			 */
++			if (*hvp && hv_isolation_type_en_snp()) {
++				WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
++				memset(*hvp, 0, PAGE_SIZE);
++			}
++		}
++
+ 		if (*hvp)
+ 			msr.pfn = vmalloc_to_pfn(*hvp);
  
-+static u8 __init get_vtl(void)
-+{
-+	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-+	struct hv_get_vp_registers_input *input;
-+	struct hv_get_vp_registers_output *output;
-+	unsigned long flags;
-+	u64 ret;
-+
-+	local_irq_save(flags);
-+	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	output = (struct hv_get_vp_registers_output *)input;
-+
-+	memset(input, 0, struct_size(input, element, 1));
-+	input->header.partitionid = HV_PARTITION_ID_SELF;
-+	input->header.vpindex = HV_VP_INDEX_SELF;
-+	input->header.inputvtl = 0;
-+	input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
-+
-+	ret = hv_do_hypercall(control, input, output);
-+	if (hv_result_success(ret)) {
-+		ret = output->as64.low & HV_X64_VTL_MASK;
-+	} else {
-+		pr_err("Failed to get VTL(%lld) and set VTL to zero by default.\n", ret);
-+		ret = 0;
-+	}
-+
-+	local_irq_restore(flags);
-+	return ret;
-+}
-+
- /*
-  * This function is to be invoked early in the boot sequence after the
-  * hypervisor has been detected.
-@@ -506,6 +536,10 @@ void __init hyperv_init(void)
- 	/* Query the VMs extended capability once, so that it can be cached. */
- 	hv_query_ext_cap(0);
- 
-+	/* Find the VTL */
-+	if (hv_isolation_type_en_snp())
-+		ms_hyperv.vtl = get_vtl();
-+
- 	return;
- 
- clean_guest_os_id:
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index cea95dcd27c2..4bf0b315b0ce 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -301,6 +301,13 @@ enum hv_isolation_type {
- #define HV_X64_MSR_TIME_REF_COUNT	HV_REGISTER_TIME_REF_COUNT
- #define HV_X64_MSR_REFERENCE_TSC	HV_REGISTER_REFERENCE_TSC
- 
-+/*
-+ * Registers are only accessible via HVCALL_GET_VP_REGISTERS hvcall and
-+ * there is not associated MSR address.
-+ */
-+#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
-+#define	HV_X64_VTL_MASK			GENMASK(3, 0)
-+
- /* Hyper-V memory host visibility */
- enum hv_mem_host_visibility {
- 	VMBUS_PAGE_NOT_VISIBLE		= 0,
-diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 5978e9dbc286..02b54f85dc60 100644
---- a/drivers/hv/connection.c
-+++ b/drivers/hv/connection.c
-@@ -98,6 +98,7 @@ int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo, u32 version)
- 	 */
- 	if (version >= VERSION_WIN10_V5) {
- 		msg->msg_sint = VMBUS_MESSAGE_SINT;
-+		msg->msg_vtl = ms_hyperv.vtl;
- 		vmbus_connection.msg_conn_id = VMBUS_MESSAGE_CONNECTION_ID_4;
- 	} else {
- 		msg->interrupt_page = virt_to_phys(vmbus_connection.int_page);
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 580c766958de..efd0d2aedad3 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -54,6 +54,7 @@ struct ms_hyperv_info {
- 		};
- 	};
- 	u64 shared_gpa_boundary;
-+	u8 vtl;
- };
- extern struct ms_hyperv_info ms_hyperv;
- extern bool hv_nested;
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index bfbc37ce223b..1f2bfec4abde 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -665,8 +665,8 @@ struct vmbus_channel_initiate_contact {
- 		u64 interrupt_page;
- 		struct {
- 			u8	msg_sint;
--			u8	padding1[3];
--			u32	padding2;
-+			u8	msg_vtl;
-+			u8	reserved[6];
- 		};
- 	};
- 	u64 monitor_page1;
 -- 
 2.25.1
 
