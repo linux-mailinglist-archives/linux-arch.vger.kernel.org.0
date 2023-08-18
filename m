@@ -2,82 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D07A780DD2
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 16:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6741780DE7
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 16:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350450AbjHROSY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Aug 2023 10:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
+        id S1348755AbjHROUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 10:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377063AbjHROSX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 10:18:23 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBCD272D;
-        Fri, 18 Aug 2023 07:18:21 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68876bbecb6so793771b3a.1;
-        Fri, 18 Aug 2023 07:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692368301; x=1692973101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wto+R/pwAtZu+OAScHxoYW4hGhVsJhO4pIWd7518M1Q=;
-        b=NQVm83i98ZzuOj2BhRjWble1dNvZrqknPQJkoLmHMwXPzUxZRPjQF8eq93c8VLJ7wB
-         6FSP8DFD/5nNFjm9iOwXMJkPqisEV5SImdGQsGXg3/qOHAHPKGZuPFPlb019kamxNQFa
-         LdKOtReh3/h+vtq4IGDNquO7CUfkO1sDx0HcxSappv6a2cJujIK38X8x5eMKZ1Oe+BzV
-         GhCtezyVSNOVIGR0ndnrB7XdRwEXakfhL4pzbTB0nND7KAyojamAtc4PfYJxLaKvp7ad
-         Ife3aeYVAByH+zmsMEJgLbwDT9LLIamlFbSjjUkYx9cNDo6/vL2cEm4lF5ARk2Xn9abC
-         QaeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692368301; x=1692973101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Wto+R/pwAtZu+OAScHxoYW4hGhVsJhO4pIWd7518M1Q=;
-        b=LUOiNJQKntxd9VDk8v9Zam8HOnlvuHqd3Uq6/9E2XiEHQF4e4ClvUYXzY9rfxnStF8
-         Dks+AzXBzFAZ7+YGVRIh87AUz2MmuWtSpp0Hr/LCJWw1Rr5czHRm9SUj4CI+oxsMcAHN
-         KYc+lIE/iJOgCehWuMkppcDr2Ydsne9dA3BPonpe0PXBsdUDGWigxweIlXyp8XQdSTLz
-         SM8DjNhvt02XevgcQCJMSEl+QgJX0N8EVV3/zFcP/rcIzWjr5HWr32TLYQYChENRMXjO
-         cuBo/pw7SYdwxbA3e5tc5+t+KG5pSRsXJHZfDzLchgmcw6BjFDWkejqgb6DVvAWO4wUm
-         A0Qg==
-X-Gm-Message-State: AOJu0Yx3f5yVfhQGW3bXdf0VmYZsKUUyBE+5Dya4jq5VmIxbcySOrGDL
-        su8WH0bex8gea89f7L+1UDQ=
-X-Google-Smtp-Source: AGHT+IF2M4SN/IAWkX2sMfsEtmmJM2jFqdHT71yWDhNzW8tK7ucEp8RvNg9VKal3iMdsahGH8WHhzw==
-X-Received: by 2002:a05:6a00:1952:b0:671:4b06:4ea7 with SMTP id s18-20020a056a00195200b006714b064ea7mr2856335pfk.15.1692368300583;
-        Fri, 18 Aug 2023 07:18:20 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id j22-20020aa79296000000b0068709861cb6sm1583877pfa.137.2023.08.18.07.18.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Aug 2023 07:18:20 -0700 (PDT)
-Message-ID: <0012002e-5f4d-5687-f2f7-7ad792ed053f@gmail.com>
-Date:   Fri, 18 Aug 2023 22:18:09 +0800
+        with ESMTP id S1377715AbjHROUO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 10:20:14 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D35093AA4;
+        Fri, 18 Aug 2023 07:20:07 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Dx_+sPft9kSOQZAA--.52188S3;
+        Fri, 18 Aug 2023 22:19:59 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxfSPPfd9k0KpdAA--.50667S3;
+        Fri, 18 Aug 2023 22:18:56 +0800 (CST)
+Message-ID: <1af49baf-05e8-8cc8-c5b7-766db5a4acad@loongson.cn>
+Date:   Fri, 18 Aug 2023 22:18:55 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 1/9] x86/hyperv: Add hv_isolation_type_tdx() to detect TDX
- guests
-To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-hyperv@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        Jason@zx2c4.com, nik.borisov@suse.com, mikelley@microsoft.com
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        rick.p.edgecombe@intel.com, andavis@redhat.com, mheslin@redhat.com,
-        vkuznets@redhat.com, xiaoyao.li@intel.com
-References: <20230811221851.10244-1-decui@microsoft.com>
- <20230811221851.10244-2-decui@microsoft.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20230811221851.10244-2-decui@microsoft.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [06/12] arch: Declare screen_info in <asm/screen_info.h>
+Content-Language: en-US
+From:   suijingfeng <suijingfeng@loongson.cn>
+To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
+        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
+Cc:     linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-ia64@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-sh@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        Rich Felker <dalias@libc.org>, Guo Ren <guoren@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-hexagon@vger.kernel.org, linux-staging@lists.linux.dev,
+        Russell King <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kees Cook <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        loongarch@lists.linux.dev,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Zi Yan <ziy@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Brian Cain <bcain@quicinc.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-kernel@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        linux-alpha@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>, x86@kernel.org
+References: <20230629121952.10559-7-tzimmermann@suse.de>
+ <924934b8-d2ca-c1ea-b357-202c2f995adc@loongson.cn>
+In-Reply-To: <924934b8-d2ca-c1ea-b357-202c2f995adc@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxfSPPfd9k0KpdAA--.50667S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9fXoWfJr4Uur48Ar1kZr4DZF4xuFX_yoW8WFyfAo
+        W7K3WUZF45Xr42gr4xGwn8GFZxJr1Ykrs3JrW8GrnxJF15tF45J348tryjyay5Jry8Kr1U
+        Gr45WrZxAa4UAr1rl-sFpf9Il3svdjkaLaAFLSUrUUUUvb8apTn2vfkv8UJUUUU8wcxFpf
+        9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
+        UjIYCTnIWjp_UUUOv7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI
+        8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+        Y2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+        v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVW8Jr0_Cr1UM2kKe7AKxVWrXVW3AwAS0I0E0xvYzxvE52x082IY62kv0487Mc804V
+        CY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
+        xVW3AVW8Xw1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y4
+        8IcVAKI48JM4IIrI8v6xkF7I0E4cxCY480cwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0E
+        n4kS14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbc
+        kI1I0E14v26Fy26r43JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07bjZ2-UUUUU=
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,120 +114,374 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/12/2023 6:18 AM, Dexuan Cui wrote:
-> No logic change to SNP/VBS guests.
-> 
-> hv_isolation_type_tdx() will be used to instruct a TDX guest on Hyper-V to
-> do some TDX-specific operations, e.g. for a fully enlightened TDX guest
-> (i.e. without the paravisor), hv_do_hypercall() should use
-> __tdx_hypercall() and such a guest on Hyper-V should handle the Hyper-V
-> Event/Message/Monitor pages specially.
-> 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
 
-Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+On 2023/8/18 22:04, suijingfeng wrote:
+> Hi,
+>
+>
+> Why this patch get dropped in the end?
+>
+> Since the global screen_info is an arch-specific thing,
+> Whenever an arch-neutral module or subsystem references the global 
+> screen_info,
+> There are some complaints from either compile testing robot.
 
-> ---
->   arch/x86/hyperv/ivm.c              | 9 +++++++++
->   arch/x86/include/asm/hyperv-tlfs.h | 3 ++-
->   arch/x86/include/asm/mshyperv.h    | 3 +++
->   arch/x86/kernel/cpu/mshyperv.c     | 2 ++
->   drivers/hv/hv_common.c             | 6 ++++++
->   include/asm-generic/mshyperv.h     | 1 +
->   6 files changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index ee08a0cd6da38..d4aafe8b6b50d 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -524,3 +524,12 @@ bool hv_isolation_type_en_snp(void)
->   	return static_branch_unlikely(&isolation_type_en_snp);
->   }
->   
-> +DEFINE_STATIC_KEY_FALSE(isolation_type_tdx);
-> +/*
-> + * hv_isolation_type_tdx - Check if the system runs in an Intel TDX based
-> + * isolated VM.
-> + */
-> +bool hv_isolation_type_tdx(void)
-> +{
-> +	return static_branch_unlikely(&isolation_type_tdx);
-> +}
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> index 4bf0b315b0ce9..2ff26f53cd624 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -169,7 +169,8 @@
->   enum hv_isolation_type {
->   	HV_ISOLATION_TYPE_NONE	= 0,
->   	HV_ISOLATION_TYPE_VBS	= 1,
-> -	HV_ISOLATION_TYPE_SNP	= 2
-> +	HV_ISOLATION_TYPE_SNP	= 2,
-> +	HV_ISOLATION_TYPE_TDX	= 3
->   };
->   
->   /* Hyper-V specific model specific registers (MSRs) */
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 0b0d1eb249d0a..83fc3a79f1557 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -27,6 +27,7 @@ union hv_ghcb;
->   
->   DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
->   DECLARE_STATIC_KEY_FALSE(isolation_type_en_snp);
-> +DECLARE_STATIC_KEY_FALSE(isolation_type_tdx);
->   
->   typedef int (*hyperv_fill_flush_list_func)(
->   		struct hv_guest_mapping_flush_list *flush,
-> @@ -59,6 +60,8 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
->   int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
->   int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
->   
-> +bool hv_isolation_type_tdx(void);
-> +
->   static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
->   {
->   	u64 input_address = input ? virt_to_phys(input) : 0;
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index b7d73f3107c63..a50fd3650ea9b 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -418,6 +418,8 @@ static void __init ms_hyperv_init_platform(void)
->   			static_branch_enable(&isolation_type_en_snp);
->   		} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP) {
->   			static_branch_enable(&isolation_type_snp);
-> +		} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_TDX) {
-> +			static_branch_enable(&isolation_type_tdx);
->   		}
->   	}
->   
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index 2d43ba2bc925d..da3307533f4d7 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -521,6 +521,12 @@ bool __weak hv_isolation_type_en_snp(void)
->   }
->   EXPORT_SYMBOL_GPL(hv_isolation_type_en_snp);
->   
-> +bool __weak hv_isolation_type_tdx(void)
-> +{
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(hv_isolation_type_tdx);
-> +
->   void __weak hv_setup_vmbus_handler(void (*handler)(void))
->   {
->   }
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-> index efd0d2aedad39..c5e657c3cdf4c 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -66,6 +66,7 @@ extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
->   extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
->   extern bool hv_isolation_type_snp(void);
->   extern bool hv_isolation_type_en_snp(void);
-> +extern bool hv_isolation_type_tdx(void);
->   
->   /* Helper functions that provide a consistent pattern for checking Hyper-V hypercall status. */
->   static inline int hv_result(u64 status)
+
+There are some complaints from either compile testing robot or domain 
+specific reviewers who doubt why you select the CONFIG_SYSFB not 
+CONFIG_VT or CONFIG_EFI.
+
+
+> Well, a programmer may handle it by using the CONFIG_SYSFB guard,
+> but it is not as precise as what this patch provided.
+>
+> Personally, I think this patch is still valuable.
+> I suggest either forcing all other architectures to export screen_info,
+> like the X86 and IA64 arch does, after all the screen_info is a good 
+> thing.
+> or provide the fine-control version like this patch does.
+>
+
+Because all of the three tokens(CONFIG_SYSFB not CONFIG_VT or CONFIG_EFI.)
+
+have no direct relationship with the global screen_info if an arch is 
+not mentioned first.
+
+
+
+> On 2023/6/29 19:45, Thomas Zimmermann wrote:
+>> The variable screen_info does not exist on all architectures. Declare
+>> it in <asm-generic/screen_info.h>. All architectures that do declare it
+>> will provide it via <asm/screen_info.h>.
+>>
+>> Add the Kconfig token ARCH_HAS_SCREEN_INFO to guard against access on
+>> architectures that don't provide screen_info.
+>>
+>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: Richard Henderson <richard.henderson@linaro.org>
+>> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+>> Cc: Matt Turner <mattst88@gmail.com>
+>> Cc: Russell King <linux@armlinux.org.uk>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Guo Ren <guoren@kernel.org>
+>> Cc: Brian Cain <bcain@quicinc.com>
+>> Cc: Huacai Chen <chenhuacai@kernel.org>
+>> Cc: WANG Xuerui <kernel@xen0n.name>
+>> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>> Cc: Dinh Nguyen <dinguyen@kernel.org>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Nicholas Piggin <npiggin@gmail.com>
+>> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>> Cc: Albert Ou <aou@eecs.berkeley.edu>
+>> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+>> Cc: Rich Felker <dalias@libc.org>
+>> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>> Cc: x86@kernel.org
+>> Cc: "H. Peter Anvin" <hpa@zytor.com>
+>> Cc: Chris Zankel <chris@zankel.net>
+>> Cc: Max Filippov <jcmvbkbc@gmail.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Frederic Weisbecker <frederic@kernel.org>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Ard Biesheuvel <ardb@kernel.org>
+>> Cc: Sami Tolvanen <samitolvanen@google.com>
+>> Cc: Juerg Haefliger <juerg.haefliger@canonical.com>
+>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+>> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
+>> Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+>> Cc: Linus Walleij <linus.walleij@linaro.org>
+>> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+>> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Acked-by: WANG Xuerui <git@xen0n.name> # loongarch
+>> ---
+>>   arch/Kconfig                      |  6 ++++++
+>>   arch/alpha/Kconfig                |  1 +
+>>   arch/arm/Kconfig                  |  1 +
+>>   arch/arm64/Kconfig                |  1 +
+>>   arch/csky/Kconfig                 |  1 +
+>>   arch/hexagon/Kconfig              |  1 +
+>>   arch/ia64/Kconfig                 |  1 +
+>>   arch/loongarch/Kconfig            |  1 +
+>>   arch/mips/Kconfig                 |  1 +
+>>   arch/nios2/Kconfig                |  1 +
+>>   arch/powerpc/Kconfig              |  1 +
+>>   arch/riscv/Kconfig                |  1 +
+>>   arch/sh/Kconfig                   |  1 +
+>>   arch/sparc/Kconfig                |  1 +
+>>   arch/x86/Kconfig                  |  1 +
+>>   arch/xtensa/Kconfig               |  1 +
+>>   drivers/video/Kconfig             |  3 +++
+>>   include/asm-generic/Kbuild        |  1 +
+>>   include/asm-generic/screen_info.h | 12 ++++++++++++
+>>   include/linux/screen_info.h       |  2 +-
+>>   20 files changed, 38 insertions(+), 1 deletion(-)
+>>   create mode 100644 include/asm-generic/screen_info.h
+>>
+>> diff --git a/arch/Kconfig b/arch/Kconfig
+>> index 205fd23e0cada..2f58293fd7bcb 100644
+>> --- a/arch/Kconfig
+>> +++ b/arch/Kconfig
+>> @@ -1466,6 +1466,12 @@ config ARCH_HAS_NONLEAF_PMD_YOUNG
+>>         address translations. Page table walkers that clear the 
+>> accessed bit
+>>         may use this capability to reduce their search space.
+>>   +config ARCH_HAS_SCREEN_INFO
+>> +    bool
+>> +    help
+>> +      Selected by architectures that provide a global instance of
+>> +      screen_info.
+>> +
+>>   source "kernel/gcov/Kconfig"
+>>     source "scripts/gcc-plugins/Kconfig"
+>> diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
+>> index a5c2b1aa46b02..d749011d88b14 100644
+>> --- a/arch/alpha/Kconfig
+>> +++ b/arch/alpha/Kconfig
+>> @@ -4,6 +4,7 @@ config ALPHA
+>>       default y
+>>       select ARCH_32BIT_USTAT_F_TINODE
+>>       select ARCH_HAS_CURRENT_STACK_POINTER
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_MIGHT_HAVE_PC_PARPORT
+>>       select ARCH_MIGHT_HAVE_PC_SERIO
+>>       select ARCH_NO_PREEMPT
+>> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+>> index 0fb4b218f6658..a9d01ee67a90e 100644
+>> --- a/arch/arm/Kconfig
+>> +++ b/arch/arm/Kconfig
+>> @@ -15,6 +15,7 @@ config ARM
+>>       select ARCH_HAS_MEMBARRIER_SYNC_CORE
+>>       select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>       select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SETUP_DMA_OPS
+>>       select ARCH_HAS_SET_MEMORY
+>>       select ARCH_STACKWALK
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 343e1e1cae10a..21addc4715bb3 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -36,6 +36,7 @@ config ARM64
+>>       select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>       select ARCH_HAS_PTE_DEVMAP
+>>       select ARCH_HAS_PTE_SPECIAL
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SETUP_DMA_OPS
+>>       select ARCH_HAS_SET_DIRECT_MAP
+>>       select ARCH_HAS_SET_MEMORY
+>> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+>> index 4df1f8c9d170b..28444e581fc1f 100644
+>> --- a/arch/csky/Kconfig
+>> +++ b/arch/csky/Kconfig
+>> @@ -10,6 +10,7 @@ config CSKY
+>>       select ARCH_USE_QUEUED_RWLOCKS
+>>       select ARCH_USE_QUEUED_SPINLOCKS
+>>       select ARCH_HAS_CURRENT_STACK_POINTER
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>>       select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+>>       select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
+>> diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
+>> index 54eadf2651786..cc683c0a43d34 100644
+>> --- a/arch/hexagon/Kconfig
+>> +++ b/arch/hexagon/Kconfig
+>> @@ -5,6 +5,7 @@ comment "Linux Kernel Configuration for Hexagon"
+>>   config HEXAGON
+>>       def_bool y
+>>       select ARCH_32BIT_OFF_T
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>>       select ARCH_NO_PREEMPT
+>>       select DMA_GLOBAL_POOL
+>> diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+>> index e79f15e32a451..8b1e785e6d53d 100644
+>> --- a/arch/ia64/Kconfig
+>> +++ b/arch/ia64/Kconfig
+>> @@ -10,6 +10,7 @@ config IA64
+>>       bool
+>>       select ARCH_BINFMT_ELF_EXTRA_PHDRS
+>>       select ARCH_HAS_DMA_MARK_CLEAN
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_STRNCPY_FROM_USER
+>>       select ARCH_HAS_STRNLEN_USER
+>>       select ARCH_MIGHT_HAVE_PC_PARPORT
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index d38b066fc931b..6aab2fb7753da 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -13,6 +13,7 @@ config LOONGARCH
+>>       select ARCH_HAS_FORTIFY_SOURCE
+>>       select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>>       select ARCH_HAS_PTE_SPECIAL
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>>       select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>>       select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> index 675a8660cb85a..c0ae09789cb6d 100644
+>> --- a/arch/mips/Kconfig
+>> +++ b/arch/mips/Kconfig
+>> @@ -10,6 +10,7 @@ config MIPS
+>>       select ARCH_HAS_KCOV
+>>       select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
+>>       select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_STRNCPY_FROM_USER
+>>       select ARCH_HAS_STRNLEN_USER
+>>       select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+>> index e5936417d3cd3..7183eea282212 100644
+>> --- a/arch/nios2/Kconfig
+>> +++ b/arch/nios2/Kconfig
+>> @@ -3,6 +3,7 @@ config NIOS2
+>>       def_bool y
+>>       select ARCH_32BIT_OFF_T
+>>       select ARCH_HAS_DMA_PREP_COHERENT
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SYNC_DMA_FOR_CPU
+>>       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>>       select ARCH_HAS_DMA_SET_UNCACHED
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index bff5820b7cda1..b1acad3076180 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -148,6 +148,7 @@ config PPC
+>>       select ARCH_HAS_PTE_DEVMAP        if PPC_BOOK3S_64
+>>       select ARCH_HAS_PTE_SPECIAL
+>>       select ARCH_HAS_SCALED_CPUTIME        if 
+>> VIRT_CPU_ACCOUNTING_NATIVE && PPC_BOOK3S_64
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SET_MEMORY
+>>       select ARCH_HAS_STRICT_KERNEL_RWX    if (PPC_BOOK3S || PPC_8xx 
+>> || 40x) && !HIBERNATION
+>>       select ARCH_HAS_STRICT_KERNEL_RWX    if PPC_85xx && 
+>> !HIBERNATION && !RANDOMIZE_BASE
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 5966ad97c30c3..b5a48f8424af9 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -29,6 +29,7 @@ config RISCV
+>>       select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>       select ARCH_HAS_PMEM_API
+>>       select ARCH_HAS_PTE_SPECIAL
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SET_DIRECT_MAP if MMU
+>>       select ARCH_HAS_SET_MEMORY if MMU
+>>       select ARCH_HAS_STRICT_KERNEL_RWX if MMU && !XIP_KERNEL
+>> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+>> index 04b9550cf0070..001f5149952b4 100644
+>> --- a/arch/sh/Kconfig
+>> +++ b/arch/sh/Kconfig
+>> @@ -10,6 +10,7 @@ config SUPERH
+>>       select ARCH_HAS_GIGANTIC_PAGE
+>>       select ARCH_HAS_GCOV_PROFILE_ALL
+>>       select ARCH_HAS_PTE_SPECIAL
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>>       select ARCH_HIBERNATION_POSSIBLE if MMU
+>>       select ARCH_MIGHT_HAVE_PC_PARPORT
+>> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+>> index 8535e19062f65..e4bfb80b48cfe 100644
+>> --- a/arch/sparc/Kconfig
+>> +++ b/arch/sparc/Kconfig
+>> @@ -13,6 +13,7 @@ config 64BIT
+>>   config SPARC
+>>       bool
+>>       default y
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
+>>       select ARCH_MIGHT_HAVE_PC_SERIO
+>>       select DMA_OPS
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 53bab123a8ee4..d7c2bf4ee403d 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -91,6 +91,7 @@ config X86
+>>       select ARCH_HAS_NONLEAF_PMD_YOUNG    if PGTABLE_LEVELS > 2
+>>       select ARCH_HAS_UACCESS_FLUSHCACHE    if X86_64
+>>       select ARCH_HAS_COPY_MC            if X86_64
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SET_MEMORY
+>>       select ARCH_HAS_SET_DIRECT_MAP
+>>       select ARCH_HAS_STRICT_KERNEL_RWX
+>> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+>> index 3c6e5471f025b..c6cbd7459939c 100644
+>> --- a/arch/xtensa/Kconfig
+>> +++ b/arch/xtensa/Kconfig
+>> @@ -8,6 +8,7 @@ config XTENSA
+>>       select ARCH_HAS_DMA_PREP_COHERENT if MMU
+>>       select ARCH_HAS_GCOV_PROFILE_ALL
+>>       select ARCH_HAS_KCOV
+>> +    select ARCH_HAS_SCREEN_INFO
+>>       select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
+>>       select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
+>>       select ARCH_HAS_DMA_SET_UNCACHED if MMU
+>> diff --git a/drivers/video/Kconfig b/drivers/video/Kconfig
+>> index 8b2b9ac37c3df..d4a72bea56be0 100644
+>> --- a/drivers/video/Kconfig
+>> +++ b/drivers/video/Kconfig
+>> @@ -21,6 +21,9 @@ config STI_CORE
+>>   config VIDEO_CMDLINE
+>>       bool
+>>   +config ARCH_HAS_SCREEN_INFO
+>> +    bool
+>> +
+>>   config VIDEO_NOMODESET
+>>       bool
+>>       default n
+>> diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+>> index 941be574bbe00..5e5d4158a4b4b 100644
+>> --- a/include/asm-generic/Kbuild
+>> +++ b/include/asm-generic/Kbuild
+>> @@ -47,6 +47,7 @@ mandatory-y += percpu.h
+>>   mandatory-y += pgalloc.h
+>>   mandatory-y += preempt.h
+>>   mandatory-y += rwonce.h
+>> +mandatory-y += screen_info.h
+>>   mandatory-y += sections.h
+>>   mandatory-y += serial.h
+>>   mandatory-y += shmparam.h
+>> diff --git a/include/asm-generic/screen_info.h 
+>> b/include/asm-generic/screen_info.h
+>> new file mode 100644
+>> index 0000000000000..6fd0e50fabfcd
+>> --- /dev/null
+>> +++ b/include/asm-generic/screen_info.h
+>> @@ -0,0 +1,12 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +
+>> +#ifndef _ASM_GENERIC_SCREEN_INFO_H
+>> +#define _ASM_GENERIC_SCREEN_INFO_H
+>> +
+>> +#include <uapi/linux/screen_info.h>
+>> +
+>> +#if defined(CONFIG_ARCH_HAS_SCREEN_INFO)
+>> +extern struct screen_info screen_info;
+>> +#endif
+>> +
+>> +#endif /* _ASM_GENERIC_SCREEN_INFO_H */
+>> diff --git a/include/linux/screen_info.h b/include/linux/screen_info.h
+>> index eab7081392d50..c764b9a51c24b 100644
+>> --- a/include/linux/screen_info.h
+>> +++ b/include/linux/screen_info.h
+>> @@ -4,6 +4,6 @@
+>>     #include <uapi/linux/screen_info.h>
+>>   -extern struct screen_info screen_info;
+>> +#include <asm/screen_info.h>
+>>     #endif /* _SCREEN_INFO_H */
+
