@@ -2,74 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380F57802B9
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 02:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9C8780542
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 07:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352399AbjHRA04 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Aug 2023 20:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S239516AbjHRFAV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 01:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356429AbjHRA0l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Aug 2023 20:26:41 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0365FE;
-        Thu, 17 Aug 2023 17:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692318400; x=1723854400;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ctCzlIT+5k3T1YALRzvioprufv0wKEBR63rBIHtioCM=;
-  b=BeI8am6kq9Og1ZQMQciAFJTcAp6s++mqERlWUFnmvYdhx8QwZpzJHpsu
-   lHjHFqOkt9KmyJ3zYEivnESymc3qSd4kqwEAPa0f2aTdtA1e5KLzII1lb
-   0WhTVcxBNmSl/Zr3XfbU2JhPP0eCj5BWmjzx7b/yJVQjWDieQ4IShBI5p
-   7UflkcR+b5vdwZdxWx7GXNsFxLxJL1trCNs0gq2pVntaaw0ldWpQrDXus
-   NSzb5flOqCiEvcyVOWBhCLnMJCe0l+ml2NlkEvI5RGmoMBZ4K9H3B4MVn
-   L6f4koflsVPBEFrM4EhEiWhjd9Gwi8N8YGkczTuAWJsalaukit/nX9flh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="403951555"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="403951555"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 17:26:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="1065518469"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="1065518469"
-Received: from lacoffin-mobl.amr.corp.intel.com (HELO [10.212.196.192]) ([10.212.196.192])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 17:26:20 -0700
-Message-ID: <51095880-da66-5041-e47c-6572f199f6db@intel.com>
-Date:   Thu, 17 Aug 2023 17:26:21 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 03/15] mshyperv: Introduce
- numa_node_to_proximity_domain_info
-Content-Language: en-US
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Cc:     patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
-        wei.liu@kernel.org, haiyangz@microsoft.com, decui@microsoft.com,
-        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
-        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
-        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        will@kernel.org, catalin.marinas@arm.com
-References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1692309711-5573-4-git-send-email-nunodasneves@linux.microsoft.com>
- <3b1ca61c-fa3f-a802-6705-a8c1f37ad58f@intel.com>
- <8161aa90-5535-4ef9-ad30-1655746a1053@linux.microsoft.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <8161aa90-5535-4ef9-ad30-1655746a1053@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        with ESMTP id S1357956AbjHRFAS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 01:00:18 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FFA3AAB;
+        Thu, 17 Aug 2023 22:00:15 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 68FFC2B00164;
+        Fri, 18 Aug 2023 01:00:14 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 18 Aug 2023 01:00:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1692334813; x=1692342013; bh=4Hne7fM3xWWmZ3VcZm3RQeJhl
+        3MPidqC5AOvp1iIiWo=; b=U7nPHzITmY8Dx2B/MRu9k7dshceM4Lv+Y0UxZeCRN
+        VmgsHyIydhtvkbwPA/1QwxuA7AugJ4xoqFUgWXVgqOkVCCWfSFYmpGUpkdnGALRS
+        p3hX8zdNFNDmSqMkvxiXWowloHsaC1OImAZbYmHx84ye+MXWS3Hv+QYtvLuaTM+l
+        JzrX7up7VDi/IFVh6E3USe8rl8DZ5F2ksGj5xAM3Wwv69coAXdH3iuwFIED2VJs0
+        NvydZFk2V4SP3ykPWAIIHrO9AkmNZifijRrC1PA9CVzVwpch0XBzV7h9qeoM6Ny+
+        3pphwjWaBdzWGCz0/xwxfSnRls7UFb4+96NyVigXbdScA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1692334813; x=1692342013; bh=4Hne7fM3xWWmZ3VcZm3RQeJhl3MPidqC5AO
+        vp1iIiWo=; b=qZeTZ0OVd0DZxVfKhKSQ1iCDE4yE3QtvijtvDK5S5AkGbmU1QE5
+        +xxFXTvzP6aoWCBvGNhVsr2h8o1bocEYcdgbmtzlwxW73MuMpF4NWHMUeSM8oAfl
+        MaAS/3d1wy1PtQpQfkontpQY4Q1hQnN3Dzl33iZbPrhN0GVkAzGCAZYrUgNhy4s3
+        nDbIPAVXYoZ1lwCGKDbYLCox5vvT0IWjP2OwClHlzyhZYgEISaNTtd8e+6PD44R3
+        vIMUDOAZTm0jkdZozm+MQSD6HbybriyI08xa3otlRg97BS/iEms6NJGCN6R0xOqt
+        mew3Iicz5zVR1MdisGxNgHXejWPFVp644RA==
+X-ME-Sender: <xms:3freZO_HIXfahjzTG4R5tMPDk26GjXGAbpBKA8RnIXJxNUPIH6O4TQ>
+    <xme:3freZOv2TO0QnyMmaes7r3QepCxEoshXfMmIe5_1T5BsF-5E09ahkg05rvTrBGWdf
+    rurUsyI-ptlCVoUxLo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudduvddgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:3freZECcoJFZ_lA5154jiC_ByFNfJRkVdh2WMiWfBL0euvsWVPXPtQ>
+    <xmx:3freZGdzpx0CPuCCfXgNJUXEzswglei4GfOflJbpDJv2vAgVdFJpyQ>
+    <xmx:3freZDNxMgNvLSHkNwp-Vuo0gt3OEK2q8oSPrQPXkJ7yvHOkDRW1tA>
+    <xmx:3freZO038HrUsOBLpGt29YTo_BtcSk8xvz_swuHhbX4LY5QXPFkZyaSGZ20>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 28838B60089; Fri, 18 Aug 2023 01:00:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <35766d47-a38d-4096-b602-887cf3a689e1@app.fastmail.com>
+Date:   Fri, 18 Aug 2023 07:00:12 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Palmer Dabbelt" <palmer@rivosinc.com>
+Subject: [GIT PULL] asm-generic: regression fix for 6.5
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,27 +84,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/17/23 17:17, Nuno Das Neves wrote:
->>> +	if (node != NUMA_NO_NODE) {
->>> +		proximity_domain_info.domain_id = node_to_pxm(node);
->>> +		proximity_domain_info.flags.reserved = 0;
->>> +		proximity_domain_info.flags.proximity_info_valid = 1;
->>> +		proximity_domain_info.flags.proximity_preferred = 1;
->>> +	} else {
->>> +		proximity_domain_info.as_uint64 = 0;
->>> +	}
->>> +
->>> +	return proximity_domain_info;
->>> +}
->> Pop quiz: What are the rules for the 30 bits of uninitialized data of
->> proximity_domain_info.flags in the (node != NUMA_NO_NODE) case?
->>
->> I actually don't know off the top of my head.  I generally avoid
->> bitfields, but if they were normal stack-allocated variable space,
->> they'd be garbage.
-> I'm not sure what you are getting at here - all the fields are
-> initialized.
+The following changes since commit 4dd595c34c4bb22c16a76206a18c13e4e194335d:
 
-Whoops, I somehow missed the reserved field initialization.  But, yeah,
-a struct would be nice instead of the union here.
+  syscalls: Remove file path comments from headers (2023-06-22 17:10:09 +0200)
 
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fix-6.5
+
+for you to fetch changes up to 6e8d96909a23c8078ee965bd48bb31cbef2de943:
+
+  asm-generic: partially revert "Unify uapi bitsperlong.h for arm64, riscv and loongarch" (2023-08-17 14:51:20 +0200)
+
+----------------------------------------------------------------
+asm-generic: regression fix for 6.5
+
+Just one partial revert for a commit from the merge window
+that caused annoying behavior when building old kernels on
+arm64 hosts.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      asm-generic: partially revert "Unify uapi bitsperlong.h for arm64, riscv and loongarch"
+
+ arch/arm64/include/uapi/asm/bitsperlong.h       | 24 ++++++++++++++++++++++++
+ arch/riscv/include/uapi/asm/bitsperlong.h       | 14 ++++++++++++++
+ tools/arch/arm64/include/uapi/asm/bitsperlong.h | 24 ++++++++++++++++++++++++
+ tools/arch/riscv/include/uapi/asm/bitsperlong.h | 14 ++++++++++++++
+ 4 files changed, 76 insertions(+)
+ create mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
+ create mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
+ create mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
+ create mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
