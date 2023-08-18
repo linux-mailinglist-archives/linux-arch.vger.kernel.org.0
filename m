@@ -2,321 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A40B78132D
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 21:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC79678136A
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 21:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379500AbjHRTAA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Aug 2023 15:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S1379610AbjHRTij (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 15:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379523AbjHRS7g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 14:59:36 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A6462D7D;
-        Fri, 18 Aug 2023 11:59:34 -0700 (PDT)
-Received: from [192.168.0.5] (71-212-112-68.tukw.qwest.net [71.212.112.68])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 953D6211F7DD;
-        Fri, 18 Aug 2023 11:59:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 953D6211F7DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1692385174;
-        bh=d135KGrz2cWsfEoV6BOJWYUpTSu6tAXXjBPCbPKLBJA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aZLRFk89WqilThXbog1OAMH5ppE8UiJskTwacYRU+T5fSznZv25tozwgXb54wsvZX
-         qH5kzl227zdj2JAvPND2lFizLRXc3+pQ/scXbhSpfkFmxhuTmqoTeTQ5DktR3jCsG7
-         X9HoHytr/hCasHZrRVC0Z5zwsGS3UX1tA5UX6IPs=
-Message-ID: <664aec4c-7ea9-447f-afab-9e31e9e106c1@linux.microsoft.com>
-Date:   Fri, 18 Aug 2023 11:59:34 -0700
+        with ESMTP id S1379660AbjHRTiP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 15:38:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D191FCE;
+        Fri, 18 Aug 2023 12:38:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B7662D18;
+        Fri, 18 Aug 2023 19:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBE7C433C8;
+        Fri, 18 Aug 2023 19:38:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692387492;
+        bh=01Q2xEmAO2pVJWHzK9M3MZQdGCIPPOuErEoePLDfq+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZvLDUejgDxFNb6IhI4Y0qdql5M25cqQLtbiufVm4Gb1iXmTmAB0Vv7ahIz5a06KAb
+         PUVYYrLHaNR/SZqrZU0yrVK5FDSBVeGGfofO9+Df7X5NWY2X9XcazAltA6H9EsHtv+
+         fc4AWwR9CKunnY9EpyNqH+5BjOB9QdtB0QMaWXxuq/yd9mPtqlVE1q+rF9jr+uSXsI
+         f1NsCWGQH8w59yUVRi8q2TubicSUqChyEh/LQmmTFJ4Z4wetsknCZ6enP2KXAnB49z
+         oUn0kP6MHyAsmo5BdzSFWx5eauk1ZDTV4IrU/9IN+nMSi55OIHvkUfyBmizMa3JLC6
+         ole8zbgLwOsiA==
+Date:   Fri, 18 Aug 2023 20:38:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
+ <ZNOhjrYleGBR6Pbs@arm.com>
+ <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+ <ZN+qki9EaZ6f9XNi@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/15] Drivers: hv: Add modules to expose /dev/mshv to
- VMMs running on Hyper-V
-Content-Language: en-US
-To:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Cc:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        MUKESH RATHOR <mukeshrathor@microsoft.com>,
-        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>
-References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1692309711-5573-16-git-send-email-nunodasneves@linux.microsoft.com>
- <PUZP153MB063545036E6B547C009F6AECBE1BA@PUZP153MB0635.APCP153.PROD.OUTLOOK.COM>
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <PUZP153MB063545036E6B547C009F6AECBE1BA@PUZP153MB0635.APCP153.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LNILMu582aOVL6hM"
+Content-Disposition: inline
+In-Reply-To: <ZN+qki9EaZ6f9XNi@arm.com>
+X-Cookie: Your aim is high and to the right.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/18/2023 6:08 AM, Saurabh Singh Sengar wrote:
->> +
->> +config MSHV_VTL
->> +	tristate "Microsoft Hyper-V VTL driver"
->> +	depends on MSHV
->> +	select HYPERV_VTL_MODE
->> +	select TRANSPARENT_HUGEPAGE
-> 
-> TRANSPARENT_HUGEPAGE can be avoided for now.
-> 
 
-I will remove it in the next version. Thanks.
->> +
->> +#define HV_GET_REGISTER_BATCH_SIZE	\
->> +	(HV_HYP_PAGE_SIZE / sizeof(union hv_register_value))
->> +#define HV_SET_REGISTER_BATCH_SIZE	\
->> +	((HV_HYP_PAGE_SIZE - sizeof(struct hv_input_set_vp_registers)) \
->> +		/ sizeof(struct hv_register_assoc))
->> +
->> +int hv_call_get_vp_registers(
->> +		u32 vp_index,
->> +		u64 partition_id,
->> +		u16 count,
->> +		union hv_input_vtl input_vtl,
->> +		struct hv_register_assoc *registers)
->> +{
->> +	struct hv_input_get_vp_registers *input_page;
->> +	union hv_register_value *output_page;
->> +	u16 completed = 0;
->> +	unsigned long remaining = count;
->> +	int rep_count, i;
->> +	u64 status;
->> +	unsigned long flags;
->> +
->> +	local_irq_save(flags);
->> +
->> +	input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> +	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
->> +
->> +	input_page->partition_id = partition_id;
->> +	input_page->vp_index = vp_index;
->> +	input_page->input_vtl.as_uint8 = input_vtl.as_uint8;
->> +	input_page->rsvd_z8 = 0;
->> +	input_page->rsvd_z16 = 0;
->> +
->> +	while (remaining) {
->> +		rep_count = min(remaining, HV_GET_REGISTER_BATCH_SIZE);
->> +		for (i = 0; i < rep_count; ++i)
->> +			input_page->names[i] = registers[i].name;
->> +
->> +		status = hv_do_rep_hypercall(HVCALL_GET_VP_REGISTERS,
->> rep_count,
->> +					     0, input_page, output_page);
-> 
-> Is there any possibility that count value is passed 0 by mistake ? In that case
-> status will remain uninitialized. 
-> 
+--LNILMu582aOVL6hM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-These lines ensure rep_count is never 0 here:
+On Fri, Aug 18, 2023 at 06:29:54PM +0100, Catalin Marinas wrote:
 
-	while (remaining) {
-		rep_count = min(remaining, HV_GET_REGISTER_BATCH_SIZE);
+> A related question - it may have been discussed intensively on the x86
+> thread (I may read it sometime) - why not have the libc map the shadow
 
-Remaining can't be 0 or the loop would exit, and HV_GET_REGISTER_BATCH_SIZE
-is not 0, or we would never get any registers.
+Your assumption that this is a single thread feels optimistic there.
 
->> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
->> index 13f972e72375..ccd76f30a638 100644
->> --- a/drivers/hv/hv_common.c
->> +++ b/drivers/hv/hv_common.c
->> @@ -62,7 +62,11 @@ EXPORT_SYMBOL_GPL(hyperv_pcpu_output_arg);
->>   */
->>  static inline bool hv_output_arg_exists(void)
->>  {
->> +#ifdef CONFIG_MSHV_VTL
-> 
-> Although today both the option works together. But thinking
-> which is more accurate CONFIG_HYPERV_VTL_MODE or
-> CONFIG_MSHV_VTL here for scalability of VTL modules.
-> 
+> stack and pass the pointer/size to clone3()? It saves us from having to
+> guess what the right size we'd need. struct clone_args is extensible.
 
-Good point. Though I'm not sure it matters too much right now,
-since as you mention they will always be enabled together.
+I can't recall or locate the specific reasoning there right now, perhaps
+Rick or someone else can?  I'd guess there would be compat concerns for
+things that don't go via libc which would complicate the story with
+identifying and marking things as GCS/SS safe, it's going to be more
+robust to just supply a GCS if the process is using it.  That said
+having a default doesn't preclude us using the extensibility to allow
+userspace directly to control the GCS size, I would certainly be in
+favour of adding support for that.
 
-Does CONFIG_HYPERV_VTL_MODE use the output arg?
+> (I plan to get back next week to this series, I'll need to read a bit
+> more on the spec)
 
->> diff --git a/drivers/hv/mshv.h b/drivers/hv/mshv.h
->> new file mode 100644
->> index 000000000000..166480a73f3f
->> --- /dev/null
->> +++ b/drivers/hv/mshv.h
->> @@ -0,0 +1,156 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (c) 2023, Microsoft Corporation.
->> + */
->> +
->> +#ifndef _MSHV_H_
->> +#define _MSHV_H_
->> +
->> +#include <linux/spinlock.h>
->> +#include <linux/mutex.h>
->> +#include <linux/semaphore.h>
->> +#include <linux/sched.h>
->> +#include <linux/srcu.h>
->> +#include <linux/wait.h>
->> +#include <uapi/linux/mshv.h>
->> +
->> +/*
->> + * Hyper-V hypercalls
->> + */
->> +
->> +int hv_call_withdraw_memory(u64 count, int node, u64 partition_id);
->> +int hv_call_create_partition(
->> +		u64 flags,
->> +		struct hv_partition_creation_properties creation_properties,
->> +		union hv_partition_isolation_properties isolation_properties,
->> +		u64 *partition_id);
->> +int hv_call_initialize_partition(u64 partition_id);
->> +int hv_call_finalize_partition(u64 partition_id);
->> +int hv_call_delete_partition(u64 partition_id);
->> +int hv_call_map_gpa_pages(
->> +		u64 partition_id,
->> +		u64 gpa_target,
->> +		u64 page_count, u32 flags,
->> +		struct page **pages);
->> +int hv_call_unmap_gpa_pages(
->> +		u64 partition_id,
->> +		u64 gpa_target,
->> +		u64 page_count, u32 flags);
->> +int hv_call_get_vp_registers(
->> +		u32 vp_index,
->> +		u64 partition_id,
->> +		u16 count,
->> +		union hv_input_vtl input_vtl,
->> +		struct hv_register_assoc *registers);
->> +int hv_call_get_gpa_access_states(
->> +		u64 partition_id,
->> +		u32 count,
->> +		u64 gpa_base_pfn,
->> +		u64 state_flags,
->> +		int *written_total,
->> +		union hv_gpa_page_access_state *states);
->> +
->> +int hv_call_set_vp_registers(
->> +		u32 vp_index,
->> +		u64 partition_id,
->> +		u16 count,
->> +		union hv_input_vtl input_vtl,
->> +		struct hv_register_assoc *registers);
-> 
-> Nit: Opportunity to fix many of the checkpatch.pl related to line break here
-> and many other places.
-> 
+I've been making changes, mostly in response to your feedback, so there
+should be a new version on Monday even if not everything is addressed
+yet.
 
-checkpatch.pl doesn't complain about anything in this file.
+--LNILMu582aOVL6hM
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> +static int
->> +mshv_assign_ioeventfd(struct mshv_partition *partition,
->> +		      struct mshv_ioeventfd *args)
->> +	__must_hold(&partition->mutex)
->> +{
->> +	struct kernel_mshv_ioeventfd *p;
->> +	struct eventfd_ctx *eventfd;
->> +	u64 doorbell_flags = 0;
->> +	int ret;
->> +
->> +	/* This mutex is currently protecting ioeventfd.items list */
->> +	WARN_ON_ONCE(!mutex_is_locked(&partition->mutex));
->> +
->> +	if (args->flags & MSHV_IOEVENTFD_FLAG_PIO)
->> +		return -EOPNOTSUPP;
->> +
->> +	/* must be natural-word sized */
->> +	switch (args->len) {
->> +	case 0:
->> +		doorbell_flags = HV_DOORBELL_FLAG_TRIGGER_SIZE_ANY;
->> +		break;
->> +	case 1:
->> +		doorbell_flags = HV_DOORBELL_FLAG_TRIGGER_SIZE_BYTE;
->> +		break;
->> +	case 2:
->> +		doorbell_flags = HV_DOORBELL_FLAG_TRIGGER_SIZE_WORD;
->> +		break;
->> +	case 4:
->> +		doorbell_flags =
->> HV_DOORBELL_FLAG_TRIGGER_SIZE_DWORD;
->> +		break;
->> +	case 8:
->> +		doorbell_flags =
->> HV_DOORBELL_FLAG_TRIGGER_SIZE_QWORD;
->> +		break;
->> +	default:
->> +		pr_warn("ioeventfd: invalid length specified\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	/* check for range overflow */
->> +	if (args->addr + args->len < args->addr)
->> +		return -EINVAL;
->> +
->> +	/* check for extra flags that we don't understand */
->> +	if (args->flags & ~MSHV_IOEVENTFD_VALID_FLAG_MASK)
->> +		return -EINVAL;
->> +
->> +	eventfd = eventfd_ctx_fdget(args->fd);
->> +	if (IS_ERR(eventfd))
->> +		return PTR_ERR(eventfd);
->> +
->> +	p = kzalloc(sizeof(*p), GFP_KERNEL);
->> +	if (!p) {
->> +		ret = -ENOMEM;
->> +		goto fail;
->> +	}
->> +
->> +	p->addr    = args->addr;
->> +	p->length  = args->len;
->> +	p->eventfd = eventfd;
->> +
->> +	/* The datamatch feature is optional, otherwise this is a wildcard */
->> +	if (args->flags & MSHV_IOEVENTFD_FLAG_DATAMATCH)
->> +		p->datamatch = args->datamatch;
->> +	else {
->> +		p->wildcard = true;
->> +		doorbell_flags |=
->> HV_DOORBELL_FLAG_TRIGGER_ANY_VALUE;
->> +	}
->> +
->> +	if (ioeventfd_check_collision(partition, p)) {
->> +		ret = -EEXIST;
->> +		goto unlock_fail;
->> +	}
->> +
->> +	ret = mshv_register_doorbell(partition->id, ioeventfd_mmio_write,
->> +				     (void *)partition, p->addr,
->> +				     p->datamatch, doorbell_flags);
->> +	if (ret < 0) {
->> +		pr_err("Failed to register ioeventfd doorbell!\n");
-> 
-> Nit: Do we like to print function name at the start of pr_err. 
-> 
+-----BEGIN PGP SIGNATURE-----
 
-Yes, we should. I will fix it. Thanks!
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTfyJkACgkQJNaLcl1U
+h9Cw3Af8Cnyy0Sa1PU1lq3c1HV/d6eNcVzOoN4kECuID3B/GKxWng90W0Z7wR75z
+Wl9H0WZxlDkqd/voFGHAJTEtlcEZMg6xNByq8Rhq2jw6R2EX3O8P6+Uqumjb3UQ8
+wb+PJyloj3BhXcQPiMH8vFHAs6b81DyPYo9NtaCLsYbtZv4MwGjgJKRrAl8+O2ct
+n/1P1Hpp/XUeTZUZvyWxrBdDUD7nLq9mQe2/+h6NxTtchrNTb98Kvgk7JrRefjrB
+7kehDj9XiBJt5vVkoSO+e5aVln7wgwWor3KsjviaeNzyXglWrx+VBIc8OT6FMiJw
+VIA6Wrc8ikvi1fZ/oooK9TnU+p5chw==
+=RgY5
+-----END PGP SIGNATURE-----
 
+--LNILMu582aOVL6hM--
