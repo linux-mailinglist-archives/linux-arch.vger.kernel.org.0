@@ -2,84 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D5D7815D4
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Aug 2023 01:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A65D7815E0
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Aug 2023 01:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242594AbjHRXbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Aug 2023 19:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S242851AbjHRXpK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 19:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242456AbjHRXbL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 19:31:11 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4E6E4C;
-        Fri, 18 Aug 2023 16:31:10 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1bc0d39b52cso11320905ad.2;
-        Fri, 18 Aug 2023 16:31:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692401470; x=1693006270;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X0VrumJjXJtBH0MCiqRAB25wxy5fETy8C315CEQSkOI=;
-        b=O1uk9GNOIpHfJ4FywIHwXawtEMTIhGkv66O2F+O19NiDM8Ai9qq/Iy/wvlKpLNSX6e
-         WAt0yvNTDngqfvQkUf8M+HZjWCdvXLEZsN5IonLj1LYkoxwi1knEcHSvHAbRkVpemGCx
-         MWG5CZpJFsHLa6vQW4bd0h4RZnC9QH73CbZ3Le4cQ8rR6AQ0v7crc5CDTlqO5cfZGqQk
-         Fw/cnEj4XDmm7K3zS59vZE6z39Hph/lA8YLsYF5SvJ+DZ5S+jODkaZQhbsOvJkgQ+Kei
-         xheLgXVOcBu8mxhGVxsSn1Piuw/S5TKycSb7c9am/Oa85P5JPWyofRbnN44wzr1I3BqX
-         b1Ww==
-X-Gm-Message-State: AOJu0YxyideC79Hx/LAFGz9N3rT3zLfJvOr0V0+PKqo9SI5YHtA+dPju
-        I2lmHHwCLxvjHPEVtbWVScA=
-X-Google-Smtp-Source: AGHT+IHTQ4leX3gaB2UBapnVqB5I/AgZBLaIfW34OqI1+sD+yGPUlnFWei0O+z0QrwTB+gAkYxdWRw==
-X-Received: by 2002:a17:903:11c6:b0:1bb:98a0:b78a with SMTP id q6-20020a17090311c600b001bb98a0b78amr830369plh.18.1692401470267;
-        Fri, 18 Aug 2023 16:31:10 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170902724b00b001bb515e6b39sm2273755pll.306.2023.08.18.16.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 16:31:09 -0700 (PDT)
-Date:   Fri, 18 Aug 2023 23:30:52 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, patches@lists.linux.dev,
-        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
-        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
-        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH v2 14/15] asm-generic: hyperv: Use mshv headers
- conditionally. Add asm-generic/hyperv-defs.h
-Message-ID: <ZN//LCO3mVzC4gv9@liuwe-devbox-debian-v2>
-References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1692309711-5573-15-git-send-email-nunodasneves@linux.microsoft.com>
+        with ESMTP id S242300AbjHRXon (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 19:44:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BEE2135;
+        Fri, 18 Aug 2023 16:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=xTd+xM15uwaYqGAW/S8CZDkcwvuJ3aJIIjx1MPGNF/Y=; b=pZH/ksRwnPq3maIwYAlJC3Rrrr
+        9sXlHg5rZOuCTKksS/zIoMTj4CYgiei2BSHr/Fmq4d5o6u6K44iFq95QRQnAeXh21SPlKB1dSqI9S
+        Cfts7MiOtQtejm51Kqr727hN42qMODja2NIagNNWPITLUN3zgCX6JPHkj/KLLfXzJl6lnRj2IQpX0
+        rdlY37izaBlOJXXS/VdrrvoBUDNRoF1KuxWjFO1MPDhsEqGcrcCV503FRIC+zvjs3tCc/aw4OtNDw
+        1CgyBaH6pumLMmkbfGn+hR53qU8NQHPiWTB5c7oduD3LBzu4IRjjLr3T37jzgVW5PH9+G1oKRWkqj
+        I69daqCw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qX98o-00ABNX-07;
+        Fri, 18 Aug 2023 23:44:30 +0000
+Message-ID: <78a802c5-3f0d-e199-d974-e586c00180eb@infradead.org>
+Date:   Fri, 18 Aug 2023 16:44:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1692309711-5573-15-git-send-email-nunodasneves@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        Vineet Gupta <vgupta@kernel.org>,
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <38e1a01b-1e8b-7c66-bafc-fc5861f08da9@gmail.com>
+ <86e329b1-c8d7-47bf-8be8-3326daf74eb5@infradead.org>
+In-Reply-To: <86e329b1-c8d7-47bf-8be8-3326daf74eb5@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 03:01:50PM -0700, Nuno Das Neves wrote:
-> Add hyperv-defs.h to replace some inclusions of hyperv-tlfs.h.
-> 
-> It includes hyperv-tlfs.h or hvhdk.h depending on a compile-time constant
-> HV_HYPERV_DEFS which will be defined in the mshv driver.
-> 
-> This is needed to keep unstable Hyper-V interfaces independent of
-> hyperv-tlfs.h. This ensures hvhdk.h replaces hyperv-tlfs.h in the mshv driver,
-> even via indirect includes.
-> 
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Hi Jesse,
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+I replied to your comment a few days ago, but for some reason
+your email to me contains:
+Reply-To: 20230816055010.31534-1-rdunlap@infradead.org
+so it wasn't sent directly to you.
+
+My former reply is below.
+
+On 8/16/23 20:15, Randy Dunlap wrote:
+> Hi Jesse,
+> 
+> On 8/16/23 15:45, Jesse Taube wrote:
+>> Hi, Randy
+>>
+>>> diff -- a/init/Kconfig b/init/Kconfig
+>>> --- a/init/Kconfig
+>>> +++ b/init/Kconfig
+>>> @@ -1790,14 +1790,6 @@ config DEBUG_RSEQ
+>>>
+>>>         If unsure, say N.
+>>>
+>>> -config EMBEDDED
+>>> -    bool "Embedded system"
+>>> -    select EXPERT
+>>> -    help
+>>> -      This option should be enabled if compiling the kernel for
+>>> -      an embedded system so certain expert options are available
+>>> -      for configuration.
+>>
+>> Wouldn't removing this break many out of tree configs?
+> 
+> I'm not familiar with out-of-tree configs.
+> Do you have some examples of some that use CONFIG_EMBEDDED?
+> (not distros)
+> 
+>> Should there be a warning here to update change it instead of removal?
+> 
+> kconfig doesn't have a warning mechanism AFAIK.
+> Do you have an idea of how this would work?
+> 
+> We could make a smaller change to init/Kconfig, like so:
+> 
+>  config EMBEDDED
+> -	bool "Embedded system"
+> +	bool "Embedded system (DEPRECATED)"
+>  	select EXPERT
+>  	help
+> -	  This option should be enabled if compiling the kernel for
+> -	  an embedded system so certain expert options are available
+> -	  for configuration.
+> +	  This option is being removed after Linux 6.6.
+> +	  Use EXPERT instead of EMBEDDED.
+> 
+> but there is no way to produce a warning message. I.e., even with this
+> change, the message will probably be overlooked.
+> 
+> ---
+> ~Randy
+
+-- 
+~Randy
