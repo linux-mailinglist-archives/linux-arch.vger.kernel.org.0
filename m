@@ -2,170 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63895781437
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Aug 2023 22:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21217815AA
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Aug 2023 01:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379948AbjHRUP7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Aug 2023 16:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
+        id S241865AbjHRXIw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Aug 2023 19:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379968AbjHRUP1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 16:15:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60B41BD4;
-        Fri, 18 Aug 2023 13:15:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42CC860DB6;
-        Fri, 18 Aug 2023 20:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FBFC433C7;
-        Fri, 18 Aug 2023 20:15:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692389724;
-        bh=WCt+HTyPqpQoM8uuU7vN+x57RA6ZJu12mqg0CzvfAKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWpnqpi65SH3/qdqWBn6Zd1Ci2gAJDST/B3oTk2b0QqR4KzLEHujl/2sXAp34aaQz
-         rYf/Hxv4pGdxI4XtXA71/BlwdSjOlALBF8+7Nh/txVG1Pr0etLTfoxWGUJ+zGSMQ13
-         12qmiSM3fn6coLaVe6HKubfVBJb5Z/QsLDUtopgpRJBemR/BlWB0eyjCHm7pxUeA6y
-         yvGiBvlRhhmOnJmtqJKBgyLZHzlJhtJfhzvqoLPqNP+U1RPimemgLmIq2et3p1jWan
-         qRLwKdKD5hl3mrqoXMp+UCe8E/WSmGnN+WQpVc/+3X3jhGCfNqyeGGCMUIAzmPI1DF
-         i74Qa8ekO6c+g==
-Date:   Fri, 18 Aug 2023 21:15:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 19/36] arm64/gcs: Allocate a new GCS for threads with
- GCS enabled
-Message-ID: <3a01ce20-3365-421b-95ff-211946808174@sirena.org.uk>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-19-68cfa37f9069@kernel.org>
- <ZNZhG/4rBpTenYVH@arm.com>
+        with ESMTP id S242460AbjHRXIn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Aug 2023 19:08:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C2EE4D;
+        Fri, 18 Aug 2023 16:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=LZRegAIROXzZcs6sU84B7SbtZZCoef4fDxKDjhh4irI=; b=jdWFCFbZODmxVzFWdoTI9O2FUZ
+        LP163Ww3plYQyuXOuCX4kBW102YAtQPG9t2P30poUbzum44SEHT8gnFbqIOXz5II8JMORQo2h33vb
+        tCIqxpDF100+vGFjppYnqKQZpEC3DQk5XPZc7A1sNyZ2P1ddLKz3uSA57PpNI7dBJYrPtbGWSdCwP
+        hb5HntJ7c/VWIsblxRnQG95t+nyDe4hpjHzPQ4C8lwzUdvKUgC6dUjVRnMKKoDlX8VCMXbMU4jBLt
+        YvNieNNbXPsjlxmtsXDH5Z+w+DMxpFrYf5F9qbQVphJRmXpqrGlc29g/qJ792Qq2Po55FCXVLZFOU
+        BGqruOyA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qX8Zj-00A8u5-1J;
+        Fri, 18 Aug 2023 23:08:15 +0000
+Message-ID: <3a5898a1-71b3-7377-cf46-94149e53cbce@infradead.org>
+Date:   Fri, 18 Aug 2023 16:08:13 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="45mwPxvFeqYyCSA9"
-Content-Disposition: inline
-In-Reply-To: <ZNZhG/4rBpTenYVH@arm.com>
-X-Cookie: Your aim is high and to the right.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v1 1/1] asm-generic: Fix spelling of architecture
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>
+References: <20230724134301.13980-1-andriy.shevchenko@linux.intel.com>
+ <ZN+V7P6srKrAelUQ@smile.fi.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZN+V7P6srKrAelUQ@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi,
 
---45mwPxvFeqYyCSA9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 8/18/23 09:01, Andy Shevchenko wrote:
+> On Mon, Jul 24, 2023 at 04:43:01PM +0300, Andy Shevchenko wrote:
+>> Fix spelling of "architecture" in the Kbuild file.
+> 
+> Any comments?
+> 
 
-On Fri, Aug 11, 2023 at 05:26:03PM +0100, Catalin Marinas wrote:
-> On Mon, Aug 07, 2023 at 11:00:24PM +0100, Mark Brown wrote:
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks.
 
-> > +	mmap_write_lock(mm);
-> > +	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
-> > +			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
-
-> Why not PROT_WRITE as well? I guess I need to check the x86 patches
-> since the do_mmap() called here has a different prototype than what's in
-> mainline.
-
-> This gets confusing since currently the VM_* flags are derived from the
-> PROT_* flags passed to mmap(). But you skip the PROT_WRITE in favour of
-> adding VM_WRITE directly.
-
-I have to confess that I inherited this from the x86 code and never
-thought too hard about it.  I've got a horrible feeling the reasoning is
-simply the way in which x86 fits shadow stack into the page tables
-without having a mechanism like permission indirection, these don't
-apply for us.
-
-> I haven't followed the x86 discussion but did we run out of PROT_* bits
-> for a PROT_SHADOW_STACK?
-
-It's more that there are security concerns with having PROT_, especially
-in conjunction with needing to provide a token for stack pivot - we not
-only need to map pages for the GCS, we also need to write a cap token
-into it so that we can pivot to the new stack.  If the GCS can ever be
-written to by userspace via normal means then that's an issue for the
-basic protection model that the feature is trying to implement.  If we
-have the PROT_ but try to check for bad uses of it that makes everything
-messy and complicated which is especially non-ideal for a feature with a
-security focus.  Having a more packaged system call is easier for
-everyone.
-
-More detail in the x86 patch that's currently in -next:
-
-   https://lore.kernel.org/all/20230319001535.23210-34-rick.p.edgecombe@intel.com/
-
-> > +	/* Allocate RLIMIT_STACK with limits of PAGE_SIZE..4G */
-> > +	size = PAGE_ALIGN(min_t(unsigned long long,
-> > +				rlimit(RLIMIT_STACK), SZ_4G));
-> > +	return max(PAGE_SIZE, size);
-> > +}
-
-> I saw Szabolcs commenting on the default size as well. Maybe we should
-> go for RLIMIT_STACK/2 but let's see how the other sub-thread is going.
-
-I've updated it.
-
-> > +	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
-> > +		return 0;
-
-> Is it safe for CLONE_VFORK not to get a new shadow stack? A syscall for
-> exec could push something to the stack. I guess the GCS pointer in the
-> parent stays the same, so it wouldn't matter.
-
-Yes, pushing should be fine just as for the regular stack.
-
-> That said, I think this check should be somewhere higher up in the
-> caller of gcs_alloc_thread_stack(). The copy_thread_gcs() function
-> already does most of the above checks. Is the GCS allocation called from
-> elsewhere as well?
-
-That's the only place.  I've moved the above check into copy_thread_gcs(),
-you're right that the other checks are redundant as they're done in the
-caller already.
-
---45mwPxvFeqYyCSA9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTf0VIACgkQJNaLcl1U
-h9AK7Af8DxBPnoklDhEt6uL9Qzwyg5iHuvMMz45iQs74RTv9fEM/vR1B1L0U0vxL
-LjcRxv98KB+GM2DQ+YOoQK84V2okcpKSNu9l/0CY+hvT8JChP5Ljn/b3azVF3FGY
-QYftbzRipJONW9pKxIZ7Svx8+iZIg03PmcwJTtLRsi36gyykxlFbYhzZm/0VbWH6
-HDuDWH8yMX1/BQGizf3FM7CxbBmhcI/zzi2eUslQ3EPOoSKywy4JXRc49XAvrxbT
-Bu8EbBX7Oapi96h+KlZEAWSiTuD4plJ6pJQsjMdMcELiI//3sTIzNRNqmFxBIgWS
-O2Sp933Ku1aQm9TW9TcOY3MVq5dYiQ==
-=X4OS
------END PGP SIGNATURE-----
-
---45mwPxvFeqYyCSA9--
+-- 
+~Randy
