@@ -2,109 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EBC781C10
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Aug 2023 04:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB552781C07
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Aug 2023 04:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjHTCgB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 19 Aug 2023 22:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S229835AbjHTCdu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 19 Aug 2023 22:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjHTCfr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Aug 2023 22:35:47 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84355D4C7;
-        Sat, 19 Aug 2023 16:12:57 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0106B580126;
-        Sat, 19 Aug 2023 19:12:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 19 Aug 2023 19:12:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1692486774; x=1692493974; bh=eF
-        p9xFgSVp+I1HTUH+y+7224okESMQ+VhbU3Am512Uw=; b=GXs5Ux18dB7s0wFIA7
-        EqEXXEICoPI+MlJNUcsMVjF7KAdxknUeboQC5nn/yYM6tgVpl/0TwWMvATMWmHtZ
-        hkhuQaHdleRtYpTuCi0aIVczwIb5ZMgxlN59ySsDf7vRpemRUuR2fS0+ICwtJJG7
-        qTqYF0dpBsTOaGt81+niyXp1SOH+gdl2UekcgeMO3ns+Hw/YckLwE91NXkRyH1LK
-        oLIZbt0G8sqGDBiWeWNOsvs48hgFiRT43a31LbgBuSD/BtnQI1UHBVTBXpkxygoW
-        +aMuYaE7TEx2ASCa1kooI7poXJi0tfN1WFo5UrMrfVYL5r+EhBOqC0koyppfKcTW
-        kjDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1692486774; x=1692493974; bh=eFp9xFgSVp+I1
-        HTUH+y+7224okESMQ+VhbU3Am512Uw=; b=Udursr+emtzG/itOBWyrlF2MXy/uT
-        JC8uydwvvtDYj3J6YYUbAp7hQSYTYVpNZkujBOjtQeedXkQuWLtN3LTll+AVzSwA
-        yECKLkED1sAXwOkHu0SecwJbyYfbTc8vhjKF+YVTplEZpTrz7bQTwjcp0Mfdf75N
-        CO3+YgwY/KEbAAWElpsSZTbhk83SrFMKVl6NFZXDq8LkSFtlTsVzmfZUGOsABvh9
-        SW8hntLOBpOe9NCE2I99ewFmBrUfl7T1ejFkCvr2ExDNM58bhUMwS2gZ+2cNPrdC
-        cUYhGlwW0psGSQtEJBJF5WtrasD3qV17MD7gOs+JDwzW2EaQ7hfC2ljyQ==
-X-ME-Sender: <xms:dUzhZDLE_dc_K6K0vpAUQcVXmUImZgpV1_84N9Yng8QEZeY_dQgoLQ>
-    <xme:dUzhZHKRX3cLgqezx5P2CgtwfNzFzojKxOmVe3o13tiG4DCgPanXrZS3O1CSXk0cM
-    ZyM7vzMVkA1bMsZK-U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudduiedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:dUzhZLux1Zi5xpS4iCD97tHjabzhI9G0FDo2K5c3WVlbJ1xD3dDhOQ>
-    <xmx:dUzhZMYa8lfbuwQNZ31QQc8XW_2lKi_-jfHs6gVm3JGhdoK6kRxoKg>
-    <xmx:dUzhZKYO75Qn0D2iw1RJooEoSom1tSj-PNdIlOspoRWfx4U6_GCtEQ>
-    <xmx:dkzhZCoWf9xiWHn0WlPoS7_tyK_KM9JWHPGnMtwc2JJfcAyVrBqQfQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F0FB0B60089; Sat, 19 Aug 2023 19:12:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <320be16c-32a2-4f34-9a30-e352f8203671@app.fastmail.com>
-In-Reply-To: <20230704083022.692368-1-davidgow@google.com>
-References: <20230704083022.692368-1-davidgow@google.com>
-Date:   Sat, 19 Aug 2023 19:12:29 -0400
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "David Gow" <davidgow@google.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Noah Goldstein" <goldstein.w.n@gmail.com>
-Cc:     linux-um@lists.infradead.org, x86@kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] asm-generic: current: Don't include thread-info.h if building
- asm
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229838AbjHTCdk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Aug 2023 22:33:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1939D88CFB;
+        Sat, 19 Aug 2023 16:34:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A056061A77;
+        Sat, 19 Aug 2023 23:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8378FC433C8;
+        Sat, 19 Aug 2023 23:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692488047;
+        bh=94swkMMWtMWXwlQ0MRgkdCnBJXEwx0etvzk4fEwCRDY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JsMv3/rggBxUAEy32zChNAPBOEk124vJgtFdFlqmhzojWGUfnGlmH6Dv0D7biSBGU
+         MfhY7jR5WQoXC7RaHkedup9FAPC3Yp/FcJYsRDRtWZhGUxs6VKkJA0GulpwgYdTqt1
+         glqQGzkihFlP0v7PsYiLUsEts+9sl2NbYYXwox5Gkjfd3G5Yig9l6GhGhUegCmEEIM
+         lULmSruHs4a9z5EMqm8m6WOK94P5TolXC9oIFJewviheEF6XiezAxgZtoNjWlVB8nh
+         NjOk2dED6IoyJT748l7aOqXD7gaTRXbi95OD0Lzq5QdJERcYSkX3l4JMndODHH/SBt
+         hs5iKuiYFfJPw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 6/6] alpha: remove <asm/export.h>
+Date:   Sun, 20 Aug 2023 08:33:53 +0900
+Message-Id: <20230819233353.3683813-6-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230819233353.3683813-1-masahiroy@kernel.org>
+References: <20230819233353.3683813-1-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 4, 2023, at 04:30, David Gow wrote:
-> asm/current.h is included by some assembly files (either directly, or
-> indirectly). This works on some architectures (such as x86), as their
-> implementation of current.h is careful to not include any C, but the
-> asm-generic version includes linux/thread-info.h unconditionally, which
-> leads to errors when either C code or non-asm-compatible preprocessor
-> directives are included.
->
-> Just wrap the contents behind an #ifndef __ASSEMBLY__ to avoid any C
-> code making its way in.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+All *.S files under arch/alpha/ have been converted to include
+<linux/export.h> instead of <asm/export.h>.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Remove <asm/export.h>.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ arch/alpha/include/asm/Kbuild | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/alpha/include/asm/Kbuild b/arch/alpha/include/asm/Kbuild
+index dd31e97edae8..396caece6d6d 100644
+--- a/arch/alpha/include/asm/Kbuild
++++ b/arch/alpha/include/asm/Kbuild
+@@ -3,6 +3,5 @@
+ generated-y += syscall_table.h
+ generic-y += agp.h
+ generic-y += asm-offsets.h
+-generic-y += export.h
+ generic-y += kvm_para.h
+ generic-y += mcs_spinlock.h
+-- 
+2.39.2
+
