@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E03781FC4
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Aug 2023 22:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1322781FCE
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Aug 2023 22:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjHTUdC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Aug 2023 16:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S231895AbjHTUdL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Aug 2023 16:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjHTUdC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Aug 2023 16:33:02 -0400
+        with ESMTP id S231860AbjHTUdD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Aug 2023 16:33:03 -0400
 Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021024.outbound.protection.outlook.com [52.101.62.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABE410F2;
-        Sun, 20 Aug 2023 13:27:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7551F8F;
+        Sun, 20 Aug 2023 13:27:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SS+0/8GWsSJP51h8PKnd9dU7CbroyrU5QMUyaxMiq03B+ySUu1CGGze5w2yw2u+3JQly49HSE/ikVS8NdqneNKE49LEMr5Nj4qWMXvM1rUWIs2D2KBmQVD9upJpGvGIWvZhaHzcf9oJOQK+txsFuXswrEA6N1lW1UudBggf4yrJ4DfvhXTQ4akVytdLApPRJEsvoO4BqIwAfDQaPV87WUQkcH8QkJ1yCdkp7HOgwkdsGbDBHTBsZP+L2maW7Mh2xUYueI4QHj75mxcAu4f/rB8adUMPtNYnxWanbNRJTVC5Jn7g3wHC+BW0nujK1vBScXEdB9TpVk/nWQPmL1NE0iQ==
+ b=YlVKpuhj6IXci/q0wYht+wdLGNrWXfdI66+fRduQw13s73OBdnUq/gp7w4+bjm0dJ35brYMqJO7fmBwDtlTdcrAfza8bq/joRajtCL5w6T7sr6hAfdy9JDx5lq1757TkgR4EnDQXPpKwECF5hXX7BTahBoqQERSPBTemKCZLZSK0wyMEujlLRdO/Ue58VR+Mn1LJGEtb7RLe5eoxslH0JoOO1onidaMbKBunMC0S75Dmuwl2pkflFzq+Oi9oCq4LWjeXkX5oYkpAjZX9AKGt+QL47bREPIsAALmVVA8YVq2ClKRUZgW4PFdJsUL4f3FWdwMl7kZ/huQu6X7VAYpzjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NwduPhA7Ih3xl+gl2VLQ8LTkrBX8M7OcrAksCLLVl1c=;
- b=e42fgnkqSapqnv4yFqypJX4Sp2OqU3AzwAhXqYwakHzxRre3IxXn3G3Nuk+JUzMfsfycMjesieNxhg2DnMfFk2fZBG/uzpZy3p6cT05+oI3cEjDRMVIVnRuXNK2y58+tci1Q+miZNPSJ0plcqlkK9EIJLlqXPBONXR0Ij1sTr0mcE7zymxNGN7qCH719jHlBpasGGwmoAUXTHe1bA3dD6JPhwVY8fVDdlJdzxFXWxDtH4Qyv8w8zYa5+gsnl4O+IvfhqXR11Qto8gtfgAHivlBAJvXW+ZtAWHnRJw0AQzvRTaeJD4oJI0kfAv+I7qEp6yYQpG/QYUYhyPvMW4xdIBw==
+ bh=HCahY2jdvwB3iGIicm2L3sl8nCpNQcXped8Vwo9J+XY=;
+ b=LnttHJtf9WlXmwGFiVGO1H+9XPT42H4lQ3C+K6h752iEDzepYuwNu9HgWAEqMwmXsi92VRWTK2rKe9+CWJDkCv44ENaspT35YIv442Up2WXKwlElOZ2KnkteHe5jEZBqeIXysDaoMzyS9o9gxI52LOQ86dYhxJ9kHDLtlU6WE+YBDICbxHCwgKnJFvsomhOXVqKNTdtXcMpunVBaHSoN0YDv3i2gPrX0bmevwgnlu4DLTgnhNcczY8+GJFjat06j2yQacdEFYvuh4rKQPEmDkzRdofrXaqOyVXaf2RXvijlfPeHEUaemcRoqFd4lxpeVRMldja95sZ2OnYGjyzLxmw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NwduPhA7Ih3xl+gl2VLQ8LTkrBX8M7OcrAksCLLVl1c=;
- b=fx3zGb89s2nre/yc9yC89cmGp8mdoiWc4zl+CWR751baRhIkG0wvozzkZEUMeRiIQ67bGFiAFQKuWOU0Pbi9hIzyLVmMs3OoQTjvj2TZLvztIa6NL1QygCC6qmlwRBBs29o48V6ekg5Uw8IHF0+ae0dWEhTgLOA9hPU1biT3wNM=
+ bh=HCahY2jdvwB3iGIicm2L3sl8nCpNQcXped8Vwo9J+XY=;
+ b=heXEPGYBVZrnPnxvCIhVeGW3UCpkCLkfBMljAyvVxrcNPW92bYW+04xVsE02hE1SjCD56gLbvH2B/mUaFLSKZ8Mdm5JNZJainGEkryZEcJhHyOACffFSUOjPnQ0tCc7kfbTPQ+vb6iOV2VpCT4DmSXppX8JS9t6anIsTBx6yHAw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
  (2603:10b6:207:30::23) by MW4PR21MB2075.namprd21.prod.outlook.com
  (2603:10b6:303:122::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.3; Sun, 20 Aug
- 2023 20:27:53 +0000
+ 2023 20:27:56 +0000
 Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
  ([fe80::b3df:a8e9:52dd:dfad]) by BL0PR2101MB1092.namprd21.prod.outlook.com
  ([fe80::b3df:a8e9:52dd:dfad%5]) with mapi id 15.20.6745.001; Sun, 20 Aug 2023
- 20:27:53 +0000
+ 20:27:56 +0000
 From:   Dexuan Cui <decui@microsoft.com>
 To:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
         brijesh.singh@amd.com, dan.j.williams@intel.com,
@@ -56,9 +56,9 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         rick.p.edgecombe@intel.com, andavis@redhat.com, mheslin@redhat.com,
         vkuznets@redhat.com, xiaoyao.li@intel.com,
         Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH v2 1/9] x86/hyperv: Add hv_isolation_type_tdx() to detect TDX guests
-Date:   Sun, 20 Aug 2023 13:27:07 -0700
-Message-Id: <20230820202715.29006-2-decui@microsoft.com>
+Subject: [PATCH v2 2/9] x86/hyperv: Support hypercalls for fully enlightened TDX guests
+Date:   Sun, 20 Aug 2023 13:27:08 -0700
+Message-Id: <20230820202715.29006-3-decui@microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230820202715.29006-1-decui@microsoft.com>
 References: <20230820202715.29006-1-decui@microsoft.com>
@@ -70,52 +70,52 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|MW4PR21MB2075:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7fe745a9-2f9e-4d73-8273-08dba1bbedf7
+X-MS-Office365-Filtering-Correlation-Id: 57119700-9981-4399-daae-08dba1bbefbe
 X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uBGzF9jm3Uf9g1oGbtdH/5d4KZLx+jLP5wsHhGPsol15CSDdhUl+3d0Ui7KErm7kHS4BupwT/gOZEG1CnFe/vim/cL7ftN9UgEszQ6g9CFDZVV+Awa8InP/S2PJUDtn+R86PfI+vp85a5StfRgZSnvGDlSukLFV+d5Z48GavW2JEX3y3uKVTbucXQeQ/tnZDsAI/CEBeEjVzD5QzOur3SJup1b000xAsTfRz8TBYuYpvKi3kGA5AIBku9UAWn004iEg7E8Xt6i/c6sI7V+Cx/YzzwUZKiGjM5aWzlDW+Y8kvQGX9DqTE1c8qTmiHKnK/vOnRyxol3YeNRQL+BkzAVzTvFT4fwnlxxd2BrQh/oXiUZQtOUIE5aA7BynT2KkUa2eum5nfhG1qo5lmAYqXd2w3QLakfy3shW6OyI71EvGT284o1rMBRq8UCZC2ctp/gCb3CoMZVc7WTcHnCnLwa+LtWrFPsemHxecnVSdjxnxyXbosV5+HzH6HaSsxXdgo3TjRrTYT+sg7cGaLiKgUihAjVViHmj5nDAKjFs/pQ1Y0No5upmXvocPWiabbmlm3Ve7arzob3ns3SHL/aHUtXixQ4fluUY6+aQjXH1RzwqJdJq1iCArTb0R5p3WVLaC/o/Pz0wpnMmDbr6pJgcL3ggzYSOIgRqPy85v/Jpf9U/dfy1kmBac1YsXwkJPHcc5lC
+X-Microsoft-Antispam-Message-Info: sQOLZYPiU1KPqeWTHaE93CsTGoyxGHZ/nWWWyDkltEzAIZcmPkaShyF4COh3ZmxhA/8aEkkAUlYTJQTD/vPLL7tOC5I7Y+ub2BCZKAxwObL5U185lfDC6c8yeUl6UcgtVYYSZMjUjh5PzAoA15q6XroNncWocQJH/VE3NoUQn/mxLkqDaQ65dS6EmtQ4jwwgyZ8M438wOjB/mKfI67NUsdksqSBwYOpfr9jtsuY0rKmuAznb4z4yazAG/CYd31ZTkECkeTq9kSdYW/8mjwjV0UiE2mh84u6SSxEVZhYVnjxGurPu2ZLJ0gwzRDyadRUd2PTxA8LbeSQzZaCVFaH8KcsHmEnRVmGld7XOYwj+YKgsc5/maiw2zsYO9ug3/61qYqKA48Vq0a39vOIpw4mriRT8IWaba0UEHWViWtSvQEpzJQvC0gOQhj4BmrVcBXVQ9hlxszmYNjBpG4RtUcJdNsRaiww4Y2afiDT7DVbp+H5zem5qvJbEOjkjvKiczaZqVnjfkdaJkyqgvzCMaDwaFIeBnw0NvZvi/Fa3OLl5VN44zkZiwUGW7EpwjrodmmbowRFxLrYzkgmdXSMHfXKSduHMzlRMo+m9pfxr09NoNFpHNYVpFXxolWkDGlP5DrSefguPrVkGmtlJVjk4wOfiY7yAbAcH4BDMQsNR4uHcNJ0um4Z5kn4O9eFcrqsWBSvI
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(376002)(346002)(39860400002)(136003)(186009)(1800799009)(451199024)(6512007)(6666004)(7416002)(7406005)(52116002)(2906002)(6506007)(6486002)(1076003)(2616005)(107886003)(86362001)(38100700002)(66946007)(66556008)(66476007)(316002)(6636002)(82960400001)(36756003)(41300700001)(478600001)(8936002)(921005)(8676002)(4326008)(82950400001)(5660300002)(10290500003)(83380400001)(12101799020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f+NLYmTg4SIK00GPToTNcNaQcqDPFhrA8qNODnzE1WBnMGjZZGHdTqdYjFL8?=
- =?us-ascii?Q?UvQnwm54vL5zyNuC5xurcWHe6lrft8vH5phsFVY/C++eXHvRG707tpafwV7Y?=
- =?us-ascii?Q?8CJ7tCok13Pnkq3VOItDauA0fF1UH0RCDUks5KuAOFLf3alSKXeKEXV+9MWe?=
- =?us-ascii?Q?Rqc7WVH4wsA5i8YA8vbUwNqvyWPNt6Q/m8WT+vDRawZJl4yatR9c9DCTIRVa?=
- =?us-ascii?Q?3kNfXvTjynfyH8ozgxxdlqhfVgT1wJUM3D9Yz+7HPBtkbmI19UAToIVCOx2u?=
- =?us-ascii?Q?YHxUAikHMHmyQlWf2QHxclTI3D98jTdnJHckb2JsUFp5zBaLij+MgI15B8uv?=
- =?us-ascii?Q?W/YXFUIUO6aWhKSUwUjTIr+P/5bzrsPqOJqhs4onb79pu4rrS50HDaaa6jvp?=
- =?us-ascii?Q?wcTCutoiKhDvRNddHnuWLDyrvNyR0e1cyCDeqqgxOAZZeRCUjr+xr8sE3yMh?=
- =?us-ascii?Q?4e7c7IrSMRQJjqbiobpPzF23bhUKECLk1pHWBjGq2Fvw9onKkJCBaJE78joC?=
- =?us-ascii?Q?6ME6LHTWCY2NWM65sx1Yw2SmrNGGD6+YyJJG1ym/1FPxy/PK5Y75ooR70Moq?=
- =?us-ascii?Q?nc9zojsKJyoDf1Xlihv4mEaLL6RufTPLySTzlZVh42IXvXjmNSsugJ0dWREy?=
- =?us-ascii?Q?yK7Xb/XjIAxrA1/zY9n5uE/hZYfZkqmVZAHH13Z5k1nYmU4YbEpVUDm2Pz5w?=
- =?us-ascii?Q?s+whWUkATsJrYSuztoxGFKUWXb0uU+xHdXd8VP1MQ8Zts1RN8LqNCmqEUYFq?=
- =?us-ascii?Q?xlIoIJELoSqbXZh8veZNzGMK8cWtDS4so/wGvr2ICz+D07jPktiDXMM7r8Z+?=
- =?us-ascii?Q?hd6U2XAcTD6ZpuNr9ESc3veestrg//i9kfAUSaqtis9hHpaOSdVgdbzRgfyn?=
- =?us-ascii?Q?OSpi+zM7e84GT8uq3ygN+tMXQzVKo6iIhbhnW/CmZYNoBfS0wrlqirn4UpKv?=
- =?us-ascii?Q?H3ZkTQPcfjC2tC7EaFnFbqdRy4evwKm+uOXdNLpkfF7pH+xXZvS7OX7Tg6WL?=
- =?us-ascii?Q?uvjQGfKlMzMF7HlT8lKr1OlrR6KsSRBZ3cVhKoHqtdbkgmexvn8esP7LtbeI?=
- =?us-ascii?Q?4PssgVNA0LpPChpzuPfOK1sc6Gr7v3nmd89804bMemUeR1kb4F9kCHfG0sXR?=
- =?us-ascii?Q?S0cDJnQbSnrz9V1/YQJBDckhMUkZQJ7MBvDcF3yEc/UPAZ5Pko1aDJ8wik9S?=
- =?us-ascii?Q?dPiwpjBjKewDxqfijwtTplXT5Txy1gxldBU73QYGP+32MHj6OLHmEa782qd2?=
- =?us-ascii?Q?ujLOekN4J2EXXKI9eObmyMAMbU4TePFANKbNakbYMFoanih40E0I7zlEOuaE?=
- =?us-ascii?Q?wRUtRfUy2bvq0GMihxbw385n48thgS4z7gA8ITuzl3AGwT3UHm3xSZzyw7w2?=
- =?us-ascii?Q?xogl5YOVjCK1NBhpeA463k4UqP4kWutC63W8zSHoTK7L1TpVAQVAgOJaijyV?=
- =?us-ascii?Q?Nhy5YQz8/aOuQQw6ASU1tCbQdxfJQaiFJGPUfPSQvmktEKuyLYxsOKrWrQjV?=
- =?us-ascii?Q?luSUwaiaJ3dqc1pwMcvJDmFSYwBFylq4SUbmrk1GhTR4yiNmABf+6f/FbROp?=
- =?us-ascii?Q?1wFLZqbWCz+Yb5Z1NbKXMcnNtEPIe62qLSAH/q3y6wUqSQixyhBc0xUzCBxb?=
- =?us-ascii?Q?9pbElnBQp2iFre0EGKi4O9E2QVpLkiTvC5b4vE3L1ArP?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pDWTQHcQsm2Q99FnyQEdTDR+UEqWGQjAmu3cvUhwxXpaXcGD0GMqnDZV00ik?=
+ =?us-ascii?Q?yOsiy9YS8dZEeFLQD6i2ceOLTRLuDDPirwgiFBiIaqpHE+qr84Dcua002jJD?=
+ =?us-ascii?Q?go0Vn2SJfdZhI4Lj5C/AlBZsBSrOM2uTsDlG2TAw6nX9HVC0aoapwGOTKDqI?=
+ =?us-ascii?Q?5jUJQ4RUIy6I2Kv3fn5aQHi2Ut9sSy5P6lVhCIEDJbM1S2PxCyHTFA0bMhmh?=
+ =?us-ascii?Q?xSJ4hc6KmazzVLahMdaU+Rtvk06zj5p4S2Bwqr3qEgBkiGHEC5BtkwpNvEtt?=
+ =?us-ascii?Q?4kv9DRn0EHXc/OOCu9RT/PIXh6a/IVhcF/Ou+EuJd/R1Drc25S/79IomEoyf?=
+ =?us-ascii?Q?USxXExfEkS/875C5Wx69sRWDX/A+b7GAcUhI1jgh7W7wLS21uw8oQkA5H7ZO?=
+ =?us-ascii?Q?Xl2r40mb/Gh6eoVMeJY4v66jCBeGiU1xPYyMLwt1GUPhTdikpiL0GZaxJE0f?=
+ =?us-ascii?Q?fM6rqGoKyOkf4SjC+Idq5iVuzHKW1feGeolMD2Im4T6zN+qCKIZCmkZpLrfc?=
+ =?us-ascii?Q?Ysufa/HXeGugx+yupcnooY1i1LHaFGEohkqqXpJ8Vp54aHJ0Iye7n29zdkam?=
+ =?us-ascii?Q?e07CcgKwYYAWyU48DuZ8DPvwyXaEMbtCxHCV1Bdb2GBcvYFDJq+TbAav/M8o?=
+ =?us-ascii?Q?nCIvK8hsn4xe/lzmie7L39BUTIehr3TS26zEMFt0dYrYP56bYRxwByNCLnUC?=
+ =?us-ascii?Q?ThSDKh4IgxJrjpLA/KBFK4Roc4kWxSvWCbEZAdlq419k0e2nLxlAE6m7kRBA?=
+ =?us-ascii?Q?+6xAnGgghKpZsK3kRI0ffkHVvbFMV4zZFLXMND1Ky62Aq/vu3H+fWt/6HsMN?=
+ =?us-ascii?Q?eZp0FY79+j5jI2pwomcBxYf4MD4aod3zFAJK2OqjR/UdViJ7t5Xbofntbv15?=
+ =?us-ascii?Q?xEfe8qeUBUdJ7ALpXnpFUQKTdZuPnN4lHwyWbZzjb0bTrAQQJTZXRN4j12mf?=
+ =?us-ascii?Q?YaAGZM7ca2nMOj61IQukKxisUrdm2hW/VIYbleRJywWXqyvsF1HZl2q/TK+i?=
+ =?us-ascii?Q?1CQ7dzbDJE2rT8q494hQCQNQtKqO0BDioKFCDIIHbBOhgAVck3kYs6OxItK/?=
+ =?us-ascii?Q?STeeQ3BLPOAaBmKPx5B+APxN0AjTCj+LtAI4FhpRzC/Z+MWXJj8Cj0lVV58K?=
+ =?us-ascii?Q?SZE/ZfdgsbCJtPEliyHSbXf66WAcqrdWO2CR4c4cu1TQdKbf6BHq+TX/A62q?=
+ =?us-ascii?Q?d13hGIIHI3X49G9cLUZhj1ihuMosIvKghJm8mg+b9MxfGnElAptFTPXxi0MQ?=
+ =?us-ascii?Q?2uBLRCmXXV1L2Gi4Xd/M/jx0SKggBBQJ4AVAsO+u8Z2D7Kcpg32QUnLPyN+d?=
+ =?us-ascii?Q?Ft6FeZaI4cpxY3UmcY4WJn1AXPQFYRBXZnB1GJl7gnYRMwmSXF1G9stJ/LEl?=
+ =?us-ascii?Q?Cw0H9wUwJWfQLyq7D3N35vmDNNF8ZmnanbZ8buGlLmCVlN0ueXc/K8moNxFx?=
+ =?us-ascii?Q?HJPKFIhpmgqxkpH0mJHoMs7FHWW671kvDCukwsrZLQF/ATM0F4Fnxl4K95Rk?=
+ =?us-ascii?Q?pmDbHW2k4SmFTBNyE0tLuwPTVi02o2zv5AcnMAUeMaim7ts5DHSrAq769jEx?=
+ =?us-ascii?Q?yL6dRJO4ryS86q1hMU+7pL+g08ktL2Yj1PF34j82fYmHwhisnmxMiL2IqWDL?=
+ =?us-ascii?Q?qMk1f7ouFGtJPuqGRoTXzA6BPgMCTp5eo1vRzRcIdzF/?=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7fe745a9-2f9e-4d73-8273-08dba1bbedf7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57119700-9981-4399-daae-08dba1bbefbe
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2023 20:27:52.9522
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2023 20:27:55.9186
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UvutWVoQiI5TKt35lp1vhVZzUbrCnOf6bjTBolfuv1YdthXhTqiSIQT+i16pgJxPPZDWWy5HAof0Z37Nz9zijg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: /i0b5Y0hXfBDNbWWZGmlnYXpGUmtDmkYUH4vJzdxGn6OqEuOzbLriLxX/Fk6PQn+jC7jSTa1/qj8OOlU+cvA3A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB2075
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -127,124 +127,188 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-No logic change to SNP/VBS guests.
+A fully enlightened TDX guest on Hyper-V (i.e. without the paravisor) only
+uses the GHCI call rather than hv_hypercall_pg.
 
-hv_isolation_type_tdx() will be used to instruct a TDX guest on Hyper-V to
-do some TDX-specific operations, e.g. for a fully enlightened TDX guest
-(i.e. without the paravisor), hv_do_hypercall() should use
-__tdx_hypercall() and such a guest on Hyper-V should handle the Hyper-V
-Event/Message/Monitor pages specially.
+In hv_do_hypercall(), Hyper-V requires that the input/output addresses
+must have the cc_mask.
 
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Tianyu Lan <tiala@microsoft.com>
 Signed-off-by: Dexuan Cui <decui@microsoft.com>
 ---
 
 Changes in v2:
-  Added Tianyu's Reviewed-by.
+  Included asm/coco.h in arch/x86/include/asm/mshyperv.h to avoid a
+gcc warning: "implicit declaration of cc_mkdec"
 
- arch/x86/hyperv/ivm.c              | 9 +++++++++
- arch/x86/include/asm/hyperv-tlfs.h | 3 ++-
- arch/x86/include/asm/mshyperv.h    | 3 +++
- arch/x86/kernel/cpu/mshyperv.c     | 2 ++
- drivers/hv/hv_common.c             | 6 ++++++
- include/asm-generic/mshyperv.h     | 1 +
- 6 files changed, 23 insertions(+), 1 deletion(-)
+ arch/x86/hyperv/hv_init.c       |  8 ++++++++
+ arch/x86/hyperv/ivm.c           | 17 +++++++++++++++++
+ arch/x86/include/asm/mshyperv.h | 17 +++++++++++++++++
+ drivers/hv/hv_common.c          | 10 ++++++++--
+ include/asm-generic/mshyperv.h  |  1 +
+ 5 files changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index cbbd3af4c3daf..afdae1a8a1177 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -562,3 +562,12 @@ bool hv_isolation_type_en_snp(void)
- 	return static_branch_unlikely(&isolation_type_en_snp);
- }
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index bcfbcda8b050c..255e02ec467eb 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -476,6 +476,10 @@ void __init hyperv_init(void)
+ 	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+ 	hv_ghcb_msr_write(HV_X64_MSR_GUEST_OS_ID, guest_id);
  
-+DEFINE_STATIC_KEY_FALSE(isolation_type_tdx);
-+/*
-+ * hv_isolation_type_tdx - Check if the system runs in an Intel TDX based
-+ * isolated VM.
-+ */
-+bool hv_isolation_type_tdx(void)
-+{
-+	return static_branch_unlikely(&isolation_type_tdx);
-+}
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 4bf0b315b0ce9..2ff26f53cd624 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -169,7 +169,8 @@
- enum hv_isolation_type {
- 	HV_ISOLATION_TYPE_NONE	= 0,
- 	HV_ISOLATION_TYPE_VBS	= 1,
--	HV_ISOLATION_TYPE_SNP	= 2
-+	HV_ISOLATION_TYPE_SNP	= 2,
-+	HV_ISOLATION_TYPE_TDX	= 3
- };
- 
- /* Hyper-V specific model specific registers (MSRs) */
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 6bd9ae04d9c36..e18c6c8f4fba8 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -27,6 +27,7 @@ union hv_ghcb;
- 
- DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
- DECLARE_STATIC_KEY_FALSE(isolation_type_en_snp);
-+DECLARE_STATIC_KEY_FALSE(isolation_type_tdx);
- 
- typedef int (*hyperv_fill_flush_list_func)(
- 		struct hv_guest_mapping_flush_list *flush,
-@@ -49,6 +50,8 @@ extern u64 hv_current_partition_id;
- extern union hv_ghcb * __percpu *hv_ghcb_pg;
- 
- extern bool hv_isolation_type_en_snp(void);
-+bool hv_isolation_type_tdx(void);
++	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg. */
++	if (hv_isolation_type_tdx())
++		goto skip_hypercall_pg_init;
 +
- /*
-  * DEFAULT INIT GPAT and SEGMENT LIMIT value in struct VMSA
-  * to start AP in enlightened SEV guest.
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 26b9fcabd7d95..e0640fe6f6b82 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -417,6 +417,8 @@ static void __init ms_hyperv_init_platform(void)
- 			static_branch_enable(&isolation_type_en_snp);
- 		} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP) {
- 			static_branch_enable(&isolation_type_snp);
-+		} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_TDX) {
-+			static_branch_enable(&isolation_type_tdx);
- 		}
+ 	hv_hypercall_pg = __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START,
+ 			VMALLOC_END, GFP_KERNEL, PAGE_KERNEL_ROX,
+ 			VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+@@ -515,6 +519,7 @@ void __init hyperv_init(void)
+ 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
  	}
  
++skip_hypercall_pg_init:
+ 	/*
+ 	 * hyperv_init() is called before LAPIC is initialized: see
+ 	 * apic_intr_mode_init() -> x86_platform.apic_post_init() and
+@@ -642,6 +647,9 @@ bool hv_is_hyperv_initialized(void)
+ 	if (x86_hyper_type != X86_HYPER_MS_HYPERV)
+ 		return false;
+ 
++	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg. */
++	if (hv_isolation_type_tdx())
++		return true;
+ 	/*
+ 	 * Verify that earlier initialization succeeded by checking
+ 	 * that the hypercall page is setup
+diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+index afdae1a8a1177..6c7598d9e68a3 100644
+--- a/arch/x86/hyperv/ivm.c
++++ b/arch/x86/hyperv/ivm.c
+@@ -571,3 +571,20 @@ bool hv_isolation_type_tdx(void)
+ {
+ 	return static_branch_unlikely(&isolation_type_tdx);
+ }
++
++#ifdef CONFIG_INTEL_TDX_GUEST
++
++u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
++{
++	struct tdx_hypercall_args args = { };
++
++	args.r10 = control;
++	args.rdx = param1;
++	args.r8  = param2;
++
++	(void)__tdx_hypercall_ret(&args);
++
++	return args.r11;
++}
++
++#endif
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index e18c6c8f4fba8..24d7f662a8beb 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -5,6 +5,7 @@
+ #include <linux/types.h>
+ #include <linux/nmi.h>
+ #include <linux/msi.h>
++#include <asm/coco.h>
+ #include <asm/io.h>
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/nospec-branch.h>
+@@ -51,6 +52,7 @@ extern union hv_ghcb * __percpu *hv_ghcb_pg;
+ 
+ extern bool hv_isolation_type_en_snp(void);
+ bool hv_isolation_type_tdx(void);
++u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2);
+ 
+ /*
+  * DEFAULT INIT GPAT and SEGMENT LIMIT value in struct VMSA
+@@ -63,6 +65,10 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
+ int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
+ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
+ 
++/*
++ * If the hypercall involves no input or output parameters, the hypervisor
++ * ignores the corresponding GPA pointer.
++ */
+ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+ {
+ 	u64 input_address = input ? virt_to_phys(input) : 0;
+@@ -70,6 +76,11 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+ 	u64 hv_status;
+ 
+ #ifdef CONFIG_X86_64
++	if (hv_isolation_type_tdx())
++		return hv_tdx_hypercall(control,
++					cc_mkdec(input_address),
++					cc_mkdec(output_address));
++
+ 	if (hv_isolation_type_en_snp()) {
+ 		__asm__ __volatile__("mov %4, %%r8\n"
+ 				     "vmmcall"
+@@ -123,6 +134,9 @@ static inline u64 _hv_do_fast_hypercall8(u64 control, u64 input1)
+ 	u64 hv_status;
+ 
+ #ifdef CONFIG_X86_64
++	if (hv_isolation_type_tdx())
++		return hv_tdx_hypercall(control, input1, 0);
++
+ 	if (hv_isolation_type_en_snp()) {
+ 		__asm__ __volatile__(
+ 				"vmmcall"
+@@ -174,6 +188,9 @@ static inline u64 _hv_do_fast_hypercall16(u64 control, u64 input1, u64 input2)
+ 	u64 hv_status;
+ 
+ #ifdef CONFIG_X86_64
++	if (hv_isolation_type_tdx())
++		return hv_tdx_hypercall(control, input1, input2);
++
+ 	if (hv_isolation_type_en_snp()) {
+ 		__asm__ __volatile__("mov %4, %%r8\n"
+ 				     "vmmcall"
 diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 2d43ba2bc925d..da3307533f4d7 100644
+index da3307533f4d7..897bbb96f4118 100644
 --- a/drivers/hv/hv_common.c
 +++ b/drivers/hv/hv_common.c
-@@ -521,6 +521,12 @@ bool __weak hv_isolation_type_en_snp(void)
- }
- EXPORT_SYMBOL_GPL(hv_isolation_type_en_snp);
+@@ -381,10 +381,10 @@ int hv_common_cpu_init(unsigned int cpu)
+ 			*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+ 		}
  
-+bool __weak hv_isolation_type_tdx(void)
-+{
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(hv_isolation_type_tdx);
-+
- void __weak hv_setup_vmbus_handler(void (*handler)(void))
- {
+-		if (hv_isolation_type_en_snp()) {
++		if (hv_isolation_type_en_snp() || hv_isolation_type_tdx()) {
+ 			ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
+ 			if (ret) {
+-				kfree(*inputarg);
++				/* It may be unsafe to free *inputarg */
+ 				*inputarg = NULL;
+ 				return ret;
+ 			}
+@@ -567,3 +567,9 @@ u64 __weak hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_s
+ 	return HV_STATUS_INVALID_PARAMETER;
  }
+ EXPORT_SYMBOL_GPL(hv_ghcb_hypercall);
++
++u64 __weak hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
++{
++	return HV_STATUS_INVALID_PARAMETER;
++}
++EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
 diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index efd0d2aedad39..82eba2d5fc4cd 100644
+index 82eba2d5fc4cd..f577eff58ea0b 100644
 --- a/include/asm-generic/mshyperv.h
 +++ b/include/asm-generic/mshyperv.h
-@@ -66,6 +66,7 @@ extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
- extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
- extern bool hv_isolation_type_snp(void);
- extern bool hv_isolation_type_en_snp(void);
-+bool hv_isolation_type_tdx(void);
- 
- /* Helper functions that provide a consistent pattern for checking Hyper-V hypercall status. */
- static inline int hv_result(u64 status)
+@@ -283,6 +283,7 @@ enum hv_isolation_type hv_get_isolation_type(void);
+ bool hv_is_isolation_supported(void);
+ bool hv_isolation_type_snp(void);
+ u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size);
++u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2);
+ void hyperv_cleanup(void);
+ bool hv_query_ext_cap(u64 cap_query);
+ void hv_setup_dma_ops(struct device *dev, bool coherent);
 -- 
 2.25.1
 
