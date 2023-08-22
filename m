@@ -2,70 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67B478455B
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 17:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388227845E8
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 17:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjHVPWK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Aug 2023 11:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
+        id S237230AbjHVPmd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Aug 2023 11:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237032AbjHVPWI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 11:22:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171EFCDA
-        for <linux-arch@vger.kernel.org>; Tue, 22 Aug 2023 08:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692717675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K+4dLM+qjKpedR3SxcMNZWwteZnGWMqZ2x4IrF9xwmE=;
-        b=XhksWGvOujynlzvS4ImTi8AXCHbF/+RC2HFdzjfdePZw4G+w5BHMtkFUwC2tLgFIqeYnT/
-        raiaJsyAhEk3yuzXHlvDIMAQM7rZLKhzvyK+VaQ7zym6ealaHlpmGSX0kxVrYW5tJp7w90
-        Gb8MlHHpW9UMP8VW5d2D/KVOBmvQmPM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-297-2qXx7zOYONGyAkcs9OKNxw-1; Tue, 22 Aug 2023 11:21:13 -0400
-X-MC-Unique: 2qXx7zOYONGyAkcs9OKNxw-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-31adc3ca07aso2738826f8f.2
-        for <linux-arch@vger.kernel.org>; Tue, 22 Aug 2023 08:21:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692717672; x=1693322472;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K+4dLM+qjKpedR3SxcMNZWwteZnGWMqZ2x4IrF9xwmE=;
-        b=PclxSjMIAH3+NIJ216MBgEgsIYqmydLD8k80fP0VXzuuSzddWnVup1G+9LCaShMDN7
-         pUjtSMzoJq6ibYdLHbNOYD409mhYGlXimMvd8bXwMmYeFfDmLgJx1yVBROMZnpNGpbWK
-         iw9Z/Zch25vyIaYgNayPtFQ5FZg+J/FJVRtPaCQBmLUnumcEwQ9AK0TJkQ3tQnbUVPHf
-         vXJxRuATyzjqfmblZqRK7UX1/m1YgfnAWfnngL2pjs4J7Iubh2duO6CBlhTXMqQIJlat
-         mAVYs+H3mrs61Pgw2fl2vTgOE1MPFmL3T/dxYRHFkvKC9NhzhMpNAzLQWLiCJJlcwkaE
-         W1EA==
-X-Gm-Message-State: AOJu0YzubA/tsRLkJpm0IH0v6qwqk1k26rLOr6L+/raYRhDIp1qo9J0U
-        i5vYmzvm7PrSiBSsDkSd5Y9zeuzPooNRkgY6q0C/6Cc1kHPNzaqk4RBepo97pqbRZhQOWnhSbMC
-        79EWc/pcd1XKHLLwYFEEGsg==
-X-Received: by 2002:a5d:4ccc:0:b0:314:1230:29b0 with SMTP id c12-20020a5d4ccc000000b00314123029b0mr6891012wrt.52.1692717672414;
-        Tue, 22 Aug 2023 08:21:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGvvahb1vrGoYIb2vzRiaZnzgGGGa/+gqBYlj1b7B5EZtm9phlubqZT0TsAOsELNEsT5eF4fQ==
-X-Received: by 2002:a5d:4ccc:0:b0:314:1230:29b0 with SMTP id c12-20020a5d4ccc000000b00314123029b0mr6890972wrt.52.1692717671988;
-        Tue, 22 Aug 2023 08:21:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:7400:83da:ebad:ba7f:c97c? (p200300cbc706740083daebadba7fc97c.dip0.t-ipconnect.de. [2003:cb:c706:7400:83da:ebad:ba7f:c97c])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d4204000000b0031c5dda3aedsm3811087wrq.95.2023.08.22.08.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Aug 2023 08:21:11 -0700 (PDT)
-Message-ID: <8f2cf5af-cad7-a69c-e8ec-39f48deae1cb@redhat.com>
-Date:   Tue, 22 Aug 2023 17:21:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v5 11/37] mm: Define VM_SHADOW_STACK for arm64 when we
- support GCS
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        with ESMTP id S232959AbjHVPmc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 11:42:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF2AE7E;
+        Tue, 22 Aug 2023 08:41:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A243265B14;
+        Tue, 22 Aug 2023 15:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F198BC433C7;
+        Tue, 22 Aug 2023 15:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692718902;
+        bh=U8sk7r3HpjuM6jyf6I/ZCmrrIT4hPUtWgTjlWgfZQ+E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ew1lxee1O/Ti1p/vQKYfVrokDQePlcLRRcpwk16Sz433/A4D7AWBgD3BRDBIf4X4a
+         fgRp87Xf/4hsKqH1P1veF7eYsQVXiFifYGG80LgQD/9WhpHdqV0wzwdNl9g5n8o4Is
+         BU7SEV6UiJDuuKjAcW7KgylZl46xOuShdprb7imzwhaqgdpaWPuAZaW+SgljORXEqk
+         bYT4DY30YPyhtbGZeq/Y5wXvmzcvTPRyyMUdQnfal+F/LjJWiqxIGX1Sr3xqwpstgA
+         E91ugzTDnLfi50x+F5ZD+ysZzx7G1FYX11oVwClMHP6ycS7PC20BZUcsFSLKaaP2s1
+         Z4ILnptB/1A+w==
+Date:   Tue, 22 Aug 2023 16:41:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -80,8 +50,8 @@ To:     Mark Brown <broonie@kernel.org>,
         "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
         Deepak Gupta <debug@rivosinc.com>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -90,91 +60,75 @@ Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 11/37] mm: Define VM_SHADOW_STACK for arm64 when we
+ support GCS
+Message-ID: <54b2c1e5-a99d-42c0-b686-1b5cbb849581@sirena.org.uk>
 References: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
  <20230822-arm64-gcs-v5-11-9ef181dd6324@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230822-arm64-gcs-v5-11-9ef181dd6324@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <8f2cf5af-cad7-a69c-e8ec-39f48deae1cb@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Rm2VNANgsE/SCWLa"
+Content-Disposition: inline
+In-Reply-To: <8f2cf5af-cad7-a69c-e8ec-39f48deae1cb@redhat.com>
+X-Cookie: MIT:
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 22.08.23 15:56, Mark Brown wrote:
-> Use VM_HIGH_ARCH_5 for guarded control stack pages.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   Documentation/filesystems/proc.rst |  2 +-
->   fs/proc/task_mmu.c                 |  3 +++
->   include/linux/mm.h                 | 12 +++++++++++-
->   3 files changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index 6ccb57089a06..086a0408a4d7 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -566,7 +566,7 @@ encoded manner. The codes are the following:
->       mt    arm64 MTE allocation tags are enabled
->       um    userfaultfd missing tracking
->       uw    userfaultfd wr-protect tracking
-> -    ss    shadow stack page
-> +    ss    shadow/guarded control stack page
->       ==    =======================================
->   
->   Note that there is no guarantee that every flag and associated mnemonic will
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index cfab855fe7e9..e8c50848bb16 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -711,6 +711,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->   #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
->   #ifdef CONFIG_X86_USER_SHADOW_STACK
->   		[ilog2(VM_SHADOW_STACK)] = "ss",
-> +#endif
-> +#ifdef CONFIG_ARM64_GCS
-> +		[ilog2(VM_SHADOW_STACK)] = "ss",
->   #endif
 
-See my comment below.
+--Rm2VNANgsE/SCWLa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->   	};
->   	size_t i;
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 43fe625b85aa..3f939ae212e5 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -372,7 +372,17 @@ extern unsigned int kobjsize(const void *objp);
->    * having a PAGE_SIZE guard gap.
->    */
->   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
-> -#else
-> +#endif
-> +
-> +#if defined(CONFIG_ARM64_GCS)
-> +/*
-> + * arm64's Guarded Control Stack implements similar functionality and
-> + * has similar constraints to shadow stacks.
-> + */
-> +# define VM_SHADOW_STACK	VM_HIGH_ARCH_5
-> +#endif
+On Tue, Aug 22, 2023 at 05:21:09PM +0200, David Hildenbrand wrote:
+> On 22.08.23 15:56, Mark Brown wrote:
 
+> > @@ -372,7 +372,17 @@ extern unsigned int kobjsize(const void *objp);
+> >    * having a PAGE_SIZE guard gap.
+> >    */
+> >   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+> > -#else
+> > +#endif
+> > +
+> > +#if defined(CONFIG_ARM64_GCS)
+> > +/*
+> > + * arm64's Guarded Control Stack implements similar functionality and
+> > + * has similar constraints to shadow stacks.
+> > + */
+> > +# define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+> > +#endif
 
-Shouldn't that all just merged with the previous define(s)?
+> Shouldn't that all just merged with the previous define(s)?
 
-Also, I wonder if we now want to have CONFIG_HAVE_ARCH_SHADOW_STACK or 
-similar.
+> Also, I wonder if we now want to have CONFIG_HAVE_ARCH_SHADOW_STACK or
+> similar.
 
--- 
-Cheers,
+I can certainly update it to do that, I was just trying to fit in with
+how the code was written on the basis that there was probably a good
+reason for it that had been discussed somewhere.  I can send an
+incremental patch for this on top of the x86 patches assuming they go in
+during the merge window.
 
-David / dhildenb
+--Rm2VNANgsE/SCWLa
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTk1ywACgkQJNaLcl1U
+h9BD9wf/cB5zRdwIzkkWbWNj7vGmdw/naEVnAbVYCNZ/bHdhOSOrh0n6okk3VIRr
+nG08750cw+elIt7ZbSAQPiP1+CFzCr/dshkv4rpO3BsDkOLG5T4fGC1k2lDGxkod
+RLVF6XQwgM2ztHvSeEkAR+R4QiLHJ/x+wO/3GmmhU/uI7mEZUGtJSfDCYAVoha5E
+vREhonRSaCxOzb+/K+v+oGApAxl15DggL1W5Kz9nwoYd4rnQaxYBKref5sCuZ+xL
+znOWuAx8fzyiQO9PxBHSvgI5oddgUpbkmWA9zvZNWysIEtoKN01wlzPxlyv2mHyz
+Zct6RQVH8GSydpTlgzb6BPdxyXhOLw==
+=WYLZ
+-----END PGP SIGNATURE-----
+
+--Rm2VNANgsE/SCWLa--
