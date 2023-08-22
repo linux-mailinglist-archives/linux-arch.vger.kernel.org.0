@@ -2,29 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EBC7847FB
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 18:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A882378481E
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 19:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbjHVQuQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Aug 2023 12:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
+        id S237970AbjHVRBh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Aug 2023 13:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbjHVQuQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 12:50:16 -0400
+        with ESMTP id S237969AbjHVRBg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 13:01:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C2E1BE;
-        Tue, 22 Aug 2023 09:50:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DECFB;
+        Tue, 22 Aug 2023 10:01:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C48E65B3C;
-        Tue, 22 Aug 2023 16:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21995C433C8;
-        Tue, 22 Aug 2023 16:49:55 +0000 (UTC)
-Date:   Tue, 22 Aug 2023 17:49:51 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B93C643F3;
+        Tue, 22 Aug 2023 17:01:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E4BC433C7;
+        Tue, 22 Aug 2023 17:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692723694;
+        bh=4CwJzH4TL2Y8EXaFoTYYQXYVEx5uhhyOhGKEBL5M5a4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nwIELk0L965ZZxRQU/I6AfIxI41pPfoJ/8ilmpqMMDxttWnkizigjluGn+Ari53wx
+         MqNyiNJuURRYl2rCuLNJJ2Cs85l4nwq7Q2vWycN3a3XFaBaWvpt/KvtYd4TWJtE93y
+         2mhcqEGqeiz2SkybCYJmTOdlsX5/UNDCZXZ+F5YxZ6vS1R+LOWxtY7m0pc+kMGPPlJ
+         kPp/83wuyHdo3Irho6uo8xb6TPcAKTt8iUzDXu8bbnYEB9weodOZjJ9UCKfJORCNeV
+         gnjnzeyg+Tps+7sTo22OVIrcM6LgodrBWVlbjMG9YcUoS05XXyscb+z/gcliAOGlOk
+         ceFShSQCdJEsg==
+Date:   Tue, 22 Aug 2023 18:01:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         Andrew Morton <akpm@linux-foundation.org>,
         Marc Zyngier <maz@kernel.org>,
@@ -48,58 +58,69 @@ Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <ZOTnL1SDJWZjHPUW@arm.com>
+Subject: Re: [PATCH v4 18/36] arm64/gcs: Context switch GCS state for EL0
+Message-ID: <699c1105-df8e-4a08-ae6c-8c01a13e4a3d@sirena.org.uk>
 References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
- <ZNOhjrYleGBR6Pbs@arm.com>
- <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
- <ZN+qki9EaZ6f9XNi@arm.com>
- <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <20230807-arm64-gcs-v4-18-68cfa37f9069@kernel.org>
+ <ZNZUerbrJmzqZzJw@arm.com>
+ <28a61b5f-db65-427e-8e92-60dd61549da5@sirena.org.uk>
+ <ZOTjnmwwZ+iMsi6Y@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/y5R8A5W/qG63MLx"
 Content-Disposition: inline
-In-Reply-To: <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZOTjnmwwZ+iMsi6Y@arm.com>
+X-Cookie: MIT:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 08:38:02PM +0100, Mark Brown wrote:
-> On Fri, Aug 18, 2023 at 06:29:54PM +0100, Catalin Marinas wrote:
-> > A related question - it may have been discussed intensively on the x86
-> > thread (I may read it sometime) - why not have the libc map the shadow
-> 
-> Your assumption that this is a single thread feels optimistic there.
 
-Yeah and I unfortunately ignored all of them.
+--/y5R8A5W/qG63MLx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > stack and pass the pointer/size to clone3()? It saves us from having to
-> > guess what the right size we'd need. struct clone_args is extensible.
-> 
-> I can't recall or locate the specific reasoning there right now, perhaps
-> Rick or someone else can?  I'd guess there would be compat concerns for
-> things that don't go via libc which would complicate the story with
-> identifying and marking things as GCS/SS safe, it's going to be more
-> robust to just supply a GCS if the process is using it.  That said
-> having a default doesn't preclude us using the extensibility to allow
-> userspace directly to control the GCS size, I would certainly be in
-> favour of adding support for that.
+On Tue, Aug 22, 2023 at 05:34:38PM +0100, Catalin Marinas wrote:
+> On Wed, Aug 16, 2023 at 07:15:53PM +0100, Mark Brown wrote:
 
-It would be good if someone provided a summary of the x86 decision (I'll
-get to those thread but most likely in September). I think we concluded
-that we can't deploy GCS entirely transparently, so we need a libc
-change (apart from the ELF annotations). Since libc is opting in to GCS,
-we could also update the pthread_create() etc. to allocate the shadow
-together with the standard stack.
+> > Right, it's for the GCS memory rather than the registers.  I'm fairly
+> > sure it's excessive but but was erring on the side of caution until I
+> > have convinced myself that the interactions between GCS barriers and
+> > regular barriers were doing the right thing, until we have physical
+> > implementations to contend with I'd guess the practical impact will be
+> > minimal.
 
-Anyway, that's my preference but maybe there were good reasons not to do
-this.
+> Well, I'd say either we are clear about why it's (not) needed or we ask
+> the architects to clarify the spec. I haven't checked your latest
+> series but in principle I don't like adding barriers just because we are
+> not sure they are needed (and I don't think having hardware eventually
+> changes this).
 
--- 
-Catalin
+I should probably also mention that another part of my thinking was that
+when we implement GCS for EL1 we'll need to ensure that everything is
+synced during the pivot of the EL1 GCS (each EL needs an independent
+GCS).  We won't be able to rely on having an ERET there so it's going to
+have more stringent requirements, I was partly punting to think things
+through fully there.
+
+--/y5R8A5W/qG63MLx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTk6eQACgkQJNaLcl1U
+h9A05Qf/V5pH2tcF7cng/WQnlzNdmdQF2NZIRZuZVVzKe1JQ/d5SGT8sP/2ifM6m
+wN2P+4yqnMpjdMltFNtMpcnsMQDx7U6kGEmfdBOpr7tmr3dLxpE9snGGTiwRWUtu
+Th+Jz7B9omQ+w4wFZLCcZZtpiQcjpDwzqiW8ubZdoqdvyGOSkRO9xx6P47d07ter
+dmAEKsDiEQbU/2eFycrJRA85aSwx6Kv1tAC3ZPjigcmFnCGqomM3VzJ0QZNCsMTz
+SiUY5GKoO9gk9JPNd4c57jhzWikGGoFFzivLbal/hPfr8MzeIIrVCR7Jxm4ZNRkX
+zs3fDy9ePEheBAThiikuE6F7aPriRw==
+=VUaf
+-----END PGP SIGNATURE-----
+
+--/y5R8A5W/qG63MLx--
