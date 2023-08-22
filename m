@@ -2,121 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4518D783992
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 07:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D925784066
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 14:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbjHVF4L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Aug 2023 01:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S234909AbjHVMKM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Aug 2023 08:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbjHVF4K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 01:56:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D52D7;
-        Mon, 21 Aug 2023 22:56:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E8A360C6B;
-        Tue, 22 Aug 2023 05:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF0BC433C8;
-        Tue, 22 Aug 2023 05:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692683767;
-        bh=9um55Zj5RL+HKm7sDYvky+ZFM9uVlT2G4kmh91T3oQk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i4U9wZJzMB/JAaVGMUuwP8/xefH2Qsh14Xu32Xc/qVZSzGa4W6W3VIIOD6/v7Xh9Q
-         k18VkvEHim3SO3tNgXRvBblBzeHsL87eELXVl0EFzY0tsPjs811q9rfXFnsj0lLTQF
-         EpSoXGxzXLDJWts1fI4IRWcROzjHP5G0AT0qxuEpgYP+SXJ2yRth8TU23/w9KY3J6f
-         EluPrQ6jZirhSO+0JgVTf6rSYqMW+FR+pbNaNhMUovRm87mowMfEhVJUUff6ttYjdN
-         DWsbeQYoA+y9d0IeLN7eLGKZEWZbHrOHUi96dM2CviwCqt7RLb3FLDwwTsj9BwMrPz
-         Cnb9nNjBOJIVA==
-Message-ID: <ae07d064-85ea-3074-0a32-867e5bbf6e7a@kernel.org>
-Date:   Tue, 22 Aug 2023 14:56:04 +0900
+        with ESMTP id S231261AbjHVMKL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 08:10:11 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCB2893;
+        Tue, 22 Aug 2023 05:09:57 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.102])
+        by gateway (Coremail) with SMTP id _____8CxfOqUpeRkWugaAA--.27989S3;
+        Tue, 22 Aug 2023 20:09:56 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.109.102])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxzyORpeRkVkZgAA--.62529S3;
+        Tue, 22 Aug 2023 20:09:55 +0800 (CST)
+Message-ID: <bee90784-e53c-4a30-b1f5-feeba46c7f5a@loongson.cn>
+Date:   Tue, 22 Aug 2023 20:09:53 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/9] ARM: Remove <asm/ide.h>
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] docs/zh_CN: add zh_CN translation for
+ memory-barriers.txt
+To:     Gang Li <gang.li@linux.dev>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Alex Shi <alex.shi@linux.alibaba.com>,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1692288018.git.geert@linux-m68k.org>
- <e53f0f8da1607856028d941e7ac8646aa2abc555.1692288018.git.geert@linux-m68k.org>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <e53f0f8da1607856028d941e7ac8646aa2abc555.1692288018.git.geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <214aed18-5df5-1014-b73d-a1748c0cca13@linux.dev>
+ <20230819162526.GA274478@leoy-huanghe.lan>
+ <f7eac106-abe4-aba1-14df-6c9d1bfdf3b3@linux.dev>
+ <20230821125322.GB57731@leoy-huanghe.lan>
+Content-Language: en-US
+From:   Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <20230821125322.GB57731@leoy-huanghe.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxzyORpeRkVkZgAA--.62529S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrKrW5AFy7Xw15GryxXrW3XFc_yoWkAwb_ua
+        4Y9F4kAr4DXF4Ikan2kr48CayvqaykXr1UJF40qw4fArZ2qFykWFnYvrZ2vwn5JFs3JwnI
+        kr1vq3W2q39FqosvyTuYvTs0mTUanT9S1TB71UUUU1DqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1ln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+        6rW5McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
+        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jxDG5UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/18/23 01:07, Geert Uytterhoeven wrote:
-> As of commit b7fb14d3ac63117e ("ide: remove the legacy ide driver") in
-> v5.14, there are no more generic users of <asm/ide.h>.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Looks good to me. All patches are reviewed or acked, except this one.
-Can I get an ack from arm folks ?
+在 2023/8/21 20:53, Leo Yan 写道:
+> On Mon, Aug 21, 2023 at 02:39:15PM +0800, Gang Li wrote:
+>> Thanks for your review!
+>>
+>> Your suggestions will be integrated into the next version(v2).
+>>
+>> On 2023/8/20 00:25, Leo Yan wrote:
+>>>> +		|       |   :   |        |   :   |       |
+>>>> +		|       |   :   |        |   :   |       |
+>>>> +		| CPU 1 |<----->|  内存  |<----->| CPU 2 |
+>>> Unalignment caused by extra space around "内存".
+>>>
+>> If using Chinese, it is impossible to align properly no matter
+>> how it is modified. If strict alignment is needed, the text in the
+>> charts should not be translated.
+> In my editor (vim), a Chinese character is two-width of English
+> character.  So you could see in above, I can simply remove a space for
+> alignment.
 
-> ---
->  arch/arm/include/asm/ide.h | 24 ------------------------
->  1 file changed, 24 deletions(-)
->  delete mode 100644 arch/arm/include/asm/ide.h
-> 
-> diff --git a/arch/arm/include/asm/ide.h b/arch/arm/include/asm/ide.h
-> deleted file mode 100644
-> index a81e0b0d6747aa2f..0000000000000000
-> --- a/arch/arm/include/asm/ide.h
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -/*
-> - *  arch/arm/include/asm/ide.h
-> - *
-> - *  Copyright (C) 1994-1996  Linus Torvalds & authors
-> - */
-> -
-> -/*
-> - *  This file contains the ARM architecture specific IDE code.
-> - */
-> -
-> -#ifndef __ASMARM_IDE_H
-> -#define __ASMARM_IDE_H
-> -
-> -#ifdef __KERNEL__
-> -
-> -#define __ide_mm_insw(port,addr,len)	readsw(port,addr,len)
-> -#define __ide_mm_insl(port,addr,len)	readsl(port,addr,len)
-> -#define __ide_mm_outsw(port,addr,len)	writesw(port,addr,len)
-> -#define __ide_mm_outsl(port,addr,len)	writesl(port,addr,len)
-> -
-> -#endif /* __KERNEL__ */
-> -
-> -#endif /* __ASMARM_IDE_H */
+Hi Gang,
 
--- 
-Damien Le Moal
-Western Digital Research
+
+Yes, we will use vim to make adjustments in the end, no matter what 
+editor we use for this work.
+
+
+BTW, The title should also be aligned, with one Chinese character and 
+two "=".
+
+Just like:
+
+-+==========
+-+免责声明
+-+==========
+++========
+++免责声明
+++========
+
+
+Thanks,
+
+Yanteng
+
+> Anyway, if you have different editor or configuration, using either
+> langauge is fine for me.
+>
+> Please expect I will have more review.
+>
+> Thanks,
+> Leo
 
