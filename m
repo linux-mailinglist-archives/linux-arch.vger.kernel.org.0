@@ -2,84 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1937783745
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 03:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4518D783992
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Aug 2023 07:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjHVBRT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Aug 2023 21:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S232880AbjHVF4L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Aug 2023 01:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjHVBRS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Aug 2023 21:17:18 -0400
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1802184;
-        Mon, 21 Aug 2023 18:17:16 -0700 (PDT)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-68a4025b5e8so1350379b3a.3;
-        Mon, 21 Aug 2023 18:17:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692667036; x=1693271836;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vvCdHBtjSnuFrbABVz90pmxppJPtgweSzJ+1K52oA8A=;
-        b=j2Q7m9U7y9yiSOo1nBNYQc+vdbfKlu0KrZaTbV2cnPcsZk+O1v4ULZVirqtxG61Deu
-         TN81mwJVnwGGcQ4fAmzSGgjMd4X9BkZphcqdb6/KETay7qq4PTT+YqZ3JU6DGYG6YBzx
-         oYtrGkqItk0S298vt1eobaKlxhIbCLJ4J9BbcHluyFVN1Dz6bqYRic4jtLChhhxqvQic
-         ZwTBEUbHuCOzNVN1xrPldvGJePV9EroYAXv/U7P6yQ+fl3l1L2gynjZgOKTb5VZu9YaS
-         tr00BrmQjrNHuEGoMT4yy+ZZEF5zalPvSvqcjpDBALufs4T7fHoC44f18nT28KcO/ae5
-         lM0A==
-X-Gm-Message-State: AOJu0Yw2acWZqjGx8fBoMgUaJyfowu68ZpuCjGPqKqFYSq8axoKg4mC4
-        N8ol23n9fzpgvxrXeU+nYr8=
-X-Google-Smtp-Source: AGHT+IHMQh5HegE43CVlVbwBVI6hDP7ObjofAdRLJ03kKsEvoAIsU8gW2VhfpbtlaAbbRO20SNbPSw==
-X-Received: by 2002:a05:6a20:a115:b0:13f:b028:789c with SMTP id q21-20020a056a20a11500b0013fb028789cmr7206284pzk.5.1692667036329;
-        Mon, 21 Aug 2023 18:17:16 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b001bc39aa63ebsm7647738plb.121.2023.08.21.18.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Aug 2023 18:17:15 -0700 (PDT)
-Date:   Tue, 22 Aug 2023 01:16:56 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com, Tianyu Lan <tiala@microsoft.com>,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com
-Subject: Re: [PATCH v7 0/8] x86/hyperv: Add AMD sev-snp enlightened guest
- support on hyperv
-Message-ID: <ZOQMiLEdPsD+pF8q@liuwe-devbox-debian-v2>
-References: <20230818102919.1318039-1-ltykernel@gmail.com>
+        with ESMTP id S231316AbjHVF4K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Aug 2023 01:56:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D52D7;
+        Mon, 21 Aug 2023 22:56:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E8A360C6B;
+        Tue, 22 Aug 2023 05:56:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF0BC433C8;
+        Tue, 22 Aug 2023 05:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692683767;
+        bh=9um55Zj5RL+HKm7sDYvky+ZFM9uVlT2G4kmh91T3oQk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i4U9wZJzMB/JAaVGMUuwP8/xefH2Qsh14Xu32Xc/qVZSzGa4W6W3VIIOD6/v7Xh9Q
+         k18VkvEHim3SO3tNgXRvBblBzeHsL87eELXVl0EFzY0tsPjs811q9rfXFnsj0lLTQF
+         EpSoXGxzXLDJWts1fI4IRWcROzjHP5G0AT0qxuEpgYP+SXJ2yRth8TU23/w9KY3J6f
+         EluPrQ6jZirhSO+0JgVTf6rSYqMW+FR+pbNaNhMUovRm87mowMfEhVJUUff6ttYjdN
+         DWsbeQYoA+y9d0IeLN7eLGKZEWZbHrOHUi96dM2CviwCqt7RLb3FLDwwTsj9BwMrPz
+         Cnb9nNjBOJIVA==
+Message-ID: <ae07d064-85ea-3074-0a32-867e5bbf6e7a@kernel.org>
+Date:   Tue, 22 Aug 2023 14:56:04 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230818102919.1318039-1-ltykernel@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/9] ARM: Remove <asm/ide.h>
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1692288018.git.geert@linux-m68k.org>
+ <e53f0f8da1607856028d941e7ac8646aa2abc555.1692288018.git.geert@linux-m68k.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <e53f0f8da1607856028d941e7ac8646aa2abc555.1692288018.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 06:29:10AM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
+On 8/18/23 01:07, Geert Uytterhoeven wrote:
+> As of commit b7fb14d3ac63117e ("ide: remove the legacy ide driver") in
+> v5.14, there are no more generic users of <asm/ide.h>.
 > 
-> Tianyu Lan (8):
->   x86/hyperv: Add sev-snp enlightened guest static key
->   x86/hyperv: Set Virtual Trust Level in VMBus init message
->   x86/hyperv: Mark Hyper-V vp assist page unencrypted in SEV-SNP
->     enlightened guest
->   drivers: hv: Mark percpu hvcall input arg page unencrypted in SEV-SNP
->     enlightened guest
->   x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
->     enlightened guest
->   clocksource: hyper-v: Mark hyperv tsc page unencrypted in sev-snp
->     enlightened guest
->   x86/hyperv: Add smp support for SEV-SNP guest
->   x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Applied to hyperv-next. Thanks.
+Looks good to me. All patches are reviewed or acked, except this one.
+Can I get an ack from arm folks ?
+
+> ---
+>  arch/arm/include/asm/ide.h | 24 ------------------------
+>  1 file changed, 24 deletions(-)
+>  delete mode 100644 arch/arm/include/asm/ide.h
+> 
+> diff --git a/arch/arm/include/asm/ide.h b/arch/arm/include/asm/ide.h
+> deleted file mode 100644
+> index a81e0b0d6747aa2f..0000000000000000
+> --- a/arch/arm/include/asm/ide.h
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -/*
+> - *  arch/arm/include/asm/ide.h
+> - *
+> - *  Copyright (C) 1994-1996  Linus Torvalds & authors
+> - */
+> -
+> -/*
+> - *  This file contains the ARM architecture specific IDE code.
+> - */
+> -
+> -#ifndef __ASMARM_IDE_H
+> -#define __ASMARM_IDE_H
+> -
+> -#ifdef __KERNEL__
+> -
+> -#define __ide_mm_insw(port,addr,len)	readsw(port,addr,len)
+> -#define __ide_mm_insl(port,addr,len)	readsl(port,addr,len)
+> -#define __ide_mm_outsw(port,addr,len)	writesw(port,addr,len)
+> -#define __ide_mm_outsl(port,addr,len)	writesl(port,addr,len)
+> -
+> -#endif /* __KERNEL__ */
+> -
+> -#endif /* __ASMARM_IDE_H */
+
+-- 
+Damien Le Moal
+Western Digital Research
+
