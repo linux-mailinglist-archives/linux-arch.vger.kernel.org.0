@@ -2,250 +2,196 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A277868EA
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 09:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B8D7869A0
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbjHXHvf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Aug 2023 03:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S229803AbjHXIJ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Aug 2023 04:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjHXHv0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 03:51:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DF01703
-        for <linux-arch@vger.kernel.org>; Thu, 24 Aug 2023 00:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692863438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9VEiwM/469XoxPkv00kiY2u9t4qVyJoCjGxKGq/80WA=;
-        b=bXj0eTn16vSh2KzmI7uPM8zkiBpDPJN+E9wQbnQ+fiXttwTW7duQXxoNJjBDRjsLCy2GUU
-        8yVs53Gn+h1O15hxuMeKtu+a7U1uTLFBJqoFBUQGXbFPUQfBNQvsvjymfBaMUV/LIl5yyl
-        4NlTjK3zCJ36KHVsOFnn8BrEwtujQ0k=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-220-c3N4ETCLMP2ZBi4o1ERhcg-1; Thu, 24 Aug 2023 03:50:37 -0400
-X-MC-Unique: c3N4ETCLMP2ZBi4o1ERhcg-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-500983fde5fso1466766e87.1
-        for <linux-arch@vger.kernel.org>; Thu, 24 Aug 2023 00:50:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692863436; x=1693468236;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9VEiwM/469XoxPkv00kiY2u9t4qVyJoCjGxKGq/80WA=;
-        b=ADFT44p+wfO/9ZVSTHhCwNilbxjTk2gGt3sMAD4yBmVb+/RvUXHhA1G+hm8Nhgr9Rk
-         q4Ds+wGSKUtAf+DUBJRlOt1PALc/Gn2Hx9ySIDkTengqYWXvI7dcdjLx7J2/B3P4xQfU
-         hcjN/iW55PPP0iStsW5BkI4QbJ/3A1Nr/RX703wCFDqsi/f5WicgnqFS1vz6tVWQMzu5
-         qSkF55JCANE6Y9HwNlWpfKfc57Vfn9Rlb77qBU2v8GYYr225ICIJqnwH8wnHPZXw7wm6
-         eGt/axSYfdQCOVq/jtdBug7D+Wgrm5yd5D6sYT6d5C02WApykjuLoujITIemlAQBEYiT
-         GHrQ==
-X-Gm-Message-State: AOJu0YyuZA70D8Ugs79X9lbB3dXNhqClcGWuGsz+iO2oLyHbXBlgIweC
-        fllns7SNZ9RlzpwFVRHo+3vNyhUOV3+20uNu5BxOU6QzJxnevbvYB9q0CVjNtE85gm4VqI2Nm5Z
-        77BZBSTjCvqQYZ7sHjszmTg==
-X-Received: by 2002:a05:6512:1296:b0:4fe:993:2218 with SMTP id u22-20020a056512129600b004fe09932218mr13520772lfs.31.1692863435817;
-        Thu, 24 Aug 2023 00:50:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFWxb3vEOPi9oDLO474PCk5smXiK4t0flJpP1QfkBeZvkQd0769Sd7lavC4bQKKWkbdbP5Q0A==
-X-Received: by 2002:a05:6512:1296:b0:4fe:993:2218 with SMTP id u22-20020a056512129600b004fe09932218mr13520754lfs.31.1692863435397;
-        Thu, 24 Aug 2023 00:50:35 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c709:6200:16ba:af70:999d:6a1a? (p200300cbc709620016baaf70999d6a1a.dip0.t-ipconnect.de. [2003:cb:c709:6200:16ba:af70:999d:6a1a])
-        by smtp.gmail.com with ESMTPSA id w7-20020adfcd07000000b00313de682eb3sm21614062wrm.65.2023.08.24.00.50.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 00:50:34 -0700 (PDT)
-Message-ID: <33def4fe-fdb8-6388-1151-fabd2adc8220@redhat.com>
-Date:   Thu, 24 Aug 2023 09:50:32 +0200
+        with ESMTP id S240483AbjHXIJx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 04:09:53 -0400
+Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-cusazlp170110003.outbound.protection.outlook.com [IPv6:2a01:111:f403:c111::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFEB19AC;
+        Thu, 24 Aug 2023 01:09:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eg2edIuz3325ZtQ3jz64MxDdH6tAegU8w2tuNNNavrO2i7xrNLzAqxmo/FBAXfNdIGY1/n9XnFc+Dxcxxup/rbRo9lns6RSNZKUvj0nF349WBxBwq2xrZobcRNa6MyFPPdbopY6Rs3rNJWNc4HdbY+/S3r5oI01Rb7pFkkrwz2E0zZ1zICeqFZpNsNpDRlDVpM+uhTn22vmyCsF9O/JWJGzP70dUZinjy54GUYPhsI9innyxOE/SDOwsLiTmWc/Q3Shn2qGMj8dH7SPK5CeqAZaoocoTcMYCQ/LRzXdHjTO4PGlViWf9J1DHlTWeXW4cEwpB3X3dJHccxWzwFnoiKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rnUayE8ALRviTCwI1L+S+95PH0M5CslHtG83Lvxgou8=;
+ b=UwbJXP/wIbXNvCW1FNux3Npf5cR/hu617PMlgsObr7DHu/RMk2D8C5KD3+W9PyWkMhD9G05YrAiT91y4I/4L8rU6i0YcoEWhCT8NM7E2H6g+MGLNVqvxc+V1BeS5yZ9ilOYnRAnHNsgr5XuQDX0oNA/zuL+X6/bRbD/qPT9NsdSX3r3jQR0CmnW+iuGkXwfH5b6d4Hbg9FxMnP6nH9oTHaBkLTkaD8ifWe9SsAJGUBkeZXlZ2+7Zu9Bv05E5XB2KBSrEOCoSIygmlaft/l+DRDnx6wH9j+YZebS6u9uFVYp7E7sGib6PkiL06wq6XNAH540rxezO3Lj6FLwZZDp9YA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rnUayE8ALRviTCwI1L+S+95PH0M5CslHtG83Lvxgou8=;
+ b=IEvuJDMwekjk0/teP59IZODZztBwHwJFp2tGNcf9oJDkM1p7wOIXs+oAeY/jOYX3cuQNw6X6KvEU+nqWH2UlaY9hhu2WlfrAdz8KVF8LElD3i6DzGrA6Ti4Ef4VMIAy9e0gjbj418Z8Gk+7E9H7wnUDJcirDsc0A/Ye1BXa5l1Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
+ (2603:10b6:207:30::23) by PH8PR21MB3901.namprd21.prod.outlook.com
+ (2603:10b6:510:23a::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.4; Thu, 24 Aug
+ 2023 08:07:52 +0000
+Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
+ ([fe80::b3df:a8e9:52dd:dfad]) by BL0PR2101MB1092.namprd21.prod.outlook.com
+ ([fe80::b3df:a8e9:52dd:dfad%5]) with mapi id 15.20.6745.006; Thu, 24 Aug 2023
+ 08:07:51 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        brijesh.singh@amd.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        Jason@zx2c4.com, nik.borisov@suse.com, mikelley@microsoft.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        rick.p.edgecombe@intel.com, andavis@redhat.com, mheslin@redhat.com,
+        vkuznets@redhat.com, xiaoyao.li@intel.com,
+        Dexuan Cui <decui@microsoft.com>
+Subject: [PATCH v3 00/10] Support TDX guests on Hyper-V (the Hyper-V specific part)
+Date:   Thu, 24 Aug 2023 01:07:02 -0700
+Message-Id: <20230824080712.30327-1-decui@microsoft.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: CY5PR15CA0175.namprd15.prod.outlook.com
+ (2603:10b6:930:81::20) To BL0PR2101MB1092.namprd21.prod.outlook.com
+ (2603:10b6:207:30::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-        maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-        yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-        rppt@kernel.org, hughd@google.com
-Cc:     pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
-        vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
-        hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-References: <20230823131350.114942-1-alexandru.elisei@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH RFC 00/37] Add support for arm64 MTE dynamic tag storage
- reuse
-In-Reply-To: <20230823131350.114942-1-alexandru.elisei@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|PH8PR21MB3901:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0650dfad-26a1-47a5-d298-08dba47935e1
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p+Rik1g2NTVWNEUXCEYs5aPxZ1rX3E2BObk4h5O7WJc/IrfcCUFoEPeIr/BdoLwj57pMUTpREcUKcP2rQchGXGRTN2vECPpYFhT0meLQBD1krFP/qGHgI4n557IChEAqpCIT2vpP+0FTo5sqRpst2OA9rLcPvUf3AHnizJZDj8ApfKPT+hvxkQ7b7aXID9MxOjebM9zKpMCAbbV/fixkg0oGPGtpgsqJXVWLS5aMqVaERUE8YISanmA0vli6MU1seWkca371LUlnuAfOixH1AFqDn293JM5nQPSsDtjRZWqApOJNeYHI3XSoq5PutrDMsbJU228ElBDRbfkfg3T3RxOUDuuJHYPh7zSj25lP5vO1YVa2tkRmmz1yqBkz/R2l8KTkclf2oJ2aR9rw6T7fuxfeaqUwxhr5oH5kyQdaRrbq6KAlW23wFsdOMno+fv5VEPJFnz1oorzd4CbUrevGtqcgOhOmDyw9+cxgAfXpTcNDBozUNJx/qAdRCrJU6Ne6OZyRGy6kPgu5f7EhoBqDn5cErL6YZVBr2FMh01lAbNHeG0GPhHM9azhwi2QWhfOLnmyTxo8X1mEuE0vv68e+JlzTTJpc0C91LWuKsCQUPnNTFeDzFTy1nDACxQ1x/wNdrUX2oHvpPxjGmm2+fU7/keBNnJ4dtxl2fCXYwbJfrUGQ2uQffUqQpAhNgLdJmm2daeHLkeQciiYDVz2CMg+CWg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(366004)(346002)(39860400002)(136003)(451199024)(1800799009)(186009)(12101799020)(478600001)(966005)(6486002)(10290500003)(6666004)(83380400001)(38100700002)(7406005)(82950400001)(921005)(2906002)(52116002)(7416002)(4326008)(1076003)(6506007)(2616005)(107886003)(6512007)(66556008)(36756003)(66476007)(86362001)(82960400001)(5660300002)(316002)(8676002)(8936002)(6636002)(66946007)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L5LGts4WNYFdxDEGO8r4sk6ROI3yQXOm7B2xaCGO8zxi7u8xFV2f4jk+AJk1?=
+ =?us-ascii?Q?WJYNw/MynT6qmAzhV8yGbauuxreSq7s9qq8ph2PD8yvkWv7lnTIAhvC1uMXr?=
+ =?us-ascii?Q?tAQ1p4hAG4zAl4ew7xpWBbZcQa8D9ML+nY4BQa901Uv6tMnnE2SPqqmrku1d?=
+ =?us-ascii?Q?1fIypeSWAI7ymwbtP8aD+uafyyvUvBXZZ64Gu1xJApnz+gPaJQHSdyziKJRZ?=
+ =?us-ascii?Q?5NPpNSpVX/s1TVaXAoAMl7gDTRVmFijZdQRM7EXAulcMm76RHT8HDkQZyoCX?=
+ =?us-ascii?Q?VqMTpZqIg2sZ4IeRqoz6xGYsV5PbIELaqrCjs/zUGLSrM1wjXmiy+hwnBmOd?=
+ =?us-ascii?Q?PqtqphyFCq2HzhZ4v5ZbpRHxxdINse5C2xqOJVFaGRbAEGT/qic9lBC6N0Et?=
+ =?us-ascii?Q?hsqUmTn4Sftid+ZCoEHBoHS9gRRdcyx4hsN148BYPCFKu3nLEuJ3NgRrlgnk?=
+ =?us-ascii?Q?mDcK3CQTXJKxYcAmzu4Wct1Sz1u9ovUaTqcPG8oThTcXKwkRVxcxj8XIlH9b?=
+ =?us-ascii?Q?ZuNN1f4yYjPqxjhE0sK3F492SlCQ5izXZBAleCX15H72jvu926zimyPE8b3e?=
+ =?us-ascii?Q?YHGO9bX9TnDRV5EVAoA2BFt2G1R73CsHxwmTxIjsdX1DwhiP/A3OCP1cgqnO?=
+ =?us-ascii?Q?5rm1ybKqBGCf7dXsw+YQHIeSY6+qfeFjrX+ROVd98BvFPR2fkz7H5Ze+iRu+?=
+ =?us-ascii?Q?JaJLK2w/41eRzNjA3UAAiLuM4DNXK3+eiX0Olhoerk6Nk+l220BkDFmEGomq?=
+ =?us-ascii?Q?u4mYPFkTDaJ+osnd/YX030KhUgSYW///Gf6xPRxNTZHkrVNw/CG5svxKG2O5?=
+ =?us-ascii?Q?Kyms4J0UFILm441xxhE2c+L3F5/pTNHUYjqbQHsahtjCiW4pCATwnl+Otu/+?=
+ =?us-ascii?Q?liApMhJYlOEp9X2gYSKzqO8TmpzwOBEDhQeMKt/2vzXXaLvBgxOAHdR5t5nF?=
+ =?us-ascii?Q?jTHfsFsVgaJYorqlae5h3o7N256EsEKb8sTUFNJyj+Ie5CrXguiIfvoBX5LV?=
+ =?us-ascii?Q?qCBCxR231HUjof0mNstiXar9XRuKiGfHhkPkzhaYQqOwhspHswhBFgccz8kL?=
+ =?us-ascii?Q?LHI/tyUPiz9qZmPEkCPicPbfWUGyh1K1BQFJzg9qY8xgHgwHoxx8PoW4jM8O?=
+ =?us-ascii?Q?QUsfKp+qQe165UWoNQtBS9T/aLUdorO13UVFu6aKyJsRkOCdFC8acKRFL397?=
+ =?us-ascii?Q?aF4g6jpLAQiYR+eQCM0IGZHBcO9rUnM5bzkRg5vTkV5RGrBHspzhGfqtHDQ7?=
+ =?us-ascii?Q?6eo7XrG1aP1eSPUxWXXAOvB2U3JbJ2Vs7KKhlOMpqUKKxJb86ZzL/OAV9hko?=
+ =?us-ascii?Q?8h9vizPVPBHmCvKd+O/H3RlXeIehm0OiEgZbRiArM80g/KTq0h49i0t3KmqB?=
+ =?us-ascii?Q?1OI0ks4gOqe9OVKSWL8tBAkSP2Syo0MbyVeWOguvxdsz4CWJG9VT7aR54xuC?=
+ =?us-ascii?Q?31MIIww9rDYaZL0K+hRoV1nGDs3ZtveS0ogBGwtqN7K7GQvu7A+3ZDxVH0Ru?=
+ =?us-ascii?Q?m/N93uj72g9zMRyiSXD8j8loqa+Rxhkiie7q5nXomongcxwbz5DA3j0wp43Z?=
+ =?us-ascii?Q?psGtsO84vvD6gg07md/apTx7rLmyMTTo38BqHrvN5qxQjSYsFPm2C3OM3Fjf?=
+ =?us-ascii?Q?/RRdPgi9RnygToq8Mb7PAN2q/kscGNcEw9ST4aHf/5EM?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0650dfad-26a1-47a5-d298-08dba47935e1
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2023 08:07:51.2396
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DzfD8LIfTDV27oXurp1WBXkNI8RpDu9TyfD1Vj9YGGThEDePxp9cpMPk/gNLpNWzQwNdOTxtoYne9KDoJFBACA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR21MB3901
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 23.08.23 15:13, Alexandru Elisei wrote:
-> Introduction
-> ============
-> 
-> Arm has implemented memory coloring in hardware, and the feature is called
-> Memory Tagging Extensions (MTE). It works by embedding a 4 bit tag in bits
-> 59..56 of a pointer, and storing this tag to a reserved memory location.
-> When the pointer is dereferenced, the hardware compares the tag embedded in
-> the pointer (logical tag) with the tag stored in memory (allocation tag).
-> 
-> The relation between memory and where the tag for that memory is stored is
-> static.
-> 
-> The memory where the tags are stored have been so far unaccessible to Linux.
-> This series aims to change that, by adding support for using the tag storage
-> memory only as data memory; tag storage memory cannot be itself tagged.
-> 
-> 
-> Implementation
-> ==============
-> 
-> The series is based on v6.5-rc3 with these two patches cherry picked:
-> 
-> - mm: Call arch_swap_restore() from unuse_pte():
-> 
->      https://lore.kernel.org/all/20230523004312.1807357-3-pcc@google.com/
-> 
-> - arm64: mte: Simplify swap tag restoration logic:
-> 
->      https://lore.kernel.org/all/20230523004312.1807357-4-pcc@google.com/
-> 
-> The above two patches are queued for the v6.6 merge window:
-> 
->      https://lore.kernel.org/all/20230702123821.04e64ea2c04dd0fdc947bda3@linux-foundation.org/
-> 
-> The entire series, including the above patches, can be cloned with:
-> 
-> $ git clone https://gitlab.arm.com/linux-arm/linux-ae.git \
-> 	-b arm-mte-dynamic-carveout-rfc-v1
-> 
-> On the arm64 architecture side, an extension is being worked on that will
-> clarify how MTE tag storage reuse should behave. The extension will be
-> made public soon.
-> 
-> On the Linux side, MTE tag storage reuse is accomplished with the
-> following changes:
-> 
-> 1. The tag storage memory is exposed to the memory allocator as a new
-> migratetype, MIGRATE_METADATA. It behaves similarly to MIGRATE_CMA, with
-> the restriction that it cannot be used to allocate tagged memory (tag
-> storage memory cannot be tagged). On tagged page allocation, the
-> corresponding tag storage is reserved via alloc_contig_range().
-> 
-> 2. mprotect(PROT_MTE) is implemented by changing the pte prot to
-> PAGE_METADATA_NONE. When the page is next accessed, a fault is taken and
-> the corresponding tag storage is reserved.
-> 
-> 3. When the code tries to copy tags to a page which doesn't have the tag
-> storage reserved, the tags are copied to an xarray and restored in
-> set_pte_at(), when the page is eventually mapped with the tag storage
-> reserved.
+Hyper-V provides two modes for running Intel TDX VMs:
 
-Hi!
+1) TD Partitioning mode with a paravisor (see [1]).
+2) In "fully enlightened" mode with normal TDX shared bit control
+   over page encryption, and no paravisor
 
-after re-reading it 2 times, I still have no clue what your patch set is 
-actually trying to achieve. Probably there is a way to describe how user 
-space intents to interact with this feature, so to see which value this 
-actually has for user space -- and if we are using the right APIs and 
-allocators.
+The first mode is similar to AMD SEV-SNP's vTOM mode.
+The second is similar to AMD SEV-SNP's C-bit mode.
 
-So some dummy questions / statements
+For #2, the v6 patchset was [2], which is later split into 2 parts:
+the generic TDX part (see [3][4]), and the Hyper-V specific part, i.e.
+the first 5 patches of this patchset. For the second part, I rebased
+the patches to Tianyu's fully enlighted SNP patchset (which has been
+in the Hyper-V tree's hyperv-next branch). Since this is mostly a
+straightforward rebasing, I keep the existing Acked-by and
+Reviewed-by in the v6 patchset [2].
 
-1) Is this about re-propusing the memory used to hold tags for different 
-purpose? Or what exactly is user space going to do with the PROT_MTE 
-memory? The whole mprotect(PROT_MTE) approach might not eb the right 
-thing to do.
+The next 3 patches of this patchset add the support for #1.
 
-2) Why do we even have to involve the page allocator if this is some 
-special-purpose memory? Re-porpusing the buddy when later using 
-alloc_contig_range() either way feels wrong.
+The last 2 patches (the 9th and the 10th) just make some cleanup.
 
+Please review all the 10 patches, which are also on my github
+branch [5]. The patches can apply cleanly on hyperv-next.
 
-[...]
+I tested the patches for a regular VM, a VBS VM, a SNP VM
+with the paravisor, and a TDX VM with the paravisor and a TDX
+VM without the paravisor, and an ARM64 VM. All the VMs worked
+as expected.
 
->   arch/arm64/Kconfig                       |  13 +
->   arch/arm64/include/asm/assembler.h       |  10 +
->   arch/arm64/include/asm/memory_metadata.h |  49 ++
->   arch/arm64/include/asm/mte-def.h         |  16 +-
->   arch/arm64/include/asm/mte.h             |  40 +-
->   arch/arm64/include/asm/mte_tag_storage.h |  36 ++
->   arch/arm64/include/asm/page.h            |   5 +-
->   arch/arm64/include/asm/pgtable-prot.h    |   2 +
->   arch/arm64/include/asm/pgtable.h         |  33 +-
->   arch/arm64/kernel/Makefile               |   1 +
->   arch/arm64/kernel/elfcore.c              |  14 +-
->   arch/arm64/kernel/hibernate.c            |  46 +-
->   arch/arm64/kernel/mte.c                  |  31 +-
->   arch/arm64/kernel/mte_tag_storage.c      | 667 +++++++++++++++++++++++
->   arch/arm64/kernel/setup.c                |   7 +
->   arch/arm64/kvm/arm.c                     |   6 +-
->   arch/arm64/lib/mte.S                     |  30 +-
->   arch/arm64/mm/copypage.c                 |  26 +
->   arch/arm64/mm/fault.c                    |  35 +-
->   arch/arm64/mm/mteswap.c                  | 113 +++-
->   fs/proc/meminfo.c                        |   8 +
->   fs/proc/page.c                           |   1 +
->   include/asm-generic/Kbuild               |   1 +
->   include/asm-generic/memory_metadata.h    |  50 ++
->   include/linux/gfp.h                      |  10 +
->   include/linux/gfp_types.h                |  14 +-
->   include/linux/huge_mm.h                  |   6 +
->   include/linux/kernel-page-flags.h        |   1 +
->   include/linux/migrate_mode.h             |   1 +
->   include/linux/mm.h                       |  12 +-
->   include/linux/mmzone.h                   |  26 +-
->   include/linux/page-flags.h               |   1 +
->   include/linux/pgtable.h                  |  19 +
->   include/linux/sched.h                    |   2 +-
->   include/linux/sched/mm.h                 |  13 +
->   include/linux/vm_event_item.h            |   5 +
->   include/linux/vmstat.h                   |   2 +
->   include/trace/events/mmflags.h           |   5 +-
->   mm/Kconfig                               |   5 +
->   mm/compaction.c                          |  52 +-
->   mm/huge_memory.c                         | 109 ++++
->   mm/internal.h                            |   7 +
->   mm/khugepaged.c                          |   7 +
->   mm/memory.c                              | 180 +++++-
->   mm/mempolicy.c                           |   7 +
->   mm/migrate.c                             |   6 +
->   mm/mm_init.c                             |  23 +-
->   mm/mprotect.c                            |  46 ++
->   mm/page_alloc.c                          | 136 ++++-
->   mm/page_isolation.c                      |  19 +-
->   mm/page_owner.c                          |   3 +-
->   mm/shmem.c                               |  14 +-
->   mm/show_mem.c                            |   4 +
->   mm/swapfile.c                            |   4 +
->   mm/vmscan.c                              |   3 +
->   mm/vmstat.c                              |  13 +-
->   56 files changed, 1834 insertions(+), 161 deletions(-)
->   create mode 100644 arch/arm64/include/asm/memory_metadata.h
->   create mode 100644 arch/arm64/include/asm/mte_tag_storage.h
->   create mode 100644 arch/arm64/kernel/mte_tag_storage.c
->   create mode 100644 include/asm-generic/memory_metadata.h
+Thanks,
+Dexuan
 
-The core-mm changes don't look particularly appealing :)
+References:
+[1] Intel TDX Module v1.5 TD Partitioning Architecture Specification
+[2] https://lwn.net/ml/linux-kernel/20230504225351.10765-1-decui@microsoft.com/
+[3] https://lwn.net/ml/linux-kernel/20230811214826.9609-1-decui%40microsoft.com/
+[4] https://github.com/dcui/tdx/commits/decui/mainline/x86/tdx/v10
+[5] https://github.com/dcui/tdx/commits/decui/mainline/x86/hyperv/tdx-v3
+
+Dexuan Cui (10):
+  x86/hyperv: Add hv_isolation_type_tdx() to detect TDX guests
+  x86/hyperv: Support hypercalls for fully enlightened TDX guests
+  Drivers: hv: vmbus: Support fully enlightened TDX guests
+  x86/hyperv: Fix serial console interrupts for fully enlightened TDX
+    guests
+  Drivers: hv: vmbus: Support >64 VPs for a fully enlightened TDX/SNP VM
+  x86/hyperv: Introduce a global variable hyperv_paravisor_present
+  Drivers: hv: vmbus: Bring the post_msg_page back for TDX VMs with the
+    paravisor
+  x86/hyperv: Use TDX GHCI to access some MSRs in a TDX VM with the
+    paravisor
+  x86/hyperv: Remove hv_isolation_type_en_snp
+  x86/hyperv: Move the code in ivm.c around to avoid unnecessary ifdef's
+
+ arch/x86/hyperv/hv_apic.c          |  15 +-
+ arch/x86/hyperv/hv_init.c          |  59 ++++-
+ arch/x86/hyperv/ivm.c              | 374 ++++++++++++++++++-----------
+ arch/x86/include/asm/hyperv-tlfs.h |   3 +-
+ arch/x86/include/asm/mshyperv.h    |  43 +++-
+ arch/x86/kernel/cpu/mshyperv.c     |  65 ++++-
+ drivers/hv/connection.c            |  15 +-
+ drivers/hv/hv.c                    |  78 +++++-
+ drivers/hv/hv_common.c             |  43 +++-
+ drivers/hv/hyperv_vmbus.h          |  11 +
+ include/asm-generic/mshyperv.h     |   5 +-
+ 11 files changed, 505 insertions(+), 206 deletions(-)
 
 -- 
-Cheers,
-
-David / dhildenb
+2.25.1
 
