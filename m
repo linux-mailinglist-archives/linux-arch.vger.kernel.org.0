@@ -2,59 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6165178721B
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 16:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A615B787221
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 16:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234690AbjHXOqE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Aug 2023 10:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S237335AbjHXOrj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Aug 2023 10:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241842AbjHXOpw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 10:45:52 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6301BE7;
-        Thu, 24 Aug 2023 07:45:45 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68bee12e842so662014b3a.3;
-        Thu, 24 Aug 2023 07:45:45 -0700 (PDT)
+        with ESMTP id S241852AbjHXOrf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 10:47:35 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC1F1FF5;
+        Thu, 24 Aug 2023 07:47:03 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68a410316a2so3412046b3a.0;
+        Thu, 24 Aug 2023 07:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692888345; x=1693493145;
+        d=gmail.com; s=20221208; t=1692888413; x=1693493213;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V34KTjUax4ElVUXtcgSRy6iibO4cjpLJVJbRtQW8DEA=;
-        b=Ovo31Uv6a2OSnXKhonXx+LyqgidfKlMY93wLa1zJr0sWilTyIPbm2byjwlpyP3j1Mc
-         SxRB1rTeUmTQymg8x1XF893UMcJmi5LMzcbwL6JyzaigSUru5aHSA63ahHkWBAUxl3DP
-         Z4rRrdFvfD0BTIpxAL6CEMobBqVud+YCoaNwVxvsMlbVY+PqjghNSHPa/dTS2Gpqqafx
-         ojRPR0Bkq9swVXO8a/4vsf+/NaMtypagWXrXQ/KdTARIxUu/6T2wdw6DuCVs2Zj7Dtv/
-         6B4GjPmtLVyiKJytC92YjOQkJTiLz+4w+fTlQdSKoCz9+cryN1Kt3zshAmTEq3BcpqZB
-         uMGA==
+        bh=jJ+KTDR8wR2AOEp41hFS/dpjHwcNvA7RwPrlUly9aow=;
+        b=KpfnOd3vdyD4nQClcLyPckRwxPStbsl88Zj+GpP4QICkiquuEx99obKZuCnQj84qCF
+         cfRomPB0imwC9xcOXtA2Nrgm+Hv76MFQJ4Dw4d0bdRpVnBAahs/VlV4fkjz9rv/oqSjt
+         Wy7mf5o1oPTRGdEreBMNQChOOVYcA8bP89dzz0T0wtBgwXI+e8RJbxi8mqjn/LYO7e+/
+         2egQohcTxNy3hxJcSzhwz2FYni3uJ2Sykv0xuS/3OkLoPR7HLYB82VwSzQaxCfUa0Ujd
+         g3RUJU5nJFA9r9fz6NNHjMpMnZtKeL2ElPZVI/k90Did19GZ0/zDeK0yuCmiaDl37ZbZ
+         EGIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692888345; x=1693493145;
+        d=1e100.net; s=20221208; t=1692888413; x=1693493213;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=V34KTjUax4ElVUXtcgSRy6iibO4cjpLJVJbRtQW8DEA=;
-        b=hCKJPfjr0cHl8l+aczlbyb56criT9XNbDjKYdS2smlEVgDYg4Vu0t6zDMYxrVdcp7o
-         kjZWURZEKS1QMP0uVOEjW7jgQycp9b5KlSfQpyphrAgacjmXoNpcEr+YUyA8CRq5ivWI
-         7PeRiFJPh5OENVzw2zfcyAX1ri9ydwNIJSUk0QLWph9UsJvVfl5xLwEeJTc9kq78iSAt
-         d6h/yMfrCyctIm+V9+1sMFjA5msfY95C/Zu8nQ/ayg/rRFs6g8jiZq95UVuUn3W4mh91
-         JcItruqpbwMGhe3OmjswvOiL5VTNYUHbjWb03bhO6rd9uLgLrMsHL4yLEV2jyXG/MbnE
-         /pkQ==
-X-Gm-Message-State: AOJu0YyLyD5xLcxOcKEyMRfHAEtfqt+sDHhubtdOxd43XxOJezPPaE49
-        X9a0PfwAhsltHJSTJspn8ao=
-X-Google-Smtp-Source: AGHT+IGiwd3hJaunLjoNoluRg6yzgJu4qOKHRcicoNdJPlBFrEjmxOMJujom+4ieDcaIYVEZcqOOug==
-X-Received: by 2002:a05:6a00:1495:b0:68a:5d25:7fea with SMTP id v21-20020a056a00149500b0068a5d257feamr10633069pfu.6.1692888345220;
-        Thu, 24 Aug 2023 07:45:45 -0700 (PDT)
+        bh=jJ+KTDR8wR2AOEp41hFS/dpjHwcNvA7RwPrlUly9aow=;
+        b=PBPt26uOTQSuHFQy8lZY+aZW2DwXodmDAJxcFMvilXwRqd0zVkdXeFg/+oCtIWlT5J
+         q/QA5PB/kmyvtU9mDWyNNdcR8tRrEvMhE8/RKBTPVVQlg65T7hMKaJBHngkv8JHym/e/
+         6rHpF1On0UgpKRBcMf1Bx6CFyvPlNnz+vQ2mhqxlxa/4ZL71znsDaLYk3KCZ2Aqzl1h9
+         uWnAcxVJdhMGJdwjluyb81C4EMWWLOuq5Ox+qW6VMbxXSqU+jYUInRBQ4BN1X0ttJKEw
+         VNS8JDQMLI1e+RBtPDn2GqKI9Aju9m2Nk/zEsSlUbvP/Gusmr1xBD/+cmD4qn4Krlgo1
+         2RXg==
+X-Gm-Message-State: AOJu0YzuVrKzP+tGhZ8OwewlhFzsANUcS08/2PIpIJHtDtccaYGusfLQ
+        CgwlNkFtWtblnxTEuoCM5h8=
+X-Google-Smtp-Source: AGHT+IHUAUmyZfJ4cJMVcs+fGHTN6JFXYUmuC2Qait9zuRI9fhVdY6VJsF0s3wboXBY7sU/bs3AYkA==
+X-Received: by 2002:a05:6a00:1949:b0:68b:e29c:b5c with SMTP id s9-20020a056a00194900b0068be29c0b5cmr4424217pfk.27.1692888413268;
+        Thu, 24 Aug 2023 07:46:53 -0700 (PDT)
 Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id e20-20020aa78c54000000b0068a46cd4120sm7404930pfd.199.2023.08.24.07.45.35
+        by smtp.gmail.com with ESMTPSA id c2-20020aa78802000000b0064fd4a6b306sm11137228pfo.76.2023.08.24.07.46.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 07:45:44 -0700 (PDT)
-Message-ID: <ff179294-b556-ab16-a884-10acaef456f4@gmail.com>
-Date:   Thu, 24 Aug 2023 22:45:34 +0800
+        Thu, 24 Aug 2023 07:46:52 -0700 (PDT)
+Message-ID: <ef11fd79-006d-1af2-b2ce-e532703de007@gmail.com>
+Date:   Thu, 24 Aug 2023 22:46:41 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH v3 09/10] x86/hyperv: Remove hv_isolation_type_en_snp
+Subject: Re: [PATCH v3 10/10] x86/hyperv: Move the code in ivm.c around to
+ avoid unnecessary ifdef's
 To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
         arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
         dan.j.williams@intel.com, dave.hansen@intel.com,
@@ -70,9 +71,9 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         rick.p.edgecombe@intel.com, andavis@redhat.com, mheslin@redhat.com,
         vkuznets@redhat.com, xiaoyao.li@intel.com
 References: <20230824080712.30327-1-decui@microsoft.com>
- <20230824080712.30327-10-decui@microsoft.com>
+ <20230824080712.30327-11-decui@microsoft.com>
 From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20230824080712.30327-10-decui@microsoft.com>
+In-Reply-To: <20230824080712.30327-11-decui@microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,15 +87,21 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 8/24/2023 4:07 PM, Dexuan Cui wrote:
-> In ms_hyperv_init_platform(), do not distinguish between a SNP VM with
-> the paravisor and a SNP VM without the paravisor.
+> Group the code this way so that we can avoid too many ifdef's:
 > 
-> Replace hv_isolation_type_en_snp() with
-> !ms_hyperv.paravisor_present && hv_isolation_type_snp().
+>    Data only used in an SNP VM with the paravisor;
+>    Functions only used in an SNP VM with the paravisor;
 > 
-> The hv_isolation_type_en_snp() in drivers/hv/hv.c and
-> drivers/hv/hv_common.c can be changed to hv_isolation_type_snp() since
-> we know !ms_hyperv.paravisor_present is true there.
+>    Data only used in an SNP VM without the paravisor;
+>    Functions only used in an SNP VM without the paravisor;
+> 
+>    Functions only used in a TDX VM, with and without the paravisor;
+> 
+>    Functions used in an SNP or TDX VM, when the paravisor is present;
+> 
+>    Functions always used, even in a regular non-CoCo VM.
+> 
+> No functional change.
 > 
 > Signed-off-by: Dexuan Cui <decui@microsoft.com>
 
