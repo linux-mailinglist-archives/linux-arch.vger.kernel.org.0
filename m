@@ -2,366 +2,250 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C37786676
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 06:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A277868EA
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 09:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjHXEEc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Aug 2023 00:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S237993AbjHXHvf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Aug 2023 03:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240005AbjHXEEN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 00:04:13 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E688A198;
-        Wed, 23 Aug 2023 21:04:10 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7E2945C0200;
-        Thu, 24 Aug 2023 00:04:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 24 Aug 2023 00:04:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1692849847; x=1692936247; bh=oP/gPV/pNQ
-        wDfgV/Ig6aHbuxRRON8CXYuajJAziUPQI=; b=SbvuKrUatxQamdvBhIhMvJoT2R
-        3SYbZIPuU1PgsZvRY3OGvLEUWGiqcfOCGZ3TqvAzHxjsCqOidhSB1d/9tBXL4w04
-        kV13Ngg7xCVXKhYubdNKE7ESZFkFKYo2zp6mLqwcGG2D/8sAvbcjaHeLvYqO19RC
-        jISfAvhrfuPpnu64pv/jR1gyzhqzLwWNy3/mPWM4Uzy34J9bYov/2vv6DEAEheVv
-        +g+jVZis0CVesxzcadYfr7jzt57QfmH+q0CTwKQZLkHDhsw1+uRLtsTzjOxdFlAm
-        vbLXw6CLQRqa0wMaagRv3KssS3Yk2jk2oDkVnRAR+ciOBn53Yhz7qhWi+wsg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1692849847; x=1692936247; bh=oP/gPV/pNQwDf
-        gV/Ig6aHbuxRRON8CXYuajJAziUPQI=; b=KU6/Gu7OOD6/jt4btnOHVOJiqFAf3
-        26g75eHbJp51xmKjj2H1ztNwB/wICeJv3H6dG6Qoitr+gQeJgpxcCH4pprqdmIQv
-        DGq2SxlBwrZbnH9kw3JrzoA6/dtozRxy7tugS//CmjcLHa3P6yJd4/m6IJnkvsHq
-        FUJRdlk4dYdvPivQA6/BtVSTpLg/mJVX9LPXdNHFsgsakr0BcxYOHm2ZvtPrPV7x
-        j3onP4kqXzy5hhnGqN/EZmUg+TpDcw8w1NDtD/e44cxp6ubI6hHUTTwdbkG5k8Vc
-        u8G2a1I0Tp7Th+LGvkoPJSW/+2jlNtGT4MqIJXem/igsIeVyqy/8CZNgA==
-X-ME-Sender: <xms:ttbmZJO8UiEAzRyWXLwa9FyPIKPNNNddU0Jtc4ULAlohquzVT0YY8Q>
-    <xme:ttbmZL94IB86NDYNppQJSEw7CacCAXVaV7yYq30SiJqcmqe3jD0eW_upLu1Oa2S8a
-    RVMfkr8ChZIhNfoWpQ>
-X-ME-Received: <xmr:ttbmZIRbw1a4bFr2dQI0XY5tCDJvzA7Rw2W42WfsU7Esn-5_-5zYoFM14ZlU6XSAdZS4LXRMCk4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddvhedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhirgiguhhn
-    ucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenucggtf
-    frrghtthgvrhhnpefhtedutdduveeileejjeetffehueejudehgfffjeduhfeuleeludff
-    fefgffevkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:ttbmZFv7-Y8HR5Xt6GCxGFeBY2LfmXddfBvQXyKcrVOgqnDAB0RtNg>
-    <xmx:ttbmZBeMa8OWrb4c1vrirdO0lU7yjReu4IUzUfUcvvmUdg0SJJOq0w>
-    <xmx:ttbmZB3swWzd56NuxF7-wsY7vBYk1FiXSYKL6BINR7K5Mn__-Me_lg>
-    <xmx:t9bmZKF9kogaolqamTlTWbq0I28U0qUW3VrIr1Jioe1dJXMBpCOW_Q>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Aug 2023 00:04:04 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, Baoquan He <bhe@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: [PATCH v5] mips: add <asm-generic/io.h> including
-Date:   Thu, 24 Aug 2023 12:03:29 +0800
-Message-Id: <20230824040329.132810-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S230207AbjHXHv0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 03:51:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DF01703
+        for <linux-arch@vger.kernel.org>; Thu, 24 Aug 2023 00:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692863438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9VEiwM/469XoxPkv00kiY2u9t4qVyJoCjGxKGq/80WA=;
+        b=bXj0eTn16vSh2KzmI7uPM8zkiBpDPJN+E9wQbnQ+fiXttwTW7duQXxoNJjBDRjsLCy2GUU
+        8yVs53Gn+h1O15hxuMeKtu+a7U1uTLFBJqoFBUQGXbFPUQfBNQvsvjymfBaMUV/LIl5yyl
+        4NlTjK3zCJ36KHVsOFnn8BrEwtujQ0k=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-220-c3N4ETCLMP2ZBi4o1ERhcg-1; Thu, 24 Aug 2023 03:50:37 -0400
+X-MC-Unique: c3N4ETCLMP2ZBi4o1ERhcg-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-500983fde5fso1466766e87.1
+        for <linux-arch@vger.kernel.org>; Thu, 24 Aug 2023 00:50:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692863436; x=1693468236;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9VEiwM/469XoxPkv00kiY2u9t4qVyJoCjGxKGq/80WA=;
+        b=ADFT44p+wfO/9ZVSTHhCwNilbxjTk2gGt3sMAD4yBmVb+/RvUXHhA1G+hm8Nhgr9Rk
+         q4Ds+wGSKUtAf+DUBJRlOt1PALc/Gn2Hx9ySIDkTengqYWXvI7dcdjLx7J2/B3P4xQfU
+         hcjN/iW55PPP0iStsW5BkI4QbJ/3A1Nr/RX703wCFDqsi/f5WicgnqFS1vz6tVWQMzu5
+         qSkF55JCANE6Y9HwNlWpfKfc57Vfn9Rlb77qBU2v8GYYr225ICIJqnwH8wnHPZXw7wm6
+         eGt/axSYfdQCOVq/jtdBug7D+Wgrm5yd5D6sYT6d5C02WApykjuLoujITIemlAQBEYiT
+         GHrQ==
+X-Gm-Message-State: AOJu0YyuZA70D8Ugs79X9lbB3dXNhqClcGWuGsz+iO2oLyHbXBlgIweC
+        fllns7SNZ9RlzpwFVRHo+3vNyhUOV3+20uNu5BxOU6QzJxnevbvYB9q0CVjNtE85gm4VqI2Nm5Z
+        77BZBSTjCvqQYZ7sHjszmTg==
+X-Received: by 2002:a05:6512:1296:b0:4fe:993:2218 with SMTP id u22-20020a056512129600b004fe09932218mr13520772lfs.31.1692863435817;
+        Thu, 24 Aug 2023 00:50:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFWxb3vEOPi9oDLO474PCk5smXiK4t0flJpP1QfkBeZvkQd0769Sd7lavC4bQKKWkbdbP5Q0A==
+X-Received: by 2002:a05:6512:1296:b0:4fe:993:2218 with SMTP id u22-20020a056512129600b004fe09932218mr13520754lfs.31.1692863435397;
+        Thu, 24 Aug 2023 00:50:35 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:6200:16ba:af70:999d:6a1a? (p200300cbc709620016baaf70999d6a1a.dip0.t-ipconnect.de. [2003:cb:c709:6200:16ba:af70:999d:6a1a])
+        by smtp.gmail.com with ESMTPSA id w7-20020adfcd07000000b00313de682eb3sm21614062wrm.65.2023.08.24.00.50.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Aug 2023 00:50:34 -0700 (PDT)
+Message-ID: <33def4fe-fdb8-6388-1151-fabd2adc8220@redhat.com>
+Date:   Thu, 24 Aug 2023 09:50:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     Alexandru Elisei <alexandru.elisei@arm.com>,
+        catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+        maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+        yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+        rppt@kernel.org, hughd@google.com
+Cc:     pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
+        vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
+        hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+References: <20230823131350.114942-1-alexandru.elisei@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 00/37] Add support for arm64 MTE dynamic tag storage
+ reuse
+In-Reply-To: <20230823131350.114942-1-alexandru.elisei@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the adding, some default ioremap_xx methods defined in
-asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-NULL.
+On 23.08.23 15:13, Alexandru Elisei wrote:
+> Introduction
+> ============
+> 
+> Arm has implemented memory coloring in hardware, and the feature is called
+> Memory Tagging Extensions (MTE). It works by embedding a 4 bit tag in bits
+> 59..56 of a pointer, and storing this tag to a reserved memory location.
+> When the pointer is dereferenced, the hardware compares the tag embedded in
+> the pointer (logical tag) with the tag stored in memory (allocation tag).
+> 
+> The relation between memory and where the tag for that memory is stored is
+> static.
+> 
+> The memory where the tags are stored have been so far unaccessible to Linux.
+> This series aims to change that, by adding support for using the tag storage
+> memory only as data memory; tag storage memory cannot be itself tagged.
+> 
+> 
+> Implementation
+> ==============
+> 
+> The series is based on v6.5-rc3 with these two patches cherry picked:
+> 
+> - mm: Call arch_swap_restore() from unuse_pte():
+> 
+>      https://lore.kernel.org/all/20230523004312.1807357-3-pcc@google.com/
+> 
+> - arm64: mte: Simplify swap tag restoration logic:
+> 
+>      https://lore.kernel.org/all/20230523004312.1807357-4-pcc@google.com/
+> 
+> The above two patches are queued for the v6.6 merge window:
+> 
+>      https://lore.kernel.org/all/20230702123821.04e64ea2c04dd0fdc947bda3@linux-foundation.org/
+> 
+> The entire series, including the above patches, can be cloned with:
+> 
+> $ git clone https://gitlab.arm.com/linux-arm/linux-ae.git \
+> 	-b arm-mte-dynamic-carveout-rfc-v1
+> 
+> On the arm64 architecture side, an extension is being worked on that will
+> clarify how MTE tag storage reuse should behave. The extension will be
+> made public soon.
+> 
+> On the Linux side, MTE tag storage reuse is accomplished with the
+> following changes:
+> 
+> 1. The tag storage memory is exposed to the memory allocator as a new
+> migratetype, MIGRATE_METADATA. It behaves similarly to MIGRATE_CMA, with
+> the restriction that it cannot be used to allocate tagged memory (tag
+> storage memory cannot be tagged). On tagged page allocation, the
+> corresponding tag storage is reserved via alloc_contig_range().
+> 
+> 2. mprotect(PROT_MTE) is implemented by changing the pte prot to
+> PAGE_METADATA_NONE. When the page is next accessed, a fault is taken and
+> the corresponding tag storage is reserved.
+> 
+> 3. When the code tries to copy tags to a page which doesn't have the tag
+> storage reserved, the tags are copied to an xarray and restored in
+> set_pte_at(), when the page is eventually mapped with the tag storage
+> reserved.
 
-We also massaged various headers to avoid nested includes.
+Hi!
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-[jiaxun.yang@flygoat.com: Massage more headers, fix ioport defines]
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
----
-v5:
-   - Remove unused define of memcpy_*
-   - Don't define 64bit variant of I/O ops on 32bit kernel
----
- arch/mips/include/asm/io.h      | 96 +++++++++++++++++++++++----------
- arch/mips/include/asm/mmiowb.h  |  4 +-
- arch/mips/include/asm/smp-ops.h |  2 -
- arch/mips/include/asm/smp.h     |  4 +-
- arch/mips/kernel/setup.c        |  1 +
- arch/mips/pci/pci-ip27.c        |  3 ++
- 6 files changed, 75 insertions(+), 35 deletions(-)
+after re-reading it 2 times, I still have no clue what your patch set is 
+actually trying to achieve. Probably there is a way to describe how user 
+space intents to interact with this feature, so to see which value this 
+actually has for user space -- and if we are using the right APIs and 
+allocators.
 
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 062dd4e6b954..41d8bd5adef8 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -13,7 +13,6 @@
- #define _ASM_IO_H
- 
- #include <linux/compiler.h>
--#include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/irqflags.h>
- 
-@@ -25,7 +24,6 @@
- #include <asm/cpu-features.h>
- #include <asm/page.h>
- #include <asm/pgtable-bits.h>
--#include <asm/processor.h>
- #include <asm/string.h>
- #include <mangle-port.h>
- 
-@@ -41,6 +39,11 @@
- # define __raw_ioswabq(a, x)	(x)
- # define ____raw_ioswabq(a, x)	(x)
- 
-+# define _ioswabb ioswabb
-+# define _ioswabw ioswabw
-+# define _ioswabl ioswabl
-+# define _ioswabq ioswabq
-+
- # define __relaxed_ioswabb ioswabb
- # define __relaxed_ioswabw ioswabw
- # define __relaxed_ioswabl ioswabl
-@@ -126,6 +129,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
-  *     almost all conceivable cases a device driver should not be using
-  *     this function
-  */
-+#define phys_to_virt phys_to_virt
- static inline void * phys_to_virt(unsigned long address)
- {
- 	return __va(address);
-@@ -296,9 +300,9 @@ static inline type pfx##read##bwlq(const volatile void __iomem *mem)	\
- 	return pfx##ioswab##bwlq(__mem, __val);				\
- }
- 
--#define __BUILD_IOPORT_SINGLE(pfx, bwlq, type, barrier, relax, p)	\
-+#define __BUILD_IOPORT_SINGLE(pfx, bwlq, type, barrier, relax)		\
- 									\
--static inline void pfx##out##bwlq##p(type val, unsigned long port)	\
-+static inline void pfx##out##bwlq(type val, unsigned long port)		\
- {									\
- 	volatile type *__addr;						\
- 	type __val;							\
-@@ -318,7 +322,7 @@ static inline void pfx##out##bwlq##p(type val, unsigned long port)	\
- 	*__addr = __val;						\
- }									\
- 									\
--static inline type pfx##in##bwlq##p(unsigned long port)			\
-+static inline type pfx##in##bwlq(unsigned long port)			\
- {									\
- 	volatile type *__addr;						\
- 	type __val;							\
-@@ -360,11 +364,10 @@ __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
- #endif
- 
- #define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
--	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
--	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
-+	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0)
- 
- #define BUILDIO_IOPORT(bwlq, type)					\
--	__BUILD_IOPORT_PFX(, bwlq, type)				\
-+	__BUILD_IOPORT_PFX(_, bwlq, type)				\
- 	__BUILD_IOPORT_PFX(__mem_, bwlq, type)
- 
- BUILDIO_IOPORT(b, u8)
-@@ -412,14 +415,6 @@ __BUILDIO(q, u64)
- #define writeq_be(val, addr)						\
- 	__raw_writeq(cpu_to_be64((val)), (__force unsigned *)(addr))
- 
--/*
-- * Some code tests for these symbols
-- */
--#ifdef CONFIG_64BIT
--#define readq				readq
--#define writeq				writeq
--#endif
--
- #define __BUILD_MEMORY_STRING(bwlq, type)				\
- 									\
- static inline void writes##bwlq(volatile void __iomem *mem,		\
-@@ -480,18 +475,6 @@ BUILDSTRING(l, u32)
- BUILDSTRING(q, u64)
- #endif
- 
--static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
--{
--	memset((void __force *) addr, val, count);
--}
--static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
--{
--	memcpy(dst, (void __force *) src, count);
--}
--static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
--{
--	memcpy((void __force *) dst, src, count);
--}
- 
- /*
-  * The caches on some architectures aren't dma-coherent and have need to
-@@ -548,6 +531,61 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST) = (v))
- #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST))
- 
-+
-+#define __raw_readb __raw_readb
-+#define __raw_readw __raw_readw
-+#define __raw_readl __raw_readl
-+#ifdef CONFIG_64BIT
-+#define __raw_readq __raw_readq
-+#endif
-+#define __raw_writeb __raw_writeb
-+#define __raw_writew __raw_writew
-+#define __raw_writel __raw_writel
-+#ifdef CONFIG_64BIT
-+#define __raw_writeq __raw_writeq
-+#endif
-+
-+#define readb readb
-+#define readw readw
-+#define readl readl
-+#ifdef CONFIG_64BIT
-+#define readq readq
-+#endif
-+#define writeb writeb
-+#define writew writew
-+#define writel writel
-+#ifdef CONFIG_64BIT
-+#define writeq writeq
-+#endif
-+
-+#define readsb readsb
-+#define readsw readsw
-+#define readsl readsl
-+#ifdef CONFIG_64BIT
-+#define readsq readsq
-+#endif
-+#define writesb writesb
-+#define writesw writesw
-+#define writesl writesl
-+#ifdef CONFIG_64BIT
-+#define writesq writesq
-+#endif
-+
-+#define _inb _inb
-+#define _inw _inw
-+#define _inl _inl
-+#define insb insb
-+#define insw insw
-+#define insl insl
-+
-+#define _outb _outb
-+#define _outw _outw
-+#define _outl _outl
-+#define outsb outsb
-+#define outsw outsw
-+#define outsl outsl
-+
-+
- /*
-  * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-  * access
-@@ -557,4 +595,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- 
- void __ioread64_copy(void *to, const void __iomem *from, size_t count);
- 
-+#include <asm-generic/io.h>
-+
- #endif /* _ASM_IO_H */
-diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
-index a40824e3ef8e..cf27752fd220 100644
---- a/arch/mips/include/asm/mmiowb.h
-+++ b/arch/mips/include/asm/mmiowb.h
-@@ -2,9 +2,9 @@
- #ifndef _ASM_MMIOWB_H
- #define _ASM_MMIOWB_H
- 
--#include <asm/io.h>
-+#include <asm/barrier.h>
- 
--#define mmiowb()	iobarrier_w()
-+#define mmiowb()	wmb()
- 
- #include <asm-generic/mmiowb.h>
- 
-diff --git a/arch/mips/include/asm/smp-ops.h b/arch/mips/include/asm/smp-ops.h
-index 5719ff49eff1..a6941b7f0cc0 100644
---- a/arch/mips/include/asm/smp-ops.h
-+++ b/arch/mips/include/asm/smp-ops.h
-@@ -13,8 +13,6 @@
- 
- #include <linux/errno.h>
- 
--#include <asm/mips-cps.h>
--
- #ifdef CONFIG_SMP
- 
- #include <linux/cpumask.h>
-diff --git a/arch/mips/include/asm/smp.h b/arch/mips/include/asm/smp.h
-index a40d8c0e4b87..f3b18b4a5e44 100644
---- a/arch/mips/include/asm/smp.h
-+++ b/arch/mips/include/asm/smp.h
-@@ -11,13 +11,11 @@
- #ifndef __ASM_SMP_H
- #define __ASM_SMP_H
- 
--#include <linux/bitops.h>
-+#include <linux/compiler.h>
- #include <linux/linkage.h>
--#include <linux/smp.h>
- #include <linux/threads.h>
- #include <linux/cpumask.h>
- 
--#include <linux/atomic.h>
- #include <asm/smp-ops.h>
- 
- extern int smp_num_siblings;
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index cb871eb784a7..6939b27b1106 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -43,6 +43,7 @@
- #include <asm/sections.h>
- #include <asm/setup.h>
- #include <asm/smp-ops.h>
-+#include <asm/mips-cps.h>
- #include <asm/prom.h>
- #include <asm/fw/fw.h>
- 
-diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
-index d85cbf84e41c..973faea61cad 100644
---- a/arch/mips/pci/pci-ip27.c
-+++ b/arch/mips/pci/pci-ip27.c
-@@ -7,6 +7,9 @@
-  * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-  */
-+
-+#include <linux/io.h>
-+
- #include <asm/sn/addrs.h>
- #include <asm/sn/types.h>
- #include <asm/sn/klconfig.h>
+So some dummy questions / statements
+
+1) Is this about re-propusing the memory used to hold tags for different 
+purpose? Or what exactly is user space going to do with the PROT_MTE 
+memory? The whole mprotect(PROT_MTE) approach might not eb the right 
+thing to do.
+
+2) Why do we even have to involve the page allocator if this is some 
+special-purpose memory? Re-porpusing the buddy when later using 
+alloc_contig_range() either way feels wrong.
+
+
+[...]
+
+>   arch/arm64/Kconfig                       |  13 +
+>   arch/arm64/include/asm/assembler.h       |  10 +
+>   arch/arm64/include/asm/memory_metadata.h |  49 ++
+>   arch/arm64/include/asm/mte-def.h         |  16 +-
+>   arch/arm64/include/asm/mte.h             |  40 +-
+>   arch/arm64/include/asm/mte_tag_storage.h |  36 ++
+>   arch/arm64/include/asm/page.h            |   5 +-
+>   arch/arm64/include/asm/pgtable-prot.h    |   2 +
+>   arch/arm64/include/asm/pgtable.h         |  33 +-
+>   arch/arm64/kernel/Makefile               |   1 +
+>   arch/arm64/kernel/elfcore.c              |  14 +-
+>   arch/arm64/kernel/hibernate.c            |  46 +-
+>   arch/arm64/kernel/mte.c                  |  31 +-
+>   arch/arm64/kernel/mte_tag_storage.c      | 667 +++++++++++++++++++++++
+>   arch/arm64/kernel/setup.c                |   7 +
+>   arch/arm64/kvm/arm.c                     |   6 +-
+>   arch/arm64/lib/mte.S                     |  30 +-
+>   arch/arm64/mm/copypage.c                 |  26 +
+>   arch/arm64/mm/fault.c                    |  35 +-
+>   arch/arm64/mm/mteswap.c                  | 113 +++-
+>   fs/proc/meminfo.c                        |   8 +
+>   fs/proc/page.c                           |   1 +
+>   include/asm-generic/Kbuild               |   1 +
+>   include/asm-generic/memory_metadata.h    |  50 ++
+>   include/linux/gfp.h                      |  10 +
+>   include/linux/gfp_types.h                |  14 +-
+>   include/linux/huge_mm.h                  |   6 +
+>   include/linux/kernel-page-flags.h        |   1 +
+>   include/linux/migrate_mode.h             |   1 +
+>   include/linux/mm.h                       |  12 +-
+>   include/linux/mmzone.h                   |  26 +-
+>   include/linux/page-flags.h               |   1 +
+>   include/linux/pgtable.h                  |  19 +
+>   include/linux/sched.h                    |   2 +-
+>   include/linux/sched/mm.h                 |  13 +
+>   include/linux/vm_event_item.h            |   5 +
+>   include/linux/vmstat.h                   |   2 +
+>   include/trace/events/mmflags.h           |   5 +-
+>   mm/Kconfig                               |   5 +
+>   mm/compaction.c                          |  52 +-
+>   mm/huge_memory.c                         | 109 ++++
+>   mm/internal.h                            |   7 +
+>   mm/khugepaged.c                          |   7 +
+>   mm/memory.c                              | 180 +++++-
+>   mm/mempolicy.c                           |   7 +
+>   mm/migrate.c                             |   6 +
+>   mm/mm_init.c                             |  23 +-
+>   mm/mprotect.c                            |  46 ++
+>   mm/page_alloc.c                          | 136 ++++-
+>   mm/page_isolation.c                      |  19 +-
+>   mm/page_owner.c                          |   3 +-
+>   mm/shmem.c                               |  14 +-
+>   mm/show_mem.c                            |   4 +
+>   mm/swapfile.c                            |   4 +
+>   mm/vmscan.c                              |   3 +
+>   mm/vmstat.c                              |  13 +-
+>   56 files changed, 1834 insertions(+), 161 deletions(-)
+>   create mode 100644 arch/arm64/include/asm/memory_metadata.h
+>   create mode 100644 arch/arm64/include/asm/mte_tag_storage.h
+>   create mode 100644 arch/arm64/kernel/mte_tag_storage.c
+>   create mode 100644 include/asm-generic/memory_metadata.h
+
+The core-mm changes don't look particularly appealing :)
+
 -- 
-2.39.2
+Cheers,
+
+David / dhildenb
 
