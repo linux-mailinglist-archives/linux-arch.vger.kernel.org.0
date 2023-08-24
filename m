@@ -2,328 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CA3786CEE
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 12:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCD0786D0D
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Aug 2023 12:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240005AbjHXKjw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Aug 2023 06:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S232059AbjHXKpq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Aug 2023 06:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240814AbjHXKj2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 06:39:28 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF67719AE;
-        Thu, 24 Aug 2023 03:39:18 -0700 (PDT)
-Received: from pwmachine.localnet (85-170-34-233.rev.numericable.fr [85.170.34.233])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 12D3F2127C7E;
-        Thu, 24 Aug 2023 03:39:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 12D3F2127C7E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1692873558;
-        bh=sADkn8tyKPEO16o0GbANLDuNQfMjSQjCtM0kk6kWOiQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aZMTuurF26Asywaf/muB6/j1rBzPEOkfaKVzO1h/B5VAU6i2Ndv4Ac/KhfBRsopVV
-         DZApvoOfhFdgvY3KSQVOCLzXbMNz4g79KxuvCEt7bf7isr7pAZ17fsl6KSQa2jRopr
-         Ypj2lftkw5V/JRfJK+uGkYtXpTh8KitNBT0nNmls=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/1] tracing/kprobes: Return ENAMESVRLSYMS when func matches several symbols
-Date:   Thu, 24 Aug 2023 12:39:12 +0200
-Message-ID: <2695869.mvXUDI8C0e@pwmachine>
-In-Reply-To: <20230824085355.4fdd6215f71b0fa5f443d76d@kernel.org>
-References: <20230823161410.103489-1-flaniel@linux.microsoft.com> <20230823161410.103489-2-flaniel@linux.microsoft.com> <20230824085355.4fdd6215f71b0fa5f443d76d@kernel.org>
+        with ESMTP id S240848AbjHXKph (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Aug 2023 06:45:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61390D3;
+        Thu, 24 Aug 2023 03:44:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC1126699F;
+        Thu, 24 Aug 2023 10:44:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34910C433C8;
+        Thu, 24 Aug 2023 10:44:17 +0000 (UTC)
+Date:   Thu, 24 Aug 2023 11:44:13 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        oliver.upton@linux.dev, maz@kernel.org, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com, arnd@arndb.de,
+        akpm@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
+        pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
+        vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
+        hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 00/37] Add support for arm64 MTE dynamic tag storage
+ reuse
+Message-ID: <ZOc0fehF02MohuWr@arm.com>
+References: <20230823131350.114942-1-alexandru.elisei@arm.com>
+ <33def4fe-fdb8-6388-1151-fabd2adc8220@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33def4fe-fdb8-6388-1151-fabd2adc8220@redhat.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi.
+On Thu, Aug 24, 2023 at 09:50:32AM +0200, David Hildenbrand wrote:
+> after re-reading it 2 times, I still have no clue what your patch set is
+> actually trying to achieve. Probably there is a way to describe how user
+> space intents to interact with this feature, so to see which value this
+> actually has for user space -- and if we are using the right APIs and
+> allocators.
 
-Le jeudi 24 ao=FBt 2023, 01:53:55 CEST Masami Hiramatsu a =E9crit :
-> Hi Francis,
->=20
-> On Wed, 23 Aug 2023 18:14:10 +0200
->=20
-> Francis Laniel <flaniel@linux.microsoft.com> wrote:
-> > Previously to this commit, if func matches several symbols, a PMU kprobe
-> > would be installed for the first matching address.
-> > This could lead to some misunderstanding when some BPF code was never
-> > called because it was attached to a function which was indeed not call,
-> > because the effectively called one has no kprobes.
-> >=20
-> > So, this commit introduces ENAMESVRLSYMS which is returned when func
-> > matches several symbols.
->=20
-> The trace_kprobe part looks good to me.
-> But sorry, I mislead you. I meant using an existing error code as a
-> metaphor. EINVAL is used everywhere, so choose another error code, e.g.
-> EADDRNOTAVAIL.
+I'll try with an alternative summary, hopefully it becomes clearer (I
+think Alex is away until the end of the week, may not reply
+immediately). If this still doesn't work, maybe we should try a
+different implementation ;).
 
-No problem, I was a bit in doubt regarding adding a new error code, but at=
-=20
-least I learnt how to do it if one day I need to do so!
-But yes, for this case, better to use an existing one!
+The way MTE is implemented currently is to have a static carve-out of
+the DRAM to store the allocation tags (a.k.a. memory colour). This is
+what we call the tag storage. Each 16 bytes have 4 bits of tags, so this
+means 1/32 of the DRAM, roughly 3% used for the tag storage. This is
+done transparently by the hardware/interconnect (with firmware setup)
+and normally hidden from the OS. So a checked memory access to location
+X generates a tag fetch from location Y in the carve-out and this tag is
+compared with the bits 59:56 in the pointer. The correspondence from X
+to Y is linear (subject to a minimum block size to deal with some
+address interleaving). The software doesn't need to know about this
+correspondence as we have specific instructions like STG/LDG to location
+X that lead to a tag store/load to Y.
 
-> Also, can you add this check in __trace_kprobe_create()?
-> I think right before below code, at that point, 'symbol' has the symbol
-> name.
->=20
->         trace_probe_log_set_index(0);
->         if (event) {
->                 ret =3D traceprobe_parse_event_name(&event, &group, gbuf,
->                                                   event - argv[0]);
->                 if (ret)
->                         goto parse_error;
->         }
+Now, not all memory used by applications is tagged (mmap(PROT_MTE)).
+For example, some large allocations may not use PROT_MTE at all or only
+for the first and last page since initialising the tags takes time. The
+side-effect is that of these 3% DRAM, only part, say 1% is effectively
+used. Some people want the unused tag storage to be released for normal
+data usage (i.e. give it to the kernel page allocator).
 
-Addressed in v2, thank you!
+So the first complication is that a PROT_MTE page allocation at address
+X will need to reserve the tag storage at location Y (and migrate any
+data in that page if it is in use).
 
->=20
-> Thank you,
->=20
-> > This way, user needs to use addr to remove the ambiguity.
-> >=20
-> > Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> > Link:
-> > https://lore.kernel.org/lkml/20230819101105.b0c104ae4494a7d1f2eea742@ke=
-rn
-> > el.org/ ---
-> >=20
-> >  arch/alpha/include/uapi/asm/errno.h        |  2 ++
-> >  arch/mips/include/uapi/asm/errno.h         |  2 ++
-> >  arch/parisc/include/uapi/asm/errno.h       |  2 ++
-> >  arch/sparc/include/uapi/asm/errno.h        |  2 ++
-> >  include/uapi/asm-generic/errno.h           |  2 ++
-> >  kernel/trace/trace_kprobe.c                | 26 ++++++++++++++++++++++
-> >  tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
-> >  tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
-> >  tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
-> >  tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
-> >  tools/include/uapi/asm-generic/errno.h     |  2 ++
-> >  11 files changed, 46 insertions(+)
-> >=20
-> > diff --git a/arch/alpha/include/uapi/asm/errno.h
-> > b/arch/alpha/include/uapi/asm/errno.h index 3d265f6babaf..3d9686d915f9
-> > 100644
-> > --- a/arch/alpha/include/uapi/asm/errno.h
-> > +++ b/arch/alpha/include/uapi/asm/errno.h
-> > @@ -125,4 +125,6 @@
-> >=20
-> >  #define EHWPOISON	139	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	140	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/arch/mips/include/uapi/asm/errno.h
-> > b/arch/mips/include/uapi/asm/errno.h index 2fb714e2d6d8..1fd64ee7b629
-> > 100644
-> > --- a/arch/mips/include/uapi/asm/errno.h
-> > +++ b/arch/mips/include/uapi/asm/errno.h
-> > @@ -124,6 +124,8 @@
-> >=20
-> >  #define EHWPOISON	168	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	169	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #define EDQUOT		1133	/* Quota exceeded */
-> >=20
-> > diff --git a/arch/parisc/include/uapi/asm/errno.h
-> > b/arch/parisc/include/uapi/asm/errno.h index 87245c584784..c7845ceece26
-> > 100644
-> > --- a/arch/parisc/include/uapi/asm/errno.h
-> > +++ b/arch/parisc/include/uapi/asm/errno.h
-> > @@ -124,4 +124,6 @@
-> >=20
-> >  #define EHWPOISON	257	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	258	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/arch/sparc/include/uapi/asm/errno.h
-> > b/arch/sparc/include/uapi/asm/errno.h index 81a732b902ee..1ed065943bab
-> > 100644
-> > --- a/arch/sparc/include/uapi/asm/errno.h
-> > +++ b/arch/sparc/include/uapi/asm/errno.h
-> > @@ -115,4 +115,6 @@
-> >=20
-> >  #define EHWPOISON	135	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	136	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/include/uapi/asm-generic/errno.h
-> > b/include/uapi/asm-generic/errno.h index cf9c51ac49f9..3d5d5740c8da
-> > 100644
-> > --- a/include/uapi/asm-generic/errno.h
-> > +++ b/include/uapi/asm-generic/errno.h
-> > @@ -120,4 +120,6 @@
-> >=20
-> >  #define EHWPOISON	133	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	134	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> > index 23dba01831f7..53b66db1ff53 100644
-> > --- a/kernel/trace/trace_kprobe.c
-> > +++ b/kernel/trace/trace_kprobe.c
-> > @@ -1699,6 +1699,16 @@ static int unregister_kprobe_event(struct
-> > trace_kprobe *tk)>=20
-> >  }
-> > =20
-> >  #ifdef CONFIG_PERF_EVENTS
-> >=20
-> > +
-> > +static int count_symbols(void *data, unsigned long unused)
-> > +{
-> > +	unsigned int *count =3D data;
-> > +
-> > +	(*count)++;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >=20
-> >  /* create a trace_kprobe, but don't add it to global lists */
-> >  struct trace_event_call *
-> >  create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
-> >=20
-> > @@ -1709,6 +1719,22 @@ create_local_trace_kprobe(char *func, void *addr,
-> > unsigned long offs,>=20
-> >  	int ret;
-> >  	char *event;
-> >=20
-> > +	/*
-> > +	 * If user specifies func, we check that the function name does not
-> > +	 * correspond to several symbols.
-> > +	 * If this is the case, we return with error code ENAMESVRLSYMS to
-> > +	 * indicate the user he/she should use addr and offs rather than func=
-=20
-to
-> > +	 * remove the ambiguity.
-> > +	 */
-> > +	if (func) {
-> > +		unsigned int count;
-> > +
-> > +		count =3D 0;
-> > +		kallsyms_on_each_match_symbol(count_symbols, func, &count);
-> > +		if (count > 1)
-> > +			return ERR_PTR(-ENAMESVRLSYMS);
-> > +	}
-> > +
-> >=20
-> >  	/*
-> >  =09
-> >  	 * local trace_kprobes are not added to dyn_event, so they are never
-> >  	 * searched in find_trace_kprobe(). Therefore, there is no concern of
-> >=20
-> > diff --git a/tools/arch/alpha/include/uapi/asm/errno.h
-> > b/tools/arch/alpha/include/uapi/asm/errno.h index
-> > 3d265f6babaf..3d9686d915f9 100644
-> > --- a/tools/arch/alpha/include/uapi/asm/errno.h
-> > +++ b/tools/arch/alpha/include/uapi/asm/errno.h
-> > @@ -125,4 +125,6 @@
-> >=20
-> >  #define EHWPOISON	139	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	140	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/tools/arch/mips/include/uapi/asm/errno.h
-> > b/tools/arch/mips/include/uapi/asm/errno.h index
-> > 2fb714e2d6d8..1fd64ee7b629 100644
-> > --- a/tools/arch/mips/include/uapi/asm/errno.h
-> > +++ b/tools/arch/mips/include/uapi/asm/errno.h
-> > @@ -124,6 +124,8 @@
-> >=20
-> >  #define EHWPOISON	168	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	169	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #define EDQUOT		1133	/* Quota exceeded */
-> >=20
-> > diff --git a/tools/arch/parisc/include/uapi/asm/errno.h
-> > b/tools/arch/parisc/include/uapi/asm/errno.h index
-> > 87245c584784..c7845ceece26 100644
-> > --- a/tools/arch/parisc/include/uapi/asm/errno.h
-> > +++ b/tools/arch/parisc/include/uapi/asm/errno.h
-> > @@ -124,4 +124,6 @@
-> >=20
-> >  #define EHWPOISON	257	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	258	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/tools/arch/sparc/include/uapi/asm/errno.h
-> > b/tools/arch/sparc/include/uapi/asm/errno.h index
-> > 81a732b902ee..1ed065943bab 100644
-> > --- a/tools/arch/sparc/include/uapi/asm/errno.h
-> > +++ b/tools/arch/sparc/include/uapi/asm/errno.h
-> > @@ -115,4 +115,6 @@
-> >=20
-> >  #define EHWPOISON	135	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	136	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > diff --git a/tools/include/uapi/asm-generic/errno.h
-> > b/tools/include/uapi/asm-generic/errno.h index cf9c51ac49f9..3d5d5740c8=
-da
-> > 100644
-> > --- a/tools/include/uapi/asm-generic/errno.h
-> > +++ b/tools/include/uapi/asm-generic/errno.h
-> > @@ -120,4 +120,6 @@
-> >=20
-> >  #define EHWPOISON	133	/* Memory page has hardware error */
-> >=20
-> > +#define ENAMESVRLSYMS	134	/* Name correspond to several symbols */
-> > +
-> >=20
-> >  #endif
-> >=20
-> > --
-> > 2.34.1
+To make things worse, pages in the tag storage/carve-out range cannot
+use PROT_MTE themselves on current hardware, so this adds the second
+complication - a heterogeneous memory layout. The kernel needs to know
+where to allocate a PROT_MTE page from or migrate a current page if it
+becomes PROT_MTE (mprotect()) and the range it is in does not support
+tagging.
 
-Best regards.
+Some other complications are arm64-specific like cache coherency between
+tags and data accesses. There is a draft architecture spec which will be
+released soon, detailing how the hardware behaves.
 
+To your question about user APIs/ABIs, that's entirely transparent. As
+with the current kernel (without this dynamic tag storage), a user only
+needs to ask for PROT_MTE mappings to get tagged pages.
 
+> So some dummy questions / statements
+> 
+> 1) Is this about re-propusing the memory used to hold tags for different
+> purpose?
+
+Yes. To allow part of this 3% to be used for data. It could even be the
+whole 3% if no application is enabling MTE.
+
+> Or what exactly is user space going to do with the PROT_MTE memory?
+> The whole mprotect(PROT_MTE) approach might not eb the right thing to do.
+
+As I mentioned above, there's no difference to the user ABI. PROT_MTE
+works as before with the kernel moving pages around as needed.
+
+> 2) Why do we even have to involve the page allocator if this is some
+> special-purpose memory? Re-porpusing the buddy when later using
+> alloc_contig_range() either way feels wrong.
+
+The aim here is to rebrand this special-purpose memory as a nearly
+general-purpose one (bar the PROT_MTE restriction).
+
+> The core-mm changes don't look particularly appealing :)
+
+OTOH, it's a fun project to learn about the mm ;).
+
+Our aim for now is to get some feedback from the mm community on whether
+this special -> nearly general rebranding is acceptable together with
+the introduction of a heterogeneous memory concept for the general
+purpose page allocator.
+
+There are some alternatives we looked at with a smaller mm impact but we
+haven't prototyped them yet: (a) use the available tag storage as a
+frontswap accelerator or (b) use it as a (compressed) ramdisk that can
+be mounted as swap. The latter has the advantage of showing up in the
+available total memory, keeps customers happy ;). Both options would
+need some mm hooks when a PROT_MTE page gets allocated to release the
+corresponding page in the tag storage range.
+
+-- 
+Catalin
