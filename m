@@ -2,98 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCFF788245
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Aug 2023 10:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1C578862F
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Aug 2023 13:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240129AbjHYIiz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Aug 2023 04:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S233450AbjHYLn3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Aug 2023 07:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243833AbjHYIio (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Aug 2023 04:38:44 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097722114
-        for <linux-arch@vger.kernel.org>; Fri, 25 Aug 2023 01:38:36 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d746d030a86so689090276.1
-        for <linux-arch@vger.kernel.org>; Fri, 25 Aug 2023 01:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692952715; x=1693557515;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tvrAZfZObxxG28RSeJRcZBkrJAH4pNTBPSYNsn7KlkY=;
-        b=G//T8G2z8S8EcxNudW2kZb8T7NvSRhJ9V4Rlj9qkZ3and7tONGkMBru7Ywhb3Zu+AH
-         NOpG8ToWQkNELg2h1n6/isJsba5YcDum19CMEHrhNIShQU0qvHOhOLMye7Csb4GO6ZtD
-         exJA4P8pxHZmrz8nCVdhH9AI/8eJJm+Vabk+bXEEtxRLl3zsk5ImjORs7lsVfLuuTO42
-         jPxSnVHnpTZdhcKntPS1+W+lzI/8nYEpPaiagM/lNVYK9jTvnmvMNHWid9fta6atfOXF
-         kHF22Vj0YCHiJB8PRY2KCaszWizMHT6KrBfZggxJMOZLV1FcLI8+UBFwOq77rVzRy8Px
-         Nf+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692952715; x=1693557515;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tvrAZfZObxxG28RSeJRcZBkrJAH4pNTBPSYNsn7KlkY=;
-        b=Mw/Thr7L1JmvhgXxda6eMHof6MWXh7HKjrsHWlms5HBWwVH3CL1mA7Iln227FbPJlr
-         duvCuq70S0qnXBzNytMtlgQe2writ86YuWwF3fM4mB9KFdSYufzLQKJs2jPIe7I/89lw
-         I/Uu1ssp3x2nFtub8npn40Nrt0LZhGaWs8roVMLoV45EEaBDLtgQl70W+0w11yheFrzp
-         qCEcgUJqC8g86fzcvm2ldbY1Kvp1TlXMM6etCd+tICI5M6LzlrKWtSd1L6Kw4QiOSRoG
-         TJ81228zm/XD8GpmFAayF9AOXj1TxF1V+iT7CFJv5PM/Z9tQheoytdB6oj6JEBo3lz9x
-         kT7A==
-X-Gm-Message-State: AOJu0YxSG0g0wt2q+kduYin7nZoGLOOKENB3HXR0uO3dDrPx9hTfZIfv
-        BFMt93g7qjCMc/r9kZnXh4FOajYKge7UOGztwA5B/g==
-X-Google-Smtp-Source: AGHT+IFifIYPXxawPovV9xM3m3Lv62e3s1l+kC3k+cZCLqS4gUQIp5jWwXRHVgrA1LaaG5gjqQbs2fL/nEGplCnMZpw=
-X-Received: by 2002:a25:2985:0:b0:c00:e25d:818f with SMTP id
- p127-20020a252985000000b00c00e25d818fmr16434538ybp.27.1692952715233; Fri, 25
- Aug 2023 01:38:35 -0700 (PDT)
+        with ESMTP id S230330AbjHYLm5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Aug 2023 07:42:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DB91FD7;
+        Fri, 25 Aug 2023 04:42:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A9CE64998;
+        Fri, 25 Aug 2023 11:42:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E165DC433C8;
+        Fri, 25 Aug 2023 11:42:51 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Ensure FP/SIMD registers in the core dump file is up to date
+Date:   Fri, 25 Aug 2023 19:42:24 +0800
+Message-Id: <20230825114224.3886577-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-References: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
- <168155747955.13678.5648956145924030241.stgit@skinsburskii.localdomain>
-In-Reply-To: <168155747955.13678.5648956145924030241.stgit@skinsburskii.localdomain>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 25 Aug 2023 10:38:20 +0200
-Message-ID: <CACRpkdZQbGEbpTXYm5uOZsAPAzAiSRLRsWZfDMDRFWESBu4cXA@mail.gmail.com>
-Subject: Re: [PATCH 7/7] asm-generic/io.h: Expect immutable pointer in virt_to_phys
-To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc:     Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 7:43=E2=80=AFPM Stanislav Kinsburskii
-<skinsburskii@linux.microsoft.com> wrote:
+This is a port of commit 379eb01c21795edb4c ("riscv: Ensure the value
+of FP registers in the core dump file is up to date").
 
-> From: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
->
-> These helper function - virt_to_phys - doesn't need the address pointer t=
-o be
-> mutable.
->
-> In the same time expecting it to be mutable leads to the following build
-> warning for constant pointers:
->
->   warning: passing argument 1 of =E2=80=98virt_to_phys=E2=80=99 discards =
-=E2=80=98const=E2=80=99 qualifier from pointer target type
->
-> Signed-off-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
-> CC: Arnd Bergmann <arnd@arndb.de>
-> CC: linux-arch@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
+The values of FP/SIMD registers in the core dump file come from the
+thread.fpu. However, kernel saves the FP/SIMD registers only before
+scheduling out the process. If no process switch happens during the
+exception handling, kernel will not have a chance to save the latest
+values of FP/SIMD registers. So it may cause their values in the core
+dump file incorrect. To solve this problem, force fpr_get()/simd_get()
+to save the FP/SIMD registers into the thread.fpu if the target task
+equals the current task.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/include/asm/fpu.h | 22 ++++++++++++++++++----
+ arch/loongarch/kernel/ptrace.c   |  4 ++++
+ 2 files changed, 22 insertions(+), 4 deletions(-)
 
-I changed several other virt_to_phys() implementations to add const to
-the argument and no problems so this should work fine.
+diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
+index b541f6248837..08a45e9fd15c 100644
+--- a/arch/loongarch/include/asm/fpu.h
++++ b/arch/loongarch/include/asm/fpu.h
+@@ -173,16 +173,30 @@ static inline void restore_fp(struct task_struct *tsk)
+ 		_restore_fp(&tsk->thread.fpu);
+ }
+ 
+-static inline union fpureg *get_fpu_regs(struct task_struct *tsk)
++static inline void get_fpu_regs(struct task_struct *tsk)
+ {
++	unsigned int euen;
++
+ 	if (tsk == current) {
+ 		preempt_disable();
+-		if (is_fpu_owner())
++
++		euen = csr_read32(LOONGARCH_CSR_EUEN);
++
++#ifdef CONFIG_CPU_HAS_LASX
++		if (euen & CSR_EUEN_LASXEN)
++			_save_lasx(&current->thread.fpu);
++		else
++#endif
++#ifdef CONFIG_CPU_HAS_LSX
++		if (euen & CSR_EUEN_LSXEN)
++			_save_lsx(&current->thread.fpu);
++		else
++#endif
++		if (euen & CSR_EUEN_FPEN)
+ 			_save_fp(&current->thread.fpu);
++
+ 		preempt_enable();
+ 	}
+-
+-	return tsk->thread.fpu.fpr;
+ }
+ 
+ static inline int is_simd_owner(void)
+diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
+index 2bb5ec55ae1e..209e3d29e0b2 100644
+--- a/arch/loongarch/kernel/ptrace.c
++++ b/arch/loongarch/kernel/ptrace.c
+@@ -148,6 +148,8 @@ static int fpr_get(struct task_struct *target,
+ {
+ 	int r;
+ 
++	get_fpu_regs(target);
++
+ 	if (sizeof(target->thread.fpu.fpr[0]) == sizeof(elf_fpreg_t))
+ 		r = gfpr_get(target, &to);
+ 	else
+@@ -279,6 +281,8 @@ static int simd_get(struct task_struct *target,
+ {
+ 	const unsigned int wr_size = NUM_FPU_REGS * regset->size;
+ 
++	get_fpu_regs(target);
++
+ 	if (!tsk_used_math(target)) {
+ 		/* The task hasn't used FP or LSX, fill with 0xff */
+ 		copy_pad_fprs(target, regset, &to, 0);
+-- 
+2.39.3
 
-Yours,
-Linus Walleij
