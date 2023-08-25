@@ -2,128 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1C578862F
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Aug 2023 13:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BB3788EA3
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Aug 2023 20:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbjHYLn3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Aug 2023 07:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S230138AbjHYSZV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Aug 2023 14:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjHYLm5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Aug 2023 07:42:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DB91FD7;
-        Fri, 25 Aug 2023 04:42:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A9CE64998;
-        Fri, 25 Aug 2023 11:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E165DC433C8;
-        Fri, 25 Aug 2023 11:42:51 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Ensure FP/SIMD registers in the core dump file is up to date
-Date:   Fri, 25 Aug 2023 19:42:24 +0800
-Message-Id: <20230825114224.3886577-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+        with ESMTP id S231370AbjHYSZC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Aug 2023 14:25:02 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D65B6E50;
+        Fri, 25 Aug 2023 11:24:59 -0700 (PDT)
+Received: from [192.168.0.5] (71-212-112-68.tukw.qwest.net [71.212.112.68])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D00DA2127C95;
+        Fri, 25 Aug 2023 11:24:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D00DA2127C95
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1692987899;
+        bh=lTiAq6TIQlz3/KRzBrYOW9Zloaa6S2j8QsR1OWQ9nd0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=O7+HQDi40dbcU5ZJ+REsZOWEZbODS6aqRVj4DMw9c6KTpW6MGAoCJiEkoiHCN9+lb
+         qeO/sDXHDMnr3G3VhGWUbUBoBwRvv009PLONJU70BqfDsHZJ+EUTSjer4YwBIGwRdZ
+         jJPkTnenGtlRUjYJeGFRyc2zXJLb3eQBXaQU9Y1A=
+Message-ID: <c4482a6a-aed0-4750-aa1b-421f0e541cfa@linux.microsoft.com>
+Date:   Fri, 25 Aug 2023 11:24:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 13/15] uapi: hyperv: Add mshv driver headers hvhdk.h,
+ hvhdk_mini.h, hvgdk.h, hvgdk_mini.h
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>, Wei Liu <wei.liu@kernel.org>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <1692309711-5573-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1692309711-5573-14-git-send-email-nunodasneves@linux.microsoft.com>
+ <ZN6m2gVmtVStuEfA@liuwe-devbox-debian-v2> <2023081923-crown-cake-79f7@gregkh>
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <2023081923-crown-cake-79f7@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is a port of commit 379eb01c21795edb4c ("riscv: Ensure the value
-of FP registers in the core dump file is up to date").
+On 8/19/2023 3:26 AM, Greg KH wrote:
+> 
+> My "strong" opinion is the one kernel development rule that we have,
+> "you can not break userspace".  So, if you change these
+> values/structures/whatever in the future, and userspace tools break,
+> that's not ok and the changes have to be reverted.
+> 
+> If you can control both sides of the API here (with open tools that you
+> can guarantee everyone will always update to), then yes, you can change
+> the api in the future.
+> 
 
-The values of FP/SIMD registers in the core dump file come from the
-thread.fpu. However, kernel saves the FP/SIMD registers only before
-scheduling out the process. If no process switch happens during the
-exception handling, kernel will not have a chance to save the latest
-values of FP/SIMD registers. So it may cause their values in the core
-dump file incorrect. To solve this problem, force fpr_get()/simd_get()
-to save the FP/SIMD registers into the thread.fpu if the target task
-equals the current task.
+This is true for us - we contribute and maintain support for this driver
+in Cloud Hypervisor[1], an open source VMM.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/include/asm/fpu.h | 22 ++++++++++++++++++----
- arch/loongarch/kernel/ptrace.c   |  4 ++++
- 2 files changed, 22 insertions(+), 4 deletions(-)
+We also do a check of the hypervisor version when the driver loads, and
+refuse to proceed if it is running on an incompatible hypervisor.
 
-diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-index b541f6248837..08a45e9fd15c 100644
---- a/arch/loongarch/include/asm/fpu.h
-+++ b/arch/loongarch/include/asm/fpu.h
-@@ -173,16 +173,30 @@ static inline void restore_fp(struct task_struct *tsk)
- 		_restore_fp(&tsk->thread.fpu);
- }
- 
--static inline union fpureg *get_fpu_regs(struct task_struct *tsk)
-+static inline void get_fpu_regs(struct task_struct *tsk)
- {
-+	unsigned int euen;
-+
- 	if (tsk == current) {
- 		preempt_disable();
--		if (is_fpu_owner())
-+
-+		euen = csr_read32(LOONGARCH_CSR_EUEN);
-+
-+#ifdef CONFIG_CPU_HAS_LASX
-+		if (euen & CSR_EUEN_LASXEN)
-+			_save_lasx(&current->thread.fpu);
-+		else
-+#endif
-+#ifdef CONFIG_CPU_HAS_LSX
-+		if (euen & CSR_EUEN_LSXEN)
-+			_save_lsx(&current->thread.fpu);
-+		else
-+#endif
-+		if (euen & CSR_EUEN_FPEN)
- 			_save_fp(&current->thread.fpu);
-+
- 		preempt_enable();
- 	}
--
--	return tsk->thread.fpu.fpr;
- }
- 
- static inline int is_simd_owner(void)
-diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
-index 2bb5ec55ae1e..209e3d29e0b2 100644
---- a/arch/loongarch/kernel/ptrace.c
-+++ b/arch/loongarch/kernel/ptrace.c
-@@ -148,6 +148,8 @@ static int fpr_get(struct task_struct *target,
- {
- 	int r;
- 
-+	get_fpu_regs(target);
-+
- 	if (sizeof(target->thread.fpu.fpr[0]) == sizeof(elf_fpreg_t))
- 		r = gfpr_get(target, &to);
- 	else
-@@ -279,6 +281,8 @@ static int simd_get(struct task_struct *target,
- {
- 	const unsigned int wr_size = NUM_FPU_REGS * regset->size;
- 
-+	get_fpu_regs(target);
-+
- 	if (!tsk_used_math(target)) {
- 		/* The task hasn't used FP or LSX, fill with 0xff */
- 		copy_pad_fprs(target, regset, &to, 0);
--- 
-2.39.3
+Thanks,
+Nuno Das Neves
+
+
+[1] https://github.com/cloud-hypervisor/cloud-hypervisor
 
