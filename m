@@ -2,65 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D1978B6FC
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Aug 2023 20:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C606078B735
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Aug 2023 20:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjH1SE6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Aug 2023 14:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S232161AbjH1SZv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Aug 2023 14:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbjH1SE4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Aug 2023 14:04:56 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2665312D;
-        Mon, 28 Aug 2023 11:04:54 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-57355a16941so1806510eaf.2;
-        Mon, 28 Aug 2023 11:04:54 -0700 (PDT)
+        with ESMTP id S232985AbjH1SZQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Aug 2023 14:25:16 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD11184
+        for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 11:25:12 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2bcb89b4767so53485181fa.3
+        for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 11:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693245893; x=1693850693;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        d=linux-foundation.org; s=google; t=1693247111; x=1693851911;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojSxv79wHQMsfeTbgLB/0/oKnfI9LSWvCqpNwR1k0CI=;
-        b=chTb2boVCw41yuBS6QK9ccvZ/dL97jM+EB+QY6tiABAEPYXcoEvi8vY1Q4ClbBb5Q3
-         AERyS4vcFfncpiVxZVAMyY1krkQUQKQjexnM8bNs5J9JwKRDJ8VIpnMeJ6lfsAaZsco1
-         NzavUnPFiRkg1t/nCOFFDkeyJlybN7SviMiJixjg/5LobTbdER3ORINT51GCDH8OmSWO
-         OKzn8s9lkn3TtEO3DyS0dg0jBmMrfg3vTNOyXs9IbbKnTcHGUAmiWlUf/MPiABystBE6
-         ZqleURihKrc9qtEr7yEXJSvCaN86pUD4IQNn4uyoxP4lCEy9V5EtkHg9s1aLsYqEf3bs
-         qMvQ==
+        bh=/YYQjGDw6zrjA4gHYIkErDzKVOCQS4WllI1Xx3Q7eP4=;
+        b=AbLTto9YaaycJ6PseRR/9rn/3LeY1lrSFUOsVXEZ0Vg7k5UOTza0jIYpCa8BcKfTcc
+         5PzdKf+Ze5kABNb34m64J7b1dy80iKIBKHfCROKIcoB59I9jB++1blIfNmnYCh3Mj1sQ
+         NyhJT6rl3n4Ra0infY5+Q3KPwU8AOFdTsU8Rc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693245893; x=1693850693;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        d=1e100.net; s=20221208; t=1693247111; x=1693851911;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ojSxv79wHQMsfeTbgLB/0/oKnfI9LSWvCqpNwR1k0CI=;
-        b=D0snGj9bBZg8nSnX5ITP1GjnlcV6eUC3Qwho5yzVHq8ncR670YtlXgSd9f6hYOgJdD
-         1+n6xK2pW4TMhVWBgp/8uwMMTCCqnS+Hapwf62a/glvqYVXHY7MjOToO/Bo9uEMWAlCZ
-         5lMM4Vm39zBJ2Y4QuOaY0gYHtj+x3lEwpO/e+H3clLj3Uw1G2ZGAv7ZJVlUpxrpf+NEL
-         WTk29+bFis6rgAOOEGdGN/eaxBVh6qzUGjFCx8FLcrjP8uOCPX4KmlyEVKHqoOButR41
-         397J6LZfn7++dT4rOnduM6x/31Zd67tGsZUR6LX+S9BJyaJmZiWwP64c7I7hNWnHPqLy
-         PWlw==
-X-Gm-Message-State: AOJu0YwU0UKVRMQg0B6uobElDGlcOIxVUGuSgPbiKL9eqOZLNPoEyJF3
-        rqAdpesvlPBlA2piRUhQGQseF5QC91+ALWDVYzDlEtgs
-X-Google-Smtp-Source: AGHT+IH/TG63PAZtXL/cjEgVrtiDVk49PCnWuBOiq9aE7Mb0u+O/GjmNvlD0kbTR6cBR+TzRQMz/iG65d2u76uKswNk=
-X-Received: by 2002:a4a:255a:0:b0:573:4da2:4427 with SMTP id
- v26-20020a4a255a000000b005734da24427mr7308192ooe.7.1693245893352; Mon, 28 Aug
- 2023 11:04:53 -0700 (PDT)
+        bh=/YYQjGDw6zrjA4gHYIkErDzKVOCQS4WllI1Xx3Q7eP4=;
+        b=Sf8BjyciPkCj9o1sYkQWNTdj4dvJLk1fNv+Tn0yHA3ZCJaz8g8w92Cbl1LOqaErAfz
+         HnT6jmZbRj70XNGRHRUDV76IeGaMgjUc1poKOnjC/8470tm6vUhvz0Z22ty4YSwdtJmH
+         rTaJDojJ7Mjvo1fv00LpltlSVy43zuz68Q9aj8LmPt7K+h2pd4XVMm9EClt36/BAZUa2
+         wLexB6SrDhpqa9VTqjsWhDCx4xDUXCR+eQh/0fiZaYPR3bvCytorUpZsTIvVq4JNm14n
+         MLJZlhE1yM6z5zikcYcHdvAW8vuei7Eai7/BpEacyubPTfsxlP5aMHfQKeoyPf0NzS73
+         cDOA==
+X-Gm-Message-State: AOJu0YxVfCTgdldHd06oY7EtevHJR0SBD+9vUPXMGmemChU3ajejC66l
+        MzDRClvVCfVPSsyD0HQ4nhYJBAfvBNRKons9cStfZQ==
+X-Google-Smtp-Source: AGHT+IEfaJpE2aypVyiKCq58VLuMTu+6221e57sZQYiJOWVgJ42QyYgEr5CR71SGbYkqHgnMUeB1wA==
+X-Received: by 2002:a2e:6e0c:0:b0:2b6:eb5a:6504 with SMTP id j12-20020a2e6e0c000000b002b6eb5a6504mr20732884ljc.18.1693247110736;
+        Mon, 28 Aug 2023 11:25:10 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170906344c00b00982a92a849asm4948518ejb.91.2023.08.28.11.25.10
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Aug 2023 11:25:10 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-52a4818db4aso4604861a12.2
+        for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 11:25:10 -0700 (PDT)
+X-Received: by 2002:a17:907:a04d:b0:9a1:e758:fc6e with SMTP id
+ gz13-20020a170907a04d00b009a1e758fc6emr11440118ejc.10.1693247109830; Mon, 28
+ Aug 2023 11:25:09 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a8a:1141:0:b0:4f0:1250:dd51 with HTTP; Mon, 28 Aug 2023
- 11:04:52 -0700 (PDT)
-In-Reply-To: <CAHk-=wi1BO1KQaPOTzs7N4QrLh2UCiRuNnW0MPVTDLrRxZhDww@mail.gmail.com>
 References: <20230828170732.2526618-1-mjguzik@gmail.com> <CAHk-=wi1BO1KQaPOTzs7N4QrLh2UCiRuNnW0MPVTDLrRxZhDww@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Mon, 28 Aug 2023 20:04:52 +0200
-Message-ID: <CAGudoHGGXNP5dBpZLadBUTVeD-JPEuikQXONruJzvnRJrp5+KA@mail.gmail.com>
+ <CAGudoHGGXNP5dBpZLadBUTVeD-JPEuikQXONruJzvnRJrp5+KA@mail.gmail.com>
+In-Reply-To: <CAGudoHGGXNP5dBpZLadBUTVeD-JPEuikQXONruJzvnRJrp5+KA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 28 Aug 2023 11:24:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgrsfz4HmJE2fgdHrh-xUuVqk7t08=k2scz8Cgix0hBwg@mail.gmail.com>
+Message-ID: <CAHk-=wgrsfz4HmJE2fgdHrh-xUuVqk7t08=k2scz8Cgix0hBwg@mail.gmail.com>
 Subject: Re: [PATCH] x86: bring back rep movsq for user access on CPUs without ERMS
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To:     Mateusz Guzik <mjguzik@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         bp@alien8.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,27 +74,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/28/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Mon, 28 Aug 2023 at 10:07, Mateusz Guzik <mjguzik@gmail.com> wrote:
->>
->> While here make sure labels are unique.
+On Mon, 28 Aug 2023 at 11:04, Mateusz Guzik <mjguzik@gmail.com> wrote:
 >
-> I'll take a look at the other changes later, but this one I reacted
-> to: please don't do this.
->
-> It's a disaster. It makes people make up random numbers, and then
-> pointlessly change them if the code moves around etc.
->
-> Numeric labels should make sense *locally*.  The way to disambiguate
-> them is to have each use just have "f" and 'b" to distinguish whether
-> it refers forward or backwards.
->
-[snip]
+> Other files do it (e.g., see __copy_user_nocache), but I have no
+> strong opinion myself.
 
-Other files do it (e.g., see __copy_user_nocache), but I have no
-strong opinion myself.
+So the __copy_user_nocache() thing is a case of that second issue -
+see my comment about "some sane visually sensible grouping" of the
+numbers.
 
-That said I'll wait for the rest of the review before sending a v2.
+Look closer, and you'll notice that they aren't actually sequential.
+They are of the form XY where the X is the grouping, and Y is the
+local number within that grouping.
 
--- 
-Mateusz Guzik <mjguzik gmail.com>
+That case also comes with a fair amount of comments about each group
+for the extable entries.
+
+But yes, we also do have a number of thos e"sequential labels". See
+for example arch/x86/lib/getuser.S, where we then end up having all
+the exception handling at the end because it is mostly shared across
+cases. It's ugly.
+
+We also have a lot of ugly cases that probably shouldn't use numbers
+at all, eg csum_partial(). I think that goes back to some darker age
+when things like "assembly is so trivial that it doesn't need any
+fancy explanatory labels for code" was ok.
+
+See also arch/x86/lib/memmove_64.S for similar horrors. I wonder if it
+is a case of "use compiler to get almost the right code, then massage
+things manually". Nasty, nasty. That should use legible names, not
+random numbers.
+
+I also suspect some people really thought that the numbers need to be
+unique, and just didn't know to use local numbering.
+
+             Linus
