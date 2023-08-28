@@ -2,64 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25C178A68B
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Aug 2023 09:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E5B78B46A
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Aug 2023 17:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjH1HcP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Aug 2023 03:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S229577AbjH1P0M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Aug 2023 11:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjH1Hbx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Aug 2023 03:31:53 -0400
-Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A11F9
-        for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 00:31:50 -0700 (PDT)
-Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
-        id 0F95848243; Mon, 28 Aug 2023 07:30:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
-        s=mail; t=1693207909;
-        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
-        h=Date:From:To:Subject:From;
-        b=lYPVQugSqn19Z8bhO90xwpCdnF4J2qxPxqlkKKab8k7KgUn/pF0tIKfqjzMd4fV9o
-         ZjzBK9ENJpXR1WzkWM90Mju0ahmvqoUzi+z3GUUE9kmzMeA+mEWa0w3sZu+t6j3cbY
-         IhQxGfOrzIlBqAR6195z9klbtYDFviQEOLHZ5kEwlE4T82aJ3Po0cyDDsjJImKkW8D
-         RJTQkyHdzf32dsFf6m2eMcaxhoF8afoo8Nm7689KbA+GSPAbrVq+Lu0HxpUfuycJIT
-         FmkyVuTpUicDNrhDOH1vDZJHXMC0k50yq9UiuErApVEnj9+rsW92gOpm3/MEyYBi+F
-         DUF73OxblQNkw==
-Received: by mail.profitpathwaygo.com for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 07:30:28 GMT
-Message-ID: <20230828064500-0.1.1e.dcs6.0.06de43ugi2@profitpathwaygo.com>
-Date:   Mon, 28 Aug 2023 07:30:28 GMT
-From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
-To:     <linux-arch@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
-X-Mailer: mail.profitpathwaygo.com
+        with ESMTP id S230188AbjH1PZ4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Aug 2023 11:25:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659D6E0;
+        Mon, 28 Aug 2023 08:25:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0502B6159F;
+        Mon, 28 Aug 2023 15:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87380C433C7;
+        Mon, 28 Aug 2023 15:25:49 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jiantao Shan <shanjiantao@loongson.cn>
+Subject: [PATCH] LoongArch: Remove shm_align_mask and use SHMLBA instead
+Date:   Mon, 28 Aug 2023 23:25:40 +0800
+Message-Id: <20230828152540.1194317-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Both shm_align_mask and SHMLBA want to avoid cache alias. But they are
+inconsistent: shm_align_mask is (PAGE_SIZE - 1) while SHMLBA is SZ_64K,
+but PAGE_SIZE is not always equal to SZ_64K.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+This may cause problems when shmat() twice. Fix this problem by removing
+shm_align_mask and using SHMLBA (SHMLBA - 1, strctly) instead.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Reported-by: Jiantao Shan <shanjiantao@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/mm/cache.c      |  1 -
+ arch/loongarch/mm/mmap.c       | 12 ++++--------
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+diff --git a/arch/loongarch/mm/cache.c b/arch/loongarch/mm/cache.c
+index 72685a48eaf0..6be04d36ca07 100644
+--- a/arch/loongarch/mm/cache.c
++++ b/arch/loongarch/mm/cache.c
+@@ -156,7 +156,6 @@ void cpu_cache_init(void)
+ 
+ 	current_cpu_data.cache_leaves_present = leaf;
+ 	current_cpu_data.options |= LOONGARCH_CPU_PREFETCH;
+-	shm_align_mask = PAGE_SIZE - 1;
+ }
+ 
+ static const pgprot_t protection_map[16] = {
+diff --git a/arch/loongarch/mm/mmap.c b/arch/loongarch/mm/mmap.c
+index fbe1a4856fc4..c99c8015651a 100644
+--- a/arch/loongarch/mm/mmap.c
++++ b/arch/loongarch/mm/mmap.c
+@@ -8,12 +8,8 @@
+ #include <linux/mm.h>
+ #include <linux/mman.h>
+ 
+-unsigned long shm_align_mask = PAGE_SIZE - 1;	/* Sane caches */
+-EXPORT_SYMBOL(shm_align_mask);
+-
+-#define COLOUR_ALIGN(addr, pgoff)				\
+-	((((addr) + shm_align_mask) & ~shm_align_mask) +	\
+-	 (((pgoff) << PAGE_SHIFT) & shm_align_mask))
++#define COLOUR_ALIGN(addr, pgoff)			\
++	((((addr) + (SHMLBA - 1)) & ~(SHMLBA - 1)) + (((pgoff) << PAGE_SHIFT) & (SHMLBA - 1)))
+ 
+ enum mmap_allocation_direction {UP, DOWN};
+ 
+@@ -40,7 +36,7 @@ static unsigned long arch_get_unmapped_area_common(struct file *filp,
+ 		 * cache aliasing constraints.
+ 		 */
+ 		if ((flags & MAP_SHARED) &&
+-		    ((addr - (pgoff << PAGE_SHIFT)) & shm_align_mask))
++		    ((addr - (pgoff << PAGE_SHIFT)) & (SHMLBA - 1)))
+ 			return -EINVAL;
+ 		return addr;
+ 	}
+@@ -63,7 +59,7 @@ static unsigned long arch_get_unmapped_area_common(struct file *filp,
+ 	}
+ 
+ 	info.length = len;
+-	info.align_mask = do_color_align ? (PAGE_MASK & shm_align_mask) : 0;
++	info.align_mask = do_color_align ? (PAGE_MASK & (SHMLBA - 1)) : 0;
+ 	info.align_offset = pgoff << PAGE_SHIFT;
+ 
+ 	if (dir == DOWN) {
+-- 
+2.39.3
 
-
-Pozdrawiam serdecznie
-Adam Charachuta
