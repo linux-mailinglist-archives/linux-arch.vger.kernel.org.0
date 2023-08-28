@@ -2,107 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ADA78A1D2
-	for <lists+linux-arch@lfdr.de>; Sun, 27 Aug 2023 23:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25C178A68B
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Aug 2023 09:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjH0V20 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 27 Aug 2023 17:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S229727AbjH1HcP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Aug 2023 03:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjH0V16 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 27 Aug 2023 17:27:58 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E714DEB;
-        Sun, 27 Aug 2023 14:27:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 943725C00FE;
-        Sun, 27 Aug 2023 17:27:52 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 27 Aug 2023 17:27:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1693171672; x=1693258072; bh=+t
-        9yubBgGX1nrGznKy2YZXP7qckFjHgJxHS467gzkCU=; b=VJr6aiNOh3fxdk6/4K
-        cNQIU4uiaiI5v+WwX/Evg+ExqsOanUWE0FT/CUPolosfzPBPOhGzPab59PcD2e2p
-        4+syTvZZ7zt8jnhikD0kdcX2x54mABSOj9gJfO+EHHfCep/WMcub82QoOFO9AGj0
-        /CFWnkX21e+8tT8cP6XnwR0xgGDAy6j7t0VJluqfRhCbfinI2PJkCuxxJ+OzV/R7
-        gbC6u1mjE1GlYSJqrwNGVtwJUDPIniHU50RQC63uUH+h/18Ugm4/+4ib5cRq8sIJ
-        FdSIa9e0h8WJfyVpv8FLuS0J9BN92uRPAFcZ2T+8t5BezzFrtBuXCbW31/FH17U4
-        lw7g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1693171672; x=1693258072; bh=+t9yubBgGX1nr
-        GznKy2YZXP7qckFjHgJxHS467gzkCU=; b=Z2qURXB+cZXpH7p0CPyuer+su15RS
-        1vGsHq0WgvYxw41TkkSsrfXkgOHgUKys2pCEbahHajo60g5yE+NHW8MAVYs62bUP
-        McLCGwoRioTkJWRDcbbHfBT2R35NYCRmgrYrkobOq0Byb3WzZ58MjiVCLnuV/ho/
-        fbNZWXcR5NEu1cFldNtyUnGM1RUfP3LGzFsrMfDxohgVN5eT6EUtYPPIUqUcDnTW
-        c3SFZQniVgxQ0okfk8bjEnw77Fuw6g2vWQtinaCseY0oG0Q8ArCM9p8MbtwkHkWB
-        dlyoMu9zYD0UKPC8V+/Hp8Wk4Wx313xatB887VmxQ1aywdc8OgAFRHrOQ==
-X-ME-Sender: <xms:17_rZBDLgwunWGJubX1ftHGXNvji95zw-obisd5seOrplDSOBHwMnQ>
-    <xme:17_rZPjxQ6r7mINGHweNS7v6mBdTe7BxotYoaNB8oUiRO2taYztmfYQMLjPjxyHjd
-    4fmiujT097Gh7jK-C0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefvddgudeivdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:2L_rZMkuU6Kp1Ok5_hlGjFvdOAu7O6IjCm7mPWdy5_P_wNEc0jqw-A>
-    <xmx:2L_rZLztoo23ycwgLO_vi5wCZFUQ9bAs47FGJeDzyEV95Hy6ZxogHA>
-    <xmx:2L_rZGTliR0uuY1q9XAZGzIc96hs-tGRtPwX2ppMJMbf7Crg6kKINA>
-    <xmx:2L_rZEdcP_B0q1oSlWOl3mzyZS2xGeMLoqn3-74SdE-laVTt0kuYTw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DB0B1B60089; Sun, 27 Aug 2023 17:27:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-647-g545049cfe6-fm-20230814.001-g545049cf
-Mime-Version: 1.0
-Message-Id: <9f7799cc-4b9e-4da9-8cd3-e2258a597089@app.fastmail.com>
-In-Reply-To: <20230824040329.132810-1-jiaxun.yang@flygoat.com>
-References: <20230824040329.132810-1-jiaxun.yang@flygoat.com>
-Date:   Sun, 27 Aug 2023 17:27:31 -0400
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jiaxun Yang" <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     "Baoquan He" <bhe@redhat.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v5] mips: add <asm-generic/io.h> including
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229758AbjH1Hbx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Aug 2023 03:31:53 -0400
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A11F9
+        for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 00:31:50 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id 0F95848243; Mon, 28 Aug 2023 07:30:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1693207909;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=lYPVQugSqn19Z8bhO90xwpCdnF4J2qxPxqlkKKab8k7KgUn/pF0tIKfqjzMd4fV9o
+         ZjzBK9ENJpXR1WzkWM90Mju0ahmvqoUzi+z3GUUE9kmzMeA+mEWa0w3sZu+t6j3cbY
+         IhQxGfOrzIlBqAR6195z9klbtYDFviQEOLHZ5kEwlE4T82aJ3Po0cyDDsjJImKkW8D
+         RJTQkyHdzf32dsFf6m2eMcaxhoF8afoo8Nm7689KbA+GSPAbrVq+Lu0HxpUfuycJIT
+         FmkyVuTpUicDNrhDOH1vDZJHXMC0k50yq9UiuErApVEnj9+rsW92gOpm3/MEyYBi+F
+         DUF73OxblQNkw==
+Received: by mail.profitpathwaygo.com for <linux-arch@vger.kernel.org>; Mon, 28 Aug 2023 07:30:28 GMT
+Message-ID: <20230828064500-0.1.1e.dcs6.0.06de43ugi2@profitpathwaygo.com>
+Date:   Mon, 28 Aug 2023 07:30:28 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-arch@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 24, 2023, at 00:03, Jiaxun Yang wrote:
-> With the adding, some default ioremap_xx methods defined in
-> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> NULL.
->
-> We also massaged various headers to avoid nested includes.
->
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> [jiaxun.yang@flygoat.com: Massage more headers, fix ioport defines]
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
+Dzie=C5=84 dobry,
 
-I'm not able to do any testing at the moment, but this all looks
-good to me,
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam serdecznie
+Adam Charachuta
