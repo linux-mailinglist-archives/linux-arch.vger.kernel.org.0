@@ -2,59 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CC078CD11
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Aug 2023 21:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37F778CD25
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Aug 2023 21:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238632AbjH2Thc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Aug 2023 15:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S232728AbjH2Tpe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Aug 2023 15:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240428AbjH2ThB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Aug 2023 15:37:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7A8109;
-        Tue, 29 Aug 2023 12:36:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AD5E641E7;
-        Tue, 29 Aug 2023 19:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD9D8C433C9;
-        Tue, 29 Aug 2023 19:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693337817;
-        bh=gCcw7cvd5IuQnv6kV0Ao6adg0/EXaXQ9XzkH4O4gLnA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HNeBnzNaSiU0L3Ie0gzGW58JOARLieCoxLgDDUdvP577mAJHItYJzD8u6sormaUCU
-         s9YE+8J9fw7YjdM7WzR+A36aCFtXu7zH8sTYzvd0DHxq+EuZzonciJv2hiorHBtbWV
-         b7Ly40YVfajg2PFj5HrJVJKfucQfdbhQ4PoMxuho1zKxW7vqCpt4A75fjMHPb5UlOx
-         tPufU+r+uAPe10WviglxzulYSHD32Kfs3VQ1aAIp4ra5vUP3UdHBHIwndQmmbaFZ9C
-         3gWOIqLLJYc8ar3Qfft3ASM/PMFAeIS+XrfFMy8dEe0WYMed7qVK5zUx421Ofgipeg
-         6OA38zD3t3a6w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AA941C595D2;
-        Tue, 29 Aug 2023 19:36:57 +0000 (UTC)
-Subject: Re: [GIT PULL] csky changes for v6.6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230829150236.2701631-1-guoren@kernel.org>
-References: <20230829150236.2701631-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230829150236.2701631-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.6
-X-PR-Tracked-Commit-Id: c8171a86b27401aa1f492dd1f080f3102264f1ab
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: eaf9f4649cf03ba3442712497a30686380ba7c23
-Message-Id: <169333781769.25364.3114102057878400161.pr-tracker-bot@kernel.org>
-Date:   Tue, 29 Aug 2023 19:36:57 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, guoren@kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S238558AbjH2TpN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Aug 2023 15:45:13 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74A2193;
+        Tue, 29 Aug 2023 12:45:10 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-5733aa10291so3204475eaf.3;
+        Tue, 29 Aug 2023 12:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693338310; x=1693943110; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XnGagmBfZYiioG3h7ZIo4cSowIxiux7AtfINlh/Cmno=;
+        b=CB7t6+kPFUrLqQokhccUf6u77/jBg16GIiJ4jqKJoirOLDzUy+YWkMbXq0anJ6Whd9
+         U/IkDOIq0U8m72B5Xo8mbMPx6wDnXl9NaJ1nbyLzAfNVSPcdpO/LI/eB0MOGpASb+0er
+         OTpwCYmfHQeI9eDOUKGg0rVQ6OtsLq8Hm3awb7mRcpo8/uVVXGVj51L0xaoS1AuCUlNe
+         RSUtoHxSj53ChexTEgbW8hBfzcK3B/fz9qedu89Kn9iBlKY5RSKFA6evVOvN+BliBav9
+         DmzxnvD6aL2nrXkzNNFetDKB2vYKrPbQl10PknBQZOGeGKpWq59FBgUMh2ppAaNORgED
+         yRYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693338310; x=1693943110;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XnGagmBfZYiioG3h7ZIo4cSowIxiux7AtfINlh/Cmno=;
+        b=eoBtKFdDVH6jYC018lOwSqlngWv9/FDXoXioTC9CwU9BtpgZnOKZhVs4upLKfXGSxC
+         wSJXtyUirKULEw6Wx94OZz1QgLmC/1qN3Zo/UjU40xHgh1Y6X2EypYXlTeutelpV/g71
+         UjDp9yO8dJysJeRYGFj63SGAeZVFQDrxJUht8mX3u3BvHHzWebW3k4k6VL0+NnIwudEh
+         iG0aJpo9Gkc2V6Koyzv8vzSw3N5tNjUHVVmHIZ2IYtd3MN8TtxTjJtcLFvUPDj5Xb8up
+         xXORCDCgiv56InZN6DDOZOg9JuMZre3YASnCITa9aOawNCJEY5xMavqHZzP5hdB1vnfJ
+         aoJg==
+X-Gm-Message-State: AOJu0YzkJHhQdVftWM6RL3b7zodxrr1t9O1wF2GDde2sLzTod9t4lcrn
+        v1exaH0Xo3iiLIRE9iU1b8xT56lYKNbAsynQ2vUH5vz8
+X-Google-Smtp-Source: AGHT+IE8AN/tVpouvGtwr0xoZsUC2TKm6JKSqyt7X4BW7SlhFx3IhvIuz1b6XTYYPS7XX0qWvsmjTJ6ehXu9Cn4WXf4=
+X-Received: by 2002:a4a:3954:0:b0:571:24b4:15b7 with SMTP id
+ x20-20020a4a3954000000b0057124b415b7mr46262oog.1.1693338310017; Tue, 29 Aug
+ 2023 12:45:10 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a8a:1141:0:b0:4f0:1250:dd51 with HTTP; Tue, 29 Aug 2023
+ 12:45:09 -0700 (PDT)
+In-Reply-To: <CAHk-=wj=YwAsPUHN7Drem=Gj9xT6vvxgZx77ZecZVxOYYXpC0w@mail.gmail.com>
+References: <20230828170732.2526618-1-mjguzik@gmail.com> <CAHk-=wj=YwAsPUHN7Drem=Gj9xT6vvxgZx77ZecZVxOYYXpC0w@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Tue, 29 Aug 2023 21:45:09 +0200
+Message-ID: <CAGudoHHnCKwObL7Y_4hiX7FmREiX6cGfte5EuyGitbXwe_RhkQ@mail.gmail.com>
+Subject: Re: [PATCH] x86: bring back rep movsq for user access on CPUs without ERMS
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        bp@alien8.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +68,75 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Tue, 29 Aug 2023 11:02:36 -0400:
+On 8/29/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Mon, 28 Aug 2023 at 10:07, Mateusz Guzik <mjguzik@gmail.com> wrote:
+>>
+>> Hand-rolled mov loops executing in this case are quite pessimal compared
+>> to rep movsq for bigger sizes. While the upper limit depends on uarch,
+>> everyone is well south of 1KB AFAICS and sizes bigger than that are
+>> common. The problem can be easily remedied so do it.
+>
+> Ok, looking at teh actual code now, and your patch is buggy.
+>
+>> +.Llarge_movsq:
+>> +       movq %rcx,%r8
+>> +       movq %rcx,%rax
+>> +       shrq $3,%rcx
+>> +       andl $7,%eax
+>> +6:     rep movsq
+>> +       movl %eax,%ecx
+>>         testl %ecx,%ecx
+>>         jne .Lcopy_user_tail
+>>         RET
+>
+> The fixup code is very very broken:
+>
+>> +/*
+>> + * Recovery after failed rep movsq
+>> + */
+>> +7:     movq %r8,%rcx
+>> +       jmp .Lcopy_user_tail
+>> +
+>> +       _ASM_EXTABLE_UA( 6b, 7b)
+>
+> That just copies the original value back into %rcx. That's not at all
+> ok. The "rep movsq" may have succeeded partially, and updated %rcx
+> (and %rsi/rdi) accordingly. You now will do the "tail" for entirely
+> too much, and returning the wrong return value.
+>
+> In fact, if this then races with a mmap() in another thread, the user
+> copy might end up then succeeding for the part that used to fail, and
+> in that case it will possibly end up copying much more than asked for
+> and overrunning the buffers provided.
+>
+> So all those games with %r8 are entirely bogus. There is no way that
+> "save the original length" can ever be relevant or correct.
+>
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.6
+Huh, pretty obvious now that you mention it, I don't know why I
+thought regs go back. But more importantly I should have checked
+handling in the now-removed movsq routine (copy_user_generic_string):
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/eaf9f4649cf03ba3442712497a30686380ba7c23
+[snip]
+        movl %edx,%ecx
+        shrl $3,%ecx
+        andl $7,%edx
+1:      rep movsq
+2:      movl %edx,%ecx
+3:      rep movsb
+        xorl %eax,%eax
+        ASM_CLAC
+        RET
 
-Thank you!
+11:     leal (%rdx,%rcx,8),%ecx
+12:     movl %ecx,%edx          /* ecx is zerorest also */
+        jmp .Lcopy_user_handle_tail
+
+        _ASM_EXTABLE_CPY(1b, 11b)
+        _ASM_EXTABLE_CPY(3b, 12b)
+[/snip]
+
+So I think I know how to fix it, but I'm going to sleep on it.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Mateusz Guzik <mjguzik gmail.com>
