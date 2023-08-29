@@ -2,71 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424F078CD4C
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Aug 2023 22:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95DC78CD7A
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Aug 2023 22:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239312AbjH2UEZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Aug 2023 16:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S237244AbjH2UUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Aug 2023 16:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbjH2UET (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Aug 2023 16:04:19 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F794CC0
-        for <linux-arch@vger.kernel.org>; Tue, 29 Aug 2023 13:04:14 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bcfd3220d3so55865051fa.2
-        for <linux-arch@vger.kernel.org>; Tue, 29 Aug 2023 13:04:13 -0700 (PDT)
+        with ESMTP id S240509AbjH2UUM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Aug 2023 16:20:12 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C031BE;
+        Tue, 29 Aug 2023 13:20:08 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3a36b52b4a4so114701b6e.1;
+        Tue, 29 Aug 2023 13:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1693339452; x=1693944252; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        d=gmail.com; s=20221208; t=1693340408; x=1693945208; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E7+fPH/MQHoNa3vChLqeUExHzKt7daOcGn55CTVmoBc=;
-        b=iEdN0GNF1nWhyy3IF16S7OnEtMlSoMwG+HXNoqZCldV67/QGjVHuby2oBM4lstXdby
-         V5zJ5ndCJOKJphewgeR5XslWA1aNivc0RntpwXM0VIiUrgWpLTCpMKU3D4oLS2jfIYGT
-         NZDkzQV9xFIH7XbgJeRVCuMF8JVn/PuRf0PzU=
+        bh=dPLASuyRHqr5emQFn0tjFMLNpyleK0mRYR0JeYXXEd4=;
+        b=dJ4fsVO7B9Wqzz3co24/hU4d9UBxPoXJlGFSRP/WsPjWbukX0nWzowMyOiwNv86pVv
+         5Bco6QQ2reUSVNMO4jkJBRkMqYvWsWh1lrCsr1ZlaDis9UmDk+rc6E57yZm6qpGE3WbN
+         3hFWVA9Vm9C4FdimDEDDfLPWnT/Z37yTKFzLOBjpey++2WTfXYf4qsf3Rj/a8ciBEUxf
+         nH9vVS+a6h9mTsFiMsYCYwTF8dhlWlbrwxHQ91HDmEusa09UL6guYpYJEiY9J+qSRFXb
+         RK8bGhI1tuKIdoMuIk7mFUh9HShj1CbyHHeukvThzD4IYbr1VgXkzR4GUnpsgqSbgd8t
+         VJ2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693339452; x=1693944252;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        d=1e100.net; s=20221208; t=1693340408; x=1693945208;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E7+fPH/MQHoNa3vChLqeUExHzKt7daOcGn55CTVmoBc=;
-        b=b+cR8hu6j+GeB1P4FF8ogdZ/zm9QHS4jaLqCoGO+z5WaUtkj/QGPIpDmAq+6kpOkOw
-         wiUrmJaAbGfEuR94JJnRKPgp9iBiMvyJw8Nqtup5Hqg2OOodWoV73jzKSc+YVEDyoQfd
-         iCl7QXY068nM5Rlxy8X8HwQ+ibFeRu7v93ul71+hAoM4XoOWGLb1xty5S0kWYkCRwI2y
-         tzkDAYuW+7NkO9NKdmSwp3Xhgb2+BhOYSgvX8V/Q7e0cmTfQl2/jDM8Yzpfxt0pD2k2c
-         E1OFmBXBq+VZ+3ai01tTtjxNaopmAVLzDjtK9nAplO8Apvf2LFkHc7Epw35TzfHhRDTb
-         CxmA==
-X-Gm-Message-State: AOJu0YyDKie2hEtdNU+nkJUSglOdcLBiR+OkX6/7BxAPZOvTmEakOAza
-        CbU5rm2QsvcesOryXwMCWN7qb1T//SeUBZ1NTZ0AISMF
-X-Google-Smtp-Source: AGHT+IFVofbPvwJ6JBR/u+iqGm9I/Z31F6SXR7bwVfayh6EBvi2+wogJGWDDZkRh0C2SeBMfmJeQcg==
-X-Received: by 2002:a2e:3308:0:b0:2bc:b9cd:8bc2 with SMTP id d8-20020a2e3308000000b002bcb9cd8bc2mr194211ljc.4.1693339452026;
-        Tue, 29 Aug 2023 13:04:12 -0700 (PDT)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
-        by smtp.gmail.com with ESMTPSA id ha19-20020a170906a89300b00989027eb30asm6262938ejb.158.2023.08.29.13.04.11
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Aug 2023 13:04:11 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-99cdb0fd093so634477266b.1
-        for <linux-arch@vger.kernel.org>; Tue, 29 Aug 2023 13:04:11 -0700 (PDT)
-X-Received: by 2002:a17:906:51d4:b0:9a3:faf:7aa8 with SMTP id
- v20-20020a17090651d400b009a30faf7aa8mr55430ejk.10.1693339451148; Tue, 29 Aug
- 2023 13:04:11 -0700 (PDT)
+        bh=dPLASuyRHqr5emQFn0tjFMLNpyleK0mRYR0JeYXXEd4=;
+        b=Bv4T0qFT53Xij1SUeOlP9Yy0Z3nQzx9ZA/VyUDIYPLI+Jy0S2SOyk4LXk+xKrhV56w
+         5k17zjIZsr43rFNFYbRUQQQ8wVcSqpiCWxmvwFJmslF/mWcgt7PVM8DRjk0R/0sNXftE
+         5ZxhAtNQopEzQ8OcxnrJJ5qytdPrDZoSI69UkMtFyTu3YVone6ukkgVkkLWf7/w3xSIC
+         th66O3Drww6tU+MJ0JpP7PFb0JIHezmCc2J37QBvvsHyf9IU8odDldAzcsex+mZnkK/s
+         3dDGVsbG33ghM87mchRc8b3gOuFO6yQ/ChQ3FBf6mjhnMiZ7d3dH2KvMwldOgYdxWC/L
+         trlQ==
+X-Gm-Message-State: AOJu0YxsZOEZEqBVHMfzhkEoyPsku1tSvnB0POkcaG7iIIffbMlzqLGl
+        OSHca6FF0fQqotfyD0mvIgtn9I1DsdS77suX7E1S4LgD
+X-Google-Smtp-Source: AGHT+IFPVfeuAryUVSPtgazrKBqFMai7x1CNri4TuB/RyWuOSyukq4INi0uf70AF+Q6nvF/wsRLepbQtHqNdtq6Ngw8=
+X-Received: by 2002:a05:6808:23c6:b0:3a8:6a40:7dc0 with SMTP id
+ bq6-20020a05680823c600b003a86a407dc0mr2599820oib.18.1693340407961; Tue, 29
+ Aug 2023 13:20:07 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a8a:1141:0:b0:4f0:1250:dd51 with HTTP; Tue, 29 Aug 2023
+ 13:20:07 -0700 (PDT)
+In-Reply-To: <CAHk-=wgemNj9GBepSEJXS5N99rr9wLkL668UC9TsKH45NnJ7Mg@mail.gmail.com>
 References: <20230828170732.2526618-1-mjguzik@gmail.com> <CAHk-=wj=YwAsPUHN7Drem=Gj9xT6vvxgZx77ZecZVxOYYXpC0w@mail.gmail.com>
- <CAGudoHHnCKwObL7Y_4hiX7FmREiX6cGfte5EuyGitbXwe_RhkQ@mail.gmail.com>
-In-Reply-To: <CAGudoHHnCKwObL7Y_4hiX7FmREiX6cGfte5EuyGitbXwe_RhkQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 29 Aug 2023 13:03:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgemNj9GBepSEJXS5N99rr9wLkL668UC9TsKH45NnJ7Mg@mail.gmail.com>
-Message-ID: <CAHk-=wgemNj9GBepSEJXS5N99rr9wLkL668UC9TsKH45NnJ7Mg@mail.gmail.com>
+ <CAGudoHHnCKwObL7Y_4hiX7FmREiX6cGfte5EuyGitbXwe_RhkQ@mail.gmail.com> <CAHk-=wgemNj9GBepSEJXS5N99rr9wLkL668UC9TsKH45NnJ7Mg@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Tue, 29 Aug 2023 22:20:07 +0200
+Message-ID: <CAGudoHFNPb8CHGNK+msCE70bPZkKyCom7g_7Laja+AVoAN5CXQ@mail.gmail.com>
 Subject: Re: [PATCH] x86: bring back rep movsq for user access on CPUs without ERMS
-To:     Mateusz Guzik <mjguzik@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         bp@alien8.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +69,64 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 29 Aug 2023 at 12:45, Mateusz Guzik <mjguzik@gmail.com> wrote:
+On 8/29/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Tue, 29 Aug 2023 at 12:45, Mateusz Guzik <mjguzik@gmail.com> wrote:
+>>
+>> So I think I know how to fix it, but I'm going to sleep on it.
 >
-> So I think I know how to fix it, but I'm going to sleep on it.
+> I think you can just skip the %r8 games, and do that
+>
+>         leal (%rax,%rcx,8),%rcx
+>
+> in the exception fixup code, since %rax will have the low bits of the
+> byte count, and %rcx will have the remaining qword count.
+>
+> We should also have some test-case for partial reads somewhere, but I
+> have to admit that when I did the cleanup patches I just wrote some
+> silly test myself (ie just doing a 'mmap()' and then reading/writing
+> into the end of that mmap at different offsets.
+>
+> I didn't save that hacky thing, I'm afraid.
+>
 
-I think you can just skip the %r8 games, and do that
+Ye I was planning on writing some tests to illustrate this works as
+intended and v1 does not. Part of why I'm going to take more time,
+there is no rush patching this.
 
-        leal (%rax,%rcx,8),%rcx
+> I also tried to figure out if there is any CPU we should care about
+> that doesn't like 'rep movsq', but I think you are right that there
+> really isn't. The "good enough" rep things were introduced in the PPro
+> if I recall correctly, and while you could disable them in the BIOS,
+> by the time Intel did 64-bit in Northwood (?) it was pretty much
+> standard.
+>
 
-in the exception fixup code, since %rax will have the low bits of the
-byte count, and %rcx will have the remaining qword count.
+gcc already inlines rep movsq for copies which fit, so....
 
-We should also have some test-case for partial reads somewhere, but I
-have to admit that when I did the cleanup patches I just wrote some
-silly test myself (ie just doing a 'mmap()' and then reading/writing
-into the end of that mmap at different offsets.
+On that note I'm going to submit a patch to whack non-rep clear_page as well.
 
-I didn't save that hacky thing, I'm afraid.
+> So yeah, no reason to have the unrolled loop at all, and I think your
+> patch is fine conceptually, just needs fixing and testing for the
+> partial success case.
+>
+> Oh, and you should also remove the clobbers of r8-r11 in the
+> copy_user_generic() inline asm in <asm/uaccess_64.h> when you've fixed
+> the exception handling. The only reason for those clobbers were for
+> that unrolled register use.
+>
+> So only %rax ends up being a clobber for the rep_movs_alternative
+> case, as far as I can tell.
+>
 
-I also tried to figure out if there is any CPU we should care about
-that doesn't like 'rep movsq', but I think you are right that there
-really isn't. The "good enough" rep things were introduced in the PPro
-if I recall correctly, and while you could disable them in the BIOS,
-by the time Intel did 64-bit in Northwood (?) it was pretty much
-standard.
+Ok, I'll patch it up.
 
-So yeah, no reason to have the unrolled loop at all, and I think your
-patch is fine conceptually, just needs fixing and testing for the
-partial success case.
+That label reorg was cosmetics, did not matter. But that bad fixup
+thing was quite avoidable by checking what original movsq was doing,
+which I should have done before sending v1. Sorry for the lame patch
+on that front. ;) (fwiw I did multiple kernel builds and whatnot with
+it, nothing blew up)
 
-Oh, and you should also remove the clobbers of r8-r11 in the
-copy_user_generic() inline asm in <asm/uaccess_64.h> when you've fixed
-the exception handling. The only reason for those clobbers were for
-that unrolled register use.
+Thanks for the review.
 
-So only %rax ends up being a clobber for the rep_movs_alternative
-case, as far as I can tell.
-
-            Linus
+-- 
+Mateusz Guzik <mjguzik gmail.com>
