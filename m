@@ -2,259 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0380A78DC6E
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Aug 2023 20:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01CA78DC76
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Aug 2023 20:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbjH3Spr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Aug 2023 14:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S237181AbjH3Spu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Aug 2023 14:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244795AbjH3ODY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Aug 2023 10:03:24 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6733CFC;
-        Wed, 30 Aug 2023 07:03:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9a2185bd83cso742867866b.0;
-        Wed, 30 Aug 2023 07:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693404200; x=1694009000; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qR8FBesuV6bnDQYMHXUzhTaUk+KcihZET/yksmXJo6c=;
-        b=REAWP0F65SsmZM6ZgyIk6rehqYWdPmUm+C2wTG2Sj3EXcyZMeGqY/rh3FwoVJChiCL
-         i9BqaGxP9oMvMlg/pL52eXoRSHJTs4Tybmh7pdekLJuQ6X/rur4SuiURN1iZFAtgN5nQ
-         UZBp1eihSZMU94MOV+syPFhcoMSF2bL0qHHuB1Ta92Po1F2Q9gjgOPnBAxEveaA8AS3r
-         5x1hAZURyAbLC4uVgxgzs3pDn4lOQrGh/OsiVDw+zFdFpEQ2GQjO31/jmA4M9vo0BPAI
-         18UGcJoj529nJ7P890XCb54acQX0UrhiPR1nY0kzQvgBq3GiiViGeTrccp7kMtmUZiSt
-         Ehyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693404200; x=1694009000;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qR8FBesuV6bnDQYMHXUzhTaUk+KcihZET/yksmXJo6c=;
-        b=lmuckSuSs5Bo9vZwXNX+wF7rSqbTssY5xSl+iO+kmXjk0FLB1JC7qd0U061aFz7sQ/
-         zTRQ/yAk7rzlUB1KGgIVu3KO1Rlk7xRPR24iIjvSYUKfDq3flw51x97LHAEpR2DO7ieO
-         GOY2GT8DWDQIDgplt4njrg1Nib/0o+K+60k4mVVZVeWGxWdd5VPWmb8gvIdWLw8+PZzq
-         GdpxgZiP0LyVT8vBZWo8KED1KkmmUsYJqDeUl470jGJQF4doElT5d4PN60KECw9EYSuh
-         fe2KhXnEycBoAuT5hFMAM/F5eeNppNqPHUoMU2Vja24yvj0fe6bECZCtdh7tcM27o56Y
-         0FRQ==
-X-Gm-Message-State: AOJu0YzDGtAX/1YPhD3MiqJH8zcmT2i5WRxMD7DjFuaviywL9XZTyZ+u
-        4O6xivGbQtKpFGLlpYX/REk=
-X-Google-Smtp-Source: AGHT+IF119hvfhGyUF2CbiGcj5ESmW9hj7AvbiwCGvzI5mPU8vGioCNhv78LhcFYvgSAFFrARzo0Vg==
-X-Received: by 2002:a17:907:75d8:b0:99c:55a9:3925 with SMTP id jl24-20020a17090775d800b0099c55a93925mr1597688ejc.24.1693404199595;
-        Wed, 30 Aug 2023 07:03:19 -0700 (PDT)
-Received: from f.. (cst-prg-30-15.cust.vodafone.cz. [46.135.30.15])
-        by smtp.gmail.com with ESMTPSA id v17-20020a17090606d100b0098669cc16b2sm7148453ejb.83.2023.08.30.07.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 07:03:19 -0700 (PDT)
-From:   Mateusz Guzik <mjguzik@gmail.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        bp@alien8.de, Mateusz Guzik <mjguzik@gmail.com>
-Subject: [PATCH v2] x86: bring back rep movsq for user access on CPUs without ERMS
-Date:   Wed, 30 Aug 2023 16:03:15 +0200
-Message-Id: <20230830140315.2666490-1-mjguzik@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1343718AbjH3Qmk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Aug 2023 12:42:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FEA19A;
+        Wed, 30 Aug 2023 09:42:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81AD762119;
+        Wed, 30 Aug 2023 16:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F379C433C7;
+        Wed, 30 Aug 2023 16:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693413751;
+        bh=+cegdjpC7G5umSHFHbrmT1BIlMdov4rtt+v2oJEk1tM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VjbX4CCwh2T7VRmcGdTip7u/f/TaIxuYGePqe7e+D4VSLmbiZHbmccKJEensZqdYd
+         /SkVtQoHfFek1l/akYZpl6ne+8eKdaeb9A2TuvGKtHgX54qQvFDVWxI1azmcGgWe2A
+         TCS6C1oK4Z9Yi4kRDMDic1bnoquUGBouKD5MDQ3AY/kt+9FcjbvW5qvdsxbxoapCQj
+         m6CelcYTizHCgj7uEUvmooKRW1IDpuIbzMXpLTY63MW/y+bD0wODuEHfxQZ27KwMGs
+         UK+r1H9fjVVo3zf7MJOTbhSZBfN9GnYmDVX/HSF7zUQGGf3T2s6/zw2yHd96jP9gqw
+         cyxOybFWimvpA==
+Date:   Wed, 30 Aug 2023 17:42:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <9992beaf-f57d-41f8-9dbb-8044c783ddf4@sirena.org.uk>
+References: <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <ZOTnL1SDJWZjHPUW@arm.com>
+ <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
+ <ZOXa98SqwYPwxzNP@arm.com>
+ <227e6552-353c-40a9-86c1-280587a40e3c@sirena.org.uk>
+ <ZOY3lz+Zyhd5ZyQ9@arm.com>
+ <ZOZEmO6WGyVAcOqK@arm.com>
+ <ef7272d2-d807-428f-9915-6fc9febadb5c@sirena.org.uk>
+ <ZOd6lzj29VksAp7L@arm.com>
+ <ZO84DWEiYk6dU3iR@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="K/vjy3MP44rS/waF"
+Content-Disposition: inline
+In-Reply-To: <ZO84DWEiYk6dU3iR@arm.com>
+X-Cookie: Immanuel doesn't pun, he Kant.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I hacked up this crapper:
 
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
+--K/vjy3MP44rS/waF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-int main(void)
-{
-        char *buf;
-        int fd, n;
+On Wed, Aug 30, 2023 at 01:37:33PM +0100, Szabolcs Nagy wrote:
+> The 08/24/2023 16:43, Catalin Marinas wrote:
 
-        buf = mmap((void *)0xAA0000, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE | MAP_FIXED, -1, 0);
-        if (buf == MAP_FAILED) {
-                perror("mmap");
-                return 1;
-        }
+> > Is there a use-case for the unlocked configuration to allow disabling
+> > the GCS implicitly via a clone syscall?
 
-        fd = open("/tmp/out", O_RDWR | O_CREAT, 0644);
-        if (fd == -1) {
-                perror("open");
-                return 1;
-        }
-        n = write(fd, &buf[4096 - 66], 130);
-        printf("%d\n", n);
-}
+> how would you handle clone or clone3 without gcs specified?
+> (in the cases when clone creates a new thread with new stack)
 
-Then I modified the unrolled loop to have the following fixup:
-.Lfallback:
-	ud2
+> (1) fail.
+> (2) allocate gcs.
+> (3) disable gcs.
 
-	_ASM_EXTABLE_UA(10b, .Lfallback)
-	_ASM_EXTABLE_UA(11b, .Lfallback)
-[and so on]
+...
 
-Similarly, the movsq implementation:
-1:     leaq (%rax,%rcx,8),%rcx
-       ud2
-       jmp .Lcopy_user_tail
+> problem with (2) is that the size policy and lifetime management
+> is in the kernel then. (since only special cases are affected i
+> guess that is ok, but i assumed we want to avoid this by moving
+> to clone3 and user managed gcs).
 
-Then I compared regdumps from both results and they match up:
-stock:  RCX: 0000000000000042 RSI: 0000000000aa0ffe
-movsq:  RCS: 0000000000000042 RSI: 0000000000aa0ffe
+Right, it seems like if we go with this then we may as well just allow
+plain clone() too.
 
-[note MAP_FIXED with 0xAA0000]
+> the problem with (3) is escaping the security measure, however
+> it only applies to very special threads that can always decide
+> to opt-in to gcs, so i don't see this as such a bad option and
+> at least bw compat with existing code. (in my threat model the
+> attacker cannot hijack clone syscalls as that seems stronger
+> than hijacking return addresses.)
 
-v1 gives a bogus result.
+It doesn't seem great to have a feature which is to a large extent a
+security feature where we provide a fairly straightforward mechanism for
+disabling the feature and actively expect things to be using it.
 
-Finally write returns 66 on both stock and patched kernel.
+Given the timescales until this gets practically deployed on arm64 I
+would be inclined to go with making things fail and forcing updates in
+the users, though obviously that's less helpful for x86 where the
+hardware is in user hands already so it's more of a pressing issue (and
+there's already what is effectively option 2 in the code).  We could
+have the architectures diverge, as you say the effect is likely to be
+mainly in very low level code rather than general software.
 
-So I think we are fine here.
+--K/vjy3MP44rS/waF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-================ cut here ================
+-----BEGIN PGP SIGNATURE-----
 
-Intel CPUs ship with ERMS for over a decade, but this is not true for
-AMD.  In particular one reasonably recent uarch (EPYC 7R13) does not
-have it (or at least the bit is inactive when running on the Amazon
-EC2 cloud -- I found rather conflicting information about AMD CPUs vs the
-extension).
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTvcWkACgkQJNaLcl1U
+h9BrNwf/ZAr2lf9jr/JbNkYpu9zm6Fga4tZrLQoMWCDnP9PGxphhBn9iAMWz6X+F
+0X05x9pIN7D4g7qLffjEzsFOpfukbLwIQ4wH/AdjNW7MvFpuH+4kt7iWwiDparY/
+wliRfw6VyCf8lMA40bSac+jlTEJowbBmX+nh1z+EI924BOUXDONu/PGGfoVtn9U0
+mOVw+DFx3lACf5cjCPKSE9JfYf74s+y9cH8fk9x1/D6jHuJuX5IOafLld3PytL/v
+Yxbc/C9XY0Qa9If9yV/NWPb7irX1i7vTMOcHJ8AAzwzHV7LjOOk2cBgRj0IJ2TBI
+1fuiPsv3RNuj2GUC01Od5Md0pPjifQ==
+=qSdV
+-----END PGP SIGNATURE-----
 
-Hand-rolled mov loops executing in this case are quite pessimal compared
-to rep movsq for bigger sizes. While the upper limit depends on uarch,
-everyone is well south of 1KB AFAICS and sizes bigger than that are
-common.
-
-While technically ancient CPUs may be suffering from rep usage, gcc has
-been emitting it for years all over kernel code, so I don't think this
-is a legitimate concern.
-
-Sample result from read1_processes from will-it-scale (4KB reads/s):
-before:	1507021
-after:	1721828 (+14%)
-
-Note that the cutoff point for rep usage is set to 64 bytes, which is
-way too conservative but I'm sticking to what was done in 47ee3f1dd93b
-("x86: re-introduce support for ERMS copies for user space accesses").
-That is to say *some* copies will now go slower, which is fixable but
-beyond the scope of this patch.
-
-v2:
-- correct fixup handling
-- use 0/1 labels, stop messing with ones already put there for erms
-[the _ASM_EXTABLE_UA line is still modified because it was indented with
-spaces]
-- removu now unneded clobbers on r8-r11
-- add a note about removal of the unrolled loop
-
-Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
----
- arch/x86/include/asm/uaccess_64.h |  2 +-
- arch/x86/lib/copy_user_64.S       | 57 +++++++------------------------
- 2 files changed, 14 insertions(+), 45 deletions(-)
-
-diff --git a/arch/x86/include/asm/uaccess_64.h b/arch/x86/include/asm/uaccess_64.h
-index 81b826d3b753..f2c02e4469cc 100644
---- a/arch/x86/include/asm/uaccess_64.h
-+++ b/arch/x86/include/asm/uaccess_64.h
-@@ -116,7 +116,7 @@ copy_user_generic(void *to, const void *from, unsigned long len)
- 		"2:\n"
- 		_ASM_EXTABLE_UA(1b, 2b)
- 		:"+c" (len), "+D" (to), "+S" (from), ASM_CALL_CONSTRAINT
--		: : "memory", "rax", "r8", "r9", "r10", "r11");
-+		: : "memory", "rax");
- 	clac();
- 	return len;
- }
-diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
-index 01c5de4c279b..0a81aafed7f8 100644
---- a/arch/x86/lib/copy_user_64.S
-+++ b/arch/x86/lib/copy_user_64.S
-@@ -27,7 +27,7 @@
-  * NOTE! The calling convention is very intentionally the same as
-  * for 'rep movs', so that we can rewrite the function call with
-  * just a plain 'rep movs' on machines that have FSRM.  But to make
-- * it simpler for us, we can clobber rsi/rdi and rax/r8-r11 freely.
-+ * it simpler for us, we can clobber rsi/rdi and rax freely.
-  */
- SYM_FUNC_START(rep_movs_alternative)
- 	cmpq $64,%rcx
-@@ -68,55 +68,24 @@ SYM_FUNC_START(rep_movs_alternative)
- 	_ASM_EXTABLE_UA( 3b, .Lcopy_user_tail)
- 
- .Llarge:
--0:	ALTERNATIVE "jmp .Lunrolled", "rep movsb", X86_FEATURE_ERMS
-+0:	ALTERNATIVE "jmp .Llarge_movsq", "rep movsb", X86_FEATURE_ERMS
- 1:	RET
- 
--        _ASM_EXTABLE_UA( 0b, 1b)
-+	_ASM_EXTABLE_UA( 0b, 1b)
- 
--	.p2align 4
--.Lunrolled:
--10:	movq (%rsi),%r8
--11:	movq 8(%rsi),%r9
--12:	movq 16(%rsi),%r10
--13:	movq 24(%rsi),%r11
--14:	movq %r8,(%rdi)
--15:	movq %r9,8(%rdi)
--16:	movq %r10,16(%rdi)
--17:	movq %r11,24(%rdi)
--20:	movq 32(%rsi),%r8
--21:	movq 40(%rsi),%r9
--22:	movq 48(%rsi),%r10
--23:	movq 56(%rsi),%r11
--24:	movq %r8,32(%rdi)
--25:	movq %r9,40(%rdi)
--26:	movq %r10,48(%rdi)
--27:	movq %r11,56(%rdi)
--	addq $64,%rsi
--	addq $64,%rdi
--	subq $64,%rcx
--	cmpq $64,%rcx
--	jae .Lunrolled
--	cmpl $8,%ecx
--	jae .Lword
-+.Llarge_movsq:
-+	movq %rcx,%rax
-+	shrq $3,%rcx
-+	andl $7,%eax
-+0:	rep movsq
-+	movl %eax,%ecx
- 	testl %ecx,%ecx
- 	jne .Lcopy_user_tail
- 	RET
- 
--	_ASM_EXTABLE_UA(10b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(11b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(12b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(13b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(14b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(15b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(16b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(17b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(20b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(21b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(22b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(23b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(24b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(25b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(26b, .Lcopy_user_tail)
--	_ASM_EXTABLE_UA(27b, .Lcopy_user_tail)
-+1:	leaq (%rax,%rcx,8),%rcx
-+	jmp .Lcopy_user_tail
-+
-+	_ASM_EXTABLE_UA( 0b, 1b)
- SYM_FUNC_END(rep_movs_alternative)
- EXPORT_SYMBOL(rep_movs_alternative)
--- 
-2.39.2
-
+--K/vjy3MP44rS/waF--
