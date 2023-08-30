@@ -2,138 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FEA78E074
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Aug 2023 22:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD67C78E1A5
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Aug 2023 23:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbjH3UTA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Aug 2023 16:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S237586AbjH3Vwt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Aug 2023 17:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbjH3UTA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Aug 2023 16:19:00 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25813C00;
-        Wed, 30 Aug 2023 13:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tjJFXRrC0i86SOlwgDvPcsbn6f+wSEMk3Zmh190DkJ8=; b=xHP24Y/i/tnQDk79l2uTYI3JHj
-        lP0dtLRHCqayWm9bwkWjvNBtOs2R78CGLNGRim6gTaqJdL9BQbQbPYRb8WzQfWr/W1m+DqFTYAxnd
-        UgYr/Ps3inemlF6uvLKaDCx6hdvKtYA+rS+1e+8yq0sDlf272aPTceyNM6nFrDtIBAXi1lmKmdLGC
-        OVTtKny5z2AlHOVKvX8jRMy9wls2UDe9xMULQPdWgcRKBOF0EQ7r0K++CljbtmGhf33Q/DwK57Dwz
-        hhPbnLA8vITgdB8scOlAI9dQksSfLKbM1f3OwNJopUziqpurdNxtdUZeLhCfGFBXrpkZLtwlK0vTR
-        Ps3dkCoQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52236)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qbPyO-0001ww-2C;
-        Wed, 30 Aug 2023 19:31:24 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qbPyJ-0005vm-NG; Wed, 30 Aug 2023 19:31:19 +0100
-Date:   Wed, 30 Aug 2023 19:31:19 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [RFC PATCH 02/32] ACPI: Move ACPI_HOTPLUG_CPU to be enabled per
- architecture
-Message-ID: <ZO+K9+C+RgNeZ7Nq@shell.armlinux.org.uk>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-3-james.morse@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203135043.409192-3-james.morse@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S242844AbjH3Vws (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Aug 2023 17:52:48 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAFACF9;
+        Wed, 30 Aug 2023 14:52:16 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 473173200681;
+        Wed, 30 Aug 2023 15:51:26 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 30 Aug 2023 15:51:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1693425085; x=1693511485; bh=EA
+        AokXkBZ1oabmHLEd4xI3A+ZO14oLciXrp5+OaR49E=; b=DoI3vSr5VzKvXd7sPf
+        vRiV8hH4rK6fXmpdJRGIVz1xGTgPKfqxxjxs24kmW6FihHX3N0yEKJ8qik6UEGYb
+        95CHQ6ljd4jxgRKFewqaAnNDL0JPJm3B5SGXKL9Evt0PvSK8XunFWlPJ7q8dC1pX
+        f+XJHFZYW51CKc9uWzF73aumHv/iTm1jzTDMeosWM5Q17KXBxjKMqIqnv1n+wSUH
+        eyTyuY85ZMSBpy5vJvMmZECuzaz9Ma/NHSiqsHNdwnq0d1aZBNpnNOI9utHoOU9J
+        gwqUgdnaYkRQK5DO47QZ7WJrVANHCPMtolWnf/7GcrtDYnTcSw9i+Q6PzcM7p+NS
+        0Qlw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1693425085; x=1693511485; bh=EAAokXkBZ1oab
+        mHLEd4xI3A+ZO14oLciXrp5+OaR49E=; b=L/Jph3j1eWucO0jOVPQwlTO5pQs0i
+        Oa6lNnCSl1I4DN3KB5hNWbqv8JQBp2j7r9d8DsVoc/W3GZj0ZvbfWcpXxFkOJT0/
+        xrftvIs7dkBf5CCzG8MHY3sdizv0DjtM4PnyiPV/GX1JFSlltO6gZZ35IBDQAp+e
+        g6tgTurFihzq0RQPk09i9wb7+nTsfRAslfqOG14Kj4TblbyOQ81FSpT0g/KDW7tJ
+        Narg1/ORjjTOz/4gd+j1jRc6EtJ6Tv94/lXXzWqMz0ik2H8ND5yfHmEW8AgglMJ9
+        /2sbZLr8idRZcbpl98+PxcUqsvtEh7084D3d1gVXzLD02/wRY1Eg8lLqg==
+X-ME-Sender: <xms:vJ3vZMv0SI2oeOcUO_qrvCHdVfncwt-xTicrG-Hh0D-D8L8vWYXFPA>
+    <xme:vJ3vZJe4GLF3uWbGnIuBaz6fW_SjcddvKynT3EAfcKAOQVIbpsyE8vKuXKuoVIqwR
+    OvBpwAEHswci-5M468>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedgudeggecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:vJ3vZHya8rFzM3ZWaUkc_0L78fMJGWsuFavX5429EJzhI_YZIzrgCA>
+    <xmx:vJ3vZPOaSvJN-gwiqYhVSY4bWeTHvX9b7yuvVLoQPViDqBFSvqktDg>
+    <xmx:vJ3vZM8PQv_XjkHXjy4_uFZIB8s_CT2nvs7nPBEhf097Lr6-wNjw_g>
+    <xmx:vZ3vZNjSLyi2FUZobnkLrgMlbC0JTdK73QaaP7HMVy6rBf63jdmuEg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3B057B6008D; Wed, 30 Aug 2023 15:51:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-701-g9b2f44d3ee-fm-20230823.001-g9b2f44d3
+Mime-Version: 1.0
+Message-Id: <0036d0ee-4329-4fd8-9317-95818f576e98@app.fastmail.com>
+In-Reply-To: <e53f0f8da1607856028d941e7ac8646aa2abc555.1692288018.git.geert@linux-m68k.org>
+References: <cover.1692288018.git.geert@linux-m68k.org>
+ <e53f0f8da1607856028d941e7ac8646aa2abc555.1692288018.git.geert@linux-m68k.org>
+Date:   Wed, 30 Aug 2023 15:51:03 -0400
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Sergey Shtylyov" <s.shtylyov@omp.ru>,
+        "Damien Le Moal" <dlemoal@kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>, "Jens Axboe" <axboe@kernel.dk>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/9] ARM: Remove <asm/ide.h>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 01:50:13PM +0000, James Morse wrote:
-> --- a/arch/ia64/Kconfig
-> +++ b/arch/ia64/Kconfig
-> @@ -15,6 +15,7 @@ config IA64
->  	select ARCH_MIGHT_HAVE_PC_PARPORT
->  	select ARCH_MIGHT_HAVE_PC_SERIO
->  	select ACPI
-> +	select ACPI_HOTPLUG_CPU if ACPI
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -5,6 +5,7 @@ config LOONGARCH
->  	select ACPI
->  	select ACPI_GENERIC_GSI if ACPI
->  	select ACPI_MCFG if ACPI
-> +	select ACPI_HOTPLUG_CPU if ACPI
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -59,6 +59,7 @@ config X86
->  	#
->  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
->  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-> +	select ACPI_HOTPLUG_CPU			if ACPI
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -309,7 +309,6 @@ config ACPI_HOTPLUG_CPU
->  	bool
->  	depends on ACPI_PROCESSOR && HOTPLUG_CPU
->  	select ACPI_CONTAINER
-> -	default y
+On Thu, Aug 17, 2023, at 12:07, Geert Uytterhoeven wrote:
+> As of commit b7fb14d3ac63117e ("ide: remove the legacy ide driver") in
+> v5.14, there are no more generic users of <asm/ide.h>.
+>
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
 
-When selecting the symbol, it's a good idea to ensure that its
-dependencies are satisfied. So here, ACPI_HOTPLUG_CPU depends on
-ACPI_PROCESSOR and HOTPLUG_CPU.
-
-For x86, you're selecting ACPI_HOTPLUG_CPU if ACPI is enabled,
-and ACPI can be freely enabled. HOTPLUG_CPU depends on SMP,
-which is also a freely selectable option. Lastly,
-ACPI_PROCESSOR depends on X86 || IA64 || ARM64 || LOONGARCH,
-and is a user selectable, defaulting-y option if ACPI is
-enabled.
-
-So, shouldn't the x86 select be:
-
-	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
-
-?
-
-I suspect similar issues exist for the other architecture Kconfig files
-modified above.
-
-This seems to also be in the latest rfc too, which is why I'm bringing
-it up.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Acked-by: Arnd Bergmann <arnd@arndb.de>
