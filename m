@@ -2,66 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95DC78CD7A
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Aug 2023 22:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F90978DC69
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Aug 2023 20:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237244AbjH2UUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Aug 2023 16:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
+        id S240192AbjH3Spl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Aug 2023 14:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240509AbjH2UUM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Aug 2023 16:20:12 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C031BE;
-        Tue, 29 Aug 2023 13:20:08 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3a36b52b4a4so114701b6e.1;
-        Tue, 29 Aug 2023 13:20:08 -0700 (PDT)
+        with ESMTP id S242349AbjH3ILQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Aug 2023 04:11:16 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDE41A2;
+        Wed, 30 Aug 2023 01:11:13 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-792918c5f33so127214639f.3;
+        Wed, 30 Aug 2023 01:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693340408; x=1693945208; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dPLASuyRHqr5emQFn0tjFMLNpyleK0mRYR0JeYXXEd4=;
-        b=dJ4fsVO7B9Wqzz3co24/hU4d9UBxPoXJlGFSRP/WsPjWbukX0nWzowMyOiwNv86pVv
-         5Bco6QQ2reUSVNMO4jkJBRkMqYvWsWh1lrCsr1ZlaDis9UmDk+rc6E57yZm6qpGE3WbN
-         3hFWVA9Vm9C4FdimDEDDfLPWnT/Z37yTKFzLOBjpey++2WTfXYf4qsf3Rj/a8ciBEUxf
-         nH9vVS+a6h9mTsFiMsYCYwTF8dhlWlbrwxHQ91HDmEusa09UL6guYpYJEiY9J+qSRFXb
-         RK8bGhI1tuKIdoMuIk7mFUh9HShj1CbyHHeukvThzD4IYbr1VgXkzR4GUnpsgqSbgd8t
-         VJ2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693340408; x=1693945208;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1693383073; x=1693987873; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dPLASuyRHqr5emQFn0tjFMLNpyleK0mRYR0JeYXXEd4=;
-        b=Bv4T0qFT53Xij1SUeOlP9Yy0Z3nQzx9ZA/VyUDIYPLI+Jy0S2SOyk4LXk+xKrhV56w
-         5k17zjIZsr43rFNFYbRUQQQ8wVcSqpiCWxmvwFJmslF/mWcgt7PVM8DRjk0R/0sNXftE
-         5ZxhAtNQopEzQ8OcxnrJJ5qytdPrDZoSI69UkMtFyTu3YVone6ukkgVkkLWf7/w3xSIC
-         th66O3Drww6tU+MJ0JpP7PFb0JIHezmCc2J37QBvvsHyf9IU8odDldAzcsex+mZnkK/s
-         3dDGVsbG33ghM87mchRc8b3gOuFO6yQ/ChQ3FBf6mjhnMiZ7d3dH2KvMwldOgYdxWC/L
-         trlQ==
-X-Gm-Message-State: AOJu0YxsZOEZEqBVHMfzhkEoyPsku1tSvnB0POkcaG7iIIffbMlzqLGl
-        OSHca6FF0fQqotfyD0mvIgtn9I1DsdS77suX7E1S4LgD
-X-Google-Smtp-Source: AGHT+IFPVfeuAryUVSPtgazrKBqFMai7x1CNri4TuB/RyWuOSyukq4INi0uf70AF+Q6nvF/wsRLepbQtHqNdtq6Ngw8=
-X-Received: by 2002:a05:6808:23c6:b0:3a8:6a40:7dc0 with SMTP id
- bq6-20020a05680823c600b003a86a407dc0mr2599820oib.18.1693340407961; Tue, 29
- Aug 2023 13:20:07 -0700 (PDT)
+        bh=eYDzreiruH6qbDLXg2iLXCvSh9G4cLtJs9x6gJkSy4U=;
+        b=VRc3L/YJmlEqi9nW+I4BpFQV2geuHX+gL4RmSF1Kpn5C2lL1mM/eEZ+2Q5rp63om0i
+         tfwHJ+BW52bA2/hqzMh1h+3BX7tDIB6yEEzDkVrk5CIip3PesyNRFMjLATpMxeD5DIgV
+         HhSjv1NHEsvuqukPoeIWnCEsmmFwx8HHv+ZKuuDCgembecfxXd2a1bpOq84/IFtpfbMt
+         ae4so5eQo4oP62KoeQu4SL5KGP+pGhedeM7Lji4bepydO0ATJp2wtdcxclPN3sOND6Bi
+         dhuCDkKBDM8MTLjZR5nS4Ejja7WtvIsRovlBlTe3ZNaUWJ109Cs1EN6t4VCbky+m6mxH
+         9Isg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693383073; x=1693987873;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eYDzreiruH6qbDLXg2iLXCvSh9G4cLtJs9x6gJkSy4U=;
+        b=fdp8SgkKLtvsYmXLPoro6bKgkHq0IJnIv+/kA6oajjP+fHNcFa6OWNWlcDg15MZw6m
+         wci6GpSeoGqW+sBARcLj9zSrorl2SefLkT6sTG4XdhzKgHjb24jDMzcTB/wbf9bbMKf6
+         cHwc6ypfXBy0vpVlqUp0GUTejMSUXmkrDMVX1O3ibCdqa4oP+TucI/rJyY/jr5QJb8ii
+         YfYLdrAmUogsEH6oOLifdFGzb++YYHDWyQLd0L1WNShOX/e9mXBB6u28c/35WDmrzdcL
+         rp79aJzpwj187SKAuQ7Qk8r7YH34VPqIaAYmchfpn/yQ/4kmA7aLqTd3XS28mVeQj8Jc
+         kAfg==
+X-Gm-Message-State: AOJu0YxBJS/XJak0lBCnaeZ7PPNCAHxJOX5e8G0LT73rVBTVGT/G9Cr+
+        B3DXVUV1ELU3ItXarzaQeObP0koP8i4=
+X-Google-Smtp-Source: AGHT+IFLukJjgPDCF+6dPVVFCsQtUYJRqy8yK01NHrroGa5RFO41C2WL5CPpF/m8ShUQRg8pSqKOLw==
+X-Received: by 2002:a6b:7a03:0:b0:787:34d:f1ea with SMTP id h3-20020a6b7a03000000b00787034df1eamr1946784iom.8.1693383072910;
+        Wed, 30 Aug 2023 01:11:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h12-20020a6b7a0c000000b007836c7e8dccsm3762285iom.17.2023.08.30.01.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 01:11:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 30 Aug 2023 01:11:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH] csky: Fixup -Wmissing-prototypes warning
+Message-ID: <cd3924fb-8639-4fa5-8aae-bc2b20a63dec@roeck-us.net>
+References: <20230811030750.1335526-1-guoren@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a8a:1141:0:b0:4f0:1250:dd51 with HTTP; Tue, 29 Aug 2023
- 13:20:07 -0700 (PDT)
-In-Reply-To: <CAHk-=wgemNj9GBepSEJXS5N99rr9wLkL668UC9TsKH45NnJ7Mg@mail.gmail.com>
-References: <20230828170732.2526618-1-mjguzik@gmail.com> <CAHk-=wj=YwAsPUHN7Drem=Gj9xT6vvxgZx77ZecZVxOYYXpC0w@mail.gmail.com>
- <CAGudoHHnCKwObL7Y_4hiX7FmREiX6cGfte5EuyGitbXwe_RhkQ@mail.gmail.com> <CAHk-=wgemNj9GBepSEJXS5N99rr9wLkL668UC9TsKH45NnJ7Mg@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Tue, 29 Aug 2023 22:20:07 +0200
-Message-ID: <CAGudoHFNPb8CHGNK+msCE70bPZkKyCom7g_7Laja+AVoAN5CXQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: bring back rep movsq for user access on CPUs without ERMS
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        bp@alien8.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230811030750.1335526-1-guoren@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +75,81 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/29/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Tue, 29 Aug 2023 at 12:45, Mateusz Guzik <mjguzik@gmail.com> wrote:
->>
->> So I think I know how to fix it, but I'm going to sleep on it.
->
-> I think you can just skip the %r8 games, and do that
->
->         leal (%rax,%rcx,8),%rcx
->
-> in the exception fixup code, since %rax will have the low bits of the
-> byte count, and %rcx will have the remaining qword count.
->
-> We should also have some test-case for partial reads somewhere, but I
-> have to admit that when I did the cleanup patches I just wrote some
-> silly test myself (ie just doing a 'mmap()' and then reading/writing
-> into the end of that mmap at different offsets.
->
-> I didn't save that hacky thing, I'm afraid.
->
+On Thu, Aug 10, 2023 at 11:07:50PM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Cleanup the warnings:
+> 
+> arch/csky/kernel/ptrace.c:320:16: error: no previous prototype for 'syscall_trace_enter' [-Werror=missing-prototypes]
+> arch/csky/kernel/ptrace.c:336:17: error: no previous prototype for 'syscall_trace_exit' [-Werror=missing-prototypes]
+> arch/csky/kernel/setup.c:116:34: error: no previous prototype for 'csky_start' [-Werror=missing-prototypes]
+> arch/csky/kernel/signal.c:255:17: error: no previous prototype for 'do_notify_resume' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:150:15: error: no previous prototype for 'do_trap_unknown' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:152:15: error: no previous prototype for 'do_trap_zdiv' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:154:15: error: no previous prototype for 'do_trap_buserr' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:157:17: error: no previous prototype for 'do_trap_misaligned' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:168:17: error: no previous prototype for 'do_trap_bkpt' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:187:17: error: no previous prototype for 'do_trap_illinsn' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:210:17: error: no previous prototype for 'do_trap_fpe' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:220:17: error: no previous prototype for 'do_trap_priv' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:230:17: error: no previous prototype for 'trap_c' [-Werror=missing-prototypes]
+> arch/csky/kernel/traps.c:57:13: error: no previous prototype for 'trap_init' [-Werror=missing-prototypes]
+> arch/csky/kernel/vdso/vgettimeofday.c:12:5: error: no previous prototype for '__vdso_clock_gettime64' [-Werror=missing-prototypes]
+> arch/csky/kernel/vdso/vgettimeofday.c:18:5: error: no previous prototype for '__vdso_gettimeofday' [-Werror=missing-prototypes]
+> arch/csky/kernel/vdso/vgettimeofday.c:24:5: error: no previous prototype for '__vdso_clock_getres' [-Werror=missing-prototypes]
+> arch/csky/kernel/vdso/vgettimeofday.c:6:5: error: no previous prototype for '__vdso_clock_gettime' [-Werror=missing-prototypes]
+> arch/csky/mm/fault.c:187:17: error: no previous prototype for 'do_page_fault' [-Werror=missing-prototypes]
+> 
+> Link: https://lore.kernel.org/lkml/20230810141947.1236730-17-arnd@kernel.org/
+> Reported-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 
-Ye I was planning on writing some tests to illustrate this works as
-intended and v1 does not. Part of why I'm going to take more time,
-there is no rush patching this.
+I get the following build errors in linux-next. Bisect points to this patch.
 
-> I also tried to figure out if there is any CPU we should care about
-> that doesn't like 'rep movsq', but I think you are right that there
-> really isn't. The "good enough" rep things were introduced in the PPro
-> if I recall correctly, and while you could disable them in the BIOS,
-> by the time Intel did 64-bit in Northwood (?) it was pretty much
-> standard.
->
+Building csky:defconfig ... failed
+--------------
+Error log:
+In file included from arch/csky/include/asm/ptrace.h:7,
+                 from arch/csky/include/asm/elf.h:6,
+                 from include/linux/elf.h:6,
+                 from kernel/extable.c:6:
+arch/csky/include/asm/traps.h:43:11: error: expected ';' before 'void'
+   43 | asmlinkage void do_trap_unknown(struct pt_regs *regs);
+      |           ^~~~~
 
-gcc already inlines rep movsq for copies which fit, so....
+[ and many more similar errors ]
 
-On that note I'm going to submit a patch to whack non-rep clear_page as well.
+Guenter
 
-> So yeah, no reason to have the unrolled loop at all, and I think your
-> patch is fine conceptually, just needs fixing and testing for the
-> partial success case.
->
-> Oh, and you should also remove the clobbers of r8-r11 in the
-> copy_user_generic() inline asm in <asm/uaccess_64.h> when you've fixed
-> the exception handling. The only reason for those clobbers were for
-> that unrolled register use.
->
-> So only %rax ends up being a clobber for the rep_movs_alternative
-> case, as far as I can tell.
->
-
-Ok, I'll patch it up.
-
-That label reorg was cosmetics, did not matter. But that bad fixup
-thing was quite avoidable by checking what original movsq was doing,
-which I should have done before sending v1. Sorry for the lame patch
-on that front. ;) (fwiw I did multiple kernel builds and whatnot with
-it, nothing blew up)
-
-Thanks for the review.
-
--- 
-Mateusz Guzik <mjguzik gmail.com>
+---
+# bad: [56585460cc2ec44fc5d66924f0a116f57080f0dc] Add linux-next specific files for 20230830
+# good: [2dde18cd1d8fac735875f2e4987f11817cc0bc2c] Linux 6.5
+git bisect start 'HEAD' 'v6.5'
+# bad: [17582b16f00f2ca3f84f1c9dadef1529895ddd9a] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+git bisect bad 17582b16f00f2ca3f84f1c9dadef1529895ddd9a
+# good: [bd6c11bc43c496cddfc6cf603b5d45365606dbd5] Merge tag 'net-next-6.6' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+git bisect good bd6c11bc43c496cddfc6cf603b5d45365606dbd5
+# bad: [b22935905f9c5830bfd1c66ad3638ffdf6f80da7] Merge branch 'for-linux-next-fixes' of git://anongit.freedesktop.org/drm/drm-misc
+git bisect bad b22935905f9c5830bfd1c66ad3638ffdf6f80da7
+# good: [692f5510159c79bfa312a4e27a15e266232bfb4c] Merge tag 'asoc-v6.6' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-linus
+git bisect good 692f5510159c79bfa312a4e27a15e266232bfb4c
+# good: [b91742d84d29c39b643992b95560cfb7337eab18] mm/shmem.c: use helper macro K()
+git bisect good b91742d84d29c39b643992b95560cfb7337eab18
+# good: [19134bc23500a01bfdb77a804fc8e4bf8808d0cc] mm: fix kernel-doc warning from tlb_flush_rmaps()
+git bisect good 19134bc23500a01bfdb77a804fc8e4bf8808d0cc
+# bad: [858e6c6fd1960650c6a44b8158e1ac26ee63e26d] Merge branch 'for-curr' of git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git
+git bisect bad 858e6c6fd1960650c6a44b8158e1ac26ee63e26d
+# bad: [9d6b14cd1e993d2ff98df0cef6d935ce6fd4dbec] Merge tag 'flex-array-transformations-6.6-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux
+git bisect bad 9d6b14cd1e993d2ff98df0cef6d935ce6fd4dbec
+# good: [3b425dd2aeb8c876805a4cc29d84a6c455b43530] parisc: led: Move register_led_regions() to late_initcall()
+git bisect good 3b425dd2aeb8c876805a4cc29d84a6c455b43530
+# good: [48d25d382643a9d8867f8eb13af231268ab10db5] Merge tag 'parisc-for-6.6-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+git bisect good 48d25d382643a9d8867f8eb13af231268ab10db5
+# bad: [c8171a86b27401aa1f492dd1f080f3102264f1ab] csky: Fixup -Wmissing-prototypes warning
+git bisect bad c8171a86b27401aa1f492dd1f080f3102264f1ab
+# good: [1362d15ffb59db65b2df354b548b7915686cb05c] csky: pgtable: Invalidate stale I-cache lines in update_mmu_cache
+git bisect good 1362d15ffb59db65b2df354b548b7915686cb05c
+# good: [c1884e1e116409dafce84df38134aa2d7cdb719d] csky: Make pfn accessors static inlines
+git bisect good c1884e1e116409dafce84df38134aa2d7cdb719d
+# first bad commit: [c8171a86b27401aa1f492dd1f080f3102264f1ab] csky: Fixup -Wmissing-prototypes warning
