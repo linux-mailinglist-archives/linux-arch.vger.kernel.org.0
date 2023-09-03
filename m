@@ -2,70 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84F7790E15
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Sep 2023 23:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BEC790E1A
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Sep 2023 23:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238904AbjICVGV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 3 Sep 2023 17:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54322 "EHLO
+        id S1348364AbjICVJW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 3 Sep 2023 17:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjICVGU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 3 Sep 2023 17:06:20 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8407010C;
-        Sun,  3 Sep 2023 14:06:15 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-57361de8878so545723eaf.0;
-        Sun, 03 Sep 2023 14:06:15 -0700 (PDT)
+        with ESMTP id S1348266AbjICVJW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 3 Sep 2023 17:09:22 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B73106
+        for <linux-arch@vger.kernel.org>; Sun,  3 Sep 2023 14:09:18 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9a2a4a5472dso366942766b.1
+        for <linux-arch@vger.kernel.org>; Sun, 03 Sep 2023 14:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693775175; x=1694379975; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        d=linux-foundation.org; s=google; t=1693775356; x=1694380156; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5DcI7CSTA0DXB0f7TWXzeRwOjmGYUwoknwb9WpO8Nw=;
-        b=J6Nb5f48kKIHYfUPwfDZwea8GZsLIUV6HecZrCescG0Q3EXAOdh8juo+wqlNSDi0HU
-         hSZK+5DJdaaAHGirErVFnb3GJYtoijB/slo6In49Q3JBy1gVByf88zosVG13cYALJrfd
-         azNbgy9LBhPylHE9isHdYvfrpCKapV0kqhWLW8VtuSSiwVTE6xayGICSIjSkKxpPYN7N
-         YfXiaC6viFdvaH7zJKWvU7oTyO3LDg8oJEdH05FP46KTevjGoue6kPZ5fnlpz85THfse
-         5CK3NMJZ/3JbAJcGLX+XBepB+DWS7bQOay0xtRRhKFIe6XJtUnKuVITKwuaTmlj8Spgu
-         TF1Q==
+        bh=ETEfE0KXcMXBvMZBy08UTNp3OVjDrmaEtqJyFQMw/WY=;
+        b=WONMALfu2j9ZAyF28WSrAF4vpDizubOoLLGn6KO4uIXMNvTR0002pwwMFTIWz/jQaN
+         fBFPpPK3+INaAEvIViFxgqBTSzMgok/Wt28tyQLU9nXtVRUiHBOtLzPDf85OHiR2HaQQ
+         YjmhP1sFUxAPnRwaSKo2PbNWwPOjVIUfyHVP4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693775175; x=1694379975;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        d=1e100.net; s=20221208; t=1693775356; x=1694380156;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=v5DcI7CSTA0DXB0f7TWXzeRwOjmGYUwoknwb9WpO8Nw=;
-        b=W519BdYcDreLuQ0dOyqTQmzZIDhiwCkBNSgIPeHWw6cKJlTjZQ5d6j2v2wLxgTCbda
-         kJq8nY5pTRmF/Ie4WbmcXlz8JI3plLIaysW1ts8kUsP96xos5bwjH/y2WD4nwRNLMgeU
-         YJXrGRC0n0q8eWzdz2s4pRY1swiE82QIAXHeSHbvRvHfM+3JGhlIYFDGmooN9jbNvFC+
-         9gNe6OBJfpSMeqnmPYmRBOJR8+JdNRZrXAOeDfAL9ORtKf47rM8CYrwhIbiMR4I9ys0O
-         WHfJl2TNTRCr/6T0wam34ADe7ZwKVbDCiwmZnD1nGTWCwl6NQI73dHDb4hIp4d+peDMA
-         cjJg==
-X-Gm-Message-State: AOJu0YyUXwvaUpphElm+zPeMjnDYP74zw8CNYy9x+kZWjiTjkXli14se
-        4xMdHNfrrRF22qNkTr8O25u1RI4u63ZaUSQkpzFddMiekOE=
-X-Google-Smtp-Source: AGHT+IHIq3io5UHSsSNYnsEGGcc25gvWF2P8V7QLtUaujytjjZBoER9LcQCsUd+qGN+VHE8j2JDq4Qrv+Z5D1/ZSHPE=
-X-Received: by 2002:a4a:6c1d:0:b0:570:c8fa:4ad7 with SMTP id
- q29-20020a4a6c1d000000b00570c8fa4ad7mr6618978ooc.1.1693775174749; Sun, 03 Sep
- 2023 14:06:14 -0700 (PDT)
+        bh=ETEfE0KXcMXBvMZBy08UTNp3OVjDrmaEtqJyFQMw/WY=;
+        b=ix5ZyKK5a6F2NPlnPU+nhJ44A/8Z2/6b/Ktue5Iwhf5+XQWjh4i7pwL5+HYljUxlSB
+         1fCIvdU1Hjb072XOZxV+K4fJQosHFAHaH0+UFkni974tgLyqoJ8QeP0E7w4IQy8ggX7Y
+         Lh2Xw2B75sMBFbsoNlajoQXJSDkpjKur3uAnxB5KQIf6tRuPwHOM/1zMh7O9SYQlKfBa
+         oIke2SZBuoUYLpl6oHIXSuZu82cYAWwh6U5OPe/YxvY3zcC78ODgomzGUBHwJbYQgtb8
+         VeOABvPZ+ZH27FbSSSxJ2o19o6RNuL/UezXX+ioZQmKSElkeGS3r5d1OTpxafnzU4hwk
+         5BGw==
+X-Gm-Message-State: AOJu0YxzMLm1eAOF05KxOqYUk6u0rPpthIEcwoMMTEShi/aQt3wtdSaw
+        4Qxi6S4M2+Jtykqt7ERlGDuP4XFyzwHg1iMyCxcly8Pb
+X-Google-Smtp-Source: AGHT+IFPiDTKKBVSCOjP6ykmGaWnEwmHvgMxEeDwmEaf2Cju290kkQ/4D1xsPS5ZJgPcbT06wu8fyA==
+X-Received: by 2002:a17:906:5a63:b0:9a5:d710:dea5 with SMTP id my35-20020a1709065a6300b009a5d710dea5mr8117805ejc.17.1693775356672;
+        Sun, 03 Sep 2023 14:09:16 -0700 (PDT)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
+        by smtp.gmail.com with ESMTPSA id r10-20020a170906c28a00b0099297782aa9sm5166183ejz.49.2023.09.03.14.09.15
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Sep 2023 14:09:15 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9a1de3417acso370036566b.0
+        for <linux-arch@vger.kernel.org>; Sun, 03 Sep 2023 14:09:15 -0700 (PDT)
+X-Received: by 2002:aa7:c690:0:b0:523:c36e:ec8b with SMTP id
+ n16-20020aa7c690000000b00523c36eec8bmr9015339edq.9.1693775355421; Sun, 03 Sep
+ 2023 14:09:15 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a8a:60c:0:b0:4f0:1250:dd51 with HTTP; Sun, 3 Sep 2023
- 14:06:14 -0700 (PDT)
-In-Reply-To: <CAHk-=whHZ1KJGVKTaBOSr7KwYAqvrjD9bcoz-SKrsW3DdS9Eug@mail.gmail.com>
 References: <20230830140315.2666490-1-mjguzik@gmail.com> <CAHk-=wgADyL9i8r1=YkRTehKG8T89TzqAFMXDJV1Ag+_4_25Cw@mail.gmail.com>
  <CAGudoHH95OKVgf0jW5pz_Nt2ab0HTnt3H9hbmU=aSHozOS5B0Q@mail.gmail.com>
  <CAHk-=wh+=W2k1V_0Om=_=QpPAN_VgHzdZ4FLXSfcyTSK7xo0Eg@mail.gmail.com>
  <CAHk-=wg6bzTdQHSsswHPYFUbb1DfszyWTZ97hZv7bYxaNHVkHw@mail.gmail.com>
  <20230903204858.lv7i3kqvw6eamhgz@f> <CAHk-=whHZ1KJGVKTaBOSr7KwYAqvrjD9bcoz-SKrsW3DdS9Eug@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Sun, 3 Sep 2023 23:06:14 +0200
-Message-ID: <CAGudoHH-KZcmTjPQihiZ3cAYQwyNhw4q2Yvdrxr-xKBp8nTwPw@mail.gmail.com>
+ <CAGudoHH-KZcmTjPQihiZ3cAYQwyNhw4q2Yvdrxr-xKBp8nTwPw@mail.gmail.com>
+In-Reply-To: <CAGudoHH-KZcmTjPQihiZ3cAYQwyNhw4q2Yvdrxr-xKBp8nTwPw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 3 Sep 2023 14:08:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiohUShtCtCxee5-SGvMetd6vgnWgboLNHq2m4cpyNUJQ@mail.gmail.com>
+Message-ID: <CAHk-=wiohUShtCtCxee5-SGvMetd6vgnWgboLNHq2m4cpyNUJQ@mail.gmail.com>
 Subject: Re: [PATCH v2] x86: bring back rep movsq for user access on CPUs
  without ERMS
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To:     Mateusz Guzik <mjguzik@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         bp@alien8.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,43 +79,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/3/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Sun, 3 Sept 2023 at 13:49, Mateusz Guzik <mjguzik@gmail.com> wrote:
->>
->> It dodges lockref et al, but it does not dodge SMAP which accounts for
->> the difference.
+On Sun, 3 Sept 2023 at 14:06, Mateusz Guzik <mjguzik@gmail.com> wrote:
 >
-> Yeah, just doing that "check if the name is empty" is not free. The
-> CLAC/STAC overhead is real.
->
-> I see no way of avoiding that cost, though - the only true fix is to
-> fix the glibc braindamage.
->
-> In fact, I suspect that my stupid patch is unacceptable exactly
-> because it actually makes a *real* fstatat() with a real path much
-> worse due to the "check if the path is empty".
->
+> I don't think it is *that* bad. I did a quick sanity check on that
+> front by rolling with bpftrace on cases which pass AT_EMPTY_PATH *and*
+> provide a path.
 
-I don't think it is *that* bad. I did a quick sanity check on that
-front by rolling with bpftrace on cases which pass AT_EMPTY_PATH *and*
-provide a path. Apart from my test prog which deliberately did that
-nothing popped up in casual testing. But there is definitely funny
-code out there which passes both not for testing purposes, so there is
-that.
+I guess you are right - nobody sane would use AT_EMPTY_PATH except if
+they don't have a path.
 
-> We could possibly move that check into the getname() path, and at
-> least avoid the extra overhead.
->
+Of course, the only reason we're discussing this in the first place is
+because people are doing insane things, which makes _that_ particular
+argument very weak indeed...
 
-Complexity aside that would eat some of the win as kmalloc/kfree are
-not particularly cheap, and I'm even ignoring the INIT_ON_ALLOC
-problem.
-
-So I would not go for it, but that's my $0,03.
-
-That said, I'm going to engage glibc people to sort this out on their
-end. Arguably this is something everyone will be able to backport to
-their distro no matter how LTSy (not that I expect it to happen ;)).
-
--- 
-Mateusz Guzik <mjguzik gmail.com>
+                     Linus
