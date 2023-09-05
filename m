@@ -2,156 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A547926EE
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Sep 2023 18:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8812A79302A
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Sep 2023 22:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344083AbjIEQU7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Sep 2023 12:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S232361AbjIEUlj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Sep 2023 16:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354574AbjIEMoO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Sep 2023 08:44:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FE01AD;
-        Tue,  5 Sep 2023 05:44:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D1BC51FDB0;
-        Tue,  5 Sep 2023 12:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1693917849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FkN9fHLyAfRcHsilGUbRusJjN/has0O6CzUMKzXJasI=;
-        b=keVYfmc48mpS4Nt09vnh12VZJSCRjao6bLq8+mD13pxU9x71zSHfdmFp8Kfx0sIOXsaSP1
-        QLaKzvB23hHyKAMtuhTve0e7QYNrA8bdsPZW4JDoFRxpWeBAZBhQKf86/lYvhAs1FAC7Sa
-        J4Fk+xaeTOI5b+kunmcl9yd9y6d2wU4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1693917849;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FkN9fHLyAfRcHsilGUbRusJjN/has0O6CzUMKzXJasI=;
-        b=vIhIJzxZZmb5DcNB3OjOlwl7lrOhkEIHzE4KHaujlzT60ABsQijnddOVu6k4DIbcF4Ojdb
-        PcktSvBRfw9cC5Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C3ED13911;
-        Tue,  5 Sep 2023 12:44:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9K0AHZki92SuHQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 05 Sep 2023 12:44:09 +0000
-Message-ID: <5265f1eb-e1a6-c91e-9bc2-75089d594a0e@suse.de>
-Date:   Tue, 5 Sep 2023 14:44:08 +0200
+        with ESMTP id S231315AbjIEUli (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Sep 2023 16:41:38 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24942D8;
+        Tue,  5 Sep 2023 13:41:35 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1d4e0c2901bso1721735fac.0;
+        Tue, 05 Sep 2023 13:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693946494; x=1694551294; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lN8/blfhbXNk42zQ+dhE95HQtpdju1g6GvGHzJNaOwI=;
+        b=XaHZK+s9p+pOYVhF+3TOHD7pGcR8pGf6d0dh5VLMBWqUJ07S0uwB0+Hw6+KH39YT0B
+         zRw0nZu6tE+/bdjCywp4y7dUQWwvQPNlI1dB7vYlZEMpTFceZ+uIGs1pyqbEUwFUoOJW
+         TVk3ZPFOXKyrYR8MBwy3zWmOV4AJUuDyPN24QEbFpX5cXIu+ipAIWfpEwelnqfQ4X/rc
+         u0YxU4T8OaJsxT7eDJK2xg368tHDeS3+6HO62HCSnR4KZ8Is/Iehq/UaLEOPAIaTdX2w
+         wqlOU//5tKKNL0iMjSoapO9JovylAbLExCaK11QXr87rW7ZOkyhHtyf7nsi/Bq0iJeFJ
+         /0XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693946494; x=1694551294;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lN8/blfhbXNk42zQ+dhE95HQtpdju1g6GvGHzJNaOwI=;
+        b=ObKiImq6Z/HEXQlIUyb6vMQwmUG2BjUZmdXsAz1caLmELVqNPhGu4dbreEjsrV7xzg
+         vfMVl02jJx67BAeRMKwjw/8vew63i1+79wyFPAOGzqe4wrJQQJP81/+tH8vZQfam23sP
+         GM8k5NZXk4G9JV70Nth+E3u5EFCuPx3J8bCfzJjXisG3rRruPsNdtIfolctwyrkL5rZj
+         wBkmWNiMoVs8ymmRXA8r2H77iFbNTmGCMqcyzlkFf9ZrKgprQHZ092YPn/USHal78cY8
+         IS9vevtEH2hFnb5Ec+v6RCMEaUr8H2Kspmf/XmzyXQRGaJt+JxzjGXtYZL4b3KE6KW8M
+         WNKA==
+X-Gm-Message-State: AOJu0YwCB5f1R9kzSG3TOhQCAWE03vWzSib7uSRcYTo41aD6RpqjyWS2
+        gcEPOaqY6bCd8Frz8AK8ENbgnKPJeAtKiyzqWb6k8eJt
+X-Google-Smtp-Source: AGHT+IFfcSyC12XlgmDD1sbRygiarzs/SN/Tb4fwGhnuRiCcbIPOCV/x7fIYwZdm3uYJFjQOXN4vF8JxITpXs5jQUnQ=
+X-Received: by 2002:a05:6870:a11e:b0:1c3:c43d:838 with SMTP id
+ m30-20020a056870a11e00b001c3c43d0838mr18588532oae.39.1693946494387; Tue, 05
+ Sep 2023 13:41:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 0/4] ppc, fbdev: Clean up fbdev mmap helper
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, arnd@arndb.de, deller@gmx.de
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org
-References: <20230901142659.31787-1-tzimmermann@suse.de>
- <874jk9ibf7.fsf@mail.lhotse>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <874jk9ibf7.fsf@mail.lhotse>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------8cnkOZ3clMojcrflCUVqPiyi"
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:ac9:745a:0:b0:4f0:1250:dd51 with HTTP; Tue, 5 Sep 2023
+ 13:41:33 -0700 (PDT)
+In-Reply-To: <CAHk-=wgjyGX3OVDtzJW6Oh2ukviXtJYi9+7eJW75DgX+d673iw@mail.gmail.com>
+References: <20230830140315.2666490-1-mjguzik@gmail.com> <CAHk-=wgADyL9i8r1=YkRTehKG8T89TzqAFMXDJV1Ag+_4_25Cw@mail.gmail.com>
+ <CAGudoHH95OKVgf0jW5pz_Nt2ab0HTnt3H9hbmU=aSHozOS5B0Q@mail.gmail.com>
+ <CAHk-=wh+=W2k1V_0Om=_=QpPAN_VgHzdZ4FLXSfcyTSK7xo0Eg@mail.gmail.com>
+ <CAHk-=wg6bzTdQHSsswHPYFUbb1DfszyWTZ97hZv7bYxaNHVkHw@mail.gmail.com>
+ <20230903204858.lv7i3kqvw6eamhgz@f> <CAHk-=wjYOZf2wPj_=arATJ==DQQAQwh0ki=Za0RcE542rWBGFw@mail.gmail.com>
+ <ZPT/LzkPR/jaiaDb@gmail.com> <CAHk-=wh1hi-HnBQRu9_ALQL-fbhyn_go+2c9FajO26khf2dsTw@mail.gmail.com>
+ <CAGudoHG1_r1B0pz6-HUqb6AfbAgWHxBy+TnimvQtwLLqkKtchA@mail.gmail.com>
+ <CAHk-=wjM6KwAvC9+sCAm9BgBSspZm60VBLzHcuonGcHrPKJrbw@mail.gmail.com>
+ <CAHk-=whnEF7-+DL+71wVgnJG1xjeHAQjzqMAULgQq_uhWfP0ZA@mail.gmail.com>
+ <CAGudoHENT1yPBD=+xAUTzWxL+iro8CE3+hHLtYiU6j3cCv7PPA@mail.gmail.com> <CAHk-=wgjyGX3OVDtzJW6Oh2ukviXtJYi9+7eJW75DgX+d673iw@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Tue, 5 Sep 2023 22:41:33 +0200
+Message-ID: <CAGudoHEXyYSZj-7=3Xss=65jGyX4Lq=R-BdbnmGKJwSS8QznSw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86: bring back rep movsq for user access on CPUs
+ without ERMS
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, bp@alien8.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------8cnkOZ3clMojcrflCUVqPiyi
-Content-Type: multipart/mixed; boundary="------------vggYL9Fu9Mr0081TqvPYGkw1";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
- christophe.leroy@csgroup.eu, arnd@arndb.de, deller@gmx.de
-Cc: linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org
-Message-ID: <5265f1eb-e1a6-c91e-9bc2-75089d594a0e@suse.de>
-Subject: Re: [PATCH 0/4] ppc, fbdev: Clean up fbdev mmap helper
-References: <20230901142659.31787-1-tzimmermann@suse.de>
- <874jk9ibf7.fsf@mail.lhotse>
-In-Reply-To: <874jk9ibf7.fsf@mail.lhotse>
+On 9/4/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Sun, 3 Sept 2023 at 23:03, Mateusz Guzik <mjguzik@gmail.com> wrote:
+>>
+>> Worst case if the 64 bit structs differ one can settle for
+>> user-accessing INIT_STRUCT_STAT_PADDING.
+>
+> As I said, try it. I think you'll find that you are wrong.  It's
+> _hard_ to get the padding right. The "use a temporary" model of the
+> current code makes the fallback easy - just clear it before copying
+> the fields. Without that, you have to get every architecture padding
+> right manually.
+>
 
---------------vggYL9Fu9Mr0081TqvPYGkw1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+See below for an unrelated patch. ;)
 
-SGkNCg0KQW0gMDUuMDkuMjMgdW0gMDQ6NDcgc2NocmllYiBNaWNoYWVsIEVsbGVybWFuOg0K
-PiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JpdGVzOg0KPj4g
-UmVmYWN0b3IgZmJfcGdwcm90ZWN0KCkgaW4gUG93ZXJQQyB0byB3b3JrIHdpdGhvdXQgc3Ry
-dWN0IGZpbGUuIFRoZW4NCj4+IGNsZWFuIHVwIGFuZCByZW5hbWUgZmJfcGdwcm90ZWN0KCku
-IFRoaXMgY2hhbmdlIGhhcyBiZWVuIGRpc2N1c3NlZCBhdA0KPj4gWzFdIGluIHRoZSBjb250
-ZXh0IG9mIHJlZmFjdG9yaW5nIGZiZGV2J3MgbW1hcCBjb2RlLg0KPj4NCj4+IFRoZSBmaXJz
-dCB0aHJlZSBwYXRjaGVzIGFkYXB0IFBvd2VyUEMncyBpbnRlcm5hbCBpbnRlcmZhY2VzIHRv
-DQo+PiBwcm92aWRlIGEgcGh5c19tZW1fYWNjZXNzX3Byb3QoKSB0aGF0IHdvcmtzIHdpdGhv
-dXQgc3RydWN0IGZpbGUuIE5laXRoZXINCj4+IHRoZSBhcmNoaXRlY3R1cmUgY29kZSBvciBm
-YmRldiBoZWxwZXJzIG5lZWQgdGhlIHBhcmFtZXRlci4NCj4+DQo+PiBQYXRjaCA0IHJlcGxh
-Y2VzIGZiZGV2J3MgZmJfcGdwcm90ZWN0KCkgd2l0aCBmYl9wZ3Byb3RfZGV2aWNlKCkgb24N
-Cj4+IGFsbCBhcmNoaXRlY3R1cmVzLiBUaGUgbmV3IGhlbHBlciB3aXRoIGl0cyBzdHJlYW0t
-bGluZWQgaW50ZXJmYWNlDQo+PiBlbmFibGVzIG1vcmUgcmVmYWN0b3Jpbmcgd2l0aGluIGZi
-ZGV2J3MgbW1hcCBpbXBsZW1lbnRhdGlvbi4NCj4gDQo+IFRoZSBjb250ZW50IG9mIHRoaXMg
-c2VyaWVzIGlzIE9LLCBidXQgdGhlIHdheSBpdCdzIHN0cnVjdHVyZWQgbWFrZXMgaXQgYQ0K
-PiByZWFsIGhlYWRhY2hlIHRvIG1lcmdlLCBiZWNhdXNlIGl0J3MgbW9zdGx5IHBvd2VycGMg
-Y2hhbmdlcyBhbmQgdGhlbiBhDQo+IGRlcGVuZGFudCBjcm9zcyBhcmNoaXRlY3R1cmUgcGF0
-Y2ggYXQgdGhlIGVuZC4NCj4gDQo+IEl0IHdvdWxkIGJlIHNpbXBsZXIgaWYgcGF0Y2ggNCB3
-YXMgZmlyc3QgYW5kIGp1c3QgcGFzc2VkIGZpbGU9TlVMTCB0bw0KPiB0aGUgcG93ZXJwYyBo
-ZWxwZXIsIHdpdGggYW4gZXhwbGFuYXRpb24gdGhhdCBpdCdzIHVudXNlZCBhbmQgd2lsbCBi
-ZQ0KPiBkcm9wcGVkIGluIGEgZnV0dXJlIGNsZWFudXAuDQo+IA0KPiBXZSBjb3VsZCB0aGVu
-IHB1dCB0aGUgZmlyc3QgcGF0Y2ggKHByZXZpb3VzbHkgcGF0Y2ggNCkgaW4gYSB0b3BpYyBi
-cmFuY2gNCj4gdGhhdCBpcyBzaGFyZWQgYmV0d2VlbiB0aGUgcG93ZXJwYyB0cmVlIGFuZCB0
-aGUgZmJkZXYgdHJlZSwgYW5kIHRoZW4gdGhlDQo+IHBvd2VycGMgY2hhbmdlcyBjb3VsZCBi
-ZSBzdGFnZWQgb24gdG9wIG9mIHRoYXQgdGhyb3VnaCB0aGUgcG93ZXJwYyB0cmVlLg0KDQpP
-aywgdGhhbmtzIGZvciByZXZpZXdpbmcuIFRoZSBmYmRldiBwYXRjaCB3b3VsZCBnbyB0aHJv
-dWdoIHRoZSBkcm0tbWlzYyANCnRyZWUgYXMgYmFzZSBmb3IgZnVydGhlciByZWZhY3Rvcmlu
-Zy4NCg0KSSdsbCB1cGRhdGUgdGhlIHBhdGNoc2V0IGFjY29yZGluZ2x5Lg0KDQpCZXN0IHJl
-Z2FyZHMNClRob21hcw0KDQo+IA0KPiBjaGVlcnMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFu
-bg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
-R2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2Vy
-bWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJv
-dWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
+In the worst case user-accessing INIT_STRUCT_STAT_PADDING would simply
+have these padding assignments spelled out, like you had to do anyway
+in your patch (among other things) and which already happens with
+existing code for x86-64. The code would not be fully optimized due to
+"bad" ordering, but the implementation would avoid escaping fs/stat.c
+which imo justifies it.
 
---------------vggYL9Fu9Mr0081TqvPYGkw1--
+I said my $0,03 on the matter twice, I don't think this convo is
+getting anywhere or that it is particularly important.
 
---------------8cnkOZ3clMojcrflCUVqPiyi
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+With that out of the way:
 
------BEGIN PGP SIGNATURE-----
+Earlier you attached a patch to check for an empty path early, that
+was a nice win but can result in duplicated smap trips for nasty
+software.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmT3IpgFAwAAAAAACgkQlh/E3EQov+Ar
-2BAAx4GyhqkGBaJfv3puNbbvuB7PEZosJZ/vqe3G59Ue+8wRBHUTSKhDolnDRYRTbKQgZ1SQOrZG
-s6+W76rPXD1Ut4CVvr8k7nTHykj6zZleDub7NrWbfct6eQCj162khf2dJa4gR75GQ2xD+SDj3i4W
-1LGY55I1ufx+7SulJur+5EUbmRBHxru6iU5MYxADPt5aUUbwMNWCr6sobziieqr0IP/20SfispBk
-dUdtMdCkU3Lw2ZK2n9UVUVxmO7XSgRU2UFJEGr3/0BIMhnHMuxkiXPYn/JJlddIgbC24PsKp/gAW
-mcWBqdQnCLya6eb0TYII9VyeJGHISNWx01SprtAnuvp7yuKOwizJEVWC6XclHcSA89RgaRCm0Yx5
-+WPhWrlzgI1Bw9ZwpEP/xRtDXUTFRYBipih65g7Aijb3FiSg3kNTAbE6A4m5agaj28L1ctOaUpz4
-ntRjkcG3o7CyqSKp6sZh6+pvzf7HR1sdFiQuDgG8ySlNND/EJVdu4QS/17JYC0Eo8rdtduUTDhqv
-13/YT17csTxF5EGvFMKS+FXFDansioQxoUsA+Dr+nhakhID6DXmmICnbQSa2f+/4rG1MKN2qxzKe
-3dNq15p4ARLrfNQ6GJsXLOTw+OtJHK4TPzPcP3NaK9UK+HQC3YGExb3Fge10A1SQK1ZJAwfpWaae
-D/g=
-=iHVQ
------END PGP SIGNATURE-----
+Then you mentioned doing the check after the name is fully copied in,
+which I incorrectly dismissed from the get go -- mentally I had a
+state from $elsewhere where it would require patching namei. But in
+Linux this is not the case:
 
---------------8cnkOZ3clMojcrflCUVqPiyi--
+        name = getname_flags(filename,
+getname_statx_lookup_flags(statx_flags), NULL);
+        ret = vfs_statx(dfd, name, statx_flags, stat, STATX_BASIC_STATS);
+        putname(name);
+
+So something like this:
+
+@@ -312,7 +314,15 @@ int vfs_fstatat(int dfd, const char __user *filename,
+        struct filename *name;
+
+        name = getname_flags(filename,
+getname_statx_lookup_flags(statx_flags), NULL);
+-       ret = vfs_statx(dfd, name, statx_flags, stat, STATX_BASIC_STATS);
++       /*
++        * Hack: ugliness below damage controls glibc which reimplemented fstat
++        * on top of newfstatat(fd, "", buf, AT_EMPTY_PATH). We still pay for
++        * kmalloc and user access, but elide lockref.
++        */
++       if (name->name[0] == '\0' && flags == AT_EMPTY_PATH && dfd >= 0)
++               ret = vfs_fstat(dfd, stat);
++       else
++               ret = vfs_statx(dfd, name, statx_flags, stat,
+STATX_BASIC_STATS);
+        putname(name);
+
+        return ret;
+
+Previous numbers:
+> stock fstat     5088199
+> patched fstat   7625244 (+49%)
+> real fstat      8540383 (+67% / +12%)
+
+while moving the check lower:
+patchedv2 fstat 6253694 (+22%)
+
+So quite a bit slower than the hackiest variant, but avoids the double
+smap problem for cases passing AT_EMPTY_PATH and a non-"" name.
+
+I think this is a justifiable patch, can submit properly formatted
+(this is copy pasted into gmail, sorry). Alternatively since it is
+trivial and it was your idea feel free to take it or reimpement or
+whatever in similar vein.
+
+-- 
+Mateusz Guzik <mjguzik gmail.com>
