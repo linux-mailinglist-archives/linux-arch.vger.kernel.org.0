@@ -2,77 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9690979344E
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Sep 2023 06:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC8C7934A7
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Sep 2023 07:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbjIFELK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Sep 2023 00:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S230391AbjIFFBs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Sep 2023 01:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjIFELJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Sep 2023 00:11:09 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9B9184;
-        Tue,  5 Sep 2023 21:11:03 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-57354433a7dso1772916eaf.1;
-        Tue, 05 Sep 2023 21:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693973463; x=1694578263; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P4FZa087hyUqZvPa7tIhMq2JMpJjYeVOov7QoimEdp4=;
-        b=hV89rb+8pICVikBKpMTckHNK728tYtMtW9DWi9+jocNkox4ZEIGkrwT3X4nDlxLTzh
-         9SctQPGWJf2KVzLhWSaSp4lySt9tEac7Zl3JC6G8iqFbkxZ2FeAq5PLKKhsrUmiqCLLj
-         IIe//Ck6uqAIpToYDTrlcozLDZUcKWqm3mv1Jk9rp3YVSY9eLFR9jT25JLzP3yCkv8HE
-         VT3oaJj/VuuIBk+Q6gAdHsL12q3pD8vxSvUsXZna5UEbgKUVmA7jFmXIw1YBtbeoTbvG
-         ZzIQiZsIMXefyVJi4WXuint54z1Ivbtp/2BQQuqCSPPHcpnpNSFvOkwxsxF+iEZ4Wm1m
-         DJ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693973463; x=1694578263;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P4FZa087hyUqZvPa7tIhMq2JMpJjYeVOov7QoimEdp4=;
-        b=Hqd9qnU/k+MOB3J5oBxMNeTbMneJ6kBu3yulO45ueF7Gk0nhpVOw2LZyQBRGQOpM/n
-         VEhPLabqqVSZt27UAXvdVCfYuHbzXCYEyfdF9lScX6M+RMBw5A5diNUpmjU2faZRWw/f
-         mbheTVnBJ4xkO82m+Zl0fH3kvoYoAAbHLJAu23li4kBlglTG4qYTr/GXz5WDcsXevlSZ
-         mdMHG6RhvParX/2sRKa6h4OCumR0PoPpwazg4AblirukP+5cLx4Z47hrNhbDsFVHg2kC
-         NwiPUx9/4tq5nD9BY6QUqx5ajK7Q3vZPKOXOuooxCnTWi2ObZK4G/o0aXeY6IXUs/IWD
-         TLKA==
-X-Gm-Message-State: AOJu0YyegvKs233rWlKvmJeY0YBzqiQ1OMyjBSmgvWqIyALIkGnyecRu
-        WVPm53zf+XDpHAYq7GQsOckTW8Nup5KbuAf5UDY=
-X-Google-Smtp-Source: AGHT+IGrUiiHqpj6nSPCM7SRQ+tOP84EbjN8VTSNYKFwWPnKr2m7q6WYy7JED9MP9psbE5K9AaPZo0mllOegzNcsmOA=
-X-Received: by 2002:a4a:314b:0:b0:56c:cd04:9083 with SMTP id
- v11-20020a4a314b000000b0056ccd049083mr12638895oog.1.1693973463099; Tue, 05
- Sep 2023 21:11:03 -0700 (PDT)
+        with ESMTP id S230330AbjIFFBs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Sep 2023 01:01:48 -0400
+X-Greylist: delayed 390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 22:01:44 PDT
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B048E;
+        Tue,  5 Sep 2023 22:01:43 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.141.245])
+        by APP-03 (Coremail) with SMTP id rQCowAAnLKAuBvhkIAchCw--.41703S2;
+        Wed, 06 Sep 2023 12:55:11 +0800 (CST)
+From:   sunying@nj.iscas.ac.cn
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pengpeng@iscas.ac.cn, renyanjie01@gmail.com,
+        Ying Sun <sunying@nj.iscas.ac.cn>
+Subject: [PATCH] include/asm-generic/topology.h: remove dead code cpumask_of_node macro
+Date:   Wed,  6 Sep 2023 12:54:49 +0800
+Message-Id: <20230906045449.15110-1-sunying@nj.iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:ac9:745a:0:b0:4f0:1250:dd51 with HTTP; Tue, 5 Sep 2023
- 21:11:02 -0700 (PDT)
-In-Reply-To: <CAHk-=wh0J7HotWcjP5nL4pZZLZN31SMid5rpf3pvmv-7Yi2W1A@mail.gmail.com>
-References: <20230830140315.2666490-1-mjguzik@gmail.com> <CAHk-=wgADyL9i8r1=YkRTehKG8T89TzqAFMXDJV1Ag+_4_25Cw@mail.gmail.com>
- <CAGudoHH95OKVgf0jW5pz_Nt2ab0HTnt3H9hbmU=aSHozOS5B0Q@mail.gmail.com>
- <CAHk-=wh+=W2k1V_0Om=_=QpPAN_VgHzdZ4FLXSfcyTSK7xo0Eg@mail.gmail.com>
- <CAHk-=wg6bzTdQHSsswHPYFUbb1DfszyWTZ97hZv7bYxaNHVkHw@mail.gmail.com>
- <20230903204858.lv7i3kqvw6eamhgz@f> <CAHk-=wjYOZf2wPj_=arATJ==DQQAQwh0ki=Za0RcE542rWBGFw@mail.gmail.com>
- <ZPT/LzkPR/jaiaDb@gmail.com> <CAHk-=wh1hi-HnBQRu9_ALQL-fbhyn_go+2c9FajO26khf2dsTw@mail.gmail.com>
- <CAGudoHG1_r1B0pz6-HUqb6AfbAgWHxBy+TnimvQtwLLqkKtchA@mail.gmail.com>
- <CAHk-=wjM6KwAvC9+sCAm9BgBSspZm60VBLzHcuonGcHrPKJrbw@mail.gmail.com>
- <CAHk-=whnEF7-+DL+71wVgnJG1xjeHAQjzqMAULgQq_uhWfP0ZA@mail.gmail.com>
- <CAGudoHENT1yPBD=+xAUTzWxL+iro8CE3+hHLtYiU6j3cCv7PPA@mail.gmail.com>
- <CAHk-=wgjyGX3OVDtzJW6Oh2ukviXtJYi9+7eJW75DgX+d673iw@mail.gmail.com>
- <CAGudoHEXyYSZj-7=3Xss=65jGyX4Lq=R-BdbnmGKJwSS8QznSw@mail.gmail.com> <CAHk-=wh0J7HotWcjP5nL4pZZLZN31SMid5rpf3pvmv-7Yi2W1A@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Wed, 6 Sep 2023 06:11:02 +0200
-Message-ID: <CAGudoHFAzfA+PoCYD_XabFAQxow1e32M4Wxf_3AqczKKAtc0Wg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, bp@alien8.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAAnLKAuBvhkIAchCw--.41703S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJryUAFW8KFW7ZFyDtFW8Zwb_yoW8Gr4xpF
+        n5GrWYkws5JFy8Cay0v3yvkryjqFZ5GrZYqa1j9ws3AFy7Jw18Xr1qvrsxZryDWrZ2vrWr
+        JF95GF1Sg3W2yFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv214x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAKzVCY07xG64k0F24l
+        c2xSY4AK67AK6r45MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7VUUuyIUUUUUU==
+X-Originating-IP: [124.16.141.245]
+X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,44 +58,45 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/6/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Tue, 5 Sept 2023 at 13:41, Mateusz Guzik <mjguzik@gmail.com> wrote:
->>
->> @@ -312,7 +314,15 @@ int vfs_fstatat(int dfd, const char __user
->> *filename,
->>         struct filename *name;
->>
->>         name = getname_flags(filename,
->> getname_statx_lookup_flags(statx_flags), NULL);
->> -       ret = vfs_statx(dfd, name, statx_flags, stat, STATX_BASIC_STATS);
->> +       /*
->> +        * Hack: ugliness below damage controls glibc which reimplemented
->> fstat
->> +        * on top of newfstatat(fd, "", buf, AT_EMPTY_PATH). We still pay
->> for
->> +        * kmalloc and user access, but elide lockref.
->> +        */
->> +       if (name->name[0] == '\0' && flags == AT_EMPTY_PATH && dfd >= 0)
->> +               ret = vfs_fstat(dfd, stat);
->> +       else
->> +               ret = vfs_statx(dfd, name, statx_flags, stat,
->> STATX_BASIC_STATS);
->>         putname(name);
->
-> I actually think I might prefer the earlier hacky thing, because it
-> avoids the whole nasty pathname allocation thing (ie the __getname()
-> dance in getname_flags(), and the addition of the pathname to the
-> audit records etc).
->
-> I suspect your "there are no real loads that combine AT_EMPTY_PATH
-> with a path" comment is true.
->
-> So if we have this short-circuit of the code, let's go all hog on it,
-> and avoid not just the RCU lookup (with lockref etc), but the pathname
-> allocation too.
->
+From: Ying Sun <sunying@nj.iscas.ac.cn>
 
-Ok, I'm buggering off the subject.
+The macro of “cpumask_of_node(node)” in line 49 is a dead code
+which will never be implemented，because its conditions of
+line 30 "#ifndef CONFIG_NUMA" and line 48 "#ifdef CONFIG_NUMA"
+are mutually exclusive. It is recommended to delete redundant code.
 
+Suggested-by: Yanjie Ren <renyanjie01@gmail.com>
+Signed-off-by: Ying Sun <sunying@nj.iscas.ac.cn>
+---
+ include/asm-generic/topology.h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/include/asm-generic/topology.h b/include/asm-generic/topology.h
+index 4dbe715be65b..8fcc95953e70 100644
+--- a/include/asm-generic/topology.h
++++ b/include/asm-generic/topology.h
+@@ -45,11 +45,7 @@
+ #endif
+ 
+ #ifndef cpumask_of_node
+-  #ifdef CONFIG_NUMA
+-    #define cpumask_of_node(node)	((node) == 0 ? cpu_online_mask : cpu_none_mask)
+-  #else
+-    #define cpumask_of_node(node)	((void)(node), cpu_online_mask)
+-  #endif
++  #define cpumask_of_node(node)	((void)(node), cpu_online_mask)
+ #endif
+ #ifndef pcibus_to_node
+ #define pcibus_to_node(bus)	((void)(bus), -1)
+@@ -61,7 +57,7 @@
+ 				 cpumask_of_node(pcibus_to_node(bus)))
+ #endif
+ 
+-#endif	/* CONFIG_NUMA */
++#endif	/* !CONFIG_NUMA */
+ 
+ #if !defined(CONFIG_NUMA) || !defined(CONFIG_HAVE_MEMORYLESS_NODES)
+ 
 -- 
-Mateusz Guzik <mjguzik gmail.com>
+2.17.1
+
