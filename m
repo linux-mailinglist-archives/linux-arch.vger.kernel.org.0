@@ -2,231 +2,210 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF1D797B3E
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Sep 2023 20:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2AF79864E
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Sep 2023 13:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbjIGSKj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Sep 2023 14:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
+        id S242014AbjIHLLc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Sep 2023 07:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239762AbjIGSKi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Sep 2023 14:10:38 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0361810F1;
-        Thu,  7 Sep 2023 11:10:05 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-64c2e2572f7so7123506d6.1;
-        Thu, 07 Sep 2023 11:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694110203; x=1694715003; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=brKbRdx1kpGoO2Y9NjS4SFjuuPU0IFk1738Z4hW7QPE=;
-        b=rrd4PrDWVv2jjTdtd6O8xCq4EHwQOoFejM4fR38BvLRDotce54HnzQOhBRlumlmTuP
-         n7vLi29D93/GGBcdbOJU/x6HrGn/bzAxY9voU+K4fpd3Zgk8XAya2AHATDw0YR4zPYUc
-         3SkXsIWQJT6WqHlLL34Rm44pml0yAVJMqjj7T5gO/9GLAZVIO22u+ygTU+teFR86UR8U
-         AGTAuUOIrV+0C7EFXEVJ2VE+FDiBe7VjOax6FEZcrv8HcFDr55yP2qPbJ0FbUrf+1mvq
-         xboq46V8/txGqUym1lMqSodhg4pOtFaL7lcSnn+AUG8/bxgFxOVMkHXzRD3N/bS47M6F
-         k8/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694110203; x=1694715003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=brKbRdx1kpGoO2Y9NjS4SFjuuPU0IFk1738Z4hW7QPE=;
-        b=pzDWyfssVPXQO+wTMLWBByj/y1zhxl+D1G1Lyo4Ng1qZfCyVAoWk/LC85XrNNfE5Up
-         uyDLSWYRHjO2GmXDWL5bv3XPsvZG73T9JN9wfeoGvJgCIHzSNWS03vd0qdD0Pnyyzjgl
-         KZ5ewjzdQDORvXWh6g73X8qZXawFAxBOn+uO3smo6XZresRBalkuZ9JPjOUV7uQlbxD6
-         8sA8fJLS6PFy797dkz8Lc4pOvwMh+r4AmWeo12bSrC8bYXMZIg1tR2rK9VQ9Ap2Wsrc3
-         fPgdUJJ/sdOwH7JxWoDVR/veVc4/IY9Sa4Z8fMw8YTlHRxIgfAX1Rs1EXLle/LX02h9Q
-         dOpA==
-X-Gm-Message-State: AOJu0YwTBDU3/MFGnztDAVE/vSjuXW3GLkBncxakSGWsdFW8wJrtuj99
-        X7VY3bdU75R27Xo65gd9c+uDCPh/zM2VyV8pucDjiM4bkXE=
-X-Google-Smtp-Source: AGHT+IEB2hO+TGGIAGO65G3+5LgFgJwUd0dqMX6Dw9arpoFxlY11pB1Z3e5xVZisoM3mAw7p9kKP6mypD/66ucf4p3s=
-X-Received: by 2002:a6b:d315:0:b0:787:ff98:c38c with SMTP id
- s21-20020a6bd315000000b00787ff98c38cmr21570759iob.10.1694083805330; Thu, 07
- Sep 2023 03:50:05 -0700 (PDT)
+        with ESMTP id S242334AbjIHLLb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Sep 2023 07:11:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9B01FC4;
+        Fri,  8 Sep 2023 04:11:23 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA41C433CA;
+        Fri,  8 Sep 2023 11:11:20 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.6
+Date:   Fri,  8 Sep 2023 19:10:53 +0800
+Message-Id: <20230908111053.1660033-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-References: <20230801085402.1168351-1-alexghiti@rivosinc.com>
- <20230801085402.1168351-5-alexghiti@rivosinc.com> <CA+V-a8t56xDqMTQfoKcsvPF8errkTMydaDz5V6nejLvVfJrW3g@mail.gmail.com>
- <CAHVXubiENHt36LrcSBoNU0rAMQ8EoT6tde9M8vLP3Hw2nwMm8g@mail.gmail.com>
- <CA+V-a8vJJFCKy3pCL2Qp1NogL-K5s9moGDbv3tTvx+z1FeKarw@mail.gmail.com>
- <CAHVXubhLB9Pw51C1ed1Youp9k0qTJKrokUAqf=Xnr+m3BoN5=g@mail.gmail.com>
- <CA+V-a8s0i=VMSbMa6WvOiZpqe_idAhq4cZ0inSdCNy39-rQeAg@mail.gmail.com>
- <CAHVXubjgjAwMOi0J5zZJkuX8RKwgfKp-_=tVTLDvKN=tBBdxNQ@mail.gmail.com>
- <CA+V-a8uxe=sT7oX4Dk4zppCbYzWdZgWt9Xh4m+pA2+3t8kfnjg@mail.gmail.com> <CAHVXubitpk9RxMPc9+ss0y=ZmpOrfv0ocP+UDQktR=TM+gy=KQ@mail.gmail.com>
-In-Reply-To: <CAHVXubitpk9RxMPc9+ss0y=ZmpOrfv0ocP+UDQktR=TM+gy=KQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 7 Sep 2023 11:49:03 +0100
-Message-ID: <CA+V-a8tGGR8q1Wv=dJJKLkbAsfmH8p8Fn9Ycns7+1LCSzxvpZA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] riscv: Improve flush_tlb_kernel_range()
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Alexandre,
+The following changes since commit 2dde18cd1d8fac735875f2e4987f11817cc0bc2c:
 
-On Thu, Sep 7, 2023 at 10:06=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> Hi Prabhakar,
->
-> On Wed, Sep 6, 2023 at 3:55=E2=80=AFPM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> >
-> > Hi Alexandre,
-> >
-> > On Wed, Sep 6, 2023 at 1:43=E2=80=AFPM Alexandre Ghiti <alexghiti@rivos=
-inc.com> wrote:
-> > >
-> > > On Wed, Sep 6, 2023 at 2:24=E2=80=AFPM Lad, Prabhakar
-> > > <prabhakar.csengg@gmail.com> wrote:
-> > > >
-> > > > Hi Alexandre,
-> > > >
-> > > > On Wed, Sep 6, 2023 at 1:18=E2=80=AFPM Alexandre Ghiti <alexghiti@r=
-ivosinc.com> wrote:
-> > > > >
-> > > > > On Wed, Sep 6, 2023 at 2:09=E2=80=AFPM Lad, Prabhakar
-> > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > >
-> > > > > > Hi Alexandre,
-> > > > > >
-> > > > > > On Wed, Sep 6, 2023 at 1:01=E2=80=AFPM Alexandre Ghiti <alexghi=
-ti@rivosinc.com> wrote:
-> > > > > > >
-> > > > > > > Hi Prabhakar,
-> > > > > > >
-> > > > > > > On Wed, Sep 6, 2023 at 1:49=E2=80=AFPM Lad, Prabhakar
-> > > > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > Hi Alexandre,
-> > > > > > > >
-> > > > > > > > On Tue, Aug 1, 2023 at 9:58=E2=80=AFAM Alexandre Ghiti <ale=
-xghiti@rivosinc.com> wrote:
-> > > > > > > > >
-> > > > > > > > > This function used to simply flush the whole tlb of all h=
-arts, be more
-> > > > > > > > > subtile and try to only flush the range.
-> > > > > > > > >
-> > > > > > > > > The problem is that we can only use PAGE_SIZE as stride s=
-ince we don't know
-> > > > > > > > > the size of the underlying mapping and then this function=
- will be improved
-> > > > > > > > > only if the size of the region to flush is < threshold * =
-PAGE_SIZE.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > > > > > > > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > > > > > > > ---
-> > > > > > > > >  arch/riscv/include/asm/tlbflush.h | 11 +++++-----
-> > > > > > > > >  arch/riscv/mm/tlbflush.c          | 34 +++++++++++++++++=
-++++++--------
-> > > > > > > > >  2 files changed, 31 insertions(+), 14 deletions(-)
-> > > > > > > > >
-> > > > > > > > After applying this patch, I am seeing module load issues o=
-n RZ/Five
-> > > > > > > > (complete log [0]). I am testing defconfig + [1] (rz/five r=
-elated
-> > > > > > > > configs).
-> > > > > > > >
-> > > > > > > > Any pointers on what could be an issue here?
-> > > > > > >
-> > > > > > > Can you give me the exact version of the kernel you use? The =
-trap
-> > > > > > > addresses are vmalloc addresses, and a fix for those landed v=
-ery late
-> > > > > > > in the release cycle.
-> > > > > > >
-> > > > > > I am using next-20230906, Ive pushed a branch [1] for you to ha=
-ve a look.
-> > > > > >
-> > > > > > [0] https://github.com/prabhakarlad/linux/tree/rzfive-debug
-> > > > >
-> > > > > Great, thanks, I had to get rid of this possibility :)
-> > > > >
-> > > > > As-is, I have no idea, can you try to "bisect" the problem? I mea=
-n
-> > > > > which patch in the series leads to those traps?
-> > > > >
-> > > > Oops sorry for not mentioning earlier, this is the offending patch
-> > > > which leads to the issues seen on rz/five.
-> > >
-> > > Ok, so at least I found the following problem, but I don't see how
-> > > that could fix your issue: can you give a try anyway? I keep looking
-> > > into this, thanks
-> > >
-> > > diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
-> > > index df2a0838c3a1..b5692bc6c76a 100644
-> > > --- a/arch/riscv/mm/tlbflush.c
-> > > +++ b/arch/riscv/mm/tlbflush.c
-> > > @@ -239,7 +239,7 @@ void flush_tlb_range(struct vm_area_struct *vma,
-> > > unsigned long start,
-> > >
-> > >  void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-> > >  {
-> > > -       __flush_tlb_range(NULL, start, end, PAGE_SIZE);
-> > > +       __flush_tlb_range(NULL, start, end - start, PAGE_SIZE);
-> > >  }
-> > >
-> > I am able to reproduce the issue with the above change too.
->
-> I can't reproduce the problem on my Unmatched or Qemu, so it is not
-> easy to debug. But I took another look at your traces and something is
-> weird to me. In the following trace (and there is another one), the
-> trap is taken at 0xffffffff015ca034, which is the beginning of
-> rz_ssi_probe(): that's a page fault, so no translation was found (or
-> an invalid one is cached).
->
-> [   16.586527] Unable to handle kernel paging request at virtual
-> address ffffffff015ca034
-> [   16.594750] Oops [#3]
-> ...
-> [   16.622000] epc : rz_ssi_probe+0x0/0x52a [snd_soc_rz_ssi]
-> ...
-> [   16.708697] status: 0000000200000120 badaddr: ffffffff015ca034
-> cause: 000000000000000c
-> [   16.716580] [<ffffffff015ca034>] rz_ssi_probe+0x0/0x52a
-> [snd_soc_rz_ssi]
-> ...
->
-> But then here we are able to read the code at this same address:
-> [   16.821620] Code: 0109 6597 0000 8593 5f65 7097 7f34 80e7 7aa0 b7a9
-> (7139) f822
->
-> So that looks like a "transient" error. Do you know if you uarch
-> caches invalid TLB entries? If you don't know, I have just written
-> some piece of code to determine if it does, let me know.
->
-No I dont, can you please share the details so that I can pass on the
-information to you.
+  Linux 6.5 (2023-08-27 14:49:51 -0700)
 
-> Do those errors always happen?
->
-Yes they do.
+are available in the Git repository at:
 
-Cheers,
-Prabhakar
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.6
+
+for you to fetch changes up to 671eae93ae2090d2df01d810d354cab05f6bed8b:
+
+  LoongArch: Update Loongson-3 default config file (2023-09-07 12:06:20 +0800)
+
+----------------------------------------------------------------
+LoongArch changes for v6.6
+
+1, Allow usage of LSX/LASX in the kernel;
+2, Add SIMD-optimized RAID5/RAID6 routines;
+3, Add Loongson Binary Translation (LBT) extension support;
+4, Add basic KGDB & KDB support;
+5, Add building with kcov coverage;
+6, Add KFENCE (Kernel Electric-Fence) support;
+7, Add KASAN (Kernel Address Sanitizer) support;
+8, Some bug fixes and other small changes;
+9, Update the default config file.
+
+Note: There is a conflicts in arch/loongarch/mm/pgtable.c but can be
+simply fixed by adjusting context.
+
+----------------------------------------------------------------
+Bibo Mao (3):
+      LoongArch: Code improvements in function pcpu_populate_pte()
+      LoongArch: mm: Introduce unified function populate_kernel_pte()
+      LoongArch: Use static defined zero page rather than allocated
+
+Enze Li (4):
+      kfence: Defer the assignment of the local variable addr
+      LoongArch: mm: Add page table mapped mode support for virt_to_page()
+      LoongArch: Get partial stack information when providing regs parameter
+      LoongArch: Add KFENCE (Kernel Electric-Fence) support
+
+Feiyang Chen (2):
+      LoongArch: Provide kaslr_offset() to get kernel offset
+      LoongArch: Allow building with kcov coverage
+
+Hongchen Zhang (1):
+      LoongArch: mm: Add p?d_leaf() definitions
+
+Huacai Chen (4):
+      Merge tag 'md-next-20230814-resend' into loongarch-next
+      LoongArch: Remove shm_align_mask and use SHMLBA instead
+      LoongArch: Allow usage of LSX/LASX in the kernel
+      LoongArch: Update Loongson-3 default config file
+
+Nathan Chancellor (1):
+      LoongArch: Drop unused parse_r and parse_v macros
+
+Qi Hu (1):
+      LoongArch: Add Loongson Binary Translation (LBT) extension support
+
+Qing Zhang (5):
+      LoongArch: Add basic KGDB & KDB support
+      kasan: Add __HAVE_ARCH_SHADOW_MAP to support arch specific mapping
+      kasan: Add (pmd|pud)_init for LoongArch zero_(pud|p4d)_populate process
+      LoongArch: Simplify the processing of jumping new kernel for KASLR
+      LoongArch: Add KASAN (Kernel Address Sanitizer) support
+
+Tiezhu Yang (1):
+      LoongArch: Define symbol 'fault' as a local label in fpu.S
+
+WANG Xuerui (3):
+      LoongArch: Add SIMD-optimized XOR routines
+      raid6: Add LoongArch SIMD syndrome calculation
+      raid6: Add LoongArch SIMD recovery implementation
+
+Weihao Li (1):
+      LoongArch: Adjust {copy, clear}_user exception handler behavior
+
+ Documentation/dev-tools/kasan.rst                  |   4 +-
+ .../features/debug/KASAN/arch-support.txt          |   2 +-
+ Documentation/features/debug/kcov/arch-support.txt |   2 +-
+ Documentation/features/debug/kgdb/arch-support.txt |   2 +-
+ .../translations/zh_CN/dev-tools/kasan.rst         |   2 +-
+ arch/loongarch/Kconfig                             |  26 +
+ arch/loongarch/Makefile                            |   3 +
+ arch/loongarch/configs/loongson3_defconfig         |  74 ++-
+ arch/loongarch/include/asm/asm-prototypes.h        |   1 +
+ arch/loongarch/include/asm/asmmacro.h              | 158 ++---
+ arch/loongarch/include/asm/kasan.h                 | 126 ++++
+ arch/loongarch/include/asm/kfence.h                |  61 ++
+ arch/loongarch/include/asm/kgdb.h                  |  97 +++
+ arch/loongarch/include/asm/lbt.h                   | 109 +++
+ arch/loongarch/include/asm/loongarch.h             |  47 +-
+ arch/loongarch/include/asm/mmzone.h                |   2 -
+ arch/loongarch/include/asm/page.h                  |   7 +-
+ arch/loongarch/include/asm/pgalloc.h               |   1 +
+ arch/loongarch/include/asm/pgtable.h               |  31 +-
+ arch/loongarch/include/asm/processor.h             |  26 +-
+ arch/loongarch/include/asm/setup.h                 |   8 +-
+ arch/loongarch/include/asm/stackframe.h            |   4 +
+ arch/loongarch/include/asm/string.h                |  20 +
+ arch/loongarch/include/asm/switch_to.h             |   2 +
+ arch/loongarch/include/asm/thread_info.h           |   4 +
+ arch/loongarch/include/asm/xor.h                   |  68 ++
+ arch/loongarch/include/asm/xor_simd.h              |  34 +
+ arch/loongarch/include/uapi/asm/ptrace.h           |   6 +
+ arch/loongarch/include/uapi/asm/sigcontext.h       |  10 +
+ arch/loongarch/kernel/Makefile                     |   9 +
+ arch/loongarch/kernel/asm-offsets.c                |  18 +-
+ arch/loongarch/kernel/cpu-probe.c                  |  14 +
+ arch/loongarch/kernel/entry.S                      |   5 +
+ arch/loongarch/kernel/fpu.S                        |  14 +-
+ arch/loongarch/kernel/head.S                       |  13 +-
+ arch/loongarch/kernel/kfpu.c                       |  55 +-
+ arch/loongarch/kernel/kgdb.c                       | 727 +++++++++++++++++++++
+ arch/loongarch/kernel/lbt.S                        | 155 +++++
+ arch/loongarch/kernel/numa.c                       |  35 +-
+ arch/loongarch/kernel/process.c                    |  15 +-
+ arch/loongarch/kernel/ptrace.c                     |  54 ++
+ arch/loongarch/kernel/relocate.c                   |   8 +-
+ arch/loongarch/kernel/setup.c                      |   4 +
+ arch/loongarch/kernel/signal.c                     | 188 ++++++
+ arch/loongarch/kernel/stacktrace.c                 |  18 +-
+ arch/loongarch/kernel/traps.c                      |  50 +-
+ arch/loongarch/lib/Makefile                        |   2 +
+ arch/loongarch/lib/clear_user.S                    |  87 +--
+ arch/loongarch/lib/copy_user.S                     | 161 ++---
+ arch/loongarch/lib/memcpy.S                        |   8 +-
+ arch/loongarch/lib/memmove.S                       |  20 +-
+ arch/loongarch/lib/memset.S                        |   8 +-
+ arch/loongarch/lib/xor_simd.c                      |  93 +++
+ arch/loongarch/lib/xor_simd.h                      |  38 ++
+ arch/loongarch/lib/xor_simd_glue.c                 |  72 ++
+ arch/loongarch/lib/xor_template.c                  | 110 ++++
+ arch/loongarch/mm/Makefile                         |   3 +
+ arch/loongarch/mm/cache.c                          |   1 -
+ arch/loongarch/mm/fault.c                          |  22 +-
+ arch/loongarch/mm/init.c                           |  71 +-
+ arch/loongarch/mm/kasan_init.c                     | 243 +++++++
+ arch/loongarch/mm/mmap.c                           |  13 +-
+ arch/loongarch/mm/pgtable.c                        |  12 +
+ arch/loongarch/vdso/Makefile                       |   3 +
+ include/linux/kasan.h                              |   2 +
+ include/linux/raid/pq.h                            |   4 +
+ lib/raid6/Makefile                                 |   1 +
+ lib/raid6/algos.c                                  |  16 +
+ lib/raid6/loongarch.h                              |  38 ++
+ lib/raid6/loongarch_simd.c                         | 422 ++++++++++++
+ lib/raid6/recov_loongarch_simd.c                   | 513 +++++++++++++++
+ lib/raid6/test/Makefile                            |  12 +
+ mm/kasan/init.c                                    |  18 +-
+ mm/kasan/kasan.h                                   |   6 +
+ mm/kfence/core.c                                   |   5 +-
+ 75 files changed, 3862 insertions(+), 461 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kasan.h
+ create mode 100644 arch/loongarch/include/asm/kfence.h
+ create mode 100644 arch/loongarch/include/asm/kgdb.h
+ create mode 100644 arch/loongarch/include/asm/lbt.h
+ create mode 100644 arch/loongarch/include/asm/xor.h
+ create mode 100644 arch/loongarch/include/asm/xor_simd.h
+ create mode 100644 arch/loongarch/kernel/kgdb.c
+ create mode 100644 arch/loongarch/kernel/lbt.S
+ create mode 100644 arch/loongarch/lib/xor_simd.c
+ create mode 100644 arch/loongarch/lib/xor_simd.h
+ create mode 100644 arch/loongarch/lib/xor_simd_glue.c
+ create mode 100644 arch/loongarch/lib/xor_template.c
+ create mode 100644 arch/loongarch/mm/kasan_init.c
+ create mode 100644 lib/raid6/loongarch.h
+ create mode 100644 lib/raid6/loongarch_simd.c
+ create mode 100644 lib/raid6/recov_loongarch_simd.c
