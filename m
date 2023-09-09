@@ -2,156 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D527996CC
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Sep 2023 10:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26097996CF
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Sep 2023 10:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237776AbjIIIEU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 Sep 2023 04:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S1343649AbjIIIGA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 Sep 2023 04:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbjIIIEU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Sep 2023 04:04:20 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61EC19BA;
-        Sat,  9 Sep 2023 01:04:09 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7294A580955;
-        Sat,  9 Sep 2023 04:04:06 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 09 Sep 2023 04:04:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1694246646; x=1694253846; bh=gr
-        bdhyMY7NxNdYcqo5ZxM4YzfzXCIZPyhmdZ4v8wTn0=; b=jcFHpGDMxb0ub6SgBG
-        +TF2uT3JbRG5rK7IKiNvJ7vlBdLbUKAMBSCr0GRmD1qvnw3wQMrlnaIBMT6HgL21
-        tHB1ij192ixeJRmAY9ANCaq2uSmYh+FTJd7g6WBfsgyhXKCnycEHcPtuc54DamkS
-        khM9AYRkM3uv8YQxaDaXYNUY/hynnSLC/64GoRk/TUm13+lkHbpP59YpulVlN0cz
-        BSxT56PB5cBjXcxOGaTcleYTt6WmFmxUhbOZQVFwwFyMQ7Khvvbx0QnIFsoIrdc6
-        3Dp0YVyo3FB5HLQdyB3FzG2MJzn8Awvy0Pa9EIAZNh7VGDmyTvsy877TjVDmxIg6
-        rz3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1694246646; x=1694253846; bh=grbdhyMY7NxNd
-        Ycqo5ZxM4YzfzXCIZPyhmdZ4v8wTn0=; b=cLqGc7RBEBP0PFyVbyiffdpqfBR7/
-        Mf9n5q14JmhZwNGe/XElC2gBwEf4NMI92dv5MDUDV2/6itANdcO6Pfshj9qw4E8o
-        J3pN3XqPmbkNh52ANIX8bxjPKnbzyD8rSPEaDUELnh8ToLQOvfAYekO6H3fr1W/U
-        kCQwoklKTjFyzMWgZR1w/gxhePoBQ4VS2o0KxcWZlB464kotNi0cNalYLMdYp4wY
-        RByVLM+KEbqHr/G64mpNEooBKfWn2GAxOQ9DOe2OGThkjsMhd5nexzthBMPy5iPS
-        wfJgiGPYnHnd8jsYIJg9g3jRnW//fGvoifpsAwfx7jXSUOuvV5xJ/be8w==
-X-ME-Sender: <xms:9Sb8ZOalQxWM7d8-I7UGi8hg2iWSVT4byBVp5_hK3jeB48deIGPw_A>
-    <xme:9Sb8ZBZj2IBpdwOYyV4JnFpZdQJRYewg5lNr7p3aLcIaW8YzyACdpFbWABZTABwp9
-    6dTcnbA2lKm-k5Ai70>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudehkedguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:9Sb8ZI9M0KhmD1iC5LR5rRA0H4CbiCpBxI3iNB8E-9NlGD_IZJIsqg>
-    <xmx:9Sb8ZAp_MOAOWzJY4OYMgRARmPS2r7ktUrNcjPvwZL87_BzPshSLPw>
-    <xmx:9Sb8ZJrXRAxuS0ZRhWRZO9yJG7RZ7OT-fZ5lXpYZlSeMhBbA3JKIqA>
-    <xmx:9ib8ZHgZQayI_WMLXMdxs6iYBQLI-pHKZTIeG3AOm5O0xYDs0fuk5g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CDBBEB60089; Sat,  9 Sep 2023 04:04:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-711-g440737448e-fm-20230828.001-g44073744
-Mime-Version: 1.0
-Message-Id: <f73d0495-f575-4b97-bc74-a57bd427df98@app.fastmail.com>
-In-Reply-To: <20230907075453.350554-4-gregory.price@memverge.com>
-References: <20230907075453.350554-1-gregory.price@memverge.com>
- <20230907075453.350554-4-gregory.price@memverge.com>
-Date:   Sat, 09 Sep 2023 10:03:33 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Gregory Price" <gourry.memverge@gmail.com>,
-        linux-mm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-cxl@vger.kernel.org,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>, x86@kernel.org,
-        "Gregory Price" <gregory.price@memverge.com>
-Subject: Re: [RFC PATCH 3/3] mm/migrate: Create move_phys_pages syscall
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1343533AbjIIIF7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Sep 2023 04:05:59 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011DD19BC;
+        Sat,  9 Sep 2023 01:05:55 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6FDC433C7;
+        Sat,  9 Sep 2023 08:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694246755;
+        bh=FAl7QCcBEBmuLvmZgnqvXZHtyLfOeqGUElSXUm48ss8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mxiDnjRJL1emXGMPGtEXTuXekD/jV3lQGdCWyZEne8TW8wJQr0i4ixTGyOuDVeFiI
+         p306iJPwMgX+b+cp3CaDPGpDt2IC6QphD9Kx5uHsocJUGmCMfv/Si5mYgAyl+w2Cw2
+         EPRXQqUxqJcsAYM3wYsf/zbZhebqU3N+YuDieEbOoO5PC0FeEtLL8UwraVfLCQ4ht4
+         X5fB630qfxkVF9JY5SihEw9FZpeVx8HnkHvVmoGcfcoGok9d/BOvvNsafoGRD8yttV
+         ZxSzFwI19ry8hlXK3hPygQyDO28CgqJ7cr2Elioi4w/VUhDW28mlTE+H0xEjqwv+Es
+         ERWasIBvKqlrg==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-9a603159f33so349890166b.0;
+        Sat, 09 Sep 2023 01:05:55 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwFbQDebPtMSHzPKN+n4yofybDwvKXx/Jt/CVeo/W8xtt+7T0n2
+        37NDk1huobc/3Ac0/CgvNPyOl1LIhFwe2LgvTNM=
+X-Google-Smtp-Source: AGHT+IFNPGlpu+8xmETkoFkPcqKPS03ejfP5dOQKlJQWvnRcJa/E/kzIOA4TpPs+PsPQB8ZoR/NAa/0CTqnNt8gfYBg=
+X-Received: by 2002:a17:906:51c2:b0:9a1:beb2:1cb8 with SMTP id
+ v2-20020a17090651c200b009a1beb21cb8mr4250702ejk.39.1694246754043; Sat, 09 Sep
+ 2023 01:05:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230908111053.1660033-1-chenhuacai@loongson.cn> <CAHk-=wh-uoZ_XsZ4fDodqjUY+rYJq=D3RVme3f=zBDB5neWhKQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wh-uoZ_XsZ4fDodqjUY+rYJq=D3RVme3f=zBDB5neWhKQ@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 9 Sep 2023 16:05:44 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H64=ZWBnzFmtS-FMB83nn21DSm20adrXdsrYkoka_oyjw@mail.gmail.com>
+Message-ID: <CAAhV-H64=ZWBnzFmtS-FMB83nn21DSm20adrXdsrYkoka_oyjw@mail.gmail.com>
+Subject: Re: [GIT PULL] LoongArch changes for v6.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 7, 2023, at 09:54, Gregory Price wrote:
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl 
-> b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 2d0b1bd866ea..25db6d71af0c 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -457,3 +457,4 @@
->  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
->  451	i386	cachestat		sys_cachestat
->  452	i386	fchmodat2		sys_fchmodat2
-> +454	i386	move_phys_pages		sys_move_phys_pages
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl 
-> b/arch/x86/entry/syscalls/syscall_64.tbl
-> index 1d6eee30eceb..9676f2e7698c 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -375,6 +375,7 @@
->  451	common	cachestat		sys_cachestat
->  452	common	fchmodat2		sys_fchmodat2
->  453	64	map_shadow_stack	sys_map_shadow_stack
-> +454	common	move_phys_pages		sys_move_phys_pages
+Hi, Linus,
 
-Doing only x86 is fine for review purposes, but note that
-once there is consensus on actually merging it and the syscall
-number, you should do the same for all architectures. I think
-most commonly we do one patch to add the code and another
-patch to hook it up to all the syscall.tbl files and the
-include/uapi/asm-generic/unistd.h file.
+On Sat, Sep 9, 2023 at 3:48=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, 8 Sept 2023 at 04:11, Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > 7, Add KASAN (Kernel Address Sanitizer) support
+>
+> I have pulled this, but please at least consider
+>
+>  (a) don't use the stupid and random __HAVE_ARCH_xyz defines
+>
+> Yes, yes, we have historical uses of it. That doesn't make it good.
+> Instead of making up new random symbol names, just *USE* the names you
+> are defining per architecture.
+>
+> IOW, instead of doing
+>
+>   #define __HAVE_ARCH_SHADOW_MAP
+>
+> and defining your own helper replacement functions for
+> kasan_mem_to_shadow() etc, just use those names as-is.
+>
+> So if you have an architecture that has its own version of
+> "kasan_mem_to_shadow()", then use *THAT* name for the #ifdef too.
+> Don't make up another name entirely of the form "__HAVE_ARCH_xyz".
+>
+> Example: architectures can override the default generic versions of
+> "arch_atomic_xyz()" operations, and the way you do that is (for
+> example)
+>
+>   static __always_inline int arch_atomic_add_return(int i, atomic_t *v)
+>   {
+>         return i + xadd(&v->counter, i);
+>   }
+>   #define arch_atomic_add_return arch_atomic_add_return
+>
+> note how the define to let you know the name exists is the name itself
+> (and because the implementation is an inline function, not the macro,
+> the marker is then just a "define the name to itself").
+>
+> End result: no made-up secondary names for other things. When you grep
+> for the thing that is used, you find both the implementation and the
+> marker for "look, I am overriding it".
+>
+> And also
+>
+>  (b) do you really want to inline those kasan_mem_to_shadow() and
+> kasan_shadow_to_mem() things?
+>
+> Yes, the caller is addr_has_metadata(), and that one is
+> "__always_inline",. because otherwise objtool would complain about
+> doing function calls in SMAP-enabled regions.
+>
+> HOWEVER:
+>
+>  - on LoongArch, I don't think you have that objtool / SMAP issue
+>
+>  - and if  you did, the function should be __always_inline, not just
+> plain inline anyway
+>
+> so I get the feeling that the inline is simply wrong either way. Maybe
+> that function should just be declared, with the implementation being
+> out-of-line? It seems unnecessarily big to be an inline function, and
+> it doesn't seem performance-critical?
+>
+> Neither of the above issues are critical, and the second one in
+> particular really is just a "did you really mean to do that" kind of
+> reaction, but since I was looking at this, I decided to write up my
+> reactions.
+Thank you for your suggestions, I will make cleanup patches for the
+two issues before v6.6 is released.
 
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index 22bc6bc147f8..6860675a942f 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -821,6 +821,11 @@ asmlinkage long sys_move_pages(pid_t pid, unsigned 
-> long nr_pages,
->  				const int __user *nodes,
->  				int __user *status,
->  				int flags);
-> +asmlinkage long sys_move_phys_pages(unsigned long nr_pages,
-> +				    const void __user * __user *pages,
-> +				    const int __user *nodes,
-> +				    int __user *status,
-> +				    int flags);
-
-The prototype looks good from a portability point of view,
-i.e. I made sure this is portable across CONFIG_COMPAT
-architectures etc.
-
-What I'm not sure about is whether the representation of physical
-memory pages as a 'void *' is a good choice, I can see potential
-problems with this:
-
-- it's not really a pointer, but instead a shifted PFN number
-  in the implementation
-
-- physical addresses may be wider than pointers on 32-bit
-  architectures with CONFIG_PHYS_ADDR_T_64BIT
-
-I'm also not sure where the user space caller gets the
-physical addresses from, are those not intentionally kept
-hidden from userspace?
-
-     Arnd
+Huacai
+>
+>               Linus
+>
