@@ -2,187 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B857679B173
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 01:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B5579C101
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 02:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238227AbjIKVGY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Sep 2023 17:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S237978AbjIKVGN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Sep 2023 17:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243860AbjIKSDf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 14:03:35 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69642103;
-        Mon, 11 Sep 2023 11:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694455410; x=1725991410;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zl8mXYrGXcNEkRuXh0xk4b0ia0PVFV5ULgLWpewd6CU=;
-  b=U4v3XrnuRR+s2r4mfijiqKQ/5ps/7t3+g4ruev7VR4roxr2cgplvIVzA
-   awMMmzDnux/ak7RsNPNKzxFpAg2DHp8Wes9t+tJ9inOaPthayftlQ6ges
-   WQ9q2gKcaPhjvRwYfUT6PM/zzAw1qVpRevZsZ/v8NZkS/9DDs7jNRnkRf
-   qbEtlPF1T2KsU0o2laDsSnDDIZ/HsRwfy73ql3GgL6EMtyvCvbrveOPqL
-   T9ZqQSFh481gPOzDV3ej0/G+lgpib2XYtK5BQhsUxQylmcjg5QuwwZzqx
-   gLLUSEiqZ4QKy4niDKVqeeGx+7AQyjjlJJ+BBgtjKIWm7MtCHPUL6/GJV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="368416973"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="368416973"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 11:03:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="808905960"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="808905960"
-Received: from sohilmeh.sc.intel.com ([172.25.103.65])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Sep 2023 11:03:28 -0700
-From:   Sohil Mehta <sohil.mehta@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sergei Trofimovich <slyich@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Deepak Gupta <debug@rivosinc.com>, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH 1/2] tools headers UAPI: Sync fchmodat2() syscall table entries
-Date:   Mon, 11 Sep 2023 18:02:09 +0000
-Message-Id: <20230911180210.1060504-2-sohil.mehta@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230911180210.1060504-1-sohil.mehta@intel.com>
-References: <20230911180210.1060504-1-sohil.mehta@intel.com>
+        with ESMTP id S240625AbjIKOtQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 10:49:16 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81F8E4D;
+        Mon, 11 Sep 2023 07:49:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jIzcos7kMXgXpXAxyYmpnIr4D4Jul6UY9LqbbNfhAeA9uNb4ZsYBJN4OO7pgX8B8Nnn8aVn1zYFA0Xm0qaU9D8DENj1hZ9OxMU87zZ1yyIMwXSvOkdCwipX8iCPt51aaprvWZYvRGnkMYQBPR0A64x1lUdLz3k1UMupoqPFQLhvdS2fpVE+kZkqwaRo79jSpIZfHXX0qBgaQljUrGebla1xG+5DbZaFhwpT+8iRieNDPgbcIlho0ebeGDLUoQB4s5CY3xQzGvlV9ypoR8yRSvpTgpHPrHSEqq00WG4jVXxnH4xgRQkLxC7dRPbhz6+4gHBrFw6RvuTAnba++nvfjeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cwJOxpAp9dHs/UVh2VAyV7o4fOVzHIQk12g7qrxAqFA=;
+ b=JsZnb9IArXEP4wkGWl7bqPh4azFGx+ndcHHIAyKzHLUs+3esHcngiKoF+jKZGMLdDI0Slj580+AIhM/o3x4xpxhWJk0aqMe5iMhpxGsSSjp41FWUA01tcEb9ZXdzIR0XIVJZzD41myuDDggx5/IRX1Y+ROAZ1QADWpRQuMPDR5p9ccKrUR8vti1xweknB+X+1rcp4s2qnjoLCAIZzJkMpLZa5ExaynPOxGmFxjIEFkexrxXiE2hZxmoDXPd6unBXqntA3ndqeyUO58da5N+LKm1pDVtBvg+g9pA5a35knkTVwGDXpqvDs78xt+HfayMqIdGr1ZVBddMVNtjdLLDaaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
+ dkim=pass header.d=memverge.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cwJOxpAp9dHs/UVh2VAyV7o4fOVzHIQk12g7qrxAqFA=;
+ b=L5vv36E+S2Eiy46cp11EpI3iv+Nb0sihCiaGQUKRKNFz8g1GwFj14dZJwUsSD7nyg5cPBJkoHd0y+ZBEnOHRfmLd/6FBgu7fO5XemP6jIZysfLqY7n6EYFGIJzvuNsFwoQHW8/esxmoSsi9Lnc1Js5zYZQJgTQhioENtXtLfVF4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=memverge.com;
+Received: from SJ0PR17MB5512.namprd17.prod.outlook.com (2603:10b6:a03:394::19)
+ by PH0PR17MB4815.namprd17.prod.outlook.com (2603:10b6:510:8b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Mon, 11 Sep
+ 2023 14:49:07 +0000
+Received: from SJ0PR17MB5512.namprd17.prod.outlook.com
+ ([fe80::94b1:abab:838f:650e]) by SJ0PR17MB5512.namprd17.prod.outlook.com
+ ([fe80::94b1:abab:838f:650e%4]) with mapi id 15.20.6745.030; Mon, 11 Sep 2023
+ 14:49:06 +0000
+Date:   Sun, 10 Sep 2023 07:49:53 -0400
+From:   Gregory Price <gregory.price@memverge.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-mm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-cxl@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, arnd@arndb.de, akpm@linux-foundation.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 3/3] mm/migrate: Create move_phys_pages syscall
+Message-ID: <ZP2tYY00/q9ElFQn@memverge.com>
+References: <20230907075453.350554-1-gregory.price@memverge.com>
+ <20230907075453.350554-4-gregory.price@memverge.com>
+ <878r9dzrxj.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878r9dzrxj.fsf@meer.lwn.net>
+X-ClientProxiedBy: SJ0PR05CA0063.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::8) To SJ0PR17MB5512.namprd17.prod.outlook.com
+ (2603:10b6:a03:394::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR17MB5512:EE_|PH0PR17MB4815:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49529720-dd94-4c97-5f62-08dbb2d63faf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1F2YnYaatLozgTTnAiA+zT53A623jIrd/FVnznolsz8MK2lraogDTncIEAdFg0NvEZrGxAMas3EHRnyG9MFv5ecvqLqgCgadLffAff3xA7eZ6jJ5PL87WeYqzE4BJ2+EspLIBFvvLqqomo1spY/RMGV2CMjffzGSreChrE9z7tFXbO0GNlUezzXzcew4GN358BG6Hqg+nvMOH5os+128d92SXYTBvNNXAm5Wc+x+Lg4RFutovOKFxPCo1WOPgjiub8Lrp6QAGXEy38vIvFgcvDStMmqns4VW3WCHQpTiqaCqQ2mtqG2LO4vTdS3CWCmT3MFAUQn3Vf+/CX54b3JPSzToXTpNRN5oxy/rjrK4gZDy5QjyzQxz9UwxzW9ZJPVyBIzmwrQQy32jFHAikPJM0vj9Bak4tXr5Cta4T1JDolmKqLXznSInTWMVza9JZG6fzl4n8CegLGvNRPzNM6uT9X7DvAPiAWUEDQXfwYyQEYtJbjS0aZdqRFs6kN+VnwPKhpfB4IrCHDnXsvoTmrSyrY+8lBuaNzd51IqpdVSWxPN+/AvSeLD94dyUlAjS4LqO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB5512.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39830400003)(366004)(136003)(346002)(376002)(451199024)(186009)(1800799009)(8676002)(7416002)(2906002)(4326008)(44832011)(8936002)(41300700001)(5660300002)(66476007)(66946007)(66556008)(6916009)(316002)(478600001)(6506007)(6486002)(6512007)(6666004)(2616005)(26005)(83380400001)(36756003)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VbAeylw0XYiavNwxL9peU0BqfDa0gpqui0BzYfAeJP+GIJnlMoHhyf0pmRH9?=
+ =?us-ascii?Q?qC1AKZQpzG2wrfvf7I7h4mcWcd7gRcpiUBngbla3W57QJrrH5QFN6PJilZta?=
+ =?us-ascii?Q?Jg4vuOjesWBXZ+g/ZcETTGGYP2MJLJz+xTio6Gh3PNRKvmSoXjDeevbC/o/p?=
+ =?us-ascii?Q?8jd0ITIc+lH6p4W6B3w66OuKh1/NHzfJVIs9b+jJgM51AHSpEDwU97meoxHa?=
+ =?us-ascii?Q?4qKxleVFpIp5FP/idEJ7XeaBwD0T6b7O+DguIdIf8OtjmK1+H2Rp2s/SlVt/?=
+ =?us-ascii?Q?ODZAGFB1LT1/IC6JrVknvO/ERBtVSA/JAW7mDgLiSjMVatXIgXLYt/pw32cX?=
+ =?us-ascii?Q?WkdeRaRTNV7Ll560jm2mwE+B/4tTu5EpVf+6HKAKtugvjvWCZVC6AHz849kc?=
+ =?us-ascii?Q?PSXvaK+w79D8t+v1kUAFRWeiM04+q8vUIKED8hIeJ6dKCG8a8uQel+4LyO6K?=
+ =?us-ascii?Q?KplQbKXiKSSu5HH8a75BVl8M1YmaPtUdjXsiSK0vVTDWqVXEXjNLcZIH53hf?=
+ =?us-ascii?Q?/OL6Wmco4OmWfDqFrSiizfwYDp+N+qftPXrLHHk+1Oce+HRgwl94trAd3aXn?=
+ =?us-ascii?Q?6CpOePlJO4VG/J6CTTsXUMO10aR0c44KzmrQVd7SCYZiGRZVczfBfW5VmUOD?=
+ =?us-ascii?Q?A3JYMdYNQdeqIhqL7LsSnvcIHEqz+E604YpPXC0EMtt8TBvxvsKOYTjrWb7g?=
+ =?us-ascii?Q?78nSiJIXSg7SJqQJ6K0gTxXARB4p8Zjvn7bM5l1mS6BO2J8XJ+sYFnnaa5mo?=
+ =?us-ascii?Q?KRLhvQeRN/H3cBVAfG74eGhDEaNQHOzyJzHHkx+yYasLv1sGDjDEX3xUyZqB?=
+ =?us-ascii?Q?u29XyDPmbA43gCb37bd/5XJ1wf8lbRyhFzMBaplv8QuubQss8Oj3ddbpJVBv?=
+ =?us-ascii?Q?Ff1o9pmT8oPifVxU/PTmLtPoTbT/vr7rQTO4EnRMQiUWyVjREJAAjlzwQ8ob?=
+ =?us-ascii?Q?K/Q2z/dgos8FtoisYxFPAnyCvdizIpScQYNQ2G/uA+un6IGB2cw76GQDgFqa?=
+ =?us-ascii?Q?OVgpHkgJVwaWrPQfCG5BdNfEqJV821ySqIc1I0PmVcYfT40/XCSemTBwizcz?=
+ =?us-ascii?Q?EKZFum37OsIstB2kaLdDQTDp6taPt5GsHTa4G7p49V2Lf1u0ZRE4dHrKnZq1?=
+ =?us-ascii?Q?MEDLGR5mPUjRiLZF7wGXBU71nZMn78AnLd40eTJ5EZU0M9ojktXHyykY6Ujs?=
+ =?us-ascii?Q?xbIvoCO/cyX9zSS2KrlqVcgfNcawr4Kn2tFCAE7vg9iYMFowTPICLj8UsrDx?=
+ =?us-ascii?Q?km8ekGlRtef3JNYLf9c5tYZ3NmMWLcmO3YVI0AO9qs62LW2NnZLSEja0CxQQ?=
+ =?us-ascii?Q?0MoNwYIsGB89N0HIt7ZWB5VcusIv53RygAVTNXwg2NJRFKRFhYYy6fv9k4i0?=
+ =?us-ascii?Q?FNKXO+/RwuN0sBjKq0zCwlURzjGadP4F584OPN9MqlP/YoKqF0lXC+VdBvbT?=
+ =?us-ascii?Q?L7AC8QPDNw8UH9lhPDVx19UzMUPjy7M2uBdYHpCb21FSD/12p91v/OcylB7W?=
+ =?us-ascii?Q?knINWQRkijbeQlhpOSVxclUGaLHCsSKEGU61g5GnYcoPv/DODGrFerwHa3Vt?=
+ =?us-ascii?Q?wqF07i7QSKdVVGxTH2QFA8xE5N/PoV1i8XILkEvul/+/+icmnWkdl+CXCQ5Y?=
+ =?us-ascii?Q?SA=3D=3D?=
+X-OriginatorOrg: memverge.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49529720-dd94-4c97-5f62-08dbb2d63faf
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR17MB5512.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 14:49:06.6818
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dOTFPMPUtHFobeRbMW2QLg9wcl7eCUwk9PoWe33cH31Dt2Jz4J7AhWpFDWrYP2+WJoqnqrUakeqAMftluowTt/89ACVbqTH+RzSRs2aljuo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR17MB4815
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The syscall table entries in the core kernel and perf are expected to be
-in sync. This would fix perf build warnings and also add support for
-fchmodat2 in 'perf trace'.
+On Sun, Sep 10, 2023 at 02:36:40PM -0600, Jonathan Corbet wrote:
+> Gregory Price <gourry.memverge@gmail.com> writes:
+> 
+> > Similar to the move_pages system call, instead of taking a pid and
+> > list of virtual addresses, this system call takes a list of physical
+> > addresses.
+> >
+> > Because there is no task to validate the memory policy against, each
+> > page needs to be interrogated to determine whether the migration is
+> > valid, and all tasks that map it need to be interrogated.
+> >
+> > This is accomplished via an rmap_walk on the folio containing
+> > the page, and interrogating all tasks that map the page.
+> >
+> > Each page must be interrogated individually, which should be
+> > considered when using this to migrate shared regions.
+> >
+> > The remaining logic is the same as the move_pages syscall. One
+> > change to do_pages_move is made (to check whether an mm_struct is
+> > passed) in order to re-use the existing migration code.
+> >
+> > Signed-off-by: Gregory Price <gregory.price@memverge.com>
+> > ---
+> >  arch/x86/entry/syscalls/syscall_32.tbl  |   1 +
+> >  arch/x86/entry/syscalls/syscall_64.tbl  |   1 +
+> >  include/linux/syscalls.h                |   5 +
+> >  include/uapi/asm-generic/unistd.h       |   8 +-
+> >  kernel/sys_ni.c                         |   1 +
+> >  mm/migrate.c                            | 178 +++++++++++++++++++++++-
+> >  tools/include/uapi/asm-generic/unistd.h |   8 +-
+> >  7 files changed, 197 insertions(+), 5 deletions(-)
+> 
+> So this is probably a silly question, but just to be sure ... what is
+> the permission model for this system call?  As far as I can tell, the
+> ability to move pages is entirely unrestricted, with the exception of
+> pages that would need MPOL_MF_MOVE_ALL.  If so, that seems undesirable,
+> but probably I'm just missing something ... ?
+> 
+> Thanks,
+> 
+> jon
 
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
----
- tools/include/uapi/asm-generic/unistd.h             | 5 ++++-
- tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 1 +
- tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 1 +
- tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 1 +
- tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 1 +
- 5 files changed, 8 insertions(+), 1 deletion(-)
+Not silly, looks like when U dropped the CAP_SYS_NICE check (no task to
+check against), check i neglected to add a CAP_SYS_ADMIN check.
 
-diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
-index fd6c1cb585db..abe087c53b4b 100644
---- a/tools/include/uapi/asm-generic/unistd.h
-+++ b/tools/include/uapi/asm-generic/unistd.h
-@@ -820,8 +820,11 @@ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
- #define __NR_cachestat 451
- __SYSCALL(__NR_cachestat, sys_cachestat)
- 
-+#define __NR_fchmodat2 452
-+__SYSCALL(__NR_fchmodat2, sys_fchmodat2)
-+
- #undef __NR_syscalls
--#define __NR_syscalls 452
-+#define __NR_syscalls 453
- 
- /*
-  * 32 bit systems traditionally used different
-diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-index cfda2511badf..cb5e757f6621 100644
---- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-+++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-@@ -366,3 +366,4 @@
- 449	n64	futex_waitv			sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	n64	cachestat			sys_cachestat
-+452	n64	fchmodat2			sys_fchmodat2
-diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-index 8c0b08b7a80e..20e50586e8a2 100644
---- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-+++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-@@ -538,3 +538,4 @@
- 449	common  futex_waitv                     sys_futex_waitv
- 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
-+452	common	fchmodat2			sys_fchmodat2
-diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-index a6935af2235c..0122cc156952 100644
---- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-+++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-@@ -454,3 +454,4 @@
- 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
- 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451  common	cachestat		sys_cachestat			sys_cachestat
-+452  common	fchmodat2		sys_fchmodat2			sys_fchmodat2
-diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-index 227538b0ce80..a5db10ddf540 100644
---- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -373,6 +373,7 @@
- 449	common	futex_waitv		sys_futex_waitv
- 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451	common	cachestat		sys_cachestat
-+452	common  fchmodat2		sys_fchmodat2
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
--- 
-2.34.1
+Oversight on my part, I'll work it in with other feedback.
 
+Thanks!
+~Gregory
