@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CD8799D48
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Sep 2023 10:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B12799D4D
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Sep 2023 10:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236031AbjIJIcI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 10 Sep 2023 04:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S239521AbjIJIcO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 10 Sep 2023 04:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbjIJIcI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 10 Sep 2023 04:32:08 -0400
+        with ESMTP id S235671AbjIJIcO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 10 Sep 2023 04:32:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863B8170C;
-        Sun, 10 Sep 2023 01:31:28 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06695C433C7;
-        Sun, 10 Sep 2023 08:31:20 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073B01728;
+        Sun, 10 Sep 2023 01:31:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E823CC433C8;
+        Sun, 10 Sep 2023 08:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694334686;
-        bh=XRClpokZATGms/5hSmQVWqg3PgTsbj60ag4pgT82d1g=;
+        s=k20201202; t=1694334692;
+        bh=tGHFuxIP3SbPPf/Epb/Xnkxu5WfdeddjXtXxQeK/obc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DAOn5xYy1snXrOmFmNehUeHzj1Z0ze8me0Irn4+sU5MWVFFo5IVtlgSxXBj+N5x66
-         SThfOeVincosujHlIPmZwaPH7xmI30VIyYyLOLJE3Bl/vsoZAaPr1jyY3JN/Ne08Fh
-         a2k8iW8/2r/OtbySdghJbCUCJTkyPRaE1dVLz9HACSYHii/unurbLmqg9m5QaHjxLA
-         EqJD/2+Sl/GAUpU9Ueyi2qO6xrtIM5p2E/EELjjJFh4Hd8QRVtQXv9J2o0kNjFnfAk
-         G0voEZGJh1qlLocmGgE7uF+4hz00VcMN4Cpu/u15U7gqDQYozJOJU9lJUB45CjGWhU
-         4c3Ju+DiYrSGw==
+        b=YUKo/luMDwQ8ZTHKumNn75SdYE5FDukIjOgss5a5AbXFbueaYWrxKwu9Qkyj8QpzH
+         6ZTe9MLwdEREPEFTO+BHHd0E1QiUV/q/RCTlcE04SMv7lx+zDLCynlX3vKHZt2z7va
+         E/11VNyj8a4aIGWv24FBkPQordBCQuvBtQNul7krmNBWS3/gMvved/HvortUZXOw1B
+         HHCp8xJQaao+4BHm+WuJofLhiQSVvwQG3eqADFFZTcafRLFP/1waYYPh0PlZUpFy+J
+         VzQ8ykVD7bRApcaRbqsfoR8egd0/EE0OxCXQL4dsYaYUykxPJHUg9F7Cy83ImCsGQ2
+         qLELasFU6ESIg==
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -42,9 +42,9 @@ Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH V11 13/17] RISC-V: paravirt: pvqspinlock: Add SBI implementation
-Date:   Sun, 10 Sep 2023 04:29:07 -0400
-Message-Id: <20230910082911.3378782-14-guoren@kernel.org>
+Subject: [PATCH V11 14/17] RISC-V: paravirt: pvqspinlock: Add kconfig entry
+Date:   Sun, 10 Sep 2023 04:29:08 -0400
+Message-Id: <20230910082911.3378782-15-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230910082911.3378782-1-guoren@kernel.org>
 References: <20230910082911.3378782-1-guoren@kernel.org>
@@ -61,72 +61,49 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Implement pv_kick with SBI implementation, and add SBI_EXT_PVLOCK
-extension detection.
+Add kconfig entry for paravirt_spinlock, an unfair qspinlock
+virtualization-friendly backend, by halting the virtual CPU rather
+than spinning.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/sbi.h           | 6 ++++++
- arch/riscv/kernel/qspinlock_paravirt.c | 7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ arch/riscv/Kconfig         | 12 ++++++++++++
+ arch/riscv/kernel/Makefile |  1 +
+ 2 files changed, 13 insertions(+)
 
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index e0233b3d7a5f..3533f8d4f3e2 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -30,6 +30,7 @@ enum sbi_ext_id {
- 	SBI_EXT_HSM = 0x48534D,
- 	SBI_EXT_SRST = 0x53525354,
- 	SBI_EXT_PMU = 0x504D55,
-+	SBI_EXT_PVLOCK = 0xAB0401,
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 4bcff2860f48..ec0da24ed6fb 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -813,6 +813,18 @@ config RELOCATABLE
  
- 	/* Experimentals extensions must lie within this range */
- 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-@@ -243,6 +244,11 @@ enum sbi_pmu_ctr_type {
- /* Flags defined for counter stop function */
- #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
+           If unsure, say N.
  
-+/* SBI PVLOCK (kick cpu out of wfi) */
-+enum sbi_ext_pvlock_fid {
-+	SBI_EXT_PVLOCK_KICK_CPU = 0,
-+};
++config PARAVIRT_SPINLOCKS
++	bool "Paravirtualization layer for spinlocks"
++	depends on QUEUED_SPINLOCKS
++	default y
++	help
++	  Paravirtualized spinlocks allow a unfair qspinlock to replace the
++	  test-set kvm-guest virt spinlock implementation with something
++	  virtualization-friendly, for example, halt the virtual CPU rather
++	  than spinning.
 +
- #define SBI_SPEC_VERSION_DEFAULT	0x1
- #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
- #define SBI_SPEC_VERSION_MAJOR_MASK	0x7f
-diff --git a/arch/riscv/kernel/qspinlock_paravirt.c b/arch/riscv/kernel/qspinlock_paravirt.c
-index a0ad4657f437..571626f350be 100644
---- a/arch/riscv/kernel/qspinlock_paravirt.c
-+++ b/arch/riscv/kernel/qspinlock_paravirt.c
-@@ -11,6 +11,8 @@
- 
- void pv_kick(int cpu)
- {
-+	sbi_ecall(SBI_EXT_PVLOCK, SBI_EXT_PVLOCK_KICK_CPU,
-+		  cpuid_to_hartid_map(cpu), 0, 0, 0, 0, 0);
- 	return;
- }
- 
-@@ -25,7 +27,7 @@ void pv_wait(u8 *ptr, u8 val)
- 	if (READ_ONCE(*ptr) != val)
- 		goto out;
- 
--	/* wait_for_interrupt(); */
-+	wait_for_interrupt();
- out:
- 	local_irq_restore(flags);
- }
-@@ -62,6 +64,9 @@ void __init pv_qspinlock_init(void)
- 	if(sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)
- 		return;
- 
-+	if (!sbi_probe_extension(SBI_EXT_PVLOCK))
-+		return;
++	  If you are unsure how to answer this question, answer Y.
 +
- 	pr_info("PV qspinlocks enabled\n");
- 	__pv_init_lock_hash();
+ endmenu # "Kernel features"
  
+ menu "Boot options"
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 671ad85f28f2..114b29234c46 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -103,3 +103,4 @@ obj-$(CONFIG_ARCH_RV64ILP32)	+= compat_signal.o
+ 
+ obj-$(CONFIG_64BIT)		+= pi/
+ obj-$(CONFIG_ACPI)		+= acpi.o
++obj-$(CONFIG_PARAVIRT_SPINLOCKS) += qspinlock_paravirt.o
 -- 
 2.36.1
 
