@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9B279BC55
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 02:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676BB79B8D9
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 02:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbjIKVFZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Sep 2023 17:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S235899AbjIKVFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Sep 2023 17:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242130AbjIKPXL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 11:23:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6339AF2
-        for <linux-arch@vger.kernel.org>; Mon, 11 Sep 2023 08:22:25 -0700 (PDT)
+        with ESMTP id S242442AbjIKPfH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 11:35:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FA04120
+        for <linux-arch@vger.kernel.org>; Mon, 11 Sep 2023 08:34:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694445744;
+        s=mimecast20190719; t=1694446457;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=m6+UTvfQcsvDPdhGXSi2AAvjsiLi7Cpcaa64YOiSPW8=;
-        b=GIx1PCfcghqizZ3eCJswALXpXzG1i2Qzr1f8bqkBmd3YOU8DcwOW8Vj86x6+R0/Cx/0vjI
-        YENd0sAi10zu9pwoxUYdt0n18l7YdzOQX95AurV7sDAEJt5Tc6cRkL4q0uBRAJ/aA9JnUL
-        99TtdlYqTYpniYaGS+RUvZ7ygReG87M=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-lqKOgAgdOfK27hptzaDxOw-1; Mon, 11 Sep 2023 11:22:20 -0400
-X-MC-Unique: lqKOgAgdOfK27hptzaDxOw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        bh=H0hlG5FAGp8RmPoZ3E3s3/+3No0cdG4KvSkd6VNEwic=;
+        b=IHhM6Qem/3nEfzc4yLTanbBi3Jb08wowb/QR1r7En9iZNL/lfzuslNyQR+vns4tG5kX/6z
+        i1m4laUtBpIVvdC3iQ3rflOnxXBKmQu2X69sV74cKTe4cpVJRX8abOrIP2SeC+hqnm00Eu
+        7ZYGfonNtfd3vm8n8tLjxkoNipYSZ2s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-196-7swe91uhPdmELgDadpzMYA-1; Mon, 11 Sep 2023 11:34:13 -0400
+X-MC-Unique: 7swe91uhPdmELgDadpzMYA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79C873C1ACE8;
-        Mon, 11 Sep 2023 15:22:18 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D615183689B;
+        Mon, 11 Sep 2023 15:34:11 +0000 (UTC)
 Received: from [10.22.32.237] (unknown [10.22.32.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5CB4040C200B;
-        Mon, 11 Sep 2023 15:22:16 +0000 (UTC)
-Message-ID: <11f2a7a5-5219-a46e-5d16-4bdd400f5d9b@redhat.com>
-Date:   Mon, 11 Sep 2023 11:22:16 -0400
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D391140C6EBF;
+        Mon, 11 Sep 2023 15:34:09 +0000 (UTC)
+Message-ID: <5ba0b8f3-f8f5-3a25-e9b7-f29a1abe654a@redhat.com>
+Date:   Mon, 11 Sep 2023 11:34:09 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
@@ -65,12 +65,11 @@ From:   Waiman Long <longman@redhat.com>
 In-Reply-To: <20230910082911.3378782-8-guoren@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,10 +102,19 @@ On 9/10/23 04:29, guoren@kernel.org wrote:
 >   	qspinlock.numa_spinlock_threshold_ns=	[NUMA, PV_OPS]
 >   			Set the time threshold in nanoseconds for the
 >   			number of intra-node lock hand-offs before the
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index a447cf360a18..0f084f037651 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -270,6 +270,15 @@ static void __init parse_dtb(void)
+>   }
+>   
+>   #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
+> +bool enable_qspinlock_key = false;
 
-Your patch series is still based on top of numa-aware qspinlock patchset 
-which isn't upstream yet. Please rebase it without that as that will 
-cause merge conflict during upstream merge.
+You can use __ro_after_init qualifier for enable_qspinlock_key. BTW, 
+this is not a static key, just a simple flag. So what is the point of 
+the _key suffix?
 
 Cheers,
 Longman
