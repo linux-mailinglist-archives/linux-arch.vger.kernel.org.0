@@ -2,162 +2,224 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9221579B8F3
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 02:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2ED79BBC4
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 02:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbjIKVFc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Sep 2023 17:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S237821AbjIKVGK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Sep 2023 17:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236438AbjIKKio (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 06:38:44 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DF2DE69
-        for <linux-arch@vger.kernel.org>; Mon, 11 Sep 2023 03:38:39 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-321-IzkOUA4zNlKP5UCAOsRxDw-1; Mon, 11 Sep 2023 11:38:10 +0100
-X-MC-Unique: IzkOUA4zNlKP5UCAOsRxDw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 11 Sep
- 2023 11:37:59 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 11 Sep 2023 11:37:59 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mateusz Guzik' <mjguzik@gmail.com>
-CC:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>
-Subject: RE: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-Thread-Topic: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-Thread-Index: AQHZ23Vdq8Esj5k0zUGYupOb09r6RrAF7nHAgAAb1ICAABQQEIANxBwAgAGZkGA=
-Date:   Mon, 11 Sep 2023 10:37:58 +0000
-Message-ID: <ed0ac0937cdf4bb99b273fc0396b46b9@AcuMS.aculab.com>
-References: <20230830140315.2666490-1-mjguzik@gmail.com>
- <27ba3536633c4e43b65f1dcd0a82c0de@AcuMS.aculab.com>
- <CAGudoHHUWZNz0OU5yCqOBkeifSYKhm4y6WO1x+q5pDPt1j3+GA@mail.gmail.com>
- <9a5dd401bf154a0aace0e5f781a3580c@AcuMS.aculab.com>
- <CAGudoHEuY1cMFStdRAjb8aWbHNqy8Pbeavk6tPB+u=rYzFDF+Q@mail.gmail.com>
-In-Reply-To: <CAGudoHEuY1cMFStdRAjb8aWbHNqy8Pbeavk6tPB+u=rYzFDF+Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S237489AbjIKMxm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 08:53:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5167ACEB;
+        Mon, 11 Sep 2023 05:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1694436818; x=1725972818;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F18RZdFWM4GMQROAAbnXFN2k3b4JLezGGc1Iq3gZ/zs=;
+  b=Qof1Tn7Drz2q5pJBs19D48KXqtndp0XKgs3tlMDifP76PS338MECL1dh
+   WAHlq0xoY3413x9Ban2Nz06RWbaUnazYlREVnPkuBmtj1XKmChE9bgUO/
+   1qKK+RKn5M6v6RiuoxrUBr45xcjSm0pgbL5P3aoOzKMQW9X0Vc4LY5wIs
+   alLHvVcJ7epXnzlDZzBDE5eowV9oDvRZx9VFc4sRm/n1U0h0ZCh0wvmKN
+   AYNlxz6QqdgDcbFHFnpb7ym6k0CXbBo7aatj6c+g8BcbjrzPCiaQut6Wf
+   mUyNOChpsyMtz9EqSSWL0V/8fxR2hJ87nCpUURCYcLOA4q9/UidAVnyzp
+   A==;
+X-CSE-ConnectionGUID: rGMnXp3/ScCh2he0ZE8W7g==
+X-CSE-MsgGUID: +aT+43DkQw6jnFnRFXnEkQ==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="asc'?scan'208";a="3979966"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2023 05:53:37 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 11 Sep 2023 05:53:19 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 11 Sep 2023 05:53:14 -0700
+Date:   Mon, 11 Sep 2023 13:52:59 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Guo Ren <guoren@kernel.org>
+CC:     Conor Dooley <conor@kernel.org>, <paul.walmsley@sifive.com>,
+        <anup@brainfault.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <will@kernel.org>, <palmer@rivosinc.com>, <longman@redhat.com>,
+        <boqun.feng@gmail.com>, <tglx@linutronix.de>, <paulmck@kernel.org>,
+        <rostedt@goodmis.org>, <rdunlap@infradead.org>,
+        <catalin.marinas@arm.com>, <xiaoguang.xing@sophgo.com>,
+        <bjorn@rivosinc.com>, <alexghiti@rivosinc.com>,
+        <keescook@chromium.org>, <greentime.hu@sifive.com>,
+        <ajones@ventanamicro.com>, <jszhang@kernel.org>, <wefu@redhat.com>,
+        <wuwei2016@iscas.ac.cn>, <leobras@redhat.com>,
+        <linux-arch@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-csky@vger.kernel.org>, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V11 00/17] riscv: Add Native/Paravirt qspinlock support
+Message-ID: <20230911-nimbly-outcome-496efae7adc6@wendy>
+References: <20230910082911.3378782-1-guoren@kernel.org>
+ <20230910-esteemed-exodus-706aaae940b1@spud>
+ <CAJF2gTRQd_dNuZHNwfg3SwD0XERaYXYUdFUFQiarym40kpxFRQ@mail.gmail.com>
+ <20230910-baggage-accent-ec5331b58c8e@spud>
+ <CAJF2gTS8Vh5XdMUcgLA_GJzW6Nm3JKHxuMN9jYSNe_YCEjgCXA@mail.gmail.com>
+ <20230910-facsimile-answering-60d1452b8c10@spud>
+ <CAJF2gTSP1rxVhuwOKyWiE2vFFijJFc2aKRU2=0rTK9nDc8AbsQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: multipart/mixed;
-        boundary="_002_ed0ac0937cdf4bb99b273fc0396b46b9AcuMSaculabcom_"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GbfQjpg1lIhwJuEz"
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTSP1rxVhuwOKyWiE2vFFijJFc2aKRU2=0rTK9nDc8AbsQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---_002_ed0ac0937cdf4bb99b273fc0396b46b9AcuMSaculabcom_
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+--GbfQjpg1lIhwJuEz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-RnJvbTogTWF0ZXVzeiBHdXppaw0KPiBTZW50OiAxMCBTZXB0ZW1iZXIgMjAyMyAxMTo1NA0KPiAN
-Cj4gT24gOS8zLzIzLCBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBhY3VsYWIuY29tPiB3cm90
-ZToNCj4gPiAuLi4NCj4gPj4gV2hlbiBJIHdhcyBwbGF5aW5nIHdpdGggdGhpcyBzdHVmZiBhYm91
-dCA1IHllYXJzIGFnbyBJIGZvdW5kIDMyLWJ5dGUNCj4gPj4gbG9vcHMgdG8gYmUgb3B0aW1hbCBm
-b3IgdWFyY2hzIG9mIHRoZSBwcmlvZCAoU2t5bGFrZSwgQnJvYWR3ZWxsLA0KPiA+PiBIYXN3ZWxs
-IGFuZCBzbyBvbiksIGJ1dCBvbmx5IHVwIHRvIGEgcG9pbnQgd2hlcmUgcmVwIHdpbnMuDQo+ID4N
-Cj4gPiBEb2VzIHRoZSAncmVwIG1vdnNxJyBldmVyIGFjdHVhbGx5IHdpbj8NCj4gPiAoVW5sZXNz
-IHlvdSBmaW5kIG9uZSBvZiB0aGUgRU1SUyAob3Igc2ltaWxhcikgdmVyc2lvbnMuKQ0KPiA+IElJ
-UkMgaXQgb25seSBldmVyIGRvZXMgb25lIGl0ZXJhdGlvbiBwZXIgY2xvY2sgLSBhbmQgeW91DQo+
-ID4gc2hvdWxkIGJlIGFibGUgdG8gbWF0Y2ggdGhhdCB3aXRoIGEgY2FyZWZ1bGx5IGNvbnN0cnVj
-dGVkIGxvb3AuDQo+ID4NCj4gDQo+IFNvcnJ5IGZvciBsYXRlIHJlcGx5LCBJIG1pc3NlZCB5b3Vy
-IGUtbWFpbCBkdWUgdG8gYWxsIHRoZSB1bnJlbGF0ZWQNCj4gdHJhZmZpYyBpbiB0aGUgdGhyZWFk
-IGFuZCB1c2luZyBnbWFpbCBjbGllbnQuIDspDQo+IA0KPiBJIGFtIHNvbWV3aGF0IGNvbmZ1c2Vk
-IGJ5IHRoZSBxdWVzdGlvbiB0aG91Z2guIEluIHRoaXMgdmVyeSBwYXRjaCBJJ20NCj4gc2hvd2lu
-ZyBudW1iZXJzIGZyb20gYW4gRVJNUy1sZXNzIHVhcmNoIGdldHRpbmcgYSB3aW4gZnJvbSBzd2l0
-Y2hpbmcNCj4gZnJvbSBoYW5kLXJvbGxlZCBtb3YgbG9vcCB0byByZXAgbW92c3EsIHdoaWxlIGRv
-aW5nIDRLQiBjb3BpZXMuDQoNCkkndmUganVzdCBkb21lIHNvbWUgbWVhc3VyZW1lbnRzIG9uIGFu
-IGk3LTc3MDAuDQpUaGF0IGRvZXMgaGF2ZSBFUk1TIChmYXN0ICdyZXAgbW92c2InKSBidXQgc2hv
-d3Mgc29tZSBpbnRlcmVzdGluZyBpbmZvLg0KDQpUaGUgb3ZlcmhlYWQgb2YgJ3JlcCBtb3Zicycg
-aXMgYWJvdXQgMzYgY2xvY2tzLCAncmVwIG1vdnNxJyBvbmx5IDE2Lg0KKGV4Y2VwdCBpdCBoYXMg
-anVzdCBjaGFuZ2VkIGl0cyBtaW5kLi4uKQ0KJ3JlcCBtb3ZzYicgd2lsbCBjb3B5IChhYm91dCkg
-MzIgYnl0ZXMvY2xvY2sgcHJvdmlkZWQgdGhlDQpkZXN0aW5hdGlvbiBidWZmZXIgaXMgMzJieXRl
-IGFsaWduZWQsIGJ1dCBvbmx5IDE2IGJ5dGVzL2Nsb2NrDQpvdGhlcndpc2UuIFRoZSBzb3VyY2Ug
-YnVmZmVyIGFsaWdubWVudCBkb2Vzbid0IHNlZW0gdG8gbWF0dGVyLg0KDQpPbiB0aGlzIHN5c3Rl
-bSAncmVwIG1vdnNxJyBzZWVtcyB0byBiZWhhdmUgdGhlIHNhbWUgd2F5Lg0KDQpTbyB0aGF0IGlz
-IGZhc3RlciB0aGFuIGFuIGNvcHkgbG9vcCAtIGxpbWl0ZWQgdG8gb25lIHJlZ2lzdGVyDQp3cml0
-ZSBwZXIgY2xvY2suDQoNClRlc3QgcHJvZ3JhbSBhdHRhY2hlZC4NCg0KCURhdmlkDQoNCi0NClJl
-Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
-b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
-Cg==
---_002_ed0ac0937cdf4bb99b273fc0396b46b9AcuMSaculabcom_
-Content-Type: text/plain; name=memcpy_perf.c; charset=WINDOWS-1252
-Content-Description: memcpy_perf.c
-Content-Disposition: attachment; filename="memcpy_perf.c"; size=2972;
-	creation-date="Mon, 11 Sep 2023 10:18:55 GMT";
-	modification-date="Mon, 11 Sep 2023 10:18:55 GMT"
-Content-Transfer-Encoding: base64
+On Mon, Sep 11, 2023 at 11:36:27AM +0800, Guo Ren wrote:
+> On Mon, Sep 11, 2023 at 3:45=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
+rote:
+> >
+> > On Sun, Sep 10, 2023 at 05:49:13PM +0800, Guo Ren wrote:
+> > > On Sun, Sep 10, 2023 at 5:32=E2=80=AFPM Conor Dooley <conor@kernel.or=
+g> wrote:
+> > > >
+> > > > On Sun, Sep 10, 2023 at 05:16:46PM +0800, Guo Ren wrote:
+> > > > > On Sun, Sep 10, 2023 at 4:58=E2=80=AFPM Conor Dooley <conor@kerne=
+l.org> wrote:
+> > > > > >
+> > > > > > On Sun, Sep 10, 2023 at 04:28:54AM -0400, guoren@kernel.org wro=
+te:
+> > > > > >
+> > > > > > > Changlog:
+> > > > > > > V11:
+> > > > > > >  - Based on Leonardo Bras's cmpxchg_small patches v5.
+> > > > > > >  - Based on Guo Ren's Optimize arch_spin_value_unlocked patch=
+ v3.
+> > > > > > >  - Remove abusing alternative framework and use jump_label in=
+stead.
+> > > > > >
+> > > > > > btw, I didn't say that using alternatives was the problem, it w=
+as
+> > > > > > abusing the errata framework to perform feature detection that =
+I had
+> > > > > > a problem with. That's not changed in v11.
+> > > > > I've removed errata feature detection. The only related patches a=
+re:
+> > > > >  - riscv: qspinlock: errata: Add ERRATA_THEAD_WRITE_ONCE fixup
+> > > > >  - riscv: qspinlock: errata: Enable qspinlock for T-HEAD processo=
+rs
+> > > > >
+> > > > > Which one is your concern? Could you reply on the exact patch thr=
+ead? Thx.
+> > > >
+> > > > riscv: qspinlock: errata: Enable qspinlock for T-HEAD processors
+> > > >
+> > > > Please go back and re-read the comments I left on v11 about using t=
+he
+> > > > errata code for feature detection.
+> > > >
+> > > > > > A stronger forward progress guarantee is not an erratum, AFAICT.
+> > > >
+> > > > > Sorry, there is no erratum of "stronger forward progress guarante=
+e" in the V11.
+> > > >
+> > > > "riscv: qspinlock: errata: Enable qspinlock for T-HEAD processors" =
+still
+> > > > uses the errata framework to detect the presence of the stronger fo=
+rward
+> > > > progress guarantee in v11.
+> > > Oh, thx for pointing it out. I could replace it with this:
+> > >
+> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > > index 88690751f2ee..4be92766d3e3 100644
+> > > --- a/arch/riscv/kernel/setup.c
+> > > +++ b/arch/riscv/kernel/setup.c
+> > > @@ -310,7 +310,8 @@ static void __init riscv_spinlock_init(void)
+> > >  {
+> > >  #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
+> > >         if (!enable_qspinlock_key &&
+> > > -           (sbi_get_firmware_id() !=3D SBI_EXT_BASE_IMPL_ID_KVM)) {
+> > > +           (sbi_get_firmware_id() !=3D SBI_EXT_BASE_IMPL_ID_KVM) &&
+> > > +           (sbi_get_mvendorid() !=3D THEAD_VENDOR_ID)) {
+> > >                 static_branch_disable(&combo_qspinlock_key);
+> > >                 pr_info("Ticket spinlock: enabled\n");
+> > >         } else {
+> >
+> > As I said on v11, I am opposed to feature probing using mvendorid & Co,
+> > partially due to the exact sort of check here to see if the kernel is
+> > running as a KVM guest. IMO, whether a platform has this stronger
 
-I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdGRsaWIuaD4KI2luY2x1ZGUgPHVuaXN0ZC5o
-PgojaW5jbHVkZSA8c3RyaW5nLmg+CiNpbmNsdWRlIDxlcnJuby5oPgoKI2luY2x1ZGUgPGxpbnV4
-L3BlcmZfZXZlbnQuaD4KI2luY2x1ZGUgPHN5cy9tbWFuLmg+CiNpbmNsdWRlIDxzeXMvc3lzY2Fs
-bC5oPgoKc3RhdGljIGludCBpbml0X3BtYyh2b2lkKQp7CglzdGF0aWMgc3RydWN0IHBlcmZfZXZl
-bnRfYXR0ciBwZXJmX2F0dHIgPSB7CgkJLnR5cGUgPSBQRVJGX1RZUEVfSEFSRFdBUkUsCgkJLmNv
-bmZpZyA9IFBFUkZfQ09VTlRfSFdfQ1BVX0NZQ0xFUywKCQkucGlubmVkID0gMSwKCX07CglzdHJ1
-Y3QgcGVyZl9ldmVudF9tbWFwX3BhZ2UgKnBjOwoKCWludCBwZXJmX2ZkOwoJcGVyZl9mZCA9IHN5
-c2NhbGwoX19OUl9wZXJmX2V2ZW50X29wZW4sICZwZXJmX2F0dHIsIDAsIC0xLCAtMSwgMCk7Cglp
-ZiAocGVyZl9mZCA8IDApIHsKCQlmcHJpbnRmKHN0ZGVyciwgInBlcmZfZXZlbnRfb3BlbiBmYWls
-ZWQ6IGVycm5vICVkXG4iLCBlcnJubyk7CgkJZXhpdCgxKTsKCX0KCXBjID0gbW1hcChOVUxMLCA0
-MDk2LCBQUk9UX1JFQUQsIE1BUF9TSEFSRUQsIHBlcmZfZmQsIDApOwoJaWYgKHBjID09IE1BUF9G
-QUlMRUQpIHsKCQlmcHJpbnRmKHN0ZGVyciwgInBlcmZfZXZlbnQgbW1hcCgpIGZhaWxlZDogZXJy
-bm8gJWRcbiIsIGVycm5vKTsKCQlleGl0KDEpOwoJfQoJcmV0dXJuIHBjLT5pbmRleCAtIDE7Cn0K
-CnN0YXRpYyBpbmxpbmUgdW5zaWduZWQgaW50IHJkcG1jKHVuc2lnbmVkIGludCBjb3VudGVyKQp7
-CiAgICAgICAgdW5zaWduZWQgaW50IGxvdywgaGlnaDsKCgkvLyBhc20gdm9sYXRpbGUoInJkdHNj
-IiA6ICI9YSIgKGxvdyksICI9ZCIgKGhpZ2gpKTsKCWFzbSB2b2xhdGlsZSgibGZlbmNlIik7Cglh
-c20gdm9sYXRpbGUoInJkcG1jIiA6ICI9YSIgKGxvdyksICI9ZCIgKGhpZ2gpIDogImMiIChjb3Vu
-dGVyKSk7CgoJLy8gcmV0dXJuIGxvdyBiaXRzLCBjb3VudGVyIG1pZ2h0IHRvIDMyIG9yIDQwIGJp
-dHMgd2lkZS4KCXJldHVybiBsb3c7Cn0KCiNpZm5kZWYgTU9ERQojZGVmaW5lIE1PREUgMAojZW5k
-aWYKCl9fYXR0cmlidXRlX18oKG5vaW5saW5lKSkKdm9pZCBtZW1jcHlfcGVyZih1bnNpZ25lZCBj
-aGFyICpkX2J1ZmYsIGNvbnN0IHVuc2lnbmVkIGNoYXIgKnNfYnVmZiwgdW5zaWduZWQgbG9uZyBs
-ZW4pCnsKCiNpZiBNT0RFID09IC0xCi8vICdObyBjb3B5JyBsb29wIGZvciBiYXNlbGluZSBvdmVy
-aGVhZAoJYXNtIHZvbGF0aWxlKCIJbm9wXG4iCgkJOiAiKyZEIiAoZF9idWZmKSwgICIrJlMiIChz
-X2J1ZmYpLCAgIismYyIgKGxlbikKCQk6IDogIm1lbW9yeSIpOwojZW5kaWYKCiNpZiBNT0RFID09
-IDAKLy8gU2ltcGxlICdyZXAgbW92cycgbG9vcAoJYXNtIHZvbGF0aWxlKCIJcmVwIG1vdnNiXG4i
-CgkJOiAiKyZEIiAoZF9idWZmKSwgICIrJlMiIChzX2J1ZmYpLCAgIismYyIgKGxlbikKCQk6IDog
-Im1lbW9yeSIpOwojZW5kaWYKCiNpZiBNT0RFID09IDEKLy8gU2ltcGxlICdyZXAgbW92cScgbG9v
-cAoJbGVuIC89IDg7Cglhc20gdm9sYXRpbGUoIglyZXAgbW92c3FcbiIKCQk6ICIrJkQiIChkX2J1
-ZmYpLCAgIismUyIgKHNfYnVmZiksICAiKyZjIiAobGVuKQoJCTogOiAibWVtb3J5Iik7CiNlbmRp
-ZgoKfQoKdW5zaWduZWQgY2hhciBzX2J1ZmZbODE5Ml0gX19hdHRyaWJ1dGVfXygoYWxpZ25lZCg0
-MDk2KSkpOwp1bnNpZ25lZCBjaGFyIGRfYnVmZls4MTkyICsgMV0gX19hdHRyaWJ1dGVfXygoYWxp
-Z25lZCg0MDk2KSkpOwoKI2lmbmRlZiBQQVNTRVMKI2RlZmluZSBQQVNTRVMgNQojZW5kaWYKCiNp
-Zm5kZWYgT0ZGU0VUCiNkZWZpbmUgT0ZGU0VUIDAKI2VuZGlmCgppbnQgbWFpbihpbnQgYXJnYywg
-Y2hhciAqKmFyZ3YpCnsKCXVuc2lnbmVkIGludCB0aWNrOwoJdW5zaWduZWQgaW50IHRpY2tzW1BB
-U1NFU107Cgl1bnNpZ25lZCBpbnQgbGVuLCBzX29mZiA9IDAsIGRfb2ZmID0gMDsKCXVuc2lnbmVk
-IGludCBpOwoJdW5zaWduZWQgaW50IGlkID0gaW5pdF9wbWMoKTsKCXVuc2lnbmVkIGludCBvZmZz
-ZXQgPSBPRkZTRVQ7CgoJbGVuID0gc2l6ZW9mIHNfYnVmZjsKCWZvciAoOzspIHsKCQlzd2l0Y2gg
-KGdldG9wdChhcmdjLCBhcmd2LCAibDpzOmQ6bzoiKSkgewoJCWNhc2UgLTE6CgkJCWJyZWFrOwoJ
-CWRlZmF1bHQ6CgkJCWV4aXQoMSk7CgkJY2FzZSAnbCc6IGxlbiA9IGF0b2kob3B0YXJnKTsgY29u
-dGludWU7CgkJY2FzZSAncyc6IHNfb2ZmID0gYXRvaShvcHRhcmcpOyBjb250aW51ZTsKCQljYXNl
-ICdkJzogZF9vZmYgPSBhdG9pKG9wdGFyZyk7IGNvbnRpbnVlOwoJCWNhc2UgJ28nOiBvZmZzZXQg
-PSBhdG9pKG9wdGFyZyk7IGNvbnRpbnVlOwoJCX0KCQlicmVhazsKCX0KCglpZiAoc19vZmYgKyBs
-ZW4gPiBzaXplb2Ygc19idWZmIHx8IGRfb2ZmICsgbGVuID4gc2l6ZW9mIGRfYnVmZiAtIDEpIHsK
-CQlmcHJpbnRmKHN0ZGVyciwgInRvbyBsb25nXG4iKTsKCQlleGl0KDEpOwoJfQoKCWZvciAoaSA9
-IDA7IGkgPCBsZW47IGkrKykKCQlzX2J1ZmZbaV0gPSByYW5kKCk7CgoJZm9yIChpID0gMDsgaSA8
-IFBBU1NFUzsgaSsrKSB7CgkJdGljayA9IHJkcG1jKGlkKTsKCQltZW1jcHlfcGVyZihkX2J1ZmYg
-KyBkX29mZiwgc19idWZmICsgc19vZmYsIGxlbik7CgkJdGlja3NbaV0gPSByZHBtYyhpZCkgLSB0
-aWNrOwoJfQoKCXByaW50ZigiICAgdGlja3MgICAgcmF0ZSBtb2RlICVkXG4iLCBNT0RFKTsKCWZv
-ciAoaSA9IDA7IGkgPCBQQVNTRVM7IGkrKykKCQlwcmludGYoIiAlN3UgJTd1XG4iLCB0aWNrc1tp
-XSwgMTAwICogbGVuIC8gKHRpY2tzW2ldIC0gb2Zmc2V0KSk7CgoJaWYgKG1lbWNtcChkX2J1ZmYg
-KyBkX29mZiwgc19idWZmICsgc19vZmYsIGxlbikgfHwgZF9idWZmW2Rfb2ZmICsgbGVuXSkgewoJ
-CWZwcmludGYoc3RkZXJyLCAiY29weSBtaXNtYXRjaFxuIik7CgkJZXhpdCgxKTsKCX0KCXJldHVy
-biAwOwp9Cgo=
---_002_ed0ac0937cdf4bb99b273fc0396b46b9AcuMSaculabcom_--
+> KVM can't use any fairness lock, so forcing it using a Test-Set lock
+> or paravirt qspinlock is the right way. KVM is not a vendor platform.
 
+My point is that KVM should be telling the guest what additional features
+it is capable of using, rather than the kernel making some assumptions
+based on$vendorid etc that are invalid when the kernel is running as a
+KVM guest.
+If the mvendorid etc related assumptions were dropped, the kernel would
+then default away from your qspinlock & there'd not be a need to
+special-case KVM AFAICT.
+
+> > guarantee needs to be communicated by firmware, using ACPI or DT.
+> > I made some comments on v11, referring similar discussion about the
+> > thead vector stuff. Please go take a look at that.
+> I prefer forcing T-HEAD processors using qspinlock, but if all people
+> thought it must be in the ACPI or DT, I would compromise. Then, I
+> would delete the qspinlock cmdline param patch and move it into DT.
+>=20
+> By the way, what's the kind of DT format? How about:
+
+I added the new "riscv,isa-extensions" property in part to make
+communicating vendor extensions like this easier. Please try to use
+that. "qspinlock" is software configuration though, the vendor extension
+should focus on the guarantee of strong forward progress, since that is
+the non-standard aspect of your IP.
+
+A commandline property may still be desirable, to control the locking
+method used, since the DT should be a description of the hardware, not
+for configuring software policy in your operating system.
+
+Thanks,
+Conor.
+
+>         cpus {
+>                 #address-cells =3D <1>;
+>                 #size-cells =3D <0>;
+> +              qspinlock;
+>                 cpu0: cpu@0 {
+>                         compatible =3D "sifive,bullet0", "riscv";
+>                         device_type =3D "cpu";
+>                         i-cache-block-size =3D <64>;
+>                         i-cache-sets =3D <128>;
+>=20
+> --
+> Best Regards
+>  Guo Ren
+
+--GbfQjpg1lIhwJuEz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZP8NqwAKCRB4tDGHoIJi
+0ldAAP9GGcetHG7gYZ4HG1QKhxMohQaaxgboYx7iHBroM1TWOQD/ZjZA5Wijf1OK
+1IInfX9naDCgcUU+DJfxo1FhU6ifVAA=
+=zWg1
+-----END PGP SIGNATURE-----
+
+--GbfQjpg1lIhwJuEz--
