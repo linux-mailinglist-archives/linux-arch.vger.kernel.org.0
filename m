@@ -2,89 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8260D79DA3C
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 22:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA7D79DBFD
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 00:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235902AbjILUs3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Sep 2023 16:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S237798AbjILWko (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Sep 2023 18:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjILUs3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 16:48:29 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2013A10D3
-        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 13:48:25 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-501bd164fbfso9940495e87.0
-        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 13:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1694551703; x=1695156503; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hv80f3uDeX+bprELwtiGX3ZT6QuXvl6UBldMet1HOC8=;
-        b=TxoxlD5wJ9ARnL0xVpGBzb3beYAA9gnS79hlfxVWWSJl12JcExYO8Qk2rlFbAg8mhn
-         gOZfqd8yjYQt5YuELvyg2sdaPN6pYt89YA+KVACkU2NywnF1eAAa3o923o8f3FOx62gk
-         wjG0CLl+RDgbOn46edkm6zaELpBkbg5VPSfBI=
+        with ESMTP id S235041AbjILWko (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 18:40:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA77310F2
+        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 15:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694558348;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hw4dz052UmhVfzEQW7+Uflu1VFGZC1UKKB7LwcrU6Xs=;
+        b=MvrVe0hy+BTUdvgmv5XYR9J31v/CXhR5LTixqQsZP/Dgq3P2MPw+CwUwsiybgH8AiCNmfX
+        qT9k+OQ0zYYnLABn0nYWolO4BH+wmJ7avUunp3M7V9Dn2Dd3nrJUzC+rjNNdLsu46t5rip
+        +RM+nzVmmzCHFaHHUTaSVqalBLt4HkA=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-360-jOas4ZuXPJim6lrLmA1N5A-1; Tue, 12 Sep 2023 18:39:06 -0400
+X-MC-Unique: jOas4ZuXPJim6lrLmA1N5A-1
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1c3ae44bbceso35790715ad.2
+        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 15:39:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694551703; x=1695156503;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hv80f3uDeX+bprELwtiGX3ZT6QuXvl6UBldMet1HOC8=;
-        b=ZM+tUTyDxf3P8qzRKAelUcMbyhofknfeHHbJhqNngqpUTGFIbaKzssAETCqjodggNB
-         mW1N7IfVpJURK7B3Dz3btGLJYRtRnmrks2AugU+au0koYRIoNN7iZvaNXQVCCdPUrg3a
-         gwhqSpdGW6V6mezW9JBk7cZApVWtH1Dd+FcwkO0d7dj2OfELUcJjFJXXZmtVE7s55XfV
-         OS7KeL0x5nPy1KMlOKcjDQgZ1ynIgHcKtiyVKbllWBU3nmuRKDv5j47LWdnCM4+2oFiW
-         6LxyPRicH/HsoVZsaTOe4TbQ//mIrg96U/aTl7h5BYmd2tqQFay0YIKIu2gon8kqAa7N
-         rpwg==
-X-Gm-Message-State: AOJu0YyFyrYpuTn6YdN5d8yTwDTS749I0V1rA6JGbPCUveWs5nrTYOgP
-        xRXATJ+yLRKWYxpbvAepkz3ianuwfnxGXqv10jgri5Tn
-X-Google-Smtp-Source: AGHT+IGGh8ZjSTSacqqttf4C5+473dXkDGwHZfOdB0D35hBzJxKaqV41oNVgd+OIddgHcQddOpPzZg==
-X-Received: by 2002:a05:6512:3f08:b0:500:9d4a:89fa with SMTP id y8-20020a0565123f0800b005009d4a89famr636743lfa.22.1694551703092;
-        Tue, 12 Sep 2023 13:48:23 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id e10-20020a170906044a00b0099d0a8ccb5fsm7352645eja.152.2023.09.12.13.48.21
-        for <linux-arch@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1694558345; x=1695163145;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hw4dz052UmhVfzEQW7+Uflu1VFGZC1UKKB7LwcrU6Xs=;
+        b=Abokg+OQLF1MOGeIK6rcH1RcOJp7Yi9xSCIII6UxhicYO5lJMhuBVqBJcPK4lkIees
+         2wDuUR5WB2yEQ7FYiqpXQXGOA+UerKNQYYit1GLNd6GgJX6CXP4ZYHkQ81y4ELxL5sCb
+         rkUGb9WFTM7VRpR8Yhd/h12WqjnYndI+CH+lygN0QHlvAt1PYN1gLBjgSS1AICFSN2eK
+         5aZru830v3n5sbr1+jTeuXl2tkzv5Fz6skqmi3nCbc+3FWuz45z+NkfG5eFCSvQwcq7E
+         9Zytg/OzeDAMV1ZnBRAjyshIDIX7oxoOF9EGWF3Lg7hbxyFG+V8TDOhji0tPsycQfaom
+         ipxQ==
+X-Gm-Message-State: AOJu0Yx6IfKtrjTmqPU+Rdn/xs83CPTA70qWFyKXFTJqturN/pazlK4O
+        iQxvdLrrDvaEfb0K3t93sQPlQXVISdxvbO8YPLT+yIzwOIJ8e+l/HUEglg4LH/Nz8sCBIlZJ05i
+        el7QCPZhNijeXEyCV9qkGOYMz4Bkkvw==
+X-Received: by 2002:a17:903:41c4:b0:1c3:3cde:7b44 with SMTP id u4-20020a17090341c400b001c33cde7b44mr1269640ple.12.1694558344876;
+        Tue, 12 Sep 2023 15:39:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHJXfeCtpozu/i9MX/Nb9C9D8rRf3TwAOO4AoonFr0CYCLCqxvZy3HNtrsprY+cWVaejgiLRA==
+X-Received: by 2002:a17:903:41c4:b0:1c3:3cde:7b44 with SMTP id u4-20020a17090341c400b001c33cde7b44mr1269621ple.12.1694558344560;
+        Tue, 12 Sep 2023 15:39:04 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902aa4a00b001c0af36dd64sm8964168plr.162.2023.09.12.15.38.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Sep 2023 13:48:22 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-401b393ddd2so69383555e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 13:48:21 -0700 (PDT)
-X-Received: by 2002:a05:600c:2288:b0:401:d803:6246 with SMTP id
- 8-20020a05600c228800b00401d8036246mr553079wmf.2.1694551701487; Tue, 12 Sep
- 2023 13:48:21 -0700 (PDT)
+        Tue, 12 Sep 2023 15:39:03 -0700 (PDT)
+Message-ID: <5a5fb237-c28b-d6b5-0425-8f8f0fe1ac79@redhat.com>
+Date:   Wed, 13 Sep 2023 08:38:51 +1000
 MIME-Version: 1.0
-References: <20230830140315.2666490-1-mjguzik@gmail.com> <27ba3536633c4e43b65f1dcd0a82c0de@AcuMS.aculab.com>
- <CAGudoHHUWZNz0OU5yCqOBkeifSYKhm4y6WO1x+q5pDPt1j3+GA@mail.gmail.com>
- <9a5dd401bf154a0aace0e5f781a3580c@AcuMS.aculab.com> <CAGudoHEuY1cMFStdRAjb8aWbHNqy8Pbeavk6tPB+u=rYzFDF+Q@mail.gmail.com>
- <ed0ac0937cdf4bb99b273fc0396b46b9@AcuMS.aculab.com> <CAHk-=wiXw+NSW6usWH31Y6n4CnF5LiOs_vJREb8_U290W9w3KQ@mail.gmail.com>
- <fa01f553d57e436c8a7f5b1c2aae23a9@AcuMS.aculab.com>
-In-Reply-To: <fa01f553d57e436c8a7f5b1c2aae23a9@AcuMS.aculab.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 12 Sep 2023 13:48:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whC8TaarEhz2ie_w01r34hQHNCTiZLAs6e42ewP7+cvoA@mail.gmail.com>
-Message-ID: <CAHk-=whC8TaarEhz2ie_w01r34hQHNCTiZLAs6e42ewP7+cvoA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Mateusz Guzik <mjguzik@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
+Content-Language: en-US
+To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <41dd71ab-a6a7-fd93-73ec-64a6b0ca468e@redhat.com>
+ <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 12 Sept 2023 at 12:41, David Laight <David.Laight@aculab.com> wrote:
->
-> What I found seemed to imply that 'rep movsq' used the same internal
-> logic as 'rep movsb' (pretty easy to do in hardware)
 
-Christ.
+Hi James,
 
-I told you. It's pretty easy in hardware  AS LONG AS IT'S ALIGNED.
+On 9/13/23 03:01, James Morse wrote:
+> On 29/03/2023 03:35, Gavin Shan wrote:
+>> On 2/3/23 9:50 PM, James Morse wrote:
+> 
+>>> If folk want to play along at home, you'll need a copy of Qemu that supports this.
+>>> https://github.com/salil-mehta/qemu.git
+>>> salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
+>>>
+>>> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
+>>> to match your host kernel. Replace your '-smp' argument with something like:
+>>> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+>>>
+>>> then feed the following to the Qemu montior;
+>>> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+>>> | (qemu) device_del cpu1
+>>>
+>>>
+>>> This series is based on v6.2-rc3, and can be retrieved from:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+> 
+>> I give it a try, but the hot-added CPU needs to be put into online
+>> state manually. I'm not sure if it's expected or not.
+> 
+> This is expected. If you want the CPUs to be brought online automatically, you can add
+> udev rules to do that.
+> 
 
-And if it's unaligned, "rep movsq" is FUNDAMENTALLY HARDER.
+Yeah, I usually execute the following command to bring the CPU into online state,
+after the vCPU is hot added by QMP command.
 
-Really.
+(qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+guest# echo 1 > /sys/devices/system/cpu/cpux/online
 
-                    Linus
+James, the series was posted a while ago and do you have plan to respin
+and post RFCv2 in near future? :)
+
+Thanks,
+Gavin
+
