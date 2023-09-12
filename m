@@ -2,98 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B778279D2C2
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 15:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1DB79D704
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 19:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbjILNvA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Sep 2023 09:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S235835AbjILRBx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Sep 2023 13:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbjILNu6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 09:50:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C310D7;
-        Tue, 12 Sep 2023 06:50:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2C8EF1F85D;
-        Tue, 12 Sep 2023 13:50:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1694526653; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jV/rHFCKWKhe5o/Dlji+h0tSxNvEv9pGQp8HF0qfFsw=;
-        b=Ew6/ShMt2eLj+cJ80uJN98SHanYPOov+NxTUOhOU2guO/sjidGDeaB2opl7TgIjsFoZos8
-        iOlarOI9lXf4fNYAryBRhul5DvdlSagyy+aXg3gIylx9rejm+0l1lebNZd9nDylzoTpDG0
-        KnwoLVFIiyCSTzh2hKHA6n2k7Nv7/qg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1694526653;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jV/rHFCKWKhe5o/Dlji+h0tSxNvEv9pGQp8HF0qfFsw=;
-        b=mCQGGEEqAUZk6FbEVgwGjMaR7bNzYn80/YZJFR4O0MHHOph1X0dtseZydWjo0aeJynBB8b
-        GZfd9/6d+QYFB4Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF0E913A3B;
-        Tue, 12 Sep 2023 13:50:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OMKiNbxsAGVKQwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 12 Sep 2023 13:50:52 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        arnd@arndb.de, deller@gmx.de
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 5/5] arch/powerpc: Call internal __phys_mem_access_prot() in fbdev code
-Date:   Tue, 12 Sep 2023 15:49:03 +0200
-Message-ID: <20230912135050.17155-6-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230912135050.17155-1-tzimmermann@suse.de>
-References: <20230912135050.17155-1-tzimmermann@suse.de>
+        with ESMTP id S233392AbjILRBu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 13:01:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A4FA1724;
+        Tue, 12 Sep 2023 10:01:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FF04C15;
+        Tue, 12 Sep 2023 10:02:22 -0700 (PDT)
+Received: from [10.1.197.60] (eglon.cambridge.arm.com [10.1.197.60])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A3F43F738;
+        Tue, 12 Sep 2023 10:01:38 -0700 (PDT)
+Message-ID: <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
+Date:   Tue, 12 Sep 2023 18:01:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
+Content-Language: en-GB
+To:     Gavin Shan <gshan@redhat.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <41dd71ab-a6a7-fd93-73ec-64a6b0ca468e@redhat.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <41dd71ab-a6a7-fd93-73ec-64a6b0ca468e@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Call __phys_mem_access_prot() from the fbdev mmap helper
-pgprot_framebuffer(). Allows to avoid the file argument of NULL.
+Hi Gavin,
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
----
- arch/powerpc/include/asm/fb.h | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+On 29/03/2023 03:35, Gavin Shan wrote:
+> On 2/3/23 9:50 PM, James Morse wrote:
 
-diff --git a/arch/powerpc/include/asm/fb.h b/arch/powerpc/include/asm/fb.h
-index 3cecf14d51de8..c0c5d1df7ad1e 100644
---- a/arch/powerpc/include/asm/fb.h
-+++ b/arch/powerpc/include/asm/fb.h
-@@ -8,12 +8,7 @@ static inline pgprot_t pgprot_framebuffer(pgprot_t prot,
- 					  unsigned long vm_start, unsigned long vm_end,
- 					  unsigned long offset)
- {
--	/*
--	 * PowerPC's implementation of phys_mem_access_prot() does
--	 * not use the file argument. Set it to NULL in preparation
--	 * of later updates to the interface.
--	 */
--	return phys_mem_access_prot(NULL, PHYS_PFN(offset), vm_end - vm_start, prot);
-+	return __phys_mem_access_prot(PHYS_PFN(offset), vm_end - vm_start, prot);
- }
- #define pgprot_framebuffer pgprot_framebuffer
- 
--- 
-2.42.0
+>> If folk want to play along at home, you'll need a copy of Qemu that supports this.
+>> https://github.com/salil-mehta/qemu.git
+>> salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
+>>
+>> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
+>> to match your host kernel. Replace your '-smp' argument with something like:
+>> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+>>
+>> then feed the following to the Qemu montior;
+>> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+>> | (qemu) device_del cpu1
+>>
+>>
+>> This series is based on v6.2-rc3, and can be retrieved from:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
 
+> I give it a try, but the hot-added CPU needs to be put into online
+> state manually. I'm not sure if it's expected or not.
+
+This is expected. If you want the CPUs to be brought online automatically, you can add
+udev rules to do that.
+
+
+Thanks,
+
+James
