@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF46B79C1F5
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 03:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D752B79C1ED
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 03:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234620AbjILBtR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Sep 2023 21:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S235664AbjILBtG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Sep 2023 21:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbjILBs7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 21:48:59 -0400
+        with ESMTP id S233871AbjILBs4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Sep 2023 21:48:56 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371C8130FB8;
-        Mon, 11 Sep 2023 18:22:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB896C4AF6B;
-        Tue, 12 Sep 2023 01:06:42 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C85118D55;
+        Mon, 11 Sep 2023 18:22:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F34C4AF5E;
+        Tue, 12 Sep 2023 01:08:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694480802;
-        bh=l4+CNsWaJdhkXR0vkKkAiHJ2iQogyvfkUk7FzvHK3AU=;
+        s=k20201202; t=1694480928;
+        bh=vPBtjeXZPsX8uMaq9qwgKEv+1PCvHrRzIWtKBohUeVk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rDRIA4d6KAD5REBFXHv8wxLdpkWXtR/ABreMbVOKR1Z842Q1IY2CrC1HXeIj0ZugJ
-         EXDPGPvX9IibEzN74L3a7ldtnF3uqIFhLY7YoHImX5G41brZSb+8Ej/ioxIieDNPE7
-         EOSb67RxTTZtlrcliGrquXC8rYsE5WpXHQev4fbvySjhS/6HhV5WZ/4mm+aJUgLxW3
-         QXsM2P+8thLUgQT6KsFyjlf/KYxk4TUJYoBN4JMhyT9/CdlMi+EYcYEe0apCG2FJGs
-         1kQYlRKXTPINHgKX2v2fYG7Fa+vLY2ZFsBH1NySCgMULXNb6V3rjSA3wobObxXvv4X
-         meLNkytj/8PFw==
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-52a5c0d949eso6377282a12.0;
-        Mon, 11 Sep 2023 18:06:42 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yx0a/UHX3JXqFSrobU/M6cB+j/o3+em6OPq0WuKg0ta0BHrQFBR
-        BsYipR0Ew3KC6wklropm7zW8PBZRC2cQDQNJO4s=
-X-Google-Smtp-Source: AGHT+IH4FhF/kTxPNgAVFbni63ODW/AwqSUOKFR7sTv2qzDRT5kLd8ExzVW67eg6HZD7guqGdyMOiuukWtzDSS5Upc0=
-X-Received: by 2002:a17:907:2c67:b0:99d:e617:abeb with SMTP id
- ib7-20020a1709072c6700b0099de617abebmr8061187ejc.23.1694480801055; Mon, 11
- Sep 2023 18:06:41 -0700 (PDT)
+        b=HV8j/1foh3iKGbddE+oh/8T8Agp46qlTjejJvqAwChtOJSpPVYuFV1tIAkYIVaYUA
+         K4VgsVQPAVuVrQbVcVH0V0nHGhHHEHid4URTR6QIroK4Grv/vZ3pi7ECsy6miD5o/j
+         67sMuCUxb2Zj6K4VKYIMQXxexoSR0LRCxxDoEDxhCJOVeTweA+gdxTzNDod00CWWOi
+         fBS6cM+HGI6TlOc4N6MApsSoe0nAFK8q1+YyipDrraZ/SR3gNGsEB606x9Vx7qtFTt
+         mli0gr9Qci1MvwbF16IdaiVBymPD9QKkT/GPPmJQgALVyypYaYclHn98c9EOYuk9mM
+         h7+2P4jrntJ+A==
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9a63b2793ecso642675666b.2;
+        Mon, 11 Sep 2023 18:08:48 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxNCNkkpjG4zyh+kmHBF/KBMGWei3dvMJlwWg1GJMMCg1fmYCSR
+        tMv2AY+vYIBHT4VwNY6iHf3IoH86pXOKBUTXz7E=
+X-Google-Smtp-Source: AGHT+IGzCHN4mbb9AV6M5P3xYllprNXyZ+f6yZI8Aqw1YDdEyhI15mU09G08slBaULRW+BgPstHqnFZshoO7b1fogcM=
+X-Received: by 2002:a17:907:2c77:b0:9a2:185b:5376 with SMTP id
+ ib23-20020a1709072c7700b009a2185b5376mr8328061ejc.49.1694480926903; Mon, 11
+ Sep 2023 18:08:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-8-guoren@kernel.org>
- <11f2a7a5-5219-a46e-5d16-4bdd400f5d9b@redhat.com>
-In-Reply-To: <11f2a7a5-5219-a46e-5d16-4bdd400f5d9b@redhat.com>
+ <5ba0b8f3-f8f5-3a25-e9b7-f29a1abe654a@redhat.com>
+In-Reply-To: <5ba0b8f3-f8f5-3a25-e9b7-f29a1abe654a@redhat.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 12 Sep 2023 09:06:28 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTFhcwprGoBvrS7bw1pBUWSPPZxsujjpgheQ4L80wBnXg@mail.gmail.com>
-Message-ID: <CAJF2gTTFhcwprGoBvrS7bw1pBUWSPPZxsujjpgheQ4L80wBnXg@mail.gmail.com>
+Date:   Tue, 12 Sep 2023 09:08:34 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT2hRxgnQt+WJ9P0YBWnUaZJ1-9g3ZE9tOz_MiLSsUjwQ@mail.gmail.com>
+Message-ID: <CAJF2gTT2hRxgnQt+WJ9P0YBWnUaZJ1-9g3ZE9tOz_MiLSsUjwQ@mail.gmail.com>
 Subject: Re: [PATCH V11 07/17] riscv: qspinlock: Introduce qspinlock param for
  command line
 To:     Waiman Long <longman@redhat.com>
@@ -64,7 +64,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 11:22=E2=80=AFPM Waiman Long <longman@redhat.com> w=
+On Mon, Sep 11, 2023 at 11:34=E2=80=AFPM Waiman Long <longman@redhat.com> w=
 rote:
 >
 > On 9/10/23 04:29, guoren@kernel.org wrote:
@@ -96,11 +96,21 @@ nlock.
 > >       qspinlock.numa_spinlock_threshold_ns=3D   [NUMA, PV_OPS]
 > >                       Set the time threshold in nanoseconds for the
 > >                       number of intra-node lock hand-offs before the
+> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > index a447cf360a18..0f084f037651 100644
+> > --- a/arch/riscv/kernel/setup.c
+> > +++ b/arch/riscv/kernel/setup.c
+> > @@ -270,6 +270,15 @@ static void __init parse_dtb(void)
+> >   }
+> >
+> >   #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
+> > +bool enable_qspinlock_key =3D false;
 >
-> Your patch series is still based on top of numa-aware qspinlock patchset
-> which isn't upstream yet. Please rebase it without that as that will
-> cause merge conflict during upstream merge.
-Okay, thx for pointing it out.
+> You can use __ro_after_init qualifier for enable_qspinlock_key. BTW,
+> this is not a static key, just a simple flag. So what is the point of
+> the _key suffix?
+Okay, I would change it to:
+bool enable_qspinlock_flag __ro_after_init =3D false;
 
 >
 > Cheers,
