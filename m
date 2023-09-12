@@ -2,146 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7147E79D9B2
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 21:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8260D79DA3C
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Sep 2023 22:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236057AbjILTlb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Sep 2023 15:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S235902AbjILUs3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Sep 2023 16:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjILTlY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 15:41:24 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FB47115
-        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 12:41:20 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-76-W-5t9hiWOWqAxCmj4PVSRw-1; Tue, 12 Sep 2023 20:41:07 +0100
-X-MC-Unique: W-5t9hiWOWqAxCmj4PVSRw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 12 Sep
- 2023 20:41:03 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 12 Sep 2023 20:41:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>
-CC:     Mateusz Guzik <mjguzik@gmail.com>,
+        with ESMTP id S232402AbjILUs3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 16:48:29 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2013A10D3
+        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 13:48:25 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-501bd164fbfso9940495e87.0
+        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 13:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1694551703; x=1695156503; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hv80f3uDeX+bprELwtiGX3ZT6QuXvl6UBldMet1HOC8=;
+        b=TxoxlD5wJ9ARnL0xVpGBzb3beYAA9gnS79hlfxVWWSJl12JcExYO8Qk2rlFbAg8mhn
+         gOZfqd8yjYQt5YuELvyg2sdaPN6pYt89YA+KVACkU2NywnF1eAAa3o923o8f3FOx62gk
+         wjG0CLl+RDgbOn46edkm6zaELpBkbg5VPSfBI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694551703; x=1695156503;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hv80f3uDeX+bprELwtiGX3ZT6QuXvl6UBldMet1HOC8=;
+        b=ZM+tUTyDxf3P8qzRKAelUcMbyhofknfeHHbJhqNngqpUTGFIbaKzssAETCqjodggNB
+         mW1N7IfVpJURK7B3Dz3btGLJYRtRnmrks2AugU+au0koYRIoNN7iZvaNXQVCCdPUrg3a
+         gwhqSpdGW6V6mezW9JBk7cZApVWtH1Dd+FcwkO0d7dj2OfELUcJjFJXXZmtVE7s55XfV
+         OS7KeL0x5nPy1KMlOKcjDQgZ1ynIgHcKtiyVKbllWBU3nmuRKDv5j47LWdnCM4+2oFiW
+         6LxyPRicH/HsoVZsaTOe4TbQ//mIrg96U/aTl7h5BYmd2tqQFay0YIKIu2gon8kqAa7N
+         rpwg==
+X-Gm-Message-State: AOJu0YyFyrYpuTn6YdN5d8yTwDTS749I0V1rA6JGbPCUveWs5nrTYOgP
+        xRXATJ+yLRKWYxpbvAepkz3ianuwfnxGXqv10jgri5Tn
+X-Google-Smtp-Source: AGHT+IGGh8ZjSTSacqqttf4C5+473dXkDGwHZfOdB0D35hBzJxKaqV41oNVgd+OIddgHcQddOpPzZg==
+X-Received: by 2002:a05:6512:3f08:b0:500:9d4a:89fa with SMTP id y8-20020a0565123f0800b005009d4a89famr636743lfa.22.1694551703092;
+        Tue, 12 Sep 2023 13:48:23 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id e10-20020a170906044a00b0099d0a8ccb5fsm7352645eja.152.2023.09.12.13.48.21
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Sep 2023 13:48:22 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-401b393ddd2so69383555e9.0
+        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 13:48:21 -0700 (PDT)
+X-Received: by 2002:a05:600c:2288:b0:401:d803:6246 with SMTP id
+ 8-20020a05600c228800b00401d8036246mr553079wmf.2.1694551701487; Tue, 12 Sep
+ 2023 13:48:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230830140315.2666490-1-mjguzik@gmail.com> <27ba3536633c4e43b65f1dcd0a82c0de@AcuMS.aculab.com>
+ <CAGudoHHUWZNz0OU5yCqOBkeifSYKhm4y6WO1x+q5pDPt1j3+GA@mail.gmail.com>
+ <9a5dd401bf154a0aace0e5f781a3580c@AcuMS.aculab.com> <CAGudoHEuY1cMFStdRAjb8aWbHNqy8Pbeavk6tPB+u=rYzFDF+Q@mail.gmail.com>
+ <ed0ac0937cdf4bb99b273fc0396b46b9@AcuMS.aculab.com> <CAHk-=wiXw+NSW6usWH31Y6n4CnF5LiOs_vJREb8_U290W9w3KQ@mail.gmail.com>
+ <fa01f553d57e436c8a7f5b1c2aae23a9@AcuMS.aculab.com>
+In-Reply-To: <fa01f553d57e436c8a7f5b1c2aae23a9@AcuMS.aculab.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 12 Sep 2023 13:48:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whC8TaarEhz2ie_w01r34hQHNCTiZLAs6e42ewP7+cvoA@mail.gmail.com>
+Message-ID: <CAHk-=whC8TaarEhz2ie_w01r34hQHNCTiZLAs6e42ewP7+cvoA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86: bring back rep movsq for user access on CPUs
+ without ERMS
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Mateusz Guzik <mjguzik@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "bp@alien8.de" <bp@alien8.de>
-Subject: RE: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-Thread-Topic: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-Thread-Index: AQHZ23Vdq8Esj5k0zUGYupOb09r6RrAF7nHAgAAb1ICAABQQEIANxBwAgAGZkGCAAg/ggIAAEt9w
-Date:   Tue, 12 Sep 2023 19:41:03 +0000
-Message-ID: <fa01f553d57e436c8a7f5b1c2aae23a9@AcuMS.aculab.com>
-References: <20230830140315.2666490-1-mjguzik@gmail.com>
- <27ba3536633c4e43b65f1dcd0a82c0de@AcuMS.aculab.com>
- <CAGudoHHUWZNz0OU5yCqOBkeifSYKhm4y6WO1x+q5pDPt1j3+GA@mail.gmail.com>
- <9a5dd401bf154a0aace0e5f781a3580c@AcuMS.aculab.com>
- <CAGudoHEuY1cMFStdRAjb8aWbHNqy8Pbeavk6tPB+u=rYzFDF+Q@mail.gmail.com>
- <ed0ac0937cdf4bb99b273fc0396b46b9@AcuMS.aculab.com>
- <CAHk-=wiXw+NSW6usWH31Y6n4CnF5LiOs_vJREb8_U290W9w3KQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiXw+NSW6usWH31Y6n4CnF5LiOs_vJREb8_U290W9w3KQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTIgU2VwdGVtYmVyIDIwMjMgMTk6NDkNCj4g
-DQo+IE9uIE1vbiwgMTEgU2VwdCAyMDIzIGF0IDAzOjM4LCBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
-aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IFRoZSBvdmVyaGVhZCBvZiAncmVwIG1v
-dmJzJyBpcyBhYm91dCAzNiBjbG9ja3MsICdyZXAgbW92c3EnIG9ubHkgMTYuDQoNCkludGVyZXN0
-aW5nbHkgZXhhY3RseSB0aGUgc2FtZSB0ZXN0IGNoYW5nZWQgaXRzIG1pbmQgZm9yIG5vIHJlYXNv
-biENCldoaWxlIEkgZ290IHJlcGVhdGFibGUgY2xvY2sgY291bnRzICgrLy0xIGluIHRoZSBsb3cg
-aHVuZHJlZHMpIHdoZW4NCmxvb3BpbmcgdGhlIHRlc3QgKGllIHRoZSAnaG90IGNhY2hlJyBjYXNl
-cyksIEkgY291bGRuJ3QgZGVjaWRlIG9uDQp0aGUgZXhhY3Qgb3ZlcmhlYWQgdG8gZ2V0IGFuIGFj
-Y3VyYXRlIGJ5dGVzL2Nsb2NrLg0KT1RPSCBpdCB3YXMgYmV0d2VlbiAzMCBhbmQgMzUgLSBzbyBw
-cmV0dHkgbXVjaCBsaWtlbHkgdG8gYmUgMzIuDQoNCj4gTm90ZSB0aGF0IHRoZSBoYXJkIGNhc2Ug
-Zm9yICdyZXAgbW92c3EnIGlzIHdoZW4gdGhlIHN0b3JlcyBjcm9zcyBhDQo+IGNhY2hlbGluZSAo
-b3Igd29yc2UgeWV0LCBhIHBhZ2UpIGJvdW5kYXJ5Lg0KDQpQYWdlIGZhdWx0cyBvbiBtaXNhbGln
-bmVkIHRyYW5zZmVycyBhcmUgd2hhdCBtYWtlcyB0aGVtIGhhcmQgdG8gaW1wbGVtZW50Lg0KT1RP
-SCB0aGF0IGlzIGEgJ2hhcmR3YXJlIHByb2JsZW0nIG5vdCBzcGVjaWZpY2FsbHkgd29ydGggb3B0
-aW1pc2luZw0KZm9yIC0gc2luY2UgdW5saWtlbHkuDQoNCj4gVGhhdCBpcyB3aGF0IG1ha2VzICdy
-ZXAgbW92c2InIGZ1bmRhbWVudGFsbHkgc2ltcGxlciBpbiB0aGVvcnkuIFRoZQ0KPiBuYXR1cmFs
-IHJlYWN0aW9uIGlzICJidXQgbW92c3EgZG9lcyB0aGluZ3MgOCBieXRlcyBhdCBhIHRpbWUiLCBi
-dXQNCj4gb25jZSB5b3Ugc3RhcnQgZG9pbmcgYW55IGtpbmQgb2Ygb3B0aW1pemF0aW9ucyB0aGF0
-IGFyZSBhY3R1YWxseSBiYXNlZA0KPiBvbiBiaWdnZXIgYXJlYXMsIHRoZSBieXRlIGNvdW50cyBh
-cmUgYWN0dWFsbHkgc2ltcGxlci4gWW91IGNhbiBhbHdheXMNCj4gZG8gdGhlbSBhcyBtYXNrZWQg
-d3JpdGVzIHVwIHRvIHdoYXRldmVyIGJvdW5kYXJ5IHlvdSBsaWtlLCBhbmQganVzdA0KPiByZXN0
-YXJ0LiBUaGVyZSBhcmUgbmV2ZXIgYW55ICJ3aGF0IGFib3V0IHRoZSBzdHJhZGRsaW5nIGJ5dGVz
-IiBpc3N1ZXMuDQoNCldoYXQgSSBmb3VuZCBzZWVtZWQgdG8gaW1wbHkgdGhhdCAncmVwIG1vdnNx
-JyB1c2VkIHRoZSBzYW1lIGludGVybmFsDQpsb2dpYyBhcyAncmVwIG1vdnNiJyAocHJldHR5IGVh
-c3kgdG8gZG8gaW4gaGFyZHdhcmUpIGV2ZW4gdGhvdWdoIEkNCmRvbid0IHRoaW5rIHRoZSBFTVJT
-IGRvY3Mgc2F5IGFueXRoaW5nIGFib3V0IHRoYXQuDQppdCBtYXkgd2VsbCBiZSBjcHUgc3BlY2lm
-aWMgLSBidXQgSSdkIGV4cGVjdCBsYXRlciBvbmVzIHRvIGJlIHRoZSBzYW1lLg0KKEFNRCBjcHUg
-d2lsbCBiZSBkaWZmZXJlbnQsIGFuZCBJIGRvbid0IGhhdmUgYWNjZXNzIHRvIGFueXRoaW5nIG5l
-dy4pDQoNCj4gVGhhdCdzIG9uZSBvZiB0aGUgZGFuZ2VycyB3aXRoIGJlbmNobWFya2luZy4gRG8g
-eW91IGJlbmNobWFyayB0aGUNCj4gdW5hbGlnbmVkIGNhc2VzPyBIb3cgbXVjaCBkbyB0aGV5IG1h
-dHRlciBpbiByZWFsIGxpZmU/IERvIHRoZXkgZXZlbg0KPiBoYXBwZW4/DQoNCkEgbWljcm9iZW5j
-aG1hcmsgY2FuIHRlbGwgeW91IGhvdyBiYWQgdGhleSBhcmUuDQpSZWFsIGxpZmUgd2lsbCBhbG1v
-c3QgY2VydGFpbmx5IGJlIGRpZmZlcmVudC4NCg0KSSBkaWQgc29tZSBidWZmZXIgb2Zmc2V0IG1l
-YXN1cmVtZW50cyAodGhlIGJ1ZmZlcnMgc2hvdWxkIGhhdmUgYmVlbg0KOGsgYWxpZ25lZCkuDQpG
-b3IgcmVhc29uYWJsZSBsZW5ndGggY29waWVzICgxMDI0IGJ5dGVzKSB0aGUgc291cmNlIGFsaWdu
-bWVudCBtYWRlDQphbG1vc3Qgbm8gZGlmZmVyZW5jZS4NCldoYXQgZGlkIG1hdHRlciB3YXMgdGhl
-IGRlc3RpbmF0aW9uIGFsaWdubWVudCwgYW55dGhpbmcgb3RoZXIgdGhhbg0KYSBtdWx0aXBsZSBv
-ciAzMiBoYWx2ZWQgdGhlIHRyYW5zZmVyIHNwZWVkIChyZWdhcmRsZXNzIG9mIHRoZQ0Kc291cmNl
-IGFsaWdubWVudCkuDQpTbyAzMm4rMSwgMzJuKzggYW5kIDMybisxNiB3ZXJlIGFsbCBlcXVhbGx5
-IGJhZC4NClNvbWUgdmFsdWVzIHJlZHVjZWQgaXQgZnVydGhlciwgcG9zc2libHkgd3JpdGVzIGFm
-ZmVjdGluZyB0aGUNCnJlYWQgcHJlZmV0Y2hlcyAtIHdobyBrbm93cy4NCg0KQW55d2F5IGl0IHNl
-ZW1lZCBsaWtlIHRoZXJlIGlzIGEgcGlwZWxpbmVkIGJhcnJlbCBzaGlmdGVyIG9uDQp0aGUgcmVh
-ZCBzaWRlIChzbyBpdCBjb3VsZCByZWFkIDMyIGJ5dGVzL2Nsb2NrKSBidXQgdGhlIHdyaXRlDQpz
-aWRlIHdhcyBoYXZpbmcgdG8gZG8gdHdvIHdyaXRlcyBvZiBlYWNoIG1pc2FsaWduZWQgYmxvY2su
-DQoNCj4gQW5kIHRoYXQncyBlbnRpcmVseSBpZ25vcmluZyBhbnkgImNvbGQgdnMgaG90IGNhY2hl
-cyIgZXRjIGlzc3Vlcywgb3INCj4gdGhlICJ3aGF0IGlzIHRoZSBjb3N0IG9mIGFjY2VzcyBfYWZ0
-ZXJfIHRoZSBtZW1jcHkvbWVtc2V0Ii4NCg0KSSBjb3VudCB0aGUgY2xvY2tzIGZvciA1IGl0ZXJh
-dGlvbnMuDQpUaGUgZmlyc3QgJ2NvbGQgY2FjaGUnIGlzIG1hc3NpdmVseSBzbG93ZXIuDQpUaGUg
-cmVzdCBhcmUgcHJldHR5IG11Y2ggaWRlbnRpY2FsIC0gc28gNSBpcyBwbGVudHkuDQpGb3IgbWlj
-cm9iZW5jaG1hcmtzIHlvdSByZWFsbHkgd2FudCB0byBhc3N1bWUgJ2hvdCBjYWNoZScuDQpUaGUg
-Y2FjaGUgbG9hZHMvaW52YWxpZGF0ZXMgd2lsbCAodXN1YWxseSkgYmUgbmVlZGVkIHNvbWV0aW1l
-DQpzbyBubyBwb2ludCBkZXN0cm95aW5nIGEgYmVuY2htYXJrIGJ5IGluY2x1ZGluZyB0aGVtLg0K
-RXNwZWNpYWxseSB3aGVuIGxvb2tpbmcgYSBzaG9ydCBjb2RlIGxvb3BzLg0KDQpJJ20gZGVmaW5p
-dGVseSBhZ2FpbnN0IHJ1bm5pbmcgMTAwMDAgaXRlcmF0aW9ucyBhbmQgbWVhc3VyaW5nIHdhbGwg
-dGltZS4NCkl0IHJlYWxseSBkb2Vzbid0IHRlbGwgeW91IGFueXRoaW5nIHVzZWZ1bC4NCkkgY2Fu
-J3QgZXZlbiB1c2UgcmR0c2MgLSBJIGNhbid0IGxvY2sgdGhlIGNwdSBjbG9jayBmcmVxdWVuY3ku
-DQoNCj4gT3IsIGluIHRoZSBjYXNlIG9mIHRoZSBrZXJuZWwsIG91ciBpc3N1ZXMgd2l0aCAiZnVu
-Y3Rpb24gY2FsbHMgY2FuIG5vdw0KPiBiZSBzdXJwcmlzaW5nbHkgZXhwZW5zaXZlLCBhbmQgaWYg
-d2UgY2FuIGlubGluZSB0aGluZ3MgaXQgY2FuIHdpbiBiYWNrDQo+IDIwIGN5Y2xlcyBmcm9tIGEg
-Zm9yY2VkIG1pc3ByZWRpY3QiLg0KDQpBbmQgdGhlbiBnbGliYyBwcm9iYWJseSBhZGRzIGEgcGls
-ZSBvZiB3cmFwcGVycyB0byBjb252ZXJ0IG9wZW4oKQ0KaW50byBvcGVuYXQoT19FTVBUWV9QQVRI
-LC4uLi4pIGZvciBubyBnb29kIHJlYXNvbi4NClVuZG9pbmcgYWxsIHRoZSBnb29kIHdvcmsuDQoN
-CkFuZCB0aGVuIHRoZXJlIGlzIHRoZSBjb2RlIEkndmUgd3JpdHRlbiBmb3IgYW4gZnBnYSBzb2Z0
-LWNvcmUNCndoaWNoIGhhcyBhIGxpbWl0ZWQgbnVtYmVyIG9mIGNsb2NrIHRvIGRvIGl0cyB3b3Jr
-Lg0KUmVxdWlyZWQgY2FyZWZ1bCBhbmFseXNpcyBvZiBzdGF0aWMgYnJhbmNoIHByZWRpY3Rpb24g
-KGhhdmluZw0KZm91bmQgdGhlIGhpZGRlbiBtZW51IHRvIGRpc2FibGUgdGhlIGR5bmFtaWMgb25l
-KSB0byBlbnN1cmUNCnRoYXQgdGhlIHdvcnN0IGNhc2UgcGF0aHMgd2VyZSBmYXN0IGVub3VnaCAt
-IHJhdGhlciB0aGFuIG1ha2luZw0KdGhlIGNvbW1vbiBwYXRocyBmYXN0ZXN0LiANCg0KLi4uDQo+
-IFNvIGJld2FyZSBtaWNyb2JlbmNobWFya3MuIFRoYXQncyB0cnVlIGluIGdlbmVyYWwsIGJ1dCBp
-dCdzDQo+IF9wYXJ0aWN1bGFybHlfIHRydWUgb2YgbWVtc2V0L21lbWNweS4NCg0KSSBzZWUgdGhl
-IHByb2JsZW0gYmVuY2htYXJrcyB0aGUgb25lcyB0aGF0IGFyZSBtYXNzaXZlbHkgdW5yb2xsZWQN
-CmFuZCBydW4gZmFzdChpc2gpIGluIGEgYmVuY2htYXJrIGJ1dCBqdXN0IGRlc3Ryb3kgdGhlIGkt
-Y2FjaGUuDQoNCklmIEknbSBtaXJjb2JlbmNobWFya2luZyBJJ20gdHJ5aW5nIHRvIHNlZSBpZiBp
-IGNhbiBnZXQgdGhlDQpjcHUgdG8gZXhlY3V0ZSBhcyBtYW55IGluc3RydWN0aW9ucyBpbiBwYXJh
-bGxlbCBhcyBpdCBzaG91bGQNCnNvIHRoYXQgdGhlIGNvZGUgbG9vcCBpcyBsaW1pdGVkIGJ5IChl
-ZykgdGhlIG51bWJlciBvZiByZWFkcy4NCklmIHlvdSBjYW4gZ2V0IGEgc2hvcnQgbG9vcCB0byBy
-dW4gJ2FzIGZhc3QgYXMgcG9zc2libGUnIHRoZXJlDQppcyBubyBwb2ludCBkb2luZyBhIDE5ODAn
-cyB1bnJvbGwuDQoNCklmIGFueW9uZSBoYWQgZG9uZSBhIG1pY3JvYmVuY2htYXJrIG9mIHRoZSAn
-YWRjJyBsaXN0IGluIHRoZSBpcA0KY2hlY2tzdW0gY29kZSAoZWcgb24gSW50ZWwgY29yZS0yKSB0
-aGV5J2QgaGF2ZSBwYW5pY2tlZCBhYm91dA0KZWFjaCBvbmUgdGFraW5nIHR3byBjbG9ja3MuDQpF
-dmVuIHdpdGggbW9yZSByZWNlbnQgY3B1IHlvdSBuZWVkIHRvIGFkYyB0byBhbHRlcm5hdGUgcmVn
-aXN0ZXJzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
-bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
-YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Tue, 12 Sept 2023 at 12:41, David Laight <David.Laight@aculab.com> wrote:
+>
+> What I found seemed to imply that 'rep movsq' used the same internal
+> logic as 'rep movsb' (pretty easy to do in hardware)
 
+Christ.
+
+I told you. It's pretty easy in hardware  AS LONG AS IT'S ALIGNED.
+
+And if it's unaligned, "rep movsq" is FUNDAMENTALLY HARDER.
+
+Really.
+
+                    Linus
