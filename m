@@ -2,133 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C310979ECF7
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 17:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0489A79ED00
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 17:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjIMP3q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 11:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S229704AbjIMPa1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 11:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjIMP3c (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 11:29:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9F61BEB;
-        Wed, 13 Sep 2023 08:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XdtCAZyx/MZYsEBg/jFRSdFTbFPWHLuZyAfo/8U5/tw=; b=FKQnCx1yL4RyEEWc6jQCHdQzMK
-        szsOP/bu+Hp+kcV7jfsv1j9W2fK3qrHVMhjiwW3Sv5KUUSSTSuAP9ppITyPWNkSa6GOsWotDD0hxb
-        grFlbm2z2X/FlaUtQqKyYXfOPJzmLZZNI29Yskokx19istLJS7pHSdkbMIWTSma9/50YnAHqtoFXz
-        +du9ZJd2CpX2TaFbf3S8XiUmtfYMWHiiLBKiSIdjUV3LYH0jjF25i2xitRWIsHEztFKiLs74AKyn8
-        ui29Pde6io2w+oPRoE0ORQ495MO5MipHx015n6Q5DbY3l/PQa+T2ru1WA/cVybHgDAqM34yXV92wK
-        zjCw8DCg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59522)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qgRnY-0002gL-2z;
-        Wed, 13 Sep 2023 16:29:00 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qgRnT-0003q4-B5; Wed, 13 Sep 2023 16:28:55 +0100
-Date:   Wed, 13 Sep 2023 16:28:55 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
-Message-ID: <ZQHVN4QqSvx4ndW4@shell.armlinux.org.uk>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <41dd71ab-a6a7-fd93-73ec-64a6b0ca468e@redhat.com>
- <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
- <5a5fb237-c28b-d6b5-0425-8f8f0fe1ac79@redhat.com>
+        with ESMTP id S229700AbjIMPaM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 11:30:12 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A25F2685;
+        Wed, 13 Sep 2023 08:29:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3072C433C8;
+        Wed, 13 Sep 2023 15:29:27 +0000 (UTC)
+Date:   Wed, 13 Sep 2023 16:29:25 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        oliver.upton@linux.dev, maz@kernel.org, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com, arnd@arndb.de,
+        akpm@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
+        pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
+        vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
+        hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 00/37] Add support for arm64 MTE dynamic tag storage
+ reuse
+Message-ID: <ZQHVVdlN9QQztc7Q@arm.com>
+References: <20230823131350.114942-1-alexandru.elisei@arm.com>
+ <33def4fe-fdb8-6388-1151-fabd2adc8220@redhat.com>
+ <ZOc0fehF02MohuWr@arm.com>
+ <ebd3f142-43cc-dc92-7512-8f1c99073fce@redhat.com>
+ <0b9c122a-c05a-b3df-c69f-85f520294adc@redhat.com>
+ <ZOd2LvUKMguWdlgq@arm.com>
+ <ZPhfNVWXhabqnknK@monolith>
+ <ZP7/e8YFiosElvTm@arm.com>
+ <0cc8a118-2522-f666-5bcc-af06263fd352@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5a5fb237-c28b-d6b5-0425-8f8f0fe1ac79@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <0cc8a118-2522-f666-5bcc-af06263fd352@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 08:38:51AM +1000, Gavin Shan wrote:
-> 
-> Hi James,
-> 
-> On 9/13/23 03:01, James Morse wrote:
-> > On 29/03/2023 03:35, Gavin Shan wrote:
-> > > On 2/3/23 9:50 PM, James Morse wrote:
+On Mon, Sep 11, 2023 at 02:29:03PM +0200, David Hildenbrand wrote:
+> On 11.09.23 13:52, Catalin Marinas wrote:
+> > On Wed, Sep 06, 2023 at 12:23:21PM +0100, Alexandru Elisei wrote:
+> > > On Thu, Aug 24, 2023 at 04:24:30PM +0100, Catalin Marinas wrote:
+> > > > On Thu, Aug 24, 2023 at 01:25:41PM +0200, David Hildenbrand wrote:
+> > > > > On 24.08.23 13:06, David Hildenbrand wrote:
+> > > > > > Regarding one complication: "The kernel needs to know where to allocate
+> > > > > > a PROT_MTE page from or migrate a current page if it becomes PROT_MTE
+> > > > > > (mprotect()) and the range it is in does not support tagging.",
+> > > > > > simplified handling would be if it's in a MIGRATE_CMA pageblock, it
+> > > > > > doesn't support tagging. You have to migrate to a !CMA page (for
+> > > > > > example, not specifying GFP_MOVABLE as a quick way to achieve that).
+> > > > > 
+> > > > > Okay, I now realize that this patch set effectively duplicates some CMA
+> > > > > behavior using a new migrate-type.
+> > [...]
+> > > I considered mixing the tag storage memory memory with normal memory and
+> > > adding it to MIGRATE_CMA. But since tag storage memory cannot be tagged,
+> > > this means that it's not enough anymore to have a __GFP_MOVABLE allocation
+> > > request to use MIGRATE_CMA.
+> > > 
+> > > I considered two solutions to this problem:
+> > > 
+> > > 1. Only allocate from MIGRATE_CMA is the requested memory is not tagged =>
+> > > this effectively means transforming all memory from MIGRATE_CMA into the
+> > > MIGRATE_METADATA migratetype that the series introduces. Not very
+> > > appealing, because that means treating normal memory that is also on the
+> > > MIGRATE_CMA lists as tagged memory.
 > > 
-> > > > If folk want to play along at home, you'll need a copy of Qemu that supports this.
-> > > > https://github.com/salil-mehta/qemu.git
-> > > > salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
-> > > > 
-> > > > You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
-> > > > to match your host kernel. Replace your '-smp' argument with something like:
-> > > > | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
-> > > > 
-> > > > then feed the following to the Qemu montior;
-> > > > | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
-> > > > | (qemu) device_del cpu1
-> > > > 
-> > > > 
-> > > > This series is based on v6.2-rc3, and can be retrieved from:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+> > That's indeed not ideal. We could try this if it makes the patches
+> > significantly simpler, though I'm not so sure.
 > > 
-> > > I give it a try, but the hot-added CPU needs to be put into online
-> > > state manually. I'm not sure if it's expected or not.
+> > Allocating metadata is the easier part as we know the correspondence
+> > from the tagged pages (32 PROT_MTE page) to the metadata page (1 tag
+> > storage page), so alloc_contig_range() does this for us. Just adding it
+> > to the CMA range is sufficient.
 > > 
-> > This is expected. If you want the CPUs to be brought online automatically, you can add
-> > udev rules to do that.
+> > However, making sure that we don't allocate PROT_MTE pages from the
+> > metadata range is what led us to another migrate type. I guess we could
+> > achieve something similar with a new zone or a CPU-less NUMA node,
+> 
+> Ideally, no significant core-mm changes to optimize for an architecture
+> oddity. That implies, no new zones and no new migratetypes -- unless it is
+> unavoidable and you are confident that you can convince core-MM people that
+> the use case (giving back 3% of system RAM at max in some setups) is worth
+> the trouble.
+
+If I was an mm maintainer, I'd also question this ;). But vendors seem
+pretty picky about the amount of RAM reserved for MTE (e.g. 0.5G for a
+16G platform does look somewhat big). As more and more apps adopt MTE,
+the wastage would be smaller but the first step is getting vendors to
+enable it.
+
+> I also had CPU-less NUMA nodes in mind when thinking about that, but not
+> sure how easy it would be to integrate it. If the tag memory has actually
+> different performance characteristics as well, a NUMA node would be the
+> right choice.
+
+In general I'd expect the same characteristics. However, changing the
+memory designation from tag to data (and vice-versa) requires some cache
+maintenance. The allocation cost is slightly higher (not the runtime
+one), so it would help if the page allocator does not favour this range.
+Anyway, that's an optimisation to worry about later.
+
+> If we could find some way to easily support this either via CMA or CPU-less
+> NUMA nodes, that would be much preferable; even if we cannot cover each and
+> every future use case right now. I expect some issues with CXL+MTE either
+> way , but are happy to be taught otherwise :)
+
+I think CXL+MTE is rather theoretical at the moment. Given that PCIe
+doesn't have any notion of MTE, more likely there would be some piece of
+interconnect that generates two memory accesses: one for data and the
+other for tags at a configurable offset (which may or may not be in the
+same CXL range).
+
+> Another thought I had was adding something like CMA memory characteristics.
+> Like, asking if a given CMA area/page supports tagging (i.e., flag for the
+> CMA area set?)?
+
+I don't think adding CMA memory characteristics helps much. The metadata
+allocation wouldn't go through cma_alloc() but rather
+alloc_contig_range() directly for a specific pfn corresponding to the
+data pages with PROT_MTE. The core mm code doesn't need to know about
+the tag storage layout.
+
+It's also unlikely for cma_alloc() memory to be mapped as PROT_MTE.
+That's typically coming from device drivers (DMA API) with their own
+mmap() implementation that doesn't normally set VM_MTE_ALLOWED (and
+therefore PROT_MTE is rejected).
+
+What we need though is to prevent vma_alloc_folio() from allocating from
+a MIGRATE_CMA list if PROT_MTE (VM_MTE). I guess that's basically
+removing __GFP_MOVABLE in those cases. As long as we don't have large
+ZONE_MOVABLE areas, it shouldn't be an issue.
+
+> When you need memory that supports tagging and have a page that does not
+> support tagging (CMA && taggable), simply migrate to !MOVABLE memory
+> (eventually we could also try adding !CMA).
+> 
+> Was that discussed and what would be the challenges with that? Page
+> migration due to compaction comes to mind, but it might also be easy to
+> handle if we can just avoid CMA memory for that.
+
+IIRC that was because PROT_MTE pages would have to come only from
+!MOVABLE ranges. Maybe that's not such big deal.
+
+We'll give this a go and hopefully it simplifies the patches a bit (it
+will take a while as Alex keeps going on holiday ;)). In the meantime,
+I'm talking to the hardware people to see whether we can have MTE pages
+in the tag storage/metadata range. We'd still need to reserve about 0.1%
+of the RAM for the metadata corresponding to the tag storage range when
+used as data but that's negligible (1/32 of 1/32). So if some future
+hardware allows this, we can drop the page allocation restriction from
+the CMA range.
+
+> > though the latter is not guaranteed not to allocate memory from the
+> > range, only make it less likely. Both these options are less flexible in
+> > terms of size/alignment/placement.
 > > 
+> > Maybe as a quick hack - only allow PROT_MTE from ZONE_NORMAL and
+> > configure the metadata range in ZONE_MOVABLE but at some point I'd
+> > expect some CXL-attached memory to support MTE with additional carveout
+> > reserved.
 > 
-> Yeah, I usually execute the following command to bring the CPU into online state,
-> after the vCPU is hot added by QMP command.
-> 
-> (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
-> guest# echo 1 > /sys/devices/system/cpu/cpux/online
-> 
-> James, the series was posted a while ago and do you have plan to respin
-> and post RFCv2 in near future? :)
+> I have no idea how we could possibly cleanly support memory hotplug in
+> virtual environments (virtual DIMMs, virtio-mem) with MTE. In contrast to
+> s390x storage keys, the approach that arm64 with MTE took here (exposing tag
+> memory to the VM) makes it rather hard and complicated.
 
-I'll pipe up here, because I've been discussing this topic with James
-privately.
+The current thinking is that the VM is not aware of the tag storage,
+that's entirely managed by the host. The host would treat the guest
+memory similarly to the PROT_MTE user allocations, reserve metadata etc.
 
-In James' last email to me, he indicated that he's hoping to publish
-the next iteration of the patches towards the end of this week. I
-suspect that's conditional on there being no major issues coming up.
-
-One of the things that I think would help this patch set along is if
-people could test it on x86, to make sure that there aren't any
-regressions on random x86 hardware - and report successes and
-failures so confidence in the patch series can be gained.
-
-Thanks.
+Thanks for the feedback so far, very useful.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Catalin
