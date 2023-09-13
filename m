@@ -2,191 +2,245 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0489A79ED00
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 17:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0ABE79EE66
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjIMPa1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 11:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S229506AbjIMQiq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 12:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjIMPaM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 11:30:12 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A25F2685;
-        Wed, 13 Sep 2023 08:29:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3072C433C8;
-        Wed, 13 Sep 2023 15:29:27 +0000 (UTC)
-Date:   Wed, 13 Sep 2023 16:29:25 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        oliver.upton@linux.dev, maz@kernel.org, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com, arnd@arndb.de,
-        akpm@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
-        pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
-        vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
-        hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 00/37] Add support for arm64 MTE dynamic tag storage
- reuse
-Message-ID: <ZQHVVdlN9QQztc7Q@arm.com>
-References: <20230823131350.114942-1-alexandru.elisei@arm.com>
- <33def4fe-fdb8-6388-1151-fabd2adc8220@redhat.com>
- <ZOc0fehF02MohuWr@arm.com>
- <ebd3f142-43cc-dc92-7512-8f1c99073fce@redhat.com>
- <0b9c122a-c05a-b3df-c69f-85f520294adc@redhat.com>
- <ZOd2LvUKMguWdlgq@arm.com>
- <ZPhfNVWXhabqnknK@monolith>
- <ZP7/e8YFiosElvTm@arm.com>
- <0cc8a118-2522-f666-5bcc-af06263fd352@redhat.com>
+        with ESMTP id S229437AbjIMQip (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:38:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BD5019B1;
+        Wed, 13 Sep 2023 09:38:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 042891FB;
+        Wed, 13 Sep 2023 09:39:18 -0700 (PDT)
+Received: from merodach.members.linode.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8CB83F7C5;
+        Wed, 13 Sep 2023 09:38:38 -0700 (PDT)
+From:   James Morse <james.morse@arm.com>
+To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: [RFC PATCH v2 00/35] ACPI/arm64: add support for virtual cpuhotplug
+Date:   Wed, 13 Sep 2023 16:37:48 +0000
+Message-Id: <20230913163823.7880-1-james.morse@arm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0cc8a118-2522-f666-5bcc-af06263fd352@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 02:29:03PM +0200, David Hildenbrand wrote:
-> On 11.09.23 13:52, Catalin Marinas wrote:
-> > On Wed, Sep 06, 2023 at 12:23:21PM +0100, Alexandru Elisei wrote:
-> > > On Thu, Aug 24, 2023 at 04:24:30PM +0100, Catalin Marinas wrote:
-> > > > On Thu, Aug 24, 2023 at 01:25:41PM +0200, David Hildenbrand wrote:
-> > > > > On 24.08.23 13:06, David Hildenbrand wrote:
-> > > > > > Regarding one complication: "The kernel needs to know where to allocate
-> > > > > > a PROT_MTE page from or migrate a current page if it becomes PROT_MTE
-> > > > > > (mprotect()) and the range it is in does not support tagging.",
-> > > > > > simplified handling would be if it's in a MIGRATE_CMA pageblock, it
-> > > > > > doesn't support tagging. You have to migrate to a !CMA page (for
-> > > > > > example, not specifying GFP_MOVABLE as a quick way to achieve that).
-> > > > > 
-> > > > > Okay, I now realize that this patch set effectively duplicates some CMA
-> > > > > behavior using a new migrate-type.
-> > [...]
-> > > I considered mixing the tag storage memory memory with normal memory and
-> > > adding it to MIGRATE_CMA. But since tag storage memory cannot be tagged,
-> > > this means that it's not enough anymore to have a __GFP_MOVABLE allocation
-> > > request to use MIGRATE_CMA.
-> > > 
-> > > I considered two solutions to this problem:
-> > > 
-> > > 1. Only allocate from MIGRATE_CMA is the requested memory is not tagged =>
-> > > this effectively means transforming all memory from MIGRATE_CMA into the
-> > > MIGRATE_METADATA migratetype that the series introduces. Not very
-> > > appealing, because that means treating normal memory that is also on the
-> > > MIGRATE_CMA lists as tagged memory.
-> > 
-> > That's indeed not ideal. We could try this if it makes the patches
-> > significantly simpler, though I'm not so sure.
-> > 
-> > Allocating metadata is the easier part as we know the correspondence
-> > from the tagged pages (32 PROT_MTE page) to the metadata page (1 tag
-> > storage page), so alloc_contig_range() does this for us. Just adding it
-> > to the CMA range is sufficient.
-> > 
-> > However, making sure that we don't allocate PROT_MTE pages from the
-> > metadata range is what led us to another migrate type. I guess we could
-> > achieve something similar with a new zone or a CPU-less NUMA node,
-> 
-> Ideally, no significant core-mm changes to optimize for an architecture
-> oddity. That implies, no new zones and no new migratetypes -- unless it is
-> unavoidable and you are confident that you can convince core-MM people that
-> the use case (giving back 3% of system RAM at max in some setups) is worth
-> the trouble.
+Hello!
 
-If I was an mm maintainer, I'd also question this ;). But vendors seem
-pretty picky about the amount of RAM reserved for MTE (e.g. 0.5G for a
-16G platform does look somewhat big). As more and more apps adopt MTE,
-the wastage would be smaller but the first step is getting vendors to
-enable it.
+Changes since RFC-v1:
+ * riscv is new, ia64 is gone
+ * The KVM support is different, and upstream - no need to patch the host.
 
-> I also had CPU-less NUMA nodes in mind when thinking about that, but not
-> sure how easy it would be to integrate it. If the tag memory has actually
-> different performance characteristics as well, a NUMA node would be the
-> right choice.
+---
 
-In general I'd expect the same characteristics. However, changing the
-memory designation from tag to data (and vice-versa) requires some cache
-maintenance. The allocation cost is slightly higher (not the runtime
-one), so it would help if the page allocator does not favour this range.
-Anyway, that's an optimisation to worry about later.
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI out of the arch code by using
+GENERIC_CPU_DEVICES, then into the ACPI processor driver.
 
-> If we could find some way to easily support this either via CMA or CPU-less
-> NUMA nodes, that would be much preferable; even if we cannot cover each and
-> every future use case right now. I expect some issues with CXL+MTE either
-> way , but are happy to be taught otherwise :)
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
 
-I think CXL+MTE is rather theoretical at the moment. Given that PCIe
-doesn't have any notion of MTE, more likely there would be some piece of
-interconnect that generates two memory accesses: one for data and the
-other for tags at a configurable offset (which may or may not be in the
-same CXL range).
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
 
-> Another thought I had was adding something like CMA memory characteristics.
-> Like, asking if a given CMA area/page supports tagging (i.e., flag for the
-> CMA area set?)?
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
 
-I don't think adding CMA memory characteristics helps much. The metadata
-allocation wouldn't go through cma_alloc() but rather
-alloc_contig_range() directly for a specific pfn corresponding to the
-data pages with PROT_MTE. The core mm code doesn't need to know about
-the tag storage layout.
+Critically: everything described in the firmware tables must remain present.
 
-It's also unlikely for cma_alloc() memory to be mapped as PROT_MTE.
-That's typically coming from device drivers (DMA API) with their own
-mmap() implementation that doesn't normally set VM_MTE_ALLOWED (and
-therefore PROT_MTE is rejected).
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
 
-What we need though is to prevent vma_alloc_folio() from allocating from
-a MIGRATE_CMA list if PROT_MTE (VM_MTE). I guess that's basically
-removing __GFP_MOVABLE in those cases. As long as we don't have large
-ZONE_MOVABLE areas, it shouldn't be an issue.
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
 
-> When you need memory that supports tagging and have a page that does not
-> support tagging (CMA && taggable), simply migrate to !MOVABLE memory
-> (eventually we could also try adding !CMA).
-> 
-> Was that discussed and what would be the challenges with that? Page
-> migration due to compaction comes to mind, but it might also be easy to
-> handle if we can just avoid CMA memory for that.
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
 
-IIRC that was because PROT_MTE pages would have to come only from
-!MOVABLE ranges. Maybe that's not such big deal.
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
 
-We'll give this a go and hopefully it simplifies the patches a bit (it
-will take a while as Alex keeps going on holiday ;)). In the meantime,
-I'm talking to the hardware people to see whether we can have MTE pages
-in the tag storage/metadata range. We'd still need to reserve about 0.1%
-of the RAM for the metadata corresponding to the tag storage range when
-used as data but that's negligible (1/32 of 1/32). So if some future
-hardware allows this, we can drop the page allocation restriction from
-the CMA range.
+This creates something that looks like cpuhotplug to user-space, as the sysfs
+files appear and disappear, and the udev notifications look the same.
 
-> > though the latter is not guaranteed not to allocate memory from the
-> > range, only make it less likely. Both these options are less flexible in
-> > terms of size/alignment/placement.
-> > 
-> > Maybe as a quick hack - only allow PROT_MTE from ZONE_NORMAL and
-> > configure the metadata range in ZONE_MOVABLE but at some point I'd
-> > expect some CXL-attached memory to support MTE with additional carveout
-> > reserved.
-> 
-> I have no idea how we could possibly cleanly support memory hotplug in
-> virtual environments (virtual DIMMs, virtio-mem) with MTE. In contrast to
-> s390x storage keys, the approach that arm64 with MTE took here (exposing tag
-> memory to the VM) makes it rather hard and complicated.
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
 
-The current thinking is that the VM is not aware of the tag storage,
-that's entirely managed by the host. The host would treat the guest
-memory similarly to the PROT_MTE user allocations, reserve metadata etc.
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
 
-Thanks for the feedback so far, very useful.
+This code is unconditionally enabled for all ACPI architectures.
+If there are problems with firmware tables on some devices, the CPUs will
+already be online by the time the acpi_processor_make_enabled() is called.
+A mismatch here causes a firmware-bug message and kernel taint. This should
+only affect people with broken firmware who also boot with maxcpus=1, and
+bring CPUs online later.
+
+I had a go at switching the remaining architectures over to GENERIC_CPU_DEVICES,
+so that the Kconfig symbol can be removed, but I got stuck with powerpc
+and s390.
+
+I've only build tested Loongarch and riscv. I've removed the ia64 specific
+patches, but left the changes in other patches to make git-grep review of
+renames easier.
+
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v2-rc6
+
+Replace your '-smp' argument with something like:
+| -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+
+then feed the following to the Qemu montior;
+| (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+| (qemu) device_del cpu1
+
+
+Why is this still an RFC? I'm still looking for confirmation from the
+kubernetes/kata folk that this works for them. Because of this I've culled
+the CC list...
+
+
+This series is based on v6.6-rc1, and can be retrieved from:
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v2
+
+
+Thanks,
+
+James Morse (34):
+  ACPI: Move ACPI_HOTPLUG_CPU to be disabled on arm64 and riscv
+  drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
+  drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden
+  drivers: base: Move cpu_dev_init() after node_dev_init()
+  drivers: base: Print a warning instead of panic() when register_cpu()
+    fails
+  arm64: setup: Switch over to GENERIC_CPU_DEVICES using
+    arch_register_cpu()
+  x86: intel_epb: Don't rely on link order
+  x86/topology: Switch over to GENERIC_CPU_DEVICES
+  LoongArch: Switch over to GENERIC_CPU_DEVICES
+  riscv: Switch over to GENERIC_CPU_DEVICES
+  arch_topology: Make register_cpu_capacity_sysctl() tolerant to late
+    CPUs
+  ACPI: Use the acpi_device_is_present() helper in more places
+  ACPI: Rename acpi_scan_device_not_present() to be about enumeration
+  ACPI: Only enumerate enabled (or functional) devices
+  ACPI: processor: Add support for processors described as container
+    packages
+  ACPI: processor: Register CPUs that are online, but not described in
+    the DSDT
+  ACPI: processor: Register all CPUs from acpi_processor_get_info()
+  ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
+  ACPI: Move acpi_bus_trim_one() before acpi_scan_hot_remove()
+  ACPI: Rename acpi_processor_hotadd_init and remove pre-processor
+    guards
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  ACPI: Check _STA present bit before making CPUs not present
+  ACPI: Warn when the present bit changes but the feature is not enabled
+  drivers: base: Implement weak arch_unregister_cpu()
+  LoongArch: Use the __weak version of arch_unregister_cpu()
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  ACPICA: Add new MADT GICC flags fields [code first?]
+  arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a
+    helper
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  ACPI: add support to register CPUs based on the _STA enabled bit
+  arm64: document virtual CPU hotplug's expectations
+  ACPI: Add _OSC bits to advertise OS support for toggling CPU
+    present/enabled
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
+
+Jean-Philippe Brucker (1):
+  arm64: psci: Ignore DENIED CPUs
+
+ Documentation/arch/arm64/cpu-hotplug.rst   |  79 ++++++++++
+ Documentation/arch/arm64/index.rst         |   1 +
+ arch/arm64/Kconfig                         |   1 +
+ arch/arm64/include/asm/acpi.h              |  11 ++
+ arch/arm64/include/asm/cpu.h               |   1 -
+ arch/arm64/kernel/acpi_numa.c              |  11 --
+ arch/arm64/kernel/psci.c                   |   2 +-
+ arch/arm64/kernel/setup.c                  |  13 +-
+ arch/arm64/kernel/smp.c                    |   5 +-
+ arch/ia64/Kconfig                          |   2 +
+ arch/ia64/include/asm/acpi.h               |   2 +-
+ arch/ia64/include/asm/cpu.h                |   5 -
+ arch/ia64/kernel/acpi.c                    |   6 +-
+ arch/ia64/kernel/setup.c                   |   2 +-
+ arch/ia64/kernel/topology.c                |   2 +-
+ arch/loongarch/Kconfig                     |   2 +
+ arch/loongarch/configs/loongson3_defconfig |   2 +-
+ arch/loongarch/kernel/acpi.c               |   4 +-
+ arch/loongarch/kernel/topology.c           |  38 +----
+ arch/riscv/Kconfig                         |   1 +
+ arch/riscv/kernel/setup.c                  |  19 +--
+ arch/x86/Kconfig                           |   3 +
+ arch/x86/include/asm/cpu.h                 |   6 -
+ arch/x86/kernel/acpi/boot.c                |   4 +-
+ arch/x86/kernel/cpu/intel_epb.c            |   2 +-
+ arch/x86/kernel/topology.c                 |  25 +---
+ drivers/acpi/Kconfig                       |  14 +-
+ drivers/acpi/acpi_processor.c              | 160 ++++++++++++++++-----
+ drivers/acpi/bus.c                         |  16 +++
+ drivers/acpi/device_pm.c                   |   2 +-
+ drivers/acpi/device_sysfs.c                |   2 +-
+ drivers/acpi/internal.h                    |   1 -
+ drivers/acpi/processor_core.c              |   2 +-
+ drivers/acpi/property.c                    |   2 +-
+ drivers/acpi/scan.c                        | 147 ++++++++++++-------
+ drivers/base/arch_topology.c               |  38 +++--
+ drivers/base/cpu.c                         |  40 ++++--
+ drivers/base/init.c                        |   2 +-
+ drivers/firmware/psci/psci.c               |   2 +
+ drivers/irqchip/irq-gic-v3.c               |  38 ++---
+ include/acpi/acpi_bus.h                    |   1 +
+ include/acpi/actbl2.h                      |   1 +
+ include/acpi/processor.h                   |   2 +-
+ include/linux/acpi.h                       |  14 +-
+ include/linux/cpu.h                        |   6 +
+ include/linux/cpumask.h                    |  25 ++++
+ kernel/cpu.c                               |   3 +
+ 47 files changed, 516 insertions(+), 251 deletions(-)
+ create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
 
 -- 
-Catalin
+2.39.2
+
