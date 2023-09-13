@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270D979EE6B
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB4779EE71
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjIMQjA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 12:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S230339AbjIMQjC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 12:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjIMQi7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:38:59 -0400
+        with ESMTP id S230223AbjIMQjB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:39:01 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C7F71BC8;
-        Wed, 13 Sep 2023 09:38:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C20519B1;
+        Wed, 13 Sep 2023 09:38:57 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4743E1FB;
-        Wed, 13 Sep 2023 09:39:32 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4588CC15;
+        Wed, 13 Sep 2023 09:39:34 -0700 (PDT)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C3E83F5A1;
-        Wed, 13 Sep 2023 09:38:53 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A6263F5A1;
+        Wed, 13 Sep 2023 09:38:55 -0700 (PDT)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com
-Subject: [RFC PATCH v2 01/35] ACPI: Move ACPI_HOTPLUG_CPU to be disabled on arm64 and riscv
-Date:   Wed, 13 Sep 2023 16:37:49 +0000
-Message-Id: <20230913163823.7880-2-james.morse@arm.com>
+Subject: [RFC PATCH v2 02/35] drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
+Date:   Wed, 13 Sep 2023 16:37:50 +0000
+Message-Id: <20230913163823.7880-3-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230913163823.7880-1-james.morse@arm.com>
 References: <20230913163823.7880-1-james.morse@arm.com>
@@ -41,136 +41,75 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Neither arm64 nor riscv support physical hotadd of CPUs that were not
-present at boot. For arm64 much of the platform description is in static
-tables which do not have update methods. arm64 does support HOTPLUG_CPU,
-which is backed by a firmware interface to turn CPUs on and off.
+Three of the five ACPI architectures create sysfs entries using
+register_cpu() for present CPUs, whereas arm64, riscv and all
+GENERIC_CPU_DEVICES do this for possible CPUs.
 
-acpi_processor_hotadd_init() and acpi_processor_remove() are for adding
-and removing CPUs that were not present at boot. arm64 systems that do this
-are not supported as there is currently insufficient information in the
-platform description. (e.g. did the GICR get removed too?)
+Registering a CPU is what causes them to show up in sysfs.
 
-arm64 currently relies on the MADT enabled flag check in map_gicc_mpidr()
-to prevent CPUs that were not described as present at boot from being
-added to the system. Similarly, riscv relies on the same check in
-map_rintc_hartid(). Both architectures also rely on the weak 'always fails'
-definitions of acpi_map_cpu() and arch_register_cpu().
+It makes very little sense to register all possible CPUs. Registering
+a CPU is what triggers the udev notifications allowing user-space to
+react to newly added CPUs.
 
-Subsequent changes will redefine ACPI_HOTPLUG_CPU as making possible
-CPUs present. Neither arm64 nor riscv support this.
+To allow all five ACPI architectures to use GENERIC_CPU_DEVICES, change
+it to use for_each_present_cpu(). Making the ACPI architectures use
+GENERIC_CPU_DEVICES is a pre-requisite step to centralise their
+cpu_register() logic, before moving it into the ACPI processor driver.
+When ACPI is disabled this work would be done by
+cpu_dev_register_generic().
 
-Disable ACPI_HOTPLUG_CPU for arm64 and riscv by removing 'default y' and
-selecting it on the other three ACPI architectures. This allows the weak
-definitions of some symbols to be removed.
+Of the ACPI architectures that register possible CPUs, arm64 and riscv
+do not support making possible CPUs present as they use the weak 'always
+fails' version of arch_register_cpu().
+
+Only two of the eight architectures that use GENERIC_CPU_DEVICES have a
+distinction between present and possible CPUs.
+
+The following architectures use GENERIC_CPU_DEVICES but are not SMP,
+so possible == present:
+ * m68k
+ * microblaze
+ * nios2
+
+The following architectures use GENERIC_CPU_DEVICES and consider
+possible == present:
+ * csky: setup_smp()
+ * parisc: smp_prepare_boot_cpu() marks the boot cpu as present,
+   processor_probe() sets possible for all CPUs and present for all CPUs
+   except the boot cpu.
+
+um appears to be a subarchitecture of x86.
+
+The remaining architecture using GENERIC_CPU_DEVICES are:
+ * openrisc and hexagon:
+   where smp_init_cpus() makes all CPUs < NR_CPUS possible,
+   whereas smp_prepare_cpus() only makes CPUs < setup_max_cpus present.
+
+After this change, openrisc and hexagon systems that use the max_cpus
+command line argument would not see the other CPUs present in sysfs.
+This should not be a problem as these CPUs can't bre brought online as
+_cpu_up() checks cpu_present().
+
+After this change, only CPUs which are present appear in sysfs.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
-Changes since RFC:
- * Expanded conditions to avoid ACPI_HOTPLUG_CPU being enabled when
-   HOTPLUG_CPU isn't.
----
- arch/ia64/Kconfig                |  1 +
- arch/loongarch/Kconfig           |  1 +
- arch/loongarch/include/asm/cpu.h |  7 +++++++
- arch/x86/Kconfig                 |  1 +
- drivers/acpi/Kconfig             |  1 -
- drivers/acpi/acpi_processor.c    | 18 ------------------
- 6 files changed, 10 insertions(+), 19 deletions(-)
+ drivers/base/cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 53faa122b0f4..a3bfd42467ab 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -16,6 +16,7 @@ config IA64
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ACPI
-+	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
- 	select ACPI_NUMA if NUMA
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index e14396a2ddcb..2bddd202470e 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -5,6 +5,7 @@ config LOONGARCH
- 	select ACPI
- 	select ACPI_GENERIC_GSI if ACPI
- 	select ACPI_MCFG if ACPI
-+	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
- 	select ACPI_PPTT if ACPI
- 	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
- 	select ARCH_BINFMT_ELF_STATE
-diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
-index 48b9f7168bcc..7afe8cbb844e 100644
---- a/arch/loongarch/include/asm/cpu.h
-+++ b/arch/loongarch/include/asm/cpu.h
-@@ -128,4 +128,11 @@ enum cpu_type_enum {
- #define LOONGARCH_CPU_HYPERVISOR	BIT_ULL(CPU_FEATURE_HYPERVISOR)
- #define LOONGARCH_CPU_PTW		BIT_ULL(CPU_FEATURE_PTW)
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index 9ea22e165acd..34b48f660b6b 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -533,7 +533,7 @@ static void __init cpu_dev_register_generic(void)
+ #ifdef CONFIG_GENERIC_CPU_DEVICES
+ 	int i;
  
-+#if !defined(__ASSEMBLY__)
-+#ifdef CONFIG_HOTPLUG_CPU
-+int arch_register_cpu(int num);
-+void arch_unregister_cpu(int cpu);
-+#endif
-+#endif /* ! __ASSEMBLY__ */
-+
- #endif /* _ASM_CPU_H */
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 982b777eadc7..a0100a1ab4a0 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -60,6 +60,7 @@ config X86
- 	#
- 	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
- 	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-+	select ACPI_HOTPLUG_CPU			if ACPI_PROCESSOR && HOTPLUG_CPU
- 	select ARCH_32BIT_OFF_T			if X86_32
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-index cee82b473dc5..8456d48ba702 100644
---- a/drivers/acpi/Kconfig
-+++ b/drivers/acpi/Kconfig
-@@ -309,7 +309,6 @@ config ACPI_HOTPLUG_CPU
- 	bool
- 	depends on ACPI_PROCESSOR && HOTPLUG_CPU
- 	select ACPI_CONTAINER
--	default y
- 
- config ACPI_PROCESSOR_AGGREGATOR
- 	tristate "Processor Aggregator"
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index c711db8a9c33..c0839bcf78c1 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -183,24 +183,6 @@ static void __init acpi_pcc_cpufreq_init(void) {}
- 
- /* Initialization */
- #ifdef CONFIG_ACPI_HOTPLUG_CPU
--int __weak acpi_map_cpu(acpi_handle handle,
--		phys_cpuid_t physid, u32 acpi_id, int *pcpu)
--{
--	return -ENODEV;
--}
--
--int __weak acpi_unmap_cpu(int cpu)
--{
--	return -ENODEV;
--}
--
--int __weak arch_register_cpu(int cpu)
--{
--	return -ENODEV;
--}
--
--void __weak arch_unregister_cpu(int cpu) {}
--
- static int acpi_processor_hotadd_init(struct acpi_processor *pr)
- {
- 	unsigned long long sta;
+-	for_each_possible_cpu(i) {
++	for_each_present_cpu(i) {
+ 		if (register_cpu(&per_cpu(cpu_devices, i), i))
+ 			panic("Failed to register CPU device");
+ 	}
 -- 
 2.39.2
 
