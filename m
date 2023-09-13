@@ -2,210 +2,269 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC5E79EEFF
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AC979F16D
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 20:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjIMQmi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 12:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S232023AbjIMSy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 14:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjIMQlo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:41:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 960DA2D7E;
-        Wed, 13 Sep 2023 09:40:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D35AC15;
-        Wed, 13 Sep 2023 09:40:40 -0700 (PDT)
-Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51B823F5A1;
-        Wed, 13 Sep 2023 09:40:01 -0700 (PDT)
-From:   James Morse <james.morse@arm.com>
-To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: [RFC PATCH v2 35/35] cpumask: Add enabled cpumask for present CPUs that can be brought online
-Date:   Wed, 13 Sep 2023 16:38:23 +0000
-Message-Id: <20230913163823.7880-36-james.morse@arm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230913163823.7880-1-james.morse@arm.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-MIME-Version: 1.0
+        with ESMTP id S231931AbjIMSy1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 14:54:27 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA281986
+        for <linux-arch@vger.kernel.org>; Wed, 13 Sep 2023 11:54:23 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68fc081cd46so120505b3a.0
+        for <linux-arch@vger.kernel.org>; Wed, 13 Sep 2023 11:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1694631263; x=1695236063; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AeNR7qwQLkJOVuge8P10O3vzgVEpbjfLDo4ctIHKwbU=;
+        b=VdS/pDO4yvsVu/1ahDVz/fvHw92at1jw/ugcmAuDydR4skNEALikzcyS/QQGawmikF
+         lmoenMs3SlGwHBNHJUaG/4v+Brd1jfPVGIAjq4ZctQBbK8F5xnek+enffjSfbh2LzWss
+         hRVRuovwqGqYJN6cagUD1hRXmz0W3ZBCJZ+FIgTCXHXAcBBWZHxDUpUTcKkDhhI1QsIM
+         PZWJjYCFnCarSn7veuCg186TNCiahJlx3v3RZudKgVj7RmbJ9D+p6ta0h2QUjUDzUtwQ
+         M6w7r/lnZFac6BnlVIn3tsrninChcSUpd3lulbC3DJTTFcN1KiSd7PykZiN1WF1UUtrJ
+         IZmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694631263; x=1695236063;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AeNR7qwQLkJOVuge8P10O3vzgVEpbjfLDo4ctIHKwbU=;
+        b=uYtESylw2jrYsmcKeoQKIgRwPlKf+NCNF0bzzlroJCR1EpVgIyXOiuoDkuLuTcgFrE
+         hmEki4YqPeG5K4MXRZ2Z/B0KIEeD2wvO/5ZmgOVa/oCjIEzkpYAxscHcr2t/l26z9SGv
+         kTEUIjVt1Mvvg5oXfHhXCkuXuAphlavx2VWOET0HBjzwdggM9P3QKzinSC30JZrbla7w
+         NMv2uP8dHSrFs3lFDWldPpL/Hk2SbVvPhBsSCRWFlvBrugcNupxOwBI//qurrcSSI5jV
+         YpEg3cLKS4Rb2muoqRRhPHNTqEWq1hgsZ7dX/wSd7ojC4ToqTUp+fyVydVc1rk/wdNAJ
+         OBlw==
+X-Gm-Message-State: AOJu0YwGbDfIByTIKklK+0tpTYXy+f3QrJBdfn1nfWOZdH6dhIyxf0bQ
+        dIpml/DJyf3iQXmOhwaMWkeeAg==
+X-Google-Smtp-Source: AGHT+IHWJanL/mhSZzKNrnjgZ9a4L8x4QH7mCct+onuawdEUp8h+RhW5cHMtW3sNV708kZgryFVaZg==
+X-Received: by 2002:a05:6a21:329c:b0:12e:98a3:77b7 with SMTP id yt28-20020a056a21329c00b0012e98a377b7mr3872648pzb.59.1694631262697;
+        Wed, 13 Sep 2023 11:54:22 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170902ec8e00b001a6d4ea7301sm10765184plg.251.2023.09.13.11.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Sep 2023 11:54:21 -0700 (PDT)
+Date:   Wed, 13 Sep 2023 11:54:21 -0700 (PDT)
+X-Google-Original-Date: Wed, 13 Sep 2023 11:54:19 PDT (-0700)
+Subject:     Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce ERRATA_THEAD_QSPINLOCK
+In-Reply-To: <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
+CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        anup@brainfault.org, peterz@infradead.org, mingo@redhat.com,
+        Will Deacon <will@kernel.org>, longman@redhat.com,
+        boqun.feng@gmail.com, tglx@linutronix.de, paulmck@kernel.org,
+        rostedt@goodmis.org, rdunlap@infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        xiaoguang.xing@sophgo.com, Bjorn Topel <bjorn@rivosinc.com>,
+        alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     sorear@fastmail.com
+Message-ID: <mhng-ee184bd2-7666-402d-b0df-d484ed6d8236@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 'offline' file in sysfs shows all offline CPUs, including those
-that aren't present. User-space is expected to remove not-present CPUs
-from this list to learn which CPUs could be brought online.
+On Sun, 06 Aug 2023 22:23:34 PDT (-0700), sorear@fastmail.com wrote:
+> On Wed, Aug 2, 2023, at 12:46 PM, guoren@kernel.org wrote:
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> According to qspinlock requirements, RISC-V gives out a weak LR/SC
+>> forward progress guarantee which does not satisfy qspinlock. But
+>> many vendors could produce stronger forward guarantee LR/SC to
+>> ensure the xchg_tail could be finished in time on any kind of
+>> hart. T-HEAD is the vendor which implements strong forward
+>> guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+>> with errata help.
+>>
+>> T-HEAD early version of processors has the merge buffer delay
+>> problem, so we need ERRATA_WRITEONCE to support qspinlock.
+>>
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>> ---
+>>  arch/riscv/Kconfig.errata              | 13 +++++++++++++
+>>  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
+>>  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
+>>  arch/riscv/include/asm/vendorid_list.h |  3 ++-
+>>  arch/riscv/kernel/cpufeature.c         |  3 ++-
+>>  5 files changed, 61 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+>> index 4745a5c57e7c..eb43677b13cc 100644
+>> --- a/arch/riscv/Kconfig.errata
+>> +++ b/arch/riscv/Kconfig.errata
+>> @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
+>>
+>>  	  If you don't know what to do here, say "Y".
+>>
+>> +config ERRATA_THEAD_QSPINLOCK
+>> +	bool "Apply T-Head queued spinlock errata"
+>> +	depends on ERRATA_THEAD
+>> +	default y
+>> +	help
+>> +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
+>> +	  match the xchg_tail requirement of qspinlock.
+>> +
+>> +	  This will apply the QSPINLOCK errata to handle the non-standard
+>> +	  behavior via using qspinlock instead of ticket_lock.
+>> +
+>> +	  If you don't know what to do here, say "Y".
+>
+> If this is to be applied, I would like to see a detailed explanation somewhere,
+> preferably with citations, of:
+>
+> (a) The memory model requirements for qspinlock
+> (b) Why, with arguments, RISC-V does not architecturally meet (a)
+> (c) Why, with arguments, T-HEAD C9xx meets (a)
+> (d) Why at least one other architecture which defines ARCH_USE_QUEUED_SPINLOCKS
+>     meets (a)
 
-CPUs can be present but not-enabled. These CPUs can't be brought online
-until the firmware policy changes, which comes with an ACPI notification
-that will register the CPUs.
+I agree.
 
-With only the offline and present files, user-space is unable to
-determine which CPUs it can try to bring online. Add a new CPU mask
-that shows this based on all the registered CPUs.
+Just having a magic fence that makes qspinlocks stop livelocking on some 
+processors is going to lead to a mess -- I'd argue this means those 
+processors just don't provide the forward progress guarantee, but we'd 
+really need something written down about what this new custom 
+instruction aliasing as a fence does.
 
-Signed-off-by: James Morse <james.morse@arm.com>
----
- drivers/base/cpu.c      | 10 ++++++++++
- include/linux/cpumask.h | 25 +++++++++++++++++++++++++
- kernel/cpu.c            |  3 +++
- 3 files changed, 38 insertions(+)
+> As far as I can tell, the RISC-V guarantees concerning constrained LR/SC loops
+> (livelock freedom but no starvation freedom) are exactly the same as those in
+> Armv8 (as of 0487F.c) for equivalent loops, and xchg_tail compiles to a
+> constrained LR/SC loop with guaranteed eventual success (with -O1).  Clearly you
+> disagree; I would like to see your perspective.
 
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index c709747c4a18..a19a8be93102 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
- {
- 	int logical_cpu = cpu->dev.id;
- 
-+	set_cpu_enabled(logical_cpu, false);
- 	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
- 
- 	device_unregister(&cpu->dev);
-@@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
- }
- static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
- 
-+static ssize_t print_cpus_enabled(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
-+}
-+static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
-+
- static ssize_t print_cpus_isolated(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
-@@ -413,6 +421,7 @@ int register_cpu(struct cpu *cpu, int num)
- 	register_cpu_under_node(num, cpu_to_node(num));
- 	dev_pm_qos_expose_latency_limit(&cpu->dev,
- 					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-+	set_cpu_enabled(num, true);
- 
- 	return 0;
- }
-@@ -494,6 +503,7 @@ static struct attribute *cpu_root_attrs[] = {
- 	&cpu_attrs[2].attr.attr,
- 	&dev_attr_kernel_max.attr,
- 	&dev_attr_offline.attr,
-+	&dev_attr_enabled.attr,
- 	&dev_attr_isolated.attr,
- #ifdef CONFIG_NO_HZ_FULL
- 	&dev_attr_nohz_full.attr,
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index f10fb87d49db..a29ee03f13ff 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -92,6 +92,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
-  *
-  *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
-  *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
-+ *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
-  *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
-  *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
-  *
-@@ -124,11 +125,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
- 
- extern struct cpumask __cpu_possible_mask;
- extern struct cpumask __cpu_online_mask;
-+extern struct cpumask __cpu_enabled_mask;
- extern struct cpumask __cpu_present_mask;
- extern struct cpumask __cpu_active_mask;
- extern struct cpumask __cpu_dying_mask;
- #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
- #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
-+#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
- #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
- #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
- #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
-@@ -973,6 +976,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
- #else
- #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
- #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-+#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
- #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
- #endif
- 
-@@ -995,6 +999,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
- 		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
- }
- 
-+static inline void
-+set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
-+{
-+	if (can_be_onlined)
-+		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
-+	else
-+		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
-+}
-+
- static inline void
- set_cpu_present(unsigned int cpu, bool present)
- {
-@@ -1074,6 +1087,7 @@ static __always_inline unsigned int num_online_cpus(void)
- 	return raw_atomic_read(&__num_online_cpus);
- }
- #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
-+#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
- #define num_present_cpus()	cpumask_weight(cpu_present_mask)
- #define num_active_cpus()	cpumask_weight(cpu_active_mask)
- 
-@@ -1082,6 +1096,11 @@ static inline bool cpu_online(unsigned int cpu)
- 	return cpumask_test_cpu(cpu, cpu_online_mask);
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpumask_test_cpu(cpu, cpu_enabled_mask);
-+}
-+
- static inline bool cpu_possible(unsigned int cpu)
- {
- 	return cpumask_test_cpu(cpu, cpu_possible_mask);
-@@ -1106,6 +1125,7 @@ static inline bool cpu_dying(unsigned int cpu)
- 
- #define num_online_cpus()	1U
- #define num_possible_cpus()	1U
-+#define num_enabled_cpus()	1U
- #define num_present_cpus()	1U
- #define num_active_cpus()	1U
- 
-@@ -1119,6 +1139,11 @@ static inline bool cpu_possible(unsigned int cpu)
- 	return cpu == 0;
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpu == 0;
-+}
-+
- static inline bool cpu_present(unsigned int cpu)
- {
- 	return cpu == 0;
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6de7c6bb74ee..2201a6a449b5 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -3101,6 +3101,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
- struct cpumask __cpu_online_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_online_mask);
- 
-+struct cpumask __cpu_enabled_mask __read_mostly;
-+EXPORT_SYMBOL(__cpu_enabled_mask);
-+
- struct cpumask __cpu_present_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_present_mask);
- 
--- 
-2.39.2
+It sounds to me like this processor might be quite broken: if it's 
+permanently holding stores in a buffer we're going to have more issues 
+than just qspinlock, pretty much anything concurrent is going to have 
+issues -- and that's not just in the kernel, there's concurrent 
+userspace code as well.
 
+> -s
+>
+>> +
+>>  endmenu # "CPU errata selection"
+>> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+>> index 881729746d2e..d560dc45c0e7 100644
+>> --- a/arch/riscv/errata/thead/errata.c
+>> +++ b/arch/riscv/errata/thead/errata.c
+>> @@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
+>>  	return false;
+>>  }
+>>
+>> +static bool errata_probe_qspinlock(unsigned int stage,
+>> +				   unsigned long arch_id, unsigned long impid)
+>> +{
+>> +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
+>> +		return false;
+>> +
+>> +	/*
+>> +	 * The queued_spinlock torture would get in livelock without
+>> +	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
+>> +	 * processors.
+>> +	 */
+>> +	if (arch_id == 0 && impid == 0 &&
+>> +	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
+>> +		return false;
+>> +
+>> +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+>> +		return true;
+>> +
+>> +	return false;
+>> +}
+>> +
+>>  static u32 thead_errata_probe(unsigned int stage,
+>>  			      unsigned long archid, unsigned long impid)
+>>  {
+>> @@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
+>>  	if (errata_probe_write_once(stage, archid, impid))
+>>  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+>>
+>> +	if (errata_probe_qspinlock(stage, archid, impid))
+>> +		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
+>> +
+>>  	return cpu_req_errata;
+>>  }
+>>
+>> diff --git a/arch/riscv/include/asm/errata_list.h
+>> b/arch/riscv/include/asm/errata_list.h
+>> index fbb2b8d39321..a696d18d1b0d 100644
+>> --- a/arch/riscv/include/asm/errata_list.h
+>> +++ b/arch/riscv/include/asm/errata_list.h
+>> @@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
+>>  	: "=r" (__ovl) :						\
+>>  	: "memory")
+>>
+>> +static __always_inline bool
+>> +riscv_has_errata_thead_qspinlock(void)
+>> +{
+>> +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+>> +		asm_volatile_goto(
+>> +		ALTERNATIVE(
+>> +		"j	%l[l_no]", "nop",
+>> +		THEAD_VENDOR_ID,
+>> +		ERRATA_THEAD_QSPINLOCK,
+>> +		CONFIG_ERRATA_THEAD_QSPINLOCK)
+>> +		: : : : l_no);
+>> +	} else {
+>> +		goto l_no;
+>> +	}
+>> +
+>> +	return true;
+>> +l_no:
+>> +	return false;
+>> +}
+>> +
+>>  #endif /* __ASSEMBLY__ */
+>>
+>>  #endif
+>> diff --git a/arch/riscv/include/asm/vendorid_list.h
+>> b/arch/riscv/include/asm/vendorid_list.h
+>> index 73078cfe4029..1f1d03877f5f 100644
+>> --- a/arch/riscv/include/asm/vendorid_list.h
+>> +++ b/arch/riscv/include/asm/vendorid_list.h
+>> @@ -19,7 +19,8 @@
+>>  #define	ERRATA_THEAD_CMO 1
+>>  #define	ERRATA_THEAD_PMU 2
+>>  #define	ERRATA_THEAD_WRITE_ONCE 3
+>> -#define	ERRATA_THEAD_NUMBER 4
+>> +#define	ERRATA_THEAD_QSPINLOCK 4
+>> +#define	ERRATA_THEAD_NUMBER 5
+>>  #endif
+>>
+>>  #endif
+>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+>> index f8dbbe1bbd34..d9694fe40a9a 100644
+>> --- a/arch/riscv/kernel/cpufeature.c
+>> +++ b/arch/riscv/kernel/cpufeature.c
+>> @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
+>>  		 * spinlock value, the only way is to change from queued_spinlock to
+>>  		 * ticket_spinlock, but can not be vice.
+>>  		 */
+>> -		if (!force_qspinlock) {
+>> +		if (!force_qspinlock &&
+>> +		    !riscv_has_errata_thead_qspinlock()) {
+>>  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
+>>  		}
+>>  #endif
+>> --
+>> 2.36.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
