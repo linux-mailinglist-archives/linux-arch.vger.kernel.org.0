@@ -2,140 +2,244 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA7D79DBFD
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 00:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1EA79DE02
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 03:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbjILWko (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Sep 2023 18:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S238110AbjIMBzv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Sep 2023 21:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbjILWko (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 18:40:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA77310F2
-        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 15:39:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694558348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hw4dz052UmhVfzEQW7+Uflu1VFGZC1UKKB7LwcrU6Xs=;
-        b=MvrVe0hy+BTUdvgmv5XYR9J31v/CXhR5LTixqQsZP/Dgq3P2MPw+CwUwsiybgH8AiCNmfX
-        qT9k+OQ0zYYnLABn0nYWolO4BH+wmJ7avUunp3M7V9Dn2Dd3nrJUzC+rjNNdLsu46t5rip
-        +RM+nzVmmzCHFaHHUTaSVqalBLt4HkA=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-360-jOas4ZuXPJim6lrLmA1N5A-1; Tue, 12 Sep 2023 18:39:06 -0400
-X-MC-Unique: jOas4ZuXPJim6lrLmA1N5A-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1c3ae44bbceso35790715ad.2
-        for <linux-arch@vger.kernel.org>; Tue, 12 Sep 2023 15:39:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694558345; x=1695163145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hw4dz052UmhVfzEQW7+Uflu1VFGZC1UKKB7LwcrU6Xs=;
-        b=Abokg+OQLF1MOGeIK6rcH1RcOJp7Yi9xSCIII6UxhicYO5lJMhuBVqBJcPK4lkIees
-         2wDuUR5WB2yEQ7FYiqpXQXGOA+UerKNQYYit1GLNd6GgJX6CXP4ZYHkQ81y4ELxL5sCb
-         rkUGb9WFTM7VRpR8Yhd/h12WqjnYndI+CH+lygN0QHlvAt1PYN1gLBjgSS1AICFSN2eK
-         5aZru830v3n5sbr1+jTeuXl2tkzv5Fz6skqmi3nCbc+3FWuz45z+NkfG5eFCSvQwcq7E
-         9Zytg/OzeDAMV1ZnBRAjyshIDIX7oxoOF9EGWF3Lg7hbxyFG+V8TDOhji0tPsycQfaom
-         ipxQ==
-X-Gm-Message-State: AOJu0Yx6IfKtrjTmqPU+Rdn/xs83CPTA70qWFyKXFTJqturN/pazlK4O
-        iQxvdLrrDvaEfb0K3t93sQPlQXVISdxvbO8YPLT+yIzwOIJ8e+l/HUEglg4LH/Nz8sCBIlZJ05i
-        el7QCPZhNijeXEyCV9qkGOYMz4Bkkvw==
-X-Received: by 2002:a17:903:41c4:b0:1c3:3cde:7b44 with SMTP id u4-20020a17090341c400b001c33cde7b44mr1269640ple.12.1694558344876;
-        Tue, 12 Sep 2023 15:39:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHJXfeCtpozu/i9MX/Nb9C9D8rRf3TwAOO4AoonFr0CYCLCqxvZy3HNtrsprY+cWVaejgiLRA==
-X-Received: by 2002:a17:903:41c4:b0:1c3:3cde:7b44 with SMTP id u4-20020a17090341c400b001c33cde7b44mr1269621ple.12.1694558344560;
-        Tue, 12 Sep 2023 15:39:04 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170902aa4a00b001c0af36dd64sm8964168plr.162.2023.09.12.15.38.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Sep 2023 15:39:03 -0700 (PDT)
-Message-ID: <5a5fb237-c28b-d6b5-0425-8f8f0fe1ac79@redhat.com>
-Date:   Wed, 13 Sep 2023 08:38:51 +1000
+        with ESMTP id S230323AbjIMBzu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Sep 2023 21:55:50 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABDA10EB;
+        Tue, 12 Sep 2023 18:55:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E1B2C433D9;
+        Wed, 13 Sep 2023 01:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694570146;
+        bh=2OddQKIH3uYXJT7ExCA6HUaFdELFgK8aV8tLID+9nMA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eD0PQCfBKvsqVbB7ZvJNoRjXJLBBGZHn7YlSY1d/Tz+qrf4w3SSr4rHMQrwHZomTq
+         /gGngHgQe0yZjZ49G1DqOAiFSCDvaQAw3+Jbovt3FzsC97hDsUmgVouzDdA9qdhNmT
+         K8mB8yEC9C1lWaVjm78l1Vdj84WFdaOwFhvcegWoOdwmTSLOP0+0kNYKKoOnRpMcwL
+         Zg0Dt3s0KZro1KI9dnHd1Uw0K2Q80a5Ig7UDUuRwuMeu9ravHyLun9fMqlp5S4c+y0
+         sPVzgLLUrB0JtdlQNL8M+GAGtjiD3zVCe2dgZARFgoDCAwc4ceSWMHg2400pjtpAeb
+         jqMIYKeY0hFcw==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-501be2d45e0so10633674e87.3;
+        Tue, 12 Sep 2023 18:55:46 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yw1bh1PU/GbvxMYx3w1CgGt6HjH/YoD48410ij48/Q03WgcO5Pu
+        ubEJ5Lghbx5g9id7w8YlSUESiRWzKs51lIs/zYI=
+X-Google-Smtp-Source: AGHT+IGiIM8YEctQvL/CVmwan/hG+6jqbFGBYTrZFX/O9x6gC7L4g0XHDwgTYPZ+T/UmOPyj0gLtC9syNiSq7NGyTW8=
+X-Received: by 2002:ac2:58e8:0:b0:500:bffa:5b86 with SMTP id
+ v8-20020ac258e8000000b00500bffa5b86mr760589lfo.6.1694570144735; Tue, 12 Sep
+ 2023 18:55:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <41dd71ab-a6a7-fd93-73ec-64a6b0ca468e@redhat.com>
- <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-2-guoren@kernel.org>
+ <5c082cb1fd306cb75abbcaa80229d791260f8756.camel@redhat.com>
+In-Reply-To: <5c082cb1fd306cb75abbcaa80229d791260f8756.camel@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 13 Sep 2023 09:55:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSynMnYy+ARhFb0JjbAGjEYrfgsiGa2ZWv4wB3HdheU2A@mail.gmail.com>
+Message-ID: <CAJF2gTSynMnYy+ARhFb0JjbAGjEYrfgsiGa2ZWv4wB3HdheU2A@mail.gmail.com>
+Subject: Re: [PATCH V11 01/17] asm-generic: ticket-lock: Reuse arch_spinlock_t
+ of qspinlock
+To:     =?UTF-8?Q?Leonardo_Br=C3=A1s?= <leobras@redhat.com>
+Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
+        rdunlap@infradead.org, catalin.marinas@arm.com,
+        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
+        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Sep 12, 2023 at 3:05=E2=80=AFAM Leonardo Br=C3=A1s <leobras@redhat.=
+com> wrote:
+>
+> On Sun, 2023-09-10 at 04:28 -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The arch_spinlock_t of qspinlock has contained the atomic_t val, which
+> > satisfies the ticket-lock requirement. Thus, unify the arch_spinlock_t
+> > into qspinlock_types.h. This is the preparation for the next combo
+> > spinlock.
+> >
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > ---
+> >  include/asm-generic/spinlock.h       | 14 +++++++-------
+> >  include/asm-generic/spinlock_types.h | 12 ++----------
+> >  2 files changed, 9 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinl=
+ock.h
+> > index 90803a826ba0..4773334ee638 100644
+> > --- a/include/asm-generic/spinlock.h
+> > +++ b/include/asm-generic/spinlock.h
+> > @@ -32,7 +32,7 @@
+> >
+> >  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+> >  {
+> > -     u32 val =3D atomic_fetch_add(1<<16, lock);
+> > +     u32 val =3D atomic_fetch_add(1<<16, &lock->val);
+> >       u16 ticket =3D val >> 16;
+> >
+> >       if (ticket =3D=3D (u16)val)
+> > @@ -46,31 +46,31 @@ static __always_inline void arch_spin_lock(arch_spi=
+nlock_t *lock)
+> >        * have no outstanding writes due to the atomic_fetch_add() the e=
+xtra
+> >        * orderings are free.
+> >        */
+> > -     atomic_cond_read_acquire(lock, ticket =3D=3D (u16)VAL);
+> > +     atomic_cond_read_acquire(&lock->val, ticket =3D=3D (u16)VAL);
+> >       smp_mb();
+> >  }
+> >
+> >  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+> >  {
+> > -     u32 old =3D atomic_read(lock);
+> > +     u32 old =3D atomic_read(&lock->val);
+> >
+> >       if ((old >> 16) !=3D (old & 0xffff))
+> >               return false;
+> >
+> > -     return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for =
+RCsc */
+> > +     return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC=
+, for RCsc */
+> >  }
+> >
+> >  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+> >  {
+> >       u16 *ptr =3D (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+> > -     u32 val =3D atomic_read(lock);
+> > +     u32 val =3D atomic_read(&lock->val);
+> >
+> >       smp_store_release(ptr, (u16)val + 1);
+> >  }
+> >
+> >  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lo=
+ck)
+> >  {
+> > -     u32 val =3D lock.counter;
+> > +     u32 val =3D lock.val.counter;
+> >
+> >       return ((val >> 16) =3D=3D (val & 0xffff));
+> >  }
+>
+> This one seems to be different in torvalds/master, but I suppose it's bec=
+ause of
+> the requirement patches I have not merged.
+>
+> > @@ -84,7 +84,7 @@ static __always_inline int arch_spin_is_locked(arch_s=
+pinlock_t *lock)
+> >
+> >  static __always_inline int arch_spin_is_contended(arch_spinlock_t *loc=
+k)
+> >  {
+> > -     u32 val =3D atomic_read(lock);
+> > +     u32 val =3D atomic_read(&lock->val);
+> >
+> >       return (s16)((val >> 16) - (val & 0xffff)) > 1;
+> >  }
+> > diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic=
+/spinlock_types.h
+> > index 8962bb730945..f534aa5de394 100644
+> > --- a/include/asm-generic/spinlock_types.h
+> > +++ b/include/asm-generic/spinlock_types.h
+> > @@ -3,15 +3,7 @@
+> >  #ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
+> >  #define __ASM_GENERIC_SPINLOCK_TYPES_H
+> >
+> > -#include <linux/types.h>
+> > -typedef atomic_t arch_spinlock_t;
+> > -
+> > -/*
+> > - * qrwlock_types depends on arch_spinlock_t, so we must typedef that b=
+efore the
+> > - * include.
+> > - */
+> > -#include <asm/qrwlock_types.h>
+> > -
+> > -#define __ARCH_SPIN_LOCK_UNLOCKED    ATOMIC_INIT(0)
+> > +#include <asm-generic/qspinlock_types.h>
+> > +#include <asm-generic/qrwlock_types.h>
+> >
+> >  #endif /* __ASM_GENERIC_SPINLOCK_TYPES_H */
+>
+> FWIW, LGTM:
+>
+> Reviewed-by: Leonardo Bras <leobras@redhat.com>
+>
+>
+> Just a suggestion: In this patch I could see a lot of usage changes to
+> arch_spinlock_t, and only at the end I could see the actual change in the=
+ .h
+> file.
+ include/asm-generic/spinlock.h       | 14 +++++++-------
+ include/asm-generic/spinlock_types.h | 12 ++----------
 
-Hi James,
+All are .h files. So, how to use git.orderfile?
 
-On 9/13/23 03:01, James Morse wrote:
-> On 29/03/2023 03:35, Gavin Shan wrote:
->> On 2/3/23 9:50 PM, James Morse wrote:
-> 
->>> If folk want to play along at home, you'll need a copy of Qemu that supports this.
->>> https://github.com/salil-mehta/qemu.git
->>> salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
->>>
->>> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
->>> to match your host kernel. Replace your '-smp' argument with something like:
->>> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
->>>
->>> then feed the following to the Qemu montior;
->>> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
->>> | (qemu) device_del cpu1
->>>
->>>
->>> This series is based on v6.2-rc3, and can be retrieved from:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
-> 
->> I give it a try, but the hot-added CPU needs to be put into online
->> state manually. I'm not sure if it's expected or not.
-> 
-> This is expected. If you want the CPUs to be brought online automatically, you can add
-> udev rules to do that.
-> 
+>
+> In cases like this, it looks nicer to see the .h file first.
+>
+> I recently found out about this git diff.orderFile option, which helps to
+> achieve exactly this.
+>
+> I use the following git.orderfile, adapted from qemu:
+>
+> #########################################################################=
+###
+> #
+> # order file for git, to produce patches which are easier to review
+> # by diffing the important stuff like interface changes first.
+> #
+> # one-off usage:
+> #   git diff -O scripts/git.orderfile ...
+> #
+> # add to git config:
+> #   git config diff.orderFile scripts/git.orderfile
+> #
+>
+> MAINTAINERS
+>
+> # Documentation
+> Documentation/*
+> *.rst
+> *.rst.inc
+>
+> # build system
+> Kbuild
+> Makefile*
+> *.mak
+>
+> # semantic patches
+> *.cocci
+>
+> # headers
+> *.h
+> *.h.inc
+>
+> # code
+> *.c
+> *.c.inc
+>
+>
 
-Yeah, I usually execute the following command to bring the CPU into online state,
-after the vCPU is hot added by QMP command.
 
-(qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
-guest# echo 1 > /sys/devices/system/cpu/cpux/online
-
-James, the series was posted a while ago and do you have plan to respin
-and post RFCv2 in near future? :)
-
-Thanks,
-Gavin
-
+--=20
+Best Regards
+ Guo Ren
