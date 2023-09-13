@@ -2,91 +2,234 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6446279E201
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 10:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F4079E22F
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 10:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238531AbjIMI0C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 04:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S238911AbjIMIca (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 04:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238826AbjIMI0B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 04:26:01 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CED910C0
-        for <linux-arch@vger.kernel.org>; Wed, 13 Sep 2023 01:25:57 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-192-lGiFXdsMNTWbQGXrkH0Nsw-1; Wed, 13 Sep 2023 09:25:43 +0100
-X-MC-Unique: lGiFXdsMNTWbQGXrkH0Nsw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 13 Sep
- 2023 09:25:40 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 13 Sep 2023 09:25:40 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>
-CC:     Mateusz Guzik <mjguzik@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>
-Subject: RE: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-Thread-Topic: [PATCH v2] x86: bring back rep movsq for user access on CPUs
- without ERMS
-Thread-Index: AQHZ23Vdq8Esj5k0zUGYupOb09r6RrAF7nHAgAAb1ICAABQQEIANxBwAgAGZkGCAAg/ggIAAEt9wgAAOawCAAM6MQA==
-Date:   Wed, 13 Sep 2023 08:25:40 +0000
-Message-ID: <e0228468e054426c9737530fed594ad0@AcuMS.aculab.com>
-References: <20230830140315.2666490-1-mjguzik@gmail.com>
- <27ba3536633c4e43b65f1dcd0a82c0de@AcuMS.aculab.com>
- <CAGudoHHUWZNz0OU5yCqOBkeifSYKhm4y6WO1x+q5pDPt1j3+GA@mail.gmail.com>
- <9a5dd401bf154a0aace0e5f781a3580c@AcuMS.aculab.com>
- <CAGudoHEuY1cMFStdRAjb8aWbHNqy8Pbeavk6tPB+u=rYzFDF+Q@mail.gmail.com>
- <ed0ac0937cdf4bb99b273fc0396b46b9@AcuMS.aculab.com>
- <CAHk-=wiXw+NSW6usWH31Y6n4CnF5LiOs_vJREb8_U290W9w3KQ@mail.gmail.com>
- <fa01f553d57e436c8a7f5b1c2aae23a9@AcuMS.aculab.com>
- <CAHk-=whC8TaarEhz2ie_w01r34hQHNCTiZLAs6e42ewP7+cvoA@mail.gmail.com>
-In-Reply-To: <CAHk-=whC8TaarEhz2ie_w01r34hQHNCTiZLAs6e42ewP7+cvoA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S238900AbjIMIca (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 04:32:30 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E708E73
+        for <linux-arch@vger.kernel.org>; Wed, 13 Sep 2023 01:32:26 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31ad9155414so5947335f8f.3
+        for <linux-arch@vger.kernel.org>; Wed, 13 Sep 2023 01:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1694593944; x=1695198744; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MnTWLbskqt//nMg0mFaFHPq2gBLre/x26wIHG0UioHY=;
+        b=yv5lidArENEuIvkzHDJ60QNm8POGBK9AVAqc9Wy4rp0yFZd+MVQZ59n3EmX8jF1+MD
+         1t4Gp/uDrYf/lwAKWobzjmJXgTOAOqLM+XmFVKZ/zWqaU0YbVglH6xEH+t2LanDh6uJP
+         Jm2manHcMnacrLStHjHO4rq1CBhZZtoW0OrdqMuwN9Z6D/r9kauqUr1wlQ7DBDBgZkv7
+         6zl3M2F9+gZPLYsJgokxvGrlvIG4GTTY6Kw8xbzXSvY6uAttCSHddhRDoSGWYWSCfvN5
+         8cX1Yv558SLq4mLH1OZKVxSN5dpOnqPhMDlhPSF+/LItzwoERlysC62Bnbcrg7BDTtNM
+         lOiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694593944; x=1695198744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MnTWLbskqt//nMg0mFaFHPq2gBLre/x26wIHG0UioHY=;
+        b=C6IXq1lCQzoW/eSu8hA0ndllSWE11pcIFExHjfqJYsDM2Sx9PkuxSqdg3DpfHhv28f
+         bwePKmtajHGBj4q7nIMKaiRTyjsU1qKSoquJOEE7GshvNU/PbZMyHINaVywu+kuQVrMq
+         QCSR8XfXUho2sVQmZsfDocSEFUnFcuYxtS6mRZjqPjI8A9+CS6bZmYQREoSvI5bqkHmk
+         8FxT31Usrh9svj8RqxqNyL7y3PlwlL7Nq2A0lvBDSz92qIJS3ETp9XH9PKwFE7b1f+hN
+         awavShF+hwspL1tjt/KligAV1Kig776XzNP7hqFzXH3IJvzFNIPd11uIQAkEINwz2p4S
+         7i6g==
+X-Gm-Message-State: AOJu0Yx5mvXSn1RI/Iv4wUn9uKRPTS2VIbYF+yYH+0QRewb0YLBnQZg4
+        vEhvte6IJhsYlOuHdgkBS+9XFRc78cjLXXTxHj3pIMqShwt9V6fqJGY=
+X-Google-Smtp-Source: AGHT+IGEhCPdcCrXcmWUhJSPWmCvw+1W5qAcDduQR77c6UrkXb5UorlQyiK1+gYg5kjtoL67a1RhfxqWPgumpB4OPEY=
+X-Received: by 2002:a5d:6589:0:b0:319:84dd:4596 with SMTP id
+ q9-20020a5d6589000000b0031984dd4596mr1641330wru.5.1694593944637; Wed, 13 Sep
+ 2023 01:32:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+References: <20230911131224.61924-1-alexghiti@rivosinc.com>
+ <20230911131224.61924-5-alexghiti@rivosinc.com> <CAHVXubiVH=q9pnTLQyjS3X3W-hvuA=ZMM2D2xYPFkGjFnAgbWg@mail.gmail.com>
+ <CA+V-a8tYzee-cX8rMiQ66ENWb+rLLFHmkOdovft0L-8ASQ3eog@mail.gmail.com>
+In-Reply-To: <CA+V-a8tYzee-cX8rMiQ66ENWb+rLLFHmkOdovft0L-8ASQ3eog@mail.gmail.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Wed, 13 Sep 2023 10:32:13 +0200
+Message-ID: <CAHVXubjYpkaOhP3oJwAQVHJLON7pNt+D0A7enqr3n5UuKC13UQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] riscv: Improve flush_tlb_kernel_range()
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Andrew Jones <ajones@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTIgU2VwdGVtYmVyIDIwMjMgMjE6NDgNCj4g
-DQo+IE9uIFR1ZSwgMTIgU2VwdCAyMDIzIGF0IDEyOjQxLCBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
-aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IFdoYXQgSSBmb3VuZCBzZWVtZWQgdG8g
-aW1wbHkgdGhhdCAncmVwIG1vdnNxJyB1c2VkIHRoZSBzYW1lIGludGVybmFsDQo+ID4gbG9naWMg
-YXMgJ3JlcCBtb3ZzYicgKHByZXR0eSBlYXN5IHRvIGRvIGluIGhhcmR3YXJlKQ0KPiANCj4gQ2hy
-aXN0Lg0KPiANCj4gSSB0b2xkIHlvdS4gSXQncyBwcmV0dHkgZWFzeSBpbiBoYXJkd2FyZSAgQVMg
-TE9ORyBBUyBJVCdTIEFMSUdORUQuDQo+IA0KPiBBbmQgaWYgaXQncyB1bmFsaWduZWQsICJyZXAg
-bW92c3EiIGlzIEZVTkRBTUVOVEFMTFkgSEFSREVSLg0KDQpGb3IgY2FjaGVkIG1lbW9yeSBpdCBv
-bmx5IGhhcyB0byBhcHBlYXIgdG8gaGF2ZSB1c2VkIDggYnl0ZQ0KYWNjZXNzZXMuDQpTbyBpbiB0
-aGUgc2FtZSB3YXkgdGhhdCAncmVwIG1vdnNiJyBjb3VsZCBiZSBvcHRpbWlzZWQgdG8gZG8NCmNh
-Y2hlIGxpbmUgc2l6ZWQgcmVhZHMgYW5kIHdyaXRlcyBldmVuIGlmIHRoZSBhZGRyZXNzIGFyZQ0K
-Y29tcGxldGVseSBtaXNhbGlnbmVkICdyZXAgbW92c3EnIGNvdWxkIHVzZSBleGFjdGx5IHRoZSBz
-YW1lDQpoYXJkd2FyZSBsb2dpYyB3aXRoIGEgYnl0ZSBjb3VudCB0aGF0IGlzIDggdGltZXMgbGFy
-Z2VyLg0KDQpUaGUgb25seSBzdWJ0bGV0eSBpcyB0aGF0IHRoZSByZWFkIGxlbmd0aCB3b3VsZCBu
-ZWVkIG1hc2tpbmcNCnRvIGEgbXVsdGlwbGUgb2YgOCBpZiB0aGVyZSBpcyBhIHBhZ2UgZmF1bHQg
-b24gYSBtaXNhbGlnbmVkDQpyZWFkIHNpZGUgKHNvIHRoYXQgYSBtdWx0aXBsZSBvZiA4IGJ5dGVz
-IHdvdWxkIGJlIHdyaXR0ZW4pLg0KVGhhdCB3b3VsZG4ndCByZWFsbHkgYmUgaGFyZC4NCg0KSSBk
-ZWZpbml0ZWx5IHNhdyBleGFjdGx5IHRoZSBzYW1lIG51bWJlciBvZiBieXRlcy9jbG9jaw0KZm9y
-ICdyZXAgbW92c2InIGFuZCAncmVwIG1vdnNxJyB3aGVuIHRoZSBkZXN0aW5hdGlvbiB3YXMNCm1p
-c2FsaWduZWQuDQpUaGUgYWxpZ25tZW50IG1hZGUgbm8gZGlmZmVyZW5jZSBleGNlcHQgdGhhdCBh
-IG11bHRpcGxlDQpvZiAzMiByYW4gKGFib3V0KSB0d2ljZSBhcyBmYXN0Lg0KSSBldmVuIGRvdWJs
-ZS1jaGVja2VkIHRoZSBkaXNhc3NlbWJseSB0byBtYWtlIHN1cmUgSSB3YXMNCnJ1bm5pbmcgdGhl
-IHJpZ2h0IGNvZGUuDQoNClNvIGl0IGxvb2tzIGxpa2UgdGhlIEludGVsIGhhcmR3YXJlIGVuZ2lu
-ZWVycyBoYXZlIHNvbHZlZA0KdGhlICdGVU5EQU1FTlRBTExZIEhBUkRFUicgcHJvYmxlbS4NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+On Wed, Sep 13, 2023 at 10:24=E2=80=AFAM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> Hi Alexandre,
+>
+> On Wed, Sep 13, 2023 at 9:04=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosi=
+nc.com> wrote:
+> >
+> > @Lad, Prabhakar Any chance you give a try to this new patchset? So
+> > that we make sure Samuel found your issue :)
+> >
+> I have given the patches a try and not seen the module load failures
+> as seen previously. I have some rigorous tests which test the complete
+> platform. I'm just waiting for it to complete before I give Tested by.
+>
 
+Awesome, thanks for the update! Well done @Samuel Holland
+
+> Cheers,
+> Prabhakar
+>
+> > On Mon, Sep 11, 2023 at 3:16=E2=80=AFPM Alexandre Ghiti <alexghiti@rivo=
+sinc.com> wrote:
+> > >
+> > > This function used to simply flush the whole tlb of all harts, be mor=
+e
+> > > subtile and try to only flush the range.
+> > >
+> > > The problem is that we can only use PAGE_SIZE as stride since we don'=
+t know
+> > > the size of the underlying mapping and then this function will be imp=
+roved
+> > > only if the size of the region to flush is < threshold * PAGE_SIZE.
+> > >
+> > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > > ---
+> > >  arch/riscv/include/asm/tlbflush.h | 11 ++++++-----
+> > >  arch/riscv/mm/tlbflush.c          | 33 ++++++++++++++++++++++-------=
+--
+> > >  2 files changed, 30 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/a=
+sm/tlbflush.h
+> > > index 170a49c531c6..8f3418c5f172 100644
+> > > --- a/arch/riscv/include/asm/tlbflush.h
+> > > +++ b/arch/riscv/include/asm/tlbflush.h
+> > > @@ -40,6 +40,7 @@ void flush_tlb_mm_range(struct mm_struct *mm, unsig=
+ned long start,
+> > >  void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr);
+> > >  void flush_tlb_range(struct vm_area_struct *vma, unsigned long start=
+,
+> > >                      unsigned long end);
+> > > +void flush_tlb_kernel_range(unsigned long start, unsigned long end);
+> > >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > >  #define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+> > >  void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long s=
+tart,
+> > > @@ -56,15 +57,15 @@ static inline void flush_tlb_range(struct vm_area=
+_struct *vma,
+> > >         local_flush_tlb_all();
+> > >  }
+> > >
+> > > -#define flush_tlb_mm(mm) flush_tlb_all()
+> > > -#define flush_tlb_mm_range(mm, start, end, page_size) flush_tlb_all(=
+)
+> > > -#endif /* !CONFIG_SMP || !CONFIG_MMU */
+> > > -
+> > >  /* Flush a range of kernel pages */
+> > >  static inline void flush_tlb_kernel_range(unsigned long start,
+> > >         unsigned long end)
+> > >  {
+> > > -       flush_tlb_all();
+> > > +       local_flush_tlb_all();
+> > >  }
+> > >
+> > > +#define flush_tlb_mm(mm) flush_tlb_all()
+> > > +#define flush_tlb_mm_range(mm, start, end, page_size) flush_tlb_all(=
+)
+> > > +#endif /* !CONFIG_SMP || !CONFIG_MMU */
+> > > +
+> > >  #endif /* _ASM_RISCV_TLBFLUSH_H */
+> > > diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> > > index 2c1136d73411..28cd8539b575 100644
+> > > --- a/arch/riscv/mm/tlbflush.c
+> > > +++ b/arch/riscv/mm/tlbflush.c
+> > > @@ -97,19 +97,27 @@ static void __flush_tlb_range(struct mm_struct *m=
+m, unsigned long start,
+> > >                               unsigned long size, unsigned long strid=
+e)
+> > >  {
+> > >         struct flush_tlb_range_data ftd;
+> > > -       struct cpumask *cmask =3D mm_cpumask(mm);
+> > > +       struct cpumask *cmask, full_cmask;
+> > >         unsigned long asid =3D FLUSH_TLB_NO_ASID;
+> > > -       unsigned int cpuid;
+> > >         bool broadcast;
+> > >
+> > > -       if (cpumask_empty(cmask))
+> > > -               return;
+> > > +       if (mm) {
+> > > +               unsigned int cpuid;
+> > > +
+> > > +               cmask =3D mm_cpumask(mm);
+> > > +               if (cpumask_empty(cmask))
+> > > +                       return;
+> > >
+> > > -       cpuid =3D get_cpu();
+> > > -       /* check if the tlbflush needs to be sent to other CPUs */
+> > > -       broadcast =3D cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
+> > > +               cpuid =3D get_cpu();
+> > > +               /* check if the tlbflush needs to be sent to other CP=
+Us */
+> > > +               broadcast =3D cpumask_any_but(cmask, cpuid) < nr_cpu_=
+ids;
+> > > +       } else {
+> > > +               cpumask_setall(&full_cmask);
+> > > +               cmask =3D &full_cmask;
+> > > +               broadcast =3D true;
+> > > +       }
+> > >
+> > > -       if (static_branch_unlikely(&use_asid_allocator))
+> > > +       if (static_branch_unlikely(&use_asid_allocator) && mm)
+> > >                 asid =3D atomic_long_read(&mm->context.id) & asid_mas=
+k;
+> > >
+> > >         if (broadcast) {
+> > > @@ -128,7 +136,8 @@ static void __flush_tlb_range(struct mm_struct *m=
+m, unsigned long start,
+> > >                 local_flush_tlb_range_asid(start, size, stride, asid)=
+;
+> > >         }
+> > >
+> > > -       put_cpu();
+> > > +       if (mm)
+> > > +               put_cpu();
+> > >  }
+> > >
+> > >  void flush_tlb_mm(struct mm_struct *mm)
+> > > @@ -189,6 +198,12 @@ void flush_tlb_range(struct vm_area_struct *vma,=
+ unsigned long start,
+> > >
+> > >         __flush_tlb_range(vma->vm_mm, start, end - start, stride_size=
+);
+> > >  }
+> > > +
+> > > +void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+> > > +{
+> > > +       __flush_tlb_range(NULL, start, end - start, PAGE_SIZE);
+> > > +}
+> > > +
+> > >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > >  void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long s=
+tart,
+> > >                         unsigned long end)
+> > > --
+> > > 2.39.2
+> > >
