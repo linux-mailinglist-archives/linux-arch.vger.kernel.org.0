@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF7279EEB7
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9710D79EEBA
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjIMQka (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 12:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S231335AbjIMQki (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 12:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjIMQjs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:39:48 -0400
+        with ESMTP id S230526AbjIMQjw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:39:52 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34C7419B1;
-        Wed, 13 Sep 2023 09:39:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34AA1212A;
+        Wed, 13 Sep 2023 09:39:27 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35227FEC;
-        Wed, 13 Sep 2023 09:40:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33FD11FB;
+        Wed, 13 Sep 2023 09:40:04 -0700 (PDT)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A6373F5A1;
-        Wed, 13 Sep 2023 09:39:23 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3895B3F5A1;
+        Wed, 13 Sep 2023 09:39:25 -0700 (PDT)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com
-Subject: [RFC PATCH v2 16/35] ACPI: processor: Register CPUs that are online, but not described in the DSDT
-Date:   Wed, 13 Sep 2023 16:38:04 +0000
-Message-Id: <20230913163823.7880-17-james.morse@arm.com>
+Subject: [RFC PATCH v2 17/35] ACPI: processor: Register all CPUs from acpi_processor_get_info()
+Date:   Wed, 13 Sep 2023 16:38:05 +0000
+Message-Id: <20230913163823.7880-18-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230913163823.7880-1-james.morse@arm.com>
 References: <20230913163823.7880-1-james.morse@arm.com>
@@ -41,61 +41,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-says "Each processor in the system must be declared in the ACPI
-namespace"). Having two descriptions allows firmware authors to get
-this wrong.
+To allow ACPI to skip the call to arch_register_cpu() when the _STA
+value indicates the CPU can't be brought online right now, move the
+arch_register_cpu() call into acpi_processor_get_info().
 
-If CPUs are described in the MADT/APIC, they will be brought online
-early during boot. Once the register_cpu() calls are moved to ACPI,
-they will be based on the DSDT description of the CPUs. When CPUs are
-missing from the DSDT description, they will end up online, but not
-registered.
+Systems can still be booted with 'acpi=off', or not include an
+ACPI description at all. For these, the CPUs continue to be
+registered by cpu_dev_register_generic().
 
-Add a helper that runs after acpi_init() has completed to register
-CPUs that are online, but weren't found in the DSDT. Any CPU that
-is registered by this code triggers a firmware-bug warning and kernel
-taint.
-
-Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-is configured.
+This moves the CPU register logic back to a subsys_initcall(),
+while the memory nodes will have been registered earlier.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/acpi/acpi_processor.c | 13 +++++++++++++
+ drivers/base/cpu.c            |  2 +-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index b4bde78121bb..a01e315aa16a 100644
+index a01e315aa16a..867782bc50b0 100644
 --- a/drivers/acpi/acpi_processor.c
 +++ b/drivers/acpi/acpi_processor.c
-@@ -790,6 +790,25 @@ void __init acpi_processor_init(void)
- 	acpi_pcc_cpufreq_init();
- }
+@@ -313,6 +313,19 @@ static int acpi_processor_get_info(struct acpi_device *device)
+ 			cpufreq_add_device("acpi-cpufreq");
+ 	}
  
-+static int __init acpi_processor_register_missing_cpus(void)
-+{
-+	int cpu;
++	/*
++	 * Register CPUs that are present.
++	 * Use get_cpu_device() to skip duplicate CPU descriptions from
++	 * firmware.
++	 */
++	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
++	    !get_cpu_device(pr->id)) {
++		int ret = arch_register_cpu(pr->id);
 +
-+	if (acpi_disabled)
-+		return 0;
-+
-+	for_each_online_cpu(cpu) {
-+		if (!get_cpu_device(cpu)) {
-+			pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
-+			add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-+			arch_register_cpu(cpu);
-+		}
++		if (ret)
++			return ret;
 +	}
 +
-+	return 0;
-+}
-+subsys_initcall_sync(acpi_processor_register_missing_cpus);
-+
- #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
- /**
-  * acpi_processor_claim_cst_control - Request _CST control from the platform.
+ 	/*
+ 	 *  Extra Processor objects may be enumerated on MP systems with
+ 	 *  less than the max # of CPUs. They should be ignored _iff
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index d31c936f0955..677f963e02ce 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -537,7 +537,7 @@ static void __init cpu_dev_register_generic(void)
+ {
+ 	int i, ret;
+ 
+-	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
++	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
+ 		return;
+ 
+ 	for_each_present_cpu(i) {
 -- 
 2.39.2
 
