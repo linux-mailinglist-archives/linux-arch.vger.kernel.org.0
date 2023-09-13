@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB4779EE71
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FDC79EE82
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Sep 2023 18:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjIMQjC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Sep 2023 12:39:02 -0400
+        id S230395AbjIMQjJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Sep 2023 12:39:09 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjIMQjB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:39:01 -0400
+        with ESMTP id S230327AbjIMQjD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Sep 2023 12:39:03 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C20519B1;
-        Wed, 13 Sep 2023 09:38:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 488B419A7;
+        Wed, 13 Sep 2023 09:38:59 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4588CC15;
-        Wed, 13 Sep 2023 09:39:34 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45A3FFEC;
+        Wed, 13 Sep 2023 09:39:36 -0700 (PDT)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A6263F5A1;
-        Wed, 13 Sep 2023 09:38:55 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A8B83F5A1;
+        Wed, 13 Sep 2023 09:38:57 -0700 (PDT)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com
-Subject: [RFC PATCH v2 02/35] drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
-Date:   Wed, 13 Sep 2023 16:37:50 +0000
-Message-Id: <20230913163823.7880-3-james.morse@arm.com>
+Subject: [RFC PATCH v2 03/35] drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden
+Date:   Wed, 13 Sep 2023 16:37:51 +0000
+Message-Id: <20230913163823.7880-4-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230913163823.7880-1-james.morse@arm.com>
 References: <20230913163823.7880-1-james.morse@arm.com>
@@ -41,75 +41,148 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Three of the five ACPI architectures create sysfs entries using
-register_cpu() for present CPUs, whereas arm64, riscv and all
-GENERIC_CPU_DEVICES do this for possible CPUs.
+Architectures often have extra per-cpu work that needs doing
+before a CPU is registered, often to determine if a CPU is
+hotpluggable.
 
-Registering a CPU is what causes them to show up in sysfs.
-
-It makes very little sense to register all possible CPUs. Registering
-a CPU is what triggers the udev notifications allowing user-space to
-react to newly added CPUs.
-
-To allow all five ACPI architectures to use GENERIC_CPU_DEVICES, change
-it to use for_each_present_cpu(). Making the ACPI architectures use
-GENERIC_CPU_DEVICES is a pre-requisite step to centralise their
-cpu_register() logic, before moving it into the ACPI processor driver.
-When ACPI is disabled this work would be done by
-cpu_dev_register_generic().
-
-Of the ACPI architectures that register possible CPUs, arm64 and riscv
-do not support making possible CPUs present as they use the weak 'always
-fails' version of arch_register_cpu().
-
-Only two of the eight architectures that use GENERIC_CPU_DEVICES have a
-distinction between present and possible CPUs.
-
-The following architectures use GENERIC_CPU_DEVICES but are not SMP,
-so possible == present:
- * m68k
- * microblaze
- * nios2
-
-The following architectures use GENERIC_CPU_DEVICES and consider
-possible == present:
- * csky: setup_smp()
- * parisc: smp_prepare_boot_cpu() marks the boot cpu as present,
-   processor_probe() sets possible for all CPUs and present for all CPUs
-   except the boot cpu.
-
-um appears to be a subarchitecture of x86.
-
-The remaining architecture using GENERIC_CPU_DEVICES are:
- * openrisc and hexagon:
-   where smp_init_cpus() makes all CPUs < NR_CPUS possible,
-   whereas smp_prepare_cpus() only makes CPUs < setup_max_cpus present.
-
-After this change, openrisc and hexagon systems that use the max_cpus
-command line argument would not see the other CPUs present in sysfs.
-This should not be a problem as these CPUs can't bre brought online as
-_cpu_up() checks cpu_present().
-
-After this change, only CPUs which are present appear in sysfs.
+To allow the ACPI architectures to use GENERIC_CPU_DEVICES, move
+the cpu_register() call into arch_register_cpu(), which is made __weak
+so architectures with extra work can override it.
+This aligns with the way x86, ia64 and loongarch register hotplug CPUs
+when they become present.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- drivers/base/cpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since RFC:
+ * Dropped __init from x86/ia64 arch_register_cpu()
+---
+ arch/ia64/include/asm/cpu.h      |  1 -
+ arch/ia64/kernel/topology.c      |  2 +-
+ arch/loongarch/include/asm/cpu.h |  1 -
+ arch/x86/include/asm/cpu.h       |  1 -
+ arch/x86/kernel/topology.c       |  2 +-
+ drivers/base/cpu.c               | 14 ++++++++++----
+ include/linux/cpu.h              |  5 +++++
+ 7 files changed, 17 insertions(+), 9 deletions(-)
 
+diff --git a/arch/ia64/include/asm/cpu.h b/arch/ia64/include/asm/cpu.h
+index db125df9e088..a3e690e685e5 100644
+--- a/arch/ia64/include/asm/cpu.h
++++ b/arch/ia64/include/asm/cpu.h
+@@ -16,7 +16,6 @@ DECLARE_PER_CPU(struct ia64_cpu, cpu_devices);
+ DECLARE_PER_CPU(int, cpu_state);
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-extern int arch_register_cpu(int num);
+ extern void arch_unregister_cpu(int);
+ #endif
+ 
+diff --git a/arch/ia64/kernel/topology.c b/arch/ia64/kernel/topology.c
+index 94a848b06f15..741863a187a6 100644
+--- a/arch/ia64/kernel/topology.c
++++ b/arch/ia64/kernel/topology.c
+@@ -59,7 +59,7 @@ void __ref arch_unregister_cpu(int num)
+ }
+ EXPORT_SYMBOL(arch_unregister_cpu);
+ #else
+-static int __init arch_register_cpu(int num)
++int __init arch_register_cpu(int num)
+ {
+ 	return register_cpu(&sysfs_cpus[num].cpu, num);
+ }
+diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
+index 7afe8cbb844e..b8568e637420 100644
+--- a/arch/loongarch/include/asm/cpu.h
++++ b/arch/loongarch/include/asm/cpu.h
+@@ -130,7 +130,6 @@ enum cpu_type_enum {
+ 
+ #if !defined(__ASSEMBLY__)
+ #ifdef CONFIG_HOTPLUG_CPU
+-int arch_register_cpu(int num);
+ void arch_unregister_cpu(int cpu);
+ #endif
+ #endif /* ! __ASSEMBLY__ */
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index 3a233ebff712..96dc4665e87d 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -28,7 +28,6 @@ struct x86_cpu {
+ };
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-extern int arch_register_cpu(int num);
+ extern void arch_unregister_cpu(int);
+ extern void soft_restart_cpu(void);
+ #endif
+diff --git a/arch/x86/kernel/topology.c b/arch/x86/kernel/topology.c
+index ca004e2e4469..0bab03130033 100644
+--- a/arch/x86/kernel/topology.c
++++ b/arch/x86/kernel/topology.c
+@@ -54,7 +54,7 @@ void arch_unregister_cpu(int num)
+ EXPORT_SYMBOL(arch_unregister_cpu);
+ #else /* CONFIG_HOTPLUG_CPU */
+ 
+-static int __init arch_register_cpu(int num)
++int __init arch_register_cpu(int num)
+ {
+ 	return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
+ }
 diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 9ea22e165acd..34b48f660b6b 100644
+index 34b48f660b6b..579064fda97b 100644
 --- a/drivers/base/cpu.c
 +++ b/drivers/base/cpu.c
-@@ -533,7 +533,7 @@ static void __init cpu_dev_register_generic(void)
+@@ -525,19 +525,25 @@ bool cpu_is_hotpluggable(unsigned int cpu)
+ EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+ 
  #ifdef CONFIG_GENERIC_CPU_DEVICES
+-static DEFINE_PER_CPU(struct cpu, cpu_devices);
++DEFINE_PER_CPU(struct cpu, cpu_devices);
++
++int __weak arch_register_cpu(int cpu)
++{
++	return register_cpu(&per_cpu(cpu_devices, cpu), cpu);
++}
+ #endif
+ 
+ static void __init cpu_dev_register_generic(void)
+ {
+-#ifdef CONFIG_GENERIC_CPU_DEVICES
  	int i;
  
--	for_each_possible_cpu(i) {
-+	for_each_present_cpu(i) {
- 		if (register_cpu(&per_cpu(cpu_devices, i), i))
++	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
++		return;
++
+ 	for_each_present_cpu(i) {
+-		if (register_cpu(&per_cpu(cpu_devices, i), i))
++		if (arch_register_cpu(i))
  			panic("Failed to register CPU device");
  	}
+-#endif
+ }
+ 
+ #ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index 0abd60a7987b..a71691d7c2ca 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -80,12 +80,17 @@ extern __printf(4, 5)
+ struct device *cpu_device_create(struct device *parent, void *drvdata,
+ 				 const struct attribute_group **groups,
+ 				 const char *fmt, ...);
++extern int arch_register_cpu(int cpu);
+ #ifdef CONFIG_HOTPLUG_CPU
+ extern void unregister_cpu(struct cpu *cpu);
+ extern ssize_t arch_cpu_probe(const char *, size_t);
+ extern ssize_t arch_cpu_release(const char *, size_t);
+ #endif
+ 
++#ifdef CONFIG_GENERIC_CPU_DEVICES
++DECLARE_PER_CPU(struct cpu, cpu_devices);
++#endif
++
+ /*
+  * These states are not related to the core CPU hotplug mechanism. They are
+  * used by various (sub)architectures to track internal state
 -- 
 2.39.2
 
