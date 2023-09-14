@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369767A120E
+	by mail.lfdr.de (Postfix) with ESMTP id D62E57A1210
 	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 01:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjINXzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S230500AbjINXzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Thu, 14 Sep 2023 19:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjINXzJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 19:55:09 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E20B269D;
-        Thu, 14 Sep 2023 16:55:05 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-59be8a2099bso17217437b3.0;
-        Thu, 14 Sep 2023 16:55:05 -0700 (PDT)
+        with ESMTP id S230353AbjINXzN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 19:55:13 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FEF270C;
+        Thu, 14 Sep 2023 16:55:06 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-59bbed7353aso22487827b3.0;
+        Thu, 14 Sep 2023 16:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694735704; x=1695340504; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694735705; x=1695340505; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gU+YVbdee9/ukrVxBlOoXUecIi7N3xBmAGT5Qfkumcc=;
-        b=cbQCwrfGbWoRFwRkZs4UzAKzst9w2aGQiSQAh1P0asDxKju2fgVJbGBHho01IHnLaK
-         lRpTmgdmNK0RfM6L4Eu26lspT4awBVGAWmI4Cz8fW2z5ByZVuMTtxGDMaVV4o6yxmsYC
-         CaRSj1dCP01/ZRp6uNLczjW/C4j4Iq0sBu8Mm5tyHrwyOX5CaWkOgHkanqJl0887f3XD
-         YN7xVPYd8ZtHQn92wuSfVJjyQRb0OJRFW19CBy5R51nzuzglPt8tKu5lnfRBc/d6s9l5
-         6WYsTbomsSNj/WwYL65b3CXfW7kf0imBAeSh7234uRK776hS9ky+5S1nENuNpawx6sye
-         tldQ==
+        bh=yc7YsJNEj8lnUE8O45Qp2UuWgYtrB9vsot4v2UqiCoQ=;
+        b=F31bP+GjakMtFWq2BACovzx7TvR7cMXfKQkCQeBx0VpzhhO0ozso8JoUC7ZyVZuUt2
+         kg4DtV4qa7wasP7T1eK6JfYjPw8deieqF0+DmaK0SpQI4AUhrMT0jnh+QgTYH9Alo1cB
+         gXLOYCNvejaLBZ7KuOOst7LCb0RPSvUXSAgImDS8az9rHmkW/Q9b4tGCPX9+DT/S5hwr
+         CDda++p0xJLW1zehCi/Teg2j5J/O1rqW51pS0wapkVGMrPgnmwSWEEiP9BFFNIQneFn6
+         4sXLg7vrOCQNKirKIbq3P72/ljOt877XcOMohBUIgd39sU5cPWj3QBCQxLUapEBuvnuU
+         gJlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694735704; x=1695340504;
+        d=1e100.net; s=20230601; t=1694735705; x=1695340505;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gU+YVbdee9/ukrVxBlOoXUecIi7N3xBmAGT5Qfkumcc=;
-        b=HQzolTuqxha/JXwxSDSqYXVElWbKMmI5koLRT44IpRrFopz46pRPBgyCnUkpIwqQSa
-         Adh2XUXGfWs9JPtFCF74MHzihAJDmasZPfJ3vEQHie2X1qT9BnR+HABNUb7apx+6CxKD
-         CwFu4mZL7KgdHaLZcl2Gc0VTJQgnzONUl9VPnQIhcEDWZx3ht07ZDo9O5/1SMcElA1ca
-         SFFGBT4e1d/suHjUN4jDwyC3YtDVzhPf445W/06Fa16uSJV5LsivCtCA5trPJ0j0gVCN
-         WMw6Sv7WN1s2uzpnK/P9COasfPoGSV/8Lj2WUXLqXHq14EWQSbyNNnj/1M8r150foskd
-         wztg==
-X-Gm-Message-State: AOJu0YyrRc+Km9NalgqDLhVs/0jLjSlEc+3GFqllyVZkmva4umwUdZ9N
-        TX3cKKGVN9vbpoh2Mis6ayhP7bfphnlA
-X-Google-Smtp-Source: AGHT+IG2b5asOwO5McNRji9qTvhU4BwgyLPo8o0Gp+z/U9++NsjhOfUOITAqDujgPXwuSv1ZjOwhbg==
-X-Received: by 2002:a81:a54a:0:b0:589:eec9:a7e8 with SMTP id v10-20020a81a54a000000b00589eec9a7e8mr197202ywg.38.1694735704168;
-        Thu, 14 Sep 2023 16:55:04 -0700 (PDT)
+        bh=yc7YsJNEj8lnUE8O45Qp2UuWgYtrB9vsot4v2UqiCoQ=;
+        b=rxMfimeYbVEz27dJPWaZ5yRy44kVbrHPCWg72n54tZoYLNCDBMxMCfhz6Zum6UIRtc
+         feBpNO7lAI7IrkHrPRkfabNNJ5g/IE4d35/XehSdUl0zWVQxn5HZfLB1qQOBAIMTo221
+         MWwBVH+YFOgh+mv7C89WXVDIZ5EWZhSs8rGNLJj05QClLPqg2EvDQK1c5806JUXTs5wm
+         4fONmL25tkdbvzUbX3XDDgCh6/EpbtC0PGVxvPFv4cSGODz+Rg3ucqmAyet0zeBZrz5p
+         LtDTQbNz1SuvoPrs6uji56gdfC07UhzrdRBuFl82qanteyYnKRWZ0ovTn0h4d0BmUDN7
+         6iHQ==
+X-Gm-Message-State: AOJu0Yx2UWoO2vWw/e17+QqoMHo2GhtsH8RrMTE0g1lnWe55xjR5+kZR
+        bC405DYUJ/bznDoZu+7/OKB8OsgzwgtJ
+X-Google-Smtp-Source: AGHT+IFdMv8Q/eXzwgnb7IHOM/TKa73O1tI4dEJDglBAcOc/L7FuI+67g+VHE6Ok6t5WlTHlSv0Bmw==
+X-Received: by 2002:a81:7344:0:b0:589:a400:a046 with SMTP id o65-20020a817344000000b00589a400a046mr157875ywc.14.1694735705659;
+        Thu, 14 Sep 2023 16:55:05 -0700 (PDT)
 Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id p188-20020a0dcdc5000000b005777a2c356asm586300ywd.65.2023.09.14.16.55.03
+        by smtp.gmail.com with ESMTPSA id p188-20020a0dcdc5000000b005777a2c356asm586300ywd.65.2023.09.14.16.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 16:55:03 -0700 (PDT)
+        Thu, 14 Sep 2023 16:55:05 -0700 (PDT)
 From:   Gregory Price <gourry.memverge@gmail.com>
 X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
 To:     linux-mm@vger.kernel.org
@@ -58,9 +58,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         arnd@arndb.de, akpm@linux-foundation.org, x86@kernel.org,
         Gregory Price <gregory.price@memverge.com>
-Subject: [RFC PATCH 2/3] mm/mempolicy: Implement set_mempolicy2 and get_mempolicy2 syscalls
-Date:   Thu, 14 Sep 2023 19:54:56 -0400
-Message-Id: <20230914235457.482710-3-gregory.price@memverge.com>
+Subject: [RFC PATCH 3/3] mm/mempolicy: implement a partial-interleave mempolicy
+Date:   Thu, 14 Sep 2023 19:54:57 -0400
+Message-Id: <20230914235457.482710-4-gregory.price@memverge.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230914235457.482710-1-gregory.price@memverge.com>
 References: <20230914235457.482710-1-gregory.price@memverge.com>
@@ -70,361 +70,381 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-sys_set_mempolicy is limited by its current argument structure
-(mode, nodes, flags) to implementing policies that can be described
-in that manner.
+The partial-interleave mempolicy implements interleave on an
+allocation interval. The default node is the local node, for
+which N pages will be allocated before an interleave pass occurs.
 
-Implement set/get_mempolicy2 with a new mempolicy_args structure
-which encapsulates the old behavior, and allows for new mempolicies
-which may require additional information.
+For example:
+  nodes=0,1,2
+  interval=3
+  cpunode=0
+
+Over 10 consecutive allocations, the following nodes will be selected:
+[0,0,0,1,2,0,0,0,1,2]
+
+In this example, there is a 60%/20%/20% distribution of memory.
+
+Using this mechanism, it becomes possible to define an approximate
+distribution percentage of memory across a set of nodes:
+
+local_node% : interval/((nr_nodes-1)+interval-1)
+other_node% : (1-local_node%)/(nr_nodes-1)
 
 Signed-off-by: Gregory Price <gregory.price@memverge.com>
 ---
- arch/x86/entry/syscalls/syscall_32.tbl |   2 +
- arch/x86/entry/syscalls/syscall_64.tbl |   2 +
- include/linux/syscalls.h               |   2 +
- include/uapi/asm-generic/unistd.h      |  10 +-
- include/uapi/linux/mempolicy.h         |  32 ++++
- mm/mempolicy.c                         | 215 ++++++++++++++++++++++++-
- 6 files changed, 261 insertions(+), 2 deletions(-)
+ include/linux/mempolicy.h      |   8 ++
+ include/uapi/linux/mempolicy.h |   5 +
+ mm/mempolicy.c                 | 161 +++++++++++++++++++++++++++++++--
+ 3 files changed, 166 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 2d0b1bd866ea..a72ef588a704 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -457,3 +457,5 @@
- 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	i386	cachestat		sys_cachestat
- 452	i386	fchmodat2		sys_fchmodat2
-+454	i386	set_mempolicy2		sys_set_mempolicy2
-+455	i386	get_mempolicy2		sys_get_mempolicy2
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 1d6eee30eceb..ec54064de8b3 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -375,6 +375,8 @@
- 451	common	cachestat		sys_cachestat
- 452	common	fchmodat2		sys_fchmodat2
- 453	64	map_shadow_stack	sys_map_shadow_stack
-+454	common	set_mempolicy2		sys_set_mempolicy2
-+455	common	get_mempolicy2		sys_get_mempolicy2
+diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
+index d232de7cdc56..41a6de9ff556 100644
+--- a/include/linux/mempolicy.h
++++ b/include/linux/mempolicy.h
+@@ -48,6 +48,14 @@ struct mempolicy {
+ 	nodemask_t nodes;	/* interleave/bind/perfer */
+ 	int home_node;		/* Home node to use for MPOL_BIND and MPOL_PREFERRED_MANY */
  
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 22bc6bc147f8..d50a452954ae 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -813,6 +813,8 @@ asmlinkage long sys_get_mempolicy(int __user *policy,
- 				unsigned long addr, unsigned long flags);
- asmlinkage long sys_set_mempolicy(int mode, const unsigned long __user *nmask,
- 				unsigned long maxnode);
-+asmlinkage long sys_get_mempolicy2(struct mempolicy_args __user *args);
-+asmlinkage long sys_set_mempolicy2(struct mempolicy_args __user *args);
- asmlinkage long sys_migrate_pages(pid_t pid, unsigned long maxnode,
- 				const unsigned long __user *from,
- 				const unsigned long __user *to);
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index abe087c53b4b..397dcf804941 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -823,8 +823,16 @@ __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
- 
-+/* CONFIG_MMU only */
-+#ifndef __ARCH_NOMMU
-+#define __NR_set_mempolicy 454
-+__SYSCALL(__NR_set_mempolicy2, sys_set_mempolicy2)
-+#define __NR_set_mempolicy 455
-+__SYSCALL(__NR_get_mempolicy2, sys_get_mempolicy2)
-+#endif
++	union {
++		/* Partial Interleave: Allocate local count, then interleave */
++		struct {
++			int interval;
++			int count;
++		} part_int;
++	};
 +
- #undef __NR_syscalls
--#define __NR_syscalls 453
-+#define __NR_syscalls 456
- 
- /*
-  * 32 bit systems traditionally used different
+ 	union {
+ 		nodemask_t cpuset_mems_allowed;	/* relative to these nodes */
+ 		nodemask_t user_nodemask;	/* nodemask passed by user */
 diff --git a/include/uapi/linux/mempolicy.h b/include/uapi/linux/mempolicy.h
-index 046d0ccba4cd..53650f69db2b 100644
+index 53650f69db2b..1af344344459 100644
 --- a/include/uapi/linux/mempolicy.h
 +++ b/include/uapi/linux/mempolicy.h
-@@ -23,9 +23,41 @@ enum {
- 	MPOL_INTERLEAVE,
+@@ -24,6 +24,7 @@ enum {
  	MPOL_LOCAL,
  	MPOL_PREFERRED_MANY,
-+	MPOL_LEGACY,	/* set_mempolicy limited to above modes */
+ 	MPOL_LEGACY,	/* set_mempolicy limited to above modes */
++	MPOL_PARTIAL_INTERLEAVE,
  	MPOL_MAX,	/* always last member of enum */
  };
  
-+struct mempolicy_args {
-+	int err;
-+	unsigned short mode;
-+	unsigned long *nodemask;
-+	unsigned long maxnode;
-+	unsigned short flags;
-+	struct {
-+		/* Memory allowed */
+@@ -55,6 +56,10 @@ struct mempolicy_args {
+ 		struct {
+ 			unsigned long next_node; /* get only */
+ 		} interleave;
 +		struct {
-+			int err;
-+			unsigned long maxnode;
-+			unsigned long *nodemask;
-+		} allowed;
-+		/* Address information */
-+		struct {
-+			int err;
-+			unsigned long addr;
-+			unsigned long node;
-+			unsigned short mode;
-+			unsigned short flags;
-+		} addr;
-+		/* Interleave */
-+	} get;
-+	/* Mode specific settings */
-+	union {
-+		struct {
++			unsigned long interval;  /* get and set */
 +			unsigned long next_node; /* get only */
-+		} interleave;
-+	};
-+};
-+
- /* Flags for set_mempolicy */
- #define MPOL_F_STATIC_NODES	(1 << 15)
- #define MPOL_F_RELATIVE_NODES	(1 << 14)
++		} part_int;
+ 	};
+ };
+ 
 diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index f49337f6f300..1cf7709400f1 100644
+index 1cf7709400f1..a2ee45ac2ab6 100644
 --- a/mm/mempolicy.c
 +++ b/mm/mempolicy.c
-@@ -1483,7 +1483,7 @@ static inline int sanitize_mpol_flags(int *mode, unsigned short *flags)
- 	*flags = *mode & MPOL_MODE_FLAGS;
- 	*mode &= ~MPOL_MODE_FLAGS;
+@@ -399,6 +399,10 @@ static const struct mempolicy_operations mpol_ops[MPOL_MAX] = {
+ 		.create = mpol_new_nodemask,
+ 		.rebind = mpol_rebind_nodemask,
+ 	},
++	[MPOL_PARTIAL_INTERLEAVE] = {
++		.create = mpol_new_nodemask,
++		.rebind = mpol_rebind_nodemask,
++	},
+ 	[MPOL_PREFERRED] = {
+ 		.create = mpol_new_preferred,
+ 		.rebind = mpol_rebind_preferred,
+@@ -875,7 +879,8 @@ static long swap_mempolicy(struct mempolicy *new,
  
--	if ((unsigned int)(*mode) >=  MPOL_MAX)
-+	if ((unsigned int)(*mode) >= MPOL_LEGACY)
- 		return -EINVAL;
- 	if ((*flags & MPOL_F_STATIC_NODES) && (*flags & MPOL_F_RELATIVE_NODES))
- 		return -EINVAL;
-@@ -1614,6 +1614,219 @@ SYSCALL_DEFINE3(set_mempolicy, int, mode, const unsigned long __user *, nmask,
+ 	old = current->mempolicy;
+ 	current->mempolicy = new;
+-	if (new && new->mode == MPOL_INTERLEAVE)
++	if (new && (new->mode == MPOL_INTERLEAVE ||
++		    new->mode == MPOL_PARTIAL_INTERLEAVE))
+ 		current->il_prev = MAX_NUMNODES-1;
+ out:
+ 	task_unlock(current);
+@@ -920,6 +925,7 @@ static void get_policy_nodemask(struct mempolicy *p, nodemask_t *nodes)
+ 	switch (p->mode) {
+ 	case MPOL_BIND:
+ 	case MPOL_INTERLEAVE:
++	case MPOL_PARTIAL_INTERLEAVE:
+ 	case MPOL_PREFERRED:
+ 	case MPOL_PREFERRED_MANY:
+ 		*nodes = p->nodes;
+@@ -1614,6 +1620,23 @@ SYSCALL_DEFINE3(set_mempolicy, int, mode, const unsigned long __user *, nmask,
  	return kernel_set_mempolicy(mode, nmask, maxnode);
  }
  
-+static long do_set_mempolicy2(struct mempolicy_args *args)
++static long do_set_partial_interleave(struct mempolicy_args *args,
++				      struct mempolicy *new,
++				      nodemask_t *nodes)
 +{
-+	struct mempolicy *new = NULL;
-+	nodemask_t nodes;
-+	int err;
-+
-+	if (args->mode <= MPOL_LEGACY)
++	/* Preferred interleave cannot be done with no nodemask */
++	if (nodes_empty(*nodes))
 +		return -EINVAL;
 +
-+	if (args->mode >= MPOL_MAX)
++	/* Preferred interleave interval cannot be <= 0 */
++	if (args->part_int.interval <= 0)
 +		return -EINVAL;
 +
-+	err = get_nodes(&nodes, args->nodemask, args->maxnode);
-+	if (err)
-+		return err;
-+
-+	new = mpol_new(args->mode, args->flags, &nodes);
-+	if (IS_ERR(new)) {
-+		err = PTR_ERR(new);
-+		goto out;
-+	}
-+
-+	switch (args->mode) {
-+	default:
-+		BUG();
-+	}
-+
-+	if (err)
-+		goto out;
-+
-+	err = swap_mempolicy(new, &nodes);
-+out:
-+	if (err && new)
-+		mpol_put(new);
-+	return err;
-+};
-+
-+static bool mempolicy2_args_valid(struct mempolicy_args *kargs)
-+{
-+	/* Legacy modes are routed through the legacy interface */
-+	if (kargs->mode <= MPOL_LEGACY)
-+		return false;
-+
-+	if (kargs->mode >= MPOL_MAX)
-+		return false;
-+
-+	return true;
++	new->part_int.interval = args->part_int.interval;
++	new->part_int.count = 0;
++	return 0;
 +}
 +
-+static long kernel_set_mempolicy2(const struct mempolicy_args __user *uargs,
-+				  size_t usize)
-+{
-+	struct mempolicy_args kargs;
-+	int err;
-+
-+	if (usize != sizeof(kargs))
-+		return -EINVAL;
-+
-+	err = copy_struct_from_user(&kargs, sizeof(kargs), uargs, usize);
-+	if (err)
-+		return err;
-+
-+	/* If the mode is legacy, use the legacy path */
-+	if (kargs.mode < MPOL_LEGACY) {
-+		int legacy_mode = kargs.mode | kargs.flags;
-+		const unsigned long __user *lnmask = kargs.nodemask;
-+		unsigned long maxnode = kargs.maxnode;
-+
-+		return kernel_set_mempolicy(legacy_mode, lnmask, maxnode);
-+	}
-+
-+	if (!mempolicy2_args_valid(&kargs))
-+		return -EINVAL;
-+
-+	return do_set_mempolicy2(&kargs);
-+}
-+
-+SYSCALL_DEFINE2(set_mempolicy2, const struct mempolicy_args __user *, args,
-+		size_t, size)
-+{
-+	return kernel_set_mempolicy2(args, size);
-+}
-+
-+/* Gets extended mempolicy information */
-+static long do_get_mempolicy2(struct mempolicy_args *kargs)
-+{
-+	struct mempolicy *pol = current->mempolicy;
-+	nodemask_t knodes;
-+	int err = 0;
-+
-+	kargs->err = 0;
-+	kargs->mode = pol->mode;
-+	/* Mask off internal flags */
-+	kargs->flags = (pol->flags & MPOL_MODE_FLAGS);
-+
-+	if (kargs->nodemask) {
-+		if (mpol_store_user_nodemask(pol)) {
-+			knodes = pol->w.user_nodemask;
-+		} else {
-+			task_lock(current);
-+			get_policy_nodemask(pol, &knodes);
-+			task_unlock(current);
-+		}
-+		err = copy_nodes_to_user(kargs->nodemask,
-+					 kargs->maxnode,
-+					 &knodes);
-+		if (err)
-+			return -EINVAL;
-+	}
-+
-+
-+	if (kargs->get.allowed.nodemask) {
-+		kargs->get.allowed.err = 0;
-+		task_lock(current);
-+		knodes = cpuset_current_mems_allowed;
-+		task_unlock(current);
-+		err = copy_nodes_to_user(kargs->get.allowed.nodemask,
-+					 kargs->get.allowed.maxnode,
-+					 &knodes);
-+		kargs->get.allowed.err = err ? err : 0;
-+		kargs->err |= err ? err : 1;
-+	}
-+
-+	if (kargs->get.addr.addr) {
-+		struct mempolicy *addr_pol = NULL;
-+		struct vm_area_struct *vma = NULL;
-+		struct mm_struct *mm = current->mm;
-+		unsigned long addr = kargs->get.addr.addr;
-+
-+		kargs->get.addr.err = 0;
-+
-+		/*
-+		 * Do NOT fall back to task policy if the
-+		 * vma/shared policy at addr is NULL.  We
-+		 * want to return MPOL_DEFAULT in this case.
-+		 */
-+		mmap_read_lock(mm);
-+		vma = vma_lookup(mm, addr);
-+		if (!vma) {
-+			mmap_read_unlock(mm);
-+			kargs->get.addr.err = -EFAULT;
-+			kargs->err |= err ? err : 2;
-+			goto mode_info;
-+		}
-+		if (vma->vm_ops && vma->vm_ops->get_policy)
-+			addr_pol = vma->vm_ops->get_policy(vma, addr);
-+		else
-+			addr_pol = vma->vm_policy;
-+
-+		kargs->get.addr.mode = addr_pol->mode;
-+		/* Mask off internal flags */
-+		kargs->get.addr.flags = (pol->flags & MPOL_MODE_FLAGS);
-+
-+		/*
-+		 * Take a refcount on the mpol, because we are about to
-+		 * drop the mmap_lock, after which only "pol" remains
-+		 * valid, "vma" is stale.
-+		 */
-+		vma = NULL;
-+		mpol_get(addr_pol);
-+		mmap_read_unlock(mm);
-+		err = lookup_node(mm, addr);
-+		mpol_put(addr_pol);
-+		if (err < 0) {
-+			kargs->get.addr.err = err;
-+			kargs->err |= err ? err : 4;
-+			goto mode_info;
-+		}
-+		kargs->get.addr.node = err;
-+	}
-+
-+mode_info:
-+	switch (kargs->mode) {
-+	case MPOL_INTERLEAVE:
-+		kargs->interleave.next_node = next_node_in(current->il_prev,
-+							   pol->nodes);
+ static long do_set_mempolicy2(struct mempolicy_args *args)
+ {
+ 	struct mempolicy *new = NULL;
+@@ -1637,6 +1660,9 @@ static long do_set_mempolicy2(struct mempolicy_args *args)
+ 	}
+ 
+ 	switch (args->mode) {
++	case MPOL_PARTIAL_INTERLEAVE:
++		err = do_set_partial_interleave(args, new, &nodes);
 +		break;
-+	default:
+ 	default:
+ 		BUG();
+ 	}
+@@ -1791,6 +1817,11 @@ static long do_get_mempolicy2(struct mempolicy_args *kargs)
+ 		kargs->interleave.next_node = next_node_in(current->il_prev,
+ 							   pol->nodes);
+ 		break;
++	case MPOL_PARTIAL_INTERLEAVE:
++		kargs->part_int.next_node = next_node_in(current->il_prev,
++							 pol->nodes);
++		kargs->part_int.interval = pol->part_int.interval;
 +		break;
+ 	default:
+ 		break;
+ 	}
+@@ -2133,8 +2164,19 @@ static unsigned interleave_nodes(struct mempolicy *policy)
+ 	struct task_struct *me = current;
+ 
+ 	next = next_node_in(me->il_prev, policy->nodes);
+-	if (next < MAX_NUMNODES)
++
++	if (policy->mode == MPOL_PARTIAL_INTERLEAVE) {
++		if (next == numa_node_id()) {
++			if (++policy->part_int.count >= policy->part_int.interval) {
++				policy->part_int.count = 0;
++				me->il_prev = next;
++			}
++		} else if (next < MAX_NUMNODES) {
++			me->il_prev = next;
++		}
++	} else if (next < MAX_NUMNODES)
+ 		me->il_prev = next;
++
+ 	return next;
+ }
+ 
+@@ -2159,6 +2201,7 @@ unsigned int mempolicy_slab_node(void)
+ 		return first_node(policy->nodes);
+ 
+ 	case MPOL_INTERLEAVE:
++	case MPOL_PARTIAL_INTERLEAVE:
+ 		return interleave_nodes(policy);
+ 
+ 	case MPOL_BIND:
+@@ -2195,7 +2238,7 @@ static unsigned offset_il_node(struct mempolicy *pol, unsigned long n)
+ 	nodemask_t nodemask = pol->nodes;
+ 	unsigned int target, nnodes;
+ 	int i;
+-	int nid;
++	int nid = MAX_NUMNODES;
+ 	/*
+ 	 * The barrier will stabilize the nodemask in a register or on
+ 	 * the stack so that it will stop changing under the code.
+@@ -2208,8 +2251,35 @@ static unsigned offset_il_node(struct mempolicy *pol, unsigned long n)
+ 	nnodes = nodes_weight(nodemask);
+ 	if (!nnodes)
+ 		return numa_node_id();
+-	target = (unsigned int)n % nnodes;
+-	nid = first_node(nodemask);
++
++	if (pol->mode == MPOL_PARTIAL_INTERLEAVE) {
++		int interval = pol->part_int.interval;
++		/*
++		 * Mode or interval can change so default to basic interleave
++		 * if the interval has become invalid.  Basic interleave is
++		 * equivalent to interval=1. Don't double-count the base node
++		 */
++		if (interval == 0)
++			interval = 1;
++		interval -= 1;
++
++		/* If target <= the interval, no need to call next_node */
++		target = ((unsigned int)n % (nnodes + interval));
++		target -= (target > interval) ? interval : target;
++		target %= MAX_NUMNODES;
++
++		/* If the local node ID is no longer set, do interleave */
++		nid = numa_node_id();
++		if (!node_isset(nid, nodemask))
++			nid = MAX_NUMNODES;
 +	}
 +
-+	return err;
-+}
++	/* If partial interleave generated an invalid nid, do interleave */
++	if (nid == MAX_NUMNODES) {
++		target = (unsigned int)n % nnodes;
++		nid = first_node(nodemask);
++	}
 +
-+static long kernel_get_mempolicy2(struct mempolicy_args __user *uargs,
-+				  size_t usize)
+ 	for (i = 0; i < target; i++)
+ 		nid = next_node(nid, nodemask);
+ 	return nid;
+@@ -2263,7 +2333,8 @@ int huge_node(struct vm_area_struct *vma, unsigned long addr, gfp_t gfp_flags,
+ 	*nodemask = NULL;
+ 	mode = (*mpol)->mode;
+ 
+-	if (unlikely(mode == MPOL_INTERLEAVE)) {
++	if (unlikely(mode == MPOL_INTERLEAVE) ||
++	    unlikely(mode == MPOL_PARTIAL_INTERLEAVE)) {
+ 		nid = interleave_nid(*mpol, vma, addr,
+ 					huge_page_shift(hstate_vma(vma)));
+ 	} else {
+@@ -2304,6 +2375,7 @@ bool init_nodemask_of_mempolicy(nodemask_t *mask)
+ 	case MPOL_PREFERRED_MANY:
+ 	case MPOL_BIND:
+ 	case MPOL_INTERLEAVE:
++	case MPOL_PARTIAL_INTERLEAVE:
+ 		*mask = mempolicy->nodes;
+ 		break;
+ 
+@@ -2414,7 +2486,8 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
+ 
+ 	pol = get_vma_policy(vma, addr);
+ 
+-	if (pol->mode == MPOL_INTERLEAVE) {
++	if (pol->mode == MPOL_INTERLEAVE ||
++	    pol->mode == MPOL_PARTIAL_INTERLEAVE) {
+ 		struct page *page;
+ 		unsigned nid;
+ 
+@@ -2516,7 +2589,8 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
+ 	 * No reference counting needed for current->mempolicy
+ 	 * nor system default_policy
+ 	 */
+-	if (pol->mode == MPOL_INTERLEAVE)
++	if (pol->mode == MPOL_INTERLEAVE ||
++	    pol->mode == MPOL_PARTIAL_INTERLEAVE)
+ 		page = alloc_page_interleave(gfp, order, interleave_nodes(pol));
+ 	else if (pol->mode == MPOL_PREFERRED_MANY)
+ 		page = alloc_pages_preferred_many(gfp, order,
+@@ -2576,6 +2650,68 @@ static unsigned long alloc_pages_bulk_array_interleave(gfp_t gfp,
+ 	return total_allocated;
+ }
+ 
++static unsigned long alloc_pages_bulk_array_partial_interleave(gfp_t gfp,
++		struct mempolicy *pol, unsigned long nr_pages,
++		struct page **page_array)
 +{
-+	struct mempolicy_args kargs;
-+	int err;
++	nodemask_t nodemask = pol->nodes;
++	unsigned long nr_pages_main;
++	unsigned long nr_pages_other;
++	unsigned long total_cycle;
++	unsigned long delta;
++	unsigned long interval;
++	int allocated = 0;
++	int start_nid;
++	int nnodes;
++	int prev, next;
++	int i;
 +
-+	if (usize != sizeof(struct mempolicy_args))
-+		return -EINVAL;
++	/* This stabilizes nodes on the stack incase pol->nodes changes */
++	barrier();
 +
-+	err = copy_struct_from_user(&kargs, sizeof(kargs), uargs, usize);
-+	if (err)
-+		return err;
++	nnodes = nodes_weight(nodemask);
++	start_nid = numa_node_id();
 +
-+	/* Get the extended memory policy information (kargs.ext) */
-+	err = do_get_mempolicy2(&kargs);
-+	if (err)
-+		return err;
++	if (!node_isset(start_nid, nodemask))
++		start_nid = first_node(nodemask);
 +
-+	err = copy_to_user(uargs, &kargs, sizeof(struct mempolicy_args));
++	if (nnodes == 1) {
++		allocated = __alloc_pages_bulk(gfp, start_nid,
++					       NULL, nr_pages_main,
++					       NULL, page_array);
++		return allocated;
++	}
++	/* We don't want to double-count the main node in calculations */
++	nnodes--;
 +
-+	return err;
++	interval = pol->part_int.interval;
++	total_cycle = (interval + nnodes);
++	/* Number of pages on main node: (cycles*interval + up to interval) */
++	nr_pages_main = ((nr_pages / total_cycle) * interval);
++	nr_pages_main += (nr_pages % total_cycle % (interval + 1));
++	/* Number of pages on others: (remaining/nodes) + 1 page if delta  */
++	nr_pages_other = (nr_pages - nr_pages_main) / nnodes;
++	nr_pages_other /= nnodes;
++	/* Delta is number of pages beyond interval up to full cycle */
++	delta = nr_pages - (nr_pages_main + (nr_pages_other * nnodes));
++
++	/* start by allocating for the main node, then interleave rest */
++	prev = start_nid;
++	allocated = __alloc_pages_bulk(gfp, start_nid, NULL, nr_pages_main,
++				       NULL, page_array);
++	for (i = 0; i < nnodes; i++) {
++		int pages = nr_pages_other + (delta-- ? 1 : 0);
++
++		next = next_node_in(prev, nodemask);
++		if (next < MAX_NUMNODES)
++			prev = next;
++		allocated += __alloc_pages_bulk(gfp, next, NULL, pages,
++						NULL, page_array);
++	}
++
++	return allocated;
 +}
 +
-+SYSCALL_DEFINE2(get_mempolicy2, struct mempolicy_args __user *, policy,
-+		size_t, size)
-+{
-+	return kernel_get_mempolicy2(policy, size);
-+}
+ static unsigned long alloc_pages_bulk_array_preferred_many(gfp_t gfp, int nid,
+ 		struct mempolicy *pol, unsigned long nr_pages,
+ 		struct page **page_array)
+@@ -2614,6 +2750,11 @@ unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
+ 		return alloc_pages_bulk_array_interleave(gfp, pol,
+ 							 nr_pages, page_array);
+ 
++	if (pol->mode == MPOL_PARTIAL_INTERLEAVE)
++		return alloc_pages_bulk_array_partial_interleave(gfp, pol,
++								 nr_pages,
++								 page_array);
 +
- static int kernel_migrate_pages(pid_t pid, unsigned long maxnode,
- 				const unsigned long __user *old_nodes,
- 				const unsigned long __user *new_nodes)
+ 	if (pol->mode == MPOL_PREFERRED_MANY)
+ 		return alloc_pages_bulk_array_preferred_many(gfp,
+ 				numa_node_id(), pol, nr_pages, page_array);
+@@ -2686,6 +2827,7 @@ bool __mpol_equal(struct mempolicy *a, struct mempolicy *b)
+ 	switch (a->mode) {
+ 	case MPOL_BIND:
+ 	case MPOL_INTERLEAVE:
++	case MPOL_PARTIAL_INTERLEAVE:
+ 	case MPOL_PREFERRED:
+ 	case MPOL_PREFERRED_MANY:
+ 		return !!nodes_equal(a->nodes, b->nodes);
+@@ -2822,6 +2964,7 @@ int mpol_misplaced(struct page *page, struct vm_area_struct *vma, unsigned long
+ 
+ 	switch (pol->mode) {
+ 	case MPOL_INTERLEAVE:
++	case MPOL_PARTIAL_INTERLEAVE:
+ 		pgoff = vma->vm_pgoff;
+ 		pgoff += (addr - vma->vm_start) >> PAGE_SHIFT;
+ 		polnid = offset_il_node(pol, pgoff);
+@@ -3209,6 +3352,7 @@ static const char * const policy_modes[] =
+ 	[MPOL_PREFERRED]  = "prefer",
+ 	[MPOL_BIND]       = "bind",
+ 	[MPOL_INTERLEAVE] = "interleave",
++	[MPOL_PARTIAL_INTERLEAVE] = "partial interleave",
+ 	[MPOL_LOCAL]      = "local",
+ 	[MPOL_PREFERRED_MANY]  = "prefer (many)",
+ };
+@@ -3379,6 +3523,7 @@ void mpol_to_str(char *buffer, int maxlen, struct mempolicy *pol)
+ 	case MPOL_PREFERRED_MANY:
+ 	case MPOL_BIND:
+ 	case MPOL_INTERLEAVE:
++	case MPOL_PARTIAL_INTERLEAVE:
+ 		nodes = pol->nodes;
+ 		break;
+ 	default:
 -- 
 2.39.1
 
