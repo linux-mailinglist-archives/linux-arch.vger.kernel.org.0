@@ -2,76 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB657A012B
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 12:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458B07A0202
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 12:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237747AbjINKEf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 06:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S235484AbjINK4X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 06:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237276AbjINKEe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 06:04:34 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136111BE7;
-        Thu, 14 Sep 2023 03:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TungYnLWY9BVlgruVURPd6F3Z87oI7SC3m5x9j6z2eg=; b=y9U73woI1ZDPmhAm+/gOrb9PoN
-        WxH4DuTEG1QNBULV6zUe2S7kmS86eZZl110Gx3sDQ+8uHmBKKkwvLGuUsXmeQCbHJc3Rp+L7XM/ww
-        5s39GgSMHFadDwMi/PN2t5rkyiphQX1ZrhY4iJflxBgAMIbwbcSqf6+wNlg5YbCDu2iRWF42QKgAM
-        gvqabwDEdElAA23pKQBzzgePvq00M3IO48IMcyYlgtucEYPnfElxlyRtCXPQu2F/NpNIpiasr0E2g
-        V+0bZcufUpoFQ81fewAN5YmTEk3eXiBQrfamqSAFku6oMOSF6p6xcjl/RsexI30JFTxyH5EBNB2ZI
-        s+ZgrTqw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45606)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qgjD1-0003rJ-0a;
-        Thu, 14 Sep 2023 11:04:27 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qgjD1-0004fG-TJ; Thu, 14 Sep 2023 11:04:27 +0100
-Date:   Thu, 14 Sep 2023 11:04:27 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        with ESMTP id S231404AbjINK4W (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 06:56:22 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B583F1BFE;
+        Thu, 14 Sep 2023 03:56:17 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmZ3v01jqz6K5v5;
+        Thu, 14 Sep 2023 18:55:38 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
+ 2023 11:56:14 +0100
+Date:   Thu, 14 Sep 2023 11:56:13 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     James Morse <james.morse@arm.com>, <linux-pm@vger.kernel.org>,
+        <loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: Re: [RFC PATCH v2 10/35] riscv: Switch over to GENERIC_CPU_DEVICES
-Message-ID: <ZQLaq0/qyXdJWbLq@shell.armlinux.org.uk>
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 02/35] drivers: base: Use present CPUs in
+ GENERIC_CPU_DEVICES
+Message-ID: <20230914115613.0000778e@Huawei.com>
+In-Reply-To: <ZQLCZsw+ZGbTM8oK@shell.armlinux.org.uk>
 References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-11-james.morse@arm.com>
+        <20230913163823.7880-3-james.morse@arm.com>
+        <ZQLCZsw+ZGbTM8oK@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913163823.7880-11-james.morse@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 04:37:58PM +0000, James Morse wrote:
-> Now that GENERIC_CPU_DEVICES calls arch_register_cpu(), which can be
-> overridden by the arch code, switch over to this to allow common code
-> to choose when the register_cpu() call is made.
-> 
-> This allows topology_init() to be removed.
-> 
-> This is an intermediate step to the logic being moved to drivers/acpi,
-> where GENERIC_CPU_DEVICES will do the work when booting with acpi=off.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
+On Thu, 14 Sep 2023 09:20:54 +0100
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-... and same concern as the previous patch.
+> On Wed, Sep 13, 2023 at 04:37:50PM +0000, James Morse wrote:
+> > Three of the five ACPI architectures create sysfs entries using
+> > register_cpu() for present CPUs, whereas arm64, riscv and all
+> > GENERIC_CPU_DEVICES do this for possible CPUs.
+> > 
+> > Registering a CPU is what causes them to show up in sysfs.
+> > 
+> > It makes very little sense to register all possible CPUs. Registering
+> > a CPU is what triggers the udev notifications allowing user-space to
+> > react to newly added CPUs.
+> > 
+> > To allow all five ACPI architectures to use GENERIC_CPU_DEVICES, change
+> > it to use for_each_present_cpu(). Making the ACPI architectures use
+> > GENERIC_CPU_DEVICES is a pre-requisite step to centralise their
+> > cpu_register() logic, before moving it into the ACPI processor driver.
+> > When ACPI is disabled this work would be done by
+> > cpu_dev_register_generic().
+> > 
+> > Of the ACPI architectures that register possible CPUs, arm64 and riscv
+> > do not support making possible CPUs present as they use the weak 'always
+> > fails' version of arch_register_cpu().
+> > 
+> > Only two of the eight architectures that use GENERIC_CPU_DEVICES have a
+> > distinction between present and possible CPUs.
+> > 
+> > The following architectures use GENERIC_CPU_DEVICES but are not SMP,
+> > so possible == present:
+> >  * m68k
+> >  * microblaze
+> >  * nios2
+> > 
+> > The following architectures use GENERIC_CPU_DEVICES and consider
+> > possible == present:
+> >  * csky: setup_smp()
+> >  * parisc: smp_prepare_boot_cpu() marks the boot cpu as present,
+> >    processor_probe() sets possible for all CPUs and present for all CPUs
+> >    except the boot cpu.  
+> 
+> However, init/main.c::start_kernel() calls boot_cpu_init() which sets
+> the boot CPU in the online, active, present and possible masks. So,
+> _every_ architecture gets the boot CPU in all these masks no matter
+> what.
+> 
+> Only of something then clears the boot CPU from these masks (which
+> would be silly) would the boot CPU not be in all of these masks.
+Hi Russel,
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Upshot is that the code in parisc smp_prepare_boot_cpu() can be dropped?
+Seems like another useful simplification to add to front of this series.
+The function will end up with just a print then. 
+Seems there are lots of other empty implementations of smp_prepare_boot_cpu()
+maybe worth making that optional whilst here and dropping all the empty ones?
+
+There seem to be some other architectures setting at least some of the cpu masks
+that could perhaps be tidied up a little via same logic?
+
+Jonathan
+
+> 
+
