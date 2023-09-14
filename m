@@ -2,44 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D727A080E
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4C47A0834
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbjINO4k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 10:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S240555AbjINO6t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 10:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbjINO4j (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:56:39 -0400
+        with ESMTP id S234000AbjINO6s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:58:48 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81E11FC4;
-        Thu, 14 Sep 2023 07:56:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240BE1FC4;
+        Thu, 14 Sep 2023 07:58:44 -0700 (PDT)
 Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmgP90gY1z67Q1Y;
-        Thu, 14 Sep 2023 22:55:57 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmgLx17dvz6D8yp;
+        Thu, 14 Sep 2023 22:54:01 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 15:56:33 +0100
-Date:   Thu, 14 Sep 2023 15:56:32 +0100
+ 2023 15:58:41 +0100
+Date:   Thu, 14 Sep 2023 15:58:40 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     James Morse <james.morse@arm.com>, <linux-pm@vger.kernel.org>,
-        <loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
         <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 06/35] arm64: setup: Switch over to
- GENERIC_CPU_DEVICES using arch_register_cpu()
-Message-ID: <20230914155632.00003ca9@Huawei.com>
-In-Reply-To: <ZQMTmi7blj/4FpbI@shell.armlinux.org.uk>
+Subject: Re: [RFC PATCH v2 28/35] arm64, irqchip/gic-v3, ACPI: Move MADT
+ GICC enabled check into a helper
+Message-ID: <20230914155840.0000393b@Huawei.com>
+In-Reply-To: <20230913163823.7880-29-james.morse@arm.com>
 References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-7-james.morse@arm.com>
-        <20230914122715.000076be@Huawei.com>
-        <ZQMTmi7blj/4FpbI@shell.armlinux.org.uk>
+        <20230913163823.7880-29-james.morse@arm.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
@@ -53,63 +52,113 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 14 Sep 2023 15:07:22 +0100
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+On Wed, 13 Sep 2023 16:38:16 +0000
+James Morse <james.morse@arm.com> wrote:
 
-> On Thu, Sep 14, 2023 at 12:27:15PM +0100, Jonathan Cameron wrote:
-> > On Wed, 13 Sep 2023 16:37:54 +0000
-> > James Morse <james.morse@arm.com> wrote:
-> >   
-> > > To allow ACPI's _STA value to hide CPUs that are present, but not
-> > > available to online right now due to VMM or firmware policy, the
-> > > register_cpu() call needs to be made by the ACPI machinery when ACPI
-> > > is in use. This allows it to hide CPUs that are unavailable from sysfs.
-> > > 
-> > > Switching to GENERIC_CPU_DEVICES is an intermediate step to allow all
-> > > five ACPI architectures to be modified at once.
-> > > 
-> > > Switch over to GENERIC_CPU_DEVICES, and provide an arch_register_cpu()
-> > > that populates the hotpluggable flag. arch_register_cpu() is also the
-> > > interface the ACPI machinery expects.
-> > > 
-> > > The struct cpu in struct cpuinfo_arm64 is never used directly, remove
-> > > it to use the one GENERIC_CPU_DEVICES provides.
-> > > 
-> > > This changes the CPUs visible in sysfs from possible to present, but
-> > > on arm64 smp_prepare_cpus() ensures these are the same.
-> > > 
-> > > Signed-off-by: James Morse <james.morse@arm.com>  
-> > 
-> > After this the earlier question about ordering of cpu_dev_init()
-> > and node_dev_init() is relevant.   
-> > 
-> > Why won't node_dev_init() call
-> > get_cpu_devce() which queries per_cpu(cpu_sys_devices)
-> > and get NULL as we haven't yet filled that in?
-> > 
-> > Or does it do so but that doesn't matter as well create the
-> > relevant links later?  
+> ACPI, irqchip and the architecture code all inspect the MADT
+> enabled bit for a GICC entry in the MADT.
 > 
-> node_dev_init() will walk through the nodes calling register_one_node()
-> on each. This will trickle down to __register_one_node() which walks
-> all present CPUs, calling register_cpu_under_node() on each.
+> The addition of an 'online capable' bit means all these sites need
+> updating.
 > 
-> register_cpu_under_node() will call get_cpu_device(cpu) for each and
-> will return NULL until the CPU is registered using register_cpu(),
-> which will now happen _after_ node_dev_init().
+> Move the current checks behind a helper to make future updates easier.
 > 
-> So, at this point, CPUs won't get registered, and initially one might
-> think that's a problem.
-> 
-> However, register_cpu() will itself call register_cpu_under_node(),
-> where get_cpu_device() will return the now populated entry, and the
-> sysfs links will be created.
-> 
-> So, I think what you've spotted is a potential chunk of code that
-> isn't necessary when using GENERIC_CPU_DEVICES after this change!
-> 
+> Signed-off-by: James Morse <james.morse@arm.com>
 
-Makes sense thanks. I was just being too lazy to check and bouncing it back
-at James! *looks guilty*
+Looks good to me and seems fine to add as part of a precursor mini
+series to the main one.  (fix Russell's observation of course!)
 
-Jonathan
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  arch/arm64/kernel/smp.c       |  2 +-
+>  drivers/acpi/processor_core.c |  2 +-
+>  drivers/irqchip/irq-gic-v3.c  | 10 ++++------
+>  include/linux/acpi.h          |  5 +++++
+>  4 files changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> index 960b98b43506..8c8f55721786 100644
+> --- a/arch/arm64/kernel/smp.c
+> +++ b/arch/arm64/kernel/smp.c
+> @@ -520,7 +520,7 @@ acpi_map_gic_cpu_interface(struct acpi_madt_generic_interrupt *processor)
+>  {
+>  	u64 hwid = processor->arm_mpidr;
+>  
+> -	if (!(processor->flags & ACPI_MADT_ENABLED)) {
+> +	if (!acpi_gicc_is_usable(processor)) {
+>  		pr_debug("skipping disabled CPU entry with 0x%llx MPIDR\n", hwid);
+>  		return;
+>  	}
+> diff --git a/drivers/acpi/processor_core.c b/drivers/acpi/processor_core.c
+> index 7dd6dbaa98c3..b203cfe28550 100644
+> --- a/drivers/acpi/processor_core.c
+> +++ b/drivers/acpi/processor_core.c
+> @@ -90,7 +90,7 @@ static int map_gicc_mpidr(struct acpi_subtable_header *entry,
+>  	struct acpi_madt_generic_interrupt *gicc =
+>  	    container_of(entry, struct acpi_madt_generic_interrupt, header);
+>  
+> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
+> +	if (!acpi_gicc_is_usable(gicc))
+>  		return -ENODEV;
+>  
+>  	/* device_declaration means Device object in DSDT, in the
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index eedfa8e9f077..72d3cdebdad1 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -2367,8 +2367,7 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+>  	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
+>  	void __iomem *redist_base;
+>  
+> -	/* GICC entry which has !ACPI_MADT_ENABLED is not unusable so skip */
+> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
+> +	if (!acpi_gicc_is_usable(gicc))
+>  		return 0;
+>  
+>  	redist_base = ioremap(gicc->gicr_base_address, size);
+> @@ -2418,7 +2417,7 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+>  	 * If GICC is enabled and has valid gicr base address, then it means
+>  	 * GICR base is presented via GICC
+>  	 */
+> -	if ((gicc->flags & ACPI_MADT_ENABLED) && gicc->gicr_base_address) {
+> +	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+>  		acpi_data.enabled_rdists++;
+>  		return 0;
+>  	}
+> @@ -2427,7 +2426,7 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+>  	 * It's perfectly valid firmware can pass disabled GICC entry, driver
+>  	 * should not treat as errors, skip the entry instead of probe fail.
+>  	 */
+> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
+> +	if (!acpi_gicc_is_usable(gicc))
+>  		return 0;
+>  
+>  	return -ENODEV;
+> @@ -2486,8 +2485,7 @@ static int __init gic_acpi_parse_virt_madt_gicc(union acpi_subtable_headers *hea
+>  	int maint_irq_mode;
+>  	static int first_madt = true;
+>  
+> -	/* Skip unusable CPUs */
+> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
+> +	if (!acpi_gicc_is_usable(gicc))
+>  		return 0;
+>  
+>  	maint_irq_mode = (gicc->flags & ACPI_MADT_VGIC_IRQ_MODE) ?
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index b7ab85857bb7..e3265a9eafae 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -256,6 +256,11 @@ acpi_table_parse_cedt(enum acpi_cedt_type id,
+>  int acpi_parse_mcfg (struct acpi_table_header *header);
+>  void acpi_table_print_madt_entry (struct acpi_subtable_header *madt);
+>  
+> +static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
+> +{
+> +	return (gicc->flags & ACPI_MADT_ENABLED);
+> +}
+> +
+>  /* the following numa functions are architecture-dependent */
+>  void acpi_numa_slit_init (struct acpi_table_slit *slit);
+>  
+
