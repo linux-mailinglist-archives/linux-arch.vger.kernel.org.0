@@ -2,156 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8176E79FD47
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 09:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1572979FD9F
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 09:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234833AbjINHdL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 03:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S234255AbjINH6D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 03:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjINHdK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 03:33:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE0C8CF1
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 00:32:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694676746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zeXUZmzA2R78d6Tnnb+ykDeaJ41fYcPMQRTIom5IJuI=;
-        b=XNDRgndW/I6ws6MgXUN1d23QLtx1zRTy1EFAUJHjfKJSQwgXO7Twd602JSzYL3RP+wXJmJ
-        F73SG+gzHKUx8460yaAm4TO9k8iUS9DdjZARvVW+G2GwbZ4DnYYP43qFdgh/IdQ0mW3PSj
-        TCDxfHn0tAUMS5ICW3BgE6KNn/HdOLY=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-609-Ft1RqmUFPQqHDdY8AmZgxQ-1; Thu, 14 Sep 2023 03:32:20 -0400
-X-MC-Unique: Ft1RqmUFPQqHDdY8AmZgxQ-1
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6bdcdde1df9so916576a34.2
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 00:32:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694676740; x=1695281540;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zeXUZmzA2R78d6Tnnb+ykDeaJ41fYcPMQRTIom5IJuI=;
-        b=ma1A4g6cUinvd2Ss778YbWU1ifyOWwElvHllP6EqJmhdzsyd8PIUP6+GFNJ/+LgEDA
-         G0GKgSFE91zd2KsPPVUiFVlHXUy4KllHZo2nUsyzJ8vfVXjS/WuBQVR9YAH5GGW9NJ40
-         XaJ/iyQGaWgXbKZovWdXzxbBv001OM99b7/mm4jfM+/FOR1SE9NsCxyZPP+KZYbU9h4D
-         aYSrmyQbpmclzWBnerhwVQxe+hOIP7IwPQS+INUvkCHn9wTSQGN/HcpB4Yq1CuWS26/9
-         2TlcRe6HTeQy0rx5RUyaTbgTqn2vdE7zkahl2s+I1iGbUtz3WeA6BDFgKs4Nn6raF90I
-         WbPA==
-X-Gm-Message-State: AOJu0YycYtCNsQyY2pZHuJAo6zFlmHjQPHA8kmNiZz+FsZjFmYmatXCk
-        4Z6iWMTzA/qK/DRrtTXW9FPbjFPHEJBO2mxhg0ZfykDsVoj+A7Yu/JVE6k+PqOXbwhfQFWsj4vW
-        41hNhiWvymIE5lEM2oz3yAA==
-X-Received: by 2002:a9d:7748:0:b0:6b7:6e07:4951 with SMTP id t8-20020a9d7748000000b006b76e074951mr5156987otl.25.1694676740039;
-        Thu, 14 Sep 2023 00:32:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEr6lIrxX3lHcIWXsLn8H+SAhlSeGClLIiE+FDMDpEhnhKKTf67DlStq8kfOI9KIS1JIF/G5A==
-X-Received: by 2002:a9d:7748:0:b0:6b7:6e07:4951 with SMTP id t8-20020a9d7748000000b006b76e074951mr5156960otl.25.1694676739790;
-        Thu, 14 Sep 2023 00:32:19 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id v25-20020a9d69d9000000b006b83a36c08bsm421777oto.53.2023.09.14.00.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 00:32:19 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 04:32:08 -0300
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>, paul.walmsley@sifive.com,
-        anup@brainfault.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, palmer@rivosinc.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 07/17] riscv: qspinlock: Introduce qspinlock param
- for command line
-Message-ID: <ZQK2-CIL9U_QdMjh@redhat.com>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-8-guoren@kernel.org>
- <5ba0b8f3-f8f5-3a25-e9b7-f29a1abe654a@redhat.com>
- <CAJF2gTT2hRxgnQt+WJ9P0YBWnUaZJ1-9g3ZE9tOz_MiLSsUjwQ@mail.gmail.com>
+        with ESMTP id S232458AbjINH6C (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 03:58:02 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDE71BF6;
+        Thu, 14 Sep 2023 00:57:58 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37AC2C433CA;
+        Thu, 14 Sep 2023 07:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694678278;
+        bh=w97jgCxmnIaSV+4bbnSk1R7YKOaENxmwU85CS3tNcPo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZhVxi3ng0SyBcUTeBMQePKCqcaLd8ethtP02v1fL+sfnyUaoKqHkq9ju2Mb2DzGmx
+         12cPbr6KS37U3XQdfYDg39fefRxRGPkNAt0JcrqNuLoRrMOChzJNI4I+30xyF/Z+DO
+         9uUgJtnDdJgF7nEXzChIzKYS5cn58Peg6JMWClVEEmyT8kN2TvcDY5+cWznkmtlWEO
+         c1HUPT6VfSprEw7p42m6MzIVjlX2UkH0Kd4+Pu+jggh68f29rTsOMA5jm7wh31KLCT
+         cO/FDvorrtEl5TBHSc2NBxToKVfMI9e/jz1tApeqdW/ft0iWrkGBooY5qJ9zwbp4IC
+         8ehDh8M7Vy3CQ==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2bcb0b973a5so9531961fa.3;
+        Thu, 14 Sep 2023 00:57:58 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yw+9qrEMoTR7t0idesOR0RbpI5kPq+T/PRgyFtG8hVW4gMz6vls
+        x+xt8doxzKfnZHFOYXYHfc2Y77LOzwa0321qE9s=
+X-Google-Smtp-Source: AGHT+IFuQtEiIDjo1DdCQY9KR6JQVDNyxLjSiMxhcLunotHqZWQic/fNmbjkP5sAIxtK7RWx3KWbiGw4//GC4psRyfI=
+X-Received: by 2002:a2e:a172:0:b0:2bc:db70:b563 with SMTP id
+ u18-20020a2ea172000000b002bcdb70b563mr4235801ljl.32.1694678276384; Thu, 14
+ Sep 2023 00:57:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTT2hRxgnQt+WJ9P0YBWnUaZJ1-9g3ZE9tOz_MiLSsUjwQ@mail.gmail.com>
+References: <20230913163823.7880-1-james.morse@arm.com> <20230913163823.7880-28-james.morse@arm.com>
+In-Reply-To: <20230913163823.7880-28-james.morse@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 14 Sep 2023 09:57:44 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
+Message-ID: <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields [code first?]
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 09:08:34AM +0800, Guo Ren wrote:
-> On Mon, Sep 11, 2023 at 11:34 PM Waiman Long <longman@redhat.com> wrote:
-> >
-> > On 9/10/23 04:29, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Allow cmdline to force the kernel to use queued_spinlock when
-> > > CONFIG_RISCV_COMBO_SPINLOCKS=y.
-> > >
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >   Documentation/admin-guide/kernel-parameters.txt |  2 ++
-> > >   arch/riscv/kernel/setup.c                       | 16 +++++++++++++++-
-> > >   2 files changed, 17 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > index 7dfb540c4f6c..61cacb8dfd0e 100644
-> > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > @@ -4693,6 +4693,8 @@
-> > >                       [KNL] Number of legacy pty's. Overwrites compiled-in
-> > >                       default number.
-> > >
-> > > +     qspinlock       [RISCV] Force to use qspinlock or auto-detect spinlock.
-> > > +
-> > >       qspinlock.numa_spinlock_threshold_ns=   [NUMA, PV_OPS]
-> > >                       Set the time threshold in nanoseconds for the
-> > >                       number of intra-node lock hand-offs before the
-> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > > index a447cf360a18..0f084f037651 100644
-> > > --- a/arch/riscv/kernel/setup.c
-> > > +++ b/arch/riscv/kernel/setup.c
-> > > @@ -270,6 +270,15 @@ static void __init parse_dtb(void)
-> > >   }
-> > >
-> > >   #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
-> > > +bool enable_qspinlock_key = false;
-> >
-> > You can use __ro_after_init qualifier for enable_qspinlock_key. BTW,
-> > this is not a static key, just a simple flag. So what is the point of
-> > the _key suffix?
-> Okay, I would change it to:
-> bool enable_qspinlock_flag __ro_after_init = false;
+Hello James,
 
-IIUC, this bool / flag is used in a single file, so it makes sense for it 
-to be static. Being static means it does not need to be initialized to 
-false, as it's standard to zero-fill this areas.
+On Wed, 13 Sept 2023 at 18:41, James Morse <james.morse@arm.com> wrote:
+>
+> Add the new flag field to the MADT's GICC structure.
+>
+> 'Online Capable' indicates a disabled CPU can be enabled later.
+>
 
-Also, since it's a bool, it does not need to be called _flag.
+Why do we need a bit for this? What would be the point of describing
+disabled CPUs that cannot be enabled (and are you are aware of
+firmware doing this?).
 
-I would go with:
-
-static bool enable_qspinlock __ro_after_init;
+So why are we not able to assume that this new bit can always be treated as '1'?
 
 
-> 
-> >
-> > Cheers,
-> > Longman
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+> This patch probably needs to go via the upstream acpica project,
+> but is included here so the feature can be testd.
+> ---
+>  include/acpi/actbl2.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
+> index 3751ae69432f..c433a079d8e1 100644
+> --- a/include/acpi/actbl2.h
+> +++ b/include/acpi/actbl2.h
+> @@ -1046,6 +1046,7 @@ struct acpi_madt_generic_interrupt {
+>  /* ACPI_MADT_ENABLED                    (1)      Processor is usable if set */
+>  #define ACPI_MADT_PERFORMANCE_IRQ_MODE  (1<<1) /* 01: Performance Interrupt Mode */
+>  #define ACPI_MADT_VGIC_IRQ_MODE         (1<<2) /* 02: VGIC Maintenance Interrupt mode */
+> +#define ACPI_MADT_GICC_CPU_CAPABLE      (1<<3) /* 03: CPU is online capable */
+>
+>  /* 12: Generic Distributor (ACPI 5.0 + ACPI 6.0 changes) */
+>
+> --
+> 2.39.2
+>
