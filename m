@@ -2,140 +2,228 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CEC7A07AC
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29347A07B1
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240315AbjINOr1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 10:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S240314AbjINOrs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 10:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240314AbjINOr0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:47:26 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293521BFE
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 07:47:22 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-4018af103bcso7418505e9.1
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 07:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694702840; x=1695307640; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vHpWmHejf9EicOnbuTpXQSbFe9gmT4JUPIXQ/pQhLLs=;
-        b=OICqe2J+pAU/Tw1th392fVmAUa+8T60710r04130hvuY9Irz3uPklqPCNYiKH4N5tp
-         xaJWWXHhj5/wE040hJ9kSMtiEtj3yLpwmlXy4G9+5zTfiBd10Qt5CSsICqywQijxFcRW
-         je8Xf8KvgNIImwjEAQuKAwCKVvicotgOFQeKFpUVHsE58ly20i+nAxdQOyxX1bckKLXK
-         U0mVstkxeoV8WKZulfztUojq62+BLhyKlN2vYfkEjX2I+ieKe6sjku4C6BOEivTOZvc4
-         YWItytRxlm2VXgACWpOT9Y1q0CcvybbeOAxnvdP4ERRnggf+1Efu6xg17KaLkV8nSEM8
-         Kp1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694702840; x=1695307640;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vHpWmHejf9EicOnbuTpXQSbFe9gmT4JUPIXQ/pQhLLs=;
-        b=PcJ00nedioiWdQzzdYO62DxJxmfEITuv7uQAw+isPgCEKaL+UzUJoEAEVE9oQXXy0o
-         5gGJb4XBYk86M01823aOyqPfCw6AINpOzwQuPOp0pYaOqvjFN07PGJdCeMfZkDFwiJ5i
-         JKQ+YrK8DH9WR8+fvpYJj5WIgPYNzPJoLfhCjOn280Zr46AuN9O0NXHfG7y3ae/kCejn
-         oB0Jh6ibd4IwqWLuyZxbqIkfUy5OLd9K1Casl6NH1IslW/DQlbcWOAEwoNzfHiFP37ks
-         CYGa6s/rZZBrljb1rqh+PUI5qpN1/bsS07p5jzAoWJO5PoW0rjE/29F2V2HzLu3QZTz1
-         Bm8w==
-X-Gm-Message-State: AOJu0Yzn4Kv4Qk1CTSrOHfJdzxhpMCU6R4wlYrTh0P4EhsRb8qCCVkNu
-        usjljKgY/6lUjjdlZuWdctQKcw==
-X-Google-Smtp-Source: AGHT+IE4vnDXBqfwShidPjq/u140Nh9Lf+YfW3WjJy+bEdPvCUxsYsEPIWnZNVPkTVSDMOA9EX84Jw==
-X-Received: by 2002:a05:600c:895:b0:401:b393:da18 with SMTP id l21-20020a05600c089500b00401b393da18mr1795468wmp.6.1694702840548;
-        Thu, 14 Sep 2023 07:47:20 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id n7-20020a7bcbc7000000b003fef3180e7asm4996897wmi.44.2023.09.14.07.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 07:47:19 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 16:47:18 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     guoren@kernel.org
-Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, jszhang@kernel.org, wefu@redhat.com,
-        wuwei2016@iscas.ac.cn, leobras@redhat.com,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
-Message-ID: <20230914-74d0cf00633c199758ee3450@orel>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-4-guoren@kernel.org>
- <20230914-892327a75b4b86badac5de02@orel>
+        with ESMTP id S234000AbjINOrr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:47:47 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4D71BFC;
+        Thu, 14 Sep 2023 07:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:From:To:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=k/kzubGMoF55SY8q/NSTULYXd8nOQVDVaZO5jElyano=; b=dBVhc8oknmbKL8K6SMVUV7f8Iq
+        x/L3g6I+OXnEQzlek24sVI6zZt3F1Mp//EWFJENAl5DLknigcxE+wIFrBH4QtwaBOvy4kQzw86szc
+        bspe08fwfuPk4ezDVX49czJQqmZKnI4d5Yq+j9k/dhj0JlOzL+9CTy9JBMIRs7JlxeOkzQNBHi8iX
+        iIHg/PccSEOhvYpUzMo5EHC0DHTh1fWWX4N3HCewZ62JfQThx5971APFS7Q5KOwuruOFp4Pt5rSf+
+        V16Nl7DCjt1Bsm4r8eZaOKsAlIRsOGEiKCsiS+Ncm//5HeiShoBkg9Nnp/HlLl+8aC41Y38BzufZN
+        hLUi7wcg==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:46516 helo=rmk-PC.armlinux.org.uk)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1qgnd2-0004Nf-2B;
+        Thu, 14 Sep 2023 15:47:36 +0100
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1qgnd3-007ZQF-Ds; Thu, 14 Sep 2023 15:47:37 +0100
+From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To:     linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>
+Subject: [PATCH RFC] cpu-hotplug: provide prototypes for arch CPU registration
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Salil Mehta <salil.mehta@huawei.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-ia64@vger.kernel.org
+Subject: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
+MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230914-892327a75b4b86badac5de02@orel>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1qgnd3-007ZQF-Ds@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Thu, 14 Sep 2023 15:47:37 +0100
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 04:25:53PM +0200, Andrew Jones wrote:
-> On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> > 
-> > Cache-block prefetch instructions are HINTs to the hardware to
-> > indicate that software intends to perform a particular type of
-> > memory access in the near future. Enable ARCH_HAS_PREFETCHW and
-> > improve the arch_xchg for qspinlock xchg_tail.
-> > 
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/Kconfig                 | 15 +++++++++++++++
-> >  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
-> >  arch/riscv/include/asm/hwcap.h     |  1 +
-> >  arch/riscv/include/asm/insn-def.h  |  5 +++++
-> >  arch/riscv/include/asm/processor.h | 13 +++++++++++++
-> >  arch/riscv/kernel/cpufeature.c     |  1 +
-> >  6 files changed, 38 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index e9ae6fa232c3..2c346fe169c1 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
-> >  
-> >  	   If you don't know what to do here, say Y.
-> >  
-> > +config RISCV_ISA_ZICBOP
-> 
-> Even if we're not concerned with looping over blocks yet, I think we
-> should introduce zicbop block size DT parsing at the same time we bring
-> zicbop support to the kernel (it's just more copy+paste from zicbom and
-> zicboz). It's a bit annoying that the CMO spec doesn't state that block
-> sizes should be the same for m/z/p. And, the fact that m/z/p are all
-> separate extensions leads us to needing to parse block sizes for all
-> three, despite the fact that in practice they'll probably be the same.
+Provide common prototypes for arch_register_cpu() and
+arch_unregister_cpu(). These are called by acpi_processor.c, with
+weak versions, so the prototype for this is already set. It is
+generally not necessary for function prototypes to be conditional
+on preprocessor macros.
 
-Although, I saw on a different mailing list that Andrei Warkentin
-interpreted section 2.7 "Software Discovery" of the spec, which states
+Some architectures (e.g. Loongarch) are missing the prototype for this,
+and rather than add it to Loongarch's asm/cpu.h, lets do the job once
+for everyone.
 
-"""
-The initial set of CMO extensions requires the following information to be
-discovered by software:
+Since this covers everyone, remove the now unnecessary prototypes in
+asm/cpu.h, and we also need to remove the 'static' from one of ia64's
+arch_register_cpu() definitions.
 
-* The size of the cache block for management and prefetch instructions
-* The size of the cache block for zero instructions
-* CBIE support at each privilege level
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+Spotted during the review of James Morse's patches, I think rather than
+adding prototypes for loongarch to its asm/cpu.h, it would make more
+sense to provide the prototypes in a non-arch specific header file so
+everyone can benefit, rather than having each architecture do its own
+thing.
 
-Other general cache characteristics may also be specified in the discovery
-mechanism.
-"""
+I'm sending this as RFC as James has yet to comment on my proposal, and
+also to a wider audience, and although it makes a little more work for
+James (to respin his series) it does mean that his series should get a
+little smaller.
 
-as management and prefetch having the same block size and only zero
-potentially having a different size. That looks like a reasonable
-interpretation to me, too. So, we could maybe proceed with assuming we
-can use zicbom_block_size for prefetch, for now. If a platform comes along
-that interpreted the spec differently, requiring prefetch block size to
-be specified separately, then we'll cross that bridge when we get there.
+See:
+ https://lore.kernel.org/r/20230913163823.7880-2-james.morse@arm.com
+ https://lore.kernel.org/r/20230913163823.7880-4-james.morse@arm.com
+ https://lore.kernel.org/r/20230913163823.7880-23-james.morse@arm.com
 
-Thanks,
-drew
+ arch/ia64/include/asm/cpu.h | 5 -----
+ arch/ia64/kernel/topology.c | 2 +-
+ arch/x86/include/asm/cpu.h  | 2 --
+ include/linux/cpu.h         | 2 ++
+ 4 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/arch/ia64/include/asm/cpu.h b/arch/ia64/include/asm/cpu.h
+index db125df9e088..642d71675ddb 100644
+--- a/arch/ia64/include/asm/cpu.h
++++ b/arch/ia64/include/asm/cpu.h
+@@ -15,9 +15,4 @@ DECLARE_PER_CPU(struct ia64_cpu, cpu_devices);
+ 
+ DECLARE_PER_CPU(int, cpu_state);
+ 
+-#ifdef CONFIG_HOTPLUG_CPU
+-extern int arch_register_cpu(int num);
+-extern void arch_unregister_cpu(int);
+-#endif
+-
+ #endif /* _ASM_IA64_CPU_H_ */
+diff --git a/arch/ia64/kernel/topology.c b/arch/ia64/kernel/topology.c
+index 94a848b06f15..741863a187a6 100644
+--- a/arch/ia64/kernel/topology.c
++++ b/arch/ia64/kernel/topology.c
+@@ -59,7 +59,7 @@ void __ref arch_unregister_cpu(int num)
+ }
+ EXPORT_SYMBOL(arch_unregister_cpu);
+ #else
+-static int __init arch_register_cpu(int num)
++int __init arch_register_cpu(int num)
+ {
+ 	return register_cpu(&sysfs_cpus[num].cpu, num);
+ }
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index 3a233ebff712..25050d953eee 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -28,8 +28,6 @@ struct x86_cpu {
+ };
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-extern int arch_register_cpu(int num);
+-extern void arch_unregister_cpu(int);
+ extern void soft_restart_cpu(void);
+ #endif
+ 
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index 0abd60a7987b..eb768a866fe3 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -80,6 +80,8 @@ extern __printf(4, 5)
+ struct device *cpu_device_create(struct device *parent, void *drvdata,
+ 				 const struct attribute_group **groups,
+ 				 const char *fmt, ...);
++extern int arch_register_cpu(int cpu);
++extern void arch_unregister_cpu(int cpu);
+ #ifdef CONFIG_HOTPLUG_CPU
+ extern void unregister_cpu(struct cpu *cpu);
+ extern ssize_t arch_cpu_probe(const char *, size_t);
+-- 
+2.30.2
+
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+
+Provide common prototypes for arch_register_cpu() and
+arch_unregister_cpu(). These are called by acpi_processor.c, with
+weak versions, so the prototype for this is already set. It is
+generally not necessary for function prototypes to be conditional
+on preprocessor macros.
+
+Some architectures (e.g. Loongarch) are missing the prototype for this,
+and rather than add it to Loongarch's asm/cpu.h, lets do the job once
+for everyone.
+
+Since this covers everyone, remove the now unnecessary prototypes in
+asm/cpu.h
+
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+
+
+ arch/ia64/include/asm/cpu.h | 5 -----
+ arch/x86/include/asm/cpu.h  | 2 --
+ include/linux/cpu.h         | 2 ++
+ 3 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/arch/ia64/include/asm/cpu.h b/arch/ia64/include/asm/cpu.h
+index db125df9e088..642d71675ddb 100644
+--- a/arch/ia64/include/asm/cpu.h
++++ b/arch/ia64/include/asm/cpu.h
+@@ -15,9 +15,4 @@ DECLARE_PER_CPU(struct ia64_cpu, cpu_devices);
+ 
+ DECLARE_PER_CPU(int, cpu_state);
+ 
+-#ifdef CONFIG_HOTPLUG_CPU
+-extern int arch_register_cpu(int num);
+-extern void arch_unregister_cpu(int);
+-#endif
+-
+ #endif /* _ASM_IA64_CPU_H_ */
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index 3a233ebff712..25050d953eee 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -28,8 +28,6 @@ struct x86_cpu {
+ };
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-extern int arch_register_cpu(int num);
+-extern void arch_unregister_cpu(int);
+ extern void soft_restart_cpu(void);
+ #endif
+ 
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index 0abd60a7987b..eb768a866fe3 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -80,6 +80,8 @@ extern __printf(4, 5)
+ struct device *cpu_device_create(struct device *parent, void *drvdata,
+ 				 const struct attribute_group **groups,
+ 				 const char *fmt, ...);
++extern int arch_register_cpu(int cpu);
++extern void arch_unregister_cpu(int cpu);
+ #ifdef CONFIG_HOTPLUG_CPU
+ extern void unregister_cpu(struct cpu *cpu);
+ extern ssize_t arch_cpu_probe(const char *, size_t);
+-- 
+2.30.2
+
