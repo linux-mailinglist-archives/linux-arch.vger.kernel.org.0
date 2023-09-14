@@ -2,98 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8637A0350
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 14:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C9C7A03BF
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 14:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238356AbjINMFE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 08:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
+        id S237941AbjINM1J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 08:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbjINMFD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 08:05:03 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E801BF4;
-        Thu, 14 Sep 2023 05:04:59 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmbb90TM0z6K6W4;
-        Thu, 14 Sep 2023 20:04:21 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 13:04:56 +0100
-Date:   Thu, 14 Sep 2023 13:04:55 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+        with ESMTP id S237745AbjINM1J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 08:27:09 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BF31FC9;
+        Thu, 14 Sep 2023 05:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1694694421;
+        bh=IKd/xoLaYMNT3G43ojUHtX33LcBflkrUDAX5TgQ89VQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rYiR5HRfpS/tMJ5vZ04WGHK5tqlEmN3zl7YBnuBIj4iDXvSjRcMk3Bm1xQR4G2xqA
+         ch/6vWdPHmOC2BUMMk4XX30GKkFETwPb6UKi6HR3vSS9M+ZGF48pqFYfp4X0b6Xnoc
+         3IT8Xs1CRfVJWHkXJOg3XffMJXWhIzBrBfe0rLT/1FOwmVJNKXhzU+07wARKckah+G
+         1nYEufulJtii1DdLYzWI+dlftci66s6CJLfGerDALqoTxKf5zQo5DIOqkNkz913pHl
+         hiwkYuo8iIaiLSkIq8iYXaa9BldBulkzz3WoyK+kyoqd71CY/sNwj3K8X+Pby7L5LJ
+         Ni+zJOD6zygLg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rmc544Ldlz4wxN;
+        Thu, 14 Sep 2023 22:26:48 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Cc:     "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "schwab@linux-m68k.org" <schwab@linux-m68k.org>,
+        "brgerst@gmail.com" <brgerst@gmail.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "glaubitz@physik.fu-berlin.de" <glaubitz@physik.fu-berlin.de>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ink@jurassic.park.msu.ru" <ink@jurassic.park.msu.ru>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "Hunter, Adrian" <adrian.hunter@intel.com>,
+        "acme@kernel.org" <acme@kernel.org>,
+        "ysato@users.sourceforge.jp" <ysato@users.sourceforge.jp>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "rmclure@linux.ibm.com" <rmclure@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "slyich@gmail.com" <slyich@gmail.com>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "chris@zankel.net" <chris@zankel.net>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "mattst88@gmail.com" <mattst88@gmail.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 12/35] ACPI: Use the acpi_device_is_present()
- helper in more places
-Message-ID: <20230914130455.00004434@Huawei.com>
-In-Reply-To: <20230913163823.7880-13-james.morse@arm.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-13-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "richard.henderson@linaro.org" <richard.henderson@linaro.org>,
+        "irogers@google.com" <irogers@google.com>,
+        "namhyung@kernel.org" <namhyung@kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: Re: [PATCH 2/2] arch: Reserve map_shadow_stack() syscall number for
+ all architectures
+In-Reply-To: <8b7106881fa227a64b4e951c6b9240a7126ac4a2.camel@intel.com>
+References: <20230911180210.1060504-1-sohil.mehta@intel.com>
+ <20230911180210.1060504-3-sohil.mehta@intel.com>
+ <8b7106881fa227a64b4e951c6b9240a7126ac4a2.camel@intel.com>
+Date:   Thu, 14 Sep 2023 22:26:47 +1000
+Message-ID: <871qf17xfc.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:38:00 +0000
-James Morse <james.morse@arm.com> wrote:
+"Edgecombe, Rick P" <rick.p.edgecombe@intel.com> writes:
+> On Mon, 2023-09-11 at 18:02 +0000, Sohil Mehta wrote:
+>> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl
+>> b/arch/powerpc/kernel/syscalls/syscall.tbl
+>> index 20e50586e8a2..2767b8a42636 100644
+>> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
+>> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+>> @@ -539,3 +539,4 @@
+>> =C2=A0450=C2=A0=C2=A0=C2=A0=C2=A0nospu=C2=A0=C2=A0=C2=A0set_mempolicy_ho=
+me_node=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sys_set_mempol=
+icy_hom
+>> e_node
+>> =C2=A0451=C2=A0=C2=A0=C2=A0=C2=A0common=C2=A0=C2=A0cachestat=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sys_cachestat
+>> =C2=A0452=C2=A0=C2=A0=C2=A0=C2=A0common=C2=A0=C2=A0fchmodat2=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sys_fchmodat2
+>> +453=C2=A0=C2=A0=C2=A0=C2=A0common=C2=A0=C2=A0map_shadow_stack=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0sys_map_shadow_stack
+>
+> I noticed in powerpc, the not implemented syscalls are manually mapped
+> to sys_ni_syscall. It also has some special extra sys_ni_syscall()
+> implementation bits to handle both ARCH_HAS_SYSCALL_WRAPPER and
+> !ARCH_HAS_SYSCALL_WRAPPER. So wondering if it might need special
+> treatment. Did you see those parts?
 
-> acpi_device_is_present() checks the present or functional bits
-> from the cached copy of _STA.
-> 
-> A few places open-code this check. Use the helper instead to
-> improve readability.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
+I don't think it needs any special treatment. It's processed by the same
+script as other arches (scripts/syscalltbl.sh). So if there's no compat
+or native entry it will default to sys_ni_syscall.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+I think it's just habit/historical that we always spell out sys_ni_syscall.
 
-Pull this one out and send it upstream in advance of the rest.
-
-Jonathan
-
-
-> ---
->  drivers/acpi/scan.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 691d4b7686ee..ed01e19514ef 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
->  	int error;
->  
->  	acpi_bus_get_status(adev);
-> -	if (adev->status.present || adev->status.functional) {
-> +	if (acpi_device_is_present(adev)) {
->  		/*
->  		 * This function is only called for device objects for which
->  		 * matching scan handlers exist.  The only situation in which
-> @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
->  	int error;
->  
->  	acpi_bus_get_status(adev);
-> -	if (!(adev->status.present || adev->status.functional)) {
-> +	if (!acpi_device_is_present(adev)) {
->  		acpi_scan_device_not_present(adev);
->  		return 0;
->  	}
-
+cheers
