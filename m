@@ -2,119 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475637A0693
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 15:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08137A06E0
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239107AbjINN4S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 09:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S239455AbjINOHc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 10:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239273AbjINN4O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 09:56:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57A1CEB;
-        Thu, 14 Sep 2023 06:56:10 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmf2700D8z6HJb0;
-        Thu, 14 Sep 2023 21:54:22 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 14:56:08 +0100
-Date:   Thu, 14 Sep 2023 14:56:07 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
+        with ESMTP id S234873AbjINOHc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:07:32 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DDD1BF8;
+        Thu, 14 Sep 2023 07:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=GIdT/cJmFA2qx50pgPlJRNzy/bheI4vUqGYQu+a7PMI=; b=raixHrVeNVHHMS+SmMW0fsVxI+
+        rZLO2b1FApnkXyJLVlkjBZUzsfFxmDi2JMVVu/R8wleWSzTAHzOFKzQL/zWb/JJhTJQkeyGGl2H3d
+        1EsUw8fAPKHCZzu4CyyEqx+rG9yuFwm7T+vos+z7VLqGttytZaDieHznwmb3696A6aPLvSAslWr7a
+        thmdyxIrHQUHf4/fW3Cr1tTqOrfips0KHORhG+5wXWbJd9QGypzhjjzPeg+uOfhgIbBdTkF3z9ckY
+        NUhze25dfC5TxiZv0q43BsedV3/l/zOQC9B/nOQb7gFNThJ/nZ0J8fzai0g8EC7sBDROC7wVMPZBJ
+        p/hgjtbQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:37510)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qgn08-0004Jo-2O;
+        Thu, 14 Sep 2023 15:07:24 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qgn06-0004ol-Vs; Thu, 14 Sep 2023 15:07:22 +0100
+Date:   Thu, 14 Sep 2023 15:07:22 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 16/35] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <20230914145607.00006f9b@Huawei.com>
-In-Reply-To: <20230913163823.7880-17-james.morse@arm.com>
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: Re: [RFC PATCH v2 06/35] arm64: setup: Switch over to
+ GENERIC_CPU_DEVICES using arch_register_cpu()
+Message-ID: <ZQMTmi7blj/4FpbI@shell.armlinux.org.uk>
 References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-17-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+ <20230913163823.7880-7-james.morse@arm.com>
+ <20230914122715.000076be@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914122715.000076be@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:38:04 +0000
-James Morse <james.morse@arm.com> wrote:
-
-> ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-> in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-> says "Each processor in the system must be declared in the ACPI
-> namespace"). Having two descriptions allows firmware authors to get
-> this wrong.
+On Thu, Sep 14, 2023 at 12:27:15PM +0100, Jonathan Cameron wrote:
+> On Wed, 13 Sep 2023 16:37:54 +0000
+> James Morse <james.morse@arm.com> wrote:
 > 
-> If CPUs are described in the MADT/APIC, they will be brought online
-> early during boot. Once the register_cpu() calls are moved to ACPI,
-> they will be based on the DSDT description of the CPUs. When CPUs are
-> missing from the DSDT description, they will end up online, but not
-> registered.
+> > To allow ACPI's _STA value to hide CPUs that are present, but not
+> > available to online right now due to VMM or firmware policy, the
+> > register_cpu() call needs to be made by the ACPI machinery when ACPI
+> > is in use. This allows it to hide CPUs that are unavailable from sysfs.
+> > 
+> > Switching to GENERIC_CPU_DEVICES is an intermediate step to allow all
+> > five ACPI architectures to be modified at once.
+> > 
+> > Switch over to GENERIC_CPU_DEVICES, and provide an arch_register_cpu()
+> > that populates the hotpluggable flag. arch_register_cpu() is also the
+> > interface the ACPI machinery expects.
+> > 
+> > The struct cpu in struct cpuinfo_arm64 is never used directly, remove
+> > it to use the one GENERIC_CPU_DEVICES provides.
+> > 
+> > This changes the CPUs visible in sysfs from possible to present, but
+> > on arm64 smp_prepare_cpus() ensures these are the same.
+> > 
+> > Signed-off-by: James Morse <james.morse@arm.com>
 > 
-> Add a helper that runs after acpi_init() has completed to register
-> CPUs that are online, but weren't found in the DSDT. Any CPU that
-> is registered by this code triggers a firmware-bug warning and kernel
-> taint.
+> After this the earlier question about ordering of cpu_dev_init()
+> and node_dev_init() is relevant.   
 > 
-> Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-> is configured.
-
-We should fix that as who likes warnings and taint :)
-I dread to think how common this will turn out to be.
-
+> Why won't node_dev_init() call
+> get_cpu_devce() which queries per_cpu(cpu_sys_devices)
+> and get NULL as we haven't yet filled that in?
 > 
-> Signed-off-by: James Morse <james.morse@arm.com>
-LGTM
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Or does it do so but that doesn't matter as well create the
+> relevant links later?
 
-> ---
->  drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index b4bde78121bb..a01e315aa16a 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -790,6 +790,25 @@ void __init acpi_processor_init(void)
->  	acpi_pcc_cpufreq_init();
->  }
->  
-> +static int __init acpi_processor_register_missing_cpus(void)
-> +{
-> +	int cpu;
-> +
-> +	if (acpi_disabled)
-> +		return 0;
-> +
-> +	for_each_online_cpu(cpu) {
-> +		if (!get_cpu_device(cpu)) {
-> +			pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
-> +			add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-> +			arch_register_cpu(cpu);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +subsys_initcall_sync(acpi_processor_register_missing_cpus);
-> +
->  #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
->  /**
->   * acpi_processor_claim_cst_control - Request _CST control from the platform.
+node_dev_init() will walk through the nodes calling register_one_node()
+on each. This will trickle down to __register_one_node() which walks
+all present CPUs, calling register_cpu_under_node() on each.
 
+register_cpu_under_node() will call get_cpu_device(cpu) for each and
+will return NULL until the CPU is registered using register_cpu(),
+which will now happen _after_ node_dev_init().
+
+So, at this point, CPUs won't get registered, and initially one might
+think that's a problem.
+
+However, register_cpu() will itself call register_cpu_under_node(),
+where get_cpu_device() will return the now populated entry, and the
+sysfs links will be created.
+
+So, I think what you've spotted is a potential chunk of code that
+isn't necessary when using GENERIC_CPU_DEVICES after this change!
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
