@@ -2,116 +2,235 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5A07A073B
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F717A074E
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 16:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240000AbjINO0G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 10:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S240105AbjINO2R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 10:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239857AbjINO0G (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:26:06 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21E7B9
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 07:26:01 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-403012f276dso10950355e9.0
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 07:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694701560; x=1695306360; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YG4jj4GnceKWHFc9CDsOyyvWCOlMS/zle7Y09KSgtKI=;
-        b=g9aO+D0A7Vn87/QKbx6OjNyzvS41oJJljAbyt1gOMP0HFE/p0xVhJfDJyruCGJezsL
-         0Xp8U7T7SpVCoNljpptT6C8MQ3S8eOsCAMOBtX1wFniGrHDubaDjs++2PM9seSsFmVRv
-         i6pcY7ZcBzDbA+T4cOZtjvJYJPtWouq5DCINtoEMPlJYoUYS/7JstacfGZVNa56xbnxY
-         x9YkPFKN26qHx9kqXWnJ4aq4rvwAbRCYuKu3warY8gcutISNPKUNITeesF+LbvuReeVl
-         CA6RDVqiLMVMZaDVFD66wIuI5kGF2FlxSL1GXMa4JshALqWLyijVeJp3axBBWcHyd9kP
-         urcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694701560; x=1695306360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YG4jj4GnceKWHFc9CDsOyyvWCOlMS/zle7Y09KSgtKI=;
-        b=KTdlIkkLICDIuDs5lacqXeHG+o/ecpW2R68rqno8fmq9W7VD4h9bXd9IRvsPb+eG4b
-         rc93thWsE13Gx4su0Fo0k/SfBEkB++GmzygbSjpZZDSydp+NS/PimSxNmgHO+u8VJ5wC
-         q6Qj6rgIEeDqgGurQbE8YNPmCOuhBt1r2Guj2gjIcG9ygBnZmQ4dpia31ZWY7ERHFjiA
-         q5y3NqNuYCO85AytntZ/DFaCfqKSxWOdZiBASTAxOXibsSJhgiz9W3syimNdwr9DR8U6
-         A4sRNHw/YXqf7532SbHKJrmk8PONk4wdRYUS3lhHCYW7FNWVON5XLzrfhZlv2zFea35C
-         FBcQ==
-X-Gm-Message-State: AOJu0YwuMdJnZnO7gULua0mRGwx9zOpjRHry2rc0WXGKG1e3rA1p/W1P
-        AhiCxx6BsXfP9NqAdIbaqX3HsQ==
-X-Google-Smtp-Source: AGHT+IFWc50omqudDyR0Nh+pUUfbse+nkODV23h/mlFUP8m4u/vojRIjASaeifFA7VSOhcKfy6pcrw==
-X-Received: by 2002:a05:600c:c8:b0:402:f5c2:c6d9 with SMTP id u8-20020a05600c00c800b00402f5c2c6d9mr5110748wmm.37.1694701559948;
-        Thu, 14 Sep 2023 07:25:59 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0031c8a43712asm1914525wrr.69.2023.09.14.07.25.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 07:25:59 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 16:25:53 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     guoren@kernel.org
-Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, jszhang@kernel.org, wefu@redhat.com,
-        wuwei2016@iscas.ac.cn, leobras@redhat.com,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
-Message-ID: <20230914-892327a75b4b86badac5de02@orel>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-4-guoren@kernel.org>
+        with ESMTP id S240017AbjINO2R (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 10:28:17 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AF7E3;
+        Thu, 14 Sep 2023 07:28:13 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmfl46hyHz6HJcg;
+        Thu, 14 Sep 2023 22:26:24 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
+ 2023 15:28:10 +0100
+Date:   Thu, 14 Sep 2023 15:28:09 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 21/35] ACPI: Add post_eject to struct
+ acpi_scan_handler for cpu hotplug
+Message-ID: <20230914152809.00003152@Huawei.com>
+In-Reply-To: <20230913163823.7880-22-james.morse@arm.com>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-22-james.morse@arm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230910082911.3378782-4-guoren@kernel.org>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Wed, 13 Sep 2023 16:38:09 +0000
+James Morse <james.morse@arm.com> wrote:
+
+> struct acpi_scan_handler has a detach callback that is used to remove
+> a driver when a bus is changed. When interacting with an eject-request,
+> the detach callback is called before _EJ0.
 > 
-> Cache-block prefetch instructions are HINTs to the hardware to
-> indicate that software intends to perform a particular type of
-> memory access in the near future. Enable ARCH_HAS_PREFETCHW and
-> improve the arch_xchg for qspinlock xchg_tail.
+> This means the ACPI processor driver can't use _STA to determine if a
+> CPU has been made not-present, or some of the other _STA bits have been
+> changed. acpi_processor_remove() needs to know the value of _STA after
+> _EJ0 has been called.
+
+Why hasn't it been a problem before?
+
 > 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Add a post_eject callback to struct acpi_scan_handler. This is called
+> after acpi_scan_hot_remove() has successfully called _EJ0. Because
+> acpi_bus_trim_one() also clears the handler pointer, it needs to be
+> told if the caller will go on to call acpi_bus_post_eject(), so
+> that acpi_device_clear_enumerated() and clearing the handler pointer
+> can be deferred. The existing not-used pointer is used for this.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+
+I briefly wondered if an alternative model where you always call the
+post walk was cleaner as the handler clear etc would always be in same place.
+However, couldn't make it work that nicely because you still need to indicate
+that it's an eject post handler or not which just moves the messy code.
+
+As such this LGTM
+
+Reviewed-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
+
+
 > ---
->  arch/riscv/Kconfig                 | 15 +++++++++++++++
->  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
->  arch/riscv/include/asm/hwcap.h     |  1 +
->  arch/riscv/include/asm/insn-def.h  |  5 +++++
->  arch/riscv/include/asm/processor.h | 13 +++++++++++++
->  arch/riscv/kernel/cpufeature.c     |  1 +
->  6 files changed, 38 insertions(+), 1 deletion(-)
+>  drivers/acpi/acpi_processor.c |  4 +--
+>  drivers/acpi/scan.c           | 52 ++++++++++++++++++++++++++++++-----
+>  include/acpi/acpi_bus.h       |  1 +
+>  3 files changed, 48 insertions(+), 9 deletions(-)
 > 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index e9ae6fa232c3..2c346fe169c1 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index 22a15a614f95..00dcc23d49a8 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -459,7 +459,7 @@ static int acpi_processor_add(struct acpi_device *device,
 >  
->  	   If you don't know what to do here, say Y.
+>  #ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+>  /* Removal */
+> -static void acpi_processor_remove(struct acpi_device *device)
+> +static void acpi_processor_post_eject(struct acpi_device *device)
+>  {
+>  	struct acpi_processor *pr;
 >  
-> +config RISCV_ISA_ZICBOP
+> @@ -627,7 +627,7 @@ static struct acpi_scan_handler processor_handler = {
+>  	.ids = processor_device_ids,
+>  	.attach = acpi_processor_add,
+>  #ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+> -	.detach = acpi_processor_remove,
+> +	.post_eject = acpi_processor_post_eject,
+>  #endif
+>  	.hotplug = {
+>  		.enabled = true,
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index a675333618ae..b6d2f01640a9 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -244,18 +244,28 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+>  	return 0;
+>  }
+>  
+> -static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+> +/**
+> + * acpi_bus_trim_one() - Detach scan handlers and drivers from ACPI device
+> + *                       objects.
+> + * @adev:       Root of the ACPI namespace scope to walk.
+> + * @eject:      Pointer to a bool that indicates if this was due to an
+> + *              eject-request.
+> + *
+> + * Must be called under acpi_scan_lock.
+> + * If @eject points to true, clearing the device enumeration is deferred until
+> + * acpi_bus_post_eject() is called.
+> + */
+> +static int acpi_bus_trim_one(struct acpi_device *adev, void *eject)
+>  {
+>  	struct acpi_scan_handler *handler = adev->handler;
+> +	bool is_eject = *(bool *)eject;
+>  
+> -	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
+> +	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, eject);
+>  
+>  	adev->flags.match_driver = false;
+>  	if (handler) {
+>  		if (handler->detach)
+>  			handler->detach(adev);
+> -
+> -		adev->handler = NULL;
+>  	} else {
+>  		device_release_driver(&adev->dev);
+>  	}
+> @@ -265,7 +275,12 @@ static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+>  	 */
+>  	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+>  	adev->flags.initialized = false;
+> -	acpi_device_clear_enumerated(adev);
+> +
+> +	/* For eject this is deferred to acpi_bus_post_eject() */
+> +	if (!is_eject) {
+> +		adev->handler = NULL;
+> +		acpi_device_clear_enumerated(adev);
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -278,15 +293,36 @@ static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+>   */
+>  void acpi_bus_trim(struct acpi_device *adev)
+>  {
+> -	acpi_bus_trim_one(adev, NULL);
+> +	bool eject = false;
+> +
+> +	acpi_bus_trim_one(adev, &eject);
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_bus_trim);
+>  
+> +static int acpi_bus_post_eject(struct acpi_device *adev, void *not_used)
+> +{
+> +	struct acpi_scan_handler *handler = adev->handler;
+> +
+> +	acpi_dev_for_each_child_reverse(adev, acpi_bus_post_eject, NULL);
+> +
+> +	if (handler) {
+> +		if (handler->post_eject)
+> +			handler->post_eject(adev);
+> +
+> +		adev->handler = NULL;
+> +	}
+> +
+> +	acpi_device_clear_enumerated(adev);
+> +
+> +	return 0;
+> +}
+> +
+>  static int acpi_scan_hot_remove(struct acpi_device *device)
+>  {
+>  	acpi_handle handle = device->handle;
+>  	unsigned long long sta;
+>  	acpi_status status;
+> +	bool eject = true;
+>  
+>  	if (device->handler && device->handler->hotplug.demand_offline) {
+>  		if (!acpi_scan_is_offline(device, true))
+> @@ -299,7 +335,7 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+>  
+>  	acpi_handle_debug(handle, "Ejecting\n");
+>  
+> -	acpi_bus_trim(device);
+> +	acpi_bus_trim_one(device, &eject);
+>  
+>  	acpi_evaluate_lck(handle, 0);
+>  	/*
+> @@ -322,6 +358,8 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+>  	} else if (sta & ACPI_STA_DEVICE_ENABLED) {
+>  		acpi_handle_warn(handle,
+>  			"Eject incomplete - status 0x%llx\n", sta);
+> +	} else {
+> +		acpi_bus_post_eject(device, NULL);
+>  	}
+>  
+>  	return 0;
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index 254685085c82..1b7e1acf925b 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -127,6 +127,7 @@ struct acpi_scan_handler {
+>  	bool (*match)(const char *idstr, const struct acpi_device_id **matchid);
+>  	int (*attach)(struct acpi_device *dev, const struct acpi_device_id *id);
+>  	void (*detach)(struct acpi_device *dev);
+> +	void (*post_eject)(struct acpi_device *dev);
+>  	void (*bind)(struct device *phys_dev);
+>  	void (*unbind)(struct device *phys_dev);
+>  	struct acpi_hotplug_profile hotplug;
 
-Even if we're not concerned with looping over blocks yet, I think we
-should introduce zicbop block size DT parsing at the same time we bring
-zicbop support to the kernel (it's just more copy+paste from zicbom and
-zicboz). It's a bit annoying that the CMO spec doesn't state that block
-sizes should be the same for m/z/p. And, the fact that m/z/p are all
-separate extensions leads us to needing to parse block sizes for all
-three, despite the fact that in practice they'll probably be the same.
-
-Thanks,
-drew
