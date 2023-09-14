@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0107A0AF3
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 18:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7566C7A0AFF
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Sep 2023 18:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbjINQlq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 12:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S231339AbjINQua (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 12:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjINQlp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 12:41:45 -0400
+        with ESMTP id S229485AbjINQu3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 12:50:29 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486AD1FD7;
-        Thu, 14 Sep 2023 09:41:41 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmjkP6LwKz6K5xM;
-        Fri, 15 Sep 2023 00:41:01 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93A31BCB;
+        Thu, 14 Sep 2023 09:50:24 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmjwT5pVSz6K5yw;
+        Fri, 15 Sep 2023 00:49:45 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 17:41:38 +0100
-Date:   Thu, 14 Sep 2023 17:41:37 +0100
+ 2023 17:50:22 +0100
+Date:   Thu, 14 Sep 2023 17:50:21 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     James Morse <james.morse@arm.com>
 CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
@@ -33,12 +33,12 @@ CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 33/35] arm64: document virtual CPU hotplug's
- expectations
-Message-ID: <20230914174137.00000a62@Huawei.com>
-In-Reply-To: <20230913163823.7880-34-james.morse@arm.com>
+Subject: Re: [RFC PATCH v2 34/35] ACPI: Add _OSC bits to advertise OS
+ support for toggling CPU present/enabled
+Message-ID: <20230914175021.000018fd@Huawei.com>
+In-Reply-To: <20230913163823.7880-35-james.morse@arm.com>
 References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-34-james.morse@arm.com>
+        <20230913163823.7880-35-james.morse@arm.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
@@ -52,156 +52,198 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:38:21 +0000
+On Wed, 13 Sep 2023 16:38:22 +0000
 James Morse <james.morse@arm.com> wrote:
 
-> Add a description of physical and virtual CPU hotplug, explain the
-> differences and elaborate on what is required in ACPI for a working
-> virtual hotplug system.
+> Platform firmware can disabled a CPU, or make it not-present by making
+> an eject-request notification, then waiting for the os to make it offline
+> and call _EJx. After the firmware updates _STA with the new status.
+> 
+> Not all operating systems support this. For arm64 making CPUs not-present
+> has never been supported. For all ACPI architectures, making CPUs disabled
+> has recently been added. Firmware can't know what the OS has support for.
+> 
+> Add two new _OSC bits to advertise whether the OS supports the _STA enabled
+> or present bits being toggled for CPUs. This will be important for arm64
+> if systems that support physical CPU hotplug ever appear as arm64 linux
+> doesn't currently support this, so firmware shouldn't try.
+
+I'm not sure I like enabling this for all architectures though I guess
+everyone will ignore it on those that have long supported 
+changing the enabled bit. The hypervisors won't care if Linux claims
+to support it or not.  I can see the argument for architectures that might
+support it in the future.
+
+I need to think a bit more about this, but maybe just having the online
+capable bit OSC is safer in general. I guess it depends on whether there
+are hypervisors out there implementing the x86 version of that even though
+no one has yet posted patches for Linux.
+
+Perhaps we just call these out as hints that we 'definitely' support them.
+Otherwise we might for some architectures so poke it anyway.
+
+
+OSC is late in boot, so what advantage is there in preventing it working?
+We can't change any of the bring up / sizing etc as a result so might as
+well let it through.
+
+> 
+> Advertising this support to firmware is useful for cloud orchestrators
+> to know whether they can scale a particular VM by adding CPUs.
 > 
 > Signed-off-by: James Morse <james.morse@arm.com>
 > ---
->  Documentation/arch/arm64/cpu-hotplug.rst | 79 ++++++++++++++++++++++++
->  Documentation/arch/arm64/index.rst       |  1 +
->  2 files changed, 80 insertions(+)
->  create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
+> I'm assuming ia64 with physical hotplug machines once existed, and
+> that Loongarch machines with support for this don't.
+> ---
+>  arch/ia64/Kconfig             |  1 +
+>  arch/x86/Kconfig              |  1 +
+>  drivers/acpi/Kconfig          |  9 +++++++++
+>  drivers/acpi/acpi_processor.c | 14 +++++++++++++-
+>  drivers/acpi/bus.c            | 16 ++++++++++++++++
+>  include/linux/acpi.h          |  4 ++++
+>  6 files changed, 44 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/arch/arm64/cpu-hotplug.rst b/Documentation/arch/arm64/cpu-hotplug.rst
-> new file mode 100644
-> index 000000000000..76ba8d932c72
-> --- /dev/null
-> +++ b/Documentation/arch/arm64/cpu-hotplug.rst
-> @@ -0,0 +1,79 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. _cpuhp_index:
-> +
-> +====================
-> +CPU Hotplug and ACPI
-> +====================
-> +
-> +CPU hotplug in the arm64 world is commonly used to describe the kernel taking
-> +CPUs online/offline using PSCI. This document is about ACPI firmware allowing
-> +CPUs that were not available during boot to be added to the system later.
-> +
-> +``possible`` and ``present`` refer to the state of the CPU as seen by linux.
-> +
-> +
-> +CPU Hotplug on physical systems - CPUs not present at boot
-> +----------------------------------------------------------
-> +
-> +Physical systems need to mark a CPU that is ``possible`` but not ``present`` as
-> +being ``present``. An example would be a dual socket machine, where the package
-> +in one of the sockets can be replaced while the system is running.
-> +
-> +This is not supported.
-> +
-> +In the arm64 world CPUs are not a single device but a slice of the system.
-> +There are no systems that support the physical addition (or removal) of CPUs
-> +while the system is running, and ACPI is not able to sufficiently describe
-> +them.
-> +
-> +e.g. New CPUs come with new caches, but the platform's cache toplogy is
-> +described in a static table, the PPTT. How caches are shared between CPUs is
-> +not discoverable, and must be described by firmware.
-> +
-> +e.g. The GIC redistributor for each CPU must be accessed by the driver during
-> +boot to discover the system wide supported features. ACPI's MADT GICC
-> +structures can describe a redistributor associated with a disabled CPU, but
-> +can't describe whether the redistributor is accessible, only that it is not
-> +'always on'.
-> +
-> +arm64's ACPI tables assume that everything described is ``present``.
+> diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+> index 54972f9fe804..13df676bad67 100644
+> --- a/arch/ia64/Kconfig
+> +++ b/arch/ia64/Kconfig
+> @@ -17,6 +17,7 @@ config IA64
+>  	select ARCH_MIGHT_HAVE_PC_SERIO
+>  	select ACPI
+>  	select ACPI_HOTPLUG_PRESENT_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
+> +	select ACPI_HOTPLUG_IGNORE_OSC  if ACPI
+>  	select ACPI_NUMA if NUMA
+>  	select ARCH_ENABLE_MEMORY_HOTPLUG
+>  	select ARCH_ENABLE_MEMORY_HOTREMOVE
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 295a7a3debb6..5fea3ce9594e 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -61,6 +61,7 @@ config X86
+>  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
+>  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+>  	select ACPI_HOTPLUG_PRESENT_CPU		if ACPI_PROCESSOR && HOTPLUG_CPU
+> +	select ACPI_HOTPLUG_IGNORE_OSC		if ACPI && HOTPLUG_CPU
+>  	select ARCH_32BIT_OFF_T			if X86_32
+>  	select ARCH_CLOCKSOURCE_INIT
+>  	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index 417f9f3077d2..c49978b4b11f 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -310,6 +310,15 @@ config ACPI_HOTPLUG_PRESENT_CPU
+>  	depends on ACPI_PROCESSOR && HOTPLUG_CPU
+>  	select ACPI_CONTAINER
+>  
+> +config ACPI_HOTPLUG_IGNORE_OSC
+> +	bool
+> +	depends on ACPI_HOTPLUG_PRESENT_CPU
+> +	help
+> +	  Ignore whether firmware acknowledged support for toggling the CPU
+> +	  present bit in _STA. Some architectures predate the _OSC bits, so
+> +	  firmware doesn't know to do this.
 > +
 > +
-> +CPU Hotplug on virtual systems - CPUs not enabled at boot
-> +---------------------------------------------------------
+>  config ACPI_PROCESSOR_AGGREGATOR
+>  	tristate "Processor Aggregator"
+>  	depends on ACPI_PROCESSOR
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index b49859eab01a..87926f22c857 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -181,6 +181,18 @@ static void __init acpi_pcc_cpufreq_init(void)
+>  static void __init acpi_pcc_cpufreq_init(void) {}
+>  #endif /* CONFIG_X86 */
+>  
+> +static bool acpi_processor_hotplug_present_supported(void)
+> +{
+> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> +		return false;
 > +
-> +Virtual systems have the advantage that all the properties the system will
-> +ever have can be described at boot. There are no power-domain considerations
-> +as such devices are emulated.
+> +	/* x86 systems pre-date the _OSC bit */
+> +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_IGNORE_OSC))
+> +		return true;
 > +
-> +CPU Hotplug on virtual systems is supported. It is distinct from physical
-> +CPU Hotplug as all resources are described as ``present``, but CPUs may be
-> +marked as disabled by firmware. Only the CPU's online/offline behaviour is
-> +influenced by firmware. An example is where a virtual machine boots with a
-> +single CPU, and additional CPUs are added once a cloud orchestrator deploys
-> +the workload.
+> +	return osc_sb_hotplug_present_support_acked;
+> +}
 > +
-> +For a virtual machine, the VMM (e.g. Qemu) plays the part of firmware.
-> +
-> +Virtual hotplug is implemented as a firmware policy affecting which CPUs can be
-> +brought online. Firmware can enforce its policy via PSCI's return codes. e.g.
-> +``DENIED``.
-> +
-> +The ACPI tables must describe all the resources of the virtual machine. CPUs
-> +that firmware wishes to disable either from boot (or later) should not be
-> +``enabled`` in the MADT GICC structures, but should have the ``online capable``
-> +bit set, to indicate they can be enabled later. The boot CPU must be marked as
-> +``enabled``.  The 'always on' GICR structure must be used to describe the
-> +redistributors.
+>  /* Initialization */
+>  static int acpi_processor_make_present(struct acpi_processor *pr)
+>  {
+> @@ -188,7 +200,7 @@ static int acpi_processor_make_present(struct acpi_processor *pr)
+>  	acpi_status status;
+>  	int ret;
+>  
+> -	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU)) {
+> +	if (!acpi_processor_hotplug_present_supported()) {
 
-Hi James,
+I don't see the advantage of blocking on basis of what the firmware said.
+It was clearly lying or didn't understand the question ;)
 
-I guess you know I'm going to comment on this given I got a bit fixated on it
-at the Linaro Open Discussions call the other day.
-
-This is the corner case that I think needs discussion. So far there is nothing
-the ACPI spec that says anything about unplugability of CPUs so I see this as a
-Linux implementation choice and I think it may be a problem for the cloud tennant
-scalability usecases.  The problem is legacy operating systems. Some of whom may have
-a different interpretation of the ACPI Spec unless we make sure it addresses this.
-
-At time of VM startup, I want to provide a flexible number of CPUs say, 1 to 64 -
-but the customer paid for 4 currently so I want to start them off with 4. 
-To make this model work I have to know if they are running a hotplug capable OS
-and, even if the current OSC ACPI code first proposal goes forwards, I either have to
-ask customers to tell me they support it, or boot to find out (relying on OSC handshake
-late in boot).
-
-Code first proposal mentioned:
-https://bugzilla.tianocore.org/show_bug.cgi?id=4481
-
-If the guest doesn't support CPU hotplug I need to set enabled for the 4 CPUs. Once
-booted I can use that OSC to discover if they can ever take advantage of hotplug
-CPUs (arguably we could tweak that definition or add another to say they are fine
-with me removing them as well).
-
-If they do support CPU hotplug maximum flexiblity suggests I set enabled for CPU 0
-and online capable for the next 3 and rely on the OS optimistically poking the
-oneline capable ones to see if they are there at boot.
-
-Of course one option is stick with what you have here and treat it as customer
-lock-in they can only get bigger, not smaller.  Might be acceptable as might
-the horrible approach of trying to hot unplug a CPU and getting no reply
-(not a good user experience)
-
-I probably haven't described that well.
-
-Jonathan
-
-
+>  		pr_err_once("Changing CPU present bit is not supported\n");
+>  		return -ENODEV;
+>  	}
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index f41dda2d3493..123c28c2eda3 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -298,6 +298,13 @@ EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+>  
+>  bool osc_sb_cppc2_support_acked;
+>  
+> +/*
+> + * ACPI 6.? Proposed Operating System Capabilities for modifying CPU
+> + * present/enable.
+> + */
+> +bool osc_sb_hotplug_enabled_support_acked;
+> +bool osc_sb_hotplug_present_support_acked;
 > +
-> +CPUs described as ``online capable`` but not ``enabled`` can be set to enabled
-> +by the DSDT's Processor object's _STA method. On virtual systems the _STA method
-> +must always report the CPU as ``present``. Changes to the firmware policy can
-> +be notified to the OS via device-check or eject-request.
+>  static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+>  static void acpi_bus_osc_negotiate_platform_control(void)
+>  {
+> @@ -346,6 +353,11 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>  
+>  	if (!ghes_disable)
+>  		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_APEI_SUPPORT;
 > +
-> +CPUs described as ``enabled`` in the static table, should not have their _STA
-> +modified dynamically by firmware. Soft-restart features such as kexec will
-> +re-read the static properties of the system from these static tables, and
-> +may malfunction if these no longer describe the running system. Linux will
-> +re-discover the dynamic properties of the system from the _STA method later
-> +during boot.
-> diff --git a/Documentation/arch/arm64/index.rst b/Documentation/arch/arm64/index.rst
-> index d08e924204bf..78544de0a8a9 100644
-> --- a/Documentation/arch/arm64/index.rst
-> +++ b/Documentation/arch/arm64/index.rst
-> @@ -13,6 +13,7 @@ ARM64 Architecture
->      asymmetric-32bit
->      booting
->      cpu-feature-registers
-> +    cpu-hotplug
->      elf_hwcaps
->      hugetlbpage
->      kdump
+> +	capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_HOTPLUG_ENABLED_SUPPORT;
+> +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> +		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_HOTPLUG_PRESENT_SUPPORT;
+> +
+>  	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+>  		return;
+>  
+> @@ -383,6 +395,10 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>  			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
+>  		osc_cpc_flexible_adr_space_confirmed =
+>  			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPC_FLEXIBLE_ADR_SPACE;
+> +		osc_sb_hotplug_enabled_support_acked =
+> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_HOTPLUG_ENABLED_SUPPORT;
+> +		osc_sb_hotplug_present_support_acked =
+> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_HOTPLUG_PRESENT_SUPPORT;
+>  	}
+>  
+>  	kfree(context.ret.pointer);
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 92cb25349a18..2ba7e0b10bcf 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -580,12 +580,16 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+>  #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+>  #define OSC_SB_PRM_SUPPORT			0x00200000
+>  #define OSC_SB_FFH_OPR_SUPPORT			0x00400000
+> +#define OSC_SB_HOTPLUG_ENABLED_SUPPORT		0x00800000
+> +#define OSC_SB_HOTPLUG_PRESENT_SUPPORT		0x01000000
+>  
+>  extern bool osc_sb_apei_support_acked;
+>  extern bool osc_pc_lpi_support_confirmed;
+>  extern bool osc_sb_native_usb4_support_confirmed;
+>  extern bool osc_sb_cppc2_support_acked;
+>  extern bool osc_cpc_flexible_adr_space_confirmed;
+> +extern bool osc_sb_hotplug_enabled_support_acked;
+> +extern bool osc_sb_hotplug_present_support_acked;
+>  
+>  /* USB4 Capabilities */
+>  #define OSC_USB_USB3_TUNNELING			0x00000001
 
