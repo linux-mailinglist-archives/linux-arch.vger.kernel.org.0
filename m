@@ -2,196 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D214F7A13DA
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 04:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A8C7A1451
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 05:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbjIOC3W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 22:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S229854AbjIODYJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 23:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjIOC3V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 22:29:21 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D57268A;
-        Thu, 14 Sep 2023 19:29:16 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmyl26R7dz67NsF;
-        Fri, 15 Sep 2023 10:27:26 +0800 (CST)
-Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Fri, 15 Sep 2023 03:29:13 +0100
-Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
- lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.031;
- Fri, 15 Sep 2023 03:29:13 +0100
-From:   Salil Mehta <salil.mehta@huawei.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-CC:     James Morse <james.morse@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "x86@kernel.org" <x86@kernel.org>,
+        with ESMTP id S229767AbjIODYJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 23:24:09 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F14270C;
+        Thu, 14 Sep 2023 20:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1694748242;
+        bh=6XG3B0FzXsmvZoKkkhm5wOJHB7Zd1TpS1JWjBGpTusE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=PKpIyJXfdhJr2Sk2XiFpR9ouUJal5nD2tBGYvkTi+yQRsa9ZIvCgirZ5+6besrqBL
+         UlCTRNeIti/3HlXKC5s/hNh/zWDyp0CAj38ooZCtURDec0zV29n1q0vvHWP8LzC/8u
+         j+BMCh8sirKL/ZLOdFgRYAJwTicvGuLLCgCMve6s4NNE6G+YTeu3xI1X+6WSPiiUmJ
+         53dID1WgSubZVw/xkbEC18yiNd+dsH+sCiTIMfNZ4C0SAAbyPBEWD+PT1gDHirRJ7I
+         e1Oe/pJXxiN5V+sroGp3Ed6zutx8sxe3J/0iaG/Wx6C4lA/ghdRZcbu2waY0Piauup
+         ceLVj/+K8GSVw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rn0045DDWz4wxR;
+        Fri, 15 Sep 2023 13:23:48 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Sohil Mehta <sohil.mehta@intel.com>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Cc:     Sohil Mehta <sohil.mehta@intel.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
-        "justin.he@arm.com" <justin.he@arm.com>
-Subject: RE: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields [code
- first?]
-Thread-Topic: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields
- [code first?]
-Thread-Index: AQHZ5mDqpYLh+nkhC0mj9mPBt3XEBLAZ5MMAgAB0lICAAAsFgIAAEfIQ
-Date:   Fri, 15 Sep 2023 02:29:13 +0000
-Message-ID: <f5d9beea95e149ab89364dcdb0f8bf69@huawei.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-28-james.morse@arm.com>
- <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
- <20230914155459.00002dba@Huawei.com>
- <CAMj1kXFquiLGCMow3iujHUU4GBZx2t9KfKy1R9iqjBFjY+acaA@mail.gmail.com>
-In-Reply-To: <CAMj1kXFquiLGCMow3iujHUU4GBZx2t9KfKy1R9iqjBFjY+acaA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.169.72]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sergei Trofimovich <slyich@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Deepak Gupta <debug@rivosinc.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2] arch: Reserve map_shadow_stack() syscall number for
+ all architectures
+In-Reply-To: <20230914185804.2000497-1-sohil.mehta@intel.com>
+References: <20230914185804.2000497-1-sohil.mehta@intel.com>
+Date:   Fri, 15 Sep 2023 13:23:43 +1000
+Message-ID: <878r986rwg.fsf@mail.lhotse>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-SGkgQXJkLA0KDQo+IEZyb206IEFyZCBCaWVzaGV1dmVsIDxhcmRiQGtlcm5lbC5vcmc+DQo+IFNl
-bnQ6IFRodXJzZGF5LCBTZXB0ZW1iZXIgMTQsIDIwMjMgNDozNCBQTQ0KPiBUbzogSm9uYXRoYW4g
-Q2FtZXJvbiA8am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPg0KPiBDYzogSmFtZXMgTW9yc2Ug
-PGphbWVzLm1vcnNlQGFybS5jb20+OyBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxvb25n
-YXJjaEBsaXN0cy5saW51eC5kZXY7IGxpbnV4LWFjcGlAdmdlci5rZXJuZWwub3JnOyBsaW51eC0N
-Cj4gYXJjaEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGxp
-bnV4LWFybS0NCj4ga2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LXJpc2N2QGxpc3Rz
-LmluZnJhZGVhZC5vcmc7DQo+IGt2bWFybUBsaXN0cy5saW51eC5kZXY7IHg4NkBrZXJuZWwub3Jn
-OyBTYWxpbCBNZWh0YQ0KPiA8c2FsaWwubWVodGFAaHVhd2VpLmNvbT47IFJ1c3NlbGwgS2luZyA8
-bGludXhAYXJtbGludXgub3JnLnVrPjsgSmVhbi0NCj4gUGhpbGlwcGUgQnJ1Y2tlciA8amVhbi1w
-aGlsaXBwZUBsaW5hcm8ub3JnPjsgamlhbnlvbmcud3VAYXJtLmNvbTsNCj4ganVzdGluLmhlQGFy
-bS5jb20NCj4gU3ViamVjdDogUmU6IFtSRkMgUEFUQ0ggdjIgMjcvMzVdIEFDUElDQTogQWRkIG5l
-dyBNQURUIEdJQ0MgZmxhZ3MgZmllbGRzDQo+IFtjb2RlIGZpcnN0P10NCj4gDQo+IE9uIFRodSwg
-MTQgU2VwdCAyMDIzIGF0IDE2OjU1LCBKb25hdGhhbiBDYW1lcm9uDQo+IDxKb25hdGhhbi5DYW1l
-cm9uQGh1YXdlaS5jb20+IHdyb3RlOg0KPiA+DQo+ID4gT24gVGh1LCAxNCBTZXAgMjAyMyAwOTo1
-Nzo0NCArMDIwMA0KPiA+IEFyZCBCaWVzaGV1dmVsIDxhcmRiQGtlcm5lbC5vcmc+IHdyb3RlOg0K
-PiA+DQo+ID4gPiBIZWxsbyBKYW1lcywNCj4gPiA+DQo+ID4gPiBPbiBXZWQsIDEzIFNlcHQgMjAy
-MyBhdCAxODo0MSwgSmFtZXMgTW9yc2UgPGphbWVzLm1vcnNlQGFybS5jb20+IHdyb3RlOg0KPiA+
-ID4gPg0KPiA+ID4gPiBBZGQgdGhlIG5ldyBmbGFnIGZpZWxkIHRvIHRoZSBNQURUJ3MgR0lDQyBz
-dHJ1Y3R1cmUuDQo+ID4gPiA+DQo+ID4gPiA+ICdPbmxpbmUgQ2FwYWJsZScgaW5kaWNhdGVzIGEg
-ZGlzYWJsZWQgQ1BVIGNhbiBiZSBlbmFibGVkIGxhdGVyLg0KPiA+ID4gPg0KPiA+ID4NCj4gPiA+
-IFdoeSBkbyB3ZSBuZWVkIGEgYml0IGZvciB0aGlzPyBXaGF0IHdvdWxkIGJlIHRoZSBwb2ludCBv
-ZiBkZXNjcmliaW5nDQo+ID4gPiBkaXNhYmxlZCBDUFVzIHRoYXQgY2Fubm90IGJlIGVuYWJsZWQg
-KGFuZCBhcmUgeW91IGFyZSBhd2FyZSBvZg0KPiA+ID4gZmlybXdhcmUgZG9pbmcgdGhpcz8pLg0K
-PiA+DQo+ID4gRW5hYmxlZCBiZWluZyBub3Qgc2V0IGlzIGNvbW1vbiBhdCBzb21lIHNpbWlsYXIg
-QUNQSSB0YWJsZXMgYXQgbGVhc3QuDQo+ID4NCj4gPiBUaGlzIGlzIGF2YWlsYWJsZSBpbiBtb3N0
-IEFDUEkgdGFibGVzIHRvIGFsbG93IGZpcm13YXJlIHRvIHVzZSAnbmVhcmx5Jw0KPiA+IHN0YXRp
-YyB0YWJsZXMgYW5kIGp1c3QgdHdlYWsgdGhlICdlbmFibGVkJyBiaXQgdG8gc2F5IGlmIHRoZSBy
-ZWNvcmQgc2hvdWxkDQo+ID4gYmUgaWdub3JlZCBvciBub3QuIEFsc28gX1NUQSBub3QgcHJlc2Vu
-dCB3aGljaCBpcyBmb3Igc2FtZSB0cmljay4NCj4gPiBJZiB5b3UgYXJlIGRvaW5nIGNsZXZlciBk
-eW5hbWljIHRhYmxlcywgdGhlbiB5b3UgY2FuIGp1c3Qgbm90IHByZXNlbnQNCj4gPiB0aGUgZW50
-cnkuDQo+ID4NCj4gPiBXaXRoIHRoYXQgZXhpc3RpbmcgdXNlIGNhc2UgaW4gbWluZCwgbmVlZCBh
-bm90aGVyIGJpdCB0byBzYXkgdGhpcw0KPiA+IG9uZSBtaWdodCBvbmUgZGF5IHR1cm4gdXAuICBO
-b3RlIHRoaXMgaXMgY29waWVkIGZyb20geDg2IHRob3VnaCBubw0KPiA+IG9uZSBzZWVtcyB0byBo
-YXZlIGltcGxlbWVudGVkIHRoZSBrZXJuZWwgc3VwcG9ydCBmb3IgdGhlbSB5ZXQuDQo+ID4NCj4g
-PiBOb3RlIGFzIHBlciBteSBvdGhlciByZXBseSAtIHRoaXMgaXNuJ3QgYSBjb2RlIGZpcnN0IHBy
-b3Bvc2FsLiBJdCdzIGluIHRoZQ0KPiA+IHNwZWMgYWxyZWFkeSAodmlhIGEgY29kZSBmaXJzdCBw
-cm9wb3NhbCBsYXN0IHllYXIgSSB0aGluaykuDQo+ID4NCj4gPiA+DQo+ID4gPiBTbyB3aHkgYXJl
-IHdlIG5vdCBhYmxlIHRvIGFzc3VtZSB0aGF0IHRoaXMgbmV3IGJpdCBjYW4gYWx3YXlzIGJlIHRy
-ZWF0ZWQgYXMgJzEnPw0KPiA+DQo+ID4gR2l2ZW4gYWJvdmUsIG5lZWQgdGhlIGV4dHJhIGJpdCB0
-byBzaXplIHN0dWZmIHRvIGFsbG93IGZvciB0aGUgQ1BVIHNob3dpbmcgdXANCj4gPiBsYXRlLg0K
-PiA+DQo+IA0KPiBTbyBkb2VzIHRoaXMgbWVhbiB0aGF0IG9uIHg4NiwgdGhlIENQVSBvYmplY3Qg
-aXMgaW5zdGFudGlhdGVkIG9ubHkNCj4gd2hlbiB0aGUgaGFyZHdhcmUgbGV2ZWwgaG90cGx1ZyBv
-Y2N1cnM/IEFuZCBiZWZvcmUgdGhhdCwgdGhlIG9iamVjdA0KPiBkb2VzIG5vdCBleGlzdCBhdCBh
-bGw/DQoNClRoYXQgaXMgY29ycmVjdCBidXQgSSBhbSBub3Qgc3VyZSBpZiB0aGUgcHJlc2VuY2Ug
-b2YgaGFyZHdhcmUgSG90cGx1Zw0Kb24geDg2IGlzIGV2ZW4gdHJ1ZS4gSXQgYWxsIGhpZGRlbiBi
-ZWhpbmQgZmlybXdhcmUgbWFnaWMgKEkgdGhpbmspLiBTbw0KeDg2IGlzIGFibGUgdG8gdXNlIHNh
-bWUgaW5mcmFzdHJ1Y3R1cmUgYm90aCBmb3IgdmlydHVhbCBhbmQgcGh5c2ljYWwNCkNQVSBIb3Rw
-bHVnLg0KDQpGcm9tIHRoZSBBQ1BJIDYuMyA+IHg4NiBoYXZlIHN0YXJ0ZWQgdG8gdXNlIG9ubGlu
-ZS1jYXBhYmxlIGJpdCBmb3IgbG9jYWwNCngyYXBpYyBpbiB0aGUgTUFEVCBUYWJsZQ0KDQpodHRw
-czovL2xvcmUua2VybmVsLm9yZy9sa21sLzE2ODAxNjg3ODAwMi40MDQuNTI2MjEwNTQwMTE2NDQw
-ODIxNC50aXAtYm90MkB0aXAtYm90Mi8NCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMTY4
-MDE2ODc4MDg1LjQwNC42MDAzNzM0NzAwNjE2MTkzMjM4LnRpcC1ib3QyQHRpcC1ib3QyLw0KDQpC
-dXQgdGhlcmUgaXMgYSBzdWJ0bGUgZGlmZmVyZW5jZSBpbiB0aGUgd2F5IGl0IGlzIGJlaW5nIHVz
-ZWQgb24geDg2DQphbmQgb24gdGhlIEFSTSBwbGF0Zm9ybSByaWdodCBub3cuDQoNCk9uIHg4Niwg
-ZHVyaW5nIGluaXQsIGlmIHRoZSBNQURUIGVudHJ5IGZvciBMQVBJQyBpcyBmb3VuZCB0byBiZQ0K
-b25saW5lLWNhcGFibGUgYW5kIGlzIGVuYWJsZWQgYXMgd2VsbCB0aGVuIHBvc3NpYmxlIGFuZCBw
-cmVzZW50DQpjcHVtYXNrIGdldHMgc2V0IGFuZCBhIGxvZ2ljYWwgY3B1LWlkIGlzIGFsc28gYWxs
-b2NhdGVkLiBJZiB0aGUNCk1BRFQgZW50cnkgaXMgb25saW5lLWNhcGFibGUgYnV0IG5vdCBlbmFi
-bGVkIHRoZW4gZGlzYWJsZWQgY3B1cw0KYXJlIHN0aWxsIGNvdW50ZWQgYnV0IGxvZ2ljYWwgY3B1
-LWlkIGlzIG5vdCBhbGxvY2F0ZWQgZHVyaW5nDQppbml0IHRpbWUgYW5kIGluIGZhY3Qgc2V0dGlu
-ZyBwcmVzZW50IG1hc2sgYml0cyBhcmUgYWxzbw0KZGVmZXJyZWQgdGlsbCBIb3RwbHVnIGhhcHBl
-bnMgbGF0ZXIuDQoNCnN0YXRpYyBpbnQgYWNwaV9yZWdpc3Rlcl9sYXBpYyhpbnQgaWQsIHUzMiBh
-Y3BpaWQsIHU4IGVuYWJsZWQpDQp7DQogICAgICBbLi4uXSAgDQoJaWYgKCFlbmFibGVkKSB7ICAv
-KiBOb3QgQUNQSV9NQURUX0VOQUJMRUQgKi8NCgkJKytkaXNhYmxlZF9jcHVzOw0KCQlyZXR1cm4g
-LUVJTlZBTDsNCgl9DQoNCiAgICAgIFsuLi5dICANCg0KCWNwdSA9IGdlbmVyaWNfcHJvY2Vzc29y
-X2luZm8oaWQsIHZlcik7IC8qIGxvZ2ljYWwgY3VwaWQsIHByZXNlbnQgbWFzayovDQoNCiAgICAg
-IFsuLi5dDQoJcmV0dXJuIGNwdTsNCn0NCg0KYWNwaV9wYXJzZV94MmFwaWModW5pb24gYWNwaV9z
-dWJ0YWJsZV9oZWFkZXJzICogaGVhZGVyLCBjb25zdCB1bnNpZ25lZCBsb25nIGVuZCkNCnsNCglz
-dHJ1Y3QgYWNwaV9tYWR0X2xvY2FsX3gyYXBpYyAqcHJvY2Vzc29yID0gTlVMTDsNCg0KCXByb2Nl
-c3NvciA9IChzdHJ1Y3QgYWNwaV9tYWR0X2xvY2FsX3gyYXBpYyAqKWhlYWRlcjsNCg0KICAgICAg
-Wy4uLl0gDQoNCiAgICAgIGVuYWJsZWQgPSBwcm9jZXNzb3ItPmxhcGljX2ZsYWdzICYgQUNQSV9N
-QURUX0VOQUJMRUQ7DQoNCiAgICAgIFsuLi5dDQoNCgkvKiBkb24ndCByZWdpc3RlciBwcm9jZXNz
-b3JzIHRoYXQgY2Fubm90IGJlIG9ubGluZWQgKi8NCglpZiAoIWFjcGlfaXNfcHJvY2Vzc29yX3Vz
-YWJsZShwcm9jZXNzb3ItPmxhcGljX2ZsYWdzKSkNCgkJcmV0dXJuIDA7DQoNCiAgICAgIFsuLi5d
-DQoNCglhY3BpX3JlZ2lzdGVyX2xhcGljKGFwaWNfaWQsIHByb2Nlc3Nvci0+dWlkLCBlbmFibGVk
-KTsNCg0KCXJldHVybiAwOw0KfQ0KDQpPbiBBUk0sIHdlIHNpbWlsYXJseSBpZGVudGlmeSBhbGwg
-TUFEVCBHSUNDIGVudHJpZXMgd2hpY2ggYXJlDQoqdXNhYmxlKiBpLmUuIGVpdGhlciBhcmUgKkVO
-QUJMRUQqIG9yICpvbmxpbmUtY2FwYWJsZSouIEJ1dA0KVW5saWtlIHg4NiwgYWxsIGNwdXMgY29y
-cmVzcG9uZGluZyB0byB1c2FibGUgTUFEVCBHSUNDIGVudHJpZXMNCmdldHMgbG9naWNhbCBjcHUt
-ZHMgYWxsb2NhdGVkIGFuZCB0aGVpciBwcmVzZW50IGJpdCBtYXNrIHNldA0KZHVyaW5nIGJvb3Qg
-aXRzZWxmLiBIZW5jZSwgcHJlc2VudCBtYXNrIGlzIGFsd2F5cyBlcXVhbCB0bw0KdGhlIHBvc3Np
-YmxlIGNwdXMgbWFzayBvbiBBUk0uDQoNCmh0dHBzOi8vdWVmaS5vcmcvc3BlY3MvQUNQSS82LjUv
-MDVfQUNQSV9Tb2Z0d2FyZV9Qcm9ncmFtbWluZ19Nb2RlbC5odG1sI2dpY2MtY3B1LWludGVyZmFj
-ZS1mbGFncw0KDQoNCkZvciBvbmxpbmUtY2FwYWJsZSBidXQgKm5vdCogZW5hYmxlZCBDUFVzIHdl
-IGRlZmVyIHRoZQ0KcmVnaXN0cmF0aW9uIG9mIHRoZSBsb2dpY2FsIENQVS1pZHMgd2l0aCB0aGUg
-TGludXggRHJpdmVyIE1vZGVsDQp0aWxsIHRoZSB0aW1lIEFDUEkgSG90cGx1ZyBldmVudCBvY2N1
-cnMuIFRoaXMgbWVhbnMNCnJlZ2lzdGVyX2NwdSgpIGlzIG5vdCBjYWxsZWQgZm9yIHRoZSBkaXNh
-YmxlZCBDUFVzIGR1cmluZw0KaW5pdCB0aW1lLiBIZW5jZSwgc3lzZnMgZW50cmllcyBmb3IgdGhl
-IGRpc2FibGVkIENQVXMNCmRvbuKAmXQgZXhpdHMuDQoNCkJ1dCBhYm92ZSBjcmVhdGVzIGJpdCBv
-ZiBjb25mdXNpb24gdG8gYSB4ODYgYWNjdXN0b21lZCB1c2Vycw0KYXMgb24gQVJNIHdpdGggb3Vy
-IHNvbHV0aW9uLCBwcmVzZW50IENQVXMgYXJlIGFsd2F5cyBlcXVhbCB0bw0KcG9zc2libGUgQ1BV
-cy4gDQoNCiQgY2F0IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L3Bvc3NpYmxlDQowLTUNCiQgY2F0
-IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L3ByZXNlbnQNCjAtNQ0KJCBjYXQgL3N5cy9kZXZpY2Vz
-L3N5c3RlbS9jcHUvb25saW5lDQowLTENCiQgY2F0IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L29m
-ZmxpbmUNCjItNQ0KDQpUaGVyZSBpcyBubyB3YXkgdG8ga25vdyB3aGljaCBDUFVzIGhhdmUgYmVl
-biBob3RwbHVnZ2VkDQp1c2luZyBhYm92ZSBpbnRlcmZhY2UuIEhlbmNlLCB3ZSBoYXZlIGFsc28g
-YSBuZXcgbWFzaw0Kb2YgZW5hYmxlZCBDUFVzIGluIHRoZQ0KDQokIGNhdCAvc3lzL2RldmljZXMv
-c3lzdGVtL2NwdS9wb3NzaWJsZQ0KMC01DQokIGNhdCAvc3lzL2RldmljZXMvc3lzdGVtL2NwdS9w
-cmVzZW50DQowLTUNCiQgY2F0IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2VuYWJsZWQNCjAtMg0K
-JCBjYXQgL3N5cy9kZXZpY2VzL3N5c3RlbS9jcHUvb25saW5lDQowLTENCiQgY2F0IC9zeXMvZGV2
-aWNlcy9zeXN0ZW0vY3B1L29mZmxpbmUNCjItNQ0KDQpRZW11IHBhcmFtZXRlcnM6IC1zbXAgY3B1
-PTMgbWF4Y3B1cz02DQpLZXJuZWwgcGFyYW1ldGVyOiBtYXhjcHVzPTIgDQoNCg0KPiANCj4gQmVj
-YXVzZSBpdCBzZWVtcyB0byBtZSB0aGF0IF9TVEEsIGhhdmluZyBib3RoIGVuYWJsZWQgYW5kIHBy
-ZXNlbnQNCj4gYml0cywgY291bGQgYWxyZWFkeSBkZXNjcmliZSB3aGF0IHdlIG5lZWQgaGVyZSwg
-YW5kIGFyZ3VhYmx5LCBhIENQVQ0KPiB0aGF0IGlzIG5vdCBib3RoIHByZXNlbnQgYW5kIGVuYWJs
-ZWQgc2hvdWxkIG5vdCBiZSB1c2VkIGJ5IHRoZSBPUy4NCj4gVGhpcyB3b3VsZCBsZWF2ZSByb29t
-IGZvciByZXByZXNlbnRpbmcgb2ZmLWxpbmUgQ1BVcyBhcyBwcmVzZW50IGJ1dA0KPiBub3QgZW5h
-YmxlZC4NCg0KVGhhdCBpcyBjb3JyZWN0IHVuZGVyc3RhbmRpbmcuDQoNCkZvciBwbHVnZ2VkIGNw
-dXM6DQpfU1RBLlByZXNlbnQ9MSBhbmQgX1NUQS5FbmFibGVkPTENCg0KRm9yIHVucGx1Z2dlZCBj
-cHVzOg0KX1NUQS5QcmVzZW50PTEgYW5kIF9TVEEuRW5hYmxlZD0wDQoNCkhvdCh1bilwbHVnZ2lu
-ZyBpcyBvbmx5IGFsbG93ZWQgaWYgZHVyaW5nIGJvb3QgdGhlIEdJQ0MgZW50cmllcyB3ZXJlDQpk
-aXNjb3ZlcmVkIGFzICpvbmxpbmUtY2FwYWJsZSouIEdJQ0MgZW50cmllcyB3aGljaCBhcmUgTUFE
-VCBHSUNDDQplbmFibGVkIGR1cmluZyBib290IGNhbm5vdCBiZSBob3QtdW5wbHVnZ2VkIGVpdGhl
-ci4gIA0KDQpDYXRjaDoNCklmIGhvdCB1bnBsdWdnaW5nIGlzIHRvIGJlIHN1cHBvcnRlZCBmb3Ig
-YWxsIGNwdXMgZXhjZXB0IHRoZSBib290DQp0aGVuIHdlIE1VU1Qgc2V0IGFsbCBDUFVzIGV4Y2Vw
-dCBib290IENQVXMgYXMgKm9ubGluZS1jYXBhYmxlKi4gDQpUaGlzIHBvc2VzIGNvbXBhdGliaWxp
-dHkgcHJvYmxlbXMgd2l0aCB0aGUgbGVnYWN5IE9TIHJ1bm5pbmcgb3Zlcg0KbGF0ZXN0IG1hY2hp
-bmVzL3BsYXRmb3JtcyBzdXBwb3J0aW5nIEhvdHBsdWcgZmVhdHVyZS4gT1MgbWlnaHQNCmlnbm9y
-ZSBhbGwgdGhlIG9ubGluZS1jYXBhYmxlIGJpdHMgZHVyaW5nIGJvb3QgdGltZSBhbmQgaGVuY2Ug
-b25seQ0KMSBDUFUgaS5lLiBib290IGNwdXMgbWlnaHQgYXBwZWFyLg0KDQpIZW5jZSwgTUFEVC5H
-SUNDLkVuYWJsZWQgYml0cyBhbmQgTUFEVC5HSUNDLm9ubGluZS1jYXBhYmxlIG5lZWQNCk5vdCBi
-ZSBtdXR1YWxseSBleGNsdXNpdmUuIFRoaXMgcmVxdWlyZXMgbW9yZSBkaXNjdXNzaW9ucyENCg0K
-WW91IG1pZ2h0IGZpbmQgYmVsb3cgdXNlZnVsOg0KaHR0cHM6Ly9rdm0tZm9ydW0ucWVtdS5vcmcv
-MjAyMy90YWxrLzlTTVBEUS8NCg0KDQoNCj4gDQo+IEFwb2xvZ2llcyBpZiBJIGFtIG1pc3Npbmcg
-c29tZXRoaW5nIG9idmlvdXMgaGVyZSAtIHRoZSB3aG9sZSByYXRpb25hbGUNCj4gYmVoaW5kIHRo
-aXMgdGhpbmcgaXMgcmF0aGVyIGNvbmZ1c2luZyB0byBtZS4NCg==
+Sohil Mehta <sohil.mehta@intel.com> writes:
+> commit c35559f94ebc ("x86/shstk: Introduce map_shadow_stack syscall")
+> recently added support for map_shadow_stack() but it is limited to x86
+> only for now. There is a possibility that other architectures (namely,
+> arm64 and RISC-V), that are implementing equivalent support for shadow
+> stacks, might need to add support for it.
+>
+> Independent of that, reserving arch-specific syscall numbers in the
+> syscall tables of all architectures is good practice and would help
+> avoid future conflicts. map_shadow_stack() is marked as a conditional
+> syscall in sys_ni.c. Adding it to the syscall tables of other
+> architectures is harmless and would return ENOSYS when exercised.
+>
+> Note, map_shadow_stack() was assigned #453 during the merge process
+> since #452 was taken by fchmodat2().
+>
+> For Powerpc, map it to sys_ni_syscall() as is the norm for Powerpc
+> syscall tables.
+
+Mapping it to sys_map_shadow_stack() would work fine, but I'm happy with
+sys_ni_syscall as I don't see powerpc implementing map_shadow_stack()
+any time soon.
+
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+cheers
