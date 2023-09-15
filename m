@@ -2,152 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6657A1682
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 08:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E49F7A16F2
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 09:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjIOGxQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Sep 2023 02:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        id S232608AbjIOHJq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Sep 2023 03:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbjIOGxP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Sep 2023 02:53:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 289AE2736
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 23:52:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694760734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mil5Lpt/AWqT9ucliicGrw0zms2aJ9EQRoMaWTOR9i0=;
-        b=SV2hrhHvksiGOiy9I7WRaF35D2wblp2MAGwvZXJy8/e62OLxYDhjfnv34Domv7DnICanJx
-        JxHeLzM/tk3Jxrc0h8nQe5qUt3KmW6pTiaV1CCbkAWpApE7vN36lUdoJ4n/7jkX550DDdo
-        OBrRpKaJ5YLeV7R17TKY+W6v5vvJPbI=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-629-Hv_eEDmeO0iX_YqAZMxEcg-1; Fri, 15 Sep 2023 02:52:11 -0400
-X-MC-Unique: Hv_eEDmeO0iX_YqAZMxEcg-1
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6c22d8a0cecso2164034a34.0
-        for <linux-arch@vger.kernel.org>; Thu, 14 Sep 2023 23:52:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694760730; x=1695365530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mil5Lpt/AWqT9ucliicGrw0zms2aJ9EQRoMaWTOR9i0=;
-        b=lsUXsN/CSNtfSEdHOIvs8+Wnqc/fNPJ/nEyWp2HAwcClhPqrQLqbkylTgu9SBDVh/X
-         uq6Cw0rtSt2k8UakxTQu72TcFUDolejdqs9UxagEEWEU08BqLxsYAXy2eLs9DeU/Xq8F
-         z0o0CKWrR4RZkEV6y2hyAG4qbVJtZghm3QZjNqsW2IPWZ0EdnkyjpZDS+/K3o0S+uJDG
-         55podc7AL1Jtt5ipp/8OFXi5bojto/wc0yJOTP3Jc+wdVtVi5wSWmO3evqfce4b0l8md
-         uB3+O8OAJtJOY4P6G/Wz3KOnustRPHHMIxUF5MeA5i6iWL1GyjUA8jO/gecxmhb3X5is
-         pCGQ==
-X-Gm-Message-State: AOJu0YxFrgBrQJM1wrx8lkuMHHbJH1WVp74OcGfUmx49LHcmnwjrIuxp
-        capdds9soGh4qdJNP77TBUkkYbyZw4T4nUKeBfrD83OywzBG57rop70AVC+ekmLYD+oCiyQ9ZOq
-        e79j8yiKDTn1toupA0Q2BDg==
-X-Received: by 2002:a9d:61d2:0:b0:6b8:691e:ec53 with SMTP id h18-20020a9d61d2000000b006b8691eec53mr692074otk.11.1694760730710;
-        Thu, 14 Sep 2023 23:52:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF5XKtDZPdccOWeAcP3oR13oWpgp0h0NQCTbBcXsI+ozwyS91W+C45E6K0TtmaCpK+EoMojSA==
-X-Received: by 2002:a9d:61d2:0:b0:6b8:691e:ec53 with SMTP id h18-20020a9d61d2000000b006b8691eec53mr692067otk.11.1694760730535;
-        Thu, 14 Sep 2023 23:52:10 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id a9-20020a056830008900b006b9b6aea237sm1367919oto.80.2023.09.14.23.52.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 23:52:10 -0700 (PDT)
-Date:   Fri, 15 Sep 2023 03:52:00 -0300
-From:   Leonardo Bras <leobras@redhat.com>
-To:     guoren@kernel.org
-Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 17/17] RISC-V: paravirt: pvqspinlock: KVM: Implement
- kvm_sbi_ext_pvlock_kick_cpu()
-Message-ID: <ZQP_ELqR7y5recdD@redhat.com>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-18-guoren@kernel.org>
+        with ESMTP id S232535AbjIOHJo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Sep 2023 03:09:44 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B3D10C9;
+        Fri, 15 Sep 2023 00:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IO8svM9r91GxPSxrPIglbeq86oJ/FKDbJ+lBe36BJYc=; b=nLlE6W1QoxubyvNpaxsJh8jzSR
+        /d5Lf0iTnNQyN9DC4SlP84mxxOmAcgYGHW9si9eE8NiFR9lGM1kX2SNH6SfP+LOj9Q0yDw90kQIl4
+        9P5GRkhAmpz8ushDyws83FOx0ZaDux9kxNevsrN6bb08cRo1sEhN0NDRwMTyXk8KaK2T630WX+MSa
+        ZhvPIz8oIWSgu3WCEn1Zl3zJglEsl7TSxhMRq4kLqYITKU5X8LHgc13rfTd0aFODSmtXLQ2yShJbY
+        EQ0RSbcqGMXPe4bGcqG9ns6yl1/JX3Mg3ep6z6Tf6ife4cVQjnjij5Trg+ivckApl2S9ZSJ/YTZZc
+        g94ctEMg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:37980)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qh2xD-0005H3-1N;
+        Fri, 15 Sep 2023 08:09:27 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qh2xB-0005bU-2C; Fri, 15 Sep 2023 08:09:25 +0100
+Date:   Fri, 15 Sep 2023 08:09:25 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Salil Mehta <salil.mehta@huawei.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
+        "justin.he@arm.com" <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields
+ [code first?]
+Message-ID: <ZQQDJT6MOaIOPmq5@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-28-james.morse@arm.com>
+ <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
+ <20230914155459.00002dba@Huawei.com>
+ <CAMj1kXFquiLGCMow3iujHUU4GBZx2t9KfKy1R9iqjBFjY+acaA@mail.gmail.com>
+ <f5d9beea95e149ab89364dcdb0f8bf69@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230910082911.3378782-18-guoren@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f5d9beea95e149ab89364dcdb0f8bf69@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 10, 2023 at 04:29:11AM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> We only need to call the kvm_vcpu_kick() and bring target_vcpu
-> from the halt state. No irq raised, no other request, just a pure
-> vcpu_kick.
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
->  arch/riscv/kvm/vcpu_sbi_pvlock.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/riscv/kvm/vcpu_sbi_pvlock.c b/arch/riscv/kvm/vcpu_sbi_pvlock.c
-> index 544a456c5041..914fc58aedfe 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_pvlock.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_pvlock.c
-> @@ -12,6 +12,24 @@
->  #include <asm/sbi.h>
->  #include <asm/kvm_vcpu_sbi.h>
->  
-> +static int kvm_sbi_ext_pvlock_kick_cpu(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> +	struct kvm *kvm = vcpu->kvm;
-> +	struct kvm_vcpu *target;
-> +
-> +	target = kvm_get_vcpu_by_id(kvm, cp->a0);
-> +	if (!target)
-> +		return SBI_ERR_INVALID_PARAM;
-> +
-> +	kvm_vcpu_kick(target);
-> +
-> +	if (READ_ONCE(target->ready))
-> +		kvm_vcpu_yield_to(target);
-> +
-> +	return SBI_SUCCESS;
-> +}
-> +
->  static int kvm_sbi_ext_pvlock_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  				      struct kvm_vcpu_sbi_return *retdata)
->  {
-> @@ -21,6 +39,7 @@ static int kvm_sbi_ext_pvlock_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
->  
->  	switch (funcid) {
->  	case SBI_EXT_PVLOCK_KICK_CPU:
-> +		ret = kvm_sbi_ext_pvlock_kick_cpu(vcpu);
->  		break;
->  	default:
->  		ret = SBI_ERR_NOT_SUPPORTED;
-> -- 
-> 2.36.1
-> 
+On Fri, Sep 15, 2023 at 02:29:13AM +0000, Salil Mehta wrote:
+> On x86, during init, if the MADT entry for LAPIC is found to be
+> online-capable and is enabled as well then possible and present
 
+Note that the ACPI spec says enabled + online-capable isn't defined.
 
-LGTM:
-Reviewed-by: Leonardo Bras <leobras@redhat.com>
+"The information conveyed by this bit depends on the value of the
+Enabled bit. If the Enabled bit is set, this bit is reserved and
+must be zero."
 
-Thanks!
-Leo
+So, if x86 is doing something with the enabled && online-capable
+state (other than ignoring the online-capable) then technically it
+is doing something that the spec doesn't define - and it's
+completely fine if aarch64 does something else (maybe treating it
+strictly as per the spec and ignoring online-capable.)
 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
