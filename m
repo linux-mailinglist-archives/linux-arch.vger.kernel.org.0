@@ -2,208 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CF97A245F
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 19:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E417A260F
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 20:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbjIORMg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 15 Sep 2023 13:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S236543AbjIOSiT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Sep 2023 14:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbjIORMZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Sep 2023 13:12:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2012717;
-        Fri, 15 Sep 2023 10:12:15 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RnLM908Zwz6K5wf;
-        Sat, 16 Sep 2023 01:11:33 +0800 (CST)
-Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Fri, 15 Sep 2023 18:12:12 +0100
-Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
- lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.031;
- Fri, 15 Sep 2023 18:12:12 +0100
-From:   Salil Mehta <salil.mehta@huawei.com>
-To:     Jonathan Cameron <jonathan.cameron@huawei.com>
-CC:     Russell King <linux@armlinux.org.uk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
-        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
-        "justin.he@arm.com" <justin.he@arm.com>
-Subject: RE: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields [code
- first?]
-Thread-Topic: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields
- [code first?]
-Thread-Index: AQHZ5mDqpYLh+nkhC0mj9mPBt3XEBLAZ5MMAgAB0lICAAAsFgIAAEfIQgADzSoCAABq9gIAAG4DQgAA3wICAACNmMP//+zYAgAArSrA=
-Date:   Fri, 15 Sep 2023 17:12:12 +0000
-Message-ID: <62c89f1c03f34f2796244ba83c08adbb@huawei.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-28-james.morse@arm.com>
-        <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
-        <20230914155459.00002dba@Huawei.com>
-        <CAMj1kXFquiLGCMow3iujHUU4GBZx2t9KfKy1R9iqjBFjY+acaA@mail.gmail.com>
-        <f5d9beea95e149ab89364dcdb0f8bf69@huawei.com>
-        <ZQQDJT6MOaIOPmq5@shell.armlinux.org.uk>
-        <CAJZ5v0jUQ+4G5ArYAtu1gvYF4356CK_QVTO4oWn0ukwdOiZaHA@mail.gmail.com>
-        <80e36ff513504a0382a1cbce83e42295@huawei.com>
-        <ZQRfaYYwrYQEfICN@shell.armlinux.org.uk>
-        <9e327ad1128045fa80eebf327abaa8f0@huawei.com>
- <20230915163238.000054c8@Huawei.com>
-In-Reply-To: <20230915163238.000054c8@Huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.174.239]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S236544AbjIOShr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Sep 2023 14:37:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736281BD3;
+        Fri, 15 Sep 2023 11:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=JjdcCeARBetsZH137aFl33BJ3ii6NFAsip2SWa5M3tY=; b=p17pTr3se0JO/f6M04cDpPtP+5
+        K/0tbeZ6PTE1lD28UmJtDp+MmcL/fkV6rpoqjooMTaFiT6A+wiZNO3LfFsTW0EJg0CtGJ3T2Htj7q
+        2vPlqyDoipOOe5joiIo8yawKYHtz72l/cRIJRH1Y7fKZZaXRjPnL96TuNG3d7I5exwb2fOz2bdJZx
+        hrZHp1wcxwHcn37XwnLC4Q98HIXkwl0RW4mQtwsuzJZ06on3fs6Qb0d6uUwUI1wZ+FxH8pQT4w73L
+        qS3WAWId/CoC7Q2weH7Kr/MQIOEamN7K1gZKEzWnitOC6RJa5VvnCInxTb738HTzJvu/bfYYBYciq
+        GcGIN+Ig==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qhDgi-00BMIL-Vs; Fri, 15 Sep 2023 18:37:09 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        torvalds@linux-foundation.org, Nicholas Piggin <npiggin@gmail.com>
+Subject: [PATCH 00/17] Add folio_end_read
+Date:   Fri, 15 Sep 2023 19:36:50 +0100
+Message-Id: <20230915183707.2707298-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Jonathan,
+The core of this patchset is the new folio_end_read() call which
+filesystems can use when finishing a page cache read instead of separate
+calls to mark the folio uptodate and unlock it.  As an illustration of
+its use, I converted ext4, iomap & mpage; more can be converted.
 
-> From: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Sent: Friday, September 15, 2023 4:33 PM
-> To: Salil Mehta <salil.mehta@huawei.com>
-> Cc: Russell King <linux@armlinux.org.uk>; Rafael J. Wysocki
-> <rafael@kernel.org>; Ard Biesheuvel <ardb@kernel.org>; James Morse
-> <james.morse@arm.com>; linux-pm@vger.kernel.org; loongarch@lists.linux.dev;
-> linux-acpi@vger.kernel.org; linux-arch@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> riscv@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org; Jean-
-> Philippe Brucker <jean-philippe@linaro.org>; jianyong.wu@arm.com;
-> justin.he@arm.com
-> Subject: Re: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields
-> [code first?]
-> 
-> On Fri, 15 Sep 2023 16:17:21 +0100
-> Salil Mehta <salil.mehta@huawei.com> wrote:
-> 
-> > Hi Russel,
-> > Thanks for highlighting your concerns.
-> >
-> > > From: Russell King <linux@armlinux.org.uk>
-> > > Sent: Friday, September 15, 2023 2:43 PM
-> > > To: Salil Mehta <salil.mehta@huawei.com>
-> > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Ard Biesheuvel
-> > > <ardb@kernel.org>; Jonathan Cameron <jonathan.cameron@huawei.com>; James
-> > > Morse <james.morse@arm.com>; linux-pm@vger.kernel.org;
-> > > loongarch@lists.linux.dev; linux-acpi@vger.kernel.org; linux-
-> > > arch@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
-> > > kernel@lists.infradead.org; linux-riscv@lists.infradead.org;
-> > > kvmarm@lists.linux.dev; x86@kernel.org; Jean-Philippe Brucker <jean-
-> > > philippe@linaro.org>; jianyong.wu@arm.com; justin.he@arm.com
-> > > Subject: Re: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields
-> > > [code first?]
-> > >
-> > > On Fri, Sep 15, 2023 at 09:34:46AM +0000, Salil Mehta wrote:
-> > > > > > Note that the ACPI spec says enabled + online-capable isn't defined.
-> > > > > >
-> > > > > > "The information conveyed by this bit depends on the value of the
-> > > > > > Enabled bit. If the Enabled bit is set, this bit is reserved and
-> > > > > > must be zero."
-> > > > > >
-> > > > > > So, if x86 is doing something with the enabled && online-capable
-> > > > > > state (other than ignoring the online-capable) then technically it
-> > > > > > is doing something that the spec doesn't define
-> > > > >
-> > > > > And so it is wrong.
-> > > >
-> > > > Or maybe, specification has not been updated yet. code-first?
-> > >
-> > > What is the point in speculating. If you want to speculate about it,
-> > > fine, but please don't use speculation as a reason that "oh we need
-> > > to sort this out before we can merge the patches".
-> >
-> > [already replied in other thread but repeating it here]
-> >
-> > Sorry, I am not aware but I was suggesting this. Can we have this
-> > done for ARM first because there is a legitimate use-case. This
-> > can be done in parallel while other patches are getting reviewed.
-> > It would be great if they get accepted even in the current form.
-> >
-> >
-> > > This is precisely why engineers are bad at producing products. They
-> > > like to continually tweak the design, and the design never gets out
-> > > the door. You need someone who is a project manager to tell engineers
-> > > when to stop. Without a project manager to do that, eventually the
-> > > project fades into insignificance because it becomes no longer relevant
-> > > or has its funding cut.
-> > >
-> > > Hotplug VCPU on aarch64 feels exactly like that - it seems to be an
-> > > engineer project that is just going to for-ever rumble on and never
-> > > actually see the light of day.
-> >
-> >
-> > Sometimes things are not in single persons control. Yes, it is
-> > frustrating, I do understand that.
-> >
-> >
-> > > So please - stop speculating and lets get vCPU hotplug *actually*
-> > > delivered and usable. Even if it's not 100% perfect.
-> >
-> > We need to decide what is the criteria of acceptability and it can
-> > vary across organizations. It depends upon internal requirements.
-> > The issues what I pointed are,
-> >
-> > 1. Legacy OS will not boot on latest platform with hotplug support.
-> >    - Try running older windows on ARM platform with hotplug support.
-> >      - older windows will only see boot cpu with online-capable bit.
-> >      - Will windows use _OSC to check compatibility?
-> >    - We have verified this with older Linux and it only shows 1 CPU.
-> > 2. Hot(un)plug of cold-booted CPUs.
-> >    - Its use-case is subjective. Maybe you can throw light on this.
-> >
-> > With current composition of bits both 1 & 2 cannot be supported
-> > simultaneously.
-> >
-> > It is perfectly okay to live with them while clearly indicating
-> > what we intend to support or are in process of supporting it.
-> > But we do need an open discussion about how to proceed. This is
-> > to avoid surprises later on.
-> >
-> > BTW, I am just trying to make every one aware of the problems.
-> 
-> Step 1 - just allow growing (and shrinking back to initial
-> enabled cpus).  That is fine with current specification and legacy
-> OS. We only assume CPUs that are hotplugged can later be removed.
-> That covers most use cases.
+I think that's useful by itself, but the interesting optimisation is
+that we can implement that with a single XOR instruction that sets the
+uptodate bit, clears the lock bit, tests the waiter bit and provides a
+write memory barrier.  That removes one memory barrier and one atomic
+instruction from each page read, which seems worth doing.  That's in
+patch 15.
 
+The last two patches could be a separate series, but basically we can do
+the same thing with the writeback flag that we do with the unlock flag;
+clear it and test the waiters bit at the same time.
 
-Yes, we can do that for a moment (at least in qemu) and then
-not allow unplugging vCPUs which were cold plugged or allow
-it as a debugging feature but splash a warning.
+I don't have any performance numbers; I'm hoping Nick might provide some
+since PPC seems particularly unhappy with write-after-write hazards.
 
+Matthew Wilcox (Oracle) (17):
+  iomap: Hold state_lock over call to ifs_set_range_uptodate()
+  iomap: Protect read_bytes_pending with the state_lock
+  mm: Add folio_end_read()
+  ext4: Use folio_end_read()
+  buffer: Use folio_end_read()
+  iomap: Use folio_end_read()
+  bitops: Add xor_unlock_is_negative_byte()
+  alpha: Implement xor_unlock_is_negative_byte
+  m68k: Implement xor_unlock_is_negative_byte
+  mips: Implement xor_unlock_is_negative_byte
+  powerpc: Implement arch_xor_unlock_is_negative_byte on 32-bit
+  riscv: Implement xor_unlock_is_negative_byte
+  s390: Implement arch_xor_unlock_is_negative_byte
+  mm: Delete checks for xor_unlock_is_negative_byte()
+  mm: Add folio_xor_flags_has_waiters()
+  mm: Make __end_folio_writeback() return void
+  mm: Use folio_xor_flags_has_waiters() in folio_end_writeback()
 
-> So what effectively what Russell said. Enable what we can with
-> the specifications as they stand before getting distracted by
-> modifying them (again).
+ arch/alpha/include/asm/bitops.h               | 20 +++++
+ arch/m68k/include/asm/bitops.h                | 13 ++++
+ arch/mips/include/asm/bitops.h                | 25 +++++-
+ arch/mips/lib/bitops.c                        | 14 ++++
+ arch/powerpc/include/asm/bitops.h             | 21 ++---
+ arch/riscv/include/asm/bitops.h               | 12 +++
+ arch/s390/include/asm/bitops.h                | 10 +++
+ arch/x86/include/asm/bitops.h                 | 11 ++-
+ fs/buffer.c                                   | 16 +---
+ fs/ext4/readpage.c                            | 14 +---
+ fs/iomap/buffered-io.c                        | 55 ++++++++-----
+ .../asm-generic/bitops/instrumented-lock.h    | 28 ++++---
+ include/asm-generic/bitops/lock.h             | 20 +----
+ include/linux/page-flags.h                    | 19 +++++
+ include/linux/pagemap.h                       |  1 +
+ kernel/kcsan/kcsan_test.c                     |  9 +--
+ kernel/kcsan/selftest.c                       |  9 +--
+ mm/filemap.c                                  | 77 ++++++++++---------
+ mm/kasan/kasan_test.c                         |  8 +-
+ mm/page-writeback.c                           | 35 ++++-----
+ 20 files changed, 248 insertions(+), 169 deletions(-)
 
+-- 
+2.40.1
 
-Yes, agreed. Idea was to clearly highlight them. These can be
-discussed as part of separate thread in parallel - absolutely!
-
-
-Thanks
-Salil.
