@@ -2,449 +2,354 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62E57A1210
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 01:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4125B7A1397
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 04:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjINXzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Sep 2023 19:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S231265AbjIOCKp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Sep 2023 22:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjINXzN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 19:55:13 -0400
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FEF270C;
-        Thu, 14 Sep 2023 16:55:06 -0700 (PDT)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-59bbed7353aso22487827b3.0;
-        Thu, 14 Sep 2023 16:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694735705; x=1695340505; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yc7YsJNEj8lnUE8O45Qp2UuWgYtrB9vsot4v2UqiCoQ=;
-        b=F31bP+GjakMtFWq2BACovzx7TvR7cMXfKQkCQeBx0VpzhhO0ozso8JoUC7ZyVZuUt2
-         kg4DtV4qa7wasP7T1eK6JfYjPw8deieqF0+DmaK0SpQI4AUhrMT0jnh+QgTYH9Alo1cB
-         gXLOYCNvejaLBZ7KuOOst7LCb0RPSvUXSAgImDS8az9rHmkW/Q9b4tGCPX9+DT/S5hwr
-         CDda++p0xJLW1zehCi/Teg2j5J/O1rqW51pS0wapkVGMrPgnmwSWEEiP9BFFNIQneFn6
-         4sXLg7vrOCQNKirKIbq3P72/ljOt877XcOMohBUIgd39sU5cPWj3QBCQxLUapEBuvnuU
-         gJlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694735705; x=1695340505;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yc7YsJNEj8lnUE8O45Qp2UuWgYtrB9vsot4v2UqiCoQ=;
-        b=rxMfimeYbVEz27dJPWaZ5yRy44kVbrHPCWg72n54tZoYLNCDBMxMCfhz6Zum6UIRtc
-         feBpNO7lAI7IrkHrPRkfabNNJ5g/IE4d35/XehSdUl0zWVQxn5HZfLB1qQOBAIMTo221
-         MWwBVH+YFOgh+mv7C89WXVDIZ5EWZhSs8rGNLJj05QClLPqg2EvDQK1c5806JUXTs5wm
-         4fONmL25tkdbvzUbX3XDDgCh6/EpbtC0PGVxvPFv4cSGODz+Rg3ucqmAyet0zeBZrz5p
-         LtDTQbNz1SuvoPrs6uji56gdfC07UhzrdRBuFl82qanteyYnKRWZ0ovTn0h4d0BmUDN7
-         6iHQ==
-X-Gm-Message-State: AOJu0Yx2UWoO2vWw/e17+QqoMHo2GhtsH8RrMTE0g1lnWe55xjR5+kZR
-        bC405DYUJ/bznDoZu+7/OKB8OsgzwgtJ
-X-Google-Smtp-Source: AGHT+IFdMv8Q/eXzwgnb7IHOM/TKa73O1tI4dEJDglBAcOc/L7FuI+67g+VHE6Ok6t5WlTHlSv0Bmw==
-X-Received: by 2002:a81:7344:0:b0:589:a400:a046 with SMTP id o65-20020a817344000000b00589a400a046mr157875ywc.14.1694735705659;
-        Thu, 14 Sep 2023 16:55:05 -0700 (PDT)
-Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id p188-20020a0dcdc5000000b005777a2c356asm586300ywd.65.2023.09.14.16.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 16:55:05 -0700 (PDT)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-mm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-cxl@vger.kernel.org,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        arnd@arndb.de, akpm@linux-foundation.org, x86@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: [RFC PATCH 3/3] mm/mempolicy: implement a partial-interleave mempolicy
-Date:   Thu, 14 Sep 2023 19:54:57 -0400
-Message-Id: <20230914235457.482710-4-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230914235457.482710-1-gregory.price@memverge.com>
-References: <20230914235457.482710-1-gregory.price@memverge.com>
+        with ESMTP id S229584AbjIOCKp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Sep 2023 22:10:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16371FCE;
+        Thu, 14 Sep 2023 19:10:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A0FC433C9;
+        Fri, 15 Sep 2023 02:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694743840;
+        bh=H4peK7/Mx5CDu/1O9wTXBMeibtsHq958OKN8Kc01/TA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JqWhsvZc7iIoAE7APKfQgH5c3AouN4YAe3iumbXDsC+5qITNTjme4meegPKHtnNcj
+         OCfy2N2rw4ikX9QCeX/jxyozhea3hk79gvrSOv9OAvHLpxRzEmh7Lj3QzYgDb3Ciqs
+         KGHmAONa2tdSQePEkCpGhwaP9Sc4JltkL2FinrI/GCtofX/1LMB4tU4b0eGTtXNbQA
+         /ERh6egjQbpUqhH67BVXJPi6i79Tz2N4ny19v6RhMYSZLymFothQzgdF+VsgGy84Rr
+         1uQHuTsYRIVrGS/ZKviT1nWrWYYZaRF7JGUyAAKLR3Pmt3T5RpOaJQNb/5r/ph2l//
+         c6IG/xWewNm6w==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-52a4737a08fso1796332a12.3;
+        Thu, 14 Sep 2023 19:10:40 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxDvR6Qm9mMMQBaV9tsp3EpobIyUDZF5gW3tfXf8fQkwxUcwI0B
+        eqbkkycZlGbYoWw1mPKy8gq1eI3il7n21EEdrn0=
+X-Google-Smtp-Source: AGHT+IGlBZEBLeOpPiY2OjtH1L7jaQh4g/3yO4ZFve5QQCpfWKQwx78LuRffM/CeRhTTa3fCgbFI5kBSMtxudiIb+D4=
+X-Received: by 2002:aa7:cc0a:0:b0:522:3855:7ec5 with SMTP id
+ q10-20020aa7cc0a000000b0052238557ec5mr201422edt.10.1694743838675; Thu, 14 Sep
+ 2023 19:10:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-6-guoren@kernel.org>
+ <ZQIbejhIev5tx6vl@redhat.com> <CAJF2gTSdjgUaUqhkfTPmJg6Mph+8Ej4j8MeDmfBOmFY5gkTpBQ@mail.gmail.com>
+ <ZQLVqoCGJ1ExMU3e@redhat.com>
+In-Reply-To: <ZQLVqoCGJ1ExMU3e@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 15 Sep 2023 10:10:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQWUCLOpKMQsybMoJdZrso2FEbBRVYV+2U1veFC=7U8_A@mail.gmail.com>
+Message-ID: <CAJF2gTQWUCLOpKMQsybMoJdZrso2FEbBRVYV+2U1veFC=7U8_A@mail.gmail.com>
+Subject: Re: [PATCH V11 05/17] riscv: qspinlock: Add basic queued_spinlock support
+To:     Leonardo Bras <leobras@redhat.com>
+Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
+        rdunlap@infradead.org, catalin.marinas@arm.com,
+        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
+        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The partial-interleave mempolicy implements interleave on an
-allocation interval. The default node is the local node, for
-which N pages will be allocated before an interleave pass occurs.
+On Thu, Sep 14, 2023 at 5:43=E2=80=AFPM Leonardo Bras <leobras@redhat.com> =
+wrote:
+>
+> On Thu, Sep 14, 2023 at 12:46:56PM +0800, Guo Ren wrote:
+> > On Thu, Sep 14, 2023 at 4:29=E2=80=AFAM Leonardo Bras <leobras@redhat.c=
+om> wrote:
+> > >
+> > > On Sun, Sep 10, 2023 at 04:28:59AM -0400, guoren@kernel.org wrote:
+> > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > >
+> > > > The requirements of qspinlock have been documented by commit:
+> > > > a8ad07e5240c ("asm-generic: qspinlock: Indicate the use of mixed-si=
+ze
+> > > > atomics").
+> > > >
+> > > > Although RISC-V ISA gives out a weaker forward guarantee LR/SC, whi=
+ch
+> > > > doesn't satisfy the requirements of qspinlock above, it won't preve=
+nt
+> > > > some riscv vendors from implementing a strong fwd guarantee LR/SC i=
+n
+> > > > microarchitecture to match xchg_tail requirement. T-HEAD C9xx proce=
+ssor
+> > > > is the one.
+> > > >
+> > > > We've tested the patch on SOPHGO sg2042 & th1520 and passed the str=
+ess
+> > > > test on Fedora & Ubuntu & OpenEuler ... Here is the performance
+> > > > comparison between qspinlock and ticket_lock on sg2042 (64 cores):
+> > > >
+> > > > sysbench test=3Dthreads threads=3D32 yields=3D100 lock=3D8 (+13.8%)=
+:
+> > > >   queued_spinlock 0.5109/0.00
+> > > >   ticket_spinlock 0.5814/0.00
+> > > >
+> > > > perf futex/hash (+6.7%):
+> > > >   queued_spinlock 1444393 operations/sec (+- 0.09%)
+> > > >   ticket_spinlock 1353215 operations/sec (+- 0.15%)
+> > > >
+> > > > perf futex/wake-parallel (+8.6%):
+> > > >   queued_spinlock (waking 1/64 threads) in 0.0253 ms (+-2.90%)
+> > > >   ticket_spinlock (waking 1/64 threads) in 0.0275 ms (+-3.12%)
+> > > >
+> > > > perf futex/requeue (+4.2%):
+> > > >   queued_spinlock Requeued 64 of 64 threads in 0.0785 ms (+-0.55%)
+> > > >   ticket_spinlock Requeued 64 of 64 threads in 0.0818 ms (+-4.12%)
+> > > >
+> > > > System Benchmarks (+6.4%)
+> > > >   queued_spinlock:
+> > > >     System Benchmarks Index Values               BASELINE       RES=
+ULT    INDEX
+> > > >     Dhrystone 2 using register variables         116700.0  62861374=
+5.4  53865.8
+> > > >     Double-Precision Whetstone                       55.0     18242=
+2.8  33167.8
+> > > >     Execl Throughput                                 43.0      1311=
+6.6   3050.4
+> > > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    776230=
+6.2  19601.8
+> > > >     File Copy 256 bufsize 500 maxblocks            1655.0    341755=
+6.8  20649.9
+> > > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    742799=
+5.7  12806.9
+> > > >     Pipe Throughput                               12440.0   2305860=
+0.5  18535.9
+> > > >     Pipe-based Context Switching                   4000.0    283561=
+7.7   7089.0
+> > > >     Process Creation                                126.0      1253=
+7.3    995.0
+> > > >     Shell Scripts (1 concurrent)                     42.4      5705=
+7.4  13456.9
+> > > >     Shell Scripts (8 concurrent)                      6.0       736=
+7.1  12278.5
+> > > >     System Call Overhead                          15000.0   3330830=
+1.3  22205.5
+> > > >                                                                    =
+    =3D=3D=3D=3D=3D=3D=3D=3D
+> > > >     System Benchmarks Index Score                                  =
+     12426.1
+> > > >
+> > > >   ticket_spinlock:
+> > > >     System Benchmarks Index Values               BASELINE       RES=
+ULT    INDEX
+> > > >     Dhrystone 2 using register variables         116700.0  62654170=
+1.9  53688.2
+> > > >     Double-Precision Whetstone                       55.0     18192=
+1.0  33076.5
+> > > >     Execl Throughput                                 43.0      1262=
+5.1   2936.1
+> > > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    655379=
+2.9  16550.0
+> > > >     File Copy 256 bufsize 500 maxblocks            1655.0    318923=
+1.6  19270.3
+> > > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    722127=
+7.0  12450.5
+> > > >     Pipe Throughput                               12440.0   2059401=
+8.7  16554.7
+> > > >     Pipe-based Context Switching                   4000.0    257111=
+7.7   6427.8
+> > > >     Process Creation                                126.0      1079=
+8.4    857.0
+> > > >     Shell Scripts (1 concurrent)                     42.4      5722=
+7.5  13497.1
+> > > >     Shell Scripts (8 concurrent)                      6.0       732=
+9.2  12215.3
+> > > >     System Call Overhead                          15000.0   3076677=
+8.4  20511.2
+> > > >                                                                    =
+    =3D=3D=3D=3D=3D=3D=3D=3D
+> > > >     System Benchmarks Index Score                                  =
+     11670.7
+> > > >
+> > > > The qspinlock has a significant improvement on SOPHGO SG2042 64
+> > > > cores platform than the ticket_lock.
+> > > >
+> > > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > > ---
+> > > >  arch/riscv/Kconfig                | 16 ++++++++++++++++
+> > > >  arch/riscv/include/asm/Kbuild     |  3 ++-
+> > > >  arch/riscv/include/asm/spinlock.h | 17 +++++++++++++++++
+> > > >  3 files changed, 35 insertions(+), 1 deletion(-)
+> > > >  create mode 100644 arch/riscv/include/asm/spinlock.h
+> > > >
+> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > index 2c346fe169c1..7f39bfc75744 100644
+> > > > --- a/arch/riscv/Kconfig
+> > > > +++ b/arch/riscv/Kconfig
+> > > > @@ -471,6 +471,22 @@ config NODES_SHIFT
+> > > >         Specify the maximum number of NUMA Nodes available on the t=
+arget
+> > > >         system.  Increases memory reserved to accommodate various t=
+ables.
+> > > >
+> > > > +choice
+> > > > +     prompt "RISC-V spinlock type"
+> > > > +     default RISCV_TICKET_SPINLOCKS
+> > > > +
+> > > > +config RISCV_TICKET_SPINLOCKS
+> > > > +     bool "Using ticket spinlock"
+> > > > +
+> > > > +config RISCV_QUEUED_SPINLOCKS
+> > > > +     bool "Using queued spinlock"
+> > > > +     depends on SMP && MMU
+> > > > +     select ARCH_USE_QUEUED_SPINLOCKS
+> > > > +     help
+> > > > +       Make sure your micro arch LL/SC has a strong forward progre=
+ss guarantee.
+> > > > +       Otherwise, stay at ticket-lock.
+> > > > +endchoice
+> > > > +
+> > > >  config RISCV_ALTERNATIVE
+> > > >       bool
+> > > >       depends on !XIP_KERNEL
+> > > > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm=
+/Kbuild
+> > > > index 504f8b7e72d4..a0dc85e4a754 100644
+> > > > --- a/arch/riscv/include/asm/Kbuild
+> > > > +++ b/arch/riscv/include/asm/Kbuild
+> > > > @@ -2,10 +2,11 @@
+> > > >  generic-y +=3D early_ioremap.h
+> > > >  generic-y +=3D flat.h
+> > > >  generic-y +=3D kvm_para.h
+> > > > +generic-y +=3D mcs_spinlock.h
+> > > >  generic-y +=3D parport.h
+> > > > -generic-y +=3D spinlock.h
+> > >
+> > > IIUC here you take the asm-generic/spinlock.h (which defines arch_spi=
+n_*())
+> > > and include the asm-generic headers of mcs_spinlock and qspinlock.
+> > >
+> > > In this case, the qspinlock.h will provide the arch_spin_*() interfac=
+es,
+> > > which seems the oposite of the above description (ticket spinlocks be=
+ing
+> > > the standard).
+> > >
+> > > Shouldn't ticket-spinlock.h also get included here?
+> > > (Also, I am probably missing something, as I dont' see the use of
+> > > mcs_spinlock here.)
+> > No, because asm-generic/spinlock.h:
+> > ...
+> > #include <asm-generic/ticket_spinlock.h>
+> > ...
+> >
+>
+> But aren't you removing asm-generic/spinlock.h below ?
+> -generic-y +=3D spinlock.h
+Yes, current is:
 
-For example:
-  nodes=0,1,2
-  interval=3
-  cpunode=0
+arch/riscv/include/asm/spinlock.h -> include/asm-generic/spinlock.h ->
+include/asm-generic/ticket_spinlock.h
 
-Over 10 consecutive allocations, the following nodes will be selected:
-[0,0,0,1,2,0,0,0,1,2]
++#ifdef CONFIG_QUEUED_SPINLOCKS
++#include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
++#else
++#include <asm-generic/spinlock.h>
++#endif
 
-In this example, there is a 60%/20%/20% distribution of memory.
+So, you want me:
++#ifdef CONFIG_QUEUED_SPINLOCKS
++#include <asm/qspinlock.h>
++#else
++#include <asm-generic/ticket_spinlock.h>
++#endif
 
-Using this mechanism, it becomes possible to define an approximate
-distribution percentage of memory across a set of nodes:
++#include <asm/qrwlock.h>
 
-local_node% : interval/((nr_nodes-1)+interval-1)
-other_node% : (1-local_node%)/(nr_nodes-1)
+Right?
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
----
- include/linux/mempolicy.h      |   8 ++
- include/uapi/linux/mempolicy.h |   5 +
- mm/mempolicy.c                 | 161 +++++++++++++++++++++++++++++++--
- 3 files changed, 166 insertions(+), 8 deletions(-)
+>
+> > >
+> > > >  generic-y +=3D spinlock_types.h
+> > > >  generic-y +=3D qrwlock.h
+> > > >  generic-y +=3D qrwlock_types.h
+> > > > +generic-y +=3D qspinlock.h
+> > > >  generic-y +=3D user.h
+> > > >  generic-y +=3D vmlinux.lds.h
+> > > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include=
+/asm/spinlock.h
+> > > > new file mode 100644
+> > > > index 000000000000..c644a92d4548
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/include/asm/spinlock.h
+> > > > @@ -0,0 +1,17 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +
+> > > > +#ifndef __ASM_RISCV_SPINLOCK_H
+> > > > +#define __ASM_RISCV_SPINLOCK_H
+> > > > +
+> > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
+> > > > +#define _Q_PENDING_LOOPS     (1 << 9)
+> > > > +#endif
+> > >
+> > > Any reason the above define couldn't be merged on the ifdef below?
+> > Easy for the next patch to modify. See Waiman's comment:
+> >
+> > https://lore.kernel.org/linux-riscv/4cc7113a-0e4e-763a-cba2-7963bcd26c7=
+a@redhat.com/
+> >
+> > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/a=
+sm/spinlock.h
+> > > index c644a92d4548..9eb3ad31e564 100644
+> > > --- a/arch/riscv/include/asm/spinlock.h
+> > > +++ b/arch/riscv/include/asm/spinlock.h
+> > > @@ -7,11 +7,94 @@
+> > >   #define _Q_PENDING_LOOPS (1 << 9)
+> > >   #endif
+> > >
+> >
+> > I see why you separated the _Q_PENDING_LOOPS out.
+> >
+>
+> I see, should be fine then.
+>
+> Thanks!
+> Leo
+>
+> >
+> > >
+> > > > +
+> > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
+> > > > +#include <asm/qspinlock.h>
+> > > > +#include <asm/qrwlock.h>
+> > > > +#else
+> > > > +#include <asm-generic/spinlock.h>
+> > > > +#endif
+> > > > +
+> > > > +#endif /* __ASM_RISCV_SPINLOCK_H */
+> > > > --
+> > > > 2.36.1
+> > > >
+> > >
+> > > Thanks!
+> > > Leo
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+>
 
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index d232de7cdc56..41a6de9ff556 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -48,6 +48,14 @@ struct mempolicy {
- 	nodemask_t nodes;	/* interleave/bind/perfer */
- 	int home_node;		/* Home node to use for MPOL_BIND and MPOL_PREFERRED_MANY */
- 
-+	union {
-+		/* Partial Interleave: Allocate local count, then interleave */
-+		struct {
-+			int interval;
-+			int count;
-+		} part_int;
-+	};
-+
- 	union {
- 		nodemask_t cpuset_mems_allowed;	/* relative to these nodes */
- 		nodemask_t user_nodemask;	/* nodemask passed by user */
-diff --git a/include/uapi/linux/mempolicy.h b/include/uapi/linux/mempolicy.h
-index 53650f69db2b..1af344344459 100644
---- a/include/uapi/linux/mempolicy.h
-+++ b/include/uapi/linux/mempolicy.h
-@@ -24,6 +24,7 @@ enum {
- 	MPOL_LOCAL,
- 	MPOL_PREFERRED_MANY,
- 	MPOL_LEGACY,	/* set_mempolicy limited to above modes */
-+	MPOL_PARTIAL_INTERLEAVE,
- 	MPOL_MAX,	/* always last member of enum */
- };
- 
-@@ -55,6 +56,10 @@ struct mempolicy_args {
- 		struct {
- 			unsigned long next_node; /* get only */
- 		} interleave;
-+		struct {
-+			unsigned long interval;  /* get and set */
-+			unsigned long next_node; /* get only */
-+		} part_int;
- 	};
- };
- 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 1cf7709400f1..a2ee45ac2ab6 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -399,6 +399,10 @@ static const struct mempolicy_operations mpol_ops[MPOL_MAX] = {
- 		.create = mpol_new_nodemask,
- 		.rebind = mpol_rebind_nodemask,
- 	},
-+	[MPOL_PARTIAL_INTERLEAVE] = {
-+		.create = mpol_new_nodemask,
-+		.rebind = mpol_rebind_nodemask,
-+	},
- 	[MPOL_PREFERRED] = {
- 		.create = mpol_new_preferred,
- 		.rebind = mpol_rebind_preferred,
-@@ -875,7 +879,8 @@ static long swap_mempolicy(struct mempolicy *new,
- 
- 	old = current->mempolicy;
- 	current->mempolicy = new;
--	if (new && new->mode == MPOL_INTERLEAVE)
-+	if (new && (new->mode == MPOL_INTERLEAVE ||
-+		    new->mode == MPOL_PARTIAL_INTERLEAVE))
- 		current->il_prev = MAX_NUMNODES-1;
- out:
- 	task_unlock(current);
-@@ -920,6 +925,7 @@ static void get_policy_nodemask(struct mempolicy *p, nodemask_t *nodes)
- 	switch (p->mode) {
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
-+	case MPOL_PARTIAL_INTERLEAVE:
- 	case MPOL_PREFERRED:
- 	case MPOL_PREFERRED_MANY:
- 		*nodes = p->nodes;
-@@ -1614,6 +1620,23 @@ SYSCALL_DEFINE3(set_mempolicy, int, mode, const unsigned long __user *, nmask,
- 	return kernel_set_mempolicy(mode, nmask, maxnode);
- }
- 
-+static long do_set_partial_interleave(struct mempolicy_args *args,
-+				      struct mempolicy *new,
-+				      nodemask_t *nodes)
-+{
-+	/* Preferred interleave cannot be done with no nodemask */
-+	if (nodes_empty(*nodes))
-+		return -EINVAL;
-+
-+	/* Preferred interleave interval cannot be <= 0 */
-+	if (args->part_int.interval <= 0)
-+		return -EINVAL;
-+
-+	new->part_int.interval = args->part_int.interval;
-+	new->part_int.count = 0;
-+	return 0;
-+}
-+
- static long do_set_mempolicy2(struct mempolicy_args *args)
- {
- 	struct mempolicy *new = NULL;
-@@ -1637,6 +1660,9 @@ static long do_set_mempolicy2(struct mempolicy_args *args)
- 	}
- 
- 	switch (args->mode) {
-+	case MPOL_PARTIAL_INTERLEAVE:
-+		err = do_set_partial_interleave(args, new, &nodes);
-+		break;
- 	default:
- 		BUG();
- 	}
-@@ -1791,6 +1817,11 @@ static long do_get_mempolicy2(struct mempolicy_args *kargs)
- 		kargs->interleave.next_node = next_node_in(current->il_prev,
- 							   pol->nodes);
- 		break;
-+	case MPOL_PARTIAL_INTERLEAVE:
-+		kargs->part_int.next_node = next_node_in(current->il_prev,
-+							 pol->nodes);
-+		kargs->part_int.interval = pol->part_int.interval;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -2133,8 +2164,19 @@ static unsigned interleave_nodes(struct mempolicy *policy)
- 	struct task_struct *me = current;
- 
- 	next = next_node_in(me->il_prev, policy->nodes);
--	if (next < MAX_NUMNODES)
-+
-+	if (policy->mode == MPOL_PARTIAL_INTERLEAVE) {
-+		if (next == numa_node_id()) {
-+			if (++policy->part_int.count >= policy->part_int.interval) {
-+				policy->part_int.count = 0;
-+				me->il_prev = next;
-+			}
-+		} else if (next < MAX_NUMNODES) {
-+			me->il_prev = next;
-+		}
-+	} else if (next < MAX_NUMNODES)
- 		me->il_prev = next;
-+
- 	return next;
- }
- 
-@@ -2159,6 +2201,7 @@ unsigned int mempolicy_slab_node(void)
- 		return first_node(policy->nodes);
- 
- 	case MPOL_INTERLEAVE:
-+	case MPOL_PARTIAL_INTERLEAVE:
- 		return interleave_nodes(policy);
- 
- 	case MPOL_BIND:
-@@ -2195,7 +2238,7 @@ static unsigned offset_il_node(struct mempolicy *pol, unsigned long n)
- 	nodemask_t nodemask = pol->nodes;
- 	unsigned int target, nnodes;
- 	int i;
--	int nid;
-+	int nid = MAX_NUMNODES;
- 	/*
- 	 * The barrier will stabilize the nodemask in a register or on
- 	 * the stack so that it will stop changing under the code.
-@@ -2208,8 +2251,35 @@ static unsigned offset_il_node(struct mempolicy *pol, unsigned long n)
- 	nnodes = nodes_weight(nodemask);
- 	if (!nnodes)
- 		return numa_node_id();
--	target = (unsigned int)n % nnodes;
--	nid = first_node(nodemask);
-+
-+	if (pol->mode == MPOL_PARTIAL_INTERLEAVE) {
-+		int interval = pol->part_int.interval;
-+		/*
-+		 * Mode or interval can change so default to basic interleave
-+		 * if the interval has become invalid.  Basic interleave is
-+		 * equivalent to interval=1. Don't double-count the base node
-+		 */
-+		if (interval == 0)
-+			interval = 1;
-+		interval -= 1;
-+
-+		/* If target <= the interval, no need to call next_node */
-+		target = ((unsigned int)n % (nnodes + interval));
-+		target -= (target > interval) ? interval : target;
-+		target %= MAX_NUMNODES;
-+
-+		/* If the local node ID is no longer set, do interleave */
-+		nid = numa_node_id();
-+		if (!node_isset(nid, nodemask))
-+			nid = MAX_NUMNODES;
-+	}
-+
-+	/* If partial interleave generated an invalid nid, do interleave */
-+	if (nid == MAX_NUMNODES) {
-+		target = (unsigned int)n % nnodes;
-+		nid = first_node(nodemask);
-+	}
-+
- 	for (i = 0; i < target; i++)
- 		nid = next_node(nid, nodemask);
- 	return nid;
-@@ -2263,7 +2333,8 @@ int huge_node(struct vm_area_struct *vma, unsigned long addr, gfp_t gfp_flags,
- 	*nodemask = NULL;
- 	mode = (*mpol)->mode;
- 
--	if (unlikely(mode == MPOL_INTERLEAVE)) {
-+	if (unlikely(mode == MPOL_INTERLEAVE) ||
-+	    unlikely(mode == MPOL_PARTIAL_INTERLEAVE)) {
- 		nid = interleave_nid(*mpol, vma, addr,
- 					huge_page_shift(hstate_vma(vma)));
- 	} else {
-@@ -2304,6 +2375,7 @@ bool init_nodemask_of_mempolicy(nodemask_t *mask)
- 	case MPOL_PREFERRED_MANY:
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
-+	case MPOL_PARTIAL_INTERLEAVE:
- 		*mask = mempolicy->nodes;
- 		break;
- 
-@@ -2414,7 +2486,8 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
- 
- 	pol = get_vma_policy(vma, addr);
- 
--	if (pol->mode == MPOL_INTERLEAVE) {
-+	if (pol->mode == MPOL_INTERLEAVE ||
-+	    pol->mode == MPOL_PARTIAL_INTERLEAVE) {
- 		struct page *page;
- 		unsigned nid;
- 
-@@ -2516,7 +2589,8 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
- 	 * No reference counting needed for current->mempolicy
- 	 * nor system default_policy
- 	 */
--	if (pol->mode == MPOL_INTERLEAVE)
-+	if (pol->mode == MPOL_INTERLEAVE ||
-+	    pol->mode == MPOL_PARTIAL_INTERLEAVE)
- 		page = alloc_page_interleave(gfp, order, interleave_nodes(pol));
- 	else if (pol->mode == MPOL_PREFERRED_MANY)
- 		page = alloc_pages_preferred_many(gfp, order,
-@@ -2576,6 +2650,68 @@ static unsigned long alloc_pages_bulk_array_interleave(gfp_t gfp,
- 	return total_allocated;
- }
- 
-+static unsigned long alloc_pages_bulk_array_partial_interleave(gfp_t gfp,
-+		struct mempolicy *pol, unsigned long nr_pages,
-+		struct page **page_array)
-+{
-+	nodemask_t nodemask = pol->nodes;
-+	unsigned long nr_pages_main;
-+	unsigned long nr_pages_other;
-+	unsigned long total_cycle;
-+	unsigned long delta;
-+	unsigned long interval;
-+	int allocated = 0;
-+	int start_nid;
-+	int nnodes;
-+	int prev, next;
-+	int i;
-+
-+	/* This stabilizes nodes on the stack incase pol->nodes changes */
-+	barrier();
-+
-+	nnodes = nodes_weight(nodemask);
-+	start_nid = numa_node_id();
-+
-+	if (!node_isset(start_nid, nodemask))
-+		start_nid = first_node(nodemask);
-+
-+	if (nnodes == 1) {
-+		allocated = __alloc_pages_bulk(gfp, start_nid,
-+					       NULL, nr_pages_main,
-+					       NULL, page_array);
-+		return allocated;
-+	}
-+	/* We don't want to double-count the main node in calculations */
-+	nnodes--;
-+
-+	interval = pol->part_int.interval;
-+	total_cycle = (interval + nnodes);
-+	/* Number of pages on main node: (cycles*interval + up to interval) */
-+	nr_pages_main = ((nr_pages / total_cycle) * interval);
-+	nr_pages_main += (nr_pages % total_cycle % (interval + 1));
-+	/* Number of pages on others: (remaining/nodes) + 1 page if delta  */
-+	nr_pages_other = (nr_pages - nr_pages_main) / nnodes;
-+	nr_pages_other /= nnodes;
-+	/* Delta is number of pages beyond interval up to full cycle */
-+	delta = nr_pages - (nr_pages_main + (nr_pages_other * nnodes));
-+
-+	/* start by allocating for the main node, then interleave rest */
-+	prev = start_nid;
-+	allocated = __alloc_pages_bulk(gfp, start_nid, NULL, nr_pages_main,
-+				       NULL, page_array);
-+	for (i = 0; i < nnodes; i++) {
-+		int pages = nr_pages_other + (delta-- ? 1 : 0);
-+
-+		next = next_node_in(prev, nodemask);
-+		if (next < MAX_NUMNODES)
-+			prev = next;
-+		allocated += __alloc_pages_bulk(gfp, next, NULL, pages,
-+						NULL, page_array);
-+	}
-+
-+	return allocated;
-+}
-+
- static unsigned long alloc_pages_bulk_array_preferred_many(gfp_t gfp, int nid,
- 		struct mempolicy *pol, unsigned long nr_pages,
- 		struct page **page_array)
-@@ -2614,6 +2750,11 @@ unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
- 		return alloc_pages_bulk_array_interleave(gfp, pol,
- 							 nr_pages, page_array);
- 
-+	if (pol->mode == MPOL_PARTIAL_INTERLEAVE)
-+		return alloc_pages_bulk_array_partial_interleave(gfp, pol,
-+								 nr_pages,
-+								 page_array);
-+
- 	if (pol->mode == MPOL_PREFERRED_MANY)
- 		return alloc_pages_bulk_array_preferred_many(gfp,
- 				numa_node_id(), pol, nr_pages, page_array);
-@@ -2686,6 +2827,7 @@ bool __mpol_equal(struct mempolicy *a, struct mempolicy *b)
- 	switch (a->mode) {
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
-+	case MPOL_PARTIAL_INTERLEAVE:
- 	case MPOL_PREFERRED:
- 	case MPOL_PREFERRED_MANY:
- 		return !!nodes_equal(a->nodes, b->nodes);
-@@ -2822,6 +2964,7 @@ int mpol_misplaced(struct page *page, struct vm_area_struct *vma, unsigned long
- 
- 	switch (pol->mode) {
- 	case MPOL_INTERLEAVE:
-+	case MPOL_PARTIAL_INTERLEAVE:
- 		pgoff = vma->vm_pgoff;
- 		pgoff += (addr - vma->vm_start) >> PAGE_SHIFT;
- 		polnid = offset_il_node(pol, pgoff);
-@@ -3209,6 +3352,7 @@ static const char * const policy_modes[] =
- 	[MPOL_PREFERRED]  = "prefer",
- 	[MPOL_BIND]       = "bind",
- 	[MPOL_INTERLEAVE] = "interleave",
-+	[MPOL_PARTIAL_INTERLEAVE] = "partial interleave",
- 	[MPOL_LOCAL]      = "local",
- 	[MPOL_PREFERRED_MANY]  = "prefer (many)",
- };
-@@ -3379,6 +3523,7 @@ void mpol_to_str(char *buffer, int maxlen, struct mempolicy *pol)
- 	case MPOL_PREFERRED_MANY:
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
-+	case MPOL_PARTIAL_INTERLEAVE:
- 		nodes = pol->nodes;
- 		break;
- 	default:
--- 
-2.39.1
 
+--=20
+Best Regards
+ Guo Ren
