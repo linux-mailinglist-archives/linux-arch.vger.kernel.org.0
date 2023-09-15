@@ -2,154 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7715A7A260D
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 20:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9447A26EC
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Sep 2023 21:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbjIOSiR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Sep 2023 14:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S234621AbjIOTJV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Sep 2023 15:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbjIOShr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Sep 2023 14:37:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DBA1BD4;
-        Fri, 15 Sep 2023 11:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=n7u0d+abmaVaMLzO4YFLO6CA1M26m1t19aSjcVFsvyQ=; b=Ki3hIdnhdMv60FfdfEOljvltYs
-        O2p6WhI14WeOIkOkpuGNThSphzEWgamOZ2tl4TadV+sLFcS3OGaX5vUz6YydTrxv0+xPb9J15TdfB
-        Wkj52lf53qWnjsP77RGlXpFUIqCMw36qV8f7ZsEpS7+qGq+phMBML/R7NY85CrpdbzXbEfabQ3J0F
-        9hTbkW4hBz4ZwVrUc91m2AUqR+Gj771pbofj+7lhGgqrTcCND5JHMjPbpzJGYkCrsq1qgJ12msS9o
-        ohnFu3M2vVceno8fThSIIaDRW2ceuNofx1ZW3XjdFwp9oJR6+liR9lEN879iiI+VogQUS8uSWTNBo
-        reN4LkIA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qhDgk-00BMJ6-Ef; Fri, 15 Sep 2023 18:37:10 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        torvalds@linux-foundation.org, Nicholas Piggin <npiggin@gmail.com>
-Subject: [PATCH 17/17] mm: Use folio_xor_flags_has_waiters() in folio_end_writeback()
-Date:   Fri, 15 Sep 2023 19:37:07 +0100
-Message-Id: <20230915183707.2707298-18-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230915183707.2707298-1-willy@infradead.org>
-References: <20230915183707.2707298-1-willy@infradead.org>
+        with ESMTP id S236950AbjIOTJS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Sep 2023 15:09:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C9498;
+        Fri, 15 Sep 2023 12:09:13 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1694804951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FDeIVKTICKDFwpeyMiKeUyQnaEhJj8v8RkRSMefmd/k=;
+        b=AHhoxWCpLqkPmcYu/FFKkCMeN1qFRbSQa9NH06THW5izeby06dvSy8CbZpcnjAln4Y9CZW
+        +YnMsh53yrTYClYKQ2Hlrn0ZSNZRO03YSPFHP9egzWgUldP072yO8kSidxwSx881SkmpUI
+        WXQSiF4ghsDsnDK3I+JS2f6PtOSfiYMNOm2uhITtE8MThM7nvkwzC72foLGnqIHtnlRGbd
+        0LvoKP1quv4a9z6mNqyUp6kuXEDr8HOCl8BHHDMHIoBBrZmVE1EOziz2MKhGUvMTAAAxtA
+        mKU2tks1Qp9J0F0oeB2aYYINw4fyoXMVhmUb4I0Hv6P2deRKSnEoNGyHY9QjaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1694804951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FDeIVKTICKDFwpeyMiKeUyQnaEhJj8v8RkRSMefmd/k=;
+        b=ijQ0D6WzikBWYrorxKopMvxIQLmVdcyirOD2bgrPoV6JiJG3+BsxpPmKRUZIYx+Nm78qDP
+        WLkEpJeyJvydd7Bg==
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Salil Mehta <salil.mehta@huawei.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-ia64@vger.kernel.org
+Subject: Re: [PATCH RFC v2] cpu-hotplug: provide prototypes for arch CPU
+ registration
+In-Reply-To: <E1qgnh2-007ZRZ-WD@rmk-PC.armlinux.org.uk>
+References: <E1qgnh2-007ZRZ-WD@rmk-PC.armlinux.org.uk>
+Date:   Fri, 15 Sep 2023 21:09:10 +0200
+Message-ID: <871qez1cfd.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Match how folio_unlock() works by combining the test for PG_waiters with
-the clearing of PG_writeback.  This should have a small performance win,
-and removes the last user of folio_wake().
+On Thu, Sep 14 2023 at 15:51, Russell King wrote:
+> Provide common prototypes for arch_register_cpu() and
+> arch_unregister_cpu(). These are called by acpi_processor.c, with
+> weak versions, so the prototype for this is already set. It is
+> generally not necessary for function prototypes to be conditional
+> on preprocessor macros.
+>
+> Some architectures (e.g. Loongarch) are missing the prototype for this,
+> and rather than add it to Loongarch's asm/cpu.h, lets do the job once
+> for everyone.
+>
+> Since this covers everyone, remove the now unnecessary prototypes in
+> asm/cpu.h, and we also need to remove the 'static' from one of ia64's
+> arch_register_cpu() definitions.
+>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> Spotted during the review of James Morse's patches, I think rather than
+> adding prototypes for loongarch to its asm/cpu.h, it would make more
+> sense to provide the prototypes in a non-arch specific header file so
+> everyone can benefit, rather than having each architecture do its own
+> thing.
+>
+> I'm sending this as RFC as James has yet to comment on my proposal, and
+> also to a wider audience, and although it makes a little more work for
+> James (to respin his series) it does mean that his series should get a
+> little smaller.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- mm/filemap.c        | 15 +++------------
- mm/internal.h       |  2 +-
- mm/page-writeback.c |  9 ++++++---
- 3 files changed, 10 insertions(+), 16 deletions(-)
+And it makes tons of sense.
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 53c0d71aae8e..f57b62d65001 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1177,13 +1177,6 @@ static void folio_wake_bit(struct folio *folio, int bit_nr)
- 	spin_unlock_irqrestore(&q->lock, flags);
- }
- 
--static void folio_wake(struct folio *folio, int bit)
--{
--	if (!folio_test_waiters(folio))
--		return;
--	folio_wake_bit(folio, bit);
--}
--
- /*
-  * A choice of three behaviors for folio_wait_bit_common():
-  */
-@@ -1620,13 +1613,11 @@ void folio_end_writeback(struct folio *folio)
- 	 * Writeback does not hold a folio reference of its own, relying
- 	 * on truncation to wait for the clearing of PG_writeback.
- 	 * But here we must make sure that the folio is not freed and
--	 * reused before the folio_wake().
-+	 * reused before the folio_wake_bit().
- 	 */
- 	folio_get(folio);
--	__folio_end_writeback(folio);
--
--	smp_mb__after_atomic();
--	folio_wake(folio, PG_writeback);
-+	if (__folio_end_writeback(folio))
-+		folio_wake_bit(folio, PG_writeback);
- 	acct_reclaim_writeback(folio);
- 	folio_put(folio);
- }
-diff --git a/mm/internal.h b/mm/internal.h
-index ccb08dd9b5ec..30cf724ddbce 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -105,7 +105,7 @@ static inline void wake_throttle_isolated(pg_data_t *pgdat)
- 
- vm_fault_t do_swap_page(struct vm_fault *vmf);
- void folio_rotate_reclaimable(struct folio *folio);
--void __folio_end_writeback(struct folio *folio);
-+bool __folio_end_writeback(struct folio *folio);
- void deactivate_file_folio(struct folio *folio);
- void folio_activate(struct folio *folio);
- 
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 410b53e888e3..c52514fe1d23 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -2940,10 +2940,11 @@ static void wb_inode_writeback_end(struct bdi_writeback *wb)
- 	spin_unlock_irqrestore(&wb->work_lock, flags);
- }
- 
--void __folio_end_writeback(struct folio *folio)
-+bool __folio_end_writeback(struct folio *folio)
- {
- 	long nr = folio_nr_pages(folio);
- 	struct address_space *mapping = folio_mapping(folio);
-+	bool ret;
- 
- 	folio_memcg_lock(folio);
- 	if (mapping && mapping_use_writeback_tags(mapping)) {
-@@ -2952,7 +2953,7 @@ void __folio_end_writeback(struct folio *folio)
- 		unsigned long flags;
- 
- 		xa_lock_irqsave(&mapping->i_pages, flags);
--		folio_test_clear_writeback(folio);
-+		ret = folio_xor_flags_has_waiters(folio, 1 << PG_writeback);
- 		__xa_clear_mark(&mapping->i_pages, folio_index(folio),
- 					PAGECACHE_TAG_WRITEBACK);
- 		if (bdi->capabilities & BDI_CAP_WRITEBACK_ACCT) {
-@@ -2970,13 +2971,15 @@ void __folio_end_writeback(struct folio *folio)
- 
- 		xa_unlock_irqrestore(&mapping->i_pages, flags);
- 	} else {
--		folio_test_clear_writeback(folio);
-+		ret = folio_xor_flags_has_waiters(folio, 1 << PG_writeback);
- 	}
- 
- 	lruvec_stat_mod_folio(folio, NR_WRITEBACK, -nr);
- 	zone_stat_mod_folio(folio, NR_ZONE_WRITE_PENDING, -nr);
- 	node_stat_mod_folio(folio, NR_WRITTEN, nr);
- 	folio_memcg_unlock(folio);
-+
-+	return ret;
- }
- 
- bool __folio_start_writeback(struct folio *folio, bool keep_write)
--- 
-2.40.1
+> See:
+>  https://lore.kernel.org/r/20230913163823.7880-2-james.morse@arm.com
+>  https://lore.kernel.org/r/20230913163823.7880-4-james.morse@arm.com
+>  https://lore.kernel.org/r/20230913163823.7880-23-james.morse@arm.com
+>
+> v2: lets try not fat-fingering vim.
 
+Yeah. I wondered how you managed to mangle that :)
+
+>  arch/ia64/include/asm/cpu.h | 5 -----
+>  arch/ia64/kernel/topology.c | 2 +-
+
+That's moot as ia64 is queued for removal :)
+
+Thanks,
+
+        tglx
