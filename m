@@ -2,220 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AAE7A2DD9
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Sep 2023 06:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91587A2EE1
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Sep 2023 10:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbjIPEFb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 Sep 2023 00:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S230215AbjIPIvM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 16 Sep 2023 04:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235620AbjIPEFQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Sep 2023 00:05:16 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1181BCD
-        for <linux-arch@vger.kernel.org>; Fri, 15 Sep 2023 21:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694837111; x=1726373111;
-  h=date:from:to:cc:subject:message-id;
-  bh=DuEk8Hn7P3NgCX2zob9fKiVBN81WgVzJUPArxDueyOw=;
-  b=mjFflN1QYofXQ6L0q2kKLDm2T0SXtoEOdo+5hi1TVSqxK4+C8RbTRJ9f
-   gwNlJtHQQpP4drzezUzI9geCYJeaWZHhI7pQIIJDEkYa6puTNt8KKPOtt
-   TWO9woHT+kWveiQ6Gz3jEq/TbeHcpdGw9ZH02rdmqBTH3/5vKTsC7VeZD
-   K/f5WyibTXYGYWNRHvrqobb0RVJCQXY27LbXKrYDuowg1qxah+QYzRa5k
-   3iFc5QItPKHZJV0TifWKtE8xxAhHOXexlRsgDUiXJ6xzBs8KWDkPYmM1X
-   aU/UQ6oAtPSIJvkts3p6cY5f6CqNybnO1fIk1jHyZLFdzn2wHBbChrFSS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="359631000"
-X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
-   d="scan'208";a="359631000"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 21:05:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="780323988"
-X-IronPort-AV: E=Sophos;i="6.02,151,1688454000"; 
-   d="scan'208";a="780323988"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Sep 2023 21:05:09 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qhMYN-0003pE-1L;
-        Sat, 16 Sep 2023 04:05:07 +0000
-Date:   Sat, 16 Sep 2023 12:05:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 43ff221426d33db909f7159fdf620c3b052e2d1c
-Message-ID: <202309161259.d5L6Ukmo-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S237743AbjIPIuq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Sep 2023 04:50:46 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71826CF8;
+        Sat, 16 Sep 2023 01:50:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AADC433C7;
+        Sat, 16 Sep 2023 08:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694854241;
+        bh=40ylAetvH2D45aO5J/08CkEvM05rm1lwgoMuurgAuH0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gC+VjBFi06GNrUV4aejNhpXtveOVkoTOJURdSDxNPs+L1wLQuki8wXleFcffnq9Xj
+         X6PW2HOI5TlnVkKC591doTM7l1THmFUSQB1Jlhx+3uRq0UhlHHiZ3+p97Na0Qtfg2K
+         bsD5I6szMJPGak1RUxwzIs6upcyErp1/s+Xp1mHqDjtHjnkTugyv7vANcepK86Xpa+
+         aFAIMbolhjbh59Ge0hy1eVd/nWSAq2zQOF8PmqxOcN11bATns2sTU/wkdxq3y7jdaK
+         kQBUNNwtA6EDXCOucwung84Z5syZ82le1aiY0yVEe+oxASsns0Wn/HTYHuajwtILlm
+         l9AVHz3LY2Zhg==
+Date:   Sat, 16 Sep 2023 09:50:36 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Charlie Jenkins <charlie@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Samuel Holland <samuel.holland@sifive.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v6 1/4] asm-generic: Improve csum_fold
+Message-ID: <20230916-jackpot-guy-01c2024c6a63@spud>
+References: <20230915-optimize_checksum-v6-0-14a6cf61c618@rivosinc.com>
+ <20230915-optimize_checksum-v6-1-14a6cf61c618@rivosinc.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="60Aaxr3gdQT472cE"
+Content-Disposition: inline
+In-Reply-To: <20230915-optimize_checksum-v6-1-14a6cf61c618@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 43ff221426d33db909f7159fdf620c3b052e2d1c  Merge tag 'tag-remove-ia64' of git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux into asm-generic
 
-elapsed time: 721m
+--60Aaxr3gdQT472cE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 144
-configs skipped: 2
+On Fri, Sep 15, 2023 at 10:01:17AM -0700, Charlie Jenkins wrote:
+> This csum_fold implementation introduced into arch/arc by Vineet Gupta
+> is better than the default implementation on at least arc, x86, and
+> riscv. Using GCC trunk and compiling non-inlined version, this
+> implementation has 41.6667%, 25% fewer instructions on riscv64, x86-64
+> respectively with -O3 optimization. Most implmentations override this
+> default in asm, but this should be more performant than all of those
+> other implementations except for arm which has barrel shifting and
+> sparc32 which has a carry flag.
+>=20
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> Reviewed-by: David Laight <david.laight@aculab.com>
+> ---
+>  include/asm-generic/checksum.h | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/include/asm-generic/checksum.h b/include/asm-generic/checksu=
+m.h
+> index 43e18db89c14..37f5ec70ac93 100644
+> --- a/include/asm-generic/checksum.h
+> +++ b/include/asm-generic/checksum.h
+> @@ -31,9 +31,7 @@ extern __sum16 ip_fast_csum(const void *iph, unsigned i=
+nt ihl);
+>  static inline __sum16 csum_fold(__wsum csum)
+>  {
+>  	u32 sum =3D (__force u32)csum;
+> -	sum =3D (sum & 0xffff) + (sum >> 16);
+> -	sum =3D (sum & 0xffff) + (sum >> 16);
+> -	return (__force __sum16)~sum;
+> +	return (__force __sum16)((~sum - ror32(sum, 16)) >> 16);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Breaks the build on RISC-V in a way that is repaired by later patches in
+the series, so you likely did not notice:
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230916   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230916   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             alldefconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20230916   gcc  
-i386         buildonly-randconfig-002-20230916   gcc  
-i386         buildonly-randconfig-003-20230916   gcc  
-i386         buildonly-randconfig-004-20230916   gcc  
-i386         buildonly-randconfig-005-20230916   gcc  
-i386         buildonly-randconfig-006-20230916   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230916   gcc  
-i386                  randconfig-002-20230916   gcc  
-i386                  randconfig-003-20230916   gcc  
-i386                  randconfig-004-20230916   gcc  
-i386                  randconfig-005-20230916   gcc  
-i386                  randconfig-006-20230916   gcc  
-i386                  randconfig-011-20230916   gcc  
-i386                  randconfig-012-20230916   gcc  
-i386                  randconfig-013-20230916   gcc  
-i386                  randconfig-014-20230916   gcc  
-i386                  randconfig-015-20230916   gcc  
-i386                  randconfig-016-20230916   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230916   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath79_defconfig   clang
-mips                           jazz_defconfig   gcc  
-mips                      pic32mzda_defconfig   clang
-mips                         rt305x_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                     asp8347_defconfig   gcc  
-powerpc                   motionpro_defconfig   gcc  
-powerpc                      pasemi_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230916   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230916   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20230916   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230916   gcc  
-x86_64       buildonly-randconfig-002-20230916   gcc  
-x86_64       buildonly-randconfig-003-20230916   gcc  
-x86_64       buildonly-randconfig-004-20230916   gcc  
-x86_64       buildonly-randconfig-005-20230916   gcc  
-x86_64       buildonly-randconfig-006-20230916   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230916   gcc  
-x86_64                randconfig-002-20230916   gcc  
-x86_64                randconfig-003-20230916   gcc  
-x86_64                randconfig-004-20230916   gcc  
-x86_64                randconfig-005-20230916   gcc  
-x86_64                randconfig-006-20230916   gcc  
-x86_64                randconfig-011-20230916   gcc  
-x86_64                randconfig-012-20230916   gcc  
-x86_64                randconfig-013-20230916   gcc  
-x86_64                randconfig-014-20230916   gcc  
-x86_64                randconfig-015-20230916   gcc  
-x86_64                randconfig-016-20230916   gcc  
-x86_64                randconfig-072-20230916   gcc  
-x86_64                randconfig-073-20230916   gcc  
-x86_64                randconfig-074-20230916   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
+=2E/include/asm-generic/checksum.h:34:35: error: call to undeclared functio=
+n 'ror32'; ISO C99 and later do not support implicit function declarations =
+[-Wimplicit-function-declaration]
+=2E./include/linux/bitops.h:134:21: error: static declaration of 'ror32' fo=
+llows non-static declaration
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Conor.
+
+--60Aaxr3gdQT472cE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQVsXAAKCRB4tDGHoIJi
+0mnEAQCTLnl3iMEBVo3Tzp6o42hU6amG6PduNyUQd8smnnQAVAD/RhsXtPuthkcC
+tk+v8xXjpz227mU8sGL65Usl2rfDRgk=
+=GX46
+-----END PGP SIGNATURE-----
+
+--60Aaxr3gdQT472cE--
