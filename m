@@ -2,118 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91587A2EE1
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Sep 2023 10:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B2A7A2F0A
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Sep 2023 11:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjIPIvM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 Sep 2023 04:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S238853AbjIPJdW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 16 Sep 2023 05:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbjIPIuq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Sep 2023 04:50:46 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71826CF8;
-        Sat, 16 Sep 2023 01:50:41 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AADC433C7;
-        Sat, 16 Sep 2023 08:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694854241;
-        bh=40ylAetvH2D45aO5J/08CkEvM05rm1lwgoMuurgAuH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gC+VjBFi06GNrUV4aejNhpXtveOVkoTOJURdSDxNPs+L1wLQuki8wXleFcffnq9Xj
-         X6PW2HOI5TlnVkKC591doTM7l1THmFUSQB1Jlhx+3uRq0UhlHHiZ3+p97Na0Qtfg2K
-         bsD5I6szMJPGak1RUxwzIs6upcyErp1/s+Xp1mHqDjtHjnkTugyv7vANcepK86Xpa+
-         aFAIMbolhjbh59Ge0hy1eVd/nWSAq2zQOF8PmqxOcN11bATns2sTU/wkdxq3y7jdaK
-         kQBUNNwtA6EDXCOucwung84Z5syZ82le1aiY0yVEe+oxASsns0Wn/HTYHuajwtILlm
-         l9AVHz3LY2Zhg==
-Date:   Sat, 16 Sep 2023 09:50:36 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        with ESMTP id S238836AbjIPJcx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Sep 2023 05:32:53 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ABE2173B
+        for <linux-arch@vger.kernel.org>; Sat, 16 Sep 2023 02:32:47 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-244-9HYSYDoAOBG_m3lja_VXfg-1; Sat, 16 Sep 2023 10:32:44 +0100
+X-MC-Unique: 9HYSYDoAOBG_m3lja_VXfg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 16 Sep
+ 2023 10:32:40 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 16 Sep 2023 10:32:40 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Charlie Jenkins' <charlie@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
         Samuel Holland <samuel.holland@sifive.com>,
-        David Laight <David.Laight@aculab.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v6 1/4] asm-generic: Improve csum_fold
-Message-ID: <20230916-jackpot-guy-01c2024c6a63@spud>
+Subject: RE: [PATCH v6 3/4] riscv: Add checksum library
+Thread-Topic: [PATCH v6 3/4] riscv: Add checksum library
+Thread-Index: AQHZ5/ZuR2Nhj94ZDEWquHSBL7yNdbAdI/3w
+Date:   Sat, 16 Sep 2023 09:32:40 +0000
+Message-ID: <0357e092c05043fba13eccad77ba799f@AcuMS.aculab.com>
 References: <20230915-optimize_checksum-v6-0-14a6cf61c618@rivosinc.com>
- <20230915-optimize_checksum-v6-1-14a6cf61c618@rivosinc.com>
+ <20230915-optimize_checksum-v6-3-14a6cf61c618@rivosinc.com>
+In-Reply-To: <20230915-optimize_checksum-v6-3-14a6cf61c618@rivosinc.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="60Aaxr3gdQT472cE"
-Content-Disposition: inline
-In-Reply-To: <20230915-optimize_checksum-v6-1-14a6cf61c618@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+RnJvbTogQ2hhcmxpZSBKZW5raW5zDQo+IFNlbnQ6IDE1IFNlcHRlbWJlciAyMDIzIDE4OjAxDQo+
+IA0KPiBQcm92aWRlIGEgMzIgYW5kIDY0IGJpdCB2ZXJzaW9uIG9mIGRvX2NzdW0uIFdoZW4gY29t
+cGlsZWQgZm9yIDMyLWJpdA0KPiB3aWxsIGxvYWQgZnJvbSB0aGUgYnVmZmVyIGluIGdyb3VwcyBv
+ZiAzMiBiaXRzLCBhbmQgd2hlbiBjb21waWxlZCBmb3INCj4gNjQtYml0IHdpbGwgbG9hZCBpbiBn
+cm91cHMgb2YgNjQgYml0cy4NCj4gDQouLi4NCj4gKwkvKg0KPiArCSAqIERvIDMyLWJpdCByZWFk
+cyBvbiBSVjMyIGFuZCA2NC1iaXQgcmVhZHMgb3RoZXJ3aXNlLiBUaGlzIHNob3VsZCBiZQ0KPiAr
+CSAqIGZhc3RlciB0aGFuIGRvaW5nIDMyLWJpdCByZWFkcyBvbiBhcmNoaXRlY3R1cmVzIHRoYXQg
+c3VwcG9ydCBsYXJnZXINCj4gKwkgKiByZWFkcy4NCj4gKwkgKi8NCj4gKwl3aGlsZSAobGVuID4g
+MCkgew0KPiArCQljc3VtICs9IGRhdGE7DQo+ICsJCWNzdW0gKz0gY3N1bSA8IGRhdGE7DQo+ICsJ
+CWxlbiAtPSBzaXplb2YodW5zaWduZWQgbG9uZyk7DQo+ICsJCXB0ciArPSAxOw0KPiArCQlkYXRh
+ID0gKnB0cjsNCj4gKwl9DQoNCkkgdGhpbmsgeW91J2QgYmUgYmV0dGVyIGFkZGluZyB0aGUgJ2Nh
+cnJ5JyBiaXRzIGluIGEgc2VwYXJhdGUNCnZhcmlhYmxlLg0KSXQgcmVkdWNlcyB0aGUgcmVnaXN0
+ZXIgZGVwZW5kZW5jeSBjaGFpbiBsZW5ndGggaW4gdGhlIGxvb3AuDQooSGVscHMgaWYgdGhlIGNw
+dSBjYW4gZXhlY3V0ZSB0d28gaW5zdHJ1Y3Rpb25zIGluIG9uZSBjbG9jay4pDQoNClRoZSBtYXNr
+ZWQgbWlzYWxpZ25lZCBkYXRhIHZhbHVlcyBhcmUgbWF4IDI0IGJpdHMNCihpZiANCg0KWW91J2xs
+IGFsc28gYWxtb3N0IGNlcnRhaW5seSByZW1vdmUgYXQgbGVhc3Qgb25lIGluc3RydWN0aW9uDQpm
+cm9tIHRoZSBsb29wIGJ5IGNvbXBhcmluZyBhZ2FpbnN0IHRoZSBlbmQgYWRkcmVzcyByYXRoZXIg
+dGhhbg0KY2hhbmdpbmcgJ2xlbicuDQoNClNvIGVuZGluZyB1cCB3aXRoIChzb21ldGhpbmcgbGlr
+ZSk6DQoJZW5kID0gYnVmZiArIGxlbmd0aDsNCgkuLi4NCgl3aGlsZSAoKytwdHIgPCBlbmQpIHsN
+CgkJY3N1bSArPSBkYXRhOw0KCQljYXJyeSArPSBjc3VtIDwgZGF0YTsNCgkJZGF0YSA9IHB0clst
+MV07DQoJfQ0KKEFsdGhvdWdoIGEgZG8td2hpbGUgbG9vcCB0ZW5kcyB0byBnZW5lcmF0ZSBiZXR0
+ZXIgY29kZQ0KYW5kIGdjYyB3aWxsIHByZXR0eSBtdWNoIGFsd2F5cyBtYWtlIHRoYXQgdHJhbnNm
+b3JtYXRpb24uKQ0KDQpJIHRoaW5rIHRoYXQgaXMgNCBpbnN0cnVjdGlvbnMgcGVyIHdvcmQgKGxv
+YWQsIGFkZCwgY21wK3NldCwgYWRkKS4NCkluIHByaW5jaXBsZSB0aGV5IGNvdWxkIGJlIGNvbXBs
+ZXRlbHkgcGlwZWxpbmVkIGFuZCBhbGwNCmV4ZWN1dGUgKGZvciBkaWZmZXJlbnQgbG9vcCBpdGVy
+YXRpb25zKSBpbiB0aGUgc2FtZSBjbG9jay4NCihCdXQgdGhhdCBpcyBwcmV0dHkgdW5saWtlbHkg
+dG8gaGFwcGVuIC0gZXZlbiB4ODYgaXNuJ3QgdGhhdCBnb29kLikNCkJ1dCB0YWtpbmcgdHdvIGNs
+b2NrcyBpcyBxdWl0ZSBwbGF1c2libGUuDQpQbHVzIDIgaW5zdHJ1Y3Rpb25zIHBlciBsb29wIChp
+bmMsIGNtcCtqbXApLg0KVGhleSBtaWdodCBleGVjdXRlIGluIHBhcmFsbGVsLCBidXQgdW5yb2xs
+aW5nIG9uY2UNCm1heSBiZSByZXF1aXJlZC4NCg0KLi4uDQo+ICsJaWYgKElTX0VOQUJMRUQoQ09O
+RklHX1JJU0NWX0lTQV9aQkIpICYmDQo+ICsJICAgIHJpc2N2X2hhc19leHRlbnNpb25fbGlrZWx5
+KFJJU0NWX0lTQV9FWFRfWkJCKSkgew0KLi4uDQo+ICsJCX0NCj4gK2VuZDoNCj4gKwkJcmV0dXJu
+IGNzdW0gPj4gMTY7DQo+ICsJfQ0KDQpJcyBpdCByZWFsbHkgd29ydGggZG9pbmcgYWxsIHRoYXQg
+dG8gc2F2ZSAoSSB0aGluaykgNCBpbnN0cnVjdGlvbnM/DQooc2hpZnQsIHNoaWZ0LCBvciB3aXRo
+IHJvdGF0ZSB0d2ljZSkuDQpUaGVyZSBpcyBtdWNoIG1vcmUgdG8gYmUgZ2FpbmVkIGJ5IGNhcmVm
+dWwgaW5zcGVjdGlvbg0Kb2YgdGhlIGxvb3AgKGV2ZW4gbGVhdmluZyBpdCBpbiBDKS4NCg0KPiAr
+DQo+ICsjaWZuZGVmIENPTkZJR18zMkJJVA0KPiArCWNzdW0gKz0gKGNzdW0gPj4gMzIpIHwgKGNz
+dW0gPDwgMzIpOw0KPiArCWNzdW0gPj49IDMyOw0KPiArI2VuZGlmDQo+ICsJY3N1bSA9ICh1bnNp
+Z25lZCBpbnQpY3N1bSArICgoKHVuc2lnbmVkIGludCljc3VtID4+IDE2KSB8ICgodW5zaWduZWQg
+aW50KWNzdW0gPDwgMTYpKTsNCg0KVXNlIHJvcjY0KCkgYW5kIHJvcjMyKCkuDQoNCglEYXZpZA0K
+DQo+ICsJaWYgKG9mZnNldCAmIDEpDQo+ICsJCXJldHVybiAodW5zaWduZWQgc2hvcnQpc3dhYjMy
+KGNzdW0pOw0KPiArCXJldHVybiBjc3VtID4+IDE2Ow0KPiArfQ0KPiANCj4gLS0NCj4gMi40Mi4w
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 
---60Aaxr3gdQT472cE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Sep 15, 2023 at 10:01:17AM -0700, Charlie Jenkins wrote:
-> This csum_fold implementation introduced into arch/arc by Vineet Gupta
-> is better than the default implementation on at least arc, x86, and
-> riscv. Using GCC trunk and compiling non-inlined version, this
-> implementation has 41.6667%, 25% fewer instructions on riscv64, x86-64
-> respectively with -O3 optimization. Most implmentations override this
-> default in asm, but this should be more performant than all of those
-> other implementations except for arm which has barrel shifting and
-> sparc32 which has a carry flag.
->=20
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Reviewed-by: David Laight <david.laight@aculab.com>
-> ---
->  include/asm-generic/checksum.h | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/include/asm-generic/checksum.h b/include/asm-generic/checksu=
-m.h
-> index 43e18db89c14..37f5ec70ac93 100644
-> --- a/include/asm-generic/checksum.h
-> +++ b/include/asm-generic/checksum.h
-> @@ -31,9 +31,7 @@ extern __sum16 ip_fast_csum(const void *iph, unsigned i=
-nt ihl);
->  static inline __sum16 csum_fold(__wsum csum)
->  {
->  	u32 sum =3D (__force u32)csum;
-> -	sum =3D (sum & 0xffff) + (sum >> 16);
-> -	sum =3D (sum & 0xffff) + (sum >> 16);
-> -	return (__force __sum16)~sum;
-> +	return (__force __sum16)((~sum - ror32(sum, 16)) >> 16);
-
-Breaks the build on RISC-V in a way that is repaired by later patches in
-the series, so you likely did not notice:
-
-=2E/include/asm-generic/checksum.h:34:35: error: call to undeclared functio=
-n 'ror32'; ISO C99 and later do not support implicit function declarations =
-[-Wimplicit-function-declaration]
-=2E./include/linux/bitops.h:134:21: error: static declaration of 'ror32' fo=
-llows non-static declaration
-
-Cheers,
-Conor.
-
---60Aaxr3gdQT472cE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQVsXAAKCRB4tDGHoIJi
-0mnEAQCTLnl3iMEBVo3Tzp6o42hU6amG6PduNyUQd8smnnQAVAD/RhsXtPuthkcC
-tk+v8xXjpz227mU8sGL65Usl2rfDRgk=
-=GX46
------END PGP SIGNATURE-----
-
---60Aaxr3gdQT472cE--
