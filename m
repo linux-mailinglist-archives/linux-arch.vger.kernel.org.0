@@ -2,48 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D3D7A35FB
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Sep 2023 16:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01B27A35FF
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Sep 2023 17:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbjIQO66 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Sep 2023 10:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S232640AbjIQPDP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Sep 2023 11:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbjIQO6k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Sep 2023 10:58:40 -0400
+        with ESMTP id S235480AbjIQPDH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Sep 2023 11:03:07 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2954E123;
-        Sun, 17 Sep 2023 07:58:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BAF5C43397;
-        Sun, 17 Sep 2023 14:58:33 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE16133;
+        Sun, 17 Sep 2023 08:03:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09BCC433B6;
+        Sun, 17 Sep 2023 15:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694962713;
-        bh=KlwF03cA38LAbVNYQ0y1gs6pl2aebfxqLISOHWTDsTQ=;
+        s=k20201202; t=1694962980;
+        bh=WEoHWxaDL2HV4na9gZ7zlh3s8ucDoEGnuRAGx4E8F/0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BElNy19Zi6WXfi5QvaX6dSm5kY31l5uVcjX4a9byHPOZfr/t8PUkoQYKaflIAJuqK
-         +bh71YFgrcbIs9l1D9dZqFOlDft2nsZEAxV4+RL3DtatWWFvKWLvkJEnbwr/vkvY/q
-         t0eynRlIQKhqssPWqET2/z0i0wWcU2vCI1ofh7WoIIta9iCArwL0dZQA5J76Zt4jo/
-         DFZk7ESCWqW7UU6NcOQHstTEdbyeub2ZbvfdfZjkFdTs9I+PM7t/7pL1ndSQAJbvLO
-         L2ywltEnz+mE7FaTxhoVJvSyYv2uXbOGcFdPn5Aj/M9F3CxQ1yepaIw46z8wibV9VD
-         0yFHZ6930D9sQ==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-502e6d632b6so5457163e87.0;
-        Sun, 17 Sep 2023 07:58:33 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwZGIQMJ5g7K3/k9hTxTK8Dkh3o1a5uWVUa3HfZatiNtiD7TU0s
-        W3oZPRusPJ21eKyXP/qxKYTIJz7G4AFnF8RJyM4=
-X-Google-Smtp-Source: AGHT+IFTwZZCE3hh6xs2ZyRlSuSnjazLmRxzgJV9zrr2hr8LYPakqHAE+jjNxivy5lS1QyXq2HYkSXCT5opEECDSrac=
-X-Received: by 2002:a05:6512:2207:b0:503:985:92c9 with SMTP id
- h7-20020a056512220700b00503098592c9mr2556045lfu.22.1694962711680; Sun, 17 Sep
- 2023 07:58:31 -0700 (PDT)
+        b=Zlg0K/RD4fmIzZki4FsNFddG2P0Keb1IT+6lnHewhXBo/Zd17AIbqGNSg3X35bgKE
+         T7g4i5IfpHM22VotVUzlDkZxcExAoos33xeQSOJSQJ6X0UGfv/D5GcOtRhHPiNoz8C
+         n9I6SYweYbd3TbB7o5bZR7uXUKNjpO48/pk9EjHVRLKh96dyvb5RyllZXetO1MeHsL
+         vG4esOelBCJASh4q/l194pPQmoQJYKy4TwrfGkwcgusqW94YDjpoTjLVfgYaX04Gfg
+         jHzY8iDT56FJ7xbJS+TMawmJIRz1CH9P256sqbMl7CnN8OUNYdTZ9OD3NOX0YQ+HYX
+         oLp22qsZcp1Ig==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-52e5900cf77so4469125a12.2;
+        Sun, 17 Sep 2023 08:03:00 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyGhSGkxfXOD79ddpm5ajXS+zyLBqX0lnGkDXzZmir0WcdGHJA6
+        Ns/tcwKfuuNlJEur6OqafU+WF7zzX34WQTNF750=
+X-Google-Smtp-Source: AGHT+IF86mtNik8Am6q6FkjYByJ/srAqDa79Od4bxYxo/a1eiSzpnmj9oJRSMlaFtJOPeg8/iLC+pF3/1OITJQ0OCfM=
+X-Received: by 2002:aa7:d954:0:b0:514:9ab4:3524 with SMTP id
+ l20-20020aa7d954000000b005149ab43524mr5176110eds.7.1694962979127; Sun, 17 Sep
+ 2023 08:02:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-12-guoren@kernel.org>
- <ZQPuvCNq5IAYlMR6@redhat.com>
-In-Reply-To: <ZQPuvCNq5IAYlMR6@redhat.com>
+References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-6-guoren@kernel.org>
+ <ZQIbejhIev5tx6vl@redhat.com> <CAJF2gTSdjgUaUqhkfTPmJg6Mph+8Ej4j8MeDmfBOmFY5gkTpBQ@mail.gmail.com>
+ <ZQLVqoCGJ1ExMU3e@redhat.com> <CAJF2gTQWUCLOpKMQsybMoJdZrso2FEbBRVYV+2U1veFC=7U8_A@mail.gmail.com>
+ <ZQQe9Fa4IPGDF0_f@redhat.com>
+In-Reply-To: <ZQQe9Fa4IPGDF0_f@redhat.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 17 Sep 2023 22:58:18 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR-CAw3nGPBfxszEOfOaPBxios3fSKiHXFVTG7LsCc+FQ@mail.gmail.com>
-Message-ID: <CAJF2gTR-CAw3nGPBfxszEOfOaPBxios3fSKiHXFVTG7LsCc+FQ@mail.gmail.com>
-Subject: Re: [PATCH V11 11/17] RISC-V: paravirt: pvqspinlock: Add paravirt
- qspinlock skeleton
+Date:   Sun, 17 Sep 2023 23:02:47 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTad6HCeE3rpd8+Gr0t9+Ay_4kt3pSjSAE0DaRjM4fJsA@mail.gmail.com>
+Message-ID: <CAJF2gTTad6HCeE3rpd8+Gr0t9+Ay_4kt3pSjSAE0DaRjM4fJsA@mail.gmail.com>
+Subject: Re: [PATCH V11 05/17] riscv: qspinlock: Add basic queued_spinlock support
 To:     Leonardo Bras <leobras@redhat.com>
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -70,279 +71,352 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 1:42=E2=80=AFPM Leonardo Bras <leobras@redhat.com> =
+On Fri, Sep 15, 2023 at 5:08=E2=80=AFPM Leonardo Bras <leobras@redhat.com> =
 wrote:
 >
-> On Sun, Sep 10, 2023 at 04:29:05AM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
+> On Fri, Sep 15, 2023 at 10:10:25AM +0800, Guo Ren wrote:
+> > On Thu, Sep 14, 2023 at 5:43=E2=80=AFPM Leonardo Bras <leobras@redhat.c=
+om> wrote:
+> > >
+> > > On Thu, Sep 14, 2023 at 12:46:56PM +0800, Guo Ren wrote:
+> > > > On Thu, Sep 14, 2023 at 4:29=E2=80=AFAM Leonardo Bras <leobras@redh=
+at.com> wrote:
+> > > > >
+> > > > > On Sun, Sep 10, 2023 at 04:28:59AM -0400, guoren@kernel.org wrote=
+:
+> > > > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > > > >
+> > > > > > The requirements of qspinlock have been documented by commit:
+> > > > > > a8ad07e5240c ("asm-generic: qspinlock: Indicate the use of mixe=
+d-size
+> > > > > > atomics").
+> > > > > >
+> > > > > > Although RISC-V ISA gives out a weaker forward guarantee LR/SC,=
+ which
+> > > > > > doesn't satisfy the requirements of qspinlock above, it won't p=
+revent
+> > > > > > some riscv vendors from implementing a strong fwd guarantee LR/=
+SC in
+> > > > > > microarchitecture to match xchg_tail requirement. T-HEAD C9xx p=
+rocessor
+> > > > > > is the one.
+> > > > > >
+> > > > > > We've tested the patch on SOPHGO sg2042 & th1520 and passed the=
+ stress
+> > > > > > test on Fedora & Ubuntu & OpenEuler ... Here is the performance
+> > > > > > comparison between qspinlock and ticket_lock on sg2042 (64 core=
+s):
+> > > > > >
+> > > > > > sysbench test=3Dthreads threads=3D32 yields=3D100 lock=3D8 (+13=
+.8%):
+> > > > > >   queued_spinlock 0.5109/0.00
+> > > > > >   ticket_spinlock 0.5814/0.00
+> > > > > >
+> > > > > > perf futex/hash (+6.7%):
+> > > > > >   queued_spinlock 1444393 operations/sec (+- 0.09%)
+> > > > > >   ticket_spinlock 1353215 operations/sec (+- 0.15%)
+> > > > > >
+> > > > > > perf futex/wake-parallel (+8.6%):
+> > > > > >   queued_spinlock (waking 1/64 threads) in 0.0253 ms (+-2.90%)
+> > > > > >   ticket_spinlock (waking 1/64 threads) in 0.0275 ms (+-3.12%)
+> > > > > >
+> > > > > > perf futex/requeue (+4.2%):
+> > > > > >   queued_spinlock Requeued 64 of 64 threads in 0.0785 ms (+-0.5=
+5%)
+> > > > > >   ticket_spinlock Requeued 64 of 64 threads in 0.0818 ms (+-4.1=
+2%)
+> > > > > >
+> > > > > > System Benchmarks (+6.4%)
+> > > > > >   queued_spinlock:
+> > > > > >     System Benchmarks Index Values               BASELINE      =
+ RESULT    INDEX
+> > > > > >     Dhrystone 2 using register variables         116700.0  6286=
+13745.4  53865.8
+> > > > > >     Double-Precision Whetstone                       55.0     1=
+82422.8  33167.8
+> > > > > >     Execl Throughput                                 43.0      =
+13116.6   3050.4
+> > > > > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    77=
+62306.2  19601.8
+> > > > > >     File Copy 256 bufsize 500 maxblocks            1655.0    34=
+17556.8  20649.9
+> > > > > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    74=
+27995.7  12806.9
+> > > > > >     Pipe Throughput                               12440.0   230=
+58600.5  18535.9
+> > > > > >     Pipe-based Context Switching                   4000.0    28=
+35617.7   7089.0
+> > > > > >     Process Creation                                126.0      =
+12537.3    995.0
+> > > > > >     Shell Scripts (1 concurrent)                     42.4      =
+57057.4  13456.9
+> > > > > >     Shell Scripts (8 concurrent)                      6.0      =
+ 7367.1  12278.5
+> > > > > >     System Call Overhead                          15000.0   333=
+08301.3  22205.5
+> > > > > >                                                                =
+        =3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > >     System Benchmarks Index Score                              =
+         12426.1
+> > > > > >
+> > > > > >   ticket_spinlock:
+> > > > > >     System Benchmarks Index Values               BASELINE      =
+ RESULT    INDEX
+> > > > > >     Dhrystone 2 using register variables         116700.0  6265=
+41701.9  53688.2
+> > > > > >     Double-Precision Whetstone                       55.0     1=
+81921.0  33076.5
+> > > > > >     Execl Throughput                                 43.0      =
+12625.1   2936.1
+> > > > > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    65=
+53792.9  16550.0
+> > > > > >     File Copy 256 bufsize 500 maxblocks            1655.0    31=
+89231.6  19270.3
+> > > > > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    72=
+21277.0  12450.5
+> > > > > >     Pipe Throughput                               12440.0   205=
+94018.7  16554.7
+> > > > > >     Pipe-based Context Switching                   4000.0    25=
+71117.7   6427.8
+> > > > > >     Process Creation                                126.0      =
+10798.4    857.0
+> > > > > >     Shell Scripts (1 concurrent)                     42.4      =
+57227.5  13497.1
+> > > > > >     Shell Scripts (8 concurrent)                      6.0      =
+ 7329.2  12215.3
+> > > > > >     System Call Overhead                          15000.0   307=
+66778.4  20511.2
+> > > > > >                                                                =
+        =3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > >     System Benchmarks Index Score                              =
+         11670.7
+> > > > > >
+> > > > > > The qspinlock has a significant improvement on SOPHGO SG2042 64
+> > > > > > cores platform than the ticket_lock.
+> > > > > >
+> > > > > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > > > > ---
+> > > > > >  arch/riscv/Kconfig                | 16 ++++++++++++++++
+> > > > > >  arch/riscv/include/asm/Kbuild     |  3 ++-
+> > > > > >  arch/riscv/include/asm/spinlock.h | 17 +++++++++++++++++
+> > > > > >  3 files changed, 35 insertions(+), 1 deletion(-)
+> > > > > >  create mode 100644 arch/riscv/include/asm/spinlock.h
+> > > > > >
+> > > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > > > index 2c346fe169c1..7f39bfc75744 100644
+> > > > > > --- a/arch/riscv/Kconfig
+> > > > > > +++ b/arch/riscv/Kconfig
+> > > > > > @@ -471,6 +471,22 @@ config NODES_SHIFT
+> > > > > >         Specify the maximum number of NUMA Nodes available on t=
+he target
+> > > > > >         system.  Increases memory reserved to accommodate vario=
+us tables.
+> > > > > >
+> > > > > > +choice
+> > > > > > +     prompt "RISC-V spinlock type"
+> > > > > > +     default RISCV_TICKET_SPINLOCKS
+> > > > > > +
+> > > > > > +config RISCV_TICKET_SPINLOCKS
+> > > > > > +     bool "Using ticket spinlock"
+> > > > > > +
+> > > > > > +config RISCV_QUEUED_SPINLOCKS
+> > > > > > +     bool "Using queued spinlock"
+> > > > > > +     depends on SMP && MMU
+> > > > > > +     select ARCH_USE_QUEUED_SPINLOCKS
+> > > > > > +     help
+> > > > > > +       Make sure your micro arch LL/SC has a strong forward pr=
+ogress guarantee.
+> > > > > > +       Otherwise, stay at ticket-lock.
+> > > > > > +endchoice
+> > > > > > +
+> > > > > >  config RISCV_ALTERNATIVE
+> > > > > >       bool
+> > > > > >       depends on !XIP_KERNEL
+> > > > > > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include=
+/asm/Kbuild
+> > > > > > index 504f8b7e72d4..a0dc85e4a754 100644
+> > > > > > --- a/arch/riscv/include/asm/Kbuild
+> > > > > > +++ b/arch/riscv/include/asm/Kbuild
+> > > > > > @@ -2,10 +2,11 @@
+> > > > > >  generic-y +=3D early_ioremap.h
+> > > > > >  generic-y +=3D flat.h
+> > > > > >  generic-y +=3D kvm_para.h
+> > > > > > +generic-y +=3D mcs_spinlock.h
+> > > > > >  generic-y +=3D parport.h
+> > > > > > -generic-y +=3D spinlock.h
+> > > > >
+> > > > > IIUC here you take the asm-generic/spinlock.h (which defines arch=
+_spin_*())
+> > > > > and include the asm-generic headers of mcs_spinlock and qspinlock=
+.
+> > > > >
+> > > > > In this case, the qspinlock.h will provide the arch_spin_*() inte=
+rfaces,
+> > > > > which seems the oposite of the above description (ticket spinlock=
+s being
+> > > > > the standard).
+> > > > >
+> > > > > Shouldn't ticket-spinlock.h also get included here?
+> > > > > (Also, I am probably missing something, as I dont' see the use of
+> > > > > mcs_spinlock here.)
+> > > > No, because asm-generic/spinlock.h:
+> > > > ...
+> > > > #include <asm-generic/ticket_spinlock.h>
+> > > > ...
+> > > >
+> > >
+> > > But aren't you removing asm-generic/spinlock.h below ?
+> > > -generic-y +=3D spinlock.h
+> > Yes, current is:
 > >
-> > Using static_call to switch between:
-> >   native_queued_spin_lock_slowpath()    __pv_queued_spin_lock_slowpath(=
-)
-> >   native_queued_spin_unlock()           __pv_queued_spin_unlock()
+> > arch/riscv/include/asm/spinlock.h -> include/asm-generic/spinlock.h ->
+> > include/asm-generic/ticket_spinlock.h
+>
+> I did a little reading on how generic-y works (which I was unaware):
+>
+> "If an architecture uses a verbatim copy of a header from
+> include/asm-generic then this is listed in the file
+> arch/$(SRCARCH)/include/asm/Kbuild [...] During the prepare phase of the
+> build a wrapper include file is generated in the directory [...]"
+>
+> Oh, so you are removing the asm-generic/spinlock.h because it's link
+> was replaced by a new asm/spinlock.h.
+>
+> You add qspinlock.h to generic-y because it's new in riscv, and add
+> mcs_spinlock.h because it's needed by qspinlock.h.
+>
+> Ok, it makes sense now.
+>
+> Sorry about this noise.
+> I was unaware of how generic-y worked, and (wrongly)
+> assumed it was about including headers automatically in the build.
+>
+>
 > >
-> > Finish the pv_wait implementation, but pv_kick needs the SBI
-> > definition of the next patches.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/include/asm/Kbuild               |  1 -
-> >  arch/riscv/include/asm/qspinlock.h          | 35 +++++++++++++
-> >  arch/riscv/include/asm/qspinlock_paravirt.h | 29 +++++++++++
-> >  arch/riscv/include/asm/spinlock.h           |  2 +-
-> >  arch/riscv/kernel/qspinlock_paravirt.c      | 57 +++++++++++++++++++++
-> >  arch/riscv/kernel/setup.c                   |  4 ++
-> >  6 files changed, 126 insertions(+), 2 deletions(-)
-> >  create mode 100644 arch/riscv/include/asm/qspinlock.h
-> >  create mode 100644 arch/riscv/include/asm/qspinlock_paravirt.h
-> >  create mode 100644 arch/riscv/kernel/qspinlock_paravirt.c
-> >
-> > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbu=
-ild
-> > index a0dc85e4a754..b89cb3b73c13 100644
-> > --- a/arch/riscv/include/asm/Kbuild
-> > +++ b/arch/riscv/include/asm/Kbuild
-> > @@ -7,6 +7,5 @@ generic-y +=3D parport.h
-> >  generic-y +=3D spinlock_types.h
-> >  generic-y +=3D qrwlock.h
-> >  generic-y +=3D qrwlock_types.h
-> > -generic-y +=3D qspinlock.h
-> >  generic-y +=3D user.h
-> >  generic-y +=3D vmlinux.lds.h
-> > diff --git a/arch/riscv/include/asm/qspinlock.h b/arch/riscv/include/as=
-m/qspinlock.h
-> > new file mode 100644
-> > index 000000000000..7d4f416c908c
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/qspinlock.h
-> > @@ -0,0 +1,35 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (c), 2023 Alibaba Cloud
-> > + * Authors:
-> > + *   Guo Ren <guoren@linux.alibaba.com>
-> > + */
-> > +
-> > +#ifndef _ASM_RISCV_QSPINLOCK_H
-> > +#define _ASM_RISCV_QSPINLOCK_H
-> > +
-> > +#ifdef CONFIG_PARAVIRT_SPINLOCKS
-> > +#include <asm/qspinlock_paravirt.h>
-> > +
-> > +/* How long a lock should spin before we consider blocking */
-> > +#define SPIN_THRESHOLD               (1 << 15)
-> > +
-> > +void native_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)=
-;
-> > +void __pv_init_lock_hash(void);
-> > +void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-> > +
-> > +static inline void queued_spin_lock_slowpath(struct qspinlock *lock, u=
-32 val)
-> > +{
-> > +     static_call(pv_queued_spin_lock_slowpath)(lock, val);
-> > +}
-> > +
-> > +#define queued_spin_unlock   queued_spin_unlock
-> > +static inline void queued_spin_unlock(struct qspinlock *lock)
-> > +{
-> > +     static_call(pv_queued_spin_unlock)(lock);
-> > +}
-> > +#endif /* CONFIG_PARAVIRT_SPINLOCKS */
-> > +
-> > +#include <asm-generic/qspinlock.h>
-> > +
-> > +#endif /* _ASM_RISCV_QSPINLOCK_H */
-> > diff --git a/arch/riscv/include/asm/qspinlock_paravirt.h b/arch/riscv/i=
-nclude/asm/qspinlock_paravirt.h
-> > new file mode 100644
-> > index 000000000000..9681e851f69d
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/qspinlock_paravirt.h
-> > @@ -0,0 +1,29 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (c), 2023 Alibaba Cloud
-> > + * Authors:
-> > + *   Guo Ren <guoren@linux.alibaba.com>
-> > + */
-> > +
-> > +#ifndef _ASM_RISCV_QSPINLOCK_PARAVIRT_H
-> > +#define _ASM_RISCV_QSPINLOCK_PARAVIRT_H
-> > +
-> > +void pv_wait(u8 *ptr, u8 val);
-> > +void pv_kick(int cpu);
-> > +
-> > +void dummy_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-> > +void dummy_queued_spin_unlock(struct qspinlock *lock);
-> > +
-> > +DECLARE_STATIC_CALL(pv_queued_spin_lock_slowpath, dummy_queued_spin_lo=
-ck_slowpath);
-> > +DECLARE_STATIC_CALL(pv_queued_spin_unlock, dummy_queued_spin_unlock);
-> > +
-> > +void __init pv_qspinlock_init(void);
-> > +
-> > +static inline bool pv_is_native_spin_unlock(void)
-> > +{
-> > +     return false;
-> > +}
-> > +
-> > +void __pv_queued_spin_unlock(struct qspinlock *lock);
-> > +
-> > +#endif /* _ASM_RISCV_QSPINLOCK_PARAVIRT_H */
-> > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm=
-/spinlock.h
-> > index 6b38d6616f14..ed4253f491fe 100644
-> > --- a/arch/riscv/include/asm/spinlock.h
-> > +++ b/arch/riscv/include/asm/spinlock.h
-> > @@ -39,7 +39,7 @@ static inline bool virt_spin_lock(struct qspinlock *l=
-ock)
-> >  #undef arch_spin_trylock
-> >  #undef arch_spin_unlock
-> >
-> > -#include <asm-generic/qspinlock.h>
+> > +#ifdef CONFIG_QUEUED_SPINLOCKS
 > > +#include <asm/qspinlock.h>
-> >  #include <linux/jump_label.h>
+> > +#include <asm/qrwlock.h>
+> > +#else
+> > +#include <asm-generic/spinlock.h>
+> > +#endif
 > >
-> >  #undef arch_spin_is_locked
-> > diff --git a/arch/riscv/kernel/qspinlock_paravirt.c b/arch/riscv/kernel=
-/qspinlock_paravirt.c
-> > new file mode 100644
-> > index 000000000000..85ff5a3ec234
-> > --- /dev/null
-> > +++ b/arch/riscv/kernel/qspinlock_paravirt.c
-> > @@ -0,0 +1,57 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c), 2023 Alibaba Cloud
-> > + * Authors:
-> > + *   Guo Ren <guoren@linux.alibaba.com>
-> > + */
-> > +
-> > +#include <linux/static_call.h>
-> > +#include <asm/qspinlock_paravirt.h>
-> > +#include <asm/sbi.h>
-> > +
-> > +void pv_kick(int cpu)
-> > +{
-> > +     return;
-> > +}
-> > +
-> > +void pv_wait(u8 *ptr, u8 val)
-> > +{
-> > +     unsigned long flags;
-> > +
-> > +     if (in_nmi())
-> > +             return;
-> > +
-> > +     local_irq_save(flags);
-> > +     if (READ_ONCE(*ptr) !=3D val)
-> > +             goto out;
-> > +
-> > +     /* wait_for_interrupt(); */
-> > +out:
-> > +     local_irq_restore(flags);
-> > +}
-> > +
-> > +static void native_queued_spin_unlock(struct qspinlock *lock)
-> > +{
-> > +     smp_store_release(&lock->locked, 0);
-> > +}
-> > +
-> > +DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lo=
-ck_slowpath);
-> > +EXPORT_STATIC_CALL(pv_queued_spin_lock_slowpath);
-> > +
-> > +DEFINE_STATIC_CALL(pv_queued_spin_unlock, native_queued_spin_unlock);
-> > +EXPORT_STATIC_CALL(pv_queued_spin_unlock);
-> > +
-> > +void __init pv_qspinlock_init(void)
-> > +{
-> > +     if (num_possible_cpus() =3D=3D 1)
-> > +             return;
-> > +
-> > +     if(sbi_get_firmware_id() !=3D SBI_EXT_BASE_IMPL_ID_KVM)
+> > So, you want me:
+> > +#ifdef CONFIG_QUEUED_SPINLOCKS
+> > +#include <asm/qspinlock.h>
+> > +#else
+> > +#include <asm-generic/ticket_spinlock.h>
+> > +#endif
+> >
+> > +#include <asm/qrwlock.h>
+> >
+> > Right?
 >
-> Checks like this seem to be very common on this patchset.
-> For someone not much familiar with this, it can be hard to
-> understand.
+> No, I didn't mean that.
+> I was just worried about the arch_spin_*() interfaces, but they should be
+> fine.
 >
-> I mean, on patch 8/17 you introduce those IDs, which look to be
-> incremental ( ID =3D=3D N includes stuff from ID < N ), but I am not sure=
- as I
-> couln't find much documentation on that.
-It's from sbi spec:
-https://github.com/riscv-non-isa/riscv-sbi-doc/releases
+> BTW, according to kernel doc on generic-y, shouldn't be a better idea to
+> add 'ticket_spinlock.h' to generic-y, and include above as
+> asm/ticket_spinlock.h?
+>
+> Or is generic-y reserved only for stuff which is indirectly included by
+> other headers?
+It's okay to add generic-y for ticket_spinlock.h, and I'm okay with
+the following:
 
-0 Berkeley Boot Loader (BBL)
-1 OpenSBI
-2 Xvisor
-3 KVM
-4 RustSBI
-5 Diosix
-6 Coffer
-7 Xen Project
-8 PolarFire Hart Software Service
++#ifdef CONFIG_QUEUED_SPINLOCKS
++#include <asm/qspinlock.h>
++#else
++#include <asm/ticket_spinlock.h>
++#endif
 
->
-> Then above you test for the id being different than
-> SBI_EXT_BASE_IMPL_ID_KVM, but if they are actually incremental and a new
-> version lands, the new version will also return early because it passes t=
-he
-> test.
->
-> I am no sure if above is right, but it's all I could understand without
-> documentation.
->
-> Well, my point is: this seems hard to understand & review, so it would be
-> nice to have a macro like this to be used instead:
->
-> #define sbi_fw_implements_kvm() \
->         (sbi_get_firmware_id() >=3D SBI_EXT_BASE_IMPL_ID_KVM)
-No, it's not correct. It must be:
-(sbi_get_firmware_id() =3D=3D SBI_EXT_BASE_IMPL_ID_KVM)
++#include <asm/qrwlock.h>
 
->
-> if(!sbi_fw_implements_kvm())
-I'm okay with sbi_fw_implements_kvm().
-
->         return;
->
-> What do you think?
->
-> Other than that, LGTM.
 >
 > Thanks!
 > Leo
 >
-> > +             return;
-> > +
-> > +     pr_info("PV qspinlocks enabled\n");
-> > +     __pv_init_lock_hash();
-> > +
-> > +     static_call_update(pv_queued_spin_lock_slowpath, __pv_queued_spin=
-_lock_slowpath);
-> > +     static_call_update(pv_queued_spin_unlock, __pv_queued_spin_unlock=
-);
-> > +}
-> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > index c57d15b05160..88690751f2ee 100644
-> > --- a/arch/riscv/kernel/setup.c
-> > +++ b/arch/riscv/kernel/setup.c
-> > @@ -321,6 +321,10 @@ static void __init riscv_spinlock_init(void)
-> >  #ifdef CONFIG_QUEUED_SPINLOCKS
-> >       virt_spin_lock_init();
-> >  #endif
-> > +
-> > +#ifdef CONFIG_PARAVIRT_SPINLOCKS
-> > +     pv_qspinlock_init();
-> > +#endif
-> >  }
 > >
-> >  extern void __init init_rt_signal_env(void);
+> > >
+> > > > >
+> > > > > >  generic-y +=3D spinlock_types.h
+> > > > > >  generic-y +=3D qrwlock.h
+> > > > > >  generic-y +=3D qrwlock_types.h
+> > > > > > +generic-y +=3D qspinlock.h
+> > > > > >  generic-y +=3D user.h
+> > > > > >  generic-y +=3D vmlinux.lds.h
+> > > > > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/inc=
+lude/asm/spinlock.h
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..c644a92d4548
+> > > > > > --- /dev/null
+> > > > > > +++ b/arch/riscv/include/asm/spinlock.h
+> > > > > > @@ -0,0 +1,17 @@
+> > > > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > > > +
+> > > > > > +#ifndef __ASM_RISCV_SPINLOCK_H
+> > > > > > +#define __ASM_RISCV_SPINLOCK_H
+> > > > > > +
+> > > > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
+> > > > > > +#define _Q_PENDING_LOOPS     (1 << 9)
+> > > > > > +#endif
+> > > > >
+> > > > > Any reason the above define couldn't be merged on the ifdef below=
+?
+> > > > Easy for the next patch to modify. See Waiman's comment:
+> > > >
+> > > > https://lore.kernel.org/linux-riscv/4cc7113a-0e4e-763a-cba2-7963bcd=
+26c7a@redhat.com/
+> > > >
+> > > > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/inclu=
+de/asm/spinlock.h
+> > > > > index c644a92d4548..9eb3ad31e564 100644
+> > > > > --- a/arch/riscv/include/asm/spinlock.h
+> > > > > +++ b/arch/riscv/include/asm/spinlock.h
+> > > > > @@ -7,11 +7,94 @@
+> > > > >   #define _Q_PENDING_LOOPS (1 << 9)
+> > > > >   #endif
+> > > > >
+> > > >
+> > > > I see why you separated the _Q_PENDING_LOOPS out.
+> > > >
+> > >
+> > > I see, should be fine then.
+> > >
+> > > Thanks!
+> > > Leo
+> > >
+> > > >
+> > > > >
+> > > > > > +
+> > > > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
+> > > > > > +#include <asm/qspinlock.h>
+> > > > > > +#include <asm/qrwlock.h>
+> > > > > > +#else
+> > > > > > +#include <asm-generic/spinlock.h>
+> > > > > > +#endif
+> > > > > > +
+> > > > > > +#endif /* __ASM_RISCV_SPINLOCK_H */
+> > > > > > --
+> > > > > > 2.36.1
+> > > > > >
+> > > > >
+> > > > > Thanks!
+> > > > > Leo
+> > > > >
+> > > >
+> > > >
+> > > > --
+> > > > Best Regards
+> > > >  Guo Ren
+> > > >
+> > >
+> >
+> >
 > > --
-> > 2.36.1
+> > Best Regards
+> >  Guo Ren
 > >
 >
 
