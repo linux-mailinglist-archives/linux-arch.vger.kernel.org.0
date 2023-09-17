@@ -2,100 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410727A3144
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Sep 2023 18:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAC37A3574
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Sep 2023 14:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjIPP7t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 Sep 2023 11:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S231952AbjIQMET (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Sep 2023 08:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjIPP7j (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Sep 2023 11:59:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32BC114;
-        Sat, 16 Sep 2023 08:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=w48b1gTGXHiaqxwJXgXOFHKSen7VOnpQ1+UdzbtV8mQ=; b=mSUuCOplScq5spGBc4yY1EjuuG
-        C+5Ns+4ln0AVgDoLmm4dW2C3bau1nzQZSkJRoTq+kJi4tZNl1mPhkXfvuMSjRgc9NM1zrCZuomzJm
-        5Lc9LWVh1e5QLAuTK3Hx8tnZ/DdaVqJpU6X0ZBs5/kt3I/pUJgkz2fQNhred2Y9uy4XvQze7BT+C1
-        5npTOgn387mrIi6cQLGkUARogmX8+2Vpe8/1gpB8fw3S/HP/sSKuR74sr7xuHWSCzpkLrQksiQLBp
-        b0N1qW+pkcz7JwohapppuB0nK9KYwRtxp8wIFD9mBTK6GEWEYrBzu4HwP8JO1CA10ObpqeXMl13qE
-        yXT1oZ5Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qhXhk-00H0Wr-8s; Sat, 16 Sep 2023 15:59:32 +0000
-Date:   Sat, 16 Sep 2023 16:59:32 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 08/17] alpha: Implement xor_unlock_is_negative_byte
-Message-ID: <ZQXQ5OnAgisxVyKs@casper.infradead.org>
-References: <20230915183707.2707298-1-willy@infradead.org>
- <20230915183707.2707298-9-willy@infradead.org>
- <CAHk-=wgBUvM7tc70AAvUw+HHOo6Q=jD4FVheFGDCjNaK3OCEGA@mail.gmail.com>
- <ZQT4/gA4vIa/7H6q@casper.infradead.org>
- <CAHk-=whbj+pVGhJTcQCLhY8KZJNomWOKM=s-GZSpK_G=G4fXEA@mail.gmail.com>
+        with ESMTP id S229972AbjIQMER (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Sep 2023 08:04:17 -0400
+Received: from shiva.jussieu.fr (shiva.jussieu.fr [134.157.0.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFA8112B;
+        Sun, 17 Sep 2023 05:04:11 -0700 (PDT)
+Received: from mailix1.insp.jussieu.fr (mailix1.insp.jussieu.fr [134.157.37.11])
+          by shiva.jussieu.fr (8.15.2/jtpda-5.4) with ESMTP id 38HC40nk026906
+          ; Sun, 17 Sep 2023 14:04:05 +0200 (CEST)
+X-Ids:  168
+Received: from hordix.insp.jussieu.fr (hordix.insp.jussieu.fr [134.157.37.9])
+        by mailix1.insp.jussieu.fr (Postfix-INSP-2.10.1) with ESMTPSA id 78A06C062BC0;
+        Sun, 17 Sep 2023 13:58:50 +0200 (CEST)
+Received: from [105.112.96.211] ([105.112.96.211]) by
+ webmail.insp.jussieu.fr (Horde Framework) with HTTPS; Sun, 17 Sep 2023
+ 11:58:50 +0000
+Date:   Sun, 17 Sep 2023 11:58:50 +0000
+Message-ID: <20230917115850.Horde.nDVhVuZCMbI1tdSrz7hexww@webmail.insp.jussieu.fr>
+From:   Victoria Cleland <wajdi.chaabani@insp.upmc.fr>
+Subject: Hallo
+Reply-to: v.cleland10@aol.com
+User-Agent: Horde Application Framework 5
+Organization: Institut des NanoSciences de Paris
+X-InspUpmcSession: CHAABANI
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whbj+pVGhJTcQCLhY8KZJNomWOKM=s-GZSpK_G=G4fXEA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Miltered: at jchkmail2.reseau.jussieu.fr with ID 6506EB30.005 by Joe's j-chkmail (http : // j-chkmail dot ensmp dot fr)!
+X-j-chkmail-Enveloppe: 6506EB30.005 from mailix1.insp.jussieu.fr/mailix1.insp.jussieu.fr/134.157.37.11/mailix1.insp.jussieu.fr/<wajdi.chaabani@insp.upmc.fr>
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [134.157.0.129 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
+        *      [134.157.0.129 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [v.cleland10[at]aol.com]
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 07:01:14PM -0700, Linus Torvalds wrote:
-> On Fri, 15 Sept 2023 at 17:38, Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Fri, Sep 15, 2023 at 05:27:17PM -0700, Linus Torvalds wrote:
-> > > On Fri, 15 Sept 2023 at 11:37, Matthew Wilcox (Oracle)
-> > > <willy@infradead.org> wrote:
-> > > >
-> > > > +       "1:     ldl_l %0,%4\n"
-> > > > +       "       xor %0,%3,%0\n"
-> > > > +       "       xor %0,%3,%2\n"
-> > > > +       "       stl_c %0,%1\n"
-> > >
-> > > What an odd thing to do.
-> > >
-> > > Why don't you just save the old value? That double xor looks all kinds
-> > > of strange, and is a data dependency for no good reason that I can
-> > > see.
-> > >
-> > > Why isn't this "ldl_l + mov %0,%2 + xor + stl_c" instead?
-> > >
-> > > Not that I think alpha matters, but since I was looking through the
-> > > series, this just made me go "Whaa?"
-> >
-> > Well, this is my first time writing Alpha assembler ;-)  I stole this
-> > from ATOMIC_OP_RETURN:
-> >
-> >         "1:     ldl_l %0,%1\n"                                          \
-> >         "       " #asm_op " %0,%3,%2\n"                                 \
-> >         "       " #asm_op " %0,%3,%0\n"                                 \
-> 
-> Note how that does "orig" assignment first (ie the '%2" destination is
-> the first instruction), unlike your version.
 
-Wow.  I totally missed that I'd transposed those two lines.  I read
-it back with the lines in the order that they should have been in.
-Every time I read it.  I was wondering why you were talking about a data
-dependency, and I just couldn't see it.  With the lines in the order that
-they're actually in, it's quite obvious and totally not what I meant.
-Of course, it doesn't matter which order they're in from the point of
-view of testing the waiters bit since we don't change the waiters bit.
+17. September 2023.
 
-> Does any of this matter? Nope. It's alpha. There's probably a handful
-> of machines, and it's maybe one extra cycle. It's really the oddity
-> that threw me.
+Hallo,
 
-I'll admit to spending far more time on the m68k version of this than
-the alpha version ;-)
+Ich möchte Ihnen einen Geschäftsvorschlag mitteilen. Für weitere  
+Details antworten Sie auf Englisch.
+
+Grüße
+Frau Victoria Cleland
+_________________________
+Sekretär: Wajdi Chaabani
+
