@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9E97A35E3
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Sep 2023 16:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D3D7A35FB
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Sep 2023 16:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjIQOe7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Sep 2023 10:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S232592AbjIQO66 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Sep 2023 10:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236043AbjIQOe5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Sep 2023 10:34:57 -0400
+        with ESMTP id S234501AbjIQO6k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Sep 2023 10:58:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1BC127;
-        Sun, 17 Sep 2023 07:34:51 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D0FFC433CC;
-        Sun, 17 Sep 2023 14:34:51 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2954E123;
+        Sun, 17 Sep 2023 07:58:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BAF5C43397;
+        Sun, 17 Sep 2023 14:58:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694961291;
-        bh=GLC0vxg2cNEzyoFwNv+NnYc51jrkI3SfuCpiJnPVyME=;
+        s=k20201202; t=1694962713;
+        bh=KlwF03cA38LAbVNYQ0y1gs6pl2aebfxqLISOHWTDsTQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VnPYQgDEh/cu9zGucD0YMX3ubc8EHYfCvTThtSO9jnUl5vyvU9xRck9D5ZXek+nFQ
-         8nVrdIc20V+WJYKBBzoo3kGTkS4O8UT6ifJp2DkcmIAaa0FluvdW0AfwsdhjvSt45n
-         EtaCabvZdUKN8KPLbf2+VZysXRFI5CpXRE5G7CxW8CBuxJuQcJKhFtgu+TcNuquud8
-         Lhxk2XXnNoyVnRMDlhMh+0OG0M8xAgdfHjYUmjcjNU+ivkZ34eRv5wkpjPwymveZtj
-         AQ5OFI+AslaiV31C2Hg3uX7h2O01fBlb6c15+brpR9zo/iUzQFO0VNKSMhiZLsmt3P
-         4IMMdU66cp1sQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4c0so8068947a12.0;
-        Sun, 17 Sep 2023 07:34:51 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yy1q2rqwUMXqZNCs1J+hF70mjS46lE853FZWmQxNFIXB2zo6mz0
-        +O9bUFmgPQTuirA78Koe1xBaKTlcy5FxSmmran8=
-X-Google-Smtp-Source: AGHT+IHNJUa2Po77Ox7aOFbpAK1qWttrvqZ9h23V4sen1nS6Gt92OUHNpjlk8om+Q+b+NJ8LVrAgo1QCBvdA9fcBNpc=
-X-Received: by 2002:a50:ec8c:0:b0:52f:a763:aab4 with SMTP id
- e12-20020a50ec8c000000b0052fa763aab4mr10251708edr.5.1694961289833; Sun, 17
- Sep 2023 07:34:49 -0700 (PDT)
+        b=BElNy19Zi6WXfi5QvaX6dSm5kY31l5uVcjX4a9byHPOZfr/t8PUkoQYKaflIAJuqK
+         +bh71YFgrcbIs9l1D9dZqFOlDft2nsZEAxV4+RL3DtatWWFvKWLvkJEnbwr/vkvY/q
+         t0eynRlIQKhqssPWqET2/z0i0wWcU2vCI1ofh7WoIIta9iCArwL0dZQA5J76Zt4jo/
+         DFZk7ESCWqW7UU6NcOQHstTEdbyeub2ZbvfdfZjkFdTs9I+PM7t/7pL1ndSQAJbvLO
+         L2ywltEnz+mE7FaTxhoVJvSyYv2uXbOGcFdPn5Aj/M9F3CxQ1yepaIw46z8wibV9VD
+         0yFHZ6930D9sQ==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-502e6d632b6so5457163e87.0;
+        Sun, 17 Sep 2023 07:58:33 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwZGIQMJ5g7K3/k9hTxTK8Dkh3o1a5uWVUa3HfZatiNtiD7TU0s
+        W3oZPRusPJ21eKyXP/qxKYTIJz7G4AFnF8RJyM4=
+X-Google-Smtp-Source: AGHT+IFTwZZCE3hh6xs2ZyRlSuSnjazLmRxzgJV9zrr2hr8LYPakqHAE+jjNxivy5lS1QyXq2HYkSXCT5opEECDSrac=
+X-Received: by 2002:a05:6512:2207:b0:503:985:92c9 with SMTP id
+ h7-20020a056512220700b00503098592c9mr2556045lfu.22.1694962711680; Sun, 17 Sep
+ 2023 07:58:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-4-guoren@kernel.org>
- <ZQF3qS1KRYAt3coC@redhat.com> <CAJF2gTT5s2-vhgrxnkE1EGqJMvXn8ftYrrwRMdJH1tjEqAv5kQ@mail.gmail.com>
- <ZQUEEckIEbtxwLEG@redhat.com>
-In-Reply-To: <ZQUEEckIEbtxwLEG@redhat.com>
+References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-12-guoren@kernel.org>
+ <ZQPuvCNq5IAYlMR6@redhat.com>
+In-Reply-To: <ZQPuvCNq5IAYlMR6@redhat.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 17 Sep 2023 22:34:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQLBNy9uS4AF+UgD+ew3BN1dLs0f0+z0jzpieR75kv_Dw@mail.gmail.com>
-Message-ID: <CAJF2gTQLBNy9uS4AF+UgD+ew3BN1dLs0f0+z0jzpieR75kv_Dw@mail.gmail.com>
-Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
+Date:   Sun, 17 Sep 2023 22:58:18 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR-CAw3nGPBfxszEOfOaPBxios3fSKiHXFVTG7LsCc+FQ@mail.gmail.com>
+Message-ID: <CAJF2gTR-CAw3nGPBfxszEOfOaPBxios3fSKiHXFVTG7LsCc+FQ@mail.gmail.com>
+Subject: Re: [PATCH V11 11/17] RISC-V: paravirt: pvqspinlock: Add paravirt
+ qspinlock skeleton
 To:     Leonardo Bras <leobras@redhat.com>
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -70,244 +70,279 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 16, 2023 at 9:25=E2=80=AFAM Leonardo Bras <leobras@redhat.com> =
+On Fri, Sep 15, 2023 at 1:42=E2=80=AFPM Leonardo Bras <leobras@redhat.com> =
 wrote:
 >
-> On Fri, Sep 15, 2023 at 08:36:31PM +0800, Guo Ren wrote:
-> > On Wed, Sep 13, 2023 at 4:50=E2=80=AFPM Leonardo Bras <leobras@redhat.c=
-om> wrote:
-> > >
-> > > On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
-> > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > >
-> > > > Cache-block prefetch instructions are HINTs to the hardware to
-> > > > indicate that software intends to perform a particular type of
-> > > > memory access in the near future. Enable ARCH_HAS_PREFETCHW and
-> > > > improve the arch_xchg for qspinlock xchg_tail.
-> > > >
-> > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > > ---
-> > > >  arch/riscv/Kconfig                 | 15 +++++++++++++++
-> > > >  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
-> > > >  arch/riscv/include/asm/hwcap.h     |  1 +
-> > > >  arch/riscv/include/asm/insn-def.h  |  5 +++++
-> > > >  arch/riscv/include/asm/processor.h | 13 +++++++++++++
-> > > >  arch/riscv/kernel/cpufeature.c     |  1 +
-> > > >  6 files changed, 38 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > index e9ae6fa232c3..2c346fe169c1 100644
-> > > > --- a/arch/riscv/Kconfig
-> > > > +++ b/arch/riscv/Kconfig
-> > > > @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
-> > > >
-> > > >          If you don't know what to do here, say Y.
-> > > >
-> > > > +config RISCV_ISA_ZICBOP
-> > > > +     bool "Zicbop extension support for cache block prefetch"
-> > > > +     depends on MMU
-> > > > +     depends on RISCV_ALTERNATIVE
-> > > > +     default y
-> > > > +     help
-> > > > +        Adds support to dynamically detect the presence of the ZIC=
-BOP
-> > > > +        extension (Cache Block Prefetch Operations) and enable its
-> > > > +        usage.
-> > > > +
-> > > > +        The Zicbop extension can be used to prefetch cache block f=
-or
-> > > > +        read/write/instruction fetch.
-> > > > +
-> > > > +        If you don't know what to do here, say Y.
-> > > > +
-> > > >  config TOOLCHAIN_HAS_ZIHINTPAUSE
-> > > >       bool
-> > > >       default y
-> > > > diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/=
-asm/cmpxchg.h
-> > > > index 702725727671..56eff7a9d2d2 100644
-> > > > --- a/arch/riscv/include/asm/cmpxchg.h
-> > > > +++ b/arch/riscv/include/asm/cmpxchg.h
-> > > > @@ -11,6 +11,7 @@
-> > > >
-> > > >  #include <asm/barrier.h>
-> > > >  #include <asm/fence.h>
-> > > > +#include <asm/processor.h>
-> > > >
-> > > >  #define __arch_xchg_masked(prepend, append, r, p, n)              =
-   \
-> > > >  ({                                                                =
-   \
-> > > > @@ -25,6 +26,7 @@
-> > > >                                                                    =
-   \
-> > > >       __asm__ __volatile__ (                                       =
-   \
-> > > >              prepend                                               =
-   \
-> > > > +            PREFETCHW_ASM(%5)                                     =
-   \
-> > > >              "0:      lr.w %0, %2\n"                               =
-   \
-> > > >              "        and  %1, %0, %z4\n"                          =
-   \
-> > > >              "        or   %1, %1, %z3\n"                          =
-   \
-> > > > @@ -32,7 +34,7 @@
-> > > >              "        bnez %1, 0b\n"                               =
-   \
-> > > >              append                                                =
-   \
-> > > >              : "=3D&r" (__retx), "=3D&r" (__rc), "+A" (*(__ptr32b))=
-       \
-> > > > -            : "rJ" (__newx), "rJ" (~__mask)                       =
-   \
-> > > > +            : "rJ" (__newx), "rJ" (~__mask), "rJ" (__ptr32b)      =
-   \
-> > > >              : "memory");                                          =
-   \
-> > > >                                                                    =
-   \
-> > > >       r =3D (__typeof__(*(p)))((__retx & __mask) >> __s);          =
-     \
-> > > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/as=
-m/hwcap.h
-> > > > index b7b58258f6c7..78b7b8b53778 100644
-> > > > --- a/arch/riscv/include/asm/hwcap.h
-> > > > +++ b/arch/riscv/include/asm/hwcap.h
-> > > > @@ -58,6 +58,7 @@
-> > > >  #define RISCV_ISA_EXT_ZICSR          40
-> > > >  #define RISCV_ISA_EXT_ZIFENCEI               41
-> > > >  #define RISCV_ISA_EXT_ZIHPM          42
-> > > > +#define RISCV_ISA_EXT_ZICBOP         43
-> > > >
-> > > >  #define RISCV_ISA_EXT_MAX            64
-> > > >
-> > > > diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include=
-/asm/insn-def.h
-> > > > index 6960beb75f32..dc590d331894 100644
-> > > > --- a/arch/riscv/include/asm/insn-def.h
-> > > > +++ b/arch/riscv/include/asm/insn-def.h
-> > > > @@ -134,6 +134,7 @@
-> > > >
-> > > >  #define RV_OPCODE_MISC_MEM   RV_OPCODE(15)
-> > > >  #define RV_OPCODE_SYSTEM     RV_OPCODE(115)
-> > > > +#define RV_OPCODE_PREFETCH   RV_OPCODE(19)
-> > > >
-> > > >  #define HFENCE_VVMA(vaddr, asid)                             \
-> > > >       INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(17),              \
-> > > > @@ -196,4 +197,8 @@
-> > > >       INSN_I(OPCODE_MISC_MEM, FUNC3(2), __RD(0),              \
-> > > >              RS1(base), SIMM12(4))
-> > > >
-> > > > +#define CBO_prefetchw(base)                                  \
-> > > > +     INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),             \
-> > > > +            RD(x0), RS1(base), RS2(x0))
-> > > > +
-> > >
-> > > I understand that here you create the instruction via bitfield, follo=
-wing
-> > > the ISA, and this enables using instructions not available on the
-> > > toolchain.
-> > >
-> > > It took me some time to find the document with this instruction, so p=
-lease
-> > > add this to the commit msg:
-> > >
-> > > https://github.com/riscv/riscv-CMOs/blob/master/specifications/cmobas=
-e-v1.0.pdf
-> > > Page 23.
-> > >
-> > > IIUC, the instruction is "prefetch.w".
-> > >
-> > > Maybe I am missing something, but in the document the rs2 field
-> > > (PREFETCH.W) contains a 0x3, while the above looks to have a 0 instea=
-d.
-> > >
-> > > rs2 field =3D 0x0 would be a prefetch.i (instruction prefetch) instea=
-d.
-> > >
-> > > Is the above correct, or am I missing something?
-> > Oh, you are right. My fault, thx for pointing out. It should be:
-> > +       INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),             \
-> > +              RD(x0), RS1(base), RS2(x3))
+> On Sun, Sep 10, 2023 at 04:29:05AM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Using static_call to switch between:
+> >   native_queued_spin_lock_slowpath()    __pv_queued_spin_lock_slowpath(=
+)
+> >   native_queued_spin_unlock()           __pv_queued_spin_unlock()
+> >
+> > Finish the pv_wait implementation, but pv_kick needs the SBI
+> > definition of the next patches.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/include/asm/Kbuild               |  1 -
+> >  arch/riscv/include/asm/qspinlock.h          | 35 +++++++++++++
+> >  arch/riscv/include/asm/qspinlock_paravirt.h | 29 +++++++++++
+> >  arch/riscv/include/asm/spinlock.h           |  2 +-
+> >  arch/riscv/kernel/qspinlock_paravirt.c      | 57 +++++++++++++++++++++
+> >  arch/riscv/kernel/setup.c                   |  4 ++
+> >  6 files changed, 126 insertions(+), 2 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/qspinlock.h
+> >  create mode 100644 arch/riscv/include/asm/qspinlock_paravirt.h
+> >  create mode 100644 arch/riscv/kernel/qspinlock_paravirt.c
+> >
+> > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbu=
+ild
+> > index a0dc85e4a754..b89cb3b73c13 100644
+> > --- a/arch/riscv/include/asm/Kbuild
+> > +++ b/arch/riscv/include/asm/Kbuild
+> > @@ -7,6 +7,5 @@ generic-y +=3D parport.h
+> >  generic-y +=3D spinlock_types.h
+> >  generic-y +=3D qrwlock.h
+> >  generic-y +=3D qrwlock_types.h
+> > -generic-y +=3D qspinlock.h
+> >  generic-y +=3D user.h
+> >  generic-y +=3D vmlinux.lds.h
+> > diff --git a/arch/riscv/include/asm/qspinlock.h b/arch/riscv/include/as=
+m/qspinlock.h
+> > new file mode 100644
+> > index 000000000000..7d4f416c908c
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/qspinlock.h
+> > @@ -0,0 +1,35 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (c), 2023 Alibaba Cloud
+> > + * Authors:
+> > + *   Guo Ren <guoren@linux.alibaba.com>
+> > + */
+> > +
+> > +#ifndef _ASM_RISCV_QSPINLOCK_H
+> > +#define _ASM_RISCV_QSPINLOCK_H
+> > +
+> > +#ifdef CONFIG_PARAVIRT_SPINLOCKS
+> > +#include <asm/qspinlock_paravirt.h>
+> > +
+> > +/* How long a lock should spin before we consider blocking */
+> > +#define SPIN_THRESHOLD               (1 << 15)
+> > +
+> > +void native_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)=
+;
+> > +void __pv_init_lock_hash(void);
+> > +void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+> > +
+> > +static inline void queued_spin_lock_slowpath(struct qspinlock *lock, u=
+32 val)
+> > +{
+> > +     static_call(pv_queued_spin_lock_slowpath)(lock, val);
+> > +}
+> > +
+> > +#define queued_spin_unlock   queued_spin_unlock
+> > +static inline void queued_spin_unlock(struct qspinlock *lock)
+> > +{
+> > +     static_call(pv_queued_spin_unlock)(lock);
+> > +}
+> > +#endif /* CONFIG_PARAVIRT_SPINLOCKS */
+> > +
+> > +#include <asm-generic/qspinlock.h>
+> > +
+> > +#endif /* _ASM_RISCV_QSPINLOCK_H */
+> > diff --git a/arch/riscv/include/asm/qspinlock_paravirt.h b/arch/riscv/i=
+nclude/asm/qspinlock_paravirt.h
+> > new file mode 100644
+> > index 000000000000..9681e851f69d
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/qspinlock_paravirt.h
+> > @@ -0,0 +1,29 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (c), 2023 Alibaba Cloud
+> > + * Authors:
+> > + *   Guo Ren <guoren@linux.alibaba.com>
+> > + */
+> > +
+> > +#ifndef _ASM_RISCV_QSPINLOCK_PARAVIRT_H
+> > +#define _ASM_RISCV_QSPINLOCK_PARAVIRT_H
+> > +
+> > +void pv_wait(u8 *ptr, u8 val);
+> > +void pv_kick(int cpu);
+> > +
+> > +void dummy_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+> > +void dummy_queued_spin_unlock(struct qspinlock *lock);
+> > +
+> > +DECLARE_STATIC_CALL(pv_queued_spin_lock_slowpath, dummy_queued_spin_lo=
+ck_slowpath);
+> > +DECLARE_STATIC_CALL(pv_queued_spin_unlock, dummy_queued_spin_unlock);
+> > +
+> > +void __init pv_qspinlock_init(void);
+> > +
+> > +static inline bool pv_is_native_spin_unlock(void)
+> > +{
+> > +     return false;
+> > +}
+> > +
+> > +void __pv_queued_spin_unlock(struct qspinlock *lock);
+> > +
+> > +#endif /* _ASM_RISCV_QSPINLOCK_PARAVIRT_H */
+> > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm=
+/spinlock.h
+> > index 6b38d6616f14..ed4253f491fe 100644
+> > --- a/arch/riscv/include/asm/spinlock.h
+> > +++ b/arch/riscv/include/asm/spinlock.h
+> > @@ -39,7 +39,7 @@ static inline bool virt_spin_lock(struct qspinlock *l=
+ock)
+> >  #undef arch_spin_trylock
+> >  #undef arch_spin_unlock
+> >
+> > -#include <asm-generic/qspinlock.h>
+> > +#include <asm/qspinlock.h>
+> >  #include <linux/jump_label.h>
+> >
+> >  #undef arch_spin_is_locked
+> > diff --git a/arch/riscv/kernel/qspinlock_paravirt.c b/arch/riscv/kernel=
+/qspinlock_paravirt.c
+> > new file mode 100644
+> > index 000000000000..85ff5a3ec234
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/qspinlock_paravirt.c
+> > @@ -0,0 +1,57 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c), 2023 Alibaba Cloud
+> > + * Authors:
+> > + *   Guo Ren <guoren@linux.alibaba.com>
+> > + */
+> > +
+> > +#include <linux/static_call.h>
+> > +#include <asm/qspinlock_paravirt.h>
+> > +#include <asm/sbi.h>
+> > +
+> > +void pv_kick(int cpu)
+> > +{
+> > +     return;
+> > +}
+> > +
+> > +void pv_wait(u8 *ptr, u8 val)
+> > +{
+> > +     unsigned long flags;
+> > +
+> > +     if (in_nmi())
+> > +             return;
+> > +
+> > +     local_irq_save(flags);
+> > +     if (READ_ONCE(*ptr) !=3D val)
+> > +             goto out;
+> > +
+> > +     /* wait_for_interrupt(); */
+> > +out:
+> > +     local_irq_restore(flags);
+> > +}
+> > +
+> > +static void native_queued_spin_unlock(struct qspinlock *lock)
+> > +{
+> > +     smp_store_release(&lock->locked, 0);
+> > +}
+> > +
+> > +DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lo=
+ck_slowpath);
+> > +EXPORT_STATIC_CALL(pv_queued_spin_lock_slowpath);
+> > +
+> > +DEFINE_STATIC_CALL(pv_queued_spin_unlock, native_queued_spin_unlock);
+> > +EXPORT_STATIC_CALL(pv_queued_spin_unlock);
+> > +
+> > +void __init pv_qspinlock_init(void)
+> > +{
+> > +     if (num_possible_cpus() =3D=3D 1)
+> > +             return;
+> > +
+> > +     if(sbi_get_firmware_id() !=3D SBI_EXT_BASE_IMPL_ID_KVM)
 >
-> Now I am curious to check if / how will this impact performance. :)
-> (Please let me know)
-Ref:
-commit 0ea366f5e1b6 ("arm64: atomics: prefetch the destination word
-for write prior to stxr")
-commit 86d231459d6d ("bpf: cpumap memory prefetchw optimizations for
-struct page")
+> Checks like this seem to be very common on this patchset.
+> For someone not much familiar with this, it can be hard to
+> understand.
+>
+> I mean, on patch 8/17 you introduce those IDs, which look to be
+> incremental ( ID =3D=3D N includes stuff from ID < N ), but I am not sure=
+ as I
+> couln't find much documentation on that.
+It's from sbi spec:
+https://github.com/riscv-non-isa/riscv-sbi-doc/releases
+
+0 Berkeley Boot Loader (BBL)
+1 OpenSBI
+2 Xvisor
+3 KVM
+4 RustSBI
+5 Diosix
+6 Coffer
+7 Xen Project
+8 PolarFire Hart Software Service
 
 >
+> Then above you test for the id being different than
+> SBI_EXT_BASE_IMPL_ID_KVM, but if they are actually incremental and a new
+> version lands, the new version will also return early because it passes t=
+he
+> test.
 >
+> I am no sure if above is right, but it's all I could understand without
+> documentation.
+>
+> Well, my point is: this seems hard to understand & review, so it would be
+> nice to have a macro like this to be used instead:
+>
+> #define sbi_fw_implements_kvm() \
+>         (sbi_get_firmware_id() >=3D SBI_EXT_BASE_IMPL_ID_KVM)
+No, it's not correct. It must be:
+(sbi_get_firmware_id() =3D=3D SBI_EXT_BASE_IMPL_ID_KVM)
+
+>
+> if(!sbi_fw_implements_kvm())
+I'm okay with sbi_fw_implements_kvm().
+
+>         return;
+>
+> What do you think?
+>
+> Other than that, LGTM.
+>
+> Thanks!
+> Leo
+>
+> > +             return;
+> > +
+> > +     pr_info("PV qspinlocks enabled\n");
+> > +     __pv_init_lock_hash();
+> > +
+> > +     static_call_update(pv_queued_spin_lock_slowpath, __pv_queued_spin=
+_lock_slowpath);
+> > +     static_call_update(pv_queued_spin_unlock, __pv_queued_spin_unlock=
+);
+> > +}
+> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > index c57d15b05160..88690751f2ee 100644
+> > --- a/arch/riscv/kernel/setup.c
+> > +++ b/arch/riscv/kernel/setup.c
+> > @@ -321,6 +321,10 @@ static void __init riscv_spinlock_init(void)
+> >  #ifdef CONFIG_QUEUED_SPINLOCKS
+> >       virt_spin_lock_init();
+> >  #endif
+> > +
+> > +#ifdef CONFIG_PARAVIRT_SPINLOCKS
+> > +     pv_qspinlock_init();
+> > +#endif
+> >  }
 > >
-> > >
-> > >
-> > > Thanks!
-> > > Leo
-> > >
-> > > >  #endif /* __ASM_INSN_DEF_H */
-> > > > diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/includ=
-e/asm/processor.h
-> > > > index de9da852f78d..7ad3a24212e8 100644
-> > > > --- a/arch/riscv/include/asm/processor.h
-> > > > +++ b/arch/riscv/include/asm/processor.h
-> > > > @@ -12,6 +12,8 @@
-> > > >  #include <vdso/processor.h>
-> > > >
-> > > >  #include <asm/ptrace.h>
-> > > > +#include <asm/insn-def.h>
-> > > > +#include <asm/hwcap.h>
-> > > >
-> > > >  #ifdef CONFIG_64BIT
-> > > >  #define DEFAULT_MAP_WINDOW   (UL(1) << (MMAP_VA_BITS - 1))
-> > > > @@ -103,6 +105,17 @@ static inline void arch_thread_struct_whitelis=
-t(unsigned long *offset,
-> > > >  #define KSTK_EIP(tsk)                (ulong)(task_pt_regs(tsk)->ep=
-c)
-> > > >  #define KSTK_ESP(tsk)                (ulong)(task_pt_regs(tsk)->sp=
-)
-> > > >
-> > > > +#define ARCH_HAS_PREFETCHW
-> > > > +#define PREFETCHW_ASM(base)  ALTERNATIVE(__nops(1), \
-> > > > +                                         CBO_prefetchw(base), \
-> > > > +                                         0, \
-> > > > +                                         RISCV_ISA_EXT_ZICBOP, \
-> > > > +                                         CONFIG_RISCV_ISA_ZICBOP)
-> > > > +static inline void prefetchw(const void *ptr)
-> > > > +{
-> > > > +     asm volatile(PREFETCHW_ASM(%0)
-> > > > +             : : "r" (ptr) : "memory");
-> > > > +}
-> > > >
-> > > >  /* Do necessary setup to start up a newly executed thread. */
-> > > >  extern void start_thread(struct pt_regs *regs,
-> > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpu=
-feature.c
-> > > > index ef7b4fd9e876..e0b897db0b97 100644
-> > > > --- a/arch/riscv/kernel/cpufeature.c
-> > > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > > @@ -159,6 +159,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[]=
- =3D {
-> > > >       __RISCV_ISA_EXT_DATA(h, RISCV_ISA_EXT_h),
-> > > >       __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
-> > > >       __RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
-> > > > +     __RISCV_ISA_EXT_DATA(zicbop, RISCV_ISA_EXT_ZICBOP),
-> > > >       __RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
-> > > >       __RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
-> > > >       __RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
-> > > > --
-> > > > 2.36.1
-> > > >
-> > >
-> >
-> >
+> >  extern void __init init_rt_signal_env(void);
 > > --
-> > Best Regards
-> >  Guo Ren
+> > 2.36.1
 > >
 >
 
