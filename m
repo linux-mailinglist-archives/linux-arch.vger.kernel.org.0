@@ -2,133 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5706A7A4F0D
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Sep 2023 18:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A24D7A4F6A
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Sep 2023 18:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjIRQdk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 Sep 2023 12:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
+        id S230372AbjIRQma (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 Sep 2023 12:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjIRQdW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 12:33:22 -0400
-Received: from icp-osb-irony-out5.external.iinet.net.au (icp-osb-irony-out5.external.iinet.net.au [203.59.1.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 783905FE1;
-        Mon, 18 Sep 2023 09:19:10 -0700 (PDT)
-X-SMTP-MATCH: 1
-IronPort-Data: A9a23:VSxAMasW1E456BIkgqf6yRc4uOfnVEpfMUV32f8akzHdYApBsoF/q
- tZmKVkyQEty1hlBgm0KGI+zxf6LyZfVzubXKHJtqTc3CSgiRfPtXbyxNl33Mz6ZMvrNRUdm6
- 9R2QtTbJajYdFeFzvuWGuan9SMUOZ2gHOKmU7aVY3ApHGeIdQ964f5ds79h6mJXqYXha++9k
- Yuai9HSPlajxwl1Pgo8g05UgEoy1BhakGpwUm0WPZinjneH/5UmJMt3yZWKEpfNatI88thW5
- gr05OrREmvxp3/BA/v5yeyjKhVirrT6ZWBigVIOM0SuqkQZ/HRqis7XOdJEAXq7hQllkPhIj
- 9scnoytSz50O7z1g+c0UhVgKB1XaPguFL/veRBTsOSglhycNSKyk7M2ShtsCOX0+M4qUScQs
- 6ZCdnZXNkDra+GemdpXTsFjnMksMc/kMZkSoFl/wCrFC/s6B5vERuPD+Le02R9s15kTRqiEN
- 5txhTxHai/LOi9EH2guUb0hgs22vVumeCBdtwfAzUYwyy2JpOBr65DyMd7Ra/SLQ8tPl0qVr
- 26A+H72ajkeNdqC2X+G/2iqi+vngyz2QsQRGae++/osh0ecrkQXCRsLRR61uvW0lEO6c8xQJ
- lZS+Sc0q6U2skuxQbHVWxy+vW7BtwQXW/JOHOAgrgKA0KzZ50CeHGdsZiJGcsIvsMMtbTgr0
- EKZ2t3uGDpjuaGUTnTb8a2bxRu0ISkaIm4ETSABRAoBpdLkpekOYgnnE4YmTuvv1IOwQ2mgh
- SySoyl4jLIWy8cWv0mmwW36b/uXjsChZmYICs//Bzv9s1oRiFKND2Bw1WXm0A==
-IronPort-HdrOrdr: A9a23:0/uzuKjCrt8AqS1smUj0ClKljXBQXwV13DAbv31ZSRFFG/FwyP
- rCoB1L73XJYWgqM03I+OrwTZVoJEmskKKdjrNhdYtKNjOW8VdAU7sSk7cKrweQfREWtdQtpJ
- uICpIOe+EYVGIK//oSgzPIZ+rIouP3iJxA7N22pxsDLXAIGsVdAh9CazpzencGJjWubqBJc6
- Z0iPA33gZJBBwsH7SG760+LpL+Tunw5dnbiFM9dl0aAHXnt0LW1JfKVzyjmjsOWTJGxrkvtU
- DDjgzC/62m98q2zxfNvlWjoai/zLHapOdrNYipsIw4Oz/sggGnaMBKQLuZpg04p+mp9RIDjM
- TMiw1IBbUq11rhOkWO5Tf90Qjp1zgjr1X4z0WDvHflqcvlABonFst6g55DeBex0Tt4gDhF6t
- MR44uljesRMfqAplW42zHwbWAuqqNgmwtlrQYR50YvHrf2JoUh97D3x3klXKvoLBiKorzPL9
- MeQf00nMwmCm9yT0qp/1WHk+bcHkjbWC32AHTqTfblrwS+cUoJuHfw2vZv6EvoXahNNqV52w
- ==
-X-Talos-CUID: =?us-ascii?q?9a23=3ADIVpgmrEUmiu9eRs8tg4wefmUflifCz23GrSGhK?=
- =?us-ascii?q?9GF9yS5SURWerxIoxxg=3D=3D?=
-X-Talos-MUID: 9a23:UX6ocgp3iuKBxa4lo4gezzdZP55a6IGRMRkijosspfKmbCdtPijI2Q==
-X-IronPort-AV: E=Sophos;i="6.02,156,1688400000"; 
-   d="scan'208";a="491536289"
-Received: from 58-6-226-208.tpgi.com.au (HELO [192.168.0.22]) ([58.6.226.208])
-  by icp-osb-irony-out5.iinet.net.au with ESMTP; 18 Sep 2023 22:37:48 +0800
-Message-ID: <cb763591-a697-ab74-171e-fcd7f4e70137@westnet.com.au>
-Date:   Tue, 19 Sep 2023 00:37:47 +1000
+        with ESMTP id S229704AbjIRQmQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 12:42:16 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986F03C13;
+        Mon, 18 Sep 2023 09:04:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695052925; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=pvP79mxSIzR8bl+ycoQCPTSq3/RqkpCUNtaGVAn5fqW/LazgJ/6Fi0tMgOmLfqOAFO
+    27inCowafwAyXUvq8U3TWiEzsysP1aO898Ece1gvAKPkZemazTyIFDol0qSOnHUKnG3b
+    i1cUQEmiyKNcVvfIzKfr/dCzFuPjukZCK+ZC2/bpHjPkcGxfWk0gb6cOANKR5TBdnCYc
+    qyT3QpMD/Gq5SA+/Y6GVWubQiLLHlUlJEQApGkCW9ZBDvWB2q02QveRC1PfGzZFd/GLS
+    cSupHKWN5Fsfy0q6vJI38JppkoGNyKpxeu3/uDHty7RVBDVLmMEwvtP/YK16M+ZSREv9
+    F1eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1695052925;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=yd6kyYrWj6oCQzFKUGHBarpAI0TUx5LPFaSLdyNH3nY=;
+    b=Nnp9/8M42n+EdljYtcUUih3JATBJ8wrX2GbOBptWi3F0ylpG6hC/0W/i/1scLHUh6R
+    91ldGT9Z7pQ7C504NoYbEgM64OXeoQzHi1sqGjHI4DwMcQ8gTVmVJH3Vp2luk4Io7uZV
+    RIlmihk+sfqZoRhrz0A/jHDanFjq5sr3MFya3smPtqZLsTavjj9kfzxZBdP/RiULWuIu
+    ij6Mzeyl7nP4kKyWTNbu9h389B0A5GhliVcLKtaueP9bF7KimZc19JR6/5tmaUqlhJJ6
+    SRJT7dRtPVAFes/7krIUGz8rvMEIj+hDvCHPRM1F3qRdPTbcnXKo1rNNxILKADCO0aja
+    4dfg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1695052925;
+    s=strato-dkim-0002; d=aepfle.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=yd6kyYrWj6oCQzFKUGHBarpAI0TUx5LPFaSLdyNH3nY=;
+    b=fUDjsb7ilDKCZPHca3zLwykO/DSnGifRcqDB5uo77H9C3Yva24rxuS2vqXa34EVMsW
+    TYDsHdgJUrgQegwlr1Mouj23l8qBo5ohY6VKjhzELfHn+nqNOSK1sZ7Y2pAG29g9ebZq
+    WOc3J6EJv9v28ncVPrZ/tPhh6aqtseaWN0bcswLO5prz0ff3OmY+FUU6ewJeervQE23C
+    wCf3Byj1OvSY2AwiEYUPjaquEvuKlc/R7/RmtIgpjImU9ZRVOTWq9S3Bl4Giyna6Py87
+    JrFf6CcFdQSzcq90EU/DUpYNdKk79/yaSwE8C+rPR+vDQyslZqvoq0IH8ong+gec21nc
+    sNpQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1695052925;
+    s=strato-dkim-0003; d=aepfle.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=yd6kyYrWj6oCQzFKUGHBarpAI0TUx5LPFaSLdyNH3nY=;
+    b=7oT3j3lZWjQ/Kq1bVlBzamIjnCIecoSDJNXOcpTsnkAKQ6C0S/+aNoxnAuYvtthPx4
+    iP5tLxUrs75idd7LsIDg==
+X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QXkBR9MXjAuzpIG0mv9coXAg4wqFn7GpQtMwqaqfdp7uT2JYghpVgZry79i6M1qA=="
+Received: from sender
+    by smtp.strato.de (RZmta 49.8.2 AUTH)
+    with ESMTPSA id C041b2z8IG25yDi
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 18 Sep 2023 18:02:05 +0200 (CEST)
+From:   Olaf Hering <olaf@aepfle.de>
+To:     linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v1] hyperv: reduce size of ms_hyperv_info
+Date:   Mon, 18 Sep 2023 18:01:40 +0200
+Message-Id: <20230918160141.23465-1-olaf@aepfle.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, torvalds@linux-foundation.org,
-        Nicholas Piggin <npiggin@gmail.com>
-References: <20230915183707.2707298-1-willy@infradead.org>
- <20230915183707.2707298-10-willy@infradead.org>
- <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au>
- <ZQW849TfSCK6u2f8@casper.infradead.org>
-From:   Greg Ungerer <gregungerer@westnet.com.au>
-In-Reply-To: <ZQW849TfSCK6u2f8@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Use the hole prior shared_gpa_boundary to store the result of get_vtl.
+This reduces the size by 8 bytes.
 
-On 17/9/23 00:34, Matthew Wilcox wrote:
-> On Sat, Sep 16, 2023 at 11:11:32PM +1000, Greg Ungerer wrote:
->> On 16/9/23 04:36, Matthew Wilcox (Oracle) wrote:
->>> Using EOR to clear the guaranteed-to-be-set lock bit will test the
->>> negative flag just like the x86 implementation.  This should be
->>> more efficient than the generic implementation in filemap.c.  It
->>> would be better if m68k had __GCC_ASM_FLAG_OUTPUTS__.
->>>
->>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->>> ---
->>>    arch/m68k/include/asm/bitops.h | 14 ++++++++++++++
->>>    1 file changed, 14 insertions(+)
->>>
->>> diff --git a/arch/m68k/include/asm/bitops.h b/arch/m68k/include/asm/bitops.h
->>> index e984af71df6b..909ebe7cab5d 100644
->>> --- a/arch/m68k/include/asm/bitops.h
->>> +++ b/arch/m68k/include/asm/bitops.h
->>> @@ -319,6 +319,20 @@ arch___test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
->>>    	return test_and_change_bit(nr, addr);
->>>    }
->>> +static inline bool xor_unlock_is_negative_byte(unsigned long mask,
->>> +		volatile unsigned long *p)
->>> +{
->>> +	char result;
->>> +	char *cp = (char *)p + 3;	/* m68k is big-endian */
->>> +
->>> +	__asm__ __volatile__ ("eor.b %1, %2; smi %0"
->>
->> The ColdFire members of the 68k family do not support byte size eor:
->>
->>    CC      mm/filemap.o
->> {standard input}: Assembler messages:
->> {standard input}:824: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `eor.b #1,3(%a0)' ignored
-> 
-> Well, that sucks.  What do you suggest for Coldfire?
+Signed-off-by: Olaf Hering <olaf@aepfle.de>
+---
+ include/asm-generic/mshyperv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I am not seeing an easy way to not fall back to something like the MIPS
-implementation for ColdFire. Could obviously assemblerize this to do better
-than gcc, but if it has to be atomic I think we are stuck with the irq locking.
-
-static inline bool cf_xor_is_negative_byte(unsigned long mask,
-                 volatile unsigned long *addr)
-{
-         unsigned long flags;
-         unsigned long data;
-
-         local_irq_save(flags)
-         data = *addr;
-         *addr = data ^ mask;
-         local_irq_restore(flags);
-
-         return (data & BIT(7)) != 0;
-}
-
-Regards
-Greg
-
-
-> (Shame you didn't join in on the original discussion:
-> https://lore.kernel.org/linux-m68k/ZLmKq2VLjYGBVhMI@casper.infradead.org/ )
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index cecd2b7bd033..bdee5fbaaf40 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -53,8 +53,8 @@ struct ms_hyperv_info {
+ 			u32 reserved_b2 : 20;
+ 		};
+ 	};
+-	u64 shared_gpa_boundary;
+ 	u8 vtl;
++	u64 shared_gpa_boundary;
+ };
+ extern struct ms_hyperv_info ms_hyperv;
+ extern bool hv_nested;
