@@ -2,192 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D57B7A40A5
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Sep 2023 07:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F4F7A414C
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Sep 2023 08:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239708AbjIRFvj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 Sep 2023 01:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S230133AbjIRGdh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 Sep 2023 02:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbjIRFvP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 01:51:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5817C121
-        for <linux-arch@vger.kernel.org>; Sun, 17 Sep 2023 22:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695016221;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w7TSEWyUXJCeqtg0Djyj65qrS0+HnzgNG2tRE6DrFAI=;
-        b=L0Hrdhij1FOUvxkcusm1zmuOs0uI1TzsftvlWLbutCFMadfomLmUCxDSo5PQVILpmX3IB6
-        y7PPWIkW9951E2s6T1DsD+LdM9Z9HMVet1A8lFjsPsNbjTBXD1s+BP2QT2XrkxtnPlr1gV
-        aUlTybwoROB/hRUIiU2FkWUTxSKWXQw=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-433-IPeyAzoyO62OGm8HgKMC3A-1; Mon, 18 Sep 2023 01:50:18 -0400
-X-MC-Unique: IPeyAzoyO62OGm8HgKMC3A-1
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3add3240d52so931089b6e.0
-        for <linux-arch@vger.kernel.org>; Sun, 17 Sep 2023 22:50:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695016217; x=1695621017;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w7TSEWyUXJCeqtg0Djyj65qrS0+HnzgNG2tRE6DrFAI=;
-        b=cmieL7/ihyuUGB2MYKM4LodnVAwdShYIQxXkj09R170KuZCkjuyba2fh6qAtNocVvL
-         UbmxFsSMlu88QWMBFdfBVfFOEzJjYPpdd0YXw8FgsivKPZqOAfsMTm9eALEGo0TXd8o2
-         ftuozaRudwAwMePdabIMSJAWX3BwF9LRLzLr2JUv9I81ixraUsWBZ+D6WkYjvFAMr44D
-         glLDABHKH5J7+eouYPcP5Lvh5TO+loVzVueUr3cAj2MsaHzXma/YfRromx9sDPR8il3B
-         rQF0Wajn4mdTT7gkKoC0jInoTmRAYjUtcpb0ldijNb7A1FZj0uMP9eGbWHqxHg3LbKlN
-         4icg==
-X-Gm-Message-State: AOJu0YythrZzGLceU8iJpIbYnr/vWrPNjifg/VvXRDtxvua0y1RHlFoL
-        HYSbXw7nNJBxEyqg4vhw8MaMojXYLOHtBkbvSij2vua4xaNtcKUKSzwomDRFLPyVF/mJoDYZAYB
-        EDi5oBadM241oDWibFgIDpfG0zctNEw==
-X-Received: by 2002:aca:121a:0:b0:3a7:8fcd:3325 with SMTP id 26-20020aca121a000000b003a78fcd3325mr10015616ois.17.1695016217165;
-        Sun, 17 Sep 2023 22:50:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFoCM/tkJCT1jU0h2UbpaP8HBCFgV19s7sjBE5RVSp8/LXycbN7Ov8MEcZYxO77VSRowm8tHQ==
-X-Received: by 2002:aca:121a:0:b0:3a7:8fcd:3325 with SMTP id 26-20020aca121a000000b003a78fcd3325mr10015608ois.17.1695016216974;
-        Sun, 17 Sep 2023 22:50:16 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id m12-20020a17090a71cc00b00262d079720bsm8127581pjs.29.2023.09.17.22.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Sep 2023 22:50:16 -0700 (PDT)
-Message-ID: <b8f430c1-c30f-191f-18c6-f750fa6ba476@redhat.com>
-Date:   Mon, 18 Sep 2023 15:50:09 +1000
+        with ESMTP id S239901AbjIRGdZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 02:33:25 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDC71B9;
+        Sun, 17 Sep 2023 23:31:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VsH48PF_1695018713;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VsH48PF_1695018713)
+          by smtp.aliyun-inc.com;
+          Mon, 18 Sep 2023 14:31:54 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     will@kernel.org, aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, tsbogend@alpha.franken.de,
+        dave.hansen@linux.intel.com, luto@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, arnd@arndb.de, willy@infradead.org,
+        baolin.wang@linux.alibaba.com, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] mm: add statistics for PUD level pagetable
+Date:   Mon, 18 Sep 2023 14:31:42 +0800
+Message-Id: <876c71c03a7e69c17722a690e3225a4f7b172fb2.1695017383.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 20/35] ACPI: Rename acpi_processor_hotadd_init and
- remove pre-processor guards
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-21-james.morse@arm.com>
- <20230914151720.00007105@Huawei.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230914151720.00007105@Huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Recently, we found that cross-die access to pagetable pages on ARM64
+machines can cause performance fluctuations in our business. Currently,
+there are no PMU events available to track this situation on our ARM64
+machines, so an accurate pagetable accounting can help to analyze this
+issue, but now the PUD level pagetable accounting is missed.
 
-On 9/15/23 00:17, Jonathan Cameron wrote:
-> On Wed, 13 Sep 2023 16:38:08 +0000
-> James Morse <james.morse@arm.com> wrote:
-> 
->> acpi_processor_hotadd_init() will make a CPU present by mapping it
->> based on its hardware id.
->>
->> 'hotadd_init' is ambiguous once there are two different behaviours
->> for cpu hotplug. This is for toggling the _STA present bit. Subsequent
->> patches will add support for toggling the _STA enabled bit, named
->> acpi_processor_make_enabled().
->>
->> Rename it acpi_processor_make_present() to make it clear this is
->> for CPUs that were not previously present.
->>
->> Expose the function prototypes it uses to allow the preprocessor
->> guards to be removed. The IS_ENABLED() check will let the compiler
->> dead-code elimination pass remove this if it isn't going to be
->> used.
->>
->> Signed-off-by: James Morse <james.morse@arm.com>
->> ---
->>   drivers/acpi/acpi_processor.c | 14 +++++---------
->>   include/linux/acpi.h          |  2 --
->>   2 files changed, 5 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
->> index 75257fae10e7..22a15a614f95 100644
->> --- a/drivers/acpi/acpi_processor.c
->> +++ b/drivers/acpi/acpi_processor.c
->> @@ -182,13 +182,15 @@ static void __init acpi_pcc_cpufreq_init(void) {}
->>   #endif /* CONFIG_X86 */
->>   
->>   /* Initialization */
->> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
->> -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
->> +static int acpi_processor_make_present(struct acpi_processor *pr)
->>   {
->>   	unsigned long long sta;
->>   	acpi_status status;
->>   	int ret;
->>   
->> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
->> +		return -ENODEV;
->> +
->>   	if (invalid_phys_cpuid(pr->phys_id))
->>   		return -ENODEV;
->>   
->> @@ -222,12 +224,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
->>   	cpu_maps_update_done();
->>   	return ret;
->>   }
->> -#else
->> -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
->> -{
->> -	return -ENODEV;
->> -}
->> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
->>   
->>   static int acpi_processor_get_info(struct acpi_device *device)
->>   {
->> @@ -335,7 +331,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
->>   	 *  because cpuid <-> apicid mapping is persistent now.
->>   	 */
->>   	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
->> -		int ret = acpi_processor_hotadd_init(pr);
->> +		int ret = acpi_processor_make_present(pr);
->>   
->>   		if (ret)
->>   			return ret;
->> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
->> index 651dd43976a9..b7ab85857bb7 100644
->> --- a/include/linux/acpi.h
->> +++ b/include/linux/acpi.h
->> @@ -316,12 +316,10 @@ static inline int acpi_processor_evaluate_cst(acpi_handle handle, u32 cpu,
->>   }
->>   #endif
->>   
->> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
->>   /* Arch dependent functions for cpu hotplug support */
->>   int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
->>   		 int *pcpu);
->>   int acpi_unmap_cpu(int cpu);
-> 
-> I've lost track somewhat but I think the definitions of these are still under ifdefs
-> which is messy if nothing else and might cause build issues.
-> 
+So introducing pagetable_pud_ctor/dtor() to help to get an accurate
+PUD pagetable accounting, as well as converting the architectures with
+using generic PUD pagatable allocation to add corresponding PUD pagetable
+accounting. Moreover this patch will also mark the PUD level pagetable
+with PG_table flag, which will help to do sanity validation in unpoison_memory().
 
-Yup, it's not safe to use 'if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))' in
-acpi_processor_make_present() until the ifdefs are removed for those two functions
-in individual architectures.
+On my testing machine, I can see more pagetables statistics after the patch
+with page-types tool:
 
->> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
->>   
->>   #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
->>   int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
+Before patch:
+        flags           page-count      MB  symbolic-flags                     long-symbolic-flags
+0x0000000004000000           27326      106  __________________________g_________________       pgtable
+After patch:
+0x0000000004000000           27541      107  __________________________g_________________       pgtable
 
-Thanks,
-Gavin
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ arch/arm64/include/asm/tlb.h         |  5 ++++-
+ arch/loongarch/include/asm/pgalloc.h |  1 +
+ arch/mips/include/asm/pgalloc.h      |  1 +
+ arch/x86/mm/pgtable.c                |  3 +++
+ include/asm-generic/pgalloc.h        |  7 ++++++-
+ include/linux/mm.h                   | 16 ++++++++++++++++
+ 6 files changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+index 2c29239d05c3..846c563689a8 100644
+--- a/arch/arm64/include/asm/tlb.h
++++ b/arch/arm64/include/asm/tlb.h
+@@ -96,7 +96,10 @@ static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,
+ static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pudp,
+ 				  unsigned long addr)
+ {
+-	tlb_remove_ptdesc(tlb, virt_to_ptdesc(pudp));
++	struct ptdesc *ptdesc = virt_to_ptdesc(pudp);
++
++	pagetable_pud_dtor(ptdesc);
++	tlb_remove_ptdesc(tlb, ptdesc);
+ }
+ #endif
+ 
+diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
+index 79470f0b4f1d..4e2d6b7ca2ee 100644
+--- a/arch/loongarch/include/asm/pgalloc.h
++++ b/arch/loongarch/include/asm/pgalloc.h
+@@ -84,6 +84,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ 
+ 	if (!ptdesc)
+ 		return NULL;
++	pagetable_pud_ctor(ptdesc);
+ 	pud = ptdesc_address(ptdesc);
+ 
+ 	pud_init(pud);
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index 40e40a7eb94a..f4440edcd8fe 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -95,6 +95,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ 
+ 	if (!ptdesc)
+ 		return NULL;
++	pagetable_pud_ctor(ptdesc);
+ 	pud = ptdesc_address(ptdesc);
+ 
+ 	pud_init(pud);
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 9deadf517f14..0cbc1b8e8e3d 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -76,6 +76,9 @@ void ___pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd)
+ #if CONFIG_PGTABLE_LEVELS > 3
+ void ___pud_free_tlb(struct mmu_gather *tlb, pud_t *pud)
+ {
++	struct ptdesc *ptdesc = virt_to_ptdesc(pud);
++
++	pagetable_pud_dtor(ptdesc);
+ 	paravirt_release_pud(__pa(pud) >> PAGE_SHIFT);
+ 	paravirt_tlb_remove_table(tlb, virt_to_page(pud));
+ }
+diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
+index c75d4a753849..879e5f8aa5e9 100644
+--- a/include/asm-generic/pgalloc.h
++++ b/include/asm-generic/pgalloc.h
+@@ -169,6 +169,8 @@ static inline pud_t *__pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+ 	ptdesc = pagetable_alloc(gfp, 0);
+ 	if (!ptdesc)
+ 		return NULL;
++
++	pagetable_pud_ctor(ptdesc);
+ 	return ptdesc_address(ptdesc);
+ }
+ 
+@@ -190,8 +192,11 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+ 
+ static inline void __pud_free(struct mm_struct *mm, pud_t *pud)
+ {
++	struct ptdesc *ptdesc = virt_to_ptdesc(pud);
++
+ 	BUG_ON((unsigned long)pud & (PAGE_SIZE-1));
+-	pagetable_free(virt_to_ptdesc(pud));
++	pagetable_pud_dtor(ptdesc);
++	pagetable_free(ptdesc);
+ }
+ 
+ #ifndef __HAVE_ARCH_PUD_FREE
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 12335de50140..2232bfebb88a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3049,6 +3049,22 @@ static inline spinlock_t *pud_lock(struct mm_struct *mm, pud_t *pud)
+ 	return ptl;
+ }
+ 
++static inline void pagetable_pud_ctor(struct ptdesc *ptdesc)
++{
++	struct folio *folio = ptdesc_folio(ptdesc);
++
++	__folio_set_pgtable(folio);
++	lruvec_stat_add_folio(folio, NR_PAGETABLE);
++}
++
++static inline void pagetable_pud_dtor(struct ptdesc *ptdesc)
++{
++	struct folio *folio = ptdesc_folio(ptdesc);
++
++	__folio_clear_pgtable(folio);
++	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
++}
++
+ extern void __init pagecache_init(void);
+ extern void free_initmem(void);
+ 
+-- 
+2.39.3
 
