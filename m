@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB287A5948
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 07:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EB87A595B
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 07:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjISFVb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 01:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        id S230454AbjISFb0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 01:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjISFVa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 01:21:30 -0400
+        with ESMTP id S230437AbjISFb0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 01:31:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90F1100
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:20:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927F211A
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695100841;
+        s=mimecast20190719; t=1695101437;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/yNKPxmsPCL5ZqRqn6QofYHN+lqEoZ/fz5W5giSNC8A=;
-        b=L+fiw/FKkBBf6dHxOxfW2PCeBPs8Xtt0GwDL/8hrIfQNuOIdMCAjTAWxnl+61H1aNiqNAB
-        NJKaf4BQ7WLbPrsn2W2i+gm3/4tqdhlyu1UQoOiW3NSaFxJBmdhXgrJZYRu6XwgMzzDq9w
-        9zkURPota1OsnuYHbiXEJNlYSpXYDf4=
+        bh=vOiDvIp8ZO3F6CAn88eZW4xllynwcvVSacGgI+FHRPk=;
+        b=VMSh2zqLABDFounc7RilweqhF+zIc5jBqECgN8/m6ozdFjMYCh2E7wSB89BGVGCp0zbabW
+        tQrOYCqiGApipWJYLxapLQNbLr1E4nIUYt/FS/gjrMm7QTL0a3AfT7uEy4vR+wx4cUVqPE
+        pZP3vGWBD2PXAptmH+JxZDLuEvm/qvE=
 Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
  [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-251-zU68rHTGPL2mB1OsuleJJw-1; Tue, 19 Sep 2023 01:20:36 -0400
-X-MC-Unique: zU68rHTGPL2mB1OsuleJJw-1
-Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-55e16833517so7081342eaf.1
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:20:36 -0700 (PDT)
+ us-mta-27-bT9ScFtKPY-pp7fNQm7FuA-1; Tue, 19 Sep 2023 01:30:34 -0400
+X-MC-Unique: bT9ScFtKPY-pp7fNQm7FuA-1
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-57698a90356so7556331eaf.0
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:30:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695100835; x=1695705635;
+        d=1e100.net; s=20230601; t=1695101434; x=1695706234;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/yNKPxmsPCL5ZqRqn6QofYHN+lqEoZ/fz5W5giSNC8A=;
-        b=uLf7WjxcD/jeVPLSypjP8h+u1UMegLJhCLOnbrDokNTPNQyknaGr0sEvDzyOiWsgW2
-         FE253wox7Wbsl9h1zJte8yyzDu2rzzSe2nu02KAIAvBw1X51xWhq/MrR7zmvXaCWhsJQ
-         McnGMWeqjGNieO80ieVPAIddmWj9bmAb0niURdHbE8w8RWBaLYBkv/6d5j8sn1yvOV+C
-         KwQ+dRKd/x5QEy86499gE+TJLorxdfWa9EIEwP0QKnhO9qI9yDwnjNAXXpntCfUpZw39
-         AlmjrwL267uLT0CrYH2jfCSajUU1f8LgNPet3jR5c6GdP9Q+AQV7+YSXJMThN9x293db
-         8GLw==
-X-Gm-Message-State: AOJu0Yzxsrod7fVH37IlC2VTP62DcfTAVKx75LkHjgFflq4mFjGlMLKI
-        7vZ42Trjp7BUPGMLpREdkM6C7KLF3tb1VXyC9OwfMLuYLkF5IQrpz7xPuzX5OfHRV30H31XkedP
-        eoV7QdwwkmGvCt6bnPTrcmw==
-X-Received: by 2002:a4a:2a14:0:b0:576:8bd8:9ab5 with SMTP id k20-20020a4a2a14000000b005768bd89ab5mr11719450oof.1.1695100835321;
-        Mon, 18 Sep 2023 22:20:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFyZiDIY8DWM8wmhxxSRadT5FLG918rWzNwRvzpvTFyy8RUOuciOkWDguCBKKGUuOdXuJNGTw==
-X-Received: by 2002:a4a:2a14:0:b0:576:8bd8:9ab5 with SMTP id k20-20020a4a2a14000000b005768bd89ab5mr11719421oof.1.1695100835016;
-        Mon, 18 Sep 2023 22:20:35 -0700 (PDT)
+        bh=vOiDvIp8ZO3F6CAn88eZW4xllynwcvVSacGgI+FHRPk=;
+        b=xH7Pc6c+cwYj+feIMsGh8SveyHYdCCpdzEyrevS5NXiAkB072MuBfbEMYzaXbE30S3
+         pcqEu9TQ40HDbeHBCV4jYO2kA/7WNAry0zGBmV2N6sykoSsM8f8U+93gaGBnBCwq2207
+         oLANWU/05S4V5jdzO0PTfw/DudMQBG69MMyAI1rPKpI/bFXGOMOiMgK4TCI9aUNP6Afj
+         PyK+hvV4dj/D/7SxGlFflbzmUiZVs2RuRL/BeLwNA7ZKtNX+D4+Bxvfrb231apjSuUY4
+         c/qQUsOe2+BxA78hug1phIRBsdFiwk8QYfSucWKC3CSlx+d1CC8ukLI4qN9eoSUr0cTS
+         bM5A==
+X-Gm-Message-State: AOJu0YyEa7bA6GR//W1+IGhhXn+bSc4JXOUZGTpGi0lGVteNpivLTwqn
+        MJGakS9TEcDfvKk2JeXjPEeQhwQCWh1U6z+toIoMk4oHTFuHsIoMwgigC2HPTZy479Rdt8ydH72
+        Ilv+QJhbamPxo2oSpkfP1jQ==
+X-Received: by 2002:a4a:7652:0:b0:573:f620:ec80 with SMTP id w18-20020a4a7652000000b00573f620ec80mr10121678ooe.2.1695101434169;
+        Mon, 18 Sep 2023 22:30:34 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG4tz9OuYK5vkBrvbh1+QWMEOqlzr3kwHkjk4JxS7cBXq9kiMcXQe9Q+9OS8QNnGWcnNjRSKA==
+X-Received: by 2002:a4a:7652:0:b0:573:f620:ec80 with SMTP id w18-20020a4a7652000000b00573f620ec80mr10121660ooe.2.1695101433854;
+        Mon, 18 Sep 2023 22:30:33 -0700 (PDT)
 Received: from redhat.com ([2804:1b3:a803:677d:42e9:f426:9422:f020])
-        by smtp.gmail.com with ESMTPSA id z196-20020a4a49cd000000b005768a6a19f9sm5348310ooa.2.2023.09.18.22.20.27
+        by smtp.gmail.com with ESMTPSA id j4-20020a4aab44000000b00576161c4315sm4777968oon.37.2023.09.18.22.30.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 22:20:34 -0700 (PDT)
-Date:   Tue, 19 Sep 2023 02:20:24 -0300
+        Mon, 18 Sep 2023 22:30:33 -0700 (PDT)
+Date:   Tue, 19 Sep 2023 02:30:23 -0300
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Guo Ren <guoren@kernel.org>
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
@@ -71,22 +71,18 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 05/17] riscv: qspinlock: Add basic queued_spinlock
- support
-Message-ID: <ZQkvmMXECwEGxGKv@redhat.com>
+Subject: Re: [PATCH V11 08/17] riscv: qspinlock: Add virt_spin_lock() support
+ for KVM guest
+Message-ID: <ZQkx75LgsM3-UfaN@redhat.com>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-6-guoren@kernel.org>
- <ZQIbejhIev5tx6vl@redhat.com>
- <CAJF2gTSdjgUaUqhkfTPmJg6Mph+8Ej4j8MeDmfBOmFY5gkTpBQ@mail.gmail.com>
- <ZQLVqoCGJ1ExMU3e@redhat.com>
- <CAJF2gTQWUCLOpKMQsybMoJdZrso2FEbBRVYV+2U1veFC=7U8_A@mail.gmail.com>
- <ZQQe9Fa4IPGDF0_f@redhat.com>
- <CAJF2gTTad6HCeE3rpd8+Gr0t9+Ay_4kt3pSjSAE0DaRjM4fJsA@mail.gmail.com>
+ <20230910082911.3378782-9-guoren@kernel.org>
+ <ZQK9-tn2MepXlY1u@redhat.com>
+ <CAJF2gTR6USUQc7=TmFx+8HfhKa8whzb9qtNjLKR_FPZzN656Zg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTTad6HCeE3rpd8+Gr0t9+Ay_4kt3pSjSAE0DaRjM4fJsA@mail.gmail.com>
+In-Reply-To: <CAJF2gTR6USUQc7=TmFx+8HfhKa8whzb9qtNjLKR_FPZzN656Zg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
@@ -98,307 +94,227 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 17, 2023 at 11:02:47PM +0800, Guo Ren wrote:
-> On Fri, Sep 15, 2023 at 5:08 PM Leonardo Bras <leobras@redhat.com> wrote:
+On Sun, Sep 17, 2023 at 11:12:31PM +0800, Guo Ren wrote:
+> On Thu, Sep 14, 2023 at 4:02 PM Leonardo Bras <leobras@redhat.com> wrote:
 > >
-> > On Fri, Sep 15, 2023 at 10:10:25AM +0800, Guo Ren wrote:
-> > > On Thu, Sep 14, 2023 at 5:43 PM Leonardo Bras <leobras@redhat.com> wrote:
-> > > >
-> > > > On Thu, Sep 14, 2023 at 12:46:56PM +0800, Guo Ren wrote:
-> > > > > On Thu, Sep 14, 2023 at 4:29 AM Leonardo Bras <leobras@redhat.com> wrote:
-> > > > > >
-> > > > > > On Sun, Sep 10, 2023 at 04:28:59AM -0400, guoren@kernel.org wrote:
-> > > > > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > > > > >
-> > > > > > > The requirements of qspinlock have been documented by commit:
-> > > > > > > a8ad07e5240c ("asm-generic: qspinlock: Indicate the use of mixed-size
-> > > > > > > atomics").
-> > > > > > >
-> > > > > > > Although RISC-V ISA gives out a weaker forward guarantee LR/SC, which
-> > > > > > > doesn't satisfy the requirements of qspinlock above, it won't prevent
-> > > > > > > some riscv vendors from implementing a strong fwd guarantee LR/SC in
-> > > > > > > microarchitecture to match xchg_tail requirement. T-HEAD C9xx processor
-> > > > > > > is the one.
-> > > > > > >
-> > > > > > > We've tested the patch on SOPHGO sg2042 & th1520 and passed the stress
-> > > > > > > test on Fedora & Ubuntu & OpenEuler ... Here is the performance
-> > > > > > > comparison between qspinlock and ticket_lock on sg2042 (64 cores):
-> > > > > > >
-> > > > > > > sysbench test=threads threads=32 yields=100 lock=8 (+13.8%):
-> > > > > > >   queued_spinlock 0.5109/0.00
-> > > > > > >   ticket_spinlock 0.5814/0.00
-> > > > > > >
-> > > > > > > perf futex/hash (+6.7%):
-> > > > > > >   queued_spinlock 1444393 operations/sec (+- 0.09%)
-> > > > > > >   ticket_spinlock 1353215 operations/sec (+- 0.15%)
-> > > > > > >
-> > > > > > > perf futex/wake-parallel (+8.6%):
-> > > > > > >   queued_spinlock (waking 1/64 threads) in 0.0253 ms (+-2.90%)
-> > > > > > >   ticket_spinlock (waking 1/64 threads) in 0.0275 ms (+-3.12%)
-> > > > > > >
-> > > > > > > perf futex/requeue (+4.2%):
-> > > > > > >   queued_spinlock Requeued 64 of 64 threads in 0.0785 ms (+-0.55%)
-> > > > > > >   ticket_spinlock Requeued 64 of 64 threads in 0.0818 ms (+-4.12%)
-> > > > > > >
-> > > > > > > System Benchmarks (+6.4%)
-> > > > > > >   queued_spinlock:
-> > > > > > >     System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> > > > > > >     Dhrystone 2 using register variables         116700.0  628613745.4  53865.8
-> > > > > > >     Double-Precision Whetstone                       55.0     182422.8  33167.8
-> > > > > > >     Execl Throughput                                 43.0      13116.6   3050.4
-> > > > > > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    7762306.2  19601.8
-> > > > > > >     File Copy 256 bufsize 500 maxblocks            1655.0    3417556.8  20649.9
-> > > > > > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    7427995.7  12806.9
-> > > > > > >     Pipe Throughput                               12440.0   23058600.5  18535.9
-> > > > > > >     Pipe-based Context Switching                   4000.0    2835617.7   7089.0
-> > > > > > >     Process Creation                                126.0      12537.3    995.0
-> > > > > > >     Shell Scripts (1 concurrent)                     42.4      57057.4  13456.9
-> > > > > > >     Shell Scripts (8 concurrent)                      6.0       7367.1  12278.5
-> > > > > > >     System Call Overhead                          15000.0   33308301.3  22205.5
-> > > > > > >                                                                        ========
-> > > > > > >     System Benchmarks Index Score                                       12426.1
-> > > > > > >
-> > > > > > >   ticket_spinlock:
-> > > > > > >     System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> > > > > > >     Dhrystone 2 using register variables         116700.0  626541701.9  53688.2
-> > > > > > >     Double-Precision Whetstone                       55.0     181921.0  33076.5
-> > > > > > >     Execl Throughput                                 43.0      12625.1   2936.1
-> > > > > > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    6553792.9  16550.0
-> > > > > > >     File Copy 256 bufsize 500 maxblocks            1655.0    3189231.6  19270.3
-> > > > > > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    7221277.0  12450.5
-> > > > > > >     Pipe Throughput                               12440.0   20594018.7  16554.7
-> > > > > > >     Pipe-based Context Switching                   4000.0    2571117.7   6427.8
-> > > > > > >     Process Creation                                126.0      10798.4    857.0
-> > > > > > >     Shell Scripts (1 concurrent)                     42.4      57227.5  13497.1
-> > > > > > >     Shell Scripts (8 concurrent)                      6.0       7329.2  12215.3
-> > > > > > >     System Call Overhead                          15000.0   30766778.4  20511.2
-> > > > > > >                                                                        ========
-> > > > > > >     System Benchmarks Index Score                                       11670.7
-> > > > > > >
-> > > > > > > The qspinlock has a significant improvement on SOPHGO SG2042 64
-> > > > > > > cores platform than the ticket_lock.
-> > > > > > >
-> > > > > > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > > > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > > > > > ---
-> > > > > > >  arch/riscv/Kconfig                | 16 ++++++++++++++++
-> > > > > > >  arch/riscv/include/asm/Kbuild     |  3 ++-
-> > > > > > >  arch/riscv/include/asm/spinlock.h | 17 +++++++++++++++++
-> > > > > > >  3 files changed, 35 insertions(+), 1 deletion(-)
-> > > > > > >  create mode 100644 arch/riscv/include/asm/spinlock.h
-> > > > > > >
-> > > > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > > > > index 2c346fe169c1..7f39bfc75744 100644
-> > > > > > > --- a/arch/riscv/Kconfig
-> > > > > > > +++ b/arch/riscv/Kconfig
-> > > > > > > @@ -471,6 +471,22 @@ config NODES_SHIFT
-> > > > > > >         Specify the maximum number of NUMA Nodes available on the target
-> > > > > > >         system.  Increases memory reserved to accommodate various tables.
-> > > > > > >
-> > > > > > > +choice
-> > > > > > > +     prompt "RISC-V spinlock type"
-> > > > > > > +     default RISCV_TICKET_SPINLOCKS
-> > > > > > > +
-> > > > > > > +config RISCV_TICKET_SPINLOCKS
-> > > > > > > +     bool "Using ticket spinlock"
-> > > > > > > +
-> > > > > > > +config RISCV_QUEUED_SPINLOCKS
-> > > > > > > +     bool "Using queued spinlock"
-> > > > > > > +     depends on SMP && MMU
-> > > > > > > +     select ARCH_USE_QUEUED_SPINLOCKS
-> > > > > > > +     help
-> > > > > > > +       Make sure your micro arch LL/SC has a strong forward progress guarantee.
-> > > > > > > +       Otherwise, stay at ticket-lock.
-> > > > > > > +endchoice
-> > > > > > > +
-> > > > > > >  config RISCV_ALTERNATIVE
-> > > > > > >       bool
-> > > > > > >       depends on !XIP_KERNEL
-> > > > > > > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-> > > > > > > index 504f8b7e72d4..a0dc85e4a754 100644
-> > > > > > > --- a/arch/riscv/include/asm/Kbuild
-> > > > > > > +++ b/arch/riscv/include/asm/Kbuild
-> > > > > > > @@ -2,10 +2,11 @@
-> > > > > > >  generic-y += early_ioremap.h
-> > > > > > >  generic-y += flat.h
-> > > > > > >  generic-y += kvm_para.h
-> > > > > > > +generic-y += mcs_spinlock.h
-> > > > > > >  generic-y += parport.h
-> > > > > > > -generic-y += spinlock.h
-> > > > > >
-> > > > > > IIUC here you take the asm-generic/spinlock.h (which defines arch_spin_*())
-> > > > > > and include the asm-generic headers of mcs_spinlock and qspinlock.
-> > > > > >
-> > > > > > In this case, the qspinlock.h will provide the arch_spin_*() interfaces,
-> > > > > > which seems the oposite of the above description (ticket spinlocks being
-> > > > > > the standard).
-> > > > > >
-> > > > > > Shouldn't ticket-spinlock.h also get included here?
-> > > > > > (Also, I am probably missing something, as I dont' see the use of
-> > > > > > mcs_spinlock here.)
-> > > > > No, because asm-generic/spinlock.h:
-> > > > > ...
-> > > > > #include <asm-generic/ticket_spinlock.h>
-> > > > > ...
-> > > > >
-> > > >
-> > > > But aren't you removing asm-generic/spinlock.h below ?
-> > > > -generic-y += spinlock.h
-> > > Yes, current is:
+> > On Sun, Sep 10, 2023 at 04:29:02AM -0400, guoren@kernel.org wrote:
+> > > From: Guo Ren <guoren@linux.alibaba.com>
 > > >
-> > > arch/riscv/include/asm/spinlock.h -> include/asm-generic/spinlock.h ->
-> > > include/asm-generic/ticket_spinlock.h
-> >
-> > I did a little reading on how generic-y works (which I was unaware):
-> >
-> > "If an architecture uses a verbatim copy of a header from
-> > include/asm-generic then this is listed in the file
-> > arch/$(SRCARCH)/include/asm/Kbuild [...] During the prepare phase of the
-> > build a wrapper include file is generated in the directory [...]"
-> >
-> > Oh, so you are removing the asm-generic/spinlock.h because it's link
-> > was replaced by a new asm/spinlock.h.
-> >
-> > You add qspinlock.h to generic-y because it's new in riscv, and add
-> > mcs_spinlock.h because it's needed by qspinlock.h.
-> >
-> > Ok, it makes sense now.
-> >
-> > Sorry about this noise.
-> > I was unaware of how generic-y worked, and (wrongly)
-> > assumed it was about including headers automatically in the build.
-> >
-> >
+> > > Add a static key controlling whether virt_spin_lock() should be
+> > > called or not. When running on bare metal set the new key to
+> > > false.
+> > >
+> > > The KVM guests fall back to a Test-and-Set spinlock, because fair
+> > > locks have horrible lock 'holder' preemption issues. The
+> > > virt_spin_lock_key would shortcut for the
+> > > queued_spin_lock_slowpath() function that allow virt_spin_lock to
+> > > hijack it.
+> > >
+> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > ---
+> > >  .../admin-guide/kernel-parameters.txt         |  4 +++
+> > >  arch/riscv/include/asm/sbi.h                  |  8 +++++
+> > >  arch/riscv/include/asm/spinlock.h             | 22 ++++++++++++++
+> > >  arch/riscv/kernel/sbi.c                       |  2 +-
+> > >  arch/riscv/kernel/setup.c                     | 30 ++++++++++++++++++-
+> > >  5 files changed, 64 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index 61cacb8dfd0e..f75bedc50e00 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -3927,6 +3927,10 @@
+> > >       no_uaccess_flush
+> > >                       [PPC] Don't flush the L1-D cache after accessing user data.
+> > >
+> > > +     no_virt_spin    [RISC-V] Disable virt_spin_lock in KVM guest to use
+> > > +                     native_queued_spinlock when the nopvspin option is enabled.
+> > > +                     This would help vcpu=pcpu scenarios.
+> > > +
+> > >       novmcoredd      [KNL,KDUMP]
+> > >                       Disable device dump. Device dump allows drivers to
+> > >                       append dump data to vmcore so you can collect driver
+> > > diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> > > index 501e06e52078..e0233b3d7a5f 100644
+> > > --- a/arch/riscv/include/asm/sbi.h
+> > > +++ b/arch/riscv/include/asm/sbi.h
+> > > @@ -50,6 +50,13 @@ enum sbi_ext_base_fid {
+> > >       SBI_EXT_BASE_GET_MIMPID,
+> > >  };
+> > >
+> > > +enum sbi_ext_base_impl_id {
+> > > +     SBI_EXT_BASE_IMPL_ID_BBL = 0,
+> > > +     SBI_EXT_BASE_IMPL_ID_OPENSBI,
+> > > +     SBI_EXT_BASE_IMPL_ID_XVISOR,
+> > > +     SBI_EXT_BASE_IMPL_ID_KVM,
+> > > +};
+> > > +
+> > >  enum sbi_ext_time_fid {
+> > >       SBI_EXT_TIME_SET_TIMER = 0,
+> > >  };
+> > > @@ -269,6 +276,7 @@ int sbi_console_getchar(void);
+> > >  long sbi_get_mvendorid(void);
+> > >  long sbi_get_marchid(void);
+> > >  long sbi_get_mimpid(void);
+> > > +long sbi_get_firmware_id(void);
+> > >  void sbi_set_timer(uint64_t stime_value);
+> > >  void sbi_shutdown(void);
+> > >  void sbi_send_ipi(unsigned int cpu);
+> > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+> > > index 8ea0fee80652..6b38d6616f14 100644
+> > > --- a/arch/riscv/include/asm/spinlock.h
+> > > +++ b/arch/riscv/include/asm/spinlock.h
+> > > @@ -4,6 +4,28 @@
+> > >  #define __ASM_RISCV_SPINLOCK_H
+> > >
+> > >  #ifdef CONFIG_QUEUED_SPINLOCKS
+> > > +/*
+> > > + * The KVM guests fall back to a Test-and-Set spinlock, because fair locks
+> > > + * have horrible lock 'holder' preemption issues. The virt_spin_lock_key
+> > > + * would shortcut for the queued_spin_lock_slowpath() function that allow
+> > > + * virt_spin_lock to hijack it.
+> > > + */
+> > > +DECLARE_STATIC_KEY_TRUE(virt_spin_lock_key);
+> > > +
+> > > +#define virt_spin_lock virt_spin_lock
+> > > +static inline bool virt_spin_lock(struct qspinlock *lock)
+> > > +{
+> > > +     if (!static_branch_likely(&virt_spin_lock_key))
+> > > +             return false;
+> > > +
+> > > +     do {
+> > > +             while (atomic_read(&lock->val) != 0)
+> > > +                     cpu_relax();
+> > > +     } while (atomic_cmpxchg(&lock->val, 0, _Q_LOCKED_VAL) != 0);
+> > > +
+> > > +     return true;
+> > > +}
+> > > +
+> > >  #define _Q_PENDING_LOOPS     (1 << 9)
+> > >  #endif
+> > >
+> > > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+> > > index 88eea3a99ee0..cdd45edc8db4 100644
+> > > --- a/arch/riscv/kernel/sbi.c
+> > > +++ b/arch/riscv/kernel/sbi.c
+> > > @@ -555,7 +555,7 @@ static inline long sbi_get_spec_version(void)
+> > >       return __sbi_base_ecall(SBI_EXT_BASE_GET_SPEC_VERSION);
+> > >  }
+> > >
+> > > -static inline long sbi_get_firmware_id(void)
+> > > +long sbi_get_firmware_id(void)
+> > >  {
+> > >       return __sbi_base_ecall(SBI_EXT_BASE_GET_IMP_ID);
+> > >  }
+> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > > index 0f084f037651..c57d15b05160 100644
+> > > --- a/arch/riscv/kernel/setup.c
+> > > +++ b/arch/riscv/kernel/setup.c
+> > > @@ -26,6 +26,7 @@
+> > >  #include <asm/alternative.h>
+> > >  #include <asm/cacheflush.h>
+> > >  #include <asm/cpu_ops.h>
+> > > +#include <asm/cpufeature.h>
+> > >  #include <asm/early_ioremap.h>
+> > >  #include <asm/pgtable.h>
+> > >  #include <asm/setup.h>
+> > > @@ -283,16 +284,43 @@ DEFINE_STATIC_KEY_TRUE(combo_qspinlock_key);
+> > >  EXPORT_SYMBOL(combo_qspinlock_key);
+> > >  #endif
 > > >
 > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +#include <asm/qspinlock.h>
-> > > +#include <asm/qrwlock.h>
-> > > +#else
-> > > +#include <asm-generic/spinlock.h>
+> > > +static bool no_virt_spin_key = false;
+> >
+> > I suggest no _key, also there is no need for "= false".
+> > To be consistent with enable_qspinlock, I also suggest
+> > adding __ro_after_init:
+> >
+> > static bool no_virt_spin __ro_after_init;
+> okay.
+> 
+> >
+> >
+> >
+> > > +DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
+> > > +
+> > > +static int __init no_virt_spin_setup(char *p)
+> > > +{
+> > > +     no_virt_spin_key = true;
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +early_param("no_virt_spin", no_virt_spin_setup);
+> > > +
+> > > +static void __init virt_spin_lock_init(void)
+> > > +{
+> > > +     if (sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM ||
+> > > +         no_virt_spin_key)
+> > > +             static_branch_disable(&virt_spin_lock_key);
+> > > +     else
+> > > +             pr_info("Enable virt_spin_lock\n");
+> > > +}
 > > > +#endif
-> > >
-> > > So, you want me:
+> > > +
+> >
+> > A new virt_no_spin kernel parameter was introduced, but without
+> > CONFIG_QUEUED_SPINLOCKS it will silently fail.
+> >
+> > I would suggest an #else clause here with a function to print an error /
+> > warning message about no_virt_spin being invalid in this scenario.
+> > It will probably help future debugging.
+> If CONFIG_QUEUED_SPINLOCKS=n, no_virt_spin should be quiet. The
+> no_virt_spin is one path of qspinlock.
+
+IIUC having no_virt_spin being passed as parameter to a kernel with
+CONFIG_QUEUED_SPINLOCKS=n is not supposed to have any warning this 
+parameter is useless. 
+
+I was just thinking it would be nice to have this warning during debugging, 
+but if it's standard practice then I am ok with this.
+
+> 
+> >
+> >
+> > >  static void __init riscv_spinlock_init(void)
+> > >  {
+> > >  #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
+> > > -     if (!enable_qspinlock_key) {
+> > > +     if (!enable_qspinlock_key &&
+> > > +         (sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)) {
+> > >               static_branch_disable(&combo_qspinlock_key);
+> > >               pr_info("Ticket spinlock: enabled\n");
+> > >       } else {
+> > >               pr_info("Queued spinlock: enabled\n");
+> > >       }
+> > >  #endif
+> > > +
 > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +#include <asm/qspinlock.h>
-> > > +#else
-> > > +#include <asm-generic/ticket_spinlock.h>
+> > > +     virt_spin_lock_init();
 > > > +#endif
+> > >  }
 > > >
-> > > +#include <asm/qrwlock.h>
+> > >  extern void __init init_rt_signal_env(void);
+> > > --
+> > > 2.36.1
 > > >
-> > > Right?
 > >
-> > No, I didn't mean that.
-> > I was just worried about the arch_spin_*() interfaces, but they should be
-> > fine.
+> > I am probably missing something out, but it looks to me that this patch is
+> > causing 2 different changes:
+> > 1 - Enabling no_virt_spin parameter
+> > 2 - Disabling queued spinlocks for some firmware_id
 > >
-> > BTW, according to kernel doc on generic-y, shouldn't be a better idea to
-> > add 'ticket_spinlock.h' to generic-y, and include above as
-> > asm/ticket_spinlock.h?
-> >
-> > Or is generic-y reserved only for stuff which is indirectly included by
-> > other headers?
-> It's okay to add generic-y for ticket_spinlock.h, and I'm okay with
-> the following:
-> 
-> +#ifdef CONFIG_QUEUED_SPINLOCKS
-> +#include <asm/qspinlock.h>
-> +#else
-> +#include <asm/ticket_spinlock.h>
-> +#endif
-> 
-> +#include <asm/qrwlock.h>
+> > Wouldn't be better to split those changes in multiple patches?
+> > Or am I missing the point on why they need to be together?
 
-It does look more intuitive, so I am glad it works for you :)
-
-FWIW:
-Reviewed-by: Leonardo Bras <leobras@redhat.com>
+^ Want your input on this
 
 Thanks!
 Leo
 
-> 
 > >
 > > Thanks!
 > > Leo
-> >
-> > >
-> > > >
-> > > > > >
-> > > > > > >  generic-y += spinlock_types.h
-> > > > > > >  generic-y += qrwlock.h
-> > > > > > >  generic-y += qrwlock_types.h
-> > > > > > > +generic-y += qspinlock.h
-> > > > > > >  generic-y += user.h
-> > > > > > >  generic-y += vmlinux.lds.h
-> > > > > > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..c644a92d4548
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/arch/riscv/include/asm/spinlock.h
-> > > > > > > @@ -0,0 +1,17 @@
-> > > > > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > > > > +
-> > > > > > > +#ifndef __ASM_RISCV_SPINLOCK_H
-> > > > > > > +#define __ASM_RISCV_SPINLOCK_H
-> > > > > > > +
-> > > > > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > > > > > +#define _Q_PENDING_LOOPS     (1 << 9)
-> > > > > > > +#endif
-> > > > > >
-> > > > > > Any reason the above define couldn't be merged on the ifdef below?
-> > > > > Easy for the next patch to modify. See Waiman's comment:
-> > > > >
-> > > > > https://lore.kernel.org/linux-riscv/4cc7113a-0e4e-763a-cba2-7963bcd26c7a@redhat.com/
-> > > > >
-> > > > > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-> > > > > > index c644a92d4548..9eb3ad31e564 100644
-> > > > > > --- a/arch/riscv/include/asm/spinlock.h
-> > > > > > +++ b/arch/riscv/include/asm/spinlock.h
-> > > > > > @@ -7,11 +7,94 @@
-> > > > > >   #define _Q_PENDING_LOOPS (1 << 9)
-> > > > > >   #endif
-> > > > > >
-> > > > >
-> > > > > I see why you separated the _Q_PENDING_LOOPS out.
-> > > > >
-> > > >
-> > > > I see, should be fine then.
-> > > >
-> > > > Thanks!
-> > > > Leo
-> > > >
-> > > > >
-> > > > > >
-> > > > > > > +
-> > > > > > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > > > > > +#include <asm/qspinlock.h>
-> > > > > > > +#include <asm/qrwlock.h>
-> > > > > > > +#else
-> > > > > > > +#include <asm-generic/spinlock.h>
-> > > > > > > +#endif
-> > > > > > > +
-> > > > > > > +#endif /* __ASM_RISCV_SPINLOCK_H */
-> > > > > > > --
-> > > > > > > 2.36.1
-> > > > > > >
-> > > > > >
-> > > > > > Thanks!
-> > > > > > Leo
-> > > > > >
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Best Regards
-> > > > >  Guo Ren
-> > > > >
-> > > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> > >
 > >
 > 
 > 
