@@ -2,75 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EABC7A64CA
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 15:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B067A7A66A1
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 16:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjISNX1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 19 Sep 2023 09:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S232812AbjISO0b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjISNX0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 09:23:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1646F4
-        for <linux-arch@vger.kernel.org>; Tue, 19 Sep 2023 06:23:20 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-53-kQOjcUm9Mdygv-A1vaw1tA-1; Tue, 19 Sep 2023 14:23:13 +0100
-X-MC-Unique: kQOjcUm9Mdygv-A1vaw1tA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 19 Sep
- 2023 14:23:08 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 19 Sep 2023 14:23:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>,
-        Greg Ungerer <gregungerer@westnet.com.au>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232804AbjISO0a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 10:26:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603EFF7;
+        Tue, 19 Sep 2023 07:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VncnnhJmc8PsU0ruYP9H8J/d7HOU/JkrH5FEC5hhYfI=; b=nY5fCyJsDEElTaGCYnh8i/NEA5
+        CFMU0X1ing7uHiVoZSIDlH6e9DPZQcxX5mzviYpFmt/x1/mPgJZDxlUuX4oI+5NzqwUdK87aP9wcm
+        zdP5V7h3lcazZ3jjEwjrmd/sxuc/McSa1luT/D06mztTkKIgU8t3kZGIZGMY08EW0IY7zM2dgUsOx
+        D4KtFCR9S3A2QqghlqdTAGaHioDYOhuV58+G7bPj1MzzXw7sGndLoBrVCX5+2Uxb9KI2jIZHfgyGO
+        yY+lKYS/FTao9tnpuoByRcVqaOOU0UBZbkxeb4lEkD+ZV+QqL8FZOWXs74i+O/mtOvPlYFClpIgoJ
+        bIf+WLww==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qibg4-0005zv-Ma; Tue, 19 Sep 2023 14:26:12 +0000
+Date:   Tue, 19 Sep 2023 15:26:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Greg Ungerer <gregungerer@westnet.com.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "Nicholas Piggin" <npiggin@gmail.com>
-Subject: RE: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
-Thread-Topic: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
-Thread-Index: AQHZ6Kr+hLdybFnA00ugx5L/MFgM8bAiJxPQ
-Date:   Tue, 19 Sep 2023 13:23:08 +0000
-Message-ID: <e1fb697714ac408e85c4e3dc573cd7d5@AcuMS.aculab.com>
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
+Message-ID: <ZQmvhC+pGWNs9R23@casper.infradead.org>
 References: <20230915183707.2707298-1-willy@infradead.org>
  <20230915183707.2707298-10-willy@infradead.org>
  <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au>
  <ZQW849TfSCK6u2f8@casper.infradead.org>
-In-Reply-To: <ZQW849TfSCK6u2f8@casper.infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <e1fb697714ac408e85c4e3dc573cd7d5@AcuMS.aculab.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1fb697714ac408e85c4e3dc573cd7d5@AcuMS.aculab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> Well, that sucks.  What do you suggest for Coldfire?
+On Tue, Sep 19, 2023 at 01:23:08PM +0000, David Laight wrote:
+> > Well, that sucks.  What do you suggest for Coldfire?
+> 
+> Can you just do a 32bit xor ?
+> Unless you've got smp m68k I'd presume it is ok?
+> (And assuming you aren't falling off a page.)
 
-Can you just do a 32bit xor ?
-Unless you've got smp m68k I'd presume it is ok?
-(And assuming you aren't falling off a page.)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Patch welcome.
