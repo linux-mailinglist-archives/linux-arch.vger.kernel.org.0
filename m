@@ -2,125 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91707A6A97
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 20:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B06D7A6ACF
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 20:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjISSUY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 14:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S231993AbjISSpF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 14:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjISSUX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 14:20:23 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D8E8F;
-        Tue, 19 Sep 2023 11:20:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nQ8iZ6qojclXKyS1znwXpZTNsfGVQn7t1tkhIVwsCJEkk1Ws2Q+cCb/WDHBivXao1/8UlM2RgXWtCZl7tg9+ydx2ZzZ/d62NhkX7og7OvIlm0syUwLc5cHVdlFtv2UEQzqBUZccdz/a7fsdb8W8nF3DZODZ5dj7kWmDQonKh6We9jkH+Ia5J7F1WMLNIixwVXqBkuWUg6fyGT0yx8bloYH3AkBkujMN8ts4xkQTgA1BRfEO074AR39Dq1mRLodIK7JgV6BVX8ZaeAFSwi7VCIygarTaemhLbxwkPafPBfFA5uxLNMHXvuBSEIa0buCfRr2afqeqDTtp2Z0C7rQ2LQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gkq9CYpYNZr/jqpib3kXkUKWvV3EBJzWHBi8wqoEfuM=;
- b=femNtAML2Zvvei2BrV7Us2a3UiNWKYB2DkqZhOoQV0RXncwiGGFuI11hH+PuYx68FB0fwwdF51GA4shXgLzdfph40UCIpwwCH9WTieTN6KrNh2u0PBJ3V3N315MOd1vIbGb3yH1sMAlka2xNkM8mUZx/sc/sdWU6EZoQyAhcitT7rUNnp9Nxj2HHqJhy8J7j+8mIz982DzeUcpyeahtGzFancQlvvIzZD4ccpCMRdywUasUjji621K5KuozUEj2mTT1FXKh8yqR9myIKt0n0lpppNeufh5dV0AZlqg+9C3wRmlfjp10k61GxTjwpC5IT/mh+oGmopD8XUowPJBc/yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gkq9CYpYNZr/jqpib3kXkUKWvV3EBJzWHBi8wqoEfuM=;
- b=Sd1jr5/FqYwWytY/GBERMp3rrukNRvtDlhsfsLWhThwIxO4qxc/WYOhs8HHFVDBzvPpFF63x20CKIDD2Is0gRfOsa/GenI1SFrro/3SmDnM7eq/aMbw+MeibvPMP5hrmXG+LUElChrSWndcgWvlQugl4Ntj/1m9/JseXaiv+6kc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com (2603:10b6:a03:394::19)
- by CH3PR17MB6403.namprd17.prod.outlook.com (2603:10b6:610:122::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28; Tue, 19 Sep
- 2023 18:20:13 +0000
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::f4e8:df0d:9be8:88cc]) by SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::f4e8:df0d:9be8:88cc%6]) with mapi id 15.20.6792.026; Tue, 19 Sep 2023
- 18:20:12 +0000
-Date:   Tue, 19 Sep 2023 14:20:04 -0400
-From:   Gregory Price <gregory.price@memverge.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Gregory Price <gourry.memverge@gmail.com>,
-        linux-mm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-cxl@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [RFC PATCH 3/3] mm/migrate: Create move_phys_pages syscall
-Message-ID: <ZQnmVI0Q/Al5UKgQ@memverge.com>
-References: <20230907075453.350554-1-gregory.price@memverge.com>
- <20230907075453.350554-4-gregory.price@memverge.com>
- <878r9dzrxj.fsf@meer.lwn.net>
- <ZP2tYY00/q9ElFQn@memverge.com>
- <42d97bb4-fa0c-4ecc-8a1b-337b40dca930@app.fastmail.com>
- <ZQnMzD26VI3C/ivf@memverge.com>
- <0a7e3ccc-db66-428e-8c09-66e67bfded51@app.fastmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a7e3ccc-db66-428e-8c09-66e67bfded51@app.fastmail.com>
-X-ClientProxiedBy: BYAPR07CA0068.namprd07.prod.outlook.com
- (2603:10b6:a03:60::45) To SJ0PR17MB5512.namprd17.prod.outlook.com
- (2603:10b6:a03:394::19)
+        with ESMTP id S229853AbjISSpF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 14:45:05 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9269E
+        for <linux-arch@vger.kernel.org>; Tue, 19 Sep 2023 11:44:58 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-565e54cb93aso3526341a12.3
+        for <linux-arch@vger.kernel.org>; Tue, 19 Sep 2023 11:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1695149098; x=1695753898; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2uA2AKw5TRuWkTphPeTSud1oyV6iHPUIlWEjGcPkhvI=;
+        b=ygcczdBodNaTKVzFwxIcsmZsm1h02TlyGNKHsPyRLUKTfpRRw0LKq3G3WWPB7KJ5aG
+         EKHqgQXGn0N8Lo32ezKoUW73t8ByxUHUVLlKUEU3eW2CPBUZv6zsqSq2/EPUJUJYvB70
+         grs+X7erBCW+Cc6Wb3e6383TSUhG8Qk4tmhE4j0vpeYxBdDvKORXYw+SDRHF9Y08Rp7q
+         +aCdpI20832Fwu5Os+ktUxRzn5MOJ1QoB0MaKxQD9ceknlDM9gQXneLV5yNcTAO6eDf9
+         q20HnVHmdCnBXgvxrhpR2KoOhl0m4s55Jj+RXt77zARrH19jonj2mIFKxjONNEE8sc38
+         Y5VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695149098; x=1695753898;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2uA2AKw5TRuWkTphPeTSud1oyV6iHPUIlWEjGcPkhvI=;
+        b=L7mB+NH0plYfMakeXh3jtuYUCFatVBH5xmoNFbHFAktOu4l8i1tIxuCovd1BfYaES4
+         Viuzdo2QTmMLOpg4Mg8HDFb2KhaOXpNpia/26WVvwqmISJTtTJfWsq9IJc5v7xnc97Jc
+         F5TxlwCWyt7NNKvUIkLpSFJvXH+vJRDy+qAZpLHDPDhgL09dyaIIiAZUxm4at+v5fumf
+         hv7Aew3zjJFC+cZo9/Rau9129kj8cXQghyDV2J0/Jw2n6Qb0B9KMr+M4Yu1QgY0+DM5n
+         ymIWA5XoTsZDey4YrdJ+ErJ/uW1YO1VRu1JPPa9tV9cvSdfwJyUylNsb8XEOEGyX7uh5
+         lpjQ==
+X-Gm-Message-State: AOJu0YwmDTqpK5MpEkjID6b2Fu3GMeGLJ/JCSxpq6MmswYW58de8icES
+        Zsfva8zozIA1EW5hYKU1cEpjrDkarWG4GrcVchY=
+X-Google-Smtp-Source: AGHT+IHQse60GH+RLIRvJ6EeiBAwEVE5yYVcnEb1+9ssEr7AXWIByI8HcDuGdJ6V4rNHibbFVK8OGQ==
+X-Received: by 2002:a17:90a:e2ce:b0:26b:5ba4:4948 with SMTP id fr14-20020a17090ae2ce00b0026b5ba44948mr534507pjb.12.1695149098229;
+        Tue, 19 Sep 2023 11:44:58 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id m5-20020a17090b068500b0026309d57724sm3876846pjz.39.2023.09.19.11.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Sep 2023 11:44:57 -0700 (PDT)
+From:   Charlie Jenkins <charlie@rivosinc.com>
+Subject: [PATCH v7 0/4] riscv: Add fine-tuned checksum functions
+Date:   Tue, 19 Sep 2023 11:44:29 -0700
+Message-Id: <20230919-optimize_checksum-v7-0-06c7d0ddd5d6@rivosinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR17MB5512:EE_|CH3PR17MB6403:EE_
-X-MS-Office365-Filtering-Correlation-Id: b67734fc-ed2c-412c-87dc-08dbb93d107d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4HtdWp9ixnIqopvQIA+SAsFsLuk/61/d35mVbizi71qYgtBjeqemCc/jTvCdVPvX/ckyt2c5KMdv8GFxRkwQbk8Ok+/nxvnvpR+2aWFR/SA5Hggqh7TDncAEqpOR7ztfbgulxRDJ3htsMh7r1koxvIkIwvRhW+5jXCy/EfGYkZ1oDsvqlkUhQmOnFaTz5s50cQm87U0aucpeeynvdYDIpIwjER6i/fb0lHCy8AIZpVz46cBlBRWZOPkMvfc4jq6+Nh2hfyZEp0moR2rCMOlWAx9VxOo06qmCjFckojHLaCwdori3fNbOC3xF2WgrPuew+YR46aDr4cCWtx6siQ6xT6C9bxX6XalfH6O1wGhjztJVfLOGKc7x7n2lki6QoarmcEiaZ84ARPqPwGvdK7/sYT1IOTOhlJt+nPcp3OdPzqMET+gBUNTcDRVdq3sMHI4N3vTpS7Md1ji3ksBvTGqr3bnTzeRACFii4ygcJ92KiAUogaZky4xuemQ1Fr8dLjwObMkFTtCnr/a1rrUjjETsXERF3A4Nf3ov2o5nC6sOF3Nhq/ZD/DcYhZE8Oo9tp0Ed
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB5512.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39850400004)(396003)(346002)(366004)(186009)(1800799009)(451199024)(6666004)(6512007)(6506007)(478600001)(6486002)(83380400001)(26005)(7416002)(5660300002)(2906002)(4326008)(66476007)(8676002)(66556008)(54906003)(66946007)(44832011)(8936002)(6916009)(316002)(41300700001)(2616005)(86362001)(36756003)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HqRGDCcN1EkY2MjkfgAuXrBFlHMDAI6jSFJkqWbx8JSMXXDlPkmAQYB/F1Gs?=
- =?us-ascii?Q?1CGMZb8/jlP8K7lvikA/8Yypl/7gFQSZq1YTC1C60I/kxhG9IedgeBgU43xP?=
- =?us-ascii?Q?tf80JDL0P6UHpMCqDlrdDajWmea9zaTJDu2O5U0Gekl73XG9zmrjwXPt6H5B?=
- =?us-ascii?Q?GaXoWXr3tKM+YSvO+Sz/4dquwR4Qies0j++9wJLWRT7rBCl5KHw/0P4t15x+?=
- =?us-ascii?Q?2RfEcK3ORaUvsH82/UPdmToCXNkk+GPmg62TT+BJT3Q01t9hFvD6S3bDIfn5?=
- =?us-ascii?Q?VREadmt394yLBm2ySOCUOFBQ0LWjWTGn/NzoktqUozFj2MrkxiX1VVeTXtqb?=
- =?us-ascii?Q?cbvZf9DT4WMaDAuYKYOQEU/q0s7zUXEh05bdP4dMzRrIXaBiuOxP6poD7vb3?=
- =?us-ascii?Q?xZFdWlpWnRcJbwKu7Hp5kXFcSILTu86HAxFcbZhimhaWFOK5c2AhuEjA2OgF?=
- =?us-ascii?Q?M4BuVr64Utskc0wXBVVlW8aue9LvkvKr7xWaa0pbuyPr1u8XXvpp+W71pXhw?=
- =?us-ascii?Q?odWrElv9mFIA6m+WhUDrIFBtra42k+M7QlKnla6mQwTGgBOvUURkJkIrpz0y?=
- =?us-ascii?Q?C/kcbB0B5KXGQs1NopkhugWaqdj9sK4fk3p2CDiQ8iE45zJg3YIFw3+GSFTg?=
- =?us-ascii?Q?bqVz5eJ1Q4pZpWVkMAydda0yEk91q8x4E7OU0QFwl2lGIc2l1Wsk05wI+x//?=
- =?us-ascii?Q?Gl+Tn1xByM/kjOissDGNU+r+DpFolcm2U3+Q91U+zHKt8EN9R5G9o80iHExD?=
- =?us-ascii?Q?6q18HObFuhbcnThjGFO5ScV+io02r+rVHJE5rzFHjhBqxSj4RpVR9211S1FD?=
- =?us-ascii?Q?JlNbzqSusC3IprEQAgLJrsdrXm9AfuGt9rD74ij+cia+enVIN5SOZxT0yKaU?=
- =?us-ascii?Q?3s0Ellk3CSboKqrpj1bY8gbVArRml5fFjBMr7OuBcmWyJZJ/uwtxQt0RTLLV?=
- =?us-ascii?Q?xexj+PPq/0rzNrcnL5o5VslBiF55qQ+EFykioKa8Vr00nS6FB96jndFLB5oA?=
- =?us-ascii?Q?VI5VbwSswdYtfcx5dzEjzMy4pPhHG60vj7TFJW4kj93yFdYxWMYiEJOuWqwT?=
- =?us-ascii?Q?nxmzUY8xQoDJ6duq1ffJtv2h/3fg5z5GFIv6inb/fTF9L9L03X72DTSeUfR0?=
- =?us-ascii?Q?Dgl5khJndTwhF9lXpHQw9zzbY7UkrWqCb2YOMZQpZvYPcAeEOESDWI7xQhu+?=
- =?us-ascii?Q?jo2S+EW99VfW9KdvgeVvRcViXFLMwlxl8UichsVVnT0PTuAa1/RbKBP6mTks?=
- =?us-ascii?Q?Da17B0NcUJdffr35ewzsotcfnCXdiUxbwJInIB/a2KJxwnWoPsfed5uug45O?=
- =?us-ascii?Q?XY2SwVt63FsUPy8dg18cpRUUpIUv3v1je9ubeAmUArhc79Fx6ZWa4pnFNKAq?=
- =?us-ascii?Q?KQD9f7qNJdXC0CyA0BU4Hw2o8vPlwiDozLo+RI4YJ87i2LCHFxe7iPTDyXHQ?=
- =?us-ascii?Q?oO3T07ianeqaZva4XYzrki5LbPQS3LRW/EeJk6iPBMKaxfynhnrrPV/iv0s+?=
- =?us-ascii?Q?IuIBvJQe36SRj07wiaPT+rCF4Jw3jHQPa6KHERItu1kdVZTxIttkt4j99gGa?=
- =?us-ascii?Q?5li+ODa92RD33cIe23nvnxOPsYZYFTrbI6qgQleKieVANL7vS5Q3AcfOiDA8?=
- =?us-ascii?Q?TA=3D=3D?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b67734fc-ed2c-412c-87dc-08dbb93d107d
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR17MB5512.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 18:20:12.5540
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8gEbkMJWVW1UQrR3D9XATg7tewc+yjRDc8XM+o5TAPKHW3qPBBnZtSHZoEE4bWMN6HKzQWUKKDhADHPAi11M/sP8G7VJ2ZiwAoNeKtfihx0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR17MB6403
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA3sCWUC/23QTWrDMBAF4KsEresijf6z6j1KKNJIqUWxFaxEt
+ A2+e+VQqClavoH5Znh3UuKSYiHHw50ssaaS8tyCfjoQHN38HocUWiZAgVNDxZAv1zSl7/iGY8S
+ PcpuG4JmQYIxDYKTtXZZ4Tp8P8/XU8pjKNS9fjxOVbdNfDVRHq2ygg+VaUuYbC+5lSTWXNOMz5
+ olsYIU/xFLZQ6AhiEFJE7wW3HcQvkd0D+EbIikELoINmncQsUMY6yGiIVojggs2NqWDyD3Sa7j
+ K7RMrvQEHWurYQdQe6XaiGsKEU3hWDBUz/5B1XX8A5VvcmA4CAAA=
+To:     Charlie Jenkins <charlie@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Samuel Holland <samuel.holland@sifive.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Laight <david.laight@aculab.com>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,36 +81,148 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 10:59:33AM -0700, Andy Lutomirski wrote:
-> 
-> I'm not complaining about the name.  I'm objecting about the semantics.
-> 
-> Apparently you have a system to collect usage statistics of physical addresses, but you have no idea what those pages map do (without crawling /proc or /sys, anyway).  But that means you have no idea when the logical contents of those pages *changes*.  So you fundamentally have a nasty race: anything else that swaps or migrates those pages will mess up your statistics, and you'll start trying to migrate the wrong thing.
+Each architecture generally implements fine-tuned checksum functions to
+leverage the instruction set. This patch adds the main checksum
+functions that are used in networking.
 
-How does this change if I use virtual address based migration?
+Vector support is included in this patch to start a discussion on that,
+it can probably be optimized more. The vector patches still need some
+work as they rely on GCC vector intrinsics types which cannot work in
+the kernel since it requires C vector support rather than just assembler
+support. I have tested the vector patches as standalone algorithms in QEMU.
 
-I could do sampling based on virtual address (page faults, IBS/PEBs,
-whatever), and by the time I make a decision, the kernel could have
-migrated the data or even my task from Node A to Node B.  The sample I
-took is now stale, and I could make a poor migration decision.
+This patch takes heavy use of the Zbb extension using alternatives
+patching.
 
-If I do move_pages(pid, some_virt_addr, some_node) and it migrates the
-page from NodeA to NodeB, then the device-side collection is likewise
-no longer valid.  This problem doesn't change because I used virtual
-address compared to physical address.
+To test this patch, enable the configs for KUNIT, then CHECKSUM_KUNIT
+and RISCV_CHECKSUM_KUNIT.
 
-But if i have a 512GB memory device, and i can see a wide swath of that
-512GB is hot, while a good chunk of my local DRAM is not - then I
-probably don't care *what* gets migrated up to DRAM, i just care that a
-vast majority of that hot data does.
+I have attempted to make these functions as optimal as possible, but I
+have not ran anything on actual riscv hardware. My performance testing
+has been limited to inspecting the assembly, running the algorithms on
+x86 hardware, and running in QEMU.
 
-The goal here isn't 100% precision, you will never get there. The goal
-here is broad-scope performance enhancements of the overall system
-while minimizing the cost to compute the migration actions to be taken.
+ip_fast_csum is a relatively small function so even though it is
+possible to read 64 bits at a time on compatible hardware, the
+bottleneck becomes the clean up and setup code so loading 32 bits at a
+time is actually faster.
 
-I don't think the contents of the page are always relevant.  The entire
-concept here is to enable migration without caring about what programs
-are using the memory for - just so long as the memcg's and zoning is
-respected.
+---
+    
+The algorithm proposed to replace the default csum_fold can be seen to
+compute the same result by running all 2^32 possible inputs.
+    
+static inline unsigned int ror32(unsigned int word, unsigned int shift)
+{
+	return (word >> (shift & 31)) | (word << ((-shift) & 31));
+}
 
-~Gregory
+unsigned short csum_fold(unsigned int csum)
+{
+	unsigned int sum = csum;
+	sum = (sum & 0xffff) + (sum >> 16);
+	sum = (sum & 0xffff) + (sum >> 16);
+	return ~sum;
+}
+
+unsigned short csum_fold_arc(unsigned int csum)
+{
+	return ((~csum - ror32(csum, 16)) >> 16);
+}
+
+int main()
+{
+	unsigned int start = 0x0;
+	do {
+		if (csum_fold(start) != csum_fold_arc(start)) {
+			printf("Not the same %u\n", start);
+			return -1;
+		}
+		start += 1;
+	} while(start != 0x0);
+	printf("The same\n");
+	return 0;
+}
+
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Arnd Bergmann <arnd@arndb.de>
+To: Charlie Jenkins <charlie@rivosinc.com>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+To: Conor Dooley <conor@kernel.org>
+To: Samuel Holland <samuel.holland@sifive.com>
+To: David Laight <David.Laight@aculab.com>
+To: linux-riscv@lists.infradead.org
+To: linux-kernel@vger.kernel.org
+To: linux-arch@vger.kernel.org
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+
+---
+Changes in v7:
+- Included linux/bitops.h in asm-generic/checksum.h to use ror (Conor)
+- Optimized loop in do_csum (David)
+- Used ror instead of shifting (David)
+- Unfortunately had to reintroduce ifdefs because gcc is not smart
+  enough to not throw warnings on code that will never execute
+- Use ifdef instead of IS_ENABLED on __LITTLE_ENDIAN because IS_ENABLED
+  does not work on that
+- Only optimize for zbb when alternatives is enabled in do_csum
+- Link to v6: https://lore.kernel.org/r/20230915-optimize_checksum-v6-0-14a6cf61c618@rivosinc.com
+
+Changes in v6:
+- Fix accuracy of commit message for csum_fold
+- Fix indentation
+- Link to v5: https://lore.kernel.org/r/20230914-optimize_checksum-v5-0-c95b82a2757e@rivosinc.com
+
+Changes in v5:
+- Drop vector patches
+- Check ZBB enabled before doing any ZBB code (Conor)
+- Check endianness in IS_ENABLED
+- Revert to the simpler non-tree based version of ipv6_csum_magic since
+  David pointed out that the tree based version is not better.
+- Link to v4: https://lore.kernel.org/r/20230911-optimize_checksum-v4-0-77cc2ad9e9d7@rivosinc.com
+
+Changes in v4:
+- Suggestion by David Laight to use an improved checksum used in
+  arch/arc.
+- Eliminates zero-extension on rv32, but not on rv64.
+- Reduces data dependency which should improve execution speed on
+  rv32 and rv64
+- Still passes CHECKSUM_KUNIT and RISCV_CHECKSUM_KUNIT on rv32 and
+  rv64 with and without zbb.
+- Link to v3: https://lore.kernel.org/r/20230907-optimize_checksum-v3-0-c502d34d9d73@rivosinc.com
+
+Changes in v3:
+- Use riscv_has_extension_likely and has_vector where possible (Conor)
+- Reduce ifdefs by using IS_ENABLED where possible (Conor)
+- Use kernel_vector_begin in the vector code (Samuel)
+- Link to v2: https://lore.kernel.org/r/20230905-optimize_checksum-v2-0-ccd658db743b@rivosinc.com
+
+Changes in v2:
+- After more benchmarking, rework functions to improve performance.
+- Remove tests that overlapped with the already existing checksum
+  tests and make tests more extensive.
+- Use alternatives to activate code with Zbb and vector extensions
+- Link to v1: https://lore.kernel.org/r/20230826-optimize_checksum-v1-0-937501b4522a@rivosinc.com
+
+---
+Charlie Jenkins (4):
+      asm-generic: Improve csum_fold
+      riscv: Checksum header
+      riscv: Add checksum library
+      riscv: Test checksum functions
+
+ arch/riscv/Kconfig.debug              |   1 +
+ arch/riscv/include/asm/checksum.h     |  91 ++++++++++
+ arch/riscv/lib/Kconfig.debug          |  31 ++++
+ arch/riscv/lib/Makefile               |   3 +
+ arch/riscv/lib/csum.c                 | 217 ++++++++++++++++++++++
+ arch/riscv/lib/riscv_checksum_kunit.c | 330 ++++++++++++++++++++++++++++++++++
+ include/asm-generic/checksum.h        |   6 +-
+ 7 files changed, 676 insertions(+), 3 deletions(-)
+---
+base-commit: da5f5b0f1b813dafe9ce81b70fed01b0d103d556
+change-id: 20230804-optimize_checksum-db145288ac21
+-- 
+- Charlie
+
