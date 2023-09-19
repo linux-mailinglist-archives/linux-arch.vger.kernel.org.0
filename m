@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EB87A595B
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 07:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEED7A5966
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 07:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjISFb0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 01:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S231391AbjISFfP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 01:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjISFb0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 01:31:26 -0400
+        with ESMTP id S230437AbjISFfN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 01:35:13 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927F211A
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:30:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B80FC
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695101437;
+        s=mimecast20190719; t=1695101660;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vOiDvIp8ZO3F6CAn88eZW4xllynwcvVSacGgI+FHRPk=;
-        b=VMSh2zqLABDFounc7RilweqhF+zIc5jBqECgN8/m6ozdFjMYCh2E7wSB89BGVGCp0zbabW
-        tQrOYCqiGApipWJYLxapLQNbLr1E4nIUYt/FS/gjrMm7QTL0a3AfT7uEy4vR+wx4cUVqPE
-        pZP3vGWBD2PXAptmH+JxZDLuEvm/qvE=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8GekO9FCWEmR9LtDRQf6a8wFqBw2A8YWLyWPmpRHYdI=;
+        b=IEqjEze7903H9IJDw6RDMwOWvzKHNo5y2G1On6Tc4F7OPuJV83Tv92lPrYhEA0dOJsUXws
+        2J9mAeKFJaKG5tz/8ad/u98KGaEwAqUGXag0HYcBXYqr3Lpm7Odh/2FIFiy9FB575qwMqM
+        JDFxtjiX8GhBQTGzRl1ajkStnz2LOaw=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-27-bT9ScFtKPY-pp7fNQm7FuA-1; Tue, 19 Sep 2023 01:30:34 -0400
-X-MC-Unique: bT9ScFtKPY-pp7fNQm7FuA-1
-Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-57698a90356so7556331eaf.0
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:30:34 -0700 (PDT)
+ us-mta-325-meL3fggVOquNkEb0NNKRsA-1; Tue, 19 Sep 2023 01:34:18 -0400
+X-MC-Unique: meL3fggVOquNkEb0NNKRsA-1
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6c0f174540cso7813476a34.2
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:34:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695101434; x=1695706234;
+        d=1e100.net; s=20230601; t=1695101657; x=1695706457;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vOiDvIp8ZO3F6CAn88eZW4xllynwcvVSacGgI+FHRPk=;
-        b=xH7Pc6c+cwYj+feIMsGh8SveyHYdCCpdzEyrevS5NXiAkB072MuBfbEMYzaXbE30S3
-         pcqEu9TQ40HDbeHBCV4jYO2kA/7WNAry0zGBmV2N6sykoSsM8f8U+93gaGBnBCwq2207
-         oLANWU/05S4V5jdzO0PTfw/DudMQBG69MMyAI1rPKpI/bFXGOMOiMgK4TCI9aUNP6Afj
-         PyK+hvV4dj/D/7SxGlFflbzmUiZVs2RuRL/BeLwNA7ZKtNX+D4+Bxvfrb231apjSuUY4
-         c/qQUsOe2+BxA78hug1phIRBsdFiwk8QYfSucWKC3CSlx+d1CC8ukLI4qN9eoSUr0cTS
-         bM5A==
-X-Gm-Message-State: AOJu0YyEa7bA6GR//W1+IGhhXn+bSc4JXOUZGTpGi0lGVteNpivLTwqn
-        MJGakS9TEcDfvKk2JeXjPEeQhwQCWh1U6z+toIoMk4oHTFuHsIoMwgigC2HPTZy479Rdt8ydH72
-        Ilv+QJhbamPxo2oSpkfP1jQ==
-X-Received: by 2002:a4a:7652:0:b0:573:f620:ec80 with SMTP id w18-20020a4a7652000000b00573f620ec80mr10121678ooe.2.1695101434169;
-        Mon, 18 Sep 2023 22:30:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG4tz9OuYK5vkBrvbh1+QWMEOqlzr3kwHkjk4JxS7cBXq9kiMcXQe9Q+9OS8QNnGWcnNjRSKA==
-X-Received: by 2002:a4a:7652:0:b0:573:f620:ec80 with SMTP id w18-20020a4a7652000000b00573f620ec80mr10121660ooe.2.1695101433854;
-        Mon, 18 Sep 2023 22:30:33 -0700 (PDT)
+        bh=8GekO9FCWEmR9LtDRQf6a8wFqBw2A8YWLyWPmpRHYdI=;
+        b=NuRNXJqxpVyYeZm23YrS0QYXtZoYwNZRBBGsTBTV8R/SHjwELgqBZXWrRDC5GThikw
+         zulXFAqOtG+prYlyjCznbtbpivoHUIx+RBrGNjOLO0CMzJEaAIIU8GMTIRqfqdp2oXJ+
+         TPAiSeYhrYnYl5XU3WCoEm9jMSeSlf9wlBTLf/D0UqS2wL8ADHFkfcZWjWJiGyxDYWYh
+         BqdadGSeCoTjmAOseoLjqd/vi4Fh+prKGJAzoQEjikJatO7eQU4uIy2lZrh7dJyQcxQE
+         1cphn4tNapXv/gjW5taNNBmdSJR3nDZhC/JG2kn987SUcDWTLsPDEL2ycjGQVH+GvEsr
+         +7sg==
+X-Gm-Message-State: AOJu0YyurPt5uNmexsK9ZylW3pmtsvZ3hs57YF3W2u9JKGS8QlzKa/Ct
+        wUUy1do5XULi1JONKFe9Vr9YIOtCkUHbKm2IfRfD9mPE6nfvLs1KA/UtYwtCl9jDtr5vUYLlvfs
+        Iqpd3dTBbaxhOWMVWluhrIg==
+X-Received: by 2002:a9d:7b41:0:b0:6bd:c865:a618 with SMTP id f1-20020a9d7b41000000b006bdc865a618mr12560979oto.13.1695101657728;
+        Mon, 18 Sep 2023 22:34:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGp3oYUvOdK3gaxD3wDIWgRy4zZEjJouzUN/g8abs79z1pkNhC69bY0U3OucGyIenW2zns05w==
+X-Received: by 2002:a9d:7b41:0:b0:6bd:c865:a618 with SMTP id f1-20020a9d7b41000000b006bdc865a618mr12560940oto.13.1695101657463;
+        Mon, 18 Sep 2023 22:34:17 -0700 (PDT)
 Received: from redhat.com ([2804:1b3:a803:677d:42e9:f426:9422:f020])
-        by smtp.gmail.com with ESMTPSA id j4-20020a4aab44000000b00576161c4315sm4777968oon.37.2023.09.18.22.30.26
+        by smtp.gmail.com with ESMTPSA id z7-20020a9d4687000000b006c460c58b00sm589553ote.2.2023.09.18.22.34.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 22:30:33 -0700 (PDT)
-Date:   Tue, 19 Sep 2023 02:30:23 -0300
+        Mon, 18 Sep 2023 22:34:16 -0700 (PDT)
+Date:   Tue, 19 Sep 2023 02:34:07 -0300
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Guo Ren <guoren@kernel.org>
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
@@ -71,250 +71,285 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 08/17] riscv: qspinlock: Add virt_spin_lock() support
- for KVM guest
-Message-ID: <ZQkx75LgsM3-UfaN@redhat.com>
+Subject: Re: [PATCH V11 09/17] riscv: qspinlock: errata: Add
+ ERRATA_THEAD_WRITE_ONCE fixup
+Message-ID: <ZQkyzymyWClEbRhc@redhat.com>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-9-guoren@kernel.org>
- <ZQK9-tn2MepXlY1u@redhat.com>
- <CAJF2gTR6USUQc7=TmFx+8HfhKa8whzb9qtNjLKR_FPZzN656Zg@mail.gmail.com>
+ <20230910082911.3378782-10-guoren@kernel.org>
+ <ZQLFJ1cmQ8PAoMHm@redhat.com>
+ <CAJF2gTRQNduoHJgf3iJP5ada4WTwrzD9UtkyRj0X=0JFyRPM=w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTR6USUQc7=TmFx+8HfhKa8whzb9qtNjLKR_FPZzN656Zg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <CAJF2gTRQNduoHJgf3iJP5ada4WTwrzD9UtkyRj0X=0JFyRPM=w@mail.gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 17, 2023 at 11:12:31PM +0800, Guo Ren wrote:
-> On Thu, Sep 14, 2023 at 4:02 PM Leonardo Bras <leobras@redhat.com> wrote:
+On Sun, Sep 17, 2023 at 11:15:51PM +0800, Guo Ren wrote:
+> On Thu, Sep 14, 2023 at 4:32 PM Leonardo Bras <leobras@redhat.com> wrote:
 > >
-> > On Sun, Sep 10, 2023 at 04:29:02AM -0400, guoren@kernel.org wrote:
+> > On Sun, Sep 10, 2023 at 04:29:03AM -0400, guoren@kernel.org wrote:
 > > > From: Guo Ren <guoren@linux.alibaba.com>
 > > >
-> > > Add a static key controlling whether virt_spin_lock() should be
-> > > called or not. When running on bare metal set the new key to
-> > > false.
+> > > The early version of T-Head C9xx cores has a store merge buffer
+> > > delay problem. The store merge buffer could improve the store queue
+> > > performance by merging multi-store requests, but when there are not
+> > > continued store requests, the prior single store request would be
+> > > waiting in the store queue for a long time. That would cause
+> > > significant problems for communication between multi-cores. This
+> > > problem was found on sg2042 & th1520 platforms with the qspinlock
+> > > lock torture test.
 > > >
-> > > The KVM guests fall back to a Test-and-Set spinlock, because fair
-> > > locks have horrible lock 'holder' preemption issues. The
-> > > virt_spin_lock_key would shortcut for the
-> > > queued_spin_lock_slowpath() function that allow virt_spin_lock to
-> > > hijack it.
+> > > So appending a fence w.o could immediately flush the store merge
+> > > buffer and let other cores see the write result.
+> > >
+> > > This will apply the WRITE_ONCE errata to handle the non-standard
+> > > behavior via appending a fence w.o instruction for WRITE_ONCE().
 > > >
 > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > > > Signed-off-by: Guo Ren <guoren@kernel.org>
 > > > ---
-> > >  .../admin-guide/kernel-parameters.txt         |  4 +++
-> > >  arch/riscv/include/asm/sbi.h                  |  8 +++++
-> > >  arch/riscv/include/asm/spinlock.h             | 22 ++++++++++++++
-> > >  arch/riscv/kernel/sbi.c                       |  2 +-
-> > >  arch/riscv/kernel/setup.c                     | 30 ++++++++++++++++++-
-> > >  5 files changed, 64 insertions(+), 2 deletions(-)
+> > >  arch/riscv/Kconfig.errata              | 19 +++++++++++++++++++
+> > >  arch/riscv/errata/thead/errata.c       | 20 ++++++++++++++++++++
+> > >  arch/riscv/include/asm/errata_list.h   | 13 -------------
+> > >  arch/riscv/include/asm/rwonce.h        | 24 ++++++++++++++++++++++++
+> > >  arch/riscv/include/asm/vendorid_list.h | 14 ++++++++++++++
+> > >  include/asm-generic/rwonce.h           |  2 ++
+> > >  6 files changed, 79 insertions(+), 13 deletions(-)
+> > >  create mode 100644 arch/riscv/include/asm/rwonce.h
 > > >
-> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > index 61cacb8dfd0e..f75bedc50e00 100644
-> > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > @@ -3927,6 +3927,10 @@
-> > >       no_uaccess_flush
-> > >                       [PPC] Don't flush the L1-D cache after accessing user data.
+> > > diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+> > > index 1aa85a427ff3..c919cc3f1a3a 100644
+> > > --- a/arch/riscv/Kconfig.errata
+> > > +++ b/arch/riscv/Kconfig.errata
+> > > @@ -77,4 +77,23 @@ config ERRATA_THEAD_PMU
 > > >
-> > > +     no_virt_spin    [RISC-V] Disable virt_spin_lock in KVM guest to use
-> > > +                     native_queued_spinlock when the nopvspin option is enabled.
-> > > +                     This would help vcpu=pcpu scenarios.
+> > >         If you don't know what to do here, say "Y".
+> > >
+> > > +config ERRATA_THEAD_WRITE_ONCE
+> > > +     bool "Apply T-Head WRITE_ONCE errata"
+> > > +     depends on ERRATA_THEAD
+> > > +     default y
+> > > +     help
+> > > +       The early version of T-Head C9xx cores has a store merge buffer
+> > > +       delay problem. The store merge buffer could improve the store queue
+> > > +       performance by merging multi-store requests, but when there are no
+> > > +       continued store requests, the prior single store request would be
+> > > +       waiting in the store queue for a long time. That would cause
+> > > +       significant problems for communication between multi-cores. Appending
+> > > +       a fence w.o could immediately flush the store merge buffer and let
+> > > +       other cores see the write result.
 > > > +
-> > >       novmcoredd      [KNL,KDUMP]
-> > >                       Disable device dump. Device dump allows drivers to
-> > >                       append dump data to vmcore so you can collect driver
-> > > diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> > > index 501e06e52078..e0233b3d7a5f 100644
-> > > --- a/arch/riscv/include/asm/sbi.h
-> > > +++ b/arch/riscv/include/asm/sbi.h
-> > > @@ -50,6 +50,13 @@ enum sbi_ext_base_fid {
-> > >       SBI_EXT_BASE_GET_MIMPID,
-> > >  };
-> > >
-> > > +enum sbi_ext_base_impl_id {
-> > > +     SBI_EXT_BASE_IMPL_ID_BBL = 0,
-> > > +     SBI_EXT_BASE_IMPL_ID_OPENSBI,
-> > > +     SBI_EXT_BASE_IMPL_ID_XVISOR,
-> > > +     SBI_EXT_BASE_IMPL_ID_KVM,
-> > > +};
+> > > +       This will apply the WRITE_ONCE errata to handle the non-standard
+> > > +       behavior via appending a fence w.o instruction for WRITE_ONCE().
 > > > +
-> > >  enum sbi_ext_time_fid {
-> > >       SBI_EXT_TIME_SET_TIMER = 0,
-> > >  };
-> > > @@ -269,6 +276,7 @@ int sbi_console_getchar(void);
-> > >  long sbi_get_mvendorid(void);
-> > >  long sbi_get_marchid(void);
-> > >  long sbi_get_mimpid(void);
-> > > +long sbi_get_firmware_id(void);
-> > >  void sbi_set_timer(uint64_t stime_value);
-> > >  void sbi_shutdown(void);
-> > >  void sbi_send_ipi(unsigned int cpu);
-> > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-> > > index 8ea0fee80652..6b38d6616f14 100644
-> > > --- a/arch/riscv/include/asm/spinlock.h
-> > > +++ b/arch/riscv/include/asm/spinlock.h
-> > > @@ -4,6 +4,28 @@
-> > >  #define __ASM_RISCV_SPINLOCK_H
-> > >
-> > >  #ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +/*
-> > > + * The KVM guests fall back to a Test-and-Set spinlock, because fair locks
-> > > + * have horrible lock 'holder' preemption issues. The virt_spin_lock_key
-> > > + * would shortcut for the queued_spin_lock_slowpath() function that allow
-> > > + * virt_spin_lock to hijack it.
-> > > + */
-> > > +DECLARE_STATIC_KEY_TRUE(virt_spin_lock_key);
+> > > +       If you don't know what to do here, say "Y".
 > > > +
-> > > +#define virt_spin_lock virt_spin_lock
-> > > +static inline bool virt_spin_lock(struct qspinlock *lock)
+> > >  endmenu # "CPU errata selection"
+> > > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > > index be84b14f0118..751eb5a7f614 100644
+> > > --- a/arch/riscv/errata/thead/errata.c
+> > > +++ b/arch/riscv/errata/thead/errata.c
+> > > @@ -69,6 +69,23 @@ static bool errata_probe_pmu(unsigned int stage,
+> > >       return true;
+> > >  }
+> > >
+> > > +static bool errata_probe_write_once(unsigned int stage,
+> > > +                                 unsigned long arch_id, unsigned long impid)
 > > > +{
-> > > +     if (!static_branch_likely(&virt_spin_lock_key))
+> > > +     if (!IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
 > > > +             return false;
 > > > +
-> > > +     do {
-> > > +             while (atomic_read(&lock->val) != 0)
-> > > +                     cpu_relax();
-> > > +     } while (atomic_cmpxchg(&lock->val, 0, _Q_LOCKED_VAL) != 0);
+> > > +     /* target-c9xx cores report arch_id and impid as 0 */
+> > > +     if (arch_id != 0 || impid != 0)
+> > > +             return false;
 > > > +
-> > > +     return true;
+> > > +     if (stage == RISCV_ALTERNATIVES_BOOT ||
+> > > +         stage == RISCV_ALTERNATIVES_MODULE)
+> > > +             return true;
+> > > +
+> > > +     return false;
 > > > +}
 > > > +
-> > >  #define _Q_PENDING_LOOPS     (1 << 9)
-> > >  #endif
-> > >
-> > > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> > > index 88eea3a99ee0..cdd45edc8db4 100644
-> > > --- a/arch/riscv/kernel/sbi.c
-> > > +++ b/arch/riscv/kernel/sbi.c
-> > > @@ -555,7 +555,7 @@ static inline long sbi_get_spec_version(void)
-> > >       return __sbi_base_ecall(SBI_EXT_BASE_GET_SPEC_VERSION);
-> > >  }
-> > >
-> > > -static inline long sbi_get_firmware_id(void)
-> > > +long sbi_get_firmware_id(void)
+> > >  static u32 thead_errata_probe(unsigned int stage,
+> > >                             unsigned long archid, unsigned long impid)
 > > >  {
-> > >       return __sbi_base_ecall(SBI_EXT_BASE_GET_IMP_ID);
-> > >  }
-> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > > index 0f084f037651..c57d15b05160 100644
-> > > --- a/arch/riscv/kernel/setup.c
-> > > +++ b/arch/riscv/kernel/setup.c
-> > > @@ -26,6 +26,7 @@
-> > >  #include <asm/alternative.h>
-> > >  #include <asm/cacheflush.h>
-> > >  #include <asm/cpu_ops.h>
-> > > +#include <asm/cpufeature.h>
-> > >  #include <asm/early_ioremap.h>
-> > >  #include <asm/pgtable.h>
-> > >  #include <asm/setup.h>
-> > > @@ -283,16 +284,43 @@ DEFINE_STATIC_KEY_TRUE(combo_qspinlock_key);
-> > >  EXPORT_SYMBOL(combo_qspinlock_key);
-> > >  #endif
+> > > @@ -83,6 +100,9 @@ static u32 thead_errata_probe(unsigned int stage,
+> > >       if (errata_probe_pmu(stage, archid, impid))
+> > >               cpu_req_errata |= BIT(ERRATA_THEAD_PMU);
 > > >
-> > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +static bool no_virt_spin_key = false;
+> > > +     if (errata_probe_write_once(stage, archid, impid))
+> > > +             cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+> > > +
+> > >       return cpu_req_errata;
+> > >  }
+> > >
+> > > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> > > index 712cab7adffe..fbb2b8d39321 100644
+> > > --- a/arch/riscv/include/asm/errata_list.h
+> > > +++ b/arch/riscv/include/asm/errata_list.h
+> > > @@ -11,19 +11,6 @@
+> > >  #include <asm/hwcap.h>
+> > >  #include <asm/vendorid_list.h>
+> > >
+> > > -#ifdef CONFIG_ERRATA_SIFIVE
+> > > -#define      ERRATA_SIFIVE_CIP_453 0
+> > > -#define      ERRATA_SIFIVE_CIP_1200 1
+> > > -#define      ERRATA_SIFIVE_NUMBER 2
+> > > -#endif
+> > > -
+> > > -#ifdef CONFIG_ERRATA_THEAD
+> > > -#define      ERRATA_THEAD_PBMT 0
+> > > -#define      ERRATA_THEAD_CMO 1
+> > > -#define      ERRATA_THEAD_PMU 2
+> > > -#define      ERRATA_THEAD_NUMBER 3
+> > > -#endif
+> > > -
 > >
-> > I suggest no _key, also there is no need for "= false".
-> > To be consistent with enable_qspinlock, I also suggest
-> > adding __ro_after_init:
-> >
-> > static bool no_virt_spin __ro_after_init;
-> okay.
+> > Here I understand you are moving stuff from errata_list.h to
+> > vendorid_list.h. Wouldn't it be better to do this on a separated patch
+> > before this one?
+> Okay.
 > 
 > >
+> > I understand this is used here, but it looks like it's unrelated.
+> >
+> > >  #ifdef __ASSEMBLY__
+> > >
+> > >  #define ALT_INSN_FAULT(x)                                            \
+> > > diff --git a/arch/riscv/include/asm/rwonce.h b/arch/riscv/include/asm/rwonce.h
+> > > new file mode 100644
+> > > index 000000000000..be0b8864969d
+> > > --- /dev/null
+> > > +++ b/arch/riscv/include/asm/rwonce.h
+> > > @@ -0,0 +1,24 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +
+> > > +#ifndef __ASM_RWONCE_H
+> > > +#define __ASM_RWONCE_H
+> > > +
+> > > +#include <linux/compiler_types.h>
+> > > +#include <asm/alternative-macros.h>
+> > > +#include <asm/vendorid_list.h>
+> > > +
+> > > +#define __WRITE_ONCE(x, val)                         \
+> > > +do {                                                 \
+> > > +     *(volatile typeof(x) *)&(x) = (val);            \
+> > > +     asm volatile(ALTERNATIVE(                       \
+> > > +             __nops(1),                              \
+> > > +             "fence w, o\n\t",                       \
+> > > +             THEAD_VENDOR_ID,                        \
+> > > +             ERRATA_THEAD_WRITE_ONCE,                \
+> > > +             CONFIG_ERRATA_THEAD_WRITE_ONCE)         \
+> > > +             : : : "memory");                        \
+> > > +} while (0)
+> > > +
+> > > +#include <asm-generic/rwonce.h>
+> > > +
+> > > +#endif       /* __ASM_RWONCE_H */
+> >
+> > IIUC the idea here is to have an alternative __WRITE_ONCE that replaces the
+> > asm-generic one.
+> >
+> > Honestly, this asm alternative here seems too much information, and too
+> > cryptic. I mean, yeah in the patch it all makes sense, but I imagine myself
+> > in the future looking at all this and trying to understand what is going
+> > on.
+> >
+> > Wouldn't it look better to have something like:
+> >
+> > #####
+> >
+> > /* Some explanation like the one on Kconfig */
+> >
+> > #define write_once_flush()                      \
+> > do {                                            \
+> >         asm volatile(ALTERNATIVE(                       \
+> >                 __nops(1),                      \
+> >                 "fence w, o\n\t",               \
+> >                 THEAD_VENDOR_ID,                \
+> >                 ERRATA_THEAD_WRITE_ONCE,        \
+> >                 CONFIG_ERRATA_THEAD_WRITE_ONCE) \
+> >                 : : : "memory");                \
+> > } while(0)
 > >
 > >
-> > > +DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
-> > > +
-> > > +static int __init no_virt_spin_setup(char *p)
-> > > +{
-> > > +     no_virt_spin_key = true;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +early_param("no_virt_spin", no_virt_spin_setup);
-> > > +
-> > > +static void __init virt_spin_lock_init(void)
-> > > +{
-> > > +     if (sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM ||
-> > > +         no_virt_spin_key)
-> > > +             static_branch_disable(&virt_spin_lock_key);
-> > > +     else
-> > > +             pr_info("Enable virt_spin_lock\n");
-> > > +}
-> > > +#endif
-> > > +
+> > #define __WRITE_ONCE(x, val)                    \
+> > do {                                            \
+> >         *(volatile typeof(x) *)&(x) = (val);    \
+> >         write_once_flush();                     \
+> > } while(0)
 > >
-> > A new virt_no_spin kernel parameter was introduced, but without
-> > CONFIG_QUEUED_SPINLOCKS it will silently fail.
+> > #####
 > >
-> > I would suggest an #else clause here with a function to print an error /
-> > warning message about no_virt_spin being invalid in this scenario.
-> > It will probably help future debugging.
-> If CONFIG_QUEUED_SPINLOCKS=n, no_virt_spin should be quiet. The
-> no_virt_spin is one path of qspinlock.
+> >
+> > This way I could quickly see there is a flush after the writting of
+> > WRITE_ONCE(), and this flush is the above "complicated" asm.
+> >
+> > What do you think?
+> Okay, good point, and I would take it.
 
-IIUC having no_virt_spin being passed as parameter to a kernel with
-CONFIG_QUEUED_SPINLOCKS=n is not supposed to have any warning this 
-parameter is useless. 
+Thanks!
 
-I was just thinking it would be nice to have this warning during debugging, 
-but if it's standard practice then I am ok with this.
+Once you take the above suggestions, please include in your next patch:
+
+Reviewed-by: Leonardo Bras <leobras@redhat.com>
+
 
 > 
 > >
-> >
-> > >  static void __init riscv_spinlock_init(void)
-> > >  {
-> > >  #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
-> > > -     if (!enable_qspinlock_key) {
-> > > +     if (!enable_qspinlock_key &&
-> > > +         (sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)) {
-> > >               static_branch_disable(&combo_qspinlock_key);
-> > >               pr_info("Ticket spinlock: enabled\n");
-> > >       } else {
-> > >               pr_info("Queued spinlock: enabled\n");
-> > >       }
-> > >  #endif
-> > > +
-> > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +     virt_spin_lock_init();
-> > > +#endif
-> > >  }
+> > > diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
+> > > index cb89af3f0704..73078cfe4029 100644
+> > > --- a/arch/riscv/include/asm/vendorid_list.h
+> > > +++ b/arch/riscv/include/asm/vendorid_list.h
+> > > @@ -8,4 +8,18 @@
+> > >  #define SIFIVE_VENDOR_ID     0x489
+> > >  #define THEAD_VENDOR_ID              0x5b7
 > > >
-> > >  extern void __init init_rt_signal_env(void);
+> > > +#ifdef CONFIG_ERRATA_SIFIVE
+> > > +#define      ERRATA_SIFIVE_CIP_453 0
+> > > +#define      ERRATA_SIFIVE_CIP_1200 1
+> > > +#define      ERRATA_SIFIVE_NUMBER 2
+> > > +#endif
+> > > +
+> > > +#ifdef CONFIG_ERRATA_THEAD
+> > > +#define      ERRATA_THEAD_PBMT 0
+> > > +#define      ERRATA_THEAD_CMO 1
+> > > +#define      ERRATA_THEAD_PMU 2
+> > > +#define      ERRATA_THEAD_WRITE_ONCE 3
+> > > +#define      ERRATA_THEAD_NUMBER 4
+> > > +#endif
+> > > +
+> > >  #endif
+> > > diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonce.h
+> > > index 8d0a6280e982..fb07fe8c6e45 100644
+> > > --- a/include/asm-generic/rwonce.h
+> > > +++ b/include/asm-generic/rwonce.h
+> > > @@ -50,10 +50,12 @@
+> > >       __READ_ONCE(x);                                                 \
+> > >  })
+> > >
+> > > +#ifndef __WRITE_ONCE
+> > >  #define __WRITE_ONCE(x, val)                                         \
+> > >  do {                                                                 \
+> > >       *(volatile typeof(x) *)&(x) = (val);                            \
+> > >  } while (0)
+> > > +#endif
+> > >
+> > >  #define WRITE_ONCE(x, val)                                           \
+> > >  do {                                                                 \
 > > > --
 > > > 2.36.1
 > > >
-> >
-> > I am probably missing something out, but it looks to me that this patch is
-> > causing 2 different changes:
-> > 1 - Enabling no_virt_spin parameter
-> > 2 - Disabling queued spinlocks for some firmware_id
-> >
-> > Wouldn't be better to split those changes in multiple patches?
-> > Or am I missing the point on why they need to be together?
-
-^ Want your input on this
-
-Thanks!
-Leo
-
-> >
-> > Thanks!
-> > Leo
 > >
 > 
 > 
