@@ -2,200 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C857A598C
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 07:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0467A59DA
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 08:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjISFqn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 01:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S229690AbjISGTH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 02:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjISFql (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 01:46:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AFC18C
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695102350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HiVEPo5eeRXHXivfzlf4pcDpdl4skr74vqWMfN6Le04=;
-        b=QjFMctCMTih3hJhzVi1Te3He754jLHbNGUQMTw5DQjGRyJhZeib5pJeJiZoKtqUwQZ2Wv8
-        mqQYHT/AENZxjqfCcHL3lZ/KGDGRmCI+n83Q5O1L8bA5hitNKnq6jr0v4Th8GW0OcEEbha
-        9efbmp+0rRrTHvtbI3Bv1vI97kIOPsg=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-13-RxqObGYvNVK0nN_M7S8csQ-1; Tue, 19 Sep 2023 01:45:48 -0400
-X-MC-Unique: RxqObGYvNVK0nN_M7S8csQ-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1d6cf10016cso3605323fac.1
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:45:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695102348; x=1695707148;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HiVEPo5eeRXHXivfzlf4pcDpdl4skr74vqWMfN6Le04=;
-        b=ZKHyp7J+c9+tEcUKQrwH0s3LmYQ1OZtAN3e7alRA/YfyOX52cvQ5vacWpLueUW3z/0
-         VVrH2MSTbE7QCbKIjFP/DshlNx5QcTTDbEAlKcVDoCKc/jwo3oTn7TYVqZN5m6OEGvwU
-         x8VlZ9H5+bPJj9w3QCWMRL2EXAfzNe8hksnv8kIkx6OL4B+sEI5oNOqJbiX3oiT3JLFp
-         Ur5NNDTy2nUQSS0/kbrj3v3Ljun9oIeJLZOjLAT4Aa4NL5rHTv0ayetsKfVgKp/eT2IB
-         gI+fA91Ogyb5gXBOGOeh/yldFKo0LDERFipRUne8VnXEWMDIjUxhekM6xyphhZJRuxD4
-         yLrg==
-X-Gm-Message-State: AOJu0YztENQ51SojNquNX/vjyku6RtqjcfLxcEMT7YOc83EX90FxNtTU
-        /eRkqphiooCUmUIXsYUhBQ4z21jGZxrA+fqGJL3pvVnqHwR5+1LIKn3zkWKwO+/m1ixkGuaLxpG
-        hHNj0uQIIs63RtZ4y3jMNlQ==
-X-Received: by 2002:a05:6870:5690:b0:1bb:83e9:6277 with SMTP id p16-20020a056870569000b001bb83e96277mr13486635oao.33.1695102348009;
-        Mon, 18 Sep 2023 22:45:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHA7fVjpU09v/Q+0JN+fs3b+WtouB3O3IFXrPr3jgLPWef/tjcxoKLI0bNZO/4778Pfmzj0VA==
-X-Received: by 2002:a05:6870:5690:b0:1bb:83e9:6277 with SMTP id p16-20020a056870569000b001bb83e96277mr13486603oao.33.1695102347774;
-        Mon, 18 Sep 2023 22:45:47 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:677d:42e9:f426:9422:f020])
-        by smtp.gmail.com with ESMTPSA id cc6-20020a056871e18600b001b3d67934e9sm5733332oac.26.2023.09.18.22.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 22:45:47 -0700 (PDT)
-Date:   Tue, 19 Sep 2023 02:45:37 -0300
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 13/17] RISC-V: paravirt: pvqspinlock: Add SBI
- implementation
-Message-ID: <ZQk1gTtXayK9BDfB@redhat.com>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-14-guoren@kernel.org>
- <ZQP4SXLf00IntVWd@redhat.com>
- <CAJF2gTTBwFKjVOovMHB171s+nymL88OANpS3O-uwKBLxto43mA@mail.gmail.com>
+        with ESMTP id S229449AbjISGTC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 02:19:02 -0400
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020022.outbound.protection.outlook.com [52.101.61.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407F6100;
+        Mon, 18 Sep 2023 23:18:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GituE2aonioB7MXa1T/pxt6uq0MTWXbLuHChgFEt08XCxLhlFfZHTaNVAp86iXxDFh7uHKjXCd2Lkbvy8BI0c9eREWzUSR2JvoqqFw2p0w/NHdnjoOyj3MsZfK147pPCqdtiGcW/UaQSHVMJc5OkeRILwLaet38brryp+5qRu6ax9Ee+uRj9JMtwmYv/GMBJxiZfWIutqRHJg8IQskpKl4TW5IVIgplwoimueldMUJMpEYD4EaVxdzomO/UO32Tyf70Wv2CN5SaDzOTsVbm4co3Vp79r1vxfNQdHVByten2H/51r8eDNqEBgKe0/iHNypyEZxymAzAR0295Ufo6gVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=siN2DK8amF/a8yWiMreDEb6A/qUBw5Oq5J1wlS2BI5M=;
+ b=F8/0qrniDOJfjA9qgnaBS5xeL3kLDGF/Flw49pMlMI3zRlJtZWYb72DkoCSDTRZkNYTeWKGW1K3eE5rhNJESLKE5IxfzzVU1CzfG5ky1rEkSpPYX+y0trpvGiZrciHpi/osHKSYOOO4BqWtRjvRfrknEO7h4IVeY5J0GX52BTftwq8ViS55jdjgXQD/GeNVx0vIpvJkSeoUWIThj3QDsnIF53XgoWovmY9KuKcRTYFReSK0VjKgTST5qOH6M21NMVWO0i0JTt3zrbJat34QsiMkaFxEApWKnMi4IBmuh8Hp5cSZ72g8HtZBg21r8MuwiRLufJq/hbkS53J9fGZ/6Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=siN2DK8amF/a8yWiMreDEb6A/qUBw5Oq5J1wlS2BI5M=;
+ b=Gq1bZYeHleW/KtSOcUhqawaS0ig3ctx3BenqLg8UovVI8cg4a+gcLkRm4EZdn9Y5zHkP0iTeTBmEuEUcw5/Qi78Sce/ts8z/UbbDfSSLTo0+AT2cfGy1KAIg9QR6zx/EEa+1YPQYgzgI/99dte2/WOXZbpyZPl3Ie4+iTwUA268=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by MW4PR21MB2057.namprd21.prod.outlook.com (2603:10b6:303:11c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.1; Tue, 19 Sep
+ 2023 06:18:54 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::b05:d4ac:60ff:3b3f]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::b05:d4ac:60ff:3b3f%5]) with mapi id 15.20.6838.003; Tue, 19 Sep 2023
+ 06:18:54 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Olaf Hering <olaf@aepfle.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: RE: [PATCH v1] hyperv: reduce size of ms_hyperv_info
+Thread-Topic: [PATCH v1] hyperv: reduce size of ms_hyperv_info
+Thread-Index: AQHZ6kl9meKzfjp4TkqOb2QZ4H54prAhq5JA
+Date:   Tue, 19 Sep 2023 06:18:53 +0000
+Message-ID: <SA1PR21MB133593AABC414CB427B84FABBFFAA@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230918160141.23465-1-olaf@aepfle.de>
+In-Reply-To: <20230918160141.23465-1-olaf@aepfle.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=0b63f011-6edd-4c96-94b1-79b73334dd1b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-09-19T06:11:05Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|MW4PR21MB2057:EE_
+x-ms-office365-filtering-correlation-id: 2aa573e6-a817-4946-a8cc-08dbb8d84c7d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: E5/MEnArZXzseQvkv2BmPA6xeZBJK/XU0m706XR/Z8BMJ85RR1bgOlUxZx9lk8iOsqQwCA5oBf5H1qScG3YxMOz+5Rawyp7oYKW8T0IW23loGIDQhSrL8MiZ38rdyNT/LrjUx/+80Wnrst4CJQF6PFAu9Nkg0y61zj5GFK06Y2HBKenjwy0n7jql1yyrKyS6pEJDkp41cHqWSDw6RaMievP+KP9c30tPH58VGheBl2finlWytYChVvB1N5AKrs17wmpePB3cT9+5p6eJ06/lzparpYy/7218LZ/reF3mFEVkS3NKiCGN6cq50I41Pzhw0+skPzGgzDojrRfCV7JU3lzbV04T/xbZjndU0WH//m6Qzm3nRR+OAorcZL0T5JduyVixN9jMkCBqQFxQwSEAF7kenHlRN1RHmcscQyUrz5xIQDbjZUXGR4/aJnC5kKcjTVHhCw4L5MHHpI848+69ECFg/+OxJLA8jsVadvuTYXMh6fI++dhHH2E3ush7LIouJasOxv9ewukNw6fmifPiMWXnG/tP7XzOZsZ7mxzZM9GZAFndd6MUho7MwLXhMi4I31GBU7J9uLqx7gp7qWp0DtQ2/IqxwKjlgX+Rf5JwKGFBMP1RtQq43kUlDOhnAsVi25hT49h0Gahn8sEZvnefvKf1xX/eKd904Nr6yMEfdiw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(376002)(136003)(39860400002)(186009)(1800799009)(451199024)(6506007)(7696005)(9686003)(71200400001)(10290500003)(478600001)(2906002)(54906003)(110136005)(8990500004)(64756008)(76116006)(66556008)(66476007)(66946007)(66446008)(52536014)(4326008)(8676002)(316002)(8936002)(41300700001)(5660300002)(38070700005)(86362001)(33656002)(82950400001)(122000001)(82960400001)(38100700002)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?x5D24fmGmawr639HGDpfl7RT1J12Nh533WaNrHVUdZ7TnqwXjzIXagIUWgho?=
+ =?us-ascii?Q?RSRwVs6zDbZUsK72YA0f7iFx0PfBsm5silZREwPXa8H8Tvt1XWv+eHuhIf9Y?=
+ =?us-ascii?Q?F2Mak/E1quM5sZDlPlZHAUbvtbwspotg7CtweholFHj9ZGu0DP91lKqEO3g2?=
+ =?us-ascii?Q?t9r9Ooi6zJzC8uTT6at1ZnQqLHmCWmRZcuxLzfwjwD7bKkEBA9Ovc4XkTzTU?=
+ =?us-ascii?Q?YS3hgzBOEz3MdFImQesOzkMwXZYYzSpVfNlh2Nixkp/XNj1udHM5VggukPCX?=
+ =?us-ascii?Q?712zJRxnOVHYZdOSS95ZoTl0oeSQtDIbZkM+D5yz3Ka49TebO2wuRKqJsaLO?=
+ =?us-ascii?Q?1TBZqUWDkqa9CMx6GqufBleB/zUV13mk08d/bCmw4Cht3YFz9EKjSp1i9QUf?=
+ =?us-ascii?Q?G5GhrUPNMPD8JdViPwG7VkRTANCnU9wnS+1+JiBnvZT5ZjbJi+M4Dn434Egj?=
+ =?us-ascii?Q?HaAFN7pIjNOmdW5vs8nPrlEeIBjhDMCbdClBeM0QJ5t1VgtOgUe4B7ezgtfG?=
+ =?us-ascii?Q?9W3WM8EHOefkKDhlxh23l53+D4aHHNG5RD8pSl5o8x0QV9tJPpYUPtV3hRss?=
+ =?us-ascii?Q?naCSkcQCvfbRhmbHj3fWWY3KYSHgDF8IYEFnCZs0nhqT/7LDMRJENgdgYC05?=
+ =?us-ascii?Q?gKohrefKcRMFAAs6WEISjFniUaHZZClnYamutkHXbElDM5sDeTGTOglKiavh?=
+ =?us-ascii?Q?aEpB9ftiBqM30VAnRtQKMqLojTJvoOUBzHsw2msHrzZ6u5lEKl8uxBxLoAl0?=
+ =?us-ascii?Q?CeuOXtGaGGh0CUMWaPxJrQfFVCWN/5fcq59RmGMZuKruiqdkK9xyKTA0YSgw?=
+ =?us-ascii?Q?b0xm4IdT9pIFN2/rH1eKAo3J36adcdZyysPXLcBgMLPofYQz5F3KaLcNldEz?=
+ =?us-ascii?Q?Y42HUl495MHn/pG61vbTo6g6H4yaUprthmgaFKxcQC59AxdSw361LxJyVib0?=
+ =?us-ascii?Q?CBpxpwc9tPPwx+Jt/4dteN9aXXZnxOdC9TpGLMKVzW8mSrNcbk+DnQk2E007?=
+ =?us-ascii?Q?7M9V9uPsedj62Do7mTu/1d+X63Nmv8sYuKqZBgwAA9xUObGX3S02jcTGN0Ev?=
+ =?us-ascii?Q?k5L8hdz0pVF3PH5KLhJMi2ja5EQG0cP/4IqcJFnAFjTNmhZNeM4AOSsou4mJ?=
+ =?us-ascii?Q?DShEmQO8wI14p82EWvEbY5c0O9gilAC2triaoIFsgjXvFHiLsIKoopzyWjEQ?=
+ =?us-ascii?Q?+BKbgWHFMTdF3QF8cYbVpMLSO3gZ5Vp64iMOoG5Wqq/g08iNzVelgBs0gKas?=
+ =?us-ascii?Q?M8sAYfqVbzFeeZiNeuMK3t28AMF0aC7CmHm2ovS/HzPGpH4PwqALZNHP8BzL?=
+ =?us-ascii?Q?+0vQpyvjZDU/sa2BWowRVzlZWdwQaIXNOOOBkzaVyD7SFVzP0VFyyHHRlJK1?=
+ =?us-ascii?Q?BB0kDDPlwgnX+yn7gRoJQEclv/NPF7tjRpbrNDHmVlQu1Ti6Fz0lZGAxwcuI?=
+ =?us-ascii?Q?3MpP3VfN61fPdKE1kva6vWUzqS9UfHJdOCRTevg1OChUN9fGvqaQoxm34KQD?=
+ =?us-ascii?Q?u4ohzA6aWcTt2rK+vYEw3hy2cjzJ4cyK7hA22qw0W/abRAO/bFkFAjEM9zaN?=
+ =?us-ascii?Q?UqnlRM+tk22njJbDI9iJ6Hbbxjm3tOYgLEkjY5iw6XcnCSb2X5/+mTFUNuoB?=
+ =?us-ascii?Q?41Qrcwp7UdskU3LvtGOHwId54Fs7mpJLhRq75qOp+kUL?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTTBwFKjVOovMHB171s+nymL88OANpS3O-uwKBLxto43mA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aa573e6-a817-4946-a8cc-08dbb8d84c7d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2023 06:18:53.8529
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RDCR3yd4USFkH1vxXq3rFxeb2nbunxRBrAH1wxZhrHO13w/ZFosSSU9gnucdTD1Pj0zLSHUnve4duDsrL83oWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB2057
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 17, 2023 at 11:06:48PM +0800, Guo Ren wrote:
-> On Fri, Sep 15, 2023 at 2:23 PM Leonardo Bras <leobras@redhat.com> wrote:
-> >
-> > On Sun, Sep 10, 2023 at 04:29:07AM -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Implement pv_kick with SBI implementation, and add SBI_EXT_PVLOCK
-> > > extension detection.
-> > >
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >  arch/riscv/include/asm/sbi.h           | 6 ++++++
-> > >  arch/riscv/kernel/qspinlock_paravirt.c | 7 ++++++-
-> > >  2 files changed, 12 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> > > index e0233b3d7a5f..3533f8d4f3e2 100644
-> > > --- a/arch/riscv/include/asm/sbi.h
-> > > +++ b/arch/riscv/include/asm/sbi.h
-> > > @@ -30,6 +30,7 @@ enum sbi_ext_id {
-> > >       SBI_EXT_HSM = 0x48534D,
-> > >       SBI_EXT_SRST = 0x53525354,
-> > >       SBI_EXT_PMU = 0x504D55,
-> > > +     SBI_EXT_PVLOCK = 0xAB0401,
-> > >
-> > >       /* Experimentals extensions must lie within this range */
-> > >       SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-> > > @@ -243,6 +244,11 @@ enum sbi_pmu_ctr_type {
-> > >  /* Flags defined for counter stop function */
-> > >  #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
-> > >
-> > > +/* SBI PVLOCK (kick cpu out of wfi) */
-> > > +enum sbi_ext_pvlock_fid {
-> > > +     SBI_EXT_PVLOCK_KICK_CPU = 0,
-> > > +};
-> > > +
-> > >  #define SBI_SPEC_VERSION_DEFAULT     0x1
-> > >  #define SBI_SPEC_VERSION_MAJOR_SHIFT 24
-> > >  #define SBI_SPEC_VERSION_MAJOR_MASK  0x7f
-> > > diff --git a/arch/riscv/kernel/qspinlock_paravirt.c b/arch/riscv/kernel/qspinlock_paravirt.c
-> > > index a0ad4657f437..571626f350be 100644
-> > > --- a/arch/riscv/kernel/qspinlock_paravirt.c
-> > > +++ b/arch/riscv/kernel/qspinlock_paravirt.c
-> > > @@ -11,6 +11,8 @@
-> > >
-> > >  void pv_kick(int cpu)
-> > >  {
-> > > +     sbi_ecall(SBI_EXT_PVLOCK, SBI_EXT_PVLOCK_KICK_CPU,
-> > > +               cpuid_to_hartid_map(cpu), 0, 0, 0, 0, 0);
-> > >       return;
-> > >  }
-> > >
-> > > @@ -25,7 +27,7 @@ void pv_wait(u8 *ptr, u8 val)
-> > >       if (READ_ONCE(*ptr) != val)
-> > >               goto out;
-> > >
-> > > -     /* wait_for_interrupt(); */
-> > > +     wait_for_interrupt();
-> > >  out:
-> > >       local_irq_restore(flags);
-> > >  }
-> > > @@ -62,6 +64,9 @@ void __init pv_qspinlock_init(void)
-> > >       if(sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)
-> > >               return;
-> > >
-> > > +     if (!sbi_probe_extension(SBI_EXT_PVLOCK))
-> > > +             return;
-> > > +
-> > >       pr_info("PV qspinlocks enabled\n");
-> > >       __pv_init_lock_hash();
-> > >
-> > > --
-> > > 2.36.1
-> > >
-> >
-> > IIUC this PVLOCK extension is now a requirement to use pv_qspinlock(), and
-> > it allows a cpu to use an instruction to wait for interrupt in pv_wait(),
-> > and kicks it out of this wait using a new sbi_ecall() on pv_kick().
-> Yes.
-> 
-> >
-> > Overall it LGTM, but would be nice to have the reference doc in the commit
-> > msg. I end up inferring some of the inner workings by your implementation,
-> > which is not ideal for reviewing.
-> I would improve the commit msg in the next version of patch.
+> From: Olaf Hering <olaf@aepfle.de>
+> Sent: Monday, September 18, 2023 9:02 AM
+> [...]
+> Use the hole prior shared_gpa_boundary to store the result of get_vtl.
+> This reduces the size by 8 bytes.
+>  [...]
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -53,8 +53,8 @@ struct ms_hyperv_info {
+>  			u32 reserved_b2 : 20;
+>  		};
+>  	};
+> -	u64 shared_gpa_boundary;
+>  	u8 vtl;
+> +	u64 shared_gpa_boundary;
+>  };
+>  extern struct ms_hyperv_info ms_hyperv;
+>  extern bool hv_nested;
 
-Thx!
-Leo
+How about moving the 'vtl' field to an even earlier place:
 
-> 
-> >
-> > If understanding above is right,
-> > Reviewed-by: Leonardo Bras <leobras@redhat.com>
-> >
-> > Thanks!
-> > Leo
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -36,6 +36,9 @@ struct ms_hyperv_info {
+        u32 nested_features;
+        u32 max_vp_index;
+        u32 max_lp_index;
++
++       u8 vtl;
++
+        union {
+                u32 isolation_config_a;
+                struct {
+@@ -54,7 +57,6 @@ struct ms_hyperv_info {
+                };
+        };
+        u64 shared_gpa_boundary;
+-       u8 vtl;
+ };
+ extern struct ms_hyperv_info ms_hyperv;
+ extern bool hv_nested;
 
+This also reduces the size by 8 bytes, and keeps
+the isolation_config_a/ isolation_config_b/ shared_gpa_boundary
+together, which are related.
