@@ -2,201 +2,192 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024A17A56F4
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 03:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076EF7A5796
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 04:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjISBYD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 Sep 2023 21:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        id S230424AbjISC63 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 Sep 2023 22:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjISBYC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 21:24:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1162010D
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 18:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695086590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8rZEMBXcWAsOd1JUxhybBTc4j/duZaFTPteC/Fr9lkM=;
-        b=FtA3w0XeVotf1iW5q6N+Vh9jAK/1v7a4TuX3AKoWOCUcCDL2uhzBhdGyTJISJgDXHeK6qt
-        vVjFaQUYkYHCdEU8yyyekNPuAnk9+tqsxJLCW/8Nq1HsMuqFHiFny2GSYIzk/Q2hTEbiA2
-        9EVjvlQ2grEjb8fU3cwn+I3Lf4r+VdY=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-295-_3jdMWSpNoaXKNQ-7xSzPw-1; Mon, 18 Sep 2023 21:23:08 -0400
-X-MC-Unique: _3jdMWSpNoaXKNQ-7xSzPw-1
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1c4588f622aso17474375ad.2
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 18:23:08 -0700 (PDT)
+        with ESMTP id S230355AbjISC62 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 22:58:28 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B2010E
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 19:58:22 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c44c7dbaf9so26848545ad.1
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 19:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1695092302; x=1695697102; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORUv82vqRYOMSTI3MAI/v8wlx+Ql9aKnbQUGVaGlaPk=;
+        b=wS5pFz53WfNB6zNhEWhSmjVJ0B0Xa2hBhIUJf3cIGo/91N0TXEJD1Cfik73/QZo4Cm
+         RGI2GX32YFTQl72rpLuSB9NfC6885oYvj89N8t5Ep1dXQgbi3jv5wA/PF8HyCtUb8feP
+         A9d3Pm4C14Y1nJttPsSnx0IQvK5xqqxA7iUOgrP04WIXrubq68icdLPXfWcoQXVXZSW4
+         O550msgyjxZFVobdG2NQdx68kGGUK0QYuTPqqCyr+IVxsnvL//dY4XbY7BPw/uKgJnA/
+         aN9Pz7L99wjHost2RQW39mXcCW9T9zHek8jhcjELQH51PO7iSw4w9pOGjK0xhTesroJR
+         muZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695086588; x=1695691388;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rZEMBXcWAsOd1JUxhybBTc4j/duZaFTPteC/Fr9lkM=;
-        b=gkpLR9UzabVG9hdI0RpTb6EjsTsNwguB7WtX38Z27LALJ7pgrzXgucJ8fU3MjYA1l0
-         f0JEygCqeZYtdWU5Jwe3UBxtPGPaj0L+6LKG6cWc7CnrWUI8JfX0jE6LjgJ2lfQRbJ5q
-         3OBaYJ2mZ9w2lvmki/nz0LKgZNRFdM586ZUBqPE3DQgfPIGTInGzkeRh2AFR7qCt9DjC
-         MnGh28Ur+w3YNEucbFYhHjvBN5oZckZ+Gs1svdX38Xyqw5K2VFhJQbIjepKhPwqFCmGF
-         RcANDxkUIEoMJpKCxB7LYsPYIOVhQSmr4twhmqQaVwp5K/o0p9UjY5XGkxtlr5Ic8L3c
-         j9YQ==
-X-Gm-Message-State: AOJu0YyY0BPrtcOit1yxBpZm3HE5gWKyAH71AsRoRDKH4HyEV7hvMWE5
-        pgcY3uhOUq+/CV5WkOnHGuf/QHJhbKZYzmNRNNvrEVA1jAfWE5IIcCKdF3O3l2vk5aa0HLuM55n
-        fl4NEhhHSOB50qsxR6R3ucg==
-X-Received: by 2002:a17:902:d4c7:b0:1c3:c687:4793 with SMTP id o7-20020a170902d4c700b001c3c6874793mr10025102plg.63.1695086587821;
-        Mon, 18 Sep 2023 18:23:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHoDFw/kgFjKPQwWTf0Oet8p5HAvy+YamWqASTKA/sRdSVgiuLoUsA4+OwthgzDWlhTMjCURQ==
-X-Received: by 2002:a17:902:d4c7:b0:1c3:c687:4793 with SMTP id o7-20020a170902d4c700b001c3c6874793mr10025086plg.63.1695086587495;
-        Mon, 18 Sep 2023 18:23:07 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b001beef2c9bffsm8873509plg.85.2023.09.18.18.23.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 18:23:06 -0700 (PDT)
-Message-ID: <f45820cf-3ea5-6f5a-7702-bb4b14811e56@redhat.com>
-Date:   Tue, 19 Sep 2023 11:23:00 +1000
+        d=1e100.net; s=20230601; t=1695092302; x=1695697102;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ORUv82vqRYOMSTI3MAI/v8wlx+Ql9aKnbQUGVaGlaPk=;
+        b=H50mPPVnKi0mL2dIMgt2DXjagDgCQqfnrycDcdbBjpYJhifPFZG7/M6oHGd1rIKeNN
+         hZ2gQTLbBmZVpdy6vP2eA74xahPaafNPMte1KCkPC2rm6TCD4o1ao2YHi8aZHPNibBvT
+         zvhC9idq/RU/RwbYNx/rGLXKGF9jnM+YkLGBb96XMJQUs/7Z0j6MBKJXBsUczsjzBoQL
+         Z5E3jlpocmx21QZj+PYQNJXTIo+KAHt8/8ptmJpBC4iihh+cfqx63/jwzblsBbQr7PY1
+         cmbrAXv7GaaUog5rGf/UT8rtRaHNyKEoK6Z8RcKtqv1GSQg6c7CXdV4WNb6gT5ICaXIT
+         e2Zw==
+X-Gm-Message-State: AOJu0YwLSHKQnBu4GH8UdBmUcpdqulHvQqsAZSNBeBbhKfiGwEiJL15X
+        LNnfpY6CNbVb6Kmu2/0mpKcqQQ==
+X-Google-Smtp-Source: AGHT+IGvzqt10mRcT1dFlERUb3xtizvXDaC+nue1KjE5CKUtvggbx55iRB0WQs7JDN+aUlchqMqXaQ==
+X-Received: by 2002:a17:902:eb46:b0:1c5:76b6:d94f with SMTP id i6-20020a170902eb4600b001c576b6d94fmr4069811pli.31.1695092302279;
+        Mon, 18 Sep 2023 19:58:22 -0700 (PDT)
+Received: from ghost ([50.168.177.76])
+        by smtp.gmail.com with ESMTPSA id jj6-20020a170903048600b001b8c6662094sm5038719plb.188.2023.09.18.19.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 19:58:21 -0700 (PDT)
+Date:   Mon, 18 Sep 2023 22:58:17 -0400
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Samuel Holland <samuel.holland@sifive.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v6 3/4] riscv: Add checksum library
+Message-ID: <ZQkOSf1b66lHzjaf@ghost>
+References: <20230915-optimize_checksum-v6-0-14a6cf61c618@rivosinc.com>
+ <20230915-optimize_checksum-v6-3-14a6cf61c618@rivosinc.com>
+ <0357e092c05043fba13eccad77ba799f@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 28/35] arm64, irqchip/gic-v3, ACPI: Move MADT GICC
- enabled check into a helper
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-29-james.morse@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230913163823.7880-29-james.morse@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0357e092c05043fba13eccad77ba799f@AcuMS.aculab.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 9/14/23 02:38, James Morse wrote:
-> ACPI, irqchip and the architecture code all inspect the MADT
-> enabled bit for a GICC entry in the MADT.
+On Sat, Sep 16, 2023 at 09:32:40AM +0000, David Laight wrote:
+> From: Charlie Jenkins
+> > Sent: 15 September 2023 18:01
+> > 
+> > Provide a 32 and 64 bit version of do_csum. When compiled for 32-bit
+> > will load from the buffer in groups of 32 bits, and when compiled for
+> > 64-bit will load in groups of 64 bits.
+> > 
+> ...
+> > +	/*
+> > +	 * Do 32-bit reads on RV32 and 64-bit reads otherwise. This should be
+> > +	 * faster than doing 32-bit reads on architectures that support larger
+> > +	 * reads.
+> > +	 */
+> > +	while (len > 0) {
+> > +		csum += data;
+> > +		csum += csum < data;
+> > +		len -= sizeof(unsigned long);
+> > +		ptr += 1;
+> > +		data = *ptr;
+> > +	}
 > 
-> The addition of an 'online capable' bit means all these sites need
-> updating.
+> I think you'd be better adding the 'carry' bits in a separate
+> variable.
+> It reduces the register dependency chain length in the loop.
+> (Helps if the cpu can execute two instructions in one clock.)
 > 
-> Move the current checks behind a helper to make future updates easier.
+> The masked misaligned data values are max 24 bits
+> (if 
 > 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->   arch/arm64/kernel/smp.c       |  2 +-
->   drivers/acpi/processor_core.c |  2 +-
->   drivers/irqchip/irq-gic-v3.c  | 10 ++++------
->   include/linux/acpi.h          |  5 +++++
->   4 files changed, 11 insertions(+), 8 deletions(-)
+> You'll also almost certainly remove at least one instruction
+> from the loop by comparing against the end address rather than
+> changing 'len'.
+> 
+> So ending up with (something like):
+> 	end = buff + length;
+> 	...
+> 	while (++ptr < end) {
+> 		csum += data;
+> 		carry += csum < data;
+> 		data = ptr[-1];
+> 	}
+> (Although a do-while loop tends to generate better code
+> and gcc will pretty much always make that transformation.)
+> 
+> I think that is 4 instructions per word (load, add, cmp+set, add).
+> In principle they could be completely pipelined and all
+> execute (for different loop iterations) in the same clock.
+> (But that is pretty unlikely to happen - even x86 isn't that good.)
+> But taking two clocks is quite plausible.
+> Plus 2 instructions per loop (inc, cmp+jmp).
+> They might execute in parallel, but unrolling once
+> may be required.
+> 
+It looks like GCC actually ends up generating 7 total instructions:
+ffffffff808d2acc:	97b6                	add	a5,a5,a3
+ffffffff808d2ace:	00d7b533          	sltu	a0,a5,a3
+ffffffff808d2ad2:	0721                	add	a4,a4,8
+ffffffff808d2ad4:	86be                	mv	a3,a5
+ffffffff808d2ad6:	962a                	add	a2,a2,a0
+ffffffff808d2ad8:	ff873783          	ld	a5,-8(a4)
+ffffffff808d2adc:	feb768e3          	bltu	a4,a1,ffffffff808d2acc <do_csum+0x34>
+
+This mv instruction could be avoided if the registers were shuffled
+around, but perhaps this way reduces some dependency chains.
+> ...
+> > +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
+> > +	    riscv_has_extension_likely(RISCV_ISA_EXT_ZBB)) {
+> ...
+> > +		}
+> > +end:
+> > +		return csum >> 16;
+> > +	}
+> 
+> Is it really worth doing all that to save (I think) 4 instructions?
+> (shift, shift, or with rotate twice).
+> There is much more to be gained by careful inspection
+> of the loop (even leaving it in C).
 > 
 
-With Jonathan and Russell's comments addressed:
+The main benefit was from using rev8 to replace swab32. However, now
+that I am looking at the assembly in the kernel it is not outputting the
+asm that matches what I have from an out of kernel test case, so rev8
+might not be beneficial. I am going to have to look at this more to
+figure out what is happening.
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > +
+> > +#ifndef CONFIG_32BIT
+> > +	csum += (csum >> 32) | (csum << 32);
+> > +	csum >>= 32;
+> > +#endif
+> > +	csum = (unsigned int)csum + (((unsigned int)csum >> 16) | ((unsigned int)csum << 16));
+> 
+> Use ror64() and ror32().
+> 
+> 	David
+> 
 
-> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> index 960b98b43506..8c8f55721786 100644
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -520,7 +520,7 @@ acpi_map_gic_cpu_interface(struct acpi_madt_generic_interrupt *processor)
->   {
->   	u64 hwid = processor->arm_mpidr;
->   
-> -	if (!(processor->flags & ACPI_MADT_ENABLED)) {
-> +	if (!acpi_gicc_is_usable(processor)) {
->   		pr_debug("skipping disabled CPU entry with 0x%llx MPIDR\n", hwid);
->   		return;
->   	}
-> diff --git a/drivers/acpi/processor_core.c b/drivers/acpi/processor_core.c
-> index 7dd6dbaa98c3..b203cfe28550 100644
-> --- a/drivers/acpi/processor_core.c
-> +++ b/drivers/acpi/processor_core.c
-> @@ -90,7 +90,7 @@ static int map_gicc_mpidr(struct acpi_subtable_header *entry,
->   	struct acpi_madt_generic_interrupt *gicc =
->   	    container_of(entry, struct acpi_madt_generic_interrupt, header);
->   
-> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
-> +	if (!acpi_gicc_is_usable(gicc))
->   		return -ENODEV;
->   
->   	/* device_declaration means Device object in DSDT, in the
-> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-> index eedfa8e9f077..72d3cdebdad1 100644
-> --- a/drivers/irqchip/irq-gic-v3.c
-> +++ b/drivers/irqchip/irq-gic-v3.c
-> @@ -2367,8 +2367,7 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
->   	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
->   	void __iomem *redist_base;
->   
-> -	/* GICC entry which has !ACPI_MADT_ENABLED is not unusable so skip */
-> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
-> +	if (!acpi_gicc_is_usable(gicc))
->   		return 0;
->   
->   	redist_base = ioremap(gicc->gicr_base_address, size);
-> @@ -2418,7 +2417,7 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
->   	 * If GICC is enabled and has valid gicr base address, then it means
->   	 * GICR base is presented via GICC
->   	 */
-> -	if ((gicc->flags & ACPI_MADT_ENABLED) && gicc->gicr_base_address) {
-> +	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
->   		acpi_data.enabled_rdists++;
->   		return 0;
->   	}
-> @@ -2427,7 +2426,7 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
->   	 * It's perfectly valid firmware can pass disabled GICC entry, driver
->   	 * should not treat as errors, skip the entry instead of probe fail.
->   	 */
-> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
-> +	if (!acpi_gicc_is_usable(gicc))
->   		return 0;
->   
->   	return -ENODEV;
-> @@ -2486,8 +2485,7 @@ static int __init gic_acpi_parse_virt_madt_gicc(union acpi_subtable_headers *hea
->   	int maint_irq_mode;
->   	static int first_madt = true;
->   
-> -	/* Skip unusable CPUs */
-> -	if (!(gicc->flags & ACPI_MADT_ENABLED))
-> +	if (!acpi_gicc_is_usable(gicc))
->   		return 0;
->   
->   	maint_irq_mode = (gicc->flags & ACPI_MADT_VGIC_IRQ_MODE) ?
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index b7ab85857bb7..e3265a9eafae 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -256,6 +256,11 @@ acpi_table_parse_cedt(enum acpi_cedt_type id,
->   int acpi_parse_mcfg (struct acpi_table_header *header);
->   void acpi_table_print_madt_entry (struct acpi_subtable_header *madt);
->   
-> +static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
-> +{
-> +	return (gicc->flags & ACPI_MADT_ENABLED);
-> +}
-> +
->   /* the following numa functions are architecture-dependent */
->   void acpi_numa_slit_init (struct acpi_table_slit *slit);
->   
+Good idea.
 
-Thanks,
-Gavin
+- Charlie
 
+> > +	if (offset & 1)
+> > +		return (unsigned short)swab32(csum);
+> > +	return csum >> 16;
+> > +}
+> > 
+> > --
+> > 2.42.0
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
