@@ -2,85 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9327A587D
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 06:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135DA7A5936
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 07:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjISEr0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 00:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S231165AbjISFOq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 01:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjISErY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 00:47:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94B010E
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 21:46:35 -0700 (PDT)
+        with ESMTP id S231144AbjISFOp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 01:14:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A43910E
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:13:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695098794;
+        s=mimecast20190719; t=1695100432;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0md79eddiFVt37093ccE7iiQ7K8nZkLOgQESfCPy8Vw=;
-        b=ABBcJbCglt1qxSif2IH5J3qgXYyXsxJaWfF3gBRp1dPh6ss73WMMOWAbl+ey1zKq2ZQVUs
-        uLFgztIA8qetI/t/H6tYs1zxuUXVPiCDw6S12ftz0f8EI3VpWgl1tYFVayboLVpoORjp2E
-        I3Ro9znR8eHFbfC3m2M6w7pXHJHP1EY=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4GZT13TAwSFlgcmBEe3p4sewwUQikjB5LnKu1cjTHTo=;
+        b=AZF+JRkJjFCB5cOGUJo/PPeEUmhPHts9xdaNmTQECk7l3eR6nBU1IGL1We6ksShpdMEpfg
+        1LIz8UMdyNdMLIptPCL+ZPY3M52cz/rYyInKmkXuvwQ2cpN1T2ByftNuaQn1SiSmorFsiu
+        6iSLbtgAbTQmKbJgNGbRxQukYtNizbs=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-ZZeQVwgvOgavIJp5KSwzcQ-1; Tue, 19 Sep 2023 00:46:32 -0400
-X-MC-Unique: ZZeQVwgvOgavIJp5KSwzcQ-1
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6c0d4cb748bso7349208a34.3
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 21:46:32 -0700 (PDT)
+ us-mta-245-V6W3LRNPOVyrBVi1Rb8Qug-1; Tue, 19 Sep 2023 01:13:50 -0400
+X-MC-Unique: V6W3LRNPOVyrBVi1Rb8Qug-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6c0d4f1baddso7820093a34.0
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 22:13:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695098791; x=1695703591;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1695100430; x=1695705230;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0md79eddiFVt37093ccE7iiQ7K8nZkLOgQESfCPy8Vw=;
-        b=s+PvRjs9AxUgjiBuGktzsI7fqN5dOPD/MYXh7XVdT4nl1qxjBCWdEpu+L+AkZRlMDC
-         1Z7oSTv+KsQWpQ9fc4lTaED7vpEGA8ZuM/WO/P9ZNwwV5zuOghgxTgl0gNa5nXLVTesn
-         IyZiJ3r+6H+tZ+C2hdhsOJlRUv6BHFNYOOewYNV+fS//+9rMiIRU7YTOeEjuDbKrimET
-         QD+CHcfrYZ5BNpa3TZIq9BkwJ25EKDDr+9BPuycokgC8NPUr3LPPkT7F9CVidZRfHHG+
-         jhTIMVDbQtDI+bAfkJTHYmRLwohgnSXAOFL6JUxjWmt+6K8QCpCYrxFBd3Qdcd4rkEAG
-         79Gg==
-X-Gm-Message-State: AOJu0Ywik63+/+7H2DiBKYwXjwdqdTcGyjt7qiGXC1AiepF6uyqIUcJG
-        8/cg29LCd+RBiA9htexrO6GptjNZlCmcY/V+/tdGeVA/IiNknJ/zm0XB3qWbK1w4dEaWzoH2ZvU
-        tanSBhToQ44Gqlx/Q2vENIA==
-X-Received: by 2002:a05:6358:249d:b0:134:e603:116e with SMTP id m29-20020a056358249d00b00134e603116emr9678035rwc.6.1695098791616;
-        Mon, 18 Sep 2023 21:46:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFKkoLP87+mw9T8TQ8bjb6RIWKH/vCCTjI0tHPFOvwV8K6Ynikd7+Ff2EaTqVQJl8SE4ves7A==
-X-Received: by 2002:a05:6358:249d:b0:134:e603:116e with SMTP id m29-20020a056358249d00b00134e603116emr9678018rwc.6.1695098791296;
-        Mon, 18 Sep 2023 21:46:31 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id d3-20020a633603000000b0057749dc8d3asm196597pga.47.2023.09.18.21.46.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 21:46:30 -0700 (PDT)
-Message-ID: <ad068df5-d5b1-030a-af25-723cd5c3b854@redhat.com>
-Date:   Tue, 19 Sep 2023 14:46:22 +1000
+        bh=4GZT13TAwSFlgcmBEe3p4sewwUQikjB5LnKu1cjTHTo=;
+        b=rzv2y3A2tOGYc44wf5fei8OCdv58fjnlQV6yv4w+STSxFFcmpP8P3wwpiQ+ddb+j6/
+         Dumhjly+lN0IoLmBJMb+rFEob+2cW7mn/w9fgS3jOAjojtVHLEJGEPyrjnpAvjAu9jvH
+         0TS8U/UPYXaAAhwGCHBNd95Oi+g1CvvdVae0rMo/VLdEn2L8EfrFtmNTvMJPsGljfFrU
+         E9eyhdsoeB4ZG738Zf6pNtDSUeaDUVucHXyk8mMDyHmfr1vh7xD9TxBLZeahuzXTAkzs
+         ZrN8HtEf2YuOO+y6LuRPY7jmbMCJptAsuG6PyiClWNmUwKyNqxPg8L3aEL6YaLH1YDWG
+         3d6Q==
+X-Gm-Message-State: AOJu0Yyl/zHyODTrq0BIeCxn55eBIdyZhShQBoc+xiL3Pa0Luu1Kn8SH
+        k2WzEUnvUEMbZor0ZvI5CXHfAx78UVUFvA+9ShlAmkpubjPXgKZux44SGQ+XsiTfZjtqEHFNf2U
+        +CnewhwDV7OhFs618fH5qYQ==
+X-Received: by 2002:a9d:4d85:0:b0:6bd:78a:460 with SMTP id u5-20020a9d4d85000000b006bd078a0460mr12957263otk.32.1695100429985;
+        Mon, 18 Sep 2023 22:13:49 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF5ILH35twxznQW0Ej6u7DI9g60WcJhE2TstDk41zWTR2DprqxjK01MIBFqaLSsyUqs0vRlGg==
+X-Received: by 2002:a9d:4d85:0:b0:6bd:78a:460 with SMTP id u5-20020a9d4d85000000b006bd078a0460mr12957247otk.32.1695100429689;
+        Mon, 18 Sep 2023 22:13:49 -0700 (PDT)
+Received: from redhat.com ([2804:1b3:a803:677d:42e9:f426:9422:f020])
+        by smtp.gmail.com with ESMTPSA id q4-20020a9d7c84000000b006b45be2fdc2sm4759631otn.65.2023.09.18.22.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 22:13:49 -0700 (PDT)
+Date:   Tue, 19 Sep 2023 02:13:39 -0300
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
+        rdunlap@infradead.org, catalin.marinas@arm.com,
+        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
+        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
+Message-ID: <ZQkuA7WloWIIteVR@redhat.com>
+References: <20230910082911.3378782-1-guoren@kernel.org>
+ <20230910082911.3378782-4-guoren@kernel.org>
+ <ZQF3qS1KRYAt3coC@redhat.com>
+ <CAJF2gTT5s2-vhgrxnkE1EGqJMvXn8ftYrrwRMdJH1tjEqAv5kQ@mail.gmail.com>
+ <ZQUEEckIEbtxwLEG@redhat.com>
+ <CAJF2gTQLBNy9uS4AF+UgD+ew3BN1dLs0f0+z0jzpieR75kv_Dw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 32/35] ACPI: add support to register CPUs based on
- the _STA enabled bit
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-33-james.morse@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230913163823.7880-33-james.morse@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJF2gTQLBNy9uS4AF+UgD+ew3BN1dLs0f0+z0jzpieR75kv_Dw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,99 +95,229 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Sun, Sep 17, 2023 at 10:34:36PM +0800, Guo Ren wrote:
+> On Sat, Sep 16, 2023 at 9:25 AM Leonardo Bras <leobras@redhat.com> wrote:
+> >
+> > On Fri, Sep 15, 2023 at 08:36:31PM +0800, Guo Ren wrote:
+> > > On Wed, Sep 13, 2023 at 4:50 PM Leonardo Bras <leobras@redhat.com> wrote:
+> > > >
+> > > > On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
+> > > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > > >
+> > > > > Cache-block prefetch instructions are HINTs to the hardware to
+> > > > > indicate that software intends to perform a particular type of
+> > > > > memory access in the near future. Enable ARCH_HAS_PREFETCHW and
+> > > > > improve the arch_xchg for qspinlock xchg_tail.
+> > > > >
+> > > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > > > ---
+> > > > >  arch/riscv/Kconfig                 | 15 +++++++++++++++
+> > > > >  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
+> > > > >  arch/riscv/include/asm/hwcap.h     |  1 +
+> > > > >  arch/riscv/include/asm/insn-def.h  |  5 +++++
+> > > > >  arch/riscv/include/asm/processor.h | 13 +++++++++++++
+> > > > >  arch/riscv/kernel/cpufeature.c     |  1 +
+> > > > >  6 files changed, 38 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > > index e9ae6fa232c3..2c346fe169c1 100644
+> > > > > --- a/arch/riscv/Kconfig
+> > > > > +++ b/arch/riscv/Kconfig
+> > > > > @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
+> > > > >
+> > > > >          If you don't know what to do here, say Y.
+> > > > >
+> > > > > +config RISCV_ISA_ZICBOP
+> > > > > +     bool "Zicbop extension support for cache block prefetch"
+> > > > > +     depends on MMU
+> > > > > +     depends on RISCV_ALTERNATIVE
+> > > > > +     default y
+> > > > > +     help
+> > > > > +        Adds support to dynamically detect the presence of the ZICBOP
+> > > > > +        extension (Cache Block Prefetch Operations) and enable its
+> > > > > +        usage.
+> > > > > +
+> > > > > +        The Zicbop extension can be used to prefetch cache block for
+> > > > > +        read/write/instruction fetch.
+> > > > > +
+> > > > > +        If you don't know what to do here, say Y.
+> > > > > +
+> > > > >  config TOOLCHAIN_HAS_ZIHINTPAUSE
+> > > > >       bool
+> > > > >       default y
+> > > > > diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> > > > > index 702725727671..56eff7a9d2d2 100644
+> > > > > --- a/arch/riscv/include/asm/cmpxchg.h
+> > > > > +++ b/arch/riscv/include/asm/cmpxchg.h
+> > > > > @@ -11,6 +11,7 @@
+> > > > >
+> > > > >  #include <asm/barrier.h>
+> > > > >  #include <asm/fence.h>
+> > > > > +#include <asm/processor.h>
+> > > > >
+> > > > >  #define __arch_xchg_masked(prepend, append, r, p, n)                 \
+> > > > >  ({                                                                   \
+> > > > > @@ -25,6 +26,7 @@
+> > > > >                                                                       \
+> > > > >       __asm__ __volatile__ (                                          \
+> > > > >              prepend                                                  \
+> > > > > +            PREFETCHW_ASM(%5)                                        \
+> > > > >              "0:      lr.w %0, %2\n"                                  \
+> > > > >              "        and  %1, %0, %z4\n"                             \
+> > > > >              "        or   %1, %1, %z3\n"                             \
+> > > > > @@ -32,7 +34,7 @@
+> > > > >              "        bnez %1, 0b\n"                                  \
+> > > > >              append                                                   \
+> > > > >              : "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))       \
+> > > > > -            : "rJ" (__newx), "rJ" (~__mask)                          \
+> > > > > +            : "rJ" (__newx), "rJ" (~__mask), "rJ" (__ptr32b)         \
+> > > > >              : "memory");                                             \
+> > > > >                                                                       \
+> > > > >       r = (__typeof__(*(p)))((__retx & __mask) >> __s);               \
+> > > > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > > > > index b7b58258f6c7..78b7b8b53778 100644
+> > > > > --- a/arch/riscv/include/asm/hwcap.h
+> > > > > +++ b/arch/riscv/include/asm/hwcap.h
+> > > > > @@ -58,6 +58,7 @@
+> > > > >  #define RISCV_ISA_EXT_ZICSR          40
+> > > > >  #define RISCV_ISA_EXT_ZIFENCEI               41
+> > > > >  #define RISCV_ISA_EXT_ZIHPM          42
+> > > > > +#define RISCV_ISA_EXT_ZICBOP         43
+> > > > >
+> > > > >  #define RISCV_ISA_EXT_MAX            64
+> > > > >
+> > > > > diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
+> > > > > index 6960beb75f32..dc590d331894 100644
+> > > > > --- a/arch/riscv/include/asm/insn-def.h
+> > > > > +++ b/arch/riscv/include/asm/insn-def.h
+> > > > > @@ -134,6 +134,7 @@
+> > > > >
+> > > > >  #define RV_OPCODE_MISC_MEM   RV_OPCODE(15)
+> > > > >  #define RV_OPCODE_SYSTEM     RV_OPCODE(115)
+> > > > > +#define RV_OPCODE_PREFETCH   RV_OPCODE(19)
+> > > > >
+> > > > >  #define HFENCE_VVMA(vaddr, asid)                             \
+> > > > >       INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(17),              \
+> > > > > @@ -196,4 +197,8 @@
+> > > > >       INSN_I(OPCODE_MISC_MEM, FUNC3(2), __RD(0),              \
+> > > > >              RS1(base), SIMM12(4))
+> > > > >
+> > > > > +#define CBO_prefetchw(base)                                  \
+> > > > > +     INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),             \
+> > > > > +            RD(x0), RS1(base), RS2(x0))
+> > > > > +
+> > > >
+> > > > I understand that here you create the instruction via bitfield, following
+> > > > the ISA, and this enables using instructions not available on the
+> > > > toolchain.
+> > > >
+> > > > It took me some time to find the document with this instruction, so please
+> > > > add this to the commit msg:
+> > > >
+> > > > https://github.com/riscv/riscv-CMOs/blob/master/specifications/cmobase-v1.0.pdf
+> > > > Page 23.
+> > > >
+> > > > IIUC, the instruction is "prefetch.w".
+> > > >
+> > > > Maybe I am missing something, but in the document the rs2 field
+> > > > (PREFETCH.W) contains a 0x3, while the above looks to have a 0 instead.
+> > > >
+> > > > rs2 field = 0x0 would be a prefetch.i (instruction prefetch) instead.
+> > > >
+> > > > Is the above correct, or am I missing something?
+> > > Oh, you are right. My fault, thx for pointing out. It should be:
+> > > +       INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),             \
+> > > +              RD(x0), RS1(base), RS2(x3))
+> >
+> > Now I am curious to check if / how will this impact performance. :)
+> > (Please let me know)
+> Ref:
+> commit 0ea366f5e1b6 ("arm64: atomics: prefetch the destination word
+> for write prior to stxr")
+> commit 86d231459d6d ("bpf: cpumap memory prefetchw optimizations for
+> struct page")
 
-On 9/14/23 02:38, James Morse wrote:
-> acpi_processor_get_info() registers all present CPUs. Registering a
-> CPU is what creates the sysfs entries and triggers the udev
-> notifications.
+Oh, I understand that prefetch.w is very useful for performance :)
+
+What I meant is that previously this patch was issuing a prefetch.i,
+and now it's issuing a prefetch.w (as intended). 
+
+What got me curious is how much would it impact the performance to change 
+the prefetch.i to prefetch.w. :)
+
+Thanks!
+Leo
+
+
 > 
-> arm64 virtual machines that support 'virtual cpu hotplug' use the
-> enabled bit to indicate whether the CPU can be brought online, as
-> the existing ACPI tables require all hardware to be described and
-> present.
+> >
+> >
+> > >
+> > > >
+> > > >
+> > > > Thanks!
+> > > > Leo
+> > > >
+> > > > >  #endif /* __ASM_INSN_DEF_H */
+> > > > > diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> > > > > index de9da852f78d..7ad3a24212e8 100644
+> > > > > --- a/arch/riscv/include/asm/processor.h
+> > > > > +++ b/arch/riscv/include/asm/processor.h
+> > > > > @@ -12,6 +12,8 @@
+> > > > >  #include <vdso/processor.h>
+> > > > >
+> > > > >  #include <asm/ptrace.h>
+> > > > > +#include <asm/insn-def.h>
+> > > > > +#include <asm/hwcap.h>
+> > > > >
+> > > > >  #ifdef CONFIG_64BIT
+> > > > >  #define DEFAULT_MAP_WINDOW   (UL(1) << (MMAP_VA_BITS - 1))
+> > > > > @@ -103,6 +105,17 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+> > > > >  #define KSTK_EIP(tsk)                (ulong)(task_pt_regs(tsk)->epc)
+> > > > >  #define KSTK_ESP(tsk)                (ulong)(task_pt_regs(tsk)->sp)
+> > > > >
+> > > > > +#define ARCH_HAS_PREFETCHW
+> > > > > +#define PREFETCHW_ASM(base)  ALTERNATIVE(__nops(1), \
+> > > > > +                                         CBO_prefetchw(base), \
+> > > > > +                                         0, \
+> > > > > +                                         RISCV_ISA_EXT_ZICBOP, \
+> > > > > +                                         CONFIG_RISCV_ISA_ZICBOP)
+> > > > > +static inline void prefetchw(const void *ptr)
+> > > > > +{
+> > > > > +     asm volatile(PREFETCHW_ASM(%0)
+> > > > > +             : : "r" (ptr) : "memory");
+> > > > > +}
+> > > > >
+> > > > >  /* Do necessary setup to start up a newly executed thread. */
+> > > > >  extern void start_thread(struct pt_regs *regs,
+> > > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > > > > index ef7b4fd9e876..e0b897db0b97 100644
+> > > > > --- a/arch/riscv/kernel/cpufeature.c
+> > > > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > > > @@ -159,6 +159,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+> > > > >       __RISCV_ISA_EXT_DATA(h, RISCV_ISA_EXT_h),
+> > > > >       __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+> > > > >       __RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
+> > > > > +     __RISCV_ISA_EXT_DATA(zicbop, RISCV_ISA_EXT_ZICBOP),
+> > > > >       __RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+> > > > >       __RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+> > > > >       __RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
+> > > > > --
+> > > > > 2.36.1
+> > > > >
+> > > >
+> > >
+> > >
+> > > --
+> > > Best Regards
+> > >  Guo Ren
+> > >
+> >
 > 
-> If firmware describes a CPU as present, but disabled, skip the
-> registration. Such CPUs are present, but can't be brought online for
-> whatever reason. (e.g. firmware/hypervisor policy).
 > 
-> Once firmware sets the enabled bit, the CPU can be registered and
-> brought online by user-space. Online CPUs, or CPUs that are missing
-> an _STA method must always be registered.
+> -- 
+> Best Regards
+>  Guo Ren
 > 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->   drivers/acpi/acpi_processor.c | 31 ++++++++++++++++++++++++++++++-
->   1 file changed, 30 insertions(+), 1 deletion(-)
-> 
-
-With below nits addressed:
-
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index b67616079751..b49859eab01a 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -227,6 +227,32 @@ static int acpi_processor_make_present(struct acpi_processor *pr)
->   	return ret;
->   }
->   
-> +static int acpi_processor_make_enabled(struct acpi_processor *pr)
-> +{
-> +	unsigned long long sta;
-> +	acpi_status status;
-> +	bool present, enabled;
-> +
-> +	if (!acpi_has_method(pr->handle, "_STA"))
-> +		return arch_register_cpu(pr->id);
-> +
-> +	status = acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
-> +	if (ACPI_FAILURE(status))
-> +		return -ENODEV;
-> +
-> +	present = sta & ACPI_STA_DEVICE_PRESENT;
-> +	enabled = sta & ACPI_STA_DEVICE_ENABLED;
-> +
-> +	if (cpu_online(pr->id) && (!present || !enabled)) {
-> +		pr_err_once(FW_BUG "CPU %u is online, but described as not present or disabled!\n", pr->id);
-> +		add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-> +	} else if (!present || !enabled) {
-> +		return -ENODEV;
-> +	}
-> +
-> +	return arch_register_cpu(pr->id);
-> +}
-> +
-
-The message needs to be split up into multiple lines to make ./scripts/checkpatch.pl
-happy:
-
-	pr_err_once(FW_BUG "CPU %u is online, but described "
-			   "as not present or disabled!\n", pr->id);
-
->   static int acpi_processor_get_info(struct acpi_device *device)
->   {
->   	union acpi_object object = { 0 };
-> @@ -318,7 +344,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
->   	 */
->   	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
->   	    !get_cpu_device(pr->id)) {
-> -		int ret = arch_register_cpu(pr->id);
-> +		int ret = acpi_processor_make_enabled(pr);
->   
->   		if (ret)
->   			return ret;
-> @@ -526,6 +552,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
->   		acpi_processor_make_not_present(device);
->   		return;
->   	}
-> +
-> +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
-> +		arch_unregister_cpu(pr->id);
->   }
->   
->   #ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
-
-Thanks,
-Gavin
 
