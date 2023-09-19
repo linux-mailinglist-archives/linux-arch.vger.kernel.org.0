@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC5E7A67C9
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 17:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5A77A67F1
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 17:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjISPPQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 11:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S233073AbjISPWq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 19 Sep 2023 11:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjISPPP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 11:15:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F6194;
-        Tue, 19 Sep 2023 08:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ho41svlP2AnIR71/YViS49+x6zj9O4UA2RkQCTRc9gI=; b=iJkDmrycNCqwLPt1Ftw8ltXU7+
-        LOjQxHwJ6iYkjxpyldZnAuh2aSS7AKrg2/mzddsIaYA1OTsUVNU1ZO4NSkVmNRIGnHe4eUwa4zwUg
-        E4ILepeUdxk1UVaou2f3LxRg/MBkqIH5RY+P1uQZ9E7PkVoynsBc6k5rkuhF5eZdei5cd2mCziz/w
-        I0tyivnheP6EdtcYbBgTet8ziVqzM+diyh/sYOviI90omnLhM2OqG6qQaXKKvoC7OHyrRj9cDx7a0
-        HkhqaR6HWtvonBFNFulP0R+E9cRt0F+PjV7idl9gObPI7sI6mlag8I5gObVC7s03f6+jBYXjpHDEv
-        1VYLssBA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qicRC-000J2M-Q8; Tue, 19 Sep 2023 15:14:54 +0000
-Date:   Tue, 19 Sep 2023 16:14:54 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Greg Ungerer <gregungerer@westnet.com.au>,
+        with ESMTP id S233135AbjISPWp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 11:22:45 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927CF7
+        for <linux-arch@vger.kernel.org>; Tue, 19 Sep 2023 08:22:37 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-213-T6mP4cI8MPimIBAjGs1jLQ-1; Tue, 19 Sep 2023 16:22:30 +0100
+X-MC-Unique: T6mP4cI8MPimIBAjGs1jLQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 19 Sep
+ 2023 16:22:25 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 19 Sep 2023 16:22:25 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>
+CC:     Greg Ungerer <gregungerer@westnet.com.au>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
         Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
-Message-ID: <ZQm67lGOBBdC2Dl9@casper.infradead.org>
+Subject: RE: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
+Thread-Topic: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
+Thread-Index: AQHZ6Kr+hLdybFnA00ugx5L/MFgM8bAiJxPQgAABTgCAABHZMP//+8IAgAARftA=
+Date:   Tue, 19 Sep 2023 15:22:25 +0000
+Message-ID: <c61a58a1f5a34f2b96c6043840635197@AcuMS.aculab.com>
 References: <20230915183707.2707298-1-willy@infradead.org>
  <20230915183707.2707298-10-willy@infradead.org>
  <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au>
@@ -44,41 +44,57 @@ References: <20230915183707.2707298-1-willy@infradead.org>
  <e1fb697714ac408e85c4e3dc573cd7d5@AcuMS.aculab.com>
  <ZQmvhC+pGWNs9R23@casper.infradead.org>
  <cffc2a427ae74f62b07345ec9348e43e@AcuMS.aculab.com>
+ <ZQm67lGOBBdC2Dl9@casper.infradead.org>
+In-Reply-To: <ZQm67lGOBBdC2Dl9@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cffc2a427ae74f62b07345ec9348e43e@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 02:35:25PM +0000, David Laight wrote:
-> From: Matthew Wilcox <willy@infradead.org>
-> > Sent: 19 September 2023 15:26
-> > 
-> > On Tue, Sep 19, 2023 at 01:23:08PM +0000, David Laight wrote:
-> > > > Well, that sucks.  What do you suggest for Coldfire?
+From: Matthew Wilcox <willy@infradead.org>
+> Sent: 19 September 2023 16:15
+> 
+> On Tue, Sep 19, 2023 at 02:35:25PM +0000, David Laight wrote:
+> > From: Matthew Wilcox <willy@infradead.org>
+> > > Sent: 19 September 2023 15:26
 > > >
-> > > Can you just do a 32bit xor ?
-> > > Unless you've got smp m68k I'd presume it is ok?
-> > > (And assuming you aren't falling off a page.)
-> > 
-> > Patch welcome.
+> > > On Tue, Sep 19, 2023 at 01:23:08PM +0000, David Laight wrote:
+> > > > > Well, that sucks.  What do you suggest for Coldfire?
+> > > >
+> > > > Can you just do a 32bit xor ?
+> > > > Unless you've got smp m68k I'd presume it is ok?
+> > > > (And assuming you aren't falling off a page.)
+> > >
+> > > Patch welcome.
+...
+> I have a 68020 book; what I don't have is a Coldfire manual.
 > 
-> My 68020 book seems to be at work and I'm at home.
-> (The 286, 386 and cy7c600 (sparc 32) books don't help).
-> 
-> But if the code is trying to do *ptr ^= 0x80 and check the
-> sign flag then you just need to use eor.l with 0x80000000
-> on the same address.
+> Anyway, that's not the brief.  We're looking to (eg) clear bit 0
+> and test whether bit 7 was set.  So it's the sign bit of the byte,
+> not the sign bit of the int.
 
-I have a 68020 book; what I don't have is a Coldfire manual.
+Use the address of the byte as an int and xor with 1u<<24.
+The xor will do a rmw on the three bytes following, but I
+doubt that matters.
 
-Anyway, that's not the brief.  We're looking to (eg) clear bit 0
-and test whether bit 7 was set.  So it's the sign bit of the byte,
-not the sign bit of the int.
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
