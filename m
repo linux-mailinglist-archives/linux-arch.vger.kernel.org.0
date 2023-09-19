@@ -2,117 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF37A5828
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 05:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1197A5869
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Sep 2023 06:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjISDzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 Sep 2023 23:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S231417AbjISEcC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 00:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbjISDzC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Sep 2023 23:55:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB105120
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 20:54:09 -0700 (PDT)
+        with ESMTP id S231405AbjISEcB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 00:32:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65B610E
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 21:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695095648;
+        s=mimecast20190719; t=1695097875;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=opGMZb4zVfpw4j3bwF+zyk+VH4LC+VDK5rPEHS4VpxU=;
-        b=GK/Dw6pdhLZD/5K9KU3TSZGSiOyvEw3nphSmp/W6Olk6VVQGWolDqA5DysDCin4Qwl8bwk
-        NmuCOPmr7A0EilzsNcmD7NCCnEzxIbkGP8mSzcuJBNFk000zkMjIAyiU5MvsV1ePSxqH/E
-        Q/urbzYdWGUbIyZHANqE4wepZywKAAs=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tujQrNvl4PrxqMiJg4NQJAeEUSLfcAURkaot9IyEWb0=;
+        b=hlaOSo41osQ3Fwnre2sp51uPxy8BAq0AlrPPSeBnAlDgfJfu4wzb80F8MS2bgPWXRS1Zun
+        iocSP/YUy7xNk14eBODhRmxfdk09xN8EhMgCdjHk0MMPIa/pJM6N5il8XXuqqruR3TEjnv
+        A9B0Pb09jbPx83hI5sv9+Md3e0eRyNU=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-6xFCpdVUOFCnT4BGbrYBbA-1; Mon, 18 Sep 2023 23:54:04 -0400
-X-MC-Unique: 6xFCpdVUOFCnT4BGbrYBbA-1
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3ade3827a69so679154b6e.3
-        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 20:54:04 -0700 (PDT)
+ us-mta-592-jEp-aYroP5SyRjXfNJ3DNw-1; Tue, 19 Sep 2023 00:31:13 -0400
+X-MC-Unique: jEp-aYroP5SyRjXfNJ3DNw-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1c4103c26ccso51062675ad.3
+        for <linux-arch@vger.kernel.org>; Mon, 18 Sep 2023 21:31:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695095644; x=1695700444;
+        d=1e100.net; s=20230601; t=1695097872; x=1695702672;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=opGMZb4zVfpw4j3bwF+zyk+VH4LC+VDK5rPEHS4VpxU=;
-        b=vHHrzT0kav00cNA2rVEb8KBYGKCHXmtJVmiX06rQkaUdrz6BiZPZzdF0vtHoG2WaEf
-         KNU+rXhs49TwZrfMwtbGEliR9ygehQ5Lo/IOjUj3fZCTPIjeW45rzh649xpvHdnsrbOu
-         KGOSlyRjQaYApn5UPxlXn1N3sfAWVSgQEFdCqOm+O77cyrnTRFKaFejWcWXG6HyieF6f
-         WYY3excvxekDBNSEJou9bydAveAMk4itFGfZTNdSDmUtlpG9f9ozssY2FYD0Jb1TU+v3
-         xaQ55Z0U1aCpkDIB6p3o3RVPl5yFZiatn1bBeL6tYS1ifGYCs+iRBa0r2c2BnkhaOREJ
-         yZYA==
-X-Gm-Message-State: AOJu0YxZX/r4Wbsna+9t296ptWWxLXOzNIjB81ehDP89pwfWJmikj15p
-        YFmFgWM5rIfcM02jWYQvRLKPtBi9KPDp7x6NHYHFc1uq3f1Ei6TVYfnIX+iyXse6pSwcivD/Ccf
-        f7F4yBuG/Vh5IiK+MP/Clgg==
-X-Received: by 2002:a54:4504:0:b0:3a3:76c6:a46f with SMTP id l4-20020a544504000000b003a376c6a46fmr12922330oil.38.1695095644171;
-        Mon, 18 Sep 2023 20:54:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGGYlj7TJDnGHj/RWXEc2C+lTOzyiwCCuIn5mHVU8DsjC6vooAlJ9Xs3Gr3phqs2j6qI73HUw==
-X-Received: by 2002:a54:4504:0:b0:3a3:76c6:a46f with SMTP id l4-20020a544504000000b003a376c6a46fmr12922314oil.38.1695095643929;
-        Mon, 18 Sep 2023 20:54:03 -0700 (PDT)
+        bh=tujQrNvl4PrxqMiJg4NQJAeEUSLfcAURkaot9IyEWb0=;
+        b=i9mEe2JR9PTigUXP4ncwCbmAVMC3gCfXxoTSQZvla+vCxO0BRkx5LIQ2zZR7NsYgAR
+         LBqiv59JRHQwF2O4XD1W+3cgupyaUA3E1CRzKEgx8q5tFReqkLdjwkyQrFZMswwCjU4P
+         YgtKDOMnKYCC7idbFxuohMWT6sxyQ4e5KKDdUW0gxQEdXILx3gtfbSAWgifxaQoCIHRF
+         vhEbCwpBnE3G3znk3osf+LucvO4k+wH6SKlGosf53wXyzhUAW9q/p/oS4OGjjGdHGOJ/
+         Rgl1JB6ga3qWegsHltHhL2VmfDxU344EuqcmQrNd0LpMrrbC7nPXr0Xj83LDr48BM+w3
+         EoHg==
+X-Gm-Message-State: AOJu0Yyvzolr6LnitgF40IwmP7gNqTZsyYG3gDksr4aoWrqffn/8y7fJ
+        Z8V0G3tDfsnqZg88FDiP058wnMIrxvt6igHPrUif5Smlr2KA545Ryp9AXPHUFyG9I379pf3R9C6
+        gQKlUU8YtNi1sVhNfozl8yw==
+X-Received: by 2002:a17:902:7e8a:b0:1c1:ed61:e058 with SMTP id z10-20020a1709027e8a00b001c1ed61e058mr9604508pla.16.1695097872165;
+        Mon, 18 Sep 2023 21:31:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0jjbVQCYx0HrEgkOAsu8m5j5UqVtkKvnOrxhTmEgF6XxUE6+/pZbGU0AbafmkGXTMtnwJTA==
+X-Received: by 2002:a17:902:7e8a:b0:1c1:ed61:e058 with SMTP id z10-20020a1709027e8a00b001c1ed61e058mr9604496pla.16.1695097871847;
+        Mon, 18 Sep 2023 21:31:11 -0700 (PDT)
 Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id s5-20020a17090a948500b0026b3f76a063sm7639370pjo.44.2023.09.18.20.53.58
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902b60700b001b9f032bb3dsm9059276pls.3.2023.09.18.21.31.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 20:54:03 -0700 (PDT)
-Message-ID: <ea0a43be-4143-7efa-b1c6-550ece6965f6@redhat.com>
-Date:   Tue, 19 Sep 2023 13:53:56 +1000
+        Mon, 18 Sep 2023 21:31:11 -0700 (PDT)
+Message-ID: <89a36ddc-5354-5ee0-2066-11a8d4ae1806@redhat.com>
+Date:   Tue, 19 Sep 2023 14:31:04 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 30/35] irqchip/gic-v3: Add support for ACPI's
- disabled but 'online capable' CPUs
+Subject: Re: [RFC PATCH v2 31/35] arm64: psci: Ignore DENIED CPUs
 Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
         James Morse <james.morse@arm.com>
 Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
         x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com
 References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-31-james.morse@arm.com>
- <ZQLADHCbOr5J8TpX@shell.armlinux.org.uk>
+ <20230913163823.7880-32-james.morse@arm.com>
+ <20230914170155.000065cf@Huawei.com>
 From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <ZQLADHCbOr5J8TpX@shell.armlinux.org.uk>
+In-Reply-To: <20230914170155.000065cf@Huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 9/15/23 02:01, Jonathan Cameron wrote:
+> On Wed, 13 Sep 2023 16:38:19 +0000
+> James Morse <james.morse@arm.com> wrote:
+> 
+>> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>
+>> When a CPU is marked as disabled, but online capable in the MADT, PSCI
+>> applies some firmware policy to control when it can be brought online.
+>> PSCI returns DENIED to a CPU_ON request if this is not currently
+>> permitted. The OS can learn the current policy from the _STA enabled bit.
+>>
+>> Handle the PSCI DENIED return code gracefully instead of printing an
+>> error.
+> 
+> Specification reference would be good particularly as it's only been
+> added as a possibility fairly recently.
+> 
 
+https://developer.arm.com/documentation/den0022/f/?lang=en   page-58
 
-On 9/14/23 18:10, Russell King (Oracle) wrote:
-> On Wed, Sep 13, 2023 at 04:38:18PM +0000, James Morse wrote:
->>   static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
+It seems DENIED is the best matched indicator.
+
+>>
+>> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>> [ morse: Rewrote commit message ]
+>> Signed-off-by: James Morse <james.morse@arm.com>
+>> ---
+>>   arch/arm64/kernel/psci.c     | 2 +-
+>>   arch/arm64/kernel/smp.c      | 3 ++-
+>>   drivers/firmware/psci/psci.c | 2 ++
+>>   3 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/psci.c b/arch/arm64/kernel/psci.c
+>> index 29a8e444db83..4fcc0cdd757b 100644
+>> --- a/arch/arm64/kernel/psci.c
+>> +++ b/arch/arm64/kernel/psci.c
+>> @@ -40,7 +40,7 @@ static int cpu_psci_cpu_boot(unsigned int cpu)
 >>   {
->> -	return (gicc->flags & ACPI_MADT_ENABLED);
->> +	return ((gicc->flags & ACPI_MADT_ENABLED ||
->> +		 gicc->flags & ACPI_MADT_GICC_CPU_CAPABLE));
+>>   	phys_addr_t pa_secondary_entry = __pa_symbol(secondary_entry);
+>>   	int err = psci_ops.cpu_on(cpu_logical_map(cpu), pa_secondary_entry);
+>> -	if (err)
+>> +	if (err && err != -EPROBE_DEFER)
 > 
-> ... and this starts getting silly with the number of parens.
-> 
-> 	return gicc->flags & ACPI_MADT_ENABLED ||
-> 	       gicc->flags & ACPI_MADT_GICC_CPU_CAPABLE;
-> 
-> is entirely sufficient. Also:
-> 
-> 	return gicc->flags & (ACPI_MADT_ENABLED | ACPI_MADT_GICC_CPU_CAPABLE);
-> 
-> also works.
+> Hmm. EPROBE_DEFER has very specific meaning around driver requesting a retry
+> when some other bit of the system has finished booting.
+> I'm not sure it's a good idea for this use case.  Maybe just keep to EPERM
+> as psci_to_linux_errno() will return anyway.  Seems valid to me, or
+> is the requirement to use EPROBE_DEFER coming from further up the stack?
 > 
 
-vote for the second one, which is: gicc->flags & (ACPI_MADT_ENABLED | ACPI_MADT_GICC_CPU_CAPABLE)
+I agree with Jonathan that -EPERM from psci_to_linux_errno(DENIED) is
+good enough here. Actually, I think we need to bail from bringing up
+the CPU once error is raised on psci_ops.cpu_on() and avoid reporting
+it as error with help of -EPROBE_DEFER. -EPERM can serve the same
+purpose.
+
+> 
+> 
+>>   		pr_err("failed to boot CPU%d (%d)\n", cpu, err);
+>>   
+>>   	return err;
+>> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+>> index 8c8f55721786..e958db987665 100644
+>> --- a/arch/arm64/kernel/smp.c
+>> +++ b/arch/arm64/kernel/smp.c
+>> @@ -124,7 +124,8 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
+>>   	/* Now bring the CPU into our world */
+>>   	ret = boot_secondary(cpu, idle);
+>>   	if (ret) {
+>> -		pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
+>> +		if (ret != -EPROBE_DEFER)
+>> +			pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
+>>   		return ret;
+>>   	}
+>>   
+>> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+>> index d9629ff87861..f7ab3fed3528 100644
+>> --- a/drivers/firmware/psci/psci.c
+>> +++ b/drivers/firmware/psci/psci.c
+>> @@ -218,6 +218,8 @@ static int __psci_cpu_on(u32 fn, unsigned long cpuid, unsigned long entry_point)
+>>   	int err;
+>>   
+>>   	err = invoke_psci_fn(fn, cpuid, entry_point, 0);
+>> +	if (err == PSCI_RET_DENIED)
+>> +		return -EPROBE_DEFER;
+>>   	return psci_to_linux_errno(err);
+>>   }
+>>   
 
 Thanks,
 Gavin
