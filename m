@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5B47A6F39
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 01:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A251D7A6F40
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 01:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbjISXKG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Sep 2023 19:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S233765AbjISXKq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Sep 2023 19:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbjISXJr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 19:09:47 -0400
+        with ESMTP id S233838AbjISXJt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Sep 2023 19:09:49 -0400
 Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A804CC1;
-        Tue, 19 Sep 2023 16:09:31 -0700 (PDT)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-59ed7094255so10861117b3.3;
-        Tue, 19 Sep 2023 16:09:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A05F122;
+        Tue, 19 Sep 2023 16:09:33 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-59bebd5bdadso64418327b3.0;
+        Tue, 19 Sep 2023 16:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695164970; x=1695769770; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695164972; x=1695769772; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IAAOThTNxxDaTKwUuAmUnX6Mus9LanSm8SFJZWT7NOE=;
-        b=MniXeIXa2vGRodt2lyRPhgEyTzQTJ9S/TazdGdRy5rjehN+lcqr1+A7mGLz8XnR6l3
-         nqvrnjGy1r7hAkQDypQZHVyyEu/WenzXBVaf6b5n55A4832OmwjoKQFr0og75L30cjOJ
-         InnfrElw7jMdNv4QRFHAcc2ws4qVPk1yNPr/daXPjwBjyMLdx5k3NZZrr5rCaYs0k25u
-         lPriksmkkHgjFJM/pGMSazY5eBlDFYMd4Dr9ZewCKUP0Dtgj1gTjanddGDFH/bIfFHt6
-         hXLVZt8tyc4DsBZyiEZ5c/fC4PrISzJZ4V//cXxM5cA+TnpGHsFQ0NvwvxarVRb54QEv
-         e7YQ==
+        bh=x2rIP8yr4Z/tR7qtSq7lABbsZYKpf6sAk4TU1XcMfbs=;
+        b=OfehRJ+VskevhNs5ISViFrl4mtSiWdgAkhoZgK3sjFyPytiazj0tKRZuF5eaEQLf9I
+         s/cN/rnPAOxHmB1l8/z8V/uDORG/fsUpztSJ0dgwGMmq3gU3Dyc9KfK6KbhBcz7ZifpJ
+         WZE6L+urt6TPisGfZjD1h7PK2Z+QFtX/NdSDUCOJqEDsxHu9VNge4wjJmt4T13w3ryv/
+         uL29/UEFnlV4aHElXirlWDkNngM1808JqgrfSQ0izK8JTW7P9fyKw1dZrdQciosZ9ngT
+         nAPozGiUT+1LECQ73z0KDjHQ5wLBydWdlyzRYnTmBHYUMArVh58lHGuoY+zlq4QLsHuB
+         hK1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695164970; x=1695769770;
+        d=1e100.net; s=20230601; t=1695164972; x=1695769772;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IAAOThTNxxDaTKwUuAmUnX6Mus9LanSm8SFJZWT7NOE=;
-        b=dLeOzqM+cVdoN+ok52R7m8vm42v4OLu/JdG5wEmMguAVtVpioP2TYFFwKvxtoO25z6
-         eaTy92i8zmfyhmjgJIT1C0XSm7bqSKgNx0bx4/4QMXgq1grXGPQYqIp9A1kmj1ye7uQB
-         da8/0aNDhGiiXrq4Mp16yKABctIX3FAsHEiouYNLMOFs9E5QTmMeyNEx1humgZ841sR0
-         R04X88z8LL4YiTxRK8dFSkB78bPwDpNiC+Kjztxh+8HrLKO2o0l4cbGoX+Z3Y94dUVtp
-         tGKkaaLxt1KNn7LFb/X8Ya1xwuH5xDxAXyjdSFtpRS4FAWoqBp9x4eeu62iY1g+L4bzT
-         RA5Q==
-X-Gm-Message-State: AOJu0Yw+Y61FxQYdtKL1zOzRod7/WWFgvuB99u2y312StTIeoQv5dJ8T
-        gbrOdVe96HeVMvFUG+Hf6JPL0u/gxg3b
-X-Google-Smtp-Source: AGHT+IELpSbTtQSw9aZCtbMiiRQh32UaN2P3kHIm7eNXHSkBJQ5NEDVRLaBPyt36f3ZrhXNFGHjsxQ==
-X-Received: by 2002:a81:d243:0:b0:59b:cde8:fc32 with SMTP id m3-20020a81d243000000b0059bcde8fc32mr939034ywl.46.1695164970047;
-        Tue, 19 Sep 2023 16:09:30 -0700 (PDT)
+        bh=x2rIP8yr4Z/tR7qtSq7lABbsZYKpf6sAk4TU1XcMfbs=;
+        b=gbEto3ODi/B+gXCFd1A4TZEkhvuXsMWTNGVrYN/yUiSw8tSgvro2WyGgYQrZzJQ76x
+         wA3m1HRoAr/wxXqlBz+hL62UPaM0IMQlIgKEKQIYmL9bNpaakb14Ug8VysCqalrkhnPe
+         fw15OrXlalfF3rQ6+fDkTRlKtCvNO/Ixc5TpOBH1/qbOUBxCyIhRdomhKbRv3Jcss0ou
+         tLjaNxmHJ8ILRdtr2fMX//WNV3osKwDiSbG8/hlRRZQmCtQYHh8s8AIDzGw6E/9ddOT0
+         TXRJCAIS5AyWs2SdeEi4xz0rcVp4b1rxFpAnNlU4wsrqIk8w+xvnSWvpeqobgtLKcv1g
+         kpmw==
+X-Gm-Message-State: AOJu0Yx3Y4PGR9cFYPHI6cLtZ1Rmyon76G6xPcyMZxy7ecV0LOvnHOyo
+        19nmzL2qzZZXRsTQ9Z8V2aZlRP7fp2rh
+X-Google-Smtp-Source: AGHT+IEE2Ri9fZWDKXKBXMbI9+9SbxlW7iU1XmgowN/E2j062+16hKUlkNBHSsb1+gXgfWAidBpIZg==
+X-Received: by 2002:a0d:df01:0:b0:59c:7d0:ab06 with SMTP id i1-20020a0ddf01000000b0059c07d0ab06mr987766ywe.45.1695164971726;
+        Tue, 19 Sep 2023 16:09:31 -0700 (PDT)
 Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id d128-20020a0df486000000b005925765aa30sm3476327ywf.135.2023.09.19.16.09.29
+        by smtp.gmail.com with ESMTPSA id d128-20020a0df486000000b005925765aa30sm3476327ywf.135.2023.09.19.16.09.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Sep 2023 16:09:29 -0700 (PDT)
+        Tue, 19 Sep 2023 16:09:31 -0700 (PDT)
 From:   Gregory Price <gourry.memverge@gmail.com>
 X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
 To:     linux-mm@vger.kernel.org
@@ -58,9 +58,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         arnd@arndb.de, akpm@linux-foundation.org, x86@kernel.org,
         Gregory Price <gregory.price@memverge.com>
-Subject: [RFC v2 4/5] mm/migrate: Create move_phys_pages syscall
-Date:   Tue, 19 Sep 2023 19:09:07 -0400
-Message-Id: <20230919230909.530174-5-gregory.price@memverge.com>
+Subject: [RFC v2 5/5] ktest: sys_move_phys_pages ktest
+Date:   Tue, 19 Sep 2023 19:09:08 -0400
+Message-Id: <20230919230909.530174-6-gregory.price@memverge.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230919230909.530174-1-gregory.price@memverge.com>
 References: <20230919230909.530174-1-gregory.price@memverge.com>
@@ -76,393 +76,150 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Similar to the move_pages system call, instead of taking a pid and
-list of virtual addresses, this system call takes a list of physical
-addresses.
-
-Because there is no task to validate the memory policy against, each
-page needs to be interrogated to determine whether the migration is
-valid, and all tasks that map it need to be interrogated.
-
-This is accomplished in via a rmap_walk on the folio containing
-the page, and an interrogation of all tasks that map the page (by
-way of each task's vma).
-
-Each page must be interrogated individually, which should be
-considered when using this to migrate shared regions.
-
-The remaining logic is the same as the move_pages syscall. Some
-minor changes to do_pages_move are made (to check whether an
-mm_struct is passed) in order to re-use the existing migration code.
+Implement simple ktest that looks up the physical address via
+/proc/self/pagemap and migrates the page based on that information.
 
 Signed-off-by: Gregory Price <gregory.price@memverge.com>
 ---
- arch/x86/entry/syscalls/syscall_32.tbl  |   1 +
- arch/x86/entry/syscalls/syscall_64.tbl  |   1 +
- include/linux/syscalls.h                |   5 +
- include/uapi/asm-generic/unistd.h       |   8 +-
- kernel/sys_ni.c                         |   1 +
- mm/migrate.c                            | 211 +++++++++++++++++++++++-
- tools/include/uapi/asm-generic/unistd.h |   8 +-
- 7 files changed, 228 insertions(+), 7 deletions(-)
+ tools/testing/selftests/mm/migration.c | 101 +++++++++++++++++++++++++
+ 1 file changed, 101 insertions(+)
 
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 2d0b1bd866ea..25db6d71af0c 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -457,3 +457,4 @@
- 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	i386	cachestat		sys_cachestat
- 452	i386	fchmodat2		sys_fchmodat2
-+454	i386	move_phys_pages		sys_move_phys_pages
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 1d6eee30eceb..9676f2e7698c 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -375,6 +375,7 @@
- 451	common	cachestat		sys_cachestat
- 452	common	fchmodat2		sys_fchmodat2
- 453	64	map_shadow_stack	sys_map_shadow_stack
-+454	common	move_phys_pages		sys_move_phys_pages
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 22bc6bc147f8..6860675a942f 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -821,6 +821,11 @@ asmlinkage long sys_move_pages(pid_t pid, unsigned long nr_pages,
- 				const int __user *nodes,
- 				int __user *status,
- 				int flags);
-+asmlinkage long sys_move_phys_pages(unsigned long nr_pages,
-+				    const void __user * __user *pages,
-+				    const int __user *nodes,
-+				    int __user *status,
-+				    int flags);
- asmlinkage long sys_rt_tgsigqueueinfo(pid_t tgid, pid_t  pid, int sig,
- 		siginfo_t __user *uinfo);
- asmlinkage long sys_perf_event_open(
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index abe087c53b4b..8838fcfaf261 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -823,8 +823,14 @@ __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
- 
-+/* CONFIG_MMU only */
-+#ifndef __ARCH_NOMMU
-+#define __NR_move_phys_pages 454
-+__SYSCALL(__NR_move_phys_pages, sys_move_phys_pages)
-+#endif
-+
- #undef __NR_syscalls
--#define __NR_syscalls 453
-+#define __NR_syscalls 455
- 
- /*
-  * 32 bit systems traditionally used different
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index e137c1385c56..07441b10f92a 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -192,6 +192,7 @@ COND_SYSCALL(migrate_pages);
- COND_SYSCALL(move_pages);
- COND_SYSCALL(set_mempolicy_home_node);
- COND_SYSCALL(cachestat);
-+COND_SYSCALL(move_phys_pages);
- 
- COND_SYSCALL(perf_event_open);
- COND_SYSCALL(accept4);
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 1123d841a7f1..2d06557c0b80 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2165,9 +2165,118 @@ static int move_pages_and_store_status(int node,
- 	return store_status(status, start, node, i - start);
- }
- 
-+struct rmap_page_ctxt {
-+	bool found;
-+	bool migratable;
-+	bool node_allowed;
-+	int node;
-+};
-+
-+/*
-+ * Walks each vma mapping a given page and determines if those
-+ * vma's are both migratable, and that the target node is within
-+ * the allowed cpuset of the owning task.
-+ */
-+static bool phys_page_migratable(struct folio *folio,
-+				 struct vm_area_struct *vma,
-+				 unsigned long address,
-+				 void *arg)
-+{
-+	struct rmap_page_ctxt *ctxt = (struct rmap_page_ctxt *)arg;
-+	struct task_struct *owner = vma->vm_mm->owner;
-+	/* On non-memcg systems, the allowed set is the possible set */
-+#ifdef CONFIG_MEMCG
-+	nodemask_t task_nodes = cpuset_mems_allowed(owner);
-+#else
-+	nodemask_t task_nodes = node_possible_map;
-+#endif
-+
-+	ctxt->found |= true;
-+	ctxt->migratable &= vma_migratable(vma);
-+	ctxt->node_allowed &= node_isset(ctxt->node, task_nodes);
-+
-+	return ctxt->migratable && ctxt->node_allowed;
-+}
-+
-+static struct folio *phys_migrate_get_folio(struct page *page)
-+{
-+	struct folio *folio;
-+
-+	folio = page_folio(page);
-+	if (!folio_test_lru(folio) || !folio_try_get(folio))
-+		return NULL;
-+	if (unlikely(page_folio(page) != folio || !folio_test_lru(folio))) {
-+		folio_put(folio);
-+		folio = NULL;
-+	}
-+	return folio;
-+}
-+
-+/*
-+ * Validates the physical address is online and migratable.  Walks the folio
-+ * containing the page to validate the vma is migratable and the cpuset node
-+ * restrictions.  Then calls add_page_for_migration to isolate it from the
-+ * LRU and place it into the given pagelist.
-+ * Returns:
-+ *     errno - if the page is not online, migratable, or can't be isolated
-+ *     0 - when it doesn't have to be migrated because it is already on the
-+ *         target node
-+ *     1 - when it has been queued
-+ */
-+static int add_phys_page_for_migration(const void __user *p, int node,
-+				       struct list_head *pagelist,
-+				       bool migrate_all)
-+{
-+	unsigned long pfn;
-+	struct page *page;
-+	struct folio *folio;
-+	int err;
-+	struct rmap_page_ctxt rmctxt = {
-+		.found = false,
-+		.migratable = true,
-+		.node_allowed = true,
-+		.node = node
-+	};
-+	struct rmap_walk_control rwc = {
-+		.rmap_one = phys_page_migratable,
-+		.arg = &rmctxt
-+	};
-+
-+	pfn = ((unsigned long)p) >> PAGE_SHIFT;
-+	page = pfn_to_online_page(pfn);
-+	if (!page || PageTail(page))
-+		return -ENOENT;
-+
-+	folio = phys_migrate_get_folio(page);
-+	if (folio)
-+		rmap_walk(folio, &rwc);
-+
-+	if (!rmctxt.found)
-+		err = -ENOENT;
-+	else if (!rmctxt.migratable)
-+		err = -EFAULT;
-+	else if (!rmctxt.node_allowed)
-+		err = -EACCES;
-+	else
-+		err = add_page_for_migration(page, node, pagelist, migrate_all);
-+
-+	if (folio)
-+		folio_put(folio);
-+
-+	return err;
-+}
-+
- /*
-  * Migrate an array of page address onto an array of nodes and fill
-  * the corresponding array of status.
-+ *
-+ * When the mm argument is not NULL, task_nodes is expected to be the
-+ * cpuset nodemask for the task which owns the mm_struct, and the
-+ * values located in (*pages) are expected to be virtual addresses.
-+ *
-+ * When the mm argument is NULL, the values located at (*pages) are
-+ * expected to be physical addresses, and task_nodes is expected to
-+ * be empty.
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 6908569ef406..67fbae243f94 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -5,6 +5,8 @@
   */
- static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 			 unsigned long nr_pages,
-@@ -2181,6 +2290,10 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 	int start, i;
- 	int err = 0, err1;
  
-+	/* This should never occur in regular operation */
-+	if (!mm && nodes_weight(task_nodes) > 0)
-+		return -EINVAL;
+ #include "../kselftest_harness.h"
++#include <stdint.h>
++#include <stdio.h>
+ #include <strings.h>
+ #include <pthread.h>
+ #include <numa.h>
+@@ -14,11 +16,17 @@
+ #include <sys/types.h>
+ #include <signal.h>
+ #include <time.h>
++#include <unistd.h>
+ 
+ #define TWOMEG (2<<20)
+ #define RUNTIME (20)
+ 
++#define GET_BIT(X, Y) ((X & ((uint64_t)1<<Y)) >> Y)
++#define GET_PFN(X) (X & 0x7FFFFFFFFFFFFFull)
+ #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
++#define PAGEMAP_ENTRY 8
++const int __endian_bit = 1;
++#define is_bigendian() ((*(char *)&__endian_bit) == 0)
+ 
+ FIXTURE(migration)
+ {
+@@ -94,6 +102,47 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 	return 0;
+ }
+ 
 +
- 	lru_cache_disable();
- 
- 	for (i = start = 0; i < nr_pages; i++) {
-@@ -2209,7 +2322,14 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 			goto out_flush;
- 
- 		err = -EACCES;
--		if (!node_isset(node, task_nodes))
++
++int migrate_phys(uint64_t paddr, int n1, int n2)
++{
++	int ret, tmp;
++	int status = 0;
++	struct timespec ts1, ts2;
++
++	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
++		return -1;
++
++	while (1) {
++		if (clock_gettime(CLOCK_MONOTONIC, &ts2))
++			return -1;
++
++		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME)
++			return 0;
++
 +		/*
-+		 * if mm is NULL, then the pages are addressed via physical
-+		 * address and the task_nodes structure is empty. Validation
-+		 * of migratability is deferred to add_phys_page_for_migration
-+		 * where vma's that map the address will have their node_mask
-+		 * checked to ensure the requested node bit is set.
++		 * FIXME: move_phys_pages was syscall 454 during RFC.
++		 * Update this when an official syscall number is adopted
++		 * and the libnuma interface is implemented.
 +		 */
-+		if (mm && !node_isset(node, task_nodes))
- 			goto out_flush;
- 
- 		if (current_node == NUMA_NO_NODE) {
-@@ -2226,10 +2346,17 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 
- 		/*
- 		 * Errors in the page lookup or isolation are not fatal and we simply
--		 * report them via status
-+		 * report them via status.
-+		 *
-+		 * If mm is NULL, then p treated as is a physical address.
- 		 */
--		err = add_virt_page_for_migration(mm, p, current_node, &pagelist,
--					     flags & MPOL_MF_MOVE_ALL);
-+		if (mm)
-+			err = add_virt_page_for_migration(mm, p, current_node, &pagelist,
-+						     flags & MPOL_MF_MOVE_ALL);
-+		else
-+			err = add_phys_page_for_migration(p, current_node, &pagelist,
-+					flags & MPOL_MF_MOVE_ALL);
++		ret = syscall(454, 1, (void **) &paddr, &n2, &status,
++			      MPOL_MF_MOVE_ALL);
++		if (ret) {
++			if (ret > 0)
++				printf("Didn't migrate %d pages\n", ret);
++			else
++				perror("Couldn't migrate pages");
++			return -2;
++		}
 +
- 
- 		if (err > 0) {
- 			/* The page is successfully queued for migration */
-@@ -2317,6 +2444,37 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
- 	mmap_read_unlock(mm);
- }
- 
-+/*
-+ * Determine the nodes pages pointed to by the physical addresses in the
-+ * pages array, and store those node values in the status array
-+ */
-+static void do_phys_pages_stat_array(unsigned long nr_pages,
-+				     const void __user **pages, int *status)
-+{
-+	unsigned long i;
-+
-+	for (i = 0; i < nr_pages; i++) {
-+		unsigned long pfn = (unsigned long)(*pages) >> PAGE_SHIFT;
-+		struct page *page = pfn_to_online_page(pfn);
-+		int err = -ENOENT;
-+
-+		if (!page)
-+			goto set_status;
-+
-+		get_page(page);
-+
-+		if (!is_zone_device_page(page))
-+			err = page_to_nid(page);
-+
-+		put_page(page);
-+set_status:
-+		*status = err;
-+
-+		pages++;
-+		status++;
++		tmp = n2;
++		n2 = n1;
++		n1 = tmp;
 +	}
++
++	return 0;
 +}
 +
- static int get_compat_pages_array(const void __user *chunk_pages[],
- 				  const void __user * __user *pages,
- 				  unsigned long chunk_nr)
-@@ -2359,7 +2517,10 @@ static int do_pages_stat(struct mm_struct *mm, unsigned long nr_pages,
- 				break;
- 		}
- 
--		do_pages_stat_array(mm, chunk_nr, chunk_pages, chunk_status);
-+		if (mm)
-+			do_pages_stat_array(mm, chunk_nr, chunk_pages, chunk_status);
-+		else
-+			do_phys_pages_stat_array(chunk_nr, chunk_pages, chunk_status);
- 
- 		if (copy_to_user(status, chunk_status, chunk_nr * sizeof(*status)))
- 			break;
-@@ -2460,6 +2621,46 @@ SYSCALL_DEFINE6(move_pages, pid_t, pid, unsigned long, nr_pages,
- 	return kernel_move_pages(pid, nr_pages, pages, nodes, status, flags);
+ void *access_mem(void *ptr)
+ {
+ 	volatile uint64_t y = 0;
+@@ -199,4 +248,56 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
  }
  
 +/*
-+ * Move a list of physically-addressed pages to the list of target nodes
++ * Same as the basic migration, but test move_phys_pages.
 + */
-+static int kernel_move_phys_pages(unsigned long nr_pages,
-+				  const void __user * __user *pages,
-+				  const int __user *nodes,
-+				  int __user *status, int flags)
++TEST_F_TIMEOUT(migration, phys_addr, 2*RUNTIME)
 +{
-+	int err;
-+	nodemask_t dummy_nodes;
++	uint64_t *ptr;
++	uint64_t pagemap_val, paddr, file_offset;
++	unsigned char c_buf[PAGEMAP_ENTRY];
++	int i, c, status;
++	FILE *f;
 +
-+	if (flags & ~(MPOL_MF_MOVE|MPOL_MF_MOVE_ALL))
-+		return -EINVAL;
++	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
++		SKIP(return, "Not enough threads or NUMA nodes available");
 +
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
++	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
++		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(ptr, MAP_FAILED);
 +
-+	/*
-+	 * When the mm argument to do_pages_move is null, the task_nodes
-+	 * argument is ignored, so pass in an empty nodemask as a dummy.
-+	 */
-+	nodes_clear(dummy_nodes);
-+	if (nodes)
-+		err = do_pages_move(NULL, dummy_nodes, nr_pages, pages,
-+			nodes, status, flags);
-+	else
-+		err = do_pages_stat(NULL, nr_pages, pages, status);
++	memset(ptr, 0xde, TWOMEG);
 +
-+	return err;
++	/* PFN of ptr from /proc/self/pagemap */
++	f = fopen("/proc/self/pagemap", "rb");
++	file_offset = ((uint64_t)ptr) / getpagesize() * PAGEMAP_ENTRY;
++	status = fseek(f, file_offset, SEEK_SET);
++	ASSERT_EQ(status, 0);
++	for (i = 0; i < PAGEMAP_ENTRY; i++) {
++		c = getc(f);
++		ASSERT_NE(c, EOF);
++		/* handle endiand differences */
++		if (is_bigendian())
++			c_buf[i] = c;
++		else
++			c_buf[PAGEMAP_ENTRY - i - 1] = c;
++	}
++	fclose(f);
++
++	for (i = 0; i < PAGEMAP_ENTRY; i++)
++		pagemap_val = (pagemap_val << 8) + c_buf[i];
++
++	ASSERT_TRUE(GET_BIT(pagemap_val, 63));
++	/* This reports a pfn, we need to shift this by page size */
++	paddr = GET_PFN(pagemap_val) << __builtin_ctz(getpagesize());
++
++	for (i = 0; i < self->nthreads - 1; i++)
++		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
++			perror("Couldn't create thread");
++
++	ASSERT_EQ(migrate_phys(paddr, self->n1, self->n2), 0);
++	for (i = 0; i < self->nthreads - 1; i++)
++		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
 +}
 +
-+SYSCALL_DEFINE5(move_phys_pages, unsigned long, nr_pages,
-+		const void __user * __user *, pages,
-+		const int __user *, nodes,
-+		int __user *, status, int, flags)
-+{
-+	return kernel_move_phys_pages(nr_pages, pages, nodes, status, flags);
-+}
-+
-+
- #ifdef CONFIG_NUMA_BALANCING
- /*
-  * Returns true if this is a safe migration target node for misplaced NUMA
-diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
-index fd6c1cb585db..b140ad444946 100644
---- a/tools/include/uapi/asm-generic/unistd.h
-+++ b/tools/include/uapi/asm-generic/unistd.h
-@@ -820,8 +820,14 @@ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
- #define __NR_cachestat 451
- __SYSCALL(__NR_cachestat, sys_cachestat)
- 
-+/* CONFIG_MMU only */
-+#ifndef __ARCH_NOMMU
-+#define __NR_move_phys_pages 454
-+__SYSCALL(__NR_move_phys_pages, sys_move_phys_pages)
-+#endif
-+
- #undef __NR_syscalls
--#define __NR_syscalls 452
-+#define __NR_syscalls 455
- 
- /*
-  * 32 bit systems traditionally used different
+ TEST_HARNESS_MAIN
 -- 
 2.39.1
 
