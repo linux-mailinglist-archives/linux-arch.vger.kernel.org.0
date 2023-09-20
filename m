@@ -2,186 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D2D7A7F72
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 14:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203AE7A87E0
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 17:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbjITM1R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Sep 2023 08:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S235393AbjITPHT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Sep 2023 11:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236023AbjITM1K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 08:27:10 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8BCC6;
-        Wed, 20 Sep 2023 05:26:58 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB55C433C8;
-        Wed, 20 Sep 2023 12:26:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695212818;
-        bh=KFGWJpQl4J4z6mh8girfOUZf/dUUh5td6TmshyWaqL0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RzYV2FVLZaxvKXDvX2FQTlGvlw9Wyt8P7TMR3gMjIvxxF+OcNM4UDKc+MIBd0Usga
-         5c1exxM66iAcvEEiNau3xTsWcSn7KdW0Z4djWZczGOLZzwAYdFjOgh5b2YxLmPhOb6
-         7ONu7IQ3ad6oIP0yrXWnaJiloa4t09dprkSeO0v0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Jiri Slaby <jslaby@suse.cz>,
-        Borislav Petkov <bp@suse.de>,
-        Cao jin <caoj.fnst@cn.fujitsu.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Wei Huang <wei@redhat.com>, x86-ml <x86@kernel.org>,
-        Xiaoyao Li <xiaoyao.li@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 056/367] x86/boot: Annotate local functions
-Date:   Wed, 20 Sep 2023 13:27:13 +0200
-Message-ID: <20230920112859.951125884@linuxfoundation.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230920112858.471730572@linuxfoundation.org>
-References: <20230920112858.471730572@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+        with ESMTP id S235264AbjITPHS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 11:07:18 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A719AF;
+        Wed, 20 Sep 2023 08:07:12 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id DE07F5C01BB;
+        Wed, 20 Sep 2023 11:07:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 20 Sep 2023 11:07:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695222428; x=1695308828; bh=ms
+        4LUioRCx9g5Fcd6Nj2Z553BmfY/nfNy++/9p0eMTE=; b=BHuLRfyyuipWu6am6/
+        M3C5KuEVtPRgHdnUSWE2tXf1NF5z/c0HjnG1qXb1WaGZu8Uq7k1Lq5DXx3SfUhLJ
+        +AGNDQ0Gvdy1xUAqZGHxFG0dPweDd4IWaDHtLa1Ju8frSZGFQNlRlxX/YTmR+QTm
+        FrxvvQHeQGOAH4tKQgxAP8/n/XDBfPur4ivYpz7AqfbRaoZFC/0DB/LRt6ogTvDK
+        ibhf89hk7VyhvpN4sS3aoNoWA5NNg9KqAE+6NjLPwBok0RZB1mJOs3iV6MFt/MH4
+        Dtvydol1NjIVeiH0yas9c7mbU50veoZbaGHU9IbQP2FByO/vbbLSQKTuw+/nHr+K
+        WV2g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695222428; x=1695308828; bh=ms4LUioRCx9g5
+        Fcd6Nj2Z553BmfY/nfNy++/9p0eMTE=; b=qgZHhiyUGnQdiRx/usTNHt32rPNJr
+        9B5WYZMfGf4Wh7FyO6A52lomoJ9ynn4fijFhbL1uXxQvXbZqDqwI3RtNixlUDdBY
+        nr7g83/UKByMv2jpbfoqr0MMhEyLeVl4HTvngpxiAH2TNzYOuQTYsysj+12PQUhh
+        NfZeCSd5kQ2vll+YcV+q/+APQLD6yBY/5mJ6KzJ/VXaqAf54B8D5OfAW8ja+q4S8
+        OwObw1sDeIiXVgJxGcmw5NakTXzLLouS4lIeLJo/w8h5AT4kacfRuTF+izO/lkmJ
+        F56Yyuk075kXqXJcxdmlOPxlIIi+Xm++i+2jPz5jH6sqj1NLjf7H1eCog==
+X-ME-Sender: <xms:nAoLZYwrTKoT42bcnpXZ4-w53D73C76DbJIuYsMLzYvbbB86qR_ffQ>
+    <xme:nAoLZcRulMbaUjUAhbE-QFya1Gxyi5QzCzhATtS7FolBRFqxN9c07Aga3yV4Qoxiq
+    eWbYSyImVFth6dskDE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekfedgkeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:nAoLZaWZx_TRLb7BjvQU3lpTtrt3jJpa0avXJjdRrHX-EzABxErB_A>
+    <xmx:nAoLZWgVBoycMfqp10qcSIzofTqfa999ofexvDZjpX2k4ORya7JL9g>
+    <xmx:nAoLZaBR9j0jFMUdPxCKTuDNgoxms16P9lFOofBz07ktzPmbvA4Yng>
+    <xmx:nAoLZe6LFDULF3sZ_R6NM9MvFBnTENxcVdrZ0bbn_jFL0BMhje4eJA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EC7C5B60089; Wed, 20 Sep 2023 11:07:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <df784a58-23f8-43d2-8506-ab1d351da8fe@app.fastmail.com>
+In-Reply-To: <20230912135050.17155-1-tzimmermann@suse.de>
+References: <20230912135050.17155-1-tzimmermann@suse.de>
+Date:   Wed, 20 Sep 2023 11:06:48 -0400
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Helge Deller" <deller@gmx.de>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v4 0/5] ppc, fbdev: Clean up fbdev mmap helper
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-5.4-stable review patch.  If anyone has any objections, please let me know.
+On Tue, Sep 12, 2023, at 09:48, Thomas Zimmermann wrote:
+> Clean up and rename fb_pgprotect() to work without struct file. Then
+> refactor the implementation for PowerPC. This change has been discussed
+> at [1] in the context of refactoring fbdev's mmap code.
+>
+> The first two patches update fbdev and replace fbdev's fb_pgprotect()
+> with pgprot_framebuffer() on all architectures. The new helper's stream-
+> lined interface enables more refactoring within fbdev's mmap
+> implementation.
+>
+> Patches 3 to 5 adapt PowerPC's internal interfaces to provide
+> phys_mem_access_prot() that works without struct file. Neither the
+> architecture code or fbdev helpers need the parameter.
+>
+> v4:
+> 	* fix commit message (Christophe)
+> v3:
+> 	* rename fb_pgrotect() to pgprot_framebuffer() (Arnd)
 
-------------------
+I had another look today, and everything look good to me now.
 
-From: Jiri Slaby <jslaby@suse.cz>
+Whole series
 
-[ Upstream commit deff8a24e1021fb39dddf5f6bc5832e0e3a632ea ]
-
-.Lrelocated, .Lpaging_enabled, .Lno_longmode, and .Lin_pm32 are
-self-standing local functions, annotate them as such and preserve "no
-alignment".
-
-The annotations do not generate anything yet.
-
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Cao jin <caoj.fnst@cn.fujitsu.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Kate Stewart <kstewart@linuxfoundation.org>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: linux-arch@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wei Huang <wei@redhat.com>
-Cc: x86-ml <x86@kernel.org>
-Cc: Xiaoyao Li <xiaoyao.li@linux.intel.com>
-Link: https://lkml.kernel.org/r/20191011115108.12392-8-jslaby@suse.cz
-Stable-dep-of: 264b82fdb498 ("x86/decompressor: Don't rely on upper 32 bits of GPRs being preserved")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/boot/compressed/head_32.S | 3 ++-
- arch/x86/boot/compressed/head_64.S | 9 ++++++---
- arch/x86/boot/pmjump.S             | 4 ++--
- 3 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
-index d7c0fcc1dbf9e..b788b986f3351 100644
---- a/arch/x86/boot/compressed/head_32.S
-+++ b/arch/x86/boot/compressed/head_32.S
-@@ -210,7 +210,7 @@ ENDPROC(efi32_stub_entry)
- #endif
- 
- 	.text
--.Lrelocated:
-+SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
- 
- /*
-  * Clear BSS (stack is currently empty)
-@@ -261,6 +261,7 @@ ENDPROC(efi32_stub_entry)
-  */
- 	xorl	%ebx, %ebx
- 	jmp	*%eax
-+SYM_FUNC_END(.Lrelocated)
- 
- #ifdef CONFIG_EFI_STUB
- 	.data
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index 50c9eeb36f0d8..95ee795d97964 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -517,7 +517,7 @@ ENDPROC(efi64_stub_entry)
- #endif
- 
- 	.text
--.Lrelocated:
-+SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
- 
- /*
-  * Clear BSS (stack is currently empty)
-@@ -546,6 +546,7 @@ ENDPROC(efi64_stub_entry)
-  * Jump to the decompressed kernel.
-  */
- 	jmp	*%rax
-+SYM_FUNC_END(.Lrelocated)
- 
- /*
-  * Adjust the global offset table
-@@ -641,9 +642,10 @@ ENTRY(trampoline_32bit_src)
- 	lret
- 
- 	.code64
--.Lpaging_enabled:
-+SYM_FUNC_START_LOCAL_NOALIGN(.Lpaging_enabled)
- 	/* Return from the trampoline */
- 	jmp	*%rdi
-+SYM_FUNC_END(.Lpaging_enabled)
- 
- 	/*
-          * The trampoline code has a size limit.
-@@ -653,11 +655,12 @@ ENTRY(trampoline_32bit_src)
- 	.org	trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_SIZE
- 
- 	.code32
--.Lno_longmode:
-+SYM_FUNC_START_LOCAL_NOALIGN(.Lno_longmode)
- 	/* This isn't an x86-64 CPU, so hang intentionally, we cannot continue */
- 1:
- 	hlt
- 	jmp     1b
-+SYM_FUNC_END(.Lno_longmode)
- 
- #include "../../kernel/verify_cpu.S"
- 
-diff --git a/arch/x86/boot/pmjump.S b/arch/x86/boot/pmjump.S
-index ea88d52eeac70..81658fe353808 100644
---- a/arch/x86/boot/pmjump.S
-+++ b/arch/x86/boot/pmjump.S
-@@ -46,7 +46,7 @@ ENDPROC(protected_mode_jump)
- 
- 	.code32
- 	.section ".text32","ax"
--.Lin_pm32:
-+SYM_FUNC_START_LOCAL_NOALIGN(.Lin_pm32)
- 	# Set up data segments for flat 32-bit mode
- 	movl	%ecx, %ds
- 	movl	%ecx, %es
-@@ -72,4 +72,4 @@ ENDPROC(protected_mode_jump)
- 	lldt	%cx
- 
- 	jmpl	*%eax			# Jump to the 32-bit entrypoint
--ENDPROC(.Lin_pm32)
-+SYM_FUNC_END(.Lin_pm32)
--- 
-2.40.1
-
-
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
