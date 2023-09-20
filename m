@@ -2,111 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E9D7A77B0
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 11:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D2D7A7F72
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 14:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbjITJhM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Sep 2023 05:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        id S235838AbjITM1R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Sep 2023 08:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbjITJhK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 05:37:10 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D7ECF;
-        Wed, 20 Sep 2023 02:37:03 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id D77E6320034E;
-        Wed, 20 Sep 2023 05:37:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 20 Sep 2023 05:37:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695202621; x=1695289021; bh=JN
-        1ZzaiwVFExq/3/5UGUuW9E0CnaSmXvojZmxi01Kcc=; b=Pm8O1gOEIViOo1Budb
-        3EuwADD286hOxA3J0GYhoMDrkIH2t+PFfEvg0aXIhz0gunW1x4kkTzPTdL6SYqwP
-        51VKokd80Hj0RKh5FRGxLiBRHUzF9obSnYMI9afTQHdZ1rTx4fisINLeMvhCevFd
-        Bj8hrQ7WU4yFBfMYTG8mPuf/f7xJpGFXIszmhFNUvkuQN9ZqWeIcnQzxlMusZEUJ
-        bk9Hmaio42ziipwIOrrQ8eV45RBWqhlD8mJVj2SEcSsnmMrInFbhuUGxsXWfWw8e
-        v6/Fy91qyfbQJaZ8SBcAC88Oj4dTC5X+ZfBwcUZ/E/ATPWljbBKmwdAY+G9nhfgm
-        tVPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695202621; x=1695289021; bh=JN1ZzaiwVFExq
-        /3/5UGUuW9E0CnaSmXvojZmxi01Kcc=; b=oTLvY1yG2kMqEXf+HxPvuLCeLFu2a
-        yc7o2PutX7FVP+lscX+cfS/PXM4eaUK4e0tOpFtx7QeQ3xBfgEZY+Ld0bSFQlKUm
-        7pWSMhxBJGuFH161aX1ClZtZfOuohRiYr0D05oEyaO5CGJfNw91UhzmngSsmGccX
-        70O7NCkbEpnCUFi1QUkbNbHX7cUQeCE9aQkF6+VrYJIu7CowvpblQkkIP54GteUS
-        rXnSxAxt7/L0ReZMCDvZmbo/dEayKb6f/cq0HA49K1BFEi8D8cZW5BKmU04V3McE
-        BqPA/P5oypt8f0hu3unvgt0vtaIXK2BRC8a3oJKSnkmzHm/2Vm83ywBUQ==
-X-ME-Sender: <xms:PL0KZb6lhtH46k9GGSDj5yk3j3mZCRrBS_Y1L90S1ZtH339ksLcHiw>
-    <xme:PL0KZQ5iWwZ1otcgXt1LERwxEL9Pnw5fYYFBdfbcKEZGIAuEoxrteY-4aE83qCFLt
-    r0ChJoV6Gf7daf8cFM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekfedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:PL0KZSesSU9ywtQ-tngRXbTJzPcxuA5Y4tWyJOpAnBc3oR4QgLSlUQ>
-    <xmx:PL0KZcLC4L0R3ZVR_u8sCugVuSFd1G8xcy7oRTLxNHilU6r7CSCTZA>
-    <xmx:PL0KZfL8yMrsJ4QfdwTs9P7QEPSw5txNRgGXNKJysQ6QXmT5ii8DIQ>
-    <xmx:Pb0KZZBQfFXY91QZ2moim8ARvgr9ZxEf03fqNy_kz4cHxc8rreKIhQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 14CB2B60089; Wed, 20 Sep 2023 05:37:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
+        with ESMTP id S236023AbjITM1K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 08:27:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8BCC6;
+        Wed, 20 Sep 2023 05:26:58 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB55C433C8;
+        Wed, 20 Sep 2023 12:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1695212818;
+        bh=KFGWJpQl4J4z6mh8girfOUZf/dUUh5td6TmshyWaqL0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RzYV2FVLZaxvKXDvX2FQTlGvlw9Wyt8P7TMR3gMjIvxxF+OcNM4UDKc+MIBd0Usga
+         5c1exxM66iAcvEEiNau3xTsWcSn7KdW0Z4djWZczGOLZzwAYdFjOgh5b2YxLmPhOb6
+         7ONu7IQ3ad6oIP0yrXWnaJiloa4t09dprkSeO0v0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Jiri Slaby <jslaby@suse.cz>,
+        Borislav Petkov <bp@suse.de>,
+        Cao jin <caoj.fnst@cn.fujitsu.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Wei Huang <wei@redhat.com>, x86-ml <x86@kernel.org>,
+        Xiaoyao Li <xiaoyao.li@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 056/367] x86/boot: Annotate local functions
+Date:   Wed, 20 Sep 2023 13:27:13 +0200
+Message-ID: <20230920112859.951125884@linuxfoundation.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230920112858.471730572@linuxfoundation.org>
+References: <20230920112858.471730572@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
-Message-Id: <e43c9fb0-1869-4328-a984-33b35caf58ba@app.fastmail.com>
-In-Reply-To: <20230919230909.530174-2-gregory.price@memverge.com>
-References: <20230919230909.530174-1-gregory.price@memverge.com>
- <20230919230909.530174-2-gregory.price@memverge.com>
-Date:   Wed, 20 Sep 2023 05:36:39 -0400
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Gregory Price" <gourry.memverge@gmail.com>,
-        linux-mm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-cxl@vger.kernel.org,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>, x86@kernel.org,
-        "Gregory Price" <gregory.price@memverge.com>
-Subject: Re: [RFC v2 1/5] mm/migrate: fix do_pages_move for compat pointers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 19, 2023, at 19:09, Gregory Price wrote:
-> do_pages_move does not handle compat pointers for the page list.
-> correctly.  Add in_compat_syscall check and appropriate get_user
-> fetch when iterating the page list.
->
-> Signed-off-by: Gregory Price <gregory.price@memverge.com>
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+5.4-stable review patch.  If anyone has any objections, please let me know.
 
-Looks correct to me, thanks for fixing it!
+------------------
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+From: Jiri Slaby <jslaby@suse.cz>
 
-You can also blame me for breaking it in the first place
+[ Upstream commit deff8a24e1021fb39dddf5f6bc5832e0e3a632ea ]
 
-Fixes: 5b1b561ba73c ("mm: simplify compat_sys_move_pages")
+.Lrelocated, .Lpaging_enabled, .Lno_longmode, and .Lin_pm32 are
+self-standing local functions, annotate them as such and preserve "no
+alignment".
 
-      Arnd
+The annotations do not generate anything yet.
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Cao jin <caoj.fnst@cn.fujitsu.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Kate Stewart <kstewart@linuxfoundation.org>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: linux-arch@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Wei Huang <wei@redhat.com>
+Cc: x86-ml <x86@kernel.org>
+Cc: Xiaoyao Li <xiaoyao.li@linux.intel.com>
+Link: https://lkml.kernel.org/r/20191011115108.12392-8-jslaby@suse.cz
+Stable-dep-of: 264b82fdb498 ("x86/decompressor: Don't rely on upper 32 bits of GPRs being preserved")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/boot/compressed/head_32.S | 3 ++-
+ arch/x86/boot/compressed/head_64.S | 9 ++++++---
+ arch/x86/boot/pmjump.S             | 4 ++--
+ 3 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+index d7c0fcc1dbf9e..b788b986f3351 100644
+--- a/arch/x86/boot/compressed/head_32.S
++++ b/arch/x86/boot/compressed/head_32.S
+@@ -210,7 +210,7 @@ ENDPROC(efi32_stub_entry)
+ #endif
+ 
+ 	.text
+-.Lrelocated:
++SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+ 
+ /*
+  * Clear BSS (stack is currently empty)
+@@ -261,6 +261,7 @@ ENDPROC(efi32_stub_entry)
+  */
+ 	xorl	%ebx, %ebx
+ 	jmp	*%eax
++SYM_FUNC_END(.Lrelocated)
+ 
+ #ifdef CONFIG_EFI_STUB
+ 	.data
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index 50c9eeb36f0d8..95ee795d97964 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -517,7 +517,7 @@ ENDPROC(efi64_stub_entry)
+ #endif
+ 
+ 	.text
+-.Lrelocated:
++SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+ 
+ /*
+  * Clear BSS (stack is currently empty)
+@@ -546,6 +546,7 @@ ENDPROC(efi64_stub_entry)
+  * Jump to the decompressed kernel.
+  */
+ 	jmp	*%rax
++SYM_FUNC_END(.Lrelocated)
+ 
+ /*
+  * Adjust the global offset table
+@@ -641,9 +642,10 @@ ENTRY(trampoline_32bit_src)
+ 	lret
+ 
+ 	.code64
+-.Lpaging_enabled:
++SYM_FUNC_START_LOCAL_NOALIGN(.Lpaging_enabled)
+ 	/* Return from the trampoline */
+ 	jmp	*%rdi
++SYM_FUNC_END(.Lpaging_enabled)
+ 
+ 	/*
+          * The trampoline code has a size limit.
+@@ -653,11 +655,12 @@ ENTRY(trampoline_32bit_src)
+ 	.org	trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_SIZE
+ 
+ 	.code32
+-.Lno_longmode:
++SYM_FUNC_START_LOCAL_NOALIGN(.Lno_longmode)
+ 	/* This isn't an x86-64 CPU, so hang intentionally, we cannot continue */
+ 1:
+ 	hlt
+ 	jmp     1b
++SYM_FUNC_END(.Lno_longmode)
+ 
+ #include "../../kernel/verify_cpu.S"
+ 
+diff --git a/arch/x86/boot/pmjump.S b/arch/x86/boot/pmjump.S
+index ea88d52eeac70..81658fe353808 100644
+--- a/arch/x86/boot/pmjump.S
++++ b/arch/x86/boot/pmjump.S
+@@ -46,7 +46,7 @@ ENDPROC(protected_mode_jump)
+ 
+ 	.code32
+ 	.section ".text32","ax"
+-.Lin_pm32:
++SYM_FUNC_START_LOCAL_NOALIGN(.Lin_pm32)
+ 	# Set up data segments for flat 32-bit mode
+ 	movl	%ecx, %ds
+ 	movl	%ecx, %es
+@@ -72,4 +72,4 @@ ENDPROC(protected_mode_jump)
+ 	lldt	%cx
+ 
+ 	jmpl	*%eax			# Jump to the 32-bit entrypoint
+-ENDPROC(.Lin_pm32)
++SYM_FUNC_END(.Lin_pm32)
+-- 
+2.40.1
+
+
+
