@@ -2,92 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA51F7A747B
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 09:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235907A74AC
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 09:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbjITHm6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Sep 2023 03:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S233907AbjITHrC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Sep 2023 03:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbjITHmv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 03:42:51 -0400
-X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Sep 2023 00:42:45 PDT
-Received: from mail.venturelinkage.com (mail.venturelinkage.com [80.211.143.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5281D9E
-        for <linux-arch@vger.kernel.org>; Wed, 20 Sep 2023 00:42:45 -0700 (PDT)
-Received: by mail.venturelinkage.com (Postfix, from userid 1002)
-        id BF2C0826C3; Wed, 20 Sep 2023 09:36:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=venturelinkage.com;
-        s=mail; t=1695195371;
-        bh=7iowqdzve/IIiUUjcEwx8j3uMrVqqiE7R9zbOCKRV9Q=;
-        h=Date:From:To:Subject:From;
-        b=UwQwI1HVl19lHyaoYwUYzz128WNP4SlZku4i2J5NW020uyltANWe3YvXioEK0A+Uz
-         C4JP2iwkxiDE5GhJJAiIc+7vr/VrheAl0zd1Afz5nrhjy8tad4dbO6dEx+PKF+iqWB
-         c9yqO7uoV3r49NFW5VzntH+w3p2uQ3ErHU+eQKDZmt4tiqpnlwGXfKdUuo1yNaqVv8
-         jJvxOUFDeFnh/Mbk3KxoNdSz/+juq7XLvdcjNRscNHtQarA60n3JkcpCrBbj4x8pjT
-         Bv9eiL64Zra33iIpUriFjsSOaswoHJvSEKGbPWKl5CBu5SHlFetpRcr7icZ1pmQKHt
-         P0sR4OtDzoGRA==
-Received: by mail.venturelinkage.com for <linux-arch@vger.kernel.org>; Wed, 20 Sep 2023 07:36:09 GMT
-Message-ID: <20230920084500-0.1.l.11b3.0.8qkdrd4o2h@venturelinkage.com>
-Date:   Wed, 20 Sep 2023 07:36:09 GMT
-From:   "Lukas Varga" <lukas.varga@venturelinkage.com>
-To:     <linux-arch@vger.kernel.org>
-Subject: =?UTF-8?Q?Popt=C3=A1vka?=
-X-Mailer: mail.venturelinkage.com
+        with ESMTP id S234052AbjITHqd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 03:46:33 -0400
+Received: from icp-osb-irony-out5.external.iinet.net.au (icp-osb-irony-out5.external.iinet.net.au [203.59.1.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C72DCE4;
+        Wed, 20 Sep 2023 00:45:52 -0700 (PDT)
+X-SMTP-MATCH: 1
+IronPort-Data: A9a23:azQpg6xIW9ObnWEOXuN6t+cnxyrEfRIJ4+MujC+fZmUNrF6WrkU3e
+ hirod39jgY+HhL3funC5f239Uo2Dfalz9J9ShxunZ1UZyoigdLfAtiEJVvHMSqXL8nSJGpq9
+ Mx2huPodajYdVeC4E/3WlTdhSMkj/rQF+CkULes1h1ZHmeIdg9w0XqPpMZk2uaEsfDhayuRt
+ NX7pdHoOVPN81aY5UpNtspvADs21BjDkGtwUm4WPJinj3eH/5UhN6/zEInqR5fOrii4KcbhL
+ wrL5OnREmrxo0x3Uov9+lrxWhVirrX6ZWBihlIKAPL62kAqSiEais4G2PQghUh/u2WkkdZ62
+ tp3kZ2TcVYlA4/nwvkmakwNe81+FfUuFL7vEiHu64rKkR2AKz22mcAG4EMeYN1epKAtWz8Ir
+ 6RIQNwORknra+aez6i2RfRqick5IdPDI44Epndt0XfSCvNgSI2rr6DiuY4BjWlh2JgTdRrYT
+ 9AHVTd9NhXdWkFwNBRNMKM9w8KamVCqJlW0r3rQ/8Lb+VP70w111KnFMdzbYNWGSMxZ2EGCq
+ Qru+2X/HwFfN9GFzzeB2myji/WJni7hXo8WUrqi+ZZChFyV23xWBgYaWEW2pdGnhUOkHdFSM
+ UoZ/mwpt6da3EiqSMTtGhSiq36soBERQZxTHvc85QXLzbDbiy6FAXIaRzpNc/QitckrVXkk0
+ UKPk9r1BDtp9rqPRhq18K+VojyzPwAaKGYDYWkPSg5t3jX4iNxjy0yKFIw9VfTt3pvpAT7xh
+ TuNqW43mt3/kPI26klyxnif6xrEm3QDZlddCtn/No590j5EWQ==
+IronPort-HdrOrdr: A9a23:8cNknKgC5uWXPwRJcEjE0pucnXBQXmsji2hC6mlwRA09TyX4ra
+ 6TdZEguCMc5wxxZJhNo7C90dC7MBThHPxOkOss1MaZLWrbUQKTRekIh+eM/9SHIVybygc379
+ YET0ERMqyJMXFKyez/pCG+G9Mx2tmcmZrY+dv2/jNGSUVHbL5t6gFhBm+gYzJLbTgDKZ0lFI
+ eNouprzgDQAkj/t/7LYEXtidKz3uHjpdbvfBoPBxss7Q+TgHey7qLmH3Gjr2kjegIKyaon+W
+ jBmQn++qjmqeiyzlvV3XLS6ZM+oqqa9vJzQMSQjsAULz/ojBqkIJ55U7nHpzwtpvqzgWxa7e
+ Xxnw==
+X-Talos-CUID: =?us-ascii?q?9a23=3AuWQeS2pTeuaoxyCd2FPf7pvmUfB1X3Pbx2XfGWu?=
+ =?us-ascii?q?5Kl44RIC3YgWNw5oxxg=3D=3D?=
+X-Talos-MUID: 9a23:z4HOwgWseijTGJ7q/CXyuDxwbsZ12viRBgNXqaQF5Oy2KgUlbg==
+X-IronPort-AV: E=Sophos;i="6.02,161,1688400000"; 
+   d="scan'208";a="491969605"
+Received: from 58-6-226-208.tpgi.com.au (HELO [192.168.0.22]) ([58.6.226.208])
+  by icp-osb-irony-out5.iinet.net.au with ESMTP; 20 Sep 2023 15:45:47 +0800
+Message-ID: <5add8ae8-d746-b254-7559-b96aa72d3523@westnet.com.au>
+Date:   Wed, 20 Sep 2023 17:45:47 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: venturelinkage.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [80.211.143.151 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: venturelinkage.com]
-        *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [80.211.143.151 listed in list.dnswl.org]
-        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
-        *      [score: 0.0353]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
-        *      days
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
+Content-Language: en-US
+From:   Greg Ungerer <gregungerer@westnet.com.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, torvalds@linux-foundation.org,
+        Nicholas Piggin <npiggin@gmail.com>
+References: <20230915183707.2707298-1-willy@infradead.org>
+ <20230915183707.2707298-10-willy@infradead.org>
+ <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au>
+ <ZQW849TfSCK6u2f8@casper.infradead.org>
+ <cb763591-a697-ab74-171e-fcd7f4e70137@westnet.com.au>
+In-Reply-To: <cb763591-a697-ab74-171e-fcd7f4e70137@westnet.com.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
 
-Dovolil jsem si V=C3=A1s kontaktovat, proto=C5=BEe m=C3=A1m z=C3=A1jem ov=
-=C4=9B=C5=99it mo=C5=BEnost nav=C3=A1z=C3=A1n=C3=AD spolupr=C3=A1ce.
+On 19/9/23 00:37, Greg Ungerer wrote:
+> On 17/9/23 00:34, Matthew Wilcox wrote:
+>> On Sat, Sep 16, 2023 at 11:11:32PM +1000, Greg Ungerer wrote:
+>>> On 16/9/23 04:36, Matthew Wilcox (Oracle) wrote:
+>>>> Using EOR to clear the guaranteed-to-be-set lock bit will test the
+>>>> negative flag just like the x86 implementation.  This should be
+>>>> more efficient than the generic implementation in filemap.c.  It
+>>>> would be better if m68k had __GCC_ASM_FLAG_OUTPUTS__.
+>>>>
+>>>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>>> ---
+>>>>    arch/m68k/include/asm/bitops.h | 14 ++++++++++++++
+>>>>    1 file changed, 14 insertions(+)
+>>>>
+>>>> diff --git a/arch/m68k/include/asm/bitops.h b/arch/m68k/include/asm/bitops.h
+>>>> index e984af71df6b..909ebe7cab5d 100644
+>>>> --- a/arch/m68k/include/asm/bitops.h
+>>>> +++ b/arch/m68k/include/asm/bitops.h
+>>>> @@ -319,6 +319,20 @@ arch___test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+>>>>        return test_and_change_bit(nr, addr);
+>>>>    }
+>>>> +static inline bool xor_unlock_is_negative_byte(unsigned long mask,
+>>>> +        volatile unsigned long *p)
+>>>> +{
+>>>> +    char result;
+>>>> +    char *cp = (char *)p + 3;    /* m68k is big-endian */
+>>>> +
+>>>> +    __asm__ __volatile__ ("eor.b %1, %2; smi %0"
+>>>
+>>> The ColdFire members of the 68k family do not support byte size eor:
+>>>
+>>>    CC      mm/filemap.o
+>>> {standard input}: Assembler messages:
+>>> {standard input}:824: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `eor.b #1,3(%a0)' ignored
+>>
+>> Well, that sucks.  What do you suggest for Coldfire?
+> 
+> I am not seeing an easy way to not fall back to something like the MIPS
+> implementation for ColdFire. Could obviously assemblerize this to do better
+> than gcc, but if it has to be atomic I think we are stuck with the irq locking.
+> 
+> static inline bool cf_xor_is_negative_byte(unsigned long mask,
+>                  volatile unsigned long *addr)
+> {
+>          unsigned long flags;
+>          unsigned long data;
+> 
+>          local_irq_save(flags)
+>          data = *addr;
+>          *addr = data ^ mask;
+>          local_irq_restore(flags);
+> 
+>          return (data & BIT(7)) != 0;
+> }
 
-Podporujeme firmy p=C5=99i z=C3=ADsk=C3=A1v=C3=A1n=C3=AD nov=C3=BDch obch=
-odn=C3=ADch z=C3=A1kazn=C3=ADk=C5=AF.
+The problem with this C implementation is that need to use loal_irq_save()
+which results in some ugly header dependencies trying top include irqflags.h.
 
-M=C5=AF=C5=BEeme si promluvit a poskytnout podrobnosti?
-
-V p=C5=99=C3=ADpad=C4=9B z=C3=A1jmu V=C3=A1s bude kontaktovat n=C3=A1=C5=A1=
- anglicky mluv=C3=ADc=C3=AD z=C3=A1stupce.
+This version at least compiles and run, though we can probably do better still.
 
 
-Pozdravy
-Lukas Varga
+diff --git a/arch/m68k/include/asm/bitops.h b/arch/m68k/include/asm/bitops.h
+index e984af71df6b..99392c26e784 100644
+--- a/arch/m68k/include/asm/bitops.h
++++ b/arch/m68k/include/asm/bitops.h
+@@ -319,6 +319,48 @@ arch___test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+         return test_and_change_bit(nr, addr);
+  }
+  
++static inline bool cf_xor_unlock_is_negative_byte(unsigned long mask,
++               volatile unsigned long *addr)
++{
++       unsigned long data;
++
++        asm volatile (
++               "move.w %%sr,%%d1       \n\t"
++               "move.w %%d1,%%d0       \n\t"
++               "ori.l  #0x0700,%%d0    \n\t"
++               "move.w %%d0,%%sr       \n\t"
++
++               "move.l %2@,%0          \n\t"
++               "eor.l  %1,%0           \n\t"
++               "move.l %0,%2@          \n\t"
++
++               "movew  %%d1,%%sr       \n"
++               : "=d" (data)
++               : "di" (mask), "a" (addr)
++               : "cc", "%d0", "%d1", "memory");
++
++       return (data & BIT(7)) != 0;
++}
++
++static inline bool m68k_xor_unlock_is_negative_byte(unsigned long mask,
++               volatile unsigned long *p)
++{
++       char result;
++       char *cp = (char *)p + 3;       /* m68k is big-endian */
++
++       __asm__ __volatile__ ("eor.b %1, %2; smi %0"
++               : "=d" (result)
++               : "di" (mask), "o" (*cp)
++               : "memory");
++       return result;
++}
++
++#if defined(CONFIG_COLDFIRE)
++#define xor_unlock_is_negative_byte(mask, p) cf_xor_unlock_is_negative_byte(mask, p)
++#else
++#define xor_unlock_is_negative_byte(mask, p) m68k_xor_unlock_is_negative_byte(mask, p)
++#endif
++
+  /*
+   *     The true 68020 and more advanced processors support the "bfffo"
+   *     instruction for finding bits. ColdFire and simple 68000 parts
+
+
+Regards
+Greg
