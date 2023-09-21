@@ -2,123 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE787A89E4
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Sep 2023 18:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCED07A9708
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Sep 2023 19:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbjITQ65 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Sep 2023 12:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S230162AbjIURLB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Sep 2023 13:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbjITQ6x (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Sep 2023 12:58:53 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD2FEA
-        for <linux-arch@vger.kernel.org>; Wed, 20 Sep 2023 09:58:44 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9ad8a822508so911022866b.0
-        for <linux-arch@vger.kernel.org>; Wed, 20 Sep 2023 09:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1695229123; x=1695833923; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBATFQF6dlOmh7K8WWAThqiY1eLo2LHS4t8VOlA1EXQ=;
-        b=gl1fHrMtnNE1ac77kGMYF1kmi9ir61fLOOA69jVMaOLtOPB9MrvYQ3j8hSRX3Fw7ho
-         IGSrC97oPk5QdLyI/YihvkmKxB7u2vQXvO9jfgcAePh++uq/owuSXHdMFJ/+/4UhbSfo
-         fbHgVsK7OwtZBWI6JACu/fP+Kt08g1cK7tXOY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695229123; x=1695833923;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VBATFQF6dlOmh7K8WWAThqiY1eLo2LHS4t8VOlA1EXQ=;
-        b=vwL8Xjp/wt6V1c15BvVhQIQ87S1nX/hWjlg6fD+FKGCHk8f8FOvs/gPpyd3Hk6TKR0
-         JvFa63JJeL7MGVwPHi3C7JQOvQdUoZfghH3ygMfMDEX+vCTjmB5pN8SVWJ+eTk0TNlaK
-         mjWx9lfmHbsvpoo4N6FJ0Pzqwfoe5jJPbptniEbVMr+/EME+6foUxWBHrXhGHPRwkWA0
-         eLxBo0vcY+JpVikgXRW/Y3WfJ2EykuqY3K/42Pfa0WD3REM1CMWD4aPoYFA4gFnSq3x8
-         iKdE+AQOLj+tUonO2O6tSqvhXu2ewmFxtLDaXbhtN2ekF8nVHsRa+CcJZ9Gz6tDhahgY
-         LdCw==
-X-Gm-Message-State: AOJu0YwooEvI5pGXuQbeGONf74B7FOIK7vYPAD5HN8kXr973qrrYPzjC
-        W06ZQFzXfipLdWTgXYFyd712MqB/JFf1cCReGlBIL/NN
-X-Google-Smtp-Source: AGHT+IF+Dw9F+avhHSsNJoJ0EByE5fG3xNyGLEQc/DcBkM49cC65glZB3HRo4i6Q0mzCAsetEs3C9A==
-X-Received: by 2002:a17:907:a42b:b0:9a5:cf23:de5b with SMTP id sg43-20020a170907a42b00b009a5cf23de5bmr3187203ejc.38.1695229122885;
-        Wed, 20 Sep 2023 09:58:42 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170906078c00b0099d804da2e9sm9701241ejc.225.2023.09.20.09.58.42
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 09:58:42 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5310a63cf7bso4700132a12.1
-        for <linux-arch@vger.kernel.org>; Wed, 20 Sep 2023 09:58:42 -0700 (PDT)
-X-Received: by 2002:a05:6402:164e:b0:52f:34b3:7c4 with SMTP id
- s14-20020a056402164e00b0052f34b307c4mr2539957edx.39.1695229121693; Wed, 20
- Sep 2023 09:58:41 -0700 (PDT)
+        with ESMTP id S231359AbjIURKb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Sep 2023 13:10:31 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B1EA5C9;
+        Thu, 21 Sep 2023 10:05:54 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id D723832009EB;
+        Thu, 21 Sep 2023 08:25:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 21 Sep 2023 08:25:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695299122; x=1695385522; bh=Qt
+        VbcPXLwmPHbqM7Z1JFnFzIc7YAtI2BYnyrt95OPhk=; b=Cu8cylWkfAYqM4kdKA
+        E0MUXpGBIZnygnpCeE2qbClbzc+r82AC9G4kcFl6d1f3KQ9tZrKxdWm358GD10FS
+        9A+C918gXnGOtCToboUZLWoDRNUVoJaIy+r3JpfHBeMRhjQpQNCyEFOTDeb7SxiU
+        TR/aIxr7lhgp2kJxbXovIZc3qBCBRm8amFslmXGS5B6bAmUycT5hpwJMkw+mizKH
+        mwzax1tg1v/Pj9uP/kgxsP+qwQxqWkUnkRVdcoDpES9bGtlPC9dWgoT71IhvgLYd
+        w0Wxq4wdNoEj4M1ps7kktxszrSjUuQpJj1Tg42EhY1N0/zfctp1UZeDFx0NNX3jF
+        f+gQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695299122; x=1695385522; bh=QtVbcPXLwmPHb
+        qM7Z1JFnFzIc7YAtI2BYnyrt95OPhk=; b=DDeBOwHhwDXEaTztHATTvfe4jIk3Y
+        4FIjRbYQ0f9lgPxfl0ZlMvexXSzxTp4DQ53S2Vnm+3vjxu7Y2lLSW0Ro7rBnV4ka
+        3OkI0SKH5tgaLTClViXESDyvCGcS3m5Ky0PAaCNuETCPt9EOW9iqURw3B3vg6I8W
+        3pva8IVYF+FH+UR7vBPjaYU1RKQTORhvnX6ryUkq+wIZoANCzbunVeqB4honcHEZ
+        N+yIOBxhjzNubNM90lyVdk4NM71Y86FLGKYRdpg2E9Df79DsBbfX+J/kyee5NZs8
+        EsoYTAz0Ko1lEzgI+VdpRcUJxDFUUIM7QQ8dNks8sZcWhfxnMoX7yFxbg==
+X-ME-Sender: <xms:MTYMZSSEg_SSqGx5AGZe4oU9f0aKxlr-qUhBubmHtIx8pVYcnMCn-Q>
+    <xme:MTYMZXy33ZVSyvUq9BX316kG4OfB-mZMOPOiTUehtC2J2ttC6xtsAe2WiBeeojUEA
+    LD0EcVt96vrCtR5E7I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekiedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:MTYMZf3f8KfjcqJQRDz8SU1PHtJvnR0afaNP21xbMt37zhvmWSoXOg>
+    <xmx:MTYMZeAY7BKRDTnqh1zyDybLCkYzoVpj29UVdZ2Am7NmWDsHcr8JaQ>
+    <xmx:MTYMZbibo5dvZkxXU98F6xDuuKRk5XuShs5_fQaka5qHJiOnHPAvwg>
+    <xmx:MjYMZWR-kXl52lIkKZjN4zS-ggkjUeUB_2c2-uIknDLPgbAtRzT8iA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 50E5CB60089; Thu, 21 Sep 2023 08:25:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
 MIME-Version: 1.0
-References: <20230915183707.2707298-1-willy@infradead.org> <20230915183707.2707298-10-willy@infradead.org>
- <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au> <ZQW849TfSCK6u2f8@casper.infradead.org>
- <cb763591-a697-ab74-171e-fcd7f4e70137@westnet.com.au> <5add8ae8-d746-b254-7559-b96aa72d3523@westnet.com.au>
-In-Reply-To: <5add8ae8-d746-b254-7559-b96aa72d3523@westnet.com.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 20 Sep 2023 09:58:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg-C5S0zx4uSyzfJDZzG3g7U9ZMkZMQbbFyCnywtKW5qA@mail.gmail.com>
-Message-ID: <CAHk-=wg-C5S0zx4uSyzfJDZzG3g7U9ZMkZMQbbFyCnywtKW5qA@mail.gmail.com>
-Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
-To:     Greg Ungerer <gregungerer@westnet.com.au>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Message-Id: <2c3e0545-c00e-412f-9ab3-d736d07df045@app.fastmail.com>
+In-Reply-To: <20230921110424.215592-5-bhe@redhat.com>
+References: <20230921110424.215592-1-bhe@redhat.com>
+ <20230921110424.215592-5-bhe@redhat.com>
+Date:   Thu, 21 Sep 2023 08:24:59 -0400
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Serge Semin" <fancer.lancer@gmail.com>,
+        "Huacai Chen" <chenhuacai@kernel.org>, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] mips: io: remove duplicated codes
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 20 Sept 2023 at 00:45, Greg Ungerer <gregungerer@westnet.com.au> wrote:
+On Thu, Sep 21, 2023, at 07:04, Baoquan He wrote:
+> By adding <asm-generic/io.h> support, the duplicated phys_to_virt
+> can be removed to use the default version in <asm-gneneric/io.h>.
 >
-> The problem with this C implementation is that need to use loal_irq_save()
-> which results in some ugly header dependencies trying top include irqflags.h.
+> Meanwhile move isa_bus_to_virt() down below <asm-generic/io.h> including
+> to fix the compiling error of missing phys_to_virt definition.
 >
-> This version at least compiles and run, though we can probably do better still.
 
-I was going to say "can't you use CAS?" but apparently coldfire
-doesn't have that either. What a horrible thing.
-
-I do wonder if we should just say "let's use the top bit instead"?
-
-The reason we used bit #7 is that
-
- - only x86 used to do the clear_bit_unlock_is_negative_byte
-
- - it was easy with a simple "andb".
-
- - it was just a trivial "move two bits around".
-
-but honestly, on x86, doing it with "andl/andq" shouldn't be any
-worse, and we can still use a (sign-extended) 8-bit immediate value to
-xor the low seven bits and test the high bit at the same time - so it
-should be basically exactly the same code sequence.
-
-There's a question about mixing access widths - which can be deadly to
-performance on x86 - but generally this op should be the only op on
-the page flags in that sequence, and doing a byte access isn't
-necessarily better.
-
-Of course, using the top bit then screws with all the
-zone/node/section/lru_gen bits that we currently put in the high bits.
-So it's absolutely *not* just a trivial "move this bit" operation.
-
-It would change all the <linux/page-flags-layout.h> games we do.
-
-That might be enough for any sane person to go "this is not worth it",
-but *if* Willy goes "I like the bit twiddling games", maybe he'd be
-willing to look at that.
-
-I mean, he wrote alpha assembler for this, that certainly says
-*something* about WIlly ;)
-
-Willy?
-
-                  Linus
+Acked-by: Arnd Bergmann <arnd@arndb.de>
