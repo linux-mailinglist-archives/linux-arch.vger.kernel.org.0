@@ -2,115 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843817ABA1A
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 21:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D64D7ABA54
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 22:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjIVTb4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Sep 2023 15:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S231831AbjIVUDe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Sep 2023 16:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjIVTb4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 15:31:56 -0400
-X-Greylist: delayed 161 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Sep 2023 12:31:49 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A2394;
-        Fri, 22 Sep 2023 12:31:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1695410924; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=hqw57XLZtkDLU8tskHINx6s05s6dT3HJ2PDb01kxB7u4aGhj37MyVrmBdAtpLsqm9q
-    B/Fr2g9wSvBYqbT043zbYDiwkj0Brw2z5XeQ+hUV2nUU4JxAHeZN09sOzbb0Opir+lRc
-    EdQn6qVc9DoSPHvtGx5oulk/ToC+Z3rvLWhk5dmyM5f44Sbb7n6Kzl0Vnn9aAr6V3ZJr
-    KjhmwRyTmxzN6bfURpTkejXVg7RS9utu+PwBbFeFv62AhF/Q3Ig0hczqP8kB7hZ3vlXg
-    zOirTBsRSsIdIeNQjfbZyM/uw0Fj0D8fQRiXG4aD11gGL8l2ZlT3rVEFnT2Zscdad5lW
-    dU5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1695410924;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=zk3k328hgovnBCBlDXuQXLcoaZsgP5mLEqng5TkR5JQ=;
-    b=n7FHynLHt8a877V/qdEH0TVb466kYjSBKOa2DxYXGIS7WGJwDyKj5nagM7sNKkD9fr
-    p59IR/rPzKeK4/1N72bgR6Z2drU+FVHW2Ws/7Tx4RqZx79UtMDHDcAlVsj8hclE1VsnE
-    STJFDAE8SBJhijE1bmfY2+mGvFIkEhfy9OcPGNGbtbzrnnVF6qn5rS6Us//Rpv6XqVKz
-    stjGelvHqTs83L2LP7HobPWP32QKqy9aRLMq7WgOvSGeskhLJNRsgyWFr0H0u7bJYLjf
-    LkmEBUgvGlFqXmCIJFDWl6reVTWFfxYpjsdw8cugVj52+AMkGOLHTnHfDEIz13oj0wBp
-    CqXw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1695410924;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=zk3k328hgovnBCBlDXuQXLcoaZsgP5mLEqng5TkR5JQ=;
-    b=nl/fH7u6+eOm3Wql3zmZe66L7utnN43GSBmn7WarrEn4dsKKr+nlRWGpAYqz2sQIpw
-    Ty2dKfYyfgQZodmTaeFfw0sH1JNfFpKKnkEW1GjvBi6B5nxmRJJadNePgt+mBtVum05r
-    dxTn4OPVbx/2RX0RjbdunyJPgfDOZ+5pzf0AHoQlIUT3gzfTWJ3cNiuzrIAj9acVIqY8
-    xDFW75wv3HtXmF9xnyMpEQeNgGUaWQI6Vz638FERA9MyY3ibI9Qj0HdMC31voZedEgJh
-    ZR9Zg52KKkPMjllnXRG2fjben53vZ/JERBrSpbgv9EMhM0aWSzzeFN9ynvE23Qf6e3mg
-    Dd0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1695410924;
-    s=strato-dkim-0003; d=aepfle.de;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=zk3k328hgovnBCBlDXuQXLcoaZsgP5mLEqng5TkR5JQ=;
-    b=aJi8fSp0jDQCL+Ql5tLsPIyOVOM5PP9Obox0IbfK55BLJA+7GG7owagLBhFRUWGGtc
-    2cxfafHFPcguif0asEAg==
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QXkBR9MXjAuzoZG0ivpswfW93lKL5OLSJeaogTnBaSYHCSFyJtwcJv0YWEnfIN"
-Received: from sender
-    by smtp.strato.de (RZmta 49.8.2 AUTH)
-    with ESMTPSA id C041b2z8MJSiHhR
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 22 Sep 2023 21:28:44 +0200 (CEST)
-From:   Olaf Hering <olaf@aepfle.de>
-To:     linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2] hyperv: reduce size of ms_hyperv_info
-Date:   Fri, 22 Sep 2023 21:28:40 +0200
-Message-Id: <20230922192840.3886-1-olaf@aepfle.de>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S229540AbjIVUDd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 16:03:33 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFD51A2;
+        Fri, 22 Sep 2023 13:03:28 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3adc3d94f66so1657979b6e.1;
+        Fri, 22 Sep 2023 13:03:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695413007; x=1696017807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=92vwJf3WLmkpUBPfM1uX6jdmCsJTt9zpYit4o1iVPi8=;
+        b=rFYOk1ch88uOvZb8zJLWalshSsUk+B77cqUWWub3URXfej/Ap/PzaeN5hzPoxeRt60
+         Iexvc93zFzzk/c6VhD/cS9z8EVFKKYdnxEu0NDVqjRwryMZv435lbU01lp647pPuNAYZ
+         t1j/o2Kc0xv/KSGN1TF1TZHgKvZ7zsNfXX2Tsy/TP8wYSUaBM0SUiv/zkMjX+oAkift2
+         zhkpPX2GA635YnCIEkgLarnszAbAy1V2AUw9NBI3eMti/Bp3e/JCEVm/0TWeEOBeCJ2Q
+         aUqnL7gFW32lswJevXSB4Q3sZzec/I1Ib13IBIh6KMWqkVkrJVcyMJOJ8Axz5yk36T91
+         n7Vg==
+X-Gm-Message-State: AOJu0YyYW3mEy5UK0ix5lMM1sksEryKmSVOiQTnsMgIixbRkm+sUDrdH
+        QPRe3BhmRGR0R1J+QLoGjKg=
+X-Google-Smtp-Source: AGHT+IEP3JVa7YW6iKvp3c2447aJv58pC9gBEASQVTZuq+rvJLqoI+1fmX0Z9I0z5RQGrE60EI+KSw==
+X-Received: by 2002:a05:6808:4d4:b0:3a7:35af:bbc0 with SMTP id a20-20020a05680804d400b003a735afbbc0mr664405oie.54.1695413007358;
+        Fri, 22 Sep 2023 13:03:27 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id fe20-20020a056a002f1400b0068fadc9226dsm3614729pfb.33.2023.09.22.13.03.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Sep 2023 13:03:26 -0700 (PDT)
+Date:   Fri, 22 Sep 2023 20:02:43 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
+ VMMs running on Hyper-V
+Message-ID: <ZQ3y47GDfhjf23Rh@liuwe-devbox-debian-v2>
+References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use the hole prior shared_gpa_boundary to store the result of get_vtl.
-This reduces the size by 8 bytes.
+On Fri, Sep 22, 2023 at 11:38:35AM -0700, Nuno Das Neves wrote:
+> Add mshv, mshv_root, and mshv_vtl modules:
+> 
+> Module mshv is the parent module to the other two. It provides /dev/mshv,
+> plus some common hypercall helper code. When one of the child modules is
+> loaded, it is registered with the mshv module, which then provides entry
+> point(s) to the child module via the IOCTLs defined in uapi/linux/mshv.h.
+> 
+> E.g. When the mshv_root module is loaded, it registers itself, and the
+> MSHV_CREATE_PARTITION IOCTL becomes available in /dev/mshv. That is used to
+> get a partition fd managed by mshv_root.
+> 
+> Similarly for mshv_vtl module, there is MSHV_CREATE_VTL, which creates
+> an fd representing the lower vtl, managed by mshv_vtl.
+> 
+> Module mshv_root provides APIs for creating and managing child partitions.
+> It defines abstractions for partitions (vms), vps (vcpus), and other things
+> related to running a guest. It exposes the userspace interfaces for a VMM
+> to manage the guest.
+> 
+> Module mshv_vtl provides VTL (Virtual Trust Level) support for VMMs. In
+> this scenario, the host kernel and VMM run in a higher trust level than the
+> guest, but within the same partition. This provides better isolation and
+> performance.
+> 
+> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-Signed-off-by: Olaf Hering <olaf@aepfle.de>
----
-v2: move vtl up, as suggested by Dexuan Cui
+As far as I can tell, all my comments from the previous version are
+addressed. I believe Saurabh and Boqun's comments are addressed, too.
 
- include/asm-generic/mshyperv.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The code looks good to me, so:
 
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index cecd2b7bd033..430f0ae0dde2 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -36,6 +36,7 @@ struct ms_hyperv_info {
- 	u32 nested_features;
- 	u32 max_vp_index;
- 	u32 max_lp_index;
-+	u8 vtl;
- 	union {
- 		u32 isolation_config_a;
- 		struct {
-@@ -54,7 +55,6 @@ struct ms_hyperv_info {
- 		};
- 	};
- 	u64 shared_gpa_boundary;
--	u8 vtl;
- };
- extern struct ms_hyperv_info ms_hyperv;
- extern bool hv_nested;
+Acked-by: Wei Liu <wei.liu@kernel.org>
+
+I will wait for some time for others to chime in, just in case the
+community has more comments.
