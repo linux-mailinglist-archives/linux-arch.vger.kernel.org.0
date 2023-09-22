@@ -2,100 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADA07ABABD
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 22:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8AC7ABA81
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 22:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjIVU7x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Sep 2023 16:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S229558AbjIVU3X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Sep 2023 16:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjIVU7w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 16:59:52 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46471A2;
-        Fri, 22 Sep 2023 13:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=zWIQ6Yi556U65myk2PzRkq/DHdsIiBTxeyqBKDx6r2g=; b=hktQlK3IZ5z27ejm1FLGbbL1mo
-        mzMcjkhwk3cOL9uWlaupMqvTCXnVZAoT6CJRQ0M29Q5yLP4ldsnxOmGjX4q6rjSEI64QiOYmhDBl1
-        P34q0qimycD9b/kQhEEKct+8KTKDGbkWMwSTmS278soTtIfi9R+SqnOIrE5sNsyZz3ma+fTYPc4zF
-        1bnVko5qUEoPXj7iOJw+xXKE+NPyQD41xo32nxvuoljsm3NlHTZLfVHISoB7SITHfEz+0mYyjkOq8
-        DkRxp0jw7F5ICVHtOBTQtELeVEyWis3tl7y1KZ2CkP3ihqlF98Q0ECbL3/aloKy0AEDNlzdBY/hIg
-        FSIpHA6A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qjnEs-00GXzC-2v;
-        Fri, 22 Sep 2023 20:59:05 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-        id F0DDE3008D6; Fri, 22 Sep 2023 22:59:03 +0200 (CEST)
-Message-Id: <20230922205450.033535181@infradead.org>
-User-Agent: quilt/0.65
-Date:   Fri, 22 Sep 2023 22:01:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     tglx@linutronix.de, axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de, steve.shaw@intel.com,
-        marko.makela@mariadb.com, andrei.artemev@intel.com
-Subject: [PATCH 17/15] [HACK] futex: Force futex hash collision
-References: <20230921104505.717750284@noisy.programming.kicks-ass.net>
- <20230921104505.717750284@noisy.programming.kicks-ass.net>
- <20230922200120.011184118@infradead.org>
+        with ESMTP id S229498AbjIVU3X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 16:29:23 -0400
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287BA19E;
+        Fri, 22 Sep 2023 13:29:17 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6907e44665bso2496714b3a.1;
+        Fri, 22 Sep 2023 13:29:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695414556; x=1696019356;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GWtsUoRr/XZOrcIX7VdV06rv+aK2Ytwp/S+nDpDIrig=;
+        b=C4qF59zUbPqEmAfw1TCM2h47gj3Tz7CH2x2HNhL3obzgEIUf6UQppz2VaE8nBH51RH
+         cqw2FQ64CySxfYHL/8zaYHwllQGT2Oc71grVYOYBo9ofq0nme0AcWAgXfyC9GFmTaI7k
+         CZBtCBnp90biqzUD6JJXbLQac8c6FKO+PbjQ9dde5Se3jmZEnegsOEnyO6e7dTxm08Ra
+         P6kqD47Zu6rzF3o6Wbwb+B1gBnJgBOqCslYOtSQ68UDAvi5k6klN1MmbeVfkVrQj7J3X
+         FatIUpZ752QpPWh43usuoSFJl7wCsKo4ESo0r4cqETl/apSsAhDX876l7lt2Ak2jGnGz
+         RvZg==
+X-Gm-Message-State: AOJu0YzjHTcY/ptscq0NsCTDL8KT8Z/6QwYSX7GVlbztvNnzjo2nbdSa
+        ORCgrwrJLIjnU6izsUe7tl8=
+X-Google-Smtp-Source: AGHT+IHVit3Ti0rL+3+NOKgkIBKGfVAJ8X12Z7ZuDQR48MgS28XKFayJQRS1YGs+N12V6yNB97iYCg==
+X-Received: by 2002:a05:6a00:2e86:b0:692:a727:1fde with SMTP id fd6-20020a056a002e8600b00692a7271fdemr481358pfb.14.1695414556542;
+        Fri, 22 Sep 2023 13:29:16 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id y19-20020aa78053000000b0066684d8115bsm3705434pfm.178.2023.09.22.13.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Sep 2023 13:29:16 -0700 (PDT)
+Date:   Fri, 22 Sep 2023 20:28:33 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Olaf Hering <olaf@aepfle.de>
+Cc:     linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2] hyperv: reduce size of ms_hyperv_info
+Message-ID: <ZQ348XuCa6ofOHDu@liuwe-devbox-debian-v2>
+References: <20230922192840.3886-1-olaf@aepfle.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230922192840.3886-1-olaf@aepfle.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-If you hate performance -- use this.
+On Fri, Sep 22, 2023 at 09:28:40PM +0200, Olaf Hering wrote:
+> Use the hole prior shared_gpa_boundary to store the result of get_vtl.
+> This reduces the size by 8 bytes.
+> 
+> Signed-off-by: Olaf Hering <olaf@aepfle.de>
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/futex/core.c     |    6 ++++++
- kernel/sched/features.h |    2 ++
- 2 files changed, 8 insertions(+)
-
---- a/kernel/futex/core.c
-+++ b/kernel/futex/core.c
-@@ -128,6 +128,9 @@ static int futex_put_value(u32 val, u32
- 	}
- }
- 
-+#include <linux/sched/cputime.h>
-+#include "../sched/sched.h"
-+
- /**
-  * futex_hash - Return the hash bucket in the global hash
-  * @key:	Pointer to the futex key for which the hash is calculated
-@@ -159,6 +162,9 @@ struct futex_hash_bucket *futex_hash(uni
- 		}
- 	}
- 
-+	if (sched_feat(FUTEX_SQUASH))
-+		hash = 0;
-+
- 	return &futex_queues[node][hash & (futex_hashsize - 1)];
- }
- 
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -89,3 +89,5 @@ SCHED_FEAT(UTIL_EST_FASTUP, true)
- SCHED_FEAT(LATENCY_WARN, false)
- 
- SCHED_FEAT(HZ_BW, true)
-+
-+SCHED_FEAT(FUTEX_SQUASH, false)
-
-
+Applied to hyperv-fixes. Thanks.
