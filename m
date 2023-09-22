@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3B37AB93F
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 20:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E777AB940
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 20:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbjIVSis (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Sep 2023 14:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S233267AbjIVSit (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Sep 2023 14:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjIVSis (ORCPT
+        with ESMTP id S229664AbjIVSis (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 14:38:48 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99384AF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3DDBB7;
         Fri, 22 Sep 2023 11:38:41 -0700 (PDT)
 Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0F671212C5D0;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 2AF50212C5D2;
         Fri, 22 Sep 2023 11:38:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F671212C5D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2AF50212C5D2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1695407921;
-        bh=NIfGVUlO7WQ33ga3OGW5GP0MsO2X2+qMCAxYLtCBKi8=;
+        bh=MKa+JmKM3e3p5195TvJLc+j4786CSagh61v3508iSU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hCeq+BcHF6IgXlUxk71xccHS8s89u9ojevfczhxOorqjOTzwcR2Mr3kkXmSI0HoOJ
-         Npbpm9gyhhDOgfOIXcmSkCd7JtYLPFqoLfthfOLvAUYzNYJY1l8jORxfrlkUiNFDNK
-         gSlF8MvKfETlfwz42VzB0pkoaTXxqTykw18wfHFw=
+        b=ZKSbFwRP8Q1U1u1avWKnyiIgY1flSIU+1V4BPU/t9+tRrPrPt5qx2cht4uwmkF3aU
+         NVqs9k5EBpfLZPfrCLpe0GTsuPGHKZKNif3SekZublr5ZBydDXfsnpUPoOanP606Z3
+         W+IL9tC4Mk1W0Bvdq3xqWrR4DUuHnmiG8Q1ccXp8=
 From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
 To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -38,9 +38,9 @@ Cc:     patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
         vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         will@kernel.org, catalin.marinas@arm.com
-Subject: [PATCH v3 02/15] mshyperv: Introduce hv_get_hypervisor_version function
-Date:   Fri, 22 Sep 2023 11:38:22 -0700
-Message-Id: <1695407915-12216-3-git-send-email-nunodasneves@linux.microsoft.com>
+Subject: [PATCH v3 03/15] mshyperv: Introduce numa_node_to_proximity_domain_info
+Date:   Fri, 22 Sep 2023 11:38:23 -0700
+Message-Id: <1695407915-12216-4-git-send-email-nunodasneves@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
 References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
@@ -54,168 +54,130 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-x86_64 and arm64 implementations to get the hypervisor version
-information. Store these in hv_hypervisor_version_info structure to
-simplify parsing the fields.
+Factor out logic for converting numa node to proximity domain info into
+a helper function, and export it.
 
-Replace the existing parsing when printing the version numbers at boot.
+Change hv_proximity_domain_info to a struct to simplify the code.
 
 Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
 ---
- arch/arm64/hyperv/mshyperv.c      | 23 +++++++++++++-------
- arch/x86/kernel/cpu/mshyperv.c    | 36 +++++++++++++++++++------------
- include/asm-generic/hyperv-tlfs.h | 23 ++++++++++++++++++++
- include/asm-generic/mshyperv.h    |  2 ++
- 4 files changed, 62 insertions(+), 22 deletions(-)
+ arch/x86/hyperv/hv_proc.c         |  8 ++------
+ drivers/acpi/numa/srat.c          |  1 +
+ include/asm-generic/hyperv-tlfs.h | 14 +++++---------
+ include/asm-generic/mshyperv.h    | 15 +++++++++++++++
+ 4 files changed, 23 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index f1b8a04ee9f2..53bdd3bc81ac 100644
---- a/arch/arm64/hyperv/mshyperv.c
-+++ b/arch/arm64/hyperv/mshyperv.c
-@@ -19,10 +19,19 @@
+diff --git a/arch/x86/hyperv/hv_proc.c b/arch/x86/hyperv/hv_proc.c
+index 68a0843d4750..5ba5ca1b2089 100644
+--- a/arch/x86/hyperv/hv_proc.c
++++ b/arch/x86/hyperv/hv_proc.c
+@@ -121,7 +121,6 @@ int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
+ 	u64 status;
+ 	unsigned long flags;
+ 	int ret = HV_STATUS_SUCCESS;
+-	int pxm = node_to_pxm(node);
  
- static bool hyperv_initialized;
- 
-+int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
-+{
-+	hv_get_vpreg_128(HV_REGISTER_HYPERVISOR_VERSION,
-+			 (struct hv_get_vp_registers_output *)info);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
-+
- static int __init hyperv_init(void)
- {
--	struct hv_get_vp_registers_output	result;
--	u32	a, b, c, d;
-+	struct hv_get_vp_registers_output result;
-+	union hv_hypervisor_version_info version;
- 	u64	guest_id;
- 	int	ret;
- 
-@@ -55,13 +64,11 @@ static int __init hyperv_init(void)
- 		ms_hyperv.misc_features);
- 
- 	/* Get information about the Hyper-V host version */
--	hv_get_vpreg_128(HV_REGISTER_HYPERVISOR_VERSION, &result);
--	a = result.as32.a;
--	b = result.as32.b;
--	c = result.as32.c;
--	d = result.as32.d;
-+	hv_get_hypervisor_version(&version);
- 	pr_info("Hyper-V: Host Build %d.%d.%d.%d-%d-%d\n",
--		b >> 16, b & 0xFFFF, a,	d & 0xFFFFFF, c, d >> 24);
-+		version.major_version, version.minor_version,
-+		version.build_number, version.service_number,
-+		version.service_pack, version.service_branch);
- 
- 	ret = hv_common_init();
- 	if (ret)
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 7c82b96da11f..73fbcc003d68 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -347,13 +347,26 @@ static void __init reduced_hw_init(void)
- 	x86_init.irqs.pre_vector_init	= x86_init_noop;
- }
- 
-+int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
-+{
-+	unsigned int hv_max_functions;
-+
-+	hv_max_functions = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
-+	if (hv_max_functions < HYPERV_CPUID_VERSION) {
-+		pr_err("%s: Could not detect Hyper-V version\n", __func__);
-+		return -ENODEV;
-+	}
-+
-+	cpuid(HYPERV_CPUID_VERSION, &info->eax, &info->ebx, &info->ecx, &info->edx);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
-+
- static void __init ms_hyperv_init_platform(void)
- {
- 	int hv_max_functions_eax;
--	int hv_host_info_eax;
--	int hv_host_info_ebx;
--	int hv_host_info_ecx;
--	int hv_host_info_edx;
-+	union hv_hypervisor_version_info version;
- 
- #ifdef CONFIG_PARAVIRT
- 	pv_info.name = "Hyper-V";
-@@ -407,16 +420,11 @@ static void __init ms_hyperv_init_platform(void)
  	/*
- 	 * Extract host information.
- 	 */
--	if (hv_max_functions_eax >= HYPERV_CPUID_VERSION) {
--		hv_host_info_eax = cpuid_eax(HYPERV_CPUID_VERSION);
--		hv_host_info_ebx = cpuid_ebx(HYPERV_CPUID_VERSION);
--		hv_host_info_ecx = cpuid_ecx(HYPERV_CPUID_VERSION);
--		hv_host_info_edx = cpuid_edx(HYPERV_CPUID_VERSION);
--
--		pr_info("Hyper-V: Host Build %d.%d.%d.%d-%d-%d\n",
--			hv_host_info_ebx >> 16, hv_host_info_ebx & 0xFFFF,
--			hv_host_info_eax, hv_host_info_edx & 0xFFFFFF,
--			hv_host_info_ecx, hv_host_info_edx >> 24);
-+	if (hv_get_hypervisor_version(&version) == 0) {
-+		pr_info("Hyper-V Host Build:%d-%d.%d-%d-%d.%d\n",
-+			version.build_number, version.major_version,
-+			version.minor_version, version.service_pack,
-+			version.service_branch, version.service_number);
- 	}
+ 	 * When adding a logical processor, the hypervisor may return
+@@ -137,11 +136,8 @@ int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
  
- 	if (ms_hyperv.features & HV_ACCESS_FREQUENCY_MSRS &&
+ 		input->lp_index = lp_index;
+ 		input->apic_id = apic_id;
+-		input->flags = 0;
+-		input->proximity_domain_info.domain_id = pxm;
+-		input->proximity_domain_info.flags.reserved = 0;
+-		input->proximity_domain_info.flags.proximity_info_valid = 1;
+-		input->proximity_domain_info.flags.proximity_preferred = 1;
++		input->proximity_domain_info =
++			numa_node_to_proximity_domain_info(node);
+ 		status = hv_do_hypercall(HVCALL_ADD_LOGICAL_PROCESSOR,
+ 					 input, output);
+ 		local_irq_restore(flags);
+diff --git a/drivers/acpi/numa/srat.c b/drivers/acpi/numa/srat.c
+index 1f4fc5f8a819..0cf9f0574495 100644
+--- a/drivers/acpi/numa/srat.c
++++ b/drivers/acpi/numa/srat.c
+@@ -48,6 +48,7 @@ int node_to_pxm(int node)
+ 		return PXM_INVAL;
+ 	return node_to_pxm_map[node];
+ }
++EXPORT_SYMBOL(node_to_pxm);
+ 
+ static void __acpi_map_pxm_to_node(int pxm, int node)
+ {
 diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index fdac4a1714ec..f63b3704d89e 100644
+index f63b3704d89e..a6dffb346bf2 100644
 --- a/include/asm-generic/hyperv-tlfs.h
 +++ b/include/asm-generic/hyperv-tlfs.h
-@@ -787,6 +787,29 @@ struct hv_input_unmap_device_interrupt {
- #define HV_SOURCE_SHADOW_NONE               0x0
- #define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
+@@ -512,13 +512,9 @@ struct hv_proximity_domain_flags {
+ 	u32 proximity_info_valid : 1;
+ } __packed;
  
-+/*
-+ * Version info reported by hypervisor
-+ */
-+union hv_hypervisor_version_info {
-+	struct {
-+		u32 build_number;
-+
-+		u32 minor_version : 16;
-+		u32 major_version : 16;
-+
-+		u32 service_pack;
-+
-+		u32 service_number : 24;
-+		u32 service_branch : 8;
-+	};
-+	struct {
-+		u32 eax;
-+		u32 ebx;
-+		u32 ecx;
-+		u32 edx;
-+	};
-+};
-+
- /*
-  * The whole argument should fit in a page to be able to pass to the hypervisor
-  * in one hypercall.
+-/* Not a union in windows but useful for zeroing */
+-union hv_proximity_domain_info {
+-	struct {
+-		u32 domain_id;
+-		struct hv_proximity_domain_flags flags;
+-	};
+-	u64 as_uint64;
++struct hv_proximity_domain_info {
++	u32 domain_id;
++	struct hv_proximity_domain_flags flags;
+ } __packed;
+ 
+ struct hv_lp_startup_status {
+@@ -535,7 +531,7 @@ struct hv_lp_startup_status {
+ struct hv_add_logical_processor_in {
+ 	u32 lp_index;
+ 	u32 apic_id;
+-	union hv_proximity_domain_info proximity_domain_info;
++	struct hv_proximity_domain_info proximity_domain_info;
+ 	u64 flags;
+ } __packed;
+ 
+@@ -560,7 +556,7 @@ struct hv_create_vp {
+ 	u8 padding[3];
+ 	u8 subnode_type;
+ 	u64 subnode_id;
+-	union hv_proximity_domain_info proximity_domain_info;
++	struct hv_proximity_domain_info proximity_domain_info;
+ 	u64 flags;
+ } __packed;
+ 
 diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 38fc48405d5f..5b3512e5a72e 100644
+index 5b3512e5a72e..e16557523b6e 100644
 --- a/include/asm-generic/mshyperv.h
 +++ b/include/asm-generic/mshyperv.h
-@@ -161,6 +161,8 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
- 	}
- }
+@@ -21,6 +21,7 @@
+ #include <linux/types.h>
+ #include <linux/atomic.h>
+ #include <linux/bitops.h>
++#include <acpi/acpi_numa.h>
+ #include <linux/cpumask.h>
+ #include <linux/nmi.h>
+ #include <asm/ptrace.h>
+@@ -28,6 +29,20 @@
  
-+int hv_get_hypervisor_version(union hv_hypervisor_version_info *info);
+ #define VTPM_BASE_ADDRESS 0xfed40000
+ 
++static inline struct hv_proximity_domain_info
++numa_node_to_proximity_domain_info(int node)
++{
++	struct hv_proximity_domain_info proximity_domain_info = {};
 +
- void hv_setup_vmbus_handler(void (*handler)(void));
- void hv_remove_vmbus_handler(void);
- void hv_setup_stimer0_handler(void (*handler)(void));
++	if (node != NUMA_NO_NODE) {
++		proximity_domain_info.domain_id = node_to_pxm(node);
++		proximity_domain_info.flags.proximity_info_valid = 1;
++		proximity_domain_info.flags.proximity_preferred = 1;
++	}
++
++	return proximity_domain_info;
++}
++
+ struct ms_hyperv_info {
+ 	u32 features;
+ 	u32 priv_high;
 -- 
 2.25.1
 
