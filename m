@@ -2,131 +2,236 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E247AB328
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 15:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667147AB941
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 20:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjIVN4i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Sep 2023 09:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S233403AbjIVSit (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Sep 2023 14:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjIVN4h (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 09:56:37 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43715E8
-        for <linux-arch@vger.kernel.org>; Fri, 22 Sep 2023 06:56:31 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-79f96830e4dso15725939f.1
-        for <linux-arch@vger.kernel.org>; Fri, 22 Sep 2023 06:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695390990; x=1695995790; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l4ucugCATkzwXuMI23OkOn2TmVsi6Gz/cX1EPcaz7Pc=;
-        b=OXfNquCIOcbqGFkW8h4CwCOrqp13I/OO5Ey9q0Ta9VHoviE5FI1wY5XxB0J3PW+sHg
-         0ltGtSn3TC7n4L1Neos1SZdAPGDeEE9q1binQlp4zP3fZTzyO2Z8btQ0Mdh+Kz5gTuRV
-         6HB1b2DI88yO9o8DRswBiRulqaqsYRk4sOEzRb0kDoOBJyefZSqYjocWUbdz9dXPOGYn
-         WNJJUfOV3uYi8Xt5jBqr+cJjshrbnCa+TZAkDfGiSmSSQgrxYG8hxe9Ygjs5xs0y+hKF
-         VRub7/r03NVK5HT2ojyWTwPCMq7sjh4UjxDmYNWQePXMOPvXefCapWgoMPHa+m/KkmiX
-         fT3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695390990; x=1695995790;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4ucugCATkzwXuMI23OkOn2TmVsi6Gz/cX1EPcaz7Pc=;
-        b=OJrzT9SAQO/UT8nZVw9e1SgiifYv74Cj7+4xGwspgoJXysMy4/Df7RfqlPXXSfCs2d
-         ddEdu9YSJvA63d2cKxdpzt/TWcu1o+JFujeuKMhmb/pjopPahmmSeP0X91UC4bKngUn0
-         9DKzCsMy3CB6CshLux+9JU9Tje6i3xgfIvQEYbYEgMzaE4vr9k+8JtiKsnSZhqMccxIp
-         ZtIPpuiEUvfgHyHL1dxt7i7UvuZ8Hx4nhdKhTAoHML/4HbjMq49RrhfVpftkYBOgWniw
-         g99jhyIlQd8nP59IMPT2hygXl7mSZpKziO8tUZcitMXRqvJm18LWVuR7jpvKIekf0o7Q
-         9v4Q==
-X-Gm-Message-State: AOJu0YznxhQ9r4zx1LPp3XwK9WZwz0qRg06PeBnJP+F1IOGCxtwy5bUB
-        FXJYq3FKaYe4Lreyj1wTao7f6g==
-X-Google-Smtp-Source: AGHT+IGjSQ4+X2lvYsCJzmEr2bY8Ksct5WoXMUIbuCCLm87x5DFFi7/n497IxFMbPn45HSyCkxKdYQ==
-X-Received: by 2002:a05:6602:13c2:b0:79d:1c65:9bde with SMTP id o2-20020a05660213c200b0079d1c659bdemr11422024iov.1.1695390990588;
-        Fri, 22 Sep 2023 06:56:30 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id l13-20020a02cd8d000000b0042b05586c52sm1028681jap.25.2023.09.22.06.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 06:56:29 -0700 (PDT)
-Message-ID: <ec7cf6ad-3081-47a8-be83-af6eb7befa35@kernel.dk>
-Date:   Fri, 22 Sep 2023 07:56:28 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/15] futex: Add sys_futex_requeue()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
-        Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com,
-        hch@infradead.org, lstoakes@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de, Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20230921104505.717750284@noisy.programming.kicks-ass.net>
- <20230921105248.511860556@noisy.programming.kicks-ass.net>
- <ZQ1fx29+b8PmLVk6@gmail.com>
- <20230922110335.GC7080@noisy.programming.kicks-ass.net>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230922110335.GC7080@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229639AbjIVSis (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 14:38:48 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85BF9AB;
+        Fri, 22 Sep 2023 11:38:41 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C95A3212C5CD;
+        Fri, 22 Sep 2023 11:38:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C95A3212C5CD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1695407920;
+        bh=RjSwxBRyWpJEBY1wCo9rYn7tpDxkXA16qcqUnB6DS6U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Rem98psiD47ctTHRdEliz2PAHvhy2Xq7qqCkWEAskTT3DoQh58gKEAmVWn8NsDW8a
+         TR+3qw41aBo0Px150sF8BtWvvJpOHUtr/H1FBfSJxOPYxNNtTvWe2tmt411TJ9TUFH
+         0hdTV8HFmc4hevu5bvGCbhDVyWs9Q5Nqutup4h9I=
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org
+Cc:     patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
+        wei.liu@kernel.org, gregkh@linuxfoundation.org,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
+        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
+        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        will@kernel.org, catalin.marinas@arm.com
+Subject: [PATCH v3 00/15] Introduce /dev/mshv drivers
+Date:   Fri, 22 Sep 2023 11:38:20 -0700
+Message-Id: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-15.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,URI_TRY_3LD,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/22/23 5:03 AM, Peter Zijlstra wrote:
-> On Fri, Sep 22, 2023 at 11:35:03AM +0200, Ingo Molnar wrote:
->>
->> * peterz@infradead.org <peterz@infradead.org> wrote:
->>
->>> --- linux-2.6.orig/kernel/futex/syscalls.c
->>> +++ linux-2.6/kernel/futex/syscalls.c
->>> @@ -396,6 +396,44 @@ SYSCALL_DEFINE6(futex_wait,
->>>  	return ret;
->>>  }
->>>  
->>> +/*
->>> + * sys_futex_requeue - Requeue a waiter from one futex to another
->>> + * @waiters:	array describing the source and destination futex
->>> + * @flags:	unused
->>> + * @nr_wake:	number of futexes to wake
->>> + * @nr_requeue:	number of futexes to requeue
->>> + *
->>> + * Identical to the traditional FUTEX_CMP_REQUEUE op, except it is part of the
->>> + * futex2 family of calls.
->>> + */
->>> +
->>> +SYSCALL_DEFINE4(futex_requeue,
->>> +		struct futex_waitv __user *, waiters,
->>> +		unsigned int, flags,
->>> +		int, nr_wake,
->>> +		int, nr_requeue)
->>> +{
->>> +	struct futex_vector futexes[2];
->>> +	u32 cmpval;
->>> +	int ret;
->>> +
->>> +	if (flags)
->>> +		return -EINVAL;
->>
->> Small detail, but isn't -ENOSYS the canonical error code for functionality 
->> not yet implemented - which the unused 'flags' ABI is arguably?
->>
->> -EINVAL is for recognized but incorrect parameters, such as:
-> 
-> IIUC 'unknown flag' falls into the -EINVAL return category. Here we
-> happen to have no known flags, but that should not matter.
+This series introduces support for creating and running guest machines
+while running on the Microsoft Hypervisor. [0]
+This is done via an IOCTL interface accessed through /dev/mshv, similar to
+/dev/kvm. Another series introducing this support was previously posted.
+[1]
 
-Yep, -ENOSYS is for not having the syscall at all, -EINVAL for unknown
-flags set.
+These interfaces support VMMs running in:
+1. The root patition - provided in the mshv_root module, and
+2. VTL 2 - provided in the mshv_vtl module [2]
+
+Patches breakdown
+-----------------
+The first 7 patches are refactoring and adding some helper functions.
+They provide some benefit on their own and could be applied independently
+as cleanup patches.
+
+Patches 8-12 just set things up for the driver code to come. These are very
+small. They come first so that the remaining patches are more self-contained.
+
+The final 3 patches are the meat of the series:
+- Patch 13 contains new header files used by the driver.
+  These are designed to mirror the ABI headers exported by Hyper-V. This is
+  done to avoid polluting hyperv-tlfs.h and help track changes to the ABIs
+  that are still unstable. (See FAQ below).
+- Patch 14 conditionally includes these new header files into mshyperv.h
+  and linux/hyperv.h, in order to be able to use these files in the new
+  drivers while remaining independent from hyperv-tlfs.h.
+- Patch 15 contains the new driver code located in drivers/hv. This is a
+  large amount of code and new files, but it is mostly self-contained and
+  all within drivers/hv - apart from the IOCTL interface itself in uapi.
+
+Patch 15 is rather big and has bounced back from some mailing lists. If you
+did not get a copy in your inbox, you can view it here instead:
+https://github.com/NunoDasNeves/linux/commit/2ae1cabd82257cb303296ab6af707d1bac867e42
+
+FAQ on include/uapi/hyperv/*.h
+------------------------------
+Q:
+Why not just add these definitions to hyperv-tlfs.h?
+A:
+The intention of hyperv-tlfs.h is to contain stable definitions documented
+in the public TLFS document. These new definitions don't fit that criteria,
+so they should be separate.
+
+Q:
+The new headers redefine many things that are already in hyperv-tlfs.h - why?
+A:
+Some definitions are extended compared to what is documented in the TLFS.
+In order to avoid adding undocumented or unstable definitions to hyperv-tlfs.h,
+the new headers must compile independently.
+Therefore, the new headers must redefine many things in hyperv-tlfs.h in order
+to compile.
+
+Q:
+Why are these files named hvgdk.h, hvgdk_mini.h, hvhdk.h and hvhdk_mini.h?
+A:
+The precise meaning of the names reflects conventions used internally at
+Microsoft.
+Naming them this way makes it easy to find where particular Hyper-V
+definitions come from, and check their correctness.
+It also facilitates the future work of automatically generating these files.
+
+Q:
+Why are they in uapi?
+A:
+In short, to keep things simple. There are many definitions needed in both
+the kernel and the VMM in userspace. Separating them doesn't serve much
+purpose, and makes it more laborious to import definitions from Hyper-V
+code.
+
+--------------------------
+[0] "Hyper-V" is more well-known, but it really refers to the whole stack
+    including the hypervisor and other components that run in Windows
+    kernel and userspace.
+[1] Previous /dev/mshv patch series and discussion:
+    https://lore.kernel.org/linux-hyperv/1632853875-20261-1-git-send-email-nunodasneves@linux.microsoft.com/
+[2] Virtual Secure Mode (VSM) and Virtual Trust Levels (VTL):
+    https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm
+--------------------------
+
+Changes since v2:
+    * Fix some commit message wrapping
+    * Fix many checkpatch.pl --strict style issues
+    * Replace uapi ints with __s32
+    * Replace uapi enums with __u32
+    * Replace uapi pointers with __u64
+    * Add explicit padding to uapi structures
+    * Initialize status in get/set registers hypercall helpers
+    * Add missing return on error in get_vp_signaled_count
+    * Remove select TRANSPARENT_HUGEPAGES for mshv_vtl
+    * Use __func__ prefix consistently in printks
+    * Use single generic cpuid() to get all 4 registers instead of 4 calls
+    * Change hv_proximity_domain_info from union to struct for clarity
+Changes since v1:
+    * Clean up formatting, capitalization in commit messages
+    * Add detail to commit message for patch 15
+    * Remove errant lines in Makefile and Kconfig in patch 15
+    * Move a reference to CONFIG_MSHV_VTL from patch 9 to 15
+
+Nuno Das Neves (15):
+  hyperv-tlfs: Change shared HV_REGISTER_* defines to HV_MSR_*
+  mshyperv: Introduce hv_get_hypervisor_version function
+  mshyperv: Introduce numa_node_to_proximity_domain_info
+  asm-generic/mshyperv: Introduce hv_recommend_using_aeoi()
+  hyperv: Move hv_connection_id to hyperv-tlfs
+  hyperv-tlfs: Introduce hv_status_to_string and hv_status_to_errno
+  Drivers: hv: Move hv_call_deposit_pages and hv_call_create_vp to
+    common code
+  Drivers: hv: Introduce per-cpu event ring tail
+  Drivers: hv: Introduce hv_output_arg_exists in hv_common.c
+  x86: hyperv: Add mshv_handler irq handler and setup function
+  Drivers: hv: export vmbus_isr, hv_context and hv_post_message
+  Documentation: Reserve ioctl number for mshv driver
+  uapi: hyperv: Add mshv driver headers defining hypervisor ABIs
+  asm-generic: hyperv: Use new Hyper-V headers conditionally.
+  Drivers: hv: Add modules to expose /dev/mshv to VMMs running on
+    Hyper-V
+
+ .../userspace-api/ioctl/ioctl-number.rst      |    2 +
+ arch/arm64/hyperv/mshyperv.c                  |   23 +-
+ arch/arm64/include/asm/hyperv-tlfs.h          |   25 +
+ arch/arm64/include/asm/mshyperv.h             |    2 +-
+ arch/x86/hyperv/hv_init.c                     |    2 +-
+ arch/x86/hyperv/hv_proc.c                     |  166 +-
+ arch/x86/include/asm/hyperv-tlfs.h            |  137 +-
+ arch/x86/include/asm/mshyperv.h               |   12 +-
+ arch/x86/kernel/cpu/mshyperv.c                |   67 +-
+ drivers/acpi/numa/srat.c                      |    1 +
+ drivers/clocksource/hyperv_timer.c            |   24 +-
+ drivers/hv/Kconfig                            |   49 +
+ drivers/hv/Makefile                           |   20 +
+ drivers/hv/hv.c                               |   50 +-
+ drivers/hv/hv_call.c                          |  113 +
+ drivers/hv/hv_common.c                        |  223 +-
+ drivers/hv/hyperv_vmbus.h                     |    2 +-
+ drivers/hv/mshv.h                             |  123 ++
+ drivers/hv/mshv_eventfd.c                     |  761 +++++++
+ drivers/hv/mshv_eventfd.h                     |   80 +
+ drivers/hv/mshv_main.c                        |  208 ++
+ drivers/hv/mshv_msi.c                         |  129 ++
+ drivers/hv/mshv_portid_table.c                |   84 +
+ drivers/hv/mshv_root.h                        |  193 ++
+ drivers/hv/mshv_root_hv_call.c                | 1015 +++++++++
+ drivers/hv/mshv_root_main.c                   | 1920 +++++++++++++++++
+ drivers/hv/mshv_synic.c                       |  688 ++++++
+ drivers/hv/mshv_vtl.h                         |   52 +
+ drivers/hv/mshv_vtl_main.c                    | 1517 +++++++++++++
+ drivers/hv/vmbus_drv.c                        |    3 +-
+ drivers/hv/xfer_to_guest.c                    |   28 +
+ include/asm-generic/hyperv-defs.h             |   26 +
+ include/asm-generic/hyperv-tlfs.h             |   93 +-
+ include/asm-generic/mshyperv.h                |   73 +-
+ include/linux/hyperv.h                        |   11 +-
+ include/uapi/hyperv/hvgdk.h                   |   41 +
+ include/uapi/hyperv/hvgdk_mini.h              | 1076 +++++++++
+ include/uapi/hyperv/hvhdk.h                   | 1342 ++++++++++++
+ include/uapi/hyperv/hvhdk_mini.h              |  160 ++
+ include/uapi/linux/mshv.h                     |  306 +++
+ 40 files changed, 10483 insertions(+), 364 deletions(-)
+ create mode 100644 drivers/hv/hv_call.c
+ create mode 100644 drivers/hv/mshv.h
+ create mode 100644 drivers/hv/mshv_eventfd.c
+ create mode 100644 drivers/hv/mshv_eventfd.h
+ create mode 100644 drivers/hv/mshv_main.c
+ create mode 100644 drivers/hv/mshv_msi.c
+ create mode 100644 drivers/hv/mshv_portid_table.c
+ create mode 100644 drivers/hv/mshv_root.h
+ create mode 100644 drivers/hv/mshv_root_hv_call.c
+ create mode 100644 drivers/hv/mshv_root_main.c
+ create mode 100644 drivers/hv/mshv_synic.c
+ create mode 100644 drivers/hv/mshv_vtl.h
+ create mode 100644 drivers/hv/mshv_vtl_main.c
+ create mode 100644 drivers/hv/xfer_to_guest.c
+ create mode 100644 include/asm-generic/hyperv-defs.h
+ create mode 100644 include/uapi/hyperv/hvgdk.h
+ create mode 100644 include/uapi/hyperv/hvgdk_mini.h
+ create mode 100644 include/uapi/hyperv/hvhdk.h
+ create mode 100644 include/uapi/hyperv/hvhdk_mini.h
+ create mode 100644 include/uapi/linux/mshv.h
 
 -- 
-Jens Axboe
+2.25.1
 
