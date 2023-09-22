@@ -2,108 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D64D7ABA54
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 22:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4DF7ABABF
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 22:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjIVUDe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Sep 2023 16:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        id S229747AbjIVU7x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Sep 2023 16:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjIVUDd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 16:03:33 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFD51A2;
-        Fri, 22 Sep 2023 13:03:28 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3adc3d94f66so1657979b6e.1;
-        Fri, 22 Sep 2023 13:03:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695413007; x=1696017807;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=92vwJf3WLmkpUBPfM1uX6jdmCsJTt9zpYit4o1iVPi8=;
-        b=rFYOk1ch88uOvZb8zJLWalshSsUk+B77cqUWWub3URXfej/Ap/PzaeN5hzPoxeRt60
-         Iexvc93zFzzk/c6VhD/cS9z8EVFKKYdnxEu0NDVqjRwryMZv435lbU01lp647pPuNAYZ
-         t1j/o2Kc0xv/KSGN1TF1TZHgKvZ7zsNfXX2Tsy/TP8wYSUaBM0SUiv/zkMjX+oAkift2
-         zhkpPX2GA635YnCIEkgLarnszAbAy1V2AUw9NBI3eMti/Bp3e/JCEVm/0TWeEOBeCJ2Q
-         aUqnL7gFW32lswJevXSB4Q3sZzec/I1Ib13IBIh6KMWqkVkrJVcyMJOJ8Axz5yk36T91
-         n7Vg==
-X-Gm-Message-State: AOJu0YyYW3mEy5UK0ix5lMM1sksEryKmSVOiQTnsMgIixbRkm+sUDrdH
-        QPRe3BhmRGR0R1J+QLoGjKg=
-X-Google-Smtp-Source: AGHT+IEP3JVa7YW6iKvp3c2447aJv58pC9gBEASQVTZuq+rvJLqoI+1fmX0Z9I0z5RQGrE60EI+KSw==
-X-Received: by 2002:a05:6808:4d4:b0:3a7:35af:bbc0 with SMTP id a20-20020a05680804d400b003a735afbbc0mr664405oie.54.1695413007358;
-        Fri, 22 Sep 2023 13:03:27 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id fe20-20020a056a002f1400b0068fadc9226dsm3614729pfb.33.2023.09.22.13.03.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 13:03:26 -0700 (PDT)
-Date:   Fri, 22 Sep 2023 20:02:43 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, patches@lists.linux.dev,
-        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
-        decui@microsoft.com, apais@linux.microsoft.com,
-        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
-        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
-        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
-        catalin.marinas@arm.com
-Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
- VMMs running on Hyper-V
-Message-ID: <ZQ3y47GDfhjf23Rh@liuwe-devbox-debian-v2>
-References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229678AbjIVU7w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 16:59:52 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4A31A4;
+        Fri, 22 Sep 2023 13:59:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:References:In-Reply-To:Cc:To:
+        From:Date:Message-Id:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=reMqHnLawtQWzzJGyWchM0kycFgNaHwuVHMPL5F7/LQ=; b=fwFeoZP8X3SOPmGO0C+SKoLaLG
+        UAKf05bsOetdUDWVacCvVL3SjXif6z0O3NNcDeX2/R9AoKIxklW0DVkMVGiUH76DI2+9q/U/93kHO
+        bNuJPeHtMFR0JJKT4MjBEckZyH2RdH3VzULD/Pw+zP2inGLQvGtVqVNd3wnqS01TNY77T0U9q+wVk
+        rl3NW0T1VqrbVmYNUn4m+pstkERd4VyJW+r7qM5NQJQeiKA/maXRRwLEEz82fnvXMnoZHAm/exTmY
+        F7jM4yvKtti+5FjtFSQbidMffXd456V/d5TWPSxjJzB6J5g9wzFI2cQmKMWVYI8rHZlOJDkk8SNnR
+        K0IQUNYA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qjnEs-00GXz9-2k;
+        Fri, 22 Sep 2023 20:59:05 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
+        id E269230042E; Fri, 22 Sep 2023 22:59:03 +0200 (CEST)
+Message-Id: <20230922200120.011184118@infradead.org>
+User-Agent: quilt/0.65
+Date:   Fri, 22 Sep 2023 22:01:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     tglx@linutronix.de, axboe@kernel.dk
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
+        andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
+        urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        malteskarupke@web.de, steve.shaw@intel.com,
+        marko.makela@mariadb.com, andrei.artemev@intel.com
+In-Reply-To: <20230921104505.717750284@noisy.programming.kicks-ass.net>
+References: <20230921104505.717750284@noisy.programming.kicks-ass.net>
+ <20230921104505.717750284@noisy.programming.kicks-ass.net>
+Subject: futex2 numa stuff
+X-Bad-Reply: References and In-Reply-To but no 'Re:' in Subject.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 11:38:35AM -0700, Nuno Das Neves wrote:
-> Add mshv, mshv_root, and mshv_vtl modules:
-> 
-> Module mshv is the parent module to the other two. It provides /dev/mshv,
-> plus some common hypercall helper code. When one of the child modules is
-> loaded, it is registered with the mshv module, which then provides entry
-> point(s) to the child module via the IOCTLs defined in uapi/linux/mshv.h.
-> 
-> E.g. When the mshv_root module is loaded, it registers itself, and the
-> MSHV_CREATE_PARTITION IOCTL becomes available in /dev/mshv. That is used to
-> get a partition fd managed by mshv_root.
-> 
-> Similarly for mshv_vtl module, there is MSHV_CREATE_VTL, which creates
-> an fd representing the lower vtl, managed by mshv_vtl.
-> 
-> Module mshv_root provides APIs for creating and managing child partitions.
-> It defines abstractions for partitions (vms), vps (vcpus), and other things
-> related to running a guest. It exposes the userspace interfaces for a VMM
-> to manage the guest.
-> 
-> Module mshv_vtl provides VTL (Virtual Trust Level) support for VMMs. In
-> this scenario, the host kernel and VMM run in a higher trust level than the
-> guest, but within the same partition. This provides better isolation and
-> performance.
-> 
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Hi!
 
-As far as I can tell, all my comments from the previous version are
-addressed. I believe Saurabh and Boqun's comments are addressed, too.
+Updated version of patch 15/15 and a few extra patches for testing the
+FUTEX2_NUMA bits. The last patch (17/15) should never be applied for anything
+you care about and exists purely because I'm too lazy to generate actual
+hash-bucket contention.
 
-The code looks good to me, so:
+On my 2 node IVB-EP:
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+ $ echo FUTEX_SQUASH > /debug/sched/features
 
-I will wait for some time for others to chime in, just in case the
-community has more comments.
+Effectively reducing each node to 1 bucket.
+
+ $ numactl -m0 -N0 ./futex_numa -c10 -t2 -n0 -N0 &
+   numactl -m1 -N1 ./futex_numa -c10 -t2 -n0 -N0
+
+ ...
+ contenders: 16154935
+ contenders: 16202472
+
+ $ numactl -m0 -N0 ./futex_numa -c10 -t2 -n0 -N0 &
+   numactl -m1 -N1 ./futex_numa -c10 -t2 -n0 -N1
+
+ contenders: 48584991
+ contenders: 48680560
+
+(loop counts, higher is better)
+
+Clearly showing how separating the hashes works. 
+
+The first one runs 10 contenders on each node but forces the (numa) futex to
+hash to node 0 for both. This ensures all 20 contenders hash to the same
+bucket and *ouch*.
+
+The second one does the same, except now fully separates the nodes. Performance
+is much improved.
+
+Proving the per-node hashing actually works as advertised.
+
+Further:
+
+ $ ./futex_numa -t2 -n50000 -s1 -N
+ ...
+ node: -1
+ node: -1
+ node: 0
+ node: 0
+ node: -1
+ node: -1
+ node: 1
+ node: 1
+ ...
+ total: 8980
+
+Shows how a FUTEX2_NUMA lock can bounce around the nodes. The test has some
+trivial asserts trying to show critical section integrity, but otherwise does
+lock+unlock cycles with a nanosleep.
+
+This both illustrates how to build a (trivial) lock using FUTEX2_NUMA and
+proves the functionality works.
+
+
+
