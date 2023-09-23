@@ -2,83 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DEE7ABE96
-	for <lists+linux-arch@lfdr.de>; Sat, 23 Sep 2023 09:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8EB7ABEAB
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Sep 2023 09:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjIWHvM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 23 Sep 2023 03:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S230222AbjIWH4W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 23 Sep 2023 03:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjIWHvM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Sep 2023 03:51:12 -0400
-Received: from shiva.jussieu.fr (shiva.jussieu.fr [134.157.0.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A0D11D;
-        Sat, 23 Sep 2023 00:51:05 -0700 (PDT)
-Received: from mailix1.insp.jussieu.fr (mailix1.insp.jussieu.fr [134.157.37.11])
-          by shiva.jussieu.fr (8.15.2/jtpda-5.4) with ESMTP id 38N7mEO5035034
-          ; Sat, 23 Sep 2023 09:48:14 +0200 (CEST)
-X-Ids:  164
-Received: from hordix.insp.jussieu.fr (hordix.insp.jussieu.fr [134.157.37.9])
-        by mailix1.insp.jussieu.fr (Postfix-INSP-2.10.1) with ESMTPSA id EE6E9C06B5F6;
-        Sat, 23 Sep 2023 09:48:08 +0200 (CEST)
-Received: from [105.112.214.216] ([105.112.214.216]) by
- webmail.insp.jussieu.fr (Horde Framework) with HTTPS; Sat, 23 Sep 2023
- 07:48:08 +0000
-Date:   Sat, 23 Sep 2023 07:48:08 +0000
-Message-ID: <20230923074808.Horde.cbloaD0KutWc0KgVIYXLh1O@webmail.insp.jussieu.fr>
-From:   Victoria Cleland <lamya.essaoui@insp.upmc.fr>
-Subject: Hallo
-Reply-to: v.cleland10@aol.com
-User-Agent: Horde Application Framework 5
-Organization: Institut des NanoSciences de Paris
-X-InspUpmcSession: essaoui
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        with ESMTP id S230193AbjIWH4V (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Sep 2023 03:56:21 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC5D180;
+        Sat, 23 Sep 2023 00:56:15 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E146C433C7;
+        Sat, 23 Sep 2023 07:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1695455775;
+        bh=LqG3KPeWI7ENhJ299tmnxeWZpLoJ9oK5WScmGb/OaoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KsEwi/WPhH2PeWr5n3kqJVm61b2bAT6V/rKTA97CCsqNvmhjQGgIXgW5l0Dys5kmG
+         dSN7bG6Ont1BZjdbOo9tyYbTedXAP9LufpoacZBjjVyXFTt8be8rg0idiiej5rAiK4
+         mfgwaPPOz3epU4y4HTGgvSUA+hzUA8DuCEYXAheE=
+Date:   Sat, 23 Sep 2023 09:56:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
+        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
+        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        will@kernel.org, catalin.marinas@arm.com
+Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
+ VMMs running on Hyper-V
+Message-ID: <2023092318-starter-pointing-9388@gregkh>
+References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Miltered: at jchkmail2.reseau.jussieu.fr with ID 650E983E.001 by Joe's j-chkmail (http : // j-chkmail dot ensmp dot fr)!
-X-j-chkmail-Enveloppe: 650E983E.001 from mailix1.insp.jussieu.fr/mailix1.insp.jussieu.fr/134.157.37.11/mailix1.insp.jussieu.fr/<lamya.essaoui@insp.upmc.fr>
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [134.157.0.129 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
-        *      [134.157.0.129 listed in wl.mailspike.net]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [v.cleland10[at]aol.com]
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Sep 22, 2023 at 11:38:35AM -0700, Nuno Das Neves wrote:
+> +static int __init mshv_vtl_init(void)
+> +{
+> +	int ret;
+> +
+> +	tasklet_init(&msg_dpc, mshv_vtl_sint_on_msg_dpc, 0);
+> +	init_waitqueue_head(&fd_wait_queue);
+> +
+> +	if (mshv_vtl_get_vsm_regs()) {
+> +		pr_emerg("%s: Unable to get VSM capabilities !!\n", __func__);
+> +		BUG();
+> +	}
 
-23. September 2023.
 
-Hallo,
+So you crash the whole kernel if someone loads this module on a non-mshv
+system?
 
-Ich möchte Ihnen einen Geschäftsvorschlag mitteilen. Für weitere  
-Details antworten Sie auf Englisch.
+That seems quite excessive and hostile :(
 
-Grüße
-Frau Victoria Cleland
-_________________________
-Sekretärin: Lamya Essaoui
+Or am I somehow reading this incorrectly?
 
+thanks,
+
+greg k-h
