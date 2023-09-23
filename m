@@ -2,71 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8AC7ABA81
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Sep 2023 22:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DEE7ABE96
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Sep 2023 09:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjIVU3X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Sep 2023 16:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S230193AbjIWHvM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 23 Sep 2023 03:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjIVU3X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Sep 2023 16:29:23 -0400
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287BA19E;
-        Fri, 22 Sep 2023 13:29:17 -0700 (PDT)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6907e44665bso2496714b3a.1;
-        Fri, 22 Sep 2023 13:29:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695414556; x=1696019356;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GWtsUoRr/XZOrcIX7VdV06rv+aK2Ytwp/S+nDpDIrig=;
-        b=C4qF59zUbPqEmAfw1TCM2h47gj3Tz7CH2x2HNhL3obzgEIUf6UQppz2VaE8nBH51RH
-         cqw2FQ64CySxfYHL/8zaYHwllQGT2Oc71grVYOYBo9ofq0nme0AcWAgXfyC9GFmTaI7k
-         CZBtCBnp90biqzUD6JJXbLQac8c6FKO+PbjQ9dde5Se3jmZEnegsOEnyO6e7dTxm08Ra
-         P6kqD47Zu6rzF3o6Wbwb+B1gBnJgBOqCslYOtSQ68UDAvi5k6klN1MmbeVfkVrQj7J3X
-         FatIUpZ752QpPWh43usuoSFJl7wCsKo4ESo0r4cqETl/apSsAhDX876l7lt2Ak2jGnGz
-         RvZg==
-X-Gm-Message-State: AOJu0YzjHTcY/ptscq0NsCTDL8KT8Z/6QwYSX7GVlbztvNnzjo2nbdSa
-        ORCgrwrJLIjnU6izsUe7tl8=
-X-Google-Smtp-Source: AGHT+IHVit3Ti0rL+3+NOKgkIBKGfVAJ8X12Z7ZuDQR48MgS28XKFayJQRS1YGs+N12V6yNB97iYCg==
-X-Received: by 2002:a05:6a00:2e86:b0:692:a727:1fde with SMTP id fd6-20020a056a002e8600b00692a7271fdemr481358pfb.14.1695414556542;
-        Fri, 22 Sep 2023 13:29:16 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa78053000000b0066684d8115bsm3705434pfm.178.2023.09.22.13.29.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 13:29:16 -0700 (PDT)
-Date:   Fri, 22 Sep 2023 20:28:33 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Olaf Hering <olaf@aepfle.de>
-Cc:     linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2] hyperv: reduce size of ms_hyperv_info
-Message-ID: <ZQ348XuCa6ofOHDu@liuwe-devbox-debian-v2>
-References: <20230922192840.3886-1-olaf@aepfle.de>
+        with ESMTP id S229808AbjIWHvM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Sep 2023 03:51:12 -0400
+Received: from shiva.jussieu.fr (shiva.jussieu.fr [134.157.0.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A0D11D;
+        Sat, 23 Sep 2023 00:51:05 -0700 (PDT)
+Received: from mailix1.insp.jussieu.fr (mailix1.insp.jussieu.fr [134.157.37.11])
+          by shiva.jussieu.fr (8.15.2/jtpda-5.4) with ESMTP id 38N7mEO5035034
+          ; Sat, 23 Sep 2023 09:48:14 +0200 (CEST)
+X-Ids:  164
+Received: from hordix.insp.jussieu.fr (hordix.insp.jussieu.fr [134.157.37.9])
+        by mailix1.insp.jussieu.fr (Postfix-INSP-2.10.1) with ESMTPSA id EE6E9C06B5F6;
+        Sat, 23 Sep 2023 09:48:08 +0200 (CEST)
+Received: from [105.112.214.216] ([105.112.214.216]) by
+ webmail.insp.jussieu.fr (Horde Framework) with HTTPS; Sat, 23 Sep 2023
+ 07:48:08 +0000
+Date:   Sat, 23 Sep 2023 07:48:08 +0000
+Message-ID: <20230923074808.Horde.cbloaD0KutWc0KgVIYXLh1O@webmail.insp.jussieu.fr>
+From:   Victoria Cleland <lamya.essaoui@insp.upmc.fr>
+Subject: Hallo
+Reply-to: v.cleland10@aol.com
+User-Agent: Horde Application Framework 5
+Organization: Institut des NanoSciences de Paris
+X-InspUpmcSession: essaoui
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230922192840.3886-1-olaf@aepfle.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Miltered: at jchkmail2.reseau.jussieu.fr with ID 650E983E.001 by Joe's j-chkmail (http : // j-chkmail dot ensmp dot fr)!
+X-j-chkmail-Enveloppe: 650E983E.001 from mailix1.insp.jussieu.fr/mailix1.insp.jussieu.fr/134.157.37.11/mailix1.insp.jussieu.fr/<lamya.essaoui@insp.upmc.fr>
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [134.157.0.129 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
+        *      [134.157.0.129 listed in wl.mailspike.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [v.cleland10[at]aol.com]
+        *  1.0 MISSING_HEADERS Missing To: header
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 09:28:40PM +0200, Olaf Hering wrote:
-> Use the hole prior shared_gpa_boundary to store the result of get_vtl.
-> This reduces the size by 8 bytes.
-> 
-> Signed-off-by: Olaf Hering <olaf@aepfle.de>
 
-Applied to hyperv-fixes. Thanks.
+23. September 2023.
+
+Hallo,
+
+Ich möchte Ihnen einen Geschäftsvorschlag mitteilen. Für weitere  
+Details antworten Sie auf Englisch.
+
+Grüße
+Frau Victoria Cleland
+_________________________
+Sekretärin: Lamya Essaoui
+
