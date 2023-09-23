@@ -2,131 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD897ABEB0
-	for <lists+linux-arch@lfdr.de>; Sat, 23 Sep 2023 09:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFFE7ABF2D
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Sep 2023 11:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjIWH6z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 23 Sep 2023 03:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S229804AbjIWJLN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 23 Sep 2023 05:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjIWH6y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Sep 2023 03:58:54 -0400
+        with ESMTP id S229743AbjIWJLN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Sep 2023 05:11:13 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D85C180;
-        Sat, 23 Sep 2023 00:58:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C6BC433C8;
-        Sat, 23 Sep 2023 07:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695455927;
-        bh=Ijh7USVyCy8OB6+AzeKdkPsYF66NC4GSUfQEKgKYTvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b+qYPdg+tAiRoIe73SG1cFIi9CDIxIvz7tWOvjyvJLX0inuMCIdhqquAec7ze81VT
-         in/3GB4Q6PGeYXz3Cis2UWZH3tA2npiYhqeU2ElQdjq2J7sWD+NGCQCbrRfjM+ZK9j
-         ph2epph/TfJYavdBfMVeD/aVfnGXJvTs3PAvksxI=
-Date:   Sat, 23 Sep 2023 09:58:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, patches@lists.linux.dev,
-        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
-        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
-        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
- VMMs running on Hyper-V
-Message-ID: <2023092342-staunch-chafe-1598@gregkh>
-References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA724C2;
+        Sat, 23 Sep 2023 02:11:03 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B93C433C7;
+        Sat, 23 Sep 2023 09:11:00 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch fixes for v6.6-rc3
+Date:   Sat, 23 Sep 2023 17:10:31 +0800
+Message-Id: <20230923091031.1075337-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 11:38:35AM -0700, Nuno Das Neves wrote:
-> +static int mshv_vtl_get_vsm_regs(void)
-> +{
-> +	struct hv_register_assoc registers[2];
-> +	union hv_input_vtl input_vtl;
-> +	int ret, count = 2;
-> +
-> +	input_vtl.as_uint8 = 0;
-> +	registers[0].name = HV_REGISTER_VSM_CODE_PAGE_OFFSETS;
-> +	registers[1].name = HV_REGISTER_VSM_CAPABILITIES;
-> +
-> +	ret = hv_call_get_vp_registers(HV_VP_INDEX_SELF, HV_PARTITION_ID_SELF,
-> +				       count, input_vtl, registers);
-> +	if (ret)
-> +		return ret;
-> +
-> +	mshv_vsm_page_offsets.as_uint64 = registers[0].value.reg64;
-> +	mshv_vsm_capabilities.as_uint64 = registers[1].value.reg64;
-> +
-> +	pr_debug("%s: VSM code page offsets: %#016llx\n", __func__,
-> +		 mshv_vsm_page_offsets.as_uint64);
-> +	pr_info("%s: VSM capabilities: %#016llx\n", __func__,
-> +		mshv_vsm_capabilities.as_uint64);
+The following changes since commit ce9ecca0238b140b88f43859b211c9fdfd8e5b70:
 
-When drivers are working properly, they are quiet.  This is very noisy
-and probably is leaking memory addresses to userspace?
+  Linux 6.6-rc2 (2023-09-17 14:40:24 -0700)
 
-Also, there is NEVER a need for __func__ in a pr_debug() line, it has
-that for you automatically.
+are available in the Git repository at:
 
-Also, drivers should never call pr_*() calls, always use the proper
-dev_*() calls instead.
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.6-1
 
+for you to fetch changes up to e74a6b7f3744d122ff4544f19393dfab167166ec:
 
+  docs/zh_CN/LoongArch: Update the links of ABI (2023-09-20 14:26:38 +0800)
 
-> +
-> +	return ret;
-> +}
-> +
-> +static int mshv_vtl_configure_vsm_partition(void)
-> +{
-> +	union hv_register_vsm_partition_config config;
-> +	struct hv_register_assoc reg_assoc;
-> +	union hv_input_vtl input_vtl;
-> +
-> +	config.as_u64 = 0;
-> +	config.default_vtl_protection_mask = HV_MAP_GPA_PERMISSIONS_MASK;
-> +	config.enable_vtl_protection = 1;
-> +	config.zero_memory_on_reset = 1;
-> +	config.intercept_vp_startup = 1;
-> +	config.intercept_cpuid_unimplemented = 1;
-> +
-> +	if (mshv_vsm_capabilities.intercept_page_available) {
-> +		pr_debug("%s: using intercept page", __func__);
+----------------------------------------------------------------
+LoongArch fixes for v6.6-rc3
 
-Again, __func__ is not needed, you are providing it twice here for no
-real reason except to waste storage space :)
+Fix lockdep, fix a boot failure, fix some build warnings, fix document
+links, and some cleanups.
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      LoongArch: Use _UL() and _ULL()
 
-> +		config.intercept_page = 1;
-> +	}
-> +
-> +	reg_assoc.name = HV_REGISTER_VSM_PARTITION_CONFIG;
-> +	reg_assoc.value.reg64 = config.as_u64;
-> +	input_vtl.as_uint8 = 0;
-> +
-> +	return hv_call_set_vp_registers(HV_VP_INDEX_SELF, HV_PARTITION_ID_SELF,
-> +				       1, input_vtl, &reg_assoc);
+Bibo Mao (1):
+      LoongArch: Fix some build warnings with W=1
 
+Helge Deller (1):
+      LoongArch: Fix lockdep static memory detection
 
-None of this needs to be unwound if initialization fails later on?
+Huacai Chen (3):
+      LoongArch: Set all reserved memblocks on Node#0 at initialization
+      kasan: Cleanup the __HAVE_ARCH_SHADOW_MAP usage
+      LoongArch: Don't inline kasan_mem_to_shadow()/kasan_shadow_to_mem()
 
-thanks,
+Tiezhu Yang (3):
+      LoongArch: Remove dead code in relocate_new_kernel
+      docs/LoongArch: Update the links of ABI
+      docs/zh_CN/LoongArch: Update the links of ABI
 
-greg k-h
+ Documentation/arch/loongarch/introduction.rst      |  4 +-
+ .../zh_CN/arch/loongarch/introduction.rst          |  4 +-
+ arch/loongarch/include/asm/addrspace.h             | 12 ++---
+ arch/loongarch/include/asm/exception.h             | 45 +++++++++++++++++
+ arch/loongarch/include/asm/kasan.h                 | 59 ++++------------------
+ arch/loongarch/include/asm/smp.h                   |  1 +
+ arch/loongarch/kernel/Makefile                     |  4 ++
+ arch/loongarch/kernel/acpi.c                       |  1 -
+ arch/loongarch/kernel/mem.c                        |  4 +-
+ arch/loongarch/kernel/module-sections.c            |  1 +
+ arch/loongarch/kernel/process.c                    |  1 +
+ arch/loongarch/kernel/relocate_kernel.S            |  1 -
+ arch/loongarch/kernel/signal.c                     |  7 +--
+ arch/loongarch/kernel/smp.c                        |  3 ++
+ arch/loongarch/kernel/syscall.c                    |  1 +
+ arch/loongarch/kernel/time.c                       |  2 +-
+ arch/loongarch/kernel/topology.c                   |  3 ++
+ arch/loongarch/kernel/traps.c                      | 25 ++-------
+ arch/loongarch/kernel/vmlinux.lds.S                | 55 ++++++++++----------
+ arch/loongarch/mm/fault.c                          |  2 +-
+ arch/loongarch/mm/hugetlbpage.c                    | 12 -----
+ arch/loongarch/mm/ioremap.c                        |  1 +
+ arch/loongarch/mm/kasan_init.c                     | 51 +++++++++++++++++++
+ arch/loongarch/mm/tlb.c                            |  2 +-
+ include/linux/kasan.h                              |  2 +-
+ mm/kasan/kasan.h                                   |  8 ++-
+ 26 files changed, 177 insertions(+), 134 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/exception.h
