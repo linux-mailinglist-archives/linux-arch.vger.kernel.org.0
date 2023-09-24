@@ -2,83 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746F47ACAFC
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Sep 2023 19:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9C37ACB14
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Sep 2023 19:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjIXRUv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 24 Sep 2023 13:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        id S230220AbjIXRcF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Sep 2023 13:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjIXRUu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Sep 2023 13:20:50 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6951FC;
-        Sun, 24 Sep 2023 10:20:43 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2bffdf50212so79813781fa.1;
-        Sun, 24 Sep 2023 10:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695576042; x=1696180842; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NYwWt/Haldb8Z9AhFR/B5mbU054gJ14PDUXSNrrFlQY=;
-        b=SLg28wM7Sq6fZCD79cOLIGqiwlJ5fKmnUkb/iZhFqicttIBD0wFPaIaWTKFrdq75yH
-         n6ogo4muYANW7ItldshUtM9VqQIcDzcNEySRBRaBEEjvPZMKtF+t9Q6hOgqoWWszrNf1
-         hOIv8QVD0wosawdHSfLywHgpHlUpveRR8JzvNgSqXvRokpoD4ysGATx/0kdi3clLye+8
-         2EageKMG+PHlJByAVZLeFKLNXkqnjVIQD3Up5t4VEi/dfHsQmgLAq6LQG58bGqbmi7Tm
-         0bzih3HnCPhKx5ebwL6YjUgI2dIxgV544w70+7mQQLTDtaQpGqPrl/viRY5xv3Shl6LB
-         NTng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695576042; x=1696180842;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NYwWt/Haldb8Z9AhFR/B5mbU054gJ14PDUXSNrrFlQY=;
-        b=AJ640m7anAf+KqqJGaiDwEwrebqSpykJNh/eFnQH6BYI3OuPEd/jYbntYcuSoeq81q
-         W5Yf4n7N1m9VcYk8r8DR+VWTbd6nBuyeJbn8XPmy36NKiZKkXCcRvGKQFLquwmHVajcP
-         cjiGr5e6o8qCs4TYmpsydIOzuOEPnwCTuUSZ21qf7ti9L3EBESZQjacWjlVv9ZAqs+OJ
-         ejXIVwUk22fwpMAcXnmZK8jNZqghWQONSSujZ7FtR9B3mWv2cOsURGmJu92jXCBXiSck
-         lYrSfveCTkQW7jEmSPLU3uuqNx93HnP6tJjf4yAzE2ethj0iGixabYK2X/pj/9I6p5TO
-         cj0A==
-X-Gm-Message-State: AOJu0YxZ5e5F5Agy0tfGPI0TgLjIFcx4p5CcXXE9NNk4xvQcgS3ugTs/
-        Yrh5UrqgIbGDebLPN+3XawK1f9gOjMVsMGUFOEUp6d++gpw=
-X-Google-Smtp-Source: AGHT+IEUXSewh5mor/yQ4TIYsU+GCIGbe7Ycr82z3d+389uXGX/eiZ2hQLEKX6/jK8/y/rn0nCCiZQT76PpKSKhLxE0=
-X-Received: by 2002:a05:651c:19a1:b0:2bf:ee57:f18 with SMTP id
- bx33-20020a05651c19a100b002bfee570f18mr2922293ljb.16.1695576041711; Sun, 24
- Sep 2023 10:20:41 -0700 (PDT)
+        with ESMTP id S230136AbjIXRcD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Sep 2023 13:32:03 -0400
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528EA109;
+        Sun, 24 Sep 2023 10:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+ t=1695576696; x=1696181496; i=frank.scheiner@web.de;
+ bh=1jVLbmeGm1r0R9T377qSsQRKRbGQva98bCeYistbNgI=;
+ h=X-UI-Sender-Class:Date:Subject:To:References:Cc:From:In-Reply-To;
+ b=kWDtqL9DpmRkQOKNqZ9cHjWFqNWMjeb0Qww62nop+Q6/eYk+WeOMEjV0I0axUdr8jEnOT4DNpHD
+ 8cQtB6dicKwPjuYbkQOkQLJlR1XqSNztMNniJSV66hixTffJHhlmBAW9kzmq8Jl3woZOr6ZvP6D0D
+ cmWkKeUqUb58CEsXXuw+Jy9E+ZgP0Y98gxGe0OPsrQaCAmT4Ofo9lU3ilwnOMSNOZ9yRZpTCq8WdN
+ P42X0KGCOJL/ZWrfxqcDB1dSxbHOhgKcAIDGCJ3RWzDX1vc0QLkDV+ieUxmg5Jbs3Q6qvUjmZnMUy
+ djlsau7dSYljzIj8fujdP4Gvr3k72ubBfFow==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.30] ([217.247.45.129]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N7xeb-1rgVHH07mt-01558g; Sun, 24
+ Sep 2023 19:31:36 +0200
+Message-ID: <273eb7ed-9897-2350-946e-989f586580bc@web.de>
+Date:   Sun, 24 Sep 2023 19:31:35 +0200
 MIME-Version: 1.0
-From:   =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>
-Date:   Sun, 24 Sep 2023 19:20:30 +0200
-Message-ID: <CAHtyXDfvS4OYLjOqALy74vR4w9DOFjJ9z8UOFeDpyjv7_PHNXw@mail.gmail.com>
-Subject: ia64 maintainership (resend)
-To:     linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: ia64 maintainership (resend)
+To:     =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org
+References: <CAHtyXDfvS4OYLjOqALy74vR4w9DOFjJ9z8UOFeDpyjv7_PHNXw@mail.gmail.com>
+Content-Language: en-US
+Cc:     debian-ia64 <debian-ia64@lists.debian.org>, ia64@gentoo.org
+From:   Frank Scheiner <frank.scheiner@web.de>
+In-Reply-To: <CAHtyXDfvS4OYLjOqALy74vR4w9DOFjJ9z8UOFeDpyjv7_PHNXw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:WW6qauD397rf+lResLrpQoEGPBbd5qCvMzilH4Byx+EYEMPznLb
+ Pa/uOK1cgyjDSKz8xydPrImDVhZDSiQ10DfVMJFUMIvTJHYuRBmsbhyHhFNpX0/BtvGbNE+
+ jRsgRyam/vsSD0BY+jdfobCLp4dRhQSknbwkrPEp7/WAQ2MVh2LHj/MWIvVroybSz5VLOrK
+ EYGARg+2jW3xmQs+KV7vw==
+UI-OutboundReport: notjunk:1;M01:P0:hpOc7Tu/cIw=;0EAdEcRraaywO3tELkhnVeHU5jq
+ dS8lHqi05CKdwb6xr8lydKOCjNSMhh60Gv6PY/cH5jS7CwtganMJzLjlbE14+836sOrxLHeMg
+ Z8WX022tbBJZiWJOfH5m03WE2OW+y+OCFbNM995Qyz7LJ9tmFs62HrNBuCSLdpcAJPtVlkUrb
+ i6LuQTI9FsGJb2ciZXyz+PjglL/WNmwdUQg0y0zw7iM6+VWU+uJmuA5kaGWHjVlRUBKxdVEpa
+ e8GL8QjlYqvfYBIKQDOLszPIMMCJ4obSp2z0MznX5DaYzZ+2xmEi9R9TtbEEsrvL26jub9sjB
+ 0pzdkoEjgFIKcjyw/UUTME/p5giXvTRUmKNtoQ3GH/g3FnZ4DvcbXbKMkyR7CataZOZocB89J
+ lXy58mrKrVCEkiRG7An02w+sAsdI36DDLaHqk+7aAyiQNCNELfILP6EmHfubyreaUwv2+/x6S
+ utKPUnUofq4NfcH1oiykJucn+cTmKtJuGXBpkGBkm6CNPo6oiKbM/+/jaON+9NE8lMHTWGWpn
+ k/pNVOJNJKUk+EfOkA8V9Mnt3YcJiaQ4rtqXoQ2ixoCz6nqwv2M6+5Yr5xYpGU7S85kBTR+UB
+ wEQZK3HbpiwckVgZRLLAzoswVcd4MySWyu5mqfF6MSlAUzLVcE/p1ssIyXgJE6TbOzoAzn8on
+ BhqTsne/CDdTLXHbFGEue+1zhIICI+h77bsp3kDpOKgepJ3As1cb428ildrO24VdUoYNOrOmT
+ 3aahcNhRyfBv9YrvkWcT5GdJbvK4ZrcWJnfJo3Mw/S50KfvNYCPD2PfvCr10rGVr7FO6Mf5BB
+ Loh2FzRj1UkmjLZUK9t2a+PMh0bNu96ctdG27JG5l/piRs/kWmUpYBTmHpD4U7tdG+SLZA4lV
+ p7AcbC4wEBXGzti86u+6Qkm2YqCu1uJ5tjAbmhrc1Yt8GaxmPiXLfhHYHBdJoTchkTfVhHGA1
+ BoQh7gBzNM3AEn1ER2e3fJlBfv8=
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello linux-ia64,
-
-I noticed following the news of the proposal to remove ia64 from the
-kernel that the architecture has no maintainer. I'd be happy to
-volunteer to maintain the architecture, should the decision of removal
-be reversed.
-
-I'm not the ideal candidate, since I never contributed anything to the
-code, but I have an Itanium machine running Linux to test on, some
-spare time, and I've contributed a few patches as a part of my job of
-kernel developer at Red Hat.
-
-I'm also a contributor to T2 SDE, a source-based community Linux
-distribution supporting various architectures including Alpha, HP
-PA-RISC, and Itanium. I have interest in the architecture, having done
-some experiments on it with code performance.
-
-Tomas Glozar
-
-PS: Original email got sent in multipart format by mistake, re-sending
-as plain text, sorry about that.
+RGVhciBUb21hcywNCg0KT24gMjQuMDkuMjMgMTk6MjAsIFRvbcOhxaEgR2xvemFyIHdyb3Rl
+Og0KPiBIZWxsbyBsaW51eC1pYTY0LA0KPiANCj4gSSBub3RpY2VkIGZvbGxvd2luZyB0aGUg
+bmV3cyBvZiB0aGUgcHJvcG9zYWwgdG8gcmVtb3ZlIGlhNjQgZnJvbSB0aGUNCj4ga2VybmVs
+IHRoYXQgdGhlIGFyY2hpdGVjdHVyZSBoYXMgbm8gbWFpbnRhaW5lci4gSSdkIGJlIGhhcHB5
+IHRvDQo+IHZvbHVudGVlciB0byBtYWludGFpbiB0aGUgYXJjaGl0ZWN0dXJlLCBzaG91bGQg
+dGhlIGRlY2lzaW9uIG9mIHJlbW92YWwNCj4gYmUgcmV2ZXJzZWQuDQo+IA0KPiBJJ20gbm90
+IHRoZSBpZGVhbCBjYW5kaWRhdGUsIHNpbmNlIEkgbmV2ZXIgY29udHJpYnV0ZWQgYW55dGhp
+bmcgdG8gdGhlDQo+IGNvZGUsIGJ1dCBJIGhhdmUgYW4gSXRhbml1bSBtYWNoaW5lIHJ1bm5p
+bmcgTGludXggdG8gdGVzdCBvbiwgc29tZQ0KPiBzcGFyZSB0aW1lLCBhbmQgSSd2ZSBjb250
+cmlidXRlZCBhIGZldyBwYXRjaGVzIGFzIGEgcGFydCBvZiBteSBqb2Igb2YNCj4ga2VybmVs
+IGRldmVsb3BlciBhdCBSZWQgSGF0Lg0KPiANCj4gSSdtIGFsc28gYSBjb250cmlidXRvciB0
+byBUMiBTREUsIGEgc291cmNlLWJhc2VkIGNvbW11bml0eSBMaW51eA0KPiBkaXN0cmlidXRp
+b24gc3VwcG9ydGluZyB2YXJpb3VzIGFyY2hpdGVjdHVyZXMgaW5jbHVkaW5nIEFscGhhLCBI
+UA0KPiBQQS1SSVNDLCBhbmQgSXRhbml1bS4gSSBoYXZlIGludGVyZXN0IGluIHRoZSBhcmNo
+aXRlY3R1cmUsIGhhdmluZyBkb25lDQo+IHNvbWUgZXhwZXJpbWVudHMgb24gaXQgd2l0aCBj
+b2RlIHBlcmZvcm1hbmNlLg0KPiANCj4gVG9tYXMgR2xvemFyDQo+IA0KPiBQUzogT3JpZ2lu
+YWwgZW1haWwgZ290IHNlbnQgaW4gbXVsdGlwYXJ0IGZvcm1hdCBieSBtaXN0YWtlLCByZS1z
+ZW5kaW5nDQo+IGFzIHBsYWluIHRleHQsIHNvcnJ5IGFib3V0IHRoYXQuDQoNCkdyZWF0ISBJ
+J2QgYmUgaGFwcHkgdG8gc3VwcG9ydCB5b3Ugd2l0aCBteSBrZXJuZWwgdGVzdGluZy4NCg0K
+QWxzbyBDQ2luZyB0aGlzIHRvIERlYmlhbidzIGFuZCBHZW50b28ncyBpYTY0IGxpc3RzLg0K
+DQpDaGVlcnMsDQpGcmFuaw0K
