@@ -2,130 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7F87AEDD7
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Sep 2023 15:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3777AEFA4
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Sep 2023 17:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjIZNQw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 26 Sep 2023 09:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S234991AbjIZP1S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Sep 2023 11:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjIZNQv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Sep 2023 09:16:51 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88044E4;
-        Tue, 26 Sep 2023 06:16:44 -0700 (PDT)
-Received: from lhrpeml500002.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rw0bh0SMmz6K7vG;
-        Tue, 26 Sep 2023 21:15:28 +0800 (CST)
-Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
- lhrpeml500002.china.huawei.com (7.191.160.78) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Tue, 26 Sep 2023 14:16:41 +0100
-Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
- lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.031;
- Tue, 26 Sep 2023 14:16:41 +0100
-From:   Salil Mehta <salil.mehta@huawei.com>
-To:     James Morse <james.morse@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
-        "justin.he@arm.com" <justin.he@arm.com>
-Subject: RE: [RFC PATCH v2 00/35] ACPI/arm64: add support for virtual
- cpuhotplug
-Thread-Topic: [RFC PATCH v2 00/35] ACPI/arm64: add support for virtual
- cpuhotplug
-Thread-Index: AQHZ5mDIR7JMF2KEeEGQTVeJuAX/8LAtKYMg
-Date:   Tue, 26 Sep 2023 13:16:41 +0000
-Message-ID: <622a39bda12a4b75a6da84f4566b4238@huawei.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-In-Reply-To: <20230913163823.7880-1-james.morse@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.174.16]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S234986AbjIZP1R (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Sep 2023 11:27:17 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DC0124;
+        Tue, 26 Sep 2023 08:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1695741991; bh=QsqRgvKUnL6W0NEHrtVeuczEAWjiUjF19Ug8WTjaTXE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dkRllyLpdnpiqce7rLwaswg120DWfCzh/EDuHTOHdQSkNDgloICRzpypSge7K6Ljr
+         B7rDry8mGd/OtmEqvoCiZoUL4HjortUwuXJAqnQIF94l8jqQjqXSpN3ytFfZhojO6v
+         IWn5Nem208jOWslFl47iaXp7DvBBnc/q8VJr1YsA=
+Received: from [IPV6:240e:388:8d29:7200:439e:6305:2d94:4764] (unknown [IPv6:240e:388:8d29:7200:439e:6305:2d94:4764])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5A225600B5;
+        Tue, 26 Sep 2023 23:26:31 +0800 (CST)
+Message-ID: <4abf8ddb-ff93-436f-a834-39e7f4d7a503@xen0n.name>
+Date:   Tue, 26 Sep 2023 23:26:30 +0800
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] LoongArch: numa: Fix high_memory calculation
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        stable@vger.kernel.org, Chong Qiao <qiaochong@loongson.cn>
+References: <20230926121031.1901760-1-chenhuacai@loongson.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20230926121031.1901760-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: James Morse <james.morse@arm.com>
-> Sent: Wednesday, September 13, 2023 5:38 PM
-
-[...]
-
-> 
-> Hello!
-> 
-> Changes since RFC-v1:
->  * riscv is new, ia64 is gone
->  * The KVM support is different, and upstream - no need to patch the host.
-> 
+On 9/26/23 20:10, Huacai Chen wrote:
+> high_memory is the virtual address of the 'highest physical address' in
+> the system. But __va(get_num_physpages() << PAGE_SHIFT) is not what we
+> want because there may be holes in the physical address space. On the
+> other hand, max_low_pfn is calculated from memblock_end_of_DRAM(), which
+> is exactly corresponding to the highest physical address, so use it for
+> high_memory calculation.
+>
+> Cc: <stable@vger.kernel.org>
+Which commit is this patch intended to amend? A "Fixes:" tag may be 
+helpful for stable backporting.
+> Signed-off-by: Chong Qiao <qiaochong@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
-> 
-> This series adds what looks like cpuhotplug support to arm64 for use in
-> virtual machines. It does this by moving the cpu_register() calls for
-> architectures that support ACPI out of the arch code by using
-> GENERIC_CPU_DEVICES, then into the ACPI processor driver.
-> 
-> The kubernetes folk really want to be able to add CPUs to an existing VM,
-> in exactly the same way they do on x86. The use-case is pre-booting guests
-> with one CPU, then adding the number that were actually needed when the
-> workload is provisioned.
-> 
+>   arch/loongarch/kernel/numa.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/kernel/numa.c b/arch/loongarch/kernel/numa.c
+> index c7d33c489e04..6e65ff12d5c7 100644
+> --- a/arch/loongarch/kernel/numa.c
+> +++ b/arch/loongarch/kernel/numa.c
+> @@ -436,7 +436,7 @@ void __init paging_init(void)
+>   
+>   void __init mem_init(void)
+>   {
+> -	high_memory = (void *) __va(get_num_physpages() << PAGE_SHIFT);
+> +	high_memory = (void *) __va(max_low_pfn << PAGE_SHIFT);
+>   	memblock_free_all();
+>   }
+>   
 
-[...]
+-- 
+WANG "xen0n" Xuerui
 
-> 
-> I had a go at switching the remaining architectures over to
-> GENERIC_CPU_DEVICES,
-> so that the Kconfig symbol can be removed, but I got stuck with powerpc
-> and s390.
-> 
-> I've only build tested Loongarch and riscv. I've removed the ia64 specific
-> patches, but left the changes in other patches to make git-grep review of
-> renames easier.
-> 
-> If folk want to play along at home, you'll need a copy of Qemu that
-> supports this.
-> https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v2-rc6
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
-
-Please use the latest pushed RFC V2 instead:
-https://lore.kernel.org/qemu-devel/20230926100436.28284-1-salil.mehta@huawei.com/T/#m523b37819c4811c7827333982004e07a1ef03879
-
-Repository:
-https://github.com/salil-mehta/qemu.git  virt-cpuhp-armv8/rfc-v2
-
-
-Thanks
-Salil.
-
-
-[...]
-
-> Why is this still an RFC? I'm still looking for confirmation from the
-> kubernetes/kata folk that this works for them. Because of this I've culled
-> the CC list...
-> 
-> 
-> This series is based on v6.6-rc1, and can be retrieved from:
-> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/virtual_cpu_hotplug/rfc/v2
