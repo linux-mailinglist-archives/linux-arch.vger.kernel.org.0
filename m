@@ -2,120 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656707AE227
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Sep 2023 01:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B53F7AE2C6
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Sep 2023 02:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbjIYXRh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Sep 2023 19:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S229460AbjIZAH1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Sep 2023 20:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjIYXRg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Sep 2023 19:17:36 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA018101;
-        Mon, 25 Sep 2023 16:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lK9wsOQ0X+liH8Gj+buTBXV/sF1bkg6KdP4DvULH538=; b=zxMH/KaHAkwdrC1+MS43+Ar/0c
-        rF9M5PWf4SI63IOtDUMqPRSW6tx0l0M4RgxdATupJXkPwvbD4Vjve6+5Pnpd2m8XxJLTvGA6jBcps
-        CrAAAsUI+8oEAzcWtoOUIl+cadXKxUnz7Nor3Qk2xr1D8zH2rTVem6vEVssyMUQuXeIfDYeBoFS58
-        n2uyCGUlyi+MjdH1aveQezpB6xzm5Xcb1HMIJU++NkCaZ/iWZtjdq/0Atrt63PgrvLM5Y0+a084ZP
-        P8gAGwISZUzUKkQkmiZTlTZKWibCLuKxDD0MK4wnuWO1yGiZujLHgPNDabuGLmfu5dJ9P/WBEBMxY
-        VbEzIwOw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40444)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qkupO-0001gn-1S;
-        Tue, 26 Sep 2023 00:17:22 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qkupL-0008F5-Vw; Tue, 26 Sep 2023 00:17:20 +0100
-Date:   Tue, 26 Sep 2023 00:17:19 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-acpi@vger.kernel.org,
-        James Morse <james.morse@arm.com>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
-Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
-Message-ID: <ZRIU/yFrbFbIR7zZ@shell.armlinux.org.uk>
-References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk>
- <dd4dee9e-4d75-e1e6-04c8-82d84b28fd35@redhat.com>
+        with ESMTP id S229495AbjIZAH0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Sep 2023 20:07:26 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3D8710E;
+        Mon, 25 Sep 2023 17:07:19 -0700 (PDT)
+Received: from [10.0.0.178] (c-76-135-56-23.hsd1.wa.comcast.net [76.135.56.23])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AA1D320B74C0;
+        Mon, 25 Sep 2023 17:07:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AA1D320B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1695686839;
+        bh=QZodBqGHLOewJOW6wRe5geNAIIU82UjzOMXe88tfjPE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kmTYP0lWHcekOyaKUSaNB5IUOvjE7JowCi4cvfizTGz5XrByutoXC7Nn8iodtOL5S
+         yd0NXd+7/jOmpmxv4AqC5GfNM9SbURuMj6c6nmdV1ClKyUL8JX7CCgIEW3ISjk295x
+         lAKUsxfmyJul+OZjhzVhc6tGwAGW9CQByXb1DnKY=
+Message-ID: <e235025e-abfa-4b31-8b83-416ec8ec4f72@linux.microsoft.com>
+Date:   Mon, 25 Sep 2023 17:07:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd4dee9e-4d75-e1e6-04c8-82d84b28fd35@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
+ VMMs running on Hyper-V
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
+        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
+        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        will@kernel.org, catalin.marinas@arm.com
+References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
+ <2023092342-staunch-chafe-1598@gregkh>
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <2023092342-staunch-chafe-1598@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,SPF_HELO_PASS,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 09:04:46AM +1000, Gavin Shan wrote:
-> Hi Russell,
+Resend in plain text instead of HTML - oops!
+
+On 9/23/2023 12:58 AM, Greg KH wrote:
+> On Fri, Sep 22, 2023 at 11:38:35AM -0700, Nuno Das Neves wrote:
+>> +static int mshv_vtl_get_vsm_regs(void)
+>> +{
+>> +	struct hv_register_assoc registers[2];
+>> +	union hv_input_vtl input_vtl;
+>> +	int ret, count = 2;
+>> +
+>> +	input_vtl.as_uint8 = 0;
+>> +	registers[0].name = HV_REGISTER_VSM_CODE_PAGE_OFFSETS;
+>> +	registers[1].name = HV_REGISTER_VSM_CAPABILITIES;
+>> +
+>> +	ret = hv_call_get_vp_registers(HV_VP_INDEX_SELF, HV_PARTITION_ID_SELF,
+>> +				       count, input_vtl, registers);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	mshv_vsm_page_offsets.as_uint64 = registers[0].value.reg64;
+>> +	mshv_vsm_capabilities.as_uint64 = registers[1].value.reg64;
+>> +
+>> +	pr_debug("%s: VSM code page offsets: %#016llx\n", __func__,
+>> +		 mshv_vsm_page_offsets.as_uint64);
+>> +	pr_info("%s: VSM capabilities: %#016llx\n", __func__,
+>> +		mshv_vsm_capabilities.as_uint64);
 > 
-> On 9/26/23 02:28, Russell King (Oracle) wrote:
-> > Provide common prototypes for arch_register_cpu() and
-> > arch_unregister_cpu(). These are called by acpi_processor.c, with
-> > weak versions, so the prototype for this is already set. It is
-> > generally not necessary for function prototypes to be conditional
-> > on preprocessor macros.
-> > 
-> > Some architectures (e.g. Loongarch) are missing the prototype for this,
-> > and rather than add it to Loongarch's asm/cpu.h, lets do the job once
-> > for everyone.
-> > 
-> > Since this covers everyone, remove the now unnecessary prototypes in
-> > asm/cpu.h, and we also need to remove the 'static' from one of ia64's
-> > arch_register_cpu() definitions.
-> > 
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> > Changes since RFC v2:
-> >   - drop ia64 changes, as ia64 has already been removed.
-> > 
-> >   arch/x86/include/asm/cpu.h  | 2 --
-> >   arch/x86/kernel/topology.c  | 2 +-
-> >   include/linux/cpu.h         | 2 ++
-> >   3 files changed, 3 insertions(+), 3 deletions(-)
-> > 
+> When drivers are working properly, they are quiet.  This is very noisy
+> and probably is leaking memory addresses to userspace?
 > 
-> In Linux 6.6.rc3, the prototypes are still existing in arch/ia64/include/asm/cpu.h.
 
-Correct, but I have been told that IA64 has been removed, so I removed
-those changes from my patch.
+I will remove these, thanks.
 
-> They may have been dropped in other ia64 or x86 git repository, which this patch
-> bases on.
+> Also, there is NEVER a need for __func__ in a pr_debug() line, it has
+> that for you automatically.
+> 
 
-I have no idea which repository they have been dropped from. I only know
-what tglx told me, and despite asking the question, I never got any
-answer. So I've done the best I can with this patch. If kernel devs want
-to state things in vague terms, and then go silent when asked questions
-to elaborate, then that leads to guessing.
+Thank you, I didn't know this.
 
-Maybe someone else should adapt this patch to apply to whatever tree it
-is going to end up being applied to - because I have no idea _which_
-tree it'll end up being applied to.
+> Also, drivers should never call pr_*() calls, always use the proper
+> dev_*() calls instead.
+> 
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+We only use struct device in one place in this driver, I think that is 
+the only place it makes sense to use dev_*() over pr_*() calls.
+> 
+> 
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int mshv_vtl_configure_vsm_partition(void)
+>> +{
+>> +	union hv_register_vsm_partition_config config;
+>> +	struct hv_register_assoc reg_assoc;
+>> +	union hv_input_vtl input_vtl;
+>> +
+>> +	config.as_u64 = 0;
+>> +	config.default_vtl_protection_mask = HV_MAP_GPA_PERMISSIONS_MASK;
+>> +	config.enable_vtl_protection = 1;
+>> +	config.zero_memory_on_reset = 1;
+>> +	config.intercept_vp_startup = 1;
+>> +	config.intercept_cpuid_unimplemented = 1;
+>> +
+>> +	if (mshv_vsm_capabilities.intercept_page_available) {
+>> +		pr_debug("%s: using intercept page", __func__);
+> 
+> Again, __func__ is not needed, you are providing it twice here for no
+> real reason except to waste storage space :)
+> 
+
+Thanks, I will review all the uses of pr_debug().
+
+>> +		config.intercept_page = 1;
+>> +	}
+>> +
+>> +	reg_assoc.name = HV_REGISTER_VSM_PARTITION_CONFIG;
+>> +	reg_assoc.value.reg64 = config.as_u64;
+>> +	input_vtl.as_uint8 = 0;
+>> +
+>> +	return hv_call_set_vp_registers(HV_VP_INDEX_SELF, HV_PARTITION_ID_SELF,
+>> +				       1, input_vtl, &reg_assoc);
+> 
+> 
+> None of this needs to be unwound if initialization fails later on?
+> 
+
+I think unwinding this is not needed, not 100% sure.
+Saurabh, can you comment?
+
+Thanks,
+Nuno
+
+> thanks,
+> 
+> greg k-h
+
