@@ -2,153 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E7B7AFEAC
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Sep 2023 10:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355CF7B00F1
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Sep 2023 11:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjI0IfF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Sep 2023 04:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S230170AbjI0Jue (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Sep 2023 05:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjI0Iei (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Sep 2023 04:34:38 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458F11B3;
-        Wed, 27 Sep 2023 01:33:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E5CC433C7;
-        Wed, 27 Sep 2023 08:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695803633;
-        bh=I5DZTuEJvTywxXc0qMvlpl6ebHjK8ISFhOGKsz7oZgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=132Uw3jfwPEJVezfW+Ns78q1UcSiSTw9uJW4qYSDHVitzTUG01Mju4TknFo/4xRAd
-         /3ztEnzyxLxFZ6/Zuozy30RmREj5YmdU7GxGWv70kzUN8BOtFkhYBDbUgS8n/FuajJ
-         MTS49kXLOMUoQQ+edrzW2VHszhz2/Z9c8ZKwFnao=
-Date:   Wed, 27 Sep 2023 10:33:50 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, patches@lists.linux.dev,
-        mikelley@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, apais@linux.microsoft.com,
-        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
-        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
-        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
-        catalin.marinas@arm.com
-Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
- VMMs running on Hyper-V
-Message-ID: <2023092757-cupbearer-cancel-b314@gregkh>
-References: <2023092342-staunch-chafe-1598@gregkh>
- <e235025e-abfa-4b31-8b83-416ec8ec4f72@linux.microsoft.com>
- <2023092630-masculine-clinic-19b6@gregkh>
- <ZRJyGrm4ufNZvN04@liuwe-devbox-debian-v2>
- <2023092614-tummy-dwelling-7063@gregkh>
- <ZRKBo5Nbw+exPkAj@liuwe-devbox-debian-v2>
- <2023092646-version-series-a7b5@gregkh>
- <05119cbc-155d-47c5-ab21-e6a08eba5dc4@linux.microsoft.com>
- <2023092737-daily-humility-f01c@gregkh>
- <ZRPiGk9M3aQr99Y5@liuwe-devbox-debian-v2>
+        with ESMTP id S229509AbjI0Jue (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Sep 2023 05:50:34 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1121AE;
+        Wed, 27 Sep 2023 02:50:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KIPQ/7x0jHokAt0F1xeeAEzyBqiGQLFAwnonjSlAFA76eVhOAj+uWssArci5hjiIjh8Tz5WShW1fjJ0p+8nretNIUYA7E+tDYS4HnIOEDUxiPHYauKbjdkFiOHhP8VDx9EhDTJk22BDBSNdNAOGQXT/1cUd5fKQgHho2NlqWmil1+eBIfH2QfnMRCBNW8tYzi8Z7aqcy+fkn8E98KaNmNcrKaJs86SZ5+QUOyiGx2SAFdYXoeGPAKf318wWASOaxL1SDO1vg0WCU/0Mz4uqH3XMQDibRgEQb3TRke1yzxXefHkmd3ek1NX3iSr7pUOAW5Uowyd6aHx8Vzc9IDRsnnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6a9/12WgCgZMTWXMzVNEZXcO1CrVBtcJsx8yF/T3UpA=;
+ b=lP7Q13zdqcL2IWTl+TsO8C8goutCR5vHL94zO29xy/UOowJDO7GJqr5ZEIer5A+Uea+FeeDgzSN1SwuPPf4FBN6wmIv65Z6HqvG4Wb+h4qiJUeGEKeljmPJY6eZb5P4NO5Cd9TjyvyVHLUP/9BCfVz2xBpcNPlXx/uMwUIF4ibI0lkAKslyKgxgx6FMZ80HZoaNLIP1Q5+51SFuSS733l0sbpFGyM5RlkV/TrNMMl4LYhOe1jcH9XAq5REoymWPaQDrQ9Z2oMcNUpKFr3GAiVcZvhg8OVuDVfcXq9gzx60fAtOTd0AP2lrutUZSsVPQTREioHTm0UjTOcl5hvi3ULg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.201.242.130) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=micron.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=micron.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6a9/12WgCgZMTWXMzVNEZXcO1CrVBtcJsx8yF/T3UpA=;
+ b=UQdLHMmanbNFLFmggey3pyKi0+B+MUIjhFr8FM9N8hgoVKsIdRFbTT3qwjSGkzihoM1alHsSn+oIx4VoIURpI+LaHoaRmpVv1jw46RAS0BHZKfzMpmHR6oULiNrjWlFSoXWsT3R5TL3+DRg2mfcQhcauRA8gfE3eVHDyuNmaU+JmTWAc0Z7Fzx1U08XeA2gWCuWfy6mYh2QL5y8aeZR1zxdfTe0qLL7TK4snKqDDJBugyEQxbZX8oL0BrJzko5tsgtTCwPhNeM/VUQgLHPrMQR/K67OJPUP4/UvYHt+2Icb181A0MAuwM+S8B+kFRFVYtXDjksPx/srd7DW1T7pP9g==
+Received: from MW4PR04CA0218.namprd04.prod.outlook.com (2603:10b6:303:87::13)
+ by BL3PR08MB7300.namprd08.prod.outlook.com (2603:10b6:208:353::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.31; Wed, 27 Sep
+ 2023 09:50:26 +0000
+Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
+ (2603:10b6:303:87:cafe::6d) by MW4PR04CA0218.outlook.office365.com
+ (2603:10b6:303:87::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.22 via Frontend
+ Transport; Wed, 27 Sep 2023 09:50:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 137.201.242.130)
+ smtp.mailfrom=micron.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=micron.com;
+Received-SPF: Pass (protection.outlook.com: domain of micron.com designates
+ 137.201.242.130 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.201.242.130; helo=mail.micron.com; pr=C
+Received: from mail.micron.com (137.201.242.130) by
+ CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.14 via Frontend Transport; Wed, 27 Sep 2023 09:50:25 +0000
+Received: from BOW17EX19B.micron.com (137.201.21.219) by
+ BOW36EX1902.micron.com (137.201.85.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.16; Wed, 27 Sep 2023 03:50:23 -0600
+Received: from VENKATARAVI-LAP.micron.com (10.70.32.235) by
+ RestrictedRelay17EX19B.micron.com (137.201.21.219) with Microsoft SMTP Server
+ id 15.2.1258.12 via Frontend Transport; Wed, 27 Sep 2023 03:50:17 -0600
+From:   Ravi Jonnalagadda <ravis.opensrc@micron.com>
+To:     <linux-mm@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <luto@kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dietmar.eggemann@arm.com>, <vincent.guittot@linaro.org>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+        <akpm@linux-foundation.org>, <x86@kernel.org>,
+        <aneesh.kumar@linux.ibm.com>, <gregory.price@memverge.com>,
+        <ying.huang@intel.com>, <jgroves@micron.com>,
+        <ravis.opensrc@micron.com>, <sthanneeru@micron.com>,
+        <emirakhur@micron.com>, <vtanna@micron.com>
+Subject: [RFC PATCH 0/2] mm: mempolicy: Multi-tier interleaving
+Date:   Wed, 27 Sep 2023 15:20:00 +0530
+Message-ID: <20230927095002.10245-1-ravis.opensrc@micron.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZRPiGk9M3aQr99Y5@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044EE:EE_|BL3PR08MB7300:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4514ed98-6195-47e8-228f-08dbbf3f2cad
+X-EXT-ByPass: 1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jkJACQMgCBEtHMNXUL+bWBnflAhl+ptNnYlsuQ+uaZ264LHa2n4vVWf9X8iozlL9rFaU6BQhdQnomcYYcNniP3wCWQB7Xvap6zTovfbbvp9Ul5wTF0R1Ts98ErRMKLlYobZNerADpBouhvVWtbmy2mQ4DlD4bbJlle8NxzvL1QTpTHLWTulWiVqtd6rfe+I8gx5uczUY7ZSipfzaLnyYIGS2E9iJ5R2GpbpiFnED4qZHhuNEPl6WndH89xNjIYugPGYc37hA0OMofCAeH6InpqNeYD6DQB9YfdZIjlUd/WnW8m32aXeEM53NMV6ZHYhN6cRCuCeb7LtQVzIfB5XXLauNnNg9iIr9jDyMpGNK2q/cA7e95klk+z3ryol1dEUtZ2iErQnsPfp30Dab9ZM5k2MkqDwRRb1b2aM5dkfp7xyOr/em26rqUlaXI5YmRbaJKQRTkH8j0ZGIJNRq2n35g5GanyzGEZ4BBwW/rrRNZ2kz1P0/SKYDEle5FacOHCuGJD3ENxxNE7w/UkUfKgucXwB5Oz83A99Z4yzw47RxqcaumQqq8Oc/nvqOYspRCwXZlHrgVGDWrayHnhJPplUKSu1QGaukKWi5nHfhN8sr7l5LaMApXPGdcnBObVYiF1PXmgLNZ9U+JIAqGPdMyZAgCNb10k98a1fXmeSRAcBYvs68x68M5dYkwvnGv0Q/H4uapI0EKhJYd/A0gLPcOyOsH+QSFLb8mTGgyBpQAvfyLbU=
+X-Forefront-Antispam-Report: CIP:137.201.242.130;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.micron.com;PTR:masquerade.micron.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(39860400002)(346002)(230922051799003)(1800799009)(82310400011)(186009)(451199024)(46966006)(40470700004)(36840700001)(40480700001)(426003)(6666004)(7696005)(70586007)(40460700003)(5660300002)(36756003)(107886003)(7636003)(2616005)(41300700001)(26005)(336012)(1076003)(356005)(478600001)(70206006)(54906003)(316002)(110136005)(86362001)(82740400003)(7416002)(966005)(2906002)(83380400001)(47076005)(4326008)(8936002)(8676002)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2023 09:50:25.5352
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4514ed98-6195-47e8-228f-08dbbf3f2cad
+X-MS-Exchange-CrossTenant-Id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f38a5ecd-2813-4862-b11b-ac1d563c806f;Ip=[137.201.242.130];Helo=[mail.micron.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044EE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR08MB7300
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 08:04:42AM +0000, Wei Liu wrote:
-> On Wed, Sep 27, 2023 at 08:01:01AM +0200, Greg KH wrote:
-> [...]
-> > > > > If we're working with real devices like network cards or graphics cards
-> > > > > I would agree -- it is easy to imagine that we have several cards of the
-> > > > > same model in the system -- but in real world there won't be two
-> > > > > hypervisor instances running on the same hardware.
-> > > > > 
-> > > > > We can stash the struct device inside some private data fields, but that
-> > > > > doesn't change the fact that we're still having one instance of the
-> > > > > structure. Is this what you want? Or do you have something else in mind?
-> > > > 
-> > > > You have a real device, it's how userspace interacts with your
-> > > > subsystem.  Please use that, it is dynamically created and handled and
-> > > > is the correct representation here.
-> > > > 
-> > > 
-> > > Are you referring to the struct device we get from calling
-> > > misc_register?
-> > 
-> > Yes.
-> > 
-> 
-> We know about this, please see below. And we plan to use this.
-> 
-> > > How would you suggest we get a reference to that device via e.g. open()
-> > > or ioctl() without keeping a global reference to it?
-> > 
-> > You explicitly have it in your open() and ioctl() call, you never need a
-> > global reference for it the kernel gives it to you!
-> > 
-> 
-> This is what I don't follow.
-> 
-> Nuno and I discussed this today offline. We looked at the code before
-> and looked again today (well, yesterday now).
-> 
-> Here are the two functions:
-> 
->     int vfs_open(const struct path *path, struct file *file)
->     long vfs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> 
-> Or, if we provide an open function in our file_operations struct, we get
-> an additional struct inode pointer.
-> 
->     int (*open) (struct inode *, struct file *);
-> 
-> Neither struct file nor struct inode contains a reference to struct device.
-> 
-> Then in vfs.rst, there is a section about open:
-> 
-> ``open``
->         called by the VFS when an inode should be opened.  When the VFS
->         opens a file, it creates a new "struct file".  It then calls the
->         open method for the newly allocated file structure.  You might
->         think that the open method really belongs in "struct
->         inode_operations", and you may be right.  I think it's done the
->         way it is because it makes filesystems simpler to implement.
->         The open() method is a good place to initialize the
->         "private_data" member in the file structure if you want to point
->         to a device structure
-> 
-> So, the driver is supposed to stash a pointer to struct device in
-> private_data. That's what I alluded to in my previous reply. The core
-> driver framework or the VFS doesn't give us a reference to struct
-> device. We have to do it ourselves.
+From: Ravi Shankar <ravis.opensrc@micron.com>
 
-Please read Linux Device Drivers, 3rd edition, chapter 3, for how to do
-this properly.  The book is free online.
+Hello,
 
-Also look at the zillion in-kernel example drivers that use the misc
-device api, container_of() is your friend...
+The current interleave policy operates by interleaving page requests
+among nodes defined in the memory policy. To accommodate the
+introduction of memory tiers for various memory types (e.g., DDR, CXL,
+HBM, PMEM, etc.), a mechanism is needed for interleaving page requests
+across these memory types or tiers.
 
-> We can do that for sure, but the struct device we stash into
-> private_data is going to be the one that is returned from misc_register,
-> which at the same time is already stashed inside a static variable in
-> our driver by our own code (Note that this is a pervasive pattern in the
-> kernel).
+This can be achieved by implementing an interleaving method that
+considers the tier weights.
+The tier weight will determine the proportion of nodes to select from
+those specified in the memory policy.
+A tier weight can be assigned to each memory type within the system.
 
-Again, don't make this static, there's no requirement to do so.
+Hasan Al Maruf had put forth a proposal for interleaving between two
+tiers, namely the top tier and the low tier. However, this patch was
+not adopted due to constraints on the number of available tiers.
 
-But even if you do, sure, use it this way, you have a device.  But I
-would strongly discourage you from having a static variable, there is no
-need to do this at all, and no one else should do so either.
+https://lore.kernel.org/linux-mm/YqD0%2FtzFwXvJ1gK6@cmpxchg.org/T/
 
-thanks,
+New proposed changes:
 
-greg k-h
+1. Introducea sysfs entry to allow setting the interleave weight for each
+memory tier.
+2. Each tier with a default weight of 1, indicating a standard 1:1
+proportion.
+3. Distribute the weight of that tier in a uniform manner across all nodes.
+4. Modifications to the existing interleaving algorithm to support the
+implementation of multi-tier interleaving based on tier-weights.
+
+This is inline with Huang, Ying's presentation in lpc22, 16th slide in
+https://lpc.events/event/16/contributions/1209/attachments/1042/1995/\
+Live%20In%20a%20World%20With%20Multiple%20Memory%20Types.pdf
+
+Observed a significant increase (165%) in bandwidth utilization
+with the newly proposed multi-tier interleaving compared to the
+traditional 1:1 interleaving approach between DDR and CXL tier nodes,
+where 85% of the bandwidth is allocated to DDR tier and 15% to CXL
+tier with MLC -w2 option.
+
+Usage Example:
+
+1. Set weights for DDR (tier4) and CXL(teir22) tiers.
+echo 85 > /sys/devices/virtual/memory_tiering/memory_tier4/interleave_weight
+echo 15 > /sys/devices/virtual/memory_tiering/memory_tier22/interleave_weight
+
+2. Interleave between DRR(tier4, node-0) and CXL (tier22, node-1) using numactl
+numactl -i0,1 mlc --loaded_latency W2
+
+Srinivasulu Thanneeru (2):
+  memory tier: Introduce sysfs for tier interleave weights.
+  mm: mempolicy: Interleave policy for tiered memory nodes
+
+ include/linux/memory-tiers.h |  27 ++++++++-
+ include/linux/sched.h        |   2 +
+ mm/memory-tiers.c            |  67 +++++++++++++++-------
+ mm/mempolicy.c               | 107 +++++++++++++++++++++++++++++++++--
+ 4 files changed, 174 insertions(+), 29 deletions(-)
+
+-- 
+2.39.3
+
