@@ -2,56 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058977AF86B
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Sep 2023 05:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5077AFA93
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Sep 2023 08:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjI0DEw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Sep 2023 23:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
+        id S229753AbjI0GCp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Sep 2023 02:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbjI0DCv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Sep 2023 23:02:51 -0400
+        with ESMTP id S229934AbjI0GCO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Sep 2023 02:02:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A976B2;
-        Tue, 26 Sep 2023 17:45:41 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4528EC433CB;
-        Wed, 27 Sep 2023 00:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695775539;
-        bh=2czlUODplVLqlPwrGiCVrixmp6cbiBPmEv+rpDMNXbE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gNE3/ylOvhRAAoz/vsvv9pN5ZobXtP1piV0MjWp1L0UZj699jNMZbSqPNIug9aveo
-         EXIR25LqshXk+WtroxcOWzrX8sHUzX+k3t/iTkQb+0n4hSJqcQBpyIvyXfu9I/C4qo
-         9Zcm00JBw0DvFNlOAz8fWYvCC6GGgCZEazaYZbI4zHTzyIbKvT4Zq2Gka+8StvxJbm
-         v29idUfwAetZBi/R+2RCOPbQnmrZa09PJdhkBCs59xhijWkwu3iPnjtNfdBBwFsRss
-         5a1oyOE+sSaJlNVxR/r5r6JsojfIp8MQYqDhtGqcBdm7bx+thdBaWvs1SwDfT2zeNm
-         JIGs47bCHE4wA==
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4053c6f0e50so94643995e9.1;
-        Tue, 26 Sep 2023 17:45:39 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yx8stZjqNN2cxNj12+4RuiCBQlvRdYPKhR+B4BsTiAYy4yxzfU8
-        3Y1ofQQin7Q4dEyq4ZjQx7zutu8yBik1zCTt5LY=
-X-Google-Smtp-Source: AGHT+IH7TiTSw495lHvxkQDLdhAGLVNGCEfgqX0IVQetkEk4oU2/PQH5vwKZCIneHOZYWfI/8AGboWlwslKgZwyqJJY=
-X-Received: by 2002:adf:ecce:0:b0:31f:98b4:4b62 with SMTP id
- s14-20020adfecce000000b0031f98b44b62mr229081wro.37.1695775537680; Tue, 26 Sep
- 2023 17:45:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5A9CDB;
+        Tue, 26 Sep 2023 23:01:04 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD420C433C7;
+        Wed, 27 Sep 2023 06:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1695794464;
+        bh=5bU3gzx6D/KCU0/C5mz2JXiNA41aaEP8U6oXybPm8gI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j2LRf4pJ6rPQn6ySzyf20SC7ew+5hiHg0ZgTGztrtSHsf+ONc0fSbPWBjlR9BQEcF
+         T9u0I6IHdfCXvEtS+qRFuUJFBEdCb9gUa1iDa3NEL90zruzcMkXboJd04FQft3n+wA
+         JDYbRNptapF/6wySxZlqHvmS2oV11NdlYt4NoVdQ=
+Date:   Wed, 27 Sep 2023 08:01:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
+        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
+        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        will@kernel.org, catalin.marinas@arm.com
+Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
+ VMMs running on Hyper-V
+Message-ID: <2023092737-daily-humility-f01c@gregkh>
+References: <1695407915-12216-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1695407915-12216-16-git-send-email-nunodasneves@linux.microsoft.com>
+ <2023092342-staunch-chafe-1598@gregkh>
+ <e235025e-abfa-4b31-8b83-416ec8ec4f72@linux.microsoft.com>
+ <2023092630-masculine-clinic-19b6@gregkh>
+ <ZRJyGrm4ufNZvN04@liuwe-devbox-debian-v2>
+ <2023092614-tummy-dwelling-7063@gregkh>
+ <ZRKBo5Nbw+exPkAj@liuwe-devbox-debian-v2>
+ <2023092646-version-series-a7b5@gregkh>
+ <05119cbc-155d-47c5-ab21-e6a08eba5dc4@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230926121031.1901760-1-chenhuacai@loongson.cn> <4abf8ddb-ff93-436f-a834-39e7f4d7a503@xen0n.name>
-In-Reply-To: <4abf8ddb-ff93-436f-a834-39e7f4d7a503@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 27 Sep 2023 08:45:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5z5a45PobUQ5xU3rP6bqenoqtuuceX2=ijYhTN6a_vqg@mail.gmail.com>
-Message-ID: <CAAhV-H5z5a45PobUQ5xU3rP6bqenoqtuuceX2=ijYhTN6a_vqg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: numa: Fix high_memory calculation
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        stable@vger.kernel.org, Chong Qiao <qiaochong@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05119cbc-155d-47c5-ab21-e6a08eba5dc4@linux.microsoft.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -62,48 +64,75 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 11:26=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wr=
-ote:
->
-> On 9/26/23 20:10, Huacai Chen wrote:
-> > high_memory is the virtual address of the 'highest physical address' in
-> > the system. But __va(get_num_physpages() << PAGE_SHIFT) is not what we
-> > want because there may be holes in the physical address space. On the
-> > other hand, max_low_pfn is calculated from memblock_end_of_DRAM(), whic=
-h
-> > is exactly corresponding to the highest physical address, so use it for
-> > high_memory calculation.
-> >
-> > Cc: <stable@vger.kernel.org>
-> Which commit is this patch intended to amend? A "Fixes:" tag may be
-> helpful for stable backporting.
-OK, I will add a Fixes: tag.
+On Tue, Sep 26, 2023 at 02:52:36PM -0700, Nuno Das Neves wrote:
+> On 9/26/2023 1:03 AM, Greg KH wrote:
+> > On Tue, Sep 26, 2023 at 07:00:51AM +0000, Wei Liu wrote:
+> > > On Tue, Sep 26, 2023 at 08:31:03AM +0200, Greg KH wrote:
+> > > > On Tue, Sep 26, 2023 at 05:54:34AM +0000, Wei Liu wrote:
+> > > > > On Tue, Sep 26, 2023 at 06:52:46AM +0200, Greg KH wrote:
+> > > > > > On Mon, Sep 25, 2023 at 05:07:24PM -0700, Nuno Das Neves wrote:
+> > > > > > > On 9/23/2023 12:58 AM, Greg KH wrote:
+> > > > > > > > Also, drivers should never call pr_*() calls, always use the proper
+> > > > > > > > dev_*() calls instead.
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > We only use struct device in one place in this driver, I think that is the
+> > > > > > > only place it makes sense to use dev_*() over pr_*() calls.
+> > > > > > 
+> > > > > > Then the driver needs to be fixed to use struct device properly so that
+> > > > > > you do have access to it when you want to print messages.  That's a
+> > > > > > valid reason to pass around your device structure when needed.
+> > > > > 
+> 
+> What is the tangible benefit of using dev_*() over pr_*()?
 
-Huacai
+Unified reporting and handling of userspace of kernel log messages so
+they can be classified properly as well as dealing correctly with the
+dynamic debugging kernel infrastructure.
 
-> > Signed-off-by: Chong Qiao <qiaochong@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/kernel/numa.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/loongarch/kernel/numa.c b/arch/loongarch/kernel/numa.=
-c
-> > index c7d33c489e04..6e65ff12d5c7 100644
-> > --- a/arch/loongarch/kernel/numa.c
-> > +++ b/arch/loongarch/kernel/numa.c
-> > @@ -436,7 +436,7 @@ void __init paging_init(void)
-> >
-> >   void __init mem_init(void)
-> >   {
-> > -     high_memory =3D (void *) __va(get_num_physpages() << PAGE_SHIFT);
-> > +     high_memory =3D (void *) __va(max_low_pfn << PAGE_SHIFT);
-> >       memblock_free_all();
-> >   }
-> >
->
-> --
-> WANG "xen0n" Xuerui
->
-> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
->
+Why wouldn't you want to use it?
+
+> As I said,
+> our use of struct device is very limited compared to all the places we
+> may need to log errors.
+
+Then please fix that.
+
+> pr_*() is used by many, many drivers; it seems to be the norm.
+
+Not at all, it is not.
+
+> We can certainly add a pr_fmt to improve the logging.
+
+Please do it correctly so you don't have to go and add support for it
+later when your tools people ask you why they can't properly parse your
+driver's kernel log messages.
+
+> > > If we're working with real devices like network cards or graphics cards
+> > > I would agree -- it is easy to imagine that we have several cards of the
+> > > same model in the system -- but in real world there won't be two
+> > > hypervisor instances running on the same hardware.
+> > > 
+> > > We can stash the struct device inside some private data fields, but that
+> > > doesn't change the fact that we're still having one instance of the
+> > > structure. Is this what you want? Or do you have something else in mind?
+> > 
+> > You have a real device, it's how userspace interacts with your
+> > subsystem.  Please use that, it is dynamically created and handled and
+> > is the correct representation here.
+> > 
+> 
+> Are you referring to the struct device we get from calling
+> misc_register?
+
+Yes.
+
+> How would you suggest we get a reference to that device via e.g. open()
+> or ioctl() without keeping a global reference to it?
+
+You explicitly have it in your open() and ioctl() call, you never need a
+global reference for it the kernel gives it to you!
+
+thanks,
+
+greg k-h
