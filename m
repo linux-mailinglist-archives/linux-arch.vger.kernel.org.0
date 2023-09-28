@@ -2,153 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D9B7B1EB3
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 15:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664DC7B2129
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 17:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjI1NlI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 Sep 2023 09:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S231620AbjI1P0J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 Sep 2023 11:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbjI1NlH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 Sep 2023 09:41:07 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21C618F;
-        Thu, 28 Sep 2023 06:41:02 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id E2EA16C13E9;
-        Thu, 28 Sep 2023 13:40:57 +0000 (UTC)
-Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 4657C6C10E9;
-        Thu, 28 Sep 2023 13:40:57 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1695908457; a=rsa-sha256;
-        cv=none;
-        b=g9ApNVDpXUw8NbiVPB91whx+A98KefOUdvwQ3MYgplXW6DoYam+sUPQAu91KxM6lXmAxXG
-        4+lVY54zLzyyeGEiSaAH0MBOT3EuV9QBCa0z35Pjcv+ka5OdYgrOTPawDQ8X/6Hog0PECj
-        +VCYPSQUjhUvfaQFeKTuTziLY1PYZ7zN0W2keRSHnvhhkZRSqGTT7nDSy/vr6QmB7kG2zE
-        aKNFEeYHzAdw4/CP9pzCP/D5KIHZM+kN6o0Doinn8IGGWCCyXnD4WUM7GoCEAEmTdubvyH
-        YNCN9PZ81xsNuE4W7RAYFXtAiT4RMIC4CXIiuJJCIv6I1MUs9hAY1OAbljCfwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1695908457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=fV4Zxk0FhT7C3XEli4MGvFTPX5hp1XlfXjZMP4aD39E=;
-        b=HoJv0cmylHUZA6FoIjPfBtY0ro3gzvVAMtGpG62BbF4JZKhTFuAeXbbMMWrMRmmHLMWbC1
-        Su1yYVFJnEg6+imcOYpfqRFBMKak44KKYR7GGJC1Y23rdaeyTn8Z1YRVOvAY8jdOJGmth6
-        ki1bCHAvCi1kba0drAKEAC254cmoOeUVO95JQzn7aFe1bnyaEsN4EX9DQLOFMWoci1n9Fq
-        KgwUoMt97N7Npdr93dzqm0EXiacL/gvbC8ECImymDcwm4f2YFI3iSlGTyH5WvxP5xNjV4m
-        qBqAkSJSA/OCTfaTx6sj6Uvr+90EujW3AM732SSUMEeK1om25hJK4lnP9RI4jA==
-ARC-Authentication-Results: i=1;
-        rspamd-7d5dc8fd68-ftkct;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Plucky-Illegal: 128ccf8d5bc7bb01_1695908457686_874718514
-X-MC-Loop-Signature: 1695908457686:2815361285
-X-MC-Ingress-Time: 1695908457686
-Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.109.140.241 (trex/6.9.1);
-        Thu, 28 Sep 2023 13:40:57 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4RxF481GpZzLJ;
-        Thu, 28 Sep 2023 06:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1695908457;
-        bh=fV4Zxk0FhT7C3XEli4MGvFTPX5hp1XlfXjZMP4aD39E=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=YX3pGd+sUWu1zeeF2pqWBMRrJZeNQkOmmn70Mqq6Iw782HyjKK/rQbp90x0CM28MQ
-         ORUsj1thJvkFcftFmXRFJgwcTgcZAUIZnM8TWQkBbOnsfu3mrIjHTt1mt7DmYtaeo+
-         YA/JI9YuN/kkMCRAeJLVbjheB8a558IPuxjyzgYK1d4QDcG4sNAI3j9bKO3NwAPGWw
-         xjMHvl+rpIZEnI4KMbpxd8720EKSNF/OzV/vX425Rpme0SB+CUYaGU/7bSv2i+dXCK
-         9ho7aXqOGPZPB7rqpNc5GGz+/Yg4v0H+teJQiEal+h5fLIp3hcmE3uZhGbuxwl2OWx
-         hgJkWw+wEHVfg==
-Date:   Thu, 28 Sep 2023 06:40:53 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tglx@linutronix.de, axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, dvhart@infradead.org, andrealmeid@igalia.com,
-        Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com,
-        hch@infradead.org, lstoakes@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        malteskarupke@web.de, steve.shaw@intel.com,
-        marko.makela@mariadb.com, andrei.artemev@intel.com
-Subject: Re: futex2 numa stuff
-Message-ID: <zhd6njnv63lithg5yetvyniwt34wcltxa5huk4ustp7j7pf2na@6v6qehyb3w3g>
-Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>, 
-        tglx@linutronix.de, axboe@kernel.dk, linux-kernel@vger.kernel.org, mingo@redhat.com, 
-        dvhart@infradead.org, andrealmeid@igalia.com, 
-        Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com, 
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org, linux-mm@kvack.org, 
-        linux-arch@vger.kernel.org, malteskarupke@web.de, steve.shaw@intel.com, 
-        marko.makela@mariadb.com, andrei.artemev@intel.com
-References: <20230921104505.717750284@noisy.programming.kicks-ass.net>
- <20230921104505.717750284@noisy.programming.kicks-ass.net>
- <20230922200120.011184118@infradead.org>
+        with ESMTP id S231438AbjI1P0J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 Sep 2023 11:26:09 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D5D99;
+        Thu, 28 Sep 2023 08:26:05 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32547C433C8;
+        Thu, 28 Sep 2023 15:26:02 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch fixes for v6.6-rc4
+Date:   Thu, 28 Sep 2023 23:25:35 +0800
+Message-Id: <20230928152535.2617047-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230922200120.011184118@infradead.org>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 22 Sep 2023, Peter Zijlstra wrote:
+The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
 
->Hi!
->
->Updated version of patch 15/15 and a few extra patches for testing the
->FUTEX2_NUMA bits. The last patch (17/15) should never be applied for anything
->you care about and exists purely because I'm too lazy to generate actual
->hash-bucket contention.
->
->On my 2 node IVB-EP:
->
-> $ echo FUTEX_SQUASH > /debug/sched/features
->
->Effectively reducing each node to 1 bucket.
->
-> $ numactl -m0 -N0 ./futex_numa -c10 -t2 -n0 -N0 &
->   numactl -m1 -N1 ./futex_numa -c10 -t2 -n0 -N0
->
-> ...
-> contenders: 16154935
-> contenders: 16202472
->
-> $ numactl -m0 -N0 ./futex_numa -c10 -t2 -n0 -N0 &
->   numactl -m1 -N1 ./futex_numa -c10 -t2 -n0 -N1
->
-> contenders: 48584991
-> contenders: 48680560
->
->(loop counts, higher is better)
->
->Clearly showing how separating the hashes works.
->
->The first one runs 10 contenders on each node but forces the (numa) futex to
->hash to node 0 for both. This ensures all 20 contenders hash to the same
->bucket and *ouch*.
->
->The second one does the same, except now fully separates the nodes. Performance
->is much improved.
->
->Proving the per-node hashing actually works as advertised.
+  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
 
-Very nice.
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.6-2
+
+for you to fetch changes up to b1dc55a3d6a86cc2c1ae664ad7280bff4c0fc28f:
+
+  LoongArch: Add support for 64_PCREL relocation type (2023-09-27 16:19:13 +0800)
+
+----------------------------------------------------------------
+LoongArch fixes for v6.6-rc4
+
+Fix high_memory calculation and module loader errors with latest binutils.
+----------------------------------------------------------------
+Huacai Chen (1):
+      LoongArch: numa: Fix high_memory calculation
+
+Tiezhu Yang (3):
+      LoongArch: Define relocation types for ABI v2.10
+      LoongArch: Add support for 32_PCREL relocation type
+      LoongArch: Add support for 64_PCREL relocation type
+
+ arch/loongarch/include/asm/elf.h |  9 +++++++++
+ arch/loongarch/kernel/module.c   | 22 +++++++++++++++++++++-
+ arch/loongarch/kernel/numa.c     |  2 +-
+ 3 files changed, 31 insertions(+), 2 deletions(-)
