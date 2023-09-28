@@ -2,94 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947167B0FD2
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 02:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734437B1105
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 05:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjI1AR7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Sep 2023 20:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S229437AbjI1DCb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Sep 2023 23:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjI1AR6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Sep 2023 20:17:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4C41114;
-        Wed, 27 Sep 2023 17:17:56 -0700 (PDT)
-Received: from [10.0.0.178] (c-76-135-56-23.hsd1.wa.comcast.net [76.135.56.23])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C798520B74C0;
-        Wed, 27 Sep 2023 17:17:55 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C798520B74C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1695860276;
-        bh=apiqyVomDl3eH58Vs8mK0hqcp1k7lISOy2zAU3jCyNU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=V8yNq7vak/Kr3K00IoP6fpQzGDvLsvy4Ezk9uAHfe4/mS3eMbtM8AOjTFUAcUd+m8
-         Uy7bPwEC59miyqW9bO1K2C0BHSiD0UJAdT4igjnaL80svRDmpqu5ZuDj+DfThLWX/d
-         EzQskjEpeqCkesXIudWToBYAWfoOBMOwhSz/l9+M=
-Message-ID: <fda2a3dd-b325-4780-bd02-d1fedcaec260@linux.microsoft.com>
-Date:   Wed, 27 Sep 2023 17:17:54 -0700
+        with ESMTP id S229493AbjI1DCa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Sep 2023 23:02:30 -0400
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21FB899;
+        Wed, 27 Sep 2023 20:02:27 -0700 (PDT)
+Received: from wangkailong$jari.cn ( [182.148.12.64] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Thu, 28 Sep 2023 11:01:08
+ +0800 (GMT+08:00)
+X-Originating-IP: [182.148.12.64]
+Date:   Thu, 28 Sep 2023 11:01:08 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "KaiLong Wang" <wangkailong@jari.cn>
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] vmlinux.lds.h: Clean up errors in vmlinux.lds.h
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.1-cmXT6 build
+ 20230419(ff23bf83) Copyright (c) 2002-2023 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 15/15] Drivers: hv: Add modules to expose /dev/mshv to
- VMMs running on Hyper-V
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>, Wei Liu <wei.liu@kernel.org>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, patches@lists.linux.dev,
-        mikelley@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, apais@linux.microsoft.com,
-        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
-        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
-        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
-        catalin.marinas@arm.com
-References: <2023092342-staunch-chafe-1598@gregkh>
- <e235025e-abfa-4b31-8b83-416ec8ec4f72@linux.microsoft.com>
- <2023092630-masculine-clinic-19b6@gregkh>
- <ZRJyGrm4ufNZvN04@liuwe-devbox-debian-v2>
- <2023092614-tummy-dwelling-7063@gregkh>
- <ZRKBo5Nbw+exPkAj@liuwe-devbox-debian-v2>
- <2023092646-version-series-a7b5@gregkh>
- <05119cbc-155d-47c5-ab21-e6a08eba5dc4@linux.microsoft.com>
- <2023092737-daily-humility-f01c@gregkh>
- <ZRPiGk9M3aQr99Y5@liuwe-devbox-debian-v2>
- <2023092757-cupbearer-cancel-b314@gregkh>
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <2023092757-cupbearer-cancel-b314@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,SPF_HELO_PASS,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <72e80688.8a8.18ad9bba905.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwD3lD917BRlq3++AA--.692W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAIB2UT+K8AFQACs4
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_PBL,RDNS_NONE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/27/2023 1:33 AM, Greg KH wrote:
-> On Wed, Sep 27, 2023 at 08:04:42AM +0000, Wei Liu wrote:
->> So, the driver is supposed to stash a pointer to struct device in
->> private_data. That's what I alluded to in my previous reply. The core
->> driver framework or the VFS doesn't give us a reference to struct
->> device. We have to do it ourselves.
-> 
-> Please read Linux Device Drivers, 3rd edition, chapter 3, for how to do
-> this properly.  The book is free online.
-> 
-
-Thanks, the issue that confused us was how to get the miscdevice.
-I eventually found the answer in the misc_register() documentation:
-
-"By default, an open() syscall to the device sets file->private_data to
-point to the structure."
-
-That's good - when we create a guest, we will have the miscdevice
-in private_data already. Then we can just put it in our per-guest data
-structure. That will let us retrieve the device in the other ioctls so 
-we can call dev_*().
-
-Thanks,
-Nuno
+Rml4IHRoZSBmb2xsb3dpbmcgZXJyb3JzIHJlcG9ydGVkIGJ5IGNoZWNrcGF0Y2g6CgpFUlJPUjog
+c3BhY2VzIHJlcXVpcmVkIGFyb3VuZCB0aGF0ICc6JyAoY3R4Old4VikKRVJST1I6IHNwYWNlIHJl
+cXVpcmVkIGFmdGVyIHRoYXQgJywnIChjdHg6VnhPKQpFUlJPUjogbmVlZCBjb25zaXN0ZW50IHNw
+YWNpbmcgYXJvdW5kICcqJyAoY3R4OlZ4VykKClNpZ25lZC1vZmYtYnk6IEthaUxvbmcgV2FuZyA8
+d2FuZ2thaWxvbmdAamFyaS5jbj4KLS0tCiBpbmNsdWRlL2FzbS1nZW5lcmljL3ZtbGludXgubGRz
+LmggfCAyMiArKysrKysrKysrKy0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0
+aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9hc20tZ2VuZXJp
+Yy92bWxpbnV4Lmxkcy5oIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy92bWxpbnV4Lmxkcy5oCmluZGV4
+IDljNTk0MDkxMDRmNi4uOWUxOTIzNGJiZjk3IDEwMDY0NAotLS0gYS9pbmNsdWRlL2FzbS1nZW5l
+cmljL3ZtbGludXgubGRzLmgKKysrIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy92bWxpbnV4Lmxkcy5o
+CkBAIC02Myw4ICs2Myw4IEBACiAgKiB1cCBpbiB0aGUgUFRfTk9URSBQcm9ncmFtIEhlYWRlci4K
+ICAqLwogI2lmZGVmIEVNSVRTX1BUX05PVEUKLSNkZWZpbmUgTk9URVNfSEVBREVSUwkJOnRleHQg
+Om5vdGUKLSNkZWZpbmUgTk9URVNfSEVBREVSU19SRVNUT1JFCV9fcmVzdG9yZV9waCA6IHsgKigu
+X19yZXN0b3JlX3BoKSB9IDp0ZXh0CisjZGVmaW5lIE5PVEVTX0hFQURFUlMgOiB0ZXh0IDogbm90
+ZQorI2RlZmluZSBOT1RFU19IRUFERVJTX1JFU1RPUkUJX19yZXN0b3JlX3BoIDogeyAqKC5fX3Jl
+c3RvcmVfcGgpIH0gOiB0ZXh0CiAjZWxzZQogI2RlZmluZSBOT1RFU19IRUFERVJTCiAjZGVmaW5l
+IE5PVEVTX0hFQURFUlNfUkVTVE9SRQpAQCAtOTgsMTAgKzk4LDEwIEBACiAgKi8KICNpZiBkZWZp
+bmVkKENPTkZJR19MRF9ERUFEX0NPREVfREFUQV9FTElNSU5BVElPTikgfHwgZGVmaW5lZChDT05G
+SUdfTFRPX0NMQU5HKQogI2RlZmluZSBURVhUX01BSU4gLnRleHQgLnRleHQuWzAtOWEtekEtWl9d
+KgotI2RlZmluZSBEQVRBX01BSU4gLmRhdGEgLmRhdGEuWzAtOWEtekEtWl9dKiAuZGF0YS4uTCog
+LmRhdGEuLmNvbXBvdW5kbGl0ZXJhbCogLmRhdGEuJF9fdW5uYW1lZF8qIC5kYXRhLiRMKgorI2Rl
+ZmluZSBEQVRBX01BSU4gLmRhdGEgLmRhdGEuWzAtOWEtekEtWl9dICogLmRhdGEuLkwgKiAuZGF0
+YS4uY29tcG91bmRsaXRlcmFsICogLmRhdGEuJF9fdW5uYW1lZF8gKiAuZGF0YS4kTCoKICNkZWZp
+bmUgU0RBVEFfTUFJTiAuc2RhdGEgLnNkYXRhLlswLTlhLXpBLVpfXSoKLSNkZWZpbmUgUk9EQVRB
+X01BSU4gLnJvZGF0YSAucm9kYXRhLlswLTlhLXpBLVpfXSogLnJvZGF0YS4uTCoKLSNkZWZpbmUg
+QlNTX01BSU4gLmJzcyAuYnNzLlswLTlhLXpBLVpfXSogLmJzcy4uY29tcG91bmRsaXRlcmFsKgor
+I2RlZmluZSBST0RBVEFfTUFJTiAucm9kYXRhIC5yb2RhdGEuWzAtOWEtekEtWl9dICogLnJvZGF0
+YS4uTCoKKyNkZWZpbmUgQlNTX01BSU4gLmJzcyAuYnNzLlswLTlhLXpBLVpfXSAqIC5ic3MuLmNv
+bXBvdW5kbGl0ZXJhbCoKICNkZWZpbmUgU0JTU19NQUlOIC5zYnNzIC5zYnNzLlswLTlhLXpBLVpf
+XSoKICNlbHNlCiAjZGVmaW5lIFRFWFRfTUFJTiAudGV4dApAQCAtMjk0LDcgKzI5NCw3IEBACiAj
+aWZkZWYgQ09ORklHX1NFUklBTF9FQVJMWUNPTgogI2RlZmluZSBFQVJMWUNPTl9UQUJMRSgpCQkJ
+CQkJXAogCS4gPSBBTElHTig4KTsJCQkJCQkJXAotCUJPVU5ERURfU0VDVElPTl9QT1NUX0xBQkVM
+KF9fZWFybHljb25fdGFibGUsIF9fZWFybHljb25fdGFibGUsICwgX2VuZCkKKwlCT1VOREVEX1NF
+Q1RJT05fUE9TVF9MQUJFTChfX2Vhcmx5Y29uX3RhYmxlLCBfX2Vhcmx5Y29uX3RhYmxlLCwgX2Vu
+ZCkKICNlbHNlCiAjZGVmaW5lIEVBUkxZQ09OX1RBQkxFKCkKICNlbmRpZgpAQCAtNDYyLDcgKzQ2
+Miw3IEBACiAJLiA9IEFMSUdOKChhbGlnbikpOwkJCQkJCVwKIAkucm9kYXRhICAgICAgICAgICA6
+IEFUKEFERFIoLnJvZGF0YSkgLSBMT0FEX09GRlNFVCkgewkJXAogCQlfX3N0YXJ0X3JvZGF0YSA9
+IC47CQkJCQlcCi0JCSooLnJvZGF0YSkgKigucm9kYXRhLiopCQkJCQlcCisJCSooLnJvZGF0YSkg
+KiAoLnJvZGF0YS4qKQkJCQkJXAogCQlTQ0hFRF9EQVRBCQkJCQkJXAogCQlST19BRlRFUl9JTklU
+X0RBVEEJLyogUmVhZCBvbmx5IGFmdGVyIGluaXQgKi8JXAogCQkuID0gQUxJR04oOCk7CQkJCQkJ
+XApAQCAtNDk0LDI4ICs0OTQsMjggQEAKIAkvKiBLZXJuZWwgc3ltYm9sIHRhYmxlOiBOb3JtYWwg
+c3ltYm9scyAqLwkJCVwKIAlfX2tzeW10YWIgICAgICAgICA6IEFUKEFERFIoX19rc3ltdGFiKSAt
+IExPQURfT0ZGU0VUKSB7CQlcCiAJCV9fc3RhcnRfX19rc3ltdGFiID0gLjsJCQkJCVwKLQkJS0VF
+UCgqKFNPUlQoX19fa3N5bXRhYisqKSkpCQkJCVwKKwkJS0VFUCgqKFNPUlQoX19fa3N5bXRhYisg
+KikpKQkJCQlcCiAJCV9fc3RvcF9fX2tzeW10YWIgPSAuOwkJCQkJXAogCX0JCQkJCQkJCVwKIAkJ
+CQkJCQkJCVwKIAkvKiBLZXJuZWwgc3ltYm9sIHRhYmxlOiBHUEwtb25seSBzeW1ib2xzICovCQkJ
+XAogCV9fa3N5bXRhYl9ncGwgICAgIDogQVQoQUREUihfX2tzeW10YWJfZ3BsKSAtIExPQURfT0ZG
+U0VUKSB7CVwKIAkJX19zdGFydF9fX2tzeW10YWJfZ3BsID0gLjsJCQkJXAotCQlLRUVQKCooU09S
+VChfX19rc3ltdGFiX2dwbCsqKSkpCQkJCVwKKwkJS0VFUCgqKFNPUlQoX19fa3N5bXRhYl9ncGwr
+ICopKSkJCQlcCiAJCV9fc3RvcF9fX2tzeW10YWJfZ3BsID0gLjsJCQkJXAogCX0JCQkJCQkJCVwK
+IAkJCQkJCQkJCVwKIAkvKiBLZXJuZWwgc3ltYm9sIHRhYmxlOiBOb3JtYWwgc3ltYm9scyAqLwkJ
+CVwKIAlfX2tjcmN0YWIgICAgICAgICA6IEFUKEFERFIoX19rY3JjdGFiKSAtIExPQURfT0ZGU0VU
+KSB7CQlcCiAJCV9fc3RhcnRfX19rY3JjdGFiID0gLjsJCQkJCVwKLQkJS0VFUCgqKFNPUlQoX19f
+a2NyY3RhYisqKSkpCQkJCVwKKwkJS0VFUCgqKFNPUlQoX19fa2NyY3RhYisgKikpKQkJCQlcCiAJ
+CV9fc3RvcF9fX2tjcmN0YWIgPSAuOwkJCQkJXAogCX0JCQkJCQkJCVwKIAkJCQkJCQkJCVwKIAkv
+KiBLZXJuZWwgc3ltYm9sIHRhYmxlOiBHUEwtb25seSBzeW1ib2xzICovCQkJXAogCV9fa2NyY3Rh
+Yl9ncGwgICAgIDogQVQoQUREUihfX2tjcmN0YWJfZ3BsKSAtIExPQURfT0ZGU0VUKSB7CVwKIAkJ
+X19zdGFydF9fX2tjcmN0YWJfZ3BsID0gLjsJCQkJXAotCQlLRUVQKCooU09SVChfX19rY3JjdGFi
+X2dwbCsqKSkpCQkJCVwKKwkJS0VFUCgqKFNPUlQoX19fa2NyY3RhYl9ncGwrICopKSkJCQlcCiAJ
+CV9fc3RvcF9fX2tjcmN0YWJfZ3BsID0gLjsJCQkJXAogCX0JCQkJCQkJCVwKIAkJCQkJCQkJCVwK
+LS0gCjIuMTcuMQo=
