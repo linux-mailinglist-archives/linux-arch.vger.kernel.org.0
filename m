@@ -2,68 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0857B1109
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 05:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082A47B128A
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 08:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjI1DFR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Sep 2023 23:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S230220AbjI1GTK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 Sep 2023 02:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjI1DFQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Sep 2023 23:05:16 -0400
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B280694;
-        Wed, 27 Sep 2023 20:05:14 -0700 (PDT)
-Received: from wangkailong$jari.cn ( [182.148.12.64] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Thu, 28 Sep 2023 11:03:55
- +0800 (GMT+08:00)
-X-Originating-IP: [182.148.12.64]
-Date:   Thu, 28 Sep 2023 11:03:55 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "KaiLong Wang" <wangkailong@jari.cn>
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] div64: Clean up errors in div64.h
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.1-cmXT6 build
- 20230419(ff23bf83) Copyright (c) 2002-2023 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S229453AbjI1GTJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 Sep 2023 02:19:09 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4D899;
+        Wed, 27 Sep 2023 23:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695881946; x=1727417946;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=yPoRTff1W8kHOZj6MIgWTa4FPEtV7El2Duzf1zGYqoI=;
+  b=XCmh6lMezJrCbdiEj6brvfLLN+4eo4r0uPrIBptu38VyOV1oYDG6UJI9
+   do2V5wVo0YxP/em7YTb0rKomZqAHoHKP41Ccv47kW5MBFB+2yfnlkNq51
+   X92JODOz5PFxUzxfwKV8rpdrpjK8KZzBv2eRlgo1VElZIbBAVyVOKHmYF
+   qkCX1Ouz4f0JUTsZDmhFmI1J+5p6CkzjhiqQAp9t1Lp0lJ/hR+L1U1GN9
+   52bTwBaeQPbrzcJJwMlwZdlsNl3oLkQpDlY+EqhGSw1QFTmPb/9NvfYRw
+   yPYbFY6TUoFZOuJ9yQnlDf9U80BK6g7a25NLdazkyARnsmTJB3cvNAGIu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="446139326"
+X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
+   d="scan'208";a="446139326"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 23:19:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="726120975"
+X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
+   d="scan'208";a="726120975"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 23:19:00 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Ravi Jonnalagadda <ravis.opensrc@micron.com>
+Cc:     <linux-mm@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <luto@kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dietmar.eggemann@arm.com>, <vincent.guittot@linaro.org>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+        <akpm@linux-foundation.org>, <x86@kernel.org>,
+        <aneesh.kumar@linux.ibm.com>, <gregory.price@memverge.com>,
+        <jgroves@micron.com>, <sthanneeru@micron.com>,
+        <emirakhur@micron.com>, <vtanna@micron.com>
+Subject: Re: [RFC PATCH 0/2] mm: mempolicy: Multi-tier interleaving
+References: <20230927095002.10245-1-ravis.opensrc@micron.com>
+Date:   Thu, 28 Sep 2023 14:14:32 +0800
+In-Reply-To: <20230927095002.10245-1-ravis.opensrc@micron.com> (Ravi
+        Jonnalagadda's message of "Wed, 27 Sep 2023 15:20:00 +0530")
+Message-ID: <87v8burfhz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Message-ID: <109c2e25.8a9.18ad9be34be.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwD3lD8b7RRl6X++AA--.693W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAIB2UT+K8AFQAEs+
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_PBL,RDNS_NONE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgZXJyb3JzIHJlcG9ydGVkIGJ5IGNoZWNrcGF0Y2g6CgpFUlJPUjog
-c3BhY2UgcmVxdWlyZWQgYWZ0ZXIgdGhhdCAnLCcgKGN0eDpWeFYpCgpTaWduZWQtb2ZmLWJ5OiBL
-YWlMb25nIFdhbmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogaW5jbHVkZS9hc20tZ2VuZXJp
-Yy9kaXY2NC5oIHwgNCArKy0tCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRl
-bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvYXNtLWdlbmVyaWMvZGl2NjQuaCBiL2lu
-Y2x1ZGUvYXNtLWdlbmVyaWMvZGl2NjQuaAppbmRleCAxM2Y1YWE2OGE0NTUuLmVjNzViNzk5OGQw
-NiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9kaXY2NC5oCisrKyBiL2luY2x1ZGUv
-YXNtLWdlbmVyaWMvZGl2NjQuaApAQCAtNDIsNyArNDIsNyBAQAogICogTk9URTogbWFjcm8gcGFy
-YW1ldGVyIEBuIGlzIGV2YWx1YXRlZCBtdWx0aXBsZSB0aW1lcywKICAqIGJld2FyZSBvZiBzaWRl
-IGVmZmVjdHMhCiAgKi8KLSMgZGVmaW5lIGRvX2RpdihuLGJhc2UpICh7CQkJCQlcCisjIGRlZmlu
-ZSBkb19kaXYobiwgYmFzZSkgKHsJCQkJCVwKIAl1aW50MzJfdCBfX2Jhc2UgPSAoYmFzZSk7CQkJ
-CVwKIAl1aW50MzJfdCBfX3JlbTsJCQkJCQlcCiAJX19yZW0gPSAoKHVpbnQ2NF90KShuKSkgJSBf
-X2Jhc2U7CQkJXApAQCAtMjE2LDcgKzIxNiw3IEBAIGV4dGVybiB1aW50MzJfdCBfX2RpdjY0XzMy
-KHVpbnQ2NF90ICpkaXZpZGVuZCwgdWludDMyX3QgZGl2aXNvcik7CiAvKiBUaGUgdW5uZWNlc3Nh
-cnkgcG9pbnRlciBjb21wYXJlIGlzIHRoZXJlCiAgKiB0byBjaGVjayBmb3IgdHlwZSBzYWZldHkg
-KG4gbXVzdCBiZSA2NGJpdCkKICAqLwotIyBkZWZpbmUgZG9fZGl2KG4sYmFzZSkgKHsJCQkJXAor
-IyBkZWZpbmUgZG9fZGl2KG4sIGJhc2UpICh7CQkJCVwKIAl1aW50MzJfdCBfX2Jhc2UgPSAoYmFz
-ZSk7CQkJXAogCXVpbnQzMl90IF9fcmVtOwkJCQkJXAogCSh2b2lkKSgoKHR5cGVvZigobikpICop
-MCkgPT0gKCh1aW50NjRfdCAqKTApKTsJXAotLSAKMi4xNy4xCg==
+Hi, Ravi,
+
+Thanks for the patch!
+
+Ravi Jonnalagadda <ravis.opensrc@micron.com> writes:
+
+> From: Ravi Shankar <ravis.opensrc@micron.com>
+>
+> Hello,
+>
+> The current interleave policy operates by interleaving page requests
+> among nodes defined in the memory policy. To accommodate the
+> introduction of memory tiers for various memory types (e.g., DDR, CXL,
+> HBM, PMEM, etc.), a mechanism is needed for interleaving page requests
+> across these memory types or tiers.
+
+Why do we need interleaving page allocation among memory tiers?  I think
+that you need to make it more explicit.  I guess that it's to increase
+maximal memory bandwidth for workloads?
+
+> This can be achieved by implementing an interleaving method that
+> considers the tier weights.
+> The tier weight will determine the proportion of nodes to select from
+> those specified in the memory policy.
+> A tier weight can be assigned to each memory type within the system.
+
+What is the problem of the original interleaving?  I think you need to
+make it explicit too.
+
+> Hasan Al Maruf had put forth a proposal for interleaving between two
+> tiers, namely the top tier and the low tier. However, this patch was
+> not adopted due to constraints on the number of available tiers.
+>
+> https://lore.kernel.org/linux-mm/YqD0%2FtzFwXvJ1gK6@cmpxchg.org/T/
+>
+> New proposed changes:
+>
+> 1. Introducea sysfs entry to allow setting the interleave weight for each
+> memory tier.
+> 2. Each tier with a default weight of 1, indicating a standard 1:1
+> proportion.
+> 3. Distribute the weight of that tier in a uniform manner across all nodes.
+> 4. Modifications to the existing interleaving algorithm to support the
+> implementation of multi-tier interleaving based on tier-weights.
+>
+> This is inline with Huang, Ying's presentation in lpc22, 16th slide in
+> https://lpc.events/event/16/contributions/1209/attachments/1042/1995/\
+> Live%20In%20a%20World%20With%20Multiple%20Memory%20Types.pdf
+
+Thanks to refer to the original work about this.
+
+> Observed a significant increase (165%) in bandwidth utilization
+> with the newly proposed multi-tier interleaving compared to the
+> traditional 1:1 interleaving approach between DDR and CXL tier nodes,
+> where 85% of the bandwidth is allocated to DDR tier and 15% to CXL
+> tier with MLC -w2 option.
+
+It appears that "mlc" isn't an open source software.  Better to use a
+open source software to test.  And, even better to use a more practical
+workloads instead of a memory bandwidth/latency measurement tool.
+
+> Usage Example:
+>
+> 1. Set weights for DDR (tier4) and CXL(teir22) tiers.
+> echo 85 > /sys/devices/virtual/memory_tiering/memory_tier4/interleave_weight
+> echo 15 > /sys/devices/virtual/memory_tiering/memory_tier22/interleave_weight
+>
+> 2. Interleave between DRR(tier4, node-0) and CXL (tier22, node-1) using numactl
+> numactl -i0,1 mlc --loaded_latency W2
+>
+> Srinivasulu Thanneeru (2):
+>   memory tier: Introduce sysfs for tier interleave weights.
+>   mm: mempolicy: Interleave policy for tiered memory nodes
+>
+>  include/linux/memory-tiers.h |  27 ++++++++-
+>  include/linux/sched.h        |   2 +
+>  mm/memory-tiers.c            |  67 +++++++++++++++-------
+>  mm/mempolicy.c               | 107 +++++++++++++++++++++++++++++++++--
+>  4 files changed, 174 insertions(+), 29 deletions(-)
+
+--
+Best Regards,
+Huang, Ying
