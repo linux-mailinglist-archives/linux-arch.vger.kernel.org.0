@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516E67B397D
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Sep 2023 20:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F8E7B3973
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Sep 2023 20:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbjI2SCU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Sep 2023 14:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S233767AbjI2SCN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Sep 2023 14:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbjI2SCI (ORCPT
+        with ESMTP id S233798AbjI2SCI (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Sep 2023 14:02:08 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 453D5CE3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAC90CE7;
         Fri, 29 Sep 2023 11:02:05 -0700 (PDT)
 Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6817120B74C3;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 832A120B74D4;
         Fri, 29 Sep 2023 11:01:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6817120B74C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 832A120B74D4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1696010517;
-        bh=+X19D62rwhGltzmqE9hkowrhpuhbGotyJ9cqKAt/I2k=;
+        bh=HF/7TB3ETksYEB9KlMb0r3JzZFCijaEXdQeCMYRt1dI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Svl+o1aPZN9g64ZPJA152dkqcc1Q17nHMqBbccrEeM3HYmsignv9qc56AANMnTh8H
-         RNJM/3j1pPg738h2nnAcFuizNQyWY+japk5CIpJFbFJ/tWOP6cTK0lAG87BHQG4XfU
-         Y/nDJ9d1iC+IJvaTfQur/BjzSvGBPS2bOLtYqS2E=
+        b=Glh+75DkolqBQ8RtEtapSaQIo8RtOlXCmgQ9VG7LYu6+d+xpZ9ZjQmGfY7x0FL2nD
+         cEY35bbIgL1+h9dA1HBB00yEdjoXTRo75+1prMRbfC+93CGSgX+/k6X84pXecN2rho
+         TlG3SCevISlR8R74cXtULhYbrUn2mc/uhvboA2Dc=
 From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
 To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -38,9 +38,9 @@ Cc:     patches@lists.linux.dev, mikelley@microsoft.com, kys@microsoft.com,
         vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         will@kernel.org, catalin.marinas@arm.com
-Subject: [PATCH v4 10/15] x86: hyperv: Add mshv_handler irq handler and setup function
-Date:   Fri, 29 Sep 2023 11:01:36 -0700
-Message-Id: <1696010501-24584-11-git-send-email-nunodasneves@linux.microsoft.com>
+Subject: [PATCH v4 11/15] Drivers: hv: export vmbus_isr, hv_context and hv_post_message
+Date:   Fri, 29 Sep 2023 11:01:37 -0700
+Message-Id: <1696010501-24584-12-git-send-email-nunodasneves@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
 References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
@@ -54,81 +54,69 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This will handle SYNIC interrupts such as intercepts, doorbells, and
-scheduling messages intended for the mshv driver.
+These will be used by the mshv_vtl driver.
 
 Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
-Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+Acked-by: Wei Liu <wei.liu@kernel.org>
 ---
- arch/x86/kernel/cpu/mshyperv.c | 9 +++++++++
- drivers/hv/hv_common.c         | 5 +++++
- include/asm-generic/mshyperv.h | 2 ++
- 3 files changed, 16 insertions(+)
+ drivers/hv/hv.c           | 2 ++
+ drivers/hv/hyperv_vmbus.h | 1 +
+ drivers/hv/vmbus_drv.c    | 3 ++-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 9b898b65a013..06f79963add5 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -110,6 +110,7 @@ void hv_set_register(unsigned int reg, u64 value)
+diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+index d7869205dcbe..c60a4fb55f3c 100644
+--- a/drivers/hv/hv.c
++++ b/drivers/hv/hv.c
+@@ -25,6 +25,7 @@
+ 
+ /* The one and only */
+ struct hv_context hv_context;
++EXPORT_SYMBOL_GPL(hv_context);
+ 
+ /*
+  * hv_init - Main initialization routine.
+@@ -93,6 +94,7 @@ int hv_post_message(union hv_connection_id connection_id,
+ 
+ 	return hv_result(status);
  }
- EXPORT_SYMBOL_GPL(hv_set_register);
++EXPORT_SYMBOL_GPL(hv_post_message);
  
-+static void (*mshv_handler)(void);
- static void (*vmbus_handler)(void);
- static void (*hv_stimer0_handler)(void);
- static void (*hv_kexec_handler)(void);
-@@ -120,6 +121,9 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
- 	struct pt_regs *old_regs = set_irq_regs(regs);
- 
- 	inc_irq_stat(irq_hv_callback_count);
-+	if (mshv_handler)
-+		mshv_handler();
-+
- 	if (vmbus_handler)
- 		vmbus_handler();
- 
-@@ -129,6 +133,11 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
- 	set_irq_regs(old_regs);
- }
- 
-+void hv_setup_mshv_irq(void (*handler)(void))
-+{
-+	mshv_handler = handler;
-+}
-+
- void hv_setup_vmbus_handler(void (*handler)(void))
+ int hv_synic_alloc(void)
  {
- 	vmbus_handler = handler;
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 3f6f23e4c579..6ec63502d83d 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -585,6 +585,11 @@ void __weak hv_remove_vmbus_handler(void)
- }
- EXPORT_SYMBOL_GPL(hv_remove_vmbus_handler);
+diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+index f6b1e710f805..09792eb4ffed 100644
+--- a/drivers/hv/hyperv_vmbus.h
++++ b/drivers/hv/hyperv_vmbus.h
+@@ -32,6 +32,7 @@
+  */
+ #define HV_UTIL_NEGO_TIMEOUT 55
  
-+void __weak hv_setup_mshv_irq(void (*handler)(void))
-+{
-+}
-+EXPORT_SYMBOL_GPL(hv_setup_mshv_irq);
-+
- void __weak hv_setup_kexec_handler(void (*handler)(void))
++void vmbus_isr(void);
+ 
+ /* Definitions for the monitored notification facility */
+ union hv_monitor_trigger_group {
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index edbb38f6956b..6d27597af8bf 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1286,7 +1286,7 @@ static void vmbus_chan_sched(struct hv_per_cpu_context *hv_cpu)
+ 	}
+ }
+ 
+-static void vmbus_isr(void)
++void vmbus_isr(void)
  {
- }
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 4e49fd662b2b..d832852d0ee7 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -198,6 +198,8 @@ void hv_remove_vmbus_handler(void);
- void hv_setup_stimer0_handler(void (*handler)(void));
- void hv_remove_stimer0_handler(void);
+ 	struct hv_per_cpu_context *hv_cpu
+ 		= this_cpu_ptr(hv_context.cpu_context);
+@@ -1309,6 +1309,7 @@ static void vmbus_isr(void)
  
-+void hv_setup_mshv_irq(void (*handler)(void));
-+
- void hv_setup_kexec_handler(void (*handler)(void));
- void hv_remove_kexec_handler(void);
- void hv_setup_crash_handler(void (*handler)(struct pt_regs *regs));
+ 	add_interrupt_randomness(vmbus_interrupt);
+ }
++EXPORT_SYMBOL_GPL(vmbus_isr);
+ 
+ static irqreturn_t vmbus_percpu_isr(int irq, void *dev_id)
+ {
 -- 
 2.25.1
 
