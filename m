@@ -2,72 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DB97B253B
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Sep 2023 20:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DB87B3856
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Sep 2023 19:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbjI1S2C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 Sep 2023 14:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S233581AbjI2RG2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Sep 2023 13:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbjI1S2C (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 Sep 2023 14:28:02 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01854BF;
-        Thu, 28 Sep 2023 11:27:59 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9301EC433C8;
-        Thu, 28 Sep 2023 18:27:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695925679;
-        bh=03pNwnsCu9bvSuYC2KV0dtSHOC68MXCTopKVfQi2CxY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HXf5v7gQmNzS6tpxaxCtDguAE6WwDJCRVRsa/8zbYbwqQO6zf9UVvmqeRzPAmI4ky
-         m5kcj7BQqfFaOfMTj60A3pnSgEYTorVtkTLl4uAMf8PHqOTGbkDUeyARU98//uKOrX
-         CYL0143gSq4w7pkLDS+g1McwaDN/ZtBNHEHZg4TK0jRPUc6e0PdFa2aWjQhBGiES5Y
-         a3DZ+CqBUW4RUdLvlzZA5kneG0PBigG1XPBNxoSDf1F60zSGs3qhtBvep+KlUcUI0W
-         Xrhjr7jaaYoiKPsjR885FL/RUO5rMSO3JBXSDuS81KG09aDklBdIYz6MGFac2C7LyP
-         RFbpquITeJHcQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F2A1C395E0;
-        Thu, 28 Sep 2023 18:27:59 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch fixes for v6.6-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230928152535.2617047-1-chenhuacai@loongson.cn>
-References: <20230928152535.2617047-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230928152535.2617047-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.6-2
-X-PR-Tracked-Commit-Id: b1dc55a3d6a86cc2c1ae664ad7280bff4c0fc28f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5d959343ae487157a2ef2993794e1359a82a5b15
-Message-Id: <169592567951.30580.5452438448631717449.pr-tracker-bot@kernel.org>
-Date:   Thu, 28 Sep 2023 18:27:59 +0000
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233656AbjI2RGW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Sep 2023 13:06:22 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F691B0
+        for <linux-arch@vger.kernel.org>; Fri, 29 Sep 2023 10:06:16 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-692a9bc32bcso10858170b3a.2
+        for <linux-arch@vger.kernel.org>; Fri, 29 Sep 2023 10:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696007176; x=1696611976; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rxYI9ulX5XzPX5XOXonON+SMQGYguOvm0R6V5aclg6A=;
+        b=bu1AoD1MBVuaFoU4Kuqjuqz5JwkYDxAb/pFXZk9XNWc31UlGWoURxzrRJKID/C5YQq
+         GEenO95S0XOakk+8QV8UB7b5BzrBZ6AmxiUv10KSb1orI0GOiPELysEe8Wuk5eVnd8pN
+         qcXdvyBgGUXe5HqINyWSntdWcpSuTAG/sM+cA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696007176; x=1696611976;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rxYI9ulX5XzPX5XOXonON+SMQGYguOvm0R6V5aclg6A=;
+        b=RErRIpg9RhG89FwJZrymbpI3XI3qHI+Mp0IGbskxuOa+2LbviY81W97qRC2Irz1F+p
+         iLhNztOkMGUbAcpagQty1WyeGZMqjXlnIogMNXof5Bx+4wm1ZRzmTw2pgNjcJDELJrfH
+         MI8SEhyI17Vw4Vy5wZwnoR3iM3iJmIvACsLSgNl9UE4qQ4UK4NO2GBAgoAS/S2oana7i
+         uoLFRYWmzI+qwCH4WSnpwDZ11KLtr3ckVoeZUXdStWTGa8KjtwO93h0+2ZvLvryd1ETK
+         1pjNVGbINFWxQd7YRipdVR3PvFL6glQIv2BF/EQt6oMk8/l/8UeJOjlo38Y26K7CCNnU
+         4DbA==
+X-Gm-Message-State: AOJu0Yy7IwGNJt2pjKZAGBg2rcTEafpVgCCzuP2QhIXqPhaiI1w/HWZe
+        41uDd2Xf6YZY9+sMYXYf1CVIyw==
+X-Google-Smtp-Source: AGHT+IEEm0cgYM95RhBy+hVCohyjsNc4BHxivmWx4iHFGWyTUfY+kiazqEJ0Uju7DJ50x2sjMqjMDA==
+X-Received: by 2002:a05:6a20:3d04:b0:153:7978:4faa with SMTP id y4-20020a056a203d0400b0015379784faamr5859933pzi.37.1696007176255;
+        Fri, 29 Sep 2023 10:06:16 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id fk1-20020a056a003a8100b00682868714fdsm15810970pfb.95.2023.09.29.10.06.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 10:06:15 -0700 (PDT)
+Date:   Fri, 29 Sep 2023 10:06:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Pedro Falcato <pedro.falcato@gmail.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Sebastian Ott <sebott@redhat.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] binfmt_elf: Use elf_load() for library
+Message-ID: <202309291005.80DD5F55E9@keescook>
+References: <20230929031716.it.155-kees@kernel.org>
+ <20230929032435.2391507-4-keescook@chromium.org>
+ <CAKbZUD1ojuNN_+x6gkxEMsmLOd5KbCs-wfJcMM==b8+k8_uD_w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKbZUD1ojuNN_+x6gkxEMsmLOd5KbCs-wfJcMM==b8+k8_uD_w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Thu, 28 Sep 2023 23:25:35 +0800:
+On Fri, Sep 29, 2023 at 01:12:13PM +0100, Pedro Falcato wrote:
+> On Fri, Sep 29, 2023 at 4:24 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > While load_elf_library() is a libc5-ism, we can still replace most of
+> > its contents with elf_load() as well, further simplifying the code.
+> 
+> While I understand you want to break as little as possible (as the ELF
+> loader maintainer), I'm wondering if we could axe CONFIG_USELIB
+> altogether? Since CONFIG_BINFMT_AOUT also got axed. Does this have
+> users anywhere?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.6-2
+I can't even find a libc5 image I can test. :P
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5d959343ae487157a2ef2993794e1359a82a5b15
+I made it non-default in '22:
 
-Thank you!
+7374fa33dc2d ("init/Kconfig: remove USELIB syscall by default")
+
+I'm not sure we can drop it entirely, though.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kees Cook
