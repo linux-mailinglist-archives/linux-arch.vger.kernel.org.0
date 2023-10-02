@@ -2,130 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254447B5BC5
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Oct 2023 22:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F767B5C6C
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Oct 2023 23:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbjJBUHX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Oct 2023 16:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S229671AbjJBVTm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Oct 2023 17:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235047AbjJBUHW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 16:07:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A0FD3;
-        Mon,  2 Oct 2023 13:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=VaRXBAX+SL8oR5DAJJ33YWK0kg9y3S/tFMs5ErCwV4M=; b=tyTvddQZwjPU4NCyNbqmtBxwTI
-        Kq6g9Qapzu1V2T/1LVfoTymMZ1bb2QONrTl41ltGkcWgO8C3OxMrZO0vUUbterkaPjXQqj5zl5UWY
-        Od/q+nFr5sp3hmR7Q+02+fFUHyfa/unLm/Waq6/NDA+nKY6gA77n1Y4CV6C8E7B9yjTT2MSAhqsX/
-        mE0L1qEHeU9Z8HDcrn4+IgWdTLUacxy76ZOg8LoMQ6Fu1YDKq8FKQmrhzovQYa4Y7jTfB5MNGW7kU
-        vcWu8FBBE/rEktzzt2TIToDZle387TUfE+hHWx0duFsDle3jHlyRiQtp+i2PYtGwvYw5Fx/EDytKW
-        owGUyJog==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qnPCA-00AvU4-SH; Mon, 02 Oct 2023 20:07:10 +0000
-Date:   Mon, 2 Oct 2023 21:07:10 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Greg Ungerer <gregungerer@westnet.com.au>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
-Message-ID: <ZRsi7smLotWDwoNP@casper.infradead.org>
-References: <20230915183707.2707298-1-willy@infradead.org>
- <20230915183707.2707298-10-willy@infradead.org>
- <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au>
- <ZQW849TfSCK6u2f8@casper.infradead.org>
- <e1fb697714ac408e85c4e3dc573cd7d5@AcuMS.aculab.com>
- <ZQmvhC+pGWNs9R23@casper.infradead.org>
- <cffc2a427ae74f62b07345ec9348e43e@AcuMS.aculab.com>
- <ZQm67lGOBBdC2Dl9@casper.infradead.org>
- <35a33582-9206-94bb-eca2-a1d9c585f6c1@westnet.com.au>
+        with ESMTP id S229650AbjJBVTl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 17:19:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB570A4;
+        Mon,  2 Oct 2023 14:19:38 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 392LJDiQ000786;
+        Mon, 2 Oct 2023 21:19:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=gatv7sy+EOwFxHcezDJOHWDu3nM1vA3GE7rgG9QZ/KI=;
+ b=GlQP1vi4L/n3i6tR1nGdk/3FPGSstrkoaNsqO4MIqQAX6UMER+faRjVDlwFX9DCxp0+1
+ wiAQ48fc1fts/APs9F35r79/zWcAmhCyA9vlYUri6XeznNlLqh0QNxlECmANXFM1LdpX
+ DA/5v2LmVEjll0UO0BANCz4/xTvdpJrWiLhNMt1bisI1k3crGOJ1JjxwpxfVPnev4I/r
+ wCtQ8Ubva8GRIkuwA7hmAur9l/D5oaHhWIY+B9+oF8NrktxgJoY49+Kis3E9WplluL4/
+ uba3lt24vcN+N71c5W9JmS8eP/Nvc06UWk/b5rEpZDTVbz+4jQ66Lx5vyxvB6P2aIrmH Nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tg5p3002v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Oct 2023 21:19:14 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 392LJD0T000844;
+        Mon, 2 Oct 2023 21:19:13 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tg5p3002b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Oct 2023 21:19:13 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 392K30dV005924;
+        Mon, 2 Oct 2023 21:19:12 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tex0scuh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Oct 2023 21:19:12 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 392LJBht65733118
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Oct 2023 21:19:12 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A80FB58058;
+        Mon,  2 Oct 2023 21:19:11 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0832858057;
+        Mon,  2 Oct 2023 21:19:11 +0000 (GMT)
+Received: from [9.61.61.107] (unknown [9.61.61.107])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  2 Oct 2023 21:19:10 +0000 (GMT)
+Message-ID: <891957ad-453e-4c68-9c5a-7a979667543d@linux.ibm.com>
+Date:   Mon, 2 Oct 2023 16:19:10 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <35a33582-9206-94bb-eca2-a1d9c585f6c1@westnet.com.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] uapi/auxvec: Define AT_HWCAP3 and AT_HWCAP4 aux vector,
+ entries
+Content-Language: en-US
+To:     Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        GNU C Library <libc-alpha@sourceware.org>
+References: <fd879f60-3f0b-48d1-bfa1-6d337768207e@linux.ibm.com>
+ <97eb2099-23c2-4921-89ac-9523226ad221@linaro.org>
+From:   Peter Bergner <bergner@linux.ibm.com>
+In-Reply-To: <97eb2099-23c2-4921-89ac-9523226ad221@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: iwOxse1LKTd-mzgBl_gDQrG6AZJZ2pID
+X-Proofpoint-GUID: oXttozJ5pEGhCYcwaRXxZAKaOtCxpjge
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-02_15,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ phishscore=0 mlxlogscore=716 malwarescore=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310020163
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 05:22:33PM +1000, Greg Ungerer wrote:
-> On 20/9/23 01:14, Matthew Wilcox wrote:
-> > I have a 68020 book; what I don't have is a Coldfire manual.
+Hi Adhemerval, sorry for the delay in replying, I was a little under the
+weather last week.
+
+
+On 9/27/23 11:03 AM, Adhemerval Zanella Netto wrote:
+> On 26/09/23 19:02, Peter Bergner wrote:
+>> The powerpc toolchain keeps a copy of the HWCAP bit masks in our TCB for fast
+>> access by our __builtin_cpu_supports built-in function.  The TCB space for
+>> the HWCAP entries - which are created in pairs - is an ABI extension, so
+>> waiting to create the space for HWCAP3 and HWCAP4 until we need them is
+>> problematical, given distro unwillingness to apply ABI modifying patches
+>> to distro point releases.  Define AT_HWCAP3 and AT_HWCAP4 in the generic
+>> uapi header so they can be used in GLIBC to reserve space in the powerpc
+>> TCB for their future use.
 > 
-> You can find it here: https://www.nxp.com/docs/en/reference-manual/CFPRM.pdf
+> This is different than previously exported auxv, where each AT_* constant
+> would have a auxv entry. On glibc it would require changing _dl_parse_auxv
+> to iterate over the auxv_values to find AT_HWCAP3/AT_HWCAP4 (not ideal, 
+> but doable).
 
-Thanks, Greg.  This is almost good:
+When you say different, do you mean because all AUXVs exported by the kernel
+*will* have an AT_HWCAP and AT_HWCAP2 entry and AT_HWCAP3/AT_HWCAP4 won't?
+I don't think that's a problem for either kernel or glibc side of things.
+I'm not even sure there is a guarantee that every AT_* value *must* be
+present in the exported AUXV.
 
-static inline bool xor_unlock_is_negative_byte(unsigned long mask,
-                volatile unsigned long *p)
-{
-#ifdef CONFIG_COLDFIRE
-        __asm__ __volatile__ ("eorl %1, %0"
-                : "+m" (*p)
-                : "d" (mask)
-                : "memory");
-        return *p & (1 << 7);
-#else
-        char result;
-        char *cp = (char *)p + 3;       /* m68k is big-endian */
+The new AT_HWCAP3/AT_HWCAP4 defines are less than AT_MINSIGSTKSZ, so they
+don't affect the size of _dl_parse_auxv's auxv_values array size and the
+AT_HWCAP3 and AT_HWCAP4 entries in auxv_values[] are already initialized
+to zero today.  Additionally, the loop in _dl_parse_auxv already parses
+the entire AUXV, so there is no extra work for it to do, unless and until
+AT_HWCAP3 and AT_HWCAP4 start being exported by the kernel.  Really, the
+only extra work _dl_parse_auxv would need to do, is add two new stores:
 
-        __asm__ __volatile__ ("eor.b %1, %2; smi %0"
-                : "=d" (result)
-                : "di" (mask), "o" (*cp)
-                : "memory");
-        return result;
-#endif
-}
+  GLRO(dl_hwcap3) = auxv_values[AT_HWCAP3];
+  GLRO(dl_hwcap4) = auxv_values[AT_HWCAP4];
 
-folio_end_read() does about as well as can be expected:
 
-00000708 <folio_end_read>:
-     708:       206f 0004       moveal %sp@(4),%a0
-     70c:       7009            moveq #9,%d0
-     70e:       4a2f 000b       tstb %sp@(11)
-     712:       6602            bnes 716 <folio_end_read+0xe>
-     714:       7001            moveq #1,%d0
-     716:       b190            eorl %d0,%a0@
-     718:       2010            movel %a0@,%d0
-     71a:       4a00            tstb %d0
-     71c:       6a0c            bpls 72a <folio_end_read+0x22>
-     71e:       42af 0008       clrl %sp@(8)
-     722:       2f48 0004       movel %a0,%sp@(4)
-     726:       6000 fcfe       braw 426 <folio_wake_bit>
-     72a:       4e75            rts
 
-However, it seems that folio_unlock() could shave off an instruction:
+> Wouldn't be better to always export it on fs/binfmt_elf.c, along with all 
+> the machinery to setup it (ELF_HWCAP3, etc), along with proper documentation?
 
-00000918 <folio_unlock>:
-     918:       206f 0004       moveal %sp@(4),%a0
-     91c:       7001            moveq #1,%d0
-     91e:       b190            eorl %d0,%a0@
-     920:       2010            movel %a0@,%d0
-     922:       4a00            tstb %d0
-     924:       6a0a            bpls 930 <folio_unlock+0x18>
-     926:       42a7            clrl %sp@-
-     928:       2f08            movel %a0,%sp@-
-     92a:       4eba fafa       jsr %pc@(426 <folio_wake_bit>)
-     92e:       508f            addql #8,%sp
-     930:       4e75            rts
+You mean modify the kernel now to export AT_HWCAP3 and AT_HWCAP4 as zero
+masks?  Is that really necessary since we don't need or have any features
+defined in them yet?  GLIBC's _dl_parse_auxv doesn't really need them to
+be exported either, since in the absence of the entries, it will just end
+up using zero masks for dl_hwcap3 and dl_hwcap4, so everything is copacetic
+even without any kernel changes.
 
-We could use eori instead of eorl, at least according to table 3-9 on
-page 3-8:
+As I mentioned, our real problem is the lead time for getting changes that
+affect the user ABI into a distro release, and ppc's copy/cache of the HWCAP
+masks is an ABI change.  If we wait to add this support until when we
+actually have a need for HWCAP3, then we won't have any support until
+the next major distro release.  However, if we can add this support now,
+which I don't think is an onerous change on glibc's part, then we can
+start using it immediately when Linux starts exporting them.
 
-EOR Dy,<ea>x L Source ^ Destination → Destination ISA_A
-EORI #<data>,Dx L Immediate Data ^ Destination → Destination ISA_A
 
-but gas is unhappy with everything I've tried to use eori.  I'm building
-with stmark2_defconfig, which I assume should work.
+Peter
+
+
+
+
