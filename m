@@ -2,118 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03D57B59C7
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Oct 2023 20:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351EC7B5B55
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Oct 2023 21:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbjJBSDy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Oct 2023 14:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S238726AbjJBT31 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Oct 2023 15:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjJBSDx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 14:03:53 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8B09B;
-        Mon,  2 Oct 2023 11:03:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ePOgtnG3EOPkGnXA/ySSKMn3ofu6m4kVuynies93FxwGsmXOk+jpC/ZxjKlrHUplPbUwfRUesxoWDotd3viPeFCg4aFI7/A9Fw1RycZyrkBCTkWyVJN1opQgbD9QICtJjoVoABUVGZJxirb1J+t3ILtbGbMKwg2vhosG9vHFO9yCVFC6MwU+Ti2CGR+qzvdChp/DAFWgcaV+sPWYr3EjunjH67E//pjnuLq2HY1hgcafbKIvS9cidONrtP5X7ZyMeje0b7/381B8nuOH7joz5qnyHgeSTBwZBnpdi+jbqwnIS4vTb6m3xp8KFjhRlPAXEo41uxy6dzFLnV6Id2xUNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hZzHEyicg5uHdRB9wUAyJPXLxM6t5Fqd3do55hO5pqE=;
- b=E6eaeA0eno+50XuXIc3qTVBaOizNPkrqLXQ1FNGzVwnzUplYyddiPm5IM4FQDkMqPEdqTJqoYW6J0a7yrP9BEBIkCZtcSjBjEsmGAANI2+vQtmTFwYy6wM2TkXV61NWrb4DF6ofKprPrsOlmSyIg4IGAIv3BcTaKA++wQYHQ425TXMvP3KF9oiUqjPMfxNAg5fvdUiiJ60X9eJq6181rU2d78Of4XlQEw8SIFV4o7bm7GXb7gFDnaSiwvfHJppPwBbz3cXu0BICareUXWGrc3cuAnikifU+tqjFXYJ/D3H1PrWQ02tRucqNzdqj0RzqJ2ycDw481JCOOqDMgp96sLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hZzHEyicg5uHdRB9wUAyJPXLxM6t5Fqd3do55hO5pqE=;
- b=QF9c2ciA+5sjIs0k5FHSkozuC2K6wX5bBJkY+SdDWdLsj+ppvanIq7LmLsQK1ubKR4malnJlE22EOMTQO3ReatI2jR8hgAB7WCB/k8qjXnBG18DWaJ0/+YkP30rXK6pbmzSVDtSCHlySEZyvbEU+QpioT9fRuQnqz6tEf2bmf64=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com (2603:10b6:a03:394::19)
- by IA1PR17MB6599.namprd17.prod.outlook.com (2603:10b6:208:3f3::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.30; Mon, 2 Oct
- 2023 18:03:46 +0000
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::5565:d559:61b0:e2df]) by SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::5565:d559:61b0:e2df%6]) with mapi id 15.20.6813.027; Mon, 2 Oct 2023
- 18:03:46 +0000
-Date:   Mon, 2 Oct 2023 14:03:41 -0400
-From:   Gregory Price <gregory.price@memverge.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        owner-linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-cxl@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, arnd@arndb.de, akpm@linux-foundation.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 2/3] mm/mempolicy: Implement set_mempolicy2 and
- get_mempolicy2 syscalls
-Message-ID: <ZRsF/ZoYXH/77XH6@memverge.com>
-References: <20230914235457.482710-1-gregory.price@memverge.com>
- <20230914235457.482710-3-gregory.price@memverge.com>
- <20231002143008.000038ac@Huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231002143008.000038ac@Huawei.com>
-X-ClientProxiedBy: BY3PR10CA0005.namprd10.prod.outlook.com
- (2603:10b6:a03:255::10) To SJ0PR17MB5512.namprd17.prod.outlook.com
- (2603:10b6:a03:394::19)
+        with ESMTP id S238516AbjJBT30 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 15:29:26 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1FCBF;
+        Mon,  2 Oct 2023 12:29:23 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-49d428d89cdso23778e0c.1;
+        Mon, 02 Oct 2023 12:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696274963; x=1696879763; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ajjlmKdebxZk7OHm+SN7lonVxoqhP21tLhFjdE+XoAg=;
+        b=QIJIOUN8IQ91tt4FjAlwaWiuT90azTbgJWXT/blrZ4QRHAY4O79mYOXrK71wadPG3B
+         42OqOwwHolB+wQSXQLyNx33LcE3SY6s+8geEHw3IceP7eSIdoNpFFJy2LwQnyBNdpHg5
+         KtsgvAX5hOfHgpywsbeMn66GsnJb9N+Qq6PaYSK9WeWtB5S58JhKcpKttwk5SHCJjN1C
+         64JNBFnZUIP7GCR0uX/0u19rHqT2xtVmNu9SHIHakyh7CSYGkWarrzZFcBl3nlfi8shW
+         f67g2CLcXRto0dk8F8jT8NyGMijjIbsYcUX3ghOJENzTS+DLpR16CVw0m1KumBp+fn5z
+         bKVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696274963; x=1696879763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ajjlmKdebxZk7OHm+SN7lonVxoqhP21tLhFjdE+XoAg=;
+        b=PlTYwH8sPF/ufW5dqTp8quud2X7QgN3toz26QS5EDX4+kICfh8dCAGM/9ambQOzdj3
+         qwULHrz2k5gPWPhduuRhSA+wbYdEZwvJqo/mamQWEJvGwBKQvTKc8y5viS76K2re7N1k
+         hYt87t+fgNW2u0PCfCU5Bqe/U2nf8JENKlN5xNj6cvVG6E0qBrnNVYF5FM/MC3IrBecY
+         voZc4XYXfErvHtjKYCs6optXfFiA+VUvn82yqmzeoMVkVBh3JcQjrabk1GYtBHL2OU5C
+         CH5QjwAPzrm6Y9cLjkKZPahXWxvWk1QgKT1TqijEwB6FMVtdVUy2V9uGc1ROQIeyFL3N
+         5g9Q==
+X-Gm-Message-State: AOJu0YxvvPBXYMhuLGsS2ITMt95OofeNjMLctCdwiwfi90YyslfuKZLD
+        PxBEWiTRFUblZBLOZoIp/WGYncxHTFi0ByK7gJE=
+X-Google-Smtp-Source: AGHT+IE49qL31bZrwQMJ0Xfes4Ezx8noj0Ajc/E7xZWoRNGoaK3gWcipOZQfm9J+6RsfmrXvjcIxKo9Ikw11UYOzsZY=
+X-Received: by 2002:a05:6122:60c:b0:49b:9510:1f94 with SMTP id
+ u12-20020a056122060c00b0049b95101f94mr5413861vkp.1.1696274962518; Mon, 02 Oct
+ 2023 12:29:22 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR17MB5512:EE_|IA1PR17MB6599:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21bb8ff4-894c-4ee1-596e-08dbc371eb6f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lQtEida4Pv9CNFNH3R+qBDDvseffe3NpwlWtUMeDb7GZYNjg08MoqkhsVJWxJFjl7RYmZmtnC9DW/uj1Ropfm02eJ/h0BCY8LguLA2VS0y3EJK/KYLp0h743vnRATe45Mcp2XFhExPNIVrXPeVl1/amqMS7dZpGachM1dZEdQAJhyEBmWKYqKD5nAZU7lur0AJueK2aazxuvKom/kyQTS/4CUMTle5UVyTtu8PWSsIEQUpC9v7732rR/qc6msVlSn9ujW6H8gUXFoEWYdpnK25MUFdTh8c0y8A1dXVx+H/NDmpOT8ym3/hbIFaYsBqpk5hGYD165fjhXRzKEvwZSFA4bkK8NPkL7zBXeMXln0UYljI5pzd7CJlqpwiEChUNXgadzbXZETNii1Um12u5XuExHd33MDRcZ0jpgKyy18M7wU/StYqgCbixciD+4c0VXfTySy/LZna5/UBYBcQPIQcL2ibgPujJIs78YyUECzsCozFLWyrfxEtOkSTshSfqflRNbxJdNpl4LHsbpAYfrwKhWrze2mF5MNnZJHinMPG1LXO5Xo3PzfgjdpxBm0i6k
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB5512.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(39850400004)(396003)(136003)(346002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(6666004)(478600001)(6486002)(6506007)(38100700002)(86362001)(2906002)(7416002)(41300700001)(6512007)(26005)(2616005)(36756003)(66946007)(4744005)(316002)(8676002)(6916009)(66556008)(66476007)(4326008)(5660300002)(44832011)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a6jQeJXHkf+s0K8X1ttvlhz0azK9nRhflnDBSCnKm5PsAUcTvyNHTdKKQ6ue?=
- =?us-ascii?Q?bXrhd/KY+2n9QyVO0jXrs31wWrJD+/5KCf5uqo8hGl5F9+Z/r7Rbv154ko+d?=
- =?us-ascii?Q?f5/GE/cXbQ8gHNRI25lhm8wD8JAziM55E9eu85YAnvEk9vADO61jeIxlIv5S?=
- =?us-ascii?Q?gBmCsgrHKP0nrXBG7caTAkgP2yOFd8JSw2kYiD+a/vAd5gLyKgqRkVy8NzEb?=
- =?us-ascii?Q?uioS5clWWA6WKIXuFjFlj0x2j0vPuNDlObGMfXjbu4yzE6wT+3MoA2RsGgnx?=
- =?us-ascii?Q?8oWYfXt5X1HAZ3Slint4+vyO4qCqvnAlht0MQxOEKkQtJzqoRsGbSwsmLsMi?=
- =?us-ascii?Q?ZpkeG10AKTBZ4XQzH0u9Tu+XA3DPELPjYVrgccRUOb7ClZZ5mQHF/HjgDmQt?=
- =?us-ascii?Q?eB/PZq1tLWcQfY0BP/vcqytICjL0jXSLdPmRcxts/sywf0apVzMjZBK3wVR6?=
- =?us-ascii?Q?4hYVVicwjH4ZySECA3g/SPrlRg/o/80OSoO/fZanSAY4vCL2C6RRdG81dM+z?=
- =?us-ascii?Q?VlMHdz/x4lr8N/LrFtGTgrbQgXyiP0LYYVYbGeyTqBQmonm38t0e3sWESkA7?=
- =?us-ascii?Q?Jtew094nNfpkRZBa6f9T/DHvFHowJHUNdCVY+zzg7ffEmx0DEfLH3vXgV7sn?=
- =?us-ascii?Q?0T34OS0N24cx7Kqe+diRsuyTFDNDJ4KHoEvZJmmXj8REO5M27KR3RmhVMTLL?=
- =?us-ascii?Q?7UQYDhSLuAlmi07nv5df3N3klWLnGwpBBtIPIzOK9kzGXZjomRS/ULCgetJw?=
- =?us-ascii?Q?rJ/1i4rKKbRhzYK7a1yMiES0T5Dfyr3UHYP7be5VSMxrNuz47GtUsxOxwjAG?=
- =?us-ascii?Q?7uMfbEWILjkfWUygMRBUIOHZe9HNCxp7MdLGfDxlf+VwjcqsxWF0JBR/qGRH?=
- =?us-ascii?Q?p95o98QkvajU/SstAL4A9y3G8aeMI4iv8BJqO86flXw+AywlPplpyYPndoR4?=
- =?us-ascii?Q?gOuezqDjWdZ8LdNL9rl/RSfureW1bDJjU+dZz4C2J0YGkXRogrh71Duj/7wK?=
- =?us-ascii?Q?6stnf/Sg4N2xfXgMY3IoIpx36pbnFLYtSlxeCLTNxvXolMuE0aXYWdfNO3by?=
- =?us-ascii?Q?YyQe8e4YyFxjXRuKsff0mzZAjQ9tpxO5oaEt2grOSWrPJIGLgFwBqay5XxKZ?=
- =?us-ascii?Q?tDt9ZJ4Y0TCdiWB9FaCyd+DUmaR4z8UZvK8PIOXVBI5pJZ+6KMTO6S2K02nL?=
- =?us-ascii?Q?ORZITkTyKspYLvNQtpSMliMwv6Gw2nixFxkFXkhh13m1YF5UJZsKGCKnCyfa?=
- =?us-ascii?Q?tWLZaAzhg2NPfTJ5AGGvNmoukfB/3HciVOxwTu42dzWqOJqpew9gsL4Eeppa?=
- =?us-ascii?Q?MYskHKJfOmzEfN1XMRSNXIolLgD5829svk5b5VdvoZD2crhgfqVYUBuJahee?=
- =?us-ascii?Q?9mbXbAQGcTgAmEeQX2SEW0VUMHoRO4bPm4zm5nez/32RziUXooI++E/tFoj7?=
- =?us-ascii?Q?lpaWbKUq0Dbci00D6ztrPHb26c9mjwxk5xSntSbDoClNIHMzQpqDfWsGAiNE?=
- =?us-ascii?Q?8SFLuCGO0uuxjYRbUTz1jGq6yHwFgUsqH6F2aY+qtB+OExNR32FQR6mLTk8l?=
- =?us-ascii?Q?Hf1pbNtPffBWteyMMl8x9kYHNioa6s/hm508MTNeRVJ3Q9QHmLc9RZff1sJW?=
- =?us-ascii?Q?nw=3D=3D?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21bb8ff4-894c-4ee1-596e-08dbc371eb6f
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR17MB5512.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2023 18:03:45.3978
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KHi0IR0gRajb0IVfj/q3UoYDR1KOLmuGS9VDqAW7tF/R4xjHWKxkx3hSEUf5z9XF5Ie8ZtWAbwSUSLgCn7ucwVL94/bygv+9gxsQjeWUkcg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR17MB6599
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1696010501-24584-10-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1696010501-24584-10-git-send-email-nunodasneves@linux.microsoft.com>
+From:   Alex Ionescu <aionescu@gmail.com>
+Date:   Mon, 2 Oct 2023 15:29:11 -0400
+Message-ID: <CAJ-90N+A-wS-Uwrs_2WVL86Uo3qzQ1czxm-u9vDj3UuOwjhLdQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/15] Drivers: hv: Introduce hv_output_arg_exists in hv_common.c
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,32 +79,94 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 02, 2023 at 02:30:08PM +0100, Jonathan Cameron wrote:
-> On Thu, 14 Sep 2023 19:54:56 -0400
-> Gregory Price <gourry.memverge@gmail.com> wrote:
-> 
-> > diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> > index 1d6eee30eceb..ec54064de8b3 100644
-> > --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> > +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> > @@ -375,6 +375,8 @@
-> >  451	common	cachestat		sys_cachestat
-> >  452	common	fchmodat2		sys_fchmodat2
-> >  453	64	map_shadow_stack	sys_map_shadow_stack
-> > +454	common	set_mempolicy2		sys_set_mempolicy2
-> > +455	common	get_mempolicy2		sys_get_mempolicy2
-> >  
+Hi Nuno,
 
-^^ this is the discrepency.  map_shadow_stack is at 453, so NR_syscalls
-should already be 454, but map_shadow_stack has not be plumbed through
-the rest of the kernel.
+Is it possible to simply change to always allocating the output page?
+For example, the output page could be needed in scenarios where Linux
+is not running as the root partition, since certain hypercalls that a
+guest can make will still require one (I realize that's not the case
+_today_, but I don't believe this optimization buys much).
 
-This needs to be addressed, but not in this RFC.
+Best regards,
+Alex Ionescu
 
-> >  #undef __NR_syscalls
-> > -#define __NR_syscalls 453
-> > +#define __NR_syscalls 456
-> +3 for 2 additions?
-> 
+Best regards,
+Alex Ionescu
 
-see above
+
+On Fri, Sep 29, 2023 at 2:02=E2=80=AFPM Nuno Das Neves
+<nunodasneves@linux.microsoft.com> wrote:
+>
+> This is a more flexible approach for determining whether to allocate the
+> output page.
+>
+> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> ---
+>  drivers/hv/hv_common.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index 39077841d518..3f6f23e4c579 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -58,6 +58,14 @@ EXPORT_SYMBOL_GPL(hyperv_pcpu_input_arg);
+>  void * __percpu *hyperv_pcpu_output_arg;
+>  EXPORT_SYMBOL_GPL(hyperv_pcpu_output_arg);
+>
+> +/*
+> + * Determine whether output arg is needed
+> + */
+> +static inline bool hv_output_arg_exists(void)
+> +{
+> +       return hv_root_partition ? true : false;
+> +}
+> +
+>  static void hv_kmsg_dump_unregister(void);
+>
+>  static struct ctl_table_header *hv_ctl_table_hdr;
+> @@ -342,10 +350,12 @@ int __init hv_common_init(void)
+>         hyperv_pcpu_input_arg =3D alloc_percpu(void  *);
+>         BUG_ON(!hyperv_pcpu_input_arg);
+>
+> -       /* Allocate the per-CPU state for output arg for root */
+> -       if (hv_root_partition) {
+> +       if (hv_output_arg_exists()) {
+>                 hyperv_pcpu_output_arg =3D alloc_percpu(void *);
+>                 BUG_ON(!hyperv_pcpu_output_arg);
+> +       }
+> +
+> +       if (hv_root_partition) {
+>                 hv_synic_eventring_tail =3D alloc_percpu(u8 *);
+>                 BUG_ON(hv_synic_eventring_tail =3D=3D NULL);
+>         }
+> @@ -375,7 +385,7 @@ int hv_common_cpu_init(unsigned int cpu)
+>         u8 **synic_eventring_tail;
+>         u64 msr_vp_index;
+>         gfp_t flags;
+> -       int pgcount =3D hv_root_partition ? 2 : 1;
+> +       int pgcount =3D hv_output_arg_exists() ? 2 : 1;
+>         void *mem;
+>         int ret;
+>
+> @@ -393,9 +403,12 @@ int hv_common_cpu_init(unsigned int cpu)
+>                 if (!mem)
+>                         return -ENOMEM;
+>
+> -               if (hv_root_partition) {
+> +               if (hv_output_arg_exists()) {
+>                         outputarg =3D (void **)this_cpu_ptr(hyperv_pcpu_o=
+utput_arg);
+>                         *outputarg =3D (char *)mem + HV_HYP_PAGE_SIZE;
+> +               }
+> +
+> +               if (hv_root_partition) {
+>                         synic_eventring_tail =3D (u8 **)this_cpu_ptr(hv_s=
+ynic_eventring_tail);
+>                         *synic_eventring_tail =3D kcalloc(HV_SYNIC_SINT_C=
+OUNT, sizeof(u8),
+>                                                         flags);
+> --
+> 2.25.1
+>
+>
