@@ -2,78 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A7C7B6B11
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 16:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A867B6B21
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 16:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237880AbjJCOIU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Oct 2023 10:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S232463AbjJCOO3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Oct 2023 10:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjJCOIT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Oct 2023 10:08:19 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B8B0
-        for <linux-arch@vger.kernel.org>; Tue,  3 Oct 2023 07:08:16 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-694f3444f94so733073b3a.2
-        for <linux-arch@vger.kernel.org>; Tue, 03 Oct 2023 07:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696342096; x=1696946896; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9RQ2Fb9bLEnmrzYZSIfxNu7G1yFcSEUW3tQEd9IywA=;
-        b=cGVyk2xwlUreSHZ1EKlYQrCktX9LtN6rFoaVbwUML2M1+SghLs7cmL64pd73vRTcZw
-         5YB1u5OguDQAo/BWqx9Pyec/aSUmeHW4oOa7anxkN0P5zl9QGOEWRY0tdn/FUBKiG6ui
-         WkH9w+XSYqdrMdo9j6FfGjv2/4mnVZvPEqOLHbAbZUpTnvTUOAfiyNoykAl2zkt68ufH
-         CWtBlWD7FNXTyd/f+QPYoCzS9PlWqL7+5D6fFkURxKi/Bzi3T72GwZRxAKHDXJiVizDz
-         kiFbp51/DRmWt1WiH/QsEzGNlSiEs4le8unHZMqXGrqoP4P+0aWq7rmhJPstfYBQftAF
-         zjAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696342096; x=1696946896;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o9RQ2Fb9bLEnmrzYZSIfxNu7G1yFcSEUW3tQEd9IywA=;
-        b=xR8sKm5wqoOLOhyhB9wZ/lc44V+aYTpI5k9UQ8yXk2qeiCkS3O6HAIoTbGyz1ikLrN
-         BZyWuyGhaV5S93AFNn1RJpY9G8XuEHOTJpMhmkFFyK/4SWvGI7Jxd1ICkILBtDJSuNIs
-         0ERKgVRdP9XSSWmmOyz6cg/HQAtur4MoR9xYJY2Tl12fepN7kFdjOhZann400Oei1qPb
-         Wzt80XIgjGu4JeoECUORa2Q1KZbojGKlzFsqt+NmAy0Wd86QNmkHVGuoHYZi9hUTsLWU
-         l9XU4nhiRWlfikxzYc1c8roSxgjF5k25JLOGb79DKBRqx2quY20rRKGJRGv/UOEq1J9p
-         qPfg==
-X-Gm-Message-State: AOJu0Yw0djaKHGD4vq0SRnyB0v2swuawjwzY4hQxD3dNsbKw5mPoMQql
-        ziujfGHV8oiRdYVN7cOGM6HL8Q==
-X-Google-Smtp-Source: AGHT+IFnebiHHdZDfxamsHmcSvnNx8iA5IlyEN1o219acCh5Cnqdc0JgdUD8yn/eqYycu6H4H4de0g==
-X-Received: by 2002:a05:6a00:22cc:b0:68a:5cf8:dac5 with SMTP id f12-20020a056a0022cc00b0068a5cf8dac5mr16883440pfj.22.1696342095702;
-        Tue, 03 Oct 2023 07:08:15 -0700 (PDT)
-Received: from ?IPV6:2804:1b3:a7c1:feaf:c9f1:61ab:649c:ad56? ([2804:1b3:a7c1:feaf:c9f1:61ab:649c:ad56])
-        by smtp.gmail.com with ESMTPSA id h6-20020a62b406000000b006883561b421sm1390807pfn.162.2023.10.03.07.08.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Oct 2023 07:08:15 -0700 (PDT)
-Message-ID: <057366c2-ee65-441d-b2ac-f40e1d94b44e@linaro.org>
-Date:   Tue, 3 Oct 2023 11:08:11 -0300
+        with ESMTP id S231834AbjJCOO3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Oct 2023 10:14:29 -0400
+Received: from icp-osb-irony-out9.external.iinet.net.au (icp-osb-irony-out9.external.iinet.net.au [203.59.1.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDAA195;
+        Tue,  3 Oct 2023 07:14:20 -0700 (PDT)
+Received: from gateway.pc5.atmailcloud.com (HELO mqr.i-0a234e95c20fc4c8e) ([13.54.26.16])
+  by icp-osb-irony-out9.iinet.net.au with ESMTP; 03 Oct 2023 22:14:16 +0800
+Received: from CMR-KAKADU04.i-07d08b64cb3fd2a62 by MQR.i-0a234e95c20fc4c8e with esmtps
+        (envelope-from <gregungerer@westnet.com.au>)
+        id 1qngAB-0000ig-0I;
+        Tue, 03 Oct 2023 14:14:15 +0000
+Received: from [203.220.76.238] (helo=[192.168.0.22])
+         by CMR-KAKADU04.i-07d08b64cb3fd2a62 with esmtpsa
+        (envelope-from <gregungerer@westnet.com.au>)
+        id 1qngAA-0005cb-24;
+        Tue, 03 Oct 2023 14:14:14 +0000
+Message-ID: <9d73b9e2-502e-4ef5-bb49-bc89d478329a@westnet.com.au>
+Date:   Wed, 4 Oct 2023 00:14:10 +1000
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] uapi/auxvec: Define AT_HWCAP3 and AT_HWCAP4 aux vector,
- entries
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 09/17] m68k: Implement xor_unlock_is_negative_byte
 Content-Language: en-US
-To:     Peter Bergner <bergner@linux.ibm.com>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        GNU C Library <libc-alpha@sourceware.org>
-References: <fd879f60-3f0b-48d1-bfa1-6d337768207e@linux.ibm.com>
- <97eb2099-23c2-4921-89ac-9523226ad221@linaro.org>
- <891957ad-453e-4c68-9c5a-7a979667543d@linux.ibm.com>
-From:   Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
-Organization: Linaro
-In-Reply-To: <891957ad-453e-4c68-9c5a-7a979667543d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+References: <20230915183707.2707298-1-willy@infradead.org>
+ <20230915183707.2707298-10-willy@infradead.org>
+ <6e409d5f-a419-07b7-c82c-4e80fe19c6ba@westnet.com.au>
+ <ZQW849TfSCK6u2f8@casper.infradead.org>
+ <e1fb697714ac408e85c4e3dc573cd7d5@AcuMS.aculab.com>
+ <ZQmvhC+pGWNs9R23@casper.infradead.org>
+ <cffc2a427ae74f62b07345ec9348e43e@AcuMS.aculab.com>
+ <ZQm67lGOBBdC2Dl9@casper.infradead.org>
+ <35a33582-9206-94bb-eca2-a1d9c585f6c1@westnet.com.au>
+ <ZRsi7smLotWDwoNP@casper.infradead.org>
+From:   Greg Ungerer <gregungerer@westnet.com.au>
+In-Reply-To: <ZRsi7smLotWDwoNP@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Atmail-Id: gregungerer@westnet.com.au
+X-atmailcloud-spam-action: no action
+X-atmailcloud-spam-report: Action: no action
+X-Cm-Envelope: MS4xfIBMT51AiiNz2dlGlRP1BjcNFfsmNerdQ9uhalFXb8JZLgl5GZ6cboSon/f8+hS04zgKn58MdhBWKK7VJY1WoVixGuLcjJZXjl05wI08khOgN6Vn4Y9u t0bdjEbwJxBiYwdftZ0MRuCCZF+wfK5vfRwhthWETiDgJFd5jnp7nJXPs1XE/mjs4xpwJqQv8KOuWg==
+X-Cm-Analysis: v=2.4 cv=af+n3zkt c=1 sm=1 tr=0 ts=651c21b6 a=1qi1FL2F0EdFFg+SXJ3Exg==:117 a=1qi1FL2F0EdFFg+SXJ3Exg==:17 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=80-xaVIC0AIA:10 a=x7bEGLp0ZPQA:10 a=8AirrxEcAAAA:8 a=dndB6WL-r_NQjhKt7_AA:9 a=QEXdDO2ut3YA:10 a=ST-jHhOKWsTCqRlWije3:22
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,79 +68,106 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-
-On 02/10/23 18:19, Peter Bergner wrote:
-> Hi Adhemerval, sorry for the delay in replying, I was a little under the
-> weather last week.
-> 
-> 
-> On 9/27/23 11:03 AM, Adhemerval Zanella Netto wrote:
->> On 26/09/23 19:02, Peter Bergner wrote:
->>> The powerpc toolchain keeps a copy of the HWCAP bit masks in our TCB for fast
->>> access by our __builtin_cpu_supports built-in function.  The TCB space for
->>> the HWCAP entries - which are created in pairs - is an ABI extension, so
->>> waiting to create the space for HWCAP3 and HWCAP4 until we need them is
->>> problematical, given distro unwillingness to apply ABI modifying patches
->>> to distro point releases.  Define AT_HWCAP3 and AT_HWCAP4 in the generic
->>> uapi header so they can be used in GLIBC to reserve space in the powerpc
->>> TCB for their future use.
+On 3/10/23 06:07, Matthew Wilcox wrote:
+> On Wed, Sep 20, 2023 at 05:22:33PM +1000, Greg Ungerer wrote:
+>> On 20/9/23 01:14, Matthew Wilcox wrote:
+>>> I have a 68020 book; what I don't have is a Coldfire manual.
 >>
->> This is different than previously exported auxv, where each AT_* constant
->> would have a auxv entry. On glibc it would require changing _dl_parse_auxv
->> to iterate over the auxv_values to find AT_HWCAP3/AT_HWCAP4 (not ideal, 
->> but doable).
+>> You can find it here: https://www.nxp.com/docs/en/reference-manual/CFPRM.pdf
 > 
-> When you say different, do you mean because all AUXVs exported by the kernel
-> *will* have an AT_HWCAP and AT_HWCAP2 entry and AT_HWCAP3/AT_HWCAP4 won't?
-> I don't think that's a problem for either kernel or glibc side of things.
-> I'm not even sure there is a guarantee that every AT_* value *must* be
-> present in the exported AUXV.
+> Thanks, Greg.  This is almost good:
 > 
-> The new AT_HWCAP3/AT_HWCAP4 defines are less than AT_MINSIGSTKSZ, so they
-> don't affect the size of _dl_parse_auxv's auxv_values array size and the
-> AT_HWCAP3 and AT_HWCAP4 entries in auxv_values[] are already initialized
-> to zero today.  Additionally, the loop in _dl_parse_auxv already parses
-> the entire AUXV, so there is no extra work for it to do, unless and until
-> AT_HWCAP3 and AT_HWCAP4 start being exported by the kernel.  Really, the
-> only extra work _dl_parse_auxv would need to do, is add two new stores:
+> static inline bool xor_unlock_is_negative_byte(unsigned long mask,
+>                  volatile unsigned long *p)
+> {
+> #ifdef CONFIG_COLDFIRE
+>          __asm__ __volatile__ ("eorl %1, %0"
+>                  : "+m" (*p)
+>                  : "d" (mask)
+>                  : "memory");
+>          return *p & (1 << 7);
+> #else
+>          char result;
+>          char *cp = (char *)p + 3;       /* m68k is big-endian */
 > 
->   GLRO(dl_hwcap3) = auxv_values[AT_HWCAP3];
->   GLRO(dl_hwcap4) = auxv_values[AT_HWCAP4];
+>          __asm__ __volatile__ ("eor.b %1, %2; smi %0"
+>                  : "=d" (result)
+>                  : "di" (mask), "o" (*cp)
+>                  : "memory");
+>          return result;
+> #endif
+> }
 > 
+> folio_end_read() does about as well as can be expected:
+> 
+> 00000708 <folio_end_read>:
+>       708:       206f 0004       moveal %sp@(4),%a0
+>       70c:       7009            moveq #9,%d0
+>       70e:       4a2f 000b       tstb %sp@(11)
+>       712:       6602            bnes 716 <folio_end_read+0xe>
+>       714:       7001            moveq #1,%d0
+>       716:       b190            eorl %d0,%a0@
+>       718:       2010            movel %a0@,%d0
+>       71a:       4a00            tstb %d0
+>       71c:       6a0c            bpls 72a <folio_end_read+0x22>
+>       71e:       42af 0008       clrl %sp@(8)
+>       722:       2f48 0004       movel %a0,%sp@(4)
+>       726:       6000 fcfe       braw 426 <folio_wake_bit>
+>       72a:       4e75            rts
+> 
+> However, it seems that folio_unlock() could shave off an instruction:
+> 
+> 00000918 <folio_unlock>:
+>       918:       206f 0004       moveal %sp@(4),%a0
+>       91c:       7001            moveq #1,%d0
+>       91e:       b190            eorl %d0,%a0@
+>       920:       2010            movel %a0@,%d0
+>       922:       4a00            tstb %d0
+>       924:       6a0a            bpls 930 <folio_unlock+0x18>
+>       926:       42a7            clrl %sp@-
+>       928:       2f08            movel %a0,%sp@-
+>       92a:       4eba fafa       jsr %pc@(426 <folio_wake_bit>)
+>       92e:       508f            addql #8,%sp
+>       930:       4e75            rts
+> 
+> We could use eori instead of eorl, at least according to table 3-9 on
+> page 3-8:
+> 
+> EOR Dy,<ea>x L Source ^ Destination → Destination ISA_A
+> EORI #<data>,Dx L Immediate Data ^ Destination → Destination ISA_A
+> 
+> but gas is unhappy with everything I've tried to use eori.  I'm building
 
-Indeed you are right, I wrong assumed that the AT_HWCAP3/AT_HWCAP4 would
-be higher than AT_MINSIGSTKSZ. 
+I can't seem to get it to always use it either. This comes close:
 
-> 
-> 
->> Wouldn't be better to always export it on fs/binfmt_elf.c, along with all 
->> the machinery to setup it (ELF_HWCAP3, etc), along with proper documentation?
-> 
-> You mean modify the kernel now to export AT_HWCAP3 and AT_HWCAP4 as zero
-> masks?  Is that really necessary since we don't need or have any features
-> defined in them yet?  GLIBC's _dl_parse_auxv doesn't really need them to
-> be exported either, since in the absence of the entries, it will just end
-> up using zero masks for dl_hwcap3 and dl_hwcap4, so everything is copacetic
-> even without any kernel changes.
-> 
-> As I mentioned, our real problem is the lead time for getting changes that
-> affect the user ABI into a distro release, and ppc's copy/cache of the HWCAP
-> masks is an ABI change.  If we wait to add this support until when we
-> actually have a need for HWCAP3, then we won't have any support until
-> the next major distro release.  However, if we can add this support now,
-> which I don't think is an onerous change on glibc's part, then we can
-> start using it immediately when Linux starts exporting them.
+         __asm__ __volatile__ ("eorl %1, %0"
+                 : "+d" (*p)
+                 : "di" (mask)
+                 : "memory");
+         return *p & (1 << 7);
 
-What it is not clear to me is what kind of ABI boundary you are trying to
-preemptively add support here. The TCB ABI for __builtin_cpu_supports is
-userland only, so if your intention is just to allow gcc to work on older
-glibcs, it should be a matter to just reserve the space on tcbhead_t.  Once
-kernel actually provides AT_HWCAP3/AT_HWCAP4, backporting should be
-straightforward.
+Using eoril for folio_unlock, but not for folio_end_read:
 
-If your intention is to also add support on glibc, it makes more sense to
-already reserve it.  For __builtin_cpu_supports it should work, although
-for glibc itself some backporting would be required (to correctly showing
-the bits with LD_SHOW_AUXV).
+400413e6 <folio_unlock>:
+400413e6:       206f 0004       moveal %sp@(4),%a0
+400413ea:       2010            movel %a0@,%d0
+400413ec:       0a80 0000 0001  eoril #1,%d0
+400413f2:       2080            movel %d0,%a0@
+400413f4:       2010            movel %a0@,%d0
+400413f6:       4a00            tstb %d0
+400413f8:       6c0a            bges 40041404 <folio_unlock+0x1e>
+400413fa:       42a7            clrl %sp@-
+400413fc:       2f08            movel %a0,%sp@-
+400413fe:       4eba ff30       jsr %pc@(40041330 <folio_wake_bit>)
+40041402:       508f            addql #8,%sp
+40041404:       4e75            rts
 
+But that is still worse anyway.
+
+> with stmark2_defconfig, which I assume should work.
+
+Yes, or any of amcore, m5208evb, m5249evb, m5272c3, m5275evb, m5307c3, m5407c3.
+
+Regards
+Greg
 
