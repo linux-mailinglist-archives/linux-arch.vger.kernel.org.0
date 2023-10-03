@@ -2,160 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25697B6F8C
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 19:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D667B7010
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 19:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240647AbjJCRTy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 3 Oct 2023 13:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S231967AbjJCRko (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Oct 2023 13:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjJCRTy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Oct 2023 13:19:54 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B51A3;
-        Tue,  3 Oct 2023 10:19:50 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-d84f18e908aso1245292276.1;
-        Tue, 03 Oct 2023 10:19:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696353590; x=1696958390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gDlx4Wu9l39McbXAmxr/aQafR9CqgRAFRsdqHoaziys=;
-        b=u3TzJQVHs2TyvUbttO8WzzrdBlie/xcE1zaSK5/+w7CWrluwn4sTXLpeNJ2uaxsPV2
-         s4F8CxAC4LvhidYIZwOmZHgyFbVFi1PY+UMa28XdQbQEmrLLdU4ymN0raz72rKgMxCoS
-         AyDMWlEqrZ2pDUhObtqykTQND70Npumrx/vw0P0NRZ6uHCL3dukLOM0PQQeZIAgaBJ3X
-         sMU0dBY6WaOXetVWq6lUuFECgKsQeqxOxnwS75upyCUDRMK6VOJa+qzQWhY38DiVZwL2
-         aVp01VzxydtYck3vrjIqOi0kqjbqy8T5kchgGgAG7QE5K5Mt/+1S6V/0GNjcuGll5XD3
-         PEYw==
-X-Gm-Message-State: AOJu0Yws6aDGR6Q6DJkGzmuDu0kV3ujCyFxEiM3yug5UNKZWbhplMu3V
-        7njiSLUhvbcMaBDGpjJByBn3rqEndnBqwA==
-X-Google-Smtp-Source: AGHT+IGqmgXkbkTaf+6EtgFJ/h0X0E+OPsMzs3fneex+WjZKmz+aewZPW0qOLo2vl5CreZHC7XbNxQ==
-X-Received: by 2002:a25:3042:0:b0:d81:7041:9520 with SMTP id w63-20020a253042000000b00d8170419520mr12551329ybw.56.1696353589811;
-        Tue, 03 Oct 2023 10:19:49 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id x62-20020a254a41000000b00bcd91bb300esm520301yba.54.2023.10.03.10.19.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Oct 2023 10:19:49 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5a24b03e22eso14897427b3.0;
-        Tue, 03 Oct 2023 10:19:49 -0700 (PDT)
-X-Received: by 2002:a81:a14b:0:b0:583:6db3:a007 with SMTP id
- y72-20020a81a14b000000b005836db3a007mr272837ywg.17.1696353588829; Tue, 03 Oct
- 2023 10:19:48 -0700 (PDT)
+        with ESMTP id S231845AbjJCRko (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Oct 2023 13:40:44 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36BDBD;
+        Tue,  3 Oct 2023 10:40:40 -0700 (PDT)
+Received: from [192.168.7.187] ([76.103.185.250])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 393Hb5dd1691810
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 3 Oct 2023 10:37:05 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 393Hb5dd1691810
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023091101; t=1696354628;
+        bh=pV/MsKucrKusG2Y/zWi1V+/lmmij2RlMuAhslhwjBGY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ie+iUNG++evbuJJIH4LlVE0y2kO/anm5d/KQwE81BTvjNrZxoKeTGUjvRP94gJyOW
+         sFFwd0PevILqj6hD6U2qhBArrigpGLpXM8fHjGxeiGT+ars6lZM63/+CSvM7JcI6Ce
+         i/1trzuvN3L4daAHaFAv1RVz8+foCPfh2Rmolh8QxMA/Xrvn95KJpYWuswaXnnZolW
+         YcYqO+AG6Y17Wv5Ou8D9OODEB0u/t1bXtlvbsLuz6TiurGl9UM3D82tn97PdzO/W6E
+         Iv0qGHQNJAC0k8ul3K4pRSLLwEm7lTKyXhJ30LwwQxK+sgBP6hHFmJXb3j2p6StTgX
+         RDV3jN2oQ7j6A==
+Message-ID: <7aee5021-8bb6-4343-b746-a8417af030a9@zytor.com>
+Date:   Tue, 3 Oct 2023 10:37:02 -0700
 MIME-Version: 1.0
-References: <20230914185804.2000497-1-sohil.mehta@intel.com>
-In-Reply-To: <20230914185804.2000497-1-sohil.mehta@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Oct 2023 19:19:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDho+vRAnQ3_AWjLcGgrNKNhWGmpdpjipq53QjvRrUJw@mail.gmail.com>
-Message-ID: <CAMuHMdWDho+vRAnQ3_AWjLcGgrNKNhWGmpdpjipq53QjvRrUJw@mail.gmail.com>
-Subject: Re: [PATCH v2] arch: Reserve map_shadow_stack() syscall number for
- all architectures
-To:     Sohil Mehta <sohil.mehta@intel.com>
-Cc:     linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Gavin Shan <gshan@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-acpi@vger.kernel.org,
+        James Morse <james.morse@arm.com>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sergei Trofimovich <slyich@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Deepak Gupta <debug@rivosinc.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-ia64@vger.kernel.org
+References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk>
+ <dd4dee9e-4d75-e1e6-04c8-82d84b28fd35@redhat.com>
+ <ZRIU/yFrbFbIR7zZ@shell.armlinux.org.uk>
+ <ZRwmj/e+jAXFfvCm@shell.armlinux.org.uk>
+Content-Language: en-US
+From:   Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <ZRwmj/e+jAXFfvCm@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 8:59 PM Sohil Mehta <sohil.mehta@intel.com> wrote:
-> commit c35559f94ebc ("x86/shstk: Introduce map_shadow_stack syscall")
-> recently added support for map_shadow_stack() but it is limited to x86
-> only for now. There is a possibility that other architectures (namely,
-> arm64 and RISC-V), that are implementing equivalent support for shadow
-> stacks, might need to add support for it.
->
-> Independent of that, reserving arch-specific syscall numbers in the
-> syscall tables of all architectures is good practice and would help
-> avoid future conflicts. map_shadow_stack() is marked as a conditional
-> syscall in sys_ni.c. Adding it to the syscall tables of other
-> architectures is harmless and would return ENOSYS when exercised.
->
-> Note, map_shadow_stack() was assigned #453 during the merge process
-> since #452 was taken by fchmodat2().
->
-> For Powerpc, map it to sys_ni_syscall() as is the norm for Powerpc
-> syscall tables.
->
-> For Alpha, map_shadow_stack() takes up #563 as Alpha still diverges from
-> the common syscall numbering system in the other architectures.
->
-> Link: https://lore.kernel.org/lkml/20230515212255.GA562920@debug.ba.rivosinc.com/
-> Link: https://lore.kernel.org/lkml/b402b80b-a7c6-4ef0-b977-c0f5f582b78a@sirena.org.uk/
->
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+On 10/3/2023 7:34 AM, Russell King (Oracle) wrote:
+>>>>
+>>>> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>>>> ---
+>>>> Changes since RFC v2:
+>>>>    - drop ia64 changes, as ia64 has already been removed.
+>>>>
 
->  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+If this is RFC v2, we put "RFC v2" in the subject, then people know you
+are sending a newer version.  People are busy, and your patch could be 
+skipped if it appears the same as a previous one.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
