@@ -2,578 +2,260 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2EA7B5E23
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 02:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3465F7B5E4E
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 02:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238962AbjJCAWW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Oct 2023 20:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S229910AbjJCAlN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Oct 2023 20:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238487AbjJCAWT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 20:22:19 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0112BE1;
-        Mon,  2 Oct 2023 17:22:09 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-1e10ba12fd3so208605fac.1;
-        Mon, 02 Oct 2023 17:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696292529; x=1696897329; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qMDruOuLBm4Gji0WOsN7NL1T5EMDFv1mGIaADmwpZLQ=;
-        b=jgyB//XTpIumAx1eopl01dscE+Ri9QRfEYp40wGKollDMZHgb92BiKXcNJ4MxP0Xe4
-         jrW3jiRhk7y5+miCCLq8PUa9eVgcDTTpsg81Y+cpzSwr6oauwTg1Udr36l7Uln9YtJtF
-         reDuGwJ/73LlWe+85G4zFQo/0yx5rniGwenNv6xUryOW1KdGuuKa4yAlyliGNyCC4zQG
-         BGsQIYSEEmT7OnoGn65cKPxjcq8+vGOVUW7hMqypqsEaJVq0zXUAQfliQ0/QbAzy8fSz
-         kRX5TSr6ivMu9lqbaAUu3qKIQK6vcByR+gTZRGO1jdt8NGrTV9k0z2wNVpQwrDpyhcap
-         3NdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696292529; x=1696897329;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qMDruOuLBm4Gji0WOsN7NL1T5EMDFv1mGIaADmwpZLQ=;
-        b=NtRsdds1XKaHkGVftSsnKrEtMZrybLc1yeWBLjRoG9PJdHpZr79tIcFHGQE81c91jt
-         07WpoRdSlAP3OLPTvybAWL4lCK/sLOSsH+Onuf3yyMhzw1ld9GclqvtVI1WOkipLtrOk
-         vCo1HH3hBxKIhyIiV4wxB3tyniTJLtFRIrH6CJwe/SI2laf/OGgudGjSe1ENMd7KSQd+
-         h358hI+l1xTXSuVlgguXkLpfm82mURpxV+3FEhwsbMhTg6I0ekaPeJvrsg3JXU5MI5N0
-         dX9mYKWyEMrbBkBXIgk3+hbSFYMpY8HGuXEIS4A9cYyF4MdDouL2jo3K1fMrnP2IkM2P
-         Rr8Q==
-X-Gm-Message-State: AOJu0Ywsx+dDzweG+cX8ehyXVYLpXqUK3nqONyv7xvl2sEHFewAyuCO9
-        kadB1d+rynI2Pib8u0M03w==
-X-Google-Smtp-Source: AGHT+IE2YAsLVNpJsdNcG2bxedQTiFrhif1A8zx9yeRwEXXF9bKT3nIRs/0OjC+MT/bG/oTToYDBxA==
-X-Received: by 2002:a05:6870:9720:b0:1d5:c134:cecb with SMTP id n32-20020a056870972000b001d5c134cecbmr14980678oaq.1.1696292529153;
-        Mon, 02 Oct 2023 17:22:09 -0700 (PDT)
-Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id a2-20020a056870618200b001e135f4f849sm24725oah.9.2023.10.02.17.22.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 17:22:08 -0700 (PDT)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-cxl@vger.kernel.org,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        arnd@arndb.de, akpm@linux-foundation.org, x86@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: [RFC PATCH v2 4/4] mm/mempolicy: implement a weighted-interleave
-Date:   Mon,  2 Oct 2023 20:21:56 -0400
-Message-Id: <20231003002156.740595-5-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20231003002156.740595-1-gregory.price@memverge.com>
-References: <20231003002156.740595-1-gregory.price@memverge.com>
+        with ESMTP id S229806AbjJCAlM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 20:41:12 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7EA1A9;
+        Mon,  2 Oct 2023 17:41:07 -0700 (PDT)
+Received: from [10.0.0.178] (c-76-135-56-23.hsd1.wa.comcast.net [76.135.56.23])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D572220B74C0;
+        Mon,  2 Oct 2023 17:41:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D572220B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1696293665;
+        bh=q1lXOIgpOpeoyI8MnD95ZJF7BeW1/5fq2wtlMaBBZP4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iSVcFH40SA0y+q78CHE8RtSw6g6tF1YQ+fTI4d8PyWo5iquAj++CYCmSXlqX8gwpC
+         Mv+s1kid6MYugDmetwjd6KOD7xT/lIy64sb9vzqVMUghSgKZQWJ/uKlWtZ63gsJyFN
+         obbMw4JYEsHjZKluEpBRoU04sukOWjGwWltG6gEw=
+Message-ID: <749f477a-1e7a-495e-bea1-e3abe8da7fb9@linux.microsoft.com>
+Date:   Mon, 2 Oct 2023 17:41:02 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 14/15] asm-generic: hyperv: Use new Hyper-V headers
+ conditionally.
+To:     Alex Ionescu <aionescu@gmail.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1696010501-24584-15-git-send-email-nunodasneves@linux.microsoft.com>
+ <CAJ-90NKJ=FViuuy2MyA-8S1j9Lsia8bR-ytZuAr=pOPuAiO0VQ@mail.gmail.com>
+Content-Language: en-US
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <CAJ-90NKJ=FViuuy2MyA-8S1j9Lsia8bR-ytZuAr=pOPuAiO0VQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The weighted-interleave mempolicy implements weights per-node
-which are used to distribute memory while interleaving.
+Hi Alex,
 
-For example:
-   nodes: 0,1,2
-   weights: 5,3,2
+On 10/2/2023 12:35 PM, Alex Ionescu wrote:
+> Hi Nuno,
+> 
+> I understand the requirement to have
+> undocumented/non-standard/non-TLFS-published information in the HDK
+> headers, however, the current state of this patch is that for any
+> other code that's not in the kernel today, or in this upcoming driver,
+> the hyperv-tlfs definitions are incomplete, because some *documented*
+> TLFS fields are only in HDK headers. Similarly, it is also impossible
 
-Over 10 consecutive allocations, the following nodes will be selected:
-[0,0,0,0,0,1,1,1,2,2]
+If I understand correctly, you are saying there are documented
+definitions (in the TLFS document), which are NOT in hyperv-tlfs.h, but
+ARE in these new HDK headers, correct?
 
-In this example there is a 50%/30%/20% distribution of memory across
-the enabled nodes.
+If these are needed elsewhere in the kernel, they can just be added to
+hyperv-tlfs.h.
 
-If a node is enabled, the minimum weight is expected to be 0. If an
-enabled node ends up with a weight of 0 (as can happen if weights
-are being recalculated due to a cgroup mask update), a minimum
-of 1 is applied during the interleave mechanism.
+> to only use the HDK headers for other use cases, because some basic
+> documented, standard defines only exist in hyperv-tlfs. So there is no
+> "logical" relationship between the two -- HDK headers are not _just_
+> undocumented information, but also documented information, but also
+> not complete documented information.
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
----
- include/linux/mempolicy.h      |   6 +
- include/uapi/linux/mempolicy.h |   6 +
- mm/mempolicy.c                 | 261 ++++++++++++++++++++++++++++++++-
- 3 files changed, 269 insertions(+), 4 deletions(-)
+That is correct - they are meant to be independently compileable.
+The new HDK headers only serve as a replacement *in our driver* when we
+need some definitions like do_hypercall() etc in mshyperv.h.
 
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index 8f918488c61c..8763e536d4a2 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -54,6 +54,12 @@ struct mempolicy {
- 			int weight;
- 			int count;
- 		} pil;
-+		/* weighted interleave */
-+		struct {
-+			unsigned int il_weight;
-+			unsigned char cur_weight;
-+			unsigned char weights[MAX_NUMNODES];
-+		} wil;
- 	};
- 
- 	union {
-diff --git a/include/uapi/linux/mempolicy.h b/include/uapi/linux/mempolicy.h
-index 41c35f404c5e..913ca9bf9af7 100644
---- a/include/uapi/linux/mempolicy.h
-+++ b/include/uapi/linux/mempolicy.h
-@@ -25,6 +25,7 @@ enum {
- 	MPOL_PREFERRED_MANY,
- 	MPOL_LEGACY,	/* set_mempolicy limited to above modes */
- 	MPOL_PREFERRED_INTERLEAVE,
-+	MPOL_WEIGHTED_INTERLEAVE,
- 	MPOL_MAX,	/* always last member of enum */
- };
- 
-@@ -58,6 +59,11 @@ struct mempolicy_args {
- 			unsigned long weight;  /* get and set */
- 			unsigned long next_node; /* get only */
- 		} pil;
-+		/* Weighted interleave */
-+		struct {
-+			unsigned long next_node; /* get only */
-+			unsigned char *weights; /* get and set */
-+		} wil;
- 	};
- };
- 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 6374312cef5f..92be74d4c431 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -195,11 +195,43 @@ static void mpol_relative_nodemask(nodemask_t *ret, const nodemask_t *orig,
- 	nodes_onto(*ret, tmp, *rel);
- }
- 
-+static void mpol_recalculate_weights(struct mempolicy *pol)
-+{
-+	unsigned int il_weight = 0;
-+	int node;
-+
-+	/* Recalculate weights to ensure minimum node weight */
-+	for (node = 0; node < MAX_NUMNODES; node++) {
-+		if (!node_isset(node, pol->nodes) && pol->wil.weights[node]) {
-+			/* If node is not set, weight should be 0 */
-+			pol->wil.weights[node] = 0;
-+		} else if (!pol->wil.weights[node]) {
-+			/* If node is set, weight should be minimum of 1 */
-+			pol->wil.weights[node] = 1;
-+			pol->wil.il_weight += 1;
-+			il_weight += 1;
-+		} else {
-+			/* Otherwise, keep the existing weight */
-+			il_weight += pol->wil.weights[node];
-+		}
-+	}
-+	pol->wil.il_weight = il_weight;
-+	/*
-+	 * It's possible an allocation has been occurring at this point
-+	 * force it to go to the next node, since we just changed weights
-+	 */
-+	pol->wil.cur_weight = 0;
-+}
-+
- static int mpol_new_nodemask(struct mempolicy *pol, const nodemask_t *nodes)
- {
- 	if (nodes_empty(*nodes))
- 		return -EINVAL;
- 	pol->nodes = *nodes;
-+
-+	if (pol->mode == MPOL_WEIGHTED_INTERLEAVE)
-+		mpol_recalculate_weights(pol);
-+
- 	return 0;
- }
- 
-@@ -334,6 +366,10 @@ static void mpol_rebind_nodemask(struct mempolicy *pol, const nodemask_t *nodes)
- 		tmp = *nodes;
- 
- 	pol->nodes = tmp;
-+
-+	/* After a change to the nodemask, weights must be recalculated */
-+	if (pol->mode == MPOL_WEIGHTED_INTERLEAVE)
-+		mpol_recalculate_weights(pol);
- }
- 
- static void mpol_rebind_preferred(struct mempolicy *pol,
-@@ -403,6 +439,10 @@ static const struct mempolicy_operations mpol_ops[MPOL_MAX] = {
- 		.create = mpol_new_nodemask,
- 		.rebind = mpol_rebind_nodemask,
- 	},
-+	[MPOL_WEIGHTED_INTERLEAVE] = {
-+		.create = mpol_new_nodemask,
-+		.rebind = mpol_rebind_nodemask,
-+	},
- 	[MPOL_PREFERRED] = {
- 		.create = mpol_new_preferred,
- 		.rebind = mpol_rebind_preferred,
-@@ -878,8 +918,10 @@ static long replace_mempolicy(struct mempolicy *new, nodemask_t *nodes)
- 	old = current->mempolicy;
- 	current->mempolicy = new;
- 	if (new && (new->mode == MPOL_INTERLEAVE ||
--		    new->mode == MPOL_PREFERRED_INTERLEAVE))
-+		    new->mode == MPOL_PREFERRED_INTERLEAVE ||
-+		    new->mode == MPOL_WEIGHTED_INTERLEAVE))
- 		current->il_prev = MAX_NUMNODES-1;
-+
- out:
- 	task_unlock(current);
- 	mpol_put(old);
-@@ -921,6 +963,7 @@ static void get_policy_nodemask(struct mempolicy *p, nodemask_t *nodes)
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
- 	case MPOL_PREFERRED_INTERLEAVE:
-+	case MPOL_WEIGHTED_INTERLEAVE:
- 	case MPOL_PREFERRED:
- 	case MPOL_PREFERRED_MANY:
- 		*nodes = p->nodes;
-@@ -1632,6 +1675,56 @@ static long do_set_preferred_interleave(struct mempolicy_args *args,
- 	return 0;
- }
- 
-+static long do_set_weighted_interleave(struct mempolicy_args *args,
-+				       struct mempolicy *new,
-+				       nodemask_t *nodes)
-+{
-+	unsigned char weight;
-+	unsigned char *weights;
-+	int node;
-+	int ret = 0;
-+
-+	/* Weighted interleave cannot be done with no nodemask */
-+	if (nodes_empty(*nodes))
-+		return -EINVAL;
-+
-+	/* Weighted interleave requires a set of weights */
-+	if (!args->wil.weights)
-+		return -EINVAL;
-+
-+	weights = kmalloc(MAX_NUMNODES, GFP_KERNEL);
-+	if (!weights)
-+		return -ENOMEM;
-+
-+	ret = copy_from_user(weights, args->wil.weights, MAX_NUMNODES);
-+	if (ret) {
-+		ret = -EFAULT;
-+		goto weights_out;
-+	}
-+
-+	new->wil.cur_weight = 0;
-+	new->wil.il_weight = 0;
-+	memset(new->wil.weights, 0, sizeof(new->wil.weights));
-+
-+	/* Weights for set nodes cannot be 0 */
-+	node = first_node(*nodes);
-+	while (node != MAX_NUMNODES) {
-+		weight = weights[node];
-+		if (!weight) {
-+			ret = -EINVAL;
-+			goto weights_out;
-+		}
-+		/* policy creation initializes total to nr_nodes, adjust it */
-+		new->wil.il_weight += weight;
-+		new->wil.weights[node] = weight;
-+		node = next_node(node, *nodes);
-+	}
-+
-+weights_out:
-+	kfree(weights);
-+	return ret;
-+}
-+
- static long do_set_mempolicy2(struct mempolicy_args *args)
- {
- 	struct mempolicy *new = NULL;
-@@ -1656,6 +1749,9 @@ static long do_set_mempolicy2(struct mempolicy_args *args)
- 	case MPOL_PREFERRED_INTERLEAVE:
- 		err = do_set_preferred_interleave(args, new, &nodes);
- 		break;
-+	case MPOL_WEIGHTED_INTERLEAVE:
-+		err = do_set_weighted_interleave(args, new, &nodes);
-+		break;
- 	default:
- 		BUG();
- 	}
-@@ -1799,6 +1895,12 @@ static long do_get_mempolicy2(struct mempolicy_args *kargs)
- 		kargs->pil.weight = pol->pil.weight;
- 		rc = 0;
- 		break;
-+	case MPOL_WEIGHTED_INTERLEAVE:
-+		kargs->wil.next_node = next_node_in(current->il_prev,
-+						    pol->nodes);
-+		rc = copy_to_user(kargs->wil.weights, pol->wil.weights,
-+				  MAX_NUMNODES);
-+		break;
- 	default:
- 		BUG();
- 	}
-@@ -2160,6 +2262,27 @@ static unsigned int preferred_interleave_nodes(struct mempolicy *policy)
- 	return next;
- }
- 
-+static unsigned int weighted_interleave_nodes(struct mempolicy *policy)
-+{
-+	unsigned int next;
-+	unsigned char next_weight;
-+	struct task_struct *me = current;
-+
-+	/* When weight reaches 0, we're on a new node, reset the weight */
-+	next = next_node_in(me->il_prev, policy->nodes);
-+	if (!policy->wil.cur_weight) {
-+		/* If the node is set, at least 1 allocation is required */
-+		next_weight = policy->wil.weights[next];
-+		policy->wil.cur_weight = next_weight ? next_weight : 1;
-+	}
-+
-+	policy->wil.cur_weight--;
-+	if (next < MAX_NUMNODES && !policy->wil.cur_weight)
-+		me->il_prev = next;
-+
-+	return next;
-+}
-+
- /* Do dynamic interleaving for a process */
- static unsigned interleave_nodes(struct mempolicy *policy)
- {
-@@ -2168,6 +2291,8 @@ static unsigned interleave_nodes(struct mempolicy *policy)
- 
- 	if (policy->mode == MPOL_PREFERRED_INTERLEAVE)
- 		return preferred_interleave_nodes(policy);
-+	else if (policy->mode == MPOL_WEIGHTED_INTERLEAVE)
-+		return weighted_interleave_nodes(policy);
- 
- 	next = next_node_in(me->il_prev, policy->nodes);
- 	if (next < MAX_NUMNODES)
-@@ -2197,6 +2322,7 @@ unsigned int mempolicy_slab_node(void)
- 
- 	case MPOL_INTERLEAVE:
- 	case MPOL_PREFERRED_INTERLEAVE:
-+	case MPOL_WEIGHTED_INTERLEAVE:
- 		return interleave_nodes(policy);
- 
- 	case MPOL_BIND:
-@@ -2273,6 +2399,40 @@ static unsigned int offset_pil_node(struct mempolicy *pol, unsigned long n)
- 	return nid;
- }
- 
-+static unsigned int offset_wil_node(struct mempolicy *pol, unsigned long n)
-+{
-+	nodemask_t nodemask = pol->nodes;
-+	unsigned int target, nnodes;
-+	unsigned char weight;
-+	int nid;
-+
-+	/*
-+	 * The barrier will stabilize the nodemask in a register or on
-+	 * the stack so that it will stop changing under the code.
-+	 *
-+	 * Between first_node() and next_node(), pol->nodes could be changed
-+	 * by other threads. So we put pol->nodes in a local stack.
-+	 */
-+	barrier();
-+
-+	nnodes = nodes_weight(nodemask);
-+	if (!nnodes)
-+		return numa_node_id();
-+	target = (unsigned int)n % pol->wil.il_weight;
-+	nid = first_node(nodemask);
-+	while (target) {
-+		weight = pol->wil.weights[nid];
-+		/* If weights are being recaculated, revert to interleave */
-+		if (!weight)
-+			weight = 1;
-+		if (target < weight)
-+			break;
-+		target -= weight;
-+		nid = next_node_in(nid, nodemask);
-+	}
-+	return nid;
-+}
-+
- /*
-  * Do static interleaving for a VMA with known offset @n.  Returns the n'th
-  * node in pol->nodes (starting from n=0), wrapping around if n exceeds the
-@@ -2287,6 +2447,8 @@ static unsigned offset_il_node(struct mempolicy *pol, unsigned long n)
- 
- 	if (pol->mode == MPOL_PREFERRED_INTERLEAVE)
- 		return offset_pil_node(pol, n);
-+	else if (pol->mode == MPOL_WEIGHTED_INTERLEAVE)
-+		return offset_wil_node(pol, n);
- 
- 	nodemask = pol->nodes;
- 
-@@ -2358,7 +2520,8 @@ int huge_node(struct vm_area_struct *vma, unsigned long addr, gfp_t gfp_flags,
- 	mode = (*mpol)->mode;
- 
- 	if (unlikely(mode == MPOL_INTERLEAVE) ||
--	    unlikely(mode == MPOL_PREFERRED_INTERLEAVE)) {
-+	    unlikely(mode == MPOL_PREFERRED_INTERLEAVE) ||
-+	    unlikely(mode == MPOL_WEIGHTED_INTERLEAVE)) {
- 		nid = interleave_nid(*mpol, vma, addr,
- 					huge_page_shift(hstate_vma(vma)));
- 	} else {
-@@ -2400,6 +2563,7 @@ bool init_nodemask_of_mempolicy(nodemask_t *mask)
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
- 	case MPOL_PREFERRED_INTERLEAVE:
-+	case MPOL_WEIGHTED_INTERLEAVE:
- 		*mask = mempolicy->nodes;
- 		break;
- 
-@@ -2511,7 +2675,8 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
- 	pol = get_vma_policy(vma, addr);
- 
- 	if (pol->mode == MPOL_INTERLEAVE ||
--	    pol->mode == MPOL_PREFERRED_INTERLEAVE) {
-+	    pol->mode == MPOL_PREFERRED_INTERLEAVE ||
-+	    pol->mode == MPOL_WEIGHTED_INTERLEAVE) {
- 		struct page *page;
- 		unsigned nid;
- 
-@@ -2614,7 +2779,8 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
- 	 * nor system default_policy
- 	 */
- 	if (pol->mode == MPOL_INTERLEAVE ||
--	    pol->mode == MPOL_PREFERRED_INTERLEAVE)
-+	    pol->mode == MPOL_PREFERRED_INTERLEAVE ||
-+	    pol->mode == MPOL_WEIGHTED_INTERLEAVE)
- 		page = alloc_page_interleave(gfp, order, interleave_nodes(pol));
- 	else if (pol->mode == MPOL_PREFERRED_MANY)
- 		page = alloc_pages_preferred_many(gfp, order,
-@@ -2737,6 +2903,84 @@ static unsigned long alloc_pages_bulk_array_pil(gfp_t gfp,
- 	return allocated;
- }
- 
-+static unsigned long alloc_pages_bulk_array_weighted_interleave(gfp_t gfp,
-+	struct mempolicy *pol, unsigned long nr_pages,
-+	struct page **page_array)
-+{
-+	struct task_struct *me = current;
-+	unsigned long total_allocated = 0;
-+	unsigned long nr_allocated;
-+	unsigned long rounds;
-+	unsigned long node_pages, delta;
-+	unsigned char weight;
-+	int nnodes, node, prev_node;
-+	int i;
-+
-+	nnodes = nodes_weight(pol->nodes);
-+	/* Continue allocating from most recent node and adjust the nr_pages */
-+	if (pol->wil.cur_weight) {
-+		node = next_node_in(me->il_prev, pol->nodes);
-+		node_pages = pol->wil.cur_weight;
-+		nr_allocated = __alloc_pages_bulk(gfp, node, NULL, node_pages,
-+						  NULL, page_array);
-+		page_array += nr_allocated;
-+		total_allocated += nr_allocated;
-+		/* if that's all the pages, no need to interleave */
-+		if (nr_pages <= pol->wil.cur_weight) {
-+			pol->wil.cur_weight -= nr_pages;
-+			return total_allocated;
-+		}
-+		/* Otherwise we adjust nr_pages down, and continue from there */
-+		nr_pages -= pol->wil.cur_weight;
-+		pol->wil.cur_weight = 0;
-+		prev_node = node;
-+	}
-+
-+	/* Now we can continue allocating from this point */
-+	rounds = nr_pages / pol->wil.il_weight;
-+	delta = nr_pages % pol->wil.il_weight;
-+	for (i = 0; i < nnodes; i++) {
-+		node = next_node_in(prev_node, pol->nodes);
-+		weight = pol->wil.weights[node];
-+		node_pages = weight * rounds;
-+		if (delta) {
-+			if (delta > weight) {
-+				node_pages += weight;
-+				delta -= weight;
-+			} else {
-+				node_pages += delta;
-+				delta = 0;
-+			}
-+		}
-+		/* We may not make it all the way around */
-+		if (!node_pages)
-+			break;
-+		nr_allocated = __alloc_pages_bulk(gfp, node, NULL, node_pages,
-+						  NULL, page_array);
-+		page_array += nr_allocated;
-+		total_allocated += nr_allocated;
-+		prev_node = node;
-+	}
-+
-+	/*
-+	 * Finally, we need to update me->il_prev and pol->wil.cur_weight
-+	 * if there were overflow pages, but not equivalent to the node
-+	 * weight, set the cur_weight to node_weight - delta and the
-+	 * me->il_prev to the previous node. Otherwise if it was perfect
-+	 * we can simply set il_prev to node and cur_weight to 0
-+	 */
-+	delta %= weight;
-+	if (node_pages) {
-+		me->il_prev = prev_node;
-+		pol->wil.cur_weight = pol->wil.weights[node] - node_pages;
-+	} else {
-+		me->il_prev = node;
-+		pol->wil.cur_weight = 0;
-+	}
-+
-+	return total_allocated;
-+}
-+
- static unsigned long alloc_pages_bulk_array_preferred_many(gfp_t gfp, int nid,
- 		struct mempolicy *pol, unsigned long nr_pages,
- 		struct page **page_array)
-@@ -2779,6 +3023,11 @@ unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
- 		return alloc_pages_bulk_array_pil(gfp, pol, nr_pages,
- 						  page_array);
- 
-+	if (pol->mode == MPOL_WEIGHTED_INTERLEAVE)
-+		return alloc_pages_bulk_array_weighted_interleave(gfp, pol,
-+								  nr_pages,
-+								  page_array);
-+
- 	if (pol->mode == MPOL_PREFERRED_MANY)
- 		return alloc_pages_bulk_array_preferred_many(gfp,
- 				numa_node_id(), pol, nr_pages, page_array);
-@@ -2852,6 +3101,7 @@ bool __mpol_equal(struct mempolicy *a, struct mempolicy *b)
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
- 	case MPOL_PREFERRED_INTERLEAVE:
-+	case MPOL_WEIGHTED_INTERLEAVE:
- 	case MPOL_PREFERRED:
- 	case MPOL_PREFERRED_MANY:
- 		return !!nodes_equal(a->nodes, b->nodes);
-@@ -2989,6 +3239,7 @@ int mpol_misplaced(struct page *page, struct vm_area_struct *vma, unsigned long
- 	switch (pol->mode) {
- 	case MPOL_INTERLEAVE:
- 	case MPOL_PREFERRED_INTERLEAVE:
-+	case MPOL_WEIGHTED_INTERLEAVE:
- 		pgoff = vma->vm_pgoff;
- 		pgoff += (addr - vma->vm_start) >> PAGE_SHIFT;
- 		polnid = offset_il_node(pol, pgoff);
-@@ -3377,6 +3628,7 @@ static const char * const policy_modes[] =
- 	[MPOL_BIND]       = "bind",
- 	[MPOL_INTERLEAVE] = "interleave",
- 	[MPOL_PREFERRED_INTERLEAVE] = "preferred interleave",
-+	[MPOL_WEIGHTED_INTERLEAVE] = "weighted interleave",
- 	[MPOL_LOCAL]      = "local",
- 	[MPOL_PREFERRED_MANY]  = "prefer (many)",
- };
-@@ -3548,6 +3800,7 @@ void mpol_to_str(char *buffer, int maxlen, struct mempolicy *pol)
- 	case MPOL_BIND:
- 	case MPOL_INTERLEAVE:
- 	case MPOL_PREFERRED_INTERLEAVE:
-+	case MPOL_WEIGHTED_INTERLEAVE:
- 		nodes = pol->nodes;
- 		break;
- 	default:
--- 
-2.39.1
+> 
+> Would you consider:
+> 
+> 1) Updating hyperv-tlfs with all newly documented TLFS fields that are
+> in the HDK headers?
+
+I think this can be done on an as-needed basis, as I outlined above.
+
+> OR
+> 2) Updating the new HDK headers you're adding here to also include
+> previously-documented information from hyperv-tlfs? This way, someone
+> can include the HDK headers and get everything they need
+
+The new HDK headers are only intended for the new mshv driver.
+
+> OR
+> 3) Truly making hypertv-tlfs the "documented" header, and then > removing any duplication from HDK so that it remains the
+> "undocumented" header file. In this manner, one would include
+> hyperv-tlfs to use the stable ABI, and they would include HDK (which
+> would include hyperv-tlfs) to use the unstable+stable ABI.
+
+hyperv-tlfs.h is remaining the "documented" header.
+
+But, we can't make the HDK header depend on hyperv-tlfs.h, for 2 primary
+reasons:
+1. We need to put the new HDK headers in uapi so that we can use them in 
+our IOCTL interface. As a result, we can't include hyperv-tlfs.h (unless 
+we put it in uapi as well).
+2. The HDK headers not only duplicate, but also MODIFY some structures 
+in hyperv-tlfs.h. e.g., The struct is in hyperv-tlfs.h, but a particular
+field or bitfield is not.
+
+Thanks,
+Nuno
+
+> 
+> Thank you for your consideration.
+> 
+> Best regards,
+> Alex Ionescu
+> 
+> On Fri, Sep 29, 2023 at 2:02 PM Nuno Das Neves
+> <nunodasneves@linux.microsoft.com> wrote:
+>>
+>> Add asm-generic/hyperv-defs.h. It includes hyperv-tlfs.h or hvhdk.h
+>> depending on compile-time constant HV_HYPERV_DEFS which will be defined in
+>> the mshv driver.
+>>
+>> This is needed to keep unstable Hyper-V interfaces independent of
+>> hyperv-tlfs.h. This ensures hvhdk.h replaces hyperv-tlfs.h in the mshv
+>> driver, even via indirect includes.
+>>
+>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+>> Acked-by: Wei Liu <wei.liu@kernel.org>
+>> ---
+>>   arch/arm64/include/asm/mshyperv.h |  2 +-
+>>   arch/x86/include/asm/mshyperv.h   |  3 +--
+>>   drivers/hv/hyperv_vmbus.h         |  1 -
+>>   include/asm-generic/hyperv-defs.h | 26 ++++++++++++++++++++++++++
+>>   include/asm-generic/mshyperv.h    |  2 +-
+>>   include/linux/hyperv.h            |  2 +-
+>>   6 files changed, 30 insertions(+), 6 deletions(-)
+>>   create mode 100644 include/asm-generic/hyperv-defs.h
+>>
+>> diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
+>> index 20070a847304..8ec14caf3d4f 100644
+>> --- a/arch/arm64/include/asm/mshyperv.h
+>> +++ b/arch/arm64/include/asm/mshyperv.h
+>> @@ -20,7 +20,7 @@
+>>
+>>   #include <linux/types.h>
+>>   #include <linux/arm-smccc.h>
+>> -#include <asm/hyperv-tlfs.h>
+>> +#include <asm-generic/hyperv-defs.h>
+>>
+>>   /*
+>>    * Declare calls to get and set Hyper-V VP register values on ARM64, which
+>> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+>> index e3768d787065..bb1b97106cd3 100644
+>> --- a/arch/x86/include/asm/mshyperv.h
+>> +++ b/arch/x86/include/asm/mshyperv.h
+>> @@ -6,10 +6,9 @@
+>>   #include <linux/nmi.h>
+>>   #include <linux/msi.h>
+>>   #include <linux/io.h>
+>> -#include <asm/hyperv-tlfs.h>
+>>   #include <asm/nospec-branch.h>
+>>   #include <asm/paravirt.h>
+>> -#include <asm/mshyperv.h>
+>> +#include <asm-generic/hyperv-defs.h>
+>>
+>>   /*
+>>    * Hyper-V always provides a single IO-APIC at this MMIO address.
+>> diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+>> index 09792eb4ffed..0e4bc18a13fa 100644
+>> --- a/drivers/hv/hyperv_vmbus.h
+>> +++ b/drivers/hv/hyperv_vmbus.h
+>> @@ -15,7 +15,6 @@
+>>   #include <linux/list.h>
+>>   #include <linux/bitops.h>
+>>   #include <asm/sync_bitops.h>
+>> -#include <asm/hyperv-tlfs.h>
+>>   #include <linux/atomic.h>
+>>   #include <linux/hyperv.h>
+>>   #include <linux/interrupt.h>
+>> diff --git a/include/asm-generic/hyperv-defs.h b/include/asm-generic/hyperv-defs.h
+>> new file mode 100644
+>> index 000000000000..ac6fcba35c8c
+>> --- /dev/null
+>> +++ b/include/asm-generic/hyperv-defs.h
+>> @@ -0,0 +1,26 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _ASM_GENERIC_HYPERV_DEFS_H
+>> +#define _ASM_GENERIC_HYPERV_DEFS_H
+>> +
+>> +/*
+>> + * There are cases where Microsoft Hypervisor ABIs are needed which may not be
+>> + * stable or present in the Hyper-V TLFS document. E.g. the mshv_root driver.
+>> + *
+>> + * As these interfaces are unstable and may differ from hyperv-tlfs.h, they
+>> + * must be kept separate and independent.
+>> + *
+>> + * However, code from files that depend on hyperv-tlfs.h (such as mshyperv.h)
+>> + * is still needed, so work around the issue by conditionally including the
+>> + * correct definitions.
+>> + *
+>> + * Note: Since they are independent of each other, there are many definitions
+>> + * duplicated in both hyperv-tlfs.h and uapi/hyperv/hv*.h files.
+>> + */
+>> +#ifdef HV_HYPERV_DEFS
+>> +#include <uapi/hyperv/hvhdk.h>
+>> +#else
+>> +#include <asm/hyperv-tlfs.h>
+>> +#endif
+>> +
+>> +#endif /* _ASM_GENERIC_HYPERV_DEFS_H */
+>> +
+>> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+>> index d832852d0ee7..6bef0d59d1b7 100644
+>> --- a/include/asm-generic/mshyperv.h
+>> +++ b/include/asm-generic/mshyperv.h
+>> @@ -25,7 +25,7 @@
+>>   #include <linux/cpumask.h>
+>>   #include <linux/nmi.h>
+>>   #include <asm/ptrace.h>
+>> -#include <asm/hyperv-tlfs.h>
+>> +#include <asm-generic/hyperv-defs.h>
+>>
+>>   #define VTPM_BASE_ADDRESS 0xfed40000
+>>
+>> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+>> index 4d5a5e39d76c..722a8cf23d87 100644
+>> --- a/include/linux/hyperv.h
+>> +++ b/include/linux/hyperv.h
+>> @@ -24,7 +24,7 @@
+>>   #include <linux/mod_devicetable.h>
+>>   #include <linux/interrupt.h>
+>>   #include <linux/reciprocal_div.h>
+>> -#include <asm/hyperv-tlfs.h>
+>> +#include <asm-generic/hyperv-defs.h>
+>>
+>>   #define MAX_PAGE_BUFFER_COUNT                          32
+>>   #define MAX_MULTIPAGE_BUFFER_COUNT                     32 /* 128K */
+>> --
+>> 2.25.1
+>>
+>>
 
