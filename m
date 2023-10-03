@@ -2,294 +2,212 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2FF7B6035
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 07:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D3B7B649E
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 10:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjJCFHT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Oct 2023 01:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S239397AbjJCIqy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Oct 2023 04:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjJCFHT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Oct 2023 01:07:19 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CF6A9;
-        Mon,  2 Oct 2023 22:07:15 -0700 (PDT)
+        with ESMTP id S239370AbjJCIqx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Oct 2023 04:46:53 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2089.outbound.protection.outlook.com [40.107.15.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3909AC;
+        Tue,  3 Oct 2023 01:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O3FR+XsUkAb07K1BsVq2myWzXOMLFKW2bf9kUJfgJso=;
+ b=lZ2lksXhDK5uw9p/vLR7uXp8ivWY4qjD425YWW/ouRf7tL+7GbDeFZYHCRASIk6n8iAJV47wmY/YIbnjM5T+o4QAfGv+wTJuGpDE1Leq7EGSgu1cTeZlzthuXvCU0bXb7BPjXMHWyc0lD+WTDCw4+ZxAZwgcqL182RIJyjW6mqw=
+Received: from DB7PR05CA0010.eurprd05.prod.outlook.com (2603:10a6:10:36::23)
+ by AS2PR08MB8383.eurprd08.prod.outlook.com (2603:10a6:20b:55a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21; Tue, 3 Oct
+ 2023 08:46:27 +0000
+Received: from DBAEUR03FT011.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:36:cafe::43) by DB7PR05CA0010.outlook.office365.com
+ (2603:10a6:10:36::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.30 via Frontend
+ Transport; Tue, 3 Oct 2023 08:46:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT011.mail.protection.outlook.com (100.127.142.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.24 via Frontend Transport; Tue, 3 Oct 2023 08:46:27 +0000
+Received: ("Tessian outbound ab4fc72d2cd4:v211"); Tue, 03 Oct 2023 08:46:27 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 74118f93a405798c
+X-CR-MTA-TID: 64aa7808
+Received: from 52bafdcfe683.2
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id A54C3ABA-CB31-4A35-8381-D2F938FA5FC2.1;
+        Tue, 03 Oct 2023 08:46:16 +0000
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 52bafdcfe683.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 03 Oct 2023 08:46:16 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AjCl9KnO6MyGkNB1RPwjBv+OIlAyzsTscMd9pvgF0Y3QGq+au9G6LG/r9B3xV0XNiFlF66+N8U6Er7j7X28l2wzPcJD9DVpXPzCrZiOEYjY1oJrtIb6SMXNrmbWJoCU5xbUBEui8k8Qe1GAy192pU3dVkO69J43zoho9OKLIpeA7nbhFLZsMJ02c61u8hX64A5VBNiuHlHK8NGTGHB7TQiJdMEDXqaiF+5UHEfwbkQngwXVl+Zbx+/m1ERehOxmldQVk0lPP/1RpNHLtkew6CAM2fVKgUEL+4oHQK8LsxbIUoO7jekxIfn0M3OjFxgG+izS53tsX5+8nOuFVWjTmGQ==
+ b=Wt0RuRQA74jRHar8hfIU8lWwKaxJJdgG7jU4y66nEz9F2dES0A07DTYyVA9YARASp27b+3J7SQ1r7vaULpD+ify3FzLSaLTimmqBcCGjBoVTkvW3dzlpW+3L5QJjaCdeW3Z9KxaFENt1wCtoJ+4KCh5MO2Ke3ZgnWTTlbaLgjUlWjXrWq/BFbWVWfVNkO3f3TZT4cas3VGeyk19TlN3ehO8SqmbQsU4g41ELgk49sv+wE2ZiKM/D2z1TF38cZBJdIejMfa+Kjn61R3AmzCQ60zfD+ljtiX5dVlZMVHTJr6EdjpejMDy+EXIbtorNAqanBBLkvjdY/eqWwIxhGO6jcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8IjjJV73tb1uR5tm+EJa6oxhTuzazV3RhmoDK3EYdnA=;
- b=ZskEaRlosN3PzsnNEmxtX9wMzmytcn3A9ST2Ruph0GPu27RzQOJQ5QYI82QxygZ2xHB4VWbnez0t73KQr8hozDsuqRLQLTTa8kKz4i5bZ+bCsmge3d/uPzK1EDyCoV7JtcFdk2g43XregaradD7QdGGedvik+Kyl1WZH/a6unk3K1dBXM5CUbfGzGY6zbp3lR57B2z97dp5omzD9zJFQM9NH0h8leD3/8ofFkfp6oo54jyzpinf4AocJ1BMjaxHvDavJ2FGsy1j/T6MFvMFCuPzOkDiK9v7xAU/asICNBAvRNKy+kEhOznMsddBEEpO2ZjOgk7ajXz9pHT99CZC8ow==
+ bh=O3FR+XsUkAb07K1BsVq2myWzXOMLFKW2bf9kUJfgJso=;
+ b=ciZ5mG++PRC7FIN/Iy2iHL3l5ro6QNpIJ2VtESA1Zcu3pdn8eWFdfiOBxcRsLU0pGZ59n40gCs4DdH4pXsWo20ABIhYvinj3dRzFny04QGZLKGc+8CruI35Bfa8wLtwqY76JZst+8hN7+VgezkHh6T4HTQwdoyeQUuMrx8YlY9amvDpunvLmhfyJtUUeCaLfIkgKzyscIALCZAJ294KrPlylurdD8p00lew0+OSWaOd137HX/6ysG0JeVfbXc1I9wc/azx6QWiTgs+gNGLirxVT7qwfDT84jDIYBj8KnbyNwKKUriwx2ys+R1C4Rz4h89rRxk30efmO214sswyS/Lg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
- dkim=pass header.d=micron.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
- s=selector2;
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8IjjJV73tb1uR5tm+EJa6oxhTuzazV3RhmoDK3EYdnA=;
- b=p4cYQHoWcO8MYtgmsAgNTe6LL5jypIZpwXqvyWbu756oslz4CKp1uUDabvutcG0TOutlVVx00V2bPq4iHqREqwNiI6wggimcTxTfjTNSBdo3B1Wc77Z33gvxkXzccHP6y1u77JOLNf89/xQIH6FxJX7Axuy0Rbqc8RcgDfizze9MaIKDsOK3FLbCPH2KH91H5ZDci76yOYmd1BnDXoDeuMUioWsSGGFT6f+S3EM3rovpPAUnxqgzHoAJ8fXjisWpGOUzfL3WypujLl5L7keTgW84E3bfMuCc334NTXTMa6F6iBoCloNF5MCUT32eM0anLyC9q8KTL5mSZvC8l1c5+w==
-Received: from PH0PR08MB7955.namprd08.prod.outlook.com (2603:10b6:510:11a::17)
- by BN0PR08MB7294.namprd08.prod.outlook.com (2603:10b6:408:14a::9) with
+ bh=O3FR+XsUkAb07K1BsVq2myWzXOMLFKW2bf9kUJfgJso=;
+ b=lZ2lksXhDK5uw9p/vLR7uXp8ivWY4qjD425YWW/ouRf7tL+7GbDeFZYHCRASIk6n8iAJV47wmY/YIbnjM5T+o4QAfGv+wTJuGpDE1Leq7EGSgu1cTeZlzthuXvCU0bXb7BPjXMHWyc0lD+WTDCw4+ZxAZwgcqL182RIJyjW6mqw=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by AS8PR08MB9219.eurprd08.prod.outlook.com (2603:10a6:20b:5a2::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.33; Tue, 3 Oct
- 2023 05:07:10 +0000
-Received: from PH0PR08MB7955.namprd08.prod.outlook.com
- ([fe80::ee86:3818:3342:933d]) by PH0PR08MB7955.namprd08.prod.outlook.com
- ([fe80::ee86:3818:3342:933d%7]) with mapi id 15.20.6813.027; Tue, 3 Oct 2023
- 05:07:10 +0000
-From:   Srinivasulu Thanneeru <sthanneeru@micron.com>
-To:     "Huang, Ying" <ying.huang@intel.com>,
-        Ravis OpenSrc <Ravis.OpenSrc@micron.com>
-CC:     "linux-mm@vger.kernel.org" <linux-mm@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "gregory.price@memverge.com" <gregory.price@memverge.com>,
-        John Groves <jgroves@micron.com>,
-        Eishan Mirakhur <emirakhur@micron.com>,
-        Vishal Tanna <vtanna@micron.com>
-Subject: Re: [EXT] Re: [RFC PATCH 0/2] mm: mempolicy: Multi-tier interleaving
-Thread-Topic: [EXT] Re: [RFC PATCH 0/2] mm: mempolicy: Multi-tier interleaving
-Thread-Index: AQHZ8SgSd7VrgZiMdUSwwsnheXTUbLAvxRyogAe/Czs=
-Date:   Tue, 3 Oct 2023 05:07:10 +0000
-Message-ID: <PH0PR08MB79559353E5C579D066C992B6A8C4A@PH0PR08MB7955.namprd08.prod.outlook.com>
-References: <20230927095002.10245-1-ravis.opensrc@micron.com>
- <87v8burfhz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87v8burfhz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Enabled=True;MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_SiteId=f38a5ecd-2813-4862-b11b-ac1d563c806f;MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_SetDate=2023-10-03T05:07:08.833Z;MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Name=Confidential;MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_ContentBits=0;MSIP_Label_37874100-6000-43b6-a204-2d77792600b9_Method=Standard;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=micron.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR08MB7955:EE_|BN0PR08MB7294:EE_
-x-ms-office365-filtering-correlation-id: aee41b1b-6082-409c-8873-08dbc3ce9927
-x-ld-processed: f38a5ecd-2813-4862-b11b-ac1d563c806f,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zczp6A4zR5RjAD6ibNoYDh/yz1IPDOwGKg8oWOyHUhlvpTo95jsIgueJ/PXqCDcpPsuOY9wblNNJYl5Zam0sMDuKyPlCXK7u4vFuwDwz3+rsOQTd176u4d5llxCPIL1ugaT642S+RscCs8sGU0RkUytPi0oaF5rjI+QIFENq/MyTncfvf/vhxw5ULzwgMQ5It2u4bl0t9bozdNFxjaz5KUeSzvn7Nwvx5AYVxLc6f0gSROMFP4eCN4Hk03+jsK8yE3ucgPTtQ8zEjz+X6yg4k3kww+UOiI/S7y4kVKVAha7bc2PAinNAw3nVVRJ2RQbvn5lXr7YsK5qn5HYtxluSdcS3Q3+sZc4avp1LN/kceS7BEZxQxl5VwHzIWGtV+7OzAcKtgQlNeucGuZzXw63eRCZKXxMWrbro8ea/0tA2ZwTHNTbjeTNpwNddTVb/zrmUeIzPwQrUcEzBbYCZ6/H4fxTEY70+wVNRasqK6OHGr02HGONDJyvdQKxrLLOP+c/1au1Lf1dIKx971Yma7XXrgFqg24ZBQ11Q5H7+/VQ0Z+r0CbPtS0HErfG+lZL1CiPwzDoHR4Pw4xU8eeto30nWxCkeEbOcKQ1f+61+5/5++tk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR08MB7955.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(376002)(396003)(39860400002)(346002)(230922051799003)(186009)(64100799003)(1800799009)(451199024)(2906002)(83380400001)(7416002)(86362001)(33656002)(38100700002)(38070700005)(122000001)(55016003)(53546011)(316002)(66946007)(76116006)(6636002)(54906003)(66446008)(66476007)(66556008)(64756008)(9686003)(7696005)(6506007)(91956017)(110136005)(107886003)(41300700001)(966005)(45080400002)(478600001)(71200400001)(52536014)(4326008)(8676002)(5660300002)(26005)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-7?B?MnYvQzNCQUI4Smtid1FERmRkblJyWVVSZDFHUjUycGRsNkR2dDZnbjBrb2ti?=
- =?utf-7?B?OGNZeFVnNHlPMVpZQlc0MUY1VGRIVTc0eXY0ODBmNzJsUE5mMC83NWpOdUM4?=
- =?utf-7?B?b2didG4xaExRQWJkMkNmYUd5YjlzUmttUmY0VHNHTystS0RUZUdqdUpsV0pl?=
- =?utf-7?B?WTI3Z1RlNnlsRjgyanptREZDQldyQXVnaVM5RkxCQ0ZWdmlvMEFWb3FIZWVS?=
- =?utf-7?B?MmFLbnZWb3ZYVUk5eWwxY0FWVUhtMEU5cSstWTlQeWMwUDg0TnBYTVpIR2xn?=
- =?utf-7?B?MmMxOGhKbFpuQ3Uva1NvU0ZuY0dUb0dFalovRW52Ry9UN2RpaEVqbGhwWTI1?=
- =?utf-7?B?L3JzKy04Um9UUjZqZ1pPKy1LZURsY2hNMjB2dWNCQ2dqbHd0cDdnUU5IUnJD?=
- =?utf-7?B?Qm1jT2hGdVFNcXlETGozSE5VKy1oVjVYYkgrLXhxSDNFZjJRamtlSDlIaE4y?=
- =?utf-7?B?MlVXSG5wa2JIMldTeDR6WnExTngwU1FaenEvVzdIUHR5UVIrLTdvU2QyU2Q=?=
- =?utf-7?B?Ky1rS3I1Y0Nib3N6Vncvakx1cWJ4TEl1d0ZxUjlaVnkvdzB6ZUNGQ2JRVklR?=
- =?utf-7?B?NWhSV0JwQjF2bVg5dGozdFM0TGFkaUxlVDU5VW5wdzhVVHpYdUQwVzhTYVla?=
- =?utf-7?B?Ym85bXZFOU96Mjl4MXhBQjNwYTljUTFoaGp1anViRUlma3lCakE2a2VFeXFl?=
- =?utf-7?B?RlEvTUNpRktKT1JFSFczdklib2JKUCstV3NqZ1Exc2wrLTlvYUJCVzZ1Ky1L?=
- =?utf-7?B?WUZNd29zZC9CWmlab0ZmRjhOOWJycHIyNistV2RoWEN3TS94TystZks1MFgw?=
- =?utf-7?B?TVlwbklCRzZpNXM4Z2tEZC9zRHllU1pvNVZtU2Y3aGtrSnVZRVI2Y1pLWkFD?=
- =?utf-7?B?a1J0ejlIQU9GUUZ5V2I2MlZsQkprSzZoNnNGSzRFcDFxdDIvdklpWTJLTlJv?=
- =?utf-7?B?VTJvdHlsLzVSSXJmQm50Vzd5Qk9XalJoRG1JN01kaGM3Qk0yeGltdkdTS0g2?=
- =?utf-7?B?dkhNS1ovRnF2UmVEYk1Uemw3REFSNVN1WmJlZDVONHp4d0tLTlJSaTY0Y09E?=
- =?utf-7?B?cVJ0ODdwMHdlWll5NWZUbFkxV0IyL0NqcFcyMzY0bmRTM3JrZXhyL3VpNllN?=
- =?utf-7?B?NjdtZVpZSm5ZZmdiL0xjT253bmZTbXNXaTNlNThJSERQZEEyRFZMQ3NyREhm?=
- =?utf-7?B?ZFlsQU9pT0NMRnhuOTJVaWJ3eFpHa04rLTZ4ZkFVNjhTaXRnV3FpV2ZXdmIv?=
- =?utf-7?B?M3R0dFRWUUN1Mk1KSS9zQWpMcW1sQTRMbVpaQjBiZi9rMEN1Tk5oQ3ArLVhx?=
- =?utf-7?B?bXlrcXpXYjdDdDJ2dy9aOVl1bE9DM1h1cC9BMmM5Q0Vzc0ZRSjN2QTFoNkxj?=
- =?utf-7?B?OXJkTGVmSkdXbUdydFhCa2diUGVnU1REbDg5RXR0WTJIZlVYTW9XVUsxQjV3?=
- =?utf-7?B?U3g2NVJIUmNudzlyUGU5aTJNZmpZdXNjRWNnc1BSTnNQV0RmZkZzMktQS3hM?=
- =?utf-7?B?YjJ1YystSGxJSzF1a3pwN0ZLNzYrLWNGZ0VkbFlEUzAxd3p2d01lbHczYkE=?=
- =?utf-7?B?Ky1nZGNib1VrdzRWTllSY3NTT1VYKy1ZRHJROVpsYi9tL0VER3NyWTVSOGNS?=
- =?utf-7?B?VWF0RFpVcGU0VUt2YzVLWFhkT242bTRJTFpTdTdQYThQWEZ5MXhtR0dVMGtX?=
- =?utf-7?B?enFzWHlEQ3R5R1ZFSUZqOWg2TG5Dd3NWaGIwL284THh2anFnZlNZTFZYTXBI?=
- =?utf-7?B?NWw1VGYvN3ZUY2t3amE0d1pCQ2JTZ0JEbkhmMU9LVUdHUm1HeGRQMmVRanZQ?=
- =?utf-7?B?QmlrOW0wUlNxeEZ4d3lwVzI3bnd1RVdhZkllb3ozaGJRb04rLUd0V3hDd2Nu?=
- =?utf-7?B?c2djd1FRS0RHUElPeVQzcmZGUUc2MjFCNnlpU0lyc1FZNXhrWVdQQlRFenVw?=
- =?utf-7?B?ZmpSU2lOMG0yc2N4RUJYcWY1Yk9NYU0zQnBLU3JCMERRUjM3MUZhQ2hWSC8w?=
- =?utf-7?B?b1NUYSstaGQ4MFlkc01DTnNiZ253d1lMTlBkZjdXL2c5eDgxamxLNTU3N25R?=
- =?utf-7?B?dDk4WWt4Sm1tZzhaUzVLMVAvOWR4VVFjNk9QQ0IrLVljclpGTTlmVmNxdUpz?=
- =?utf-7?B?S1J0ZmhUZm5JSUNnaEd2MktQak1vZ1llaFJCSjJoUzcwdXZ4WXllQzhIVGk1?=
- =?utf-7?B?UkFwVg==?=
-Content-Type: text/plain; charset="utf-7"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.26; Tue, 3 Oct
+ 2023 08:46:13 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e34a:7a41:96db:8aba]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e34a:7a41:96db:8aba%4]) with mapi id 15.20.6838.029; Tue, 3 Oct 2023
+ 08:46:11 +0000
+Date:   Tue, 3 Oct 2023 09:45:56 +0100
+From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <ZRvUxLgMse8QYlGS@arm.com>
+References: <ZNOhjrYleGBR6Pbs@arm.com>
+ <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+ <ZN+qki9EaZ6f9XNi@arm.com>
+ <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <ZOTnL1SDJWZjHPUW@arm.com>
+ <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
+ <ZOXa98SqwYPwxzNP@arm.com>
+ <ZOYFazB1gYjzDRdA@arm.com>
+ <ZRWw7aa3C0LlMPTH@arm.com>
+ <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
+X-ClientProxiedBy: LO2P265CA0320.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a4::20) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-X-OriginatorOrg: micron.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR08MB7955.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aee41b1b-6082-409c-8873-08dbc3ce9927
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2023 05:07:10.2791
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS8PR08MB9219:EE_|DBAEUR03FT011:EE_|AS2PR08MB8383:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25b8dd71-f44d-4926-bca2-08dbc3ed3b62
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: lwz41uy8E/+WYL8kGSYOQ7mGoDrnRSVYD4GEiKcfSwpcMkhTiU2OvEIShlAK/0Rn8kKzfIwUPAMvNSZ3kwd5qUo4tFhzEXYDYp2R4X1ciXWgSi82QZEGxcG5VGpZyPeNViZom/Lyqk4g1qiMh5R5x0NK3kEaH5lWdu7NYCjtTGsBzL5i8zvNZQC0EwL9143mKDhTFjEHV/SeOrQlWrrCbL+t6+0qCPhvDkTNnznixNI7Ex82DjnirYqZ83iSw3/cYW5bo5WINLQ/2ZEJKwJYBbeLfoSZw3bvh5WLX6bS2HWWHYseErTct5OpUHcHcBuVQko2g4TYWJppYzuTIltaBsSTraiq0rhIkxUsSd2oiQoIdHYjzKFQGy//A4/2NItSpmFcfY1lJ7I5/Aj+CaVy6+O4wZiNjA/j4L+nvowg0YrGcl3Xd2aUjbOfjJa4A5zemg+SskQy0or+qhnwb4VzxWEYEap+ugQ8b5W0yxYbfiep935qeI9+mBYyW/LDz7yl7GGfOB0PWumcBx4391y7Qq3b54j2pygwE3hpU+ISirp9Pw+bH1HXCs1pQDmzv/Z5
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(376002)(346002)(136003)(396003)(230922051799003)(1800799009)(451199024)(64100799003)(186009)(5660300002)(8936002)(8676002)(4326008)(26005)(2906002)(478600001)(316002)(66556008)(66946007)(54906003)(7416002)(6916009)(66476007)(6486002)(41300700001)(6506007)(6666004)(6512007)(36756003)(2616005)(83380400001)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9219
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT011.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: ced56863-5bee-4f49-b9e1-08dbc3ed31e4
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cB1zBN3bkRX4sDAE1bFONfZKIjgtXhs0nC9CM1wxYZ6D59SHcCxF/AHqYE5BL185Rt09AndqcvAuzev4rkmfRbTq68TBzM5aL6nOj/7FDb1XRVSMB2ADqFR4fkRTPlXKUKKpjzuvkcI2750Gfjon293p/zGtCU3rW9YhrSjpt8pCuRErSK80kbLUrJNo7Lg5egotrt7CPMr+0hQG9Unt2SqmKZXyzcHYUR/I6JM3rMt04sSsUadH3qBe81cp9Wm1hP6r4dstRXhSwrsVS1mMIUCOd7qTTemHGsQr0BJWVh1/pgCM7r8c8Fuy9JupGDJ9j+0FOppXdLMYDTCP9oCMs5vJNFxB611Mqj6aNxZkj0rce5yMyqLNX5UB8GyGEqX4ZC47I1lyYYWN1zxezYZCiKNZvypc3WqGtQvAg63rTm6BXz4pnvUwhrEQj93lDjXbkLB3pwJGj4K/259S5N292RVWhrcLR2XAhpZsZmk8IcTivmr44LD5bYR3lJ3E5tNJCHgMU9ZlO5WLKQWJ+vG4JO+JDUOXAfHwQkGbNmMtXDk0uHyul4tIRuCH7xGgz6PBPTWBhU4eb1i8tYdAjngslUYEvv3Y3HRqElwEIMcRFXBUXLAVxuJUncHJ2Rpu+G0aJAuIMDbSHew5bSXmDZ04emc6QLkUWPNlWHbsMneFAIAQRS3j65N2Zn91ay9m8E8OIENlmk0EJLjn9OzP9EqmP6SXE6C4CSj/n57QMhQz+3eDTU9UDOajEnWxqL5DfznG
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(39860400002)(136003)(396003)(230922051799003)(82310400011)(186009)(1800799009)(64100799003)(451199024)(46966006)(40470700004)(36840700001)(86362001)(40460700003)(40480700001)(36756003)(2906002)(5660300002)(450100002)(107886003)(36860700001)(83380400001)(336012)(41300700001)(6512007)(4326008)(316002)(2616005)(8676002)(6862004)(26005)(47076005)(8936002)(70586007)(6486002)(81166007)(70206006)(356005)(54906003)(82740400003)(6506007)(478600001)(6666004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2023 08:46:27.3111
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tsqOWzpsof6DcjzI20c8cxxuf8sWq3T/0gC/gEeiZzZrylAQ7moCawG3V4lcDsVgsAzR4X+EyJgxvqZDH88M/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR08MB7294
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25b8dd71-f44d-4926-bca2-08dbc3ed3b62
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT011.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8383
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Micron Confidential
+The 10/02/2023 20:49, Mark Brown wrote:
+> On Thu, Sep 28, 2023 at 05:59:25PM +0100, Szabolcs Nagy wrote:
+> > The 08/23/2023 14:11, Catalin Marinas wrote:
+> 
+> > > > and there is user code doing raw clone threads (such threads are
+> > > > technically not allowed to call into libc) it's not immediately
+> > > > clear to me if having gcs in those threads is better or worse.
+> 
+> > i think raw clone / clone3 users may be relevant so we need a
+> > solution such that they don't fail when gcs args are missing.
+> 
+> Are we sure about that?  Old binaries shouldn't be affected since they
+> won't turn GCS so we're just talking about new binaries here - are there
+> really so many of them that we won't be able to get them all converted
+> over to clone3() and GCS in the timescales we're talking about for GCS
+> deployment?  I obviously don't particularly mind having the default size
+> logic but if we allow clone() then that's keeping the existing behaviour
+> and layering allocation via clone3() on top of it which Catalin didn't
+> want.  Catalin?
 
-Hi Huang,
+clone3 seems to have features that are only available in clone3 and
+not exposed (reasonably) in libc apis so ppl will use clone3 directly
+and those will be hard to fix for gcs (you have to convince upstream
+to add future arm64 arch specific changes that they cannot test).
+where this analysis might be wrong is that raw clone3 is more likely
+used as fork/vfork without a new stack and thus no gcs issue.
 
-Thanks to you for your comments and in the next version, these suggestions =
-will be incorporated.
+even if we have time to fix code, we don't want too many ifdef hacks
+just for gcs so it matters how many projects are affected.
 
-Regards,
-Srini
+> > userspace allocated gcs works for me, but maybe the alternative
+> > with size only is more consistent (thread gcs is kernel mapped
+> > with fallback size logic if gcs size is missing):
+> 
+> If we have size only then the handling of GCS and normal stack in struct
+> clone_args would be inconsistent.  Given that it seems better to have
+> the field present, we can allow it to be NULL and do the allocation with
+> the specified size but it should be there.
 
-Micron Confidential
-+AF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF=
-8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8-
-From: Huang, Ying +ADw-ying.huang+AEA-intel.com+AD4-
-Sent: Thursday, September 28, 2023 11:44 AM
-To: Ravis OpenSrc
-Cc: linux-mm+AEA-vger.kernel.org+ADs- linux-cxl+AEA-vger.kernel.org+ADs- li=
-nux-kernel+AEA-vger.kernel.org+ADs- linux-arch+AEA-vger.kernel.org+ADs- lin=
-ux-api+AEA-vger.kernel.org+ADs- luto+AEA-kernel.org+ADs- tglx+AEA-linutroni=
-x.de+ADs- mingo+AEA-redhat.com+ADs- bp+AEA-alien8.de+ADs- dietmar.eggemann+=
-AEA-arm.com+ADs- vincent.guittot+AEA-linaro.org+ADs- dave.hansen+AEA-linux.=
-intel.com+ADs- hpa+AEA-zytor.com+ADs- arnd+AEA-arndb.de+ADs- akpm+AEA-linux=
--foundation.org+ADs- x86+AEA-kernel.org+ADs- aneesh.kumar+AEA-linux.ibm.com=
-+ADs- gregory.price+AEA-memverge.com+ADs- John Groves+ADs- Srinivasulu Than=
-neeru+ADs- Eishan Mirakhur+ADs- Vishal Tanna
-Subject: +AFs-EXT+AF0- Re: +AFs-RFC PATCH 0/2+AF0- mm: mempolicy: Multi-tie=
-r interleaving
+i see, then try the original plan.
 
-CAUTION: EXTERNAL EMAIL. Do not click links or open attachments unless you =
-recognize the sender and were expecting this message.
+> > the main thread gcs is still special: the size is provided
+> > via prctl (if at all).
+> 
+> Either that or we have it do a map_shadow_stack() but that's an extra
+> syscall during startup.
 
-
-Hi, Ravi,
-
-Thanks for the patch+ACE-
-
-Ravi Jonnalagadda +ADw-ravis.opensrc+AEA-micron.com+AD4- writes:
-
-+AD4- From: Ravi Shankar +ADw-ravis.opensrc+AEA-micron.com+AD4-
-+AD4-
-+AD4- Hello,
-+AD4-
-+AD4- The current interleave policy operates by interleaving page requests
-+AD4- among nodes defined in the memory policy. To accommodate the
-+AD4- introduction of memory tiers for various memory types (e.g., DDR, CXL=
-,
-+AD4- HBM, PMEM, etc.), a mechanism is needed for interleaving page request=
-s
-+AD4- across these memory types or tiers.
-
-Why do we need interleaving page allocation among memory tiers?  I think
-that you need to make it more explicit.  I guess that it's to increase
-maximal memory bandwidth for workloads?
-
-Yes, it is to increase the maximal memory bandwidth.
-
-+AD4- This can be achieved by implementing an interleaving method that
-+AD4- considers the tier weights.
-+AD4- The tier weight will determine the proportion of nodes to select from
-+AD4- those specified in the memory policy.
-+AD4- A tier weight can be assigned to each memory type within the system.
-
-What is the problem of the original interleaving?  I think you need to
-make it explicit too.
-
-The original approach, page distribution is fixed 1:1, user/admin cannot be=
- changed as required. The need to use different ratios has become evident f=
-rom the introduction of new memory tiers that cover a wide range of memory =
-types.
-
-With default interleaving we observed memory bandwidth utilization is less =
-compare to the proposed approach with 85:15, when interleave between DRR an=
-d CXL.
-
-We will capture this information in next series.
-
-+AD4- Hasan Al Maruf had put forth a proposal for interleaving between two
-+AD4- tiers, namely the top tier and the low tier. However, this patch was
-+AD4- not adopted due to constraints on the number of available tiers.
-+AD4-
-+AD4- https://lore.kernel.org/linux-mm/YqD0+ACU-2FtzFwXvJ1gK6+AEA-cmpxchg.o=
-rg/T/
-+AD4-
-+AD4- New proposed changes:
-+AD4-
-+AD4- 1. Introducea sysfs entry to allow setting the interleave weight for =
-each
-+AD4- memory tier.
-+AD4- 2. Each tier with a default weight of 1, indicating a standard 1:1
-+AD4- proportion.
-+AD4- 3. Distribute the weight of that tier in a uniform manner across all =
-nodes.
-+AD4- 4. Modifications to the existing interleaving algorithm to support th=
-e
-+AD4- implementation of multi-tier interleaving based on tier-weights.
-+AD4-
-+AD4- This is inline with Huang, Ying's presentation in lpc22, 16th slide i=
-n
-+AD4- https://lpc.events/event/16/contributions/1209/attachments/1042/1995/=
-/
-+AD4- Live+ACU-20In+ACU-20a+ACU-20World+ACU-20With+ACU-20Multiple+ACU-20Mem=
-ory+ACU-20Types.pdf
-
-Thanks to refer to the original work about this.
-
-+AD4- Observed a significant increase (165+ACU-) in bandwidth utilization
-+AD4- with the newly proposed multi-tier interleaving compared to the
-+AD4- traditional 1:1 interleaving approach between DDR and CXL tier nodes,
-+AD4- where 85+ACU- of the bandwidth is allocated to DDR tier and 15+ACU- t=
-o CXL
-+AD4- tier with MLC -w2 option.
-
-It appears that +ACI-mlc+ACI- isn't an open source software.  Better to use=
- a
-open source software to test.  And, even better to use a more practical
-workloads instead of a memory bandwidth/latency measurement tool.
-
-Sure, will try it.
-
-+AD4- Usage Example:
-+AD4-
-+AD4- 1. Set weights for DDR (tier4) and CXL(teir22) tiers.
-+AD4- echo 85 +AD4- /sys/devices/virtual/memory+AF8-tiering/memory+AF8-tier=
-4/interleave+AF8-weight
-+AD4- echo 15 +AD4- /sys/devices/virtual/memory+AF8-tiering/memory+AF8-tier=
-22/interleave+AF8-weight
-+AD4-
-+AD4- 2. Interleave between DRR(tier4, node-0) and CXL (tier22, node-1) usi=
-ng numactl
-+AD4- numactl -i0,1 mlc --loaded+AF8-latency W2
-+AD4-
-+AD4- Srinivasulu Thanneeru (2):
-+AD4-   memory tier: Introduce sysfs for tier interleave weights.
-+AD4-   mm: mempolicy: Interleave policy for tiered memory nodes
-+AD4-
-+AD4-  include/linux/memory-tiers.h +AHw-  27 +-+-+-+-+-+-+-+--
-+AD4-  include/linux/sched.h        +AHw-   2 +-
-+AD4-  mm/memory-tiers.c            +AHw-  67 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+=
---------
-+AD4-  mm/mempolicy.c               +AHw- 107 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+=
--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+---
-+AD4-  4 files changed, 174 insertions(+-), 29 deletions(-)
-
---
-Best Regards,
-Huang, Ying
+an extra syscall is not too bad for the gcs enabled case.
