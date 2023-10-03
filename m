@@ -2,198 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDEB7B5C95
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Oct 2023 23:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147767B5E17
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Oct 2023 02:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbjJBVne (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Oct 2023 17:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S237660AbjJCAWG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Oct 2023 20:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjJBVnd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 17:43:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BAAAB;
-        Mon,  2 Oct 2023 14:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696283010; x=1727819010;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ImBSKqFocFUuPet6uNRyHRBpn4ZUmgtlBaXfVqyA7Lg=;
-  b=gUgFdGnARPysxvyfvecu3arApiTvRvX3yoPyfvvnBSE+pMIjmkaLr6Bq
-   u4x6XY3RxRNQ+GliPs9695MrIlgmO0pyu1cARopJbtg2x04+JgxY7N+Zm
-   6AP1KS2mZk0OslBg8Q2y8Yi8ftwVgdBfr9zWQDkgc/i/CfTbGCsjTHDv7
-   YphljYB5PwHI35dOaQiDvGdu9r7bsB2/Zg1f0a5Ye5oRk+dMpCLCqHZYj
-   yLUi6/ttXADVsuxoDd5+kAfwRW8hYF2SZP+tVLtPr8Y/nXcDtV2RlBEPy
-   6PbDqX/eapXEP/d+WQ+rtdcdgFSwDbRchp42fDBs95ZDrFuu0XnZOVJ0s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="469020073"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="469020073"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 14:43:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="1644548"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 02 Oct 2023 14:42:48 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 2 Oct 2023 14:43:28 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 2 Oct 2023 14:43:27 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Mon, 2 Oct 2023 14:43:27 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Mon, 2 Oct 2023 14:43:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JK4G5zfeB2pIgnky3H1tQLRFo6sakhlVKcawr3n7vmy6ZBXd41mP7Ha6I0KrtOkPJvvcsjAtFxVQB5P4t7ZSoOeTNFeIoATAUSfddXDhSRF25WB1JiZ5BFqA35Jkd0AqTFgxzXV5rzld4mI0Lze5jC4/O+56+oa35eAEHGOyJhXEelxboFmRuClG5LS5yi7IqvHudfUQm4Ac43pWnjzeL1j2SlqzcqKG8O9gh4eodYG8bWjUSj0tnQpIXi+llVPSeBcyZ/e0Dd9zKjF+atdrJPHym2DaT3K8BGxYCTP39715pDehj7HKD6V37V2OMV6Xm/hyCrqW9mSdJUh5MaYygA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ImBSKqFocFUuPet6uNRyHRBpn4ZUmgtlBaXfVqyA7Lg=;
- b=TYGd0c2TCLlqd70MKzPddUVIIpRgqKy5Ryk2zuQyt2jd+ozvGKPUfqe+3WwxMtAnLCTX0Z0FA812r47pWXL73+OxVujQCvETv6N9OJ4+YshOn3ve+aDtLUzcQvuFuJIt5SaUxTmKeNf9Y19BBSmk0l7XF2OgK/rj+jf31cSZh4l2togX4cAAUxOgPUq1gDo8NCX3yMhSMY2aoHtpls13p6O53MKr3hLYY4EbvX5xp7wR0DriiVVwefMHcBvJbUySJqeuMHZoXUVdpqTyvp6/QDDfCf+3nHl185O2NcbscUZB90Sf5l8FoVWLNlDvvKZmYilFJfFXmUzQa7NiHhhI2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by SJ0PR11MB4974.namprd11.prod.outlook.com (2603:10b6:a03:2d6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.25; Mon, 2 Oct
- 2023 21:43:25 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::56f1:507b:133e:57cf]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::56f1:507b:133e:57cf%5]) with mapi id 15.20.6838.030; Mon, 2 Oct 2023
- 21:43:25 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Thread-Topic: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Thread-Index: AQHZyXrQTo7DD5VaeE6rWykOJvFzra/iB2IAgAATqwCADkUwAIAAI80AgAYaVoCAABGwgIABEOyAgAAynICAONO3gIAGeNeAgAAf1YA=
-Date:   Mon, 2 Oct 2023 21:43:25 +0000
-Message-ID: <add914d6ad943139cd4a8f23fea7167b083a53db.camel@intel.com>
-References: <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
-         <ZNOhjrYleGBR6Pbs@arm.com>
-         <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
-         <ZN+qki9EaZ6f9XNi@arm.com>
-         <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
-         <ZOTnL1SDJWZjHPUW@arm.com>
-         <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
-         <ZOXa98SqwYPwxzNP@arm.com> <ZOYFazB1gYjzDRdA@arm.com>
-         <ZRWw7aa3C0LlMPTH@arm.com>
-         <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
-In-Reply-To: <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|SJ0PR11MB4974:EE_
-x-ms-office365-filtering-correlation-id: ec537086-f2d9-450e-89c9-08dbc3909bbe
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 685drLnPBiZtATRAjWsBLJpvEsuc3YULI1pvkx9DbyKx/PJZ2ghdYNS4iTaiapUgKX4eqCkBeCdqh4OvY1gYeRpMm51Qo1b7+bJKouikyVPOP4Pl4J5gF37xk/wzBjlBw5XWZP4mdklZUlzXzx0sVAevUfrIa4TT+Cwn+5pEk/v99Gg7ERxIewXnOOEiN0Gr3OkIZ6gg0jWs7DdnLwIo7Xdfsf8SgbX7ZcepjoYDyZHwI1naMQ5QMpZegWHkn0HnWKZoa0tsfAnxzk2WjX6TAT3QYMz0qwiaAQM4ShdKOkKEjYXpwXqRIa9LQjdIXYnHKwo6zMrc1azfuFffo/6mlrZ4ixC4v6J5wZ9XhOniQGNXwiiKqfzMrEmBIydNXnWLBfMYtcRDlc53Q3yZtyJEG98kjtrRBHqk67Nae5nYn6Mule+vrOLVyNu7x6KQY1FjmURB05Hzt7LoD4laV9iN0tAxc74epKEOdAvAQ+VDJ2fAOruu5vB6UgfiEBK/bpWdlrNOqJDS412tGPgBKOOaSY1QhGzhYCeeGnZdXWklJcN7r5QgF16rI7CfXbrthE0Dp+2OoaFFXGZ2tQ7/2saoiFIqNF7pO6fv6/oC5U73v1YIaUHwA2JZcmBfqz7++7K/
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(396003)(39860400002)(376002)(346002)(230922051799003)(451199024)(64100799003)(1800799009)(186009)(2906002)(83380400001)(7406005)(7416002)(316002)(5660300002)(36756003)(41300700001)(4326008)(8676002)(8936002)(76116006)(66476007)(54906003)(64756008)(91956017)(26005)(86362001)(6506007)(6486002)(66946007)(2616005)(6512007)(71200400001)(38100700002)(38070700005)(122000001)(110136005)(66556008)(82960400001)(66446008)(478600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UWNnQUhsMS9mWTExYkJyYjcxei9vZTVZbWpFQWVhTDRiRUFxUS8vSnlXU01n?=
- =?utf-8?B?eFhQVjdHVUUvUCtVUGE2bk9JTnFObFpBeE9rcS8wR2lJS2lKZXBZUnBTcDJW?=
- =?utf-8?B?Q2YxNm9hc0d1UFhkQkU1RHlWOGZwdjFoSE5qU09nVVpLdWtPM0V0NitoNnpk?=
- =?utf-8?B?RjVDOEc0TlZyd0VQUzZRMFlTMXNJK016U0FmZWxVSlF6UHlpdGJFVFZsdXV2?=
- =?utf-8?B?bkRrZVFoRjhwU0E1SEJtTURGNG9KYnkyS3pGdVlnUzAyNnJTZno1T1R2b3V3?=
- =?utf-8?B?Nm13T0puL1Voc25sTGthUWRUa01wQUFqT0tXR21zM1pEWDJUTUZmWlhHeFNO?=
- =?utf-8?B?Wmc1Z3BLb2dUREtQcWVQVENrM2xtbGp2UjRnQjA1bDFWN1hvOGJra2JzdlpW?=
- =?utf-8?B?UUtqVW1rMU90cm9mVEREc3Rwc3RzOFR6YmhoQ042OTZ4cWxiOFVaeTZxUURv?=
- =?utf-8?B?NE1aWjVLdUljZU9hNnVaNVQwWk9FeENvYTVDa0FlTFV0Q0xsK3NYTHBtZjBo?=
- =?utf-8?B?Q0JuMU1pUmIvbGFoWUI1d3lFZEpUU1VqVnE5ZEhtWENXc1R6WVJaZzd1TTVy?=
- =?utf-8?B?RThoeGZBR1dkZ0Fob1NZZS9QOGExNHZzQWIxUy9JcnRDdkt1NS94Nkx4RzhR?=
- =?utf-8?B?UndtdW5CZE1iWllsYWFLRVZlVno2T1JnWUJyVkhlY2V6STdpOTI1MTFwUjBU?=
- =?utf-8?B?ZXQreWxiUTdka054ZUx5M0JNZE1jeEJJc1hiV2dQcFJ0M25VaG9ITXF4VEls?=
- =?utf-8?B?SktETnMwNDZoNXd2YlEzVmdzUzM0Nnlna2tDQmUxZVRqcVV2K01BdzJzMXN3?=
- =?utf-8?B?NlI2M0JUNGd1bFRxcXkvVmZJQ1IzWnkzWkM1UWptYWVyWXlHbjBucGRWRWM3?=
- =?utf-8?B?VzczTmk3VmcvMWZWQ3hSYUpHUjlMY0dsZmxQMHFkZldUMHF1UXNFTUlxNkVz?=
- =?utf-8?B?cWpaOG0vekErcTRJZHo4RzN6T1N6V2NHaVIzaFpDMGFnQlRvalRwclgyL041?=
- =?utf-8?B?TG93a0N0Tm5wZVcvdnl5Nm5ZLzU2dmRSTVpDWDFiUXpONGwzVDlGdS9nQ1NT?=
- =?utf-8?B?R2wxWktlOWhIYTZxZnBQRGxGbVVhNDN1S3Qxenk1OVZaaVpPQVdUUWZwdU80?=
- =?utf-8?B?SnlvRVY1YzVrTWwvc0xRM1gyN2dqMHgrdjZtTzQ4enVxMW9ERlNxdnVtLzJ6?=
- =?utf-8?B?S2JvL3BMb0JyLzFHd0VmbzVobllOT2o2R1c4QkdGc0c3dzdIVDZkQ3lHbk40?=
- =?utf-8?B?VWd5b3Y4Y3Z6V0IvSXIySk1vOFh4ckRDdHg0TzNvNWk3MUR4bStRQ0s5QzRU?=
- =?utf-8?B?TG85S01SVkNjYUJYT01UTXVDM3l5ZVMrRlZrbFM0TUhVMEJzeWk0dytmWmxu?=
- =?utf-8?B?cUZCMVUzMnZTRVlYQzM2OFlWUXAzeWt2ZFRpbGIwaXhoSlVqY3pSMEIxM1B3?=
- =?utf-8?B?Q0Jwcmwvc3RzK3VzVTdPM08zNEI2ZTlMV1J5U243VWlLRU14cW9aS0dBM2NW?=
- =?utf-8?B?QzBoRlo1RzBWM1NNelBHNG44MVdnTkx6SHZzSVRmRHd2QU1UUnoyZ1ZaQXJB?=
- =?utf-8?B?dk5WWFJ6NlZxTWtrdnZiMFFNdURydDlEYUtwNk9qMXVna09WeFVzaFhkM1ZL?=
- =?utf-8?B?Z2ovSExCM1hWOTJXS1FnOEprVHVqbUxyU3lPajhHTkJ6WjFLTXpFb2EwbzBR?=
- =?utf-8?B?YSs0ZFlsQ3BXVytPQkxNYXcrdlRZazltVzlHQVJRTk5jTE03ei9UQ2x4dm50?=
- =?utf-8?B?OHU2REdjdk84OXpDNUUyNlk5MjJ5RXhnbDN4TnhVK0JUN211RHFwQnFWZ28x?=
- =?utf-8?B?NGxIcE5PbTFNWU1SVm1HYUZwTGZ0SXQ5dVNRWkNjNjhRaExNZDJIY0s5ckxH?=
- =?utf-8?B?TUcwMUlKKzVuUmJMYlV4VTNzVUhtMVRRY2I3TXRua1IrZE1qVlkySjRTRWd5?=
- =?utf-8?B?R1k4dXRnZFRNMWtWakxXQ3dOZXJUcHhjTVl3dU8zc3F5c2owMmRWVHVTMkE3?=
- =?utf-8?B?WDlEVHRyMDR5Z3ZjOEx1dktJajZMQzZOOHJMcHlCMnpJVjU4S29GOWR4UEVO?=
- =?utf-8?B?Mk1YdzNXNmRjUDNjM21QeHJXenBUQkNOcEl1M2ZiMUZqZnRia2VzOHB5aFhw?=
- =?utf-8?B?RWRKRndBaDZ2T1NPZUtoZk5sMHNwREExTUh2RWRibWg0NnkvT0Iza3lqSnA2?=
- =?utf-8?B?RVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <84742A11A380D44391AEBCD9D5719729@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S237389AbjJCAWF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Oct 2023 20:22:05 -0400
+Received: from mail-oa1-x42.google.com (mail-oa1-x42.google.com [IPv6:2001:4860:4864:20::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62476CC;
+        Mon,  2 Oct 2023 17:22:01 -0700 (PDT)
+Received: by mail-oa1-x42.google.com with SMTP id 586e51a60fabf-1e10507a4d6so231119fac.1;
+        Mon, 02 Oct 2023 17:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696292520; x=1696897320; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uuhPUh0uYTyOtat+cBWc3JztI8sfqvFBPjb/Wb5+EC8=;
+        b=fdUiXtcLgHTCkMfgG6o1fH/aOqBaW9ekZn29KOxI7SEKPMJ0fClilEQmuhhiMvzwAJ
+         f+ZnrUuigaBYPPweclMPqTTuwuTZIGwz/jwTWm6X8dQwDNo6Z9XhwjaY3KN5InWIp/xm
+         fRZgzVkC3WWngEwM2Alx1j57rEhYL2SftGpOlZRu8IfXSNtGd+ixUOHvL0BSv0vtT9AC
+         BowkMxzh3EFsyS/UhxPtko0oDFRoCEX8HIqPvN2M0YAVceFjsnpCT2+bVIlEJDRV23nE
+         ORfqYmzP/GA1lDKiSMpYWFxGiLwuKD5ODqfuKrFF9Uvesbhf/daHkvLVO1Qh4/1lea1X
+         7m6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696292520; x=1696897320;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uuhPUh0uYTyOtat+cBWc3JztI8sfqvFBPjb/Wb5+EC8=;
+        b=RZN+pM2iCmpcF/X/psWZuptqU3L/PTHVN9eNW8oBVQco2eREU7iu6wsl1I0dlEZcYc
+         DXwQPUwHjh2obDY7YbdlqaKEOQx/sCHNEhVPALFuVT8SEmUvZzwerla1QMT7umKT/c7T
+         tnCdm8M2Y9nxBlg6sthDb8wUQhjYLWLr6tiy+hQAP0WvYPq077L/ErEuLT4ABqPXQ0Yn
+         04UfxEyI+bqdxGXVuOLiNLpLaQNN54lf+2iFDUJ86K6TGlZKddlBEc1pX+YoAL3pXjIw
+         pPSk5+/kzVoQwsi44IJZeqYBWGUITkbvABUxfByU3zi3SuTXygKtgvPVDbKdKK6B/uip
+         2ERg==
+X-Gm-Message-State: AOJu0YxREZgZDUuLTMDwQ54mxvna6HMZzvQNUPkEYi647dTwZOTmLgyB
+        O6N5AwtYDYAlanw2OLdavw==
+X-Google-Smtp-Source: AGHT+IEMaNvc9GighnWe6s22nYSLEFHD8PQ/7QhG0rtWyDaV7W+KjHXahywEecOySrP+ampgoMdJCQ==
+X-Received: by 2002:a05:6871:b0d:b0:1dc:f4de:46b8 with SMTP id fq13-20020a0568710b0d00b001dcf4de46b8mr15896518oab.59.1696292520502;
+        Mon, 02 Oct 2023 17:22:00 -0700 (PDT)
+Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
+        by smtp.gmail.com with ESMTPSA id a2-20020a056870618200b001e135f4f849sm24725oah.9.2023.10.02.17.21.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 17:22:00 -0700 (PDT)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-cxl@vger.kernel.org,
+        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        arnd@arndb.de, akpm@linux-foundation.org, x86@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Subject: [RFC PATCH v2 0/4] mm/mempolicy: get/set_mempolicy2 syscalls
+Date:   Mon,  2 Oct 2023 20:21:52 -0400
+Message-Id: <20231003002156.740595-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec537086-f2d9-450e-89c9-08dbc3909bbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2023 21:43:25.8664
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ybuPqNcmvpgSDLl7VBB8I9tjc0+XoW5fhoRFx1wZHzna6ahNcPGq+t5F72ig69v8+z1OnkN2AFrrLX9y/laZEnM8GaTHXop4LmfPXaI4ycE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4974
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -201,52 +73,280 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTEwLTAyIGF0IDIwOjQ5ICswMTAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiBP
-biBUaHUsIFNlcCAyOCwgMjAyMyBhdCAwNTo1OToyNVBNICswMTAwLCBTemFib2xjcyBOYWd5IHdy
-b3RlOg0KPiA+IFRoZSAwOC8yMy8yMDIzIDE0OjExLCBDYXRhbGluIE1hcmluYXMgd3JvdGU6DQo+
-IA0KPiA+ID4gPiBhbmQgdGhlcmUgaXMgdXNlciBjb2RlIGRvaW5nIHJhdyBjbG9uZSB0aHJlYWRz
-IChzdWNoIHRocmVhZHMNCj4gPiA+ID4gYXJlDQo+ID4gPiA+IHRlY2huaWNhbGx5IG5vdCBhbGxv
-d2VkIHRvIGNhbGwgaW50byBsaWJjKSBpdCdzIG5vdCBpbW1lZGlhdGVseQ0KPiA+ID4gPiBjbGVh
-ciB0byBtZSBpZiBoYXZpbmcgZ2NzIGluIHRob3NlIHRocmVhZHMgaXMgYmV0dGVyIG9yIHdvcnNl
-Lg0KPiANCj4gPiBpIHRoaW5rIHJhdyBjbG9uZSAvIGNsb25lMyB1c2VycyBtYXkgYmUgcmVsZXZh
-bnQgc28gd2UgbmVlZCBhDQo+ID4gc29sdXRpb24gc3VjaCB0aGF0IHRoZXkgZG9uJ3QgZmFpbCB3
-aGVuIGdjcyBhcmdzIGFyZSBtaXNzaW5nLg0KPiANCj4gQXJlIHdlIHN1cmUgYWJvdXQgdGhhdD/C
-oCBPbGQgYmluYXJpZXMgc2hvdWxkbid0IGJlIGFmZmVjdGVkIHNpbmNlDQo+IHRoZXkNCj4gd29u
-J3QgdHVybiBHQ1Mgc28gd2UncmUganVzdCB0YWxraW5nIGFib3V0IG5ldyBiaW5hcmllcyBoZXJl
-IC0gYXJlDQo+IHRoZXJlDQo+IHJlYWxseSBzbyBtYW55IG9mIHRoZW0gdGhhdCB3ZSB3b24ndCBi
-ZSBhYmxlIHRvIGdldCB0aGVtIGFsbA0KPiBjb252ZXJ0ZWQNCj4gb3ZlciB0byBjbG9uZTMoKSBh
-bmQgR0NTIGluIHRoZSB0aW1lc2NhbGVzIHdlJ3JlIHRhbGtpbmcgYWJvdXQgZm9yDQo+IEdDUw0K
-PiBkZXBsb3ltZW50P8KgIEkgb2J2aW91c2x5IGRvbid0IHBhcnRpY3VsYXJseSBtaW5kIGhhdmlu
-ZyB0aGUgZGVmYXVsdA0KPiBzaXplDQo+IGxvZ2ljIGJ1dCBpZiB3ZSBhbGxvdyBjbG9uZSgpIHRo
-ZW4gdGhhdCdzIGtlZXBpbmcgdGhlIGV4aXN0aW5nDQo+IGJlaGF2aW91cg0KPiBhbmQgbGF5ZXJp
-bmcgYWxsb2NhdGlvbiB2aWEgY2xvbmUzKCkgb24gdG9wIG9mIGl0IHdoaWNoIENhdGFsaW4NCj4g
-ZGlkbid0DQo+IHdhbnQuwqANCg0KT24gdGhlIHg4NiBzaWRlLCB0aGVyZSBoYXZlIGJlZW4gYSBs
-b3Qgb2YgYmluYXJpZXMgZ2VuZXJhdGVkIHRoYXQgaGF2ZQ0KYmVlbiBibGluZGx5IG1hcmtlZCBh
-cyBzdXBwb3J0aW5nIHNoYWRvdyBzdGFjay4gU28gZXZlbiBpZiB0aGV5IGFyZSBub3QNCm9sZCwg
-dGhlcmUgbWF5IHN0aWxsIGJlIG1pc21hcmtlZCBvbmVzIHVzaW5nIGNsb25lKCkuDQoNCkluIGdl
-bmVyYWwgdGhlcmUgYXJlIGEgbG90IG9mIHRyYWRlb2ZmcyB3aXRoIHNoYWRvdyBzdGFjayBiZXR3
-ZWVuDQpzZWN1cml0eSwgY29tcGF0aWJpbGl0eSBhbmQgcGVyZm9ybWFuY2UuIFN6YWJvbGNzIGhh
-ZCBwcmV2aW91c2x5DQpkaXNjdXNzZWQgc29tZSBpZGVhcyBhcm91bmQgYWxsIHRocmVlOg0KIC0g
-Y29tcGF0aWJpbGl0eSAoYXV0b21hdGljIHNpZ2FsdHN0YWNrKCkpDQogLSBwZXJmb3JtYW5jZS91
-dGlsaXR5IChjcmVhdGluZyBhIG5ldyBsaWJjIEFQSSBmb3IgbWFrZWNvbnRleHQoKSkNCiAtIHNl
-Y3VyaXR5ICh0b2tlbiBzY2hlbWVzIHRvIGd1YXJhbnRlZSBvbmx5IG9uZSB1c2VyIG9mIGEgc2hh
-ZG93wqANCiAgICAgICAgICAgICBzdGFja8KgYXQgYSB0aW1lKQ0KDQpPbiB0aGUgeDg2IGtlcm5l
-bCBzaWRlLCB3ZSBoYWQgb3VyIGhhbmRzIHRpZWQgYSBiaXQgYnkgdGhlIGV4aXN0aW5nDQp1c2Vy
-c3BhY2UsIGFuZCBraW5kIG9mIGVuZGVkIHVwIHdpdGggYSBtaXguIEkgaW1hZ2luZWQgdGhhdCB3
-ZSBtaWdodA0Kc2VlIGRlbWFuZCBhbG9uZyBvbmUgb2YgdGhvc2UgYXhlcyBhZnRlciBzb21lIHJl
-YWwgd29ybGQgdXNlLiBBdCB3aGljaA0KcG9pbnQgd2UgY291bGQgYWRkIHNvbWUgb3B0LWluIEFC
-SSB0d2Vha3MgdG8gaGVscC4NCg0KSWYgQVJNIGlzIHRoaW5raW5nIG9mIGRvaW5nIHRoaW5ncyBk
-aWZmZXJlbnRseSB0aGFuIHg4NiwgeW91IG1pZ2h0DQp0aGluayBhYm91dCBob3cgeW91IHdlaWdo
-dCB0aG9zZSB0cmFkZW9mZnMuIExpa2UsIGl0IG1pZ2h0IGJlIHNpbGx5IHRvDQp3b3JyeSBhYm91
-dCBjbG9uZSgpIHN1cHBvcnQgaWYgc29tZXRoaW5nIGVsc2UgZW5kcyB1cCBicmVha2luZw0KY29t
-cGF0aWJpbGl0eSBtYWpvcmx5LiBCdXQsIGl0IG1pZ2h0IGJlIHdvcnRod2hpbGUgaXQgeW91IGVu
-ZCB1cCBnb2luZw0KdG8gdGhlIHByb3Bvc2VkIGV4dHJlbWVzIGFyb3VuZCBzaWduYWwgYWx0IHN0
-YWNrcywgdG8gbWF4aW1pemUNCmNvbXBhdGliaWxpdHkNCg0KQWxzbyB0aGVuIG1heWJlIHg4NiBj
-b3VsZCBjb3B5IHRoZSBBUk0gQUJJIHNvbWUgZGF5LCBpZiBpdCBlbmRzIHVwDQpjaGFzaW5nIHRo
-ZSB0cmFkZW9mZiBwZW9wbGUgcHJlZmVyLiBJdCBwcm9iYWJseSBnb2VzIHdpdGhvdXQgc2F5aW5n
-DQp0aGF0IHRoZSBjbG9zZXIgdGhlc2UgZmVhdHVyZXMgYmVoYXZlIGZyb20gdGhlIGFwcCBkZXZl
-bG9wZXINCnBlcnNwZWN0aXZlLCB0aGUgYmV0dGVyLiBTbyBhIGRpZmZlcmVudCBBQkkgdGhhbiB4
-ODYgdGhhdCBhbHNvIHRhcmdldHMNCmEgbWl4IHdvdWxkIGJlIGEgYml0IHVuZm9ydHVuYXRlLiAo
-bm90IHRoZSBlbmQgb2YgdGhlIHdvcmxkIHRob3VnaCkNCg0KQW55d2F5LCBqdXN0IHdhbnRlZCB0
-byBzaGFyZSBzb21lIHBlcnNwZWN0aXZlIHRoZXJlLiBTb3JyeSBmb3Igam9pbmluZw0KdGhpcyB0
-aHJlYWQgc28gbGF0ZS4NCg0K
+v2: style updates, weighted-interleave, rename partial-interleave to
+    preferred-interleave, variety of bug fixes.
+
+---
+
+This patch set is a proposal for set_mempolicy2 and get_mempolicy2
+system calls.  This is an extension to the existing mempolicy
+syscalls that allow for a more extensible mempolicy interface and
+new, complex memory policies.
+
+This RFC is broken into 4 patches for discussion:
+
+  1) A refactor of do_set_mempolicy that allows code reuse for
+     the new syscalls when replacing the task mempolicy.
+
+  2) The implementation of get_mempolicy2 and set_mempolicy2 which
+     includes a new uapi type: "struct mempolicy_args" and denotes
+     the original mempolicies as "legacy". This allows the existing
+     policies to be routed through the original interface.
+
+     (note: only implemented on x86 at this time, though can be
+      hacked into other architectures somewhat trivially)
+
+  3) The implementation of "preferred-interleave", a policy which
+     applies a weight to the local node while interleaving.
+
+  4) The implementation of "weighted-interleave", a policy which
+     applies weights to all enabled nodes while interleaving.
+
+  x) Future Updates: ktest, numactl, and man page updates
+
+
+Besides the obvious proposal of extending the mempolicy subsystem for
+new policies, the core proposal is the addition of the new uapi type
+"struct mempolicy". In this proposal, the get and set interfaces use
+the same structure, and some fields may be ignored depending on the
+requested operation.
+
+This sample implementation of get_mempolicy allows for the retrieval
+of all information that would have previously required multiple calls
+to get_mempolicy, and implements an area for per-policy information.
+
+This allows for future extensibility, and would avoid the need for
+additional syscalls in the future.
+
+struct mempolicy_args {
+  unsigned short mode;
+  unsigned long *nodemask;
+  unsigned long maxnode;
+  unsigned short flags;
+  struct {
+        /* Memory allowed */
+        struct {
+                unsigned long maxnode;
+                unsigned long *nodemask;
+        } allowed;
+        /* Address information */
+        struct {
+                unsigned long addr;
+                unsigned long node;
+                unsigned short mode;
+                unsigned short flags;
+        } addr;
+  } get;
+  union {
+    /* Interleave */
+    struct {
+      unsigned long next_node; /* get only */
+    } interleave;
+    /* Preferred Interleave */
+    struct {
+      unsigned long weight;  /* get and set */
+      unsigned long next_node; /* get only */
+    } pil;
+    /* Weighted Interleave */
+    struct {
+      unsigned long next_node; /* get only */
+      unsigned char *weight; /* get and set */
+    } wil;
+  };
+};
+
+In the third and fourth patch, we implement preferred and weighted
+interleave policies (respectively), which could not be implemented
+with the existing syscalls.
+
+We extend the internal mempolicy structure to include to include
+a new union area which can be used to host complex policy data.
+
+Example:
+union {
+  /* Preferred Interleave: Allocate local count, then interleave */
+  struct {
+    int weight;
+    int count;
+  } pil;
+  /* Weighted Interleave */
+  struct {
+    unsigned int il_weight;
+    unsigned char cur_weight;
+    unsigned char weights[MAX_NUMNODES];
+  } wil;
+};
+
+
+Summary of Preferred Interleave:
+================================
+nodeset=0,1,2
+interval=3
+cpunode=0
+
+The preferred node (cpunode) is the "preferred" node on which [weight]
+allocations are made before an interleave occurs.
+
+Over 10 consecutive allocations, the following nodes will be selected:
+[0,0,0,1,2,0,0,0,1,2]
+
+In this example, there is a 60%/20%/20% distribution of memory across
+the node set.
+
+This is a useful strategy if the goal is an even distribution of
+memory across all non-local nodes for the purpose of bandwidth AND
+task-node migrations are a possibility.  In this case, the weight
+applies to whatever the local node happens to be at the time of the
+interleave, rather than a static node weight.
+
+
+Summary of Weighted Interleave:
+===============================
+
+The weighted-interleave mempolicy implements weights per-node
+which are used to distribute memory while interleaving.
+
+For example:
+nodes: 0,1,2
+weights: 5,3,2
+
+Over 10 consecutive allocations, the following nodes will be selected:
+[0,0,0,0,0,1,1,1,2,2]
+
+If a node is enabled, the minimum weight is 1. If an enabled node
+ends up with a weight of 0 (cgroup updates can cause a runtime
+recalculation) a minimum of 1 is applied during interleave.
+
+This is a useful strategy if the goal is a non-even distribution of
+memory across a variety of nodes AND task-node migrations are NOT
+expected to occur (or the weights are approximately the same,
+relationally from all possible target nodes).
+
+This is because "Thread A" with weights set for best performance
+from the perspective of "Socket 0" may have a less-than-optimal
+interleave strategy if "Thread A" is migrated to "Socket 1". In
+this scenario, the bandwidth and latency attributes of each node
+will have changed, as will the local node.
+
+In the above example, a thread migrating from node 0 to node 1 will
+cause most of its memory to be allocated on remote nodes, which is
+less than optimal.
+
+
+Some notes for discussion
+=========================
+0) Why?
+
+  In the coming age of CXL and a many-numa-node system with memory
+  hosted on the PCIe bus, new memory policies are likely to be
+  beneficial to experiment with and ultimately implement new
+  allocation-time placement policies.
+
+  Presently, much focus is placed on memory-usage monitoring and data
+  migration, but these methods steal performance to accomplish what
+  could be optimized for up-front.  For example, if maximizing bandwith
+  is preferable, then a statistical distribution of memory can be
+  calculated fairly easily based on task location..
+
+  Getting a fair approximation of distribution at allocation can help
+  reduce the migration load required after-the fact.  This is the
+  intent of the included preferred-interleave example, which allows for
+  an approximate distribution of memory, where the local node is still
+  the preferred location for the majority of memory.
+
+1) Maybe this should be a set of sysfs interfaces?
+
+  This would involve adding a /proc/pid/mempolicy interface that
+  allows for external processes to interrogate and change the
+  mempolicy of running processes. This would be a fundamental
+  change to the mempolicy subsystem.
+
+  I attempted this, but eventually came to the conclusion that it
+  would require a much more radical re-write of mempolicy.c code
+  due concurrency issues.
+
+  Notably, mempolicy.c is very "current"--centric, and is not well
+  designed for runtime changes to nodemask (and, subsequently, the
+  new weights added to struct mempolicy).
+
+  I avoided that for this RFC as it seemed far more radical than
+  proposing a set/get_mempolicy2 interface.  Though technically it
+  could be done.
+
+2) Why not do this in cgroups or memtier?
+
+  Both have the issue of functionally being a "global" setting,
+  in the sense that cgroups/memtier implemented weights would
+  produce poor results on processes whose threads span multiple
+  sockets (or on a thread migration).
+
+  Consider the following scenario:
+
+  Node 0 - Socket 0 DRAM
+  Node 1 - Socket 1 DRAM
+  Node 2 - Socket 0 local CXL
+  Node 3 - Socket 1 local CXL
+  Weights:
+    [0:4, 1:2, 2:2, 3:1]
+
+  The "Tiers" in this case are essentially [0, 1-2, 3]
+
+  We have 2 tasks in our cgroup:
+  Thread A - socket 0
+  Thread B - socket 1
+
+  In this scenario, Thread B will have a very poor distribution of
+  memory, with most of its memory landing on a remote-socket.
+
+  Instead, it's preferable for workloads to stick to a single socket
+  where possible, and future work will need to be done to determine
+  how to handle workloads which span sockets.  Due to the above
+  mentioned issues with concurrency, this may be quite some time.
+
+  In the meantime, there is user for weights to be carried per-task.
+
+  For migrations:
+
+  Weights could be recalculated based on the new location of the
+  task. This recalculation of weights is not included in this
+  patch set, but could be done as an extension to weighted
+  interleave, where a thread that detects it has been migrated
+  works with memtier.c to adjust its weights internally.
+
+  So basically even if you implement these things in cgroups/memtier,
+  you still require per-task information (local node) to adjust the
+  weights.  My proposal: Just do it in mempolicy and use things like
+  cgroups/memtier to enrich that implementation, rather than the other
+  way around.
+
+3) Do we need this level extensibility?
+
+   Presently the ability to dictate allocation-time placement is
+   limited to a few primitive mechanisms:
+
+     1) existing mempolicy, and those that can be implemented using
+        the existing interface.
+     2) numa-aware applications, requiring code changes.
+     3) LDPRELOAD methods, which have compability issues.
+
+   For the sake of compatibility, being able to extend numactl to
+   include newer, more complex policies would be beneficial.
+
+Gregory Price (4):
+  mm/mempolicy: refactor do_set_mempolicy for code re-use
+  mm/mempolicy: Implement set_mempolicy2 and get_mempolicy2 syscalls
+  mm/mempolicy: implement a preferred-interleave mempolicy
+  mm/mempolicy: implement a weighted-interleave mempolicy
+
+ arch/x86/entry/syscalls/syscall_32.tbl |   2 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   2 +
+ include/linux/mempolicy.h              |  14 +
+ include/linux/syscalls.h               |   4 +
+ include/uapi/asm-generic/unistd.h      |  10 +-
+ include/uapi/linux/mempolicy.h         |  41 ++
+ mm/mempolicy.c                         | 688 ++++++++++++++++++++++++-
+ 7 files changed, 741 insertions(+), 20 deletions(-)
+
+-- 
+2.39.1
+
