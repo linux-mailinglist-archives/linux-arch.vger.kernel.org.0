@@ -2,183 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC427B7869
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Oct 2023 09:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52DE7B78A1
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Oct 2023 09:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjJDHMH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Oct 2023 03:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S241479AbjJDHXO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Oct 2023 03:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232624AbjJDHMG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Oct 2023 03:12:06 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE57AC
-        for <linux-arch@vger.kernel.org>; Wed,  4 Oct 2023 00:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696403522; x=1727939522;
-  h=date:from:to:cc:subject:message-id;
-  bh=ARdX40whAoeT3sQjoW8LDnB49KYrV3lmApk8YhaGSsk=;
-  b=mRI4mc8G874i5hilH7TG300K1a1pbJNYlKVu55wGfqGW3OYYyyV/Npz7
-   FeZVUCdZodqRJpoWR6XFKSEb/8eIwQdmiJgGIvGtr3oewCw1XfGYKrhvn
-   YkvBu5rIKgKS0TjFet2V5grAHnFWwTTXPwWWSw8P00UemRz8mrVAEZkNR
-   hQ4HvGDHpN5Y3xLiAXGutMraBP/hjw+lj7rufoLDEDeST7uwWT18SLoE1
-   oAp9eKY7qNS7AM/qdkP7PWJUH0Y1IVZ/zk07H/fBHGSu/iPCNuAy0JVG3
-   E8Q+djUksY8Fl4qTfydpEcnyScywHwyWE7UUhbAgMnUu0xsWt6sydtVwZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="449579714"
-X-IronPort-AV: E=Sophos;i="6.03,199,1694761200"; 
-   d="scan'208";a="449579714"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 00:12:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="700996749"
-X-IronPort-AV: E=Sophos;i="6.03,199,1694761200"; 
-   d="scan'208";a="700996749"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 04 Oct 2023 00:12:00 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qnw34-000Dcq-1v;
-        Wed, 04 Oct 2023 07:11:58 +0000
-Date:   Wed, 04 Oct 2023 15:11:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- ccab211af3c2b90ed792eb5f33707d2f0d59fe50
-Message-ID: <202310041522.Pmc6U7Jm-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232754AbjJDHXO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Oct 2023 03:23:14 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611E2AB;
+        Wed,  4 Oct 2023 00:23:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5AA2C433C7;
+        Wed,  4 Oct 2023 07:22:59 +0000 (UTC)
+Date:   Wed, 4 Oct 2023 08:22:57 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Sohil Mehta <sohil.mehta@intel.com>
+Cc:     linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sergei Trofimovich <slyich@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Deepak Gupta <debug@rivosinc.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2] arch: Reserve map_shadow_stack() syscall number for
+ all architectures
+Message-ID: <ZR0S0QUoAbqTS/O+@arm.com>
+References: <20230914185804.2000497-1-sohil.mehta@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914185804.2000497-1-sohil.mehta@intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: ccab211af3c2b90ed792eb5f33707d2f0d59fe50  syscalls: Cleanup references to sys_lookup_dcookie()
+On Thu, Sep 14, 2023 at 06:58:03PM +0000, Sohil Mehta wrote:
+> commit c35559f94ebc ("x86/shstk: Introduce map_shadow_stack syscall")
+> recently added support for map_shadow_stack() but it is limited to x86
+> only for now. There is a possibility that other architectures (namely,
+> arm64 and RISC-V), that are implementing equivalent support for shadow
+> stacks, might need to add support for it.
+> 
+> Independent of that, reserving arch-specific syscall numbers in the
+> syscall tables of all architectures is good practice and would help
+> avoid future conflicts. map_shadow_stack() is marked as a conditional
+> syscall in sys_ni.c. Adding it to the syscall tables of other
+> architectures is harmless and would return ENOSYS when exercised.
+> 
+> Note, map_shadow_stack() was assigned #453 during the merge process
+> since #452 was taken by fchmodat2().
+> 
+> For Powerpc, map it to sys_ni_syscall() as is the norm for Powerpc
+> syscall tables.
+> 
+> For Alpha, map_shadow_stack() takes up #563 as Alpha still diverges from
+> the common syscall numbering system in the other architectures.
+> 
+> Link: https://lore.kernel.org/lkml/20230515212255.GA562920@debug.ba.rivosinc.com/
+> Link: https://lore.kernel.org/lkml/b402b80b-a7c6-4ef0-b977-c0f5f582b78a@sirena.org.uk/
+> 
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> ---
+> v2:
+> - Skip syscall table changes to tools/. They will be handled separetely by the
+>   perf folks.
+> - Map Powerpc to sys_ni_syscall (Rick Edgecombe)
+> ---
+>  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+>  arch/arm/tools/syscall.tbl                  | 1 +
+>  arch/arm64/include/asm/unistd.h             | 2 +-
+>  arch/arm64/include/asm/unistd32.h           | 2 ++
 
-elapsed time: 728m
+For arm64 (compat):
 
-configs tested: 107
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231004   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20231004   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231004   gcc  
-i386         buildonly-randconfig-002-20231004   gcc  
-i386         buildonly-randconfig-003-20231004   gcc  
-i386         buildonly-randconfig-004-20231004   gcc  
-i386         buildonly-randconfig-005-20231004   gcc  
-i386         buildonly-randconfig-006-20231004   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231004   gcc  
-i386                  randconfig-002-20231004   gcc  
-i386                  randconfig-003-20231004   gcc  
-i386                  randconfig-004-20231004   gcc  
-i386                  randconfig-005-20231004   gcc  
-i386                  randconfig-006-20231004   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231004   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231004   gcc  
-x86_64                randconfig-002-20231004   gcc  
-x86_64                randconfig-003-20231004   gcc  
-x86_64                randconfig-004-20231004   gcc  
-x86_64                randconfig-005-20231004   gcc  
-x86_64                randconfig-006-20231004   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
