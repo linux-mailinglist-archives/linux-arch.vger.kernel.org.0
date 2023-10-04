@@ -2,74 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BDC7B86F5
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Oct 2023 19:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67647B86FB
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Oct 2023 19:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbjJDRuj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Oct 2023 13:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
+        id S233397AbjJDRwc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Oct 2023 13:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbjJDRuj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Oct 2023 13:50:39 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BAE9E;
-        Wed,  4 Oct 2023 10:50:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4EC4C433C7;
-        Wed,  4 Oct 2023 17:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696441834;
-        bh=zUosDvRHyf5850z577fl4LTHEhb7yQpe48mCNpSn/dc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2WhJHhBMIySUnPBl69ikcW1YP9LVxDdKLskFO0ilfchUa0N62QAKE6YuIQedy7KXD
-         SxnHr2LcS0FDOOjXfHSyTFyx3IFbO6clRjTbzA+eUie0xc0EVaPHTOXuzUnE9W/an/
-         Noh3F/uSnPsR43lBo/FgNg2eHFDKe5hpkVGQ9WLI=
-Date:   Wed, 4 Oct 2023 19:50:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        MUKESH RATHOR <mukeshrathor@microsoft.com>,
-        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>
-Subject: Re: [PATCH v4 13/15] uapi: hyperv: Add mshv driver headers defining
- hypervisor ABIs
-Message-ID: <2023100415-diving-clapper-a2a7@gregkh>
-References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1696010501-24584-14-git-send-email-nunodasneves@linux.microsoft.com>
- <2023093057-eggplant-reshoot-8513@gregkh>
- <ZRia1uyFfEkSqmXw@liuwe-devbox-debian-v2>
- <2023100154-ferret-rift-acef@gregkh>
- <dd5159fe-5337-44ed-bf1b-58220221b597@linux.microsoft.com>
- <2023100443-wrinkly-romp-79d9@gregkh>
- <SA1PR21MB1335F5145ACB0ED4F378105ABFCBA@SA1PR21MB1335.namprd21.prod.outlook.com>
+        with ESMTP id S233325AbjJDRwb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Oct 2023 13:52:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C6EA6;
+        Wed,  4 Oct 2023 10:52:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=mo3SyRE4KU0QzJxDQXUPBvxPA9G+jjLznhNMOrDLoDM=; b=3oPq2TOpYHgcYcsR7E5Nqtt1vb
+        T+i6KveGE0ktmSIadiY0DVB5ch9450DddZ4PdOqS+iDOcflTW9MTdMbG2C9YxRpIRmujoHdyPPjPw
+        /O7lOjglJY+zq6RK08F7n54ZIaftQQDDOhmMuhktVpOSRLs/VohqILMBaF0R4HUGqBdpq425dOOux
+        XcqG4QYfjj+FqCZv8aoWbPJIRZuGxs9RefI/o/spj1wMzqg9Upun3oVoElRDgpRXva+S2VOR7lcA2
+        Igd0LyObVOa33uIY7JTQl0zRXQociPYtkdOH7Mzb0yKGkuv8jo4psZcwa8lreWLg8edPkVQmUa7Bq
+        gKqQ9xFQ==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qo62q-000dsZ-24;
+        Wed, 04 Oct 2023 17:52:24 +0000
+Message-ID: <2d690a95-67c6-45cb-91a1-4fbac09e1224@infradead.org>
+Date:   Wed, 4 Oct 2023 10:52:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR21MB1335F5145ACB0ED4F378105ABFCBA@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] kernel/config: Introduce CONFIG_DEBUG_INFO_IKCONFIG
+Content-Language: en-US
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-debuggers@vger.kernel.org
+References: <20231004165804.659482-1-stephen.s.brennan@oracle.com>
+ <20231004165804.659482-2-stephen.s.brennan@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20231004165804.659482-2-stephen.s.brennan@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +54,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 05:36:32PM +0000, Dexuan Cui wrote:
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > Sent: Tuesday, October 3, 2023 11:10 PM
-> > [...]
-> > On Tue, Oct 03, 2023 at 04:37:01PM -0700, Nuno Das Neves wrote:
-> > > On 9/30/2023 11:19 PM, Greg KH wrote:
-> > > > On Sat, Sep 30, 2023 at 10:01:58PM +0000, Wei Liu wrote:
-> > > > > On Sat, Sep 30, 2023 at 08:09:19AM +0200, Greg KH wrote:
-> > > > > > On Fri, Sep 29, 2023 at 11:01:39AM -0700, Nuno Das Neves wrote:
-> > > > > > > +/* Define connection identifier type. */
-> > > > > > > +union hv_connection_id {
-> > > > > > > +   __u32 asu32;
-> > > > > > > +   struct {
-> > > > > > > +           __u32 id:24;
-> > > > > > > +           __u32 reserved:8;
-> > > > > > > +   } __packed u;
-> 
-> IMO the "__packed" is unnecessary.
-> 
-> > > > > > bitfields will not work properly in uapi .h files, please never do that.
-> > > > >
-> > > > > Can you clarify a bit more why it wouldn't work? Endianess? Alignment?
-> > > >
-> > > > Yes to both.
-> > > >
-> > > > Did you all read the documentation for how to write a kernel api?  If
-> > > > not, please do so.  I think it mentions bitfields, but it not, it really
-> > > > should as of course, this will not work properly with different endian
-> > > > systems or many compilers.
-> > >
-> > > Yes, in
-> > https://docs.k/
-> > ernel.org%2Fdriver-
-> > api%2Fioctl.html&data=05%7C01%7Cdecui%40microsoft.com%7Ce404769e0f
-> > 85493f0aa108dbc4a08a27%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C
-> > 0%7C638319966071263290%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLj
-> > AwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%
-> > 7C%7C&sdata=RiLNA5DRviWBQK6XXhxC4m77raSDBb%2F0BB6BDpFPUJY%3D
-> > &reserved=0 it says that it is
-> > > "better to avoid" bitfields.
-> > >
-> > > Unfortunately bitfields are used in the definition of the hypervisor
-> > > ABI. We import these definitions directly from the hypervisor code.
-> >
-> > So why do you feel you have to use this specific format for your
-> > user/kernel api?  That is not what is going to the hypervisor.
-> 
-> If it's hard to avoid bitfield here, maybe we can refer to the definition of
-> struct iphdr in include/uapi/linux/ip.h
+Hi,
 
-It is not hard to avoid using bitfields, just use the proper definitions
-to make this portable for all compilers.  And ick, ip.h is not a good
-thing to follow :)
+On 10/4/23 09:58, Stephen Brennan wrote:
+> The option CONFIG_IKCONFIG allows the gzip compressed kernel
+> configuration to be included into vmlinux or a module. In these cases,
+> debuggers can access the config data and use it to adjust their behavior
+> according to the configuration. However, distributions rarely enable
+> this, likely because it uses a fair bit of kernel memory which cannot be
+> swapped out.
 
-thanks,
+x86_64 allmodconfig is 91 KB gzipped... oh well.
 
-greg k-h
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+> This means that in practice, the kernel configuration is rarely
+> available to debuggers.
+> 
+> So, introduce an alternative, CONFIG_DEBUG_INFO_IKCONFIG. This strategy,
+> which is only available if IKCONFIG is not already built-in, adds a
+> section ".debug_linux_ikconfig", to the vmlinux ELF. It will be stripped
+> out of the final images, but will remain in the debuginfo files. So
+> debuggers which rely on vmlinux debuginfo can have access to the kernel
+> configuration, without incurring a cost to the kernel at runtime.
+> 
+> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h |  3 ++-
+>  kernel/Makefile                   |  1 +
+>  kernel/configs-debug.S            | 18 ++++++++++++++++++
+>  lib/Kconfig.debug                 | 14 ++++++++++++++
+>  4 files changed, 35 insertions(+), 1 deletion(-)
+>  create mode 100644 kernel/configs-debug.S
+
+
+-- 
+~Randy
