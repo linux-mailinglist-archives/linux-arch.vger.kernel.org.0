@@ -2,74 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA2B7BA162
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Oct 2023 16:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655017BA753
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Oct 2023 19:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237132AbjJEOnO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Oct 2023 10:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S230035AbjJERIt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Oct 2023 13:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbjJEOhn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Oct 2023 10:37:43 -0400
+        with ESMTP id S230200AbjJERHw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Oct 2023 13:07:52 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6894E358;
-        Thu,  5 Oct 2023 07:03:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FFFCC2BCFE;
-        Thu,  5 Oct 2023 10:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696501633;
-        bh=4fxCXTLyJSEnYgLs6b+JCuhTnShTf/CIKp0OZexQrj4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HHqX91JuhSpBSMK2o5ESJ0CBb18LLzCffYRKge9Capj2sJtPUdKCWOaxUiEofWFwy
-         YXYbGFcxtC72+SdtbwVaoy04zAaGLRi5fcM2EwOsKJDm8EESrPXXCLBrKNo9yC3Sf6
-         J/H2XeTyxw7J+SIcHLdbKmLBsKxTOxNeiNxlLrWI=
-Date:   Thu, 5 Oct 2023 12:27:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, patches@lists.linux.dev,
-        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        apais@linux.microsoft.com, Tianyu.Lan@microsoft.com,
-        ssengar@linux.microsoft.com, mukeshrathor@microsoft.com,
-        stanislav.kinsburskiy@gmail.com, jinankjain@linux.microsoft.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH v4 13/15] uapi: hyperv: Add mshv driver headers defining
- hypervisor ABIs
-Message-ID: <2023100517-rogue-gopher-e70f@gregkh>
-References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1696010501-24584-14-git-send-email-nunodasneves@linux.microsoft.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB7B1FC2;
+        Thu,  5 Oct 2023 09:53:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04C4C433C7;
+        Thu,  5 Oct 2023 16:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696524792;
+        bh=QqFYej4zszOQ9dZXHQnUKqXBkmPZfqU3JS9WYFmKdmQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=jLxs7RQUwT/7fGOj6cQriRmgkLmIlXWgZAFYKosF74F9NyB3UNvErb1T/7nI/6Si9
+         rOa2rY9VSOZHefnUmUNYKPJIdU4kUjwP0ovsyGfGN8ujImCgY4H4nfkAV9si2htizu
+         Z2et/xgbnU3WOpSEPrnLeRW8WlHQ2iv998MuPOq9E03EBangBojAbKvsd96brKRVh9
+         dMTTYS1YvFm7K721l139E0t65bYIaud8Cy5VC2gnAlCSFoJlzK8jZztudgCZM5hiF5
+         P5BopJk+Zu62aXB7B2waSVrYNZwTl6mml8nl6FpmncMjY4JsSjAmruuQDOiY8OTHEJ
+         qMJKOrKBZyGqw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8157ACE0869; Thu,  5 Oct 2023 09:53:12 -0700 (PDT)
+Date:   Thu, 5 Oct 2023 09:53:12 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH memory-model] docs: memory-barriers: Add note on compiler
+ transformation and address deps
+Message-ID: <ceaeba0a-fc30-4635-802a-668c859a58b2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1696010501-24584-14-git-send-email-nunodasneves@linux.microsoft.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 11:01:39AM -0700, Nuno Das Neves wrote:
-> +/* Define connection identifier type. */
-> +union hv_connection_id {
-> +	__u32 asu32;
-> +	struct {
-> +		__u32 id:24;
-> +		__u32 reserved:8;
+The compiler has the ability to cause misordering by destroying
+address-dependency barriers if comparison operations are used. Add a
+note about this to memory-barriers.txt in the beginning of both the
+historical address-dependency sections and point to rcu-dereference.rst
+for more information.
 
-Meta-commment, I don't see anywhere you are properly checking that all
-of the "reserved" areas of these structures are actually set to 0 when
-they are sent to you.  If you don't do that, then they are not really
-reserved at all and can never be used in the future, so properly check
-them please.
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-thanks,
-
-greg k-h
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 06e14efd8662..d414e145f912 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -396,6 +396,10 @@ Memory barriers come in four basic varieties:
+ 
+ 
+  (2) Address-dependency barriers (historical).
++     [!] This section is marked as HISTORICAL: For more up-to-date
++     information, including how compiler transformations related to pointer
++     comparisons can sometimes cause problems, see
++     Documentation/RCU/rcu_dereference.rst.
+ 
+      An address-dependency barrier is a weaker form of read barrier.  In the
+      case where two loads are performed such that the second depends on the
+@@ -556,6 +560,9 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
+ 
+ ADDRESS-DEPENDENCY BARRIERS (HISTORICAL)
+ ----------------------------------------
++[!] This section is marked as HISTORICAL: For more up-to-date information,
++including how compiler transformations related to pointer comparisons can
++sometimes cause problems, see Documentation/RCU/rcu_dereference.rst.
+ 
+ As of v4.15 of the Linux kernel, an smp_mb() was added to READ_ONCE() for
+ DEC Alpha, which means that about the only people who need to pay attention
