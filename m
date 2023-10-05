@@ -2,159 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858067BA202
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Oct 2023 17:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D7A7BA012
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Oct 2023 16:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjJEPLC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Oct 2023 11:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S234278AbjJEOcx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 5 Oct 2023 10:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjJEPKJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Oct 2023 11:10:09 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACADC3693;
-        Thu,  5 Oct 2023 07:42:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D80EC433AD;
-        Thu,  5 Oct 2023 06:26:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696487200;
-        bh=9xyNVyN7N7MBzA9UwuP9xPWMA9I3taWkS2jqsvKhr3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jLcSNkQ/LCUGlX23x7bKHMrm6O+lCfLyVyl4lJFpqj9ZiSYYzwxEp9jZma31Pfllr
-         wdUrN6biBfOS5V6bMBNu6EAM0Sq3HUrUansreS7bmBd3mLFduc2pF/kqcY06+yQC5z
-         D87SMtm/bM/1USoOdPqeLZaEubagHNYsjEKm7koc=
-Date:   Thu, 5 Oct 2023 08:26:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        MUKESH RATHOR <mukeshrathor@microsoft.com>,
-        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>
-Subject: Re: [PATCH v4 13/15] uapi: hyperv: Add mshv driver headers defining
- hypervisor ABIs
-Message-ID: <2023100540-linked-remote-3da7@gregkh>
-References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1696010501-24584-14-git-send-email-nunodasneves@linux.microsoft.com>
- <2023093057-eggplant-reshoot-8513@gregkh>
- <ZRia1uyFfEkSqmXw@liuwe-devbox-debian-v2>
- <2023100154-ferret-rift-acef@gregkh>
- <dd5159fe-5337-44ed-bf1b-58220221b597@linux.microsoft.com>
- <2023100443-wrinkly-romp-79d9@gregkh>
- <SA1PR21MB1335F5145ACB0ED4F378105ABFCBA@SA1PR21MB1335.namprd21.prod.outlook.com>
- <2023100415-diving-clapper-a2a7@gregkh>
- <e960ffec-f367-4180-b857-4aceedb7cd89@linux.microsoft.com>
+        with ESMTP id S234668AbjJEOba (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Oct 2023 10:31:30 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526B586A2;
+        Thu,  5 Oct 2023 01:11:47 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-59f4f80d084so6936157b3.1;
+        Thu, 05 Oct 2023 01:11:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696493506; x=1697098306;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ey3mu0cYa/bhtbEBQ1BIB9STmNOx3N6SafWjGpaN/7o=;
+        b=ZOyjygg3GUumYg9yDyOz6SZZuyYwFZ9A98Nnvlgmh9+X365JiXTlmMxMHe40aLBFQH
+         d4EwSoQB++invakhlD/oTKTQOmk53v4b8yk267AZnSgNhK4GF+xqmr8GWHN8/SyZ1kMI
+         pYWJCqkpKJhZkaaclrMzJEgb4AeaENTK7B9nsWeyi4NIeLRmWqpruEK1m38RZRuHeTKZ
+         yF4mON9Tl5Grt/mF101iGe1gcov6oaGcCnT1Hu9RKUaeqntHvv6On+0cXlp29v592BYq
+         nZ2szla2DhPeqm2azwRRlLaQswPN+ahYZ2c6ayorWUgQwof87N8iSuSfNSQa2ZZPmj5S
+         E8UQ==
+X-Gm-Message-State: AOJu0YyLKfuQLS9UTlvV7kBM/4JHClZuFCuU6U3+7fN2X9HKPggRqYKu
+        bs7Z7CJT3m4qlhiX/jCoqSZBzGYUm8UNGg==
+X-Google-Smtp-Source: AGHT+IErovl4GsmqwzdyaD91ebnxhzBvD4rddXJGCptI3O5ZVpa17U84HpI9S7jORC1taC7Fh+aigg==
+X-Received: by 2002:a81:928e:0:b0:59f:519e:3e7c with SMTP id j136-20020a81928e000000b0059f519e3e7cmr5542216ywg.24.1696493505932;
+        Thu, 05 Oct 2023 01:11:45 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id n1-20020a0dcb01000000b0059293c8d70csm343716ywd.132.2023.10.05.01.11.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Oct 2023 01:11:45 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-59f4bc88f9fso6878497b3.2;
+        Thu, 05 Oct 2023 01:11:45 -0700 (PDT)
+X-Received: by 2002:a81:8246:0:b0:58d:f1fe:5954 with SMTP id
+ s67-20020a818246000000b0058df1fe5954mr4952101ywf.32.1696493505212; Thu, 05
+ Oct 2023 01:11:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e960ffec-f367-4180-b857-4aceedb7cd89@linux.microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231004165317.1061855-1-willy@infradead.org> <20231004165317.1061855-10-willy@infradead.org>
+In-Reply-To: <20231004165317.1061855-10-willy@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 5 Oct 2023 10:11:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUv-iALRvpBacsKOAo3P1Rgpf5g=taWqdt=5t-1Xjg9Rw@mail.gmail.com>
+Message-ID: <CAMuHMdUv-iALRvpBacsKOAo3P1Rgpf5g=taWqdt=5t-1Xjg9Rw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/17] m68k: Implement xor_unlock_is_negative_byte
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        torvalds@linux-foundation.org, npiggin@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 11:16:46AM -0700, Nuno Das Neves wrote:
-> On 10/4/2023 10:50 AM, Greg KH wrote:
-> > On Wed, Oct 04, 2023 at 05:36:32PM +0000, Dexuan Cui wrote:
-> > > > From: Greg KH <gregkh@linuxfoundation.org>
-> > > > Sent: Tuesday, October 3, 2023 11:10 PM
-> > > > [...]
-> > > > On Tue, Oct 03, 2023 at 04:37:01PM -0700, Nuno Das Neves wrote:
-> > > > > On 9/30/2023 11:19 PM, Greg KH wrote:
-> > > > > > On Sat, Sep 30, 2023 at 10:01:58PM +0000, Wei Liu wrote:
-> > > > > > > On Sat, Sep 30, 2023 at 08:09:19AM +0200, Greg KH wrote:
-> > > > > > > > On Fri, Sep 29, 2023 at 11:01:39AM -0700, Nuno Das Neves wrote:
-> > > > > > > > > +/* Define connection identifier type. */
-> > > > > > > > > +union hv_connection_id {
-> > > > > > > > > +   __u32 asu32;
-> > > > > > > > > +   struct {
-> > > > > > > > > +           __u32 id:24;
-> > > > > > > > > +           __u32 reserved:8;
-> > > > > > > > > +   } __packed u;
-> > > 
-> > > IMO the "__packed" is unnecessary.
-> > > 
-> > > > > > > > bitfields will not work properly in uapi .h files, please never do that.
-> > > > > > > 
-> > > > > > > Can you clarify a bit more why it wouldn't work? Endianess? Alignment?
-> > > > > > 
-> > > > > > Yes to both.
-> > > > > > 
-> > > > > > Did you all read the documentation for how to write a kernel api?  If
-> > > > > > not, please do so.  I think it mentions bitfields, but it not, it really
-> > > > > > should as of course, this will not work properly with different endian
-> > > > > > systems or many compilers.
-> > > > > 
-> > > > > Yes, in
-> > > > https://docs.k/
-> > > > ernel.org%2Fdriver-
-> > > > api%2Fioctl.html&data=05%7C01%7Cdecui%40microsoft.com%7Ce404769e0f
-> > > > 85493f0aa108dbc4a08a27%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C
-> > > > 0%7C638319966071263290%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLj
-> > > > AwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%
-> > > > 7C%7C&sdata=RiLNA5DRviWBQK6XXhxC4m77raSDBb%2F0BB6BDpFPUJY%3D
-> > > > &reserved=0 it says that it is
-> > > > > "better to avoid" bitfields.
-> > > > > 
-> > > > > Unfortunately bitfields are used in the definition of the hypervisor
-> > > > > ABI. We import these definitions directly from the hypervisor code.
-> > > > 
-> > > > So why do you feel you have to use this specific format for your
-> > > > user/kernel api?  That is not what is going to the hypervisor.
-> > > 
-> These *are* going to the hypervisor - we use these same definitions in
-> our driver for the kernel/hypervisor API. This is so we don't have to
-> maintain two separate definitions for user/kernel and kernel/hypervisor
-> APIs.
+On Wed, Oct 4, 2023 at 6:53 PM Matthew Wilcox (Oracle)
+<willy@infradead.org> wrote:
+> Using EOR to clear the guaranteed-to-be-set lock bit will test the
+> negative flag just like the x86 implementation.  This should be
+> more efficient than the generic implementation in filemap.c.  It
+> would be better if m68k had __GCC_ASM_FLAG_OUTPUTS__.
+>
+> Coldfire doesn't have a byte-sized EOR, so we test bit 7 after the
+> EOR, which is a second memory access, but it's slightly better than
+> the current C code.
+>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-So these fields are just pass-through from userspace to the hypervisor
-and are not touched at all by the kernel?  If so, I hope the hypervisor
-is doing some validation of the data :)
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-> > > If it's hard to avoid bitfield here, maybe we can refer to the definition of
-> > > struct iphdr in include/uapi/linux/ip.h
-> > 
-> > It is not hard to avoid using bitfields, just use the proper definitions
-> > to make this portable for all compilers.  And ick, ip.h is not a good
-> > thing to follow :)
-> > 
-> Greg, there is nothing making us use bitfields. It just makes the work
-> of porting the hypervisor definitions to Linux easier - aided by the
-> fact that in practice, all the compilers in our stack produce the same
-> code for these.
+Gr{oetje,eeting}s,
 
-"our stack" is not how Linux works, you have to write files that work
-for all compilers here.
+                        Geert
 
-Just use a normal variable and define the bits in them with proper bit
-shifts or masks and that will be portable everywhere.  This isn't rocket
-science...
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-thanks,
-
-greg k-h
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
