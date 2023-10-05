@@ -2,69 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1E97B9929
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Oct 2023 02:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2EB7B9EA3
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Oct 2023 16:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbjJEAN2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Oct 2023 20:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S233114AbjJEOJy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Oct 2023 10:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjJEAN2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Oct 2023 20:13:28 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC3FD8;
-        Wed,  4 Oct 2023 17:13:24 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-692c02adeefso324927b3a.3;
-        Wed, 04 Oct 2023 17:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696464804; x=1697069604; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nqakhanUkyXE0xPicMEDIve3RCLeYDmd6tYI+qxvuGI=;
-        b=jQCxzsZFDI/kG0/1a1abjao+wn3b3n5FL0E06jkXNvgj/HeYUayTgWWNUU0AhKBP62
-         iH94Kn2rDJlwiat3xA17SUuJ3BBVRVS76VYLJXUZI1QI5c3KN3tjEf1yUG9Q6eN7V3VI
-         bhB0GIvll114RHUuuURieo5zRs90+n5aAiw4hBi2UzhyFdgTQwWPdpxkEabz8Vct4kUZ
-         C/Z3vk111e5TfpfQCRaUdtjL01auQMuMUPOYL2cGX5zOWdzCQPlAIcumFiaX2Dn2f+lp
-         dsn8QJbdENYtzN/V2g2E+Ut8M3L7W1NN+uRZ4IXe+FsT1CB3Vf+LLrTQcAMbJ8wO7u2r
-         l5+Q==
+        with ESMTP id S231356AbjJEOII (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Oct 2023 10:08:08 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820A61FDF;
+        Wed,  4 Oct 2023 20:59:09 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c5db4925f9so4649585ad.1;
+        Wed, 04 Oct 2023 20:59:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696464804; x=1697069604;
+        d=1e100.net; s=20230601; t=1696478348; x=1697083148;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nqakhanUkyXE0xPicMEDIve3RCLeYDmd6tYI+qxvuGI=;
-        b=VfFaO08zInF5GnPFF+EHeemTWbOQ34IKHJS+0AOTOTmXK3CSjs1Gsgjh1bMgcg2qvR
-         5C8a7LW2Vpx4t8t1w+8oEGf9O6BV08gXUMVSvKbwnNjEWEYLfIM/nn4+ED+R2067CvOH
-         CYkOtfcIWT1wXnunnhf9GyKDrbMQyybTQFzZd1oSgZTdCINfE1KG1cxtg+t1dObd1UQJ
-         54tYeJWJebKIYhqH66gPLkqFK9DsTvp8RQcidC9zFIEA9lzt0tAJ3FCdIDaZ0ysm2LZ/
-         N7FMJBiobFMuTwIHgybXWWv0hAmTaFZY1z/ZO4JyL7i8xGQZfyI/zORSSQfizJLxT+8o
-         TTYw==
-X-Gm-Message-State: AOJu0YxCZQSWiG2wQu7zeyHJKNSv5UyRGf0E6zifcnVHdG6pX0oVjC38
-        4gQ7H2iqH4zpdXdhjHVLMJWsXYkIbVk=
-X-Google-Smtp-Source: AGHT+IHIwFlvB45+yzceWHMTWIgLMaG0BJtUWIPRq5vAnAJGf8k4ZlJVldPc1gAL5tyGmDlxeKYlBw==
-X-Received: by 2002:a05:6a20:32aa:b0:15e:10e:2cc3 with SMTP id g42-20020a056a2032aa00b0015e010e2cc3mr2952450pzd.60.1696464803576;
-        Wed, 04 Oct 2023 17:13:23 -0700 (PDT)
-Received: from debian.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170903244200b001b891259eddsm154267pls.197.2023.10.04.17.13.21
+        bh=e+Jkb9so4Sx/SuJj60Fyzc1sAp0BI3gQYpSvgDry1RU=;
+        b=uV9OeEnvCIsjCh7gtOscvYY4I3quzgdpthYLmr75YtiVM/HboaWhAd7CXn48il05iK
+         QE8cx9gGowbYKaV1g7wzGWPczQSrkb7EL7oSdqhYtzfkfyzPYr0bLT3QuNZ7qFfAJa36
+         l+z8oLn9WQX9MrHxF5j7rKRYqrORF3K9MQblbMB9keve19hezIoJY8rMMmaqHF7yUDbF
+         ttJV2jHX0/DnWyEa98qfjVYyfADc1zB3KRX2RWAWifxU5cftDDaKONDTiX5FCBp9xiiB
+         mDARnla87ZHW1rnlLDKYvGcN9A7+r0N4BHwQszOOCq2y6iu7UCX1+4eSxE41m7OqJzwL
+         enoQ==
+X-Gm-Message-State: AOJu0Yw6VTtPgmxL4yN0SoFYe3irDkR5zYdPHNxF4MYcBA6JEpd2vcXr
+        is96ZjBn+chDUWcfnG18nB0=
+X-Google-Smtp-Source: AGHT+IHAxgh1RuIcuUvDcXDLUh/lmF/YHHBUPm/7q98TdAA0PrzTlYpYEdCFxJzdIf9FrJHWVapM5g==
+X-Received: by 2002:a17:902:db10:b0:1bc:edd:e891 with SMTP id m16-20020a170902db1000b001bc0edde891mr398542plx.1.1696478348342;
+        Wed, 04 Oct 2023 20:59:08 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170903235000b001c724732058sm392807plh.235.2023.10.04.20.59.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 17:13:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4E388A6F5E91; Thu,  5 Oct 2023 07:13:19 +0700 (WIB)
-Date:   Thu, 5 Oct 2023 07:13:18 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     "KaiLong Wang" <wangkailong@jari.cn>, arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vmlinux.lds.h: Clean up errors in vmlinux.lds.h
-Message-ID: <ZR3_nt646ijkV3UJ@debian.me>
-References: <72e80688.8a8.18ad9bba905.Coremail.wangkailong@jari.cn>
+        Wed, 04 Oct 2023 20:59:07 -0700 (PDT)
+Date:   Thu, 5 Oct 2023 03:59:05 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+Subject: Re: [PATCH v4 13/15] uapi: hyperv: Add mshv driver headers defining
+ hypervisor ABIs
+Message-ID: <ZR40iZDLy43WzEy3@liuwe-devbox-debian-v2>
+References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1696010501-24584-14-git-send-email-nunodasneves@linux.microsoft.com>
+ <2023093057-eggplant-reshoot-8513@gregkh>
+ <ZRia1uyFfEkSqmXw@liuwe-devbox-debian-v2>
+ <2023100154-ferret-rift-acef@gregkh>
+ <ZRyj5kJJYaBu22O3@liuwe-devbox-debian-v2>
+ <2023100458-confusing-carton-3302@gregkh>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bEqKWIA1685n+LKp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <72e80688.8a8.18ad9bba905.Coremail.wangkailong@jari.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <2023100458-confusing-carton-3302@gregkh>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,121 +77,49 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, Oct 04, 2023 at 08:11:13AM +0200, Greg KH wrote:
+> On Tue, Oct 03, 2023 at 11:29:42PM +0000, Wei Liu wrote:
+> > > > > > diff --git a/include/uapi/hyperv/hvgdk.h b/include/uapi/hyperv/hvgdk.h
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..9bcbb7d902b2
+> > > > > > --- /dev/null
+> > > > > > +++ b/include/uapi/hyperv/hvgdk.h
+> > > > > > @@ -0,0 +1,41 @@
+> > > > > > +/* SPDX-License-Identifier: MIT */
+> > > > > 
+> > > > > That's usually not a good license for a new uapi .h file, why did you
+> > > > > choose this one?
+> > > > > 
+> > > > 
+> > > > This is chosen so that other Microsoft developers who don't normally
+> > > > work on Linux can review this code.
+> > > 
+> > > Sorry, but that's not how kernel development is done.  Please fix your
+> > > internal review processes and use the correct uapi header file license.
+> > > 
+> > > If your lawyers insist on this license, that's fine, but please have
+> > > them provide a signed-off-by on the patch that adds it and have it
+> > > documented why it is this license in the changelog AND in a comment in
+> > > the file so we can understand what is going on with it.
+> > > 
+> > 
+> > We went through an internal review with our legal counsel regarding the
+> > MIT license. We have an approval from them.
+> > 
+> > Let me ask if using something like "GPL-2.0 WITH Linux-syscall-note OR
+> > MIT" is possible.
+> 
+> That marking makes no sense from a legal point of view, please work with
+> your lawyers as it seems they do not understand license descriptions
+> very well :(
 
---bEqKWIA1685n+LKp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've got the clearance to use "GPL-2.0 WITH Linux-syscall-note". We can
+close on this issue. Thank you for the review.
 
-On Thu, Sep 28, 2023 at 11:01:08AM +0800, KaiLong Wang wrote:
-> Fix the following errors reported by checkpatch:
->=20
-> ERROR: spaces required around that ':' (ctx:WxV)
-> ERROR: space required after that ',' (ctx:VxO)
-> ERROR: need consistent spacing around '*' (ctx:VxW)
->=20
-> Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
-> ---
->  include/asm-generic/vmlinux.lds.h | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
->=20
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
-nux.lds.h
-> index 9c59409104f6..9e19234bbf97 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -63,8 +63,8 @@
->   * up in the PT_NOTE Program Header.
->   */
->  #ifdef EMITS_PT_NOTE
-> -#define NOTES_HEADERS		:text :note
-> -#define NOTES_HEADERS_RESTORE	__restore_ph : { *(.__restore_ph) } :text
-> +#define NOTES_HEADERS : text : note
-> +#define NOTES_HEADERS_RESTORE	__restore_ph : { *(.__restore_ph) } : text
+Thanks,
+Wei.
 
-Personally I prefer macro arguments to be aligned.
-
->  #else
->  #define NOTES_HEADERS
->  #define NOTES_HEADERS_RESTORE
-> @@ -98,10 +98,10 @@
->   */
->  #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_=
-CLANG)
->  #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
-> -#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundlit=
-eral* .data.$__unnamed_* .data.$L*
-> +#define DATA_MAIN .data .data.[0-9a-zA-Z_] * .data..L * .data..compoundl=
-iteral * .data.$__unnamed_ * .data.$L*
->  #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
-> -#define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
-> -#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
-> +#define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_] * .rodata..L*
-> +#define BSS_MAIN .bss .bss.[0-9a-zA-Z_] * .bss..compoundliteral*
->  #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
-
-Is it taking a pointer or changing to multiplication?
-
->  #else
->  #define TEXT_MAIN .text
-> @@ -462,7 +462,7 @@
->  	. =3D ALIGN((align));						\
->  	.rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {		\
->  		__start_rodata =3D .;					\
-> -		*(.rodata) *(.rodata.*)					\
-> +		*(.rodata) * (.rodata.*)					\
->  		SCHED_DATA						\
->  		RO_AFTER_INIT_DATA	/* Read only after init */	\
->  		. =3D ALIGN(8);						\
-> @@ -494,28 +494,28 @@
->  	/* Kernel symbol table: Normal symbols */			\
->  	__ksymtab         : AT(ADDR(__ksymtab) - LOAD_OFFSET) {		\
->  		__start___ksymtab =3D .;					\
-> -		KEEP(*(SORT(___ksymtab+*)))				\
-> +		KEEP(*(SORT(___ksymtab+ *)))				\
->  		__stop___ksymtab =3D .;					\
->  	}								\
->  									\
->  	/* Kernel symbol table: GPL-only symbols */			\
->  	__ksymtab_gpl     : AT(ADDR(__ksymtab_gpl) - LOAD_OFFSET) {	\
->  		__start___ksymtab_gpl =3D .;				\
-> -		KEEP(*(SORT(___ksymtab_gpl+*)))				\
-> +		KEEP(*(SORT(___ksymtab_gpl+ *)))			\
->  		__stop___ksymtab_gpl =3D .;				\
->  	}								\
->  									\
->  	/* Kernel symbol table: Normal symbols */			\
->  	__kcrctab         : AT(ADDR(__kcrctab) - LOAD_OFFSET) {		\
->  		__start___kcrctab =3D .;					\
-> -		KEEP(*(SORT(___kcrctab+*)))				\
-> +		KEEP(*(SORT(___kcrctab+ *)))				\
->  		__stop___kcrctab =3D .;					\
->  	}								\
->  									\
->  	/* Kernel symbol table: GPL-only symbols */			\
->  	__kcrctab_gpl     : AT(ADDR(__kcrctab_gpl) - LOAD_OFFSET) {	\
->  		__start___kcrctab_gpl =3D .;				\
-> -		KEEP(*(SORT(___kcrctab_gpl+*)))				\
-> +		KEEP(*(SORT(___kcrctab_gpl+ *)))			\
->  		__stop___kcrctab_gpl =3D .;				\
->  	}								\
-
-Same here.
-
-Confused...
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---bEqKWIA1685n+LKp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZR3/mAAKCRD2uYlJVVFO
-oxvuAQCkXx9+njnvII0+xKHGRERMrYm8sxrQQXTQ3J6EHyC8dQEAlc3kXaAJwrV9
-I8WIium3NvzhTHvv8hayacA5UwGjgAA=
-=dqD1
------END PGP SIGNATURE-----
-
---bEqKWIA1685n+LKp--
+> 
+> thanks,
+> 
+> greg k-h
