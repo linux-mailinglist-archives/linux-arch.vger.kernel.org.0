@@ -2,105 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13387C54DF
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Oct 2023 15:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895137C611E
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Oct 2023 01:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234906AbjJKNIu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Oct 2023 09:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S233885AbjJKXce (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Oct 2023 19:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjJKNIt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Oct 2023 09:08:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A82AA9;
-        Wed, 11 Oct 2023 06:08:47 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-504a7f9204eso8363703e87.3;
-        Wed, 11 Oct 2023 06:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697029726; x=1697634526; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MYM9UN1cQM24eN/cx1yRvLKv4WydXJJTwKdXLA9EWM8=;
-        b=fdfGOIn6tWJIfLGDqKmVroC1PK/c37r2YuQcFBAanciQg7QFn8r+eDD7Quc6euRCGs
-         d9tT5RV33GZHiXceKzTN+4wYqMQ/PL/YwwHA80w8xSODcngfp2G2JCyyjv9RW3BLyAWk
-         VbxsiixST+GEHoTpjLYh3tEQb2pJsxHv+zPhhELKY2V7W+8Z1NixX/yQRiu6kgndT9Uc
-         Aado8LHwgb0N8v2SxYpFOXMTFxQQHFOnmK1zmYHdOAZVauRYoUuLrqvVHRovcc0zi8oN
-         AqgOzpEeqKtJpFhkuhxtHVsnXaLtsm7VhwXx+6b8pFUgTrrIeDorcicvAZ4oW+138OWI
-         B0aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697029726; x=1697634526;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MYM9UN1cQM24eN/cx1yRvLKv4WydXJJTwKdXLA9EWM8=;
-        b=tzuB/xeWiIKVq18iXuAoC0VfNKqFyfkrfcDESImXO1UeqVnGL3GJk88xY0hai5aoEz
-         q3Iqo3/TpmVtr2+mA8Q9VIIz2F1071po5MHQpLlExuRGGPrKe/CihXut/0y73QFWgxtp
-         5Rf1i10YPECUipPe0hbIBE4LKMITv+Y2mc+uio0tQrIJVJm7CB82yAz1dcZfgLrxhGmB
-         z1lZPnJGEG6e2y+Nxz6M1VVtf2sTU9xHBuS5ZY2sH97Yb4QOa025Uo7rlqR8NJHqvrMI
-         I6l+NbmoIBzfTpcs6vfutHqCX8tZfYjE2xvTLSlrXKEGQ2YW7BsEiMcjV7v2NnqJJ4JY
-         XgoA==
-X-Gm-Message-State: AOJu0YzIZrIZxvD/0yMhw/fC3LFT7dxcYGRfgLcinZEfJ8B0frevtYw3
-        3mKUIWP/ZBrfnutsZ28mj6NPrBPWmJP/VbRe/jQ=
-X-Google-Smtp-Source: AGHT+IEjN10vumMrnkaVLm49rRcsyi0oHpP0pF8gEAjsR7W/99v8G6qx2BYXKqogcr2nJ1Z3MXtFLamAEVvS47wud0A=
-X-Received: by 2002:ac2:4431:0:b0:503:258d:643c with SMTP id
- w17-20020ac24431000000b00503258d643cmr16419640lfl.21.1697029725500; Wed, 11
- Oct 2023 06:08:45 -0700 (PDT)
+        with ESMTP id S233849AbjJKXcd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Oct 2023 19:32:33 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFC6EA9;
+        Wed, 11 Oct 2023 16:32:31 -0700 (PDT)
+Received: from [10.0.0.178] (c-76-135-56-23.hsd1.wa.comcast.net [76.135.56.23])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 80D9A20B74C0;
+        Wed, 11 Oct 2023 16:32:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 80D9A20B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1697067151;
+        bh=4Hm83xIHy0uJKbXFIfT/CbbMnnFeszXXVJIu6LMsrrc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HbmZaTJobUZ3XDNnfzWrOkOnKOlVq7XoAVl3UI/c580uOL9uoPFUxcnZuVT3fewhn
+         MXLwG6epTJtrZimHm5s+iWvkP0Fg8yDx8+vNEv6oZP9kQtXGr8o1hUn8iNFBP/u0Zl
+         BGEIS0wv5i1LokehZ8ktTWZ9RlZuxQuFcrCkNMh4=
+Message-ID: <0f2df9e8-8145-4749-893c-e256820bb90f@linux.microsoft.com>
+Date:   Wed, 11 Oct 2023 16:32:34 -0700
 MIME-Version: 1.0
-References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk> <ZSV6i4pnjQqvWuKp@shell.armlinux.org.uk>
- <87o7h5l5xr.ffs@tglx>
-In-Reply-To: <87o7h5l5xr.ffs@tglx>
-From:   =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>
-Date:   Wed, 11 Oct 2023 15:08:34 +0200
-Message-ID: <CAHtyXDdr_R_Moypb3ieFs54RRGu+zqHS46WrjEvWCFtT0KZRaQ@mail.gmail.com>
-Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 14/15] asm-generic: hyperv: Use new Hyper-V headers
+ conditionally.
+To:     Alex Ionescu <aionescu@gmail.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <1696010501-24584-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1696010501-24584-15-git-send-email-nunodasneves@linux.microsoft.com>
+ <CAJ-90NKJ=FViuuy2MyA-8S1j9Lsia8bR-ytZuAr=pOPuAiO0VQ@mail.gmail.com>
+ <749f477a-1e7a-495e-bea1-e3abe8da7fb9@linux.microsoft.com>
+ <CAJ-90NL8S5xnJbiwCHAGs4QeiJ3DHUL0Obi1snqsTDJEpQRnsg@mail.gmail.com>
+Content-Language: en-US
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <CAJ-90NL8S5xnJbiwCHAGs4QeiJ3DHUL0Obi1snqsTDJEpQRnsg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Thomas,
+On 10/5/2023 12:52 PM, Alex Ionescu wrote:
+>>> 3) Truly making hypertv-tlfs the "documented" header, and then > removing any duplication from HDK so that it remains the
+>>> "undocumented" header file. In this manner, one would include
+>>> hyperv-tlfs to use the stable ABI, and they would include HDK (which
+>>> would include hyperv-tlfs) to use the unstable+stable ABI.
+>>
+>> hyperv-tlfs.h is remaining the "documented" header.
+>>
+>> But, we can't make the HDK header depend on hyperv-tlfs.h, for 2 primary
+>> reasons:
+>> 1. We need to put the new HDK headers in uapi so that we can use them in
+>> our IOCTL interface. As a result, we can't include hyperv-tlfs.h (unless
+>> we put it in uapi as well).
+>> 2. The HDK headers not only duplicate, but also MODIFY some structures
+>> in hyperv-tlfs.h. e.g., The struct is in hyperv-tlfs.h, but a particular
+>> field or bitfield is not.
+> 
+> #2 was something I was worried about. Do you know if the
+> standards/docs team is planning on updating the TLFS at some point
+> with updates on their end? At which point I'd assume you'd be OK with
+> patches to add them to hyperv-tlfs.h
+> 
 
-st 11. 10. 2023 v 14:06 odes=C3=ADlatel Thomas Gleixner <tglx@linutronix.de=
-> napsal:
->
-> Sorry for the wrong information about ia64. The removal did not happen
-> because someone stepped up as a possible maintainer.
->
-
-Does that mean that the removal patch will be reverted soon in
-asm-generic and linux-next? Both have no ia64 as of now, and there are
-already a few patches without ia64 part (e,g,
-https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit=
-/?id=3D2fd0ebad27bcd4c8fc61c61a98d4283c47054bcf).
-Without the revert, patches affecting ia64 will conflict.
-
-I am the person who volunteered to maintain the architecture. If the
-removal was indeed cancelled, me and Frank Scheiner can start testing
-and reviewing patches affecting ia64.
+I don't know the current plans for updating the TLFS. But yes, assuming
+a new TLFS doc has something that is needed in the kernel, hyperv-tlfs.h
+would be updated to support that.
 
 Thanks,
-
-Tomas
+Nuno
