@@ -2,80 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4B57CC0AA
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Oct 2023 12:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D817CC0EA
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Oct 2023 12:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbjJQK0r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Oct 2023 06:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
+        id S233570AbjJQKqk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Oct 2023 06:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234833AbjJQK0q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Oct 2023 06:26:46 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90804B0;
-        Tue, 17 Oct 2023 03:26:45 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20331C433C8;
-        Tue, 17 Oct 2023 10:26:38 +0000 (UTC)
-Date:   Tue, 17 Oct 2023 11:26:36 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Alexandru Elisei <alexandru.elisei@arm.com>
-Cc:     Hyesoo Yu <hyesoo.yu@samsung.com>, will@kernel.org,
-        oliver.upton@linux.dev, maz@kernel.org, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com, arnd@arndb.de,
-        akpm@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
-        pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
-        vincenzo.frascino@arm.com, david@redhat.com, eugenis@google.com,
-        kcc@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 06/37] mm: page_alloc: Allocate from movable pcp
- lists only if ALLOC_FROM_METADATA
-Message-ID: <ZS5hXFHs08zQOboi@arm.com>
-References: <20230823131350.114942-1-alexandru.elisei@arm.com>
- <20230823131350.114942-7-alexandru.elisei@arm.com>
- <CGME20231012013524epcas2p4b50f306e3e4d0b937b31f978022844e5@epcas2p4.samsung.com>
- <20231010074823.GA2536665@tiffany>
- <ZS0va9nICZo8bF03@monolith>
+        with ESMTP id S234608AbjJQKqk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Oct 2023 06:46:40 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4117A2;
+        Tue, 17 Oct 2023 03:46:38 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 59C431C006A; Tue, 17 Oct 2023 12:46:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1697539597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m671g35jVHurr8wOcj+WlvlYKhYnYhlvUxsN6VNvRGY=;
+        b=r0HGqmvvNd5g7CMrbD4jPXD4pgEr6r1Gm6it6Yn8e+jW1rZb4R31EB/0rxa/Ub2tjKQADj
+        GRrPxQw0JGiR3agauWaIPg7A95d06Vso54rp2fJU8pY/eMGv2az94kcMMbS3XZrbhFkUm0
+        Vw2I4WKWfM46jsXvzxoxKX1AHMG8KR0=
+Date:   Tue, 17 Oct 2023 12:46:36 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>, quic_jhugo@quicinc.com,
+        snitzer@kernel.org, dm <dm-devel@redhat.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] Fix confusion around MAX_ORDER
+Message-ID: <ZS5mDNCRkp/RGm45@duo.ucw.cz>
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <3c25ec6f-cd33-9445-a76f-6ec2c30755f5@redhat.com>
+ <86e7f97a-ac6b-873d-93b2-1121a464989a@redhat.com>
+ <b3ed3da7-ffa3-0d35-34c1-27b159af43bb@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="U9ipWO248TbRr+D3"
 Content-Disposition: inline
-In-Reply-To: <ZS0va9nICZo8bF03@monolith>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b3ed3da7-ffa3-0d35-34c1-27b159af43bb@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 01:41:15PM +0100, Alexandru Elisei wrote:
-> On Thu, Oct 12, 2023 at 10:25:11AM +0900, Hyesoo Yu wrote:
-> > I don't think it would be effcient when the majority of movable pages
-> > do not use GFP_TAGGED.
-> > 
-> > Metadata pages have a low probability of being in the pcp list
-> > because metadata pages is bypassed when freeing pages.
-> > 
-> > The allocation performance of most movable pages is likely to decrease
-> > if only the request with ALLOC_FROM_METADATA could be allocated.
-> 
-> You're right, I hadn't considered that.
-> 
-> > 
-> > How about not including metadata pages in the pcp list at all ?
-> 
-> Sounds reasonable, I will keep it in mind for the next iteration of the
-> series.
 
-BTW, I suggest for the next iteration we drop MIGRATE_METADATA, only use
-CMA and assume that the tag storage itself supports tagging. Hopefully
-it makes the patches a bit simpler.
+--U9ipWO248TbRr+D3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Catalin
+On Thu 2023-09-28 18:57:18, Paolo Bonzini wrote:
+> On 9/28/23 09:50, Mikulas Patocka wrote:
+> > > > Fix the bugs and then change the definition of MAX_ORDER to be
+> > > > inclusive: the range of orders user can ask from buddy allocator is
+> > > > 0..MAX_ORDER now.
+> > I think that exclusive MAX_ORDER is more intuitive in the C language -
+> > i.e. if you write "for (i =3D 0; i < MAX_ORDER; i++)", you are supposed=
+ to
+> > loop over all allowed values. If you declare an array "void
+> > *array[MAX_ORDER];" you are supposed to hold a value for each allowed
+> > order.
+> >=20
+> > Pascal has for loops and array dimensions with inclusive ranges - and it
+> > is more prone to off-by-one errors.
+>=20
+> I agree it's somewhat confusing either way but the ship has sailed, the
+> patch has been included in Linux for several months.
+
+Just make sure people don't backport it to stable. Fixes: (the commit
+that causes the semantic change) should do the trick.
+
+BR,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--U9ipWO248TbRr+D3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZS5mDAAKCRAw5/Bqldv6
+8tIGAJsFJix/mB5VZ3yp+Ypy6TLK4hgW0QCfcfJ3sDGET1Vosz3XWgzgTqljj6A=
+=mKaU
+-----END PGP SIGNATURE-----
+
+--U9ipWO248TbRr+D3--
