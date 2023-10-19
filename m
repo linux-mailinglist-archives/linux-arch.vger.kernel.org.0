@@ -2,61 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D34B7CFFC2
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Oct 2023 18:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F3C7D0038
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Oct 2023 19:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbjJSQjz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Oct 2023 12:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S1345848AbjJSRIY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Oct 2023 13:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjJSQjy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Oct 2023 12:39:54 -0400
+        with ESMTP id S1345614AbjJSRIY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Oct 2023 13:08:24 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46136182;
-        Thu, 19 Oct 2023 09:39:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D15EFC433C8;
-        Thu, 19 Oct 2023 16:39:51 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2204B12A;
+        Thu, 19 Oct 2023 10:08:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BCAC433C8;
+        Thu, 19 Oct 2023 17:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697733591;
-        bh=ZexdEiNNC+LPRHxIe+2g3JjtbdL/fbrUvs+KMs1hAvQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=N6on/NJddQzika1XMcjbHj7toTNRJyuR5KMRzPvp7mA8LgX+IY8GvugaHVCy8Hzel
-         rNFneoedbIvB2CQR7cczq3CPe3P83aryz7sCMA9uqJh3XCNYeXNVbkUGBykaLyiLOb
-         r2A2UooAjRrfk/UetsSuxAJqx4xzh6yeaepQR8pGGmVyjM7np6xSrfncQ+REhCfVM1
-         oHTHI4vBzhnYuNzjDm//El38reWyxjJ2N/HfEhLUp1e/evBBN1KX+SKt+2i+tvqCNt
-         GBva0BVUyySgpUl6P35iC0kLE8DzcFih3R/xXqMEX1lVY0eloheMEX6uuY5GjrunOb
-         Ux+QZo26gYhkQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6DA82CE041E; Thu, 19 Oct 2023 09:39:51 -0700 (PDT)
-Date:   Thu, 19 Oct 2023 09:39:51 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
+        s=k20201202; t=1697735301;
+        bh=pG0Qit3AqQuyW6KGy3cTGUjC4taxXCYceYbhQqKPpi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iuYT4D0VMaEuj+thGqbHAXol5XSAP+gpQW0FvmhrZUDfxLXv+/ZVEXa7HboYTdjfS
+         6IW13fpGKYOraD3SUYgFKSKngtaiTn4eZnS5/t4No3Bd9JUpA/YN36SlzCfxP3r8Qo
+         GSGIhhQuUcl2bZWr7R2xIlGjz0vg5FexGBIpOTGda3+rKYYtVhgWVsIhxkX6hbI0gm
+         mcLC1qwZc2f1UoNDZu97OVSCneDpDNOnMk0J/9pg1MhLPNaMhehC5h9M8hK61gX85H
+         oCvpdUL6LgDGxSu2UPoMDo+pZMMxQOrswwQOGCVnwHabAhbK25KaSViVEB0JO0/a2D
+         NKmdSxXCL95kQ==
+Date:   Thu, 19 Oct 2023 18:08:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
         Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH memory-model] docs: memory-barriers: Add note on compiler
- transformation and address deps
-Message-ID: <f363d6e0-5682-43e7-9a3f-6b896c3cd920@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ceaeba0a-fc30-4635-802a-668c859a58b2@paulmck-laptop>
- <4110a58a-8db5-57c4-2f5a-e09ee054baaa@huaweicloud.com>
- <1c731fdc-9383-21f2-b2d0-2c879b382687@huaweicloud.com>
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <8a158486-f0b9-4f25-b673-998726a40528@sirena.org.uk>
+References: <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <ZOTnL1SDJWZjHPUW@arm.com>
+ <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
+ <ZOXa98SqwYPwxzNP@arm.com>
+ <ZOYFazB1gYjzDRdA@arm.com>
+ <ZRWw7aa3C0LlMPTH@arm.com>
+ <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
+ <ZRvUxLgMse8QYlGS@arm.com>
+ <a7d2fd66-c06b-4033-bca2-4b14afc4904f@sirena.org.uk>
+ <ZR7w/mr0xZbpIPc5@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kNvCjmZsgc4H4SyY"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1c731fdc-9383-21f2-b2d0-2c879b382687@huaweicloud.com>
+In-Reply-To: <ZR7w/mr0xZbpIPc5@arm.com>
+X-Cookie: Beware of dog.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -67,132 +82,112 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 18, 2023 at 12:11:58PM +0200, Jonas Oberhauser wrote:
-> Hi Paul,
-> 
-> on a second thought. Why can't the compiler always do, e.g.,
-> 
->     int *p = READ_ONCE(shared_ptr);
-> 
->     assert (*p == 0);
-> 
-> ~>
-> 
->     int *p = READ_ONCE(shared_ptr);
-> 
->     int val = x; // x is some object that definitely won't segfault, but may
-> very well be owned by another thread right now
->     if (p != &x) val = *p;
 
-The compiler is forbidden from inventing pointer comparisons.
+--kNvCjmZsgc4H4SyY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->     assert (val == 0);
-> 
-> and in case p == &x, the address dependency is elided
+On Thu, Oct 05, 2023 at 06:23:10PM +0100, Catalin Marinas wrote:
 
-But yes, this is one reason why Documentation/RCU/rcu_dereference.rst
-warns about pointer comparisons.
+> I haven't checked how many clone() or clone3() uses outside the libc are
+> (I tried some quick search in Debian but did not dig into the specifics
+> to see how generic that code is). I agree that having to change valid
+> cases outside of libc is not ideal. Even if we have the same clone3()
+> interface for x86 and arm64, we'd have other architectures that need
+> #ifdef'ing.
 
-> Best wishes,
-> 
-> jonas
-> 
-> Am 10/6/2023 um 6:39 PM schrieb Jonas Oberhauser:
-> > Hi Paul,
-> > 
-> > The "more up-to-date information" makes it sound like (some of) the
-> > information in this section is out-of-date/no longer valid.
+FTR the set of Debian source packages that have references to the string
+__NR_clone (which picks up clone3 too) is below.  At least some (eg,
+kore) just have things that look like a copy of the syscall table rather
+than things that look like calls, though equally it's likely we're
+missing some.
 
-The old smp_read_barrier_depends() that these section cover really
-does no longer exist.
+aflplusplus
+android-platform-tools
+binutils-avr
+box64
+brltty
+bubblewrap
+chromium
+chrony
+crash
+criu
+crun
+dietlibc
+elogind
+emscripten
+fakeroot-ng
+falcosecurity-libs
+firefox
+firefox-esr
+flatpak
+gcc-9
+gcc-10
+gcc-11
+gcc-12
+gcc-13
+gcc-arm-none-eabi
+gcc-snapshot
+gdb-msp430
+glibc
+gnumach
+hurd
+klibc
+kore
+libpod
+libseccomp
+linux
+llvm-toolchain-14
+llvm-toolchain-15
+llvm-toolchain-16
+lxc
+lxcfs
+lxd
+musl
+newlib
+notcurses
+purelibc
+pwntools
+qemu
+qt6-base
+qt6-webengine
+qtbase-opensource-src
+qtbase-opensource-src-gles
+qtwebengine-opensource-src
+radare2
+rumur
+rustc
+rust-linux-raw-sys
+rust-rustix
+strace
+stress-ng
+swtpm
+systemd
+systemtap
+termpaint
+thunderbird
+tor
+uclibc
+umview
+valgrind
+vsftpd
+wasi-libc
+webkit2gtk
+wpewebkit
 
-> > But after reading the sections, it seems the information is valid, but
-> > discusses mostly the history of address dependency barriers.
-> > 
-> > Given that the sepcond part  specifically already starts with a
-> > disclaimer that this information is purely relevant to people interested
-> > in history or working on alpha, I think it would make more sense to
-> > modify things slightly differently.
-> > 
-> > Firstly I'd remove the "historical" part in the first section, and add
-> > two short paragraphs explaining that
-> > 
-> > - every marked access implies a address dependency barrier
+--kNvCjmZsgc4H4SyY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This is covered in rcu_dereference.rst.  Or is something missing there?
-Please note that the atomic_read() primitives operate on integers
-rather than pointers, so are off the table.  Yes, in theory, some of
-the value-returning atomic read-modify-write operations could head a
-dependency chain, but these things are sufficiently heavyweight that
-most situations would be better served by an _acquire() suffix than by
-a relaxed version of such an atomic operation.
+-----BEGIN PGP SIGNATURE-----
 
-> > - address dependencies considered by the model are *semantic*
-> > dependencies, meaning that a *syntactic* dependency is not sufficient to
-> > imply ordering; see the rcu file for some examples where compilers can
-> > elide syntactic dependencies
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUxYnsACgkQJNaLcl1U
+h9BPuwf/ckJjx9BnOVP9ZzZPFpa7pKsXZe4D8gbrhkTsTNPX6DKdD77294DX72gh
+Q3LR3m5Xdw3nFoR/pP6cUgZ24o8sV/iUz8fLdBvuOOnemVmgoPIRcB/TNueOcq9P
+1rIwQ44UzdUfxc/5Ny1QKCvurTnCs4dFc3Llt0GdVvDy+Ec6FK9hX/Wwe48hsvLr
+6kDkKqvYz3IF3xnnTmGyHxD7EdaHnYPHrU8mWr33e1j8/MWMn6ywGyCRV6ZgrQxW
+VuTTod0EwhsDlW/u8yYNGmLBirZQszpmt3Wp2QCv4vcjHbjxa+xh7SYq8P5BNRj3
+ZgUagp/WsyNXXW6iGiQlgqb1YHdFdg==
+=ZvaR
+-----END PGP SIGNATURE-----
 
-There is a bunch of text in rcu_dereference.rst to this effect.  Or
-is there some aspect that is missing from that document?
-
-The longer-term direction, perhaps a few years from now, is for the
-first section to simply reference rcu_dereference.rst and for the second
-section to be removed completely.
-
-> > Secondly, I'd not add the disclaimer to the second section; there's
-> > already a link to rcu_dereference in that section ( https://github.com/torvalds/linux/blob/master/Documentation/memory-barriers.txt#L634
-> > ), and already a small text explaining that the section is historical.
-
-The problem is that people insist on diving into the middle of documents,
-so sometimes repetition is a necessary form of self defense.  ;-)
-
-But I very much appreciate your review and feedback, and I also apologize
-for my slowness.
-
-							Thanx, Paul
-
-> > Best wishes,
-> > 
-> > jonas
-> > 
-> > 
-> > Am 10/5/2023 um 6:53 PM schrieb Paul E. McKenney:
-> > > The compiler has the ability to cause misordering by destroying
-> > > address-dependency barriers if comparison operations are used. Add a
-> > > note about this to memory-barriers.txt in the beginning of both the
-> > > historical address-dependency sections and point to rcu-dereference.rst
-> > > for more information.
-> > > 
-> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > 
-> > > diff --git a/Documentation/memory-barriers.txt
-> > > b/Documentation/memory-barriers.txt
-> > > index 06e14efd8662..d414e145f912 100644
-> > > --- a/Documentation/memory-barriers.txt
-> > > +++ b/Documentation/memory-barriers.txt
-> > > @@ -396,6 +396,10 @@ Memory barriers come in four basic varieties:
-> > >        (2) Address-dependency barriers (historical).
-> > > +     [!] This section is marked as HISTORICAL: For more up-to-date
-> > > +     information, including how compiler transformations related to
-> > > pointer
-> > > +     comparisons can sometimes cause problems, see
-> > > +     Documentation/RCU/rcu_dereference.rst.
-> > >          An address-dependency barrier is a weaker form of read
-> > > barrier.  In the
-> > >        case where two loads are performed such that the second
-> > > depends on the
-> > > @@ -556,6 +560,9 @@ There are certain things that the Linux kernel
-> > > memory barriers do not guarantee:
-> > >     ADDRESS-DEPENDENCY BARRIERS (HISTORICAL)
-> > >   ----------------------------------------
-> > > +[!] This section is marked as HISTORICAL: For more up-to-date
-> > > information,
-> > > +including how compiler transformations related to pointer
-> > > comparisons can
-> > > +sometimes cause problems, see Documentation/RCU/rcu_dereference.rst.
-> > >     As of v4.15 of the Linux kernel, an smp_mb() was added to
-> > > READ_ONCE() for
-> > >   DEC Alpha, which means that about the only people who need to pay
-> > > attention
-> 
+--kNvCjmZsgc4H4SyY--
