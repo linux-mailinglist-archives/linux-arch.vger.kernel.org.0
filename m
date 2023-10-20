@@ -2,139 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145B17D1315
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Oct 2023 17:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE237D136F
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Oct 2023 18:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377717AbjJTPpd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Oct 2023 11:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        id S1377853AbjJTQA7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Oct 2023 12:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377691AbjJTPpc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Oct 2023 11:45:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98836AB;
-        Fri, 20 Oct 2023 08:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xIKKUjcH/qIC5BsSUPE/DncbhPOe3xXoX+eKN1YVw6I=; b=0p6w5hEafrSWaGfgk1H2QdUv/d
-        eaeQUYuSUMmQt1NCpQ7r2N1dVlBcE+b1vGg09q5+cIVbdXb/5Ugh+JEXAqQA5RSDITYfuhCvBwciM
-        n7V5RUoowAW0boyNBEf+Aww9K/BLHdUSnLe23higeruw8rbQQpfcNXYt2NFHIyX/LjCrlxfA9qlZy
-        v0N7hRLe2HyXHWIQ6VP8tnOZwng7hNXpmMUbbzuBc3fuUZkjwV3TO3hNntpgN/jCFd4ZgjzcfAJKM
-        kcxGQErzQ9uL1DJPilPyo6s5QA8hxNX71g7k0Mu9XRhXGNNJ5/g/Q39GM20miBrHMtaYAsReZVARS
-        F6HoD1iA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48332)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qtrgk-0000bl-0a;
-        Fri, 20 Oct 2023 16:45:26 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qtrgl-0001fB-0I; Fri, 20 Oct 2023 16:45:27 +0100
-Date:   Fri, 20 Oct 2023 16:45:26 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: Re: [RFC PATCH v2 14/35] ACPI: Only enumerate enabled (or
- functional) devices
-Message-ID: <ZTKglklxz8PN9VmI@shell.armlinux.org.uk>
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-15-james.morse@arm.com>
- <ebfa8b5c-c09f-a1e6-e6ec-f4f3cda9de03@redhat.com>
+        with ESMTP id S1377861AbjJTQA6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Oct 2023 12:00:58 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E13D73;
+        Fri, 20 Oct 2023 09:00:55 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SBpnG4JFyz9v7cQ;
+        Fri, 20 Oct 2023 23:45:06 +0800 (CST)
+Received: from [10.81.210.100] (unknown [10.81.210.100])
+        by APP1 (Coremail) with SMTP id LxC2BwBXsJEUpDJl+6eWAg--.65134S2;
+        Fri, 20 Oct 2023 17:00:30 +0100 (CET)
+Message-ID: <0bf4cda3-cc43-0e77-e47b-43e1402ed276@huaweicloud.com>
+Date:   Fri, 20 Oct 2023 18:00:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebfa8b5c-c09f-a1e6-e6ec-f4f3cda9de03@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH memory-model] docs: memory-barriers: Add note on compiler
+ transformation and address deps
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <ceaeba0a-fc30-4635-802a-668c859a58b2@paulmck-laptop>
+ <4110a58a-8db5-57c4-2f5a-e09ee054baaa@huaweicloud.com>
+ <1c731fdc-9383-21f2-b2d0-2c879b382687@huaweicloud.com>
+ <f363d6e0-5682-43e7-9a3f-6b896c3cd920@paulmck-laptop>
+ <b96cfbc1-f6b0-2fa6-b72d-d57c34bbf14b@huaweicloud.com>
+ <2694e6e1-3282-4a69-b955-06afd7d7f87f@paulmck-laptop>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <2694e6e1-3282-4a69-b955-06afd7d7f87f@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwBXsJEUpDJl+6eWAg--.65134S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF13WrWkGrWUtFykXw1DKFg_yoWrJw1Dpr
+        W7uF12kF4DAw13Cw1ktw10yFyIvrWrAF45Gr93Kr1DZa98urySkF47tw45uF98Crs5Zr1j
+        qrZIq397Z34qvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 09:43:46AM +1000, Gavin Shan wrote:
-> On 9/14/23 02:38, James Morse wrote:
-> > +	if (!device->status.present && !device->status.enabled)
-> > +		return device->status.functional;
-> > +
-> > +	return device->status.present && device->status.enabled;
-> >   }
-> >   EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
-> 
-> Looking at Salil's latest branch (vcpu-hotplug-RFCv2-rc7), there are 3 possible statuses:
-> 
->   0x0       when CPU isn't present
->   0xD       when CPU is present, but not enabled
->   0xF       when CPU is present and enabled
-> 
-> Previously, the ACPI device is enumerated on 0xD and 0xF. We want to avoid the enumeration
-> on 0xD since the processor isn't ready for enumeration in this specific case. The changed
-> check (device->status.present && device->status.enabled) can ensure it. So the addition
-> of checking @device->state.functional seems irrelevant to ARM64 vCPU hot-add? I guess we
-> probably want a relaxation after the condition (device->status.present || device->status.enabled)
-> becomes a more strict one (device->status.present && device->status.enabled)
 
-Okay, I'm confused by your comment.
+Am 10/20/2023 um 3:57 PM schrieb Paul E. McKenney:
+> On Fri, Oct 20, 2023 at 11:29:24AM +0200, Jonas Oberhauser wrote:
+>> Am 10/19/2023 um 6:39 PM schrieb Paul E. McKenney:
+>>> On Wed, Oct 18, 2023 at 12:11:58PM +0200, Jonas Oberhauser wrote:
+>>>> Hi Paul,
+>>>> [...]
+>>> The compiler is forbidden from inventing pointer comparisons.
+>> TIL :) Btw, do you remember a discussion where this is clarified? A quick
+>> search didn't turn up anything.
+> This was a verbal discussion with Richard Smith at the 2020 C++ Standards
+> Committee meeting in Prague.  I honestly do not know what standardese
+> supports this.
 
-As mentioned in my reply to Jonathan, the current code tests for
-device->status.present || device->status.functional, not
-device->status.present || device->status.enabled.
 
-Digging back in the history, the acpi_device_is_present() helper
-was added in 202317a573b2 "ACPI / scan: Add acpi_device objects for all
-device nodes in the namespace". The commit description states:
+Then this e-mail thread shall be my evidence for future discussion.
 
-    Modify the ACPI namespace scanning code to register a struct
-    acpi_device object for every namespace node representing a device,
-    processor and so on, even if the device represented by that namespace
-    node is reported to be not present and not functional by _STA.
 
-It seems the code originally used this test
+>
+>>>> Best wishes,
+>>>>
+>>>> jonas
+>>>>
+>>>> Am 10/6/2023 um 6:39 PM schrieb Jonas Oberhauser:
+>>>>> Hi Paul,
+>>>>>
+>>>>> The "more up-to-date information" makes it sound like (some of) the
+>>>>> information in this section is out-of-date/no longer valid.
+>>> The old smp_read_barrier_depends() that these section cover really
+>>> does no longer exist.
+>>
+>> (and the parts that are still there are all still relevant, while the parts
+>> that only the authors know was intended to be there and is out-of-date is
+>> already gone).
+> The question is instead what parts that are still relevant are missing
+> from rcu_dereference.rst.
+>
+>> So I would add a disclaimer specifying that (since 4.15) *all* marked
+>> accesses imply read dependency barriers which resolve most of the issues
+>> mentioned in the remainder of the article.
+>> However, some issues remain because the dependencies that are preserved by
+>> such barriers are just *semantic* dependencies, and readers should check
+>> rcu_dereference.rst for examples of what that implies.
+> Or maybe it is now time to remove those sections from memory-barriers.txt,
+> leaving only the first section's pointer to rcu_dereference.rst.
 
--       if (!(sta & ACPI_STA_DEVICE_PRESENT) &&
--           !(sta & ACPI_STA_DEVICE_FUNCTIONING)) {
 
-So this commit is just continuing that "tradition".
+That would also make sense to me.
 
-Digging further back, we find:
 
-778cbc1d3abd ACPI: factor out device type and status checking
+> It still feels a bit early to me, and I am still trying to figure out
+> why you care so much about these sections.  ;-)
 
--       case ACPI_BUS_TYPE_PROCESSOR:
--       case ACPI_BUS_TYPE_DEVICE:
-...
--               /*
--                * When the device is neither present nor functional, the
--                * device should not be added to Linux ACPI device tree.
--                * When the status of the device is not present but functinal,
--                * it should be added to Linux ACPI tree. For example : bay
--                * device , dock device.
--                * In such conditions it is unncessary to check whether it is
--                * bay device or dock device.
--                */
--               if (!device->status.present && !device->status.functional) {
 
-and that comment seems to indicate where the !present && functional
-case comes from.
+I honestly don't care about the sections themselves, but I do care about 
+1) address dependency ordering and 2) not confusing people more than 
+necessary.
+IMHO the sections right now are more confusing than necessary.
+As I said before, I think they should clarify what exactly is historical 
+in a short sentence. E.g.
 
-So, I think it's necessary to continue supporting the !present &&
-functional case otherwise it seems to me that we'll be regressing some
-platforms.
+  (2) Address-dependency barriers (historical).
+      [!] This section is marked as HISTORICAL: it covers the obsolete barrier
+      smp_read_barrier_depends(), the semantics of which is now implicit in all
+      marked accesses. For more up-to-date information, including how compiler
+      transformations related to pointer comparisons can sometimes cause problems,
+      see Documentation/RCU/rcu_dereference.rst.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+I think this tiny rewrite makes it much more clear. Specifically it tells *why* the text is historical (and why we maybe don't need to read it anymore).
+
+Btw, when I raised my concerns about what should be there I didn't mean to imply those points are missing, just trying to sketch what the paragraph should look like in my opinion.
+The paragraphs you are adding already had several of those points.
+
+
+>>> The longer-term direction, perhaps a few years from now, is for the
+>>> first section to simply reference rcu_dereference.rst and for the second
+>>> section to be removed completely.
+>> Sounds good to me, but that doesn't mean we need to compromise the
+>> readability in the interim :)
+> Some compromise is needed for people that read the document some time
+> back and are looking for something specific.
+
+Yes. But the compromise should be "there's a blob of text other people 
+don't need to read", not "there's a blob of text that will leave other 
+people confused".
+
+
+Best wishes,
+
+jonas
+
