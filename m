@@ -2,235 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6245C7D158D
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Oct 2023 20:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830C97D15F5
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Oct 2023 20:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjJTSNd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Oct 2023 14:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S229604AbjJTSrL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Oct 2023 14:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjJTSNc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Oct 2023 14:13:32 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F51DD5B;
-        Fri, 20 Oct 2023 11:13:30 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F76C433C8;
-        Fri, 20 Oct 2023 18:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697825609;
-        bh=wOR5O9YegoVKw4ww+kiBFNh2VRvivdmGmXTHFswo0y8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ohtghylusGZ935EjRwomKqdPUesyozWCBjsi60LQHc4ypSYGZzersCHunwDzY1YZE
-         QIRI5iMhZKdKFXQqXo2FKV/ikYfCt4k6Vq1LKUlSXqh+mJlGU2vEPU///LSwTemMjb
-         6CDba3ArYel5UBERl9jsKfJCWIu95FJO86jG+pEla0tH5MyXNjOPQSYPS4p0qKikbi
-         MbjC9RCSTxPuoOYpoZfa5Wzg9yKkHa1MFlm9XXARJ8R1b5j9mzTfDEDK0v5AqRss+Z
-         QC3egmArFh9AeIX+cZTwi/HA5JyJmEL6hGhgWbH45iq/c5GN8oUfv9GYXnx5xAGtaT
-         m78rkgscsUU6A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 52983CE059F; Fri, 20 Oct 2023 11:13:29 -0700 (PDT)
-Date:   Fri, 20 Oct 2023 11:13:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH memory-model] docs: memory-barriers: Add note on compiler
- transformation and address deps
-Message-ID: <79233008-4be2-4442-9600-f9ac1a654312@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ceaeba0a-fc30-4635-802a-668c859a58b2@paulmck-laptop>
- <4110a58a-8db5-57c4-2f5a-e09ee054baaa@huaweicloud.com>
- <1c731fdc-9383-21f2-b2d0-2c879b382687@huaweicloud.com>
- <f363d6e0-5682-43e7-9a3f-6b896c3cd920@paulmck-laptop>
- <b96cfbc1-f6b0-2fa6-b72d-d57c34bbf14b@huaweicloud.com>
- <2694e6e1-3282-4a69-b955-06afd7d7f87f@paulmck-laptop>
- <0bf4cda3-cc43-0e77-e47b-43e1402ed276@huaweicloud.com>
+        with ESMTP id S229437AbjJTSrL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Oct 2023 14:47:11 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8677D7;
+        Fri, 20 Oct 2023 11:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=p30D1Q3zE2qXAXYR3qzel/vvewRxpsqtgQHCmqUYVEc=; b=LtdVRAzT/5ZWoDw0QQ+xhklB9/
+        890ErFfVXqWVySS3OHD9I/gJXfSDCp+LFYKEA06AQdIWecu1WiROyi+hxGDfFV/1Exv8Gt3xM4/Zp
+        jrrxGUmPkdG5J+IZajAAnmyd74VJlPHVEd6cHT8P3HuEtGZFu4nHStDWYitjNYhSEtsZEfsaTRmW2
+        AKBY6J/S0UG58H67P4/tHOxwhdmNloeKleBA3MmXYEClCEnkM9S/Vl6Ya8vvoa7doTjRHhEfQKzy9
+        U2guXWrehQ2IB+qYklB2lYQl+pAwQlvbd1NpxiUJzLoUnup9N6znXpEammjKwPoK/XzTHp7WIHJpj
+        8IuirCgg==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:59232 helo=rmk-PC.armlinux.org.uk)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1qtuWU-0000mU-1u;
+        Fri, 20 Oct 2023 19:47:02 +0100
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1qtuWW-00AQ7P-0W; Fri, 20 Oct 2023 19:47:04 +0100
+From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     x86@kernel.org, James Morse <james.morse@arm.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: [PATCH] ACPI: Rename acpi_scan_device_not_present() to be about
+ enumeration
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0bf4cda3-cc43-0e77-e47b-43e1402ed276@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1qtuWW-00AQ7P-0W@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Fri, 20 Oct 2023 19:47:04 +0100
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 06:00:19PM +0200, Jonas Oberhauser wrote:
-> 
-> Am 10/20/2023 um 3:57 PM schrieb Paul E. McKenney:
-> > On Fri, Oct 20, 2023 at 11:29:24AM +0200, Jonas Oberhauser wrote:
-> > > Am 10/19/2023 um 6:39 PM schrieb Paul E. McKenney:
-> > > > On Wed, Oct 18, 2023 at 12:11:58PM +0200, Jonas Oberhauser wrote:
-> > > > > Hi Paul,
-> > > > > [...]
-> > > > The compiler is forbidden from inventing pointer comparisons.
-> > > TIL :) Btw, do you remember a discussion where this is clarified? A quick
-> > > search didn't turn up anything.
-> > This was a verbal discussion with Richard Smith at the 2020 C++ Standards
-> > Committee meeting in Prague.  I honestly do not know what standardese
-> > supports this.
-> 
-> Then this e-mail thread shall be my evidence for future discussion.
+From: James Morse <james.morse@arm.com>
 
-I am sure that Richard will be delighted, especially given that he
-did not seem at all happy with this don't-invent-pointer-comparisons
-rule.  ;-)
+acpi_scan_device_not_present() is called when a device in the
+hierarchy is not available for enumeration. Historically enumeration
+was only based on whether the device was present.
 
-> > > > > Best wishes,
-> > > > > 
-> > > > > jonas
-> > > > > 
-> > > > > Am 10/6/2023 um 6:39 PM schrieb Jonas Oberhauser:
-> > > > > > Hi Paul,
-> > > > > > 
-> > > > > > The "more up-to-date information" makes it sound like (some of) the
-> > > > > > information in this section is out-of-date/no longer valid.
-> > > > The old smp_read_barrier_depends() that these section cover really
-> > > > does no longer exist.
-> > > 
-> > > (and the parts that are still there are all still relevant, while the parts
-> > > that only the authors know was intended to be there and is out-of-date is
-> > > already gone).
-> > The question is instead what parts that are still relevant are missing
-> > from rcu_dereference.rst.
-> > 
-> > > So I would add a disclaimer specifying that (since 4.15) *all* marked
-> > > accesses imply read dependency barriers which resolve most of the issues
-> > > mentioned in the remainder of the article.
-> > > However, some issues remain because the dependencies that are preserved by
-> > > such barriers are just *semantic* dependencies, and readers should check
-> > > rcu_dereference.rst for examples of what that implies.
-> > Or maybe it is now time to remove those sections from memory-barriers.txt,
-> > leaving only the first section's pointer to rcu_dereference.rst.
-> 
-> That would also make sense to me.
-> 
-> > It still feels a bit early to me, and I am still trying to figure out
-> > why you care so much about these sections.  ;-)
-> 
-> I honestly don't care about the sections themselves, but I do care about 1)
-> address dependency ordering and 2) not confusing people more than necessary.
-> IMHO the sections right now are more confusing than necessary.
-> As I said before, I think they should clarify what exactly is historical in
-> a short sentence. E.g.
-> 
->  (2) Address-dependency barriers (historical).
->      [!] This section is marked as HISTORICAL: it covers the obsolete barrier
->      smp_read_barrier_depends(), the semantics of which is now implicit in all
->      marked accesses. For more up-to-date information, including how compiler
->      transformations related to pointer comparisons can sometimes cause problems,
->      see Documentation/RCU/rcu_dereference.rst.
-> 
-> I think this tiny rewrite makes it much more clear. Specifically it tells *why* the text is historical (and why we maybe don't need to read it anymore).
+To add support for only enumerating devices that are both present
+and enabled, this helper should be renamed. It was only ever about
+enumeration, rename it acpi_scan_device_not_enumerated().
 
-Good point!  I reworked this a bit and added it to both HISTORICAL
-sections, with your Suggested-by.
+No change in behaviour is intended.
 
-> Btw, when I raised my concerns about what should be there I didn't mean to imply those points are missing, just trying to sketch what the paragraph should look like in my opinion.
-> The paragraphs you are adding already had several of those points.
+Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+This is another patch from James' aarch64 hotplug vcpu series.
 
-Very good, but I did have to ask.  It wouldn't be the first time that
-I left something out.  ;-)
+I asked:
+> Is this another patch which ought to be submitted without waiting
+> for the rest of the series?
+to which Jonathan Cameron replied:
+> Looks like a valid standalone change to me.
 
-> > > > The longer-term direction, perhaps a few years from now, is for the
-> > > > first section to simply reference rcu_dereference.rst and for the second
-> > > > section to be removed completely.
-> > > Sounds good to me, but that doesn't mean we need to compromise the
-> > > readability in the interim :)
-> > Some compromise is needed for people that read the document some time
-> > back and are looking for something specific.
-> 
-> Yes. But the compromise should be "there's a blob of text other people don't
-> need to read", not "there's a blob of text that will leave other people
-> confused".
+So let's get this queued up.
 
-Fair enough in general, but I cannot promise to never confuse people.
-This is after all memory ordering.  And different people will be confused
-by different things.
+ drivers/acpi/scan.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-But I do very much like your suggested clarification.  Please let me
-know if I messed anything up in the translation.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 566c71eee55b26ece5855ebbee6f8762495d78f7
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Fri Oct 20 11:04:27 2023 -0700
-
-    doc: Clarify historical disclaimers in memory-barriers.txt
-    
-    This commit makes it clear that the reason that these sections are
-    historical is that smp_read_barrier_depends() is no more.  It also
-    removes the point about comparison operations, given that there are
-    other optimizations that can break address dependencies.
-    
-    Suggested-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-    Cc: Alan Stern <stern@rowland.harvard.edu>
-    Cc: Andrea Parri <parri.andrea@gmail.com>
-    Cc: Will Deacon <will@kernel.org>
-    Cc: Peter Zijlstra <peterz@infradead.org>
-    Cc: Boqun Feng <boqun.feng@gmail.com>
-    Cc: Nicholas Piggin <npiggin@gmail.com>
-    Cc: David Howells <dhowells@redhat.com>
-    Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-    Cc: Luc Maranget <luc.maranget@inria.fr>
-    Cc: Akira Yokosawa <akiyks@gmail.com>
-    Cc: Daniel Lustig <dlustig@nvidia.com>
-    Cc: Joel Fernandes <joel@joelfernandes.org>
-    Cc: Jonathan Corbet <corbet@lwn.net>
-    Cc: <linux-arch@vger.kernel.org>
-    Cc: <linux-doc@vger.kernel.org>
-
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index d414e145f912..4202174a6262 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -396,10 +396,11 @@ Memory barriers come in four basic varieties:
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index ed01e19514ef..17ab875a7d4e 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -289,10 +289,10 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+ 	return 0;
+ }
  
+-static int acpi_scan_device_not_present(struct acpi_device *adev)
++static int acpi_scan_device_not_enumerated(struct acpi_device *adev)
+ {
+ 	if (!acpi_device_enumerated(adev)) {
+-		dev_warn(&adev->dev, "Still not present\n");
++		dev_warn(&adev->dev, "Still not enumerated\n");
+ 		return -EALREADY;
+ 	}
+ 	acpi_bus_trim(adev);
+@@ -327,7 +327,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
+ 			error = -ENODEV;
+ 		}
+ 	} else {
+-		error = acpi_scan_device_not_present(adev);
++		error = acpi_scan_device_not_enumerated(adev);
+ 	}
+ 	return error;
+ }
+@@ -339,7 +339,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
  
-  (2) Address-dependency barriers (historical).
--     [!] This section is marked as HISTORICAL: For more up-to-date
--     information, including how compiler transformations related to pointer
--     comparisons can sometimes cause problems, see
--     Documentation/RCU/rcu_dereference.rst.
-+     [!] This section is marked as HISTORICAL: it covers the long-obsolete
-+     smp_read_barrier_depends() macro, the semantics of which are now
-+     implicit in all marked accesses.  For more up-to-date information,
-+     including how compiler transformations can sometimes break address
-+     dependencies, see Documentation/RCU/rcu_dereference.rst.
- 
-      An address-dependency barrier is a weaker form of read barrier.  In the
-      case where two loads are performed such that the second depends on the
-@@ -560,9 +561,11 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
- 
- ADDRESS-DEPENDENCY BARRIERS (HISTORICAL)
- ----------------------------------------
--[!] This section is marked as HISTORICAL: For more up-to-date information,
--including how compiler transformations related to pointer comparisons can
--sometimes cause problems, see Documentation/RCU/rcu_dereference.rst.
-+[!] This section is marked as HISTORICAL: it covers the long-obsolete
-+smp_read_barrier_depends() macro, the semantics of which are now implicit
-+in all marked accesses.  For more up-to-date information, including
-+how compiler transformations can sometimes break address dependencies,
-+see Documentation/RCU/rcu_dereference.rst.
- 
- As of v4.15 of the Linux kernel, an smp_mb() was added to READ_ONCE() for
- DEC Alpha, which means that about the only people who need to pay attention
+ 	acpi_bus_get_status(adev);
+ 	if (!acpi_device_is_present(adev)) {
+-		acpi_scan_device_not_present(adev);
++		acpi_scan_device_not_enumerated(adev);
+ 		return 0;
+ 	}
+ 	if (handler && handler->hotplug.scan_dependent)
+-- 
+2.30.2
+
