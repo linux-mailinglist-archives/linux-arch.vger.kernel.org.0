@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CCC7D25A0
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Oct 2023 21:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABBC7D25AC
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Oct 2023 21:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjJVTkc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 22 Oct 2023 15:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S232330AbjJVTq3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 22 Oct 2023 15:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjJVTkb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Oct 2023 15:40:31 -0400
+        with ESMTP id S229500AbjJVTq2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Oct 2023 15:46:28 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C3EE;
-        Sun, 22 Oct 2023 12:40:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43352EE;
+        Sun, 22 Oct 2023 12:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mvXOsV7xKu7EdRR0C6tarbYLzv4UMUs1TlczcX3qS6Y=; b=RB7rSf1bTmjJS02tz6TUdTVNu1
-        q7KD11Y1/jx7GrbGtJtl+K4TLqWx8zWzNOgENzRgqdgmmCK/uyFvzhWenuMAvyqtZvDTX3akLon1c
-        sQbKLSRbOLgrvEm9J8KpkvQuht6EAukVEc3JMwfUx6EcUzBMZLb6l94XjviGm20hvMvjx4baYyJpr
-        eGr3cjxZ1J6l/AV0p6H8Dtyoz31AGruxitHH8KhxO8jrU7/T5pFPEO2Wqn1FbO1oPzvOtaHpOiTuG
-        4O22z012llqWMKc9MKlIz/b+ZJoVpvyfAwgdbGPudjM66QbC/6cJjuyPnCgn5SnSeuXfDJOgDel08
-        o9OpjrrQ==;
+        bh=xPiLUxU2U8e/9yv2aodnlynTGMAbarGa9WinOZ+Kyso=; b=apg2y4w9Dt6/HXTmfqNSPHnovP
+        /KhOjUO0GY15DWNYXYY4rb5qAqqQOJsmM/OX0gWcypUKbIyWyYtuZX9jCK8dCC+JuH5AlDk2qsEMR
+        xDYSxd4NNSkYDJhGV0zFpeoSwJeF2yS7Q1g6SzWpgD8e+ZG/NaLK6CtUKxGxXdz/poU0ZH1R+Xsgw
+        FjQkuBTQYJprFPr6Y8eIuza1H5SSSKxKfnm0oPmi6lxnDw9j+QZnNnmqOl3be63mflrh2U/0eSjJR
+        UIES6XJjSha2/JSyOTdOdFBUTF+j7DdQNEJICDfb1y06DMMkbLzFr05edreqf4IrLggszuQLhwwwy
+        OvJTrMlQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1queJA-0045HA-0n;
-        Sun, 22 Oct 2023 19:40:20 +0000
-Date:   Sun, 22 Oct 2023 20:40:20 +0100
+        id 1queOw-0045NN-2k;
+        Sun, 22 Oct 2023 19:46:18 +0000
+Date:   Sun, 22 Oct 2023 20:46:18 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     linux-arch@vger.kernel.org
 Cc:     gus Gusenleitner Klaus <gus@keba.com>,
@@ -42,11 +42,10 @@ Cc:     gus Gusenleitner Klaus <gus@keba.com>,
         "kuba@kernel.org" <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [RFC][PATCH] fix csum_and_copy_..._user() idiocy.  Re: AW: [PATCH]
- amd64: Fix csum_partial_copy_generic()
-Message-ID: <20231022194020.GA972254@ZenIV>
-References: <VI1PR0702MB3840EB26EF2A1A35BFEA53BFD9D5A@VI1PR0702MB3840.eurprd07.prod.outlook.com>
- <20231018154205.GT800259@ZenIV>
+Subject: Re: [RFC][PATCH] fix csum_and_copy_..._user() idiocy.  Re: AW:
+ [PATCH] amd64: Fix csum_partial_copy_generic()
+Message-ID: <20231022194618.GC800259@ZenIV>
+References: <20231018154205.GT800259@ZenIV>
  <VI1PR0702MB3840F2D594B9681BF2E0CD81D9D4A@VI1PR0702MB3840.eurprd07.prod.outlook.com>
  <20231019050250.GV800259@ZenIV>
  <20231019061427.GW800259@ZenIV>
@@ -55,10 +54,11 @@ References: <VI1PR0702MB3840EB26EF2A1A35BFEA53BFD9D5A@VI1PR0702MB3840.eurprd07.p
  <20231019080615.GY800259@ZenIV>
  <20231021071525.GA789610@ZenIV>
  <20231021222203.GA800259@ZenIV>
+ <20231022194020.GA972254@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231021222203.GA800259@ZenIV>
+In-Reply-To: <20231022194020.GA972254@ZenIV>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
@@ -69,79 +69,32 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 21, 2023 at 11:22:03PM +0100, Al Viro wrote:
-> On Sat, Oct 21, 2023 at 08:15:25AM +0100, Al Viro wrote:
-> 
-> > I don't think -rc7 is a good time for that, though.  At the
-> > very least it needs a review on linux-arch - I think I hadn't
-> > fucked the ABI for returning u64 up, but...
+On Sun, Oct 22, 2023 at 08:40:20PM +0100, Al Viro wrote:
+> On Sat, Oct 21, 2023 at 11:22:03PM +0100, Al Viro wrote:
+> > On Sat, Oct 21, 2023 at 08:15:25AM +0100, Al Viro wrote:
 > > 
-> > Anyway, completely untested patch follows:
+> > > I don't think -rc7 is a good time for that, though.  At the
+> > > very least it needs a review on linux-arch - I think I hadn't
+> > > fucked the ABI for returning u64 up, but...
+> > > 
+> > > Anyway, completely untested patch follows:
+> > 
+> > ... and now something that at least builds (with some brainos fixed); it's still
+> > slightly suboptimal representation on big-endian 32bit - there it would be better to
+> > have have the csum in upper half of the 64bit getting returned and use the lower
+> > half as fault indicator, but dealing with that cleanly takes some massage of
+> > includes in several places, so I'd left that alone for now.  In any case, the
+> > overhead of that is pretty much noise.
 > 
-> ... and now something that at least builds (with some brainos fixed); it's still
-> slightly suboptimal representation on big-endian 32bit - there it would be better to
-> have have the csum in upper half of the 64bit getting returned and use the lower
-> half as fault indicator, but dealing with that cleanly takes some massage of
-> includes in several places, so I'd left that alone for now.  In any case, the
-> overhead of that is pretty much noise.
+> OK, here's what I have in mind for the next cycle.  It's still untested (builds,
+> but that's it).  Conversion to including <net/checksum.h> rather than
+> <asm/checksum.h> is going to get carved out into a separate patch.
+> I _think_ I've got the asm parts (and ABI for returning 64bit) right,
+> but I would really appreciate review and testing.
 
-OK, here's what I have in mind for the next cycle.  It's still untested (builds,
-but that's it).  Conversion to including <net/checksum.h> rather than
-<asm/checksum.h> is going to get carved out into a separate patch.
-I _think_ I've got the asm parts (and ABI for returning 64bit) right,
-but I would really appreciate review and testing.
+Gyah....  What I got wrong is the lib/iov_iter.c part - check for faults is
+backwards ;-/  Hopefully fixed variant follows:
 
-
-Fix the csum_and_copy_..._user() idiocy
-
-We need a way for csum_and_copy_{from,to}_user() to report faults.
-The approach taken back in 2020 (avoid 0 as return value by starting
-summing from ~0U, use 0 to report faults) had been broken; it does
-yield the right value modulo 2^16-1, but the case when data is
-entirely zero-filled is not handled right.  It almost works, since
-for most of the codepaths we have a non-zero value added in
-and there 0 is not different from anything divisible by 0xffff.
-However, there are cases (ICMPv4 replies, for example) where we
-are not guaranteed that.
-
-In other words, we really need to have those primitives return 0
-on filled-with-zeroes input.  So let's make them return a 64bit
-value instead; we can do that cheaply (all supported architectures
-do that via a couple of registers) and we can use that to report
-faults without disturbing the 32bit csum.
-
-New type: __wsum_fault.  64bit, returned by csum_and_copy_..._user().
-Primitives:
-	* CSUM_FAULT representing the fault
-	* to_wsum_fault() folding __wsum value into that
-	* from_wsum_fault() extracting __wsum value
-	* wsum_fault_check() checking if it's a fault value
-
-Representation depends upon the target.
-	CSUM_FAULT: ~0ULL
-	to_wsum_fault(v32): (u64)v32 for 64bit and 32bit l-e,
-(u64)v32 << 32 for 32bit b-e.
-
-Rationale: relationship between the calling conventions for returning 64bit 
-and those for returning 32bit values.  On 64bit architectures the same
-register is used; on 32bit l-e the lower half of the value goes in the
-same register that is used for returning 32bit values and the upper half
-goes into additional register.  On 32bit b-e the opposite happens -
-upper 32 bits go into the register used for returning 32bit values and
-the lower 32 bits get stuffed into additional register.
-
-So with this choice of representation we need minimal changes on the
-asm side (zero an extra register in 32bit case, nothing in 64bit case),
-and from_wsum_fault() is as cheap as it gets.
-
-Sum calculation is back to "start from 0".
-
-X-paperbag: brown
-Fixes: c693cc4676a0 "saner calling conventions for csum_and_copy_..._user()"
-Fucked-up-by: Al Viro <viro@zeniv.linux.org.uk>
-Reported-by: gus Gusenleitner Klaus <gus@keba.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
 diff --git a/arch/alpha/include/asm/asm-prototypes.h b/arch/alpha/include/asm/asm-prototypes.h
 index c8ae46fc2e74..0cf90f406d00 100644
 --- a/arch/alpha/include/asm/asm-prototypes.h
@@ -1615,7 +1568,7 @@ index 0eed92b77ba3..971e7824893b 100644
  #define MAX_LEN 512
  #define MAX_ALIGN 64
 diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 27234a820eeb..076ff222ee39 100644
+index 27234a820eeb..0da8f36ce341 100644
 --- a/lib/iov_iter.c
 +++ b/lib/iov_iter.c
 @@ -1184,15 +1184,16 @@ EXPORT_SYMBOL(iov_iter_get_pages_alloc2);
@@ -1634,7 +1587,7 @@ index 27234a820eeb..076ff222ee39 100644
 -		sum = csum_block_add(sum, next, off);
 -		next ? 0 : len;
 +		sum = csum_block_add(sum, from_wsum_fault(next), off);
-+		unlikely(wsum_fault_check(next)) ? 0 : len;
++		likely(!wsum_fault_check(next)) ? 0 : len;
  	}), ({
  		sum = csum_and_memcpy(addr + off, base, len, sum, off);
  	})
@@ -1655,7 +1608,7 @@ index 27234a820eeb..076ff222ee39 100644
 -		sum = csum_block_add(sum, next, off);
 -		next ? 0 : len;
 +		sum = csum_block_add(sum, from_wsum_fault(next), off);
-+		unlikely(wsum_fault_check(next)) ? 0 : len;
++		likely(!wsum_fault_check(next)) ? 0 : len;
  	}), ({
  		sum = csum_and_memcpy(base, addr + off, len, sum, off);
  	})
