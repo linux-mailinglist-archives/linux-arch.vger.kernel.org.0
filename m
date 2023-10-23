@@ -2,130 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FC37D2B42
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Oct 2023 09:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DF77D2C21
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Oct 2023 10:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbjJWH1f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Oct 2023 03:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S229593AbjJWIDH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Oct 2023 04:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233463AbjJWH1e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Oct 2023 03:27:34 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774C0D6B;
-        Mon, 23 Oct 2023 00:27:31 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231023072728epoutp016f16d270b9d58d77a3df83a636430be8~Qq_JRhUIp1250612506epoutp01L;
-        Mon, 23 Oct 2023 07:27:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231023072728epoutp016f16d270b9d58d77a3df83a636430be8~Qq_JRhUIp1250612506epoutp01L
+        with ESMTP id S229574AbjJWIDF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Oct 2023 04:03:05 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C9D10C4;
+        Mon, 23 Oct 2023 01:03:00 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231023080258epoutp0415e688a9ab35ee365957a92bdd5d060e~QrdI9hV2X0433704337epoutp04k;
+        Mon, 23 Oct 2023 08:02:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231023080258epoutp0415e688a9ab35ee365957a92bdd5d060e~QrdI9hV2X0433704337epoutp04k
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1698046048;
-        bh=yQ0o45G+VG1R4BSnMeP2FwuyP8TuVxRSYxt30sCvGNU=;
+        s=mail20170921; t=1698048178;
+        bh=AACSYwStM2Fj3YRgCcuvQYmMDqXUgVQCwVuy+yFJJfU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vWYv5YdIqTb8esz/7oR57rVdrqQiQW9bXDca8BNdaR4ZY3WdofGJiE8CuQjHf2HLk
-         CksB44uQ7Cwl6cRBx5dgShygTWEKAZiKeokXTu4VPGDUWLw+tj7S9/6kDD0WvlC+iM
-         //7xf1s/6FWok/KbWp9xlHw5Xn6dt7rRjL6/WqUI=
+        b=C2i54pr8WrkMTXO05efoz5ahzb1e8OynmLqKGA7rV+1xNvaXw7aRGtdqzYfw9BcMf
+         ySljRnS5a3+rjcTLGpCHhQ2eP47qr3UKvE5JWgCLFMAVNcykcukaZNmeurE9ddZ6tt
+         fQSgrIlyAdvoXGT/bMR+yjqCVUKFgxbrul8jZtFw=
 Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20231023072727epcas2p4eb120f3e7d6e0b6a0a76ae809bcf413e~Qq_I3l0GM2774427744epcas2p4m;
-        Mon, 23 Oct 2023 07:27:27 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4SDRbg0FN6z4x9Q1; Mon, 23 Oct
-        2023 07:27:27 +0000 (GMT)
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20231023080257epcas2p3d49beb068b29d8d3bfa396d29ad9f634~QrdIpeO570450704507epcas2p3Q;
+        Mon, 23 Oct 2023 08:02:57 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4SDSNd05j1z4x9Q9; Mon, 23 Oct
+        2023 08:02:57 +0000 (GMT)
 Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7D.5A.10006.E5026356; Mon, 23 Oct 2023 16:27:26 +0900 (KST)
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D7.76.09622.0B826356; Mon, 23 Oct 2023 17:02:56 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20231023072726epcas2p22a956be89b7f25f9edf2faff418e507a~Qq_HuFV_g1856218562epcas2p2J;
-        Mon, 23 Oct 2023 07:27:26 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20231023080256epcas2p327a8a17e7d92f5c58e010d0b7e153be0~QrdHhRHlZ2526025260epcas2p3C;
+        Mon, 23 Oct 2023 08:02:56 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231023072726epsmtrp243c3957bce73fbbad6710deba8333a18~Qq_Hsw4u43069830698epsmtrp2B;
-        Mon, 23 Oct 2023 07:27:26 +0000 (GMT)
-X-AuditID: b6c32a45-3ebfd70000002716-b6-6536205e5a1e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3C.BF.08755.E5026356; Mon, 23 Oct 2023 16:27:26 +0900 (KST)
-Received: from tiffany (unknown [10.229.95.142]) by epsmtip1.samsung.com
+        20231023080256epsmtrp2f6390c094fa52e7b213a55464083f04b~QrdHfpZG61878518785epsmtrp2Q;
+        Mon, 23 Oct 2023 08:02:56 +0000 (GMT)
+X-AuditID: b6c32a46-fcdfd70000002596-5a-653628b0189b
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D0.DF.18939.0B826356; Mon, 23 Oct 2023 17:02:56 +0900 (KST)
+Received: from tiffany (unknown [10.229.95.142]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20231023072725epsmtip1ca6761ce4659bf69cb32b5496d0bcbf8~Qq_HPonl_2906329063epsmtip1Q;
-        Mon, 23 Oct 2023 07:27:25 +0000 (GMT)
-Date:   Mon, 23 Oct 2023 16:16:56 +0900
+        20231023080256epsmtip22527cb7f5cd0fc263896ab2c4f53fa14~QrdHH64gP1774517745epsmtip2i;
+        Mon, 23 Oct 2023 08:02:56 +0000 (GMT)
+Date:   Mon, 23 Oct 2023 16:52:29 +0900
 From:   Hyesoo Yu <hyesoo.yu@samsung.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        oliver.upton@linux.dev, maz@kernel.org, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com, arnd@arndb.de,
-        akpm@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
-        pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
+To:     Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+        maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+        yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+        rppt@kernel.org, hughd@google.com, pcc@google.com,
+        steven.price@arm.com, anshuman.khandual@arm.com,
         vincenzo.frascino@arm.com, david@redhat.com, eugenis@google.com,
         kcc@google.com, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
         linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH RFC 06/37] mm: page_alloc: Allocate from movable pcp
- lists only if ALLOC_FROM_METADATA
-Message-ID: <20231023071656.GA344850@tiffany>
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 04/37] mm: Add MIGRATE_METADATA allocation policy
+Message-ID: <20231023075229.GB344850@tiffany>
 MIME-Version: 1.0
-In-Reply-To: <ZS5hXFHs08zQOboi@arm.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbVRj39N7eFgQtjOEZSybr5hTk0SItZwbYsiG5OmcwEolOxAo3tFBK
-        1xajMgQW5LFsg4FM3mLmYCCPpYBAVwpSXgXC5pZN3jgeBYlQYY5m4JgXLjP77/f9Ht93Hvm4
-        mKOJ48KVKTSUSiGR8wlb/BejG/L81FVMCRbSECqpryHQ91V3CGToi0SPc3s46PbMXZr6MxVH
-        lorzAD2sX8fQXE4Thn4tX8bR3OpFHE0ZKlloIjsfR83mJRZabDTiKFP3EEfamXtspG8z4eiO
-        roRAkzVP2Ki1xMRGectmgK5UHkK3O8pZKP/RXwTKHv+dQL0XOljIkPkHC3XVN7NQapeFQIVj
-        YwBldq1hqG3zEY6auq0clDYuQiNXr3OOHiRrymoAubGeC8g0wyiHLNcmkGldS2yy4Zo7qa3O
-        Ikjtai6HHL+nJ8i+gg2c/DElHyMbfkomFxoKAWkx3CXIhoFE8oF2Xwjv41h/KSWJolSulCIy
-        PkqmiA7gn/gg4niESCwQegoPIz++q0ISRwXwg94N8QyWyel35Lt+IZEn0FSIRK3mewf6q+IT
-        NJSrNF6tCeBTyii50k/ppZbEqRMU0V4KSvOmUCDwEdHGz2Kl88UnlEsvfmkxnUoBs3bngA0X
-        8nyh+fwUfg7Ych15LQBOVk5jTLEK4CVL4Y6yBmBGRzbnaaR7zEIwQhuA/1Tp2EwxB2DKoJm1
-        5cJ5r8CVDv12guC9CvsaK8AWduJ5wlvp3223xXg6AlpNWnxL2MWTw5xp3bbJnjY1behZDHaA
-        psLZbY8N3eiutRFshSEv3RbWZ5lpgUMXQbDlJHO6XXCxt3HnpC7wwXIbweBYOLGSs4M1sG4w
-        ZcfzBiwyZ2yPxXhSqDfcou/PpfkDsGsUZ+gXYKbxMYeh7WFmuiOTPADbK8pwBu+B07UZbMZC
-        wqyVZOZFrrJge5qRnQP2FT1zl6JnhjHYA5bfWCWK6DjG2wsrN7kMdIP1Ou9ywK4GzpRSHRdN
-        qX2Uwv9/NzI+Tgu2d8r9rRaQt/S3VydgcUEngFyM72RfHOZLOdpHSb76mlLFR6gS5JS6E4jo
-        n7mEueyOjKeXUqGJEPoeFviKxUI/H5HAj/+S/eS3pVGOvGiJhoqlKCWleppjcW1cUlivBwXL
-        k6rOfPLytbHTxUNhRr8ZTox1JEkluJlwUXev7pCHl5ODtS7JOnQ6PFL/nne7SOZc1qrH+z8f
-        jCnYxNknW21q3xeP5ThmhEe2KTx/W+k+q4+SxSqcZOv2x68fXRi2C7hidnq+f0/S8OiK24VQ
-        N1ne7g0C24xxdgh3ST47bmf1EQxUr7Y5/4x9FDjiccYU6jAbWu0XflnxTXR9wN7guqFhpf+N
-        y9a1qYNqq5FddKz/uQmxtLly1rb3w3f4nsLE0nmtc0/wkzhLg9f9Hq6oJDjVrlR85AfNfMXN
-        QONrYVL/niMDBWH3RcX+ik5ZSXNio6H21NtzIfvj8kr6/l1sOsbH1VKJ0B1TqSX/AZTw3Tfc
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0wbdRjH/d1dr0dN41lmuP0JNnUbQkYHzcQnbBqjb04TErO5LWFmesIF
-        iG2pLWwTY+gyZAw3V7F1Fhh2wVFGOoG2CNZSEcqg/DFbJ5sbVJw4LI2jUAQGRLSlMe7dN8/n
-        +3meNw+FS4yCLVSRuoTXqjmljBQR3/TJktOPSrP4jHuXBFDfaiPhwpWbJHgG8+DvmmtC8E+N
-        RUczJwkIN51FsNi6isN9QwcOP1hmCbgf+YSASY8Vg8B5EwGd0w8wCDn7CKhyLRJgn7olAHe3
-        j4CbrnoSfrH9I4Bv630C+Gx2GkGjdSf4eywYmFb+JOH8xG0SBs71YOCp+hUDb2snBie9YRLM
-        4+MIqrxLOHSvrxDQ0b8shIqJ5+DO5TbhS9tZW4MNsWurNYit8NwVshZ7KVvhfSBgHc1prL3l
-        DMnaIzVCduKWm2QHv1gj2Et6E846vipngw4zYsOeMZJ1DH/ALtiTX6dzRfvyeWXRMV67+8W3
-        RYWh7kpcc1V8wuufQ3rULapGCRRD72H6x8NkNRJREvo7xDSaKlEcbGZqF3xYPCcykxVeQbw0
-        hZjFhggRAwS9g5nvcQtjmaRTmEFn04a8iU5nrlcaiZiA026SqV65S8ZAIq1kDL+5NkriaKlj
-        zY3Ft1oxxlhnFcTBk4zP/PvGBZxOY35en4mWqGjeyljXqdg4IXpsbNmJDIiufcSofcSo/d+w
-        ILwFbeY1OlWBSpepyVTzx+U6TqUrVRfI84pVdrTxOGmpXaizZU7eizAK9SKGwmWbxHWH9/AS
-        cT73fhmvLX5LW6rkdb1oK0XIksRJwXP5ErqAK+Hf5XkNr/2PYlTCFj32qTP34ILzna/9bTMX
-        PFd72hWGU2ek5aMmedbTWV1m5VnV86FrhZn20NDxMBbufCJP1VypHO43u9tzZw1yJvuiRR/Y
-        ZSdfeKwvRdLWmPFKgPtpqSHljYD4KcuhVFej+rKkbGmIHVb3Gl/7a/+4edfI6qHbOdukkm3t
-        ftNufmAtwq0nCovDzx7UU59/dPrDBt/RvUklzVyT1KS5kZPjatk5Gmg/XahWlH2pvvNe6rSt
-        nyia304oRg/M/nEi+9jQyIHsGwM/ll9cLrn+TCQo3aeYL3YYj4yYPuYWku89vvdI8PuOpZfr
-        cucmHza9+VDRtcM7U5Oe3vqqOyP5VFBTHwkldckIXSGXmYZrddy/l57xSKcDAAA=
-X-CMS-MailID: 20231023072726epcas2p22a956be89b7f25f9edf2faff418e507a
+In-Reply-To: <ZS0vRz6PlUJM8MN9@monolith>
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTdxTHvY/eFhbctSj7rTOGXaNDFGgrjx8GlsURchdZgnPJJmzDpr2j
+        CJSmLcxhFkBAKuhAHOMhsjoQmBZw5Y2UZycvTQYEjLxUkAbJoI7HkJeucNH43+ec3/fke37n
+        5PAwfi9XwAtTaBiVQhJBEbZ4TfsB6HLbyZMR/pblAfMr9ATM/qOfgE2dUrieeZcL+yYGrKln
+        CTi0FF9E4GLFCgYnM6ox2KqbxeHk3M84fNRUgsLR9Cwc1ppnUDhd1Y5DbcMiDg0TgxzYaOzC
+        YX9DPgHH9K840FRxH4f1+V0ceGXWjMDCkv2wr0WHwqzlfwiYPvKAgB2XWlDYpH2MWrW1KEww
+        WQiYOzyMQK3pPwwaXy7jsPqvJS5MGvGAD2/c5n6yj9YX6BF6dSUToZOahri0zhBNJ5lmOHRl
+        qTNtuHmBoA1zmVx6ZLCRoDtzVnH6enwWRlcWxdFTlbkIbWkaIOjKnrP0vGFPIBkU7iNnJDJG
+        5cgopFGyMEWoL3XsRMinIR6eQpGLyBt6UY4KSSTjS/kFBLr4h0VYh0k5xkgioq2pQIlaTbl9
+        7KOKitYwjvIotcaXYpSyCKWX0lUtiVRHK0JdFYzmiEgoFHtYhafC5Ql9TzjKooNnFhLNaDxS
+        RqUiNjxAuoOhmhwiFbHl8ck6BKwNryNsMIeAkuYV4k3wPPE+93WJSbuObzCfrEfAi+XvWNEk
+        Asw5LZsinNwHjKkXsQ0myI9AZ1UxssE7STcwXj29aYGR3QQYvXoP3XiwJz8DWZaETbYjXUBZ
+        oQFjeQfoyn1qdePxbEgnULPMbNQCMtUWzFZMc9iO/MD1+UcYy/ZguqNqq1MBmJ81EiyHg9F/
+        M7ZYA8rvxW9pDoM8c8pmcxgpB3mjDZwNL0DuBaYhnE1vB9r2dS6btgPa83y2ci9oLi7AWX4f
+        jJelbHVDA0OPEWVnokVBT1opkYHsyXvrN3lvubF8COjuzBF5VguM/ACUvOSxeABUNLjpEM5N
+        xIFRqiNDGbVYKX6zYGlUpAHZvC1n/zrkl5nnrm0IykPaEMDDqJ12V79yZ/h2MsmPsYwqKkQV
+        HcGo2xAP624uY4Jd0ijrcSo0ISJ3b6G7p6fIS+wh9KLesxtLvibjk6ESDRPOMEpG9boO5dkI
+        4tGieUpvYYxyXF8bpFPt3p0Miw9XdH9rzE6v9Qw6/qFM2VIvGzKNSLN9+VfmwGT2/CGt/0T1
+        QOzJoyWl54xHErIzyCSX8e11nrrBqonyvsdd9msB3aeeLjyrFR998cC7/LwoKbh95DSzyp+O
+        yTstuxVu6vQOPlHs6/cDb1H/au2b35e8XM/5mR3wVuGto5o/L/xEfb/tpPTajgDdrjvliaZ8
+        h/A0Nb8zblAOv/6y/11BWmLjFwLbs4LAu5MzT9xqkhd/1WreiS3Yn1Q15fR3b3C3Je5SdGDr
+        DfFxKsWSG+Oz2jjZ3HMmYigS70hp5izHFB4EU8aF4Lax3m2fL9HHYuBDClfLJSJnTKWW/A+g
+        MGdE5AQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEKsWRmVeSWpSXmKPExsWy7bCSvO4GDbNUg6k7+S3mrF/DZjF95WU2
+        i30nki3+TjrGbnHp8VWg0MtGFov3y3oYLb6u/8Vs8XTCVmaLgwvesVg8/dTHYnF/33Imi7v9
+        U1kstj97y2TxasthFouOXV9ZLDY9vsZqsWfvSRaLy7vmsFncW/Of1eLI+rMsFjvnnGS1mPzu
+        GaPF4uVqFpcOLGCymPrzDZtF/53rbBbHew8wWezreMAEVLudyaLxyHs2i5m3bzNadBz5xmyx
+        999PFoutR7+zW7TcMbW4uXQDu4Oqx5p5axg9fv+axOjRsu8Wu8eCTaUeLUfesnpsXqHlsWlV
+        J5vHpk+T2D3uXNvD5nFixm8Wj4UNU5k9Ni+p93ixeSajx/t9V9k8Np+u9vi8SS5AIIrLJiU1
+        J7MstUjfLoEro3faDraCJxoVB+e/ZW9gbFPoYuTkkBAwkTjS8ZcFxBYS2M4o8eBTPkRcUmLW
+        55NMELawxP2WI6xdjFxANY8ZJaZsnskKkmARUJXY29XDDGKzCahLnNiyjBHEFhHQl3i09RUj
+        SAOzwBk2ib7Vs8AahAU8Jaa+bwSbyiugK7F28SZmiM1dTBKtJ30h4oISJ2c+AbuIWUBL4sa/
+        l0D1HEC2tMTyfxwgJqeAhsS2n6kTGAVmIWmYhaRhFkLDAkbmVYyiqQXFuem5yQWGesWJucWl
+        eel6yfm5mxjByUYraAfjsvV/9Q4xMnEwHmKU4GBWEuGdHW6SKsSbklhZlVqUH19UmpNafIhR
+        moNFSZxXOaczRUggPbEkNTs1tSC1CCbLxMEp1cCkGqW3+q7KBPn7OtGcT1fMNi5XlD/2ZmLH
+        lPXPslTCTtZfE3Ep8xD5ZZT4ITzginPRoz8rnI63mMkKmSue/WghVr6vVFQgfVHxH60DCSUK
+        IpEfGFSWGv3b/unGxj2sC6TWuMcFluqo35P4GMlePfWOr/89Jhez4xmnVfWnV5grXeibP2dB
+        3okpH8LFV3wvDvOTur+58n5b34OFfhPmb2DaH3k9XDb88OlFGhvmae7mbmx1YJvP29Hp9POU
+        qv9dm4ajTU3fa6Jn25pr/VsanqN38qr8sQm7J0128Z26uWSSnMqf97oHlfacF5vq/ryqw6F4
+        w7q6zKyz+TyZG6ccdiwNLkl5PZlFu/Tw9XgtkQ1KLMUZiYZazEXFiQCNL+iFpQMAAA==
+X-CMS-MailID: 20231023080256epcas2p327a8a17e7d92f5c58e010d0b7e153be0
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-        boundary="----kpWfbNyO0dZ94JZMx8UaZzOLaVw4Eds-FlcQ7ND7-zj3ifPP=_5344b_"
+        boundary="----QkVgGvrvWiyli5pqMJpqhgOu5Z7YYftLzn.eTqKOKf81mxr7=_53dc1_"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231012013524epcas2p4b50f306e3e4d0b937b31f978022844e5
+X-CMS-RootMailID: 20231012013834epcas2p28ff3162673294077caef3b0794b69e72
 References: <20230823131350.114942-1-alexandru.elisei@arm.com>
-        <20230823131350.114942-7-alexandru.elisei@arm.com>
-        <CGME20231012013524epcas2p4b50f306e3e4d0b937b31f978022844e5@epcas2p4.samsung.com>
-        <20231010074823.GA2536665@tiffany> <ZS0va9nICZo8bF03@monolith>
-        <ZS5hXFHs08zQOboi@arm.com>
+        <20230823131350.114942-5-alexandru.elisei@arm.com>
+        <CGME20231012013834epcas2p28ff3162673294077caef3b0794b69e72@epcas2p2.samsung.com>
+        <20231012012824.GA2426387@tiffany> <ZS0vRz6PlUJM8MN9@monolith>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
@@ -136,56 +134,123 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-------kpWfbNyO0dZ94JZMx8UaZzOLaVw4Eds-FlcQ7ND7-zj3ifPP=_5344b_
+------QkVgGvrvWiyli5pqMJpqhgOu5Z7YYftLzn.eTqKOKf81mxr7=_53dc1_
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 
-On Tue, Oct 17, 2023 at 11:26:36AM +0100, Catalin Marinas wrote:
-> On Mon, Oct 16, 2023 at 01:41:15PM +0100, Alexandru Elisei wrote:
-> > On Thu, Oct 12, 2023 at 10:25:11AM +0900, Hyesoo Yu wrote:
-> > > I don't think it would be effcient when the majority of movable pages
-> > > do not use GFP_TAGGED.
-> > > 
-> > > Metadata pages have a low probability of being in the pcp list
-> > > because metadata pages is bypassed when freeing pages.
-> > > 
-> > > The allocation performance of most movable pages is likely to decrease
-> > > if only the request with ALLOC_FROM_METADATA could be allocated.
-> > 
-> > You're right, I hadn't considered that.
-> > 
-> > > 
-> > > How about not including metadata pages in the pcp list at all ?
-> > 
-> > Sounds reasonable, I will keep it in mind for the next iteration of the
-> > series.
+On Mon, Oct 16, 2023 at 01:40:39PM +0100, Alexandru Elisei wrote:
+> Hello,
 > 
-> BTW, I suggest for the next iteration we drop MIGRATE_METADATA, only use
-> CMA and assume that the tag storage itself supports tagging. Hopefully
-> it makes the patches a bit simpler.
+> On Thu, Oct 12, 2023 at 10:28:24AM +0900, Hyesoo Yu wrote:
+> > On Wed, Aug 23, 2023 at 02:13:17PM +0100, Alexandru Elisei wrote:
+> > > Some architectures implement hardware memory coloring to catch incorrect
+> > > usage of memory allocation. One such architecture is arm64, which calls its
+> > > hardware implementation Memory Tagging Extension.
+> > > 
+> > > So far, the memory which stores the metadata has been configured by
+> > > firmware and hidden from Linux. For arm64, it is impossible to to have the
+> > > entire system RAM allocated with metadata because executable memory cannot
+> > > be tagged. Furthermore, in practice, only a chunk of all the memory that
+> > > can have tags is actually used as tagged. which leaves a portion of
+> > > metadata memory unused. As such, it would be beneficial to use this memory,
+> > > which so far has been unaccessible to Linux, to service allocation
+> > > requests. To prepare for exposing this metadata memory a new migratetype is
+> > > being added to the page allocator, called MIGRATE_METADATA.
+> > > 
+> > > One important aspect is that for arm64 the memory that stores metadata
+> > > cannot have metadata associated with it, it can only be used to store
+> > > metadata for other pages. This means that the page allocator will *not*
+> > > allocate from this migratetype if at least one of the following is true:
+> > > 
+> > > - The allocation also needs metadata to be allocated.
+> > > - The allocation isn't movable. A metadata page storing data must be
+> > >   able to be migrated at any given time so it can be repurposed to store
+> > >   metadata.
+> > > 
+> > > Both cases are specific to arm64's implementation of memory metadata.
+> > > 
+> > > For now, metadata storage pages management is disabled, and it will be
+> > > enabled once the architecture-specific handling is added.
+> > > 
+> > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> > > ---
+> > > [..]
+> > > @@ -2144,6 +2156,15 @@ __rmqueue(struct zone *zone, unsigned int order, int migratetype,
+> > >  		if (alloc_flags & ALLOC_CMA)
+> > >  			page = __rmqueue_cma_fallback(zone, order);
+> > >  
+> > > +		/*
+> > > +		 * Allocate data pages from MIGRATE_METADATA only if the regular
+> > > +		 * allocation path fails to increase the chance that the
+> > > +		 * metadata page is available when the associated data page
+> > > +		 * needs it.
+> > > +		 */
+> > > +		if (!page && (alloc_flags & ALLOC_FROM_METADATA))
+> > > +			page = __rmqueue_metadata_fallback(zone, order);
+> > > +
+> > 
+> > Hi!
+> > 
+> > I guess it would cause non-movable page starving issue as CMA.
+> 
+> I don't understand what you mean by "non-movable page starving issue as
+> CMA". Would you care to elaborate?
 > 
 
-I am curious about the plan for the next iteration.
+Before below patch, I frequently encountered situations where there was free CMA memory
+available but the allocation of unmovable page failed. That patch has improved this
+issue. ("mm,page_alloc,cma: conditionally prefer cma pageblocks for movable allocations)
+https://lore.kernel.org/linux-mm/20200306150102.3e77354b@imladris.surriel.com/
 
-Does tag storage itself supports tagging? Will the following version be unusable
-if the hardware does not support it? The document of google said that 
-"If this memory is itself mapped as Tagged Normal (which should not happen!)
-then tag updates on it either raise a fault or do nothing, but never change the
-contents of any other page."
-(https://github.com/google/sanitizers/blob/master/mte-dynamic-carveout/spec.md)
+I guess it would be beneficial to add a policy for effectively utilizing the metadata
+area as well. I think migration is cheaper than app killing or swap in terms
+of performance.
 
-The support of H/W is very welcome because it is good to make the patches simpler.
-But if H/W doesn't support it, Can't the new solution be used?
+But, if the next iteration tries to use only cma, as discussed in recent mailing lists,
+I think this concern would be fine.
 
 Thanks,
 Regards.
 
-> -- 
-> Catalin
+> > The metadata pages cannot be used for non-movable allocations.
+> > Metadata pages are utilized poorly, non-movable allocations may end up
+> > getting starved if all regular movable pages are allocated and the only
+> > pages left are metadata. If the system has a lot of CMA pages, then
+> > this problem would become more bad. I think it would be better to make
+> > use of it in places where performance is not critical, including some
+> > GFP_METADATA ?
+> 
+> GFP_METADATA pages must be used only for movable allocations. The kernel
+> must be able to migrate GFP_METADATA pages (if they have been allocated)
+> when they are reserved to serve as tag storage for a newly allocated tagged
+> page.
+> 
+> If you are referring to the fact that GFP_METADATA pages are allocated only
+> when there are no more free pages in the zone, then yes, I can understand
+> that that might be an issue. However, it's worth keeping in mind that if a
+> GFP_METADATA page is in use when it needs to be repurposed to serve as tag
+> storage, its contents must be migrated first, and this is obviously slow.
+> 
+> To put it another way, the more eager the page allocator is to allocate
+> from GFP_METADATA, the slower it will be to allocate tagged pages because
+> reserving the corresponding tag storage will be slow due to migration.
+> 
+> Before making a decision, I think it would be very helpful to run
+> performance tests with different allocation policies for GFP_METADATA. But I
+> would say that it's a bit premature for that, and I think it would be best
+> to wait until the series stabilizes.
+> 
+> And thank you for the feedback!
+> 
+> Alex
+> 
+> > 
+> > Thanks,
+> > Hyesoo Yu.
 > 
 
-------kpWfbNyO0dZ94JZMx8UaZzOLaVw4Eds-FlcQ7ND7-zj3ifPP=_5344b_
+------QkVgGvrvWiyli5pqMJpqhgOu5Z7YYftLzn.eTqKOKf81mxr7=_53dc1_
 Content-Type: text/plain; charset="utf-8"
 
 
-------kpWfbNyO0dZ94JZMx8UaZzOLaVw4Eds-FlcQ7ND7-zj3ifPP=_5344b_--
+------QkVgGvrvWiyli5pqMJpqhgOu5Z7YYftLzn.eTqKOKf81mxr7=_53dc1_--
