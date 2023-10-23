@@ -2,103 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECCC7D3CDF
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Oct 2023 18:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5347D3D11
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Oct 2023 19:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjJWQwg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Oct 2023 12:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S229452AbjJWRIg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Oct 2023 13:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjJWQwg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Oct 2023 12:52:36 -0400
+        with ESMTP id S229870AbjJWRIf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Oct 2023 13:08:35 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478B1DB;
-        Mon, 23 Oct 2023 09:52:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5199C433C9;
-        Mon, 23 Oct 2023 16:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698079953;
-        bh=nCtnA++YH4GS3eG6W2wL2J30XXMWQEHO20vUYEFJw1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JNJRQ99IjKvayYTywMrhrwcvTxawuFRCQPVt8FxvXRfpypDLUJoCIvwcy7nCJOyxt
-         0tTrh9YBE4II+a8SjnIjo6c3EU4t4IoebfYWcg88gJAytZb+RXpZpTAPjrt8u8oihD
-         Qr4ajVFRo6jqcvyloTtNgGa6itseIG9AdFTG+DqK/G4H76sTAckI6nSZeEuAQkQzZk
-         HPSmChtWH7n+fjTPEQjDY97JfSjcswZJVfdPwxStcdMDD9Z7seGHWwECmRWJUz62g6
-         VQX1MoVxkR/NF7LqnG3unpfpSS6vWPO7ZY3Pm2ZpQf0RNQhxoIBVK3k4zWpyKg7mHk
-         IjLzOLdTImEng==
-Date:   Tue, 24 Oct 2023 00:40:20 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     "Schaffner, Tobias" <tobias.schaffner@siemens.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "minda.chen@starfivetech.com" <minda.chen@starfivetech.com>
-Subject: Re: [PATCH RT 0/3] riscv: add PREEMPT_RT support
-Message-ID: <ZTah9NOMbZkf6dfL@xhacker>
-References: <20230510162406.1955-1-jszhang@kernel.org>
- <a37fc706-78cd-4721-9af3-aabb610f49b1@siemens.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73AFD79;
+        Mon, 23 Oct 2023 10:08:33 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EBAEC433C8;
+        Mon, 23 Oct 2023 17:08:24 +0000 (UTC)
+Date:   Mon, 23 Oct 2023 18:08:21 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Hyesoo Yu <hyesoo.yu@samsung.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        oliver.upton@linux.dev, maz@kernel.org, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com, arnd@arndb.de,
+        akpm@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
+        pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
+        vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH RFC 06/37] mm: page_alloc: Allocate from movable pcp
+ lists only if ALLOC_FROM_METADATA
+Message-ID: <ZTaohewXhtkqoLZD@arm.com>
+References: <20230823131350.114942-1-alexandru.elisei@arm.com>
+ <20230823131350.114942-7-alexandru.elisei@arm.com>
+ <CGME20231012013524epcas2p4b50f306e3e4d0b937b31f978022844e5@epcas2p4.samsung.com>
+ <20231010074823.GA2536665@tiffany>
+ <ZS0va9nICZo8bF03@monolith>
+ <ZS5hXFHs08zQOboi@arm.com>
+ <20231023071656.GA344850@tiffany>
+ <ZTZP66CA1r35yTmp@arm.com>
+ <25fad62e-b1d9-4d63-9d95-08c010756231@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a37fc706-78cd-4721-9af3-aabb610f49b1@siemens.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <25fad62e-b1d9-4d63-9d95-08c010756231@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 04:33:13PM +0000, Schaffner, Tobias wrote:
-> On 10.05.23 18:24, Jisheng Zhang wrote:
-> > This series is to add PREEMPT_RT support to riscv. Compared with last
-> > try[1], there are two major changes:
+On Mon, Oct 23, 2023 at 01:55:12PM +0200, David Hildenbrand wrote:
+> On 23.10.23 12:50, Catalin Marinas wrote:
+> > On Mon, Oct 23, 2023 at 04:16:56PM +0900, Hyesoo Yu wrote:
+> > > Does tag storage itself supports tagging? Will the following version be unusable
+> > > if the hardware does not support it? The document of google said that
+> > > "If this memory is itself mapped as Tagged Normal (which should not happen!)
+> > > then tag updates on it either raise a fault or do nothing, but never change the
+> > > contents of any other page."
+> > > (https://github.com/google/sanitizers/blob/master/mte-dynamic-carveout/spec.md)
+> > > 
+> > > The support of H/W is very welcome because it is good to make the patches simpler.
+> > > But if H/W doesn't support it, Can't the new solution be used?
 > > 
-> > 1. riscv has been converted to Generic Entry. And riscv uses
-> > asm-generic/preeempt.h, so we need to patch asm-generic's preeempt to
-> > enable lazy preempt support for riscv. This is what patch1 does.
-> > However, it duplicates the preempt_lazy_count() defintion, I'm sure
-> > there must be an elegant solution. Neverless, it doesn't impact the
-> > riscv PREEMPT_RT support itself.
-> > 
-> > 2. three preparation patches(patch1/2/3 in [1]) has been merged in
-> > mainline.
-> > 
-> > I back-ported the lastest linux-6.3.y-rt patches to the lastest Linus tree,
-> > then cook this series.
-> > 
-> > Link: https://lore.kernel.org/linux-riscv/20220831175920.2806-1-jszhang@kernel.org/
+> > AFAIK on the current interconnects this is supported but the offsets
+> > will need to be configured by firmware in such a way that a tag access
+> > to the tag carve-out range still points to physical RAM, otherwise, as
+> > per Google's doc, you can get some unexpected behaviour.
+[...]
+> I followed what you are saying, but I didn't quite read the following
+> clearly stated in your calculations: Using this model, how much memory would
+> you be able to reuse, and how much not?
 > 
-> Any news on this series? Are there any open tasks blocking this?
-> I am willing to help, but do not see what's missing to get this merged.
+> I suspect you would *not* be able to reuse "1/(32*32)" [second carve-out]
+> but be able to reuse "1/32 - 1/(32*32)" [first carve-out] or am I completely
+> off?
 
-Hi Thomas, Sebastian
+That's correct. In theory, from the hardware perspective, we could even
+go recursively to the third/fourth etc. carveout until the last one is a
+single page but I'd rather not complicate things further.
 
-could you please review? Any comments are appreciated. or do you want a
-rebase on linux-6.5.y-rt?
+> Further, (just thinking about it) I assume you've taken care of the
+> condition that memory cannot self-host it's own tag memory. So that cannot
+> happen in the model proposed here, right?
 
-Thanks
+I don't fully understand what you mean. The tags for the first data
+range (0 .. ram_size * 31/32) are stored in the first tag carveout.
+That's where we'll need CMA. For the tag carveout, when hosting data
+pages as tagged, the tags go in the second carveout which is fully
+reserved (still TBD but possibly the firmware won't even tell the kernel
+about it).
 
-> 
-> > Jisheng Zhang (3):
-> >    asm-generic/preempt: also check preempt_lazy_count for
-> >      should_resched() etc.
-> >    riscv: add lazy preempt support
-> >    riscv: Allow to enable RT
-> > 
-> >   arch/riscv/Kconfig                   | 2 ++
-> >   arch/riscv/include/asm/thread_info.h | 5 ++++-
-> >   arch/riscv/kernel/asm-offsets.c      | 1 +
-> >   include/asm-generic/preempt.h        | 8 +++++++-
-> >   4 files changed, 14 insertions(+), 2 deletions(-)
-> > 
-> 
-
-
+-- 
+Catalin
