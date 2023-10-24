@@ -2,102 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883CB7D560F
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AAA7D56BD
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343768AbjJXPXL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Oct 2023 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S234660AbjJXPnC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 11:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343780AbjJXPWp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:22:45 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BE619B5;
-        Tue, 24 Oct 2023 08:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-        In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IrQZezcTHlwAvEdDZH0HquaGmdYgypjcTSeB2SVxIp8=; b=ZLONfC6WIs7Ij54XVAv7c/QGCA
-        vqH/kxgJ1eh0L7IWmUpkaOGf0QbZl3Z6u31V5GVERfwMxbxrpRMMcIvbkk4zj58w7hHpuuLMujAbB
-        nFipclESZIW3joZ2gmKp58KUZmUlRPnuPWtJUT16jpWJVCt+HB6MCPrdWZB4Xur8kUA50fBDaKIBc
-        vAf2dpyZWdj43dSGgsANyFNqvQUMSr+lIgpcxsmgNdX3IooRH5MLu1ChijgvRcMWiX1UnyP7qE2JD
-        tTtZcOTEl7FdiQpKaZv4ADOKvHZUO8YQGqxDBaiu/fsjiogPoQqV/0W6VyJQvV2PqCKRwWRh9je6W
-        O2GAfj9A==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:44356 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1qvJBo-0004Xf-1h;
-        Tue, 24 Oct 2023 16:19:28 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1qvJBp-00AqSc-W3; Tue, 24 Oct 2023 16:19:30 +0100
-In-Reply-To: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
-References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
-From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        with ESMTP id S234241AbjJXPnB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:43:01 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D4BA3;
+        Tue, 24 Oct 2023 08:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698162179; x=1729698179;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TR0MsODDCDld/9hD7QPnERhiZ/gxH5leUiM0oaDfwbI=;
+  b=mwVzgn+5pw/LzBLPCXjnMT/FmEnuYa0rlpvb2Q/bvSJS41OQI5FFi5m7
+   30Lm3rSBC9e0FfQpUeRG6c4qMqv/ZMSuzsCqpWt4b5+xTtvF8Zsm7ssby
+   YgV3UmamB4JuZScqA1oKNb2B206VpyeclqpO+jogJuoPDqoZIfw7W6AkR
+   9hGojjKAu8Ul8lM/oIXXNscpb3UGxu51TYb6J1EqFAoBMqq47awDljmGU
+   vwaTo20gJnJPUHvMl3/gZrmAnsc9w/9RcmEUEScs17NH84qaAH6qGl/2P
+   GL6EcdsuJmwYSoo/jDkY1Dv8aDjRjYivDOiRxu53hnDwmC9nDjRjJHQPe
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="389946496"
+X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
+   d="scan'208";a="389946496"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:36:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1089891583"
+X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
+   d="scan'208";a="1089891583"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:32:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qvJOa-00000008Jsh-3eUI;
+        Tue, 24 Oct 2023 18:32:40 +0300
+Date:   Tue, 24 Oct 2023 18:32:40 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
         x86@kernel.org, linux-csky@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org
-Cc:     Salil Mehta <salil.mehta@huawei.com>,
+        linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com,
         James Morse <james.morse@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: [PATCH 39/39] ACPI: processor: Only call arch_unregister_cpu() if
- HOTPLUG_CPU is selected
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 38/39] cpumask: Add enabled cpumask for present CPUs that
+ can be brought online
+Message-ID: <ZTfjmM3nmeh+D5w/@smile.fi.intel.com>
+References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
+ <E1qvJBk-00AqSW-R8@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1qvJBp-00AqSc-W3@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Tue, 24 Oct 2023 16:19:29 +0100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <E1qvJBk-00AqSW-R8@rmk-PC.armlinux.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+On Tue, Oct 24, 2023 at 04:19:24PM +0100, Russell King wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> The 'offline' file in sysfs shows all offline CPUs, including those
+> that aren't present. User-space is expected to remove not-present CPUs
+> from this list to learn which CPUs could be brought online.
+> 
+> CPUs can be present but not-enabled. These CPUs can't be brought online
+> until the firmware policy changes, which comes with an ACPI notification
+> that will register the CPUs.
+> 
+> With only the offline and present files, user-space is unable to
+> determine which CPUs it can try to bring online. Add a new CPU mask
+> that shows this based on all the registered CPUs.
 
-The kbuild robot points out that configurations without HOTPLUG_CPU
-selected can try to build acpi_processor_post_eject() without success
-as arch_unregister_cpu() is not defined.
+...
 
-Check this explicitly. This will be merged into:
-| ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
-for any subsequent posting.
+> +static ssize_t print_cpus_enabled(struct device *dev,
+> +				  struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
+> +}
+> +static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
 
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: James Morse <james.morse@arm.com>
----
- drivers/acpi/acpi_processor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hmm... DEVICE_ATTR_RO() ?
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 539412ff59a1..5bb207a7a1dd 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -549,7 +549,7 @@ static void acpi_processor_post_eject(struct acpi_device *device)
- 	unsigned long long sta;
- 	acpi_status status;
- 
--	if (!device)
-+	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU) || !device)
- 		return;
- 
- 	pr = acpi_driver_data(device);
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
