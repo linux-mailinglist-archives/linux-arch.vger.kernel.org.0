@@ -2,38 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25897D4687
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 05:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B2D7D46B5
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 06:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjJXD4P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Oct 2023 23:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S231820AbjJXE0y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 00:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbjJXDz5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Oct 2023 23:55:57 -0400
+        with ESMTP id S229921AbjJXE0x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 00:26:53 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120FC30E9;
-        Mon, 23 Oct 2023 20:53:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2B1125;
+        Mon, 23 Oct 2023 21:26:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CVSXNcUpUTxl/nBT2LczxGdrQxY7bHQZW/3Wv9WHsEQ=; b=itlaKAC5qL9u6+/kbcFJg0RlPF
-        c5++gmOs1K0IhWwICRlAgZy6LvNGvHRMkc7kJUDRaWVSwJOuRxLxBPTeKry1qLfQbwKJveIo8BurO
-        DJCSIH6qXEwfXq1ZrcxALijEW6e+/EVRZG9IaeYmRx8ntD9JRMDtyQpxX5vcb0Atsmhu6b4T9RCc2
-        ktUXFAxVyTGiDSjmn7gVeCkfmARMa0tA4X73zJjlMk9o3rO7T5QWYFdBO/wwvLfmWhNexrKGazUaw
-        NVZhelf4Ud399ANIMhnT/Z/wha93UnbkFjiLBznW0Ptjnni9H4HdgbiBtU3V17Etws3tSoxMATVaM
-        e/9l9Rmg==;
+        bh=kry6XAEjZW+AJ9FoGZbhDGjQPVuRuTT9bve3BJ1xdbg=; b=NO4MDcbuJCYfeSSG4HeYFAKV7u
+        HO6ADQuGek0V0WRdzxGs7ddwODrAqBNAz+xpag/TK78/uOG66j5s8lyxmtyFfmdxZqQ2vLaN6ucIy
+        kmUFdFU5U/3mWrqrdyaouiGse3UGnHFuJv+ly5uL1VlB2c9r3soNK4GEJOPAa36J2jZSJb9RWpXQK
+        QEKtn8uFmIrxibMk1DNcxVcR2GXFyBdEZ/j22Ixn1v59VM6yRoglfm6I/gMbSzDTB0CfiRkyLgAG/
+        lBTdfNNUWWukOJTwmW9aAX98XKDa+0qkzAKEQcfzvASg8iigo1W/Sz/Ml1L4o/FBRxuWo1hEaMqMY
+        w0/H33XQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qv8UI-004kZl-32;
-        Tue, 24 Oct 2023 03:53:51 +0000
-Date:   Tue, 24 Oct 2023 04:53:50 +0100
+        id 1qv909-004lGJ-0p;
+        Tue, 24 Oct 2023 04:26:45 +0000
+Date:   Tue, 24 Oct 2023 05:26:45 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        gus Gusenleitner Klaus <gus@keba.com>,
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arch@vger.kernel.org, gus Gusenleitner Klaus <gus@keba.com>,
         Al Viro <viro@ftp.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
         lkml <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
@@ -45,9 +43,8 @@ Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         Eric Dumazet <edumazet@google.com>
 Subject: Re: [RFC][PATCH] fix csum_and_copy_..._user() idiocy.  Re: AW:
  [PATCH] amd64: Fix csum_partial_copy_generic()
-Message-ID: <20231024035350.GE800259@ZenIV>
-References: <VI1PR0702MB3840F2D594B9681BF2E0CD81D9D4A@VI1PR0702MB3840.eurprd07.prod.outlook.com>
- <20231019050250.GV800259@ZenIV>
+Message-ID: <20231024042645.GF800259@ZenIV>
+References: <20231019050250.GV800259@ZenIV>
  <20231019061427.GW800259@ZenIV>
  <20231019063925.GX800259@ZenIV>
  <CANn89iJre=VQ6J=UuD0d2J5t=kXr2b9Dk9b=SwzPX1CM+ph60A@mail.gmail.com>
@@ -55,11 +52,12 @@ References: <VI1PR0702MB3840F2D594B9681BF2E0CD81D9D4A@VI1PR0702MB3840.eurprd07.p
  <20231021071525.GA789610@ZenIV>
  <20231021222203.GA800259@ZenIV>
  <20231022194020.GA972254@ZenIV>
- <83a6e7e00f824f1daef01ad599aad663@AcuMS.aculab.com>
+ <20231022194618.GC800259@ZenIV>
+ <87wmvdd3p5.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <83a6e7e00f824f1daef01ad599aad663@AcuMS.aculab.com>
+In-Reply-To: <87wmvdd3p5.ffs@tglx>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -70,100 +68,166 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 02:44:13PM +0000, David Laight wrote:
-> From: Al Viro
-> > Sent: 22 October 2023 20:40
-> ....
-> > We need a way for csum_and_copy_{from,to}_user() to report faults.
-> > The approach taken back in 2020 (avoid 0 as return value by starting
-> > summing from ~0U, use 0 to report faults) had been broken; it does
-> > yield the right value modulo 2^16-1, but the case when data is
-> > entirely zero-filled is not handled right.  It almost works, since
-> > for most of the codepaths we have a non-zero value added in
-> > and there 0 is not different from anything divisible by 0xffff.
-> > However, there are cases (ICMPv4 replies, for example) where we
-> > are not guaranteed that.
-> > 
-> > In other words, we really need to have those primitives return 0
-> > on filled-with-zeroes input.  So let's make them return a 64bit
-> > value instead; we can do that cheaply (all supported architectures
-> > do that via a couple of registers) and we can use that to report
-> > faults without disturbing the 32bit csum.
+On Mon, Oct 23, 2023 at 12:37:58PM +0200, Thomas Gleixner wrote:
+> On Sun, Oct 22 2023 at 20:46, Al Viro wrote:
+> > @@ -113,14 +113,14 @@ csum_partial_cfu_aligned(const unsigned long __user *src, unsigned long *dst,
+> >  		*dst = word | tmp;
+> >  		checksum += carry;
+> >  	}
+> > -	return checksum;
+> > +	return from64to16 (checksum);
 > 
-> Does the ICMPv4 sum need to be zero if all zeros but 0xffff
-> if there are non-zero bytes in there?
+>   from64to16(checksum); all over the place
 
-No.  RTFRFC, please.  Or the discussion of the bug upthread, for that
-matter.
+Umm...  Is that about whitespace?
+ 
+> >  #define _HAVE_ARCH_COPY_AND_CSUM_FROM_USER
+> >  #define _HAVE_ARCH_CSUM_AND_COPY
+> >  static inline
+> > -__wsum csum_and_copy_from_user(const void __user *src, void *dst, int len)
+> > +__wsum_fault csum_and_copy_from_user(const void __user *src, void *dst, int len)
+> >  {
+> >  	if (!access_ok(src, len))
+> > -		return 0;
+> > +		return -1;
+> 
+>   return CSUM_FAULT; 
 
-> IIRC the original buggy case was fixed by returning 0xffff
-> for the all-zero buffer.
+Already caught and fixed...
 
-YRIC.  For the benefit of those who can pass the Turing test better than
-ChatGPT would:
+> > --- a/arch/arm/lib/csumpartialcopyuser.S
+> > +++ b/arch/arm/lib/csumpartialcopyuser.S
+> > @@ -73,11 +73,11 @@
+> >  #include "csumpartialcopygeneric.S"
+> >  
+> >  /*
+> > - * We report fault by returning 0 csum - impossible in normal case, since
+> > - * we start with 0xffffffff for initial sum.
+> > + * We report fault by returning ~0ULL csum
+> >   */
+> 
+> There is also a stale comment a few lines further up.
 
-Define a binary operation on [0..0xffff] by
+Umm...
+ *  Returns : r0:r1 = checksum:0 on success or -1:-1 on fault  
+perhaps?
 
-	X PLUS Y = X + Y - ((X + Y > 0xffff) ? 0xffff : 0)
+> > +typedef u64 __bitwise __wsum_fault;
+> 
+> newline please.
 
-Properties:
-	X PLUS Y \in [0..0xffff]
-	X PLUS Y = 0 iff X = Y = 0
-	X PLUS Y is congruent to X + Y modulo 0xffff
-	X PLUS Y = Y PLUS X
-	(X PLUS Y) PLUS Z = X PLUS (Y PLUS Z)
-	X PLUS 0 = X
-	For any non-zero X, X PLUS 0xffff = X
-	X PLUS (0xffff ^ X) = 0xffff
-	byteswap(X) PLUS byteswap(Y) = byteswap(X PLUS Y)
-(hint: if X \in [0..0xffff], byteswap(X) is congruent to 256*X modulo 0xffff)
+Done...
 
-	If A0,...,An are all in range 0..0xffff, \sum Ak * 0x1000^k is
-congruent to A0 PLUS A1 PLUS ... PLUS An modulo 0xffff.  That's pretty
-much the same thing as the usual rule for checking if decimal number
-is divisible by 9.
+> > +static inline __wsum_fault to_wsum_fault(__wsum v)
+> > +{
+> > +#if defined(CONFIG_64BIT) || defined(__LITTLE_ENDIAN__)
+> > +	return (__force __wsum_fault)v;
+> > +#else
+> > +	return (__force __wsum_fault)((__force u64)v << 32);
+> > +#endif
+> > +}
+> > +
+> > +static inline __wsum_fault from_wsum_fault(__wsum v)
+> > +{
+> > +#if defined(CONFIG_64BIT) || defined(__LITTLE_ENDIAN__)
+> > +	return (__force __wsum)v;
+> > +#else
+> > +	return (__force __wsum)((__force u64)v >> 32);
+> > +#endif
+> > +}
+> > +
+> > +static inline bool wsum_fault_check(__wsum_fault v)
+> > +{
+> > +#if defined(CONFIG_64BIT) || defined(__LITTLE_ENDIAN__)
+> > +	return (__force s64)v < 0;
+> > +#else
+> > +	return (int)(__force u32)v < 0;
+> 
+> Why not __force s32 right away?
 
-	That's the math behind the checksum calculations.  You look at the
-data, append 0 if the length had been odd and sum the 16bit values up
-using PLUS as addition.  Result will be a 16bit value that will be
-	* congruent to that data taken as long integer modulo 0xffff
-	* 0 if and only if the data consists entirely of zeroes.
-Endianness does not matter - byteswap the entire thing and result will
-be byteswapped.
+Mostly to keep the reader within more familiar cases
+of conversion - u64 to u32 is "throw the upper 32 bits
+away", u32 to s32 - "treat MSB as sign".
 
-	Note that since 0xffffffff is a multiple of 0xffff, we can
-calculate the remainder modulo 0xffffffff (by doing similar addition
-of 4-byte groups), then calculate the remainder of that modulo 0xffff;
-that's almost always cheaper - N/4 32bit operations vs N/2 16bit ones.
-For 64bit architecture we can do the same with 64bit operations, reducing
-to 32bit value in the end.  That's what csum_and_copy_...() stuff
-is doing - it's memcpy() (or copy_..._user()) combined with calculation
-of some 32bit value that would have the right reminder modulo 0xffff.
+It's still a nasal demon country, of course - the proper
+solution is
 
-	Requirement for ICMP is that this function of the payload should
-be 0xffff.  So we zero the "checksum" field, calculate the sum and then
-adjust that field so that the sum would become 0xffff.  I.e. if the
-value of the function with that field zeroed is N, we want to store
-0xffff ^ N into the damn field.
+static inline bool wsum_fault_check(__wsum_fault v)
+{
+#if defined(CONFIG_64BIT) || defined(__LITTLE_ENDIAN__)
+	return (__force u64)v & (1ULL << 63);
+#else
+	return (__force u32)v & (1ULL << 31);
+#endif
+}
 
-	That's where it had hit the fan - getting 0xffff instead of 0
-on the "all zeroes" data ended up with "OK, store the 0xffff ^ 0xffff
-in there, everything will be fine".  Which yields the payload with
-actual sum being 0.
+Incidentally, in this case we really want a cast to u32
+rather than u64 - gcc is smart enough to figure out that
+checking MSB in 32bit can be done as signed 32bit comparison
+with 0, but bit 31 in 64bit is not special as far as it's
+concerned, even though it's a bit 31 of 32bit register...
+ 
+>   	if (copy_to_user(dst, src, len))
+> 		return CSUM_FAULT;
+> 	return to_wsum_fault(sum);
+> 
+> So it follows the pattern of csum_and_copy_from_user() above?
 
-	Special treatment of icmp_reply() is doable, but nobody is
-suggesting to check for "all zeroes" case - that would be insane and
-pointless.  The minimal workaround papering over that particular case
-would be to chech WTF have we stored in that field and always
-replacing 0 with 0xffff.  Note that if our data is e.g.
-	<40 zeroes> 0x7f 0xff 0x80 0x00
-the old rule would (correctly) suggest storing two zeroes into the
-checksum field, while that modification would yield two 0xff in
-there.  Which is still fine - 0xffff PLUS 0x7fff PLUS 0x8000 =
-0 PLUS 0x7fff PLUS 0x8000 = 0xffff, so both variants are acceptable.
+Let's not mix that with the rest of changes...
 
-	However, I'm not at all sure that icmp_reply() is really
-the only place where we can get all-zero data possible to encounter.
-Most of the places where want to calculate checksums are not going
-to see all-zeroes data, but it would be a lot better not to have to
-rely upon that.
+> Which means that if the first vector is successfully copied, then 'off'
+> is greater 0. A fault on the second one will correctly break out of the
+> loop, but the function will incorrectly return a value > 0, i.e. the
+> length of the first iteration.
+> 
+> As the callers just check for != 0 such a partial copy is considered
+> success, no?
+
+Check the callers...
+
+static __always_inline __must_check
+bool csum_and_copy_from_iter_full(void *addr, size_t bytes,
+                                  __wsum *csum, struct iov_iter *i)
+{
+        size_t copied = csum_and_copy_from_iter(addr, bytes, csum, i);
+        if (likely(copied == bytes))
+                return true;
+        iov_iter_revert(i, copied);
+        return false;
+}
+
+and
+static int skb_copy_and_csum_datagram(const struct sk_buff *skb, int offset,
+                                      struct iov_iter *to, int len,
+                                      __wsum *csump)
+{
+        struct csum_state csdata = { .csum = *csump };
+        int ret;
+
+        ret = __skb_datagram_iter(skb, offset, to, len, true,
+                                  csum_and_copy_to_iter, &csdata);
+        if (ret)
+                return ret;
+
+        *csump = csdata.csum;
+        return 0;
+}
+
+with __skb_datagram_iter() treating short copies as "revert everything
+and return -EFAULT".
+
+> So instead of 
+> 
+> 	likely(!wsum_fault_check(next)) ? 0 : len;
+> 
+> shouldn't this just do:
+> 
+> 	if (unlikely(wsum_fault_check(next))
+> 		return 0;
+>         len;
+> 
+> for simplicity and mental sanity sake?
+
+Let's not.  The macros are still too convoluted, but I really hate the
+idea of having to cope with non-trivial control flow in the thunks.
+It's really *NOT* helping mental state of anyone having to touch those...
