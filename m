@@ -2,39 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA2A7D5662
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2947D566E
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343833AbjJXPaE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Oct 2023 11:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
+        id S234739AbjJXPaY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 11:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343815AbjJXP3s (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:29:48 -0400
+        with ESMTP id S234838AbjJXP3w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:29:52 -0400
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99DB2700;
-        Tue, 24 Oct 2023 08:19:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64241720;
+        Tue, 24 Oct 2023 08:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
         Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
         In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IvdCyZ69JqjCqU2UCE2N7kgvodoHzzbAeaFJb32wt6M=; b=HXBUATQVBdjMZPY0yc6gM7kPy3
-        G3hrUbLBAVOLWAfhp7RSpQyTDo7kR93WiMzdV7a87uv35WPsIqru3D1uZ6uAi2zfLpa6dfU3h5pv8
-        vzi3dl9isG3GGh3n5k2W4XJe0ogrjaGhQ5L55rpGmsONgDHpsUuhQ355rEY2hf+9Lg9SqilZSMfZX
-        Ye7Y/qNvdVEdWIgCGh36o2wQflsQPjVxaUPt/A2I4YhimpoM+vFFnMib/ZXWdF85xUHJuFLIFlF3S
-        e8ajQ1VQuoclimJYrm4GDa0mWAJKt6BniECMV5SPpDQwXY0VqweTrf/JA0Zs+Jbxda2NjqyCiiVCk
-        CdBVe8Jw==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:46022 helo=rmk-PC.armlinux.org.uk)
+        bh=wObq1ZtL38GoyXrpykUfQ+L3NY/VXeUmDZFIelovoYM=; b=FZDrLbP5QGr0Bfm6ivhiO1LbjQ
+        Y4iafTUgbHLhkHP38WYvvVy6wgsx3XPMAkOraEF/gFnmpk/e9X8NZoY39Fs82GsEQOi/AN3hzJ2z/
+        AKclEoxu7/BMPGlEBiHrVD+WGnT9K6F7yHYlIdOhSJ2tG/uPgN7TE9h8GpOG9WAE91evCIgpZBP3I
+        fNhegreY0+W0QGkObxdbNBGb1DIqOBJzYV1rmlxYQLBApbk5ERid6ZuTH8skj0JKRp7i3gwXyHFeE
+        sSLJw4ITb6s22exlxYg9WpCPCaWm2XP1LB3GblSxuM+VwsqI4Bu6lJ4uGAL4IC/+A7rVLNhjbUQUr
+        pajifeoQ==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:46028 helo=rmk-PC.armlinux.org.uk)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.96)
         (envelope-from <rmk@armlinux.org.uk>)
-        id 1qvJBJ-0004Vr-2J;
-        Tue, 24 Oct 2023 16:18:57 +0100
+        id 1qvJBO-0004WC-2a;
+        Tue, 24 Oct 2023 16:19:03 +0100
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
         (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1qvJBL-00AqS2-3S; Tue, 24 Oct 2023 16:18:59 +0100
+        id 1qvJBQ-00AqS8-8B; Tue, 24 Oct 2023 16:19:04 +0100
 In-Reply-To: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
 References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
 From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
@@ -49,19 +49,18 @@ Cc:     Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com,
         James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: [PATCH 33/39] irqchip/gic-v3: Add support for ACPI's disabled but
- 'online capable' CPUs
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Subject: [PATCH 34/39] arm64: psci: Ignore DENIED CPUs
 MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1qvJBL-00AqS2-3S@rmk-PC.armlinux.org.uk>
+Message-Id: <E1qvJBQ-00AqS8-8B@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Tue, 24 Oct 2023 16:18:59 +0100
+Date:   Tue, 24 Oct 2023 16:19:04 +0100
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -71,90 +70,72 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-To support virtual CPU hotplug, ACPI has added an 'online capable' bit
-to the MADT GICC entries. This indicates a disabled CPU entry may not
-be possible to online via PSCI until firmware has set enabled bit in
-_STA.
+When a CPU is marked as disabled, but online capable in the MADT, PSCI
+applies some firmware policy to control when it can be brought online.
+PSCI returns DENIED to a CPU_ON request if this is not currently
+permitted. The OS can learn the current policy from the _STA enabled bit.
 
-What about the redistributor in the GICC entry? ACPI doesn't want to say.
-Assume the worst: When a redistributor is described in the GICC entry,
-but the entry is marked as disabled at boot, assume the redistributor
-is inaccessible.
+Handle the PSCI DENIED return code gracefully instead of printing an
+error.
 
-The GICv3 driver doesn't support late online of redistributors, so this
-means the corresponding CPU can't be brought online either. Clear the
-possible and present bits.
+See https://developer.arm.com/documentation/den0022/f/?lang=en page 58.
 
-Systems that want CPU hotplug in a VM can ensure their redistributors
-are always-on, and describe them that way with a GICR entry in the MADT.
-
-When mapping redistributors found via GICC entries, handle the case
-where the arch code believes the CPU is present and possible, but it
-does not have an accessible redistributor. Print a warning and clear
-the present and possible bits.
-
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+[ morse: Rewrote commit message ]
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-----
-Disabled but online-capable CPUs cause this message to be printed
-if their redistributors are described via GICC:
-| GICv3: CPU 3's redistributor is inaccessible: this CPU can't be brought online
-
-If ACPI's _STA tries to make the cpu present later, this message is printed:
-| Changing CPU present bit is not supported
-
-Changes since RFC v2:
- * use gicc->flags & (ACPI_MADT_ENABLED | ACPI_MADT_GICC_CPU_CAPABLE)
 ---
- drivers/irqchip/irq-gic-v3.c | 14 ++++++++++++++
- include/linux/acpi.h         |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+Changes since RFC v2
+ * Add specification reference
+ * Use EPERM rather than EPROBE_DEFER
+---
+ arch/arm64/kernel/psci.c     | 2 +-
+ arch/arm64/kernel/smp.c      | 3 ++-
+ drivers/firmware/psci/psci.c | 2 ++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index e787e7bbb5a2..8a89b853a5b9 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -2378,11 +2378,25 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
- 				(struct acpi_madt_generic_interrupt *)header;
- 	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
- 	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
-+	int cpu = get_cpu_for_acpi_id(gicc->uid);
- 	void __iomem *redist_base;
- 
- 	if (!acpi_gicc_is_usable(gicc))
- 		return 0;
- 
-+	/*
-+	 * Capable but disabled CPUs can be brought online later. What about
-+	 * the redistributor? ACPI doesn't want to say!
-+	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
-+	 * Otherwise, prevent such CPUs from being brought online.
-+	 */
-+	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
-+		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
-+		set_cpu_present(cpu, false);
-+		set_cpu_possible(cpu, false);
-+		return 0;
-+	}
-+
- 	redist_base = ioremap(gicc->gicr_base_address, size);
- 	if (!redist_base)
- 		return -ENOMEM;
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 3672312e15eb..ed1ef5d8687f 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -258,7 +258,7 @@ void acpi_table_print_madt_entry (struct acpi_subtable_header *madt);
- 
- static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
+diff --git a/arch/arm64/kernel/psci.c b/arch/arm64/kernel/psci.c
+index 29a8e444db83..4fcc0cdd757b 100644
+--- a/arch/arm64/kernel/psci.c
++++ b/arch/arm64/kernel/psci.c
+@@ -40,7 +40,7 @@ static int cpu_psci_cpu_boot(unsigned int cpu)
  {
--	return gicc->flags & ACPI_MADT_ENABLED;
-+	return gicc->flags & (ACPI_MADT_ENABLED | ACPI_MADT_GICC_CPU_CAPABLE);
+ 	phys_addr_t pa_secondary_entry = __pa_symbol(secondary_entry);
+ 	int err = psci_ops.cpu_on(cpu_logical_map(cpu), pa_secondary_entry);
+-	if (err)
++	if (err && err != -EPROBE_DEFER)
+ 		pr_err("failed to boot CPU%d (%d)\n", cpu, err);
+ 
+ 	return err;
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 8c8f55721786..68ec7fbe166f 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -124,7 +124,8 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
+ 	/* Now bring the CPU into our world */
+ 	ret = boot_secondary(cpu, idle);
+ 	if (ret) {
+-		pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
++		if (ret != -EPERM)
++			pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
+ 		return ret;
+ 	}
+ 
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index d9629ff87861..ee82e7880d8c 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -218,6 +218,8 @@ static int __psci_cpu_on(u32 fn, unsigned long cpuid, unsigned long entry_point)
+ 	int err;
+ 
+ 	err = invoke_psci_fn(fn, cpuid, entry_point, 0);
++	if (err == PSCI_RET_DENIED)
++		return -EPERM;
+ 	return psci_to_linux_errno(err);
  }
  
- /* the following numa functions are architecture-dependent */
 -- 
 2.30.2
 
