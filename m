@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F637D5512
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196C37D5519
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjJXPQZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Oct 2023 11:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S233846AbjJXPQb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 11:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjJXPQY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:16:24 -0400
+        with ESMTP id S233151AbjJXPQ1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:16:27 -0400
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D40CDE;
-        Tue, 24 Oct 2023 08:16:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD17DE;
+        Tue, 24 Oct 2023 08:16:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
         Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
         In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lY8MAhZ9Z+rtoj2wYABQB+N0CKSqFLYW9u3X+b/CjEk=; b=MIuYVLL/ss5nnQ4+gplZqkXCRX
-        /MNdqQD/kryr4L2BxVRmfVOR58iw9MZRAu7mb2BCNGmTN1dK7FEdQWftEa+sicdcBpQVsB35lO3+q
-        loolpA9iU7Nq0WKV7S80BBm1kkkp3/Hqzxn2bhcPWBtllfuHD46+oW1MfiXWY4skJ8cNz6Fbxa5Q4
-        BWHxYre5Zagm7L3Z/H5OVTAuVERhN8hxTx0akFq2Pp+ZMOft8NXNMMc/MRtlyagRrCGlVHUQunuWP
-        CmhzqTPGGVUkyPEeeIwTclwblDOGmJVvUf+3/BRntJEDqLntj6Yxkh+eI2Dm/dz4qRwlNo/k7whLQ
-        Md+spz1w==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:60856 helo=rmk-PC.armlinux.org.uk)
+        bh=jgOua7XG/wnLF83C9dm9FB0uL6rg1MROYA8EjBMPhHA=; b=J2mp06g9NQqtqT3uv6Ylw6MUGl
+        t7fj+2TzW7pWDsG+AfTTqVbVrFQ7E01xmS7KhXSk9a3NMdtC4NdTDMho53IISz5KGe6ZPGeG+M1o8
+        W7UuBj8Tu6mPnTeK65XF5jjxwYD+3gTzqrzc4PQIgOnvIgKky6ZpA8cWYur8KkqIX6A8NlQL7S/oY
+        ccYWnfYCURmqRXx13tS5qqYWGz+nejtRLJuL6igjZaiOoVIjRQxerM0ZboNIvlJyfpSDylqTeHJ5K
+        2uZgq8xSxHqf9f109wLtiZsaqELT9K1GTBkwTscEaLOpZ9Xbvn05u5bRuwq65t9b9ZPhTuOxhBDtb
+        bjaD9I+g==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:43856 helo=rmk-PC.armlinux.org.uk)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.96)
         (envelope-from <rmk@armlinux.org.uk>)
-        id 1qvJ8e-0004LL-36;
-        Tue, 24 Oct 2023 16:16:13 +0100
+        id 1qvJ8k-0004LV-0H;
+        Tue, 24 Oct 2023 16:16:18 +0100
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
         (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1qvJ8g-00AqOs-E9; Tue, 24 Oct 2023 16:16:14 +0100
+        id 1qvJ8l-00AqOy-J5; Tue, 24 Oct 2023 16:16:19 +0100
 In-Reply-To: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
 References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
-From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -49,16 +49,17 @@ Cc:     Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com,
         James Morse <james.morse@arm.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 01/39] parisc: simplify smp_prepare_boot_cpu()
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: [PATCH 02/39] ACPI: Use the acpi_device_is_present() helper in more
+ places
 MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1qvJ8g-00AqOs-E9@rmk-PC.armlinux.org.uk>
+Message-Id: <E1qvJ8l-00AqOy-J5@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Tue, 24 Oct 2023 16:16:14 +0100
+Date:   Tue, 24 Oct 2023 16:16:19 +0100
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -68,52 +69,45 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-smp_prepare_boot_cpu() reads the cpuid of the first CPU, printing a
-message to state which processor booted, and setting it online and
-present.
+From: James Morse <james.morse@arm.com>
 
-This cpuid is retrieved from per_cpu(cpu_data, 0).cpuid, which is
-initialised in arch/parisc/kernel/processor.c:processor_probe() thusly:
+acpi_device_is_present() checks the present or functional bits
+from the cached copy of _STA.
 
-	p = &per_cpu(cpu_data, cpuid);
-...
-	p->cpuid = cpuid;	/* save CPU id */
+A few places open-code this check. Use the helper instead to
+improve readability.
 
-Consequently, the cpuid retrieved seems to be guaranteed to also be
-zero, meaning that the message printed in this boils down to:
-
-	pr_info("SMP: bootstrap CPU ID is 0\n");
-
-Moreover, since kernel/cpu.c::boot_cpu_init() already sets CPU 0 to
-be present and online, there is no need to do this again in
-smp_prepare_boot_cpu().
-
-Remove this code, and simplify the printk().
-
+Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+Reviewed-by: Miguel Luis <miguel.luis@oracle.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- arch/parisc/kernel/smp.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/acpi/scan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/parisc/kernel/smp.c b/arch/parisc/kernel/smp.c
-index 2019c1f04bd0..444154271f23 100644
---- a/arch/parisc/kernel/smp.c
-+++ b/arch/parisc/kernel/smp.c
-@@ -404,13 +404,7 @@ static int smp_boot_one_cpu(int cpuid, struct task_struct *idle)
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 691d4b7686ee..ed01e19514ef 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
+ 	int error;
  
- void __init smp_prepare_boot_cpu(void)
- {
--	int bootstrap_processor = per_cpu(cpu_data, 0).cpuid;
--
--	/* Setup BSP mappings */
--	printk(KERN_INFO "SMP: bootstrap CPU ID is %d\n", bootstrap_processor);
--
--	set_cpu_online(bootstrap_processor, true);
--	set_cpu_present(bootstrap_processor, true);
-+	pr_info("SMP: bootstrap CPU ID is 0\n");
- }
+ 	acpi_bus_get_status(adev);
+-	if (adev->status.present || adev->status.functional) {
++	if (acpi_device_is_present(adev)) {
+ 		/*
+ 		 * This function is only called for device objects for which
+ 		 * matching scan handlers exist.  The only situation in which
+@@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
+ 	int error;
  
- 
+ 	acpi_bus_get_status(adev);
+-	if (!(adev->status.present || adev->status.functional)) {
++	if (!acpi_device_is_present(adev)) {
+ 		acpi_scan_device_not_present(adev);
+ 		return 0;
+ 	}
 -- 
 2.30.2
 
