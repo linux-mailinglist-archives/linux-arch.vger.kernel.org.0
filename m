@@ -2,48 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AAA7D56BD
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 17:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD5E7D5737
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 18:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234660AbjJXPnC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Oct 2023 11:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S234875AbjJXQCg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 12:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbjJXPnB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 11:43:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D4BA3;
-        Tue, 24 Oct 2023 08:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698162179; x=1729698179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TR0MsODDCDld/9hD7QPnERhiZ/gxH5leUiM0oaDfwbI=;
-  b=mwVzgn+5pw/LzBLPCXjnMT/FmEnuYa0rlpvb2Q/bvSJS41OQI5FFi5m7
-   30Lm3rSBC9e0FfQpUeRG6c4qMqv/ZMSuzsCqpWt4b5+xTtvF8Zsm7ssby
-   YgV3UmamB4JuZScqA1oKNb2B206VpyeclqpO+jogJuoPDqoZIfw7W6AkR
-   9hGojjKAu8Ul8lM/oIXXNscpb3UGxu51TYb6J1EqFAoBMqq47awDljmGU
-   vwaTo20gJnJPUHvMl3/gZrmAnsc9w/9RcmEUEScs17NH84qaAH6qGl/2P
-   GL6EcdsuJmwYSoo/jDkY1Dv8aDjRjYivDOiRxu53hnDwmC9nDjRjJHQPe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="389946496"
-X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="389946496"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:36:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1089891583"
-X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="1089891583"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:32:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qvJOa-00000008Jsh-3eUI;
-        Tue, 24 Oct 2023 18:32:40 +0300
-Date:   Tue, 24 Oct 2023 18:32:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S234306AbjJXQCf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 12:02:35 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7916F1B3;
+        Tue, 24 Oct 2023 09:02:33 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C019C433C7;
+        Tue, 24 Oct 2023 16:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1698163353;
+        bh=F7gFThJKXxRz67KtPOHXZ1MPyn546aHaKsuQ7HB3hqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G0VPiT0NaPFcpVExXTrkeNQPAO04ohPxAd37DPcoJLpOtXMCCjTbSvuBTvMKm6fKL
+         7+97TChy1Rw9XyE2D4xj290syTx4P7Q0qI+cUomEuI1s01Fdc+0+On0HONlKTWh43O
+         JYqW/Fa9n5BmP1kwOrdU1rcoFgbCPjndXNvWvCiA=
+Date:   Tue, 24 Oct 2023 18:02:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Russell King <rmk+kernel@armlinux.org.uk>
 Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -55,26 +36,25 @@ Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com,
         James Morse <james.morse@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
 Subject: Re: [PATCH 38/39] cpumask: Add enabled cpumask for present CPUs that
  can be brought online
-Message-ID: <ZTfjmM3nmeh+D5w/@smile.fi.intel.com>
+Message-ID: <2023102411-ascent-plot-04fd@gregkh>
 References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
  <E1qvJBk-00AqSW-R8@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <E1qvJBk-00AqSW-R8@rmk-PC.armlinux.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,9 +75,30 @@ On Tue, Oct 24, 2023 at 04:19:24PM +0100, Russell King wrote:
 > With only the offline and present files, user-space is unable to
 > determine which CPUs it can try to bring online. Add a new CPU mask
 > that shows this based on all the registered CPUs.
-
-...
-
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  drivers/base/cpu.c      | 10 ++++++++++
+>  include/linux/cpumask.h | 25 +++++++++++++++++++++++++
+>  kernel/cpu.c            |  3 +++
+>  3 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index 2b9cb2667654..f8bf1d4c7d71 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
+>  {
+>  	int logical_cpu = cpu->dev.id;
+>  
+> +	set_cpu_enabled(logical_cpu, false);
+>  	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
+>  
+>  	device_unregister(&cpu->dev);
+> @@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
+>  }
+>  static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
+>  
 > +static ssize_t print_cpus_enabled(struct device *dev,
 > +				  struct device_attribute *attr, char *buf)
 > +{
@@ -105,10 +106,9 @@ On Tue, Oct 24, 2023 at 04:19:24PM +0100, Russell King wrote:
 > +}
 > +static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
 
-Hmm... DEVICE_ATTR_RO() ?
+This needs to be documented somewhere in Documentation/ABI/ did I miss
+that patch?
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
 
-
+greg k-h
