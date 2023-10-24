@@ -2,135 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8947D5A63
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 20:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8F07D5AB4
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 20:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344099AbjJXS1O convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 24 Oct 2023 14:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
+        id S234883AbjJXSif (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 14:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343918AbjJXS1N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 14:27:13 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC81A2;
-        Tue, 24 Oct 2023 11:27:10 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1e99a55a9c0so734273fac.1;
-        Tue, 24 Oct 2023 11:27:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698172030; x=1698776830;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZB5g9jVTVNd81eeii8uxLo5X0yRuiVq8WyebZu9f0ok=;
-        b=UcaLjFkedGJtoYFbqpwb05Tte1Y6/Qz++/THENR/+Q1+tpmb0yrYlEK+mBz+bN2AOA
-         x1W947p3WbL63fXeo+rTURUlBh9+jGgVtaBwebJ7z58rJvWev03+YadpEL3k2c/X/490
-         C3W1TgyH6dVe0kMDya5Jc4v9WnOWbqTt3nmxuh6JLgsPtf+4NqrcLeHsJWFSzDhJASsa
-         uySO7Z7khjvNTf+jTrGHB23UIG5wFC5yAl1/Akbf8QkWvJzYr8BVC5VPGkbIoztydEVB
-         ml0rRhF3iAljspTb4hzX+yRHlEK/G1XeUIrxksDnKx98geCo0i+ybksHUYxzR4wZT/Mx
-         SyWg==
-X-Gm-Message-State: AOJu0YzurFXh+OQ2r/NxgtzNzOMTnTsbSicmIKQ4KRFRN7iC8VDZLt1Y
-        McYuUqSvj23dT2zYeftgYzNbcw/PpFsAzbJiCFI=
-X-Google-Smtp-Source: AGHT+IHYw04Ty/CGd2NctaMoui4YrLNgBZQzIhNXmipd8DpS8HZWntl33os4cOY1dCw/clSDDFMROR1KkS5avBsdGCU=
-X-Received: by 2002:a05:6870:cb81:b0:1d6:4c63:7ba9 with SMTP id
- ov1-20020a056870cb8100b001d64c637ba9mr17269512oab.3.1698172030159; Tue, 24
- Oct 2023 11:27:10 -0700 (PDT)
+        with ESMTP id S234872AbjJXSif (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 14:38:35 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Oct 2023 11:38:32 PDT
+Received: from out-192.mta0.migadu.com (out-192.mta0.migadu.com [91.218.175.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F4010C9
+        for <linux-arch@vger.kernel.org>; Tue, 24 Oct 2023 11:38:31 -0700 (PDT)
+Date:   Tue, 24 Oct 2023 11:29:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1698172172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cJvtH1RU485LotJpakrbV9U/UfyKsr5ptSPtEPeho50=;
+        b=qxmyiqZdvUbSc5OX8sJ5B56VRDGRIypt0m2ZexyNmyd2CWJuUlLqxDCgQmiWZxhgLrnEJP
+        Q3PacIpe5vXTiE86jUv2kcvB2COry3b6xKIlN2wW5y2pG9dxxNOj26Rwsg8w9wjXki2GwQ
+        /5zO2TFTFVb+ghWrRC0JLTshCp62Kqo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, vvvvvv@google.com,
+        gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH v2 00/39] Memory allocation profiling
+Message-ID: <ZTgM74EapT9mea2l@P9FQF9L96D.corp.robot.car>
+References: <20231024134637.3120277-1-surenb@google.com>
 MIME-Version: 1.0
-References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
-In-Reply-To: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Oct 2023 20:26:58 +0200
-Message-ID: <CAJZ5v0j-73_+9U3ngDAf9w1ADDhBTKctJdWboqUk-okH2TQGyg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 00/39] ACPI/arm64: add support for virtual cpuhotplug
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-        linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 5:15 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> Hi,
->
-> I'm posting James' patch set updated with most of the review comments
-> from his RFC v2 series back in September. Individual patches have a
-> changelog attached at the bottom of the commit message. Those which
-> I have finished updating have my S-o-b on them, those which still have
-> outstanding review comments from RFC v2 do not. In some of these cases
-> I've asked questions and am waiting for responses.
->
-> I'm posting this as RFC v3 because there's still some unaddressed
-> comments and it's clearly not ready for merging. Even if it was ready
-> to be merged, it is too late in this development cycle to be taking
-> this change in, so there would be little point posting it non-RFC.
-> Also James stated that he's waiting for confirmation from the
-> Kubernetes/Kata folk - I have no idea what the status is there.
->
-> I will be sending each patch individually to a wider audience
-> appropriate for that patch - apologies to those missing out on this
-> cover message. I have added more mailing lists to the series with the
-> exception of the acpica list in a hope of this cover message also
-> reaching those folk.
->
-> The changes that aren't included are:
->
-> 1. Updates for my patch that was merged via Thomas (thanks!):
->    c4dd854f740c cpu-hotplug: Provide prototypes for arch CPU registration
->    rather than having this change spread through James' patches.
->
-> 2. New patch - simplification of PA-RISC's smp_prepare_boot_cpu()
->
-> 3. Moved "ACPI: Use the acpi_device_is_present() helper in more places"
->    and "ACPI: Rename acpi_scan_device_not_present() to be about
->    enumeration" to the beginning of the series - these two patches are
->    already queued up for merging into 6.7.
->
-> 4. Moved "arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into
->    a helper" to the beginning of the series, which has been submitted,
->    but as yet the fate of that posting isn't known.
->
-> The first four patches in this series are provided for completness only.
->
-> There is an additional patch in James' git tree that isn't in the set
-> of patches that James posted: "ACPI: processor: Only call
-> arch_unregister_cpu() if HOTPLUG_CPU is selected" which looks to me to
-> be a workaround for arch_unregister_cpu() being under the ifdef. I've
-> commented on this on the RFC v2 posting making a suggestion, but as yet
-> haven't had any response.
->
-> I've included almost all of James' original covering body below the
-> diffstat.
->
-> The reason that I'm doing this is to help move this code forward so
-> hopefully it can be merged - which is why I have been keen to dig out
-> from James' patches anything that can be merged and submit it
-> separately, since this is a feature for which some users have a
-> definite need for.
+On Tue, Oct 24, 2023 at 06:45:57AM -0700, Suren Baghdasaryan wrote:
+> Updates since the last version [1]
+> - Simplified allocation tagging macros;
+> - Runtime enable/disable sysctl switch (/proc/sys/vm/mem_profiling)
+> instead of kernel command-line option;
+> - CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT to select default enable state;
+> - Changed the user-facing API from debugfs to procfs (/proc/allocinfo);
+> - Removed context capture support to make patch incremental;
+> - Renamed uninstrumented allocation functions to use _noprof suffix;
+> - Added __GFP_LAST_BIT to make the code cleaner;
+> - Removed lazy per-cpu counters; it turned out the memory savings was
+> minimal and not worth the performance impact;
 
-I've gone through the series and there is at least one thing in it
-that concerns me a lot and some others that at least appear to be
-really questionable.
+Hello Suren,
 
-I need more time to send comments which I'm not going to do before the
-6.7 merge window (sorry), but from what I can say right now, this is
-not looking good.
+> Performance overhead:
+> To evaluate performance we implemented an in-kernel test executing
+> multiple get_free_page/free_page and kmalloc/kfree calls with allocation
+> sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
+> affinity set to a specific CPU to minimize the noise. Below is performance
+> comparison between the baseline kernel, profiling when enabled, profiling
+> when disabled and (for comparison purposes) baseline with
+> CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
+> 
+>                         kmalloc                 pgalloc
+> (1 baseline)            12.041s                 49.190s
+> (2 default disabled)    14.970s (+24.33%)       49.684s (+1.00%)
+> (3 default enabled)     16.859s (+40.01%)       56.287s (+14.43%)
+> (4 runtime enabled)     16.983s (+41.04%)       55.760s (+13.36%)
+> (5 memcg)               33.831s (+180.96%)      51.433s (+4.56%)
 
-Thanks!
+some recent changes [1] to the kmem accounting should have made it quite a bit
+faster. Would be great if you can provide new numbers for the comparison.
+Maybe with the next revision?
+
+And btw thank you (and Kent): your numbers inspired me to do this kmemcg
+performance work. I expect it still to be ~twice more expensive than your
+stuff because on the memcg side we handle separately charge and statistics,
+but hopefully the difference will be lower.
+
+Thank you!
+
+[1]:
+  patches from next tree, so no stable hashes:
+    mm: kmem: reimplement get_obj_cgroup_from_current()
+    percpu: scoped objcg protection
+    mm: kmem: scoped objcg protection
+    mm: kmem: make memcg keep a reference to the original objcg
+    mm: kmem: add direct objcg pointer to task_struct
+    mm: kmem: optimize get_obj_cgroup_from_current()
