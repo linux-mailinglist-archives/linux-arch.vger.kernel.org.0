@@ -2,135 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A451D7D4F55
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 14:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912627D4FC8
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Oct 2023 14:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbjJXMCU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 24 Oct 2023 08:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S233500AbjJXMbJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Oct 2023 08:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbjJXMCT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 08:02:19 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC31E120;
-        Tue, 24 Oct 2023 05:02:17 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3b2d9a9c824so1006841b6e.0;
-        Tue, 24 Oct 2023 05:02:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698148937; x=1698753737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q2pHDhFBV3p+9e1mZi2uGJDDYekveY6SeTMBwmaYx/4=;
-        b=SzR3QQEYyvhYRcAV2mt9thqEo+GgfpLYPwXexHxaEJ8URGnqceLxSYECZzWRCJkKx0
-         rZ2QGxui+UFef4QKs9ZbZ45IEqIU4mSud3D0mKPeZe0F3PZWmONM8i3tu9n+iESja9tP
-         RkCV0l7UwYXx8zBZP4Ubdivsxj0YFr4MuEmtuJ6izvEU/Re8WQx9H+As1Sr/pHsGfSpX
-         qjYpgkoJZs32R7TDoasiTfEdfogF59ApFtrRbvDIILONyAKudftuwdQj4m68+fqRIth7
-         +nhPUHwfHQF++EJNw3bEUg+zac3MaCxcqioi26tXrteZKXIpjVQQxXYc6L3PFGEAnffp
-         bmlw==
-X-Gm-Message-State: AOJu0Yys0jeFsrf8FGpN2jdKNA6LLUavTE2B2MxGPzULME9GMfwm40ZN
-        4p6yDIcocdahMT87J7v55JLqG99qPAk6YcQ9gmU=
-X-Google-Smtp-Source: AGHT+IGIETBiiFD1D2fRVRb8FftiTW+n7MOvkpWXai2dprUcsPzAq6Nyi8wxC+U5gNTBl00FSuUydUoDBwyRfxz40/M=
-X-Received: by 2002:a05:6808:1513:b0:3ae:5e6a:5693 with SMTP id
- u19-20020a056808151300b003ae5e6a5693mr13497868oiw.0.1698148937006; Tue, 24
- Oct 2023 05:02:17 -0700 (PDT)
+        with ESMTP id S233761AbjJXMbG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Oct 2023 08:31:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97008186;
+        Tue, 24 Oct 2023 05:31:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1698150662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HP05YnYT52F/EpUarcu+n7nWv8BJHObUjbTKRDaDnJY=;
+        b=j5mUbwy44Qq9kxY8+ATVL2R33Mz4pyF9vZEY1eQgYZpgmuP8hPbbj0ADpyO9TbBnM+sIFa
+        Wm5Pm+1wuX10acKf3RQdVjgDwwSll7IDDESNEX1xcv9C66oizpMgClCfojX+U5FsUGu7ke
+        1NzDqh30dC28TmWdyZH7bsMQYkicderH7ZK7ZQYoFkX6tZ24RE3r+VLTdVX3gc5TxjENgn
+        EGWzZ6QJAPmWa2bTzSYVSmIjs67q6YJ4rNQuk2AP0rs0S6OgkOTRJd3JinHR+vNljJfxZz
+        mKjeZy5pxzNdl4ByOHSuVkDhHCaxfOz1Oir+jfE9PMqC6pzgQFCzg2n++4xXew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1698150662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HP05YnYT52F/EpUarcu+n7nWv8BJHObUjbTKRDaDnJY=;
+        b=qrCmO2SLn7GIkloVe9cBKK+7EUiekrt3cyqR83gySJXc1iDjy0zslml0EES94jaG6GN5/v
+        xevB/jLHHQVZJWBg==
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-arch@vger.kernel.org, gus Gusenleitner Klaus <gus@keba.com>,
+        Al Viro <viro@ftp.linux.org.uk>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [RFC][PATCH] fix csum_and_copy_..._user() idiocy.  Re: AW:
+ [PATCH] amd64: Fix csum_partial_copy_generic()
+In-Reply-To: <20231024042645.GF800259@ZenIV>
+References: <20231019050250.GV800259@ZenIV> <20231019061427.GW800259@ZenIV>
+ <20231019063925.GX800259@ZenIV>
+ <CANn89iJre=VQ6J=UuD0d2J5t=kXr2b9Dk9b=SwzPX1CM+ph60A@mail.gmail.com>
+ <20231019080615.GY800259@ZenIV> <20231021071525.GA789610@ZenIV>
+ <20231021222203.GA800259@ZenIV> <20231022194020.GA972254@ZenIV>
+ <20231022194618.GC800259@ZenIV> <87wmvdd3p5.ffs@tglx>
+ <20231024042645.GF800259@ZenIV>
+Date:   Tue, 24 Oct 2023 14:31:01 +0200
+Message-ID: <877cnccid6.ffs@tglx>
 MIME-Version: 1.0
-References: <E1qtuWW-00AQ7P-0W@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1qtuWW-00AQ7P-0W@rmk-PC.armlinux.org.uk>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Oct 2023 14:02:05 +0200
-Message-ID: <CAJZ5v0hEXaYSgre=F=hZ0XTRqupaBR5Grnck=tQtfj4inDkOKA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: Rename acpi_scan_device_not_present() to be about enumeration
-To:     Russell King <rmk+kernel@armlinux.org.uk>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, James Morse <james.morse@arm.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 8:47 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
+On Tue, Oct 24 2023 at 05:26, Al Viro wrote:
+> On Mon, Oct 23, 2023 at 12:37:58PM +0200, Thomas Gleixner wrote:
+>> On Sun, Oct 22 2023 at 20:46, Al Viro wrote:
+>> > -	return checksum;
+>> > +	return from64to16 (checksum);
+>> 
+>>   from64to16(checksum); all over the place
 >
-> From: James Morse <james.morse@arm.com>
->
-> acpi_scan_device_not_present() is called when a device in the
-> hierarchy is not available for enumeration. Historically enumeration
-> was only based on whether the device was present.
->
-> To add support for only enumerating devices that are both present
-> and enabled, this helper should be renamed. It was only ever about
-> enumeration, rename it acpi_scan_device_not_enumerated().
->
-> No change in behaviour is intended.
->
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
-> This is another patch from James' aarch64 hotplug vcpu series.
->
-> I asked:
-> > Is this another patch which ought to be submitted without waiting
-> > for the rest of the series?
-> to which Jonathan Cameron replied:
-> > Looks like a valid standalone change to me.
->
-> So let's get this queued up.
->
->  drivers/acpi/scan.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index ed01e19514ef..17ab875a7d4e 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -289,10 +289,10 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
->         return 0;
->  }
->
-> -static int acpi_scan_device_not_present(struct acpi_device *adev)
-> +static int acpi_scan_device_not_enumerated(struct acpi_device *adev)
->  {
->         if (!acpi_device_enumerated(adev)) {
-> -               dev_warn(&adev->dev, "Still not present\n");
-> +               dev_warn(&adev->dev, "Still not enumerated\n");
->                 return -EALREADY;
->         }
->         acpi_bus_trim(adev);
-> @@ -327,7 +327,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
->                         error = -ENODEV;
->                 }
->         } else {
-> -               error = acpi_scan_device_not_present(adev);
-> +               error = acpi_scan_device_not_enumerated(adev);
->         }
->         return error;
->  }
-> @@ -339,7 +339,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
->
->         acpi_bus_get_status(adev);
->         if (!acpi_device_is_present(adev)) {
-> -               acpi_scan_device_not_present(adev);
-> +               acpi_scan_device_not_enumerated(adev);
->                 return 0;
->         }
->         if (handler && handler->hotplug.scan_dependent)
-> --
+> Umm...  Is that about whitespace?
 
-Applied as 6.7 material, thanks!
+Yes, my parser choked on that :)
+  
+>> >  /*
+>> > - * We report fault by returning 0 csum - impossible in normal case, since
+>> > - * we start with 0xffffffff for initial sum.
+>> > + * We report fault by returning ~0ULL csum
+>> >   */
+>> 
+>> There is also a stale comment a few lines further up.
+>
+> Umm...
+>  *  Returns : r0:r1 = checksum:0 on success or -1:-1 on fault  
+> perhaps?
+
+Looks good.
+
+>> > +static inline bool wsum_fault_check(__wsum_fault v)
+>> > +{
+>> > +#if defined(CONFIG_64BIT) || defined(__LITTLE_ENDIAN__)
+>> > +	return (__force s64)v < 0;
+>> > +#else
+>> > +	return (int)(__force u32)v < 0;
+>> 
+>> Why not __force s32 right away?
+>
+> Mostly to keep the reader within more familiar cases
+> of conversion - u64 to u32 is "throw the upper 32 bits
+> away", u32 to s32 - "treat MSB as sign".
+
+Fair enough.
+
+> It's still a nasal demon country, of course - the proper
+> solution is
+>
+> static inline bool wsum_fault_check(__wsum_fault v)
+> {
+> #if defined(CONFIG_64BIT) || defined(__LITTLE_ENDIAN__)
+> 	return (__force u64)v & (1ULL << 63);
+> #else
+> 	return (__force u32)v & (1ULL << 31);
+> #endif
+> }
+>
+> Incidentally, in this case we really want a cast to u32
+> rather than u64 - gcc is smart enough to figure out that
+> checking MSB in 32bit can be done as signed 32bit comparison
+> with 0, but bit 31 in 64bit is not special as far as it's
+> concerned, even though it's a bit 31 of 32bit register...
+
+Indeed.
+  
+>> As the callers just check for != 0 such a partial copy is considered
+>> success, no?
+>
+> Check the callers...
+>
+> static __always_inline __must_check
+> bool csum_and_copy_from_iter_full(void *addr, size_t bytes,
+>                                   __wsum *csum, struct iov_iter *i)
+> {
+>         size_t copied = csum_and_copy_from_iter(addr, bytes, csum, i);
+>         if (likely(copied == bytes))
+>                 return true;
+
+Duh. I think I stared at a caller of csum_and_copy_from_iter_full()
+instead...
+
+Thanks,
+
+        tglx
