@@ -2,101 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157857D7681
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Oct 2023 23:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9518C7D7715
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Oct 2023 23:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjJYVUa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Oct 2023 17:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S229709AbjJYVvl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Oct 2023 17:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjJYVU3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 17:20:29 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A825D12A
-        for <linux-arch@vger.kernel.org>; Wed, 25 Oct 2023 14:20:27 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6cd1918afb2so118861a34.0
-        for <linux-arch@vger.kernel.org>; Wed, 25 Oct 2023 14:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1698268827; x=1698873627; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4R+fBPz/tYoWNwPb9Pp7jc9YbV1QMHyx6psPQvV2NA=;
-        b=mr158P156/Z9KJDv08VPhWe22lAiExxKdjEjGw09Oy9Ryx3vnwevfoAsM1mb/Eep5Z
-         GdhWMxpgRwK1C61JWfoXrYnEjtGNNfBxYjugtXY6CEDo6reTGSbe3q7q99h4W36OqzxX
-         Ojp5L/buBcxj/NcDnssvPD2eRAdxYUZs418j3uWNlUJ8t/tlNZzNosJrAZPyyn1umFOY
-         8nsTj5u7HK5nsYkiepcJiIHAvdWoCjhy5UIAgRVNk6tgIF5uu4sHDByK613UOtd5oG0c
-         VTfNoeDwTpJOUQtXnb/B02IdJJPDItDVlLXBHk1U+5u9dB5hAokXhKLjukBvsigs1h75
-         146w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698268827; x=1698873627;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x4R+fBPz/tYoWNwPb9Pp7jc9YbV1QMHyx6psPQvV2NA=;
-        b=Ox1IGUtZFzekyUNR6ReTFYNHqdCmHZWzcRO7b5AIuYAlXc/pBlK1VxvGT2kVKwNN4G
-         4okSswXV/DNKLr8kJhlFeuUY5WKo4LNwX0GnV6F+biep2tTN1JVHnRu27PVjTugq03Re
-         kgoPu9JoRj6a0yhWtGJU2bNQmGrcvVF/+1uYTCDvchdxiqsgIQsQthjgBDVdlw6Jcgb/
-         /IohxZsBmjM9X7UHNBYzgcW5UTUuYkva+nuExj0U3cyYbL0Qwlez7FXpY7n65ZzufuRd
-         4Xu5rGw3JejxFBkdQ8BFLqhOKft7gE5PO3IrlGc1NpZFLewrYGWCas6O4UZETaKWKF+s
-         3kVQ==
-X-Gm-Message-State: AOJu0YxbFxB5VDLnOWYkZoc1zVt4OrN5fcdRzY867mf0ulMsh7gQ29LY
-        KUCJrPP2PU8Uku6h8YqrTR2t+8lVD3qTEwDnCPE=
-X-Google-Smtp-Source: AGHT+IGav5/1dQVNAHhyYvy58dHFfkWIu/JtH4MUc2KdaTCN0BgNu4GrGfs3WwaokFiLCk2KDuCXfg==
-X-Received: by 2002:a05:6830:7:b0:6b8:9a3a:ea12 with SMTP id c7-20020a056830000700b006b89a3aea12mr18253103otp.12.1698268827023;
-        Wed, 25 Oct 2023 14:20:27 -0700 (PDT)
-Received: from ghost ([208.116.208.98])
-        by smtp.gmail.com with ESMTPSA id r125-20020a4a4e83000000b0057b38a94f38sm166296ooa.12.2023.10.25.14.20.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 14:20:26 -0700 (PDT)
-Date:   Wed, 25 Oct 2023 14:20:23 -0700
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "Wang, Xiao W" <xiao.w.wang@intel.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v7 2/4] riscv: Checksum header
-Message-ID: <ZTmGl36A3X1UtnNu@ghost>
-References: <20230919-optimize_checksum-v7-0-06c7d0ddd5d6@rivosinc.com>
- <20230919-optimize_checksum-v7-2-06c7d0ddd5d6@rivosinc.com>
- <DM8PR11MB575134C301E7E17E72281CFAB8DEA@DM8PR11MB5751.namprd11.prod.outlook.com>
- <ZTl8gauEst2NGrw6@ghost>
- <059f17e6-e240-40fa-8742-7844ad3b3502@app.fastmail.com>
- <ZTmEkYn1NcUvL58n@ghost>
- <571211a1-470a-43da-a603-fd12a640b7a8@app.fastmail.com>
+        with ESMTP id S230091AbjJYVvj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 17:51:39 -0400
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CEA193
+        for <linux-arch@vger.kernel.org>; Wed, 25 Oct 2023 14:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1698270694; x=1698529894;
+        bh=+mIMtJy5g/3pP0bfV4kNM3vtmyjGkqlYbw5iT4J0tl8=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=iRbIVns0Dvfe0uo4iphsA8sVRHbI3fybSM6Y3MW1meOEMhMW3SdN9huZmKHpXxX2A
+         oAK5DOYYJZdr4M/kC5NJ+cqGDRzHm0csHrZ4b6h6eWh/WH8RjXWL5YFH4eqIncxgIJ
+         EDkHDM3DRwaW+RxWzN2/5QYQpFRbt83ITw/C427DwracoFThk79D0EYG8u3lo7UpQs
+         FS7NOh7g+xWsN0rozPH61QKY3ppBd5gPVD4R5zuO4AN2dgdGKfGi97VAyLAaXJOs9/
+         9+4MysEB0mgU9ipH7wCJyhJkoNKt1bVhQErSz7YIkKG7dA/2UiizCzBeuMdLrL5lPb
+         nu1WNLGiBcOsQ==
+Date:   Wed, 25 Oct 2023 21:51:28 +0000
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        kent.overstreet@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        elver@google.com, Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC] rust: types: Add read_once and write_once
+Message-ID: <VEhpQqgTM0U-aNYRUQ89ICIHW9Eehr66yw92DrmBZcZOah2mLqlz24HxEwDwYPVDOnaigDiZDEVl5mWqZJxoAtRheqTMjzpxuTKe0sr1uZs=@proton.me>
+In-Reply-To: <20231025195339.1431894-1-boqun.feng@gmail.com>
+References: <20231025195339.1431894-1-boqun.feng@gmail.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <571211a1-470a-43da-a603-fd12a640b7a8@app.fastmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 11:18:40PM +0200, Arnd Bergmann wrote:
-> On Wed, Oct 25, 2023, at 23:11, Charlie Jenkins wrote:
-> >
-> > Thank you for pointing that out, I had not realized that macro existed.
-> > Since riscv keeps NET_IP_ALIGN at 0 it should be expected that
-> > ip_fast_csum is only called with 32-bit aligned addresses. I will update
-> > the comment and refer to that macro. riscv supports misaligned accesses
-> > but there are no guarantees of speed.
-> 
-> Just to clarify for your comment: riscv gets the default value of '2',
-> which is the one that makes the header aligned.
-> 
->       Arnd
+> In theory, `read_volatile` and `write_volatile` in Rust can have UB in
+> case of the data races [1]. However, kernel uses volatiles to implement
 
-Oops, typo. I meant to write 2.
+I would not write "In theory", but rather state that data races involving
+`read_volatile` is documented to still be UB.
 
-- Charlie
+> READ_ONCE() and WRITE_ONCE(), and expects races on these marked accesses
 
+Missing "`"?
+
+> don't cause UB. And they are proven to have a lot of usages in kernel.
+>=20
+> To close this gap, `read_once` and `write_once` are introduced, they
+> have the same semantics as `READ_ONCE` and `WRITE_ONCE` especially
+> regarding data races under the assumption that `read_volatile` and
+
+I would separate implementation from specification. We specify
+`read_once` and `write_once` to have the same semantics as `READ_ONCE`
+and `WRITE_ONCE`. But we implement them using
+`read_volatile`/`write_volatile`, so we might still encounter UB, but it
+is still a sort of best effort. As soon as we have the actual thing in
+Rust, we will switch the implementation.
+
+> `write_volatile` have the same behavior as a volatile pointer in C from
+> a compiler point of view.
+>=20
+> Longer term solution is to work with Rust language side for a better way
+> to implement `read_once` and `write_once`. But so far, it should be good
+> enough.
+>=20
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Link: https://doc.rust-lang.org/std/ptr/fn.read_volatile.html#safety [1]
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>=20
+> Notice I also make the primitives only work on T: Copy, since I don't
+> think Rust side and C side will use a !Copy type to communicate, but we
+> can always remove that constrait later.
+>=20
+>=20
+>  rust/kernel/prelude.rs |  2 ++
+>  rust/kernel/types.rs   | 43 ++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 45 insertions(+)
+>=20
+> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> index ae21600970b3..351ad182bc63 100644
+> --- a/rust/kernel/prelude.rs
+> +++ b/rust/kernel/prelude.rs
+> @@ -38,3 +38,5 @@
+>  pub use super::init::{InPlaceInit, Init, PinInit};
+>=20
+>  pub use super::current;
+> +
+> +pub use super::types::{read_once, write_once};
+
+Do we really want people to use these so often that they should be in
+the prelude?
+
+Sure there will not really be any name conflicts, but I think an
+explicit import might make sense.
+
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index d849e1979ac7..b0872f751f97 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+
+I don't think this should go into `types.rs`. But I do not have a good
+name for the new module.
+
+> @@ -432,3 +432,46 @@ pub enum Either<L, R> {
+>      /// Constructs an instance of [`Either`] containing a value of type =
+`R`.
+>      Right(R),
+>  }
+> +
+> +/// (Concurrent) Primitives to interact with C side, which are considere=
+d as marked access:
+> +///
+> +/// tools/memory-memory/Documentation/access-marking.txt
+> +
+
+Accidental empty line? Or is this meant as a comment for both
+functions?
+
+> +/// The counter part of C `READ_ONCE()`.
+> +///
+> +/// The semantics is exactly the same as `READ_ONCE()`, especially when =
+used for intentional data
+> +/// races.
+
+It would be great if these semantics are either linked or spelled out
+here. Ideally both.
+
+> +///
+> +/// # Safety
+> +///
+> +/// * `src` must be valid for reads.
+> +/// * `src` must be properly aligned.
+> +/// * `src` must point to a properly initialized value of value `T`.
+> +#[inline(always)]
+> +pub unsafe fn read_once<T: Copy>(src: *const T) -> T {
+
+Why only `T: Copy`?
+
+> +    // SAFETY: the read is valid because of the function's safety requir=
+ement, plus the assumption
+> +    // here is that 1) a volatile pointer dereference in C and 2) a `rea=
+d_volatile` in Rust have the
+> +    // same semantics, so this function should have the same behavior as=
+ `READ_ONCE()` regarding
+> +    // data races.
+
+I would explicitly state that we might have UB here due to data races.
+But that we have not seen any invalid codegen and thus assume there to
+be no UB (you might also want to write this in the commit message).
+
+--
+Cheers,
+Benno
+
+> +    unsafe { src.read_volatile() }
+> +}
+> +
+> +/// The counter part of C `WRITE_ONCE()`.
+> +///
+> +/// The semantics is exactly the same as `WRITE_ONCE()`, especially when=
+ used for intentional data
+> +/// races.
+> +///
+> +/// # Safety
+> +///
+> +/// * `dst` must be valid for writes.
+> +/// * `dst` must be properly aligned.
+> +#[inline(always)]
+> +pub unsafe fn write_once<T: Copy>(dst: *mut T, value: T) {
+> +    // SAFETY: the write is valid because of the function's safety requi=
+rement, plus the assumption
+> +    // here is that 1) a write to a volatile pointer dereference in C an=
+d 2) a `write_volatile` in
+> +    // Rust have the same semantics, so this function should have the sa=
+me behavior as
+> +    // `WRITE_ONCE()` regarding data races.
+> +    unsafe {
+> +        core::ptr::write_volatile(dst, value);
+> +    }
+> +}
+> --
+> 2.41.0
