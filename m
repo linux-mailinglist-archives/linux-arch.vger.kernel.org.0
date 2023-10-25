@@ -2,230 +2,301 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287A17D6148
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Oct 2023 07:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ACBA7D61D1
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Oct 2023 08:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjJYFrD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Oct 2023 01:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S229583AbjJYGuS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Oct 2023 02:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjJYFrD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 01:47:03 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DA6132;
-        Tue, 24 Oct 2023 22:46:58 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id A2366176EDE;
-        Wed, 25 Oct 2023 07:46:53 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1698212815; bh=Fzoj7znzln2FKzFSy7EkpghoFnNQo2dDFbO99KLMZ1U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CtP3+TzS8CkcsgomgnQyRoews1e8kSXl6tIW6PP+WD6S7jUaZvG8SXzQc1jmk8G/E
-         JVGgfluKh0ZFUK69XkviXYUoLMWoBpqXlVoj+g6o/MkSwFYRcIsZLf2UD15izjtD5O
-         kIGiSxnG7PwSuFgbt2n28YOlyxAV82uWECuofceWuVNOjzkxb4AaY4+WFBA+e2vMWB
-         NHze7yHWtky0MHvjo2j/KSUzOPtgQfip6wsqvb/kxwmblgqsZUBvu3YcB7TydoTx/f
-         od6AL+VJNBPeFBQ+Wl5U3hQwxkVjP/CL3Nje1qTpGnTV0EZy4vR8Cy+BODfM5l08H6
-         ifCvvmhseikqA==
-Date:   Wed, 25 Oct 2023 07:46:52 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Suren Baghdasaryan <surenb@google.com>, Neil Brown <neilb@suse.de>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, vvvvvv@google.com,
-        gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-        minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH v2 06/39] mm: enumerate all gfp flags
-Message-ID: <20231025074652.44bc0eb4@meshulam.tesarici.cz>
-In-Reply-To: <20231024134637.3120277-7-surenb@google.com>
-References: <20231024134637.3120277-1-surenb@google.com>
-        <20231024134637.3120277-7-surenb@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S230009AbjJYGuQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 02:50:16 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248C911F;
+        Tue, 24 Oct 2023 23:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698216613; x=1729752613;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=8CWOhgW0WpESHioiS7JkCgnZR5ZTxlDsqflhybK46NU=;
+  b=YOPNQEgTVKxq2bQfpHIeLcwcyRln6qSqu/nxYfgBD/Jxeea5VKjZpidn
+   wpw4NjrUG8KZsFcxc7cUm/v470z5pBRA0WSrRNL+dmTljRQnb+KOscfkA
+   EKJ1DCM8ZSh+AjD8liiOyhpNJ+eHBzwQgfXQdnItKUZ59/umFdT3EDCju
+   AN7la0NdwACY0jmV2NriEbwt2WFBWeutiEo9aiKMC+bjdZ6Jj6lrUjfAj
+   fF5f8f14FrGSmZ81Fc7AgohsrSo7uej8cATQFq2tf83Y99Bp5x8iRMh1U
+   zn7HiuWlilFu/JZdRTmanVBu+PDKRv9HCE93cOmqWceEjhtXSD+yPjVZO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="451474186"
+X-IronPort-AV: E=Sophos;i="6.03,249,1694761200"; 
+   d="scan'208";a="451474186"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 23:50:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="758774881"
+X-IronPort-AV: E=Sophos;i="6.03,249,1694761200"; 
+   d="scan'208";a="758774881"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Oct 2023 23:50:09 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 24 Oct 2023 23:50:07 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 24 Oct 2023 23:50:07 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Tue, 24 Oct 2023 23:50:07 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Tue, 24 Oct 2023 23:50:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hKSyem1ns538keBMmpQXEniXcT71ZWTiyRbPHybuB0Gg9DkBBwsGyy3xaGXRt6DKXNSG2WtAS6vlS55axYdm0QRged4ZYX0d57Dn/vYDoyscgT59JnfECwZTqgD0IQk1ZF1aCW9jEobrk+Lfn0/htGPpvjpD4Xn1lgmtSWFBPU/yAgv62MZHP7hvu+sJbZvLT9Ip/HEEu5XVcr889O+TS6A6JnMy+aFHyA9QJA8kQRN5MiBH2Z0uIKm2MrDxVycl5cIgHPOVYNaGt48pvDZ//QN5QqFX760fpUAlV0ABeIiieadzRsTBnSyA4+hxW1/tGcRO2CBkGcFplgobTb1qyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ut9yjbvxS5j5fGbHbhbOnwXAo0qgIm14tRsgYD/NPnY=;
+ b=WIh+JmrD+L6vD4cChnNK/+hnjCrmtappHgMX2aMnnMXs1ZP3BeC6pFNleS/vhNM2JmolH1Zu/l08J4Um0TK2Z+gXVfylyr8fuye7cgChHDuHBSDqxjFikJ4ABkUXCOzTC3phOoJgrsrFOjMeur7mobqShf1xOsdjFrzdPyGTyjp15Egc7cE/iKdTYtMxm9zEP5VHZZ7omSz1XaSfWUGoceVmDAP3bxp5n+JAL6nKkub8mzL8FWNib0lzajwVYn5B79aZCOfaKmqf0YsbsHiFZgnT0e5LaRKcJj7yWx6NPuEz2THkoF2YQKCntIGDlNGHw0mh9ObIhCYBZg76H4jKig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM8PR11MB5751.namprd11.prod.outlook.com (2603:10b6:8:12::16) by
+ CH3PR11MB7772.namprd11.prod.outlook.com (2603:10b6:610:120::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.33; Wed, 25 Oct 2023 06:50:05 +0000
+Received: from DM8PR11MB5751.namprd11.prod.outlook.com
+ ([fe80::d070:1879:5b04:5f57]) by DM8PR11MB5751.namprd11.prod.outlook.com
+ ([fe80::d070:1879:5b04:5f57%4]) with mapi id 15.20.6933.019; Wed, 25 Oct 2023
+ 06:50:05 +0000
+From:   "Wang, Xiao W" <xiao.w.wang@intel.com>
+To:     Charlie Jenkins <charlie@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Samuel Holland <samuel.holland@sifive.com>,
+        David Laight <David.Laight@aculab.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: RE: [PATCH v7 2/4] riscv: Checksum header
+Thread-Topic: [PATCH v7 2/4] riscv: Checksum header
+Thread-Index: AQHZ6yms6aorkSEK5k6453Q63ctFM7BaOtGA
+Date:   Wed, 25 Oct 2023 06:50:05 +0000
+Message-ID: <DM8PR11MB575134C301E7E17E72281CFAB8DEA@DM8PR11MB5751.namprd11.prod.outlook.com>
+References: <20230919-optimize_checksum-v7-0-06c7d0ddd5d6@rivosinc.com>
+ <20230919-optimize_checksum-v7-2-06c7d0ddd5d6@rivosinc.com>
+In-Reply-To: <20230919-optimize_checksum-v7-2-06c7d0ddd5d6@rivosinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR11MB5751:EE_|CH3PR11MB7772:EE_
+x-ms-office365-filtering-correlation-id: 81a6e41c-cb3e-49bd-fdc3-08dbd5269ee2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0G5O4QCxAhLRMXw3MxEpwyuMlv0US9UEwUsuACUjqg/URne6Us6KzrrY5tFQnGxMn0MxXU4NXrZO7UeGaYlFVPVdD85fskrL7ZjBf4oGn4NIyaaskfA/qHagWYVV+3/MXk46mMx1QaTgDbEz9HqqxhvNJzxdBDL7tN3djC1n7oWqqiGGZ8uOWHGnm8T7qEtve3csJuQpnjVC9L6NEYgJidtcezYY86T9014T/TYRfBJ2CrjL8IZRbSBP2ro0jVhbVUTv01wL6A1Koipxrlj5S25of6X0eN+HX3Av47jAsa1nVSnBgtzow3exD9ruh+5DsJDSvSZSFodlVyaBB0q17YNyRFEwk/QfoP99CrZ6L9WDumakUZsx9dugI7T+82y/xhNW/T4xqROhKzx0tpru8grlWJU+xS12is4jl0BWQXjCXaFrEcT4yC/19Tr3vvH+aOWb6nzi6O/cX/R+fRcLV7uCd5ZFrXko3FA64XxCWhe9TCFYvAwvOPSyeCW2RUOexELELT7+fAgERhTLsnIJB2Eey2s4LmcPPkiNt+uljdt34xO+J1UzwAHchbOuuZgQju5OC3Kdiq69Wty/0nZ/+Qfeo602ZBwT7ZdRPn8igSI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5751.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(366004)(396003)(136003)(39860400002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(38070700009)(55016003)(83380400001)(7416002)(2906002)(38100700002)(71200400001)(8676002)(33656002)(52536014)(82960400001)(26005)(53546011)(122000001)(4326008)(8936002)(7696005)(64756008)(9686003)(86362001)(6506007)(316002)(478600001)(966005)(76116006)(5660300002)(66446008)(110136005)(54906003)(66556008)(66946007)(41300700001)(66476007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?1yzIe1PoURBJ1OeXU2VzBkhO/55jBQguVqE9CJtyYThvd6m9J11CaLU/?=
+ =?Windows-1252?Q?hrwJuYRE2O4v5yEoTedU2XVyX03gGO2BrzCcj34uVaLYQXc+OdGnlePq?=
+ =?Windows-1252?Q?w3t8WNJls+QoWNuszYY3KIS0/lMd7eqwW/9f3sH4opzbvnGFOUkBpRkr?=
+ =?Windows-1252?Q?jriacQaxcYB9GzUwsUhgBp3l02k31vci6Aij8ZNXH2iGFOlbJM5VIY1R?=
+ =?Windows-1252?Q?NLfrQ5FOFPjqBfCqREbLv/kcZkv5JUXMiE293wddVdrtTJo2O3y7MZrz?=
+ =?Windows-1252?Q?BmqGaj+IEWk4skGYZnHBsFBQhi1yXc6a7FMs+k5KDjwIr9wa9jpULiE5?=
+ =?Windows-1252?Q?/ufBs9WVVHwqXepsGX0RYMdVC3vvtzMH4qVyEbbnQYkzBfoOx7lrnt4j?=
+ =?Windows-1252?Q?Jx/SfkiROAoS1er5AADdlyzgvHYrY+MYOmVAJsbyWiUFx8Dt9JH/YaSU?=
+ =?Windows-1252?Q?aA3cjPEaRN5rozBIQbbe5QvV35qPpcXPRZl6sQATQFele3laqsEQZC3w?=
+ =?Windows-1252?Q?2LOno0L4nlgHvD4bubLucNfLXl/6Z0HZEW1oNP8AaEZfgUdaYMeTnRBQ?=
+ =?Windows-1252?Q?vpAPsnPRvJp0SlczO93X4xTWcbLeyXerWwpBff3xMVYn/y39IwexJcQv?=
+ =?Windows-1252?Q?sjnL37Kt7ELWOp4l1yMFVfJFBjknCj1tI2Tl8YmlTxyXzShT98YOaBep?=
+ =?Windows-1252?Q?IRZjIV9J1s65VIhqjT5Fj+SZiet3PTo5+YrzL9v7CmsDRWh50K6q2DrQ?=
+ =?Windows-1252?Q?7/qoZKL4XqHhpAlY7VB9LmPcs5dzs244SIIcHFKcfauqAMBfih7G+iIJ?=
+ =?Windows-1252?Q?23BPQboqNrMTP7s5FaGZyBg5+dFgg6pX8RFuaHzsB/LM9szmbwjWa4LN?=
+ =?Windows-1252?Q?lf8lVqKE9+kuNkHr60bYGWZ8KDUbZxWDTwOvXFIt6JFf7hkEiuYu76Ll?=
+ =?Windows-1252?Q?pbml8xVXOn1yBBGR4zHLGdtQNWy/hoaTmr+rSR/Ty6r84oE5VbBNnZGh?=
+ =?Windows-1252?Q?eiKlLVGWmR9ESPEdwHlVkPax/sKiidaT5TrU+ZX9jwJ82P+dH4R37aeJ?=
+ =?Windows-1252?Q?XzCOq2qdh3wjK2eY0no9nVXCx2dvMM/lKFumGGkPxucWu0q/LFj6TalS?=
+ =?Windows-1252?Q?ccXI0BQxAs6GcM890aXiInmzjF0R8xZIf3skyCg8ZZ/XWS1S7uUaxnJ1?=
+ =?Windows-1252?Q?UjNr5bpKp2IBpZrAk5mQf9lLpnkpEK1+00JwBiquUf2MfnPAITYVhjXD?=
+ =?Windows-1252?Q?uob5NMR5zRLkjPhFsrH+xhlYowBStL++eDlCEnDx8khdlCJVxRaWJpjr?=
+ =?Windows-1252?Q?PcRefCiwOVjotZ9KAMo8mn4GgiP+K+2EntA7kCXbLvnnI6RqEaxasA+M?=
+ =?Windows-1252?Q?tBNrq2uwBOiJ7s0r0t+KvZJ5A7e55CA84KXljFPcDiDoDElM4DRyH5Cc?=
+ =?Windows-1252?Q?7v7sQ+cLc5EoMplvBiOqHgUdpd2Mou1xffJUcxALi83v884nUpTBwgGj?=
+ =?Windows-1252?Q?RoDVU1p+NwG3hIN3arcDO3Tl7813xqRMU9wV72/PkQOvwmqf651QHxER?=
+ =?Windows-1252?Q?ajEvfQpk35e5u964LrZ4zV1Qtalj5pFWsFo9hXcNpkpwGs3Vcp04Q6dg?=
+ =?Windows-1252?Q?GUCWYuWzIueDxSre8Da6IN3HrV9P7qnZJdoNzl0h5MUDK3/ecCtt4AZA?=
+ =?Windows-1252?Q?ftso72W150xZNyr2aLp8z3iZwe5ersbU?=
+Content-Type: text/plain; charset="Windows-1252"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5751.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81a6e41c-cb3e-49bd-fdc3-08dbd5269ee2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2023 06:50:05.3721
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EbwYgF6V8G69WdsD1uOEFWdI9vzvcEctAbMcc4Ska6q5MivlmR5wuiklUr3DTxW8Vgr1qU9wPsj8WpAL9DPeSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7772
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 24 Oct 2023 06:46:03 -0700
-Suren Baghdasaryan <surenb@google.com> wrote:
+Hi Charlie,
 
-> Introduce GFP bits enumeration to let compiler track the number of used
-> bits (which depends on the config options) instead of hardcoding them.
-> That simplifies __GFP_BITS_SHIFT calculation.
-> Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/gfp_types.h | 90 +++++++++++++++++++++++++++------------
->  1 file changed, 62 insertions(+), 28 deletions(-)
+> -----Original Message-----
+> From: linux-riscv <linux-riscv-bounces@lists.infradead.org> On Behalf Of
+> Charlie Jenkins
+> Sent: Wednesday, September 20, 2023 2:45 AM
+> To: Charlie Jenkins <charlie@rivosinc.com>; Palmer Dabbelt
+> <palmer@dabbelt.com>; Conor Dooley <conor@kernel.org>; Samuel Holland
+> <samuel.holland@sifive.com>; David Laight <David.Laight@aculab.com>;
+> linux-riscv@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+> arch@vger.kernel.org
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>; Albert Ou
+> <aou@eecs.berkeley.edu>; Arnd Bergmann <arnd@arndb.de>
+> Subject: [PATCH v7 2/4] riscv: Checksum header
 >=20
-> diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-> index 6583a58670c5..3fbe624763d9 100644
-> --- a/include/linux/gfp_types.h
-> +++ b/include/linux/gfp_types.h
-> @@ -21,44 +21,78 @@ typedef unsigned int __bitwise gfp_t;
->   * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
->   */
-> =20
-> +enum {
-> +	___GFP_DMA_BIT,
-> +	___GFP_HIGHMEM_BIT,
-> +	___GFP_DMA32_BIT,
-> +	___GFP_MOVABLE_BIT,
-> +	___GFP_RECLAIMABLE_BIT,
-> +	___GFP_HIGH_BIT,
-> +	___GFP_IO_BIT,
-> +	___GFP_FS_BIT,
-> +	___GFP_ZERO_BIT,
-> +	___GFP_UNUSED_BIT,	/* 0x200u unused */
-> +	___GFP_DIRECT_RECLAIM_BIT,
-> +	___GFP_KSWAPD_RECLAIM_BIT,
-> +	___GFP_WRITE_BIT,
-> +	___GFP_NOWARN_BIT,
-> +	___GFP_RETRY_MAYFAIL_BIT,
-> +	___GFP_NOFAIL_BIT,
-> +	___GFP_NORETRY_BIT,
-> +	___GFP_MEMALLOC_BIT,
-> +	___GFP_COMP_BIT,
-> +	___GFP_NOMEMALLOC_BIT,
-> +	___GFP_HARDWALL_BIT,
-> +	___GFP_THISNODE_BIT,
-> +	___GFP_ACCOUNT_BIT,
-> +	___GFP_ZEROTAGS_BIT,
-> +#ifdef CONFIG_KASAN_HW_TAGS
-> +	___GFP_SKIP_ZERO_BIT,
-> +	___GFP_SKIP_KASAN_BIT,
-> +#endif
-> +#ifdef CONFIG_LOCKDEP
-> +	___GFP_NOLOCKDEP_BIT,
-> +#endif
-> +	___GFP_LAST_BIT
-> +};
+> Provide checksum algorithms that have been designed to leverage riscv
+> instructions such as rotate. In 64-bit, can take advantage of the larger
+> register to avoid some overflow checking.
+>=20
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/checksum.h | 79
+> +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>=20
+> diff --git a/arch/riscv/include/asm/checksum.h
+> b/arch/riscv/include/asm/checksum.h
+> new file mode 100644
+> index 000000000000..dc0dd89f2a13
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/checksum.h
+> @@ -0,0 +1,79 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * IP checksum routines
+> + *
+> + * Copyright (C) 2023 Rivos Inc.
+> + */
+> +#ifndef __ASM_RISCV_CHECKSUM_H
+> +#define __ASM_RISCV_CHECKSUM_H
 > +
->  /* Plain integer GFP bitmasks. Do not use this directly. */
-> -#define ___GFP_DMA		0x01u
-> -#define ___GFP_HIGHMEM		0x02u
-> -#define ___GFP_DMA32		0x04u
-> -#define ___GFP_MOVABLE		0x08u
-> -#define ___GFP_RECLAIMABLE	0x10u
-> -#define ___GFP_HIGH		0x20u
-> -#define ___GFP_IO		0x40u
-> -#define ___GFP_FS		0x80u
-> -#define ___GFP_ZERO		0x100u
-> +#define ___GFP_DMA		BIT(___GFP_DMA_BIT)
-> +#define ___GFP_HIGHMEM		BIT(___GFP_HIGHMEM_BIT)
-> +#define ___GFP_DMA32		BIT(___GFP_DMA32_BIT)
-> +#define ___GFP_MOVABLE		BIT(___GFP_MOVABLE_BIT)
-> +#define ___GFP_RECLAIMABLE	BIT(___GFP_RECLAIMABLE_BIT)
-> +#define ___GFP_HIGH		BIT(___GFP_HIGH_BIT)
-> +#define ___GFP_IO		BIT(___GFP_IO_BIT)
-> +#define ___GFP_FS		BIT(___GFP_FS_BIT)
-> +#define ___GFP_ZERO		BIT(___GFP_ZERO_BIT)
->  /* 0x200u unused */
+> +#include <linux/in6.h>
+> +#include <linux/uaccess.h>
+> +
+> +#define ip_fast_csum ip_fast_csum
+> +
+> +#include <asm-generic/checksum.h>
+> +
+> +/*
+> + * Quickly compute an IP checksum with the assumption that IPv4 headers
+> will
+> + * always be in multiples of 32-bits, and have an ihl of at least 5.
+> + * @ihl is the number of 32 bit segments and must be greater than or equ=
+al
+> to 5.
+> + * @iph is assumed to be word aligned.
 
-This comment can be also removed here, because it is already stated
-above with the definition of ___GFP_UNUSED_BIT.
+Not sure if the assumption is always true. It looks the implementation in "=
+lib/checksum.c" doesn't take this assumption.
+The ip header can comes after a 14-Byte ether header, which may start from =
+a word-aligned or DMA friendly address.
 
-Then again, I think that the GFP bits have never been compacted after
-Neil Brown removed __GFP_ATOMIC with commit 2973d8229b78 simply because
-that would mean changing definitions of all subsequent GFP flags. FWIW
-I am not aware of any code that would depend on the numeric value of
-___GFP_* macros, so this patch seems like a good opportunity to change
-the numbering and get rid of this unused 0x200u altogether.
+> + */
+> +static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
+> +{
+> +	unsigned long csum =3D 0;
+> +	int pos =3D 0;
+> +
+> +	do {
+> +		csum +=3D ((const unsigned int *)iph)[pos];
+> +		if (IS_ENABLED(CONFIG_32BIT))
+> +			csum +=3D csum < ((const unsigned int *)iph)[pos];
+> +	} while (++pos < ihl);
+> +
+> +	/*
+> +	 * ZBB only saves three instructions on 32-bit and five on 64-bit so no=
+t
+> +	 * worth checking if supported without Alternatives.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
+> +	    IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> +		unsigned long fold_temp;
+> +
+> +		asm_volatile_goto(ALTERNATIVE("j %l[no_zbb]", "nop", 0,
+> +					      RISCV_ISA_EXT_ZBB, 1)
+> +		    :
+> +		    :
+> +		    :
+> +		    : no_zbb);
+> +
+> +		if (IS_ENABLED(CONFIG_32BIT)) {
+> +			asm(".option push				\n\
+> +			.option arch,+zbb				\n\
+> +				not	%[fold_temp], %[csum]
+> 	\n\
+> +				rori	%[csum], %[csum], 16		\n\
+> +				sub	%[csum], %[fold_temp], %[csum]
+> 	\n\
+> +			.option pop"
+> +			: [csum] "+r" (csum), [fold_temp] "=3D&r" (fold_temp));
+> +		} else {
+> +			asm(".option push				\n\
+> +			.option arch,+zbb				\n\
+> +				rori	%[fold_temp], %[csum], 32	\n\
+> +				add	%[csum], %[fold_temp], %[csum]
+> 	\n\
+> +				srli	%[csum], %[csum], 32		\n\
+> +				not	%[fold_temp], %[csum]
+> 	\n\
+> +				roriw	%[csum], %[csum], 16		\n\
+> +				subw	%[csum], %[fold_temp], %[csum]
+> 	\n\
+> +			.option pop"
+> +			: [csum] "+r" (csum), [fold_temp] "=3D&r" (fold_temp));
+> +		}
+> +		return csum >> 16;
+> +	}
+> +no_zbb:
+> +#ifndef CONFIG_32BIT
+> +	csum +=3D (csum >> 32) | (csum << 32);
 
-@Neil: I have added you to the conversation in case you want to correct
-my understanding of the unused bit.
+Just like patch 3/4 does, we can call ror64(csum, 32).
 
-Other than that LGTM.
+BRs,
+Xiao
 
-Petr T
-
-> -#define ___GFP_DIRECT_RECLAIM	0x400u
-> -#define ___GFP_KSWAPD_RECLAIM	0x800u
-> -#define ___GFP_WRITE		0x1000u
-> -#define ___GFP_NOWARN		0x2000u
-> -#define ___GFP_RETRY_MAYFAIL	0x4000u
-> -#define ___GFP_NOFAIL		0x8000u
-> -#define ___GFP_NORETRY		0x10000u
-> -#define ___GFP_MEMALLOC		0x20000u
-> -#define ___GFP_COMP		0x40000u
-> -#define ___GFP_NOMEMALLOC	0x80000u
-> -#define ___GFP_HARDWALL		0x100000u
-> -#define ___GFP_THISNODE		0x200000u
-> -#define ___GFP_ACCOUNT		0x400000u
-> -#define ___GFP_ZEROTAGS		0x800000u
-> +#define ___GFP_DIRECT_RECLAIM	BIT(___GFP_DIRECT_RECLAIM_BIT)
-> +#define ___GFP_KSWAPD_RECLAIM	BIT(___GFP_KSWAPD_RECLAIM_BIT)
-> +#define ___GFP_WRITE		BIT(___GFP_WRITE_BIT)
-> +#define ___GFP_NOWARN		BIT(___GFP_NOWARN_BIT)
-> +#define ___GFP_RETRY_MAYFAIL	BIT(___GFP_RETRY_MAYFAIL_BIT)
-> +#define ___GFP_NOFAIL		BIT(___GFP_NOFAIL_BIT)
-> +#define ___GFP_NORETRY		BIT(___GFP_NORETRY_BIT)
-> +#define ___GFP_MEMALLOC		BIT(___GFP_MEMALLOC_BIT)
-> +#define ___GFP_COMP		BIT(___GFP_COMP_BIT)
-> +#define ___GFP_NOMEMALLOC	BIT(___GFP_NOMEMALLOC_BIT)
-> +#define ___GFP_HARDWALL		BIT(___GFP_HARDWALL_BIT)
-> +#define ___GFP_THISNODE		BIT(___GFP_THISNODE_BIT)
-> +#define ___GFP_ACCOUNT		BIT(___GFP_ACCOUNT_BIT)
-> +#define ___GFP_ZEROTAGS		BIT(___GFP_ZEROTAGS_BIT)
->  #ifdef CONFIG_KASAN_HW_TAGS
-> -#define ___GFP_SKIP_ZERO	0x1000000u
-> -#define ___GFP_SKIP_KASAN	0x2000000u
-> +#define ___GFP_SKIP_ZERO	BIT(___GFP_SKIP_ZERO_BIT)
-> +#define ___GFP_SKIP_KASAN	BIT(___GFP_SKIP_KASAN_BIT)
->  #else
->  #define ___GFP_SKIP_ZERO	0
->  #define ___GFP_SKIP_KASAN	0
->  #endif
->  #ifdef CONFIG_LOCKDEP
-> -#define ___GFP_NOLOCKDEP	0x4000000u
-> +#define ___GFP_NOLOCKDEP	BIT(___GFP_NOLOCKDEP_BIT)
->  #else
->  #define ___GFP_NOLOCKDEP	0
->  #endif
-> -/* If the above are modified, __GFP_BITS_SHIFT may need updating */
-> =20
->  /*
->   * Physical address zone modifiers (see linux/mmzone.h - low four bits)
-> @@ -249,7 +283,7 @@ typedef unsigned int __bitwise gfp_t;
->  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
-> =20
->  /* Room for N __GFP_FOO bits */
-> -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
-> +#define __GFP_BITS_SHIFT ___GFP_LAST_BIT
->  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
-> =20
->  /**
-
+> +	csum >>=3D 32;
+> +#endif
+> +	return csum_fold((__force __wsum)csum);
+> +}
+> +
+> +#endif // __ASM_RISCV_CHECKSUM_H
+>=20
+> --
+> 2.42.0
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
