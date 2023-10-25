@@ -2,260 +2,338 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906CC7D7811
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Oct 2023 00:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14FD7D7858
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Oct 2023 01:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjJYWg6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Oct 2023 18:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S229877AbjJYXDg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Oct 2023 19:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjJYWg5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 18:36:57 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26897AC;
-        Wed, 25 Oct 2023 15:36:52 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39PLNfSe019319;
-        Wed, 25 Oct 2023 22:36:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=q4Q0EFRV+KTn2YAAU5CLKSRZlReky5dXzhiF6PTDZZ8=;
- b=RLAPhrBprtad4srqeHJjO7+/AwydLU8qLYiv0eq1of6UJWY7xoNzGWPio9t9o7EnLzwu
- v7UbevhHU8Nf2akar/mRgnQBBB6CLC+/PvUfInuj6rx2D5FD+f0WJ0vD6OIJlDyN/eTE
- iI46ozHo04wdLSBKEoXzYMalNdHKAh6DS0r3VSyiOUvHk6KnKowNdtFSi7j9Pv0rdxoz
- wrTvk7bLaeX8pEoDkzw+v666uHggHoDGmhTMhSisUQsj6IsKZbizqWbmktLZIe3Spf5Q
- xFhJVFR2cdRki7dAp2yINGEudncnpBPo4tweK7RIfPmjKi/Obug4KkIscVDmVNQ3xuWT 1w== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tv68thfpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Oct 2023 22:36:47 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39PLeocm034561;
-        Wed, 25 Oct 2023 22:36:46 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3tv537avd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Oct 2023 22:36:46 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eZmzXDVO//rtlj4oi1VC+E/JPGuVctx6ag75bNtZcvd+RmfKYOgmwril6S50N81rSM8Zh1B6TRNRHDLSbZO1xMnvY+0R8Yqnw0F24tNaeFefpsp0zDUOvaAcPzvBsY7QKJAPsofTx3UcGH9WQKyiQwL/zlWQjaBqSRR2yoJWanRrlcY4iNQGG09xbAzuv1kJgA0Udxz6BdhY0P+wFYWKVdvl2380ga2IuHimvVMFZ+OUs3pCP7yFSUINyKfcCf96Ug7dGT4JBZgiZ0BvxeV8lklWrFfXWZTV9Yx21L3ME+VD235bKYTeTPwjzFfoOIOl7JoFvKhvhivg75KXnAaUhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q4Q0EFRV+KTn2YAAU5CLKSRZlReky5dXzhiF6PTDZZ8=;
- b=nSLp3BGWSNuA7GzSWuDcYoArV9IlPEz2x2PPDIKV8KnAZIWTt9ZBu7JbRwaxtOTHDVp0cdTrGmGxm+WXT7QiRYMGO7Te352+9hXiongYtkjFk/IOGjVQQYePGkTNEJpTsKkFHPOP97i8RafYLbKuMdHnSfdIippVCPgNUtSkZfZ1K81XmXhln6XrlEyxP653k/0xhU4W5HobkozjLC/2BNomP5ZP3Fyrec+++uv9IUGKmrlA7M108tGYLwx/fLELGjJUxFZxmJbt8TfBuXjkvjp3Sw4Fe2PnXSyaz3geBG5mJcdwdbliH1IfJGLhuuK7wiM41JkcztexzWeYDAnaMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S229723AbjJYXDf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 19:03:35 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB3CBB;
+        Wed, 25 Oct 2023 16:03:32 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d81d09d883dso196429276.0;
+        Wed, 25 Oct 2023 16:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q4Q0EFRV+KTn2YAAU5CLKSRZlReky5dXzhiF6PTDZZ8=;
- b=BrGoh65cU7bnNtAuVbuOuB4jw8Ql31lb1NAsCfWNSO3ynvRNdNGXnANVFJxBvqQqmI64c02gG7/rt2w+KlUhP2yMGGqSy39IdFHzSW493R3Q8mjLY3z+v+q8WmJLIfCYFMVraTDZSRbsIIxK0/WV7lQNqwisETTHgGPVJXsam1c=
-Received: from PH8PR10MB6597.namprd10.prod.outlook.com (2603:10b6:510:226::20)
- by CO1PR10MB4643.namprd10.prod.outlook.com (2603:10b6:303:9c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Wed, 25 Oct
- 2023 22:36:44 +0000
-Received: from PH8PR10MB6597.namprd10.prod.outlook.com
- ([fe80::6d2c:be3a:dbc5:6f9e]) by PH8PR10MB6597.namprd10.prod.outlook.com
- ([fe80::6d2c:be3a:dbc5:6f9e%4]) with mapi id 15.20.6933.019; Wed, 25 Oct 2023
- 22:36:44 +0000
-From:   Stephen Brennan <stephen.s.brennan@oracle.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-debuggers@vger.kernel.org
-Subject: [PATCH v2 1/1] kernel/config: Introduce CONFIG_DEBUG_INFO_IKCONFIG
-Date:   Wed, 25 Oct 2023 15:36:40 -0700
-Message-Id: <20231025223640.1132047-2-stephen.s.brennan@oracle.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20231025223640.1132047-1-stephen.s.brennan@oracle.com>
-References: <20231025223640.1132047-1-stephen.s.brennan@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PH0PR07CA0023.namprd07.prod.outlook.com
- (2603:10b6:510:5::28) To PH8PR10MB6597.namprd10.prod.outlook.com
- (2603:10b6:510:226::20)
+        d=gmail.com; s=20230601; t=1698275012; x=1698879812; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=61JSi82jmprMEy2wjLB3v55zpvhJh5bM0LopIsNdZBI=;
+        b=jXCfQ4MkgGZo0vVIaUkQGcBd881pWRRXMSrwxv/sCVleGYRejRAr87UbXvghsAPxHn
+         l3i0yypXGre04zp0ZRfEVy8Fmc8+khED2wJDIgRWowq2mBfQWtUCkiJy7vgSsoXwnsso
+         +za+35BYb2yeBGUzDoKB3VYs7+Oqpi80RryGtFaME5ulMd/9ByVYFJuEHC5X+yPIuVQl
+         PYQypJ6mPdz9Y5NxBX4IjjIXv4/5pb9IuKIdaB+63q4gBhFvHZNxE7u/LdX3DW5G9Lmp
+         In5Nzr2ce/PxOEnXw1ciR4y/5OXaqAd3dkwa3onqoe/gpI3hHwEbX8hiiOKN5bZBd8yH
+         ZpHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698275012; x=1698879812;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=61JSi82jmprMEy2wjLB3v55zpvhJh5bM0LopIsNdZBI=;
+        b=TnkJ7udCbkcQL66SWDbbdCgGzyb0kXp5ZGNPMVcAq+waQ4EcSnYfe+hD/NdB0L3R6G
+         br+xf+bZcZ8SD57X6XJJTniSrrPNOUZlCxdMZHgtDHT98wlQ7pnYF48OI2BlEwOJ7+WP
+         XgRprXnjiYPg3FNoiB+ZXeR2IbLXTbHwy3Xv3vb4v8vAIJkxr86oy8VS4C4MvNUNgzPr
+         fD9MUEF45tXKjeFGWdLf4/awwYpmgRuopCCHLuEyNEu+EiE184FInLF/Gx8bGxaKt84V
+         xBgOgFzJFHqBZHUP74LGxJncB6G3Mlhc+ecMdX8AkLpSIo33j8KIhXbobsOms97lF4Xx
+         KyTQ==
+X-Gm-Message-State: AOJu0Yy28fr0NaeZHBnDjSDR3ZI0ebm1vyD8KK3ADoM3Fkwa1BXqFd2R
+        FrMQp9x4L84/E7BiMJ7W1eA=
+X-Google-Smtp-Source: AGHT+IHzO+kZQE6t+6SokT/XjMJiUdNBfvOO3vMCUbf3gh0kZ9vOkSrhSIeP9wvnukh1IIjW55IOtw==
+X-Received: by 2002:a25:cfc9:0:b0:da0:68a0:7cc6 with SMTP id f192-20020a25cfc9000000b00da068a07cc6mr3923847ybg.17.1698275011722;
+        Wed, 25 Oct 2023 16:03:31 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id m10-20020a258c8a000000b00d9a4aad7f40sm4722392ybl.24.2023.10.25.16.03.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 16:03:31 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 15D0227C005B;
+        Wed, 25 Oct 2023 19:03:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 25 Oct 2023 19:03:30 -0400
+X-ME-Sender: <xms:wZ45ZXhrsAQv86EZB20iNdVStWugNJLSiSs8UqlV8WOzkdpe3iscVg>
+    <xme:wZ45ZUCuQeq1Fm7OMN92dciAz3VWEIKPi3isoU5Jy_HhjiwzD_MfmO3hxdl73AXqq
+    a9wQ14E2glff84OkA>
+X-ME-Received: <xmr:wZ45ZXEJ5dqgov2_NYos_099EEN_Matr_EBjJtuXtODoXPxOeC9MHdFg1eE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledugdduiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthekrodttddtjeenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeelgfegfeehtdeftedvjeffffdutddtvdduvddutdeigfffheehjeeutdeu
+    keeuieenucffohhmrghinheprhhushhtqdhlrghnghdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgr
+    uhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsoh
+    hquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:wZ45ZUT3D_EgD3vYO4rUAkdJ_hj7h1AKSYudX2jVrHUrRPsJrL5ACg>
+    <xmx:wZ45ZUwk5yKED0_O9mfPn1S6DyCpCrQEmzr1U-03ZkU6bGSLR_qkHw>
+    <xmx:wZ45Za5Y_WVxM_VIkdzobstZ76uBfYKYIPpNf_yGiTzqLqsPJg-8jQ>
+    <xmx:wp45ZVRw4Nc-eD9_tWFDJqqPeb_AOUnatoLTu8HK250Oa41qsU7erA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Oct 2023 19:03:28 -0400 (EDT)
+Date:   Wed, 25 Oct 2023 16:02:45 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Benno Lossin <benno.lossin@proton.me>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        kent.overstreet@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        elver@google.com, Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC] rust: types: Add read_once and write_once
+Message-ID: <ZTmelWlSncdtExXp@boqun-archlinux>
+References: <20231025195339.1431894-1-boqun.feng@gmail.com>
+ <VEhpQqgTM0U-aNYRUQ89ICIHW9Eehr66yw92DrmBZcZOah2mLqlz24HxEwDwYPVDOnaigDiZDEVl5mWqZJxoAtRheqTMjzpxuTKe0sr1uZs=@proton.me>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR10MB6597:EE_|CO1PR10MB4643:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fe7dbe9-0d34-46ab-5142-08dbd5aadd7d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y4ZahiVNBZs7UUpMzrLSaicLckTqBoqIsRGyb3G5fmyA8ZvWl7iLC6Xy0+aOzhvO5FG2QkRagpU1npOVf7bdZ/o+gbEVJGakMdni11RvZwG/UfFSYSLMuvzu+iKuARP7C6EA3gpue6EHkY+HyLVgEs8yN50kOOKl2ouTUSJT33ViLJDyNWczyGBK3xT99FLisfp0AY+XuNRUpuiwXl5EmtPA5+5dDrX+lSWM5l2wsTD97NOdPXXYtvJfy78ZzgEzwSZrb9UAn2YkGD2IV92pFAafShlK74z8Dk2mfnc3Rv23OgbZBz+SN/JneKBhJSXRhrnUWng79R/RnbbQJxpyocdHLTUt6JVHYI6uSsL0exsozlCqo8mgjUDmxeS1buhtwhiWqhyKDOPLpa59oDUypx3y/m3g71pb/QZYRMc9tUPHP2qNE2sYQ4zP9Kc/Ieol4ZCsHjcukrN4RtVI/josnEUToaBi65eaC54PJWbpLue+nIddMPmvleO3GL6UxZED+Rtw8pJiW370H2l+yFyUwibT/xrj6uxyU0FS095IVRWYex/Hb0tfAD80u8pOlrFA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6597.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(376002)(346002)(136003)(396003)(230922051799003)(1800799009)(186009)(451199024)(64100799003)(2616005)(1076003)(6512007)(6506007)(6666004)(83380400001)(103116003)(86362001)(36756003)(38100700002)(478600001)(6486002)(2906002)(66556008)(66476007)(66946007)(54906003)(5660300002)(41300700001)(8676002)(4326008)(8936002)(6916009)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?46Qp9X1ggJv38gpLzYx7y6NmgqIZNdk1yRIRa9hicV3JL5nLztmH0PXhknJl?=
- =?us-ascii?Q?sAOmHriwhOa/Ioi/8XcF/22GGo16wpr4FHv5IFtLhqjg9ySdhnAKlOGj83aI?=
- =?us-ascii?Q?V3Yn4laYFv1h/ixwHXBIaO92joW9AuOAa36YCrxhUK5dQdNLWWOZMysIUdIi?=
- =?us-ascii?Q?TrZrh8ESY/WOOGUOsxD4pn8NzO9qGvCu0iFjuqNI5LZARCX+xjOPQIuZW2zC?=
- =?us-ascii?Q?pPFhsTwbzjr0Q9lCAfU/DA3KTTnszLNfvpfqX1XVCBAQ4DGBYRyCEtHV8meR?=
- =?us-ascii?Q?65JLiAwV5IYyFgVmEj+tMXfp71u65tLUgVBzh9IwBlGIDcxTuoCJRLcWwwa7?=
- =?us-ascii?Q?0CBuQv2YMo3ioer3T3remhW349qJ32HHDMhfl/lp41YYIBuoSczVTeipw3mi?=
- =?us-ascii?Q?cjHKVixcnuTsKfuuCCmx1Xm2QkV4Vg1lkKCBwLlcOzFDH6Wg4+P38ziLB2/x?=
- =?us-ascii?Q?O63U2bQSFIGpbgTZB68MVFHMcgaigk6h1gkq3x7ds1ZyILocct+eDF23g1Ga?=
- =?us-ascii?Q?H+DFdzVlSUcmDFxqA3rnLDr25YSFDqSKSbtR+PKxqL4328aRI4JXsE8CFrR7?=
- =?us-ascii?Q?tzj2m2NOabIgChMzY9ii8frezPsjJtzaI5lJBMIiw2i83NHb+O+uZXz4DSHm?=
- =?us-ascii?Q?YIcaoIaoS6u9QICJqFwoxBs995XputB5OsgHXzPuOgqUpyVkAf3VnOEPXRal?=
- =?us-ascii?Q?yWFL5ggkxMXTiNiXHrHMAun3/URHejkmvMUXddW8fklkuFTLQ3j/pJWO3tkA?=
- =?us-ascii?Q?iDs2Hs/5+z90BxahxABSuNfzec/rVqBXD/lnkY/+hcVFcRMWcSMixZUrfToH?=
- =?us-ascii?Q?SBF9gX/Y1Ocnx1iQDTJgnHIib+whxJJCX1fxJEqr2gTXS78vScfSDSpYL+oR?=
- =?us-ascii?Q?k/0ObGZKGO8Rc6/ViD+K8SD88iWuHgyHgUYDArPDNlbGLQfHsXqzbbt2KEso?=
- =?us-ascii?Q?qljJcAs8WCl2t04wB1/GvaRBjkFJDToYoOsERfXvbhcUXpoBCt3R52XetUkU?=
- =?us-ascii?Q?RyGU0IOlrmugS7ojbRqFPMiDWQy9M3p+AFAksSSLWJ8cO9gZxBdhyzLnK4vB?=
- =?us-ascii?Q?tRTF1uxfFbIq271GugKTuZrRXalsWgB9c8Bvu8bjvC7bGTsuwhNc2h/2UbpX?=
- =?us-ascii?Q?p0aexA7CZ3f9lAyRnoEZ7bVbm6hJgrJ/v7ysZUmMvLqGXt+bnAFMroDRKtlr?=
- =?us-ascii?Q?QqHTjk9s7SB+01aQIyPbh3U/4qjMIu2vbppC8Jiz2FPWgQN2NqHOwKKgEQOT?=
- =?us-ascii?Q?U16LylUXOwvAJ/mrs/ftlNMm4uWSWYEXSnVuy7UTTgZ/vt60lRTzr+qTXAPJ?=
- =?us-ascii?Q?SUqJ6UUwf8VPw/eUpTOrdNbJsHCx6i7nN/5P3jO6qX9+556x3JxlA4Ra6E2R?=
- =?us-ascii?Q?KiZT7iozKCfBmZLtvffwq+eakgb27Tmm29rX3jBFZH8lpx/jWaN7glFIVLqY?=
- =?us-ascii?Q?4pSI3RvEkakZr9Bxz7dZYvT0L0VfzSguKhVZpqTzqAS4X9CLTGc84nGGQTcN?=
- =?us-ascii?Q?M9MNJmuL2qSFKob8eeAGv5qQ9Eze5l4HYjCMqtnO+5ceDUCKstvHRsZVsW1y?=
- =?us-ascii?Q?+x9XVSdVMewk/khlWa/c3GBy8CBufTh1HCuXu8lrJ88l6iwA91cVpYEbgJS5?=
- =?us-ascii?Q?tyv5TWIHXtTHE9JW7YNer0uOkYr/ZiJgUzGgTokhEPhc?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: DX9hzBcqpvXx+ebvylOa6XJpG+PRJxEkGtTTrjeaMq9FMikmzF/Z1oZQbb2aoGY7LKLzT1mXPH1NN4HGtcXzFCExAhVmo8FdtbwDXGCgO+48A72C3s1QvUrzvJCC/wss2EdxXQAQi05QQUGvMpGhJK6pceTfuFP4kxiyIR4aiopUPy6OVJwmIfDaq95ydfybeIJStOs29X2vv9yythk5fHwfmUow8E0pfTN1S7elUI9ys4A94maTKnthQ6D1443t3EZrxdhy+ubGl5tWLch0bwfaj9rm3eR1jtaS+C74FSxeWI8aLra0hVkRA8jua1lfTmc8zv3aVK+GmuNyg59rZZCpYNGK/D92uK10hBbO5tHzuku73nUAzrTga35cZcJIYXjILUTe7G0849gMeSScW2oIWGZfxzmTyLxcLROsfDNY7cSeTuq6xkEOQzOVXOrONKK6DjkG2vBOZ+cxpETVxoXMy7dY5LWou5oTOXNimKMiWxmgEPhMnpJcNopB+HBJgI0Tn8CakZHepObAJNpDZmgjRgFhRi4j4JHE7QoHidXdXdJYi/JenFahCFbph7ayShpUYflYPm/yyQy3b+HTMHZAHgQxSfnmow8pVolNFdFl3b4nm57EXcYkTxuSMVSjQTuGbaxYROCqT/F8gRG68NHfeF/D/9Z1abzK96b+59ienLrWYjZDPbm0YtYmHwbd+yFSlenSNjhlhJ4sfbr+6v4MQUM8fs3sovAGpXWQuj58YgfQm8qGmmnQYwYGXevP5UbjTMJqRKlKeubm6JUJCoWNUfi5Y/jPCutRuD9Gn0QE0EpfSGHS9ZIInnNKEdWm+HK4bJkcIAvDeyjBhKQSVQ==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe7dbe9-0d34-46ab-5142-08dbd5aadd7d
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6597.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2023 22:36:44.4061
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nWLvKG1btQo3kz7QGhC7arDoF+Fz6O9ZQRjZ60pMR+5yuczyLy38IxhhE8X+4HwEqUj3XqNF8JO+HgeonEvBD0wDBy1FJGYV4zy43KlPrV0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4643
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-25_12,2023-10-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310170001
- definitions=main-2310250194
-X-Proofpoint-ORIG-GUID: WlG3LvCWg2XcF53i4pyIMLCapW3MTbgn
-X-Proofpoint-GUID: WlG3LvCWg2XcF53i4pyIMLCapW3MTbgn
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <VEhpQqgTM0U-aNYRUQ89ICIHW9Eehr66yw92DrmBZcZOah2mLqlz24HxEwDwYPVDOnaigDiZDEVl5mWqZJxoAtRheqTMjzpxuTKe0sr1uZs=@proton.me>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The option CONFIG_IKCONFIG allows the gzip compressed kernel
-configuration to be included into vmlinux or a module. In these cases,
-debuggers can access the config data and use it to adjust their behavior
-according to the configuration. However, distributions rarely enable
-this, likely because it uses a fair bit of kernel memory which cannot be
-swapped out.
+On Wed, Oct 25, 2023 at 09:51:28PM +0000, Benno Lossin wrote:
+> > In theory, `read_volatile` and `write_volatile` in Rust can have UB in
+> > case of the data races [1]. However, kernel uses volatiles to implement
+> 
+> I would not write "In theory", but rather state that data races involving
+> `read_volatile` is documented to still be UB.
+> 
 
-This means that in practice, the kernel configuration is rarely
-available to debuggers.
+Good point.
 
-So, introduce an alternative, CONFIG_DEBUG_INFO_IKCONFIG. This strategy,
-which is only available if IKCONFIG is not already built-in, adds a
-section ".debug_linux_ikconfig", to the vmlinux ELF. It will be stripped
-out of the final images, but will remain in the debuginfo files. So
-debuggers which rely on vmlinux debuginfo can have access to the kernel
-configuration, without incurring a cost to the kernel at runtime.
+> > READ_ONCE() and WRITE_ONCE(), and expects races on these marked accesses
+> 
+> Missing "`"?
+> 
 
-The configuration is enabled whenever DEBUG_INFO=y and IKCONFIG!=y. The
-added section is not large compared to debug info sizes. It won't affect
-the runtime kernel at all, and this default will ensure that
-distributions intending to create useful debuginfo will get this new
-addition for kernel debuggers.
+Yeah, but these are C macros, and here is the commit log, so I wasn't so
+sure I want to add "`", but I guess it's good for consistency.
 
-Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
----
- include/asm-generic/vmlinux.lds.h |  3 ++-
- kernel/Makefile                   |  1 +
- kernel/configs-debug.S            | 18 ++++++++++++++++++
- lib/Kconfig.debug                 | 15 +++++++++++++++
- 4 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 kernel/configs-debug.S
+> > don't cause UB. And they are proven to have a lot of usages in kernel.
+> > 
+> > To close this gap, `read_once` and `write_once` are introduced, they
+> > have the same semantics as `READ_ONCE` and `WRITE_ONCE` especially
+> > regarding data races under the assumption that `read_volatile` and
+> 
+> I would separate implementation from specification. We specify
+> `read_once` and `write_once` to have the same semantics as `READ_ONCE`
+> and `WRITE_ONCE`. But we implement them using
+> `read_volatile`/`write_volatile`, so we might still encounter UB, but it
+> is still a sort of best effort. As soon as we have the actual thing in
+> Rust, we will switch the implementation.
+> 
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 9c59409104f6..025b0bfe17bf 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -824,7 +824,8 @@
- 		.comment 0 : { *(.comment) }				\
- 		.symtab 0 : { *(.symtab) }				\
- 		.strtab 0 : { *(.strtab) }				\
--		.shstrtab 0 : { *(.shstrtab) }
-+		.shstrtab 0 : { *(.shstrtab) }				\
-+		.debug_linux_ikconfig 0 : { *(.debug_linux_ikconfig) }
- 
- #ifdef CONFIG_GENERIC_BUG
- #define BUG_TABLE							\
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 3947122d618b..e2f517a10f04 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -138,6 +138,7 @@ KCSAN_SANITIZE_stackleak.o := n
- KCOV_INSTRUMENT_stackleak.o := n
- 
- obj-$(CONFIG_SCF_TORTURE_TEST) += scftorture.o
-+obj-$(CONFIG_DEBUG_INFO_IKCONFIG) += configs-debug.o
- 
- $(obj)/configs.o: $(obj)/config_data.gz
- 
-diff --git a/kernel/configs-debug.S b/kernel/configs-debug.S
-new file mode 100644
-index 000000000000..d0dd5c2f7bd5
---- /dev/null
-+++ b/kernel/configs-debug.S
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0-only
-+ *
-+ * Inline kernel configuration for debuginfo files
-+ *
-+ * Copyright (c) 2023, Oracle and/or its affiliates.
-+ */
-+
-+/*
-+ * By using the same "IKCFG_ST" and "IKCFG_ED" markers found in configs.c, we
-+ * can ensure that the resulting debuginfo files can be read by
-+ * scripts/extract-ikconfig. Unfortunately, this means that the contents of the
-+ * section cannot be directly extracted and used. Since debuggers should be able
-+ * to trim these markers off trivially, this is a good tradeoff.
-+ */
-+	.section .debug_linux_ikconfig
-+	.ascii "IKCFG_ST"
-+	.incbin "kernel/config_data.gz"
-+	.ascii "IKCFG_ED"
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index fa307f93fa2e..c43a874ea584 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -429,6 +429,21 @@ config GDB_SCRIPTS
- 	  instance. See Documentation/dev-tools/gdb-kernel-debugging.rst
- 	  for further details.
- 
-+config DEBUG_INFO_IKCONFIG
-+	bool "Embed KConfig in debuginfo, if not already present"
-+	depends on IKCONFIG!=y
-+	default y if IKCONFIG!=y
-+	help
-+	  This provides the gzip-compressed KConfig information in an ELF
-+	  section called .ikconfig which will be stripped out of the final
-+	  bootable image, but remain in the debuginfo. Debuggers that are aware
-+	  of this can use this to customize their behavior to the kernel
-+	  configuration, without requiring the configuration information to be
-+	  stored in the kernel like CONFIG_IKCONFIG does. This configuration is
-+	  unnecessary when CONFIG_IKCONFIG is enabled, since the data can be
-+	  found in the .rodata section in that case (see
-+	  scripts/extract-ikconfig).
-+
- endif # DEBUG_INFO
- 
- config FRAME_WARN
--- 
-2.39.3
+Sounds good, I will use this in the next version.
 
+> > `write_volatile` have the same behavior as a volatile pointer in C from
+> > a compiler point of view.
+> > 
+> > Longer term solution is to work with Rust language side for a better way
+> > to implement `read_once` and `write_once`. But so far, it should be good
+> > enough.
+> > 
+> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> > Link: https://doc.rust-lang.org/std/ptr/fn.read_volatile.html#safety [1]
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> > 
+> > Notice I also make the primitives only work on T: Copy, since I don't
+> > think Rust side and C side will use a !Copy type to communicate, but we
+> > can always remove that constrait later.
+> > 
+> > 
+> >  rust/kernel/prelude.rs |  2 ++
+> >  rust/kernel/types.rs   | 43 ++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 45 insertions(+)
+> > 
+> > diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> > index ae21600970b3..351ad182bc63 100644
+> > --- a/rust/kernel/prelude.rs
+> > +++ b/rust/kernel/prelude.rs
+> > @@ -38,3 +38,5 @@
+> >  pub use super::init::{InPlaceInit, Init, PinInit};
+> > 
+> >  pub use super::current;
+> > +
+> > +pub use super::types::{read_once, write_once};
+> 
+> Do we really want people to use these so often that they should be in
+> the prelude?
+> 
+
+The reason I prelude them is because that `READ_ONCE` and `WRITE_ONCE`
+have total ~7000 users in kernel, but now think about it, maybe it's
+better not.
+
+> Sure there will not really be any name conflicts, but I think an
+> explicit import might make sense.
+> 
+> > diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> > index d849e1979ac7..b0872f751f97 100644
+> > --- a/rust/kernel/types.rs
+> > +++ b/rust/kernel/types.rs
+> 
+> I don't think this should go into `types.rs`. But I do not have a good
+> name for the new module.
+> 
+
+kernel::sync?
+
+> > @@ -432,3 +432,46 @@ pub enum Either<L, R> {
+> >      /// Constructs an instance of [`Either`] containing a value of type `R`.
+> >      Right(R),
+> >  }
+> > +
+> > +/// (Concurrent) Primitives to interact with C side, which are considered as marked access:
+> > +///
+> > +/// tools/memory-memory/Documentation/access-marking.txt
+> > +
+> 
+> Accidental empty line? Or is this meant as a comment for both
+> functions?
+> 
+
+Right, it's the documentation for both functions.
+
+> > +/// The counter part of C `READ_ONCE()`.
+> > +///
+> > +/// The semantics is exactly the same as `READ_ONCE()`, especially when used for intentional data
+> > +/// races.
+> 
+> It would be great if these semantics are either linked or spelled out
+> here. Ideally both.
+> 
+
+Actually I haven't found any document about `READ_ONCE()` races with
+writes is not UB: we do have document saying `READ_ONCE()` will disable
+KCSAN checks, but no document says (explicitly) that it's not a UB.
+
+> > +///
+> > +/// # Safety
+> > +///
+> > +/// * `src` must be valid for reads.
+> > +/// * `src` must be properly aligned.
+> > +/// * `src` must point to a properly initialized value of value `T`.
+> > +#[inline(always)]
+> > +pub unsafe fn read_once<T: Copy>(src: *const T) -> T {
+> 
+> Why only `T: Copy`?
+> 
+
+I actually explained this above, after "---" of the commit log, but
+maybe it's worth its own documentation? The reason that it only works
+with `T: Copy`, is that these primitives should be mostly used for
+C/Rust communication, and using a `T: !Copy` is probably wrong (or at
+least complicated) for communication, since users need to handle which
+one should be used after `read_once()`. This is in the same spirit as
+`read_volatile` documentation:
+
+```
+Like read, read_volatile creates a bitwise copy of T, regardless of
+whether T is Copy. If T is not Copy, using both the returned value and
+the value at *src can violate memory safety. However, storing non-Copy
+types in volatile memory is almost certainly incorrect.
+```
+
+I want to start with restrict usage.
+
+> > +    // SAFETY: the read is valid because of the function's safety requirement, plus the assumption
+> > +    // here is that 1) a volatile pointer dereference in C and 2) a `read_volatile` in Rust have the
+> > +    // same semantics, so this function should have the same behavior as `READ_ONCE()` regarding
+> > +    // data races.
+> 
+> I would explicitly state that we might have UB here due to data races.
+> But that we have not seen any invalid codegen and thus assume there to
+
+I'd rather not claim this (no invalid codegen), not because it's not
+true, but because it's not under our control. We have written doc in
+Rust says:
+
+```
+... so the precise semantics of what “volatile” means here is subject
+to change over time. That being said, the semantics will almost always
+end up pretty similar to C11’s definition of volatile.
+```
+
+, so we have some confidence to say `read_volatile` equals to a volatile
+read, and `write_volatile` equals to a volatile write. Therefore, we can
+assume they have the same behaviors as `READ_ONCE()` and `WRITE_ONCE()`,
+but that's it. Going futher to talk about codegen means we have more
+guarantee from Rust compiler implementation.
+
+In other words, we are not saying racing `read_volatile`s don't have
+UBs, we are saying racing `read_volatile`s behave the same as a volatile
+read on UBs.
+
+Regards,
+Boqun
+
+> be no UB (you might also want to write this in the commit message).
+> 
+> --
+> Cheers,
+> Benno
+> 
+> > +    unsafe { src.read_volatile() }
+> > +}
+> > +
+> > +/// The counter part of C `WRITE_ONCE()`.
+> > +///
+> > +/// The semantics is exactly the same as `WRITE_ONCE()`, especially when used for intentional data
+> > +/// races.
+> > +///
+> > +/// # Safety
+> > +///
+> > +/// * `dst` must be valid for writes.
+> > +/// * `dst` must be properly aligned.
+> > +#[inline(always)]
+> > +pub unsafe fn write_once<T: Copy>(dst: *mut T, value: T) {
+> > +    // SAFETY: the write is valid because of the function's safety requirement, plus the assumption
+> > +    // here is that 1) a write to a volatile pointer dereference in C and 2) a `write_volatile` in
+> > +    // Rust have the same semantics, so this function should have the same behavior as
+> > +    // `WRITE_ONCE()` regarding data races.
+> > +    unsafe {
+> > +        core::ptr::write_volatile(dst, value);
+> > +    }
+> > +}
+> > --
+> > 2.41.0
+> 
