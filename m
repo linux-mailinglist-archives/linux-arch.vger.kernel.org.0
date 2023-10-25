@@ -2,217 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AB47D74DE
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Oct 2023 21:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF777D75D6
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Oct 2023 22:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjJYTyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Oct 2023 15:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S229632AbjJYUha (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Oct 2023 16:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjJYTyc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 15:54:32 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915C893;
-        Wed, 25 Oct 2023 12:54:30 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a82c2eb50cso860327b3.2;
-        Wed, 25 Oct 2023 12:54:30 -0700 (PDT)
+        with ESMTP id S229583AbjJYUh3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 16:37:29 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B07DDE
+        for <linux-arch@vger.kernel.org>; Wed, 25 Oct 2023 13:37:27 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6ce2c5b2154so95321a34.3
+        for <linux-arch@vger.kernel.org>; Wed, 25 Oct 2023 13:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698263670; x=1698868470; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=p6jzHaWTKlGSa7gW0KxMQikIkjGjrHxsb4GjecdcJn0=;
-        b=ZahyFL13OVt27cpBrFOFCWM6R+swbSN0MZ0bcTr43eYBc6zIE38AECvW6c4RgMsLjm
-         elnWgQ7WaBd/2hT4vC/l1uBBQ1upxqngGzmji0+7iAwj4ei3tQAq+8cqkyLSUU8LpxFA
-         wb8B6rq+ctadJGpM6g137qrkChEyt2jj6TTZhnXVZs7aZ5SWzHGJO7ZInWML4xgvH/in
-         leDllM9PdHvrfjgeurj9lE67f6SwY5t4kHOyefF3AT2e+tGKPmMkgEvjTd2UeX+7rRBv
-         pMznuzabzjaNSKdRH8gfGUzljnNg744ReDoFQQ3ii8WJa+LDsUGD5mILlABpSd3oXaA8
-         Oo+w==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1698266244; x=1698871044; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GRvWkvBoDYkTwsED6VPJ0pdisbEkaoGqPda2wjpU/Qs=;
+        b=MII0mSTzaQsqVwpW2bZubOzl9GP8xBXYgW3rk0k3ReYKcLrieCYwQP2tmFC5O1kssl
+         1Lf9FuZ8RiskJ6lVenwZwo8w6QVlTemUAWvQPhvVh7lZGv2BVUt3P3oaz+6e0vJ3nVT6
+         NLUZQU61fyc4pHxV5dQUECFsA1WGYxdpdCxWy5uCwcNhYxDllCsoqA01eCLt9y6zRghr
+         0r9I5hppaMVdV9aHFjylDJhgY/Nk8jifUnVvUv8HwM9tM7e2dqn7dhPBltnERgXRp7Wb
+         GoRYc3/WKLU9r6YzD8DUkkd8d0My9GHNrjKKPlrJ526/zGcics5PhrNOAzpxga+ZBaIL
+         ZYtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698263670; x=1698868470;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1698266244; x=1698871044;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p6jzHaWTKlGSa7gW0KxMQikIkjGjrHxsb4GjecdcJn0=;
-        b=n+yrr+cy/cRUVbv0zFkKEdzWy9zYcgUa4zbtelKNFYWckLsxQBSL1SxbwUtBUYfUMV
-         yYEJBQ16Y0L7N9Ibu08Nt2+fSI8u0Db0AKofoqbES6jhnp+yRRvKjTeqpW3jRV64opHO
-         yobqwKbQreWX1/Q7HzWawiv6K5qa6dwcSmD38lTLv/l9Gsu0rAEafF5bvZf0U5UDPvGR
-         0+tY3g32400G/poqSAL+BXk/6lYvFhKGhrd3CjZVIwSTufLxBAV62kQYPcfF0+1LPuxy
-         W8S4UMH6kq1qEjRnrUJXBzB+PXFxK6vbrFr4tbRoHmpZq3uMNeCeTuHjKDCao2KzPcdS
-         kYOw==
-X-Gm-Message-State: AOJu0YyUIFMsbnuY9pWSVLen4qPbVcgr4pUgn+UIzsyJ7S2gVu+Q5fjV
-        wVE7/AY1+wOiE5AY3yEoEVY=
-X-Google-Smtp-Source: AGHT+IE1Qoa4fNnTrlw2zi+7SL0JCE9t3C3ItrrVVXqK/dgYfAvHje3e4eM5qTM2/rpQ9A6/alwxZg==
-X-Received: by 2002:a81:ca08:0:b0:5a7:e4d9:f091 with SMTP id p8-20020a81ca08000000b005a7e4d9f091mr13541440ywi.25.1698263669715;
-        Wed, 25 Oct 2023 12:54:29 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id m124-20020a0de382000000b0059b2be24f88sm5237780ywe.143.2023.10.25.12.54.28
+        bh=GRvWkvBoDYkTwsED6VPJ0pdisbEkaoGqPda2wjpU/Qs=;
+        b=WpoFZFisNhthGw87WCOv2po1EVcsCNUT2T2bUEsixaB72I1mp3LovwZuB+0Iqhai3u
+         LpXPCAkEzgvFvj0PK6pBv66tb5QxA78Sb5YpiHJWgjx0JDdFLLGsyhZVfhW+O3+acEim
+         YvXITQmDNDLDdhVL8dNyL5OfG7LIO9HTvK0hfppG2vHLICgY7ltB0D7tlb+ICLtZEh4q
+         AuZ+NNzcfc80aJ1e1wM4dcvVLaxM51hIygNH9zqq9U1P5cIcQrt33U3oo7vn9wXkQRfb
+         dZvY5l9d/iIG3Ep5jYlDg8GFgv9facwQVKGe4FwzEcG75++1H0M0Pd+OjGzcl+OwZpWP
+         UxIA==
+X-Gm-Message-State: AOJu0YxCa5LnQIt/Hg06xeO9V7HqdFOw4UsrQD7EQt/4ZUCrtokIzf4+
+        hqRYycHAD69dRzZkUrRc8sThXQ==
+X-Google-Smtp-Source: AGHT+IFbX7AlguqhQunscrGf7kDQdcHYoFURhBlkQP1vlzURhFZhOpWBh6z5tFsLLNMSZKF3FqxKdg==
+X-Received: by 2002:a9d:6286:0:b0:6bd:152f:9918 with SMTP id x6-20020a9d6286000000b006bd152f9918mr18452849otk.14.1698266244527;
+        Wed, 25 Oct 2023 13:37:24 -0700 (PDT)
+Received: from ghost ([208.116.208.98])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056830160f00b006b9cc67386fsm2385303otr.66.2023.10.25.13.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 12:54:29 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 20A6027C0060;
-        Wed, 25 Oct 2023 15:54:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 25 Oct 2023 15:54:28 -0400
-X-ME-Sender: <xms:cnI5ZWZTeke_xoOgsGIkXHFnfFohKjDOcE_V2oT5Th5_P2KTEEnInA>
-    <xme:cnI5ZZZCAfQS4C3m50zr8JFHYGqKOhVh2wMrJJlB6isP24MIIkxn4nZDgHTste-O7
-    X-r2LqcPAj7hTZzrg>
-X-ME-Received: <xmr:cnI5ZQ92BHTnKIGmNHw9h9GC6gYuPrbuI7AnvO0ztLe1Taej2gj8PZ4RTEA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledtgddugeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeefkeeijefhvefhfffgfedtkedtveeulefggfejfefhudehleejieeikedvfefh
-    heenucffohhmrghinheprhhushhtqdhlrghnghdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
-    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:cnI5ZYoqr4SgwvJ6XLhjqBtp_kKFy4P4xHdcaBd0Di3LnhZF7-6_4Q>
-    <xmx:cnI5ZRrdSP7NauFhBhtWmmwz_HkN8nzThC2PXd99wCmFSxwTk9BBtQ>
-    <xmx:cnI5ZWQcipx3D9EVRo09vAx8Dqq_7kUfP-mlOfVQNWlsNq4iMvI0EA>
-    <xmx:dHI5ZeKTOhdY5FRFZesTApaVS7J9EpJQXBBVCrh-83EATNl-ZotTQA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Oct 2023 15:54:25 -0400 (EDT)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        kent.overstreet@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        elver@google.com, Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org
-Subject: [RFC] rust: types: Add read_once and write_once
-Date:   Wed, 25 Oct 2023 12:53:39 -0700
-Message-ID: <20231025195339.1431894-1-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 25 Oct 2023 13:37:24 -0700 (PDT)
+Date:   Wed, 25 Oct 2023 13:37:21 -0700
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     "Wang, Xiao W" <xiao.w.wang@intel.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Samuel Holland <samuel.holland@sifive.com>,
+        David Laight <David.Laight@aculab.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v7 2/4] riscv: Checksum header
+Message-ID: <ZTl8gauEst2NGrw6@ghost>
+References: <20230919-optimize_checksum-v7-0-06c7d0ddd5d6@rivosinc.com>
+ <20230919-optimize_checksum-v7-2-06c7d0ddd5d6@rivosinc.com>
+ <DM8PR11MB575134C301E7E17E72281CFAB8DEA@DM8PR11MB5751.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR11MB575134C301E7E17E72281CFAB8DEA@DM8PR11MB5751.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In theory, `read_volatile` and `write_volatile` in Rust can have UB in
-case of the data races [1]. However, kernel uses volatiles to implement
-READ_ONCE() and WRITE_ONCE(), and expects races on these marked accesses
-don't cause UB. And they are proven to have a lot of usages in kernel.
+On Wed, Oct 25, 2023 at 06:50:05AM +0000, Wang, Xiao W wrote:
+> Hi Charlie,
+> 
+> > -----Original Message-----
+> > From: linux-riscv <linux-riscv-bounces@lists.infradead.org> On Behalf Of
+> > Charlie Jenkins
+> > Sent: Wednesday, September 20, 2023 2:45 AM
+> > To: Charlie Jenkins <charlie@rivosinc.com>; Palmer Dabbelt
+> > <palmer@dabbelt.com>; Conor Dooley <conor@kernel.org>; Samuel Holland
+> > <samuel.holland@sifive.com>; David Laight <David.Laight@aculab.com>;
+> > linux-riscv@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+> > arch@vger.kernel.org
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>; Albert Ou
+> > <aou@eecs.berkeley.edu>; Arnd Bergmann <arnd@arndb.de>
+> > Subject: [PATCH v7 2/4] riscv: Checksum header
+> > 
+> > Provide checksum algorithms that have been designed to leverage riscv
+> > instructions such as rotate. In 64-bit, can take advantage of the larger
+> > register to avoid some overflow checking.
+> > 
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/checksum.h | 79
+> > +++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 79 insertions(+)
+> > 
+> > diff --git a/arch/riscv/include/asm/checksum.h
+> > b/arch/riscv/include/asm/checksum.h
+> > new file mode 100644
+> > index 000000000000..dc0dd89f2a13
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/checksum.h
+> > @@ -0,0 +1,79 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * IP checksum routines
+> > + *
+> > + * Copyright (C) 2023 Rivos Inc.
+> > + */
+> > +#ifndef __ASM_RISCV_CHECKSUM_H
+> > +#define __ASM_RISCV_CHECKSUM_H
+> > +
+> > +#include <linux/in6.h>
+> > +#include <linux/uaccess.h>
+> > +
+> > +#define ip_fast_csum ip_fast_csum
+> > +
+> > +#include <asm-generic/checksum.h>
+> > +
+> > +/*
+> > + * Quickly compute an IP checksum with the assumption that IPv4 headers
+> > will
+> > + * always be in multiples of 32-bits, and have an ihl of at least 5.
+> > + * @ihl is the number of 32 bit segments and must be greater than or equal
+> > to 5.
+> > + * @iph is assumed to be word aligned.
+> 
+> Not sure if the assumption is always true. It looks the implementation in "lib/checksum.c" doesn't take this assumption.
+> The ip header can comes after a 14-Byte ether header, which may start from a word-aligned or DMA friendly address.
 
-To close this gap, `read_once` and `write_once` are introduced, they
-have the same semantics as `READ_ONCE` and `WRITE_ONCE` especially
-regarding data races under the assumption that `read_volatile` and
-`write_volatile` have the same behavior as a volatile pointer in C from
-a compiler point of view.
+While lib/checksum.c does not make this assumption, other architectures
+(x86, ARM, powerpc, mips, arc) do make this assumption. Architectures
+seem to only align the header on a word boundary in do_csum. I worry
+that the benefit of aligning iph in this "fast" csum function would
+disproportionately impact hardware that has fast misaligned accesses.
 
-Longer term solution is to work with Rust language side for a better way
-to implement `read_once` and `write_once`. But so far, it should be good
-enough.
+- Charlie
 
-Suggested-by: Alice Ryhl <aliceryhl@google.com>
-Link: https://doc.rust-lang.org/std/ptr/fn.read_volatile.html#safety [1]
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
-
-Notice I also make the primitives only work on T: Copy, since I don't
-think Rust side and C side will use a !Copy type to communicate, but we
-can always remove that constrait later.
-
-
- rust/kernel/prelude.rs |  2 ++
- rust/kernel/types.rs   | 43 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
-
-diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-index ae21600970b3..351ad182bc63 100644
---- a/rust/kernel/prelude.rs
-+++ b/rust/kernel/prelude.rs
-@@ -38,3 +38,5 @@
- pub use super::init::{InPlaceInit, Init, PinInit};
- 
- pub use super::current;
-+
-+pub use super::types::{read_once, write_once};
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index d849e1979ac7..b0872f751f97 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -432,3 +432,46 @@ pub enum Either<L, R> {
-     /// Constructs an instance of [`Either`] containing a value of type `R`.
-     Right(R),
- }
-+
-+/// (Concurrent) Primitives to interact with C side, which are considered as marked access:
-+///
-+/// tools/memory-memory/Documentation/access-marking.txt
-+
-+/// The counter part of C `READ_ONCE()`.
-+///
-+/// The semantics is exactly the same as `READ_ONCE()`, especially when used for intentional data
-+/// races.
-+///
-+/// # Safety
-+///
-+/// * `src` must be valid for reads.
-+/// * `src` must be properly aligned.
-+/// * `src` must point to a properly initialized value of value `T`.
-+#[inline(always)]
-+pub unsafe fn read_once<T: Copy>(src: *const T) -> T {
-+    // SAFETY: the read is valid because of the function's safety requirement, plus the assumption
-+    // here is that 1) a volatile pointer dereference in C and 2) a `read_volatile` in Rust have the
-+    // same semantics, so this function should have the same behavior as `READ_ONCE()` regarding
-+    // data races.
-+    unsafe { src.read_volatile() }
-+}
-+
-+/// The counter part of C `WRITE_ONCE()`.
-+///
-+/// The semantics is exactly the same as `WRITE_ONCE()`, especially when used for intentional data
-+/// races.
-+///
-+/// # Safety
-+///
-+/// * `dst` must be valid for writes.
-+/// * `dst` must be properly aligned.
-+#[inline(always)]
-+pub unsafe fn write_once<T: Copy>(dst: *mut T, value: T) {
-+    // SAFETY: the write is valid because of the function's safety requirement, plus the assumption
-+    // here is that 1) a write to a volatile pointer dereference in C and 2) a `write_volatile` in
-+    // Rust have the same semantics, so this function should have the same behavior as
-+    // `WRITE_ONCE()` regarding data races.
-+    unsafe {
-+        core::ptr::write_volatile(dst, value);
-+    }
-+}
--- 
-2.41.0
-
+> 
+> > + */
+> > +static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
+> > +{
+> > +	unsigned long csum = 0;
+> > +	int pos = 0;
+> > +
+> > +	do {
+> > +		csum += ((const unsigned int *)iph)[pos];
+> > +		if (IS_ENABLED(CONFIG_32BIT))
+> > +			csum += csum < ((const unsigned int *)iph)[pos];
+> > +	} while (++pos < ihl);
+> > +
+> > +	/*
+> > +	 * ZBB only saves three instructions on 32-bit and five on 64-bit so not
+> > +	 * worth checking if supported without Alternatives.
+> > +	 */
+> > +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
+> > +	    IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> > +		unsigned long fold_temp;
+> > +
+> > +		asm_volatile_goto(ALTERNATIVE("j %l[no_zbb]", "nop", 0,
+> > +					      RISCV_ISA_EXT_ZBB, 1)
+> > +		    :
+> > +		    :
+> > +		    :
+> > +		    : no_zbb);
+> > +
+> > +		if (IS_ENABLED(CONFIG_32BIT)) {
+> > +			asm(".option push				\n\
+> > +			.option arch,+zbb				\n\
+> > +				not	%[fold_temp], %[csum]
+> > 	\n\
+> > +				rori	%[csum], %[csum], 16		\n\
+> > +				sub	%[csum], %[fold_temp], %[csum]
+> > 	\n\
+> > +			.option pop"
+> > +			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp));
+> > +		} else {
+> > +			asm(".option push				\n\
+> > +			.option arch,+zbb				\n\
+> > +				rori	%[fold_temp], %[csum], 32	\n\
+> > +				add	%[csum], %[fold_temp], %[csum]
+> > 	\n\
+> > +				srli	%[csum], %[csum], 32		\n\
+> > +				not	%[fold_temp], %[csum]
+> > 	\n\
+> > +				roriw	%[csum], %[csum], 16		\n\
+> > +				subw	%[csum], %[fold_temp], %[csum]
+> > 	\n\
+> > +			.option pop"
+> > +			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp));
+> > +		}
+> > +		return csum >> 16;
+> > +	}
+> > +no_zbb:
+> > +#ifndef CONFIG_32BIT
+> > +	csum += (csum >> 32) | (csum << 32);
+> 
+> Just like patch 3/4 does, we can call ror64(csum, 32).
+> 
+> BRs,
+> Xiao
+> 
+> > +	csum >>= 32;
+> > +#endif
+> > +	return csum_fold((__force __wsum)csum);
+> > +}
+> > +
+> > +#endif // __ASM_RISCV_CHECKSUM_H
+> > 
+> > --
+> > 2.42.0
+> > 
+> > 
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
