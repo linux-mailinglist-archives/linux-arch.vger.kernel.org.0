@@ -2,89 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE377D7B41
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Oct 2023 05:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682BE7D7DA6
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Oct 2023 09:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjJZDbs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Oct 2023 23:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S229658AbjJZHan (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Oct 2023 03:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjJZDbq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Oct 2023 23:31:46 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D28D194;
-        Wed, 25 Oct 2023 20:31:43 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d9ad67058fcso325025276.1;
-        Wed, 25 Oct 2023 20:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698291102; x=1698895902; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6GDP4Ji1MuCk3r0rvr3Ck3tuIDn99qjLg2EPnlAxDfI=;
-        b=aj/0YbEw0yP9qQ7QfTRz5qIG2TDcC5ABohmOSzlKIUC3RANRtYa4mblxwK8kXjMsXu
-         tuNJThNtYoYzCeIDSRrC40XsXWkivt7d/9iTV/d9G9K2DcehZN8z/zPEv9E9/rGTC1nH
-         4IXl+/3ORvulLO+GhGRkVv/zWR5Q3HjzrmnfFS7t3iAeJ3lqoPv22tlbI9s7nWS0gQRb
-         8Z7yca9eKfFGbO/u8AZEy339yE8EDhjDiZUwLU804MWtNhFYBJfwy/eycemhkON6rb2m
-         dZEwwym33n12u5Jx56GGc8+GnJSeOWdKBZBUdoPZwhIGWP0Aboptr5QL/tEO4mcRVlnh
-         gpow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698291102; x=1698895902;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6GDP4Ji1MuCk3r0rvr3Ck3tuIDn99qjLg2EPnlAxDfI=;
-        b=K08QtJp+rxMU4OLsTqhted7TveJTT8touTl28by7pehvWjsr8QM0Pq5Jn8P9hb+Gk1
-         PRtSrnZolpiN/3jOb1CsfSlZs26b8xH5rqx8P/VDnWVXMyj6Syn8t/rwONkAp7XQukKZ
-         5DJXuZ1gCrBBghFMvJHSq1MUlDzpy9P8E+Z3xS5zbowoYt6en1qIIyBXdHl7JE5SqytB
-         K4R1bn3bwgMUUl2BP1oFjuFU5csMbXBK2PpUHQnsLcvNUS3RZZ4v7NnnvPSoIE9oVXPE
-         I2OTC+S1ul+1k/tEDXQ6V8AJh3d3PaOffyXZNiqWR/UVYpj5M9GosjZViWtwqqfXmJwr
-         db/g==
-X-Gm-Message-State: AOJu0Yy6cduxSzexMIM/br9kYyRDAjGEgQ0UQp1NlGuTGc/XUKnmiG4K
-        du0TXNw9cVZXHzZWZX6v3fU=
-X-Google-Smtp-Source: AGHT+IE6nWVjaeF4q/0JgTm0tiEMymvKwaOV3OJaUyaEBTfVrh0s6CM2luZevzfv2bUOnfOHijnNPw==
-X-Received: by 2002:a25:918e:0:b0:d36:99eb:fc01 with SMTP id w14-20020a25918e000000b00d3699ebfc01mr15701879ybl.15.1698291102146;
-        Wed, 25 Oct 2023 20:31:42 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id w31-20020a25ac1f000000b00d9ab86bdaffsm4984302ybi.12.2023.10.25.20.31.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 20:31:41 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 3B45227C0054;
-        Wed, 25 Oct 2023 23:31:40 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 25 Oct 2023 23:31:40 -0400
-X-ME-Sender: <xms:m905ZXHeabl3payzsGhnipr0939fPX1WxlYXtDpPGBitYhhuzVsEdA>
-    <xme:m905ZUVYD2YuuzvX0WrBbGOn5IYF7wzv9iuP8I0NfXrxZVCPa6fP7gmRROY4s1l4r
-    FxrMeZeluMTg5R2Ew>
-X-ME-Received: <xmr:m905ZZLr0mpZlucqGn--iRC_i9zBXh9l9NxoYesfxctvOjI6E6ycdTs-5fk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledugdejtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudff
-    iedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
-    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
-    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
-    hmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:m905ZVHl7gYAxsC6OQxxI0jqcNrRPp__xknC5IfWjYIw-hYel9CIww>
-    <xmx:m905ZdUtrnbZBu41BsfJOKZhpSQNJ0GohEakOq0QmMlAM6gtBAW0Wg>
-    <xmx:m905ZQN-mXx_OzXtxWGhLrWAbo0hWFgf1CNJu5jeGVb7iSg9X2xGJw>
-    <xmx:nN05ZX3KwPnCn483ZeL7KokyhKS-GhK5quGqZ46tVJYPU14rgOCwSw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Oct 2023 23:31:38 -0400 (EDT)
-Date:   Wed, 25 Oct 2023 20:31:37 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Benno Lossin <benno.lossin@proton.me>
+        with ESMTP id S229638AbjJZHam (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Oct 2023 03:30:42 -0400
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA86184
+        for <linux-arch@vger.kernel.org>; Thu, 26 Oct 2023 00:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1698305434; x=1698564634;
+        bh=axyZQ/iRfA1t2iV98gW5YxAJMui6/7akQHsAayWVQLo=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Dlw9jrhGm+TIaNhBsvAuXjQ6r8zYlFFwdDelakVE8u/m8HqkXbUY7MM1QNf/3UUgN
+         qszlyh0YGy3MpDpXu/xAYf34BrmpRg6PLi+BsSx54cSWi6YAJ/5hHwS7SLMnsA+0SI
+         zbENVxSQCKDKMUCDnA5+yzptWZC9cHy0Ey/munrkbKC3+TYi4Ff0cJ8J4MpPSrcVee
+         9z//tRYuRPtGLog0mMGKeJv+gV7V++KQ4KeNJysLpjkNPvgyegG4RIMsWgWHm1UqjJ
+         FjoQpiJ00aL4aqZUZ0t4vsTGArVDEL47nG+RdgIeiYJwBYngJSZYsmRbJo6Mzdhesn
+         I9Cl+hasdd/Yw==
+Date:   Thu, 26 Oct 2023 07:30:23 +0000
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   Benno Lossin <benno.lossin@proton.me>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, llvm@lists.linux.dev,
         Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
         Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
         Andreas Hindborg <a.hindborg@samsung.com>,
         Alice Ryhl <aliceryhl@google.com>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -110,76 +61,239 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dave Chinner <david@fromorbit.com>,
         linux-fsdevel@vger.kernel.org
 Subject: Re: [RFC] rust: types: Add read_once and write_once
-Message-ID: <ZTndmXEBf37G84X-@Boquns-Mac-mini.home>
-References: <20231025195339.1431894-1-boqun.feng@gmail.com>
- <VEhpQqgTM0U-aNYRUQ89ICIHW9Eehr66yw92DrmBZcZOah2mLqlz24HxEwDwYPVDOnaigDiZDEVl5mWqZJxoAtRheqTMjzpxuTKe0sr1uZs=@proton.me>
- <ZTmelWlSncdtExXp@boqun-archlinux>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <lScQ1U0g-cF24r7MwhNpqeVAtKcrIbGJHza4a3dsrc67qpEid8czeB3Dgs5Zd3GPIf7woFEc1EkOEdEl63qsW20lSLi8o4tefv9LI5FfLho=@proton.me>
 In-Reply-To: <ZTmelWlSncdtExXp@boqun-archlinux>
+References: <20231025195339.1431894-1-boqun.feng@gmail.com> <VEhpQqgTM0U-aNYRUQ89ICIHW9Eehr66yw92DrmBZcZOah2mLqlz24HxEwDwYPVDOnaigDiZDEVl5mWqZJxoAtRheqTMjzpxuTKe0sr1uZs=@proton.me> <ZTmelWlSncdtExXp@boqun-archlinux>
+Feedback-ID: 71780778:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 04:02:45PM -0700, Boqun Feng wrote:
-[...]
-> > > +/// The counter part of C `READ_ONCE()`.
-> > > +///
-> > > +/// The semantics is exactly the same as `READ_ONCE()`, especially when used for intentional data
-> > > +/// races.
-> > 
-> > It would be great if these semantics are either linked or spelled out
-> > here. Ideally both.
-> > 
-> 
+On 26.10.23 01:02, Boqun Feng wrote:
+> On Wed, Oct 25, 2023 at 09:51:28PM +0000, Benno Lossin wrote:
+>>> In theory, `read_volatile` and `write_volatile` in Rust can have UB in
+>>> case of the data races [1]. However, kernel uses volatiles to implement
+>>
+>> I would not write "In theory", but rather state that data races involvin=
+g
+>> `read_volatile` is documented to still be UB.
+>>
+>=20
+> Good point.
+>=20
+>>> READ_ONCE() and WRITE_ONCE(), and expects races on these marked accesse=
+s
+>>
+>> Missing "`"?
+>>
+>=20
+> Yeah, but these are C macros, and here is the commit log, so I wasn't so
+> sure I want to add "`", but I guess it's good for consistency.
+
+I was just wondering if it was intentional, since you did it below.
+
+>>> don't cause UB. And they are proven to have a lot of usages in kernel.
+>>>
+>>> To close this gap, `read_once` and `write_once` are introduced, they
+>>> have the same semantics as `READ_ONCE` and `WRITE_ONCE` especially
+>>> regarding data races under the assumption that `read_volatile` and
+>>
+>> I would separate implementation from specification. We specify
+>> `read_once` and `write_once` to have the same semantics as `READ_ONCE`
+>> and `WRITE_ONCE`. But we implement them using
+>> `read_volatile`/`write_volatile`, so we might still encounter UB, but it
+>> is still a sort of best effort. As soon as we have the actual thing in
+>> Rust, we will switch the implementation.
+>>
+>=20
+> Sounds good, I will use this in the next version.
+>=20
+>>> `write_volatile` have the same behavior as a volatile pointer in C from
+>>> a compiler point of view.
+>>>
+>>> Longer term solution is to work with Rust language side for a better wa=
+y
+>>> to implement `read_once` and `write_once`. But so far, it should be goo=
+d
+>>> enough.
+>>>
+>>> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+>>> Link: https://doc.rust-lang.org/std/ptr/fn.read_volatile.html#safety [1=
+]
+>>> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+>>> ---
+>>>
+>>> Notice I also make the primitives only work on T: Copy, since I don't
+>>> think Rust side and C side will use a !Copy type to communicate, but we
+>>> can always remove that constrait later.
+>>>
+>>>
+>>>   rust/kernel/prelude.rs |  2 ++
+>>>   rust/kernel/types.rs   | 43 +++++++++++++++++++++++++++++++++++++++++=
++
+>>>   2 files changed, 45 insertions(+)
+>>>
+>>> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+>>> index ae21600970b3..351ad182bc63 100644
+>>> --- a/rust/kernel/prelude.rs
+>>> +++ b/rust/kernel/prelude.rs
+>>> @@ -38,3 +38,5 @@
+>>>   pub use super::init::{InPlaceInit, Init, PinInit};
+>>>
+>>>   pub use super::current;
+>>> +
+>>> +pub use super::types::{read_once, write_once};
+>>
+>> Do we really want people to use these so often that they should be in
+>> the prelude?
+>>
+>=20
+> The reason I prelude them is because that `READ_ONCE` and `WRITE_ONCE`
+> have total ~7000 users in kernel, but now think about it, maybe it's
+> better not.
+
+I think we should start out with it not in the prelude. Drivers should
+not need to call this often (I hope that only abstractions actually need
+this).
+
+>> Sure there will not really be any name conflicts, but I think an
+>> explicit import might make sense.
+>>
+>>> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+>>> index d849e1979ac7..b0872f751f97 100644
+>>> --- a/rust/kernel/types.rs
+>>> +++ b/rust/kernel/types.rs
+>>
+>> I don't think this should go into `types.rs`. But I do not have a good
+>> name for the new module.
+>>
+>=20
+> kernel::sync?
+
+I like that.
+
+>>> @@ -432,3 +432,46 @@ pub enum Either<L, R> {
+>>>       /// Constructs an instance of [`Either`] containing a value of ty=
+pe `R`.
+>>>       Right(R),
+>>>   }
+>>> +
+>>> +/// (Concurrent) Primitives to interact with C side, which are conside=
+red as marked access:
+>>> +///
+>>> +/// tools/memory-memory/Documentation/access-marking.txt
+>>> +
+>>
+>> Accidental empty line? Or is this meant as a comment for both
+>> functions?
+>>
+>=20
+> Right, it's the documentation for both functions.
+
+That will not work, it will just be rendered only on `read_once`.
+
+Maybe just copy it to both and also cross link the two functions.
+So `read_once` mentions the counterpart `write_once`.
+
+>>> +/// The counter part of C `READ_ONCE()`.
+>>> +///
+>>> +/// The semantics is exactly the same as `READ_ONCE()`, especially whe=
+n used for intentional data
+>>> +/// races.
+>>
+>> It would be great if these semantics are either linked or spelled out
+>> here. Ideally both.
+>>
+>=20
 > Actually I haven't found any document about `READ_ONCE()` races with
 > writes is not UB: we do have document saying `READ_ONCE()` will disable
 > KCSAN checks, but no document says (explicitly) that it's not a UB.
-> 
+>=20
+>>> +///
+>>> +/// # Safety
+>>> +///
+>>> +/// * `src` must be valid for reads.
+>>> +/// * `src` must be properly aligned.
+>>> +/// * `src` must point to a properly initialized value of value `T`.
+>>> +#[inline(always)]
+>>> +pub unsafe fn read_once<T: Copy>(src: *const T) -> T {
+>>
+>> Why only `T: Copy`?
+>>
+>=20
+> I actually explained this above, after "---" of the commit log, but
 
-Apparently I wasn't carefully reading the doc, in
-tools/memory-model/Documentation/explanation.txt, there is:
+Oh I missed that, sorry.
 
-	In technical terms, the compiler is allowed to assume that when the
-	program executes, there will not be any data races.  A "data race"
-	occurs when there are two memory accesses such that:
+> maybe it's worth its own documentation? The reason that it only works
 
-	1.      they access the same location,
+Yeah, lets document it. Otherwise I agree with your reasoning.
 
-	2.      at least one of them is a store,
+> with `T: Copy`, is that these primitives should be mostly used for
+> C/Rust communication, and using a `T: !Copy` is probably wrong (or at
+> least complicated) for communication, since users need to handle which
+> one should be used after `read_once()`. This is in the same spirit as
+> `read_volatile` documentation:
+>=20
+> ```
+> Like read, read_volatile creates a bitwise copy of T, regardless of
+> whether T is Copy. If T is not Copy, using both the returned value and
+> the value at *src can violate memory safety. However, storing non-Copy
+> types in volatile memory is almost certainly incorrect.
+> ```
+>=20
+> I want to start with restrict usage.
+>=20
+>>> +    // SAFETY: the read is valid because of the function's safety requ=
+irement, plus the assumption
+>>> +    // here is that 1) a volatile pointer dereference in C and 2) a `r=
+ead_volatile` in Rust have the
+>>> +    // same semantics, so this function should have the same behavior =
+as `READ_ONCE()` regarding
+>>> +    // data races.
+>>
+>> I would explicitly state that we might have UB here due to data races.
+>> But that we have not seen any invalid codegen and thus assume there to
+>=20
+> I'd rather not claim this (no invalid codegen), not because it's not
+> true, but because it's not under our control. We have written doc in
 
-	3.      at least one of them is plain,
+But it is under our control, we pin the compiler version and can always
+just check if the codegen is correct. If someone finds that it is not,
+we also want to be informed, so I think we should write that we rely on
+it here.
 
-	4.      they occur on different CPUs (or in different threads on the
-		same CPU), and
+> Rust says:
+>=20
+> ```
+> ... so the precise semantics of what =E2=80=9Cvolatile=E2=80=9D means her=
+e is subject
+> to change over time. That being said, the semantics will almost always
+> end up pretty similar to C11=E2=80=99s definition of volatile.
+> ```
 
-	5.      they execute concurrently.
+But this is not a guarantee, that they behave exactly the same as C11
+_now_.
 
-the #3 limits that in LKMM, data races cannot happen if both accesses
-are marked (i.e. not plain).
+--=20
+Cheers,
+Benno
 
-Thank Paul for bringing this to me, and I will update this accordingly
-in the next version.
-
-Regards,
-Boqun
-
-> > > +///
-> > > +/// # Safety
-> > > +///
-> > > +/// * `src` must be valid for reads.
-> > > +/// * `src` must be properly aligned.
-> > > +/// * `src` must point to a properly initialized value of value `T`.
-> > > +#[inline(always)]
-> > > +pub unsafe fn read_once<T: Copy>(src: *const T) -> T {
-> > 
-> > Why only `T: Copy`?
-> > 
-[...]
+> , so we have some confidence to say `read_volatile` equals to a volatile
+> read, and `write_volatile` equals to a volatile write. Therefore, we can
+> assume they have the same behaviors as `READ_ONCE()` and `WRITE_ONCE()`,
+> but that's it. Going futher to talk about codegen means we have more
+> guarantee from Rust compiler implementation.
+>=20
+> In other words, we are not saying racing `read_volatile`s don't have
+> UBs, we are saying racing `read_volatile`s behave the same as a volatile
+> read on UBs.
