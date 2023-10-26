@@ -2,85 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48637D8489
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Oct 2023 16:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0327D873B
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Oct 2023 19:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbjJZOX1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Oct 2023 10:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S231180AbjJZRIb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Oct 2023 13:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjJZOX1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Oct 2023 10:23:27 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD82C1A2;
-        Thu, 26 Oct 2023 07:23:24 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-d9ca471cf3aso675304276.2;
-        Thu, 26 Oct 2023 07:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698330204; x=1698935004; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qmQ12llQk3IZSo1cj6ehbveeVOkoR+zL/LYihr+kgBA=;
-        b=Qsort+udxHwK3UZgVeua4g2+z/2T7uXFTeokbC0yqQCMMJ7VGRZBwzf2xib7SljoCK
-         lYYS0JcQgOQYLj7JHxSkzFfUTf2OEDKLwJFYYUu8Ti4mTiFm4S30XWJi7TaCvngrIxZ1
-         sx9m+lKb7U+nCWnB0EG/PSSKhepWoxwN5pe8mdjevGLr9MbzgErufgIh756mQzFy/Ijd
-         BIpK692GUs6RpLRGNc2IQifyE3TNpb1wRUexyDoDF8oCw/wPoEvAXdquJ3fie+2Phmes
-         RAtBNHtuRmVIf4j99MXmdHpUIZc+hiewP4IQ66XOklNa30w2hQ1xi4oGwJFjNSA8iUXq
-         IELQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698330204; x=1698935004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qmQ12llQk3IZSo1cj6ehbveeVOkoR+zL/LYihr+kgBA=;
-        b=fEX5Gs9VeLWZWeJp1zS2Ie9G5boLeu7PGgsnQ4q2GoO+p2vhL71H4O40PeFwscvfGI
-         UoqMMfQsFC+Bhs4dNJzPNusfBh780TuS6ymJDNW8ks34Z1GnJW5OUmBy9i7iW3WQ4NjW
-         IRMpmH+/XtURG/ehMQfwg8nfM7Z5/+2DePFJ3Hr5ex4Ukr6bKqOjOzkjdhe0dvyveN2V
-         Vxu8/TUgsc5DTtTIxOXFYNirFqiD/XLoswBQs441ZIrWVXTRZWi53otCcfZj5T1kjZEZ
-         x+I5rurZAIy/2AhgLMleIUp6e6AtVO9vinWxOuaQt6Jmo5XAd9h/Ah44y/syCrhpe3Qe
-         gOTQ==
-X-Gm-Message-State: AOJu0YwDBRplwBeWLsD7rc0yHGVdqGXr9JX4SnmsBHvbOlmhNYp/Mq4u
-        BLP/55kMuqJCT0wWOVsTgxw=
-X-Google-Smtp-Source: AGHT+IH1fP8m0ZfURzq/DYK3dN0nkQ4K1zNYSBgKw8eHs+E9drhtEjW1W3aytItYucb04Mw1q71plA==
-X-Received: by 2002:a25:aca7:0:b0:d9c:fd8d:833a with SMTP id x39-20020a25aca7000000b00d9cfd8d833amr19746794ybi.59.1698330204037;
-        Thu, 26 Oct 2023 07:23:24 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id 205-20020a2505d6000000b00d814d8dfd69sm5314546ybf.27.2023.10.26.07.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 07:23:23 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id A68B127C005B;
-        Thu, 26 Oct 2023 10:23:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 26 Oct 2023 10:23:22 -0400
-X-ME-Sender: <xms:WnY6ZXn4lB9TVEVhjEs-iMQ9zSHVUF7Brqfa3pebbcmICW4qc1-epA>
-    <xme:WnY6Za2dLI94QaOdsGzzxDYwgH4jbKkYMI2jLX_H5AqoCUD_hHvTwuPsl-uc2J0Yv
-    ZV5GmpIhA6KvHlGUw>
-X-ME-Received: <xmr:WnY6ZdrohGQwXZCTCBX8y3wgWXGPxQW0ied1kmNm-PKN5gslsVoPX1-kodA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledvgdejiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudff
-    iedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
-    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
-    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
-    hmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:WnY6Zflspi88sF3fgu01H4l2D0B37XPK_uXRLMaRv-2LcyiuWY0dHw>
-    <xmx:WnY6ZV3gk2_I24ou6ijCgALyVCEzmtKZEcc60DuXfHxUIXZDP2aIHg>
-    <xmx:WnY6ZeuxLFr0iJhu9Gs7yct3EP3TeJ3owikW4OPYePen44xv2Z0Q8w>
-    <xmx:WnY6ZSK-H_V8jB0yAOJA6Ttrl4PfsNmA3jL339jK2qrz7MGEyht4JQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Oct 2023 10:23:21 -0400 (EDT)
-Date:   Thu, 26 Oct 2023 07:23:21 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
+        with ESMTP id S229815AbjJZRIb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Oct 2023 13:08:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0B191;
+        Thu, 26 Oct 2023 10:08:29 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A6EC433C7;
+        Thu, 26 Oct 2023 17:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698340108;
+        bh=q5nu5IfnRwPtcWkLDIu4aKyLwlMTLZH09mIm5x2Tuis=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=kvKAZN2MMSkl1+CvCbw+bKVWIonlMLlGvoyOkrluhiKxg6aAKGv7elmEkFI6RMlk1
+         L2WGU4VBOmRIzvFLMQIivxqRBZldlSs8hE8LrXKkZvVdM2jdW0IhKifYjRnNGI7dp0
+         7GQYBSYrAQlElOlklY4PCPR1C1dNMK0Uw2AOLO2LFZDz38HOx9uPZRUVr74ZD42lkF
+         uppRnkPjzY+r3oIpxavk/wSZbZ/WlJA9yD6XOQadktbY7anFw+dikPBP35tY9L6fPm
+         qG6bVF1QQPHi3CLYEyTauxQqHXJDcKe4/mmhnOyBtQH8L5gr09L5S4iXS8vUROldXF
+         udSXExCrBk2jA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E3628CE0D12; Thu, 26 Oct 2023 10:08:27 -0700 (PDT)
+Date:   Thu, 26 Oct 2023 10:08:27 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+Cc:     Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
         =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
@@ -94,7 +48,6 @@ Cc:     Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
         David Howells <dhowells@redhat.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
         Akira Yokosawa <akiyks@gmail.com>,
         Daniel Lustig <dlustig@nvidia.com>,
         Joel Fernandes <joel@joelfernandes.org>,
@@ -110,100 +63,68 @@ Cc:     Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: [RFC] rust: types: Add read_once and write_once
-Message-ID: <ZTp2WVlMxqmlC4Rb@Boquns-Mac-mini.home>
+Message-ID: <272fb0fa-bff7-4ccf-bea1-fba388c5d512@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 References: <20231025195339.1431894-1-boqun.feng@gmail.com>
  <20231026081345.GJ31411@noisy.programming.kicks-ass.net>
  <20231026113610.1425be1b@eugeo>
  <20231026111625.GK33965@noisy.programming.kicks-ass.net>
- <ZTp2AVY5twZOKEtX@Boquns-Mac-mini.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZTp2AVY5twZOKEtX@Boquns-Mac-mini.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20231026111625.GK33965@noisy.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 07:21:53AM -0700, Boqun Feng wrote:
-> On Thu, Oct 26, 2023 at 01:16:25PM +0200, Peter Zijlstra wrote:
-> > On Thu, Oct 26, 2023 at 11:36:10AM +0100, Gary Guo wrote:
-> > 
-> > > There's two reasons that we are using volatile read/write as opposed to
-> > > relaxed atomic:
-> > > * Rust lacks volatile atomics at the moment. Non-volatile atomics are
-> > >   not sufficient because the compiler is allowed (although they
-> > >   currently don't) optimise atomics. If you have two adjacent relaxed
-> > >   loads, they could be merged into one.
-> > 
-> > Ah yes, that would be problematic, eg, if lifted out of a loop things
-> > could go sideways fast.
-> > 
+On Thu, Oct 26, 2023 at 01:16:25PM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 26, 2023 at 11:36:10AM +0100, Gary Guo wrote:
 > 
-> Maybe we can workaround this limitation by using compiler barriers, i.e.
+> > There's two reasons that we are using volatile read/write as opposed to
+> > relaxed atomic:
+> > * Rust lacks volatile atomics at the moment. Non-volatile atomics are
+> >   not sufficient because the compiler is allowed (although they
+> >   currently don't) optimise atomics. If you have two adjacent relaxed
+> >   loads, they could be merged into one.
 > 
-> 	compiler_fence(SeqCst);
-> 	load(Relaxed);
-> 	compiler_fence(Acquire);
+> Ah yes, that would be problematic, eg, if lifted out of a loop things
+> could go sideways fast.
 > 
-> this is slightly stronger than a volatile atomic.
+> > * Atomics only works for integer types determined by the platform. On
+> >   some 32-bit platforms you wouldn't be able to use 64-bit atomics at
+> >   all, and on x86 you get less optimal sequence since volatile load is
+> >   permitted to tear while atomic load needs to use LOCK CMPXCHG8B.
 > 
-> > > * Atomics only works for integer types determined by the platform. On
-> > >   some 32-bit platforms you wouldn't be able to use 64-bit atomics at
-> > >   all, and on x86 you get less optimal sequence since volatile load is
-> > >   permitted to tear while atomic load needs to use LOCK CMPXCHG8B.
-> > 
-> > We only grudgingly allowed u64 READ_ONCE() on 32bit platforms because
-> > the fallout was too numerous to fix. Some of them are probably bugs.
-> > 
-> > Also, I think cmpxchg8b without lock prefix would be sufficient, but
-> > I've got too much of a head-ache to be sure. Worse is that we still
-> > support targets without cmpxchg8b.
-> > 
-> > It might be interesting to make the Rust side more strict in this regard
-> > and see where/when we run into trouble.
-> > 
+> We only grudgingly allowed u64 READ_ONCE() on 32bit platforms because
+> the fallout was too numerous to fix. Some of them are probably bugs.
 > 
-> Sounds good to me. If the compiler barriers make sense for now, then
-> we can do:
-> 
-> 	pub unsafe fn read_once_usize(ptr: *const usize) -> usize {
-> 		core::sync::atomic::compiler_fence(SeqCst);
-> 		let r = unsafe { *ptr.cast::<AtomicUsize>() }.load(Relaxed);
-> 		core::sync::atomic::compiler_fence(Acquire);
-> 		r
-> 	}
-> 
+> Also, I think cmpxchg8b without lock prefix would be sufficient, but
+> I've got too much of a head-ache to be sure. Worse is that we still
+> support targets without cmpxchg8b.
 
-I forgot to mention, this can also resolve the comments from Marco, i.e.
-switching implemention to Acquire if ARM64 & LTO.
+Plus cmpxchg8b can be quite a bit heavier weight than READ_ONCE(),
+in some cases to the point that you would instead use some other
+concurrency design.
 
-Regards,
-Boqun
+> It might be interesting to make the Rust side more strict in this regard
+> and see where/when we run into trouble.
 
-> and if the other side (i.e. write) is also atomic (e.g. WRITE_ONCE()),
-> we don't have data race.
+And maybe have some other name for READ_ONCE() that is permitted to tear.
+
+> > * Atomics doesn't work for complex structs. Although I am not quite sure
+> >   of the value of supporting it.
 > 
-> However, there are still cases where data races are ignored in C code,
-> for example inode::i_state: reads out of locks race with writes inside
-> locks, since writes are done by plain accesses. Nothing can be done to
-> fix that from Rust side only, and fixing the C side is a separate topic.
-> 
-> Thoughts?
-> 
-> Regards,
-> Boqun
-> 
-> > > * Atomics doesn't work for complex structs. Although I am not quite sure
-> > >   of the value of supporting it.
-> > 
-> > So on the C side we mandate the size is no larger than machine word,
-> > with the exception of the u64 on 32bit thing. We don't mandate strict
-> > integer types because things like pte_t are wrapper types.
-> > 
-> > 
+> So on the C side we mandate the size is no larger than machine word,
+> with the exception of the u64 on 32bit thing. We don't mandate strict
+> integer types because things like pte_t are wrapper types.
+
+On C-language atomics, people who have talked about implementing atomics
+for objects too large for tear-free loads and stores have tended to want
+ot invent locks.  :-(
+
+							Thanx, Paul
