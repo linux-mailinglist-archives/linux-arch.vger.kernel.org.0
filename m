@@ -2,170 +2,206 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054FD7D9CEB
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Oct 2023 17:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385177D9DD3
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Oct 2023 18:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjJ0P2Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Oct 2023 11:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        id S231302AbjJ0QOx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Oct 2023 12:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjJ0P2Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Oct 2023 11:28:24 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CA318A
-        for <linux-arch@vger.kernel.org>; Fri, 27 Oct 2023 08:28:21 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c5056059e0so32911341fa.3
-        for <linux-arch@vger.kernel.org>; Fri, 27 Oct 2023 08:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698420500; x=1699025300; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pNsl5MInPLJ8RSTN609h9x1G8bOqBML3/WHWrkX2PGU=;
-        b=iRNlwOt/QoKpaCq6XxLrF0wXdv5Jy1DZzQLa+O9FPjAtqhZHpeAsOBBOnJUEpUoHkb
-         jPBdwRVtq7uhfs1DnIMszqyK6ZuqHjlFPbYx6F8YhmKaa9d2zoGdydpWBd8gwTHkktic
-         h+lkMhvRcnwrq1roygwA6d4kVZkWsM8uDzIi5CB1yiBEqlBb7pncDjXeH/gs9oCCyak3
-         oc9GtNzTYGaLv+TTk8G3rKDwbJe+oiQw+X5kMmqLa+J3gvhrUMxO+Auy7P8vDQNE8qIj
-         WNSgZwSxNbvGOF2bWDisnIHP2Yg9nYLvMAfQ6SjzR8dfplstJXuPBV34aoocJw3/k/hj
-         YKgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698420500; x=1699025300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pNsl5MInPLJ8RSTN609h9x1G8bOqBML3/WHWrkX2PGU=;
-        b=QCHblCNPDXPyh8rXo/ZA1bGEveOfJeH9DG4weQvZKoohTUqeApczJQkmBmnRUUyOmj
-         vnr+Ryt9O8ScgwhgbMWCdWH4FIcf1NkhLDr9ZWZApw6LkDRXgVixXvY4DfdIDH5c4EgV
-         JnapnXqyzNTIYbPUBUQEXOfz5ZpjO7ppPgFKdkH7vfzLR4SBL5juJOh/Kot+RsAAjuf8
-         7PT0M5WbXW2Avvv4LICi6MIH9Yzk1SEpVJxLky0m5XqJcfp8MaLM77BQTtxRnzGfEEuz
-         7xLBavjSFLoqZJq/u8E0c71uDtCkJFTqy9nBsmtQY/WRt1zYhsamgAxbRLQ7DKSDXQRH
-         jrQA==
-X-Gm-Message-State: AOJu0YxyowOQunlK2F3+2awXHrlHU/NMsTg94+/evDQvpKWSu5Yx3PvE
-        9ojRAOrUBz6V9alsjDv2ZvWH++acUbFp6SbhdIhUTw==
-X-Google-Smtp-Source: AGHT+IHhztclk1FNuTavfV09vRrRQcRnx6lXYSGYBX+I6vgMiVsYpEDbYR5+xRzUeW2IFeyne8V1kWZ8Fus2muopy04=
-X-Received: by 2002:a05:651c:1070:b0:2c5:47f:8ff7 with SMTP id
- y16-20020a05651c107000b002c5047f8ff7mr2161033ljm.18.1698420499387; Fri, 27
- Oct 2023 08:28:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231024134637.3120277-1-surenb@google.com> <20231024134637.3120277-29-surenb@google.com>
- <87h6me620j.ffs@tglx> <CAJuCfpH1pG513-FUE_28MfJ7xbX=9O-auYUjkxKLmtve_6rRAw@mail.gmail.com>
- <87jzr93rxv.ffs@tglx> <20231026235433.yuvxf7opxg74ncmd@moria.home.lan> <b20fe713-28c6-4ca8-b64a-df017f161524@app.fastmail.com>
-In-Reply-To: <b20fe713-28c6-4ca8-b64a-df017f161524@app.fastmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 27 Oct 2023 08:28:08 -0700
-Message-ID: <CAKwvOdnKwGnxZnnDW-miaUO+M5AN_Np1A0fmj18Mz1AV2aQPzg@mail.gmail.com>
-Subject: Re: [PATCH v2 28/39] timekeeping: Fix a circular include dependency
+        with ESMTP id S230451AbjJ0QOx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Oct 2023 12:14:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BCEE3
+        for <linux-arch@vger.kernel.org>; Fri, 27 Oct 2023 09:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698423290; x=1729959290;
+  h=date:from:to:cc:subject:message-id;
+  bh=c/vye7WmJvYd6ydwz1Xp38fuhW6WywGuTBEoG3uYlKg=;
+  b=bt8lI6jOkOVAOMvWV9p/zUgibvlj2pfRRvd3sPadHk7K6yw4Xb1lVySA
+   gpo8i/NHy+F+MoPWd+806imtZXjU6Hn0USnf4LLCSng8wpFB97dHfS6T3
+   eNPQD58U/bHYVEZCxeAml33uwJ5EDOCJPNwsZu5Etaqy3GOuonxfzf6r7
+   b9/tsUyFPAxkKK2dk+kpdR66rQPEvwfAsk3UWxOT24YzBamPX3vEnMr2X
+   tPnsbA7DWdZ8VppXedUhZnuhtYctrqNy3DAKG2c1BOK8il3TXztSHy1DW
+   EqaGjWFRm8sNX3n5dNjD7lFHVin8bh2mkk0r/K+ycw6E7gtObwYsGVsQW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="418913574"
+X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
+   d="scan'208";a="418913574"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 09:14:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="736113163"
+X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
+   d="scan'208";a="736113163"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Oct 2023 09:14:49 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qwPTy-000B07-2y;
+        Fri, 27 Oct 2023 16:14:46 +0000
+Date:   Sat, 28 Oct 2023 00:14:22 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, void@manifault.com,
-        Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        peterx@redhat.com, David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Muchun Song <muchun.song@linux.dev>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, Yu Zhao <yuzhao@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kees Cook <keescook@chromium.org>, vvvvvv@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Biggers <ebiggers@google.com>, ytcoode@gmail.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jason Baron <jbaron@akamai.com>,
-        David Rientjes <rientjes@google.com>, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-        cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 550087a0ba91eb001c139f563a193b1e9ef5a8dd
+Message-ID: <202310280018.pbYHkNmT-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 11:35=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
->
-> On Fri, Oct 27, 2023, at 01:54, Kent Overstreet wrote:
-> > On Fri, Oct 27, 2023 at 01:05:48AM +0200, Thomas Gleixner wrote:
-> >> On Thu, Oct 26 2023 at 18:33, Suren Baghdasaryan wrote:
-> >> > On Wed, Oct 25, 2023 at 5:33=E2=80=AFPM Thomas Gleixner <tglx@linutr=
-onix.de> wrote:
-> >> >> > This avoids a circular header dependency in an upcoming patch by =
-only
-> >> >> > making hrtimer.h depend on percpu-defs.h
-> >> >>
-> >> >> What's the actual dependency problem?
-> >> >
-> >> > Sorry for the delay.
-> >> > When we instrument per-cpu allocations in [1] we need to include
-> >> > sched.h in percpu.h to be able to use alloc_tag_save(). sched.h
-> >>
-> >> Including sched.h in percpu.h is fundamentally wrong as sched.h is the
-> >> initial place of all header recursions.
-> >>
-> >> There is a reason why a lot of funtionalitiy has been split out of
-> >> sched.h into seperate headers over time in order to avoid that.
-> >
-> > Yeah, it's definitely unfortunate. The issue here is that
-> > alloc_tag_save() needs task_struct - we have to pull that in for
-> > alloc_tag_save() to be inline, which we really want.
-> >
-> > What if we moved task_struct to its own dedicated header? That might be
-> > good to do anyways...
->
-> Yes, I agree that is the best way to handle it. I've prototyped
-> a more thorough header cleanup with good results (much improved
-> build speed) in the past, and most of the work to get there is
-> to seperate out structures like task_struct, mm_struct, net_device,
-> etc into headers that only depend on the embedded structure
-> definitions without needing all the inline functions associated
-> with them.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 550087a0ba91eb001c139f563a193b1e9ef5a8dd  hexagon: Remove unusable symbols from the ptrace.h uapi
 
-This is something I'll add to our automation todos which I plan to
-talk about at plumbers; I feel like it should be possible to write a
-script that given a header and identifier can split whatever
-declaration out into a new header, update the old header, then add the
-necessary includes for the newly created header to each dependent
-(optional).
---=20
-Thanks,
-~Nick Desaulniers
+elapsed time: 2898m
+
+configs tested: 129
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231026   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   randconfig-001-20231026   gcc  
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20231026   gcc  
+i386         buildonly-randconfig-002-20231026   gcc  
+i386         buildonly-randconfig-003-20231026   gcc  
+i386         buildonly-randconfig-004-20231026   gcc  
+i386         buildonly-randconfig-005-20231026   gcc  
+i386         buildonly-randconfig-006-20231026   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231026   gcc  
+i386                  randconfig-002-20231026   gcc  
+i386                  randconfig-003-20231026   gcc  
+i386                  randconfig-004-20231026   gcc  
+i386                  randconfig-005-20231026   gcc  
+i386                  randconfig-006-20231026   gcc  
+i386                  randconfig-011-20231026   gcc  
+i386                  randconfig-012-20231026   gcc  
+i386                  randconfig-013-20231026   gcc  
+i386                  randconfig-014-20231026   gcc  
+i386                  randconfig-015-20231026   gcc  
+i386                  randconfig-016-20231026   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231026   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231026   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231026   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                 randconfig-001-20231026   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-001-20231026   gcc  
+x86_64       buildonly-randconfig-002-20231026   gcc  
+x86_64       buildonly-randconfig-003-20231026   gcc  
+x86_64       buildonly-randconfig-004-20231026   gcc  
+x86_64       buildonly-randconfig-005-20231026   gcc  
+x86_64       buildonly-randconfig-006-20231026   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231026   gcc  
+x86_64                randconfig-002-20231026   gcc  
+x86_64                randconfig-003-20231026   gcc  
+x86_64                randconfig-004-20231026   gcc  
+x86_64                randconfig-005-20231026   gcc  
+x86_64                randconfig-006-20231026   gcc  
+x86_64                randconfig-011-20231026   gcc  
+x86_64                randconfig-012-20231026   gcc  
+x86_64                randconfig-013-20231026   gcc  
+x86_64                randconfig-014-20231026   gcc  
+x86_64                randconfig-015-20231026   gcc  
+x86_64                randconfig-016-20231026   gcc  
+x86_64                randconfig-071-20231026   gcc  
+x86_64                randconfig-072-20231026   gcc  
+x86_64                randconfig-073-20231026   gcc  
+x86_64                randconfig-074-20231026   gcc  
+x86_64                randconfig-075-20231026   gcc  
+x86_64                randconfig-076-20231026   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
