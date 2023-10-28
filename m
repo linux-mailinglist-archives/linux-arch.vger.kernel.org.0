@@ -2,193 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07567DA837
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Oct 2023 19:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3058A7DA8BD
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Oct 2023 20:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjJ1RV7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Oct 2023 13:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S229594AbjJ1Swr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Oct 2023 14:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjJ1RV6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Oct 2023 13:21:58 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E39E1;
-        Sat, 28 Oct 2023 10:21:56 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 1794B183AEA;
-        Sat, 28 Oct 2023 19:21:48 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1698513709; bh=NjpBpPt/yrrzyUMwOnxT0t9fJ7lkHUICaTlDk7VnK5E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NEf36SYo3kQbCeEsdwZEo5Rs7ubi4rXjiy/HkeByeW5ZFg1NJ7jrkUSgWkxmg2M8k
-         B0u/D2sCM3DcHuuZDfcPU7EjnH661MAuSS0d/FyxcRCZoz24WCjCK0k1P8odl2097t
-         ZVT0E+8iYlsOBUWMC4fZaTpedbZzQ/CHY/uHKk5wgB1+rAceIGvg9nE6AeoAR5SMTy
-         VdPZ/XLtuodw43A4B+h4DkkMi1URAqTCzmC3/qWgJtpSG7UvnNZ/ye9sCmfnJIiYAE
-         BLpNDIscF2rgwyxelghhqIlUEu7ofl0My0JCMUOvGX60kRL5D6XzWCGs+fAiOUMIG4
-         77EOtdZarg36A==
-Date:   Sat, 28 Oct 2023 19:21:47 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Neil Brown <neilb@suse.de>, akpm@linux-foundation.org,
-        kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, vvvvvv@google.com,
-        gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-        minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH v2 06/39] mm: enumerate all gfp flags
-Message-ID: <20231028192147.2a755c46@meshulam.tesarici.cz>
-In-Reply-To: <CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
-References: <20231024134637.3120277-1-surenb@google.com>
-        <20231024134637.3120277-7-surenb@google.com>
-        <20231025074652.44bc0eb4@meshulam.tesarici.cz>
-        <CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S229448AbjJ1Swq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Oct 2023 14:52:46 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8828F2
+        for <linux-arch@vger.kernel.org>; Sat, 28 Oct 2023 11:52:43 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-670e7ae4a2eso4361006d6.1
+        for <linux-arch@vger.kernel.org>; Sat, 28 Oct 2023 11:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1698519163; x=1699123963; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rTzbMaF9e6LFHLkvVnlr1iqkQocBR5uDxVZIr/Uj4WE=;
+        b=bKiCN+XifgLo/kCsXVZ5lyU1MMBSR5PZtUh2oeq3zr3v1A31KOPcJjRPnNr1RFnWya
+         UBCYDpidnkE4lxC4pEAi+LfJoldNgHoDda6NrGGRw9NLWXvQ2vu5n0lo7fzbPgeOfWAP
+         JS7epE/YfcPehp1w8QFwp3bobJG0mqIt1XJGDkSndFNSqApFAdP0SkaAmXQO3GV5wNoU
+         Wqu8ESb06tZ26R0lGjsup22v3l4BE++bPpq+EmqM9ul5ZSvtxtPnDRz3YsujL4VPbvPs
+         oQ4wGRaKBZ827tdr9smCebiTxQu4lUv2F3zUPEADtMwji/lCH57iMNm8wEKgrtY7KUZY
+         ClmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698519163; x=1699123963;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rTzbMaF9e6LFHLkvVnlr1iqkQocBR5uDxVZIr/Uj4WE=;
+        b=SYxKe141fwS75ZbjMA8E2y8eArdphPoNORqX2dacPgPZqJ0iv8JuDuFQs0ytX3B+EI
+         U517E3L1nGyMXhvy42Rx1qIEBasoebI9cVVezw+VcFXCjEbWJg2eecQ/3KOBW0yFIolR
+         NcAfTKEeel7TBW93My8w1oD5QOyM8zsAoVbS72+Kvx1Ri72lO04hRbu/Ps8M2O6md6se
+         bJkhDxxUKp+J5daTuPw5X+nEl/VPvSIC2FdXbMWbtuCeEO5g6pcjVEauzNQI9TD43K+f
+         sEKCp3ibLHxL7rXEGMAlq4rc459T0jvkX7C0dl0xPQj8BfSJeaNRWo1by5N0TNHsrBbU
+         PYXQ==
+X-Gm-Message-State: AOJu0YznLrU8U92ZchZtHaA0AJja3ypsKCVUpfHprFOXR+HiOreYCJhj
+        Jrvv6MQdeOfeXyKbFLIRNQJo0g==
+X-Google-Smtp-Source: AGHT+IHRhO2f1MH3WnnbQd9fLdzhnTNzypJ89qAUGrhcvHOOFaTQVJ4ekwM34frzhsDctzrIh0CLVQ==
+X-Received: by 2002:ad4:5aaf:0:b0:66d:8752:b6cf with SMTP id u15-20020ad45aaf000000b0066d8752b6cfmr5006791qvg.26.1698519163004;
+        Sat, 28 Oct 2023 11:52:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2000:b002:c988:e7b9:36ab:57c6? ([2600:1700:2000:b002:c988:e7b9:36ab:57c6])
+        by smtp.gmail.com with ESMTPSA id mg22-20020a056214561600b0065b0d9b4ee7sm1820353qvb.20.2023.10.28.11.52.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Oct 2023 11:52:42 -0700 (PDT)
+Message-ID: <e661b2ef-2a9a-44d7-bb32-6c0c8f8b6e85@sifive.com>
+Date:   Sat, 28 Oct 2023 13:52:41 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/4] riscv: Improve flush_tlb_range() for hugetlb pages
+Content-Language: en-US
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+References: <20231019140151.21629-1-alexghiti@rivosinc.com>
+ <20231019140151.21629-3-alexghiti@rivosinc.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>
+From:   Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <20231019140151.21629-3-alexghiti@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 25 Oct 2023 08:28:32 -0700
-Suren Baghdasaryan <surenb@google.com> wrote:
+On 2023-10-19 9:01 AM, Alexandre Ghiti wrote:
+> flush_tlb_range() uses a fixed stride of PAGE_SIZE and in its current form,
+> when a hugetlb mapping needs to be flushed, flush_tlb_range() flushes the
+> whole tlb: so set a stride of the size of the hugetlb mapping in order to
+> only flush the hugetlb mapping. However, if the hugepage is a NAPOT region,
+> all PTEs that constitute this mapping must be invalidated, so the stride
+> size must actually be the size of the PTE.
+> 
+> Note that THPs are directly handled by flush_pmd_tlb_range().
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/mm/tlbflush.c | 31 ++++++++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> index fa03289853d8..5933744df91a 100644
+> --- a/arch/riscv/mm/tlbflush.c
+> +++ b/arch/riscv/mm/tlbflush.c
+> @@ -3,6 +3,7 @@
+>  #include <linux/mm.h>
+>  #include <linux/smp.h>
+>  #include <linux/sched.h>
+> +#include <linux/hugetlb.h>
+>  #include <asm/sbi.h>
+>  #include <asm/mmu_context.h>
+>  
+> @@ -147,7 +148,35 @@ void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
+>  void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+>  		     unsigned long end)
+>  {
+> -	__flush_tlb_range(vma->vm_mm, start, end - start, PAGE_SIZE);
+> +	unsigned long stride_size;
+> +
+> +	if (!is_vm_hugetlb_page(vma)) {
+> +		stride_size = PAGE_SIZE;
+> +	} else {
+> +		stride_size = huge_page_size(hstate_vma(vma));
+> +
+> +#ifdef CONFIG_RISCV_ISA_SVNAPOT
 
-> On Tue, Oct 24, 2023 at 10:47=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tes=
-arici.cz> wrote:
-> >
-> > On Tue, 24 Oct 2023 06:46:03 -0700
-> > Suren Baghdasaryan <surenb@google.com> wrote:
-> > =20
-> > > Introduce GFP bits enumeration to let compiler track the number of us=
-ed
-> > > bits (which depends on the config options) instead of hardcoding them.
-> > > That simplifies __GFP_BITS_SHIFT calculation.
-> > > Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  include/linux/gfp_types.h | 90 +++++++++++++++++++++++++++----------=
---
-> > >  1 file changed, 62 insertions(+), 28 deletions(-)
-> > >
-> > > diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-> > > index 6583a58670c5..3fbe624763d9 100644
-> > > --- a/include/linux/gfp_types.h
-> > > +++ b/include/linux/gfp_types.h
-> > > @@ -21,44 +21,78 @@ typedef unsigned int __bitwise gfp_t;
-> > >   * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
-> > >   */
-> > >
-> > > +enum {
-> > > +     ___GFP_DMA_BIT,
-> > > +     ___GFP_HIGHMEM_BIT,
-> > > +     ___GFP_DMA32_BIT,
-> > > +     ___GFP_MOVABLE_BIT,
-> > > +     ___GFP_RECLAIMABLE_BIT,
-> > > +     ___GFP_HIGH_BIT,
-> > > +     ___GFP_IO_BIT,
-> > > +     ___GFP_FS_BIT,
-> > > +     ___GFP_ZERO_BIT,
-> > > +     ___GFP_UNUSED_BIT,      /* 0x200u unused */
-> > > +     ___GFP_DIRECT_RECLAIM_BIT,
-> > > +     ___GFP_KSWAPD_RECLAIM_BIT,
-> > > +     ___GFP_WRITE_BIT,
-> > > +     ___GFP_NOWARN_BIT,
-> > > +     ___GFP_RETRY_MAYFAIL_BIT,
-> > > +     ___GFP_NOFAIL_BIT,
-> > > +     ___GFP_NORETRY_BIT,
-> > > +     ___GFP_MEMALLOC_BIT,
-> > > +     ___GFP_COMP_BIT,
-> > > +     ___GFP_NOMEMALLOC_BIT,
-> > > +     ___GFP_HARDWALL_BIT,
-> > > +     ___GFP_THISNODE_BIT,
-> > > +     ___GFP_ACCOUNT_BIT,
-> > > +     ___GFP_ZEROTAGS_BIT,
-> > > +#ifdef CONFIG_KASAN_HW_TAGS
-> > > +     ___GFP_SKIP_ZERO_BIT,
-> > > +     ___GFP_SKIP_KASAN_BIT,
-> > > +#endif
-> > > +#ifdef CONFIG_LOCKDEP
-> > > +     ___GFP_NOLOCKDEP_BIT,
-> > > +#endif
-> > > +     ___GFP_LAST_BIT
-> > > +};
-> > > +
-> > >  /* Plain integer GFP bitmasks. Do not use this directly. */
-> > > -#define ___GFP_DMA           0x01u
-> > > -#define ___GFP_HIGHMEM               0x02u
-> > > -#define ___GFP_DMA32         0x04u
-> > > -#define ___GFP_MOVABLE               0x08u
-> > > -#define ___GFP_RECLAIMABLE   0x10u
-> > > -#define ___GFP_HIGH          0x20u
-> > > -#define ___GFP_IO            0x40u
-> > > -#define ___GFP_FS            0x80u
-> > > -#define ___GFP_ZERO          0x100u
-> > > +#define ___GFP_DMA           BIT(___GFP_DMA_BIT)
-> > > +#define ___GFP_HIGHMEM               BIT(___GFP_HIGHMEM_BIT)
-> > > +#define ___GFP_DMA32         BIT(___GFP_DMA32_BIT)
-> > > +#define ___GFP_MOVABLE               BIT(___GFP_MOVABLE_BIT)
-> > > +#define ___GFP_RECLAIMABLE   BIT(___GFP_RECLAIMABLE_BIT)
-> > > +#define ___GFP_HIGH          BIT(___GFP_HIGH_BIT)
-> > > +#define ___GFP_IO            BIT(___GFP_IO_BIT)
-> > > +#define ___GFP_FS            BIT(___GFP_FS_BIT)
-> > > +#define ___GFP_ZERO          BIT(___GFP_ZERO_BIT)
-> > >  /* 0x200u unused */ =20
-> >
-> > This comment can be also removed here, because it is already stated
-> > above with the definition of ___GFP_UNUSED_BIT. =20
->=20
-> Ack.
->=20
-> >
-> > Then again, I think that the GFP bits have never been compacted after
-> > Neil Brown removed __GFP_ATOMIC with commit 2973d8229b78 simply because
-> > that would mean changing definitions of all subsequent GFP flags. FWIW
-> > I am not aware of any code that would depend on the numeric value of
-> > ___GFP_* macros, so this patch seems like a good opportunity to change
-> > the numbering and get rid of this unused 0x200u altogether.
-> >
-> > @Neil: I have added you to the conversation in case you want to correct
-> > my understanding of the unused bit. =20
->=20
-> Hmm. I would prefer to do that in a separate patch even though it
-> would be a one-line change. Seems safer to me in case something goes
-> wrong and we have to bisect and revert it. If that sounds ok I'll post
-> that in the next version.
+There is a fallback implementation of has_svnapot(), so you do not need this
+preprocessor check. With that removed:
 
-You're right. If something does go wrong, it will be easier to fix if
-the removal of the unused bit is in a commit of its own.
+Reviewed-by: Samuel Holland <samuel.holland@sifive.com>
 
-Petr T
+> +		/*
+> +		 * As stated in the privileged specification, every PTE in a
+> +		 * NAPOT region must be invalidated, so reset the stride in that
+> +		 * case.
+> +		 */
+> +		if (has_svnapot()) {
+> +			if (stride_size >= PGDIR_SIZE)
+> +				stride_size = PGDIR_SIZE;
+> +			else if (stride_size >= P4D_SIZE)
+> +				stride_size = P4D_SIZE;
+
+As a side note, and this is probably premature optimization... PGDIR_SIZE and
+P4D_SIZE check pgtable_l{4,5}_enabled. That's not really necessary here, since
+we are just trying to round down, and there won't be any higher-order hugepages
+if those paging levels are disabled.
+
+> +			else if (stride_size >= PUD_SIZE)
+> +				stride_size = PUD_SIZE;
+> +			else if (stride_size >= PMD_SIZE)
+> +				stride_size = PMD_SIZE;
+> +			else
+> +				stride_size = PAGE_SIZE;
+> +		}
+> +#endif
+> +	}
+> +
+> +	__flush_tlb_range(vma->vm_mm, start, end - start, stride_size);
+>  }
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
+
