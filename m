@@ -2,94 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6199B7E0DDE
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Nov 2023 05:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440CF7DBAC4
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Oct 2023 14:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbjKDE6O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 4 Nov 2023 00:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S233469AbjJ3NbL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Oct 2023 09:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234193AbjKDE6O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Nov 2023 00:58:14 -0400
-X-Greylist: delayed 4289 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:58:09 PDT
-Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA5A125
-        for <linux-arch@vger.kernel.org>; Fri,  3 Nov 2023 21:58:09 -0700 (PDT)
-Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
-        id 275F153D6E; Mon, 30 Oct 2023 08:30:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
-        s=mail; t=1698655395;
-        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
-        h=Date:From:To:Subject:From;
-        b=Mc++BC4+aN0bYjsRkJcgR629gnHQOqVag8a9TfAx4HsVofXvthqv8+9+K7Z0NVcTK
-         OxM3dPDtnkAcpdwocg6Sq31qX3LjAjBNUmld0qTEvaj2bsjYwzhe4NceY54nDIYFBi
-         D6RSTadpJPL8fsjpyc3NpJPHBnYqU8Az0EaZdX3/ht5tJ5wJcbpQT6N5fg/Nokqiwx
-         uttRYSudHxfJW5Nv23bYsnTqkJJNjj/mmId+sCIe1G24ML1HU7s5g1w2t3ymmyX9/O
-         MzmXHHvVadQImkNKcWvkZLwdqRi6KZHAvrYMAC4ln79erKRqhEtuNqAjXt2dg3WOMA
-         H1tr//rWgHvKQ==
-Received: by mail.profitpathwaygo.com for <linux-arch@vger.kernel.org>; Mon, 30 Oct 2023 08:30:28 GMT
-Message-ID: <20231030074500-0.1.2s.154hw.0.g93p3prb7u@profitpathwaygo.com>
-Date:   Mon, 30 Oct 2023 08:30:28 GMT
-From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
-To:     <linux-arch@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
-X-Mailer: mail.profitpathwaygo.com
+        with ESMTP id S233464AbjJ3NbJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Oct 2023 09:31:09 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E68A2
+        for <linux-arch@vger.kernel.org>; Mon, 30 Oct 2023 06:31:03 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2c4fe37f166so61820271fa.1
+        for <linux-arch@vger.kernel.org>; Mon, 30 Oct 2023 06:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1698672662; x=1699277462; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFAyygTf1wEzmKUuixPjgxrlB1EH/ZEG0d5M9D9G9l4=;
+        b=bj6OJfEvoOiVZSPCRL+ZtsLck7sx0k4WqXSjA2LAlOmPleXECuhooyWN6SKRsZML6H
+         fetwby11m4f9rNDijQP2rYLmceuWxtkaZBXGAlDfR91MjjYHU/1nCQ3Zr6Su1Vqu7606
+         zibNunm9X9cvuFVUEr9lmsc7S0UIoDEYApLO+r5yxV5OqpdOZn1j5USs+Pi1OrBWQphb
+         ycXm2ZAAZmyk0gu0JAtaKV0781MzrsDqqGmfWpO1LczmQPVzl0VmJclCIsBpmeCthXeq
+         yy6iel+Yn9Uf/twQcq0deYWdeHmC5DwfNV2/J+YQc44hpFLnnTJDbrB+0GdQ0Gwqot1R
+         NBhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698672662; x=1699277462;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cFAyygTf1wEzmKUuixPjgxrlB1EH/ZEG0d5M9D9G9l4=;
+        b=wGNzFqCRZmsDLNO/HXkgz+9bbAlJHG6piT90Ix/vi8u9rww0FVfmQfWzf/la6TyTwH
+         i76JO54wueECtqvTBIbRRdlZnjGmLOml0Fb0hE7yTEDxqx1bossMv32PoRJVaMTmeX+G
+         Ws7OhBg0atNkB/Skume8dHFHdGxlGgdT3QPljmvYK6XBE0Ace4vVAOuYRCWEdK9Gs0ky
+         LWkqqv8RLGeAduhTteo8IDIOKHBquYediqmdfJil6NOl+KR5uGlH2bdJpaySxGDSSElP
+         Os7qIQeKgO/2t+e+2gDGUiAOBOInStYq3h8ymsBtQoyMUELkLiXf9b0xQO7EHlrtOnQG
+         uGQw==
+X-Gm-Message-State: AOJu0YwjScp3sCC03cykc7tYyp+d4gl2yfdlSbQpOVQg93y01SCTpATE
+        VmcZvjlKKAaRBJ1yJIRMe7x4Hw==
+X-Google-Smtp-Source: AGHT+IGp3Flp6e8u4wQXKFFe94N4J3LW0CdDXYSPeu5D/05PAkg9EMs3NFgFQ+aCgOk5cp4xvQIWmA==
+X-Received: by 2002:a2e:a48d:0:b0:2c5:2357:c659 with SMTP id h13-20020a2ea48d000000b002c52357c659mr7665145lji.38.1698672661824;
+        Mon, 30 Oct 2023 06:31:01 -0700 (PDT)
+Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id iv8-20020a05600c548800b003fefaf299b6sm9383887wmb.38.2023.10.30.06.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Oct 2023 06:31:01 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v6 0/4] riscv: tlb flush improvements
+Date:   Mon, 30 Oct 2023 14:30:24 +0100
+Message-Id: <20231030133027.19542-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: profitpathwaygo.com]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: profitpathwaygo.com]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [141.94.21.238 listed in bl.score.senderscore.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [141.94.21.238 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: profitpathwaygo.com]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0070]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This series optimizes the tlb flushes on riscv which used to simply
+flush the whole tlb whatever the size of the range to flush or the size
+of the stride.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Patch 3 introduces a threshold that is microarchitecture specific and
+will very likely be modified by vendors, not sure though which mechanism
+we'll use to do that (dt? alternatives? vendor initialization code?).
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Next steps would be to implement:
+- svinval extension as Mayuresh did here [1]
+- BATCHED_UNMAP_TLB_FLUSH (I'll wait for arm64 patchset to land)
+- MMU_GATHER_RCU_TABLE_FREE
+- MMU_GATHER_MERGE_VMAS
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Any other idea welcome.
 
+[1] https://lore.kernel.org/linux-riscv/20230623123849.1425805-1-mchitale@ventanamicro.com/
 
-Pozdrawiam serdecznie
-Adam Charachuta
+Changes in v6:
+- Remove ifdef SVNAPOT, as suggested by Samuel
+- Fix usage of u16 which could overflow, as noted by Samuel
+- Use cpu_online_mask, as suggested by Samuel
+- Move static_branch_unlikely(&use_asid_allocator) test, as suggested by Samuel
+- Add TB/RB from Prabhakar and Samuel, thanks guys!
+
+Changes in v5:
+- Fix commit message s/flush_tlb/tlb_flush thanks to Samuel
+- Simplify NAPOT mapping stride size handling, as suggested by Samuel
+- Add TB from Prabhakar
+- Add RB from Samuel
+- Remove TB/RB from patch 2 as it changed enough
+
+Changes in v4:
+- Correctly handle the stride size for a NAPOT hugepage, thanks to Aaron Durbin!
+- Fix flush_tlb_kernel_range() which passed a wrong argument to __flush_tlb_range()
+- Factorize code to handle asid/no asid flushes
+- Fix kernel flush bug where I used to pass 0 instead of x0, big thanks to Samuel for finding that!
+
+Changes in v3:
+- Add RB from Andrew, thanks!
+- Unwrap a few lines, as suggested by Andrew
+- Introduce defines for -1 constants used in tlbflush.c, as suggested by Andrew and Conor
+- Use huge_page_size() directly instead of using the shift, as suggested by Andrew
+- Remove misleading comments as suggested by Conor
+
+Changes in v2:
+- Make static tlb_flush_all_threshold, we'll figure out later how to
+  override this value on a vendor basis, as suggested by Conor and Palmer
+- Fix nommu build, as reported by Conor
+
+Alexandre Ghiti (4):
+  riscv: Improve tlb_flush()
+  riscv: Improve flush_tlb_range() for hugetlb pages
+  riscv: Make __flush_tlb_range() loop over pte instead of flushing the
+    whole tlb
+  riscv: Improve flush_tlb_kernel_range()
+
+ arch/riscv/include/asm/sbi.h      |   3 -
+ arch/riscv/include/asm/tlb.h      |   8 +-
+ arch/riscv/include/asm/tlbflush.h |  15 ++-
+ arch/riscv/kernel/sbi.c           |  32 ++----
+ arch/riscv/mm/tlbflush.c          | 181 +++++++++++++++++++-----------
+ 5 files changed, 144 insertions(+), 95 deletions(-)
+
+-- 
+2.39.2
+
