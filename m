@@ -2,60 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE91F7DC016
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Oct 2023 19:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935017DC7BD
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Oct 2023 08:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjJ3SzK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Oct 2023 14:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S235350AbjJaH5w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Oct 2023 03:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjJ3SzJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Oct 2023 14:55:09 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54425C9;
-        Mon, 30 Oct 2023 11:55:07 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-507a62d4788so7354944e87.0;
-        Mon, 30 Oct 2023 11:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698692105; x=1699296905; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B2XCZx3/R8oTKYE9BrmrGqp1BsnPUxRKC3gA5ci6I/8=;
-        b=JqexuX2vJC9ActXb+o0bri/ThFiNUW6k7XpgAE3nvWw6e5uB/2iKGmj9nBvVfxn8XI
-         pxohHH1SIFVFuU8giWQrXyx9i3lUj6Fdw8KpbtO/16v+eUepEycn19fD7hwAKGU61Pib
-         /MRvD6TriIbnUXKGn9tD53+HGaySEmH259fYJMcN7McJqWPVtnNivrt5J+dgSh+S1yNk
-         ttFHC/5K18vnjuRpvYbSWqstwePMBEjpwb5CLqj0kU6rYIOMOLf4fPiKcfxAtzUce5Zp
-         Kh0xQQPHQIT62FBUiBvuSEjBKZYBjvu5ijFfUdg75Tzy8osGtZRw0bFP0lHzZ1iuVX64
-         CtJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698692105; x=1699296905;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B2XCZx3/R8oTKYE9BrmrGqp1BsnPUxRKC3gA5ci6I/8=;
-        b=hFt/fV/4vkbhyxT/Ikes+c8p5OqEPPa6+sGPhrFiASGby4koFflwNuOiaKtfFOXQ0x
-         Xx0SDb64JAaTPZsezy78xeEoPdbYNDH/ONaPm3RRgTVFsyFKXUDpSkejAUTEHRFjKOIM
-         HC0aFnZxE+fkcXM7+RXhpnHd/i7wQf6ElbbVodvIu1Fpp+PzE70jIhmd/ql7LSHExCpm
-         32JJxLCHs6NX6Ft0iw1+eKs4YtXEa5r1jHuAz0fn7Jd2LKNUPnRUCIgS69i2NtBB1VXz
-         PCmkQGED181+LLoQSHw+6ORpyGtpjMv46nhlWU9NnVUOekM96XW1XoFN0dqgAR8ipQsf
-         thrg==
-X-Gm-Message-State: AOJu0YyxKTTMbe0v6SKsaGGG6btQVWPx4zaZY6uaFLx/BhQRy9ynDlhZ
-        IyJTZfDAAMX7UScF7EDuZQe1axT5ZtmEYW9Rq7dxnQtwhec=
-X-Google-Smtp-Source: AGHT+IE6WoBwH8gKIBiQqPqjspRYmpmf+U3WZyH8EbrefUW8AUExz5DewzlpcghkhpT8+5xE4BreuwgC6oMgZH+3B60=
-X-Received: by 2002:a19:f713:0:b0:507:a33f:135d with SMTP id
- z19-20020a19f713000000b00507a33f135dmr7734946lfe.4.1698692104665; Mon, 30 Oct
- 2023 11:55:04 -0700 (PDT)
+        with ESMTP id S236158AbjJaH5v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Oct 2023 03:57:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19B79F;
+        Tue, 31 Oct 2023 00:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1698739069; x=1730275069;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eiDnUW4Kn/odss8/DbdMU36YzLZTMzt2HhmARUpQoCE=;
+  b=nL0YLl38fK87H00c2OlSpo/RC4VGZLb97MzfQ9siON+2wvjJewueN9/+
+   0nkYJJmNGgGDAQLlT49gpLsJvVcNm3URQhsX0+/nxdBWjGKHfnTSlVL0A
+   NDXulnmUkFE2NreUcloeQHWM9ffcPBJiT9g4plWXPCV4srIubHs+Um3YT
+   GqxwewCd+o8qgpetks/pgEvX05VumjjjmfCcPlSEC914O374ILJUcj7vh
+   CLMhcwhhvzG0E/nR2lR/LnVhWyOZkfefqcSTU3Ufjzag0Agv6vGgGHiCa
+   ZemQXwc/auyIbJZbeUJrTwuieQo+nZesGnG2e8so6InqIZKDD/sdWzHSc
+   A==;
+X-CSE-ConnectionGUID: oOYSTJdaShisXPhp1E4W2A==
+X-CSE-MsgGUID: 9QGEiL/2TtG25dQLEbKR6A==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="asc'?scan'208";a="241617896"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Oct 2023 00:57:48 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 31 Oct 2023 00:57:45 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 31 Oct 2023 00:57:43 -0700
+Date:   Tue, 31 Oct 2023 07:57:19 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Charlie Jenkins <charlie@rivosinc.com>
+CC:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Samuel Holland <samuel.holland@sifive.com>,
+        David Laight <David.Laight@aculab.com>,
+        Xiao Wang <xiao.w.wang@intel.com>,
+        Evan Green <evan@rivosinc.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v8 0/5] riscv: Add fine-tuned checksum functions
+Message-ID: <20231031-shrouded-simmering-e60d23d17fa3@wendy>
+References: <20231027-optimize_checksum-v8-0-feb7101d128d@rivosinc.com>
 MIME-Version: 1.0
-References: <CAHtyXDfvS4OYLjOqALy74vR4w9DOFjJ9z8UOFeDpyjv7_PHNXw@mail.gmail.com>
-In-Reply-To: <CAHtyXDfvS4OYLjOqALy74vR4w9DOFjJ9z8UOFeDpyjv7_PHNXw@mail.gmail.com>
-From:   =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>
-Date:   Mon, 30 Oct 2023 19:54:53 +0100
-Message-ID: <CAHtyXDfxEsUM-=EtK9sVPZQ65UL3LxvYL+0HU5+rdfedaM9NFw@mail.gmail.com>
-Subject: Re: ia64 maintainership (resend)
-To:     linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qRR1lRF7FS8U2Elp"
+Content-Disposition: inline
+In-Reply-To: <20231027-optimize_checksum-v8-0-feb7101d128d@rivosinc.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,12 +77,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Update: next-20231027 still works on ia64 after reverting the removal
-patches with only a small diff needed for it to build:
-https://gist.github.com/lenticularis39/af031432f8b1c8f2ca1da94ebe144378
+--qRR1lRF7FS8U2Elp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It boots just fine as you can see here: https://i.ibb.co/vLQq0NW/obrazek.png
+On Fri, Oct 27, 2023 at 03:43:50PM -0700, Charlie Jenkins wrote:
+> Each architecture generally implements fine-tuned checksum functions to
+> leverage the instruction set. This patch adds the main checksum
+> functions that are used in networking.
+>=20
+> This patch takes heavy use of the Zbb extension using alternatives
+> patching.
+>=20
+> To test this patch, enable the configs for KUNIT, then CHECKSUM_KUNIT
+> and RISCV_CHECKSUM_KUNIT.
+>=20
+> I have attempted to make these functions as optimal as possible, but I
+> have not ran anything on actual riscv hardware. My performance testing
+> has been limited to inspecting the assembly, running the algorithms on
+> x86 hardware, and running in QEMU.
+>=20
+> ip_fast_csum is a relatively small function so even though it is
+> possible to read 64 bits at a time on compatible hardware, the
+> bottleneck becomes the clean up and setup code so loading 32 bits at a
+> time is actually faster.
+>=20
+> Relies on https://lore.kernel.org/lkml/20230920193801.3035093-1-evan@rivo=
+sinc.com/
 
-I haven't run any further tests but it's a good starting point to fix
-Itanium build should the breaking changes be merged from next and the
-Itanium removal not.
+Not sure if the dep here is related, but the series is back to failing
+to build properly. Patch 3's build is broken everywhere pretty much, and
+patch 4's allmodconfigs don't build:
+
+https://patchwork.kernel.org/project/linux-riscv/list/?series=3D797256
+
+Cheers,
+Conor.
+
+--qRR1lRF7FS8U2Elp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUCzXwAKCRB4tDGHoIJi
+0gTuAQCn9o4GuOxKhaiu5W8NOQuoO/gxx0KouCaKxas8K9dn4wEA1y5FNvh1iWAg
+XUdMgxRn+G362ufQfEH3gDx1oLZImgE=
+=YvhH
+-----END PGP SIGNATURE-----
+
+--qRR1lRF7FS8U2Elp--
