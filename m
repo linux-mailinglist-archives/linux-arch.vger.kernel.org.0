@@ -2,56 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD687DE087
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Nov 2023 12:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39917DE095
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Nov 2023 12:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235267AbjKALu5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Nov 2023 07:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S235276AbjKAL4O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Nov 2023 07:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjKALuz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Nov 2023 07:50:55 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA912109;
-        Wed,  1 Nov 2023 04:50:51 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA00C433C9;
-        Wed,  1 Nov 2023 11:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698839451;
-        bh=mF6eg4XvSECsF2HMgNiQoGzvU7I5nf27Gh38oBPoW8w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=misf2IeNRgfcUPjvk9oQ48jbkYilldGVOKEo78NWgtyyiJKFDZX40Xwemwf/fBhsx
-         s2POZN2NGNfhrFnuf0liu77A/wyhqOUqQdwRs7/TeE998W8lfLrk2mb1idYIWZLR5V
-         bFqIamEMC9t+Ys+bamXQFdX03YBbtI4lXscLwfqaEJORAYa2wl4RgMmFVlnP+I3xeu
-         sZETzyTkmDMKSOCO7S4JCz205KrJaOvxSlXLeZKvWk71LUVs9jisMPiEARQjfKRwfV
-         kDOeRUW/Dd5lHMQrLEIdMdhrouhvMT+xg2ywZQb3YFddMiSdMYHZGcjQLLmMhoei7Y
-         RaSvd6gry7SCg==
-Date:   Wed, 1 Nov 2023 11:50:46 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Samuel Holland <samuel.holland@sifive.com>,
-        David Laight <David.Laight@aculab.com>,
-        Xiao Wang <xiao.w.wang@intel.com>,
-        Evan Green <evan@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v9 0/5] riscv: Add fine-tuned checksum functions
-Message-ID: <20231101-palace-tightly-97a1d35a4597@spud>
-References: <20231031-optimize_checksum-v9-0-ea018e69b229@rivosinc.com>
+        with ESMTP id S235288AbjKAL4N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Nov 2023 07:56:13 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B7B10F;
+        Wed,  1 Nov 2023 04:56:04 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C74A33200922;
+        Wed,  1 Nov 2023 07:56:03 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 01 Nov 2023 07:56:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1698839763; x=1698926163; bh=IPh9CsqLU4u3dCRavOB07s+Kjay/eRFWrX3
+        L+KjfSiU=; b=Y7z0PKTYBfI6u68m8CQDLFZwHj/6XtUJfZWUYhhuOK+zw1Purk8
+        lm2A9wJEjNGZT1faNrWvvr98l86UhDK/LQhvZRfvHMdlNzT5mHKeD9ldKaIPgns2
+        yRYLZPde2LQXlZCm/IXTCNWdgstuFXIr+msWhNW7t9G8IlpAVsUz9CxQKppRAoIb
+        Xn1ybU4FVBz39SfQnn+p/ukJ7s+nkBqA3vZdY9WTJOLQQ7dI52dTLLucvvMZXEUt
+        7q7dcZiSMJTTC6/qbVvtLGgRzSu9i5un1y1cIdjJWpfb3y5Fr4hv9bNLKJLY+sO2
+        /q6Me5qNEgEPI34Q75Q9XfForgJAgjbsBwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1698839763; x=1698926163; bh=IPh9CsqLU4u3dCRavOB07s+Kjay/eRFWrX3
+        L+KjfSiU=; b=oVhBir7M5Iwo2BKPZCIHt9eANhp3dqvhEP5KIhOh+E5NzHbctiO
+        oWEB1OZK3P54rNE6F5SvtFBMOnaPZHRzod076DAgzpybNj98bkO3EB0HZlTrbbuR
+        /7aAK4oD0GR5/SaHdD41ddTTrX8X/1TsTkQGRWsBkLmhIDbmdra7kbhEUgeQU2SY
+        rJ4BGfnl07xERP5Q8PJTzptp9krw/kSlbsiluwt2w65wszeBMp/D8a/4rXcoEN7D
+        MgXytY2torbiswy5tjnHu/ybk+Pdpz4+Qxmfu2sGJmgZ0NeUIuXq8MO03/zQYq8j
+        3V7Mrq9HwKoNEGoj6l8ge5qI1K7FHepptTQ==
+X-ME-Sender: <xms:0jxCZUhVg2WY2veJq0MurP3HEmtNia_tmadkzHdQPyvqgY0essl1Bg>
+    <xme:0jxCZdAb4I17vQdOUg3wNDBiW7F0zT-xzNrNAuHsjQgeOBjgyGrijN0fkmf3oTpG1
+    3Pw5PKAHNQIHhbZTpk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtgedgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:0jxCZcEPibyMS8E8e8y0YNehMoffJvcWHuGgSaYmr7DLZ6TaDr55VQ>
+    <xmx:0jxCZVSHUpNAj0iHbu-cd3d1b3kYzxHsZLXptsOMHCuD234gtG5_8w>
+    <xmx:0jxCZRzbbLW_kGOLUaQW6yKj3DCzIewbwq02xbpLIf6GPUJR3BeDYg>
+    <xmx:0zxCZc-v9crm1aRjV9HOq2BPLfnjb0N4v0eadH1YvpcQeXstWZMnLA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 979B036A0075; Wed,  1 Nov 2023 07:56:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LjqsyqiDGC45356u"
-Content-Disposition: inline
-In-Reply-To: <20231031-optimize_checksum-v9-0-ea018e69b229@rivosinc.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <04275b02-0f04-4aed-9e05-7346daf7f102@app.fastmail.com>
+In-Reply-To: <f548e9e7-e499-4e26-87d9-c45ce69236a1@app.fastmail.com>
+References: <82076999-9346-473d-8841-1480cd70b527@app.fastmail.com>
+ <f548e9e7-e499-4e26-87d9-c45ce69236a1@app.fastmail.com>
+Date:   Wed, 01 Nov 2023 11:55:29 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Arnd Bergmann" <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        "Baoquan He" <bhe@redhat.com>
+Subject: Re: Overhead of io{read,write}{8,16,32,64} on x86
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,52 +89,41 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---LjqsyqiDGC45356u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 31, 2023 at 05:18:50PM -0700, Charlie Jenkins wrote:
-> Each architecture generally implements fine-tuned checksum functions to
-> leverage the instruction set. This patch adds the main checksum
-> functions that are used in networking.
->=20
-> This patch takes heavy use of the Zbb extension using alternatives
-> patching.
->=20
-> To test this patch, enable the configs for KUNIT, then CHECKSUM_KUNIT
-> and RISCV_CHECKSUM_KUNIT.
->=20
-> I have attempted to make these functions as optimal as possible, but I
-> have not ran anything on actual riscv hardware. My performance testing
-> has been limited to inspecting the assembly, running the algorithms on
-> x86 hardware, and running in QEMU.
->=20
-> ip_fast_csum is a relatively small function so even though it is
-> possible to read 64 bits at a time on compatible hardware, the
-> bottleneck becomes the clean up and setup code so loading 32 bits at a
-> time is actually faster.
->=20
-> Relies on https://lore.kernel.org/lkml/20230920193801.3035093-1-evan@rivo=
-sinc.com/
+=E5=9C=A82023=E5=B9=B411=E6=9C=881=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =E4=
+=B8=8A=E5=8D=889:08=EF=BC=8CArnd Bergmann=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+> My feeling is that converting to ioread/iowrite is generally a win
+> for any driver that already needs to support both cases (e.g.
+> serial-8250) since this can unify the two code paths.
+>
+> However, for drivers that only support inb()/outb() today, I don't
+> see a real benefit in converting them from the traditional methods.
 
-I coulda sworn I reported build issues against the v8 of this series
-that are still present in this v9. For example:
-https://patchwork.kernel.org/project/linux-riscv/patch/20231031-optimize_ch=
-ecksum-v9-3-ea018e69b229@rivosinc.com/
+Unfortunately, there are tons of old system trying to mimic PC do
+rely on those drivers :-(
 
-Cheers,
-Conor.
+I think the universal target is to remove provision of inb()/outb()
+family on archs other than x86, and perhaps remove PCI_IOBASE
+as well because we can manage io regions with ioremap afterwards.
 
---LjqsyqiDGC45356u
-Content-Type: application/pgp-signature; name="signature.asc"
+Besides PnP system may need an overhaul to handle enablement of
+ISA device, presumably the ability of receiving information from
+OF and platform code can be helpful.
 
------BEGIN PGP SIGNATURE-----
+> Another question is whether we actually want to keep the ISA-only
+> drivers around. Usually once you look closely, any particular
+> ISA driver tends to be entirely unused already and can be removed,
+> aside from a few known devices that are either soldered-down on
+> motherboards or that have an LPC variant using the same ISA driver.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUI7lgAKCRB4tDGHoIJi
-0h2sAP0RKjRG5Rpub/HvLIazZUE6vW1OEyWKng47PNLxPT1sUgD/Xz1kJ0si+e+m
-myJ1M13eciVOu5bFSEGmDXc/0JMsxgY=
-=1Fkh
------END PGP SIGNATURE-----
+Well for MIPS Alpha PPC m68k I guess that's worth it. Those systems
+tends to have random hardware pieces from PC, including ISA EISA slots.
 
---LjqsyqiDGC45356u--
+Thanks.
+
+>
+>      Arnd
+
+--=20
+- Jiaxun
