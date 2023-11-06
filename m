@@ -2,701 +2,304 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4E27E18F4
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 03:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F457E194F
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 05:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjKFCqA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Nov 2023 21:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S230145AbjKFEEL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Nov 2023 23:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjKFCp1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Nov 2023 21:45:27 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21231725
-        for <linux-arch@vger.kernel.org>; Sun,  5 Nov 2023 18:44:45 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d9caf486775so4541340276.2
-        for <linux-arch@vger.kernel.org>; Sun, 05 Nov 2023 18:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699238684; x=1699843484; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TUP3yrFP0An+tKPrM9CHpFI1TCjxfyeIP5pvhkXR8IQ=;
-        b=vZ2RXNpAUxRPOBvsM4V2pVr+5ay77IwkisEeR2cP5fG1zileTHT40hxZKFqyzFsC8p
-         hWkABJgAGb7skoufKgi6BUHCobjkZDkAsYWCimjfEL2b2kD3YGQvqsR0e/y7SuHdyBXn
-         r+eZYSwP6+oFR7OpLEfQ/hZSYd4eqTnLh4xBAICZ7yZHdDVf7YaESITC0+59Euy1VVn8
-         VaN9IPphJ3mbc0Kfzxk3KfAMuubDjanS/KIlNmF0cf/em5g2rUcKuWZisRW6S/C2i3t/
-         SyKYE1++tDNDfuqWWFVcEuXlrye+nzfrHhONGHehlj0QZ8KdhjMqHu6/4FDPKKyxL2TR
-         4png==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699238684; x=1699843484;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TUP3yrFP0An+tKPrM9CHpFI1TCjxfyeIP5pvhkXR8IQ=;
-        b=dKXCApO3ZwGzqM1cjFSUVsOcw3IQKEOce3bq6xbNSJZmdJizQX+4vfUKoT6bLXBSX6
-         oX/8OGM2YUioLCh3t0up4zyiZyzbRkAx3vi3d4TBl6IRMovZbEcqia0myVGU7S318BtY
-         aMoXjTCh6gmz3/MH9382E/8/9O8E4rSzdPWmDwJNnfhqZvrcScaB+m/KSBey/tfCTH3G
-         5ZPEYV5ys0e21dZSTn3SZoYYrWIzqI996BRlQqELUkCt33IWOcwSdUSBejbqAreVBBKd
-         /jh+d3x49rLg3a0zUZ1DmzS/FSTU4k8MBlZYLl1D5uqpkUiFEUrUIOT6kHVRuLJuqLWy
-         s3Zg==
-X-Gm-Message-State: AOJu0YwRS0SaOmHf8ffyUtrYZAQojt/akfT6bFsCqEKl+9s8WIoy0z2d
-        GQmRq/+q8z8IhZjBgYODh2R+IMr/7dhO6XepwA==
-X-Google-Smtp-Source: AGHT+IGlKnQaLTjiFq56736Kg6KGnbLJJvMDAHLmJHlqvHe3XtgJy7m+AFG7yCUfMAeRjPJzY6RrPY2Ej7c7HoxUYg==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:35de:fff:97b7:db3e])
- (user=almasrymina job=sendgmr) by 2002:a25:2083:0:b0:da0:c584:def4 with SMTP
- id g125-20020a252083000000b00da0c584def4mr519198ybg.1.1699238684278; Sun, 05
- Nov 2023 18:44:44 -0800 (PST)
-Date:   Sun,  5 Nov 2023 18:44:11 -0800
-In-Reply-To: <20231106024413.2801438-1-almasrymina@google.com>
-Mime-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231106024413.2801438-13-almasrymina@google.com>
-Subject: [RFC PATCH v3 12/12] selftests: add ncdevmem, netcat for devmem TCP
-From:   Mina Almasry <almasrymina@google.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Cc:     Mina Almasry <almasrymina@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230030AbjKFEEL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Nov 2023 23:04:11 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB80D6;
+        Sun,  5 Nov 2023 20:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699243446; x=1730779446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=36G3s3mjGbJFq5j/NhFGstt1RlPdX0X1ykdfnGuTgYY=;
+  b=KC6dhKP7Cpe0oDxvaoZ/uw6UwmEuIV3NQxAQlnVMz8ugQUP8O6zM4+rI
+   mN9NkihSa/kI0iVy1T5rP69TDVUzXEGp31XoscpfY2lyYcLGzQ1mOQfB3
+   cVd/OtDv4YfCyul+B92xFSL8SaQQjwZqR7KtKwTvKAS0/PkokQZucjJFv
+   poyaz0HHoeWrId0z0flmilhRlzN6poMzTkjyxcgDQT9SuK07KkCENbUKm
+   S8nE1tj85i2Epm93/JiqlI/ZGpwv6VrANRG1KJdR43Zpy0hzL3Utnb1Z/
+   Emv7Yt8ClXITcsAVRi+qccpYss5jy5YSDcWa+nOSQRTj+SOufB0S5VpzZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="420319132"
+X-IronPort-AV: E=Sophos;i="6.03,280,1694761200"; 
+   d="scan'208";a="420319132"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2023 20:04:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10885"; a="828081680"
+X-IronPort-AV: E=Sophos;i="6.03,280,1694761200"; 
+   d="scan'208";a="828081680"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Nov 2023 20:03:59 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qzqqC-000656-2R;
+        Mon, 06 Nov 2023 04:03:56 +0000
+Date:   Mon, 6 Nov 2023 12:03:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, patches@lists.linux.dev,
+        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+        decui@microsoft.com, apais@linux.microsoft.com,
+        Tianyu.Lan@microsoft.com, ssengar@linux.microsoft.com,
+        mukeshrathor@microsoft.com, stanislav.kinsburskiy@gmail.com,
+        jinankjain@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, will@kernel.org,
+        catalin.marinas@arm.com
+Subject: Re: [PATCH v4 15/15] Drivers: hv: Add modules to expose /dev/mshv to
+ VMMs running on Hyper-V
+Message-ID: <202311061139.Zrlkam3w-lkp@intel.com>
+References: <1696010501-24584-16-git-send-email-nunodasneves@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1696010501-24584-16-git-send-email-nunodasneves@linux.microsoft.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ncdevmem is a devmem TCP netcat. It works similarly to netcat, but it
-sends and receives data using the devmem TCP APIs. It uses udmabuf as
-the dmabuf provider. It is compatible with a regular netcat running on
-a peer, or a ncdevmem running on a peer.
+Hi Nuno,
 
-In addition to normal netcat support, ncdevmem has a validation mode,
-where it sends a specific pattern and validates this pattern on the
-receiver side to ensure data integrity.
+kernel test robot noticed the following build warnings:
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
+[auto build test WARNING on arnd-asm-generic/master]
+[also build test WARNING on tip/x86/core arm64/for-next/core linus/master v6.6 next-20231103]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Das-Neves/hyperv-tlfs-Change-shared-HV_REGISTER_-defines-to-HV_MSR_/20230930-041305
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/1696010501-24584-16-git-send-email-nunodasneves%40linux.microsoft.com
+patch subject: [PATCH v4 15/15] Drivers: hv: Add modules to expose /dev/mshv to VMMs running on Hyper-V
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231106/202311061139.Zrlkam3w-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231106/202311061139.Zrlkam3w-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311061139.Zrlkam3w-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hv/hv_call.c:21:5: warning: no previous prototype for 'hv_call_get_vp_registers' [-Wmissing-prototypes]
+      21 | int hv_call_get_vp_registers(u32 vp_index, u64 partition_id, u16 count,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/hv_call.c:65:5: warning: no previous prototype for 'hv_call_set_vp_registers' [-Wmissing-prototypes]
+      65 | int hv_call_set_vp_registers(u32 vp_index, u64 partition_id, u16 count,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+--
+>> drivers/hv/mshv_root_main.c:1816:12: warning: no previous prototype for 'mshv_root_init' [-Wmissing-prototypes]
+    1816 | int __init mshv_root_init(void)
+         |            ^~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_main.c:1896:13: warning: no previous prototype for 'mshv_root_exit' [-Wmissing-prototypes]
+    1896 | void __exit mshv_root_exit(void)
+         |             ^~~~~~~~~~~~~~
+--
+>> drivers/hv/mshv_synic.c:27:1: warning: no previous prototype for 'synic_event_ring_get_queued_port' [-Wmissing-prototypes]
+      27 | synic_event_ring_get_queued_port(u32 sint_index)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+>> drivers/hv/mshv_root_hv_call.c:46:5: warning: no previous prototype for 'hv_call_withdraw_memory' [-Wmissing-prototypes]
+      46 | int hv_call_withdraw_memory(u64 count, int node, u64 partition_id)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:94:5: warning: no previous prototype for 'hv_call_create_partition' [-Wmissing-prototypes]
+      94 | int hv_call_create_partition(u64 flags,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:139:5: warning: no previous prototype for 'hv_call_initialize_partition' [-Wmissing-prototypes]
+     139 | int hv_call_initialize_partition(u64 partition_id)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:166:5: warning: no previous prototype for 'hv_call_finalize_partition' [-Wmissing-prototypes]
+     166 | int hv_call_finalize_partition(u64 partition_id)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:177:5: warning: no previous prototype for 'hv_call_delete_partition' [-Wmissing-prototypes]
+     177 | int hv_call_delete_partition(u64 partition_id)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:188:5: warning: no previous prototype for 'hv_call_map_gpa_pages' [-Wmissing-prototypes]
+     188 | int hv_call_map_gpa_pages(u64 partition_id, u64 gpa_target, u64 page_count,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:241:5: warning: no previous prototype for 'hv_call_unmap_gpa_pages' [-Wmissing-prototypes]
+     241 | int hv_call_unmap_gpa_pages(u64 partition_id, u64 gpa_target, u64 page_count,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:277:5: warning: no previous prototype for 'hv_call_get_gpa_access_states' [-Wmissing-prototypes]
+     277 | int hv_call_get_gpa_access_states(u64 partition_id, u32 count,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:320:5: warning: no previous prototype for 'hv_call_install_intercept' [-Wmissing-prototypes]
+     320 | int hv_call_install_intercept(u64 partition_id, u32 access_type,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:350:5: warning: no previous prototype for 'hv_call_assert_virtual_interrupt' [-Wmissing-prototypes]
+     350 | int hv_call_assert_virtual_interrupt(u64 partition_id, u32 vector, u64 dest_addr,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:372:5: warning: no previous prototype for 'hv_call_get_vp_state' [-Wmissing-prototypes]
+     372 | int hv_call_get_vp_state(u32 vp_index, u64 partition_id,
+         |     ^~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:429:5: warning: no previous prototype for 'hv_call_set_vp_state' [-Wmissing-prototypes]
+     429 | int hv_call_set_vp_state(u32 vp_index, u64 partition_id,
+         |     ^~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:494:5: warning: no previous prototype for 'hv_call_map_vp_state_page' [-Wmissing-prototypes]
+     494 | int hv_call_map_vp_state_page(u64 partition_id, u32 vp_index, u32 type,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:531:5: warning: no previous prototype for 'hv_call_unmap_vp_state_page' [-Wmissing-prototypes]
+     531 | int hv_call_unmap_vp_state_page(u64 partition_id, u32 vp_index, u32 type)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:554:5: warning: no previous prototype for 'hv_call_get_partition_property' [-Wmissing-prototypes]
+     554 | int hv_call_get_partition_property(u64 partition_id, u64 property_code,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:581:5: warning: no previous prototype for 'hv_call_set_partition_property' [-Wmissing-prototypes]
+     581 | int hv_call_set_partition_property(u64 partition_id, u64 property_code,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:609:5: warning: no previous prototype for 'hv_call_translate_virtual_address' [-Wmissing-prototypes]
+     609 | int hv_call_translate_virtual_address(u32 vp_index, u64 partition_id, u64 flags,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:648:1: warning: no previous prototype for 'hv_call_clear_virtual_interrupt' [-Wmissing-prototypes]
+     648 | hv_call_clear_virtual_interrupt(u64 partition_id)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:662:1: warning: no previous prototype for 'hv_call_create_port' [-Wmissing-prototypes]
+     662 | hv_call_create_port(u64 port_partition_id, union hv_port_id port_id,
+         | ^~~~~~~~~~~~~~~~~~~
+>> drivers/hv/mshv_root_hv_call.c:703:1: warning: no previous prototype for 'hv_call_delete_port' [-Wmissing-prototypes]
+     703 | hv_call_delete_port(u64 port_partition_id, union hv_port_id port_id)
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:721:1: warning: no previous prototype for 'hv_call_connect_port' [-Wmissing-prototypes]
+     721 | hv_call_connect_port(u64 port_partition_id, union hv_port_id port_id,
+         | ^~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:761:1: warning: no previous prototype for 'hv_call_disconnect_port' [-Wmissing-prototypes]
+     761 | hv_call_disconnect_port(u64 connection_partition_id,
+         | ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:781:1: warning: no previous prototype for 'hv_call_notify_port_ring_empty' [-Wmissing-prototypes]
+     781 | hv_call_notify_port_ring_empty(u32 sint_index)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:798:5: warning: no previous prototype for 'hv_call_register_intercept_result' [-Wmissing-prototypes]
+     798 | int hv_call_register_intercept_result(u32 vp_index, u64 partition_id,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:834:5: warning: no previous prototype for 'hv_call_signal_event_direct' [-Wmissing-prototypes]
+     834 | int hv_call_signal_event_direct(u32 vp_index, u64 partition_id, u8 vtl,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:861:5: warning: no previous prototype for 'hv_call_post_message_direct' [-Wmissing-prototypes]
+     861 | int hv_call_post_message_direct(u32 vp_index, u64 partition_id, u8 vtl,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_hv_call.c:883:5: warning: no previous prototype for 'hv_call_get_vp_cpuid_values' [-Wmissing-prototypes]
+     883 | int hv_call_get_vp_cpuid_values(u32 vp_index, u64 partition_id,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+>> drivers/hv/xfer_to_guest.c:15:5: warning: no previous prototype for 'mshv_xfer_to_guest_mode_handle_work' [-Wmissing-prototypes]
+      15 | int mshv_xfer_to_guest_mode_handle_work(unsigned long ti_work)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
----
+vim +/hv_call_get_vp_registers +21 drivers/hv/hv_call.c
 
-RFC v2:
-- General cleanups (Willem).
+    14	
+    15	#define HV_GET_REGISTER_BATCH_SIZE	\
+    16		(HV_HYP_PAGE_SIZE / sizeof(union hv_register_value))
+    17	#define HV_SET_REGISTER_BATCH_SIZE	\
+    18		((HV_HYP_PAGE_SIZE - sizeof(struct hv_input_set_vp_registers)) \
+    19			/ sizeof(struct hv_register_assoc))
+    20	
+  > 21	int hv_call_get_vp_registers(u32 vp_index, u64 partition_id, u16 count,
+    22				     union hv_input_vtl input_vtl,
+    23				     struct hv_register_assoc *registers)
+    24	{
+    25		struct hv_input_get_vp_registers *input_page;
+    26		union hv_register_value *output_page;
+    27		u16 completed = 0;
+    28		unsigned long remaining = count;
+    29		int rep_count, i;
+    30		u64 status = HV_STATUS_SUCCESS;
+    31		unsigned long flags;
+    32	
+    33		local_irq_save(flags);
+    34	
+    35		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
+    36		output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
+    37	
+    38		input_page->partition_id = partition_id;
+    39		input_page->vp_index = vp_index;
+    40		input_page->input_vtl.as_uint8 = input_vtl.as_uint8;
+    41		input_page->rsvd_z8 = 0;
+    42		input_page->rsvd_z16 = 0;
+    43	
+    44		while (remaining) {
+    45			rep_count = min(remaining, HV_GET_REGISTER_BATCH_SIZE);
+    46			for (i = 0; i < rep_count; ++i)
+    47				input_page->names[i] = registers[i].name;
+    48	
+    49			status = hv_do_rep_hypercall(HVCALL_GET_VP_REGISTERS, rep_count,
+    50						     0, input_page, output_page);
+    51			if (!hv_result_success(status))
+    52				break;
+    53			completed = hv_repcomp(status);
+    54			for (i = 0; i < completed; ++i)
+    55				registers[i].value = output_page[i];
+    56	
+    57			registers += completed;
+    58			remaining -= completed;
+    59		}
+    60		local_irq_restore(flags);
+    61	
+    62		return hv_status_to_errno(status);
+    63	}
+    64	
+  > 65	int hv_call_set_vp_registers(u32 vp_index, u64 partition_id, u16 count,
+    66				     union hv_input_vtl input_vtl,
+    67				     struct hv_register_assoc *registers)
+    68	{
+    69		struct hv_input_set_vp_registers *input_page;
+    70		u16 completed = 0;
+    71		unsigned long remaining = count;
+    72		int rep_count;
+    73		u64 status = HV_STATUS_SUCCESS;
+    74		unsigned long flags;
+    75	
+    76		local_irq_save(flags);
+    77		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
+    78	
+    79		input_page->partition_id = partition_id;
+    80		input_page->vp_index = vp_index;
+    81		input_page->input_vtl.as_uint8 = input_vtl.as_uint8;
+    82		input_page->rsvd_z8 = 0;
+    83		input_page->rsvd_z16 = 0;
+    84	
+    85		while (remaining) {
+    86			rep_count = min(remaining, HV_SET_REGISTER_BATCH_SIZE);
+    87			memcpy(input_page->elements, registers,
+    88			       sizeof(struct hv_register_assoc) * rep_count);
+    89	
+    90			status = hv_do_rep_hypercall(HVCALL_SET_VP_REGISTERS, rep_count,
+    91						     0, input_page, NULL);
+    92			if (!hv_result_success(status))
+    93				break;
+    94			completed = hv_repcomp(status);
+    95			registers += completed;
+    96			remaining -= completed;
+    97		}
+    98	
+    99		local_irq_restore(flags);
+   100	
+   101		return hv_status_to_errno(status);
+   102	}
+   103	
 
----
- tools/testing/selftests/net/.gitignore |   1 +
- tools/testing/selftests/net/Makefile   |   5 +
- tools/testing/selftests/net/ncdevmem.c | 546 +++++++++++++++++++++++++
- 3 files changed, 552 insertions(+)
- create mode 100644 tools/testing/selftests/net/ncdevmem.c
-
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 2f9d378edec3..b644dbae58b7 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -17,6 +17,7 @@ ipv6_flowlabel
- ipv6_flowlabel_mgr
- log.txt
- msg_zerocopy
-+ncdevmem
- nettest
- psock_fanout
- psock_snd
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b9804ceb9494..6c6e53c70e99 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -5,6 +5,10 @@ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
- CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
- # Additional include paths needed by kselftest.h
- CFLAGS += -I../
-+CFLAGS += -I../../../net/ynl/generated/
-+CFLAGS += -I../../../net/ynl/lib/
-+
-+LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
- 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
-@@ -91,6 +95,7 @@ TEST_PROGS += test_bridge_neigh_suppress.sh
- TEST_PROGS += test_vxlan_nolocalbypass.sh
- TEST_PROGS += test_bridge_backup_port.sh
- TEST_PROGS += fdb_flush.sh
-+TEST_GEN_FILES += ncdevmem
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-new file mode 100644
-index 000000000000..78bc3ad767ca
---- /dev/null
-+++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -0,0 +1,546 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#define __EXPORTED_HEADERS__
-+
-+#include <linux/uio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <errno.h>
-+#define __iovec_defined
-+#include <fcntl.h>
-+#include <malloc.h>
-+
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+
-+#include <linux/memfd.h>
-+#include <linux/if.h>
-+#include <linux/dma-buf.h>
-+#include <linux/udmabuf.h>
-+#include <libmnl/libmnl.h>
-+#include <linux/types.h>
-+#include <linux/netlink.h>
-+#include <linux/genetlink.h>
-+#include <linux/netdev.h>
-+#include <time.h>
-+
-+#include "netdev-user.h"
-+#include <ynl.h>
-+
-+#define PAGE_SHIFT 12
-+#define TEST_PREFIX "ncdevmem"
-+#define NUM_PAGES 16000
-+
-+#ifndef MSG_SOCK_DEVMEM
-+#define MSG_SOCK_DEVMEM 0x2000000
-+#endif
-+
-+/*
-+ * tcpdevmem netcat. Works similarly to netcat but does device memory TCP
-+ * instead of regular TCP. Uses udmabuf to mock a dmabuf provider.
-+ *
-+ * Usage:
-+ *
-+ * * Without validation:
-+ *
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -l \
-+ *		-p 5201
-+ *
-+ *	On client:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -p 5201
-+ *
-+ * * With Validation:
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -l -f eth1 -n 0000:06:00.0 \
-+ *		-p 5202 -v 1
-+ *
-+ *	On client:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -n 0000:06:00.0 -p 5202 \
-+ *		-v 100000
-+ *
-+ * Note this is compatible with regular netcat. i.e. the sender or receiver can
-+ * be replaced with regular netcat to test the RX or TX path in isolation.
-+ */
-+
-+static char *server_ip = "192.168.1.4";
-+static char *client_ip = "192.168.1.2";
-+static char *port = "5201";
-+static size_t do_validation;
-+static int queue_num = 15;
-+static char *ifname = "eth1";
-+static char *nic_pci_addr = "0000:06:00.0";
-+static unsigned int iterations;
-+
-+void print_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	int i;
-+
-+	for (i = 0; i < size; i++) {
-+		printf("%02hhX ", p[i]);
-+	}
-+	printf("\n");
-+}
-+
-+void print_nonzero_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	unsigned int i;
-+
-+	for (i = 0; i < size; i++)
-+		putchar(p[i]);
-+	printf("\n");
-+}
-+
-+void validate_buffer(void *line, size_t size)
-+{
-+	static unsigned char seed = 1;
-+	unsigned char *ptr = line;
-+	int errors = 0;
-+	size_t i;
-+
-+	for (i = 0; i < size; i++) {
-+		if (ptr[i] != seed) {
-+			fprintf(stderr,
-+				"Failed validation: expected=%u, actual=%u, index=%lu\n",
-+				seed, ptr[i], i);
-+			errors++;
-+			if (errors > 20)
-+				exit(1);
-+		}
-+		seed++;
-+		if (seed == do_validation)
-+			seed = 0;
-+	}
-+
-+	fprintf(stdout, "Validated buffer\n");
-+}
-+
-+static void reset_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple off",
-+		 "eth1");
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple on",
-+		 "eth1");
-+	system(command);
-+}
-+
-+static void configure_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool -N %s flow-type tcp4 src-ip %s dst-ip %s src-port %s dst-port %s queue %d",
-+		 ifname, client_ip, server_ip, port, port, queue_num);
-+	system(command);
-+}
-+
-+/* Triggers a driver reset...
-+ *
-+ * The proper way to do this is probably 'ethtool --reset', but I don't have
-+ * that supported on my current test bed. I resort to changing this
-+ * configuration in the driver which also causes a driver reset...
-+ */
-+static void trigger_device_reset(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool --set-priv-flags %s enable-header-split off",
-+		 ifname);
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool --set-priv-flags %s enable-header-split on",
-+		 ifname);
-+	system(command);
-+}
-+
-+static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
-+			 __u32 *queue_idx, unsigned int n_queue_index,
-+			 struct ynl_sock **ys)
-+{
-+	struct netdev_bind_rx_req *req = NULL;
-+	struct ynl_error yerr;
-+	int ret = 0;
-+
-+	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+	if (!*ys) {
-+		fprintf(stderr, "YNL: %s\n", yerr.msg);
-+		return -1;
-+	}
-+
-+	if (ynl_subscribe(*ys, "mgmt"))
-+		goto err_close;
-+
-+	req = netdev_bind_rx_req_alloc();
-+	netdev_bind_rx_req_set_ifindex(req, ifindex);
-+	netdev_bind_rx_req_set_dmabuf_fd(req, dmabuf_fd);
-+	__netdev_bind_rx_req_set_queues(req, queue_idx, n_queue_index);
-+
-+	ret = netdev_bind_rx(*ys, req);
-+	if (!ret) {
-+		perror("netdev_bind_rx");
-+		goto err_close;
-+	}
-+
-+	netdev_bind_rx_req_free(req);
-+
-+	return 0;
-+
-+err_close:
-+	fprintf(stderr, "YNL failed: %s\n", (*ys)->err.msg);
-+	netdev_bind_rx_req_free(req);
-+	ynl_sock_destroy(*ys);
-+	return -1;
-+}
-+
-+static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
-+{
-+	struct udmabuf_create create;
-+	int ret;
-+
-+	*devfd = open("/dev/udmabuf", O_RDWR);
-+	if (*devfd < 0) {
-+		fprintf(stderr,
-+			"%s: [skip,no-udmabuf: Unable to access DMA "
-+			"buffer device file]\n",
-+			TEST_PREFIX);
-+		exit(70);
-+	}
-+
-+	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (*memfd < 0) {
-+		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
-+		exit(72);
-+	}
-+
-+	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0) {
-+		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+		exit(73);
-+	}
-+
-+	ret = ftruncate(*memfd, dmabuf_size);
-+	if (ret == -1) {
-+		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+		exit(74);
-+	}
-+
-+	memset(&create, 0, sizeof(create));
-+
-+	create.memfd = *memfd;
-+	create.offset = 0;
-+	create.size = dmabuf_size;
-+	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
-+	if (*buf < 0) {
-+		printf("%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-+		exit(75);
-+	}
-+}
-+
-+int do_server(void)
-+{
-+	char ctrl_data[sizeof(int) * 20000];
-+	size_t non_page_aligned_frags = 0;
-+	struct sockaddr_in client_addr;
-+	struct sockaddr_in server_sin;
-+	size_t page_aligned_frags = 0;
-+	int devfd, memfd, buf, ret;
-+	size_t total_received = 0;
-+	bool is_devmem = false;
-+	char *buf_mem = NULL;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	char iobuf[819200];
-+	char buffer[256];
-+	int socket_fd;
-+	int client_fd;
-+	size_t i = 0;
-+	int opt = 1;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	__u32 *queue_idx = malloc(sizeof(__u32) * 2);
-+
-+	queue_idx[0] = 14;
-+	queue_idx[1] = 15;
-+	if (bind_rx_queue(3 /* index for eth1 */, buf, queue_idx, 2, &ys)) {
-+		fprintf(stderr, "Failed to bind\n");
-+		exit(1);
-+	}
-+
-+	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		       buf, 0);
-+	if (buf_mem == MAP_FAILED) {
-+		perror("mmap()");
-+		exit(1);
-+	}
-+
-+	/* Need to trigger the NIC to reallocate its RX pages, otherwise the
-+	 * bind doesn't take effect.
-+	 */
-+	trigger_device_reset();
-+
-+	sleep(1);
-+
-+	reset_flow_steering();
-+	configure_flow_steering();
-+
-+	server_sin.sin_family = AF_INET;
-+	server_sin.sin_port = htons(atoi(port));
-+
-+	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(79);
-+	}
-+
-+	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	if (socket < 0) {
-+		printf("%s: [FAIL, create socket]\n", TEST_PREFIX);
-+		exit(76);
-+	}
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
-+			 sizeof(opt));
-+	if (ret) {
-+		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
-+			 sizeof(opt));
-+	if (ret) {
-+		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt,
-+			 sizeof(opt));
-+	if (ret) {
-+		printf("%s: [FAIL, set sock opt]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	printf("binding to address %s:%d\n", server_ip,
-+	       ntohs(server_sin.sin_port));
-+
-+	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret) {
-+		printf("%s: [FAIL, bind]: %s\n", TEST_PREFIX, strerror(errno));
-+		exit(76);
-+	}
-+
-+	ret = listen(socket_fd, 1);
-+	if (ret) {
-+		printf("%s: [FAIL, listen]: %s\n", TEST_PREFIX,
-+		       strerror(errno));
-+		exit(76);
-+	}
-+
-+	socklen_t client_addr_len = sizeof(client_addr);
-+
-+	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Waiting or connection on %s:%d\n", buffer,
-+	       ntohs(server_sin.sin_port));
-+	client_fd = accept(socket_fd, &client_addr, &client_addr_len);
-+
-+	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Got connection from %s:%d\n", buffer,
-+	       ntohs(client_addr.sin_port));
-+
-+	while (1) {
-+		struct iovec iov = { .iov_base = iobuf,
-+				     .iov_len = sizeof(iobuf) };
-+		struct cmsg_devmem *cmsg_devmem = NULL;
-+		struct dma_buf_sync sync = { 0 };
-+		struct cmsghdr *cm = NULL;
-+		struct msghdr msg = { 0 };
-+		struct devmemtoken token;
-+		ssize_t ret;
-+
-+		is_devmem = false;
-+		printf("\n\n");
-+
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+		ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
-+		printf("recvmsg ret=%ld\n", ret);
-+		if (ret < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-+			continue;
-+		}
-+		if (ret < 0) {
-+			perror("recvmsg");
-+			continue;
-+		}
-+		if (ret == 0) {
-+			printf("client exited\n");
-+			goto cleanup;
-+		}
-+
-+		i++;
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_SOCKET ||
-+			    (cm->cmsg_type != SCM_DEVMEM_OFFSET &&
-+			     cm->cmsg_type != SCM_DEVMEM_HEADER)) {
-+				fprintf(stdout, "skipping non-devmem cmsg\n");
-+				continue;
-+			}
-+
-+			cmsg_devmem = (struct cmsg_devmem *)CMSG_DATA(cm);
-+			is_devmem = true;
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_HEADER) {
-+				/* TODO: process data copied from skb's linear
-+				 * buffer.
-+				 */
-+				fprintf(stdout,
-+					"SCM_DEVMEM_HEADER. "
-+					"cmsg_devmem->frag_size=%u\n",
-+					cmsg_devmem->frag_size);
-+
-+				continue;
-+			}
-+
-+			token.token_start = cmsg_devmem->frag_token;
-+			token.token_count = 1;
-+
-+			total_received += cmsg_devmem->frag_size;
-+			printf("received frag_page=%llu, in_page_offset=%llu,"
-+			       " frag_offset=%llu, frag_size=%u, token=%u"
-+			       " total_received=%lu\n",
-+			       cmsg_devmem->frag_offset >> PAGE_SHIFT,
-+			       cmsg_devmem->frag_offset % getpagesize(),
-+			       cmsg_devmem->frag_offset, cmsg_devmem->frag_size,
-+			       cmsg_devmem->frag_token, total_received);
-+
-+			if (cmsg_devmem->frag_size % getpagesize())
-+				non_page_aligned_frags++;
-+			else
-+				page_aligned_frags++;
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			if (do_validation)
-+				validate_buffer(
-+					((unsigned char *)buf_mem) +
-+						cmsg_devmem->frag_offset,
-+					cmsg_devmem->frag_size);
-+			else
-+				print_nonzero_bytes(
-+					((unsigned char *)buf_mem) +
-+						cmsg_devmem->frag_offset,
-+					cmsg_devmem->frag_size);
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			ret = setsockopt(client_fd, SOL_SOCKET,
-+					 SO_DEVMEM_DONTNEED, &token,
-+					 sizeof(token));
-+			if (ret != 1) {
-+				perror("SO_DEVMEM_DONTNEED not enough tokens");
-+				exit(1);
-+			}
-+		}
-+		if (!is_devmem)
-+			printf("flow steering error\n");
-+
-+		printf("total_received=%lu\n", total_received);
-+	}
-+
-+	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+cleanup:
-+
-+	munmap(buf_mem, dmabuf_size);
-+	close(client_fd);
-+	close(socket_fd);
-+	close(buf);
-+	close(memfd);
-+	close(devfd);
-+	ynl_sock_destroy(ys);
-+	trigger_device_reset();
-+
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int is_server = 0, opt;
-+
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:f:n:i:")) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			is_server = 1;
-+			break;
-+		case 's':
-+			server_ip = optarg;
-+			break;
-+		case 'c':
-+			client_ip = optarg;
-+			break;
-+		case 'p':
-+			port = optarg;
-+			break;
-+		case 'v':
-+			do_validation = atoll(optarg);
-+			break;
-+		case 'q':
-+			queue_num = atoi(optarg);
-+			break;
-+		case 'f':
-+			ifname = optarg;
-+			break;
-+		case 'n':
-+			nic_pci_addr = optarg;
-+			break;
-+		case 'i':
-+			iterations = atoll(optarg);
-+			break;
-+		case '?':
-+			printf("unknown option: %c\n", optopt);
-+			break;
-+		}
-+	}
-+
-+	for (; optind < argc; optind++) {
-+		printf("extra arguments: %s\n", argv[optind]);
-+	}
-+
-+	if (is_server)
-+		return do_server();
-+
-+	return 0;
-+}
 -- 
-2.42.0.869.gea05f2083d-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
