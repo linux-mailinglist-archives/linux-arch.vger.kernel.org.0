@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26E37E18AE
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 03:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7DD7E18B5
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 03:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjKFCo3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Nov 2023 21:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S230215AbjKFCoa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Nov 2023 21:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjKFCo1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Nov 2023 21:44:27 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A285613E
-        for <linux-arch@vger.kernel.org>; Sun,  5 Nov 2023 18:44:23 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5afa86b8d66so56328577b3.3
-        for <linux-arch@vger.kernel.org>; Sun, 05 Nov 2023 18:44:23 -0800 (PST)
+        with ESMTP id S230184AbjKFCo3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Nov 2023 21:44:29 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDB9191
+        for <linux-arch@vger.kernel.org>; Sun,  5 Nov 2023 18:44:25 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-da03390793fso4609967276.3
+        for <linux-arch@vger.kernel.org>; Sun, 05 Nov 2023 18:44:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699238663; x=1699843463; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1699238665; x=1699843465; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2aWBuORvTMxiaxkeVBpZ19MJEVfIpSc8yfaq5OEMLWc=;
-        b=3fASEIAw+83aeyOPu29o+h9e9Py/WA3mB46W/RzTuxb5g5o9BZanbIUVaUumEMHy9o
-         frqRfDo8Q3gjyTIYmA2v6GzWsPC14qQfKTlRvE5jCLdJ/j0YveO/NOyVQplB165lZeuZ
-         NuYK0pfyrwTi7QtGrHXTwbaYcTTp00wu4oYFTcz8fq16lOuATHbTnvXy0I8UT13P6i7x
-         IB3SL0mL29a99hli8I05b/sp0F7kvL+sF2aVoOYtW1aspfbOeXjoEMcfYvo6EOmnQETH
-         Sb6BLKvGdH+EXSFm6oTa2iGlPUs4US/OiwD3HXkCLJ/mNaB7aB7wmd9kVDZD0COMIkyl
-         d5Hg==
+        bh=myyimfrqgp1IZWG/ujCwmnkNglmXYrRvMz92cYVRHqQ=;
+        b=Pm9R3xL6bn9UQe2wumfaDV9vJnA5rdu7IRShE1NvhDHl/1ZeblbkO6Z+hOfYIoJ/PN
+         IV+7AjyubuXQOJ7ZOVo8SnCEFRppgWULsAd8QtEhI8bdd233GmwL4U3jcFX0A30H+KUF
+         7Px/ZGnSNXxdiJPTHeGa3Wh8jHPl4IL6gCRBwbgcmeKQfg+9kiNzbkIoNrx/yAeQGdrF
+         7DTryPhfGvrAUua8viYVq8L/rrLWH+TILrvs3LzKKwSyRsfTEAD/ZWA7jJgg7302Stjs
+         lTRNsftAFdpxIuaXKnVKvmeMHVMHz8M+x3Mh9I2jTzMxvkErQaeHRNs7dLvBp6ujiJjG
+         00nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699238663; x=1699843463;
+        d=1e100.net; s=20230601; t=1699238665; x=1699843465;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2aWBuORvTMxiaxkeVBpZ19MJEVfIpSc8yfaq5OEMLWc=;
-        b=exDinCItUA+2pHzla/4mEghMCvSwjyefnQfdLzHogFkzug+8rmtm0m85OpLNujy+ml
-         WnRab9MD+FDDn0lLAlXlV/JapcWDFf/fs15WL71a9746zx94N6PG+rfHcZNtKo7uzJb6
-         eZzNrgo91X6VLn3zVbgBjtf4ZGmqDPxXKiv8fBQxQInhMnIJSvpt4UtPmC28OfYLxhHe
-         5YqhWa8tsEMDz1AtF7bIxUq4pIACqB1+l0qf0hCAKaJ+QfQVi+7s6Fe9ZqBsiNHKZbOy
-         oz1FW0rTItTiLn6oWcfPf2cq6e20Rw1J+N4EGgbdZRv6AQY0TXXMGyK4Q8WwpS1Dl1yv
-         Nbjw==
-X-Gm-Message-State: AOJu0Yy47QNnk/vFQ2qOIDiwny7mUeDc5uKV4NnXHuyIxeFezTz2fM9K
-        WREg3JT5H7bG7MB+BmKwFHw2373BHLA8QCuJxg==
-X-Google-Smtp-Source: AGHT+IEw+DPriD5kGCKLp7L9RvV3A2PIEZmUjmOXZu2L4QcO1pjeWSWUha8L2tTFId6zhwFVRynJBYuZ216EpkRCrw==
+        bh=myyimfrqgp1IZWG/ujCwmnkNglmXYrRvMz92cYVRHqQ=;
+        b=H6MqipwHRx/HRWv35VUp3AHQVNzKjyB06+UU5GROSfhxvWxlffvBlJZ78vpkQgZXTG
+         KIFQq1aZ08Cdkcvp0xPLSt4uMZvBGJAnhBfqpIh01V9zS3j8M7QUnAJhyABTXf6ioA62
+         hZI1S0IifogpFsBjHk+iADkU/JRYxLQgI+UEr712dmSpkQS36+1fUOEz6JJamWVfeYED
+         wl0jAF/Q5bX7kpJgMIH3L87nTh8V65MzJLTAl7DTv2/KDKobgT3TT0XJznCKWk9+5Ltp
+         y6bBw4E0PDcIcjdY0dnhfEtf2A/dTHAzwR9u/fEhlkMAe5h3cTadwKLwKkb5LgIdoR54
+         RYqQ==
+X-Gm-Message-State: AOJu0YwH+fmB2BF261BdIZfrrvxY4lxZsZ20WX6EyRFgw0dzJ40DZgY3
+        xM1hD7ZFaNyJF1a560FOkQrB+b3byNQBI3bFmA==
+X-Google-Smtp-Source: AGHT+IGWp48Z8KmELXQxvxVV5DLFXiq5qCBokj5aX+KpMHAL69lZpLvJunFDekA59GS1FqFlT9Q2Vt+r+UX/F4+7uQ==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:35de:fff:97b7:db3e])
- (user=almasrymina job=sendgmr) by 2002:a25:688b:0:b0:da0:46e5:a7ef with SMTP
- id d133-20020a25688b000000b00da046e5a7efmr496838ybc.3.1699238662743; Sun, 05
- Nov 2023 18:44:22 -0800 (PST)
-Date:   Sun,  5 Nov 2023 18:44:01 -0800
+ (user=almasrymina job=sendgmr) by 2002:a25:db11:0:b0:d9a:47ea:69a5 with SMTP
+ id g17-20020a25db11000000b00d9a47ea69a5mr527645ybf.1.1699238664884; Sun, 05
+ Nov 2023 18:44:24 -0800 (PST)
+Date:   Sun,  5 Nov 2023 18:44:02 -0800
 In-Reply-To: <20231106024413.2801438-1-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20231106024413.2801438-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231106024413.2801438-3-almasrymina@google.com>
-Subject: [RFC PATCH v3 02/12] net: page_pool: create hooks for custom page providers
+Message-ID: <20231106024413.2801438-4-almasrymina@google.com>
+Subject: [RFC PATCH v3 03/12] net: netdev netlink api to bind dma-buf to a net device
 From:   Mina Almasry <almasrymina@google.com>
 To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -72,7 +72,8 @@ Cc:     Mina Almasry <almasrymina@google.com>,
         "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
         Shakeel Butt <shakeelb@google.com>,
         Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -84,187 +85,310 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+API takes the dma-buf fd as input, and binds it to the netdevice. The
+user can specify the rx queues to bind the dma-buf to.
 
-The page providers which try to reuse the same pages will
-need to hold onto the ref, even if page gets released from
-the pool - as in releasing the page from the pp just transfers
-the "ownership" reference from pp to the provider, and provider
-will wait for other references to be gone before feeding this
-page back into the pool.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Suggested-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-
 ---
 
-This is implemented by Jakub in his RFC:
-https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@redhat.com/T/
-
-I take no credit for the idea or implementation; I only added minor
-edits to make this workable with device memory TCP, and removed some
-hacky test code. This is a critical dependency of device memory TCP
-and thus I'm pulling it into this series to make it revewable and
-mergable.
+Changes in v3:
+- Support binding multiple rx rx-queues
 
 ---
- include/net/page_pool/types.h | 18 +++++++++++++
- net/core/page_pool.c          | 51 +++++++++++++++++++++++++++++++----
- 2 files changed, 64 insertions(+), 5 deletions(-)
+ Documentation/netlink/specs/netdev.yaml | 28 +++++++++++++++
+ include/uapi/linux/netdev.h             | 10 ++++++
+ net/core/netdev-genl-gen.c              | 14 ++++++++
+ net/core/netdev-genl-gen.h              |  1 +
+ net/core/netdev-genl.c                  |  6 ++++
+ tools/include/uapi/linux/netdev.h       | 10 ++++++
+ tools/net/ynl/generated/netdev-user.c   | 42 ++++++++++++++++++++++
+ tools/net/ynl/generated/netdev-user.h   | 47 +++++++++++++++++++++++++
+ 8 files changed, 158 insertions(+)
 
-diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
-index 6fc5134095ed..d4bea053bb7e 100644
---- a/include/net/page_pool/types.h
-+++ b/include/net/page_pool/types.h
-@@ -60,6 +60,8 @@ struct page_pool_params {
- 	int		nid;
- 	struct device	*dev;
- 	struct napi_struct *napi;
-+	u8		memory_provider;
-+	void            *mp_priv;
- 	enum dma_data_direction dma_dir;
- 	unsigned int	max_len;
- 	unsigned int	offset;
-@@ -118,6 +120,19 @@ struct page_pool_stats {
+diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+index 14511b13f305..2141c5f5c33e 100644
+--- a/Documentation/netlink/specs/netdev.yaml
++++ b/Documentation/netlink/specs/netdev.yaml
+@@ -86,6 +86,24 @@ attribute-sets:
+              See Documentation/networking/xdp-rx-metadata.rst for more details.
+         type: u64
+         enum: xdp-rx-metadata
++  -
++    name: bind-dmabuf
++    attributes:
++      -
++        name: ifindex
++        doc: netdev ifindex to bind the dma-buf to.
++        type: u32
++        checks:
++          min: 1
++      -
++        name: queues
++        doc: receive queues to bind the dma-buf to.
++        type: u32
++        multi-attr: true
++      -
++        name: dmabuf-fd
++        doc: dmabuf file descriptor to bind.
++        type: u32
+ 
+ operations:
+   list:
+@@ -120,6 +138,16 @@ operations:
+       doc: Notification about device configuration being changed.
+       notify: dev-get
+       mcgrp: mgmt
++    -
++      name: bind-rx
++      doc: Bind dmabuf to netdev
++      attribute-set: bind-dmabuf
++      do:
++        request:
++          attributes:
++            - ifindex
++            - dmabuf-fd
++            - queues
+ 
+ mcast-groups:
+   list:
+diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+index 2943a151d4f1..2cd367c498c7 100644
+--- a/include/uapi/linux/netdev.h
++++ b/include/uapi/linux/netdev.h
+@@ -64,11 +64,21 @@ enum {
+ 	NETDEV_A_DEV_MAX = (__NETDEV_A_DEV_MAX - 1)
  };
- #endif
  
-+struct mem_provider;
++enum {
++	NETDEV_A_BIND_DMABUF_IFINDEX = 1,
++	NETDEV_A_BIND_DMABUF_QUEUES,
++	NETDEV_A_BIND_DMABUF_DMABUF_FD,
 +
-+enum pp_memory_provider_type {
-+	__PP_MP_NONE, /* Use system allocator directly */
++	__NETDEV_A_BIND_DMABUF_MAX,
++	NETDEV_A_BIND_DMABUF_MAX = (__NETDEV_A_BIND_DMABUF_MAX - 1)
 +};
 +
-+struct pp_memory_provider_ops {
-+	int (*init)(struct page_pool *pool);
-+	void (*destroy)(struct page_pool *pool);
-+	struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
-+	bool (*release_page)(struct page_pool *pool, struct page *page);
+ enum {
+ 	NETDEV_CMD_DEV_GET = 1,
+ 	NETDEV_CMD_DEV_ADD_NTF,
+ 	NETDEV_CMD_DEV_DEL_NTF,
+ 	NETDEV_CMD_DEV_CHANGE_NTF,
++	NETDEV_CMD_BIND_RX,
+ 
+ 	__NETDEV_CMD_MAX,
+ 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
+diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
+index ea9231378aa6..58300efaf4e5 100644
+--- a/net/core/netdev-genl-gen.c
++++ b/net/core/netdev-genl-gen.c
+@@ -15,6 +15,13 @@ static const struct nla_policy netdev_dev_get_nl_policy[NETDEV_A_DEV_IFINDEX + 1
+ 	[NETDEV_A_DEV_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
+ };
+ 
++/* NETDEV_CMD_BIND_RX - do */
++static const struct nla_policy netdev_bind_rx_nl_policy[NETDEV_A_BIND_DMABUF_DMABUF_FD + 1] = {
++	[NETDEV_A_BIND_DMABUF_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
++	[NETDEV_A_BIND_DMABUF_DMABUF_FD] = { .type = NLA_U32, },
++	[NETDEV_A_BIND_DMABUF_QUEUES] = { .type = NLA_U32, },
 +};
 +
- struct page_pool {
- 	struct page_pool_params p;
+ /* Ops table for netdev */
+ static const struct genl_split_ops netdev_nl_ops[] = {
+ 	{
+@@ -29,6 +36,13 @@ static const struct genl_split_ops netdev_nl_ops[] = {
+ 		.dumpit	= netdev_nl_dev_get_dumpit,
+ 		.flags	= GENL_CMD_CAP_DUMP,
+ 	},
++	{
++		.cmd		= NETDEV_CMD_BIND_RX,
++		.doit		= netdev_nl_bind_rx_doit,
++		.policy		= netdev_bind_rx_nl_policy,
++		.maxattr	= NETDEV_A_BIND_DMABUF_DMABUF_FD,
++		.flags		= GENL_CMD_CAP_DO,
++	},
+ };
  
-@@ -165,6 +180,9 @@ struct page_pool {
- 	 */
- 	struct ptr_ring ring;
+ static const struct genl_multicast_group netdev_nl_mcgrps[] = {
+diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
+index 7b370c073e7d..5aaeb435ec08 100644
+--- a/net/core/netdev-genl-gen.h
++++ b/net/core/netdev-genl-gen.h
+@@ -13,6 +13,7 @@
  
-+	const struct pp_memory_provider_ops *mp_ops;
-+	void *mp_priv;
+ int netdev_nl_dev_get_doit(struct sk_buff *skb, struct genl_info *info);
+ int netdev_nl_dev_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb);
++int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info);
+ 
+ enum {
+ 	NETDEV_NLGRP_MGMT,
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index fe61f85bcf33..59d3d512d9cc 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -129,6 +129,12 @@ int netdev_nl_dev_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+ 	return skb->len;
+ }
+ 
++/* Stub */
++int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
++{
++	return 0;
++}
 +
- #ifdef CONFIG_PAGE_POOL_STATS
- 	/* recycle stats are per-cpu to avoid locking */
- 	struct page_pool_recycle_stats __percpu *recycle_stats;
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 578b6f2eeb46..7ea1f4682479 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -23,6 +23,8 @@
- 
- #include <trace/events/page_pool.h>
- 
-+static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
-+
- #define DEFER_TIME (msecs_to_jiffies(1000))
- #define DEFER_WARN_INTERVAL (60 * HZ)
- 
-@@ -172,6 +174,7 @@ static int page_pool_init(struct page_pool *pool,
- 			  const struct page_pool_params *params)
+ static int netdev_genl_netdevice_event(struct notifier_block *nb,
+ 				       unsigned long event, void *ptr)
  {
- 	unsigned int ring_qsize = 1024; /* Default */
+diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
+index 2943a151d4f1..2cd367c498c7 100644
+--- a/tools/include/uapi/linux/netdev.h
++++ b/tools/include/uapi/linux/netdev.h
+@@ -64,11 +64,21 @@ enum {
+ 	NETDEV_A_DEV_MAX = (__NETDEV_A_DEV_MAX - 1)
+ };
+ 
++enum {
++	NETDEV_A_BIND_DMABUF_IFINDEX = 1,
++	NETDEV_A_BIND_DMABUF_QUEUES,
++	NETDEV_A_BIND_DMABUF_DMABUF_FD,
++
++	__NETDEV_A_BIND_DMABUF_MAX,
++	NETDEV_A_BIND_DMABUF_MAX = (__NETDEV_A_BIND_DMABUF_MAX - 1)
++};
++
+ enum {
+ 	NETDEV_CMD_DEV_GET = 1,
+ 	NETDEV_CMD_DEV_ADD_NTF,
+ 	NETDEV_CMD_DEV_DEL_NTF,
+ 	NETDEV_CMD_DEV_CHANGE_NTF,
++	NETDEV_CMD_BIND_RX,
+ 
+ 	__NETDEV_CMD_MAX,
+ 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
+diff --git a/tools/net/ynl/generated/netdev-user.c b/tools/net/ynl/generated/netdev-user.c
+index b5ffe8cd1144..d5f4c6d4c2b2 100644
+--- a/tools/net/ynl/generated/netdev-user.c
++++ b/tools/net/ynl/generated/netdev-user.c
+@@ -18,6 +18,7 @@ static const char * const netdev_op_strmap[] = {
+ 	[NETDEV_CMD_DEV_ADD_NTF] = "dev-add-ntf",
+ 	[NETDEV_CMD_DEV_DEL_NTF] = "dev-del-ntf",
+ 	[NETDEV_CMD_DEV_CHANGE_NTF] = "dev-change-ntf",
++	[NETDEV_CMD_BIND_RX] = "bind-rx",
+ };
+ 
+ const char *netdev_op_str(int op)
+@@ -72,6 +73,17 @@ struct ynl_policy_nest netdev_dev_nest = {
+ 	.table = netdev_dev_policy,
+ };
+ 
++struct ynl_policy_attr netdev_bind_dmabuf_policy[NETDEV_A_BIND_DMABUF_MAX + 1] = {
++	[NETDEV_A_BIND_DMABUF_IFINDEX] = { .name = "ifindex", .type = YNL_PT_U32, },
++	[NETDEV_A_BIND_DMABUF_QUEUES] = { .name = "queues", .type = YNL_PT_U32, },
++	[NETDEV_A_BIND_DMABUF_DMABUF_FD] = { .name = "dmabuf-fd", .type = YNL_PT_U32, },
++};
++
++struct ynl_policy_nest netdev_bind_dmabuf_nest = {
++	.max_attr = NETDEV_A_BIND_DMABUF_MAX,
++	.table = netdev_bind_dmabuf_policy,
++};
++
+ /* Common nested types */
+ /* ============== NETDEV_CMD_DEV_GET ============== */
+ /* NETDEV_CMD_DEV_GET - do */
+@@ -197,6 +209,36 @@ void netdev_dev_get_ntf_free(struct netdev_dev_get_ntf *rsp)
+ 	free(rsp);
+ }
+ 
++/* ============== NETDEV_CMD_BIND_RX ============== */
++/* NETDEV_CMD_BIND_RX - do */
++void netdev_bind_rx_req_free(struct netdev_bind_rx_req *req)
++{
++	free(req->queues);
++	free(req);
++}
++
++int netdev_bind_rx(struct ynl_sock *ys, struct netdev_bind_rx_req *req)
++{
++	struct nlmsghdr *nlh;
 +	int err;
- 
- 	memcpy(&pool->p, params, sizeof(pool->p));
- 
-@@ -225,10 +228,34 @@ static int page_pool_init(struct page_pool *pool,
- 	/* Driver calling page_pool_create() also call page_pool_destroy() */
- 	refcount_set(&pool->user_cnt, 1);
- 
-+	switch (pool->p.memory_provider) {
-+	case __PP_MP_NONE:
-+		break;
-+	default:
-+		err = -EINVAL;
-+		goto free_ptr_ring;
-+	}
 +
-+	pool->mp_priv = pool->p.mp_priv;
-+	if (pool->mp_ops) {
-+		err = pool->mp_ops->init(pool);
-+		if (err) {
-+			pr_warn("%s() mem-provider init failed %d\n",
-+				__func__, err);
-+			goto free_ptr_ring;
-+		}
++	nlh = ynl_gemsg_start_req(ys, ys->family_id, NETDEV_CMD_BIND_RX, 1);
++	ys->req_policy = &netdev_bind_dmabuf_nest;
 +
-+		static_branch_inc(&page_pool_mem_providers);
-+	}
++	if (req->_present.ifindex)
++		mnl_attr_put_u32(nlh, NETDEV_A_BIND_DMABUF_IFINDEX, req->ifindex);
++	if (req->_present.dmabuf_fd)
++		mnl_attr_put_u32(nlh, NETDEV_A_BIND_DMABUF_DMABUF_FD, req->dmabuf_fd);
++	for (unsigned int i = 0; i < req->n_queues; i++)
++		mnl_attr_put_u32(nlh, NETDEV_A_BIND_DMABUF_QUEUES, req->queues[i]);
 +
- 	if (pool->p.flags & PP_FLAG_DMA_MAP)
- 		get_device(pool->p.dev);
- 
- 	return 0;
++	err = ynl_exec(ys, nlh, NULL);
++	if (err < 0)
++		return -1;
 +
-+free_ptr_ring:
-+	ptr_ring_cleanup(&pool->ring, NULL);
-+	return err;
- }
- 
- /**
-@@ -490,7 +517,10 @@ struct page *page_pool_alloc_pages(struct page_pool *pool, gfp_t gfp)
- 		return page;
- 
- 	/* Slow-path: cache empty, do real allocation */
--	page = __page_pool_alloc_pages_slow(pool, gfp);
-+	if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
-+		page = pool->mp_ops->alloc_pages(pool, gfp);
-+	else
-+		page = __page_pool_alloc_pages_slow(pool, gfp);
- 	return page;
- }
- EXPORT_SYMBOL(page_pool_alloc_pages);
-@@ -542,10 +572,13 @@ void __page_pool_release_page_dma(struct page_pool *pool, struct page *page)
- void page_pool_return_page(struct page_pool *pool, struct page *page)
- {
- 	int count;
-+	bool put;
- 
--	__page_pool_release_page_dma(pool, page);
--
--	page_pool_clear_pp_info(page);
-+	put = true;
-+	if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
-+		put = pool->mp_ops->release_page(pool, page);
-+	else
-+		__page_pool_release_page_dma(pool, page);
- 
- 	/* This may be the last page returned, releasing the pool, so
- 	 * it is not safe to reference pool afterwards.
-@@ -553,7 +586,10 @@ void page_pool_return_page(struct page_pool *pool, struct page *page)
- 	count = atomic_inc_return_relaxed(&pool->pages_state_release_cnt);
- 	trace_page_pool_state_release(pool, page, count);
- 
--	put_page(page);
-+	if (put) {
-+		page_pool_clear_pp_info(page);
-+		put_page(page);
-+	}
- 	/* An optimization would be to call __free_pages(page, pool->p.order)
- 	 * knowing page is not part of page-cache (thus avoiding a
- 	 * __page_cache_release() call).
-@@ -821,6 +857,11 @@ static void __page_pool_destroy(struct page_pool *pool)
- 	if (pool->disconnect)
- 		pool->disconnect(pool);
- 
-+	if (pool->mp_ops) {
-+		pool->mp_ops->destroy(pool);
-+		static_branch_dec(&page_pool_mem_providers);
-+	}
++	return 0;
++}
 +
- 	ptr_ring_cleanup(&pool->ring, NULL);
+ static const struct ynl_ntf_info netdev_ntf_info[] =  {
+ 	[NETDEV_CMD_DEV_ADD_NTF] =  {
+ 		.alloc_sz	= sizeof(struct netdev_dev_get_ntf),
+diff --git a/tools/net/ynl/generated/netdev-user.h b/tools/net/ynl/generated/netdev-user.h
+index 4fafac879df3..3cf9096d733a 100644
+--- a/tools/net/ynl/generated/netdev-user.h
++++ b/tools/net/ynl/generated/netdev-user.h
+@@ -87,4 +87,51 @@ struct netdev_dev_get_ntf {
  
- 	if (pool->p.flags & PP_FLAG_DMA_MAP)
+ void netdev_dev_get_ntf_free(struct netdev_dev_get_ntf *rsp);
+ 
++/* ============== NETDEV_CMD_BIND_RX ============== */
++/* NETDEV_CMD_BIND_RX - do */
++struct netdev_bind_rx_req {
++	struct {
++		__u32 ifindex:1;
++		__u32 dmabuf_fd:1;
++	} _present;
++
++	__u32 ifindex;
++	__u32 dmabuf_fd;
++	unsigned int n_queues;
++	__u32 *queues;
++};
++
++static inline struct netdev_bind_rx_req *netdev_bind_rx_req_alloc(void)
++{
++	return calloc(1, sizeof(struct netdev_bind_rx_req));
++}
++void netdev_bind_rx_req_free(struct netdev_bind_rx_req *req);
++
++static inline void
++netdev_bind_rx_req_set_ifindex(struct netdev_bind_rx_req *req, __u32 ifindex)
++{
++	req->_present.ifindex = 1;
++	req->ifindex = ifindex;
++}
++static inline void
++netdev_bind_rx_req_set_dmabuf_fd(struct netdev_bind_rx_req *req,
++				 __u32 dmabuf_fd)
++{
++	req->_present.dmabuf_fd = 1;
++	req->dmabuf_fd = dmabuf_fd;
++}
++static inline void
++__netdev_bind_rx_req_set_queues(struct netdev_bind_rx_req *req, __u32 *queues,
++				unsigned int n_queues)
++{
++	free(req->queues);
++	req->queues = queues;
++	req->n_queues = n_queues;
++}
++
++/*
++ * Bind dmabuf to netdev
++ */
++int netdev_bind_rx(struct ynl_sock *ys, struct netdev_bind_rx_req *req);
++
+ #endif /* _LINUX_NETDEV_GEN_H */
 -- 
 2.42.0.869.gea05f2083d-goog
 
