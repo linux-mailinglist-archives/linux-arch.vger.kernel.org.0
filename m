@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6787E2C38
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 19:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B647E2C43
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 19:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbjKFSoo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Nov 2023 13:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        id S231800AbjKFSsE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Nov 2023 13:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjKFSom (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Nov 2023 13:44:42 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60783BB
-        for <linux-arch@vger.kernel.org>; Mon,  6 Nov 2023 10:44:38 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5afc00161daso55053067b3.1
-        for <linux-arch@vger.kernel.org>; Mon, 06 Nov 2023 10:44:38 -0800 (PST)
+        with ESMTP id S232519AbjKFSsD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Nov 2023 13:48:03 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6478BB
+        for <linux-arch@vger.kernel.org>; Mon,  6 Nov 2023 10:47:58 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-daa2684f67eso1467426276.0
+        for <linux-arch@vger.kernel.org>; Mon, 06 Nov 2023 10:47:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699296277; x=1699901077; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1699296478; x=1699901278; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=unAu3rVdKljQQL2turiQBdlprjhTErZk5t5fH6+DkH4=;
-        b=EBrZgWzb8ptjn5alHcyp6K67Z9HV1e8gx3PBLZVj8KVwDJon61QOiBhbCgCoO4n77y
-         eniFWQiSk8Iqp+BuU6iOd9OixJdyeQDUhssJFMkcdy3D1JOjSrvYhoA6/E4sAzYeAaI8
-         dOwkG0pucxs42L1gWcxcdN/yPIxvczn8hSai9H+THPyjhVEh3p39SFwRxlSXLxWt26Zk
-         sJa2WY2RhLl2USXpSXlDb4oaLG9XEfJ1W6Yibo0XFjkJhJ12Vyh8QKXxXMKfPZ32Q9Db
-         79+e9uzVsDLsyVVI/mEwM3aZuMYw5NeNGA6cEPt81ZvrVsSNu6imlIbukhMHKLOe81DF
-         o10g==
+        bh=xfYGvt6skLkznGwiqZd9de4cpoKtWczhZA3SDzBtHOk=;
+        b=a0aFkRbtVsZ+9weBVWl18mtKRU+MNbVC2hH62bBUxUtHDLF8FSq+8VWpUzh50tN0wk
+         zcP+5Fnk57gItAbOzC7pmbc/7I+oYIwJDh6EbbaY/Flu7JqdQh5fX/JNk3FQx07wO8lT
+         QFf99PlNgx2AZo1ntdedlSJEmUkQ9d96Ud3/ZBp61Nj+goZpZwhSoXnEwFfSrkX91KJz
+         2UJoMFX5kq5o3wxxtNLJjRhL7Z9zociCvwvVkn92v+Gg7J+wlPsVaAFFYOUF+PHMshFR
+         nTB5456B/mD2lLHdWZI9/xylUVcpkmJcm78im/pgB3NL/PbkmUKNuWdljfQJI97Eq06U
+         2qBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699296277; x=1699901077;
+        d=1e100.net; s=20230601; t=1699296478; x=1699901278;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=unAu3rVdKljQQL2turiQBdlprjhTErZk5t5fH6+DkH4=;
-        b=Xg8J2ICRb6EGN4uLmoUCXxLtJMsjAVQ7QSbRbpbSFVpe+gUU8kSfNN4oV7UiQtld1x
-         d2kPja6WTDRbl6srCIXGNx8n6PeQOXo30oIDT2Hce2wtft/y+79q3N0dk7Nj3oXlNXHG
-         V6RIRplHiwHv4yYBTShVTbdhtbvkF5zpfnDK3MjTFxbgg6gjdW8nj29Zvdkl+Lnv0YRB
-         fVdCf8gw6A65XlfjelfxfNYTaR/Yb1Cma2GhiKFJvklQ3cFQx6RF1XLajfUYwoW3mvfJ
-         YJQ24QcDp52EWN7wInR+o+XY76tHgVLhaQKmbuJZCXSdb5nnmagBEot8Zw+YA0sdTRvi
-         S25g==
-X-Gm-Message-State: AOJu0YzKUQFGPiuLy/5MMlxqLqAMf4k3HIGKlqt/dj/aM3RW6RYDO9p2
-        rhEMO+tijnSlm3skTsOY+3ml3iA=
-X-Google-Smtp-Source: AGHT+IEPymksCe+J/GlG9UX+jCVEkLe44ItRkLzMmMlfrHbtUb58+EI2rBGvjINzoBfcVB6u0nFDhYI=
+        bh=xfYGvt6skLkznGwiqZd9de4cpoKtWczhZA3SDzBtHOk=;
+        b=ZfOOmqVMtT5SOEsD97VetmLldxMcCuGbrOapbBLNV2ukACZZy+N0BO0vqZt6cINZhF
+         oQTEi/lfNFAoE3e42V6OYI+IdMpkCGNtiWrMgVVWScZXhGPTjxpHgQlhY+x/2sgYjcn1
+         k1jVhowq69/Wm7CjojAE1ElHsd+REAfP0zK+XtDWCDSea+wycfN9mbj8BdcG+kCOpMyr
+         G7eNczkSmNMxlbyBNNYnt2BZBTfWqE7XANAP3RtxDvQjuYtT2afe1ZPaJuTZdlOs5uSy
+         T2yZV3k5QAL0k5yvvI3RBc2+0FKgnhZORn17CEAsHeWRi3i8RS86DNhjawCoBE6srnXt
+         o/5A==
+X-Gm-Message-State: AOJu0Yz5samWlrt8+U2emcUO2jQTNk2vy7LkOUbgTud26HPvGYzfpFdQ
+        qgKoE0HYAKbF6j1ZgUbs79cEBPg=
+X-Google-Smtp-Source: AGHT+IGUJ2l90Skjb6Eo4Ej5QS91AxRpSBX/C4tSPBp5d8CEeFQv1G9sZ0kIa3LYlCMauqPUFev8brw=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a25:7702:0:b0:d9a:6007:223a with SMTP id
- s2-20020a257702000000b00d9a6007223amr558822ybc.8.1699296277518; Mon, 06 Nov
- 2023 10:44:37 -0800 (PST)
-Date:   Mon, 6 Nov 2023 10:44:36 -0800
-In-Reply-To: <20231106024413.2801438-11-almasrymina@google.com>
+ (user=sdf job=sendgmr) by 2002:a25:d308:0:b0:da0:c924:4fdc with SMTP id
+ e8-20020a25d308000000b00da0c9244fdcmr7631ybf.6.1699296478090; Mon, 06 Nov
+ 2023 10:47:58 -0800 (PST)
+Date:   Mon, 6 Nov 2023 10:47:56 -0800
+In-Reply-To: <20231106024413.2801438-10-almasrymina@google.com>
 Mime-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com> <20231106024413.2801438-11-almasrymina@google.com>
-Message-ID: <ZUk0FGuJ28s1d9OX@google.com>
-Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
+References: <20231106024413.2801438-1-almasrymina@google.com> <20231106024413.2801438-10-almasrymina@google.com>
+Message-ID: <ZUk03DhWxV-bOFJL@google.com>
+Subject: Re: [RFC PATCH v3 09/12] net: add support for skbs with unreadable frags
 From:   Stanislav Fomichev <sdf@google.com>
 To:     Mina Almasry <almasrymina@google.com>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -86,67 +86,69 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 11/05, Mina Almasry wrote:
-> In tcp_recvmsg_locked(), detect if the skb being received by the user
-> is a devmem skb. In this case - if the user provided the MSG_SOCK_DEVMEM
-> flag - pass it to tcp_recvmsg_devmem() for custom handling.
+> For device memory TCP, we expect the skb headers to be available in host
+> memory for access, and we expect the skb frags to be in device memory
+> and unaccessible to the host. We expect there to be no mixing and
+> matching of device memory frags (unaccessible) with host memory frags
+> (accessible) in the same skb.
 > 
-> tcp_recvmsg_devmem() copies any data in the skb header to the linear
-> buffer, and returns a cmsg to the user indicating the number of bytes
-> returned in the linear buffer.
+> Add a skb->devmem flag which indicates whether the frags in this skb
+> are device memory frags or not.
 > 
-> tcp_recvmsg_devmem() then loops over the unaccessible devmem skb frags,
-> and returns to the user a cmsg_devmem indicating the location of the
-> data in the dmabuf device memory. cmsg_devmem contains this information:
+> __skb_fill_page_desc() now checks frags added to skbs for page_pool_iovs,
+> and marks the skb as skb->devmem accordingly.
 > 
-> 1. the offset into the dmabuf where the payload starts. 'frag_offset'.
-> 2. the size of the frag. 'frag_size'.
-> 3. an opaque token 'frag_token' to return to the kernel when the buffer
-> is to be released.
-> 
-> The pages awaiting freeing are stored in the newly added
-> sk->sk_user_pages, and each page passed to userspace is get_page()'d.
-> This reference is dropped once the userspace indicates that it is
-> done reading this page.  All pages are released when the socket is
-> destroyed.
+> Add checks through the network stack to avoid accessing the frags of
+> devmem skbs and avoid coalescing devmem skbs with non devmem skbs.
 > 
 > Signed-off-by: Willem de Bruijn <willemb@google.com>
 > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 > Signed-off-by: Mina Almasry <almasrymina@google.com>
 > 
 > ---
+>  include/linux/skbuff.h | 14 +++++++-
+>  include/net/tcp.h      |  5 +--
+>  net/core/datagram.c    |  6 ++++
+>  net/core/gro.c         |  5 ++-
+>  net/core/skbuff.c      | 77 ++++++++++++++++++++++++++++++++++++------
+>  net/ipv4/tcp.c         |  6 ++++
+>  net/ipv4/tcp_input.c   | 13 +++++--
+>  net/ipv4/tcp_output.c  |  5 ++-
+>  net/packet/af_packet.c |  4 +--
+>  9 files changed, 115 insertions(+), 20 deletions(-)
 > 
-> RFC v3:
-> - Fixed issue with put_cmsg() failing silently.
-> 
-> ---
->  include/linux/socket.h            |   1 +
->  include/net/page_pool/helpers.h   |   9 ++
->  include/net/sock.h                |   2 +
->  include/uapi/asm-generic/socket.h |   5 +
->  include/uapi/linux/uio.h          |   6 +
->  net/ipv4/tcp.c                    | 189 +++++++++++++++++++++++++++++-
->  net/ipv4/tcp_ipv4.c               |   7 ++
->  7 files changed, 214 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/socket.h b/include/linux/socket.h
-> index cfcb7e2c3813..fe2b9e2081bb 100644
-> --- a/include/linux/socket.h
-> +++ b/include/linux/socket.h
-> @@ -326,6 +326,7 @@ struct ucred {
->  					  * plain text and require encryption
->  					  */
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 1fae276c1353..8fb468ff8115 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -805,6 +805,8 @@ typedef unsigned char *sk_buff_data_t;
+>   *	@csum_level: indicates the number of consecutive checksums found in
+>   *		the packet minus one that have been verified as
+>   *		CHECKSUM_UNNECESSARY (max 3)
+> + *	@devmem: indicates that all the fragments in this skb are backed by
+> + *		device memory.
+>   *	@dst_pending_confirm: need to confirm neighbour
+>   *	@decrypted: Decrypted SKB
+>   *	@slow_gro: state present at GRO time, slower prepare step required
+> @@ -991,7 +993,7 @@ struct sk_buff {
+>  #if IS_ENABLED(CONFIG_IP_SCTP)
+>  	__u8			csum_not_inet:1;
+>  #endif
+> -
+> +	__u8			devmem:1;
+>  #if defined(CONFIG_NET_SCHED) || defined(CONFIG_NET_XGRESS)
+>  	__u16			tc_index;	/* traffic control index */
+>  #endif
+> @@ -1766,6 +1768,12 @@ static inline void skb_zcopy_downgrade_managed(struct sk_buff *skb)
+>  		__skb_zcopy_downgrade_managed(skb);
+>  }
 >  
-> +#define MSG_SOCK_DEVMEM 0x2000000	/* Receive devmem skbs as cmsg */
+> +/* Return true if frags in this skb are not readable by the host. */
+> +static inline bool skb_frags_not_readable(const struct sk_buff *skb)
+> +{
+> +	return skb->devmem;
 
-Sharing the feedback that I've been providing internally on the public list:
-
-IMHO, we need a better UAPI to receive the tokens and give them back to
-the kernel. CMSG + setsockopt(SO_DEVMEM_DONTNEED) get the job done,
-but look dated and hacky :-(
-
-We should either do some kind of user/kernel shared memory queue to
-receive/return the tokens (similar to what Jonathan was doing in his
-proposal?) or bite the bullet and switch to io_uring.
-
-I was also suggesting to do it via netlink initially, but it's probably
-a bit slow for these purpose, idk.
+bikeshedding: should we also rename 'devmem' sk_buff flag to 'not_readable'?
+It better communicates the fact that the stack shouldn't dereference the
+frags (because it has 'devmem' fragments or for some other potential
+future reason).
