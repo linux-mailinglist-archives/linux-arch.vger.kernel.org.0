@@ -2,59 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C397E2CD1
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 20:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714557E2CEC
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 20:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjKFT3v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Nov 2023 14:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S232380AbjKFTfA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Nov 2023 14:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjKFT3v (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Nov 2023 14:29:51 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39869C6
-        for <linux-arch@vger.kernel.org>; Mon,  6 Nov 2023 11:29:48 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-45d9b477f7bso1389221137.1
-        for <linux-arch@vger.kernel.org>; Mon, 06 Nov 2023 11:29:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699298987; x=1699903787; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G7Si+k3SGcxGf6sJGMI/kj5eJZ6V+SjfPyFVm8vGoBA=;
-        b=LqlReyfqOi5hTdMQbb+YXa8+g7KEHgzvrOt4dBaC2f3Fn1pp1kl+nekse8KlFM49ll
-         k1tuf0NyoOUYtWmrTR/FzHfuh9VczuBtD4kwQ1iPmv4fzL4mguF1IZCyYtvZem/8ddqQ
-         Vp7G1IGaHYgyO4r1YsHBD9G/4lN++Lcdrk907s0ZKDP0GdV4EgmL6mtDEx9g+Q6KZtKn
-         cIcjMsIBNHNOhO3WChRAcKEWGKwbu0zQQHrgrmtiu+h1ugFZ8MsydbCgufcarunRAtQL
-         O4WVSSFCdSmKRZ1XOdS2X+FDURpiHUl9/AYVD5GnqLQFqX2zWDQdnZUPySVTzzd8RQu5
-         nVTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699298987; x=1699903787;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G7Si+k3SGcxGf6sJGMI/kj5eJZ6V+SjfPyFVm8vGoBA=;
-        b=rUeAZDsIlwzLfyN9aSenFHlZt6AltyzicGSS8mXKnWTRRz0LBAfrf184OevBdIN4lo
-         sH8q4mHW5c1c6wQqFjCw6bdMJfyhiTjaoSaTsCBqYk0EEP/cfvoLsGIKNvrSJiDnmRWz
-         UpDtdmg9slNlHcVkMcDtGgaoJYyMi6fmeBu1uVgAwG2Xnscmr2Pyrye/pNC4xtPA4zDh
-         4UMT/Ent1GXzdsqysE5SdTIWP9edln5dXzxHqjzEqvW0hEC/I/7xvHS6FIZNA1f7p6LJ
-         3q9rqY48jPXMT4hqrvgCvZesKRR0tywnzdWpCYrnKbUjREjpHtto58dBhOti8jYVQwj8
-         xiKA==
-X-Gm-Message-State: AOJu0YzgrOWQiAWaZWYrSOu+S+cyYQTDwKRnPIpINIuSQ9VENvptrwdW
-        rVOXTU2FdlZbhoCQQSJFgiQlGbTLjPVNPphZVqmCaw==
-X-Google-Smtp-Source: AGHT+IG22F7RZ7INsRT61We/dhQuubrTDUtrXNKt9IRXUitWz7JbG7ca/qoY3u3vM4us0jqLVC7nFfmA8VO3BFOqiRY=
-X-Received: by 2002:a67:a247:0:b0:45d:9083:f877 with SMTP id
- t7-20020a67a247000000b0045d9083f877mr7751422vsh.5.1699298986878; Mon, 06 Nov
- 2023 11:29:46 -0800 (PST)
+        with ESMTP id S231555AbjKFTe7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Nov 2023 14:34:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4FB183;
+        Mon,  6 Nov 2023 11:34:55 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA7AC433C9;
+        Mon,  6 Nov 2023 19:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699299294;
+        bh=Hl1nfA1hQNe7leKhITV5rp/ybaYc2SObTEPuCoXKzsU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A19kRBUhdf908QakvSgKid7H5ILLcRyl3LZTCq1N1NbR7P1t/sgJRPyq2mGHLHvNQ
+         c1PmQQF3vJZi27wlDydYRDaG8WnnwIr0O2WZfJhX3FpFS6CHEqJ6CuB7YqBNsWEaZE
+         xyOMV1pLvMG22qoj0QveUa+peLUS08xdNIur+5Fr3xrEIfcoB+ObeLmiFlg1mq0m3q
+         0yN7lT3Uys4lMsk11MZaPaYEVjqE3WuxO6HHuReiJN0i9RJhbO12h4kRSoBuzqWNjB
+         idZCa47/HKlp/rFMD73n780muQHc7iYP5/kr+yLw9PIA6OnA231CX8KwxAGpxy4SoF
+         Lhij6W8x3MIrw==
+Message-ID: <19129763-6f74-4b04-8a5f-441255b76d34@kernel.org>
+Date:   Mon, 6 Nov 2023 12:34:52 -0700
 MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-11-almasrymina@google.com> <ZUk0FGuJ28s1d9OX@google.com>
-In-Reply-To: <ZUk0FGuJ28s1d9OX@google.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Mon, 6 Nov 2023 11:29:33 -0800
-Message-ID: <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
-To:     Stanislav Fomichev <sdf@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 09/12] net: add support for skbs with unreadable
+ frags
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>,
+        Mina Almasry <almasrymina@google.com>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -66,7 +46,6 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
         Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -76,12 +55,16 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Praveen Kaligineedi <pkaligineedi@google.com>,
         Willem de Bruijn <willemb@google.com>,
         Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-10-almasrymina@google.com>
+ <ZUk03DhWxV-bOFJL@google.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <ZUk03DhWxV-bOFJL@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,112 +72,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 6, 2023 at 10:44=E2=80=AFAM Stanislav Fomichev <sdf@google.com>=
- wrote:
->
+On 11/6/23 11:47 AM, Stanislav Fomichev wrote:
 > On 11/05, Mina Almasry wrote:
-> > In tcp_recvmsg_locked(), detect if the skb being received by the user
-> > is a devmem skb. In this case - if the user provided the MSG_SOCK_DEVME=
-M
-> > flag - pass it to tcp_recvmsg_devmem() for custom handling.
-> >
-> > tcp_recvmsg_devmem() copies any data in the skb header to the linear
-> > buffer, and returns a cmsg to the user indicating the number of bytes
-> > returned in the linear buffer.
-> >
-> > tcp_recvmsg_devmem() then loops over the unaccessible devmem skb frags,
-> > and returns to the user a cmsg_devmem indicating the location of the
-> > data in the dmabuf device memory. cmsg_devmem contains this information=
-:
-> >
-> > 1. the offset into the dmabuf where the payload starts. 'frag_offset'.
-> > 2. the size of the frag. 'frag_size'.
-> > 3. an opaque token 'frag_token' to return to the kernel when the buffer
-> > is to be released.
-> >
-> > The pages awaiting freeing are stored in the newly added
-> > sk->sk_user_pages, and each page passed to userspace is get_page()'d.
-> > This reference is dropped once the userspace indicates that it is
-> > done reading this page.  All pages are released when the socket is
-> > destroyed.
-> >
-> > Signed-off-by: Willem de Bruijn <willemb@google.com>
-> > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ---
-> >
-> > RFC v3:
-> > - Fixed issue with put_cmsg() failing silently.
-> >
-> > ---
-> >  include/linux/socket.h            |   1 +
-> >  include/net/page_pool/helpers.h   |   9 ++
-> >  include/net/sock.h                |   2 +
-> >  include/uapi/asm-generic/socket.h |   5 +
-> >  include/uapi/linux/uio.h          |   6 +
-> >  net/ipv4/tcp.c                    | 189 +++++++++++++++++++++++++++++-
-> >  net/ipv4/tcp_ipv4.c               |   7 ++
-> >  7 files changed, 214 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/linux/socket.h b/include/linux/socket.h
-> > index cfcb7e2c3813..fe2b9e2081bb 100644
-> > --- a/include/linux/socket.h
-> > +++ b/include/linux/socket.h
-> > @@ -326,6 +326,7 @@ struct ucred {
-> >                                         * plain text and require encryp=
-tion
-> >                                         */
-> >
-> > +#define MSG_SOCK_DEVMEM 0x2000000    /* Receive devmem skbs as cmsg */
->
-> Sharing the feedback that I've been providing internally on the public li=
-st:
->
+>> For device memory TCP, we expect the skb headers to be available in host
+>> memory for access, and we expect the skb frags to be in device memory
+>> and unaccessible to the host. We expect there to be no mixing and
+>> matching of device memory frags (unaccessible) with host memory frags
+>> (accessible) in the same skb.
+>>
+>> Add a skb->devmem flag which indicates whether the frags in this skb
+>> are device memory frags or not.
+>>
+>> __skb_fill_page_desc() now checks frags added to skbs for page_pool_iovs,
+>> and marks the skb as skb->devmem accordingly.
+>>
+>> Add checks through the network stack to avoid accessing the frags of
+>> devmem skbs and avoid coalescing devmem skbs with non devmem skbs.
+>>
+>> Signed-off-by: Willem de Bruijn <willemb@google.com>
+>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+>> Signed-off-by: Mina Almasry <almasrymina@google.com>
+>>
+>> ---
+>>  include/linux/skbuff.h | 14 +++++++-
+>>  include/net/tcp.h      |  5 +--
+>>  net/core/datagram.c    |  6 ++++
+>>  net/core/gro.c         |  5 ++-
+>>  net/core/skbuff.c      | 77 ++++++++++++++++++++++++++++++++++++------
+>>  net/ipv4/tcp.c         |  6 ++++
+>>  net/ipv4/tcp_input.c   | 13 +++++--
+>>  net/ipv4/tcp_output.c  |  5 ++-
+>>  net/packet/af_packet.c |  4 +--
+>>  9 files changed, 115 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+>> index 1fae276c1353..8fb468ff8115 100644
+>> --- a/include/linux/skbuff.h
+>> +++ b/include/linux/skbuff.h
+>> @@ -805,6 +805,8 @@ typedef unsigned char *sk_buff_data_t;
+>>   *	@csum_level: indicates the number of consecutive checksums found in
+>>   *		the packet minus one that have been verified as
+>>   *		CHECKSUM_UNNECESSARY (max 3)
+>> + *	@devmem: indicates that all the fragments in this skb are backed by
+>> + *		device memory.
+>>   *	@dst_pending_confirm: need to confirm neighbour
+>>   *	@decrypted: Decrypted SKB
+>>   *	@slow_gro: state present at GRO time, slower prepare step required
+>> @@ -991,7 +993,7 @@ struct sk_buff {
+>>  #if IS_ENABLED(CONFIG_IP_SCTP)
+>>  	__u8			csum_not_inet:1;
+>>  #endif
+>> -
+>> +	__u8			devmem:1;
+>>  #if defined(CONFIG_NET_SCHED) || defined(CONFIG_NET_XGRESS)
+>>  	__u16			tc_index;	/* traffic control index */
+>>  #endif
+>> @@ -1766,6 +1768,12 @@ static inline void skb_zcopy_downgrade_managed(struct sk_buff *skb)
+>>  		__skb_zcopy_downgrade_managed(skb);
+>>  }
+>>  
+>> +/* Return true if frags in this skb are not readable by the host. */
+>> +static inline bool skb_frags_not_readable(const struct sk_buff *skb)
+>> +{
+>> +	return skb->devmem;
+> 
+> bikeshedding: should we also rename 'devmem' sk_buff flag to 'not_readable'?
+> It better communicates the fact that the stack shouldn't dereference the
+> frags (because it has 'devmem' fragments or for some other potential
+> future reason).
 
-There may have been a miscommunication. I don't recall hearing this
-specific feedback from you, at least in the last few months. Sorry if
-it seemed like I'm ignoring feedback :)
++1.
 
-> IMHO, we need a better UAPI to receive the tokens and give them back to
-> the kernel. CMSG + setsockopt(SO_DEVMEM_DONTNEED) get the job done,
-> but look dated and hacky :-(
->
-> We should either do some kind of user/kernel shared memory queue to
-> receive/return the tokens (similar to what Jonathan was doing in his
-> proposal?)
-
-I'll take a look at Jonathan's proposal, sorry, I'm not immediately
-familiar but I wanted to respond :-) But is the suggestion here to
-build a new kernel-user communication channel primitive for the
-purpose of passing the information in the devmem cmsg? IMHO that seems
-like an overkill. Why add 100-200 lines of code to the kernel to add
-something that can already be done with existing primitives? I don't
-see anything concretely wrong with cmsg & setsockopt approach, and if
-we switch to something I'd prefer to switch to an existing primitive
-for simplicity?
-
-The only other existing primitive to pass data outside of the linear
-buffer is the MSG_ERRQUEUE that is used for zerocopy. Is that
-preferred? Any other suggestions or existing primitives I'm not aware
-of?
-
-> or bite the bullet and switch to io_uring.
->
-
-IMO io_uring & socket support are orthogonal, and one doesn't preclude
-the other. As you know we like to use sockets and I believe there are
-issues with io_uring adoption at Google that I'm not familiar with
-(and could be wrong). I'm interested in exploring io_uring support as
-a follow up but I think David Wei will be interested in io_uring
-support as well anyway.
-
-> I was also suggesting to do it via netlink initially, but it's probably
-> a bit slow for these purpose, idk.
-
-Yeah, I hear netlink is reserved for control paths and is
-inappropriate for data path, but I'll let folks correct me if wrong.
-
---=20
-Thanks,
-Mina
+Also, the flag on the skb is an optimization - a high level signal that
+one or more frags is in unreadable memory. There is no requirement that
+all of the frags are in the same memory type.
