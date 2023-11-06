@@ -2,63 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC1B7E2EBE
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 22:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20DD7E2ED1
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Nov 2023 22:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbjKFVPH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Nov 2023 16:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
+        id S231739AbjKFVSH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Nov 2023 16:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbjKFVPG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Nov 2023 16:15:06 -0500
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC5AB3;
-        Mon,  6 Nov 2023 13:15:03 -0800 (PST)
-Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-4ac459d7962so1005468e0c.1;
-        Mon, 06 Nov 2023 13:15:03 -0800 (PST)
+        with ESMTP id S233121AbjKFVSF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Nov 2023 16:18:05 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A5710C0
+        for <linux-arch@vger.kernel.org>; Mon,  6 Nov 2023 13:18:01 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1cc23f2226bso33363725ad.2
+        for <linux-arch@vger.kernel.org>; Mon, 06 Nov 2023 13:18:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699305302; x=1699910102; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDNcwAtyE05sKduQb5rMgv/slyyDqYM9dQystHpAe00=;
-        b=d/waIwl8ZhA+3fMGbwtKR/1HQ2FRL8sJJsPoARNUrIj8zRK8eO7BDXtgdodqgjiHLU
-         unS+H7Eo+A7ubP2doo1X9VDwtqXBTb3ZE2Z826gxkVF4W0np3D84TjK0bwBUS4W6KEoL
-         qBFnETI4bh8yk/HI3sm5F++bZk1MkQeh7O3+c3lcqALf1dcJTnQMH+BBcjMAcREoAYN1
-         AbMnGj1EzdZssMWjcM16p5fGRn00qXcOBLFkZxFhNtlcigbicTYrEPh7n57SXkrT2+Cj
-         jhacDSfXLrzR+cF+pM2dASy3gyLaxagYqaM/x+jFxgRDfvXU/TyTl5RSnksMGtFehfvY
-         wK8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699305302; x=1699910102;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=google.com; s=20230601; t=1699305480; x=1699910280; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pDNcwAtyE05sKduQb5rMgv/slyyDqYM9dQystHpAe00=;
-        b=aX5cbGP1wCwveuRfm4tKEgwNVCIrlD5DrRm910xvVAVp5pmL5H/X5MiGc/fVpUbZl3
-         ykvtYO8cH5Ez3/ejMX7SWUcIn5YKC0k/ieHa54C+lsJQfmUiDnbg1OWaJtdgFtx616KE
-         PV2OTpkPfHvPA9Fm4Ht3tgTK9Qq8h55Lw/WgOvsLWh+RqXxMaBUYjYRNFhDiKQKrf7mZ
-         4ZXR8CfbbQk6yNpRcFjtoLgPPPt0v23yPN9f3Az7xeObo4vsx2KwaM5fR/Oudog45rV5
-         73qi2paemTaAT40Q1m4AEtCvgjvf2goD4N6vaY4GiUItT2Du18y9A+ckgy5jN3nnmk/n
-         7YyA==
-X-Gm-Message-State: AOJu0YySOXuUrwY9uvsMK5z2lq1ujaCi0/VA0l+EtzQP6aA1saFuim5x
-        ZqR5sZlDUW213kinphNnAxKUpM/4VKuN/IWN8wQ=
-X-Google-Smtp-Source: AGHT+IFSfXgdSlZ+tas3UVj7xs8CWVob5ysFpk92liyDA5WPCjjGPD1amiOzYCm06+9kKyONPbaGF06Qrr1pItVwWII=
-X-Received: by 2002:a05:6122:4694:b0:49d:20fb:c899 with SMTP id
- di20-20020a056122469400b0049d20fbc899mr441320vkb.4.1699305302147; Mon, 06 Nov
- 2023 13:15:02 -0800 (PST)
-MIME-Version: 1.0
+        bh=Q+e/wl/IpkV0o6PDo9Tkqa7B1djQqq2R6AetcJyqBsw=;
+        b=guQnzDNrQ0IEnDzO5hmG0IkO9uQpBsE3dQM3ouRmgcIUj8ovtjwTeObif9ZB0Nh1IL
+         Ogw6bASCzlrDbxFB1Ig73mKR0hWGudoulglTPgsFRJei6ZPUavDy4CLE+hiAQ2wiPiVN
+         JnVSSX6b0kXkG45BERqEsZABipd1zMRyVExPL5PbHvNDYjMHAKcAGZMk0PXvKxLwHz6D
+         o2WL1O+bGCtEfRVE6g71WCK1G9uV763h8zt62FZGAOOnSjhBTeAFTbXE8POz71PKERm6
+         IWsFEuPkzt4SAFAUIRJ2XlWdw05sk/Sqf7JtUTQINTH/G/eTA8goRYsvdbBmmRirOhKz
+         7CLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699305480; x=1699910280;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Q+e/wl/IpkV0o6PDo9Tkqa7B1djQqq2R6AetcJyqBsw=;
+        b=Pt8qL1KdOYfisdGCI0EWrmTxIQcCNWhVdkkWTGmzbVMoytHmdE53ZCLvL2A1H4wYhR
+         0leeof2R9xdmxrYgLe2bb93ME+bCBMOqtHy3zUbAVs0KuhQGNEJvA1O5V0CjLHr5xqZ6
+         49TyKtwOvdb+e64RZT6qtNoCnzi76K9ob0aUjqjBY9Avx7P+ZvpZGeM+rnQgcLxTL7yo
+         3aFnRe/XOsmODg2UFmsFXj1dmZcBjTVOu3DrCt+XcIR7WNnXtClQFP52R5a3wkjyMJd+
+         mCKGhofgFqOIpcOvxD0QPp8qO5R0TKwx4Fu50KzZnkrATauW5q3JhNA7Rg6+zJk1S1Yb
+         BZRg==
+X-Gm-Message-State: AOJu0YzEICZ5CxUmU1xOcfXItWbuxCsAwJQtwX5yw4vUX3Pz7pi34/xb
+        fbY4NmGNg1jupfomq259b7uh3hc=
+X-Google-Smtp-Source: AGHT+IFyUJONzj4do13pt+qQjhpP+paqIv/cmkYUyDep9IE9Z/JO/7Oa2cHBSiwtEe3VWLUwCJQwRDY=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:f809:b0:1cc:2a6f:ab91 with SMTP id
+ ix9-20020a170902f80900b001cc2a6fab91mr467862plb.0.1699305480560; Mon, 06 Nov
+ 2023 13:18:00 -0800 (PST)
+Date:   Mon, 6 Nov 2023 13:17:59 -0800
+In-Reply-To: <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
+Mime-Version: 1.0
 References: <20231106024413.2801438-1-almasrymina@google.com>
  <20231106024413.2801438-11-almasrymina@google.com> <ZUk0FGuJ28s1d9OX@google.com>
  <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
-In-Reply-To: <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 6 Nov 2023 13:14:25 -0800
-Message-ID: <CAF=yD-+MFpO5Hdqn+Q9X54SBpgcBeJvKTRD53X2oM4s8uVqnAQ@mail.gmail.com>
+Message-ID: <ZUlYB99GK1Q8is-I@google.com>
 Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
+From:   Stanislav Fomichev <sdf@google.com>
 To:     Mina Almasry <almasrymina@google.com>
-Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -67,24 +69,103 @@ Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
         David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Christian =?utf-8?B?S8O2bmln?=" <christian.koenig@amd.com>,
         Shakeel Butt <shakeelb@google.com>,
         Jeroen de Borst <jeroendb@google.com>,
         Praveen Kaligineedi <pkaligineedi@google.com>,
         Willem de Bruijn <willemb@google.com>,
         Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
+
+On 11/06, Mina Almasry wrote:
+> On Mon, Nov 6, 2023 at 10:44=E2=80=AFAM Stanislav Fomichev <sdf@google.co=
+m> wrote:
+> >
+> > On 11/05, Mina Almasry wrote:
+> > > In tcp_recvmsg_locked(), detect if the skb being received by the user
+> > > is a devmem skb. In this case - if the user provided the MSG_SOCK_DEV=
+MEM
+> > > flag - pass it to tcp_recvmsg_devmem() for custom handling.
+> > >
+> > > tcp_recvmsg_devmem() copies any data in the skb header to the linear
+> > > buffer, and returns a cmsg to the user indicating the number of bytes
+> > > returned in the linear buffer.
+> > >
+> > > tcp_recvmsg_devmem() then loops over the unaccessible devmem skb frag=
+s,
+> > > and returns to the user a cmsg_devmem indicating the location of the
+> > > data in the dmabuf device memory. cmsg_devmem contains this informati=
+on:
+> > >
+> > > 1. the offset into the dmabuf where the payload starts. 'frag_offset'=
+.
+> > > 2. the size of the frag. 'frag_size'.
+> > > 3. an opaque token 'frag_token' to return to the kernel when the buff=
+er
+> > > is to be released.
+> > >
+> > > The pages awaiting freeing are stored in the newly added
+> > > sk->sk_user_pages, and each page passed to userspace is get_page()'d.
+> > > This reference is dropped once the userspace indicates that it is
+> > > done reading this page.  All pages are released when the socket is
+> > > destroyed.
+> > >
+> > > Signed-off-by: Willem de Bruijn <willemb@google.com>
+> > > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > >
+> > > ---
+> > >
+> > > RFC v3:
+> > > - Fixed issue with put_cmsg() failing silently.
+> > >
+> > > ---
+> > >  include/linux/socket.h            |   1 +
+> > >  include/net/page_pool/helpers.h   |   9 ++
+> > >  include/net/sock.h                |   2 +
+> > >  include/uapi/asm-generic/socket.h |   5 +
+> > >  include/uapi/linux/uio.h          |   6 +
+> > >  net/ipv4/tcp.c                    | 189 ++++++++++++++++++++++++++++=
++-
+> > >  net/ipv4/tcp_ipv4.c               |   7 ++
+> > >  7 files changed, 214 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/include/linux/socket.h b/include/linux/socket.h
+> > > index cfcb7e2c3813..fe2b9e2081bb 100644
+> > > --- a/include/linux/socket.h
+> > > +++ b/include/linux/socket.h
+> > > @@ -326,6 +326,7 @@ struct ucred {
+> > >                                         * plain text and require encr=
+yption
+> > >                                         */
+> > >
+> > > +#define MSG_SOCK_DEVMEM 0x2000000    /* Receive devmem skbs as cmsg =
+*/
+> >
+> > Sharing the feedback that I've been providing internally on the public =
+list:
+> >
+>=20
+> There may have been a miscommunication. I don't recall hearing this
+> specific feedback from you, at least in the last few months. Sorry if
+> it seemed like I'm ignoring feedback :)
+
+No worries, there was a thread long time ago about this whole token
+interface and whether it should support out-of-order refills, etc.
 
 > > IMHO, we need a better UAPI to receive the tokens and give them back to
 > > the kernel. CMSG + setsockopt(SO_DEVMEM_DONTNEED) get the job done,
@@ -93,7 +174,7 @@ X-Mailing-List: linux-arch@vger.kernel.org
 > > We should either do some kind of user/kernel shared memory queue to
 > > receive/return the tokens (similar to what Jonathan was doing in his
 > > proposal?)
->
+>=20
 > I'll take a look at Jonathan's proposal, sorry, I'm not immediately
 > familiar but I wanted to respond :-) But is the suggestion here to
 > build a new kernel-user communication channel primitive for the
@@ -103,15 +184,26 @@ X-Mailing-List: linux-arch@vger.kernel.org
 > see anything concretely wrong with cmsg & setsockopt approach, and if
 > we switch to something I'd prefer to switch to an existing primitive
 > for simplicity?
->
+>=20
 > The only other existing primitive to pass data outside of the linear
 > buffer is the MSG_ERRQUEUE that is used for zerocopy. Is that
 > preferred? Any other suggestions or existing primitives I'm not aware
 > of?
->
+
+I guess I'm just wondering whether other people have any suggestions
+here. Not sure Jonathan's way was better, but we fundamentally
+have two queues between the kernel and the userspace:
+- userspace receiving tokens (recvmsg + magical flag)
+- userspace refilling tokens (setsockopt + magical flag)
+
+So having some kind of shared memory producer-consumer queue feels natural.
+And using 'classic' socket api here feels like a stretch, idk.
+
+But maybe I'm overthinking and overcomplicating :-)
+
 > > or bite the bullet and switch to io_uring.
 > >
->
+>=20
 > IMO io_uring & socket support are orthogonal, and one doesn't preclude
 > the other. As you know we like to use sockets and I believe there are
 > issues with io_uring adoption at Google that I'm not familiar with
@@ -119,15 +211,14 @@ X-Mailing-List: linux-arch@vger.kernel.org
 > a follow up but I think David Wei will be interested in io_uring
 > support as well anyway.
 
-I also disagree that we need to replace a standard socket interface
-with something "faster", in quotes.
+Ack, might be one more reason on our side to adopt iouring :-p
 
-This interface is not the bottleneck to the target workload.
-
-Replacing the synchronous sockets interface with something more
-performant for workloads where it is, is an orthogonal challenge.
-However we do that, I think that traditional sockets should continue
-to be supported.
-
-The feature may already even work with io_uring, as both recvmsg with
-cmsg and setsockopt have io_uring support now.
+> > I was also suggesting to do it via netlink initially, but it's probably
+> > a bit slow for these purpose, idk.
+>=20
+> Yeah, I hear netlink is reserved for control paths and is
+> inappropriate for data path, but I'll let folks correct me if wrong.
+>=20
+> --=20
+> Thanks,
+> Mina
