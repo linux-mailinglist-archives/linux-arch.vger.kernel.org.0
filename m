@@ -1,115 +1,120 @@
-Return-Path: <linux-arch+bounces-52-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-53-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7986B7E399A
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 11:31:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFA897E3B4A
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 12:47:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A745B20C7F
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 10:31:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A36C0280F8E
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 11:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FAA729422;
-	Tue,  7 Nov 2023 10:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="iBWuSBO8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0272D7AD;
+	Tue,  7 Nov 2023 11:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AAD28E29;
-	Tue,  7 Nov 2023 10:31:19 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862C4D57;
-	Tue,  7 Nov 2023 02:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=s/nJSc12wTo3rC59/Tj7C6Qxk/YhPkpMlGmhBF4UOwQ=; b=iBWuSBO8byS44iey2YnZSgJM8U
-	MFt1NMp2w5pAfZ6wCLyhFFlLsovAEisNzEANGVeTWzW/SvgUOWs8hzrl8E6fK+iTUQlweEEngqE3f
-	clKt8RH9RkEOEHOUca70RLavt4Q4aMF3hqPZwPOI9vFg9kh++U7+bjIdhqcec+iRE9IOnhXewhCqH
-	6LPO3PA4SHNnRIpc2kCc3AAFwOldWLYZ8485pEq5BSo1Ktymanumc1ZnMMGf0asTqW9d5XypAMciV
-	XC9/SCnbDNdQN4NpBcW4WiP5nljAPkKxazCZz/vCJxqPKHMlq3Z6Rfls/ZgiL/ixuTbrlcSmxHnl7
-	BTSz1Lxg==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:51274 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1r0JMT-0000Kg-2d;
-	Tue, 07 Nov 2023 10:31:09 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1r0JMV-00CTyh-It; Tue, 07 Nov 2023 10:31:11 +0000
-In-Reply-To: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: linux-pm@vger.kernel.org,
-	 loongarch@lists.linux.dev,
-	 linux-acpi@vger.kernel.org,
-	 linux-arch@vger.kernel.org,
-	 linux-kernel@vger.kernel.org,
-	 linux-arm-kernel@lists.infradead.org,
-	 linux-riscv@lists.infradead.org,
-	 kvmarm@lists.linux.dev,
-	 x86@kernel.org,
-	 linux-csky@vger.kernel.org,
-	 linux-doc@vger.kernel.org,
-	 linux-ia64@vger.kernel.org,
-	 linux-parisc@vger.kernel.org
-Cc: Salil Mehta <salil.mehta@huawei.com>,
-	 Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	 jianyong.wu@arm.com,
-	 justin.he@arm.com,
-	 James Morse <james.morse@arm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Subject: [PATCH RFC 22/22] riscv: convert to use arch_cpu_is_hotpluggable()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F81F1FA6;
+	Tue,  7 Nov 2023 11:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2726EC433C8;
+	Tue,  7 Nov 2023 11:47:15 +0000 (UTC)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	Xuefeng Li <lixuefeng@loongson.cn>,
+	Guo Ren <guoren@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	loongson-kernel@lists.loongnix.cn,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch/smp: Call rcutree_report_cpu_starting() earlier
+Date: Tue,  7 Nov 2023 19:47:04 +0800
+Message-Id: <20231107114704.2751316-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1r0JMV-00CTyh-It@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Tue, 07 Nov 2023 10:31:11 +0000
 
-Convert riscv to use the arch_cpu_is_hotpluggable() helper rather than
-arch_register_cpu().
+rcutree_report_cpu_starting() must be called before cpu_probe() to avoid
+the following lockdep splat that triggered by calling __alloc_pages() when
+CONFIG_PROVE_RCU_LIST=y:
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+ =============================
+ WARNING: suspicious RCU usage
+ 6.6.0+ #980 Not tainted
+ -----------------------------
+ kernel/locking/lockdep.c:3761 RCU-list traversed in non-reader section!!
+ other info that might help us debug this:
+ RCU used illegally from offline CPU!
+ rcu_scheduler_active = 1, debug_locks = 1
+ 1 lock held by swapper/1/0:
+  #0: 900000000c82ef98 (&pcp->lock){+.+.}-{2:2}, at: get_page_from_freelist+0x894/0x1790
+ CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.6.0+ #980
+ Stack : 0000000000000001 9000000004f79508 9000000004893670 9000000100310000
+         90000001003137d0 0000000000000000 90000001003137d8 9000000004f79508
+         0000000000000000 0000000000000001 0000000000000000 90000000048a3384
+         203a656d616e2065 ca43677b3687e616 90000001002c3480 0000000000000008
+         000000000000009d 0000000000000000 0000000000000001 80000000ffffe0b8
+         000000000000000d 0000000000000033 0000000007ec0000 13bbf50562dad831
+         9000000005140748 0000000000000000 9000000004f79508 0000000000000004
+         0000000000000000 9000000005140748 90000001002bad40 0000000000000000
+         90000001002ba400 0000000000000000 9000000003573ec8 0000000000000000
+         00000000000000b0 0000000000000004 0000000000000000 0000000000070000
+         ...
+ Call Trace:
+ [<9000000003573ec8>] show_stack+0x38/0x150
+ [<9000000004893670>] dump_stack_lvl+0x74/0xa8
+ [<900000000360d2bc>] lockdep_rcu_suspicious+0x14c/0x190
+ [<900000000361235c>] __lock_acquire+0xd0c/0x2740
+ [<90000000036146f4>] lock_acquire+0x104/0x2c0
+ [<90000000048a955c>] _raw_spin_lock_irqsave+0x5c/0x90
+ [<900000000381cd5c>] rmqueue_bulk+0x6c/0x950
+ [<900000000381fc0c>] get_page_from_freelist+0xd4c/0x1790
+ [<9000000003821c6c>] __alloc_pages+0x1bc/0x3e0
+ [<9000000003583b40>] tlb_init+0x150/0x2a0
+ [<90000000035742a0>] per_cpu_trap_init+0xf0/0x110
+ [<90000000035712fc>] cpu_probe+0x3dc/0x7a0
+ [<900000000357ed20>] start_secondary+0x40/0xb0
+ [<9000000004897138>] smpboot_entry+0x54/0x58
+
+raw_smp_processor_id() is required in order to avoid calling into lockdep
+before RCU has declared the CPU to be watched for readers.
+
+See also commit 29368e093921 ("x86/smpboot: Move rcu_cpu_starting() earlier"),
+commit de5d9dae150c ("s390/smp: move rcu_cpu_starting() earlier") and commit
+99f070b62322 ("powerpc/smp: Call rcu_cpu_starting() earlier").
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/riscv/kernel/setup.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/loongarch/kernel/smp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index f8875ae1b0aa..168f0db63d53 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -294,12 +294,9 @@ void __init setup_arch(char **cmdline_p)
- 	riscv_set_dma_cache_alignment();
- }
+diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+index ef35c871244f..5bca12d16e06 100644
+--- a/arch/loongarch/kernel/smp.c
++++ b/arch/loongarch/kernel/smp.c
+@@ -504,8 +504,9 @@ asmlinkage void start_secondary(void)
+ 	unsigned int cpu;
  
--int arch_register_cpu(int cpu)
-+bool arch_cpu_is_hotpluggable(int cpu)
- {
--	struct cpu *c = &per_cpu(cpu_devices, cpu);
--
--	c->hotpluggable = cpu_has_hotplug(cpu);
--	return register_cpu(c, cpu);
-+	return cpu_has_hotplug(cpu);
- }
+ 	sync_counter();
+-	cpu = smp_processor_id();
++	cpu = raw_smp_processor_id();
+ 	set_my_cpu_offset(per_cpu_offset(cpu));
++	rcutree_report_cpu_starting(cpu);
  
- void free_initmem(void)
+ 	cpu_probe();
+ 	constant_clockevent_init();
 -- 
-2.30.2
+2.39.3
 
 
