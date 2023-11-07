@@ -1,93 +1,112 @@
-Return-Path: <linux-arch+bounces-20-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-21-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D307E355B
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 07:50:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F187E356A
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 08:00:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66EC7280ED4
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 06:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA7FD1C203D8
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 07:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C682BE47;
-	Tue,  7 Nov 2023 06:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FA3BE47;
+	Tue,  7 Nov 2023 07:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="shl5AXMx"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="qavlxJPt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1CABA3A
-	for <linux-arch@vger.kernel.org>; Tue,  7 Nov 2023 06:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EC18DC433CB;
-	Tue,  7 Nov 2023 06:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699339827;
-	bh=qbNyvpCu834BElj57LNyccltMncgWk9IvDmnQ9vJRjA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=shl5AXMxRxwe5t1DNYT7WfQcfWTp5KXYl8lVkW14F07S/gYNH/2CKdgrecwJ5Ubce
-	 T442EIVmb7yPMI2N5NuWUX/vqUZPdERJ9THQS6pQDDw7eT1Lp8bFqMoPOxnNdB/P4U
-	 zOlRRTkE7WyE1eCkgBPLRSqc50K8KsFAmRNiL9+YWNM9Ee6pKf9f8YDBTmnFiC5G6N
-	 mU++k62dTUiOKWDbzidfpie3V1bk4VkGFj8rLfEIiJuqMeCcHEOysn8gROq8ZoICEg
-	 n5kMpGZQKLF9dxmu96ON3yGEmxpDXXelk/6/MxS4y7nfjyfEQ+1TcEJnok4uNXZHuw
-	 Xh1oEWun9T2dg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1506E00096;
-	Tue,  7 Nov 2023 06:50:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4FCBA3B
+	for <linux-arch@vger.kernel.org>; Tue,  7 Nov 2023 07:00:09 +0000 (UTC)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72F610F
+	for <linux-arch@vger.kernel.org>; Mon,  6 Nov 2023 23:00:05 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1cc9784dbc1so31247515ad.2
+        for <linux-arch@vger.kernel.org>; Mon, 06 Nov 2023 23:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1699340405; x=1699945205; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HT+fB+nShc13WFwJsBmCnkPpP2szplCX09J2M/XdGJc=;
+        b=qavlxJPtvsJtxFBdQwFOVgEYU7hi5LpRx19AgpWuaBEju9wwL+/KUkWaoy93hx8shG
+         HMABIivvvYeuDmsjjlRlCZ2XgL0hWC3gY6RcuDyJwEihZ886d9W2EiEJ2Cbbc3lOUbU2
+         RhQ1BLodh6XCL3x3iSl0aXDaYPP0FzKxCsVsqyZ+g9FMh3PESug7OHPksU5T+TXmjFSp
+         E2UT9qcFTz7Dt4+QRz4OX8eJFclaQUk0aQtgXinCaBOFTyA+pONTn1PPuGuJYdCr9wWo
+         sSOG7tNc1h1T8/EedW99MIJtH1DKlZj39/Opq+5XyX1TeUgQXP1WX2hZfJrxXs8BLAc9
+         y50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699340405; x=1699945205;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HT+fB+nShc13WFwJsBmCnkPpP2szplCX09J2M/XdGJc=;
+        b=mUt0rGZ/GZ65JT4G6Oc4xD5TsjOlvkG3hXppWgZIs50i23M7yJfUbm2rlV8aEqIxxY
+         btCRqMQVCOJXMBCdFzwlZl6M2Xh/ncz8+v90o+BWylVuwruRoVazr8w7vHvQ32PxFxuN
+         vCt74lM2i5qieib6GI0vdOAQZXAxN+/Owei1tt8ZOyZ0xwS7JhmTXRZc6XhObzmtbjg5
+         Evy5tlWFAyrv/Fwm8CesUVs9CFh2eQBOBV0BLbvO7amK6g6PwH/qAhVSaFeDORSl7r10
+         Z/oBNh1K+tENyh2jTeKg1GyAP7Y899byn/2mQ6Ae7I2RcX0FAF4FVu+v3JuCQi4MZ8u+
+         C4RQ==
+X-Gm-Message-State: AOJu0Yyc8/k+rxab1d6uzjlwVRooiM0LUKViOcYUhNfa/Xs4flgle1hF
+	OZIVKFV00YLFDgse7Ko6ceBMAA==
+X-Google-Smtp-Source: AGHT+IHfFOWchFvO8pJneXAWC0dzM9ECoTMi1CyG7yOXyLVhl6cL8Z+QF9QwrVc4186nG4cx0iwg+A==
+X-Received: by 2002:a17:902:bd85:b0:1cc:ef72:8600 with SMTP id q5-20020a170902bd8500b001ccef728600mr1911154pls.62.1699340404326;
+        Mon, 06 Nov 2023 23:00:04 -0800 (PST)
+Received: from localhost ([12.44.203.122])
+        by smtp.gmail.com with ESMTPSA id kx14-20020a170902f94e00b001ca222edc16sm6950068plb.135.2023.11.06.23.00.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Nov 2023 23:00:03 -0800 (PST)
+Date: Mon, 06 Nov 2023 23:00:03 -0800 (PST)
+X-Google-Original-Date: Mon, 06 Nov 2023 22:59:59 PST (-0800)
+Subject:     Re: [PATCH v6 0/4] riscv: tlb flush improvements
+In-Reply-To: <24E0FC81-810E-44FD-9494-CA9374E495B5@gmail.com>
+CC: alexghiti@rivosinc.com, Will Deacon <will@kernel.org>,
+  aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org, npiggin@gmail.com, peterz@infradead.org,
+  mchitale@ventanamicro.com, vincent.chen@sifive.com, Paul Walmsley <paul.walmsley@sifive.com>,
+  aou@eecs.berkeley.edu, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, samuel@sholland.org, prabhakar.csengg@gmail.com
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: nadav.amit@gmail.com
+Message-ID: <mhng-4e3e3fa7-5e25-494c-a3ad-6ef7ec78cf20@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v6 0/4] riscv: tlb flush improvements
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <169933982685.6233.4393621260958877500.git-patchwork-notify@kernel.org>
-Date: Tue, 07 Nov 2023 06:50:26 +0000
-References: <20231030133027.19542-1-alexghiti@rivosinc.com>
-In-Reply-To: <20231030133027.19542-1-alexghiti@rivosinc.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, will@kernel.org,
- aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org, npiggin@gmail.com,
- peterz@infradead.org, mchitale@ventanamicro.com, vincent.chen@sifive.com,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- samuel@sholland.org, prabhakar.csengg@gmail.com
 
-Hello:
+On Mon, 30 Oct 2023 07:01:48 PDT (-0700), nadav.amit@gmail.com wrote:
+>
+>> On Oct 30, 2023, at 3:30 PM, Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+>> 
+>> +			on_each_cpu_mask(cmask,
+>> +					 __ipi_flush_tlb_range_asid,
+>> +					 &ftd, 1);
+>> 
+>
+> Unrelated, but having fed
 
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+Do you mean `ftd`?
 
-On Mon, 30 Oct 2023 14:30:24 +0100 you wrote:
-> This series optimizes the tlb flushes on riscv which used to simply
-> flush the whole tlb whatever the size of the range to flush or the size
-> of the stride.
-> 
-> Patch 3 introduces a threshold that is microarchitecture specific and
-> will very likely be modified by vendors, not sure though which mechanism
-> we'll use to do that (dt? alternatives? vendor initialization code?).
-> 
-> [...]
+If so I'm not all that convinced that's a problem: sure it's 4x`long`, 
+so we pass it on the stack instead of registers, but otherwise we'd need 
+another `on_each_cpu_mask()` callback to shim stuff through via 
+registers.
 
-Here is the summary with links:
-  - [v6,1/4] riscv: Improve tlb_flush()
-    https://git.kernel.org/riscv/c/c5e9b2c2ae82
-  - [v6,2/4] riscv: Improve flush_tlb_range() for hugetlb pages
-    https://git.kernel.org/riscv/c/c962a6e74639
-  - [v6,3/4] riscv: Make __flush_tlb_range() loop over pte instead of flushing the whole tlb
-    https://git.kernel.org/riscv/c/9d4e8d5fa7db
-  - [v6,4/4] riscv: Improve flush_tlb_kernel_range()
-    https://git.kernel.org/riscv/c/5e22bfd520ea
+> on the stack might cause it to be unaligned to
+> the cacheline, which in x86 we have seen introduces some overhead.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We have 128-bit stack alignment on RISC-V, so the elements are at least 
+aligned.  Since they're just being loaded up as scalars for the next 
+function call I'm not sure the alignment is all that exciting here.
 
+> Actually, it is best not to put it on the stack, if possible to reduce
+> cache traffic.
 
+Sorry if I'm just missing something, but I'm not convinced this is a 
+measurable performance problem.
 
