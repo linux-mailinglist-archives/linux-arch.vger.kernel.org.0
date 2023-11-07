@@ -1,104 +1,136 @@
-Return-Path: <linux-arch+bounces-26-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-27-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B47F37E362E
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 09:01:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E877D7E36CC
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 09:38:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33595280EF9
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 08:01:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 254F21C209F9
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 08:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFD3D2E0;
-	Tue,  7 Nov 2023 08:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EC42913;
+	Tue,  7 Nov 2023 08:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZVEDJbxo"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94441C8E4;
-	Tue,  7 Nov 2023 08:01:46 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256F2E8;
-	Tue,  7 Nov 2023 00:01:45 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SPgf74yFYzvQS6;
-	Tue,  7 Nov 2023 16:01:35 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 7 Nov
- 2023 16:00:33 +0800
-Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
-To: Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
- Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Shakeel Butt <shakeelb@google.com>, Jeroen de
- Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-8-almasrymina@google.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
-Date: Tue, 7 Nov 2023 16:00:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B852C28F7
+	for <linux-arch@vger.kernel.org>; Tue,  7 Nov 2023 08:38:22 +0000 (UTC)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFB5113;
+	Tue,  7 Nov 2023 00:38:21 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-542d654d03cso8893319a12.1;
+        Tue, 07 Nov 2023 00:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699346300; x=1699951100; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y6dvthR2+uXXaKtZhfu19I8uRaF5Ucp/hKjGsFNZse0=;
+        b=ZVEDJbxoG1cS+KXLakjHKi1Wvnew4GghZa5ENLiGXYwhNB0917zW3Isid4c5aWvHgt
+         JXxZV3jpqfKgU5tKRUYe8MVcTUxjekvuq5N0l0w+8wNeUqCP0SZKFk4lNN+IUeDa28pj
+         KUVoREzkMHad7reegxHZcl4nQVhg/Tb2YmF7kYNOdmg6PppDg/VyeZ4hcCG6GeaVnZx2
+         LZ8nOc/fXnbxfDK1kxTVnef1XXFyU2nd1CQFhdao0CBvzTVyKpx0K6ErXfh/Js8Jrzq+
+         0C44p7phCvskaWM+7VOo9JljK9t4tnxEXiWZ1B+lpF/9YPh6+W2NwnfwZXw+C2QI1SFQ
+         Z6Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699346300; x=1699951100;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y6dvthR2+uXXaKtZhfu19I8uRaF5Ucp/hKjGsFNZse0=;
+        b=cBKMdk/ga3x2dKHlulTTpYWAlJgrKYrgBTFBU9MBo5zxNxPReU0qL0Ze8IcN9dgS8p
+         YjN3wEujtG8fdeRMliZI7ne6IJ48rEvc4bcaonIq4sm7q0f19BxvABSyT0QqFfV6NGzK
+         CrFKN1t4/hEd5oIJaaZIv2TzV6V8vZCFogMR7hwdMwZGWqvb6adiA4gTzOd2WjgmIr7/
+         fzE8rMt27omf21hZgiiCcYKo9acTchiz9TgS+d3CiRbS4MsnyW0e9/uMsGCoHxDTq9XB
+         WPfMLMP3C+FwiTeZ6LENGTWKK6nS+ccJIET+Dc9XhzB+VD/oJkbrKr30hhYeBSYYi3DT
+         GWLQ==
+X-Gm-Message-State: AOJu0YyTfM9kDRv9UbJ2htdm6CshGjgfPS9ABRGh4+4tA1w4GoN8yfPS
+	9u7YOucfmT20ugna/vFEHGA=
+X-Google-Smtp-Source: AGHT+IFAT164A5+0+DDOFocrTagB32BVc9/FCJDm9227j7/4JmRH7adGpr3sTfoKn2svR2FIqdu2QQ==
+X-Received: by 2002:a05:6402:28b3:b0:540:118:e8f with SMTP id eg51-20020a05640228b300b0054001180e8fmr25487702edb.24.1699346299233;
+        Tue, 07 Nov 2023 00:38:19 -0800 (PST)
+Received: from smtpclient.apple ([132.69.236.77])
+        by smtp.gmail.com with ESMTPSA id r15-20020aa7cfcf000000b0053e469f6505sm5095738edy.26.2023.11.07.00.38.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Nov 2023 00:38:17 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20231106024413.2801438-8-almasrymina@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.200.91.1.1\))
+Subject: Re: [PATCH v6 0/4] riscv: tlb flush improvements
+From: Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <mhng-4e3e3fa7-5e25-494c-a3ad-6ef7ec78cf20@palmer-ri-x1c9a>
+Date: Tue, 7 Nov 2023 10:38:01 +0200
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Will Deacon <will@kernel.org>,
+ "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Nick Piggin <npiggin@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Mayuresh Chitale <mchitale@ventanamicro.com>,
+ Vincent Chen <vincent.chen@sifive.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ linux-arch@vger.kernel.org,
+ linux-mm <linux-mm@kvack.org>,
+ linux-riscv@lists.infradead.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Samuel Holland <samuel@sholland.org>,
+ Lad Prabhakar <prabhakar.csengg@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D1DBDDD4-9B6A-40EA-993E-FF6CF02A2668@gmail.com>
+References: <mhng-4e3e3fa7-5e25-494c-a3ad-6ef7ec78cf20@palmer-ri-x1c9a>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+X-Mailer: Apple Mail (2.3774.200.91.1.1)
 
-On 2023/11/6 10:44, Mina Almasry wrote:
-> Overload the LSB of struct page* to indicate that it's a page_pool_iov.
-> 
-> Refactor mm calls on struct page* into helpers, and add page_pool_iov
-> handling on those helpers. Modify callers of these mm APIs with calls to
-> these helpers instead.
-> 
-> In areas where struct page* is dereferenced, add a check for special
-> handling of page_pool_iov.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
->  include/net/page_pool/helpers.h | 74 ++++++++++++++++++++++++++++++++-
->  net/core/page_pool.c            | 63 ++++++++++++++++++++--------
->  2 files changed, 118 insertions(+), 19 deletions(-)
-> 
-> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-> index b93243c2a640..08f1a2cc70d2 100644
-> --- a/include/net/page_pool/helpers.h
-> +++ b/include/net/page_pool/helpers.h
-> @@ -151,6 +151,64 @@ static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
->  	return NULL;
->  }
->  
-> +static inline int page_pool_page_ref_count(struct page *page)
-> +{
-> +	if (page_is_page_pool_iov(page))
-> +		return page_pool_iov_refcount(page_to_page_pool_iov(page));
 
-We have added a lot of 'if' for the devmem case, it would be better to
-make it more generic so that we can have more unified metadata handling
-for normal page and devmem. If we add another memory type here, do we
-need another 'if' here?
-That is part of the reason I suggested using a more unified metadata for
-all the types of memory chunks used by page_pool.
+
+> On Nov 7, 2023, at 9:00=E2=80=AFAM, Palmer Dabbelt =
+<palmer@dabbelt.com> wrote:
+>=20
+> On Mon, 30 Oct 2023 07:01:48 PDT (-0700), nadav.amit@gmail.com wrote:
+>>=20
+>>> On Oct 30, 2023, at 3:30 PM, Alexandre Ghiti =
+<alexghiti@rivosinc.com> wrote:
+>>> + on_each_cpu_mask(cmask,
+>>> + __ipi_flush_tlb_range_asid,
+>>> + &ftd, 1);
+>>=20
+>> Unrelated, but having fed
+>=20
+> Do you mean `ftd`?
+>=20
+> If so I'm not all that convinced that's a problem: sure it's 4x`long`, =
+so we pass it on the stack instead of registers, but otherwise we'd need =
+another `on_each_cpu_mask()` callback to shim stuff through via =
+registers.
+
+I have no idea why you need to move stuff through the registers.
+
+>> Actually, it is best not to put it on the stack, if possible to =
+reduce
+>> cache traffic.
+>=20
+> Sorry if I'm just missing something, but I'm not convinced this is a =
+measurable performance problem.
+
+I am not going to try to convince you (I ran the numbers on x86 a long
+time ago).
+
+There is a cost of bouncing cache-lines (because multiple cores access
+the stack), TLB-miss on remote cores (which is mostly avoidable if ftd
+is global).
+
+Having said that, the optimizations you added now and intend to add in
+the next steps are definitely more important for performance.
+
 
