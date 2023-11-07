@@ -1,144 +1,165 @@
-Return-Path: <linux-arch+bounces-30-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-31-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F3B77E391E
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 11:29:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CBED7E3925
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 11:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D4E11C2033D
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 10:29:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F6781C209F5
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Nov 2023 10:29:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41CA312E7E;
-	Tue,  7 Nov 2023 10:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B6A13FE9;
+	Tue,  7 Nov 2023 10:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Xvbg8rVw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="q+446HBS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3829012E67;
-	Tue,  7 Nov 2023 10:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE43012E67;
+	Tue,  7 Nov 2023 10:29:29 +0000 (UTC)
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3DEF7;
-	Tue,  7 Nov 2023 02:29:06 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8C2122;
+	Tue,  7 Nov 2023 02:29:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=mnU5AkoHae2A4t/6hUnkAeF1QeR2fa8gldl6fabdpys=; b=Xvbg8rVwQvptDasFluB1GivJJR
-	lkmYK9tHPkK3vfKg66aLbO07r9lL+qDWdsMtP1fVlOa8E6KTkOYoEs2lwy4BuATJgRxBHul9tXxli
-	QGqH/a1GwQbXH4Ty2qge3vzSS6Lc2LavAFmQ5ENfzpAimPTrAHwq4g364DPRdQkTj0tDP0qjcdxfK
-	STyjqt1AJWeyZh74VX0SvsNhUiKdGJQ5F9Q8X2OntVFa17qD+omT8nLqUX52QnKNsc7MXWynhIz17
-	xiLH8jwcSjSqGdcRk8+6xspJu1Yko/6rlvG1nsItzUsrSafRMYvzk7lo3JLicVij5zIccje25TllF
-	GUWgjCdw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:37708)
+	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=XGhpKk09pdERl3TLuSkcjp8wddtxgCnM/F8wNa+d4Ds=; b=q+446HBSaqDASp2DnGSpsalYDH
+	pEuuqbj+B5pSmcX0VDJ+qGo58o7uSeMuiLOYxUQrm0Wkih2A3Ky189UPnhCg834f6nmAlW8BHpu6H
+	zmvap4iTUECvSPaMtHSu5vdB/QurXGDPNvSGKEhAg3Nn51eifgYPV2OqtuAnHQFr18lBLFcIzKzmv
+	Hy8RNRf8FAqUQNat3Jr3povSccaGlwjcGInBALMOWoNXvc+8V7k6IgxxJXcW0E2qWnwSyh+VLF/L5
+	6nGpBHGGVVySCpWYM/fLTZonlnYqoyQ49FDeC4o1c1P53Mv4wYPnmDRRNKv7EYOPw3DzXxQ3GCg8D
+	8rDkb9nQ==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:40856 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1r0JKK-0000DJ-2j;
-	Tue, 07 Nov 2023 10:28:56 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1r0JKF-0006qX-KE; Tue, 07 Nov 2023 10:28:51 +0000
-Date: Tue, 7 Nov 2023 10:28:51 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org
-Cc: Albert Ou <aou@eecs.berkeley.edu>, Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com, Len Brown <lenb@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Salil Mehta <salil.mehta@huawei.com>,
+	(envelope-from <rmk@armlinux.org.uk>)
+	id 1r0JKj-0000DW-2W;
+	Tue, 07 Nov 2023 10:29:21 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+	id 1r0JKl-00CTwT-Hx; Tue, 07 Nov 2023 10:29:23 +0000
+In-Reply-To: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+To: linux-pm@vger.kernel.org,
+	 loongarch@lists.linux.dev,
+	 linux-acpi@vger.kernel.org,
+	 linux-arch@vger.kernel.org,
+	 linux-kernel@vger.kernel.org,
+	 linux-arm-kernel@lists.infradead.org,
+	 linux-riscv@lists.infradead.org,
+	 kvmarm@lists.linux.dev,
+	 x86@kernel.org,
+	 linux-csky@vger.kernel.org,
+	 linux-doc@vger.kernel.org,
+	 linux-ia64@vger.kernel.org,
+	 linux-parisc@vger.kernel.org
+Cc: Salil Mehta <salil.mehta@huawei.com>,
+	 Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	 jianyong.wu@arm.com,
+	 justin.he@arm.com,
+	 James Morse <james.morse@arm.com>,
 	Sudeep Holla <sudeep.holla@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>
-Subject: [PATCH RFC 00/22] Initial cleanups for vCPU hotplug
-Message-ID: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH RFC 01/22] arch_topology: Make register_cpu_capacity_sysctl()
+ tolerant to late CPUs
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1r0JKl-00CTwT-Hx@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Tue, 07 Nov 2023 10:29:23 +0000
 
-Hi,
+From: James Morse <james.morse@arm.com>
 
-Rather than posting the entire set of vCPU kernel patches, this is a
-subset of those patches which I hope will be able to be appropriately
-queued for the next merge window. I am also hoping that nothing here
-is covered by Rafael's concerns he alluded to in his response to the
-RFC v3 series.
+register_cpu_capacity_sysctl() adds a property to sysfs that describes
+the CPUs capacity. This is done from a subsys_initcall() that assumes
+all possible CPUs are registered.
 
-This series aims to switch most architectures over to using generic CPU
-devices rather than arch specific implementations, which I think is
-worthwhile doing even if the vCPU hotplug series needs further work.
+With CPU hotplug, possible CPUs aren't registered until they become
+present, (or for arm64 enabled). This leads to messages during boot:
+| register_cpu_capacity_sysctl: too early to get CPU1 device!
+and once these CPUs are added to the system, the file is missing.
 
-Since this series changes the init order (node_dev_init() vs
-cpu_dev_init()) and later on in the vCPU hotplug series move the
-location that CPUs are registered, the first two patches head off
-problems with register_cpu_capacity_sysctl() and the intel_epb code.
-These two were ordered later in the original series.
+Move this to a cpuhp callback, so that the file is created once
+CPUs are brought online. This covers CPUs that are added late by
+mechanisms like hotplug.
+One observable difference is the file is now missing for offline CPUs.
 
-The next pair of patches are new and remove the exports of
-arch_*register_cpu() which are not necessary - these functions are only
-called from non-modular code - drivers/base/cpu.c and acpi_processor.c
-both of which can only be built-in.
+Signed-off-by: James Morse <james.morse@arm.com>
+---
+If the offline CPUs thing is a problem for the tools that consume
+this value, we'd need to move cpu_capacity to be part of cpu.c's
+common_cpu_attr_groups.
+---
+ drivers/base/arch_topology.c | 38 ++++++++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 12 deletions(-)
 
-The majority of the other patches come from the vCPU hotplug RFC v3
-series I posted earlier, rebased on Linus' current tip, but with some
-new patches adding arch_cpu_is_hotpluggable() as the remaining
-arch_register_cpu() functions only differ in the setting of the
-hotpluggable member of the CPU device - so let's get generic code
-doing that and provide a way for an architecture to specify whether a
-CPU is hotpluggable.
-
-I would appreciate testing reports on loongarch, riscv and x86
-platforms please.
-
-Thanks!
-
- arch/arm64/Kconfig               |  1 +
- arch/arm64/include/asm/cpu.h     |  1 -
- arch/arm64/kernel/setup.c        | 13 ++-----------
- arch/loongarch/Kconfig           |  2 ++
- arch/loongarch/kernel/topology.c | 42 ++--------------------------------------
- arch/riscv/Kconfig               |  1 +
- arch/riscv/kernel/setup.c        | 18 ++---------------
- arch/x86/Kconfig                 |  2 ++
- arch/x86/include/asm/cpu.h       |  4 ----
- arch/x86/kernel/cpu/intel_epb.c  |  2 +-
- arch/x86/kernel/topology.c       | 33 ++-----------------------------
- drivers/acpi/Kconfig             |  1 -
- drivers/acpi/acpi_processor.c    | 18 -----------------
- drivers/base/arch_topology.c     | 38 ++++++++++++++++++++++++------------
- drivers/base/cpu.c               | 39 +++++++++++++++++++++++++++++--------
- drivers/base/init.c              |  2 +-
- drivers/base/node.c              |  7 -------
- include/linux/cpu.h              |  5 +++++
- 18 files changed, 78 insertions(+), 151 deletions(-)
-
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index b741b5ba82bd..9ccb7daee78e 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -220,20 +220,34 @@ static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+ 
+ static DEVICE_ATTR_RO(cpu_capacity);
+ 
+-static int register_cpu_capacity_sysctl(void)
++static int cpu_capacity_sysctl_add(unsigned int cpu)
+ {
+-	int i;
+-	struct device *cpu;
++	struct device *cpu_dev = get_cpu_device(cpu);
+ 
+-	for_each_possible_cpu(i) {
+-		cpu = get_cpu_device(i);
+-		if (!cpu) {
+-			pr_err("%s: too early to get CPU%d device!\n",
+-			       __func__, i);
+-			continue;
+-		}
+-		device_create_file(cpu, &dev_attr_cpu_capacity);
+-	}
++	if (!cpu_dev)
++		return -ENOENT;
++
++	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
++
++	return 0;
++}
++
++static int cpu_capacity_sysctl_remove(unsigned int cpu)
++{
++	struct device *cpu_dev = get_cpu_device(cpu);
++
++	if (!cpu_dev)
++		return -ENOENT;
++
++	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
++
++	return 0;
++}
++
++static int register_cpu_capacity_sysctl(void)
++{
++	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
++			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
+ 
+ 	return 0;
+ }
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.30.2
+
 
