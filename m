@@ -1,296 +1,201 @@
-Return-Path: <linux-arch+bounces-87-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-88-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B577E6291
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 04:20:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C749A7E654E
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 09:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7392BB20E31
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 03:20:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38E67281073
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 08:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EE253BA;
-	Thu,  9 Nov 2023 03:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C352A10956;
+	Thu,  9 Nov 2023 08:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uk1880h0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D79jnct0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA576525E
-	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 03:20:38 +0000 (UTC)
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1BF26A1
-	for <linux-arch@vger.kernel.org>; Wed,  8 Nov 2023 19:20:38 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-7b747c9b067so113480241.3
-        for <linux-arch@vger.kernel.org>; Wed, 08 Nov 2023 19:20:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699500037; x=1700104837; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Iq3WEnd44vE8jgZXHpA4QQ1qmbAmdjZD/UBm9ibEcLQ=;
-        b=Uk1880h0LxRYdfJR9fy6Atdf9CACkGBgxRCp01IpQYyd+nU6+KJJDOpwnYc9o5qAE9
-         6Pt4HHohk6wj9OCfsW2Y9mn9yBFqZoFPOuYVRdahMuPzTZat0RSLgUTl/M/kQErinbHH
-         k27a0w586gTuLMhHGJOxDk6fqkFnyEw1RPzFlKVJkvp6/1WGqnvSFrlQvXTtdA08vu8X
-         EdYget2xOBgZp+Mc94R1RGvt9CsT7oH6FwM/pg3g7l1ZwFQlRM1gPnsMVI7gsO8H4o+6
-         0e8l6hUuYeIkk3Spso+/cfYxjGWNxmajeRh1HQ9J1BtoLF5v/MvOx+UCtXd1fnNuADEt
-         xT2Q==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EAAD304
+	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 08:30:01 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FD0210A
+	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 00:30:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699518599;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0qGu6ReB5a+EcqdKKJhEiSap1D12mNLXKF1UNlxFd2w=;
+	b=D79jnct0+p49WHZIvBrLM3eviXDg+AaGwi4+1oZuvnw03Pr4cTNXGl34/igvzMPASFb7AD
+	ToN6OTXBXgt/rcWBi1Y677PMfBceNbOYPqLzw9QytUXS80YmLidqpHXMuPv9Kn/mm+KWSG
+	V04TssdwWyUTo0DWJ2J0V6T7ohPJ9qs=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-399-m9zhKuFmPxi-YowzEaEtcQ-1; Thu, 09 Nov 2023 03:29:58 -0500
+X-MC-Unique: m9zhKuFmPxi-YowzEaEtcQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9c45a6a8832so11662066b.1
+        for <linux-arch@vger.kernel.org>; Thu, 09 Nov 2023 00:29:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699500037; x=1700104837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Iq3WEnd44vE8jgZXHpA4QQ1qmbAmdjZD/UBm9ibEcLQ=;
-        b=lgQ+aXBH6Hq4QFKEqtH9lAn4zJ9LWA86yQM+hl1x1ZJM3gAzM8v1DK0yvQIpzEqY6q
-         1pbIp3s9+Ino6OqkdM8MjB+Le5B11WKFn+RG11fOkUItmkNG57/VFAPndlPqjGTutEqI
-         OO1dzNaSE+1WI9Y+9MHT0q4oQE6ZCkj6SXMuw5MSRjQ5+YXJ/bZlkRYNWW+J4f+FqPOS
-         AZvLtCZKjoxNgiUiUhmJG33xRCjLi/+DczCFm8MqdO1JwZA5gdDuYkr/356sUWUvu+ag
-         zZCGeU6izIiYlL7F5m//iMVkFaYrgm+vKazFgX6I0UD1vxvrrERLwbxPn63IbvVLl1k1
-         1aBA==
-X-Gm-Message-State: AOJu0YxVlsGU7JKsemr+B4QGdl+dBouycTQzdslRGjQEvqQvdxHM+K6n
-	6aW5gQODqdcetxoT6ycuOtGbSJEq+UDrObfH8rxp5g==
-X-Google-Smtp-Source: AGHT+IEuh5NgxjrKua8SvctN+++crxKQK/Bd5CzKUuAJSFOtKWUj/OMgQExzWsLLGvFYvuGXIORZ65hgBJVAlS0Att4=
-X-Received: by 2002:a05:6102:3d8c:b0:45f:1bed:cec9 with SMTP id
- h12-20020a0561023d8c00b0045f1bedcec9mr3696662vsv.34.1699500037125; Wed, 08
- Nov 2023 19:20:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699518597; x=1700123397;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0qGu6ReB5a+EcqdKKJhEiSap1D12mNLXKF1UNlxFd2w=;
+        b=Z5mg/fVPgeGsl/xGOW7+Varg1RYQDbn7+hthPu5QXSIfJsDPsxoGovrgMyZLhNpcyd
+         3p8CWrVPXUHoenZG83g6Hk2A3CLomKtooYVLbrcZsj7wkTBpxajM5FSshiqL2GxWsBNd
+         xk9Nd4NgaXhiJO1mlseZAT2+BAOO1yB6kj+LTHB74kvdiBWyQV20VryBrM5MgWHPFwby
+         rbdgR/AB8qTC8mqGVSqhO1CHISAFaE+AtuZ3vKCbh2HiiVv5iPhGkwQJUH3YYr2d70my
+         a1dhfzbl2fN0laTNaVVaNXIYMScGyxvVr9OqlOBaRwvT3QbrGHE8Z6Th697H6w99QhMo
+         gvfg==
+X-Gm-Message-State: AOJu0YyUk9VPDRXtxN21/C+7+VzuDxxFT1PpVgROvn6Ec5CRdGTOuh+L
+	s/BaQCi5TKOtov4/tCD80ueg5JTqbuf1c4qx8yYJfgyBMlrAFQ8sGKQ6NfcBUdXfyAcMXYEaRUT
+	S/jn1V9H5/WUT5Oav7pNCGQ==
+X-Received: by 2002:a17:907:9725:b0:9dd:b624:dea9 with SMTP id jg37-20020a170907972500b009ddb624dea9mr3415512ejc.7.1699518597390;
+        Thu, 09 Nov 2023 00:29:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEFQLHA2HdtAUf7yiWJ3zu6Jf15htwDL4OIcB2ox9NPft2Q3sVGGotT9BWcb+BUEytSXl5ggw==
+X-Received: by 2002:a17:907:9725:b0:9dd:b624:dea9 with SMTP id jg37-20020a170907972500b009ddb624dea9mr3415493ejc.7.1699518597043;
+        Thu, 09 Nov 2023 00:29:57 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
+        by smtp.gmail.com with ESMTPSA id v25-20020a170906381900b009dfd3b80ba3sm2221221ejc.35.2023.11.09.00.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Nov 2023 00:29:56 -0800 (PST)
+Message-ID: <076fa6505f3e1c79cc8acdf9903809fad6c2fd31.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 04/12] netdev: support binding dma-buf to
+ netdevice
+From: Paolo Abeni <pabeni@redhat.com>
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>,  Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Christian =?ISO-8859-1?Q?K=F6nig?=
+ <christian.koenig@amd.com>, Shakeel Butt <shakeelb@google.com>, Jeroen de
+ Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Date: Thu, 09 Nov 2023 09:29:54 +0100
+In-Reply-To: <20231106024413.2801438-5-almasrymina@google.com>
+References: <20231106024413.2801438-1-almasrymina@google.com>
+	 <20231106024413.2801438-5-almasrymina@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-8-almasrymina@google.com> <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
- <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com> <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com>
-In-Reply-To: <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 8 Nov 2023 19:20:21 -0800
-Message-ID: <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 8, 2023 at 2:56=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
->
-> On 2023/11/8 5:56, Mina Almasry wrote:
-> > On Tue, Nov 7, 2023 at 12:00=E2=80=AFAM Yunsheng Lin <linyunsheng@huawe=
-i.com> wrote:
-> >>
-> >> On 2023/11/6 10:44, Mina Almasry wrote:
-> >>> Overload the LSB of struct page* to indicate that it's a page_pool_io=
-v.
-> >>>
-> >>> Refactor mm calls on struct page* into helpers, and add page_pool_iov
-> >>> handling on those helpers. Modify callers of these mm APIs with calls=
- to
-> >>> these helpers instead.
-> >>>
-> >>> In areas where struct page* is dereferenced, add a check for special
-> >>> handling of page_pool_iov.
-> >>>
-> >>> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >>>
-> >>> ---
-> >>>  include/net/page_pool/helpers.h | 74 +++++++++++++++++++++++++++++++=
-+-
-> >>>  net/core/page_pool.c            | 63 ++++++++++++++++++++--------
-> >>>  2 files changed, 118 insertions(+), 19 deletions(-)
-> >>>
-> >>> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/=
-helpers.h
-> >>> index b93243c2a640..08f1a2cc70d2 100644
-> >>> --- a/include/net/page_pool/helpers.h
-> >>> +++ b/include/net/page_pool/helpers.h
-> >>> @@ -151,6 +151,64 @@ static inline struct page_pool_iov *page_to_page=
-_pool_iov(struct page *page)
-> >>>       return NULL;
-> >>>  }
-> >>>
-> >>> +static inline int page_pool_page_ref_count(struct page *page)
-> >>> +{
-> >>> +     if (page_is_page_pool_iov(page))
-> >>> +             return page_pool_iov_refcount(page_to_page_pool_iov(pag=
-e));
-> >>
-> >> We have added a lot of 'if' for the devmem case, it would be better to
-> >> make it more generic so that we can have more unified metadata handlin=
-g
-> >> for normal page and devmem. If we add another memory type here, do we
-> >> need another 'if' here?
-> >
-> > Maybe, not sure. I'm guessing new memory types will either be pages or
-> > iovs, so maybe no new if statements needed.
-> >
-> >> That is part of the reason I suggested using a more unified metadata f=
-or
-> >> all the types of memory chunks used by page_pool.
-> >
-> > I think your suggestion was to use struct pages for devmem. That was
-> > thoroughly considered and intensely argued about in the initial
-> > conversations regarding devmem and the initial RFC, and from the
-> > conclusions there it's extremely clear to me that devmem struct pages
-> > are categorically a no-go.
->
-> Not exactly, I was wondering if adding a more abstract structure specific=
-ly
-> for page pool makes any sense, and each mem type can add its own specific
-> fields, net stack only see and handle the common fields so that it does n=
-ot
-> care about specific mem type, and each provider only see the and handle t=
-he
-> specific fields belonging to it most of the time.
->
-> Ideally something like beleow:
->
-> struct netmem {
->         /* common fields */
->         refcount_t refcount;
->         struct page_pool *pp;
->         ......
->
->         union {
->                 struct devmem{
->                         struct dmabuf_genpool_chunk_owner *owner;
->                 };
->
->                 struct other_mem{
->                         ...
->                         ...
->                 };
->         };
-> };
->
-> But untill we completely decouple the 'struct page' from the net stack,
-> the above seems undoable in the near term.
+On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
+[...]
+> +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> +		       struct netdev_dmabuf_binding **out)
+> +{
+> +	struct netdev_dmabuf_binding *binding;
+> +	struct scatterlist *sg;
+> +	struct dma_buf *dmabuf;
+> +	unsigned int sg_idx, i;
+> +	unsigned long virtual;
+> +	int err;
+> +
+> +	if (!capable(CAP_NET_ADMIN))
+> +		return -EPERM;
+> +
+> +	dmabuf =3D dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
+> +
+> +	binding =3D kzalloc_node(sizeof(*binding), GFP_KERNEL,
+> +			       dev_to_node(&dev->dev));
+> +	if (!binding) {
+> +		err =3D -ENOMEM;
+> +		goto err_put_dmabuf;
+> +	}
+> +
+> +	xa_init_flags(&binding->bound_rxq_list, XA_FLAGS_ALLOC);
+> +
+> +	refcount_set(&binding->ref, 1);
+> +
+> +	binding->dmabuf =3D dmabuf;
+> +
+> +	binding->attachment =3D dma_buf_attach(binding->dmabuf, dev->dev.parent=
+);
+> +	if (IS_ERR(binding->attachment)) {
+> +		err =3D PTR_ERR(binding->attachment);
+> +		goto err_free_binding;
+> +	}
+> +
+> +	binding->sgt =3D dma_buf_map_attachment(binding->attachment,
+> +					      DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(binding->sgt)) {
+> +		err =3D PTR_ERR(binding->sgt);
+> +		goto err_detach;
+> +	}
+> +
+> +	/* For simplicity we expect to make PAGE_SIZE allocations, but the
+> +	 * binding can be much more flexible than that. We may be able to
+> +	 * allocate MTU sized chunks here. Leave that for future work...
+> +	 */
+> +	binding->chunk_pool =3D gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+> +	if (!binding->chunk_pool) {
+> +		err =3D -ENOMEM;
+> +		goto err_unmap;
+> +	}
+> +
+> +	virtual =3D 0;
+> +	for_each_sgtable_dma_sg(binding->sgt, sg, sg_idx) {
+> +		dma_addr_t dma_addr =3D sg_dma_address(sg);
+> +		struct dmabuf_genpool_chunk_owner *owner;
+> +		size_t len =3D sg_dma_len(sg);
+> +		struct page_pool_iov *ppiov;
+> +
+> +		owner =3D kzalloc_node(sizeof(*owner), GFP_KERNEL,
+> +				     dev_to_node(&dev->dev));
+> +		owner->base_virtual =3D virtual;
+> +		owner->base_dma_addr =3D dma_addr;
+> +		owner->num_ppiovs =3D len / PAGE_SIZE;
+> +		owner->binding =3D binding;
+> +
+> +		err =3D gen_pool_add_owner(binding->chunk_pool, dma_addr,
+> +					 dma_addr, len, dev_to_node(&dev->dev),
+> +					 owner);
+> +		if (err) {
+> +			err =3D -EINVAL;
+> +			goto err_free_chunks;
+> +		}
+> +
+> +		owner->ppiovs =3D kvmalloc_array(owner->num_ppiovs,
+> +					       sizeof(*owner->ppiovs),
+> +					       GFP_KERNEL);
+> +		if (!owner->ppiovs) {
+> +			err =3D -ENOMEM;
+> +			goto err_free_chunks;
+> +		}
+> +
+> +		for (i =3D 0; i < owner->num_ppiovs; i++) {
+> +			ppiov =3D &owner->ppiovs[i];
+> +			ppiov->owner =3D owner;
+> +			refcount_set(&ppiov->refcount, 1);
+> +		}
+> +
+> +		dma_addr +=3D len;
 
-Agreed everything above is undoable.
+I'm trying to wrap my head around the whole infra... the above line is
+confusing. Why do you increment dma_addr? it will be re-initialized in
+the next iteration.
 
-> But we might be able to do something as folio is doing now, mm subsystem
-> is still seeing 'struct folio/page', but other subsystem like slab is usi=
-ng
-> 'struct slab', and there is still some common fields shared between
-> 'struct folio' and 'struct slab'.
->
+Cheers,
 
-In my eyes this is almost exactly what I suggested in RFC v1 and got
-immediately nacked with no room to negotiate. What we did for v1 is to
-allocate struct pages for dma-buf to make dma-bufs look like struct
-page to mm subsystem. Almost exactly what you're describing above.
-It's a no-go. I don't think renaming struct page to netmem is going to
-move the needle (it also re-introduces code-churn). What I feel like I
-learnt is that dma-bufs are not struct pages and can't be made to look
-like one, I think.
+Paolo
 
-> As the netmem patchset, is devmem able to reuse the below 'struct netmem'
-> and rename it to 'struct page_pool_iov'?
-
-I don't think so. For the reasons above, but also practically it
-immediately falls apart. Consider this field in netmem:
-
-+ * @flags: The same as the page flags.  Do not use directly.
-
-dma-buf don't have or support page-flags, and making dma-buf looks
-like they support page flags or any page-like features (other than
-dma_addr) seems extremely unacceptable to mm folks.
-
-> So that 'struct page' for normal
-> memory and 'struct page_pool_iov' for devmem share the common fields used
-> by page pool and net stack?
-
-Are you suggesting that we'd cast a netmem* to a page* and call core
-mm APIs on it? It's basically what was happening with RFC v1, where
-things that are not struct pages were made to look like struct pages.
-
-Also, there isn't much upside for what you're suggesting, I think. For
-example I can align the refcount variable in struct page_pool_iov with
-the refcount in struct page so that this works:
-
-put_page((struct page*)ppiov);
-
-but it's a disaster. Because put_page() will call __put_page() if the
-page is freed, and __put_page() will try to return the page to the
-buddy allocator!
-
->  And we might be able to reuse the 'flags',
-> '_pp_mapping_pad' and '_mapcount' for specific mem provider, which is eno=
-ugh
-> for the devmem only requiring a single pointer to point to it's
-> owner?
->
-
-All the above seems quite similar to RFC v1 again, using netmem
-instead of struct page. In RFC v1 we re-used zone_device_data() for
-the dma-buf owner equivalent.
-
-> https://lkml.kernel.org/netdev/20230105214631.3939268-2-willy@infradead.o=
-rg/
->
-> +/**
-> + * struct netmem - A memory allocation from a &struct page_pool.
-> + * @flags: The same as the page flags.  Do not use directly.
-> + * @pp_magic: Magic value to avoid recycling non page_pool allocated pag=
-es.
-> + * @pp: The page pool this netmem was allocated from.
-> + * @dma_addr: Call netmem_get_dma_addr() to read this value.
-> + * @dma_addr_upper: Might need to be 64-bit on 32-bit architectures.
-> + * @pp_frag_count: For frag page support, not supported in 32-bit
-> + *   architectures with 64-bit DMA.
-> + * @_mapcount: Do not access this member directly.
-> + * @_refcount: Do not access this member directly.  Read it using
-> + *   netmem_ref_count() and manipulate it with netmem_get() and netmem_p=
-ut().
-> + *
-> + * This struct overlays struct page for now.  Do not modify without a
-> + * good understanding of the issues.
-> + */
-> +struct netmem {
-> +       unsigned long flags;
-> +       unsigned long pp_magic;
-> +       struct page_pool *pp;
-> +       /* private: no need to document this padding */
-> +       unsigned long _pp_mapping_pad;  /* aliases with folio->mapping */
-> +       /* public: */
-> +       unsigned long dma_addr;
-> +       union {
-> +               unsigned long dma_addr_upper;
-> +               atomic_long_t pp_frag_count;
-> +       };
-> +       atomic_t _mapcount;
-> +       atomic_t _refcount;
-> +};
->
-> If we do that, it seems we might be able to allow net stack and page pool=
- to see
-> the metadata for devmem chunk as 'struct page', and may be able to aovid =
-most of
-> the 'if' checking in net stack and page pool?
->
-> >
-> > --
-> > Thanks,
-> > Mina
-> >
-> > .
-> >
-
-
-
---=20
-Thanks,
-Mina
 
