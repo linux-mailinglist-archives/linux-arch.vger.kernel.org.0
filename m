@@ -1,173 +1,216 @@
-Return-Path: <linux-arch+bounces-93-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-94-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E67D7E66CF
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 10:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57D3D7E66F6
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 10:43:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60171281654
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 09:30:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC344281732
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 09:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B586C12E48;
-	Thu,  9 Nov 2023 09:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C431E134A2;
+	Thu,  9 Nov 2023 09:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f6+oEIAS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA4211CA8;
-	Thu,  9 Nov 2023 09:30:52 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745EB2590;
-	Thu,  9 Nov 2023 01:30:51 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SQxWy6kV1zfb3k;
-	Thu,  9 Nov 2023 17:30:38 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 9 Nov
- 2023 17:30:16 +0800
-Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
-To: Mina Almasry <almasrymina@google.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-	<linaro-mm-sig@lists.linaro.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
- Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Shakeel Butt <shakeelb@google.com>, Jeroen de
- Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-8-almasrymina@google.com>
- <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
- <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
- <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com>
- <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <a8ae22dc-5b85-9efe-16c7-d95d455828fa@huawei.com>
-Date: Thu, 9 Nov 2023 17:30:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A539134C2
+	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 09:43:48 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2242737
+	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 01:43:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699523027;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OEjQ7xxzDSW6bCsBCGR2pe6qDNDSEL6lx838tIM/GU8=;
+	b=f6+oEIASi65VzaiyTjaD9u+K9jLEYYB14KYR755tiblsv2Eo4qIzmmuAJJyG3PiXjkWptG
+	qbVqlY7RAKtWGUOYTu6FaVBLNFiXxm1n5OP+xyBH879iMbVubfBT1ioo/D77ROwvVORDN2
+	euRlqCT5Vk/t8ZRuKXLsEJCaVD7RIRM=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-203-1YJycd0-MX2J_6Ua-GxZOg-1; Thu, 09 Nov 2023 04:43:45 -0500
+X-MC-Unique: 1YJycd0-MX2J_6Ua-GxZOg-1
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2800fffc08eso186687a91.0
+        for <linux-arch@vger.kernel.org>; Thu, 09 Nov 2023 01:43:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699523024; x=1700127824;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OEjQ7xxzDSW6bCsBCGR2pe6qDNDSEL6lx838tIM/GU8=;
+        b=jyNPynHNF1KTPAUK4x+YTmgZKRz9WZXDsoMsy5Ob37E7MiVY9j0BsJ+x9u9uulX2o9
+         Yg7JkuvNH82EGONVdYICQpO5iaQ+ab4L9b8kxmkN5q+gxXUDctj0z3JhBaBRiRG0+oqw
+         +AuWCGDfa+F1MRT25oXo5W4qAH2YgnpOUEi30EUwwZkDAAq97JqI7U2Mytmu31zwOdG8
+         VmK5PE0HpXcPTkXll7P6A7CHcLwsXJ9QNbwDWb3KZ6O12eVTWuR98pvmFr567BzZZYL8
+         sMou4dyt7EUef658VOsuqnxXRqB9LQR3WPXiPGLkgGp9tkyZqOHO2b1CbLWTnopvU6Ol
+         J7gg==
+X-Gm-Message-State: AOJu0Yy1y1p8Zm1f68nplON2zyPAstROKW/pVISeRtW33H+E8GKFlHhg
+	3UpHdr06py5CV8hX8MNAIjAiSZeyOigU5Ik2wVUJP41bPs/FMiTxUfD+dvtMpVX0bA08QE8Y1XW
+	oKbNLK3Z+8ZxcaNcsEcIksw==
+X-Received: by 2002:a17:902:d4cd:b0:1cc:2bc4:5157 with SMTP id o13-20020a170902d4cd00b001cc2bc45157mr4921108plg.1.1699523024553;
+        Thu, 09 Nov 2023 01:43:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF6RZnogij7LzQU0k7NFPHwR/unfu31fUk7J39NRmSg93ajKyOUqEekd23fy6SG5sWCfMu5eg==
+X-Received: by 2002:a17:902:d4cd:b0:1cc:2bc4:5157 with SMTP id o13-20020a170902d4cd00b001cc2bc45157mr4921073plg.1.1699523024112;
+        Thu, 09 Nov 2023 01:43:44 -0800 (PST)
+Received: from [10.66.61.39] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id h21-20020a170902eed500b001bf846dd2d0sm3105978plb.13.2023.11.09.01.43.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Nov 2023 01:43:43 -0800 (PST)
+Message-ID: <46faa2bd-9f27-2eea-f46d-f02715e2b540@redhat.com>
+Date: Thu, 9 Nov 2023 17:43:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH RFC 05/22] ACPI: Move ACPI_HOTPLUG_CPU to be disabled on
+ arm64 and riscv
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+ linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org,
+ linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
+Cc: Salil Mehta <salil.mehta@huawei.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
+ justin.he@arm.com, James Morse <james.morse@arm.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Len Brown <lenb@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+ <E1r0JL6-00CTws-3z@rmk-PC.armlinux.org.uk>
+From: Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <E1r0JL6-00CTws-3z@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2023/11/9 11:20, Mina Almasry wrote:
-> On Wed, Nov 8, 2023 at 2:56 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
 
-> 
-> Agreed everything above is undoable.
-> 
->> But we might be able to do something as folio is doing now, mm subsystem
->> is still seeing 'struct folio/page', but other subsystem like slab is using
->> 'struct slab', and there is still some common fields shared between
->> 'struct folio' and 'struct slab'.
->>
-> 
-> In my eyes this is almost exactly what I suggested in RFC v1 and got
-> immediately nacked with no room to negotiate. What we did for v1 is to
-> allocate struct pages for dma-buf to make dma-bufs look like struct
-> page to mm subsystem. Almost exactly what you're describing above.
 
-Maybe the above is where we have disagreement:
-Do we still need make dma-bufs look like struct page to mm subsystem?
-IMHO, the answer is no. We might only need to make dma-bufs look like
-struct page to net stack and page pool subsystem. I think that is already
-what this pacthset is trying to do, what I am suggesting is just make
-it more like 'struct page' to net stack and page pool subsystem, in order
-to try to avoid most of the 'if' checking in net stack and page pool
-subsystem.
+On 11/7/23 18:29, Russell King (Oracle) wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> Neither arm64 nor riscv support physical hotadd of CPUs that were not
+> present at boot. For arm64 much of the platform description is in static
+> tables which do not have update methods. arm64 does support HOTPLUG_CPU,
+> which is backed by a firmware interface to turn CPUs on and off.
+> 
+> acpi_processor_hotadd_init() and acpi_processor_remove() are for adding
+> and removing CPUs that were not present at boot. arm64 systems that do this
+> are not supported as there is currently insufficient information in the
+> platform description. (e.g. did the GICR get removed too?)
+> 
+> arm64 currently relies on the MADT enabled flag check in map_gicc_mpidr()
+> to prevent CPUs that were not described as present at boot from being
+> added to the system. Similarly, riscv relies on the same check in
+> map_rintc_hartid(). Both architectures also rely on the weak 'always fails'
+> definitions of acpi_map_cpu() and arch_register_cpu().
+> 
+> Subsequent changes will redefine ACPI_HOTPLUG_CPU as making possible
+> CPUs present. Neither arm64 nor riscv support this.
+> 
+> Disable ACPI_HOTPLUG_CPU for arm64 and riscv by removing 'default y' and
+> selecting it on the other three ACPI architectures. This allows the weak
+> definitions of some symbols to be removed.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+> Changes since RFC:
+>   * Expanded conditions to avoid ACPI_HOTPLUG_CPU being enabled when
+>     HOTPLUG_CPU isn't.
+> Changes since RFC v3:
+>   * Dropped ia64 changes
+> ---
+>   arch/loongarch/Kconfig        |  1 +
+>   arch/x86/Kconfig              |  1 +
+>   drivers/acpi/Kconfig          |  1 -
+>   drivers/acpi/acpi_processor.c | 18 ------------------
+>   4 files changed, 2 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index d889a0b97bc1..64620e90c12c 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -5,6 +5,7 @@ config LOONGARCH
+>   	select ACPI
+>   	select ACPI_GENERIC_GSI if ACPI
+>   	select ACPI_MCFG if ACPI
+> +	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
+>   	select ACPI_PPTT if ACPI
+>   	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+>   	select ARCH_BINFMT_ELF_STATE
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 3762f41bb092..dbdcfc708369 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -59,6 +59,7 @@ config X86
+>   	#
+>   	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
+>   	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+> +	select ACPI_HOTPLUG_CPU			if ACPI_PROCESSOR && HOTPLUG_CPU
+>   	select ARCH_32BIT_OFF_T			if X86_32
+>   	select ARCH_CLOCKSOURCE_INIT
+>   	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index f819e760ff19..a3acfc750fce 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -310,7 +310,6 @@ config ACPI_HOTPLUG_CPU
+>   	bool
+>   	depends on ACPI_PROCESSOR && HOTPLUG_CPU
+>   	select ACPI_CONTAINER
+> -	default y
+>   
+>   config ACPI_PROCESSOR_AGGREGATOR
+>   	tristate "Processor Aggregator"
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index 0f5218e361df..4fe2ef54088c 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -184,24 +184,6 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+>   
+>   /* Initialization */
+>   #ifdef CONFIG_ACPI_HOTPLUG_CPU
+> -int __weak acpi_map_cpu(acpi_handle handle,
+> -		phys_cpuid_t physid, u32 acpi_id, int *pcpu)
+> -{
+> -	return -ENODEV;
+> -}
+> -
+> -int __weak acpi_unmap_cpu(int cpu)
+> -{
+> -	return -ENODEV;
+> -}
+> -
+> -int __weak arch_register_cpu(int cpu)
+> -{
+> -	return -ENODEV;
+> -}
+> -
+> -void __weak arch_unregister_cpu(int cpu) {}
+> -
+>   static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>   {
+>   	unsigned long long sta;
 
-> It's a no-go. I don't think renaming struct page to netmem is going to
-> move the needle (it also re-introduces code-churn). What I feel like I
-> learnt is that dma-bufs are not struct pages and can't be made to look
-> like one, I think.
-> 
->> As the netmem patchset, is devmem able to reuse the below 'struct netmem'
->> and rename it to 'struct page_pool_iov'?
-> 
-> I don't think so. For the reasons above, but also practically it
-> immediately falls apart. Consider this field in netmem:
-> 
-> + * @flags: The same as the page flags.  Do not use directly.
-> 
-> dma-buf don't have or support page-flags, and making dma-buf looks
-> like they support page flags or any page-like features (other than
-> dma_addr) seems extremely unacceptable to mm folks.
+-- 
+Shaoqin
 
-As far as I tell, as we limit the devmem usage in netstack, the below
-is the related mm function call for 'struct page' for devmem:
-page_ref_*(): page->_refcount does not need changing
-page_is_pfmemalloc(): which is corresponding to page->pp_magic, and
-                      devmem provider can set/unset it in it's 'alloc_pages'
-                      ops.
-page_to_nid(): we may need to handle it differently somewhat like this
-               patch does as page_to_nid() may has different implementation
-               based on different configuration.
-page_pool_iov_put_many(): as mentioned in other thread, if net stack is not
-                          calling page_pool_page_put_many() directly, we
-                          can reuse napi_pp_put_page() for devmem too, and
-                          handle the special case for devmem in 'release_page'
-                          ops.
-
-> 
->> So that 'struct page' for normal
->> memory and 'struct page_pool_iov' for devmem share the common fields used
->> by page pool and net stack?
-> 
-> Are you suggesting that we'd cast a netmem* to a page* and call core
-> mm APIs on it? It's basically what was happening with RFC v1, where
-> things that are not struct pages were made to look like struct pages.
-> 
-> Also, there isn't much upside for what you're suggesting, I think. For
-> example I can align the refcount variable in struct page_pool_iov with
-> the refcount in struct page so that this works:
-> 
-> put_page((struct page*)ppiov);
-> 
-> but it's a disaster. Because put_page() will call __put_page() if the
-> page is freed, and __put_page() will try to return the page to the
-> buddy allocator!
-
-As what I suggested above, Can we handle this in devmem provider's
-'release_page' ops instead of calling put_page() directly as for devmem.
-
-> 
->>  And we might be able to reuse the 'flags',
->> '_pp_mapping_pad' and '_mapcount' for specific mem provider, which is enough
->> for the devmem only requiring a single pointer to point to it's
->> owner?
->>
-> 
-> All the above seems quite similar to RFC v1 again, using netmem
-> instead of struct page. In RFC v1 we re-used zone_device_data() for
-> the dma-buf owner equivalent.
-
-As we have added a few checkings to limit 'struct page' for devmem to
-be only used in net stack, we can decouple 'struct page' for devmem
-from mm subsystem, zone_device_data() is not really needed, right?
-
-If we can decouple 'struct page' for normal memory from mm subsystem
-through the folio work in the future, then we may define a more abstract
-structure for page pool and net stack instead of reusing 'struct page'
-from mm.
-
-> 
 
