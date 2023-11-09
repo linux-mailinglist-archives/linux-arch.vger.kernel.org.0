@@ -1,181 +1,159 @@
-Return-Path: <linux-arch+bounces-96-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-97-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70D447E6785
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 11:13:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87D597E6817
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 11:29:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0F141C20A86
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 10:13:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F67F1C20A32
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 10:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD167182C2;
-	Thu,  9 Nov 2023 10:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BEA219445;
+	Thu,  9 Nov 2023 10:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fc9VgENE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="IHSMPuWY"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB911802E
-	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 10:13:41 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F182D72
-	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 02:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699524819;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3rYhpoB4lYmS4MLIzZUo4ZMf6R8bUZVPeYV6RdLZieo=;
-	b=Fc9VgENEm2PmhajBqiD0Bt6akMJUrQf1W7VLT/FaQ2jffXs7/DpjVkYMiXfSeTSlZsUIpD
-	XOa9icpjTB9LBy9OznyZG270mCoQnl3xVDwvdPu91coidzV/RW+RXB6vn1cSlu2DBIsRz2
-	cC5DVn5IKgsfsh8erOnphvYnwKZlQ3Y=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-462-Je5fXkCTPQiCv6B7dtsAXA-1; Thu, 09 Nov 2023 05:13:37 -0500
-X-MC-Unique: Je5fXkCTPQiCv6B7dtsAXA-1
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2800be2d781so188007a91.1
-        for <linux-arch@vger.kernel.org>; Thu, 09 Nov 2023 02:13:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699524814; x=1700129614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3rYhpoB4lYmS4MLIzZUo4ZMf6R8bUZVPeYV6RdLZieo=;
-        b=RePBtyqY3M66cT4hv9+OPOaU1B3EFYRF/1xirhXF+3kTtEUx9ROutm4QJApe4sOdSd
-         c3fZOVK/O2/3DCbKYXa0yNyMhz3wDtSKH5MJVhpRAZtkoOxXfgxp4xe2KmFyU5wWZH31
-         u9AL8DyjfllkzhpbguPWSD01ecCNScBWI8OKJdLKuTHHuip2LTKtsy0hFX6jhjJvrIKD
-         peblqRrK2sfw7YQWUTBPKdM1yHbhL6WHIFzhYbsy1Ruo0ESC46TuPEc4k893uAbliz/A
-         IAoU3F4w+BctN3474e0QefihXp5fbzj4Jb/OX8+FF9PsYmRDIJOo/kozqesfDEQD/NBO
-         ef7A==
-X-Gm-Message-State: AOJu0YxaZ4V0iM7CYPWsM3RhsD7AsnVXy/I6KXMfVeD5oR5whPNSVcxw
-	AAxUy9g2wrqpJYMNxd7opp1V3Pl3x44usOyptOg2U/bJfLyqqIei8TiNmIhp4JRaevDYbREbsHJ
-	6gqF4YNsML7vYj8xoeCRvog==
-X-Received: by 2002:a17:903:120e:b0:1cc:ebe:5547 with SMTP id l14-20020a170903120e00b001cc0ebe5547mr5043356plh.0.1699524813768;
-        Thu, 09 Nov 2023 02:13:33 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGMYccyPUYXdRLbiWAt/Rrr2lff8DkVfjHrlmnPr9rVOEThxcSXfzeRdAMTZ0+vEY8CCgW5xw==
-X-Received: by 2002:a17:903:120e:b0:1cc:ebe:5547 with SMTP id l14-20020a170903120e00b001cc0ebe5547mr5043330plh.0.1699524813447;
-        Thu, 09 Nov 2023 02:13:33 -0800 (PST)
-Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902e74200b001c60a2b5c61sm3165370plf.134.2023.11.09.02.13.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 02:13:33 -0800 (PST)
-Message-ID: <6341a77d-ba42-3f3a-4a2a-b598fb5c0e20@redhat.com>
-Date: Thu, 9 Nov 2023 18:13:26 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC8019444;
+	Thu,  9 Nov 2023 10:29:37 +0000 (UTC)
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5D211B;
+	Thu,  9 Nov 2023 02:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=k2gkeOQrNAEjn39cRXCfbpgo6HGUJfn9iHjQZ+mCvpE=; b=IHSMPuWYcuLCdYJoZFFHEG8thf
+	9jhhPJSykRLloUzaTWB4BUbFOkPu8loXs39HW9H8x4N5rRmEh38UyjZQIwLCF0Afp6ktJOPMGz+Xf
+	ueHVW9YySJOX2vw4OEy4zJjjj4EE5/zCN4jUZNjweQ9e8s8yknfigbErHK8XcLW/MiKh9Qn+PPDBV
+	DU5IAe2iD5JjtMfuW7zFqO82ZzKbT9eSsLuUBjL5fihCHqnuQjdhggMMaZMgZPerYH9MCj0pvIhb5
+	iSXhbPROGKwd+XCrFhhcWjsE88bL9nzHMW3hg2V8Cza4PBuLBnLCJhi8oPMvNNVaX/vdxFPFI/N2i
+	AjY9v+WA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40426)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1r12Hx-0002KD-09;
+	Thu, 09 Nov 2023 10:29:29 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1r12Hv-0000TA-GL; Thu, 09 Nov 2023 10:29:27 +0000
+Date: Thu, 9 Nov 2023 10:29:27 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Shaoqin Huang <shahuang@redhat.com>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, linux-csky@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH RFC 06/22] drivers: base: Use present CPUs in
+ GENERIC_CPU_DEVICES
+Message-ID: <ZUy0h/lc3QCPsuU8@shell.armlinux.org.uk>
+References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+ <E1r0JLB-00CTwy-7y@rmk-PC.armlinux.org.uk>
+ <f00dd1cf-5b4c-38a8-a337-817d474d53d1@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH RFC 07/22] drivers: base: Allow parts of
- GENERIC_CPU_DEVICES to be overridden
-Content-Language: en-US
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org,
- linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
-Cc: Salil Mehta <salil.mehta@huawei.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
- justin.he@arm.com, James Morse <james.morse@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JLG-00CTx8-CG@rmk-PC.armlinux.org.uk>
-From: Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <E1r0JLG-00CTx8-CG@rmk-PC.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f00dd1cf-5b4c-38a8-a337-817d474d53d1@redhat.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
+On Thu, Nov 09, 2023 at 06:09:32PM +0800, Shaoqin Huang wrote:
+> Hi Russell,
+> 
+> On 11/7/23 18:29, Russell King (Oracle) wrote:
+> > From: James Morse <james.morse@arm.com>
+> > 
+> > Three of the five ACPI architectures create sysfs entries using
+> > register_cpu() for present CPUs, whereas arm64, riscv and all
+> > GENERIC_CPU_DEVICES do this for possible CPUs.
+> > 
+> > Registering a CPU is what causes them to show up in sysfs.
+> > 
+> > It makes very little sense to register all possible CPUs. Registering
+> > a CPU is what triggers the udev notifications allowing user-space to
+> > react to newly added CPUs.
+> > 
+> > To allow all five ACPI architectures to use GENERIC_CPU_DEVICES, change
+> > it to use for_each_present_cpu(). Making the ACPI architectures use
+> > GENERIC_CPU_DEVICES is a pre-requisite step to centralise their
+> > cpu_register() logic, before moving it into the ACPI processor driver.
+> > When ACPI is disabled this work would be done by
+> > cpu_dev_register_generic().
+> 
+> What do you actually mean about when ACPI is disabled this work would be
 
+Firstly, please note that "you" is not appropriate here. This is James'
+commit message, not mine.
 
-On 11/7/23 18:29, Russell King (Oracle) wrote:
-> From: James Morse <james.morse@arm.com>
-> 
-> Architectures often have extra per-cpu work that needs doing
-> before a CPU is registered, often to determine if a CPU is
-> hotpluggable.
-> 
-> To allow the ACPI architectures to use GENERIC_CPU_DEVICES, move
-> the cpu_register() call into arch_register_cpu(), which is made __weak
-> so architectures with extra work can override it.
-> This aligns with the way x86, ia64 and loongarch register hotplug CPUs
-> when they become present.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
-> Changes since RFC:
->   * Dropped __init from x86/ia64 arch_register_cpu()
-> Changes since RFC v2:
->   * Dropped unnecessary Loongarch asm/cpu.h changes
-> ---
->   drivers/base/cpu.c  | 14 ++++++++++----
->   include/linux/cpu.h |  4 ++++
->   2 files changed, 14 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index 34b48f660b6b..579064fda97b 100644
-> --- a/drivers/base/cpu.c
-> +++ b/drivers/base/cpu.c
-> @@ -525,19 +525,25 @@ bool cpu_is_hotpluggable(unsigned int cpu)
->   EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
->   
->   #ifdef CONFIG_GENERIC_CPU_DEVICES
-> -static DEFINE_PER_CPU(struct cpu, cpu_devices);
-> +DEFINE_PER_CPU(struct cpu, cpu_devices);
-> +
-> +int __weak arch_register_cpu(int cpu)
-> +{
-> +	return register_cpu(&per_cpu(cpu_devices, cpu), cpu);
-> +}
->   #endif
->   
->   static void __init cpu_dev_register_generic(void)
->   {
-> -#ifdef CONFIG_GENERIC_CPU_DEVICES
->   	int i;
->   
-> +	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
-> +		return;
-> +
->   	for_each_present_cpu(i) {
-> -		if (register_cpu(&per_cpu(cpu_devices, i), i))
-> +		if (arch_register_cpu(i))
->   			panic("Failed to register CPU device");
->   	}
-> -#endif
->   }
->   
->   #ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
-> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-> index fc8094419084..1e982d63eae8 100644
-> --- a/include/linux/cpu.h
-> +++ b/include/linux/cpu.h
-> @@ -88,6 +88,10 @@ extern ssize_t arch_cpu_probe(const char *, size_t);
->   extern ssize_t arch_cpu_release(const char *, size_t);
->   #endif
->   
-> +#ifdef CONFIG_GENERIC_CPU_DEVICES
-> +DECLARE_PER_CPU(struct cpu, cpu_devices);
-> +#endif
-> +
->   /*
->    * These states are not related to the core CPU hotplug mechanism. They are
->    * used by various (sub)architectures to track internal state
+> done by cpu_dev_register_generic()? Is the work means register the cpu?
+
+When ACPI is disabled _and_ CONFIG_GENERIC_CPU_DEVICES is enabled, then
+cpu_dev_register_generic() will call arch_register_cpu() for each present
+CPU after this commit, rather than for each _possible_ CPU (which is the
+actual code change here.)
+
+> I'm not quite understand that, and how about when ACPI is enabled, which
+> function do this work?
+
+This is what happens later in the series.
+
+"drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden"
+adds a test for CONFIG_GENERIC_CPU_DEVICES, so this will only be used
+with architectures using GENERIC_CPU_DEVICES. Then in:
+
+"ACPI: processor: Register all CPUs from acpi_processor_get_info()"
+which is not part of this series, this adds a call to arch_register_cpu()
+in the ACPI code, and disables this path via a test for !acpi_disabled.
+
+Essentially, this path gets used to register the present CPUs when
+firmware (ACPI) isn't going to be registering the present CPUs.
+
+I've changed this to:
+
+"It makes very little sense to register all possible CPUs. Registering
+a CPU is what triggers the udev notifications allowing user-space to
+react to newly added CPUs.
+
+"To allow all five ACPI architectures to use GENERIC_CPU_DEVICES, change
+it to use for_each_present_cpu().
+
+"Making the ACPI architectures use GENERIC_CPU_DEVICES is a pre-requisite
+step to centralise their register_cpu() logic, before moving it into the
+ACPI processor driver. When we add support for register CPUs from ACPI
+in a later patch, we will avoid registering CPUs in this path."
+
+which I hope makes it clearer.
+
+> > After this change, openrisc and hexagon systems that use the max_cpus
+> > command line argument would not see the other CPUs present in sysfs.
+> > This should not be a problem as these CPUs can't bre brought online as
+>                                              ^ nit: can't be
+
+Thanks, I'll fix that.
 
 -- 
-Shaoqin
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
