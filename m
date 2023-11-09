@@ -1,114 +1,137 @@
-Return-Path: <linux-arch+bounces-91-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-92-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B18AD7E6661
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 10:14:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014AE7E66C0
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 10:29:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1CB81C20B08
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 09:14:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78AC31F21616
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Nov 2023 09:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879B711197;
-	Thu,  9 Nov 2023 09:14:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g8SWf5T5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D903125CF;
+	Thu,  9 Nov 2023 09:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3908CEC9
-	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 09:14:45 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731C52702
-	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 01:14:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699521283;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rlxAh75JGCxuVSjk/DiobkLepAxu5g+JZPGhaCfgbCo=;
-	b=g8SWf5T5KQhsMCNRpnKP337QbtoffTbXYNZ2hm897463pyLRVGy0vGnrokcH1/cgbk+RwW
-	QcOVpdrHsnyg7Z2lWcOOMdFZROTsV9RTFxNAz7HSBb32vZ7ti7Nj96H4iM+49GaoltZXZG
-	g2wSY5UgZcugITOr6chcsGGXrN7gf7A=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-138-cuyxQyJ1OReXAxV55ZDaxA-1; Thu, 09 Nov 2023 04:14:41 -0500
-X-MC-Unique: cuyxQyJ1OReXAxV55ZDaxA-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9bfbc393c43so15947766b.1
-        for <linux-arch@vger.kernel.org>; Thu, 09 Nov 2023 01:14:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699521280; x=1700126080;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rlxAh75JGCxuVSjk/DiobkLepAxu5g+JZPGhaCfgbCo=;
-        b=Fl4MMFA2OPpFTbF8E1FJ8H4MKkWyZU7djzWIA4Qq+Z2V7oJapav9iDONAsHVjqCtLl
-         gKUW3CE7+DsQ2INslsnXGZ5J+1rFKgz2j6uU79V+StnafbXBa0L98c/jkwRhCA+aQ+Xs
-         sRS7zP91Qq/FX8FdlWJjyd/OcwTTJ4aoDd/DBfPfFhSJGIpN848SDhXFagdOHDQ0VqEQ
-         Fvq21ngjTJktw0OA8awhS29Bis4F72UWTtg8nV93ziXWKy2o8quuuodyKTnSCwdq+Zi5
-         kOLPk/kaSRGeCbCFUY9lsM9LCdRumXQhLSo05bGFLm2ffXi0fxyPPRbkRu0uS1HmZ+s2
-         Zsjg==
-X-Gm-Message-State: AOJu0YzZSuarqLmreuU+ErAhGsxHk/qSrWBn5bXw43bee2tGA0jzFXpz
-	mp4GUA3vH4pyFakA3yrHCIivh69pFLidKvrXPRnMs1sUoOr0/yS4s3eRbhG3MZiHUFLFxsM5VAC
-	sJ3a4UoNj3Zf28MKwWYxqCQ==
-X-Received: by 2002:a17:906:e84:b0:9e3:a1a9:3db3 with SMTP id p4-20020a1709060e8400b009e3a1a93db3mr3052487ejf.0.1699521280330;
-        Thu, 09 Nov 2023 01:14:40 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFrN7rWZV1LJySiH/LlJHce45p7c2N1o4c7lFbPUX87ekT7bdY/faJ0o5ksbIAqMgIYGTojqQ==
-X-Received: by 2002:a17:906:e84:b0:9e3:a1a9:3db3 with SMTP id p4-20020a1709060e8400b009e3a1a93db3mr3052473ejf.0.1699521280043;
-        Thu, 09 Nov 2023 01:14:40 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
-        by smtp.gmail.com with ESMTPSA id dv16-20020a170906b81000b009a1c05bd672sm2252071ejb.127.2023.11.09.01.14.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 01:14:39 -0800 (PST)
-Message-ID: <adde2b31fdd9e7bb4a09f0073580b840bea0bab1.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 08/12] net: support non paged skb frags
-From: Paolo Abeni <pabeni@redhat.com>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, Willem de
- Bruijn <willemdebruijn.kernel@gmail.com>,  Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Christian =?ISO-8859-1?Q?K=F6nig?=
- <christian.koenig@amd.com>, Shakeel Butt <shakeelb@google.com>, Jeroen de
- Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Date: Thu, 09 Nov 2023 10:14:37 +0100
-In-Reply-To: <20231106024413.2801438-9-almasrymina@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A7011CA9;
+	Thu,  9 Nov 2023 09:29:06 +0000 (UTC)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F012590;
+	Thu,  9 Nov 2023 01:29:06 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SQxQS1bmVz1P86p;
+	Thu,  9 Nov 2023 17:25:52 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 9 Nov
+ 2023 17:29:01 +0800
+Subject: Re: [RFC PATCH v3 04/12] netdev: support binding dma-buf to netdevice
+To: Mina Almasry <almasrymina@google.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
+	<christian.koenig@amd.com>, Shakeel Butt <shakeelb@google.com>, Jeroen de
+ Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 References: <20231106024413.2801438-1-almasrymina@google.com>
-	 <20231106024413.2801438-9-almasrymina@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+ <20231106024413.2801438-5-almasrymina@google.com>
+ <1fee982f-1e96-4ae8-ede0-7e57bf84c5f7@huawei.com>
+ <CAHS8izPV3isMWyjFnr7bJDDPANg-zm_M=UbHyuhYWv1Viy7fRw@mail.gmail.com>
+ <c1b689bd-a05b-85e9-0ce4-7264c818c2dc@huawei.com>
+ <CAHS8izMXkaGE_jqYJJk9KpfxWEYDu95XAJNqajws57QWV2yRJQ@mail.gmail.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <80b4022f-45d1-03e9-56e1-e797c0107786@huawei.com>
+Date: Thu, 9 Nov 2023 17:29:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAHS8izMXkaGE_jqYJJk9KpfxWEYDu95XAJNqajws57QWV2yRJQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 
-On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
-[...]
-> @@ -3421,7 +3446,7 @@ static inline struct page *skb_frag_page(const skb_=
-frag_t *frag)
->   */
->  static inline void __skb_frag_ref(skb_frag_t *frag)
->  {
-> -	get_page(skb_frag_page(frag));
-> +	page_pool_page_get_many(frag->bv_page, 1);
+On 2023/11/9 10:22, Mina Almasry wrote:
+> On Tue, Nov 7, 2023 at 7:40 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> On 2023/11/8 5:59, Mina Almasry wrote:
+>>> On Mon, Nov 6, 2023 at 11:46 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>>>
+>>>> On 2023/11/6 10:44, Mina Almasry wrote:
+>>>>> +
+>>>>> +void __netdev_devmem_binding_free(struct netdev_dmabuf_binding *binding)
+>>>>> +{
+>>>>> +     size_t size, avail;
+>>>>> +
+>>>>> +     gen_pool_for_each_chunk(binding->chunk_pool,
+>>>>> +                             netdev_devmem_free_chunk_owner, NULL);
+>>>>> +
+>>>>> +     size = gen_pool_size(binding->chunk_pool);
+>>>>> +     avail = gen_pool_avail(binding->chunk_pool);
+>>>>> +
+>>>>> +     if (!WARN(size != avail, "can't destroy genpool. size=%lu, avail=%lu",
+>>>>> +               size, avail))
+>>>>> +             gen_pool_destroy(binding->chunk_pool);
+>>>>
+>>>>
+>>>> Is there any other place calling the gen_pool_destroy() when the above
+>>>> warning is triggered? Do we have a leaking for binding->chunk_pool?
+>>>>
+>>>
+>>> gen_pool_destroy BUG_ON() if it's not empty at the time of destroying.
+>>> Technically that should never happen, because
+>>> __netdev_devmem_binding_free() should only be called when the refcount
+>>> hits 0, so all the chunks have been freed back to the gen_pool. But,
+>>> just in case, I don't want to crash the server just because I'm
+>>> leaking a chunk... this is a bit of defensive programming that is
+>>> typically frowned upon, but the behavior of gen_pool is so severe I
+>>> think the WARN() + check is warranted here.
+>>
+>> It seems it is pretty normal for the above to happen nowadays because of
+>> retransmits timeouts, NAPI defer schemes mentioned below:
+>>
+>> https://lkml.kernel.org/netdev/168269854650.2191653.8465259808498269815.stgit@firesoul/
+>>
+>> And currently page pool core handles that by using a workqueue.
+> 
+> Forgive me but I'm not understanding the concern here.
+> 
+> __netdev_devmem_binding_free() is called when binding->ref hits 0.
+> 
+> binding->ref is incremented when an iov slice of the dma-buf is
+> allocated, and decremented when an iov is freed. So,
+> __netdev_devmem_binding_free() can't really be called unless all the
+> iovs have been freed, and gen_pool_size() == gen_pool_avail(),
+> regardless of what's happening on the page_pool side of things, right?
 
-I guess the above needs #ifdef CONFIG_PAGE_POOL guards and explicit
-skb_frag_is_page_pool_iov() check ?
+I seems to misunderstand it. In that case, it seems to be about
+defensive programming like other checking.
 
+By looking at it more closely, it seems napi_frag_unref() call
+page_pool_page_put_many() directly， which means devmem seems to
+be bypassing the napi_safe optimization.
 
-Cheers,
+Can napi_frag_unref() reuse napi_pp_put_page() in order to reuse
+the napi_safe optimization?
 
-Paolo
-
+> 
 
