@@ -1,133 +1,124 @@
-Return-Path: <linux-arch+bounces-111-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-112-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49D187E781C
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Nov 2023 04:37:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C5357E799D
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Nov 2023 07:54:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE61CB20DB3
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Nov 2023 03:37:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF08D2811A2
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Nov 2023 06:54:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA9D1869;
-	Fri, 10 Nov 2023 03:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C956AB2;
+	Fri, 10 Nov 2023 06:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b5345Xd4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4e5BoRhI"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0331848
-	for <linux-arch@vger.kernel.org>; Fri, 10 Nov 2023 03:37:25 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4C12D6B
-	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 19:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699587444;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pROeszy9ePncz4nZyjZpb065/8N1ucMk0OODbP+hams=;
-	b=b5345Xd4CfAHxovucD90DpRX2u+HjGodmOo2tM1PmGl9pbs2YS6YMFg3bqB0yoWOn1BbbP
-	kSRaQ7GbD/VFxoBBbMZmqlPSaliyNc6mf939PPMsN/5At0ps8De3tzo/lvpMo0Zeyv3N1Z
-	QtstkZ2hLbue4IfyLhwRBcqnee8hqNw=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-352-gBakX54iMz6zSJBp00u63w-1; Thu, 09 Nov 2023 22:37:23 -0500
-X-MC-Unique: gBakX54iMz6zSJBp00u63w-1
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3b2ec6de4e4so63834b6e.1
-        for <linux-arch@vger.kernel.org>; Thu, 09 Nov 2023 19:37:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E86B6AB1
+	for <linux-arch@vger.kernel.org>; Fri, 10 Nov 2023 06:53:57 +0000 (UTC)
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABD87EEB
+	for <linux-arch@vger.kernel.org>; Thu,  9 Nov 2023 22:53:56 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7789cc5c8ccso148303885a.0
+        for <linux-arch@vger.kernel.org>; Thu, 09 Nov 2023 22:53:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699599235; x=1700204035; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eHJDdNWZZ4tIwkHZEN1gC9OcT0HCJr1RVppBH6tmUws=;
+        b=4e5BoRhI2H4vAa/oZz6RgXvPGcebmjtO54p5v4TsY5n9LtMJ+4Z92mHXZUmlZBdc93
+         +WZD5SvaCX9MGl7VRDDhXR8heYXCFH14k/jOSMGY4Nva045GlY3vwzli1zgB6xQP+Vz6
+         KKB8JYTTQNpqyV4N5TFnSTaXzTN7nMx1Mh86tUPvyViOvsizxXnCY9cB00iFsYDhwZR5
+         BMbGMsL+ZLUh6VZz2st3/Z2GwvlQCR/a7NCkHZwCwrEaq4O9MpOHpfnLJogX+hcxdZu2
+         +KK3vW4spqqjLtQJC+8vxSUlCETpSs4C7zkKCmUVgNxgf32CzXlOva1QF4H/3yizCSTx
+         iftw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699587442; x=1700192242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pROeszy9ePncz4nZyjZpb065/8N1ucMk0OODbP+hams=;
-        b=vc4EbPLa6oYFYkjxbeopUo7RBFuIatj3mPenmpguGEpC9cX4Oy2FuHpaBuQwhnx5li
-         aL+iSWOOT2B+a+eXlD1sbZXx5JLaKh0vG7EEJqEs2KjPTZ7fgjedfnEQH+aKFPZckN6Q
-         LUt+K7u9yY2VObiJ06kyf7RP6eU9rtCwEQacykKgwz33jfnO3sU0ePCsqBW1h0y2xYB2
-         vquQxgVKSXCTTxWefrU/Jd2fJqNacPqraT1cnU0Cb7s6qwI/+jt2oIWxyYoqMpaeyj9A
-         cd8xdMdCiBctWj8C/23urNLol4P1XcII0SrTucTbThas2PBde0KVFTFa1wZF6p9xYhmD
-         QllA==
-X-Gm-Message-State: AOJu0YwUfa5hbtHy46EoR26e2SyuulIzjqov8x584q2lIphNU1NJ9amH
-	BwnK8Ha/p26hbY0tnWlnGP7n6UT2PYQKycRuydUrzXVUHI+poatq0TMw9f0xzlEf1y3YUZQd+VQ
-	OMjS+5WB22GW744GViigyvA==
-X-Received: by 2002:a05:6808:199c:b0:3a9:e8e2:579d with SMTP id bj28-20020a056808199c00b003a9e8e2579dmr8276246oib.2.1699587442423;
-        Thu, 09 Nov 2023 19:37:22 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFPdXOyaUAzV6aldemEymWFIQu5uK8SS6EoZEeBtta4Ue7SEB3JH44cFaCIyyqf1iZkLKsTPg==
-X-Received: by 2002:a05:6808:199c:b0:3a9:e8e2:579d with SMTP id bj28-20020a056808199c00b003a9e8e2579dmr8276228oib.2.1699587442206;
-        Thu, 09 Nov 2023 19:37:22 -0800 (PST)
-Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id e8-20020a63d948000000b005a9b20408a7sm5370547pgj.23.2023.11.09.19.37.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 19:37:21 -0800 (PST)
-Message-ID: <fd78bb81-1f83-13a4-ec37-3fe0cd040ec0@redhat.com>
-Date: Fri, 10 Nov 2023 11:37:16 +0800
+        d=1e100.net; s=20230601; t=1699599235; x=1700204035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eHJDdNWZZ4tIwkHZEN1gC9OcT0HCJr1RVppBH6tmUws=;
+        b=R/NFLrwuyanuYWlJdQcELgdcgx8NrxPp/Cr/appdyAYmXsYzPawydrORrb5c72mz+k
+         SPkDEf46VnXHZ1k5PMfuIAFAR9A7JOEgUFl9BivB4KIIspByx2U9BGQIDeWUnuXLWHdB
+         DjqluSz7h1WDMCXQ7hsSOlKD8x1sCDIsayNmDtnCul1rNRdXuMCk4LITRZhLP3ta+2o5
+         gPvTeIBMyaU/q5xTIFBQfSJTaKIhuV3Tb/d/xt/J0ecnzafMY0sg9DmCZq2PJjZqYINl
+         rTWK7dxD6zH/7W27PX2JWRMo1x09FAh+5nmPQviRcII/hkXQ5Nb8HixPNAmrC2yvAN5N
+         LnNw==
+X-Gm-Message-State: AOJu0Yw3C93B6F/iCqEiSuU2QRQjvrubC1ILeFdAHQylREkz/Qj8m9uf
+	qKexbvUoqOiNGU/U+fRfNiLe+WVvrW5R8LX/Z2wlepovIKdQAdtfrnE=
+X-Google-Smtp-Source: AGHT+IHV8+0MFbC/VQpqHkvElGy/RL/z/ISeA+lbF9gB7A+2xFrkzHZehvrtNrke+02jjGbQaJXjvKRk/eDFLYB8QzU=
+X-Received: by 2002:a05:6102:3d8b:b0:44d:38d6:5cb8 with SMTP id
+ h11-20020a0561023d8b00b0044d38d65cb8mr631035vsv.10.1699589171185; Thu, 09 Nov
+ 2023 20:06:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH RFC 14/22] arm64: convert to arch_cpu_is_hotpluggable()
-Content-Language: en-US
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org,
- linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
-Cc: Salil Mehta <salil.mehta@huawei.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
- justin.he@arm.com, James Morse <james.morse@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JLq-00CTxq-CF@rmk-PC.armlinux.org.uk>
-From: Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <E1r0JLq-00CTxq-CF@rmk-PC.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-9-almasrymina@google.com> <adde2b31fdd9e7bb4a09f0073580b840bea0bab1.camel@redhat.com>
+In-Reply-To: <adde2b31fdd9e7bb4a09f0073580b840bea0bab1.camel@redhat.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 9 Nov 2023 20:06:00 -0800
+Message-ID: <CAHS8izMrJVb0ESjFhqUWuxdZ8W5HDmg=yRj1J1sTeGoQjDcJog@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 08/12] net: support non paged skb frags
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Nov 9, 2023 at 1:15=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
+> [...]
+> > @@ -3421,7 +3446,7 @@ static inline struct page *skb_frag_page(const sk=
+b_frag_t *frag)
+> >   */
+> >  static inline void __skb_frag_ref(skb_frag_t *frag)
+> >  {
+> > -     get_page(skb_frag_page(frag));
+> > +     page_pool_page_get_many(frag->bv_page, 1);
+>
+> I guess the above needs #ifdef CONFIG_PAGE_POOL guards and explicit
+> skb_frag_is_page_pool_iov() check ?
+>
+
+It doesn't actually. page_pool_page_* helpers are compiled in
+regardless of CONFIG_PAGE_POOL, and handle both page_pool_iov* & page*
+just fine (the checking happens inside the function).
+
+You may yell at me that it's too confusing... I somewhat agree, but
+I'm unsure of what is a better name or location for the helpers. The
+helpers handle (page_pool_iov* || page*) gracefully, so they seem to
+belong in the page pool for me, but it is indeed surprising/confusing
+that these helpers are available even if !CONFIG_PAGE_POOL.
+
+>
+> Cheers,
+>
+> Paolo
+>
+>
 
 
-
-On 11/7/23 18:30, Russell King (Oracle) wrote:
-> Convert arm64 to use the arch_cpu_is_hotpluggable() helper rather than
-> arch_register_cpu().
-> 
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
->   arch/arm64/kernel/setup.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-> index 165bd2c0dd5a..42c690bb2d60 100644
-> --- a/arch/arm64/kernel/setup.c
-> +++ b/arch/arm64/kernel/setup.c
-> @@ -402,13 +402,9 @@ static inline bool cpu_can_disable(unsigned int cpu)
->   	return false;
->   }
->   
-> -int arch_register_cpu(int num)
-> +bool arch_cpu_is_hotpluggable(int num)
->   {
-> -	struct cpu *cpu = &per_cpu(cpu_devices, num);
-> -
-> -	cpu->hotpluggable = cpu_can_disable(num);
-> -
-> -	return register_cpu(cpu, num);
-> +	return cpu_can_disable(num);
->   }
->   
->   static void dump_kernel_offset(void)
-
--- 
-Shaoqin
-
+--=20
+Thanks,
+Mina
 
