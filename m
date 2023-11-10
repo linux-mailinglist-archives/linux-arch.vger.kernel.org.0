@@ -1,58 +1,69 @@
-Return-Path: <linux-arch+bounces-122-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-123-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A8167E8658
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Nov 2023 00:16:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3467B7E8669
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Nov 2023 00:17:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F355D280F0E
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Nov 2023 23:16:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF3F0B20B56
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Nov 2023 23:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4AC3D3B8;
-	Fri, 10 Nov 2023 23:16:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB813D3AF;
+	Fri, 10 Nov 2023 23:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iVuzaAhc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgPe1WP3"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35E91B299;
-	Fri, 10 Nov 2023 23:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D168C433C8;
-	Fri, 10 Nov 2023 23:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B681945B;
+	Fri, 10 Nov 2023 23:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B48C433C7;
+	Fri, 10 Nov 2023 23:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699658191;
-	bh=lp6MUfcnlWg0MaE5+BDw4kORckYukPsXO/JArSSKHJ0=;
+	s=k20201202; t=1699658232;
+	bh=DgVOmmZyh3PXIlWFtVjMUaKArXLuCBtm1eqxE6u0RQs=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iVuzaAhclFKl7LeZxL1NI8Ry5+2sm28Vs5NzEPoZdxbe3go12IaDJWLkU1qciBkSM
-	 whBYgKfAUNPBSEhJE4QJ7XezrNh7jGDkV5xIkVM0WEaslaTziGDnt7EcXARHStWAV+
-	 X6UvXOaaioy3gynvYEIjRXId9KFFQwsnC44K5pRX/XKXmzuJmcbveiUyk5oASlRWGl
-	 kJorEGqFqwRuYuDjtmNfv3ReaToE+lgcd+/1MwmRx/qDbHlD4itRI3rUiLvAhgRsE6
-	 /3K9PErcilfL1+yDjqcvhNbjPdvssNyP6Hk78Zm7WjFtgVSVlPYeMoU0i4fqtJVGeA
-	 dQ6M9ylbMVj5Q==
-Date: Fri, 10 Nov 2023 15:16:29 -0800
+	b=IgPe1WP3NH7aJqiPGbFf01nnZ3S9WWaPDdxWlqeYzs9iaDXsoDvv2dqwKir3GxS/8
+	 ovIfqe7IwZnmwI9MvJbsCTwHRj4470U3s09zOeVzdZc/YZ2sZAar9hq9ndnbCwoiF8
+	 KPicEYVkTbWf2SWOfHTrvLpJWh7+lddI4LXveik/S0m5YQEgD8OwusdxvhMnijrwp3
+	 QbeMiiInT7XxDlesibExVQDmqs0ZhzwtrM7mq3HcqWj+OtiNDqLoDWk/RiwPdsfMrP
+	 +fEJD6tHAp1grxD54ay+pE7B6chuXtshliijsxPD1JgQiX16WMoSN6FtvZ78OGNuwC
+	 //C01sLxUSBsQ==
+Date: Fri, 10 Nov 2023 15:17:10 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: Stanislav Fomichev <sdf@google.com>
+Cc: Eric Dumazet <edumazet@google.com>, Mina Almasry
+ <almasrymina@google.com>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, David Ahern <dsahern@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
  linaro-mm-sig@lists.linaro.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
- <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- "Christian =?UTF-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Shakeel Butt
- <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
- Kaligineedi <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
-Subject: Re: [RFC PATCH v3 03/12] net: netdev netlink api to bind dma-buf to
- a net device
-Message-ID: <20231110151629.047b1389@kernel.org>
-In-Reply-To: <20231106024413.2801438-4-almasrymina@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
-	<20231106024413.2801438-4-almasrymina@google.com>
+ Paolo Abeni <pabeni@redhat.com>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, Sumit Semwal
+ <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Shakeel Butt <shakeelb@google.com>, Jeroen de
+ Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH v3 09/12] net: add support for skbs with unreadable
+ frags
+Message-ID: <20231110151710.2ceded75@kernel.org>
+In-Reply-To: <ZUq42Po1Pn-9QxrM@google.com>
+References: <CAHS8izMaAhoae5ChnzO4gny1cYYnqV1cB8MC2cAF3eoyt+Sf4A@mail.gmail.com>
+	<ZUlvzm24SA3YjirV@google.com>
+	<CAHS8izMQ5Um_ScY0VgAjaEaT-hRh4tFoTgc6Xr9Tj5rEj0fijA@mail.gmail.com>
+	<CAKH8qBsbh8qYxNHZ6111RQFFpNWbWZtg0LDXkn15xcsbAq4R6w@mail.gmail.com>
+	<CAF=yD-+BuKXoVL8UF+No1s0TsHSzBTz7UrB1Djt_BrM74uLLcg@mail.gmail.com>
+	<CAHS8izNxKHhW5uCqmfau6n3c18=hE3RXzA+ng5LEGiKj12nGcg@mail.gmail.com>
+	<ZUmNk98LyO_Ntcy7@google.com>
+	<CAHS8izNTDsHTahkd17zQVQnjzniZAk-dKNs-Mq0E4shdrXOJbg@mail.gmail.com>
+	<ZUqms8QzQpfPQWyy@google.com>
+	<CANn89iJNR8bYYBO92=f5_2hFoTK8+giH11o-7NHURoahwvV11w@mail.gmail.com>
+	<ZUq42Po1Pn-9QxrM@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -62,21 +73,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun,  5 Nov 2023 18:44:02 -0800 Mina Almasry wrote:
-> +      -
-> +        name: queues
-> +        doc: receive queues to bind the dma-buf to.
-> +        type: u32
-> +        multi-attr: true
+On Tue, 7 Nov 2023 14:23:20 -0800 Stanislav Fomichev wrote:
+> Can we mark a socket as devmem-only? Do we have any use-case for those
+> hybrid setups? Or, let me put it that way: do we expect API callers
+> to handle both linear and non-linear cases correctly?
+> As a consumer of the previous versions of these apis internally,
+> I find all those corner cases confusing :-( Hence trying to understand
+> whether we can make it a bit more rigid and properly defined upstream.
 
-I think that you should throw in the queue type.
-I know you made the op imply RX:
+FWIW I'd also prefer to allow mixing. "Some NICs" can decide HDS
+very flexibly, incl. landing full jumbo frames into the "headers".
 
-> +    -
-> +      name: bind-rx
-
-but if we decide to create a separate "type" for some magic 
-queue type one day we'll have to ponder how to extend this API
-
-IMHO queue should be identified by a <type, id> tuple, always.
+There's no sender API today to signal how to mark the data for
+selective landing,  but if Mina already has the rx side written 
+to allow that...
 
