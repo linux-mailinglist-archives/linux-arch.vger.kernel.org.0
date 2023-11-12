@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-171-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-172-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0004C7E8EC3
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACA527E8EC4
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:19:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADC8E280CF0
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:19:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 581B7280CFC
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:19:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CA385394;
-	Sun, 12 Nov 2023 06:19:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD29653A1;
+	Sun, 12 Nov 2023 06:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggOZX2kR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbI2EEzZ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F615386
-	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F1EC433CC;
-	Sun, 12 Nov 2023 06:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23405386
+	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DF4C433CA;
+	Sun, 12 Nov 2023 06:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699769941;
-	bh=qRqp7QPejGbBbu5oKyIM5RFWyLdo559Kq9GxnASTbi4=;
+	s=k20201202; t=1699769947;
+	bh=NRQ3+7zYtWxcLMyaVKQL6b/W2ki6kHtASjhWDkIuCOI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ggOZX2kRI1MtgdsU3XRYcle/m3IZf5lFlvSEYa0dAcFri8lmz9B12mIjqRdjlTXpT
-	 9eFDzbRis6FA35srzfdsZ1u+hdrQQVMKimjV/uEL8gk48FIJWD4Fq7mAEAar6U9BQA
-	 UO4a6fHPSuSWXP7Uof/glDnhRF6GmGUcc2ukCjlha4UnHfycJl2E7Vmx63uepFbtX2
-	 eSwGWL6bq0W+YoWoC5OdGwLBR3dmmolU6lxAdTgevj6QQ9NDteYmG5XgzL4wGhXiFx
-	 mJWrDq5z/7tZHCpCSiEhZE6dgetUMoigTXmlWHhxf6Q40hsyiNK/Qs5ODE9ZGl3gwW
-	 COGIgXRKibzXA==
+	b=VbI2EEzZrCv1lHLtCSo4ml+lsXoi2BDR011BlUq9xT0ZNKfCfIJqP1pKQzJBh8N7g
+	 kiMUAnJS6x4AZgmjx2yE/Ll/Yh2fkJYiBAoM1ZsZW9v4oJc0VHf32QSGCngpncB27v
+	 LrJ7/m8DB/od4SkM4KJERf+onE6k2uJojjXohO3T1P7hGXPF9PwyWGjUI50nFnK721
+	 NoXn00HX/mfQHlJg2099EljXDIxLj0RA4ke7+vHnDG/TY9K29A8ZFU5Obq3R9yBR2D
+	 rgeYSxG2x8DJrDFwGs5DcDwJRy82wG1hlg4UfnC8H60hdWaKQfalzVHUZciXmdD3qd
+	 MVlNJeiEpTn4w==
 From: guoren@kernel.org
 To: arnd@arndb.de,
 	guoren@kernel.org,
@@ -63,9 +63,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH V2 35/38] clocksource: riscv: s64ilp32: Use __riscv_xlen instead of CONFIG_32BIT
-Date: Sun, 12 Nov 2023 01:15:11 -0500
-Message-Id: <20231112061514.2306187-36-guoren@kernel.org>
+Subject: [RFC PATCH V2 36/38] irqchip: riscv: s64ilp32: Use __riscv_xlen instead of CONFIG_32BIT
+Date: Sun, 12 Nov 2023 01:15:12 -0500
+Message-Id: <20231112061514.2306187-37-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20231112061514.2306187-1-guoren@kernel.org>
 References: <20231112061514.2306187-1-guoren@kernel.org>
@@ -85,22 +85,43 @@ must use __riscv_xlen to detect real machine XLEN for CSR access.
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- drivers/clocksource/timer-riscv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/irqchip/irq-riscv-intc.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index da3071b387eb..fe83b4e2005a 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -38,7 +38,7 @@ static int riscv_clock_next_event(unsigned long delta,
+diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+index 4adeee1bc391..ee3514ef4326 100644
+--- a/drivers/irqchip/irq-riscv-intc.c
++++ b/drivers/irqchip/irq-riscv-intc.c
+@@ -22,10 +22,7 @@ static struct irq_domain *intc_domain;
  
- 	csr_set(CSR_IE, IE_TIE);
- 	if (static_branch_likely(&riscv_sstc_available)) {
--#if defined(CONFIG_32BIT)
-+#if __riscv_xlen == 32
- 		csr_write(CSR_STIMECMP, next_tval & 0xFFFFFFFF);
- 		csr_write(CSR_STIMECMPH, next_tval >> 32);
- #else
+ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+ {
+-	unsigned long cause = regs->cause & ~CAUSE_IRQ_FLAG;
+-
+-	if (unlikely(cause >= BITS_PER_LONG))
+-		panic("unexpected interrupt cause");
++	xlen_t cause = regs->cause & ~CAUSE_IRQ_FLAG;
+ 
+ 	generic_handle_domain_irq(intc_domain, cause);
+ }
+@@ -117,7 +114,7 @@ static int __init riscv_intc_init_common(struct fwnode_handle *fn)
+ {
+ 	int rc;
+ 
+-	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
++	intc_domain = irq_domain_create_linear(fn, __riscv_xlen,
+ 					       &riscv_intc_domain_ops, NULL);
+ 	if (!intc_domain) {
+ 		pr_err("unable to add IRQ domain\n");
+@@ -132,7 +129,7 @@ static int __init riscv_intc_init_common(struct fwnode_handle *fn)
+ 
+ 	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
+ 
+-	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
++	pr_info("%d local interrupts mapped\n", __riscv_xlen);
+ 
+ 	return 0;
+ }
 -- 
 2.36.1
 
