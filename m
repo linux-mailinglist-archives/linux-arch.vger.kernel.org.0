@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-163-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-164-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 706CD7E8EB5
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:18:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA6837E8EB6
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:18:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 129661F20F63
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:18:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F3541F20F6B
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957C34410;
-	Sun, 12 Nov 2023 06:18:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB714410;
+	Sun, 12 Nov 2023 06:18:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q9FS9ARU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XzxiUc/r"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CEF440A
-	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 139DCC433C8;
-	Sun, 12 Nov 2023 06:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1ED440A
+	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF689C433CC;
+	Sun, 12 Nov 2023 06:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699769892;
-	bh=Se41gQju7esb4eo2kifFLRU4bWbFiAHi/+vBMhWFQy0=;
+	s=k20201202; t=1699769898;
+	bh=C5/JTwI5wb372y7wWIYf3dQ+SLZcZm+RSCZqId06nPc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q9FS9ARUamXXaaEY7AQz3NchiLDA2ZkD57Sll0hRZts0OLQyJeawiSN2smXN0fSE0
-	 9PCu9cIbHg9iqvXzLl0HAhBfnbf4do6AlWl+bRNTlhzz27lrJqQtK64ckOa9E4hSMK
-	 vIS/YyelQCO8j9btqRE99cEzhSJxcPhTJ7KZcb3yesHRJHsMQD3mArJ9eZS8l5puCe
-	 ab+J9RECiexXhAchKZMaZaCjwLxoOPo+ETD4GaceQQhFDVJ5aOVfz8L1cTVmhjb4pV
-	 7cC/lbI7m1gRb5qiB+sXzaBhgMXzocyyV36Ef52nSiA5IxVqlGcyxRr3ZMG8vsSlfE
-	 nPYSCj8r+4F+g==
+	b=XzxiUc/riiP4tMEJUwggD2u9mRqrLLZ41Aw67HFXqS1bHzAuFmeIH2H5OdveRi8cH
+	 5zztfx/t2iY6XV7eYL8QLHaXv5f+VLVEv0DQBpzv3fhdQ34oepKnhuUHQCRLTAAfmI
+	 BlXFjNTpR4nT0HBy8oRTm2UlXg1Lm37W6+Es2jfbgDfBCMc1rqNVmbOAc2iRrA8GrJ
+	 6R8wIWO+3OcjVbkakLgVpVjgClmWXdTeeqSpyTGCAbCoxFIQVQxFEwORvHlUkG+QQa
+	 oywT+nnivDrE06mlTpUBGGpGzGR1WmPvM77j7UI/6TmlIhpnpuKOcrEvU6Cvpr98bH
+	 HAReT157wq6iw==
 From: guoren@kernel.org
 To: arnd@arndb.de,
 	guoren@kernel.org,
@@ -62,10 +62,11 @@ To: arnd@arndb.de,
 Cc: linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
-	Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH V2 27/38] riscv: s64ilp32: Correct the rv64ilp32 stackframe layout
-Date: Sun, 12 Nov 2023 01:15:03 -0500
-Message-Id: <20231112061514.2306187-28-guoren@kernel.org>
+	Guo Ren <guoren@linux.alibaba.com>,
+	LiaoShihua <shihua@iscas.ac.cn>
+Subject: [RFC PATCH V2 28/38] riscv: s64ilp32: Temporary workaround solution to gcc problem
+Date: Sun, 12 Nov 2023 01:15:04 -0500
+Message-Id: <20231112061514.2306187-29-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20231112061514.2306187-1-guoren@kernel.org>
 References: <20231112061514.2306187-1-guoren@kernel.org>
@@ -79,67 +80,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The callee saved fp & ra are xlen size, not long size. This patch
-corrects the layout for the struct stackframe.
+There is an existing problem in 64ilp32 gcc that combines two pointers
+in one register. Liao is solving that problem. Before he finishes the
+job, we could prevent it with a simple noinline attribute, fortunately.
 
-echo c > /proc/sysrq-trigger
+struct path {
+	struct vfsmount *mnt;
+	struct dentry *dentry;
+} __randomize_layout;
 
-Before the patch:
+struct nameidata {
+        struct path     path;
+        struct qstr     last;
+        struct path     root;
+...
+} __randomize_layout;
 
-sysrq: Trigger a crash
-Kernel panic - not syncing: sysrq triggered crash
-CPU: 0 PID: 102 Comm: sh Not tainted 6.3.0-rc1-00084-g9e2ba938797e-dirty #2
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
----[ end Kernel panic - not syncing: sysrq triggered crash ]---
+	struct nameidata *nd
+	...
+	nd->path = nd->root;
+6c88                	ld	a0,24(s1)
+				^^ // Wrong arg of mntget
+e088                	sd	a0,0(s1)
+	// Need inserting "lw a0,0(s1)" here
+	mntget(path->mnt);
+2a6150ef          	jal	c01ce946 <mntget>
 
-After the patch:
-
-sysrq: Trigger a crash
-Kernel panic - not syncing: sysrq triggered crash
-CPU: 0 PID: 102 Comm: sh Not tainted 6.3.0-rc1-00084-g9e2ba938797e-dirty #1
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<c00050c8>] dump_backtrace+0x1e/0x26
-[<c086dcae>] show_stack+0x2e/0x3c
-[<c0878e00>] dump_stack_lvl+0x40/0x5a
-[<c0878e30>] dump_stack+0x16/0x1e
-[<c086df7c>] panic+0x10c/0x2a8
-[<c04f4c1e>] sysrq_reset_seq_param_set+0x0/0x76
-[<c04f52cc>] __handle_sysrq+0x9c/0x19c
-[<c04f5946>] write_sysrq_trigger+0x64/0x78
-[<c020c7f6>] proc_reg_write+0x4a/0xa2
-[<c01acf0a>] vfs_write+0xac/0x308
-[<c01ad2b8>] ksys_write+0x62/0xda
-[<c01ad33e>] sys_write+0xe/0x16
-[<c0879860>] do_trap_ecall_u+0xd8/0xda
-[<c00037de>] ret_from_exception+0x0/0x66
----[ end Kernel panic - not syncing: sysrq triggered crash ]---
+Any gcc helps are welcome :)
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: LiaoShihua <shihua@iscas.ac.cn>
 ---
- arch/riscv/include/asm/stacktrace.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/namei.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
-index f7e8ef2418b9..cea8aafbecca 100644
---- a/arch/riscv/include/asm/stacktrace.h
-+++ b/arch/riscv/include/asm/stacktrace.h
-@@ -8,7 +8,13 @@
- 
- struct stackframe {
- 	unsigned long fp;
-+#ifdef CONFIG_ARCH_RV64ILP32
-+	unsigned long pad1;
-+#endif
- 	unsigned long ra;
-+#ifdef CONFIG_ARCH_RV64ILP32
-+	unsigned long pad2;
-+#endif
- };
- 
- extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+diff --git a/fs/namei.c b/fs/namei.c
+index e56ff39a79bc..1285736dadc4 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -543,7 +543,7 @@ EXPORT_SYMBOL(inode_permission);
+  *
+  * Given a path increment the reference count to the dentry and the vfsmount.
+  */
+-void path_get(const struct path *path)
++void noinline path_get(const struct path *path)
+ {
+ 	mntget(path->mnt);
+ 	dget(path->dentry);
 -- 
 2.36.1
 
