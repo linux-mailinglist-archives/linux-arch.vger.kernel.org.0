@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-140-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-141-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D41017E8E88
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1E7B7E8E8B
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:16:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 736511F20FAA
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:15:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58E9A1F20EF5
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3744410;
-	Sun, 12 Nov 2023 06:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E113440E;
+	Sun, 12 Nov 2023 06:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lT4YE0Oj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b53s08La"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5FE440A
-	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC40C433CC;
-	Sun, 12 Nov 2023 06:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36E0440A
+	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AA0C433CB;
+	Sun, 12 Nov 2023 06:15:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699769751;
-	bh=rxwIgp8hQp0Nt2lN35u6PopHm3HPAlKUrKzCrN0lOv8=;
+	s=k20201202; t=1699769757;
+	bh=XpUd4fnRtkvkgeq3GEpwNa3eOjoCC/fgMtEHTFs7iQM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lT4YE0OjIKAEa87Flp9Iq31j+R93R3Y6ygJ9cjCzEtjj4rSQDfgZ+lCifue2vC7A0
-	 DHpnccClCtCx2ad112n/ZAI3XB3aqPA7SW95BNGTWD9l2BvbvOREnjVUmWj0lDL54E
-	 9vFY5BaSkBCkpJr/5gqMOvoyTRQum91KuUnkoIYQkuRf5+Y7BFXR3RhGei7fLGXRqi
-	 fA9VE043VDoMeAFCs6tSNgK4rVPZrXOHWRfyFbZrV7fMRCJ7/elUvwLhOH2/vjHewT
-	 efgUxa75Mi+zXxRLNT4VCW/0HFZxrFgMWjBHRKTfP5nojYXlW5cW1lAIqE1T58BI1d
-	 gn6AEW/df+s8Q==
+	b=b53s08LaY2s8JDp3okKYnrU4Mv3y6oiqRbwSmKtfYC6PGgDsKHomDFswG6XilGAB9
+	 i2ZHEjTGokwuqB5C6ZWyqjHti4EPgj5O23G8cMJ2hHA9jnkNadseJdXEwx9czWciTv
+	 NlLxoDPPFuqQm2+zh60dZo9SnKyaFQ57eGpZfgVpzhlY4F+SO4BtcaHjaBC4AKchJu
+	 SoAWitasUakDYe1AF1gOZvQOmqoY74p3qjPJl8+fx3ar5OrIJUVPl8lobVtkXDxukk
+	 KznCc8rChOmNBqMvEMsb0IOQBUQNk1P83yM/IhKkQg10eJ6VYey/U1g/69goMlooKC
+	 xE1HG33YlubVQ==
 From: guoren@kernel.org
 To: arnd@arndb.de,
 	guoren@kernel.org,
@@ -63,9 +63,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH V2 04/38] riscv: u64ilp32: Introduce ILP32 vdso for UXL=64
-Date: Sun, 12 Nov 2023 01:14:40 -0500
-Message-Id: <20231112061514.2306187-5-guoren@kernel.org>
+Subject: [RFC PATCH V2 05/38] riscv: u64ilp32: Adjust vDSO kernel flow for 64ilp32 abi
+Date: Sun, 12 Nov 2023 01:14:41 -0500
+Message-Id: <20231112061514.2306187-6-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20231112061514.2306187-1-guoren@kernel.org>
 References: <20231112061514.2306187-1-guoren@kernel.org>
@@ -79,193 +79,282 @@ Content-Transfer-Encoding: 8bit
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-This is the first patch to introduce ILP32 abi for RV64. Here is the
-diagram:
-
-  +--------------------------------+------------+
-  | +-------------------+--------+ | +--------+ |
-  | |           (compat)|(compat)| | |        | |
-  | |u64lp64    u64ilp32|u32ilp32| | |u32ilp32| | ABI
-  | |           ^^^^^^^^|        | | |        | |
-  | +-------------------+--------+ | +--------+ |
-  | +-------------------+--------+ | +--------+ |
-  | |       UXL=64      | UXL=32 | | | UXL=32 | | ISA
-  | +-------------------+--------+ | +--------+ |
-  +--------------------------------+------------+-------
-  | +----------------------------+ | +--------+ |
-  | |              64BIT         | | |   32BIT| | Kernel
-  | |            s64lp64         | | |s32ilp32| | ABI
-  | +----------------------------+ | +--------+ |
-  | +----------------------------+ | +--------+ |
-  | |             SXL=64         | | | SXL=32 | | ISA
-  | +----------------------------+ | +--------+ |
-  +--------------------------------+------------+
-
-The 64ilp32 userspace needs another virtual dynamic shared object
-independent from vdso32(32ilp32) and vdso64(64ilp32).
+The 64ilp32 vDSO brings another new abi into riscv, and it needs to
+adjust the current vDSO flow to enable it. This patch separates the
+VDSO32 (32ILP32), VDSO64 (64LP64), and VDSO64ILP32 more clearly, and
+enable VDSO64ILP32 as need.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/Kconfig                            |  5 ++
- arch/riscv/Makefile                           |  4 ++
- arch/riscv/kernel/Makefile                    |  1 +
- arch/riscv/kernel/vdso/Makefile               | 59 +++++++++++++++++++
- .../kernel/vdso/gen_vdso64ilp32_offsets.sh    |  5 ++
- arch/riscv/kernel/vdso64ilp32.S               |  8 +++
- 6 files changed, 82 insertions(+)
- create mode 100755 arch/riscv/kernel/vdso/gen_vdso64ilp32_offsets.sh
- create mode 100644 arch/riscv/kernel/vdso64ilp32.S
+ arch/riscv/include/asm/vdso.h   | 18 +++---
+ arch/riscv/kernel/alternative.c | 15 ++++-
+ arch/riscv/kernel/signal.c      | 23 ++++++--
+ arch/riscv/kernel/vdso.c        | 98 +++++++++++++++++++++++++++------
+ 4 files changed, 121 insertions(+), 33 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 24b1b6abf0a7..5d770b8e2756 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -288,6 +288,10 @@ config VDSO64
- 	bool
- 	depends on MMU
+diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
+index 305ddc6de21c..77015edb1488 100644
+--- a/arch/riscv/include/asm/vdso.h
++++ b/arch/riscv/include/asm/vdso.h
+@@ -38,15 +38,15 @@ extern char vdso32_start[], vdso32_end[];
  
-+config VDSO64ILP32
-+	bool
-+	depends on MMU
-+
- source "arch/riscv/Kconfig.socs"
- source "arch/riscv/Kconfig.errata"
+ #endif /* CONFIG_VDSO32 */
  
-@@ -707,6 +711,7 @@ config COMPAT
- 	bool "Kernel support for 32-bit U-mode"
- 	default 64BIT
- 	select VDSO32
-+	select VDSO64ILP32 if $(cc-option,-march=rv64g -mabi=ilp32)
- 	depends on 64BIT && MMU
- 	help
- 	  This option enables support for a 32-bit U-mode running under a 64-bit
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 3b7d5ebf3c78..8605050bddd0 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -140,6 +140,8 @@ vdso_install:
- 		$(build)=arch/riscv/kernel/vdso vdso32_install
- 	$(if $(CONFIG_VDSO64),$(Q)$(MAKE) \
- 		$(build)=arch/riscv/kernel/vdso vdso64_install
-+	$(if $(CONFIG_VDSO64ILP32),$(Q)$(MAKE) \
-+		$(build)=arch/riscv/kernel/vdso vdso64ilp32_install
+-#ifdef CONFIG_64BIT
+-#define vdso_start	vdso64_start
+-#define vdso_end	vdso64_end
+-#define VDSO_SYMBOL	VDSO64_SYMBOL
+-#else /* CONFIG_64BIT */
+-#define vdso_start	vdso32_start
+-#define vdso_end	vdso32_end
+-#define VDSO_SYMBOL	VDSO32_SYMBOL
+-#endif /* CONFIG_64BIT */
++#ifdef CONFIG_VDSO64ILP32
++#include <generated/vdso64ilp32-offsets.h>
++
++#define VDSO64ILP32_SYMBOL(base, name)					\
++	(void __user *)((unsigned long)(base) + rv64ilp32__vdso_##name##_offset)
++
++extern char vdso64ilp32_start[], vdso64ilp32_end[];
++
++#endif /* CONFIG_VDSO64ILP32 */
  
- ifeq ($(KBUILD_EXTMOD),)
- ifeq ($(CONFIG_MMU),y)
-@@ -149,6 +151,8 @@ vdso_prepare: prepare0
- 		$(build)=arch/riscv/kernel/vdso include/generated/vdso32-offsets.h)
- 	$(if $(CONFIG_VDSO64),$(Q)$(MAKE) \
- 		$(build)=arch/riscv/kernel/vdso include/generated/vdso64-offsets.h)
-+	$(if $(CONFIG_VDSO64ILP32),$(Q)$(MAKE) \
-+		$(build)=arch/riscv/kernel/vdso include/generated/vdso64ilp32-offsets.h)
- endif
- endif
+ #endif /* !__ASSEMBLY__ */
  
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 23032ac7f51d..a4583a29b28b 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -59,6 +59,7 @@ obj-y	+= probes/
- obj-$(CONFIG_MMU) += vdso.o vdso/
- obj-$(CONFIG_VDSO64)  += vdso64.o
- obj-$(CONFIG_VDSO32)  += vdso32.o
-+obj-$(CONFIG_VDSO64ILP32)  += vdso64ilp32.o
+diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+index 6b75788c18e6..73a2d7533806 100644
+--- a/arch/riscv/kernel/alternative.c
++++ b/arch/riscv/kernel/alternative.c
+@@ -182,7 +182,7 @@ static void __init_or_module _apply_alternatives(struct alt_entry *begin,
+ }
  
- obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
- obj-$(CONFIG_FPU)		+= fpu.o
-diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-index df8f68bb0937..629989b1ad05 100644
---- a/arch/riscv/kernel/vdso/Makefile
-+++ b/arch/riscv/kernel/vdso/Makefile
-@@ -148,3 +148,62 @@ vdso32.so: $(obj)/vdso32.so.dbg
+ #ifdef CONFIG_MMU
+-static void __init apply_vdso_alternatives(void)
++static void __init apply_vdso_alternatives(void *vdso_start)
+ {
+ 	const Elf_Ehdr *hdr;
+ 	const Elf_Shdr *shdr;
+@@ -203,7 +203,7 @@ static void __init apply_vdso_alternatives(void)
+ 			    RISCV_ALTERNATIVES_BOOT);
+ }
+ #else
+-static void __init apply_vdso_alternatives(void) { }
++static void __init apply_vdso_alternatives(void *vdso_start) { }
+ #endif
  
- vdso32_install: vdso32.so
- endif
+ void __init apply_boot_alternatives(void)
+@@ -216,7 +216,16 @@ void __init apply_boot_alternatives(void)
+ 			    (struct alt_entry *)__alt_end,
+ 			    RISCV_ALTERNATIVES_BOOT);
+ 
+-	apply_vdso_alternatives();
++#ifdef CONFIG_VDSO64
++	apply_vdso_alternatives(vdso64_start);
++#endif
++#ifdef CONFIG_VDSO32
++	apply_vdso_alternatives(vdso32_start);
++#endif
++#ifdef CONFIG_VDSO64ILP32
++	apply_vdso_alternatives(vdso64ilp32_start);
++#endif
 +
-+ifdef CONFIG_VDSO64ILP32
-+VDSO64ILP32_CC_FLAGS := -march=rv64g -mabi=ilp32
-+VDSO64ILP32_LD_FLAGS := -melf32lriscv
+ }
+ 
+ /*
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index 180d951d3624..95c4a8d8a3f5 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -345,10 +345,25 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+ 		return -EFAULT;
+ 
+ 	/* Set up to return from userspace. */
+-#ifdef CONFIG_MMU
+-	regs->ra = (unsigned long)VDSO_SYMBOL(
+-		current->mm->context.vdso, rt_sigreturn);
+-#else
++#ifdef CONFIG_VDSO64
++	if (!test_thread_flag(TIF_32BIT))
++		regs->ra = (unsigned long)VDSO64_SYMBOL(
++			current->mm->context.vdso, rt_sigreturn);
++#endif /* CONFIG_VDSO64 */
 +
-+obj-as-vdso64ilp32  = $(patsubst %, %-64ilp32.o, $(vdso-as-syms)) note-64ilp32.o
-+obj-as-vdso64ilp32 := $(addprefix $(obj)/, $(obj-as-vdso64ilp32))
++#ifdef CONFIG_VDSO32
++	if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
++		regs->ra = (unsigned long)VDSO32_SYMBOL(
++			current->mm->context.vdso, rt_sigreturn);
++#endif /* CONFIG_VDSO32 */
 +
-+obj-cc-vdso64ilp32  = $(patsubst %, %-64ilp32.o, $(vdso-cc-syms))
-+obj-cc-vdso64ilp32 := $(addprefix $(obj)/, $(obj-cc-vdso64ilp32))
++#ifdef CONFIG_VDSO64ILP32
++	if (test_thread_flag(TIF_32BIT) && test_thread_flag(TIF_64ILP32))
++		regs->ra = (unsigned long)VDSO64ILP32_SYMBOL(
++			current->mm->context.vdso, rt_sigreturn);
++#endif /* CONFIG_VDSO64ILP32 */
 +
-+targets += $(obj-as-vdso64ilp32) $(obj-cc-vdso64ilp32) vdso64ilp32.so vdso64ilp32.so.dbg vdso64ilp32.lds
++#ifndef CONFIG_MMU
+ 	/*
+ 	 * For the nommu case we don't have a VDSO.  Instead we push two
+ 	 * instructions to call the rt_sigreturn syscall onto the user stack.
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index dc03393bf900..6b5cfb7ddbae 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -50,9 +50,14 @@ struct __vdso_info {
+ 	struct vm_special_mapping *cm;
+ };
+ 
+-static struct __vdso_info vdso_info;
+-#ifdef CONFIG_COMPAT
+-static struct __vdso_info compat_vdso_info;
++#ifdef CONFIG_VDSO64
++static struct __vdso_info vdso64_info;
++#endif
++#ifdef CONFIG_VDSO32
++static struct __vdso_info vdso32_info;
++#endif
++#ifdef CONFIG_VDSO64ILP32
++static struct __vdso_info vdso64ilp32_info;
+ #endif
+ 
+ static int vdso_mremap(const struct vm_special_mapping *sm,
+@@ -114,10 +119,16 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 	mmap_read_lock(mm);
+ 
+ 	for_each_vma(vmi, vma) {
+-		if (vma_is_special_mapping(vma, vdso_info.dm))
++#ifdef CONFIG_VDSO64
++		if (vma_is_special_mapping(vma, vdso64_info.dm))
+ 			zap_vma_pages(vma);
+-#ifdef CONFIG_COMPAT
+-		if (vma_is_special_mapping(vma, compat_vdso_info.dm))
++#endif
++#ifdef CONFIG_VDSO32
++		if (vma_is_special_mapping(vma, vdso32_info.dm))
++			zap_vma_pages(vma);
++#endif
++#ifdef CONFIG_VDSO64ILP32
++		if (vma_is_special_mapping(vma, vdso64ilp32_info.dm))
+ 			zap_vma_pages(vma);
+ #endif
+ 	}
+@@ -172,13 +183,15 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+ 	},
+ };
+ 
+-static struct __vdso_info vdso_info __ro_after_init = {
++#ifdef CONFIG_VDSO64
++static struct __vdso_info vdso64_info __ro_after_init = {
+ 	.name = "vdso",
+-	.vdso_code_start = vdso_start,
+-	.vdso_code_end = vdso_end,
++	.vdso_code_start = vdso64_start,
++	.vdso_code_end = vdso64_end,
+ 	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+ 	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+ };
++#endif
+ 
+ #ifdef CONFIG_COMPAT
+ static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+@@ -191,21 +204,48 @@ static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+ 		.mremap = vdso_mremap,
+ 	},
+ };
++#endif
+ 
+-static struct __vdso_info compat_vdso_info __ro_after_init = {
+-	.name = "compat_vdso",
++#ifdef CONFIG_VDSO32
++static struct __vdso_info vdso32_info __ro_after_init = {
++	.name = "vdso32",
+ 	.vdso_code_start = vdso32_start,
+ 	.vdso_code_end = vdso32_end,
++#ifdef CONFIG_64BIT
+ 	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+ 	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
++#else
++	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
++	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
++#endif
++};
++#endif
 +
-+$(obj)/vdso64ilp32.so.dbg: $(obj)/vdso.lds $(obj-as-vdso64ilp32) $(obj-cc-vdso64ilp32) FORCE
-+	$(call if_changed,vdso64ilp32ld)
-+LDFLAGS_vdso64ilp32.so.dbg = -shared -S -soname=linux-vdso64ilp32.so.1 \
-+	--build-id=sha1 --hash-style=both --eh-frame-hdr
++#ifdef CONFIG_VDSO64ILP32
++static struct __vdso_info vdso64ilp32_info __ro_after_init = {
++	.name = "vdso64ilp32",
++	.vdso_code_start = vdso64ilp32_start,
++	.vdso_code_end = vdso64ilp32_end,
++#ifdef CONFIG_64BIT
++	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
++	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
++#else
++	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
++	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
++#endif
+ };
+ #endif
+ 
+ static int __init vdso_init(void)
+ {
+-	__vdso_init(&vdso_info);
+-#ifdef CONFIG_COMPAT
+-	__vdso_init(&compat_vdso_info);
++#ifdef CONFIG_VDSO64
++	__vdso_init(&vdso64_info);
++#endif
++#ifdef CONFIG_VDSO32
++	__vdso_init(&vdso32_info);
++#endif
++#ifdef CONFIG_VDSO64ILP32
++	__vdso_init(&vdso64ilp32_info);
+ #endif
+ 
+ 	return 0;
+@@ -265,8 +305,18 @@ int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+ 	if (mmap_write_lock_killable(mm))
+ 		return -EINTR;
+ 
+-	ret = __setup_additional_pages(mm, bprm, uses_interp,
+-							&compat_vdso_info);
++#ifdef CONFIG_VDSO32
++	if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
++		ret = __setup_additional_pages(mm, bprm, uses_interp,
++							&vdso32_info);
++#endif
 +
-+# The DSO images are built using a special linker script
-+# Make sure only to export the intended __vdso_xxx symbol offsets.
-+quiet_cmd_vdso64ilp32ld = VDSO64ILP32LD  $@
-+      cmd_vdso64ilp32ld = $(VDSO_LD) $(ld_flags) $(VDSO64ILP32_LD_FLAGS) -T $(filter-out FORCE,$^) -o $@.tmp && \
-+                   $(OBJCOPY) $(patsubst %, -G __vdso_%, $(vdso-as-syms) $(vdso-cc-syms)) $@.tmp $@ && \
-+                   rm $@.tmp
++#ifdef CONFIG_VDSO64ILP32
++	if (test_thread_flag(TIF_32BIT) && test_thread_flag(TIF_64ILP32))
++		ret = __setup_additional_pages(mm, bprm, uses_interp,
++							&vdso64ilp32_info);
++#endif
 +
-+# actual build commands
-+quiet_cmd_vdso64ilp32as = VDSO64ILP32AS $@
-+      cmd_vdso64ilp32as = $(VDSO_CC) $(a_flags) $(VDSO64ILP32_CC_FLAGS) -c -o $@ $<
-+quiet_cmd_vdso64ilp32cc = VDSO64ILP32CC $@
-+      cmd_vdso64ilp32cc = $(VDSO_CC) $(c_flags) $(VDSO64ILP32_CC_FLAGS) -c -o $@ $<
+ 	mmap_write_unlock(mm);
+ 
+ 	return ret;
+@@ -281,7 +331,21 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 	if (mmap_write_lock_killable(mm))
+ 		return -EINTR;
+ 
+-	ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
++#ifdef CONFIG_VDSO64
++	if (!test_thread_flag(TIF_32BIT))
++		ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso64_info);
++#endif
 +
-+# Force dependency
-+$(obj)/vdso64ilp32.o: $(obj)/vdso64ilp32.so
++#ifdef CONFIG_VDSO32
++	if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
++		ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso32_info);
++#endif
 +
-+$(obj-as-vdso64ilp32): %-64ilp32.o: %.S FORCE
-+	$(call if_changed_dep,vdso64ilp32as)
-+$(obj-cc-vdso64ilp32): %-64ilp32.o: %.c FORCE
-+	$(call if_changed_dep,vdso64ilp32cc)
++#ifdef CONFIG_VDSO64ILP32
++	if (test_thread_flag(TIF_32BIT) && test_thread_flag(TIF_64ILP32))
++		ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso64ilp32_info);
++#endif
 +
-+CFLAGS_hwprobe-64ilp32.o += -fPIC
-+
-+CFLAGS_vgettimeofday-64ilp32.o += -fPIC -include $(c-gettimeofday-y)
-+# Disable -pg to prevent insert call site
-+CFLAGS_REMOVE_vgettimeofday-64ilp32.o = $(CC_FLAGS_FTRACE)
-+
-+# Generate VDSO offsets using helper script
-+gen-vdso64ilp32sym := $(srctree)/$(src)/gen_vdso64ilp32_offsets.sh
-+quiet_cmd_vdso64ilp32sym = VDSO64ILP32SYM $@
-+	cmd_vdso64ilp32sym = $(NM) $< | $(gen-vdso64ilp32sym) | LC_ALL=C sort > $@
-+
-+include/generated/vdso64ilp32-offsets.h: $(obj)/vdso64ilp32.so.dbg $(obj)/vdso64ilp32.so FORCE
-+	$(call if_changed,vdso64ilp32sym)
-+
-+vdso64ilp32.so: $(obj)/vdso64ilp32.so.dbg
-+	@mkdir -p $(MODLIB)/vdso
-+	$(call cmd,vdso_install)
-+
-+vdso64ilp32_install: vdso64ilp32.so
-+endif
-diff --git a/arch/riscv/kernel/vdso/gen_vdso64ilp32_offsets.sh b/arch/riscv/kernel/vdso/gen_vdso64ilp32_offsets.sh
-new file mode 100755
-index 000000000000..6af2db7a26ad
---- /dev/null
-+++ b/arch/riscv/kernel/vdso/gen_vdso64ilp32_offsets.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+LC_ALL=C
-+sed -n -e 's/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define rv64ilp32\2_offset\t0x\1/p'
-diff --git a/arch/riscv/kernel/vdso64ilp32.S b/arch/riscv/kernel/vdso64ilp32.S
-new file mode 100644
-index 000000000000..5b658da1eeef
---- /dev/null
-+++ b/arch/riscv/kernel/vdso64ilp32.S
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#define	vdso64_start	vdso64ilp32_start
-+#define	vdso64_end	vdso64ilp32_end
-+
-+#define	__VDSO_PATH	"arch/riscv/kernel/vdso/vdso64ilp32.so"
-+
-+#include "vdso64.S"
+ 	mmap_write_unlock(mm);
+ 
+ 	return ret;
 -- 
 2.36.1
 
