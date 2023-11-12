@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-156-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-157-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A3317E8EA8
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:17:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09DC87E8EAA
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:17:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AADED1C2042E
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:17:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B388F1F20F75
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E944410;
-	Sun, 12 Nov 2023 06:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1402440E;
+	Sun, 12 Nov 2023 06:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fM4A4qzP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVixWE5B"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CF2440E
-	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:17:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C71C433CB;
-	Sun, 12 Nov 2023 06:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D84440A
+	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F47BC433CC;
+	Sun, 12 Nov 2023 06:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699769848;
-	bh=81esJgTh4dOkvuzt4uEEBn1Vcq8zmYGS/5KoUzDRHwk=;
+	s=k20201202; t=1699769855;
+	bh=McvUmbn7ofR9ECIK1HzZvYjfVLwR/ntK8/66isIijtM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fM4A4qzP2sUTruR53HAyk8qZNaK4mAcObnJjPX2TBzXVU1E9k1oP29D1Ez3sdVbPq
-	 VsesVknvjqglzsZlFYWy6ftyd3D62nRk2/pz7DZpsI7W7TO8MDjHHs0XUMXsZ7j2fr
-	 aAj6qKQnOSkGp8jsZBRKxYRlvbmVXPviL5PIdHIDX3N5OPy4/yEVTkn8Pq6uaPa5wO
-	 lqPxaJT15ygRjwBsrpYDU+yL0kCH8mcajb45/i0aYxr0YIY7ahmWeIEEumtYCKelgs
-	 5Mr7VtDVKIqN5vVaQ+ZFIaoXjEIzMdQ/RE9v+85S4qGWU+sLPqQYtTovNtmUB3AxHv
-	 0Vj8D6OiNLLvQ==
+	b=cVixWE5BU3e4YiwTPApmxFvfwcQjyW4BCr6TG50g4zBwUphGarDaFwV04CbuzkNp8
+	 fcJ0yF57pqfwrYk17nBniNgJxa5HEYSLCYceCYpVlwmBs9t+j9Spx8D1/+UCxRCwZH
+	 WXJIGTd4x825tMD5ZBzWbl9DBr7XQEX7SIzW63zoNx0sU9rdFqMSxR2HmlOONiJA/E
+	 bFNhgrFJTCHEhWW1sLsfWksh5LGNylmxHUEhA94B/fhLu6Z516D55+XjtOpZ1t0rru
+	 EEqGkJ+xcrIaxrsLSz4Q6jxSDw6D/R6mP+p/Ftn3C/cHP9pQd8XP9GFq1R/+IeC50b
+	 gWTZeAfPCLuhw==
 From: guoren@kernel.org
 To: arnd@arndb.de,
 	guoren@kernel.org,
@@ -63,9 +63,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH V2 20/38] riscv: s64ilp32: Add ARCH_RV64ILP32 Kconfig option
-Date: Sun, 12 Nov 2023 01:14:56 -0500
-Message-Id: <20231112061514.2306187-21-guoren@kernel.org>
+Subject: [RFC PATCH V2 21/38] riscv: s64ilp32: Add MMU_SV32 mode support
+Date: Sun, 12 Nov 2023 01:14:57 -0500
+Message-Id: <20231112061514.2306187-22-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20231112061514.2306187-1-guoren@kernel.org>
 References: <20231112061514.2306187-1-guoren@kernel.org>
@@ -79,59 +79,78 @@ Content-Transfer-Encoding: 8bit
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Just the same as ARCH_RV64I & ARCH_RV32I, add ARCH_RV64ILP32 config
-for s64ilp32 and turn on the s64ilp32 compile switch in the
-arch/riscv/Makefile.
+This needs to add Sv32 mode in the SATP CSR of RV64 ISA, a novel
+extension of 64-bit processors' MMU. It could save a bit of page
+table footprint and improve the page table walk performance:
+
+s64ilp32 with Sv39:
+PageTables:          136 kB
+
+s64ilp32 with Sv32:
+PageTables:           60 kB
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/Kconfig  | 7 +++++++
- arch/riscv/Makefile | 5 +++++
- 2 files changed, 12 insertions(+)
+ arch/riscv/Kconfig           | 11 ++++++++++-
+ arch/riscv/Kconfig.errata    |  2 +-
+ arch/riscv/include/asm/csr.h |  1 +
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5d770b8e2756..5a3eb5e7d67a 100644
+index 5a3eb5e7d67a..1d3a236d2c45 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -334,6 +334,13 @@ config ARCH_RV64I
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
- 	select SWIOTLB if MMU
+@@ -481,7 +481,7 @@ config RISCV_ISA_SVNAPOT
  
-+config ARCH_RV64ILP32
-+	bool "RV64ILP32"
-+	depends on NONPORTABLE
-+	select 32BIT
-+	select MMU
-+	select VDSO64ILP32
+ config RISCV_ISA_SVPBMT
+ 	bool "Svpbmt extension support for supervisor mode page-based memory types"
+-	depends on 64BIT && MMU
++	depends on !MMU_SV32 && MMU
+ 	depends on RISCV_ALTERNATIVE
+ 	default y
+ 	help
+@@ -638,6 +638,15 @@ config THREAD_SIZE_ORDER
+ 	  Specify the Pages of thread stack size (from 4KB to 64KB), which also
+ 	  affects irq stack size, which is equal to thread stack size.
+ 
++config MMU_SV32
++	bool "MMU Sv32"
++	depends on 32BIT && MMU
++	help
++	  ARCH_RV32I only supports MMU Sv32 mode, but ARCH_RV64ILP32 supports
++	  MMU Sv39 & Sv32 (MMU Sv32 is optional for RV64 hardware).
 +
- endchoice
++	  If unsure, say N.
++
+ endmenu # "Platform type"
  
- # We must be able to map all physical memory into the kernel, but the compiler
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 8605050bddd0..3b1435bade49 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -58,6 +58,7 @@ endif
- # ISA string setting
- riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
- riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
-+riscv-march-$(CONFIG_ARCH_RV64ILP32)	:= rv64ima
- riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
- riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
- riscv-march-$(CONFIG_RISCV_ISA_V)	:= $(riscv-march-y)v
-@@ -121,7 +122,11 @@ stack_protector_prepare: prepare0
- endif
+ menu "Kernel features"
+diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+index 0c8f4652cd82..1aa85a427ff3 100644
+--- a/arch/riscv/Kconfig.errata
++++ b/arch/riscv/Kconfig.errata
+@@ -44,7 +44,7 @@ config ERRATA_THEAD
  
- # arch specific predefines for sparse
-+ifeq ($(CONFIG_ARCH_RV64ILP32),y)
-+CHECKFLAGS += -D__riscv
-+else
- CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
-+endif
- 
- # Default target when executing plain make
- boot		:= arch/riscv/boot
+ config ERRATA_THEAD_PBMT
+ 	bool "Apply T-Head memory type errata"
+-	depends on ERRATA_THEAD && 64BIT && MMU
++	depends on ERRATA_THEAD && !MMU_SV32 && MMU
+ 	select RISCV_ALTERNATIVE_EARLY
+ 	default y
+ 	help
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index 03acdedc100d..aa78c5f20d75 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -65,6 +65,7 @@
+ #define SATP_ASID_MASK	_AC(0x1FF, UXL)
+ #else
+ #define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UXL)
++#define SATP_MODE_32	_AC(0x1000000000000000, UXL)
+ #define SATP_MODE_39	_AC(0x8000000000000000, UXL)
+ #define SATP_MODE_48	_AC(0x9000000000000000, UXL)
+ #define SATP_MODE_57	_AC(0xa000000000000000, UXL)
 -- 
 2.36.1
 
