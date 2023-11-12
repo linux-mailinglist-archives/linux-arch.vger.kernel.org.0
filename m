@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-148-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-149-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A35247E8E99
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:16:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02FEE7E8E9B
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 07:16:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F7E8280CF0
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:16:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CE9C1F20F6B
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Nov 2023 06:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2845440E;
-	Sun, 12 Nov 2023 06:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32188440E;
+	Sun, 12 Nov 2023 06:16:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZw4FPl2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESyaUcYg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1049440A
-	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32147C433D9;
-	Sun, 12 Nov 2023 06:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175EF440A
+	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 06:16:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1162C433CB;
+	Sun, 12 Nov 2023 06:16:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699769800;
-	bh=bKheZRHS9yncX/iADam3fCVUrHEXBhjqFo5pnoPNSGY=;
+	s=k20201202; t=1699769806;
+	bh=qHVG03WWJVZvda3e++Okszof2Z8C09M4hIc5+i1mb4w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uZw4FPl2DJ3Wy1j2ZEwoepxbHE6DvDx5D2CMzMcLDv7WUAb1mopfDPG2mTccFGbDZ
-	 nPjC2Fr4vIJQHXstErsxJ19YJcQy9J7eqHC7RmE26UZEn5b4VpUvB+m0sPE83Gsot/
-	 6rRsUnqbsvfyGrFwrGTER0NPbJMxhuDefiiQ7rdfA03S14dKLQ7qK1ILPU/ZiBdoBy
-	 zNuIHRcvaXsIu7tV9NsTyPOxEl7LBd6tFmICqxa+M5dGBTqiErlIRs7OHBijIT7fH8
-	 IILxwqB74RlTBAQMJDDnmDZmQa/KRgHjjFZZiBwaCWzl3dmvapPV6WWEfJSituLY9v
-	 bU4bVdgMuMuyg==
+	b=ESyaUcYgNZ0w0PeP2kGWLX5Cc0dwRyNfLVnXyg9QegSXPArmxplZ9qX9iQZiScfEQ
+	 Rm+EPIvWhBCbTz1kAKaBDTtgnpMq2U0IFUgRl4vPD599u+P4UJtlsliPYEUhWYXCcD
+	 HGuVXJuQ3nZc4keZ0OZbGfXF5P4ISH/LZ/c776GY97dKhlM/b4KDihf7Y/rOwCLki5
+	 dBjrHeqm7rXXA5VQeX2ON4PAqAdRv/3futewKN+kSZKpGxof7uenBZyysTjmpJd87Y
+	 xms8KaaJztTEunoNDl9dgjtK7zpZ0Vro0gs+xIo90ZVYrYtlpcn0GZcjI8dFoNpuHb
+	 LdAJYKuyfZr8g==
 From: guoren@kernel.org
 To: arnd@arndb.de,
 	guoren@kernel.org,
@@ -63,9 +63,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH V2 12/38] riscv: s64ilp32: Unify ULL & UL into UXL in csr
-Date: Sun, 12 Nov 2023 01:14:48 -0500
-Message-Id: <20231112061514.2306187-13-guoren@kernel.org>
+Subject: [RFC PATCH V2 13/38] riscv: s64ilp32: Introduce xlen_t for 64ILP32 kernel
+Date: Sun, 12 Nov 2023 01:14:49 -0500
+Message-Id: <20231112061514.2306187-14-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20231112061514.2306187-1-guoren@kernel.org>
 References: <20231112061514.2306187-1-guoren@kernel.org>
@@ -79,269 +79,419 @@ Content-Transfer-Encoding: 8bit
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The 64ilp32's long size has been different from the csr xlen, so
-introduce a new macro of UXL to distinguish UL & ULL.
+When s64ilp32 landed, we couldn't use CONFIG_64/32BIT to distingue XLEN
+data types. Because the xlen is 64, but the long & pointer is 32 for
+s64ilp32, and s64ilp32 is a 32BIT from the software view. So introduce a
+new data type - "xlen_t" and use __riscv_xlen instead of CONFIG_64/32BIT
+ifdef macro.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/csr.h | 166 +++++++++++++++++++----------------
- 1 file changed, 89 insertions(+), 77 deletions(-)
+ arch/riscv/include/asm/csr.h       | 20 ++++---
+ arch/riscv/include/asm/processor.h |  8 +--
+ arch/riscv/include/asm/ptrace.h    | 96 +++++++++++++++---------------
+ arch/riscv/include/asm/timex.h     | 10 ++--
+ arch/riscv/kernel/process.c        |  4 +-
+ arch/riscv/kernel/traps.c          |  4 +-
+ arch/riscv/kernel/vector.c         |  2 +-
+ arch/riscv/lib/memset.S            |  4 +-
+ arch/riscv/mm/fault.c              |  2 +-
+ 9 files changed, 78 insertions(+), 72 deletions(-)
 
 diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 638b7a836acc..051c017e1e5e 100644
+index 051c017e1e5e..03acdedc100d 100644
 --- a/arch/riscv/include/asm/csr.h
 +++ b/arch/riscv/include/asm/csr.h
-@@ -9,64 +9,76 @@
- #include <asm/asm.h>
- #include <linux/bits.h>
- 
-+#if __riscv_xlen == 32
-+#define UXL		UL
-+#define GENMASK_UXL	GENMASK
-+#else
-+#define UXL		ULL
-+#define GENMASK_UXL	GENMASK_ULL
-+#endif
-+
- /* Status register flags */
--#define SR_SIE		_AC(0x00000002, UL) /* Supervisor Interrupt Enable */
--#define SR_MIE		_AC(0x00000008, UL) /* Machine Interrupt Enable */
--#define SR_SPIE		_AC(0x00000020, UL) /* Previous Supervisor IE */
--#define SR_MPIE		_AC(0x00000080, UL) /* Previous Machine IE */
--#define SR_SPP		_AC(0x00000100, UL) /* Previously Supervisor */
--#define SR_MPP		_AC(0x00001800, UL) /* Previously Machine */
--#define SR_SUM		_AC(0x00040000, UL) /* Supervisor User Memory Access */
--
--#define SR_FS		_AC(0x00006000, UL) /* Floating-point Status */
--#define SR_FS_OFF	_AC(0x00000000, UL)
--#define SR_FS_INITIAL	_AC(0x00002000, UL)
--#define SR_FS_CLEAN	_AC(0x00004000, UL)
--#define SR_FS_DIRTY	_AC(0x00006000, UL)
--
--#define SR_VS		_AC(0x00000600, UL) /* Vector Status */
--#define SR_VS_OFF	_AC(0x00000000, UL)
--#define SR_VS_INITIAL	_AC(0x00000200, UL)
--#define SR_VS_CLEAN	_AC(0x00000400, UL)
--#define SR_VS_DIRTY	_AC(0x00000600, UL)
--
--#define SR_XS		_AC(0x00018000, UL) /* Extension Status */
--#define SR_XS_OFF	_AC(0x00000000, UL)
--#define SR_XS_INITIAL	_AC(0x00008000, UL)
--#define SR_XS_CLEAN	_AC(0x00010000, UL)
--#define SR_XS_DIRTY	_AC(0x00018000, UL)
-+#define SR_SIE		_AC(0x00000002, UXL) /* Supervisor Interrupt Enable */
-+#define SR_MIE		_AC(0x00000008, UXL) /* Machine Interrupt Enable */
-+#define SR_SPIE		_AC(0x00000020, UXL) /* Previous Supervisor IE */
-+#define SR_MPIE		_AC(0x00000080, UXL) /* Previous Machine IE */
-+#define SR_SPP		_AC(0x00000100, UXL) /* Previously Supervisor */
-+#define SR_MPP		_AC(0x00001800, UXL) /* Previously Machine */
-+#define SR_SUM		_AC(0x00040000, UXL) /* Supervisor User Memory Access */
-+
-+#define SR_FS		_AC(0x00006000, UXL) /* Floating-point Status */
-+#define SR_FS_OFF	_AC(0x00000000, UXL)
-+#define SR_FS_INITIAL	_AC(0x00002000, UXL)
-+#define SR_FS_CLEAN	_AC(0x00004000, UXL)
-+#define SR_FS_DIRTY	_AC(0x00006000, UXL)
-+
-+#define SR_VS		_AC(0x00000600, UXL) /* Vector Status */
-+#define SR_VS_OFF	_AC(0x00000000, UXL)
-+#define SR_VS_INITIAL	_AC(0x00000200, UXL)
-+#define SR_VS_CLEAN	_AC(0x00000400, UXL)
-+#define SR_VS_DIRTY	_AC(0x00000600, UXL)
-+
-+#define SR_XS		_AC(0x00018000, UXL) /* Extension Status */
-+#define SR_XS_OFF	_AC(0x00000000, UXL)
-+#define SR_XS_INITIAL	_AC(0x00008000, UXL)
-+#define SR_XS_CLEAN	_AC(0x00010000, UXL)
-+#define SR_XS_DIRTY	_AC(0x00018000, UXL)
- 
- #define SR_FS_VS	(SR_FS | SR_VS) /* Vector and Floating-Point Unit */
- 
--#ifndef CONFIG_64BIT
--#define SR_SD		_AC(0x80000000, UL) /* FS/VS/XS dirty */
-+#if __riscv_xlen == 32
-+#define SR_SD		_AC(0x80000000, UXL) /* FS/VS/XS dirty */
- #else
--#define SR_SD		_AC(0x8000000000000000, UL) /* FS/VS/XS dirty */
-+#define SR_SD		_AC(0x8000000000000000, UXL) /* FS/VS/XS dirty */
- #endif
- 
--#define SR_UXL		_AC(0x300000000, UL) /* XLEN mask for U-mode */
--#define SR_UXL_32	_AC(0x100000000, UL) /* XLEN = 32 for U-mode */
--#define SR_UXL_64	_AC(0x200000000, UL) /* XLEN = 64 for U-mode */
-+#define SR_UXL		_AC(0x300000000, UXL) /* XLEN mask for U-mode */
-+#define SR_UXL_32	_AC(0x100000000, UXL) /* XLEN = 32 for U-mode */
-+#define SR_UXL_64	_AC(0x200000000, UXL) /* XLEN = 64 for U-mode */
- 
- /* SATP flags */
--#ifndef CONFIG_64BIT
--#define SATP_PPN	_AC(0x003FFFFF, UL)
--#define SATP_MODE_32	_AC(0x80000000, UL)
-+#if __riscv_xlen == 32
-+#define SATP_PPN	_AC(0x003FFFFF, UXL)
-+#define SATP_MODE_32	_AC(0x80000000, UXL)
- #define SATP_ASID_BITS	9
- #define SATP_ASID_SHIFT	22
--#define SATP_ASID_MASK	_AC(0x1FF, UL)
-+#define SATP_ASID_MASK	_AC(0x1FF, UXL)
- #else
--#define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UL)
--#define SATP_MODE_39	_AC(0x8000000000000000, UL)
--#define SATP_MODE_48	_AC(0x9000000000000000, UL)
--#define SATP_MODE_57	_AC(0xa000000000000000, UL)
-+#define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UXL)
-+#define SATP_MODE_39	_AC(0x8000000000000000, UXL)
-+#define SATP_MODE_48	_AC(0x9000000000000000, UXL)
-+#define SATP_MODE_57	_AC(0xa000000000000000, UXL)
- #define SATP_ASID_BITS	16
- #define SATP_ASID_SHIFT	44
--#define SATP_ASID_MASK	_AC(0xFFFF, UL)
-+#define SATP_ASID_MASK	_AC(0xFFFF, UXL)
- #endif
- 
- /* Exception cause high bit - is an interrupt if set */
--#define CAUSE_IRQ_FLAG		(_AC(1, UL) << (__riscv_xlen - 1))
-+#if __riscv_xlen == 32
-+#define CAUSE_IRQ_FLAG		(_AC(1, UXL) << (__riscv_xlen - 1))
-+#else
-+#define CAUSE_IRQ_FLAG		(_AC(1, UXL) << (__riscv_xlen - 1))
-+#endif
- 
- /* Interrupt causes (minus the high bit) */
- #define IRQ_S_SOFT		1
-@@ -81,7 +93,7 @@
- #define IRQ_S_GEXT		12
- #define IRQ_PMU_OVF		13
- #define IRQ_LOCAL_MAX		(IRQ_PMU_OVF + 1)
--#define IRQ_LOCAL_MASK		GENMASK((IRQ_LOCAL_MAX - 1), 0)
-+#define IRQ_LOCAL_MASK		GENMASK_UXL((IRQ_LOCAL_MAX - 1), 0)
- 
- /* Exception causes */
- #define EXC_INST_MISALIGNED	0
-@@ -114,41 +126,41 @@
- #define PMP_L			0x80
- 
- /* HSTATUS flags */
--#ifdef CONFIG_64BIT
--#define HSTATUS_VSXL		_AC(0x300000000, UL)
-+#if __riscv_xlen == 64
-+#define HSTATUS_VSXL		_AC(0x300000000, UXL)
- #define HSTATUS_VSXL_SHIFT	32
- #endif
--#define HSTATUS_VTSR		_AC(0x00400000, UL)
--#define HSTATUS_VTW		_AC(0x00200000, UL)
--#define HSTATUS_VTVM		_AC(0x00100000, UL)
--#define HSTATUS_VGEIN		_AC(0x0003f000, UL)
-+#define HSTATUS_VTSR		_AC(0x00400000, UXL)
-+#define HSTATUS_VTW		_AC(0x00200000, UXL)
-+#define HSTATUS_VTVM		_AC(0x00100000, UXL)
-+#define HSTATUS_VGEIN		_AC(0x0003f000, UXL)
- #define HSTATUS_VGEIN_SHIFT	12
--#define HSTATUS_HU		_AC(0x00000200, UL)
--#define HSTATUS_SPVP		_AC(0x00000100, UL)
--#define HSTATUS_SPV		_AC(0x00000080, UL)
--#define HSTATUS_GVA		_AC(0x00000040, UL)
--#define HSTATUS_VSBE		_AC(0x00000020, UL)
-+#define HSTATUS_HU		_AC(0x00000200, UXL)
-+#define HSTATUS_SPVP		_AC(0x00000100, UXL)
-+#define HSTATUS_SPV		_AC(0x00000080, UXL)
-+#define HSTATUS_GVA		_AC(0x00000040, UXL)
-+#define HSTATUS_VSBE		_AC(0x00000020, UXL)
- 
- /* HGATP flags */
--#define HGATP_MODE_OFF		_AC(0, UL)
--#define HGATP_MODE_SV32X4	_AC(1, UL)
--#define HGATP_MODE_SV39X4	_AC(8, UL)
--#define HGATP_MODE_SV48X4	_AC(9, UL)
--#define HGATP_MODE_SV57X4	_AC(10, UL)
-+#define HGATP_MODE_OFF		_AC(0, UXL)
-+#define HGATP_MODE_SV32X4	_AC(1, UXL)
-+#define HGATP_MODE_SV39X4	_AC(8, UXL)
-+#define HGATP_MODE_SV48X4	_AC(9, UXL)
-+#define HGATP_MODE_SV57X4	_AC(10, UXL)
- 
- #define HGATP32_MODE_SHIFT	31
- #define HGATP32_VMID_SHIFT	22
--#define HGATP32_VMID		GENMASK(28, 22)
--#define HGATP32_PPN		GENMASK(21, 0)
-+#define HGATP32_VMID		GENMASK_UXL(28, 22)
-+#define HGATP32_PPN		GENMASK_UXL(21, 0)
- 
- #define HGATP64_MODE_SHIFT	60
- #define HGATP64_VMID_SHIFT	44
--#define HGATP64_VMID		GENMASK(57, 44)
--#define HGATP64_PPN		GENMASK(43, 0)
-+#define HGATP64_VMID		GENMASK_UXL(57, 44)
-+#define HGATP64_PPN		GENMASK_UXL(43, 0)
- 
- #define HGATP_PAGE_SHIFT	12
- 
--#ifdef CONFIG_64BIT
-+#if __riscv_xlen == 64
- #define HGATP_PPN		HGATP64_PPN
- #define HGATP_VMID_SHIFT	HGATP64_VMID_SHIFT
- #define HGATP_VMID		HGATP64_VMID
-@@ -162,30 +174,30 @@
- 
- /* VSIP & HVIP relation */
- #define VSIP_TO_HVIP_SHIFT	(IRQ_VS_SOFT - IRQ_S_SOFT)
--#define VSIP_VALID_MASK		((_AC(1, UL) << IRQ_S_SOFT) | \
--				 (_AC(1, UL) << IRQ_S_TIMER) | \
--				 (_AC(1, UL) << IRQ_S_EXT))
-+#define VSIP_VALID_MASK		((_AC(1, UXL) << IRQ_S_SOFT) | \
-+				 (_AC(1, UXL) << IRQ_S_TIMER) | \
-+				 (_AC(1, UXL) << IRQ_S_EXT))
- 
- /* AIA CSR bits */
- #define TOPI_IID_SHIFT		16
--#define TOPI_IID_MASK		GENMASK(11, 0)
--#define TOPI_IPRIO_MASK		GENMASK(7, 0)
-+#define TOPI_IID_MASK		GENMASK_UXL(11, 0)
-+#define TOPI_IPRIO_MASK		GENMASK_UXL(7, 0)
- #define TOPI_IPRIO_BITS		8
- 
- #define TOPEI_ID_SHIFT		16
--#define TOPEI_ID_MASK		GENMASK(10, 0)
--#define TOPEI_PRIO_MASK		GENMASK(10, 0)
-+#define TOPEI_ID_MASK		GENMASK_UXL(10, 0)
-+#define TOPEI_PRIO_MASK		GENMASK_UXL(10, 0)
- 
- #define ISELECT_IPRIO0		0x30
- #define ISELECT_IPRIO15		0x3f
--#define ISELECT_MASK		GENMASK(8, 0)
-+#define ISELECT_MASK		GENMASK_UXL(8, 0)
- 
- #define HVICTL_VTI		BIT(30)
--#define HVICTL_IID		GENMASK(27, 16)
-+#define HVICTL_IID		GENMASK_UXL(27, 16)
- #define HVICTL_IID_SHIFT	16
- #define HVICTL_DPR		BIT(9)
- #define HVICTL_IPRIOM		BIT(8)
--#define HVICTL_IPRIO		GENMASK(7, 0)
-+#define HVICTL_IPRIO		GENMASK_UXL(7, 0)
- 
- /* xENVCFG flags */
- #define ENVCFG_STCE			(_AC(1, ULL) << 63)
-@@ -438,14 +450,14 @@
- # define RV_IRQ_TIMER	IRQ_S_TIMER
- # define RV_IRQ_EXT		IRQ_S_EXT
- # define RV_IRQ_PMU	IRQ_PMU_OVF
--# define SIP_LCOFIP     (_AC(0x1, UL) << IRQ_PMU_OVF)
-+# define SIP_LCOFIP     (_AC(0x1, UXL) << IRQ_PMU_OVF)
- 
- #endif /* !CONFIG_RISCV_M_MODE */
- 
- /* IE/IP (Supervisor/Machine Interrupt Enable/Pending) flags */
--#define IE_SIE		(_AC(0x1, UL) << RV_IRQ_SOFT)
--#define IE_TIE		(_AC(0x1, UL) << RV_IRQ_TIMER)
--#define IE_EIE		(_AC(0x1, UL) << RV_IRQ_EXT)
-+#define IE_SIE		(_AC(0x1, UXL) << RV_IRQ_SOFT)
-+#define IE_TIE		(_AC(0x1, UXL) << RV_IRQ_TIMER)
-+#define IE_EIE		(_AC(0x1, UXL) << RV_IRQ_EXT)
+@@ -461,9 +461,15 @@
  
  #ifndef __ASSEMBLY__
  
++#if __riscv_xlen == 64
++typedef u64 xlen_t;
++#else
++typedef u32 xlen_t;
++#endif
++
+ #define csr_swap(csr, val)					\
+ ({								\
+-	unsigned long __v = (unsigned long)(val);		\
++	xlen_t __v = (xlen_t)(val);				\
+ 	__asm__ __volatile__ ("csrrw %0, " __ASM_STR(csr) ", %1"\
+ 			      : "=r" (__v) : "rK" (__v)		\
+ 			      : "memory");			\
+@@ -472,7 +478,7 @@
+ 
+ #define csr_read(csr)						\
+ ({								\
+-	register unsigned long __v;				\
++	register xlen_t __v;					\
+ 	__asm__ __volatile__ ("csrr %0, " __ASM_STR(csr)	\
+ 			      : "=r" (__v) :			\
+ 			      : "memory");			\
+@@ -481,7 +487,7 @@
+ 
+ #define csr_write(csr, val)					\
+ ({								\
+-	unsigned long __v = (unsigned long)(val);		\
++	xlen_t __v = (xlen_t)(val);				\
+ 	__asm__ __volatile__ ("csrw " __ASM_STR(csr) ", %0"	\
+ 			      : : "rK" (__v)			\
+ 			      : "memory");			\
+@@ -489,7 +495,7 @@
+ 
+ #define csr_read_set(csr, val)					\
+ ({								\
+-	unsigned long __v = (unsigned long)(val);		\
++	xlen_t __v = (xlen_t)(val);				\
+ 	__asm__ __volatile__ ("csrrs %0, " __ASM_STR(csr) ", %1"\
+ 			      : "=r" (__v) : "rK" (__v)		\
+ 			      : "memory");			\
+@@ -498,7 +504,7 @@
+ 
+ #define csr_set(csr, val)					\
+ ({								\
+-	unsigned long __v = (unsigned long)(val);		\
++	xlen_t __v = (xlen_t)(val);				\
+ 	__asm__ __volatile__ ("csrs " __ASM_STR(csr) ", %0"	\
+ 			      : : "rK" (__v)			\
+ 			      : "memory");			\
+@@ -506,7 +512,7 @@
+ 
+ #define csr_read_clear(csr, val)				\
+ ({								\
+-	unsigned long __v = (unsigned long)(val);		\
++	xlen_t __v = (xlen_t)(val);				\
+ 	__asm__ __volatile__ ("csrrc %0, " __ASM_STR(csr) ", %1"\
+ 			      : "=r" (__v) : "rK" (__v)		\
+ 			      : "memory");			\
+@@ -515,7 +521,7 @@
+ 
+ #define csr_clear(csr, val)					\
+ ({								\
+-	unsigned long __v = (unsigned long)(val);		\
++	xlen_t __v = (xlen_t)(val);				\
+ 	__asm__ __volatile__ ("csrc " __ASM_STR(csr) ", %0"	\
+ 			      : : "rK" (__v)			\
+ 			      : "memory");			\
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index c950a8d9edef..d8bfadaeea32 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -37,12 +37,12 @@ struct thread_struct {
+ 	/* Callee-saved registers */
+ 	unsigned long ra;
+ 	unsigned long sp;	/* Kernel mode stack */
+-	unsigned long s[12];	/* s[0]: frame pointer */
++	xlen_t     s[12];	/* s[0]: frame pointer */
+ 	struct __riscv_d_ext_state fstate;
+ 	unsigned long bad_cause;
+ 	unsigned long vstate_ctrl;
+ 	struct __riscv_v_ext_state vstate;
+-};
++} __attribute__((__aligned__(sizeof(xlen_t))));
+ 
+ /* Whitelist the fstate from the task_struct for hardened usercopy */
+ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+@@ -60,8 +60,8 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+ 	((struct pt_regs *)(task_stack_page(tsk) + THREAD_SIZE		\
+ 			    - ALIGN(sizeof(struct pt_regs), STACK_ALIGN)))
+ 
+-#define KSTK_EIP(tsk)		(task_pt_regs(tsk)->epc)
+-#define KSTK_ESP(tsk)		(task_pt_regs(tsk)->sp)
++#define KSTK_EIP(tsk)		(ulong)(task_pt_regs(tsk)->epc)
++#define KSTK_ESP(tsk)		(ulong)(task_pt_regs(tsk)->sp)
+ 
+ 
+ /* Do necessary setup to start up a newly executed thread. */
+diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
+index b5b0adcc85c1..54cdeec8ee79 100644
+--- a/arch/riscv/include/asm/ptrace.h
++++ b/arch/riscv/include/asm/ptrace.h
+@@ -13,53 +13,53 @@
+ #ifndef __ASSEMBLY__
+ 
+ struct pt_regs {
+-	unsigned long epc;
+-	unsigned long ra;
+-	unsigned long sp;
+-	unsigned long gp;
+-	unsigned long tp;
+-	unsigned long t0;
+-	unsigned long t1;
+-	unsigned long t2;
+-	unsigned long s0;
+-	unsigned long s1;
+-	unsigned long a0;
+-	unsigned long a1;
+-	unsigned long a2;
+-	unsigned long a3;
+-	unsigned long a4;
+-	unsigned long a5;
+-	unsigned long a6;
+-	unsigned long a7;
+-	unsigned long s2;
+-	unsigned long s3;
+-	unsigned long s4;
+-	unsigned long s5;
+-	unsigned long s6;
+-	unsigned long s7;
+-	unsigned long s8;
+-	unsigned long s9;
+-	unsigned long s10;
+-	unsigned long s11;
+-	unsigned long t3;
+-	unsigned long t4;
+-	unsigned long t5;
+-	unsigned long t6;
++	xlen_t epc;
++	xlen_t ra;
++	xlen_t sp;
++	xlen_t gp;
++	xlen_t tp;
++	xlen_t t0;
++	xlen_t t1;
++	xlen_t t2;
++	xlen_t s0;
++	xlen_t s1;
++	xlen_t a0;
++	xlen_t a1;
++	xlen_t a2;
++	xlen_t a3;
++	xlen_t a4;
++	xlen_t a5;
++	xlen_t a6;
++	xlen_t a7;
++	xlen_t s2;
++	xlen_t s3;
++	xlen_t s4;
++	xlen_t s5;
++	xlen_t s6;
++	xlen_t s7;
++	xlen_t s8;
++	xlen_t s9;
++	xlen_t s10;
++	xlen_t s11;
++	xlen_t t3;
++	xlen_t t4;
++	xlen_t t5;
++	xlen_t t6;
+ 	/* Supervisor/Machine CSRs */
+-	unsigned long status;
+-	unsigned long badaddr;
+-	unsigned long cause;
++	xlen_t status;
++	xlen_t badaddr;
++	xlen_t cause;
+ 	/* a0 value before the syscall */
+-	unsigned long orig_a0;
++	xlen_t orig_a0;
+ };
+ 
+ #define PTRACE_SYSEMU			0x1f
+ #define PTRACE_SYSEMU_SINGLESTEP	0x20
+ 
+-#ifdef CONFIG_64BIT
+-#define REG_FMT "%016lx"
++#if __riscv_xlen == 64
++#define REG_FMT "%016llx"
+ #else
+-#define REG_FMT "%08lx"
++#define REG_FMT "%08x"
+ #endif
+ 
+ #define user_mode(regs) (((regs)->status & SR_PP) == 0)
+@@ -69,12 +69,12 @@ struct pt_regs {
+ /* Helpers for working with the instruction pointer */
+ static inline unsigned long instruction_pointer(struct pt_regs *regs)
+ {
+-	return regs->epc;
++	return (unsigned long)regs->epc;
+ }
+ static inline void instruction_pointer_set(struct pt_regs *regs,
+ 					   unsigned long val)
+ {
+-	regs->epc = val;
++	regs->epc = (xlen_t)val;
+ }
+ 
+ #define profile_pc(regs) instruction_pointer(regs)
+@@ -82,40 +82,40 @@ static inline void instruction_pointer_set(struct pt_regs *regs,
+ /* Helpers for working with the user stack pointer */
+ static inline unsigned long user_stack_pointer(struct pt_regs *regs)
+ {
+-	return regs->sp;
++	return (unsigned long)regs->sp;
+ }
+ static inline void user_stack_pointer_set(struct pt_regs *regs,
+ 					  unsigned long val)
+ {
+-	regs->sp =  val;
++	regs->sp = (xlen_t)val;
+ }
+ 
+ /* Valid only for Kernel mode traps. */
+ static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
+ {
+-	return regs->sp;
++	return (unsigned long)regs->sp;
+ }
+ 
+ /* Helpers for working with the frame pointer */
+ static inline unsigned long frame_pointer(struct pt_regs *regs)
+ {
+-	return regs->s0;
++	return (unsigned long)regs->s0;
+ }
+ static inline void frame_pointer_set(struct pt_regs *regs,
+ 				     unsigned long val)
+ {
+-	regs->s0 = val;
++	regs->s0 = (xlen_t)val;
+ }
+ 
+ static inline unsigned long regs_return_value(struct pt_regs *regs)
+ {
+-	return regs->a0;
++	return (unsigned long)regs->a0;
+ }
+ 
+ static inline void regs_set_return_value(struct pt_regs *regs,
+ 					 unsigned long val)
+ {
+-	regs->a0 = val;
++	regs->a0 = (xlen_t)val;
+ }
+ 
+ extern int regs_query_register_offset(const char *name);
+diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
+index a06697846e69..bc0d2708bcd6 100644
+--- a/arch/riscv/include/asm/timex.h
++++ b/arch/riscv/include/asm/timex.h
+@@ -8,7 +8,7 @@
+ 
+ #include <asm/csr.h>
+ 
+-typedef unsigned long cycles_t;
++typedef xlen_t cycles_t;
+ 
+ #ifdef CONFIG_RISCV_M_MODE
+ 
+@@ -62,12 +62,12 @@ static inline u32 get_cycles_hi(void)
+ 
+ #endif /* !CONFIG_RISCV_M_MODE */
+ 
+-#ifdef CONFIG_64BIT
++#if __riscv_xlen == 64
+ static inline u64 get_cycles64(void)
+ {
+ 	return get_cycles();
+ }
+-#else /* CONFIG_64BIT */
++#else /* __riscv_xlen == 64 */
+ static inline u64 get_cycles64(void)
+ {
+ 	u32 hi, lo;
+@@ -79,12 +79,12 @@ static inline u64 get_cycles64(void)
+ 
+ 	return ((u64)hi << 32) | lo;
+ }
+-#endif /* CONFIG_64BIT */
++#endif /* __riscv_xlen == 64 */
+ 
+ #define ARCH_HAS_READ_CURRENT_TIMER
+ static inline int read_current_timer(unsigned long *timer_val)
+ {
+-	*timer_val = get_cycles();
++	*timer_val = (unsigned long)get_cycles();
+ 	return 0;
+ }
+ 
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 87bdb0d6dbf3..599b1966a166 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -46,8 +46,8 @@ void __show_regs(struct pt_regs *regs)
+ 	show_regs_print_info(KERN_DEFAULT);
+ 
+ 	if (!user_mode(regs)) {
+-		pr_cont("epc : %pS\n", (void *)regs->epc);
+-		pr_cont(" ra : %pS\n", (void *)regs->ra);
++		pr_cont("epc : %pS\n", (void *)(ulong)regs->epc);
++		pr_cont(" ra : %pS\n", (void *)(ulong)regs->ra);
+ 	}
+ 
+ 	pr_cont("epc : " REG_FMT " ra : " REG_FMT " sp : " REG_FMT "\n",
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index f910dfccbf5d..8fcef4fa43d0 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -100,7 +100,7 @@ void do_trap(struct pt_regs *regs, int signo, int code, unsigned long addr)
+ 	if (show_unhandled_signals && unhandled_signal(tsk, signo)
+ 	    && printk_ratelimit()) {
+ 		pr_info("%s[%d]: unhandled signal %d code 0x%x at 0x" REG_FMT,
+-			tsk->comm, task_pid_nr(tsk), signo, code, addr);
++			tsk->comm, task_pid_nr(tsk), signo, code, (xlen_t)addr);
+ 		print_vma_addr(KERN_CONT " in ", instruction_pointer(regs));
+ 		pr_cont("\n");
+ 		__show_regs(regs);
+@@ -265,7 +265,7 @@ void handle_break(struct pt_regs *regs)
+ 	current->thread.bad_cause = regs->cause;
+ 
+ 	if (user_mode(regs))
+-		force_sig_fault(SIGTRAP, TRAP_BRKPT, (void __user *)regs->epc);
++		force_sig_fault(SIGTRAP, TRAP_BRKPT, (void __user *)instruction_pointer(regs));
+ #ifdef CONFIG_KGDB
+ 	else if (notify_die(DIE_TRAP, "EBREAK", regs, 0, regs->cause, SIGTRAP)
+ 								== NOTIFY_STOP)
+diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+index 8d92fb6c522c..72ff3916eed6 100644
+--- a/arch/riscv/kernel/vector.c
++++ b/arch/riscv/kernel/vector.c
+@@ -133,7 +133,7 @@ EXPORT_SYMBOL_GPL(riscv_v_vstate_ctrl_user_allowed);
+ 
+ bool riscv_v_first_use_handler(struct pt_regs *regs)
+ {
+-	u32 __user *epc = (u32 __user *)regs->epc;
++	u32 __user *epc = (u32 __user *)(ulong)regs->epc;
+ 	u32 insn = (u32)regs->badaddr;
+ 
+ 	/* Do not handle if V is not supported, or disabled */
+diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
+index 34c5360c6705..34be7bf51731 100644
+--- a/arch/riscv/lib/memset.S
++++ b/arch/riscv/lib/memset.S
+@@ -38,7 +38,7 @@ WEAK(memset)
+ 	or a1, a3, a1
+ 	slli a3, a1, 16
+ 	or a1, a3, a1
+-#ifdef CONFIG_64BIT
++#if __riscv_xlen == 64
+ 	slli a3, a1, 32
+ 	or a1, a3, a1
+ #endif
+@@ -58,7 +58,7 @@ WEAK(memset)
+ 	/* Jump into loop body */
+ 	/* Assumes 32-bit instruction lengths */
+ 	la a5, 3f
+-#ifdef CONFIG_64BIT
++#if __riscv_xlen == 64
+ 	srli a4, a4, 1
+ #endif
+ 	add a5, a5, a4
+diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+index 6ea2cce4cc17..3d410dad28f8 100644
+--- a/arch/riscv/mm/fault.c
++++ b/arch/riscv/mm/fault.c
+@@ -28,7 +28,7 @@ static void die_kernel_fault(const char *msg, unsigned long addr,
+ 	bust_spinlocks(1);
+ 
+ 	pr_alert("Unable to handle kernel %s at virtual address " REG_FMT "\n", msg,
+-		addr);
++		(xlen_t)addr);
+ 
+ 	bust_spinlocks(0);
+ 	die(regs, "Oops");
 -- 
 2.36.1
 
