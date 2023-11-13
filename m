@@ -1,210 +1,174 @@
-Return-Path: <linux-arch+bounces-206-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-207-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37E557E9868
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 09:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3253F7E98D3
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 10:22:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 671181C203A4
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 08:57:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62FDA1C2037B
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 09:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF1318022;
-	Mon, 13 Nov 2023 08:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94C218C0F;
+	Mon, 13 Nov 2023 09:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="s1qV1NPd"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ERFtAi0H";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PC5YoXrU"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7391116436;
-	Mon, 13 Nov 2023 08:57:09 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434EC46AB;
-	Mon, 13 Nov 2023 00:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=s5Y4+GBI1idt885dHqSlmCpxDTCC53GskoMylOtfMEQ=; b=s1qV1NPdjQcYNlQAH0HnCureja
-	lYM0KeWoOVTXJ+nvcY2qysAv8biWNl91gK+sRrrAZOAF2kpgUNC1Rf74g61vu4921ppiLkBKMhxuF
-	vrbxEEQZ6Y2WiKanzePtJUZhu5YRPTe/3tShMKJE0MaFOCI8tl1pBhatLMJ0Opz9VKhtqJvhQNFgY
-	Rbu4qwcgsu9qGSWU18ENEur4D0vN0y/p2/RqEGqzx7AGj9uH9cYx37B76a+mjUqS1V+E/YKRcrWl1
-	1Yw/qPK5OgBxXP4uhXJRADiWqdVeMdSXRl4xTamkdzHGqHhYXNOY5gmCHtVTzZBjeQl0vQ1L62eQH
-	wEOSGG8g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49224)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1r2SkQ-0006OC-2B;
-	Mon, 13 Nov 2023 08:56:46 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1r2SkM-0004PF-EM; Mon, 13 Nov 2023 08:56:42 +0000
-Date: Mon, 13 Nov 2023 08:56:42 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Gavin Shan <gshan@redhat.com>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH RFC 05/22] ACPI: Move ACPI_HOTPLUG_CPU to be disabled on
- arm64 and riscv
-Message-ID: <ZVHkykFMp+CMUqyf@shell.armlinux.org.uk>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JL6-00CTws-3z@rmk-PC.armlinux.org.uk>
- <8e288692-7460-4aa4-86f3-500327256bc3@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7722018E1F;
+	Mon, 13 Nov 2023 09:22:41 +0000 (UTC)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C0510D4;
+	Mon, 13 Nov 2023 01:22:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C0B4721900;
+	Mon, 13 Nov 2023 09:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1699867356; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=D3Jfk6wPDPn61d9SkNQs0RWFcu0gEIcj0L1gosyNYP8=;
+	b=ERFtAi0H+/DmiIIYjA+Bg4Dqa4ttdxaixobGeq6zAd8e+voDaBuTYYHh5mShTHIydQhYDO
+	BhFcwI5MgzxmaiPz4c610/cjl7TD0zbozg0vkTGoSHKBIS6XiSOHus9Z3cm/EXoHv3uFMr
+	tQTYZ6bZatOp7TGSp8ez0Y/9Ot7gCRU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1699867356;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=D3Jfk6wPDPn61d9SkNQs0RWFcu0gEIcj0L1gosyNYP8=;
+	b=PC5YoXrUjX6g/jXM/N5NHV/AtDbhH4BfCbejheLebBTK6Ge4VnlGBOz0UYqdOwNIsJHxfc
+	+iLd84dtD/q1/YBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3FD2B13398;
+	Mon, 13 Nov 2023 09:22:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id Dta+DNzqUWVjCwAAMHmgww
+	(envelope-from <tzimmermann@suse.de>); Mon, 13 Nov 2023 09:22:36 +0000
+Message-ID: <ba7e407c-d091-410d-92a5-19ec25224bd2@suse.de>
+Date: Mon, 13 Nov 2023 10:22:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e288692-7460-4aa4-86f3-500327256bc3@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: (subset) [PATCH v5 0/5] ppc, fbdev: Clean up fbdev mmap helper
+To: Michael Ellerman <patch-notifications@ellerman.id.au>
+Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org
+References: <20230922080636.26762-1-tzimmermann@suse.de>
+ <169984352204.1887074.16685503842131763450.b4-ty@ellerman.id.au>
+Content-Language: en-US
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <169984352204.1887074.16685503842131763450.b4-ty@ellerman.id.au>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------bhtCdMnClY6lSHNIfviMvszc"
 
-On Mon, Nov 13, 2023 at 10:29:39AM +1000, Gavin Shan wrote:
-> On 11/7/23 20:29, Russell King (Oracle) wrote:
-> > From: James Morse <james.morse@arm.com>
-> > 
-> > Neither arm64 nor riscv support physical hotadd of CPUs that were not
-> > present at boot. For arm64 much of the platform description is in static
-> > tables which do not have update methods. arm64 does support HOTPLUG_CPU,
-> > which is backed by a firmware interface to turn CPUs on and off.
-> > 
-> > acpi_processor_hotadd_init() and acpi_processor_remove() are for adding
-> > and removing CPUs that were not present at boot. arm64 systems that do this
-> > are not supported as there is currently insufficient information in the
-> > platform description. (e.g. did the GICR get removed too?)
-> > 
-> > arm64 currently relies on the MADT enabled flag check in map_gicc_mpidr()
-> > to prevent CPUs that were not described as present at boot from being
-> > added to the system. Similarly, riscv relies on the same check in
-> > map_rintc_hartid(). Both architectures also rely on the weak 'always fails'
-> > definitions of acpi_map_cpu() and arch_register_cpu().
-> > 
-> > Subsequent changes will redefine ACPI_HOTPLUG_CPU as making possible
-> > CPUs present. Neither arm64 nor riscv support this.
-> > 
-> > Disable ACPI_HOTPLUG_CPU for arm64 and riscv by removing 'default y' and
-> > selecting it on the other three ACPI architectures. This allows the weak
-> > definitions of some symbols to be removed.
-> > 
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> > Changes since RFC:
-> >   * Expanded conditions to avoid ACPI_HOTPLUG_CPU being enabled when
-> >     HOTPLUG_CPU isn't.
-> > Changes since RFC v3:
-> >   * Dropped ia64 changes
-> > ---
-> >   arch/loongarch/Kconfig        |  1 +
-> >   arch/x86/Kconfig              |  1 +
-> >   drivers/acpi/Kconfig          |  1 -
-> >   drivers/acpi/acpi_processor.c | 18 ------------------
-> >   4 files changed, 2 insertions(+), 19 deletions(-)
-> > 
-> 
-> With the following nits addressed:
-> 
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> 
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index d889a0b97bc1..64620e90c12c 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -5,6 +5,7 @@ config LOONGARCH
-> >   	select ACPI
-> >   	select ACPI_GENERIC_GSI if ACPI
-> >   	select ACPI_MCFG if ACPI
-> > +	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
-> >   	select ACPI_PPTT if ACPI
-> >   	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-> >   	select ARCH_BINFMT_ELF_STATE
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 3762f41bb092..dbdcfc708369 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -59,6 +59,7 @@ config X86
-> >   	#
-> >   	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
-> >   	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-> > +	select ACPI_HOTPLUG_CPU			if ACPI_PROCESSOR && HOTPLUG_CPU
-> >   	select ARCH_32BIT_OFF_T			if X86_32
-> >   	select ARCH_CLOCKSOURCE_INIT
-> >   	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-> > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> > index f819e760ff19..a3acfc750fce 100644
-> > --- a/drivers/acpi/Kconfig
-> > +++ b/drivers/acpi/Kconfig
-> > @@ -310,7 +310,6 @@ config ACPI_HOTPLUG_CPU
-> >   	bool
-> >   	depends on ACPI_PROCESSOR && HOTPLUG_CPU
-> >   	select ACPI_CONTAINER
-> > -	default y
-> >   config ACPI_PROCESSOR_AGGREGATOR
-> >   	tristate "Processor Aggregator"
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > index 0f5218e361df..4fe2ef54088c 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -184,24 +184,6 @@ static void __init acpi_pcc_cpufreq_init(void) {}
-> >   /* Initialization */
-> >   #ifdef CONFIG_ACPI_HOTPLUG_CPU
-> > -int __weak acpi_map_cpu(acpi_handle handle,
-> > -		phys_cpuid_t physid, u32 acpi_id, int *pcpu)
-> > -{
-> > -	return -ENODEV;
-> > -}
-> > -
-> > -int __weak acpi_unmap_cpu(int cpu)
-> > -{
-> > -	return -ENODEV;
-> > -}
-> > -
-> > -int __weak arch_register_cpu(int cpu)
-> > -{
-> > -	return -ENODEV;
-> > -}
-> > -
-> > -void __weak arch_unregister_cpu(int cpu) {}
-> > -
-> 
-> Since we're here, EXPORT_SYMBOL() can be dropped for these functions on
-> x86 and loongarch because they're not called from a module?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------bhtCdMnClY6lSHNIfviMvszc
+Content-Type: multipart/mixed; boundary="------------ZnC76XYWWYK1mLFHw8ZmTwef";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Michael Ellerman <patch-notifications@ellerman.id.au>
+Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org
+Message-ID: <ba7e407c-d091-410d-92a5-19ec25224bd2@suse.de>
+Subject: Re: (subset) [PATCH v5 0/5] ppc, fbdev: Clean up fbdev mmap helper
+References: <20230922080636.26762-1-tzimmermann@suse.de>
+ <169984352204.1887074.16685503842131763450.b4-ty@ellerman.id.au>
+In-Reply-To: <169984352204.1887074.16685503842131763450.b4-ty@ellerman.id.au>
 
-I'm confused, and don't understand your comment. You've r-b the
-previous two patches that remove the EXPORT_SYMBOL()s for
-arch_register_cpu() and arch_unregister_cpu() from x86 and loongarch.
-So it seems your comment is already addressed, and thus makes no
-sense.
+--------------ZnC76XYWWYK1mLFHw8ZmTwef
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Please clarify.
+DQoNCkFtIDEzLjExLjIzIHVtIDAzOjQ1IHNjaHJpZWIgTWljaGFlbCBFbGxlcm1hbjoNCj4g
+T24gRnJpLCAyMiBTZXAgMjAyMyAxMDowNDo1NCArMDIwMCwgVGhvbWFzIFppbW1lcm1hbm4g
+d3JvdGU6DQo+PiBDbGVhbiB1cCBhbmQgcmVuYW1lIGZiX3BncHJvdGVjdCgpIHRvIHdvcmsg
+d2l0aG91dCBzdHJ1Y3QgZmlsZS4gVGhlbg0KPj4gcmVmYWN0b3IgdGhlIGltcGxlbWVudGF0
+aW9uIGZvciBQb3dlclBDLiBUaGlzIGNoYW5nZSBoYXMgYmVlbiBkaXNjdXNzZWQNCj4+IGF0
+IFsxXSBpbiB0aGUgY29udGV4dCBvZiByZWZhY3RvcmluZyBmYmRldidzIG1tYXAgY29kZS4N
+Cj4+DQo+PiBUaGUgZmlyc3QgdHdvIHBhdGNoZXMgdXBkYXRlIGZiZGV2IGFuZCByZXBsYWNl
+IGZiZGV2J3MgZmJfcGdwcm90ZWN0KCkNCj4+IHdpdGggcGdwcm90X2ZyYW1lYnVmZmVyKCkg
+b24gYWxsIGFyY2hpdGVjdHVyZXMuIFRoZSBuZXcgaGVscGVyJ3Mgc3RyZWFtLQ0KPj4gbGlu
+ZWQgaW50ZXJmYWNlIGVuYWJsZXMgbW9yZSByZWZhY3RvcmluZyB3aXRoaW4gZmJkZXYncyBt
+bWFwDQo+PiBpbXBsZW1lbnRhdGlvbi4NCj4+DQo+PiBbLi4uXQ0KPiANCj4gUGF0Y2hlcyAz
+LTUgYXBwbGllZCB0byBwb3dlcnBjL2ZpeGVzLg0KPiANCj4gWzMvNV0gYXJjaC9wb3dlcnBj
+OiBSZW1vdmUgdHJhaWxpbmcgd2hpdGVzcGFjZXMNCj4gICAgICAgIGh0dHBzOi8vZ2l0Lmtl
+cm5lbC5vcmcvcG93ZXJwYy9jLzMyMjk0OGMzMTk4Y2Y4MGU3YzEwZDk1M2RkYWQyNGViZDg1
+NzU3Y2QNCj4gWzQvNV0gYXJjaC9wb3dlcnBjOiBSZW1vdmUgZmlsZSBwYXJhbWV0ZXIgZnJv
+bSBwaHlzX21lbV9hY2Nlc3NfcHJvdCBjb2RlDQo+ICAgICAgICBodHRwczovL2dpdC5rZXJu
+ZWwub3JnL3Bvd2VycGMvYy8xZjkyYTg0NGMzNWU0ODNjMDBiYWI4YTdiN2QzOWM1NTVlZTc5
+OWQ4DQo+IFs1LzVdIGFyY2gvcG93ZXJwYzogQ2FsbCBpbnRlcm5hbCBfX3BoeXNfbWVtX2Fj
+Y2Vzc19wcm90KCkgaW4gZmJkZXYgY29kZQ0KPiAgICAgICAgaHR0cHM6Ly9naXQua2VybmVs
+Lm9yZy9wb3dlcnBjL2MvZGVlYmU1ZjYwN2Q3ZjcyZjgzYzQxMTYzMTkxYWQwYzFjNDM1NjM4
+NQ0KDQpHcmVhdCwgdGhhbmtzIGEgbG90IQ0KDQo+IA0KPiBjaGVlcnMNCg0KLS0gDQpUaG9t
+YXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2Fy
+ZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51
+ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcg
+TWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+
+--------------ZnC76XYWWYK1mLFHw8ZmTwef--
+
+--------------bhtCdMnClY6lSHNIfviMvszc
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmVR6tsFAwAAAAAACgkQlh/E3EQov+Db
++Q//VC9xdTxmoG7kkH+AyylOR0zi9TCw9c4m+AppLVu16/wmZST6snqAPRBzoXQDrPXOyWaLujR8
+1bKd+/5KUf07wboA5UOV+6z4DMOC7E0eGAwWsfYvgpPML4y5mD1UWeRoSqXuHGNiVeQoDavIgK91
+PPck79Iio2/66zBh9P9/0QSHvJGKGcsuLVSd6ACxtgp+ADNdperGmT+7gAoqEoOeUiA5OhvVGv1l
+3Juv91vCU7x5bgCsfvr0p3BXGAdWBG0B2eGiUhdtNM1dBdxWXn8zbvgMxkyCImceZkgJebZDvuLO
+psEzobD5NvsM41DAQEpxLshhL8Eq+6/No9c0oUhmLcN7BDgagRanlJXRRSnMSIx8kvLAOs4YvcZ2
+5sR+UAIx6NM7fQhdq4CoGCE05Ff/s571qRlDB8TaTnb9l4+ooLYWcM3wtEqJSO9RdD98orMiE5H1
+1APxpQwq+Mg+oEM3/QprJSCu68Iu9I8E8ArjugGP7eRw83sN/VJM7EB3NrDgZ3/V0znFCSb11JP1
+WAjoF0X09yHMivD91jm+pVeNcM5TLOTC0Fv11VZHbDMtaLSpwGi4Pn6fyFVrFHLvotckv70TFRvz
+rqNzZtQjManvzCGFBQVtNIWGXZgi7eWiK8mWsyFHOcYhhlw2646Bdoi81E93egf9QvWJXQV7MxvK
+epo=
+=KjZf
+-----END PGP SIGNATURE-----
+
+--------------bhtCdMnClY6lSHNIfviMvszc--
 
