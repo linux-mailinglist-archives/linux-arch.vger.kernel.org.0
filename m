@@ -1,127 +1,125 @@
-Return-Path: <linux-arch+bounces-188-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-189-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DDBB7E9587
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 04:29:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4E247E95CE
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 05:04:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B98451F210F5
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 03:29:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AD421C20973
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 04:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153C2883A;
-	Mon, 13 Nov 2023 03:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9565C14E;
+	Mon, 13 Nov 2023 04:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CSrHsh9B"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DwKRNRZa"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E8A8838
-	for <linux-arch@vger.kernel.org>; Mon, 13 Nov 2023 03:29:07 +0000 (UTC)
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC74171C
-	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 19:29:05 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-45db31f9156so1717470137.1
-        for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 19:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699846145; x=1700450945; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N2dGyXj5qPWx8L/oD7d/kJ2B1kSBzAWVgjHl9+VbT5g=;
-        b=CSrHsh9BqDX/+zONieAXevR7NLb18gQCuO78q5RU/ltdr9vQOM6ranCrMqhyi32jaL
-         s2UzxX2G44i/g9AwnqRS7KMooFi8rKcU407idcCYkgZgfyIaHJXjIViF1Vf6QgXBhLXp
-         TAFJPZ3A5m0olNiegRJtM4hoU/mm7At7ggx1gOSdH2+fi+NDLdLpauJljnDMQBkOHVbg
-         l3Q0iMNuJn+Ciz9hUm+CN0g31WPchNENDrmiOz29CF7d1aAI4Os1ZmfxJMukV+0rx6GG
-         33ED0ficMpON3UfmQaf2mWdIaNurZPD2uU4wSUJVQ03HqG3Nvg3A5DDiVjVZp5HvN++k
-         aJJQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B354C12F
+	for <linux-arch@vger.kernel.org>; Mon, 13 Nov 2023 04:04:08 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0429E111
+	for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 20:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699848246;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MtNFooCff3vqCOUxCEz1jHRl+QbfPpBEZibpqDAaoCg=;
+	b=DwKRNRZa+xVhO5aifoyoc0a6t/eISpLe5wUxbtFP4LcrQqkzayJZKHmdeTdL06ylZVhTgB
+	K57bezKSZiCH92HkQd0Gr7QunNEs2Km3Mm1hsoDZtCQm1iuCezkPgP5NwqTxOVa4TUw/wV
+	Nsgkfcwkgv5XgudM9ViwrFs7N0jgDes=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-221-70RiiA3cNxygzWicz9lGBA-1; Sun, 12 Nov 2023 23:04:04 -0500
+X-MC-Unique: 70RiiA3cNxygzWicz9lGBA-1
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1cc482cc026so54406915ad.2
+        for <linux-arch@vger.kernel.org>; Sun, 12 Nov 2023 20:04:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699846145; x=1700450945;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N2dGyXj5qPWx8L/oD7d/kJ2B1kSBzAWVgjHl9+VbT5g=;
-        b=kLVA9VwZSe+aRNrWz5iGRtqvTU04zOV8HY/rGtmAZ7uF5P5kg9ndQPCflOPBgbCGrl
-         Gk3U4zEd442S9CgXthqWcJnIN3eeKLansOmS2mq/1n5UpPfyplhQkXVu9TmVHJ4/2ExU
-         StkgrrthB/DDGnmJsyWDKs0YwIyfkbtyRYxI9bzLr7hl6qU0QHZDYLntbJBwbcjmD2Um
-         w6mPb+c0p1Dm3V3Zkw3Hhrn9rIbePIBtXHkb8IVd2gIiQhup4lwlPcCJTSrJT7ODs4PJ
-         VwUwxOem4Aeym0owc3eNaj4WvqTBVLusaHEiLQZK83A20zDZIADSyHviWt7PfBe5woxg
-         rl4A==
-X-Gm-Message-State: AOJu0YyDaC/4cU3ou9afg5DjjehQIm7YFKK/D1WvJEudIAGcv0lq9V8J
-	nGX2SHB5vnMCtTcUlveyoFUcFqdFb4g+7xSbjD12sA==
-X-Google-Smtp-Source: AGHT+IHF2Jct5wlvc5iEDA5CXatiC4I+LjFNu9wrknK+tB6gu0XrkZJBw+kq39swHZW/DhuGkGJI2Nhu4+A/S+uBIBE=
-X-Received: by 2002:a05:6102:23cd:b0:45d:989b:da4a with SMTP id
- x13-20020a05610223cd00b0045d989bda4amr4899045vsr.22.1699846144896; Sun, 12
- Nov 2023 19:29:04 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699848243; x=1700453043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MtNFooCff3vqCOUxCEz1jHRl+QbfPpBEZibpqDAaoCg=;
+        b=TedCWuK7i2Hf68Es7J6n/rK1tBC4HVEp6iiWc5VQuWioHFMzQKZ+/YqIBVz7P1lpzX
+         n5mdrO07/kMG4x4qbStuy6cY385GZAQ9ruW1GXLgxyg7dHG+oeNHH8fU80b5fjdi0akA
+         mSjOmMbuoSlkZ+k7u24Q1b1LXTB904tdnVAz8e/4iNLXmMSjafZAmkr1P1FIe8NRHUxn
+         FHkw+CtBE7Qxnk0jEkGls4CNhj0IO7YF5cAuHu1TwVovnIoZArzSIM1ktSpP2E7hwRT1
+         +FBIWsj5BW4q35KjVGXXbeGDDOgdecfMK17O2crSbQewUu7WlZeRiCvw1S+sirtmfQSz
+         fYww==
+X-Gm-Message-State: AOJu0YyVbZudrm6fGMpOHJFNHzbWB0vwAupNHlT2casYydN2FTMWaato
+	dQ/whRI8+nX0Xa7J0g/7CqzK69JJ1M9+k8Yb6OhCXsqF8B+k1r5QWyNkqhFKAHmIuuHzDVz06rZ
+	TZnyKN8WZfsoVBvTKDGpaqA==
+X-Received: by 2002:a17:903:124b:b0:1cc:3f10:4175 with SMTP id u11-20020a170903124b00b001cc3f104175mr7395305plh.28.1699848243618;
+        Sun, 12 Nov 2023 20:04:03 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHIUBgi1/lc4Y3idUGi3EHadW6QYxPGSgwR1L+ZBVEJt2K4HesJHzLX8fXA3t0WRPADwpmGUg==
+X-Received: by 2002:a17:903:124b:b0:1cc:3f10:4175 with SMTP id u11-20020a170903124b00b001cc3f104175mr7395280plh.28.1699848243280;
+        Sun, 12 Nov 2023 20:04:03 -0800 (PST)
+Received: from ?IPV6:2001:8003:e5b0:9f00:b890:3e54:96bb:2a15? ([2001:8003:e5b0:9f00:b890:3e54:96bb:2a15])
+        by smtp.gmail.com with ESMTPSA id u18-20020a170902e5d200b001c62d63b817sm3216342plf.179.2023.11.12.20.03.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Nov 2023 20:04:02 -0800 (PST)
+Message-ID: <c4a0af68-153e-41a8-ae82-8ebb2b4c4bc9@redhat.com>
+Date: Mon, 13 Nov 2023 14:03:53 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-3-almasrymina@google.com> <20231110151907.023c61cd@kernel.org>
-In-Reply-To: <20231110151907.023c61cd@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Sun, 12 Nov 2023 19:28:52 -0800
-Message-ID: <CAHS8izPKRh7ukRytXaweKcY_76sE7F_3s1sYVgsUXYGrypK93Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 02/12] net: page_pool: create hooks for custom page providers
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 12/22] drivers: base: Print a warning instead of
+ panic() when register_cpu() fails
+Content-Language: en-US
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+ linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org,
+ linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
+Cc: Salil Mehta <salil.mehta@huawei.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
+ justin.he@arm.com, James Morse <james.morse@arm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+ <E1r0JLg-00CTxd-31@rmk-PC.armlinux.org.uk>
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <E1r0JLg-00CTxd-31@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 10, 2023 at 3:19=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Sun,  5 Nov 2023 18:44:01 -0800 Mina Almasry wrote:
-> > diff --git a/include/net/page_pool/types.h b/include/net/page_pool/type=
-s.h
-> > index 6fc5134095ed..d4bea053bb7e 100644
-> > --- a/include/net/page_pool/types.h
-> > +++ b/include/net/page_pool/types.h
-> > @@ -60,6 +60,8 @@ struct page_pool_params {
-> >       int             nid;
-> >       struct device   *dev;
-> >       struct napi_struct *napi;
-> > +     u8              memory_provider;
-> > +     void            *mp_priv;
-> >       enum dma_data_direction dma_dir;
-> >       unsigned int    max_len;
-> >       unsigned int    offset;
->
-> you should rebase on top of net-next
->
-> More importantly I was expecting those fields to be gone from params.
-> The fact that the page pool is configured to a specific provider
-> should be fully transparent to the driver, driver should just tell
-> the core what queue its creating the pool from and if there's a dmabuf
-> bound for that queue - out pops a pp backed by the dmabuf.
->
+On 11/7/23 20:30, Russell King (Oracle) wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> loongarch, mips, parisc, riscv and sh all print a warning if
+> register_cpu() returns an error. Architectures that use
+> GENERIC_CPU_DEVICES call panic() instead.
+> 
+> Errors in this path indicate something is wrong with the firmware
+> description of the platform, but the kernel is able to keep running.
+> 
+> Downgrade this to a warning to make it easier to debug this issue.
+> 
+> This will allow architectures that switching over to GENERIC_CPU_DEVICES
+> to drop their warning, but keep the existing behaviour.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+>   drivers/base/cpu.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
 
-My issue with this is that if the driver doesn't support dmabuf then
-the driver will accidentally use the pp backed by the dmabuf, allocate
-a page from it, then call page_address() on it or something, and
-crash.
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-Currently I avoid that by having the driver be responsible for picking
-up the dmabuf from the netdev_rx_queue and giving it to the page pool.
-What would be the appropriate way to check for driver support in the
-netlink API? Perhaps adding something to ndo_features_check?
-
---=20
-Thanks,
-Mina
 
