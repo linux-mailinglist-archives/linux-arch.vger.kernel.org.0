@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-210-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-211-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA027EA5BA
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 23:11:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE54A7EA5E2
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 23:17:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C333280EB1
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 22:11:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 645981F2297B
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Nov 2023 22:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E2C2D631;
-	Mon, 13 Nov 2023 22:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FFF2E621;
+	Mon, 13 Nov 2023 22:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sh8VLAlu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pfTtVlCf"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B532D62C;
-	Mon, 13 Nov 2023 22:11:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73772C433C8;
-	Mon, 13 Nov 2023 22:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EDE2D616;
+	Mon, 13 Nov 2023 22:17:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ACAAC433C8;
+	Mon, 13 Nov 2023 22:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699913462;
-	bh=y8SvI32OK2xraWnJ4KYO59jDyKCSgMJ4BUaSyMs0sXQ=;
+	s=k20201202; t=1699913845;
+	bh=CxWQpMYa8YFxdmrO7alx+fTpOfQbmSEl3BDYj4zQHDQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=sh8VLAlu2TmvxYxt3GN/26B09B8wkV2+1djcwE8Do3NvbevLDLFLmcF4YsP/sCiHD
-	 NW4TAVN2626qYqQZ9gcvgaKIoHkfVe+s2AWqXNrsu8Xl0AfBnF1Vd8JWmlqeVdBKOM
-	 h2ru3fjERW2LWok5RGV9gkJxm2hnRvqjsTxAfYZyMO9A2PhTDH5PN+1t8UAu1SEGIZ
-	 NOIR0ex6iou1GQEd1NFF2ucKqLJjr9mKhphshDQXzoqdPKJhBHReb0wsywTUyCOztx
-	 tLE5Vxef0IOTcXVEzGS5tfTu8GIR8oCdjW0zUkV3ILeho4XhBy1idGuC8LO3I8aBdJ
-	 yzLBad+6UuGBg==
-Date: Mon, 13 Nov 2023 17:10:58 -0500
+	b=pfTtVlCfr2biHw2W2q09MzqRYOXyxULA1cvXKH7lJgKmOoBelavwg2NXMOeLV7RUo
+	 hrZuG3PHE0z5OMU4LNRcYJVjk0cH2848YM8SF61BQovVnipqwkNu8pDfRo54FL/qed
+	 /K+B+kMd4vlsDHBN45H7bcB4/VHCJY4WQK9LS2T0cMlbtHGDade5u1H98jC04pTWwN
+	 KPdxdN8TpGk98s6qR3UTMZL77bOJSTg3QVyGaeJlKZR8wMv/V50rWPbz2j2fb7M3J8
+	 gAhCxBNq7Y1mkkatFEdAbqH0WbqHrEMgjNWtPrunbYike0UbTQowc3cHZ7MmbWmELA
+	 naKo5qrdJEm0Q==
+Date: Mon, 13 Nov 2023 17:17:21 -0500
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -47,14 +47,13 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shakeel Butt
  <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
  Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH v3 02/12] net: page_pool: create hooks for custom
- page providers
-Message-ID: <20231113171058.68973860@kernel.org>
-In-Reply-To: <CAHS8izPKRh7ukRytXaweKcY_76sE7F_3s1sYVgsUXYGrypK93Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 08/12] net: support non paged skb frags
+Message-ID: <20231113171721.1a6731e6@kernel.org>
+In-Reply-To: <CAHS8izN7MydkJPaHfj7Pw0V+xoDBkCmEVTc1TH24=hjXm98xnQ@mail.gmail.com>
 References: <20231106024413.2801438-1-almasrymina@google.com>
-	<20231106024413.2801438-3-almasrymina@google.com>
-	<20231110151907.023c61cd@kernel.org>
-	<CAHS8izPKRh7ukRytXaweKcY_76sE7F_3s1sYVgsUXYGrypK93Q@mail.gmail.com>
+	<20231106024413.2801438-9-almasrymina@google.com>
+	<20231110151935.0859fd7a@kernel.org>
+	<CAHS8izN7MydkJPaHfj7Pw0V+xoDBkCmEVTc1TH24=hjXm98xnQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,19 +63,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun, 12 Nov 2023 19:28:52 -0800 Mina Almasry wrote:
-> My issue with this is that if the driver doesn't support dmabuf then
-> the driver will accidentally use the pp backed by the dmabuf, allocate
-> a page from it, then call page_address() on it or something, and
-> crash.
-> 
-> Currently I avoid that by having the driver be responsible for picking
-> up the dmabuf from the netdev_rx_queue and giving it to the page pool.
-> What would be the appropriate way to check for driver support in the
-> netlink API? Perhaps adding something to ndo_features_check?
+On Sun, 12 Nov 2023 22:05:30 -0800 Mina Almasry wrote:
+> My issue here is that all these skb helpers call each other so I end
+> up having to move a lot of the unrelated skb helpers to this new
+> header (maybe that is acceptable but it feels weird).
 
-We need some form of capabilities. I was expecting to add that as part
-of the queue API. Either a new field in struct net_device or in ndos.
-I tend to put static driver caps of this nature into ops.
-See for instance .supported_ring_params in ethtool ops.
+Splitting pp headers again is not an option, we already split it into
+types and helpers.
+
+The series doesn't apply and it's a bit hard for me to, in between LPC
+talks, figure out how to extract your patches from the GH UI to take a
+proper look :(
+We can defer this for now, and hopefully v4 will apply to net-next.
+But it will need to get solved.
 
