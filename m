@@ -1,140 +1,110 @@
-Return-Path: <linux-arch+bounces-224-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-225-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 468767EC052
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Nov 2023 11:11:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA1E27EC397
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Nov 2023 14:28:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C928FB209C2
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Nov 2023 10:11:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148EF1C2074E
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Nov 2023 13:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91A23C2FD;
-	Wed, 15 Nov 2023 10:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DEC1A708;
+	Wed, 15 Nov 2023 13:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="WMk7AaLV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U8G4Uevf"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD965C8CB;
-	Wed, 15 Nov 2023 10:11:46 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252539C;
-	Wed, 15 Nov 2023 02:11:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=J+m5Wux4gCeZ5VbKE22zSD3h2vqCToIPoOglMpcMB98=; b=WMk7AaLVtN5GRy7VHSplvABKOr
-	OXRc47CE5LjYfVL1I4G9BmL9nkSst8Vh0ERKHmS8MJxRSPLKDFvaYbEeA1sMiDIYtcRhNQa/pnlI8
-	PkqOB9knMX2YL+uvuraKATTscnDpMYKl3cLLR36pzK4yKmNHGHEjAw7PZ395B53vvUhyuWvtelDyB
-	r5XhCGNIJB9iBgYQiuOIDQBOPCIGnr+az2tu1OpmA6+1stGbOEb7mZfrcCgopQw9ZYDmB/DHKIyAH
-	MGihds8I0ekCwC2YQuqoXNHvkOJ31Wt+yTJ713pnOPmQLGMyMGfLqHWpB6tvMEThA4WWseIPd1uBc
-	ry+LnBrA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56952)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1r3Crx-0000WK-1q;
-	Wed, 15 Nov 2023 10:11:37 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1r3Crw-0006Uz-QI; Wed, 15 Nov 2023 10:11:36 +0000
-Date: Wed, 15 Nov 2023 10:11:36 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Gavin Shan <gshan@redhat.com>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH RFC 11/22] drivers: base: remove unnecessary call to
- register_cpu_under_node()
-Message-ID: <ZVSZWK+OmZWEce33@shell.armlinux.org.uk>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JLa-00CTxY-Uv@rmk-PC.armlinux.org.uk>
- <955f2b95-76e4-4e68-830b-e6dd9f122dc1@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153FF1A5BA
+	for <linux-arch@vger.kernel.org>; Wed, 15 Nov 2023 13:28:19 +0000 (UTC)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A148196
+	for <linux-arch@vger.kernel.org>; Wed, 15 Nov 2023 05:28:18 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-50930f126b1so9024560e87.3
+        for <linux-arch@vger.kernel.org>; Wed, 15 Nov 2023 05:28:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700054896; x=1700659696; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IwN4XVt8yK1X3+YfAI5MPsrSuan+JzWxqjLblP1tQKk=;
+        b=U8G4Uevfz+kHk0zZH4Xj4k/HqAagC61Z5A7roLUdDSoeAGL83SRc6bJWyn5Tl+tQ8c
+         Lmpf6x/qr6bp39utb+XPzTKWPtsZxcwMHKrr20ENEReQH4tDWpx56C8HRLUHCiw/PZOm
+         PyYmYVYywVXySeZsW/POAoHjIGBpaUtZFg2CsbHc9UTq2m/te0/9DcnJ8J27iQELwO/x
+         eBU31l7ADziA4V6WCPqtwTTd6UKL2M3+csZO7kj0m2RcPW8H3oD4IUjL/YFDbD1kuRCA
+         Jbb6+OLtn7d0m6lYlAod08sVzg7tglDPlMVWNZjh13WntC8qXUyNnqprOoPRLznQ1ir0
+         XjsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700054896; x=1700659696;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IwN4XVt8yK1X3+YfAI5MPsrSuan+JzWxqjLblP1tQKk=;
+        b=SOMSFMCUSOiJmFgcKTs88vkkAcgtPCHASSnL0xdPyops3pqvzLOGxAp1pTC84sC1XX
+         MgXC4iTy4+GlKW724qZljaQfJJpOvyEaQo6SsCfQC333wVNYPeqaLZHLYQMgL+VMuRXN
+         7lRs10QXV/bm1wJ7raBAIzWK0xgWxnYGlpccmuK/HfCAOK9Zsey1mWBWdOEOshwWYDJE
+         pFW9L0vKUnib2jxE3uq2xr63ATv+twKFjYKG3CHKpvHvsLkEwcjY1B5i9RjJATRFJ6TY
+         MUAp0w/iT9/gNH+/OzcPw1xcBbnE0dHOQZOyN/tlD8pNaskAmBFZ+fpiR8pbIaJqf4zO
+         sEgg==
+X-Gm-Message-State: AOJu0YyQfzgXKbOjRiW7r/8HCaeg60VPcyHkMovyqflq9PMV2ekXM+32
+	XiwssFIfZTywTtnwKoObYe9wMwGYT8XW1w6IoFQ=
+X-Google-Smtp-Source: AGHT+IF6FsX84+Bpu5NsuR9YTgjgvPm5Ii4b6DzTvo5LXdZ+KTsK38zulfyHnqY8V8cYq+V7VMdbJg==
+X-Received: by 2002:a05:6512:3e1e:b0:509:4b8a:b65f with SMTP id i30-20020a0565123e1e00b005094b8ab65fmr10675082lfv.60.1700054895757;
+        Wed, 15 Nov 2023 05:28:15 -0800 (PST)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id l12-20020a19c20c000000b00507b1da672bsm1648705lfc.174.2023.11.15.05.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Nov 2023 05:28:15 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/2] arch: Virt to phys to static inlines
+Date: Wed, 15 Nov 2023 14:28:13 +0100
+Message-Id: <20231115-virt-to-phy-arch-tree-v1-0-8b61296eae73@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <955f2b95-76e4-4e68-830b-e6dd9f122dc1@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAG3HVGUC/x3MPQqAMAxA4atIZgON/3gVcdAabRaVtBRFvLvF8
+ Rvee8CzCnvosweUo3g59gTKM7Bu2jdGWZKhMEVJRDVG0YDhwNPdOKl1GJQZqWxn27Wmapggtaf
+ yKtf/Hcb3/QD/9wbVZwAAAA==
+To: Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>, 
+ Brian Cain <bcain@quicinc.com>
+Cc: linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+ Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.4
 
-On Mon, Nov 13, 2023 at 02:04:32PM +1000, Gavin Shan wrote:
-> On 11/7/23 20:30, Russell King (Oracle) wrote:
-> > Since "drivers: base: Move cpu_dev_init() after node_dev_init()", we
-> > can remove some redundant code.
-> > 
-> > node_dev_init() will walk through the nodes calling register_one_node()
-> > on each. This will trickle down to __register_one_node() which walks
-> > all present CPUs, calling register_cpu_under_node() on each.
-> > 
-> > register_cpu_under_node() will call get_cpu_device(cpu) for each, which
-> > will return NULL until the CPU is registered using register_cpu(). This
-> > now happens _after_ node_dev_init().
-> > 
-> > Therefore, calling register_cpu_under_node() from __register_one_node()
-> > becomes a no-op, and can be removed.
-> > 
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >   drivers/base/node.c | 7 -------
-> >   1 file changed, 7 deletions(-)
-> > 
-> 
-> __register_one_node() can be called in memory hot add path either. In that path,
-> a new NUMA node can be presented and becomes online. Does this become a problem
-> after the logic of associating CPU with newly added NUMA node?
+Some architectures have been given patches to switch their
+virt_to_phys()/phys_to_virt() or underlying *pfn etc functions
+over to static inlines.
 
-I guess this is where ordering matters.
+Some patches have been ignored or have no maintained arch
+tree.
 
-As mentioned in the commit message, register_cpu_under_node() does
-this:
+This set includes patches that I suggest to simply be applied
+to the arch tree so they get in.
 
-        if (!node_online(nid))
-                return 0;
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Linus Walleij (2):
+      ARC: mm: Make virt_to_pfn() a static inline
+      Hexagon: Make pfn accessors statics inlines
 
-        obj = get_cpu_device(cpu);
-        if (!obj)
-                return 0;
+ arch/arc/include/asm/page.h           | 21 ++++++++++++---------
+ arch/arc/include/asm/pgtable-levels.h |  2 +-
+ arch/hexagon/include/asm/page.h       | 15 +++++++++++++--
+ 3 files changed, 26 insertions(+), 12 deletions(-)
+---
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+change-id: 20231115-virt-to-phy-arch-tree-137bc87046e1
 
-get_cpu_device() will return NULL if the CPU is not possible or is out
-of range, or register_cpu() has not yet been called for this CPU, and
-register_cpu() will call register_cpu_under_node().
-
-I guess it is possible for a CPU it be present, but the node its
-associated with would not be online, which means we end up with
-register_cpu_under_node() returning on !node_online(nid) but we've
-populated the CPU devices (thus get_cpu_device(cpu) would return
-non-NULL).
-
-Then when the numa node comes online, we do still need to call this
-path, so this change is incorrect.
-
-It came about trying to address Jonathan's comment for this patch:
-
-https://lore.kernel.org/r/20230913163823.7880-7-james.morse@arm.com
-
-I think my response to Jonathan is still correct - but didn't need
-a code change. I'm dropping this patch.
-
+Best regards,
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Linus Walleij <linus.walleij@linaro.org>
+
 
