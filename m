@@ -1,30 +1,30 @@
-Return-Path: <linux-arch+bounces-244-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-245-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3C27F005A
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Nov 2023 16:47:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3429A7F00CF
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Nov 2023 17:02:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C93231C20748
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Nov 2023 15:47:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD5BB280F48
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Nov 2023 16:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A200112E4D;
-	Sat, 18 Nov 2023 15:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3209171B9;
+	Sat, 18 Nov 2023 16:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="PPS36QHm"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="IUezXz9I"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2108.outbound.protection.outlook.com [40.107.94.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8250A126;
-	Sat, 18 Nov 2023 07:47:50 -0800 (PST)
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2109.outbound.protection.outlook.com [40.107.92.109])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE77D182;
+	Sat, 18 Nov 2023 08:02:35 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ag3Ojf+4gKe3YhohMwQ1nYrjHMPFAuiHmLXjga8qEjEwAV65oVR7Haa/O69tom593RO1YSfTPJBf/o+PqRgrT6CRoIQhXwC2H9YtyLrURealxVD1I2MfaldFtEnj5g0ycXttIe0cBStX9OqloE7ahVUtYo/Ww2rkF8V697bEwx3C8rtzD1k3z6LtUcePsBAK5NW+DqDV5ToWzxmWwJS7iv4LXYi8PdL3m3owAsbHse/sYjWbDzDO4RTdfXis2ccQgp5bGsStUL55UHHsvyXbqBzOTq7CKETmHasCuUsW5S/tlyFYbPectFun5+ji0zkZ05MqSZYZ0CbJWQDkqawchQ==
+ b=QVYE/WkwsmMmJVugsf6lCgeB62pMNDivyRnrFTl8+aT34O41rFiCTPOMVQc+elHTOt23OqIg87GPRV7QTI0ket5S4+XbuN2bctlaM2jeWULyfxgXK0ridkzNbrU2x48Xe2kCaLAiI2ixpD1XnQOcVvBa3nrYGOA6tpXaBdnRz16VV3Uo4Wl0vChaIMdecZ0C/kZ6vzZd8hqi8RLhCPWUtC90rRabH7CYZhUCYftpT5mM7SHX+t67hVPyncKJLhKxJPUiFWdsMZWo0zyIFRTuEixIO8Vw9tgirRS58RgK2km5U6dMxSqGdd1mIKUUcsSfGiiktKHzUC8l+212LFBntQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OamWYxVHYSl/8BSwA7S6GjnkHHLCbgyMzNHUNUPpZqU=;
- b=ZNYZ+s3CREpFB7xitKW7gsxpmSMiR/MMYm9ctz+3kq0r8+R/jEWgNEPiUPeKt84WOFhPWY/CG5j0322IlP/IwMJjCQVvfgwx9mxJCaeR4tsEsrnWvejrA3QAe5qn3mSNC5Em/uobimUvrUua4nlt8kSZ/0kaTIwd4s/xQ5fGqUYxy/1beGCIqvQ4OLDbMlYYj7oIaCIvwcFza185HsBhv+AX7+/BjaYtKQ+BEr8hQr75NJPjFU57oYB7qJf6U4V/Z+Fp9QIm1zVq8BzjlhV/um8DtplpTKDj5IlepMgU/fsguFJxA9yfrqb71320L8x0YxB38aottRMaharvr9mviw==
+ bh=wv2MhPhz8vX5EVXTcetWaN6ncrvpW3Me+2LRl1lemRQ=;
+ b=h1PBNTMcB9nn5Kor+BZk4/4VL1BkF48jpi/oJvVoCXoAi6xKNnasaMuKQPfifii62+o8zMhrCmC/U/43KAr6xK0DyRzxSkWCrjRAImNVCM5AZDREsUoY7kt6vrI5NtveUiGlyhQIWu8g5ganMifVNdq8TbagpJT6YAH1v40dfVMh+2FZDgBunNiFphD2a7Qrp12ETEsI2uE9BSJ3g6Nm2NhbMIgsVuoizbaayb4+Sm1BKqdismj2GkgKVT3hlMmiJgthko5hXcpmEJGX3MYpk7dfhRjRZM4djAv3S1wQBNlzMuihoozuoYwAXJsK7jvL5YXHveo/Fr+EsppgGJ+eIA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -32,18 +32,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OamWYxVHYSl/8BSwA7S6GjnkHHLCbgyMzNHUNUPpZqU=;
- b=PPS36QHm+hWNUzMfUdg5u6FtvkuNfZBzQlbl3h4bHR1b+6wpzWoGGbEa44tXeiMRp1o0nTNLCAnM5ZQ4apdYHWn28FOTpbj1xXZHflnhsACXw3/FRWn1BBKooUgoeQOijKPDnr+KXLt2M5nQ0Plw0JfJySUagYep7ce/6UhddAQ=
+ bh=wv2MhPhz8vX5EVXTcetWaN6ncrvpW3Me+2LRl1lemRQ=;
+ b=IUezXz9IBNiQFOeyUY2OP0YRRmdUWbm/Ml6gB+MFFQduRZAiePtreHAewtgmkMqXxYXtbz91Fnv7S/PuWcks5RmrJIuyffc+q7aLUy4BNSm7ItTY6nk8Qb8ggbt41pyP91U3ENfQsdytJgQFcM9dkjmkvz0fFFjMbZAZ+4h1Eh0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
- MW4PR01MB6259.prod.exchangelabs.com (2603:10b6:303:78::12) with Microsoft
+ IA0PR01MB8306.prod.exchangelabs.com (2603:10b6:208:480::22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7002.23; Sat, 18 Nov 2023 15:47:46 +0000
+ 15.20.7002.25; Sat, 18 Nov 2023 16:02:32 +0000
 Received: from PH0PR01MB7975.prod.exchangelabs.com
  ([fe80::3f45:6905:e017:3b77]) by PH0PR01MB7975.prod.exchangelabs.com
  ([fe80::3f45:6905:e017:3b77%7]) with mapi id 15.20.6977.028; Sat, 18 Nov 2023
- 15:47:45 +0000
+ 16:02:32 +0000
 From: Huang Shijie <shijie@os.amperecomputing.com>
 To: catalin.marinas@arm.com
 Cc: will@kernel.org,
@@ -58,16 +58,16 @@ Cc: will@kernel.org,
 	linux-arch@vger.kernel.org,
 	patches@amperecomputing.com,
 	Huang Shijie <shijie@os.amperecomputing.com>
-Subject: [PATCH v2] arm64: irq: set the correct node for VMAP stack
-Date: Sat, 18 Nov 2023 23:47:07 +0800
-Message-Id: <20231118154707.3668-1-shijie@os.amperecomputing.com>
+Subject: [PATCH v3] arm64: irq: set the correct node for VMAP stack
+Date: Sun, 19 Nov 2023 00:02:05 +0800
+Message-Id: <20231118160205.3923-1-shijie@os.amperecomputing.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <ZVZO55IjQSbzWnfG@arm.com>
 References: <ZVZO55IjQSbzWnfG@arm.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: CH5PR05CA0004.namprd05.prod.outlook.com
- (2603:10b6:610:1f0::9) To PH0PR01MB7975.prod.exchangelabs.com
+X-ClientProxiedBy: CH5P222CA0013.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:610:1ee::14) To PH0PR01MB7975.prod.exchangelabs.com
  (2603:10b6:510:26d::15)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -76,56 +76,56 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|MW4PR01MB6259:EE_
-X-MS-Office365-Filtering-Correlation-Id: 802dc9b1-52df-46f8-40d1-08dbe84db52e
+X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|IA0PR01MB8306:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d36c0ee-4d1a-44ad-704d-08dbe84fc578
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	oaWslfWNQ1KEI79pC/GVu9XJ0Xq9k9rlRwhfqXWXntd8SzBQfXzYDfhR7iWtZ08W8kRTcj2WiUjl1zlhf4TTvFnBncr64ijN9J7PkQ5c96IosnjJuVnXnMS9bADpPf3IneYx2gFp364YuBt4+YU+CpbMae+Id5F3vu/p6pDSpk+xtEZSeTYPOfbqC3efN+XpE9LhktAHHxJ0e2xZUfWgz+efxTqMXPhqXfa/ICT5ihVBxCHdHw5S4RXJy05fPK7rqKQSNZmDJFS871Kgc+ceJoszIlpMnszOQkSXDY8cJFuVHwZen6e9qmi+h/mNYkGwnrEs7/rqEbRopaGXx5LmoGZQ9ktp8JfHuqCWKRm7l3GabKmELQqjEZ9qkTF0rSWGsBOFG4tG6kl4KmnbCW+PDhnCWjKy+WWewZzoP3Sud7CVxQ+qdre80Y+tgGLeQleCRPG1YvI9UJBZXbkaG/Ih1JvvODCXF3QMKMZxmikzHYinkZf+oWJvF3sIEQPG5ixUvVnP1COFyhhz4sk4OP7YqZ+0w5Ir9ah8ZEqQvZSAxk9AuVE7ba98MemsBHTIHutF7VbzwEqjmDMt+er+z1wAPe9dPx4kap6SUEzGEzS+ioZFztTndUbO7uV631CdfPbW
+	nC8TVmGGqpY7I48bdngWs164A5sdGUTuITlZWfudmdiobWnuxrTMKGZiGDWxfxv1+HO5rX1b0qiVZkf9Qw7kq58ZElIxDbmsHxehdJ1ORnui+KWJwQvyPt6Y1xZ4bbwDiNTPQcNakHeQspp3+K4QIVeBhrqedqgTKhJCLTsoHV0HoAnq+hQ/i8BayE5TYUa2zaD53rnQxAe8F4JOYKLWvwvNn7uEpOpEQ5l8xNl66J0HmRcHDoJOI8g+3KZKA+FqjAqbILaO3UMC6nSn/h+UfqkZKSO/tWbv2IOGAU6F+MWX7W0SXL922szIOgCZw1QbGHNl6kYgGxcg37+Guua7ZbZpe5NxA89hZ25H7F6+g2UC9daQfJJ5rfoONQV9YVKwNINk/HPBhZDuwpDbPfCbz4ilpEzlmtVaXqhyY1GGWtMjwOU2CABuONYROilpyABnJJSpz5KDezcVMIff4rTiOMEje/LUGoXOTSCdSdqMfgTJtZYHxJxnNNPGi8uZLjU6v0Lybj4US438k3H/VIYIjJCain9RNb7CDyCrJcxmGy7/MEgl9+vOpRZpz50wfJPzl7SPWSYhsx6Vh8vwV6faw3F5E4Z5RLRCEkb/rCGbBRlnkLF2PudUnr5F9Fsuvava
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(366004)(396003)(376002)(39850400004)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(316002)(6916009)(26005)(1076003)(66556008)(66476007)(66946007)(86362001)(8936002)(38350700005)(4326008)(38100700002)(8676002)(41300700001)(2906002)(5660300002)(7416002)(6486002)(83380400001)(6506007)(52116002)(478600001)(6512007)(107886003)(6666004)(2616005);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(396003)(346002)(376002)(366004)(136003)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(66556008)(66476007)(66946007)(6916009)(316002)(52116002)(6512007)(6666004)(6506007)(2616005)(26005)(1076003)(107886003)(478600001)(6486002)(38350700005)(38100700002)(83380400001)(86362001)(2906002)(5660300002)(7416002)(4326008)(8676002)(8936002)(41300700001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?t2xv7hdzCfBc/6jO2RVgVSUIRvUr6pG7VGZtgdWIMdhLfZJ/NY9Wq8LYVgNy?=
- =?us-ascii?Q?XFRHfOBfkIv3zqXb+BzizmTOOKc+wjfvrChtvl2emmvblxFRgCg+vkuQ6epn?=
- =?us-ascii?Q?FPQoKbyBXN2LI+7Y2Fe2DEeqP5Z/FU3ANYX5Mw6Byd7JYpblqIOdGmvlD/UJ?=
- =?us-ascii?Q?pAVps3V0JnDBXA3AVSp6jfE48Isx+4OsmSzJfBbGH6q4kJ4VY6/0EwDEgHjT?=
- =?us-ascii?Q?95g+WVTGcwDNx4gIvav86WrUfdq65bc8fIbin6rycyjnRte3cfcGxCxGrMj/?=
- =?us-ascii?Q?hlNHJT//9RWULGCyH1gpF002+BlvH6iw1jSDBRu3frjD8tTK7XlslDUPIg5A?=
- =?us-ascii?Q?83LjgtjFQzMHIc3R5W3EFRehhdiA8/9zwCRJ4QtDyn6R3PJDBKFynY4NdrlE?=
- =?us-ascii?Q?LQ9B1ADs7DxGoKUZOLqGQU+vLBSpVGnC8QZkZMIWu7uWGlJ6DpHuX3PT49ja?=
- =?us-ascii?Q?5xUNtZ3GA1cF/xGNxNO0NTeN8ThMoQhFw1qcnj1zTzOB9WVLoWYTGema31ds?=
- =?us-ascii?Q?Wbso6b2WghM51lo6/IB7pZM6CCPAT07AM/xSgagJN/b9CYcFPT8pxIWtbSsE?=
- =?us-ascii?Q?Ip6VmEBOsKpYf1avAb/Pir66DS3uS2du63VfLYYghplXs9QCPsFKWPGQT9Q7?=
- =?us-ascii?Q?ySZ0CJZRclOLLMhyg36q1MQ1kA2FQ1QhNaFLhF7XesvSCr7+5XJOuRjyyMNS?=
- =?us-ascii?Q?BTn+daVFTrvUvrpbVsKI6uYzGBwIGgKZ8kjyDVi7qDiloPI5Tx97w5iDLUGl?=
- =?us-ascii?Q?+PoudgTNPSipgPMkkuoDoYYjUt2fPq8CzfAU+GebYOMOi2o/a0alRmvO6IWT?=
- =?us-ascii?Q?gZQdbj8oIT/TX/OVzOPJ2NRYJ+92IqQoGsnFEYpaH9eC5jvoNgRld0wqWW1Q?=
- =?us-ascii?Q?Fu1rEd5mprKoBbwV8jWPd67kAU2b6bibvdZi9SxGvTD4tttFCH/35Tc0D/kL?=
- =?us-ascii?Q?NqnB2gZdsIMvLsEL93VS+ozp32msiRMmCNZ083BNccv1BkeuW2cEfvxlwh5Q?=
- =?us-ascii?Q?UCkIKBVr1HmPdp7XWWQbSht+YSmvMFPD0Z1mRHhRWYGIPDt6OokadhUm8bio?=
- =?us-ascii?Q?Em+aULtV2lUYrJI0gJKFZ24wiM2qPNoN3lcXkm+FFrv80tj+3wVSF1AoceM6?=
- =?us-ascii?Q?AozqASe0exGKxXMn8rqcl009MnjUv+9f26rAv09SnDieglE0UpIumYSWys46?=
- =?us-ascii?Q?4A/Mr+XsOcNz8oE0uEh0S8O6LyDEW/0m5NDyZz7vRCul8kAb93lxnqah55Ic?=
- =?us-ascii?Q?M+CHZvPsywv6qtJ36ax7AN4303DDnT4qkz1dZD1Kq3onM0pKSvIBup85eeH5?=
- =?us-ascii?Q?vp9prFH7Kcegbk8DFOlUwX3c/jGHkf+9WSPlRUj3xTksy0GUSSgorovC7Sor?=
- =?us-ascii?Q?W0BOhOZL9fK9GAoiFJ1PTvz4e55frv/qCSOlz6R/xVGKcWdbFW7+gRUQb0sX?=
- =?us-ascii?Q?dEKOfsO9a7Z/MgtgLgiVWrqUcQTSzGvWy7GHTnDNIu8gmW2mF/5LyLS7wAcQ?=
- =?us-ascii?Q?6KqEeKhQHFq+rmnHl1Gl+iKDVhDQivGzV53OFV5h8JPOgkedx52qbWdLt7A4?=
- =?us-ascii?Q?89gVe4CiQinLC83H2HDm3e26hk4zyzDhDKPeM8C70FegQS/6Zg3kLcaYfsXi?=
- =?us-ascii?Q?JA=3D=3D?=
+	=?us-ascii?Q?Y8NJEKdv7MXmP7KocyeknDxYAavKS/wWC3OR0PZoCYY5tbm6va9dDGkwBrx6?=
+ =?us-ascii?Q?bguIp1gzMm5gyMTb/icATkP48/zi9qrq1BZjR6X11rqi5cuQ8vM3O057aXvE?=
+ =?us-ascii?Q?DJMTlUeeAoLoIeh3/CcGy/32zsFB/7JHVQUXuwbeU0jElXJKDfT31bWZmemO?=
+ =?us-ascii?Q?/fxKoz5n+CG0zmFTaSBhZsmIH/XLgEAgfiGQm5u2dVaVbXiQlNnN7DPUNMW3?=
+ =?us-ascii?Q?aJsYeAzq0rwGkHIygyCsHe5lvvasar0Wd8YWHc3C24tKG9TXLzJlr2AKnFql?=
+ =?us-ascii?Q?/4tS1KF8QfP2HuHM7DFb00wdTY8SZ9Bzx/wwR9Q/zncjR2Yo5+jUM1EYGMKH?=
+ =?us-ascii?Q?WK45fGQD6HnvMEgztnLItcwIFxgJ11tnnifUTHnYU+Z/bssnZeBi67/Lv2oY?=
+ =?us-ascii?Q?GbCWD2L5KbaTnOCYUTvwqZ6FYo5SmByLuneRsyioULLwqHjAfg86jGWsOlkh?=
+ =?us-ascii?Q?u2HSuHtqH9AhJvT0v122H98qVx8i4Td0qzwjVaGKXrAOscvw8t8oQ4NIFT0O?=
+ =?us-ascii?Q?FscxhJ2NrMWIr4npo9KxrMoR6nK/bDCi9BRBM4Gd62Qb8FV/KG9q7WPaIRgq?=
+ =?us-ascii?Q?0/xdrMs6svS7xcXQ5ikxxVXeCUEP6kLjGbKJAB8jUKbqROL/6+EEHQ0UzZ9Z?=
+ =?us-ascii?Q?CA0Orbwpuze2O9glDMRRm/WJy3cdBu4O9CC00+osHW0lcpD+fOdXajZMV6uH?=
+ =?us-ascii?Q?QN+L+6zCbeq4O39QXjEDzPqpoEfDB2IEX5WvZkzc5ItspWHdmuNdfQYoS+Kt?=
+ =?us-ascii?Q?1SjWgBF6TqCxxJ2Jos6Rzr3W+jIw94vn6yWrUaqRPeOK9zPKmunshm70FYmW?=
+ =?us-ascii?Q?ejUsTEhH6JviA7xaVS1WBCyqdjsQ+FzRyqIq3JK6LHcEALOY3sloIIu5d1zd?=
+ =?us-ascii?Q?IL02y8xvU/oDE5O82PX/yc3B7hjdBtPQBlI79r5OZ4sH2fMbNTOBDFVyrh9B?=
+ =?us-ascii?Q?DGE5xualowQP+i6UcGJIuLD5uDivSeFc/S77fsPfgtLhJkn8onxd3S7E+Nc9?=
+ =?us-ascii?Q?DN4sYFYDBjivFeT92TtMvXpWNLFIblxvUGdh3Eq8+2JEH10HEkLXTN8olDok?=
+ =?us-ascii?Q?sphuxRShQRy89D/5FtTataEFdVHlX3h1P1uBHMG2pFNI6b+8bz/4DaGhUjBu?=
+ =?us-ascii?Q?aGBYQTgkHHfOzY7znYIQ2kGRcGNxEK0md+tVPuKVrzn+Y82gI6vLZDeZczbP?=
+ =?us-ascii?Q?wDchh/sgnIK/mZUk/RbeVIMKcsdRuXfWPSosz/HTGmMSSYHz9J4QNcZ8HH8J?=
+ =?us-ascii?Q?AkZCaDbs0OGW5oVLv0CKZna0ElcsEEBy3StFX9EV8FLC/8L9/yMk4CToVlOP?=
+ =?us-ascii?Q?dhDACZ8sOGf9hiK1Kf7yswIGZy1x309RkkJYPZxNU0DBem6HKr4BNRO2x8uX?=
+ =?us-ascii?Q?x9F9NFS2Va55dtb2VJfF7xwLwOAiqUVfzXejEOkcAY1U3I+dYiLNZRd347MA?=
+ =?us-ascii?Q?SWTlyn57sfKSLK7JeDTDbcpW9nyJ7/XsH+QKlXxGkZMijuwePi8Z+Qy07czK?=
+ =?us-ascii?Q?JlBy/2T8A/WVwZlO3L+8eX6WyjEhaRITiZKN+skKW0BQPQwWIUZGmLnWJJ6j?=
+ =?us-ascii?Q?Fyl/XnSunz2gfGdjU5MJ2mAQM25aGhxYjsu8jkLmVb7ZaFVNFozWsN1ItKZQ?=
+ =?us-ascii?Q?yQ=3D=3D?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 802dc9b1-52df-46f8-40d1-08dbe84db52e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d36c0ee-4d1a-44ad-704d-08dbe84fc578
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2023 15:47:45.6044
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2023 16:02:31.9315
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +gTgczTAw3VdkPQgyqJq9wPdkVBB/NJlJ2QzGo/P9BPoJgBs4bR3Wg1LN0T0XKjpIQn12B1lqQq9dF1Sj1lQPxaYpKvW9pDQYQqQVoGZ00+QyYFA9iRr/DKUkOt4JM9L
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6259
+X-MS-Exchange-CrossTenant-UserPrincipalName: wlRs/yK7rDRQIWa8tsCRGI5iApSbE90Hdo9ajnOm8+l8i/i3Bo3iIMM1MK6sCjnn3SePn5PDMdOX80TeFHZIy8FGg9vHvyof77bKx8I5XNXucHFnaTV23XnJyWQSYQtm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR01MB8306
 
 In current code, init_irq_stacks() will call cpu_to_node().
 The cpu_to_node() depends on percpu "numa_node" which is initialized in:
@@ -144,9 +144,8 @@ in the init_irq_stacks().
 
 Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
 ---
-v1 --> v2:
-	fix the !NUMA compiling error.
-
+v2 --> v3:
+	move the "numa.h" to the right position.
 ---
  arch/arm64/kernel/irq.c    | 3 ++-
  drivers/base/arch_numa.c   | 2 +-
@@ -154,17 +153,17 @@ v1 --> v2:
  3 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-index 6ad5c6ef5329..5226030979ae 100644
+index 6ad5c6ef5329..d9ee14723478 100644
 --- a/arch/arm64/kernel/irq.c
 +++ b/arch/arm64/kernel/irq.c
-@@ -25,6 +25,7 @@
+@@ -22,6 +22,7 @@
+ #include <linux/vmalloc.h>
+ #include <asm/daifflags.h>
+ #include <asm/exception.h>
++#include <asm/numa.h>
  #include <asm/softirq_stack.h>
  #include <asm/stacktrace.h>
  #include <asm/vmap_stack.h>
-+#include <asm/numa.h>
- 
- /* Only access this in an NMI enter/exit */
- DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
 @@ -57,7 +58,7 @@ static void init_irq_stacks(void)
  	unsigned long *p;
  
