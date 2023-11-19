@@ -1,192 +1,333 @@
-Return-Path: <linux-arch+bounces-247-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-248-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEDCA7F042A
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Nov 2023 04:14:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFCDB7F07AF
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Nov 2023 17:57:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53A351F22140
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Nov 2023 03:14:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25261280DA0
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Nov 2023 16:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA73F1876;
-	Sun, 19 Nov 2023 03:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crKG24SE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78DA714A88;
+	Sun, 19 Nov 2023 16:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2260DB3;
-	Sat, 18 Nov 2023 19:14:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700363662; x=1731899662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DgMR+20joI22QFpxuYG34MFkzxuJ+eU5dAVuggNsAkY=;
-  b=crKG24SEVzDB+/qpn5UkJtaCvz4M5b+dCf1WRzbgH/97u50JW2nzuMR2
-   OsiyuOcCJqNzgEKS7AzwKzQUzoQm5dN2FmgRCakBDYJATQjlVWC39UQl0
-   O+WjvD0TTEcmq6wZwUePSt61/FoKDnFL8BkLoEj67fJgmUla1hTxflQro
-   0it5PAlXhVj/JDPWqnCgUUGK5DpHc74ShAz7iAqoMTAIXKkJkhbsaqp4W
-   om2CW063g7wFvgC1mfE8i5jsOx1+jwrA5bVPjkPiY1/tk2oYMR+JiIQ1/
-   kmW07znCra8rmfHDNFj8/dRKLsgP1N56aEksIrEjn/TZ8DEGcxXyK29Fu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="370812188"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="370812188"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 19:14:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="800823006"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="800823006"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 Nov 2023 19:14:14 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r4YGC-0004aP-0K;
-	Sun, 19 Nov 2023 03:14:12 +0000
-Date: Sun, 19 Nov 2023 11:13:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kefeng Wang <wangkefeng.wang@huawei.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	linux-hexagon@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	linux-m68k@lists.linux-m68k.org,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E997C2;
+	Sun, 19 Nov 2023 08:57:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C605EDA7;
+	Sun, 19 Nov 2023 08:58:25 -0800 (PST)
+Received: from e121798.cable.virginm.net (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C6E83F6C4;
+	Sun, 19 Nov 2023 08:57:34 -0800 (PST)
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: catalin.marinas@arm.com,
+	will@kernel.org,
+	oliver.upton@linux.dev,
+	maz@kernel.org,
+	james.morse@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	arnd@arndb.de,
+	akpm@linux-foundation.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	mhiramat@kernel.org,
+	rppt@kernel.org,
+	hughd@google.com
+Cc: pcc@google.com,
+	steven.price@arm.com,
+	anshuman.khandual@arm.com,
+	vincenzo.frascino@arm.com,
+	david@redhat.com,
+	eugenis@google.com,
+	kcc@google.com,
+	hyesoo.yu@samsung.com,
 	linux-arm-kernel@lists.infradead.org,
-	Brian Cain <bcain@quicinc.com>, linux-parisc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and
- unxlate_dev_mem_ptr()
-Message-ID: <202311191145.pppExJS6-lkp@intel.com>
-References: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH RFC v2 00/27] Add support for arm64 MTE dynamic tag storage reuse
+Date: Sun, 19 Nov 2023 16:56:54 +0000
+Message-Id: <20231119165721.9849-1-alexandru.elisei@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Kefeng,
+The series is based on v6.7-rc1 and can be cloned with:
 
-kernel test robot noticed the following build errors:
+$ git clone https://gitlab.arm.com/linux-arm/linux-ae.git \
+	-b arm-mte-dynamic-carveout-rfc-v2
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on geert-m68k/for-next geert-m68k/for-linus deller-parisc/for-next powerpc/next powerpc/fixes linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Introduction
+============
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/asm-io-remove-unnecessary-xlate_dev_mem_ptr-and-unxlate_dev_mem_ptr/20231118-183038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20231118100827.1599422-1-wangkefeng.wang%40huawei.com
-patch subject: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/reproduce)
+Memory Tagging Extension (MTE) is implemented currently to have a static
+carve-out of the DRAM to store the allocation tags (a.k.a. memory colour).
+This is what we call the tag storage. Each 16 bytes have 4 bits of tags, so
+this means 1/32 of the DRAM, roughly 3% used for the tag storage.  This is
+done transparently by the hardware/interconnect (with firmware setup) and
+normally hidden from the OS. So a checked memory access to location X
+generates a tag fetch from location Y in the carve-out and this tag is
+compared with the bits 59:56 in the pointer. The correspondence from X to Y
+is linear (subject to a minimum block size to deal with some address
+interleaving). The software doesn't need to know about this correspondence
+as we have specific instructions like STG/LDG to location X that lead to a
+tag store/load to Y.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311191145.pppExJS6-lkp@intel.com/
+Now, not all memory used by applications is tagged (mmap(PROT_MTE)).  For
+example, some large allocations may not use PROT_MTE at all or only for the
+first and last page since initialising the tags takes time. The side-effect
+is that of that 3% of DRAM, only part of it, say 1%, is effectively used.
 
-All errors (new ones prefixed by >>):
+The series aims to take that unused tag storage and release it to the page
+allocator for normal data usage.
 
->> drivers/char/mem.c:159:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ptr = xlate_dev_mem_ptr(p);
-                                 ^
->> drivers/char/mem.c:159:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                           ptr = xlate_dev_mem_ptr(p);
-                               ^ ~~~~~~~~~~~~~~~~~~~~
->> drivers/char/mem.c:164:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           unxlate_dev_mem_ptr(p, ptr);
-                           ^
-   drivers/char/mem.c:235:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ptr = xlate_dev_mem_ptr(p);
-                                 ^
-   drivers/char/mem.c:235:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                           ptr = xlate_dev_mem_ptr(p);
-                               ^ ~~~~~~~~~~~~~~~~~~~~
-   drivers/char/mem.c:243:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           unxlate_dev_mem_ptr(p, ptr);
-                           ^
-   6 errors generated.
+The first complication is that a PROT_MTE page allocation at address X will
+need to reserve the tag storage page at location Y (and migrate any data in
+that page if it is in use).
+
+To make things worse, pages in the tag storage/carve-out range cannot use
+PROT_MTE themselves on current hardware, so this adds the second
+complication - a heterogeneous memory layout. The kernel needs to know
+where to allocate a PROT_MTE page from or migrate a current page if it
+becomes PROT_MTE (mprotect()) and the range it is in does not support
+tagging.
+
+Some other complications are arm64-specific like cache coherency between
+tags and data accesses. There is a draft architecture spec which will be
+released soon, detailing how the hardware behaves.
+
+All of this will be entirely transparent to userspace. As with the current
+kernel (without this dynamic tag storage), a user only needs to ask for
+PROT_MTE mappings to get tagged pages.
+
+Implementation
+==============
+
+MTE tag storage reuse is accomplished with the following changes to the
+Linux kernel:
+
+1. The tag storage memory is exposed to the memory allocator as
+MIGRATE_CMA. The arm64 code manages this memory directly instead of using
+cma_declare_contiguous/cma_alloc for performance reasons.
+
+There is a limitation to this approach: MIGRATE_CMA cannot be used for
+tagged allocations, even if not all MIGRATE_CMA memory is tag storage.
+
+2. mprotect(PROT_MTE) is implemented by adding a fault-on-access mechanism
+for existing pages. When a page is next accessed, a fault is taken and the
+corresponding tag storage is reserved.
+
+3. When the code tries to copy tags to a page (when swapping in a newly
+allocated page, or during migration/THP collapse) which doesn't have the
+tag storage reserved, the tags are copied to an xarray and restored when
+tag storage is reserved for the destination page.
+
+KVM support has not been implemented yet, that because a non-MTE enabled
+VMA can back the memory of an MTE-enabled VM. It will be added after there
+is a consensus on the right approach on the memory management support.
+
+Overview of the patches
+=======================
+
+For people not interested in the arm64 details, you probably want to start
+with patches 1-10, which mostly deal with adding the necessary hooks to the
+memory management code, and patches 19 and 20 which add the page
+fault-on-access mechanism for regular pages, respectively huge pages. Patch
+21 is rather invasive, it moves the definition of struct
+migration_target_control out of mm/internal.h to migrate.h, and the arm64
+code also uses isolate_lru_page() and putback_movable_pages() when
+migrating a tag storage page out of a PROT_MTE VMA. And finally patch 26 is
+an optimization for a performance regression that has been reported with
+Chrome and it introduces CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY to allow arm64 to
+use take_page_off_buddy() to fast track reserving tag storage when the page
+is free.
+
+The rest of the patches are mostly arm64 specific.
+
+Patches 11-18 support for detecting the tag storage region and reserving
+tag storage when a tagged page is allocated.
+
+Patches 19-21 add the page fault-on-access on mechanism and use it to
+reserve tag storage when needed.
+
+Patches 22 and 23 handle saving tags temporarily to an xarray if the page
+doesn't have tag storage, and copying the tags over to the tagged page when
+tag storage is reserved.
+
+Changelog
+=========
+
+Changes since RFC v1 [1]:
+
+* The entire series has been reworked to remove MIGRATE_METADATA and put tag
+  storage pages on the MIGRATE_CMA freelists.
+
+* Changed how tags are saved and restored when copying them from one page to
+  another if the destination page doesn't have tag storage - now the tags are
+  restored when tag storage is reserved for the destination page instead of
+  restoring them in set_pte_at() -> mte_sync_tags().
+
+[1] https://lore.kernel.org/lkml/20230823131350.114942-1-alexandru.elisei@arm.com/
+
+Testing
+=======
+
+To enable MTE dynamic tag storage:
+
+- CONFIG_ARM64_MTE_TAG_STORAGE=y
+- system_supports_mte() returns true
+- kasan_hw_tags_enabled() returns false
+- correct DTB node (for the specification, see commit "arm64: mte: Reserve tag
+  storage memory")
+
+Check dmesg for the message "MTE tag storage region management enabled".
+
+I've tested the series using FVP with MTE enabled, but without support for
+dynamic tag storage reuse. To simulate it, I've added two fake tag storage
+regions in the DTB by splitting the upper 2GB memory region into 3: one region
+for normal RAM, followed by the tag storage for the lower 2GB of memory, then
+the tag storage for the normal RAM region. Like below:
+
+diff --git a/arch/arm64/boot/dts/arm/fvp-base-revc.dts b/arch/arm64/boot/dts/arm/fvp-base-revc.dts
+index 60472d65a355..8c719825a9b3 100644
+--- a/arch/arm64/boot/dts/arm/fvp-base-revc.dts
++++ b/arch/arm64/boot/dts/arm/fvp-base-revc.dts
+@@ -165,12 +165,30 @@ C1_L2: l2-cache1 {
+                };
+        };
+ 
+-       memory@80000000 {
++       memory0: memory@80000000 {
+                device_type = "memory";
+-               reg = <0x00000000 0x80000000 0 0x80000000>,
+-                     <0x00000008 0x80000000 0 0x80000000>;
++               reg = <0x00000000 0x80000000 0 0x80000000>;
+        };
+ 
++       memory1: memory@880000000 {
++               device_type = "memory";
++               reg = <0x00000008 0x80000000 0 0x78000000>;
++       };
++
++       tags0: tag-storage@8f8000000 {
++                compatible = "arm,mte-tag-storage";
++                reg = <0x00000008 0xf8000000 0 0x4000000>;
++                block-size = <0x1000>;
++                memory = <&memory0>;
++        };
++
++        tags1: tag-storage@8fc000000 {
++                compatible = "arm,mte-tag-storage";
++                reg = <0x00000008 0xfc000000 0 0x3c00000>;
++                block-size = <0x1000>;
++                memory = <&memory1>;
++        };
++
+        reserved-memory {
+                #address-cells = <2>;
+                #size-cells = <2>;
 
 
-vim +/xlate_dev_mem_ptr +159 drivers/char/mem.c
 
-^1da177e4c3f41 Linus Torvalds                2005-04-16  133  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  134  	bounce = kmalloc(PAGE_SIZE, GFP_KERNEL);
-22ec1a2aea73b9 Kees Cook                     2017-12-01  135  	if (!bounce)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  136  		return -ENOMEM;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  137  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  138  	while (count > 0) {
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  139  		unsigned long remaining;
-b5b38200ebe548 Kees Cook                     2018-03-27  140  		int allowed, probe;
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  141  
-f222318e9c3a31 Wu Fengguang                  2009-12-14  142  		sz = size_inside_page(p, count);
-^1da177e4c3f41 Linus Torvalds                2005-04-16  143  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  144  		err = -EPERM;
-a4866aa812518e Kees Cook                     2017-04-05  145  		allowed = page_is_allowed(p >> PAGE_SHIFT);
-a4866aa812518e Kees Cook                     2017-04-05  146  		if (!allowed)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  147  			goto failed;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  148  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  149  		err = -EFAULT;
-a4866aa812518e Kees Cook                     2017-04-05  150  		if (allowed == 2) {
-a4866aa812518e Kees Cook                     2017-04-05  151  			/* Show zeros for restricted memory. */
-a4866aa812518e Kees Cook                     2017-04-05  152  			remaining = clear_user(buf, sz);
-a4866aa812518e Kees Cook                     2017-04-05  153  		} else {
-^1da177e4c3f41 Linus Torvalds                2005-04-16  154  			/*
-a4866aa812518e Kees Cook                     2017-04-05  155  			 * On ia64 if a page has been mapped somewhere as
-a4866aa812518e Kees Cook                     2017-04-05  156  			 * uncached, then it must also be accessed uncached
-a4866aa812518e Kees Cook                     2017-04-05  157  			 * by the kernel or data corruption may occur.
-^1da177e4c3f41 Linus Torvalds                2005-04-16  158  			 */
-^1da177e4c3f41 Linus Torvalds                2005-04-16 @159  			ptr = xlate_dev_mem_ptr(p);
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  160  			if (!ptr)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  161  				goto failed;
-a4866aa812518e Kees Cook                     2017-04-05  162  
-fe557319aa06c2 Christoph Hellwig             2020-06-17  163  			probe = copy_from_kernel_nofault(bounce, ptr, sz);
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18 @164  			unxlate_dev_mem_ptr(p, ptr);
-b5b38200ebe548 Kees Cook                     2018-03-27  165  			if (probe)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  166  				goto failed;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  167  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  168  			remaining = copy_to_user(buf, bounce, sz);
-a4866aa812518e Kees Cook                     2017-04-05  169  		}
-a4866aa812518e Kees Cook                     2017-04-05  170  
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  171  		if (remaining)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  172  			goto failed;
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  173  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  174  		buf += sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  175  		p += sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  176  		count -= sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  177  		read += sz;
-8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  178  		if (should_stop_iteration())
-8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  179  			break;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  180  	}
-22ec1a2aea73b9 Kees Cook                     2017-12-01  181  	kfree(bounce);
-^1da177e4c3f41 Linus Torvalds                2005-04-16  182  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  183  	*ppos += read;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  184  	return read;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  185  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  186  failed:
-22ec1a2aea73b9 Kees Cook                     2017-12-01  187  	kfree(bounce);
-22ec1a2aea73b9 Kees Cook                     2017-12-01  188  	return err;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  189  }
-^1da177e4c3f41 Linus Torvalds                2005-04-16  190  
+Alexandru Elisei (27):
+  arm64: mte: Rework naming for tag manipulation functions
+  arm64: mte: Rename __GFP_ZEROTAGS to __GFP_TAGGED
+  mm: cma: Make CMA_ALLOC_SUCCESS/FAIL count the number of pages
+  mm: migrate/mempolicy: Add hook to modify migration target gfp
+  mm: page_alloc: Add an arch hook to allow prep_new_page() to fail
+  mm: page_alloc: Allow an arch to hook early into free_pages_prepare()
+  mm: page_alloc: Add an arch hook to filter MIGRATE_CMA allocations
+  mm: page_alloc: Partially revert "mm: page_alloc: remove stale CMA
+    guard code"
+  mm: Allow an arch to hook into folio allocation when VMA is known
+  mm: Call arch_swap_prepare_to_restore() before arch_swap_restore()
+  arm64: mte: Reserve tag storage memory
+  arm64: mte: Add tag storage pages to the MIGRATE_CMA migratetype
+  arm64: mte: Make tag storage depend on ARCH_KEEP_MEMBLOCK
+  arm64: mte: Disable dynamic tag storage management if HW KASAN is
+    enabled
+  arm64: mte: Check that tag storage blocks are in the same zone
+  arm64: mte: Manage tag storage on page allocation
+  arm64: mte: Perform CMOs for tag blocks on tagged page allocation/free
+  arm64: mte: Reserve tag block for the zero page
+  mm: mprotect: Introduce PAGE_FAULT_ON_ACCESS for mprotect(PROT_MTE)
+  mm: hugepage: Handle huge page fault on access
+  mm: arm64: Handle tag storage pages mapped before mprotect(PROT_MTE)
+  arm64: mte: swap: Handle tag restoring when missing tag storage
+  arm64: mte: copypage: Handle tag restoring when missing tag storage
+  arm64: mte: Handle fatal signal in reserve_tag_storage()
+  KVM: arm64: Disable MTE if tag storage is enabled
+  arm64: mte: Fast track reserving tag storage when the block is free
+  arm64: mte: Enable dynamic tag storage reuse
 
+ arch/arm64/Kconfig                       |  16 +
+ arch/arm64/include/asm/assembler.h       |  10 +
+ arch/arm64/include/asm/mte-def.h         |  16 +-
+ arch/arm64/include/asm/mte.h             |  43 +-
+ arch/arm64/include/asm/mte_tag_storage.h |  75 +++
+ arch/arm64/include/asm/page.h            |   5 +-
+ arch/arm64/include/asm/pgtable-prot.h    |   2 +
+ arch/arm64/include/asm/pgtable.h         |  96 +++-
+ arch/arm64/kernel/Makefile               |   1 +
+ arch/arm64/kernel/elfcore.c              |  14 +-
+ arch/arm64/kernel/hibernate.c            |  46 +-
+ arch/arm64/kernel/mte.c                  |  12 +-
+ arch/arm64/kernel/mte_tag_storage.c      | 686 +++++++++++++++++++++++
+ arch/arm64/kernel/setup.c                |   7 +
+ arch/arm64/kvm/arm.c                     |   6 +-
+ arch/arm64/lib/mte.S                     |  34 +-
+ arch/arm64/mm/copypage.c                 |  59 ++
+ arch/arm64/mm/fault.c                    | 261 ++++++++-
+ arch/arm64/mm/mteswap.c                  | 162 +++++-
+ fs/proc/page.c                           |   1 +
+ include/linux/gfp_types.h                |  14 +-
+ include/linux/huge_mm.h                  |   2 +
+ include/linux/kernel-page-flags.h        |   1 +
+ include/linux/migrate.h                  |  12 +-
+ include/linux/migrate_mode.h             |   1 +
+ include/linux/mmzone.h                   |   5 +
+ include/linux/page-flags.h               |  16 +-
+ include/linux/pgtable.h                  |  54 ++
+ include/trace/events/mmflags.h           |   5 +-
+ mm/Kconfig                               |   7 +
+ mm/cma.c                                 |   4 +-
+ mm/huge_memory.c                         |   5 +-
+ mm/internal.h                            |   9 -
+ mm/memory-failure.c                      |   8 +-
+ mm/memory.c                              |  10 +
+ mm/mempolicy.c                           |   3 +
+ mm/migrate.c                             |   3 +
+ mm/page_alloc.c                          | 118 +++-
+ mm/shmem.c                               |  14 +-
+ mm/swapfile.c                            |   7 +
+ 40 files changed, 1668 insertions(+), 182 deletions(-)
+ create mode 100644 arch/arm64/include/asm/mte_tag_storage.h
+ create mode 100644 arch/arm64/kernel/mte_tag_storage.c
+
+
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.1
+
 
