@@ -1,54 +1,56 @@
-Return-Path: <linux-arch+bounces-246-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-247-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD1EB7F0260
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Nov 2023 20:27:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEDCA7F042A
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Nov 2023 04:14:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0545C1C20510
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Nov 2023 19:27:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53A351F22140
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Nov 2023 03:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934421A5B9;
-	Sat, 18 Nov 2023 19:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA73F1876;
+	Sun, 19 Nov 2023 03:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nhXlTlRs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crKG24SE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D607182;
-	Sat, 18 Nov 2023 11:27:04 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2260DB3;
+	Sat, 18 Nov 2023 19:14:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700335624; x=1731871624;
+  t=1700363662; x=1731899662;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7oM0Oe15GY24uVXAs/p2DnzhDDjC2fzvA/A3qyVQxc4=;
-  b=nhXlTlRsRYCFhwRG7XT//XdNTNhByJiaZIAZfBzj8AuLXEXrI5U1woLJ
-   aRajIZdfAgtvgjfOFEfGU65DLSMkFvVGGh8daGyB9xRI0T3/3gqI4SLIh
-   vP4eBkrZ2UO8ILboq/dLXgPMHa7cLD0e+b4ubdK+sdS0+PAth6pRMLUla
-   Ii1Ho55lyJCNQcsedi0MmA/Br+OhFcypC0Vkkv9zNYj11hcagKZ37NMAc
-   JTmR7lvLtg6rPYdcTqTFX7WNMXfNJPbmMxhenHaqteADiw8DZjUoeTflB
-   1Jgr4kmf7uz7RerXNgODuoF1cut2MShHHVolGNwExB5MSxV5rbTu1ueBk
+  bh=DgMR+20joI22QFpxuYG34MFkzxuJ+eU5dAVuggNsAkY=;
+  b=crKG24SEVzDB+/qpn5UkJtaCvz4M5b+dCf1WRzbgH/97u50JW2nzuMR2
+   OsiyuOcCJqNzgEKS7AzwKzQUzoQm5dN2FmgRCakBDYJATQjlVWC39UQl0
+   O+WjvD0TTEcmq6wZwUePSt61/FoKDnFL8BkLoEj67fJgmUla1hTxflQro
+   0it5PAlXhVj/JDPWqnCgUUGK5DpHc74ShAz7iAqoMTAIXKkJkhbsaqp4W
+   om2CW063g7wFvgC1mfE8i5jsOx1+jwrA5bVPjkPiY1/tk2oYMR+JiIQ1/
+   kmW07znCra8rmfHDNFj8/dRKLsgP1N56aEksIrEjn/TZ8DEGcxXyK29Fu
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="4554067"
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="370812188"
 X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="4554067"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 11:27:04 -0800
+   d="scan'208";a="370812188"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 19:14:21 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="800823006"
 X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="13795239"
+   d="scan'208";a="800823006"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 18 Nov 2023 11:26:59 -0800
+  by orsmga001.jf.intel.com with ESMTP; 18 Nov 2023 19:14:14 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4Qxz-0004Cf-3C;
-	Sat, 18 Nov 2023 19:26:55 +0000
-Date: Sun, 19 Nov 2023 03:26:17 +0800
+	id 1r4YGC-0004aP-0K;
+	Sun, 19 Nov 2023 03:14:12 +0000
+Date: Sun, 19 Nov 2023 11:13:56 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kefeng Wang <wangkefeng.wang@huawei.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: oe-kbuild-all@lists.linux.dev, Kefeng Wang <wangkefeng.wang@huawei.com>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
 	Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
 	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
 	sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -65,7 +67,7 @@ Cc: oe-kbuild-all@lists.linux.dev, Kefeng Wang <wangkefeng.wang@huawei.com>,
 	linuxppc-dev@lists.ozlabs.org
 Subject: Re: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and
  unxlate_dev_mem_ptr()
-Message-ID: <202311190352.yqCpBjIn-lkp@intel.com>
+Message-ID: <202311191145.pppExJS6-lkp@intel.com>
 References: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -91,32 +93,36 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/asm-io-remove
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
 patch link:    https://lore.kernel.org/r/20231118100827.1599422-1-wangkefeng.wang%40huawei.com
 patch subject: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
-config: mips-db1xxx_defconfig (https://download.01.org/0day-ci/archive/20231119/202311190352.yqCpBjIn-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311190352.yqCpBjIn-lkp@intel.com/reproduce)
+config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311190352.yqCpBjIn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311191145.pppExJS6-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/char/mem.c: In function 'read_mem':
->> drivers/char/mem.c:159:31: error: implicit declaration of function 'xlate_dev_mem_ptr' [-Werror=implicit-function-declaration]
-     159 |                         ptr = xlate_dev_mem_ptr(p);
-         |                               ^~~~~~~~~~~~~~~~~
->> drivers/char/mem.c:159:29: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     159 |                         ptr = xlate_dev_mem_ptr(p);
-         |                             ^
->> drivers/char/mem.c:164:25: error: implicit declaration of function 'unxlate_dev_mem_ptr' [-Werror=implicit-function-declaration]
-     164 |                         unxlate_dev_mem_ptr(p, ptr);
-         |                         ^~~~~~~~~~~~~~~~~~~
-   drivers/char/mem.c: In function 'write_mem':
-   drivers/char/mem.c:235:29: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     235 |                         ptr = xlate_dev_mem_ptr(p);
-         |                             ^
-   cc1: some warnings being treated as errors
+>> drivers/char/mem.c:159:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ptr = xlate_dev_mem_ptr(p);
+                                 ^
+>> drivers/char/mem.c:159:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+                           ptr = xlate_dev_mem_ptr(p);
+                               ^ ~~~~~~~~~~~~~~~~~~~~
+>> drivers/char/mem.c:164:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           unxlate_dev_mem_ptr(p, ptr);
+                           ^
+   drivers/char/mem.c:235:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ptr = xlate_dev_mem_ptr(p);
+                                 ^
+   drivers/char/mem.c:235:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+                           ptr = xlate_dev_mem_ptr(p);
+                               ^ ~~~~~~~~~~~~~~~~~~~~
+   drivers/char/mem.c:243:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           unxlate_dev_mem_ptr(p, ptr);
+                           ^
+   6 errors generated.
 
 
 vim +/xlate_dev_mem_ptr +159 drivers/char/mem.c
