@@ -1,99 +1,124 @@
-Return-Path: <linux-arch+bounces-280-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-281-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF8687F0C76
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Nov 2023 08:05:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D9097F0EFA
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Nov 2023 10:24:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16FF22817BF
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Nov 2023 07:05:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DECA8B216F2
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Nov 2023 09:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CF35242;
-	Mon, 20 Nov 2023 07:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1EC911199;
+	Mon, 20 Nov 2023 09:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Y7u3kRAF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D89DB3;
-	Sun, 19 Nov 2023 23:05:21 -0800 (PST)
-Received: from dggpemm100001.china.huawei.com (unknown [172.30.72.55])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SYdhg3CDpzsRJy;
-	Mon, 20 Nov 2023 15:01:23 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 20 Nov 2023 15:04:49 +0800
-Message-ID: <1f013eda-b82f-4ae0-99ad-0eec70d45146@huawei.com>
-Date: Mon, 20 Nov 2023 15:04:48 +0800
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A928CA;
+	Mon, 20 Nov 2023 01:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=VaLCPpptCPl4dd3HPwfC9h62KXrs4QNdYGscUChirrc=; b=Y7u3kRAFMUjm3/j4LodjYSA3LZ
+	VC/v4Le7llOshhtVIeZgByL9Ta8EV6wWiKc32k2oFctq/SRATcfURY2PKHwM1fQ3e8O0y94oymLQc
+	xUrw2kmBGd5PWCfen4xrhtknxW1A3VcIcPuln0pl6/3f9+djfDci/m0DmbTJbLwDqHwz9uzkkrzpc
+	n5mOUp+mG/7fnMgC/NdjC9qKdJiht8DNMXVImILTIBATOw8lyvNOwlhTzaZeudVzzfnwbvVIrj3yR
+	uYAf8x/ctMS3iNKwDTV/DFOkBJ4dwsZmpT9F11ZEBjlVG0bZ2GIoNmwdcP+kaiqwUeH0SI0NgvPw4
+	bHPb0sAw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49586)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1r50WD-0005DX-2m;
+	Mon, 20 Nov 2023 09:24:37 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1r50WD-00033Q-J2; Mon, 20 Nov 2023 09:24:37 +0000
+Date: Mon, 20 Nov 2023 09:24:37 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jianyong Wu <Jianyong.Wu@arm.com>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Justin He <Justin.He@arm.com>, James Morse <James.Morse@arm.com>,
+	Catalin Marinas <Catalin.Marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <Mark.Rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>
+Subject: Re: [PATCH 34/39] arm64: psci: Ignore DENIED CPUs
+Message-ID: <ZVsl1ZQ9JRXPf4qH@shell.armlinux.org.uk>
+References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
+ <E1qvJBQ-00AqS8-8B@rmk-PC.armlinux.org.uk>
+ <DB9PR08MB7511B178CA811C412766FDBAF4B0A@DB9PR08MB7511.eurprd08.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and
- unxlate_dev_mem_ptr()
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Linux-Arch <linux-arch@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-hexagon@vger.kernel.org>,
-	<linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>, Richard Henderson
-	<richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Russell King <linux@armlinux.org.uk>, Brian Cain <bcain@quicinc.com>, "James
- E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Nicholas Piggin
-	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
-	"David S . Miller" <davem@davemloft.net>, Stanislav Kinsburskii
-	<stanislav.kinsburskii@gmail.com>
-References: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
- <CAMuHMdU+MMiogx6TcBwxFL7AODZYhiAZpVHiafEBfnRsDaXTog@mail.gmail.com>
- <c441db4c-1851-4b09-a344-377a1684e9b5@huawei.com>
- <2a7bff92-8e25-4cf7-acf1-8ed054691fd8@app.fastmail.com>
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <2a7bff92-8e25-4cf7-acf1-8ed054691fd8@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100001.china.huawei.com (7.185.36.93)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB9PR08MB7511B178CA811C412766FDBAF4B0A@DB9PR08MB7511.eurprd08.prod.outlook.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-
-
-On 2023/11/20 14:40, Arnd Bergmann wrote:
-> On Mon, Nov 20, 2023, at 01:39, Kefeng Wang wrote:
->> On 2023/11/20 3:34, Geert Uytterhoeven wrote:
->>> On Sat, Nov 18, 2023 at 11:09 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->>>>
->>>> -/*
->>>> - * Convert a physical pointer to a virtual kernel pointer for /dev/mem
->>>> - * access
->>>> - */
->>>> -#define xlate_dev_mem_ptr(p)   __va(p)
->>>> -#define unxlate_dev_mem_ptr(p, v) do { } while (0)
->>>> -
->>>>    void __ioread64_copy(void *to, const void __iomem *from, size_t count);
->>>
->>> Missing #include <asm-generic/io.h>, according to the build bot report.
->>
->> Will check the bot report.
+On Thu, Nov 16, 2023 at 07:45:51AM +0000, Jianyong Wu wrote:
+> Hi Russell,
 > 
-> I had planned to pick up the series from
+> One inline comment.
+...
+> > Changes since RFC v2
+> >  * Add specification reference
+> >  * Use EPERM rather than EPROBE_DEFER
+...
+> > @@ -40,7 +40,7 @@ static int cpu_psci_cpu_boot(unsigned int cpu)  {
+> >  	phys_addr_t pa_secondary_entry = __pa_symbol(secondary_entry);
+> >  	int err = psci_ops.cpu_on(cpu_logical_map(cpu), pa_secondary_entry);
+> > -	if (err)
+> > +	if (err && err != -EPROBE_DEFER)
 > 
-> https://lore.kernel.org/lkml/20230921110424.215592-3-bhe@redhat.com/
+> Should this be EPERM? As the following psci cpu_on op will return it. I
+> think you miss to change this when apply Jean-Philippe's patch.
 
-Good to see it.
+It looks like James didn't properly update all places. Also,
 
-> 
-> for v6.7 but didn't make it in the end. I'll try to do it now
-> for v6.8 and apply your v1 patch with the Acks on top.
+> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c index
+> > d9629ff87861..ee82e7880d8c 100644
+> > --- a/drivers/firmware/psci/psci.c
+> > +++ b/drivers/firmware/psci/psci.c
+> > @@ -218,6 +218,8 @@ static int __psci_cpu_on(u32 fn, unsigned long cpuid,
+> > unsigned long entry_point)
+> >  	int err;
+> > 
+> >  	err = invoke_psci_fn(fn, cpuid, entry_point, 0);
+> > +	if (err == PSCI_RET_DENIED)
+> > +		return -EPERM;
+> >  	return psci_to_linux_errno(err);
+
+This change is unnecessary - probably comes from when -EPROBE_DEFER was
+being used. psci_to_linux_errno() already does:
+
+       case PSCI_RET_DENIED:
+               return -EPERM;
 
 Thanks.
 
-> 
->      Arnd
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
