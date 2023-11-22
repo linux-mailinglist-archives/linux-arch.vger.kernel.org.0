@@ -1,161 +1,274 @@
-Return-Path: <linux-arch+bounces-334-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-335-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B92FE7F3F5C
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 08:58:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B655D7F4180
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 10:22:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48D4EB20DBC
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 07:58:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DDE91F21E62
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 09:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3223820B1A;
-	Wed, 22 Nov 2023 07:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5RWB0za"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F36721373;
+	Wed, 22 Nov 2023 09:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1782220B19
-	for <linux-arch@vger.kernel.org>; Wed, 22 Nov 2023 07:58:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CE1C433C9
-	for <linux-arch@vger.kernel.org>; Wed, 22 Nov 2023 07:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700639905;
-	bh=TSjw9JHMBHe5Fok2w0/uBfI+0oxAFjy8dkw2a06Jmg0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=h5RWB0zaJ1wH4Z9oR+P0oKmBF1aBuN5qllDOg0mpr0huC1/bIits5k/57O49Z5/fc
-	 diHr3Uz/SXMtSGFs6FQv/XXz0Sgl4MJwTQifgRnf270636nOxgVDzkgLXegTiJLJib
-	 qIAnA2xL8ZchHkdV9RKJuS0pJB8dicngRjYj8+ftvXMUBNGWBewWyGzX08X0Bho6J6
-	 KVTSGOrvhKcUhcSL1JiurM0CM3o8moONO8ejyvXA9CbkhHfmgH/PdBqUoB75m3eS06
-	 9EiwSggh+5NwL+ZyW3xh7ejDlFOdlKJdr7sZj6l9gf5BIBKYEuPMzt8ZHWWzITry6/
-	 z3OWGas8Zr7pQ==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-548f6f3cdc9so2624525a12.2
-        for <linux-arch@vger.kernel.org>; Tue, 21 Nov 2023 23:58:25 -0800 (PST)
-X-Gm-Message-State: AOJu0YxiOwzt5vq6qmI4kqsB9bi1aMijAyMjHKiQCSXJ61MmXRGjxaIw
-	nhnK0J0TaT2c03WWp/mCfrfV7djJqZHvhg3ADCc=
-X-Google-Smtp-Source: AGHT+IEZMw4hpym7GPvn/jpG/VAFv2/TjUkvtNr2nYSzA9tWWzFpr3nwjjRTy95SPiijIV09Am4vQAgDpi6VGgvNKow=
-X-Received: by 2002:a17:907:9443:b0:9fd:9616:c48e with SMTP id
- dl3-20020a170907944300b009fd9616c48emr995537ejc.27.1700639904103; Tue, 21 Nov
- 2023 23:58:24 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBE6FF4;
+	Wed, 22 Nov 2023 01:22:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42BE01595;
+	Wed, 22 Nov 2023 01:23:32 -0800 (PST)
+Received: from arm.com (e121798.cambridge.arm.com [10.1.197.44])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C2073F73F;
+	Wed, 22 Nov 2023 01:22:41 -0800 (PST)
+Date: Wed, 22 Nov 2023 09:22:38 +0000
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: Peter Collingbourne <pcc@google.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+	rppt@kernel.org, hughd@google.com, steven.price@arm.com,
+	anshuman.khandual@arm.com, vincenzo.frascino@arm.com,
+	david@redhat.com, eugenis@google.com, kcc@google.com,
+	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 20/27] mm: hugepage: Handle huge page fault on
+ access
+Message-ID: <ZV3IXlxKcyOphMgb@arm.com>
+References: <20231119165721.9849-1-alexandru.elisei@arm.com>
+ <20231119165721.9849-21-alexandru.elisei@arm.com>
+ <CAMn1gO7_UG-T9Vf_7oVOhLD1DFVPc1ceSxdJFsFqkem_vCopog@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231121070209.210934-1-hengqi.chen@gmail.com>
- <CAAhV-H7SwSRDh8Ui2xVb1ncoaEQVd=dugphcBemkeaPNGQX2qw@mail.gmail.com> <CAEyhmHRYghT5iFiLByUmC=AjdygiBWU8TH3joSyyWibu0Ki2xw@mail.gmail.com>
-In-Reply-To: <CAEyhmHRYghT5iFiLByUmC=AjdygiBWU8TH3joSyyWibu0Ki2xw@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 22 Nov 2023 15:58:12 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Jr_a4j+Qnitd7ay9Vkcw5g0W_W3LNJwUzQ1BWXoGpoA@mail.gmail.com>
-Message-ID: <CAAhV-H4Jr_a4j+Qnitd7ay9Vkcw5g0W_W3LNJwUzQ1BWXoGpoA@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Store syscall nr in thread_info
-To: Hengqi Chen <hengqi.chen@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arch <linux-arch@vger.kernel.org>
-Cc: loongarch@lists.linux.dev, kernel@xen0n.name
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMn1gO7_UG-T9Vf_7oVOhLD1DFVPc1ceSxdJFsFqkem_vCopog@mail.gmail.com>
 
-Hi, Hengqi,
+Hi Peter,
 
-On Wed, Nov 22, 2023 at 3:34=E2=80=AFPM Hengqi Chen <hengqi.chen@gmail.com>=
- wrote:
->
-> Hi, Huacai,
->
-> On Wed, Nov 22, 2023 at 2:32=E2=80=AFPM Huacai Chen <chenhuacai@kernel.or=
-g> wrote:
+On Tue, Nov 21, 2023 at 05:28:49PM -0800, Peter Collingbourne wrote:
+> On Sun, Nov 19, 2023 at 8:59 AM Alexandru Elisei
+> <alexandru.elisei@arm.com> wrote:
 > >
-> > Hi, Hengqi,
+> > Handle PAGE_FAULT_ON_ACCESS faults for huge pages in a similar way to
+> > regular pages.
 > >
-> > On Wed, Nov 22, 2023 at 1:14=E2=80=AFPM Hengqi Chen <hengqi.chen@gmail.=
-com> wrote:
-> > >
-> > > Currently, we store syscall number in pt_regs::regs[11] and it may be
-> > > changed during syscall execution. Take `execve` as an example:
-> > >
-> > >     sys_execve
-> > >       -> do_execve
-> > >         -> do_execveat_common
-> > >           -> bprm_execve
-> > >             -> exec_binprm
-> > >               -> search_binary_handler
-> > >                 -> load_elf_binary
-> > >                   -> ELF_PLAT_INIT
-> > >
-> > > ELF_PLAT_INIT reset regs[11] to 0, later in syscall_exit_to_user_mode
-> > > we get a wrong syscall nr.
-> > >
-> > > Known affected syscalls includes execve/execveat/rt_sigreturn. Tools
-> > > like execsnoop do not work properly because the sys_exit_* tracepoint=
-s
-> > > does not trigger at all.
-> > >
-> > > Let's store syscall nr in thread_info instead.
-> > Can we just modify ELF_PLAT_INIT and not clear regs[11]?
+> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> > ---
+> >  arch/arm64/include/asm/mte_tag_storage.h |  1 +
+> >  arch/arm64/include/asm/pgtable.h         |  7 ++
+> >  arch/arm64/mm/fault.c                    | 81 ++++++++++++++++++++++++
+> >  include/linux/huge_mm.h                  |  2 +
+> >  include/linux/pgtable.h                  |  5 ++
+> >  mm/huge_memory.c                         |  4 +-
+> >  mm/memory.c                              |  3 +
+> >  7 files changed, 101 insertions(+), 2 deletions(-)
 > >
->
-> I am uncertain about the side effects of changing ELF_PLAT_INIT.
-> From a completeness perspective, changing ELF_PLAT_INIT is suboptimal,
-> rt_sigreturn is affected in another code path, and there may be other
-> syscalls that I am unaware of.
-Save syscall number in thread_info has more side effects, because
-ptrace allows us to change the number during syscall, then we should
-keep consistency between syscall and regs[11].
-
-And about ELF_PLAT_INIT, maybe Arnd can give us some more information.
-
-Hi, Arnd,
-
-I found some new architectures, such as ARM64 and RISC-V, just do
-nearly nothing in ELF_PLAT_INIT, while some old architectures, such as
-x86 and MIPS, clear most of the registers, do you know why?
-
-Huacai
-
->
-> > Huacai
+> > diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/include/asm/mte_tag_storage.h
+> > index c70ced60a0cd..b97406d369ce 100644
+> > --- a/arch/arm64/include/asm/mte_tag_storage.h
+> > +++ b/arch/arm64/include/asm/mte_tag_storage.h
+> > @@ -35,6 +35,7 @@ void free_tag_storage(struct page *page, int order);
+> >  bool page_tag_storage_reserved(struct page *page);
 > >
-> > >
-> > > Fixes: be769645a2aef ("LoongArch: Add system call support")
-> > > Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-> > > ---
-> > >  arch/loongarch/include/asm/syscall.h | 2 +-
-> > >  arch/loongarch/kernel/syscall.c      | 1 +
-> > >  2 files changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/loongarch/include/asm/syscall.h b/arch/loongarch/in=
-clude/asm/syscall.h
-> > > index e286dc58476e..2317d674b92a 100644
-> > > --- a/arch/loongarch/include/asm/syscall.h
-> > > +++ b/arch/loongarch/include/asm/syscall.h
-> > > @@ -23,7 +23,7 @@ extern void *sys_call_table[];
-> > >  static inline long syscall_get_nr(struct task_struct *task,
-> > >                                   struct pt_regs *regs)
-> > >  {
-> > > -       return regs->regs[11];
-> > > +       return task_thread_info(task)->syscall;
-> > >  }
-> > >
-> > >  static inline void syscall_rollback(struct task_struct *task,
-> > > diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/=
-syscall.c
-> > > index b4c5acd7aa3b..2783e33cf276 100644
-> > > --- a/arch/loongarch/kernel/syscall.c
-> > > +++ b/arch/loongarch/kernel/syscall.c
-> > > @@ -52,6 +52,7 @@ void noinstr do_syscall(struct pt_regs *regs)
-> > >         regs->orig_a0 =3D regs->regs[4];
-> > >         regs->regs[4] =3D -ENOSYS;
-> > >
-> > > +       task_thread_info(current)->syscall =3D nr;
-> > >         nr =3D syscall_enter_from_user_mode(regs, nr);
-> > >
-> > >         if (nr < NR_syscalls) {
-> > > --
-> > > 2.42.0
-> > >
+> >  vm_fault_t handle_page_missing_tag_storage(struct vm_fault *vmf);
+> > +vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf);
+> >  #else
+> >  static inline bool tag_storage_enabled(void)
+> >  {
+> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> > index 8cc135f1c112..1704411c096d 100644
+> > --- a/arch/arm64/include/asm/pgtable.h
+> > +++ b/arch/arm64/include/asm/pgtable.h
+> > @@ -477,6 +477,13 @@ static inline vm_fault_t arch_do_page_fault_on_access(struct vm_fault *vmf)
+> >                 return handle_page_missing_tag_storage(vmf);
+> >         return VM_FAULT_SIGBUS;
+> >  }
+> > +
+> > +static inline vm_fault_t arch_do_huge_page_fault_on_access(struct vm_fault *vmf)
+> > +{
+> > +       if (tag_storage_enabled())
+> > +               return handle_huge_page_missing_tag_storage(vmf);
+> > +       return VM_FAULT_SIGBUS;
+> > +}
+> >  #endif /* CONFIG_ARCH_HAS_FAULT_ON_ACCESS */
+> >
+> >  #define pmd_present_invalid(pmd)     (!!(pmd_val(pmd) & PMD_PRESENT_INVALID))
+> > diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> > index f5fa583acf18..6730a0812a24 100644
+> > --- a/arch/arm64/mm/fault.c
+> > +++ b/arch/arm64/mm/fault.c
+> > @@ -1041,6 +1041,87 @@ vm_fault_t handle_page_missing_tag_storage(struct vm_fault *vmf)
+> >
+> >         return 0;
+> >
+> > +out_retry:
+> > +       put_page(page);
+> > +       if (vmf->flags & FAULT_FLAG_VMA_LOCK)
+> > +               vma_end_read(vma);
+> > +       if (fault_flag_allow_retry_first(vmf->flags)) {
+> > +               err = VM_FAULT_RETRY;
+> > +       } else {
+> > +               /* Replay the fault. */
+> > +               err = 0;
+> > +       }
+> > +       return err;
+> > +}
+> > +
+> > +vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf)
+> > +{
+> > +       unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
+> > +       struct vm_area_struct *vma = vmf->vma;
+> > +       pmd_t old_pmd, new_pmd;
+> > +       bool writable = false;
+> > +       struct page *page;
+> > +       vm_fault_t err;
+> > +       int ret;
+> > +
+> > +       vmf->ptl = pmd_lock(vma->vm_mm, vmf->pmd);
+> > +       if (unlikely(!pmd_same(vmf->orig_pmd, *vmf->pmd))) {
+> > +               spin_unlock(vmf->ptl);
+> > +               return 0;
+> > +       }
+> > +
+> > +       old_pmd = vmf->orig_pmd;
+> > +       new_pmd = pmd_modify(old_pmd, vma->vm_page_prot);
+> > +
+> > +       /*
+> > +        * Detect now whether the PMD could be writable; this information
+> > +        * is only valid while holding the PT lock.
+> > +        */
+> > +       writable = pmd_write(new_pmd);
+> > +       if (!writable && vma_wants_manual_pte_write_upgrade(vma) &&
+> > +           can_change_pmd_writable(vma, vmf->address, new_pmd))
+> > +               writable = true;
+> > +
+> > +       page = vm_normal_page_pmd(vma, haddr, new_pmd);
+> > +       if (!page)
+> > +               goto out_map;
+> > +
+> > +       if (!(vma->vm_flags & VM_MTE))
+> > +               goto out_map;
+> > +
+> > +       get_page(page);
+> > +       vma_set_access_pid_bit(vma);
+> > +
+> > +       spin_unlock(vmf->ptl);
+> > +       writable = false;
+> > +
+> > +       if (unlikely(is_migrate_isolate_page(page)))
+> > +               goto out_retry;
+> > +
+> > +       ret = reserve_tag_storage(page, HPAGE_PMD_ORDER, GFP_HIGHUSER_MOVABLE);
+> > +       if (ret)
+> > +               goto out_retry;
+> > +
+> > +       put_page(page);
+> > +
+> > +       vmf->ptl = pmd_lock(vma->vm_mm, vmf->pmd);
+> > +       if (unlikely(!pmd_same(old_pmd, *vmf->pmd))) {
+> > +               spin_unlock(vmf->ptl);
+> > +               return 0;
+> > +       }
+> > +
+> > +out_map:
+> > +       /* Restore the PMD */
+> > +       new_pmd = pmd_modify(old_pmd, vma->vm_page_prot);
+> > +       new_pmd = pmd_mkyoung(new_pmd);
+> > +       if (writable)
+> > +               new_pmd = pmd_mkwrite(new_pmd, vma);
+> > +       set_pmd_at(vma->vm_mm, haddr, vmf->pmd, new_pmd);
+> > +       update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
+> > +       spin_unlock(vmf->ptl);
+> > +
+> > +       return 0;
+> > +
+> >  out_retry:
+> >         put_page(page);
+> >         if (vmf->flags & FAULT_FLAG_VMA_LOCK)
+> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> > index fa0350b0812a..bb84291f9231 100644
+> > --- a/include/linux/huge_mm.h
+> > +++ b/include/linux/huge_mm.h
+> > @@ -36,6 +36,8 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
+> >  int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> >                     pmd_t *pmd, unsigned long addr, pgprot_t newprot,
+> >                     unsigned long cp_flags);
+> > +bool can_change_pmd_writable(struct vm_area_struct *vma, unsigned long addr,
+> > +                            pmd_t pmd);
+> >
+> >  vm_fault_t vmf_insert_pfn_pmd(struct vm_fault *vmf, pfn_t pfn, bool write);
+> >  vm_fault_t vmf_insert_pfn_pud(struct vm_fault *vmf, pfn_t pfn, bool write);
+> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > index e2c761dd6c41..de45f475bf8d 100644
+> > --- a/include/linux/pgtable.h
+> > +++ b/include/linux/pgtable.h
+> > @@ -1473,6 +1473,11 @@ static inline vm_fault_t arch_do_page_fault_on_access(struct vm_fault *vmf)
+> >  {
+> >         return VM_FAULT_SIGBUS;
+> >  }
+> > +
+> > +static inline vm_fault_t arch_do_huge_page_fault_on_access(struct vm_fault *vmf)
+> > +{
+> > +       return VM_FAULT_SIGBUS;
+> > +}
+> >  #endif
+> >
+> >  #endif /* CONFIG_MMU */
+> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > index 9beead961a65..d1402b43ea39 100644
+> > --- a/mm/huge_memory.c
+> > +++ b/mm/huge_memory.c
+> > @@ -1406,8 +1406,8 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+> >         return VM_FAULT_FALLBACK;
+> >  }
+> >
+> > -static inline bool can_change_pmd_writable(struct vm_area_struct *vma,
+> > -                                          unsigned long addr, pmd_t pmd)
+> > +inline bool can_change_pmd_writable(struct vm_area_struct *vma,
+> 
+> Remove inline keyword here.
+
+Indeed, as it does nothing now that the function is not static.
+
+Thanks,
+Alex
+
+> 
+> Peter
+> 
+> > +                                   unsigned long addr, pmd_t pmd)
+> >  {
+> >         struct page *page;
+> >
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index a04a971200b9..46b926625503 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -5168,6 +5168,9 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+> >                         return 0;
+> >                 }
+> >                 if (pmd_trans_huge(vmf.orig_pmd) || pmd_devmap(vmf.orig_pmd)) {
+> > +                       if (fault_on_access_pmd(vmf.orig_pmd) && vma_is_accessible(vma))
+> > +                               return arch_do_huge_page_fault_on_access(&vmf);
+> > +
+> >                         if (pmd_protnone(vmf.orig_pmd) && vma_is_accessible(vma))
+> >                                 return do_huge_pmd_numa_page(&vmf);
+> >
+> > --
+> > 2.42.1
+> >
 
