@@ -1,306 +1,128 @@
-Return-Path: <linux-arch+bounces-331-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-332-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 487407F3B4B
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 02:29:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5707F3B5F
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 02:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64E951C20F4A
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 01:29:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A77051C21010
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 01:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD66D17D5;
-	Wed, 22 Nov 2023 01:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938254401;
+	Wed, 22 Nov 2023 01:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0fH8GNq4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwCsdM2z"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6E3CB
-	for <linux-arch@vger.kernel.org>; Tue, 21 Nov 2023 17:29:01 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1cf5ceadfd8so76845ad.0
-        for <linux-arch@vger.kernel.org>; Tue, 21 Nov 2023 17:29:01 -0800 (PST)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A6C12C;
+	Tue, 21 Nov 2023 17:41:14 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6cbb71c3020so264777b3a.1;
+        Tue, 21 Nov 2023 17:41:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700616540; x=1701221340; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PQTXNqNKjwBGV/F0nq07Eb76dHmbBkOBd/hKqiZRe4I=;
-        b=0fH8GNq49/9SN0sFpPa+dFB76Fv3TVjuVjQEK1Z67KYsFUZQ6SmhrUGQAbU0s4JgS6
-         AGa5keuizGPR4H3A8s6fa6HJ/lKlaMjF++Suzkvgk08fnaqk0iHuVf1yPpv5Afq90/YV
-         9uHhDqy+SRyC/ZG++lUKcNbxPKTyw9vVsi45IdFfECl1upuoURThgJjDPSbfN0p9Oz0V
-         ygfO1ISORS4i7J8XYeI2EjGrXmameWqCRhhGHZlKCEPPYQTa/ZbtlgwKD6PcwZ38oKlm
-         9mLRHCOsME9wjbkXbKc3AmzvSBcII8Wdau3aR7/3JYdNFgtGywTBOJNt1usXmTvLhOOM
-         Y/2w==
+        d=gmail.com; s=20230601; t=1700617273; x=1701222073; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
+        b=hwCsdM2zxxJ5EjZy88b7OGh/WAkqreYdl2vZV+JsgrpGgSlXRKlRhKwf/GqMIAyvjx
+         mLORQM7zVddznURZsWaMQIseNG6TfCoGpxBj7yX7hyJJocFFymkOuLm1Rw4Uxat/URow
+         bhSpbMHmEKubjYyetZGQFZQkiP0P1tPR8z1lIu3MIMn7+cdyJKnvPpLVZdFe4NFBb03D
+         ngic5VpYtEal4ixYE/Efms/RTOi0fQUbywZ/ASoQqDiWL+7SBXtjuTzGuYgY6dDqX0q8
+         Idlyk69apU5YfCijVxUCslEjDgUf5gdvQL7K+BqnnTc3KbqaeigrQpMPjndgBKv7Inhr
+         2oGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700616540; x=1701221340;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PQTXNqNKjwBGV/F0nq07Eb76dHmbBkOBd/hKqiZRe4I=;
-        b=m/5UyjjbmtjL+GsMZNFg7wVL0QHDUbyTXTuTcA2b3/ekg6v1MWM3MUA8ZM3KjrcxP/
-         O0ZiAaLanpiSe5KKeJFu5SzTPXvQSOiucaPDyQp+e6ky5DIc+ug0/Msy5FFHe0fJ2JUu
-         j5F9gZs20BFAFW+JcpHyHfrdd5ArjSu7PxpqXO/PQelsF+ZPtCFeaGvBJL/TAsLO69LA
-         veg28XU3lJNGVaxNAXjJCB9p+2IuAXyvzE9O6lPqZRBi+uh3SOIUj7LDhUIUF4K9pBWc
-         yYNF7t9mB3rMFuaAP0dPNOOjn2Hjd/1h2rsA/6m7DKUvk28Ul+xlL7tF+9Tdd5JB2cWv
-         soBA==
-X-Gm-Message-State: AOJu0Ywr97ykbAGBqbC34WrzzsqhXwGLdMs5C4G7g/W4UNixfEyyoj5t
-	jS8jG/NHwbcEeSqN4L2fIPi76pk2Ixj5fgHecWcN/w==
-X-Google-Smtp-Source: AGHT+IHTLY6O8nnNjugZgX1idDgXA1sk1KnuEcL73QkrrMzzt0J7bEBMJ67A4b4lOJtIs84dHwwHlsyEGiBHb8A0s/M=
-X-Received: by 2002:a17:903:643:b0:1cf:6542:b4c6 with SMTP id
- kh3-20020a170903064300b001cf6542b4c6mr63497plb.13.1700616540267; Tue, 21 Nov
- 2023 17:29:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700617273; x=1701222073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
+        b=gDL3CQKpHqZVKAcj/YZao+1+wtjq7cJ59cG6HKi3H5x9+OD7Dbv2m1KtMd6/YFoQff
+         daJFlym0J8nZY5eomy1Gp/wUTwENPuNhgvwKn8T/RQXPbA+QzuUqVecVDmSc/30y1h8M
+         rrWzXPNSnGG/oxgfW9heSBOHYHtY+9rpEUWNfAl1jCvKckzSieLyqs/msYijnNReJ+89
+         m2FCp+6CpMgI0kItLhcoXqi2JLcSEA2Z3gjsD5/jSdsFAd33OelyhxJlbg3ghs5zGWU9
+         2+PiA4XdFeXHCcEH3camGIitmWkhJAbYkbeTY4hDmp5FlHU8sC8C1OUAj4YC9XRK0uWZ
+         Lt9g==
+X-Gm-Message-State: AOJu0YxVszJF+4pNlTco84lW9YGkHVAIgr4lNdbGPNNq7dZyHgxnn5Xw
+	NBirWT0nr5dGEZ8ooKMxcyg=
+X-Google-Smtp-Source: AGHT+IHAMbcH80Qv38sfnNHrOUL21YxFpmpRBj4ZbJPJ09PEy1rp7PPEr4++1O5WoMpvW2iMsf+Omg==
+X-Received: by 2002:a05:6a21:a59b:b0:187:962d:746b with SMTP id gd27-20020a056a21a59b00b00187962d746bmr1839947pzc.9.1700617273489;
+        Tue, 21 Nov 2023 17:41:13 -0800 (PST)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:da69])
+        by smtp.gmail.com with ESMTPSA id v4-20020aa78504000000b006cb884c0362sm5005865pfn.87.2023.11.21.17.41.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 17:41:12 -0800 (PST)
+Date: Tue, 21 Nov 2023 17:41:07 -0800
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
+	ndesaulniers@google.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, jpoimboe@kernel.org, joao@overdrivepizza.com,
+	mark.rutland@arm.com
+Subject: Re: [PATCH 0/2] x86/bpf: Fix FineIBT vs eBPF
+Message-ID: <20231122014107.p5zf4o6kjanypla4@macbook-pro-49.dhcp.thefacebook.com>
+References: <20231120144642.591358648@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231119165721.9849-1-alexandru.elisei@arm.com> <20231119165721.9849-21-alexandru.elisei@arm.com>
-In-Reply-To: <20231119165721.9849-21-alexandru.elisei@arm.com>
-From: Peter Collingbourne <pcc@google.com>
-Date: Tue, 21 Nov 2023 17:28:49 -0800
-Message-ID: <CAMn1gO7_UG-T9Vf_7oVOhLD1DFVPc1ceSxdJFsFqkem_vCopog@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 20/27] mm: hugepage: Handle huge page fault on access
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
-	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, steven.price@arm.com, 
-	anshuman.khandual@arm.com, vincenzo.frascino@arm.com, david@redhat.com, 
-	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231120144642.591358648@infradead.org>
 
-On Sun, Nov 19, 2023 at 8:59=E2=80=AFAM Alexandru Elisei
-<alexandru.elisei@arm.com> wrote:
->
-> Handle PAGE_FAULT_ON_ACCESS faults for huge pages in a similar way to
-> regular pages.
->
-> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> ---
->  arch/arm64/include/asm/mte_tag_storage.h |  1 +
->  arch/arm64/include/asm/pgtable.h         |  7 ++
->  arch/arm64/mm/fault.c                    | 81 ++++++++++++++++++++++++
->  include/linux/huge_mm.h                  |  2 +
->  include/linux/pgtable.h                  |  5 ++
->  mm/huge_memory.c                         |  4 +-
->  mm/memory.c                              |  3 +
->  7 files changed, 101 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/includ=
-e/asm/mte_tag_storage.h
-> index c70ced60a0cd..b97406d369ce 100644
-> --- a/arch/arm64/include/asm/mte_tag_storage.h
-> +++ b/arch/arm64/include/asm/mte_tag_storage.h
-> @@ -35,6 +35,7 @@ void free_tag_storage(struct page *page, int order);
->  bool page_tag_storage_reserved(struct page *page);
->
->  vm_fault_t handle_page_missing_tag_storage(struct vm_fault *vmf);
-> +vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf);
->  #else
->  static inline bool tag_storage_enabled(void)
->  {
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pg=
-table.h
-> index 8cc135f1c112..1704411c096d 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -477,6 +477,13 @@ static inline vm_fault_t arch_do_page_fault_on_acces=
-s(struct vm_fault *vmf)
->                 return handle_page_missing_tag_storage(vmf);
->         return VM_FAULT_SIGBUS;
->  }
-> +
-> +static inline vm_fault_t arch_do_huge_page_fault_on_access(struct vm_fau=
-lt *vmf)
-> +{
-> +       if (tag_storage_enabled())
-> +               return handle_huge_page_missing_tag_storage(vmf);
-> +       return VM_FAULT_SIGBUS;
-> +}
->  #endif /* CONFIG_ARCH_HAS_FAULT_ON_ACCESS */
->
->  #define pmd_present_invalid(pmd)     (!!(pmd_val(pmd) & PMD_PRESENT_INVA=
-LID))
-> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> index f5fa583acf18..6730a0812a24 100644
-> --- a/arch/arm64/mm/fault.c
-> +++ b/arch/arm64/mm/fault.c
-> @@ -1041,6 +1041,87 @@ vm_fault_t handle_page_missing_tag_storage(struct =
-vm_fault *vmf)
->
->         return 0;
->
-> +out_retry:
-> +       put_page(page);
-> +       if (vmf->flags & FAULT_FLAG_VMA_LOCK)
-> +               vma_end_read(vma);
-> +       if (fault_flag_allow_retry_first(vmf->flags)) {
-> +               err =3D VM_FAULT_RETRY;
-> +       } else {
-> +               /* Replay the fault. */
-> +               err =3D 0;
-> +       }
-> +       return err;
-> +}
-> +
-> +vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf)
-> +{
-> +       unsigned long haddr =3D vmf->address & HPAGE_PMD_MASK;
-> +       struct vm_area_struct *vma =3D vmf->vma;
-> +       pmd_t old_pmd, new_pmd;
-> +       bool writable =3D false;
-> +       struct page *page;
-> +       vm_fault_t err;
-> +       int ret;
-> +
-> +       vmf->ptl =3D pmd_lock(vma->vm_mm, vmf->pmd);
-> +       if (unlikely(!pmd_same(vmf->orig_pmd, *vmf->pmd))) {
-> +               spin_unlock(vmf->ptl);
-> +               return 0;
-> +       }
-> +
-> +       old_pmd =3D vmf->orig_pmd;
-> +       new_pmd =3D pmd_modify(old_pmd, vma->vm_page_prot);
-> +
-> +       /*
-> +        * Detect now whether the PMD could be writable; this information
-> +        * is only valid while holding the PT lock.
-> +        */
-> +       writable =3D pmd_write(new_pmd);
-> +       if (!writable && vma_wants_manual_pte_write_upgrade(vma) &&
-> +           can_change_pmd_writable(vma, vmf->address, new_pmd))
-> +               writable =3D true;
-> +
-> +       page =3D vm_normal_page_pmd(vma, haddr, new_pmd);
-> +       if (!page)
-> +               goto out_map;
-> +
-> +       if (!(vma->vm_flags & VM_MTE))
-> +               goto out_map;
-> +
-> +       get_page(page);
-> +       vma_set_access_pid_bit(vma);
-> +
-> +       spin_unlock(vmf->ptl);
-> +       writable =3D false;
-> +
-> +       if (unlikely(is_migrate_isolate_page(page)))
-> +               goto out_retry;
-> +
-> +       ret =3D reserve_tag_storage(page, HPAGE_PMD_ORDER, GFP_HIGHUSER_M=
-OVABLE);
-> +       if (ret)
-> +               goto out_retry;
-> +
-> +       put_page(page);
-> +
-> +       vmf->ptl =3D pmd_lock(vma->vm_mm, vmf->pmd);
-> +       if (unlikely(!pmd_same(old_pmd, *vmf->pmd))) {
-> +               spin_unlock(vmf->ptl);
-> +               return 0;
-> +       }
-> +
-> +out_map:
-> +       /* Restore the PMD */
-> +       new_pmd =3D pmd_modify(old_pmd, vma->vm_page_prot);
-> +       new_pmd =3D pmd_mkyoung(new_pmd);
-> +       if (writable)
-> +               new_pmd =3D pmd_mkwrite(new_pmd, vma);
-> +       set_pmd_at(vma->vm_mm, haddr, vmf->pmd, new_pmd);
-> +       update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
-> +       spin_unlock(vmf->ptl);
-> +
-> +       return 0;
-> +
->  out_retry:
->         put_page(page);
->         if (vmf->flags & FAULT_FLAG_VMA_LOCK)
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index fa0350b0812a..bb84291f9231 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -36,6 +36,8 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned=
- long old_addr,
->  int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
->                     pmd_t *pmd, unsigned long addr, pgprot_t newprot,
->                     unsigned long cp_flags);
-> +bool can_change_pmd_writable(struct vm_area_struct *vma, unsigned long a=
-ddr,
-> +                            pmd_t pmd);
->
->  vm_fault_t vmf_insert_pfn_pmd(struct vm_fault *vmf, pfn_t pfn, bool writ=
-e);
->  vm_fault_t vmf_insert_pfn_pud(struct vm_fault *vmf, pfn_t pfn, bool writ=
-e);
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index e2c761dd6c41..de45f475bf8d 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -1473,6 +1473,11 @@ static inline vm_fault_t arch_do_page_fault_on_acc=
-ess(struct vm_fault *vmf)
->  {
->         return VM_FAULT_SIGBUS;
->  }
-> +
-> +static inline vm_fault_t arch_do_huge_page_fault_on_access(struct vm_fau=
-lt *vmf)
-> +{
-> +       return VM_FAULT_SIGBUS;
-> +}
->  #endif
->
->  #endif /* CONFIG_MMU */
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 9beead961a65..d1402b43ea39 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1406,8 +1406,8 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf=
-)
->         return VM_FAULT_FALLBACK;
->  }
->
-> -static inline bool can_change_pmd_writable(struct vm_area_struct *vma,
-> -                                          unsigned long addr, pmd_t pmd)
-> +inline bool can_change_pmd_writable(struct vm_area_struct *vma,
+On Mon, Nov 20, 2023 at 03:46:42PM +0100, Peter Zijlstra wrote:
+> Hi!
+> 
+> There's a problem with FineIBT and eBPF using __nocfi when
+> CONFIG_BPF_JIT_ALWAYS_ON=n, in which case the __nocfi indirect call can target
+> a normal function like __bpf_prog_run32().
 
-Remove inline keyword here.
+The lack (or partially broken) cfi in the kernel built with
+CONFIG_BPF_JIT_ALWAYS_ON=n is probably the last of people security concerns.
+We introduced CONFIG_BPF_JIT_ALWAYS_ON=y to remove the interpreter,
+since mere presence of _any_ interpreter in the kernel (bpf and any other)
+is an attack vector. As it was demonstrated during spectre days an interpreter
+sitting in executable part of vmlinux .text tremendously helps to craft
+a speculative execution exploit.
 
-Peter
+Anyway, motivation aside, more comments in the patch 2...
 
-> +                                   unsigned long addr, pmd_t pmd)
->  {
->         struct page *page;
->
-> diff --git a/mm/memory.c b/mm/memory.c
-> index a04a971200b9..46b926625503 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -5168,6 +5168,9 @@ static vm_fault_t __handle_mm_fault(struct vm_area_=
-struct *vma,
->                         return 0;
->                 }
->                 if (pmd_trans_huge(vmf.orig_pmd) || pmd_devmap(vmf.orig_p=
-md)) {
-> +                       if (fault_on_access_pmd(vmf.orig_pmd) && vma_is_a=
-ccessible(vma))
-> +                               return arch_do_huge_page_fault_on_access(=
-&vmf);
-> +
->                         if (pmd_protnone(vmf.orig_pmd) && vma_is_accessib=
-le(vma))
->                                 return do_huge_pmd_numa_page(&vmf);
->
-> --
-> 2.42.1
->
+> Specifically the various preambles look like:
+> 
+>    FineIBT				JIT
+> 
+>    __cfi_foo:
+>       endbr64
+>       subl	$hash, %r10d
+>       jz	1f
+>       ud2
+>    1: nop
+>    foo:					foo:
+>       osp nop3				   endbr64
+>       ...				   ...
+> 
+> So while bpf_dispatcher_*_func() does a __nocfi call to foo()+0 and this
+> matches what the JIT generates, it does not work for regular FineIBT functions,
+> since their +0 endbr got poisoned and things go *boom*.
+> 
+> Cure this by teaching the BPF JIT about all the various CFI forms. Notably this
+> removes the last __nocfi call on x86.
+> 
+> If the BPF folks agree (and the robots don't find fail) I'd like to take this
+> through the x86 tree, because I have a few more patches that turn the non-fatal
+> 'osp nop3' poison into a 4 byte ud1 instruction which is rather fatal. As a
+> result this problem will also surface on !IBT hardware.
+> 
 
