@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-408-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-409-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06B777F5338
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 23:18:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F6A87F533B
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 23:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B11D11F20C74
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 22:18:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88D281C20BC9
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 22:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 249CB1F947;
-	Wed, 22 Nov 2023 22:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC0F200AE;
+	Wed, 22 Nov 2023 22:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d4Yov3+O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laW49S+9"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052781F60A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A824319BDE;
+	Wed, 22 Nov 2023 22:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02699C433C9;
 	Wed, 22 Nov 2023 22:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A14C433C8;
-	Wed, 22 Nov 2023 22:18:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700691504;
-	bh=OEYsi17tOKR7Yn0RX96OmFEl8yOfWLgmEUuZLjzMjVw=;
+	s=k20201202; t=1700691506;
+	bh=z8B55/ejcoe2WW+RVahNts4dxuwsQAuxIT3oPjNu21M=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=d4Yov3+O5pJZYtO+vAquTnBX0iikeSqBxlGU2Gli2xi78IA03yNmk9fyQbbo1bUKy
-	 USXCZ0TgaqwsYqNgrN9RxOE/iLncTbx6jFokMFv7xi/puqkUnVBny2fLDJBlzBjEgd
-	 VNMknv62dWvQ4bduSYJIvxhYEqiyoAS68ikNdyJpKg5B1sqD0cEJntPOZX6eTEuKXm
-	 H4LAl9o7KqFrHVXUFXpSkYn/yymkDBfZhVFzA4Aj9+5xP4PT/dZK6VG4Q6yJvGVmw5
-	 PMhCtOZQzVPwHjoc+itTW0E6Qq+o2h8hFh4Yxo+ORbInR5eRhdlSP8Xw7NPsKYQ9MW
-	 im5YtndDD/e3Q==
+	b=laW49S+9ECP9y1T3wKde/cIOj+JYD94ZcV2pI72RtAoICnQozqPsFxDWdxqSrefDs
+	 ZjJqCBW5+z6y6DzbG/csYQ6qH+PKfJG30uVSgEA5HoqOs885iuMwXWhUKNjPsAwbdw
+	 XxvuGpQBeGw7woppvooV/6F5QcCuM+r8430xkQV5fEQ3z29cskCKuvxCiK6dt3ldAO
+	 qaVCT/uPkCtPeBI2ntkUjI5j8N8ms+wmJIo8CjN8FD9esa5RfFYHm3KKeJJfq4DzBB
+	 ppL8aFHiNtClGNGSAJOItlB/hWNweuQwonVMF7Ot9M2RAfSPlcInsxxZjHopGYk+fw
+	 Q2mrXvH3TOBDQ==
 From: deller@kernel.org
 To: linux-kernel@vger.kernel.org,
 	Masahiro Yamada <masahiroy@kernel.org>,
@@ -39,9 +39,9 @@ To: linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org,
 	linux-arch@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 3/4] vmlinux.lds.h: Fix alignment for __ksymtab*, __kcrctab_* and .pci_fixup sections
-Date: Wed, 22 Nov 2023 23:18:13 +0100
-Message-ID: <20231122221814.139916-4-deller@kernel.org>
+Subject: [PATCH 4/4] modules: Add missing entry for __ex_table
+Date: Wed, 22 Nov 2023 23:18:14 +0100
+Message-ID: <20231122221814.139916-5-deller@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231122221814.139916-1-deller@kernel.org>
 References: <20231122221814.139916-1-deller@kernel.org>
@@ -55,69 +55,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Helge Deller <deller@gmx.de>
 
-On 64-bit architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-(e.g. ppc64, ppc64le, parisc, s390x,...) the __KSYM_REF() macro stores
-64-bit pointers into the __ksymtab* sections.
-Make sure that the start of those sections is 64-bit aligned in the vmlinux
-executable, otherwise unaligned memory accesses may happen at runtime.
-
-The __kcrctab* sections store 32-bit entities, so make those sections
-32-bit aligned.
-
-The pci fixup routines want to be 64-bit aligned on 64-bit platforms
-which don't define CONFIG_HAVE_ARCH_PREL32_RELOCATIONS. An alignment
-of 8 bytes is sufficient to guarantee aligned accesses at runtime.
+The entry for __ex_table was missing, which may make __ex_table
+become 1- or 2-byte aligned in modules.
+Add the entry to ensure it gets 32-bit aligned.
 
 Signed-off-by: Helge Deller <deller@gmx.de>
 Cc: <stable@vger.kernel.org> # v6.0+
 ---
- include/asm-generic/vmlinux.lds.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ scripts/module.lds.S | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index bae0fe4d499b..fa4335346e7d 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -467,6 +467,7 @@
- 	}								\
- 									\
- 	/* PCI quirks */						\
-+	. = ALIGN(8);							\
- 	.pci_fixup        : AT(ADDR(.pci_fixup) - LOAD_OFFSET) {	\
- 		BOUNDED_SECTION_PRE_LABEL(.pci_fixup_early,  _pci_fixups_early,  __start, __end) \
- 		BOUNDED_SECTION_PRE_LABEL(.pci_fixup_header, _pci_fixups_header, __start, __end) \
-@@ -484,6 +485,7 @@
- 	PRINTK_INDEX							\
- 									\
- 	/* Kernel symbol table: Normal symbols */			\
-+	. = ALIGN(8);							\
- 	__ksymtab         : AT(ADDR(__ksymtab) - LOAD_OFFSET) {		\
- 		__start___ksymtab = .;					\
- 		KEEP(*(SORT(___ksymtab+*)))				\
-@@ -491,6 +493,7 @@
- 	}								\
- 									\
- 	/* Kernel symbol table: GPL-only symbols */			\
-+	. = ALIGN(8);							\
- 	__ksymtab_gpl     : AT(ADDR(__ksymtab_gpl) - LOAD_OFFSET) {	\
- 		__start___ksymtab_gpl = .;				\
- 		KEEP(*(SORT(___ksymtab_gpl+*)))				\
-@@ -498,6 +501,7 @@
- 	}								\
- 									\
- 	/* Kernel symbol table: Normal symbols */			\
-+	. = ALIGN(4);							\
- 	__kcrctab         : AT(ADDR(__kcrctab) - LOAD_OFFSET) {		\
- 		__start___kcrctab = .;					\
- 		KEEP(*(SORT(___kcrctab+*)))				\
-@@ -505,6 +509,7 @@
- 	}								\
- 									\
- 	/* Kernel symbol table: GPL-only symbols */			\
-+	. = ALIGN(4);							\
- 	__kcrctab_gpl     : AT(ADDR(__kcrctab_gpl) - LOAD_OFFSET) {	\
- 		__start___kcrctab_gpl = .;				\
- 		KEEP(*(SORT(___kcrctab_gpl+*)))				\
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index b00415a9ff27..488f61b156b2 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -26,6 +26,7 @@ SECTIONS {
+ 	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
+ 	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
+ 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
++	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
+ 
+ 	__patchable_function_entries : { *(__patchable_function_entries) }
+ 
 -- 
 2.41.0
 
