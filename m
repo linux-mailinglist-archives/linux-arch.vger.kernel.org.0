@@ -1,192 +1,170 @@
-Return-Path: <linux-arch+bounces-386-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-387-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F004D7F5160
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 21:17:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F65E7F521C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 22:12:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48C9EB20CA5
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 20:16:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E02F7B20DD3
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Nov 2023 21:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7897F5D910;
-	Wed, 22 Nov 2023 20:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9ED1A27D;
+	Wed, 22 Nov 2023 21:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VMN/NCn/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4571BD;
-	Wed, 22 Nov 2023 12:16:50 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1f4b29abdbcso21055fac.0;
-        Wed, 22 Nov 2023 12:16:50 -0800 (PST)
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E821A4;
+	Wed, 22 Nov 2023 13:12:05 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id d2e1a72fcca58-6b5cac99cfdso225062b3a.2;
+        Wed, 22 Nov 2023 13:12:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700687525; x=1701292325; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ndk4aGNdhF9GXKkpyyjsozTJ5amtXqJPp+cG2mKjtD0=;
+        b=VMN/NCn/0ASAQmZ66hu4oESJL0srvFqyTlN0Uzf4h/QE9KDJ14ibkDOxebGQDBkWe4
+         hzTSwiH8UTDvauJj5bIk4mEmxcGkF2eAXJglQCPFyE5yETJaV/jFigT3ZW9Dfgb+FY8h
+         RPRa6ZUjSpEZ007Cb7K8XcWpgh41vN7M6Ai6aq9fbnfjRJdv+phB0zTLpl7IFVbbid3A
+         B+iBWdf/vv9Ydfe/D6kWQJkpNmcpS1FStiGWo4NcsnPrSPNlTgYtuomKRVgdmX6fhjKg
+         mDONSLCe5wFPb89F3oDFROwkdMNqk8i5Tjt1Imb8ab6Zuc1su/nUQEgMGmbtEuDRx5BG
+         sjbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700684210; x=1701289010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U+AKNbPfGcSitF9DQBk43/GENfS9BTVC5pjwY2CWch8=;
-        b=Bu5pFWc2ETKxL65yawgTFd7QN/bAEYfIseyHUYG/wZv4J0cEI8nhynLHfTa7QvWgpn
-         UY6i6wsyCO4nqk7poMpH3gwZFogrqI2UlMoZKhy385XeLHqUGBy6p4Gj3K26HIjo5vbT
-         SFdIwNj1diF59CY/axcaC0cN3zzJUehQvNm7WSmq2Q3+sE0ji2i2enNeYb6w7XS33RN0
-         kC1unYUAdEH+y/gchfS7wg79HZqn6UjveITZ7SmkAOqx+ySIfBe05J3oJrMx2v5sTQhu
-         ACPcVkA83B2SibqwvK88yc7xy6DPcyQ4RlnlNZDvltTwmpQLhWw2KjJeHh8qpYJawe/7
-         CM+A==
-X-Gm-Message-State: AOJu0YwBcB68LlYn0Nia3sbFrGu7yDB2adf3QhBmPUfU8N4gDfZlEFcg
-	7Zyt40jhWHNXp1YmKF13Aa/UVAfIY6EGdYP8jrKalExF
-X-Google-Smtp-Source: AGHT+IEZOuwWL+O8Ns2NywQDonavCXvBHcgdxxi2QZSHFBHwzFPNR8Ac+xre6B7/Fz+/eqIGB2UbpAfb/c6ikknz6l8=
-X-Received: by 2002:a05:6871:7a0:b0:1e9:8a7e:5893 with SMTP id
- o32-20020a05687107a000b001e98a7e5893mr4323044oap.5.1700684209905; Wed, 22 Nov
- 2023 12:16:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700687525; x=1701292325;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ndk4aGNdhF9GXKkpyyjsozTJ5amtXqJPp+cG2mKjtD0=;
+        b=JeJQ3VqkcpnGaCbvXw6Vl7bbQE0SYJzbEkILqXoR8OxZQBGxNnv6frIEMnwnmbLEPk
+         p9qnPOptTurKSEHtSQOpxlGVGOB22fpv1TeeVsoHD/pW7cv3XMkg9ObxF4EFhW4KRcps
+         rGlkzA6vVN/hFDFU//KYHHAGx17IWuATqkRFNcsccKlt+JRTOtgSj+OkOOLZ7op2zRn5
+         Betn7mZMwxzSQNS8Xp82YGa41WZBJKfucWv/wA/sPhGhiDA4SCkhpG+c+jHqslvaisjG
+         LNm3vwcSAOFfhh28FR2ZyVIXnKE/mPR9e7mpjNRDmQ3ASb5f7oIubDg4bvcmOKGNJZ4v
+         S1Rw==
+X-Gm-Message-State: AOJu0YzOgWEEJC+DERJKHSMA6Fmle4jOvorap+aXMZXnPehYaWJZf8CN
+	SsEZ/Ir+ZUfyjMnfhfstEQ==
+X-Google-Smtp-Source: AGHT+IHtVS6qiXCVuICpjIo9v1ArG+K49q8MxhuOD/We1+xNdIENUBBwie8jAWodVY5lm/jNcHZQ+w==
+X-Received: by 2002:a05:6a20:12cd:b0:189:3748:f060 with SMTP id v13-20020a056a2012cd00b001893748f060mr3765980pzg.26.1700687525147;
+        Wed, 22 Nov 2023 13:12:05 -0800 (PST)
+Received: from fedora.mshome.net ([75.167.214.230])
+        by smtp.gmail.com with ESMTPSA id j18-20020a635512000000b005bdbce6818esm132136pgb.30.2023.11.22.13.12.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 13:12:04 -0800 (PST)
+From: Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To: linux-mm@kvack.org
+Cc: linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	arnd@arndb.de,
+	tglx@linutronix.de,
+	luto@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	mhocko@kernel.org,
+	tj@kernel.org,
+	ying.huang@intel.com,
+	Gregory Price <gregory.price@memverge.com>
+Subject: [RFC PATCH 00/11] mm/mempolicy: Make task->mempolicy externally modifiable via syscall and procfs
+Date: Wed, 22 Nov 2023 16:11:49 -0500
+Message-Id: <20231122211200.31620-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk> <E1r5R31-00Csyt-Jq@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1r5R31-00Csyt-Jq@rmk-PC.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 22 Nov 2023 21:16:39 +0100
-Message-ID: <CAJZ5v0iYRXh369M3XTM0V8Q9mWkAT2y+9pJMD7HMaGjgpvFEMw@mail.gmail.com>
-Subject: Re: [PATCH 05/21] ACPI: Move ACPI_HOTPLUG_CPU to be disabled on arm64
- and riscv
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, 
-	justin.he@arm.com, James Morse <james.morse@arm.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 21, 2023 at 2:44=E2=80=AFPM Russell King <rmk+kernel@armlinux.o=
-rg.uk> wrote:
->
-> From: James Morse <james.morse@arm.com>
->
-> Neither arm64 nor riscv support physical hotadd of CPUs that were not
-> present at boot. For arm64 much of the platform description is in static
-> tables which do not have update methods. arm64 does support HOTPLUG_CPU,
-> which is backed by a firmware interface to turn CPUs on and off.
->
-> acpi_processor_hotadd_init() and acpi_processor_remove() are for adding
-> and removing CPUs that were not present at boot. arm64 systems that do th=
-is
-> are not supported as there is currently insufficient information in the
-> platform description. (e.g. did the GICR get removed too?)
->
-> arm64 currently relies on the MADT enabled flag check in map_gicc_mpidr()
-> to prevent CPUs that were not described as present at boot from being
-> added to the system. Similarly, riscv relies on the same check in
-> map_rintc_hartid(). Both architectures also rely on the weak 'always fail=
-s'
-> definitions of acpi_map_cpu() and arch_register_cpu().
->
-> Subsequent changes will redefine ACPI_HOTPLUG_CPU as making possible
-> CPUs present. Neither arm64 nor riscv support this.
->
-> Disable ACPI_HOTPLUG_CPU for arm64 and riscv by removing 'default y' and
-> selecting it on the other three ACPI architectures. This allows the weak
-> definitions of some symbols to be removed.
->
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+The patch set changes task->mempolicy to be modifiable by tasks other
+than just current.
 
-I can apply this if it gets ACKs from the maintainers of the affected
-architectures.
+The ultimate goal is to make mempolicy more flexible and extensible,
+such as adding interleave weights (which may need to change at runtime
+due to hotplug events).  Making mempolicy externally modifiable allows
+for userland daemons to make runtime performance adjustments to running
+tasks without that software needing to be made numa-aware.
 
-> ---
-> Changes since RFC:
->  * Expanded conditions to avoid ACPI_HOTPLUG_CPU being enabled when
->    HOTPLUG_CPU isn't.
-> Changes since RFC v3:
->  * Dropped ia64 changes
-> ---
->  arch/loongarch/Kconfig        |  1 +
->  arch/x86/Kconfig              |  1 +
->  drivers/acpi/Kconfig          |  1 -
->  drivers/acpi/acpi_processor.c | 18 ------------------
->  4 files changed, 2 insertions(+), 19 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index ee123820a476..331becb2cb4f 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -5,6 +5,7 @@ config LOONGARCH
->         select ACPI
->         select ACPI_GENERIC_GSI if ACPI
->         select ACPI_MCFG if ACPI
-> +       select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
->         select ACPI_PPTT if ACPI
->         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
->         select ARCH_BINFMT_ELF_STATE
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 3762f41bb092..dbdcfc708369 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -59,6 +59,7 @@ config X86
->         #
->         select ACPI_LEGACY_TABLES_LOOKUP        if ACPI
->         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
-> +       select ACPI_HOTPLUG_CPU                 if ACPI_PROCESSOR && HOTP=
-LUG_CPU
->         select ARCH_32BIT_OFF_T                 if X86_32
->         select ARCH_CLOCKSOURCE_INIT
->         select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> index f819e760ff19..a3acfc750fce 100644
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -310,7 +310,6 @@ config ACPI_HOTPLUG_CPU
->         bool
->         depends on ACPI_PROCESSOR && HOTPLUG_CPU
->         select ACPI_CONTAINER
-> -       default y
->
->  config ACPI_PROCESSOR_AGGREGATOR
->         tristate "Processor Aggregator"
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
-c
-> index 0f5218e361df..4fe2ef54088c 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -184,24 +184,6 @@ static void __init acpi_pcc_cpufreq_init(void) {}
->
->  /* Initialization */
->  #ifdef CONFIG_ACPI_HOTPLUG_CPU
-> -int __weak acpi_map_cpu(acpi_handle handle,
-> -               phys_cpuid_t physid, u32 acpi_id, int *pcpu)
-> -{
-> -       return -ENODEV;
-> -}
-> -
-> -int __weak acpi_unmap_cpu(int cpu)
-> -{
-> -       return -ENODEV;
-> -}
-> -
-> -int __weak arch_register_cpu(int cpu)
-> -{
-> -       return -ENODEV;
-> -}
-> -
-> -void __weak arch_unregister_cpu(int cpu) {}
-> -
->  static int acpi_processor_hotadd_init(struct acpi_processor *pr)
->  {
->         unsigned long long sta;
-> --
-> 2.30.2
->
+This initial RFC involves 3 major updates the mempolicy.
+
+1. Refactor modifying interfaces to accept a task as an argument,
+   and change existing callers to send `current` in to retain
+   the existing behavior.
+
+2. Change locking behaviors to ensure task->mpol is referenced
+   safely by acquiring the task_lock where required.  Since
+   allocators take the alloc lock (task lock), this successfully
+   prevents changes from being made during allocations.
+
+3. Add external interfaces which allow for a task mempolicy to be
+   modified by another task.  This is implemented in 4 syscalls
+   and a procfs interface:
+        sys_set_task_mempolicy
+        sys_get_task_mempolicy
+        sys_set_task_mempolicy_home_node
+        sys_task_mbind
+        /proc/[pid]/mempolicy
+
+The new syscalls are the same as their current-task counterparts,
+except that they take a pid as an argument.  The exception is
+task_mbind, which required a new struct due to the number of args.
+
+The /proc/pid/mempolicy re-uses the interface mpol_parse_str format
+to enable get/set of mempolicy via procsfs.
+
+mpol_parse_str format:
+            <mode>[=<flags>][:<nodelist>]
+
+Example usage:
+
+echo "default" > /proc/pid/mempolicy
+echo "prefer=relative:0" > /proc/pid/mempolicy
+echo "interleave:0-3" > /proc/pid/mempolicy
+
+Changing the mempolicy does not induce memory migrations via the
+procfs interface (which is the exact same behavior as set_mempolicy).
+
+Signed-off-by: Gregory Price <gregory.price@memverge.com>
+
+Gregory Price (11):
+  mm/mempolicy: refactor do_set_mempolicy for code re-use
+  mm/mempolicy: swap cond reference counting logic in do_get_mempolicy
+  mm/mempolicy: refactor set_mempolicy stack to take a task argument
+  mm/mempolicy: modify get_mempolicy call stack to take a task argument
+  mm/mempolicy: modify set_mempolicy_home_node to take a task argument
+  mm/mempolicy: modify do_mbind to operate on task argument instead of
+    current
+  mm/mempolicy: add task mempolicy syscall variants
+  mm/mempolicy: export replace_mempolicy for use by procfs
+  mm/mempolicy: build mpol_parse_str unconditionally
+  mm/mempolicy: mpol_parse_str should ignore trailing characters in
+    nodelist
+  fs/proc: Add mempolicy attribute to allow read/write of task mempolicy
+
+ arch/x86/entry/syscalls/syscall_32.tbl |   4 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   4 +
+ fs/proc/Makefile                       |   1 +
+ fs/proc/base.c                         |   1 +
+ fs/proc/internal.h                     |   1 +
+ fs/proc/mempolicy.c                    | 117 +++++++
+ include/linux/mempolicy.h              |  13 +-
+ include/linux/syscalls.h               |  14 +
+ include/uapi/asm-generic/unistd.h      |  10 +-
+ include/uapi/linux/mempolicy.h         |  10 +
+ mm/mempolicy.c                         | 432 +++++++++++++++++++------
+ 11 files changed, 502 insertions(+), 105 deletions(-)
+ create mode 100644 fs/proc/mempolicy.c
+
+-- 
+2.39.1
+
 
