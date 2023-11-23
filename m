@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-420-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-421-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 271C07F5D3A
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Nov 2023 12:05:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 782327F5D3F
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Nov 2023 12:05:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC7B1C20DFD
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Nov 2023 11:05:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A89CC1C20E06
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Nov 2023 11:05:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB0222EE2;
-	Thu, 23 Nov 2023 11:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1164D22EE7;
+	Thu, 23 Nov 2023 11:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9YhBGVo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXSKUa80"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EF8225AE;
-	Thu, 23 Nov 2023 11:05:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C85C433C7;
-	Thu, 23 Nov 2023 11:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9C2200CD;
+	Thu, 23 Nov 2023 11:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32336C433C8;
+	Thu, 23 Nov 2023 11:05:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700737521;
-	bh=kmSnZk3RczC2wW7hFftznkdHr9ZkDg70PDOUA+ZVjaE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=M9YhBGVoZhY2hbzM62ATfyVt/7tQ/oQ/qZpdbJ2qea36LpolKDbmowhX0AC5g7lLk
-	 sieaJZf1+aJIe6RlnZFwpUWbe/PNidPyvX1032SN/Lwqzuba5orpijIZqVQRxHnO8W
-	 LRftkoW7bXxIrXatQbuFQGzAdw2elNRJIxC3rIjn2qQVQcfC9JkzCiX6xGNFCITeE3
-	 AOg4JIWtddSPTOo6FzQGoFztM6o4Hy4i/nts34VgnTPpGB8h4PDw8YDdN3d0w6RELS
-	 lnxhloqHqGtyXUCmF3Imyl4OpgK7uvUX4NtIedFziLAPEYOAuGarmedGM1FejKTB+G
-	 xC85zbozSZrPA==
+	s=k20201202; t=1700737528;
+	bh=PTPvyroKGj+bJmSOqebpW9CjBUzzYiO7xPn/MeixGLs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nXSKUa807rZ29ZDLQfJmvRhSi4N8WHovmHbAfyMVEficfSwAV9byFeM2EehuHMPvf
+	 2plHjQPIGprL9a+CvVI91LktsH4dCLOTw85PLAzRHbTDWS8PBJ+HD6a6zbcFYzYA7S
+	 /LF4mUwnNE/22hs/ycyxoIHFHiNWy/JLf4Gu9DuVWVIbobN3N9tuy8iVJrVYE3ouLt
+	 kJi1liD6r+5hhz0cNDST79u04zevwc68Rku5RvjzatdqYLmQop3cbiP1tDQ8ikihWg
+	 Ed5QrWidUanGzm2kwC1ytck42YRJYbIN/BD477srlxzuaH3tVo4HVndRuycbh+BrmA
+	 FTpBsaIVkDHAA==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -64,10 +64,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-usb@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 0/6] Treewide: enable -Wmissing-prototypes
-Date: Thu, 23 Nov 2023 12:05:00 +0100
-Message-Id: <20231123110506.707903-1-arnd@kernel.org>
+Subject: [PATCH v3 1/6] ida: make 'ida_dump' static
+Date: Thu, 23 Nov 2023 12:05:01 +0100
+Message-Id: <20231123110506.707903-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231123110506.707903-1-arnd@kernel.org>
+References: <20231123110506.707903-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -78,78 +80,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Hi Andrew,
+There is no global declaration for ida_dump() and no other
+callers, so make it static to avoid this warning:
 
-I think all other patches I have sent for -Wmissing-prototypes have made it
-into linux-next by now, these ones either got an Ack from the respective
-maintainers, or never got a reply. I just merged a few patches from my
-previous series into the asm-generic tree, these are not in linux-next
-today but should be for the next next. I also resent the powerpc patches
-to make sure they get merged soon.
+lib/test_ida.c:16:6: error: no previous prototype for 'ida_dump'
 
-Can you pick these six up into -mm for v6.8?
+Fixes: 8ab8ba38d488 ("ida: Start new test_ida module")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ lib/test_ida.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Quoting from my description to patch 6/6:
-  "At this point, there are five architectures with a number of known
-   regressions: alpha, nios2, mips, sh and sparc. In the previous version
-   of this patch, I had turned off the missing prototype warnings for the 15
-   architectures that still had issues, but since there are only five left,
-   I think we can leave the rest to the maintainers (Cc'd here) as well."
-
-The series is also likely to cause occasional build regressions on linux-next
-as developers add new code that misses prototypes. Hopefully this should
-be resolved by the time the patches make it into a release and everyone
-gets the warnings right away.
-
-    Arnd
-
-Arnd Bergmann (6):
-  ida: make 'ida_dump' static
-  jffs2: mark __jffs2_dbg_superblock_counts() static
-  sched: fair: move unused stub functions to header
-  x86: sta2x11: include header for sta2x11_get_instance() prototype
-  usb: fsl-mph-dr-of: mark fsl_usb2_mpc5121_init() static
-  Makefile.extrawarn: turn on missing-prototypes globally
-
- arch/x86/pci/sta2x11-fixup.c     |  1 +
- drivers/usb/host/fsl-mph-dr-of.c |  2 +-
- fs/jffs2/debug.c                 |  2 +-
- kernel/sched/fair.c              | 13 -------------
- kernel/sched/sched.h             | 11 +++++++++++
- lib/test_ida.c                   |  2 +-
- scripts/Makefile.extrawarn       |  4 ++--
- 7 files changed, 17 insertions(+), 18 deletions(-)
-
+diff --git a/lib/test_ida.c b/lib/test_ida.c
+index b06880625961..f946c80ced8b 100644
+--- a/lib/test_ida.c
++++ b/lib/test_ida.c
+@@ -13,7 +13,7 @@ static unsigned int tests_run;
+ static unsigned int tests_passed;
+ 
+ #ifdef __KERNEL__
+-void ida_dump(struct ida *ida) { }
++static void ida_dump(struct ida *ida) { }
+ #endif
+ #define IDA_BUG_ON(ida, x) do {						\
+ 	tests_run++;							\
 -- 
 2.39.2
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rich Felker <dalias@libc.org>
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-mtd@lists.infradead.org
-Cc: linux-sh@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: x86@kernel.org
 
