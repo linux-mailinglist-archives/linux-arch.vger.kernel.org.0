@@ -1,57 +1,56 @@
-Return-Path: <linux-arch+bounces-456-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-457-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B317F8543
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 21:39:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59C417F8549
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 21:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49B0A1C257B6
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 20:39:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA6B1B29824
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 20:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386F12EAFB;
-	Fri, 24 Nov 2023 20:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E45381CE;
+	Fri, 24 Nov 2023 20:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MRu3DXIo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g9jPH1Zb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB091990
-	for <linux-arch@vger.kernel.org>; Fri, 24 Nov 2023 12:39:15 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065B512B
+	for <linux-arch@vger.kernel.org>; Fri, 24 Nov 2023 12:54:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700858355; x=1732394355;
+  t=1700859254; x=1732395254;
   h=date:from:to:cc:subject:message-id;
-  bh=L1wg5SqroRwQTrEwcqrsGXuMNNGX0yZRTzkdKP/+uYM=;
-  b=MRu3DXIoGv7HiX5w8sNUTaEWA9Xl0v+2JuXQedhc5QR+8jG9Xcq70ERR
-   niu0YPLzzE12rAunAZGwQ0UMHdnHBzjBcCzDtyhhM4aY0Ffmujo8G8neI
-   yPQ2GoioFvx80sVgSg/Yv+jHI2fL14VMife1EkNx+L8v9BvKmN7Wcr6PO
-   t9nMRPcKJ+zh9CO9iJ9H4ctHxYwRT7bg5JUtGW9GSl/T3J+l535XyX7gd
-   R40maQ3FVN/nThm1fwPalBkGELJHuwYe4SU4/tP0JqoCgPsKc4BmKsgXf
-   CyuB0CD01E1Uzu6uYvmWQ+ZyRvNKWKUWFndvJYyb7LDZUiEm7NNn0U/Sf
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="456806595"
+  bh=dqn4fCvQWpndLCYKJTh/hySzB6N7oZcyQ2jgs9XPmpU=;
+  b=g9jPH1Zb56vgQcs1zJz8HPov84SdR4M9CoQ11M9CqC0ACo4eQT04KmZn
+   ICrUB3HjqEXfT/hFjXuRXIZTktvZzWRcUxSjYnXPBTDv/W2+KglXfvXhi
+   wPdJuQDKzC+rIV7uBY7+dx4+YIwvL21yEAh7M4T0qMd4N6c9dTevJOlWr
+   yZy3Hf3jSgQyZ46G8srcdgFyCA6HE4x9ae18J5TeAd0U1ejHDOmsB9LC2
+   /bDHq1bqQ6GXFvdcBYzo4V0G5aA3ajnpjl4BrofDAuTk8EicdNL0M7jyL
+   Buj4N4PiS6S398WHSrNX54xpFMlVt1AealpskvnEWSKWrO5BvlvLZcOEa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="389623446"
 X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="456806595"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 12:39:15 -0800
+   d="scan'208";a="389623446"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 12:54:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="1014987289"
 X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="1014987289"
+   d="scan'208";a="16054940"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Nov 2023 12:39:13 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 24 Nov 2023 12:54:12 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r6cxD-0003G2-1B;
-	Fri, 24 Nov 2023 20:39:11 +0000
-Date: Sat, 25 Nov 2023 04:38:02 +0800
+	id 1r6dBi-0003Ga-2X;
+	Fri, 24 Nov 2023 20:54:10 +0000
+Date: Sat, 25 Nov 2023 04:54:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 5da694bdf0e48013c5d875a08731eccfe165c0cc
-Message-ID: <202311250400.HCj5wbp0-lkp@intel.com>
+Subject: [arnd-asm-generic:asm-generic-io.h-cleanup] BUILD SUCCESS
+ 3cd944590da9b9840c9f14bfc6581bec308c7c71
+Message-ID: <202311250458.e8rmIvfC-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -59,12 +58,12 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 5da694bdf0e48013c5d875a08731eccfe165c0cc  Merge branch 'asm-generic-prototypes' into asm-generic
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-io.h-cleanup
+branch HEAD: 3cd944590da9b9840c9f14bfc6581bec308c7c71  asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
 
-elapsed time: 1883m
+elapsed time: 1899m
 
-configs tested: 65
+configs tested: 63
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -120,22 +119,20 @@ riscv                             allnoconfig   clang
 riscv                            allyesconfig   gcc  
 riscv                               defconfig   gcc  
 riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
 s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
 s390                                defconfig   gcc  
 sh                               allmodconfig   gcc  
 sh                                allnoconfig   gcc  
 sh                               allyesconfig   gcc  
 sh                                  defconfig   gcc  
-sparc64                             defconfig   gcc  
-um                                allnoconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
 x86_64                            allnoconfig   gcc  
 x86_64                           allyesconfig   clang
 x86_64                              defconfig   gcc  
 x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
 
 -- 
 0-DAY CI Kernel Test Service
