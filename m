@@ -1,219 +1,411 @@
-Return-Path: <linux-arch+bounces-433-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-434-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 103547F6AD6
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 04:16:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F557F6DC9
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 09:14:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8512B20DF0
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 03:16:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4302EB20C6D
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Nov 2023 08:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7808E7F5;
-	Fri, 24 Nov 2023 03:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CF69465;
+	Fri, 24 Nov 2023 08:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="jae3BwU8"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Zt1f9f9l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2108.outbound.protection.outlook.com [40.107.243.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A24910F5;
-	Thu, 23 Nov 2023 19:16:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XVRq42zz8rr70Cj8gFygwyhLDvI04I7COfMNXFvkd8ydCk3t6i9uoGe4HpLYFC2RyfaLxrnHzaOECnZGmJtZraGTIACXoMbxEx+gG/hY45WqwP+7IR5L6+5uCKyJlkalcYZfN5Ysgi5eCnutOf4vx7S580hfXzyzPW/cLIS5ruM/fqVYzgTzAAQ9pes/mWAiJs9KLmbLgyAxwkgoylCzoK40KIQclogkyY4DCKtPFOVfFlup2Q7pcYhkahMWWji6TqRowBIqVmwpp+yxLHQJAKKRjvTd00rdHyEmbd3qvUmGqxp1NG+B8iuAv8YzIwjytQsSr/mbRTbw5/7knzurvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9ULVDnZW07tHeZLi9IvabMzFmsTEFLea4bY33CL7RzY=;
- b=XLh6UPez4HmZS8qZhrHevcNZKbZBwtVx4P7TB9ywrlpujeGFA/R/nlC63jyE2sOzRFWQpo7gAEcr/qLtdOCTslQqrpk+wy5t7R/Iq6GR0FYb3UPcRsAWao9JycgEWZYXA+DYz/8mkMzWuEhNA8C9WzsmaemY+c/5ZxMyYHBA8CpA/dx3xGkRTHR2AOYT8o7dNUEfS/lEfvirCZXcCXEFVDpzLa0sp3l0Iz8bNONoGeqig2JEveUh4erFtXvTifg4Sn7hy/EqYex5iD+dGfw0LVZCRB+WWQMnoo1/VMI8Jc3fQGHU+TsOgaTQ4gDhltQ6wfdAAVNRkInflyZan20vuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5FC19A2
+	for <linux-arch@vger.kernel.org>; Fri, 24 Nov 2023 00:13:55 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-507a29c7eefso2112028e87.1
+        for <linux-arch@vger.kernel.org>; Fri, 24 Nov 2023 00:13:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ULVDnZW07tHeZLi9IvabMzFmsTEFLea4bY33CL7RzY=;
- b=jae3BwU8oncvo+TxnQeGkIfZ5caL1yCwRSp3gzbOY6aGzrk0E4TIJpYNLrSbjkMkeUFscsZYVqNCuqWmHiy8ar4hclVyVVO4cK0YQnH19rWU5wjk9Dt7yVRZWdKte3FgP4p8E/GfJxnKcCaZ2Q4COcLSsOv6BJrptPlOu/MOI/U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
- PH0PR01MB6102.prod.exchangelabs.com (2603:10b6:510:13::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7025.21; Fri, 24 Nov 2023 03:16:02 +0000
-Received: from PH0PR01MB7975.prod.exchangelabs.com
- ([fe80::3f45:6905:e017:3b77]) by PH0PR01MB7975.prod.exchangelabs.com
- ([fe80::3f45:6905:e017:3b77%7]) with mapi id 15.20.7025.020; Fri, 24 Nov 2023
- 03:16:01 +0000
-From: Huang Shijie <shijie@os.amperecomputing.com>
-To: catalin.marinas@arm.com
-Cc: will@kernel.org,
-	gregkh@linuxfoundation.org,
-	rafael@kernel.org,
-	arnd@arndb.de,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	Huang Shijie <shijie@os.amperecomputing.com>
-Subject: [PATCH v4] arm64: irq: set the correct node for VMAP stack
-Date: Fri, 24 Nov 2023 11:15:13 +0800
-Message-Id: <20231124031513.81548-1-shijie@os.amperecomputing.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <ZV-EA46rBJ9WK4UH@arm.com>
-References: <ZV-EA46rBJ9WK4UH@arm.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH0PR03CA0211.namprd03.prod.outlook.com
- (2603:10b6:610:e7::6) To PH0PR01MB7975.prod.exchangelabs.com
- (2603:10b6:510:26d::15)
+        d=bytedance.com; s=google; t=1700813633; x=1701418433; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BIPK5Hvm18pzHDJO73eIMgzzAL5lmhWxslNB0teYmMk=;
+        b=Zt1f9f9lLLl0AT6igTLQgwrz+i2HDgQd0dTDkZXq4rbqzXPey5xh8RNV3iHgcdaOcH
+         Lnb06rWrqupjGrHmNfHpR3H8vjjrtN2Do3MxrXbzv4jtvy2hKk1WvcCKcdBVA+HMa69N
+         vPP2CWqsGLgFtzJuIy3SHF2JZA/2SD3UEU3ZWOFOoYZq/3Xh7d4iql34WHEcy6qynl5p
+         V66l7yT02x9LmedmdV3uUOwP/mzh+alih5Af2ey6HGl8pbJRevdJBviNo/4EGAXbMAEp
+         YkD/0h9BDb234wsm7qHrfq2zWCAVxJPFT/64Ryxr+s4XKJMTHMNzudPMqR5sKya+JvDP
+         oqmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700813633; x=1701418433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BIPK5Hvm18pzHDJO73eIMgzzAL5lmhWxslNB0teYmMk=;
+        b=eDRdqq0UaxxsN+Px1KzpfRplKiMblyk8sY7CDR1SiGJVzc/Et8LxvzHyNisdYb/Ned
+         ku6GtJeWL06SxDH5sRqylR7KgH5NgdEGpRazpCzMAI7ljIsPf4Byy5m6vDUe0fZreAp2
+         YqlCuBKLBu26Qjmj2E3NOEjzwj583hVAyeAE3uRnrajYsyYhp38/ajjR3CiXVpaYiRs6
+         2gFZqTTUGCIyBztjbtf8GvrOH7/OF3bn2fayBSQMIKZOMjv7VLy3Wx865R6+xJz4JzNT
+         YDn7nRSdWfTElaIAsjGN3YLauFCzyIbAIqe2YZljGMBJWQRkQNe8q7UWy5KOCnbeyS+c
+         jC5g==
+X-Gm-Message-State: AOJu0Yztj2h+6zPJ7+sodTuZ7bZowYxHSlbH3eQPFyDB6PgPR5RzO5lp
+	MERslo1CqrwckpEq1/FbEGEJIdjG+UTGuB7t9nAhYw==
+X-Google-Smtp-Source: AGHT+IENKYtJn7xsQSiBE3z3paskmTKdU9LExQjBtyLHTdb/HOLTWbiQ73NUela9SSYZDTWiu5//+NrPdj5O6kxNjpY=
+X-Received: by 2002:a2e:9bc1:0:b0:2c8:3406:6fb5 with SMTP id
+ w1-20020a2e9bc1000000b002c834066fb5mr1222293ljj.7.1700813633478; Fri, 24 Nov
+ 2023 00:13:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|PH0PR01MB6102:EE_
-X-MS-Office365-Filtering-Correlation-Id: 89449542-e180-4de6-dd50-08dbec9ba416
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	so55jnm1HnBjNs2MBoteuvelyJHgH1k1QWDSRGW8sLt/n/qLz8Q2wkaBJgtEx/1VpD7Ql4i9WpoZ2aoaR/Lvb93JTnl4VE4LrpiY7JzzsUdDcMdc+0drza3r9jNj/MKiWDhN0y+yAB56twxCkN50tOC67JxvJVsmCWJxdWNIwZX5hzxP3yOcH9qeYKW2gTXuIwzqbkI4FVThy/UXIEFUWVLAJqfyeBCXobQ9bPwfd0AdiUNMdksWjX7YtNB0qTsamnFAJ3u37HEVy4N3xvJTMVEnuLBlmU0R0cX9QL30O9pQ0oP89+eDAm70rVTfXh4i30vdyYCIilsjY3f+Ys4/5ka6bmugYQJ9aRXnBakPIkCHLbgY/PGufw76ysP3U84CNdUfRC6DE7oGBHfuicU+tauy4uEfg+OUVHEU6vLYZAgRJbU0Poi4PCJJ7ayGBzj6/CbqhFJKr1Yeo9nOzVUAvV0ML4bF9Z0FnxSgFPqsUQxazLIEHX9jpNAMfP4SC4a7CRzQG2WD8jTVelfJyZgazIa+EnKf8eak5q7VynUbxwlHFsrBqiWu41Kwkx8QJqJYKD+VXQntuEidfCtdMlavAFwgmw+B1HLApfywTXPyUY1CrEG8/bDgZdPhharr9Euk
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39840400004)(366004)(396003)(136003)(376002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(6486002)(478600001)(6506007)(52116002)(6666004)(38350700005)(5660300002)(86362001)(8936002)(2906002)(41300700001)(66946007)(38100700002)(66476007)(66556008)(6916009)(4326008)(8676002)(316002)(107886003)(1076003)(2616005)(83380400001)(26005)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Oo16UmguACxF1IBAwcY3BB+j1ptMBo32AmusLeEMHJLDeJzdnbhVBctWNwdt?=
- =?us-ascii?Q?ULcYW8aXHH6YkpSc1AKTv4GjwUxub3i28/TJEkCe+4LpPAL2Y8NyB3DkkStP?=
- =?us-ascii?Q?AUb6U3Uo388v0Rk9olt+aucJxb1S9O7FYbNJfKfy0gxZrPtTPQbGNWzDxhUT?=
- =?us-ascii?Q?EkatqTv8aZGwketz8S6bPpfmUmiNFEBiwhWSu9dNmvK8fWxGjyv79K5ca+fJ?=
- =?us-ascii?Q?jGYdMOBZZRGhqi8r6rRNzetE3G8/P9UWiF5vZ98trtjv4gZMarXFnzbseJur?=
- =?us-ascii?Q?0dcoB+RyqsqxE04GJEX2qiEOSfrNnp9jyuevINCHuJ1R7SJCFKDki1aRViAf?=
- =?us-ascii?Q?MrrvqKH+gOx3XtFW0kG2I8H/RP0QovDm7gna2iikiRHuv48gZr1iSElmf0I0?=
- =?us-ascii?Q?HPDFwgpwOhDRXzeH3rrwh/ZjgqW2gHXTt8fvN+9gOaHZQTPw9FCFLl+KL3oE?=
- =?us-ascii?Q?uum9kSMFXJ7TddWJsLkZZNh4H4U5r1awRzCTy1iZTv2Zw5SjB7gTtFTjAxFC?=
- =?us-ascii?Q?AIaeM6S6fYHEIifYnOexmOdHWyevd/BoV7RWfceMRdS7to8tHmJWFnaNmoiH?=
- =?us-ascii?Q?67CZnq/l3g68VloWlRv9XfETxXaWtznz1vBUWbFBblBh+aJhG0FAQ2bGSjvD?=
- =?us-ascii?Q?q5wicIJwRmg9375xLH2k5/z4evzF/PGCmpGANCVPdgSDjdYXzvQOYaEeipul?=
- =?us-ascii?Q?9H9faLFXjOna2644N/khVztBfuLgXef3ASlA9dc4AJFLIiwy8T422yNvvH/O?=
- =?us-ascii?Q?sTbY2bHG54oKDFOMX2WJnVRfdXUvUWBtAePQ2hPh9vFSFP0+5ExIu5YDTqXz?=
- =?us-ascii?Q?k/tME9+y+b4k/hGJUZ6Fwqo8m/m3mXifEzWDx/DqsEQROyJPo2CxEfow+cqI?=
- =?us-ascii?Q?oBYQKSjAs3MUbeJ8qY2hXEKhLWl7EEXolBfpknk7XDpFkyM4K12m6zmRuaEM?=
- =?us-ascii?Q?aSZqmvOulfpn0ezEHJxpHIwM8MEnTwb1XisawtCZtJ22dzXeAjVWiSVQ/stM?=
- =?us-ascii?Q?gz00Tu4jiOyi5vE53/hIHwWtvhTYfBGAVaN5JM7xAxiVj4QwLEWve7N2U4wI?=
- =?us-ascii?Q?E1VQE/+2j++aZnUdaHckQrhUCcMwWN5oCqCL6voxP3RVcUOmkoFncFthNohH?=
- =?us-ascii?Q?EJE7Ynqg/5EfwQsPVHCsgtaxHjbCqP2K5kGUnRtW0xknsIaGxtOy2mysIVNb?=
- =?us-ascii?Q?VDTt0jDsP4O0d/u/Eb9ESp2J1Uif0jTfhPshUoM1NWOjYa0HDmmnYk6M1SWk?=
- =?us-ascii?Q?9ktlXxIOt2d+Cp0hjKNYUBLXTP1QAetzsuLFFFxu1l84v6I5IjF6AEkq2tWN?=
- =?us-ascii?Q?Wfd5Jmu4CeCbDAHb6p46Ue8QJoCI7oUr7KCabcV47UPF+ccs/vTYjMAbCWQZ?=
- =?us-ascii?Q?Qn7yJ62zK9F2RcUHWnoz/hm0q0Bv/swMtH0d2cg5ZO+DgFUvOa2KK0/a9dom?=
- =?us-ascii?Q?tFY36Dga0ZqmJtCDUf5cg+ZTY7wvw5CQwcbs8cVvMJMLRFNSjJi4ZcboRsW/?=
- =?us-ascii?Q?8gvLe/2XgDa8JyUDTD5Wey+Tp0CB6kd79VoOSge0o/643zKqqxy3j54VIL+k?=
- =?us-ascii?Q?CguJDpEGxH6J4zqlWjKwb6FCAkNu6FIZAQEOLi86R+3y6jqaZR5MuSQofyGT?=
- =?us-ascii?Q?2QcaSxzrK770QKgY0njJXd0=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89449542-e180-4de6-dd50-08dbec9ba416
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2023 03:15:42.1577
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qy5GGw4rt24749QG8bw1sO3/f4mCKegzKvKZ3C+IqV/h9+eb0E10bpOLGRfqxsq4AwC2gvx05T0Ey3xbyES02uH3lKoDYbikqCgKGzDZt5CHa5KM/pUMUHCDvYvUPHOg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6102
+References: <ZV5zGROLefrsEcHJ@r13-u19.micron.com>
+In-Reply-To: <ZV5zGROLefrsEcHJ@r13-u19.micron.com>
+From: Zhongkun He <hezhongkun.hzk@bytedance.com>
+Date: Fri, 24 Nov 2023 16:13:41 +0800
+Message-ID: <CACSyD1OFjROw26+2ojG37eDBParVg721x1HCROMiF2pW2aHj8A@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm/mbind: Introduce process_mbind() syscall for
+ external memory binding
+To: Vinicius Petrucci <vpetrucci@gmail.com>
+Cc: akpm@linux-foundation.org, linux-mm@vger.kernel.org, 
+	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-api@vger.kernel.org, minchan@kernel.org, 
+	dave.hansen@linux.intel.com, x86@kernel.org, Jonathan.Cameron@huawei.com, 
+	aneesh.kumar@linux.ibm.com, gregory.price@memverge.com, ying.huang@intel.com, 
+	dan.j.williams@intel.com, fvdl@google.com, surenb@google.com, 
+	rientjes@google.com, hannes@cmpxchg.org, mhocko@suse.com, Hasan.Maruf@amd.com, 
+	jgroves@micron.com, ravis.opensrc@micron.com, sthanneeru@micron.com, 
+	emirakhur@micron.com, vtavarespetr@micron.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In current code, init_irq_stacks() will call cpu_to_node().
-The cpu_to_node() depends on percpu "numa_node" which is initialized in:
-     arch_call_rest_init() --> rest_init() -- kernel_init()
-	--> kernel_init_freeable() --> smp_prepare_cpus()
+Hi Vinicius=EF=BC=81
 
-But init_irq_stacks() is called in init_IRQ() which is before
-arch_call_rest_init().
+On Thu, Nov 23, 2023 at 5:32=E2=80=AFAM Vinicius Petrucci <vpetrucci@gmail.=
+com> wrote:
+>
+> From: Vinicius Tavares Petrucci <vtavarespetr@micron.com>
+>
+> This patch introduces `process_mbind()` to enable a userspace orchestrato=
+r with
+> an understanding of another process's memory layout to alter its memory p=
+olicy.
+> As system memory configurations become more and more complex (e.g., DDR+H=
+BM+CXL memories),
+> such a userspace orchestrator can explore more advanced techniques to gui=
+de memory placement
+> to individual NUMA nodes across memory tiers. This allows for a more effi=
+cient allocation of
+> memory resources, leading to enhanced application performance.
+>
+> Alternatively, there are existing methods such as LD_PRELOAD (https://pme=
+m.io/memkind/) or
+> syscall_intercept (https://github.com/pmem/syscall_intercept), but these =
+techniques, beyond the
+> lack of portability/universality, can lead to system incompatibility issu=
+es, inconsistency in
+> application behavior, potential risks due to global system-wide settings,=
+ and increased
+> complexity in implementation.
+>
+> The concept of an external entity that understands the layout of another =
+process's VM
+> is already present with `process_madvise()`. Thus, it seems reasonable to=
+ introduce
+> the `process_mbind` variant of `mbind`. The implementation framework of `=
+process_mbind()`
+> is akin to `process_madvise()`. It uses pidfd of an external process to d=
+irect the memory
+> policy and supports a vector of memory address ranges.
+>
+> The general use case here is similar to the prior RFC `pidfd_set_mempolic=
+y()`
+> (https://lore.kernel.org/linux-mm/20221010094842.4123037-1-hezhongkun.hzk=
+@bytedance.com/),
+> but offers a more fine-grained external control by binding specific memor=
+y regions
+> (say, heap data structures) to specific NUMA nodes. Another concrete use =
+case was described
+> by a prior work showing up to 2X runtime improvement (compared to AutoNUM=
+A tiering) using
+> memory object/region-based memory placement for workloads with irregular =
+access patterns
+> such as graph analytics: https://iiswc.org/iiswc2022/IISWC2022_42.pdf
+>
+> The proposed API is as follows:
+>
+> long process_mbind(int pidfd,
+>                 const struct iovec *iovec,
+>                 unsigned long vlen,
+>                 unsigned long mode,
+>                 const unsigned long *nmask,
+>                 unsigned int flags);
+>
+> The `pidfd` argument is used to select the process that is identified by =
+the PID file
+> descriptor provided in pidfd. (See pidofd_open(2) for more information)
+>
+> The pointer `iovec` points to an array of iovec structures (as described =
+in <sys/uio.h>):
+>
+> struct iovec {
+>     void *iov_base;         /* starting address of region */
+>     size_t iov_len;         /* size of region (in bytes) */
+> };
+>
+> The `iovec` defines memory regions that start at the address (iov_base) a=
+nd
+> have a size measured in bytes (iov_len).
 
-So in init_irq_stacks(), the cpu_to_node() does not work, it
-always return 0. In NUMA, it makes the node 1 cpu accesses the IRQ stack which
-is in the node 0.
+Good idea.
 
-This patch fixes it by:
-  1.) export the early_cpu_to_node(), and use it in the init_irq_stacks().
-  2.) change init_irq_stacks() to __init function.
+>
+> The `vlen` indicates the quantity of elements contained in iovec.
+>
+> Please note the initial `maxnode` parameter from `mbind` was omitted
+> to ensure the API doesn't exceed 6 arguments. Instead, the constant
+> MAX_NUMNODES was utilized.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>  
-Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
----
-v3 --> v4:
-	1.) keep early_cpu_to_node() as __init function.
-	2.) change init_irq_stacks() to __init function.
+The original parameters should not be omitted,  the patch from
+Gregory Price is a good solution to put all of them together.
 
----
- arch/arm64/kernel/irq.c    | 5 +++--
- drivers/base/arch_numa.c   | 2 +-
- include/asm-generic/numa.h | 2 ++
- 3 files changed, 6 insertions(+), 3 deletions(-)
+>
+> Please see the mbind(2) man page for more details about other's arguments=
+.
+>
+> Additionally, it is worth noting the following:
+> - Using a vector of address ranges as an argument in `process_mbind` prov=
+ides more
+> flexibility than the original `mbind` system call, even when invoked from=
+ a current
+> or local process.
+> - In contrast to `move_pages`, which requires an array of fixed-size page=
+s,
+> `process_mbind` (with flags MPOL_MF_MOVE*) offers a more convinient and f=
+lexible page
+> migration capability on a per object or region basis.
+> - Similar to `process_madvise`, manipulating the memory binding of extern=
+al processes
+> necessitates `CAP_SYS_NICE` and `PTRACE_MODE_READ_FSCREDS` checks (refer =
+to ptrace(2)).
+>
+> Suggested-by: Frank van der Linden <fvdl@google.com>
+> Signed-off-by: Vinicius Tavares Petrucci <vtavarespetr@micron.com>
+> Signed-off-by: Hasan Al Maruf <Hasan.Maruf@amd.com>
+> ---
+>  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
+>  include/linux/syscalls.h               |  4 ++
+>  include/uapi/asm-generic/unistd.h      |  4 +-
+>  kernel/sys_ni.c                        |  1 +
+>  mm/mempolicy.c                         | 86 +++++++++++++++++++++++++-
+>  5 files changed, 92 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/sysc=
+alls/syscall_64.tbl
+> index 8cb8bf68721c..9d9db49a3242 100644
+> --- a/arch/x86/entry/syscalls/syscall_64.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
+> @@ -378,6 +378,7 @@
+>  454    common  futex_wake              sys_futex_wake
+>  455    common  futex_wait              sys_futex_wait
+>  456    common  futex_requeue           sys_futex_requeue
+> +457    common  process_mbind           sys_process_mbind
+>
+>  #
+>  # Due to a historical design error, certain syscalls are numbered differ=
+ently
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index fd9d12de7e92..def5250ed625 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -816,6 +816,10 @@ asmlinkage long sys_mbind(unsigned long start, unsig=
+ned long len,
+>                                 const unsigned long __user *nmask,
+>                                 unsigned long maxnode,
+>                                 unsigned flags);
+> +asmlinkage long sys_process_mbind(int pidfd, const struct iovec __user *=
+vec,
+> +                               size_t vlen, unsigned long mode,
+> +                               const unsigned long __user *nmask,
+> +                               unsigned flags);
+>  asmlinkage long sys_get_mempolicy(int __user *policy,
+>                                 unsigned long __user *nmask,
+>                                 unsigned long maxnode,
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic=
+/unistd.h
+> index 756b013fb832..9ed2c91940d6 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -828,9 +828,11 @@ __SYSCALL(__NR_futex_wake, sys_futex_wake)
+>  __SYSCALL(__NR_futex_wait, sys_futex_wait)
+>  #define __NR_futex_requeue 456
+>  __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
+> +#define __NR_process_mbind 457
+> +__SYSCALL(__NR_process_mbind, sys_process_mbind)
+>
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 457
+> +#define __NR_syscalls 458
+>
+>  /*
+>   * 32 bit systems traditionally used different
+> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+> index e1a6e3c675c0..cc5cb5ae3ae7 100644
+> --- a/kernel/sys_ni.c
+> +++ b/kernel/sys_ni.c
+> @@ -187,6 +187,7 @@ COND_SYSCALL(process_madvise);
+>  COND_SYSCALL(process_mrelease);
+>  COND_SYSCALL(remap_file_pages);
+>  COND_SYSCALL(mbind);
+> +COND_SYSCALL(process_mbind);
+>  COND_SYSCALL(get_mempolicy);
+>  COND_SYSCALL(set_mempolicy);
+>  COND_SYSCALL(migrate_pages);
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 10a590ee1c89..91ee300fa728 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -1215,11 +1215,10 @@ static struct folio *alloc_migration_target_by_mp=
+ol(struct folio *src,
+>  }
+>  #endif
+>
+> -static long do_mbind(unsigned long start, unsigned long len,
+> +static long do_mbind(struct mm_struct *mm, unsigned long start, unsigned=
+ long len,
+>                      unsigned short mode, unsigned short mode_flags,
+>                      nodemask_t *nmask, unsigned long flags)
+>  {
+> -       struct mm_struct *mm =3D current->mm;
+>         struct vm_area_struct *vma, *prev;
+>         struct vma_iterator vmi;
+>         struct migration_mpol mmpol;
+> @@ -1465,10 +1464,84 @@ static inline int sanitize_mpol_flags(int *mode, =
+unsigned short *flags)
+>         return 0;
+>  }
+>
+> +static long kernel_mbind_process(int pidfd, const struct iovec __user *v=
+ec,
+> +               size_t vlen, unsigned long mode,
+> +               const unsigned long __user *nmask, unsigned int flags)
+> +{
+> +       ssize_t ret;
+> +       struct iovec iovstack[UIO_FASTIOV];
+> +       struct iovec *iov =3D iovstack;
+> +       struct iov_iter iter;
+> +       struct task_struct *task;
+> +       struct mm_struct *mm;
+> +       unsigned int f_flags;
+> +       unsigned short mode_flags;
+> +       int lmode =3D mode;
+> +       unsigned long maxnode =3D MAX_NUMNODES;
+> +       int err;
+> +       nodemask_t nodes;
+> +
+> +       err =3D sanitize_mpol_flags(&lmode, &mode_flags);
+> +       if (err)
+> +               goto out;
+> +
+> +       err =3D get_nodes(&nodes, nmask, maxnode);
+> +       if (err)
+> +               goto out;
+> +
+> +       ret =3D import_iovec(ITER_DEST, vec, vlen, ARRAY_SIZE(iovstack),
+> +                       &iov, &iter);
+> +       if (ret < 0)
+> +               goto out;
+> +
+> +       task =3D pidfd_get_task(pidfd, &f_flags);
+> +       if (IS_ERR(task)) {
+> +               ret =3D PTR_ERR(task);
+> +               goto free_iov;
+> +       }
+> +
+> +       /* From process_madvise: Require PTRACE_MODE_READ
+> +        * to avoid leaking ASLR metadata. */
+> +       mm =3D mm_access(task, PTRACE_MODE_READ_FSCREDS);
+> +       if (IS_ERR_OR_NULL(mm)) {
+> +               ret =3D IS_ERR(mm) ? PTR_ERR(mm) : -ESRCH;
+> +               goto release_task;
+> +       }
+> +
+> +       /* From process_madvise: Require CAP_SYS_NICE for
+> +        * influencing process performance. */
+> +       if (!capable(CAP_SYS_NICE)) {
+> +               ret =3D -EPERM;
+> +               goto release_mm;
+> +       }
+> +
+> +       while (iov_iter_count(&iter)) {
+> +               unsigned long start =3D untagged_addr(
+> +                               (unsigned long)iter_iov_addr(&iter));
+> +               unsigned long len =3D iter_iov_len(&iter);
+> +
+> +               ret =3D do_mbind(mm, start, len, lmode, mode_flags,
+> +                               &nodes, flags);
+> +               if (ret < 0)
+> +                       break;
+> +               iov_iter_advance(&iter, iter_iov_len(&iter));
+> +       }
+> +
+> +release_mm:
+> +       mmput(mm);
+> +release_task:
+> +       put_task_struct(task);
+> +free_iov:
+> +       kfree(iov);
+> +out:
+> +       return ret;
+> +}
+> +
 
-diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-index 6ad5c6ef5329..9f253d8efe90 100644
---- a/arch/arm64/kernel/irq.c
-+++ b/arch/arm64/kernel/irq.c
-@@ -22,6 +22,7 @@
- #include <linux/vmalloc.h>
- #include <asm/daifflags.h>
- #include <asm/exception.h>
-+#include <asm/numa.h>
- #include <asm/softirq_stack.h>
- #include <asm/stacktrace.h>
- #include <asm/vmap_stack.h>
-@@ -51,13 +52,13 @@ static void init_irq_scs(void)
- }
- 
- #ifdef CONFIG_VMAP_STACK
--static void init_irq_stacks(void)
-+static void __init init_irq_stacks(void)
- {
- 	int cpu;
- 	unsigned long *p;
- 
- 	for_each_possible_cpu(cpu) {
--		p = arch_alloc_vmap_stack(IRQ_STACK_SIZE, cpu_to_node(cpu));
-+		p = arch_alloc_vmap_stack(IRQ_STACK_SIZE, early_cpu_to_node(cpu));
- 		per_cpu(irq_stack_ptr, cpu) = p;
- 	}
- }
-diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-index eaa31e567d1e..5b59d133b6af 100644
---- a/drivers/base/arch_numa.c
-+++ b/drivers/base/arch_numa.c
-@@ -144,7 +144,7 @@ void __init early_map_cpu_to_node(unsigned int cpu, int nid)
- unsigned long __per_cpu_offset[NR_CPUS] __read_mostly;
- EXPORT_SYMBOL(__per_cpu_offset);
- 
--static int __init early_cpu_to_node(int cpu)
-+int __init early_cpu_to_node(int cpu)
- {
- 	return cpu_to_node_map[cpu];
- }
-diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
-index 1a3ad6d29833..c32e0cf23c90 100644
---- a/include/asm-generic/numa.h
-+++ b/include/asm-generic/numa.h
-@@ -35,6 +35,7 @@ int __init numa_add_memblk(int nodeid, u64 start, u64 end);
- void __init numa_set_distance(int from, int to, int distance);
- void __init numa_free_distance(void);
- void __init early_map_cpu_to_node(unsigned int cpu, int nid);
-+int __init early_cpu_to_node(int cpu);
- void numa_store_cpu_info(unsigned int cpu);
- void numa_add_cpu(unsigned int cpu);
- void numa_remove_cpu(unsigned int cpu);
-@@ -46,6 +47,7 @@ static inline void numa_add_cpu(unsigned int cpu) { }
- static inline void numa_remove_cpu(unsigned int cpu) { }
- static inline void arch_numa_init(void) { }
- static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
-+static inline int early_cpu_to_node(int cpu) { return 0; }
- 
- #endif	/* CONFIG_NUMA */
- 
--- 
-2.40.1
+The do_mbind function relies on the current task to obtain nodemask
+and task policy,
+so the current modification is not enough.
 
+>  static long kernel_mbind(unsigned long start, unsigned long len,
+>                          unsigned long mode, const unsigned long __user *=
+nmask,
+>                          unsigned long maxnode, unsigned int flags)
+>  {
+> +       struct mm_struct *mm =3D current->mm;
+>         unsigned short mode_flags;
+>         nodemask_t nodes;
+>         int lmode =3D mode;
+> @@ -1483,7 +1556,7 @@ static long kernel_mbind(unsigned long start, unsig=
+ned long len,
+>         if (err)
+>                 return err;
+>
+> -       return do_mbind(start, len, lmode, mode_flags, &nodes, flags);
+> +       return do_mbind(mm, start, len, lmode, mode_flags, &nodes, flags)=
+;
+>  }
+>
+>  SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned =
+long, len,
+> @@ -1553,6 +1626,13 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned =
+long, start, unsigned long, le
+>         return err;
+>  }
+>
+> +SYSCALL_DEFINE6(process_mbind, int, pidfd, const struct iovec __user *, =
+vec,
+> +               size_t, vlen, unsigned long, mode,
+> +               const unsigned long __user *, nmask, unsigned int, flags)
+> +{
+> +       return kernel_mbind_process(pidfd, vec, vlen, mode, nmask, flags)=
+;
+> +}
+> +
+>  SYSCALL_DEFINE6(mbind, unsigned long, start, unsigned long, len,
+>                 unsigned long, mode, const unsigned long __user *, nmask,
+>                 unsigned long, maxnode, unsigned int, flags)
+> --
+> 2.41.0
+>
+
+Per my understanding,  the process_mbind() is implementable without
+many difficult challenges=EF=BC=8C
+since it is always protected by mm->mmap_lock. But task mempolicy does
+not acquire any lock
+in alloc_pages().
 
