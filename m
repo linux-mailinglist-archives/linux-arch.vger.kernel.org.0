@@ -1,51 +1,42 @@
-Return-Path: <linux-arch+bounces-466-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-467-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30DCB7F9F46
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 13:10:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 967F67F9FD4
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 13:42:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE7ECB20843
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 12:10:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A7FBB20D37
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 12:42:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C630C18C29;
-	Mon, 27 Nov 2023 12:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D1711CBC;
+	Mon, 27 Nov 2023 12:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AF2BEA;
-	Mon, 27 Nov 2023 04:10:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA2DA2F4;
-	Mon, 27 Nov 2023 04:10:54 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39E373F73F;
-	Mon, 27 Nov 2023 04:10:02 -0800 (PST)
-Date: Mon, 27 Nov 2023 12:09:59 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-	rppt@kernel.org, hughd@google.com, pcc@google.com,
-	steven.price@arm.com, anshuman.khandual@arm.com,
-	vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
-	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 05/27] mm: page_alloc: Add an arch hook to allow
- prep_new_page() to fail
-Message-ID: <ZWSHF2hVOPTBIQLY@raptor>
-References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-6-alexandru.elisei@arm.com>
- <dadc9d17-f311-47f1-a264-28b42bed0ab0@redhat.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8643C8C4;
+	Mon, 27 Nov 2023 12:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07870C433C9;
+	Mon, 27 Nov 2023 12:42:43 +0000 (UTC)
+Date: Mon, 27 Nov 2023 12:42:41 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, Leon Romanovsky <leon@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+	llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZWSOwT2OyMXD1lmo@arm.com>
+References: <cover.1700766072.git.leon@kernel.org>
+ <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+ <ZWB373y5XuZDultf@FVFF77S0Q05N>
+ <20231124122352.GB436702@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -54,54 +45,45 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dadc9d17-f311-47f1-a264-28b42bed0ab0@redhat.com>
+In-Reply-To: <20231124122352.GB436702@nvidia.com>
 
-Hi,
-
-Thank you so much for your comments, there are genuinely useful.
-
-On Fri, Nov 24, 2023 at 08:35:47PM +0100, David Hildenbrand wrote:
-> On 19.11.23 17:56, Alexandru Elisei wrote:
-> > Introduce arch_prep_new_page(), which will be used by arm64 to reserve tag
-> > storage for an allocated page. Reserving tag storage can fail, for example,
-> > if the tag storage page has a short pin on it, so allow prep_new_page() ->
-> > arch_prep_new_page() to similarly fail.
+On Fri, Nov 24, 2023 at 08:23:52AM -0400, Jason Gunthorpe wrote:
+> On Fri, Nov 24, 2023 at 10:16:15AM +0000, Mark Rutland wrote:
+> > On Thu, Nov 23, 2023 at 09:04:31PM +0200, Leon Romanovsky wrote:
+> > > From: Jason Gunthorpe <jgg@nvidia.com>
+[...]
+> > > Provide a new generic function memcpy_toio_64() which should reliably
+> > > generate the needed instructions for the architecture, assuming address
+> > > alignment. As the usual need for this operation is performance sensitive a
+> > > fast inline implementation is preferred.
+> > 
+> > There is *no* architectural sequence that is guaranteed to reliably generate a
+> > 64-byte TLP, and this sequence won't guarnatee that (e.g. even if the CPU
+> > *always* merged adjacent stores, we can take an interrupt mid-sequence that
+> > would prevent that).
 > 
-> But what are the side-effects of this? How does the calling code recover?
+> WC is not guaranteed on any arch, that is well known.
 > 
-> E.g., what if we need to populate a page into user space, but that
-> particular page we allocated fails to be prepared? So we inject a signal
-> into that poor process?
-
-When the page fails to be prepared, it is put back to the tail of the
-freelist with __free_one_page(.., FPI_TO_TAIL). If all the allocation paths
-are exhausted and no page has been found for which tag storage has been
-reserved, then that's treated like an OOM situation.
-
-I have been thinking about this, and I think I can simplify the code by
-making tag reservation a best effort approach. The page can be allocated
-even if reserving tag storage fails, but the page is marked as invalid in
-set_pte_at() (PAGE_NONE + an extra bit to tell arm64 that it needs tag
-storage) and next time it is accessed, arm64 will reserve tag storage in
-the fault handling code (the mechanism for that is implemented in patch #19
-of the series, "mm: mprotect: Introduce PAGE_FAULT_ON_ACCESS for
-mprotect(PROT_MTE)").
-
-With this new approach, prep_new_page() stays the way it is, and no further
-changes are required for the page allocator, as there are already arch
-callbacks that can be used for that, for example tag_clear_highpage() and
-arch_alloc_page(). The downside is extra page faults, which might impact
-performance.
-
-What do you think?
-
-Thanks,
-Alex
-
+> The HW has means to handle fragmented TLPs, it just hurts performance
+> when it happens. "reliable" here means we'd like to see something like
+> a > 90% chance of the large TLP instead of the < 1% chance with the C
+> loop.
 > 
-> -- 
-> Cheers,
+> Future ARM CPUs have the ST64B instruction which does provide the
+> architectural guarantee, and x86 has a similar guaranteed instruction
+> now too. 
 > 
-> David / dhildenb
+> > What's the actual requirement here? Is this just for performance?
 > 
+> Yes, just performance.
+
+Do you have any rough numbers (percentage)? It's highly
+microarchitecture-dependent until we get the ST64B instruction.
+
+More of a bike-shedding, I wonder whether the __iowrite*_copy()
+semantics are better suited for what you need in terms of ordering (not
+that mempcy_toio() to Normal NC memory gives us any ordering).
+
+-- 
+Catalin
 
