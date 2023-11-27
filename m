@@ -1,190 +1,153 @@
-Return-Path: <linux-arch+bounces-475-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-476-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9B5C7FA5F4
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 17:15:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2A8E7FA843
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 18:46:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBB611C2090F
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 16:15:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B3881F20EF8
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 17:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A871A35F1B;
-	Mon, 27 Nov 2023 16:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFF63A8DE;
+	Mon, 27 Nov 2023 17:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=memverge.com header.i=@memverge.com header.b="BBykjkBh"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="feIF0PY5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2065.outbound.protection.outlook.com [40.107.223.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438211B4;
-	Mon, 27 Nov 2023 08:15:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R7quJ0/JhwPoe+pjjBa+dIpSHhAZfAqMR40VItdl9NPp4i/GdC4a4fG/r6qeWApLWnbnfOmHKtW63CZJvLkrfeQjdbm9AYiWNqndySDjXMZBb9cLzBc4Fe6YGsuRNNi5BgYhsf36GaqPYKs68+2sVJwxQFLNk7Evbw5MmrQPW1aYOG9uLa7ZlcIAfhGGE+Un2StoA1mNPSCGTMrDoi4/ZBaPJW1o6O9e7+Q5WXaJur4EgsY+jzDy+r72hbjgG7wGDGPpkqlfPkLtYR2QpdSvLU7uQA2W0RL3NIq7I3AutshSZeYU0R/tBwlbBlA6Xr3GDzpu1pume3mNI74TGsZjqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D1Aw9pyMUxxgXTGggCIAPDiOg8gt/pGqW9ZRsYPBCHs=;
- b=kcmm0DCs4Zex+vMBVnh9RM5nRRmao4GICkhzVtYwCCYuCdsZ9u8e2l8S6mkFpCbaQN9zpQLceZDGCcZwen9KmqkM/JUfKZIHDxFKKRDQoKz5jEyWXvI/qSp7uUTsnfv7DQVDbodrf5BGou7kWbUzvH7ZsCrz2FnLJpJ6/j1rAuZHbDk0jXpDnM5uOkW9ntj0sRt0hanPueuvmrDZMfuQqZImj638qlzASUQ7M+KCGfihtJqZmpYjC3XwzcDRjc2z2b/xA7L/RkimtvUPRSs2NHmwD8CvWgrkB0vhEPX6XgTOpaQcxHzD48+lqgqE34QgtcCLyXjwupgIfjrtQjlBmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D1Aw9pyMUxxgXTGggCIAPDiOg8gt/pGqW9ZRsYPBCHs=;
- b=BBykjkBhmXAEcUZsNoYM+diuwyg0QPKWathNjmg1p8vsYOKpJPVfYpS3sZvu+Xed2eWpbR/W/YFuMh7r7mOsUWb2rp8l9HppRurUFjdimya5LPswf2FeKtnPtj+zLdmNmmiXL/hZBc8mn/ipnNP47frLqZNQ7KR5zhRradSJ6dw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com (2603:10b6:a03:394::19)
- by SJ0PR17MB4837.namprd17.prod.outlook.com (2603:10b6:a03:37a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.19; Mon, 27 Nov
- 2023 16:15:00 +0000
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::381c:7f11:1028:15f4]) by SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::381c:7f11:1028:15f4%5]) with mapi id 15.20.7046.015; Mon, 27 Nov 2023
- 16:15:00 +0000
-Date: Mon, 27 Nov 2023 11:14:44 -0500
-From: Gregory Price <gregory.price@memverge.com>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, arnd@arndb.de, tglx@linutronix.de,
-	luto@kernel.org, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	tj@kernel.org, ying.huang@intel.com
-Subject: Re: [RFC PATCH 00/11] mm/mempolicy: Make task->mempolicy externally
- modifiable via syscall and procfs
-Message-ID: <ZWTAdKnBVO0+5bbR@memverge.com>
-References: <20231122211200.31620-1-gregory.price@memverge.com>
- <20231122133348.d27c09a90bce755dc1c0f251@linux-foundation.org>
- <ZV5/ilfUoqC2PW0D@memverge.com>
- <ZWS19JFHm_LFSsFd@tiehlicka>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZWS19JFHm_LFSsFd@tiehlicka>
-X-ClientProxiedBy: SJ0PR05CA0085.namprd05.prod.outlook.com
- (2603:10b6:a03:332::30) To SJ0PR17MB5512.namprd17.prod.outlook.com
- (2603:10b6:a03:394::19)
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE02111;
+	Mon, 27 Nov 2023 09:46:06 -0800 (PST)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARHed0U001128;
+	Mon, 27 Nov 2023 17:45:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=lzqj58I3IPFrtKe4S8rNaZ4kZ62EXnfUaMFKX5my+LU=;
+ b=feIF0PY5+um4MebiA8jlFX3aHG2Ss612jVt0ln8mqQnDDxOl8SfctHc0x954bYkr+kv0
+ CrFXhe3FWqtpNe/Gy0yWJ/T5Vr9UNpqTn3VoQBZxkEG6IKGNaBOJSWDi53B5DeBYK65W
+ crDbe+xSTUpKM88r4rZELhkYKIx1hlQDP2S53I4mOekJ9U8e3Wq5UNKKdBUG35hMx8TB
+ TjqNC7hTIxf7pUbdNVmQvdZahzrevJogueSGunAssN9gkNsCNtVq96pkRYuZaTxlqGiU
+ IgNJ4J8+vCgyex8P8naDKu6A0VPoZ3i/83jcYeVoXLjMK6qHhtS5GjAAMZn3enq0mWYe 9g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umxd52vr0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 17:45:48 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARGqxI1010012;
+	Mon, 27 Nov 2023 17:45:47 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umxd52vhf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 17:45:47 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARGtRpk009198;
+	Mon, 27 Nov 2023 17:43:14 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukumyaftk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 17:43:14 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARHhCIC20185812
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 27 Nov 2023 17:43:12 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 61DD42004B;
+	Mon, 27 Nov 2023 17:43:12 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7E09820040;
+	Mon, 27 Nov 2023 17:43:11 +0000 (GMT)
+Received: from [9.179.10.95] (unknown [9.179.10.95])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 27 Nov 2023 17:43:11 +0000 (GMT)
+Message-ID: <637dcc4d69c380bd939dfdd1b14a5c82c2ddfaa4.camel@linux.ibm.com>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+        Nathan
+ Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>, Gerd Bayer <gbayer@linux.ibm.com>
+Date: Mon, 27 Nov 2023 18:43:11 +0100
+In-Reply-To: <20231124160627.GH436702@nvidia.com>
+References: <cover.1700766072.git.leon@kernel.org>
+	 <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+	 <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
+	 <20231124142049.GF436702@nvidia.com>
+	 <14103e31e0c47c0594e7479126ce7fe34f2de467.camel@linux.ibm.com>
+	 <20231124145529.GG436702@nvidia.com>
+	 <b3250b9a9af2f29ee3d06830746fb6e8ac49271d.camel@linux.ibm.com>
+	 <20231124160627.GH436702@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR17MB5512:EE_|SJ0PR17MB4837:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f5061f7-f429-4a1f-5661-08dbef640102
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	co4+9BfenST1vonnfpsWoyrrP3v8a7qTUHqj+gPRE8HpnpUMDV1Ceuh/u47M+Pq3/fYjZiHfOXDiBi1mWy1ktrsyoUrydEyZl+Un36+CYYhC0Lla/nWvnWvMZras3cWtYdq+FTNGvzpcdZRehTEQ44Y5yAFP15EB+AT9mxhJKdP4EjAHM0ZPx72jVIi41l363xj9m/kg6kXNIUdzgj4E35CXJesybRa6Q4Y0GWE/9OhFXzrLYSdF4PFRd6SDuJQculZIeWYzpXuqJ3qnB8k5sTZzcYKWKZ99o8DpYT+31pJTr+YMrP7PnW+3Ntj+6QC+hCBpKiUQQeen2Tb1QZM1PcBfYAswHdGl2ejNgEOiJBKkVAJdIZWrlkIG0MZsJb1WunXx9DCYz2t0JrsdkC8rQTN9zuRKipQQnnVAIDMA4HR4zTkvdkySbIN5Pr6m81qvcSdOkKbzP6Vvn1umnocX6nZLm1oOBZo4lzK0f1GDkc49RkaavyQQTDnRWdY99iSqYf2qs4OrX3jQQN+UybvDyZOA+U9kzKwVRuhl3XQufXh2BmmZq6/UZO33aQxjoqhGegwAu/2GZbIuTInUunH/SsDCHp+So7+SzE6QtJ1RQc0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB5512.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(366004)(346002)(39840400004)(396003)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(26005)(6486002)(2616005)(6506007)(6666004)(478600001)(6512007)(38100700002)(36756003)(86362001)(5660300002)(44832011)(2906002)(7416002)(66946007)(83380400001)(41300700001)(66476007)(54906003)(66556008)(4326008)(8936002)(316002)(6916009)(8676002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9gI5u5UaE+LGl1pKWYmuVOx0Ppzy9Kf0xMqJk/wODCjJ25bngK7y4aEx5uWT?=
- =?us-ascii?Q?bsQshGTLqnNVg2UX9Zq95qHvP5aV2aK2YaYsEiRG+5tlEKmeACkf/38wvUt3?=
- =?us-ascii?Q?lTOUl9j1X/TzgO+Rh1s5/NrXyaeLDL+z3JZJiuVl8rpVKaBUl+4vWX03b2Zb?=
- =?us-ascii?Q?btiJDb3V5zWPMsZkjDii7OOSQoSUUMSseaWj4YUuaGTOQer3REQvUrZ+Syaq?=
- =?us-ascii?Q?gQ+36nCKaWLHnnf+WaQvKqswyxxzJUr3w8jmHD5GnULVYGn49NHttYyYxCcD?=
- =?us-ascii?Q?+COLAaV5OaNh14coREDz1MQrhdHcpkw1+FKGM69I7HAy6C29ZnlStO0FvwV5?=
- =?us-ascii?Q?AaH/1azxyEmsvqWnH34h7hhg7THGRVpFcIjq2s2rytLZvsM3Ni34JQO492T2?=
- =?us-ascii?Q?MupfxMTW0ACLZRsB47YMWD+sQkFjlCdE/rac6N4K5TFN6dsp8bdjM6mS/bKW?=
- =?us-ascii?Q?9QBhgnbX+YRyKdurgHipQ3+8LFYwu5WcBLeRvPJfHfiYP6gBrhxJfv2htmEX?=
- =?us-ascii?Q?nz2Ltq+NNHf/8cCYoJPvqkESSZpRk+ZBhIUs1gaHEzQ45NIipbpYcHUPzsG0?=
- =?us-ascii?Q?nTS4z1sy0ZG+adGrdigl3ErbJbV9lfkC8tZI0u7V2FEQLZmM8mz3g+ai5DQO?=
- =?us-ascii?Q?Mai2DlQXO0MW8cT1wx4EiSC42/XH/FE5Hfua7l+X1is/L4GAGbHRh1sXiZhH?=
- =?us-ascii?Q?9nnvdTUkt7sGKPmgi9ma193hZnV2aD+rUhU8idLLpFMn81hvBYpQZXabc3V4?=
- =?us-ascii?Q?P9l2nEr4IMJKb7M6vPAOtcVADNlUFWpeETo/laWtyzoRcUuFSP7Eck4JkTNr?=
- =?us-ascii?Q?zXTBzZeohNW8tGR/kZMcwjk5vdGhsOLhQS2JGOez+41cDNaoKPabnxUhC6uL?=
- =?us-ascii?Q?f9+yuGEmeLEUvcsu2zIIDBkjnLGWRo/t4dLSTyzaFYScOwm3QJiNHAZDD6Fm?=
- =?us-ascii?Q?rG4Uj5QvIuhysekBrUTTh8L9kxxO+0praaj97j1yBKMC/UkjikujTDl1L99R?=
- =?us-ascii?Q?yfG24+O6nMHo9fxnA5ZrprI7CrfA4UbM+/NUPU6pOM4p80dnwtToH1JyJvnZ?=
- =?us-ascii?Q?gs/1uOIWRW74dYX+lQszGG/DHKT64eFjSj7xP6E9eZPLwsUj6FlkjZd2vrTP?=
- =?us-ascii?Q?gnUpZse8uHSonlzmfIYp/IM1TR3M6keTw1joVGjW6WJiDVBDemUkI7luHRmx?=
- =?us-ascii?Q?GlYlR2dgOEKURiKjXKzTrX7IHpzKvsmVe6DOj7mL12t0+S/yflNw2wbe4ayR?=
- =?us-ascii?Q?LxGfq2LJF1KjDhM0hgKhEdOI3BaIA7RamK88qlzdTw70dCOAHd80h+aIB1wQ?=
- =?us-ascii?Q?qfSqvCG+YzgU7r2rZCnlpTV3Qtd/VIkQxnSKg8yzw5TUdmSeZVA4t7bjm0Qw?=
- =?us-ascii?Q?nFUzQtcGNR3lut7WDrS2IRp+5LUWxYcrvX2aUavoj4+PO/Z9bLOqBL4VmOAh?=
- =?us-ascii?Q?4PRGRk/GspeGwvURAPiYrcrW3otGRso7u/5di3ukpM1LPI8+a1oF3/FjabfX?=
- =?us-ascii?Q?BHHYdcE8VE0sVXTHu37OkKao4Wi8zF7h4pGNKi4KPD9bIP70jlvZHpNfGz/a?=
- =?us-ascii?Q?mhjcZAEDG7pUQ4yRk9pCFB3Yx3UyQ4S3oA2MINGPz0vmkT6raTwpxjpbgKO5?=
- =?us-ascii?Q?3A=3D=3D?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f5061f7-f429-4a1f-5661-08dbef640102
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR17MB5512.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 16:15:00.2107
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ChMJJSg0PJsS3DAKA22nMf8nmlg7MiEnWkm4s5pZ7tDEN4wE9yLeB3LUT4u+p9jdv1jtDa3ISpxHUZae18WKSK3By/xgIdtYeIClLTGaaYI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR17MB4837
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _M3XpV3w84E_3d-YkVQ8I7sJh5H0Q7He
+X-Proofpoint-GUID: lQohcn7e8AuOM97Z7HR6-FkciDH-UZJt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-27_16,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ mlxlogscore=566 impostorscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311270122
 
-On Mon, Nov 27, 2023 at 04:29:56PM +0100, Michal Hocko wrote:
-> Sorry, didn't have much time to do a proper review. Couple of points
-> here at least.
-> 
-> > 
-> > So... yeah... the is one area I think the community very much needs to
-> > comment:  set/get_mempolicy2, many new mempolicy syscalls, procfs? All
-> > of the above?
-> 
-> I think we should actively avoid using proc interface. The most
-> reasonable way would be to add get_mempolicy2 interface that would allow
-> extensions and then create a pidfd counterpart to allow acting on a
-> remote task. The latter would require some changes to make mempolicy
-> code less current oriented.
+On Fri, 2023-11-24 at 12:06 -0400, Jason Gunthorpe wrote:
+> On Fri, Nov 24, 2023 at 04:59:38PM +0100, Niklas Schnelle wrote:
+> =20
+> > This should be as easy as adding
+> >=20
+> > #define memcpy_toio_64(to, from) zpci_memcpy_toio(to, from, 64)
+> >=20
+> > to arch/s390/include/asm/io.h. I'm wondering if we should do that as
+> > part of this series. It's not as good as a special case but probably
+> > better than the existing loop.
+>=20
+> Makes sense
 
-Sounds good, I'll pull my get/set_mempolicy2 RFC on top of this.
+Ok, I overlooked the obvious. Let's make that:
 
-Just context: patches 1-6 refactor mempolicy to allow remote task
-twiddling (fixing the current-oriented issues), and patch 7 adds the pidfd
-interfaces you describe above.
+#define memcpy_toio_64(dst, src)       zpci_write_block(dst, src, 64)
 
+>=20
+> > I don't think we have any existing in-kernel users of memcpy_toio() on
+> > s390 so far though so I'd like to give this some extra testing. Could
+> > you share instructions on how to exercise the code path of patch 2 on a
+> > ConnectX-5 or 6? Is this exercised e.g. when using NVMe-oF RDMA?
+>=20
+> Simply boot and look at pr_debug from mlx5 to see if writecombining is
+> on or off - you want to see on.
+>=20
+> Thanks,
+> Jason
 
-Couple Questions
+With the above zpci_write_block(dst, src, 64) we get a PCI store block
+without any extra alignment treatment i.e. exactly what we want for
+memcpy_toio_64(). If the alignment is wrong the PCI store block
+instruction will fail the PCI function will be isolated and we log an
+error so I don't see a need for checks there either. On an aside it
+looks like our zpci_memcpy_toio() is wrongly looking for tighter than 8
+byte alignment on the source address and would issue a series of 8
+stores. Still looking into that. I also tested this with our only
+privileged (kernel only) PCI stores and that works too.
 
-1) Should we consider simply adding a pidfd arg to set/get_mempolicy2,
-   where if (pidfd == 0), then it operates on current, otherwise it
-   operates on the target task?  That would mitigate the need for what
-   amounts to the exact same interface.
+Also it turns out the writeq() loop we had so far does not produce the
+needed 64 byte TLP on s390 either so this actually makes us newly pass
+this test.
 
-2) Should we combine all the existing operations into set_mempolicy2 and
-   add an operation arg.
+Thanks,
+Niklas
 
-   set_mempolicy2(pidfd, arg_struct, len)
-
-   struct {
-     int pidfd; /* optional */
-     int operation; /* describe which op_args to use */
-     union {
-       struct {
-       } set_mempolicy;
-       struct {
-       } set_vma_home_node;
-       struct {
-       } mbind;
-       ...
-     } op_args;
-   } args;
-
-   capturing:
-     sys_set_mempolicy
-     sys_set_mempolicy_home_node
-     sys_mbind
-
-   or should we just make a separate interface for mbind/home_node to
-   limit complexity of the single syscall?
-
-Personally I like the dispatch for the extensibility nature of the arg
-struct, but I can understand wanting to limit complexity of a syscall
-interface for a variety of reasons.
-
-~Gregory
 
