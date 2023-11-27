@@ -1,51 +1,64 @@
-Return-Path: <linux-arch+bounces-473-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-474-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 865207FA426
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 16:10:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA6367FA4BC
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 16:30:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B88AF1C20A40
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 15:10:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 608A6281836
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 15:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7E231A67;
-	Mon, 27 Nov 2023 15:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9693D321B5;
+	Mon, 27 Nov 2023 15:30:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="OOXAB+Dp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77703D6;
-	Mon, 27 Nov 2023 07:10:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAC2F2F4;
-	Mon, 27 Nov 2023 07:11:28 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC8E23F6C4;
-	Mon, 27 Nov 2023 07:10:35 -0800 (PST)
-Date: Mon, 27 Nov 2023 15:10:33 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-	rppt@kernel.org, hughd@google.com, pcc@google.com,
-	steven.price@arm.com, anshuman.khandual@arm.com,
-	vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
-	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 15/27] arm64: mte: Check that tag storage blocks
- are in the same zone
-Message-ID: <ZWSxaYGJSkyMj-bE@raptor>
-References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-16-alexandru.elisei@arm.com>
- <eb28b2fb-1480-4db0-a7e6-792716421f3d@redhat.com>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2a07:de40:b251:101:10:150:64:1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B342117;
+	Mon, 27 Nov 2023 07:29:59 -0800 (PST)
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8CB2A21B58;
+	Mon, 27 Nov 2023 15:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1701098997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ll683VjO5cgdZEXvfYTUzLYylEdUG/UQv49Lu4Sc7rA=;
+	b=OOXAB+DpFUt4iwizIQsg9NdOIv7EkWhpXPvrvm3xSPIkYK01e48JBaP6McNQXVt1W4HMcp
+	FzhsJfz4OLu8cI2pA+kFgSSwrdgoVb/idRWXuLd+Fx/rh355mLKnibOH8SOrq1VdRhoTdr
+	woqZH0y3y+TGG/qALZCHEensDf8Z/lc=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 714C11367B;
+	Mon, 27 Nov 2023 15:29:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id e1MKGvW1ZGVHRQAAD6G6ig
+	(envelope-from <mhocko@suse.com>); Mon, 27 Nov 2023 15:29:57 +0000
+Date: Mon, 27 Nov 2023 16:29:56 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Gregory Price <gregory.price@memverge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, arnd@arndb.de, tglx@linutronix.de,
+	luto@kernel.org, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	tj@kernel.org, ying.huang@intel.com
+Subject: Re: [RFC PATCH 00/11] mm/mempolicy: Make task->mempolicy externally
+ modifiable via syscall and procfs
+Message-ID: <ZWS19JFHm_LFSsFd@tiehlicka>
+References: <20231122211200.31620-1-gregory.price@memverge.com>
+ <20231122133348.d27c09a90bce755dc1c0f251@linux-foundation.org>
+ <ZV5/ilfUoqC2PW0D@memverge.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -54,78 +67,103 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eb28b2fb-1480-4db0-a7e6-792716421f3d@redhat.com>
+In-Reply-To: <ZV5/ilfUoqC2PW0D@memverge.com>
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -1.10
+X-Spamd-Result: default: False [-1.10 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 RCPT_COUNT_TWELVE(0.00)[19];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[linux-foundation.org,gmail.com,kvack.org,vger.kernel.org,arndb.de,linutronix.de,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,intel.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
 
-Hi,
+Sorry, didn't have much time to do a proper review. Couple of points
+here at least.
 
-On Fri, Nov 24, 2023 at 08:56:59PM +0100, David Hildenbrand wrote:
-> On 19.11.23 17:57, Alexandru Elisei wrote:
-> > alloc_contig_range() requires that the requested pages are in the same
-> > zone. Check that this is indeed the case before initializing the tag
-> > storage blocks.
+On Wed 22-11-23 17:24:10, Gregory Price wrote:
+> On Wed, Nov 22, 2023 at 01:33:48PM -0800, Andrew Morton wrote:
+> > On Wed, 22 Nov 2023 16:11:49 -0500 Gregory Price <gourry.memverge@gmail.com> wrote:
 > > 
-> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> > ---
-> >   arch/arm64/kernel/mte_tag_storage.c | 33 +++++++++++++++++++++++++++++
-> >   1 file changed, 33 insertions(+)
+> > > The patch set changes task->mempolicy to be modifiable by tasks other
+> > > than just current.
+> > > 
+> > > The ultimate goal is to make mempolicy more flexible and extensible,
+> > > such as adding interleave weights (which may need to change at runtime
+> > > due to hotplug events).  Making mempolicy externally modifiable allows
+> > > for userland daemons to make runtime performance adjustments to running
+> > > tasks without that software needing to be made numa-aware.
 > > 
-> > diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_tag_storage.c
-> > index 8b9bedf7575d..fd63430d4dc0 100644
-> > --- a/arch/arm64/kernel/mte_tag_storage.c
-> > +++ b/arch/arm64/kernel/mte_tag_storage.c
-> > @@ -265,6 +265,35 @@ void __init mte_tag_storage_init(void)
-> >   	}
-> >   }
-> > +/* alloc_contig_range() requires all pages to be in the same zone. */
-> > +static int __init mte_tag_storage_check_zone(void)
-> > +{
-> > +	struct range *tag_range;
-> > +	struct zone *zone;
-> > +	unsigned long pfn;
-> > +	u32 block_size;
-> > +	int i, j;
-> > +
-> > +	for (i = 0; i < num_tag_regions; i++) {
-> > +		block_size = tag_regions[i].block_size;
-> > +		if (block_size == 1)
-> > +			continue;
-> > +
-> > +		tag_range = &tag_regions[i].tag_range;
-> > +		for (pfn = tag_range->start; pfn <= tag_range->end; pfn += block_size) {
-> > +			zone = page_zone(pfn_to_page(pfn));
-> > +			for (j = 1; j < block_size; j++) {
-> > +				if (page_zone(pfn_to_page(pfn + j)) != zone) {
-> > +					pr_err("Tag storage block pages in different zones");
-> > +					return -EINVAL;
-> > +				}
-> > +			}
-> > +		}
-> > +	}
-> > +
-> > +	 return 0;
-> > +}
-> > +
+> > Please add to this [0/N] a full description of the security aspect: who
+> > can modify whose mempolicy, along with a full description of the
+> > reasoning behind this decision.
+> > 
 > 
-> Looks like something that ordinary CMA provides. See cma_activate_area().
-
-Indeed.
-
+> Will do. For the sake of v0 for now:
 > 
-> Can't we find a way to let CMA do CMA thingies and only be a user of that?
-> What would be required to make the performance issue you spelled out in the
-> cover letter be gone and not have to open-code that in arch code?
-
-I've replied with a possible solution here [1].
-
-[1] https://lore.kernel.org/all/ZWSvMYMjFLFZ-abv@raptor/
-
-Thanks,
-Alex
-
+> 1) the task itself (task == current)
+>    for obvious reasons: it already can
 > 
-> -- 
-> Cheers,
+> 2) from external interfaces: CAP_SYS_NICE
+
+Makes sense.
+
+[...]
+> > > 3. Add external interfaces which allow for a task mempolicy to be
+> > >    modified by another task.  This is implemented in 4 syscalls
+> > >    and a procfs interface:
+> > >         sys_set_task_mempolicy
+> > >         sys_get_task_mempolicy
+> > >         sys_set_task_mempolicy_home_node
+> > >         sys_task_mbind
+> > >         /proc/[pid]/mempolicy
+> > 
+> > Why is the procfs interface needed?  Doesn't it simply duplicate the
+> > syscall interface?  Please update [0/N] with a description of this
+> > decision.
+> > 
 > 
-> David / dhildenb
+> Honestly I wrote the procfs interface first, and then came back around
+> to just implement the syscalls.  mbind is not friendly to being procfs'd
+> so if the preference is to have only one, not both, then it should
+> probably be the syscalls.
 > 
+> That said, when I introduce weighted interleave on top of this, having a
+> simple procfs interface to those weights would be valuable, so I
+> imagined something like `proc/mempolicy` to determine if interleave was
+> being used and something like `proc/mpol_interleave_weights` for a clean
+> interface to update weights.
+> 
+> However, in the same breath, I have a prior RFC with set/get_mempolicy2
+> which could probably take all future mempolicy extensions and wrap them
+> up into one pair of syscalls, instead of us ending up with 200 more
+> sys_mempolicy_whatever as memory attached fabrics become more common.
+> 
+> So... yeah... the is one area I think the community very much needs to
+> comment:  set/get_mempolicy2, many new mempolicy syscalls, procfs? All
+> of the above?
+
+I think we should actively avoid using proc interface. The most
+reasonable way would be to add get_mempolicy2 interface that would allow
+extensions and then create a pidfd counterpart to allow acting on a
+remote task. The latter would require some changes to make mempolicy
+code less current oriented.
+-- 
+Michal Hocko
+SUSE Labs
 
