@@ -1,42 +1,51 @@
-Return-Path: <linux-arch+bounces-467-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-468-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 967F67F9FD4
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 13:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7E207FA042
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 14:03:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A7FBB20D37
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 12:42:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACC63B2109E
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 13:03:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D1711CBC;
-	Mon, 27 Nov 2023 12:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E8F2C852;
+	Mon, 27 Nov 2023 13:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8643C8C4;
-	Mon, 27 Nov 2023 12:42:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07870C433C9;
-	Mon, 27 Nov 2023 12:42:43 +0000 (UTC)
-Date: Mon, 27 Nov 2023 12:42:41 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, Leon Romanovsky <leon@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <ZWSOwT2OyMXD1lmo@arm.com>
-References: <cover.1700766072.git.leon@kernel.org>
- <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
- <ZWB373y5XuZDultf@FVFF77S0Q05N>
- <20231124122352.GB436702@nvidia.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31C2F10F;
+	Mon, 27 Nov 2023 05:03:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82C4A2F4;
+	Mon, 27 Nov 2023 05:04:00 -0800 (PST)
+Received: from raptor (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B14753F73F;
+	Mon, 27 Nov 2023 05:03:07 -0800 (PST)
+Date: Mon, 27 Nov 2023 13:03:04 +0000
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+	rppt@kernel.org, hughd@google.com, pcc@google.com,
+	steven.price@arm.com, anshuman.khandual@arm.com,
+	vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
+	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 06/27] mm: page_alloc: Allow an arch to hook early
+ into free_pages_prepare()
+Message-ID: <ZWSTiCghf8nMFy4G@raptor>
+References: <20231119165721.9849-1-alexandru.elisei@arm.com>
+ <20231119165721.9849-7-alexandru.elisei@arm.com>
+ <45466b05-d620-41e5-8a2b-05c420b8fa7b@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -45,45 +54,44 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231124122352.GB436702@nvidia.com>
+In-Reply-To: <45466b05-d620-41e5-8a2b-05c420b8fa7b@redhat.com>
 
-On Fri, Nov 24, 2023 at 08:23:52AM -0400, Jason Gunthorpe wrote:
-> On Fri, Nov 24, 2023 at 10:16:15AM +0000, Mark Rutland wrote:
-> > On Thu, Nov 23, 2023 at 09:04:31PM +0200, Leon Romanovsky wrote:
-> > > From: Jason Gunthorpe <jgg@nvidia.com>
-[...]
-> > > Provide a new generic function memcpy_toio_64() which should reliably
-> > > generate the needed instructions for the architecture, assuming address
-> > > alignment. As the usual need for this operation is performance sensitive a
-> > > fast inline implementation is preferred.
-> > 
-> > There is *no* architectural sequence that is guaranteed to reliably generate a
-> > 64-byte TLP, and this sequence won't guarnatee that (e.g. even if the CPU
-> > *always* merged adjacent stores, we can take an interrupt mid-sequence that
-> > would prevent that).
-> 
-> WC is not guaranteed on any arch, that is well known.
-> 
-> The HW has means to handle fragmented TLPs, it just hurts performance
-> when it happens. "reliable" here means we'd like to see something like
-> a > 90% chance of the large TLP instead of the < 1% chance with the C
-> loop.
-> 
-> Future ARM CPUs have the ST64B instruction which does provide the
-> architectural guarantee, and x86 has a similar guaranteed instruction
-> now too. 
-> 
-> > What's the actual requirement here? Is this just for performance?
-> 
-> Yes, just performance.
+Hi,
 
-Do you have any rough numbers (percentage)? It's highly
-microarchitecture-dependent until we get the ST64B instruction.
+On Fri, Nov 24, 2023 at 08:36:52PM +0100, David Hildenbrand wrote:
+> On 19.11.23 17:57, Alexandru Elisei wrote:
+> > Add arch_free_pages_prepare() hook that is called before that page flags
+> > are cleared. This will be used by arm64 when explicit management of tag
+> > storage pages is enabled.
+> 
+> Can you elaborate a bit what exactly will be done by that code with that
+> information?
 
-More of a bike-shedding, I wonder whether the __iowrite*_copy()
-semantics are better suited for what you need in terms of ordering (not
-that mempcy_toio() to Normal NC memory gives us any ordering).
+Of course.
 
--- 
-Catalin
+The MTE code that is in the kernel today uses the PG_arch_2 page flag, which it
+renames to PG_mte_tagged, to track if a page has been mapped with tagging
+enabled. That flag is cleared by free_pages_prepare() when it does:
+
+	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+
+When tag storage management is enabled, tag storage is reserved for a page if
+and only if the page is mapped as tagged. When a page is freed, the code looks
+at the PG_mte_tagged flag to determine if the page was mapped as tagged, and
+therefore has tag storage reserved, to determine if the corresponding tag
+storage should also be freed.
+
+I have considered using arch_free_page(), but free_pages_prepare() calls the
+function after the flags are cleared.
+
+Does that answer your question?
+
+Alex
+
+> 
+> -- 
+> Cheers,
+> 
+> David / dhildenb
+> 
 
