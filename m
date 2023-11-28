@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-528-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-529-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85C5E7FC736
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 22:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03DE27FC75D
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 22:10:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26C3AB25677
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 21:09:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87B0DB25C78
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 21:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C71B481BB;
-	Tue, 28 Nov 2023 21:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4CDE481B8;
+	Tue, 28 Nov 2023 21:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cgqZ4OhL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnlOH+kM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E04744379;
-	Tue, 28 Nov 2023 21:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4FAC433A9;
-	Tue, 28 Nov 2023 21:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8446244361;
+	Tue, 28 Nov 2023 21:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD36C433B6;
+	Tue, 28 Nov 2023 21:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701205712;
-	bh=NIfe/80VxkWywy3Sjc64uWaEIYL+wACbsDegDV8ILKQ=;
+	s=k20201202; t=1701205745;
+	bh=tcud/Eg7by764OGVtAfT59O6ABNRuhiQsjaVx3w5b3U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cgqZ4OhLZqe+OMTRVG+Z1XddOSd9epQqhwt8sSZ5yakxaJVb8pOWAZDIpXzOMSDk7
-	 I4ybS51VWJJRHXkpUJ/nv/cYpm7qDa0WD6XeFAioIATi7UufRQRId+bfjfnlX9+h25
-	 U9daa7RRNHphftnIXMTgGf8aBujELMa7fJhGUwUBhj/9IfyBgJW6jT4w2b8Zbe3TGz
-	 b1VaMg+pApQai+xishtqR56lvZmITdaN2ztQE/nafmFvn1+ZGaImg0+YQbRYmkGVs5
-	 G2f7Z2dN3k6mThW0VnH+p7YcQUkaL/5jX7diHtLmHllzNNyXls33XT+zU12phDjRuB
-	 yYkGhOm5SmC4A==
+	b=HnlOH+kMDjSwmvxpWwNHuvkS7B7woBQm3/0H4O0r+5f66IUL5KSHRdcfi+Ghd0D5/
+	 1AMKdgagF2j7A/GFPAH4a0JKpcFW9+SlkQMwawLIWKS4YJ1YEMpfOwfRN/3G6UpRxL
+	 sMZkV7boXUkUh3MHYPL82t5a7DznY5FxpFYs+VKtXYi4TaQCtbmiNqDLj/Bj1Uhs2p
+	 bWWUuG0zuyDHxalponNb6zQVCDu4nvOy11bdpzbl6V7PETQtlTzqqfSIYiT0IHyAQP
+	 IkmQ3vyO+935in0+OGjmtR+aVxflW1bQISXH6RJmvS7cRMeb7RHxYsaxVC5F0HZM7X
+	 VgYT3GS8Ix1/g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -41,12 +41,12 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Waiman Long <longman@redhat.com>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 23/25] asm-generic: qspinlock: fix queued_spin_value_unlocked() implementation
-Date: Tue, 28 Nov 2023 16:07:39 -0500
-Message-ID: <20231128210750.875945-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 14/15] asm-generic: qspinlock: fix queued_spin_value_unlocked() implementation
+Date: Tue, 28 Nov 2023 16:08:35 -0500
+Message-ID: <20231128210843.876493-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231128210750.875945-1-sashal@kernel.org>
-References: <20231128210750.875945-1-sashal@kernel.org>
+In-Reply-To: <20231128210843.876493-1-sashal@kernel.org>
+References: <20231128210843.876493-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.64
+X-stable-base: Linux 5.15.140
 Content-Transfer-Encoding: 8bit
 
 From: Linus Torvalds <torvalds@linux-foundation.org>
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
-index 995513fa26904..0655aa5b57b29 100644
+index d74b138255014..95cfcfb8a3b4d 100644
 --- a/include/asm-generic/qspinlock.h
 +++ b/include/asm-generic/qspinlock.h
-@@ -70,7 +70,7 @@ static __always_inline int queued_spin_is_locked(struct qspinlock *lock)
+@@ -41,7 +41,7 @@ static __always_inline int queued_spin_is_locked(struct qspinlock *lock)
   */
  static __always_inline int queued_spin_value_unlocked(struct qspinlock lock)
  {
