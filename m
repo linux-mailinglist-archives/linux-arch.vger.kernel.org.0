@@ -1,114 +1,124 @@
-Return-Path: <linux-arch+bounces-483-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-484-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC0A7FBBF7
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 14:55:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA9087FBC2C
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 15:07:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 092D1282AF3
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 13:55:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0827E1C20CAA
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 14:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F3A58ADF;
-	Tue, 28 Nov 2023 13:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9395A0E4;
+	Tue, 28 Nov 2023 14:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE909B5;
-	Tue, 28 Nov 2023 05:55:40 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SfkVd4WZ8z6JB96;
-	Tue, 28 Nov 2023 21:55:21 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 774E61400C9;
-	Tue, 28 Nov 2023 21:55:38 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 28 Nov
- 2023 13:55:37 +0000
-Date: Tue, 28 Nov 2023 13:55:36 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC: Gavin Shan <gshan@redhat.com>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH RFC 10/22] drivers: base: Move cpu_dev_init() after
- node_dev_init()
-Message-ID: <20231128135536.00002ab9@Huawei.com>
-In-Reply-To: <ZVywLPwhILp083Jk@shell.armlinux.org.uk>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
-	<E1r0JLV-00CTxS-QB@rmk-PC.armlinux.org.uk>
-	<095c2d24-735b-4ce2-ba2e-9ec2164f2237@redhat.com>
-	<ZVHXk9JG7gUjtERt@shell.armlinux.org.uk>
-	<ZVywLPwhILp083Jk@shell.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BC7B5;
+	Tue, 28 Nov 2023 06:07:18 -0800 (PST)
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DFD381F74C;
+	Tue, 28 Nov 2023 14:07:15 +0000 (UTC)
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AE2421343E;
+	Tue, 28 Nov 2023 14:07:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id YJlRJhP0ZWXeNgAAD6G6ig
+	(envelope-from <mhocko@suse.com>); Tue, 28 Nov 2023 14:07:15 +0000
+Date: Tue, 28 Nov 2023 15:07:10 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Gregory Price <gourry.memverge@gmail.com>
+Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org, arnd@arndb.de, tglx@linutronix.de,
+	luto@kernel.org, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	tj@kernel.org, ying.huang@intel.com,
+	Gregory Price <gregory.price@memverge.com>
+Subject: Re: [RFC PATCH 02/11] mm/mempolicy: swap cond reference counting
+ logic in do_get_mempolicy
+Message-ID: <ZWX0Dq6_-0NAFgSl@tiehlicka>
+References: <20231122211200.31620-1-gregory.price@memverge.com>
+ <20231122211200.31620-3-gregory.price@memverge.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122211200.31620-3-gregory.price@memverge.com>
+X-Spamd-Bar: +++++++++++++++
+X-Spam-Score: 15.00
+X-Rspamd-Server: rspamd1
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none;
+	spf=fail (smtp-out2.suse.de: domain of mhocko@suse.com does not designate 2a07:de40:b281:104:10:150:64:97 as permitted sender) smtp.mailfrom=mhocko@suse.com;
+	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.com (policy=quarantine)
+X-Rspamd-Queue-Id: DFD381F74C
+X-Spamd-Result: default: False [15.00 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FREEMAIL_TO(0.00)[gmail.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-0.63)[82.28%];
+	 ARC_NA(0.00)[];
+	 R_SPF_FAIL(1.00)[-all];
+	 FROM_HAS_DN(0.00)[];
+	 DMARC_POLICY_QUARANTINE(1.50)[suse.com : No valid SPF, No valid DKIM,quarantine];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCPT_COUNT_TWELVE(0.00)[19];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam: Yes
 
-On Tue, 21 Nov 2023 13:27:08 +0000
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+On Wed 22-11-23 16:11:51, Gregory Price wrote:
+[...]
+> @@ -982,11 +991,11 @@ static long do_get_mempolicy(int *policy, nodemask_t *nmask,
+>  	}
+>  
+>   out:
+> -	mpol_cond_put(pol);
+> +	mpol_put(pol);
+>  	if (vma)
+>  		mmap_read_unlock(mm);
+>  	if (pol_refcount)
+> -		mpol_put(pol_refcount);
+> +		mpol_cond_put(pol_refcount);
 
-> On Mon, Nov 13, 2023 at 08:00:19AM +0000, Russell King (Oracle) wrote:
-> > On Mon, Nov 13, 2023 at 10:58:46AM +1000, Gavin Shan wrote:  
-> > > 
-> > > 
-> > > On 11/7/23 20:30, Russell King (Oracle) wrote:  
-> > > > From: James Morse <james.morse@arm.com>
-> > > > 
-> > > > NUMA systems require the node descriptions to be ready before CPUs are
-> > > > registered. This is so that the node symlinks can be created in sysfs.
-> > > > 
-> > > > Currently no NUMA platform uses GENERIC_CPU_DEVICES, meaning that CPUs
-> > > > are registered by arch code, instead of cpu_dev_init().
-> > > > 
-> > > > Move cpu_dev_init() after node_dev_init() so that NUMA architectures
-> > > > can use GENERIC_CPU_DEVICES.
-> > > > 
-> > > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > > > ---
-> > > > Note: Jonathan's comment still needs addressing - see
-> > > >    https://lore.kernel.org/r/20230914121612.00006ac7@Huawei.com
-> > > > ---
-> > > >   drivers/base/init.c | 2 +-
-> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >   
-> > > 
-> > > With Jonathan's comments addressed:  
-> > 
-> > That needs James' input, which is why I made the note on the patch.  
+Maybe I am just misreading the patch but pol_refcount should be always
+NULL with this patch
+
+>  	return err;
+>  }
+>  
+> -- 
+> 2.39.1
 > 
-> I'm going to be posting the series without RFC soon, and it will be
-> with Jonathan's comment unaddressed - because as I've said several
-> times it needs James' input and we have sadly not yet received that.
-> 
-> Short of waiting until James can respond, I don't think there are
-> any other alternatives.
 
-In the interests of expediency I'm fine with that.  (To be honest I'd
-forgotten I even made that comment ;)
-
-Jonathan
-
-> 
-> I do hope we can get this queued up for v6.8 though.
-> 
-
+-- 
+Michal Hocko
+SUSE Labs
 
