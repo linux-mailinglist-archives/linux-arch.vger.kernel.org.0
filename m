@@ -1,39 +1,48 @@
-Return-Path: <linux-arch+bounces-486-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-487-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 511757FBC34
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 15:07:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EEA97FBC58
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 15:11:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09DB3282308
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 14:07:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50B741C20C6E
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 14:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16C25AB83;
-	Tue, 28 Nov 2023 14:07:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6FDF5AB8B;
+	Tue, 28 Nov 2023 14:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="gOLpy9oo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2a07:de40:b251:101:10:150:64:2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A02D64;
-	Tue, 28 Nov 2023 06:07:42 -0800 (PST)
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A997119B2;
+	Tue, 28 Nov 2023 06:11:12 -0800 (PST)
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 01DF81F74B;
-	Tue, 28 Nov 2023 14:07:41 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 1C93B2199E;
+	Tue, 28 Nov 2023 14:11:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1701180671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bZslgzkC5KxsP7jHMJfyQVKff23207T2myOVc/HMRlA=;
+	b=gOLpy9ooR5alEUjxfM+2syKJDlcrb3FB5iXQd7qKs9JYJFcQmpltz/bEmpMZcZ6R3AK0uo
+	Ecf64Donp/eqfIQGF64lFT4dMv/1bhH5kg/T9LU7xZCHWFRUsuvgVtO1yucw6i58Z2mYeq
+	YMg7dG+ez05xRcpfxL8in70wUt8APcI=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 81EC31343E;
-	Tue, 28 Nov 2023 14:07:40 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E8B481343E;
+	Tue, 28 Nov 2023 14:11:10 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +hArHCz0ZWUHNwAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Tue, 28 Nov 2023 14:07:40 +0000
-Date: Tue, 28 Nov 2023 15:07:38 +0100
+	id /3/NNf70ZWVIOAAAD6G6ig
+	(envelope-from <mhocko@suse.com>); Tue, 28 Nov 2023 14:11:10 +0000
+Date: Tue, 28 Nov 2023 15:11:06 +0100
 From: Michal Hocko <mhocko@suse.com>
 To: Gregory Price <gourry.memverge@gmail.com>
 Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org,
@@ -44,11 +53,11 @@ Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org,
 	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
 	tj@kernel.org, ying.huang@intel.com,
 	Gregory Price <gregory.price@memverge.com>
-Subject: Re: [RFC PATCH 05/11] mm/mempolicy: modify set_mempolicy_home_node
- to take a task argument
-Message-ID: <ZWX0KkaUGJoUdmQS@tiehlicka>
+Subject: Re: [RFC PATCH 06/11] mm/mempolicy: modify do_mbind to operate on
+ task argument instead of current
+Message-ID: <ZWX0-hEjqkmnR1Nq@tiehlicka>
 References: <20231122211200.31620-1-gregory.price@memverge.com>
- <20231122211200.31620-6-gregory.price@memverge.com>
+ <20231122211200.31620-7-gregory.price@memverge.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -57,68 +66,72 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231122211200.31620-6-gregory.price@memverge.com>
-X-Spamd-Bar: +++++++++++++++
-X-Spam-Score: 15.00
-X-Rspamd-Server: rspamd1
-Authentication-Results: smtp-out2.suse.de;
-	dkim=none;
-	spf=fail (smtp-out2.suse.de: domain of mhocko@suse.com does not designate 2a07:de40:b281:104:10:150:64:97 as permitted sender) smtp.mailfrom=mhocko@suse.com;
-	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.com (policy=quarantine)
-X-Rspamd-Queue-Id: 01DF81F74B
-X-Spamd-Result: default: False [15.00 / 50.00];
+In-Reply-To: <20231122211200.31620-7-gregory.price@memverge.com>
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spamd-Result: default: False [0.70 / 50.00];
 	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_SPF_FAIL(1.00)[-all];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FREEMAIL_TO(0.00)[gmail.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
 	 ARC_NA(0.00)[];
 	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
 	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
 	 TO_MATCH_ENVRCPT_ALL(0.00)[];
 	 TAGGED_RCPT(0.00)[];
 	 MIME_GOOD(-0.10)[text/plain];
 	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DMARC_POLICY_QUARANTINE(1.50)[suse.com : No valid SPF, No valid DKIM,quarantine];
-	 BAYES_HAM(-0.00)[43.15%];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
 	 RCPT_COUNT_TWELVE(0.00)[19];
-	 FREEMAIL_TO(0.00)[gmail.com];
 	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 R_DKIM_NA(2.20)[];
-	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
 	 RCVD_TLS_ALL(0.00)[];
 	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam: Yes
+X-Spam-Score: 0.70
 
-On Wed 22-11-23 16:11:54, Gregory Price wrote:
+On Wed 22-11-23 16:11:55, Gregory Price wrote:
 [...]
-> +
-> +	/*
-> +	 * Behavior when task == current allows a task modifying itself
-> +	 * to bypass the check in get_task_mm and acquire the mm directly
-> +	 */
-> +	if (task == current) {
-> +		mm = task->mm;
-> +		mmget(mm);
-> +	} else
-> +		mm = get_task_mm(task);
+> + * Like get_vma_policy and get_task_policy, must hold alloc/task_lock
+> + * while calling this.
+> + */
+> +static struct mempolicy *get_task_vma_policy(struct task_struct *task,
+> +					     struct vm_area_struct *vma,
+> +					     unsigned long addr, int order,
+> +					     pgoff_t *ilx)
+[...]
 
-Similar question as in the previous patch. When is a kthread legit to do
-manipulate borrowed mm memory policy?
+You should add lockdep annotation for alloc_lock/task_lock here for clarity and 
+also...  
+> @@ -1844,16 +1899,7 @@ struct mempolicy *__get_vma_policy(struct vm_area_struct *vma,
+>  struct mempolicy *get_vma_policy(struct vm_area_struct *vma,
+>  				 unsigned long addr, int order, pgoff_t *ilx)
+>  {
+> -	struct mempolicy *pol;
+> -
+> -	pol = __get_vma_policy(vma, addr, ilx);
+> -	if (!pol)
+> -		pol = get_task_policy(current);
+> -	if (pol->mode == MPOL_INTERLEAVE) {
+> -		*ilx += vma->vm_pgoff >> order;
+> -		*ilx += (addr - vma->vm_start) >> (PAGE_SHIFT + order);
+> -	}
+> -	return pol;
+> +	return get_task_vma_policy(current, vma, addr, order, ilx);
 
-> +
-> +	if (!mm)
-> +		return -ENODEV;
+I do not think that all get_vma_policy take task_lock (just random check
+dequeue_hugetlb_folio_vma->huge_node->get_vma_policy AFAICS)
 
-Is this an expected error? No mm means task dying and mm has been
-already released. Should we simply return ESRCH wouldbe a better error
-code IMO. This should never happen for the current task so it sould be
-safe to add.
-
+Also I do not see policy_nodemask to be handled anywhere. That one is
+used along with get_vma_policy (sometimes hidden like in
+alloc_pages_mpol). It has a dependency on
+cpuset_nodemask_valid_mems_allowed. That means that e.g. mbind on a
+remote task would be constrained by current task cpuset when allocating
+migration targets for the target task. I am wondering how many other
+dependencies like that are lurking there.
 -- 
 Michal Hocko
 SUSE Labs
