@@ -1,88 +1,201 @@
-Return-Path: <linux-arch+bounces-478-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-479-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AF507FAD59
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 23:20:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED8887FB15E
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 06:39:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A164EB210AA
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Nov 2023 22:20:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C979B20FFC
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 05:39:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F2F48CCE;
-	Mon, 27 Nov 2023 22:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC753101CE;
+	Tue, 28 Nov 2023 05:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uSglpwtt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bXsqjc+O"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC812112
-	for <linux-arch@vger.kernel.org>; Mon, 27 Nov 2023 14:20:47 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5ccc8b7f578so75119837b3.2
-        for <linux-arch@vger.kernel.org>; Mon, 27 Nov 2023 14:20:47 -0800 (PST)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FC5D63
+	for <linux-arch@vger.kernel.org>; Mon, 27 Nov 2023 21:39:29 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cfaf05db73so77165ad.0
+        for <linux-arch@vger.kernel.org>; Mon, 27 Nov 2023 21:39:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701123647; x=1701728447; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oznesxFwrvBjWVLV8MzMnU76lp7dsyZKrsJygxTLUfs=;
-        b=uSglpwttk5Fyc0kVd9ilOFq7e5RjvY3YcgqHqS8KNCXnzcUgktluRBwDqGP3zlo2tm
-         Ah/GuhXDMQ/Vs4mXsrpuyWft83AUzRGaCs6+POLNx7uadwyIGJx/0M9SPhYEH5xc5jKs
-         VYH1d0Od/gvDozUdntLP5hhnSMnWO3CR9XKCoyTd5SBvwZxHgM9I9KF8Wqpw7epKfJxY
-         gboFmdX89mSmvJ/L2aFAYmmRxVUYMjLc38Hbv79dLY5fGx3vtt8LpopXmbhlB7QvVOs0
-         AaXQAU2b1s633wVpSGBa4R3FheeLjJBva+tg8SXgn4uBPXo4Y36jlojET+yz66PRTica
-         6NmA==
+        d=google.com; s=20230601; t=1701149968; x=1701754768; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hd11373At0fgNthDfz475jB2pnftz8WhsrA0gYblitY=;
+        b=bXsqjc+O5lZombFifNkiB/W9AfwHyZFQ5SLgjbDKMWasF8nfXxWucjm+pLF9q3ltG8
+         hWu+arqrb5nyPU5LfwYm3OQqevjctUuBwRkzRQo9/TD8xmYcXESa0baCmh8igVavgGAU
+         A+bJonGvaqIDwNd5J1K9IB6tgYId5oH3Gn5jCz9ShWNpUwe7mARFCA5czA1Q04PKKk+j
+         qII1dgoS7kry8uzXKIdABg91Fg6+7nt2hROBNRJmJ/XTU4lJbf1Hx7vjLvTA8zxhySZC
+         sZKi1YoBWc1RamGA7oevhBsV1Ea6eybFg7uRFdbpf+Em5JTHNa/5SlFtOGDJE6IIWv/6
+         PLvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701123647; x=1701728447;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oznesxFwrvBjWVLV8MzMnU76lp7dsyZKrsJygxTLUfs=;
-        b=YOwJDpFC1nmq5muVIKaRY6rlO7mAzwCRHHD0hrGoMy919bVapDpiCdvy+Z2Q2ZG4/e
-         +zkICZdE4K3O0PFBpQcjAVt/uPaxC/yYzYKKeOE2m2AVx6lTOGy3r3nMv9aBHmpmID5f
-         njDpdI0taQxv+sRArEJA9hNJ7KJbynTDnYNtUD5pVdocp9NdCMwJbG50m3gJV20MMjKB
-         euLrZGaIUlhyVrVsAtO0iBejpLKpnryaSiPmfUbm7Lk1t9iPuEUXuppWWlVFxRzUJ0n4
-         UoEHSt++Je3DnrZ5wgO4wpXhswP131naZr2USRINb5metcf1ff3jMgoY1Qv1EJUnYhMO
-         Z0ow==
-X-Gm-Message-State: AOJu0YwYaWIXGxb+yO7upII4H4DLUBL5K7xTn5XeaoahHyTTuAZOkm6f
-	Veqzh1N99IxTHDMOIbwQg3dj6jPSUxM=
-X-Google-Smtp-Source: AGHT+IFwra0+HV5FKvUpEQxDt3kN8Dy+vJAehp6awy7CFsSorhFrKshysFPUsywbqDFjIVgQl8OCUKb9/sk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4406:0:b0:5cb:6639:8024 with SMTP id
- r6-20020a814406000000b005cb66398024mr417245ywa.6.1701123646847; Mon, 27 Nov
- 2023 14:20:46 -0800 (PST)
-Date: Mon, 27 Nov 2023 14:20:45 -0800
-In-Reply-To: <20231120105528.760306-4-vschneid@redhat.com>
+        d=1e100.net; s=20230601; t=1701149968; x=1701754768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hd11373At0fgNthDfz475jB2pnftz8WhsrA0gYblitY=;
+        b=CPRUk/zJ8HAV3GEGOsgPdZ+3WBx6bjZ9FilFO3+Pa16CC93jLE5CN/6Ui3iiT4QnZv
+         2gdjwktC9FD/z+KhxK5fps8DA8g0CpZfamNMNkR/QBEYi/GUSMYx2eBkTsUsIVWV34YU
+         XpIfTdkeyA6OeWzd9Jev/ws4Tof/UXuHMaU5aULYETFGVFtXRL+QnXqWeqM+e9vk4A4P
+         RXzHEx7iNF9EYuiu0B95kUxa9uuVwCw/OmKVtMeXoVF8zGnc3qQXuBfx+m8VokS9Ov+9
+         jKTNbJCYXW4/7A3ksAX7qXbuxMzyoqEDzlo+b1YqGzETvlKA0y9+s0pXix6uFJuYou4E
+         s9DA==
+X-Gm-Message-State: AOJu0Yy7jILH5BTUzl0WrCOPyz01tRQLrMJrFG1XUX/QRU5nm/pj0qLr
+	99NQEBecKNtfGz+wcfg0pzI2QJn4MPVpyVfgCH7gOA==
+X-Google-Smtp-Source: AGHT+IHMM+TBLPbm7+22ArJ0V2KCgdhbcD8w4150pEudfRnDapexGxJDfjwu4kPbNStb74F9bfmDWp9Y8DnvbExoUpc=
+X-Received: by 2002:a17:903:1206:b0:1cf:6f62:88d9 with SMTP id
+ l6-20020a170903120600b001cf6f6288d9mr1243304plh.9.1701149968448; Mon, 27 Nov
+ 2023 21:39:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231120105528.760306-1-vschneid@redhat.com> <20231120105528.760306-4-vschneid@redhat.com>
-Message-ID: <ZWUWPQJLY4rzHXFR@google.com>
-Subject: Re: [PATCH 3/5] x86/kvm: Make kvm_async_pf_enabled __ro_after_init
-From: Sean Christopherson <seanjc@google.com>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-arch@vger.kernel.org, x86@kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>, Wanpeng Li <wanpengli@tencent.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Feng Tang <feng.tang@intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, David Hildenbrand <david@redhat.com>, 
-	"ndesaulniers@google.com" <ndesaulniers@google.com>, Michael Kelley <mikelley@microsoft.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20231119165721.9849-1-alexandru.elisei@arm.com> <20231119165721.9849-22-alexandru.elisei@arm.com>
+In-Reply-To: <20231119165721.9849-22-alexandru.elisei@arm.com>
+From: Peter Collingbourne <pcc@google.com>
+Date: Mon, 27 Nov 2023 21:39:17 -0800
+Message-ID: <CAMn1gO5WYC5Xx7LfBxN_j-xqkVT+tjXP5PqDfrvhgqPOa0ZCsA@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 21/27] mm: arm64: Handle tag storage pages mapped
+ before mprotect(PROT_MTE)
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
+	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, steven.price@arm.com, 
+	anshuman.khandual@arm.com, vincenzo.frascino@arm.com, david@redhat.com, 
+	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 20, 2023, Valentin Schneider wrote:
-> kvm_async_pf_enabled is only ever enabled in __init kvm_guest_init(), so
-> mark it as __ro_after_init.
-> 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Hi Alexandru,
+
+On Sun, Nov 19, 2023 at 8:59=E2=80=AFAM Alexandru Elisei
+<alexandru.elisei@arm.com> wrote:
+>
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 > ---
+>  arch/arm64/include/asm/mte_tag_storage.h |  1 +
+>  arch/arm64/kernel/mte_tag_storage.c      | 15 +++++++
+>  arch/arm64/mm/fault.c                    | 55 ++++++++++++++++++++++++
+>  include/linux/migrate.h                  |  8 +++-
+>  include/linux/migrate_mode.h             |  1 +
+>  mm/internal.h                            |  6 ---
+>  6 files changed, 78 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/includ=
+e/asm/mte_tag_storage.h
+> index b97406d369ce..6a8b19a6a758 100644
+> --- a/arch/arm64/include/asm/mte_tag_storage.h
+> +++ b/arch/arm64/include/asm/mte_tag_storage.h
+> @@ -33,6 +33,7 @@ int reserve_tag_storage(struct page *page, int order, g=
+fp_t gfp);
+>  void free_tag_storage(struct page *page, int order);
+>
+>  bool page_tag_storage_reserved(struct page *page);
+> +bool page_is_tag_storage(struct page *page);
+>
+>  vm_fault_t handle_page_missing_tag_storage(struct vm_fault *vmf);
+>  vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf);
+> diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_=
+tag_storage.c
+> index a1cc239f7211..5096ce859136 100644
+> --- a/arch/arm64/kernel/mte_tag_storage.c
+> +++ b/arch/arm64/kernel/mte_tag_storage.c
+> @@ -500,6 +500,21 @@ bool page_tag_storage_reserved(struct page *page)
+>         return test_bit(PG_tag_storage_reserved, &page->flags);
+>  }
+>
+> +bool page_is_tag_storage(struct page *page)
+> +{
+> +       unsigned long pfn =3D page_to_pfn(page);
+> +       struct range *tag_range;
+> +       int i;
+> +
+> +       for (i =3D 0; i < num_tag_regions; i++) {
+> +               tag_range =3D &tag_regions[i].tag_range;
+> +               if (tag_range->start <=3D pfn && pfn <=3D tag_range->end)
+> +                       return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  int reserve_tag_storage(struct page *page, int order, gfp_t gfp)
+>  {
+>         unsigned long start_block, end_block;
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 6730a0812a24..964c5ae161a3 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/extable.h>
+>  #include <linux/kfence.h>
+>  #include <linux/signal.h>
+> +#include <linux/migrate.h>
+>  #include <linux/mm.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/init.h>
+> @@ -956,6 +957,50 @@ void tag_clear_highpage(struct page *page)
+>  }
+>
+>  #ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+> +
+> +#define MR_TAGGED_TAG_STORAGE  MR_ARCH_1
+> +
+> +extern bool isolate_lru_page(struct page *page);
+> +extern void putback_movable_pages(struct list_head *l);
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Could we move these declarations to a non-mm-internal header and
+#include it instead of manually declaring them here?
+
+> +
+> +/* Returns with the page reference dropped. */
+> +static void migrate_tag_storage_page(struct page *page)
+> +{
+> +       struct migration_target_control mtc =3D {
+> +               .nid =3D NUMA_NO_NODE,
+> +               .gfp_mask =3D GFP_HIGHUSER_MOVABLE | __GFP_TAGGED,
+> +       };
+> +       unsigned long i, nr_pages =3D compound_nr(page);
+> +       LIST_HEAD(pagelist);
+> +       int ret, tries;
+> +
+> +       lru_cache_disable();
+> +
+> +       for (i =3D 0; i < nr_pages; i++) {
+> +               if (!isolate_lru_page(page + i)) {
+> +                       ret =3D -EAGAIN;
+> +                       goto out;
+> +               }
+> +               /* Isolate just grabbed another reference, drop ours. */
+> +               put_page(page + i);
+> +               list_add_tail(&(page + i)->lru, &pagelist);
+> +       }
+> +
+> +       tries =3D 5;
+> +       while (tries--) {
+> +               ret =3D migrate_pages(&pagelist, alloc_migration_target, =
+NULL, (unsigned long)&mtc,
+> +                                   MIGRATE_SYNC, MR_TAGGED_TAG_STORAGE, =
+NULL);
+> +               if (ret =3D=3D 0 || ret !=3D -EBUSY)
+
+This could be simplified to:
+
+if (ret !=3D -EBUSY)
+
+Peter
 
