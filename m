@@ -1,156 +1,190 @@
-Return-Path: <linux-arch+bounces-513-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-514-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F09B17FBF30
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:29:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3057E7FBFD2
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:57:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC2852828B9
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 16:29:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 612861C20C84
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 16:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAD549F65;
-	Tue, 28 Nov 2023 16:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D0E1E49F;
+	Tue, 28 Nov 2023 16:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="L9B36PfU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DcmDT7nH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2ADFD51;
-	Tue, 28 Nov 2023 08:29:02 -0800 (PST)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASGRmKO022842;
-	Tue, 28 Nov 2023 16:28:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=v5tUjc7w7x68+zEuTzqQmhFsKGO6AZKfikkoXHbnbHo=;
- b=L9B36PfUGkfRryzE1WIAX6LaAKndsaRdl67ogsFzbWhtc9ZsOZanaIdlUgwbTLZqETRd
- eHjByrr72BmSVvhW2xLS0Qt/JHk9T5XqmXUhRZ0vZlNmxCQqMLW7zEghjgQ6cLMNjNQd
- RqmViHyEmcGv+z7/XTStkBiCdes7wBfa9wT+Tgt6vqROzYohi0TnXX+p5m0gJY7kqtzu
- WdmzkT6luoF6iLRVm3ppbQSx9EjhbbTeRue3nWkvAulb2KIiPYT/Vd8FQ0eAkqUOO3Aj
- lYF7OufxrrTlBBiNDh/nei9CkO0cCq2m00DmsG5VxFZIaCWnHgAvRDrtu1owCKDtMzDr 5g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unknq871e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Nov 2023 16:28:41 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ASGSeHf028034;
-	Tue, 28 Nov 2023 16:28:40 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unknq86yx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Nov 2023 16:28:40 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASG8Ap9028313;
-	Tue, 28 Nov 2023 16:28:38 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukv8ngw6u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Nov 2023 16:28:38 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ASGSa0P18678504
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Nov 2023 16:28:36 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 782B92004B;
-	Tue, 28 Nov 2023 16:28:36 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 36CCF20043;
-	Tue, 28 Nov 2023 16:28:36 +0000 (GMT)
-Received: from [9.152.212.236] (unknown [9.152.212.236])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 28 Nov 2023 16:28:36 +0000 (GMT)
-Message-ID: <002043477bba726f7dfb38573bf33990e38e3a51.camel@linux.ibm.com>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
-        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
-        Nathan
- Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>, Gerd Bayer <gbayer@linux.ibm.com>
-Date: Tue, 28 Nov 2023 17:28:36 +0100
-In-Reply-To: <20231127175115.GC1165737@nvidia.com>
-References: <cover.1700766072.git.leon@kernel.org>
-	 <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
-	 <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
-	 <20231124142049.GF436702@nvidia.com>
-	 <14103e31e0c47c0594e7479126ce7fe34f2de467.camel@linux.ibm.com>
-	 <20231124145529.GG436702@nvidia.com>
-	 <b3250b9a9af2f29ee3d06830746fb6e8ac49271d.camel@linux.ibm.com>
-	 <20231124160627.GH436702@nvidia.com>
-	 <637dcc4d69c380bd939dfdd1b14a5c82c2ddfaa4.camel@linux.ibm.com>
-	 <20231127175115.GC1165737@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED42D64
+	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 08:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701190657;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Mhz2aAjozGznk5js3AKekQTCp0LGPxPOzTnF3OrDrGk=;
+	b=DcmDT7nHwttuTinhgZ24+i8amJxNNGQJW3QwvNLDU/pKBoNiybFcAGaJO1T31yGOY1J1Y+
+	AVx3ib0g+L2zDqElnT80HtS2dyRLAAWB72PL5RCOfVbAEG6maYykdh187PqvRFKPZkYTZd
+	FF7nGHcPigQO5g5TV7VjQDznNaXUlQU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-619-XYAKrY8wMw-G-C4xYDrl2Q-1; Tue, 28 Nov 2023 11:57:35 -0500
+X-MC-Unique: XYAKrY8wMw-G-C4xYDrl2Q-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40b4096abc8so19400285e9.0
+        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 08:57:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701190654; x=1701795454;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mhz2aAjozGznk5js3AKekQTCp0LGPxPOzTnF3OrDrGk=;
+        b=v+YHjTAckOMC3PYJFM11SH4c5CMKkHLW/Y5UkgExa0hfkVgRzrekEAQy8q0oBL25dl
+         tMDpijbmfUOcfFQ7SL2/U+h885RnCADDY53hjVWRP12cKVGZycHLHvfJKFhw8v09MvWp
+         ip/4DL2S/amZei6ynzWQae74Ve0itxbIBtz7gHwUFaBfNzYEiIsHw5aTIFh2D2cOldKH
+         UwFZYXC0IYzP8I3vEVDTzAZERfFl1F/hPXjmgs08BARwMVUoEqHvT6eD8DEs/4ItnxHl
+         gXldxfYLGl/p7zQaigMFbQLLJGawvNKoHC6kCzRv2xp2o4ceHvhFYtPfOBnho9kenMDW
+         zS/Q==
+X-Gm-Message-State: AOJu0YwC+uZlu9MV2yEau4V0EN3zAcnzG1PD0Z21yKcy2TiK1Fl6DrOb
+	HO15vMP2xZ0vNmXX7jKqSowqE0zHBFpZvze2XqHUVWHGiJH9Svu5IQcbwmMuqXgCUjCmeA388Gn
+	SSAk7y3C4aL2YbHnCOLvkwQ==
+X-Received: by 2002:a05:600c:5486:b0:40b:4aee:ea9e with SMTP id iv6-20020a05600c548600b0040b4aeeea9emr1841380wmb.17.1701190654569;
+        Tue, 28 Nov 2023 08:57:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE2rxk0Q3GVvHMRjedMUVFzyjVJeCSZm/niH70YFfgmRZLrknHuTNDj9GCIicfRzDSV2e5yEg==
+X-Received: by 2002:a05:600c:5486:b0:40b:4aee:ea9e with SMTP id iv6-20020a05600c548600b0040b4aeeea9emr1841351wmb.17.1701190654112;
+        Tue, 28 Nov 2023 08:57:34 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:1d00:99ec:9656:7475:678d? (p200300cbc7081d0099ec96567475678d.dip0.t-ipconnect.de. [2003:cb:c708:1d00:99ec:9656:7475:678d])
+        by smtp.gmail.com with ESMTPSA id m6-20020a5d4a06000000b003330aede2aesm2717126wrq.112.2023.11.28.08.57.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Nov 2023 08:57:33 -0800 (PST)
+Message-ID: <0a0f9345-3138-4e89-80cd-c7edaf2ff62d@redhat.com>
+Date: Tue, 28 Nov 2023 17:57:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: m3GuGqo-WfsgSfsHxk8AUvi0qc6ugx63
-X-Proofpoint-ORIG-GUID: 9gK5zH9ByTU6i2fZHiPVrOhbnpNNm5mL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-28_18,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
- mlxlogscore=598 suspectscore=0 phishscore=0 impostorscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311280131
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v2 05/27] mm: page_alloc: Add an arch hook to allow
+ prep_new_page() to fail
+Content-Language: en-US
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+ maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+ yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+ mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+ vschneid@redhat.com, mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
+ pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
+ vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
+ hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+References: <20231119165721.9849-1-alexandru.elisei@arm.com>
+ <20231119165721.9849-6-alexandru.elisei@arm.com>
+ <dadc9d17-f311-47f1-a264-28b42bed0ab0@redhat.com> <ZWSHF2hVOPTBIQLY@raptor>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <ZWSHF2hVOPTBIQLY@raptor>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2023-11-27 at 13:51 -0400, Jason Gunthorpe wrote:
-> On Mon, Nov 27, 2023 at 06:43:11PM +0100, Niklas Schnelle wrote:
->=20
-> > Also it turns out the writeq() loop we had so far does not produce the
-> > needed 64 byte TLP on s390 either so this actually makes us newly pass
-> > this test.
->=20
-> Ooh, that is a significant problem - the userspace code won't be used
-> unless this test passes. So we need this on S390 to fix a bug as well
-> :\
->=20
-> Thanks,
-> Jason
->=20
+On 27.11.23 13:09, Alexandru Elisei wrote:
+> Hi,
+> 
+> Thank you so much for your comments, there are genuinely useful.
+> 
+> On Fri, Nov 24, 2023 at 08:35:47PM +0100, David Hildenbrand wrote:
+>> On 19.11.23 17:56, Alexandru Elisei wrote:
+>>> Introduce arch_prep_new_page(), which will be used by arm64 to reserve tag
+>>> storage for an allocated page. Reserving tag storage can fail, for example,
+>>> if the tag storage page has a short pin on it, so allow prep_new_page() ->
+>>> arch_prep_new_page() to similarly fail.
+>>
+>> But what are the side-effects of this? How does the calling code recover?
+>>
+>> E.g., what if we need to populate a page into user space, but that
+>> particular page we allocated fails to be prepared? So we inject a signal
+>> into that poor process?
+> 
+> When the page fails to be prepared, it is put back to the tail of the
+> freelist with __free_one_page(.., FPI_TO_TAIL). If all the allocation paths
+> are exhausted and no page has been found for which tag storage has been
+> reserved, then that's treated like an OOM situation.
+> 
+> I have been thinking about this, and I think I can simplify the code by
+> making tag reservation a best effort approach. The page can be allocated
+> even if reserving tag storage fails, but the page is marked as invalid in
+> set_pte_at() (PAGE_NONE + an extra bit to tell arm64 that it needs tag
+> storage) and next time it is accessed, arm64 will reserve tag storage in
+> the fault handling code (the mechanism for that is implemented in patch #19
+> of the series, "mm: mprotect: Introduce PAGE_FAULT_ON_ACCESS for
+> mprotect(PROT_MTE)").
+> 
+> With this new approach, prep_new_page() stays the way it is, and no further
+> changes are required for the page allocator, as there are already arch
+> callbacks that can be used for that, for example tag_clear_highpage() and
+> arch_alloc_page(). The downside is extra page faults, which might impact
+> performance.
+> 
+> What do you think?
 
-Yes ;-(
+That sounds a lot more robust, compared to intermittent failures to 
+allocate pages.
 
-In the meantime I also found out that zpci_write_block(dst, src, 64) is
-not correct for all cases because the PCI store block requires the
-(pseudo-)MMIO write not to cross a 4K boundary and we need src/dst to
-be double word aligned. In rdma-core this is neatly handled by the
-get_max_write_size() but the kernel variant of that
-zpci_get_max_write_size() isn't just a lot harder to read and likely
-less efficient but also too strict thus breaking the 64 byte write up
-needlessly.
+-- 
+Cheers,
 
-In total we have 5 conditions for the PCI block stores:
+David / dhildenb
 
-1. The dst+len must not cross a 4K boundary in the (pseudo-)MMIO space
-2. The length must not exceed the maximum write size
-3. The length must be a multiple of 8
-4. The src needs to be double word aligned
-5. The dst needs to be double word aligned
-
-So I think a good solution would be to improve zpci_memcpy_toio() with
-an enhanced zpci_get_max_write_size() based on the code in rdma-core
-extended to also handle the alignment and length restrictions which in
-rdma-core are already assumed (see comment there).=C2=A0Then we can use
-zpci_memcpy_toio(dst, src, 64) for memcpy_toio_64() and rely on the
-compiler to optimize out the unnecessary checks (2, 3 and possibly 4,
-5).
-
-So yeah this is getting a bit more  complicated than originally
-thought. Let me cook up a patch.
-
-Thanks,
-Niklas
 
