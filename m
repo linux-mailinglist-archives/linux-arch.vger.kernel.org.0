@@ -1,67 +1,67 @@
-Return-Path: <linux-arch+bounces-514-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-515-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3057E7FBFD2
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:57:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 096557FBFD7
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:59:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 612861C20C84
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 16:57:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3F0B2829D9
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 16:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D0E1E49F;
-	Tue, 28 Nov 2023 16:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94433495E9;
+	Tue, 28 Nov 2023 16:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DcmDT7nH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gpB+Q9JO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED42D64
-	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 08:57:38 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539BAD51
+	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 08:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701190657;
+	s=mimecast20190719; t=1701190740;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Mhz2aAjozGznk5js3AKekQTCp0LGPxPOzTnF3OrDrGk=;
-	b=DcmDT7nHwttuTinhgZ24+i8amJxNNGQJW3QwvNLDU/pKBoNiybFcAGaJO1T31yGOY1J1Y+
-	AVx3ib0g+L2zDqElnT80HtS2dyRLAAWB72PL5RCOfVbAEG6maYykdh187PqvRFKPZkYTZd
-	FF7nGHcPigQO5g5TV7VjQDznNaXUlQU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=ARXPoGFWKY6GPjLpkC0tgTNlXBydSFtVB0gMxNB1348=;
+	b=gpB+Q9JO80TBZXZlKmIeGQgaq9oqYdDE7RAn4w1jbHAnGMWw8oF2/qFQ3tPXi9aSkyw1cO
+	FErVlqg3vCMJgH5UR3YeJkWnUvYBLjgMK1K1uepw+T6QKnY8Th5m6FRaTPKXtK1KkuWXm5
+	lQKVcU/W5kEetdzmB3rXSD6c3OQxnnw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-619-XYAKrY8wMw-G-C4xYDrl2Q-1; Tue, 28 Nov 2023 11:57:35 -0500
-X-MC-Unique: XYAKrY8wMw-G-C4xYDrl2Q-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40b4096abc8so19400285e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 08:57:35 -0800 (PST)
+ us-mta-654-063Q5ubhNMCopUnaifYLWQ-1; Tue, 28 Nov 2023 11:58:58 -0500
+X-MC-Unique: 063Q5ubhNMCopUnaifYLWQ-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33303db14d9so1533290f8f.1
+        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 08:58:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701190654; x=1701795454;
+        d=1e100.net; s=20230601; t=1701190737; x=1701795537;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :references:cc:to:content-language:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mhz2aAjozGznk5js3AKekQTCp0LGPxPOzTnF3OrDrGk=;
-        b=v+YHjTAckOMC3PYJFM11SH4c5CMKkHLW/Y5UkgExa0hfkVgRzrekEAQy8q0oBL25dl
-         tMDpijbmfUOcfFQ7SL2/U+h885RnCADDY53hjVWRP12cKVGZycHLHvfJKFhw8v09MvWp
-         ip/4DL2S/amZei6ynzWQae74Ve0itxbIBtz7gHwUFaBfNzYEiIsHw5aTIFh2D2cOldKH
-         UwFZYXC0IYzP8I3vEVDTzAZERfFl1F/hPXjmgs08BARwMVUoEqHvT6eD8DEs/4ItnxHl
-         gXldxfYLGl/p7zQaigMFbQLLJGawvNKoHC6kCzRv2xp2o4ceHvhFYtPfOBnho9kenMDW
-         zS/Q==
-X-Gm-Message-State: AOJu0YwC+uZlu9MV2yEau4V0EN3zAcnzG1PD0Z21yKcy2TiK1Fl6DrOb
-	HO15vMP2xZ0vNmXX7jKqSowqE0zHBFpZvze2XqHUVWHGiJH9Svu5IQcbwmMuqXgCUjCmeA388Gn
-	SSAk7y3C4aL2YbHnCOLvkwQ==
-X-Received: by 2002:a05:600c:5486:b0:40b:4aee:ea9e with SMTP id iv6-20020a05600c548600b0040b4aeeea9emr1841380wmb.17.1701190654569;
-        Tue, 28 Nov 2023 08:57:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE2rxk0Q3GVvHMRjedMUVFzyjVJeCSZm/niH70YFfgmRZLrknHuTNDj9GCIicfRzDSV2e5yEg==
-X-Received: by 2002:a05:600c:5486:b0:40b:4aee:ea9e with SMTP id iv6-20020a05600c548600b0040b4aeeea9emr1841351wmb.17.1701190654112;
-        Tue, 28 Nov 2023 08:57:34 -0800 (PST)
+        bh=ARXPoGFWKY6GPjLpkC0tgTNlXBydSFtVB0gMxNB1348=;
+        b=SQto0WKaJzkcl8z5jgJoLtf/XAPuyUFk3imTq9+VOuA4flSSWS1Kwa9kEsNoO90Sfx
+         wF6tNzkuIsmA9FxOic1nv0vRylzHLF4pUGvJctOkIIfQQCT0topMOpVgmARf/8z2u/4P
+         Fq7E8xxEwSbEp6EUGfQbXlOqsvJu54Vo1KXIuJEXKIKiIFj4OZCKOS93J9SsFcbUqJMm
+         QsK9t/m935slP/CHveBwWBPGDhqx6Z2lOFTmxSh0XFY3dKfdNtI99E7jmher4d5JFA5+
+         k/d+up9r2beQFbdEHFubRGoCAdXYjBijYjcYlklUIFdbeg7wsjvZNKXmYdYuRHRrQhd4
+         bYUw==
+X-Gm-Message-State: AOJu0YxQrSG6jJd1qHlKz50JyKtQ+9GLtZiUW79CTX8CxDZxLUQkmcau
+	QbGVFWXK8zkjec0t+AlO/H01I8N41DqnrBJkGC9B+znTcaQy2y29lV0H72vMeq1fvUP30JUxGCZ
+	7X4r+yvM5SMjo7fvmS9cAxA==
+X-Received: by 2002:a05:6000:b44:b0:331:6e10:e51d with SMTP id dk4-20020a0560000b4400b003316e10e51dmr11664609wrb.31.1701190737615;
+        Tue, 28 Nov 2023 08:58:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHrI5mA/WuLGFqFY7554t1sO60OVxHSrP19L9qI42Lhus8e7ZvfT9ziI2Wde4LI9kXUjO94/g==
+X-Received: by 2002:a05:6000:b44:b0:331:6e10:e51d with SMTP id dk4-20020a0560000b4400b003316e10e51dmr11664570wrb.31.1701190737210;
+        Tue, 28 Nov 2023 08:58:57 -0800 (PST)
 Received: from ?IPV6:2003:cb:c708:1d00:99ec:9656:7475:678d? (p200300cbc7081d0099ec96567475678d.dip0.t-ipconnect.de. [2003:cb:c708:1d00:99ec:9656:7475:678d])
-        by smtp.gmail.com with ESMTPSA id m6-20020a5d4a06000000b003330aede2aesm2717126wrq.112.2023.11.28.08.57.32
+        by smtp.gmail.com with ESMTPSA id m6-20020a5d4a06000000b003330aede2aesm2717126wrq.112.2023.11.28.08.58.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 08:57:33 -0800 (PST)
-Message-ID: <0a0f9345-3138-4e89-80cd-c7edaf2ff62d@redhat.com>
-Date: Tue, 28 Nov 2023 17:57:31 +0100
+        Tue, 28 Nov 2023 08:58:56 -0800 (PST)
+Message-ID: <2e2d3f51-34e3-4982-b982-ab7b555cba21@redhat.com>
+Date: Tue, 28 Nov 2023 17:58:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 05/27] mm: page_alloc: Add an arch hook to allow
- prep_new_page() to fail
+Subject: Re: [PATCH RFC v2 06/27] mm: page_alloc: Allow an arch to hook early
+ into free_pages_prepare()
 Content-Language: en-US
 To: Alexandru Elisei <alexandru.elisei@arm.com>
 Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
@@ -87,8 +87,8 @@ Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
  linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
  linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
 References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-6-alexandru.elisei@arm.com>
- <dadc9d17-f311-47f1-a264-28b42bed0ab0@redhat.com> <ZWSHF2hVOPTBIQLY@raptor>
+ <20231119165721.9849-7-alexandru.elisei@arm.com>
+ <45466b05-d620-41e5-8a2b-05c420b8fa7b@redhat.com> <ZWSTiCghf8nMFy4G@raptor>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -135,52 +135,42 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <ZWSHF2hVOPTBIQLY@raptor>
+In-Reply-To: <ZWSTiCghf8nMFy4G@raptor>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 27.11.23 13:09, Alexandru Elisei wrote:
+On 27.11.23 14:03, Alexandru Elisei wrote:
 > Hi,
 > 
-> Thank you so much for your comments, there are genuinely useful.
-> 
-> On Fri, Nov 24, 2023 at 08:35:47PM +0100, David Hildenbrand wrote:
->> On 19.11.23 17:56, Alexandru Elisei wrote:
->>> Introduce arch_prep_new_page(), which will be used by arm64 to reserve tag
->>> storage for an allocated page. Reserving tag storage can fail, for example,
->>> if the tag storage page has a short pin on it, so allow prep_new_page() ->
->>> arch_prep_new_page() to similarly fail.
+> On Fri, Nov 24, 2023 at 08:36:52PM +0100, David Hildenbrand wrote:
+>> On 19.11.23 17:57, Alexandru Elisei wrote:
+>>> Add arch_free_pages_prepare() hook that is called before that page flags
+>>> are cleared. This will be used by arm64 when explicit management of tag
+>>> storage pages is enabled.
 >>
->> But what are the side-effects of this? How does the calling code recover?
->>
->> E.g., what if we need to populate a page into user space, but that
->> particular page we allocated fails to be prepared? So we inject a signal
->> into that poor process?
+>> Can you elaborate a bit what exactly will be done by that code with that
+>> information?
 > 
-> When the page fails to be prepared, it is put back to the tail of the
-> freelist with __free_one_page(.., FPI_TO_TAIL). If all the allocation paths
-> are exhausted and no page has been found for which tag storage has been
-> reserved, then that's treated like an OOM situation.
+> Of course.
 > 
-> I have been thinking about this, and I think I can simplify the code by
-> making tag reservation a best effort approach. The page can be allocated
-> even if reserving tag storage fails, but the page is marked as invalid in
-> set_pte_at() (PAGE_NONE + an extra bit to tell arm64 that it needs tag
-> storage) and next time it is accessed, arm64 will reserve tag storage in
-> the fault handling code (the mechanism for that is implemented in patch #19
-> of the series, "mm: mprotect: Introduce PAGE_FAULT_ON_ACCESS for
-> mprotect(PROT_MTE)").
+> The MTE code that is in the kernel today uses the PG_arch_2 page flag, which it
+> renames to PG_mte_tagged, to track if a page has been mapped with tagging
+> enabled. That flag is cleared by free_pages_prepare() when it does:
 > 
-> With this new approach, prep_new_page() stays the way it is, and no further
-> changes are required for the page allocator, as there are already arch
-> callbacks that can be used for that, for example tag_clear_highpage() and
-> arch_alloc_page(). The downside is extra page faults, which might impact
-> performance.
+> 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
 > 
-> What do you think?
+> When tag storage management is enabled, tag storage is reserved for a page if
+> and only if the page is mapped as tagged. When a page is freed, the code looks
+> at the PG_mte_tagged flag to determine if the page was mapped as tagged, and
+> therefore has tag storage reserved, to determine if the corresponding tag
+> storage should also be freed.
+> 
+> I have considered using arch_free_page(), but free_pages_prepare() calls the
+> function after the flags are cleared.
+> 
+> Does that answer your question?
 
-That sounds a lot more robust, compared to intermittent failures to 
-allocate pages.
+Yes, please add some of that to the patch description!
 
 -- 
 Cheers,
