@@ -1,67 +1,67 @@
-Return-Path: <linux-arch+bounces-517-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-518-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8FC7FBFF6
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 18:05:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DC77FBFF8
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 18:05:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56DC3282387
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:05:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A942C1C20C40
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D73C4F8A2;
-	Tue, 28 Nov 2023 17:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EC854FBC;
+	Tue, 28 Nov 2023 17:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CgSfnZiE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DfWHA2zX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AE310DF
-	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 09:05:27 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B78D10DC
+	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 09:05:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701191126;
+	s=mimecast20190719; t=1701191146;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=6jo81sBdMr2MLOlqsA0e8N717pi+NEeDfgDhIKSqp+U=;
-	b=CgSfnZiE01EVWDm8C/Uqpo7TNM3hKsf4EKSZ6D8LHOA61vhg9RRdRdsOQ035Jmkk/3Z/U+
-	kgkPRDKZnyFmSJrVjUdW+rodgq0IxTpeSh0r2iSxpLavlmFFLtlD8W4zctBNc8+rMfXfaP
-	vHC+NriDmINVMtTIHY6+b4tzbKBLXVM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=YDT3LlbuA9xwOvVqmRhwhuZAJICAn/GwCufxWqEJUZE=;
+	b=DfWHA2zX5VRr39gPT3byu0XZIT93Y+alNmGqieovtQv/D9GLZsYCa7xIYrjRkfkcWyMK90
+	wr29IjnKWhRGLGCxoaEekqgRZJzjXLwvssApmnpUU9C6tA/lHUcvrjNj0+ZsUruuuLyWPF
+	XPlXUgD6HYL3ZfxGlHZeMw1Hu7H9CQQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-28-nWs1MNxXMO20zf3H584EwA-1; Tue, 28 Nov 2023 12:05:24 -0500
-X-MC-Unique: nWs1MNxXMO20zf3H584EwA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-332dfb08436so3836276f8f.2
-        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 09:05:24 -0800 (PST)
+ us-mta-25-FAxDO6j1PDq5uEgvx_mnoQ-1; Tue, 28 Nov 2023 12:05:44 -0500
+X-MC-Unique: FAxDO6j1PDq5uEgvx_mnoQ-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-332fab597afso1983656f8f.3
+        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 09:05:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701191123; x=1701795923;
+        d=1e100.net; s=20230601; t=1701191143; x=1701795943;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :references:cc:to:content-language:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6jo81sBdMr2MLOlqsA0e8N717pi+NEeDfgDhIKSqp+U=;
-        b=VgYsxLD0nHAycEo7M+Pm9oUI/wWYOtCLT17jCyaoKxLj2yUmi+x29Wfc3NmXw/ZXuW
-         nocTeI8K5bb5GKPOM0d+uOUixgc6qaw1q18Jtc8Y0gROYBvq97EvSA1uWwXSjUOkQ2Cs
-         qnovx8vsOZcBo6VRRD/QYnpbRrw/+hZlfjoS2x0SrYW4ZGO+N3zH2G9XkaizC9iJd6I/
-         E6ch/lt2wVGjWb2n0Y+8/2j3owqaWc72hzLI7tFH6zsfrlIIRg8n+6JxU0Rt36leznJw
-         kbMY2ojXoWN+GK6sSaFPalg3zoaBjZ8ab5Ji4GALUqfjrMi/Y0UBXaex5i+BE29tC/8A
-         DVCg==
-X-Gm-Message-State: AOJu0Yzq/xfsjaxClktGC7CpNvpJXchIhT49koy1/HNnonoM5yLdOM46
-	8KQxbmrXLE0cra2+9XjQzFtK7EhCHr1x4fAiqtmNm0+TR+vZyqjSUUtYtdHq3Zi+XXKI7pOFB+U
-	PtOKyowQYTUctcUQbJbUr4w==
-X-Received: by 2002:adf:efcc:0:b0:333:130d:431a with SMTP id i12-20020adfefcc000000b00333130d431amr901449wrp.30.1701191123062;
-        Tue, 28 Nov 2023 09:05:23 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHFWpIG0UYKdT6tD9zribyy61YusjkZU9QIwSSIRGp4e9ejEbIv4PY396usZOr2uFNMBBWnQw==
-X-Received: by 2002:adf:efcc:0:b0:333:130d:431a with SMTP id i12-20020adfefcc000000b00333130d431amr901391wrp.30.1701191122580;
-        Tue, 28 Nov 2023 09:05:22 -0800 (PST)
+        bh=YDT3LlbuA9xwOvVqmRhwhuZAJICAn/GwCufxWqEJUZE=;
+        b=F6AibbaPHFtOVrYoUjK2UGKqjmVkdDAODtpV99wMK8nsYAUy5DKhtmRJZe8t6LKDm2
+         CgjFOUvuU9/Xe5zCLuwMsqEITMTEtrXhUTpPfM9l5QPMlyl0uMEj18E7y7m0V6qbxXY0
+         OJyv81JKqjIed4Riwl4Vta/Wyh3UsZZlufnfgNqxg8G/bjQ+xLwgpjuPkn9mU2T2YZ9Z
+         3sobrvXU8W0RLx8IXPdEdoBSEijZlVjx0pF4O6K5SS7IPOZKX3nyvPnz3A+GNAJ2KGoK
+         ysCtotnBw6Q8xtuyByslQkykvvjAB35qSOavyDEB/ElUoLrAzHbTpOX+1GPD2LF4dt00
+         dRRQ==
+X-Gm-Message-State: AOJu0Yw5Da2554vP4Jq9pdbibSe9X0iW/np8jBVgISHCZArum/8Iyup2
+	mqkPYYp5LgIVZrIumMRRHTswe2cCRmf+g7xTGaOyrGbngh3gp2prHoZOauOm47u40DCyXwgtXtQ
+	8lR9IqQgGIczCxxDsMehEDA==
+X-Received: by 2002:a5d:67c8:0:b0:332:d296:38e4 with SMTP id n8-20020a5d67c8000000b00332d29638e4mr11746501wrw.3.1701191143344;
+        Tue, 28 Nov 2023 09:05:43 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE9Eaiu9gI/+d6uSueiInI5bht2b/mC7sqil/E3ZdKQiWeH5452MX2pBYH3QiRGem8/2yMuzg==
+X-Received: by 2002:a5d:67c8:0:b0:332:d296:38e4 with SMTP id n8-20020a5d67c8000000b00332d29638e4mr11746454wrw.3.1701191142991;
+        Tue, 28 Nov 2023 09:05:42 -0800 (PST)
 Received: from ?IPV6:2003:cb:c708:1d00:99ec:9656:7475:678d? (p200300cbc7081d0099ec96567475678d.dip0.t-ipconnect.de. [2003:cb:c708:1d00:99ec:9656:7475:678d])
-        by smtp.gmail.com with ESMTPSA id d21-20020adf9b95000000b003316ad360c1sm15738401wrc.24.2023.11.28.09.05.20
+        by smtp.gmail.com with ESMTPSA id d21-20020adf9b95000000b003316ad360c1sm15738401wrc.24.2023.11.28.09.05.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 09:05:22 -0800 (PST)
-Message-ID: <b1c151bb-cd07-43ac-b6e7-b49f8c40573a@redhat.com>
-Date: Tue, 28 Nov 2023 18:05:20 +0100
+        Tue, 28 Nov 2023 09:05:42 -0800 (PST)
+Message-ID: <dd2dfeb0-aa7b-43e4-ae9f-e2a22b3dac30@redhat.com>
+Date: Tue, 28 Nov 2023 18:05:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 13/27] arm64: mte: Make tag storage depend on
- ARCH_KEEP_MEMBLOCK
+Subject: Re: [PATCH RFC v2 14/27] arm64: mte: Disable dynamic tag storage
+ management if HW KASAN is enabled
 Content-Language: en-US
 To: Alexandru Elisei <alexandru.elisei@arm.com>
 Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
@@ -87,8 +87,8 @@ Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
  linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
  linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
 References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-14-alexandru.elisei@arm.com>
- <91c5d2e2-57b1-4172-88e0-cd07a8d85af4@redhat.com> <ZWSwArYMN1LuyGfO@raptor>
+ <20231119165721.9849-15-alexandru.elisei@arm.com>
+ <e8f7d855-e5e7-48dd-adce-7c641a561e2b@redhat.com> <ZWSwrKS6EtJMEu1p@raptor>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -135,62 +135,30 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <ZWSwArYMN1LuyGfO@raptor>
+In-Reply-To: <ZWSwrKS6EtJMEu1p@raptor>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 27.11.23 16:04, Alexandru Elisei wrote:
+On 27.11.23 16:07, Alexandru Elisei wrote:
 > Hi,
 > 
-> On Fri, Nov 24, 2023 at 08:51:38PM +0100, David Hildenbrand wrote:
+> On Fri, Nov 24, 2023 at 08:54:12PM +0100, David Hildenbrand wrote:
 >> On 19.11.23 17:57, Alexandru Elisei wrote:
->>> Tag storage memory requires that the tag storage pages used for data are
->>> always migratable when they need to be repurposed to store tags.
+>>> To be able to reserve the tag storage associated with a page requires that
+>>> the tag storage page can be migrated.
 >>>
->>> If ARCH_KEEP_MEMBLOCK is enabled, kexec will scan all non-reserved
->>> memblocks to find a suitable location for copying the kernel image. The
->>> kernel image, once loaded, cannot be moved to another location in physical
->>> memory. The initialization code for the tag storage reserves the memblocks
->>> for the tag storage pages, which means kexec will not use them, and the tag
->>> storage pages can be migrated at any time, which is the desired behaviour.
->>>
->>> However, if ARCH_KEEP_MEMBLOCK is not selected, kexec will not skip a
->>> region unless the memory resource has the IORESOURCE_SYSRAM_DRIVER_MANAGED
->>> flag, which isn't currently set by the tag storage initialization code.
->>>
->>> Make ARM64_MTE_TAG_STORAGE depend on ARCH_KEEP_MEMBLOCK to make it explicit
->>> that that the Kconfig option required for it to work correctly.
->>>
->>> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
->>> ---
->>>    arch/arm64/Kconfig | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>> index 047487046e8f..efa5b7958169 100644
->>> --- a/arch/arm64/Kconfig
->>> +++ b/arch/arm64/Kconfig
->>> @@ -2065,6 +2065,7 @@ config ARM64_MTE
->>>    if ARM64_MTE
->>>    config ARM64_MTE_TAG_STORAGE
->>>    	bool "Dynamic MTE tag storage management"
->>> +	depends on ARCH_KEEP_MEMBLOCK
->>>    	select CONFIG_CMA
->>>    	help
->>>    	  Adds support for dynamic management of the memory used by the hardware
+>>> When HW KASAN is enabled, the kernel allocates pages, which are now tagged,
+>>> in non-preemptible contexts, which can make reserving the associate tag
+>>> storage impossible.
 >>
->> Doesn't arm64 select that unconditionally? Why is this required then?
+>> I assume that it's the only in-kernel user that actually requires tagged
+>> memory (besides for user space), correct?
 > 
-> I've added this patch to make the dependancy explicit. If, in the future, arm64
-> stops selecting ARCH_KEEP_MEMBLOCK, I thinkg it would be very easy to miss the
-> fact that tag storage depends on it. So this patch is not required per-se, it's
-> there to document the dependancy.
+> Indeed, this is the case. I'll expand the commit message to be more clear about
+> it.
+> 
 
-I see. Could you add some static_assert / BUILD_BUG_ON instead?
-
-I suspect there are plenty other (undocumented) reasons why 
-ARCH_KEEP_MEMBLOCK has to be enabled for now, and none sets 
-ARCH_KEEP_MEMBLOCK, I suspect/
+Great, thanks!
 
 -- 
 Cheers,
