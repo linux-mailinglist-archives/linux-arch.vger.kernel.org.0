@@ -1,67 +1,67 @@
-Return-Path: <linux-arch+bounces-524-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-525-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37BE47FC0E3
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 18:57:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AB247FC0F2
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 19:00:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5864A1C2094E
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 17:57:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF5D9B212F8
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 18:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C974541C6C;
-	Tue, 28 Nov 2023 17:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E71539B;
+	Tue, 28 Nov 2023 18:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VnfFcmdp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CPj7d8jw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80688268E
-	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 09:56:40 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9549171D
+	for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 10:00:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701194199;
+	s=mimecast20190719; t=1701194423;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=mb/SELaNzaD9twNmu/FD3NMqayq4NlkgR97UOh62crI=;
-	b=VnfFcmdpkSV1rvb7MrA82y3pM4jUPyZXxCdhmZ5M0WmIApQQNkth6tBB5aXntOi6czhmbn
-	CmqPjfg4A09bFjweeRI7FuWC9rRHd6ZNRfUv0NaB/x4/4pcLh1Fwhi+Ubp6fn9ghSwg6vb
-	LXmb9I9lfkDyZhPxcbIFzP7zNqdRdAc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=9NRgeHSmTfmANqB6mxYUGOl2WqWWxHh4w4sAEH65EWo=;
+	b=CPj7d8jweXSuWvSX9Qv8jzR+gJqH0sQknETxLkO2CfA4cJoAMjF+flIEJH08idSS6FPsw7
+	qCuSJ+Lx3phVRw8+VHJtJfee2daniskMvCsy8w2tncJigaOzQ+RRWFRC7YIc8r0MpSCwER
+	9PPpchw0fXhxcJg+79z6HHBbKreFPGM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-543-NoJOXAAVMMifLFqfrH4-ig-1; Tue, 28 Nov 2023 12:56:37 -0500
-X-MC-Unique: NoJOXAAVMMifLFqfrH4-ig-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40b5149af0eso705785e9.3
-        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 09:56:37 -0800 (PST)
+ us-mta-12-yQIJa-yQM8SNUzUyXD4wLw-1; Tue, 28 Nov 2023 13:00:21 -0500
+X-MC-Unique: yQIJa-yQM8SNUzUyXD4wLw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-332d213c2bbso3982307f8f.1
+        for <linux-arch@vger.kernel.org>; Tue, 28 Nov 2023 10:00:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701194196; x=1701798996;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mb/SELaNzaD9twNmu/FD3NMqayq4NlkgR97UOh62crI=;
-        b=h7k2JwebrE1DKnB90HF2v8jvjiOrdqMHB2e06lfZGohzL27ipStw3OgGcNnX7fWQud
-         OlDj1s+GT6zIOnqsb5nK74QrHku9CZxB51GEATePvK7a+/QezEDXhP5gYeqXBKXwa0L+
-         lnDw3GXXSiY30wQm1N+iypQkwnHuzOvXZ8PhmM1JqIeDr8t+WICr1stsVtvJpp3C6dvF
-         f2ubBlAnWG+mn+m7ef/qH4bZ388T82qO1ZhkI5UvRxHDBSt6puQbiBcv+jwZqFCAHBsx
-         XBGYWNAkOvz3eofcS6cBR/W35mZ3QV8Jq0jTEpaQUSSIeTJzl5YtHbuCAtrsFKkZgtAd
-         swSg==
-X-Gm-Message-State: AOJu0YzJ7nlQcNY1brEsQXFzb41QIckBNAN3clFo2YkRiHLbf0bfV5Wm
-	vEDrvt1T0miycXtGEsTE+IwaEQCpup4fOrjNyY6T14Gg56b3Lzf1WVJN4HqYHTLA31rp1+sO+wY
-	VS1egWRJKAKfP4IxzqHV1Nw==
-X-Received: by 2002:a5d:4947:0:b0:332:fe86:7f64 with SMTP id r7-20020a5d4947000000b00332fe867f64mr5843141wrs.43.1701194196613;
-        Tue, 28 Nov 2023 09:56:36 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGj+3zYY7VsSNyNUu8sA5/8Eh+WYvSczsybLrcFtvaAm0lZ2m/9N/KercXdu/KmAUvDHpd7Iw==
-X-Received: by 2002:a5d:4947:0:b0:332:fe86:7f64 with SMTP id r7-20020a5d4947000000b00332fe867f64mr5843119wrs.43.1701194196186;
-        Tue, 28 Nov 2023 09:56:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701194420; x=1701799220;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:from:content-language:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9NRgeHSmTfmANqB6mxYUGOl2WqWWxHh4w4sAEH65EWo=;
+        b=Vnfmm/n8Dt8/LlZ0cmJQpIIpgbVNJ49ArltakHVoszptsEvCSLgkGPc93Ki6ZEw2S4
+         LVt1qZ5P3MfLJ7t+Yp8rKLw9AeF0aVFZbBSHSB+v3twyZYfCYT22tAhHENboUswdYHyY
+         uEUD5tQ03E2bBAew6ne3qMQp18aotJRYA6e17UNx00AULi7C2EhbdTPQxKtHMvIJDnsY
+         WRp0VZGjAx0z93h1oswku9YUJ4hCVXp/0l483gUPDz/5QRVV3FS4vv525WB709GPnpld
+         KecSLRLmI4k2HP4Dk0t4Lk9pmVK6959KKDR3232GWDF/etD//CLkD1fftf+rMO68J7Zl
+         1IZg==
+X-Gm-Message-State: AOJu0YycNhHv4kCld1/IN8gpH5nVgODM+dU7uE/wRHyLbR837lsHZH0p
+	RcvmuZlmabitX6ZejG9Y2zBL8aQes5WIzoxGn0YzIg42KqiRDT4ZcExdCbxFTPAdJy8BOkTNipy
+	NlqwfFoLW0sSvoR1M/ttNbg==
+X-Received: by 2002:a5d:488f:0:b0:333:19b:d317 with SMTP id g15-20020a5d488f000000b00333019bd317mr4594493wrq.52.1701194419983;
+        Tue, 28 Nov 2023 10:00:19 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHnLUI0GSbEjUF3Txi7D1dfIERk9IWwHbE2NUSaCWXG93IBnMiwrHls22IAWrPMiPEh57S8YA==
+X-Received: by 2002:a5d:488f:0:b0:333:19b:d317 with SMTP id g15-20020a5d488f000000b00333019bd317mr4594457wrq.52.1701194419580;
+        Tue, 28 Nov 2023 10:00:19 -0800 (PST)
 Received: from ?IPV6:2003:cb:c708:1d00:99ec:9656:7475:678d? (p200300cbc7081d0099ec96567475678d.dip0.t-ipconnect.de. [2003:cb:c708:1d00:99ec:9656:7475:678d])
-        by smtp.gmail.com with ESMTPSA id x1-20020adfec01000000b00332cfd83b8dsm15601843wrn.96.2023.11.28.09.56.34
+        by smtp.gmail.com with ESMTPSA id q19-20020a05600c46d300b004064e3b94afsm19036286wmo.4.2023.11.28.10.00.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 09:56:35 -0800 (PST)
-Message-ID: <2cb6090d-b71f-472f-ab89-715b75dba067@redhat.com>
-Date: Tue, 28 Nov 2023 18:56:34 +0100
+        Tue, 28 Nov 2023 10:00:19 -0800 (PST)
+Message-ID: <794a0c50-2b78-4a92-a395-726ac4baba3a@redhat.com>
+Date: Tue, 28 Nov 2023 19:00:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -69,9 +69,10 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 20/27] mm: hugepage: Handle huge page fault on
- access
+Subject: Re: [PATCH RFC v2 19/27] mm: mprotect: Introduce PAGE_FAULT_ON_ACCESS
+ for mprotect(PROT_MTE)
 Content-Language: en-US
+From: David Hildenbrand <david@redhat.com>
 To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
  will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
  james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
@@ -87,8 +88,8 @@ Cc: pcc@google.com, steven.price@arm.com, anshuman.khandual@arm.com,
  linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
  linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
 References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-21-alexandru.elisei@arm.com>
-From: David Hildenbrand <david@redhat.com>
+ <20231119165721.9849-20-alexandru.elisei@arm.com>
+ <1c79ad05-cb52-4820-b2aa-bbe07ff82b19@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
  dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
@@ -134,18 +135,33 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20231119165721.9849-21-alexandru.elisei@arm.com>
+In-Reply-To: <1c79ad05-cb52-4820-b2aa-bbe07ff82b19@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 19.11.23 17:57, Alexandru Elisei wrote:
-> Handle PAGE_FAULT_ON_ACCESS faults for huge pages in a similar way to
-> regular pages.
+On 28.11.23 18:55, David Hildenbrand wrote:
+> On 19.11.23 17:57, Alexandru Elisei wrote:
+>> To enable tagging on a memory range, userspace can use mprotect() with the
+>> PROT_MTE access flag. Pages already mapped in the VMA don't have the
+>> associated tag storage block reserved, so mark the PTEs as
+>> PAGE_FAULT_ON_ACCESS to trigger a fault next time they are accessed, and
+>> reserve the tag storage on the fault path.
 > 
-> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> ---
+> That sounds alot like fake PROT_NONE. Would there be a way to unify hat
+> handling and simply reuse pte_protnone()? For example, could we special
+> case on VMA flags?
+> 
+> Like, don't do NUMA hinting in these special VMAs. Then, have something
+> like:
+> 
+> if (pte_protnone(vmf->orig_pte))
+> 	return handle_pte_protnone(vmf);
+> 
 
-Same comments :)
+Think out loud: maybe there isn't even the need to special-case on the 
+VMA. Arch code should know it there is something to do. If not, it 
+surely was triggered bu NUMA hinting. So maybe that could be handled in 
+handle_pte_protnone() quite nicely.
 
 -- 
 Cheers,
