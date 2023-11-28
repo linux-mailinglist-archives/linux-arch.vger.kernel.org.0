@@ -1,201 +1,151 @@
-Return-Path: <linux-arch+bounces-479-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-480-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED8887FB15E
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 06:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 969D67FB21C
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 07:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C979B20FFC
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 05:39:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DE33B20C73
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Nov 2023 06:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC753101CE;
-	Tue, 28 Nov 2023 05:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A30F6D311;
+	Tue, 28 Nov 2023 06:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bXsqjc+O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="if9fM89P"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FC5D63
-	for <linux-arch@vger.kernel.org>; Mon, 27 Nov 2023 21:39:29 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cfaf05db73so77165ad.0
-        for <linux-arch@vger.kernel.org>; Mon, 27 Nov 2023 21:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701149968; x=1701754768; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hd11373At0fgNthDfz475jB2pnftz8WhsrA0gYblitY=;
-        b=bXsqjc+O5lZombFifNkiB/W9AfwHyZFQ5SLgjbDKMWasF8nfXxWucjm+pLF9q3ltG8
-         hWu+arqrb5nyPU5LfwYm3OQqevjctUuBwRkzRQo9/TD8xmYcXESa0baCmh8igVavgGAU
-         A+bJonGvaqIDwNd5J1K9IB6tgYId5oH3Gn5jCz9ShWNpUwe7mARFCA5czA1Q04PKKk+j
-         qII1dgoS7kry8uzXKIdABg91Fg6+7nt2hROBNRJmJ/XTU4lJbf1Hx7vjLvTA8zxhySZC
-         sZKi1YoBWc1RamGA7oevhBsV1Ea6eybFg7uRFdbpf+Em5JTHNa/5SlFtOGDJE6IIWv/6
-         PLvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701149968; x=1701754768;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hd11373At0fgNthDfz475jB2pnftz8WhsrA0gYblitY=;
-        b=CPRUk/zJ8HAV3GEGOsgPdZ+3WBx6bjZ9FilFO3+Pa16CC93jLE5CN/6Ui3iiT4QnZv
-         2gdjwktC9FD/z+KhxK5fps8DA8g0CpZfamNMNkR/QBEYi/GUSMYx2eBkTsUsIVWV34YU
-         XpIfTdkeyA6OeWzd9Jev/ws4Tof/UXuHMaU5aULYETFGVFtXRL+QnXqWeqM+e9vk4A4P
-         RXzHEx7iNF9EYuiu0B95kUxa9uuVwCw/OmKVtMeXoVF8zGnc3qQXuBfx+m8VokS9Ov+9
-         jKTNbJCYXW4/7A3ksAX7qXbuxMzyoqEDzlo+b1YqGzETvlKA0y9+s0pXix6uFJuYou4E
-         s9DA==
-X-Gm-Message-State: AOJu0Yy7jILH5BTUzl0WrCOPyz01tRQLrMJrFG1XUX/QRU5nm/pj0qLr
-	99NQEBecKNtfGz+wcfg0pzI2QJn4MPVpyVfgCH7gOA==
-X-Google-Smtp-Source: AGHT+IHMM+TBLPbm7+22ArJ0V2KCgdhbcD8w4150pEudfRnDapexGxJDfjwu4kPbNStb74F9bfmDWp9Y8DnvbExoUpc=
-X-Received: by 2002:a17:903:1206:b0:1cf:6f62:88d9 with SMTP id
- l6-20020a170903120600b001cf6f6288d9mr1243304plh.9.1701149968448; Mon, 27 Nov
- 2023 21:39:28 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DA0748B;
+	Tue, 28 Nov 2023 06:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3030C433C7;
+	Tue, 28 Nov 2023 06:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701154214;
+	bh=BijUODoSlZIznO9rdGnXggiSdi32BpO3PHuXhYrN1B8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=if9fM89P+gYlCDnvkkF1Yr+BLEwcjrzHNVmL7eGBgP+mcsTCAA44Zo/jA2dVG0hka
+	 h/LUzMc86Pns899eb+eBzUHUyopA70K0VId+L6bo9UvWEtksLRnYfQgsCIcyFXTmsA
+	 StTDz/fcXiBOKdqidbSxUBOYr9dC1xwA/C8VFRnyTj6XuPag4Tu8h7UGU8HWcwBG9+
+	 1fH3R1gOS/OEy8/WIfOf04Wk3ofHB909dr1lvVQRSa/GLjFVYWIitbmdb/iG2c0hqj
+	 gI9GkHgvnjBOAPs5NT6aeOVlwPQnvsC/4BEjUwfK4dSUKeT8i6bctj0fIX1Dbg8u2L
+	 G9GIlEM7e/Y1Q==
+Date: Tue, 28 Nov 2023 08:49:57 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+	hughd@google.com, pcc@google.com, steven.price@arm.com,
+	anshuman.khandual@arm.com, vincenzo.frascino@arm.com,
+	david@redhat.com, eugenis@google.com, kcc@google.com,
+	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 04/27] mm: migrate/mempolicy: Add hook to modify
+ migration target gfp
+Message-ID: <20231128064957.GI636165@kernel.org>
+References: <20231119165721.9849-1-alexandru.elisei@arm.com>
+ <20231119165721.9849-5-alexandru.elisei@arm.com>
+ <20231125100322.GH636165@kernel.org>
+ <ZWSDGGJDWDtY0G35@raptor>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231119165721.9849-1-alexandru.elisei@arm.com> <20231119165721.9849-22-alexandru.elisei@arm.com>
-In-Reply-To: <20231119165721.9849-22-alexandru.elisei@arm.com>
-From: Peter Collingbourne <pcc@google.com>
-Date: Mon, 27 Nov 2023 21:39:17 -0800
-Message-ID: <CAMn1gO5WYC5Xx7LfBxN_j-xqkVT+tjXP5PqDfrvhgqPOa0ZCsA@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 21/27] mm: arm64: Handle tag storage pages mapped
- before mprotect(PROT_MTE)
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
-	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, steven.price@arm.com, 
-	anshuman.khandual@arm.com, vincenzo.frascino@arm.com, david@redhat.com, 
-	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZWSDGGJDWDtY0G35@raptor>
 
-Hi Alexandru,
+On Mon, Nov 27, 2023 at 11:52:56AM +0000, Alexandru Elisei wrote:
+> Hi Mike,
+> 
+> I really appreciate you having a look!
+> 
+> On Sat, Nov 25, 2023 at 12:03:22PM +0200, Mike Rapoport wrote:
+> > On Sun, Nov 19, 2023 at 04:56:58PM +0000, Alexandru Elisei wrote:
+> > > It might be desirable for an architecture to modify the gfp flags used to
+> > > allocate the destination page for migration based on the page that it is
+> > > being replaced. For example, if an architectures has metadata associated
+> > > with a page (like arm64, when the memory tagging extension is implemented),
+> > > it can request that the destination page similarly has storage for tags
+> > > already allocated.
+> > > 
+> > > No functional change.
+> > > 
+> > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> > > ---
+> > >  include/linux/migrate.h | 4 ++++
+> > >  mm/mempolicy.c          | 2 ++
+> > >  mm/migrate.c            | 3 +++
+> > >  3 files changed, 9 insertions(+)
+> > > 
+> > > diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+> > > index 2ce13e8a309b..0acef592043c 100644
+> > > --- a/include/linux/migrate.h
+> > > +++ b/include/linux/migrate.h
+> > > @@ -60,6 +60,10 @@ struct movable_operations {
+> > >  /* Defined in mm/debug.c: */
+> > >  extern const char *migrate_reason_names[MR_TYPES];
+> > >  
+> > > +#ifndef arch_migration_target_gfp
+> > > +#define arch_migration_target_gfp(src, gfp) 0
+> > > +#endif
+> > > +
+> > >  #ifdef CONFIG_MIGRATION
+> > >  
+> > >  void putback_movable_pages(struct list_head *l);
+> > > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> > > index 10a590ee1c89..50bc43ab50d6 100644
+> > > --- a/mm/mempolicy.c
+> > > +++ b/mm/mempolicy.c
+> > > @@ -1182,6 +1182,7 @@ static struct folio *alloc_migration_target_by_mpol(struct folio *src,
+> > >  
+> > >  		h = folio_hstate(src);
+> > >  		gfp = htlb_alloc_mask(h);
+> > > +		gfp |= arch_migration_target_gfp(src, gfp);
+> > 
+> > I think it'll be more robust to have arch_migration_target_gfp() to modify
+> > the flags and return the new mask with added (or potentially removed)
+> > flags.
+> 
+> I did it this way so an arch won't be able to remove flags set by the MM code.
+> There's a similar pattern in do_mmap() -> calc_vm_flag_bits() ->
+> arch_calc_vm_flag_bits().
 
-On Sun, Nov 19, 2023 at 8:59=E2=80=AFAM Alexandru Elisei
-<alexandru.elisei@arm.com> wrote:
->
-> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> ---
->  arch/arm64/include/asm/mte_tag_storage.h |  1 +
->  arch/arm64/kernel/mte_tag_storage.c      | 15 +++++++
->  arch/arm64/mm/fault.c                    | 55 ++++++++++++++++++++++++
->  include/linux/migrate.h                  |  8 +++-
->  include/linux/migrate_mode.h             |  1 +
->  mm/internal.h                            |  6 ---
->  6 files changed, 78 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/includ=
-e/asm/mte_tag_storage.h
-> index b97406d369ce..6a8b19a6a758 100644
-> --- a/arch/arm64/include/asm/mte_tag_storage.h
-> +++ b/arch/arm64/include/asm/mte_tag_storage.h
-> @@ -33,6 +33,7 @@ int reserve_tag_storage(struct page *page, int order, g=
-fp_t gfp);
->  void free_tag_storage(struct page *page, int order);
->
->  bool page_tag_storage_reserved(struct page *page);
-> +bool page_is_tag_storage(struct page *page);
->
->  vm_fault_t handle_page_missing_tag_storage(struct vm_fault *vmf);
->  vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf);
-> diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_=
-tag_storage.c
-> index a1cc239f7211..5096ce859136 100644
-> --- a/arch/arm64/kernel/mte_tag_storage.c
-> +++ b/arch/arm64/kernel/mte_tag_storage.c
-> @@ -500,6 +500,21 @@ bool page_tag_storage_reserved(struct page *page)
->         return test_bit(PG_tag_storage_reserved, &page->flags);
->  }
->
-> +bool page_is_tag_storage(struct page *page)
-> +{
-> +       unsigned long pfn =3D page_to_pfn(page);
-> +       struct range *tag_range;
-> +       int i;
-> +
-> +       for (i =3D 0; i < num_tag_regions; i++) {
-> +               tag_range =3D &tag_regions[i].tag_range;
-> +               if (tag_range->start <=3D pfn && pfn <=3D tag_range->end)
-> +                       return true;
-> +       }
-> +
-> +       return false;
-> +}
-> +
->  int reserve_tag_storage(struct page *page, int order, gfp_t gfp)
->  {
->         unsigned long start_block, end_block;
-> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> index 6730a0812a24..964c5ae161a3 100644
-> --- a/arch/arm64/mm/fault.c
-> +++ b/arch/arm64/mm/fault.c
-> @@ -12,6 +12,7 @@
->  #include <linux/extable.h>
->  #include <linux/kfence.h>
->  #include <linux/signal.h>
-> +#include <linux/migrate.h>
->  #include <linux/mm.h>
->  #include <linux/hardirq.h>
->  #include <linux/init.h>
-> @@ -956,6 +957,50 @@ void tag_clear_highpage(struct page *page)
->  }
->
->  #ifdef CONFIG_ARM64_MTE_TAG_STORAGE
-> +
-> +#define MR_TAGGED_TAG_STORAGE  MR_ARCH_1
-> +
-> +extern bool isolate_lru_page(struct page *page);
-> +extern void putback_movable_pages(struct list_head *l);
+Ok, just add a sentence about it to the commit message.
+ 
+> Thanks,
+> Alex
+> 
+> > 
+> > >  		nodemask = policy_nodemask(gfp, pol, ilx, &nid);
+> > >  		return alloc_hugetlb_folio_nodemask(h, nid, nodemask, gfp);
+> > >  	}
+> > > @@ -1190,6 +1191,7 @@ static struct folio *alloc_migration_target_by_mpol(struct folio *src,
+> > >  		gfp = GFP_TRANSHUGE;
+> > >  	else
+> > >  		gfp = GFP_HIGHUSER_MOVABLE | __GFP_RETRY_MAYFAIL | __GFP_COMP;
+> > > +	gfp |= arch_migration_target_gfp(src, gfp);
+> > >  
+> > >  	page = alloc_pages_mpol(gfp, order, pol, ilx, nid);
+> > >  	return page_rmappable_folio(page);
+> > 
+> > -- 
+> > Sincerely yours,
+> > Mike.
+> > 
 
-Could we move these declarations to a non-mm-internal header and
-#include it instead of manually declaring them here?
-
-> +
-> +/* Returns with the page reference dropped. */
-> +static void migrate_tag_storage_page(struct page *page)
-> +{
-> +       struct migration_target_control mtc =3D {
-> +               .nid =3D NUMA_NO_NODE,
-> +               .gfp_mask =3D GFP_HIGHUSER_MOVABLE | __GFP_TAGGED,
-> +       };
-> +       unsigned long i, nr_pages =3D compound_nr(page);
-> +       LIST_HEAD(pagelist);
-> +       int ret, tries;
-> +
-> +       lru_cache_disable();
-> +
-> +       for (i =3D 0; i < nr_pages; i++) {
-> +               if (!isolate_lru_page(page + i)) {
-> +                       ret =3D -EAGAIN;
-> +                       goto out;
-> +               }
-> +               /* Isolate just grabbed another reference, drop ours. */
-> +               put_page(page + i);
-> +               list_add_tail(&(page + i)->lru, &pagelist);
-> +       }
-> +
-> +       tries =3D 5;
-> +       while (tries--) {
-> +               ret =3D migrate_pages(&pagelist, alloc_migration_target, =
-NULL, (unsigned long)&mtc,
-> +                                   MIGRATE_SYNC, MR_TAGGED_TAG_STORAGE, =
-NULL);
-> +               if (ret =3D=3D 0 || ret !=3D -EBUSY)
-
-This could be simplified to:
-
-if (ret !=3D -EBUSY)
-
-Peter
+-- 
+Sincerely yours,
+Mike.
 
