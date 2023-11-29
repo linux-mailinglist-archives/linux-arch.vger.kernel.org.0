@@ -1,153 +1,160 @@
-Return-Path: <linux-arch+bounces-546-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-547-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A9887FD86B
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Nov 2023 14:41:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E74437FDF5B
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Nov 2023 19:33:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9A46B21815
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Nov 2023 13:41:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 217541C20AE3
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Nov 2023 18:33:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E2B208D0;
-	Wed, 29 Nov 2023 13:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EAFA5DF08;
+	Wed, 29 Nov 2023 18:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KGEL+ZDv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id C262BB2;
-	Wed, 29 Nov 2023 05:41:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EDEE2F4;
-	Wed, 29 Nov 2023 05:42:27 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CA6E3F5A1;
-	Wed, 29 Nov 2023 05:41:35 -0800 (PST)
-Date: Wed, 29 Nov 2023 13:41:32 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-	rppt@kernel.org, hughd@google.com, pcc@google.com,
-	steven.price@arm.com, anshuman.khandual@arm.com,
-	vincenzo.frascino@arm.com, eugenis@google.com, kcc@google.com,
-	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 18/27] arm64: mte: Reserve tag block for the zero
- page
-Message-ID: <ZWc_jCy7B6jdc5rP@raptor>
-References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-19-alexandru.elisei@arm.com>
- <c027ea00-a955-4c3c-b1ea-2c3f6906790d@redhat.com>
- <ZWcgzPcld1YksCtZ@raptor>
- <930b6fba-43bf-4784-9bc9-1c83c1adc30c@redhat.com>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635F0112
+	for <linux-arch@vger.kernel.org>; Wed, 29 Nov 2023 10:33:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701282830; x=1732818830;
+  h=date:from:to:cc:subject:message-id;
+  bh=EkHpo08sXMTvW1WLJeROpHLR0HuDtPcCaZYoPUIfdlk=;
+  b=KGEL+ZDvjx93zh7jq0an5xAUgUTchcBNwFqiRXoLSGgdAXFnAlSbI3On
+   wMZfzK8CS9105dzp7xThIFB3Rd+dceCBM2640a9KaSsHWzWee6qXXgUiu
+   zAb6YlkLgwKwW9Th9qmDmM9QDrLPN4NS1nAKQRvGJgcJ8WwDjyv8i0okj
+   qqsD3vZY/N0ZZ++eu56oLyTmCKkYY9/jXcz9q3nPWXnc0Pq4wjee0SOsx
+   VdXMTO4uxde+tr54z02VBkCJFt1nYstz/d3bwh7xfYH98etGIg5gobH7E
+   hN18mtKZCO9E2xmwAl8ZWI0YxIUlmd3AZDFyvYNjH8a22cK5RvY4AKSzq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="392074112"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="392074112"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 10:33:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="1100622750"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="1100622750"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Nov 2023 10:33:30 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8PNI-0000dX-06;
+	Wed, 29 Nov 2023 18:33:28 +0000
+Date: Thu, 30 Nov 2023 02:32:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 0734f5c7eb15f9d3bbdacffe501eabdb8b1c01d2
+Message-ID: <202311300248.JFyBT52A-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <930b6fba-43bf-4784-9bc9-1c83c1adc30c@redhat.com>
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 0734f5c7eb15f9d3bbdacffe501eabdb8b1c01d2  Merge branch 'asm-generic-prototypes' into asm-generic
 
-On Wed, Nov 29, 2023 at 02:13:50PM +0100, David Hildenbrand wrote:
-> On 29.11.23 12:30, Alexandru Elisei wrote:
-> > On Tue, Nov 28, 2023 at 06:06:54PM +0100, David Hildenbrand wrote:
-> > > On 19.11.23 17:57, Alexandru Elisei wrote:
-> > > > On arm64, the zero page receives special treatment by having the tagged
-> > > > flag set on MTE initialization, not when the page is mapped in a process
-> > > > address space. Reserve the corresponding tag block when tag storage
-> > > > management is being activated.
-> > > 
-> > > Out of curiosity: why does the shared zeropage require tagged storage? What
-> > > about the huge zeropage?
-> > 
-> > There are two different tags that are used for tag checking: the logical
-> > tag, the tag embedded in bits 59:56 of an address, and the physical tag
-> > corresponding to the address. This tag is stored in a separate memory
-> > location, called tag storage. When an access is performed, hardware
-> > compares the logical tag (from the address) with the physical tag (from the
-> > tag storage). If they match, the access is permitted.
-> 
-> Ack, matches my understanding.
-> 
-> > 
-> > The physical tag is set with special instructions.
-> > 
-> > Userspace pointers have bits 59:56 zero. If the pointer is in a VMA with
-> > MTE enabled, then for userspace to be able to access this address, the
-> > physical tag must also be 0b0000.
-> > 
-> > To make it easier on userspace, when a page is first mapped as tagged, its
-> > tags are cleared by the kernel; this way, userspace can access the address
-> > immediately, without clearing the physical tags beforehand. Another reason
-> > for clearing the physical tags when a page is mapped as tagged would be to
-> > avoid leaking uninitialized tags to userspace.
-> 
-> Make sense. Zero it just like we zero page content.
-> 
-> > 
-> > The zero page is special, because the physical tags are not zeroed every
-> > time the page is mapped in a process; instead, the zero page is marked as
-> > tagged (by setting a page flag) and the physical tags are zeroed only once,
-> > when MTE is enabled at boot.
-> 
-> Makes sense.
-> 
-> > 
-> > All of this means that when tag storage is enabled, which happens after MTE
-> > is enabled, the tag storage corresponding to the zero page is already in
-> > use and must be rezerved, and it can never be used for data allocations.
-> > 
-> > I hope all of the above makes sense. I can also put it in the commit
-> > message :)
-> 
-> Yes, makes sense!
-> 
-> > 
-> > As for the zero huge page, the MTE code in the kernel treats it like a
-> > regular page, and it zeroes the tags when it is mapped as tagged in a
-> > process. I agree that this might not be the best solution from a
-> > performance perspective, but it has worked so far.
-> 
-> What if user space were to change the tag of that shared resource?
-> 
-> Having a tag != 0 doesn't make sense for such a shared resource, so I
-> suspect modifying the tag is like a write event: trigger write-fault -> COW.
+elapsed time: 1471m
 
-Yes, modifying the tag is a write event.
+configs tested: 82
+configs skipped: 2
 
-> 
-> > 
-> > With tag storage management enabled, set_pte_at()->mte_sync_tags() will
-> > discover that the huge zero page doesn't have tag storage reserved, the
-> > table entry will be mapped as invalid to use the page fault-on-access
-> > mechanism that I introduce later in the series [1] to reserve tag storage,
-> 
-> I assume (without looking at the code) that you took proper care of possible
-> races.
-> 
-> Thanks for goind into detail!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-No problem.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
 
-Alex
-
-> 
-> 
-> -- 
-> Cheers,
-> 
-> David / dhildenb
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
