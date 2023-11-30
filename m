@@ -1,160 +1,140 @@
-Return-Path: <linux-arch+bounces-547-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-548-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E74437FDF5B
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Nov 2023 19:33:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE2607FEBE6
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 10:34:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 217541C20AE3
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Nov 2023 18:33:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51178B20EB6
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 09:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EAFA5DF08;
-	Wed, 29 Nov 2023 18:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA7A38F9B;
+	Thu, 30 Nov 2023 09:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KGEL+ZDv"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="f0K8D4b6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635F0112
-	for <linux-arch@vger.kernel.org>; Wed, 29 Nov 2023 10:33:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701282830; x=1732818830;
-  h=date:from:to:cc:subject:message-id;
-  bh=EkHpo08sXMTvW1WLJeROpHLR0HuDtPcCaZYoPUIfdlk=;
-  b=KGEL+ZDvjx93zh7jq0an5xAUgUTchcBNwFqiRXoLSGgdAXFnAlSbI3On
-   wMZfzK8CS9105dzp7xThIFB3Rd+dceCBM2640a9KaSsHWzWee6qXXgUiu
-   zAb6YlkLgwKwW9Th9qmDmM9QDrLPN4NS1nAKQRvGJgcJ8WwDjyv8i0okj
-   qqsD3vZY/N0ZZ++eu56oLyTmCKkYY9/jXcz9q3nPWXnc0Pq4wjee0SOsx
-   VdXMTO4uxde+tr54z02VBkCJFt1nYstz/d3bwh7xfYH98etGIg5gobH7E
-   hN18mtKZCO9E2xmwAl8ZWI0YxIUlmd3AZDFyvYNjH8a22cK5RvY4AKSzq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="392074112"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="392074112"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 10:33:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="1100622750"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="1100622750"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Nov 2023 10:33:30 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r8PNI-0000dX-06;
-	Wed, 29 Nov 2023 18:33:28 +0000
-Date: Thu, 30 Nov 2023 02:32:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 0734f5c7eb15f9d3bbdacffe501eabdb8b1c01d2
-Message-ID: <202311300248.JFyBT52A-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C06ED48
+	for <linux-arch@vger.kernel.org>; Thu, 30 Nov 2023 01:34:17 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50bce42295eso490540e87.2
+        for <linux-arch@vger.kernel.org>; Thu, 30 Nov 2023 01:34:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1701336855; x=1701941655; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+eIvDGUerrfda7PffkFuPcobBVIOmFzTvv07SzDnFxE=;
+        b=f0K8D4b6Oe8iOmMUicT+5Lv91ypLRKyglr/Pzb7avwoiUeeCkjczQlgrFzZ/XAFEUg
+         eQh2jlq+UR19sNECrQK1HQasRgZHvBpFaFMRPBySOzM4EjPiJA37j34bVlNCIsfDboSE
+         10YgyhnL0w2u+rDqn4QocWquSeCJyvOfDQAm/KCRQzbTInSEFlltVT2+zU4ayaBxSVWs
+         epNVPNHTtRESZlipG3S9DqKQvjX9t+GwcrAGv0/rYEF8D4W9L37SB/hvZwp9xXlWOqWD
+         L5Famg7t7l2X+DbzGABtg78fiKeCIbKuNbDspI1nDNUXPgLTliwPi0xErbSTewndabNY
+         Lg6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701336855; x=1701941655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+eIvDGUerrfda7PffkFuPcobBVIOmFzTvv07SzDnFxE=;
+        b=YRO8bSrgQBibrvQOqtDgNr2/vP8gNM34v5t3ehJXJ3rVjBpDkuz35NZVl+TmKo15my
+         wvKTI1nDZtpP1oUwCHUmiSGtrZVJkFWEUesCwNp5ltxq479WlCkPS4qSP49vMLFS7400
+         lHSMOtdbpbls/cNVlNfrKTjCv2mBqlPhT/ybxUQYRdGL99pJdnkiknGWbHjqHVwDfSCT
+         +vAxJBwFhBwIu6/vNxK5Fp0XevisZyZ5Z+qmynr+u5GExAvKeEZttbRBtxkq33kOfe05
+         x7Z3W/AmW+nyYtV/NsFj28jf4+IJ389COYXsjzaGIS7abOafQJ4mY9sf564iEbmXnXK3
+         K7xg==
+X-Gm-Message-State: AOJu0Yy0jAltAOMV13PZmNblif7sjTZen6ywnu7sG89uay4dnrHrBCsI
+	oWIpaiKnEi87asBlR/I1ZTE8EYhnUb/HeN5DQPNSfg==
+X-Google-Smtp-Source: AGHT+IGEdQGMBIjZ7uHMEFe3IpSrNio2BkAzOv5Ena+HIB7yN6xBdJSwPKwJFx2hI5uAUVFYg1O06Q8AZ2TzKuVz+uU=
+X-Received: by 2002:a19:a40a:0:b0:50b:c7e3:a1e6 with SMTP id
+ q10-20020a19a40a000000b0050bc7e3a1e6mr2293027lfc.44.1701336855608; Thu, 30
+ Nov 2023 01:34:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <ZV5zGROLefrsEcHJ@r13-u19.micron.com> <CACSyD1OFjROw26+2ojG37eDBParVg721x1HCROMiF2pW2aHj8A@mail.gmail.com>
+ <ZV/HSFMmv3xwkNPL@memverge.com>
+In-Reply-To: <ZV/HSFMmv3xwkNPL@memverge.com>
+From: Zhongkun He <hezhongkun.hzk@bytedance.com>
+Date: Thu, 30 Nov 2023 17:34:04 +0800
+Message-ID: <CACSyD1MrCzyV-93Ov07NpV3Nm3u0fYExmD1ShE_e2tapW6a6HA@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm/mbind: Introduce process_mbind() syscall for
+ external memory binding
+To: Gregory Price <gregory.price@memverge.com>
+Cc: Vinicius Petrucci <vpetrucci@gmail.com>, akpm@linux-foundation.org, 
+	linux-mm@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-api@vger.kernel.org, minchan@kernel.org, dave.hansen@linux.intel.com, 
+	x86@kernel.org, Jonathan.Cameron@huawei.com, aneesh.kumar@linux.ibm.com, 
+	ying.huang@intel.com, dan.j.williams@intel.com, fvdl@google.com, 
+	surenb@google.com, rientjes@google.com, hannes@cmpxchg.org, mhocko@suse.com, 
+	Hasan.Maruf@amd.com, jgroves@micron.com, ravis.opensrc@micron.com, 
+	sthanneeru@micron.com, emirakhur@micron.com, vtavarespetr@micron.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 0734f5c7eb15f9d3bbdacffe501eabdb8b1c01d2  Merge branch 'asm-generic-prototypes' into asm-generic
+Hi Gregory, sorry for the late reply.
 
-elapsed time: 1471m
+I tried pidfd_set_mempolicy(suggested by michal) about a year ago.
+There is a problem here that may need attention.
 
-configs tested: 82
-configs skipped: 2
+A mempolicy can be either associated with a process or with a VMA.
+All vma manipulation is somewhat protected by a down_read on
+mmap_lock.In process context(in alloc_pages()) there is no locking
+because only the process accesses its own state.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Now  we need to change the process context mempolicy specified
+in pidfd. the mempolicy may about to be freed by
+pidfd_set_mempolicy() while alloc_pages() is using it,
+The race condition appears.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+Say something like the following=EF=BC=9A
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+pidfd_set_mempolicy()        target task stack:
+                                               alloc_pages:
+                                             mpol =3D p->mempolicy;
+  task_lock(task);
+  old =3D task->mempolicy;
+  task->mempolicy =3D new;
+  task_unlock(task);
+  mpol_put(old);
+                                           /*old mpol has been freed.*/
+                                           policy_node(...., mpol)
+                                          __alloc_pages();
+
+To reduce the use of locks and atomic operations(mpol_get/put)
+in the hot path, there are no references or lock protections here
+for task mempolicy.
+
+It would be great if your refactoring has a good solution.
+
+Thanks.
+
+On Sat, Nov 25, 2023 at 4:09=E2=80=AFAM Gregory Price
+<gregory.price@memverge.com> wrote:
+>
+> On Fri, Nov 24, 2023 at 04:13:41PM +0800, Zhongkun He wrote:
+> >
+> > Per my understanding,  the process_mbind() is implementable without
+> > many difficult challenges=EF=BC=8C
+> > since it is always protected by mm->mmap_lock. But task mempolicy does
+> > not acquire any lock
+> > in alloc_pages().
+>
+> per-vma policies are protected by the mmap lock, while the task
+> mempolicy is protected by the task lock on replacement, and
+> task->mems_allowed (protected by task_lock).
+>
+> There is an update in my refactor tickets that enforces the acquisition
+> of task_lock on mpol_set_nodemask, which prevents the need for
+> alloc_pages to do anything else.  That's not present in this patch.
+>
+> Basically mems_allowed deals with the majority of situations, and
+> mmap_lock deals with per-vma mempolicy changes and migrations.
+>
+> ~Gregory
 
