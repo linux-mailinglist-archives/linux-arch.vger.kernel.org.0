@@ -1,209 +1,220 @@
-Return-Path: <linux-arch+bounces-562-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-563-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2D8C7FF466
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 17:08:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79BC57FF6AD
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 17:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6B6228168F
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 16:08:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8A5CB20BF6
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 16:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8F954BDF;
-	Thu, 30 Nov 2023 16:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=memverge.com header.i=@memverge.com header.b="yC9Z/qD9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4489632181;
+	Thu, 30 Nov 2023 16:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D061290;
-	Thu, 30 Nov 2023 08:08:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ngu0jTSjqNFk1qifX0En3KJwmaNOtGGU1VixxQcaiZOihlioF0ExwGfpWsCpgjisH9ZFaCtHJfJEMvAqlFz5U9V95FrLRmTS10iE1hx6mkRvOtgHX66OKg8BEb6ISFosfvlE/lfUkzwxKd0La2HTtNphkQFrDDoNuJl0IzcHqtBYGDc5sWK/Z+cHRB/p9ixp/STLrAPVM0SCOtLkr8coLH9TWCUlxSh3qFcnfXtAVTgb5ilvFe8DAvJjX1DOr1ZI+obMrAVQP3c+wmP4ELhzUSsb6uyn2LX/8cyou9NBnsViRtm6xOmAgy5mnDXi2eruQzo7TPOoQKrkLx0aaU39hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5t7gQnNDOYvyQ621jnLJLPSU+g12cU27tJ+eOQ9aFoI=;
- b=T20kLSbNLvohqoUDUADgvw50TR/pZX1Q4o0KCWFHu1WArx/t+ghtPVWwEdRt5a8jq7+wfum8I/n7NSf04nvzQTgKOor/Yx7qxQunxmJWlVaEMDQSyYgpEZbS4FIydREntDySlzFSEvXtlQgt9nnG9IRzyaWEiv5WigEP6aBQnAJKDwUqqZ4Yexz0QMiISejyXDrpAgx7AZwVSSVPUjkZuUptWMYI5UPa4hvQ4zyvnCCTnC2pe9l6EIdNOHj0dDJAtLNk+lUTRwdLU2ZAXbNQ4DI9T3hutQ2KVhb22mCg9Z1G4Rt4iAzdYzSwVEWLg4FxKVwPRpfwWt2go3m/A5ljEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5t7gQnNDOYvyQ621jnLJLPSU+g12cU27tJ+eOQ9aFoI=;
- b=yC9Z/qD9NNzAJ+jE25AmQM1sAC27DvMMRPWwcOTGPYoPZ/1QOJU5PEQc+uqNA5MKmClsTeAcm8/YjW/7ZZ1ifTNO+rTWLnN0z2W7mXnRetGby22WFy3seRy8KnTZl8S0dMpfR5K4s1G4fe8TtPkgP9ZziDvyOfc2Ei5rqcHBRug=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com (2603:10b6:a03:394::19)
- by DM4PR17MB6954.namprd17.prod.outlook.com (2603:10b6:8:18e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.8; Thu, 30 Nov
- 2023 16:08:00 +0000
-Received: from SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::381c:7f11:1028:15f4]) by SJ0PR17MB5512.namprd17.prod.outlook.com
- ([fe80::381c:7f11:1028:15f4%5]) with mapi id 15.20.7068.012; Thu, 30 Nov 2023
- 16:07:59 +0000
-Date: Thu, 30 Nov 2023 11:07:44 -0500
-From: Gregory Price <gregory.price@memverge.com>
-To: Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc: Vinicius Petrucci <vpetrucci@gmail.com>, akpm@linux-foundation.org,
-	linux-mm@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-api@vger.kernel.org, minchan@kernel.org,
-	dave.hansen@linux.intel.com, x86@kernel.org,
-	Jonathan.Cameron@huawei.com, aneesh.kumar@linux.ibm.com,
-	ying.huang@intel.com, dan.j.williams@intel.com, fvdl@google.com,
-	surenb@google.com, rientjes@google.com, hannes@cmpxchg.org,
-	mhocko@suse.com, Hasan.Maruf@amd.com, jgroves@micron.com,
-	ravis.opensrc@micron.com, sthanneeru@micron.com,
-	emirakhur@micron.com, vtavarespetr@micron.com
-Subject: Re: [RFC PATCH] mm/mbind: Introduce process_mbind() syscall for
- external memory binding
-Message-ID: <ZWizUEd/rsxSc0fW@memverge.com>
-References: <ZV5zGROLefrsEcHJ@r13-u19.micron.com>
- <CACSyD1OFjROw26+2ojG37eDBParVg721x1HCROMiF2pW2aHj8A@mail.gmail.com>
- <ZV/HSFMmv3xwkNPL@memverge.com>
- <CACSyD1MrCzyV-93Ov07NpV3Nm3u0fYExmD1ShE_e2tapW6a6HA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACSyD1MrCzyV-93Ov07NpV3Nm3u0fYExmD1ShE_e2tapW6a6HA@mail.gmail.com>
-X-ClientProxiedBy: BY5PR16CA0028.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::41) To SJ0PR17MB5512.namprd17.prod.outlook.com
- (2603:10b6:a03:394::19)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D496D10DF;
+	Thu, 30 Nov 2023 08:46:13 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Sh25S5Wz5z6K5lf;
+	Fri,  1 Dec 2023 00:41:32 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8C3F214058E;
+	Fri,  1 Dec 2023 00:46:11 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 30 Nov
+ 2023 16:46:10 +0000
+Date: Thu, 30 Nov 2023 16:46:09 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: James Morse <james.morse@arm.com>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	<jianyong.wu@arm.com>, <justin.he@arm.com>, <gregkh@linuxfoundation.org>
+Subject: Re: [RFC PATCH v2 11/35] arch_topology: Make
+ register_cpu_capacity_sysctl() tolerant to late CPUs
+Message-ID: <20231130164609.00000b4a@Huawei.com>
+In-Reply-To: <ZTKEQz0DJuv/tqNH@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+	<20230913163823.7880-12-james.morse@arm.com>
+	<20230914130126.000069db@Huawei.com>
+	<ZTKEQz0DJuv/tqNH@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR17MB5512:EE_|DM4PR17MB6954:EE_
-X-MS-Office365-Filtering-Correlation-Id: 422f3940-7478-4ae9-13c0-08dbf1be85d4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	w465u5lFbE7yGTsyMBjnicYaxvtZBxNRxHM62Y6fWUw6yt/G1q+NI7nyxFtUQ8rBAyhNNuhMr00kHDbFJg4v7ieRtJIeVM+wFX5dWACfC1FxMW+QkdGAACLdwXMYPvtToh1hTW4kfw76aMDmgLZtbYxiPLENjC3LnZjHPuSXRxFZgwFX2hQ2VdEndAc53a4eHb4tMlU2VDTuUX4iRgkjN+9r4DBtt1xmP2FqpbpXA6cKy484DnY4v9I0q68rVrCudT41dra7BJ1ESzkASw/e47xiJoK+0PZ8dhUoyNQ1Co+mLmMo5357LoEcruUJNbybWEmpVLK5WjdynZbTVFCuqTpcCsUBfXBwTnztSZZyEnTiurHYnN5ZykVtvq16QptkFkTQM1t8T2ErBr1ADBdBOa3r0h86i27QBbH9eVC+o4gbBFkXF/b8zwkdRJIXzbT4xivmRYE+eIjqGSnerc2S5ggm5OsNblA5ulh04NcRMgcvjPk0mMi3KCKsmgXoZtdG0lhk1bgH0F4jZdHpHzC1HYuIf9OmQYfOMlpMZ1m4+88=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB5512.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(366004)(376002)(136003)(39840400004)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(38100700002)(83380400001)(8676002)(66476007)(2906002)(44832011)(86362001)(8936002)(4326008)(5660300002)(66556008)(316002)(7416002)(66946007)(6486002)(966005)(478600001)(36756003)(6916009)(6506007)(41300700001)(6512007)(6666004)(26005)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K29hZUpNaGhGd1RiSDgvMURCOVB4WXVVSEV1N0lyRXJDd080Q0tyRHNlRGIx?=
- =?utf-8?B?SnM0T3FxbEZhQ1Z2VUdqUEhPRVdVVFVJTmE2QndOM0xlT3c0a1Ixb2V6encr?=
- =?utf-8?B?enBrRWlrZ0Z0eGZTREdwSGV6N1JqQWc5OVQwSWFLejZ5d3NBR0JqcmRBODRU?=
- =?utf-8?B?bXJUNG9qeit0L3ZidXNmNnBYd3pyb09YV1hZRlpPdUk4SmV2bDlZczNxT1p2?=
- =?utf-8?B?NTBxa1p3ZVRDdXVvbFpvcU14TXpsWkg5Y2piRlRVT3FKTE54N0x6cHhYL1lG?=
- =?utf-8?B?ZmpPZzJpZGluRU9IMkp6M1EzWk9mUFRqSGwwUnU0aDQrVVFQN0hSbGVBcVlI?=
- =?utf-8?B?ck00ZFZXeVJjOEtQMm9KeU1SNkVCMEFISldYeXFTWDBldFhoTS9EZFRRcXJx?=
- =?utf-8?B?eEFvVkl3TmV4U2RILytacDFOS2tKTENYNWNsZmxScXRtZ0wyN1M3U1F2WEsx?=
- =?utf-8?B?VkozVmpSdGtmcFdpbUZnWDVmLzVrY2FuREVqRDN6K1hQWktzVTJtMHdRL3pa?=
- =?utf-8?B?VXdZQU9OZHpINVUveUhTUk4xSUwwajIxOTBSOWZYd3VYeDNVZHFrMVZTSnhW?=
- =?utf-8?B?U3FRVDhiUVhtMFZqcGhxLzBNNlpBV0dTTEE5NndFSlBMT2lEaWU3blIreGtM?=
- =?utf-8?B?K0JLUVBVRnBZeXVCZk1oR0FWQXJGRU9ESDdPUCs3WFg5cUxwRGZWaEd3alcx?=
- =?utf-8?B?S09oVG9KNnJndFNWcU5DMFdxdGJmUU9KQ094a0djOS9rMjQxS2pSdUJ3bFRP?=
- =?utf-8?B?MXd1bDEvUVBpQmNsQjN5ZWVvWkVrWFdLNlFkZW11NkVqUmZaSEw4YmdNNVpO?=
- =?utf-8?B?RE53QklGUmVzQUM2VGdQUUZIZmdGVmJaYnBKMkpNNWFuNE5waEk0QTk5bEhu?=
- =?utf-8?B?U3M2T2hUaDMydGFOVzExbDVwV3lENXdVSjF5VVRmYVpGM21vRXNoWjAwUkhq?=
- =?utf-8?B?T1c5Q25LNFBBWkRESHE1bEE2OStidWIvNE1IVHNXc05WR2gySVRod1dsb0Fz?=
- =?utf-8?B?dEQwdmNFS21pdm1EVlRJbHd4UzZzcnFERHZyNENJVWRIL0hJTGpFeGJ1YnlH?=
- =?utf-8?B?cVFyNlJwMkRDUDVyRWJ1b2NDakl2T0daaTFyL0dmQmFDU2x2ZDc0V3JLQUJH?=
- =?utf-8?B?SnVvWlM1cHlNTlU3M1dXTnl0TXZWS0tYd0lyWnoxOWVsTWVjd2JvQnB3TGNB?=
- =?utf-8?B?VkoyanlJQW9jdWFGb0hXTlRYYlQ1aDZwTnZNVEVrQXVWZzNyNTFXSy9wUTcy?=
- =?utf-8?B?K3UxWjA1eEYzRjNaL1J1RTZaOXROaFQwOHk3d2xzSnAxUHRmOWZrRHYrS0Jx?=
- =?utf-8?B?R3V6ZElhQ0tRT3BVdWFMRTNFdU5FQ25KUGRkMDg3YnRkV0t1RnlnVEkrUXd2?=
- =?utf-8?B?WmtKb1MxQkErbXVWVWg0OUZVRkx3L0sreXFGTlFieE5aOEJrWjJ6bzBDd2lE?=
- =?utf-8?B?bVp0UXNmQ1hvdUFHWnF1eFVFRTdpcityTk9qM0RtbHN3a1lOdEQrNkk2TGFU?=
- =?utf-8?B?dVJ6VHZuQ1RoNlZwb3lIaWZtYzd6ZFVMMnhQdmh2NG1ZNjJTTjhIano4alFP?=
- =?utf-8?B?Nkd0UTFLMnNadGJmRmgzYUpodjVZK2Q5MGIwaGxYL2lDbmFPYWRjZy9ZUzg1?=
- =?utf-8?B?bGc0MDQ3SUxjUFh6RTNrdGVBN3E3aUhCczBWU3JpaTJLUHh1L243ZzNlcUJ4?=
- =?utf-8?B?ay90UlBJZjJVV2FNaE91REdFdFdpZUV2RDZYNUk2emR4eENRTnliMjc2by9m?=
- =?utf-8?B?TCtYT3YxTytwbUZ5YkwxNnNXMW1ONGtvSXh4c3phZklUb0NkTU9ON0dPMm0z?=
- =?utf-8?B?WWdnSjU5UVZ5OXJHZXVUb040NHdOSUJXbFBtdDR2UVBvWVZkU25LMU9uT3hn?=
- =?utf-8?B?WFduQUFTTjZTdjBxdWJKYWswZkdudFlaSnRPcHJZemN2Z1Z6RHU3eHlYS3gz?=
- =?utf-8?B?TThPZHNBK2MrajFWeTZYejZ5NWYvYmFCTWt6NjRGNk1ZWVZ1YzAzUSsrZEh6?=
- =?utf-8?B?dEFNWndmR01DdVRRRVBuT1Q5Z1cxK0JhWVhkQVRvNGg4cGE2UUZTczNzSndj?=
- =?utf-8?B?Q2ZXZkg1NzJCcTlhTDFwekNOOWVQM1QzU2lTSktiZ2ltMGNEdUk3a0JtbWly?=
- =?utf-8?B?dUsxeHNVSExIVjNWVzNFZC9rUEp5TnF1Wkw0NTdxV1lvbkZOOFhKVVJJZVVM?=
- =?utf-8?B?MWc9PQ==?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 422f3940-7478-4ae9-13c0-08dbf1be85d4
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR17MB5512.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2023 16:07:59.7081
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xXYRxDyVvGRunDKB1Ic1lgWpJNIfOOq4Lwb6ElrgmYQQY+JkQM35q17AazrvNo5eFpKpj4CS4hUS82DTCRMl5vz4+ZU3x3qX0pcTJcYjPk8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR17MB6954
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, Nov 30, 2023 at 05:34:04PM +0800, Zhongkun He wrote:
-> Hi Gregory, sorry for the late reply.
+On Fri, 20 Oct 2023 14:44:35 +0100
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+
+> On Thu, Sep 14, 2023 at 01:01:26PM +0100, Jonathan Cameron wrote:
+> > On Wed, 13 Sep 2023 16:37:59 +0000
+> > James Morse <james.morse@arm.com> wrote:
+> >   
+> > > register_cpu_capacity_sysctl() adds a property to sysfs that describes
+> > > the CPUs capacity. This is done from a subsys_initcall() that assumes
+> > > all possible CPUs are registered.
+> > > 
+> > > With CPU hotplug, possible CPUs aren't registered until they become
+> > > present, (or for arm64 enabled). This leads to messages during boot:
+> > > | register_cpu_capacity_sysctl: too early to get CPU1 device!
+> > > and once these CPUs are added to the system, the file is missing.
+> > > 
+> > > Move this to a cpuhp callback, so that the file is created once
+> > > CPUs are brought online. This covers CPUs that are added late by
+> > > mechanisms like hotplug.
+> > > One observable difference is the file is now missing for offline CPUs.
+> > > 
+> > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > ---
+> > > If the offline CPUs thing is a problem for the tools that consume
+> > > this value, we'd need to move cpu_capacity to be part of cpu.c's
+> > > common_cpu_attr_groups.  
+> > 
+> > I think we should do that anyway and then use an is_visible() if we want to
+> > change whether it is visible in offline cpus.
+> > 
+> > Dynamic sysfs file creation is horrible - particularly when done
+> > from an totally different file from where the rest of the attributes
+> > are registered.  I'm curious what the history behind that is.
+> > 
+> > Whilst here, why is there a common_cpu_attr_groups which is
+> > identical to the hotpluggable_cpu_attr_groups in base/cpu.c?  
 > 
-> I tried pidfd_set_mempolicy(suggested by michal) about a year ago.
-> There is a problem here that may need attention.
+> Looking into doing this, the easy bit is adding the attribute group
+> with an appropriate .is_visible dependent on cpu_present(), but we
+> need to be able to call sysfs_update_groups() when the state of the
+> .is_visible() changes.
+Hi Russell,
+
+Sorry, somehow I missed this completely until you referred back to it :(
+
+This is pretty much what I was thinking so thanks for doing it.
+
 > 
-> A mempolicy can be either associated with a process or with a VMA.
-> All vma manipulation is somewhat protected by a down_read on
-> mmap_lock.In process context(in alloc_pages()) there is no locking
-> because only the process accesses its own state.
+> Given the comment in sysfs_update_groups() about "if an error occurs",
+> rather than making this part of common_cpu_attr_groups, would it be
+> better that it's part of its own set of groups, thus limiting the
+> damage from a possible error? I suspect, however, that any error at
+> that point means that the system is rather fatally wounded.
 > 
-> Now  we need to change the process context mempolicy specified
-> in pidfd. the mempolicy may about to be freed by
-> pidfd_set_mempolicy() while alloc_pages() is using it,
-> The race condition appears.
+> This is what I have so far to implement your idea, less the necessary
+> sysfs_update_groups() call when we need to change the visibility of
+> the attributes.
+
+Fwiw (and I think you shouldn't add this to the critical path for your
+main series for obvious reasons), I think you are right that it makes
+sense to do this in a separate group, but that if we were going to see
+an error I'd 'hope' we shouldn't see anything that hasn't occurred
+when groups were originally added. Maybe that's overly optimistic.
+
+Sorry again for lack of reply before now and thanks for pointing this
+out.  I'd love to see this posted after the ARM vCPU HP stuff is in.
+
+Jonathan
+
+
 > 
-> Say something like the following：
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 9ccb7daee78e..06c9fc6620d2 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -215,43 +215,24 @@ static ssize_t cpu_capacity_show(struct device *dev,
+>  	return sysfs_emit(buf, "%lu\n", topology_get_cpu_scale(cpu->dev.id));
+>  }
+>  
+> -static void update_topology_flags_workfn(struct work_struct *work);
+> -static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+> -
+>  static DEVICE_ATTR_RO(cpu_capacity);
+>  
+> -static int cpu_capacity_sysctl_add(unsigned int cpu)
+> -{
+> -	struct device *cpu_dev = get_cpu_device(cpu);
+> -
+> -	if (!cpu_dev)
+> -		return -ENOENT;
+> -
+> -	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
+> -
+> -	return 0;
+> -}
+> -
+> -static int cpu_capacity_sysctl_remove(unsigned int cpu)
+> +static umode_t cpu_present_attrs_visible(struct kobject *kobi,
+> +					 struct attribute *attr, int index)
+>  {
+> -	struct device *cpu_dev = get_cpu_device(cpu);
+> -
+> -	if (!cpu_dev)
+> -		return -ENOENT;
+> -
+> -	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct cpu *cpu = container_of(dev, struct cpu, dev);
+>  
+> -	return 0;
+> +	return cpu_present(cpu->dev.id) ? attr->mode : 0;
+>  }
+>  
+> -static int register_cpu_capacity_sysctl(void)
+> -{
+> -	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
+> -			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
+> +const struct attribute_group cpu_capacity_attr_group = {
+> +	.is_visible = cpu_present_attrs_visible,
+> +	.attrs = cpu_capacity_attrs
+> +};
+>  
+> -	return 0;
+> -}
+> -subsys_initcall(register_cpu_capacity_sysctl);
+> +static void update_topology_flags_workfn(struct work_struct *work);
+> +static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+>  
+>  static int update_topology;
+>  
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index a19a8be93102..954b045705c2 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -192,6 +192,9 @@ static const struct attribute_group crash_note_cpu_attr_group = {
+>  static const struct attribute_group *common_cpu_attr_groups[] = {
+>  #ifdef CONFIG_KEXEC
+>  	&crash_note_cpu_attr_group,
+> +#endif
+> +#ifdef CONFIG_GENERIC_ARCH_TOPOLOGY
+> +	&cpu_capacity_attr_group,
+>  #endif
+>  	NULL
+>  };
+> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+> index e117c06e0c6b..745ad21e3dc8 100644
+> --- a/include/linux/cpu.h
+> +++ b/include/linux/cpu.h
+> @@ -30,6 +30,8 @@ struct cpu {
+>  	struct device dev;
+>  };
+>  
+> +extern const struct attribute_group cpu_capacity_attr_group;
+> +
+>  extern void boot_cpu_init(void);
+>  extern void boot_cpu_hotplug_init(void);
+>  extern void cpu_init(void);
 > 
-> pidfd_set_mempolicy()        target task stack:
->                                                alloc_pages:
->                                              mpol = p->mempolicy;
->   task_lock(task);
->   old = task->mempolicy;
->   task->mempolicy = new;
->   task_unlock(task);
->   mpol_put(old);
->                                            /*old mpol has been freed.*/
->                                            policy_node(...., mpol)
->                                           __alloc_pages();
-> 
-> To reduce the use of locks and atomic operations(mpol_get/put)
-> in the hot path, there are no references or lock protections here
-> for task mempolicy.
-> 
-> It would be great if your refactoring has a good solution.
-> 
-> Thanks.
-> 
 
-Hi ZhongKun!
-
-I actually just sent out a more general RFC to mempolicy updates that
-discuss this more completely:
-
-https://lore.kernel.org/linux-mm/ZWezcQk+BYEq%2FWiI@memverge.com/
-
-and another post on even more issues with pidfd modifications to vma
-mempolicies:
-
-https://lore.kernel.org/linux-mm/ZWYsth2CtC4Ilvoz@memverge.com/
-
-We may have to slow-walk the changes to vma policies due to there being
-many more hidden accesses to (current) than expected. It's a rather
-nasty rats nest of mempolicy-vma-cpusets-shmem callbacks that obscure
-these current-task accesses, it will take time to work through.
-
-As for hot-path reference counting - we may need to change the way
-mempolicy is managed, possibly we could leverage RCU to manage mempolicy
-references in the hot path, rather than using locks.  In this scenario,
-we would likely need to change the way the default policy is applied
-(maybe not, I haven't fully explored it).
-
-Do you have thoughts on this?  Would very much like additional comments
-before I go through the refactor work.
-
-Regards,
-Gregory
 
