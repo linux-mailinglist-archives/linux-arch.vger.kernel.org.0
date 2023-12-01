@@ -1,183 +1,121 @@
-Return-Path: <linux-arch+bounces-581-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-582-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06B7C7FF89D
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 18:43:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71549800239
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 04:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37C031C210D0
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Nov 2023 17:43:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E3E12816FA
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 03:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751C058132;
-	Thu, 30 Nov 2023 17:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34248468A;
+	Fri,  1 Dec 2023 03:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e/qax+t2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1EE4131;
-	Thu, 30 Nov 2023 09:43:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0867A1756;
-	Thu, 30 Nov 2023 09:43:56 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 526A93F6C4;
-	Thu, 30 Nov 2023 09:43:04 -0800 (PST)
-Date: Thu, 30 Nov 2023 17:43:01 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: Peter Collingbourne <pcc@google.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-	rppt@kernel.org, hughd@google.com, steven.price@arm.com,
-	anshuman.khandual@arm.com, vincenzo.frascino@arm.com,
-	david@redhat.com, eugenis@google.com, kcc@google.com,
-	hyesoo.yu@samsung.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 21/27] mm: arm64: Handle tag storage pages mapped
- before mprotect(PROT_MTE)
-Message-ID: <ZWjJpaSahUUM3GKs@raptor>
-References: <20231119165721.9849-1-alexandru.elisei@arm.com>
- <20231119165721.9849-22-alexandru.elisei@arm.com>
- <CAMn1gO5WYC5Xx7LfBxN_j-xqkVT+tjXP5PqDfrvhgqPOa0ZCsA@mail.gmail.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C6A171B
+	for <linux-arch@vger.kernel.org>; Thu, 30 Nov 2023 19:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701402445;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Q5xYcnLhhl5wab+9SUNf2YG1+1AQAaLiKPAT2IR83M=;
+	b=e/qax+t2P5YvcINFgcPlspj/rVKk3yt5bTDqqYwM4Jw8ozUxOHjEfPtyKWDqbZC1JBuCWv
+	zZeRxDUPid4Em5hTOgYnkj5Ys6ISxi1ti7R4zMdY0hKnGe/zpPsos4H+K4QCDqMQIY8sIT
+	G1sxsfAFm+DLvLaPacI+eLdV8jdzYYs=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-453-kpTFGzlyOJ-it1uRHjgeTg-1; Thu, 30 Nov 2023 22:47:23 -0500
+X-MC-Unique: kpTFGzlyOJ-it1uRHjgeTg-1
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5be154fe98bso133821a12.0
+        for <linux-arch@vger.kernel.org>; Thu, 30 Nov 2023 19:47:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701402442; x=1702007242;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Q5xYcnLhhl5wab+9SUNf2YG1+1AQAaLiKPAT2IR83M=;
+        b=OgZ1K0n+7/rfJO7An4QPQyAQTQP1yh+VyIdAwNxPWf6tv6FZprB3tvpWHUtcx3ESXB
+         fTiPHhdfCv1c0w3sIsZKQdwzZjCSIk1CWifglmq6OKKoNXKQIFIQmTbz6kZWpwyWnUwE
+         wlTt7UfbEU5isn9K3/Cz04XbYdvMH9GDJMLEITaA51i4vim2DPmrcuaF5eps7zaLXcrD
+         BFYMx634bixpgiWI4uhW/MuLdopCPG05fLS+SPTVgSXu9wTuq0HJq+LK+XTqO8S4dHhW
+         OjWxGQS2P32t0iAQf9j44+jLsOkpVtP5OYlpA3o6bp/l+DZoX0KYI3EWi2tUDoLusCv0
+         +DaA==
+X-Gm-Message-State: AOJu0YxP0DQQbGyN6FnozwgFeRe6ynzlcmfi83H0UxemR1mGLV1tIgBw
+	PpVhbvFEL6JWuu+Askzdass4lyOxPwgcOAHIqZdMZff9JHgGMm+2+kDU8IoiYSotiXk3Z1XwjQx
+	lKKoUB1rOw8CIan77TZyKgQ==
+X-Received: by 2002:a17:902:d2cb:b0:1cf:de3e:e4c9 with SMTP id n11-20020a170902d2cb00b001cfde3ee4c9mr23769891plc.29.1701402442609;
+        Thu, 30 Nov 2023 19:47:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFFc/FRI9UHJwfBJxYeFRAhPaME7NIPXUpzMmMZaQsrSUZaHXjj5IgT1PfH3h0ARxutVZDmxg==
+X-Received: by 2002:a17:902:d2cb:b0:1cf:de3e:e4c9 with SMTP id n11-20020a170902d2cb00b001cfde3ee4c9mr23769867plc.29.1701402442296;
+        Thu, 30 Nov 2023 19:47:22 -0800 (PST)
+Received: from [192.168.68.51] ([43.252.115.3])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902e74500b001cfc1a593f7sm2185691plf.217.2023.11.30.19.47.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Nov 2023 19:47:21 -0800 (PST)
+Message-ID: <8c3ca6c7-fa5f-4f45-b36d-1c7d9d94c918@redhat.com>
+Date: Fri, 1 Dec 2023 14:47:11 +1100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMn1gO5WYC5Xx7LfBxN_j-xqkVT+tjXP5PqDfrvhgqPOa0ZCsA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/21] drivers: base: Implement weak arch_unregister_cpu()
+Content-Language: en-US
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+ linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org,
+ linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
+Cc: Salil Mehta <salil.mehta@huawei.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
+ justin.he@arm.com, James Morse <james.morse@arm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
+ <E1r5R3H-00CszC-2n@rmk-PC.armlinux.org.uk>
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <E1r5R3H-00CszC-2n@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Peter,
-
-On Mon, Nov 27, 2023 at 09:39:17PM -0800, Peter Collingbourne wrote:
-> Hi Alexandru,
+On 11/22/23 00:44, Russell King (Oracle) wrote:
+> From: James Morse <james.morse@arm.com>
 > 
-> On Sun, Nov 19, 2023 at 8:59 AM Alexandru Elisei
-> <alexandru.elisei@arm.com> wrote:
-> >
-> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> > ---
-> >  arch/arm64/include/asm/mte_tag_storage.h |  1 +
-> >  arch/arm64/kernel/mte_tag_storage.c      | 15 +++++++
-> >  arch/arm64/mm/fault.c                    | 55 ++++++++++++++++++++++++
-> >  include/linux/migrate.h                  |  8 +++-
-> >  include/linux/migrate_mode.h             |  1 +
-> >  mm/internal.h                            |  6 ---
-> >  6 files changed, 78 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/include/asm/mte_tag_storage.h
-> > index b97406d369ce..6a8b19a6a758 100644
-> > --- a/arch/arm64/include/asm/mte_tag_storage.h
-> > +++ b/arch/arm64/include/asm/mte_tag_storage.h
-> > @@ -33,6 +33,7 @@ int reserve_tag_storage(struct page *page, int order, gfp_t gfp);
-> >  void free_tag_storage(struct page *page, int order);
-> >
-> >  bool page_tag_storage_reserved(struct page *page);
-> > +bool page_is_tag_storage(struct page *page);
-> >
-> >  vm_fault_t handle_page_missing_tag_storage(struct vm_fault *vmf);
-> >  vm_fault_t handle_huge_page_missing_tag_storage(struct vm_fault *vmf);
-> > diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_tag_storage.c
-> > index a1cc239f7211..5096ce859136 100644
-> > --- a/arch/arm64/kernel/mte_tag_storage.c
-> > +++ b/arch/arm64/kernel/mte_tag_storage.c
-> > @@ -500,6 +500,21 @@ bool page_tag_storage_reserved(struct page *page)
-> >         return test_bit(PG_tag_storage_reserved, &page->flags);
-> >  }
-> >
-> > +bool page_is_tag_storage(struct page *page)
-> > +{
-> > +       unsigned long pfn = page_to_pfn(page);
-> > +       struct range *tag_range;
-> > +       int i;
-> > +
-> > +       for (i = 0; i < num_tag_regions; i++) {
-> > +               tag_range = &tag_regions[i].tag_range;
-> > +               if (tag_range->start <= pfn && pfn <= tag_range->end)
-> > +                       return true;
-> > +       }
-> > +
-> > +       return false;
-> > +}
-> > +
-> >  int reserve_tag_storage(struct page *page, int order, gfp_t gfp)
-> >  {
-> >         unsigned long start_block, end_block;
-> > diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> > index 6730a0812a24..964c5ae161a3 100644
-> > --- a/arch/arm64/mm/fault.c
-> > +++ b/arch/arm64/mm/fault.c
-> > @@ -12,6 +12,7 @@
-> >  #include <linux/extable.h>
-> >  #include <linux/kfence.h>
-> >  #include <linux/signal.h>
-> > +#include <linux/migrate.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/hardirq.h>
-> >  #include <linux/init.h>
-> > @@ -956,6 +957,50 @@ void tag_clear_highpage(struct page *page)
-> >  }
-> >
-> >  #ifdef CONFIG_ARM64_MTE_TAG_STORAGE
-> > +
-> > +#define MR_TAGGED_TAG_STORAGE  MR_ARCH_1
-> > +
-> > +extern bool isolate_lru_page(struct page *page);
-> > +extern void putback_movable_pages(struct list_head *l);
+> Add arch_unregister_cpu() to allow the ACPI machinery to call
+> unregister_cpu(). This is enough for arm64, riscv and loongarch, but
+> needs to be overridden by x86 and ia64 who need to do more work.
 > 
-> Could we move these declarations to a non-mm-internal header and
-> #include it instead of manually declaring them here?
-
-Yes, that's better than this hackish way of doing it.
-
+> CC: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> An open question remains from the RFC v2 posting: should we provide a
+> __weak stub for !HOTPLUG_CPU as well, since in later patches ACPI may
+> reference this if the compiler doesn't optimise as we expect?
 > 
-> > +
-> > +/* Returns with the page reference dropped. */
-> > +static void migrate_tag_storage_page(struct page *page)
-> > +{
-> > +       struct migration_target_control mtc = {
-> > +               .nid = NUMA_NO_NODE,
-> > +               .gfp_mask = GFP_HIGHUSER_MOVABLE | __GFP_TAGGED,
-> > +       };
-> > +       unsigned long i, nr_pages = compound_nr(page);
-> > +       LIST_HEAD(pagelist);
-> > +       int ret, tries;
-> > +
-> > +       lru_cache_disable();
-> > +
-> > +       for (i = 0; i < nr_pages; i++) {
-> > +               if (!isolate_lru_page(page + i)) {
-> > +                       ret = -EAGAIN;
-> > +                       goto out;
-> > +               }
-> > +               /* Isolate just grabbed another reference, drop ours. */
-> > +               put_page(page + i);
-> > +               list_add_tail(&(page + i)->lru, &pagelist);
-> > +       }
-> > +
-> > +       tries = 5;
-> > +       while (tries--) {
-> > +               ret = migrate_pages(&pagelist, alloc_migration_target, NULL, (unsigned long)&mtc,
-> > +                                   MIGRATE_SYNC, MR_TAGGED_TAG_STORAGE, NULL);
-> > +               if (ret == 0 || ret != -EBUSY)
+> Changes since v1:
+>   * Added CONFIG_HOTPLUG_CPU ifdeffery around unregister_cpu
+> Changes since RFC v2:
+>   * Move earlier in the series
+> ---
+>   drivers/base/cpu.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> This could be simplified to:
-> 
-> if (ret != -EBUSY)
 
-Indeed! I can do the same thing in reserve_tag_storage(), in the loop where I
-call alloc_contig_range().
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-Thanks,
-Alex
 
