@@ -1,164 +1,128 @@
-Return-Path: <linux-arch+bounces-602-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-603-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C7C9801017
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 17:28:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13B92801334
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 19:56:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB0862816B0
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 16:28:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB16C1F20FD0
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 18:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983F44CDEF;
-	Fri,  1 Dec 2023 16:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB83B48CF1;
+	Fri,  1 Dec 2023 18:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="FewMsGRG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A6OuCdxi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WrTTrJm3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BBA83;
-	Fri,  1 Dec 2023 08:28:07 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.nyi.internal (Postfix) with ESMTP id AAE28580A4F;
-	Fri,  1 Dec 2023 11:28:03 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 01 Dec 2023 11:28:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701448083; x=1701455283; bh=eY
-	YJBcIdkLd72F1/I/hnCobiC3d8I4lgiTDbsW05Rfk=; b=FewMsGRG2mUxUBSpWO
-	M/0S1myc7hSRL3FvSrwVGHeQGumuLJ4RvB4EGSTNC83CaKyGC1+bFU5Hb33Yf1tY
-	VO4XFT8d/i/Y+dJYjdSDrW/8zqFVcu/2daQX8puPuiveYcVXPGRJH+KQsmRUMjPR
-	NwFZMOCSRsa8S1Ey4IpHbePMk5LTSf60L1Ofqcd9VJQkd/WyYvCNWDGa1gDReibG
-	b/T0TFNxpueSxIzhQhxPzzflpDZv/CtDYmCMGC+o+tsi6PNHCikhWOUPSeIqtY2q
-	iaIMCgLJunahTFwQ7hNYdKEfmK8wz/WAyfaafbTVANnSiri5Qz+V/3uRN2DIrKWG
-	z+xw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701448083; x=1701455283; bh=eYYJBcIdkLd72
-	F1/I/hnCobiC3d8I4lgiTDbsW05Rfk=; b=A6OuCdxivjbAP5VbfQsErA89IkZzt
-	z5fbjEpYzWg/ItEGqilefFlgi4GX08/yh9jdVCf/SREg/aq70rvhcSq44BckYCkc
-	DSjl9E1eTCLZ5N/sJ1CvoNy1LS6yN1B7ILVTMABRc31B1yU4IzRVNVxs82czDOdk
-	nC/H7Ks4QsPk67HzdQAnS7GpYqCXEuCQ8LXJFYe3/NChoyv8FkMjdScJVEn0TWe8
-	OzHIkGVmihZaABAzrdsxutC3XIc7748UcqyQpX4Js56w1k0caCPxH+6Lxf99GoJI
-	m8P8YdvI+1xJS1J6AM3J94+0H0erqV0jmx+Oxt+OQchX9BLoDLmfMhVyQ==
-X-ME-Sender: <xms:kglqZf_CEBYJvjsczzeens3_fwY4UOf70OKzoSAEwa7BapVJglFI9g>
-    <xme:kglqZbs8XqF0Dc2wngbqmcylIMG9wIWpq6u5yxSmo9EEO77FXCcWwKEyamAjqvTFp
-    0a_wj0rA2xPgpgeRPU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:kglqZdA1dH1Ijr6lBN34WvsZKLb0mzMG6v_GRemXoo-tr1a7NNY07g>
-    <xmx:kglqZbc1dxMUS-Une1a8_DLny0TVaaQ8FH7yEcvDf0aJzBSUrB7SSA>
-    <xmx:kglqZUMN_NYtIoLmbna_zQ5GJYdjeAHV9yprhR5PTCxb9ecEL8MfjA>
-    <xmx:kwlqZS3F_5Pk_UhB-2fGmXuWnF6ffq_QrHfqPU2X-VYrH8gd376azQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1E96DB60089; Fri,  1 Dec 2023 11:28:02 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A0910DA
+	for <linux-arch@vger.kernel.org>; Fri,  1 Dec 2023 10:56:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701457002;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=knBMShKmFlUoH2r+m1jr6Ik+IHyXp9YX9Nzcxs2hiqc=;
+	b=WrTTrJm3CVxYgsLbSYHLCs1e8p2ZE89pQc2i4AYrwTGA0Gg8LeVLAD2cpHBu9qJZZahtKG
+	sC0xAIEPC4dURaXiZPk4IqSPvQLK5IXeuSDvjnjVe5Vw6+/se6l/s+Anw83tZ7qGn7cXFu
+	kwT+n9bG2CUysYXCOiCe/PAQtQOle3E=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-145-hnfRMzJJN8ai5z5PvqknlQ-1; Fri, 01 Dec 2023 13:56:41 -0500
+X-MC-Unique: hnfRMzJJN8ai5z5PvqknlQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3333298eaabso128327f8f.0
+        for <linux-arch@vger.kernel.org>; Fri, 01 Dec 2023 10:56:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701457000; x=1702061800;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=knBMShKmFlUoH2r+m1jr6Ik+IHyXp9YX9Nzcxs2hiqc=;
+        b=KPW/AFLnjFkmKrDTmyAcxmGNPdP85gJbh+xQSLZgYWLaOAXB1WAGeQfoY+tN6vjpOv
+         XQk8ZDAk02W9IqqVWby+SoPVT8AVQfuVu31mH8BDllQg0+81w3q7+fAE0uub+ikB0yh5
+         qWddk0HWZWdpR9J6Fg8WJmMdcdr2x9jH/j2pel5aqbAhLPewgPggbjqt0c7Uzstjtlzb
+         LEGLKxUvkLbTGFPH915Q48jMm9eGJSUAacW+v2vQPoOcLtTOr8tSi99UWjas1QGGymsK
+         NygQAR5dwhZiUuDUNlWBhmghH/AJOvPRkazN4pdcIE8DCRHHLTXUNNQYlHmPTJvzv514
+         dvCA==
+X-Gm-Message-State: AOJu0Yyc8ufV3LoflhClTS2+l73AbeHyhGXnHtiB65HDIfEl4mr2Brbg
+	Cw461pENhIVmN3N2ZMAYLWxffX990aPbIZANtcT7ZmWyaQ3MyurVXuR0/2wzfRkPaCTMzGpqez1
+	Vl/xZcK+a0U5/nNfIg7D9Yg==
+X-Received: by 2002:a5d:6c6c:0:b0:333:30ff:1f69 with SMTP id r12-20020a5d6c6c000000b0033330ff1f69mr2267057wrz.2.1701456999967;
+        Fri, 01 Dec 2023 10:56:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEYgHWBQ7ogcvjbLFWn2No+e3cu9LEahop+KqhFPcJLWwUOIMB6Bc+JurOdJinf9T84hx/+XQ==
+X-Received: by 2002:a5d:6c6c:0:b0:333:30ff:1f69 with SMTP id r12-20020a5d6c6c000000b0033330ff1f69mr2267048wrz.2.1701456999652;
+        Fri, 01 Dec 2023 10:56:39 -0800 (PST)
+Received: from pstanner-thinkpadt14sgen1.remote.csb ([2001:9e8:32e2:4e00:227b:d2ff:fe26:2a7a])
+        by smtp.gmail.com with ESMTPSA id x7-20020a5d6507000000b003296b488961sm4857046wru.31.2023.12.01.10.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 10:56:39 -0800 (PST)
+Message-ID: <4bf46893a583551c71bdfbf91df9ccc4b51556b1.camel@redhat.com>
+Subject: Re: [PATCH v2 1/4] lib: move pci_iomap.c to drivers/pci/
+From: Philipp Stanner <pstanner@redhat.com>
+To: Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Dan Williams
+ <dan.j.williams@intel.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Jakub Kicinski <kuba@kernel.org>, Dave Jiang <dave.jiang@intel.com>,
+ Uladzislau Koshchanka <koshchanka@gmail.com>, Neil Brown <neilb@suse.de>,
+ Niklas Schnelle <schnelle@linux.ibm.com>, John Sanpe <sanpeqf@gmail.com>, 
+ Kent Overstreet <kent.overstreet@gmail.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Kees Cook <keescook@chromium.org>, David Gow
+ <davidgow@google.com>, Yury Norov <yury.norov@gmail.com>, "wuqiang.matt"
+ <wuqiang.matt@bytedance.com>, Jason Baron <jbaron@akamai.com>, Kefeng Wang
+ <wangkefeng.wang@huawei.com>, Ben Dooks <ben.dooks@codethink.co.uk>, Danilo
+ Krummrich <dakr@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, Linux-Arch
+	 <linux-arch@vger.kernel.org>
+Date: Fri, 01 Dec 2023 19:56:36 +0100
+In-Reply-To: <a2b006be-ab4c-4040-b3db-db68d9c77cda@app.fastmail.com>
+References: <20231201121622.16343-1-pstanner@redhat.com>
+	 <20231201121622.16343-2-pstanner@redhat.com>
+	 <a2b006be-ab4c-4040-b3db-db68d9c77cda@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3871b83a-0e80-402e-bbe6-359c17127842@app.fastmail.com>
-In-Reply-To: <20231201121622.16343-1-pstanner@redhat.com>
-References: <20231201121622.16343-1-pstanner@redhat.com>
-Date: Fri, 01 Dec 2023 17:27:40 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Philipp Stanner" <pstanner@redhat.com>,
- "Bjorn Helgaas" <bhelgaas@google.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Dan Williams" <dan.j.williams@intel.com>,
- "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Dave Jiang" <dave.jiang@intel.com>,
- "Uladzislau Koshchanka" <koshchanka@gmail.com>, "Neil Brown" <neilb@suse.de>,
- "Niklas Schnelle" <schnelle@linux.ibm.com>, "John Sanpe" <sanpeqf@gmail.com>,
- "Kent Overstreet" <kent.overstreet@gmail.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Kees Cook" <keescook@chromium.org>, "David Gow" <davidgow@google.com>,
- "Yury Norov" <yury.norov@gmail.com>,
- "wuqiang.matt" <wuqiang.matt@bytedance.com>,
- "Jason Baron" <jbaron@akamai.com>,
- "Kefeng Wang" <wangkefeng.wang@huawei.com>,
- "Ben Dooks" <ben.dooks@codethink.co.uk>, "Danilo Krummrich" <dakr@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] Regather scattered PCI-Code
-Content-Type: text/plain
 
-On Fri, Dec 1, 2023, at 13:16, Philipp Stanner wrote:
->
-> Arnd has suggested that architectures defining a custom inb() need their
-> own iomem_is_ioport(), as well. I've grepped for inb() and found the
-> following list of archs that define their own:
->   - alpha
->   - arm
->   - m68k <--
->   - parisc
->   - powerpc
->   - sh
->   - sparc
->   - x86 <--
->
-> All of those have their own definitons of pci_iounmap(). Therefore, they
-> don't need our generic version in the first place and, thus, also need
-> no iomem_is_ioport().
+On Fri, 2023-12-01 at 15:43 +0100, Arnd Bergmann wrote:
+> On Fri, Dec 1, 2023, at 13:16, Philipp Stanner wrote:
+> >=20
+> > -#ifdef CONFIG_PCI
+> > =C2=A0/**
+>=20
+> You should not remove the #ifdef here, it probably results in
+> a build failure when CONFIG_GENERIC_PCI_IOMAP is set and
+> GENERIC_PCI is not.
 
-What I meant of course is that they should define iomem_is_ioport()
-in order to drop the custom pci_iounmap() and have only one remaining
-definition of that function left.
+CONFIG_PCI you mean.
+Yes, that results in a build failure. That's what the Intel bots have
+reminded me of subtly before, which is why I:
 
-The one special case that I missed the last time is s390, which
-does not use GENERIC_PCI_IOMAP and will just require a separate
-copy of pci_iounmap() to go along with the is custom pci_iomap().
+>=20
+> Alternatively you could use Kconfig or Makefile logic to
+> prevent the file from being built without CONFIG_PCI.
 
-> The two exceptions are x86 and m68k. The former uses lib/iomap.c through
-> CONFIG_GENERIC_IOMAP, as Arnd pointed out in the previous discussion
-> (thus, CONFIG_GENERIC_IOMAP is not really generic in this regard).
->
-> So as I see it, only m68k WOULD need its own custom definition of
-> iomem_is_ioport(). But as I understand it it doesn't because it uses the
-> one from asm-generic/pci_iomap.h ??
+did exactly that in this very patch:
 
-At the moment, m68k gets the pci_iounmap() from lib/iomap.c
-if PCI is enabled for coldfire, but that incorrectly calls
-iounmap() on PCI_IO_PA if it gets passed a PIO address.
+@@ -14,6 +14,7 @@ ifdef CONFIG_PCI             <------------
+ obj-$(CONFIG_PROC_FS)		+=3D proc.o
+ obj-$(CONFIG_SYSFS)		+=3D slot.o
+ obj-$(CONFIG_ACPI)		+=3D pci-acpi.o
++obj-$(CONFIG_GENERIC_PCI_IOMAP) +=3D iomap.o     <-----------
+ endif
 
-The version from asm-generic/io.h should fix this.
 
-For classic m68k, there is no PCI, so nothing calls pci_iounmap().
+P.
 
-> I wasn't entirely sure how to deal with the address ranges for the
-> generic implementation in asm-generic/io.h. It's marked with a TODO.
-> Input appreciated.
+>=20
+> =C2=A0=C2=A0 Arnd
+>=20
 
-I commented on the function directly. To clarify, I think we should
-be able to directly turn each pci_iounmap() definition into
-a iomem_is_ioport() definition by keeping the logic unchanged
-and just return 'true' for the PIO variant or 'false' for the MMIO
-version.
-
-> I removed the guard around define pci_iounmap in asm-generic/io.h. An
-> alternative would be to have it be guarded by CONFIG_GENERIC_IOMAP and
-> CONFIG_GENERIC_PCI_IOMAP, both. Without such a guard, there is no
-> collision however, because generic pci_iounmap() from
-> drivers/pci/iomap.c will only get pulled in when
-> CONFIG_GENERIC_PCI_IOMAP is actually set.
-
-The "#define pci_iomap" can be removed entirely I think.
-
-     Arnd
 
