@@ -1,98 +1,124 @@
-Return-Path: <linux-arch+bounces-596-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-597-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6192800AE3
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 13:29:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0AF0800C9D
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 14:53:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C54B1F20ED2
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 12:29:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A15EB21326
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 13:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35C72511E;
-	Fri,  1 Dec 2023 12:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2813BB5D;
+	Fri,  1 Dec 2023 13:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dJ8jDacF"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Yk573CjB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF0724B58;
-	Fri,  1 Dec 2023 12:29:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41FD1C433C9;
-	Fri,  1 Dec 2023 12:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701433742;
-	bh=2msErawXU1FtCRCS5sg1Q8l3QB+7X8g5Q4ahABRE7v8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dJ8jDacFlSnfz6vHti2Hqo/yYnjTmAowPHXSHHs/ZVAyHKK3vqYmj15fWpmlFSwyK
-	 oDGOQXI0cD4TOPugWR4XLWNsKEWov5ibPPHMGBZmtzjTJjHNBvU0cN9CgmbjjZoerF
-	 FiLiZFU4qf9MaXbefoLTcFW9iipaY39QNIHlh/Ag=
-Date: Fri, 1 Dec 2023 12:28:59 +0000
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>,
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-	Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com, Len Brown <lenb@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 00/21] Initial cleanups for vCPU hotplug
-Message-ID: <2023120131-leotard-deprecate-4e27@gregkh>
-References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
- <87plzqxiyl.ffs@tglx>
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE73197
+	for <linux-arch@vger.kernel.org>; Fri,  1 Dec 2023 05:53:35 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c9d2ca9a96so19914761fa.3
+        for <linux-arch@vger.kernel.org>; Fri, 01 Dec 2023 05:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1701438814; x=1702043614; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=B2gDIyfWC+W4ytDLyZ1ApFFOSpObEoeppni2yotM7Sk=;
+        b=Yk573CjBNOA4iH35REuCAlz0xcvrPdhovdZ10G+9ct9/82MJ2VUkatWF5ob7pNDWHA
+         quWrakx+4FF5/3XxvR9LtyfIDhm487E0vDDSXGnyFHtYI6mDH0TY6fk/h/3gmV1C23gR
+         u+j36SCyGcOQ6ubn8/4hNrahVAFCc3S6xZJ7yYv2HkoAaRGWKI7xwDI1Farhm0gLIuG8
+         w0y0Ix375m7LdTFa20D2Cd7XERlNahb3EAJ9mSeSu3MSKb5MmvJJmbEikY+vNDgLL2E4
+         BwlqV0QaZcYNaGlMM5nWO8nalNRO1MUptzEi0wUC7rWJ8FgsQNWGbd3WwOgSVDDkcvIi
+         cj6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701438814; x=1702043614;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B2gDIyfWC+W4ytDLyZ1ApFFOSpObEoeppni2yotM7Sk=;
+        b=LkWQOo/bhnu5Uiq9UcRccviL1NEhxUmYhp+blch678OmMapE0bL120g42wiYVhcmhI
+         nkJXIzrBCGaFP+k3H6V/oi/ESM7yFkXBSWBdLkCDbJ4C+iIy6UnMzkcSUyGuMW3L5ZWa
+         R3j6m2O8YdoWggBDI4WKP/qaRkmt9W/NeNdd4RaP/geo6uKtSxFHbrMul/hA4tm5yr27
+         s6DrCWIy/zNfVf3/z/GN6WiA0yWJb4PmrKuW23HUTTDfDXOVe+eO4Wk7++v1DjTr2UkC
+         oMUlQslBXIl1979W4KcEGQqbd+ZbhfIvx7GE6AT4Qb/KdXEZVpVMALBQllqSDGYfiM7f
+         62VQ==
+X-Gm-Message-State: AOJu0YxNcCLrdeA778CGaO+aF42/G2OhklLCtFfMtoilPi36orqHBplI
+	mBkVHmw2/WJaLXO14rmnhJG/yJsC1X0TcGAvSqc94A==
+X-Google-Smtp-Source: AGHT+IEWbDp/BHTI35lHYKJahi0bZ7EApCyKw47RGLaZzY7863jjC5lW9Ntg2R4fr5oj1AbZZjB53QPWww4cZ5h4s3o=
+X-Received: by 2002:a2e:8783:0:b0:2c9:c22e:31eb with SMTP id
+ n3-20020a2e8783000000b002c9c22e31ebmr611668lji.22.1701438814214; Fri, 01 Dec
+ 2023 05:53:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87plzqxiyl.ffs@tglx>
+References: <ZV5zGROLefrsEcHJ@r13-u19.micron.com> <CACSyD1OFjROw26+2ojG37eDBParVg721x1HCROMiF2pW2aHj8A@mail.gmail.com>
+ <ZV/HSFMmv3xwkNPL@memverge.com> <CACSyD1MrCzyV-93Ov07NpV3Nm3u0fYExmD1ShE_e2tapW6a6HA@mail.gmail.com>
+ <ZWizUEd/rsxSc0fW@memverge.com>
+In-Reply-To: <ZWizUEd/rsxSc0fW@memverge.com>
+From: Zhongkun He <hezhongkun.hzk@bytedance.com>
+Date: Fri, 1 Dec 2023 21:53:23 +0800
+Message-ID: <CACSyD1PCjPEwPCVXKVULjbNwxUG89DZUUfiDLg+wFyJRJXAPzA@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm/mbind: Introduce process_mbind() syscall for
+ external memory binding
+To: Gregory Price <gregory.price@memverge.com>
+Cc: Vinicius Petrucci <vpetrucci@gmail.com>, akpm@linux-foundation.org, 
+	linux-mm@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-api@vger.kernel.org, minchan@kernel.org, dave.hansen@linux.intel.com, 
+	x86@kernel.org, Jonathan.Cameron@huawei.com, aneesh.kumar@linux.ibm.com, 
+	ying.huang@intel.com, dan.j.williams@intel.com, fvdl@google.com, 
+	surenb@google.com, rientjes@google.com, hannes@cmpxchg.org, mhocko@suse.com, 
+	Hasan.Maruf@amd.com, jgroves@micron.com, ravis.opensrc@micron.com, 
+	sthanneeru@micron.com, emirakhur@micron.com, vtavarespetr@micron.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Dec 01, 2023 at 12:25:54PM +0100, Thomas Gleixner wrote:
-> Russell!
-> 
-> On Tue, Nov 21 2023 at 13:43, Russell King wrote:
-> > This series aims to switch most architectures over to using generic CPU
-> > devices rather than arch specific implementations, which I think is
-> > worthwhile doing even if the vCPU hotplug series needs further work.
-> 
-> I went through the whole series and I can't find anything
-> objectionable.
-> 
-> Vs. merging: It does not make sense to split this up and route
-> individual patches.
-> 
-> So I can pick the whole pile up and route it through tip smp/core unless
-> Rafael or Greg prefer to take it through one of their trees. For the
-> latter case:
-> 
->        Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Greg, Rafael?
+>
+> Hi ZhongKun!
+>
+> I actually just sent out a more general RFC to mempolicy updates that
+> discuss this more completely:
+>
+> https://lore.kernel.org/linux-mm/ZWezcQk+BYEq%2FWiI@memverge.com/
+>
 
-I can take them, will do so this weekend when I catch up on patches on a
-14+ hour flight...
+OK.
 
-greg k-h
+> and another post on even more issues with pidfd modifications to vma
+> mempolicies:
+>
+> https://lore.kernel.org/linux-mm/ZWYsth2CtC4Ilvoz@memverge.com/
+>
+> We may have to slow-walk the changes to vma policies due to there being
+> many more hidden accesses to (current) than expected. It's a rather
+> nasty rats nest of mempolicy-vma-cpusets-shmem callbacks that obscure
+> these current-task accesses, it will take time to work through.
+>
+
+Got it, thanks. It's more complicated than I thought.
+
+> As for hot-path reference counting - we may need to change the way
+> mempolicy is managed, possibly we could leverage RCU to manage mempolicy
+> references in the hot path, rather than using locks.  In this scenario,
+> we would likely need to change the way the default policy is applied
+> (maybe not, I haven't fully explored it).
+>
+
+RCU may have a long time in the read-side critical section.
+
+We should probably replace the atomic_t refcnt with percpu_ref in
+mempolicy(also suggested by Michal), but refactoring work involves
+a lot of code.
+
+A simple way is to use task_work to release the mempolicy which may
+be used by alloc_pages(). But it doesn't have a direct result.
+
+> Do you have thoughts on this?  Would very much like additional comments
+> before I go through the refactor work.
+>
+> Regards,
+> Gregory
 
