@@ -1,124 +1,116 @@
-Return-Path: <linux-arch+bounces-597-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-599-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0AF0800C9D
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 14:53:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D77A4800DC4
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 15:55:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A15EB21326
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 13:53:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A63F1C203BB
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 14:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2813BB5D;
-	Fri,  1 Dec 2023 13:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F733E467;
+	Fri,  1 Dec 2023 14:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Yk573CjB"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="M8oHNdH+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gvF3JFrw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE73197
-	for <linux-arch@vger.kernel.org>; Fri,  1 Dec 2023 05:53:35 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c9d2ca9a96so19914761fa.3
-        for <linux-arch@vger.kernel.org>; Fri, 01 Dec 2023 05:53:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1701438814; x=1702043614; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B2gDIyfWC+W4ytDLyZ1ApFFOSpObEoeppni2yotM7Sk=;
-        b=Yk573CjBNOA4iH35REuCAlz0xcvrPdhovdZ10G+9ct9/82MJ2VUkatWF5ob7pNDWHA
-         quWrakx+4FF5/3XxvR9LtyfIDhm487E0vDDSXGnyFHtYI6mDH0TY6fk/h/3gmV1C23gR
-         u+j36SCyGcOQ6ubn8/4hNrahVAFCc3S6xZJ7yYv2HkoAaRGWKI7xwDI1Farhm0gLIuG8
-         w0y0Ix375m7LdTFa20D2Cd7XERlNahb3EAJ9mSeSu3MSKb5MmvJJmbEikY+vNDgLL2E4
-         BwlqV0QaZcYNaGlMM5nWO8nalNRO1MUptzEi0wUC7rWJ8FgsQNWGbd3WwOgSVDDkcvIi
-         cj6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701438814; x=1702043614;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B2gDIyfWC+W4ytDLyZ1ApFFOSpObEoeppni2yotM7Sk=;
-        b=LkWQOo/bhnu5Uiq9UcRccviL1NEhxUmYhp+blch678OmMapE0bL120g42wiYVhcmhI
-         nkJXIzrBCGaFP+k3H6V/oi/ESM7yFkXBSWBdLkCDbJ4C+iIy6UnMzkcSUyGuMW3L5ZWa
-         R3j6m2O8YdoWggBDI4WKP/qaRkmt9W/NeNdd4RaP/geo6uKtSxFHbrMul/hA4tm5yr27
-         s6DrCWIy/zNfVf3/z/GN6WiA0yWJb4PmrKuW23HUTTDfDXOVe+eO4Wk7++v1DjTr2UkC
-         oMUlQslBXIl1979W4KcEGQqbd+ZbhfIvx7GE6AT4Qb/KdXEZVpVMALBQllqSDGYfiM7f
-         62VQ==
-X-Gm-Message-State: AOJu0YxNcCLrdeA778CGaO+aF42/G2OhklLCtFfMtoilPi36orqHBplI
-	mBkVHmw2/WJaLXO14rmnhJG/yJsC1X0TcGAvSqc94A==
-X-Google-Smtp-Source: AGHT+IEWbDp/BHTI35lHYKJahi0bZ7EApCyKw47RGLaZzY7863jjC5lW9Ntg2R4fr5oj1AbZZjB53QPWww4cZ5h4s3o=
-X-Received: by 2002:a2e:8783:0:b0:2c9:c22e:31eb with SMTP id
- n3-20020a2e8783000000b002c9c22e31ebmr611668lji.22.1701438814214; Fri, 01 Dec
- 2023 05:53:34 -0800 (PST)
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3727BBD;
+	Fri,  1 Dec 2023 06:55:49 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 6FA835808AE;
+	Fri,  1 Dec 2023 09:43:57 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 01 Dec 2023 09:43:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm3; t=1701441837; x=1701449037; bh=kK
+	o4dJKblO+HlaEynT7R0ipo9rNcBzF1TALtacSN8BE=; b=M8oHNdH+cvykmc/+5J
+	8RMXWyg22pwYkaY44RoX9SPAkdK1aLBFwwkj4sptf+YpDIdDWuTHixMt9aEH++tj
+	kRSLFukS+/iWZDl3Q0aoNgsvZ8NUjDBSh39eGILjEePgB5J6m3aLFYpHYIztcwMU
+	jKm81uFGfDBlzWrPt5/0p7DrQTiGlFdjyBx76kxrq+8KsEBvUgXzyCBFFzMl0fNL
+	i8wvSsEhMh2XHOhbJ08aVytYJYkjEYgxtRGwAR+RCpNkU4rOpaDvol39QD0QGJDx
+	U3QPyA+VAYxSUKSbtQrHD//p9vvDd8gZi+BgknFw5FSC0jNXuHmv9Jf9vMz90S3w
+	sPuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701441837; x=1701449037; bh=kKo4dJKblO+Hl
+	aEynT7R0ipo9rNcBzF1TALtacSN8BE=; b=gvF3JFrwR29gFH3qJWYjCOqt3lyop
+	MwdkBKVOAx3QaD9AsJ+mKQvXRb+g3ZVqwY8+x4NjTbHwwvcebV9LRkL7NEtTJvfE
+	3oBykOvMihi81cveRMT/4Uk8DBrNnKptFYiNvuF75XpUEv4CgHRDUFgaBehOJkOI
+	HKPkil0zv46wXWPldhcOqaBYlgC4878tbGVMBU3DNpqk0ivMSXm8doZ391JausdQ
+	fFXr8GVgKGWxuyXGeJvSfi52quDYp0TAAIcZb59B9ORY1oxRebTGIctziyUCT8L9
+	QueLm9VM9VjhHwOyEP8SS6rU/u1TRMV8T3fZ+jj98h2Ed9exim2dstO6g==
+X-ME-Sender: <xms:K_FpZT1N2xHpKGa1QK9TszyH0GWiI3A3mc5QjQ6mvf4SwSdYyogiwQ>
+    <xme:K_FpZSHN9gNozBunfgMHPgQVu_k_4S9LpYPWbb2yR8qSpXGFeZtG8GpBSt_PiUFSC
+    _gurV8FebrnjCjFubA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:K_FpZT5VLRyq7L0J3Ttt9kntPs34rf9ubufIk9CTsTVak8gsEsJoZA>
+    <xmx:K_FpZY1r7ldOCyyL10MX5TaoWaBF6Rq9u_LrBIqSGkmrzWMY_9xfIw>
+    <xmx:K_FpZWE9ZE1Op-EA9RLa41otswK1gi4T-66MV-A7LPT7wMtyDBJhCg>
+    <xmx:LfFpZaNc_koo_gR9hz0jAbAGvo13fDijh0rLvdqL_CRyPBrs1lPr6Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 75EBCB6008D; Fri,  1 Dec 2023 09:43:55 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZV5zGROLefrsEcHJ@r13-u19.micron.com> <CACSyD1OFjROw26+2ojG37eDBParVg721x1HCROMiF2pW2aHj8A@mail.gmail.com>
- <ZV/HSFMmv3xwkNPL@memverge.com> <CACSyD1MrCzyV-93Ov07NpV3Nm3u0fYExmD1ShE_e2tapW6a6HA@mail.gmail.com>
- <ZWizUEd/rsxSc0fW@memverge.com>
-In-Reply-To: <ZWizUEd/rsxSc0fW@memverge.com>
-From: Zhongkun He <hezhongkun.hzk@bytedance.com>
-Date: Fri, 1 Dec 2023 21:53:23 +0800
-Message-ID: <CACSyD1PCjPEwPCVXKVULjbNwxUG89DZUUfiDLg+wFyJRJXAPzA@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm/mbind: Introduce process_mbind() syscall for
- external memory binding
-To: Gregory Price <gregory.price@memverge.com>
-Cc: Vinicius Petrucci <vpetrucci@gmail.com>, akpm@linux-foundation.org, 
-	linux-mm@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-api@vger.kernel.org, minchan@kernel.org, dave.hansen@linux.intel.com, 
-	x86@kernel.org, Jonathan.Cameron@huawei.com, aneesh.kumar@linux.ibm.com, 
-	ying.huang@intel.com, dan.j.williams@intel.com, fvdl@google.com, 
-	surenb@google.com, rientjes@google.com, hannes@cmpxchg.org, mhocko@suse.com, 
-	Hasan.Maruf@amd.com, jgroves@micron.com, ravis.opensrc@micron.com, 
-	sthanneeru@micron.com, emirakhur@micron.com, vtavarespetr@micron.com
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <a2b006be-ab4c-4040-b3db-db68d9c77cda@app.fastmail.com>
+In-Reply-To: <20231201121622.16343-2-pstanner@redhat.com>
+References: <20231201121622.16343-1-pstanner@redhat.com>
+ <20231201121622.16343-2-pstanner@redhat.com>
+Date: Fri, 01 Dec 2023 15:43:35 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Philipp Stanner" <pstanner@redhat.com>,
+ "Bjorn Helgaas" <bhelgaas@google.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Dan Williams" <dan.j.williams@intel.com>,
+ "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Dave Jiang" <dave.jiang@intel.com>,
+ "Uladzislau Koshchanka" <koshchanka@gmail.com>, "Neil Brown" <neilb@suse.de>,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>, "John Sanpe" <sanpeqf@gmail.com>,
+ "Kent Overstreet" <kent.overstreet@gmail.com>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Kees Cook" <keescook@chromium.org>, "David Gow" <davidgow@google.com>,
+ "Yury Norov" <yury.norov@gmail.com>,
+ "wuqiang.matt" <wuqiang.matt@bytedance.com>,
+ "Jason Baron" <jbaron@akamai.com>,
+ "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+ "Ben Dooks" <ben.dooks@codethink.co.uk>, "Danilo Krummrich" <dakr@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v2 1/4] lib: move pci_iomap.c to drivers/pci/
+Content-Type: text/plain
 
->
-> Hi ZhongKun!
->
-> I actually just sent out a more general RFC to mempolicy updates that
-> discuss this more completely:
->
-> https://lore.kernel.org/linux-mm/ZWezcQk+BYEq%2FWiI@memverge.com/
->
+On Fri, Dec 1, 2023, at 13:16, Philipp Stanner wrote:
+> 
+> -#ifdef CONFIG_PCI
+>  /**
 
-OK.
+You should not remove the #ifdef here, it probably results in
+a build failure when CONFIG_GENERIC_PCI_IOMAP is set and
+GENERIC_PCI is not.
 
-> and another post on even more issues with pidfd modifications to vma
-> mempolicies:
->
-> https://lore.kernel.org/linux-mm/ZWYsth2CtC4Ilvoz@memverge.com/
->
-> We may have to slow-walk the changes to vma policies due to there being
-> many more hidden accesses to (current) than expected. It's a rather
-> nasty rats nest of mempolicy-vma-cpusets-shmem callbacks that obscure
-> these current-task accesses, it will take time to work through.
->
+Alternatively you could use Kconfig or Makefile logic to
+prevent the file from being built without CONFIG_PCI.
 
-Got it, thanks. It's more complicated than I thought.
-
-> As for hot-path reference counting - we may need to change the way
-> mempolicy is managed, possibly we could leverage RCU to manage mempolicy
-> references in the hot path, rather than using locks.  In this scenario,
-> we would likely need to change the way the default policy is applied
-> (maybe not, I haven't fully explored it).
->
-
-RCU may have a long time in the read-side critical section.
-
-We should probably replace the atomic_t refcnt with percpu_ref in
-mempolicy(also suggested by Michal), but refactoring work involves
-a lot of code.
-
-A simple way is to use task_work to release the mempolicy which may
-be used by alloc_pages(). But it doesn't have a direct result.
-
-> Do you have thoughts on this?  Would very much like additional comments
-> before I go through the refactor work.
->
-> Regards,
-> Gregory
+   Arnd
 
