@@ -1,71 +1,70 @@
-Return-Path: <linux-arch+bounces-598-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-600-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F3FB800D98
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 15:45:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E6D0800E8C
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 16:26:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08BFA281BCE
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 14:45:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1670B212A1
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 15:26:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78912BB11;
-	Fri,  1 Dec 2023 14:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414054A9BF;
+	Fri,  1 Dec 2023 15:26:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="uYcRRnt0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0dayboYg"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="tSSvQ/XN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LR7YgG92"
 X-Original-To: linux-arch@vger.kernel.org
-X-Greylist: delayed 67 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Dec 2023 06:45:07 PST
 Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922D110F9;
-	Fri,  1 Dec 2023 06:45:07 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD311A6;
+	Fri,  1 Dec 2023 07:26:49 -0800 (PST)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.nyi.internal (Postfix) with ESMTP id C97045809F7;
-	Fri,  1 Dec 2023 09:45:06 -0500 (EST)
+	by mailnew.nyi.internal (Postfix) with ESMTP id 2FCE2580B7E;
+	Fri,  1 Dec 2023 10:26:49 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 01 Dec 2023 09:45:06 -0500
+  by compute5.internal (MEProxy); Fri, 01 Dec 2023 10:26:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
 	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701441906; x=1701449106; bh=+L
-	CHDVdMO4HroZLW4+K9iEctf8j8Pnc97pjq2+19EyM=; b=uYcRRnt0ypzG+T8STd
-	NQrTedJ4t8y0QKNJgAZMqlWY3f00cPTsTaIXTxIpFmqq7hJEECpNU0LqRb6bcxlC
-	ObOEogFq/gXRXJPgdKt0uj978H4ktMy5QTAt4c8wGeVqnhSuJivsbNTAIc8vNG/0
-	kGqnfX6AfiroCZw8elB/ZcBja7NHtMgBcZfdf0F+4O4M92fPynweAgK8BZ/Uezv4
-	HuSUTBed+UAbjBq6YyG5ssvoIVr4TwyowCUetCQAXxRDntTIfeQ7m9hINLuSdEw4
-	Kt0W9XQvzynA2ian5d/Skxr5U+OD5fbfp7LPznSkAtB4T8KSfetaJA6jJLuREucL
-	zvnw==
+	:subject:subject:to:to; s=fm3; t=1701444409; x=1701451609; bh=kz
+	ZQHdKoAAB6+QfS9nk3zfKOvPAc1RPjvivwc2Gzfyk=; b=tSSvQ/XNZ3ynaWywM6
+	O2qOAAwm6/yH9PjS77M2/Q9aKwXZek8fBS0aSD2KECe1D8Dx/NwERvitb3hqsB6E
+	bwBjdi61UDIa7VUnAcycsP5NqfS4a39CV1wO/UzplGjXgjWrKc8zkBlZ6aQ2i07A
+	aNSwORpTAVmQDEV80XNIAbPnvteoB/F1pY4TZ/CXaY+eqK+Wu0VuG5zHbK8uXwqc
+	nZGJAUlddmzXCu3xEvO5rSiqiOeOAKKnOdtQu4wH0OJhCpouv4xXw9avkArEAgJF
+	KnBo+jRgQO9FqKszPRUTU+RZQR81aPJEBMxqkojgxyLt0zGBl8Gv9oyZKKyXIOqI
+	YQZQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:sender:subject
 	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701441906; x=1701449106; bh=+LCHDVdMO4Hro
-	ZLW4+K9iEctf8j8Pnc97pjq2+19EyM=; b=0dayboYg4YVfLSp9hNyPyWJXns73T
-	SRa8QuDwE+c8lIYmC5/t3uefRAnTr9hujOPoNi9/SVoT0qP3n/x08EnjZwL8q9Ua
-	kP71YcKmgAeCbOuciaGct6Q9fiXCExG08YTzovOK18X1SjtZNJP1LnDnhEXAK7ds
-	/fZdLVtXPaUYactCyaLG+Hqf8CICJjWNcv8YYlcCDSxBjr2LGWJD6DTyzsSn+Td2
-	Nnf0nd6JaBnS+/SU8qqflw0PnS+pbFjedMbBUtmf3VvUGbVKw01fQePx7hcbLrRZ
-	p7nCNEPutvSXFhbea2eJ0bTlCCjqj6MGPsPTCiSMsdwfKuNYYLbEvSZrw==
-X-ME-Sender: <xms:cfFpZQ1CG5NdFTXZ68XBLazYcvfypIXc78eUEdp6YJDoySA7pNsCjw>
-    <xme:cfFpZbHp5JFCiZIwVHAwnfLNwRdyxO2XwSUpm82KIoo7LKDYNARJJ4wG5HzW5ZzjV
-    wpE7aGaNQyIV5IfJe0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgieelucetufdoteggodetrfdotf
+	:x-sasl-enc; s=fm1; t=1701444409; x=1701451609; bh=kzZQHdKoAAB6+
+	QfS9nk3zfKOvPAc1RPjvivwc2Gzfyk=; b=LR7YgG92SvMJUcrWxR02LU+JCYKuS
+	X9GrH0wt+Ns6is1sMWzBiI4296x+7LNvpS3NRjLVl8R5XvPRVJXavrc7smV2q4H+
+	Jwhdk3u+MJrK1W+G3MYKPc7HSu/VpcxdPfKjd+EX013OdaFKsj1J7eSYjVHGhQ5t
+	i2E3WRlZ5nFK/fnUvA2dpcGBVnUTfTPhjkF51gLu4gbd4bDy0lEFrwOb2M5Yq9Gh
+	3584dzcqvpyfRfRK+g7hwq3h35NXlfGyDOY9VYMEO4jx+lfLAfxD9+4HbQ7Q+ZUM
+	ZvdR9hrAwqUqdVqiZBH5p5aaxb4ZCe+/PXJRT3WlWYaCafc6Y7eaWBf3Q==
+X-ME-Sender: <xms:N_tpZdc2iDyIULkyu78iP-8qvlVtSTEExG7xaQGeygmCEuHpSwMgtg>
+    <xme:N_tpZbOfbm_2vo0beWL8uSogQtGDNpg6i6r8GtA5IlvdGC2L_BsjnWEnWIsEA_J63
+    L6V04OzMRtikUO5gnc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgjeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
     nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
     htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
     hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cfFpZY7e-KyiayVgkJpo-i1ayoVGmJz_zybGKW6FiLkOtKLrOt1miw>
-    <xmx:cfFpZZ3CtdGZPa6sBS2cq4_eTsTr6pdO4JtYHsQMqHMFCstNd44dPw>
-    <xmx:cfFpZTGvPGLr9As6kKvuuoBgumiPsnibN1HkdvSr8qpriD0ftGd7Vw>
-    <xmx:cvFpZbOqIU7ip9gmR0yiazV2Zf4CI2KsorVZuIknhVpONDGKfxOCwQ>
+X-ME-Proxy: <xmx:OPtpZWgp-T_dWsVgn7yC5TiiAZYL2j-CEi2qJJq45jBWMPcY1jnWLA>
+    <xmx:OPtpZW99Dblp5rnQ9Ltr9-pcMMSPDOt_Csdui7-h-avKqpmP0lUQTg>
+    <xmx:OPtpZZvmBwqQAEMyRuzM5ZgAXDTzVgF05-zYgladKDIUbhC2lUyfCg>
+    <xmx:OftpZZeI7Btyq6g_HlGQgiGKPT8NE7ZzIsrQNdjdYfLs5A108twiew>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 80EE6B60089; Fri,  1 Dec 2023 09:45:05 -0500 (EST)
+	id E5FD2B6008D; Fri,  1 Dec 2023 10:26:47 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
@@ -74,11 +73,11 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <32552a65-b540-4baa-9180-e04a278f0ca6@app.fastmail.com>
-In-Reply-To: <20231201121622.16343-3-pstanner@redhat.com>
+Message-Id: <619ea619-29e4-42fb-9b27-1d1a32e0ee66@app.fastmail.com>
+In-Reply-To: <20231201121622.16343-5-pstanner@redhat.com>
 References: <20231201121622.16343-1-pstanner@redhat.com>
- <20231201121622.16343-3-pstanner@redhat.com>
-Date: Fri, 01 Dec 2023 15:44:44 +0100
+ <20231201121622.16343-5-pstanner@redhat.com>
+Date: Fri, 01 Dec 2023 16:26:05 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Philipp Stanner" <pstanner@redhat.com>,
  "Bjorn Helgaas" <bhelgaas@google.com>,
@@ -97,27 +96,104 @@ To: "Philipp Stanner" <pstanner@redhat.com>,
  "Kefeng Wang" <wangkefeng.wang@huawei.com>,
  "Ben Dooks" <ben.dooks@codethink.co.uk>, "Danilo Krummrich" <dakr@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] lib: move pci-specific devres code to drivers/pci/
+ Linux-Arch <linux-arch@vger.kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
+Subject: Re: [PATCH v2 4/4] lib, pci: unify generic pci_iounmap()
 Content-Type: text/plain
 
 On Fri, Dec 1, 2023, at 13:16, Philipp Stanner wrote:
-> The pcim_*() functions in lib/devres.c are guarded by an #ifdef
-> CONFIG_PCI and, thus, don't belong to this file. They are only ever used
-> for pci and are not generic infrastructure.
+> The implementation of pci_iounmap() is currently scattered over two
+> files, drivers/pci/iounmap.c and lib/iomap.c. Additionally,
+> architectures can define their own version.
 >
-> Move all pcim_*() functions in lib/devres.c to drivers/pci/devres.c.
-> Adjust the Makefile.
+> Besides one unified version being desirable in the first place, the old
+> version in drivers/pci/iounmap.c contained a bug and could leak memory
+> mappings. The bug was that #ifdef ARCH_HAS_GENERIC_IOPORT_MAP should not
+> have guarded iounmap(p); in addition to the preceding code.
 >
-> Suggested-by: Danilo Krummrich <dakr@redhat.com>
-> Signed-off-by: Philipp Stanner <pstanner@redhat.com>
-> ---
->  drivers/pci/Makefile |   2 +-
->  drivers/pci/devres.c | 207 ++++++++++++++++++++++++++++++++++++++++++
->  lib/devres.c         | 208 +------------------------------------------
+> To have only one version, it's necessary to create a helper function,
+> iomem_is_ioport(), that tells pci_iounmap() whether the passed address
+> points to an ioport or normal memory.
+>
+> iomem_is_ioport() can be provided through three different ways:
+>   1. The architecture itself provides it.
+>   2. As a default version in include/asm-generic/io.h for those
+>      architectures that don't use CONFIG_GENERIC_IOMAP, but also don't
+>      provide their own version of iomem_is_ioport().
+>   3. As a default version in lib/iomap.c for those architectures that
+>      define and use CONFIG_GENERIC_IOMAP (currently, only x86 really
+>      uses the functions in lib/iomap.c)
 
-I still think this should go into drivers/pci/pci_iomap.c along
-with the other functions.
+I would count 3 as a special case of 1 here.
+
+> Create a unified version of pci_iounmap() in drivers/pci/iomap.c.
+> Provide the function iomem_is_ioport() in include/asm-generic/io.h and
+> lib/iomap.c.
+>
+> Remove the CONFIG_GENERIC_IOMAP guard around
+> ARCH_WANTS_GENERIC_PCI_IOUNMAP so that configs that set
+> CONFIG_GENERIC_PCI_IOMAP without CONFIG_GENERIC_IOMAP still get the
+> function.
+>
+> Fixes: 316e8d79a095 ("pci_iounmap'2: Electric Boogaloo: try to make 
+> sense of it all")
+> Suggested-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Philipp Stanner <pstanner@redhat.com>
+
+Looks good overall. It would be nice to go further than this
+and replace all the custom pci_iounmap() variants with custom
+iomem_is_ioport() implementations, but that can be a follow-up
+along with removing the incorrect or useless 'select GENERIC_IOMAP'
+parts.
+
+>  		return;
+> -	iounmap(p);
+> +	}
+>  #endif
+> +	iounmap(addr);
+>  }
+
+I think the bugfix should be a separate patch so we can backport
+it to stable kernels.
+
+> +#ifndef CONFIG_GENERIC_IOMAP
+> +static inline bool iomem_is_ioport(void __iomem *addr)
+> +{
+> +	unsigned long port = (unsigned long __force)addr;
+> +
+> +	// TODO: do we have to take IO_SPACE_LIMIT and PCI_IOBASE into account
+> +	// similar as in ioport_map() ?
+> +
+> +	if (port > MMIO_UPPER_LIMIT)
+> +		return false;
+> +
+> +	return true;
+> +}
+
+This has to have the exact logic that was present in the
+old pci_iounmap(). For the default version that is currently
+in lib/pci_iomap.c, this means something along the linens of
+
+static inline bool struct iomem_is_ioport(void __iomem *p)
+{
+#ifdef CONFIG_HAS_IOPORT
+        uintptr_t start = (uintptr_t) PCI_IOBASE;
+        uintptr_t addr = (uintptr_t) p;
+
+        if (addr >= start && addr < start + IO_SPACE_LIMIT)
+                return true;
+#endif
+        return false;
+}
+
+> +#else /* CONFIG_GENERIC_IOMAP. Version from lib/iomap.c will be used. 
+> */
+> +bool iomem_is_ioport(void __iomem *addr);
+> +#define ARCH_WANTS_GENERIC_IOMEM_IS_IOPORT
+
+I'm not sure what this macro is for, since it appears to
+do the opposite of what its name suggests: rather than
+provide the generic version of iomem_is_ioport(), it
+skips that and provides a custom one to go with lib/iomap.c
 
      Arnd
 
