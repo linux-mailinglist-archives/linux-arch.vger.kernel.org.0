@@ -1,70 +1,71 @@
-Return-Path: <linux-arch+bounces-610-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-611-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78F4C80162C
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 23:18:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AE71801630
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 23:18:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AABC11C2031F
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 22:18:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AE7AB211BA
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 22:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EBEE619A2;
-	Fri,  1 Dec 2023 22:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2762E619A1;
+	Fri,  1 Dec 2023 22:18:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="wn853AVu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fx99YuvU"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="OhVX1ual";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EhHpiTeZ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F2D128;
-	Fri,  1 Dec 2023 14:17:44 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE31128;
+	Fri,  1 Dec 2023 14:18:11 -0800 (PST)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.west.internal (Postfix) with ESMTP id C2DAA2B00432;
-	Fri,  1 Dec 2023 17:17:41 -0500 (EST)
+	by mailnew.west.internal (Postfix) with ESMTP id 132F22B00496;
+	Fri,  1 Dec 2023 17:18:08 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 01 Dec 2023 17:17:43 -0500
+  by compute5.internal (MEProxy); Fri, 01 Dec 2023 17:18:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701469061; x=1701476261; bh=EI
-	RXyofmqrPd13/Ro55ULfkGqrMFOWjZCVCRuGyg6nE=; b=wn853AVu8W0Tfbo+jk
-	1Wf8qs5cSXge4s3U1fwiNaqVoS/OyuETR65p9vOJ7wSizzTgibqq89TwBCuL7ZKo
-	WwIAh7RzCCD7qB98W2cReZCigQaChczVIPXpXFOM6i+5NJi8U1DQOm7UsaiM/xvu
-	Nd6/fN8Tb6ctqkGsXPyCdWSuASzLVAjlEGQolpb8DY03ougAuBSYOVRnGD7wPoNF
-	PZlBZLIHri9uhXACmHbs/w6P90hvgYTL0SkKksJaLKGSsN6KII5d9T3bUgfJDzUw
-	WnyCGa9ByvxnMB8/N/mEPehfjwjOYFnuDWnu0OBDhEPz+komEgwSgXkpGqE8gTKU
-	R/ag==
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1701469088; x=1701476288; bh=Yf0DCq6uHReIEXb4I8GDi+xTuGOMnvQzeuV
+	fuSfiqD0=; b=OhVX1ualRwWUKIOdDP1Op+eyMmNsNY9/yG+CBhNxoiyi7ol5pyD
+	ZP0tE9z3n608DUxFND6NXf/km6NYlvp1sobl4u54CJphz9E66Bw3JuGV5aSKjba3
+	ACmPKAbPl0NwNmEny2JAvegVKeVNCdC/qb3dgCKSljwYDm1PjMgRi+Ds7Pt4BCen
+	Wdf4F9Sm6GaZy52w5enOae2FQw9jzFuJVkBKobEKA4aymWs1ZiduXTo6AX1z8Dwk
+	IuOVzZ0pLxrdHT2RLWM51B+kejHC0ef/GOuUnFtAnoeu1JWiqn0BSOeBRWOnL95d
+	iQk1EChGVa5c1xjuuVjEzeyklZIn0Te7GNw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701469061; x=1701476261; bh=EIRXyofmqrPd1
-	3/Ro55ULfkGqrMFOWjZCVCRuGyg6nE=; b=Fx99YuvUsl3WHkepXVbxkX+JvY82g
-	afBWGFEfL4ZhqjVvOErM/ShCsUw2K5NvWGbW9Mq+zBCem+aiuqKUhixiW4T6eZfn
-	w1egZtJC3YPjy4giXM/FNm3m3MZFTvfI8ze6SrvhCqHjJIPUpUVDdrQ79NGZWWai
-	Rnvv4AVlczDYwM+5YNSSshukDQIqaT6pmtGkTFoC2yd/muXmwx33Aqr+XZYaBYwT
-	HZhSrubowpw9AXQDRZNsPUxj2VQnFh7rO6oaHWZUJNBXpOnPsXSvYacaVa6FWmuw
-	HL/W9MTPPwGLJfSj/qHM5Zd1F8vYjt5+dGBITQ0JalJ7xnOC0970yEuOg==
-X-ME-Sender: <xms:g1tqZWZ1E5IwmGCUjTdHTBfNPrJ6RiVYeoaCXAM3V3KtL5EcKNoRyA>
-    <xme:g1tqZZa8wKMvlHCFTAMtMYL3v8EcfIl_3CZWkDU2MRQmtAK_hlmAfu8vnWoxG71oZ
-    QeCeLYIBRVqZ7RzSJs>
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701469088; x=1701476288; bh=Yf0DCq6uHReIEXb4I8GDi+xTuGOMnvQzeuV
+	fuSfiqD0=; b=EhHpiTeZg4ikcKwMOfBQBIpa8CV1aHi/eisJy/so0UOP1EidwOc
+	t948VO7F2q5Ql8nngYB6dYNWo9xDciiqel4nILJquaFLjIRxMQbDyYZ/3gcQKk9Y
+	fpAA/81LDdIrIcVIWvIrLyNhy9p0VcwlFuQRezW4koG1jEBgEzD8pGlQDoFT20+Z
+	isymSy2n5jU81yhDmOIuW3fBSXnr3nN6kBq6s8CMSMIXLXZ3AJ+XYYL9nNOJc2+g
+	shYs3U8UnYzA0oNpAJRtYr4lTsjZHSCvCThLX9TiTSrEPJfykyExLCHGSRKZZWTh
+	hT2lCdLH0Rl/xqw2rW6iqI7UhUhE5MQECPA==
+X-ME-Sender: <xms:n1tqZSkPx1vAS_oYaJDBsOWOpoDMbV1GxW-dugE3oo9FSPuY3YUrpg>
+    <xme:n1tqZZ1mIrtwcTViPbknlsJi26XiGhB44jOBJFSkoFnjBoOeAGNRMroDzhgs-5hDo
+    HG_9nH-GzgbjQK_VGU>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgudehlecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:g1tqZQ9oJ8gxaAQtYkqHWCtNmoL6bt6Ksyh8wg3A-q_lJsqdD8j-Bg>
-    <xmx:g1tqZYo0_NSVBCicyo9EhtFB4mDGvGsYCTOXTgLY3VuU_DwJAEp8NA>
-    <xmx:g1tqZRofEp7Awm1fiLAHFSeB8aC8a0GZfGYLPPlQJ5Ocobckms7yFw>
-    <xmx:hVtqZVBa_pJo1VkhWuwiRPUlCSqj7tSfZKgfPnb9C2m3voQO6ZNoAMWfvZA>
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:n1tqZQoX80uebtPwscZwklt3NPqkS_K90aKHAiBkpQnVGY6-dR7FYw>
+    <xmx:n1tqZWk3T-vWG1KJOodbcQbfLeAWZzoXJoU5dWmAhWtdxY88BxO31Q>
+    <xmx:n1tqZQ2ykrtSEQX6H738J-MM5luZNuBoD3EZ4mkVIJqHYz7R_0d8VA>
+    <xmx:oFtqZb-g8xRJTB_H8wtnwVZedEPoPoPaNXJnVCCpx2FVYsHG-PC14XuNKNY>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id C65D5B6008D; Fri,  1 Dec 2023 17:17:39 -0500 (EST)
+	id B4070B60089; Fri,  1 Dec 2023 17:18:07 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
@@ -73,12 +74,13 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9ce4e2af-efe9-4049-8b56-60de4a1e942a@app.fastmail.com>
-In-Reply-To: <65079f6d5f512f9aff003bdfea127b214a9f9290.camel@redhat.com>
+Message-Id: <0ed157c7-e0be-43d9-afb1-2bd53b934f56@app.fastmail.com>
+In-Reply-To: <4bf46893a583551c71bdfbf91df9ccc4b51556b1.camel@redhat.com>
 References: <20231201121622.16343-1-pstanner@redhat.com>
- <3871b83a-0e80-402e-bbe6-359c17127842@app.fastmail.com>
- <65079f6d5f512f9aff003bdfea127b214a9f9290.camel@redhat.com>
-Date: Fri, 01 Dec 2023 23:17:19 +0100
+ <20231201121622.16343-2-pstanner@redhat.com>
+ <a2b006be-ab4c-4040-b3db-db68d9c77cda@app.fastmail.com>
+ <4bf46893a583551c71bdfbf91df9ccc4b51556b1.camel@redhat.com>
+Date: Fri, 01 Dec 2023 23:17:47 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Philipp Stanner" <pstanner@redhat.com>,
  "Bjorn Helgaas" <bhelgaas@google.com>,
@@ -98,68 +100,39 @@ To: "Philipp Stanner" <pstanner@redhat.com>,
  "Ben Dooks" <ben.dooks@codethink.co.uk>, "Danilo Krummrich" <dakr@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
  Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] Regather scattered PCI-Code
-Content-Type: text/plain
+Subject: Re: [PATCH v2 1/4] lib: move pci_iomap.c to drivers/pci/
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 1, 2023, at 20:09, Philipp Stanner wrote:
-> On Fri, 2023-12-01 at 17:27 +0100, Arnd Bergmann wrote:
+On Fri, Dec 1, 2023, at 19:56, Philipp Stanner wrote:
+> On Fri, 2023-12-01 at 15:43 +0100, Arnd Bergmann wrote:
 >> On Fri, Dec 1, 2023, at 13:16, Philipp Stanner wrote:
->> 
->> The one special case that I missed the last time is s390, which
->> does not use GENERIC_PCI_IOMAP and will just require a separate
->> copy of pci_iounmap() to go along with the is custom pci_iomap().
->> 
->> > The two exceptions are x86 and m68k. The former uses lib/iomap.c
->> > through
->> > CONFIG_GENERIC_IOMAP, as Arnd pointed out in the previous
->> > discussion
->> > (thus, CONFIG_GENERIC_IOMAP is not really generic in this regard).
->> > 
->> > So as I see it, only m68k WOULD need its own custom definition of
->> > iomem_is_ioport(). But as I understand it it doesn't because it
->> > uses the
->> > one from asm-generic/pci_iomap.h ??
->> 
->> At the moment, m68k gets the pci_iounmap() from lib/iomap.c
->> if PCI is enabled for coldfire, but that incorrectly calls
->> iounmap() on PCI_IO_PA if it gets passed a PIO address.
->> 
->> The version from asm-generic/io.h should fix this.
+>> >=20
+>> > -#ifdef CONFIG_PCI
+>> > =C2=A0/**
+>>=20
+>> You should not remove the #ifdef here, it probably results in
+>> a build failure when CONFIG_GENERIC_PCI_IOMAP is set and
+>> GENERIC_PCI is not.
 >
-> So, to be sure: m68k will use the generic iomem_is_ioport() despite
-> defining its own inb()?
-
-It depends, as m68k has two separate asm/io.h implementations:
-
-- arch/m68k/include/asm/io_no.h uses the default inb()
-  from asm-generic/io.h, so it should use the asm-generic
-  version of iomem_is_ioport().
-
-- arch/m68k/include/asm/io_mm.h is rather special when
-  it comes to inb()/outb(), but since there is no PCI,
-  I would just use the default iomem_is_ioport() because
-  it doesn't matter as long as there are no callers.
-  If we ever need a working iomem_is_ioport() here, it would
-  need the same special cases as isa_itb().
-  
->> The "#define pci_iomap" can be removed entirely I think.
+> CONFIG_PCI you mean.
+> Yes, that results in a build failure. That's what the Intel bots have
+> reminded me of subtly before, which is why I:
 >
-> I also think it can, because first arch/asm/io.h includes asm-
-> generic/io.h.
-> I was just wondering why many other functions in asm-generic/io.h
-> always define their own names..
+>>=20
+>> Alternatively you could use Kconfig or Makefile logic to
+>> prevent the file from being built without CONFIG_PCI.
 >
-> It's obviously very hard to test which config will break, so I thought
-> it's better safe than sorry here
+> did exactly that in this very patch:
+>
+> @@ -14,6 +14,7 @@ ifdef CONFIG_PCI             <------------
+>  obj-$(CONFIG_PROC_FS)		+=3D proc.o
+>  obj-$(CONFIG_SYSFS)		+=3D slot.o
+>  obj-$(CONFIG_ACPI)		+=3D pci-acpi.o
+> +obj-$(CONFIG_GENERIC_PCI_IOMAP) +=3D iomap.o     <-----------
+>  endif
 
-I'm fairly sure it's not actually needed, but since the entire file
-does it, there is probably no harm keeping it consistent for the next
-added function.
-
-This is one more thing to maybe clean up eventually in the future,
-possibly as part of moving the contents of asm-generic/io.h into
-linux/io.h, which is something I'd like to do now that all
-architectures finally started using the asm-generic version.
+Ok, got it, looks good then.
 
       Arnd
 
