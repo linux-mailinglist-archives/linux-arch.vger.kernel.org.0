@@ -1,71 +1,70 @@
-Return-Path: <linux-arch+bounces-611-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-612-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE71801630
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 23:18:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 680FD801656
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 23:32:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AE7AB211BA
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 22:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CD0D1F210A1
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Dec 2023 22:32:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2762E619A1;
-	Fri,  1 Dec 2023 22:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DDA3180;
+	Fri,  1 Dec 2023 22:32:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="OhVX1ual";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EhHpiTeZ"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="LOjQ9wXj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fT/Riyrg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE31128;
-	Fri,  1 Dec 2023 14:18:11 -0800 (PST)
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC9712A;
+	Fri,  1 Dec 2023 14:32:07 -0800 (PST)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.west.internal (Postfix) with ESMTP id 132F22B00496;
-	Fri,  1 Dec 2023 17:18:08 -0500 (EST)
+	by mailnew.west.internal (Postfix) with ESMTP id 8617A2B00344;
+	Fri,  1 Dec 2023 17:32:02 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 01 Dec 2023 17:18:11 -0500
+  by compute5.internal (MEProxy); Fri, 01 Dec 2023 17:32:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1701469088; x=1701476288; bh=Yf0DCq6uHReIEXb4I8GDi+xTuGOMnvQzeuV
-	fuSfiqD0=; b=OhVX1ualRwWUKIOdDP1Op+eyMmNsNY9/yG+CBhNxoiyi7ol5pyD
-	ZP0tE9z3n608DUxFND6NXf/km6NYlvp1sobl4u54CJphz9E66Bw3JuGV5aSKjba3
-	ACmPKAbPl0NwNmEny2JAvegVKeVNCdC/qb3dgCKSljwYDm1PjMgRi+Ds7Pt4BCen
-	Wdf4F9Sm6GaZy52w5enOae2FQw9jzFuJVkBKobEKA4aymWs1ZiduXTo6AX1z8Dwk
-	IuOVzZ0pLxrdHT2RLWM51B+kejHC0ef/GOuUnFtAnoeu1JWiqn0BSOeBRWOnL95d
-	iQk1EChGVa5c1xjuuVjEzeyklZIn0Te7GNw==
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm3; t=1701469922; x=1701477122; bh=3t
+	kYsMWbKQfh7kgu+7rruDUDrB2QAfkIq4Km6a5Mvvo=; b=LOjQ9wXjw4VM9J3b9P
+	rwSsQ+E+CzZ6OSUJx0CMjinOlbgQZN3Rhh1SJW/C2qpjTTJcV7Y+psEN4lY2G+Ub
+	qpGbWjkTy99IlUAjtuReYp/hb2z+Hq4SFun44JxlvFte/V+pxdserNMsR95EHsTH
+	/lMg9fM6tkV9gj4XUH56gCj9ZiEV2uuI5n+KoxVjioItGbME3DZFaDYVS60hLZ7w
+	HpwO2Zydt6ay0ZpmkaMh0hVbeFgoxn3NY3qvG24Fm5Y6jPWU+FQoWJuZMrR+LHM5
+	7HHF+bSWwBqCq4VjDhf4GUyVdZe33/fxGK+L2/XF5+TEipW/Ow52/jc8fWYzPVEd
+	9IMA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701469088; x=1701476288; bh=Yf0DCq6uHReIEXb4I8GDi+xTuGOMnvQzeuV
-	fuSfiqD0=; b=EhHpiTeZg4ikcKwMOfBQBIpa8CV1aHi/eisJy/so0UOP1EidwOc
-	t948VO7F2q5Ql8nngYB6dYNWo9xDciiqel4nILJquaFLjIRxMQbDyYZ/3gcQKk9Y
-	fpAA/81LDdIrIcVIWvIrLyNhy9p0VcwlFuQRezW4koG1jEBgEzD8pGlQDoFT20+Z
-	isymSy2n5jU81yhDmOIuW3fBSXnr3nN6kBq6s8CMSMIXLXZ3AJ+XYYL9nNOJc2+g
-	shYs3U8UnYzA0oNpAJRtYr4lTsjZHSCvCThLX9TiTSrEPJfykyExLCHGSRKZZWTh
-	hT2lCdLH0Rl/xqw2rW6iqI7UhUhE5MQECPA==
-X-ME-Sender: <xms:n1tqZSkPx1vAS_oYaJDBsOWOpoDMbV1GxW-dugE3oo9FSPuY3YUrpg>
-    <xme:n1tqZZ1mIrtwcTViPbknlsJi26XiGhB44jOBJFSkoFnjBoOeAGNRMroDzhgs-5hDo
-    HG_9nH-GzgbjQK_VGU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgudehlecutefuodetggdotefrod
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701469922; x=1701477122; bh=3tkYsMWbKQfh7
+	kgu+7rruDUDrB2QAfkIq4Km6a5Mvvo=; b=fT/RiyrgsZhWtJbhIUhKOFxdnURkA
+	Wzkzu5sR5UiNAkhrL0ERyd5vMBWhFdzekf4ELeQnJ7lYImJ8haAJD2uk7gv1A1Ge
+	13VazCKbT3mmQFPTWbLgkI02mKMsuTQJKpu9nBCbZEicb+6UuFy0nihReEOvArw2
+	1Jd9xk2bZ+4E8RvgGpxlajNbjG6fe6VugiorVf8/cfKYW5lYtPm3Lo5/OWU7DOKa
+	1D1FjPx/sAGznqapbZJH0EZEXUBzNXxV6TSzCzehMU6lpysGAsVCpwHREDdqv6IN
+	Mg98p9ms6N5A0A8s7a/YqbFnJz5o0emQn8tvN+Zxtv1usJGkKXue90m3g==
+X-ME-Sender: <xms:4V5qZZnn4bFbmDMmG45kZTZp0rFsmvSSSOIPt2eJIOyEZQjtfoXm-w>
+    <xme:4V5qZU0uRSqgIcS5CC6DWOvAn5J1QBspmFww-vKuRnX6V0zVbgSl6-gGmI36v98aC
+    hWNq0_WtzRpCA1pJnQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgudeiudcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:n1tqZQoX80uebtPwscZwklt3NPqkS_K90aKHAiBkpQnVGY6-dR7FYw>
-    <xmx:n1tqZWk3T-vWG1KJOodbcQbfLeAWZzoXJoU5dWmAhWtdxY88BxO31Q>
-    <xmx:n1tqZQ2ykrtSEQX6H738J-MM5luZNuBoD3EZ4mkVIJqHYz7R_0d8VA>
-    <xmx:oFtqZb-g8xRJTB_H8wtnwVZedEPoPoPaNXJnVCCpx2FVYsHG-PC14XuNKNY>
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:4V5qZfo8apN8dyULmN7Ku45hApYE5RA8EoOtVkiJejanSL8WhK7brg>
+    <xmx:4V5qZZn-X353ChUMAH6g0xsfOcdSpDscqreoik1stSrVE_lV81gblA>
+    <xmx:4V5qZX2h7Kwh4kM7IG_rxYoe6BKP3jxX3eK3e7pg_i2R6s6e6tUKQw>
+    <xmx:4l5qZe8syULkaIcrCbpBN_N-7JlmDhNB_wuUwCscP8Z6E2l0Ip6Qxp5bQYU>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B4070B60089; Fri,  1 Dec 2023 17:18:07 -0500 (EST)
+	id 0EF3BB60089; Fri,  1 Dec 2023 17:32:01 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
@@ -74,13 +73,13 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0ed157c7-e0be-43d9-afb1-2bd53b934f56@app.fastmail.com>
-In-Reply-To: <4bf46893a583551c71bdfbf91df9ccc4b51556b1.camel@redhat.com>
+Message-Id: <375165a6-e748-495e-9f74-81bb6496ac7e@app.fastmail.com>
+In-Reply-To: <90423946a0dbdcdb7cb3c93b3897683ce07c5e69.camel@redhat.com>
 References: <20231201121622.16343-1-pstanner@redhat.com>
- <20231201121622.16343-2-pstanner@redhat.com>
- <a2b006be-ab4c-4040-b3db-db68d9c77cda@app.fastmail.com>
- <4bf46893a583551c71bdfbf91df9ccc4b51556b1.camel@redhat.com>
-Date: Fri, 01 Dec 2023 23:17:47 +0100
+ <20231201121622.16343-3-pstanner@redhat.com>
+ <32552a65-b540-4baa-9180-e04a278f0ca6@app.fastmail.com>
+ <90423946a0dbdcdb7cb3c93b3897683ce07c5e69.camel@redhat.com>
+Date: Fri, 01 Dec 2023 23:31:36 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Philipp Stanner" <pstanner@redhat.com>,
  "Bjorn Helgaas" <bhelgaas@google.com>,
@@ -100,39 +99,20 @@ To: "Philipp Stanner" <pstanner@redhat.com>,
  "Ben Dooks" <ben.dooks@codethink.co.uk>, "Danilo Krummrich" <dakr@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
  Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 1/4] lib: move pci_iomap.c to drivers/pci/
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 2/4] lib: move pci-specific devres code to drivers/pci/
+Content-Type: text/plain
 
-On Fri, Dec 1, 2023, at 19:56, Philipp Stanner wrote:
-> On Fri, 2023-12-01 at 15:43 +0100, Arnd Bergmann wrote:
->> On Fri, Dec 1, 2023, at 13:16, Philipp Stanner wrote:
->> >=20
->> > -#ifdef CONFIG_PCI
->> > =C2=A0/**
->>=20
->> You should not remove the #ifdef here, it probably results in
->> a build failure when CONFIG_GENERIC_PCI_IOMAP is set and
->> GENERIC_PCI is not.
+On Fri, Dec 1, 2023, at 20:00, Philipp Stanner wrote:
 >
-> CONFIG_PCI you mean.
-> Yes, that results in a build failure. That's what the Intel bots have
-> reminded me of subtly before, which is why I:
+> The devres functions have different compile rules than the iomap
+> functions have.
 >
->>=20
->> Alternatively you could use Kconfig or Makefile logic to
->> prevent the file from being built without CONFIG_PCI.
->
-> did exactly that in this very patch:
->
-> @@ -14,6 +14,7 @@ ifdef CONFIG_PCI             <------------
->  obj-$(CONFIG_PROC_FS)		+=3D proc.o
->  obj-$(CONFIG_SYSFS)		+=3D slot.o
->  obj-$(CONFIG_ACPI)		+=3D pci-acpi.o
-> +obj-$(CONFIG_GENERIC_PCI_IOMAP) +=3D iomap.o     <-----------
->  endif
+> I would dislike it very much to need yet another preprocessor
+> instruction, especially if we're talking about #ifdef PCI within the
+> very PCI driver.
 
-Ok, got it, looks good then.
+Ah right, I had forgotten about s390 zpci being special here,
+otherwise we wouldn't need an #ifdef here.
 
       Arnd
 
