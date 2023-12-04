@@ -1,223 +1,153 @@
-Return-Path: <linux-arch+bounces-650-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-651-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 059A9803CBB
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 19:23:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F088803D25
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 19:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 884251F21273
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 18:23:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC0E4281184
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 18:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201F32F84C;
-	Mon,  4 Dec 2023 18:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFFE2E83D;
+	Mon,  4 Dec 2023 18:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rqSuQiiE"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="u2cVkyxL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2058.outbound.protection.outlook.com [40.107.237.58])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F51D2;
-	Mon,  4 Dec 2023 10:23:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h8EnppaaCDzp+6bsgGhEvnbahuF7onF/5Sfdz7EHvvp7YnhdWk4kjs7s1zwsFMWlsrmt3ZpYk4wyqHMqiMGOiBjcPSkdfAOKyhVYrhgW9qI2wgbnLvRUDWwcLDxsX7DOvTjQUyMrW/f/0sTXb0tEFY4+2ddnvOP6gRoc3nn9WpH2Oz87JQNgL3/qtUD2oDwpDNcoZqCAHBI1fa+CC2mGXncMqQja+2Mrl4AWJuHAXUcSMVOJN5tV3joJvzMKjPyOaxr5Y2yiVR3zBL8wY1GFxOPeP8Sbz0u/RrSZEpYmaeJQmO/XTF+eCHt9Q8HNV+JWm1ICaTcQhiCx/Rv6POd8Ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QwHKL8gPgwUexhx3IdpKyoewR0Gf7jNHmT+LPsPRKjA=;
- b=gIo0emulyouLAw5wrTZiPB5L7NBkL2BbqKUdLS5XnXikDhxMKviBfNqfCHhhuLQw2PApXXYBoIzYLQ0c1xmuuDsmAt+J0EhMkIu0RorR9kwgIqHcVNvAZfeX5LacTQiqfXgd3fjEqsUF75S5MKhYI/zc1wnPVbOuLzZp+mpx+/+ft2yddSBnQLl9y2OSpFnHx/K3KDHhnRpP0A5joW4of373KfdaswPutogK0h3wZbH01s2+F7Naj+S3PHH3d2bXBPQxSNswVGClRPDk/BuCII8fK8um5MY8B6i8RuVYymZfgwACmV5DB3XKaS99r5TamK1Z4rriG0xVb1+nR+qC3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QwHKL8gPgwUexhx3IdpKyoewR0Gf7jNHmT+LPsPRKjA=;
- b=rqSuQiiExaRA+31r5IQRPEhG9TzOkhXYMhL6HWBYv1cjjUB6l/coEp8k8OdOYshhIDwPZyivdZtIFb6Xl2ogau7M7XJf8QWP2HUSvrWk6Wt3vSfCIFnX4x1ISbyCHmN0rELsO3FSXIhF/WSHSDY0E5PmXFO01FBSTA6werQR5CKw7HIP8LUOa4Ev89jquEiSmicrlybQ8RJikc8fsNYARvEQXiPbCVEwKD8OEBgrN0z2kpbtKADtJoU0FCwgDJirJqcRpOi+6LeR4gSpuq3SQ0eogsFiLXlSGJOqtH3U8xHfy5tY6IlDTbtOkiMM6iu8IGkALZWEt2aEl91Qt/cZ4Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ2PR12MB7944.namprd12.prod.outlook.com (2603:10b6:a03:4c5::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.33; Mon, 4 Dec
- 2023 18:23:31 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7046.033; Mon, 4 Dec 2023
- 18:23:31 +0000
-Date: Mon, 4 Dec 2023 14:23:30 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, Leon Romanovsky <leon@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E89FF;
+	Mon,  4 Dec 2023 10:34:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=yRxkmI4dXPVCTApSsXOOM346LAa1g76vwgSBu1bA/08=; b=u2cVkyxLqoUOqz1TA/dDurEImX
+	yd+RKQfGNzDw1nNzm7F9pDtqQt51c1WaOKmTKmAbAROOiek+hm8k6eZisRZ/QWEyDAbQFc+SykZth
+	yo1Jqw2hGSDZx0/kwV/QhUbR1CaOvc39CcdS6VXzjuqXt4HYSSGFkZCVv/chpwHXClxU600842aLI
+	poUrNAgUfXs1GTMxHRcsbo3DI/Uyx2B0XaXImtz+wS5a8oBto19jcxToog2JblpiSQQodC47SWxtq
+	uoUKbAOA8OTlQYtBciApJtmEJWfW4deFx0DxiGRyt/1iUxUN98T1XdrCmGbwL4cixtGF6odl8Z3oi
+	wU5Z7Stg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rADlT-000x6k-F8; Mon, 04 Dec 2023 18:33:56 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5462830057C; Mon,  4 Dec 2023 19:33:54 +0100 (CET)
+Date: Mon, 4 Dec 2023 19:33:54 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <20231204182330.GK1493156@nvidia.com>
-References: <cover.1700766072.git.leon@kernel.org>
- <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
- <ZWB373y5XuZDultf@FVFF77S0Q05N>
- <20231124122352.GB436702@nvidia.com>
- <ZWSOwT2OyMXD1lmo@arm.com>
- <20231127134505.GI436702@nvidia.com>
- <ZW4NAzI_jvwoq8dL@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZW4NAzI_jvwoq8dL@arm.com>
-X-ClientProxiedBy: BL1PR13CA0024.namprd13.prod.outlook.com
- (2603:10b6:208:256::29) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org>
+ <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+ <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+ <20231204125239.GA1319@noisy.programming.kicks-ass.net>
+ <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ2PR12MB7944:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61d715ec-8854-4736-0405-08dbf4f61e6a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	1DCVlp4weC6qk9BenTtcHKkif1qYAWtujGTYj5wlmEpAHxBw25kDTRsBE4bsKsJQYXtLGeetm/q6lD/bDk5u1xRxsy/E4570oOwcODxuAt7NzkOn7ueCM5qkSAh5sfNbSGtRz0a7KPPY+qAJf86iMGmaBYVP+hAMvjiH3qBb2CNElzoiVfIksl3VA6kZFWSAzNPJ8NdR++0uL4MX/9Li+go845vvbJ27qjvl7yOgVCEEGOShk21OpeV0IAZ8H0TNC/LWEf0f8GKvLddYhRbDsk/7WLRyaxWZPFs6x8b2CJZrDvzrSiBWatECBRiFz3XIB/hLCd7oD27Lkq2c2jgE04u3/yGh4JGJcpHJAbTV++Q1irQwVQTrzfn2L61zymlw2IdcVXZ3vryVaEAv0cSNHx5QECa6/IgAbdNlvudrzQVuzNkmcw6D+TIHCR/wJXsV7u2lKDrU9fugNkomA//Z5qmSCdcy/6wNkPWcqqlb7nrOwsxnhOWLTF7jbbzkzI3RaU/0wow0phya6nAT7Zm1sjW9Ck13WKOEHbLu20w2V3tdnp5OlU25yTs3rqXrJUxO
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(376002)(346002)(136003)(39860400002)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(66556008)(316002)(66476007)(6916009)(54906003)(66946007)(6486002)(478600001)(7416002)(5660300002)(36756003)(41300700001)(2906002)(33656002)(8676002)(8936002)(4326008)(86362001)(1076003)(83380400001)(2616005)(26005)(6512007)(6506007)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Q95FVFVtwIZQKRT0GIHn7ZN8z0anmA18I734GPJsMQ9psSixmnf2Kk7MX4Be?=
- =?us-ascii?Q?BxmkP/U3I511dyhLPDXBoTzsEMK7WKEtSt30vm8zHjDZsENG05m3cNtrPB6G?=
- =?us-ascii?Q?XW6n+vODOwSG4Te98Ijf0nE/l/7WIPWHOlLjX6CHOCVO+CT1tSOkNbCjga6b?=
- =?us-ascii?Q?ERITPORyj4VdKGn4gdBBDBL5CZG6pZAUZqBYI2sf5P+Gjw1mS5TMAaUgkmOT?=
- =?us-ascii?Q?PYBDuUWAgWj7tVDu4Q5YYArXUuvQYpXlEZDs2hg9GQDhYCW9t7A8+ZqlW7KM?=
- =?us-ascii?Q?Sahj15kT55gZbxiFFFJBBabxm2FHnlxeoLfnMXh1hyFi22lb77w7hqG8whrs?=
- =?us-ascii?Q?0NQcZui90I0BqCcDZppkOQODcMf2etB7iIpierRgRQtSZ45U2Ejbwgt+f87M?=
- =?us-ascii?Q?BpPvmgKmDxyQxELTxLAqf1dk3xj4jSfWQd+dDnVOaQNYSwtaBtqJZYvNxB/v?=
- =?us-ascii?Q?+pWIlx/rzLGnxhIAmdg7zZd2r0G6xin544N4znd0jpn6+uaPoLb7hGlIlm21?=
- =?us-ascii?Q?mbFbyzpP2OfkLqcEpeTAy2yWFE6lKyFfBTMFq/DLrPhFeNpeSErCXGpyyyDJ?=
- =?us-ascii?Q?1iKi7nvfLr43eVla/q3ShTfzuvrVYjI3m9/h+LCX1zYq2Duqe2w21RH3Vzej?=
- =?us-ascii?Q?++FZijDaIsAJqgpv6Q5yX2Bp7FJg8IWo+cEkvuyznI0FrWB2Shcub9wd7wSV?=
- =?us-ascii?Q?r57azmBeIDwJnrgtRr7r57PvbUtvl11fZmT+rCstPIZ8AhKuoK53b9Pi5mjN?=
- =?us-ascii?Q?SSg4v7M1f5NxIGmbcZdqwT7O+lUcXvUL8l+NZv+ugNDKUGIS2zHVvoG7mXe5?=
- =?us-ascii?Q?mjwURZOdAyQwW2IrA/P7yy35LlnP3YgeoK3/673L6hjZ4LwW055CkhMbCOt8?=
- =?us-ascii?Q?NKrR5QRGUK7w59lZ6K9Dvz1E11glUJW9kW9lVfzVmMcIG+7YhiOY23wcTnmv?=
- =?us-ascii?Q?0dyf8hsIlYlBbA3j2nReOxEmIOiPFenucPO8ysRqqnvUze2QzHVHXwTndu53?=
- =?us-ascii?Q?4xkKazNGab68imF3J89iYFzEurOK1Jjsj4nCa1C0i9IyGvOHGRpzgrbZ15aY?=
- =?us-ascii?Q?Pg8+7ofaAxHQDzebifL6/LZLLoWkrdOE/RXPXZK5BlKxSCj+/gghyj1MpA9/?=
- =?us-ascii?Q?7s9mMU0wvJ3yEXHgRxMAroSs/pNHy/SMGpfJS6kdScyVKvrw6Q62H/w3djWN?=
- =?us-ascii?Q?Ke9DcHGHKdTJiiqnE5MSb2YblOONvijFqMA6lK/23gW/7nPHwCB2N3GGkNx2?=
- =?us-ascii?Q?nnBUhjz2g3oaINo6/SQLyhjZKHBveWts2b23eV3ZGVL2QCIM1wT331EWa7V3?=
- =?us-ascii?Q?InuBfnp/LTYZjvLqzrAz0VrXYkIbN3dxtTzwsxD6Vx6zVvFzwrkw4BCjC5zu?=
- =?us-ascii?Q?B/0u8q2fPlYCKwzsZZCAzjT4sCld35LrmY0TS4zy8V4zfN3fPuVOVbYiPg1Y?=
- =?us-ascii?Q?PcESP2ohFllYB3EnKZN5AN9sj/78ie1HWGAOD+/qHyqlK1Dg5oYHA8+pT1xA?=
- =?us-ascii?Q?SsI1Bv/Ac52IjvSo+ZJRiScyzSO8rJxTnVQ5wskMfzAXvp5xBJ295qu5mdxd?=
- =?us-ascii?Q?QRvMDLaukGMNOJVO2CHtDQnf9U7LQ3uPEuD7vXRn?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61d715ec-8854-4736-0405-08dbf4f61e6a
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2023 18:23:31.3948
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EzAxsFBjRGy4E2ONC43rMPdN24UU2tEtT/CTIgGFsiHR423uQCcBmPs+465utFiM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7944
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204181614.GA7299@noisy.programming.kicks-ass.net>
 
-On Mon, Dec 04, 2023 at 05:31:47PM +0000, Catalin Marinas wrote:
-> On Mon, Nov 27, 2023 at 09:45:05AM -0400, Jason Gunthorpe wrote:
-> > On Mon, Nov 27, 2023 at 12:42:41PM +0000, Catalin Marinas wrote:
-> > > > > What's the actual requirement here? Is this just for performance?
-> > > > 
-> > > > Yes, just performance.
-> > > 
-> > > Do you have any rough numbers (percentage)? It's highly
-> > > microarchitecture-dependent until we get the ST64B instruction.
-> > 
-> > The current C code is an open coded store loop. The kernel does 250
-> > tries and measures if any one of them succeeds to combine.
-> > 
-> > On x86, and older ARM cores we see that 100% of the time at least 1 in
-> > 250 tries succeeds.
-> > 
-> > With the new CPU cores we see more like 9 out of 10 time there are 0
-> > in 250 tries that succeed. Ie we can go thousands of times without
-> > seeing any successful WC combine.
-> > 
-> > The STP block brings it back to 100% of the time 1 in 250 succeed.
+On Mon, Dec 04, 2023 at 07:16:14PM +0100, Peter Zijlstra wrote:
+> On Mon, Dec 04, 2023 at 06:25:34PM +0100, Jiri Olsa wrote:
 > 
-> That's a bit confusing to me: 1 in 250 succeeding is still pretty rare.
-> But I guess what your benchmark says is that at least 1 succeeded to
-> write-combine and it might as well be all 250 tries. It's more
-> interesting to see if there's actual performance gain in real-world
-> traffic, not just some artificial benchmark (I may have misunderstood
-> your numbers above).
-
-Yes, I just don't have better data available to say that 250/250
-succeeded, but we expect that is the case.
-
-We have now something like 20 years experiance with write combining
-performance on x86 systems. It brings real world gains in real word
-HPC applications.
-
-Indeed, the reason this even came up was because one of our existing
-applications was performing unexpectedly badly on these ARM64 servers.
-
-We even have data showing that having the CPU do all the write
-combining steps and then fail to get writecombining is notably slower
-than just assuming no write combining. It is why we go through the
-trouble to test the physical HW.
-
-> > However, in userspace we have long been using ST4 to create a
-> > single-instruction 64 byte store on ARM64. As far as I know this is
-> > highly reliable. I don't have direct data on the STP configuration.
+> > that boots properly for me but gives crash below when running bpf tests
 > 
-> Personally I'd optimise the mempcy_toio() arm64 implementation to do
-> STPs if the alignment is right (like we do for classic memcpy()).
-> There's a slight overhead for alignment checking but I suspect it would
-> be lost as long as you can get the write-combining. Not sure whether the
-> interspersed reads in memcpy_toio() would somehow prevent the
-> write-combining.
+> OK, more funnies..
+> 
+> > [  482.145182][  T699] RIP: 0010:bpf_for_each_array_elem+0xbb/0x120
+> > [  482.145672][  T699] Code: 4c 01 f5 89 5c 24 04 4c 89 e7 48 8d 74 24 04 48 89 ea 4c 89 fd 4c 89 f9 45 31 c0 4d 89 eb 41 ba ef 86 cd 67 45 03 53 f1 74 02 <0f> 0b 41 ff d3 0f 1f 00 48 85 c0 75 0e 48 8d 43 01 41 8b 4c 24 24
+> > [  482.147221][  T699] RSP: 0018:ffffc900017e3e88 EFLAGS: 00010217
+> > [  482.147702][  T699] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffc900017e3ed8
+> > [  482.152162][  T699] RDX: ffff888152eb0210 RSI: ffffc900017e3e8c RDI: ffff888152eb0000
+> > [  482.152770][  T699] RBP: ffffc900017e3ed8 R08: 0000000000000000 R09: 0000000000000000
+> > [  482.153350][  T699] R10: 000000004704ef28 R11: ffffffffa0012774 R12: ffff888152eb0000
+> > [  482.153951][  T699] R13: ffffffffa0012774 R14: ffff888152eb0210 R15: ffffc900017e3ed8
+> > [  482.154554][  T699] FS:  00007fa60d4fdd00(0000) GS:ffff88846d200000(0000) knlGS:0000000000000000
+> > [  482.155138][  T699] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [  482.155564][  T699] CR2: 00007fa60d7d8000 CR3: 00000001502a2005 CR4: 0000000000770ef0
+> > [  482.156095][  T699] PKRU: 55555554
+> > [  482.156349][  T699] Call Trace:
+> > [  482.156596][  T699]  <TASK>
+> > [  482.156816][  T699]  ? __die_body+0x68/0xb0
+> > [  482.157138][  T699]  ? die+0xba/0xe0
+> > [  482.157456][  T699]  ? do_trap+0xa5/0x180
+> > [  482.157826][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
+> > [  482.158277][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
+> > [  482.158711][  T699]  ? do_error_trap+0xc4/0x140
+> > [  482.159052][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
+> > [  482.159506][  T699]  ? handle_invalid_op+0x2c/0x40
+> > [  482.159906][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
+> > [  482.160990][  T699]  ? exc_invalid_op+0x38/0x60
+> > [  482.161375][  T699]  ? asm_exc_invalid_op+0x1a/0x20
+> > [  482.161788][  T699]  ? 0xffffffffa0012774
+> > [  482.162149][  T699]  ? 0xffffffffa0012774
+> > [  482.162513][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
+> > [  482.162905][  T699]  bpf_prog_ca45ea7f9cb8ac1a_inner_map+0x94/0x98
+> > [  482.163471][  T699]  bpf_trampoline_6442549234+0x47/0x1000
+> 
+> Looks like this trips an #UD, I'll go try and figure out what this
+> bpf_for_each_array_elem() does to cause this. Looks like it has an
+> indirect call, could be the callback_fn thing has a CFI mis-match.
 
-I understand on these new CPUs anything other than a block of
-contiguous STPs is risky to break the WC. I was told we should not
-have any loads between them.
+So afaict this is used through bpf_for_each_map_elem(), where the
+argument still is properly callback_fn. However, in the desriptor
+bpf_for_each_map_elem_proto the argument gets described as:
+ARG_PTR_TO_FUNC, which in turn has a comment like:
 
-So we can't just update memcpy_toio to optimize a 128 bit store
-variant like memcpy might. We actually need a special case just for 64
-byte.
+  ARG_PTR_TO_FUNC,        /* pointer to a bpf program function */
 
-IMHO it does not look good as the chance any existing callers can use
-this optmized 64B path is probably small, but everyone has to pay the
-costs to check for it.
+Which to me sounds like there is definite type punning involved. The
+call in bpf_for_each_array_elem() is a regular C indirect call, which
+gets adorned with the kCFI magic.
 
-I also would not do this on x86 - Pathscale apparently decided the
-needed special __iowrite*_copy() things to actually make this work on
-xome x86 systems - I'm very leary to change x86 stuff away from the 64
-bit copy loopw we know works already on x86.
+But I doubt the BPF function that gets used gets the correct matching
+bits on.
 
-IMHO encoding the alignment expectation in the API is best, especially
-since this is typically a performance path.
+TL;DR, I think this is a pre-existing problem with kCFI + eBPF and not
+caused by my patches.
 
-> A memcpy_toio_64() can use the new ST64B instruction if available or
-> fall back to memcpy_toio() on arm64. It should also have the DGH
-> instruction (io_stop_wc()) but only if falling back to classic
-> memcpy_toio(). We don't need DGH with ST64B.
-
-I'm told it is problematic, something about ST64B not working with
-NORMAL_NC.
-
-We could fold the DGH into the helper though. IHMO I'd like to see how
-ST64B actually gets implemented before doing that. If the note about
-the NORMAL_NC is true then we need a lot more infrastructure to
-actually use it.
-
-Also in a future ST64B world we are going to see HW start relying on
-large TLPs, not just being an optional performance win. To my mind it
-makes more sense that there is an API that guarantees a large TLP or
-oops. We really don't want an automatic fallback to memcpy.
-
-Jason
+Could any of you bpf knowledgeable folks please explain me exactly what
+gets used as the function pointer in this case? -- I'm not sure I can
+follow along well enough to begin looking for a solution at this point
+:/
 
