@@ -1,153 +1,120 @@
-Return-Path: <linux-arch+bounces-651-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-652-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F088803D25
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 19:34:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAA08803DE0
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 19:59:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC0E4281184
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 18:34:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15CEA1C20B27
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 18:59:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFFE2E83D;
-	Mon,  4 Dec 2023 18:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1EB430D1F;
+	Mon,  4 Dec 2023 18:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="u2cVkyxL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gVppsoUu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E89FF;
-	Mon,  4 Dec 2023 10:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=yRxkmI4dXPVCTApSsXOOM346LAa1g76vwgSBu1bA/08=; b=u2cVkyxLqoUOqz1TA/dDurEImX
-	yd+RKQfGNzDw1nNzm7F9pDtqQt51c1WaOKmTKmAbAROOiek+hm8k6eZisRZ/QWEyDAbQFc+SykZth
-	yo1Jqw2hGSDZx0/kwV/QhUbR1CaOvc39CcdS6VXzjuqXt4HYSSGFkZCVv/chpwHXClxU600842aLI
-	poUrNAgUfXs1GTMxHRcsbo3DI/Uyx2B0XaXImtz+wS5a8oBto19jcxToog2JblpiSQQodC47SWxtq
-	uoUKbAOA8OTlQYtBciApJtmEJWfW4deFx0DxiGRyt/1iUxUN98T1XdrCmGbwL4cixtGF6odl8Z3oi
-	wU5Z7Stg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rADlT-000x6k-F8; Mon, 04 Dec 2023 18:33:56 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5462830057C; Mon,  4 Dec 2023 19:33:54 +0100 (CET)
-Date: Mon, 4 Dec 2023 19:33:54 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231204183354.GC7299@noisy.programming.kicks-ass.net>
-References: <20231130133630.192490507@infradead.org>
- <20231130134204.136058029@infradead.org>
- <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
- <20231204091334.GM3818@noisy.programming.kicks-ass.net>
- <20231204111128.GV8262@noisy.programming.kicks-ass.net>
- <20231204125239.GA1319@noisy.programming.kicks-ass.net>
- <ZW4LjmUKj1q6RWdL@krava>
- <20231204181614.GA7299@noisy.programming.kicks-ass.net>
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E362D5
+	for <linux-arch@vger.kernel.org>; Mon,  4 Dec 2023 10:59:28 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-4649d22b78aso403165137.0
+        for <linux-arch@vger.kernel.org>; Mon, 04 Dec 2023 10:59:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701716367; x=1702321167; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OhTNasiWgh+dkfX0Dm+ISFeJznRbPndi9WOsk0B0xUY=;
+        b=gVppsoUuN4dqz8Syy1kQUrjoI9C/nqzgvQfx9nxccS1+RNS89BFXrTngJIOrk1P6If
+         VplsZJ65o6IHbLWieGBql0IaVkQDWogVu+eI8is0EtgTP0CONumAwdj4iJfQys0/4eMk
+         Iryix0SeSnwxRXh2vSivhXqpgzPjawruaCoQ5ylbQvbXZ9QuXZa0BfcgdycQDQSAHn61
+         a4nSahHkBplyN0wqnAtQotFnTvEPpC6jXp5q+DbUtCi9EowADUZmq8jeuIr89+F+UB6n
+         xbQCIRISWxN9a3sFhAUCq3AEFFWk6PnBYeV0Hv2gnLd7K9HhxKM6WjOEUdOz9tG8WSi5
+         LU/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701716367; x=1702321167;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OhTNasiWgh+dkfX0Dm+ISFeJznRbPndi9WOsk0B0xUY=;
+        b=e2xjMotsptEGfUjHbl9qR/ykvQYhqkyktmUW6ZBNtte0J667ntzfqMzn2U1ZJY9goX
+         N162IMDyDYPTBcq8Tp++YtslnQ2XrczuOvpVrF5LQuReBEUeOnQ7GsayzLXs352Iv52I
+         afef0ZhmGbJoRR5MSaZEjDduwubJNXWp7rDtVAIqkhgGBHLXYXTB5CFOc+eC5+7HzUUH
+         G93vgUgN2y3FEszJ75MM8ghUgTN/RxCqQ3IxdiYCM8gAmqJq4qjOdU5c2g1W4sxVH2Ka
+         iXPLaIerXiaQdfPlDUlQH0nc1SZykEGd60r13vt3Xwdn8qN1p5glRIblqEY0en2r7fTf
+         freQ==
+X-Gm-Message-State: AOJu0Yw4yQQ11K8qld88FmGCM5G5YVDJvYUQpLjEAJBra9tw5MTXXvft
+	vswDhaELEnyWakIKvzPglBuinM9WuXQ6kJfbvdeOmQ==
+X-Google-Smtp-Source: AGHT+IEfIkpQz/M9GZdrLZVheDNrcWpdTi70JO843+0WuxJNqy5io3mjCriO6X0r0jWpNfjDIVrEn82cF2d3kchgVn8=
+X-Received: by 2002:a05:6102:a53:b0:452:6d82:56e3 with SMTP id
+ i19-20020a0561020a5300b004526d8256e3mr383189vss.6.1701716367163; Mon, 04 Dec
+ 2023 10:59:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231204181614.GA7299@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org> <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net> <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+ <20231204125239.GA1319@noisy.programming.kicks-ass.net> <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net> <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 4 Dec 2023 10:58:48 -0800
+Message-ID: <CABCJKudYc5GtO7TLV=d0-ZYFfBxofrV3-q1vpsaT3MD7oTKpnA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-arch <linux-arch@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Joao Moreira <joao@overdrivepizza.com>, 
+	Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 04, 2023 at 07:16:14PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 04, 2023 at 06:25:34PM +0100, Jiri Olsa wrote:
-> 
-> > that boots properly for me but gives crash below when running bpf tests
-> 
-> OK, more funnies..
-> 
-> > [  482.145182][  T699] RIP: 0010:bpf_for_each_array_elem+0xbb/0x120
-> > [  482.145672][  T699] Code: 4c 01 f5 89 5c 24 04 4c 89 e7 48 8d 74 24 04 48 89 ea 4c 89 fd 4c 89 f9 45 31 c0 4d 89 eb 41 ba ef 86 cd 67 45 03 53 f1 74 02 <0f> 0b 41 ff d3 0f 1f 00 48 85 c0 75 0e 48 8d 43 01 41 8b 4c 24 24
-> > [  482.147221][  T699] RSP: 0018:ffffc900017e3e88 EFLAGS: 00010217
-> > [  482.147702][  T699] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffc900017e3ed8
-> > [  482.152162][  T699] RDX: ffff888152eb0210 RSI: ffffc900017e3e8c RDI: ffff888152eb0000
-> > [  482.152770][  T699] RBP: ffffc900017e3ed8 R08: 0000000000000000 R09: 0000000000000000
-> > [  482.153350][  T699] R10: 000000004704ef28 R11: ffffffffa0012774 R12: ffff888152eb0000
-> > [  482.153951][  T699] R13: ffffffffa0012774 R14: ffff888152eb0210 R15: ffffc900017e3ed8
-> > [  482.154554][  T699] FS:  00007fa60d4fdd00(0000) GS:ffff88846d200000(0000) knlGS:0000000000000000
-> > [  482.155138][  T699] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  482.155564][  T699] CR2: 00007fa60d7d8000 CR3: 00000001502a2005 CR4: 0000000000770ef0
-> > [  482.156095][  T699] PKRU: 55555554
-> > [  482.156349][  T699] Call Trace:
-> > [  482.156596][  T699]  <TASK>
-> > [  482.156816][  T699]  ? __die_body+0x68/0xb0
-> > [  482.157138][  T699]  ? die+0xba/0xe0
-> > [  482.157456][  T699]  ? do_trap+0xa5/0x180
-> > [  482.157826][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
-> > [  482.158277][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
-> > [  482.158711][  T699]  ? do_error_trap+0xc4/0x140
-> > [  482.159052][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
-> > [  482.159506][  T699]  ? handle_invalid_op+0x2c/0x40
-> > [  482.159906][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
-> > [  482.160990][  T699]  ? exc_invalid_op+0x38/0x60
-> > [  482.161375][  T699]  ? asm_exc_invalid_op+0x1a/0x20
-> > [  482.161788][  T699]  ? 0xffffffffa0012774
-> > [  482.162149][  T699]  ? 0xffffffffa0012774
-> > [  482.162513][  T699]  ? bpf_for_each_array_elem+0xbb/0x120
-> > [  482.162905][  T699]  bpf_prog_ca45ea7f9cb8ac1a_inner_map+0x94/0x98
-> > [  482.163471][  T699]  bpf_trampoline_6442549234+0x47/0x1000
-> 
-> Looks like this trips an #UD, I'll go try and figure out what this
-> bpf_for_each_array_elem() does to cause this. Looks like it has an
-> indirect call, could be the callback_fn thing has a CFI mis-match.
+On Mon, Dec 4, 2023 at 10:34=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> So afaict this is used through bpf_for_each_map_elem(), where the
+> argument still is properly callback_fn. However, in the desriptor
+> bpf_for_each_map_elem_proto the argument gets described as:
+> ARG_PTR_TO_FUNC, which in turn has a comment like:
+>
+>   ARG_PTR_TO_FUNC,        /* pointer to a bpf program function */
+>
+> Which to me sounds like there is definite type punning involved. The
+> call in bpf_for_each_array_elem() is a regular C indirect call, which
+> gets adorned with the kCFI magic.
+>
+> But I doubt the BPF function that gets used gets the correct matching
+> bits on.
+>
+> TL;DR, I think this is a pre-existing problem with kCFI + eBPF and not
+> caused by my patches.
 
-So afaict this is used through bpf_for_each_map_elem(), where the
-argument still is properly callback_fn. However, in the desriptor
-bpf_for_each_map_elem_proto the argument gets described as:
-ARG_PTR_TO_FUNC, which in turn has a comment like:
+It is a pre-existing problem, I ran into the same failures when I
+looked into this briefly last year:
 
-  ARG_PTR_TO_FUNC,        /* pointer to a bpf program function */
+https://github.com/ClangBuiltLinux/linux/issues/1727
 
-Which to me sounds like there is definite type punning involved. The
-call in bpf_for_each_array_elem() is a regular C indirect call, which
-gets adorned with the kCFI magic.
+In addition to bpf_for_each_array_elem, a few other callers also use
+the same function pointer type that doesn't match cfi_bpf_hash.
 
-But I doubt the BPF function that gets used gets the correct matching
-bits on.
-
-TL;DR, I think this is a pre-existing problem with kCFI + eBPF and not
-caused by my patches.
-
-Could any of you bpf knowledgeable folks please explain me exactly what
-gets used as the function pointer in this case? -- I'm not sure I can
-follow along well enough to begin looking for a solution at this point
-:/
+Sami
 
