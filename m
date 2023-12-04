@@ -1,40 +1,39 @@
-Return-Path: <linux-arch+bounces-625-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-626-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0DC1802E3E
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 10:14:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A16680314D
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 12:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D13561C209E9
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 09:14:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 171E9B20A33
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Dec 2023 11:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF1712E6C;
-	Mon,  4 Dec 2023 09:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E70522EE5;
+	Mon,  4 Dec 2023 11:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Oq2r/tZ4"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SJZWmelL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E3CCD;
-	Mon,  4 Dec 2023 01:14:32 -0800 (PST)
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA881CC;
+	Mon,  4 Dec 2023 03:12:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=17YJ1z3ogS9ZFtbiaMgUZd7PQ1LHRkBWBWcBGoc/CJ8=; b=Oq2r/tZ4GMYvXmULCX+LD6Qfz7
-	HO9OVNz8XCXQMgxz/LWfORxgl/H3LTq81ngFJsgHC93qrKcMcjpBQX8v5qQhdci74NGvXZAJ/yVju
-	sK9gFvSFKKjG+KTta5qWhde5JaQQriDgSlX54kLf3MXV6oHLk1PYPA8HeGphIfHdNTawm8bbTLJrU
-	NgcMlwn6/lrZmRXbfPHQFRxpn4ftLCB5eM9fnRnJvlMZpH3BmDJrGqa4dnsA7VRIdxnJbQVajyNOi
-	Bn006jXGBXzTqb9dfS3GtKtm0DDTPpLydkfwONe+R1/uAJi3EvwQfUiJ18EbM5lGDJHCoVpl5xoSe
-	3fM7hPwA==;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=57qN1iQssrdoPxO3vjOJxY+KkICDSFEOHy7vEhypSQY=; b=SJZWmelLjacxjQSc2rHFwC2yAL
+	jTj9QZTX0X4Po4XPpfbs7mcPqcRffTzF+bRxA6cc+E5pWWustakRYKEHFrKYdsNMy0O3vYtMgKPqD
+	g6mXsMan1PhPEuOos6p54MK0NRN6dhfjkQFxjjekcKPgEUo/P8hMw93tOmEpoCTiUedvGyLRD8Z9D
+	HLkoFDqCUrQBEg2UU8X7XyyVtMWxis4xqXdL5iszhpV2f0OjzCwzyI6Idp1VXXqqWoC3vZQiQNbY4
+	zqZ1Mcm2rpTcgt+Qe43CxSMZDe3gBiRFLdStRojeDIPpxLyqyFTKjjgekBA/xZqWFFnX93kfXBC7a
+	/EPIZEzw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rA51D-004JwZ-2M;
-	Mon, 04 Dec 2023 09:13:35 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rA6rJ-000b3j-D2; Mon, 04 Dec 2023 11:11:29 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4D01F300472; Mon,  4 Dec 2023 10:13:34 +0100 (CET)
-Date: Mon, 4 Dec 2023 10:13:34 +0100
+	id 6305A3003F0; Mon,  4 Dec 2023 12:11:28 +0100 (CET)
+Date: Mon, 4 Dec 2023 12:11:28 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
@@ -69,95 +68,45 @@ Cc: Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
 	Joao Moreira <joao@overdrivepizza.com>,
 	Mark Rutland <mark.rutland@arm.com>
 Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+Message-ID: <20231204111128.GV8262@noisy.programming.kicks-ass.net>
 References: <20231130133630.192490507@infradead.org>
  <20231130134204.136058029@infradead.org>
  <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+In-Reply-To: <20231204091334.GM3818@noisy.programming.kicks-ass.net>
 
-On Sun, Dec 03, 2023 at 02:56:34PM -0800, Alexei Starovoitov wrote:
-> On Thu, Nov 30, 2023 at 5:43 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> >
-> >  void bpf_prog_kallsyms_del(struct bpf_prog *fp)
-> > @@ -691,6 +708,9 @@ void bpf_prog_kallsyms_del(struct bpf_pr
-> >                 return;
-> >
-> >         bpf_ksym_del(&fp->aux->ksym);
-> > +#ifdef CONFIG_FINEIBT
-> > +       bpf_ksym_del(&fp->aux->ksym_prefix);
-> > +#endif
-> >  }
-> 
-> Thank you for addressing all comments, but it panics during boot with:
-> 
-> [    3.109474] RIP: 0010:bpf_prog_kallsyms_del+0x10f/0x140
-> [    3.109867] Code: 26 e0 00 ff 05 32 dd dd 01 48 8d bb 80 03 00 00
-> 48 c7 c6 b8 b3 00 83 e8 ef 25 e0 00 48 8b 83 58 03 00 00 48 8b 8b 60
-> 03 00 00 <48> 89 48 08 48 89 01 4c 89 b3 60 03 00 00 48 c7 c7 10 0b 7b
-> 83 5b
-> [    3.111282] RSP: 0000:ffffc90000013e08 EFLAGS: 00010246
-> [    3.116968] Call Trace:
-> [    3.117163]  <TASK>
-> [    3.117328]  ? __die_body+0x68/0xb0
-> [    3.117599]  ? page_fault_oops+0x317/0x390
-> [    3.117909]  ? debug_objects_fill_pool+0x19/0x440
-> [    3.118283]  ? debug_objects_fill_pool+0x19/0x440
-> [    3.118715]  ? do_user_addr_fault+0x4cd/0x560
-> [    3.119045]  ? exc_page_fault+0x62/0x1c0
-> [    3.119350]  ? asm_exc_page_fault+0x26/0x30
-> [    3.119675]  ? bpf_prog_kallsyms_del+0x10f/0x140
-> [    3.120023]  ? bpf_prog_kallsyms_del+0x101/0x140
-> [    3.120381]  __bpf_prog_put_noref+0x12/0xf0
-> [    3.120704]  bpf_prog_put_deferred+0xe9/0x110
-> [    3.121035]  bpf_prog_put+0xbb/0xd0
-> [    3.121307]  bpf_prog_release+0x15/0x20
-> 
-> Adding the following:
-> 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 5c84a935ba63..5013fd53adfd 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -709,6 +709,8 @@ void bpf_prog_kallsyms_del(struct bpf_prog *fp)
-> 
->         bpf_ksym_del(&fp->aux->ksym);
->  #ifdef CONFIG_FINEIBT
-> +       if (cfi_mode != CFI_FINEIBT)
-> +               return;
->         bpf_ksym_del(&fp->aux->ksym_prefix);
->  #endif
->  }
-> 
-> fixes the boot issue, but test_progs is not happy.
+On Mon, Dec 04, 2023 at 10:13:34AM +0100, Peter Zijlstra wrote:
 
-Damn, I'm an idiot :-), I knew I should've boot tested all
-configurations again :/
-
-> Just running test_progs it splats right away:
+> > Just running test_progs it splats right away:
+> > 
+> > [   74.047757] kmemleak: Found object by alias at 0xffffffffa0001d80
+> > [   74.048272] CPU: 14 PID: 104 Comm: kworker/14:0 Tainted: G        W
+> >  O       6.7.0-rc3-00702-g41c30fec304d-dirty #5241
+> > [   74.049118] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> > BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> > [   74.050042] Workqueue: events bpf_prog_free_deferred
+> > [   74.050448] Call Trace:
+> > [   74.050663]  <TASK>
+> > [   74.050841]  dump_stack_lvl+0x55/0x80
+> > [   74.051141]  __find_and_remove_object+0xdb/0x110
+> > [   74.051521]  kmemleak_free+0x41/0x70
+> > [   74.051828]  vfree+0x36/0x130
 > 
-> [   74.047757] kmemleak: Found object by alias at 0xffffffffa0001d80
-> [   74.048272] CPU: 14 PID: 104 Comm: kworker/14:0 Tainted: G        W
->  O       6.7.0-rc3-00702-g41c30fec304d-dirty #5241
-> [   74.049118] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-> BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-> [   74.050042] Workqueue: events bpf_prog_free_deferred
-> [   74.050448] Call Trace:
-> [   74.050663]  <TASK>
-> [   74.050841]  dump_stack_lvl+0x55/0x80
-> [   74.051141]  __find_and_remove_object+0xdb/0x110
-> [   74.051521]  kmemleak_free+0x41/0x70
-> [   74.051828]  vfree+0x36/0x130
+> Durr, I'll see if I can get that stuff running locally, and otherwise
+> play with the robot as you suggested. Thanks!
 
-Durr, I'll see if I can get that stuff running locally, and otherwise
-play with the robot as you suggested. Thanks!
+I think it is bpf_jit_binary_pack_hdr(), which is using prog->bpf_func
+as a start address for the image, instead of jit_data->image.
+
+This used to be true, but now it's offset.
+
+Let me see what to do about that...
 
