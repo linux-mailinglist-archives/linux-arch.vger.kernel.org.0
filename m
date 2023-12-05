@@ -1,142 +1,95 @@
-Return-Path: <linux-arch+bounces-691-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-692-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07AD88050F5
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 11:45:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8726980574A
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 15:26:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0AFE1F214F0
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 10:45:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41EA9281BCA
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 14:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D0F012E7A;
-	Tue,  5 Dec 2023 10:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B2F65EBA;
+	Tue,  5 Dec 2023 14:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B/Pzv3q3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Je+fNcYY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687D1FA;
-	Tue,  5 Dec 2023 02:45:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701773112; x=1733309112;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SOLccH3Xzc++EaBQ0v6eolcJHqG0ji0sa1DvQVydOv4=;
-  b=B/Pzv3q33kt8RpyZTy/nN4u42ZFajAZmXfsTKeD8tjpYhp42/TC16GYj
-   ojRlnTUVc9MaTnwB5XaNZdyJ+S+4fXb9RIkXpNhebVWMY4TCCSVmOs4cM
-   lmc8UhjjpDBe6/1nBV8/M/p+8wbozHlFSnQ968ASyoPMjFZWJVZly3MCC
-   j2BlG9RBsmSRn1vBh/CZa59BePhRPgvWrqDd1vwO9DHsh8Gatu8scdG0V
-   e3aC/gFjpJwoiHvAz4T9jn8yJMlYpSa9ZrVT9gpqzrg2afvNzBSegEG2w
-   oDHjqn8i1CkdgEz4SR/l+x2gUKGeYQwgY7YRvSYM1HaqUapCYOLUDtg5m
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="393609836"
-X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
-   d="scan'208";a="393609836"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 02:45:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="914758875"
-X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
-   d="scan'208";a="914758875"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Dec 2023 02:45:05 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rASus-0008na-2J;
-	Tue, 05 Dec 2023 10:45:03 +0000
-Date: Tue, 5 Dec 2023 18:44:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Philipp Stanner <pstanner@redhat.com>,
-	Bjorn Helgaas <helgaas@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Hanjun Guo <guohanjun@huawei.com>, NeilBrown <neilb@suse.de>,
-	Kent Overstreet <kmo@daterainc.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Uladzislau Koshchanka <koshchanka@gmail.com>,
-	John Sanpe <sanpeqf@gmail.com>, Dave Jiang <dave.jiang@intel.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"wuqiang.matt" <wuqiang.matt@bytedance.com>,
-	Yury Norov <yury.norov@gmail.com>, Jason Baron <jbaron@akamai.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arch@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] lib, pci: unify generic pci_iounmap()
-Message-ID: <202312051813.09WbvusW-lkp@intel.com>
-References: <20231204123834.29247-6-pstanner@redhat.com>
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54C290;
+	Tue,  5 Dec 2023 06:26:26 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40b5155e154so61390465e9.3;
+        Tue, 05 Dec 2023 06:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701786385; x=1702391185; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Op8EMMLSn4u+aBPhlPBNq3QMTgHXM3GBpRsFBgi0BfQ=;
+        b=Je+fNcYYEL+oFZXHBG4vyEm4q3MDARjCNpqHxjZnjM73qqZMRPVD7xWZibgPTy3/qZ
+         cZ8IXlBB5x0tjJMdxDVWKk3z3BjzFi3X1paWRN+UEdh+T3DddyG+cimxxBfEEFaBW6E/
+         ksHVOnfKLbiMXQk9AGNjof23UTBc9YcjXzmsaZH5pbEVa6P+wzBYPzH5cu7dKdJtrQMh
+         uKQ/r54G+UJpU6cqaRA3UmR9U7XTCcCTE2WMnHPL8Epk49F602I7KbEMwBGF1/hvwnNo
+         dOXjcZoiWBK9RZeYs5Fi76sJn4nFe7doVl6pARNwGz4QT1cIckkCePFkTQLeXxmbSHUG
+         gxHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701786385; x=1702391185;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Op8EMMLSn4u+aBPhlPBNq3QMTgHXM3GBpRsFBgi0BfQ=;
+        b=dzH6VgYL2LMwnS30vzjJhaVXTq31R7cx0QQDTbh92Wrco9v9OBnX8Lc8ST1acPKaPU
+         VZL56HFq97M/uWJv4ERUImKDOo6fdDRLu7zpBgqyaIdexAav3qJZKTAMLGQ9uoQki/cQ
+         NBQgparuqcNzUelqonsVzhTJ14wXb4vW8/nCt1jH0RaX9TuVEXKOnwxkvWCyGaIBlI8G
+         nwazp/4BLRmfxQePJgk1/I0Si5Rn6tCw1uHu+DLwT5m4wGOgACiGJ/nVLbei6YyBU80t
+         ezpCKatvYywYsIjnqgc74uQmGhwPUaoLT6/2yegvHwvIMYiegkfCj+DcvOs7zlByIMoy
+         2t+Q==
+X-Gm-Message-State: AOJu0YwzAzKu92baV5gGxaknFvOj9FhAHzuvVJJIljX+N/DtMD+DePBx
+	judPtpq3C2Tfz64Ke2OgfGhN0bjE6Q==
+X-Google-Smtp-Source: AGHT+IHHROYIemcb/wsY8oPQMU7gMIn1gsTtBT9VDn93wCGrv8ctub0VOQUxcGsJwZ8m28SEOnej3w==
+X-Received: by 2002:a05:600c:4f50:b0:40b:5e1f:6fd9 with SMTP id m16-20020a05600c4f5000b0040b5e1f6fd9mr501528wmq.46.1701786384964;
+        Tue, 05 Dec 2023 06:26:24 -0800 (PST)
+Received: from p183 ([46.53.254.107])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05600c451400b004094e565e71sm19022491wmo.23.2023.12.05.06.26.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 06:26:24 -0800 (PST)
+Date: Tue, 5 Dec 2023 17:26:22 +0300
+From: Alexey Dobriyan <adobriyan@gmail.com>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH] ELF: supply userspace with available page shifts
+ (AT_PAGE_SHIFT_LIST)
+Message-ID: <75344429-1f34-4a14-ab10-8613846d694e@p183>
+References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
+ <87v89dvuxg.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231204123834.29247-6-pstanner@redhat.com>
+In-Reply-To: <87v89dvuxg.fsf@oldenburg.str.redhat.com>
 
-Hi Philipp,
+On Tue, Dec 05, 2023 at 10:51:39AM +0100, Florian Weimer wrote:
+> * Alexey Dobriyan:
+> 
+> > +/*
+> > + * Page sizes available for mmap(2) encoded as 1 page shift per byte in
+> > + * increasing order.
+> > + *
+> > + * Thus 32-bit systems get 4 shifts, 64-bit systems get 8 shifts tops.
+> 
+> Couldn't you use the bits in a long instead, to indicate which shifts
+> are present?  That's always going to be enough.
 
-kernel test robot noticed the following build errors:
+Yes!
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus arnd-asm-generic/master kees/for-next/pstore kees/for-next/kspp linus/master v6.7-rc4 next-20231205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I was so proud of myself for this line:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Stanner/lib-pci_iomap-c-fix-cleanup-bugs-in-pci_iounmap/20231204-204128
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20231204123834.29247-6-pstanner%40redhat.com
-patch subject: [PATCH v3 5/5] lib, pci: unify generic pci_iounmap()
-config: openrisc-virt_defconfig (https://download.01.org/0day-ci/archive/20231205/202312051813.09WbvusW-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312051813.09WbvusW-lkp@intel.com/reproduce)
+	val |= 21 << (s += 8);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312051813.09WbvusW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/pci/iomap.c: In function 'pci_iounmap':
->> drivers/pci/iomap.c:155:17: error: implicit declaration of function 'ioport_unmap'; did you mean 'devm_ioport_unmap'? [-Werror=implicit-function-declaration]
-     155 |                 ioport_unmap(addr);
-         |                 ^~~~~~~~~~~~
-         |                 devm_ioport_unmap
-   cc1: some warnings being treated as errors
-
-
-vim +155 drivers/pci/iomap.c
-
-   144	
-   145	/**
-   146	 * pci_iounmap - Unmapp a mapping
-   147	 * @dev: PCI device the mapping belongs to
-   148	 * @addr: start address of the mapping
-   149	 *
-   150	 * Unmapp a PIO or MMIO mapping.
-   151	 */
-   152	void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
-   153	{
-   154		if (iomem_is_ioport(addr)) {
- > 155			ioport_unmap(addr);
-   156			return;
-   157		}
-   158	
-   159		iounmap(addr);
-   160	}
-   161	EXPORT_SYMBOL(pci_iounmap);
-   162	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Now it is boring bitmask again :-)
 
