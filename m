@@ -1,78 +1,79 @@
-Return-Path: <linux-arch+bounces-689-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-690-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EFD98044DB
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 03:28:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30CAE804EB1
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 10:51:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BFDC28113E
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 02:28:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7219B2816A4
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 09:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13198BEA;
-	Tue,  5 Dec 2023 02:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC0F495F7;
+	Tue,  5 Dec 2023 09:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="kiauXGfO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H2CBKRaD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257A62718;
-	Mon,  4 Dec 2023 18:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+Sh4xFuCYtuZDODA0SGnrOJqkTBCw1GOJElB1RwG75Y=; b=kiauXGfOGc/a/PeytVXFZv7qSq
-	niZtmA7lcKvUb5/b2C/4YdYhZ0yk+mypc+QzHzy7qgHV3cnWadFuYC15RY7+v65726NgOqj6o6+tq
-	pGzgSzdb1RxwH5BBf3KX28A0YnHSSfxdQTv05SIV4UQc2z00epfxvpq0NCxQsiha1Vr0h5DVNj58c
-	/jsrnzobFi+XIysxaJjQfX8eaV+nh81MViccJVmngzjORQUHauwQEjM2VglQs3aJSgkc4f8xDZvYC
-	WCdJ1gkWQSby5c/unzmDksm6mTzufIlpSM2bPZ38hHaRdw2iBYUoyBTxDamMNGYfsYV4oaPxt4ndd
-	YIMUSFIA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAL9q-0079CL-1x;
-	Tue, 05 Dec 2023 02:27:34 +0000
-Date: Tue, 5 Dec 2023 02:27:34 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-arch@vger.kernel.org
-Cc: gus Gusenleitner Klaus <gus@keba.com>, Al Viro <viro@ftp.linux.org.uk>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	lkml <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	"dsahern@kernel.org" <dsahern@kernel.org>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
-Subject: Re: [RFC][PATCHES v2] checksum stuff
-Message-ID: <20231205022734.GC1674809@ZenIV>
-References: <VI1PR0702MB3840F2D594B9681BF2E0CD81D9D4A@VI1PR0702MB3840.eurprd07.prod.outlook.com>
- <20231019050250.GV800259@ZenIV>
- <20231019061427.GW800259@ZenIV>
- <20231019063925.GX800259@ZenIV>
- <CANn89iJre=VQ6J=UuD0d2J5t=kXr2b9Dk9b=SwzPX1CM+ph60A@mail.gmail.com>
- <20231019080615.GY800259@ZenIV>
- <20231021071525.GA789610@ZenIV>
- <20231021222203.GA800259@ZenIV>
- <20231022194020.GA972254@ZenIV>
- <20231205022100.GB1674809@ZenIV>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CFEA7
+	for <linux-arch@vger.kernel.org>; Tue,  5 Dec 2023 01:51:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701769908;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7dVZSK5HrOSlXE62GRvm87IDdzGVk4JEDjk3rU5ubq8=;
+	b=H2CBKRaD7IU7VM7s20/zAkJ1AIKeNfe3e2TIWwfhjumjajscddCTzU1QnCCxCjUKubdeH3
+	hOkwwcLFO9j1Z7z5A84mZbnc3TsnzIXDS+Q841jKHNUw0MDNiovZHBMF2ViwhxWcRiYYv5
+	eUn6zkNi67Q5o8nOqp02vkQJgcOBDek=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-582-F4k2HGFBPB6w4DHHBWvnrw-1; Tue,
+ 05 Dec 2023 04:51:43 -0500
+X-MC-Unique: F4k2HGFBPB6w4DHHBWvnrw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E0002806040;
+	Tue,  5 Dec 2023 09:51:43 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.84])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id D4BCF1C060AF;
+	Tue,  5 Dec 2023 09:51:41 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: akpm@linux-foundation.org,  linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org,  linux-api@vger.kernel.org,  x86@kernel.org
+Subject: Re: [PATCH] ELF: supply userspace with available page shifts
+ (AT_PAGE_SHIFT_LIST)
+References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
+Date: Tue, 05 Dec 2023 10:51:39 +0100
+In-Reply-To: <6b399b86-a478-48b0-92a1-25240a8ede54@p183> (Alexey Dobriyan's
+	message of "Mon, 4 Dec 2023 20:18:48 +0300")
+Message-ID: <87v89dvuxg.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205022100.GB1674809@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-On Tue, Dec 05, 2023 at 02:21:00AM +0000, Al Viro wrote:
+* Alexey Dobriyan:
 
-Arrrgghhh...
+> +/*
+> + * Page sizes available for mmap(2) encoded as 1 page shift per byte in
+> + * increasing order.
+> + *
+> + * Thus 32-bit systems get 4 shifts, 64-bit systems get 8 shifts tops.
 
-Sorry about the crap mixed into that - git send-email .... v2-* without
-checking if there are old files matching the same pattern remain.
+Couldn't you use the bits in a long instead, to indicate which shifts
+are present?  That's always going to be enough.
 
-Shouldn't have skipped --dry-run; mea culpa.
+Thanks,
+Florian
+
 
