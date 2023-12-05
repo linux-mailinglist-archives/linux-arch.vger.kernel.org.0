@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-671-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-685-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D82968044B0
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 03:24:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFF2D8044BE
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 03:24:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A45AB20B11
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 02:24:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E76F3B20C68
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Dec 2023 02:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1591C6123;
-	Tue,  5 Dec 2023 02:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B678F610D;
+	Tue,  5 Dec 2023 02:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="CMNsJnAO"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="LtctdxV8"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7BA124;
-	Mon,  4 Dec 2023 18:24:24 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690518B;
+	Mon,  4 Dec 2023 18:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=wU9rQ0WHNb7K2eVSmVt58rzaZ/jgSlXiNPhlH8JqqSU=; b=CMNsJnAO5W5GUIm/GCGKdv1gnh
-	AbtJE1nqZ29lQH0iAZEBT2kYC4PGP4YqaXvRId7cbLU1qWwjwN94UgtgAK33snpgWe6weYNB7uUqE
-	N9ONXc0u75jYiCYa55Q0u/koNQA9Zp2BJOvY31JiafAdEOBZfGhXxPy69Lj3/jFpK7269yac9jSbv
-	DeYCtUJv5CvXqLyw/1KYr5ER1yKNOQpfvPsD7iHygUhKaOvuf2UgrSjJkaWTcaFCalMf7LDI1ipfC
-	e3B4G0YG7EhesWIrTJ5L/PqC8Qf8F5nOTgz6Z494KtIZ9ARBqV8zZ4teTdThh+QfyH/h48/bFV9II
-	rUBBAwbA==;
+	bh=yGsLus4r20WEhHIEUwFMWqvoY3KD5tmxwmXqu9yESi4=; b=LtctdxV88ZB9dZnAzKcrsyJRmK
+	3tN0NMX6g3+akOw4y3ZNae1A3WM5uC6dRSRxk6bOx3aJe8VdZMcHFaxBG74+d99D+waBD/i98aJwV
+	QU/6GapyrDEWQvaNpCZpTxGjvEIcZIboUFseYoKgzl7oI6yttsI4siDtFjqWhqLxpOU6ImEd/fFbW
+	zm6wfLREYe0TezDiEYLrnFGjLo3kTnRvEA9LAJvSbpQ6piFK5m/36cm/rPWhAbx9N1NdpzSFfe3Oc
+	LoXFth9KtYsZr1nAQfqwCkznKqpzSctgzBXjzTVJq4pvxKAvKggqk4moJXHMSraFWvOm8IRc9e98R
+	iXfHokZQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAL6k-00793P-1b;
+	id 1rAL6k-00793Z-2V;
 	Tue, 05 Dec 2023 02:24:22 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-arch@vger.kernel.org
@@ -46,9 +46,9 @@ Cc: gus Gusenleitner Klaus <gus@keba.com>,
 	"kuba@kernel.org" <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 11/18] x86: merge csum_fold() for 32bit and 64bit
-Date: Tue,  5 Dec 2023 02:24:11 +0000
-Message-Id: <20231205022418.1703007-20-viro@zeniv.linux.org.uk>
+Subject: [PATCH v2 12/18] x86: merge ip_fast_csum() for 32bit and 64bit
+Date: Tue,  5 Dec 2023 02:24:12 +0000
+Message-Id: <20231205022418.1703007-21-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20231205022418.1703007-1-viro@zeniv.linux.org.uk>
 References: <20231205022100.GB1674809@ZenIV>
@@ -62,109 +62,173 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Identical.
+Identical, except that 32bit version uses asm volatile where 64bit
+one uses plain asm.  The former had become pointless when memory
+clobber got added to both versions...
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/x86/include/asm/checksum.h    | 22 ++++++++++++++++++++++
- arch/x86/include/asm/checksum_32.h | 14 --------------
- arch/x86/include/asm/checksum_64.h | 18 ------------------
- 3 files changed, 22 insertions(+), 32 deletions(-)
+ arch/x86/include/asm/checksum.h    | 43 ++++++++++++++++++++++++++++++
+ arch/x86/include/asm/checksum_32.h | 37 -------------------------
+ arch/x86/include/asm/checksum_64.h | 43 ------------------------------
+ 3 files changed, 43 insertions(+), 80 deletions(-)
 
 diff --git a/arch/x86/include/asm/checksum.h b/arch/x86/include/asm/checksum.h
-index 6df6ece8a28e..eaa5dda09bee 100644
+index eaa5dda09bee..5e617a380537 100644
 --- a/arch/x86/include/asm/checksum.h
 +++ b/arch/x86/include/asm/checksum.h
-@@ -1,13 +1,35 @@
- /* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_CHECKSUM_H
-+#define _ASM_X86_CHECKSUM_H
- #ifdef CONFIG_GENERIC_CSUM
- # include <asm-generic/checksum.h>
- #else
- # define  _HAVE_ARCH_COPY_AND_CSUM_FROM_USER 1
- # define HAVE_CSUM_COPY_USER
- # define _HAVE_ARCH_CSUM_AND_COPY
+@@ -26,6 +26,49 @@ static inline __sum16 csum_fold(__wsum sum)
+ 	return (__force __sum16)(~(__force u32)sum >> 16);
+ }
+ 
++/*
++ *	This is a version of ip_compute_csum() optimized for IP headers,
++ *	which always checksum on 4 octet boundaries.
++ *
++ *	By Jorge Cwik <jorge@laser.satlink.net>, adapted for linux by
++ *	Arnt Gulbrandsen.
++ */
 +
 +/**
-+ * csum_fold - Fold and invert a 32bit checksum.
-+ * sum: 32bit unfolded sum
-+ *
-+ * Fold a 32bit running checksum to 16bit and invert it. This is usually
-+ * the last step before putting a checksum into a packet.
-+ * Make sure not to mix with 64bit checksums.
++ * ip_fast_csum - Compute the IPv4 header checksum efficiently.
++ * iph: ipv4 header
++ * ihl: length of header / 4
 + */
-+static inline __sum16 csum_fold(__wsum sum)
++static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
 +{
-+	asm("  addl %1,%0\n"
-+	    "  adcl $0xffff,%0"
-+	    : "=r" (sum)
-+	    : "r" ((__force u32)sum << 16),
-+	      "0" ((__force u32)sum & 0xffff0000));
-+	return (__force __sum16)(~(__force u32)sum >> 16);
++	unsigned int sum;
++
++	asm("  movl (%1), %0\n"
++	    "  subl $4, %2\n"
++	    "  jbe 2f\n"
++	    "  addl 4(%1), %0\n"
++	    "  adcl 8(%1), %0\n"
++	    "  adcl 12(%1), %0\n"
++	    "1: adcl 16(%1), %0\n"
++	    "  lea 4(%1), %1\n"
++	    "  decl %2\n"
++	    "  jne	1b\n"
++	    "  adcl $0, %0\n"
++	    "  movl %0, %2\n"
++	    "  shrl $16, %0\n"
++	    "  addw %w2, %w0\n"
++	    "  adcl $0, %0\n"
++	    "  notl %0\n"
++	    "2:"
++	/* Since the input registers which are loaded with iph and ihl
++	   are modified, we must also specify them as outputs, or gcc
++	   will assume they contain their original values. */
++	    : "=r" (sum), "=r" (iph), "=r" (ihl)
++	    : "1" (iph), "2" (ihl)
++	    : "memory");
++	return (__force __sum16)sum;
 +}
 +
  # ifdef CONFIG_X86_32
  #  include <asm/checksum_32.h>
  # else
- #  include <asm/checksum_64.h>
- # endif
- #endif
-+#endif
 diff --git a/arch/x86/include/asm/checksum_32.h b/arch/x86/include/asm/checksum_32.h
-index 7570bdff7dea..4e96d0473f88 100644
+index 4e96d0473f88..d920e6c335bc 100644
 --- a/arch/x86/include/asm/checksum_32.h
 +++ b/arch/x86/include/asm/checksum_32.h
-@@ -92,20 +92,6 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
- 	return (__force __sum16)sum;
+@@ -55,43 +55,6 @@ static inline __wsum_fault csum_and_copy_from_user(const void __user *src,
+ 	return ret;
  }
  
 -/*
-- *	Fold a partial checksum
+- *	This is a version of ip_compute_csum() optimized for IP headers,
+- *	which always checksum on 4 octet boundaries.
+- *
+- *	By Jorge Cwik <jorge@laser.satlink.net>, adapted for linux by
+- *	Arnt Gulbrandsen.
 - */
--
--static inline __sum16 csum_fold(__wsum sum)
+-static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
 -{
--	asm("addl %1, %0		;\n"
--	    "adcl $0xffff, %0	;\n"
--	    : "=r" (sum)
--	    : "r" ((__force u32)sum << 16),
--	      "0" ((__force u32)sum & 0xffff0000));
--	return (__force __sum16)(~(__force u32)sum >> 16);
+-	unsigned int sum;
+-
+-	asm volatile("movl (%1), %0	;\n"
+-		     "subl $4, %2	;\n"
+-		     "jbe 2f		;\n"
+-		     "addl 4(%1), %0	;\n"
+-		     "adcl 8(%1), %0	;\n"
+-		     "adcl 12(%1), %0;\n"
+-		     "1:	adcl 16(%1), %0	;\n"
+-		     "lea 4(%1), %1	;\n"
+-		     "decl %2	;\n"
+-		     "jne 1b		;\n"
+-		     "adcl $0, %0	;\n"
+-		     "movl %0, %2	;\n"
+-		     "shrl $16, %0	;\n"
+-		     "addw %w2, %w0	;\n"
+-		     "adcl $0, %0	;\n"
+-		     "notl %0	;\n"
+-		     "2:		;\n"
+-	/* Since the input registers which are loaded with iph and ihl
+-	   are modified, we must also specify them as outputs, or gcc
+-	   will assume they contain their original values. */
+-		     : "=r" (sum), "=r" (iph), "=r" (ihl)
+-		     : "1" (iph), "2" (ihl)
+-		     : "memory");
+-	return (__force __sum16)sum;
 -}
 -
  static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
  					__u32 len, __u8 proto,
  					__wsum sum)
 diff --git a/arch/x86/include/asm/checksum_64.h b/arch/x86/include/asm/checksum_64.h
-index 2bd75710eea1..d261b4124ca6 100644
+index d261b4124ca6..b80c82590d8d 100644
 --- a/arch/x86/include/asm/checksum_64.h
 +++ b/arch/x86/include/asm/checksum_64.h
-@@ -11,24 +11,6 @@
+@@ -11,49 +11,6 @@
  #include <linux/compiler.h>
  #include <asm/byteorder.h>
  
--/**
-- * csum_fold - Fold and invert a 32bit checksum.
-- * sum: 32bit unfolded sum
+-/*
+- *	This is a version of ip_compute_csum() optimized for IP headers,
+- *	which always checksum on 4 octet boundaries.
 - *
-- * Fold a 32bit running checksum to 16bit and invert it. This is usually
-- * the last step before putting a checksum into a packet.
-- * Make sure not to mix with 64bit checksums.
+- *	By Jorge Cwik <jorge@laser.satlink.net>, adapted for linux by
+- *	Arnt Gulbrandsen.
 - */
--static inline __sum16 csum_fold(__wsum sum)
+-
+-/**
+- * ip_fast_csum - Compute the IPv4 header checksum efficiently.
+- * iph: ipv4 header
+- * ihl: length of header / 4
+- */
+-static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
 -{
--	asm("  addl %1,%0\n"
--	    "  adcl $0xffff,%0"
--	    : "=r" (sum)
--	    : "r" ((__force u32)sum << 16),
--	      "0" ((__force u32)sum & 0xffff0000));
--	return (__force __sum16)(~(__force u32)sum >> 16);
+-	unsigned int sum;
+-
+-	asm("  movl (%1), %0\n"
+-	    "  subl $4, %2\n"
+-	    "  jbe 2f\n"
+-	    "  addl 4(%1), %0\n"
+-	    "  adcl 8(%1), %0\n"
+-	    "  adcl 12(%1), %0\n"
+-	    "1: adcl 16(%1), %0\n"
+-	    "  lea 4(%1), %1\n"
+-	    "  decl %2\n"
+-	    "  jne	1b\n"
+-	    "  adcl $0, %0\n"
+-	    "  movl %0, %2\n"
+-	    "  shrl $16, %0\n"
+-	    "  addw %w2, %w0\n"
+-	    "  adcl $0, %0\n"
+-	    "  notl %0\n"
+-	    "2:"
+-	/* Since the input registers which are loaded with iph and ihl
+-	   are modified, we must also specify them as outputs, or gcc
+-	   will assume they contain their original values. */
+-	    : "=r" (sum), "=r" (iph), "=r" (ihl)
+-	    : "1" (iph), "2" (ihl)
+-	    : "memory");
+-	return (__force __sum16)sum;
 -}
 -
- /*
-  *	This is a version of ip_compute_csum() optimized for IP headers,
-  *	which always checksum on 4 octet boundaries.
+ /**
+  * csum_tcpup_nofold - Compute an IPv4 pseudo header checksum.
+  * @saddr: source address
 -- 
 2.39.2
 
