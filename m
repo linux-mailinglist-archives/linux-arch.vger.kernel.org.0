@@ -1,255 +1,152 @@
-Return-Path: <linux-arch+bounces-717-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-718-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADC40807103
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 14:39:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70E6C8073C5
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 16:36:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67A85281455
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 13:39:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 269DB1F21144
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 15:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0DB39FD8;
-	Wed,  6 Dec 2023 13:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A853FE5D;
+	Wed,  6 Dec 2023 15:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cut8zO1B"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gTruqnlu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912C7C7
-	for <linux-arch@vger.kernel.org>; Wed,  6 Dec 2023 05:39:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701869981; x=1733405981;
-  h=date:from:to:cc:subject:message-id;
-  bh=QB7f01W9/xt90CgaD1bniHi7dow1XOKCfmIo5Fd0JR4=;
-  b=cut8zO1BqzClYWwcxWROQsuAL3+J9XGWO+q40FW7HiSngaJZ89Pg0WBC
-   aTXW2pZysZDyvmGVdLNh1cAVYvmF3YR059nHmXHXhoOURqmsVuFwvOEuB
-   vRHcS2QjEaj/DcF0Zy/Pn4Ea76KiYf0x+ieimFiTqwvjN2mOHM/Gf0pSw
-   iV7UzDlrY1itx1Be9Ili/2Hs5OnokI2/p595ipRC4YmcmFPt9eW6QkTIq
-   YdFwxpXu7D1kbZJMR3VEZWDMWxuLLhfVMhm760IYaZv8LTdMcghyIb7pk
-   MXBmNYeNpoAMNjezuOB3eM81ngDm8xWQMSmYifMiLk1ochegta68XI8/l
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="393791837"
-X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="393791837"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 05:39:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="800353590"
-X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="800353590"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2023 05:39:39 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAs7l-000Aqu-19;
-	Wed, 06 Dec 2023 13:39:37 +0000
-Date: Wed, 06 Dec 2023 21:39:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:master] BUILD SUCCESS
- d6e81532b10d8deb2bc30f7b44f09534876893e3
-Message-ID: <202312062119.fa0xQhzK-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39B4112;
+	Wed,  6 Dec 2023 07:36:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=34JGkeDw2fzo5aYJ5fytyFCmmA2EAJ4M9xy4pwn6wrM=; b=gTruqnlu8eDmXa3L0iyeSD2Nnn
+	ePXXo7+GcN32qytdrXaWYSLANmme4ALZxhg0JQlNFwM/MH4cviy77G8UNNHVpyThWd9OSqLjvfyjH
+	n+hvMI4zCb/iJgc+nB2YqllaE+P53evNS/9fuIg8TOPrU7vxPv0Z2HgxAq+kGffHXcdGVjW87Znxc
+	j4vkPvTk0bS8qgVSzZs8fcJ4jZGSyPTxTSPz0Q2sEpN7Cn7GkfA4d44EOHD4gLC5FjiKQEaNcynfB
+	DtD725Qv+e8+0LnA0+qRxiZ5Qcjpt7or8VjiV6p28m3HroSjoRF0w57Lro7i//DTiB2B6gCrZJ6mU
+	cXJtqFlQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rAtw5-0031PW-8d; Wed, 06 Dec 2023 15:35:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 36B6E300451; Wed,  6 Dec 2023 16:35:40 +0100 (CET)
+Date: Wed, 6 Dec 2023 16:35:40 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+	Song Liu <songliubraving@meta.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231206153540.GA36423@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org>
+ <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+ <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+ <20231204125239.GA1319@noisy.programming.kicks-ass.net>
+ <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net>
+ <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+ <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-branch HEAD: d6e81532b10d8deb2bc30f7b44f09534876893e3  Hexagon: Make pfn accessors statics inlines
+On Mon, Dec 04, 2023 at 05:18:31PM -0800, Alexei Starovoitov wrote:
 
-elapsed time: 1457m
+> How about
 
-configs tested: 177
-configs skipped: 2
+> +int get_cfi_offset(void)
+> +{
+> +       switch (cfi_mode) {
+> +       case CFI_FINEIBT:
+> +               return 16;
+> +       case CFI_KCFI:
+> +#ifdef CONFIG_CALL_PADDING
+> +               return 16;
+> +#else
+> +               return 5;
+> +#endif
+> +       default:
+> +               return 0;
+> +       }
+> +}
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Yeah, that works. I'll go make it happen.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
-arc                   randconfig-001-20231206   gcc  
-arc                   randconfig-002-20231206   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                          pxa910_defconfig   gcc  
-arm                   randconfig-001-20231206   clang
-arm                   randconfig-002-20231206   clang
-arm                   randconfig-003-20231206   clang
-arm                   randconfig-004-20231206   clang
-arm                           spitz_defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231206   clang
-arm64                 randconfig-002-20231206   clang
-arm64                 randconfig-003-20231206   clang
-arm64                 randconfig-004-20231206   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231206   gcc  
-csky                  randconfig-002-20231206   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231206   clang
-hexagon               randconfig-002-20231206   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231205   gcc  
-i386         buildonly-randconfig-002-20231205   gcc  
-i386         buildonly-randconfig-003-20231205   gcc  
-i386         buildonly-randconfig-004-20231205   gcc  
-i386         buildonly-randconfig-005-20231205   gcc  
-i386         buildonly-randconfig-006-20231205   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231205   gcc  
-i386                  randconfig-002-20231205   gcc  
-i386                  randconfig-003-20231205   gcc  
-i386                  randconfig-004-20231205   gcc  
-i386                  randconfig-005-20231205   gcc  
-i386                  randconfig-006-20231205   gcc  
-i386                  randconfig-011-20231205   clang
-i386                  randconfig-012-20231205   clang
-i386                  randconfig-013-20231205   clang
-i386                  randconfig-014-20231205   clang
-i386                  randconfig-015-20231205   clang
-i386                  randconfig-016-20231205   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231206   gcc  
-loongarch             randconfig-002-20231206   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                           mtx1_defconfig   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231206   gcc  
-nios2                 randconfig-002-20231206   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20231206   gcc  
-parisc                randconfig-002-20231206   gcc  
-parisc64                            defconfig   gcc  
-powerpc                     akebono_defconfig   clang
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                 canyonlands_defconfig   gcc  
-powerpc               randconfig-001-20231206   clang
-powerpc               randconfig-002-20231206   clang
-powerpc               randconfig-003-20231206   clang
-powerpc                     tqm5200_defconfig   clang
-powerpc                     tqm8548_defconfig   gcc  
-powerpc64             randconfig-001-20231206   clang
-powerpc64             randconfig-002-20231206   clang
-powerpc64             randconfig-003-20231206   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231206   clang
-riscv                 randconfig-002-20231206   clang
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231206   gcc  
-s390                  randconfig-002-20231206   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                    randconfig-001-20231206   gcc  
-sh                    randconfig-002-20231206   gcc  
-sh                          rsk7269_defconfig   gcc  
-sh                            shmin_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231206   gcc  
-sparc64               randconfig-002-20231206   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231206   clang
-um                    randconfig-002-20231206   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           alldefconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231206   clang
-x86_64       buildonly-randconfig-002-20231206   clang
-x86_64       buildonly-randconfig-003-20231206   clang
-x86_64       buildonly-randconfig-004-20231206   clang
-x86_64       buildonly-randconfig-005-20231206   clang
-x86_64       buildonly-randconfig-006-20231206   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231206   gcc  
-x86_64                randconfig-002-20231206   gcc  
-x86_64                randconfig-003-20231206   gcc  
-x86_64                randconfig-004-20231206   gcc  
-x86_64                randconfig-005-20231206   gcc  
-x86_64                randconfig-006-20231206   gcc  
-x86_64                randconfig-011-20231206   clang
-x86_64                randconfig-012-20231206   clang
-x86_64                randconfig-013-20231206   clang
-x86_64                randconfig-014-20231206   clang
-x86_64                randconfig-015-20231206   clang
-x86_64                randconfig-016-20231206   clang
-x86_64                randconfig-071-20231206   clang
-x86_64                randconfig-072-20231206   clang
-x86_64                randconfig-073-20231206   clang
-x86_64                randconfig-074-20231206   clang
-x86_64                randconfig-075-20231206   clang
-x86_64                randconfig-076-20231206   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20231206   gcc  
-xtensa                randconfig-002-20231206   gcc  
+> Separately we need to deal with bpf_for_each_array_elem()
+> which doesn't look easy.
+> And fix tcp_set_ca_state() as well (which is even harder).
+> 
+> Just to see where places like these are I did:
+> +__nocfi
+>  BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+> +__nocfi
+>  static long bpf_for_each_hash_elem(struct bpf_map *map,
+> bpf_callback_t callback_fn,
+> +__nocfi
+>  static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+> +__nocfi
+>  static int __bpf_rbtree_add(struct bpf_rb_root *root,
+> +__nocfi
+>  BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
+> +__nocfi
+>  void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
+> +__nocfi
+>  void tcp_init_congestion_control(struct sock *sk)
+> +__nocfi
+>  void tcp_enter_loss(struct sock *sk)
+> +__nocfi
+>  static void tcp_cong_avoid(struct sock *sk, u32 ack, u32 acked)
+> +__nocfi
+>  static inline void tcp_in_ack_event(struct sock *sk, u32 flags)
+> 
+> and more... Which is clearly not a direction to go.
+> 
+> Instead of annotating callers is there a way to say that
+> all bpf_callback_t calls are nocfi?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Well, ideally they would all actually use CFI, I'll go figure out how
+all this works and think about it. Thanks!
+
+> I feel the patches scratched the iceberg.
+
+Yeah, clearly :/ I'll go stare at it all.
 
