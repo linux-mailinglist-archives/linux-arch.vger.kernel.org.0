@@ -1,89 +1,101 @@
-Return-Path: <linux-arch+bounces-710-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-711-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F855806D76
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 12:09:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8842E806D80
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 12:11:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09226281AF5
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 11:09:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA2F31C209BA
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 11:11:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7B631597;
-	Wed,  6 Dec 2023 11:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8885931590;
+	Wed,  6 Dec 2023 11:11:07 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AC622069;
-	Wed,  6 Dec 2023 11:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5016FC433C7;
-	Wed,  6 Dec 2023 11:09:21 +0000 (UTC)
-Date: Wed, 6 Dec 2023 11:09:18 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Niklas Schnelle <schnelle@linux.ibm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <ZXBWXodu2rxQ7Szz@arm.com>
-References: <ZWB373y5XuZDultf@FVFF77S0Q05N>
- <20231124122352.GB436702@nvidia.com>
- <ZWSOwT2OyMXD1lmo@arm.com>
- <20231127134505.GI436702@nvidia.com>
- <ZW4NAzI_jvwoq8dL@arm.com>
- <20231204182330.GK1493156@nvidia.com>
- <ZW9cF0ALVwgvcQMy@arm.com>
- <20231205175127.GJ2692119@nvidia.com>
- <ZW97VdHYH3HYVyd5@arm.com>
- <20231205195130.GM2692119@nvidia.com>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62A7D44
+	for <linux-arch@vger.kernel.org>; Wed,  6 Dec 2023 03:11:03 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-4-2hKIkG_FPuSAvM53S8Wr_w-1; Wed, 06 Dec 2023 11:10:59 +0000
+X-MC-Unique: 2hKIkG_FPuSAvM53S8Wr_w-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 6 Dec
+ 2023 11:10:45 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 6 Dec 2023 11:10:45 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Al Viro' <viro@zeniv.linux.org.uk>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>
+CC: gus Gusenleitner Klaus <gus@keba.com>, Al Viro <viro@ftp.linux.org.uk>,
+	Thomas Gleixner <tglx@linutronix.de>, lkml <linux-kernel@vger.kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+	"dsahern@kernel.org" <dsahern@kernel.org>, "kuba@kernel.org"
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+	<edumazet@google.com>
+Subject: RE: [RFC][PATCHES v2] checksum stuff
+Thread-Topic: [RFC][PATCHES v2] checksum stuff
+Thread-Index: AQHaJyGyb9WP/snuGU2gdqpp5IxoMLCcGsYA
+Date: Wed, 6 Dec 2023 11:10:45 +0000
+Message-ID: <602ab11ffa2c4cc49bb9ecae2f0540b0@AcuMS.aculab.com>
+References: <20231018154205.GT800259@ZenIV>
+ <VI1PR0702MB3840F2D594B9681BF2E0CD81D9D4A@VI1PR0702MB3840.eurprd07.prod.outlook.com>
+ <20231019050250.GV800259@ZenIV> <20231019061427.GW800259@ZenIV>
+ <20231019063925.GX800259@ZenIV>
+ <CANn89iJre=VQ6J=UuD0d2J5t=kXr2b9Dk9b=SwzPX1CM+ph60A@mail.gmail.com>
+ <20231019080615.GY800259@ZenIV> <20231021071525.GA789610@ZenIV>
+ <20231021222203.GA800259@ZenIV> <20231022194020.GA972254@ZenIV>
+ <20231205022100.GB1674809@ZenIV>
+In-Reply-To: <20231205022100.GB1674809@ZenIV>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205195130.GM2692119@nvidia.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 05, 2023 at 03:51:30PM -0400, Jason Gunthorpe wrote:
-> On Tue, Dec 05, 2023 at 07:34:45PM +0000, Catalin Marinas wrote:
-> > > 2) You want to #define __iowrite512_copy() to memcpy_toio() on ARM and
-> > >    implement some quad STP optimization for this case?
-> > 
-> > We can have the generic __iowrite512_copy() do memcpy_toio() and have
-> > the arm64 implement an optimised version.
-> > 
-> > What I'm not entirely sure of is the DGH (whatever the io_* barrier name
-> > is). I'd put it in the same __iowrite512_copy() function and remove it
-> > from the driver code. Otherwise when ST64B is added, we have an
-> > unnecessary DGH in the driver. If this does not match the other
-> > __iowrite*_copy() semantics, we can come up with another name. But start
-> > with this for now and document the function.
-> 
-> I think the iowrite is only used for WC and the DGH is functionally
-> harmless for non-WC, so it makes sense.
-> 
-> In this case we should just remove the DGH macro from the generic
-> architecture code and tell people to use iowrite - since we now
-> understand that callers basically have to in order to use DGH on new
-> ARM CPUs.
+From: Al Viro
+> Sent: 05 December 2023 02:21
+>=20
+> We need a way for csum_and_copy_{from,to}_user() to report faults.
+> The approach taken back in 2020 (avoid 0 as return value by starting
+> summing from ~0U, use 0 to report faults) had been broken; it does
+> yield the right value modulo 2^16-1, but the case when data is
+> entirely zero-filled is not handled right.  It almost works, since
+> for most of the codepaths we have a non-zero value added in
+> and there 0 is not different from anything divisible by 0xffff.
+> However, there are cases (ICMPv4 replies, for example) where we
+> are not guaranteed that.
+>=20
+> In other words, we really need to have those primitives return 0
+> on filled-with-zeroes input.
 
-That works for me but what would the semantics be for __iowrite64_copy()
-for example? Is there a DGH at the end of the whole write or after each
-iteration? I'd go with the former since e.g. hns3_tx_push_bd() does
-that (and doesn't seem to be a 64 byte copy). Similarly for
-__iowrite512_copy(), if you want the DGH after each iteration you should
-only pass a count of 1.
+Do we?
+I've not seen any justification for this at all.
+IIRC the ICMPv4 reply code needs the checksum function return 0xffff
+for all-zero input.
 
--- 
-Catalin
+So the correct and simple fix is to initialise the sum to 0xffff
+in the checksum function.
+
+=09David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
 
