@@ -1,84 +1,89 @@
-Return-Path: <linux-arch+bounces-709-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-710-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44D5E806B4F
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 11:08:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F855806D76
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 12:09:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3CE51F2103A
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 10:08:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09226281AF5
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Dec 2023 11:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10C028E0E;
-	Wed,  6 Dec 2023 10:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7B631597;
+	Wed,  6 Dec 2023 11:09:24 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFDED62;
-	Wed,  6 Dec 2023 02:08:26 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7AB216000A;
-	Wed,  6 Dec 2023 10:08:21 +0000 (UTC)
-Message-ID: <f259088f-a590-454e-b322-397e63071155@ghiti.fr>
-Date: Wed, 6 Dec 2023 11:08:20 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AC622069;
+	Wed,  6 Dec 2023 11:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5016FC433C7;
+	Wed,  6 Dec 2023 11:09:21 +0000 (UTC)
+Date: Wed, 6 Dec 2023 11:09:18 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Niklas Schnelle <schnelle@linux.ibm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZXBWXodu2rxQ7Szz@arm.com>
+References: <ZWB373y5XuZDultf@FVFF77S0Q05N>
+ <20231124122352.GB436702@nvidia.com>
+ <ZWSOwT2OyMXD1lmo@arm.com>
+ <20231127134505.GI436702@nvidia.com>
+ <ZW4NAzI_jvwoq8dL@arm.com>
+ <20231204182330.GK1493156@nvidia.com>
+ <ZW9cF0ALVwgvcQMy@arm.com>
+ <20231205175127.GJ2692119@nvidia.com>
+ <ZW97VdHYH3HYVyd5@arm.com>
+ <20231205195130.GM2692119@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] riscv: Enable percpu page first chunk allocator
-Content-Language: en-US
-To: Alexandre Ghiti <alexghiti@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
- <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
- Christoph Lameter <cl@linux.com>, Andrew Morton <akpm@linux-foundation.org>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <20231110140721.114235-1-alexghiti@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20231110140721.114235-1-alexghiti@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231205195130.GM2692119@nvidia.com>
 
-Hi Tejun,
+On Tue, Dec 05, 2023 at 03:51:30PM -0400, Jason Gunthorpe wrote:
+> On Tue, Dec 05, 2023 at 07:34:45PM +0000, Catalin Marinas wrote:
+> > > 2) You want to #define __iowrite512_copy() to memcpy_toio() on ARM and
+> > >    implement some quad STP optimization for this case?
+> > 
+> > We can have the generic __iowrite512_copy() do memcpy_toio() and have
+> > the arm64 implement an optimised version.
+> > 
+> > What I'm not entirely sure of is the DGH (whatever the io_* barrier name
+> > is). I'd put it in the same __iowrite512_copy() function and remove it
+> > from the driver code. Otherwise when ST64B is added, we have an
+> > unnecessary DGH in the driver. If this does not match the other
+> > __iowrite*_copy() semantics, we can come up with another name. But start
+> > with this for now and document the function.
+> 
+> I think the iowrite is only used for WC and the DGH is functionally
+> harmless for non-WC, so it makes sense.
+> 
+> In this case we should just remove the DGH macro from the generic
+> architecture code and tell people to use iowrite - since we now
+> understand that callers basically have to in order to use DGH on new
+> ARM CPUs.
 
-On 10/11/2023 15:07, Alexandre Ghiti wrote:
-> While working with pcpu variables, I noticed that riscv did not support
-> first chunk allocation in the vmalloc area which may be needed as a fallback
-> in case of a sparse NUMA configuration.
->
-> patch 1 starts by introducing a new function flush_cache_vmap_early() which
-> is needed since a new vmalloc mapping is established and directly accessed:
-> on riscv, this would likely fail in case of a reordered access or if the
-> uarch caches invalid entries in TLB.
->
-> patch 2 simply enables the page percpu first chunk allocator in riscv.
->
-> Alexandre Ghiti (2):
->    mm: Introduce flush_cache_vmap_early() and its riscv implementation
->    riscv: Enable pcpu page first chunk allocator
->
->   arch/riscv/Kconfig                  | 2 ++
->   arch/riscv/include/asm/cacheflush.h | 3 ++-
->   arch/riscv/include/asm/tlbflush.h   | 2 ++
->   arch/riscv/mm/kasan_init.c          | 8 ++++++++
->   arch/riscv/mm/tlbflush.c            | 5 +++++
->   include/asm-generic/cacheflush.h    | 6 ++++++
->   mm/percpu.c                         | 8 +-------
->   7 files changed, 26 insertions(+), 8 deletions(-)
->
+That works for me but what would the semantics be for __iowrite64_copy()
+for example? Is there a DGH at the end of the whole write or after each
+iteration? I'd go with the former since e.g. hns3_tx_push_bd() does
+that (and doesn't seem to be a 64 byte copy). Similarly for
+__iowrite512_copy(), if you want the DGH after each iteration you should
+only pass a count of 1.
 
-Any feedback regarding this?
-
-Thanks,
-
-Alex
-
+-- 
+Catalin
 
