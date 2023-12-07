@@ -1,170 +1,136 @@
-Return-Path: <linux-arch+bounces-744-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-745-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F01A08084C1
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 10:34:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26829808511
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 10:59:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A7E11C21EED
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 09:34:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2CF8283CF0
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 09:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64DE834549;
-	Thu,  7 Dec 2023 09:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BjH07tO6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1D0B35286;
+	Thu,  7 Dec 2023 09:59:51 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4A8D53;
-	Thu,  7 Dec 2023 01:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vFTMUOzkVz1yhy1eVbvlXLTlgFpP3ARXqzrNiOd/DUQ=; b=BjH07tO6hYuSjTfilfl4n85dJn
-	jwCzc+ni2sBN9SitG9DfFVJjs61YLkfrb8GoQfH8XUGR24A3w3hE+1+4eiXvch0bjuircH2TzwNe3
-	2wib7xfIbfMu0ZZCat/L7nH7JGRv5WicJZ/YEBVBSbdkmRW3wvF7MqUwoqS1mwMuKRmY9XOrwRUQh
-	gZqD610ihrIYCMrm8rtS55j06Xe9kiv0m2lp+eptll2P0QUCCn78OPoHJlJr2h6EdGWAwM+xhz9Qx
-	BRv9z5wptGCweR1/JNdj+9h0GN55+WMsNwvvADN6sEL9iwgdTFdETyA1h0mlfWIcOHhLOs0Jjfqb4
-	dnXvWrjA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rBAio-005war-2y;
-	Thu, 07 Dec 2023 09:33:07 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B8E6C300338; Thu,  7 Dec 2023 10:31:05 +0100 (CET)
-Date: Thu, 7 Dec 2023 10:31:05 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-	Song Liu <songliubraving@meta.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
-References: <20231204091334.GM3818@noisy.programming.kicks-ass.net>
- <20231204111128.GV8262@noisy.programming.kicks-ass.net>
- <20231204125239.GA1319@noisy.programming.kicks-ass.net>
- <ZW4LjmUKj1q6RWdL@krava>
- <20231204181614.GA7299@noisy.programming.kicks-ass.net>
- <20231204183354.GC7299@noisy.programming.kicks-ass.net>
- <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
- <20231206163814.GB36423@noisy.programming.kicks-ass.net>
- <20231206183713.GA35897@noisy.programming.kicks-ass.net>
- <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EFE128
+	for <linux-arch@vger.kernel.org>; Thu,  7 Dec 2023 01:59:44 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-6-n5yQ08V_MnaoJcWm685PQg-1; Thu, 07 Dec 2023 09:59:39 +0000
+X-MC-Unique: n5yQ08V_MnaoJcWm685PQg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 7 Dec
+ 2023 09:58:48 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 7 Dec 2023 09:58:48 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Al Viro' <viro@zeniv.linux.org.uk>
+CC: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, "gus
+ Gusenleitner Klaus" <gus@keba.com>, Al Viro <viro@ftp.linux.org.uk>, "Thomas
+ Gleixner" <tglx@linutronix.de>, lkml <linux-kernel@vger.kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+	"dsahern@kernel.org" <dsahern@kernel.org>, "kuba@kernel.org"
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+	<edumazet@google.com>
+Subject: RE: [RFC][PATCHES v2] checksum stuff
+Thread-Topic: [RFC][PATCHES v2] checksum stuff
+Thread-Index: AQHaJyGyb9WP/snuGU2gdqpp5IxoMLCcGsYAgADCXYCAALXl0A==
+Date: Thu, 7 Dec 2023 09:58:48 +0000
+Message-ID: <d7faa6ef028c4bac9bc94c92d3af9f38@AcuMS.aculab.com>
+References: <20231019050250.GV800259@ZenIV> <20231019061427.GW800259@ZenIV>
+ <20231019063925.GX800259@ZenIV>
+ <CANn89iJre=VQ6J=UuD0d2J5t=kXr2b9Dk9b=SwzPX1CM+ph60A@mail.gmail.com>
+ <20231019080615.GY800259@ZenIV> <20231021071525.GA789610@ZenIV>
+ <20231021222203.GA800259@ZenIV> <20231022194020.GA972254@ZenIV>
+ <20231205022100.GB1674809@ZenIV>
+ <602ab11ffa2c4cc49bb9ecae2f0540b0@AcuMS.aculab.com>
+ <20231206224359.GR1674809@ZenIV>
+In-Reply-To: <20231206224359.GR1674809@ZenIV>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 06, 2023 at 01:39:43PM -0800, Alexei Starovoitov wrote:
+From: Al Viro
+> Sent: 06 December 2023 22:44
+>=20
+> On Wed, Dec 06, 2023 at 11:10:45AM +0000, David Laight wrote:
+>=20
+> > Do we?
+> > I've not seen any justification for this at all.
+> > IIRC the ICMPv4 reply code needs the checksum function return 0xffff
+> > for all-zero input.
+> >
+> > So the correct and simple fix is to initialise the sum to 0xffff
+> > in the checksum function.
+>=20
+> You do realize that ICMPv4 reply code is not the only user of those,
+> right?  Sure, we can special-case it there.  And audit the entire
+> call tree, proving that no other call chains need the same.
+>=20
+> Care to post the analysis?  I have the beginnings of that and it's alread=
+y
+> long and convoluted and touches far too many places, all of which will
+> have to be watched indefinitely, so that changes in there don't introduce
+> new breakage.
+>=20
+> I could be wrong.  About many things, including the depth of your
+> aversion to RTFS.  But frankly, until that analysis shows up somewhere,
+> I'm going to ignore your usual handwaving.
 
+This code is calculating the ip-checksum of a buffer.
+The is subtly different from the 16bit 1's complement sum of
+the buffer.
+Now 0x0000 and 0xffff are mathematically equivalent but various specs
+to treat them differently.
 
-> All is ok until kCFI comes into picture.
-> Here we probably need to teach arch_prepare_bpf_trampoline() to emit
-> different __kcfi_typeid depending on kernel function proto,
-> so that caller hash checking logic won't be tripped.
-> I suspect that requires to reverse engineer an algorithm of computing kcfi from clang.
-> other ideas?
+Consider the UDP header checksum.
+For IPv4 the checksum field can be zero - but that means 'not
+calculated' and should be treated as a valid checksum.
+But IPv6 treats zero as an error.
+If the 1's complement sum is 0xffff then the checksum field
+need to contain 0xffff not 0.
+This means you really need to calculate 1 + ~sum16(1, buff, len)
+(ie initialise the sum to 1 rather than 0 or 0xffff.)
 
-I was going to try and extend bpf_struct_ops with a pointer, this
-pointer will point to a struct of the right type with all ops filled out
-as stubs.
+The issue that showed this was zero being put into an ICMP message
+when all the bytes were zero instead of the required 0xffff.
+The reporter had changed the initialiser and got the required 0xffff
+and everything then worked.
 
-Then I was going to have bpf_struct_ops_map_update_elem() pass a pointer
-to the stub op (using moff) into bpf_struct_ops_prepare_trampoline() and
-eventually arch_prepare_bpf_trampoline().
+That wasn't the copy+checksum path either - since the packet got
+sent rather than EFAULT being generated.
 
-Additionally I was going to add BPF_TRAMP_F_INDIRECT.
+If I read the code/specs I'll only find places where the buffer
+is guaranteed to be non-zero (pretty much all of IP, TCP and UDP)
+or 0xffff is the required valued (ICMP).
 
-Then when F_INDIRECT is set, have it generate the CFI preamble based on
-the stub passed -- which will have the correct preamble for that method.
+Since you are proposing this patch I think you need to show
+a concrete example of where an all zero buffer is required to
+generate a zero checksum value but a non-zero buffer must
+generate 0xffff.
 
-At least, that's what I'm thinking now, I've yet to try and implement
-it.
+=09David
 
-> > > The other case:
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-> In the case of bpf_for_each_map_elem() the 'bloom_callback' is a subprog
-> of bpf_callback_t type.
-> So the kernel is doing:
->                 ret = callback_fn((u64)(long)map, (u64)(long)&key,
->                                   (u64)(long)val, (u64)(long)callback_ctx, 0);
-> and that works on all archs including 32-bit.
-> The kernel is doing conversion from native calling convention to bpf calling convention
-> and for lucky archs like x86-64 the conversion is a true nop.
-> It's a plain indirect call to JITed bpf prog.
-> Note there is no interpreter support here. This works on archs with JITs only.
-> No ftrace and no trampoline.
-> 
-> This case is easier to make work with kCFI.
-> The JIT will use:
-> cfi_bpf_hash:
->       .long   __kcfi_typeid___bpf_prog_runX  
-> like your patch already does.
-> And will use
-> extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
-> cfi_bpf_subprog_hash:
->       .long   __kcfi_typeid___bpf_callback_fn
-> to JIT all subprogs. See bpf_is_subprog().
-
-Aaah!, yes it should be trivial to use another hash value when
-is_subprog in emit_prologue().
-
-> btw there are two patchsets in progress that will touch core bits of JITs.
-> This one:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20231201190654.1233153-1-song@kernel.org/
-> and this one:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20231011152725.95895-1-hffilwlqm@gmail.com/
-> 
-> so do you mind resending your current set with get_cfi_offset() change and
-> I can land it into bpf-next, so we can fix one bug at a time,
-> build on top, and avoid conflicts?
-
-I can do.
-
-> The more we dig the more it looks like that the follow up you planned to do
-> on top of this set isn't going to happen soon.
-> So should be ok going through bpf-next and then you can follow up with x86 things
-> after merge window?
-
-Yes, we can do that. Plans have changed on my side too -- I'm taking a 6
-week break soon, so I'll do whatever I can before I'm out, and then
-continue from whatever state I find when I get back.
-
-
-Thanks for the details!
 
