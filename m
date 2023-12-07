@@ -1,172 +1,280 @@
-Return-Path: <linux-arch+bounces-754-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-755-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13EEC809068
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 19:44:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3634809508
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 23:05:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4586A1C20A4C
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 18:44:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5201828175D
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 22:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A034E629;
-	Thu,  7 Dec 2023 18:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A599840E9;
+	Thu,  7 Dec 2023 22:05:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csTXh3rM"
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="OP0+Rsf9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7F210EB;
-	Thu,  7 Dec 2023 10:44:38 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-a1e2f34467aso124795466b.2;
-        Thu, 07 Dec 2023 10:44:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701974676; x=1702579476; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXf2lAj8XDVwxOmvMwYO09ccy2NUDabGlY5Knm7jvKw=;
-        b=csTXh3rMFTJhvJb/goSS2xFjOHdvRpHl/E9wUz/5twSHunuH2vjuythL8OssMn3tJZ
-         nusyhB0pBjPy4MS5SRPN6ctKZRPlpWxUjGeMEueB8CTxhQEQZTB6QSWoYYJGzEw2ZCu4
-         NdJrliLFFHagl3BJBwMNUANDtlxVDpUoT+jGlZL6YHgLr4azcKuucrOtiLXvRiovgfVz
-         CagHFsmHxb00C5BrOcBhjYbazlchuAkcKKPa+CQfoTlTKXewa1VopR3fvmFTFNQ1GkZ7
-         8z8vRHJD2lnGGwLaPHT8xKv3qiZziiFqqfMQwtifLgv6MCeDal8o32pwf/aV4k+vdpS2
-         ZG3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701974676; x=1702579476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oXf2lAj8XDVwxOmvMwYO09ccy2NUDabGlY5Knm7jvKw=;
-        b=J/JPoqvnZn9NUpFKBrEn3BE25c9uuj9EmvkgYqC6Hsns0sdjGAQ80Zrru/meUEyh5r
-         mzWCJVXhN2e3Ys/uZ2WkNy39lPZKOOGXoXEjME3h5rWxP6A3aFcAQv7lZltNEgA/4EXK
-         oje1BgYJ1cGgiG+85InxKymRdSLiUQhL7qbPZ0+f1hPJOjvapzGe9TsYJx4G7gK1gza7
-         yiVBNHKHHxbvO1Ey9ysE9fK5p/UpX0OgDivokuyUsU4+83ABknHirCrQVY2stSarRgIu
-         SKrMugJ5bQmYGSmrlrszlWaGBEgEfrilYCEE2IBdRW3L/6t9dQWvQeR7IjaaJTBy1cQk
-         ch3g==
-X-Gm-Message-State: AOJu0Yy8vKUkK6MMur631Onrh4GeWv2UNJT9XyeVHUCaU2hop63HF798
-	k+RQMCgbemkXdLnB9kbcRw==
-X-Google-Smtp-Source: AGHT+IG8L55PCNrPucgL1/sFRpfhV8423aIsHP2Z6wo2jY09zJ7nIsTSpi7u44scNAUHxdQnF0wQYw==
-X-Received: by 2002:a17:907:bb90:b0:a12:635d:fcd1 with SMTP id xo16-20020a170907bb9000b00a12635dfcd1mr1717463ejc.35.1701974675864;
-        Thu, 07 Dec 2023 10:44:35 -0800 (PST)
-Received: from p183 ([46.53.254.107])
-        by smtp.gmail.com with ESMTPSA id tz4-20020a170907c78400b00a1aad4d92dbsm69623ejc.123.2023.12.07.10.44.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 10:44:35 -0800 (PST)
-Date: Thu, 7 Dec 2023 21:44:33 +0300
-From: Alexey Dobriyan <adobriyan@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org, Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, linux-mm@kvack.org
-Subject: [PATCH v3] ELF: AT_PAGE_SHIFT_MASK -- supply userspace with
- available page shifts
-Message-ID: <8582f7c9-b49d-4d21-8948-59d580e5317c@p183>
-References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
- <87v89dvuxg.fsf@oldenburg.str.redhat.com>
- <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24ED10DE;
+	Thu,  7 Dec 2023 14:04:59 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 740E44C1D75;
+	Thu,  7 Dec 2023 21:56:15 +0000 (UTC)
+Received: from pdx1-sub0-mail-a206.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id C44434C1E75;
+	Thu,  7 Dec 2023 21:56:12 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1701986173; a=rsa-sha256;
+	cv=none;
+	b=FrzBhKhi7oi2hh5/Ab2hEXkSLTK+gN7zS8lRMvn/uA6y2ff2RocuRoF3iRIe04EGSb9o5A
+	hW8pbncCySgd5EvStma2upNJ0baApNsdo7+QDQyZqAo/4yeW4ZnxXWOyBA+508RnvwgCZU
+	1cGVHTg2dk9P8wM8cmd00Op06dcJObHzqcN2NwETY/znSlbeLY1XfDn+CZJW1UDxOq8pEM
+	p4feXEWkUyaqAEYZpx1Jqw2rzyuveWqM9okl+wMT2UhYXiA1fz/shGCximkWtioExwSf6M
+	+Wcs9XYjFVaERc08j8dJL1ztrnUVFom5LOY9kJJYOWR49jyg+xY7DfQfjke0CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1701986173;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=ZFQXUxb5pGxDFp9SqTWomNtV+BmHJVuCbAFuRHJpiLo=;
+	b=aJs9zHZE8/6fnJKBnUnMonnvA1jPRRICMNj4FaJFBbp48FybiaH82QJUE02OM3gjIuLcqv
+	KOOxbaHfL7HWFik4CJWcaF8bSgu0IZWpEBU+KM+cUM9IhB24EVjBGQjcG27MBmxmsYwP3Y
+	JKqBkVvCfJdJyH4LbksqIIQxjIBcsbIMtWQxc2CvaKlkbPJ4+Ek48tkraWNyFyUkBxB+oB
+	Ee965c8lmrMpqivaL5zyFssvlgGe0P8moBkgOwT/X6fIiISTdEvFewj0nBC/mCYRNcHV0d
+	T6/ME6DdT9f5MI1WAsyA+/kUAv9DtAUNZq0DxVSshcy/+HtSJURDg+zui7hZvw==
+ARC-Authentication-Results: i=1;
+	rspamd-d88d8bd54-9cctm;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Battle-Soft: 0d11124e0e30dae7_1701986175277_409846363
+X-MC-Loop-Signature: 1701986175277:1907138347
+X-MC-Ingress-Time: 1701986175277
+Received: from pdx1-sub0-mail-a206.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.125.102.70 (trex/6.9.2);
+	Thu, 07 Dec 2023 21:56:15 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a206.dreamhost.com (Postfix) with ESMTPSA id 4SmSlG6CW8zCb;
+	Thu,  7 Dec 2023 13:56:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1701986172;
+	bh=Nh2dCSqy2bPuNSUn1zPTus4eN9IQRtX4phDu3VMYX3w=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=OP0+Rsf9gPii7VoqZYcWYfH7IthslLifAefd7vbsdulQz139A+lTtfwRuFr/Glk6S
+	 r5pFgCWXsQN/9dO082NMTrSsgiCcsbTVCImTesTZF9Xwys/lwI2yof5xk7ilLVS58C
+	 Y0hXBTpj8Au9+j4onfzgEKpPL4ynFAZWV23SEz0sSbEu7dZD7u28zXLbapaFaY95BY
+	 Q53iPmLCeBLAzRQZm6KRPIFaSo2o/Mp0hKFHLBA8vnktEO/GMPU2OVMXX1jB7oNanf
+	 D0UjTUOvjS4lofM/CHx5S0Vj6YZSq/4BA5NqYz+xE9yMRM2qeuAi/g7uQrM9l9tvAg
+	 M3afLawtxCxxA==
+Date: Thu, 7 Dec 2023 13:56:07 -0800
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Gregory Price <gourry.memverge@gmail.com>
+Cc: linux-mm@kvack.org, jgroves@micron.com, ravis.opensrc@micron.com, 
+	sthanneeru@micron.com, emirakhur@micron.com, Hasan.Maruf@amd.com, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	arnd@arndb.de, tglx@linutronix.de, luto@kernel.org, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	mhocko@kernel.org, tj@kernel.org, ying.huang@intel.com, gregory.price@memverge.com, 
+	corbet@lwn.net, rakie.kim@sk.com, hyeongtak.ji@sk.com, honggyu.kim@sk.com, 
+	vtavarespetr@micron.com, peterz@infradead.org
+Subject: Re: [RFC PATCH 01/11] mm/mempolicy: implement the sysfs-based
+ weighted_interleave interface
+Message-ID: <uxqkbmqbvcvx6wc3g2h6vhkutv5flrq6rslwdfs7pa6kknupwh@a245pbtfqfgj>
+Mail-Followup-To: Gregory Price <gourry.memverge@gmail.com>, 
+	linux-mm@kvack.org, jgroves@micron.com, ravis.opensrc@micron.com, 
+	sthanneeru@micron.com, emirakhur@micron.com, Hasan.Maruf@amd.com, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	arnd@arndb.de, tglx@linutronix.de, luto@kernel.org, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	mhocko@kernel.org, tj@kernel.org, ying.huang@intel.com, gregory.price@memverge.com, 
+	corbet@lwn.net, rakie.kim@sk.com, hyeongtak.ji@sk.com, honggyu.kim@sk.com, 
+	vtavarespetr@micron.com, peterz@infradead.org
+References: <20231207002759.51418-1-gregory.price@memverge.com>
+ <20231207002759.51418-2-gregory.price@memverge.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
+In-Reply-To: <20231207002759.51418-2-gregory.price@memverge.com>
+User-Agent: NeoMutt/20231006
 
-Report available page shifts in arch independent manner, so that
-userspace developers won't have to parse /proc/cpuinfo hunting
-for arch specific strings.
+On Wed, 06 Dec 2023, Gregory Price wrote:
 
-Main users are supposed to be libhugetlbfs-like libraries which try
-to abstract huge mappings across multiple architectures. Regular code
-which queries hugepage support before using them benefits too because
-it doesn't have to deal with descriptors and parsing sysfs hierarchies
-while enjoying the simplicity and speed of getauxval(AT_PAGE_SHIFT_MASK).
+>Signed-off-by: Rakie Kim <rakie.kim@sk.com>
+>Signed-off-by: Honggyu Kim <honggyu.kim@sk.com>
+>Co-developed-by: Gregory Price <gregory.price@memverge.com>
+>Signed-off-by: Gregory Price <gregory.price@memverge.com>
+>Co-developed-by: Hyeongtak Ji <hyeongtak.ji@sk.com>
+>Signed-off-by: Hyeongtak Ji <hyeongtak.ji@sk.com>
 
-Note!
+fyi Rakie's tag needs to be last, per the From.
 
-This is strictly for userspace, if some page size is shutdown due
-to kernel command line option or CPU bug workaround, than it must
-not be reported in aux vector!
+...
 
-x86_64 machine with 1 GiB pages:
+>+What:		/sys/kernel/mm/mempolicy/weighted_interleave/
+>+Date:		December 2023
+>+Contact:	Linux memory management mailing list <linux-mm@kvack.org>
+>+Description:	Configuration Interface for the Weighted Interleave policy
+>+
+>+What:		/sys/kernel/mm/mempolicy/weighted_interleave/nodeN/
+>+Date:		December 2023
+>+Contact:	Linux memory management mailing list <linux-mm@kvack.org>
+>+Description:	Configuration interface for accesses initiated from nodeN
+>+
+>+		The directory to configure access initiator weights for nodeN.
+>+
+>+		Possible numa nodes which have not been marked as a CPU node
+>+		at boot will not have a nodeN directory made for them at boot.
 
-	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
-	00000040  1d 00 00 00 00 00 00 00  00 10 20 40 00 00 00 00
+This could be better rephrased without the negation. ie:
 
-x86_64 machine with 2 MiB pages only:
+"Only numa nodes with CPUs (compute) will have a nodeN directory."
 
-	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
-	00000040  1d 00 00 00 00 00 00 00  00 10 20 00 00 00 00 00
+>+		Hotplug for CPU nodes is not supported.
 
-AT_PAGESZ always reports one smallest page size which is not interesting.
+Can this even happen? Hot-adding a previously offlined CPU won't change/add a
+new numa node. So just rm the line altogether?
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
+>+
+>+What:		/sys/kernel/mm/mempolicy/weighted_interleave/nodeN/nodeM
+>+		/sys/kernel/mm/mempolicy/weighted_interleave/nodeN/nodeM/weight
+>+Date:		December 2023
+>+Contact:	Linux memory management mailing list <linux-mm@kvack.org>
+>+Description:	Configuration interface for target nodes accessed from nodeNN
+>+
+>+		The interleave weight for a memory node (M) from initiating
+>+		node (N). These weights are utilized by processes which have set
+>+		the mempolicy to MPOL_WEIGHTED_INTERLEAVE and have opted into
+>+		global weights by omitting a task-local weight array.
+>+
+>+		These weights only affect new allocations, and changes at runtime
+>+		will not cause migrations on already allocated pages.
+>+
+>+		If the weight of 0 is desired, the appropriate way to do this is
+>+		by removing the node from the weighted interleave nodemask.
+>+
+>+		Minimum weight: 1
+>+		Maximum weight: 255
+>diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+>index 10a590ee1c89..ce332b5e7a03 100644
+>--- a/mm/mempolicy.c
+>+++ b/mm/mempolicy.c
+>@@ -131,6 +131,11 @@ static struct mempolicy default_policy = {
+>
+> static struct mempolicy preferred_node_policy[MAX_NUMNODES];
+>
+>+struct interleave_weight_table {
+>+	unsigned char weights[MAX_NUMNODES];
+>+};
+>+static struct interleave_weight_table *iw_table;
+>+
+> /**
+>  * numa_nearest_node - Find nearest node by state
+>  * @node: Node id to start the search
+>@@ -3067,3 +3072,224 @@ void mpol_to_str(char *buffer, int maxlen, struct mempolicy *pol)
+>		p += scnprintf(p, buffer + maxlen - p, ":%*pbl",
+>			       nodemask_pr_args(&nodes));
+> }
+>+
+>+struct iw_node_info {
+>+	struct kobject kobj;
+>+	int src;
+>+	int dst;
+>+};
+>+
+>+static ssize_t node_weight_show(struct kobject *kobj,
+>+				struct kobj_attribute *attr, char *buf)
+>+{
+>+	struct iw_node_info *node_info = container_of(kobj, struct iw_node_info,
+>+						      kobj);
+>+	return sysfs_emit(buf, "%d\n",
+>+			  iw_table[node_info->src].weights[node_info->dst]);
+>+}
+>+
+>+static ssize_t node_weight_store(struct kobject *kobj,
+>+				 struct kobj_attribute *attr,
+>+				 const char *buf, size_t count)
+>+{
+>+	unsigned char weight = 0;
+>+	struct iw_node_info *node_info = NULL;
+>+
+>+	node_info = container_of(kobj, struct iw_node_info, kobj);
+>+
+>+	if (kstrtou8(buf, 0, &weight) || !weight)
+>+		return -EINVAL;
+>+
+>+	iw_table[node_info->src].weights[node_info->dst] = weight;
+>+
+>+	return count;
+>+}
 
-	v3: better comment and changelog
-	v2: switch to page shifts, rename to ARCH_AT_PAGE_SHIFT_MASK
+iw_table will need some (basic) form of serialization.
 
- arch/x86/include/asm/elf.h  |   12 ++++++++++++
- fs/binfmt_elf.c             |    3 +++
- include/uapi/linux/auxvec.h |   13 +++++++++++++
- 3 files changed, 28 insertions(+)
+...
 
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -358,6 +358,18 @@ else if (IS_ENABLED(CONFIG_IA32_EMULATION))				\
- 
- #define COMPAT_ELF_ET_DYN_BASE	(TASK_UNMAPPED_BASE + 0x1000000)
- 
-+#define ARCH_AT_PAGE_SHIFT_MASK					\
-+	do {							\
-+		u32 val = 1 << 12;				\
-+		if (boot_cpu_has(X86_FEATURE_PSE)) {		\
-+			val |= 1 << 21;				\
-+		}						\
-+		if (boot_cpu_has(X86_FEATURE_GBPAGES)) {	\
-+			val |= 1 << 30;				\
-+		}						\
-+		NEW_AUX_ENT(AT_PAGE_SHIFT_MASK, val);		\
-+	} while (0)
-+
- #endif /* !CONFIG_X86_32 */
- 
- #define VDSO_CURRENT_BASE	((unsigned long)current->mm->context.vdso)
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -240,6 +240,9 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- #endif
- 	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
- 	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
-+#ifdef ARCH_AT_PAGE_SHIFT_MASK
-+	ARCH_AT_PAGE_SHIFT_MASK;
-+#endif
- 	NEW_AUX_ENT(AT_CLKTCK, CLOCKS_PER_SEC);
- 	NEW_AUX_ENT(AT_PHDR, phdr_addr);
- 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
---- a/include/uapi/linux/auxvec.h
-+++ b/include/uapi/linux/auxvec.h
-@@ -33,6 +33,19 @@
- #define AT_RSEQ_FEATURE_SIZE	27	/* rseq supported feature size */
- #define AT_RSEQ_ALIGN		28	/* rseq allocation alignment */
- 
-+/*
-+ * All page sizes supported by CPU encoded as bitmask.
-+ *
-+ * Example: x86_64 system with pse, pdpe1gb /proc/cpuinfo flags
-+ * reports 4 KiB, 2 MiB and 1 GiB page support.
-+ *
-+ *	$ LD_SHOW_AUXV=1 $(which true) | grep -e AT_PAGE_SHIFT_MASK
-+ *	AT_PAGE_SHIFT_MASK: 0x40201000
-+ *
-+ * For 2^64 hugepage support please contact your Universe sales representative.
-+ */
-+#define AT_PAGE_SHIFT_MASK	29
-+
- #define AT_EXECFN  31	/* filename of program */
- 
- #ifndef AT_MINSIGSTKSZ
+>+static int __init mempolicy_sysfs_init(void)
+>+{
+>+	int err, nid;
+>+	int cpunodes = 0;
+>+	struct kobject *root_kobj;
+>+
+>+	for_each_node_state(nid, N_CPU)
+>+		cpunodes += 1;
+>+	iw_table = kmalloc_array(cpunodes, sizeof(*iw_table), GFP_KERNEL);
+>+	if (!iw_table) {
+>+		pr_err("failed to create interleave weight table\n");
+>+		err = -ENOMEM;
+>+		goto fail_obj;
+
+No ref here yet, just return -ENOMEM.
+
+>+	}
+>+	memset(iw_table, 1, cpunodes * sizeof(*iw_table));
+>+
+>+	root_kobj = kzalloc(sizeof(struct kobject), GFP_KERNEL);
+>+	if (!root_kobj)
+>+		return -ENOMEM;
+>+
+>+	kobject_init(root_kobj, &mempolicy_kobj_ktype);
+>+	err = kobject_add(root_kobj, mm_kobj, "mempolicy");
+>+	if (err) {
+>+		pr_err("failed to add kobject to the system\n");
+>+		goto fail_obj;
+>+	}
+>+
+>+	err = sysfs_create_group(root_kobj, &mempolicy_attr_group);
+>+	if (err) {
+>+		pr_err("failed to register mempolicy group\n");
+>+		goto fail_obj;
+>+	}
+>+
+>+	err = add_weighted_interleave_group(root_kobj);
+>+fail_obj:
+>+	if (err)
+>+		kobject_put(root_kobj);
+>+	return err;
+>+
+>+}
+>+late_initcall(mempolicy_sysfs_init);
+>--
+>2.39.1
+>
+>
 
