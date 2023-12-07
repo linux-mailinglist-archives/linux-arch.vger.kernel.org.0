@@ -1,131 +1,172 @@
-Return-Path: <linux-arch+bounces-753-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-754-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 159ED808C13
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 16:43:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13EEC809068
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 19:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DA7B1C208B2
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 15:43:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4586A1C20A4C
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 18:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BAE44C91;
-	Thu,  7 Dec 2023 15:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A034E629;
+	Thu,  7 Dec 2023 18:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="enYVfsBH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h3uVDoUl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csTXh3rM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5673810CA;
-	Thu,  7 Dec 2023 07:43:29 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id E103B5C010F;
-	Thu,  7 Dec 2023 10:43:26 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 07 Dec 2023 10:43:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1701963806; x=1702050206; bh=kK
-	DmIidL/tnOKURnMGeoV9D0OqdgpEUnz7ab3Y6ER9I=; b=enYVfsBH/ajHQbRk+Y
-	748qP1SgSEffOJ5hAXxyjXL79fyI6TSkDBSLYrNCmcVCq9v5FqtoqXQwOw5lasHn
-	FdjfPgvi7JpLTfg/u5bs72AFRKuCXSYkzrte+625THB8YGyrU0JihPN0miNheqoS
-	D0NH44LxD7N/1sobNw0Aqy1s6ZHn/UN0gbmPjh9mm7d5+vbrOSLLAiLUK0S0P4rf
-	34jHD8JOJaD+kmA/JtJS8HNws3R7fKWcZFWhqXHa5i0qhZKDLXx+5RDFDb7aZd6p
-	SE7Vks6G0laiS/g2n6jj4Eq+j3nwhVdbsv3hWpdK6tutO7HMCyl1A6bJi8zSJbIV
-	rYFA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701963806; x=1702050206; bh=kKDmIidL/tnOK
-	URnMGeoV9D0OqdgpEUnz7ab3Y6ER9I=; b=h3uVDoUlmP2wNbOIFulx31xrQpwen
-	CLulfcqV4LLs/ZfG09NAuLrxZ20DgU994sXssFbwQFZNC/gutGZcX4WrybKiHidS
-	npwYhQNy0OBZ7+XdwKQh+l37P9khQTd03fIAZgpnBU9YnkzQ7my3EiMVcs/UckaZ
-	zfibqKZf3DUibCygSZs3dSQmqWfZowxwFWsakCyLAUwzQ5KaAebIO9ZsDMafwrDx
-	aoI+Q3fr1PTB3EkNdddVmXIk7K2I7r2gVEPZImHXO3Cetg68FaozmclIfX+VFBy4
-	vndBJwldaNRMEz1o/rDNBtt4Ojs6bmGByaTe+V15v5B8pYnx/V9404ysw==
-X-ME-Sender: <xms:HehxZb_sVJKfMOi-TOCCliivGArYyFUiAi4OikunjBFY2XA533Ttww>
-    <xme:HehxZXuD5sQrFmqOk3MNNFpe_iBolaRKZTR_s1J1y39BkcHW169nBBTCj_TFtfOOF
-    Z7lEUYAavdWw9btxg4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekfedgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:HehxZZDVCsfJHl7SWb2tWqfN4fnvF_cYhchcV-yEKUrTek6rvae8vw>
-    <xmx:HehxZXe6H4HYcWipiHFiyu5MkT4X8hi7JEQWMIDeATsek8hWPe9b0w>
-    <xmx:HehxZQMTAdC7N3ay6MM5zx2arvJqA5tF_g7XDNg7hIrJ2K7AnAvQxw>
-    <xmx:HuhxZVbRI5aLXterkz05RtnzKhaqqQO4vR0zgOZZCHyznO2QOKYvWA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3BDB4B60089; Thu,  7 Dec 2023 10:43:24 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7F210EB;
+	Thu,  7 Dec 2023 10:44:38 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-a1e2f34467aso124795466b.2;
+        Thu, 07 Dec 2023 10:44:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701974676; x=1702579476; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oXf2lAj8XDVwxOmvMwYO09ccy2NUDabGlY5Knm7jvKw=;
+        b=csTXh3rMFTJhvJb/goSS2xFjOHdvRpHl/E9wUz/5twSHunuH2vjuythL8OssMn3tJZ
+         nusyhB0pBjPy4MS5SRPN6ctKZRPlpWxUjGeMEueB8CTxhQEQZTB6QSWoYYJGzEw2ZCu4
+         NdJrliLFFHagl3BJBwMNUANDtlxVDpUoT+jGlZL6YHgLr4azcKuucrOtiLXvRiovgfVz
+         CagHFsmHxb00C5BrOcBhjYbazlchuAkcKKPa+CQfoTlTKXewa1VopR3fvmFTFNQ1GkZ7
+         8z8vRHJD2lnGGwLaPHT8xKv3qiZziiFqqfMQwtifLgv6MCeDal8o32pwf/aV4k+vdpS2
+         ZG3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701974676; x=1702579476;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oXf2lAj8XDVwxOmvMwYO09ccy2NUDabGlY5Knm7jvKw=;
+        b=J/JPoqvnZn9NUpFKBrEn3BE25c9uuj9EmvkgYqC6Hsns0sdjGAQ80Zrru/meUEyh5r
+         mzWCJVXhN2e3Ys/uZ2WkNy39lPZKOOGXoXEjME3h5rWxP6A3aFcAQv7lZltNEgA/4EXK
+         oje1BgYJ1cGgiG+85InxKymRdSLiUQhL7qbPZ0+f1hPJOjvapzGe9TsYJx4G7gK1gza7
+         yiVBNHKHHxbvO1Ey9ysE9fK5p/UpX0OgDivokuyUsU4+83ABknHirCrQVY2stSarRgIu
+         SKrMugJ5bQmYGSmrlrszlWaGBEgEfrilYCEE2IBdRW3L/6t9dQWvQeR7IjaaJTBy1cQk
+         ch3g==
+X-Gm-Message-State: AOJu0Yy8vKUkK6MMur631Onrh4GeWv2UNJT9XyeVHUCaU2hop63HF798
+	k+RQMCgbemkXdLnB9kbcRw==
+X-Google-Smtp-Source: AGHT+IG8L55PCNrPucgL1/sFRpfhV8423aIsHP2Z6wo2jY09zJ7nIsTSpi7u44scNAUHxdQnF0wQYw==
+X-Received: by 2002:a17:907:bb90:b0:a12:635d:fcd1 with SMTP id xo16-20020a170907bb9000b00a12635dfcd1mr1717463ejc.35.1701974675864;
+        Thu, 07 Dec 2023 10:44:35 -0800 (PST)
+Received: from p183 ([46.53.254.107])
+        by smtp.gmail.com with ESMTPSA id tz4-20020a170907c78400b00a1aad4d92dbsm69623ejc.123.2023.12.07.10.44.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 10:44:35 -0800 (PST)
+Date: Thu, 7 Dec 2023 21:44:33 +0300
+From: Alexey Dobriyan <adobriyan@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+	x86@kernel.org, Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, linux-mm@kvack.org
+Subject: [PATCH v3] ELF: AT_PAGE_SHIFT_MASK -- supply userspace with
+ available page shifts
+Message-ID: <8582f7c9-b49d-4d21-8948-59d580e5317c@p183>
+References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
+ <87v89dvuxg.fsf@oldenburg.str.redhat.com>
+ <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cddbf290-021a-49d5-8729-e98cb099ff67@app.fastmail.com>
-In-Reply-To: <ZXHdhVeel1dOxlYJ@memverge.com>
-References: <20231207002759.51418-1-gregory.price@memverge.com>
- <20231207002759.51418-8-gregory.price@memverge.com>
- <67fab0f1-e326-4ad8-9def-4d2bd5489b33@app.fastmail.com>
- <ZXHdhVeel1dOxlYJ@memverge.com>
-Date: Thu, 07 Dec 2023 16:43:03 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Gregory Price" <gregory.price@memverge.com>
-Cc: "Gregory Price" <gourry.memverge@gmail.com>, linux-mm@kvack.org,
- jgroves@micron.com, ravis.opensrc@micron.com, sthanneeru@micron.com,
- emirakhur@micron.com, Hasan.Maruf@amd.com, linux-doc@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Andy Lutomirski" <luto@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Michal Hocko" <mhocko@kernel.org>,
- "Tejun Heo" <tj@kernel.org>, ying.huang@intel.com,
- "Jonathan Corbet" <corbet@lwn.net>, rakie.kim@sk.com, hyeongtak.ji@sk.com,
- honggyu.kim@sk.com, vtavarespetr@micron.com,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Frank van der Linden" <fvdl@google.com>
-Subject: Re: [RFC PATCH 07/11] mm/mempolicy: add userland mempolicy arg structure
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
 
-On Thu, Dec 7, 2023, at 15:58, Gregory Price wrote:
-> On Thu, Dec 07, 2023 at 08:13:22AM +0100, Arnd Bergmann wrote:
->> On Thu, Dec 7, 2023, at 01:27, Gregory Price wrote:
->> 
->> Aside from this, you should avoid holes in the data structure.
->> On 64-bit architectures, the layout above has holes after
->> policy_node and after addr_node.
->> 
->>       Arnd
->
-> doh, clearly i didn't stop to think about alignment. Good eye.
-> I'll redo this with __u/s members and fix the holes.
->
-> Didn't stop to think about compat pointers.  I don't think the
-> u64_to_user_ptr pattern is offensive, so i'll make that change.
-> At least I don't see what the other options are beyond compat.
+Report available page shifts in arch independent manner, so that
+userspace developers won't have to parse /proc/cpuinfo hunting
+for arch specific strings.
 
-Ok, sounds good.
+Main users are supposed to be libhugetlbfs-like libraries which try
+to abstract huge mappings across multiple architectures. Regular code
+which queries hugepage support before using them benefits too because
+it doesn't have to deal with descriptors and parsing sysfs hierarchies
+while enjoying the simplicity and speed of getauxval(AT_PAGE_SHIFT_MASK).
 
-I see you already call wrappers for compat mode to convert
-iovec and nodemask layouts for the indirect pointers, and they
-look correct. If you wanted to do handle the compat syscalls
-using the same entry point, you could add the same kind of
-helper to copy the mempolicy args from user space with an
-optional conversion, but not having to do this is clearly
-easier.
+Note!
 
-     Arnd
+This is strictly for userspace, if some page size is shutdown due
+to kernel command line option or CPU bug workaround, than it must
+not be reported in aux vector!
+
+x86_64 machine with 1 GiB pages:
+
+	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
+	00000040  1d 00 00 00 00 00 00 00  00 10 20 40 00 00 00 00
+
+x86_64 machine with 2 MiB pages only:
+
+	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
+	00000040  1d 00 00 00 00 00 00 00  00 10 20 00 00 00 00 00
+
+AT_PAGESZ always reports one smallest page size which is not interesting.
+
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
+
+	v3: better comment and changelog
+	v2: switch to page shifts, rename to ARCH_AT_PAGE_SHIFT_MASK
+
+ arch/x86/include/asm/elf.h  |   12 ++++++++++++
+ fs/binfmt_elf.c             |    3 +++
+ include/uapi/linux/auxvec.h |   13 +++++++++++++
+ 3 files changed, 28 insertions(+)
+
+--- a/arch/x86/include/asm/elf.h
++++ b/arch/x86/include/asm/elf.h
+@@ -358,6 +358,18 @@ else if (IS_ENABLED(CONFIG_IA32_EMULATION))				\
+ 
+ #define COMPAT_ELF_ET_DYN_BASE	(TASK_UNMAPPED_BASE + 0x1000000)
+ 
++#define ARCH_AT_PAGE_SHIFT_MASK					\
++	do {							\
++		u32 val = 1 << 12;				\
++		if (boot_cpu_has(X86_FEATURE_PSE)) {		\
++			val |= 1 << 21;				\
++		}						\
++		if (boot_cpu_has(X86_FEATURE_GBPAGES)) {	\
++			val |= 1 << 30;				\
++		}						\
++		NEW_AUX_ENT(AT_PAGE_SHIFT_MASK, val);		\
++	} while (0)
++
+ #endif /* !CONFIG_X86_32 */
+ 
+ #define VDSO_CURRENT_BASE	((unsigned long)current->mm->context.vdso)
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -240,6 +240,9 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+ #endif
+ 	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
+ 	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
++#ifdef ARCH_AT_PAGE_SHIFT_MASK
++	ARCH_AT_PAGE_SHIFT_MASK;
++#endif
+ 	NEW_AUX_ENT(AT_CLKTCK, CLOCKS_PER_SEC);
+ 	NEW_AUX_ENT(AT_PHDR, phdr_addr);
+ 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
+--- a/include/uapi/linux/auxvec.h
++++ b/include/uapi/linux/auxvec.h
+@@ -33,6 +33,19 @@
+ #define AT_RSEQ_FEATURE_SIZE	27	/* rseq supported feature size */
+ #define AT_RSEQ_ALIGN		28	/* rseq allocation alignment */
+ 
++/*
++ * All page sizes supported by CPU encoded as bitmask.
++ *
++ * Example: x86_64 system with pse, pdpe1gb /proc/cpuinfo flags
++ * reports 4 KiB, 2 MiB and 1 GiB page support.
++ *
++ *	$ LD_SHOW_AUXV=1 $(which true) | grep -e AT_PAGE_SHIFT_MASK
++ *	AT_PAGE_SHIFT_MASK: 0x40201000
++ *
++ * For 2^64 hugepage support please contact your Universe sales representative.
++ */
++#define AT_PAGE_SHIFT_MASK	29
++
+ #define AT_EXECFN  31	/* filename of program */
+ 
+ #ifndef AT_MINSIGSTKSZ
 
