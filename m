@@ -1,147 +1,131 @@
-Return-Path: <linux-arch+bounces-752-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-753-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F8AC808C04
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 16:38:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 159ED808C13
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 16:43:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A32C1F2125A
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 15:38:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DA7B1C208B2
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 15:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5E0444C8D;
-	Thu,  7 Dec 2023 15:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BAE44C91;
+	Thu,  7 Dec 2023 15:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BwBLlw5e"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="enYVfsBH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h3uVDoUl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80114437A;
-	Thu,  7 Dec 2023 15:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A55C433CB;
-	Thu,  7 Dec 2023 15:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701963494;
-	bh=wvVN+1YIFHu6pwuC8my2GQeLCZBlFO2tSFyxQF8MEoA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BwBLlw5eO1GwXbEIAOPxS00/C0TZYafXou2wc/4do1UG3aFN+nnzSSA5mXnu5gzKN
-	 ++ArkvzxIsTVYgdlDD09GaZYkw39DyQv1MnL2HE5ZYiAz9G4nwmeRvLiEHI6TF6Xyj
-	 F7Bc/ntE8UuQznRkoo3k4paYxXtP+YekIgDKu2H+MKFd34HqpLv5BmOkBcd98Pbz5/
-	 z2/qkCKtoad7MxiAD6wrFdoxf4fJlbly5v09CObEup7PTOfw1PGFtZ+H3Nt1pTXmNL
-	 dE6ZRSVjo/L+4RdBt852KgFxEL0soBCSeoF9rDgb0+BD0qvXdOf108VvM3RvpnF5ep
-	 bJkkQ5ND3sEBQ==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ca0d14976aso11119651fa.2;
-        Thu, 07 Dec 2023 07:38:14 -0800 (PST)
-X-Gm-Message-State: AOJu0YxqTAcfQiOF++ADXxtRp33L6X1oImJKGUwdKA6Z/W8STMjfgRgT
-	mCOZh+pmvmsUEA1DR3zatZUwizz9hSeCalHRIy8=
-X-Google-Smtp-Source: AGHT+IFvQXuCu2DYdb90avyxL8P6qli6omWybxLqio1Iex9LuiGceMcEqs0UsqxMj6ERwpyXfaCn99dgbPE4v3Fpqtg=
-X-Received: by 2002:a2e:9686:0:b0:2ca:c76:c021 with SMTP id
- q6-20020a2e9686000000b002ca0c76c021mr1610161lji.68.1701963492420; Thu, 07 Dec
- 2023 07:38:12 -0800 (PST)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5673810CA;
+	Thu,  7 Dec 2023 07:43:29 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id E103B5C010F;
+	Thu,  7 Dec 2023 10:43:26 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 07 Dec 2023 10:43:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm1; t=1701963806; x=1702050206; bh=kK
+	DmIidL/tnOKURnMGeoV9D0OqdgpEUnz7ab3Y6ER9I=; b=enYVfsBH/ajHQbRk+Y
+	748qP1SgSEffOJ5hAXxyjXL79fyI6TSkDBSLYrNCmcVCq9v5FqtoqXQwOw5lasHn
+	FdjfPgvi7JpLTfg/u5bs72AFRKuCXSYkzrte+625THB8YGyrU0JihPN0miNheqoS
+	D0NH44LxD7N/1sobNw0Aqy1s6ZHn/UN0gbmPjh9mm7d5+vbrOSLLAiLUK0S0P4rf
+	34jHD8JOJaD+kmA/JtJS8HNws3R7fKWcZFWhqXHa5i0qhZKDLXx+5RDFDb7aZd6p
+	SE7Vks6G0laiS/g2n6jj4Eq+j3nwhVdbsv3hWpdK6tutO7HMCyl1A6bJi8zSJbIV
+	rYFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701963806; x=1702050206; bh=kKDmIidL/tnOK
+	URnMGeoV9D0OqdgpEUnz7ab3Y6ER9I=; b=h3uVDoUlmP2wNbOIFulx31xrQpwen
+	CLulfcqV4LLs/ZfG09NAuLrxZ20DgU994sXssFbwQFZNC/gutGZcX4WrybKiHidS
+	npwYhQNy0OBZ7+XdwKQh+l37P9khQTd03fIAZgpnBU9YnkzQ7my3EiMVcs/UckaZ
+	zfibqKZf3DUibCygSZs3dSQmqWfZowxwFWsakCyLAUwzQ5KaAebIO9ZsDMafwrDx
+	aoI+Q3fr1PTB3EkNdddVmXIk7K2I7r2gVEPZImHXO3Cetg68FaozmclIfX+VFBy4
+	vndBJwldaNRMEz1o/rDNBtt4Ojs6bmGByaTe+V15v5B8pYnx/V9404ysw==
+X-ME-Sender: <xms:HehxZb_sVJKfMOi-TOCCliivGArYyFUiAi4OikunjBFY2XA533Ttww>
+    <xme:HehxZXuD5sQrFmqOk3MNNFpe_iBolaRKZTR_s1J1y39BkcHW169nBBTCj_TFtfOOF
+    Z7lEUYAavdWw9btxg4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekfedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:HehxZZDVCsfJHl7SWb2tWqfN4fnvF_cYhchcV-yEKUrTek6rvae8vw>
+    <xmx:HehxZXe6H4HYcWipiHFiyu5MkT4X8hi7JEQWMIDeATsek8hWPe9b0w>
+    <xmx:HehxZQMTAdC7N3ay6MM5zx2arvJqA5tF_g7XDNg7hIrJ2K7AnAvQxw>
+    <xmx:HuhxZVbRI5aLXterkz05RtnzKhaqqQO4vR0zgOZZCHyznO2QOKYvWA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 3BDB4B60089; Thu,  7 Dec 2023 10:43:24 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231206125433.18420-1-tzimmermann@suse.de> <20231206125433.18420-4-tzimmermann@suse.de>
-In-Reply-To: <20231206125433.18420-4-tzimmermann@suse.de>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 7 Dec 2023 16:38:01 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE7JtotB=V7hrkbseDUwkwgUdkd5ownrsAdhayEqpy4sA@mail.gmail.com>
-Message-ID: <CAMj1kXE7JtotB=V7hrkbseDUwkwgUdkd5ownrsAdhayEqpy4sA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arch/x86: Do not include <asm/bootparam.h> in several
- header files
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <cddbf290-021a-49d5-8729-e98cb099ff67@app.fastmail.com>
+In-Reply-To: <ZXHdhVeel1dOxlYJ@memverge.com>
+References: <20231207002759.51418-1-gregory.price@memverge.com>
+ <20231207002759.51418-8-gregory.price@memverge.com>
+ <67fab0f1-e326-4ad8-9def-4d2bd5489b33@app.fastmail.com>
+ <ZXHdhVeel1dOxlYJ@memverge.com>
+Date: Thu, 07 Dec 2023 16:43:03 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Gregory Price" <gregory.price@memverge.com>
+Cc: "Gregory Price" <gourry.memverge@gmail.com>, linux-mm@kvack.org,
+ jgroves@micron.com, ravis.opensrc@micron.com, sthanneeru@micron.com,
+ emirakhur@micron.com, Hasan.Maruf@amd.com, linux-doc@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Andy Lutomirski" <luto@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Michal Hocko" <mhocko@kernel.org>,
+ "Tejun Heo" <tj@kernel.org>, ying.huang@intel.com,
+ "Jonathan Corbet" <corbet@lwn.net>, rakie.kim@sk.com, hyeongtak.ji@sk.com,
+ honggyu.kim@sk.com, vtavarespetr@micron.com,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Frank van der Linden" <fvdl@google.com>
+Subject: Re: [RFC PATCH 07/11] mm/mempolicy: add userland mempolicy arg structure
+Content-Type: text/plain
 
-On Wed, 6 Dec 2023 at 13:54, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+On Thu, Dec 7, 2023, at 15:58, Gregory Price wrote:
+> On Thu, Dec 07, 2023 at 08:13:22AM +0100, Arnd Bergmann wrote:
+>> On Thu, Dec 7, 2023, at 01:27, Gregory Price wrote:
+>> 
+>> Aside from this, you should avoid holes in the data structure.
+>> On 64-bit architectures, the layout above has holes after
+>> policy_node and after addr_node.
+>> 
+>>       Arnd
 >
-> Remove the include statement for <asm/bootparam.h> from several header
-> files that don't require it. Limits the exposure of the boot parameters
-> within the Linux kernel code.
+> doh, clearly i didn't stop to think about alignment. Good eye.
+> I'll redo this with __u/s members and fix the holes.
 >
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Didn't stop to think about compat pointers.  I don't think the
+> u64_to_user_ptr pattern is offensive, so i'll make that change.
+> At least I don't see what the other options are beyond compat.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Ok, sounds good.
 
-> ---
->  arch/x86/include/asm/kexec.h       | 1 -
->  arch/x86/include/asm/mem_encrypt.h | 2 +-
->  arch/x86/include/asm/sev.h         | 3 ++-
->  arch/x86/include/asm/x86_init.h    | 2 --
->  4 files changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-> index c9f6a6c5de3c..91ca9a9ee3a2 100644
-> --- a/arch/x86/include/asm/kexec.h
-> +++ b/arch/x86/include/asm/kexec.h
-> @@ -25,7 +25,6 @@
->
->  #include <asm/page.h>
->  #include <asm/ptrace.h>
-> -#include <asm/bootparam.h>
->
->  struct kimage;
->
-> diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-> index 359ada486fa9..c1a8a3408c18 100644
-> --- a/arch/x86/include/asm/mem_encrypt.h
-> +++ b/arch/x86/include/asm/mem_encrypt.h
-> @@ -15,7 +15,7 @@
->  #include <linux/init.h>
->  #include <linux/cc_platform.h>
->
-> -#include <asm/bootparam.h>
-> +struct boot_params;
->
->  #ifdef CONFIG_X86_MEM_ENCRYPT
->  void __init mem_encrypt_init(void);
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index 5b4a1ce3d368..8dad8b1613bf 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -13,7 +13,6 @@
->
->  #include <asm/insn.h>
->  #include <asm/sev-common.h>
-> -#include <asm/bootparam.h>
->  #include <asm/coco.h>
->
->  #define GHCB_PROTOCOL_MIN      1ULL
-> @@ -22,6 +21,8 @@
->
->  #define        VMGEXIT()                       { asm volatile("rep; vmmcall\n\r"); }
->
-> +struct boot_params;
-> +
->  enum es_result {
->         ES_OK,                  /* All good */
->         ES_UNSUPPORTED,         /* Requested operation not supported */
-> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-> index c878616a18b8..f062715578a0 100644
-> --- a/arch/x86/include/asm/x86_init.h
-> +++ b/arch/x86/include/asm/x86_init.h
-> @@ -2,8 +2,6 @@
->  #ifndef _ASM_X86_PLATFORM_H
->  #define _ASM_X86_PLATFORM_H
->
-> -#include <asm/bootparam.h>
-> -
->  struct ghcb;
->  struct mpc_bus;
->  struct mpc_cpu;
-> --
-> 2.43.0
->
+I see you already call wrappers for compat mode to convert
+iovec and nodemask layouts for the indirect pointers, and they
+look correct. If you wanted to do handle the compat syscalls
+using the same entry point, you could add the same kind of
+helper to copy the mempolicy args from user space with an
+optional conversion, but not having to do this is clearly
+easier.
+
+     Arnd
 
