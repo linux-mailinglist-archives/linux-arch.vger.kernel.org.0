@@ -1,136 +1,208 @@
-Return-Path: <linux-arch+bounces-745-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-746-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26829808511
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 10:59:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE09808B2C
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 15:57:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2CF8283CF0
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 09:59:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D75D71C20B39
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Dec 2023 14:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1D0B35286;
-	Thu,  7 Dec 2023 09:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E0A44378;
+	Thu,  7 Dec 2023 14:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZXN7/jhR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EFE128
-	for <linux-arch@vger.kernel.org>; Thu,  7 Dec 2023 01:59:44 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-6-n5yQ08V_MnaoJcWm685PQg-1; Thu, 07 Dec 2023 09:59:39 +0000
-X-MC-Unique: n5yQ08V_MnaoJcWm685PQg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 7 Dec
- 2023 09:58:48 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 7 Dec 2023 09:58:48 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Al Viro' <viro@zeniv.linux.org.uk>
-CC: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, "gus
- Gusenleitner Klaus" <gus@keba.com>, Al Viro <viro@ftp.linux.org.uk>, "Thomas
- Gleixner" <tglx@linutronix.de>, lkml <linux-kernel@vger.kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
-	<x86@kernel.org>, "David S. Miller" <davem@davemloft.net>,
-	"dsahern@kernel.org" <dsahern@kernel.org>, "kuba@kernel.org"
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
-	<edumazet@google.com>
-Subject: RE: [RFC][PATCHES v2] checksum stuff
-Thread-Topic: [RFC][PATCHES v2] checksum stuff
-Thread-Index: AQHaJyGyb9WP/snuGU2gdqpp5IxoMLCcGsYAgADCXYCAALXl0A==
-Date: Thu, 7 Dec 2023 09:58:48 +0000
-Message-ID: <d7faa6ef028c4bac9bc94c92d3af9f38@AcuMS.aculab.com>
-References: <20231019050250.GV800259@ZenIV> <20231019061427.GW800259@ZenIV>
- <20231019063925.GX800259@ZenIV>
- <CANn89iJre=VQ6J=UuD0d2J5t=kXr2b9Dk9b=SwzPX1CM+ph60A@mail.gmail.com>
- <20231019080615.GY800259@ZenIV> <20231021071525.GA789610@ZenIV>
- <20231021222203.GA800259@ZenIV> <20231022194020.GA972254@ZenIV>
- <20231205022100.GB1674809@ZenIV>
- <602ab11ffa2c4cc49bb9ecae2f0540b0@AcuMS.aculab.com>
- <20231206224359.GR1674809@ZenIV>
-In-Reply-To: <20231206224359.GR1674809@ZenIV>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD0DAC;
+	Thu,  7 Dec 2023 06:57:09 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-a1d450d5c11so123961566b.3;
+        Thu, 07 Dec 2023 06:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701961028; x=1702565828; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZjO+EmVAcgMYQOFWsnqPhTs0jze6OHRX9SLzDiaddCI=;
+        b=ZXN7/jhR2U35RWuQgH5jjl7tVQoKSVyAb1cTBbXVCLiHBQPFkajxNuYa08zS9Aeyhe
+         urMw9KJi7LVYSRpwOSRM3MQhPv/9zp+ey14WVzy2+am/mPoGqBMOKPo02W8QKmuH56la
+         6YXGD6jF9iOLhNAfHs8Zm/emcTz8mFw0QP5MKSShFw+VKdJmfe4QsLNTM/h4HCWd8LEC
+         BEY6rJNmYJZbrKeC85eIwQoFwWSnS4de786t7E5nqHBtqNbKFhRDqP3YbKLex/+j42MM
+         kIragEG4Ql9gvLhrLDDEcVzdkugbfvc3LVy8JLcKDfZYxTqJ4RiY2f7dYacfRY+lo7d9
+         jBqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701961028; x=1702565828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZjO+EmVAcgMYQOFWsnqPhTs0jze6OHRX9SLzDiaddCI=;
+        b=VdtjODmIC3DWyb/qTC93RwoRchG0llFzXSRgHjTokp4yoGUlz4ijrOAaJEF7XjOQ+B
+         58hpsw06iAcNJOjt8HmAEgbu6GIpzu5uJULMuv0KuOr9QMRZPSJMB5sZBib7mQrenBCV
+         0UOa5kak6uyG+7U8gJqUe05oGrworCDF/mb/NFPazRIvVl0vEq3U1JgxC7XiOCU/fDU4
+         2PllevFREgM6ss+REtWi8sl4wa7TvUDqwTq5lN81XJ4FFU7o2QpxQ/XUnp61F1B6nV7k
+         xUmHVB/I8TWrgyDtOfZ/m+dfCf4XYkz8brH907Ov3zxaZSRBeAZPSgxSZib2k+UrDj8f
+         TTVg==
+X-Gm-Message-State: AOJu0Yw7O5uPPCjKjbGqZNFwHPan6/TEilmiYkFiGkin2JyGOsDZqXsi
+	xch6BKB+ZC2JwRq3Ac4v4w==
+X-Google-Smtp-Source: AGHT+IEH55TOuzrB8F4p8kP/vkgBcD1yAQQocMdM6HWrGdQLoBFnymWCiACeHR1CL4EyUBHMRIGn1A==
+X-Received: by 2002:a17:906:af98:b0:a19:a19b:55ee with SMTP id mj24-20020a170906af9800b00a19a19b55eemr1627699ejb.126.1701961027670;
+        Thu, 07 Dec 2023 06:57:07 -0800 (PST)
+Received: from p183 ([46.53.254.107])
+        by smtp.gmail.com with ESMTPSA id q5-20020a1709060e4500b00a1d17c92ef3sm923271eji.51.2023.12.07.06.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 06:57:07 -0800 (PST)
+Date: Thu, 7 Dec 2023 17:57:05 +0300
+From: Alexey Dobriyan <adobriyan@gmail.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v2] ELF: supply userspace with available page shifts
+ (AT_PAGE_SHIFT_MASK)
+Message-ID: <4f5f29d4-9c50-453c-8ad3-03a92fed192e@p183>
+References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
+ <87v89dvuxg.fsf@oldenburg.str.redhat.com>
+ <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
+ <202312061236.DE847C52AA@keescook>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202312061236.DE847C52AA@keescook>
 
-From: Al Viro
-> Sent: 06 December 2023 22:44
->=20
-> On Wed, Dec 06, 2023 at 11:10:45AM +0000, David Laight wrote:
->=20
-> > Do we?
-> > I've not seen any justification for this at all.
-> > IIRC the ICMPv4 reply code needs the checksum function return 0xffff
-> > for all-zero input.
-> >
-> > So the correct and simple fix is to initialise the sum to 0xffff
-> > in the checksum function.
->=20
-> You do realize that ICMPv4 reply code is not the only user of those,
-> right?  Sure, we can special-case it there.  And audit the entire
-> call tree, proving that no other call chains need the same.
->=20
-> Care to post the analysis?  I have the beginnings of that and it's alread=
-y
-> long and convoluted and touches far too many places, all of which will
-> have to be watched indefinitely, so that changes in there don't introduce
-> new breakage.
->=20
-> I could be wrong.  About many things, including the depth of your
-> aversion to RTFS.  But frankly, until that analysis shows up somewhere,
-> I'm going to ignore your usual handwaving.
+On Wed, Dec 06, 2023 at 12:47:27PM -0800, Kees Cook wrote:
+> On Tue, Dec 05, 2023 at 07:01:34PM +0300, Alexey Dobriyan wrote:
+> > Report available page shifts in arch independent manner, so that
+> > userspace developers won't have to parse /proc/cpuinfo hunting
+> > for arch specific strings:
+> > 
+> > Note!
+> > 
+> > This is strictly for userspace, if some page size is shutdown due
+> > to kernel command line option or CPU bug workaround, than is must not
+> > be reported in aux vector!
+> 
+> Given Florian in CC, I assume this is something glibc would like to be
+> using? Please mention this in the commit log.
 
-This code is calculating the ip-checksum of a buffer.
-The is subtly different from the 16bit 1's complement sum of
-the buffer.
-Now 0x0000 and 0xffff are mathematically equivalent but various specs
-to treat them differently.
+glibc can use it. Main user is libhugetlbfs, I guess:
 
-Consider the UDP header checksum.
-For IPv4 the checksum field can be zero - but that means 'not
-calculated' and should be treated as a valid checksum.
-But IPv6 treats zero as an error.
-If the 1's complement sum is 0xffff then the checksum field
-need to contain 0xffff not 0.
-This means you really need to calculate 1 + ~sum16(1, buff, len)
-(ie initialise the sum to 1 rather than 0 or 0xffff.)
+	https://github.com/libhugetlbfs/libhugetlbfs/blob/master/hugeutils.c#L915
 
-The issue that showed this was zero being put into an ICMP message
-when all the bytes were zero instead of the required 0xffff.
-The reporter had changed the initialiser and got the required 0xffff
-and everything then worked.
+Loop inside getauxval() can run faster than opendir().
 
-That wasn't the copy+checksum path either - since the packet got
-sent rather than EFAULT being generated.
+> > x86_64 machine with 1 GiB pages:
+> > 
+> > 	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
+> > 	00000040  1d 00 00 00 00 00 00 00  00 10 20 40 00 00 00 00
+> > 
+> > x86_64 machine with 2 MiB pages only:
+> > 
+> > 	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
+> > 	00000040  1d 00 00 00 00 00 00 00  00 10 20 00 00 00 00 00
+> > 
+> > AT_PAGESZ is always 4096 which is not that interesting.
+> 
+> That's not always true. For example, see arm64:
+> arch/arm64/include/asm/elf.h:#define ELF_EXEC_PAGESIZE  PAGE_SIZE
 
-If I read the code/specs I'll only find places where the buffer
-is guaranteed to be non-zero (pretty much all of IP, TCP and UDP)
-or 0xffff is the required valued (ICMP).
+Yes, I'm x86_64 guy, AT_PAGESZ remark is about x86_64.
 
-Since you are proposing this patch I think you need to show
-a concrete example of where an all zero buffer is required to
-generate a zero checksum value but a non-zero buffer must
-generate 0xffff.
+> I'm not actually sure why x86 forces it to 4096. I'd need to go look
+> through the history there.
 
-=09David
+> > --- a/arch/x86/include/asm/elf.h
+> > +++ b/arch/x86/include/asm/elf.h
+> > @@ -358,6 +358,18 @@ else if (IS_ENABLED(CONFIG_IA32_EMULATION))				\
+> >  
+> >  #define COMPAT_ELF_ET_DYN_BASE	(TASK_UNMAPPED_BASE + 0x1000000)
+> >  
+> > +#define ARCH_AT_PAGE_SHIFT_MASK					\
+> > +	do {							\
+> > +		u32 val = 1 << 12;				\
+> > +		if (boot_cpu_has(X86_FEATURE_PSE)) {		\
+> > +			val |= 1 << 21;				\
+> > +		}						\
+> > +		if (boot_cpu_has(X86_FEATURE_GBPAGES)) {	\
+> > +			val |= 1 << 30;				\
+> > +		}						\
+> > +		NEW_AUX_ENT(AT_PAGE_SHIFT_MASK, val);		\
+> > +	} while (0)
+> > +
+> >  #endif /* !CONFIG_X86_32 */
+> 
+> Can't we have a generic ARCH_AT_PAGE_SHIFT_MASK too? Something like:
+> 
+> #ifndef ARCH_AT_PAGE_SHIFT_MASK
+> #define ARCH_AT_PAGE_SHIFT_MASK
+> 	NEW_AUX_ENT(AT_PAGE_SHIFT_MASK, 1 << PAGE_SHIFT)
+> #endif
+> 
+> Or am I misunderstanding something here?
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+1) Arch maintainers can opt into this new way to report information at
+   their own pace.
 
+2) AT_PAGE_SHIFT_MASK is about _all_ pagesizes supported by CPU.
+   Reporting just one is missing the point.
+
+   I'll clarify comment: mmap() support require many things including
+   tests for hugetlbfs being mounted, this is about CPU support.
+
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -240,6 +240,9 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+> >  #endif
+> >  	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
+> >  	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
+> > +#ifdef ARCH_AT_PAGE_SHIFT_MASK
+> > +	ARCH_AT_PAGE_SHIFT_MASK;
+> > +#endif
+> 
+> That way we can avoid an #ifdef in the .c file.
+
+That's a false economy. ifdefs aren't bad inherently.
+When all archs implement AT_PAGE_SHIFT_MASK, ifdef will be removed.
+
+> > --- a/include/uapi/linux/auxvec.h
+> > +++ b/include/uapi/linux/auxvec.h
+> > @@ -33,6 +33,20 @@
+> >  #define AT_RSEQ_FEATURE_SIZE	27	/* rseq supported feature size */
+> >  #define AT_RSEQ_ALIGN		28	/* rseq allocation alignment */
+> >  
+> > +/*
+> > + * Page sizes available for mmap(2) encoded as bitmask.
+> > + *
+> > + * Example: x86_64 system with pse, pdpe1gb /proc/cpuinfo flags reports
+> > + * 4 KiB, 2 MiB and 1 GiB page support.
+> > + *
+> > + *	$ hexdump -C /proc/self/auxv
+> 
+> FWIW, a more readable form is: $ LD_SHOW_AUXV=1 /bin/true
+
+OK. It doesn't show new values as text, but OK.
+
+> > + *	00000030  06 00 00 00 00 00 00 00  00 10 00 00 00 00 00 00
+> > + *	00000040  1d 00 00 00 00 00 00 00  00 10 20 40 00 00 00 00
+> > + *
+> > + * For 2^64 hugepage support please contact your Universe sales representative.
+> > + */
+> > +#define AT_PAGE_SHIFT_MASK	29
+> 
+> ... hmm, why is 29 unused?
+> 
+> > +
+> >  #define AT_EXECFN  31	/* filename of program */
+> >  
+> >  #ifndef AT_MINSIGSTKSZ
+> 
+> This will need a man page update for "getauxval" as well...
+
+Hear, hear!
 
