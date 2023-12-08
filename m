@@ -1,177 +1,391 @@
-Return-Path: <linux-arch+bounces-834-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-835-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A3380AFD5
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 23:47:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C3A80AFF7
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 23:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 321A7281C01
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 22:47:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21E411C20AF1
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 22:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141ED59B77;
-	Fri,  8 Dec 2023 22:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684EB59B7E;
+	Fri,  8 Dec 2023 22:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="anFV4EKn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VyEEsyaO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39250AC;
-	Fri,  8 Dec 2023 14:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=9AtZTt6OGfjsPDJQOtDfx5Cu6irtFkmWZMjDyBOLAY8=; b=anFV4EKnBK8gQJUQaPbHBdGbmh
-	b2Y7tMQ6hHkQDT5vgOGk/97h6xyIa4MDZnDQV4WFLZMH0Moc2XQBReqMlEddNf22x5eaw0zAoXtGq
-	dyQwgTqMZqIOn/1N4xYUukkUwd2BIl/rwN+ayXO0Y2NWwvxlGU3Yxjp8/bdR9jO8fTnclXdXuFPiN
-	/eQ1qV70Ux813zNWm90BtR+BVtsuhQ7+lpHQtd95lVHbKAbeBGyJQhSdn2Nf39E/FRT7aa1T5sy3K
-	KtlIjlSiXtHdzhKo1SHrWhL9Azqgm2vU4mbnqe/RW5vhus/b8/1CvhOM+ExeLbzwwDLJKGTkrTFIZ
-	Ez+2V7qQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rBjba-006iqm-2j;
-	Fri, 08 Dec 2023 22:46:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C66943003F0; Fri,  8 Dec 2023 23:45:57 +0100 (CET)
-Date: Fri, 8 Dec 2023 23:45:57 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-	Song Liu <songliubraving@meta.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231208224557.GH36716@noisy.programming.kicks-ass.net>
-References: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
- <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
- <20231208102940.GB28727@noisy.programming.kicks-ass.net>
- <20231208134041.GD28727@noisy.programming.kicks-ass.net>
- <20231208172152.GD36716@noisy.programming.kicks-ass.net>
- <CAADnVQKsnZfFomQ4wTZz=jMZW5QCV2XiXVsi64bghHkAjJtcmA@mail.gmail.com>
- <20231208203535.GG36716@noisy.programming.kicks-ass.net>
- <CAADnVQJzCw=qcG+jHBYG0q0SxLPkwghni0wpgV4A4PkpgVbGPw@mail.gmail.com>
- <20231208205241.GK28727@noisy.programming.kicks-ass.net>
- <CAADnVQL3KsJONShsstDq5jrpbc_4FOU-VQPJgDCt50N9asoFzA@mail.gmail.com>
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3D410D2;
+	Fri,  8 Dec 2023 14:56:21 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3333fbbeab9so2436427f8f.2;
+        Fri, 08 Dec 2023 14:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702076180; x=1702680980; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lb6bW5/0tabUFZtl8Q33e8tjxN2YuHNYvOt9IYVdZ58=;
+        b=VyEEsyaOsdK3V5TsMSY8116TErO/nhbRQoPhTjLkn7QcU2yMHIDR0Vuiflo03oxlb7
+         d7+4FHgEZJrxELOlgQPMIGS6dti6lRCG1+po93ZrQQerJpwk5+cyK5CTJnfrdyTVFqKh
+         dlX7BRD8Judy6o9UBLw97uQ1WXGF3qOoCBB57FUMLOqun+oOVI/IY1udyKAZXwiOylRe
+         Uk8vH90YhRNLwSfGR6fzzUsDO2DzLzmr37AXOesspcw9FuhFgDNl+Vam/JV1JkQVCBht
+         JGsWErbI3U7TCduBKTUeJMVxEcLshIMWxpVJWH1gJ2WeH1TorkM5UGyvtAqx8xUWzFr9
+         QX+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702076180; x=1702680980;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lb6bW5/0tabUFZtl8Q33e8tjxN2YuHNYvOt9IYVdZ58=;
+        b=loB02cijMsUJaptJU/9pF2KshE9vdhVIcUZYlFuOfBrt4mfD0szmrJmD+khoRaHyPt
+         LrBt8IrTXrhZ6rD+mB+jo5DB1Kw8+q4r45ew2iJDXq9m0NQeXn9SQJq79lhi8odkw97V
+         fyyHLkvNScYtD1nlMJjJJq91cqahY6j4VyUfeRZMGI779kA5M+jo4YtyvPrWKnQdRdKV
+         RS1o+kVZvIk256RwWpoQGm68U+jrMh7wBdCLfL2EqC8jGqiFXE1dr384WJgp7cy28WFw
+         BAbAbCk+jd7eK5ocr3k5rvwiKqcK2chMGv8/GQ86LaAOPjY/eWSbO7es/RZbW45xX3Wg
+         E5iA==
+X-Gm-Message-State: AOJu0YzPtAI7WfPa2rR2v1nCigiDsSLofqg71JZ9YjVKuOax6/Q38Tr/
+	BykcLrNVcd8mjFdg4FPubEE=
+X-Google-Smtp-Source: AGHT+IFAmrtgnNNek+1m8q51NDmIrFuDjToi+3B5bJWseuGhKrVhDjl0ENoSpKj3SUNwgp1Op3PP5Q==
+X-Received: by 2002:a5d:5255:0:b0:333:2fd2:68bb with SMTP id k21-20020a5d5255000000b003332fd268bbmr490933wrc.78.1702076179579;
+        Fri, 08 Dec 2023 14:56:19 -0800 (PST)
+Received: from [192.168.8.100] ([85.255.236.117])
+        by smtp.gmail.com with ESMTPSA id n11-20020a5d4c4b000000b0033326e90496sm2902430wrt.18.2023.12.08.14.56.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Dec 2023 14:56:19 -0800 (PST)
+Message-ID: <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
+Date: Fri, 8 Dec 2023 22:48:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQL3KsJONShsstDq5jrpbc_4FOU-VQPJgDCt50N9asoFzA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory
+ provider
+Content-Language: en-US
+To: Mina Almasry <almasrymina@google.com>,
+ Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-9-almasrymina@google.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20231208005250.2910004-9-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 08, 2023 at 12:58:01PM -0800, Alexei Starovoitov wrote:
-> On Fri, Dec 8, 2023 at 12:52 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Dec 08, 2023 at 12:41:03PM -0800, Alexei Starovoitov wrote:
-> > > On Fri, Dec 8, 2023 at 12:35 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > > > -__bpf_kfunc void bpf_task_release(struct task_struct *p)
-> > > > +__bpf_kfunc void bpf_task_release(void *p)
-> > >
-> > > Yeah. That won't work. We need a wrapper.
-> > > Since bpf prog is also calling it directly.
-> > > In progs/task_kfunc_common.h
-> > > void bpf_task_release(struct task_struct *p) __ksym;
-> > >
-> > > than later both libbpf and the verifier check that
-> > > what bpf prog is calling actually matches the proto
-> > > of what is in the kernel.
-> > > Effectively we're doing strong prototype check at load time.
-> >
-> > I'm still somewhat confused on how this works, where does BPF get the
-> > address of the function from? and what should I call the wrapper?
+On 12/8/23 00:52, Mina Almasry wrote:
+> Implement a memory provider that allocates dmabuf devmem page_pool_iovs.
 > 
-> It starts with
-> register_btf_id_dtor_kfuncs() that takes a set of btf_ids:
-> {btf_id_of_type, btf_id_of_dtor_function}, ...
+> The provider receives a reference to the struct netdev_dmabuf_binding
+> via the pool->mp_priv pointer. The driver needs to set this pointer for
+> the provider in the page_pool_params.
 > 
-> Then based on btf_id_of_dtor_function we find its type proto, name, do checks,
-> and eventually:
-> addr = kallsyms_lookup_name(dtor_func_name);
-> field->kptr.dtor = (void *)addr;
+> The provider obtains a reference on the netdev_dmabuf_binding which
+> guarantees the binding and the underlying mapping remains alive until
+> the provider is destroyed.
 > 
-> bpf_task_release(struct task_struct *p) would need to stay as-is,
-> but we can have a wrapper
-> void bpf_task_release_dtor(void *p)
-> {
->   bpf_task_release(p);
-> }
+> Usage of PP_FLAG_DMA_MAP is required for this memory provide such that
+> the page_pool can provide the driver with the dma-addrs of the devmem.
 > 
-> And adjust the above lookup with extra "_dtor" suffix.
+> Support for PP_FLAG_DMA_SYNC_DEV is omitted for simplicity.
 > 
-> > > btw instead of EXPORT_SYMBOL_GPL(bpf_task_release)
-> > > can __ADDRESSABLE be used ?
-> > > Since it's not an export symbol.
-> >
-> > No __ADDRESSABLE() is expressly ignored, but we have IBT_NOSEAL() that
-> > should do it. I'll rename the thing and lift it out of x86 to avoid
-> > breaking all other arch builds.
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 > 
-> Makes sense.
+> ---
+> 
+> v1:
+> - static_branch check in page_is_page_pool_iov() (Willem & Paolo).
+> - PP_DEVMEM -> PP_IOV (David).
+> - Require PP_FLAG_DMA_MAP (Jakub).
+> 
+> ---
+>   include/net/page_pool/helpers.h | 47 +++++++++++++++++
+>   include/net/page_pool/types.h   |  9 ++++
+>   net/core/page_pool.c            | 89 ++++++++++++++++++++++++++++++++-
+>   3 files changed, 144 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
+> index 8bfc2d43efd4..00197f14aa87 100644
+> --- a/include/net/page_pool/helpers.h
+> +++ b/include/net/page_pool/helpers.h
+> @@ -53,6 +53,8 @@
+>   #define _NET_PAGE_POOL_HELPERS_H
+>   
+>   #include <net/page_pool/types.h>
+> +#include <net/net_debug.h>
+> +#include <net/devmem.h>
+>   
+>   #ifdef CONFIG_PAGE_POOL_STATS
+>   /* Deprecated driver-facing API, use netlink instead */
+> @@ -92,6 +94,11 @@ static inline unsigned int page_pool_iov_idx(const struct page_pool_iov *ppiov)
+>   	return ppiov - page_pool_iov_owner(ppiov)->ppiovs;
+>   }
+>   
+> +static inline u32 page_pool_iov_binding_id(const struct page_pool_iov *ppiov)
+> +{
+> +	return page_pool_iov_owner(ppiov)->binding->id;
+> +}
+> +
+>   static inline dma_addr_t
+>   page_pool_iov_dma_addr(const struct page_pool_iov *ppiov)
+>   {
+> @@ -107,6 +114,46 @@ page_pool_iov_binding(const struct page_pool_iov *ppiov)
+>   	return page_pool_iov_owner(ppiov)->binding;
+>   }
+>   
+> +static inline int page_pool_iov_refcount(const struct page_pool_iov *ppiov)
+> +{
+> +	return refcount_read(&ppiov->refcount);
+> +}
+> +
+> +static inline void page_pool_iov_get_many(struct page_pool_iov *ppiov,
+> +					  unsigned int count)
+> +{
+> +	refcount_add(count, &ppiov->refcount);
+> +}
+> +
+> +void __page_pool_iov_free(struct page_pool_iov *ppiov);
+> +
+> +static inline void page_pool_iov_put_many(struct page_pool_iov *ppiov,
+> +					  unsigned int count)
+> +{
+> +	if (!refcount_sub_and_test(count, &ppiov->refcount))
+> +		return;
+> +
+> +	__page_pool_iov_free(ppiov);
+> +}
+> +
+> +/* page pool mm helpers */
+> +
+> +DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
+> +static inline bool page_is_page_pool_iov(const struct page *page)
+> +{
+> +	return static_branch_unlikely(&page_pool_mem_providers) &&
+> +	       (unsigned long)page & PP_IOV;
+> +}
+> +
+> +static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
+> +{
+> +	if (page_is_page_pool_iov(page))
+> +		return (struct page_pool_iov *)((unsigned long)page & ~PP_IOV);
+> +
+> +	DEBUG_NET_WARN_ON_ONCE(true);
+> +	return NULL;
+> +}
+> +
+>   /**
+>    * page_pool_dev_alloc_pages() - allocate a page.
+>    * @pool:	pool from which to allocate
+> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+> index 44faee7a7b02..136930a238de 100644
+> --- a/include/net/page_pool/types.h
+> +++ b/include/net/page_pool/types.h
+> @@ -134,8 +134,15 @@ struct memory_provider_ops {
+>   	bool (*release_page)(struct page_pool *pool, struct page *page);
+>   };
+>   
+> +extern const struct memory_provider_ops dmabuf_devmem_ops;
+> +
+>   /* page_pool_iov support */
+>   
+> +/*  We overload the LSB of the struct page pointer to indicate whether it's
+> + *  a page or page_pool_iov.
+> + */
+> +#define PP_IOV 0x01UL
+> +
+>   /* Owner of the dma-buf chunks inserted into the gen pool. Each scatterlist
+>    * entry from the dmabuf is inserted into the genpool as a chunk, and needs
+>    * this owner struct to keep track of some metadata necessary to create
+> @@ -159,6 +166,8 @@ struct page_pool_iov {
+>   	struct dmabuf_genpool_chunk_owner *owner;
+>   
+>   	refcount_t refcount;
+> +
+> +	struct page_pool *pp;
+>   };
+>   
+>   struct page_pool {
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index f5c84d2a4510..423c88564a00 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -12,6 +12,7 @@
+>   
+>   #include <net/page_pool/helpers.h>
+>   #include <net/xdp.h>
+> +#include <net/netdev_rx_queue.h>
+>   
+>   #include <linux/dma-direction.h>
+>   #include <linux/dma-mapping.h>
+> @@ -20,12 +21,15 @@
+>   #include <linux/poison.h>
+>   #include <linux/ethtool.h>
+>   #include <linux/netdevice.h>
+> +#include <linux/genalloc.h>
+> +#include <net/devmem.h>
+>   
+>   #include <trace/events/page_pool.h>
+>   
+>   #include "page_pool_priv.h"
+>   
+> -static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
+> +DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
+> +EXPORT_SYMBOL(page_pool_mem_providers);
+>   
+>   #define DEFER_TIME (msecs_to_jiffies(1000))
+>   #define DEFER_WARN_INTERVAL (60 * HZ)
+> @@ -175,6 +179,7 @@ static void page_pool_producer_unlock(struct page_pool *pool,
+>   static int page_pool_init(struct page_pool *pool,
+>   			  const struct page_pool_params *params)
+>   {
+> +	struct netdev_dmabuf_binding *binding = NULL;
+>   	unsigned int ring_qsize = 1024; /* Default */
+>   	int err;
+>   
+> @@ -237,6 +242,14 @@ static int page_pool_init(struct page_pool *pool,
+>   	/* Driver calling page_pool_create() also call page_pool_destroy() */
+>   	refcount_set(&pool->user_cnt, 1);
+>   
+> +	if (pool->p.queue)
+> +		binding = READ_ONCE(pool->p.queue->binding);
+> +
+> +	if (binding) {
+> +		pool->mp_ops = &dmabuf_devmem_ops;
+> +		pool->mp_priv = binding;
+> +	}
 
-Ok, did that. Current patches (on top of bpf-next) are here:
+Hmm, I don't understand why would we replace a nice transparent
+api with page pool relying on a queue having devmem specific
+pointer? It seemed more flexible and cleaner in the last RFC.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/cfi
+> +
+>   	if (pool->mp_ops) {
+>   		err = pool->mp_ops->init(pool);
+>   		if (err) {
+> @@ -1020,3 +1033,77 @@ void page_pool_update_nid(struct page_pool *pool, int new_nid)
+>   	}
+>   }
+>   EXPORT_SYMBOL(page_pool_update_nid);
+> +
+> +void __page_pool_iov_free(struct page_pool_iov *ppiov)
+> +{
+> +	if (WARN_ON(ppiov->pp->mp_ops != &dmabuf_devmem_ops))
+> +		return;
+> +
+> +	netdev_free_dmabuf(ppiov);
+> +}
+> +EXPORT_SYMBOL_GPL(__page_pool_iov_free);
 
-(really should try and write better changelogs, but it's too late)
+I didn't look too deep but I don't think I immediately follow
+the pp refcounting. It increments pages_state_hold_cnt on
+allocation, but IIUC doesn't mark skbs for recycle? Then, they all
+will be put down via page_pool_iov_put_many() bypassing
+page_pool_return_page() and friends. That will call
+netdev_free_dmabuf(), which doesn't bump pages_state_release_cnt.
 
-The test_progs thing still doesn't run to completion, the next problem
-seems to be bpf_throw():
+At least I couldn't make it work with io_uring, and for my purposes,
+I forced all puts to go through page_pool_return_page(), which calls
+the ->release_page callback. The callback will put the reference and
+ask its page pool to account release_cnt. It also gets rid of
+__page_pool_iov_free(), as we'd need to add a hook there for
+customization otherwise.
 
-[  247.720159]  ? die+0xa4/0xd0
-[  247.720216]  ? do_trap+0xa5/0x180
-[  247.720281]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720368]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720459]  ? do_error_trap+0xba/0x120
-[  247.720525]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720614]  ? handle_invalid_op+0x2c/0x40
-[  247.720684]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720775]  ? exc_invalid_op+0x38/0x60
-[  247.720840]  ? asm_exc_invalid_op+0x1a/0x20
-[  247.720909]  ? 0xffffffffc001ba54
-[  247.720971]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.721063]  ? bpf_throw+0x9b/0xf0
-[  247.721126]  ? bpf_test_run+0x108/0x350
-[  247.721191]  ? bpf_prog_5555714b685bf0cf_exception_throw_always_1+0x26/0x26
-[  247.721301]  ? bpf_test_run+0x108/0x350
-[  247.721368]  bpf_test_run+0x212/0x350
-[  247.721433]  ? slab_build_skb+0x22/0x110
-[  247.721503]  bpf_prog_test_run_skb+0x347/0x4a0
+I didn't care about overhead because the hot path for me is getting
+buffers from a ring, which is somewhat analogous to sock_devmem_dontneed(),
+but done on pp allocations under napi, and it's done separately.
 
-But I'm too tired to think staight. Is  this a bpf_callback_t vs
-bpf_exception_cb difference?
+Completely untested with TCP devmem:
 
-I'll prod more later. Zzzz..
+https://github.com/isilence/linux/commit/14bd56605183dc80b540999e8058c79ac92ae2d8
+
+> +
+> +/*** "Dmabuf devmem memory provider" ***/
+> +
+> +static int mp_dmabuf_devmem_init(struct page_pool *pool)
+> +{
+> +	struct netdev_dmabuf_binding *binding = pool->mp_priv;
+> +
+> +	if (!binding)
+> +		return -EINVAL;
+> +
+> +	if (!(pool->p.flags & PP_FLAG_DMA_MAP))
+> +		return -EOPNOTSUPP;
+> +
+> +	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+> +		return -EOPNOTSUPP;
+> +
+> +	netdev_dmabuf_binding_get(binding);
+> +	return 0;
+> +}
+> +
+> +static struct page *mp_dmabuf_devmem_alloc_pages(struct page_pool *pool,
+> +						 gfp_t gfp)
+> +{
+> +	struct netdev_dmabuf_binding *binding = pool->mp_priv;
+> +	struct page_pool_iov *ppiov;
+> +
+> +	ppiov = netdev_alloc_dmabuf(binding);
+> +	if (!ppiov)
+> +		return NULL;
+> +
+> +	ppiov->pp = pool;
+> +	pool->pages_state_hold_cnt++;
+> +	trace_page_pool_state_hold(pool, (struct page *)ppiov,
+> +				   pool->pages_state_hold_cnt);
+> +	return (struct page *)((unsigned long)ppiov | PP_IOV);
+> +}
+> +
+> +static void mp_dmabuf_devmem_destroy(struct page_pool *pool)
+> +{
+> +	struct netdev_dmabuf_binding *binding = pool->mp_priv;
+> +
+> +	netdev_dmabuf_binding_put(binding);
+> +}
+> +
+> +static bool mp_dmabuf_devmem_release_page(struct page_pool *pool,
+> +					  struct page *page)
+> +{
+> +	struct page_pool_iov *ppiov;
+> +
+> +	if (WARN_ON_ONCE(!page_is_page_pool_iov(page)))
+> +		return false;
+> +
+> +	ppiov = page_to_page_pool_iov(page);
+> +	page_pool_iov_put_many(ppiov, 1);
+> +	/* We don't want the page pool put_page()ing our page_pool_iovs. */
+> +	return false;
+> +}
+> +
+> +const struct memory_provider_ops dmabuf_devmem_ops = {
+> +	.init			= mp_dmabuf_devmem_init,
+> +	.destroy		= mp_dmabuf_devmem_destroy,
+> +	.alloc_pages		= mp_dmabuf_devmem_alloc_pages,
+> +	.release_page		= mp_dmabuf_devmem_release_page,
+> +};
+> +EXPORT_SYMBOL(dmabuf_devmem_ops);
+
+-- 
+Pavel Begunkov
 
