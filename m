@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-815-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-816-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 874F880ACD7
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 20:22:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7DAA80ACE5
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 20:23:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 317661F21243
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 19:22:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23EC91C20BC2
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 19:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFE74CB30;
-	Fri,  8 Dec 2023 19:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344D84CB44;
+	Fri,  8 Dec 2023 19:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HAN0UxV6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="puGdxYqA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B74210FA
-	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 11:22:20 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-35da93ba227so8134465ab.0
-        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 11:22:20 -0800 (PST)
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3C8199B
+	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 11:23:16 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-4648495a842so606912137.2
+        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 11:23:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702063339; x=1702668139; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702063396; x=1702668196; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/fl4TQmZ7TqSY+7u7iVEdDd7jYxjMB5PcBQ7oQxgRCs=;
-        b=HAN0UxV6ys8YaXjDivsdosjXOrjl06PVzjpH2uGUPs5RsqNyz/ysrO9CWy6RVg13Em
-         o1xnheW9v3R5B/xzyDnFfqyzhCDAnGNxgu1ZOeb0noyhXzXqIXktsRhkFrU1p0C9y3TY
-         ftnDKEZ12T1NspijOgpRdWkEQ2XXdYXz1fkjSGVsGZH1jjoXbw1ujmvQLDR1YZ7UCuXE
-         BXCf/dqSGgAJejMChBRjSTrHHMQ2TWR0FdTNb8mYl//2KS2jNGUKNBUpdhB4fQn2Qh/7
-         a0qjpcdaKRqNd2cQCwG+PAzkMTDHnoq3069Y+gSpUw2simxV0E5rex2fPmnaCvWTyvtc
-         mhvA==
+        bh=eNuhxRDBfdQenk+uC5+I+2o2Yad/2wCHUso1pH85sfo=;
+        b=puGdxYqAoQo3bHG294LrXUJmKf0r2uufNMehZOj/ib8lgIMoVsopaKC4B4b6fUFyya
+         +B9rAwaP7t2N4ealA6hhXjhKtZfHcQqR6mND4Wm8Bn+OcwAWZPIz8cpOBRc9eMDbClhr
+         m0HzrbjSOx0Odg45PVXWbTCRw/nXU3Cn7nmp3mL+o1poKncrgSXhF/YFLuLQHGoSStQf
+         RrJGwyuzvUNDUEsmKjSD2uxYZ/BCYB8G86AaueFaliWGMcb/21OR7QeKm0LdzJc1VKhI
+         29fSLZU9MNVBk7gsWs++emPmOErx0U5NoIpQDDk2xKmI0xt174+doddUkTq2O/QdtbwO
+         qpuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702063339; x=1702668139;
+        d=1e100.net; s=20230601; t=1702063396; x=1702668196;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/fl4TQmZ7TqSY+7u7iVEdDd7jYxjMB5PcBQ7oQxgRCs=;
-        b=LxMTE6sxjfcpOg+VD69vb+xoJRShBGaT3BDtxZBqBVZCOGO93iwbKplmjS7B3wLI8s
-         0fZU3W8267hrE50ixOuZcvd2DoMIQcmJYENFPDdPb5KpSqYgqREuZ7eVR+d8CvEKXK+D
-         8u4HJdSPrmNJs3jm4hDI04IPHK00/DQJCckFchcT/8FtSNtpW5Znsm9DD93pgjgjFD+B
-         8S5e4ub89FKO0CyD+io99W/iUsLry74G5ki6ENsAxaTHCLy7nTfLklzrqC7Q52rvXmuN
-         gItuNo+SyEHpcvNEberF+xRHJP1jNMRyV25jV1+m4c1v2HaTBmbT05ht1dqW3tv3ieto
-         MPrw==
-X-Gm-Message-State: AOJu0YxBBotI2/zwfp7idJJDZr54/aZkArpgEhfYgwspvybDzyXG1+Vv
-	gpv+VAlvUcoh5B4WFJEO5FNDHrrDoci9Okv+vDTKhg==
-X-Google-Smtp-Source: AGHT+IFGbgyAI36X5vjbEmXlQUSaq7EUn6+m4ee62vVA8uf/+NBisCPcTr1MgahWOFQEmHtZn4kVezMBf7GaXLpVVcg=
-X-Received: by 2002:a05:6e02:12e4:b0:35e:6ba1:7dfb with SMTP id
- l4-20020a056e0212e400b0035e6ba17dfbmr710980iln.29.1702063339125; Fri, 08 Dec
- 2023 11:22:19 -0800 (PST)
+        bh=eNuhxRDBfdQenk+uC5+I+2o2Yad/2wCHUso1pH85sfo=;
+        b=XUjsR8CneRBVm1nfBbIr6NMFK26Rq4h84ge1uKGPulr6qTXwgX4FfjGji4xQa7z4ee
+         1uRPETgWcu2v30fJ5dRe06EgUa6HermsiW+UrN0jPhOnpcmFAf6f38m2ETDx0LXLIx9y
+         tSuQfheZnWiQ5X9LdfNEEXtcQtEGRDQpWbok2F1spnCGgsdnSXi/1BNHlNxV1D6HWMnH
+         a+uvvlYU14EGVruBOHQXrCOJUo7wYn8YO+7mhA9/m4Kg+/YlzjYm0jprTGLVc6RkGf0M
+         C/+GOlnf585c+HZU7tN9EQvwKGuJjGxWl2xWbGCnGRAve1tNo8q9VMoZFFGDhx0jW+f8
+         Djcw==
+X-Gm-Message-State: AOJu0YxQ5m97PBDwBx8bAZf4TVkNPKDs0p3Yn5g3gsKg10+OCp8+da3q
+	fyYrtyNw1SJ0l1E8djTg29P72CSjyNaVQo5ahg4hLA==
+X-Google-Smtp-Source: AGHT+IHb22ZjibDls1yBkhF7QNEaIMpgDSaJZ0OHWa3jb0vnzr6qisUp6akF/Nl59oBqhH37DmVgAI0o7BDgdz/1wpc=
+X-Received: by 2002:a05:6102:38ce:b0:465:e3df:13a with SMTP id
+ k14-20020a05610238ce00b00465e3df013amr837357vst.9.1702063395773; Fri, 08 Dec
+ 2023 11:23:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -57,12 +57,12 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-7-almasrymina@google.com> <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
-In-Reply-To: <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
+ <20231208005250.2910004-14-almasrymina@google.com> <dd47a2a4-cb80-4164-8855-045999931a8e@kernel.org>
+In-Reply-To: <dd47a2a4-cb80-4164-8855-045999931a8e@kernel.org>
 From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 8 Dec 2023 11:22:08 -0800
-Message-ID: <CAHS8izPsQ2XoJy-vYWkn051Yc=D_kSprtQcG4mmPutf1G3+-aw@mail.gmail.com>
-Subject: Re: [net-next v1 06/16] netdev: support binding dma-buf to netdevice
+Date: Fri, 8 Dec 2023 11:23:04 -0800
+Message-ID: <CAHS8izPwkARkYjPYPY2t-5H=XFTdn=NcWk0EwiCycThR5xFmtg@mail.gmail.com>
+Subject: Re: [net-next v1 13/16] tcp: RX path for devmem TCP
 To: David Ahern <dsahern@kernel.org>
 Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
@@ -81,131 +81,59 @@ Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 8, 2023 at 9:48=E2=80=AFAM David Ahern <dsahern@kernel.org> wro=
+On Fri, Dec 8, 2023 at 9:55=E2=80=AFAM David Ahern <dsahern@kernel.org> wro=
 te:
 >
 > On 12/7/23 5:52 PM, Mina Almasry wrote:
-...
-> > +
-> > +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> > +             if (rxq->binding =3D=3D binding) {
-> > +                     /* We hold the rtnl_lock while binding/unbinding
-> > +                      * dma-buf, so we can't race with another thread =
-that
-> > +                      * is also modifying this value. However, the dri=
-ver
-> > +                      * may read this config while it's creating its
-> > +                      * rx-queues. WRITE_ONCE() here to match the
-> > +                      * READ_ONCE() in the driver.
-> > +                      */
-> > +                     WRITE_ONCE(rxq->binding, NULL);
-> > +
-> > +                     rxq_idx =3D get_netdev_rx_queue_index(rxq);
-> > +
-> > +                     netdev_restart_rx_queue(binding->dev, rxq_idx);
+> > In tcp_recvmsg_locked(), detect if the skb being received by the user
+> > is a devmem skb. In this case - if the user provided the MSG_SOCK_DEVME=
+M
+> > flag - pass it to tcp_recvmsg_devmem() for custom handling.
+> >
+> > tcp_recvmsg_devmem() copies any data in the skb header to the linear
+> > buffer, and returns a cmsg to the user indicating the number of bytes
+> > returned in the linear buffer.
+> >
+> > tcp_recvmsg_devmem() then loops over the unaccessible devmem skb frags,
+> > and returns to the user a cmsg_devmem indicating the location of the
+> > data in the dmabuf device memory. cmsg_devmem contains this information=
+:
+> >
+> > 1. the offset into the dmabuf where the payload starts. 'frag_offset'.
+> > 2. the size of the frag. 'frag_size'.
+> > 3. an opaque token 'frag_token' to return to the kernel when the buffer
+> > is to be released.
+> >
+> > The pages awaiting freeing are stored in the newly added
+> > sk->sk_user_pages, and each page passed to userspace is get_page()'d.
+> > This reference is dropped once the userspace indicates that it is
+> > done reading this page.  All pages are released when the socket is
+> > destroyed.
+> >
+> > Signed-off-by: Willem de Bruijn <willemb@google.com>
+> > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >
+> > Changes in v1:
+> > - Added dmabuf_id to dmabuf_cmsg (David/Stan).
+> > - Devmem -> dmabuf (David).
+> > - Change tcp_recvmsg_dmabuf() check to skb->dmabuf (Paolo).
+> > - Use __skb_frag_ref() & napi_pp_put_page() for refcounting (Yunsheng).
+> >
+> > RFC v3:
+> > - Fixed issue with put_cmsg() failing silently.
+> >
 >
-> Blindly restarting a queue when a dmabuf is heavy handed. If the dmabuf
-> has no outstanding references (ie., no references in the RxQ), then no
-> restart is needed.
->
+> What happens if a retransmitted packet is received or an rx window is
+> closed and a probe is received where the kernel drops the skb - is the
+> iov reference(s) in the skb returned to the pool by the stack and ready
+> for use again?
 
-I think I need to stop the queue while binding to a dmabuf for the
-sake of concurrency, no? I.e. the softirq thread may be delivering a
-packet, and in parallel a separate thread holds rtnl_lock and tries to
-bind the dma-buf. At that point the page_pool recreation will race
-with the driver doing page_pool_alloc_page(). I don't think I can
-insert a lock to handle this into the rx fast path, no?
-
-Also, this sounds like it requires (lots of) more changes. The
-page_pool + driver need to report how many pending references there
-are (with locking so we don't race with incoming packets), and have
-them reported via an ndo so that we can skip restarting the queue.
-Implementing the changes in to a huge issue but handling the
-concurrency may be a genuine blocker. Not sure it's worth the upside
-of not restarting the single rx queue?
-
-> > +             }
-> > +     }
-> > +
-> > +     xa_erase(&netdev_dmabuf_bindings, binding->id);
-> > +
-> > +     netdev_dmabuf_binding_put(binding);
-> > +}
-> > +
-> > +int netdev_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
-> > +                             struct netdev_dmabuf_binding *binding)
-> > +{
-> > +     struct netdev_rx_queue *rxq;
-> > +     u32 xa_idx;
-> > +     int err;
-> > +
-> > +     rxq =3D __netif_get_rx_queue(dev, rxq_idx);
-> > +
-> > +     if (rxq->binding)
-> > +             return -EEXIST;
-> > +
-> > +     err =3D xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit=
-_32b,
-> > +                    GFP_KERNEL);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we c=
-an't
-> > +      * race with another thread that is also modifying this value. Ho=
-wever,
-> > +      * the driver may read this config while it's creating its * rx-q=
-ueues.
-> > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
-> > +      */
-> > +     WRITE_ONCE(rxq->binding, binding);
-> > +
-> > +     err =3D netdev_restart_rx_queue(dev, rxq_idx);
->
-> Similarly, here binding a dmabuf to a queue. I was expecting the dmabuf
-> binding to add entries to the page pool for the queue.
-
-To be honest, I think maybe there's a slight disconnect between how
-you think the page_pool works, and my primitive understanding of how
-it works. Today, I see a 1:1 mapping between rx-queue and page_pool in
-the code. I don't see 1:many or many:1 mappings.
-
-In theory mapping 1 rx-queue to n page_pools is trivial: the driver
-can call page_pool_create() multiple times to generate n queues and
-decide for incoming packets which one to use.
-
-However, mapping n rx-queues to 1 page_pool seems like a can of worms.
-I see code in the page_pool that looks to me (and Willem) like it's
-safe only because the page_pool is used from the same napi context.
-with a n rx-queueue: 1 page_pool mapping, that is no longer true, no?
-There is a tail end of issues to resolve to be able to map 1 page_pool
-to n queues as I understand and even if resolved I'm not sure the
-maintainers are interested in taking the code.
-
-So, per my humble understanding there is no such thing as "add entries
-to the page pool for the (specific) queue", the page_pool is always
-used by 1 queue.
-
-Note that even though this limitation exists, we still support binding
-1 dma-buf to multiple queues, because multiple page pools can use the
-same netdev_dmabuf_binding. I should add that to the docs.
-
-> If the pool was
-> previously empty, then maybe the queue needs to be "started" in the
-> sense of creating with h/w or just pushing buffers into the queue and
-> moving the pidx.
->
->
-
-I don't think it's enough to add buffers to the page_pool, no? The
-existing buffers in the page_pool (host mem) must be purged. I think
-maybe the queue needs to be stopped as well so that we don't race with
-incoming packets and end up with skbs with devmem and non-devmem frags
-(unless you're thinking it becomes a requirement to support that, I
-think things are complicated as-is and it's a good simplification).
-When we already purge the existing buffers & restart the queue, it's
-little effort to migrate this to become in line with Jakub's queue-api
-that he also wants to use for per-queue configuration & ndo_stop/open.
+When an skb is dropped, skb_frag_unref() is called on the frags, which
+calls napi_pp_put_page(), drops the references, and the iov is
+recycled, yes.
 
 --=20
 Thanks,
