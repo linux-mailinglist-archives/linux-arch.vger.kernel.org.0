@@ -1,69 +1,63 @@
-Return-Path: <linux-arch+bounces-811-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-812-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6874C80AC0F
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 19:29:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E41F580AC1F
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 19:35:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05D24B20B4E
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 18:29:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9915D1F21223
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 18:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A8721A727;
-	Fri,  8 Dec 2023 18:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51284CB3D;
+	Fri,  8 Dec 2023 18:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kHVnjikM"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="T8fPULZ5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F38A3
-	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 10:29:27 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6ceb27ec331so1771397b3a.1
-        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 10:29:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702060167; x=1702664967; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TYr+i/5NYC3JxHFPI2U93kF4hGY9T4auZhKGKiOPNQ0=;
-        b=kHVnjikMJ8sBJkpxzMJH8TGeYPDCRNcWe0xMt9OuB/ulypTZPHYi+fTnQSgz1g6gVM
-         7lfMOdf8ZmsFg0HVpyBjTxEGA9DWqzjsfwsfsdnk6r9rfmLGVtioc6Qkmubo7Rn2GB8y
-         SuvlggiglrNgLjK7M047un0d4ZF00oX3FJh8I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702060167; x=1702664967;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TYr+i/5NYC3JxHFPI2U93kF4hGY9T4auZhKGKiOPNQ0=;
-        b=FxrU/1hIvTI145nbvHmqcZnWjo/YSgq4+2IHK05f+I2pYLaUR05VbUlkyGWJiypPp9
-         ngDguqIIepCAhWeh2CvKIbFrC+fq320XeLjqRqXXwb8TPYfbhVT00Rq5sRlkO/3sjBRJ
-         qBK37egi6WsUp4zqOl1lV7pJnaoN5CsEY8Rb1380StXrv5XhuXDS1BRcTtvwO/J9Z2RW
-         nieWI8bDf/J4QLPwFdGo1aSy0poPHHHWJ4KxztXPK+ZILUKxmva2gdTl+OvvdhjuSKkE
-         RPXiqYIxKEZJjBCozTsZA4HPFG5qQdU2myYBle6AY4u3csEi47lAC9ysdGyxyPNcFqar
-         HAkQ==
-X-Gm-Message-State: AOJu0YyJ51lHcP0CbICILJ17rxFWf55HJPmKh763n/dyLqqLRF9kwZZn
-	hr2L5bcxFaAeCjsj4PSWddIi0w==
-X-Google-Smtp-Source: AGHT+IEma1zSM6Y9S/+UI5j3p/5Dq4kkVNLpVZGExv6IrOEFo4uGT5o+AV+5AuIOPLXchpFMpklmRA==
-X-Received: by 2002:a05:6a00:15cb:b0:6ce:49f9:d3e1 with SMTP id o11-20020a056a0015cb00b006ce49f9d3e1mr494561pfu.12.1702060166997;
-        Fri, 08 Dec 2023 10:29:26 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ff16-20020a056a002f5000b006ce742b6b1fsm1900019pfb.63.2023.12.08.10.29.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 10:29:26 -0800 (PST)
-Date: Fri, 8 Dec 2023 10:29:25 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v2] ELF: supply userspace with available page shifts
- (AT_PAGE_SHIFT_MASK)
-Message-ID: <202312081027.BA44B7B3@keescook>
-References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
- <87v89dvuxg.fsf@oldenburg.str.redhat.com>
- <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
- <202312061236.DE847C52AA@keescook>
- <4f5f29d4-9c50-453c-8ad3-03a92fed192e@p183>
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359C9118;
+	Fri,  8 Dec 2023 10:35:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=iqgkejpa/rkBjVNHaS0A5K5PJBwcgcqylwReeoFCRMk=; b=T8fPULZ5vJHN49SgmCJX6fdWHu
+	K2+z2sIwrEFOU7FxzoPXvlYTiVfVy/1kf0iqenNn+9+iFZtFhNYTldLX4Rr+NQ/HRQs4KWCwkossM
+	Sc/dQJmTG6XvnTRHyU/gq4AnzkLGN0Avu0Di1LdozAE2/fG4QmSKzbGdau55xtyTEINys4KWTf2vB
+	pGuVJ4uO49mMYJFsmlRnLCFJzYNBrGbaFa3GIhzxGl9ZZ/Y1+jCzll9OZJ+1Buc2kiuBss55jwjx2
+	w/4+Hi3Jek0qA6w9PIuLzevHiFoNU9Yayvv1wbQJpivKSAE7ivt+SznrVQCd7cLDLlgxfBLEeYhhP
+	xuZC4PGw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rBfgr-0091iZ-2K;
+	Fri, 08 Dec 2023 18:35:09 +0000
+Date: Fri, 8 Dec 2023 18:35:09 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: David Laight <David.Laight@aculab.com>
+Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	gus Gusenleitner Klaus <gus@keba.com>,
+	Al Viro <viro@ftp.linux.org.uk>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	lkml <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	"dsahern@kernel.org" <dsahern@kernel.org>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
+Subject: Re: [RFC][PATCHES v2] checksum stuff
+Message-ID: <20231208183509.GC1674809@ZenIV>
+References: <20231019080615.GY800259@ZenIV>
+ <20231021071525.GA789610@ZenIV>
+ <20231021222203.GA800259@ZenIV>
+ <20231022194020.GA972254@ZenIV>
+ <20231205022100.GB1674809@ZenIV>
+ <602ab11ffa2c4cc49bb9ecae2f0540b0@AcuMS.aculab.com>
+ <20231206224359.GR1674809@ZenIV>
+ <46711b57a62348059cfe798c8acea941@AcuMS.aculab.com>
+ <20231208141712.GA1674809@ZenIV>
+ <ce18effbe40c47bfb48f87e7ee4f8141@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -72,33 +66,44 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4f5f29d4-9c50-453c-8ad3-03a92fed192e@p183>
+In-Reply-To: <ce18effbe40c47bfb48f87e7ee4f8141@AcuMS.aculab.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Thu, Dec 07, 2023 at 05:57:05PM +0300, Alexey Dobriyan wrote:
-> On Wed, Dec 06, 2023 at 12:47:27PM -0800, Kees Cook wrote:
-> > Can't we have a generic ARCH_AT_PAGE_SHIFT_MASK too? Something like:
+On Fri, Dec 08, 2023 at 03:56:27PM +0000, David Laight wrote:
+
+> > You add them as natural numbers.  If there is no carry and result
+> > fits into N bits, that's it.  If there is carry, you add it to
+> > the lower N bits of sum.
 > > 
-> > #ifndef ARCH_AT_PAGE_SHIFT_MASK
-> > #define ARCH_AT_PAGE_SHIFT_MASK
-> > 	NEW_AUX_ENT(AT_PAGE_SHIFT_MASK, 1 << PAGE_SHIFT)
-> > #endif
+> > Discussion of properties of that operation is present e.g. in
+> > RFC1071, titled "Computing the Internet Checksum".
 > > 
-> > Or am I misunderstanding something here?
+> > May I politely suggest that some basic understanding of the
+> > arithmetics involved might be useful for this discussion?
 > 
-> 1) Arch maintainers can opt into this new way to report information at
->    their own pace.
-> 
-> 2) AT_PAGE_SHIFT_MASK is about _all_ pagesizes supported by CPU.
->    Reporting just one is missing the point.
-> 
->    I'll clarify comment: mmap() support require many things including
->    tests for hugetlbfs being mounted, this is about CPU support.
+> Well 0x0000 is +0 and 0xffff is -0, mathematically they are (mostly)
+> equal.
 
-I significantly prefer APIs not being arch-specific, so I'd prefer we
-always include AT_PAGE_SHIFT_MASK. For an architecture that doesn't
-define its own ARCH_AT_PAGE_SHIFT_MASK, it's not _inaccurate_ to report
-1 << PAGE_SHIFT, but it might be incomplete.
+As representations of signed integers they are.  However, the origin
+of operation in question is irrelevant.  Again, read the fucking RFC.
 
--- 
-Kees Cook
+> I bet that ICMP response (with id == 0 and seq == 0) is the only
+> place it is possible to get an ip-checksum of a zero buffer.
+> So it will be pretty moot for copy+checksum with can return 0xffff
+> (or lots of other values) for an all-zero buffer.
+
+Egads...  Your bets are your business; you *still* have not bothered
+to look at the callers of these primitives.  Given the accuracy of
+your guesses so far, pardon me for treating any "I bet"/"it stands for
+reason"/etc. coming from you as empty handwaving.
+
+> In terms of copy+checksum returning an error, why not reduce the
+> 32bit wcsum once (to 17 bits) and return -1 (or ~0u) on error?
+> Much simpler than your patch and it won't have the lurking problem
+> of the result being assigned to a 32bit variable.
+
+In case you have somehow missed it, quite a few of the affected places
+are in assembler.  The same would apply to added code that would do
+this reduction.  Which is going to be considerably less trivial than
+the changes done in that patch.
 
