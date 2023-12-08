@@ -1,98 +1,213 @@
-Return-Path: <linux-arch+bounces-814-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-815-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79A0080AC27
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 19:38:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 874F880ACD7
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 20:22:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A343F1C20A87
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 18:38:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 317661F21243
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 19:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E0C3B7A5;
-	Fri,  8 Dec 2023 18:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFE74CB30;
+	Fri,  8 Dec 2023 19:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eNU1EAx2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HAN0UxV6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC436BD
-	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 10:38:08 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6ce72faf1e8so1836479b3a.0
-        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 10:38:08 -0800 (PST)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B74210FA
+	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 11:22:20 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-35da93ba227so8134465ab.0
+        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 11:22:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702060688; x=1702665488; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NtN8RJrSywNd9cqTGDXuX00rE8787z779s5kNZbKPTg=;
-        b=eNU1EAx2H0cVhDiB2lfoDQan7fEfMz5udTwfcMi9THoBeXBj746nTvWMWjNVPI/oae
-         7u+kXee+wGaH5DFIw6qBonTMD7k84kKyGR+guCa69j7SvDmbG4aK+5dbRq51nuD/XUdv
-         QUFMyM/mvvGSEpHl888CNEbL3R2m1SDSlUWCE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702060688; x=1702665488;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1702063339; x=1702668139; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NtN8RJrSywNd9cqTGDXuX00rE8787z779s5kNZbKPTg=;
-        b=P+WVDu8wQJRbEmfw7yS0RoBZCIOMO2JbuQcrCyp5XfuQtrnAdiTtMJrE2FL8GooYen
-         EyKB0AGy7XQDwOhmYX8wdMWA2gf/z7nv7IqbqPioLK7ZJoKgphqIF2Ug85Or6XFB2Jc+
-         V+oBo+NG3aRrh2PJQ6+q/vqNVHCFmvDnp2f/Fx303DO8xs4PLjWgGAp3Vyha/7s0FlTT
-         LJbK6GholEuGjh8WVkyOGXtsbhHIcUn3HXfeW8zA/Cq4toA7OnvFabNlcMTdEMbLgjDB
-         RPG9Ud2ZBVM4PlFqW0PrMLo45Z41XGahkdfLVg3d37fKt1cIrw9PjQfSAiu7bJbImQ8H
-         /wKA==
-X-Gm-Message-State: AOJu0Yz70QeQLI4Wyh5Dj3oToiJUqFfnfpArShnEWlhgr/f1WMIewUcP
-	DWRl4MKLqhgHOrh3qnDT8NZGXw==
-X-Google-Smtp-Source: AGHT+IHJzNo7Hbj+hV0vS5OXcDWV8L1dA0GJLnVKpqyuVHtDw1XXI/AWkfGTwQ2ZZjG7MnXsry4Z7g==
-X-Received: by 2002:a05:6a20:918b:b0:18f:97c:823b with SMTP id v11-20020a056a20918b00b0018f097c823bmr529965pzd.69.1702060688480;
-        Fri, 08 Dec 2023 10:38:08 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id o73-20020a62cd4c000000b006c875abecbcsm1966803pfg.121.2023.12.08.10.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 10:38:07 -0800 (PST)
-Date: Fri, 8 Dec 2023 10:38:07 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Florian Weimer <fweimer@redhat.com>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-api@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2] ELF: supply userspace with available page shifts
- (AT_PAGE_SHIFT_MASK)
-Message-ID: <202312081037.895E558@keescook>
-References: <6b399b86-a478-48b0-92a1-25240a8ede54@p183>
- <87v89dvuxg.fsf@oldenburg.str.redhat.com>
- <1d679805-8a82-44a4-ba14-49d4f28ff597@p183>
- <202312061236.DE847C52AA@keescook>
- <4f5f29d4-9c50-453c-8ad3-03a92fed192e@p183>
- <202312081027.BA44B7B3@keescook>
- <87lea4czki.fsf@oldenburg.str.redhat.com>
+        bh=/fl4TQmZ7TqSY+7u7iVEdDd7jYxjMB5PcBQ7oQxgRCs=;
+        b=HAN0UxV6ys8YaXjDivsdosjXOrjl06PVzjpH2uGUPs5RsqNyz/ysrO9CWy6RVg13Em
+         o1xnheW9v3R5B/xzyDnFfqyzhCDAnGNxgu1ZOeb0noyhXzXqIXktsRhkFrU1p0C9y3TY
+         ftnDKEZ12T1NspijOgpRdWkEQ2XXdYXz1fkjSGVsGZH1jjoXbw1ujmvQLDR1YZ7UCuXE
+         BXCf/dqSGgAJejMChBRjSTrHHMQ2TWR0FdTNb8mYl//2KS2jNGUKNBUpdhB4fQn2Qh/7
+         a0qjpcdaKRqNd2cQCwG+PAzkMTDHnoq3069Y+gSpUw2simxV0E5rex2fPmnaCvWTyvtc
+         mhvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702063339; x=1702668139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/fl4TQmZ7TqSY+7u7iVEdDd7jYxjMB5PcBQ7oQxgRCs=;
+        b=LxMTE6sxjfcpOg+VD69vb+xoJRShBGaT3BDtxZBqBVZCOGO93iwbKplmjS7B3wLI8s
+         0fZU3W8267hrE50ixOuZcvd2DoMIQcmJYENFPDdPb5KpSqYgqREuZ7eVR+d8CvEKXK+D
+         8u4HJdSPrmNJs3jm4hDI04IPHK00/DQJCckFchcT/8FtSNtpW5Znsm9DD93pgjgjFD+B
+         8S5e4ub89FKO0CyD+io99W/iUsLry74G5ki6ENsAxaTHCLy7nTfLklzrqC7Q52rvXmuN
+         gItuNo+SyEHpcvNEberF+xRHJP1jNMRyV25jV1+m4c1v2HaTBmbT05ht1dqW3tv3ieto
+         MPrw==
+X-Gm-Message-State: AOJu0YxBBotI2/zwfp7idJJDZr54/aZkArpgEhfYgwspvybDzyXG1+Vv
+	gpv+VAlvUcoh5B4WFJEO5FNDHrrDoci9Okv+vDTKhg==
+X-Google-Smtp-Source: AGHT+IFGbgyAI36X5vjbEmXlQUSaq7EUn6+m4ee62vVA8uf/+NBisCPcTr1MgahWOFQEmHtZn4kVezMBf7GaXLpVVcg=
+X-Received: by 2002:a05:6e02:12e4:b0:35e:6ba1:7dfb with SMTP id
+ l4-20020a056e0212e400b0035e6ba17dfbmr710980iln.29.1702063339125; Fri, 08 Dec
+ 2023 11:22:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87lea4czki.fsf@oldenburg.str.redhat.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-7-almasrymina@google.com> <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
+In-Reply-To: <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 8 Dec 2023 11:22:08 -0800
+Message-ID: <CAHS8izPsQ2XoJy-vYWkn051Yc=D_kSprtQcG4mmPutf1G3+-aw@mail.gmail.com>
+Subject: Re: [net-next v1 06/16] netdev: support binding dma-buf to netdevice
+To: David Ahern <dsahern@kernel.org>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 08, 2023 at 07:35:25PM +0100, Florian Weimer wrote:
-> * Kees Cook:
-> 
-> > I significantly prefer APIs not being arch-specific, so I'd prefer we
-> > always include AT_PAGE_SHIFT_MASK. For an architecture that doesn't
-> > define its own ARCH_AT_PAGE_SHIFT_MASK, it's not _inaccurate_ to report
-> > 1 << PAGE_SHIFT, but it might be incomplete.
-> 
-> The downside is that as an application programmer, I have to go and
-> chase for the information the legacy way if I encounter
-> getauxval(AT_PAGE_SHIFT_MASK) == getpagesize() for a longer time
-> because the interface does not signal the absence of any extended
-> page sizes.
+On Fri, Dec 8, 2023 at 9:48=E2=80=AFAM David Ahern <dsahern@kernel.org> wro=
+te:
+>
+> On 12/7/23 5:52 PM, Mina Almasry wrote:
+...
+> > +
+> > +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> > +             if (rxq->binding =3D=3D binding) {
+> > +                     /* We hold the rtnl_lock while binding/unbinding
+> > +                      * dma-buf, so we can't race with another thread =
+that
+> > +                      * is also modifying this value. However, the dri=
+ver
+> > +                      * may read this config while it's creating its
+> > +                      * rx-queues. WRITE_ONCE() here to match the
+> > +                      * READ_ONCE() in the driver.
+> > +                      */
+> > +                     WRITE_ONCE(rxq->binding, NULL);
+> > +
+> > +                     rxq_idx =3D get_netdev_rx_queue_index(rxq);
+> > +
+> > +                     netdev_restart_rx_queue(binding->dev, rxq_idx);
+>
+> Blindly restarting a queue when a dmabuf is heavy handed. If the dmabuf
+> has no outstanding references (ie., no references in the RxQ), then no
+> restart is needed.
+>
 
-Are there architectures besides x86 where AT_PAGE_SHIFT_MASK isn't a
-single bit? If so, let's get them added now along with x86.
+I think I need to stop the queue while binding to a dmabuf for the
+sake of concurrency, no? I.e. the softirq thread may be delivering a
+packet, and in parallel a separate thread holds rtnl_lock and tries to
+bind the dma-buf. At that point the page_pool recreation will race
+with the driver doing page_pool_alloc_page(). I don't think I can
+insert a lock to handle this into the rx fast path, no?
 
--- 
-Kees Cook
+Also, this sounds like it requires (lots of) more changes. The
+page_pool + driver need to report how many pending references there
+are (with locking so we don't race with incoming packets), and have
+them reported via an ndo so that we can skip restarting the queue.
+Implementing the changes in to a huge issue but handling the
+concurrency may be a genuine blocker. Not sure it's worth the upside
+of not restarting the single rx queue?
+
+> > +             }
+> > +     }
+> > +
+> > +     xa_erase(&netdev_dmabuf_bindings, binding->id);
+> > +
+> > +     netdev_dmabuf_binding_put(binding);
+> > +}
+> > +
+> > +int netdev_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> > +                             struct netdev_dmabuf_binding *binding)
+> > +{
+> > +     struct netdev_rx_queue *rxq;
+> > +     u32 xa_idx;
+> > +     int err;
+> > +
+> > +     rxq =3D __netif_get_rx_queue(dev, rxq_idx);
+> > +
+> > +     if (rxq->binding)
+> > +             return -EEXIST;
+> > +
+> > +     err =3D xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit=
+_32b,
+> > +                    GFP_KERNEL);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we c=
+an't
+> > +      * race with another thread that is also modifying this value. Ho=
+wever,
+> > +      * the driver may read this config while it's creating its * rx-q=
+ueues.
+> > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+> > +      */
+> > +     WRITE_ONCE(rxq->binding, binding);
+> > +
+> > +     err =3D netdev_restart_rx_queue(dev, rxq_idx);
+>
+> Similarly, here binding a dmabuf to a queue. I was expecting the dmabuf
+> binding to add entries to the page pool for the queue.
+
+To be honest, I think maybe there's a slight disconnect between how
+you think the page_pool works, and my primitive understanding of how
+it works. Today, I see a 1:1 mapping between rx-queue and page_pool in
+the code. I don't see 1:many or many:1 mappings.
+
+In theory mapping 1 rx-queue to n page_pools is trivial: the driver
+can call page_pool_create() multiple times to generate n queues and
+decide for incoming packets which one to use.
+
+However, mapping n rx-queues to 1 page_pool seems like a can of worms.
+I see code in the page_pool that looks to me (and Willem) like it's
+safe only because the page_pool is used from the same napi context.
+with a n rx-queueue: 1 page_pool mapping, that is no longer true, no?
+There is a tail end of issues to resolve to be able to map 1 page_pool
+to n queues as I understand and even if resolved I'm not sure the
+maintainers are interested in taking the code.
+
+So, per my humble understanding there is no such thing as "add entries
+to the page pool for the (specific) queue", the page_pool is always
+used by 1 queue.
+
+Note that even though this limitation exists, we still support binding
+1 dma-buf to multiple queues, because multiple page pools can use the
+same netdev_dmabuf_binding. I should add that to the docs.
+
+> If the pool was
+> previously empty, then maybe the queue needs to be "started" in the
+> sense of creating with h/w or just pushing buffers into the queue and
+> moving the pidx.
+>
+>
+
+I don't think it's enough to add buffers to the page_pool, no? The
+existing buffers in the page_pool (host mem) must be purged. I think
+maybe the queue needs to be stopped as well so that we don't race with
+incoming packets and end up with skbs with devmem and non-devmem frags
+(unless you're thinking it becomes a requirement to support that, I
+think things are complicated as-is and it's a good simplification).
+When we already purge the existing buffers & restart the queue, it's
+little effort to migrate this to become in line with Jakub's queue-api
+that he also wants to use for per-queue configuration & ndo_stop/open.
+
+--=20
+Thanks,
+Mina
 
