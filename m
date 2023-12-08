@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-779-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-780-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE45C809BBF
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 06:39:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F17C809BCD
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 06:41:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 269551C20BF2
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 05:39:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C9AC282090
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 05:41:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC906131;
-	Fri,  8 Dec 2023 05:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89D76AB0;
+	Fri,  8 Dec 2023 05:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jex/enZ+"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="goPP2wDU"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD41171C;
-	Thu,  7 Dec 2023 21:39:22 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231208053920epoutp0108610d4bffc289b8801cfbe4687de767~exK3VjBDb0681006810epoutp01G;
-	Fri,  8 Dec 2023 05:39:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231208053920epoutp0108610d4bffc289b8801cfbe4687de767~exK3VjBDb0681006810epoutp01G
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B1D26AC;
+	Thu,  7 Dec 2023 21:41:21 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231208054119epoutp01c076a167c4e59ebf8153b06075f17436~exMm-9AMa0608406084epoutp01k;
+	Fri,  8 Dec 2023 05:41:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231208054119epoutp01c076a167c4e59ebf8153b06075f17436~exMm-9AMa0608406084epoutp01k
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1702013960;
-	bh=a9SzkBB0LEpQmzUH0qCc/2HzgkvZOhyaAeKEGrhz5ps=;
+	s=mail20170921; t=1702014080;
+	bh=TShggJDiDmcvjOqlveL4HgbFDSRxgxWpVCqxzQnUxMs=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jex/enZ+dylgtXCvv6kls24noB9SFdLnofHHu+4WYyasi7Tzb7jWpLrrz1CvKjSK3
-	 +jwFqONJHjFv1ikWV2QLMJ6MVXqkCWABL10VtBMBjJ1exBEewOOgyo+mZm+gI+2aO0
-	 M9oYLOK7+6DwTvODHZCi+WVWcXorzaW+6UB58dRE=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-	20231208053919epcas2p44cfb65876ff22dafd91b51d26c59cc0e~exK3EuTok2742427424epcas2p4G;
-	Fri,  8 Dec 2023 05:39:19 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.92]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4Smg1g1WDxz4x9QG; Fri,  8 Dec
-	2023 05:39:19 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	80.34.10006.70CA2756; Fri,  8 Dec 2023 14:39:19 +0900 (KST)
+	b=goPP2wDUv91kZK/qLNaZSHEpbDk1J7Z+ge5rlSwzVgpiFaehYP1SqkF072Ix25Of/
+	 0XbiHNq5CnHbNug7y+OO3hdKm6Sx4hOXRIPa1b2lpUVQ6OF6i/pah3mXqJLGSV27IA
+	 2zLdqpsW0PERec2uwrfYsmB1ezsb2JOPuV+6maRY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+	20231208054119epcas2p23c182dc4bb113f596c3884c7aaed3bce~exMmur3ux3074330743epcas2p2Q;
+	Fri,  8 Dec 2023 05:41:19 +0000 (GMT)
+Received: from epsmgec2p1-new.samsung.com (unknown [182.195.36.69]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4Smg3y6k7zz4x9QC; Fri,  8 Dec
+	2023 05:41:18 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+	epsmgec2p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	75.2A.18994.E7CA2756; Fri,  8 Dec 2023 14:41:18 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-	20231208053918epcas2p3b3b14464cfaf4906f09bccce59a50ce9~exK17ecSy2469724697epcas2p3E;
-	Fri,  8 Dec 2023 05:39:18 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+	20231208054118epcas2p1bb98fbd9e0fb6a15e91a9b03d8c09ce3~exMlelct03160631606epcas2p1u;
+	Fri,  8 Dec 2023 05:41:18 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
 	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20231208053918epsmtrp2b7a6676ba19ddc4c06ac7a36b96675dc~exK15GY552373123731epsmtrp2h;
-	Fri,  8 Dec 2023 05:39:18 +0000 (GMT)
-X-AuditID: b6c32a45-3ebfd70000002716-a4-6572ac07480e
+	20231208054118epsmtrp2958e412c6b2a3e5a6a38d437b1243d25~exMldE9ty2518625186epsmtrp2M;
+	Fri,  8 Dec 2023 05:41:18 +0000 (GMT)
+X-AuditID: b6c32a4d-9f7ff70000004a32-f0-6572ac7e950d
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	79.6C.08755.60CA2756; Fri,  8 Dec 2023 14:39:18 +0900 (KST)
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	E8.87.07368.E7CA2756; Fri,  8 Dec 2023 14:41:18 +0900 (KST)
 Received: from tiffany (unknown [10.229.95.142]) by epsmtip1.samsung.com
 	(KnoxPortal) with ESMTPA id
-	20231208053918epsmtip1d5b1cb1fa46d6cf791f4f107d621ecc4~exK1lwyLD0309703097epsmtip1M;
-	Fri,  8 Dec 2023 05:39:18 +0000 (GMT)
-Date: Fri, 8 Dec 2023 14:27:39 +0900
+	20231208054117epsmtip10f9d367f5057e635709e0ea235922862~exMlIWgTu3219832198epsmtip1t;
+	Fri,  8 Dec 2023 05:41:17 +0000 (GMT)
+Date: Fri, 8 Dec 2023 14:29:38 +0900
 From: Hyesoo Yu <hyesoo.yu@samsung.com>
 To: Alexandru Elisei <alexandru.elisei@arm.com>
 Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
@@ -71,139 +71,144 @@ Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
 	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
 	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
 	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 15/27] arm64: mte: Check that tag storage blocks
- are in the same zone
-Message-ID: <20231208052739.GB1359878@tiffany>
+Subject: Re: [PATCH RFC v2 16/27] arm64: mte: Manage tag storage on page
+ allocation
+Message-ID: <20231208052938.GC1359878@tiffany>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ZWh5S9BoO5bG5nQM@raptor>
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta1ATVxjt3d1sAjNxVqTllqplQtXCCCSUx8URp7W0s6X+wDrax3SkK+wA
-	JSRpNtRH6QiIJUaRdy0UEYYSkAmEEpD3m/Joq45opCIog0IlFCixIghiE9Y+/p3vfOfc7zVX
-	hDtdEbqKYhQaVq1g5BLSkbjU7RHoJTSoWam+UYAKjAYSnbt4nURt/RHoaVavEA3eM9uoqSQC
-	zenPAPTI+ARHExl1OOosmiXQhPUsge62lWFoND2XQPWTMxiy1HYTSNv0iEA1924KUEvrAIGu
-	NxWQ6I7hmQD1GC8TqLFgQICyZycBKinbigY7ijCUu/QHidJHhkjUl9aBoTbtGGbT1mMoqWeO
-	RHm3bwOk7VnAUevqEoHqfnosRCkj/uhWabXwzS20odAA6OUnWYBOaRsW0kU18XRKz4yANpV7
-	0jUVp0i6xpolpEdutpB0/3fLBF2cmIvTph+O0w9MeYCeazOTtOmXr+iHNZvDqE9id0azTCSr
-	dmMVEcrIGEVUsOT9feFvh/sHSGVesiAUKHFTMHFssCRkT5jXuzFy2zIlbl8y8ngbFcZwnMRn
-	1061Ml7DukUrOU2whFVFylWBKm+OiePiFVHeClazQyaV+vrbhJ/FRicnVwJVyeYjKYkdZCIo
-	d9EBkQhSfjC3I1gHHEROVAOApkpGBxxt2ApgszkJ54MFAEcmrgjsKrthYchC8olWAMceWAk+
-	mACwtLifsD9LUK/B1MljdgNJbYP9tXpgx86UDxyvswC7Hqd+JuHo979i9sQG6hBMNf61JhJT
-	3jD76imSx+vhQN59wo4dqK0wrWxxrSVI5TrCipMnSL6lEKirLsR5vAFa+mqFPHaFD2dbn2s4
-	eKmkG+PNibZBtXefG96A+ZOpwN41TkVDa30svxd32DO8Vhen1kFt91MhT4uh9hsn3ugO2/WF
-	BI9fhuOVqQJeQsOl03J+JScwuDJqARlgc/7/psn/r1b+WoHtsKjZSvL0K7BsVcRDD2hs8ikC
-	ggrwEqvi4qJYzlcl+/e6Ecq4GrD2sTzfaQDZM396dwFMBLoAFOESZ7H8qpJ1EkcyR4+xamW4
-	Ol7Ocl3A33aZTNz1xQil7WcqNOEyvyCpX0CALNDXXxoocRHfOXk+0omKYjRsLMuqWPU/Pkzk
-	4JqIVeMEpwtaXPzdIdnlUJwJFkS1XyiYd0ubtuhWTkodfOaGN3VmnF/aeSCaea9pY56i21VK
-	X+zfmDAtOBhrFtd/0fd4/45udM68d12/v2bWzGXmHf+gPMTHkH7rmcfsjYTeVbHX5/kj+xuq
-	MksHDgoYY7O7c2RlyzWnvvMH6jTKO8npU2fFRfMxxEZR9scOr370NaHevXtL+LUPE6saf8uu
-	DjW80C4+HJYbnzOU5rs3Zzn025ldh+9jdVNW7dDreZLpo2E38u85pp8JCqg9Ylrp8di0nWg0
-	Fudcpis+JQfHhZaq9NCxbVsv1A7X79HPm13eqi/Un15aXu7U9epl+2IT6n5cLyG4aEbmias5
-	5m/j/7z54QQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbZRjF89779vZS03gtNbvA0phGmLJJRybkTQC3KFlu5uKcJsT4ka2j
-	dxRtS3MvHw7MBMHREVkRgqOVYadAB3aWtUAnH5VBN6kyRwYddVQxdCVAYOg6mBsOpaBx/52c
-	8zs5zx8PiUsaBLFkri6f5XRKjZwQwe4huew5wsaxO8trYlGj3Uag021jBHIPZ6OHtVeE6HrQ
-	t27NlUG01PoJQMv2BzgK1XTh6JLlNkShO6cgmnJbMfSLsR4i18wihuY7hyAy9CxD5AjeEKC+
-	fi9EYz2NBPrV9rcAeexXIfq20StAdbdnAPrKmoCuD1gwVH9/gUDGwASBvq8ewJDb8Bu2zrow
-	VOZZIpBpchIgg2cFR/1r9yHqunxPiCoCKejnlg7hnnjG1mQDzOqDWsBUuG8KGYujgKnwLAoY
-	57lExtF+kmAcd2qFTOBGH8EMN6xC5mxpPc44mz9kZp0mwCy5fQTj/LGECTtkr1JvitJVrCa3
-	kOUULxwWqUNnRoE+GPd+l7MfloKyJ6tAFElTz9MrE/NEFRCREqoX0F+eqIObQQxtDnuxTR1N
-	T1V4BJtQENAOS/M6RJKQepqunCmOMAS1jR7ubAURLaUU9HTXPIjwODVC0Ke+NgsiQTR1hK60
-	392AxFQSXXft5L/LH2O09e44sRk8QXtNtzauwKlE2r82h0XGcCqOtq6RETuKSqCrrX/iNYAy
-	P9IwP9Iw/9+wALwdxLB6Xpuj5ZP1yTq2KIlXavkCXU5Sdp7WATaeJ/HZi8DV/nvSIMBIMAho
-	EpdLxZpreaxErFIeK2a5vENcgYblB0EcCeVbxFtmq1USKkeZz77HsnqW+y/FyKjYUsxoWFnY
-	V69THC0+8Ub7yF8pI1c6M4teK8zIgKoCTpEl6RVhGoZvyDKWxcu4osckUsnNA+MdzYHlPaYf
-	zNPd6fqj3fcmzFVzav/WF5tSQkuyC++4vKrTs/jCgcIdpsxtfZk130gnX0/TDapvBfwto0d2
-	hssNYfXQ6q6XLzfprgrSK32K1HfP7gg/nj9r2/72wO7ogGtm7/l90/HH3trvaPtOv32r6eBH
-	lx5m8H+k+cqfOm75PHjm0CsvLfZkpcmytSVtqeOE3ZR7MKbFt9oqzE39CfVcTPCP7Yqamt4L
-	sRS84wPj+f79o6PiC8qS7k+fOXw8dG733Gcmp/QL0m9N6y30ySGvViYn4hyv/AcLkeWFqwMA
-	AA==
-X-CMS-MailID: 20231208053918epcas2p3b3b14464cfaf4906f09bccce59a50ce9
+In-Reply-To: <ZWc9sVTCHTBcp2Z2@raptor>
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1ATVxTG5+4um4BFF7D1mnaEiUWEaSBJgVxaaO2IzKq1g9oOTlExQ5ZH
+	gSSTBCut5S1EpoCkYg2ig8NLaSoY3q/IqwLSlioVWh6iKFCxwAwUrPJqYLXjf7/z3fOdc+69
+	c7i47R8cHjdcrmFUcmkkn7QiqlqdPQWxBhUjzK8Vo9xSA4m+v9pDIlNHMFrS3eSgOw/vmqXH
+	CQSaLvoWoLnS5zgaPVOJo+a8KQKNzmQQaNhUjKGhzGwCVY9NYmiiopVA2ro5Ahkf9lqghsZO
+	AvXU5ZLonmHFArWV/kKg2txOC/Td1BhA+cXb0J2mPAxlP/ubRJmDfSRqT2/CkEl7HzPnVmMo
+	oW2aRPqBAYC0bfM4alx+RqDKn55yUPKgB/qzsIyzw5E2XDIAeuG5DtDJpn4OnWeMppPbJi3o
+	8isutLHkNEkbZ3QcerC3gaQ7zi8Q9OX4bJwuL4ij/yrXA3radJeky7u+pmeNW/ypzyO8wxip
+	jFE5MPJghSxcHurD33swaGeQh6dQJBB5IQnfQS6NYnz4vh/7C/zCI82PyXc4Lo2MNkv+UrWa
+	7/aBt0oRrWEcwhRqjQ+fUcoilRKlq1oapY6Wh7rKGc17IqFQ7GFOPBYRdu36P7iy+qMTk01Z
+	ZDwYEacBSy6k3OFV/X1OGrDi2lINAJ4evkGywQyA3frfCTaYB1C3UI+9tIyPnMXYg0YACyZL
+	ABuMAlh3fYpczSKot2Fv/21ilUnKCXZUFIFV3ki5wZHKiTUDTt0i4dCFn9fK2lGfwZK+YXyV
+	rSlXmJa+SLBsAzv1j9bYktoGTQtL+KoZUhlWsOXaWcDO5AsHJ2YtWLaDE+0VHJZ5cHaqkWRZ
+	DavyWzHWHA9guZbtBql3Yc5Y6lohnAqDen2mmblmfSts6ydYeT3Uti5xWNkaalNsWedWeKPo
+	EsHyZjjyY+qLEWi4XFP04lWTMGi40IudAVtyXrlPzivdWH4H5tXPkDnmFjj1Jixe5rLoDEvr
+	3PKARQngMUp1VCgTLFaKBHLmy///OVgRZQRrK+ayrwY8KV1ybQEYF7QAyMX5G60juxWMrbVM
+	GvMVo1IEqaIjGXUL8DD/UBbOez1YYd5RuSZI5O4ldPf0FEnEHkIJf5P1vVMXZbZUqFTDRDCM
+	klG99GFcS148VhCAS98fOngqqdNbVnggIOXWBrfi8YTwXXNOfiHl4ix/q4IDR58uBhrao0y8
+	9H/nHx1rG48dcsxSfQEOnbRbiV1ZrpnYMxD4TcrID83u5wqr92uP7Fo3G2vCjDn2j9+wd7nS
+	ek4g2S15IBNvqvut6XL39NG4/i5tfRZ/YfJD4QPY3HXCv259EHO8cvseSdPhwL1VIem6X8n9
+	LRh6K5WbxktKULwGPzkktvGeTsj0Z3YHLcQs6rjOAWX5m2/bpR5Jz7InHQU2suium7KywZDD
+	AZodlJPXvkS37bqQxNqpJzEpTIVvaKLw/M51Sz19SRmtXXETgbEqFfZpu7jYb8PJiwWVfEId
+	JhW54Cq19D8uG+JY6wQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xTZxjH855zenog6zxWlr0gEtcMJU0sNkh4YozDJY6zzA+LbmQxi9i0
+	Z4CWwlphUzcHW0XWCDSdTNoxrPEC6xrRtggWaRh0rg0aHUodl1ECA5WtYLjIgFFHaZb57Zf/
+	7fnyMKTYLEhg8jVHeK1GoZbQsdT1LknSlhN2Lb/12pWXoK7JTsPZH+7T4PEpYdl0Swg9o70r
+	0pMyCqYun0Yw17RIwpixmYSfrJMUjE1XURD0NBDwe3UNBS3jIQImXF0UVLjnKHCMBgRws91P
+	wX13HQ1D9ucC8DbdoeBGnV8A30yOI7jQsAl6OqwE1Cz8RUP14EMafqnsIMBTMUysZFsIKPNO
+	0WAeGEBQ4X1GQnt4gYLmn+eFoB9Mh75LV4WZyZy93o64pUUT4vSefiFndRRzem9IwDkbpZzD
+	9jXNOaZNQm4wcJPmfLVLFHe+tIbknBe/4B47zYib8vTSnLP7ODfjSHqX3R+7Q8Wr80t4berO
+	g7F5C38OEkXzOz+9s1xFlqK2rQYUw2B2G340coYwoFhGzLYhfK6lVhA14rFlxk9EeR0O6r2C
+	aGgU4d6yq6sGxb6OA/2/UhGm2c3Y57qMIhzHpuKR5gkUKZDsbRpX/WhZXV3Hvo9tD4NkhEWs
+	DBsq/6GiqycJ3PHUIIgaa7Hf/MfqKslK8W/hJyvXmBVejxvCTESOYTdhz9IyaUSs5YWG5YWG
+	5f+GFZE2FM8X6QpyC5TyIrmG/0SmUxToijW5MmVhgQOtfo80pRUNnQvLOhHBoE6EGVISJ1Lf
+	LeTFIpXi6DFeW5ijLVbzuk60nqEkr4rktd+pxGyu4gh/mOeLeO1/LsHEJJQS3QmHngUnp639
+	yriUFLsyfUN79hrbg2RSlFk9n60b8F1Y9ska/0bv5F3rmxybKivXuA7ayncE5jJ2qdyS4qOP
+	yKBx91u4fHvihOxe/fOMhO6ziVtyhodTzLOte1/2de3dv+uSO0n7pv5E81jaKxtn+g7dyzLJ
+	j886HPPGDQeY+H0Nb3/gTb3YmAWBw2kHTiflDC/cuuGrrVeHWHwqOXNC+1Xo+mv2mI7K9o1n
+	vo9zLW2vtJg+79ltKplx7Rv/uPR2SJX/pdKf7novW3ysf9tHxGfVibmza6+c/PCNb8mKzQ+m
+	3VmniFljd/pQmkHbtkbqbzsffszcdbaK9iw+3ZOWUTIioXR5CrmU1OoU/wJa/2McrAMAAA==
+X-CMS-MailID: 20231208054118epcas2p1bb98fbd9e0fb6a15e91a9b03d8c09ce3
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----jVQIulvRnesfT.0dBTaAFRklTpdxk.gFV3lmrScQ3G3ZF59d=_93327_"
+	boundary="----xhiRNYr7C6p2kRFttE2KPojvpONXRQ6l4raSmD__Jn20cHwF=_9337f_"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231119165900epcas2p3efd0f3ac19b7bcf7883e8d3945e63326
+X-CMS-RootMailID: 20231119165906epcas2p4c6691d274bec428329b193b99119a8d1
 References: <20231119165721.9849-1-alexandru.elisei@arm.com>
-	<CGME20231119165900epcas2p3efd0f3ac19b7bcf7883e8d3945e63326@epcas2p3.samsung.com>
-	<20231119165721.9849-16-alexandru.elisei@arm.com>
-	<20231129085744.GB2988384@tiffany> <ZWh5S9BoO5bG5nQM@raptor>
+	<CGME20231119165906epcas2p4c6691d274bec428329b193b99119a8d1@epcas2p4.samsung.com>
+	<20231119165721.9849-17-alexandru.elisei@arm.com>
+	<20231129091040.GC2988384@tiffany> <ZWc9sVTCHTBcp2Z2@raptor>
 
-------jVQIulvRnesfT.0dBTaAFRklTpdxk.gFV3lmrScQ3G3ZF59d=_93327_
+------xhiRNYr7C6p2kRFttE2KPojvpONXRQ6l4raSmD__Jn20cHwF=_9337f_
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 
-Hi~
+Hi.
 
-On Thu, Nov 30, 2023 at 12:00:11PM +0000, Alexandru Elisei wrote:
+On Wed, Nov 29, 2023 at 01:33:37PM +0000, Alexandru Elisei wrote:
 > Hi,
 > 
-> On Wed, Nov 29, 2023 at 05:57:44PM +0900, Hyesoo Yu wrote:
-> > On Sun, Nov 19, 2023 at 04:57:09PM +0000, Alexandru Elisei wrote:
-> > > alloc_contig_range() requires that the requested pages are in the same
-> > > zone. Check that this is indeed the case before initializing the tag
-> > > storage blocks.
-> > > 
-> > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> > > ---
-> > >  arch/arm64/kernel/mte_tag_storage.c | 33 +++++++++++++++++++++++++++++
-> > >  1 file changed, 33 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_tag_storage.c
-> > > index 8b9bedf7575d..fd63430d4dc0 100644
-> > > --- a/arch/arm64/kernel/mte_tag_storage.c
-> > > +++ b/arch/arm64/kernel/mte_tag_storage.c
-> > > @@ -265,6 +265,35 @@ void __init mte_tag_storage_init(void)
-> > >  	}
-> > >  }
-> > >  
-> > > +/* alloc_contig_range() requires all pages to be in the same zone. */
-> > > +static int __init mte_tag_storage_check_zone(void)
+> On Wed, Nov 29, 2023 at 06:10:40PM +0900, Hyesoo Yu wrote:
+> > On Sun, Nov 19, 2023 at 04:57:10PM +0000, Alexandru Elisei wrote:
+> > > [..]
+> > > +static int order_to_num_blocks(int order)
 > > > +{
-> > > +	struct range *tag_range;
-> > > +	struct zone *zone;
-> > > +	unsigned long pfn;
-> > > +	u32 block_size;
-> > > +	int i, j;
+> > > +	return max((1 << order) / 32, 1);
+> > > +}
+> > > [..]
+> > > +int reserve_tag_storage(struct page *page, int order, gfp_t gfp)
+> > > +{
+> > > +	unsigned long start_block, end_block;
+> > > +	struct tag_region *region;
+> > > +	unsigned long block;
+> > > +	unsigned long flags;
+> > > +	unsigned int tries;
+> > > +	int ret = 0;
 > > > +
-> > > +	for (i = 0; i < num_tag_regions; i++) {
-> > > +		block_size = tag_regions[i].block_size;
-> > > +		if (block_size == 1)
-> > > +			continue;
+> > > +	VM_WARN_ON_ONCE(!preemptible());
 > > > +
-> > > +		tag_range = &tag_regions[i].tag_range;
-> > > +		for (pfn = tag_range->start; pfn <= tag_range->end; pfn += block_size) {
-> > > +			zone = page_zone(pfn_to_page(pfn));
+> > > +	if (page_tag_storage_reserved(page))
+> > > +		return 0;
+> > > +
+> > > +	/*
+> > > +	 * __alloc_contig_migrate_range() ignores gfp when allocating the
+> > > +	 * destination page for migration. Regardless, massage gfp flags and
+> > > +	 * remove __GFP_TAGGED to avoid recursion in case gfp stops being
+> > > +	 * ignored.
+> > > +	 */
+> > > +	gfp &= ~__GFP_TAGGED;
+> > > +	if (!(gfp & __GFP_NORETRY))
+> > > +		gfp |= __GFP_RETRY_MAYFAIL;
+> > > +
+> > > +	ret = tag_storage_find_block(page, &start_block, &region);
+> > > +	if (WARN_ONCE(ret, "Missing tag storage block for pfn 0x%lx", page_to_pfn(page)))
+> > > +		return 0;
+> > > +	end_block = start_block + order_to_num_blocks(order) * region->block_size;
+> > > +
 > > 
 > > Hello.
 > > 
-> > Since the blocks within the tag_range must all be in the same zone, can we move the "page_zone"
-> > out of the loop ?
-> `
-> Hmm.. why do you say that the pages in a tag_range must be in the same
-> zone? I am not very familiar with how the memory management code puts pages
-> into zones, but I would imagine that pages in a tag range straddling the
-> 4GB limit (so, let's say, from 3GB to 5GB) will end up in both ZONE_DMA and
-> ZONE_NORMAL.
+> > If the page size is 4K,  block size is 2 (block size bytes 8K), and order is 6,
+> > then we need 2 pages for the tag. However according to the equation, order_to_num_blocks
+> > is 2 and block_size is also 2, so end block will be incremented by 4.
+> > 
+> > However we actually only need 8K of tag, right for 256K ?
+> > Could you explain order_to_num_blocks * region->block_size more detail ?
+> 
+> I think you are correct, thank you for pointing it out. The formula should
+> probably be something like:
+> 
+> static int order_to_num_blocks(int order, u32 block_size)
+> {
+> 	int num_tag_pages = max((1 << order) / 32, 1);
+> 
+> 	return DIV_ROUND_UP(num_tag_pages, block_size);
+> }
+> 
+> and that will make end_block = start_block + 2 in your scenario.
+> 
+> Does that look correct to you?
 > 
 > Thanks,
 > Alex
 > 
 
-Oh, I see that reserve_tag_storage only calls alloc_contig_rnage in units of block_size,
-I thought it could be called for the entire range the page needed at once.
-(Maybe it could be a bit faster ? It doesn't seem like unnecessary drain and
-other operation are repeated.)
-
-If we use the cma code when activating the tag storage, it will be error if the
-entire area of tag region is not in the same zone, so there should be a constraint
-that it must be in the same zone when defining the tag region on device tree.
+That looks great!
 
 Thanks,
 Regards.
@@ -212,32 +217,155 @@ Regards.
 > > Thanks,
 > > Regards.
 > > 
-> > > +			for (j = 1; j < block_size; j++) {
-> > > +				if (page_zone(pfn_to_page(pfn + j)) != zone) {
-> > > +					pr_err("Tag storage block pages in different zones");
-> > > +					return -EINVAL;
-> > > +				}
-> > > +			}
+> > > +	mutex_lock(&tag_blocks_lock);
+> > > +
+> > > +	/* Check again, this time with the lock held. */
+> > > +	if (page_tag_storage_reserved(page))
+> > > +		goto out_unlock;
+> > > +
+> > > +	/* Make sure existing entries are not freed from out under out feet. */
+> > > +	xa_lock_irqsave(&tag_blocks_reserved, flags);
+> > > +	for (block = start_block; block < end_block; block += region->block_size) {
+> > > +		if (tag_storage_block_is_reserved(block))
+> > > +			block_ref_add(block, region, order);
+> > > +	}
+> > > +	xa_unlock_irqrestore(&tag_blocks_reserved, flags);
+> > > +
+> > > +	for (block = start_block; block < end_block; block += region->block_size) {
+> > > +		/* Refcount incremented above. */
+> > > +		if (tag_storage_block_is_reserved(block))
+> > > +			continue;
+> > > +
+> > > +		tries = 3;
+> > > +		while (tries--) {
+> > > +			ret = alloc_contig_range(block, block + region->block_size, MIGRATE_CMA, gfp);
+> > > +			if (ret == 0 || ret != -EBUSY)
+> > > +				break;
 > > > +		}
+> > > +
+> > > +		if (ret)
+> > > +			goto out_error;
+> > > +
+> > > +		ret = tag_storage_reserve_block(block, region, order);
+> > > +		if (ret) {
+> > > +			free_contig_range(block, region->block_size);
+> > > +			goto out_error;
+> > > +		}
+> > > +
+> > > +		count_vm_events(CMA_ALLOC_SUCCESS, region->block_size);
 > > > +	}
 > > > +
-> > > +	 return 0;
+> > > +	page_set_tag_storage_reserved(page, order);
+> > > +out_unlock:
+> > > +	mutex_unlock(&tag_blocks_lock);
+> > > +
+> > > +	return 0;
+> > > +
+> > > +out_error:
+> > > +	xa_lock_irqsave(&tag_blocks_reserved, flags);
+> > > +	for (block = start_block; block < end_block; block += region->block_size) {
+> > > +		if (tag_storage_block_is_reserved(block) &&
+> > > +		    block_ref_sub_return(block, region, order) == 1) {
+> > > +			__xa_erase(&tag_blocks_reserved, block);
+> > > +			free_contig_range(block, region->block_size);
+> > > +		}
+> > > +	}
+> > > +	xa_unlock_irqrestore(&tag_blocks_reserved, flags);
+> > > +
+> > > +	mutex_unlock(&tag_blocks_lock);
+> > > +
+> > > +	count_vm_events(CMA_ALLOC_FAIL, region->block_size);
+> > > +
+> > > +	return ret;
 > > > +}
 > > > +
-> > >  static int __init mte_tag_storage_activate_regions(void)
-> > >  {
-> > >  	phys_addr_t dram_start, dram_end;
-> > > @@ -321,6 +350,10 @@ static int __init mte_tag_storage_activate_regions(void)
-> > >  		goto out_disabled;
-> > >  	}
-> > >  
-> > > +	ret = mte_tag_storage_check_zone();
-> > > +	if (ret)
-> > > +		goto out_disabled;
+> > > +void free_tag_storage(struct page *page, int order)
+> > > +{
+> > > +	unsigned long block, start_block, end_block;
+> > > +	struct tag_region *region;
+> > > +	unsigned long flags;
+> > > +	int ret;
 > > > +
-> > >  	for (i = 0; i < num_tag_regions; i++) {
-> > >  		tag_range = &tag_regions[i].tag_range;
-> > >  		for (pfn = tag_range->start; pfn <= tag_range->end; pfn += pageblock_nr_pages)
+> > > +	ret = tag_storage_find_block(page, &start_block, &region);
+> > > +	if (WARN_ONCE(ret, "Missing tag storage block for pfn 0x%lx", page_to_pfn(page)))
+> > > +		return;
+> > > +
+> > > +	end_block = start_block + order_to_num_blocks(order) * region->block_size;
+> > > +
+> > > +	xa_lock_irqsave(&tag_blocks_reserved, flags);
+> > > +	for (block = start_block; block < end_block; block += region->block_size) {
+> > > +		if (WARN_ONCE(!tag_storage_block_is_reserved(block),
+> > > +		    "Block 0x%lx is not reserved for pfn 0x%lx", block, page_to_pfn(page)))
+> > > +			continue;
+> > > +
+> > > +		if (block_ref_sub_return(block, region, order) == 1) {
+> > > +			__xa_erase(&tag_blocks_reserved, block);
+> > > +			free_contig_range(block, region->block_size);
+> > > +		}
+> > > +	}
+> > > +	xa_unlock_irqrestore(&tag_blocks_reserved, flags);
+> > > +}
+> > > diff --git a/fs/proc/page.c b/fs/proc/page.c
+> > > index 195b077c0fac..e7eb584a9234 100644
+> > > --- a/fs/proc/page.c
+> > > +++ b/fs/proc/page.c
+> > > @@ -221,6 +221,7 @@ u64 stable_page_flags(struct page *page)
+> > >  #ifdef CONFIG_ARCH_USES_PG_ARCH_X
+> > >  	u |= kpf_copy_bit(k, KPF_ARCH_2,	PG_arch_2);
+> > >  	u |= kpf_copy_bit(k, KPF_ARCH_3,	PG_arch_3);
+> > > +	u |= kpf_copy_bit(k, KPF_ARCH_4,	PG_arch_4);
+> > >  #endif
+> > >  
+> > >  	return u;
+> > > diff --git a/include/linux/kernel-page-flags.h b/include/linux/kernel-page-flags.h
+> > > index 859f4b0c1b2b..4a0d719ffdd4 100644
+> > > --- a/include/linux/kernel-page-flags.h
+> > > +++ b/include/linux/kernel-page-flags.h
+> > > @@ -19,5 +19,6 @@
+> > >  #define KPF_SOFTDIRTY		40
+> > >  #define KPF_ARCH_2		41
+> > >  #define KPF_ARCH_3		42
+> > > +#define KPF_ARCH_4		43
+> > >  
+> > >  #endif /* LINUX_KERNEL_PAGE_FLAGS_H */
+> > > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> > > index a88e64acebfe..7915165a51bd 100644
+> > > --- a/include/linux/page-flags.h
+> > > +++ b/include/linux/page-flags.h
+> > > @@ -135,6 +135,7 @@ enum pageflags {
+> > >  #ifdef CONFIG_ARCH_USES_PG_ARCH_X
+> > >  	PG_arch_2,
+> > >  	PG_arch_3,
+> > > +	PG_arch_4,
+> > >  #endif
+> > >  	__NR_PAGEFLAGS,
+> > >  
+> > > diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+> > > index 6ca0d5ed46c0..ba962fd10a2c 100644
+> > > --- a/include/trace/events/mmflags.h
+> > > +++ b/include/trace/events/mmflags.h
+> > > @@ -125,7 +125,8 @@ IF_HAVE_PG_HWPOISON(hwpoison)						\
+> > >  IF_HAVE_PG_IDLE(idle)							\
+> > >  IF_HAVE_PG_IDLE(young)							\
+> > >  IF_HAVE_PG_ARCH_X(arch_2)						\
+> > > -IF_HAVE_PG_ARCH_X(arch_3)
+> > > +IF_HAVE_PG_ARCH_X(arch_3)						\
+> > > +IF_HAVE_PG_ARCH_X(arch_4)
+> > >  
+> > >  #define show_page_flags(flags)						\
+> > >  	(flags) ? __print_flags(flags, "|",				\
+> > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > > index f31f02472396..9beead961a65 100644
+> > > --- a/mm/huge_memory.c
+> > > +++ b/mm/huge_memory.c
+> > > @@ -2474,6 +2474,7 @@ static void __split_huge_page_tail(struct folio *folio, int tail,
+> > >  #ifdef CONFIG_ARCH_USES_PG_ARCH_X
+> > >  			 (1L << PG_arch_2) |
+> > >  			 (1L << PG_arch_3) |
+> > > +			 (1L << PG_arch_4) |
+> > >  #endif
+> > >  			 (1L << PG_dirty) |
+> > >  			 LRU_GEN_MASK | LRU_REFS_MASK));
 > > > -- 
 > > > 2.42.1
 > > > 
@@ -246,9 +374,9 @@ Regards.
 > 
 > 
 
-------jVQIulvRnesfT.0dBTaAFRklTpdxk.gFV3lmrScQ3G3ZF59d=_93327_
+------xhiRNYr7C6p2kRFttE2KPojvpONXRQ6l4raSmD__Jn20cHwF=_9337f_
 Content-Type: text/plain; charset="utf-8"
 
 
-------jVQIulvRnesfT.0dBTaAFRklTpdxk.gFV3lmrScQ3G3ZF59d=_93327_--
+------xhiRNYr7C6p2kRFttE2KPojvpONXRQ6l4raSmD__Jn20cHwF=_9337f_--
 
