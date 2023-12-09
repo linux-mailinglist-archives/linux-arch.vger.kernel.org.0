@@ -1,523 +1,216 @@
-Return-Path: <linux-arch+bounces-851-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-852-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 124B580B29B
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 08:01:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2525A80B2DF
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 08:48:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE4CC281106
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 07:01:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 561E91C208F8
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 07:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E001FA7;
-	Sat,  9 Dec 2023 07:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC8253A1;
+	Sat,  9 Dec 2023 07:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PSFHaeIs"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AJQsVypa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91C91BE7;
-	Fri,  8 Dec 2023 23:00:57 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id af79cd13be357-77f335002cfso150125585a.3;
-        Fri, 08 Dec 2023 23:00:57 -0800 (PST)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D210CF
+	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 23:48:31 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-54c77d011acso2731a12.1
+        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 23:48:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702105257; x=1702710057; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f0/QsDUqVOH9BytpPr3Z53rXKvjz2DVO81ae22Cz4+M=;
-        b=PSFHaeIsQxT3fPp6v+QLIMdBumke8orGESvleO4YlR2NesdtdLebrfIWTh3GeLJEoX
-         GHnBrM44EsYOsOxWS2DPAQUD3S4sS98BtE1i6x/K7PoJ3OsePTMm5wObnmk5PqhdN7Ry
-         VO0pteh6G1vz22Lr6bzCSXxyCy1fvwU7C2XM0GzcaAiQV0st8SAMFCRxEDvCx+MVsXNH
-         cI5JSLqV1/V3u/nP180g4D21p0KRm05YqDidTURza/YQ5SRliY5ntxZRelzATan6aicq
-         /VrjhodbVxHopin9rrR6Kjz7K9YteFqKZ1WDyjMrDLl0iR7PR63454iQptro2KgsaARP
-         Gbvg==
+        d=google.com; s=20230601; t=1702108110; x=1702712910; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TOkI/qNpXnQUo7poksTcJUgY7Kvb1yTBe3o4K2cS2v8=;
+        b=AJQsVypaHw5xB0xl8V+iGzcjZUXwCAhOY7zFkCYpVJhunn32A/LVyg1bnYPFJD8UWR
+         +LEMs5RvsS72PwLK7ub4GKMFtFupPV4kboNkZU02zn7FxgvsCwKLrTkJXuGFV8bfFt6o
+         Dtvrs+l1y2nQZKaHStiuVZ0V1n8L9GpszlnfPE/B911Py1g5k1cGCZJHr5i1FzuFO8wR
+         C7zzbwlLyMdxUY99Ru7N0H8xLzOL2YArv8uUacKVpbN2AKi5TS9gOhTbTZ3n7GexJAoX
+         4QdiXAcRNC0qfoa19TjeqXo//KGReefWAUqza+q0hy+wmKkCcJdSDhFRmzgxr62t0gbv
+         CMmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702105257; x=1702710057;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f0/QsDUqVOH9BytpPr3Z53rXKvjz2DVO81ae22Cz4+M=;
-        b=Bmzo/qnJSUGfxLkNJUz3akZt2g4PbZTTh/XfhqxJGeyKyJE4SyVsy2MB1xgZnpgkWn
-         eMPvbaswRpcBfTRfb7JTLj6ayOQzFdcCxs6nh8BlGCxkU/AuYAMX27dwKMwpKjk6JuLi
-         OvS9i3NS9upLLnQbi7wIawoA9xKwIb1ZHjzwAAa1LBRSs6u3NDXTBuYf9LWl4Czm9Vf2
-         B3FW6WSAYGQH7kIW8jFF7+e9nnw+yKcjKjWj6FfsfUl3u0oiYwmLirWhVf0BnqbbNrdd
-         Mq34FVHK4HLJxdkC5B5irUgw8GYWND5kwWMg7MKnndjDw6kuoYTG84fYdGuZWzMAuw0o
-         c9aw==
-X-Gm-Message-State: AOJu0YzldZiQ2qug1vLpg+iY/qz1fcPluH5iZVefyj+QEeq+DQsNKFfz
-	FEkwoteq2psWl6zFfSpcSw==
-X-Google-Smtp-Source: AGHT+IHzzAJgvXXv0VkKyzYw1q1C6HSp7DMbEqYwJaHNuPCI+sjP7dceW1TF3ra6bNoategdmsIdnQ==
-X-Received: by 2002:a05:620a:370e:b0:77e:fba3:a23a with SMTP id de14-20020a05620a370e00b0077efba3a23amr1474903qkb.148.1702105256885;
-        Fri, 08 Dec 2023 23:00:56 -0800 (PST)
-Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id x8-20020a81b048000000b005df5d592244sm326530ywk.78.2023.12.08.23.00.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 23:00:56 -0800 (PST)
-From: Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To: linux-mm@kvack.org
-Cc: linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	arnd@arndb.de,
-	tglx@linutronix.de,
-	luto@kernel.org,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	mhocko@kernel.org,
-	tj@kernel.org,
-	ying.huang@intel.com,
-	gregory.price@memverge.com,
-	corbet@lwn.net,
-	rakie.kim@sk.com,
-	hyeongtak.ji@sk.com,
-	honggyu.kim@sk.com,
-	vtavarespetr@micron.com,
-	peterz@infradead.org,
-	jgroves@micron.com,
-	ravis.opensrc@micron.com,
-	sthanneeru@micron.com,
-	emirakhur@micron.com,
-	Hasan.Maruf@amd.com,
-	seungjun.ha@samsung.com,
-	Gregory Price <gregory@gregoryprice.net>
-Subject: [PATCH v2 11/11] mm/mempolicy: extend set_mempolicy2 and mbind2 to support weighted interleave
-Date: Sat,  9 Dec 2023 01:59:33 -0500
-Message-Id: <20231209065931.3458-12-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20231209065931.3458-1-gregory.price@memverge.com>
-References: <20231209065931.3458-1-gregory.price@memverge.com>
+        d=1e100.net; s=20230601; t=1702108110; x=1702712910;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TOkI/qNpXnQUo7poksTcJUgY7Kvb1yTBe3o4K2cS2v8=;
+        b=tS7s9/1LoZjds8GUYeAP/PRwa6MzVC00MRNSE17mpIkkXfPCBrkm2pbTmv/ewwrPQ6
+         4Scw+KioK24yfP4A4/+kFQ3XvJvQ2vTvuuxSdyXcg021g9gpfHS9w4I03wWjJVj0Vrfr
+         qY+mEfv/ElNWVLT77/Jt56141OGnrX/xFyEAEDYM1zSc972L7R6go1L2+eHh825FdfaZ
+         PXTtC5z7tjoNa+wLI+mKWlyUhExVz//mTB9OAVsYKEiCN3nlxVPG4xFV6dd9WxGRAfMh
+         MZ+7VRMev28fFTmuYK5pFz6v0CHI4OlfFc2ZFO6hEXJZnLaj3hKcZnXDcEn34oGyEpT5
+         GKFg==
+X-Gm-Message-State: AOJu0Yy5m+x3JeERVOB942xsi/U1Wu+NgpcPbduRfCxye0xNg3IeoO2E
+	f2uNV+RlOYjWQeU6xJCfoTXNLFND5njF9MmNPInOig==
+X-Google-Smtp-Source: AGHT+IHtDOYCaJe3OJ2vmWISpPp5/Y0F/uE6kJGg3viAxXnuehSZrlDqfWmDNEV73NA1+s5mUTAqY5Hv/1SNs96ss2s=
+X-Received: by 2002:a50:d643:0:b0:54b:321:ef1a with SMTP id
+ c3-20020a50d643000000b0054b0321ef1amr135735edj.6.1702108110034; Fri, 08 Dec
+ 2023 23:48:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231204221932.1465004-1-rmoar@google.com>
+In-Reply-To: <20231204221932.1465004-1-rmoar@google.com>
+From: David Gow <davidgow@google.com>
+Date: Sat, 9 Dec 2023 15:48:17 +0800
+Message-ID: <CABVgOS=5Y_CrTZ4hs57UGdR_p1aK2+1w2-aZ9EVELsbRdVvqTg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] kunit: move KUNIT_TABLE out of INIT_DATA
+To: Rae Moar <rmoar@google.com>
+Cc: shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev, 
+	sadiyakazi@google.com, keescook@chromium.org, arnd@arndb.de, 
+	linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000004b74d2060c0eedaa"
 
-From: Gregory Price <gregory@gregoryprice.net>
+--0000000000004b74d2060c0eedaa
+Content-Type: text/plain; charset="UTF-8"
 
-Extend set_mempolicy2 and mbind2 to support weighted interleave, and
-demonstrate the extensibility of the mpol_args structure.
+On Tue, 5 Dec 2023 at 06:19, Rae Moar <rmoar@google.com> wrote:
+>
+> Alter the linker section of KUNIT_TABLE to move it out of INIT_DATA and
+> into DATA_DATA.
+>
+> Data for KUnit tests does not need to be in the init section.
+>
+> In order to run tests again after boot the KUnit data cannot be labeled as
+> init data as the kernel could write over it.
+>
+> Add a KUNIT_INIT_TABLE in the next patch for KUnit tests that test init
+> data/functions.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
 
-To support weighted interleave we add interleave weight fields to the
-following structures:
+I think this actually fixes a potential bug, as we loop through the
+list of suites after init has ended in the debugfs logic.
 
-Kernel Internal:  (include/linux/mempolicy.h)
-struct mempolicy {
-	/* task-local weights to apply to weighted interleave */
-	unsigned char weights[MAX_NUMNODES];
-}
-struct mempolicy_args {
-	/* Optional: interleave weights for MPOL_WEIGHTED_INTERLEAVE */
-	unsigned char *il_weights;	/* of size MAX_NUMNODES */
-}
+So maybe this is:
+Fixes: 90a025a859a3 ("vmlinux.lds.h: add linker section for KUnit test suites")
 
-UAPI: (/include/uapi/linux/mempolicy.h)
-struct mpol_args {
-	/* Optional: interleave weights for MPOL_WEIGHTED_INTERLEAVE */
-	unsigned char *il_weights;	/* of size pol_max_nodes */
-}
+Regardless, I'd love to get this in, even if we don't manage to get
+the rest of the series in soon.
 
-The task-local weights are a single, one-dimensional array of weights
-that apply to all possible nodes on the system.  If a node is set in
-the mempolicy nodemask, the weight in `il_weights` must be >= 1,
-otherwise set_mempolicy2() will return -EINVAL.  If a node is not
-set in pol_nodemask, the weight will default to `1` in the task policy.
+Reviewed-by: David Gow <davidgow@google.com>
 
-The default value of `1` is required to handle the situation where a
-task migrates to a set of nodes for which weights were not set (up to
-and including the local numa node).  For example, a migrated task whose
-nodemask changes entirely will have all its weights defaulted back
-to `1`, or if the nodemask changes to include a mix of nodes that
-were not previously accounted for - the weighted interleave may be
-suboptimal.
+Cheers,
+-- David
 
-If migrations are expected, a task should prefer not to use task-local
-interleave weights, and instead utilize the global settings for natural
-re-weighting on migration.
+>  include/asm-generic/vmlinux.lds.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index bae0fe4d499b..1107905d37fc 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -370,7 +370,8 @@
+>         BRANCH_PROFILE()                                                \
+>         TRACE_PRINTKS()                                                 \
+>         BPF_RAW_TP()                                                    \
+> -       TRACEPOINT_STR()
+> +       TRACEPOINT_STR()                                                \
+> +       KUNIT_TABLE()
+>
+>  /*
+>   * Data section helpers
+> @@ -699,8 +700,7 @@
+>         THERMAL_TABLE(governor)                                         \
+>         EARLYCON_TABLE()                                                \
+>         LSM_TABLE()                                                     \
+> -       EARLY_LSM_TABLE()                                               \
+> -       KUNIT_TABLE()
+> +       EARLY_LSM_TABLE()
+>
+>  #define INIT_TEXT                                                      \
+>         *(.init.text .init.text.*)                                      \
+>
+> base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+> --
+> 2.43.0.rc2.451.g8631bc7472-goog
+>
 
-To support global vs local weighting,  we add the kernel-internal flag:
-MPOL_F_GWEIGHT (1 << 5) /* Utilize global weights */
+--0000000000004b74d2060c0eedaa
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-This flag is set when il_weights is omitted by set_mempolicy2(), or
-when MPOL_WEIGHTED_INTERLEAVE is set by set_mempolicy(). This internal
-mode_flag dictates whether global weights or task-local weights are
-utilized by the the various weighted interleave functions:
-
-* weighted_interleave_nodes
-* weighted_interleave_nid
-* alloc_pages_bulk_array_weighted_interleave
-
-if (pol->flags & MPOL_F_GWEIGHT)
-	pol_weights = iw_table[numa_node_id()].weights;
-else
-	pol_weights = pol->wil.weights;
-
-To simplify creations and duplication of mempolicies, the weights are
-added as a structure directly within mempolicy. This allows the
-existing logic in __mpol_dup to copy the weights without additional
-allocations:
-
-if (old == current->mempolicy) {
-	task_lock(current);
-	*new = *old;
-	task_unlock(current);
-} else
-	*new = *old
-
-Suggested-by: Rakie Kim <rakie.kim@sk.com>
-Suggested-by: Hyeongtak Ji <hyeongtak.ji@sk.com>
-Suggested-by: Honggyu Kim <honggyu.kim@sk.com>
-Suggested-by: Vinicius Tavares Petrucci <vtavarespetr@micron.com>
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
-Co-developed-by: Rakie Kim <rakie.kim@sk.com>
-Signed-off-by: Rakie Kim <rakie.kim@sk.com>
-Co-developed-by: Hyeongtak Ji <hyeongtak.ji@sk.com>
-Signed-off-by: Hyeongtak Ji <hyeongtak.ji@sk.com>
-Co-developed-by: Honggyu Kim <honggyu.kim@sk.com>
-Signed-off-by: Honggyu Kim <honggyu.kim@sk.com>
-Co-developed-by: Vinicius Tavares Petrucci <vtavarespetr@micron.com>
-Signed-off-by: Vinicius Tavares Petrucci <vtavarespetr@micron.com>
----
- .../admin-guide/mm/numa_memory_policy.rst     |  10 ++
- include/linux/mempolicy.h                     |   2 +
- include/uapi/linux/mempolicy.h                |   2 +
- mm/mempolicy.c                                | 105 +++++++++++++++++-
- 4 files changed, 115 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
-index f1ba33de3a6e..84c076af74c3 100644
---- a/Documentation/admin-guide/mm/numa_memory_policy.rst
-+++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
-@@ -254,6 +254,8 @@ MPOL_WEIGHTED_INTERLEAVE
- 	This mode operates the same as MPOL_INTERLEAVE, except that
- 	interleaving behavior is executed based on weights set in
- 	/sys/kernel/mm/mempolicy/weighted_interleave/
-+	when configured to utilize global weights, or based on task-local
-+	weights configured with set_mempolicy2(2) or mbind2(2).
- 
- 	Weighted interleave allocations pages on nodes according to
- 	their weight.  For example if nodes [0,1] are weighted [5,2]
-@@ -261,6 +263,13 @@ MPOL_WEIGHTED_INTERLEAVE
- 	2 pages allocated on node1.  This can better distribute data
- 	according to bandwidth on heterogeneous memory systems.
- 
-+	When utilizing task-local weights, weights are not rebalanced
-+	in the event of a task migration.  If a weight has not been
-+	explicitly set for a node set in the new nodemask, the
-+	value of that weight defaults to "1".  For this reason, if
-+	migrations are expected or possible, users should consider
-+	utilizing global interleave weights.
-+
- NUMA memory policy supports the following optional mode flags:
- 
- MPOL_F_STATIC_NODES
-@@ -516,6 +525,7 @@ Extended Mempolicy Arguments::
- 		__u64 addr; /* get_mempolicy2: policy address */
- 		__s32 policy_node; /* get_mempolicy2: policy node information */
- 		__s32 addr_node; /* get_mempolicy2: memory range policy */
-+		__aligned_u64 il_weights;  /* u8 buf of size pol_maxnodes */
- 	};
- 
- The extended mempolicy argument structure is defined to allow the mempolicy
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index 117c5395c6eb..c78874bd84dd 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -58,6 +58,7 @@ struct mempolicy {
- 	/* Weighted interleave settings */
- 	struct {
- 		unsigned char cur_weight;
-+		unsigned char weights[MAX_NUMNODES];
- 	} wil;
- };
- 
-@@ -73,6 +74,7 @@ struct mempolicy_args {
- 	unsigned long addr;		/* get: vma address */
- 	int addr_node;			/* get: node the address belongs to */
- 	int home_node;			/* mbind: use MPOL_MF_HOME_NODE */
-+	unsigned char *il_weights;	/* for mode MPOL_WEIGHTED_INTERLEAVE */
- };
- 
- /*
-diff --git a/include/uapi/linux/mempolicy.h b/include/uapi/linux/mempolicy.h
-index 506ea0f8f34e..687c72fbe6a1 100644
---- a/include/uapi/linux/mempolicy.h
-+++ b/include/uapi/linux/mempolicy.h
-@@ -37,6 +37,7 @@ struct mpol_args {
- 	__u64 addr;
- 	__s32 policy_node;	/* get_mempolicy: policy node info */
- 	__s32 addr_node;	/* get_mempolicy: memory range policy */
-+	__aligned_u64 il_weights; /* size: pol_maxnodes * sizeof(char) */
- };
- 
- /* Flags for set_mempolicy */
-@@ -77,6 +78,7 @@ struct mpol_args {
- #define MPOL_F_SHARED  (1 << 0)	/* identify shared policies */
- #define MPOL_F_MOF	(1 << 3) /* this policy wants migrate on fault */
- #define MPOL_F_MORON	(1 << 4) /* Migrate On protnone Reference On Node */
-+#define MPOL_F_GWEIGHT	(1 << 5) /* Utilize global weights */
- 
- /*
-  * These bit locations are exposed in the vm.zone_reclaim_mode sysctl
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 8f609204fbe7..e5f86e430207 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -271,6 +271,7 @@ static struct mempolicy *mpol_new(struct mempolicy_args *args)
- 	unsigned short mode = args->mode;
- 	unsigned short flags = args->mode_flags;
- 	nodemask_t *nodes = args->policy_nodes;
-+	int node;
- 
- 	if (mode == MPOL_DEFAULT) {
- 		if (nodes && !nodes_empty(*nodes))
-@@ -297,6 +298,19 @@ static struct mempolicy *mpol_new(struct mempolicy_args *args)
- 		    (flags & MPOL_F_STATIC_NODES) ||
- 		    (flags & MPOL_F_RELATIVE_NODES))
- 			return ERR_PTR(-EINVAL);
-+	} else if (mode == MPOL_WEIGHTED_INTERLEAVE) {
-+		/* weighted interleave requires a nodemask and weights > 0 */
-+		if (nodes_empty(*nodes))
-+			return ERR_PTR(-EINVAL);
-+		if (args->il_weights) {
-+			node = first_node(*nodes);
-+			while (node != MAX_NUMNODES) {
-+				if (!args->il_weights[node])
-+					return ERR_PTR(-EINVAL);
-+				node = next_node(node, *nodes);
-+			}
-+		} else if (!(args->mode_flags & MPOL_F_GWEIGHT))
-+			return ERR_PTR(-EINVAL);
- 	} else if (nodes_empty(*nodes))
- 		return ERR_PTR(-EINVAL);
- 
-@@ -309,6 +323,16 @@ static struct mempolicy *mpol_new(struct mempolicy_args *args)
- 	policy->home_node = NUMA_NO_NODE;
- 	policy->wil.cur_weight = 0;
- 	policy->home_node = args->home_node;
-+	if (policy->mode == MPOL_WEIGHTED_INTERLEAVE && args->il_weights) {
-+		policy->wil.cur_weight = 0;
-+		/* Minimum weight value is always 1 */
-+		memset(policy->wil.weights, 1, MAX_NUMNODES);
-+		node = first_node(*nodes);
-+		while (node != MAX_NUMNODES) {
-+			policy->wil.weights[node] = args->il_weights[node];
-+			node = next_node(node, *nodes);
-+		}
-+	}
- 
- 	return policy;
- }
-@@ -1518,6 +1542,9 @@ static long kernel_mbind(unsigned long start, unsigned long len,
- 	if (err)
- 		return err;
- 
-+	if (mode & MPOL_WEIGHTED_INTERLEAVE)
-+		mode_flags |= MPOL_F_GWEIGHT;
-+
- 	memset(&margs, 0, sizeof(margs));
- 	margs.mode = lmode;
- 	margs.mode_flags = mode_flags;
-@@ -1611,6 +1638,8 @@ SYSCALL_DEFINE5(mbind2, const struct iovec __user *, vec, size_t, vlen,
- 	struct iovec iovstack[UIO_FASTIOV];
- 	struct iovec *iov = iovstack;
- 	struct iov_iter iter;
-+	unsigned char weights[MAX_NUMNODES];
-+	unsigned char *weights_ptr;
- 	int err;
- 
- 	if (!vec || !vlen)
-@@ -1648,6 +1677,20 @@ SYSCALL_DEFINE5(mbind2, const struct iovec __user *, vec, size_t, vlen,
- 	} else
- 		margs.policy_nodes = NULL;
- 
-+	if (kargs.mode == MPOL_WEIGHTED_INTERLEAVE) {
-+		weights_ptr = u64_to_user_ptr(kargs.il_weights);
-+		err = copy_struct_from_user(&weights,
-+					    sizeof(weights),
-+					    weights_ptr,
-+					    kargs.pol_maxnodes);
-+		if (err)
-+			return err;
-+		margs.il_weights = weights;
-+	} else {
-+		margs.il_weights = NULL;
-+		flags |= MPOL_F_GWEIGHT;
-+	}
-+
- 	/* For each address range in vector, do_mbind */
- 	err = import_iovec(ITER_DEST, vec, vlen, ARRAY_SIZE(iovstack), &iov,
- 			   &iter);
-@@ -1686,6 +1729,9 @@ static long kernel_set_mempolicy(int mode, const unsigned long __user *nmask,
- 	if (err)
- 		return err;
- 
-+	if (mode & MPOL_WEIGHTED_INTERLEAVE)
-+		mode_flags |= MPOL_F_GWEIGHT;
-+
- 	memset(&args, 0, sizeof(args));
- 	args.mode = lmode;
- 	args.mode_flags = mode_flags;
-@@ -1709,6 +1755,8 @@ SYSCALL_DEFINE3(set_mempolicy2, struct mpol_args __user *, uargs, size_t, usize,
- 	int err;
- 	nodemask_t policy_nodemask;
- 	unsigned long __user *nodes_ptr;
-+	unsigned char weights[MAX_NUMNODES];
-+	unsigned char __user *weights_ptr;
- 
- 	if (flags)
- 		return -EINVAL;
-@@ -1734,6 +1782,20 @@ SYSCALL_DEFINE3(set_mempolicy2, struct mpol_args __user *, uargs, size_t, usize,
- 	} else
- 		margs.policy_nodes = NULL;
- 
-+	if (kargs.mode == MPOL_WEIGHTED_INTERLEAVE && kargs.il_weights) {
-+		weights_ptr = u64_to_user_ptr(kargs.il_weights);
-+		err = copy_struct_from_user(weights,
-+					    sizeof(weights),
-+					    weights_ptr,
-+					    kargs.pol_maxnodes);
-+		if (err)
-+			return err;
-+		margs.il_weights = weights;
-+	} else {
-+		margs.il_weights = NULL;
-+		flags |= MPOL_F_GWEIGHT;
-+	}
-+
- 	return do_set_mempolicy(&margs);
- }
- 
-@@ -1935,6 +1997,8 @@ SYSCALL_DEFINE3(get_mempolicy2, struct mpol_args __user *, uargs, size_t, usize,
- 	int err;
- 	nodemask_t policy_nodemask;
- 	unsigned long __user *nodes_ptr;
-+	unsigned char *weights_ptr;
-+	unsigned char weights[MAX_NUMNODES];
- 
- 	err = copy_struct_from_user(&kargs, sizeof(kargs), uargs, usize);
- 	if (err)
-@@ -1951,6 +2015,9 @@ SYSCALL_DEFINE3(get_mempolicy2, struct mpol_args __user *, uargs, size_t, usize,
- 					  &policy_nodemask);
- 	}
- 
-+	if (kargs.il_weights)
-+		margs.il_weights = weights;
-+
- 	margs.policy_nodes = kargs.pol_nodes ? &policy_nodemask : NULL;
- 	if (flags & MPOL_F_ADDR) {
- 		margs.addr = kargs.addr;
-@@ -1971,6 +2038,13 @@ SYSCALL_DEFINE3(get_mempolicy2, struct mpol_args __user *, uargs, size_t, usize,
- 					 margs.policy_nodes);
- 	}
- 
-+	if (kargs.il_weights) {
-+		weights_ptr = u64_to_user_ptr(kargs.il_weights);
-+		err = copy_to_user(weights_ptr, weights, kargs.pol_maxnodes);
-+		if (err)
-+			return err;
-+	}
-+
- 	return copy_to_user(uargs, &kargs, usize) ? -EFAULT : 0;
- }
- 
-@@ -2087,13 +2161,18 @@ static unsigned int weighted_interleave_nodes(struct mempolicy *policy)
- {
- 	unsigned int next;
- 	struct task_struct *me = current;
-+	unsigned char next_weight;
- 
- 	next = next_node_in(me->il_prev, policy->nodes);
- 	if (next == MAX_NUMNODES)
- 		return next;
- 
--	if (!policy->wil.cur_weight)
--		policy->wil.cur_weight = iw_table[next];
-+	if (!policy->wil.cur_weight) {
-+		next_weight = (policy->flags & MPOL_F_GWEIGHT) ?
-+				iw_table[next] :
-+				policy->wil.weights[next];
-+		policy->wil.cur_weight = next_weight ? next_weight : 1;
-+	}
- 
- 	policy->wil.cur_weight--;
- 	if (!policy->wil.cur_weight)
-@@ -2167,6 +2246,7 @@ static unsigned int weighted_interleave_nid(struct mempolicy *pol, pgoff_t ilx)
- 	nodemask_t nodemask = pol->nodes;
- 	unsigned int target, weight_total = 0;
- 	int nid;
-+	unsigned char *pol_weights;
- 	unsigned char weights[MAX_NUMNODES];
- 	unsigned char weight;
- 
-@@ -2178,8 +2258,13 @@ static unsigned int weighted_interleave_nid(struct mempolicy *pol, pgoff_t ilx)
- 		return nid;
- 
- 	/* Then collect weights on stack and calculate totals */
-+	if (pol->flags & MPOL_F_GWEIGHT)
-+		pol_weights = iw_table;
-+	else
-+		pol_weights = pol->wil.weights;
-+
- 	for_each_node_mask(nid, nodemask) {
--		weight = iw_table[nid];
-+		weight = pol_weights[nid];
- 		weight_total += weight;
- 		weights[nid] = weight;
- 	}
-@@ -2577,6 +2662,7 @@ static unsigned long alloc_pages_bulk_array_weighted_interleave(gfp_t gfp,
- 	unsigned long nr_allocated;
- 	unsigned long rounds;
- 	unsigned long node_pages, delta;
-+	unsigned char *pol_weights;
- 	unsigned char weight;
- 	unsigned char weights[MAX_NUMNODES];
- 	unsigned int weight_total;
-@@ -2590,9 +2676,14 @@ static unsigned long alloc_pages_bulk_array_weighted_interleave(gfp_t gfp,
- 
- 	nnodes = nodes_weight(nodes);
- 
-+	if (pol->flags & MPOL_F_GWEIGHT)
-+		pol_weights = iw_table;
-+	else
-+		pol_weights = pol->wil.weights;
-+
- 	/* Collect weights and save them on stack so they don't change */
- 	for_each_node_mask(node, nodes) {
--		weight = iw_table[node];
-+		weight = pol_weights[node];
- 		weight_total += weight;
- 		weights[node] = weight;
- 	}
-@@ -3117,6 +3208,7 @@ void mpol_shared_policy_init(struct shared_policy *sp, struct mempolicy *mpol)
- {
- 	int ret;
- 	struct mempolicy_args margs;
-+	unsigned char weights[MAX_NUMNODES];
- 
- 	sp->root = RB_ROOT;		/* empty tree == default mempolicy */
- 	rwlock_init(&sp->lock);
-@@ -3134,6 +3226,11 @@ void mpol_shared_policy_init(struct shared_policy *sp, struct mempolicy *mpol)
- 		margs.mode_flags = mpol->flags;
- 		margs.policy_nodes = &mpol->w.user_nodemask;
- 		margs.home_node = NUMA_NO_NODE;
-+		if (margs.mode == MPOL_WEIGHTED_INTERLEAVE &&
-+		    !(margs.mode_flags & MPOL_F_GWEIGHT)) {
-+			memcpy(weights, mpol->wil.weights, sizeof(weights));
-+			margs.il_weights = weights;
-+		}
- 
- 		/* contextualize the tmpfs mount point mempolicy to this file */
- 		npol = mpol_new(&margs);
--- 
-2.39.1
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+ddIn9n5Jt6Z1o79zxraLMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBtHFwIgQZjer5K
+H+4Q+wns10k7qN+4wN2Uf+JsyOYjukaMEgdLErfA1wwtQ9uHkoYQZcWBuVVkQFa5hI+sqI2m1Weq
+riMCFSiU38s1tADdMX12IMfJRN60Nznhrw+nPyDRZqRhUTW24TwnHorkDnFPW8PHo7fAw4FrpI0n
+impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
+qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
+yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD/
+sI/7ZoyvsuMNptfqiZv2zuf1SCeNkIIKqbWKWrwlDzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDkwNzQ4MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQHe+7eYfGrUsMoio+yNP
+KKlZg0BvjTJpbyaoZJDd7LKqhvnvhEnZkrn4IJOKcKRAsYKcwMb/nFQmyG/t8UN9+tspt5LB6AcX
+LsieKohrWgvUnf3pRVCoqjgSE49yt+M1gpTHywVdE3b9lW+KS/oLlTwdFMpnqaSgVoSZ/MdF1NDp
+LgzwDUbFbjWZNzRCBpK3NyYEqiHySn81P5LUx1rpqP3K8Wv3smqnoHj8KnZHlXT9TbLt2M+xVKV0
+EBk6751LbkEYsIvoe/I4AKM/gbj1H2OgYIR0s69cZQnczzyPQcDGJyzKTGxoE4kVggYnul1+JyKq
+rmK6Qc1llUsaaxfoqQ==
+--0000000000004b74d2060c0eedaa--
 
