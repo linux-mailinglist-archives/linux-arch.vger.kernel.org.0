@@ -1,304 +1,157 @@
-Return-Path: <linux-arch+bounces-838-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-839-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B5F80B1DE
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 04:15:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B895380B213
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 05:51:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E62741C20C37
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 03:15:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C5FCB20AF9
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 04:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F93A1389;
-	Sat,  9 Dec 2023 03:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8E6E15B4;
+	Sat,  9 Dec 2023 04:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pEoza8wV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KeESuLTe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47987ED
-	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 19:15:26 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5c690c3d113so2239455a12.1
-        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 19:15:26 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E9110DF;
+	Fri,  8 Dec 2023 20:51:40 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-332fd78fa9dso2566897f8f.3;
+        Fri, 08 Dec 2023 20:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702091726; x=1702696526; darn=vger.kernel.org;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
-        b=pEoza8wVnM6tjIXWzzXHyURLxumLQKhtVzfubbHMHLXafo2aNEaDG1BKQ6qKIcjqDs
-         PBizxwWF777KEHW4PdK2suQqyYH+3EsToGtXPnPDKV40E4CCvzzmTGmT7Ysgev9/RbKz
-         j3mnjTIxzaK46S1EEvPtDI3j7Y/N6siH5PWGzL8CHn3ocgcD57KfSfja+wD1nyiyjeCP
-         ZzfLXRBoE+yBTbAY6njOwXDki228RkGszl44Upz9uCcBaPbLU8CHlOnQeavbIHx84lkj
-         1V8tljMWPcVkl4GVwI7X1g3OP9IDEckBY0lFz+PMH+xqYh3x9zhN6a7eR4sAgfUtpc0O
-         fCfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702091726; x=1702696526;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1702097499; x=1702702299; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
-        b=D/9qFcP6qPVLYTc0a+dD4kn+rPgzIrIzVYCmbtyBnGYDkXLknpE9jvVBX+Hz3RWfz0
-         4QOStHnk3tTeKAbDPJO8rY44UmbbT9jaJfowjrMgV/bOapziq3pAq7AYAF+tfC2gQoyg
-         zgoXhVWeiFIZgk6ijm7i/AxHDAFSm1Rq6REsOl0mdXygmmxR0OBqnLOpXs+mfB/6ZIx8
-         VYdi3HNGU6nysVzjYGGUShQkuYlwKnkwjxz066KDQgZbB0NpP7ktntfaUb64BAya9PxX
-         LfvX8+ODHmcdiSqVQO1qqCWTdNVv50mcDsZjgUbsQuFEseEbBQO/Ec198O+qmE7mYpCt
-         nMwA==
-X-Gm-Message-State: AOJu0YyF1sagtLSTNgwZIkamXk07JxmSWXFCE+8gbMPsGwCyRWRMAV9D
-	5HNUowC6RlP2x58sbgZ3GMrpvg==
-X-Google-Smtp-Source: AGHT+IEaUnkmb6VMOC1ZmV7RhknH3M28z+3B6TqVq+yqgnnJz1v02mq63uTBtrSHn4oV4teABtH6uA==
-X-Received: by 2002:a05:6a20:f390:b0:190:6920:e14b with SMTP id qr16-20020a056a20f39000b001906920e14bmr1018200pzb.122.1702091725612;
-        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
-Received: from localhost ([2804:14d:7e39:8470:4c58:a216:27d2:2ff])
-        by smtp.gmail.com with ESMTPSA id x22-20020a056a00271600b006be5af77f06sm2330693pfv.2.2023.12.08.19.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
-User-agent: mu4e 1.10.8; emacs 29.1
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
- <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
- Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
- Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
- Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
- <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
- <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
- Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 24/39] arm64/signal: Set up and restore the GCS
- context for signal handlers
-In-reply-to: <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
-Date: Sat, 09 Dec 2023 00:15:22 -0300
-Message-ID: <8734wcgj79.fsf@linaro.org>
+        bh=E9jLsGhfGkMZnWhDYfHQ0jvQvXqjfciOlusSLK9GhRY=;
+        b=KeESuLTeX8T5ede0i/kSECpSnduJslTf/82J4Z57rkWkSf8dSMVICt52nYkMFTOITW
+         099C3aWGMtSw770fNLMxYbnj8Flv7HGJMeJpx8n29C0BMB+kz4LKbf26wUiYEVblcqIV
+         eJ8kmYDYcNE8tfSblEWCCPuvlQ3sIoo3DhX/ssxWrC8rnhS9czhqJAmkrmA9WOD3ILP1
+         o3Vj1z3dABjSQA3jPb9x9rm6dDK+EO1NpB+Sb/FmhNhAwpJM4qECPWTrf5YHCr/+8iNw
+         puYmU9Fvq4imcj/3AzNgZ4XiuRgkS2XibAg3jB69haE6GgMTNRlrxNG9Dehpb6ffErJ/
+         KmPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702097499; x=1702702299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E9jLsGhfGkMZnWhDYfHQ0jvQvXqjfciOlusSLK9GhRY=;
+        b=AeMAll1+7Hm+LqvEgTNXH0lzxGQd4etsowOeyJqcehBysYX5I4uc9Bn/MeYGzNIATK
+         yLBMYbR/TPVfdBazATRCdYDkV5ACWwR+DXXvHkqlbdHklegH/ug7DMclYdEl5i5VGRDx
+         ItNK+dxzOLR7/4oRJqk6HKC/c2A5dskk82CsyTfZENAtSPjwXavvsj1JN/NWcykxBhJM
+         px07D4wQwEGJCLANU0RO1ophOJr/50eKInDah80Nmivxk3tPQgSDR5VWVLYRklF8CeRd
+         sXN1uGZoP2G5QVErF5YbJ4tN0PJeDUkmEsZUSFnaBK4cXauohmYLCv+04+rHD78zjNB9
+         1+eQ==
+X-Gm-Message-State: AOJu0YyiAm7KxmTwW4K2yvhry/jBGf0KDBa9HkklvsuoE/W6DggJA4xe
+	b2VWKJndrwX0/dEB2ZjxJB8qBxffeQ0xqXUlzbc=
+X-Google-Smtp-Source: AGHT+IGWegoXbG6riU09aOxjScmI6QdU76ibtag8Pupqd8K6QoQZC3fgz8qhZUFCULCtLMsl2YQJg9oU3fR3idrWio4=
+X-Received: by 2002:adf:ce8d:0:b0:333:49a8:73e4 with SMTP id
+ r13-20020adfce8d000000b0033349a873e4mr197659wrn.201.1702097499187; Fri, 08
+ Dec 2023 20:51:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
+ <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
+ <20231208102940.GB28727@noisy.programming.kicks-ass.net> <20231208134041.GD28727@noisy.programming.kicks-ass.net>
+ <20231208172152.GD36716@noisy.programming.kicks-ass.net> <CAADnVQKsnZfFomQ4wTZz=jMZW5QCV2XiXVsi64bghHkAjJtcmA@mail.gmail.com>
+ <20231208203535.GG36716@noisy.programming.kicks-ass.net> <CAADnVQJzCw=qcG+jHBYG0q0SxLPkwghni0wpgV4A4PkpgVbGPw@mail.gmail.com>
+ <20231208205241.GK28727@noisy.programming.kicks-ass.net> <CAADnVQL3KsJONShsstDq5jrpbc_4FOU-VQPJgDCt50N9asoFzA@mail.gmail.com>
+ <20231208224557.GH36716@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231208224557.GH36716@noisy.programming.kicks-ass.net>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 Dec 2023 20:51:27 -0800
+Message-ID: <CAADnVQ+Z7UcXXBBhMubhcMM=R-dExk-uHtfOLtoLxQ1XxEpqEA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
+	Song Liu <songliubraving@meta.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Joao Moreira <joao@overdrivepizza.com>, Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Dec 8, 2023 at 2:46=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+>
+> Ok, did that. Current patches (on top of bpf-next) are here:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/cfi
 
-Mark Brown <broonie@kernel.org> writes:
+Looks really great. The last patch is cleaner than I expected. Good idea.
 
-> +static bool gcs_signal_cap_valid(u64 addr, u64 val)
-> +{
-> +	/*
-> +	 * The top bit should be set, this is an invalid address for
-> +	 * EL0 and will only be set for caps created by signals.
-> +	 */
-> +	if (!(val & GCS_SIGNAL_CAP_FLAG))
-> +		return false;
-> +
-> +	/* The rest should be a standard architectural cap token. */
-> +	val &= ~GCS_SIGNAL_CAP_FLAG;
-> +
-> +	/* The cap must have the low bits set to a token value */
-> +	if (GCS_CAP_TOKEN(val) != 0)
-> +		return false;
+> (really should try and write better changelogs, but it's too late)
 
-I found the comment above a little confusing, since the if condition
-actually checks that low bits aren't set at all. Perhaps reword to
-something like "The token value of a signal cap must be 0"?
+commit logs look fine except the "pilfer" word that I had to look up
+in the dictionary :)
 
-> +
-> +	/* The cap must store the VA the cap was stored at */
-> +	if (GCS_CAP_ADDR(addr) != GCS_CAP_ADDR(val))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +#endif
-> +
->  /*
->   * Do a signal return; undo the signal stack. These are aligned to 128-bit.
->   */
-> @@ -815,6 +847,45 @@ static int restore_sigframe(struct pt_regs *regs,
->  	return err;
->  }
->  
-> +#ifdef CONFIG_ARM64_GCS
-> +static int gcs_restore_signal(void)
-> +{
-> +	u64 gcspr_el0, cap;
-> +	int ret;
-> +
-> +	if (!system_supports_gcs())
-> +		return 0;
-> +
-> +	if (!(current->thread.gcs_el0_mode & PR_SHADOW_STACK_ENABLE))
-> +		return 0;
-> +
-> +	gcspr_el0 = read_sysreg_s(SYS_GCSPR_EL0);
-> +
-> +	/*
-> +	 * GCSPR_EL0 should be pointing at a capped GCS, read the cap...
-> +	 */
-> +	gcsb_dsync();
-> +	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
-> +	if (ret)
-> +		return -EFAULT;
-> +
-> +	/*
-> +	 * ...then check that the cap is the actual GCS before
-> +	 * restoring it.
-> +	 */
-> +	if (!gcs_signal_cap_valid(gcspr_el0, cap))
-> +		return -EINVAL;
-> +
-> +	current->thread.gcspr_el0 = gcspr_el0 + sizeof(cap);
-> +	write_sysreg_s(current->thread.gcspr_el0, SYS_GCSPR_EL0);
+> [  247.721063]  ? bpf_throw+0x9b/0xf0
+> [  247.721126]  ? bpf_test_run+0x108/0x350
+> [  247.721191]  ? bpf_prog_5555714b685bf0cf_exception_throw_always_1+0x26=
+/0x26
+> [  247.721301]  ? bpf_test_run+0x108/0x350
+> [  247.721368]  bpf_test_run+0x212/0x350
+> [  247.721433]  ? slab_build_skb+0x22/0x110
+> [  247.721503]  bpf_prog_test_run_skb+0x347/0x4a0
+>
+> But I'm too tired to think staight. Is  this a bpf_callback_t vs
+> bpf_exception_cb difference?
 
-At this point, there's an inactive but valid cap just below the GCS.
-Over time, as different signals are received when the GCSPR is pointing
-at different locations of the stack, there could be a number of valid
-inactive caps available for misuse.
+Yep.
+It's easy to fix:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0e162eae8639..e36b3f41751e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1484,7 +1484,7 @@ struct bpf_prog_aux {
+        int cgroup_atype; /* enum cgroup_bpf_attach_type */
+        struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+        char name[BPF_OBJ_NAME_LEN];
+-       unsigned int (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp);
++       u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
+ #ifdef CONFIG_SECURITY
+        void *security;
+ #endif
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index fe229b28e4a9..650ebe8ff183 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2537,7 +2537,7 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+         * which skips compiler generated instrumentation to do the same.
+         */
+        kasan_unpoison_task_stack_below((void *)(long)ctx.sp);
+-       ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp);
++       ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp, 0, 0);
+        WARN(1, "A call to BPF exception callback should never return\n");
+ }
 
-I'm still not proficient enough in GCS to know how exactly this could be
-abused (e.g., somehow writing the desired return location right above
-one of these inactive caps and arranging for GCSPR to point to the cap
-before returning from a signal) but to be safe or paranoid, perhaps zero
-the location of the cap before returning?
+and with that all of test_progs runs successfully without CFI panics.
+*happy dance*
 
-> +
-> +	return 0;
-> +}
-> +
-> +#else
-> +static int gcs_restore_signal(void) { return 0; }
-> +#endif
-> +
->  SYSCALL_DEFINE0(rt_sigreturn)
->  {
->  	struct pt_regs *regs = current_pt_regs();
-> @@ -841,6 +912,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
->  	if (restore_altstack(&frame->uc.uc_stack))
->  		goto badframe;
->  
-> +	if (gcs_restore_signal())
-> +		goto badframe;
-> +
->  	return regs->regs[0];
->  
->  badframe:
-> @@ -1071,7 +1145,50 @@ static int get_sigframe(struct rt_sigframe_user_layout *user,
->  	return 0;
->  }
->  
-> -static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-> +#ifdef CONFIG_ARM64_GCS
-> +
-> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
+Only test_progs -t btf/line_info fails suspiciously.
+There we check that line info embedded in the prog looks sane.
+New cfi preamble is probably tripping something.
+It could be a test issue. I'll investigate. It's not a blocker.
 
-The ksig argument is unused, so it can be removed.
-
-> +{
-> +	unsigned long __user *gcspr_el0;
-> +	int ret = 0;
-> +
-> +	if (!system_supports_gcs())
-> +		return 0;
-> +
-> +	if (!task_gcs_el0_enabled(current))
-> +		return 0;
-> +
-> +	/*
-> +	 * We are entering a signal handler, current register state is
-> +	 * active.
-> +	 */
-> +	gcspr_el0 = (unsigned long __user *)read_sysreg_s(SYS_GCSPR_EL0);
-> +
-> +	/*
-> +	 * Push a cap and the GCS entry for the trampoline onto the GCS.
-> +	 */
-> +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
-> +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
-> +	if (ret != 0)
-> +		return ret;
-> +
-> +	gcsb_dsync();
-> +
-> +	gcspr_el0 -= 2;
-> +	write_sysreg_s((unsigned long)gcspr_el0, SYS_GCSPR_EL0);
-> +
-> +	return 0;
-> +}
-> +#else
-> +
-> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
-> +{
-> +	return 0;
-> +}
-> +
-> +#endif
-> +
-> +static int setup_return(struct pt_regs *regs, struct ksignal *ksig,
->  			 struct rt_sigframe_user_layout *user, int usig)
-
-Since the ksig argument isn't used by gcs_signal_entry(), setup_return()
-can keep the ka argument and the changes below from ka to ksic->ka are
-unnecessary.
-
->  {
->  	__sigrestore_t sigtramp;
-> @@ -1079,7 +1196,7 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
->  	regs->regs[0] = usig;
->  	regs->sp = (unsigned long)user->sigframe;
->  	regs->regs[29] = (unsigned long)&user->next_frame->fp;
-> -	regs->pc = (unsigned long)ka->sa.sa_handler;
-> +	regs->pc = (unsigned long)ksig->ka.sa.sa_handler;
->  
->  	/*
->  	 * Signal delivery is a (wacky) indirect function call in
-> @@ -1119,12 +1236,14 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
->  		sme_smstop();
->  	}
->  
-> -	if (ka->sa.sa_flags & SA_RESTORER)
-> -		sigtramp = ka->sa.sa_restorer;
-> +	if (ksig->ka.sa.sa_flags & SA_RESTORER)
-> +		sigtramp = ksig->ka.sa.sa_restorer;
->  	else
->  		sigtramp = VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
->  
->  	regs->regs[30] = (unsigned long)sigtramp;
-> +
-> +	return gcs_signal_entry(sigtramp, ksig);
->  }
->  
->  static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
-> @@ -1147,7 +1266,7 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
->  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
->  	err |= setup_sigframe(&user, regs, set);
->  	if (err == 0) {
-> -		setup_return(regs, &ksig->ka, &user, usig);
-> +		err = setup_return(regs, ksig, &user, usig);
->  		if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
->  			err |= copy_siginfo_to_user(&frame->info, &ksig->info);
->  			regs->regs[1] = (unsigned long)&frame->info;
-> diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
-> index 02f8f6046c10..6f51429c5a46 100644
-> --- a/arch/arm64/mm/gcs.c
-> +++ b/arch/arm64/mm/gcs.c
-> @@ -6,6 +6,7 @@
->  #include <linux/types.h>
->  
->  #include <asm/cpufeature.h>
-> +#include <asm/gcs.h>
->  #include <asm/page.h>
-
-This is #include isn't needed by this patch. Probably better as part of
-another one.
-
--- 
-Thiago
+Do you mind resending the whole set so that BPF CI can test it
+on different archs ?
 
