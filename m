@@ -1,255 +1,304 @@
-Return-Path: <linux-arch+bounces-837-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-838-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92A9680B08D
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 00:25:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4B5F80B1DE
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 04:15:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD25A1C20B49
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Dec 2023 23:25:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E62741C20C37
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 03:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91985ABB7;
-	Fri,  8 Dec 2023 23:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F93A1389;
+	Sat,  9 Dec 2023 03:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rMZfsgNf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pEoza8wV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3671729
-	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 15:25:14 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-4b2dcc7b71dso720515e0c.1
-        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 15:25:14 -0800 (PST)
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47987ED
+	for <linux-arch@vger.kernel.org>; Fri,  8 Dec 2023 19:15:26 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5c690c3d113so2239455a12.1
+        for <linux-arch@vger.kernel.org>; Fri, 08 Dec 2023 19:15:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702077914; x=1702682714; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q3tzRei4DqUvL1gHDjLu5ZyN+XyR0fbOVm4A1dgKAmU=;
-        b=rMZfsgNfIBlVfmM5BMuu6izhjLw8tf7OSVrlq0XQSrKAUbMtEZwkGdm7NJcvUIjkhO
-         MfpUNlwFIx72pvw2FXHUJpoB6FAlp2euk5EegmEwpR2XJxbQpf4lj5bozkprsajrDVle
-         xZLduQ/F9vZaZhiIPXIUMAJxIMjaReoTuotPoKPcKLKaXxQktW0iuRymQ/TNsNNQCW5X
-         mWboT2jI90M3URdy+mwzZcYMTCRt++z3e9zdn3P1TAbqiwREVutMY7Ate6kU2Iq4G4SR
-         R7lgPkuJW+rgGlXIrKNlOAegF/GyvJVbKWH4A570ClOYyRscr/vX5LNs/bUtGInjdlro
-         Cthg==
+        d=linaro.org; s=google; t=1702091726; x=1702696526; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
+        b=pEoza8wVnM6tjIXWzzXHyURLxumLQKhtVzfubbHMHLXafo2aNEaDG1BKQ6qKIcjqDs
+         PBizxwWF777KEHW4PdK2suQqyYH+3EsToGtXPnPDKV40E4CCvzzmTGmT7Ysgev9/RbKz
+         j3mnjTIxzaK46S1EEvPtDI3j7Y/N6siH5PWGzL8CHn3ocgcD57KfSfja+wD1nyiyjeCP
+         ZzfLXRBoE+yBTbAY6njOwXDki228RkGszl44Upz9uCcBaPbLU8CHlOnQeavbIHx84lkj
+         1V8tljMWPcVkl4GVwI7X1g3OP9IDEckBY0lFz+PMH+xqYh3x9zhN6a7eR4sAgfUtpc0O
+         fCfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702077914; x=1702682714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q3tzRei4DqUvL1gHDjLu5ZyN+XyR0fbOVm4A1dgKAmU=;
-        b=NDd6ZSHS20Y+hYiwu++QH7uOO5F7BIbMPDPyt1sKFNQ7rY8FGn2WUe/GP4NftGTP3X
-         3GNwH1jF/NiBiUJAS/8Kg9bYa43fA0UNJXb0CFYe/6e6nu4+kdD+TkPhyB8MS2mn43Hk
-         VwSMYaOIaycjmaoAA91YYaO6Mm/d9Ss/qUtdTU1e+PHWfeK/SCrlj6UVA4t1bHD09JUl
-         2WnzeDdmEhDPgGYgqPu0Z8dVtIUMtwme3aVhvO+E7+lmEHSS8lcAklwgOV3vqtZMdVoG
-         MOORXkVzE9E8VyVuWceblCzxDFL/dJQQ4Bwr4j8r2FoUT8DdMOdonjRMjHuHuumlwxTb
-         YVng==
-X-Gm-Message-State: AOJu0YwLtHRC/YUHzXw0+SpesK9Ht9jnI7WDDcmU883vxHKk3g7FAc+f
-	vtRCha5uiMTijVOhqIpV40bS2eEWIB0I/RR2FNEAGw==
-X-Google-Smtp-Source: AGHT+IEFKUc5exoP0JWsRvhqP/54jx/lwOw3AZl/60NefSo43kRLaVvc1XrXulWzYoWwJeZdst7FzfPYeaWKAp2Juns=
-X-Received: by 2002:a05:6102:3f0a:b0:464:5036:fb69 with SMTP id
- k10-20020a0561023f0a00b004645036fb69mr858666vsv.30.1702077913540; Fri, 08 Dec
- 2023 15:25:13 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702091726; x=1702696526;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
+        b=D/9qFcP6qPVLYTc0a+dD4kn+rPgzIrIzVYCmbtyBnGYDkXLknpE9jvVBX+Hz3RWfz0
+         4QOStHnk3tTeKAbDPJO8rY44UmbbT9jaJfowjrMgV/bOapziq3pAq7AYAF+tfC2gQoyg
+         zgoXhVWeiFIZgk6ijm7i/AxHDAFSm1Rq6REsOl0mdXygmmxR0OBqnLOpXs+mfB/6ZIx8
+         VYdi3HNGU6nysVzjYGGUShQkuYlwKnkwjxz066KDQgZbB0NpP7ktntfaUb64BAya9PxX
+         LfvX8+ODHmcdiSqVQO1qqCWTdNVv50mcDsZjgUbsQuFEseEbBQO/Ec198O+qmE7mYpCt
+         nMwA==
+X-Gm-Message-State: AOJu0YyF1sagtLSTNgwZIkamXk07JxmSWXFCE+8gbMPsGwCyRWRMAV9D
+	5HNUowC6RlP2x58sbgZ3GMrpvg==
+X-Google-Smtp-Source: AGHT+IEaUnkmb6VMOC1ZmV7RhknH3M28z+3B6TqVq+yqgnnJz1v02mq63uTBtrSHn4oV4teABtH6uA==
+X-Received: by 2002:a05:6a20:f390:b0:190:6920:e14b with SMTP id qr16-20020a056a20f39000b001906920e14bmr1018200pzb.122.1702091725612;
+        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:4c58:a216:27d2:2ff])
+        by smtp.gmail.com with ESMTPSA id x22-20020a056a00271600b006be5af77f06sm2330693pfv.2.2023.12.08.19.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 24/39] arm64/signal: Set up and restore the GCS
+ context for signal handlers
+In-reply-to: <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
+Date: Sat, 09 Dec 2023 00:15:22 -0300
+Message-ID: <8734wcgj79.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-9-almasrymina@google.com> <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
-In-Reply-To: <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 8 Dec 2023 15:25:00 -0800
-Message-ID: <CAHS8izNVFx6oHoo7y86P8Di9VCVe8A_n_9UZFkg5Wnt=A=YcNQ@mail.gmail.com>
-Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory provider
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Dec 8, 2023 at 2:56=E2=80=AFPM Pavel Begunkov <asml.silence@gmail.c=
-om> wrote:
->
-> On 12/8/23 00:52, Mina Almasry wrote:
-...
-> > +     if (pool->p.queue)
-> > +             binding =3D READ_ONCE(pool->p.queue->binding);
-> > +
-> > +     if (binding) {
-> > +             pool->mp_ops =3D &dmabuf_devmem_ops;
-> > +             pool->mp_priv =3D binding;
-> > +     }
->
-> Hmm, I don't understand why would we replace a nice transparent
-> api with page pool relying on a queue having devmem specific
-> pointer? It seemed more flexible and cleaner in the last RFC.
->
-
-Jakub requested this change and may chime in, but I suspect it's to
-further abstract the devmem changes from driver. In this iteration,
-the driver grabs the netdev_rx_queue and passes it to the page_pool,
-and any future configurations between the net stack and page_pool can
-be passed this way with the driver unbothered.
-
-> > +
-> >       if (pool->mp_ops) {
-> >               err =3D pool->mp_ops->init(pool);
-> >               if (err) {
-> > @@ -1020,3 +1033,77 @@ void page_pool_update_nid(struct page_pool *pool=
-, int new_nid)
-> >       }
-> >   }
-> >   EXPORT_SYMBOL(page_pool_update_nid);
-> > +
-> > +void __page_pool_iov_free(struct page_pool_iov *ppiov)
-> > +{
-> > +     if (WARN_ON(ppiov->pp->mp_ops !=3D &dmabuf_devmem_ops))
-> > +             return;
-> > +
-> > +     netdev_free_dmabuf(ppiov);
-> > +}
-> > +EXPORT_SYMBOL_GPL(__page_pool_iov_free);
->
-> I didn't look too deep but I don't think I immediately follow
-> the pp refcounting. It increments pages_state_hold_cnt on
-> allocation, but IIUC doesn't mark skbs for recycle? Then, they all
-> will be put down via page_pool_iov_put_many() bypassing
-> page_pool_return_page() and friends. That will call
-> netdev_free_dmabuf(), which doesn't bump pages_state_release_cnt.
->
-> At least I couldn't make it work with io_uring, and for my purposes,
-> I forced all puts to go through page_pool_return_page(), which calls
-> the ->release_page callback. The callback will put the reference and
-> ask its page pool to account release_cnt. It also gets rid of
-> __page_pool_iov_free(), as we'd need to add a hook there for
-> customization otherwise.
->
-> I didn't care about overhead because the hot path for me is getting
-> buffers from a ring, which is somewhat analogous to sock_devmem_dontneed(=
-),
-> but done on pp allocations under napi, and it's done separately.
->
-> Completely untested with TCP devmem:
->
-> https://github.com/isilence/linux/commit/14bd56605183dc80b540999e8058c79a=
-c92ae2d8
->
-
-This was a mistake in the last RFC, which should be fixed in v1. In
-the RFC I was not marking the skbs as skb_mark_for_recycle(), so the
-unreffing path wasn't as expected.
-
-In this iteration, that should be completely fixed. I suspect since I
-just posted this you're actually referring to the issue tested on the
-last RFC? Correct me if wrong.
-
-In this iteration, the reffing story:
-
-- memory provider allocs ppiov and returns it to the page pool with
-ppiov->refcount =3D=3D 1.
-- The page_pool gives the page to the driver. The driver may
-obtain/release references with page_pool_page_[get|put]_many(), but
-the driver is likely not doing that unless it's doing its own page
-recycling.
-- The net stack obtains references via skb_frag_ref() ->
-page_pool_page_get_many()
-- The net stack drops references via skb_frag_unref() ->
-napi_pp_put_page() -> page_pool_return_page() and friends.
-
-Thus, the issue where the unref path was skipping
-page_pool_return_page() and friends should be resolved in this
-iteration, let me know if you think otherwise, but I think this was an
-issue limited to the last RFC.
-
-> > +
-> > +/*** "Dmabuf devmem memory provider" ***/
-> > +
-> > +static int mp_dmabuf_devmem_init(struct page_pool *pool)
-> > +{
-> > +     struct netdev_dmabuf_binding *binding =3D pool->mp_priv;
-> > +
-> > +     if (!binding)
-> > +             return -EINVAL;
-> > +
-> > +     if (!(pool->p.flags & PP_FLAG_DMA_MAP))
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     netdev_dmabuf_binding_get(binding);
-> > +     return 0;
-> > +}
-> > +
-> > +static struct page *mp_dmabuf_devmem_alloc_pages(struct page_pool *poo=
-l,
-> > +                                              gfp_t gfp)
-> > +{
-> > +     struct netdev_dmabuf_binding *binding =3D pool->mp_priv;
-> > +     struct page_pool_iov *ppiov;
-> > +
-> > +     ppiov =3D netdev_alloc_dmabuf(binding);
-> > +     if (!ppiov)
-> > +             return NULL;
-> > +
-> > +     ppiov->pp =3D pool;
-> > +     pool->pages_state_hold_cnt++;
-> > +     trace_page_pool_state_hold(pool, (struct page *)ppiov,
-> > +                                pool->pages_state_hold_cnt);
-> > +     return (struct page *)((unsigned long)ppiov | PP_IOV);
-> > +}
-> > +
-> > +static void mp_dmabuf_devmem_destroy(struct page_pool *pool)
-> > +{
-> > +     struct netdev_dmabuf_binding *binding =3D pool->mp_priv;
-> > +
-> > +     netdev_dmabuf_binding_put(binding);
-> > +}
-> > +
-> > +static bool mp_dmabuf_devmem_release_page(struct page_pool *pool,
-> > +                                       struct page *page)
-> > +{
-> > +     struct page_pool_iov *ppiov;
-> > +
-> > +     if (WARN_ON_ONCE(!page_is_page_pool_iov(page)))
-> > +             return false;
-> > +
-> > +     ppiov =3D page_to_page_pool_iov(page);
-> > +     page_pool_iov_put_many(ppiov, 1);
-> > +     /* We don't want the page pool put_page()ing our page_pool_iovs. =
-*/
-> > +     return false;
-> > +}
-> > +
-> > +const struct memory_provider_ops dmabuf_devmem_ops =3D {
-> > +     .init                   =3D mp_dmabuf_devmem_init,
-> > +     .destroy                =3D mp_dmabuf_devmem_destroy,
-> > +     .alloc_pages            =3D mp_dmabuf_devmem_alloc_pages,
-> > +     .release_page           =3D mp_dmabuf_devmem_release_page,
-> > +};
-> > +EXPORT_SYMBOL(dmabuf_devmem_ops);
->
-> --
-> Pavel Begunkov
+Content-Type: text/plain
 
 
+Mark Brown <broonie@kernel.org> writes:
 
---=20
-Thanks,
-Mina
+> +static bool gcs_signal_cap_valid(u64 addr, u64 val)
+> +{
+> +	/*
+> +	 * The top bit should be set, this is an invalid address for
+> +	 * EL0 and will only be set for caps created by signals.
+> +	 */
+> +	if (!(val & GCS_SIGNAL_CAP_FLAG))
+> +		return false;
+> +
+> +	/* The rest should be a standard architectural cap token. */
+> +	val &= ~GCS_SIGNAL_CAP_FLAG;
+> +
+> +	/* The cap must have the low bits set to a token value */
+> +	if (GCS_CAP_TOKEN(val) != 0)
+> +		return false;
+
+I found the comment above a little confusing, since the if condition
+actually checks that low bits aren't set at all. Perhaps reword to
+something like "The token value of a signal cap must be 0"?
+
+> +
+> +	/* The cap must store the VA the cap was stored at */
+> +	if (GCS_CAP_ADDR(addr) != GCS_CAP_ADDR(val))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +#endif
+> +
+>  /*
+>   * Do a signal return; undo the signal stack. These are aligned to 128-bit.
+>   */
+> @@ -815,6 +847,45 @@ static int restore_sigframe(struct pt_regs *regs,
+>  	return err;
+>  }
+>  
+> +#ifdef CONFIG_ARM64_GCS
+> +static int gcs_restore_signal(void)
+> +{
+> +	u64 gcspr_el0, cap;
+> +	int ret;
+> +
+> +	if (!system_supports_gcs())
+> +		return 0;
+> +
+> +	if (!(current->thread.gcs_el0_mode & PR_SHADOW_STACK_ENABLE))
+> +		return 0;
+> +
+> +	gcspr_el0 = read_sysreg_s(SYS_GCSPR_EL0);
+> +
+> +	/*
+> +	 * GCSPR_EL0 should be pointing at a capped GCS, read the cap...
+> +	 */
+> +	gcsb_dsync();
+> +	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
+> +	if (ret)
+> +		return -EFAULT;
+> +
+> +	/*
+> +	 * ...then check that the cap is the actual GCS before
+> +	 * restoring it.
+> +	 */
+> +	if (!gcs_signal_cap_valid(gcspr_el0, cap))
+> +		return -EINVAL;
+> +
+> +	current->thread.gcspr_el0 = gcspr_el0 + sizeof(cap);
+> +	write_sysreg_s(current->thread.gcspr_el0, SYS_GCSPR_EL0);
+
+At this point, there's an inactive but valid cap just below the GCS.
+Over time, as different signals are received when the GCSPR is pointing
+at different locations of the stack, there could be a number of valid
+inactive caps available for misuse.
+
+I'm still not proficient enough in GCS to know how exactly this could be
+abused (e.g., somehow writing the desired return location right above
+one of these inactive caps and arranging for GCSPR to point to the cap
+before returning from a signal) but to be safe or paranoid, perhaps zero
+the location of the cap before returning?
+
+> +
+> +	return 0;
+> +}
+> +
+> +#else
+> +static int gcs_restore_signal(void) { return 0; }
+> +#endif
+> +
+>  SYSCALL_DEFINE0(rt_sigreturn)
+>  {
+>  	struct pt_regs *regs = current_pt_regs();
+> @@ -841,6 +912,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>  	if (restore_altstack(&frame->uc.uc_stack))
+>  		goto badframe;
+>  
+> +	if (gcs_restore_signal())
+> +		goto badframe;
+> +
+>  	return regs->regs[0];
+>  
+>  badframe:
+> @@ -1071,7 +1145,50 @@ static int get_sigframe(struct rt_sigframe_user_layout *user,
+>  	return 0;
+>  }
+>  
+> -static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+> +#ifdef CONFIG_ARM64_GCS
+> +
+> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
+
+The ksig argument is unused, so it can be removed.
+
+> +{
+> +	unsigned long __user *gcspr_el0;
+> +	int ret = 0;
+> +
+> +	if (!system_supports_gcs())
+> +		return 0;
+> +
+> +	if (!task_gcs_el0_enabled(current))
+> +		return 0;
+> +
+> +	/*
+> +	 * We are entering a signal handler, current register state is
+> +	 * active.
+> +	 */
+> +	gcspr_el0 = (unsigned long __user *)read_sysreg_s(SYS_GCSPR_EL0);
+> +
+> +	/*
+> +	 * Push a cap and the GCS entry for the trampoline onto the GCS.
+> +	 */
+> +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
+> +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	gcsb_dsync();
+> +
+> +	gcspr_el0 -= 2;
+> +	write_sysreg_s((unsigned long)gcspr_el0, SYS_GCSPR_EL0);
+> +
+> +	return 0;
+> +}
+> +#else
+> +
+> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
+> +{
+> +	return 0;
+> +}
+> +
+> +#endif
+> +
+> +static int setup_return(struct pt_regs *regs, struct ksignal *ksig,
+>  			 struct rt_sigframe_user_layout *user, int usig)
+
+Since the ksig argument isn't used by gcs_signal_entry(), setup_return()
+can keep the ka argument and the changes below from ka to ksic->ka are
+unnecessary.
+
+>  {
+>  	__sigrestore_t sigtramp;
+> @@ -1079,7 +1196,7 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+>  	regs->regs[0] = usig;
+>  	regs->sp = (unsigned long)user->sigframe;
+>  	regs->regs[29] = (unsigned long)&user->next_frame->fp;
+> -	regs->pc = (unsigned long)ka->sa.sa_handler;
+> +	regs->pc = (unsigned long)ksig->ka.sa.sa_handler;
+>  
+>  	/*
+>  	 * Signal delivery is a (wacky) indirect function call in
+> @@ -1119,12 +1236,14 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+>  		sme_smstop();
+>  	}
+>  
+> -	if (ka->sa.sa_flags & SA_RESTORER)
+> -		sigtramp = ka->sa.sa_restorer;
+> +	if (ksig->ka.sa.sa_flags & SA_RESTORER)
+> +		sigtramp = ksig->ka.sa.sa_restorer;
+>  	else
+>  		sigtramp = VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
+>  
+>  	regs->regs[30] = (unsigned long)sigtramp;
+> +
+> +	return gcs_signal_entry(sigtramp, ksig);
+>  }
+>  
+>  static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+> @@ -1147,7 +1266,7 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+>  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
+>  	err |= setup_sigframe(&user, regs, set);
+>  	if (err == 0) {
+> -		setup_return(regs, &ksig->ka, &user, usig);
+> +		err = setup_return(regs, ksig, &user, usig);
+>  		if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
+>  			err |= copy_siginfo_to_user(&frame->info, &ksig->info);
+>  			regs->regs[1] = (unsigned long)&frame->info;
+> diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
+> index 02f8f6046c10..6f51429c5a46 100644
+> --- a/arch/arm64/mm/gcs.c
+> +++ b/arch/arm64/mm/gcs.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/types.h>
+>  
+>  #include <asm/cpufeature.h>
+> +#include <asm/gcs.h>
+>  #include <asm/page.h>
+
+This is #include isn't needed by this patch. Probably better as part of
+another one.
+
+-- 
+Thiago
 
