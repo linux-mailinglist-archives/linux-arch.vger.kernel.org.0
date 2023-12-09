@@ -1,210 +1,211 @@
-Return-Path: <linux-arch+bounces-866-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-867-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D33380B6D6
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 23:29:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F092780B793
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 00:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DA9DB20ACB
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 22:29:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B12B1C2083E
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Dec 2023 23:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30EC31DFC8;
-	Sat,  9 Dec 2023 22:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F68C1E52E;
+	Sat,  9 Dec 2023 23:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OG/GZDzs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b6Hyp1OB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD6B125;
-	Sat,  9 Dec 2023 14:28:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702160933; x=1733696933;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=go2OpyoHuQJfkvWrYMKtRz7dEGNntOkffUckFpnEvWM=;
-  b=OG/GZDzs2z6yc8VBw5qpXV9u+0TxJParyizd2mpfQPHxqZjSRPrlFrEl
-   SqFhhiRBltbAdkWmrBnNggFwDNJbYFSA8kfmnR71s9LWXVgkTBKvUWoji
-   Zzb5+t145OamoiMl52Nh+qDlUBs8/4JrpjHZp/fDAsCI8uYhhUjiX/MtQ
-   aQLTbj8Ro/eyMBmUjXV6/Y9/bIsqJXq0B8oYoV2lz2Xn55BSC9a+p+3W2
-   eFVNZO6sulShr7e8h9s5PmguGXiZ/Wgdt2rV76DozIVcKOrdpGGhAQjkn
-   BuLQQxvwjwHsiJOULYwM/PyyDIMvONqrZEx8pZa0HFPTVR2D3TNQG+s9t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="398389814"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="398389814"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 14:28:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="772505822"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="772505822"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2023 14:28:45 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rC5oR-000G2z-0M;
-	Sat, 09 Dec 2023 22:28:43 +0000
-Date: Sun, 10 Dec 2023 06:28:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, arnd@arndb.de, tglx@linutronix.de,
-	luto@kernel.org, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	mhocko@kernel.org, tj@kernel.org, ying.huang@intel.com,
-	gregory.price@memverge.com, corbet@lwn.net, rakie.kim@sk.com,
-	hyeongtak.ji@sk.com, honggyu.kim@sk.com, vtavarespetr@micron.com,
-	peterz@infradead.org, jgroves@micron.com, ravis.opensrc@micron.com,
-	sthanneeru@micron.com, emirakhur@micron.com, Hasan.Maruf@amd.com
-Subject: Re: [PATCH v2 11/11] mm/mempolicy: extend set_mempolicy2 and mbind2
- to support weighted interleave
-Message-ID: <202312100606.2aOpv2T5-lkp@intel.com>
-References: <20231209065931.3458-12-gregory.price@memverge.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645C379C6;
+	Sat,  9 Dec 2023 23:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB64C433C8;
+	Sat,  9 Dec 2023 23:29:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702164551;
+	bh=c9kOjfPZi63X+asNNxhMNmUxQDfFEzKNIVa3FVoqTpU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=b6Hyp1OBNvus/wYWvXxgvsrIZmxWDbJmG7M94TiargWR0ivsB/QtcAV15++RbJpw4
+	 0aBA5M26kNQea5FdiS2dxZto+AGylSMARPzNHWPxVoeLKiA0l6cIpNgoAMvW7REZqh
+	 c2PQK/kmpYgy9PugIfR9kwNsrZdY4LqqihHztRYSxkc0KCU4dNqt/0Wv0kcB+cWFox
+	 YUDbgRYcK7BMoi+NkWVzj/MJSIR5RKcu5gsSTeGkzfQCwahZHG3Vhh7dbv3fYM7C0m
+	 IQsB2hHL6ZcSA5LR7vaDJi4nu1TqHUL4AZvEpnYmBrscOL9JKv+KMYpX68+ufgKMLS
+	 bL2ldjH3T1UQA==
+Message-ID: <279a2999-3c0a-4839-aa2e-602864197410@kernel.org>
+Date: Sat, 9 Dec 2023 16:29:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231209065931.3458-12-gregory.price@memverge.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v1 06/16] netdev: support binding dma-buf to netdevice
+Content-Language: en-US
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-7-almasrymina@google.com>
+ <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
+ <CAHS8izPsQ2XoJy-vYWkn051Yc=D_kSprtQcG4mmPutf1G3+-aw@mail.gmail.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <CAHS8izPsQ2XoJy-vYWkn051Yc=D_kSprtQcG4mmPutf1G3+-aw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Gregory,
+On 12/8/23 12:22 PM, Mina Almasry wrote:
+> On Fri, Dec 8, 2023 at 9:48 AM David Ahern <dsahern@kernel.org> wrote:
+>>
+>> On 12/7/23 5:52 PM, Mina Almasry wrote:
+> ...
+>>> +
+>>> +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+>>> +             if (rxq->binding == binding) {
+>>> +                     /* We hold the rtnl_lock while binding/unbinding
+>>> +                      * dma-buf, so we can't race with another thread that
+>>> +                      * is also modifying this value. However, the driver
+>>> +                      * may read this config while it's creating its
+>>> +                      * rx-queues. WRITE_ONCE() here to match the
+>>> +                      * READ_ONCE() in the driver.
+>>> +                      */
+>>> +                     WRITE_ONCE(rxq->binding, NULL);
+>>> +
+>>> +                     rxq_idx = get_netdev_rx_queue_index(rxq);
+>>> +
+>>> +                     netdev_restart_rx_queue(binding->dev, rxq_idx);
+>>
+>> Blindly restarting a queue when a dmabuf is heavy handed. If the dmabuf
+>> has no outstanding references (ie., no references in the RxQ), then no
+>> restart is needed.
+>>
+> 
+> I think I need to stop the queue while binding to a dmabuf for the
+> sake of concurrency, no? I.e. the softirq thread may be delivering a
+> packet, and in parallel a separate thread holds rtnl_lock and tries to
+> bind the dma-buf. At that point the page_pool recreation will race
+> with the driver doing page_pool_alloc_page(). I don't think I can
+> insert a lock to handle this into the rx fast path, no?
 
-kernel test robot noticed the following build warnings:
+I think it depends on the details of how entries are added and removed
+from the pool. I am behind on the pp details at this point, so I do need
+to do some homework.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on deller-parisc/for-next powerpc/next powerpc/fixes s390/features jcmvbkbc-xtensa/xtensa-for-next arnd-asm-generic/master linus/master v6.7-rc4]
-[cannot apply to tip/x86/asm geert-m68k/for-next geert-m68k/for-linus next-20231208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> Also, this sounds like it requires (lots of) more changes. The
+> page_pool + driver need to report how many pending references there
+> are (with locking so we don't race with incoming packets), and have
+> them reported via an ndo so that we can skip restarting the queue.
+> Implementing the changes in to a huge issue but handling the
+> concurrency may be a genuine blocker. Not sure it's worth the upside
+> of not restarting the single rx queue?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/mm-mempolicy-implement-the-sysfs-based-weighted_interleave-interface/20231209-150314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231209065931.3458-12-gregory.price%40memverge.com
-patch subject: [PATCH v2 11/11] mm/mempolicy: extend set_mempolicy2 and mbind2 to support weighted interleave
-config: x86_64-randconfig-123-20231210 (https://download.01.org/0day-ci/archive/20231210/202312100606.2aOpv2T5-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100606.2aOpv2T5-lkp@intel.com/reproduce)
+It has to do with the usability of this overall solution. As I mentioned
+most ML use cases can (and will want to) use many memory allocations for
+receiving packets - e.g., allocations per message and receiving multiple
+messages per socket connection.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312100606.2aOpv2T5-lkp@intel.com/
+> 
+>>> +             }
+>>> +     }
+>>> +
+>>> +     xa_erase(&netdev_dmabuf_bindings, binding->id);
+>>> +
+>>> +     netdev_dmabuf_binding_put(binding);
+>>> +}
+>>> +
+>>> +int netdev_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+>>> +                             struct netdev_dmabuf_binding *binding)
+>>> +{
+>>> +     struct netdev_rx_queue *rxq;
+>>> +     u32 xa_idx;
+>>> +     int err;
+>>> +
+>>> +     rxq = __netif_get_rx_queue(dev, rxq_idx);
+>>> +
+>>> +     if (rxq->binding)
+>>> +             return -EEXIST;
+>>> +
+>>> +     err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
+>>> +                    GFP_KERNEL);
+>>> +     if (err)
+>>> +             return err;
+>>> +
+>>> +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we can't
+>>> +      * race with another thread that is also modifying this value. However,
+>>> +      * the driver may read this config while it's creating its * rx-queues.
+>>> +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+>>> +      */
+>>> +     WRITE_ONCE(rxq->binding, binding);
+>>> +
+>>> +     err = netdev_restart_rx_queue(dev, rxq_idx);
+>>
+>> Similarly, here binding a dmabuf to a queue. I was expecting the dmabuf
+>> binding to add entries to the page pool for the queue.
+> 
+> To be honest, I think maybe there's a slight disconnect between how
+> you think the page_pool works, and my primitive understanding of how
+> it works. Today, I see a 1:1 mapping between rx-queue and page_pool in
+> the code. I don't see 1:many or many:1 mappings.
 
-sparse warnings: (new ones prefixed by >>)
-   mm/mempolicy.c: note: in included file (through include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h, ...):
-   include/linux/rcupdate.h:778:9: sparse: sparse: context imbalance in 'queue_folios_pte_range' - unexpected unlock
-   mm/mempolicy.c: note: in included file (through arch/x86/include/asm/uaccess.h, include/linux/uaccess.h, include/linux/sched/task.h, ...):
-   arch/x86/include/asm/uaccess_64.h:88:24: sparse: sparse: cast removes address space '__user' of expression
->> mm/mempolicy.c:1681:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned char *weights_ptr @@     got void [noderef] __user * @@
-   mm/mempolicy.c:1681:29: sparse:     expected unsigned char *weights_ptr
-   mm/mempolicy.c:1681:29: sparse:     got void [noderef] __user *
->> mm/mempolicy.c:1684:45: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void const [noderef] __user *src @@     got unsigned char *weights_ptr @@
-   mm/mempolicy.c:1684:45: sparse:     expected void const [noderef] __user *src
-   mm/mempolicy.c:1684:45: sparse:     got unsigned char *weights_ptr
-   mm/mempolicy.c:2042:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned char *weights_ptr @@     got void [noderef] __user * @@
-   mm/mempolicy.c:2042:29: sparse:     expected unsigned char *weights_ptr
-   mm/mempolicy.c:2042:29: sparse:     got void [noderef] __user *
->> mm/mempolicy.c:2043:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char *weights_ptr @@
-   mm/mempolicy.c:2043:36: sparse:     expected void [noderef] __user *to
-   mm/mempolicy.c:2043:36: sparse:     got unsigned char *weights_ptr
+I am not referring to 1:N or N:1 for page pool and queues. I am
+referring to entries within a single page pool for a single Rx queue.
 
-vim +1681 mm/mempolicy.c
 
-  1629	
-  1630	SYSCALL_DEFINE5(mbind2, const struct iovec __user *, vec, size_t, vlen,
-  1631			const struct mpol_args __user *, uargs, size_t, usize,
-  1632			unsigned long, flags)
-  1633	{
-  1634		struct mpol_args kargs;
-  1635		struct mempolicy_args margs;
-  1636		nodemask_t policy_nodes;
-  1637		unsigned long __user *nodes_ptr;
-  1638		struct iovec iovstack[UIO_FASTIOV];
-  1639		struct iovec *iov = iovstack;
-  1640		struct iov_iter iter;
-  1641		unsigned char weights[MAX_NUMNODES];
-  1642		unsigned char *weights_ptr;
-  1643		int err;
-  1644	
-  1645		if (!vec || !vlen)
-  1646			return -EINVAL;
-  1647	
-  1648		err = copy_struct_from_user(&kargs, sizeof(kargs), uargs, usize);
-  1649		if (err)
-  1650			return -EINVAL;
-  1651	
-  1652		err = validate_mpol_flags(kargs.mode, &kargs.mode_flags);
-  1653		if (err)
-  1654			return err;
-  1655	
-  1656		margs.mode = kargs.mode;
-  1657		margs.mode_flags = kargs.mode_flags;
-  1658		margs.addr = kargs.addr;
-  1659	
-  1660		/* if home node given, validate it is online */
-  1661		if (flags & MPOL_MF_HOME_NODE) {
-  1662			if ((kargs.home_node >= MAX_NUMNODES) ||
-  1663				!node_online(kargs.home_node))
-  1664				return -EINVAL;
-  1665			margs.home_node = kargs.home_node;
-  1666		} else
-  1667			margs.home_node = NUMA_NO_NODE;
-  1668		flags &= ~MPOL_MF_HOME_NODE;
-  1669	
-  1670		if (kargs.pol_nodes) {
-  1671			nodes_ptr = u64_to_user_ptr(kargs.pol_nodes);
-  1672			err = get_nodes(&policy_nodes, nodes_ptr,
-  1673					kargs.pol_maxnodes);
-  1674			if (err)
-  1675				return err;
-  1676			margs.policy_nodes = &policy_nodes;
-  1677		} else
-  1678			margs.policy_nodes = NULL;
-  1679	
-  1680		if (kargs.mode == MPOL_WEIGHTED_INTERLEAVE) {
-> 1681			weights_ptr = u64_to_user_ptr(kargs.il_weights);
-  1682			err = copy_struct_from_user(&weights,
-  1683						    sizeof(weights),
-> 1684						    weights_ptr,
-  1685						    kargs.pol_maxnodes);
-  1686			if (err)
-  1687				return err;
-  1688			margs.il_weights = weights;
-  1689		} else {
-  1690			margs.il_weights = NULL;
-  1691			flags |= MPOL_F_GWEIGHT;
-  1692		}
-  1693	
-  1694		/* For each address range in vector, do_mbind */
-  1695		err = import_iovec(ITER_DEST, vec, vlen, ARRAY_SIZE(iovstack), &iov,
-  1696				   &iter);
-  1697		if (err)
-  1698			return err;
-  1699		while (iov_iter_count(&iter)) {
-  1700			unsigned long start, len;
-  1701	
-  1702			start = untagged_addr((unsigned long)iter_iov_addr(&iter));
-  1703			len = iter_iov_len(&iter);
-  1704			err = do_mbind(start, len, &margs, flags);
-  1705			if (err)
-  1706				break;
-  1707			iov_iter_advance(&iter, iter_iov_len(&iter));
-  1708		}
-  1709	
-  1710		kfree(iov);
-  1711		return err;
-  1712	}
-  1713	
+> 
+> In theory mapping 1 rx-queue to n page_pools is trivial: the driver
+> can call page_pool_create() multiple times to generate n queues and
+> decide for incoming packets which one to use.
+> 
+> However, mapping n rx-queues to 1 page_pool seems like a can of worms.
+> I see code in the page_pool that looks to me (and Willem) like it's
+> safe only because the page_pool is used from the same napi context.
+> with a n rx-queueue: 1 page_pool mapping, that is no longer true, no?
+> There is a tail end of issues to resolve to be able to map 1 page_pool
+> to n queues as I understand and even if resolved I'm not sure the
+> maintainers are interested in taking the code.
+> 
+> So, per my humble understanding there is no such thing as "add entries
+> to the page pool for the (specific) queue", the page_pool is always
+> used by 1 queue.
+> 
+> Note that even though this limitation exists, we still support binding
+> 1 dma-buf to multiple queues, because multiple page pools can use the
+> same netdev_dmabuf_binding. I should add that to the docs.
+> 
+>> If the pool was
+>> previously empty, then maybe the queue needs to be "started" in the
+>> sense of creating with h/w or just pushing buffers into the queue and
+>> moving the pidx.
+>>
+>>
+> 
+> I don't think it's enough to add buffers to the page_pool, no? The
+> existing buffers in the page_pool (host mem) must be purged. I think
+> maybe the queue needs to be stopped as well so that we don't race with
+> incoming packets and end up with skbs with devmem and non-devmem frags
+> (unless you're thinking it becomes a requirement to support that, I
+> think things are complicated as-is and it's a good simplification).
+> When we already purge the existing buffers & restart the queue, it's
+> little effort to migrate this to become in line with Jakub's queue-api
+> that he also wants to use for per-queue configuration & ndo_stop/open.
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
