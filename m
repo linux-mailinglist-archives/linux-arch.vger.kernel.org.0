@@ -1,93 +1,118 @@
-Return-Path: <linux-arch+bounces-871-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-872-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7BF880B8A8
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 04:49:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ED1080BB9B
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 15:23:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1F6CB20A12
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 03:49:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFCEB1C20895
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 14:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F2271FC9;
-	Sun, 10 Dec 2023 03:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C313213FE5;
+	Sun, 10 Dec 2023 14:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MVA3ncTv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z46OPbu3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A42312E
-	for <linux-arch@vger.kernel.org>; Sat,  9 Dec 2023 19:49:31 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5c1f17f0198so1440985a12.1
-        for <linux-arch@vger.kernel.org>; Sat, 09 Dec 2023 19:49:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702180170; x=1702784970; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MW0tH0tCLOPnmE9TK7jB709vE7J7udoTWRcjSJbRbzw=;
-        b=MVA3ncTv2ztH8VVDR196PceGHb1j2OlSZrlL9Lw2Z9wX6UV2E/Z7XDjt5ZD7SDGkQY
-         tlWHdq4lxTiyvBUAkbTmLAnlnhSqqlhFoLb51b5SdgrG3NTW42ditNtt2dquiK22e2xx
-         Nw689Lh4It2U5heO9IEQmZwv3c3mM3nARmOuJMgEG3Fs+Rwa45tEbyggTQPX1s+IcwtO
-         u3Wiqqvto7KipLkZsC4PQE1A8RgR5sT+O1xaA8N2w+wHjPG1xRdP1x6zOnuCs9mKTdFv
-         04hbe0IOyZyj/hqPtSfyu4DtiDdktMxlvPL5bH+Fgu9pBBtlLtruM13bGr+El8lT1Frm
-         WP6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702180170; x=1702784970;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MW0tH0tCLOPnmE9TK7jB709vE7J7udoTWRcjSJbRbzw=;
-        b=mnk6NovmgbvfTJqH05wGKVmsJQRPZpk+HBxVFKqZcKirnNAOsMPT/tjJqZ60D8XQlK
-         Btt2Qd1KR88OM9mPMoboC3BDUH4TkkiqGuwrwlXOw0x4VYY5yWox2PWz5mb/3CwKzXmt
-         5w2Qx+Qw9OpOxybY7goCeIpEQ7sOgwMtiSsYKbDBeEtyfbXR3loilPUUuEvMBdGtOPQT
-         N8ZJWXHieSf3Bew7eiiO2wKMKZPMEc4M4MNZDs80zG50xImcBp2KWapo66OImZKSZ4aD
-         ef9u0v3py5VHyJmtyg1BYj8XKW9YgnW1YmJU/AHLBpZAoRY+MrtUVcv6XBDHzvX0q4LY
-         xzdQ==
-X-Gm-Message-State: AOJu0YzI+c1vDKxjNxkCdiUkOT1txXhoKQnHQMOJObSfWxd2V/C4x51Z
-	S5QMhDDhK0QI7/oLmkmlPV+CmRN2uDQ4lA==
-X-Google-Smtp-Source: AGHT+IHLBajZsz0VxcL0CaCLjiP+JcpZ3Z6iSNDh4oLOCNKWTm9OPBX9RXcqYsgny9cLWKIkHF4CYYDwWcNIvw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a63:7317:0:b0:5b8:fe99:152d with SMTP id
- o23-20020a637317000000b005b8fe99152dmr15385pgc.7.1702180170422; Sat, 09 Dec
- 2023 19:49:30 -0800 (PST)
-Date: Sun, 10 Dec 2023 03:49:28 +0000
-In-Reply-To: <20231208005250.2910004-2-almasrymina@google.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99267125DE;
+	Sun, 10 Dec 2023 14:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9FFDC433C7;
+	Sun, 10 Dec 2023 14:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702218179;
+	bh=8tne0aaAREf7h+qiY6KAldko6jyI6LRXnoNCM9fma6Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z46OPbu3lxs+nSXwJj7g5+uM236T8qcWVMENzV16W8PRn+wPA90J2c/MU1TR09r9G
+	 V7uktPMYA+kX07nhFqGBeWzVnfPGq1sWi8TmA2O/Ypbc+HHzOKCOCc6aUZpI1E2ux5
+	 i7a4xJ46nLuCB9P/YSDucazqkfc40Pwk2ruWwXth0yedV7jS/lBPvlu9h8D8FqQQ5E
+	 7NrgTVM832Ck4BiiNruf7natGB4ETT1vuYgIR5796kVSPSFEDz9SqMvV2j2pOXJx2O
+	 kYv2KFYNFZhj2cny4Ad3h63HQeFh23ezu4307DrPbna88E2yARpEbrhoRhlGsNFA2m
+	 xH4AUl7qyB+aQ==
+Date: Sun, 10 Dec 2023 14:22:56 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 26/39] arm64/ptrace: Expose GCS via ptrace and core
+ files
+Message-ID: <ZXXJwNdKC/y6bRYn@finisterre.sirena.org.uk>
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-26-201c483bd775@kernel.org>
+ <877clney35.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com> <20231208005250.2910004-2-almasrymina@google.com>
-Message-ID: <20231210034928.mk4ufxqis2w3wesg@google.com>
-Subject: Re: [net-next v1 01/16] net: page_pool: factor out releasing DMA from
- releasing the page
-From: Shakeel Butt <shakeelb@google.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	"Christian =?utf-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+xOPyWhFp+ttqF+R"
+Content-Disposition: inline
+In-Reply-To: <877clney35.fsf@linaro.org>
+X-Cookie: You might have mail.
 
-On Thu, Dec 07, 2023 at 04:52:32PM -0800, Mina Almasry wrote:
-> From: Jakub Kicinski <kuba@kernel.org>
-> 
-> Releasing the DMA mapping will be useful for other types
-> of pages, so factor it out. Make sure compiler inlines it,
-> to avoid any regressions.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
 
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
+--+xOPyWhFp+ttqF+R
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Sat, Dec 09, 2023 at 08:49:02PM -0300, Thiago Jung Bauermann wrote:
+> Mark Brown <broonie@kernel.org> writes:
+
+> > Provide a new register type NT_ARM_GCS reporting the current GCS mode
+> > and pointer for EL0.  Due to the interactions with allocation and
+> > deallocation of Guarded Control Stacks we do not permit any changes to
+> > the GCS mode via ptrace, only GCSPR_EL0 may be changed.
+
+> The code allows disabling GCS. Is that unintended?
+
+No, it's intentional - ptrace has a lot of control over the process,
+there's not a huge point trying to protect against it doing a disable.
+The reason we prevent enabling is the allocation of a GCS along with
+enable, the complexity of doing that on a remote process seemed
+unjustified.  If clone3() ends up allowing manual allocation and
+placement that'll likely be revised.
+
+--+xOPyWhFp+ttqF+R
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV1yb8ACgkQJNaLcl1U
+h9BWYwf/Tu6vlQCwGJ174Zum1yyKhNrP0gXrNj0hXhil/y9CwTApo4pvBUMmBwQz
+JO0qoPePZDOSlxns1bELpj5O5sFq0c8qB1e29Y1nFzNClHf+uyVDswS2nZDBU6Rk
+QyW/T7yJerJVj/Lw5Mh1iJMbf8+iOPyRCJ8iMOnYiCbPpOmz7FuarOxPowUXUTqe
+e/bnana1ic+ctkWCw67wxEB6SJsOSaN2uW7mCj2ftjf9Cq9GmxzYnn8WuOvPHLxQ
+1id5Q0hqIWUqpgKGWDeIng5VHThiIuZDUa4EWQga6fnVZnApv4pRNJY7ttyNS6SS
+VfquKJpzBaa9lItRtIz5Dxs2gX1jyg==
+=9ttk
+-----END PGP SIGNATURE-----
+
+--+xOPyWhFp+ttqF+R--
 
