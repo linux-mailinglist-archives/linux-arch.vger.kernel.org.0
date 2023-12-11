@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-881-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-882-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3538C80CABD
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 14:21:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4384C80CAC9
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 14:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B45DDB20F7A
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 13:21:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F17DF281F1F
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 13:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3CF03DB9B;
-	Mon, 11 Dec 2023 13:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C5D3E477;
+	Mon, 11 Dec 2023 13:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OtVmf+id"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eIX+Piq0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E7C3D96A;
-	Mon, 11 Dec 2023 13:21:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BCBC433C7;
-	Mon, 11 Dec 2023 13:20:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07A83D96A;
+	Mon, 11 Dec 2023 13:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D26C433C7;
+	Mon, 11 Dec 2023 13:21:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702300862;
-	bh=q1SgpAHgTb9yNjf1ijuF/WsU7ziWgOtp9e+gjYp9MJo=;
+	s=k20201202; t=1702300894;
+	bh=pdOjaPV9Jsg2+hufBUTJoin1FtJ4JLo5gH1YiEsQ8lI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OtVmf+id/i3jL+CkVLVQSKAM+su33w9usY4qz6ohe9ikJJaAELtzij3VYjgA9Ewp8
-	 IbjgnPDTmFzYLzisW9RoqzCM+BlinoHFZh9dn8c3DWcsxaE7n/xlIFYd5cNd5iiZYM
-	 xn+RGUNrzobVTZmgr2G/YPkzYJMxadR3JbLDRVmqIeguYU5M9B/epx6dLNTOKngCI1
-	 MfqbPSRfjDDI0mZH6L+x+WiFuG5bmPQYYmqls0mwsWZmq8aHN3nwqrQ5zwoWRasUBO
-	 t0AaPcL5MZAHJ+qrn0787/YMKkAZKw1LM4Ra/RYRDixl9gMGsxMV+U5fiYp+UkKYuN
-	 EBTvml+3hP+1Q==
-Date: Mon, 11 Dec 2023 13:20:55 +0000
+	b=eIX+Piq0oQQdGn8TD0Edg+vyONGxOr1LGqK2bq6Dsi6ovtOvnWpT/rIpQOFhBlA3b
+	 RD+M0Y9olHV8bbTdPocbTzZZmSuQtM3wSgOKRufOCXeKAdrG2YkwpRzI1hwx19gfpd
+	 R8J7br7NfDKSsDo3Ubfz/IzHwRPxRpH0UZXsDmakCZQtxs8yx3CHcht0dAUUySZ72W
+	 7ezqAlqh/1/ULVq4w52iqG1vo6pwpmtsxVWD0ybb3R5KpAvHOys51oI1D1oLC2d49W
+	 kbq2skXfspeTVUkdhvgV61N5n4rZQ8glL+SZEddbiQ/dbTg34ryLGY2yDr7oygKcuA
+	 WwZRQbf9JcgXw==
+Date: Mon, 11 Dec 2023 13:21:27 +0000
 From: Will Deacon <will@kernel.org>
-To: Russell King <rmk+kernel@armlinux.org.uk>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
 	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -46,11 +46,10 @@ Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
 	jianyong.wu@arm.com, justin.he@arm.com,
 	James Morse <james.morse@arm.com>,
 	Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH 12/21] arm64: setup: Switch over to GENERIC_CPU_DEVICES
- using arch_register_cpu()
-Message-ID: <20231211132054.GC25681@willie-the-truck>
+Subject: Re: [PATCH 13/21] arm64: convert to arch_cpu_is_hotpluggable()
+Message-ID: <20231211132127.GD25681@willie-the-truck>
 References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
- <E1r5R3b-00Csza-Ku@rmk-PC.armlinux.org.uk>
+ <E1r5R3g-00Cszg-PP@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -59,46 +58,40 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E1r5R3b-00Csza-Ku@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1r5R3g-00Cszg-PP@rmk-PC.armlinux.org.uk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Nov 21, 2023 at 01:44:51PM +0000, Russell King wrote:
-> From: James Morse <james.morse@arm.com>
+On Tue, Nov 21, 2023 at 01:44:56PM +0000, Russell King (Oracle) wrote:
+> Convert arm64 to use the arch_cpu_is_hotpluggable() helper rather than
+> arch_register_cpu().
 > 
-> To allow ACPI's _STA value to hide CPUs that are present, but not
-> available to online right now due to VMM or firmware policy, the
-> register_cpu() call needs to be made by the ACPI machinery when ACPI
-> is in use. This allows it to hide CPUs that are unavailable from sysfs.
-> 
-> Switching to GENERIC_CPU_DEVICES is an intermediate step to allow all
-> five ACPI architectures to be modified at once.
-> 
-> Switch over to GENERIC_CPU_DEVICES, and provide an arch_register_cpu()
-> that populates the hotpluggable flag. arch_register_cpu() is also the
-> interface the ACPI machinery expects.
-> 
-> The struct cpu in struct cpuinfo_arm64 is never used directly, remove
-> it to use the one GENERIC_CPU_DEVICES provides.
-> 
-> This changes the CPUs visible in sysfs from possible to present, but
-> on arm64 smp_prepare_cpus() ensures these are the same.
-> 
-> This patch also has the effect of moving the registration of CPUs from
-> subsys to driver core initialisation, prior to any initcalls running.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > Reviewed-by: Gavin Shan <gshan@redhat.com>
 > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > ---
-> Changes since RFC v2:
->  * Add note about initialisation order change.
-> ---
->  arch/arm64/Kconfig           |  1 +
->  arch/arm64/include/asm/cpu.h |  1 -
->  arch/arm64/kernel/setup.c    | 13 ++++---------
->  3 files changed, 5 insertions(+), 10 deletions(-)
+>  arch/arm64/kernel/setup.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index 165bd2c0dd5a..42c690bb2d60 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -402,13 +402,9 @@ static inline bool cpu_can_disable(unsigned int cpu)
+>  	return false;
+>  }
+>  
+> -int arch_register_cpu(int num)
+> +bool arch_cpu_is_hotpluggable(int num)
+>  {
+> -	struct cpu *cpu = &per_cpu(cpu_devices, num);
+> -
+> -	cpu->hotpluggable = cpu_can_disable(num);
+> -
+> -	return register_cpu(cpu, num);
+> +	return cpu_can_disable(num);
+>  }
+>  
+>  static void dump_kernel_offset(void)
 
 Acked-by: Will Deacon <will@kernel.org>
 
