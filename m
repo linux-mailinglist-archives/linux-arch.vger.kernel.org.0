@@ -1,282 +1,397 @@
-Return-Path: <linux-arch+bounces-877-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-878-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D90AB80C036
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 05:05:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54AFD80C105
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 06:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64DFCB207FC
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 04:04:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B50341F20F65
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 05:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56C81775F;
-	Mon, 11 Dec 2023 04:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B8721EA84;
+	Mon, 11 Dec 2023 05:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VaDRWRM1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fB5FjEVh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C21BF4
-	for <linux-arch@vger.kernel.org>; Sun, 10 Dec 2023 20:04:50 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-4b2d64a368aso2251288e0c.1
-        for <linux-arch@vger.kernel.org>; Sun, 10 Dec 2023 20:04:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702267490; x=1702872290; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VRqbtjk8rq4zydD2Xsjk5a3+pHw9ItIcSF2MB1yehQo=;
-        b=VaDRWRM1KRnktwFxZ92SGWHc1wbhGhcnjpbwvr7zS/PYf7hQmZDMYJBrBxhQ4eVjnA
-         Q+c2MzggIH/mQZjlACA44bUtyaF2Fd2UijObUiaGn0cfrabnnsoeH7776n8Xgitmi1yY
-         yjxFOAmF5tRy3PfE+F2GcW7IlBjeQdWuhMuwuIp3C33DpBBBGJiiYMoQ6zPce2JeeAaB
-         trzubaUeLVF7btf1C6JnWpEiFKOGS9XLFm+btbsaj6YpJ0LgWiubuabKMyNLHJXnPux4
-         vx0wSYQPT9j+ECQZ/fRwvyVnjJKc8Dhw82g/lYSA61ce8PUrx2nAlKy5Czg24W3W5u4b
-         GQpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702267490; x=1702872290;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VRqbtjk8rq4zydD2Xsjk5a3+pHw9ItIcSF2MB1yehQo=;
-        b=bJGy9FwPM4+hsywRzxIrl+3XVrDEBtIUJ2Ai6+VudBLzBMtjd3JXlgtNFrsulyN8qf
-         5Tml/jUzxT1mobzHTTcE1qVLdgvLo5iVd6kALyexW784t1Zzayubd2pmrwkrQl6B31hV
-         jBxwCVDrIWvIds6Hzmoqyukjo5MLeNDBqnLOoqEX57UV4oNf7c2mglvaNs1aGcMVuioF
-         3mhBcsRH52Jeo1HSgW5ALgqSbrh8HRGta8Bp6Td5WnkkA5LkWkWCeAWtyw0sra20sxwM
-         adGpXHLS4AGkaRqfe4VsyplwXZoFX2J8kJK6/3WdnmVdX9grAlyZwoXVbVWaodUN7zCb
-         45/A==
-X-Gm-Message-State: AOJu0Yzo1WmvAbWfakG2nooLjV7cXuhdxtZs6BtqWmbqjPcKp57SP0x+
-	DdgNnO+BRsQfEO5ThreWm1a/IKgDNDVVe9Xq4eiXdQ==
-X-Google-Smtp-Source: AGHT+IGAfd74P9yx0nc2KiABSnElGYTnepENJsYtWliZ+g0y9LWw0IHdbTNPBs473It21Lgw8vWq6UsEAVUukNqm/hI=
-X-Received: by 2002:a05:6122:18aa:b0:496:80b6:2fd1 with SMTP id
- bi42-20020a05612218aa00b0049680b62fd1mr2519624vkb.5.1702267489809; Sun, 10
- Dec 2023 20:04:49 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA242B3;
+	Sun, 10 Dec 2023 21:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702274150; x=1733810150;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=e2bHdzm75z38LjF+9o3T3w5mUw+3GAOwy/r3Sc5Wnf4=;
+  b=fB5FjEVhWkktHL+8X0WiKHZhevS3gauEznt6P3FT60r8UuFHV81F3cQ4
+   L5m0HJ2WsAE2CADJY9+fadc+D+ct2QkyY+sjt1r0EwTKCPSVdoXwMB+Yk
+   8/iLvMdl2GJmTMHtVQJZVtfn9OlZdC+rLgshpPaPNEchPaSheS3MDwI0X
+   IRgLRBwS6AH/lLeil2Q8lKPFD+5ph9uOnErFZrqfDmolpud8BST0wLM0T
+   xdQZAavgAIeP2tUkcB7Im9unKl57ua6gflp2ETIGF0P3Y8WAXXk9r+IxH
+   IhrXxKUIdIVRRv/qzsZb+zzhnzhXDLuOskM+p9wH82Flr89fICd5MWZ9k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="1714376"
+X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
+   d="scan'208";a="1714376"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2023 21:55:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="776539295"
+X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
+   d="scan'208";a="776539295"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2023 21:55:39 -0800
+From: "Huang, Ying" <ying.huang@intel.com>
+To: Gregory Price <gourry.memverge@gmail.com>
+Cc: linux-mm@kvack.org,  linux-doc@vger.kernel.org,
+  linux-fsdevel@vger.kernel.org,  linux-api@vger.kernel.org,
+  linux-arch@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  akpm@linux-foundation.org,  arnd@arndb.de,  tglx@linutronix.de,
+  luto@kernel.org,  mingo@redhat.com,  bp@alien8.de,
+  dave.hansen@linux.intel.com,  x86@kernel.org,  hpa@zytor.com,
+  mhocko@kernel.org,  tj@kernel.org,  gregory.price@memverge.com,
+  corbet@lwn.net,  rakie.kim@sk.com,  hyeongtak.ji@sk.com,
+  honggyu.kim@sk.com,  vtavarespetr@micron.com,  peterz@infradead.org,
+  jgroves@micron.com,  ravis.opensrc@micron.com,  sthanneeru@micron.com,
+  emirakhur@micron.com,  Hasan.Maruf@amd.com,  seungjun.ha@samsung.com,
+  Johannes Weiner <hannes@cmpxchg.org>,  Hasan Al Maruf
+ <hasanalmaruf@fb.com>,  Hao Wang <haowang3@fb.com>,  Dan Williams
+ <dan.j.williams@intel.com>,  Michal Hocko <mhocko@suse.com>,  Zhongkun He
+ <hezhongkun.hzk@bytedance.com>,  Frank van der Linden <fvdl@google.com>,
+  John Groves <john@jagalactic.com>,  Jonathan Cameron
+ <Jonathan.Cameron@Huawei.com>
+Subject: Re: [PATCH v2 00/11] mempolicy2, mbind2, and weighted interleave
+In-Reply-To: <20231209065931.3458-1-gregory.price@memverge.com> (Gregory
+	Price's message of "Sat, 9 Dec 2023 01:59:20 -0500")
+References: <20231209065931.3458-1-gregory.price@memverge.com>
+Date: Mon, 11 Dec 2023 13:53:40 +0800
+Message-ID: <87r0jtxp23.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-10-almasrymina@google.com> <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
- <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
- <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com> <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
-In-Reply-To: <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Sun, 10 Dec 2023 20:04:36 -0800
-Message-ID: <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
-Subject: Re: [net-next v1 09/16] page_pool: device memory support
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 10, 2023 at 6:26=E2=80=AFPM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> On Sun, Dec 10, 2023 at 6:04=E2=80=AFPM Yunsheng Lin <linyunsheng@huawei.=
-com> wrote:
-> >
-> > On 2023/12/9 0:05, Mina Almasry wrote:
-> > > On Fri, Dec 8, 2023 at 1:30=E2=80=AFAM Yunsheng Lin <linyunsheng@huaw=
-ei.com> wrote:
-> > >>
-> > >>
-> > >> As mentioned before, it seems we need to have the above checking eve=
-ry
-> > >> time we need to do some per-page handling in page_pool core, is ther=
-e
-> > >> a plan in your mind how to remove those kind of checking in the futu=
-re?
-> > >>
-> > >
-> > > I see 2 ways to remove the checking, both infeasible:
-> > >
-> > > 1. Allocate a wrapper struct that pulls out all the fields the page p=
-ool needs:
-> > >
-> > > struct netmem {
-> > >         /* common fields */
-> > >         refcount_t refcount;
-> > >         bool is_pfmemalloc;
-> > >         int nid;
-> > >         ...
-> > >         union {
-> > >                 struct dmabuf_genpool_chunk_owner *owner;
-> > >                 struct page * page;
-> > >         };
-> > > };
-> > >
-> > > The page pool can then not care if the underlying memory is iov or
-> > > page. However this introduces significant memory bloat as this struct
-> > > needs to be allocated for each page or ppiov, which I imagine is not
-> > > acceptable for the upside of removing a few static_branch'd if
-> > > statements with no performance cost.
-> > >
-> > > 2. Create a unified struct for page and dmabuf memory, which the mm
-> > > folks have repeatedly nacked, and I imagine will repeatedly nack in
-> > > the future.
-> > >
-> > > So I imagine the special handling of ppiov in some form is critical
-> > > and the checking may not be removable.
-> >
-> > If the above is true, perhaps devmem is not really supposed to be inter=
-gated
-> > into page_pool.
-> >
-> > Adding a checking for every per-page handling in page_pool core is just=
- too
-> > hacky to be really considerred a longterm solution.
-> >
->
-> The only other option is to implement another page_pool for ppiov and
-> have the driver create page_pool or ppiov_pool depending on the state
-> of the netdev_rx_queue (or some helper in the net stack to do that for
-> the driver). This introduces some code duplication. The ppiov_pool &
-> page_pool would look similar in implementation.
->
-> But this was all discussed in detail in RFC v2 and the last response I
-> heard from Jesper was in favor if this approach, if I understand
-> correctly:
->
-> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@redha=
-t.com/
->
-> Would love to have the maintainer weigh in here.
->
+Hi, Gregory,
 
-I should note we may be able to remove some of the checking, but maybe not =
-all.
+Thanks for updated version!
 
-- Checks that disable page fragging for ppiov can be removed once
-ppiov has frag support (in this series or follow up).
+Gregory Price <gourry.memverge@gmail.com> writes:
 
-- If we use page->pp_frag_count (or page->pp_ref_count) for
-refcounting ppiov, we can remove the if checking in the refcounting.
-
-- We may be able to store the dma_addr of the ppiov in page->dma_addr,
-but I'm unsure if that actually works, because the dma_buf dmaddr is
-dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
-I think). But if it works for pages I may be able to make it work for
-ppiov as well.
-
-- Checks that obtain the page->pp can work with ppiov if we align the
-offset of page->pp and ppiov->pp.
-
-- Checks around page->pp_magic can be removed if we also have offset
-aligned ppiov->pp_magic.
-
-Sadly I don't see us removing the checking for these other cases:
-
-- page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
-that helper.
-
-- page_to_nid(): I'm not allowed to pass a non-struct page into that helper=
-.
-
-- page_pool_free_va(): ppiov have no va.
-
-- page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
-fundamentally can't get mapped again.
-
-Are the removal (or future removal) of these checks enough to resolve this?
-
-> > It is somewhat ironical that devmem is using static_branch to alliviate=
- the
-> > performance impact for normal memory at the possible cost of performanc=
-e
-> > degradation for devmem, does it not defeat some purpose of intergating =
-devmem
-> > to page_pool?
-> >
+> v2:
+>   changes / adds:
+> - flattened weight matrix to an array at requested of Ying Huang
+> - Updated ABI docs per Davidlohr Bueso request
+> - change uapi structure to use aligned/fixed-length members as
+>   Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> - Implemented weight fetch logic in get_mempolicy2
+> - mbind2 was changed to take (iovec,len) as function arguments
+>   rather than add them to the uapi structure, since they describe
+>   where to apply the mempolicy - as opposed to being part of it.
 >
-> I don't see the issue. The static branch sets the non-ppiov path as
-> default if no memory providers are in use, and flips it when they are,
-> making the default branch prediction ideal in both cases.
+>   fixes:
+> - fixed bug on fork/pthread
+>   Reported-by: Seungjun Ha <seungjun.ha@samsung.com>
+>   Link: https://lore.kernel.org/linux-cxl/20231206080944epcms2p76ebb230b9=
+f4595f5cfcd2531d67ab3ce@epcms2p7/
+> - fixed bug in mbind2 where MPOL_F_GWEIGHTS was not set when il_weights
+>   was omitted after local weights were added as an option
+> - fixed bug in interleave logic where an OOB access was made if
+>   next_node_in returned MAX_NUMNODES
+> - fixed bug in bulk weighted interleave allocator where over-allocation
+>   could occur.
 >
-> > >
-> > >> Even though a static_branch check is added in page_is_page_pool_iov(=
-), it
-> > >> does not make much sense that a core has tow different 'struct' for =
-its
-> > >> most basic data.
-> > >>
-> > >> IMHO, the ppiov for dmabuf is forced fitting into page_pool without =
-much
-> > >> design consideration at this point.
-> > >>
-> > > ...
-> > >>
-> > >> For now, the above may work for the the rx part as it seems that you=
- are
-> > >> only enabling rx for dmabuf for now.
-> > >>
-> > >> What is the plan to enable tx for dmabuf? If it is also intergrated =
-into
-> > >> page_pool? There was a attempt to enable page_pool for tx, Eric seem=
-ed to
-> > >> have some comment about this:
-> > >> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005@=
-huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
-> > >>
-> > >> If tx is not intergrated into page_pool, do we need to create a new =
-layer for
-> > >> the tx dmabuf?
-> > >>
-> > >
-> > > I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
-> > > helpers, and page_pool_page_*() helpers, but will not need any core
-> > > page_pool changes. This is because the TX path will have to piggyback
-> >
-> > We may need another bit/flags checking to demux between page_pool owned
-> > devmem and non-page_pool owned devmem.
-> >
+>   tests:
+> - LTP: validated existing get_mempolicy, set_mempolicy, and mbind testss
+> - LTP: validated existing get_mempolicy, set_mempolicy, and mbind with
+>        MPOL_WEIGHTED_INTERLEAVE added.
+> - basic set_mempolicy2 tests and numactl -w --interleave tests
 >
-> The way I'm imagining the support, I don't see the need for such
-> flags. We'd be re-using generic helpers like
-> page_pool_iov_get_dma_address() and what not that don't need that
-> checking.
+>   numactl:
+> - Sample numactl extension for set_mempolicy available here:
+>   Link: https://github.com/gmprice/numactl/tree/weighted_interleave_master
 >
-> > Also calling page_pool_*() on non-page_pool owned devmem is confusing
-> > enough that we may need a thin layer handling non-page_pool owned devme=
-m
-> > in the end.
-> >
+> (summary of LTP tests and manual tests added to end of cover letter)
 >
-> The page_pool_page* & page_pool_iov* functions can be renamed if
-> confusing. I would think that's no issue (note that the page_pool_*
-> functions need not be called for TX path).
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 >
-> > > on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation fro=
-m
-> > > the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
-> > > implementation based on dmabuf pages without page_pool involvement, I
-> > > imagine I'll do something similar.
-> > It would be good to have a tx implementation for the next version, so
-> > that we can have a whole picture of devmem.
-> >
-> > >
+> This patch set extends the mempolicy interface to enable new
+> mempolicies which may require extended data to operate. One
+> such policy is included with this set as an example.
 >
+> There are 3 major "phases" in the patch set:
+> 1) Implement a "global weight" mechanism via sysfs, which allows
+>    set_mempolicy to implement MPOL_WEIGHTED_INTERLEAVE utilizing
+>    weights set by the administrator (or system daemon).
 >
+> 2) A refactor of the mempolicy creation mechanism to accept an
+>    extensible argument structure `struct mempolicy_args` to promote
+>    code re-use between the original mempolicy/mbind interfaces and
+>    the new extended mempolicy/mbind interfaces.
 >
-> --
-> Thanks,
-> Mina
+> 3) Implementation of set_mempolicy2, get_mempolicy2, and mbind2,
+>    along with the addition of task-local weights so that per-task
+>    weights can be registered for MPOL_WEIGHTED_INTERLEAVE.
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> (Patch 1) : sysfs addition - /sys/kernel/mm/mempolicy/
+>
+> This feature  provides a way to set interleave weight information under
+> sysfs at /sys/kernel/mm/mempolicy/weighted_interleave/nodeN/nodeM/weight
+>
+>     The sysfs structure is designed as follows.
+>
+>       $ tree /sys/kernel/mm/mempolicy/
+>       /sys/kernel/mm/mempolicy/
+>       =E2=94=9C=E2=94=80=E2=94=80 possible_nodes
+>       =E2=94=94=E2=94=80=E2=94=80 weighted_interleave
+>           =E2=94=9C=E2=94=80=E2=94=80 nodeN
+>           =E2=94=82=C2=A0  =E2=94=94=E2=94=80=E2=94=80 weight
+>           =E2=94=94=E2=94=80=E2=94=80 nodeN+X
+>           =C2=A0   =E2=94=94=E2=94=80=E2=94=80 weight
+>
+> 'mempolicy' is added to '/sys/kernel/mm/' as a control group for
+> the mempolicy subsystem.
 
+Is it good to add 'mempolicy' in '/sys/kernel/mm/numa'?  The advantage
+is that 'mempolicy' here is in fact "NUMA mempolicy".  The disadvantage
+is one more directory nesting.  I have no strong opinion here.
 
+> 'possible_nodes' is added to 'mm/mempolicy' to help describe the
+> expected structures under mempolicy directorys. For example,
+> possible_nodes describes what nodeN directories wille exist under
+> the weighted_interleave directory.
+
+We have '/sys/devices/system/node/possible' already.  Is this just a
+duplication?  If so, why?  And, the possible nodes can be gotten via
+contents of 'weighted_interleave' too.
+
+And it appears not necessary to make 'weighted_interleave/nodeN'
+directory.  Why not just make it a file.
+
+And, can we add a way to reset weight to the default value?  For example
+`echo > nodeN/weight` or `echo > nodeN`.
+
+> Internally, weights are represented as an array of unsigned char
+>
+> static unsigned char iw_table[MAX_NUMNODES];
+>
+> char was chosen as most reasonable distributions can be represented
+> as factors <100, and to minimize memory usage (1KB)
+>
+> We present possible nodes, instead of online nodes, to simplify the
+> management interface, considering that a) the table is of size
+> MAX_NUMNODES anyway to simplify fetching of weights (no need to track
+> sizes, and MAX_NUMNODES is typically at most 1kb), and b) it simplifies
+> management of hotplug events, allowing for weights to be set prior to
+> a node coming online, which may be beneficial for immediate use.
+>
+> the 'weight' of a node (an unsigned char of value 1-255) is the number
+> of pages that are allocated during a "weighted interleave" round.
+> (See 'weighted interleave' for more details').
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> (Patch 2) set_mempolicy: MPOL_WEIGHTED_INTERLEAVE
+>
+> Weighted interleave is a new memory policy that interleaves memory
+> across numa nodes in the provided nodemask based on the weights
+> described in patch 1 (sysfs global weights).
+>
+> When a system has multiple NUMA nodes and it becomes bandwidth hungry,
+> the current MPOL_INTERLEAVE could be an wise option.
+>
+> However, if those NUMA nodes consist of different types of memory such
+> as having local DRAM and CXL memory together, the current round-robin
+> based interleaving policy doesn't maximize the overall bandwidth
+> because of their different bandwidth characteristics.
+>
+> Instead, the interleaving can be more efficient when the allocation
+> policy follows each NUMA nodes' bandwidth weight rather than having 1:1
+> round-robin allocation.
+>
+> This patch introduces a new memory policy, MPOL_WEIGHTED_INTERLEAVE,
+> which enables weighted interleaving between NUMA nodes.  Weighted
+> interleave allows for a proportional distribution of memory across
+> multiple numa nodes, preferablly apportioned to match the bandwidth
+> capacity of each node from the perspective of the accessing node.
+>
+> For example, if a system has 1 CPU node (0), and 2 memory nodes (0,1),
+> with a relative bandwidth of (100GB/s, 50GB/s) respectively, the
+> appropriate weight distribution is (2:1).
+>
+> Weights will be acquired from the global weight array exposed by the
+> sysfs extension: /sys/kernel/mm/mempolicy/weighted_interleave/
+>
+> The policy will then allocate the number of pages according to the
+> set weights.  For example, if the weights are (2,1), then 2 pages
+> will be allocated on node0 for every 1 page allocated on node1.
+>
+> The new flag MPOL_WEIGHTED_INTERLEAVE can be used in set_mempolicy(2)
+> and mbind(2).
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> (Patches 3-6) Refactoring mempolicy for code-reuse
+>
+> To avoid multiple paths of mempolicy creation, we should refactor the
+> existing code to enable the designed extensibility, and refactor
+> existing users to utilize the new interface (while retaining the
+> existing userland interface).
+>
+> This set of patches introduces a new mempolicy_args structure, which
+> is used to more fully describe a requested mempolicy - to include
+> existing and future extensions.
+>
+> /*
+>  * Describes settings of a mempolicy during set/get syscalls and
+>  * kernel internal calls to do_set_mempolicy()
+>  */
+> struct mempolicy_args {
+>     unsigned short mode;            /* policy mode */
+>     unsigned short mode_flags;      /* policy mode flags */
+>     nodemask_t *policy_nodes;       /* get/set/mbind */
+>     int policy_node;                /* get: policy node information */
+>     unsigned long addr;             /* get: vma address */
+>     int addr_node;                  /* get: node the address belongs to */
+>     int home_node;                  /* mbind: use MPOL_MF_HOME_NODE */
+>     unsigned char *il_weights;      /* for mode MPOL_WEIGHTED_INTERLEAVE =
+*/
+> };
+>
+> This arg structure will eventually be utilized by the following
+> interfaces:
+>     mpol_new() - new mempolicy creation
+>     do_get_mempolicy() - acquiring information about mempolicy
+>     do_set_mempolicy() - setting the task mempolicy
+>     do_mbind()         - setting a vma mempolicy
+>
+> do_get_mempolicy() is completely refactored to break it out into
+> separate functionality based on the flags provided by get_mempolicy(2)
+>     MPOL_F_MEMS_ALLOWED: acquires task->mems_allowed
+>     MPOL_F_ADDR: acquires information on vma policies
+>     MPOL_F_NODE: changes the output for the policy arg to node info
+>
+> We refactor the get_mempolicy syscall flatten the logic based on these
+> flags, and aloow for set_mempolicy2() to re-use the underlying logic.
+>
+> The result of this refactor, and the new mempolicy_args structure, is
+> that extensions like 'sys_set_mempolicy_home_node' can now be directly
+> integrated into the initial call to 'set_mempolicy2', and that more
+> complete information about a mempolicy can be returned with a single
+> call to 'get_mempolicy2', rather than multiple calls to 'get_mempolicy'
+>
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> (Patches 7-10) set_mempolicy2, get_mempolicy2, mbind2
+>
+> These interfaces are the 'extended' counterpart to their relatives.
+> They use the userland 'struct mpol_args' structure to communicate a
+> complete mempolicy configuration to the kernel.  This structure
+> looks very much like the kernel-internal 'struct mempolicy_args':
+>
+> struct mpol_args {
+>         /* Basic mempolicy settings */
+>         __u16 mode;
+>         __u16 mode_flags;
+>         __s32 home_node;
+>         __aligned_u64 pol_nodes;
+>         __u64 pol_maxnodes;
+>         __u64 addr;
+>         __s32 policy_node;
+>         __s32 addr_node;
+>         __aligned_u64 *il_weights;      /* of size pol_maxnodes */
+> };
+
+This looks unnecessarily complex.  I don't think that it's a good idea
+to use exact same parameter for all 3 syscalls.
+
+For example, can we use something as below?
+
+  long set_mempolicy2(int mode, const unsigned long *nodemask, unsigned int=
+ *il_weights,
+                          unsigned long maxnode, unsigned long home_node,
+                          unsigned long flags);
+
+  long mbind2(unsigned long start, unsigned long len,
+                          int mode, const unsigned long *nodemask, unsigned=
+ int *il_weights,
+                          unsigned long maxnode, unsigned long home_node,
+                          unsigned long flags);
+
+A struct may be defined to hold mempolicy iteself.
+
+struct mpol {
+        int mode;
+        unsigned int home_node;
+        const unsigned long *nodemask;
+        unsigned int *il_weights;
+        unsigned int maxnode;
+};
+
+> The basic mempolicy settings which are shared across all interfaces
+> are captured at the top of the structure, while extensions such as
+> 'policy_node' and 'addr' are collected beneath.
+>
+> The syscalls are uniform and defined as follows:
+>
+> long sys_mbind2(struct iovec *vec, size_t vlen,
+>                 struct mpol_args *args, size_t usize,
+>                 unsigned long flags);
+>
+> long sys_get_mempolicy2(struct mpol_args *args, size_t size,
+>                         unsigned long flags);
+>
+> long sys_set_mempolicy2(struct mpol_args *args, size_t size,
+>                         unsigned long flags);
+>
+> The 'flags' argument for mbind2 is the same as 'mbind', except with
+> the addition of MPOL_MF_HOME_NODE to denote whether the 'home_node'
+> field should be utilized.
+>
+> The 'flags' argument for get_mempolicy2 is the same as get_mempolicy.
+>
+> The 'flags' argument is not used by 'set_mempolicy' at this time, but
+> may end up allowing the use of MPOL_MF_HOME_NODE if such functionality
+> is desired.
+>
+> The extensions can be summed up as follows:
+>
+> get_mempolicy2 extensions:
+>     'mode', 'policy_node', and 'addr_node' can now be fetched with
+>     a single call, rather than multiple with a combination of flags.
+>     - 'mode' will always return the policy mode
+>     - 'policy_node' will replace the functionality of MPOL_F_NODE
+>     - 'addr_node' will return the node for 'addr' w/ MPOL_F_ADDR
+>
+> set_mempolicy2:
+>     - task-local interleave weights can be set via 'il_weights'
+>       (see next patch)
+>
+> mbind2:
+>     - 'vec' and 'vlen' are sed to operate on multiple memory
+>        ranges, rather than a single memory range per syscall.
+>     - 'home_node' field sets policy home node w/ MPOL_MF_HOME_NODE
+>     - task-local interleave weights can be set via 'il_weights'
+>       (see next patch)
+>
 
 --
-Thanks,
-Mina
+Best Regards,
+Huang, Ying
+
+[snip]
 
