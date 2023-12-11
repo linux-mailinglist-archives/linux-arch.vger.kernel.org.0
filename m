@@ -1,118 +1,157 @@
-Return-Path: <linux-arch+bounces-872-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-873-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ED1080BB9B
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 15:23:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8786280BEDF
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 03:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFCEB1C20895
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Dec 2023 14:23:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1099F280C70
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 02:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C313213FE5;
-	Sun, 10 Dec 2023 14:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z46OPbu3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF3810A3C;
+	Mon, 11 Dec 2023 02:04:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99267125DE;
-	Sun, 10 Dec 2023 14:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9FFDC433C7;
-	Sun, 10 Dec 2023 14:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702218179;
-	bh=8tne0aaAREf7h+qiY6KAldko6jyI6LRXnoNCM9fma6Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z46OPbu3lxs+nSXwJj7g5+uM236T8qcWVMENzV16W8PRn+wPA90J2c/MU1TR09r9G
-	 V7uktPMYA+kX07nhFqGBeWzVnfPGq1sWi8TmA2O/Ypbc+HHzOKCOCc6aUZpI1E2ux5
-	 i7a4xJ46nLuCB9P/YSDucazqkfc40Pwk2ruWwXth0yedV7jS/lBPvlu9h8D8FqQQ5E
-	 7NrgTVM832Ck4BiiNruf7natGB4ETT1vuYgIR5796kVSPSFEDz9SqMvV2j2pOXJx2O
-	 kYv2KFYNFZhj2cny4Ad3h63HQeFh23ezu4307DrPbna88E2yARpEbrhoRhlGsNFA2m
-	 xH4AUl7qyB+aQ==
-Date: Sun, 10 Dec 2023 14:22:56 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 26/39] arm64/ptrace: Expose GCS via ptrace and core
- files
-Message-ID: <ZXXJwNdKC/y6bRYn@finisterre.sirena.org.uk>
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-26-201c483bd775@kernel.org>
- <877clney35.fsf@linaro.org>
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CEBD9;
+	Sun, 10 Dec 2023 18:04:08 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4SpQ5r3nGLz14M0c;
+	Mon, 11 Dec 2023 10:04:00 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7268C1800B8;
+	Mon, 11 Dec 2023 10:04:05 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 11 Dec
+ 2023 10:04:05 +0800
+Subject: Re: [net-next v1 09/16] page_pool: device memory support
+To: Mina Almasry <almasrymina@google.com>
+CC: Shailend Chand <shailend@google.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
+	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
+	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-10-almasrymina@google.com>
+ <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
+ <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com>
+Date: Mon, 11 Dec 2023 10:04:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+xOPyWhFp+ttqF+R"
-Content-Disposition: inline
-In-Reply-To: <877clney35.fsf@linaro.org>
-X-Cookie: You might have mail.
+In-Reply-To: <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
+On 2023/12/9 0:05, Mina Almasry wrote:
+> On Fri, Dec 8, 2023 at 1:30 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>>
+>> As mentioned before, it seems we need to have the above checking every
+>> time we need to do some per-page handling in page_pool core, is there
+>> a plan in your mind how to remove those kind of checking in the future?
+>>
+> 
+> I see 2 ways to remove the checking, both infeasible:
+> 
+> 1. Allocate a wrapper struct that pulls out all the fields the page pool needs:
+> 
+> struct netmem {
+>         /* common fields */
+>         refcount_t refcount;
+>         bool is_pfmemalloc;
+>         int nid;
+>         ...
+>         union {
+>                 struct dmabuf_genpool_chunk_owner *owner;
+>                 struct page * page;
+>         };
+> };
+> 
+> The page pool can then not care if the underlying memory is iov or
+> page. However this introduces significant memory bloat as this struct
+> needs to be allocated for each page or ppiov, which I imagine is not
+> acceptable for the upside of removing a few static_branch'd if
+> statements with no performance cost.
+> 
+> 2. Create a unified struct for page and dmabuf memory, which the mm
+> folks have repeatedly nacked, and I imagine will repeatedly nack in
+> the future.
+> 
+> So I imagine the special handling of ppiov in some form is critical
+> and the checking may not be removable.
 
---+xOPyWhFp+ttqF+R
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If the above is true, perhaps devmem is not really supposed to be intergated
+into page_pool.
 
-On Sat, Dec 09, 2023 at 08:49:02PM -0300, Thiago Jung Bauermann wrote:
-> Mark Brown <broonie@kernel.org> writes:
+Adding a checking for every per-page handling in page_pool core is just too
+hacky to be really considerred a longterm solution.
 
-> > Provide a new register type NT_ARM_GCS reporting the current GCS mode
-> > and pointer for EL0.  Due to the interactions with allocation and
-> > deallocation of Guarded Control Stacks we do not permit any changes to
-> > the GCS mode via ptrace, only GCSPR_EL0 may be changed.
+It is somewhat ironical that devmem is using static_branch to alliviate the
+performance impact for normal memory at the possible cost of performance
+degradation for devmem, does it not defeat some purpose of intergating devmem
+to page_pool?
 
-> The code allows disabling GCS. Is that unintended?
+> 
+>> Even though a static_branch check is added in page_is_page_pool_iov(), it
+>> does not make much sense that a core has tow different 'struct' for its
+>> most basic data.
+>>
+>> IMHO, the ppiov for dmabuf is forced fitting into page_pool without much
+>> design consideration at this point.
+>>
+> ...
+>>
+>> For now, the above may work for the the rx part as it seems that you are
+>> only enabling rx for dmabuf for now.
+>>
+>> What is the plan to enable tx for dmabuf? If it is also intergrated into
+>> page_pool? There was a attempt to enable page_pool for tx, Eric seemed to
+>> have some comment about this:
+>> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
+>>
+>> If tx is not intergrated into page_pool, do we need to create a new layer for
+>> the tx dmabuf?
+>>
+> 
+> I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
+> helpers, and page_pool_page_*() helpers, but will not need any core
+> page_pool changes. This is because the TX path will have to piggyback
 
-No, it's intentional - ptrace has a lot of control over the process,
-there's not a huge point trying to protect against it doing a disable.
-The reason we prevent enabling is the allocation of a GCS along with
-enable, the complexity of doing that on a remote process seemed
-unjustified.  If clone3() ends up allowing manual allocation and
-placement that'll likely be revised.
+We may need another bit/flags checking to demux between page_pool owned
+devmem and non-page_pool owned devmem.
 
---+xOPyWhFp+ttqF+R
-Content-Type: application/pgp-signature; name="signature.asc"
+Also calling page_pool_*() on non-page_pool owned devmem is confusing
+enough that we may need a thin layer handling non-page_pool owned devmem
+in the end.
 
------BEGIN PGP SIGNATURE-----
+> on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation from
+> the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
+> implementation based on dmabuf pages without page_pool involvement, I
+> imagine I'll do something similar.
+It would be good to have a tx implementation for the next version, so
+that we can have a whole picture of devmem.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV1yb8ACgkQJNaLcl1U
-h9BWYwf/Tu6vlQCwGJ174Zum1yyKhNrP0gXrNj0hXhil/y9CwTApo4pvBUMmBwQz
-JO0qoPePZDOSlxns1bELpj5O5sFq0c8qB1e29Y1nFzNClHf+uyVDswS2nZDBU6Rk
-QyW/T7yJerJVj/Lw5Mh1iJMbf8+iOPyRCJ8iMOnYiCbPpOmz7FuarOxPowUXUTqe
-e/bnana1ic+ctkWCw67wxEB6SJsOSaN2uW7mCj2ftjf9Cq9GmxzYnn8WuOvPHLxQ
-1id5Q0hqIWUqpgKGWDeIng5VHThiIuZDUa4EWQga6fnVZnApv4pRNJY7ttyNS6SS
-VfquKJpzBaa9lItRtIz5Dxs2gX1jyg==
-=9ttk
------END PGP SIGNATURE-----
-
---+xOPyWhFp+ttqF+R--
+> 
 
