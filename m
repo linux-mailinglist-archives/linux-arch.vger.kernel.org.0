@@ -1,351 +1,280 @@
-Return-Path: <linux-arch+bounces-900-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-901-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0584480D50E
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 19:14:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD2EA80DBB5
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 21:37:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9DC71C2138E
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 18:14:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B0641F21276
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 20:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACA3168CF;
-	Mon, 11 Dec 2023 18:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D57851039;
+	Mon, 11 Dec 2023 20:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2ZR9oew+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6q1zdkV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFADC3
-	for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 10:14:17 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6d9f9fbfd11so1788114a34.2
-        for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 10:14:17 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DBDD6;
+	Mon, 11 Dec 2023 12:37:18 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3332e351670so4516544f8f.0;
+        Mon, 11 Dec 2023 12:37:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702318456; x=1702923256; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zbiqO7RxhSXNHZRSCjwyZy4HmqVXPvY1sANPCgpMBIA=;
-        b=2ZR9oew+tVsgkdbtVJPAIjNlqjQeakbUN08vwSybi21pD7JMCR0VjzZNIAL4Ql+O9C
-         7+xRmtnoHMGO7vGqublUTMIoEUpQyMp5C/Q15mq28NKrqJo84IPm+I27gcHRRz1QvPk9
-         3Bt0ieiBUMQ0b50x1yG5uZKdQu7gk0sJiVHr4pFlWY1CWFkqiCt1k94Yr+K2ec94ewBv
-         sGZGHVvgxwJoJpWq6xDMFSAIbxsm7+NGgyHh/5zNQOFLdwzCn7Q68XHR3R3Iw0Y85XfS
-         0z1l8SQXvz9P1h9Rve0ew1xgE2nb8v3ipP5ZhXKhMFwu497xQ+GX8qKpLGznUFXJdDtR
-         VuLg==
+        d=gmail.com; s=20230601; t=1702327037; x=1702931837; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5mREG4zmhlrjDE364pycILMuHT3yybZyzypq/2nes4o=;
+        b=V6q1zdkV+wxIKXpM7DWq66B2NPzZBUPK4hr3WRtG+MTVSfExKywo7PK4Bt3nluEqDT
+         MkYrCuuDgvHFyqtkeTL5EVEmHFlAqoCG4wzA1E0AOVgzV7GgxwkQ9vs2R6aGYX15ri2/
+         sp1/AuQvVGRbOCriyt32YoOicKW7+0NZ50d5dTXoKn41lk//umXIHVlwVFUrW8yo+vYp
+         lrn9Cd0RaMPdIaG8HHIVCsPOhnrT3YGAomYLF9MeJLVuBcHmmXArVou5P2kL/Ae82RHR
+         ZnSLIq6BPwppSyaCaayBA0PoehLyk2aJOEhKI7Uz3FPmnyjCKCcFU5bviWtGyL9hN/ou
+         07XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702318456; x=1702923256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zbiqO7RxhSXNHZRSCjwyZy4HmqVXPvY1sANPCgpMBIA=;
-        b=OtbTsghUfmuChlEnr7mfEuFNAu8+zCD0vCUAvltv+MDETDN6p5NSX1m3VDL9nXygvP
-         cpDwjPyUuIjRXO0LKoDGCXMq6pHOSBY2h3myg1ERo91lMbXXEgI/LaHy9YgND6dKJfFl
-         0qA1bCBjyu6JqTjy9JXYImWmdh1wROg2BsrQeqG+aGwS386GeC5ojh2B7NpytHZ22kjd
-         EtD9OnWKOmArDm2qo0fhvUsO3bdGcL8b3XU5sWEHEYYkbHkaCj/LZjDZ4QSix1gGagBA
-         Hs6pLPC8Esg5QslO2UhFlsT+QeYOSCfoQSh5Igm9kBdJT0qi/VX7eympBuF6dKCXtfKw
-         ULpw==
-X-Gm-Message-State: AOJu0YzgB07cihpzQgScuLAjNfVTDLeLW2ICjYnYdIvh67AsBkYqy3hc
-	95ZLnrB5gmP/4/LAhhPl0Czyc8MdIDrDiXu1VCaIMQ==
-X-Google-Smtp-Source: AGHT+IE8095BrfyI+kTIXDm8hNguhYybzjvVGensk2JElZVZdZ4bLJQ+s/d+dDYVGThzdPiv+aq1lB4rQf1PXQGNIdE=
-X-Received: by 2002:a05:6830:164a:b0:6d9:d902:44f0 with SMTP id
- h10-20020a056830164a00b006d9d90244f0mr4280561otr.50.1702318456301; Mon, 11
- Dec 2023 10:14:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702327037; x=1702931837;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mREG4zmhlrjDE364pycILMuHT3yybZyzypq/2nes4o=;
+        b=XUGOs0D1C5EKC/b3Z0mxu1ogVHxrWSHJxBA65PBIYaZiH9yi8GafUYjsyV8T4DwD50
+         iI/eYdSCMb2iXzA3PXMw5XKi5yiYfZAet5sASmkxXIgBAHe7dc7e+81MnVu4zONtwbgJ
+         e9xqoQTLS1VsUyMbW8DnbrP/FQ/3S73ZrSodhoH31n3CPmfICPsRdUav5uIZ0y+l2p2f
+         BseSMW0UlBock5k7uzKK3pN9UsOmxf/FSvZP268P+JIQRei1jaSBheA1/uU9tAhth7Dp
+         fvX9tXjqjGZbrnAh1rP5Lge2WvBvNqA5x/tTQ4UEppdSvJroTP+V//2x/hUYGgTp/CUf
+         WKGg==
+X-Gm-Message-State: AOJu0YxI/1+RqepqcdtaXs8ZPwTXd9Ha46KBp8URvAL6Hv6fQJGeJM1S
+	HOj5ktQZ5YXRgkSxBIL4Nfo=
+X-Google-Smtp-Source: AGHT+IEzTCISh0ruDu6vYmjO9E9rylweqKZzQOVwuAulm2hyYEqdn+X3sTHJGxJeaYXMVcOHEARlYA==
+X-Received: by 2002:adf:a198:0:b0:333:38eb:8947 with SMTP id u24-20020adfa198000000b0033338eb8947mr1043696wru.275.1702327036762;
+        Mon, 11 Dec 2023 12:37:16 -0800 (PST)
+Received: from [192.168.8.100] ([85.255.234.108])
+        by smtp.gmail.com with ESMTPSA id o4-20020a5d58c4000000b0033333bee379sm9328312wrf.107.2023.12.11.12.37.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Dec 2023 12:37:16 -0800 (PST)
+Message-ID: <661c1bae-d7d3-457e-b545-5f67b9ef4197@gmail.com>
+Date: Mon, 11 Dec 2023 20:35:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory
+ provider
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
 References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-10-almasrymina@google.com> <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
- <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
- <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com> <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
- <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com> <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
-In-Reply-To: <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 11 Dec 2023 10:14:05 -0800
-Message-ID: <CAHS8izMdpo0D7GYzMkOtg1ueCODAVNxtwSP_qPseSYXNMhPGCw@mail.gmail.com>
-Subject: Re: [net-next v1 09/16] page_pool: device memory support
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20231208005250.2910004-9-almasrymina@google.com>
+ <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
+ <CAHS8izNVFx6oHoo7y86P8Di9VCVe8A_n_9UZFkg5Wnt=A=YcNQ@mail.gmail.com>
+ <b1aea7bc-9627-499a-9bee-d2cc07856978@gmail.com>
+ <CAHS8izPry13h49v+PqrmWSREZKZjYpPesxUTyPQy7AGyFwzo4g@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izPry13h49v+PqrmWSREZKZjYpPesxUTyPQy7AGyFwzo4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 11, 2023 at 3:51=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.co=
-m> wrote:
->
-> On 2023/12/11 12:04, Mina Almasry wrote:
-> > On Sun, Dec 10, 2023 at 6:26=E2=80=AFPM Mina Almasry <almasrymina@googl=
-e.com> wrote:
-> >>
-> >> On Sun, Dec 10, 2023 at 6:04=E2=80=AFPM Yunsheng Lin <linyunsheng@huaw=
-ei.com> wrote:
-> >>>
-> >>> On 2023/12/9 0:05, Mina Almasry wrote:
-> >>>> On Fri, Dec 8, 2023 at 1:30=E2=80=AFAM Yunsheng Lin <linyunsheng@hua=
-wei.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>> As mentioned before, it seems we need to have the above checking ev=
-ery
-> >>>>> time we need to do some per-page handling in page_pool core, is the=
-re
-> >>>>> a plan in your mind how to remove those kind of checking in the fut=
-ure?
-> >>>>>
-> >>>>
-> >>>> I see 2 ways to remove the checking, both infeasible:
-> >>>>
-> >>>> 1. Allocate a wrapper struct that pulls out all the fields the page =
-pool needs:
-> >>>>
-> >>>> struct netmem {
-> >>>>         /* common fields */
-> >>>>         refcount_t refcount;
-> >>>>         bool is_pfmemalloc;
-> >>>>         int nid;
-> >>>>         ...
-> >>>>         union {
-> >>>>                 struct dmabuf_genpool_chunk_owner *owner;
-> >>>>                 struct page * page;
-> >>>>         };
-> >>>> };
-> >>>>
-> >>>> The page pool can then not care if the underlying memory is iov or
-> >>>> page. However this introduces significant memory bloat as this struc=
-t
-> >>>> needs to be allocated for each page or ppiov, which I imagine is not
-> >>>> acceptable for the upside of removing a few static_branch'd if
-> >>>> statements with no performance cost.
-> >>>>
-> >>>> 2. Create a unified struct for page and dmabuf memory, which the mm
-> >>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
-> >>>> the future.
-> >>>>
-> >>>> So I imagine the special handling of ppiov in some form is critical
-> >>>> and the checking may not be removable.
-> >>>
-> >>> If the above is true, perhaps devmem is not really supposed to be int=
-ergated
-> >>> into page_pool.
-> >>>
-> >>> Adding a checking for every per-page handling in page_pool core is ju=
-st too
-> >>> hacky to be really considerred a longterm solution.
-> >>>
-> >>
-> >> The only other option is to implement another page_pool for ppiov and
-> >> have the driver create page_pool or ppiov_pool depending on the state
-> >> of the netdev_rx_queue (or some helper in the net stack to do that for
-> >> the driver). This introduces some code duplication. The ppiov_pool &
-> >> page_pool would look similar in implementation.
->
-> I think there is a design pattern already to deal with this kind of probl=
-em,
-> refactoring common code used by both page_pool and ppiov into a library t=
-o
-> aovid code duplication if most of them have similar implementation.
->
+On 12/11/23 02:30, Mina Almasry wrote:
+> On Sat, Dec 9, 2023 at 7:05 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 12/8/23 23:25, Mina Almasry wrote:
+>>> On Fri, Dec 8, 2023 at 2:56 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>>>
+>>>> On 12/8/23 00:52, Mina Almasry wrote:
+>>> ...
+>>>>> +     if (pool->p.queue)
+>>>>> +             binding = READ_ONCE(pool->p.queue->binding);
+>>>>> +
+>>>>> +     if (binding) {
+>>>>> +             pool->mp_ops = &dmabuf_devmem_ops;
+>>>>> +             pool->mp_priv = binding;
+>>>>> +     }
+>>>>
+>>>> Hmm, I don't understand why would we replace a nice transparent
+>>>> api with page pool relying on a queue having devmem specific
+>>>> pointer? It seemed more flexible and cleaner in the last RFC.
+>>>>
+>>>
+>>> Jakub requested this change and may chime in, but I suspect it's to
+>>> further abstract the devmem changes from driver. In this iteration,
+>>> the driver grabs the netdev_rx_queue and passes it to the page_pool,
+>>> and any future configurations between the net stack and page_pool can
+>>> be passed this way with the driver unbothered.
+>>
+>> Ok, that makes sense, but even if passed via an rx queue I'd
+>> at least hope it keeping abstract provider parameters, e.g.
+>> ops, but not hard coded with devmem specific code.
+>>
+>> It might even be better done with a helper like
+>> create_page_pool_from_queue(), unless there is some deeper
+>> interaction b/w pp and rx queues is predicted.
+>>
+> 
+> Off hand I don't see the need for a new create_page_pool_from_queue().
+> page_pool_create() already takes in a param arg that lets us pass in
+> the queue as well as any other params.
+> 
+>>>>> +
+>>>>>         if (pool->mp_ops) {
+>>>>>                 err = pool->mp_ops->init(pool);
+>>>>>                 if (err) {
+>>>>> @@ -1020,3 +1033,77 @@ void page_pool_update_nid(struct page_pool *pool, int new_nid)
+>>>>>         }
+>>>>>     }
+>>>>>     EXPORT_SYMBOL(page_pool_update_nid);
+>>>>> +
+>>>>> +void __page_pool_iov_free(struct page_pool_iov *ppiov)
+>>>>> +{
+>>>>> +     if (WARN_ON(ppiov->pp->mp_ops != &dmabuf_devmem_ops))
+>>>>> +             return;
+>>>>> +
+>>>>> +     netdev_free_dmabuf(ppiov);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(__page_pool_iov_free);
+>>>>
+>>>> I didn't look too deep but I don't think I immediately follow
+>>>> the pp refcounting. It increments pages_state_hold_cnt on
+>>>> allocation, but IIUC doesn't mark skbs for recycle? Then, they all
+>>>> will be put down via page_pool_iov_put_many() bypassing
+>>>> page_pool_return_page() and friends. That will call
+>>>> netdev_free_dmabuf(), which doesn't bump pages_state_release_cnt.
+>>>>
+>>>> At least I couldn't make it work with io_uring, and for my purposes,
+>>>> I forced all puts to go through page_pool_return_page(), which calls
+>>>> the ->release_page callback. The callback will put the reference and
+>>>> ask its page pool to account release_cnt. It also gets rid of
+>>>> __page_pool_iov_free(), as we'd need to add a hook there for
+>>>> customization otherwise.
+>>>>
+>>>> I didn't care about overhead because the hot path for me is getting
+>>>> buffers from a ring, which is somewhat analogous to sock_devmem_dontneed(),
+>>>> but done on pp allocations under napi, and it's done separately.
+>>>>
+>>>> Completely untested with TCP devmem:
+>>>>
+>>>> https://github.com/isilence/linux/commit/14bd56605183dc80b540999e8058c79ac92ae2d8
+>>>>
+>>>
+>>> This was a mistake in the last RFC, which should be fixed in v1. In
+>>> the RFC I was not marking the skbs as skb_mark_for_recycle(), so the
+>>> unreffing path wasn't as expected.
+>>>
+>>> In this iteration, that should be completely fixed. I suspect since I
+>>> just posted this you're actually referring to the issue tested on the
+>>> last RFC? Correct me if wrong.
+>>
+>> Right, it was with RFCv3
+>>
+>>> In this iteration, the reffing story:
+>>>
+>>> - memory provider allocs ppiov and returns it to the page pool with
+>>> ppiov->refcount == 1.
+>>> - The page_pool gives the page to the driver. The driver may
+>>> obtain/release references with page_pool_page_[get|put]_many(), but
+>>> the driver is likely not doing that unless it's doing its own page
+>>> recycling.
+>>> - The net stack obtains references via skb_frag_ref() ->
+>>> page_pool_page_get_many()
+>>> - The net stack drops references via skb_frag_unref() ->
+>>> napi_pp_put_page() -> page_pool_return_page() and friends.
+>>>
+>>> Thus, the issue where the unref path was skipping
+>>> page_pool_return_page() and friends should be resolved in this
+>>> iteration, let me know if you think otherwise, but I think this was an
+>>> issue limited to the last RFC.
+>>
+>> Then page_pool_iov_put_many() should and supposedly would never be
+>> called by non devmap code because all puts must circle back into
+>> ->release_page. Why adding it to into page_pool_page_put_many()?
+>>
+>> @@ -731,6 +731,29 @@ __page_pool_put_page(struct page_pool *pool, struct page *page,
+>> +       if (page_is_page_pool_iov(page)) {
+>> ...
+>> +               page_pool_page_put_many(page, 1);
+>> +               return NULL;
+>> +       }
+>>
+>> Well, I'm looking at this new branch from Patch 10, it can put
+>> the buffer, but what if we race at it's actually the final put?
+>> Looks like nobody is going to to bump up pages_state_release_cnt
+>>
+> 
+> Good catch, I think indeed the release_cnt would be incorrect in this
+> case. I think the race is benign in the sense that the ppiov will be
+> freed correctly and available for allocation when the page_pool next
+> needs it; the issue is with the stats AFAICT.
 
-Code can be refactored if it's identical, not if it is similar. I
-suspect the page_pools will be only similar, and if you're not willing
-to take devmem handling into the page pool then refactoring page_pool
-code into helpers that do devmem handling may also not be an option.
-
-> >>
-> >> But this was all discussed in detail in RFC v2 and the last response I
-> >> heard from Jesper was in favor if this approach, if I understand
-> >> correctly:
-> >>
-> >> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@re=
-dhat.com/
-> >>
-> >> Would love to have the maintainer weigh in here.
-> >>
-> >
-> > I should note we may be able to remove some of the checking, but maybe =
-not all.
-> >
-> > - Checks that disable page fragging for ppiov can be removed once
-> > ppiov has frag support (in this series or follow up).
-> >
-> > - If we use page->pp_frag_count (or page->pp_ref_count) for
-> > refcounting ppiov, we can remove the if checking in the refcounting.
-> >
-
-I'm not sure this is actually possible in the short term. The
-page_pool uses both page->_refcount and page->pp_frag_count for
-refcounting, and I will not be able to remove the special handling
-around page->_refcount as i'm not allowed to call page_ref_*() APIs on
-a non-struct page.
-
-> > - We may be able to store the dma_addr of the ppiov in page->dma_addr,
-> > but I'm unsure if that actually works, because the dma_buf dmaddr is
-> > dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
-> > I think). But if it works for pages I may be able to make it work for
-> > ppiov as well.
-> >
-> > - Checks that obtain the page->pp can work with ppiov if we align the
-> > offset of page->pp and ppiov->pp.
-> >
-> > - Checks around page->pp_magic can be removed if we also have offset
-> > aligned ppiov->pp_magic.
-> >
-> > Sadly I don't see us removing the checking for these other cases:
-> >
-> > - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
-> > that helper.
->
-> We can do similar trick like above as bit 1 of page->pp_magic is used to
-> indicate that if it is a pfmemalloc page.
->
-
-Likely yes.
-
-> >
-> > - page_to_nid(): I'm not allowed to pass a non-struct page into that he=
-lper.
->
-> Yes, this one need special case.
->
-> >
-> > - page_pool_free_va(): ppiov have no va.
->
-> Doesn't the skb_frags_readable() checking will protect the page_pool_free=
-_va()
-> from being called on devmem?
->
-
-This function seems to be only called from veth which doesn't support
-devmem. I can remove the handling there.
-
-> >
-> > - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
-> > fundamentally can't get mapped again.
->
-> Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
-> DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
->
-
-Jakub says PP_FLAG_DMA_MAP must be enabled for devmem, such that the
-page_pool handles the dma mapping of the devmem and the driver doesn't
-use it on its own.
-
-We may fail creating the page pool on  PP_FLAG_DMA_SYNC_DEV maybe, and
-remove the checking from page_pool_sync_for_dev(), I think.
-
-> >
-> > Are the removal (or future removal) of these checks enough to resolve t=
-his?
->
-> Yes, that is somewhat similar to my proposal, the biggest objection seems=
- to
-> be that we need to have a safe type checking for it to work correctly.
->
-> >
-> >>> It is somewhat ironical that devmem is using static_branch to allivia=
-te the
-> >>> performance impact for normal memory at the possible cost of performa=
-nce
-> >>> degradation for devmem, does it not defeat some purpose of intergatin=
-g devmem
-> >>> to page_pool?
-> >>>
-> >>
-> >> I don't see the issue. The static branch sets the non-ppiov path as
-> >> default if no memory providers are in use, and flips it when they are,
-> >> making the default branch prediction ideal in both cases.
->
-> You are assuming the we are not using page pool for both normal memory an=
-d
-> devmem at the same. But a generic solution should not have that assumptio=
-n
-> as my understanding.
->
-> >>
-> >>>>
-> >>>>> Even though a static_branch check is added in page_is_page_pool_iov=
-(), it
-> >>>>> does not make much sense that a core has tow different 'struct' for=
- its
-> >>>>> most basic data.
-> >>>>>
-> >>>>> IMHO, the ppiov for dmabuf is forced fitting into page_pool without=
- much
-> >>>>> design consideration at this point.
-> >>>>>
-> >>>> ...
-> >>>>>
-> >>>>> For now, the above may work for the the rx part as it seems that yo=
-u are
-> >>>>> only enabling rx for dmabuf for now.
-> >>>>>
-> >>>>> What is the plan to enable tx for dmabuf? If it is also intergrated=
- into
-> >>>>> page_pool? There was a attempt to enable page_pool for tx, Eric see=
-med to
-> >>>>> have some comment about this:
-> >>>>> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005=
-@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
-> >>>>>
-> >>>>> If tx is not intergrated into page_pool, do we need to create a new=
- layer for
-> >>>>> the tx dmabuf?
-> >>>>>
-> >>>>
-> >>>> I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
-> >>>> helpers, and page_pool_page_*() helpers, but will not need any core
-> >>>> page_pool changes. This is because the TX path will have to piggybac=
-k
-> >>>
-> >>> We may need another bit/flags checking to demux between page_pool own=
-ed
-> >>> devmem and non-page_pool owned devmem.
-> >>>
-> >>
-> >> The way I'm imagining the support, I don't see the need for such
-> >> flags. We'd be re-using generic helpers like
-> >> page_pool_iov_get_dma_address() and what not that don't need that
-> >> checking.
-> >>
-> >>> Also calling page_pool_*() on non-page_pool owned devmem is confusing
-> >>> enough that we may need a thin layer handling non-page_pool owned dev=
-mem
-> >>> in the end.
-> >>>
-> >>
-> >> The page_pool_page* & page_pool_iov* functions can be renamed if
-> >> confusing. I would think that's no issue (note that the page_pool_*
->
-> When you rename those functions, you will have a thin layer automatically=
-.
->
-> >> functions need not be called for TX path).
-> >>
-> >>>> on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation fr=
-om
-> >>>> the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
-> >>>> implementation based on dmabuf pages without page_pool involvement, =
-I
-> >>>> imagine I'll do something similar.
-> >>> It would be good to have a tx implementation for the next version, so
-> >>> that we can have a whole picture of devmem.
+hold_cnt + release_cnt serves is used for refcounting. In this case
+it'll leak the pool when you try to destroy it.
 
 
+>> If you remove the branch, let it fall into ->release and rely
+>> on refcounting there, then the callback could also fix up
+>> release_cnt or ask pp to do it, like in the patch I linked above
+>>
+> 
+> Sadly I don't think this is possible due to the reasons I mention in
+> the commit message of that patch. Prematurely releasing ppiov and not
+> having them be candidates for recycling shows me a 4-5x degradation in
+> performance.
 
---=20
-Thanks,
-Mina
+I don't think I follow. The concept is to only recycle a buffer (i.e.
+make it available for allocation) when its refs drop to zero, which is
+IMHO the only way it can work, and IIUC what this patchset is doing.
+
+That's also I suggest to do, but through a slightly different path.
+Let's say at some moment there are 2 refs (e.g. 1 for an skb and
+1 for userspace/xarray).
+
+Say it first puts the skb:
+
+napi_pp_put_page()
+   -> page_pool_return_page()
+     -> mp_ops->release_page()
+        -> need_to_free = put_buf()
+           // not last ref, need_to_free==false,
+           // don't recycle, don't increase release_cnt
+
+Then you put the last ref:
+
+page_pool_iov_put_many()
+   -> page_pool_return_page()
+     -> mp_ops->release_page()
+        -> need_to_free = put_buf()
+           // last ref, need_to_free==true,
+           // recycle and release_cnt++
+
+And that last put can even be recycled right into the
+pp / ptr_ring, in which case it doesn't need to touch
+release_cnt. Does it make sense? I don't see where
+4-5x degradation would come from
+
+
+> What I could do here is detect that the refcount was dropped to 0 and
+> fix up the stats in that case.
+
+-- 
+Pavel Begunkov
 
