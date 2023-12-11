@@ -1,55 +1,53 @@
-Return-Path: <linux-arch+bounces-882-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-883-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4384C80CAC9
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 14:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B77C80CE3C
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 15:21:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F17DF281F1F
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 13:21:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DBD6281C42
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 14:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C5D3E477;
-	Mon, 11 Dec 2023 13:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eIX+Piq0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B190D487AE;
+	Mon, 11 Dec 2023 14:21:52 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07A83D96A;
-	Mon, 11 Dec 2023 13:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D26C433C7;
-	Mon, 11 Dec 2023 13:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702300894;
-	bh=pdOjaPV9Jsg2+hufBUTJoin1FtJ4JLo5gH1YiEsQ8lI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eIX+Piq0oQQdGn8TD0Edg+vyONGxOr1LGqK2bq6Dsi6ovtOvnWpT/rIpQOFhBlA3b
-	 RD+M0Y9olHV8bbTdPocbTzZZmSuQtM3wSgOKRufOCXeKAdrG2YkwpRzI1hwx19gfpd
-	 R8J7br7NfDKSsDo3Ubfz/IzHwRPxRpH0UZXsDmakCZQtxs8yx3CHcht0dAUUySZ72W
-	 7ezqAlqh/1/ULVq4w52iqG1vo6pwpmtsxVWD0ybb3R5KpAvHOys51oI1D1oLC2d49W
-	 kbq2skXfspeTVUkdhvgV61N5n4rZQ8glL+SZEddbiQ/dbTg34ryLGY2yDr7oygKcuA
-	 WwZRQbf9JcgXw==
-Date: Mon, 11 Dec 2023 13:21:27 +0000
-From: Will Deacon <will@kernel.org>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH 13/21] arm64: convert to arch_cpu_is_hotpluggable()
-Message-ID: <20231211132127.GD25681@willie-the-truck>
-References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
- <E1r5R3g-00Cszg-PP@rmk-PC.armlinux.org.uk>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 366931BF6;
+	Mon, 11 Dec 2023 06:21:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C2ECFEC;
+	Mon, 11 Dec 2023 06:22:31 -0800 (PST)
+Received: from raptor (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 613B73F738;
+	Mon, 11 Dec 2023 06:21:39 -0800 (PST)
+Date: Mon, 11 Dec 2023 14:21:36 +0000
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: Hyesoo Yu <hyesoo.yu@samsung.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+	rppt@kernel.org, hughd@google.com, pcc@google.com,
+	steven.price@arm.com, anshuman.khandual@arm.com,
+	vincenzo.frascino@arm.com, david@redhat.com, eugenis@google.com,
+	kcc@google.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 15/27] arm64: mte: Check that tag storage blocks
+ are in the same zone
+Message-ID: <ZXca8B6a3HPRrdNP@raptor>
+References: <20231119165721.9849-1-alexandru.elisei@arm.com>
+ <CGME20231119165900epcas2p3efd0f3ac19b7bcf7883e8d3945e63326@epcas2p3.samsung.com>
+ <20231119165721.9849-16-alexandru.elisei@arm.com>
+ <20231129085744.GB2988384@tiffany>
+ <ZWh5S9BoO5bG5nQM@raptor>
+ <20231208052739.GB1359878@tiffany>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -58,42 +56,146 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E1r5R3g-00Cszg-PP@rmk-PC.armlinux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20231208052739.GB1359878@tiffany>
 
-On Tue, Nov 21, 2023 at 01:44:56PM +0000, Russell King (Oracle) wrote:
-> Convert arm64 to use the arch_cpu_is_hotpluggable() helper rather than
-> arch_register_cpu().
+Hi,
+
+On Fri, Dec 08, 2023 at 02:27:39PM +0900, Hyesoo Yu wrote:
+> Hi~
 > 
-> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
->  arch/arm64/kernel/setup.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+> On Thu, Nov 30, 2023 at 12:00:11PM +0000, Alexandru Elisei wrote:
+> > Hi,
+> > 
+> > On Wed, Nov 29, 2023 at 05:57:44PM +0900, Hyesoo Yu wrote:
+> > > On Sun, Nov 19, 2023 at 04:57:09PM +0000, Alexandru Elisei wrote:
+> > > > alloc_contig_range() requires that the requested pages are in the same
+> > > > zone. Check that this is indeed the case before initializing the tag
+> > > > storage blocks.
+> > > > 
+> > > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> > > > ---
+> > > >  arch/arm64/kernel/mte_tag_storage.c | 33 +++++++++++++++++++++++++++++
+> > > >  1 file changed, 33 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_tag_storage.c
+> > > > index 8b9bedf7575d..fd63430d4dc0 100644
+> > > > --- a/arch/arm64/kernel/mte_tag_storage.c
+> > > > +++ b/arch/arm64/kernel/mte_tag_storage.c
+> > > > @@ -265,6 +265,35 @@ void __init mte_tag_storage_init(void)
+> > > >  	}
+> > > >  }
+> > > >  
+> > > > +/* alloc_contig_range() requires all pages to be in the same zone. */
+> > > > +static int __init mte_tag_storage_check_zone(void)
+> > > > +{
+> > > > +	struct range *tag_range;
+> > > > +	struct zone *zone;
+> > > > +	unsigned long pfn;
+> > > > +	u32 block_size;
+> > > > +	int i, j;
+> > > > +
+> > > > +	for (i = 0; i < num_tag_regions; i++) {
+> > > > +		block_size = tag_regions[i].block_size;
+> > > > +		if (block_size == 1)
+> > > > +			continue;
+> > > > +
+> > > > +		tag_range = &tag_regions[i].tag_range;
+> > > > +		for (pfn = tag_range->start; pfn <= tag_range->end; pfn += block_size) {
+> > > > +			zone = page_zone(pfn_to_page(pfn));
+> > > 
+> > > Hello.
+> > > 
+> > > Since the blocks within the tag_range must all be in the same zone, can we move the "page_zone"
+> > > out of the loop ?
+> > `
+> > Hmm.. why do you say that the pages in a tag_range must be in the same
+> > zone? I am not very familiar with how the memory management code puts pages
+> > into zones, but I would imagine that pages in a tag range straddling the
+> > 4GB limit (so, let's say, from 3GB to 5GB) will end up in both ZONE_DMA and
+> > ZONE_NORMAL.
+> > 
+> > Thanks,
+> > Alex
+> > 
 > 
-> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-> index 165bd2c0dd5a..42c690bb2d60 100644
-> --- a/arch/arm64/kernel/setup.c
-> +++ b/arch/arm64/kernel/setup.c
-> @@ -402,13 +402,9 @@ static inline bool cpu_can_disable(unsigned int cpu)
->  	return false;
->  }
->  
-> -int arch_register_cpu(int num)
-> +bool arch_cpu_is_hotpluggable(int num)
->  {
-> -	struct cpu *cpu = &per_cpu(cpu_devices, num);
-> -
-> -	cpu->hotpluggable = cpu_can_disable(num);
-> -
-> -	return register_cpu(cpu, num);
-> +	return cpu_can_disable(num);
->  }
->  
->  static void dump_kernel_offset(void)
+> Oh, I see that reserve_tag_storage only calls alloc_contig_rnage in units of block_size,
+> I thought it could be called for the entire range the page needed at once.
+> (Maybe it could be a bit faster ? It doesn't seem like unnecessary drain and
+> other operation are repeated.)
 
-Acked-by: Will Deacon <will@kernel.org>
+Yes, that might be useful to do. Worth keeping in mind is that:
 
-Will
+- a number of block size pages at the start and end of the range might
+  already be reserved for other tagged pages, so the actual range that is
+  being reserved might end up being smaller that what we are expecting.
+
+- the most common allocation order is smaller or equal to
+  PAGE_ALLOC_COSTLY_ORDER, which is 3, which means that the most common
+  case is that reserve_tag_storage reserves only one tag storage block.
+
+I will definitely keep this optimization in mind, but I would prefer to get
+the series into a more stable shape before looking at performance
+optimizations.
+
+> 
+> If we use the cma code when activating the tag storage, it will be error if the
+> entire area of tag region is not in the same zone, so there should be a constraint
+> that it must be in the same zone when defining the tag region on device tree.
+
+I don't think that's the best approach, because the device tree describes
+the hardware, which does not change, and this is a software limitation
+(i.e, CMA doesn't work if a CMA region spans different zones), which might
+get fixed in a future version of Linux.
+
+In my opinion, the simplest solution would be to check that all tag storage
+regions have been activated successfully by CMA before enabling tag
+storage. Another alternative would be to split the tag storage region into
+several CMA regions at a zone boundary, and add it as distinct CMA regions.
+
+Thanks,
+Alex
+
+> 
+> Thanks,
+> Regards.
+> 
+> > > 
+> > > Thanks,
+> > > Regards.
+> > > 
+> > > > +			for (j = 1; j < block_size; j++) {
+> > > > +				if (page_zone(pfn_to_page(pfn + j)) != zone) {
+> > > > +					pr_err("Tag storage block pages in different zones");
+> > > > +					return -EINVAL;
+> > > > +				}
+> > > > +			}
+> > > > +		}
+> > > > +	}
+> > > > +
+> > > > +	 return 0;
+> > > > +}
+> > > > +
+> > > >  static int __init mte_tag_storage_activate_regions(void)
+> > > >  {
+> > > >  	phys_addr_t dram_start, dram_end;
+> > > > @@ -321,6 +350,10 @@ static int __init mte_tag_storage_activate_regions(void)
+> > > >  		goto out_disabled;
+> > > >  	}
+> > > >  
+> > > > +	ret = mte_tag_storage_check_zone();
+> > > > +	if (ret)
+> > > > +		goto out_disabled;
+> > > > +
+> > > >  	for (i = 0; i < num_tag_regions; i++) {
+> > > >  		tag_range = &tag_regions[i].tag_range;
+> > > >  		for (pfn = tag_range->start; pfn <= tag_range->end; pfn += pageblock_nr_pages)
+> > > > -- 
+> > > > 2.42.1
+> > > > 
+> > > > 
+> > 
+> > 
+> > 
+
+
 
