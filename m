@@ -1,67 +1,68 @@
-Return-Path: <linux-arch+bounces-902-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-903-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F417D80DDF6
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 23:08:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5945A80DE12
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 23:17:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E5521F21A90
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 22:08:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E42DA1F21A63
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 22:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C3E95577C;
-	Mon, 11 Dec 2023 22:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A6855788;
+	Mon, 11 Dec 2023 22:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fmleqSyA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EJGkd/iw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4D7A1
-	for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 14:08:39 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-40c3963f9fcso5815e9.1
-        for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 14:08:39 -0800 (PST)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1534F92
+	for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 14:16:50 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40c3963f9fcso6285e9.1
+        for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 14:16:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702332518; x=1702937318; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702333008; x=1702937808; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qlYlHCXGFU5KZ74rv5ll10Sv9Er2/TqtV7SmAS1Ie5U=;
-        b=fmleqSyAoJZqKuOxvTFhOA72jJdQb1AodQZBs7Isl+mYKM2JAp+t/WS7sNwTgrC7f6
-         PvzJ84i3Ehl2rZtYUIquiqD0yt0BnyokdTCq613WvfAhYZ/I+KeJYsfFztW+o0pFISym
-         MTnwHdfk3l+mTsASlFujN0Ga3bMl9gn265etgTGWuZskylOJB96pvBDI6W8EfzKm4evc
-         Rq4+s8ZApP0TLCE52ZZekDQfh4S1NmeKTTMOAuC6Aiw9TohCoI5LohgNJs9DXtqm8G5a
-         UPpQrUXd1PyrNOv+ZYj+hCqrsc02r1yLkQye6yKzNgYZBm52NthWo2HPsxu4G+3wm5v7
-         2FCQ==
+        bh=nvF5V1Q9Ar02mtoysYDu05U7aSKEzXllew7q5EyIvRE=;
+        b=EJGkd/iw2jT4LICCe7+1ZUUwN7mBfzeOtBXag0ZjSuy9YBg/LBxNWAFQQ7Il7oD0/W
+         natwddcNSVEvix41/0w02yQvnstpeVWLmZW6nHMcMTCn407rnT7CZV5jkkI+ouyYG/O2
+         uAbBZOJlmBL2FhYDMN32/d3PHfZEuVZNkzWhfCti6QFl+1UpEUa+hAxo144ds8nGSZkD
+         X8kVeWtJlLjj6Tuz3dfFEMu56+vgn31UFcAKVsJtIC0vkhg3ItzzyVSWW2hEJApzUJQy
+         Qyq7JtKPNEg7ILjTzWPZObmhA3X5nGxSh4YHyk7wP3BYYZBi+E7KsrdxstPjOez//nmI
+         yKHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702332518; x=1702937318;
+        d=1e100.net; s=20230601; t=1702333008; x=1702937808;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qlYlHCXGFU5KZ74rv5ll10Sv9Er2/TqtV7SmAS1Ie5U=;
-        b=te4BKh1dToyxPDbKY1gf7D/JfKd57jel0em9WOX0grNWW2O7MqAKerr9DLw27XgnEz
-         S78HbAqDPKUQWxBogfS9A+eAXxpyK24lmLk7sgZyGPPri4v7F9/lEU2SrQOMhRGXCGdq
-         rlKDjym2s/XefHm+W7IfGMbRRf/5oid8VXg9cKMIFVkG51YtU9kPnGA8kIzC8E3VRI2c
-         /7K3HXaF2/qPYrqvfvtqQLPcDqew5rTOaSGo97N73bGccgHLUxdQQ+I5ovy1J6ZwPret
-         ZYKXwbcX498HESMLrX5+qkhvwAZO16BoDKVdLWBtY7PWB7oZUV80fgICYx859dthFxZQ
-         BN9g==
-X-Gm-Message-State: AOJu0YxznHhz/ybB7WWoxbvNgBe2s6Mfd9mLrb82o4kBecCd4pBAqWdV
-	ddBzmJKHSa/a2wUCXjDk2wtP4DE2+QClD/qZy2NJfw==
-X-Google-Smtp-Source: AGHT+IFuAyP9/JaBzGe8rYcHm/Q0KPYoxSvmWT8WuQnqhqw+DqOV8MCYwzViQ3hUogw+SsUQ69z4RZeaHd1XvbCJjYE=
-X-Received: by 2002:a05:600c:2941:b0:405:320a:44f9 with SMTP id
- n1-20020a05600c294100b00405320a44f9mr243192wmd.5.1702332518004; Mon, 11 Dec
- 2023 14:08:38 -0800 (PST)
+        bh=nvF5V1Q9Ar02mtoysYDu05U7aSKEzXllew7q5EyIvRE=;
+        b=MtGRensRzJv1+D11B2ozB+zQsz+SZaM0OlRELfF90KLKlu82o/b85PJRjbF52r0tdy
+         AI+DCYj/7rmtulFxtm0EWDRP5j4iVAV0S+sHG2cMHszoypF77w5KpIivYVH+HQsTuCon
+         NCw6U8vUgs4ZuwbhcTAAZWmsCvZAPJ12QvMfpmA3EnoGE10EbGQt7iQ+yjLp3MKu7vvh
+         Y1WYveaRW9JKfcnUc5czhGU+p7bZvSj6kioo2EtGfGXHXcL/LaY24fL34OYOTunQap4k
+         igp5bVkfhF7Kg+8DMe5LZZTUz572LQewjnFzeMtc1A0LE88lM4+4PgG9qS9sb4HkRHsg
+         riFw==
+X-Gm-Message-State: AOJu0YzyTSDv9Oo8dYsCmnv0TvDzgWHo/af1HZG3zhW2F7iUVEUCNZde
+	kqpRSgwbuL6C5wmvl8oxZi++ZlvGVJeiby2FIjU7qw==
+X-Google-Smtp-Source: AGHT+IFpb1D1ELfBB0XjKdpLdiG584OwfX3FeJOeBZ0Uir/keSyebeXbF0BprRN9LD/H+g2A9OXUfFP3Ggfu3iAe+mU=
+X-Received: by 2002:a05:600c:1910:b0:40c:337e:f596 with SMTP id
+ j16-20020a05600c191000b0040c337ef596mr258861wmq.0.1702333008321; Mon, 11 Dec
+ 2023 14:16:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231204221932.1465004-1-rmoar@google.com> <CABVgOS=5Y_CrTZ4hs57UGdR_p1aK2+1w2-aZ9EVELsbRdVvqTg@mail.gmail.com>
-In-Reply-To: <CABVgOS=5Y_CrTZ4hs57UGdR_p1aK2+1w2-aZ9EVELsbRdVvqTg@mail.gmail.com>
+References: <20231204221932.1465004-1-rmoar@google.com> <20231204221932.1465004-6-rmoar@google.com>
+ <CABVgOS=JAn49ux6Cg2i1-V_2eNH4Utx_areqg4H1p5xwkT9FMA@mail.gmail.com>
+In-Reply-To: <CABVgOS=JAn49ux6Cg2i1-V_2eNH4Utx_areqg4H1p5xwkT9FMA@mail.gmail.com>
 From: Rae Moar <rmoar@google.com>
-Date: Mon, 11 Dec 2023 17:08:26 -0500
-Message-ID: <CA+GJov5qipT2EV2+UjtRzvjjtTA_OOtOgZKbRiitmYpbrXrE9A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] kunit: move KUNIT_TABLE out of INIT_DATA
+Date: Mon, 11 Dec 2023 17:16:36 -0500
+Message-ID: <CA+GJov7fUjfKL=O2wC4ZKMvO8OMYJm07h0vGQRDxRF6v4EOpxg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] Documentation: Add debugfs docs with run after boot
 To: David Gow <davidgow@google.com>
 Cc: shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev, 
 	sadiyakazi@google.com, keescook@chromium.org, arnd@arndb.de, 
@@ -70,36 +71,29 @@ Cc: shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 9, 2023 at 2:48=E2=80=AFAM David Gow <davidgow@google.com> wrot=
+On Sat, Dec 9, 2023 at 2:58=E2=80=AFAM David Gow <davidgow@google.com> wrot=
 e:
 >
 > On Tue, 5 Dec 2023 at 06:19, Rae Moar <rmoar@google.com> wrote:
 > >
-> > Alter the linker section of KUNIT_TABLE to move it out of INIT_DATA and
-> > into DATA_DATA.
+> > Expand the documentation on the KUnit debugfs filesystem on the
+> > run_manual.rst page.
 > >
-> > Data for KUnit tests does not need to be in the init section.
+> > Add section describing how to access results using debugfs.
 > >
-> > In order to run tests again after boot the KUnit data cannot be labeled=
- as
-> > init data as the kernel could write over it.
-> >
-> > Add a KUNIT_INIT_TABLE in the next patch for KUnit tests that test init
-> > data/functions.
+> > Add section describing how to run tests after boot using debugfs.
 > >
 > > Signed-off-by: Rae Moar <rmoar@google.com>
 > > ---
 >
-> I think this actually fixes a potential bug, as we loop through the
-> list of suites after init has ended in the debugfs logic.
+> Looks good to me, some nitpicks below.
 >
-> So maybe this is:
-> Fixes: 90a025a859a3 ("vmlinux.lds.h: add linker section for KUnit test su=
-ites")
+> The other thing I'd really want to add is some documentation on
+> writing init-section suites, which covers the pitfalls better (as
+> mentioned in the previous emails). Though that could be a separate
+> patch if you want to keep this one debugfs-specific.
 >
-> Regardless, I'd love to get this in, even if we don't manage to get
-> the rest of the series in soon.
->
+> Otherwise,
 > Reviewed-by: David Gow <davidgow@google.com>
 >
 > Cheers,
@@ -107,53 +101,137 @@ ites")
 
 Hello!
 
-Thanks for reviewing! I will be adding this fixes tag. Should I make
-this a separate patch for the next version?
+I have responded to your comments below. I would also be happy to add
+documentation to the init-section suites either in this patch series
+or in a future one.
 
 Thanks!
 -Rae
 
 >
-> >  include/asm-generic/vmlinux.lds.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
 > >
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vm=
-linux.lds.h
-> > index bae0fe4d499b..1107905d37fc 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -370,7 +370,8 @@
-> >         BRANCH_PROFILE()                                               =
- \
-> >         TRACE_PRINTKS()                                                =
- \
-> >         BPF_RAW_TP()                                                   =
- \
-> > -       TRACEPOINT_STR()
-> > +       TRACEPOINT_STR()                                               =
- \
-> > +       KUNIT_TABLE()
+> > Changes since v2:
+> > - Add info to documentation about cleaning up data, init tests, and
+> >   running tests concurrently
 > >
-> >  /*
-> >   * Data section helpers
-> > @@ -699,8 +700,7 @@
-> >         THERMAL_TABLE(governor)                                        =
- \
-> >         EARLYCON_TABLE()                                               =
- \
-> >         LSM_TABLE()                                                    =
- \
-> > -       EARLY_LSM_TABLE()                                              =
- \
-> > -       KUNIT_TABLE()
-> > +       EARLY_LSM_TABLE()
+> >  Documentation/dev-tools/kunit/run_manual.rst | 49 ++++++++++++++++++--
+> >  1 file changed, 45 insertions(+), 4 deletions(-)
 > >
-> >  #define INIT_TEXT                                                     =
- \
-> >         *(.init.text .init.text.*)                                     =
- \
+> > diff --git a/Documentation/dev-tools/kunit/run_manual.rst b/Documentati=
+on/dev-tools/kunit/run_manual.rst
+> > index e7b46421f247..aebb52ba9605 100644
+> > --- a/Documentation/dev-tools/kunit/run_manual.rst
+> > +++ b/Documentation/dev-tools/kunit/run_manual.rst
+> > @@ -49,9 +49,50 @@ loaded.
 > >
-> > base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+> >  The results will appear in TAP format in ``dmesg``.
+> >
+> > +debugfs
+> > +=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +``debugfs`` is a file system that enables user interaction with the fi=
+les to
+> > +make kernel information available to user space (See more information =
+at
+> > +Documentation/filesystems/debugfs.html)
+>
+> Nit: reference debugfs.rst here, not debugfs.html -- sphinx ought to
+> update the link automatically.
+
+Thanks for catching this! I didn't realize Sphinx would update it.
+
+>
+> Also, maybe we can make this introduction a _little_ bit more
+> KUnit-specific. I'd personally start by saying that KUnit can be
+> accessed from userspace via the debugfs filesystem (link), usually
+> mounted in /sys/kernel/debug/kunit, etc, if CONFIG_KUNIT_DEBUGFS is
+> enabled.
+
+Ok I will add this for the next version.
+
+>
+> > +
+> > +By default, only the root user has access to the debugfs directory.
+> > +
+> > +If ``CONFIG_KUNIT_DEBUGFS`` is enabled, you can use KUnit debugfs
+> > +filesystem to perform the following actions.
+> > +
+> > +Retrieve Test Results
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +You can use debugfs to retrieve KUnit test results. The test results a=
+re
+> > +accessible from the debugfs filesystem in the following read-only file=
+:
+> > +
+> > +.. code-block :: bash
+> > +
+> > +       /sys/kernel/debug/kunit/<test_suite>/results
+> > +
+> > +The test results are available in KTAP format.
+>
+> Do we want to note that this is a separate KTAP document, and so may
+> have different suite numbering from the dmesg log?
+
+Sure! I will add this for the next version.
+
+>
+> > +
+> > +Run Tests After Kernel Has Booted
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +You can use the debugfs filesystem to trigger built-in tests to run af=
+ter
+> > +boot. To run the test suite, you can use the following command to writ=
+e to
+> > +the ``/sys/kernel/debug/kunit/<test_suite>/run`` file:
+> > +
+> > +.. code-block :: bash
+> > +
+> > +       echo "any string" > /sys/kernel/debugfs/kunit/<test_suite>/run
+> > +
+> > +As a result, the test suite runs and the results are printed to the ke=
+rnel
+> > +log.
+> > +
+> > +However, this feature is not available with KUnit tests that use init =
+data.
+>
+> Let's expand this slightly, and mention that this is because the data
+> may have already been discarded, and that you can find such tests by
+> either looking for the kunit_test_init_section_suites() macro or the
+> is_init attribute.
+
+Got it. I will definitely expand this more.
+
+>
+> > +
+> > +Also, you cannot use this feature to run tests concurrently as there i=
+s a
+> > +mutex lock around running KUnit tests at the same time.
+> > +
+>
+> Instead of mentioning the mutex, which is an implementation detail,
+> just mention that tests will either wait for other tests to complete,
+> or fail having timed out.
+>
+
+I will definitely switch this out in the next version.
+
+>
+>
+> >  .. note ::
+> >
+> > -       If ``CONFIG_KUNIT_DEBUGFS`` is enabled, KUnit test results will
+> > -       be accessible from the ``debugfs`` filesystem (if mounted).
+> > -       They will be in ``/sys/kernel/debug/kunit/<test_suite>/results`=
+`, in
+> > -       TAP format.
+> > +       For test authors, to use this feature, tests will need to corre=
+ctly initialise
+> > +       and/or clean up any data, so the test runs correctly a second t=
+ime.
 > > --
 > > 2.43.0.rc2.451.g8631bc7472-goog
 > >
