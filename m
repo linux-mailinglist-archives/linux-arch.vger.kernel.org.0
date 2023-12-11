@@ -1,468 +1,351 @@
-Return-Path: <linux-arch+bounces-899-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-900-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 206A980D3C8
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 18:29:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0584480D50E
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 19:14:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CACC22820F6
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 17:29:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9DC71C2138E
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Dec 2023 18:14:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501964E1C0;
-	Mon, 11 Dec 2023 17:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACA3168CF;
+	Mon, 11 Dec 2023 18:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhoGWDjz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2ZR9oew+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298A44E1B9;
-	Mon, 11 Dec 2023 17:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D725DC433B6;
-	Mon, 11 Dec 2023 17:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702315796;
-	bh=VP6rxIE0YrbcOG/9wnq9cB6kaypzUe7LOgu57Kw03yM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OhoGWDjz+ZlKfXChXtVyZo+ZKQpmeBytRpThc2k+jzaIgdO4y8wTrqu1pp5xdKoq+
-	 YSP2Ea0Zzujdu09Cyw0tPxiSEoQU0ZFc4bcIi1Eu9UR8wNzynUYCLiy7Fj5GQR4ZqL
-	 xXmVXpT/EHk1JohfYBIBn9gj+gM+TVCyJzm8uUht85HorFunHJudGcJZc4NSBW6Zmk
-	 nX3duK2/kh+NRt5u9wwIKpu9lgA3mMEjlBSmoozvL9wxjp/FnGenPy5xMjQklfhmLB
-	 8VKyRaXtdbpsH7Yon4EZRZ0usr3clw50x4oHXjTGL1vaLU3OEIjym5FEsh01x8AUoI
-	 rPWxCB3xOMpyQ==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50be3611794so5564679e87.0;
-        Mon, 11 Dec 2023 09:29:55 -0800 (PST)
-X-Gm-Message-State: AOJu0YyiqScgjDVOovHibZ4EXqle6LMA0ff/iAx62ZAoZRZwWf34E7Wa
-	NvbzB5G3yRD+GJRsvzCHwGfWBT3n5qOsYk4D4w==
-X-Google-Smtp-Source: AGHT+IGf9GxCgHbSaCR9ChlHwIzcYeJN/o9beG+fFS/Wj2+MXjJAqODSxU5em7xHCQ26rKUjit1wlHMa263dNGOiUjs=
-X-Received: by 2002:ac2:42c3:0:b0:50b:efd4:1475 with SMTP id
- n3-20020ac242c3000000b0050befd41475mr1861829lfl.9.1702315793752; Mon, 11 Dec
- 2023 09:29:53 -0800 (PST)
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFADC3
+	for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 10:14:17 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6d9f9fbfd11so1788114a34.2
+        for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 10:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702318456; x=1702923256; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zbiqO7RxhSXNHZRSCjwyZy4HmqVXPvY1sANPCgpMBIA=;
+        b=2ZR9oew+tVsgkdbtVJPAIjNlqjQeakbUN08vwSybi21pD7JMCR0VjzZNIAL4Ql+O9C
+         7+xRmtnoHMGO7vGqublUTMIoEUpQyMp5C/Q15mq28NKrqJo84IPm+I27gcHRRz1QvPk9
+         3Bt0ieiBUMQ0b50x1yG5uZKdQu7gk0sJiVHr4pFlWY1CWFkqiCt1k94Yr+K2ec94ewBv
+         sGZGHVvgxwJoJpWq6xDMFSAIbxsm7+NGgyHh/5zNQOFLdwzCn7Q68XHR3R3Iw0Y85XfS
+         0z1l8SQXvz9P1h9Rve0ew1xgE2nb8v3ipP5ZhXKhMFwu497xQ+GX8qKpLGznUFXJdDtR
+         VuLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702318456; x=1702923256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zbiqO7RxhSXNHZRSCjwyZy4HmqVXPvY1sANPCgpMBIA=;
+        b=OtbTsghUfmuChlEnr7mfEuFNAu8+zCD0vCUAvltv+MDETDN6p5NSX1m3VDL9nXygvP
+         cpDwjPyUuIjRXO0LKoDGCXMq6pHOSBY2h3myg1ERo91lMbXXEgI/LaHy9YgND6dKJfFl
+         0qA1bCBjyu6JqTjy9JXYImWmdh1wROg2BsrQeqG+aGwS386GeC5ojh2B7NpytHZ22kjd
+         EtD9OnWKOmArDm2qo0fhvUsO3bdGcL8b3XU5sWEHEYYkbHkaCj/LZjDZ4QSix1gGagBA
+         Hs6pLPC8Esg5QslO2UhFlsT+QeYOSCfoQSh5Igm9kBdJT0qi/VX7eympBuF6dKCXtfKw
+         ULpw==
+X-Gm-Message-State: AOJu0YzgB07cihpzQgScuLAjNfVTDLeLW2ICjYnYdIvh67AsBkYqy3hc
+	95ZLnrB5gmP/4/LAhhPl0Czyc8MdIDrDiXu1VCaIMQ==
+X-Google-Smtp-Source: AGHT+IE8095BrfyI+kTIXDm8hNguhYybzjvVGensk2JElZVZdZ4bLJQ+s/d+dDYVGThzdPiv+aq1lB4rQf1PXQGNIdE=
+X-Received: by 2002:a05:6830:164a:b0:6d9:d902:44f0 with SMTP id
+ h10-20020a056830164a00b006d9d90244f0mr4280561otr.50.1702318456301; Mon, 11
+ Dec 2023 10:14:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231119165721.9849-1-alexandru.elisei@arm.com> <20231119165721.9849-12-alexandru.elisei@arm.com>
-In-Reply-To: <20231119165721.9849-12-alexandru.elisei@arm.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 11 Dec 2023 11:29:40 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+k5BeM9+u12AQvWQ0b4Uv5Cy0vPOpK_uLcYtRnunq4iQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+k5BeM9+u12AQvWQ0b4Uv5Cy0vPOpK_uLcYtRnunq4iQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 11/27] arm64: mte: Reserve tag storage memory
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
-	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, pcc@google.com, 
-	steven.price@arm.com, anshuman.khandual@arm.com, vincenzo.frascino@arm.com, 
-	david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-10-almasrymina@google.com> <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
+ <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
+ <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com> <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
+ <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com> <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
+In-Reply-To: <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 11 Dec 2023 10:14:05 -0800
+Message-ID: <CAHS8izMdpo0D7GYzMkOtg1ueCODAVNxtwSP_qPseSYXNMhPGCw@mail.gmail.com>
+Subject: Re: [net-next v1 09/16] page_pool: device memory support
+To: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 19, 2023 at 10:59=E2=80=AFAM Alexandru Elisei
-<alexandru.elisei@arm.com> wrote:
+On Mon, Dec 11, 2023 at 3:51=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.co=
+m> wrote:
 >
-> Allow the kernel to get the size and location of the MTE tag storage
-> regions from the DTB. This memory is marked as reserved for now.
->
-> The DTB node for the tag storage region is defined as:
->
->         tags0: tag-storage@8f8000000 {
->                 compatible =3D "arm,mte-tag-storage";
->                 reg =3D <0x08 0xf8000000 0x00 0x4000000>;
->                 block-size =3D <0x1000>;
->                 memory =3D <&memory0>;    // Associated tagged memory nod=
-e
->         };
-
-I skimmed thru the discussion some. If this memory range is within
-main RAM, then it definitely belongs in /reserved-memory.
-
-You need a binding for this too.
-
-> The tag storage region represents the largest contiguous memory region th=
-at
-> holds all the tags for the associated contiguous memory region which can =
-be
-> tagged. For example, for a 32GB contiguous tagged memory the correspondin=
-g
-> tag storage region is 1GB of contiguous memory, not two adjacent 512M of
-> tag storage memory.
->
-> "block-size" represents the minimum multiple of 4K of tag storage where a=
-ll
-> the tags stored in the block correspond to a contiguous memory region. Th=
-is
-> is needed for platforms where the memory controller interleaves tag write=
-s
-> to memory. For example, if the memory controller interleaves tag writes f=
-or
-> 256KB of contiguous memory across 8K of tag storage (2-way interleave),
-> then the correct value for "block-size" is 0x2000. This value is a hardwa=
+> On 2023/12/11 12:04, Mina Almasry wrote:
+> > On Sun, Dec 10, 2023 at 6:26=E2=80=AFPM Mina Almasry <almasrymina@googl=
+e.com> wrote:
+> >>
+> >> On Sun, Dec 10, 2023 at 6:04=E2=80=AFPM Yunsheng Lin <linyunsheng@huaw=
+ei.com> wrote:
+> >>>
+> >>> On 2023/12/9 0:05, Mina Almasry wrote:
+> >>>> On Fri, Dec 8, 2023 at 1:30=E2=80=AFAM Yunsheng Lin <linyunsheng@hua=
+wei.com> wrote:
+> >>>>>
+> >>>>>
+> >>>>> As mentioned before, it seems we need to have the above checking ev=
+ery
+> >>>>> time we need to do some per-page handling in page_pool core, is the=
 re
-> property, independent of the selected kernel page size.
+> >>>>> a plan in your mind how to remove those kind of checking in the fut=
+ure?
+> >>>>>
+> >>>>
+> >>>> I see 2 ways to remove the checking, both infeasible:
+> >>>>
+> >>>> 1. Allocate a wrapper struct that pulls out all the fields the page =
+pool needs:
+> >>>>
+> >>>> struct netmem {
+> >>>>         /* common fields */
+> >>>>         refcount_t refcount;
+> >>>>         bool is_pfmemalloc;
+> >>>>         int nid;
+> >>>>         ...
+> >>>>         union {
+> >>>>                 struct dmabuf_genpool_chunk_owner *owner;
+> >>>>                 struct page * page;
+> >>>>         };
+> >>>> };
+> >>>>
+> >>>> The page pool can then not care if the underlying memory is iov or
+> >>>> page. However this introduces significant memory bloat as this struc=
+t
+> >>>> needs to be allocated for each page or ppiov, which I imagine is not
+> >>>> acceptable for the upside of removing a few static_branch'd if
+> >>>> statements with no performance cost.
+> >>>>
+> >>>> 2. Create a unified struct for page and dmabuf memory, which the mm
+> >>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
+> >>>> the future.
+> >>>>
+> >>>> So I imagine the special handling of ppiov in some form is critical
+> >>>> and the checking may not be removable.
+> >>>
+> >>> If the above is true, perhaps devmem is not really supposed to be int=
+ergated
+> >>> into page_pool.
+> >>>
+> >>> Adding a checking for every per-page handling in page_pool core is ju=
+st too
+> >>> hacky to be really considerred a longterm solution.
+> >>>
+> >>
+> >> The only other option is to implement another page_pool for ppiov and
+> >> have the driver create page_pool or ppiov_pool depending on the state
+> >> of the netdev_rx_queue (or some helper in the net stack to do that for
+> >> the driver). This introduces some code duplication. The ppiov_pool &
+> >> page_pool would look similar in implementation.
 >
-> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> ---
->  arch/arm64/Kconfig                       |  12 ++
->  arch/arm64/include/asm/mte_tag_storage.h |  15 ++
->  arch/arm64/kernel/Makefile               |   1 +
->  arch/arm64/kernel/mte_tag_storage.c      | 256 +++++++++++++++++++++++
->  arch/arm64/kernel/setup.c                |   7 +
->  5 files changed, 291 insertions(+)
->  create mode 100644 arch/arm64/include/asm/mte_tag_storage.h
->  create mode 100644 arch/arm64/kernel/mte_tag_storage.c
+> I think there is a design pattern already to deal with this kind of probl=
+em,
+> refactoring common code used by both page_pool and ppiov into a library t=
+o
+> aovid code duplication if most of them have similar implementation.
 >
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 7b071a00425d..fe8276fdc7a8 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -2062,6 +2062,18 @@ config ARM64_MTE
+
+Code can be refactored if it's identical, not if it is similar. I
+suspect the page_pools will be only similar, and if you're not willing
+to take devmem handling into the page pool then refactoring page_pool
+code into helpers that do devmem handling may also not be an option.
+
+> >>
+> >> But this was all discussed in detail in RFC v2 and the last response I
+> >> heard from Jesper was in favor if this approach, if I understand
+> >> correctly:
+> >>
+> >> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@re=
+dhat.com/
+> >>
+> >> Would love to have the maintainer weigh in here.
+> >>
+> >
+> > I should note we may be able to remove some of the checking, but maybe =
+not all.
+> >
+> > - Checks that disable page fragging for ppiov can be removed once
+> > ppiov has frag support (in this series or follow up).
+> >
+> > - If we use page->pp_frag_count (or page->pp_ref_count) for
+> > refcounting ppiov, we can remove the if checking in the refcounting.
+> >
+
+I'm not sure this is actually possible in the short term. The
+page_pool uses both page->_refcount and page->pp_frag_count for
+refcounting, and I will not be able to remove the special handling
+around page->_refcount as i'm not allowed to call page_ref_*() APIs on
+a non-struct page.
+
+> > - We may be able to store the dma_addr of the ppiov in page->dma_addr,
+> > but I'm unsure if that actually works, because the dma_buf dmaddr is
+> > dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
+> > I think). But if it works for pages I may be able to make it work for
+> > ppiov as well.
+> >
+> > - Checks that obtain the page->pp can work with ppiov if we align the
+> > offset of page->pp and ppiov->pp.
+> >
+> > - Checks around page->pp_magic can be removed if we also have offset
+> > aligned ppiov->pp_magic.
+> >
+> > Sadly I don't see us removing the checking for these other cases:
+> >
+> > - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
+> > that helper.
 >
->           Documentation/arch/arm64/memory-tagging-extension.rst.
+> We can do similar trick like above as bit 1 of page->pp_magic is used to
+> indicate that if it is a pfmemalloc page.
 >
-> +if ARM64_MTE
-> +config ARM64_MTE_TAG_STORAGE
-> +       bool "Dynamic MTE tag storage management"
-> +       help
-> +         Adds support for dynamic management of the memory used by the h=
-ardware
-> +         for storing MTE tags. This memory, unlike normal memory, cannot=
- be
-> +         tagged. When it is used to store tags for another memory locati=
-on it
-> +         cannot be used for any type of allocation.
-> +
-> +         If unsure, say N
-> +endif # ARM64_MTE
-> +
->  endmenu # "ARMv8.5 architectural features"
+
+Likely yes.
+
+> >
+> > - page_to_nid(): I'm not allowed to pass a non-struct page into that he=
+lper.
 >
->  menu "ARMv8.7 architectural features"
-> diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/includ=
-e/asm/mte_tag_storage.h
-> new file mode 100644
-> index 000000000000..8f86c4f9a7c3
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/mte_tag_storage.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2023 ARM Ltd.
-> + */
-> +#ifndef __ASM_MTE_TAG_STORAGE_H
-> +#define __ASM_MTE_TAG_STORAGE_H
-> +
-> +#ifdef CONFIG_ARM64_MTE_TAG_STORAGE
-> +void mte_tag_storage_init(void);
-> +#else
-> +static inline void mte_tag_storage_init(void)
-> +{
-> +}
-> +#endif /* CONFIG_ARM64_MTE_TAG_STORAGE */
-> +#endif /* __ASM_MTE_TAG_STORAGE_H  */
-> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-> index d95b3d6b471a..5f031bf9f8f1 100644
-> --- a/arch/arm64/kernel/Makefile
-> +++ b/arch/arm64/kernel/Makefile
-> @@ -70,6 +70,7 @@ obj-$(CONFIG_CRASH_CORE)              +=3D crash_core.o
->  obj-$(CONFIG_ARM_SDE_INTERFACE)                +=3D sdei.o
->  obj-$(CONFIG_ARM64_PTR_AUTH)           +=3D pointer_auth.o
->  obj-$(CONFIG_ARM64_MTE)                        +=3D mte.o
-> +obj-$(CONFIG_ARM64_MTE_TAG_STORAGE)    +=3D mte_tag_storage.o
->  obj-y                                  +=3D vdso-wrap.o
->  obj-$(CONFIG_COMPAT_VDSO)              +=3D vdso32-wrap.o
->  obj-$(CONFIG_UNWIND_PATCH_PAC_INTO_SCS)        +=3D patch-scs.o
-> diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_=
-tag_storage.c
-> new file mode 100644
-> index 000000000000..fa6267ef8392
-> --- /dev/null
-> +++ b/arch/arm64/kernel/mte_tag_storage.c
-> @@ -0,0 +1,256 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Support for dynamic tag storage.
-> + *
-> + * Copyright (C) 2023 ARM Ltd.
-> + */
-> +
-> +#include <linux/memblock.h>
-> +#include <linux/mm.h>
-> +#include <linux/of_device.h>
+> Yes, this one need special case.
+>
+> >
+> > - page_pool_free_va(): ppiov have no va.
+>
+> Doesn't the skb_frags_readable() checking will protect the page_pool_free=
+_va()
+> from being called on devmem?
+>
 
-You probably don't need this header. If you depend on what it
-implicitly includes, then that will now break in linux-next.
+This function seems to be only called from veth which doesn't support
+devmem. I can remove the handling there.
 
-> +#include <linux/of_fdt.h>
-> +#include <linux/range.h>
-> +#include <linux/string.h>
-> +#include <linux/xarray.h>
-> +
-> +#include <asm/mte_tag_storage.h>
-> +
-> +struct tag_region {
-> +       struct range mem_range; /* Memory associated with the tag storage=
-, in PFNs. */
-> +       struct range tag_range; /* Tag storage memory, in PFNs. */
-> +       u32 block_size;         /* Tag block size, in pages. */
-> +};
-> +
-> +#define MAX_TAG_REGIONS        32
-> +
-> +static struct tag_region tag_regions[MAX_TAG_REGIONS];
-> +static int num_tag_regions;
-> +
-> +static int __init tag_storage_of_flat_get_range(unsigned long node, cons=
-t __be32 *reg,
-> +                                               int reg_len, struct range=
- *range)
-> +{
-> +       int addr_cells =3D dt_root_addr_cells;
-> +       int size_cells =3D dt_root_size_cells;
-> +       u64 size;
-> +
-> +       if (reg_len / 4 > addr_cells + size_cells)
-> +               return -EINVAL;
-> +
-> +       range->start =3D PHYS_PFN(of_read_number(reg, addr_cells));
-> +       size =3D PHYS_PFN(of_read_number(reg + addr_cells, size_cells));
-> +       if (size =3D=3D 0) {
-> +               pr_err("Invalid node");
-> +               return -EINVAL;
-> +       }
-> +       range->end =3D range->start + size - 1;
+> >
+> > - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
+> > fundamentally can't get mapped again.
+>
+> Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
+> DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
+>
 
-We have a function to read (and translate which you forgot) addresses.
-Add what's missing rather than open code your own.
+Jakub says PP_FLAG_DMA_MAP must be enabled for devmem, such that the
+page_pool handles the dma mapping of the devmem and the driver doesn't
+use it on its own.
 
-> +
-> +       return 0;
-> +}
-> +
-> +static int __init tag_storage_of_flat_get_tag_range(unsigned long node,
-> +                                                   struct range *tag_ran=
-ge)
-> +{
-> +       const __be32 *reg;
-> +       int reg_len;
-> +
-> +       reg =3D of_get_flat_dt_prop(node, "reg", &reg_len);
-> +       if (reg =3D=3D NULL) {
-> +               pr_err("Invalid metadata node");
-> +               return -EINVAL;
-> +       }
-> +
-> +       return tag_storage_of_flat_get_range(node, reg, reg_len, tag_rang=
-e);
-> +}
-> +
-> +static int __init tag_storage_of_flat_get_memory_range(unsigned long nod=
-e, struct range *mem)
-> +{
-> +       const __be32 *reg;
-> +       int reg_len;
-> +
-> +       reg =3D of_get_flat_dt_prop(node, "linux,usable-memory", &reg_len=
-);
-> +       if (reg =3D=3D NULL)
-> +               reg =3D of_get_flat_dt_prop(node, "reg", &reg_len);
-> +
-> +       if (reg =3D=3D NULL) {
-> +               pr_err("Invalid memory node");
-> +               return -EINVAL;
-> +       }
-> +
-> +       return tag_storage_of_flat_get_range(node, reg, reg_len, mem);
-> +}
-> +
-> +struct find_memory_node_arg {
-> +       unsigned long node;
-> +       u32 phandle;
-> +};
-> +
-> +static int __init fdt_find_memory_node(unsigned long node, const char *u=
-name,
-> +                                      int depth, void *data)
-> +{
-> +       const char *type =3D of_get_flat_dt_prop(node, "device_type", NUL=
-L);
-> +       struct find_memory_node_arg *arg =3D data;
-> +
-> +       if (depth !=3D 1 || !type || strcmp(type, "memory") !=3D 0)
-> +               return 0;
-> +
-> +       if (of_get_flat_dt_phandle(node) =3D=3D arg->phandle) {
-> +               arg->node =3D node;
-> +               return 1;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int __init tag_storage_get_memory_node(unsigned long tag_node, un=
-signed long *mem_node)
-> +{
-> +       struct find_memory_node_arg arg =3D { 0 };
-> +       const __be32 *memory_prop;
-> +       u32 mem_phandle;
-> +       int ret, reg_len;
-> +
-> +       memory_prop =3D of_get_flat_dt_prop(tag_node, "memory", &reg_len)=
-;
-> +       if (!memory_prop) {
-> +               pr_err("Missing 'memory' property in the tag storage node=
-");
-> +               return -EINVAL;
-> +       }
-> +
-> +       mem_phandle =3D be32_to_cpup(memory_prop);
-> +       arg.phandle =3D mem_phandle;
-> +
-> +       ret =3D of_scan_flat_dt(fdt_find_memory_node, &arg);
+We may fail creating the page pool on  PP_FLAG_DMA_SYNC_DEV maybe, and
+remove the checking from page_pool_sync_for_dev(), I think.
 
-Do not use of_scan_flat_dt. It is a relic predating libfdt which can
-get a node by phandle directly.
+> >
+> > Are the removal (or future removal) of these checks enough to resolve t=
+his?
+>
+> Yes, that is somewhat similar to my proposal, the biggest objection seems=
+ to
+> be that we need to have a safe type checking for it to work correctly.
+>
+> >
+> >>> It is somewhat ironical that devmem is using static_branch to allivia=
+te the
+> >>> performance impact for normal memory at the possible cost of performa=
+nce
+> >>> degradation for devmem, does it not defeat some purpose of intergatin=
+g devmem
+> >>> to page_pool?
+> >>>
+> >>
+> >> I don't see the issue. The static branch sets the non-ppiov path as
+> >> default if no memory providers are in use, and flips it when they are,
+> >> making the default branch prediction ideal in both cases.
+>
+> You are assuming the we are not using page pool for both normal memory an=
+d
+> devmem at the same. But a generic solution should not have that assumptio=
+n
+> as my understanding.
+>
+> >>
+> >>>>
+> >>>>> Even though a static_branch check is added in page_is_page_pool_iov=
+(), it
+> >>>>> does not make much sense that a core has tow different 'struct' for=
+ its
+> >>>>> most basic data.
+> >>>>>
+> >>>>> IMHO, the ppiov for dmabuf is forced fitting into page_pool without=
+ much
+> >>>>> design consideration at this point.
+> >>>>>
+> >>>> ...
+> >>>>>
+> >>>>> For now, the above may work for the the rx part as it seems that yo=
+u are
+> >>>>> only enabling rx for dmabuf for now.
+> >>>>>
+> >>>>> What is the plan to enable tx for dmabuf? If it is also intergrated=
+ into
+> >>>>> page_pool? There was a attempt to enable page_pool for tx, Eric see=
+med to
+> >>>>> have some comment about this:
+> >>>>> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005=
+@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
+> >>>>>
+> >>>>> If tx is not intergrated into page_pool, do we need to create a new=
+ layer for
+> >>>>> the tx dmabuf?
+> >>>>>
+> >>>>
+> >>>> I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
+> >>>> helpers, and page_pool_page_*() helpers, but will not need any core
+> >>>> page_pool changes. This is because the TX path will have to piggybac=
+k
+> >>>
+> >>> We may need another bit/flags checking to demux between page_pool own=
+ed
+> >>> devmem and non-page_pool owned devmem.
+> >>>
+> >>
+> >> The way I'm imagining the support, I don't see the need for such
+> >> flags. We'd be re-using generic helpers like
+> >> page_pool_iov_get_dma_address() and what not that don't need that
+> >> checking.
+> >>
+> >>> Also calling page_pool_*() on non-page_pool owned devmem is confusing
+> >>> enough that we may need a thin layer handling non-page_pool owned dev=
+mem
+> >>> in the end.
+> >>>
+> >>
+> >> The page_pool_page* & page_pool_iov* functions can be renamed if
+> >> confusing. I would think that's no issue (note that the page_pool_*
+>
+> When you rename those functions, you will have a thin layer automatically=
+.
+>
+> >> functions need not be called for TX path).
+> >>
+> >>>> on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation fr=
+om
+> >>>> the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
+> >>>> implementation based on dmabuf pages without page_pool involvement, =
+I
+> >>>> imagine I'll do something similar.
+> >>> It would be good to have a tx implementation for the next version, so
+> >>> that we can have a whole picture of devmem.
 
-> +       if (ret !=3D 1) {
-> +               pr_err("Associated memory node not found");
-> +               return -EINVAL;
-> +       }
-> +
-> +       *mem_node =3D arg.node;
-> +
-> +       return 0;
-> +}
-> +
-> +static int __init tag_storage_of_flat_read_u32(unsigned long node, const=
- char *propname,
-> +                                              u32 *retval)
 
-If you are going to make a generic function, make it for everyone.
 
-> +{
-> +       const __be32 *reg;
-> +
-> +       reg =3D of_get_flat_dt_prop(node, propname, NULL);
-> +       if (!reg)
-> +               return -EINVAL;
-> +
-> +       *retval =3D be32_to_cpup(reg);
-> +       return 0;
-> +}
-> +
-> +static u32 __init get_block_size_pages(u32 block_size_bytes)
-> +{
-> +       u32 a =3D PAGE_SIZE;
-> +       u32 b =3D block_size_bytes;
-> +       u32 r;
-> +
-> +       /* Find greatest common divisor using the Euclidian algorithm. */
-> +       do {
-> +               r =3D a % b;
-> +               a =3D b;
-> +               b =3D r;
-> +       } while (b !=3D 0);
-> +
-> +       return PHYS_PFN(PAGE_SIZE * block_size_bytes / a);
-> +}
-> +
-> +static int __init fdt_init_tag_storage(unsigned long node, const char *u=
-name,
-> +                                      int depth, void *data)
-> +{
-> +       struct tag_region *region;
-> +       unsigned long mem_node;
-> +       struct range *mem_range;
-> +       struct range *tag_range;
-> +       u32 block_size_bytes;
-> +       u32 nid =3D 0;
-> +       int ret;
-> +
-> +       if (depth !=3D 1 || !strstr(uname, "tag-storage"))
-> +               return 0;
-> +
-> +       if (!of_flat_dt_is_compatible(node, "arm,mte-tag-storage"))
-> +               return 0;
-> +
-> +       if (num_tag_regions =3D=3D MAX_TAG_REGIONS) {
-> +               pr_err("Maximum number of tag storage regions exceeded");
-> +               return -EINVAL;
-> +       }
-> +
-> +       region =3D &tag_regions[num_tag_regions];
-> +       mem_range =3D &region->mem_range;
-> +       tag_range =3D &region->tag_range;
-> +
-> +       ret =3D tag_storage_of_flat_get_tag_range(node, tag_range);
-> +       if (ret) {
-> +               pr_err("Invalid tag storage node");
-> +               return ret;
-> +       }
-> +
-> +       ret =3D tag_storage_get_memory_node(node, &mem_node);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D tag_storage_of_flat_get_memory_range(mem_node, mem_range)=
-;
-> +       if (ret) {
-> +               pr_err("Invalid address for associated data memory node")=
-;
-> +               return ret;
-> +       }
-> +
-> +       /* The tag region must exactly match the corresponding memory. */
-> +       if (range_len(tag_range) * 32 !=3D range_len(mem_range)) {
-> +               pr_err("Tag storage region 0x%llx-0x%llx does not cover t=
-he memory region 0x%llx-0x%llx",
-> +                      PFN_PHYS(tag_range->start), PFN_PHYS(tag_range->en=
-d),
-> +                      PFN_PHYS(mem_range->start), PFN_PHYS(mem_range->en=
-d));
-> +               return -EINVAL;
-> +       }
-> +
-> +       ret =3D tag_storage_of_flat_read_u32(node, "block-size", &block_s=
-ize_bytes);
-> +       if (ret || block_size_bytes =3D=3D 0) {
-> +               pr_err("Invalid or missing 'block-size' property");
-> +               return -EINVAL;
-> +       }
-> +       region->block_size =3D get_block_size_pages(block_size_bytes);
-> +       if (range_len(tag_range) % region->block_size !=3D 0) {
-> +               pr_err("Tag storage region size 0x%llx is not a multiple =
-of block size %u",
-> +                      PFN_PHYS(range_len(tag_range)), region->block_size=
-);
-> +               return -EINVAL;
-> +       }
-> +
-> +       ret =3D tag_storage_of_flat_read_u32(mem_node, "numa-node-id", &n=
-id);
-
-I was going to say we already have a way to associate memory nodes
-other nodes using "numa-node-id", so the "memory" phandle property is
-somewhat redundant. Maybe the tag node should have a numa-node-id.
-With that, it looks like you don't even need to access the /memory
-node. Avoiding that would be good for 2 reasons. It avoids parsing
-memory nodes twice and it's not the kernel's job to validate the DT.
-Really, if you want memory info, you should use memblock to get it
-because all the special cases of memory layout are handled. For
-example you can have memory nodes with multiple 'reg' entries or
-multiple memory nodes or both, and then some of those could be
-contiguous.
-
-Rob
+--=20
+Thanks,
+Mina
 
