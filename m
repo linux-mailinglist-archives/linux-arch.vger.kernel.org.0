@@ -1,177 +1,131 @@
-Return-Path: <linux-arch+bounces-929-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-930-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3892980F665
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 20:17:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB68580F692
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 20:23:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0BA5B20D33
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 19:17:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD9A01C20E32
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 19:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637D081E24;
-	Tue, 12 Dec 2023 19:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F1B281E40;
+	Tue, 12 Dec 2023 19:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="nKavvAYi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IfP7DhS6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B817FE
-	for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 11:17:23 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-db4422fff15so4990521276.1
-        for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 11:17:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702408642; x=1703013442; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BXh6bur6LRnADXulivu2P72dN6ifPaK1xY/cKiFFTNI=;
-        b=nKavvAYidvQ9w393bc3O1a4mlDsiGhjQJ/4lYL/qcziFXkDI45Yejvmo1XOc1GA/aq
-         DmL6kVj+2k2MsnBVsfBXQ2fCbHHJn/UbwVYJk6a2+Vd1Zghoq287v3/sT6wVS0aRUznN
-         rkEc5Vw8Ru+y58FfFbfO6ZNoJ6Uom8oeVUe+hqlQgugJjT2ERC+JJ5pXeGo7jaGJtg1K
-         bT2xufqFBgQed3Z5szo7rZzQT81g1p1UpVvbocJXyTE7JgI/AOAFO/lG1nPQAU8HRmP+
-         hxHpFwQuMvFUZvyD2kxPIHDopIZjXN+rBWqw0B6oypvOfoyLo/yXFo/6DnKBHL49SBVE
-         P/zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702408642; x=1703013442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BXh6bur6LRnADXulivu2P72dN6ifPaK1xY/cKiFFTNI=;
-        b=GJhQ6eEsA/LFdLF0dOu2fyK0OChTqTGbjIxSiLn7Albk5+sQHTPSmai0g6zunrkvqB
-         +8miJjDtzgAm6F+ue/Vigt/Vm2ADvAOhV2ZyDeqMM9omFuf1Bm8Y+/LtOkyE2ziwaME7
-         gpQckg5QWdIMSrZA95eCJPcVg4//PkkBSW4OlejepsRwH+XT1KAgY02jHb7AVgI/40G1
-         wyJZCLxf/HVibTfOZNo1a1RUgl74vra4iLwlSnmA3jjKyFn9Ak3bsbAwsS7NRXL5rrpS
-         YRZ3mwfMhHU8od9xdv5MeDJnrMwjmC7w64ne6Uy+h/ZpRR6LkcfYrMc2mXVeAw5r/otn
-         sIow==
-X-Gm-Message-State: AOJu0YzBBc7L67rPqbMeD59FJ4k0Y39JlQGVN6wCNrsFWtzZU4f0YL0g
-	AqnbAl8SBkyCEqDP6KOen88uiMI7hNRHzdiJsAdtzw==
-X-Google-Smtp-Source: AGHT+IEg7PrE51WetYNV2TXBUh16oGjCgjaHBUbmLH/Y9ejNibFsuQg1ft+g8k/hUJRIzvj4zJlXYzVe6GRAoz3cE6E=
-X-Received: by 2002:a25:244b:0:b0:dbc:c4f2:612f with SMTP id
- k72-20020a25244b000000b00dbcc4f2612fmr698912ybk.34.1702408642045; Tue, 12 Dec
- 2023 11:17:22 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257AF81E36;
+	Tue, 12 Dec 2023 19:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED42C433C7;
+	Tue, 12 Dec 2023 19:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702409007;
+	bh=XugEc5jga7y4PNlRm8BjKTZfUw+pu3ZxkmQIpRIWEZY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IfP7DhS6GQRIPh94PCnUY3D3v9HTUhNBLMgvDIKCSEyZWm7on3QEnlPSEsrB8VAly
+	 VxMqSbIZ3bDXLEwsbe1kcsiYY+66gJUk3MPujLh2TLd7piiYzNgT8/mby6PZXl45hv
+	 sWza2pUfxy/BGubgyV4ylzDtq0PT2Kjxb2j3/tZYOAyFsmOn3MVP+RVMO0+OJ63ELh
+	 8RieySJS8ocPfrZvxa9x9m8fK3pWdefGd7urdXdt3BI/iUUyl4yaoAxKMVxifEh29R
+	 ScXKjFti5r284zeeNNlTXHDNkVr0M/tfj7cm/QDJyTpxq4jSK3MjR/isfYySuemepR
+	 TnR15vPgid9eA==
+Date: Tue, 12 Dec 2023 19:22:24 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
+Message-ID: <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk>
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org>
+ <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org> <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org>
-In-Reply-To: <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Tue, 12 Dec 2023 11:17:11 -0800
-Message-ID: <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
-Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, 
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, 
-	Christian Brauner <brauner@kernel.org>, Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sqzR9iJQv0rAi7An"
+Content-Disposition: inline
+In-Reply-To: <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
+X-Cookie: If rash develops, discontinue use.
+
+
+--sqzR9iJQv0rAi7An
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 22, 2023 at 1:43=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> Three architectures (x86, aarch64, riscv) have announced support for
-> shadow stacks with fairly similar functionality.  While x86 is using
-> arch_prctl() to control the functionality neither arm64 nor riscv uses
-> that interface so this patch adds arch-agnostic prctl() support to
-> get and set status of shadow stacks and lock the current configuation to
-> prevent further changes, with support for turning on and off individual
-> subfeatures so applications can limit their exposure to features that
-> they do not need.  The features are:
->
->   - PR_SHADOW_STACK_ENABLE: Tracking and enforcement of shadow stacks,
->     including allocation of a shadow stack if one is not already
->     allocated.
->   - PR_SHADOW_STACK_WRITE: Writes to specific addresses in the shadow
->     stack.
->   - PR_SHADOW_STACK_PUSH: Push additional values onto the shadow stack.
->
-> These features are expected to be inherited by new threads and cleared
-> on exec(), unknown features should be rejected for enable but accepted
-> for locking (in order to allow for future proofing).
->
-> This is based on a patch originally written by Deepak Gupta but modified
-> fairly heavily, support for indirect landing pads is removed, additional
-> modes added and the locking interface reworked.  The set status prctl()
-> is also reworked to just set flags, if setting/reading the shadow stack
-> pointer is required this could be a separate prctl.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  include/linux/mm.h         |  4 ++++
->  include/uapi/linux/prctl.h | 22 ++++++++++++++++++++++
->  kernel/sys.c               | 30 ++++++++++++++++++++++++++++++
->  3 files changed, 56 insertions(+)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 10462f354614..8b28483b4afa 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -4143,4 +4143,8 @@ static inline bool pfn_is_unaccepted_memory(unsigne=
-d long pfn)
->         return range_contains_unaccepted_memory(paddr, paddr + PAGE_SIZE)=
-;
->  }
->
-> +int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __=
-user *status);
-> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long st=
-atus);
-> +int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long s=
-tatus);
-> +
->  #endif /* _LINUX_MM_H */
-> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-> index 370ed14b1ae0..3c66ed8f46d8 100644
-> --- a/include/uapi/linux/prctl.h
-> +++ b/include/uapi/linux/prctl.h
-> @@ -306,4 +306,26 @@ struct prctl_mm_map {
->  # define PR_RISCV_V_VSTATE_CTRL_NEXT_MASK      0xc
->  # define PR_RISCV_V_VSTATE_CTRL_MASK           0x1f
->
-> +/*
-> + * Get the current shadow stack configuration for the current thread,
-> + * this will be the value configured via PR_SET_SHADOW_STACK_STATUS.
-> + */
-> +#define PR_GET_SHADOW_STACK_STATUS      71
-> +
-> +/*
-> + * Set the current shadow stack configuration.  Enabling the shadow
-> + * stack will cause a shadow stack to be allocated for the thread.
-> + */
-> +#define PR_SET_SHADOW_STACK_STATUS      72
-> +# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
+On Tue, Dec 12, 2023 at 11:17:11AM -0800, Deepak Gupta wrote:
+> On Wed, Nov 22, 2023 at 1:43=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
+rote:
 
-Other architecture may require disabling shadow stack if glibc
-tunables is set to permissive mode.
-In permissive mode, if glibc encounters `dlopen` on an object which
-doesn't support shadow stack,
-glibc should be able to issue PR_SHADOW_STACK_DISABLE.
+> > +/*
+> > + * Set the current shadow stack configuration.  Enabling the shadow
+> > + * stack will cause a shadow stack to be allocated for the thread.
+> > + */
+> > +#define PR_SET_SHADOW_STACK_STATUS      72
+> > +# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
 
-Architectures can choose to implement or not but I think arch agnostic
-code should enumerate this.
+> Other architecture may require disabling shadow stack if glibc
+> tunables is set to permissive mode.
+> In permissive mode, if glibc encounters `dlopen` on an object which
+> doesn't support shadow stack,
+> glibc should be able to issue PR_SHADOW_STACK_DISABLE.
 
-> +# define PR_SHADOW_STACK_WRITE         (1UL << 1)
-> +# define PR_SHADOW_STACK_PUSH          (1UL << 2)
-> +
-> +/*
-> + * Prevent further changes to the specified shadow stack
-> + * configuration.  All bits may be locked via this call, including
-> + * undefined bits.
-> + */
+> Architectures can choose to implement or not but I think arch agnostic
+> code should enumerate this.
+
+The current implementation for arm64 and therefore API for the prctl()
+is that whatever combination of flags is specified will be set, this
+means that setting the status to something that does not include _ENABLE
+will result in disabling and we don't need a separate flag for disable.
+We have use cases that make active use of disabling at runtime.
+
+Please delete unneeded context from replies, it makes it much easier to
+find new content.
+
+--sqzR9iJQv0rAi7An
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV4svAACgkQJNaLcl1U
+h9Btqwf/bsYteQozf7cPtwIIhQRSI8MqfxjmscBVibOnKEFjdEqlRLo5JjkO6Pr6
+Hsm1uhj0HkH+VoTgU/3/1losf+mnWyaEoeE90IUq5vBweWShWNPKbMowY1s1JyJT
+eJ8Jv5z8xL0Zd92fTtAv0/Gl/nzqAWu3nWwc0eQH9GFutxYJ/RQceRg37XE/DJ7Z
+odJHFuONGqU0YzuzvzYXPwCScKSOq3ym2wrT5xOjARR2ltJqsKxN2gVDflKZzP62
+UImi4UsGqWZ2QvQb/fIh6ch/i9mPYGPi81vtynCHbAn91TWcPAvgOCA1Sywzc2p0
+32BmmvfZZxpi8FaPWip8qJ7NDQKaeA==
+=sM8B
+-----END PGP SIGNATURE-----
+
+--sqzR9iJQv0rAi7An--
 
