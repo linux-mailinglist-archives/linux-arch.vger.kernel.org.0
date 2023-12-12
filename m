@@ -1,240 +1,107 @@
-Return-Path: <linux-arch+bounces-905-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-906-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73EDE80E238
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 03:49:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37C0B80E3F5
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 06:45:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CB981F21C99
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 02:49:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E01401F21ECB
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 05:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA094418;
-	Tue, 12 Dec 2023 02:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A8F156C3;
+	Tue, 12 Dec 2023 05:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="BzyimD6y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNtxqUYc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F275DB8
-	for <linux-arch@vger.kernel.org>; Mon, 11 Dec 2023 18:49:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=OSkVwAGh0z9GoTAxPvHwUqo9+KybX8k0DmsbsRbpzgg=; b=BzyimD6y43TwAh1oKLNzotHcuy
-	C7OlNnfz0qzVYkOIDemNgsVZrgsOw6GdnPeQigYbpWrEjX9kdSqHugmnv0tjvXLuaLkiKl2o5gXMP
-	A4Kx1iu8iqYIALSNe1/E9Q5qzcy9fUxyf5XWX3iKP5ICrrPwRFatLSZsorBzMgKynoKwOLYDm9unl
-	V7HSEkNo9hlGGotVmAfw9LeOleCcNbm+4sgK8KtMMjAQtQmaRbmksKgCTOmFBdMBQBoxEYfdw5D/m
-	6vUpamddnNUK7mkqcYxfDmEn0LtrUwJyHq7Xt9siEpgt+AfZebhTzEyZRRdFzgZ4lfr3zj1dsJpNW
-	ul3xRUow==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rCspk-00B5Gt-1k;
-	Tue, 12 Dec 2023 02:49:20 +0000
-Date: Tue, 12 Dec 2023 02:49:20 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-arch@vger.kernel.org
-Cc: Vineet Gupta <vgupta@kernel.org>, Helge Deller <deller@gmx.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [RFC][PATCHES] getting rid of asm/unaligned.h includes
-Message-ID: <20231212024920.GG1674809@ZenIV>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7938DBA33
+	for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 05:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4CAEC433C8;
+	Tue, 12 Dec 2023 05:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702359911;
+	bh=mHTlLv30/N1FGCwE1RN2Idzyae1yHlvZ/uAAgfjPKQw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rNtxqUYc1im8TipwhJQJsspUs+vROyW3CZNv26KJu9Kz+SyIcZSTYmcABoPs06z/R
+	 B3xZzFtGY966zdTdLhuiVp6HEFMYSKKSJCHekwrJ58qWRs9Wn+LMxek67p8xmo3Ar2
+	 WogE+dv43o+St165tvUdZVMfnzIon5IBUHv6lOmDcSUBqyJ8SAp1OLAmxUuYp4saFv
+	 JEhfnPkP+Ho3w8s2Xmoe+fn0uvG1MeBeeMXZZGesL7zRuCGYHbfW859f2C3TQS9Gnc
+	 0+WbxEOSqGcnPEoVl/gMDQXM5cMd7R24yVgsBpoC3Er77x+7pEbhdKJ7BoEwQyIz/C
+	 TIGa4Hbx4VMeg==
+Message-ID: <c1b3d265-8744-408d-873b-f3145fdef5c2@kernel.org>
+Date: Mon, 11 Dec 2023 21:45:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCHES] getting rid of asm/unaligned.h includes
+Content-Language: en-US
+To: Al Viro <viro@zeniv.linux.org.uk>, linux-arch@vger.kernel.org
+Cc: Helge Deller <deller@gmx.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20231212024920.GG1674809@ZenIV>
+From: Vineet Gupta <vgupta@kernel.org>
+In-Reply-To: <20231212024920.GG1674809@ZenIV>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-	The most common include of asm/*.h is that of asm/unaligned.h.
-However, asm/unaligned.h is almost always the same - on everything
-other than arc and parisc it's simply an autogenerated include of
-asm-generic/unaligned.h.  These two architectures do have asm/unaligned.h
-of their own.  However, both instances consist of include of the same
-asm-generic/unaligned.h plus a few definitions that are never used outside
-of arch/{arc,parisc}/kernel/{trap,unaligned}.c.
 
-	Separating that cruft into arch/{arc,parisc}/kernel/unaligned.h
-allows to kill *all* asm/unaligned.h instances.  The first patch in the
-series does just that; the rest can be done mechanically just before
-the next -rc1 - remove unaligned.h from mandatory-y, move the file from
-asm-generic to linux and do a global search-and-replace of asm/unaligned.h
-to linux/unaligned.h.
 
-	I've put that into
-git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #headers.unaligned
-(both getting rid of non-default asm/unaligned.h instances and the mechanical
-followup conversion).  The former patch follows below, the latter ends up
-being 10963 lines long, so if you want to see it, look at
-https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git/commit/?h=headers.unaligned&id=959598f725aa7721a4bad53c2e997c7255ff32dc
-In any case, the second one is just for illustration purpose - it ought to be
-regenerated just before the close of next merge window.
+On 12/11/23 18:49, Al Viro wrote:
+> 	The most common include of asm/*.h is that of asm/unaligned.h.
+> However, asm/unaligned.h is almost always the same - on everything
+> other than arc and parisc it's simply an autogenerated include of
+> asm-generic/unaligned.h.  These two architectures do have asm/unaligned.h
+> of their own.  However, both instances consist of include of the same
+> asm-generic/unaligned.h plus a few definitions that are never used outside
+> of arch/{arc,parisc}/kernel/{trap,unaligned}.c.
+>
+> 	Separating that cruft into arch/{arc,parisc}/kernel/unaligned.h
+> allows to kill *all* asm/unaligned.h instances.  The first patch in the
+> series does just that; the rest can be done mechanically just before
+> the next -rc1 - remove unaligned.h from mandatory-y, move the file from
+> asm-generic to linux and do a global search-and-replace of asm/unaligned.h
+> to linux/unaligned.h.
+>
+> 	I've put that into
+> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #headers.unaligned
+> (both getting rid of non-default asm/unaligned.h instances and the mechanical
+> followup conversion).  The former patch follows below, the latter ends up
+> being 10963 lines long, so if you want to see it, look at
+> https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git/commit/?h=headers.unaligned&id=959598f725aa7721a4bad53c2e997c7255ff32dc
+> In any case, the second one is just for illustration purpose - it ought to be
+> regenerated just before the close of next merge window.
+>
+> 	I hadn't found any regressions on cross-builds.  Not sure which
+> tree should that stuff go through; suggestions?
 
-	I hadn't found any regressions on cross-builds.  Not sure which
-tree should that stuff go through; suggestions?
+Anything that makes the 2nd patch easier for you works for me.
+I don't anticipate any conflicts in this area so you could keep it
+simple and keep arch patches in your tree along side the 2nd one and let
+them go directly to Linus whenever that happens.
 
-From 286cfede3d8ca0fad1528a61293650aa6d63be58 Mon Sep 17 00:00:00 2001
-From: Al Viro <viro@zeniv.linux.org.uk>
-Date: Tue, 5 Dec 2023 21:53:22 -0500
-Subject: [PATCH 1/2] arc, parisc: get rid of private asm/unaligned.h
+> From 286cfede3d8ca0fad1528a61293650aa6d63be58 Mon Sep 17 00:00:00 2001
+> From: Al Viro <viro@zeniv.linux.org.uk>
+> Date: Tue, 5 Dec 2023 21:53:22 -0500
+> Subject: [PATCH 1/2] arc, parisc: get rid of private asm/unaligned.h
+>
+> Declarations local to arch/*/kernel/*.c are better off *not* in a public
+> header - arch/{arc,parisc}/kernel/unaligned.h is just fine for those
+> bits.
+>
+> With that done these asm/unaligned.h instances are reduced to include
+> of asm-generic/unaligned.h and can be removed - unaligned.h is in
+> mandatory-y in include/asm-generic/Kbuild.
+>
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-Declarations local to arch/*/kernel/*.c are better off *not* in a public
-header - arch/{arc,parisc}/kernel/unaligned.h is just fine for those
-bits.
-
-With that done these asm/unaligned.h instances are reduced to include
-of asm-generic/unaligned.h and can be removed - unaligned.h is in
-mandatory-y in include/asm-generic/Kbuild.
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- arch/arc/include/asm/unaligned.h    | 27 ---------------------------
- arch/arc/kernel/traps.c             |  1 +
- arch/arc/kernel/unaligned.c         |  1 +
- arch/arc/kernel/unaligned.h         | 16 ++++++++++++++++
- arch/parisc/include/asm/unaligned.h | 11 -----------
- arch/parisc/kernel/traps.c          |  2 ++
- arch/parisc/kernel/unaligned.c      |  1 +
- arch/parisc/kernel/unaligned.h      |  3 +++
- 8 files changed, 24 insertions(+), 38 deletions(-)
- delete mode 100644 arch/arc/include/asm/unaligned.h
- create mode 100644 arch/arc/kernel/unaligned.h
- delete mode 100644 arch/parisc/include/asm/unaligned.h
- create mode 100644 arch/parisc/kernel/unaligned.h
-
-diff --git a/arch/arc/include/asm/unaligned.h b/arch/arc/include/asm/unaligned.h
-deleted file mode 100644
-index cf5a02382e0e..000000000000
---- a/arch/arc/include/asm/unaligned.h
-+++ /dev/null
-@@ -1,27 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2004, 2007-2010, 2011-2012 Synopsys, Inc. (www.synopsys.com)
-- */
--
--#ifndef _ASM_ARC_UNALIGNED_H
--#define _ASM_ARC_UNALIGNED_H
--
--/* ARC700 can't handle unaligned Data accesses. */
--
--#include <asm-generic/unaligned.h>
--#include <asm/ptrace.h>
--
--#ifdef CONFIG_ARC_EMUL_UNALIGNED
--int misaligned_fixup(unsigned long address, struct pt_regs *regs,
--		     struct callee_regs *cregs);
--#else
--static inline int
--misaligned_fixup(unsigned long address, struct pt_regs *regs,
--		 struct callee_regs *cregs)
--{
--	/* Not fixed */
--	return 1;
--}
--#endif
--
--#endif /* _ASM_ARC_UNALIGNED_H */
-diff --git a/arch/arc/kernel/traps.c b/arch/arc/kernel/traps.c
-index 9b9570b79362..8e40f0881e02 100644
---- a/arch/arc/kernel/traps.c
-+++ b/arch/arc/kernel/traps.c
-@@ -20,6 +20,7 @@
- #include <asm/setup.h>
- #include <asm/unaligned.h>
- #include <asm/kprobes.h>
-+#include "unaligned.h"
- 
- void die(const char *str, struct pt_regs *regs, unsigned long address)
- {
-diff --git a/arch/arc/kernel/unaligned.c b/arch/arc/kernel/unaligned.c
-index 99a9b92ed98d..d2f5ceaaed1b 100644
---- a/arch/arc/kernel/unaligned.c
-+++ b/arch/arc/kernel/unaligned.c
-@@ -12,6 +12,7 @@
- #include <linux/ptrace.h>
- #include <linux/uaccess.h>
- #include <asm/disasm.h>
-+#include "unaligned.h"
- 
- #ifdef CONFIG_CPU_BIG_ENDIAN
- #define BE		1
-diff --git a/arch/arc/kernel/unaligned.h b/arch/arc/kernel/unaligned.h
-new file mode 100644
-index 000000000000..5244453bb85f
---- /dev/null
-+++ b/arch/arc/kernel/unaligned.h
-@@ -0,0 +1,16 @@
-+struct pt_regs;
-+struct callee_regs;
-+
-+#ifdef CONFIG_ARC_EMUL_UNALIGNED
-+int misaligned_fixup(unsigned long address, struct pt_regs *regs,
-+		     struct callee_regs *cregs);
-+#else
-+static inline int
-+misaligned_fixup(unsigned long address, struct pt_regs *regs,
-+		 struct callee_regs *cregs)
-+{
-+	/* Not fixed */
-+	return 1;
-+}
-+#endif
-+
-diff --git a/arch/parisc/include/asm/unaligned.h b/arch/parisc/include/asm/unaligned.h
-deleted file mode 100644
-index c0621295100d..000000000000
---- a/arch/parisc/include/asm/unaligned.h
-+++ /dev/null
-@@ -1,11 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _ASM_PARISC_UNALIGNED_H
--#define _ASM_PARISC_UNALIGNED_H
--
--#include <asm-generic/unaligned.h>
--
--struct pt_regs;
--void handle_unaligned(struct pt_regs *regs);
--int check_unaligned(struct pt_regs *regs);
--
--#endif /* _ASM_PARISC_UNALIGNED_H */
-diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
-index 1107ca819ac8..7ab0d44ef698 100644
---- a/arch/parisc/kernel/traps.c
-+++ b/arch/parisc/kernel/traps.c
-@@ -47,6 +47,8 @@
- #include <linux/kgdb.h>
- #include <linux/kprobes.h>
- 
-+#include "unaligned.h"
-+
- #if defined(CONFIG_LIGHTWEIGHT_SPINLOCK_CHECK)
- #include <asm/spinlock.h>
- #endif
-diff --git a/arch/parisc/kernel/unaligned.c b/arch/parisc/kernel/unaligned.c
-index ce25acfe4889..39cd222366bb 100644
---- a/arch/parisc/kernel/unaligned.c
-+++ b/arch/parisc/kernel/unaligned.c
-@@ -15,6 +15,7 @@
- #include <asm/unaligned.h>
- #include <asm/hardirq.h>
- #include <asm/traps.h>
-+#include "unaligned.h"
- 
- /* #define DEBUG_UNALIGNED 1 */
- 
-diff --git a/arch/parisc/kernel/unaligned.h b/arch/parisc/kernel/unaligned.h
-new file mode 100644
-index 000000000000..c1aa4b12e284
---- /dev/null
-+++ b/arch/parisc/kernel/unaligned.h
-@@ -0,0 +1,3 @@
-+struct pt_regs;
-+void handle_unaligned(struct pt_regs *regs);
-+int check_unaligned(struct pt_regs *regs);
--- 
-2.39.2
+Acked-by: Vineet Gupta <vgupta@kernel.org>  #arch/arc
 
 
