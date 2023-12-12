@@ -1,200 +1,324 @@
-Return-Path: <linux-arch+bounces-918-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-919-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7691C80EEFA
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 15:39:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42CDA80EF3C
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 15:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CDB4281A8F
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 14:39:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 731131C20AC7
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 14:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E496745C8;
-	Tue, 12 Dec 2023 14:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5086745D7;
+	Tue, 12 Dec 2023 14:47:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lXhvQM4U"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nTnDX5dR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2058.outbound.protection.outlook.com [40.107.96.58])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEDDD2;
-	Tue, 12 Dec 2023 06:39:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JGWKSkukbtknhxGOtHugGyz8SJYWAZxF1MbG3h6d4X/eXQ8Qr4pDf5DzWzWRLQMLSCyrvfwApGC8V2FJJTqwbeJ2GfYeI79aOUoTuY1c65dl6VnI5SlDvNr4vsoeQ+h+0/iOpsEb0ImIv/c3rRkBlBeR6Ixp8eSkb/okoWRWGk1EPtXnUHrx507iropkTJDJ6S4Wz4kU+2uzPjgo8/i8CTp/UTjx4A/2m0pQFXWNIk/wkfKSjvgvZdatOV1ocqvYc6Unm5gwTtQIFhcHP/jWw+jFIU8vbDaaQmskL2GV26TpUYDlll4QXdYomVxd4dQudGGtAVwaykDZfQd1xf/4Dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=60HBBWINjhv3np+zHYZFIeDsai/Y2e+4IoMDbnDWuoc=;
- b=YIC4ufIZ7S5SL2Ee/NjpnfzL6TF79NoD4Ts1ZXQkBrHgyuqmniOPXrGuSDoJLfPchHomqpvwZRBzexa14SQWA3c95KuHIr/ly7MVVGzkw4hgboOhRNsLUYa4wmpygFq5JlAil2eMjVV+GSDplWV78BectsSleUCYRMAL+v/A8Ajz//Z86gP+0pB61shnXTeZPwyDakI/lLi5L625/Uk8AI1bLBFmG0CcQGTjJ5CRK1x8EcV2mGqIBSjK3j29ELnSBQpE1zJtIhB8zclX5yrruWThYMnhxs4UVDbWBUJaRTyIr9eNhySnJg+gJbzI33yuR8WqyjtPk4CZ1KX/DjD/ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=60HBBWINjhv3np+zHYZFIeDsai/Y2e+4IoMDbnDWuoc=;
- b=lXhvQM4UWNBxe01wW9kR8JC3GPJ3NMYcdb8QbhNsGgfj/KDrLEdEq2j9JCwdofLIpoiGJYJdkhQlEkS0Czn1+QbtQlM5Y9A4d6BV+mzJG3ulnf1SqSgulKXzTEbQsWc3IFZPNCJdjWktRujU/s8/Q93p4EPOjyaYGTb5D8aAffR7whsQ9loBODfvT5BCiZn0PGbY2zDuQ8jsSGTRk2w8rMPL3LlRIgvPPTArQ4MdO5yqEQt/SRXKu9mvBM46wHJUwAtD7NDPjKBtByOwKbMMEIPn9smMS6m+biE6Opl8G8J2GDWejh30Q6NPfL5dhkcAYHuw+m7OpFrUTbpom3GEgA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB7889.namprd12.prod.outlook.com (2603:10b6:510:27f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Tue, 12 Dec
- 2023 14:39:44 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7091.022; Tue, 12 Dec 2023
- 14:39:44 +0000
-Date: Tue, 12 Dec 2023 10:39:42 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeelb@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory
- provider
-Message-ID: <20231212143942.GF3014157@nvidia.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-9-almasrymina@google.com>
- <20231212122535.GA3029808@nvidia.com>
- <CAHS8izMVMx0fpT=dWsnD7piqs1g7Fam8Xf5dK3iOFNxeOQD9vQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izMVMx0fpT=dWsnD7piqs1g7Fam8Xf5dK3iOFNxeOQD9vQ@mail.gmail.com>
-X-ClientProxiedBy: MN2PR20CA0021.namprd20.prod.outlook.com
- (2603:10b6:208:e8::34) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3835BD4F
+	for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 06:47:28 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50e0d1f9fe6so116673e87.1
+        for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 06:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702392447; x=1702997247; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=svSGkfXxoPYjvETADo38bpUlqdTTk6pLGr40su5OtW8=;
+        b=nTnDX5dRv4zCBEDfRkfcYuVCl/vE25w3FMur5nsi8CgW510HrLDFELeAfyQEFsJtVp
+         3ChMDv1PAFvf0x/pKsJDEdfKvehLJSkYKZYfvdAXjOGqKoMbJqC/DDpeMZAQiWWtn68H
+         VfnJSDxNJUIRkRavSwmvQj5VzEhKT7lwoQjpWasjQKlaUS+NThK4El0OCiVZx+Hln7aL
+         NAlRdw0UPHaSav3/g9VAsA4UVxZFo1+pCIvJUP3nH6thQHC1I+8KCbZmD5uIEnyQDpzZ
+         GO9Q8qvXlYcfd0+RFoElVfIA6BAbmQj7SrYhyRp4zUTHs23cvIZ+uSFhXwwbp669zjxF
+         hsmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702392447; x=1702997247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=svSGkfXxoPYjvETADo38bpUlqdTTk6pLGr40su5OtW8=;
+        b=bE1n6658/ogSxTXyapMEjb6+PvBb0guBsS+HVjkYqJxyePhHosy/lXBdQDBYt+kbey
+         TpI+XuzyJhHwHAoXCjHCHIHNIEZa4YLC/9IDIB1TdlBwdXJjR7Zca5V4XcKLutD+aVO+
+         o9r5xmFZPfCp6DesslqfR4DWTLEBn4tTNp3OraYLHxcFl6yhZ6Im9+v7KuUYR8m+jHjZ
+         DEo6OpKdge1qwP8gNvnwJfJuNjX++PvzdQhBKmpmuxBuyT122h3wUqVtjejMJvFaUqw4
+         K7ZS9+bclc1PhzrMKG+RuNsorNzKdwIJl1rCEh8IAfLJeSEqDWgu2n6NdjCZXoVpHdhM
+         KXaQ==
+X-Gm-Message-State: AOJu0YzcK5nsn/gml7/PbI/WCQxiE1/X5FRyg+KtubgBmbXAlgz5KsYs
+	uSDNSv9/yFYxtieMdcSnhus0pq5jLVK5qQe4qx+l7w==
+X-Google-Smtp-Source: AGHT+IED/VHAjdNhXHhxtPXZM7il0IVlK/nYNiYW3GnuP2eS4BonMypWtmsPI7HmlT4ntgc0d0NHzIrC3bW94tUsnXw=
+X-Received: by 2002:a05:6512:ac8:b0:50b:feb2:dac9 with SMTP id
+ n8-20020a0565120ac800b0050bfeb2dac9mr3712110lfu.2.1702392446733; Tue, 12 Dec
+ 2023 06:47:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB7889:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5680d03c-e323-4f5b-7afb-08dbfb202e7c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	UuIYqwdDMapiqaAI841n5k2jvrudkwDIgnYHWPZxTfVMmUjFJj9cyAVWy4NP2CkYl7Onm2TocgQqRvyltAsswnRV/k1FvWckTdLe+TFu7vnRBu/btHqeLwXO95Ei8/JcKHEAoLZw1U1aBnFUn3BlEIl9IB/PBdvoZRFI3loZipW8bCzYnZzt5kR4umA8d+x8I4jlulPLxCFf5i8iV8P0US0/YrZUJAw6ow7EEvIU1h8bRx5dikzUSPtnQKTsFj83dJNBjd7PpnWT2B3i7vdfPydL96BWkQ/2p5IncrNmXoukNdoAzzN9u6deJ+iIp70X4iP1YAsBjPENLpqll+5H1+i9Xs51f4+x+BEM5NXNP781oY+7Q4qg4uPeA55nEwDO8074v1zjT3WdDCUneXgrUkW31QkFKvQsCXiVL3TgOmvcITXf1nqcXViLcEdcP9CjlgXlpBNwL/JSKX2y59c1UD9iU/Zfnxs25CzBbc5MrctdL6PwugaedwaoNmK55cuOLHS44lXV4atsOzmVa/GFSzhN/Ox9mWdTE+Fh9DOyEhhBnRA0oGUyngcAZJpJGfAV
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(346002)(366004)(396003)(136003)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(41300700001)(2906002)(8676002)(8936002)(316002)(5660300002)(7416002)(7406005)(4326008)(6512007)(6506007)(6486002)(2616005)(478600001)(54906003)(86362001)(33656002)(36756003)(66946007)(66556008)(66476007)(6916009)(38100700002)(53546011)(26005)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bTA2TnpCMjVPaHVZTWJnaWo5RmJ2UlZleEhyOUNXYWtRN2U0dzFDeHpldXlj?=
- =?utf-8?B?b1dUOVJWU1F2dm9obmUwRVJrWUZCUmtSeGJmNjk5RGhISTYyNjdNTXovYkJz?=
- =?utf-8?B?TXcyNFc0YXFUd3pNK0xzZ1h1VzJMakZuSUUxcEJsdjhvV1YvOHJlU1hCRjhL?=
- =?utf-8?B?cmV3UG1DWVIwRHdBL3luUG9BMk5LWitSZGZIWGdic2VCeEpKV0NBeE50bHRs?=
- =?utf-8?B?bFRWdDZuZHkwNnJrR3JHemRubk9PZFdyVGVtM3A0YVM3TkZtaXRjQUNBVjlK?=
- =?utf-8?B?SFdQeGZpRCtFdmpHT2NXTlhBTHlwaW54UkNBd0lHdXdwTFh2SUYwT0poUEJX?=
- =?utf-8?B?NnNVSkhoSVJSMll3OTREZGRvYXR3dVFXSHRnMXFVM3gyL0xTQ1lzZllNRlBn?=
- =?utf-8?B?cjQwUEJLc3lETmJMN1J0bkt3WG50N3RiZ1R3MlhyZk9CYXJ6R3AwcnFtd2oz?=
- =?utf-8?B?ckl4aUVkNEZHV0hEZHVmcXBkZldtekFKQjZxWDZuczdsamIweDlDQ2xwaFFK?=
- =?utf-8?B?WlErb3lYeTM2TXVweVAzRkRQcnNEdzhjUXpRY3JCeVdJN2NnWHpBekJVL1FR?=
- =?utf-8?B?WncrOWo3TUxrZDlYMU5ObVRMa29nblViVFFMN0tGQmk1bHVpWThDM3VnTG5h?=
- =?utf-8?B?R3pWSTJpdndKTXVXendHeXlkVXpPdk5BdGJIUG96cUt3ZFV5Ri9oK09JTkVQ?=
- =?utf-8?B?YVU0SEhGUUdUcGRqN1plNjJWUzZTTmgyK1dvYklYS3l1QVFvY0pPSWt1QXVX?=
- =?utf-8?B?TURhUkFSN1ZRcExUOXUvcmF3cWtKbDRmdG1rTVp3ckp3S3p2NlNrZjVQNkVu?=
- =?utf-8?B?YXRHaFg1czZSSlQrUW1DcU1ZVzhwRFlyWWxjcXE1S05NTXV5UjJjS3pvZFJC?=
- =?utf-8?B?eUJra3lOa3ZkdVVKaUlCbzF4WlBxU3E5WTZWZDlTdzRsa20wc1hTSkNTTDRq?=
- =?utf-8?B?OFV6d2VFczQxdzg5VkJmK3JXbkc1YTdQSWt5eUdjVVQ0WU5lNmc0Unpncmlk?=
- =?utf-8?B?SVdXTlJuMm5wUmRwZzFwSWNiTjcrZGJnNDVOdWJZYTkwd3VFaExRWk1PV1F1?=
- =?utf-8?B?R2tEenFMc2poQWJDdnhtZDhOLzk1TVBDNVZGK0ZSd25pTk1oM0ZkSnVOVHo2?=
- =?utf-8?B?cnFVSkJVb29qeGhBdzhvbnlZNVhrYWc3RkVKZDVjSWREQ0ZudGRQaXBKZllk?=
- =?utf-8?B?NzhWYnA0cTc2U1UzRlNoQkdXNm9EajZ4ek0rTjdVZkMvYTdHalAySHFqcVVX?=
- =?utf-8?B?VWU5SGpoLzlZc25qa3FzZkZrc3lnSHF6RFRDbzVFUTBPU1FHRGkxTTBqTGVN?=
- =?utf-8?B?YXdjQkZnQ3pzVUlJWG9HWHZMTVI0N0hxSUVDbEI2WXcxZFJtNHpadjZ5RlA4?=
- =?utf-8?B?VC9NQXl2STFXaHkwNmdFRzVaMDMyZzBBQTN5NUZodFFuVTRPZWI4QUhzdENK?=
- =?utf-8?B?OWQ0WUc0K01mVE5mRXNBUWlhd3NYVUE5bUMzb1krUEFOeHFBdDVoV1JvN0RF?=
- =?utf-8?B?aW42QVBCUUk1bGtTTUU4b056SXJseVNSVU5hMlZ4MHRSYmc3THplaFNhRXlB?=
- =?utf-8?B?QXlTOTRNU2NKL1liMVBSYU9iT1daYXliOU4xY0VIYytzU2xjQk9HYlArODRZ?=
- =?utf-8?B?SWczOTd6NHNVVW56YmtHRTZ5QngrMVZBUXh6R1hxbTJmNm5IK0NnRWJaSVk4?=
- =?utf-8?B?UHFnaW1WWHV3S2EyK0ZKWjZMd1NKbUI0ck5WRDEvbUdId256MnNjUnBFVGFu?=
- =?utf-8?B?OHArYXgwUGxRcFQ5NlZnZFBYNUlBQzV5Sml0NUI1V1ZrMG0yM2lQRU9Sdkhi?=
- =?utf-8?B?TzFzeEZ3UU5HSVlpOG9xMXQ3UzRxRnhST0tDcnZOS2NNaVBJUVoxTHpNQnJQ?=
- =?utf-8?B?bUtuc2NERFRLb3M4L1lvWVc4M25WNS9mVkoya05TOUc5bUNzWjBlNlF2VnRT?=
- =?utf-8?B?alc3bklYN0tsWXlRcEdsdlRJR05teWxnMmNBeVlQbGtZL1RhQzlUbW1lbGl2?=
- =?utf-8?B?MlZicHRKY3krcHZCaUNSLy9VbkJuL284ZE1iYkJIQTQxNzFPUDdxbXlLY2px?=
- =?utf-8?B?REZweFRzc2lnMGEydDFHTWp0cElJbEsxUGNoVklwVEVvTWpuVFArbUppWVhx?=
- =?utf-8?Q?VaUq6bnBhoGbuM0LBLJFvV3iZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5680d03c-e323-4f5b-7afb-08dbfb202e7c
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 14:39:44.2602
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F+AmbUoeP0zhwQ8FxJf57G0tD0LUPLeDwMN9DgfIKdBe5xIHaAAYBvGyeVIBWV9B
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7889
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-3-almasrymina@google.com> <CAC_iWjKikzwpjR0hBjYuRxgYjyqp_EYrrxoveB_2DgCxk6vWYw@mail.gmail.com>
+In-Reply-To: <CAC_iWjKikzwpjR0hBjYuRxgYjyqp_EYrrxoveB_2DgCxk6vWYw@mail.gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 12 Dec 2023 06:47:14 -0800
+Message-ID: <CAHS8izOX5DmyT88tGJbbxoy1NScnscw3cXMFauhTfJ7m+Gb9wA@mail.gmail.com>
+Subject: Re: [net-next v1 02/16] net: page_pool: create hooks for custom page providers
+To: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 06:26:51AM -0800, Mina Almasry wrote:
-> On Tue, Dec 12, 2023 at 4:25 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Tue, Dec 12, 2023 at 12:07=E2=80=AFAM Ilias Apalodimas
+<ilias.apalodimas@linaro.org> wrote:
+>
+> Hi Mina,
+>
+> Apologies for not participating in the party earlier.
+>
+
+No worries, thanks for looking.
+
+> On Fri, 8 Dec 2023 at 02:52, Mina Almasry <almasrymina@google.com> wrote:
 > >
-> > On Thu, Dec 07, 2023 at 04:52:39PM -0800, Mina Almasry wrote:
+> > From: Jakub Kicinski <kuba@kernel.org>
 > >
-> > > +static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
-> > > +{
-> > > +     if (page_is_page_pool_iov(page))
-> > > +             return (struct page_pool_iov *)((unsigned long)page & ~PP_IOV);
-> > > +
-> > > +     DEBUG_NET_WARN_ON_ONCE(true);
-> > > +     return NULL;
-> > > +}
+> > The page providers which try to reuse the same pages will
+> > need to hold onto the ref, even if page gets released from
+> > the pool - as in releasing the page from the pp just transfers
+> > the "ownership" reference from pp to the provider, and provider
+> > will wait for other references to be gone before feeding this
+> > page back into the pool.
 > >
-> > We already asked not to do this, please do not allocate weird things
-> > can call them 'struct page' when they are not. It undermines the
-> > maintainability of the mm to have things mis-typed like
-> > this. Introduce a new type for your thing so the compiler can check it
-> > properly.
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
 > >
-> 
-> There is a new type introduced, it's the page_pool_iov. We set the LSB
-> on page_pool_iov* and cast it to page* only to avoid the churn of
-> renaming page* to page_pool_iov* in the page_pool and all the net
-> drivers using it. Is that not a reasonable compromise in your opinion?
-> Since the LSB is set on the resulting page pointers, they are not
-> actually usuable as pages, and are never passed to mm APIs per your
-> requirement.
+> > ---
+> >
+> > This is implemented by Jakub in his RFC:
+> > https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
+hat.com/T/
+> >
+> > I take no credit for the idea or implementation; I only added minor
+> > edits to make this workable with device memory TCP, and removed some
+> > hacky test code. This is a critical dependency of device memory TCP
+> > and thus I'm pulling it into this series to make it revewable and
+> > mergable.
+> >
+> > RFC v3 -> v1
+> > - Removed unusued mem_provider. (Yunsheng).
+> > - Replaced memory_provider & mp_priv with netdev_rx_queue (Jakub).
+> >
+> > ---
+> >  include/net/page_pool/types.h | 12 ++++++++++
+> >  net/core/page_pool.c          | 43 +++++++++++++++++++++++++++++++----
+> >  2 files changed, 50 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/net/page_pool/types.h b/include/net/page_pool/type=
+s.h
+> > index ac286ea8ce2d..0e9fa79a5ef1 100644
+> > --- a/include/net/page_pool/types.h
+> > +++ b/include/net/page_pool/types.h
+> > @@ -51,6 +51,7 @@ struct pp_alloc_cache {
+> >   * @dev:       device, for DMA pre-mapping purposes
+> >   * @netdev:    netdev this pool will serve (leave as NULL if none or m=
+ultiple)
+> >   * @napi:      NAPI which is the sole consumer of pages, otherwise NUL=
+L
+> > + * @queue:     struct netdev_rx_queue this page_pool is being created =
+for.
+> >   * @dma_dir:   DMA mapping direction
+> >   * @max_len:   max DMA sync memory size for PP_FLAG_DMA_SYNC_DEV
+> >   * @offset:    DMA sync address offset for PP_FLAG_DMA_SYNC_DEV
+> > @@ -63,6 +64,7 @@ struct page_pool_params {
+> >                 int             nid;
+> >                 struct device   *dev;
+> >                 struct napi_struct *napi;
+> > +               struct netdev_rx_queue *queue;
+> >                 enum dma_data_direction dma_dir;
+> >                 unsigned int    max_len;
+> >                 unsigned int    offset;
+> > @@ -125,6 +127,13 @@ struct page_pool_stats {
+> >  };
+> >  #endif
+> >
+> > +struct memory_provider_ops {
+> > +       int (*init)(struct page_pool *pool);
+> > +       void (*destroy)(struct page_pool *pool);
+> > +       struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+> > +       bool (*release_page)(struct page_pool *pool, struct page *page)=
+;
+> > +};
+> > +
+> >  struct page_pool {
+> >         struct page_pool_params_fast p;
+> >
+> > @@ -174,6 +183,9 @@ struct page_pool {
+> >          */
+> >         struct ptr_ring ring;
+> >
+> > +       void *mp_priv;
+> > +       const struct memory_provider_ops *mp_ops;
+> > +
+> >  #ifdef CONFIG_PAGE_POOL_STATS
+> >         /* recycle stats are per-cpu to avoid locking */
+> >         struct page_pool_recycle_stats __percpu *recycle_stats;
+> > diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> > index ca1b3b65c9b5..f5c84d2a4510 100644
+> > --- a/net/core/page_pool.c
+> > +++ b/net/core/page_pool.c
+> > @@ -25,6 +25,8 @@
+> >
+> >  #include "page_pool_priv.h"
+> >
+> > +static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
+>
+> We could add the existing page pool mechanisms as another 'provider',
+> but I assume this is coded like this for performance reasons (IOW skip
+> the expensive ptr call for the default case?)
+>
 
-There were two asks, the one you did was to never pass this non-struct
-page memory to the mm, which is great.
+Correct, it's done like this for performance reasons.
 
-The other was to not mistype things, and don't type something as
-struct page when it is, in fact, not.
+> > +
+> >  #define DEFER_TIME (msecs_to_jiffies(1000))
+> >  #define DEFER_WARN_INTERVAL (60 * HZ)
+> >
+> > @@ -174,6 +176,7 @@ static int page_pool_init(struct page_pool *pool,
+> >                           const struct page_pool_params *params)
+> >  {
+> >         unsigned int ring_qsize =3D 1024; /* Default */
+> > +       int err;
+> >
+> >         memcpy(&pool->p, &params->fast, sizeof(pool->p));
+> >         memcpy(&pool->slow, &params->slow, sizeof(pool->slow));
+> > @@ -234,10 +237,25 @@ static int page_pool_init(struct page_pool *pool,
+> >         /* Driver calling page_pool_create() also call page_pool_destro=
+y() */
+> >         refcount_set(&pool->user_cnt, 1);
+> >
+> > +       if (pool->mp_ops) {
+> > +               err =3D pool->mp_ops->init(pool);
+> > +               if (err) {
+> > +                       pr_warn("%s() mem-provider init failed %d\n",
+> > +                               __func__, err);
+> > +                       goto free_ptr_ring;
+> > +               }
+> > +
+> > +               static_branch_inc(&page_pool_mem_providers);
+> > +       }
+> > +
+> >         if (pool->p.flags & PP_FLAG_DMA_MAP)
+> >                 get_device(pool->p.dev);
+> >
+> >         return 0;
+> > +
+> > +free_ptr_ring:
+> > +       ptr_ring_cleanup(&pool->ring, NULL);
+> > +       return err;
+> >  }
+> >
+> >  static void page_pool_uninit(struct page_pool *pool)
+> > @@ -519,7 +537,10 @@ struct page *page_pool_alloc_pages(struct page_poo=
+l *pool, gfp_t gfp)
+> >                 return page;
+> >
+> >         /* Slow-path: cache empty, do real allocation */
+> > -       page =3D __page_pool_alloc_pages_slow(pool, gfp);
+> > +       if (static_branch_unlikely(&page_pool_mem_providers) && pool->m=
+p_ops)
+>
+> Why do we need && pool->mp_ops? On the init function, we only bump
+> page_pool_mem_providers if the ops are there
+>
 
-I fear what you've done is make it so only one driver calls these
-special functions and left the other drivers passing the struct page
-directly to the mm and sort of obfuscating why it is OK based on this
-netdev knowledge of not enabling/using the static branch in the other
-cases.
+Note that page_pool_mem_providers is a static variable (not part of
+the page_pool struct), so if you have 2 page_pools on the system, one
+using devmem and one not, we need to check pool->mp_ops to make sure
+this page_pool is using a memory provider.
 
-Perhaps you can simply avoid this by arranging for this driver to also
-exclusively use some special type to indicate the dual nature of the
-pointer and leave the other drivers as using the struct page version.
+> > +               page =3D pool->mp_ops->alloc_pages(pool, gfp);
+> > +       else
+> > +               page =3D __page_pool_alloc_pages_slow(pool, gfp);
+> >         return page;
+> >  }
+> >  EXPORT_SYMBOL(page_pool_alloc_pages);
+> > @@ -576,10 +597,13 @@ void __page_pool_release_page_dma(struct page_poo=
+l *pool, struct page *page)
+> >  void page_pool_return_page(struct page_pool *pool, struct page *page)
+> >  {
+> >         int count;
+> > +       bool put;
+> >
+> > -       __page_pool_release_page_dma(pool, page);
+> > -
+> > -       page_pool_clear_pp_info(page);
+> > +       put =3D true;
+> > +       if (static_branch_unlikely(&page_pool_mem_providers) && pool->m=
+p_ops)
+>
+> ditto
+>
+> > +               put =3D pool->mp_ops->release_page(pool, page);
+> > +       else
+> > +               __page_pool_release_page_dma(pool, page);
+> >
+> >         /* This may be the last page returned, releasing the pool, so
+> >          * it is not safe to reference pool afterwards.
+> > @@ -587,7 +611,10 @@ void page_pool_return_page(struct page_pool *pool,=
+ struct page *page)
+> >         count =3D atomic_inc_return_relaxed(&pool->pages_state_release_=
+cnt);
+> >         trace_page_pool_state_release(pool, page, count);
+> >
+> > -       put_page(page);
+> > +       if (put) {
+> > +               page_pool_clear_pp_info(page);
+> > +               put_page(page);
+> > +       }
+> >         /* An optimization would be to call __free_pages(page, pool->p.=
+order)
+> >          * knowing page is not part of page-cache (thus avoiding a
+> >          * __page_cache_release() call).
+> > @@ -857,6 +884,12 @@ static void __page_pool_destroy(struct page_pool *=
+pool)
+> >
+> >         page_pool_unlist(pool);
+> >         page_pool_uninit(pool);
+> > +
+> > +       if (pool->mp_ops) {
+>
+> Same here. Using a mix of pool->mp_ops and page_pool_mem_providers
+> will work, but since we always check the ptr on init, can't we simply
+> rely on page_pool_mem_providers for the rest of the code?
+>
+> Thanks
+> /Ilias
+> > +               pool->mp_ops->destroy(pool);
+> > +               static_branch_dec(&page_pool_mem_providers);
+> > +       }
+> > +
+> >         kfree(pool);
+> >  }
+> >
+> > --
+> > 2.43.0.472.g3155946c3a-goog
+> >
 
-Jason
+
+
+--
+Thanks,
+Mina
 
