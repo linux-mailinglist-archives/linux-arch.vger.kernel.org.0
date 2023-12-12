@@ -1,173 +1,123 @@
-Return-Path: <linux-arch+bounces-932-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-933-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8A180F76F
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 21:05:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 768E780F7B1
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 21:17:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44F281F215E8
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 20:05:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7CA41C20C7D
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 20:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351E952771;
-	Tue, 12 Dec 2023 20:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35F963BFE;
+	Tue, 12 Dec 2023 20:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Le1a7b+M"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C201AF;
-	Tue, 12 Dec 2023 12:05:26 -0800 (PST)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5907b9c3fd6so533792eaf.0;
-        Tue, 12 Dec 2023 12:05:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702411525; x=1703016325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+BOtCilKMUNbBasgq0UMjLFqZa8aCDvdPUV0gfbYhOc=;
-        b=sVUXX4IxtcwSB5JASMrBQk41fA6hU8d6vJjrJaMjfDUalK6IIKDBO5evbIbulOYgJ6
-         7lIch6sZnUkZmcfmOgvq/4DwqHLxcHT52VQOx7q0uXFYADlxGqfuv47bFGIoSPRwKrGF
-         zWW8iVQOUnTn5N8mUYTG6866YHG5be/VCYejuXJ2zFufPZile5qZvfnzEwiEHp7KtzUh
-         JiW1oaTMRNoPMhYOFvGdEkY+VKh/xvFRBfmgP5mC/z0k+D/nHhDEGzfM66rQ1a9NCPUg
-         O+kh82HzDbAeE6jH4z9VhBooVOliu3L4JA/kgHPwLF+2ndsIAWWWSfO3YoU7o9P5jUnM
-         sAeg==
-X-Gm-Message-State: AOJu0YwLcLwa0cCT7iEzeA9QsU/kIcRm6KwBQ6LlWQGQi6/U1vMQmpQD
-	VVB7nQwJHpZzajXux2+msNTc/BZ5y5LRyNbUYNs=
-X-Google-Smtp-Source: AGHT+IG/zOKPoXX+KUgHRd1YwPymLrSadLIsRID5FYaIOT9/r8DyzvG7YUYiYl28l7KFo0FotJK25IwKa9Ys4XqQUjg=
-X-Received: by 2002:a05:6820:220d:b0:58d:5302:5b18 with SMTP id
- cj13-20020a056820220d00b0058d53025b18mr13982416oob.1.1702411525380; Tue, 12
- Dec 2023 12:05:25 -0800 (PST)
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E04DB;
+	Tue, 12 Dec 2023 12:17:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=PDwWMvE707rKJbV02zug7t37qFDv7YOoytMyP2X6xyQ=; b=Le1a7b+MYxlb3kfygQ0jhZGDz+
+	1KEl3WefH1wExk5k9L8RKfyjQb31NtNsFDmeS4rbyNsnV/AXUNGZ4lb5p5n6bzlws55DQTx6h0Pci
+	2u3wY6NiE6B+lMqsPbDzadz2m2GUvO+8cAcQqTDUn2jhye7PisBrMewyqd/QZUPpAurEe+jBmHuOo
+	QZY3oxISKjP6uooc+4ddKW0Y68+IKpagaLdIr/CvX94n5Xo5rkXFcE7Uvf+3APlWLA0ytjjrnZlrN
+	8dsbOoFtwrn6T2CxI8FRZWBoRtSUTRQ8ww5gyZJb/FHHmDSGFj8cA+TDfANxb1MalWyb1DtUqoygz
+	L/AUbcjQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58234)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rD9Ba-0007OH-0y;
+	Tue, 12 Dec 2023 20:16:58 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rD9Bb-0000jo-UJ; Tue, 12 Dec 2023 20:16:59 +0000
+Date: Tue, 12 Dec 2023 20:16:59 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [RFC PATCH v3 00/39] ACPI/arm64: add support for virtual
+ cpuhotplug
+Message-ID: <ZXi/u7dZ20oLPF9n@shell.armlinux.org.uk>
+References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
+ <CAJZ5v0j-73_+9U3ngDAf9w1ADDhBTKctJdWboqUk-okH2TQGyg@mail.gmail.com>
+ <ZW4ZBkj2oCmxv55T@shell.armlinux.org.uk>
+ <ZXi7do4mVfdsz/k0@shell.armlinux.org.uk>
+ <CAJZ5v0jOU4Re2g5QtxpG0RjP3MYBxqz5Z+TtfXq2dz8HTq9A0A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk> <CAJZ5v0j-73_+9U3ngDAf9w1ADDhBTKctJdWboqUk-okH2TQGyg@mail.gmail.com>
- <ZW4ZBkj2oCmxv55T@shell.armlinux.org.uk> <ZXi7do4mVfdsz/k0@shell.armlinux.org.uk>
-In-Reply-To: <ZXi7do4mVfdsz/k0@shell.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Dec 2023 21:05:14 +0100
-Message-ID: <CAJZ5v0jOU4Re2g5QtxpG0RjP3MYBxqz5Z+TtfXq2dz8HTq9A0A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 00/39] ACPI/arm64: add support for virtual cpuhotplug
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jOU4Re2g5QtxpG0RjP3MYBxqz5Z+TtfXq2dz8HTq9A0A@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Tue, Dec 12, 2023 at 8:58=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Dec 04, 2023 at 06:23:02PM +0000, Russell King (Oracle) wrote:
-> > On Tue, Oct 24, 2023 at 08:26:58PM +0200, Rafael J. Wysocki wrote:
-> > > On Tue, Oct 24, 2023 at 5:15=E2=80=AFPM Russell King (Oracle)
-> > > <linux@armlinux.org.uk> wrote:
+On Tue, Dec 12, 2023 at 09:05:14PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Dec 12, 2023 at 8:58 PM Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Mon, Dec 04, 2023 at 06:23:02PM +0000, Russell King (Oracle) wrote:
+> > > On Tue, Oct 24, 2023 at 08:26:58PM +0200, Rafael J. Wysocki wrote:
+> > > > I've gone through the series and there is at least one thing in it
+> > > > that concerns me a lot and some others that at least appear to be
+> > > > really questionable.
 > > > >
-> > > > Hi,
-> > > >
-> > > > I'm posting James' patch set updated with most of the review commen=
-ts
-> > > > from his RFC v2 series back in September. Individual patches have a
-> > > > changelog attached at the bottom of the commit message. Those which
-> > > > I have finished updating have my S-o-b on them, those which still h=
-ave
-> > > > outstanding review comments from RFC v2 do not. In some of these ca=
-ses
-> > > > I've asked questions and am waiting for responses.
-> > > >
-> > > > I'm posting this as RFC v3 because there's still some unaddressed
-> > > > comments and it's clearly not ready for merging. Even if it was rea=
-dy
-> > > > to be merged, it is too late in this development cycle to be taking
-> > > > this change in, so there would be little point posting it non-RFC.
-> > > > Also James stated that he's waiting for confirmation from the
-> > > > Kubernetes/Kata folk - I have no idea what the status is there.
-> > > >
-> > > > I will be sending each patch individually to a wider audience
-> > > > appropriate for that patch - apologies to those missing out on this
-> > > > cover message. I have added more mailing lists to the series with t=
-he
-> > > > exception of the acpica list in a hope of this cover message also
-> > > > reaching those folk.
-> > > >
-> > > > The changes that aren't included are:
-> > > >
-> > > > 1. Updates for my patch that was merged via Thomas (thanks!):
-> > > >    c4dd854f740c cpu-hotplug: Provide prototypes for arch CPU regist=
-ration
-> > > >    rather than having this change spread through James' patches.
-> > > >
-> > > > 2. New patch - simplification of PA-RISC's smp_prepare_boot_cpu()
-> > > >
-> > > > 3. Moved "ACPI: Use the acpi_device_is_present() helper in more pla=
-ces"
-> > > >    and "ACPI: Rename acpi_scan_device_not_present() to be about
-> > > >    enumeration" to the beginning of the series - these two patches =
-are
-> > > >    already queued up for merging into 6.7.
-> > > >
-> > > > 4. Moved "arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check=
- into
-> > > >    a helper" to the beginning of the series, which has been submitt=
-ed,
-> > > >    but as yet the fate of that posting isn't known.
-> > > >
-> > > > The first four patches in this series are provided for completness =
-only.
-> > > >
-> > > > There is an additional patch in James' git tree that isn't in the s=
-et
-> > > > of patches that James posted: "ACPI: processor: Only call
-> > > > arch_unregister_cpu() if HOTPLUG_CPU is selected" which looks to me=
- to
-> > > > be a workaround for arch_unregister_cpu() being under the ifdef. I'=
-ve
-> > > > commented on this on the RFC v2 posting making a suggestion, but as=
- yet
-> > > > haven't had any response.
-> > > >
-> > > > I've included almost all of James' original covering body below the
-> > > > diffstat.
-> > > >
-> > > > The reason that I'm doing this is to help move this code forward so
-> > > > hopefully it can be merged - which is why I have been keen to dig o=
-ut
-> > > > from James' patches anything that can be merged and submit it
-> > > > separately, since this is a feature for which some users have a
-> > > > definite need for.
+> > > > I need more time to send comments which I'm not going to do before the
+> > > > 6.7 merge window (sorry), but from what I can say right now, this is
+> > > > not looking good.
 > > >
-> > > I've gone through the series and there is at least one thing in it
-> > > that concerns me a lot and some others that at least appear to be
-> > > really questionable.
+> > > Hi Rafael,
 > > >
-> > > I need more time to send comments which I'm not going to do before th=
-e
-> > > 6.7 merge window (sorry), but from what I can say right now, this is
-> > > not looking good.
+> > > Will you be able to send your comments, so that we can find out what
+> > > your other concerns are please? I'm getting questions from interested
+> > > parties who want to know what your concerns are.
+> > >
+> > > Nothing much has changed to the ACPI changes, so I think it's still
+> > > valid to have the comments back for this.
 > >
 > > Hi Rafael,
 > >
-> > Will you be able to send your comments, so that we can find out what
-> > your other concerns are please? I'm getting questions from interested
-> > parties who want to know what your concerns are.
-> >
-> > Nothing much has changed to the ACPI changes, so I think it's still
-> > valid to have the comments back for this.
->
-> Hi Rafael,
->
-> Another gentle prod on this...
+> > Another gentle prod on this...
+> 
+> There was a selection of the patches in the series sent separately and
+> I believe that some of them have been applied already.
+> 
+> Can you please send the remaining patches again so it is clear what's
+> still outstanding?
 
-There was a selection of the patches in the series sent separately and
-I believe that some of them have been applied already.
+I can do tomorrow, thanks. I will re-post as RFC again because it will
+depend on the cleanup part that was merged into Greg's tree - and thus
+the series isn't standalone (and I'll mention that in the cover
+message.)
 
-Can you please send the remaining patches again so it is clear what's
-still outstanding?
+We need to hear your concerns, which sounded quite damning for the
+series, so that if it's possible to save this a plan to address your
+concerns can be formulated.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
