@@ -1,107 +1,79 @@
-Return-Path: <linux-arch+bounces-906-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-907-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37C0B80E3F5
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 06:45:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3476980E415
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 06:58:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E01401F21ECB
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 05:45:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D4951C21ACA
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 05:58:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A8F156C3;
-	Tue, 12 Dec 2023 05:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150C2156DE;
+	Tue, 12 Dec 2023 05:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNtxqUYc"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YhOHsMUx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7938DBA33
-	for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 05:45:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4CAEC433C8;
-	Tue, 12 Dec 2023 05:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702359911;
-	bh=mHTlLv30/N1FGCwE1RN2Idzyae1yHlvZ/uAAgfjPKQw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rNtxqUYc1im8TipwhJQJsspUs+vROyW3CZNv26KJu9Kz+SyIcZSTYmcABoPs06z/R
-	 B3xZzFtGY966zdTdLhuiVp6HEFMYSKKSJCHekwrJ58qWRs9Wn+LMxek67p8xmo3Ar2
-	 WogE+dv43o+St165tvUdZVMfnzIon5IBUHv6lOmDcSUBqyJ8SAp1OLAmxUuYp4saFv
-	 JEhfnPkP+Ho3w8s2Xmoe+fn0uvG1MeBeeMXZZGesL7zRuCGYHbfW859f2C3TQS9Gnc
-	 0+WbxEOSqGcnPEoVl/gMDQXM5cMd7R24yVgsBpoC3Er77x+7pEbhdKJ7BoEwQyIz/C
-	 TIGa4Hbx4VMeg==
-Message-ID: <c1b3d265-8744-408d-873b-f3145fdef5c2@kernel.org>
-Date: Mon, 11 Dec 2023 21:45:11 -0800
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2451DA1;
+	Mon, 11 Dec 2023 21:58:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=lgLwTEhQVr7SeOkAbXZIpqhiCYecdKkb92XRhk3Nnto=; b=YhOHsMUxRMFey39Ub+BOoHUSpN
+	6MD2YvGw42vNtElnYki1NxJH9KlY8dt3Xm1HkV2P6cve8n0OT2lWYfK3Du2qGpAm+OR+Cys5wPkIf
+	LE4znGLFwFzfwfuhB6/ZRcFvqHR3KNSaEVVBM4sFec7GGKvkoEBEVIp1GDKF6IeHVHVxytGCrpZCx
+	1faM9v6zX2g+69mh7wf3OyXFWKq/ZNrIB+bGXJyrwEC02dodJ4tmwi4CT68czYOjwgp+Y+4GW16Am
+	Y55OjcCnUTKf5hamO76diNt+t88idSnTc+d8igc/Ad7wSE/4sh15ZHLMvQYX/GREDrEwnDJrL70OT
+	pMrg2+hQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rCvmR-00ApZl-36;
+	Tue, 12 Dec 2023 05:58:07 +0000
+Date: Mon, 11 Dec 2023 21:58:07 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeelb@google.com>,
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [net-next v1 00/16] Device Memory TCP
+Message-ID: <ZXf2b/Bmupwm9LaD@infradead.org>
+References: <20231208005250.2910004-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCHES] getting rid of asm/unaligned.h includes
-Content-Language: en-US
-To: Al Viro <viro@zeniv.linux.org.uk>, linux-arch@vger.kernel.org
-Cc: Helge Deller <deller@gmx.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20231212024920.GG1674809@ZenIV>
-From: Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <20231212024920.GG1674809@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231208005250.2910004-1-almasrymina@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-
-
-On 12/11/23 18:49, Al Viro wrote:
-> 	The most common include of asm/*.h is that of asm/unaligned.h.
-> However, asm/unaligned.h is almost always the same - on everything
-> other than arc and parisc it's simply an autogenerated include of
-> asm-generic/unaligned.h.  These two architectures do have asm/unaligned.h
-> of their own.  However, both instances consist of include of the same
-> asm-generic/unaligned.h plus a few definitions that are never used outside
-> of arch/{arc,parisc}/kernel/{trap,unaligned}.c.
->
-> 	Separating that cruft into arch/{arc,parisc}/kernel/unaligned.h
-> allows to kill *all* asm/unaligned.h instances.  The first patch in the
-> series does just that; the rest can be done mechanically just before
-> the next -rc1 - remove unaligned.h from mandatory-y, move the file from
-> asm-generic to linux and do a global search-and-replace of asm/unaligned.h
-> to linux/unaligned.h.
->
-> 	I've put that into
-> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #headers.unaligned
-> (both getting rid of non-default asm/unaligned.h instances and the mechanical
-> followup conversion).  The former patch follows below, the latter ends up
-> being 10963 lines long, so if you want to see it, look at
-> https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git/commit/?h=headers.unaligned&id=959598f725aa7721a4bad53c2e997c7255ff32dc
-> In any case, the second one is just for illustration purpose - it ought to be
-> regenerated just before the close of next merge window.
->
-> 	I hadn't found any regressions on cross-builds.  Not sure which
-> tree should that stuff go through; suggestions?
-
-Anything that makes the 2nd patch easier for you works for me.
-I don't anticipate any conflicts in this area so you could keep it
-simple and keep arch patches in your tree along side the 2nd one and let
-them go directly to Linus whenever that happens.
-
-> From 286cfede3d8ca0fad1528a61293650aa6d63be58 Mon Sep 17 00:00:00 2001
-> From: Al Viro <viro@zeniv.linux.org.uk>
-> Date: Tue, 5 Dec 2023 21:53:22 -0500
-> Subject: [PATCH 1/2] arc, parisc: get rid of private asm/unaligned.h
->
-> Declarations local to arch/*/kernel/*.c are better off *not* in a public
-> header - arch/{arc,parisc}/kernel/unaligned.h is just fine for those
-> bits.
->
-> With that done these asm/unaligned.h instances are reduced to include
-> of asm-generic/unaligned.h and can be removed - unaligned.h is in
-> mandatory-y in include/asm-generic/Kbuild.
->
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-
-Acked-by: Vineet Gupta <vgupta@kernel.org>  #arch/arc
-
+Please don't spread scatterlists further.  They are a bad data structure
+that mix input data (page, offset, len) and output data (phys_addr,
+dma_offset, dma_len), and do in a horrible way for iommmu mappings that
+can coalesce.  Jason and coworkers have been looking into the long
+overdue API to better support batch mapping of better data structures,
+and this is a prime example of new code that should be using.
 
