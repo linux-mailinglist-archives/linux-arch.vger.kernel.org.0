@@ -1,115 +1,143 @@
-Return-Path: <linux-arch+bounces-926-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-927-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1890480F5DB
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 19:56:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C4D980F60B
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 20:08:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD037281BD0
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 18:56:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79837B20EB7
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 19:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5CC10F5;
-	Tue, 12 Dec 2023 18:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414AB80055;
+	Tue, 12 Dec 2023 19:08:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=rwahl@gmx.de header.b="iJMGTlir"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Au4hC/1g"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4D791;
-	Tue, 12 Dec 2023 10:55:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1702407328; x=1703012128; i=rwahl@gmx.de;
-	bh=IHz6BQHqma+jxYrd5WICx4pHCK4/jGS4y2B8Mb5NueA=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=iJMGTlirtY6EwqRCUDDUytisGkGaTEkGc2xIs92K+4mHLlzpSn9JR8M29/9B0Fu8
-	 nJqik5TOJWK29NxrtBEJ0DMNxZVvpzQQbGMD0GYubuVKCh87mYKxbLAzsPhJDcw6r
-	 o4gMCRl8EthKiJR+swscGVmzPgOAidF01AS6h9lcPu50Oehz1MyUFugPhq2EWcEph
-	 2puqjToyhWwIRPGJGOY/qJQbP/gkkJ2jFk/9AmiTOWouEMQMkHmqsDcSyjlqSlz6W
-	 a9s6cpGyejjrLzp74HfL2Ck6PBACAeGnWnXWFVN31k8jIkHyIb/A07jjPWjd46Fs6
-	 CKg6b956VwqCw/nh5A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from rohan.localdomain ([84.156.159.24]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtOKi-1rU5zt44zO-00upKL; Tue, 12
- Dec 2023 19:55:28 +0100
-From: Ronald Wahl <rwahl@gmx.de>
-To: rwahl@gmx.de
-Cc: linux-kernel@vger.kernel.org,
-	Ronald Wahl <ronald.wahl@raritan.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v2] stacktrace: check whether task has a stack before saving it
-Date: Tue, 12 Dec 2023 19:55:18 +0100
-Message-ID: <20231212185518.196361-1-rwahl@gmx.de>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F1980047;
+	Tue, 12 Dec 2023 19:08:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54B9C433C8;
+	Tue, 12 Dec 2023 19:08:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702408094;
+	bh=jhISTjjXnV6IhH0cY8Vge/0tePQdfehvyIi305w0McY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Au4hC/1gn8GAGqeNMIHMx+pf9H5e6cZx6if1YTAQ6myI1fcVcXp5E5HE2JZd7l5Ox
+	 z67YTPNEYCNjnSuydNuYjf11+fIKfzPgHgAvXDJMesthEcR7qviRft/QV/5zK2IHqc
+	 ruHQ42BTGcBdnaq77FMuM0r1fOHC9LqNVWjgGTPuAoXZTpwGA7dF5WXD028QLwM5fU
+	 83R8uUGoHmwAgKnoHD0ERZyXGTjjQTXsSeJdhkJcoe/E2jvGdjrJ/mAO3N0OzKkaja
+	 5wgu6LG6g2ra++dYX1DnvaNKyc0fxe1LJrSA1Kpyox0qvKLpHzYMqlHmzVyMur9vKu
+	 ehmZCE5A0RUew==
+Date: Tue, 12 Dec 2023 19:08:06 +0000
+From: Simon Horman <horms@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeelb@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [net-next v1 14/16] net: add SO_DEVMEM_DONTNEED setsockopt to
+ release RX frags
+Message-ID: <20231212190806.GB5817@kernel.org>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-15-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MB/WDCtYiYHNxM9BLr5WR3PDMxWmJZB7ojtx/agcyB0R7JgX+36
- TyBUlgGdSmWvf72RA9oPw7pZ9gI7tbVV9jCASAEJVTDm6jDhs4S8DDu+2n5WxwNY7ZIR0cs
- mdE6NAOHRlRPRPGEcBmDcEURfiRhn+wp0a5H+JD+7NTVXHJk1ATi/NB3pACNVUiSgMuXibY
- l2ZUECZ5nlNjhFY21tLxA==
-UI-OutboundReport: notjunk:1;M01:P0:LPoQ8YsJ1rU=;e6aNZPDKFhUy4iTcSDun21tg8hd
- eN20FW/T7vWbC0Q5r6QOK9gvpQfDwuxOwJsEdEwho53DqQXI43/u3pf0kxoxPauJqV1AN4QxH
- gnrvYSTN3Ppx58pfvYnSXq77e1gLdcWc8yuXmMVUxRdg5ILIALg0mu+TlpMUpdEH8iSVAAVtT
- ORMahscVtRWMi+V1s+HryrwZDtNRRWD/mjVgwoGhAFPsLRJ7QFtNxOlPobbXJHovUcGO/GJjI
- t3Ql2AWjUtgWiOqIasKzEYPzvsk0JjQyLepWwOM5Wffw79/W8OxZfd0Q1gHwAC5ZGT2oSCth/
- 1GcH44Z8omHyxpGNlHbLAYUGZmIrCYjGG/4IiMw3JjptdSyRgaFKhU+xBkFJdsfByiX1PuodS
- HSjKCFUCF/CXeujtB76Y63hbxaD8KcsUFUobAjJwo7DYt8osFM67X+4pC0fdSWwPjHEK5uBBD
- a0bYsrsCcK62TWmb6p859t1UZF6G2OQnOXD+keNxRbmLJarj2sSe9G1hc8qLQc20BfFNr9Cbl
- 5WvE87Ga5aBxSbdqi8f991N0X2FRWz7DgEInsV5U76Gi3cHqXUtEJWRGKQhcQJp5NrgPzxurr
- nwmLmW4MCJSucWvlAj1jXKlSEfV/LoGHxWbegbbbS+u8TGdkHz1x80t2wOboq8+Y6hLRku6ou
- EqbQSrasGzD8X0uxejnexEo6Tgfuk2gUWYEsiwmBFdaQx2ODli8nNzFslaycJSrifqLN98+ds
- QeJLerrQ1b4ZSvySTn7MwWgiGk15waGixyZwoCKq0LLplqai8j1joJYrFbirTQrrVuMV4Oq5n
- EZRwoiF1CO3CEIunGMokhs9Bg4OKPnovioXQUzP9QQiE+xt5Iai9JntisfUY5zo2T6ODcjhVA
- rs6X8JGjmYaXw2D/rc7ga4F+2CwX9RtcQ4KTQ/Rfs20JKtdROpIwR+FZ17T7E605FJUudhU9/
- FinXk93y28m9gzKvY68WxQ0Zo/Q=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231208005250.2910004-15-almasrymina@google.com>
 
-From: Ronald Wahl <ronald.wahl@raritan.com>
+On Thu, Dec 07, 2023 at 04:52:45PM -0800, Mina Almasry wrote:
+> Add an interface for the user to notify the kernel that it is done
+> reading the devmem dmabuf frags returned as cmsg. The kernel will
+> drop the reference on the frags to make them available for re-use.
+> 
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-I encountered a crash on ARM32 when trying to dump the stack of some
-zombie process. This is caused by a missing check whether the task
-actually has a valid stack. This commit adds this check.
+...
 
-Commit 214d8ca6ee85 ("stacktrace: Provide common infrastructure")
-introduced this check for platforms that define CONFIG_ARCH_STACKWALK
-but ARM32 is not one of them.
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index fef349dd72fa..521bdc4ff260 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1051,6 +1051,41 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
+>  	return 0;
+>  }
+>  
+> +static noinline_for_stack int
+> +sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> +{
+> +	struct dmabuf_token tokens[128];
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-arch@vger.kernel.org
-Signed-off-by: Ronald Wahl <ronald.wahl@raritan.com>
-=2D--
-V2: - added missing put_task_stack(task) to avoid memory leak
+Hi Mina,
 
- kernel/stacktrace.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I am guessing it is mostly due to the line above,
+but on x86 32bit builds I see:
 
-diff --git a/kernel/stacktrace.c b/kernel/stacktrace.c
-index 9ed5ce989415..0bb67bd633c6 100644
-=2D-- a/kernel/stacktrace.c
-+++ b/kernel/stacktrace.c
-@@ -298,7 +298,11 @@ unsigned int stack_trace_save_tsk(struct task_struct =
-*task,
- 		.skip	=3D skipnr + (current =3D=3D task),
- 	};
+	warning: the frame size of 1048 bytes is larger than 1024 bytes [-Wframe-larger-than
 
-+	if (!try_get_task_stack(task))
-+		return 0;
-+
- 	save_stack_trace_tsk(task, &trace);
-+	put_task_stack(task);
- 	return trace.nr_entries;
- }
+> +	unsigned int num_tokens, i, j;
+> +	int ret;
+> +
+> +	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
+> +		return -EBADF;
+> +
+> +	if (optlen % sizeof(struct dmabuf_token) || optlen > sizeof(tokens))
+> +		return -EINVAL;
+> +
+> +	num_tokens = optlen / sizeof(struct dmabuf_token);
+> +	if (copy_from_sockptr(tokens, optval, optlen))
+> +		return -EFAULT;
+> +
+> +	ret = 0;
+> +	for (i = 0; i < num_tokens; i++) {
+> +		for (j = 0; j < tokens[i].token_count; j++) {
+> +			struct page *page = xa_erase(&sk->sk_user_pages,
+> +						     tokens[i].token_start + j);
+> +
+> +			if (page) {
+> +				if (WARN_ON_ONCE(!napi_pp_put_page(page,
+> +								   false)))
+> +					page_pool_page_put_many(page, 1);
+> +				ret++;
+> +			}
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  void sockopt_lock_sock(struct sock *sk)
+>  {
+>  	/* When current->bpf_ctx is set, the setsockopt is called from
 
-=2D-
-2.43.0
-
+...
 
