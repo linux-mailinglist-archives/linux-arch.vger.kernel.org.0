@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-991-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-992-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5330C8111D9
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 13:51:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 717878111E4
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 13:51:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8626D1C2085C
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 12:51:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF6951F20FB3
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 12:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF742D615;
-	Wed, 13 Dec 2023 12:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F2D2C85A;
+	Wed, 13 Dec 2023 12:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="AsjeyEgF"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="NxjT/a9l"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C01BC;
-	Wed, 13 Dec 2023 04:50:22 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA05D7F;
+	Wed, 13 Dec 2023 04:50:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
 	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=DnFY2Lrn3laRjR0dFD9DsIQAz620A4pU6zpNT78Use8=; b=AsjeyEgF6qrzJzab3wkGeZcEwz
-	rQbT8Tw9ttXnjWwBGSCpduVsdyCslNTtuX0uB4lOWLn2A4DQGf8kQ54y0eQssun1EYJVaEjWIl9+m
-	pSqtSsZYzlpMk6x1cEk4OonnO/nvQhZCTzAnt6bk8eG11xPN/bKHuFd3QTGhNZKj9fdYNDgvvT6j5
-	KjXoS4SJ3GKYkLPAF7X0EkDMoJdVgIbwj0bsR13/aGe4cetcTaI0cBPZMSGQ+V25Klu4Ppx6urvC/
-	eKcbFBSHX4L8zY9q6CIQ36XIHBJPW92Q1bOt1cleQ9a1mRdmlhqi3jF3ZqX8pqXPmBYM0zM3WXTb5
-	2ou+awpw==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:33732 helo=rmk-PC.armlinux.org.uk)
+	bh=nlbHQpsJ2mXYVNzTjHiHy20VvNm+xTIYOL47lOBS/vU=; b=NxjT/a9log1Qg2/QyYTC28lXRw
+	Nb9PdozexRLxTReLoLYO2nPm/U2CtaDlf+9iRFgmUhORHcWBDVCDEmOfIsZ/HBQqtNBv2syvGX9sV
+	vSB+ayP6h5pwY6jETJUNe3RmtaiNKcx8QfBN2h/Xh1IM03S0O5bhesS3qtkU2C567Y0tXYCzHjnoz
+	SKnotxGSCp10T9ulrc6Xvm96pwTBhdssvD2Zwqyl9X62ZMKA2SXgWyqpWB2ifAuwftFu6/bsM3ibG
+	Su6rLni7+lTJqAXf41O4K0yuwixYKidf/YEBvSwcuWzVz/QMW5sTleuqzkZF+ksNmUAYp2bFDclj4
+	OQBX60Zg==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:33740 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rDOgp-0008Fs-39;
-	Wed, 13 Dec 2023 12:50:16 +0000
+	id 1rDOgv-0008G4-0b;
+	Wed, 13 Dec 2023 12:50:21 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rDOgs-00Dvko-6t; Wed, 13 Dec 2023 12:50:18 +0000
+	id 1rDOgx-00Dvkv-Bb; Wed, 13 Dec 2023 12:50:23 +0000
 In-Reply-To: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
 References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
 From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
@@ -61,7 +61,8 @@ Cc: Salil Mehta <salil.mehta@huawei.com>,
 	jianyong.wu@arm.com,
 	justin.he@arm.com,
 	James Morse <james.morse@arm.com>
-Subject: [PATCH RFC v3 13/21] ACPICA: Add new MADT GICC flags fields
+Subject: [PATCH RFC v3 14/21] irqchip/gic-v3: Don't return errors from
+ gic_acpi_match_gicc()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -71,47 +72,74 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rDOgs-00Dvko-6t@rmk-PC.armlinux.org.uk>
+Message-Id: <E1rDOgx-00Dvkv-Bb@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 13 Dec 2023 12:50:18 +0000
+Date: Wed, 13 Dec 2023 12:50:23 +0000
 
 From: James Morse <james.morse@arm.com>
 
-Add the new flag field to the MADT's GICC structure.
+gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+It should only count the number of enabled redistributors, but it
+also tries to sanity check the GICC entry, currently returning an
+error if the Enabled bit is set, but the gicr_base_address is zero.
 
-'Online Capable' indicates a disabled CPU can be enabled later. See
-ACPI specification 6.5 Tabel 5.37: GICC CPU Interface Flags.
+Adding support for the online-capable bit to the sanity check
+complicates it, for no benefit. The existing check implicitly
+depends on gic_acpi_count_gicr_regions() previous failing to find
+any GICR regions (as it is valid to have gicr_base_address of zero if
+the redistributors are described via a GICR entry).
+
+Instead of complicating the check, remove it. Failures that happen
+at this point cause the irqchip not to register, meaning no irqs
+can be requested. The kernel grinds to a panic() pretty quickly.
+
+Without the check, MADT tables that exhibit this problem are still
+caught by gic_populate_rdist(), which helpfully also prints what
+went wrong:
+| CPU4: mpidr 100 has no re-distributor!
 
 Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
 Tested-by: Jianyong Wu <jianyong.wu@arm.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
-This patch probably needs to go via the upstream acpica project,
-but is included here so the feature can be tested.
+ drivers/irqchip/irq-gic-v3.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-If the ACPICA header files are updated before merging this patch set,
-this patch will need to be dropped.
-
-Changes since RFC v2:
- * Add ACPI specification reference.
----
- include/acpi/actbl2.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
-index 3751ae69432f..c433a079d8e1 100644
---- a/include/acpi/actbl2.h
-+++ b/include/acpi/actbl2.h
-@@ -1046,6 +1046,7 @@ struct acpi_madt_generic_interrupt {
- /* ACPI_MADT_ENABLED                    (1)      Processor is usable if set */
- #define ACPI_MADT_PERFORMANCE_IRQ_MODE  (1<<1)	/* 01: Performance Interrupt Mode */
- #define ACPI_MADT_VGIC_IRQ_MODE         (1<<2)	/* 02: VGIC Maintenance Interrupt mode */
-+#define ACPI_MADT_GICC_CPU_CAPABLE      (1<<3)	/* 03: CPU is online capable */
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 98b0329b7154..ebecd4546830 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -2420,21 +2420,15 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
  
- /* 12: Generic Distributor (ACPI 5.0 + ACPI 6.0 changes) */
+ 	/*
+ 	 * If GICC is enabled and has valid gicr base address, then it means
+-	 * GICR base is presented via GICC
++	 * GICR base is presented via GICC. The redistributor is only known to
++	 * be accessible if the GICC is marked as enabled. If this bit is not
++	 * set, we'd need to add the redistributor at runtime, which isn't
++	 * supported.
+ 	 */
+-	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
++	if (gicc->flags & ACPI_MADT_ENABLED && gicc->gicr_base_address)
+ 		acpi_data.enabled_rdists++;
+-		return 0;
+-	}
  
+-	/*
+-	 * It's perfectly valid firmware can pass disabled GICC entry, driver
+-	 * should not treat as errors, skip the entry instead of probe fail.
+-	 */
+-	if (!acpi_gicc_is_usable(gicc))
+-		return 0;
+-
+-	return -ENODEV;
++	return 0;
+ }
+ 
+ static int __init gic_acpi_count_gicr_regions(void)
 -- 
 2.30.2
 
