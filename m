@@ -1,186 +1,131 @@
-Return-Path: <linux-arch+bounces-1011-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1012-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD132811EFD
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 20:35:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E83B811F27
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 20:44:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E3361F21969
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 19:35:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E12BCB211EB
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 19:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809CB68280;
-	Wed, 13 Dec 2023 19:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20F068291;
+	Wed, 13 Dec 2023 19:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HdSYZ+Rl"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="YEamIdU7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0837ACF
-	for <linux-arch@vger.kernel.org>; Wed, 13 Dec 2023 11:35:08 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso6174161a12.3
-        for <linux-arch@vger.kernel.org>; Wed, 13 Dec 2023 11:35:08 -0800 (PST)
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC46CF
+	for <linux-arch@vger.kernel.org>; Wed, 13 Dec 2023 11:44:02 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-dbcae1e53bcso3165688276.3
+        for <linux-arch@vger.kernel.org>; Wed, 13 Dec 2023 11:44:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702496107; x=1703100907; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
-        b=HdSYZ+Rlt1kWmT46bbXaflDm+/1pwDeZwYtfIqLV/dUewHeJQ5Qnb1SQRrNht+qSnd
-         EMRlVkPRcdn5WZ+mPwRYrWdUwpmz7SrILISMDEFW9X5F8rmK0z3voMNUNsxR17asaa5a
-         wTat7gA4fb4PzsekaRA7cXM4pBT/UZp3kL5Ys=
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702496641; x=1703101441; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7KwJmg/AmRci9oth6e0vim63G1m84y3oNQcN/OKV3e0=;
+        b=YEamIdU7C239wWPhqUHdM5mUnEJHCDsS6mV07MZk3u2h4XsRiQFtYsKTRzDqF0SWvz
+         8xo+oS9bCU9hLMZjmxNcqhlYARs7r1jd0M/EmCgne2ivcV9Jwg41OYIK08nVin/QqOKP
+         WRHp6VQRqdsdWCZMf5ig8td+pC8U6YnOfKYU4+BaqmyWYC3uGP+34m4+wxeI2Ccw32AQ
+         8miGZdidSEs2mBdcowgm7+DNQSD2Y8clzNrR9t+tmgLM0J8MLFDJhbjT/Q4ZhzS6GQoQ
+         dTbInR8BqVr0ts7LZpq7jntHS13SHrK82556ERAkjzACnvr3uLp8mJvvHkrucMbHcMAi
+         Viig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702496107; x=1703100907;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
-        b=ZlV09KQTVs39tGpcr7BIkUihLL5lkRpHPwDCCFDc+1QFfjidcn/OZC/Y4PAK8OG2m7
-         1LNDrjnuLATF5GGtrwZgM7fMwRMWfknZYoYdy0eTlR0CXP5uzPD5KmQPYrjxm+ui89hI
-         LXwcrg8xBpj6Q6MUIsA0atWliuaAbMKNYb/1Oy4TKRxJrnhFb+Y3KOGf4Q4zfjRu+wWl
-         oOzJvoauqTnJubLtIupfac2qRw0hkmlQnNfutAbqdvrie/RpEnu++kLqBG4HDoox/kMl
-         GZ6/MeIm8VLbhijwr99xmhyXdjrlzwjakpfeXBCLGelGmF5NnCqjD5FqkCj3zmJRVVwb
-         BScw==
-X-Gm-Message-State: AOJu0Yzq4mKeIamMY8pWqJxwmfAPYTqyPkwqEgTqk7BhmD6KvV5xXjs/
-	RY1hK2sHM8s7admilzdL8Makrg==
-X-Google-Smtp-Source: AGHT+IF4/fKIdL6ujzk6XlIo1i2yhsQEzRVErQDBQru9JHnbSf6YHVNRS6vt2G7Eru9MYelslDEWdQ==
-X-Received: by 2002:a17:902:7e84:b0:1d3:141:cb06 with SMTP id z4-20020a1709027e8400b001d30141cb06mr6392448pla.113.1702496107474;
-        Wed, 13 Dec 2023 11:35:07 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q20-20020a656854000000b005b7dd356f75sm8909940pgt.32.2023.12.13.11.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 11:35:06 -0800 (PST)
-Date: Wed, 13 Dec 2023 11:35:06 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Wang <wanglikun@lixiang.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
-	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-	Brian Gerst <brgerst@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Changbin Du <changbin.du@intel.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Marco Elver <elver@google.com>, Mark Brown <broonie@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Roth <michael.roth@amd.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Richard Sandiford <richard.sandiford@arm.com>,
-	Song Liu <song@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Will Deacon <will@kernel.org>, x86@kernel.org,
-	Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
-	Zhen Lei <thunder.leizhen@huawei.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, Dan Li <ashimida.1990@gmail.com>
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <202312131132.639E8802B@keescook>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com>
- <20230327093016.GB4253@hirez.programming.kicks-ass.net>
- <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
- <CAE+Z0PFZaa2bwtfY5P7ZDYH4JjMxKpJgqz0m+KJ_ks4dctzAKA@mail.gmail.com>
- <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+        d=1e100.net; s=20230601; t=1702496641; x=1703101441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7KwJmg/AmRci9oth6e0vim63G1m84y3oNQcN/OKV3e0=;
+        b=kGYMYB5rwRehWgVxFIoiMNSCAl9GPN/gp7QXNBQMAGAhJ+XZhzZxd3KRTwLKKhzQtG
+         rF0FsOC4EeaD/jZc/BLf+l1ABKrkeM3Oseho5gTUnCuIW0z6nYKxWaN4Gfza4Wkyyher
+         4sK233zAtZsdg3iu8c58uNi86fF5YfZl5Dw1/WTV9Q0uUPeuEDkYGB8HvAlJV1B0fWgn
+         Amih2w7MAUPTsTExoonpkqV1+M6YMhya2sFpiHoXYez8cNCLZfSB84DFXQeBetLoVO+Y
+         U8sVvaIG/FuMKsOLML7ADMQAILow8sI5XIb5lxHfCbiWMjXQuxCYuK7JVkVuWx3/v+zc
+         jWBg==
+X-Gm-Message-State: AOJu0Yyi4xgBNDtkzFFO9vKA9VojZt3oN3yG/B5ZSYZhaCzz/eTHaRQg
+	fKldTAUocge/M4g/HAKjUN0Y7qHLMwznnoFnS5CkVg==
+X-Google-Smtp-Source: AGHT+IFSmPxfZTBIe3gumpwK2nVwVDcDb9+yDl2yaVi4US6Ez2/rKUahNn9IJ0xE08iqlW2A2FfQ7xQQ2M/z/jnykQ4=
+X-Received: by 2002:a25:8c91:0:b0:db7:dacf:59de with SMTP id
+ m17-20020a258c91000000b00db7dacf59demr4990232ybl.82.1702496641231; Wed, 13
+ Dec 2023 11:44:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org> <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
+ <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk> <CAKC1njSQPO8ja7AkTzQ724hhSsGjchH9dLbbH9LXP0ZiKj-zPQ@mail.gmail.com>
+ <0d0d8802-09e3-4ea5-a0b4-b3a08c8a282e@sirena.org.uk>
+In-Reply-To: <0d0d8802-09e3-4ea5-a0b4-b3a08c8a282e@sirena.org.uk>
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Wed, 13 Dec 2023 11:43:49 -0800
+Message-ID: <CAKC1njRHs0R=VKfn4jBap9__oR0rBHmNy7_tqHR8=xEHdUE4+A@mail.gmail.com>
+Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, 
+	Christian Brauner <brauner@kernel.org>, Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 05:01:07PM +0800, Wang wrote:
-> On 2023/12/13 16:48, Dan Li wrote:
-> > + Likun
-> >
-> > On Tue, 28 Mar 2023 at 06:18, Sami Tolvanen <samitolvanen@google.com> wrote:
-> >> On Mon, Mar 27, 2023 at 2:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >>> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
-> >>>
-> >>>> In the compiler part[4], most of the content is the same as Sami's
-> >>>> implementation[3], except for some minor differences, mainly including:
-> >>>>
-> >>>> 1. The function typeid is calculated differently and it is difficult
-> >>>> to be consistent.
-> >>> This means there is an effective ABI break between the compilers, which
-> >>> is sad :-( Is there really nothing to be done about this?
-> >> I agree, this would be unfortunate, and would also be a compatibility
-> >> issue with rustc where there's ongoing work to support
-> >> clang-compatible CFI type hashes:
-> >>
-> >> https://github.com/rust-lang/rust/pull/105452
-> >>
-> >> Sami
-> 
-> 
-> Hi Peter and Sami
-> 
-> I am Dan Li's colleague, and I will take over and continue the work of CFI.
+On Wed, Dec 13, 2023 at 5:37=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Tue, Dec 12, 2023 at 04:50:38PM -0800, Deepak Gupta wrote:
+>
+> > A theoretical scenario (no current workloads should've this case
+> > because no shadow stack)
+>
+> > - User mode did _ENABLE on the main thread. Shadow stack was allocated
+> > for the current
+> >   thread.
+> > - User mode created a bunch worker threads to run untrusted contained
+> > code. They shadow
+> >   stack too.
+> > - main thread had to do dlopen and now need to disable shadow stack on
+> > itself due to
+> >   incompatibility of incoming object in address space.
+> > - main thread controls worker threads and knows they're contained and
+> > should still be running
+> >   with a shadow stack. Although once in a while the main thread needs
+> > to perform writes to a shadow
+> >   stack of worker threads for some fixup (in the same addr space).
+> > main thread doesn't want to delegate
+> >   this responsibility of ss writes to worker threads because they're un=
+trusted.
+>
+> > How will it do that (currently _ENABLE is married to _WRITE and _PUSH) =
+?
+>
+> That's feeling moderately firmly into "don't do that" territory to be
+> honest, the problems of trying to modify the stack of another running
+> thread while it's active just don't seem worth it - if you're
+> coordinating enough to do the modifications it's probably possible to
+> just ask the thread who's stack is being modified to do the modification
+> itself and having an unprotected thread writing into shadow stack memory
+> doesn't feel great.
+>
 
-Welcome; this is great news! :) Thanks for picking up the work.
-
-> 
-> Regarding the issue of gcc cfi type id being compatible with clang, we 
-> have analyzed and verified:
-> 
-> 1. clang uses Mangling defined in Itanium C++ ABI to encode the function 
-> prototype, and uses the encoding result as input to generate cfi type id;
-> 2. Currently, gcc only implements mangling for the C++ compiler, and the 
-> function prototype coding generated by these interfaces is compatible 
-> with clang, but gcc's c compiler does not support mangling.;
-> 
-> Adding mangling to gcc's c compiler is a huge and difficult task，because 
-> we have to refactor the mangling of C++, splitting it into basic 
-> mangling and language specific mangling, and adding support for the c 
-> language which requires a deep understanding of the compiler and 
-> language processing parts.
-> 
-> And for the kernel cfi, I suggest separating type compatibility from CFI 
-> basic functions. Type compatibility is independent from CFI basic 
-> funcitons and should be dealt with under another topic. Should we focus 
-> on the main issus of cfi, and  let it work first on linux kernel, and 
-> left the compatible issue to be solved later?
-
-If you mean keeping the hashes identical between Clang/LLVM and GCC,
-I think this is going to be a requirement due to adding Rust to the
-build environment (which uses the LLVM mangling and hashing).
-
-FWIW, I think the subset of type mangling needed isn't the entirely C++
-language spec, so it shouldn't be hard to add this to GCC.
-
--Kees
-
--- 
-Kees Cook
+Yeah no leanings on my side. Just wanted to articulate this scenario.
+Since this is new ground,
+we can define what's appropriate. Let's keep it this way where a
+thread can write to shadow
+stack mappings only when it itself has shadow stack enabled.
 
