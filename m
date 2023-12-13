@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-981-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-982-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F9D781116D
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 13:49:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CADA9811174
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 13:49:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C33311C20D00
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 12:49:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87B5D281F65
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 12:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17EF729436;
-	Wed, 13 Dec 2023 12:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0687229421;
+	Wed, 13 Dec 2023 12:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ksm1NKE0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Jf/e7+SM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD94A4;
-	Wed, 13 Dec 2023 04:49:29 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA309E4;
+	Wed, 13 Dec 2023 04:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
 	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=TBP+R/WnvXUfMyTGAeqg+zDZHJCc+YgTDDU9BjPnE9g=; b=ksm1NKE0scGCsyGD98yGeYXubr
-	hB68rislLCulb5Vrhre3UZbE0fxzcZ56LCzd5+Jx/UWiG25ops81IW195eVeI8hCQ5EANLwLRWDLA
-	BmC4J9EmHzrINYzT6DlHEOYKjkDSM0BA4JczIJo4NcTNxODYtV4qUZxAeg1J7TH+VUw4KpKxTHLPz
-	mpmzh+ajIEmyMMSsM4T56yj66lxMZNRqG8qaewbcE/l7g7lRVI3rtAua0Mp747FPjrkKFWvOHFqFD
-	2bv0xOQ5zwDWdKfZo9UeZUjaRSQLgY0cl+j0aJ56oPkOTkQW4csde5cwMAKUOpa9x8rBSwoAiid2c
-	Df8GEnuA==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:43366 helo=rmk-PC.armlinux.org.uk)
+	bh=ZKS6pxC2YYfNhWwg82WjEwf9+rWwSBqqkCpc9wbmrvU=; b=Jf/e7+SMOBjpGIMb6Uk/wbjene
+	LjN9KE/FW0snbFyWyMg6pDKsB+5IvmUU5qN5LnEIjVwaaA5a9S9TaSUdqA0JE4nxCdtkeW6f6yJHb
+	Hpc+dvKih6ImW7DLJIuhosO/yJrIojS6z7MetDq6D4qLRtlFNRtkyCLtoH/8s7HGj46i9aqItRpnM
+	jIgdW7rw8xlYZl80cDI26htD87Prb0hKAY5Up92iSfUG3f3NoIX5VHMpIzaLyhydFkSMyyeXzsocJ
+	lgGarR0gEODrCWvRZO4uKb4MDZSwGZabqarJ6yQTqSXPxUFiSDdq2FTl2Zlz/IElIPZUXQQy49IWc
+	Ci+FbtPw==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:43378 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rDOg0-0008D5-24;
-	Wed, 13 Dec 2023 12:49:24 +0000
+	id 1rDOg5-0008DO-2J;
+	Wed, 13 Dec 2023 12:49:30 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rDOg2-00Dvjk-RI; Wed, 13 Dec 2023 12:49:26 +0000
+	id 1rDOg7-00Dvjq-VZ; Wed, 13 Dec 2023 12:49:32 +0000
 In-Reply-To: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
 References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
 From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
@@ -61,8 +61,8 @@ Cc: Salil Mehta <salil.mehta@huawei.com>,
 	jianyong.wu@arm.com,
 	justin.he@arm.com,
 	James Morse <james.morse@arm.com>
-Subject: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are online,
- but not described in the DSDT
+Subject: [PATCH RFC v3 04/21] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -72,73 +72,78 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
+Message-Id: <E1rDOg7-00Dvjq-VZ@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 13 Dec 2023 12:49:26 +0000
+Date: Wed, 13 Dec 2023 12:49:31 +0000
 
 From: James Morse <james.morse@arm.com>
 
-ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-says "Each processor in the system must be declared in the ACPI
-namespace"). Having two descriptions allows firmware authors to get
-this wrong.
+To allow ACPI to skip the call to arch_register_cpu() when the _STA
+value indicates the CPU can't be brought online right now, move the
+arch_register_cpu() call into acpi_processor_get_info().
 
-If CPUs are described in the MADT/APIC, they will be brought online
-early during boot. Once the register_cpu() calls are moved to ACPI,
-they will be based on the DSDT description of the CPUs. When CPUs are
-missing from the DSDT description, they will end up online, but not
-registered.
+Systems can still be booted with 'acpi=off', or not include an
+ACPI description at all. For these, the CPUs continue to be
+registered by cpu_dev_register_generic().
 
-Add a helper that runs after acpi_init() has completed to register
-CPUs that are online, but weren't found in the DSDT. Any CPU that
-is registered by this code triggers a firmware-bug warning and kernel
-taint.
-
-Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-is configured.
+This moves the CPU register logic back to a subsys_initcall(),
+while the memory nodes will have been registered earlier.
 
 Signed-off-by: James Morse <james.morse@arm.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Gavin Shan <gshan@redhat.com>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
 Tested-by: Jianyong Wu <jianyong.wu@arm.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Changes since RFC v2:
+ * Fixup comment in acpi_processor_get_info() (Gavin Shan)
+ * Add comment in cpu_dev_register_generic() (Gavin Shan)
+---
+ drivers/acpi/acpi_processor.c | 12 ++++++++++++
+ drivers/base/cpu.c            |  6 +++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 6a542e0ce396..0511f2bc10bc 100644
+index 0511f2bc10bc..e7ed4730cbbe 100644
 --- a/drivers/acpi/acpi_processor.c
 +++ b/drivers/acpi/acpi_processor.c
-@@ -791,6 +791,25 @@ void __init acpi_processor_init(void)
- 	acpi_pcc_cpufreq_init();
- }
+@@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_device *device)
+ 			cpufreq_add_device("acpi-cpufreq");
+ 	}
  
-+static int __init acpi_processor_register_missing_cpus(void)
-+{
-+	int cpu;
++	/*
++	 * Register CPUs that are present. get_cpu_device() is used to skip
++	 * duplicate CPU descriptions from firmware.
++	 */
++	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
++	    !get_cpu_device(pr->id)) {
++		int ret = arch_register_cpu(pr->id);
 +
-+	if (acpi_disabled)
-+		return 0;
-+
-+	for_each_online_cpu(cpu) {
-+		if (!get_cpu_device(cpu)) {
-+			pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
-+			add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-+			arch_register_cpu(cpu);
-+		}
++		if (ret)
++			return ret;
 +	}
 +
-+	return 0;
-+}
-+subsys_initcall_sync(acpi_processor_register_missing_cpus);
-+
- #ifdef CONFIG_ACPI_PROCESSOR_CSTATE
- /**
-  * acpi_processor_claim_cst_control - Request _CST control from the platform.
+ 	/*
+ 	 *  Extra Processor objects may be enumerated on MP systems with
+ 	 *  less than the max # of CPUs. They should be ignored _iff
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index 47de0f140ba6..13d052bf13f4 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(void)
+ {
+ 	int i, ret;
+ 
+-	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
++	/*
++	 * When ACPI is enabled, CPUs are registered via
++	 * acpi_processor_get_info().
++	 */
++	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
+ 		return;
+ 
+ 	for_each_present_cpu(i) {
 -- 
 2.30.2
 
