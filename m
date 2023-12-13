@@ -1,83 +1,109 @@
-Return-Path: <linux-arch+bounces-1008-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1007-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F3EC811911
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 17:20:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 588DA811910
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 17:19:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 857DE1C2116C
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 16:19:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF4DD1F21575
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 16:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1329F33CC7;
-	Wed, 13 Dec 2023 16:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A80B33CD1;
+	Wed, 13 Dec 2023 16:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen0n.name header.i=@xen0n.name header.b="FdZA5oT7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSNZEtly"
 X-Original-To: linux-arch@vger.kernel.org
-X-Greylist: delayed 368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Dec 2023 08:19:52 PST
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5756512A
-	for <linux-arch@vger.kernel.org>; Wed, 13 Dec 2023 08:19:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-	t=1702483992; bh=4XxyHnJEJKkc+5PvBy8tJ98Zzp6SReQrbmR5u3CSVkY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FdZA5oT75tJH3PJN0bxT2ijMm1wBFi9fAIDpRIiLKEJ8qcv7c86KrC4Caujnwy/Qz
-	 h0yWOBpr5j9YQlGHX6bTEdnz+dQUQ431E11+MzKZsjI9OYJQRIedzGgmfPSOvFDP5W
-	 xvNwB4vhFx3KjM5C9g2J1KLykNu0MN4NW1kORqlg=
-Received: from [IPV6:240e:388:8d05:a200:783a:c9a8:595e:71d0] (unknown [IPv6:240e:388:8d05:a200:783a:c9a8:595e:71d0])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E250E600D1;
-	Thu, 14 Dec 2023 00:13:11 +0800 (CST)
-Message-ID: <cc762327-796a-481b-9d79-3751361daff8@xen0n.name>
-Date: Thu, 14 Dec 2023 00:13:11 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D9B33CC7;
+	Wed, 13 Dec 2023 16:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D2AC433C9;
+	Wed, 13 Dec 2023 16:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702484390;
+	bh=rtYsdGUgzG4gShOq5eir9uSz6Dv02AOWRgbvbC1z6QE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PSNZEtlyKCT/FLY4w9ZppFBut3oFTo86KvXQ19A5ut2LSqARZgZyhF61vRtVNrlEe
+	 Ay6EDQ78iJiWMBryaP7r58sTbMMPPeFtYOwsHvf0y/xUOHdevS95ZXyDZ5996bVweU
+	 sv4KhhPsk0N6ZxNbb6aTXaRmvvfIxXMebINNc1JCdEbg3xS5+77zm0cfnfALLOjYaI
+	 LOX2IHnhNjki/2k4b+A3P3mcp4sjgIq92Q/94wAC7sdnVuHgtC7eESr3vtcaq3I9gA
+	 6uX/hRFS0gmB3XF6ZMoRq4x6IVDRMvD7vXlc24FhXwedhXTL2t+QN7yPIx4aLREPb6
+	 C/OnndWIpOX3Q==
+Date: Wed, 13 Dec 2023 16:19:44 +0000
+From: Will Deacon <will@kernel.org>
+To: Samuel Holland <samuel.holland@sifive.com>, ardb@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+	linux-riscv@lists.infradead.org,
+	Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 04/12] arm64: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+Message-ID: <20231213161944.GA32062@willie-the-truck>
+References: <20231208055501.2916202-1-samuel.holland@sifive.com>
+ <20231208055501.2916202-5-samuel.holland@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 06/12] LoongArch: Implement
- ARCH_HAS_KERNEL_FPU_SUPPORT
-To: Samuel Holland <samuel.holland@sifive.com>,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
- linux-riscv@lists.infradead.org, Christoph Hellwig <hch@infradead.org>
-Cc: linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- linux-arch@vger.kernel.org
-References: <20231208055501.2916202-1-samuel.holland@sifive.com>
- <20231208055501.2916202-7-samuel.holland@sifive.com>
-Content-Language: en-US
-From: WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20231208055501.2916202-7-samuel.holland@sifive.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231208055501.2916202-5-samuel.holland@sifive.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 12/8/23 13:54, Samuel Holland wrote:
-> LoongArch already provides kernel_fpu_begin() and kernel_fpu_end() in
-> asm/fpu.h, so it only needs to add kernel_fpu_available() and export
-> the CFLAGS adjustments.
->
+On Thu, Dec 07, 2023 at 09:54:34PM -0800, Samuel Holland wrote:
+> arm64 provides an equivalent to the common kernel-mode FPU API, but in a
+> different header and using different function names. Add a wrapper
+> header, and export CFLAGS adjustments as found in lib/raid6/Makefile.
+> 
 > Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 > ---
->
->   arch/loongarch/Kconfig           | 1 +
->   arch/loongarch/Makefile          | 5 ++++-
->   arch/loongarch/include/asm/fpu.h | 1 +
->   3 files changed, 6 insertions(+), 1 deletion(-)
+> 
+>  arch/arm64/Kconfig           |  1 +
+>  arch/arm64/Makefile          |  9 ++++++++-
+>  arch/arm64/include/asm/fpu.h | 17 +++++++++++++++++
+>  3 files changed, 26 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm64/include/asm/fpu.h
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 7b071a00425d..485ac389ac11 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -30,6 +30,7 @@ config ARM64
+>  	select ARCH_HAS_GCOV_PROFILE_ALL
+>  	select ARCH_HAS_GIGANTIC_PAGE
+>  	select ARCH_HAS_KCOV
+> +	select ARCH_HAS_KERNEL_FPU_SUPPORT if KERNEL_MODE_NEON
+>  	select ARCH_HAS_KEEPINITRD
+>  	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+>  	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+> index 9a2d3723cd0f..4a65f24c7998 100644
+> --- a/arch/arm64/Makefile
+> +++ b/arch/arm64/Makefile
+> @@ -36,7 +36,14 @@ ifeq ($(CONFIG_BROKEN_GAS_INST),y)
+>  $(warning Detected assembler with broken .inst; disassembly will be unreliable)
+>  endif
+>  
+> -KBUILD_CFLAGS	+= -mgeneral-regs-only	\
+> +# The GCC option -ffreestanding is required in order to compile code containing
+> +# ARM/NEON intrinsics in a non C99-compliant environment (such as the kernel)
+> +CC_FLAGS_FPU	:= -ffreestanding
+> +# Enable <arm_neon.h>
+> +CC_FLAGS_FPU	+= -isystem $(shell $(CC) -print-file-name=include)
+> +CC_FLAGS_NO_FPU	:= -mgeneral-regs-only
+> +
+> +KBUILD_CFLAGS	+= $(CC_FLAGS_NO_FPU) \
+>  		   $(compat_vdso) $(cc_has_k_constraint)
+>  KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
+>  KBUILD_AFLAGS	+= $(compat_vdso)
 
-This is all intuitive wrapping, so:
+Can you use this to replace the same logic in arch/arm64/lib/Makefile,
+like you do for arch/arm/?
 
-Acked-by: WANG Xuerui <git@xen0n.name>
-
-Thanks!
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+Will
 
