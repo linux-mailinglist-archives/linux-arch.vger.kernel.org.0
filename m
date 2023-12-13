@@ -1,109 +1,186 @@
-Return-Path: <linux-arch+bounces-1007-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1009-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 588DA811910
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 17:19:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E13C3811AD2
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 18:22:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF4DD1F21575
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 16:19:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8C521C21081
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 17:22:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A80B33CD1;
-	Wed, 13 Dec 2023 16:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285B553E32;
+	Wed, 13 Dec 2023 17:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSNZEtly"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCjqTyEE"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D9B33CC7;
-	Wed, 13 Dec 2023 16:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D2AC433C9;
-	Wed, 13 Dec 2023 16:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C8051C31;
+	Wed, 13 Dec 2023 17:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC89C433CA;
+	Wed, 13 Dec 2023 17:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702484390;
-	bh=rtYsdGUgzG4gShOq5eir9uSz6Dv02AOWRgbvbC1z6QE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PSNZEtlyKCT/FLY4w9ZppFBut3oFTo86KvXQ19A5ut2LSqARZgZyhF61vRtVNrlEe
-	 Ay6EDQ78iJiWMBryaP7r58sTbMMPPeFtYOwsHvf0y/xUOHdevS95ZXyDZ5996bVweU
-	 sv4KhhPsk0N6ZxNbb6aTXaRmvvfIxXMebINNc1JCdEbg3xS5+77zm0cfnfALLOjYaI
-	 LOX2IHnhNjki/2k4b+A3P3mcp4sjgIq92Q/94wAC7sdnVuHgtC7eESr3vtcaq3I9gA
-	 6uX/hRFS0gmB3XF6ZMoRq4x6IVDRMvD7vXlc24FhXwedhXTL2t+QN7yPIx4aLREPb6
-	 C/OnndWIpOX3Q==
-Date: Wed, 13 Dec 2023 16:19:44 +0000
-From: Will Deacon <will@kernel.org>
-To: Samuel Holland <samuel.holland@sifive.com>, ardb@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-	linux-riscv@lists.infradead.org,
-	Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 04/12] arm64: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
-Message-ID: <20231213161944.GA32062@willie-the-truck>
-References: <20231208055501.2916202-1-samuel.holland@sifive.com>
- <20231208055501.2916202-5-samuel.holland@sifive.com>
+	s=k20201202; t=1702488152;
+	bh=MdFfxmRqnU2pgiKIHVjpuT5qM/n8AmSOleAkAeYhZzY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nCjqTyEEwYAqdW8/rlU/X2qNfvBr2d9kOIKAiAWZ9qncIg+m+22IilZcJEY8VRoTX
+	 7PgbJV6HZ5JLE3sDdfsX2UHiaQmp3mY3zRbfmkxhAQWJ83UeIlzK3XIiaKF4vV3C3f
+	 l9pxj+2hx8VjnlJ2uwTuDTSGTfuTbmQMk1sflXBlXe0SOkan+3n93ddJV7VKUEfu0Z
+	 MZFFlYrGAojnFk9Ri12mVxePt5n8d5wu+mgtpl3OjT9ECbV+/ED8mE03YSGnU9dACx
+	 ItkqIXFCrBxK8l26h8/TEEuSPhBnj4lDFVScIjFLiDXKOzURPiqtz1dSaT/lmYKVu+
+	 rig24IG2XtNVw==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-50bf37fd2bbso9710812e87.0;
+        Wed, 13 Dec 2023 09:22:32 -0800 (PST)
+X-Gm-Message-State: AOJu0Yy2uYAhtI/7k+yf9Nu6M0xCqF7BTg6Pqn9wGukmtqAQXHv1sMP6
+	XEI8kv4E9uG7B072YJbHPSp10FfY7W7/1rN9ew==
+X-Google-Smtp-Source: AGHT+IFqzlN5cXgUWTtVKqvQkSS2vQPSTV20xZkO0pzlfuqEtQX8svaifgRBAAqLPVw/kWvXPFUvtTzHkFE1kxDLXyI=
+X-Received: by 2002:ac2:5504:0:b0:50c:a39:ee37 with SMTP id
+ j4-20020ac25504000000b0050c0a39ee37mr4154700lfk.109.1702488150631; Wed, 13
+ Dec 2023 09:22:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231208055501.2916202-5-samuel.holland@sifive.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20231119165721.9849-1-alexandru.elisei@arm.com>
+ <20231119165721.9849-12-alexandru.elisei@arm.com> <CAL_Jsq+k5BeM9+u12AQvWQ0b4Uv5Cy0vPOpK_uLcYtRnunq4iQ@mail.gmail.com>
+ <ZXiMiLz9ZyUdxUP8@raptor> <CAL_Jsq+U_GR=mOK3-phnd4jeJKf79aOmhPwDOSj+f=s-7fZZWQ@mail.gmail.com>
+ <ZXmr-Kl9L2SO13--@raptor> <CAL_JsqL=P1Y6w38LD_xw+vK4CNqt22FW_FE9oi_XTLHVQEne7Q@mail.gmail.com>
+ <ZXnE3724jYYSg4o6@raptor>
+In-Reply-To: <ZXnE3724jYYSg4o6@raptor>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 13 Dec 2023 11:22:17 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJgTnuQjo13cKo1Ebm5j9tCRT8GhNavdqu5vwp+fdnTLw@mail.gmail.com>
+Message-ID: <CAL_JsqJgTnuQjo13cKo1Ebm5j9tCRT8GhNavdqu5vwp+fdnTLw@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 11/27] arm64: mte: Reserve tag storage memory
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
+	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, pcc@google.com, 
+	steven.price@arm.com, anshuman.khandual@arm.com, vincenzo.frascino@arm.com, 
+	david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 07, 2023 at 09:54:34PM -0800, Samuel Holland wrote:
-> arm64 provides an equivalent to the common kernel-mode FPU API, but in a
-> different header and using different function names. Add a wrapper
-> header, and export CFLAGS adjustments as found in lib/raid6/Makefile.
-> 
-> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
-> ---
-> 
->  arch/arm64/Kconfig           |  1 +
->  arch/arm64/Makefile          |  9 ++++++++-
->  arch/arm64/include/asm/fpu.h | 17 +++++++++++++++++
->  3 files changed, 26 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm64/include/asm/fpu.h
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 7b071a00425d..485ac389ac11 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -30,6 +30,7 @@ config ARM64
->  	select ARCH_HAS_GCOV_PROFILE_ALL
->  	select ARCH_HAS_GIGANTIC_PAGE
->  	select ARCH_HAS_KCOV
-> +	select ARCH_HAS_KERNEL_FPU_SUPPORT if KERNEL_MODE_NEON
->  	select ARCH_HAS_KEEPINITRD
->  	select ARCH_HAS_MEMBARRIER_SYNC_CORE
->  	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
-> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-> index 9a2d3723cd0f..4a65f24c7998 100644
-> --- a/arch/arm64/Makefile
-> +++ b/arch/arm64/Makefile
-> @@ -36,7 +36,14 @@ ifeq ($(CONFIG_BROKEN_GAS_INST),y)
->  $(warning Detected assembler with broken .inst; disassembly will be unreliable)
->  endif
->  
-> -KBUILD_CFLAGS	+= -mgeneral-regs-only	\
-> +# The GCC option -ffreestanding is required in order to compile code containing
-> +# ARM/NEON intrinsics in a non C99-compliant environment (such as the kernel)
-> +CC_FLAGS_FPU	:= -ffreestanding
-> +# Enable <arm_neon.h>
-> +CC_FLAGS_FPU	+= -isystem $(shell $(CC) -print-file-name=include)
-> +CC_FLAGS_NO_FPU	:= -mgeneral-regs-only
-> +
-> +KBUILD_CFLAGS	+= $(CC_FLAGS_NO_FPU) \
->  		   $(compat_vdso) $(cc_has_k_constraint)
->  KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
->  KBUILD_AFLAGS	+= $(compat_vdso)
+On Wed, Dec 13, 2023 at 8:51=E2=80=AFAM Alexandru Elisei
+<alexandru.elisei@arm.com> wrote:
+>
+> Hi,
+>
+> On Wed, Dec 13, 2023 at 08:06:44AM -0600, Rob Herring wrote:
+> > On Wed, Dec 13, 2023 at 7:05=E2=80=AFAM Alexandru Elisei
+> > <alexandru.elisei@arm.com> wrote:
+> > >
+> > > Hi Rob,
+> > >
+> > > On Tue, Dec 12, 2023 at 12:44:06PM -0600, Rob Herring wrote:
+> > > > On Tue, Dec 12, 2023 at 10:38=E2=80=AFAM Alexandru Elisei
+> > > > <alexandru.elisei@arm.com> wrote:
+> > > > >
+> > > > > Hi Rob,
+> > > > >
+> > > > > Thank you so much for the feedback, I'm not very familiar with de=
+vice tree,
+> > > > > and any comments are very useful.
+> > > > >
+> > > > > On Mon, Dec 11, 2023 at 11:29:40AM -0600, Rob Herring wrote:
+> > > > > > On Sun, Nov 19, 2023 at 10:59=E2=80=AFAM Alexandru Elisei
+> > > > > > <alexandru.elisei@arm.com> wrote:
+> > > > > > >
+> > > > > > > Allow the kernel to get the size and location of the MTE tag =
+storage
+> > > > > > > regions from the DTB. This memory is marked as reserved for n=
+ow.
+> > > > > > >
+> > > > > > > The DTB node for the tag storage region is defined as:
+> > > > > > >
+> > > > > > >         tags0: tag-storage@8f8000000 {
+> > > > > > >                 compatible =3D "arm,mte-tag-storage";
+> > > > > > >                 reg =3D <0x08 0xf8000000 0x00 0x4000000>;
+> > > > > > >                 block-size =3D <0x1000>;
+> > > > > > >                 memory =3D <&memory0>;    // Associated tagge=
+d memory node
+> > > > > > >         };
+> > > > > >
+> > > > > > I skimmed thru the discussion some. If this memory range is wit=
+hin
+> > > > > > main RAM, then it definitely belongs in /reserved-memory.
+> > > > >
+> > > > > Ok, will do that.
+> > > > >
+> > > > > If you don't mind, why do you say that it definitely belongs in
+> > > > > reserved-memory? I'm not trying to argue otherwise, I'm curious a=
+bout the
+> > > > > motivation.
+> > > >
+> > > > Simply so that /memory nodes describe all possible memory and
+> > > > /reserved-memory is just adding restrictions. It's also because
+> > > > /reserved-memory is what gets handled early, and we don't need
+> > > > multiple things to handle early.
+> > > >
+> > > > > Tag storage is not DMA and can live anywhere in memory.
+> > > >
+> > > > Then why put it in DT at all? The only reason CMA is there is to se=
+t
+> > > > the size. It's not even clear to me we need CMA in DT either. The
+> > > > reasoning long ago was the kernel didn't do a good job of moving an=
+d
+> > > > reclaiming contiguous space, but that's supposed to be better now (=
+and
+> > > > most h/w figured out they need IOMMUs).
+> > > >
+> > > > But for tag storage you know the size as it is a function of the
+> > > > memory size, right? After all, you are validating the size is corre=
+ct.
+> > > > I guess there is still the aspect of whether you want enable MTE or
+> > > > not which could be done in a variety of ways.
+> > >
+> > > Oh, sorry, my bad, I should have been clearer about this. I don't wan=
+t to
+> > > put it in the DT as a "linux,cma" node. But I want it to be managed b=
+y CMA.
+> >
+> > Yes, I understand, but my point remains. Why do you need this in DT?
+> > If the location doesn't matter and you can calculate the size from the
+> > memory size, what else is there to add to the DT?
+>
+> I am afraid there has been a misunderstanding. What do you mean by
+> "location doesn't matter"?
 
-Can you use this to replace the same logic in arch/arm64/lib/Makefile,
-like you do for arch/arm/?
+You said:
+> Tag storage is not DMA and can live anywhere in memory.
 
-Will
+Which I took as the kernel can figure out where to put it. But maybe
+you meant the h/w platform can hard code it to be anywhere in memory?
+If so, then yes, DT is needed.
+
+> At the very least, Linux needs to know the address and size of a memory
+> region to use it. The series is about using the tag storage memory for
+> data. Tag storage cannot be described as a regular memory node because it
+> cannot be tagged (and normal memory can).
+
+If the tag storage lives in the middle of memory, then it would be
+described in the memory node, but removed by being in reserved-memory
+node.
+
+> Then there's the matter of the tag storage block size (explained in this
+> commit message), and also knowing the memory range for which a tag storag=
+e
+> region stores the tags. This is explained in the cover letter.
+
+Honestly, I just forgot about that part.
+
+Rob
 
