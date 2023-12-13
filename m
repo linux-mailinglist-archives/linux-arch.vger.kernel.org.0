@@ -1,146 +1,148 @@
-Return-Path: <linux-arch+bounces-940-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-941-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B0A80F988
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 22:37:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AFD08106FB
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 01:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A82B61C20D6A
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Dec 2023 21:37:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F276628195B
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Dec 2023 00:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10306414E;
-	Tue, 12 Dec 2023 21:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB96ECA;
+	Wed, 13 Dec 2023 00:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="uhdWwKlb"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sG7bZwXG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB10CE
-	for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 13:37:03 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40c2a444311so60158425e9.2
-        for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 13:37:03 -0800 (PST)
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D28BB9
+	for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 16:50:51 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-dbc72b692adso3210417276.2
+        for <linux-arch@vger.kernel.org>; Tue, 12 Dec 2023 16:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702417022; x=1703021822; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702428649; x=1703033449; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qCOh69caXbVfDD+nz3SkSSNJ4LOnzQLxIG6SJxHDatw=;
-        b=uhdWwKlbKZEK1iYF0wfy2Op2eROU9BP1Qv0y8RHXUCe14DhEmzdcZ4qN41DBvnuyL0
-         72tB9hPj1sv6iIvpldWFkM9V0fUBULIxWgG8/OuaDUlJz4dMPBnCrY5iFuXg5Dw+oLSB
-         octEfWiI/gC9FnZz667jR0QFXeEtUZsT+jDC9QggoJUFR/kpTap6fpMjlIyoGutlBGHk
-         6/LIV/vUU5BG2gdWi8iRQ/jFzt+8D+UE6xU3kCbs7ARXVxmRsgiBBPMkghlyrVnhZ3iW
-         N3VVtYHl1P2klo5nmgVDfB7l2cgdPZLOvPB/ShTZlRjwwm0XIvWUPM8yL9f79LmNA+4j
-         2s6A==
+        bh=IsP6D8T5vC4K0WLWKELqerL/h2k2GCGETaeygCJbK5E=;
+        b=sG7bZwXGvGujWU/Kv07//ZUVZexawR/0ceUWve54iYCKQGNMF8FAbNrrX0aufq9CAv
+         am/BawKeDgKccgvSp/NTP+KRMZ6BZK7v9OYycEgi6hv2ybuLe2iPCCkx3PShmxDN4RmV
+         EaupRUteZGx1Ox/AVwFLXtxIymHvBmJxib2CMOEP72c5OIeu7h7Q201dXqvwIC3R2HeJ
+         VWCFhWgA2Bxfml2Z357GzFJTFQWvXXqaXbxttX89vCDkMKD0fnYBb7Mn2+VTROtmHJXt
+         LUlRdVtkzOSWYNKbYKWbNhHZgufupPR3VYg4GMzTY/ymsFtUEYN562QyUvQnH71juucq
+         RVBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702417022; x=1703021822;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1702428649; x=1703033449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qCOh69caXbVfDD+nz3SkSSNJ4LOnzQLxIG6SJxHDatw=;
-        b=PfiVNupG81gGEV840pLlx9csKhfqWUEO+LttZiKLDZcrwMoyr96UNVB78JzhIIYrBg
-         pBcn+gLUZV5YA5LngozDMSA0E8A7Qe7g+8mHIF8HN8NZ47ayv195tSJrZJCh/7PvF6j1
-         cjrdb4CX5CAAjOJ3CVesf3muALorI60RybjdhSLutnt66qzMUf9wfkM2D7hekevWsRwg
-         0NLvNTgjwWR/GvYikwWwvzfbvXHIWlwkgM4ONg9EYKna+JoAPigc9pwovapNRjX+KShe
-         fzeDH9F/c/tTfVqvA/lwG+U9LELFhe1duI6OEyKJ4VkRS1/Qb4D9VMRwJD8d+Y/MkKI0
-         Mkcw==
-X-Gm-Message-State: AOJu0YyUatPOmd5UfQUMA5b8U1QoKSEEjfHqzIsrkCfYE/32bf7RtQp8
-	DVJ6bIOyONx+fMfIlvRvWks9Aw==
-X-Google-Smtp-Source: AGHT+IFqqgEgVUuuLcp/jxl4AbRQVAxPSPDTSvhp/ckLGpwai+H0FWmy2ZTFwQBh1m466TRnZ7G6vg==
-X-Received: by 2002:a05:600c:2814:b0:40b:5f03:b43f with SMTP id m20-20020a05600c281400b0040b5f03b43fmr1885174wmb.353.1702417021655;
-        Tue, 12 Dec 2023 13:37:01 -0800 (PST)
-Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b0040b2b38a1fasm17954734wmb.4.2023.12.12.13.37.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 13:37:01 -0800 (PST)
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v2 2/2] riscv: Enable pcpu page first chunk allocator
-Date: Tue, 12 Dec 2023 22:34:57 +0100
-Message-Id: <20231212213457.132605-3-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231212213457.132605-1-alexghiti@rivosinc.com>
-References: <20231212213457.132605-1-alexghiti@rivosinc.com>
+        bh=IsP6D8T5vC4K0WLWKELqerL/h2k2GCGETaeygCJbK5E=;
+        b=reYVM1u9sh5p56ncIBLzDcBFJxVPcpaKjcSHT9fMpbpub6/4sQCXXxJDeAFmF3OPL3
+         S0ZSI+MbTwehRuSIMsPg3KJcfo5t8Ip56BRb65D/nBMiy1i9hW8ClWyWqwCO9NuTGsS5
+         +J+/O/umg+Ny2Hb7b+Vws+4plyli7u+C+f7uL1k2MeU+7bgabCb8PDnxE4Wh3mYHQqjz
+         IRHKs7naOr+Pr2RIIH6hMbvqgrop3+Bb8ZAoeoqfUrjZpBso4/mP/r11AYS74uwW+nmP
+         XC/473i8gw7QIUf6okddaZ5eD6rsMA/h8qPA34fCTis13Aa7yD2ORlDdlFxQv/Vd/lYD
+         rYXg==
+X-Gm-Message-State: AOJu0YwbdLO9bLpGJoBgLM1SApIbqLMFhj/CeKJS29pjnpRmgxCEfpJY
+	Nwc8aG0jSrdKoZ1343bnCRR9ykvfh6bfBN0AYJZgfA==
+X-Google-Smtp-Source: AGHT+IFg4hZCse8kzky6Y9/DVuxOtpUz/g7bXwrKJ9hF5mEV7x9P3i3TYFdKJnIuamiDiHUwxXUn6NjiQwKNsCzwWqw=
+X-Received: by 2002:a25:8051:0:b0:db7:e91c:eb1d with SMTP id
+ a17-20020a258051000000b00db7e91ceb1dmr4411297ybn.102.1702428649654; Tue, 12
+ Dec 2023 16:50:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org> <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
+ <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk>
+In-Reply-To: <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk>
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Tue, 12 Dec 2023 16:50:38 -0800
+Message-ID: <CAKC1njSQPO8ja7AkTzQ724hhSsGjchH9dLbbH9LXP0ZiKj-zPQ@mail.gmail.com>
+Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, 
+	Christian Brauner <brauner@kernel.org>, Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As explained in commit 6ea529a2037c ("percpu: make embedding first chunk
-allocator check vmalloc space size"), the embedding first chunk allocator
-needs the vmalloc space to be larger than the maximum distance between
-units which are grouped into NUMA nodes.
+On Tue, Dec 12, 2023 at 11:23=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
+ote:
+>
+> On Tue, Dec 12, 2023 at 11:17:11AM -0800, Deepak Gupta wrote:
+> > On Wed, Nov 22, 2023 at 1:43=E2=80=AFAM Mark Brown <broonie@kernel.org>=
+ wrote:
+>
+> > > +/*
+> > > + * Set the current shadow stack configuration.  Enabling the shadow
+> > > + * stack will cause a shadow stack to be allocated for the thread.
+> > > + */
+> > > +#define PR_SET_SHADOW_STACK_STATUS      72
+> > > +# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
+>
+> > Other architecture may require disabling shadow stack if glibc
+> > tunables is set to permissive mode.
+> > In permissive mode, if glibc encounters `dlopen` on an object which
+> > doesn't support shadow stack,
+> > glibc should be able to issue PR_SHADOW_STACK_DISABLE.
+>
+> > Architectures can choose to implement or not but I think arch agnostic
+> > code should enumerate this.
+>
+> The current implementation for arm64 and therefore API for the prctl()
+> is that whatever combination of flags is specified will be set, this
+> means that setting the status to something that does not include _ENABLE
+> will result in disabling and we don't need a separate flag for disable.
+> We have use cases that make active use of disabling at runtime.
 
-On a very sparse NUMA configurations and a small vmalloc area (for example,
-it is 64GB in sv39), the allocation of dynamic percpu data in the vmalloc
-area could fail.
+A theoretical scenario (no current workloads should've this case
+because no shadow stack)
 
-So provide the pcpu page allocator as a fallback in case we fall into
-such a sparse configuration (which happened in arm64 as shown by
-commit 09cea6195073 ("arm64: support page mapping percpu first chunk
-allocator")).
+- User mode did _ENABLE on the main thread. Shadow stack was allocated
+for the current
+  thread.
+- User mode created a bunch worker threads to run untrusted contained
+code. They shadow
+  stack too.
+- main thread had to do dlopen and now need to disable shadow stack on
+itself due to
+  incompatibility of incoming object in address space.
+- main thread controls worker threads and knows they're contained and
+should still be running
+  with a shadow stack. Although once in a while the main thread needs
+to perform writes to a shadow
+  stack of worker threads for some fixup (in the same addr space).
+main thread doesn't want to delegate
+  this responsibility of ss writes to worker threads because they're untrus=
+ted.
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/Kconfig         | 2 ++
- arch/riscv/mm/kasan_init.c | 8 ++++++++
- 2 files changed, 10 insertions(+)
+How will it do that (currently _ENABLE is married to _WRITE and _PUSH) ?
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 7603bd8ab333..8ba4a63e0ae5 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -415,7 +415,9 @@ config NUMA
- 	depends on SMP && MMU
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select GENERIC_ARCH_NUMA
-+	select HAVE_SETUP_PER_CPU_AREA
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
-+	select NEED_PER_CPU_PAGE_FIRST_CHUNK
- 	select OF_NUMA
- 	select USE_PERCPU_NUMA_NODE_ID
- 	help
-diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
-index 5e39dcf23fdb..4c9a2c527f08 100644
---- a/arch/riscv/mm/kasan_init.c
-+++ b/arch/riscv/mm/kasan_init.c
-@@ -438,6 +438,14 @@ static void __init kasan_shallow_populate(void *start, void *end)
- 	kasan_shallow_populate_pgd(vaddr, vend);
- }
- 
-+#ifdef CONFIG_KASAN_VMALLOC
-+void __init kasan_populate_early_vm_area_shadow(void *start, unsigned long size)
-+{
-+	kasan_populate(kasan_mem_to_shadow(start),
-+		       kasan_mem_to_shadow(start + size));
-+}
-+#endif
-+
- static void __init create_tmp_mapping(void)
- {
- 	void *ptr;
--- 
-2.39.2
+Please note that I am making up this scenario just for sake of discussion
+And don't know if software would be using it in this manner.
 
+>
+> Please delete unneeded context from replies, it makes it much easier to
+> find new content.
+
+Sorry about that.
+Noted.
 
