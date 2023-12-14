@@ -1,103 +1,169 @@
-Return-Path: <linux-arch+bounces-1061-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1062-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13A6F813B90
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 21:33:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29F79813B97
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 21:35:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 453901C21ABB
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 20:33:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1F941F214C3
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 20:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790416D1A0;
-	Thu, 14 Dec 2023 20:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="X4nPzm6F"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B986D1B1;
+	Thu, 14 Dec 2023 20:35:51 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701D06A357
-	for <linux-arch@vger.kernel.org>; Thu, 14 Dec 2023 20:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-550dd0e3304so8185669a12.1
-        for <linux-arch@vger.kernel.org>; Thu, 14 Dec 2023 12:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1702585976; x=1703190776; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u2BdSCgUChjTXVvCDYH0x028T7FO0mEYayRY84Xmsbc=;
-        b=X4nPzm6FYrn6oYdiaRd9NKlkU78rNhH2qMFVcxn1ybaD6FHt9C4cd5zf3TJxn7/Z5/
-         igdasLnn1teTQGI1rK2+6bmR8XBM5jzNCpfWvoV6KuQkR/yYyXYeAToe2405nDOIpe4c
-         V75JMvz9xgiQQno6JrtTECQMlbKhqllbT41k0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702585976; x=1703190776;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u2BdSCgUChjTXVvCDYH0x028T7FO0mEYayRY84Xmsbc=;
-        b=Yq94wMKoTqr8aGgARYWb27Mb4DffaDehVAHlus9l8R5D5ArEtUNH5xIKaaPsPWG5m3
-         p+QG8RZbvkhmd4sEpauMk2pR+FeycCOt39xaDFXIYF5sdrDI1w5p/l2I6oXn+q43gWUJ
-         VgCQwtTAUPXOoz6aqD7dXwVq9b14OZdURh4h5ckcTXAj0IMDkHhiQvsluqKMfWgyh5hM
-         CDRwlE2QwfrwqYssFXTq/wlcNIXo2tYkbnsXK2jJDoGhxWTZf3zeOUIsqYbP7Mpu1ID3
-         HDyJa24m6sVfNursFEOvvO4oCvi2DkY0Z0YAuoHwBw28RB90Poj0MMleb8Ijdp0DroKe
-         4++w==
-X-Gm-Message-State: AOJu0YxMsB+eqlXqVKO71k9gLxh3sRBjto3vB8JNmlubaIJ7gZDNgqWy
-	UAMcspb1ITP3PaK98S6c7+M6JLhvXmtd2EnhwD9+XMXI
-X-Google-Smtp-Source: AGHT+IHHPXITBpBK7aS6G2YXf5AkqnaSr+pQglqa5rWX45YTezb26fHNnRM7RLLm2YZ0B6Z15nc86w==
-X-Received: by 2002:a17:907:510:b0:a19:a19b:78a5 with SMTP id wj16-20020a170907051000b00a19a19b78a5mr4670572ejb.104.1702585976264;
-        Thu, 14 Dec 2023 12:32:56 -0800 (PST)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id tl18-20020a170907c31200b00a1da2c9b06asm9864009ejc.42.2023.12.14.12.32.55
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 12:32:55 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a1e2ded3d9fso364266b.0
-        for <linux-arch@vger.kernel.org>; Thu, 14 Dec 2023 12:32:55 -0800 (PST)
-X-Received: by 2002:a17:906:d8cd:b0:a19:a19b:78bb with SMTP id
- re13-20020a170906d8cd00b00a19a19b78bbmr4577583ejb.126.1702585975559; Thu, 14
- Dec 2023 12:32:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C136D1AD;
+	Thu, 14 Dec 2023 20:35:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B920C433C8;
+	Thu, 14 Dec 2023 20:35:48 +0000 (UTC)
+Date: Thu, 14 Dec 2023 15:36:36 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] ring-buffer: Remove 32bit timestamp logic
+Message-ID: <20231214153636.655e18ce@gandalf.local.home>
+In-Reply-To: <CAHk-=wjjGEc0f4LLDxCTYvgD98kWqKy=89u=42JLRz5Qs3KKyA@mail.gmail.com>
+References: <20231213211126.24f8c1dd@gandalf.local.home>
+	<20231213214632.15047c40@gandalf.local.home>
+	<CAHk-=whESMW2v0cd0Ye+AnV0Hp9j+Mm4BO2xJo93eQcC1xghUA@mail.gmail.com>
+	<20231214115614.2cf5a40e@gandalf.local.home>
+	<CAHk-=wjjGEc0f4LLDxCTYvgD98kWqKy=89u=42JLRz5Qs3KKyA@mail.gmail.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231214125433.03091e5e@gandalf.local.home> <CAHk-=wiKooX5vOu6TgGPEwdX--k0DyE4ntJDU4QzbVFMWGVXFw@mail.gmail.com>
- <20231214151911.2df9f845@gandalf.local.home> <CAHk-=wh5XgB4Jb9cRLe6gh_C_wXK3YevqCLi1BFRk5z1pJDkQA@mail.gmail.com>
-In-Reply-To: <CAHk-=wh5XgB4Jb9cRLe6gh_C_wXK3YevqCLi1BFRk5z1pJDkQA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 14 Dec 2023 12:32:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjHf48o15sugNeZkzNy2sJ2XUjaJLUWskTB0FnrnFGDeA@mail.gmail.com>
-Message-ID: <CAHk-=wjHf48o15sugNeZkzNy2sJ2XUjaJLUWskTB0FnrnFGDeA@mail.gmail.com>
-Subject: Re: [PATCH v3] ring-buffer: Remove 32bit timestamp logic
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Linux Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 14 Dec 2023 at 12:30, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Read my email. Don't do random x86-centric things. We have that
->
+On Thu, 14 Dec 2023 11:44:55 -0800
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Thu, 14 Dec 2023 at 08:55, Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > And yes, this does get called in NMI context.  
+> 
+> Not on an i486-class machine they won't. You don't have a local apic
+> on those, and they won't have any NMI sources under our control (ie
+> NMI does exist, but we're talking purely legacy NMI for "motherboard
+> problems" like RAM parity errors etc)
+
+Ah, so we should not worry about being in NMI context without a 64bit cmpxchg?
+
+> 
+> > I had a patch that added:
+> >
+> > +       /* ring buffer does cmpxchg, make sure it is safe in NMI context */
+> > +       if (!IS_ENABLED(CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG) &&
+> > +           (unlikely(in_nmi()))) {
+> > +               return NULL;
+> > +       }  
+> 
+> CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG doesn't work on x86 in this context,
+> because the issue is that yes, there's a safe 'cmpxchg', but that's
+> not what you want.
+
+Sorry, that's from another patch that I combined into this one that I added
+in case there's architectures that have NMIs but need to avoid cmpxchg, as
+this code does normal long word cmpxchg too. And that change *should* go to
+you and stable. It's either just luck that things didn't crash on those
+systems today. Or it happens so infrequently, nobody reported it.
+
+> 
+> You want the save cmpxchg64, which is an entirely different beast.
+
+Understood, but this code has both. It's just that the "special" code I'm
+removing does the 64-bit cmpxchg.
+
+> 
+> And honestly, I don't think that NMI_SAFE_CMPXCHG covers the
+> double-word case anywhere else either, except purely by luck.
+
+I still need to cover the normal cmpxchg. I'll keep that a separate patch.
+
+> 
+> In mm/slab.c, we also use a double-wide cmpxchg, and there the rule
+> has literally been that it's conditional on
+> 
+>  (a) system_has_cmpxchg64() existing as a macro
+> 
+>  (b) using that macro to then gate - at runtime - whether it actually
+> works or not
+> 
+> I think - but didn't check - that we essentially only enable the
+> two-word case on x86 as a result, and fall back to the slow case on
+> all other architectures - and on the i486 case.
+> 
+> That said, other architectures *do* have a working double-word
+> cmpxchg, but I wouldn't guarantee it. For example, 32-bit arm does
+> have one using ldrexd/strexd, but that only exists on arm v6+.
+> 
+> And guess what? You'll silently get a "disable interrupts, do it as a
+> non-atomic load-store" on arm too for that case. And again, pre-v6 arm
+> is about as relevant as i486 is, but my point is, that double-word
+> cmpxchg you rely on simply DOES NOT EXIST on 32-bit platforms except
+> under special circumstances.
+> 
+> So this isn't a "x86 is the odd man out". This is literally generic.
+> 
+> > Now back to my original question. Are you OK with me sending this to you
+> > now, or should I send you just the subtle fixes to the 32-bit rb_time_*
+> > code and keep this patch for the merge window?  
+> 
+> I'm absolutely not taking some untested random "let's do 64-bit
+> cmpxchg that we know is broken on 32-bit using broken conditionals"
+> shit.
+> 
+> What *would* work is that slab approach, which is essentially
+> 
 >   #ifndef system_has_cmpxchg64
 >       #define system_has_cmpxchg64() false
 >   #endif
->
-> which should work.
+> 
+>         ...
+>         if (!system_has_cmpxchg64())
+>                 return error or slow case
+> 
+>         do_64bit_cmpxchg_case();
+> 
+> (although the slub case is much more indirect, and uses a
+> __CMPXCHG_DOUBLE flag that only gets set when that define exists etc).
+> 
+> But that would literally cut off support for all non-x86 32-bit architectures.
+> 
+> So no. You need to forget about the whole "do a 64-bit cmpxchg on
+> 32-bit architectures" as being some kind of solution in the short
+> term.
 
-And again, by "should work" I mean that it would disable this entirely
-on things like arm32 until the arm people decide they care. But at
-least it won't use an unsafe non-working 64-bit cmpxchg.
+But do all archs have an implementation of cmpxchg64, even if it requires
+disabling interrupts? If not, then I definitely cannot remove this code.
 
-And no, for 6.7, only fix reported bugs. No big reorgs at all,
-particularly for something that likely has never been hit by any user
-and sounds like this all just came out of discussion.
+If they all have an implementation, where some is just very slow, then that
+is also perfectly fine. The only time cmpxchg64 gets called is on the slow
+path, which is if an event is interrupted by an interrupt, and that
+interrupt writes an event to the same buffer.
 
-              Linus
+This doesn't happen often, and if it requires disabling interrupts, then
+it shouldn't be much notice.
+
+I just want to avoid the case that it will simply break, which is the NMI
+case. In which case, would:
+
+	if (!system_has_cmpxchg64() && in_nmi())
+		return NULL;
+
+Be OK?
+
+-- Steve
+
 
