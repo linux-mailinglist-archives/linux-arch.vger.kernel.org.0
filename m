@@ -1,41 +1,41 @@
-Return-Path: <linux-arch+bounces-1062-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1063-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29F79813B97
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 21:35:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 960C6813BF0
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 21:46:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1F941F214C3
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 20:35:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 519FF281016
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 20:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B986D1B1;
-	Thu, 14 Dec 2023 20:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AAD7494;
+	Thu, 14 Dec 2023 20:46:30 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C136D1AD;
-	Thu, 14 Dec 2023 20:35:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B920C433C8;
-	Thu, 14 Dec 2023 20:35:48 +0000 (UTC)
-Date: Thu, 14 Dec 2023 15:36:36 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24712112;
+	Thu, 14 Dec 2023 20:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7EE9C433C7;
+	Thu, 14 Dec 2023 20:46:28 +0000 (UTC)
+Date: Thu, 14 Dec 2023 15:47:15 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, LKML
- <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
  <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
  <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] ring-buffer: Remove 32bit timestamp logic
-Message-ID: <20231214153636.655e18ce@gandalf.local.home>
-In-Reply-To: <CAHk-=wjjGEc0f4LLDxCTYvgD98kWqKy=89u=42JLRz5Qs3KKyA@mail.gmail.com>
-References: <20231213211126.24f8c1dd@gandalf.local.home>
-	<20231213214632.15047c40@gandalf.local.home>
-	<CAHk-=whESMW2v0cd0Ye+AnV0Hp9j+Mm4BO2xJo93eQcC1xghUA@mail.gmail.com>
-	<20231214115614.2cf5a40e@gandalf.local.home>
-	<CAHk-=wjjGEc0f4LLDxCTYvgD98kWqKy=89u=42JLRz5Qs3KKyA@mail.gmail.com>
+ Desnoyers <mathieu.desnoyers@efficios.com>, Linux Arch
+ <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3] ring-buffer: Remove 32bit timestamp logic
+Message-ID: <20231214154715.223f245d@gandalf.local.home>
+In-Reply-To: <CAHk-=wjHf48o15sugNeZkzNy2sJ2XUjaJLUWskTB0FnrnFGDeA@mail.gmail.com>
+References: <20231214125433.03091e5e@gandalf.local.home>
+	<CAHk-=wiKooX5vOu6TgGPEwdX--k0DyE4ntJDU4QzbVFMWGVXFw@mail.gmail.com>
+	<20231214151911.2df9f845@gandalf.local.home>
+	<CAHk-=wh5XgB4Jb9cRLe6gh_C_wXK3YevqCLi1BFRk5z1pJDkQA@mail.gmail.com>
+	<CAHk-=wjHf48o15sugNeZkzNy2sJ2XUjaJLUWskTB0FnrnFGDeA@mail.gmail.com>
 X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -46,124 +46,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 14 Dec 2023 11:44:55 -0800
+On Thu, 14 Dec 2023 12:32:38 -0800
 Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> On Thu, 14 Dec 2023 at 08:55, Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Thu, 14 Dec 2023 at 12:30, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > And yes, this does get called in NMI context.  
-> 
-> Not on an i486-class machine they won't. You don't have a local apic
-> on those, and they won't have any NMI sources under our control (ie
-> NMI does exist, but we're talking purely legacy NMI for "motherboard
-> problems" like RAM parity errors etc)
-
-Ah, so we should not worry about being in NMI context without a 64bit cmpxchg?
-
-> 
-> > I had a patch that added:
+> > Read my email. Don't do random x86-centric things. We have that
 > >
-> > +       /* ring buffer does cmpxchg, make sure it is safe in NMI context */
-> > +       if (!IS_ENABLED(CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG) &&
-> > +           (unlikely(in_nmi()))) {
-> > +               return NULL;
-> > +       }  
+> >   #ifndef system_has_cmpxchg64
+> >       #define system_has_cmpxchg64() false
+> >   #endif
+> >
+> > which should work.  
 > 
-> CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG doesn't work on x86 in this context,
-> because the issue is that yes, there's a safe 'cmpxchg', but that's
-> not what you want.
+> And again, by "should work" I mean that it would disable this entirely
+> on things like arm32 until the arm people decide they care. But at
+> least it won't use an unsafe non-working 64-bit cmpxchg.
 
-Sorry, that's from another patch that I combined into this one that I added
-in case there's architectures that have NMIs but need to avoid cmpxchg, as
-this code does normal long word cmpxchg too. And that change *should* go to
-you and stable. It's either just luck that things didn't crash on those
-systems today. Or it happens so infrequently, nobody reported it.
-
-> 
-> You want the save cmpxchg64, which is an entirely different beast.
-
-Understood, but this code has both. It's just that the "special" code I'm
-removing does the 64-bit cmpxchg.
+If archs have no implementation of cmpxchg64 then the code cannot be
+removed. If it's just slower and emulated, then it shouldn't be a big deal.
+The only thing it may lose is tracing in NMI context, which I'm not sure
+that really matters.
 
 > 
-> And honestly, I don't think that NMI_SAFE_CMPXCHG covers the
-> double-word case anywhere else either, except purely by luck.
+> And no, for 6.7, only fix reported bugs. No big reorgs at all,
+> particularly for something that likely has never been hit by any user
+> and sounds like this all just came out of discussion.
 
-I still need to cover the normal cmpxchg. I'll keep that a separate patch.
+The discussion came out of adding new tests to cover new changes I'm making
+in the ring buffer code that happened to trigger subtle bugs in the 32-bit
+version of reading the 64-bit timestamps. The reason for that code, is
+because of the 64-bit cmpcxhg that is required to implement it. If we are
+keeping this code, then there's 2 or 3 fixes to it that I need to send to
+you, and also one outstanding one that in theory can be a bug, but in
+practice is highly unlikely to ever be hit. The fix for that one is a bit
+more involved, and will have to come later.
 
-> 
-> In mm/slab.c, we also use a double-wide cmpxchg, and there the rule
-> has literally been that it's conditional on
-> 
->  (a) system_has_cmpxchg64() existing as a macro
-> 
->  (b) using that macro to then gate - at runtime - whether it actually
-> works or not
-> 
-> I think - but didn't check - that we essentially only enable the
-> two-word case on x86 as a result, and fall back to the slow case on
-> all other architectures - and on the i486 case.
-> 
-> That said, other architectures *do* have a working double-word
-> cmpxchg, but I wouldn't guarantee it. For example, 32-bit arm does
-> have one using ldrexd/strexd, but that only exists on arm v6+.
-> 
-> And guess what? You'll silently get a "disable interrupts, do it as a
-> non-atomic load-store" on arm too for that case. And again, pre-v6 arm
-> is about as relevant as i486 is, but my point is, that double-word
-> cmpxchg you rely on simply DOES NOT EXIST on 32-bit platforms except
-> under special circumstances.
-> 
-> So this isn't a "x86 is the odd man out". This is literally generic.
-> 
-> > Now back to my original question. Are you OK with me sending this to you
-> > now, or should I send you just the subtle fixes to the 32-bit rb_time_*
-> > code and keep this patch for the merge window?  
-> 
-> I'm absolutely not taking some untested random "let's do 64-bit
-> cmpxchg that we know is broken on 32-bit using broken conditionals"
-> shit.
-> 
-> What *would* work is that slab approach, which is essentially
-> 
->   #ifndef system_has_cmpxchg64
->       #define system_has_cmpxchg64() false
->   #endif
-> 
->         ...
->         if (!system_has_cmpxchg64())
->                 return error or slow case
-> 
->         do_64bit_cmpxchg_case();
-> 
-> (although the slub case is much more indirect, and uses a
-> __CMPXCHG_DOUBLE flag that only gets set when that define exists etc).
-> 
-> But that would literally cut off support for all non-x86 32-bit architectures.
-> 
-> So no. You need to forget about the whole "do a 64-bit cmpxchg on
-> 32-bit architectures" as being some kind of solution in the short
-> term.
+When I was discussing these fixes and other changes with Mathieu, we
+started thinking "is this complexity worth it?" and "does anything actually
+need this?".
 
-But do all archs have an implementation of cmpxchg64, even if it requires
-disabling interrupts? If not, then I definitely cannot remove this code.
+That's where this patch originated from.
 
-If they all have an implementation, where some is just very slow, then that
-is also perfectly fine. The only time cmpxchg64 gets called is on the slow
-path, which is if an event is interrupted by an interrupt, and that
-interrupt writes an event to the same buffer.
-
-This doesn't happen often, and if it requires disabling interrupts, then
-it shouldn't be much notice.
-
-I just want to avoid the case that it will simply break, which is the NMI
-case. In which case, would:
-
-	if (!system_has_cmpxchg64() && in_nmi())
-		return NULL;
-
-Be OK?
+Now, I could also make this special code only compile for the
+"!system_has_cmpxchg64" case as well, which shouldn't punish the Atom
+processor to do 3 cmpxchg's instead of one cmpxchg8b.
 
 -- Steve
-
 
