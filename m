@@ -1,294 +1,162 @@
-Return-Path: <linux-arch+bounces-1054-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1055-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E682C813A5F
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 19:55:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28D2E813AEC
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 20:45:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 160511C20D74
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 18:55:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF54F1F21A63
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 19:45:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0912A68B97;
-	Thu, 14 Dec 2023 18:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6878D6979D;
+	Thu, 14 Dec 2023 19:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gNQWZJxL"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="T5cRHmky"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A97208BD;
-	Thu, 14 Dec 2023 18:55:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A97C433CA;
-	Thu, 14 Dec 2023 18:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702580129;
-	bh=nci52wgEP29pe93sJfvh7z3E961dOjZ6XELoPwO7AJ0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gNQWZJxLGAyg3thh8sppsdtne0S14JwyQcivHbHv7WO114nKNzDxo48NPc6NwYych
-	 LICtIuEwziEeq/jC1lhaXr9ngYWoZaqo8fUMS/56euTdwBx/kPmE7C+R0ZGJ1IKzrC
-	 tVwMMIGyAkxdOTcUZeHtX/oH7Bydean26t2VSLflEoxoggGkGn/iOrGO8984m5MjWF
-	 6g6HOVwqpoozuR4ruL1FZairOzZ7r/I7gsRUbrIno5RR1LH/MvdqsoVIm43vGmBRJL
-	 vDwFwwCLWushNGNgEe0Jm42brbIwAIz/lHY9dFRME70eLb5XNXSRgbJ4ah8tKyaXMg
-	 S4KZ7ptfgHhzQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50bf32c0140so9612505e87.1;
-        Thu, 14 Dec 2023 10:55:29 -0800 (PST)
-X-Gm-Message-State: AOJu0YxiTCAhY2AQ5BIIh/0VUE3tqq/dEH7sH5AZSHS4ZPq4T1cnOoUl
-	5RhUfBRWtEf53n4Cfx0PVrbTm5G1zO+vPPMMhA==
-X-Google-Smtp-Source: AGHT+IHH/MtbPf3CsSHjCsaUiPlKJlfOgEPCUUPp4Ha+UDKvnOS4RB7kkEQUG6S8vXVoP3f52VmIHsLn4Hf6iJQk34o=
-X-Received: by 2002:ac2:51b0:0:b0:50b:fd52:e629 with SMTP id
- f16-20020ac251b0000000b0050bfd52e629mr4153621lfk.125.1702580127399; Thu, 14
- Dec 2023 10:55:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F00697A2
+	for <linux-arch@vger.kernel.org>; Thu, 14 Dec 2023 19:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-54c5d041c23so11132448a12.2
+        for <linux-arch@vger.kernel.org>; Thu, 14 Dec 2023 11:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1702583114; x=1703187914; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MpUjOoTdCqNzayaiwbixMLyZUnTZjhFDCaA6n5v3lDM=;
+        b=T5cRHmkyC1XeP1ByTEbxUxOR7s6Iy7cYdIniNLwsjt7ikJ3h5wWxdHeXZTFssUASur
+         FWgTX9GPLeeaLHOpsnNjVBqqOQsZLLAqAyOHn3RjBFr/+mMTC+Wl7ltvmIE0swwofVRe
+         0gdUzC7arOg7g/Z8a2y3OuKMlk0wNmlIYCX9E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702583114; x=1703187914;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MpUjOoTdCqNzayaiwbixMLyZUnTZjhFDCaA6n5v3lDM=;
+        b=ZiNVIR9lu1rHnVt3imXIsPWwLeYDBx86r2LEeH5WLjMXRlObJuutBAJl3tHvhyGPM+
+         uI0Klq0fyy7GV4eovw2e4m94iWFk3B0WpDA96PGDiggQle5gJzu6TuQj39qHbZ+CSWKG
+         smw+M/f4s4qyoyrB21FJHzPnGql+HZmZbcMofisHSBTf0zqSWuBv/X+RO2ZgpT6XZLtM
+         CrLSTltg4EqeyecJbeGvNx/S5EWunnwQWCI+/itkcywC76mF8NBawybLX3eCbYZDcqFF
+         pWq23JwGHJcFvrJiTcPsUO30EhPN3JqdzU2p8lsj5KJWsyZiNsuACdTyUwT5YhfUETHv
+         4v1A==
+X-Gm-Message-State: AOJu0Ywe84m7C9Nl5yN0opaPYbmBzd6oq3gN8XtZZlJVxNVcMg9PIFWv
+	XTRDQUkHGoQdI3AjGzhmx96jSlgEy8p722U4unUSuQ==
+X-Google-Smtp-Source: AGHT+IFdeepiamORK8+rHYde+APC7Y5omw30EX1l/TXEjBEpxghdv6hUL165EQ9cl43SYxRczn07NA==
+X-Received: by 2002:a50:cdd7:0:b0:551:e2a7:8895 with SMTP id h23-20020a50cdd7000000b00551e2a78895mr1028511edj.158.1702583113842;
+        Thu, 14 Dec 2023 11:45:13 -0800 (PST)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
+        by smtp.gmail.com with ESMTPSA id c27-20020a50d65b000000b0054c9bbd07e7sm7337265edj.54.2023.12.14.11.45.12
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Dec 2023 11:45:12 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a1f653e3c3dso956093666b.2
+        for <linux-arch@vger.kernel.org>; Thu, 14 Dec 2023 11:45:12 -0800 (PST)
+X-Received: by 2002:a17:907:3ac2:b0:a19:d40a:d21f with SMTP id
+ fi2-20020a1709073ac200b00a19d40ad21fmr2222801ejc.235.1702583112429; Thu, 14
+ Dec 2023 11:45:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231119165721.9849-12-alexandru.elisei@arm.com>
- <CAL_Jsq+k5BeM9+u12AQvWQ0b4Uv5Cy0vPOpK_uLcYtRnunq4iQ@mail.gmail.com>
- <ZXiMiLz9ZyUdxUP8@raptor> <CAL_Jsq+U_GR=mOK3-phnd4jeJKf79aOmhPwDOSj+f=s-7fZZWQ@mail.gmail.com>
- <ZXmr-Kl9L2SO13--@raptor> <CAL_JsqL=P1Y6w38LD_xw+vK4CNqt22FW_FE9oi_XTLHVQEne7Q@mail.gmail.com>
- <ZXnE3724jYYSg4o6@raptor> <CAL_JsqJgTnuQjo13cKo1Ebm5j9tCRT8GhNavdqu5vwp+fdnTLw@mail.gmail.com>
- <ZXnthcg0BkEd-RgK@raptor> <CAL_JsqLAW0--F8R0oTaajN3YpbK2KgE6Ypn8tk4_pf_s=xC+aw@mail.gmail.com>
- <ZXsjFYKHkJM_JLCy@raptor>
-In-Reply-To: <ZXsjFYKHkJM_JLCy@raptor>
-From: Rob Herring <robh@kernel.org>
-Date: Thu, 14 Dec 2023 12:55:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJF7Bs6nGt0hdP25YTMpzPK8V3h6C5Thkh=PnzPbwFEkQ@mail.gmail.com>
-Message-ID: <CAL_JsqJF7Bs6nGt0hdP25YTMpzPK8V3h6C5Thkh=PnzPbwFEkQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 11/27] arm64: mte: Reserve tag storage memory
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
-	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, pcc@google.com, 
-	steven.price@arm.com, anshuman.khandual@arm.com, vincenzo.frascino@arm.com, 
-	david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org
+References: <20231213211126.24f8c1dd@gandalf.local.home> <20231213214632.15047c40@gandalf.local.home>
+ <CAHk-=whESMW2v0cd0Ye+AnV0Hp9j+Mm4BO2xJo93eQcC1xghUA@mail.gmail.com> <20231214115614.2cf5a40e@gandalf.local.home>
+In-Reply-To: <20231214115614.2cf5a40e@gandalf.local.home>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 14 Dec 2023 11:44:55 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjjGEc0f4LLDxCTYvgD98kWqKy=89u=42JLRz5Qs3KKyA@mail.gmail.com>
+Message-ID: <CAHk-=wjjGEc0f4LLDxCTYvgD98kWqKy=89u=42JLRz5Qs3KKyA@mail.gmail.com>
+Subject: Re: [PATCH] ring-buffer: Remove 32bit timestamp logic
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 9:45=E2=80=AFAM Alexandru Elisei
-<alexandru.elisei@arm.com> wrote:
+On Thu, 14 Dec 2023 at 08:55, Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> Hi,
->
-> On Wed, Dec 13, 2023 at 02:30:42PM -0600, Rob Herring wrote:
-> > On Wed, Dec 13, 2023 at 11:44=E2=80=AFAM Alexandru Elisei
-> > <alexandru.elisei@arm.com> wrote:
-> > >
-> > > On Wed, Dec 13, 2023 at 11:22:17AM -0600, Rob Herring wrote:
-> > > > On Wed, Dec 13, 2023 at 8:51=E2=80=AFAM Alexandru Elisei
-> > > > <alexandru.elisei@arm.com> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > On Wed, Dec 13, 2023 at 08:06:44AM -0600, Rob Herring wrote:
-> > > > > > On Wed, Dec 13, 2023 at 7:05=E2=80=AFAM Alexandru Elisei
-> > > > > > <alexandru.elisei@arm.com> wrote:
-> > > > > > >
-> > > > > > > Hi Rob,
-> > > > > > >
-> > > > > > > On Tue, Dec 12, 2023 at 12:44:06PM -0600, Rob Herring wrote:
-> > > > > > > > On Tue, Dec 12, 2023 at 10:38=E2=80=AFAM Alexandru Elisei
-> > > > > > > > <alexandru.elisei@arm.com> wrote:
-> > > > > > > > >
-> > > > > > > > > Hi Rob,
-> > > > > > > > >
-> > > > > > > > > Thank you so much for the feedback, I'm not very familiar=
- with device tree,
-> > > > > > > > > and any comments are very useful.
-> > > > > > > > >
-> > > > > > > > > On Mon, Dec 11, 2023 at 11:29:40AM -0600, Rob Herring wro=
-te:
-> > > > > > > > > > On Sun, Nov 19, 2023 at 10:59=E2=80=AFAM Alexandru Elis=
-ei
-> > > > > > > > > > <alexandru.elisei@arm.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > Allow the kernel to get the size and location of the =
-MTE tag storage
-> > > > > > > > > > > regions from the DTB. This memory is marked as reserv=
-ed for now.
-> > > > > > > > > > >
-> > > > > > > > > > > The DTB node for the tag storage region is defined as=
-:
-> > > > > > > > > > >
-> > > > > > > > > > >         tags0: tag-storage@8f8000000 {
-> > > > > > > > > > >                 compatible =3D "arm,mte-tag-storage";
-> > > > > > > > > > >                 reg =3D <0x08 0xf8000000 0x00 0x40000=
-00>;
-> > > > > > > > > > >                 block-size =3D <0x1000>;
-> > > > > > > > > > >                 memory =3D <&memory0>;    // Associat=
-ed tagged memory node
-> > > > > > > > > > >         };
-> > > > > > > > > >
-> > > > > > > > > > I skimmed thru the discussion some. If this memory rang=
-e is within
-> > > > > > > > > > main RAM, then it definitely belongs in /reserved-memor=
-y.
-> > > > > > > > >
-> > > > > > > > > Ok, will do that.
-> > > > > > > > >
-> > > > > > > > > If you don't mind, why do you say that it definitely belo=
-ngs in
-> > > > > > > > > reserved-memory? I'm not trying to argue otherwise, I'm c=
-urious about the
-> > > > > > > > > motivation.
-> > > > > > > >
-> > > > > > > > Simply so that /memory nodes describe all possible memory a=
-nd
-> > > > > > > > /reserved-memory is just adding restrictions. It's also bec=
-ause
-> > > > > > > > /reserved-memory is what gets handled early, and we don't n=
-eed
-> > > > > > > > multiple things to handle early.
-> > > > > > > >
-> > > > > > > > > Tag storage is not DMA and can live anywhere in memory.
-> > > > > > > >
-> > > > > > > > Then why put it in DT at all? The only reason CMA is there =
-is to set
-> > > > > > > > the size. It's not even clear to me we need CMA in DT eithe=
-r. The
-> > > > > > > > reasoning long ago was the kernel didn't do a good job of m=
-oving and
-> > > > > > > > reclaiming contiguous space, but that's supposed to be bett=
-er now (and
-> > > > > > > > most h/w figured out they need IOMMUs).
-> > > > > > > >
-> > > > > > > > But for tag storage you know the size as it is a function o=
-f the
-> > > > > > > > memory size, right? After all, you are validating the size =
-is correct.
-> > > > > > > > I guess there is still the aspect of whether you want enabl=
-e MTE or
-> > > > > > > > not which could be done in a variety of ways.
-> > > > > > >
-> > > > > > > Oh, sorry, my bad, I should have been clearer about this. I d=
-on't want to
-> > > > > > > put it in the DT as a "linux,cma" node. But I want it to be m=
-anaged by CMA.
-> > > > > >
-> > > > > > Yes, I understand, but my point remains. Why do you need this i=
-n DT?
-> > > > > > If the location doesn't matter and you can calculate the size f=
-rom the
-> > > > > > memory size, what else is there to add to the DT?
-> > > > >
-> > > > > I am afraid there has been a misunderstanding. What do you mean b=
-y
-> > > > > "location doesn't matter"?
-> > > >
-> > > > You said:
-> > > > > Tag storage is not DMA and can live anywhere in memory.
-> > > >
-> > > > Which I took as the kernel can figure out where to put it. But mayb=
-e
-> > > > you meant the h/w platform can hard code it to be anywhere in memor=
-y?
-> > > > If so, then yes, DT is needed.
-> > >
-> > > Ah, I see, sorry for not being clear enough, you are correct: tag sto=
-rage
-> > > is a hardware property, and software needs a mechanism (in this case,=
- the
-> > > dt) to discover its properties.
-> > >
-> > > >
-> > > > > At the very least, Linux needs to know the address and size of a =
-memory
-> > > > > region to use it. The series is about using the tag storage memor=
-y for
-> > > > > data. Tag storage cannot be described as a regular memory node be=
-cause it
-> > > > > cannot be tagged (and normal memory can).
-> > > >
-> > > > If the tag storage lives in the middle of memory, then it would be
-> > > > described in the memory node, but removed by being in reserved-memo=
-ry
-> > > > node.
-> > >
-> > > I don't follow. Would you mind going into more details?
-> >
-> > It goes back to what I said earlier about /memory nodes describing all
-> > the memory. There's no reason to reserve memory if you haven't
-> > described that range as memory to begin with. One could presumably
-> > just have a memory node for each contiguous chunk and not need
-> > /reserved-memory (ignoring the need to say what things are reserved
-> > for). That would become very difficult to adjust. Note that the kernel
-> > has a hardcoded limit of 64 reserved regions currently and that is not
-> > enough for some people. Seems like a lot, but I have no idea how they
-> > are (ab)using /reserved-memory.
->
-> Ah, I see what you mean, reserved memory is about marking existing memory
-> (from a /memory node) as special, not about adding new memory.
->
-> After the memblock allocator is initialized, the kernel can use it for it=
-s
-> own allocations. Kernel allocations are not movable.
->
-> When a page is allocated as tagged, the associated tag storage cannot be
-> used for data, otherwise the tags would corrupt that data. To avoid this,
-> the requirement is that tag storage pages are only used for movable
-> allocations. When a page is allocated as tagged, the data in the associat=
-ed
-> tag storage is migrated and the tag storage is taken from the page
-> allocator (via alloc_contig_range()).
->
-> My understanding is that the memblock allocator can use all the memory fr=
-om
-> a /memory node. If the tags storage memory is declared in a /memory node,
-> there exists the possibility that Linux will use tag storage memory for i=
-ts
-> own allocation, which would make that tags storage memory unmovable, and
-> thus unusable for storing tags.
+> And yes, this does get called in NMI context.
 
-No, because the tag storage would be reserved in /reserved-memory.
+Not on an i486-class machine they won't. You don't have a local apic
+on those, and they won't have any NMI sources under our control (ie
+NMI does exist, but we're talking purely legacy NMI for "motherboard
+problems" like RAM parity errors etc)
 
-Of course, the arch code could do something between scanning /memory
-nodes and /reserved-memory, but that would be broken arch code.
-Ideally, there wouldn't be any arch code in between those 2 points,
-but it's complicated. It used to mainly be powerpc, but we keep adding
-to the complexity on arm64.
-
-> Looking at early_init_dt_scan_memory(), even if a /memory node if marked =
-at
-> hotpluggable, memblock will still use it, unless "movable_node" is set on
-> the kernel command line.
+> I had a patch that added:
 >
-> That's the reason why I'm not describing tag storage in a /memory node.  =
-Is
-> there way to tell the memblock allocator not to use memory from a /memory
-> node?
->
-> >
-> > Let me give an example. Presumably using MTE at all is configurable.
-> > If you boot a kernel with MTE disabled (or older and not supporting
-> > it), then I'd assume you'd want to use the tag storage for regular
-> > memory. Well, If tag storage is already part of /memory, then all you
-> > have to do is ignore the tag reserved-memory region. Tweaking the
-> > memory nodes would be more work.
->
-> Right now, memory is added via memblock_reserve(), and if MTE is disabled
-> (for example, via the kernel command line), the code calls
-> free_reserved_page() for each tag storage page. I find that straightfowar=
-d
-> to implement.
+> +       /* ring buffer does cmpxchg, make sure it is safe in NMI context */
+> +       if (!IS_ENABLED(CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG) &&
+> +           (unlikely(in_nmi()))) {
+> +               return NULL;
+> +       }
 
-But better to just not reserve the region in the first place. Also, it
-needs to be simple enough to back port.
+CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG doesn't work on x86 in this context,
+because the issue is that yes, there's a safe 'cmpxchg', but that's
+not what you want.
 
-Also, does free_reserved_page() work on ranges outside of memblock
-range (e.g. beyond end_of_DRAM())? If the tag storage happened to live
-at the end of DRAM and you shorten the /memory node size to remove tag
-storage, is it still going to work?
+You want the save cmpxchg64, which is an entirely different beast.
 
-Rob
+And honestly, I don't think that NMI_SAFE_CMPXCHG covers the
+double-word case anywhere else either, except purely by luck.
+
+In mm/slab.c, we also use a double-wide cmpxchg, and there the rule
+has literally been that it's conditional on
+
+ (a) system_has_cmpxchg64() existing as a macro
+
+ (b) using that macro to then gate - at runtime - whether it actually
+works or not
+
+I think - but didn't check - that we essentially only enable the
+two-word case on x86 as a result, and fall back to the slow case on
+all other architectures - and on the i486 case.
+
+That said, other architectures *do* have a working double-word
+cmpxchg, but I wouldn't guarantee it. For example, 32-bit arm does
+have one using ldrexd/strexd, but that only exists on arm v6+.
+
+And guess what? You'll silently get a "disable interrupts, do it as a
+non-atomic load-store" on arm too for that case. And again, pre-v6 arm
+is about as relevant as i486 is, but my point is, that double-word
+cmpxchg you rely on simply DOES NOT EXIST on 32-bit platforms except
+under special circumstances.
+
+So this isn't a "x86 is the odd man out". This is literally generic.
+
+> Now back to my original question. Are you OK with me sending this to you
+> now, or should I send you just the subtle fixes to the 32-bit rb_time_*
+> code and keep this patch for the merge window?
+
+I'm absolutely not taking some untested random "let's do 64-bit
+cmpxchg that we know is broken on 32-bit using broken conditionals"
+shit.
+
+What *would* work is that slab approach, which is essentially
+
+  #ifndef system_has_cmpxchg64
+      #define system_has_cmpxchg64() false
+  #endif
+
+        ...
+        if (!system_has_cmpxchg64())
+                return error or slow case
+
+        do_64bit_cmpxchg_case();
+
+(although the slub case is much more indirect, and uses a
+__CMPXCHG_DOUBLE flag that only gets set when that define exists etc).
+
+But that would literally cut off support for all non-x86 32-bit architectures.
+
+So no. You need to forget about the whole "do a 64-bit cmpxchg on
+32-bit architectures" as being some kind of solution in the short
+term.
+
+               Linus
 
