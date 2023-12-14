@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-1047-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1048-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B910813926
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 18:55:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11EA9813931
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 18:57:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A6E52824E4
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 17:55:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFAB41F21DA7
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 17:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80DF67B4D;
-	Thu, 14 Dec 2023 17:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8908067B70;
+	Thu, 14 Dec 2023 17:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="YZln1QZx"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="bOgj+hxb"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EDDA6;
-	Thu, 14 Dec 2023 09:55:21 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC1A6;
+	Thu, 14 Dec 2023 09:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=yZZfFiLwNQEGOTfqPZeYqFsQFPoC9cJyPHRCME7+qng=; b=YZln1QZxhDK9MAc+S2Xd9heAgy
-	ie5lPli0BDZIk0s28NjnJCpwz3RwdjpjdXrpc+br3qEiudcMak40U5Z+KZNubTpGCA7kHnccAeNlr
-	Pyd4TFtyk/YlD6xLA3UBo+0SS95CobxPx1j5yl7dW43hlqLWjkB2Gt5g/Q9fQiM4IljnmObep5pma
-	mIgrXVGCHv0cZkuAsz3SmcPEpKVgoVbP/e96BvWTC3xUkbjCiKWCZs/aOpnDnusCNUH4kdYbxSCdM
-	U+6zvJBCblim05E+MMAqmh4KZVohjAhWk/AvdEovz1W7UBINZht7JDprgbbiomQQV/JJWQXrhLWtO
-	JcUuFF2w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45686)
+	bh=L5kH8hIOwqwSSDYrxYuLkFSUt4lz/pRwIQ1vDoFypus=; b=bOgj+hxbflOy6cpdwb0AvqLThn
+	fosBo2pgUtid/Btg47D1Tr3fCNbhKvXDaFyqcQYQOH+89NazR4QJ+nEdeEWaM9Zg8F7j05T5cdfgY
+	VM0/6oQ5Ia3iYudlE0F/bur8gqKg6jOipwcfxclKO24mpPwoNEGS+tH8oMOIY0M/Mu+mNs52+wi+F
+	lm2Ni4mV9JyW5Xe5z2A66vskhG5XC6BjK4hHnl/tR3bWJCTUoI5s6XIt40Rmf7oAfWwyL5XMzUAT4
+	/eBXYVzBh9GeGUvZJBlu9nSJESu+sZ6JrCvtRt5k+bC7E6cUZkcVRSXfwHypdgwrPjdz2GiqQfqO/
+	Cgy7guXg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38096)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <linux@armlinux.org.uk>)
-	id 1rDpvX-0001ns-17;
-	Thu, 14 Dec 2023 17:55:15 +0000
+	id 1rDpxV-0001oM-19;
+	Thu, 14 Dec 2023 17:57:17 +0000
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rDpvW-0002kf-Sv; Thu, 14 Dec 2023 17:55:14 +0000
-Date: Thu, 14 Dec 2023 17:55:14 +0000
+	id 1rDpxX-0002km-Ed; Thu, 14 Dec 2023 17:57:19 +0000
+Date: Thu, 14 Dec 2023 17:57:19 +0000
 From: "Russell King (Oracle)" <linux@armlinux.org.uk>
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
@@ -53,12 +53,12 @@ Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>,
 	jianyong.wu@arm.com, justin.he@arm.com,
 	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
- functional) devices
-Message-ID: <ZXtBgtB8FXs8ge0h@shell.armlinux.org.uk>
+Subject: Re: [PATCH RFC v3 02/21] ACPI: processor: Add support for processors
+ described as container packages
+Message-ID: <ZXtB/+2kDtaz1Zf4@shell.armlinux.org.uk>
 References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOfs-00DvjY-HQ@rmk-PC.armlinux.org.uk>
- <20231214173241.0000260f@Huawei.com>
+ <E1rDOfx-00Dvje-MS@rmk-PC.armlinux.org.uk>
+ <20231214173626.00005062@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -67,62 +67,64 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231214173241.0000260f@Huawei.com>
+In-Reply-To: <20231214173626.00005062@Huawei.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, Dec 14, 2023 at 05:32:41PM +0000, Jonathan Cameron wrote:
-> On Wed, 13 Dec 2023 12:49:16 +0000
+On Thu, Dec 14, 2023 at 05:36:26PM +0000, Jonathan Cameron wrote:
+> On Wed, 13 Dec 2023 12:49:21 +0000
 > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
 > 
 > > From: James Morse <james.morse@arm.com>
 > > 
-> > Today the ACPI enumeration code 'visits' all devices that are present.
+> > ACPI has two ways of describing processors in the DSDT. From ACPI v6.5,
+> > 5.2.12:
 > > 
-> > This is a problem for arm64, where CPUs are always present, but not
-> > always enabled. When a device-check occurs because the firmware-policy
-> > has changed and a CPU is now enabled, the following error occurs:
-> > | acpi ACPI0007:48: Enumeration failure
+> > "Starting with ACPI Specification 6.3, the use of the Processor() object
+> > was deprecated. Only legacy systems should continue with this usage. On
+> > the Itanium architecture only, a _UID is provided for the Processor()
+> > that is a string object. This usage of _UID is also deprecated since it
+> > can preclude an OSPM from being able to match a processor to a
+> > non-enumerable device, such as those defined in the MADT. From ACPI
+> > Specification 6.3 onward, all processor objects for all architectures
+> > except Itanium must now use Device() objects with an _HID of ACPI0007,
+> > and use only integer _UID values."
 > > 
-> > This is ultimately because acpi_dev_ready_for_enumeration() returns
-> > true for a device that is not enabled. The ACPI Processor driver
-> > will not register such CPUs as they are not 'decoding their resources'.
+> > Also see https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html#declaring-processors
 > > 
-> > Change acpi_dev_ready_for_enumeration() to also check the enabled bit.
-> > ACPI allows a device to be functional instead of maintaining the
-> > present and enabled bit. Make this behaviour an explicit check with
-> > a reference to the spec, and then check the present and enabled bits.
-> > This is needed to avoid enumerating present && functional devices that
-> > are not enabled.
+> > Duplicate descriptions are not allowed, the ACPI processor driver already
+> > parses the UID from both devices and containers. acpi_processor_get_info()
+> > returns an error if the UID exists twice in the DSDT.
+> > 
+> > The missing probe for CPUs described as packages creates a problem for
+> > moving the cpu_register() calls into the acpi_processor driver, as CPUs
+> > described like this don't get registered, leading to errors from other
+> > subsystems when they try to add new sysfs entries to the CPU node.
+> > (e.g. topology_sysfs_init()'s use of topology_add_dev() via cpuhp)
+> > 
+> > To fix this, parse the processor container and call acpi_processor_add()
+> > for each processor that is discovered like this. The processor container
+> > handler is added with acpi_scan_add_handler(), so no detach call will
+> > arrive.
+> > 
+> > Qemu TCG describes CPUs using processor devices in a processor container.
+> > For more information, see build_cpus_aml() in Qemu hw/acpi/cpu.c and
+> > https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html#processor-container-device
 > > 
 > > Signed-off-by: James Morse <james.morse@arm.com>
 > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
 > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
 > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > > ---
-> > If this change causes problems on deployed hardware, I suggest an
-> > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
-> > acpi_dev_ready_for_enumeration() to only check the present bit.
+> > Outstanding comments:
+> >  https://lore.kernel.org/r/20230914145353.000072e2@Huawei.com
+> Looks like you resolved those (were all patch description things).
 > 
-> My gut feeling (having made ACPI 'fixes' in the past that ran into
-> horribly broken firmware and had to be reverted) is reduce the blast
-> radius preemptively from the start. I'd love to live in a world were
-> that wasn't necessary but I don't trust all the generators of ACPI tables.
-> I'll leave it to Rafael and other ACPI experts suggest how narrow we should
-> make it though - arch opt in might be narrow enough.
+> So I'm happy.
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Yes, I think an arch opt-in would be the most sensible way forward, if
-Rafael concurs with that idea. I notice that what I wrote there was
-actually an opt-out. I'll fix that.
-
-> > +	/*
-> > +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
-> > +	 * (!present && functional) for certain types of devices that should be
-> > +	 * enumerated. Note that the enabled bit can't be sert until the present
-> 
-> set until
-
-Thanks for spotting that, fixed.
+Great, I wasn't sure if I had resolved them to your satisfaction, so I
+kept the reference to your original review. I've now removed it and
+added your r-b. Thanks.
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
