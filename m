@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-1024-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1025-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 191B381245C
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 02:15:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF19812464
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 02:18:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93E4CB20E4C
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 01:15:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E56DA282678
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Dec 2023 01:18:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E651563D;
-	Thu, 14 Dec 2023 01:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1792E642;
+	Thu, 14 Dec 2023 01:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ot/Mr1P8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ASB0owDz"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9B7EA3;
-	Thu, 14 Dec 2023 01:15:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BC1C433C7;
-	Thu, 14 Dec 2023 01:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D817963D;
+	Thu, 14 Dec 2023 01:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435CAC433C7;
+	Thu, 14 Dec 2023 01:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702516540;
-	bh=t0rU34tq8DhzkLBkFxn7ambC0hASa1O0GjSgzQkryC8=;
+	s=k20201202; t=1702516677;
+	bh=zsaG1Z/V6aX7d8f9bjRUYAcyyvlRqu+OVBtKr82ilo8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ot/Mr1P8szCrNFm0hJ5f4gZjqkAYiPwfrzCNxDCw9eE3Tj8W7JjdlpUDBDsgugHu/
-	 byFf0jmPC0QT6DYooDZBa7TFhilvS5PqbAxbeveAlzb6IskUdxsdU0qbnALISkxT3E
-	 8LaENIaxborpvBH4Xq6FmVOJ2TqiIIiXx2b45387wfpu6oDF+1d0YaVbkAQ4V9YnY8
-	 JbXgZWzOAf/iAWSoUZw7b6BOBgUV1h4M7EHkiteQthq74DtjeXUr9DjH5DA8Kd8vgN
-	 3hk5WYLKXg9U3ZPPHHf8m2W4H1ZGik9cIDED+aV//wHrF2u7hBFmTsUASIc9VgVjBj
-	 l540ij+i/09FA==
-Date: Wed, 13 Dec 2023 17:15:38 -0800
+	b=ASB0owDzSZAjwNqEaZNw5l/tG4f5H9NX+k9wIaQk8aZXmjNXWFA3xs3z4915D3ydm
+	 7Ny7vU+2Z7vaKSVVG1qq8axAQ/MCShUSGffVW9XOEwhE7c/wF53+YRFmoEGCRaSXJV
+	 xxx5jmq9TTDBawDFV+xQEVsShfQCo7hbn0fdbEXDcJggTLF+nKeQ0DUI/UxbZMIsOO
+	 5BjG5ifdnXPja4ZIyPRc+ST7CoXQVV+Yuqp2Ss/x8LSXqj0MPfatQDbKpgwNw8T3UN
+	 XTW5ymxEA+Otu6nrG7yjCGi17kV/e48xzniquq3SrjsO19LqX8qx2v133Y2t3Q722V
+	 y4VWpmNMV+zfA==
+Date: Wed, 13 Dec 2023 17:17:55 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
@@ -49,12 +49,13 @@ Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
  Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
  <christian.koenig@amd.com>, Yunsheng Lin <linyunsheng@huawei.com>,
  Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt
- <shakeelb@google.com>
-Subject: Re: [net-next v1 03/16] queue_api: define queue api
-Message-ID: <20231213171538.04847459@kernel.org>
-In-Reply-To: <20231208005250.2910004-4-almasrymina@google.com>
+ <shakeelb@google.com>, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [net-next v1 05/16] net: netdev netlink api to bind dma-buf to
+ a net device
+Message-ID: <20231213171755.5965e1ec@kernel.org>
+In-Reply-To: <20231208005250.2910004-6-almasrymina@google.com>
 References: <20231208005250.2910004-1-almasrymina@google.com>
-	<20231208005250.2910004-4-almasrymina@google.com>
+	<20231208005250.2910004-6-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,14 +65,12 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu,  7 Dec 2023 16:52:34 -0800 Mina Almasry wrote:
-> This API enables the net stack to reset the queues used for devmem.
+On Thu,  7 Dec 2023 16:52:36 -0800 Mina Almasry wrote:
+> +        name: type
+> +        doc: rx or tx queue
+> +        type: u8
+> +        enum: queue-type
 
-Nice, thanks for moving this forward. FWIW when I started hacking on it
-the API looked more like:
-https://github.com/kuba-moo/linux/commit/7af8abfa4fdff248e21fc76aecc334004a0f322f
-which passes the config objects to the queue callbacks as an argument.
-Storing in struct netdev_rx_queue makes implementing prepare / swap
-harder. But that's just FYI, we can refactor later. The queue config
-rabbit hole is pretty deep.
+nit: the queue/napi GET was applied to net-next, would be good to stick
+to the same types (s/u8/u32)
 
