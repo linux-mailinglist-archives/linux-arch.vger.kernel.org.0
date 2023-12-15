@@ -1,82 +1,82 @@
-Return-Path: <linux-arch+bounces-1078-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1080-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDA3D8147FE
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 13:26:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A69EC81480C
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 13:27:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2B1D1C23494
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 12:26:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D580B22B32
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 12:27:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7F32D052;
-	Fri, 15 Dec 2023 12:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757272DB7B;
+	Fri, 15 Dec 2023 12:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="X/7I8fRr";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="JCPzv0rT";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="X/7I8fRr";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="JCPzv0rT"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PwbUOjoy";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/utvE8Cm";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PwbUOjoy";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/utvE8Cm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF222C6A9;
-	Fri, 15 Dec 2023 12:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CC62C6B1;
+	Fri, 15 Dec 2023 12:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 01A46220D6;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 911971F829;
 	Fri, 15 Dec 2023 12:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	t=1702643178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wIKNTENIo3WMFUa1p7gLGW1/C1ipjjdUcxT2AmkwTno=;
-	b=X/7I8fRryaEc8HSxjBRqjkSOkZ2vOmwM0RwlzqCtKCqcTYiRWUMx8zpO09Bk678SwRml81
-	G6df7QWcFeoR5+SGZISyuGiMEMkOvgfD2+qhJtQKQ/HjjnnNjRE9t6SNFTxaoSkYP92/G0
-	VguBAJ13XAtF64jIFbuFB7duWj57p+U=
+	bh=ionOnhVqbRQv5yJFH2KkaG5cDoE/rfCo3Lap5LRFeCQ=;
+	b=PwbUOjoydVNdPC49q1JsmoxCgf8nZ3vdiYzrlNb1/ZCY6ASMRxEYHPK73nGjjtsUMEdhuq
+	EnZlyjneCh23omNHtUB+un1qccKZquKI5jeCSLG7ZEIACknW8eJ7MXgYypYc21ciYyagVD
+	YQmpO5kbUSDkyqnCn8NE4bsnVrKtG2E=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1702643178;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wIKNTENIo3WMFUa1p7gLGW1/C1ipjjdUcxT2AmkwTno=;
-	b=JCPzv0rTI4f8Ny5kjCMdBmJMNcx546v7M5ueqkgVoZXpnP1DW12ed5AnYfLGxx+1idtRob
-	zRlMpDWh6clhFuBg==
+	bh=ionOnhVqbRQv5yJFH2KkaG5cDoE/rfCo3Lap5LRFeCQ=;
+	b=/utvE8CmGuI3thDXTy3J8aIeKraIgUqof+nluhrMGQT0jveIhLhr0yaGOjP2ta1iNv96DV
+	CIHfPlsAAX+uYfDg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	t=1702643178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wIKNTENIo3WMFUa1p7gLGW1/C1ipjjdUcxT2AmkwTno=;
-	b=X/7I8fRryaEc8HSxjBRqjkSOkZ2vOmwM0RwlzqCtKCqcTYiRWUMx8zpO09Bk678SwRml81
-	G6df7QWcFeoR5+SGZISyuGiMEMkOvgfD2+qhJtQKQ/HjjnnNjRE9t6SNFTxaoSkYP92/G0
-	VguBAJ13XAtF64jIFbuFB7duWj57p+U=
+	bh=ionOnhVqbRQv5yJFH2KkaG5cDoE/rfCo3Lap5LRFeCQ=;
+	b=PwbUOjoydVNdPC49q1JsmoxCgf8nZ3vdiYzrlNb1/ZCY6ASMRxEYHPK73nGjjtsUMEdhuq
+	EnZlyjneCh23omNHtUB+un1qccKZquKI5jeCSLG7ZEIACknW8eJ7MXgYypYc21ciYyagVD
+	YQmpO5kbUSDkyqnCn8NE4bsnVrKtG2E=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1702643178;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wIKNTENIo3WMFUa1p7gLGW1/C1ipjjdUcxT2AmkwTno=;
-	b=JCPzv0rTI4f8Ny5kjCMdBmJMNcx546v7M5ueqkgVoZXpnP1DW12ed5AnYfLGxx+1idtRob
-	zRlMpDWh6clhFuBg==
+	bh=ionOnhVqbRQv5yJFH2KkaG5cDoE/rfCo3Lap5LRFeCQ=;
+	b=/utvE8CmGuI3thDXTy3J8aIeKraIgUqof+nluhrMGQT0jveIhLhr0yaGOjP2ta1iNv96DV
+	CIHfPlsAAX+uYfDg==
 Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 7E31213A08;
-	Fri, 15 Dec 2023 12:26:17 +0000 (UTC)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 0860713BA0;
+	Fri, 15 Dec 2023 12:26:18 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([10.150.64.162])
 	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id 2BmqHelFfGVIRwAAn2gu4w
-	(envelope-from <tzimmermann@suse.de>); Fri, 15 Dec 2023 12:26:17 +0000
+	id mJTrAOpFfGVIRwAAn2gu4w
+	(envelope-from <tzimmermann@suse.de>); Fri, 15 Dec 2023 12:26:18 +0000
 From: Thomas Zimmermann <tzimmermann@suse.de>
 To: ardb@kernel.org,
 	tglx@linutronix.de,
@@ -100,9 +100,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 2/3] arch/x86: Add <asm/ima-efi.h> for arch_ima_efi_boot_mode
-Date: Fri, 15 Dec 2023 13:18:13 +0100
-Message-ID: <20231215122614.5481-3-tzimmermann@suse.de>
+Subject: [PATCH v2 3/3] arch/x86: Do not include <asm/bootparam.h> in several header files
+Date: Fri, 15 Dec 2023 13:18:14 +0100
+Message-ID: <20231215122614.5481-4-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231215122614.5481-1-tzimmermann@suse.de>
 References: <20231215122614.5481-1-tzimmermann@suse.de>
@@ -113,16 +113,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: 2.23
 X-Spam-Flag: NO
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: **
-X-Spam-Score: 2.23
-X-Spamd-Result: default: False [2.23 / 50.00];
+X-Spam-Score: 3.40
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [3.40 / 50.00];
 	 ARC_NA(0.00)[];
 	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
+	 BAYES_HAM(-3.00)[99.99%];
 	 FROM_HAS_DN(0.00)[];
 	 TO_DN_SOME(0.00)[];
 	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
@@ -131,11 +128,9 @@ X-Spamd-Result: default: False [2.23 / 50.00];
 	 MIME_GOOD(-0.10)[text/plain];
 	 BROKEN_CONTENT_TYPE(1.50)[];
 	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
 	 R_RATELIMIT(0.00)[to_ip_from(RLthqzz6q5hnubohss7ffybi86)];
 	 RCVD_COUNT_THREE(0.00)[3];
 	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.17)[-0.833];
 	 RCPT_COUNT_TWELVE(0.00)[22];
 	 MID_CONTAINS_FROM(1.00)[];
 	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
@@ -145,118 +140,257 @@ X-Spamd-Result: default: False [2.23 / 50.00];
 	 MIME_TRACE(0.00)[0:+];
 	 RCVD_TLS_ALL(0.00)[];
 	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Flag: NO
+X-Spam-Level: ***
+X-Spam-Score: 3.40
+Authentication-Results: smtp-out2.suse.de;
+	none
 
-The header file <asm/efi.h> contains the macro arch_ima_efi_boot_mode,
-which expands to use struct boot_params from <asm/bootparams.h>. Many
-drivers include <linux/efi.h>, but do not use boot parameters. Changes
-to bootparam.h or its included headers can easily trigger large,
-unnessary rebuilds of the kernel.
-
-Moving x86's arch_ima_efi_boot_mode to <asm/ima-efi.h> and including
-<asm/setup.h> separates that dependency from the rest of the EFI
-interfaces. The only user is in ima_efi.c. As the file already declares
-a default value for arch_ima_efi_boot_mode, move this define into
-asm-generic for all other architectures.
-
-With arch_ima_efi_boot_mode removed from efi.h, <asm/bootparam.h> can
-later be removed from further x86 header files.
+Remove the include statement for <asm/bootparam.h> from several header
+files that don't require it. Limits the exposure of the boot parameters
+within the Linux kernel code. Update several source files that require
+code from bootparam.h.
 
 v2:
-	* remove extra declaration of boot_params (Ard)
+	* clean up misc.h and e820/types.h
+	* include bootparam.h in several source files
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/include/asm/efi.h       |  3 ---
- arch/x86/include/asm/ima-efi.h   | 11 +++++++++++
- include/asm-generic/Kbuild       |  1 +
- include/asm-generic/ima-efi.h    | 16 ++++++++++++++++
- security/integrity/ima/ima_efi.c |  5 +----
- 5 files changed, 29 insertions(+), 7 deletions(-)
- create mode 100644 arch/x86/include/asm/ima-efi.h
- create mode 100644 include/asm-generic/ima-efi.h
+ arch/x86/boot/compressed/acpi.c       | 2 ++
+ arch/x86/boot/compressed/cmdline.c    | 2 ++
+ arch/x86/boot/compressed/efi.c        | 2 ++
+ arch/x86/boot/compressed/misc.h       | 3 ++-
+ arch/x86/boot/compressed/pgtable_64.c | 1 +
+ arch/x86/boot/compressed/sev.c        | 1 +
+ arch/x86/include/asm/e820/types.h     | 2 +-
+ arch/x86/include/asm/kexec.h          | 1 -
+ arch/x86/include/asm/mem_encrypt.h    | 2 +-
+ arch/x86/include/asm/sev.h            | 3 ++-
+ arch/x86/include/asm/x86_init.h       | 2 --
+ arch/x86/kernel/crash.c               | 1 +
+ arch/x86/kernel/sev-shared.c          | 2 ++
+ arch/x86/platform/pvh/enlighten.c     | 1 +
+ arch/x86/xen/enlighten_pvh.c          | 1 +
+ arch/x86/xen/vga.c                    | 1 -
+ 16 files changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/efi.h b/arch/x86/include/asm/efi.h
-index c4555b269a1b..99f31176c892 100644
---- a/arch/x86/include/asm/efi.h
-+++ b/arch/x86/include/asm/efi.h
-@@ -418,9 +418,6 @@ extern int __init efi_memmap_split_count(efi_memory_desc_t *md,
- extern void __init efi_memmap_insert(struct efi_memory_map *old_memmap,
- 				     void *buf, struct efi_mem_range *mem);
+diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
+index 55c98fdd67d2..4db998a8d8f0 100644
+--- a/arch/x86/boot/compressed/acpi.c
++++ b/arch/x86/boot/compressed/acpi.c
+@@ -5,6 +5,8 @@
+ #include "../string.h"
+ #include "efi.h"
  
--#define arch_ima_efi_boot_mode	\
--	({ extern struct boot_params boot_params; boot_params.secure_boot; })
--
- #ifdef CONFIG_EFI_RUNTIME_MAP
- int efi_get_runtime_map_size(void);
- int efi_get_runtime_map_desc_size(void);
-diff --git a/arch/x86/include/asm/ima-efi.h b/arch/x86/include/asm/ima-efi.h
-new file mode 100644
-index 000000000000..b4d904e66b39
---- /dev/null
-+++ b/arch/x86/include/asm/ima-efi.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_IMA_EFI_H
-+#define _ASM_X86_IMA_EFI_H
++#include <asm/bootparam.h>
 +
-+#include <asm/setup.h>
-+
-+#define arch_ima_efi_boot_mode boot_params.secure_boot
-+
-+#include <asm-generic/ima-efi.h>
-+
-+#endif /* _ASM_X86_IMA_EFI_H */
-diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-index def242528b1d..4fd16e71e8cd 100644
---- a/include/asm-generic/Kbuild
-+++ b/include/asm-generic/Kbuild
-@@ -26,6 +26,7 @@ mandatory-y += ftrace.h
- mandatory-y += futex.h
- mandatory-y += hardirq.h
- mandatory-y += hw_irq.h
-+mandatory-y += ima-efi.h
- mandatory-y += io.h
- mandatory-y += irq.h
- mandatory-y += irq_regs.h
-diff --git a/include/asm-generic/ima-efi.h b/include/asm-generic/ima-efi.h
-new file mode 100644
-index 000000000000..f87f5edef440
---- /dev/null
-+++ b/include/asm-generic/ima-efi.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+
-+#ifndef __ASM_GENERIC_IMA_EFI_H_
-+#define __ASM_GENERIC_IMA_EFI_H_
-+
-+#include <linux/efi.h>
-+
-+/*
-+ * Only include this header file from your architecture's <asm/ima-efi.h>.
-+ */
-+
-+#ifndef arch_ima_efi_boot_mode
-+#define arch_ima_efi_boot_mode efi_secureboot_mode_unset
-+#endif
-+
-+#endif /* __ASM_GENERIC_FB_H_ */
-diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-index 138029bfcce1..56bbee271cec 100644
---- a/security/integrity/ima/ima_efi.c
-+++ b/security/integrity/ima/ima_efi.c
-@@ -6,10 +6,7 @@
- #include <linux/module.h>
- #include <linux/ima.h>
- #include <asm/efi.h>
--
--#ifndef arch_ima_efi_boot_mode
--#define arch_ima_efi_boot_mode efi_secureboot_mode_unset
--#endif
-+#include <asm/ima-efi.h>
+ #include <linux/numa.h>
  
- static enum efi_secureboot_mode get_sb_mode(void)
+ /*
+diff --git a/arch/x86/boot/compressed/cmdline.c b/arch/x86/boot/compressed/cmdline.c
+index c1bb180973ea..e162d7f59cc5 100644
+--- a/arch/x86/boot/compressed/cmdline.c
++++ b/arch/x86/boot/compressed/cmdline.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include "misc.h"
+ 
++#include <asm/bootparam.h>
++
+ static unsigned long fs;
+ static inline void set_fs(unsigned long seg)
  {
+diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
+index 6edd034b0b30..f2e50f9758e6 100644
+--- a/arch/x86/boot/compressed/efi.c
++++ b/arch/x86/boot/compressed/efi.c
+@@ -7,6 +7,8 @@
+ 
+ #include "misc.h"
+ 
++#include <asm/bootparam.h>
++
+ /**
+  * efi_get_type - Given a pointer to boot_params, determine the type of EFI environment.
+  *
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index c0d502bd8716..01c89c410efd 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -33,7 +33,6 @@
+ #include <linux/elf.h>
+ #include <asm/page.h>
+ #include <asm/boot.h>
+-#include <asm/bootparam.h>
+ #include <asm/desc_defs.h>
+ 
+ #include "tdx.h"
+@@ -53,6 +52,8 @@
+ #define memptr unsigned
+ #endif
+ 
++struct boot_param;
++
+ /* boot/compressed/vmlinux start and end markers */
+ extern char _head[], _end[];
+ 
+diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
+index 51f957b24ba7..c882e1f67af0 100644
+--- a/arch/x86/boot/compressed/pgtable_64.c
++++ b/arch/x86/boot/compressed/pgtable_64.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include "misc.h"
++#include <asm/bootparam.h>
+ #include <asm/e820/types.h>
+ #include <asm/processor.h>
+ #include "pgtable.h"
+diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+index 454acd7a2daf..13beae767e48 100644
+--- a/arch/x86/boot/compressed/sev.c
++++ b/arch/x86/boot/compressed/sev.c
+@@ -12,6 +12,7 @@
+  */
+ #include "misc.h"
+ 
++#include <asm/bootparam.h>
+ #include <asm/pgtable_types.h>
+ #include <asm/sev.h>
+ #include <asm/trapnr.h>
+diff --git a/arch/x86/include/asm/e820/types.h b/arch/x86/include/asm/e820/types.h
+index 314f75d886d0..47695db18246 100644
+--- a/arch/x86/include/asm/e820/types.h
++++ b/arch/x86/include/asm/e820/types.h
+@@ -2,7 +2,7 @@
+ #ifndef _ASM_E820_TYPES_H
+ #define _ASM_E820_TYPES_H
+ 
+-#include <uapi/asm/bootparam.h>
++#include <asm/setup_data.h>
+ 
+ /*
+  * These are the E820 types known to the kernel:
+diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
+index c9f6a6c5de3c..91ca9a9ee3a2 100644
+--- a/arch/x86/include/asm/kexec.h
++++ b/arch/x86/include/asm/kexec.h
+@@ -25,7 +25,6 @@
+ 
+ #include <asm/page.h>
+ #include <asm/ptrace.h>
+-#include <asm/bootparam.h>
+ 
+ struct kimage;
+ 
+diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
+index 359ada486fa9..c1a8a3408c18 100644
+--- a/arch/x86/include/asm/mem_encrypt.h
++++ b/arch/x86/include/asm/mem_encrypt.h
+@@ -15,7 +15,7 @@
+ #include <linux/init.h>
+ #include <linux/cc_platform.h>
+ 
+-#include <asm/bootparam.h>
++struct boot_params;
+ 
+ #ifdef CONFIG_X86_MEM_ENCRYPT
+ void __init mem_encrypt_init(void);
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index 5b4a1ce3d368..8dad8b1613bf 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -13,7 +13,6 @@
+ 
+ #include <asm/insn.h>
+ #include <asm/sev-common.h>
+-#include <asm/bootparam.h>
+ #include <asm/coco.h>
+ 
+ #define GHCB_PROTOCOL_MIN	1ULL
+@@ -22,6 +21,8 @@
+ 
+ #define	VMGEXIT()			{ asm volatile("rep; vmmcall\n\r"); }
+ 
++struct boot_params;
++
+ enum es_result {
+ 	ES_OK,			/* All good */
+ 	ES_UNSUPPORTED,		/* Requested operation not supported */
+diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+index c878616a18b8..f062715578a0 100644
+--- a/arch/x86/include/asm/x86_init.h
++++ b/arch/x86/include/asm/x86_init.h
+@@ -2,8 +2,6 @@
+ #ifndef _ASM_X86_PLATFORM_H
+ #define _ASM_X86_PLATFORM_H
+ 
+-#include <asm/bootparam.h>
+-
+ struct ghcb;
+ struct mpc_bus;
+ struct mpc_cpu;
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index c92d88680dbf..564cff7ed33a 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -26,6 +26,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/memblock.h>
+ 
++#include <asm/bootparam.h>
+ #include <asm/processor.h>
+ #include <asm/hardirq.h>
+ #include <asm/nmi.h>
+diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+index ccb0915e84e1..4962ec42dc68 100644
+--- a/arch/x86/kernel/sev-shared.c
++++ b/arch/x86/kernel/sev-shared.c
+@@ -9,6 +9,8 @@
+  * and is included directly into both code-bases.
+  */
+ 
++#include <asm/setup_data.h>
++
+ #ifndef __BOOT_COMPRESSED
+ #define error(v)	pr_err(v)
+ #define has_cpuflag(f)	boot_cpu_has(f)
+diff --git a/arch/x86/platform/pvh/enlighten.c b/arch/x86/platform/pvh/enlighten.c
+index 00a92cb2c814..944e0290f2c0 100644
+--- a/arch/x86/platform/pvh/enlighten.c
++++ b/arch/x86/platform/pvh/enlighten.c
+@@ -3,6 +3,7 @@
+ 
+ #include <xen/hvc-console.h>
+ 
++#include <asm/bootparam.h>
+ #include <asm/io_apic.h>
+ #include <asm/hypervisor.h>
+ #include <asm/e820/api.h>
+diff --git a/arch/x86/xen/enlighten_pvh.c b/arch/x86/xen/enlighten_pvh.c
+index ada3868c02c2..9e9db601bd52 100644
+--- a/arch/x86/xen/enlighten_pvh.c
++++ b/arch/x86/xen/enlighten_pvh.c
+@@ -4,6 +4,7 @@
+ 
+ #include <xen/hvc-console.h>
+ 
++#include <asm/bootparam.h>
+ #include <asm/io_apic.h>
+ #include <asm/hypervisor.h>
+ #include <asm/e820/api.h>
+diff --git a/arch/x86/xen/vga.c b/arch/x86/xen/vga.c
+index d97adab8420f..f7547807b0bd 100644
+--- a/arch/x86/xen/vga.c
++++ b/arch/x86/xen/vga.c
+@@ -2,7 +2,6 @@
+ #include <linux/screen_info.h>
+ #include <linux/init.h>
+ 
+-#include <asm/bootparam.h>
+ #include <asm/setup.h>
+ 
+ #include <xen/interface/xen.h>
 -- 
 2.43.0
 
