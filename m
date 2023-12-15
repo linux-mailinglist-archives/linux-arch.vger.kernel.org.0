@@ -1,160 +1,137 @@
-Return-Path: <linux-arch+bounces-1081-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1082-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E880814B0F
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 16:00:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F355814BE1
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 16:32:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27352B2294B
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 15:00:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29EBD1F2152E
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 15:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12432358A2;
-	Fri, 15 Dec 2023 15:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08EB636B17;
+	Fri, 15 Dec 2023 15:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ThF3UUWw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="RR12zPsU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B6235884;
-	Fri, 15 Dec 2023 15:00:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8CD3C433C8;
-	Fri, 15 Dec 2023 14:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702652405;
-	bh=422PM3fDIpd8XBwXAF/Vr2Tijy2/V6yIm6WwhsorExQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ThF3UUWwGr5c0gG18awOx5DrQRxAPwOOshZh7SWrhMEjGtlJQKezv414UMUQWtogg
-	 HnsI2tu59s1B5g7ry0ZQTMiQwmrK95OYjW9JiQ6MubAahf8tnoIGHG4ZF1g5MM51Ho
-	 Fuyd5f95QOR67Xo2K1+5IQcrm/42yldE3jy4DNl4ppdU048EmnGGuL8meF1yRhb1Vb
-	 LrNl4xg5kA7VxTmTD6d5xMpK4G8SinhZgdQ+byz8MwpizJS6XNp+ezD/RlY5hnqPb5
-	 M/qJhGhNwfiuAs4wEKcr3OTh/1Lt7WuUVP/7vAsp3W1EZLiIXddMPg4h2ayPqcPZD9
-	 deK0um1LZe7kA==
-Date: Fri, 15 Dec 2023 14:59:51 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 34/39] kselftest/arm64: Add a GCS test program built
- with the system libc
-Message-ID: <485b6454-135c-4dd4-b38e-8fb8a02779cd@sirena.org.uk>
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-34-201c483bd775@kernel.org>
- <875y1089i4.fsf@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6798136AF3;
+	Fri, 15 Dec 2023 15:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=nvVr24yJlTcKSpTw1UQi3U4632hdafX2X9T8yNVWb/s=; b=RR12zPsUj34Qy44F0kIaQPaAZB
+	nPc+zWXztM2JH+6eKjddRnEJOcP4lHMaZs0Ok+6Eho9xjDst2RRvXpsCCyoi7ja6CGEcydbSwFAla
+	53X4gkcQ8TpZWIlIRo/ThKhe3wdKOcfl7yUOyXTd80QhoYvEG1X1gzin5cMl7VuHRsiaoHUkm/vCF
+	PYV3ouDdMG+9zRwjqRNnemtSmGGjTl1pO8Bz5P4ZH+wXgC0S9oDcdiSR5YyOfn5ipO2ghRZtIMuIZ
+	6tcgCPy1Ngdj7NUdlCPMO+WdfmNzTDSJrQZBHAb7IAFs/jxP1GIaaGn85jf5fzZNPpucwpWFKdF2Q
+	MkpmY3mA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48236)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rEAAQ-0002qa-0q;
+	Fri, 15 Dec 2023 15:31:58 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rEAAN-0003iY-2B; Fri, 15 Dec 2023 15:31:55 +0000
+Date: Fri, 15 Dec 2023 15:31:55 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
+ functional) devices
+Message-ID: <ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <E1rDOfs-00DvjY-HQ@rmk-PC.armlinux.org.uk>
+ <20231214173241.0000260f@Huawei.com>
+ <CAJZ5v0jymOtZ0y65K9wE8FJk+ZKwP+FoGm4AKHXcYVfQJL9MVw@mail.gmail.com>
+ <ZXtFBYJEX2RrFrwj@shell.armlinux.org.uk>
+ <CAJZ5v0h2Keyb-gFWFuPsKtwqjXvM2snyGpo6MMfFzaXKbfEpgw@mail.gmail.com>
+ <CAJZ5v0h3WWtvrbxRpaGfq6c756k+L1SzZ1Gv3A14JxXHNcUMKA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="M02qk/d68kwsaj1P"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <875y1089i4.fsf@linaro.org>
-X-Cookie: PARDON me, am I speaking ENGLISH?
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0h3WWtvrbxRpaGfq6c756k+L1SzZ1Gv3A14JxXHNcUMKA@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
+On Thu, Dec 14, 2023 at 07:37:10PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Dec 14, 2023 at 7:16 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Thu, Dec 14, 2023 at 7:10 PM Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > > I guess we need something like:
+> > >
+> > >         if (device->status.present)
+> > >                 return device->device_type != ACPI_BUS_TYPE_PROCESSOR ||
+> > >                        device->status.enabled;
+> > >         else
+> > >                 return device->status.functional;
+> > >
+> > > so we only check device->status.enabled for processor-type devices?
+> >
+> > Yes, something like this.
+> 
+> However, that is not sufficient, because there are
+> ACPI_BUS_TYPE_DEVICE devices representing processors.
+> 
+> I'm not sure about a clean way to do it ATM.
 
---M02qk/d68kwsaj1P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, how about:
 
-On Thu, Dec 14, 2023 at 11:50:11PM -0300, Thiago Jung Bauermann wrote:
-> Mark Brown <broonie@kernel.org> writes:
+static bool acpi_dev_is_processor(const struct acpi_device *device)
+{
+	struct acpi_hardware_id *hwid;
 
-> > +	ret =3D process_vm_writev(child, &local_iov, 1, &remote_iov, 1, 0);
-> > +	if (ret =3D=3D -1)
-> > +		ksft_print_msg("process_vm_readv() failed: %s (%d)\n",
-> > +			       strerror(errno), errno);
+	if (device->device_type == ACPI_BUS_TYPE_PROCESSOR)
+		return true;
 
-> The comment and the error message say "process_vm_readv()", but the
-> function actually called is process_vm_writev(). Is this intended?
+	if (device->device_type != ACPI_BUS_TYPE_DEVICE)
+		return false;
 
-No, that's a rebasing issue.
+	list_for_each_entry(hwid, &device->pnp.ids, list)
+		if (!strcmp(ACPI_PROCESSOR_OBJECT_HID, hwid->id) ||
+		    !strcmp(ACPI_PROCESSOR_DEVICE_HID, hwid->id))
+			return true;
 
-> If I swap process_vm_readv() and process_vm_writev(), then the read
-> succeeds but the write fails:
->=20
-> #  RUN           global.ptrace_read_write ...
-> # Child: 1996
-> # Child GCSPR 0xffffa7fcffd8, flags 1, locked 0
-> # process_vm_writev() failed: Bad address (14)
-> # libc-gcs.c:291:ptrace_read_write:Expected ret (-1) =3D=3D sizeof(rval) =
-(8)
-> # libc-gcs.c:293:ptrace_read_write:Expected val (281473500358268) =3D=3D =
-ptrace(PTRACE_PEEKDATA, child, (void *)gcspr, NULL) (0)
-> # ptrace_read_write: Test failed at step #1
-> #          FAIL  global.ptrace_read_write
-> not ok 4 global.ptrace_read_write
+	return false;
+}
 
-Yeah, I did notice something had happened with the writes but didn't
-investigate yet.
+and then:
 
-> Also, it's strange that the tests defined after map_gcs.stack_overflow
-> don't run when I execute this test program. I'm doing:
+	if (device->status.present)
+		return !acpi_dev_is_processor(device) || device->status.enabled;
+	else
+		return device->status.functional;
 
-> $ ./run_kselftest.sh -t arm64:libc-gcs
+?
 
-> I.e., these tests aren't being run in my FVP:
-
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, too_small)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_1)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_2)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_3)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_4)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_5)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_6)
-> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_7)
-> > +TEST_F(map_invalid_gcs, do_map)
-> > +FIXTURE_VARIANT_ADD(invalid_mprotect, exec)
-> > +FIXTURE_VARIANT_ADD(invalid_mprotect, bti)
-> > +FIXTURE_VARIANT_ADD(invalid_mprotect, exec_bti)
-> > +TEST_F(invalid_mprotect, do_map)
-> > +TEST_F(invalid_mprotect, do_map_read)
-
-I'm seeing all of those appearing.  I'm not sure what to say there -
-that's all kselftest framework stuff, I'd expect the framework to say
-something about what it's doing if it decides to skip and I can't think
-why it would decide to skip.
-
---M02qk/d68kwsaj1P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV8aecACgkQJNaLcl1U
-h9Cx7Qf+NstvmUJDmhKZCiSXybEblR3UfKc2ERXjiJRyMZJYWGE59Aqau43rUxYz
-4oELXv45Jxb9fBX19Ap6W19TxDrGHMHoCW6fuIiqeTu9L1798R0lJi1TuUxnoX2t
-t/s1MqP87pbwKNs60ne9ezvagfQhFFBAYyUepAxrvfPkeUakOwLgsHRwx2bEVsXv
-6SsJJ9hRz7N2FvlP487cWfC5VQkyYjefXQHi/1OrZw1hSkS9a5Hb/Y1vBzacFUbS
-YDYZszJexTXkcRjAngFzHsCBCakK3xpFB1uRPMhrAOj51UDJHHwE4+nX7DUWZaxT
-delEJTYjMd7cGaEpGyDdMnkhQVyM4g==
-=fKsW
------END PGP SIGNATURE-----
-
---M02qk/d68kwsaj1P--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
