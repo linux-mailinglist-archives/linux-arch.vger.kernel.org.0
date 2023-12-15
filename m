@@ -1,46 +1,45 @@
-Return-Path: <linux-arch+bounces-1071-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1067-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E56814487
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 10:34:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49E1A814478
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 10:34:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A79381C20896
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 09:34:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0045B1F235B3
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 09:34:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD2A1A593;
-	Fri, 15 Dec 2023 09:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B8EC18045;
+	Fri, 15 Dec 2023 09:33:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Lq2PgWht"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bnPrR5+C"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061F5179A2;
-	Fri, 15 Dec 2023 09:33:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C976814290;
+	Fri, 15 Dec 2023 09:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=b4R8oBfA9zqLdMspEmf7BM9tcAtmYn2SA6ZbJ+T1P5c=; b=Lq2PgWhtX3V8toHwd4gXthsfPV
-	51X7SJQC7Nru1W8AxzAo9FgQf8X7B//HhiVa4Wni0K2G+n5NSLp0J6KuWaVPHCg5LqaWnnTct6an7
-	VSn/94veX/IqLryss/BBYEDgrH3uHxiAng0tbAwUZR/2wWcS1xNJe4HBpFsWFWk2lHDRHwf+hSYIV
-	jW3O6OYVrI2YIUtYDEzNZCpeDl/mhsRZv8X+fwN3HuvgHv0Zv4s2ZWXFlNfony2rirfUxjBaebt0e
-	2AMaCofhDa/dAdzVSTw7hG62RjkawKG+01OP4YeCDE2L2mGeW2/sgrNjJVf24DXfwrfjR9XaYP+Bk
-	aMms2tmQ==;
+	bh=78VUp4ekMeaCQuFyW0sC3Rbbj/THiYo4c7UXzXOpUYU=; b=bnPrR5+CXr7BBoaFWXx1hwtAwH
+	2F2PEBm7YfZ8Z+ek5E6sU2NggQXV8mH21iJOx8IuUUKojL8nl8piu1SVhyFdQehQqPX2euFT8vltW
+	gihZz2bb9gv+VspJ5CUh/WjJz42XFPueBSyn/WRVvdtzjuELfVeUcwPUpxitCH1rPHzI5cnsWn6R6
+	OA71iWY86Q5Duna4NQFs5qEO9r76fyhbsZt9MW8nobXMxoFO5xvrRTH57KxULwxHYWII82RLcrG8u
+	0xuFVu5NdLh7F6MnKASZQN+xq+AblZov9qntQ2dc8J39R9EsSjSbj7uUsPN6ddau0FzX8ZUSPYnLe
+	HmXCrtSg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rE4ZF-009rG1-0w;
-	Fri, 15 Dec 2023 09:33:14 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rE4ZE-00FSOc-4Z; Fri, 15 Dec 2023 09:33:13 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id D6BA730098F; Fri, 15 Dec 2023 10:33:11 +0100 (CET)
-Message-Id: <20231215092707.669401084@infradead.org>
+	id DB5FA301157; Fri, 15 Dec 2023 10:33:11 +0100 (CET)
+Message-Id: <20231215092707.799451071@infradead.org>
 User-Agent: quilt/0.65
-Date: Fri, 15 Dec 2023 10:12:21 +0100
+Date: Fri, 15 Dec 2023 10:12:22 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: paul.walmsley@sifive.com,
@@ -79,7 +78,7 @@ Cc: paul.walmsley@sifive.com,
  joao@overdrivepizza.com,
  mark.rutland@arm.com,
  peterz@infradead.org
-Subject: [PATCH v3 5/7] cfi: Add CFI_NOSEAL()
+Subject: [PATCH v3 6/7] bpf: Fix dtor CFI
 References: <20231215091216.135791411@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -89,45 +88,119 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Add a CFI_NOSEAL() helper to mark functions that need to retain their
-CFI information, despite not otherwise leaking their address.
+Ensure the various dtor functions match their prototype and retain
+their CFI signatures, since they don't have their address taken, they
+are prone to not getting CFI, making them impossible to call
+indirectly.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/cfi.h |    5 +++++
- include/linux/cfi.h        |    4 ++++
- 2 files changed, 9 insertions(+)
+ kernel/bpf/cpumask.c |    8 +++++++-
+ kernel/bpf/helpers.c |   16 ++++++++++++++--
+ net/bpf/test_run.c   |   15 +++++++++++++--
+ 3 files changed, 34 insertions(+), 5 deletions(-)
 
---- a/arch/x86/include/asm/cfi.h
-+++ b/arch/x86/include/asm/cfi.h
-@@ -8,6 +8,7 @@
-  * Copyright (C) 2022 Google LLC
-  */
- #include <linux/bug.h>
-+#include <asm/ibt.h>
- 
- /*
-  * An overview of the various calling conventions...
-@@ -138,4 +139,8 @@ static inline u32 cfi_get_func_hash(void
+--- a/kernel/bpf/cpumask.c
++++ b/kernel/bpf/cpumask.c
+@@ -96,6 +96,12 @@ __bpf_kfunc void bpf_cpumask_release(str
+ 	migrate_enable();
  }
- #endif /* CONFIG_CFI_CLANG */
  
-+#if HAS_KERNEL_IBT == 1
-+#define CFI_NOSEAL(x)	asm(IBT_NOSEAL(__stringify(x)))
-+#endif
++__bpf_kfunc void bpf_cpumask_release_dtor(void *cpumask)
++{
++	bpf_cpumask_release(cpumask);
++}
++CFI_NOSEAL(bpf_cpumask_release_dtor);
 +
- #endif /* _ASM_X86_CFI_H */
---- a/include/linux/cfi.h
-+++ b/include/linux/cfi.h
-@@ -46,4 +46,8 @@ static inline void module_cfi_finalize(c
- #endif /* CONFIG_ARCH_USES_CFI_TRAPS */
- #endif /* CONFIG_MODULES */
+ /**
+  * bpf_cpumask_first() - Get the index of the first nonzero bit in the cpumask.
+  * @cpumask: The cpumask being queried.
+@@ -441,7 +447,7 @@ static const struct btf_kfunc_id_set cpu
  
-+#ifndef CFI_NOSEAL
-+#define CFI_NOSEAL(x)
-+#endif
+ BTF_ID_LIST(cpumask_dtor_ids)
+ BTF_ID(struct, bpf_cpumask)
+-BTF_ID(func, bpf_cpumask_release)
++BTF_ID(func, bpf_cpumask_release_dtor)
+ 
+ static int __init cpumask_kfunc_init(void)
+ {
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2150,6 +2150,12 @@ __bpf_kfunc void bpf_task_release(struct
+ 	put_task_struct_rcu_user(p);
+ }
+ 
++__bpf_kfunc void bpf_task_release_dtor(void *p)
++{
++	put_task_struct_rcu_user(p);
++}
++CFI_NOSEAL(bpf_task_release_dtor);
 +
- #endif /* _LINUX_CFI_H */
+ #ifdef CONFIG_CGROUPS
+ /**
+  * bpf_cgroup_acquire - Acquire a reference to a cgroup. A cgroup acquired by
+@@ -2174,6 +2180,12 @@ __bpf_kfunc void bpf_cgroup_release(stru
+ 	cgroup_put(cgrp);
+ }
+ 
++__bpf_kfunc void bpf_cgroup_release_dtor(void *cgrp)
++{
++	cgroup_put(cgrp);
++}
++CFI_NOSEAL(bpf_cgroup_release_dtor);
++
+ /**
+  * bpf_cgroup_ancestor - Perform a lookup on an entry in a cgroup's ancestor
+  * array. A cgroup returned by this kfunc which is not subsequently stored in a
+@@ -2570,10 +2582,10 @@ static const struct btf_kfunc_id_set gen
+ 
+ BTF_ID_LIST(generic_dtor_ids)
+ BTF_ID(struct, task_struct)
+-BTF_ID(func, bpf_task_release)
++BTF_ID(func, bpf_task_release_dtor)
+ #ifdef CONFIG_CGROUPS
+ BTF_ID(struct, cgroup)
+-BTF_ID(func, bpf_cgroup_release)
++BTF_ID(func, bpf_cgroup_release_dtor)
+ #endif
+ 
+ BTF_SET8_START(common_btf_ids)
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -600,10 +600,21 @@ __bpf_kfunc void bpf_kfunc_call_test_rel
+ 	refcount_dec(&p->cnt);
+ }
+ 
++__bpf_kfunc void bpf_kfunc_call_test_release_dtor(void *p)
++{
++	bpf_kfunc_call_test_release(p);
++}
++CFI_NOSEAL(bpf_kfunc_call_test_release_dtor);
++
+ __bpf_kfunc void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+ {
+ }
+ 
++__bpf_kfunc void bpf_kfunc_call_memb_release_dtor(void *p)
++{
++}
++CFI_NOSEAL(bpf_kfunc_call_memb_release_dtor);
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_SET8_START(bpf_test_modify_return_ids)
+@@ -1671,9 +1682,9 @@ static const struct btf_kfunc_id_set bpf
+ 
+ BTF_ID_LIST(bpf_prog_test_dtor_kfunc_ids)
+ BTF_ID(struct, prog_test_ref_kfunc)
+-BTF_ID(func, bpf_kfunc_call_test_release)
++BTF_ID(func, bpf_kfunc_call_test_release_dtor)
+ BTF_ID(struct, prog_test_member)
+-BTF_ID(func, bpf_kfunc_call_memb_release)
++BTF_ID(func, bpf_kfunc_call_memb_release_dtor)
+ 
+ static int __init bpf_prog_test_run_init(void)
+ {
 
 
 
