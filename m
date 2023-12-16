@@ -1,224 +1,106 @@
-Return-Path: <linux-arch+bounces-1097-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1098-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18017815059
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 20:47:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2908155B2
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Dec 2023 01:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 230321C2378E
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Dec 2023 19:47:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7C3B1C225E5
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Dec 2023 00:50:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8088341860;
-	Fri, 15 Dec 2023 19:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D495D808;
+	Sat, 16 Dec 2023 00:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="slo6GkaM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E104184B;
-	Fri, 15 Dec 2023 19:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 2539e6c80012c5e6; Fri, 15 Dec 2023 20:47:32 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C96C5668B59;
-	Fri, 15 Dec 2023 20:47:31 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>, Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or functional) devices
-Date: Fri, 15 Dec 2023 20:47:31 +0100
-Message-ID: <5760569.DvuYhMxLoT@kreacher>
-In-Reply-To: <20231215161539.00000940@Huawei.com>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk> <20231215161539.00000940@Huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B62C10EE;
+	Sat, 16 Dec 2023 00:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 095F5C433C9;
+	Sat, 16 Dec 2023 00:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702687826;
+	bh=REY7ZuYT6jJPWfRPau8JDVsTne7UEvPQl9xgjwckxWY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=slo6GkaMTr9Way21zMIC0ORgchmdQJ92oHVwPGLzYvJxlTIO07OQnb3yhpnDzASu0
+	 2dsRQpqcgwnYqd8gGhAagAZ6g9qwxz705a1J87TNXpnKrROmlQe79ntUIY2TrPPbfY
+	 6/YjRpNviWEMP3xEODOO3iXxMDhSiya0Bznjw7SgqgYOsa0Tev8ogI/4I+Jbdub6PW
+	 ei+OrtP/Z2jkVWA7w1Ik0zCH9TZYqr1FFQQ774zT5AYJzGwvhwMDrHab+KgaBrzykF
+	 WYlQiq9IHYRQHiXIr37j1iqpANyKaoX0OBapWKDX8VbVG/UvLvX6NLkLr/E2LfRPSH
+	 uJRmdn/n5bg3w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E25A2C4314C;
+	Sat, 16 Dec 2023 00:50:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvddtvddguddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthhqredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedtvdefgeelvdefvdevveehvdetfeefhedvueeiudekieeltdetgfdviefhgfetteenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedvvddprhgtphhtthhopehlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtoheplfhonhgrthhhrghnrdevrghmvghrohhnsehhuhgrfigvihdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhoohhnghgrrhgt
- hheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=22 Fuz1=22 Fuz2=22
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 0/7] x86/cfi,bpf: Fix CFI vs eBPF
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170268782592.26334.17481945540978625909.git-patchwork-notify@kernel.org>
+Date: Sat, 16 Dec 2023 00:50:25 +0000
+References: <20231215091216.135791411@infradead.org>
+In-Reply-To: <20231215091216.135791411@infradead.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: alexei.starovoitov@gmail.com, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, arnd@arndb.de,
+ samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
+ ndesaulniers@google.com, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-arch@vger.kernel.org, llvm@lists.linux.dev, jpoimboe@kernel.org,
+ joao@overdrivepizza.com, mark.rutland@arm.com
 
-On Friday, December 15, 2023 5:15:39 PM CET Jonathan Cameron wrote:
-> On Fri, 15 Dec 2023 15:31:55 +0000
-> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
->=20
-> > On Thu, Dec 14, 2023 at 07:37:10PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Dec 14, 2023 at 7:16=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote: =20
-> > > >
-> > > > On Thu, Dec 14, 2023 at 7:10=E2=80=AFPM Russell King (Oracle)
-> > > > <linux@armlinux.org.uk> wrote: =20
-> > > > > I guess we need something like:
-> > > > >
-> > > > >         if (device->status.present)
-> > > > >                 return device->device_type !=3D ACPI_BUS_TYPE_PRO=
-CESSOR ||
-> > > > >                        device->status.enabled;
-> > > > >         else
-> > > > >                 return device->status.functional;
-> > > > >
-> > > > > so we only check device->status.enabled for processor-type device=
-s? =20
-> > > >
-> > > > Yes, something like this. =20
-> > >=20
-> > > However, that is not sufficient, because there are
-> > > ACPI_BUS_TYPE_DEVICE devices representing processors.
-> > >=20
-> > > I'm not sure about a clean way to do it ATM. =20
-> >=20
-> > Ok, how about:
-> >=20
-> > static bool acpi_dev_is_processor(const struct acpi_device *device)
-> > {
-> > 	struct acpi_hardware_id *hwid;
-> >=20
-> > 	if (device->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
-> > 		return true;
-> >=20
-> > 	if (device->device_type !=3D ACPI_BUS_TYPE_DEVICE)
-> > 		return false;
-> >=20
-> > 	list_for_each_entry(hwid, &device->pnp.ids, list)
-> > 		if (!strcmp(ACPI_PROCESSOR_OBJECT_HID, hwid->id) ||
-> > 		    !strcmp(ACPI_PROCESSOR_DEVICE_HID, hwid->id))
-> > 			return true;
-> >=20
-> > 	return false;
-> > }
-> >=20
-> > and then:
-> >=20
-> > 	if (device->status.present)
-> > 		return !acpi_dev_is_processor(device) || device->status.enabled;
-> > 	else
-> > 		return device->status.functional;
-> >=20
-> > ?
-> >=20
-> Changing it to CPU only for now makes sense to me and I think this code s=
-nippet should do the
-> job.  Nice and simple.
+Hello:
 
-Well, except that it does checks that are done elsewhere slightly
-differently, which from the maintenance POV is not nice.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Maybe something like the appended patch (untested).
+On Fri, 15 Dec 2023 10:12:16 +0100 you wrote:
+> Hi!
+> 
+> What started with the simple observation that bpf_dispatcher_*_func() was
+> broken for calling CFI functions with a __nocfi calling context for FineIBT
+> ended up with a complete BPF wide CFI fixup.
+> 
+> With these changes on the BPF selftest suite passes without crashing -- there's
+> still a few failures, but Alexei has graciously offered to look into those.
+> 
+> [...]
 
-=2D--
- drivers/acpi/acpi_processor.c |   11 +++++++++++
- drivers/acpi/internal.h       |    3 +++
- drivers/acpi/scan.c           |   24 +++++++++++++++++++++++-
- 3 files changed, 37 insertions(+), 1 deletion(-)
+Here is the summary with links:
+  - [v3,1/7] cfi: Flip headers
+    https://git.kernel.org/bpf/bpf-next/c/4382159696c9
+  - [v3,2/7] x86/cfi,bpf: Fix BPF JIT call
+    https://git.kernel.org/bpf/bpf-next/c/4f9087f16651
+  - [v3,3/7] x86/cfi,bpf: Fix bpf_callback_t CFI
+    https://git.kernel.org/bpf/bpf-next/c/e72d88d18df4
+  - [v3,4/7] x86/cfi,bpf: Fix bpf_struct_ops CFI
+    https://git.kernel.org/bpf/bpf-next/c/2cd3e3772e41
+  - [v3,5/7] cfi: Add CFI_NOSEAL()
+    https://git.kernel.org/bpf/bpf-next/c/e9d13b9d2f99
+  - [v3,6/7] bpf: Fix dtor CFI
+    https://git.kernel.org/bpf/bpf-next/c/e4c00339891c
+  - [v3,7/7] x86/cfi,bpf: Fix bpf_exception_cb() signature
+    https://git.kernel.org/bpf/bpf-next/c/852486b35f34
 
-Index: linux-pm/drivers/acpi/acpi_processor.c
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/acpi/acpi_processor.c
-+++ linux-pm/drivers/acpi/acpi_processor.c
-@@ -644,6 +644,17 @@ static struct acpi_scan_handler processo
- 	},
- };
-=20
-+bool acpi_device_is_processor(const struct acpi_device *adev)
-+{
-+	if (adev->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
-+		return true;
-+
-+	if (adev->device_type !=3D ACPI_BUS_TYPE_DEVICE)
-+		return false;
-+
-+	return acpi_scan_check_handler(adev, &processor_handler);
-+}
-+
- static int acpi_processor_container_attach(struct acpi_device *dev,
- 					   const struct acpi_device_id *id)
- {
-Index: linux-pm/drivers/acpi/internal.h
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(stru
- int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handler,
- 				       const char *hotplug_profile_name);
- void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, bool =
-val);
-+bool acpi_scan_check_handler(const struct acpi_device *adev,
-+			     struct acpi_scan_handler *handler);
-=20
- #ifdef CONFIG_DEBUG_FS
- extern struct dentry *acpi_debugfs_dir;
-@@ -133,6 +135,7 @@ int acpi_bus_register_early_device(int t
- const struct acpi_device *acpi_companion_match(const struct device *dev);
- int __acpi_device_uevent_modalias(const struct acpi_device *adev,
- 				  struct kobj_uevent_env *env);
-+bool acpi_device_is_processor(const struct acpi_device *adev);
-=20
- /* -----------------------------------------------------------------------=
-=2D--
-                                   Power Resource
-Index: linux-pm/drivers/acpi/scan.c
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -1938,6 +1938,19 @@ static bool acpi_scan_handler_matching(s
- 	return false;
- }
-=20
-+bool acpi_scan_check_handler(const struct acpi_device *adev,
-+			     struct acpi_scan_handler *handler)
-+{
-+	struct acpi_hardware_id *hwid;
-+
-+	list_for_each_entry(hwid, &adev->pnp.ids, list) {
-+		if (acpi_scan_handler_matching(handler, hwid->id, NULL))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static struct acpi_scan_handler *acpi_scan_match_handler(const char *idstr,
- 					const struct acpi_device_id **matchid)
- {
-@@ -2410,7 +2423,16 @@ bool acpi_dev_ready_for_enumeration(cons
- 	if (device->flags.honor_deps && device->dep_unmet)
- 		return false;
-=20
-=2D	return acpi_device_is_present(device);
-+	if (device->status.functional)
-+		return true;
-+
-+	if (!device->status.present)
-+		return false;
-+
-+	if (device->status.enabled)
-+		return true; /* Fast path. */
-+
-+	return !acpi_device_is_processor(device);
- }
- EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
-=20
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
 
