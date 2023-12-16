@@ -1,106 +1,130 @@
-Return-Path: <linux-arch+bounces-1098-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1099-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C2908155B2
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Dec 2023 01:50:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 656798155B9
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Dec 2023 01:54:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7C3B1C225E5
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Dec 2023 00:50:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B39681F2433C
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Dec 2023 00:54:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D495D808;
-	Sat, 16 Dec 2023 00:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C72ED7;
+	Sat, 16 Dec 2023 00:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="slo6GkaM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gyqciA6i"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B62C10EE;
-	Sat, 16 Dec 2023 00:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 095F5C433C9;
-	Sat, 16 Dec 2023 00:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702687826;
-	bh=REY7ZuYT6jJPWfRPau8JDVsTne7UEvPQl9xgjwckxWY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=slo6GkaMTr9Way21zMIC0ORgchmdQJ92oHVwPGLzYvJxlTIO07OQnb3yhpnDzASu0
-	 2dsRQpqcgwnYqd8gGhAagAZ6g9qwxz705a1J87TNXpnKrROmlQe79ntUIY2TrPPbfY
-	 6/YjRpNviWEMP3xEODOO3iXxMDhSiya0Bznjw7SgqgYOsa0Tev8ogI/4I+Jbdub6PW
-	 ei+OrtP/Z2jkVWA7w1Ik0zCH9TZYqr1FFQQ774zT5AYJzGwvhwMDrHab+KgaBrzykF
-	 WYlQiq9IHYRQHiXIr37j1iqpANyKaoX0OBapWKDX8VbVG/UvLvX6NLkLr/E2LfRPSH
-	 uJRmdn/n5bg3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E25A2C4314C;
-	Sat, 16 Dec 2023 00:50:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7DE7F2;
+	Sat, 16 Dec 2023 00:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40c256ffdbcso14139625e9.2;
+        Fri, 15 Dec 2023 16:54:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702688040; x=1703292840; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I0wkBeN2mknWfCaYD90okNAjhG97xOBmh5EL3y5dSjM=;
+        b=gyqciA6i/mJasUIygwZqT91L2RbW+6l4OPQaxt0zuF0AL5S3f3tBNiZj0MPm7hSnfh
+         6clUfr1NIs2Li/E/e9VgOh0AJeM6on0arofnNyZSrQPSo9W4RpItqzYbO2uBBRCH8O7r
+         NAPnZd1lKCz/JXLTAfgENF1VCRtHTtZmDI1DPTqkU26XIS8N9LiLURuTcIq5XshKFPCR
+         vhVM7TOv+21aPYw6C+PRhra7d22qRyBf9Z1T5IVXRefXyzRG/tL0Z2FjuMWS7LT0HPmB
+         AM/Skj2oXcVgWw1kzy5FI3G5+cn6YfjFkZ5z5p66PM3DaqFozKI6tIhqwsfntp6Zp4ho
+         ogpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702688040; x=1703292840;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I0wkBeN2mknWfCaYD90okNAjhG97xOBmh5EL3y5dSjM=;
+        b=ZEtRGCTrAFjlW+hF1j7OfRcc/1UD4ZhnueZ6oV3GeDqxYuW7gYbMi2rKJSXjY0dhYR
+         mfEz6wyFzTIwiguJcFQzXQZ1WiIc56IF1o2GTf6U8kBHgMwGNEnvgKJcvWPNee0U3Bio
+         +Y2NKO53JzwR2BI12SM2oUvOgoF11po8i2+ENN1xNtH3hehV3CctmLhjlR8oL6Rw5DuY
+         MQOjcqZTxXPnBtsk7rXvARTPrfd6ASYqtQo/L5sAKAiy/0WOdqqBRGJ+SnevQzOlVmPD
+         uLeHl1TywqW0VxdpX1ANBz4kRkkmN13OIHtcRc/H4d98EBSwU9XJfy/ydwNoMYAoRKKR
+         vcSw==
+X-Gm-Message-State: AOJu0Yx/KaTsG9jW/H4ecF5xoD7wzW9iUuLhZO6b7Z5FHDvcB9nV5cIx
+	0e1irjkncRAwwHoOqv71v+I+oi3l0fWzIS2J0wk=
+X-Google-Smtp-Source: AGHT+IFuGmazbLWUSb4nLKggAzQnLeNmhiza7lIRh77ULXtw19cTSgKhotygxYJ0AUw8jKf6X6LfkImHGcy9Q5DkS7c=
+X-Received: by 2002:adf:f609:0:b0:336:458b:38d with SMTP id
+ t9-20020adff609000000b00336458b038dmr2405362wrp.115.1702688040032; Fri, 15
+ Dec 2023 16:54:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/7] x86/cfi,bpf: Fix CFI vs eBPF
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170268782592.26334.17481945540978625909.git-patchwork-notify@kernel.org>
-Date: Sat, 16 Dec 2023 00:50:25 +0000
 References: <20231215091216.135791411@infradead.org>
 In-Reply-To: <20231215091216.135791411@infradead.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: alexei.starovoitov@gmail.com, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- hpa@zytor.com, davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, arnd@arndb.de,
- samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
- ndesaulniers@google.com, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-arch@vger.kernel.org, llvm@lists.linux.dev, jpoimboe@kernel.org,
- joao@overdrivepizza.com, mark.rutland@arm.com
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 15 Dec 2023 16:53:48 -0800
+Message-ID: <CAADnVQJoEkdjyCEJRPASjBw1QGsKYrF33QdMGc1RZa9b88bAEA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] x86/cfi,bpf: Fix CFI vs eBPF
+To: Peter Zijlstra <peterz@infradead.org>, Ilya Leoshkevich <iii@linux.ibm.com>, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-arch <linux-arch@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Joao Moreira <joao@overdrivepizza.com>, 
+	Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Fri, 15 Dec 2023 10:12:16 +0100 you wrote:
+On Fri, Dec 15, 2023 at 1:33=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
 > Hi!
-> 
+>
 > What started with the simple observation that bpf_dispatcher_*_func() was
-> broken for calling CFI functions with a __nocfi calling context for FineIBT
+> broken for calling CFI functions with a __nocfi calling context for FineI=
+BT
 > ended up with a complete BPF wide CFI fixup.
-> 
-> With these changes on the BPF selftest suite passes without crashing -- there's
-> still a few failures, but Alexei has graciously offered to look into those.
-> 
-> [...]
+>
+> With these changes on the BPF selftest suite passes without crashing -- t=
+here's
+> still a few failures, but Alexei has graciously offered to look into thos=
+e.
+>
+> (Alexei, I have presumed your SoB on the very last patch, please update
+> as you see fit)
+>
+> Changes since v2 are numerous but include:
+>  - cfi_get_offset() -- as a means to communicate the offset (ast)
+>  - 5 new patches fixing various BPF internals to be CFI clean
 
-Here is the summary with links:
-  - [v3,1/7] cfi: Flip headers
-    https://git.kernel.org/bpf/bpf-next/c/4382159696c9
-  - [v3,2/7] x86/cfi,bpf: Fix BPF JIT call
-    https://git.kernel.org/bpf/bpf-next/c/4f9087f16651
-  - [v3,3/7] x86/cfi,bpf: Fix bpf_callback_t CFI
-    https://git.kernel.org/bpf/bpf-next/c/e72d88d18df4
-  - [v3,4/7] x86/cfi,bpf: Fix bpf_struct_ops CFI
-    https://git.kernel.org/bpf/bpf-next/c/2cd3e3772e41
-  - [v3,5/7] cfi: Add CFI_NOSEAL()
-    https://git.kernel.org/bpf/bpf-next/c/e9d13b9d2f99
-  - [v3,6/7] bpf: Fix dtor CFI
-    https://git.kernel.org/bpf/bpf-next/c/e4c00339891c
-  - [v3,7/7] x86/cfi,bpf: Fix bpf_exception_cb() signature
-    https://git.kernel.org/bpf/bpf-next/c/852486b35f34
+Looks great to me. Pushed to bpf-next.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+There is a failure on s390 that I temporarily denylisted
+with an extra patch.
+And sent a proposed fix:
+https://lore.kernel.org/bpf/20231216004549.78355-1-alexei.starovoitov@gmail=
+.com/
 
+Ilya,
+please take a look.
 
+> Note: it *might* be possible to merge the
+> bpf_bpf_tcp_ca.c:unsupported_ops[] thing into the CFI stubs, as is
+> get_info will have a NULL stub, unlike the others.
+
+That's a good idea. Will clean up unsupported_ops.
+Either myself or Martin will follow up.
 
