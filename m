@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-1115-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1116-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2445B8164D9
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Dec 2023 03:45:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14BF08164E6
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Dec 2023 03:46:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48F941C2210F
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Dec 2023 02:45:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39E151C220E6
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Dec 2023 02:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93A2134AE;
-	Mon, 18 Dec 2023 02:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D5415492;
+	Mon, 18 Dec 2023 02:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hKkWpvEL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E1dqV7YL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F15134B3
-	for <linux-arch@vger.kernel.org>; Mon, 18 Dec 2023 02:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFB61427A
+	for <linux-arch@vger.kernel.org>; Mon, 18 Dec 2023 02:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5e5748d50bbso13186497b3.1
-        for <linux-arch@vger.kernel.org>; Sun, 17 Dec 2023 18:40:53 -0800 (PST)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5d0c4ba7081so25816347b3.0
+        for <linux-arch@vger.kernel.org>; Sun, 17 Dec 2023 18:40:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702867252; x=1703472052; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702867254; x=1703472054; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQE3y5pEWv1vOBfxtL1YR4p2FyI+TIpieaEd8tTg0LM=;
-        b=hKkWpvELW7g6KsXhbdOYGGfdH+YHCj44hkvx8g3jbV+LFIHksfrftYXX+Je0CqIBBV
-         aZT/j4OwuUn88ZHC/8NqSZpCVQFeRwq3WTAgu9hJVDTFLnMLTDZKKDx9U7Y4mjcrjMK6
-         rL8bHDh8Cv5tKSIYSPNORTUqqRZRV7/MBcaMpk1DHNDdgwIPJY05rmm7JD3G3e1GSLyi
-         PiofOwquSUs2TpagDIEMFZhEuykRr9AluhGto3AkDGR4jLIw13jM42DmpLqRb0flrrkR
-         abt7vwZf0GnoiGSHpmD41+7nNBDQ+5OWvMUY6MqEbz8usAs21ZsVdnSAsZlvfIPGEl9z
-         L9Fw==
+        bh=NsLvXzxzNOPiHQjobkRux+OpGRSNf4fEva+dH69h4SM=;
+        b=E1dqV7YLEzfEJRTb6Wf4tZln4+tPViZeLB2O4uKhzttyD1JCJAbvkrfMzwYnTFUIhy
+         Zdqdb/LoyUFj84ePjxCPAh412F/G3wy4bGvCneM6o742c6C79akivah2TQNUkb812GGB
+         Tw2YxikP9Xx1U0dgu/GcQdr3blZ+2rWTeZyPgWDX33nO3dbzxG0iUVuOGpphvynwZ78n
+         hMs/+Boh82kfRIK2thGM377d0QiRcm1+2A3dBJgb+rybbUiEqzDWy+1IhitO8N2vrGXK
+         xzvrRgg1Ir8e9l6nk50LP/Uev89DxdCvvyMwAgS8H5TXF/2dmfiuBN08m6gd+aemMUGn
+         1t8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702867252; x=1703472052;
+        d=1e100.net; s=20230601; t=1702867254; x=1703472054;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQE3y5pEWv1vOBfxtL1YR4p2FyI+TIpieaEd8tTg0LM=;
-        b=dXycOnUAKfhKY+jZYHJrfwFnt1GzgRgDbvouSjiOwPMGgNNlHa/yvGZsP/N96GQtKD
-         v9BK/w3fgM8It6kvAoFif5l9DdcwcaN8mxcT0TSPYyYa95gH1p2t4xwHgaOspXrdv0S5
-         HUorVpdEdpv7FJNaE9bQBvIPzGOZ3io5GjvDYPjU+NekQXDsW3T3r38vIgcHvJQ+HMNc
-         V+Xt6Q8X5NHYwlyq52ctIJ8bbw0Lr6nkygy4+Yhl+M56ZclsECR1DkKojvOotCAHKrzJ
-         cbjDbDUd+3zcomzL1ycLUfw7bbbtdBDwyRcHmW5jNsLBBsMwyzrvlKDWC9aQahAzPxo7
-         sedA==
-X-Gm-Message-State: AOJu0YzeyYojnGurrsmkT9M8mccsezVm5ZnyckP319JcUg0AtVj4L846
-	A2m8Wsre05mWXCcsk4mH8JjiJfklR4IHx0j6Rw==
-X-Google-Smtp-Source: AGHT+IGtb9AFvjVL2DLgEShW0hvuOiAN/6KCPSthjWV0dAxD6Pzkte2LmGvnspRFgzXVyLp7Mp+CzmzRY4YKyYUTAQ==
+        bh=NsLvXzxzNOPiHQjobkRux+OpGRSNf4fEva+dH69h4SM=;
+        b=DXuKSboQ2McEAvp4IBNFzWNyAowDApndOpvZqjfev9E+gXi2w0Qdrm+JSYeYxXPbze
+         zIpTIsxhwgYgohR4W/vO0pzF38TxyalnzuzS9xLhK7/ewCwinhFcN4GsccHknoABVse+
+         AgANM8W0JhFQnfjKp6hlvdhzfhXouxUx0LrR4SCBM9TR9Vr7An7KYQf2lPF/loYkuGzb
+         R1wKM8hsNN1zCyQ6dHBuwShAN1XHXjzzXSx2rBQbhnl9DGAZiDtC1+ub2+7dgaV6jGPQ
+         x7XMRxVJCAi1Krf+nAFkG7mIH076H1X8UoumkbyTgJKJGsTUDRgq1cYIymlu/dDN9tQb
+         SnJg==
+X-Gm-Message-State: AOJu0YzMlKrd5bHrvv1KkmFekHUd4NQ9ytkjRyrVspOVvDaI+2rXbTlj
+	YkRZ6g4yld+eFWiFc1MyjCljmg9bcKsC07CzFQ==
+X-Google-Smtp-Source: AGHT+IG5vRL6o84xZOZynwxVR30JpLfb7QzBlhG5Dw747riDkw0kZl3ZpSAoeSmDdw4XQ51gEnvSWAPT1/x+CoyNww==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:5cbf:3534:fb34:758e])
- (user=almasrymina job=sendgmr) by 2002:a05:690c:c8c:b0:5e4:b2b6:eeea with
- SMTP id cm12-20020a05690c0c8c00b005e4b2b6eeeamr976531ywb.4.1702867252391;
- Sun, 17 Dec 2023 18:40:52 -0800 (PST)
-Date: Sun, 17 Dec 2023 18:40:18 -0800
+ (user=almasrymina job=sendgmr) by 2002:a05:690c:b1d:b0:5d8:394d:a8f4 with
+ SMTP id cj29-20020a05690c0b1d00b005d8394da8f4mr1615182ywb.10.1702867254746;
+ Sun, 17 Dec 2023 18:40:54 -0800 (PST)
+Date: Sun, 17 Dec 2023 18:40:19 -0800
 In-Reply-To: <20231218024024.3516870-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -63,8 +63,9 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231218024024.3516870-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231218024024.3516870-12-almasrymina@google.com>
-Subject: [RFC PATCH net-next v5 11/14] tcp: RX path for devmem TCP
+Message-ID: <20231218024024.3516870-13-almasrymina@google.com>
+Subject: [RFC PATCH net-next v5 12/14] net: add SO_DEVMEM_DONTNEED setsockopt
+ to release RX frags
 From: Mina Almasry <almasrymina@google.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
 	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
@@ -97,28 +98,9 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In tcp_recvmsg_locked(), detect if the skb being received by the user
-is a devmem skb. In this case - if the user provided the MSG_SOCK_DEVMEM
-flag - pass it to tcp_recvmsg_devmem() for custom handling.
-
-tcp_recvmsg_devmem() copies any data in the skb header to the linear
-buffer, and returns a cmsg to the user indicating the number of bytes
-returned in the linear buffer.
-
-tcp_recvmsg_devmem() then loops over the unaccessible devmem skb frags,
-and returns to the user a cmsg_devmem indicating the location of the
-data in the dmabuf device memory. cmsg_devmem contains this information:
-
-1. the offset into the dmabuf where the payload starts. 'frag_offset'.
-2. the size of the frag. 'frag_size'.
-3. an opaque token 'frag_token' to return to the kernel when the buffer
-is to be released.
-
-The pages awaiting freeing are stored in the newly added
-sk->sk_user_frags, and each page passed to userspace is get_page()'d.
-This reference is dropped once the userspace indicates that it is
-done reading this page.  All pages are released when the socket is
-destroyed.
+Add an interface for the user to notify the kernel that it is done
+reading the devmem dmabuf frags returned as cmsg. The kernel will
+drop the reference on the frags to make them available for re-use.
 
 Signed-off-by: Willem de Bruijn <willemb@google.com>
 Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
@@ -127,363 +109,187 @@ Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
 
 Changes in v1:
-- Added dmabuf_id to dmabuf_cmsg (David/Stan).
-- Devmem -> dmabuf (David).
-- Change tcp_recvmsg_dmabuf() check to skb->dmabuf (Paolo).
-- Use __skb_frag_ref() & napi_pp_put_page() for refcounting (Yunsheng).
-
-RFC v3:
-- Fixed issue with put_cmsg() failing silently.
+- devmemtoken -> dmabuf_token (David).
+- Use napi_pp_put_page() for refcounting (Yunsheng).
+- Fix build error with missing socket options on other asms.
 
 ---
- include/linux/socket.h            |   1 +
- include/net/netmem.h              |  13 ++
- include/net/sock.h                |   2 +
- include/uapi/asm-generic/socket.h |   5 +
- include/uapi/linux/uio.h          |  10 ++
- net/ipv4/tcp.c                    | 190 +++++++++++++++++++++++++++++-
- net/ipv4/tcp_ipv4.c               |   9 ++
- 7 files changed, 225 insertions(+), 5 deletions(-)
+ arch/alpha/include/uapi/asm/socket.h  |  8 ++++-
+ arch/mips/include/uapi/asm/socket.h   |  6 ++++
+ arch/parisc/include/uapi/asm/socket.h |  6 ++++
+ arch/sparc/include/uapi/asm/socket.h  |  6 ++++
+ include/uapi/asm-generic/socket.h     |  1 +
+ include/uapi/linux/uio.h              |  4 +++
+ net/core/sock.c                       | 45 +++++++++++++++++++++++++++
+ 7 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index cfcb7e2c3813..fe2b9e2081bb 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -326,6 +326,7 @@ struct ucred {
- 					  * plain text and require encryption
- 					  */
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index e94f621903fe..00146c243037 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -10,7 +10,7 @@
+  * Note: we only bother about making the SOL_SOCKET options
+  * same as OSF/1, as that's all that "normal" programs are
+  * likely to set.  We don't necessarily want to be binary
+- * compatible with _everything_. 
++ * compatible with _everything_.
+  */
+ #define SOL_SOCKET	0xffff
  
-+#define MSG_SOCK_DEVMEM 0x2000000	/* Receive devmem skbs as cmsg */
- #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
- #define MSG_SPLICE_PAGES 0x8000000	/* Splice the pages from the iterator in sendmsg() */
- #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index ab3824b7b789..fa6d7b7ddef9 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -64,6 +64,19 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
- 	return niov - net_iov_owner(niov)->niovs;
- }
- 
-+static inline unsigned long net_iov_virtual_addr(const struct net_iov *niov)
-+{
-+	struct dmabuf_genpool_chunk_owner *owner = net_iov_owner(niov);
-+
-+	return owner->base_virtual +
-+	       ((unsigned long)net_iov_idx(niov) << PAGE_SHIFT);
-+}
-+
-+static inline u32 net_iov_binding_id(const struct net_iov *niov)
-+{
-+	return net_iov_owner(niov)->binding->id;
-+}
-+
- static inline dma_addr_t net_iov_dma_addr(const struct net_iov *niov)
- {
- 	struct dmabuf_genpool_chunk_owner *owner = net_iov_owner(niov);
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 8b6fe164b218..8eccf6ed8eb1 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -353,6 +353,7 @@ struct sk_filter;
-   *	@sk_txtime_unused: unused txtime flags
-   *	@ns_tracker: tracker for netns reference
-   *	@sk_bind2_node: bind node in the bhash2 table
-+  *	@sk_user_frags: xarray of pages the user is holding a reference on.
-   */
- struct sock {
- 	/*
-@@ -545,6 +546,7 @@ struct sock {
- 	struct rcu_head		sk_rcu;
- 	netns_tracker		ns_tracker;
- 	struct hlist_node	sk_bind2_node;
-+	struct xarray		sk_user_frags;
- };
- 
- enum sk_pacing {
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index 8ce8a39a1e5f..25a2f5255f52 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -135,6 +135,11 @@
+@@ -140,6 +140,12 @@
  #define SO_PASSPIDFD		76
  #define SO_PEERPIDFD		77
  
-+#define SO_DEVMEM_LINEAR	98
++#define SO_DEVMEM_DONTNEED	78
++#define SO_DEVMEM_LINEAR	79
 +#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
-+#define SO_DEVMEM_DMABUF	99
++#define SO_DEVMEM_DMABUF	80
 +#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
 +
  #if !defined(__KERNEL__)
  
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index 60ebaed28a4c..9a71ee8f36db 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -151,6 +151,12 @@
+ #define SO_PASSPIDFD		76
+ #define SO_PEERPIDFD		77
+ 
++#define SO_DEVMEM_DONTNEED	78
++#define SO_DEVMEM_LINEAR	79
++#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
++#define SO_DEVMEM_DMABUF	80
++#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index be264c2b1a11..6b8674399363 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -132,6 +132,12 @@
+ #define SO_PASSPIDFD		0x404A
+ #define SO_PEERPIDFD		0x404B
+ 
++#define SO_DEVMEM_DONTNEED	0x404C
++#define SO_DEVMEM_LINEAR	0x404D
++#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
++#define SO_DEVMEM_DMABUF	0x404E
++#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 682da3714686..ecfc8bfa9fe0 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -133,6 +133,12 @@
+ #define SO_PASSPIDFD             0x0055
+ #define SO_PEERPIDFD             0x0056
+ 
++#define SO_DEVMEM_DONTNEED       0x0057
++#define SO_DEVMEM_LINEAR         0x0058
++#define SCM_DEVMEM_LINEAR        SO_DEVMEM_LINEAR
++#define SO_DEVMEM_DMABUF         0x0059
++#define SCM_DEVMEM_DMABUF        SO_DEVMEM_DMABUF
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 25a2f5255f52..1acb77780f10 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -135,6 +135,7 @@
+ #define SO_PASSPIDFD		76
+ #define SO_PEERPIDFD		77
+ 
++#define SO_DEVMEM_DONTNEED	97
+ #define SO_DEVMEM_LINEAR	98
+ #define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
+ #define SO_DEVMEM_DMABUF	99
 diff --git a/include/uapi/linux/uio.h b/include/uapi/linux/uio.h
-index 059b1a9147f4..ad92e37699da 100644
+index ad92e37699da..65f33178a601 100644
 --- a/include/uapi/linux/uio.h
 +++ b/include/uapi/linux/uio.h
-@@ -20,6 +20,16 @@ struct iovec
- 	__kernel_size_t iov_len; /* Must be size_t (1003.1g) */
+@@ -30,6 +30,10 @@ struct dmabuf_cmsg {
+ 	__u32  dmabuf_id;	/* dmabuf id this frag belongs to. */
  };
  
-+struct dmabuf_cmsg {
-+	__u64 frag_offset;	/* offset into the dmabuf where the frag starts.
-+				 */
-+	__u32 frag_size;	/* size of the frag. */
-+	__u32 frag_token;	/* token representing this frag for
-+				 * DEVMEM_DONTNEED.
-+				 */
-+	__u32  dmabuf_id;	/* dmabuf id this frag belongs to. */
++struct dmabuf_token {
++	__u32 token_start;
++	__u32 token_count;
 +};
-+
  /*
   *	UIO_MAXIOV shall be at least 16 1003.1g (5.4.1.1)
   */
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 6f4c59143156..9df4f512d841 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -461,6 +461,7 @@ void tcp_init_sock(struct sock *sk)
- 
- 	set_bit(SOCK_SUPPORT_ZC, &sk->sk_socket->flags);
- 	sk_sockets_allocated_inc(sk);
-+	xa_init_flags(&sk->sk_user_frags, XA_FLAGS_ALLOC1);
- }
- EXPORT_SYMBOL(tcp_init_sock);
- 
-@@ -2303,6 +2304,155 @@ static int tcp_inq_hint(struct sock *sk)
- 	return inq;
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 446e945f736b..77497dbb9022 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1047,6 +1047,46 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
+ 	return 0;
  }
  
-+/* On error, returns the -errno. On success, returns number of bytes sent to the
-+ * user. May not consume all of @remaining_len.
-+ */
-+static int tcp_recvmsg_dmabuf(const struct sock *sk, const struct sk_buff *skb,
-+			      unsigned int offset, struct msghdr *msg,
-+			      int remaining_len)
++#ifdef CONFIG_PAGE_POOL
++static noinline_for_stack int
++sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
 +{
-+	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
-+	unsigned int start;
-+	int i, copy, n;
-+	int sent = 0;
-+	int err = 0;
++	unsigned int num_tokens, i, j;
++	struct dmabuf_token *tokens;
++	int ret;
 +
-+	do {
-+		start = skb_headlen(skb);
++	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
++		return -EBADF;
 +
-+		if (!skb->dmabuf) {
-+			err = -ENODEV;
-+			goto out;
++	if (optlen % sizeof(struct dmabuf_token) || optlen > sizeof(*tokens) * 128)
++		return -EINVAL;
++
++	tokens = kvmalloc_array(128, sizeof(*tokens), GFP_KERNEL);
++	if (!tokens)
++		return -ENOMEM;
++
++	num_tokens = optlen / sizeof(struct dmabuf_token);
++	if (copy_from_sockptr(tokens, optval, optlen))
++		return -EFAULT;
++
++	ret = 0;
++	for (i = 0; i < num_tokens; i++) {
++		for (j = 0; j < tokens[i].token_count; j++) {
++			struct netmem *netmem = xa_erase(&sk->sk_user_frags,
++						     tokens[i].token_start + j);
++
++			if (netmem && !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
++				WARN_ON_ONCE(!napi_pp_put_page(netmem, false));
++				ret++;
++			}
 +		}
-+
-+		/* Copy header. */
-+		copy = start - offset;
-+		if (copy > 0) {
-+			copy = min(copy, remaining_len);
-+
-+			n = copy_to_iter(skb->data + offset, copy,
-+					 &msg->msg_iter);
-+			if (n != copy) {
-+				err = -EFAULT;
-+				goto out;
-+			}
-+
-+			offset += copy;
-+			remaining_len -= copy;
-+
-+			/* First a dmabuf_cmsg for # bytes copied to user
-+			 * buffer.
-+			 */
-+			memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
-+			dmabuf_cmsg.frag_size = copy;
-+			err = put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEAR,
-+				       sizeof(dmabuf_cmsg), &dmabuf_cmsg);
-+			if (err || msg->msg_flags & MSG_CTRUNC) {
-+				msg->msg_flags &= ~MSG_CTRUNC;
-+				if (!err)
-+					err = -ETOOSMALL;
-+				goto out;
-+			}
-+
-+			sent += copy;
-+
-+			if (remaining_len == 0)
-+				goto out;
-+		}
-+
-+		/* after that, send information of dmabuf pages through a
-+		 * sequence of cmsg
-+		 */
-+		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
-+			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-+			struct net_iov *niov;
-+			u64 frag_offset;
-+			u32 user_token;
-+			int end;
-+
-+			/* skb->dmabuf should indicate that ALL the frags in
-+			 * this skb are dmabuf net_iovs. We're checking
-+			 * for that flag above, but also check individual frags
-+			 * here. If the tcp stack is not setting skb->dmabuf
-+			 * correctly, we still don't want to crash here when
-+			 * accessing pgmap or priv below.
-+			 */
-+			if (!skb_frag_net_iov(frag)) {
-+				net_err_ratelimited("Found non-dmabuf skb with net_iov");
-+				err = -ENODEV;
-+				goto out;
-+			}
-+
-+			niov = skb_frag_net_iov(frag);
-+			end = start + skb_frag_size(frag);
-+			copy = end - offset;
-+
-+			if (copy > 0) {
-+				copy = min(copy, remaining_len);
-+
-+				frag_offset = net_iov_virtual_addr(niov) +
-+					      skb_frag_off(frag) + offset -
-+					      start;
-+				dmabuf_cmsg.frag_offset = frag_offset;
-+				dmabuf_cmsg.frag_size = copy;
-+				err = xa_alloc((struct xarray *)&sk->sk_user_frags,
-+					       &user_token, frag->bv_page,
-+					       xa_limit_31b, GFP_KERNEL);
-+				if (err)
-+					goto out;
-+
-+				dmabuf_cmsg.frag_token = user_token;
-+				dmabuf_cmsg.dmabuf_id = net_iov_binding_id(niov);
-+
-+				offset += copy;
-+				remaining_len -= copy;
-+
-+				err = put_cmsg(msg, SOL_SOCKET,
-+					       SO_DEVMEM_DMABUF,
-+					       sizeof(dmabuf_cmsg),
-+					       &dmabuf_cmsg);
-+				if (err || msg->msg_flags & MSG_CTRUNC) {
-+					msg->msg_flags &= ~MSG_CTRUNC;
-+					xa_erase((struct xarray *)&sk->sk_user_frags,
-+						 user_token);
-+					if (!err)
-+						err = -ETOOSMALL;
-+					goto out;
-+				}
-+
-+				atomic_long_inc(&niov->pp_ref_count);
-+
-+				sent += copy;
-+
-+				if (remaining_len == 0)
-+					goto out;
-+			}
-+			start = end;
-+		}
-+
-+		if (!remaining_len)
-+			goto out;
-+
-+		/* if remaining_len is not satisfied yet, we need to go to the
-+		 * next frag in the frag_list to satisfy remaining_len.
-+		 */
-+		skb = skb_shinfo(skb)->frag_list ?: skb->next;
-+
-+		offset = offset - start;
-+	} while (skb);
-+
-+	if (remaining_len) {
-+		err = -EFAULT;
-+		goto out;
 +	}
 +
-+out:
-+	if (!sent)
-+		sent = err;
-+
-+	return sent;
++	kvfree(tokens);
++	return ret;
 +}
-+
- /*
-  *	This routine copies from a sock struct into the user buffer.
-  *
-@@ -2316,6 +2466,7 @@ static int tcp_recvmsg_locked(struct sock *sk, struct msghdr *msg, size_t len,
- 			      int *cmsg_flags)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
-+	int last_copied_dmabuf = -1; /* uninitialized */
- 	int copied = 0;
- 	u32 peek_seq;
- 	u32 *seq;
-@@ -2493,15 +2644,44 @@ static int tcp_recvmsg_locked(struct sock *sk, struct msghdr *msg, size_t len,
- 		}
- 
- 		if (!(flags & MSG_TRUNC)) {
--			err = skb_copy_datagram_msg(skb, offset, msg, used);
--			if (err) {
--				/* Exception. Bailout! */
--				if (!copied)
--					copied = -EFAULT;
-+			if (last_copied_dmabuf != -1 &&
-+			    last_copied_dmabuf != skb->dmabuf)
- 				break;
-+
-+			if (!skb->dmabuf) {
-+				err = skb_copy_datagram_msg(skb, offset, msg,
-+							    used);
-+				if (err) {
-+					/* Exception. Bailout! */
-+					if (!copied)
-+						copied = -EFAULT;
-+					break;
-+				}
-+			} else {
-+				if (!(flags & MSG_SOCK_DEVMEM)) {
-+					/* skb->dmabuf skbs can only be received
-+					 * with the MSG_SOCK_DEVMEM flag.
-+					 */
-+					if (!copied)
-+						copied = -EFAULT;
-+
-+					break;
-+				}
-+
-+				err = tcp_recvmsg_dmabuf(sk, skb, offset, msg,
-+							 used);
-+				if (err <= 0) {
-+					if (!copied)
-+						copied = -EFAULT;
-+
-+					break;
-+				}
-+				used = err;
- 			}
- 		}
- 
-+		last_copied_dmabuf = skb->dmabuf;
-+
- 		WRITE_ONCE(*seq, *seq + used);
- 		copied += used;
- 		len -= used;
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 4bac6e319aca..bff35d9be076 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2501,6 +2501,15 @@ static void tcp_md5sig_info_free_rcu(struct rcu_head *head)
- void tcp_v4_destroy_sock(struct sock *sk)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
-+	__maybe_unused unsigned long index;
-+	__maybe_unused struct netmem *netmem;
-+
-+#ifdef CONFIG_PAGE_POOL
-+	xa_for_each(&sk->sk_user_frags, index, netmem)
-+		WARN_ON_ONCE(!napi_pp_put_page(netmem, false));
 +#endif
 +
-+	xa_destroy(&sk->sk_user_frags);
+ void sockopt_lock_sock(struct sock *sk)
+ {
+ 	/* When current->bpf_ctx is set, the setsockopt is called from
+@@ -1534,6 +1574,11 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+ 		break;
+ 	}
  
- 	trace_tcp_destroy_sock(sk);
- 
++#ifdef CONFIG_PAGE_POOL
++	case SO_DEVMEM_DONTNEED:
++		ret = sock_devmem_dontneed(sk, optval, optlen);
++		break;
++#endif
+ 	default:
+ 		ret = -ENOPROTOOPT;
+ 		break;
 -- 
 2.43.0.472.g3155946c3a-goog
 
