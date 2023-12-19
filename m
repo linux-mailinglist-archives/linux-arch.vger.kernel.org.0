@@ -1,37 +1,37 @@
-Return-Path: <linux-arch+bounces-1135-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1136-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E39A5818F2B
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Dec 2023 19:04:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 293C8818F2C
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Dec 2023 19:04:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A6BB1F2B1E8
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Dec 2023 18:04:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8C3C288000
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Dec 2023 18:04:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AACC39ADF;
-	Tue, 19 Dec 2023 18:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D37B39AE9;
+	Tue, 19 Dec 2023 18:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIZMvRHa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BvEJaO/t"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367F139AD6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C394739AE7;
+	Tue, 19 Dec 2023 18:03:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01013C433CC;
 	Tue, 19 Dec 2023 18:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48267C433C7;
-	Tue, 19 Dec 2023 18:03:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703009010;
-	bh=7HEG7NxaC+hEbKvi6V3ezlMLYmQxX8eFSiY1oLoxI38=;
+	s=k20201202; t=1703009013;
+	bh=jOzh15UGY8/GeKyvzomEjUoOApjigEX2YDPvhINsBhY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fIZMvRHaWT8zGpNUvDXtLuxxyNtS3fWC3iodCoNDOBXnwEoc+rjvl0JDXiUFsG9JF
-	 6g39zjtD2RlRHz83NGBvDZhFP9DCC+xyZFyt+3RESTpahoQOFX42bsSJldjUzDdjj9
-	 yLPv1UTkwiTLGP8tz243HzVOxqcWTkvEMmM9JfpeHT5eaT5GmJwY3atxcN7rVSj+6K
-	 MuLrMN1qzfxqovVsps8N8LtxMR7kl1Zkg95orsXK4QgvYkfd+e+rZzqpNYxx+fG2Cl
-	 Uf048r/vPqCqySf8ci8W/7sQQ9/qvAcl8d1Y/tYdpY5KC4rBLQqt2HdR1BOhpOH6P5
-	 PRUU08tc5mcJg==
+	b=BvEJaO/t7fLRI9ME+g6Nf2uKvBFzhDxeGVkHtu0GNM/cuRLsGbH1Dn5794sKOGhX7
+	 t2neLuWSxp8mcJ6f0iqpeVhqi4qYZ8ahPfVqN2Da62LUO4i/t7gL4bmvdBqH64Llyn
+	 QkRpi8dmIk/b/s2jltgElLVpM3vEGAMoladx4fbNv3xbFj5qlDKciiWQ+lStLf8ju1
+	 pub/Wz86s+HQWQ3Ve18yw7Zyy0EcvOkhR8zgpWpEnigIMCNNdI7HcIC4rkQ9U2GhTK
+	 L7bquPxY+IC1hy+VduUcpRaujnplUMl8dZNy79gV5MHb1aIEYQXoOGfUkVwIpLYaME
+	 gcTZZsxBtN4Pg==
 From: Jisheng Zhang <jszhang@kernel.org>
 To: Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -45,9 +45,9 @@ Cc: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 3/4] riscv: enable MMU_GATHER_RCU_TABLE_FREE for SMP && MMU
-Date: Wed, 20 Dec 2023 01:50:45 +0800
-Message-Id: <20231219175046.2496-4-jszhang@kernel.org>
+Subject: [PATCH 4/4] riscv: enable HAVE_FAST_GUP if MMU
+Date: Wed, 20 Dec 2023 01:50:46 +0800
+Message-Id: <20231219175046.2496-5-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20231219175046.2496-1-jszhang@kernel.org>
 References: <20231219175046.2496-1-jszhang@kernel.org>
@@ -59,134 +59,52 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In order to implement fast gup we need to ensure that the page
-table walker is protected from page table pages being freed from
-under it.
+Activate the fast gup for riscv mmu platforms. Here are some
+GUP_FAST_BENCHMARK performance numbers:
 
-riscv situation is more complicated than other architectures: some
-riscv platforms may use IPI to perform TLB shootdown, for example,
-those platforms which support AIA, usually the riscv_ipi_for_rfence is
-true on these platforms; some riscv platforms may rely on the SBI to
-perform TLB shootdown, usually the riscv_ipi_for_rfence is false on
-these platforms. To keep software pagetable walkers safe in this case
-we switch to RCU based table free (MMU_GATHER_RCU_TABLE_FREE). See the
-comment below 'ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE' in
-include/asm-generic/tlb.h for more details.
+Before the patch:
+GUP_FAST_BENCHMARK: Time: get:53203 put:5085 us
 
-This patch enables MMU_GATHER_RCU_TABLE_FREE, then use
+After the patch:
+GUP_FAST_BENCHMARK: Time: get:17711 put:5060 us
 
-*tlb_remove_page_ptdesc() for those platforms which use IPI to perform
-TLB shootdown;
-
-*tlb_remove_ptdesc() for those platforms which use SBI to perform TLB
-shootdown;
-
-Both case mean that disabling interrupts will block the free and
-protect the fast gup page walker.
+The get time is reduced by 66.7%! IOW, 3x get speed!
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/riscv/Kconfig               |  1 +
- arch/riscv/include/asm/pgalloc.h | 23 ++++++++++++++++++-----
- arch/riscv/include/asm/tlb.h     | 18 ++++++++++++++++++
- 3 files changed, 37 insertions(+), 5 deletions(-)
+ arch/riscv/Kconfig               | 1 +
+ arch/riscv/include/asm/pgtable.h | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 24c1799e2ec4..d3555173d9f4 100644
+index d3555173d9f4..04df9920282d 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -147,6 +147,7 @@ config RISCV
- 	select IRQ_FORCED_THREADING
- 	select KASAN_VMALLOC if KASAN
- 	select LOCK_MM_AND_FIND_VMA
-+	select MMU_GATHER_RCU_TABLE_FREE if SMP && MMU
- 	select MODULES_USE_ELF_RELA if MODULES
- 	select MODULE_SECTIONS if MODULES
- 	select OF
-diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-index 3c5e3bd15f46..deaf971253a2 100644
---- a/arch/riscv/include/asm/pgalloc.h
-+++ b/arch/riscv/include/asm/pgalloc.h
-@@ -102,7 +102,10 @@ static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
- 		struct ptdesc *ptdesc = virt_to_ptdesc(pud);
- 
- 		pagetable_pud_dtor(ptdesc);
--		tlb_remove_page_ptdesc(tlb, ptdesc);
-+		if (riscv_use_ipi_for_rfence())
-+			tlb_remove_page_ptdesc(tlb, ptdesc);
-+		else
-+			tlb_remove_ptdesc(tlb, ptdesc);
- 	}
+@@ -119,6 +119,7 @@ config RISCV
+ 	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+ 	select HAVE_EBPF_JIT if MMU
++	select HAVE_FAST_GUP if MMU
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+ 	select HAVE_GCC_PLUGINS
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index ab00235b018f..c6eb214139e6 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -673,6 +673,12 @@ static inline int pmd_write(pmd_t pmd)
+ 	return pte_write(pmd_pte(pmd));
  }
  
-@@ -136,8 +139,12 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
- static inline void __p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
- 				  unsigned long addr)
- {
--	if (pgtable_l5_enabled)
--		tlb_remove_page_ptdesc(tlb, virt_to_ptdesc(p4d));
-+	if (pgtable_l5_enabled) {
-+		if (riscv_use_ipi_for_rfence())
-+			tlb_remove_page_ptdesc(tlb, virt_to_ptdesc(p4d));
-+		else
-+			tlb_remove_ptdesc(tlb, virt_to_ptdesc(p4d));
-+	}
- }
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
-@@ -169,7 +176,10 @@ static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd,
- 	struct ptdesc *ptdesc = virt_to_ptdesc(pmd);
- 
- 	pagetable_pmd_dtor(ptdesc);
--	tlb_remove_page_ptdesc(tlb, ptdesc);
-+	if (riscv_use_ipi_for_rfence())
-+		tlb_remove_page_ptdesc(tlb, ptdesc);
-+	else
-+		tlb_remove_ptdesc(tlb, ptdesc);
- }
- 
- #endif /* __PAGETABLE_PMD_FOLDED */
-@@ -180,7 +190,10 @@ static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
- 	struct ptdesc *ptdesc = page_ptdesc(pte);
- 
- 	pagetable_pte_dtor(ptdesc);
--	tlb_remove_page_ptdesc(tlb, ptdesc);
-+	if (riscv_use_ipi_for_rfence())
-+		tlb_remove_page_ptdesc(tlb, ptdesc);
-+	else
-+		tlb_remove_ptdesc(tlb, ptdesc);
- }
- #endif /* CONFIG_MMU */
- 
-diff --git a/arch/riscv/include/asm/tlb.h b/arch/riscv/include/asm/tlb.h
-index 1eb5682b2af6..a0b8b853503f 100644
---- a/arch/riscv/include/asm/tlb.h
-+++ b/arch/riscv/include/asm/tlb.h
-@@ -10,6 +10,24 @@ struct mmu_gather;
- 
- static void tlb_flush(struct mmu_gather *tlb);
- 
-+#ifdef CONFIG_MMU
-+#include <linux/swap.h>
-+
-+/*
-+ * While riscv platforms with riscv_ipi_for_rfence as true require an IPI to
-+ * perform TLB shootdown, some platforms with riscv_ipi_for_rfence as false use
-+ * SBI to perform TLB shootdown. To keep software pagetable walkers safe in this
-+ * case we switch to RCU based table free (MMU_GATHER_RCU_TABLE_FREE). See the
-+ * comment below 'ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE' in include/asm-generic/tlb.h
-+ * for more details.
-+ */
-+static inline void __tlb_remove_table(void *table)
++#define pud_write pud_write
++static inline int pud_write(pud_t pud)
 +{
-+	free_page_and_swap_cache(table);
++	return pte_write(pud_pte(pud));
 +}
 +
-+#endif /* CONFIG_MMU */
-+
- #define tlb_flush tlb_flush
- #include <asm-generic/tlb.h>
- 
+ static inline int pmd_dirty(pmd_t pmd)
+ {
+ 	return pte_dirty(pmd_pte(pmd));
 -- 
 2.40.0
 
