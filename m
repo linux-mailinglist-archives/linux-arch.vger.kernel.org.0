@@ -1,188 +1,141 @@
-Return-Path: <linux-arch+bounces-1139-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1140-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E2C819705
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Dec 2023 04:00:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20A86819795
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Dec 2023 05:13:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C6DE281718
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Dec 2023 03:00:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D0FD1C25341
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Dec 2023 04:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0498BF6;
-	Wed, 20 Dec 2023 02:59:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FD9BE5E;
+	Wed, 20 Dec 2023 04:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="XrXFybqQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sqFpniuU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48518F59
-	for <linux-arch@vger.kernel.org>; Wed, 20 Dec 2023 02:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1eb39505ba4so3096727fac.0
-        for <linux-arch@vger.kernel.org>; Tue, 19 Dec 2023 18:59:34 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF9F168B3
+	for <linux-arch@vger.kernel.org>; Wed, 20 Dec 2023 04:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d045097b4cso22827545ad.0
+        for <linux-arch@vger.kernel.org>; Tue, 19 Dec 2023 20:13:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1703041174; x=1703645974; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=apsQTMh+wzleRxg4vNWLqcpSsKcn0wPXDH5u/impo2s=;
-        b=XrXFybqQ52PeAe4YxMhvZuWcT22D3Vdz0+pFgUEhdV5DIIfoitW3/yYhHhLo8wMuAl
-         4Ynv4X9rVKMB1jVHR1FojAYCsVBk/tuLe8KNWfYztKjVSueX/QAlBup92VhgcHMQ6UWo
-         rVJFQEO83uvtEGU4P2nQEa3F9ednsrNI9sO8ZtOjrbl2nWRRhc4U4R+S7/CtIAhUdGyK
-         wnWYv6c3A6Jjhu8Y+GRiAgKNcg/nk1WwVuV9IaHWtgBfLpyG7v/jdrJN6Hst8NLR1OI0
-         eCD243FfUtEO0dflxJ5A40ewN84SD7nCjWfu6W/2WQmYemDoq7NZLcice61kdWd8E5/R
-         MDgw==
+        d=linaro.org; s=google; t=1703045623; x=1703650423; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNVWdMSAqfvpbN5g4IovRqwuhzgdiEbCZgrhc7x2wjc=;
+        b=sqFpniuUv1jPeUcslD9u70BMjvDT3Pn1u4MVKC25xqk7qxT3ogc04/G7AzpnjFN9qP
+         wX0M0o6fDxBVGgdq1KImwVb4xQARFPNes9FjuZOpYBPXl78+YLFexHeH/h/L8Nd46oF7
+         fAtGCV4qqJLJvfql1Hx8OdbBb8T6rgdTXpDhofeX1aN/vUCjzKBiwFQhBDOFceaIVp83
+         2azW/SVeUaLquJ+xCC8bz30l5VXWxfNSJDHiWYyq95ua3xyhNLNWr7xoHg6PfDpmL2BE
+         LE2WARMFquM73UPg09z5t7bXfLsAARBhlaMR76KzetrUdMYZCIaOd5uQcViu/SWCjMdG
+         s+pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703041174; x=1703645974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=apsQTMh+wzleRxg4vNWLqcpSsKcn0wPXDH5u/impo2s=;
-        b=VItCo/kw/mN/2nCX/jEPGlX6WjKH1T7uHw1mMOpRXxRnaNrKqu47OJVYzGHQNISkHZ
-         pVcHng+7YEUkk9JxjkIkCL1aqV6qMiE91rrf3cuhtf/PyEafwLu2GqLwsOq2yCJdkFDX
-         B1sFGl1xi/Z/mJhmRUugDHtUrhmu4evEaPzj4aeTzGzaQyBl9QF3C5qSpU8uRgoSIjKp
-         KFGOcJ0ueWP+PXoCTjw451LUlK/IqoRqI4Jr6rSDeGTaQmPAsjxoG9/k2ryN2hlASvNA
-         fEV1mKWv34gypbptQOtfnLdj7IXmXjXq29guUGKjyM2VGVD8FB3qpzNafK38pNZctLNg
-         6mCA==
-X-Gm-Message-State: AOJu0YyShQ5t7pBwS3Xtklj8bHXSNMLAvgg70vLrSmfQEQRM7aZuK6y7
-	OTx14fORungVYwEdJTc/4f3WRncZypY7jsW2z+sZag==
-X-Google-Smtp-Source: AGHT+IHkJO5ZOUzVzVAm0OW2c+XOHReGlsuOrQcjDbsf2O8ij6x/MrBLjV3275c/hmg9Ct7seUt4KRT1EBT+KWFvojQ=
-X-Received: by 2002:a05:6870:3929:b0:204:20b:2de with SMTP id
- b41-20020a056870392900b00204020b02demr1067684oap.35.1703041173827; Tue, 19
- Dec 2023 18:59:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703045623; x=1703650423;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNVWdMSAqfvpbN5g4IovRqwuhzgdiEbCZgrhc7x2wjc=;
+        b=RITcMnERPAx6NcnbsZ4gzOb8BROKFUGIbb4T2ZIW0KDXSBS+b8HWSPc0uThBbRk14o
+         pOWAzC11+zUhJmc0oAvdHLb/H2ziRP2mTL0KLOqkbsH/gRoRNkv5f3BqtsX6P+3MSX00
+         v+l2POapWUX0fTf0bks0wDJJk9OzCHmqXIPLaAZcsz1ROtz7NOwEL0HU1CaGCocUVhf0
+         E0xuNsfWy+/p50zD/GBiLm4aD5XOXVobmjTyJmU75EzTLikZ7a0pGVlagU7FyUgdN/0P
+         tMmjTzzV4BQTmTxHf1/7T+29f53SWx6VnbjQt3Zbuu7BsW/tdjeIi8qOR0H4pX8fWbqx
+         ONlA==
+X-Gm-Message-State: AOJu0YzxE3cdC8pVxFvNThVk7v16AnvqkoDqzu2zrQdiDIkCYCqx3oC7
+	211ydNnHz061sIOkOb7lUASnxw==
+X-Google-Smtp-Source: AGHT+IGTH7Uz/NcmceVfotUGElTRFy6BFXANyvxa2H36ukICplsk22hKc23OStWdWx3+9daWWuC7hQ==
+X-Received: by 2002:a17:903:22c1:b0:1d3:c025:c99e with SMTP id y1-20020a17090322c100b001d3c025c99emr2935918plg.63.1703045623531;
+        Tue, 19 Dec 2023 20:13:43 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:8f60:ee5a:d698:1116])
+        by smtp.gmail.com with ESMTPSA id q14-20020a170902dace00b001d08e08003esm21884208plx.174.2023.12.19.20.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 20:13:42 -0800 (PST)
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 00/39] arm64/gcs: Provide support for GCS in userspace
+In-reply-to: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+Date: Wed, 20 Dec 2023 01:13:41 -0300
+Message-ID: <874jgdh5oq.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231219175046.2496-1-jszhang@kernel.org> <20231219175046.2496-3-jszhang@kernel.org>
-In-Reply-To: <20231219175046.2496-3-jszhang@kernel.org>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Wed, 20 Dec 2023 10:59:22 +0800
-Message-ID: <CAEEQ3wn6j0N-NSQjEqE8Ee9dGzGMJJ4CW2Yhw_njAaOgR8G_eQ@mail.gmail.com>
-Subject: Re: [External] [PATCH 2/4] riscv: tlb: convert __p*d_free_tlb() to
- inline functions
-To: Jisheng Zhang <jszhang@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi Jisheng,
 
-On Wed, Dec 20, 2023 at 2:04=E2=80=AFAM Jisheng Zhang <jszhang@kernel.org> =
-wrote:
->
-> This is to prepare for enabling MMU_GATHER_RCU_TABLE_FREE.
-> No functionality changes.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/pgalloc.h | 54 +++++++++++++++++++-------------
->  1 file changed, 32 insertions(+), 22 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pg=
-alloc.h
-> index a12fb83fa1f5..3c5e3bd15f46 100644
-> --- a/arch/riscv/include/asm/pgalloc.h
-> +++ b/arch/riscv/include/asm/pgalloc.h
-> @@ -95,13 +95,16 @@ static inline void pud_free(struct mm_struct *mm, pud=
-_t *pud)
->                 __pud_free(mm, pud);
->  }
->
-> -#define __pud_free_tlb(tlb, pud, addr)                                 \
-> -do {                                                                   \
-> -       if (pgtable_l4_enabled) {                                       \
-> -               pagetable_pud_dtor(virt_to_ptdesc(pud));                \
-> -               tlb_remove_page_ptdesc((tlb), virt_to_ptdesc(pud));     \
-> -       }                                                               \
-> -} while (0)
-> +static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
-> +                                 unsigned long addr)
-> +{
-> +       if (pgtable_l4_enabled) {
-> +               struct ptdesc *ptdesc =3D virt_to_ptdesc(pud);
-> +
-> +               pagetable_pud_dtor(ptdesc);
-> +               tlb_remove_page_ptdesc(tlb, ptdesc);
-> +       }
-> +}
->
->  #define p4d_alloc_one p4d_alloc_one
->  static inline p4d_t *p4d_alloc_one(struct mm_struct *mm, unsigned long a=
-ddr)
-> @@ -130,11 +133,12 @@ static inline void p4d_free(struct mm_struct *mm, p=
-4d_t *p4d)
->                 __p4d_free(mm, p4d);
->  }
->
-> -#define __p4d_free_tlb(tlb, p4d, addr)                                 \
-> -do {                                                                   \
-> -       if (pgtable_l5_enabled)                                         \
-> -               tlb_remove_page_ptdesc((tlb), virt_to_ptdesc(p4d));     \
-> -} while (0)
-> +static inline void __p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
-> +                                 unsigned long addr)
-> +{
-> +       if (pgtable_l5_enabled)
-> +               tlb_remove_page_ptdesc(tlb, virt_to_ptdesc(p4d));
-> +}
->  #endif /* __PAGETABLE_PMD_FOLDED */
->
->  static inline void sync_kernel_mappings(pgd_t *pgd)
-> @@ -159,19 +163,25 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm=
-)
->
->  #ifndef __PAGETABLE_PMD_FOLDED
->
-> -#define __pmd_free_tlb(tlb, pmd, addr)                         \
-> -do {                                                           \
-> -       pagetable_pmd_dtor(virt_to_ptdesc(pmd));                \
-> -       tlb_remove_page_ptdesc((tlb), virt_to_ptdesc(pmd));     \
-> -} while (0)
-> +static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd,
-> +                                 unsigned long addr)
-> +{
-> +       struct ptdesc *ptdesc =3D virt_to_ptdesc(pmd);
-> +
-> +       pagetable_pmd_dtor(ptdesc);
-> +       tlb_remove_page_ptdesc(tlb, ptdesc);
-> +}
->
->  #endif /* __PAGETABLE_PMD_FOLDED */
->
-> -#define __pte_free_tlb(tlb, pte, buf)                  \
-> -do {                                                   \
-> -       pagetable_pte_dtor(page_ptdesc(pte));           \
-> -       tlb_remove_page_ptdesc((tlb), page_ptdesc(pte));\
-> -} while (0)
-> +static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
-> +                                 unsigned long addr)
-> +{
-> +       struct ptdesc *ptdesc =3D page_ptdesc(pte);
-> +
-> +       pagetable_pte_dtor(ptdesc);
-> +       tlb_remove_page_ptdesc(tlb, ptdesc);
-> +}
->  #endif /* CONFIG_MMU */
->
->  #endif /* _ASM_RISCV_PGALLOC_H */
-> --
-> 2.40.0
->
+Mark Brown <broonie@kernel.org> writes:
 
-Why is it necessary to convert to inline functions?
+>       arm64/mm: Restructure arch_validate_flags() for extensibility
+>       prctl: arch-agnostic prctl for shadow stack
+>       mman: Add map_shadow_stack() flags
+>       arm64: Document boot requirements for Guarded Control Stacks
+>       arm64/gcs: Document the ABI for Guarded Control Stacks
+>       arm64/sysreg: Add new system registers for GCS
+>       arm64/sysreg: Add definitions for architected GCS caps
+>       arm64/gcs: Add manual encodings of GCS instructions
+>       arm64/gcs: Provide put_user_gcs()
+>       arm64/cpufeature: Runtime detection of Guarded Control Stack (GCS)
+>       arm64/mm: Allocate PIE slots for EL0 guarded control stack
+>       mm: Define VM_SHADOW_STACK for arm64 when we support GCS
+>       arm64/mm: Map pages for guarded control stack
+>       KVM: arm64: Manage GCS registers for guests
+>       arm64/gcs: Allow GCS usage at EL0 and EL1
+>       arm64/idreg: Add overrride for GCS
+>       arm64/hwcap: Add hwcap for GCS
+>       arm64/traps: Handle GCS exceptions
+>       arm64/mm: Handle GCS data aborts
+>       arm64/gcs: Context switch GCS state for EL0
+>       arm64/gcs: Allocate a new GCS for threads with GCS enabled
+>       arm64/gcs: Implement shadow stack prctl() interface
+>       arm64/mm: Implement map_shadow_stack()
+>       arm64/signal: Set up and restore the GCS context for signal handlers
+>       arm64/signal: Expose GCS state in signal frames
+>       arm64/ptrace: Expose GCS via ptrace and core files
+>       arm64: Add Kconfig for Guarded Control Stack (GCS)
+>       kselftest/arm64: Verify the GCS hwcap
+>       kselftest/arm64: Add GCS as a detected feature in the signal tests
+>       kselftest/arm64: Add framework support for GCS to signal handling tests
+>       kselftest/arm64: Allow signals tests to specify an expected si_code
+>       kselftest/arm64: Always run signals tests with GCS enabled
+>       kselftest/arm64: Add very basic GCS test program
+>       kselftest/arm64: Add a GCS test program built with the system libc
+>       kselftest/arm64: Add test coverage for GCS mode locking
+>       selftests/arm64: Add GCS signal tests
+>       kselftest/arm64: Add a GCS stress test
+>       kselftest/arm64: Enable GCS for the FP stress tests
+>       kselftest/clone3: Enable GCS in the clone3 selftests
 
-Thanks,
-Yunhui
+Not sure if this is warranted, so sorry for the potential spam:
+
+I don't have any comments on the patches I haven't replied to.
+
+-- 
+Thiago
 
