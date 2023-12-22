@@ -1,201 +1,146 @@
-Return-Path: <linux-arch+bounces-1158-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1159-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DE5481C44C
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 05:43:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0731A81C4D2
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 06:59:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B77B1F258BC
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 04:43:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7223283082
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 05:59:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94AF568B;
-	Fri, 22 Dec 2023 04:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347A6611B;
+	Fri, 22 Dec 2023 05:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gfYgaZlU"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="3DUILVz5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA67567E;
-	Fri, 22 Dec 2023 04:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1D5C433D9;
-	Fri, 22 Dec 2023 04:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703220215;
-	bh=BYc4P52QVmcfkosbCiaZHm30PAhBdMV15eIFZyXrt/w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gfYgaZlUKTevwbQZJYf85rCQkvZ/2dCJYNFbjX4MpLQkTDUUEUs/gP6VgkDORJWb8
-	 39mKyH0Ale/2tztSN7oPpMMX8AVjmR7C80Ec+Qj7ylvDdMCuhODKMjmh5TDF4Lx3uC
-	 39ErfF6Mps6iJFaHEwyXAzkQ5Nu128Yd2sJxWJ6nY/94L7qUCSZHLV5/sCN8oYauqI
-	 N4dax9yGxlcrjoMrDAaNl8IZ8xR0Hgym3gVh5HxSmMIEXzMN9t6gLELtElUW7lppYm
-	 5IIc6FIgr1lxlCyWzmaSZamTNwe7g9rYswUzFs4QlJqViWD7UPJhQ8/YWKRjrzaesf
-	 HqqLBcybWwv9w==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-54c5d041c23so1618396a12.2;
-        Thu, 21 Dec 2023 20:43:34 -0800 (PST)
-X-Gm-Message-State: AOJu0YytadRPiSCTOB0XqmO/s3m45VWprQlEDvyaGXODOQIe0CytCEIY
-	TCTvxTJibSkPq7cbEJu0nyBPftsm5URCyTdo52M=
-X-Google-Smtp-Source: AGHT+IEUijHJ57JnutUHpUy3p1Ku8NBY/+d6W1M5E/W4tJng1EyPnpTmpp3MlXrvJ8ydAe+kadGKjzYldx2WjsB5z0k=
-X-Received: by 2002:a50:935c:0:b0:553:aa33:7876 with SMTP id
- n28-20020a50935c000000b00553aa337876mr152031eda.31.1703220213485; Thu, 21 Dec
- 2023 20:43:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52EB79C4;
+	Fri, 22 Dec 2023 05:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=mANM6RUEEd5RIcHHpg3Hi1iLZpC1YP27KzcxuzjOh/Y=; b=3DUILVz5D+yojTQiI8YhKFDEes
+	RkuBVNdqwSfU/ewrJeUGXNbrBWrdCRZ5akxQPW82mqBSsLTwSSr1P+ahAMZ6je0Odj6ntomwSu/+7
+	+O+pCgjbsd5ej0oJp3flIEhRQ17EKu8pqDnfEWzpIBUC0xXBJWwcUb6CWyTCVp8GVK4JMJIZUQjkr
+	jUFIBrAoCXnOf8txjXVcGMc3tQOh1e08qlG9YCAfgz1HvvCVuq0mPdvm+CtcX/Z5HXxVOvAWhz7Vl
+	+yMKBe6abozVqg81Rylf3xOpcu/OZ7qMC4v757bQuY49AoPbLZ0gonzDqKIHm6m1DxIVTIt17gms9
+	A549XPhw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rGYYp-0052LL-1D;
+	Fri, 22 Dec 2023 05:59:03 +0000
+Date: Thu, 21 Dec 2023 21:59:03 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: deller@kernel.org
+Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH 2/4] modules: Ensure 64-bit alignment on __ksymtab_*
+ sections
+Message-ID: <ZYUlpxlg/WooxGWZ@bombadil.infradead.org>
+References: <20231122221814.139916-1-deller@kernel.org>
+ <20231122221814.139916-3-deller@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220-optimize_checksum-v13-0-a73547e1cad8@rivosinc.com>
- <20231220-optimize_checksum-v13-2-a73547e1cad8@rivosinc.com>
- <CAJF2gTR9ZxLZwEs=TMeih+vEEuuxNHRkgLsG2ShjXPEZ-G44_w@mail.gmail.com> <ZYTobxPZVNct4toQ@ghost>
-In-Reply-To: <ZYTobxPZVNct4toQ@ghost>
-From: Guo Ren <guoren@kernel.org>
-Date: Fri, 22 Dec 2023 12:43:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTBweJTVw1m1WuJ6LNKrB_U83sdtkiZAk-NLND6sqdMZQ@mail.gmail.com>
-Message-ID: <CAJF2gTTBweJTVw1m1WuJ6LNKrB_U83sdtkiZAk-NLND6sqdMZQ@mail.gmail.com>
-Subject: Re: [PATCH v13 2/5] riscv: Add static key for misaligned accesses
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>, 
-	Samuel Holland <samuel.holland@sifive.com>, David Laight <David.Laight@aculab.com>, 
-	Xiao Wang <xiao.w.wang@intel.com>, Evan Green <evan@rivosinc.com>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122221814.139916-3-deller@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Fri, Dec 22, 2023 at 9:37=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> On Fri, Dec 22, 2023 at 08:33:18AM +0800, Guo Ren wrote:
-> > On Thu, Dec 21, 2023 at 7:38=E2=80=AFAM Charlie Jenkins <charlie@rivosi=
-nc.com> wrote:
-> > >
-> > > Support static branches depending on the value of misaligned accesses=
-.
-> > > This will be used by a later patch in the series. All cpus must be
-> > > considered "fast" for this static branch to be flipped.
-> > >
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > ---
-> > >  arch/riscv/include/asm/cpufeature.h |  2 ++
-> > >  arch/riscv/kernel/cpufeature.c      | 30 +++++++++++++++++++++++++++=
-+++
-> > >  2 files changed, 32 insertions(+)
-> > >
-> > > diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include=
-/asm/cpufeature.h
-> > > index a418c3112cd6..7b129e5e2f07 100644
-> > > --- a/arch/riscv/include/asm/cpufeature.h
-> > > +++ b/arch/riscv/include/asm/cpufeature.h
-> > > @@ -133,4 +133,6 @@ static __always_inline bool riscv_cpu_has_extensi=
-on_unlikely(int cpu, const unsi
-> > >         return __riscv_isa_extension_available(hart_isa[cpu].isa, ext=
-);
-> > >  }
-> > >
-> > > +DECLARE_STATIC_KEY_FALSE(fast_misaligned_access_speed_key);
-> > > +
-> > >  #endif
-> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufe=
-ature.c
-> > > index b3785ffc1570..095eb6ebdcaa 100644
-> > > --- a/arch/riscv/kernel/cpufeature.c
-> > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > @@ -10,6 +10,7 @@
-> > >  #include <linux/bitmap.h>
-> > >  #include <linux/cpuhotplug.h>
-> > >  #include <linux/ctype.h>
-> > > +#include <linux/jump_label.h>
-> > >  #include <linux/log2.h>
-> > >  #include <linux/memory.h>
-> > >  #include <linux/module.h>
-> > > @@ -728,6 +729,35 @@ void riscv_user_isa_enable(void)
-> > >                 csr_set(CSR_SENVCFG, ENVCFG_CBZE);
-> > >  }
-> > >
-> > > +DEFINE_STATIC_KEY_FALSE(fast_misaligned_access_speed_key);
-> > > +
-> > > +static int set_unaligned_access_static_branches(void)
-> > > +{
-> > > +       /*
-> > > +        * This will be called after check_unaligned_access_all_cpus =
-so the
-> > > +        * result of unaligned access speed for all cpus will be avai=
-lable.
-> > > +        */
-> > > +
-> > > +       int cpu;
-> > > +       bool fast_misaligned_access_speed =3D true;
-> > > +
-> > > +       for_each_online_cpu(cpu) {
-> > Each online_cpu? Is there any offline_cpu that is no
-> > fast_misaligned_access_speed?
->
-> I think instead of checking offline cpus, it would make more sense to
-> adjust the static branch when offline cpus come online. Since
-> riscv_online_cpu is called when a new CPU comes online, I can update the
-> static branch inside of that function.
->
-> >
-> > Move into your riscv_online_cpu for each CPU, and use stop_machine for
-> > synchronization.
-> >
->
-> I do not understand what you mean by "Move into your riscv_online_cpu
-> for each CPU", but I am assuming you are referring to updating the
-> static branch inside of riscv_online_cpu.
-I mean in:
-arch/riscv/kernel/cpufeature.c: riscv_online_cpu()
+On Wed, Nov 22, 2023 at 11:18:12PM +0100, deller@kernel.org wrote:
+> From: Helge Deller <deller@gmx.de>
+> 
+> On 64-bit architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+> (e.g. ppc64, ppc64le, parisc, s390x,...) the __KSYM_REF() macro stores
+> 64-bit pointers into the __ksymtab* sections.
+> Make sure that those sections will be correctly aligned at module link time,
+> otherwise unaligned memory accesses may happen at runtime.
 
-Yes,"adjust the static branch when offline cpus come online ..."
+The ramifications are not explained there. You keep sending me patches
+with this and we keep doing a nose dive on this. It means I have to do
+more work. So as I had suggested with your patch which I merged in
+commit 87c482bdfa79 ("modules: Ensure natural alignment for
+.altinstructions and __bug_table sections") please clarify the
+impact of not merging this patch. Also last time you noticed the
+misalignment due to a faulty exception handler, please mention how
+you found this out now.
 
->
-> I believe any race condition that could be solved by stop_machine will
-> become irrelevent by ensuring that the static branch is updated when a
-> new cpu comes online.
-Em...  stop_machine may be not necessary.
+And since this is not your first patch on the exact related subject
+I'd appreciate if you can show me perf stat results differences between
+having and not having this patch merged. Why? Because we talk about
+a performance penalthy, but we are not saying how much, and since this
+is an ongoing thing, we might as well have a tool belt with ways to
+measure such performance impact to bring clarity and value to this
+and future related patches.
 
->
-> - Charlie
->
-> > > +               int this_perf =3D per_cpu(misaligned_access_speed, cp=
-u);
-> > > +
-> > > +               if (this_perf !=3D RISCV_HWPROBE_MISALIGNED_FAST) {
-> > > +                       fast_misaligned_access_speed =3D false;
-> > > +                       break;
-> > > +               }
-> > > +       }
-> > > +
-> > > +       if (fast_misaligned_access_speed)
-> > > +               static_branch_enable(&fast_misaligned_access_speed_ke=
-y);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +arch_initcall_sync(set_unaligned_access_static_branches);
-> > > +
-> > >  #ifdef CONFIG_RISCV_ALTERNATIVE
-> > >  /*
-> > >   * Alternative patch sites consider 48 bits when determining when to=
- patch
-> > >
-> > > --
-> > > 2.43.0
-> > >
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
+> The __kcrctab* sections store 32-bit entities, so use ALIGN(4) for those.
 
+I've given some thought about how to test this. Sadly perf kallsysms
+just opens the /proc/kallsysms file, but that's fine, we need our own
+test.
 
+I think a 3 new simple modules selftest would do it and running perf
+stat on it. One module, let us call it module A which constructs its own
+name space prefix for its exported symbols and has tons of silly symbols
+for arbitrary data, whatever. We then have module B which refers to a
+few arbitrary symbols from module A, hopefully spread out linearly, so
+if module A had 10,000 symbols, we'd have module A refer to a symbol
+ever 1,000 symbols. Finally we want a symbol C which has say, 50,000
+symbols all of which will not be used at all by the first two modules,
+but the selftest will load module C first, prior to calling modprobe B.
 
---=20
-Best Regards
- Guo Ren
+We'll stress test this way two calls which use find_symbol():
+
+1) Upon load of B it will trigger simplify_symbols() to look for the
+symbol it uses from the module A with tons of symbols. That's an
+indirect way for us to call resolve_symbol_wait() from module A without
+having to use symbol_get() which want to remove as exported as it is
+just a hack which should go away. Our goal is for us to test
+resolve_symbol() which will call find_symbol() and that will eventually
+look for the symbol on module A with:
+
+  find_exported_symbol_in_section()
+
+That uses bsearch() so a binary search for the symbol and we'd end up
+hitting the misalignments here. Binary search will at worst be O(log(n))
+and so the only way to aggreviate the search will be to add tons of
+symbols to A, and have B use a few of them.
+
+2) When you load B, userspace will at first load A as depmod will inform
+userspace A goes before B. Upon B's load towards the end right before
+we call module B's init routine we get complete_formation() called on
+the module. That will first check for duplicate symbols with the call
+to verify_exported_symbols(). That is when we'll force iteration on
+module C's insane symbol list.
+
+The selftests just runs
+
+perf stat -e pick-your-poison-for-misalignments tools/testing/selftests/kmod/ksymtab.sh
+
+Where ksymtab.sh is your new script which calls:
+
+modprobe C
+modprobe B
+
+I say pick-your-poison-for-misalignments because I am not sure what is
+best here.
+
+Thoughts?
+
+> Signed-off-by: Helge Deller <deller@gmx.de>
+> Cc: <stable@vger.kernel.org> # v6.0+
+
+That's a stretch without any data, don't you think?
+
+ Luis
 
