@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-1164-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1165-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2012C81C717
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 10:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5FFD81C72F
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 10:14:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8960AB235EB
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 09:02:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28E21B23830
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Dec 2023 09:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383A1D301;
-	Fri, 22 Dec 2023 09:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3D7D527;
+	Fri, 22 Dec 2023 09:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="FhfaRI6Y"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="JqZHi07B"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDA7D2E0;
-	Fri, 22 Dec 2023 09:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16338D50B;
+	Fri, 22 Dec 2023 09:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1703235741; x=1703840541; i=deller@gmx.de;
-	bh=V6sDV6pyBLKf2NuZ6ATFB3thXBq+AktPzbQKhUhh9OY=;
+	t=1703236424; x=1703841224; i=deller@gmx.de;
+	bh=n+MfHC35t0Y8oIxZ/m3u33zRT3uWWgpuiarIUZkHvsY=;
 	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
 	 In-Reply-To;
-	b=FhfaRI6Y595PzRvvMav97qjsLp8WuDJATf2au16b9pQrJzD+NHMMiOE1j+6jUhsJ
-	 3DKvg8VIvRnBjHVxsuI4bw6o0vgo7dPqk1jFlBscYg0UyDg7GhlBfSZC16u2I1oS5
-	 e++uA5oWxu+nwI4kLe30lCCwffuHCLdt15BmjdVAv9600is7aJGNLSJHSiSH+Vr3W
-	 BownU8J2tUaWF/DW3BtGxwUVg4/9539ApJT3rsbu7V8qDxJP6GCT9PkJgp+woVbDm
-	 OkDNR/dFGqhFwBypGdPDVl+jB0Y2kBousJELx+4b8o5C/Fxbvw9+ukj2WF7+F3sbh
-	 m13Fu6t6mZKRqh6+7g==
+	b=JqZHi07BGLzBH6wGJMAtfdqGkRhT4R3mGvXPEuU7a0Ewp4yAVeflRDQ3MdEF7nTY
+	 h6TKNHykr+MYBg+DfyomXVyTORB0f74N/lkKcXw336K9LCI5yuYsCy9oMxv7jflmL
+	 7XIC0tfqP8V/DEYw0g8SFy8eVfdmepQgVv1T1Lef22dKthiiVeC7NCZ/yVKzlX4B5
+	 Sjp5a6xXCMQun65pblV6nr8xy+mhlIu3w915+utWrOxkJNyfwmrmS/3/f2neurkia
+	 saDB/GsrQuX7yQK/Yt+dJhiXo/i6nCbvcyeqJaYOz/1zGrK7x3eKVY5xwjS1KH+oU
+	 ixHhrfAKQDHv5w6sDw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.20.55] ([94.134.157.108]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSt8W-1ridEZ1AYI-00UI2a; Fri, 22
- Dec 2023 10:02:21 +0100
-Message-ID: <7a504ceb-da00-4c0b-acc0-3ab48fb60f5e@gmx.de>
-Date: Fri, 22 Dec 2023 10:02:20 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9X9-1rPABl2zLd-009BUo; Fri, 22
+ Dec 2023 10:13:44 +0100
+Message-ID: <c4922789-0561-46bd-814b-1cd0253d3562@gmx.de>
+Date: Fri, 22 Dec 2023 10:13:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -46,16 +46,15 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] vmlinux.lds.h: Fix alignment for __ksymtab*,
- __kcrctab_* and .pci_fixup sections
+Subject: Re: [PATCH 0/4] Section alignment issues?
 Content-Language: en-US
-To: Masahiro Yamada <masahiroy@kernel.org>, deller@kernel.org
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-modules@vger.kernel.org, linux-arch@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>, deller@kernel.org
+Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
+ linux-arch@vger.kernel.org
 References: <20231122221814.139916-1-deller@kernel.org>
- <20231122221814.139916-4-deller@kernel.org>
- <CAK7LNARgQ0t=4dfkJXDhSzdFGbxDuN2kPGxTgDR7siCYTtGU5w@mail.gmail.com>
+ <ZYIKmQj0H1YAJWlz@bombadil.infradead.org>
+ <ZYNDLEzkjfrpgu7U@bombadil.infradead.org>
 From: Helge Deller <deller@gmx.de>
 Autocrypt: addr=deller@gmx.de; keydata=
  xsFNBF3Ia3MBEAD3nmWzMgQByYAWnb9cNqspnkb2GLVKzhoH2QD4eRpyDLA/3smlClbeKkWT
@@ -100,93 +99,65 @@ Autocrypt: addr=deller@gmx.de; keydata=
  FwRDcGV6nxanxZGKEkSHHOm8jHwvQWvPP73pvuPBEPtKGLzbgd7OOcGZWtq2hNC6cRtsRdDx
  4TAGMCz4j238m+2mdbdhRh3iBnWT5yPFfnv/2IjFAk+sdix1Mrr+LIDF++kiekeq0yUpDdc4
  ExBy2xf6dd+tuFFBp3/VDN4U0UfG4QJ2fg19zE5Z8dS4jGIbLg==
-In-Reply-To: <CAK7LNARgQ0t=4dfkJXDhSzdFGbxDuN2kPGxTgDR7siCYTtGU5w@mail.gmail.com>
+In-Reply-To: <ZYNDLEzkjfrpgu7U@bombadil.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:C3E3fy9OPbBQ3+Xd0xFPyWcs6FoPCmKpr4ERn01kYTSd1IeBBm3
- ZgFn72lcVW/H+2DgR2xPNgr/CYqiNpitwZXF9Bs78h1+WebOTku2Xw+2uQ9NpLOQ+nX7jED
- 0cem5oeRXJa0WTL3GZoGiBXWUnJIJFzOw/jcgLFOTU26y9OS5epQEUNucR9jTmC+EZDB1DK
- L/3tyFSmz8iH9U3m4LOhA==
+X-Provags-ID: V03:K1:3zEqUv9AZnY9J4XQazbk3elNn/rcWjDfLdQDJzqcBLfiUhtMYSh
+ jJkPybvj/oYwFs6O3Wu2JWJjbAao1IvpGCuWw/TyaDY7OJ3SrocW4QBDZvqOfUawqyVyC5G
+ 1jVQ5lIrsDnFJ/M1maFDa24ThdS27PZxoCjxS/J3oZDpfA2no53glPX21EyY1kk76OiZztP
+ fI9dQ6K324bndN9usJQaA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:YCbcKvLbE8k=;xRb6+he4cYIuCvBQ6U6kllbFRqM
- C8A4cqocP3A9ntmnd8vjgkiwEJYj+pBelLBUHpm2BaOqe6+sPEUaM2ywliEr7XEjNpiKbrXhA
- 3Rcf7pSdPlPpE4zU6FBRz4RTtYCbhhAk7qwEF2oY7gMAwZ9S/vKfy5J3dHBVWxzKOnOSnS3IB
- 8N80Xtg/39xaetE1uHMTsNnOxAfK119p7B066Mq4Hf4SM8vnruWWLyW72KYNWhD9IPSfw9pxj
- zYsJ2mJRtdvRmBbJL9SwYqqb6sdbx052jpXYo4sFafeKf6AhEE4G+6DLiGpAoc4/IWFqw+IH2
- 02IvN7PXY6fvE+RQ4kwYhMhBzJgIls1b+VtF16BII8ZzB28YeV0OPos4gIws4RfEx5E9EGH11
- PMtZbzcxW5QJLO+VyxsJ6PEwAqjRKKLGT11R4CQwwpUL3MDs8r6sROSvOGT1g6TtTv5qKjBTH
- Yin0PIgQkhyLXizQ77WA1X/mFMa4wEXH/y5YlocMFGD/SKz65XqE+3LmazvwO3ifZJrZpERwe
- fN6fcDHWmhALebCKPd7ziMapioiQifoKxPTjmHeG+p23wzaLCVdvWQrYt6LdkL5y9rPHKxsHh
- i/tonVL9Ye+24Xyi6t8KIqV6CN6FCb7UxKtTFdx6e/MjXNRJbTpE9F1CuBHC0TPGHXwXwvSlN
- dIqs/SwKYRFbUtJcsjY18cDgoubARv1PqDqq5UFiJkF4fapXiuVe99jhXa95bPTX1DgTTDLwl
- zljP4Bn3d+YmT+cOI3X8OGYyxFkZaySanna+PHb//2TEiTXzQr0DiGe/13GoMVSd8u0mo6tQ2
- PREuD84czUnSW6e7Sh2BfeBFSGKVJMJPhyY1f45Fj4ayzxWGbDDTzyrcA8PNcX3Gvp9Pyb/Jp
- gubqXAkvk/zhrbWJbiY0WbcCwzlE6l4vtyJcWvOYaEm2sgbw9NC+H8YXXF4UBNxxfoknapcOE
- pPaPeK3P9g1ltpmd8adAEtHeG78=
+UI-OutboundReport: notjunk:1;M01:P0:AMQrj8E/jfQ=;E1jhV0dKW144QoERt+ctLefPCuZ
+ cbOmp+8WED+2rLEFeeijZJfwFuWs8BSuDhb0I10/pt9hZJlHcy1NH1ZAnyEvUy245iJ35e5T+
+ n9l4kNfdKAALewRc1k69ieHMhQ+w2MNHs7xwL1Vs4Nl2QytR6iHTEwx3dFxqzqvDZTSvxUZLF
+ uF0HN4Yyz2esmCZwzzTJ7cyLz6tnP10gezcIRvKXSjYpKD2dVwal8TM2zLFPOQBIFKff/2b9O
+ 4XFCsMCAlNOxslVwQqHt98MD8vK0l9A1QzJxwfqnc2GGsRniicjO6ki6X+8in+uJPPC96XtkB
+ J9C8EL+mWpMFU+D8eLJJ8kI34rnrRuwuCtS7CqoSRP4NnI3YGKGLm8p4FN86Ir4Ijth3eQrH/
+ 2iyBGdl6vWcutoXVQ1k5jT1gju6TBFk0aU6U17SOamK7++SVq3wvArCOls8wNHH9PB4Ah7gNT
+ YapJqaM/vYGVIH+3LS94i6UTfrueEcNDwKuLdRKfTTCR/JpW8xhV9SJN4o1iWElEhIci+/ptw
+ bVm/64tb87Ps2aWjd4fFVyQWHwrFAoRAwB9KhI/MmWJpkpwoxqLQ6sY6I2mrmNObNIY9ZoQ85
+ 7clab0kdwmkxNsdLgsrVn4RHr0z4UyXln/948KX9HfUB98HlHNZvMhXcEj0H4KVJN9oYWAZgA
+ 3ZNyTg3yGMxe6MacJbq1E6awRZXGbLNEcLVKZSssuhm8Z43IoB7J+cVMH9Ec8Hiy7GuYyNNnJ
+ iWZVGZuCfE2vdm0Gw/z9/pnfb5x8Qa9P0wLSEPqGggT4Xv/n4zCImMuuTiwXtFKzyw6dCtM6h
+ CEE2SIzASJiirCnWI2IM1zJQtg5Dzhh5r5UIm+6i/s/ZLX5jL2V04PvpuB9GrgdFnXE1mEkMD
+ g005RLUKxnJQ2Xb7A1YPIzUBp9VYaMYb8DThOIye/4NAgYptq5gMJlfMmS4FzOkpwZcs2SoPm
+ D4pB7QmUCfkXlgVlcNG0devB9LI=
 
-On 12/21/23 14:07, Masahiro Yamada wrote:
-> On Thu, Nov 23, 2023 at 7:18=E2=80=AFAM <deller@kernel.org> wrote:
+On 12/20/23 20:40, Luis Chamberlain wrote:
+> On Tue, Dec 19, 2023 at 01:26:49PM -0800, Luis Chamberlain wrote:
+>> On Wed, Nov 22, 2023 at 11:18:10PM +0100, deller@kernel.org wrote:
+>>> From: Helge Deller <deller@gmx.de>
+>>> My questions:
+>>> - Am I wrong with my analysis?
 >>
->> From: Helge Deller <deller@gmx.de>
+>> This would typically of course depend on the arch, but whether it helps
+>> is what I would like to see with real numbers rather then speculation.
+>> Howeer, I don't expect some of these are hot paths except maybe the
+>> table lookups. So could you look at some perf stat differences
+>> without / with alignment ? Other than bootup live patching would be
+>> a good test case. We have selftest for modules, the script in selftests
+>> tools/testing/selftests/kmod/kmod.sh is pretty aggressive, but the live
+>> patching tests might be better suited.
 >>
->> On 64-bit architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
->> (e.g. ppc64, ppc64le, parisc, s390x,...) the __KSYM_REF() macro stores
->> 64-bit pointers into the __ksymtab* sections.
->> Make sure that the start of those sections is 64-bit aligned in the vml=
-inux
->> executable, otherwise unaligned memory accesses may happen at runtime.
+>>> - What does people see on other architectures?
+>>> - Does it make sense to add a compile- and runtime-check, like the pat=
+ch below, to the kernel?
+>>
+>> The chatty aspects really depend on the above results.
+>>
+>> Aren't there some archs where an unaligned access would actually crash?
+>> Why hasn't that happened?
 >
+> I've gone down through memory lane and we have discussed this before.
 >
-> Are you solving a real problem?
+> It would seem this misalignment should not affect performance, and this
+> should not be an issue unless you have a buggy exception hanlder. We
+> actually ran into one before. Please refer to merge commit
+>
+> e74acdf55da6649dd30be5b621a93b71cbe7f3f9
 
-Not any longer.
-I faced a problem on parisc when neither #1 and #3 were applied
-because of a buggy unalignment exception handler. But this is
-not something which I would count a "real generic problem".
-
-> 1/4 already ensures the proper alignment of __ksymtab*, doesn't it?
-
-Yes, it does.
-
->...
-> So, my understanding is this patch is unneeded.
-
-Yes, it's not required and I'm fine if we drop it.
-
-But regarding __kcrctab:
-
->> @@ -498,6 +501,7 @@
->>          }                                                             =
-  \
->>                                                                        =
-  \
->>          /* Kernel symbol table: Normal symbols */                     =
-  \
->> +       . =3D ALIGN(4);                                                =
-   \
->>          __kcrctab         : AT(ADDR(__kcrctab) - LOAD_OFFSET) {       =
-  \
->>                  __start___kcrctab =3D .;                              =
-    \
->>                  KEEP(*(SORT(___kcrctab+*)))                           =
-  \
-
-I think this patch would be beneficial to get proper alignment:
-
-diff --git a/include/linux/export-internal.h b/include/linux/export-intern=
-al.h
-index cd253eb51d6c..d445705ac13c 100644
-=2D-- a/include/linux/export-internal.h
-+++ b/include/linux/export-internal.h
-@@ -64,6 +64,7 @@
-
-  #define SYMBOL_CRC(sym, crc, sec)   \
-         asm(".section \"___kcrctab" sec "+" #sym "\",\"a\""     "\n" \
-+           ".balign 4"                                         "\n" \
-             "__crc_" #sym ":"                                   "\n" \
-             ".long " #crc                                       "\n" \
-             ".previous"                                         "\n")
-
+Yes, this is the second time I stumbled over this issue.
+But let's continue discussing in the other mail thread...
 
 Helge
 
