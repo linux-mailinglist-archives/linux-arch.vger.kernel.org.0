@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-1193-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1194-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2D381F3D9
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Dec 2023 02:45:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 376BA81F3DB
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Dec 2023 02:45:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 906AF1C2082B
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Dec 2023 01:45:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B85681F21F92
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Dec 2023 01:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5209CA70;
-	Thu, 28 Dec 2023 01:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0447E543;
+	Thu, 28 Dec 2023 01:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="GqNicyL4"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="YoxALhq0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F612BE79
-	for <linux-arch@vger.kernel.org>; Thu, 28 Dec 2023 01:42:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7679FC8DE
+	for <linux-arch@vger.kernel.org>; Thu, 28 Dec 2023 01:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-59496704246so1446008eaf.2
-        for <linux-arch@vger.kernel.org>; Wed, 27 Dec 2023 17:42:40 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3bb82a52002so5279487b6e.2
+        for <linux-arch@vger.kernel.org>; Wed, 27 Dec 2023 17:42:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1703727759; x=1704332559; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1703727760; x=1704332560; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cNUGRAFHmKzY6lG9DcfUZlQ4QTwCBjkCL5t9hP4xKAE=;
-        b=GqNicyL4HRL32ZlN0VfuvcMGrPr8Ec3ZI1q0Dx2AbK1QdgMQxIa4SOwedFwZHhHw9o
-         Tzge5pdNAGVg9SB4lKcOcg0OcidwWRd0niq6G5xGMv1aNRjvC9htZk5hh15tyG8mre89
-         emtFnBn+cWSGhdr2oeWMAoUs3EUG746eOtMqpz4jGeXcZzEOxndxUJm3yriiRhPtEJvC
-         ySqwfWOueZNzB2unRwfUJbKuAsb2WfJWd+MYMrdOZ7AvzGpNw8LKLD+gzT2ZYl3MZnKq
-         CVjSzOjbP379aTv718iE+AjGteQsrnO8tSJYb4OwNFRqpv12xFAhllkgBFhrTNypVpY4
-         M/Xw==
+        bh=2e+fg9SOqP34XnXL5jU4pEY4/pq3fOIOqFLUTdc21ng=;
+        b=YoxALhq02Fmi9ReMVGIwjahtKjVj6kNk3VeVBawkhoMXovbiHRalWXzlXLflUC8Zqn
+         JpeusyL00ySE9yvPdsrxVIE1hGjtqCX/llVuL1kzfPw4BESGXG8FqkZvH+2WugiBjRQX
+         f3GCQdgPimXgPXAUs2Axo1T0UtEdI3RvHDXUrXZp/uQqVGU6LFeOoLHr7MeYknBP6j5x
+         LQXkfpyoS22w/KJoBgKwiBRPH7eYuBRxI1ExsXOvh9OiZzPfbGkIlDifX11sH1ZZM4YR
+         TUq1cQSSZ4moblEiXv2rxwxSxysJtBfCpfWCSX46MhP3SJtTl4kn6frXlIqOjxPUgCI9
+         tFfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703727759; x=1704332559;
+        d=1e100.net; s=20230601; t=1703727760; x=1704332560;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cNUGRAFHmKzY6lG9DcfUZlQ4QTwCBjkCL5t9hP4xKAE=;
-        b=kE8tR3uMLY51cDvPh3rBC2G0keprWzlGJ0E27slxQ+2Dd3AjwDU1udO9CZlwTZCq7t
-         vJvYHU6pWpSRPVw6NsBl+HR+zrJD94HyozZtfEHHl88TaHHKmbuaDU9/RoZc8u5PnXVu
-         cShWqvMFo27bic4iEY31k7QKgcjTOedqqWQEYizVnUONR68FzO9MpNuxYxCM4fxLmBqs
-         8wdDHfKbyiSFdLGwuIDnSPMHfnapC2fq4GtL7btTkrkP0DiGeo2mc8UOczxM+zjL9rfe
-         oFDa3pvgHScJdQg7B66/lcY30pq6wBmU6cE1uUX7eoAdPiUqnZT9SooDpQn0X4KeMch+
-         bXAg==
-X-Gm-Message-State: AOJu0Yx6keAtbyquzQN2hPBHcgcUUAMYOP4JlfPI1dqeRf4RXdNHAdUG
-	gXK1OdAjoIX5V08Iu458QZ4bSXPZSdSSDQ==
-X-Google-Smtp-Source: AGHT+IGvfqTB3x7wwPMxp1qNsfQvBXkwAH7kyz4he4Bu1Z+L46cvb1psldcQ6vV6De8969ozhHXwqQ==
-X-Received: by 2002:a05:6358:3a1b:b0:172:c06c:fce3 with SMTP id g27-20020a0563583a1b00b00172c06cfce3mr5190091rwe.58.1703727759326;
-        Wed, 27 Dec 2023 17:42:39 -0800 (PST)
+        bh=2e+fg9SOqP34XnXL5jU4pEY4/pq3fOIOqFLUTdc21ng=;
+        b=gem6g0F2wBXYwhVWzeCpwwXrhEEkgDP9QkwHHlF1w6v/UtC0l73Dv9w2lDVJ1/VZtq
+         BOXGu24AzfCGTCdjh77dZTTv0yygjZtO2+rp9qRRIRh9XpPFxOcf79vyhwVa8vpAcyec
+         kS1k1qpMBY6B+tscFDp9zBZods4gH0Rmdd6u42kzopinycs6rARiGVyF1ZR/40chePXj
+         FsgdpMMd8RpKoXxpy3iFEuJyT/cEJ2xWNChhXLA02DtKwf9iZ20z4KI9m9plxv/1yCNG
+         rHFf0/6EjizQYNA3rCK31uk6Xl/Fuy2qbq1m088R+MpgGG8Nlvp2FBaljtVV8lwxO1J3
+         OcOw==
+X-Gm-Message-State: AOJu0YweU+ehHXUDI2jGl5UDilUVYq7WZBUtR5P0jrSZrA33UvIYVHD7
+	LFHm5OkEhvL9lWRBc0T7LMfM7xk+T6TMbQ==
+X-Google-Smtp-Source: AGHT+IFlBstkCmb/D17edCTs8sY4vteYMNaBpcxdbvjkI2D4UtEwweJgmB+5F+NfpsSlT4ktPGSvhA==
+X-Received: by 2002:a05:6808:159d:b0:3bb:76ca:f143 with SMTP id t29-20020a056808159d00b003bb76caf143mr11199985oiw.54.1703727760626;
+        Wed, 27 Dec 2023 17:42:40 -0800 (PST)
 Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id g24-20020aa78758000000b006d49ed3effasm7335440pfo.63.2023.12.27.17.42.38
+        by smtp.gmail.com with ESMTPSA id g24-20020aa78758000000b006d49ed3effasm7335440pfo.63.2023.12.27.17.42.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Dec 2023 17:42:39 -0800 (PST)
+        Wed, 27 Dec 2023 17:42:40 -0800 (PST)
 From: Samuel Holland <samuel.holland@sifive.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linuxppc-dev@lists.ozlabs.org,
@@ -68,9 +68,9 @@ Cc: loongarch@lists.linux.dev,
 	amd-gfx@lists.freedesktop.org,
 	linux-arch@vger.kernel.org,
 	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v2 13/14] selftests/fpu: Move FP code to a separate translation unit
-Date: Wed, 27 Dec 2023 17:42:03 -0800
-Message-ID: <20231228014220.3562640-14-samuel.holland@sifive.com>
+Subject: [PATCH v2 14/14] selftests/fpu: Allow building on other architectures
+Date: Wed, 27 Dec 2023 17:42:04 -0800
+Message-ID: <20231228014220.3562640-15-samuel.holland@sifive.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231228014220.3562640-1-samuel.holland@sifive.com>
 References: <20231228014220.3562640-1-samuel.holland@sifive.com>
@@ -82,142 +82,94 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This ensures no compiler-generated floating-point code can appear
-outside kernel_fpu_{begin,end}() sections, and some architectures
-enforce this separation.
+Now that ARCH_HAS_KERNEL_FPU_SUPPORT provides a common way to compile
+and run floating-point code, this test is no longer x86-specific.
 
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 ---
 
-Changes in v2:
- - Declare test_fpu() in a header
+(no changes since v1)
 
- lib/Makefile                        |  3 ++-
- lib/test_fpu.h                      |  8 +++++++
- lib/{test_fpu.c => test_fpu_glue.c} | 32 +------------------------
- lib/test_fpu_impl.c                 | 37 +++++++++++++++++++++++++++++
- 4 files changed, 48 insertions(+), 32 deletions(-)
- create mode 100644 lib/test_fpu.h
- rename lib/{test_fpu.c => test_fpu_glue.c} (71%)
- create mode 100644 lib/test_fpu_impl.c
+ lib/Kconfig.debug   |  2 +-
+ lib/Makefile        | 25 ++-----------------------
+ lib/test_fpu_glue.c |  5 ++++-
+ 3 files changed, 7 insertions(+), 25 deletions(-)
 
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 4405f81248fb..4596100eeb14 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2918,7 +2918,7 @@ config TEST_FREE_PAGES
+ 
+ config TEST_FPU
+ 	tristate "Test floating point operations in kernel space"
+-	depends on X86 && !KCOV_INSTRUMENT_ALL
++	depends on ARCH_HAS_KERNEL_FPU_SUPPORT && !KCOV_INSTRUMENT_ALL
+ 	help
+ 	  Enable this option to add /sys/kernel/debug/selftest_helpers/test_fpu
+ 	  which will trigger a sequence of floating point operations. This is used
 diff --git a/lib/Makefile b/lib/Makefile
-index 6b09731d8e61..e7cbd54944a2 100644
+index e7cbd54944a2..b9f28558c9bd 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
-@@ -132,7 +132,8 @@ FPU_CFLAGS += $(call cc-option,-msse -mpreferred-stack-boundary=3,-mpreferred-st
- endif
+@@ -109,31 +109,10 @@ CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
+ obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
+ obj-$(CONFIG_TEST_OBJPOOL) += test_objpool.o
  
+-#
+-# CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
+-# off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
+-# get appended last to CFLAGS and thus override those previous compiler options.
+-#
+-FPU_CFLAGS := -msse -msse2
+-ifdef CONFIG_CC_IS_GCC
+-# Stack alignment mismatch, proceed with caution.
+-# GCC < 7.1 cannot compile code using `double` and -mpreferred-stack-boundary=3
+-# (8B stack alignment).
+-# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383
+-#
+-# The "-msse" in the first argument is there so that the
+-# -mpreferred-stack-boundary=3 build error:
+-#
+-#  -mpreferred-stack-boundary=3 is not between 4 and 12
+-#
+-# can be triggered. Otherwise gcc doesn't complain.
+-FPU_CFLAGS += -mhard-float
+-FPU_CFLAGS += $(call cc-option,-msse -mpreferred-stack-boundary=3,-mpreferred-stack-boundary=4)
+-endif
+-
  obj-$(CONFIG_TEST_FPU) += test_fpu.o
--CFLAGS_test_fpu.o += $(FPU_CFLAGS)
-+test_fpu-y := test_fpu_glue.o test_fpu_impl.o
-+CFLAGS_test_fpu_impl.o += $(FPU_CFLAGS)
+ test_fpu-y := test_fpu_glue.o test_fpu_impl.o
+-CFLAGS_test_fpu_impl.o += $(FPU_CFLAGS)
++CFLAGS_test_fpu_impl.o += $(CC_FLAGS_FPU)
++CFLAGS_REMOVE_test_fpu_impl.o += $(CC_FLAGS_NO_FPU)
  
  obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
  
-diff --git a/lib/test_fpu.h b/lib/test_fpu.h
-new file mode 100644
-index 000000000000..4459807084bc
---- /dev/null
-+++ b/lib/test_fpu.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+
-+#ifndef _LIB_TEST_FPU_H
-+#define _LIB_TEST_FPU_H
-+
-+int test_fpu(void);
-+
-+#endif
-diff --git a/lib/test_fpu.c b/lib/test_fpu_glue.c
-similarity index 71%
-rename from lib/test_fpu.c
-rename to lib/test_fpu_glue.c
-index e82db19fed84..85963d7be826 100644
---- a/lib/test_fpu.c
+diff --git a/lib/test_fpu_glue.c b/lib/test_fpu_glue.c
+index 85963d7be826..eef282a2715f 100644
+--- a/lib/test_fpu_glue.c
 +++ b/lib/test_fpu_glue.c
-@@ -19,37 +19,7 @@
+@@ -17,7 +17,7 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
  #include <linux/debugfs.h>
- #include <asm/fpu/api.h>
+-#include <asm/fpu/api.h>
++#include <linux/fpu.h>
  
--static int test_fpu(void)
--{
--	/*
--	 * This sequence of operations tests that rounding mode is
--	 * to nearest and that denormal numbers are supported.
--	 * Volatile variables are used to avoid compiler optimizing
--	 * the calculations away.
--	 */
--	volatile double a, b, c, d, e, f, g;
--
--	a = 4.0;
--	b = 1e-15;
--	c = 1e-310;
--
--	/* Sets precision flag */
--	d = a + b;
--
--	/* Result depends on rounding mode */
--	e = a + b / 2;
--
--	/* Denormal and very large values */
--	f = b / c;
--
--	/* Depends on denormal support */
--	g = a + c * f;
--
--	if (d > a && e > a && g > a)
--		return 0;
--	else
--		return -EINVAL;
--}
-+#include "test_fpu.h"
+ #include "test_fpu.h"
  
- static int test_fpu_get(void *data, u64 *val)
+@@ -38,6 +38,9 @@ static struct dentry *selftest_dir;
+ 
+ static int __init test_fpu_init(void)
  {
-diff --git a/lib/test_fpu_impl.c b/lib/test_fpu_impl.c
-new file mode 100644
-index 000000000000..777894dbbe86
---- /dev/null
-+++ b/lib/test_fpu_impl.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include <linux/errno.h>
-+
-+#include "test_fpu.h"
-+
-+int test_fpu(void)
-+{
-+	/*
-+	 * This sequence of operations tests that rounding mode is
-+	 * to nearest and that denormal numbers are supported.
-+	 * Volatile variables are used to avoid compiler optimizing
-+	 * the calculations away.
-+	 */
-+	volatile double a, b, c, d, e, f, g;
-+
-+	a = 4.0;
-+	b = 1e-15;
-+	c = 1e-310;
-+
-+	/* Sets precision flag */
-+	d = a + b;
-+
-+	/* Result depends on rounding mode */
-+	e = a + b / 2;
-+
-+	/* Denormal and very large values */
-+	f = b / c;
-+
-+	/* Depends on denormal support */
-+	g = a + c * f;
-+
-+	if (d > a && e > a && g > a)
-+		return 0;
-+	else
++	if (!kernel_fpu_available())
 +		return -EINVAL;
-+}
++
+ 	selftest_dir = debugfs_create_dir("selftest_helpers", NULL);
+ 	if (!selftest_dir)
+ 		return -ENOMEM;
 -- 
 2.42.0
 
