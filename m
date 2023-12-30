@@ -1,219 +1,326 @@
-Return-Path: <linux-arch+bounces-1207-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1208-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BC40820039
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Dec 2023 16:27:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F20368203EA
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Dec 2023 08:33:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12DAE28479B
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Dec 2023 15:27:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72D961F21715
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Dec 2023 07:33:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F0C3125B1;
-	Fri, 29 Dec 2023 15:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8F9257F;
+	Sat, 30 Dec 2023 07:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="VJk4pzLZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HSB2MU1I"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="fmwJGS+R"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841C6125AD;
-	Fri, 29 Dec 2023 15:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 9C1AB3200906;
-	Fri, 29 Dec 2023 10:27:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 29 Dec 2023 10:27:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1703863628; x=1703950028; bh=a4DE6lOAy5
-	UJ7XbWIZJKIkOz1MpDU+Xi8bnPQlzva/A=; b=VJk4pzLZ3jsN5yrTVY9rB5MqEO
-	t63AaOm0BTOpekd7Yk9s0B23makvF6HrsB4oPnU8/WWXGGAMD0p5CIyhVm9k1U7t
-	HJl1Cj+4svu7FSbXuWjdoasn6RgjQtlQyetnuHffeKCOYSj6euS+Ya4YFSOm8FWS
-	gyHJ3kU0KM/WpQCA40aPPmqCO2sVR9BN2UOB4AOM4Vd7Q+JWo69W9J9XyBv8PPzA
-	EFG5EfJEluh2mmHqyUOlQ3G86j5AXK4JA3rL3cxx0MYvicCjCsMJEHOKCkBgv73K
-	rtjsl8vy3GVFwgUidTs14P+JKKZOFI4jpDAw1UK5vKlZRsQUeuCYirsuqg/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1703863628; x=1703950028; bh=a4DE6lOAy5UJ7XbWIZJKIkOz1MpD
-	U+Xi8bnPQlzva/A=; b=HSB2MU1Ivw5qTw3eOQn25v23N3Fs3zRMA+fDYx66Q7Td
-	4+rSDlbfUNarkcSpiDlIy5VRZfu3JwxKZOn9KYWGg1JcvAGXSjAzyZ1DPIXloJ2p
-	d9h8ZtuPT9DHzjJyZ4UqEM8rioa75rCtVpXBrYkzkUqbPRXXktxzizocUkqwcPnO
-	iebyH6O3t2o3UNw/PMpq2FyiaUpcBTCN9SkfvNrgVZG5xLiotkfgGEuZh70INKP0
-	0DEPJGuqQbSLKWJs+zBXQxZ4aBiUeCaBPGTG38yXoIhyUZXwXxAE6KxwtVnVUQzm
-	DArXHKHQrcTgfcJFoOmevU1NDlFYK1m4dXQYFYUMGQ==
-X-ME-Sender: <xms:SuWOZTpWb9_0aUReToHlOMcJl5AzbVmlTSBsYBK74Qt02uYW2WbGiQ>
-    <xme:SuWOZdruTTvDd7wB24CFZ650mYjhVObddrZkUNGzhzKvakpuaZ9JWUWoLqxExFElR
-    TDiSvlDm3XN58ZBzJA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeffedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:SuWOZQPnHnkpSYg0-ssBQr-DVtIolpI9wCOPNYy4VUvzWZv-UPDLtg>
-    <xmx:SuWOZW56XCsfQRrmqjBFk2Llvuf9SwsRWwjK_9IvqWS2APbvgQMGlw>
-    <xmx:SuWOZS65Cgo2Qr-hgDn7YQJ_KgOYajCp-X94PZf3mCtCClnj0miJNw>
-    <xmx:TOWOZY6oVL3YAlf6hNZ3iwkZU2_bRgcXVAnINCIw8sexnwXb5GOIDg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A40F6B6008F; Fri, 29 Dec 2023 10:27:06 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADAB2569;
+	Sat, 30 Dec 2023 07:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1703921605; x=1704526405; i=deller@gmx.de;
+	bh=xni73b/fmqnkrhJ8X+AT459zG1XZ686uE4vG9mDt6nY=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=fmwJGS+RRwKmhAsgTUgewCzQqTSUcvlAkswOrPJAaXkB4ez6OT1DRUSYMLdkpT+i
+	 pP1TkWqFVmuJJXwcl9UBryQT6Xr1Rof5QQ3QaZbpLNHWmIBClPLUw4ddQNytBLxNY
+	 HdmwIM4c55SGoKVbYMtX8OjjBQiXPxzUzEn9zwBBZeMyipT3kToHqcWRRx9CwyGNu
+	 ecjxx9vzEfn36/XrS7uJJDba/IeRogYdM15w6jqcF25Ybgl9aHECha+Av+epY7Jbn
+	 fH9ageo5VL+KKdp7NHsM4ms47g+ZzoqIVhIESt/Dd5PNNsKc1FPP3u5c1Cy3fb+4q
+	 /rKfTVOMCbot4ApLaA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.55] ([94.134.152.157]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEUz4-1rTzJf1Rms-00G0an; Sat, 30
+ Dec 2023 08:33:25 +0100
+Message-ID: <59bc81b5-820e-40ff-9159-c03e429af9a6@gmx.de>
+Date: Sat, 30 Dec 2023 08:33:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f254c189-463e-43a3-bc09-9a8869ebf819@app.fastmail.com>
-In-Reply-To: <20231228122411.3189-1-maimon.sagi@gmail.com>
-References: <20231228122411.3189-1-maimon.sagi@gmail.com>
-Date: Fri, 29 Dec 2023 16:26:46 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Sagi Maimon" <maimon.sagi@gmail.com>,
- "Richard Cochran" <richardcochran@gmail.com>,
- "Andy Lutomirski" <luto@kernel.org>, datglx@linutronix.de,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Johannes Weiner" <hannes@cmpxchg.org>,
- "Sohil Mehta" <sohil.mehta@intel.com>,
- "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
- "Nhat Pham" <nphamcs@gmail.com>, "Palmer Dabbelt" <palmer@sifive.com>,
- "Kees Cook" <keescook@chromium.org>, "Alexey Gladkov" <legion@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, Netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3] posix-timers: add multi_clock_gettime system call
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] modules: Ensure 64-bit alignment on __ksymtab_*
+ sections
+Content-Language: en-US
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: deller@kernel.org, linux-kernel@vger.kernel.org,
+ Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ linux-modules@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20231122221814.139916-1-deller@kernel.org>
+ <20231122221814.139916-3-deller@kernel.org>
+ <ZYUlpxlg/WooxGWZ@bombadil.infradead.org>
+ <1b73bc5a-1948-4e67-9ec5-b238723b3a48@gmx.de>
+ <ZYXtPL7Ds1SUKPLT@bombadil.infradead.org>
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <ZYXtPL7Ds1SUKPLT@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:OzfSEZKH8jNRkcgP9iKAK8JSqt1F71b7zuc+MiQIbdUN13KrtcK
+ 68c11U3ceiTbQxhp+KXCVOR4Bg9aF9Y1he6dmyXnUxMWGLmXy+9iYqxEah7xT+zERYZUZfo
+ a9vtJMvVgjBqQOwxm6mij9M6Od4LMHVBur5P11ctfC32m/U++0XCVAnTJunB45Wfz2wTcRS
+ z4v4MPdn4/JRexgdRrngw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:vRdRdOk43i4=;27Id2SuD9tQu7nOfNoSnvp7z3U4
+ QuK5l8BcyVgsXgr2be7m7hwXoxck25UkBD0F/OyaL5joTgZEltkxxXUkS7umBkUGuQ/3Gnou8
+ NjFrUTHMVOs3WbCC1aX9Zhp/qiwkRvz/0aKmgt3Xt8u427+3ZVg8Ytg3aF5EgveT50sm7AciF
+ hX+FUF2mFtCD43Sj1xFR3yyC1aE0UPHimaIp4ksNgQzMs59nlAUCHQdulbAgspoohf4z9esvR
+ UD222OTS8B+ZLG04ubuJERqZipK2sGjg4GQOgCOgVdy8lUxMyMWNLcW8z35YhOJWWRtHmcTCJ
+ TQfgXVx8hKDwcUDHAf9j5anPKFK4Ig/ermHjfqbs1LcYCeFul16ByYsYaurwch1f9DnX/JKmM
+ NqXU3Xa9w6O9/TDsMMHNxO7Lzh/UAfhf3D+TVObkPiHd/9dKSXPu6aI13jwCWlpkE24N56EOM
+ QTx/knITFldhNPEbj4sXtDa2crbF/604mp/Hu8nEv9xy31snqYZhW9ED6swtnxTDVv/ooElsA
+ 0aqAJrQLTA4Yw48mQuTmeffxjIjx809+xXSswE2ZTfbLFpJ8sfqhbAxkZ1xQd0w30kO8bA7t8
+ wd10ZunR3SpiZlfF2MlLrp4xJ+pR4k7pesBJDSCY2W4sNj8jFLReFazwIbRnkhG8x8fW+s4IS
+ p1mB5tJe1HyzG9cAeZd2NAqma0waCIRIqlfing4X/GkoRa/aDqSsWudUmU0xvheyOF5EUiAMw
+ dXbuDMEBdsoq0dp48A2q+DB06bXHdDG+eu9PpOTAUI768y6xhaslFY2L+91HM401JQxRTEK8y
+ PsfGpnmqV9xdd77fLOQkuU/CMcQVs2VuqLmgdPao+YKqFw+SVnG9bpJhajmMBd4KISzQGt5rD
+ XgXbZkXHioyWCCVJXisYiXjYnTWciX81OlRnj+/w5fynJFTorKiXVQslBcptXT1UMf/PIfrUd
+ 96whvYGuBTonijbg8gVJqMxuxpQ=
 
-On Thu, Dec 28, 2023, at 13:24, Sagi Maimon wrote:
-> Some user space applications need to read some clocks.
-> Each read requires moving from user space to kernel space.
-> The syscall overhead causes unpredictable delay between N clocks reads
-> Removing this delay causes better synchronization between N clocks.
+Hi Luis,
+
+On 12/22/23 21:10, Luis Chamberlain wrote:
+> On Fri, Dec 22, 2023 at 01:13:26PM +0100, Helge Deller wrote:
+>> On 12/22/23 06:59, Luis Chamberlain wrote:
+>>> On Wed, Nov 22, 2023 at 11:18:12PM +0100, deller@kernel.org wrote:
+>>>> On 64-bit architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+>>>> (e.g. ppc64, ppc64le, parisc, s390x,...) the __KSYM_REF() macro store=
+s
+>>>> 64-bit pointers into the __ksymtab* sections.
+>>>> Make sure that those sections will be correctly aligned at module lin=
+k time,
+>>>> otherwise unaligned memory accesses may happen at runtime.
+>>> ...
+...
+>> So, honestly I don't see a real reason why it shouldn't be applied...
 >
-> Introduce a new system call multi_clock_gettime, which can be used to measure
-> the offset between multiple clocks, from variety of types: PHC, virtual PHC
-> and various system clocks (CLOCK_REALTIME, CLOCK_MONOTONIC, etc).
-> The offset includes the total time that the driver needs to read the clock
-> timestamp.
+> Like I said, you Cc'd stable as a fix,
+
+I added "Cc: stable@vger.kernel.org" on the patch itself, so *if* the patc=
+h
+would have been applied by you, it would later end up in stable kernel ser=
+ies too.
+But I did not CC'ed the stable mailing list directly, so my patch was neve=
+r
+sent to that mailing list.
+
+> as a maintainer it is my job to
+> verify how critical this is and ask for more details about how you found
+> it and evaluate the real impact. Even if it was not a stable fix I tend
+> to ask this for patches, even if they are trivial.
+> ...
+> OK, can you extend the patch below with something like:
 >
-> New system call allows the reading of a list of clocks - up to PTP_MAX_CLOCKS.
-> Supported clocks IDs: PHC, virtual PHC and various system clocks.
-> Up to PTP_MAX_SAMPLES times (per clock) in a single system call read.
-> The system call returns n_clocks timestamps for each measurement:
-> - clock 0 timestamp
-> - ...
-> - clock n timestamp
+> perf stat --repeat 100 --pre 'modprobe -r b a b c' -- ./tools/testing/se=
+lftests/module/find_symbol.sh
 >
-> Signed-off-by: Sagi Maimon <maimon.sagi@gmail.com>
+> And test before and after?
+>
+> I ran a simple test as-is and the data I get is within noise, and so
+> I think we need the --repeat 100 thing.
 
-Hi Sagi,
+Your selftest code is based on perf.
+AFAICS we don't have perf on parisc/hppa, so I can't test your selftest co=
+de
+on that architecture.
+I assume you tested on x86, where the CPU will transparently take care of
+unaligned accesses. This is probably why the results are within
+the noise.
+But on some platforms the CPU raises an exception on unaligned accesses
+and jumps into special exception handler assembler code inside the kernel.
+This is much more expensive than on x86, which is why we track on parisc
+in /proc/cpuinfo counters on how often this exception handler is called:
+IRQ:       CPU0       CPU1
+   3:       1332          0         SuperIO  ttyS0
+   7:    1270013          0         SuperIO  pata_ns87415
+  64:  320023012  320021431             CPU  timer
+  65:   17080507   20624423             CPU  IPI
+UAH:   10948640      58104   Unaligned access handler traps
 
-Exposing an interface to read multiple clocks makes sense to me,
-but I wonder if the interface you use is too inflexible.
+This "UAH" field could theoretically be used to extend your selftest.
+But is it really worth it? The outcome is very much architecture and CPU
+specific, maybe it's just within the noise as you measured.
 
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -828,9 +828,11 @@ __SYSCALL(__NR_futex_wake, sys_futex_wake)
->  __SYSCALL(__NR_futex_wait, sys_futex_wait)
->  #define __NR_futex_requeue 456
->  __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
-> +#define __NR_multi_clock_gettime 457
-> +__SYSCALL(__NR_multi_clock_gettime, sys_multi_clock_gettime)
-> 
->  #undef __NR_syscalls
-> -#define __NR_syscalls 457
-> +#define __NR_syscalls 458
+IMHO we should always try to natively align structures, and if we see
+we got it wrong in kernel code, we should fix it.
+My patches just fix those memory sections where we use inline
+assembly (instead of C) and thus missed to provide the correct alignments.
 
-Site note: hooking it up only here is sufficient for the
-code review but not for inclusion: once we have an agreement
-on the API, this should be added to all architectures at once.
+Helge
 
-> +#define MULTI_PTP_MAX_CLOCKS 5 /* Max number of clocks */
-> +#define MULTI_PTP_MAX_SAMPLES 10 /* Max allowed offset measurement samples. */
-> +
-> +struct __ptp_multi_clock_get {
-> +	unsigned int n_clocks; /* Desired number of clocks. */
-> +	unsigned int n_samples; /* Desired number of measurements per clock. */
-> +	clockid_t clkid_arr[MULTI_PTP_MAX_CLOCKS]; /* list of clock IDs */
-> +	/*
-> +	 * Array of list of n_clocks clocks time samples n_samples times.
-> +	 */
-> +	struct  __kernel_timespec ts[MULTI_PTP_MAX_SAMPLES][MULTI_PTP_MAX_CLOCKS];
-> +};
+> ------------------------------------------------------------------------=
+-----------
+> before:
+> sudo ./tools/testing/selftests/module/find_symbol.sh
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          81,956,206 ns   duration_time
+>          81,883,000 ns   system_time
+>                 210      page-faults
+>
+>         0.081956206 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.081883000 seconds sys
+>
+>
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          85,960,863 ns   duration_time
+>          84,679,000 ns   system_time
+>                 212      page-faults
+>
+>         0.085960863 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.084679000 seconds sys
+>
+>
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          86,484,868 ns   duration_time
+>          86,541,000 ns   system_time
+>                 213      page-faults
+>
+>         0.086484868 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.086541000 seconds sys
+>
+> ------------------------------------------------------------------------=
+-----------
+> After your modules alignement fix:
+> sudo ./tools/testing/selftests/module/find_symbol.sh
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          83,579,980 ns   duration_time
+>          83,530,000 ns   system_time
+>                 212      page-faults
+>
+>         0.083579980 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.083530000 seconds sys
+>
+>
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          70,721,786 ns   duration_time
+>          69,289,000 ns   system_time
+>                 211      page-faults
+>
+>         0.070721786 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.069289000 seconds sys
+>
+>
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          76,513,219 ns   duration_time
+>          76,381,000 ns   system_time
+>                 214      page-faults
+>
+>         0.076513219 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.076381000 seconds sys
+>
+> After your modules alignement fix:
+> sudo ./tools/testing/selftests/module/find_symbol.sh
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          83,579,980 ns   duration_time
+>          83,530,000 ns   system_time
+>                 212      page-faults
+>
+>         0.083579980 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.083530000 seconds sys
+>
+>
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          70,721,786 ns   duration_time
+>          69,289,000 ns   system_time
+>                 211      page-faults
+>
+>         0.070721786 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.069289000 seconds sys
+>
+>
+>
+>   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
+>
+>          76,513,219 ns   duration_time
+>          76,381,000 ns   system_time
+>                 214      page-faults
+>
+>         0.076513219 seconds time elapsed
+>
+>         0.000000000 seconds user
+>         0.076381000 seconds sys
+> ------------------------------------------------------------------------=
+-----------
+>
+> [perf-based selftest patch from Luis stripped]
 
-The fixed size arrays here seem to be an unnecessary limitation,
-both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS are small
-enough that one can come up with scenarios where you would want
-a higher number, but at the same time the structure is already
-808 bytes long, which is more than you'd normally want to put
-on the kernel stack, and which may take a significant time to
-copy to and from userspace.
-
-Since n_clocks and n_samples are always inputs to the syscall,
-you can just pass them as register arguments and use a dynamically
-sized array instead.
-
-It's not clear to me what you gain from having the n_samples
-argument over just calling the syscall repeatedly. Does
-this offer a benefit for accuracy or is this just meant to
-avoid syscall overhead.
-> +SYSCALL_DEFINE1(multi_clock_gettime, struct __ptp_multi_clock_get 
-> __user *, ptp_multi_clk_get)
-> +{
-> +	const struct k_clock *kc;
-> +	struct timespec64 kernel_tp;
-> +	struct __ptp_multi_clock_get multi_clk_get;
-> +	unsigned int i, j;
-> +	int error;
-> +
-> +	if (copy_from_user(&multi_clk_get, ptp_multi_clk_get, 
-> sizeof(multi_clk_get)))
-> +		return -EFAULT;
-
-Here you copy the entire structure from userspace, but
-I don't actually see the .ts[] array on the stack being
-accessed later as you just copy to the user pointer
-directly.
-
-> +		for (i = 0; i < multi_clk_get.n_clocks; i++) {
-> +			kc = clockid_to_kclock(multi_clk_get.clkid_arr[i]);
-> +			if (!kc)
-> +				return -EINVAL;
-> +			error = kc->clock_get_timespec(multi_clk_get.clkid_arr[i], 
-> &kernel_tp);
-> +			if (!error && put_timespec64(&kernel_tp, (struct __kernel_timespec 
-> __user *)
-> +						     &ptp_multi_clk_get->ts[j][i]))
-> +				error = -EFAULT;
-> +		}
-
-The put_timespec64() and possibly the clockid_to_kclock() have
-some overhead that may introduce jitter, so it may be better to
-pull that out of the loop and have a fixed-size array
-of timespec64 values on the stack and then copy them
-at the end.
-
-On the other hand, this will still give less accuracy than the
-getcrosststamp() callback with ioctl(PTP_SYS_OFFSET_PRECISE),
-so either the last bit of accuracy isn't all that important,
-or you need to refine the interface to actually be an
-improvement over the chardev.
-
-      Arnd
 
