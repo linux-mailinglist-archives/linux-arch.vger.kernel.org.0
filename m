@@ -1,326 +1,180 @@
-Return-Path: <linux-arch+bounces-1208-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1209-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F20368203EA
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Dec 2023 08:33:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C9F0820436
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Dec 2023 10:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72D961F21715
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Dec 2023 07:33:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27EF9282198
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Dec 2023 09:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8F9257F;
-	Sat, 30 Dec 2023 07:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DB35239;
+	Sat, 30 Dec 2023 09:54:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="fmwJGS+R"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="d1w1OrxQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADAB2569;
-	Sat, 30 Dec 2023 07:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1703921605; x=1704526405; i=deller@gmx.de;
-	bh=xni73b/fmqnkrhJ8X+AT459zG1XZ686uE4vG9mDt6nY=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=fmwJGS+RRwKmhAsgTUgewCzQqTSUcvlAkswOrPJAaXkB4ez6OT1DRUSYMLdkpT+i
-	 pP1TkWqFVmuJJXwcl9UBryQT6Xr1Rof5QQ3QaZbpLNHWmIBClPLUw4ddQNytBLxNY
-	 HdmwIM4c55SGoKVbYMtX8OjjBQiXPxzUzEn9zwBBZeMyipT3kToHqcWRRx9CwyGNu
-	 ecjxx9vzEfn36/XrS7uJJDba/IeRogYdM15w6jqcF25Ybgl9aHECha+Av+epY7Jbn
-	 fH9ageo5VL+KKdp7NHsM4ms47g+ZzoqIVhIESt/Dd5PNNsKc1FPP3u5c1Cy3fb+4q
-	 /rKfTVOMCbot4ApLaA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.55] ([94.134.152.157]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEUz4-1rTzJf1Rms-00G0an; Sat, 30
- Dec 2023 08:33:25 +0100
-Message-ID: <59bc81b5-820e-40ff-9159-c03e429af9a6@gmx.de>
-Date: Sat, 30 Dec 2023 08:33:24 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B67B522D
+	for <linux-arch@vger.kernel.org>; Sat, 30 Dec 2023 09:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-554e9f51522so4826963a12.2
+        for <linux-arch@vger.kernel.org>; Sat, 30 Dec 2023 01:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1703930058; x=1704534858; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:references:message-id:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=abUTt15ozYHOLG/fk60Lc57aa9WtZ24J7IwER8hUXeE=;
+        b=d1w1OrxQSL/PEmBYJoZE4VTCpsv6fck5HKO6c46JnAR8GE5mtXbL/rPyuRcjk5KF/2
+         v2CDieeJkgZ0VzOjaTSuK6ATFDK2IsqDErlIWH68xZTiT0dcazKphxUHgAzYOD6A12O8
+         JcMBABm7/194Lg/YTOLGmJUSJVj9E3zv9rtWE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703930058; x=1704534858;
+        h=content-transfer-encoding:to:references:message-id:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=abUTt15ozYHOLG/fk60Lc57aa9WtZ24J7IwER8hUXeE=;
+        b=CJ/fxTsoptifJPbMaRxiByV6QMrAwjmVm2Z5lPjhcjBFF6+0maJRSNi22gSB3ziawo
+         sr1obv5tUDAkVwJUv6HXN5pKrHvYKHUch2yJbx8YW3WUYFBvbnVLeVvnLRz/FeOXbEU6
+         SC50gKrMjRwEqjfb5D4Azgz8B5voP1VecK4w+5I9jEHfYzMuBrAU9GobIDhcFfpejo3O
+         5ry20E0VbahpF6vqtyDSDb6hvY0mdZWTaa9fl71LXpOvs5+2JFYCekt18WaP44eMLJLN
+         c1j38tHGY6XSe5gGejOD5NC4Dv7+GQjId1DO4B+P5bTNWBIFwsFPkn8k1dL86ZANLTFz
+         sm2Q==
+X-Gm-Message-State: AOJu0YwGpyo7+0G3XR61DPhw7WsR0Hf19kIwBB4RxjlFSr6BH1fiqL6z
+	3sC4VBkGPFGecEZv+oPVOQe4ELgHmp+RLjtvGkmn0f1tUmepJMJx9lM9PLbmdJq5Y7pCfSI5wKN
+	GHEOX4sLIpy5dTQRFmDc=
+X-Google-Smtp-Source: AGHT+IGK1uGrlady2TpLBMfqqY9A7tHn9+lcZGtpiYGeIBTdCURXuQcXKU0VKUNz5G0qW4/zkYvz4w==
+X-Received: by 2002:a05:6402:ca3:b0:54c:9dbe:5c03 with SMTP id cn3-20020a0564020ca300b0054c9dbe5c03mr5290445edb.40.1703930057752;
+        Sat, 30 Dec 2023 01:54:17 -0800 (PST)
+Received: from smtpclient.apple ([132.69.236.92])
+        by smtp.gmail.com with ESMTPSA id m9-20020aa7c2c9000000b00552666f4745sm12089039edp.22.2023.12.30.01.54.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 30 Dec 2023 01:54:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] modules: Ensure 64-bit alignment on __ksymtab_*
- sections
-Content-Language: en-US
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: deller@kernel.org, linux-kernel@vger.kernel.org,
- Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-modules@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20231122221814.139916-1-deller@kernel.org>
- <20231122221814.139916-3-deller@kernel.org>
- <ZYUlpxlg/WooxGWZ@bombadil.infradead.org>
- <1b73bc5a-1948-4e67-9ec5-b238723b3a48@gmx.de>
- <ZYXtPL7Ds1SUKPLT@bombadil.infradead.org>
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <ZYXtPL7Ds1SUKPLT@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.300.61.1.2\))
+Subject: Re: [PATCH 1/2] mm/tlb: fix fullmm semantics
+From: Nadav Amit <nadav.amit@broadcom.com>
+In-Reply-To: <20231228084642.1765-2-jszhang@kernel.org>
+Date: Sat, 30 Dec 2023 11:54:02 +0200
+Cc: Will Deacon <will@kernel.org>,
+ "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Nick Piggin <npiggin@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org,
+ linux-mm <linux-mm@kvack.org>,
+ linux-arm-kernel@lists.infradead.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-riscv@lists.infradead.org,
+ Nadav Amit <namit@vmware.com>,
+ Andrea Arcangeli <aarcange@redhat.com>,
+ Andy Lutomirski <luto@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Yu Zhao <yuzhao@google.com>,
+ the arch/x86 maintainers <x86@kernel.org>
+Message-Id: <204B6410-2EFA-462B-9DF7-64CC5F1D3AD2@broadcom.com>
+References: <20231228084642.1765-1-jszhang@kernel.org>
+ <20231228084642.1765-2-jszhang@kernel.org>
+To: Jisheng Zhang <jszhang@kernel.org>
+X-Mailer: Apple Mail (2.3774.300.61.1.2)
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:OzfSEZKH8jNRkcgP9iKAK8JSqt1F71b7zuc+MiQIbdUN13KrtcK
- 68c11U3ceiTbQxhp+KXCVOR4Bg9aF9Y1he6dmyXnUxMWGLmXy+9iYqxEah7xT+zERYZUZfo
- a9vtJMvVgjBqQOwxm6mij9M6Od4LMHVBur5P11ctfC32m/U++0XCVAnTJunB45Wfz2wTcRS
- z4v4MPdn4/JRexgdRrngw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:vRdRdOk43i4=;27Id2SuD9tQu7nOfNoSnvp7z3U4
- QuK5l8BcyVgsXgr2be7m7hwXoxck25UkBD0F/OyaL5joTgZEltkxxXUkS7umBkUGuQ/3Gnou8
- NjFrUTHMVOs3WbCC1aX9Zhp/qiwkRvz/0aKmgt3Xt8u427+3ZVg8Ytg3aF5EgveT50sm7AciF
- hX+FUF2mFtCD43Sj1xFR3yyC1aE0UPHimaIp4ksNgQzMs59nlAUCHQdulbAgspoohf4z9esvR
- UD222OTS8B+ZLG04ubuJERqZipK2sGjg4GQOgCOgVdy8lUxMyMWNLcW8z35YhOJWWRtHmcTCJ
- TQfgXVx8hKDwcUDHAf9j5anPKFK4Ig/ermHjfqbs1LcYCeFul16ByYsYaurwch1f9DnX/JKmM
- NqXU3Xa9w6O9/TDsMMHNxO7Lzh/UAfhf3D+TVObkPiHd/9dKSXPu6aI13jwCWlpkE24N56EOM
- QTx/knITFldhNPEbj4sXtDa2crbF/604mp/Hu8nEv9xy31snqYZhW9ED6swtnxTDVv/ooElsA
- 0aqAJrQLTA4Yw48mQuTmeffxjIjx809+xXSswE2ZTfbLFpJ8sfqhbAxkZ1xQd0w30kO8bA7t8
- wd10ZunR3SpiZlfF2MlLrp4xJ+pR4k7pesBJDSCY2W4sNj8jFLReFazwIbRnkhG8x8fW+s4IS
- p1mB5tJe1HyzG9cAeZd2NAqma0waCIRIqlfing4X/GkoRa/aDqSsWudUmU0xvheyOF5EUiAMw
- dXbuDMEBdsoq0dp48A2q+DB06bXHdDG+eu9PpOTAUI768y6xhaslFY2L+91HM401JQxRTEK8y
- PsfGpnmqV9xdd77fLOQkuU/CMcQVs2VuqLmgdPao+YKqFw+SVnG9bpJhajmMBd4KISzQGt5rD
- XgXbZkXHioyWCCVJXisYiXjYnTWciX81OlRnj+/w5fynJFTorKiXVQslBcptXT1UMf/PIfrUd
- 96whvYGuBTonijbg8gVJqMxuxpQ=
 
-Hi Luis,
 
-On 12/22/23 21:10, Luis Chamberlain wrote:
-> On Fri, Dec 22, 2023 at 01:13:26PM +0100, Helge Deller wrote:
->> On 12/22/23 06:59, Luis Chamberlain wrote:
->>> On Wed, Nov 22, 2023 at 11:18:12PM +0100, deller@kernel.org wrote:
->>>> On 64-bit architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
->>>> (e.g. ppc64, ppc64le, parisc, s390x,...) the __KSYM_REF() macro store=
-s
->>>> 64-bit pointers into the __ksymtab* sections.
->>>> Make sure that those sections will be correctly aligned at module lin=
-k time,
->>>> otherwise unaligned memory accesses may happen at runtime.
->>> ...
-...
->> So, honestly I don't see a real reason why it shouldn't be applied...
->
-> Like I said, you Cc'd stable as a fix,
 
-I added "Cc: stable@vger.kernel.org" on the patch itself, so *if* the patc=
-h
-would have been applied by you, it would later end up in stable kernel ser=
-ies too.
-But I did not CC'ed the stable mailing list directly, so my patch was neve=
-r
-sent to that mailing list.
+> On Dec 28, 2023, at 10:46=E2=80=AFAM, Jisheng Zhang <jszhang@kernel.org> =
+wrote:
+>=20
+> From: Nadav Amit <namit@vmware.com>
+>=20
+> fullmm in mmu_gather is supposed to indicate that the mm is torn-down
+> (e.g., on process exit) and can therefore allow certain optimizations.
+> However, tlb_finish_mmu() sets fullmm, when in fact it want to say that
+> the TLB should be fully flushed.
+>=20
+> Change tlb_finish_mmu() to set need_flush_all and check this flag in
+> tlb_flush_mmu_tlbonly() when deciding whether a flush is needed.
+>=20
+> At the same time, bring the arm64 fullmm on process exit optimization bac=
+k.
+>=20
+> Signed-off-by: Nadav Amit <namit@vmware.com>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Nick Piggin <npiggin@gmail.com>
+> Cc: x86@kernel.org
+> ---
+> arch/arm64/include/asm/tlb.h | 5 ++++-
+> include/asm-generic/tlb.h    | 2 +-
+> mm/mmu_gather.c              | 2 +-
+> 3 files changed, 6 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+> index 846c563689a8..6164c5f3b78f 100644
+> --- a/arch/arm64/include/asm/tlb.h
+> +++ b/arch/arm64/include/asm/tlb.h
+> @@ -62,7 +62,10 @@ static inline void tlb_flush(struct mmu_gather *tlb)
+> 	 * invalidating the walk-cache, since the ASID allocator won't
+> 	 * reallocate our ASID without invalidating the entire TLB.
+> 	 */
+> -	if (tlb->fullmm) {
+> +	if (tlb->fullmm)
+> +		return;
+> +
+> +	if (tlb->need_flush_all) {
+> 		if (!last_level)
+> 			flush_tlb_mm(tlb->mm);
+> 		return;
+>=20
 
-> as a maintainer it is my job to
-> verify how critical this is and ask for more details about how you found
-> it and evaluate the real impact. Even if it was not a stable fix I tend
-> to ask this for patches, even if they are trivial.
-> ...
-> OK, can you extend the patch below with something like:
->
-> perf stat --repeat 100 --pre 'modprobe -r b a b c' -- ./tools/testing/se=
-lftests/module/find_symbol.sh
->
-> And test before and after?
->
-> I ran a simple test as-is and the data I get is within noise, and so
-> I think we need the --repeat 100 thing.
+Thanks for pulling my patch out of the abyss, but the chunk above
+did not come from my old patch.
 
-Your selftest code is based on perf.
-AFAICS we don't have perf on parisc/hppa, so I can't test your selftest co=
-de
-on that architecture.
-I assume you tested on x86, where the CPU will transparently take care of
-unaligned accesses. This is probably why the results are within
-the noise.
-But on some platforms the CPU raises an exception on unaligned accesses
-and jumps into special exception handler assembler code inside the kernel.
-This is much more expensive than on x86, which is why we track on parisc
-in /proc/cpuinfo counters on how often this exception handler is called:
-IRQ:       CPU0       CPU1
-   3:       1332          0         SuperIO  ttyS0
-   7:    1270013          0         SuperIO  pata_ns87415
-  64:  320023012  320021431             CPU  timer
-  65:   17080507   20624423             CPU  IPI
-UAH:   10948640      58104   Unaligned access handler traps
+My knowledge of arm64 is a bit limited, but the code does not seem
+to match the comment, so if it is correct (which I strongly doubt),
+the comment should be updated.
 
-This "UAH" field could theoretically be used to extend your selftest.
-But is it really worth it? The outcome is very much architecture and CPU
-specific, maybe it's just within the noise as you measured.
+[1] https://lore.kernel.org/all/20210131001132.3368247-2-namit@vmware.com/
 
-IMHO we should always try to natively align structures, and if we see
-we got it wrong in kernel code, we should fix it.
-My patches just fix those memory sections where we use inline
-assembly (instead of C) and thus missed to provide the correct alignments.
 
-Helge
-
-> ------------------------------------------------------------------------=
------------
-> before:
-> sudo ./tools/testing/selftests/module/find_symbol.sh
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          81,956,206 ns   duration_time
->          81,883,000 ns   system_time
->                 210      page-faults
->
->         0.081956206 seconds time elapsed
->
->         0.000000000 seconds user
->         0.081883000 seconds sys
->
->
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          85,960,863 ns   duration_time
->          84,679,000 ns   system_time
->                 212      page-faults
->
->         0.085960863 seconds time elapsed
->
->         0.000000000 seconds user
->         0.084679000 seconds sys
->
->
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          86,484,868 ns   duration_time
->          86,541,000 ns   system_time
->                 213      page-faults
->
->         0.086484868 seconds time elapsed
->
->         0.000000000 seconds user
->         0.086541000 seconds sys
->
-> ------------------------------------------------------------------------=
------------
-> After your modules alignement fix:
-> sudo ./tools/testing/selftests/module/find_symbol.sh
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          83,579,980 ns   duration_time
->          83,530,000 ns   system_time
->                 212      page-faults
->
->         0.083579980 seconds time elapsed
->
->         0.000000000 seconds user
->         0.083530000 seconds sys
->
->
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          70,721,786 ns   duration_time
->          69,289,000 ns   system_time
->                 211      page-faults
->
->         0.070721786 seconds time elapsed
->
->         0.000000000 seconds user
->         0.069289000 seconds sys
->
->
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          76,513,219 ns   duration_time
->          76,381,000 ns   system_time
->                 214      page-faults
->
->         0.076513219 seconds time elapsed
->
->         0.000000000 seconds user
->         0.076381000 seconds sys
->
-> After your modules alignement fix:
-> sudo ./tools/testing/selftests/module/find_symbol.sh
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          83,579,980 ns   duration_time
->          83,530,000 ns   system_time
->                 212      page-faults
->
->         0.083579980 seconds time elapsed
->
->         0.000000000 seconds user
->         0.083530000 seconds sys
->
->
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          70,721,786 ns   duration_time
->          69,289,000 ns   system_time
->                 211      page-faults
->
->         0.070721786 seconds time elapsed
->
->         0.000000000 seconds user
->         0.069289000 seconds sys
->
->
->
->   Performance counter stats for '/sbin/modprobe test_kallsyms_b':
->
->          76,513,219 ns   duration_time
->          76,381,000 ns   system_time
->                 214      page-faults
->
->         0.076513219 seconds time elapsed
->
->         0.000000000 seconds user
->         0.076381000 seconds sys
-> ------------------------------------------------------------------------=
------------
->
-> [perf-based selftest patch from Luis stripped]
-
+--=20
+This electronic communication and the information and any files transmitted=
+=20
+with it, or attached to it, are confidential and are intended solely for=20
+the use of the individual or entity to whom it is addressed and may contain=
+=20
+information that is confidential, legally privileged, protected by privacy=
+=20
+laws, or otherwise restricted from disclosure to anyone else. If you are=20
+not the intended recipient or the person responsible for delivering the=20
+e-mail to the intended recipient, you are hereby notified that any use,=20
+copying, distributing, dissemination, forwarding, printing, or copying of=
+=20
+this e-mail is strictly prohibited. If you received this e-mail in error,=
+=20
+please return the e-mail to the sender, delete it from your computer, and=
+=20
+destroy any printed copy of it.
 
