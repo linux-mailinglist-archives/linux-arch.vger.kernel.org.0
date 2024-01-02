@@ -1,200 +1,403 @@
-Return-Path: <linux-arch+bounces-1228-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1229-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9221C821AF6
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 12:30:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 199B2821C3A
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 14:07:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0596D1F227BF
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 11:30:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16DDB1C22025
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 13:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A11E572;
-	Tue,  2 Jan 2024 11:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998DEF9DA;
+	Tue,  2 Jan 2024 13:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="J0ZzP+oE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kG2JZIXk"
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="134aR5P3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2047.outbound.protection.outlook.com [40.107.8.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6A1E555;
-	Tue,  2 Jan 2024 11:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 890A93200AD5;
-	Tue,  2 Jan 2024 06:30:21 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 02 Jan 2024 06:30:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1704195021;
-	 x=1704281421; bh=h3JvgInG7Ve5RiimZ8l2qqQlcPTAgW2uluafkfImiMg=; b=
-	J0ZzP+oENC5diPXzLG51ke/34Q4eGEG/BZdJpS2ydH8WJEaBlzGtV/fF2DFmQcM1
-	zFeZLkK3EnU26TOYyIIrE1PcDocj1PX7tLakPL++r2nsa9YZK0CuMfPM05VZev5p
-	PwnHw3+SpjQkdLsx4kZnNesNS+xZ7MlJQeRrhxvXtv39q+Sgtxvrf4fc8B1YNh3H
-	9eXlnMj6CygiRY4Vpb105G1kDzQ2U2vPgUH4rt8iMzEbYCS67H+NguMLOexH80+y
-	Am/+o+vqC6whc99P6hC+lFBFK6/oglggTWUDxW17eRPtmLjmDf7OFhfYXIdNEiAs
-	Bi6OgB3KwcVWqEhXLLvH8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1704195021; x=
-	1704281421; bh=h3JvgInG7Ve5RiimZ8l2qqQlcPTAgW2uluafkfImiMg=; b=k
-	G2JZIXkFwCe70RI3PcafnLr3j8GF7AFn3rI2Re525QhVWVQBhtTnh5+bq4BU1Rox
-	2yHZaPE7w+NO79R6NB9AV84egZjUFHEKbkCBErjw9Tv6+zql9ImL//LBu7GVHmFA
-	NtLGRyuqIcPYO6mq1iqHw3o+/SucXcsWcHi3snwlHJWpf1pRl68BeVUxWbNJAZqg
-	P4ZspZysFW/TCn3o9hMiS/Fd92IGdqiFa8SY6CgZHmHcm25DoOzH/5LmtAkCkImx
-	tK0ydany5PLkP+OQJvA+vUIQU+R74CZQVww2wKQrzz3vIV72/DtLyxGa5lHTOkaJ
-	QmPQlmfQcgtZSRCdoxJXw==
-X-ME-Sender: <xms:zPOTZYbia3SVWJYS8m8t0xhQQmG5qxhCQEDdePwlqRYd5rFgHBsptw>
-    <xme:zPOTZTbz8c5TJc26OjAIEaFEyPCVZfgXNOwthuivPvsdWvJgPi9Ds_2xU1RpTv0rZ
-    euBZu3VZ0n4EM-pjQs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdegvddgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:zPOTZS9qr36iU_GgWLmZeUyApfi00Dkasyl-QBLvNglpt92w1P3Alg>
-    <xmx:zPOTZSrcTXTA2ebg43ik4TsfMMW6enuXHga81xYxylPIAlacJr2LcA>
-    <xmx:zPOTZTo-8BflwpnXhBimnXIcYwhytNx9IyvuHHlEN6NIElwzSscq4g>
-    <xmx:zfOTZfo2D2j50BQd46AH5fFoakLl1k_C8rOLiz15xgb-hy4X2BSlCg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id F1587B6008D; Tue,  2 Jan 2024 06:30:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293B5FBE7;
+	Tue,  2 Jan 2024 13:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a9oBKDUfUIVu12zsIh63GmKkPu5XUDbVSByTfW8jMY6r2nAchXE8XmLsda5v/dHudqaHPuRbBTs4Mf2A+UtJpycGVjtr5E0b4RFFMVdQ7aH/jD8EeTpM7jZCeUOUMmr28aC71hDCEoRfbGWhYLg1ZP4JItvCitq2jdlkK2bmk7+/6+NCEMRL/O3h1eHTOUFZgDI6eq+gbDdWe9bV1sWixngB1L4FBfvXiFdDtaTdBp043335KVjKVasirT62QcVLi0hXC8bFmTCI5eNqkjHKsdS7LMJzPeFJq4v7EQMqgQu4S4ShClm0eiptwsmDE7CTlm5mZNx2xPa6S+dmh0kHpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qMuVsC9AWHLuCDPaAYWLd7P5CRYYcbMwJnZESJk+FPk=;
+ b=eB8P2I8GWuECLr64IQYEGKpFjXMQhUGxAnuIe/50id8o9pyfQdUSwOIC0UA/Ft0F7/QVFs07OZiPGCwQvt96ffZmU/1E1D8PokYGuLAF/uISTakqEWU0KTuzR24/jE26L/p8iLdT3fWj6OjXvHfVEd62w5pMMgx0JSHk7Rnf3vy7k7vdTtPsUgTxGgS/McfeRAVEOTFMrsd0nIvwLIJluFt0PSjtSWUyqZ+uYr/9ugRRw4K0JDIEtHMyxNXKueSQc/XrC7fbkVgft0cYk4o6cPAe8e78eimvSduNH2xLAHedJZsI1YbAEXI7w/tD0vKmE8kyX3kZ/ofIWLeFBB9ZyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qMuVsC9AWHLuCDPaAYWLd7P5CRYYcbMwJnZESJk+FPk=;
+ b=134aR5P3PD7wHdexO/YIQ1j8bJVjKQdXd5uHl1pRIs0CQae3ImdhMPlL41TmW00i0OJnbl0s+swqn+qXR2wpGyb7SKxbNQ0dI6qmx8ZfDuaE/vORcy3/l9bywzm9qwAiOi7oQcKesGE0ehd/8pmRkbCEUZK6vO91ujg2uv8rdJY=
+Received: from DBBPR08MB6012.eurprd08.prod.outlook.com (2603:10a6:10:205::9)
+ by DB9PR08MB7889.eurprd08.prod.outlook.com (2603:10a6:10:39c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7135.25; Tue, 2 Jan
+ 2024 13:07:26 +0000
+Received: from DBBPR08MB6012.eurprd08.prod.outlook.com
+ ([fe80::1827:6361:a3a3:5831]) by DBBPR08MB6012.eurprd08.prod.outlook.com
+ ([fe80::1827:6361:a3a3:5831%4]) with mapi id 15.20.7135.023; Tue, 2 Jan 2024
+ 13:07:25 +0000
+From: Jose Marinho <Jose.Marinho@arm.com>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>, "Russell King (Oracle)"
+	<rmk+kernel@armlinux.org.uk>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>,
+	"acpica-devel@lists.linuxfoundation.org"
+	<acpica-devel@lists.linuxfoundation.org>, "linux-csky@vger.kernel.org"
+	<linux-csky@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-ia64@vger.kernel.org"
+	<linux-ia64@vger.kernel.org>, "linux-parisc@vger.kernel.org"
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Jianyong Wu
+	<Jianyong.Wu@arm.com>, Justin He <Justin.He@arm.com>, James Morse
+	<James.Morse@arm.com>, Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+	nd <nd@arm.com>
+Subject: RE: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS support
+ for toggling CPU present/enabled
+Thread-Topic: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS support
+ for toggling CPU present/enabled
+Thread-Index: AQHaL3ntNyOGqVAnrU+84Ux6biaSarDGiPtQ
+Date: Tue, 2 Jan 2024 13:07:25 +0000
+Message-ID:
+ <DBBPR08MB60121770239F324D877847E18861A@DBBPR08MB6012.eurprd08.prod.outlook.com>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOhS-00Dvla-7i@rmk-PC.armlinux.org.uk>
+ <20231215171227.00006550@Huawei.com>
+In-Reply-To: <20231215171227.00006550@Huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ts-tracking-id: 220FBD1A958A4349801F4D34C4EDB266.0
+x-checkrecipientchecked: true
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DBBPR08MB6012:EE_|DB9PR08MB7889:EE_
+x-ms-office365-filtering-correlation-id: 4d9fbb8a-6984-4296-f48b-08dc0b93c41d
+nodisclaimer: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ inFwSiSfqBq197UYjfu0XSyRKJAoKu3KUrHuFZXp+YF6c7xb+Eq5FhjrADa9lBjBFgyRuc9FmIpPVrgZqscsCVZos7Se5k8EDOYo8yCruGiuB/gfKIT607pVOG9B9/+nIlw+qgbVHsPsaveH/o+c7DUrwqjMjc52bku7GS2tD8E2Sy/cMF9ezAWOPCFcqTAk1V5RiaO6oFG8bHL9u99SAFQ8iZJ+IkJmaidcRhzhIqhyx75HBxCGUWXX+l028ctsEnmpE3T9sxFkrdndq2PDqcZ7e17Lf/VvMYEGNlxbW4Qi6vYV2pa/KtZIyAvfVtlMWzukcTCFFBZLSfAJXb0qJ9hNO3OzH/Wr0LGNg4hiQVqzmnn7yVP0IKdL+kVuBZMML6G0hQnuGxNt6C7jukZt67ICoN+nyj1ToYvmm/lDofLUcALsdDVpboibNWsrWrNlP1DQaYA8+8LurcJzfS5eMrDy2jUvKp9HIAhvmd8SabxjJzBqFZuEHOJpPjVjju6+Au5H7QYkjrh6tAjmOlCzYBCZOIuySPUabGVV5/HS4pUPOMCSXMzG/rUIehK5SVa6839F/Mn5k9koIOMq4nzrvmzUseEOjaFp6qJNF0F4jls=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB6012.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(396003)(136003)(376002)(366004)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(26005)(71200400001)(122000001)(83380400001)(38100700002)(76116006)(110136005)(66946007)(66556008)(64756008)(66446008)(66476007)(316002)(54906003)(478600001)(966005)(86362001)(55016003)(5660300002)(2906002)(7416002)(52536014)(33656002)(8936002)(8676002)(4326008)(38070700009)(9686003)(6506007)(7696005)(53546011)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?cgxOvH4N3jU5Zt7a4hQIG9cgUq/+HSUTZ8bZ3+Z3Lvtp6K2q7EXA3COqDmYy?=
+ =?us-ascii?Q?VYSN7xK/cWaOTyuYg9TpKh2eVyV4wdOTKK/7S1pMhSBbHYQ3i2GuqsEGL2BE?=
+ =?us-ascii?Q?EDvFygdzoldu4OYsBIRa5xvXwY6UlDImSQMQICzhaquUhZ6gublJErbKFfCW?=
+ =?us-ascii?Q?do559/cAyv7QIFcqD2hCKL9kVfsGk/5VFQYLaoDu+geXEHcD7eIVX/ishNHT?=
+ =?us-ascii?Q?hd4BmVNd7+TUmqNxaZrUduYWU9jy8o2wCMoF8yx/LS+MvhnBHhFzzykOy6vT?=
+ =?us-ascii?Q?CqjBY9HgOgeW/+USkyYob2EAX0TOt1IAWD7gflNZR0O+zVJriYPcrHmpdeUg?=
+ =?us-ascii?Q?iMiIOFZG0fpm3C+IuRJgfa/v0YFmKPH73zS+V05fJGWHeqhr0cZ9+1QLkxwR?=
+ =?us-ascii?Q?+z7E/Zpl6b2SEIPt5WEaFaqGWbvPOb3772u32YROBSfTim19nplO4eWPnC2r?=
+ =?us-ascii?Q?mztwMBb+iv7BXVXQsl2WL4St7csFGpeEhxsyCR4STpypt4mtMtdDyyrXFjBg?=
+ =?us-ascii?Q?TQpVxtpOhJ/GQvhnSmbgf3xNkPqE2xHeReowyrThsSVOR4ND7ppVu4AVO99K?=
+ =?us-ascii?Q?lGXNsNFHTl+xmLDb1AxGqUEF514yDUeHecUXPFo+ciibIQg13FJBjrx9y9S4?=
+ =?us-ascii?Q?cpOI76rj5mT/1YbFXg+yiQKLwnYAfamcC3eYXsrcu2DmKA4CjPNkgY5UvVjw?=
+ =?us-ascii?Q?aqL1bEu5osLpfLdjQTT0ov5dhqNNLyaNkmagh0WZYf1WF+MUPDE3lVm4KCmk?=
+ =?us-ascii?Q?8kkNsmoxQT47SIEx9Irp7fH3ThViGr34Rtzht0vzw3fsgfPg5F7ArmWdEZCL?=
+ =?us-ascii?Q?Xeoz5dEon95195xrqdcD+8bqXwG2DOQkmVzx34/SVtRwWZ1WofRA3fGzImIE?=
+ =?us-ascii?Q?qIsDRALbdeKebyD74ZtfBoDdHSaTHZZo8hhCqS36/ucb72ijs83Ui58f156g?=
+ =?us-ascii?Q?XejGl6p2uBaPlQXNjw+MpC5muCdaU13gHlAVituxABCbh/OhtwOMOYht3y5X?=
+ =?us-ascii?Q?N110Xw72w2EwRPQQ1/KwPpmKymsZUxKAJpobO5JFMa0XnbOfcLsNPWzjjAzJ?=
+ =?us-ascii?Q?eclwvLsJ7TzMXx9bFlttyw6gW/EHaF71LJ/O1WKvB4wuDY5I3dTIi5v+NKc5?=
+ =?us-ascii?Q?obxhdloFmLPecFnqtUwxtDfc0MuyTGcBFCph7CcIh1ugblV0mnFpY3wOUF36?=
+ =?us-ascii?Q?uXb6FC8sdA3mitq3TJls3p8zSAsIJwuMAHoYSsY/pggT8n/3ODKAwrYfwdbL?=
+ =?us-ascii?Q?7Ht44exEVxuCCmMf0feqWB1FGcMZh8oxFQ5gvDDPJ/UADQhtzyQV7pA0Il/Z?=
+ =?us-ascii?Q?fdKXBO74JKnCDscZjenkN01uDzP1+x42+fhzbxp+7KDafQCDEfYfKjYO2w+h?=
+ =?us-ascii?Q?gwXDM1HVXlJs3qqchTH3SpkS238zu16++K3hgZ7j14WvCGL7EJHAfviUVPav?=
+ =?us-ascii?Q?n4WTL1k5wIc2EFFQvXN0WPyezX2DNGLhBZ2cVcIAcZEK5KyG4Qzd4yHNGL9h?=
+ =?us-ascii?Q?lSI9LD8KpNFLOV4xLRdtk1bYfUZf4+uRJg/waBUQQQ7RsNqF7d8a5PBXXbAX?=
+ =?us-ascii?Q?hFTTE3i/4/yr3ICaQWcHxbHHFkXg8R2p+84cxjTK?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <84d8e9d7-09ce-4781-8dfa-a74bb0955ae8@app.fastmail.com>
-In-Reply-To: 
- <CAMuE1bF0Hho4VwO6w3f+9z3j5TtscYzuAjj10MFt2mZXG2P8dQ@mail.gmail.com>
-References: <20231228122411.3189-1-maimon.sagi@gmail.com>
- <f254c189-463e-43a3-bc09-9a8869ebf819@app.fastmail.com>
- <CAMuE1bF0Hho4VwO6w3f+9z3j5TtscYzuAjj10MFt2mZXG2P8dQ@mail.gmail.com>
-Date: Tue, 02 Jan 2024 12:29:59 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Sagi Maimon" <maimon.sagi@gmail.com>
-Cc: "Richard Cochran" <richardcochran@gmail.com>,
- "Andy Lutomirski" <luto@kernel.org>, datglx@linutronix.de,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Johannes Weiner" <hannes@cmpxchg.org>,
- "Sohil Mehta" <sohil.mehta@intel.com>,
- "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
- "Nhat Pham" <nphamcs@gmail.com>, "Palmer Dabbelt" <palmer@sifive.com>,
- "Kees Cook" <keescook@chromium.org>, "Alexey Gladkov" <legion@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- Netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3] posix-timers: add multi_clock_gettime system call
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR08MB6012.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d9fbb8a-6984-4296-f48b-08dc0b93c41d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2024 13:07:25.7742
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KsnnOwg6YeGR0Q1+dONTA/Ydk2cIFdhhP9IIKR0oHRwCC5pMhdWv9ML7HZfxGmyI76jdVh98yrHaR71KGWq5Iw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB7889
 
-On Sun, Dec 31, 2023, at 17:00, Sagi Maimon wrote:
-> On Fri, Dec 29, 2023 at 5:27=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
-wrote:
+Hi Jonathan,
 
->> > +struct __ptp_multi_clock_get {
->> > +     unsigned int n_clocks; /* Desired number of clocks. */
->> > +     unsigned int n_samples; /* Desired number of measurements per=
- clock. */
->> > +     clockid_t clkid_arr[MULTI_PTP_MAX_CLOCKS]; /* list of clock I=
-Ds */
->> > +     /*
->> > +      * Array of list of n_clocks clocks time samples n_samples ti=
-mes.
->> > +      */
->> > +     struct  __kernel_timespec ts[MULTI_PTP_MAX_SAMPLES][MULTI_PTP=
-_MAX_CLOCKS];
->> > +};
->>
->> The fixed size arrays here seem to be an unnecessary limitation,
->> both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS are small
->> enough that one can come up with scenarios where you would want
->> a higher number, but at the same time the structure is already
->> 808 bytes long, which is more than you'd normally want to put
->> on the kernel stack, and which may take a significant time to
->> copy to and from userspace.
->>
->> Since n_clocks and n_samples are always inputs to the syscall,
->> you can just pass them as register arguments and use a dynamically
->> sized array instead.
->>
-> Both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS are enough of any
-> usage we can think of,
-> But I think you are right, it is better to use a dynamically sized
-> array for future use, plus to use less stack memory.
-> On patch v4 a dynamically sized array will be used .
-> I leaving both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS but
-> increasing their values, since there should be some limitation.
+> -----Original Message-----
+> From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Sent: Friday, December 15, 2023 5:12 PM
+> To: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Cc: linux-pm@vger.kernel.org; loongarch@lists.linux.dev; linux-
+> acpi@vger.kernel.org; linux-arch@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> riscv@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org; acpica=
+-
+> devel@lists.linuxfoundation.org; linux-csky@vger.kernel.org; linux-
+> doc@vger.kernel.org; linux-ia64@vger.kernel.org; linux-
+> parisc@vger.kernel.org; Salil Mehta <salil.mehta@huawei.com>; Jean-Philip=
+pe
+> Brucker <jean-philippe@linaro.org>; Jianyong Wu <Jianyong.Wu@arm.com>;
+> Justin He <Justin.He@arm.com>; James Morse <James.Morse@arm.com>;
+> Jose Marinho <Jose.Marinho@arm.com>; Samer El-Haj-Mahmoud <Samer.El-
+> Haj-Mahmoud@arm.com>
+> Subject: Re: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS
+> support for toggling CPU present/enabled
+>=20
+> On Wed, 13 Dec 2023 12:50:54 +0000
+> Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+>=20
+> > From: James Morse <james.morse@arm.com>
+> >
+> > Platform firmware can disabled a CPU, or make it not-present by making
+> > an eject-request notification, then waiting for the os to make it
+> > offline
+> OS
+>=20
+> > and call _EJx. After the firmware updates _STA with the new status.
+> >
+> > Not all operating systems support this. For arm64 making CPUs
+> > not-present has never been supported. For all ACPI architectures,
+> > making CPUs disabled has recently been added. Firmware can't know what
+> the OS has support for.
+> >
+> > Add two new _OSC bits to advertise whether the OS supports the _STA
+> > enabled or present bits being toggled for CPUs. This will be important
+> > for arm64 if systems that support physical CPU hotplug ever appear as
+> > arm64 linux doesn't currently support this, so firmware shouldn't try.
+> >
+> > Advertising this support to firmware is useful for cloud orchestrators
+> > to know whether they can scale a particular VM by adding CPUs.
+> >
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+>=20
+> I'm very much in favor of this _OSC but it hasn't been accepted yet I thi=
+nk...
+> https://bugzilla.tianocore.org/show_bug.cgi?id=3D4481
+>=20
+> Jose? Github suggests you are the proposer on this.
 
-I think having an implementation specific limit in the kernel is
-fine, but it would be nice to hardcode that limit in the API.
+The addition of these _OSC bits was proposed by us on the forum in question=
+.
+The forum opted to pause the definition until additional practical informat=
+ion could be provided on the use-cases.
 
-If both clkidarr[] and ts[] are passed as pointer arguments
-in registers, they can be arbitrarily long in the API and
-still have a documented maximum that we can extend in the
-future without changing the interface.
+If anyone is interested in progressing the _OSC bit definition, you are inv=
+ited to express that interest in the Bugzilla ticket.
+Information that you should provide to increase the chances of the ticket b=
+eing reopened:
+- use-case for the new _OSC bits,
+- what breaks (if anything) without the proposed _OSC bits.
 
->> It's not clear to me what you gain from having the n_samples
->> argument over just calling the syscall repeatedly. Does
->> this offer a benefit for accuracy or is this just meant to
->> avoid syscall overhead.
-> It is mainly to avoid syscall overhead which also slightly
-> improve the accuracy.
+We did receive additional comments:
+- the proposed _OSC bits are not generic: the bits simply convey whether th=
+e guest OS understands CPU hot-plug, but it says nothing about the number o=
+f CPUs that the OS supports.
+- There could be alternate schemes that do not rely on spec changes. E.g. t=
+here could be a hypervisor IMPDEF mechanism to describe if an OS image supp=
+orts CPU hot-plug.
 
-This is not a big deal as far as I'm concerned, but it
-would be nice to back this up with some numbers if you
-think it's worthwhile, as my impression is that the effect
-is barely measurable: my guess would be that the syscall
-overhead is always much less than the cost for the hardware
-access.
+>=20
+> btw v4 looks ok but v5 in the tianocore github seems to have lost the act=
+ual
+> OSC part.
 
->> On the other hand, this will still give less accuracy than the
->> getcrosststamp() callback with ioctl(PTP_SYS_OFFSET_PRECISE),
->> so either the last bit of accuracy isn't all that important,
->> or you need to refine the interface to actually be an
->> improvement over the chardev.
->>
-> I don't understand this comment, please explain.
-> The ioctl(PTP_SYS_OFFSET_PRECISE) is one specific case that can be
-> done by multi_clock_gettime syscall (which cover many more cases)
-> Plus the ioctl(PTP_SYS_OFFSET_PRECISE) works only on drivers that
-> support this feature.
+Agree that, if we do progress with this spec change, v4 is the correct form=
+ulation we should adopt.=20
 
-My point here is that on drivers that do support
-PTP_SYS_OFFSET_PRECISE, the extra accuracy should be maintained
-by the new interface, ideally in a way that does not have any
-other downsides.
+Regards,
+Jose
 
-I think Andy's suggestion of exposing time offsets instead
-of absolute times would actually achieve that: If the
-interface is changed to return the offset against
-CLOCK_MONOTONIC, CLOCK_MONOTONIC_RAW or CLOCK_BOOTTIME
-(not sure what is best here), then the new syscall can use
-getcrosststamp() where supported for the best results or
-fall back to gettimex64() or gettime64() otherwise to
-provide a consistent user interface.
+>=20
+> Jonathan
+>=20
+> > ---
+> > I'm assuming Loongarch machines do not support physical CPU hotplug.
+> >
+> > Changes since RFC v3:
+> >  * Drop ia64 changes
+> >  * Update James' comment below "---" to remove reference to ia64
+> >
+> > Outstanding comment:
+> >  https://lore.kernel.org/r/20230914175021.000018fd@Huawei.com
+>=20
+>=20
+>=20
+> > ---
+> >  arch/x86/Kconfig              |  1 +
+> >  drivers/acpi/Kconfig          |  9 +++++++++
+> >  drivers/acpi/acpi_processor.c | 14 +++++++++++++-
+> >  drivers/acpi/bus.c            | 16 ++++++++++++++++
+> >  include/linux/acpi.h          |  4 ++++
+> >  5 files changed, 43 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig index
+> > 64fc7c475ab0..33fc4dcd950c 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -60,6 +60,7 @@ config X86
+> >  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
+> >  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+> >  	select ACPI_HOTPLUG_PRESENT_CPU		if ACPI_PROCESSOR
+> && HOTPLUG_CPU
+> > +	select ACPI_HOTPLUG_IGNORE_OSC		if ACPI &&
+> HOTPLUG_CPU
+> >  	select ARCH_32BIT_OFF_T			if X86_32
+> >  	select ARCH_CLOCKSOURCE_INIT
+> >  	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+> > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig index
+> > 9c5a43d0aff4..020e7c0ab985 100644
+> > --- a/drivers/acpi/Kconfig
+> > +++ b/drivers/acpi/Kconfig
+> > @@ -311,6 +311,15 @@ config ACPI_HOTPLUG_PRESENT_CPU
+> >  	depends on ACPI_PROCESSOR && HOTPLUG_CPU
+> >  	select ACPI_CONTAINER
+> >
+> > +config ACPI_HOTPLUG_IGNORE_OSC
+> > +	bool
+> > +	depends on ACPI_HOTPLUG_PRESENT_CPU
+> > +	help
+> > +	  Ignore whether firmware acknowledged support for toggling the CPU
+> > +	  present bit in _STA. Some architectures predate the _OSC bits, so
+> > +	  firmware doesn't know to do this.
+> > +
+> > +
+> >  config ACPI_PROCESSOR_AGGREGATOR
+> >  	tristate "Processor Aggregator"
+> >  	depends on ACPI_PROCESSOR
+> > diff --git a/drivers/acpi/acpi_processor.c
+> > b/drivers/acpi/acpi_processor.c index ea12e70dfd39..5bb207a7a1dd
+> > 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -182,6 +182,18 @@ static void __init acpi_pcc_cpufreq_init(void)
+> > static void __init acpi_pcc_cpufreq_init(void) {}  #endif /*
+> > CONFIG_X86 */
+> >
+> > +static bool acpi_processor_hotplug_present_supported(void)
+> > +{
+> > +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> > +		return false;
+> > +
+> > +	/* x86 systems pre-date the _OSC bit */
+> > +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_IGNORE_OSC))
+> > +		return true;
+> > +
+> > +	return osc_sb_hotplug_present_support_acked;
+> > +}
+> > +
+> >  /* Initialization */
+> >  static int acpi_processor_make_present(struct acpi_processor *pr)  {
+> > @@ -189,7 +201,7 @@ static int acpi_processor_make_present(struct
+> acpi_processor *pr)
+> >  	acpi_status status;
+> >  	int ret;
+> >
+> > -	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU)) {
+> > +	if (!acpi_processor_hotplug_present_supported()) {
+> >  		pr_err_once("Changing CPU present bit is not supported\n");
+> >  		return -ENODEV;
+> >  	}
+> > diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c index
+> > 72e64c0718c9..7122450739d6 100644
+> > --- a/drivers/acpi/bus.c
+> > +++ b/drivers/acpi/bus.c
+> > @@ -298,6 +298,13 @@
+> > EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+> >
+> >  bool osc_sb_cppc2_support_acked;
+> >
+> > +/*
+> > + * ACPI 6.? Proposed Operating System Capabilities for modifying CPU
+> > + * present/enable.
+> > + */
+> > +bool osc_sb_hotplug_enabled_support_acked;
+> > +bool osc_sb_hotplug_present_support_acked;
+> > +
+> >  static u8 sb_uuid_str[] =3D "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+> >  static void acpi_bus_osc_negotiate_platform_control(void)
+> >  {
+> > @@ -346,6 +353,11 @@ static void
+> > acpi_bus_osc_negotiate_platform_control(void)
+> >
+> >  	if (!ghes_disable)
+> >  		capbuf[OSC_SUPPORT_DWORD] |=3D OSC_SB_APEI_SUPPORT;
+> > +
+> > +	capbuf[OSC_SUPPORT_DWORD] |=3D
+> OSC_SB_HOTPLUG_ENABLED_SUPPORT;
+> > +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> > +		capbuf[OSC_SUPPORT_DWORD] |=3D
+> OSC_SB_HOTPLUG_PRESENT_SUPPORT;
+> > +
+> >  	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+> >  		return;
+> >
+> > @@ -383,6 +395,10 @@ static void
+> acpi_bus_osc_negotiate_platform_control(void)
+> >  			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_NATIVE_USB4_SUPPORT;
+> >  		osc_cpc_flexible_adr_space_confirmed =3D
+> >  			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_CPC_FLEXIBLE_ADR_SPACE;
+> > +		osc_sb_hotplug_enabled_support_acked =3D
+> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_HOTPLUG_ENABLED_SUPPORT;
+> > +		osc_sb_hotplug_present_support_acked =3D
+> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_HOTPLUG_PRESENT_SUPPORT;
+> >  	}
+> >
+> >  	kfree(context.ret.pointer);
+> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h index
+> > 00be66683505..c572abac803c 100644
+> > --- a/include/linux/acpi.h
+> > +++ b/include/linux/acpi.h
+> > @@ -559,12 +559,16 @@ acpi_status acpi_run_osc(acpi_handle handle,
+> struct acpi_osc_context *context);
+> >  #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+> >  #define OSC_SB_PRM_SUPPORT			0x00200000
+> >  #define OSC_SB_FFH_OPR_SUPPORT			0x00400000
+> > +#define OSC_SB_HOTPLUG_ENABLED_SUPPORT		0x00800000
+> > +#define OSC_SB_HOTPLUG_PRESENT_SUPPORT		0x01000000
+> >
+> >  extern bool osc_sb_apei_support_acked;  extern bool
+> > osc_pc_lpi_support_confirmed;  extern bool
+> > osc_sb_native_usb4_support_confirmed;
+> >  extern bool osc_sb_cppc2_support_acked;  extern bool
+> > osc_cpc_flexible_adr_space_confirmed;
+> > +extern bool osc_sb_hotplug_enabled_support_acked;
+> > +extern bool osc_sb_hotplug_present_support_acked;
+> >
+> >  /* USB4 Capabilities */
+> >  #define OSC_USB_USB3_TUNNELING			0x00000001
 
-Returning an offset would also allow easily calculating an
-average over multiple calls in the kernel, instead of
-returning a two-dimensional array.
-
-    Arnd
 
