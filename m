@@ -1,40 +1,39 @@
-Return-Path: <linux-arch+bounces-1232-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1233-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96378821DFD
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 15:44:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B17821E22
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 15:53:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BC19283925
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 14:44:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C85EC1F22C1D
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jan 2024 14:53:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0533312E74;
-	Tue,  2 Jan 2024 14:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9EC12B75;
+	Tue,  2 Jan 2024 14:53:29 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C9614267;
-	Tue,  2 Jan 2024 14:39:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8081C1400D;
+	Tue,  2 Jan 2024 14:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4T4Fn71b29z6JB5q;
-	Tue,  2 Jan 2024 22:37:31 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4T4G5q1Xwbz6K5pD;
+	Tue,  2 Jan 2024 22:51:59 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id CBC821400DB;
-	Tue,  2 Jan 2024 22:39:27 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id D4BBB1400DB;
+	Tue,  2 Jan 2024 22:53:22 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 2 Jan
- 2024 14:39:27 +0000
-Date: Tue, 2 Jan 2024 14:39:25 +0000
+ 2024 14:53:22 +0000
+Date: Tue, 2 Jan 2024 14:53:20 +0000
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
 	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
@@ -43,14 +42,13 @@ CC: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Rafael J. Wysocki"
 	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
 	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
 	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
- functional) devices
-Message-ID: <20240102143925.00004361@Huawei.com>
-In-Reply-To: <5760569.DvuYhMxLoT@kreacher>
+Subject: Re: [PATCH RFC v3 17/21] ACPI: add support to register CPUs based
+ on the _STA enabled bit
+Message-ID: <20240102145320.000062f9@Huawei.com>
+In-Reply-To: <ZYBDJG1g7SH7AiM1@shell.armlinux.org.uk>
 References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk>
-	<20231215161539.00000940@Huawei.com>
-	<5760569.DvuYhMxLoT@kreacher>
+	<E1rDOhC-00DvlI-Pp@rmk-PC.armlinux.org.uk>
+	<ZYBDJG1g7SH7AiM1@shell.armlinux.org.uk>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
@@ -59,195 +57,66 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Fri, 15 Dec 2023 20:47:31 +0100
-"Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
+On Mon, 18 Dec 2023 13:03:32 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-> On Friday, December 15, 2023 5:15:39 PM CET Jonathan Cameron wrote:
-> > On Fri, 15 Dec 2023 15:31:55 +0000
-> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> >  =20
-> > > On Thu, Dec 14, 2023 at 07:37:10PM +0100, Rafael J. Wysocki wrote: =20
-> > > > On Thu, Dec 14, 2023 at 7:16=E2=80=AFPM Rafael J. Wysocki <rafael@k=
-ernel.org> wrote:   =20
-> > > > >
-> > > > > On Thu, Dec 14, 2023 at 7:10=E2=80=AFPM Russell King (Oracle)
-> > > > > <linux@armlinux.org.uk> wrote:   =20
-> > > > > > I guess we need something like:
-> > > > > >
-> > > > > >         if (device->status.present)
-> > > > > >                 return device->device_type !=3D ACPI_BUS_TYPE_P=
-ROCESSOR ||
-> > > > > >                        device->status.enabled;
-> > > > > >         else
-> > > > > >                 return device->status.functional;
-> > > > > >
-> > > > > > so we only check device->status.enabled for processor-type devi=
-ces?   =20
-> > > > >
-> > > > > Yes, something like this.   =20
-> > > >=20
-> > > > However, that is not sufficient, because there are
-> > > > ACPI_BUS_TYPE_DEVICE devices representing processors.
-> > > >=20
-> > > > I'm not sure about a clean way to do it ATM.   =20
-> > >=20
-> > > Ok, how about:
-> > >=20
-> > > static bool acpi_dev_is_processor(const struct acpi_device *device)
-> > > {
-> > > 	struct acpi_hardware_id *hwid;
-> > >=20
-> > > 	if (device->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
-> > > 		return true;
-> > >=20
-> > > 	if (device->device_type !=3D ACPI_BUS_TYPE_DEVICE)
-> > > 		return false;
-> > >=20
-> > > 	list_for_each_entry(hwid, &device->pnp.ids, list)
-> > > 		if (!strcmp(ACPI_PROCESSOR_OBJECT_HID, hwid->id) ||
-> > > 		    !strcmp(ACPI_PROCESSOR_DEVICE_HID, hwid->id))
-> > > 			return true;
-> > >=20
-> > > 	return false;
-> > > }
-> > >=20
-> > > and then:
-> > >=20
-> > > 	if (device->status.present)
-> > > 		return !acpi_dev_is_processor(device) || device->status.enabled;
-> > > 	else
-> > > 		return device->status.functional;
-> > >=20
-> > > ?
-> > >  =20
-> > Changing it to CPU only for now makes sense to me and I think this code=
- snippet should do the
-> > job.  Nice and simple. =20
->=20
-> Well, except that it does checks that are done elsewhere slightly
-> differently, which from the maintenance POV is not nice.
->=20
-> Maybe something like the appended patch (untested).
+> On Wed, Dec 13, 2023 at 12:50:38PM +0000, Russell King wrote:
+> > From: James Morse <james.morse@arm.com>
+> > 
+> > acpi_processor_get_info() registers all present CPUs. Registering a
+> > CPU is what creates the sysfs entries and triggers the udev
+> > notifications.
+> > 
+> > arm64 virtual machines that support 'virtual cpu hotplug' use the
+> > enabled bit to indicate whether the CPU can be brought online, as
+> > the existing ACPI tables require all hardware to be described and
+> > present.
+> > 
+> > If firmware describes a CPU as present, but disabled, skip the
+> > registration. Such CPUs are present, but can't be brought online for
+> > whatever reason. (e.g. firmware/hypervisor policy).
+> > 
+> > Once firmware sets the enabled bit, the CPU can be registered and
+> > brought online by user-space. Online CPUs, or CPUs that are missing
+> > an _STA method must always be registered.  
+> 
+> ...
+> 
+> > @@ -526,6 +552,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
+> >  		acpi_processor_make_not_present(device);
+> >  		return;
+> >  	}
+> > +
+> > +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
+> > +		arch_unregister_cpu(pr->id);  
+> 
+> This change isn't described in the commit log, but seems to be the cause
+> of the build error identified by the kernel build bot that is fixed
+> later in this series. I'm wondering whether this should be in a
+> different patch, maybe "ACPI: Check _STA present bit before making CPUs
+> not present" ?
 
-Hi Rafael,
+Would seem a bit odd to call arch_unregister_cpu() way before the code
+is added to call the matching arch_registers_cpu()
 
-As far as I can see that's functionally equivalent, so looks good to me.
-I'm not set up to test this today though, so will defer to Russell on wheth=
-er
-there is anything missing
+Mind you this eject doesn't just apply to those CPUs that are registered
+later I think, but instead to all.  So we run into the spec hole that
+there is no way to identify initially 'enabled' CPUs that might be disabled
+later.
 
-Thanks for putting this together.
+> 
+> Or maybe my brain isn't working properly (due to being Covid positive.)
+> Any thoughts, Jonathan?
+
+I'll go with a resounding 'not sure' on where this change belongs.
+I blame my non existent start of the year hangover.
+Hope you have recovered!
 
 Jonathan
-
->=20
-> ---
->  drivers/acpi/acpi_processor.c |   11 +++++++++++
->  drivers/acpi/internal.h       |    3 +++
->  drivers/acpi/scan.c           |   24 +++++++++++++++++++++++-
->  3 files changed, 37 insertions(+), 1 deletion(-)
->=20
-> Index: linux-pm/drivers/acpi/acpi_processor.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/acpi/acpi_processor.c
-> +++ linux-pm/drivers/acpi/acpi_processor.c
-> @@ -644,6 +644,17 @@ static struct acpi_scan_handler processo
->  	},
->  };
-> =20
-> +bool acpi_device_is_processor(const struct acpi_device *adev)
-> +{
-> +	if (adev->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
-> +		return true;
-> +
-> +	if (adev->device_type !=3D ACPI_BUS_TYPE_DEVICE)
-> +		return false;
-> +
-> +	return acpi_scan_check_handler(adev, &processor_handler);
-> +}
-> +
->  static int acpi_processor_container_attach(struct acpi_device *dev,
->  					   const struct acpi_device_id *id)
->  {
-> Index: linux-pm/drivers/acpi/internal.h
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/acpi/internal.h
-> +++ linux-pm/drivers/acpi/internal.h
-> @@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(stru
->  int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handler,
->  				       const char *hotplug_profile_name);
->  void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, boo=
-l val);
-> +bool acpi_scan_check_handler(const struct acpi_device *adev,
-> +			     struct acpi_scan_handler *handler);
-> =20
->  #ifdef CONFIG_DEBUG_FS
->  extern struct dentry *acpi_debugfs_dir;
-> @@ -133,6 +135,7 @@ int acpi_bus_register_early_device(int t
->  const struct acpi_device *acpi_companion_match(const struct device *dev);
->  int __acpi_device_uevent_modalias(const struct acpi_device *adev,
->  				  struct kobj_uevent_env *env);
-> +bool acpi_device_is_processor(const struct acpi_device *adev);
-> =20
->  /* ---------------------------------------------------------------------=
------
->                                    Power Resource
-> Index: linux-pm/drivers/acpi/scan.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/acpi/scan.c
-> +++ linux-pm/drivers/acpi/scan.c
-> @@ -1938,6 +1938,19 @@ static bool acpi_scan_handler_matching(s
->  	return false;
->  }
-> =20
-> +bool acpi_scan_check_handler(const struct acpi_device *adev,
-> +			     struct acpi_scan_handler *handler)
-> +{
-> +	struct acpi_hardware_id *hwid;
-> +
-> +	list_for_each_entry(hwid, &adev->pnp.ids, list) {
-> +		if (acpi_scan_handler_matching(handler, hwid->id, NULL))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static struct acpi_scan_handler *acpi_scan_match_handler(const char *ids=
-tr,
->  					const struct acpi_device_id **matchid)
->  {
-> @@ -2410,7 +2423,16 @@ bool acpi_dev_ready_for_enumeration(cons
->  	if (device->flags.honor_deps && device->dep_unmet)
->  		return false;
-> =20
-> -	return acpi_device_is_present(device);
-> +	if (device->status.functional)
-> +		return true;
-> +
-> +	if (!device->status.present)
-> +		return false;
-> +
-> +	if (device->status.enabled)
-> +		return true; /* Fast path. */
-> +
-> +	return !acpi_device_is_processor(device);
->  }
->  EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
-> =20
->=20
->=20
->=20
 
 
