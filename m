@@ -1,198 +1,124 @@
-Return-Path: <linux-arch+bounces-1239-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1240-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C1A9822DE7
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jan 2024 14:00:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E88DB822E08
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Jan 2024 14:11:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51FC31C225A9
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jan 2024 13:00:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 984752853DA
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Jan 2024 13:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9061319461;
-	Wed,  3 Jan 2024 13:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2861946F;
+	Wed,  3 Jan 2024 13:11:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JRN0qJR0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjiXUhhX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A5D1944F;
-	Wed,  3 Jan 2024 13:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5e734d6cbe4so81648257b3.3;
-        Wed, 03 Jan 2024 05:00:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704286805; x=1704891605; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T7i+8MOEKjuPGnNZAwLyrfk1/htpJtDKIJboRJ8BNRw=;
-        b=JRN0qJR0+he2iO4E+cmj2irMEFVUzfJE+ux7EcxfrlRZCKGfQT71A+uEONYui22I7/
-         tlMjZNWG2+VLDPOnPQTHokhyT4mURZ9aZsA0UXj6KKhz5e2b3klYF0g3nRRDgWoIFjIy
-         8wCl21rMEGZ9KXkQcbDuid+u0lt+vRvka6bqIVtxIBCYbnqwBa58ZvHzGlStHvy5606c
-         LFLLqk2xqFjbZNkrLKAliK3m3XkJTtAk29eg4jr8VuvnC+GTQTWqKP8XEoQjMn2Euh1g
-         ovtyjOVNPR5oCpQwBC/v+UR9sFq0LBHO6NIvPPiDvlXJsUHdKxGeZqWMuOWz6jgzoc4D
-         iSwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704286805; x=1704891605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T7i+8MOEKjuPGnNZAwLyrfk1/htpJtDKIJboRJ8BNRw=;
-        b=Pq09Fxv09Qntl8yyZMc9LE/mGlXz5wqvRfQpXU+bpS/1dRLREi7jxb065f4Zu906Vn
-         GIfgK5vyjs1k6c1X9NshVLQrv2I8zS2rO8lsagt0ZrfgZ42FdA5yafvjvLlc1RHQlQJS
-         4A4+m5jLfR2I3DMPYa08NxhBaagj//OqhrG6uBkNEEKMZNrr7oT//PZQrejaX2XIXqf4
-         9UrcNGuh49GuctnEZpV4gCzahjK1Awui+wNQbe9QaraHxRn98mIpu2grx+y1hqcejIZT
-         pDbV2EkebWYlpbUeG9k6YawpAehHuEdi3qyA0yuNL+kZfKUPpUicELja3J+IhMOYH07i
-         hEKA==
-X-Gm-Message-State: AOJu0YwHyKKDsOvgXyTKHuZSuLXUsM6MewgL4Aob2gExmo1HBXwN+0n4
-	OzVi4p6p02LWKFDtx/DRYOvO/F2+UII46IIvKdk=
-X-Google-Smtp-Source: AGHT+IGJmHL5mhcQjzvp8qz99imIe8rGleTfl85avDtM7nLrtho2mwL2xBJcVqPaQr7D9agYfqaHXi7cXkm96p1JIxo=
-X-Received: by 2002:a81:84ce:0:b0:5de:a99e:17af with SMTP id
- u197-20020a8184ce000000b005dea99e17afmr11538761ywf.3.1704286804769; Wed, 03
- Jan 2024 05:00:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B901F1945C;
+	Wed,  3 Jan 2024 13:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A78C433C7;
+	Wed,  3 Jan 2024 13:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704287514;
+	bh=qIhmbs4q19ce2u3+/p/L4uydu2guvXDqASx18xBCCcw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YjiXUhhXpqumwXKQPMqpkdB4wPrRMy0bOzR1kahYVY1+qE5n7Z4haXZSfzT55IAI1
+	 ynnt4aDFeWwdn3Bmo5Bfg3xsBbD4VmuDjTgmQqqSG0Dix3Qw+sRw31WGG1TTPzsztY
+	 xEBVl2pFbuK9dXt2+f5UHWoEFd+owy0H5XKrkZJgan6ykecKAc0NlQ3PixVapEOMsh
+	 WZaVatHDS9M7AbWzldR9FtJbZ8YV4Nj0WtHrYRV+9O+mPx3NBqug+uWnuoXIFfBHdv
+	 wIXZQatu7fvlr03zk4kPyj4OlIeIKc3RW7eL39FEqzhdIH8rP99VcvF/HkLUMW9Uyc
+	 e/qinOLQAN2uw==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50e766937ddso8433219e87.3;
+        Wed, 03 Jan 2024 05:11:54 -0800 (PST)
+X-Gm-Message-State: AOJu0Yw7x6HLmhqYQWyCD4Ng8AH0hEZWtJfvJPFXxVvQYICwYEqdc8pj
+	k1ASIwzd6P/jUQdMzKHIwexv7bnN81u+UYHAWIU=
+X-Google-Smtp-Source: AGHT+IH2AecowZ+aHnkLeMgGIy725oLMF333U21alEK2Fc5uT7O22wyPK+unkG3ON5Ldu0WACaHrxvakM17+AqJ7PHk=
+X-Received: by 2002:ac2:5190:0:b0:50e:aa04:b2e9 with SMTP id
+ u16-20020ac25190000000b0050eaa04b2e9mr24496lfi.39.1704287512452; Wed, 03 Jan
+ 2024 05:11:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102091855.70418-1-maimon.sagi@gmail.com> <86fcb951-67e0-4f1d-a441-f3b4bcce8210@app.fastmail.com>
-In-Reply-To: <86fcb951-67e0-4f1d-a441-f3b4bcce8210@app.fastmail.com>
-From: Sagi Maimon <maimon.sagi@gmail.com>
-Date: Wed, 3 Jan 2024 14:59:53 +0200
-Message-ID: <CAMuE1bEN61aFL7dMDqF-v1Htt0K37w7OVwmYNQuPt5QSWUphXQ@mail.gmail.com>
-Subject: Re: [PATCH v5] posix-timers: add multi_clock_gettime system call
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Richard Cochran <richardcochran@gmail.com>, Andy Lutomirski <luto@kernel.org>, datglx@linutronix.de, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Sohil Mehta <sohil.mehta@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Palmer Dabbelt <palmer@sifive.com>, Kees Cook <keescook@chromium.org>, 
-	Alexey Gladkov <legion@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	Netdev <netdev@vger.kernel.org>
+References: <20231215122614.5481-1-tzimmermann@suse.de> <20231215122614.5481-3-tzimmermann@suse.de>
+ <CAMj1kXHrn-PxpMGnR4VoHv7kHvQYyf8SS9i1irm9Gi_uBseciw@mail.gmail.com> <97f118fc-b38f-4bcc-83d3-4d3c13edf7a0@suse.de>
+In-Reply-To: <97f118fc-b38f-4bcc-83d3-4d3c13edf7a0@suse.de>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 3 Jan 2024 14:11:40 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF-1TXYzheS-e_rGKnV+6FrkZe+e2sfCixyUzxSQE7X6w@mail.gmail.com>
+Message-ID: <CAMj1kXF-1TXYzheS-e_rGKnV+6FrkZe+e2sfCixyUzxSQE7X6w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] arch/x86: Add <asm/ima-efi.h> for arch_ima_efi_boot_mode
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 2, 2024 at 12:22=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
+On Tue, 2 Jan 2024 at 15:07, Thomas Zimmermann <tzimmermann@suse.de> wrote:
 >
-> On Tue, Jan 2, 2024, at 10:18, Sagi Maimon wrote:
-> > Some user space applications need to read some clocks.
-> > Each read requires moving from user space to kernel space.
-> > The syscall overhead causes unpredictable delay between N clocks reads
-> > Removing this delay causes better synchronization between N clocks.
+> Hii Ard
+>
+> Am 19.12.23 um 12:38 schrieb Ard Biesheuvel:
+> > Hi Thomas,
 > >
-> > Introduce a new system call multi_clock_gettime, which can be used to m=
-easure
-> > the offset between multiple clocks, from variety of types: PHC, virtual=
- PHC
-> > and various system clocks (CLOCK_REALTIME, CLOCK_MONOTONIC, etc).
-> > The offset includes the total time that the driver needs to read the cl=
-ock
-> > timestamp.
+> > On Fri, 15 Dec 2023 at 13:26, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >>
+> >> The header file <asm/efi.h> contains the macro arch_ima_efi_boot_mode,
+> >> which expands to use struct boot_params from <asm/bootparams.h>. Many
+> >> drivers include <linux/efi.h>, but do not use boot parameters. Changes
+> >> to bootparam.h or its included headers can easily trigger large,
+> >> unnessary rebuilds of the kernel.
+> >>
+> >> Moving x86's arch_ima_efi_boot_mode to <asm/ima-efi.h> and including
+> >> <asm/setup.h> separates that dependency from the rest of the EFI
+> >> interfaces. The only user is in ima_efi.c. As the file already declares
+> >> a default value for arch_ima_efi_boot_mode, move this define into
+> >> asm-generic for all other architectures.
+> >>
+> >> With arch_ima_efi_boot_mode removed from efi.h, <asm/bootparam.h> can
+> >> later be removed from further x86 header files.
+> >>
 > >
-> > New system call allows the reading of a list of clocks - up to PTP_MAX_=
-CLOCKS.
-> > Supported clocks IDs: PHC, virtual PHC and various system clocks.
-> > Up to PTP_MAX_SAMPLES times (per clock) in a single system call read.
-> > The system call returns n_clocks timestamps for each measurement:
-> > - clock 0 timestamp
-> > - ...
-> > - clock n timestamp
-> >
-> > Signed-off-by: Sagi Maimon <maimon.sagi@gmail.com>
-> > ---
-> >  Changes since version 4:
-> >  - fix error  : 'struct __ptp_multi_clock_get' declared inside paramete=
-r list
-> >    will not be visible outside of this definition or declaration
+> > Apologies if I missed this in v1 but is the new asm-generic header
+> > really necessary? Could we instead turn arch_ima_efi_boot_mode into a
+> > function that is a static inline { return unset; } by default, but can
+> > be emitted out of line in one of the x86/platform/efi.c source files,
+> > where referring to boot_params is fine?
 >
-> I usually put all the changes for previous versions in a
-> list here, it helps reviewers.
+> I cannot figure out how to do this without *something* in asm-generic or
+> adding if-CONFIG_X86 guards in ima-efi.c.
 >
-Will be done on patch V6.
-> The changes you made for previous versions all look good
-> to me, but I think there is still a few things worth
-> considering. I'll also follow up on the earlier threads.
+> But I noticed that linux/efi.h already contains 2 or 3 ifdef branches
+> for x86. Would it be an option to move this code into asm/efi.h
+> (including a header file in asm-generic for the non-x86 variants) and
+> add the arch_ima_efi_boot_mode() helper there as well?  At least that
+> wouldn't be a header for only a single define.
 >
-> > +#define MULTI_PTP_MAX_CLOCKS 32 /* Max number of clocks */
-> > +#define MULTI_PTP_MAX_SAMPLES 32 /* Max allowed offset measurement sam=
-ples. */
-> > +
-> > +struct __ptp_multi_clock_get {
-> > +     unsigned int n_clocks; /* Desired number of clocks. */
-> > +     unsigned int n_samples; /* Desired number of measurements per clo=
-ck. */
-> > +     clockid_t clkid_arr[MULTI_PTP_MAX_CLOCKS]; /* list of clock IDs *=
-/
-> > +     /*
-> > +      * Array of list of n_clocks clocks time samples n_samples times.
-> > +      */
-> > +     struct  __kernel_timespec ts[MULTI_PTP_MAX_SAMPLES][MULTI_PTP_MAX=
-_CLOCKS];
-> > +};
->
-> Since you now access each member individually, I think it
-> makes more sense here to just pass these as four
-> register arguments. It helps with argument introspection,
-> avoids a couple of get_user(), and lets you remove the fixed
-> array dimensions.
->
-I prefer the use of  get_user(), I will use it to remove  the fixed
-array dimensions.
-which will be done on patch V6.
-> > +SYSCALL_DEFINE1(multi_clock_gettime, struct __ptp_multi_clock_get
-> > __user *, ptp_multi_clk_get)
-> > +{
-> > +     const struct k_clock *kc;
-> > +     struct timespec64 *kernel_tp;
-> > +     struct timespec64 *kernel_tp_base;
-> > +     unsigned int n_clocks; /* Desired number of clocks. */
-> > +     unsigned int n_samples; /* Desired number of measurements per clo=
-ck.
-> > */
-> > +     unsigned int i, j;
-> > +     clockid_t clkid_arr[MULTI_PTP_MAX_CLOCKS]; /* list of clock IDs *=
-/
-> > +     int error =3D 0;
-> > +
-> > +     if (copy_from_user(&n_clocks, &ptp_multi_clk_get->n_clocks,
-> > sizeof(n_clocks)))
-> > +             return -EFAULT;
-> > +     if (copy_from_user(&n_samples, &ptp_multi_clk_get->n_samples,
-> > sizeof(n_samples)))
->
-> If these remain as struct members rather than register arguments,
-> you should use get_user() instead of copy_from_user().
->
-Will be done on patch V6
-> > +     kernel_tp_base =3D kmalloc_array(n_clocks * n_samples,
-> > +                                    sizeof(struct timespec64), GFP_KER=
-NEL);
-> > +     if (!kernel_tp_base)
-> > +             return -ENOMEM;
->
-> To be on the safe side regarding possible data leak, maybe use
-> kcalloc() instead of kmalloc_array() here.
->
-Will be done on patch V6.
-> > +     kernel_tp =3D kernel_tp_base;
-> > +     for (j =3D 0; j < n_samples; j++) {
-> > +             for (i =3D 0; i < n_clocks; i++) {
-> > +                     if (put_timespec64(kernel_tp++, (struct __kernel_=
-timespec __user *)
-> > +                                     &ptp_multi_clk_get->ts[j][i])) {
->
-> I think the typecast here can be removed.
->
-You are right, will be fixed on patch V6.
->       Arnd
-Thanks for your Notes.
+
+Could we just move the x86 implementation out of line?
+
+So something like this in arch/x86/include/asm/efi.h
+
+enum efi_secureboot_mode x86_ima_efi_boot_mode(void);
+#define arch_ima_efi_boot_mode x86_ima_efi_boot_mode()
+
+and an implementation in one of the related .c files:
+
+enum efi_secureboot_mode x86_ima_efi_boot_mode(void)
+{
+    return boot_params.secure_boot;
+}
+
+?
 
