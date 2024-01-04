@@ -1,118 +1,141 @@
-Return-Path: <linux-arch+bounces-1283-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1284-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 497678243F8
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Jan 2024 15:40:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C797E824594
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Jan 2024 16:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE332282FC7
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Jan 2024 14:40:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7780828762B
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Jan 2024 15:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD9A22F1A;
-	Thu,  4 Jan 2024 14:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBD724B2C;
+	Thu,  4 Jan 2024 15:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CmMMliqp"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="kVe+qjl3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F09822F10;
-	Thu,  4 Jan 2024 14:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0633AC433C7;
-	Thu,  4 Jan 2024 14:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704379221;
-	bh=mKB4DEZxIw57eKu739it6g3eVDl5U5ssEGaV5HTsHMo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CmMMliqpZQ3d3p5RkVIPwbQ8Unhh9n57IKcVI9zAgcZFqIqGa9h0Hu+55ZdK0D5nq
-	 wt6xrFMuRiHKv/RvSMSvDQFyGvXZxrodci/0xVv4XS49CDNeNLVxXvmY3QEZhQHayg
-	 daO/lorO4VIRrEm//7YzcjlSaAzPRU+1qK7nNO7IptjTby4G8GP/yybFjxN5CN3L7f
-	 UnTX0iHH4qx/J9L22NBgxcfDBVKYRDTZrnbVvl2NMekyRJ9x5bvZVHeLJFOd3DXFyH
-	 1obF2vxG5o8SLmHhqrTE6QMA3pUGnaA2Jlw+hSvh1a+6tx0CfrWYTq2Qr1laOTlWAj
-	 mRjU16QNsUJqA==
-Date: Thu, 4 Jan 2024 14:40:13 +0000
-From: Will Deacon <will@kernel.org>
-To: Nadav Amit <nadav.amit@broadcom.com>
-Cc: Jisheng Zhang <jszhang@kernel.org>,
-	Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nick Piggin <npiggin@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-riscv@lists.infradead.org, Nadav Amit <namit@vmware.com>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Yu Zhao <yuzhao@google.com>,
-	the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH 1/2] mm/tlb: fix fullmm semantics
-Message-ID: <20240104144013.GA7179@willie-the-truck>
-References: <20231228084642.1765-1-jszhang@kernel.org>
- <20231228084642.1765-2-jszhang@kernel.org>
- <204B6410-2EFA-462B-9DF7-64CC5F1D3AD2@broadcom.com>
- <ZZN35DTJTNExCNXW@xhacker>
- <0468E994-273E-4A8B-A521-150723DA9774@broadcom.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FF124B20
+	for <linux-arch@vger.kernel.org>; Thu,  4 Jan 2024 15:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7ba9f1cfe94so44127639f.1
+        for <linux-arch@vger.kernel.org>; Thu, 04 Jan 2024 07:58:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1704383909; x=1704988709; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g+LkB4Vo+u25oWI7sGQO48sDZuLcvpPhc24u586CsWs=;
+        b=kVe+qjl3xbGw5qWbwaGJLueBZsSZWNrS0gHCt9jy8llqd3VWqnWAd+42K9WMM/OzWh
+         +1klNDLjVzjSTkBswvg4xiifHF87PO+zJuXQYNcHtOk9tRifUfwVsn9l7z73c6RTvx5x
+         UPpOrtgu9fIdtgbyTLoD+jD+rmGUbXZgbOv3XMvZQBsQ9DtCUIqo7lQ8nFwQvibehvau
+         pRPzt3rdOpEVxiunjYorYIcjCwa1uir6yYE/7YLBJ/qUvq7aTpPs664DwZZP3+o8ouDa
+         qzJ0csyUrQplH3sW8jqENa/cPR498SUj9G++VupUpQ3DpIMgg58+wRnU0QtnXWTGdikA
+         yuwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704383909; x=1704988709;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+LkB4Vo+u25oWI7sGQO48sDZuLcvpPhc24u586CsWs=;
+        b=OQHqkM1MV/XGGEO/utC0mRNZT+hkvEH+d7k0avAp4YGaNsbmToAaTUU+lfCkSZEOnv
+         IScj17kdY37iVLHIp5Z5vr4Te/AB/hVI1oAtKgT3TbxOJVabET1Ib/9UWHWS24y3938W
+         6U4k0SXw5OlyTklIUWhRuTMJ4Ixt4QxzEYWGGVx0Unpg9JydXG95DzD/KP5dp2ar9z/n
+         7vDtvqvLSHfmXeN8RbT+3atbFRNOXyzSZ3uKjcH6bKo/NGKA2BI5v/mnVJfxpJBUCPa8
+         j8Mly+LoGrHWiUAEcNzMc4voty57WdAObGWyYwNZnN0VmxxDf1XHHqn93mKOmc7SexHc
+         fRjg==
+X-Gm-Message-State: AOJu0YzvMA/FaTRrZDJ2LQb1HXXE33PVgKAalhrvJEzvaRsFBod7VB95
+	JBvfHssvV7RlqvmDBLbxZW3zGjWDkrPZwg==
+X-Google-Smtp-Source: AGHT+IH0j3oQCRY8sxvQe5xsZpHeGls13odOGuU65eTJqn0FYIyylaRiHWDyo9dxY5HyEPL4psyAAg==
+X-Received: by 2002:a05:6e02:b48:b0:35f:f023:f8e2 with SMTP id f8-20020a056e020b4800b0035ff023f8e2mr508987ilu.17.1704383909345;
+        Thu, 04 Jan 2024 07:58:29 -0800 (PST)
+Received: from ?IPV6:2605:a601:adae:4500:b86c:e734:b34:45c6? ([2605:a601:adae:4500:b86c:e734:b34:45c6])
+        by smtp.gmail.com with ESMTPSA id v16-20020a92d250000000b0035d6559c5b9sm9232707ilg.64.2024.01.04.07.58.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jan 2024 07:58:29 -0800 (PST)
+Message-ID: <84389bc3-f2e7-49c5-a820-de60ee00f8a7@sifive.com>
+Date: Thu, 4 Jan 2024 09:58:28 -0600
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 07/14] LoongArch: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+Content-Language: en-US
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ x86@kernel.org, linux-riscv@lists.infradead.org,
+ Christoph Hellwig <hch@lst.de>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ linux-arch@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+References: <20231228014220.3562640-1-samuel.holland@sifive.com>
+ <20231228014220.3562640-8-samuel.holland@sifive.com>
+ <CAAhV-H5TJPqRcgS6jywWDSNsCvd-PsVacgxgoiF-fJ00ZnS4uA@mail.gmail.com>
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <CAAhV-H5TJPqRcgS6jywWDSNsCvd-PsVacgxgoiF-fJ00ZnS4uA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0468E994-273E-4A8B-A521-150723DA9774@broadcom.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Jan 04, 2024 at 03:26:43PM +0200, Nadav Amit wrote:
-> 
-> 
-> > On Jan 2, 2024, at 4:41 AM, Jisheng Zhang <jszhang@kernel.org> wrote:
-> > 
-> > On Sat, Dec 30, 2023 at 11:54:02AM +0200, Nadav Amit wrote:
-> > 
-> >> 
-> >> My knowledge of arm64 is a bit limited, but the code does not seem
-> >> to match the comment, so if it is correct (which I strongly doubt),
-> >> the comment should be updated.
-> > 
-> > will do if the above change is accepted by arm64
-> 
-> Jisheng, I expected somebody with arm64 knowledge to point it out, and
-> maybe I am wrong, but I really don’t understand something about the
-> correctness, if you can please explain.
-> 
-> In the following code:
-> 
-> --- a/arch/arm64/include/asm/tlb.h
-> +++ b/arch/arm64/include/asm/tlb.h
-> @@ -62,7 +62,10 @@ static inline void tlb_flush(struct mmu_gather *tlb)
-> 	 * invalidating the walk-cache, since the ASID allocator won't
-> 	 * reallocate our ASID without invalidating the entire TLB.
-> 	 */
-> -	if (tlb->fullmm) {
-> +	if (tlb->fullmm)
-> +		return;
-> 
-> You skip flush if fullmm is on. But if page-tables are freed, you may
-> want to flush immediately and not wait for ASID to be freed to avoid
-> speculative page walks; these walks at least on x86 caused a mess.
-> 
-> No?
+Hi Huacai,
 
-I think Catalin made the same observation here:
+On 2024-01-04 3:55 AM, Huacai Chen wrote:
+> Hi, Samuel,
+> 
+> On Thu, Dec 28, 2023 at 9:42 AM Samuel Holland
+> <samuel.holland@sifive.com> wrote:
+>>
+>> LoongArch already provides kernel_fpu_begin() and kernel_fpu_end() in
+>> asm/fpu.h, so it only needs to add kernel_fpu_available() and export
+>> the CFLAGS adjustments.
+>>
+>> Acked-by: WANG Xuerui <git@xen0n.name>
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+>> ---
+>>
+>> (no changes since v1)
+>>
+>>  arch/loongarch/Kconfig           | 1 +
+>>  arch/loongarch/Makefile          | 5 ++++-
+>>  arch/loongarch/include/asm/fpu.h | 1 +
+>>  3 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index ee123820a476..65d4475565b8 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -15,6 +15,7 @@ config LOONGARCH
+>>         select ARCH_HAS_CPU_FINALIZE_INIT
+>>         select ARCH_HAS_FORTIFY_SOURCE
+>>         select ARCH_HAS_KCOV
+>> +       select ARCH_HAS_KERNEL_FPU_SUPPORT if CPU_HAS_FPU
+>>         select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>>         select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>         select ARCH_HAS_PTE_SPECIAL
+>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>> index 4ba8d67ddb09..1afe28feaba5 100644
+>> --- a/arch/loongarch/Makefile
+>> +++ b/arch/loongarch/Makefile
+>> @@ -25,6 +25,9 @@ endif
+>>  32bit-emul             = elf32loongarch
+>>  64bit-emul             = elf64loongarch
+>>
+>> +CC_FLAGS_FPU           := -mfpu=64
+>> +CC_FLAGS_NO_FPU                := -msoft-float
+> We will add LoongArch32 support later, maybe it should be -mfpu=32 in
+> that case, and do other archs have the case that only support FP32?
 
-https://lore.kernel.org/r/ZZWh4c3ZUtadFqD1@arm.com
+Do you mean that LoongArch32 does not support double-precision FP in hardware?
+At least both of the consumers in this series use double-precision, so my first
+thought is that LoongArch32 could not select ARCH_HAS_KERNEL_FPU_SUPPORT.
 
-and it does indeed look broken.
+Regards,
+Samuel
 
-Will
 
