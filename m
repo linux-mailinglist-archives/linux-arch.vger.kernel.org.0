@@ -1,180 +1,153 @@
-Return-Path: <linux-arch+bounces-1289-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1290-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27AE382646F
-	for <lists+linux-arch@lfdr.de>; Sun,  7 Jan 2024 15:06:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D28268267E2
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 07:16:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A594F1F21593
-	for <lists+linux-arch@lfdr.de>; Sun,  7 Jan 2024 14:06:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CE1C1C217A6
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 06:16:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59602134B3;
-	Sun,  7 Jan 2024 14:06:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F48B79CD;
+	Mon,  8 Jan 2024 06:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGpcLuBm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehxx9LLd"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D5A134A4;
-	Sun,  7 Jan 2024 14:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D6379DE;
+	Mon,  8 Jan 2024 06:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5f3da7ba2bfso9208117b3.3;
-        Sun, 07 Jan 2024 06:05:58 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2045bedb806so1671584fac.3;
+        Sun, 07 Jan 2024 22:16:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704636358; x=1705241158; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=At4cppVUZPK/oi+d0/WXlrlbXmfl3AdgViIm5bbQigc=;
-        b=jGpcLuBmfTRUoDV2bgeNh7eJwF5tig2ZRkIqb1zwoHF+mdU2Xe/jkVwFKPttw/xX+9
-         9ITWoNtkMrZpp2xC03uOnSF/r7pBXPCHAh91HLuhTKLeRpUmuPOhmHZHZ/K5QLbj/EEM
-         6AhtSYJ43cMZ9BDqmVR4hY0W0DKUkOqHUO0e8IEyG2gBj0px+Yt8pdeZiPadW9HNRiPv
-         6vlCG/Pjr3k+rwYB5iB2adIss0AkfjASRVLGOrQ7ksxeB/jwdsvTU2KxT9xwjO7bdil6
-         aspzIgEkyUpdAUM/KRS3Q6MMQQ6uxADgz2SX5Cedg9NZul5uSR8XSGBz2mE5z0Lkbur1
-         yKYw==
+        d=gmail.com; s=20230601; t=1704694609; x=1705299409; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R96nFtUAHcvK+Syyw7DXDD2f4NflWNpk/wdXNthWbzI=;
+        b=ehxx9LLdjRFHfsVMpsrdenN9NZuOs8NJSmXFuz8thZMoWg6dKQT59fOL1MBwP1WA/y
+         M+8LpcdG4u1r3jxDL9m7mqvz61GAvZ2LuubxndkmZhbkSanrt2LUWIwXuMMYn7k1ImWh
+         hapqsRWHIOkne3GtXjRZFNEc0kLRCBqWahJ51jr7g2hxmIDaaNq08uEWd5rtJlG8ZeG7
+         jP6o+tf8ow879kpDJ4Gp+qCIrlFHFyJKJ9jKtUwtG/ZgUypqWjdVbzqHALqOyl+h3g0F
+         XUyGFvTvamLWpsav6AO41df+Mep2FnQFZgdrAomh/WfQjaBdMEmES+vBNotfvPRtpHJa
+         bZfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704636358; x=1705241158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=At4cppVUZPK/oi+d0/WXlrlbXmfl3AdgViIm5bbQigc=;
-        b=OHloTgHGrElxX87fr4gzPQ85D1850havrc8zgSGMiYSSX/gPG/RkPzjt6lhzwnWg3W
-         2wnK/azNtQyFCaQfEt3LC+PIJbn8ZS60t48guj88RpGgmtMXZLLQTSl/w5f9Zq1Xdea7
-         jIr6jjY0Av+svyKx30F4I+1mjBeUkoSmKKAQ4cscD8pn+bEth3bWYI+VLTgDaE2cmeGs
-         nuJRwuZHX27BqgCkJvQt+kD0ZeW6SAaUw1bsKhOYGAZlXZZ9rS7qtbC9Sk+uYJFlzh2l
-         t1VMzzPGI1MoxHT6YN4S2PFHDBIUgDOFLl+5+g5wSPT3FWOU1X2I6J6Vx/OU0QUUVH7w
-         jQNw==
-X-Gm-Message-State: AOJu0YzINCwhUWBJpwOvkboEG856bAM3RgLStf8qjqhjjNeerQ3a9YTd
-	EAhwAq4oBfK3QMuPV54T9KtOvISjo3fUTZWFocY=
-X-Google-Smtp-Source: AGHT+IHHU9hNBXjpC0cTM3U5+wNHBJNsvalMHS1eOBVG8i/atRPxH3yByQ9QrY9bFvkGCWgT49AAnMDYHWqyZ1cQd4s=
-X-Received: by 2002:a81:82c6:0:b0:5ed:7d36:7963 with SMTP id
- s189-20020a8182c6000000b005ed7d367963mr2115024ywf.6.1704636357761; Sun, 07
- Jan 2024 06:05:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704694609; x=1705299409;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R96nFtUAHcvK+Syyw7DXDD2f4NflWNpk/wdXNthWbzI=;
+        b=S1gj4k8adxtfZ5AF16vVxzSoYv14vpp4X9+3xeFhjOvQRmUe7VZeDtSM5G0RYcVf63
+         QodtB34Tel/PiedzmsxpfDI8NVOpHcY3Q3ZhIF3LChboxw7OFWTe4t1DnT1V8kYVyykj
+         VlhKcJpBSgoENXAkp1Pra2Myyinl2JeVmC7S/qAqaO3612xuBO+BrWziSTzrdzgFs4ol
+         krPSWnrj/tdG0HWsEUGtzmSS+iKgXTR3guxcYDJtSMuQHKlEVKJH+QvpUNtn3XuS9tL9
+         65tRVnL67pE2GTgsu632xy0MHLKSQIITVRUsnGL5EwLKYv3jsxGiWqE0QvDaygLZC6Az
+         nwQw==
+X-Gm-Message-State: AOJu0Yzo6ijRQYkYE79yJ9/6sGxoklrT2+RhoPDPjzCtyiV9lOuN1u/Z
+	sWGASkJGdvSW3SiYjv23Mkc=
+X-Google-Smtp-Source: AGHT+IGM41Cgc2Loe8AEzfxl/LX42E5QQD9J+La3nidUPkLnPHcx80eiqLpXgjHIxCPMBHCwZclhug==
+X-Received: by 2002:a05:6358:5384:b0:175:67e3:f9be with SMTP id z4-20020a056358538400b0017567e3f9bemr3641697rwe.31.1704694608850;
+        Sun, 07 Jan 2024 22:16:48 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:7a4a:2478:1813:e8c2])
+        by smtp.gmail.com with ESMTPSA id nc6-20020a17090b37c600b0028649b84907sm5464921pjb.16.2024.01.07.22.16.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jan 2024 22:16:48 -0800 (PST)
+Date: Sun, 7 Jan 2024 22:16:45 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] asm-generic: make sparse happy with odd-sized
+ put_unaligned_*()
+Message-ID: <ZZuTTRCUFqWzA1y-@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228122411.3189-1-maimon.sagi@gmail.com> <f254c189-463e-43a3-bc09-9a8869ebf819@app.fastmail.com>
- <CAMuE1bF0Hho4VwO6w3f+9z3j5TtscYzuAjj10MFt2mZXG2P8dQ@mail.gmail.com> <84d8e9d7-09ce-4781-8dfa-a74bb0955ae8@app.fastmail.com>
-In-Reply-To: <84d8e9d7-09ce-4781-8dfa-a74bb0955ae8@app.fastmail.com>
-From: Sagi Maimon <maimon.sagi@gmail.com>
-Date: Sun, 7 Jan 2024 16:05:46 +0200
-Message-ID: <CAMuE1bFQzc4u0X_z7sXyeAn2c4vLPHHJ8aeqC8uYmo2nJpC0wQ@mail.gmail.com>
-Subject: Re: [PATCH v3] posix-timers: add multi_clock_gettime system call
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Richard Cochran <richardcochran@gmail.com>, Andy Lutomirski <luto@kernel.org>, datglx@linutronix.de, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Sohil Mehta <sohil.mehta@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Palmer Dabbelt <palmer@sifive.com>, Kees Cook <keescook@chromium.org>, 
-	Alexey Gladkov <legion@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Jan 2, 2024 at 1:30=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sun, Dec 31, 2023, at 17:00, Sagi Maimon wrote:
-> > On Fri, Dec 29, 2023 at 5:27=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
-rote:
->
-> >> > +struct __ptp_multi_clock_get {
-> >> > +     unsigned int n_clocks; /* Desired number of clocks. */
-> >> > +     unsigned int n_samples; /* Desired number of measurements per =
-clock. */
-> >> > +     clockid_t clkid_arr[MULTI_PTP_MAX_CLOCKS]; /* list of clock ID=
-s */
-> >> > +     /*
-> >> > +      * Array of list of n_clocks clocks time samples n_samples tim=
-es.
-> >> > +      */
-> >> > +     struct  __kernel_timespec ts[MULTI_PTP_MAX_SAMPLES][MULTI_PTP_=
-MAX_CLOCKS];
-> >> > +};
-> >>
-> >> The fixed size arrays here seem to be an unnecessary limitation,
-> >> both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS are small
-> >> enough that one can come up with scenarios where you would want
-> >> a higher number, but at the same time the structure is already
-> >> 808 bytes long, which is more than you'd normally want to put
-> >> on the kernel stack, and which may take a significant time to
-> >> copy to and from userspace.
-> >>
-> >> Since n_clocks and n_samples are always inputs to the syscall,
-> >> you can just pass them as register arguments and use a dynamically
-> >> sized array instead.
-> >>
-> > Both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS are enough of any
-> > usage we can think of,
-> > But I think you are right, it is better to use a dynamically sized
-> > array for future use, plus to use less stack memory.
-> > On patch v4 a dynamically sized array will be used .
-> > I leaving both MULTI_PTP_MAX_SAMPLES and MULTI_PTP_MAX_CLOCKS but
-> > increasing their values, since there should be some limitation.
->
-> I think having an implementation specific limit in the kernel is
-> fine, but it would be nice to hardcode that limit in the API.
->
-> If both clkidarr[] and ts[] are passed as pointer arguments
-> in registers, they can be arbitrarily long in the API and
-> still have a documented maximum that we can extend in the
-> future without changing the interface.
->
-> >> It's not clear to me what you gain from having the n_samples
-> >> argument over just calling the syscall repeatedly. Does
-> >> this offer a benefit for accuracy or is this just meant to
-> >> avoid syscall overhead.
-> > It is mainly to avoid syscall overhead which also slightly
-> > improve the accuracy.
->
-> This is not a big deal as far as I'm concerned, but it
-> would be nice to back this up with some numbers if you
-> think it's worthwhile, as my impression is that the effect
-> is barely measurable: my guess would be that the syscall
-> overhead is always much less than the cost for the hardware
-> access.
->
-> >> On the other hand, this will still give less accuracy than the
-> >> getcrosststamp() callback with ioctl(PTP_SYS_OFFSET_PRECISE),
-> >> so either the last bit of accuracy isn't all that important,
-> >> or you need to refine the interface to actually be an
-> >> improvement over the chardev.
-> >>
-> > I don't understand this comment, please explain.
-> > The ioctl(PTP_SYS_OFFSET_PRECISE) is one specific case that can be
-> > done by multi_clock_gettime syscall (which cover many more cases)
-> > Plus the ioctl(PTP_SYS_OFFSET_PRECISE) works only on drivers that
-> > support this feature.
->
-> My point here is that on drivers that do support
-> PTP_SYS_OFFSET_PRECISE, the extra accuracy should be maintained
-> by the new interface, ideally in a way that does not have any
-> other downsides.
->
-> I think Andy's suggestion of exposing time offsets instead
-> of absolute times would actually achieve that: If the
-> interface is changed to return the offset against
-> CLOCK_MONOTONIC, CLOCK_MONOTONIC_RAW or CLOCK_BOOTTIME
-> (not sure what is best here), then the new syscall can use
-> getcrosststamp() where supported for the best results or
-> fall back to gettimex64() or gettime64() otherwise to
-> provide a consistent user interface.
->
-> Returning an offset would also allow easily calculating an
-> average over multiple calls in the kernel, instead of
-> returning a two-dimensional array.
->
-PTP_SYS_OFFSET_PRECISE returns the systime and PHC time and not offset.
-But you are right , in the next patch I will use this IOCTL .
+__put_unaligned_be24() and friends use implicit casts to convert
+larger-sized data to bytes, which trips sparse truncation warnings when
+the argument is a constant:
 
->     Arnd
+  CC [M]  drivers/input/touchscreen/hynitron_cstxxx.o
+  CHECK   drivers/input/touchscreen/hynitron_cstxxx.c
+drivers/input/touchscreen/hynitron_cstxxx.c: note: in included file (through arch/x86/include/generated/asm/unaligned.h):
+./include/asm-generic/unaligned.h:119:16: warning: cast truncates bits from constant value (aa01a0 becomes a0)
+./include/asm-generic/unaligned.h:120:20: warning: cast truncates bits from constant value (aa01 becomes 1)
+./include/asm-generic/unaligned.h:119:16: warning: cast truncates bits from constant value (ab00d0 becomes d0)
+./include/asm-generic/unaligned.h:120:20: warning: cast truncates bits from constant value (ab00 becomes 0)
+
+To avoid this let's mask off upper bits explicitly, the resulting code
+should be exactly the same, but it will keep sparse happy.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Closes: https://lore.kernel.org/oe-kbuild-all/202401070147.gqwVulOn-lkp@intel.com/
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ include/asm-generic/unaligned.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
+index 699650f81970..a84c64e5f11e 100644
+--- a/include/asm-generic/unaligned.h
++++ b/include/asm-generic/unaligned.h
+@@ -104,9 +104,9 @@ static inline u32 get_unaligned_le24(const void *p)
+ 
+ static inline void __put_unaligned_be24(const u32 val, u8 *p)
+ {
+-	*p++ = val >> 16;
+-	*p++ = val >> 8;
+-	*p++ = val;
++	*p++ = (val >> 16) & 0xff;
++	*p++ = (val >> 8) & 0xff;
++	*p++ = val & 0xff;
+ }
+ 
+ static inline void put_unaligned_be24(const u32 val, void *p)
+@@ -116,9 +116,9 @@ static inline void put_unaligned_be24(const u32 val, void *p)
+ 
+ static inline void __put_unaligned_le24(const u32 val, u8 *p)
+ {
+-	*p++ = val;
+-	*p++ = val >> 8;
+-	*p++ = val >> 16;
++	*p++ = val & 0xff;
++	*p++ = (val >> 8) & 0xff;
++	*p++ = (val >> 16) & 0xff;
+ }
+ 
+ static inline void put_unaligned_le24(const u32 val, void *p)
+@@ -128,12 +128,12 @@ static inline void put_unaligned_le24(const u32 val, void *p)
+ 
+ static inline void __put_unaligned_be48(const u64 val, u8 *p)
+ {
+-	*p++ = val >> 40;
+-	*p++ = val >> 32;
+-	*p++ = val >> 24;
+-	*p++ = val >> 16;
+-	*p++ = val >> 8;
+-	*p++ = val;
++	*p++ = (val >> 40) & 0xff;
++	*p++ = (val >> 32) & 0xff;
++	*p++ = (val >> 24) & 0xff;
++	*p++ = (val >> 16) & 0xff;
++	*p++ = (val >> 8) & 0xff;
++	*p++ = val & 0xff;
+ }
+ 
+ static inline void put_unaligned_be48(const u64 val, void *p)
+-- 
+2.43.0.195.gebba966016-goog
+
+
+-- 
+Dmitry
 
