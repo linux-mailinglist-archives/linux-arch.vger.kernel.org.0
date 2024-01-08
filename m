@@ -1,65 +1,65 @@
-Return-Path: <linux-arch+bounces-1307-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1308-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 513E2827BBF
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jan 2024 00:58:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB5B3827BC1
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jan 2024 00:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1E6E1F2374F
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 23:58:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1411CB232EB
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 23:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D845256B68;
-	Mon,  8 Jan 2024 23:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92ED56B9D;
+	Mon,  8 Jan 2024 23:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="laHwm5MK"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Yl4ZM+w5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B35156763
-	for <linux-arch@vger.kernel.org>; Mon,  8 Jan 2024 23:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A5156B70
+	for <linux-arch@vger.kernel.org>; Mon,  8 Jan 2024 23:57:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-203fe0e3fefso1335778fac.2
-        for <linux-arch@vger.kernel.org>; Mon, 08 Jan 2024 15:57:32 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-59612e4a21eso669190eaf.3
+        for <linux-arch@vger.kernel.org>; Mon, 08 Jan 2024 15:57:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1704758251; x=1705363051; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1704758253; x=1705363053; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AlBR54Ho+Y1o3mIpBCBVXs2u+7/gciH5xwmXB5mwVNU=;
-        b=laHwm5MKj2xko3qTe9o5fIWZS/fRDyMFOKlIQo2ZaAM0R3fc8jmUPkno6f652tLRuL
-         MsQlYjSj5J2+0EpNJULl6WPUnqS1+jW6wq4Hm+hpiPowhadsJbCXejdjHHT4iGoO+GD9
-         VByoCwlWEk9q+9Qyshyx0z68HPJ3u33cV6SS6H07jVjBLxs3cR00GTBsNB76/n2fb/v0
-         t58L/S8WCm2sR1Vi9cLBo5NhKcX1pPxNYK17OqQtqYNGdxqCPURL/2WGgK47+UzI/u3w
-         7vv8bgf9DEFI+rfwGOav1nIQulkTqW1jfMkKusd3WU49nB0kLnFx0rcDVt8FebaLvTju
-         5fKQ==
+        bh=qPVTonO+LXQZXwYb7iCPbl02ew7Jx3P2FceZOwyOvEQ=;
+        b=Yl4ZM+w5l3NrYRU2P1wULFLBvEik5mmU2MjBrM45lZ2/qe6dcoN1baXgaeuz5FHlEp
+         xGzFKWdh/uvK9BkdPjfVge6NirF0sENeUdyMRo0HpaH+BllCDXQ61t5EwaWfkhm8Sh+X
+         fZJlcLNGTLwVfo19LhBGYinEfW7BNKRwr4ZFVolIF45guIIXYO1jVxQe2bzahYo93Iiy
+         tGU66QWhGqsmM591gsQEOQK/eYxOUY/YU1OwYP74VsPUL/s5RXOYF2KcsFobP6qEiq+G
+         oBiEmXy/iW62eWwZqRIM/Qat5KS07GjFz27jKIzUI5VCuIdRG05je75rf+jWDWFCtMnc
+         qsFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704758251; x=1705363051;
+        d=1e100.net; s=20230601; t=1704758253; x=1705363053;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AlBR54Ho+Y1o3mIpBCBVXs2u+7/gciH5xwmXB5mwVNU=;
-        b=A7umXBSYIBqwiBX25J/HJ4O4wbReAizS9PEnfhw1amQ98FPvj1tqr61OAt+4fNava+
-         mVYTjRAQGzm41j+H8VSzNm5uutGostVGOfbVYB32CKpfULJrHXWfeoOfM6MO5crUfx+z
-         SDywTWx4ply5imyNg6XueGA0UrbsjfZbPuTsxEXX6hpUS0AAecLMugZr1QloozJhuqo0
-         MJvJ+InlY9oibVDlUyI3lH6tWmThyv1ORgDBiGNi/DWuFmhwJK/pzcIY+Nu+1a5AeoDu
-         tzVXSILB+ZR7cYVYCfSIkp+u8WkLvcK5b0zMNKngKvx+X1i7h5/hqMkC3f3/VVH7cMfi
-         Tq1g==
-X-Gm-Message-State: AOJu0YwLllVwC/RW/42NB4jzfnHZcMOjuqj5ebsWx37k+vPFksw6lYJw
-	q7o1vYqa17co2ieRYHxV6rZv3XmjrB3S7g==
-X-Google-Smtp-Source: AGHT+IHwPAPXTkLLxmW8VZ4pal/a4TJ6IKFDbgC3aJOyBsOPpUm3+f9Bvw8flyX2Z5h4eOW/h8eVig==
-X-Received: by 2002:a05:6870:9728:b0:1fa:f418:d071 with SMTP id n40-20020a056870972800b001faf418d071mr4620078oaq.23.1704758251521;
-        Mon, 08 Jan 2024 15:57:31 -0800 (PST)
+        bh=qPVTonO+LXQZXwYb7iCPbl02ew7Jx3P2FceZOwyOvEQ=;
+        b=Re6Evb5CQfXJqSMGEhsc9w98dMHfAiuVCyeD3ogwwgDO6cLpOHqwYEStDi9FT+wY/g
+         9o9eMK/k/R9xRlTmgCetl0NQZTg6bIoMocuqJlEgmVTIbrPHZN32k48VGbmCrUFtzv9D
+         rg0NpceQEMOCf6lUuIUSPSnzsEdptK+flFmj3uNIlwvo/vriCUDEAWQ4AvcuE4/16Nwf
+         Be6x3G8OtnnCj6WQGyje/VhI7oL/YuuX5fHKieidZOTZAyiIKZfaXhHOPvgrQAr2RaHJ
+         1KdUQAIW6ewGvLj2ahpztAUcOJY3getiIlWXfog6w6iYQSjdVrM3PNpRyVC3lPyDw7dQ
+         gjlQ==
+X-Gm-Message-State: AOJu0Yzw/+OeR/bTogWR2taZjueJVqORsNfzVPlja/Ngl9mjV2hMm5N4
+	QWdoDicMQ1XIkwZ7HdmSW+lHqXCAwJMgqQ==
+X-Google-Smtp-Source: AGHT+IFekKo10GKrEWRGTXXVAIj79XHSPtsaOOZAoT44bsOZwqbiaCU7s1kzsfKznhlyr+tb7qrXLQ==
+X-Received: by 2002:a05:6870:b4a5:b0:1fb:851:bc2b with SMTP id y37-20020a056870b4a500b001fb0851bc2bmr2135695oap.57.1704758253096;
+        Mon, 08 Jan 2024 15:57:33 -0800 (PST)
 Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id ti5-20020a056871890500b002043b415eaasm206961oab.29.2024.01.08.15.57.30
+        by smtp.gmail.com with ESMTPSA id ti5-20020a056871890500b002043b415eaasm206961oab.29.2024.01.08.15.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 15:57:31 -0800 (PST)
+        Mon, 08 Jan 2024 15:57:32 -0800 (PST)
 From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Mon, 08 Jan 2024 15:57:04 -0800
-Subject: [PATCH v15 3/5] riscv: Add checksum header
+Date: Mon, 08 Jan 2024 15:57:05 -0800
+Subject: [PATCH v15 4/5] riscv: Add checksum library
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240108-optimize_checksum-v15-3-1c50de5f2167@rivosinc.com>
+Message-Id: <20240108-optimize_checksum-v15-4-1c50de5f2167@rivosinc.com>
 References: <20240108-optimize_checksum-v15-0-1c50de5f2167@rivosinc.com>
 In-Reply-To: <20240108-optimize_checksum-v15-0-1c50de5f2167@rivosinc.com>
 To: Charlie Jenkins <charlie@rivosinc.com>, 
@@ -82,113 +82,395 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>,
  Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>, 
  Conor Dooley <conor.dooley@microchip.com>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704758245; l=3093;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1704758245; l=11199;
  i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=5kLrZ5pIGOixKzGlevacL81yKd58H4/jGvyu52ss5bM=;
- b=vlnj2iaVuImO4Aya69nCeHVLgDjfp2gYnqsLnMwcOp5cZZIflMKLy90+Mo+3sPLADQFs0ICrd
- PhcHtJaoVmACVFzOfqi+6dDhy9fB+84Yi5XE9Ks3nXptNwlKUYAGlLm
+ bh=eDRUmyydl8PJNUFvLDZrYV4a83sgieN+gaZVXKbTj+s=;
+ b=x81sIU1itD3uMLgAc46+aMRV0tUqVmo9nuzPVVBmf4KYvXW/F6AFwbqhvR3xgc+1kflSkpRH0
+ 5ffVAs1hrIcCyQJDiDFFRwN88ibAFnOvym7LzWSONvi/m2ndV/nSs5O
 X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
  pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
 
-Provide checksum algorithms that have been designed to leverage riscv
-instructions such as rotate. In 64-bit, can take advantage of the larger
-register to avoid some overflow checking.
+Provide a 32 and 64 bit version of do_csum. When compiled for 32-bit
+will load from the buffer in groups of 32 bits, and when compiled for
+64-bit will load in groups of 64 bits.
+
+Additionally provide riscv optimized implementation of csum_ipv6_magic.
 
 Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Xiao Wang <xiao.w.wang@intel.com>
 ---
- arch/riscv/include/asm/checksum.h | 82 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ arch/riscv/include/asm/checksum.h |  11 ++
+ arch/riscv/lib/Makefile           |   1 +
+ arch/riscv/lib/csum.c             | 326 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 338 insertions(+)
 
 diff --git a/arch/riscv/include/asm/checksum.h b/arch/riscv/include/asm/checksum.h
-new file mode 100644
-index 000000000000..5a810126aac7
---- /dev/null
+index 5a810126aac7..a5b60b54b101 100644
+--- a/arch/riscv/include/asm/checksum.h
 +++ b/arch/riscv/include/asm/checksum.h
-@@ -0,0 +1,82 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+@@ -12,6 +12,17 @@
+ 
+ #define ip_fast_csum ip_fast_csum
+ 
++extern unsigned int do_csum(const unsigned char *buff, int len);
++#define do_csum do_csum
++
++/* Default version is sufficient for 32 bit */
++#ifndef CONFIG_32BIT
++#define _HAVE_ARCH_IPV6_CSUM
++__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
++			const struct in6_addr *daddr,
++			__u32 len, __u8 proto, __wsum sum);
++#endif
++
+ /* Define riscv versions of functions before importing asm-generic/checksum.h */
+ #include <asm-generic/checksum.h>
+ 
+diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
+index 26cb2502ecf8..2aa1a4ad361f 100644
+--- a/arch/riscv/lib/Makefile
++++ b/arch/riscv/lib/Makefile
+@@ -6,6 +6,7 @@ lib-y			+= memmove.o
+ lib-y			+= strcmp.o
+ lib-y			+= strlen.o
+ lib-y			+= strncmp.o
++lib-y			+= csum.o
+ lib-$(CONFIG_MMU)	+= uaccess.o
+ lib-$(CONFIG_64BIT)	+= tishift.o
+ lib-$(CONFIG_RISCV_ISA_ZICBOZ)	+= clear_page.o
+diff --git a/arch/riscv/lib/csum.c b/arch/riscv/lib/csum.c
+new file mode 100644
+index 000000000000..06ce8e7250d9
+--- /dev/null
++++ b/arch/riscv/lib/csum.c
+@@ -0,0 +1,326 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Checksum routines
++ * Checksum library
 + *
++ * Influenced by arch/arm64/lib/csum.c
 + * Copyright (C) 2023 Rivos Inc.
 + */
-+#ifndef __ASM_RISCV_CHECKSUM_H
-+#define __ASM_RISCV_CHECKSUM_H
++#include <linux/bitops.h>
++#include <linux/compiler.h>
++#include <linux/jump_label.h>
++#include <linux/kasan-checks.h>
++#include <linux/kernel.h>
 +
-+#include <linux/in6.h>
-+#include <linux/uaccess.h>
++#include <asm/cpufeature.h>
 +
-+#define ip_fast_csum ip_fast_csum
++#include <net/checksum.h>
 +
-+/* Define riscv versions of functions before importing asm-generic/checksum.h */
-+#include <asm-generic/checksum.h>
-+
-+/**
-+ * Quickly compute an IP checksum with the assumption that IPv4 headers will
-+ * always be in multiples of 32-bits, and have an ihl of at least 5.
-+ *
-+ * @ihl: the number of 32 bit segments and must be greater than or equal to 5.
-+ * @iph: assumed to be word aligned given that NET_IP_ALIGN is set to 2 on
-+ *  riscv, defining IP headers to be aligned.
-+ */
-+static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
++/* Default version is sufficient for 32 bit */
++#ifndef CONFIG_32BIT
++__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
++			const struct in6_addr *daddr,
++			__u32 len, __u8 proto, __wsum csum)
 +{
-+	unsigned long csum = 0;
-+	int pos = 0;
++	unsigned int ulen, uproto;
++	unsigned long sum = (__force unsigned long)csum;
 +
-+	do {
-+		csum += ((const unsigned int *)iph)[pos];
-+		if (IS_ENABLED(CONFIG_32BIT))
-+			csum += csum < ((const unsigned int *)iph)[pos];
-+	} while (++pos < ihl);
++	sum += (__force unsigned long)saddr->s6_addr32[0];
++	sum += (__force unsigned long)saddr->s6_addr32[1];
++	sum += (__force unsigned long)saddr->s6_addr32[2];
++	sum += (__force unsigned long)saddr->s6_addr32[3];
++
++	sum += (__force unsigned long)daddr->s6_addr32[0];
++	sum += (__force unsigned long)daddr->s6_addr32[1];
++	sum += (__force unsigned long)daddr->s6_addr32[2];
++	sum += (__force unsigned long)daddr->s6_addr32[3];
++
++	ulen = (__force unsigned int)htonl((unsigned int)len);
++	sum += ulen;
++
++	uproto = (__force unsigned int)htonl(proto);
++	sum += uproto;
 +
 +	/*
-+	 * ZBB only saves three instructions on 32-bit and five on 64-bit so not
-+	 * worth checking if supported without Alternatives.
++	 * Zbb support saves 4 instructions, so not worth checking without
++	 * alternatives if supported
 +	 */
 +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
 +	    IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
 +		unsigned long fold_temp;
 +
++		/*
++		 * Zbb is likely available when the kernel is compiled with Zbb
++		 * support, so nop when Zbb is available and jump when Zbb is
++		 * not available.
++		 */
 +		asm_volatile_goto(ALTERNATIVE("j %l[no_zbb]", "nop", 0,
 +					      RISCV_ISA_EXT_ZBB, 1)
-+		    :
-+		    :
-+		    :
-+		    : no_zbb);
++				  :
++				  :
++				  :
++				  : no_zbb);
++		asm(".option push					\n\
++		.option arch,+zbb					\n\
++			rori	%[fold_temp], %[sum], 32		\n\
++			add	%[sum], %[fold_temp], %[sum]		\n\
++			srli	%[sum], %[sum], 32			\n\
++			not	%[fold_temp], %[sum]			\n\
++			roriw	%[sum], %[sum], 16			\n\
++			subw	%[sum], %[fold_temp], %[sum]		\n\
++		.option pop"
++		: [sum] "+r" (sum), [fold_temp] "=&r" (fold_temp));
++		return (__force __sum16)(sum >> 16);
++	}
++no_zbb:
++	sum += ror64(sum, 32);
++	sum >>= 32;
++	return csum_fold((__force __wsum)sum);
++}
++EXPORT_SYMBOL(csum_ipv6_magic);
++#endif /* !CONFIG_32BIT */
 +
-+		if (IS_ENABLED(CONFIG_32BIT)) {
-+			asm(".option push				\n\
-+			.option arch,+zbb				\n\
-+				not	%[fold_temp], %[csum]		\n\
-+				rori	%[csum], %[csum], 16		\n\
-+				sub	%[csum], %[fold_temp], %[csum]	\n\
-+			.option pop"
-+			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp));
-+		} else {
-+			asm(".option push				\n\
-+			.option arch,+zbb				\n\
-+				rori	%[fold_temp], %[csum], 32	\n\
-+				add	%[csum], %[fold_temp], %[csum]	\n\
-+				srli	%[csum], %[csum], 32		\n\
-+				not	%[fold_temp], %[csum]		\n\
-+				roriw	%[csum], %[csum], 16		\n\
-+				subw	%[csum], %[fold_temp], %[csum]	\n\
-+			.option pop"
-+			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp));
-+		}
-+		return (__force __sum16)(csum >> 16);
++#ifdef CONFIG_32BIT
++#define OFFSET_MASK 3
++#elif CONFIG_64BIT
++#define OFFSET_MASK 7
++#endif
++
++static inline __no_sanitize_address unsigned long
++do_csum_common(const unsigned long *ptr, const unsigned long *end,
++	       unsigned long data)
++{
++	unsigned int shift;
++	unsigned long csum = 0, carry = 0;
++
++	/*
++	 * Do 32-bit reads on RV32 and 64-bit reads otherwise. This should be
++	 * faster than doing 32-bit reads on architectures that support larger
++	 * reads.
++	 */
++	while (ptr < end) {
++		csum += data;
++		carry += csum < data;
++		data = *(ptr++);
++	}
++
++	/*
++	 * Perform alignment (and over-read) bytes on the tail if any bytes
++	 * leftover.
++	 */
++	shift = ((long)ptr - (long)end) * 8;
++#ifdef __LITTLE_ENDIAN
++	data = (data << shift) >> shift;
++#else
++	data = (data >> shift) << shift;
++#endif
++	csum += data;
++	carry += csum < data;
++	csum += carry;
++	csum += csum < carry;
++
++	return csum;
++}
++
++/*
++ * Algorithm accounts for buff being misaligned.
++ * If buff is not aligned, will over-read bytes but not use the bytes that it
++ * shouldn't. The same thing will occur on the tail-end of the read.
++ */
++static inline __no_sanitize_address unsigned int
++do_csum_with_alignment(const unsigned char *buff, int len)
++{
++	unsigned int offset, shift;
++	unsigned long csum, data;
++	const unsigned long *ptr, *end;
++
++	/*
++	 * Align address to closest word (double word on rv64) that comes before
++	 * buff. This should always be in the same page and cache line.
++	 * Directly call KASAN with the alignment we will be using.
++	 */
++	offset = (unsigned long)buff & OFFSET_MASK;
++	kasan_check_read(buff, len);
++	ptr = (const unsigned long *)(buff - offset);
++
++	/*
++	 * Clear the most significant bytes that were over-read if buff was not
++	 * aligned.
++	 */
++	shift = offset * 8;
++	data = *(ptr++);
++#ifdef __LITTLE_ENDIAN
++	data = (data >> shift) << shift;
++#else
++	data = (data << shift) >> shift;
++#endif
++	end = (const unsigned long *)(buff + len);
++	csum = do_csum_common(ptr, end, data);
++
++	/*
++	 * Zbb support saves 6 instructions, so not worth checking without
++	 * alternatives if supported
++	 */
++	if (IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
++	    IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
++		unsigned long fold_temp;
++
++		/*
++		 * Zbb is likely available when the kernel is compiled with Zbb
++		 * support, so nop when Zbb is available and jump when Zbb is
++		 * not available.
++		 */
++		asm_volatile_goto(ALTERNATIVE("j %l[no_zbb]", "nop", 0,
++					      RISCV_ISA_EXT_ZBB, 1)
++				  :
++				  :
++				  :
++				  : no_zbb);
++
++#ifdef CONFIG_32BIT
++		asm_volatile_goto(".option push			\n\
++		.option arch,+zbb				\n\
++			rori	%[fold_temp], %[csum], 16	\n\
++			andi	%[offset], %[offset], 1		\n\
++			add	%[csum], %[fold_temp], %[csum]	\n\
++			beq	%[offset], zero, %l[end]	\n\
++			rev8	%[csum], %[csum]		\n\
++		.option pop"
++			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp)
++			: [offset] "r" (offset)
++			:
++			: end);
++
++		return (unsigned short)csum;
++#else /* !CONFIG_32BIT */
++		asm_volatile_goto(".option push			\n\
++		.option arch,+zbb				\n\
++			rori	%[fold_temp], %[csum], 32	\n\
++			add	%[csum], %[fold_temp], %[csum]	\n\
++			srli	%[csum], %[csum], 32		\n\
++			roriw	%[fold_temp], %[csum], 16	\n\
++			addw	%[csum], %[fold_temp], %[csum]	\n\
++			andi	%[offset], %[offset], 1		\n\
++			beq	%[offset], zero, %l[end]	\n\
++			rev8	%[csum], %[csum]		\n\
++		.option pop"
++			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp)
++			: [offset] "r" (offset)
++			:
++			: end);
++
++		return (csum << 16) >> 48;
++#endif /* !CONFIG_32BIT */
++end:
++		return csum >> 16;
 +	}
 +no_zbb:
 +#ifndef CONFIG_32BIT
 +	csum += ror64(csum, 32);
 +	csum >>= 32;
 +#endif
-+	return csum_fold((__force __wsum)csum);
++	csum = (u32)csum + ror32((u32)csum, 16);
++	if (offset & 1)
++		return (u16)swab32(csum);
++	return csum >> 16;
 +}
 +
-+#endif /* __ASM_RISCV_CHECKSUM_H */
++/*
++ * Does not perform alignment, should only be used if machine has fast
++ * misaligned accesses, or when buff is known to be aligned.
++ */
++static inline __no_sanitize_address unsigned int
++do_csum_no_alignment(const unsigned char *buff, int len)
++{
++	unsigned long csum, data;
++	const unsigned long *ptr, *end;
++
++	ptr = (const unsigned long *)(buff);
++	data = *(ptr++);
++
++	kasan_check_read(buff, len);
++
++	end = (const unsigned long *)(buff + len);
++	csum = do_csum_common(ptr, end, data);
++
++	/*
++	 * Zbb support saves 6 instructions, so not worth checking without
++	 * alternatives if supported
++	 */
++	if (IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
++	    IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
++		unsigned long fold_temp;
++
++		/*
++		 * Zbb is likely available when the kernel is compiled with Zbb
++		 * support, so nop when Zbb is available and jump when Zbb is
++		 * not available.
++		 */
++		asm_volatile_goto(ALTERNATIVE("j %l[no_zbb]", "nop", 0,
++					      RISCV_ISA_EXT_ZBB, 1)
++				  :
++				  :
++				  :
++				  : no_zbb);
++
++#ifdef CONFIG_32BIT
++		asm (".option push				\n\
++		.option arch,+zbb				\n\
++			rori	%[fold_temp], %[csum], 16	\n\
++			add	%[csum], %[fold_temp], %[csum]	\n\
++		.option pop"
++			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp)
++			:
++			: );
++
++#else /* !CONFIG_32BIT */
++		asm (".option push				\n\
++		.option arch,+zbb				\n\
++			rori	%[fold_temp], %[csum], 32	\n\
++			add	%[csum], %[fold_temp], %[csum]	\n\
++			srli	%[csum], %[csum], 32		\n\
++			roriw	%[fold_temp], %[csum], 16	\n\
++			addw	%[csum], %[fold_temp], %[csum]	\n\
++		.option pop"
++			: [csum] "+r" (csum), [fold_temp] "=&r" (fold_temp)
++			:
++			: );
++#endif /* !CONFIG_32BIT */
++		return csum >> 16;
++	}
++no_zbb:
++#ifndef CONFIG_32BIT
++	csum += ror64(csum, 32);
++	csum >>= 32;
++#endif
++	csum = (u32)csum + ror32((u32)csum, 16);
++	return csum >> 16;
++}
++
++/*
++ * Perform a checksum on an arbitrary memory address.
++ * Will do a light-weight address alignment if buff is misaligned, unless
++ * cpu supports fast misaligned accesses.
++ */
++unsigned int do_csum(const unsigned char *buff, int len)
++{
++	if (unlikely(len <= 0))
++		return 0;
++
++	/*
++	 * Significant performance gains can be seen by not doing alignment
++	 * on machines with fast misaligned accesses.
++	 *
++	 * There is some duplicate code between the "with_alignment" and
++	 * "no_alignment" implmentations, but the overlap is too awkward to be
++	 * able to fit in one function without introducing multiple static
++	 * branches. The largest chunk of overlap was delegated into the
++	 * do_csum_common function.
++	 */
++	if (static_branch_likely(&fast_misaligned_access_speed_key))
++		return do_csum_no_alignment(buff, len);
++
++	if (((unsigned long)buff & OFFSET_MASK) == 0)
++		return do_csum_no_alignment(buff, len);
++
++	return do_csum_with_alignment(buff, len);
++}
 
 -- 
 2.43.0
