@@ -1,137 +1,89 @@
-Return-Path: <linux-arch+bounces-1298-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1299-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C51826C0B
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 12:05:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51452826C35
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 12:09:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4EA9BB20E15
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 11:05:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D764FB21C24
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jan 2024 11:09:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28E214019;
-	Mon,  8 Jan 2024 11:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702F114263;
+	Mon,  8 Jan 2024 11:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ak7pHqML";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ESWjcGtI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D146414294
-	for <linux-arch@vger.kernel.org>; Mon,  8 Jan 2024 11:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-253-EyLyuJXtPwmi8cp329UFpQ-1; Mon, 08 Jan 2024 11:03:47 +0000
-X-MC-Unique: EyLyuJXtPwmi8cp329UFpQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 8 Jan
- 2024 11:03:22 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 8 Jan 2024 11:03:22 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Dmitry Torokhov' <dmitry.torokhov@gmail.com>, Arnd Bergmann
-	<arnd@arndb.de>
-CC: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Linus Torvalds
-	<torvalds@linux-foundation.org>
-Subject: RE: [PATCH] asm-generic: make sparse happy with odd-sized
- put_unaligned_*()
-Thread-Topic: [PATCH] asm-generic: make sparse happy with odd-sized
- put_unaligned_*()
-Thread-Index: AQHaQfo/rBE9iMqwLUOx80/L8Ll8bLDPvnqw
-Date: Mon, 8 Jan 2024 11:03:22 +0000
-Message-ID: <12d88da48f6947ab86a845e8d02319ff@AcuMS.aculab.com>
-References: <ZZuTTRCUFqWzA1y-@google.com>
-In-Reply-To: <ZZuTTRCUFqWzA1y-@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D381A25757;
+	Mon,  8 Jan 2024 11:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1704712141;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cBr54UrbDBqBWO0Zs3pXK4ySEoD4xvWP17nI7TgZkWs=;
+	b=ak7pHqML8qBLZvhs66sx1miPuG8E/Vc45gFM5rts0SeNmjy/TrVg2TZRsuWxspA9FdJYpi
+	2z01rYJyCNj+xhB7CNSEDqTPv7p/PLcrRAKOVnl9MAI0bBZNoB4LvUZ5x5eVQcrhBVlj4L
+	lWtPd4MWz74du1uf920GgapC3KQogwcwDXlugy58fE/pZt47CUqL/uF4p270H3cVwdjaW1
+	MLisYv6TaIkxzCdSf39pS7rpQXqDdDLOkwvs51x+Vqd0YpmQD0g5Rl72BZJvEip5ubO/Xu
+	UBh6vKy2niM34+L+sLK5IP+hDbNqGjKQaiHRoEJ1c5EXWqfRqdo4OiSdOzSpKw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1704712141;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cBr54UrbDBqBWO0Zs3pXK4ySEoD4xvWP17nI7TgZkWs=;
+	b=ESWjcGtI3EVArg1SWAS/o+XnPp8w9CzXgk8/SmWZK+qRnT6dsWhQ6UszStMiCEMnAsMeX8
+	GvPxy5pAzYjppACg==
+To: Sagi Maimon <maimon.sagi@gmail.com>, richardcochran@gmail.com,
+ luto@kernel.org, datglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+ geert@linux-m68k.org, peterz@infradead.org, hannes@cmpxchg.org,
+ sohil.mehta@intel.com, rick.p.edgecombe@intel.com, nphamcs@gmail.com,
+ palmer@sifive.com, maimon.sagi@gmail.com, keescook@chromium.org,
+ legion@kernel.org, mark.rutland@arm.com
+Cc: linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v5] posix-timers: add multi_clock_gettime system call
+In-Reply-To: <20240102091855.70418-1-maimon.sagi@gmail.com>
+References: <20240102091855.70418-1-maimon.sagi@gmail.com>
+Date: Mon, 08 Jan 2024 12:09:00 +0100
+Message-ID: <875y04kroz.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-From: Dmitry Torokhov
-> Sent: 08 January 2024 06:17
->=20
-> __put_unaligned_be24() and friends use implicit casts to convert
-> larger-sized data to bytes, which trips sparse truncation warnings when
-> the argument is a constant:
->=20
->   CC [M]  drivers/input/touchscreen/hynitron_cstxxx.o
->   CHECK   drivers/input/touchscreen/hynitron_cstxxx.c
-> drivers/input/touchscreen/hynitron_cstxxx.c: note: in included file (thro=
-ugh
-> arch/x86/include/generated/asm/unaligned.h):
-> ./include/asm-generic/unaligned.h:119:16: warning: cast truncates bits fr=
-om constant value (aa01a0
-> becomes a0)
-> ./include/asm-generic/unaligned.h:120:20: warning: cast truncates bits fr=
-om constant value (aa01
-> becomes 1)
-> ./include/asm-generic/unaligned.h:119:16: warning: cast truncates bits fr=
-om constant value (ab00d0
-> becomes d0)
-> ./include/asm-generic/unaligned.h:120:20: warning: cast truncates bits fr=
-om constant value (ab00
-> becomes 0)
->=20
-> To avoid this let's mask off upper bits explicitly, the resulting code
-> should be exactly the same, but it will keep sparse happy.
+On Tue, Jan 02 2024 at 11:18, Sagi Maimon wrote:
+> Some user space applications need to read some clocks.
+> Each read requires moving from user space to kernel space.
+> The syscall overhead causes unpredictable delay between N clocks reads
+> Removing this delay causes better synchronization between N clocks.
 
-Maybe someone should fix sparse?
-I have seen a compiler generate two explicit masks with 0xff
-followed by a byte write for:
-=09*p =3D (char)(x & 0xff);
-but I expect modern gcc is ok.
+As I explained to you before: This is wishful thinking.
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202401070147.gqwVulOn-lkp@i=
-ntel.com/
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  include/asm-generic/unaligned.h | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
->=20
-> diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unalig=
-ned.h
-> index 699650f81970..a84c64e5f11e 100644
-> --- a/include/asm-generic/unaligned.h
-> +++ b/include/asm-generic/unaligned.h
-> @@ -104,9 +104,9 @@ static inline u32 get_unaligned_le24(const void *p)
->=20
->  static inline void __put_unaligned_be24(const u32 val, u8 *p)
->  {
-> -=09*p++ =3D val >> 16;
-> -=09*p++ =3D val >> 8;
-> -=09*p++ =3D val;
-> +=09*p++ =3D (val >> 16) & 0xff;
-> +=09*p++ =3D (val >> 8) & 0xff;
-> +=09*p++ =3D val & 0xff;
->  }
+There is absolutely no guarantee that the syscall will yield better
+results. It might on average, but that's a useless measure.
 
-What happens if you implement the as (eg):
-=09*p =3D val >> 16;
-=09put_unaligned_be16(p + 1, val);
-I think that should generate better code.
-And it may stop sparse bleating.
+You also still fail to explain what this is going to solve and how it's
+used.
 
-=09David
+> Some user space applications need to read some clocks.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+Is just not an explanation at all.
 
+Thanks,
+
+        tglx
 
