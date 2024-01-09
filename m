@@ -1,126 +1,124 @@
-Return-Path: <linux-arch+bounces-1317-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1318-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84CE3828A2F
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jan 2024 17:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3DA6828B98
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jan 2024 18:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE0D1B20F79
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jan 2024 16:43:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BEB8B20E8D
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jan 2024 17:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3C339FFC;
-	Tue,  9 Jan 2024 16:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113F53B7A8;
+	Tue,  9 Jan 2024 17:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GpMpkBqF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lpMQg2JN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBXR0hDI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D7A38DEF;
-	Tue,  9 Jan 2024 16:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id A9DFC5C0420;
-	Tue,  9 Jan 2024 11:43:21 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 09 Jan 2024 11:43:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1704818601; x=1704905001; bh=bFVuHUCmJx
-	RAxC1zh4/opM0gyA5+TjTOo7qCFS2FRg8=; b=GpMpkBqFdcC9HbridPbMFDXLTY
-	7XFWI33bqAc9K/un9q1zUsVraGDDhNXA0/FO4OyeYoEf95URYLF9hyqDQIpYExj9
-	lHR/+hF50r8ZJkFqMi+C02/uvBuQK8qAtUhxLSXorq1C6Hu/0Ih2xXDIBiCr9ErR
-	SC69eVzAYitvp6Vdjhh0s9mr4RXLMBgbP8MTSbqnIGYMb8lg2UulqDjXNTGDM3R+
-	12HidHWsyvrDN1cZgXr1plr4MtbYUhlhM3EMWAR2BbYcLku9nsGvR70yPU8ZebyF
-	o34fCqAKMj1GE7ZnZeQqTzUGryOhlLJLcdY7fBUCUFNZCWUCO7lIdMGnNC7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1704818601; x=1704905001; bh=bFVuHUCmJxRAxC1zh4/opM0gyA5+
-	TjTOo7qCFS2FRg8=; b=lpMQg2JNziYchTiZ3cWpiuSjUOPLZBbwlhV3BbKiBPcj
-	jgv4H4B5JBVohETIPT/e9gYmgxpDzHNbenG9e8PyN9rBCsu+g5AbjFHE2ebdaY3v
-	oKpv2/L+5a9KaJ0uOa3bRzKwkRZ7tSCcbPsPjSDSSkabcXYPOcq2oIRCZVqRT/L+
-	FDm5XcStz2CbMpxdx5+qpDAFgOv5n4kZCxH7UI1HM8nKC+KmT9sbZIgYhDkFxGOe
-	BLNh7FuENyzfwifIxX+38CxMEhqi+lYAFIMS9IlNEEfaQzV7clpVh7NR4k6ow+i3
-	Sw0H0mDXskGBnkOhy1wPnJ5++LUj+5sV/lc+f2gfOg==
-X-ME-Sender: <xms:qHedZeAICDsRFoBlQJ2B8HxgG9uoR1X44kIaf5WnInsWmEPW8rrI9Q>
-    <xme:qHedZYgj2xC0PZ47hiIvFS3UJTbXeSM29iEJlYROXlcbP0Ys427yR4s_vOHydGcDm
-    O0B7oydPR4H5I6GvWY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdehledgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:qHedZRmp-rcWsQjsRbRNJwmxcY_ZggxzZsCxqTQP3HuQ62792NckYg>
-    <xmx:qHedZczhlV881HvelgPpUSIMsVU_0Jsvd1Wy71aEL2VlZ8wvPMMKCQ>
-    <xmx:qHedZTQwAqg8O5FQO4PClBdLHa5D7CXaagpeECcNdaI2Qn29lgpDew>
-    <xmx:qXedZdfY9MLktxjaLi0E9gkQKN7N3PLMqmneG8qWtSB8hTMdoLQVeA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 83C56B6008D; Tue,  9 Jan 2024 11:43:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBFD38DF8;
+	Tue,  9 Jan 2024 17:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD56C433F1;
+	Tue,  9 Jan 2024 17:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704823097;
+	bh=jPQukDAtVbClY9EBeS+NqfHyLacDsIvaawr24NohtKA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pBXR0hDIxuyEvjXNm0ZHkn82qvWJPxEeg8vRLhUWpcgwAjyw9QDysog3LK2PVQult
+	 9Go+Fi125jYvZDB64hW3vCXxDEcn1/BK+pt5NqtqqQKLTdqo9bY948RcuvcxU2solW
+	 4vKCSzlftGX3C8MVRS35uscVo5/xKVpYDqx9lrU9Apjy76V+ddXDE8gB+2mmN0AuZf
+	 oPcWHesQh5ieuYvzxayCuvHpRXx3KbE78X0kmN1z43HIDK8fHuuSm5D93GP6NTB/A2
+	 otf9gtIxEuJz5XBV4wxvbQ8xXHf1BOfBSoPrqMAdPLvPhwTHpw3vbnYVN41E5sHJLi
+	 jqPfsfuLkmYcA==
+Date: Tue, 9 Jan 2024 10:58:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, javierm@redhat.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
+ into setup_data.h
+Message-ID: <20240109175814.GA5981@dev-arch.thelio-3990X>
+References: <20240108095903.8427-3-tzimmermann@suse.de>
+ <202401090800.UOBEKB3W-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1633a5e7-213e-4621-bdc5-5cc056da9d99@app.fastmail.com>
-In-Reply-To: <tencent_13A0B6B4A3136E46CC448874232A9F956006@qq.com>
-References: <tencent_13A0B6B4A3136E46CC448874232A9F956006@qq.com>
-Date: Tue, 09 Jan 2024 17:43:00 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Yangyu Chen" <cyy@cyyself.name>
-Cc: "Christoph Hellwig" <hch@lst.de>,
- "Alexander Potapenko" <glider@google.com>,
- "Mike Frysinger" <vapier@gentoo.org>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: flush icache only when vma->vm_flags has VM_EXEC set
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202401090800.UOBEKB3W-lkp@intel.com>
 
-On Tue, Jan 9, 2024, at 15:45, Yangyu Chen wrote:
-> For some ISAs like RISC-V, which may not support bus broadcast-based
-> icache flushing instructions, it's necessary to send IPIs to all of the
-> CPUs in the system to flush the icache. This process can be expensive for
-> these ISAs and introduce disturbances during performance profiling.
-> Limiting the icache flush to occur only when the vma->vm_flags has VM_EXEC
-> can help minimize the frequency of these operations.
->
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> ---
->  include/asm-generic/cacheflush.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/asm-generic/cacheflush.h 
-> b/include/asm-generic/cacheflush.h
-> index 84ec53ccc450..729d51536575 100644
-> --- a/include/asm-generic/cacheflush.h
-> +++ b/include/asm-generic/cacheflush.h
-> @@ -102,7 +102,8 @@ static inline void flush_cache_vunmap(unsigned long 
-> start, unsigned long end)
->  	do { \
->  		instrument_copy_to_user((void __user *)dst, src, len); \
->  		memcpy(dst, src, len); \
-> -		flush_icache_user_page(vma, page, vaddr, len); \
-> +		if (vma->vm_flags & VM_EXEC) \
-> +			flush_icache_user_page(vma, page, vaddr, len); \
->  	} while (0)
->  #endif
+On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
+> Hi Thomas,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on tip/x86/core]
+> [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
+> base:   tip/x86/core
+> patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
+> patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
+> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
+> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from arch/x86/realmode/rm/wakemain.c:3:
+>    In file included from arch/x86/boot/boot.h:24:
+>    In file included from arch/x86/include/asm/setup.h:10:
+>    In file included from arch/x86/include/asm/page_types.h:7:
+>    In file included from include/linux/mem_encrypt.h:17:
+>    In file included from arch/x86/include/asm/mem_encrypt.h:18:
+>    In file included from arch/x86/include/uapi/asm/bootparam.h:5:
+> >> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+>       10 |         struct setup_data data;
+>          |                           ^
+>    1 warning generated.
 
-This is not my normal area of expertise, but I wonder if you can't
-just do this the same way as alpha and openrisc by having the
-condition in architecture specific code.
+I think this warning is expected. This structure is now included in the
+realmode part of arch/x86, which has its own set of build flags,
+including -Wall, which includes -Wgnu on clang. The kernel obviously
+uses GNU extensions and states this clearly with '-std=gnu11', so
+-Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
+that same treatment is needed for REALMODE_CFLAGS, which also matches
+arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
+Disable Clang warnings about GNU extensions"):
 
-     Arnd
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 1a068de12a56..24076db59783 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
+ REALMODE_CFLAGS += -Wno-address-of-packed-member
+ REALMODE_CFLAGS += $(cc_stack_align4)
+ REALMODE_CFLAGS += $(CLANG_FLAGS)
++ifdef CONFIG_CC_IS_CLANG
++REALMODE_CFLAGS += -Wno-gnu
++endif
+ export REALMODE_CFLAGS
+ 
+ # BITS is used as extension for files which are available in a 32 bit
 
