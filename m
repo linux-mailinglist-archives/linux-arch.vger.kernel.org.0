@@ -1,73 +1,74 @@
-Return-Path: <linux-arch+bounces-1327-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1328-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42793829CD2
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 15:51:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2829829CD9
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 15:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFE44282A8C
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 14:51:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3A151C21890
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 14:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CDB04B5DD;
-	Wed, 10 Jan 2024 14:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BDA4BA81;
+	Wed, 10 Jan 2024 14:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="fRTmRw2B"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="fBAd9Iel"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A9D4BA8B
-	for <linux-arch@vger.kernel.org>; Wed, 10 Jan 2024 14:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2AE4BA86
+	for <linux-arch@vger.kernel.org>; Wed, 10 Jan 2024 14:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7bb0af58134so196510339f.3
-        for <linux-arch@vger.kernel.org>; Wed, 10 Jan 2024 06:51:40 -0800 (PST)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3608402ab93so17130075ab.0
+        for <linux-arch@vger.kernel.org>; Wed, 10 Jan 2024 06:52:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1704898299; x=1705503099; darn=vger.kernel.org;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1704898354; x=1705503154; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UlRr87AfARWxTIrPYo3v1voc73TzaNkp96EPHRmj2xU=;
-        b=fRTmRw2Bt8UXdAznfySY7lFa9+F/xQH/4rfMflS72/RXhfqFE18/JorLqBFpYHWJWu
-         aadrKwKMs/YFbwuX4fVOhvCucNAt7c5NRVHg2/XX2Stgorfc1IlI7tSES8mteQMGmipr
-         XdQJltJtf3z0W2Ks0xKn+Hc8g+xIeVxZNV0hjFTloYSoWUOzI9losM33oepGWKw8ymmx
-         xhcdVdlmzx9OE0I6DxlB+Zn6ekO8aHvsRNlIS9P5FHzIfQtGencnpvHbIsPTsYqnqRx7
-         N0pVyxkXclrCrZ/mqPxYAd446553dkeALTog6c2Y0ZrvHhuZwJJhT2s4fKFSh5l9VLoh
-         wLlQ==
+        bh=pVtS8rM9wqn1PqYUXWdr8pk/hBP2Hc85AVIVtCVRz8Y=;
+        b=fBAd9Ielfai7WtsDEiImQ+n13vIY5JGFL4UN4Frm8tf5PH+KJiw9nsut0HqsTk34FV
+         CJX0ulbEAjTRJTkGjFFK5Gxv4o+Zpl5F5sT1n3bPUnmQtR+WF+NKdih1trzmTv3++COp
+         LdrSw/6GFQra2zDd7tMLVdJ9dIawUsIOplwkxD1VpUKwj9qHQZzgtC0CkOdG7mLKGAIF
+         yToVlKmiAX7EUyECETvtzeCHIOaL9xrr9DEsKJN/h/AIdz+cZwZpt8M8jGnUQD4pBPNe
+         IB4AFDt+vOsTSF8kLXQlj9LLR3p2NR/eNgumqRN9tDDR0Lhrhzz7/eGQhnhs0Ub9i7Pe
+         80lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704898299; x=1705503099;
+        d=1e100.net; s=20230601; t=1704898354; x=1705503154;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UlRr87AfARWxTIrPYo3v1voc73TzaNkp96EPHRmj2xU=;
-        b=msP/McYkQa7B6LNU4Ps2qTIO+tsiH9n0wJPtHapMkyTTmXMn7sXm2OrIIhjO0Ntnqr
-         Lt7K5vul6Ngss3avN85Rg1FcYUaSP6IpYCtsBzKALNnvx87bycjSIFiJ99GqspfsXh1Z
-         tr6vk5PqHmiuP1ka/Nl5ywyN0CbRTSjlaihCVc+6MCqOLq1S1OaSFfvYVyfE1tO9m0hc
-         6SIE6+VuV1ixO09O6dbSe+TDTwWHR17lfW7PcAz4XlHxqy+jDeNzri4fzBTDZGAbiiKL
-         X5U052axvXlvx3vmHaXqxtn00yquZhT47BoH/w9kzZBzi5LcU1EnWGs+LdBFrYU7hK2c
-         t4CA==
-X-Gm-Message-State: AOJu0Yz4daAzwMzUvBJAXRd5ahw8fVYBp2nrT/JiR9pLp5vWBAephP7B
-	kKfhbC2+QJxhVLQ/ysT6EGU1z5Y1Y2LdTg==
-X-Google-Smtp-Source: AGHT+IESMcbobMlRjbgJYfocjXsZ0yo/qo6i1dK8eo1VFgWRNLIDb9r8HTjU5OKJKjNYljfVT1tLPg==
-X-Received: by 2002:a05:6602:131d:b0:7bc:838:6665 with SMTP id h29-20020a056602131d00b007bc08386665mr986219iov.28.1704898299159;
-        Wed, 10 Jan 2024 06:51:39 -0800 (PST)
+        bh=pVtS8rM9wqn1PqYUXWdr8pk/hBP2Hc85AVIVtCVRz8Y=;
+        b=a5QCDqxnNO1ImI/sm4sNJ/D/jAo62pEfV6EPrF4QDCLNg2M2Hl+oeADRXBQoOEaBX6
+         XbjySHUjgm+4FnlHJI79jjTlWT23jYK25ivuKtaUJ892/2293I3lAn914WCH5GRHmpyu
+         pSFSLN1Uk5kINeY4V6DMeVVGGQnArP9oaiZZrdLLRvK82EUk9gVpzkKb/vnDYNgGwwYk
+         RdKKX99EpZWLJ0nFzeE6ZtGB39nyEuvvqrFAvgTKNNURZnjNZllXKSkxy86GGsL9Rn23
+         VKMftLq+aMG8fp58K0f7Hj8zL2ycsUqt+VV2Ju0G47AXgZNk56T27OglUDmTM/Awljl1
+         a1Sg==
+X-Gm-Message-State: AOJu0YzCV214aMhjGHZWLXqbvB4Pg/k5OywhepQJJ/DXzJBvvibCMYXK
+	LYtNCsBYbUU0r2asGineTU7CTVSXNnG2+A==
+X-Google-Smtp-Source: AGHT+IFvaD94WRGIWckQ9Hv3P7P0TvTdYRGacf1iIOKv8qIUaj9Zvtv4eSDrKd5J5ma8n/u1tTQeFQ==
+X-Received: by 2002:a05:6e02:34a0:b0:360:90c2:f7ca with SMTP id bp32-20020a056e0234a000b0036090c2f7camr1673156ilb.40.1704898354434;
+        Wed, 10 Jan 2024 06:52:34 -0800 (PST)
 Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id k12-20020a02c64c000000b0046e304dc641sm1319869jan.95.2024.01.10.06.51.37
+        by smtp.gmail.com with ESMTPSA id bc25-20020a056e02009900b0035fabab7985sm1278883ilb.21.2024.01.10.06.52.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jan 2024 06:51:38 -0800 (PST)
-Date: Wed, 10 Jan 2024 06:51:38 -0800 (PST)
-X-Google-Original-Date: Wed, 10 Jan 2024 06:51:33 PST (-0800)
-Subject:     Re: [PATCH v2 10/14] riscv: Add support for kernel-mode FPU
-In-Reply-To: <20231228014220.3562640-11-samuel.holland@sifive.com>
-CC: linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-  x86@kernel.org, linux-riscv@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
-  loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-  linux-arch@vger.kernel.org, samuel.holland@sifive.com
+        Wed, 10 Jan 2024 06:52:33 -0800 (PST)
+Date: Wed, 10 Jan 2024 06:52:33 -0800 (PST)
+X-Google-Original-Date: Wed, 10 Jan 2024 06:52:32 PST (-0800)
+Subject:     Re: [PATCH 1/4] riscv: tlb: fix __p*d_free_tlb()
+In-Reply-To: <36166acf-aa32-40b6-806a-ade59bc645ad@ghiti.fr>
+CC: jszhang@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+  aou@eecs.berkeley.edu, Will Deacon <will@kernel.org>, aneesh.kumar@linux.ibm.com,
+  akpm@linux-foundation.org, npiggin@gmail.com, peterz@infradead.org,
+  Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org, linux-mm@kvack.org
 From: Palmer Dabbelt <palmer@dabbelt.com>
-To: samuel.holland@sifive.com
-Message-ID: <mhng-3e4b97f6-8310-487e-9f9a-1d19d6e42a1e@palmer-ri-x1c9>
+To: alex@ghiti.fr
+Message-ID: <mhng-53f8ef0e-67ee-4a85-ba8a-84124df534ce@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -77,126 +78,87 @@ Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Wed, 27 Dec 2023 17:42:00 PST (-0800), samuel.holland@sifive.com wrote:
-> This is motivated by the amdgpu DRM driver, which needs floating-point
-> code to support recent hardware. That code is not performance-critical,
-> so only provide a minimal non-preemptible implementation for now.
+On Thu, 04 Jan 2024 02:55:40 PST (-0800), alex@ghiti.fr wrote:
+> On 19/12/2023 18:50, Jisheng Zhang wrote:
+>> If non-leaf PTEs I.E pmd, pud or p4d is modified, a sfence.vma is
+>> a must for safe, imagine if an implementation caches the non-leaf
+>> translation in TLB, although I didn't meet this HW so far, but it's
+>> possible in theory.
 >
-> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
-> ---
 >
-> Changes in v2:
->  - Remove RISC-V architecture-specific preprocessor check
+> And since this is a fix, it would be worth trying to add a Fixes tag
+> here. Not easy I agree because it fixes several commits (I have
+> 07037db5d479f,  e8a62cc26ddf5, d10efa21a9374 and c5e9b2c2ae822 if you
+> implement tlb_flush() as I suggested).
 >
->  arch/riscv/Kconfig                  |  1 +
->  arch/riscv/Makefile                 |  3 +++
->  arch/riscv/include/asm/fpu.h        | 16 ++++++++++++++++
->  arch/riscv/kernel/Makefile          |  1 +
->  arch/riscv/kernel/kernel_mode_fpu.c | 28 ++++++++++++++++++++++++++++
->  5 files changed, 49 insertions(+)
->  create mode 100644 arch/riscv/include/asm/fpu.h
->  create mode 100644 arch/riscv/kernel/kernel_mode_fpu.c
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 24c1799e2ec4..4d4d1d64ce34 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -27,6 +27,7 @@ config RISCV
->  	select ARCH_HAS_GCOV_PROFILE_ALL
->  	select ARCH_HAS_GIGANTIC_PAGE
->  	select ARCH_HAS_KCOV
-> +	select ARCH_HAS_KERNEL_FPU_SUPPORT if FPU
->  	select ARCH_HAS_MMIOWB
->  	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->  	select ARCH_HAS_PMEM_API
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index a74be78678eb..2e719c369210 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -81,6 +81,9 @@ KBUILD_CFLAGS += -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64i
->
->  KBUILD_AFLAGS += -march=$(riscv-march-y)
->
-> +# For C code built with floating-point support, exclude V but keep F and D.
-> +CC_FLAGS_FPU  := -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)([^v_]*)v?/\1\2/')
-> +
->  KBUILD_CFLAGS += -mno-save-restore
->  KBUILD_CFLAGS += -DCONFIG_PAGE_OFFSET=$(CONFIG_PAGE_OFFSET)
->
-> diff --git a/arch/riscv/include/asm/fpu.h b/arch/riscv/include/asm/fpu.h
-> new file mode 100644
-> index 000000000000..91c04c244e12
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/fpu.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023 SiFive
-> + */
-> +
-> +#ifndef _ASM_RISCV_FPU_H
-> +#define _ASM_RISCV_FPU_H
-> +
-> +#include <asm/switch_to.h>
-> +
-> +#define kernel_fpu_available()	has_fpu()
-> +
-> +void kernel_fpu_begin(void);
-> +void kernel_fpu_end(void);
-> +
-> +#endif /* ! _ASM_RISCV_FPU_H */
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index fee22a3d1b53..662c483e338d 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -62,6 +62,7 @@ obj-$(CONFIG_MMU) += vdso.o vdso/
->
->  obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
->  obj-$(CONFIG_FPU)		+= fpu.o
-> +obj-$(CONFIG_FPU)		+= kernel_mode_fpu.o
->  obj-$(CONFIG_RISCV_ISA_V)	+= vector.o
->  obj-$(CONFIG_SMP)		+= smpboot.o
->  obj-$(CONFIG_SMP)		+= smp.o
-> diff --git a/arch/riscv/kernel/kernel_mode_fpu.c b/arch/riscv/kernel/kernel_mode_fpu.c
-> new file mode 100644
-> index 000000000000..0ac8348876c4
-> --- /dev/null
-> +++ b/arch/riscv/kernel/kernel_mode_fpu.c
-> @@ -0,0 +1,28 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 SiFive
-> + */
-> +
-> +#include <linux/export.h>
-> +#include <linux/preempt.h>
-> +
-> +#include <asm/csr.h>
-> +#include <asm/fpu.h>
-> +#include <asm/processor.h>
-> +#include <asm/switch_to.h>
-> +
-> +void kernel_fpu_begin(void)
-> +{
-> +	preempt_disable();
-> +	fstate_save(current, task_pt_regs(current));
-> +	csr_set(CSR_SSTATUS, SR_FS);
-> +}
-> +EXPORT_SYMBOL_GPL(kernel_fpu_begin);
-> +
-> +void kernel_fpu_end(void)
-> +{
-> +	csr_clear(CSR_SSTATUS, SR_FS);
-> +	fstate_restore(current, task_pt_regs(current));
-> +	preempt_enable();
-> +}
-> +EXPORT_SYMBOL_GPL(kernel_fpu_end);
+> So I would add the latest commit as the Fixes commit (which would be
+> c5e9b2c2ae822), and then I'd send a patch to stable for each commit with
+> the right Fixes tag...@Conor: let me know if you have a simpler idea or
+> if this is wrong.
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+I just went with
 
-assuming you want to keep these together -- it touches a lot of stuff, 
-so LMK if you want me to pick something up.
+Fixes: c5e9b2c2ae82 ("riscv: Improve tlb_flush()")
+Cc: stable@vger.kernel.org
 
-Thanks!
+hopefully that's fine.  It's still getting tested, it's batched up with 
+some other stuff and I managed to find a bad merge so it might take a 
+bit...
+
+>
+> Thanks,
+>
+> Alex
+>
+>
+>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+>> ---
+>>   arch/riscv/include/asm/pgalloc.h | 20 +++++++++++++++++---
+>>   1 file changed, 17 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
+>> index d169a4f41a2e..a12fb83fa1f5 100644
+>> --- a/arch/riscv/include/asm/pgalloc.h
+>> +++ b/arch/riscv/include/asm/pgalloc.h
+>> @@ -95,7 +95,13 @@ static inline void pud_free(struct mm_struct *mm, pud_t *pud)
+>>   		__pud_free(mm, pud);
+>>   }
+>>
+>> -#define __pud_free_tlb(tlb, pud, addr)  pud_free((tlb)->mm, pud)
+>> +#define __pud_free_tlb(tlb, pud, addr)					\
+>> +do {									\
+>> +	if (pgtable_l4_enabled) {					\
+>> +		pagetable_pud_dtor(virt_to_ptdesc(pud));		\
+>> +		tlb_remove_page_ptdesc((tlb), virt_to_ptdesc(pud));	\
+>> +	}								\
+>> +} while (0)
+>>
+>>   #define p4d_alloc_one p4d_alloc_one
+>>   static inline p4d_t *p4d_alloc_one(struct mm_struct *mm, unsigned long addr)
+>> @@ -124,7 +130,11 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
+>>   		__p4d_free(mm, p4d);
+>>   }
+>>
+>> -#define __p4d_free_tlb(tlb, p4d, addr)  p4d_free((tlb)->mm, p4d)
+>> +#define __p4d_free_tlb(tlb, p4d, addr)					\
+>> +do {									\
+>> +	if (pgtable_l5_enabled)						\
+>> +		tlb_remove_page_ptdesc((tlb), virt_to_ptdesc(p4d));	\
+>> +} while (0)
+>>   #endif /* __PAGETABLE_PMD_FOLDED */
+>>
+>>   static inline void sync_kernel_mappings(pgd_t *pgd)
+>> @@ -149,7 +159,11 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+>>
+>>   #ifndef __PAGETABLE_PMD_FOLDED
+>>
+>> -#define __pmd_free_tlb(tlb, pmd, addr)  pmd_free((tlb)->mm, pmd)
+>> +#define __pmd_free_tlb(tlb, pmd, addr)				\
+>> +do {								\
+>> +	pagetable_pmd_dtor(virt_to_ptdesc(pmd));		\
+>> +	tlb_remove_page_ptdesc((tlb), virt_to_ptdesc(pmd));	\
+>> +} while (0)
+>>
+>>   #endif /* __PAGETABLE_PMD_FOLDED */
+>>
 
