@@ -1,288 +1,235 @@
-Return-Path: <linux-arch+bounces-1324-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1325-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72EE2829639
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 10:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CBD1829725
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 11:19:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 781291C2158D
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 09:23:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B9CB1C219C3
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 10:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC993E472;
-	Wed, 10 Jan 2024 09:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C863FB08;
+	Wed, 10 Jan 2024 10:19:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RrZt9QZo"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QIlgLaD5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BbshDz4z"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55AC3E47B
-	for <linux-arch@vger.kernel.org>; Wed, 10 Jan 2024 09:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704878588; x=1736414588;
-  h=date:from:to:cc:subject:message-id;
-  bh=t/0j4TnSQ3XmZKzJ3F+Z/G4wPBxl7a2uf1sYBst8TGE=;
-  b=RrZt9QZo5xDQIuy+x9m9BBddgTg69yZ8sS8jYwNg+Buq+V7rnh/HZvXu
-   EhrCQluVZBhMx94qgKTIUqZAX1XGABBb6HIzXgTjZmmJp2CARK6IsJOh7
-   3MZiwEza5PNvztb4iOcSRA7mseMWyZtQ7XNOoGUyAWUj+sUcDdJUF88wS
-   ReQW7eCZw7yXttXUYqn03+SXraFieXN5eSME9iN78YG4hpq3H9Utt4/Co
-   FLLb6/JzaMxuuIXbOQ0NL2rTsr5xa0Y7otNVDSHsMKmVLignDCsIxEV3S
-   SOI1qZglFp+0sYaefFCBnRiItZe+rmledrksjHVNYzb6yeQv3tL+J05UN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="5545554"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="5545554"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 01:23:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="16575964"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Jan 2024 01:23:05 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rNUnf-0006od-1N;
-	Wed, 10 Jan 2024 09:23:03 +0000
-Date: Wed, 10 Jan 2024 17:01:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- e8cf41b96bc9c8a735ba30a38ea69cc2ef1b5cae
-Message-ID: <202401101735.GpYGgz8l-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3103FB02;
+	Wed, 10 Jan 2024 10:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 513873200AE6;
+	Wed, 10 Jan 2024 05:19:13 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 10 Jan 2024 05:19:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1704881952; x=1704968352; bh=tz
+	ttvDUX93pOgvU5O2v5sdJ4w+bYyfhKUlqgeYo0g68=; b=QIlgLaD5d6LcJbLbTE
+	3lTQQf9AA6Et7bHuZtEbXdByb2UFkVbyzgo9yhfYiUsLTPJ6uJgJvjlgJZcNKZtH
+	ly/BhCqI915Srzow5fbITCQIAtjKZ43Wh5EUbCsDpcSWJHoxLXFw+ZtWXQwiHGP8
+	z9UZfbNN3QC0zNBELXLIhterbjFowk3dYsUc7HHyS3fWMjOhkMePweMqq9nNIYTY
+	c6qw18adKY1gKpw1p4Zww8EdYbubLT/gHD19zi0AeRHBTOI2pLRyoXgkekjwPIoI
+	hFD9tvTgUF4pR01Gbd9oegblIk8p3uTNDauiySADxrao6yI8VLQ5FvIVAL2emh2L
+	19VA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1704881952; x=1704968352; bh=tzttvDUX93pOg
+	vU5O2v5sdJ4w+bYyfhKUlqgeYo0g68=; b=BbshDz4zd1hTisUwXxj/k21KnzC+J
+	Ey3ysXF6xssunYFv5REuM7xnog6doHy0V0CzsNSmOCiDXvKGtOmEsnfYSVLUHcTI
+	6XFopjXIc6F+gdBNnQd27rqg8gYGO8exkKPiwqdTCo6W6GMZJCPblmJOKZdXYq0g
+	V3PL3QrQNZFSYvZDpNrCaDnwyobF4cyCY619w+Is0VnkpSAbRT5qDNXvwcoU2iQs
+	2/8DGbDUXQ60TFkvUAYR7T/Zn3e5FYFq3qQ5yq8zqSvFg2cvcvNC8O4DO4E2i1Fj
+	v07H29BTrEN88TGS+4hNT31DsFeQJDPOj8hLXpyowsqszGGOI953hF8jA==
+X-ME-Sender: <xms:IG-eZRBFdQH06Wb4N_Mj5WIhi2Bron6FqITv3c3oM9Mo5BjLSUtiKw>
+    <xme:IG-eZfjjsM33q06ArhDbeii2rr2gZDPAu9nblGn-MNt9j9e1To5khcmPaXeKFf-uE
+    xD89t2qR2aq-A960QM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeiuddgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefgffevuddtledthfduiedtvddvtdelfeekhfeggfevveelgfeitdeileeffefg
+    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:IG-eZck4IrEjC-qYAxL6ZzeaJAyzpPbjF0F3kLTgxduvU46ceBVd9Q>
+    <xmx:IG-eZbwvxhZ_HwpxACt6dq5Gg-N80SU1OolIBLKzxYZ7daH02E6hEQ>
+    <xmx:IG-eZWT_2AbFMxCNqDXxKJGHR82Q1JIAPpEU30Lq7bIpBcJqNlIx3w>
+    <xmx:IG-eZf5FCEtIWpyDuWnJEI44OthYcDwnDqH25bXUHEjTyJkRjs0B4g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 786C4B6008D; Wed, 10 Jan 2024 05:19:12 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <8d87c3da-fe7e-4b2d-9078-4421e4ca7727@app.fastmail.com>
+Date: Wed, 10 Jan 2024 11:18:36 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: [GIT PULL] asm-generic cleanups for 6.8
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: e8cf41b96bc9c8a735ba30a38ea69cc2ef1b5cae  asm-generic: make sparse happy with odd-sized put_unaligned_*()
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328f=
+a86:
 
-elapsed time: 1481m
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-configs tested: 207
-configs skipped: 2
+are available in the Git repository at:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git t=
+ags/asm-generic-6.8
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                     nsimosci_hs_defconfig   gcc  
-arc                   randconfig-001-20240109   gcc  
-arc                   randconfig-001-20240110   gcc  
-arc                   randconfig-002-20240109   gcc  
-arc                   randconfig-002-20240110   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                           h3600_defconfig   gcc  
-arm                        spear6xx_defconfig   gcc  
-arm                           stm32_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240109   gcc  
-csky                  randconfig-001-20240110   gcc  
-csky                  randconfig-002-20240109   gcc  
-csky                  randconfig-002-20240110   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             alldefconfig   gcc  
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386                                defconfig   gcc  
-i386                  randconfig-011-20240109   gcc  
-i386                  randconfig-011-20240110   gcc  
-i386                  randconfig-012-20240109   gcc  
-i386                  randconfig-012-20240110   gcc  
-i386                  randconfig-013-20240109   gcc  
-i386                  randconfig-013-20240110   gcc  
-i386                  randconfig-014-20240109   gcc  
-i386                  randconfig-014-20240110   gcc  
-i386                  randconfig-015-20240109   gcc  
-i386                  randconfig-015-20240110   gcc  
-i386                  randconfig-016-20240109   gcc  
-i386                  randconfig-016-20240110   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240109   gcc  
-loongarch             randconfig-001-20240110   gcc  
-loongarch             randconfig-002-20240109   gcc  
-loongarch             randconfig-002-20240110   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                       bvme6000_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                          rb532_defconfig   gcc  
-mips                       rbtx49xx_defconfig   gcc  
-mips                        vocore2_defconfig   gcc  
-mips                           xway_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240109   gcc  
-nios2                 randconfig-001-20240110   gcc  
-nios2                 randconfig-002-20240109   gcc  
-nios2                 randconfig-002-20240110   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-64bit_defconfig   gcc  
-parisc                randconfig-001-20240109   gcc  
-parisc                randconfig-001-20240110   gcc  
-parisc                randconfig-002-20240109   gcc  
-parisc                randconfig-002-20240110   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                       holly_defconfig   gcc  
-powerpc                    klondike_defconfig   gcc  
-powerpc                      mgcoge_defconfig   gcc  
-powerpc                     mpc83xx_defconfig   gcc  
-powerpc                      pasemi_defconfig   gcc  
-powerpc                     redwood_defconfig   gcc  
-powerpc                     tqm8560_defconfig   gcc  
-powerpc                        warp_defconfig   gcc  
-powerpc                 xes_mpc85xx_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240109   gcc  
-s390                  randconfig-001-20240110   gcc  
-s390                  randconfig-002-20240109   gcc  
-s390                  randconfig-002-20240110   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                    randconfig-001-20240109   gcc  
-sh                    randconfig-001-20240110   gcc  
-sh                    randconfig-002-20240109   gcc  
-sh                    randconfig-002-20240110   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                           se7712_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                           sh2007_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240109   gcc  
-sparc64               randconfig-001-20240110   gcc  
-sparc64               randconfig-002-20240109   gcc  
-sparc64               randconfig-002-20240110   gcc  
-um                               alldefconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240109   clang
-x86_64       buildonly-randconfig-001-20240110   clang
-x86_64       buildonly-randconfig-002-20240109   clang
-x86_64       buildonly-randconfig-002-20240110   clang
-x86_64       buildonly-randconfig-003-20240109   clang
-x86_64       buildonly-randconfig-003-20240110   clang
-x86_64       buildonly-randconfig-004-20240109   clang
-x86_64       buildonly-randconfig-004-20240110   clang
-x86_64       buildonly-randconfig-005-20240109   clang
-x86_64       buildonly-randconfig-005-20240110   clang
-x86_64       buildonly-randconfig-006-20240109   clang
-x86_64       buildonly-randconfig-006-20240110   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20240109   clang
-x86_64                randconfig-011-20240110   clang
-x86_64                randconfig-012-20240109   clang
-x86_64                randconfig-012-20240110   clang
-x86_64                randconfig-013-20240109   clang
-x86_64                randconfig-013-20240110   clang
-x86_64                randconfig-014-20240109   clang
-x86_64                randconfig-014-20240110   clang
-x86_64                randconfig-015-20240109   clang
-x86_64                randconfig-015-20240110   clang
-x86_64                randconfig-016-20240109   clang
-x86_64                randconfig-016-20240110   clang
-x86_64                randconfig-071-20240109   clang
-x86_64                randconfig-071-20240110   clang
-x86_64                randconfig-072-20240109   clang
-x86_64                randconfig-072-20240110   clang
-x86_64                randconfig-073-20240109   clang
-x86_64                randconfig-073-20240110   clang
-x86_64                randconfig-074-20240109   clang
-x86_64                randconfig-074-20240110   clang
-x86_64                randconfig-075-20240109   clang
-x86_64                randconfig-075-20240110   clang
-x86_64                randconfig-076-20240109   clang
-x86_64                randconfig-076-20240110   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                randconfig-001-20240109   gcc  
-xtensa                randconfig-001-20240110   gcc  
-xtensa                randconfig-002-20240109   gcc  
-xtensa                randconfig-002-20240110   gcc  
+for you to fetch changes up to d93cca2f3109f88c94a32d3322ec8b2854a9c339:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  asm-generic: Fix 32 bit __generic_cmpxchg_local (2024-01-05 23:19:14 +=
+0100)
+
+----------------------------------------------------------------
+asm-generic cleanups for 6.8
+
+A series from Baoquan He cleans up the asm-generic/io.h to remove the
+ioremap_uc() definition from everything except x86, which still needs it
+for pre-PAT systems. This series notably contains a patch from Jiaxun Ya=
+ng
+that converts MIPS to use asm-generic/io.h like every other architecture
+does, enabling future cleanups.
+
+Some of my own patches fix -Wmissing-prototype warnings in architecture
+specific code across several architectures. This is now needed as the
+warning is enabled by default. There are still some remaining warnings
+in minor platforms, but the series should catch most of the widely used
+ones make them more consistent with one another.
+
+David McKay fixes a bug in __generic_cmpxchg_local() when this is used
+on 64-bit architectures. This could currently only affect parisc64
+and sparc64.
+
+Additional cleanups address from Linus Walleij, Uwe Kleine-K=C3=B6nig,
+Thomas Huth, and Kefeng Wang help reduce unnecessary inconsistencies
+between architectures.
+
+----------------------------------------------------------------
+Arnd Bergmann (10):
+      Merge branch 'asm-generic-io.h-cleanup' into asm-generic
+      arch: consolidate arch_irq_work_raise prototypes
+      arch: fix asm-offsets.c building with -Wmissing-prototypes
+      arch: include linux/cpu.h for trap_init() prototype
+      arch: vdso: consolidate gettime prototypes
+      arch: add missing prepare_ftrace_return() prototypes
+      arch: add do_page_fault prototypes
+      csky: fix arch_jump_label_transform_static override
+      Merge branch 'asm-generic-prototypes' into asm-generic
+      mips: remove extraneous asm-generic/iomap.h include
+
+Baoquan He (2):
+      arch/*/io.h: remove ioremap_uc in some architectures
+      mips: io: remove duplicated codes
+
+David McKay (1):
+      asm-generic: Fix 32 bit __generic_cmpxchg_local
+
+Jiaxun Yang (1):
+      mips: add <asm-generic/io.h> including
+
+Kefeng Wang (1):
+      asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem=
+_ptr()
+
+Linus Walleij (2):
+      ARC: mm: Make virt_to_pfn() a static inline
+      Hexagon: Make pfn accessors statics inlines
+
+Nathan Chancellor (1):
+      arm64: vdso32: Define BUILD_VDSO32_64 to correct prototypes
+
+Thomas Huth (1):
+      hexagon: Remove CONFIG_HEXAGON_ARCH_VERSION from uapi header
+
+Uwe Kleine-K=C3=B6nig (1):
+      sparc: Use $(kecho) to announce kernel images being ready
+
+ Documentation/driver-api/device-io.rst   |   9 ++-
+ arch/alpha/include/asm/io.h              |   7 --
+ arch/alpha/include/asm/mmu_context.h     |   2 +
+ arch/alpha/kernel/asm-offsets.c          |   2 +-
+ arch/alpha/kernel/traps.c                |   1 +
+ arch/arc/include/asm/page.h              |  21 ++---
+ arch/arc/include/asm/pgtable-levels.h    |   2 +-
+ arch/arm/include/asm/io.h                |   6 --
+ arch/arm/include/asm/irq_work.h          |   2 -
+ arch/arm/include/asm/vdso.h              |   5 --
+ arch/arm/vdso/vgettimeofday.c            |   1 +
+ arch/arm64/include/asm/irq_work.h        |   2 -
+ arch/arm64/kernel/vdso32/vgettimeofday.c |   2 +
+ arch/csky/include/asm/ftrace.h           |   4 +
+ arch/csky/include/asm/irq_work.h         |   2 +-
+ arch/csky/include/asm/jump_label.h       |   5 ++
+ arch/csky/include/asm/traps.h            |   2 +-
+ arch/csky/kernel/traps.c                 |   1 +
+ arch/csky/kernel/vdso/vgettimeofday.c    |  11 +--
+ arch/hexagon/include/asm/io.h            |   9 ---
+ arch/hexagon/include/asm/page.h          |  15 +++-
+ arch/hexagon/include/uapi/asm/user.h     |   7 +-
+ arch/hexagon/kernel/ptrace.c             |   7 +-
+ arch/loongarch/kernel/asm-offsets.c      |  26 +++----
+ arch/loongarch/vdso/vgettimeofday.c      |   7 +-
+ arch/m68k/coldfire/vectors.c             |   3 +-
+ arch/m68k/coldfire/vectors.h             |   3 -
+ arch/m68k/include/asm/io_mm.h            |   6 --
+ arch/m68k/include/asm/kmap.h             |   1 -
+ arch/microblaze/include/asm/ftrace.h     |   1 +
+ arch/microblaze/kernel/traps.c           |   1 +
+ arch/mips/include/asm/ftrace.h           |   4 +
+ arch/mips/include/asm/io.h               | 128 +++++++++++++++++-------=
+-------
+ arch/mips/include/asm/mmiowb.h           |   4 +-
+ arch/mips/include/asm/smp-ops.h          |   2 -
+ arch/mips/include/asm/smp.h              |   4 +-
+ arch/mips/include/asm/traps.h            |   3 +
+ arch/mips/kernel/setup.c                 |   1 +
+ arch/mips/pci/pci-ip27.c                 |   3 +
+ arch/mips/vdso/vgettimeofday.c           |   1 +
+ arch/nios2/include/asm/traps.h           |   2 +
+ arch/parisc/include/asm/io.h             |   8 --
+ arch/powerpc/include/asm/io.h            |   7 --
+ arch/powerpc/include/asm/irq_work.h      |   1 -
+ arch/riscv/include/asm/irq_work.h        |   2 +-
+ arch/riscv/kernel/vdso/vgettimeofday.c   |   7 +-
+ arch/s390/include/asm/irq_work.h         |   2 -
+ arch/sh/include/asm/io.h                 |   9 ---
+ arch/sh/include/asm/traps_32.h           |   3 +
+ arch/sparc/boot/Makefile                 |  10 +--
+ arch/sparc/include/asm/io_64.h           |   7 --
+ arch/sparc/kernel/asm-offsets.c          |   6 +-
+ arch/sparc/kernel/traps_32.c             |   1 +
+ arch/sparc/kernel/traps_64.c             |   1 +
+ arch/x86/entry/vdso/vclock_gettime.c     |  10 +--
+ arch/x86/include/asm/irq_work.h          |   1 -
+ arch/x86/include/asm/traps.h             |   1 -
+ arch/x86/include/asm/vdso/gettimeofday.h |   2 -
+ arch/x86/kernel/traps.c                  |   1 +
+ include/asm-generic/cmpxchg-local.h      |   2 +-
+ include/linux/irq_work.h                 |   3 +
+ include/vdso/gettime.h                   |  23 ++++++
+ scripts/headers_install.sh               |   1 -
+ 63 files changed, 204 insertions(+), 229 deletions(-)
+ delete mode 100644 arch/m68k/coldfire/vectors.h
+ create mode 100644 include/vdso/gettime.h
 
