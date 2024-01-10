@@ -1,235 +1,108 @@
-Return-Path: <linux-arch+bounces-1325-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1326-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CBD1829725
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 11:19:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8F31829BB1
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 14:49:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B9CB1C219C3
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 10:19:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09F89B211AB
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jan 2024 13:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C863FB08;
-	Wed, 10 Jan 2024 10:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EED5495D9;
+	Wed, 10 Jan 2024 13:48:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QIlgLaD5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BbshDz4z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1jPPPfb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3103FB02;
-	Wed, 10 Jan 2024 10:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 513873200AE6;
-	Wed, 10 Jan 2024 05:19:13 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 10 Jan 2024 05:19:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1704881952; x=1704968352; bh=tz
-	ttvDUX93pOgvU5O2v5sdJ4w+bYyfhKUlqgeYo0g68=; b=QIlgLaD5d6LcJbLbTE
-	3lTQQf9AA6Et7bHuZtEbXdByb2UFkVbyzgo9yhfYiUsLTPJ6uJgJvjlgJZcNKZtH
-	ly/BhCqI915Srzow5fbITCQIAtjKZ43Wh5EUbCsDpcSWJHoxLXFw+ZtWXQwiHGP8
-	z9UZfbNN3QC0zNBELXLIhterbjFowk3dYsUc7HHyS3fWMjOhkMePweMqq9nNIYTY
-	c6qw18adKY1gKpw1p4Zww8EdYbubLT/gHD19zi0AeRHBTOI2pLRyoXgkekjwPIoI
-	hFD9tvTgUF4pR01Gbd9oegblIk8p3uTNDauiySADxrao6yI8VLQ5FvIVAL2emh2L
-	19VA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1704881952; x=1704968352; bh=tzttvDUX93pOg
-	vU5O2v5sdJ4w+bYyfhKUlqgeYo0g68=; b=BbshDz4zd1hTisUwXxj/k21KnzC+J
-	Ey3ysXF6xssunYFv5REuM7xnog6doHy0V0CzsNSmOCiDXvKGtOmEsnfYSVLUHcTI
-	6XFopjXIc6F+gdBNnQd27rqg8gYGO8exkKPiwqdTCo6W6GMZJCPblmJOKZdXYq0g
-	V3PL3QrQNZFSYvZDpNrCaDnwyobF4cyCY619w+Is0VnkpSAbRT5qDNXvwcoU2iQs
-	2/8DGbDUXQ60TFkvUAYR7T/Zn3e5FYFq3qQ5yq8zqSvFg2cvcvNC8O4DO4E2i1Fj
-	v07H29BTrEN88TGS+4hNT31DsFeQJDPOj8hLXpyowsqszGGOI953hF8jA==
-X-ME-Sender: <xms:IG-eZRBFdQH06Wb4N_Mj5WIhi2Bron6FqITv3c3oM9Mo5BjLSUtiKw>
-    <xme:IG-eZfjjsM33q06ArhDbeii2rr2gZDPAu9nblGn-MNt9j9e1To5khcmPaXeKFf-uE
-    xD89t2qR2aq-A960QM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeiuddgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpefgffevuddtledthfduiedtvddvtdelfeekhfeggfevveelgfeitdeileeffefg
-    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:IG-eZck4IrEjC-qYAxL6ZzeaJAyzpPbjF0F3kLTgxduvU46ceBVd9Q>
-    <xmx:IG-eZbwvxhZ_HwpxACt6dq5Gg-N80SU1OolIBLKzxYZ7daH02E6hEQ>
-    <xmx:IG-eZWT_2AbFMxCNqDXxKJGHR82Q1JIAPpEU30Lq7bIpBcJqNlIx3w>
-    <xmx:IG-eZf5FCEtIWpyDuWnJEI44OthYcDwnDqH25bXUHEjTyJkRjs0B4g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 786C4B6008D; Wed, 10 Jan 2024 05:19:12 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20F4495CC;
+	Wed, 10 Jan 2024 13:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14496C433C7;
+	Wed, 10 Jan 2024 13:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704894507;
+	bh=Mpj9MmpWsZ0QXa3z+JG9y8iO9570kyRUme6G8UyY3ns=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V1jPPPfbtZjWicjR/pXvV3fvfEd+WTpUYKesK1ver/unl0yUXsY4TkjQIutQjBRsP
+	 rP/Oz0q/0h14UEjOgFaxFG624+eWlJ/AO+ivv3TYC1sZnL+hL4/+Alo/46tP000hXg
+	 zplNZ64lLrfkj8J9hOzdzzP2smKm7MeEZ/IYISeNp94tvvX509RdtM1WHeyhjMm5jx
+	 6PVp6J9lR2f0adpYnosG4kNDW+C6yKAzSmFoUpH39oONuTUSb402zXo2PYbzqdDyDw
+	 8BKfIvBQaR2VfeSzJy9k28uur98lcaUtFQRjhOYk1Xziu9Q+q1jecwOjEuD67FrH9y
+	 AnuUlci6GEj1Q==
+Date: Wed, 10 Jan 2024 13:48:20 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] arch and include: Update LLVM Phabricator links
+Message-ID: <20240110-apostle-trident-533d4c2c9c97@spud>
+References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
+ <20240109-update-llvm-links-v1-2-eb09b59db071@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8d87c3da-fe7e-4b2d-9078-4421e4ca7727@app.fastmail.com>
-Date: Wed, 10 Jan 2024 11:18:36 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: [GIT PULL] asm-generic cleanups for 6.8
-Content-Type: text/plain;charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="p6SYI+U6gP5vpK1M"
+Content-Disposition: inline
+In-Reply-To: <20240109-update-llvm-links-v1-2-eb09b59db071@kernel.org>
+
+
+--p6SYI+U6gP5vpK1M
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328f=
-a86:
+On Tue, Jan 09, 2024 at 03:16:30PM -0700, Nathan Chancellor wrote:
+> reviews.llvm.org was LLVM's Phabricator instances for code review. It
+> has been abandoned in favor of GitHub pull requests. While the majority
+> of links in the kernel sources still work because of the work Fangrui
+> has done turning the dynamic Phabricator instance into a static archive,
+> there are some issues with that work, so preemptively convert all the
+> links in the kernel sources to point to the commit on GitHub.
+>=20
+> Most of the commits have the corresponding differential review link in
+> the commit message itself so there should not be any loss of fidelity in
+> the relevant information.
+>=20
+> Link: https://discourse.llvm.org/t/update-on-github-pull-requests/71540/1=
+72
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+>  arch/riscv/Kconfig              | 2 +-
+>  arch/riscv/include/asm/ftrace.h | 2 +-
 
-are available in the Git repository at:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git t=
-ags/asm-generic-6.8
+Cheers,
+Conor.
 
-for you to fetch changes up to d93cca2f3109f88c94a32d3322ec8b2854a9c339:
+--p6SYI+U6gP5vpK1M
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  asm-generic: Fix 32 bit __generic_cmpxchg_local (2024-01-05 23:19:14 +=
-0100)
+-----BEGIN PGP SIGNATURE-----
 
-----------------------------------------------------------------
-asm-generic cleanups for 6.8
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ6gJAAKCRB4tDGHoIJi
+0mIlAQCj5ZP6QEhEswWYjX38obn/p3pF8mt+Ve+vlBnVEhAW8QD8ClRvKxDiajR5
+Zp8ES/FLDyH/QJ5QjGuYLP5PATLeFAY=
+=SqXc
+-----END PGP SIGNATURE-----
 
-A series from Baoquan He cleans up the asm-generic/io.h to remove the
-ioremap_uc() definition from everything except x86, which still needs it
-for pre-PAT systems. This series notably contains a patch from Jiaxun Ya=
-ng
-that converts MIPS to use asm-generic/io.h like every other architecture
-does, enabling future cleanups.
-
-Some of my own patches fix -Wmissing-prototype warnings in architecture
-specific code across several architectures. This is now needed as the
-warning is enabled by default. There are still some remaining warnings
-in minor platforms, but the series should catch most of the widely used
-ones make them more consistent with one another.
-
-David McKay fixes a bug in __generic_cmpxchg_local() when this is used
-on 64-bit architectures. This could currently only affect parisc64
-and sparc64.
-
-Additional cleanups address from Linus Walleij, Uwe Kleine-K=C3=B6nig,
-Thomas Huth, and Kefeng Wang help reduce unnecessary inconsistencies
-between architectures.
-
-----------------------------------------------------------------
-Arnd Bergmann (10):
-      Merge branch 'asm-generic-io.h-cleanup' into asm-generic
-      arch: consolidate arch_irq_work_raise prototypes
-      arch: fix asm-offsets.c building with -Wmissing-prototypes
-      arch: include linux/cpu.h for trap_init() prototype
-      arch: vdso: consolidate gettime prototypes
-      arch: add missing prepare_ftrace_return() prototypes
-      arch: add do_page_fault prototypes
-      csky: fix arch_jump_label_transform_static override
-      Merge branch 'asm-generic-prototypes' into asm-generic
-      mips: remove extraneous asm-generic/iomap.h include
-
-Baoquan He (2):
-      arch/*/io.h: remove ioremap_uc in some architectures
-      mips: io: remove duplicated codes
-
-David McKay (1):
-      asm-generic: Fix 32 bit __generic_cmpxchg_local
-
-Jiaxun Yang (1):
-      mips: add <asm-generic/io.h> including
-
-Kefeng Wang (1):
-      asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem=
-_ptr()
-
-Linus Walleij (2):
-      ARC: mm: Make virt_to_pfn() a static inline
-      Hexagon: Make pfn accessors statics inlines
-
-Nathan Chancellor (1):
-      arm64: vdso32: Define BUILD_VDSO32_64 to correct prototypes
-
-Thomas Huth (1):
-      hexagon: Remove CONFIG_HEXAGON_ARCH_VERSION from uapi header
-
-Uwe Kleine-K=C3=B6nig (1):
-      sparc: Use $(kecho) to announce kernel images being ready
-
- Documentation/driver-api/device-io.rst   |   9 ++-
- arch/alpha/include/asm/io.h              |   7 --
- arch/alpha/include/asm/mmu_context.h     |   2 +
- arch/alpha/kernel/asm-offsets.c          |   2 +-
- arch/alpha/kernel/traps.c                |   1 +
- arch/arc/include/asm/page.h              |  21 ++---
- arch/arc/include/asm/pgtable-levels.h    |   2 +-
- arch/arm/include/asm/io.h                |   6 --
- arch/arm/include/asm/irq_work.h          |   2 -
- arch/arm/include/asm/vdso.h              |   5 --
- arch/arm/vdso/vgettimeofday.c            |   1 +
- arch/arm64/include/asm/irq_work.h        |   2 -
- arch/arm64/kernel/vdso32/vgettimeofday.c |   2 +
- arch/csky/include/asm/ftrace.h           |   4 +
- arch/csky/include/asm/irq_work.h         |   2 +-
- arch/csky/include/asm/jump_label.h       |   5 ++
- arch/csky/include/asm/traps.h            |   2 +-
- arch/csky/kernel/traps.c                 |   1 +
- arch/csky/kernel/vdso/vgettimeofday.c    |  11 +--
- arch/hexagon/include/asm/io.h            |   9 ---
- arch/hexagon/include/asm/page.h          |  15 +++-
- arch/hexagon/include/uapi/asm/user.h     |   7 +-
- arch/hexagon/kernel/ptrace.c             |   7 +-
- arch/loongarch/kernel/asm-offsets.c      |  26 +++----
- arch/loongarch/vdso/vgettimeofday.c      |   7 +-
- arch/m68k/coldfire/vectors.c             |   3 +-
- arch/m68k/coldfire/vectors.h             |   3 -
- arch/m68k/include/asm/io_mm.h            |   6 --
- arch/m68k/include/asm/kmap.h             |   1 -
- arch/microblaze/include/asm/ftrace.h     |   1 +
- arch/microblaze/kernel/traps.c           |   1 +
- arch/mips/include/asm/ftrace.h           |   4 +
- arch/mips/include/asm/io.h               | 128 +++++++++++++++++-------=
--------
- arch/mips/include/asm/mmiowb.h           |   4 +-
- arch/mips/include/asm/smp-ops.h          |   2 -
- arch/mips/include/asm/smp.h              |   4 +-
- arch/mips/include/asm/traps.h            |   3 +
- arch/mips/kernel/setup.c                 |   1 +
- arch/mips/pci/pci-ip27.c                 |   3 +
- arch/mips/vdso/vgettimeofday.c           |   1 +
- arch/nios2/include/asm/traps.h           |   2 +
- arch/parisc/include/asm/io.h             |   8 --
- arch/powerpc/include/asm/io.h            |   7 --
- arch/powerpc/include/asm/irq_work.h      |   1 -
- arch/riscv/include/asm/irq_work.h        |   2 +-
- arch/riscv/kernel/vdso/vgettimeofday.c   |   7 +-
- arch/s390/include/asm/irq_work.h         |   2 -
- arch/sh/include/asm/io.h                 |   9 ---
- arch/sh/include/asm/traps_32.h           |   3 +
- arch/sparc/boot/Makefile                 |  10 +--
- arch/sparc/include/asm/io_64.h           |   7 --
- arch/sparc/kernel/asm-offsets.c          |   6 +-
- arch/sparc/kernel/traps_32.c             |   1 +
- arch/sparc/kernel/traps_64.c             |   1 +
- arch/x86/entry/vdso/vclock_gettime.c     |  10 +--
- arch/x86/include/asm/irq_work.h          |   1 -
- arch/x86/include/asm/traps.h             |   1 -
- arch/x86/include/asm/vdso/gettimeofday.h |   2 -
- arch/x86/kernel/traps.c                  |   1 +
- include/asm-generic/cmpxchg-local.h      |   2 +-
- include/linux/irq_work.h                 |   3 +
- include/vdso/gettime.h                   |  23 ++++++
- scripts/headers_install.sh               |   1 -
- 63 files changed, 204 insertions(+), 229 deletions(-)
- delete mode 100644 arch/m68k/coldfire/vectors.h
- create mode 100644 include/vdso/gettime.h
+--p6SYI+U6gP5vpK1M--
 
