@@ -1,168 +1,148 @@
-Return-Path: <linux-arch+bounces-1355-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1356-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C6D782B605
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jan 2024 21:35:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E5CE82B72E
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jan 2024 23:41:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D27F2881A6
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jan 2024 20:35:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D34B1F24ECB
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jan 2024 22:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAB55789C;
-	Thu, 11 Jan 2024 20:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA155FC08;
+	Thu, 11 Jan 2024 22:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yA1hq8y5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfvTIE3Y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9797C58127
-	for <linux-arch@vger.kernel.org>; Thu, 11 Jan 2024 20:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40e62043a5cso625e9.0
-        for <linux-arch@vger.kernel.org>; Thu, 11 Jan 2024 12:34:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705005269; x=1705610069; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZhucuI11iLm9jZSo5DyrLuQREbxS6U88O/YNonTCxz8=;
-        b=yA1hq8y5Uw2ph0oQijZJOjlee/RLujzmEgrk2cYBtYcVwt8VYVyE1UKUGGuzqCD5Lu
-         rPSGYMQ6dlpLWyWFnOgRCaLhmKjQHFW3mB5j8VkXAog/iiTViA0xf3NMaTb832m+jdKZ
-         smKWjXXOys0Vt+In1nWTlhAjFPCIWtDoDzrQ3ieCHFIP4nvUiFT/By1z1q2xYDF3ZdpL
-         wZwl1N6rkjckZwaYLbi1iP3E0RMQtEY/wjVBpYFqIUzMkte7WgJEnanv6N6tDPiBNm1M
-         s5kPk3RVbjBl8CeIXXEGEQhoRiQ5D5HOC4SI2Nt9R3FghdBCpNy2cEel0bU8Y4AT33I2
-         V7NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705005269; x=1705610069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZhucuI11iLm9jZSo5DyrLuQREbxS6U88O/YNonTCxz8=;
-        b=O3Jzc9EeA+wHcZBLD0TbeleJdIHey4OzjmVglMIq6sxKesJmsZ8zwU9zQSFR/dU1fO
-         vXxg4XoPaLoWhZ/BPTtfEMzzS/UfRmW4d9eLmnm5l87T2Dwlov/2OpKprsg9lgcB1gmC
-         38D/eddD9yhbTtP8+aRX/OVzD5TOwR7G5KjVKwLPpiG/E6sreVS1Er9j7VacWd4nyYWI
-         eiarQfYw/K9vQwq57RRpafo+49EC9P45Ca+Kq2U+qcNauq88k4CD5mdjzznzYHyTrjYp
-         ZU3n8NAq/TNsJ4r+HI4Wzo0A1TNZIYKg6NasGRAe/G50Zmpg2F6k1/8awhT05KDACIRE
-         jOfg==
-X-Gm-Message-State: AOJu0Yw4NmXcjY3BQocc7tvPqVhfRJI/krOfeg4VqMMvx2Z/0ArQa6Zg
-	jPC+9AqtCnfp3ZOzCxPMvaflqDEE3jkLZzf9HnY+ZMBjy9Z0
-X-Google-Smtp-Source: AGHT+IEwsvtKygl+nvSOgn3WrpQlaoPEPZDIYAeAvmwuubPmfNOdEKX4uyCZcs5X4QVXtXNLJ5Llz2AVykCfzYGX6ws=
-X-Received: by 2002:a05:600c:1d1f:b0:40e:61cf:af91 with SMTP id
- l31-20020a05600c1d1f00b0040e61cfaf91mr127026wms.7.1705005268801; Thu, 11 Jan
- 2024 12:34:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70880FBF8;
+	Thu, 11 Jan 2024 22:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2ECC433F1;
+	Thu, 11 Jan 2024 22:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705012870;
+	bh=+WwJWrlRns8EY2E9CLCbBROU9LT8j8Mr6e6ahvyEWOU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OfvTIE3YPZ6MdksK4thbEF0gX4EYWItfgro+p6au+ae/0L1Rn5KPQUey1MO2mF7sb
+	 912wFQwxWJt6Eqz5rquvRdwVK23gOw+mZN3QMJzBuw9omsgfklBLL4ldqAI5eFHiMf
+	 UwH3kwKHmW649e28JAQ6P8MeeoY5YOS78K9x583/YWF7UJuVj+KZu6omk0vxfKcOhP
+	 NdiX663P8dwv8VefWE36YU8/vmf1Hpt79kYUnhnu0IyL1nEAxmLnqQ0zgq6NMjjG59
+	 7vahCIA30Sn0UeqmjWeNnB4C048bpJkLlXFQL2KrAO5l8ShyZvKdAqNwDxW80aGjE4
+	 KMyE7A/fIix6w==
+Date: Thu, 11 Jan 2024 15:41:08 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: kernel test robot <lkp@intel.com>, ardb@kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, bhelgaas@google.com, arnd@arndb.de,
+	zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+	jmorris@namei.org, serge@hallyn.com, javierm@redhat.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
+ into setup_data.h
+Message-ID: <20240111224108.GA227186@dev-arch.thelio-3990X>
+References: <20240108095903.8427-3-tzimmermann@suse.de>
+ <202401090800.UOBEKB3W-lkp@intel.com>
+ <20240109175814.GA5981@dev-arch.thelio-3990X>
+ <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org> <202401101645.ED161519BA@keescook>
-In-Reply-To: <202401101645.ED161519BA@keescook>
-From: Fangrui Song <maskray@google.com>
-Date: Thu, 11 Jan 2024 12:34:17 -0800
-Message-ID: <CAFP8O3+947djoRjnVPuPhHUHbHv_9CugufuXQ+c=N03yLsaEcA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Update LLVM Phabricator and Bugzilla links
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, akpm@linux-foundation.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	bridge@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, mykolal@fb.com, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
 
-On Wed, Jan 10, 2024 at 4:46=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Tue, Jan 09, 2024 at 03:16:28PM -0700, Nathan Chancellor wrote:
-> > This series updates all instances of LLVM Phabricator and Bugzilla link=
-s
-> > to point to GitHub commits directly and LLVM's Bugzilla to GitHub issue
-> > shortlinks respectively.
-> >
-> > I split up the Phabricator patch into BPF selftests and the rest of the
-> > kernel in case the BPF folks want to take it separately from the rest o=
-f
-> > the series, there are obviously no dependency issues in that case. The
-> > Bugzilla change was mechanical enough and should have no conflicts.
-> >
-> > I am aiming this at Andrew and CC'ing other lists, in case maintainers
-> > want to chime in, but I think this is pretty uncontroversial (famous
-> > last words...).
-> >
-> > ---
-> > Nathan Chancellor (3):
-> >       selftests/bpf: Update LLVM Phabricator links
-> >       arch and include: Update LLVM Phabricator links
-> >       treewide: Update LLVM Bugzilla links
-> >
-> >  arch/arm64/Kconfig                                 |  4 +--
-> >  arch/powerpc/Makefile                              |  4 +--
-> >  arch/powerpc/kvm/book3s_hv_nested.c                |  2 +-
-> >  arch/riscv/Kconfig                                 |  2 +-
-> >  arch/riscv/include/asm/ftrace.h                    |  2 +-
-> >  arch/s390/include/asm/ftrace.h                     |  2 +-
-> >  arch/x86/power/Makefile                            |  2 +-
-> >  crypto/blake2b_generic.c                           |  2 +-
-> >  drivers/firmware/efi/libstub/Makefile              |  2 +-
-> >  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  2 +-
-> >  drivers/media/test-drivers/vicodec/codec-fwht.c    |  2 +-
-> >  drivers/regulator/Kconfig                          |  2 +-
-> >  include/asm-generic/vmlinux.lds.h                  |  2 +-
-> >  include/linux/compiler-clang.h                     |  2 +-
-> >  lib/Kconfig.kasan                                  |  2 +-
-> >  lib/raid6/Makefile                                 |  2 +-
-> >  lib/stackinit_kunit.c                              |  2 +-
-> >  mm/slab_common.c                                   |  2 +-
-> >  net/bridge/br_multicast.c                          |  2 +-
-> >  security/Kconfig                                   |  2 +-
-> >  tools/testing/selftests/bpf/README.rst             | 32 +++++++++++---=
---------
-> >  tools/testing/selftests/bpf/prog_tests/xdpwall.c   |  2 +-
-> >  .../selftests/bpf/progs/test_core_reloc_type_id.c  |  2 +-
-> >  23 files changed, 40 insertions(+), 40 deletions(-)
-> > ---
-> > base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
-> > change-id: 20240109-update-llvm-links-d03f9d649e1e
-> >
-> > Best regards,
-> > --
-> > Nathan Chancellor <nathan@kernel.org>
-> >
->
-> Excellent! Thanks for doing this. I spot checked a handful I was
-> familiar with and everything looks good to me.
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> --
-> Kees Cook
->
+On Thu, Jan 11, 2024 at 10:50:43AM +0100, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 09.01.24 um 18:58 schrieb Nathan Chancellor:
+> > On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
+> > > Hi Thomas,
+> > > 
+> > > kernel test robot noticed the following build warnings:
+> > > 
+> > > [auto build test WARNING on tip/x86/core]
+> > > [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > > And when submitting patch, we suggest to use '--base' as documented in
+> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > 
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
+> > > base:   tip/x86/core
+> > > patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
+> > > patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
+> > > config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
+> > > compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > >     In file included from arch/x86/realmode/rm/wakemain.c:3:
+> > >     In file included from arch/x86/boot/boot.h:24:
+> > >     In file included from arch/x86/include/asm/setup.h:10:
+> > >     In file included from arch/x86/include/asm/page_types.h:7:
+> > >     In file included from include/linux/mem_encrypt.h:17:
+> > >     In file included from arch/x86/include/asm/mem_encrypt.h:18:
+> > >     In file included from arch/x86/include/uapi/asm/bootparam.h:5:
+> > > > > arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+> > >        10 |         struct setup_data data;
+> > >           |                           ^
+> > >     1 warning generated.
+> > 
+> > I think this warning is expected. This structure is now included in the
+> > realmode part of arch/x86, which has its own set of build flags,
+> > including -Wall, which includes -Wgnu on clang. The kernel obviously
+> > uses GNU extensions and states this clearly with '-std=gnu11', so
+> > -Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
+> > that same treatment is needed for REALMODE_CFLAGS, which also matches
+> > arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
+> > Disable Clang warnings about GNU extensions"):
+> > 
+> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> > index 1a068de12a56..24076db59783 100644
+> > --- a/arch/x86/Makefile
+> > +++ b/arch/x86/Makefile
+> > @@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
+> >   REALMODE_CFLAGS += -Wno-address-of-packed-member
+> >   REALMODE_CFLAGS += $(cc_stack_align4)
+> >   REALMODE_CFLAGS += $(CLANG_FLAGS)
+> > +ifdef CONFIG_CC_IS_CLANG
+> > +REALMODE_CFLAGS += -Wno-gnu
+> > +endif
+> 
+> Thanks. Shall I include this change in the patchset?
 
-These reviews.llvm.org links would definitely be kept like
-https://lists.llvm.org/pipermail/llvm-dev/ or cfe-dev links
-(discussions have been migrated to Discourse).
-However, I agree that the github repo link looks more official. I have
-clicked a few links and they look good.
+Yes, I think so to keep the build clean.
 
-Since I maintain reviews.llvm.org and created the static archive [1],
+> Best regards
+> Thomas
+> 
+> >   export REALMODE_CFLAGS
+> >   # BITS is used as extension for files which are available in a 32 bit
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Frankenstrasse 146, 90461 Nuernberg, Germany
+> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+> HRB 36809 (AG Nuernberg)
 
-Acked-by: Fangrui Song <maskray@google.com>
 
-[1]: https://discourse.llvm.org/t/llvm-phabricator-turndown/76137
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
 
