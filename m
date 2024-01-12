@@ -1,171 +1,127 @@
-Return-Path: <linux-arch+bounces-1366-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1367-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2512F82C26D
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 16:04:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 610F082C4B1
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 18:29:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6EB828303F
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 15:04:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 877BA1C22142
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 17:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 724BB6E2DE;
-	Fri, 12 Jan 2024 15:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCD52262C;
+	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/6K2Dib"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BA26E2C5;
-	Fri, 12 Jan 2024 15:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TBPrs1VcSz6FGMn;
-	Fri, 12 Jan 2024 23:02:05 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 445D41400CB;
-	Fri, 12 Jan 2024 23:04:01 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 12 Jan
- 2024 15:04:00 +0000
-Date: Fri, 12 Jan 2024 15:03:59 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: "Russell King (Oracle)" <linux@armlinux.org.uk>,
-	<linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
-	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 02/21] ACPI: processor: Add support for
- processors described as container packages
-Message-ID: <20240112150359.0000733f@Huawei.com>
-In-Reply-To: <CAJZ5v0g2CFPrSfNzHKBz_Spwt304QEQtR6w57VR11i5APPrD8Q@mail.gmail.com>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOfx-00Dvje-MS@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0iB0bS6nmjQ++pV1zp5YSGuigbffK5VD3wsX+8bY9MA5w@mail.gmail.com>
-	<20240111175908.00002f46@Huawei.com>
-	<ZaA3l4yjgCXxSiVg@shell.armlinux.org.uk>
-	<20240112092520.00001278@Huawei.com>
-	<CAJZ5v0g2CFPrSfNzHKBz_Spwt304QEQtR6w57VR11i5APPrD8Q@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743BF22626;
+	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D4DC43330;
+	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705080547;
+	bh=jssAwbuPxvN7TZtNLg2pY60C9/BU5tslVku5TmAKZdw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=c/6K2Dib9ffLTtP8V3/i61Poz6aqFNtuEEiSH0No09eQkAnvZjXt3iRP+NM8lpPGf
+	 rfNOdrI5hPYSrKpRznCK4RiWlk1LTqHjExhvF6deHyxnrKjrTthONGs8tQN09BJyf+
+	 ZNGF3PNfHa6Te4/El8O2JyvHYWpOjCcA40X44RODeJz3hvWAishkave2Lcm354ZJc2
+	 mys6CNHCSLP8C9gXnK28wYuqNQA0WLGIbfTwVqJZuQnYdLrK4TWSLuE/PlqXv1o0oU
+	 8tdoLtWgTzcqN2SvAVAkkn1JH7Uv1B7TActqvkq91t/8/IVXMpok59UqhgkZGnQnRI
+	 waDPJr64KryrA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e7dd8bce8so7970180e87.1;
+        Fri, 12 Jan 2024 09:29:07 -0800 (PST)
+X-Gm-Message-State: AOJu0YxRpTl3mvhOMIuewhyMF3yah9db0Z7hRUc/woI05YEWclUkEUzL
+	kmQQFgj+KrydHIDBxj8sIN133EXjWUnpIhRSdtY=
+X-Google-Smtp-Source: AGHT+IHv4U6Bv1CLMGqgczNTVhhcMsKubjnAMrFM7bbub8DgPF2lBHnCeeFTbjYR9e4eTnYIRgHyWdZc6b2WsJsdG64=
+X-Received: by 2002:a05:6512:39d2:b0:50e:7b01:70df with SMTP id
+ k18-20020a05651239d200b0050e7b0170dfmr1134504lfu.72.1705080545496; Fri, 12
+ Jan 2024 09:29:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240112095000.8952-1-tzimmermann@suse.de>
+In-Reply-To: <20240112095000.8952-1-tzimmermann@suse.de>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 12 Jan 2024 18:28:53 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
+Message-ID: <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on bootparam.h
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: nathan@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Fri, 12 Jan 2024 16:01:40 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On Fri, 12 Jan 2024 at 10:50, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> Reduce build time in some cases by removing unnecessary include statements
+> for <asm/bootparam.h>. Reorganize some header files accordingly.
+>
+> While working on the kernel's boot-up graphics, I noticed that touching
+> include/linux/screen_info.h triggers a complete rebuild of the kernel
+> on x86. It turns out that the architecture's PCI and EFI headers include
+> <asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
+> the drivers have any business with boot parameters or the screen_info
+> state.
+>
+> The patchset moves code from bootparam.h and efi.h into separate header
+> files and removes obsolete include statements on x86. I did
+>
+>   make allmodconfig
+>   make -j28
+>   touch include/linux/screen_info.h
+>   time make -j28
+>
+> to measure the time it takes to rebuild. Results without the patchset
+> are around 20 minutes.
+>
+>   real    20m46,705s
+>   user    354m29,166s
+>   sys     28m27,359s
+>
+> And with the patchset applied it goes down to less than one minute.
+>
+>   real    0m56,643s
+>   user    4m0,661s
+>   sys     0m32,956s
+>
+> The test system is an Intel i5-13500.
+>
+> v5:
+>         * silence clang warnings for real-mode code (Nathan)
+>         * revert boot/compressed/misc.h (kernel test robot)
+> v4:
+>         * fix fwd declaration in compressed/misc.h (Ard)
+> v3:
+>         * keep setup_header in bootparam.h (Ard)
+>         * implement arch_ima_efi_boot_mode() in source file (Ard)
+> v2:
+>         * only keep struct boot_params in bootparam.h (Ard)
+>         * simplify arch_ima_efi_boot_mode define (Ard)
+>         * updated cover letter
+>
+> Thomas Zimmermann (4):
+>   arch/x86: Move UAPI setup structures into setup_data.h
+>   arch/x86: Move internal setup_data structures into setup_data.h
+>   arch/x86: Implement arch_ima_efi_boot_mode() in source file
+>   arch/x86: Do not include <asm/bootparam.h> in several files
+>
 
-> On Fri, Jan 12, 2024 at 10:25=E2=80=AFAM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Thu, 11 Jan 2024 18:46:47 +0000
-> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> > =20
-> > > On Thu, Jan 11, 2024 at 05:59:08PM +0000, Jonathan Cameron wrote: =20
-> > > > On Mon, 18 Dec 2023 21:17:34 +0100
-> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > =20
-> > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@=
-armlinux.org.uk> wrote: =20
-> > > > > >
-> > > > > > From: James Morse <james.morse@arm.com> =20
-> > > >
-> > > > Done some digging + machine faking.  This is mid stage results at b=
-est.
-> > > >
-> > > > Summary: I don't think this patch is necessary.  If anyone happens =
-to be in
-> > > > the mood for testing on various platforms, can you drop this patch =
-and
-> > > > see if everything still works.
-> > > >
-> > > > With this patch in place, and a processor container containing
-> > > > Processor() objects acpi_process_add is called twice - once via
-> > > > the path added here and once via acpi_bus_attach etc.
-> > > >
-> > > > Maybe it's a left over from earlier approaches to some of this? =20
-> > >
-> > > From what you're saying, it seems that way. It would be really good to
-> > > get a reply from James to see whether he agrees - or at least get the
-> > > reason why this patch is in the series... but I suspect that will nev=
-er
-> > > come.
-> > > =20
-> > > > Both cases are covered by the existing handling without this.
-> > > >
-> > > > I'm far from clear on why we need this patch.  Presumably
-> > > > it's the reference in the description on it breaking for
-> > > > Processor Package containing Processor() objects that matters
-> > > > after a move... I'm struggling to find that move though! =20
-> > >
-> > > I do know that James did a lot of testing, so maybe he found some
-> > > corner case somewhere which made this necessary - but without input
-> > > from James, we can't know that.
-> > >
-> > > So, maybe the right way forward on this is to re-test the series
-> > > with this patch dropped, and see whether there's any ill effects.
-> > > It should be possible to resurect the patch if it does turn out to
-> > > be necessary.
-> > >
-> > > Does that sound like a good way forward?
-> > >
-> > > Thanks.
-> > > =20
-> >
-> > Yes that sounds like the best plan. Note this patch can only make a
-> > difference on non arm64 arches because it's a firmware bug to combine
-> > Processor() with a GICC entry in APIC/MADT.  To even test on ARM64
-> > you have to skip the bug check.
-> >
-> > https://elixir.bootlin.com/linux/latest/source/drivers/acpi/processor_c=
-ore.c#L101
-> >
-> >         /* device_declaration means Device object in DSDT, in the
-> >          * GIC interrupt model, logical processors are required to
-> >          * have a Processor Device object in the DSDT, so we should
-> >          * check device_declaration here
-> >          */
-> > //      if (device_declaration && (gicc->uid =3D=3D acpi_id)) {
-> >         if (gicc->uid =3D=3D acpi_id) {
-> >                 *mpidr =3D gicc->arm_mpidr;
-> >                 return 0;
-> >         }
-> >
-> > Only alternative is probably to go history diving and try and
-> > find another change that would have required this and is now gone.
-> >
-> > The ACPI scanning code has had a lot of changes whilst this work has
-> > been underway.  More than possible that this was papering over some
-> > issue that has long since been fixed. I can't find any deliberate
-> > functional changes, but there is some code generalization that 'might'
-> > have side effects in this area. Rafael, any expectation that anything
-> > changed in how scanning processor containers works? =20
->=20
-> There have been changes, but I can't recall when exactly without some
-> git history research.
->=20
-> In any case, it is always better to work on top of the current
-> mainline code IMO.
+This looks ok to me, thanks for sticking with it.
 
-Absolutely - just in this case the series has been rebased for=20
-a few years because the standards discussions took far far too long!
+For the series,
 
-Jonathan
-
-
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
