@@ -1,375 +1,447 @@
-Return-Path: <linux-arch+bounces-1362-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1363-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08D7882BDD5
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 10:53:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 332B582BF7A
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 12:52:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FEE11C25372
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 09:52:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB7C71F264E6
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jan 2024 11:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59CC5FF12;
-	Fri, 12 Jan 2024 09:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WVfb89vf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GNKTw6kD";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WVfb89vf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GNKTw6kD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810546A010;
+	Fri, 12 Jan 2024 11:52:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D565EE82;
-	Fri, 12 Jan 2024 09:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8193F21E5A;
-	Fri, 12 Jan 2024 09:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1705053005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=WVfb89vfFOsfEQtmvvxMABtAAqd4mvPtclri/fLLV0HtETZ+f00vBbuf84LcqDqTUtmYd9
-	p/p8uNqVD/25+fIw+MfJ1sfpaJrtNp+CCiew/2fWJXXvrpXIBIAu+xNM2wDiJgWbKLtUN9
-	AGN/surNnYHZzBkP7vm2uaTwYYrP+os=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1705053005;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=GNKTw6kDfumSrhXL8aBNPuFDSXgOyUwW5MG5LU3CTmblkDYzL7mYhh6rl38fA3ZfOkQmcz
-	7bHg3H6dazhdIbAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1705053005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=WVfb89vfFOsfEQtmvvxMABtAAqd4mvPtclri/fLLV0HtETZ+f00vBbuf84LcqDqTUtmYd9
-	p/p8uNqVD/25+fIw+MfJ1sfpaJrtNp+CCiew/2fWJXXvrpXIBIAu+xNM2wDiJgWbKLtUN9
-	AGN/surNnYHZzBkP7vm2uaTwYYrP+os=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1705053005;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=GNKTw6kDfumSrhXL8aBNPuFDSXgOyUwW5MG5LU3CTmblkDYzL7mYhh6rl38fA3ZfOkQmcz
-	7bHg3H6dazhdIbAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EBCF613782;
-	Fri, 12 Jan 2024 09:50:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id MPxPOEwLoWVmOgAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Fri, 12 Jan 2024 09:50:04 +0000
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: ardb@kernel.org,
-	nathan@kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	bhelgaas@google.com,
-	arnd@arndb.de,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	javierm@redhat.com
-Cc: linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v5 4/4] arch/x86: Do not include <asm/bootparam.h> in several files
-Date: Fri, 12 Jan 2024 10:44:39 +0100
-Message-ID: <20240112095000.8952-5-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240112095000.8952-1-tzimmermann@suse.de>
-References: <20240112095000.8952-1-tzimmermann@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0CF67E86;
+	Fri, 12 Jan 2024 11:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TBKZd3vRHz6K8Xc;
+	Fri, 12 Jan 2024 19:49:29 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 350581408FF;
+	Fri, 12 Jan 2024 19:52:08 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 12 Jan
+ 2024 11:52:07 +0000
+Date: Fri, 12 Jan 2024 11:52:05 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
+	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
+ functional) devices
+Message-ID: <20240112115205.000043b0@Huawei.com>
+In-Reply-To: <ZZ/CR/6Voec066DR@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk>
+	<20231215161539.00000940@Huawei.com>
+	<5760569.DvuYhMxLoT@kreacher>
+	<20240102143925.00004361@Huawei.com>
+	<20240111101949.000075dc@Huawei.com>
+	<ZZ/CR/6Voec066DR@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: *
-X-Spamd-Bar: +
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WVfb89vf;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=GNKTw6kD
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [1.99 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RLfgmttzabnpkr34rizty4fwu5)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.de:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FREEMAIL_TO(0.00)[kernel.org,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,arndb.de,linux.ibm.com,gmail.com,paul-moore.com,namei.org,hallyn.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-3.00)[100.00%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 FROM_HAS_DN(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[23];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: 1.99
-X-Rspamd-Queue-Id: 8193F21E5A
-X-Spam-Flag: NO
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Remove the include statement for <asm/bootparam.h> from several files
-that don't require it. Limits the exposure of the boot parameters
-within the Linux kernel code.
+On Thu, 11 Jan 2024 10:26:15 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> On Thu, Jan 11, 2024 at 10:19:49AM +0000, Jonathan Cameron wrote:
+> > On Tue, 2 Jan 2024 14:39:25 +0000
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> >  =20
+> > > On Fri, 15 Dec 2023 20:47:31 +0100
+> > > "Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
+> > >  =20
+> > > > On Friday, December 15, 2023 5:15:39 PM CET Jonathan Cameron wrote:=
+   =20
+> > > > > On Fri, 15 Dec 2023 15:31:55 +0000
+> > > > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> > > > >      =20
+> > > > > > On Thu, Dec 14, 2023 at 07:37:10PM +0100, Rafael J. Wysocki wro=
+te:     =20
+> > > > > > > On Thu, Dec 14, 2023 at 7:16=E2=80=AFPM Rafael J. Wysocki <ra=
+fael@kernel.org> wrote:       =20
+> > > > > > > >
+> > > > > > > > On Thu, Dec 14, 2023 at 7:10=E2=80=AFPM Russell King (Oracl=
+e)
+> > > > > > > > <linux@armlinux.org.uk> wrote:       =20
+> > > > > > > > > I guess we need something like:
+> > > > > > > > >
+> > > > > > > > >         if (device->status.present)
+> > > > > > > > >                 return device->device_type !=3D ACPI_BUS_=
+TYPE_PROCESSOR ||
+> > > > > > > > >                        device->status.enabled;
+> > > > > > > > >         else
+> > > > > > > > >                 return device->status.functional;
+> > > > > > > > >
+> > > > > > > > > so we only check device->status.enabled for processor-typ=
+e devices?       =20
+> > > > > > > >
+> > > > > > > > Yes, something like this.       =20
+> > > > > > >=20
+> > > > > > > However, that is not sufficient, because there are
+> > > > > > > ACPI_BUS_TYPE_DEVICE devices representing processors.
+> > > > > > >=20
+> > > > > > > I'm not sure about a clean way to do it ATM.       =20
+> > > > > >=20
+> > > > > > Ok, how about:
+> > > > > >=20
+> > > > > > static bool acpi_dev_is_processor(const struct acpi_device *dev=
+ice)
+> > > > > > {
+> > > > > > 	struct acpi_hardware_id *hwid;
+> > > > > >=20
+> > > > > > 	if (device->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
+> > > > > > 		return true;
+> > > > > >=20
+> > > > > > 	if (device->device_type !=3D ACPI_BUS_TYPE_DEVICE)
+> > > > > > 		return false;
+> > > > > >=20
+> > > > > > 	list_for_each_entry(hwid, &device->pnp.ids, list)
+> > > > > > 		if (!strcmp(ACPI_PROCESSOR_OBJECT_HID, hwid->id) ||
+> > > > > > 		    !strcmp(ACPI_PROCESSOR_DEVICE_HID, hwid->id))
+> > > > > > 			return true;
+> > > > > >=20
+> > > > > > 	return false;
+> > > > > > }
+> > > > > >=20
+> > > > > > and then:
+> > > > > >=20
+> > > > > > 	if (device->status.present)
+> > > > > > 		return !acpi_dev_is_processor(device) || device->status.enabl=
+ed;
+> > > > > > 	else
+> > > > > > 		return device->status.functional;
+> > > > > >=20
+> > > > > > ?
+> > > > > >      =20
+> > > > > Changing it to CPU only for now makes sense to me and I think thi=
+s code snippet should do the
+> > > > > job.  Nice and simple.     =20
+> > > >=20
+> > > > Well, except that it does checks that are done elsewhere slightly
+> > > > differently, which from the maintenance POV is not nice.
+> > > >=20
+> > > > Maybe something like the appended patch (untested).   =20
+> > >=20
+> > > Hi Rafael,
+> > >=20
+> > > As far as I can see that's functionally equivalent, so looks good to =
+me.
+> > > I'm not set up to test this today though, so will defer to Russell on=
+ whether
+> > > there is anything missing
+> > >=20
+> > > Thanks for putting this together. =20
+> >=20
+> > This is rather embarrassing...
+> >=20
+> > I span this up on a QEMU instance with some prints to find out we need
+> > the !acpi_device_is_processor() restriction.
+> > On my 'random' test setup it fails on one device. ACPI0017 - which I
+> > happen to know rather well. It's the weird pseudo device that lets
+> > a CXL aware OS know there is a CEDT table to probe.
+> >=20
+> > Whilst I really don't like that hack (it is all about making software
+> > distribution of out of tree modules easier rather than something
+> > fundamental), I'm the CXL QEMU maintainer :(
+> >=20
+> > Will fix that, but it shows there is at least one broken firmware out
+> > there.
+> >=20
+> > On plus side, Rafael's code seems to work as expected and lets that
+> > buggy firwmare carry on working :) So lets pretend the bug in qemu
+> > is a deliberate test case! =20
+>=20
+> Lol, thanks for a test case and showing that Rafael's approach is
+> indeed necessary.
+>=20
+> Would your test quality for a tested-by for this? For reference, this
+> is my current version below with Rafael's update:
 
----
+Sure. This matches what I have.
 
-v5:
-	* revert of boot/compressed/misc.h (kernel test robot)
-v3:
-	* revert of e820/types.h required
-v2:
-	* clean up misc.h and e820/types.h
-	* include bootparam.h in several source files
----
- arch/x86/boot/compressed/acpi.c       | 2 ++
- arch/x86/boot/compressed/cmdline.c    | 2 ++
- arch/x86/boot/compressed/efi.c        | 2 ++
- arch/x86/boot/compressed/pgtable_64.c | 1 +
- arch/x86/boot/compressed/sev.c        | 1 +
- arch/x86/include/asm/kexec.h          | 1 -
- arch/x86/include/asm/mem_encrypt.h    | 2 +-
- arch/x86/include/asm/sev.h            | 3 ++-
- arch/x86/include/asm/x86_init.h       | 2 --
- arch/x86/kernel/crash.c               | 1 +
- arch/x86/kernel/sev-shared.c          | 2 ++
- arch/x86/platform/pvh/enlighten.c     | 1 +
- arch/x86/xen/enlighten_pvh.c          | 1 +
- arch/x86/xen/vga.c                    | 1 -
- 14 files changed, 16 insertions(+), 6 deletions(-)
+Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
-index 18d15d1ce87d..f196b1d1ddf8 100644
---- a/arch/x86/boot/compressed/acpi.c
-+++ b/arch/x86/boot/compressed/acpi.c
-@@ -5,6 +5,8 @@
- #include "../string.h"
- #include "efi.h"
- 
-+#include <asm/bootparam.h>
-+
- #include <linux/numa.h>
- 
- /*
-diff --git a/arch/x86/boot/compressed/cmdline.c b/arch/x86/boot/compressed/cmdline.c
-index c1bb180973ea..e162d7f59cc5 100644
---- a/arch/x86/boot/compressed/cmdline.c
-+++ b/arch/x86/boot/compressed/cmdline.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
-+
- static unsigned long fs;
- static inline void set_fs(unsigned long seg)
- {
-diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
-index 6edd034b0b30..f2e50f9758e6 100644
---- a/arch/x86/boot/compressed/efi.c
-+++ b/arch/x86/boot/compressed/efi.c
-@@ -7,6 +7,8 @@
- 
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
-+
- /**
-  * efi_get_type - Given a pointer to boot_params, determine the type of EFI environment.
-  *
-diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
-index 51f957b24ba7..c882e1f67af0 100644
---- a/arch/x86/boot/compressed/pgtable_64.c
-+++ b/arch/x86/boot/compressed/pgtable_64.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "misc.h"
-+#include <asm/bootparam.h>
- #include <asm/e820/types.h>
- #include <asm/processor.h>
- #include "pgtable.h"
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 454acd7a2daf..13beae767e48 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -12,6 +12,7 @@
-  */
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
- #include <asm/pgtable_types.h>
- #include <asm/sev.h>
- #include <asm/trapnr.h>
-diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-index c9f6a6c5de3c..91ca9a9ee3a2 100644
---- a/arch/x86/include/asm/kexec.h
-+++ b/arch/x86/include/asm/kexec.h
-@@ -25,7 +25,6 @@
- 
- #include <asm/page.h>
- #include <asm/ptrace.h>
--#include <asm/bootparam.h>
- 
- struct kimage;
- 
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index 359ada486fa9..c1a8a3408c18 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -15,7 +15,7 @@
- #include <linux/init.h>
- #include <linux/cc_platform.h>
- 
--#include <asm/bootparam.h>
-+struct boot_params;
- 
- #ifdef CONFIG_X86_MEM_ENCRYPT
- void __init mem_encrypt_init(void);
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 5b4a1ce3d368..8dad8b1613bf 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -13,7 +13,6 @@
- 
- #include <asm/insn.h>
- #include <asm/sev-common.h>
--#include <asm/bootparam.h>
- #include <asm/coco.h>
- 
- #define GHCB_PROTOCOL_MIN	1ULL
-@@ -22,6 +21,8 @@
- 
- #define	VMGEXIT()			{ asm volatile("rep; vmmcall\n\r"); }
- 
-+struct boot_params;
-+
- enum es_result {
- 	ES_OK,			/* All good */
- 	ES_UNSUPPORTED,		/* Requested operation not supported */
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index c878616a18b8..f062715578a0 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_X86_PLATFORM_H
- #define _ASM_X86_PLATFORM_H
- 
--#include <asm/bootparam.h>
--
- struct ghcb;
- struct mpc_bus;
- struct mpc_cpu;
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index c92d88680dbf..564cff7ed33a 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -26,6 +26,7 @@
- #include <linux/vmalloc.h>
- #include <linux/memblock.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/processor.h>
- #include <asm/hardirq.h>
- #include <asm/nmi.h>
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index ccb0915e84e1..4962ec42dc68 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -9,6 +9,8 @@
-  * and is included directly into both code-bases.
-  */
- 
-+#include <asm/setup_data.h>
-+
- #ifndef __BOOT_COMPRESSED
- #define error(v)	pr_err(v)
- #define has_cpuflag(f)	boot_cpu_has(f)
-diff --git a/arch/x86/platform/pvh/enlighten.c b/arch/x86/platform/pvh/enlighten.c
-index 00a92cb2c814..944e0290f2c0 100644
---- a/arch/x86/platform/pvh/enlighten.c
-+++ b/arch/x86/platform/pvh/enlighten.c
-@@ -3,6 +3,7 @@
- 
- #include <xen/hvc-console.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/io_apic.h>
- #include <asm/hypervisor.h>
- #include <asm/e820/api.h>
-diff --git a/arch/x86/xen/enlighten_pvh.c b/arch/x86/xen/enlighten_pvh.c
-index ada3868c02c2..9e9db601bd52 100644
---- a/arch/x86/xen/enlighten_pvh.c
-+++ b/arch/x86/xen/enlighten_pvh.c
-@@ -4,6 +4,7 @@
- 
- #include <xen/hvc-console.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/io_apic.h>
- #include <asm/hypervisor.h>
- #include <asm/e820/api.h>
-diff --git a/arch/x86/xen/vga.c b/arch/x86/xen/vga.c
-index d97adab8420f..f7547807b0bd 100644
---- a/arch/x86/xen/vga.c
-+++ b/arch/x86/xen/vga.c
-@@ -2,7 +2,6 @@
- #include <linux/screen_info.h>
- #include <linux/init.h>
- 
--#include <asm/bootparam.h>
- #include <asm/setup.h>
- 
- #include <xen/interface/xen.h>
--- 
-2.43.0
+
+>=20
+> 8<=3D=3D=3D=3D
+> From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Subject: [PATCH] ACPI: Only enumerate enabled (or functional) processor
+>  devices
+>=20
+> From: James Morse <james.morse@arm.com>
+>=20
+> Today the ACPI enumeration code 'visits' all devices that are present.
+>=20
+> This is a problem for arm64, where CPUs are always present, but not
+> always enabled. When a device-check occurs because the firmware-policy
+> has changed and a CPU is now enabled, the following error occurs:
+> | acpi ACPI0007:48: Enumeration failure
+>=20
+> This is ultimately because acpi_dev_ready_for_enumeration() returns
+> true for a device that is not enabled. The ACPI Processor driver
+> will not register such CPUs as they are not 'decoding their resources'.
+>=20
+> ACPI allows a device to be functional instead of maintaining the
+> present and enabled bit, but we can't simply check the enabled bit
+> for all devices since firmware can be buggy.
+>=20
+> If ACPI indicates that the device is present and enabled, then all well
+> and good, we can enumate it. However, if the device is present and not
+> enabled, then we also check whether the device is a processor device
+> to limit the impact of this new check to just processor devices.
+>=20
+> This avoids enumerating present && functional processor devices that
+> are not enabled.
+>=20
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Co-developed-by: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> Changes since RFC v2:
+>  * Incorporate comment suggestion by Gavin Shan.
+> Changes since RFC v3:
+>  * Fixed "sert" typo.
+> Changes since RFC v3 (smaller series):
+>  * Restrict checking the enabled bit to processor devices, update
+>    commit comments.
+>  * Use Rafael's suggestion in
+>    https://lore.kernel.org/r/5760569.DvuYhMxLoT@kreacher
+> ---
+>  drivers/acpi/acpi_processor.c | 11 ++++++++
+>  drivers/acpi/device_pm.c      |  2 +-
+>  drivers/acpi/device_sysfs.c   |  2 +-
+>  drivers/acpi/internal.h       |  4 ++-
+>  drivers/acpi/property.c       |  2 +-
+>  drivers/acpi/scan.c           | 49 ++++++++++++++++++++++++++++-------
+>  6 files changed, 56 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index 4fe2ef54088c..cf7c1cca69dd 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -626,6 +626,17 @@ static struct acpi_scan_handler processor_handler =
+=3D {
+>  	},
+>  };
+> =20
+> +bool acpi_device_is_processor(const struct acpi_device *adev)
+> +{
+> +	if (adev->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
+> +		return true;
+> +
+> +	if (adev->device_type !=3D ACPI_BUS_TYPE_DEVICE)
+> +		return false;
+> +
+> +	return acpi_scan_check_handler(adev, &processor_handler);
+> +}
+> +
+>  static int acpi_processor_container_attach(struct acpi_device *dev,
+>  					   const struct acpi_device_id *id)
+>  {
+> diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> index 3b4d048c4941..e3c80f3b3b57 100644
+> --- a/drivers/acpi/device_pm.c
+> +++ b/drivers/acpi/device_pm.c
+> @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
+>  		return -EINVAL;
+> =20
+>  	device->power.state =3D ACPI_STATE_UNKNOWN;
+> -	if (!acpi_device_is_present(device)) {
+> +	if (!acpi_dev_ready_for_enumeration(device)) {
+>  		device->flags.initialized =3D false;
+>  		return -ENXIO;
+>  	}
+> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> index 23373faa35ec..a0256d2493a7 100644
+> --- a/drivers/acpi/device_sysfs.c
+> +++ b/drivers/acpi/device_sysfs.c
+> @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_devi=
+ce *acpi_dev, char *modalia
+>  	struct acpi_hardware_id *id;
+> =20
+>  	/* Avoid unnecessarily loading modules for non present devices. */
+> -	if (!acpi_device_is_present(acpi_dev))
+> +	if (!acpi_dev_ready_for_enumeration(acpi_dev))
+>  		return 0;
+> =20
+>  	/*
+> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+> index 866c7c4ed233..9388d4c8674a 100644
+> --- a/drivers/acpi/internal.h
+> +++ b/drivers/acpi/internal.h
+> @@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(struct acpi_hotplug=
+_profile *hotplug,
+>  int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handler,
+>  				       const char *hotplug_profile_name);
+>  void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, boo=
+l val);
+> +bool acpi_scan_check_handler(const struct acpi_device *adev,
+> +			     struct acpi_scan_handler *handler);
+> =20
+>  #ifdef CONFIG_DEBUG_FS
+>  extern struct dentry *acpi_debugfs_dir;
+> @@ -107,7 +109,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
+>  void acpi_device_remove_files(struct acpi_device *dev);
+>  void acpi_device_add_finalize(struct acpi_device *device);
+>  void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
+> -bool acpi_device_is_present(const struct acpi_device *adev);
+>  bool acpi_device_is_battery(struct acpi_device *adev);
+>  bool acpi_device_is_first_physical_node(struct acpi_device *adev,
+>  					const struct device *dev);
+> @@ -119,6 +120,7 @@ int acpi_bus_register_early_device(int type);
+>  const struct acpi_device *acpi_companion_match(const struct device *dev);
+>  int __acpi_device_uevent_modalias(const struct acpi_device *adev,
+>  				  struct kobj_uevent_env *env);
+> +bool acpi_device_is_processor(const struct acpi_device *adev);
+> =20
+>  /* ---------------------------------------------------------------------=
+-----
+>                                    Power Resource
+> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> index 6979a3f9f90a..14d6948fd88a 100644
+> --- a/drivers/acpi/property.c
+> +++ b/drivers/acpi/property.c
+> @@ -1420,7 +1420,7 @@ static bool acpi_fwnode_device_is_available(const s=
+truct fwnode_handle *fwnode)
+>  	if (!is_acpi_device_node(fwnode))
+>  		return false;
+> =20
+> -	return acpi_device_is_present(to_acpi_device_node(fwnode));
+> +	return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode));
+>  }
+> =20
+>  static const void *
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 02bb2cce423f..f94d1f744bcc 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device =
+*adev)
+>  	int error;
+> =20
+>  	acpi_bus_get_status(adev);
+> -	if (acpi_device_is_present(adev)) {
+> +	if (acpi_dev_ready_for_enumeration(adev)) {
+>  		/*
+>  		 * This function is only called for device objects for which
+>  		 * matching scan handlers exist.  The only situation in which
+> @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *ad=
+ev, void *not_used)
+>  	int error;
+> =20
+>  	acpi_bus_get_status(adev);
+> -	if (!acpi_device_is_present(adev)) {
+> +	if (!acpi_dev_ready_for_enumeration(adev)) {
+>  		acpi_scan_device_not_enumerated(adev);
+>  		return 0;
+>  	}
+> @@ -1913,11 +1913,6 @@ static bool acpi_device_should_be_hidden(acpi_hand=
+le handle)
+>  	return true;
+>  }
+> =20
+> -bool acpi_device_is_present(const struct acpi_device *adev)
+> -{
+> -	return adev->status.present || adev->status.functional;
+> -}
+> -
+>  static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
+>  				       const char *idstr,
+>  				       const struct acpi_device_id **matchid)
+> @@ -1938,6 +1933,18 @@ static bool acpi_scan_handler_matching(struct acpi=
+_scan_handler *handler,
+>  	return false;
+>  }
+> =20
+> +bool acpi_scan_check_handler(const struct acpi_device *adev,
+> +			     struct acpi_scan_handler *handler)
+> +{
+> +	struct acpi_hardware_id *hwid;
+> +
+> +	list_for_each_entry(hwid, &adev->pnp.ids, list)
+> +		if (acpi_scan_handler_matching(handler, hwid->id, NULL))
+> +			return true;
+> +
+> +	return false;
+> +}
+> +
+>  static struct acpi_scan_handler *acpi_scan_match_handler(const char *ids=
+tr,
+>  					const struct acpi_device_id **matchid)
+>  {
+> @@ -2381,16 +2388,38 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+>   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready fo=
+r enumeration
+>   * @device: Pointer to the &struct acpi_device to check
+>   *
+> - * Check if the device is present and has no unmet dependencies.
+> + * Check if the device is functional or enabled and has no unmet depende=
+ncies.
+>   *
+> - * Return true if the device is ready for enumeratino. Otherwise, return=
+ false.
+> + * Return true if the device is ready for enumeration. Otherwise, return=
+ false.
+>   */
+>  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
+>  {
+>  	if (device->flags.honor_deps && device->dep_unmet)
+>  		return false;
+> =20
+> -	return acpi_device_is_present(device);
+> +	/*
+> +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
+> +	 * (!present && functional) for certain types of devices that should be
+> +	 * enumerated. Note that the enabled bit should not be set unless the
+> +	 * present bit is set.
+> +	 *
+> +	 * However, limit this only to processor devices to reduce possible
+> +	 * regressions with firmware.
+> +	 */
+> +	if (device->status.functional)
+> +		return true;
+> +
+> +	if (!device->status.present)
+> +		return false;
+> +
+> +	/*
+> +	 * Fast path - if enabled is set, avoid the more expensive test to
+> +	 * check whether this device is a processor.
+> +	 */
+> +	if (device->status.enabled)
+> +		return true;
+> +
+> +	return !acpi_device_is_processor(device);
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
+> =20
 
 
