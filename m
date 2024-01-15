@@ -1,75 +1,68 @@
-Return-Path: <linux-arch+bounces-1371-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1372-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6063782D7EF
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 12:00:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFDAE82D814
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 12:06:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 176001F22279
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 11:00:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CAA528230E
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 11:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4778C1E865;
-	Mon, 15 Jan 2024 11:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F402C69F;
+	Mon, 15 Jan 2024 11:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="b9q0o4tQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="If4u5sBw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E522C683;
-	Mon, 15 Jan 2024 11:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D5A1440E01A9;
-	Mon, 15 Jan 2024 11:00:25 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id sfiRGpzfaODp; Mon, 15 Jan 2024 11:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1705316423; bh=oP77XyZj9HhicA6zK+E2uirUhsgRReQ/mwWlYJegOQA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b9q0o4tQ50g+7Sr5DKT5AfeuDncxgpLRIIudonC6h0msPRkM2sMP9vfEa+BuCZbl1
-	 Uqte3mOzZ+IpLU3RpLCzC92861U8l/LPzTnMMy+hXGuck4FLADjlPxWUXGi9TX58Sa
-	 ysB5lW8rptHc7ilcZGNrQt29I8S59GnvuP2RDdAgJyOl4KXT8oAlwcXNxsvFdSuuZW
-	 c0hLIp6HwzsEe6sFYqF/yeglM0EPf+m2FmVvCmEkarZH1Oti1fjhPfEap9JSNdQryq
-	 7Btd8LUDHVJ/vxXOTnidM6NyotTX50FuXaHub7bKxt7VwPqfjS6irr6TxnouG1KufG
-	 4BVKfTLTqr73UuSvSrZbaO/gMA5hlhZWIqHPvV2GtBuHzoovogDt0JcOwlDkbmWjFJ
-	 oLKRKGMSUy5l/1A5ReOZId7WfIjRnEuQykO4K/9d57TvWCON/BAlGvRX1O/IF+ak/x
-	 ijvYQidLBTIAmKJK7aKKLCiIOR9Zau8RftkXynt+Uk1yQrHEkzjH3HSR06A3xHKPaf
-	 67x4l5jVNR9iJzhPeorcAEWYwPfx8VWHkauCWe2Zd04ccFdd5M5pY1D8NtkY+ssykL
-	 ko4wsKO98DMsDEu/qo8GAu9HDua195gnEZgQd2RAlbTltZIxzksvnR2fT0ljic0SEu
-	 Fk8eYp/HJEpH1SwTYxISl7RI=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8C6BE40E016C;
-	Mon, 15 Jan 2024 11:00:01 +0000 (UTC)
-Date: Mon, 15 Jan 2024 12:00:00 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>, nathan@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, bhelgaas@google.com, arnd@arndb.de,
-	zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, javierm@redhat.com,
-	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on
- bootparam.h
-Message-ID: <20240115110000.GEZaUQMBwGAibwR_Yp@fat_crate.local>
-References: <20240112095000.8952-1-tzimmermann@suse.de>
- <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
- <3e2f70ab-c4de-4fae-9365-4f6f77c847c5@suse.de>
- <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C43628DD1;
+	Mon, 15 Jan 2024 11:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=B8snCTk6m/S/IySGz0MUr7RGvF9ztHAy1wNv3isU/8A=; b=If4u5sBwSs6B37nBXDgiTbTUGN
+	lDo8qxPOFMMLR9tdUyLFo9NhxhiAei6ak3C/e+2MynMriUcITyfJLZRCR7Ly9EwLVRyTpXgvcUB3V
+	dwGg8WGAGKz7K/mPA9CiHN8UfYztvfbPPXOI0b0S+WLTsoNs8EV0O1R9IOUUphih0SDSGEtoXqkyc
+	uB4sWSh8b+qMXC/2xsfM+PilLtcS9vlGpghLJvk9GXVZXiWY3hrSNwUQ65+M5e30MzDBuRHWV1QU/
+	jXo3DcbVxcVsJSrnfHOPq2fWintWikuBFLjvQHJE8GaX60F8EKAbY9S+jDwY+ZggmQThypOLb+Xcb
+	DtnjfwcQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60190)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rPKnW-0002Kh-1U;
+	Mon, 15 Jan 2024 11:06:30 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rPKnV-0002tb-9h; Mon, 15 Jan 2024 11:06:29 +0000
+Date: Mon, 15 Jan 2024 11:06:29 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
+ online, but not described in the DSDT
+Message-ID: <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -78,45 +71,92 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, Jan 15, 2024 at 11:55:36AM +0100, Ard Biesheuvel wrote:
-> But please be aware that we are in the middle of the merge window
+On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
+> >
+> > From: James Morse <james.morse@arm.com>
+> >
+> > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
+> > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
+> > says "Each processor in the system must be declared in the ACPI
+> > namespace"). Having two descriptions allows firmware authors to get
+> > this wrong.
+> >
+> > If CPUs are described in the MADT/APIC, they will be brought online
+> > early during boot. Once the register_cpu() calls are moved to ACPI,
+> > they will be based on the DSDT description of the CPUs. When CPUs are
+> > missing from the DSDT description, they will end up online, but not
+> > registered.
+> >
+> > Add a helper that runs after acpi_init() has completed to register
+> > CPUs that are online, but weren't found in the DSDT. Any CPU that
+> > is registered by this code triggers a firmware-bug warning and kernel
+> > taint.
+> >
+> > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
+> > is configured.
+> 
+> So why is this a kernel problem?
 
-Yes, and the merge window has been suspended too:
+So what are you proposing should be the behaviour here? What this
+statement seems to be saying is that QEMU as it exists today only
+describes the first CPU in DSDT.
 
-https://lore.kernel.org/r/CAHk-=wjMWpmXtKeiN__vnNO4TcttZR-8dVvd_oBq%2BhjeSsWUwg@mail.gmail.com
+As this patch series changes when arch_register_cpu() gets called (as
+described in the paragraph above) we obviously need to preserve the
+_existing_ behaviour to avoid causing regressions. So, if changing the
+kernel causes user visible regressions (e.g. sysfs entries to
+disappear) then it obviously _is_ a kernel problem that needs to be
+solved.
 
-> right now, and I suspect that the -tip maintainers may have some
-> feedback of their own. So give it at least a week or so, and ping this
-> thread again to ask how to proceed.
+We can't say "well fix QEMU then" without invoking the wrath of Linus.
 
-From: Documentation/process/maintainer-tip.rst
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > ---
+> >  drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
+> >  1 file changed, 19 insertions(+)
+> >
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> > index 6a542e0ce396..0511f2bc10bc 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -791,6 +791,25 @@ void __init acpi_processor_init(void)
+> >         acpi_pcc_cpufreq_init();
+> >  }
+> >
+> > +static int __init acpi_processor_register_missing_cpus(void)
+> > +{
+> > +       int cpu;
+> > +
+> > +       if (acpi_disabled)
+> > +               return 0;
+> > +
+> > +       for_each_online_cpu(cpu) {
+> > +               if (!get_cpu_device(cpu)) {
+> > +                       pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
+> > +                       add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
+> > +                       arch_register_cpu(cpu);
+> 
+> Which part of this code is related to ACPI?
 
-"Merge window
-^^^^^^^^^^^^
+That's a good question, and I suspect it would be more suited to being
+placed in drivers/base/cpu.c except for the problem that the error
+message refers to ACPI.
 
-Please do not expect large patch series to be handled during the merge
-window or even during the week before.  Such patches should be submitted in
-mergeable state *at* *least* a week before the merge window opens.
-Exceptions are made for bug fixes and *sometimes* for small standalone
-drivers for new hardware or minimally invasive patches for hardware
-enablement.
-
-During the merge window, the maintainers instead focus on following the
-upstream changes, fixing merge window fallout, collecting bug fixes, and
-allowing themselves a breath. Please respect that.
-
-The release candidate -rc1 is the starting point for new patches to be
-applied which are targeted for the next merge window."
-
-So pls be patient.
-
-Thx.
+As long as we keep the acpi_disabled test, I guess that's fine.
+cpu_dev_register_generic() there already tests acpi_disabled.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
