@@ -1,157 +1,117 @@
-Return-Path: <linux-arch+bounces-1380-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1381-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D9FF82E3B9
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jan 2024 00:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17DB882E40F
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jan 2024 00:46:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2245728710B
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 23:37:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5297E283FEE
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 23:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7DB219EF;
-	Mon, 15 Jan 2024 23:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B79E1B7EA;
+	Mon, 15 Jan 2024 23:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LI16xNMh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTx61PM0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7841C2BC;
-	Mon, 15 Jan 2024 23:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6A0C433C7;
-	Mon, 15 Jan 2024 23:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705361246;
-	bh=SLjTFVzCCuFtlCTLtbQ8mH7lK3/LrsRsGGDoB43LPJQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LI16xNMh5cNPH5hn5aIIF+HNsWkDmq35wqPe8QDIq+YYf9FojELEQjfJqjU+3MPC6
-	 HG23tpCPi8ZYC4WQQTS+9x3UAV2rWGDIQUxSj5WKAheDwA8Gy7S9T31b1NCVft3Ayo
-	 2mEoDzYcNt4BLqv8F1xmPfiRr5MH9U9ziThNc5uWqTbA44XmhonWd7VT58xCx39u9L
-	 MyiK0QoPsI0c5NYQUwdI/HLnFOw/Wc73I+vXDIdLKAECN1nis9W/m++a8/PFd92V0Y
-	 3qxBKsg7OItxRYOoagDDRNf3mXg7M4byViDYcX0N1gbD2CetYQOBKK3cPBk7xms/dG
-	 PDWJzz1Wae/fw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Huang Shijie <shijie@os.amperecomputing.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	gregkh@linuxfoundation.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 03/12] arm64: irq: set the correct node for VMAP stack
-Date: Mon, 15 Jan 2024 18:26:48 -0500
-Message-ID: <20240115232718.209642-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240115232718.209642-1-sashal@kernel.org>
-References: <20240115232718.209642-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC4B1B7E0;
+	Mon, 15 Jan 2024 23:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5f093e7c095so10950017b3.1;
+        Mon, 15 Jan 2024 15:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705362109; x=1705966909; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=li88m9Aw/LCRAibakjpHlPDF8glbTaanlpZnqcTkC3Q=;
+        b=mTx61PM0RfW81476w3SxgKhunmpkb+X+BRYdcyxZD0RZrTxtvVNMXfvg8o9D8eYlNY
+         5kzmp4o6p1hISU4ISHyk2U458fgCYNDvruavKcBnvdsNv9EYXPmTy8lkDmOBbCKqxLfl
+         C9VohKLwJvjO63pPmdw4KjmaQIMGOeefcNarkcUJ1KBlUwP5BROL9kgcHCVN8+QhJ0Bd
+         G0F/zrVzlR6IA0Wv3AH2uzLoTmFwmbZ4xzh1jKC+spGfAQzjzUsDdsg9ljOeU3dssjFy
+         HA/XXQYZ5YOqd9yIIlZg0+rtI4WNqqQBBguYf+s6Q8PgNrW7IEl2IRzvj+WlEnCfaBF2
+         duvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705362109; x=1705966909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=li88m9Aw/LCRAibakjpHlPDF8glbTaanlpZnqcTkC3Q=;
+        b=u2TE4xwssw4N10+ebMx/40pJjnrEC8SfIkb5k05oGOBMcKm/CBIVcP4rhYN+9gAff6
+         59l7QowriWoRpBYdQXpsszHIIYMX2Wk0O2lLu6i8yaRFB7uaGyFmnvLG/EX3tWLpZZQf
+         ThQrLXbBeaERlLc05awz7ZlJv944i8Te4xxwAkucx3wcRYLztkrjtqx7FnEvhd5zYyfP
+         wqloSuaqChLvy5QF4qqmzFZU5mD+tVhnAEEVqcNZctjhOh0IZkjcpFAtC6h+//VusQtG
+         f0qJwAd5jD0fq/CYeM0zX7FLLNaOpm2Q0777r8tlzhlfpKYpRcW72uLnQtcRFxgN59go
+         3ngQ==
+X-Gm-Message-State: AOJu0YxdB0QlQUjWHX8Y7HBihQyuHh2v5T0ze4UCnpV/wyZwLFieLqT6
+	mmmrXLUN9D8Jb09lDjYSstQ=
+X-Google-Smtp-Source: AGHT+IGoHxdCVz46pwuSIwlG6SlJkCKzggHGVAWjVqpMq2qgnnp1pcozB9Kcp8x25R40Z/y/SU3Z8w==
+X-Received: by 2002:a0d:d046:0:b0:5fb:d0ad:9545 with SMTP id s67-20020a0dd046000000b005fbd0ad9545mr5518884ywd.4.1705362109078;
+        Mon, 15 Jan 2024 15:41:49 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2600:1700:2430:6f6f:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id cl27-20020a05690c0c1b00b005f48b0ce126sm4280575ywb.62.2024.01.15.15.41.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jan 2024 15:41:48 -0800 (PST)
+Date: Mon, 15 Jan 2024 15:41:45 -0800
+From: Richard Cochran <richardcochran@gmail.com>
+To: Sagi Maimon <maimon.sagi@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+	tglx@linutronix.de, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Nhat Pham <nphamcs@gmail.com>, Palmer Dabbelt <palmer@sifive.com>,
+	Kees Cook <keescook@chromium.org>,
+	Alexey Gladkov <legion@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+	Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH v3] posix-timers: add multi_clock_gettime system call
+Message-ID: <ZaXCuV1Dy0e_E-h0@hoboy.vegasvil.org>
+References: <20231228122411.3189-1-maimon.sagi@gmail.com>
+ <f254c189-463e-43a3-bc09-9a8869ebf819@app.fastmail.com>
+ <CAMuE1bF0Hho4VwO6w3f+9z3j5TtscYzuAjj10MFt2mZXG2P8dQ@mail.gmail.com>
+ <84d8e9d7-09ce-4781-8dfa-a74bb0955ae8@app.fastmail.com>
+ <ZZ-ZNHgDsZwg9CaW@hoboy.vegasvil.org>
+ <CAMuE1bF4sSeiDr-jyebF6F8oRxGs1b2gtT39fTJ2JeaFabr6Ng@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.147
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuE1bF4sSeiDr-jyebF6F8oRxGs1b2gtT39fTJ2JeaFabr6Ng@mail.gmail.com>
 
-From: Huang Shijie <shijie@os.amperecomputing.com>
+On Mon, Jan 15, 2024 at 05:49:32PM +0200, Sagi Maimon wrote:
 
-[ Upstream commit 75b5e0bf90bffaca4b1f19114065dc59f5cc161f ]
+> Thanks for your notes, all of them will be done on the next patch (it
+> will take some time due to work overload).
 
-In current code, init_irq_stacks() will call cpu_to_node().
-The cpu_to_node() depends on percpu "numa_node" which is initialized in:
-     arch_call_rest_init() --> rest_init() -- kernel_init()
-	--> kernel_init_freeable() --> smp_prepare_cpus()
+No hurry, glad you are keeping this going...
 
-But init_irq_stacks() is called in init_IRQ() which is before
-arch_call_rest_init().
+> The only question that I have is: why not implement it as an IOCTL?
+> It makes more sense to me since it is close to another IOCTL, the
+> "PTP_SYS_OFFSET" family.
 
-So in init_irq_stacks(), the cpu_to_node() does not work, it
-always return 0. In NUMA, it makes the node 1 cpu accesses the IRQ stack which
-is in the node 0.
+I've often needed other clock offsets, like CLOCK_REALTIME - CLOCK_MONOTONIC.
 
-This patch fixes it by:
-  1.) export the early_cpu_to_node(), and use it in the init_irq_stacks().
-  2.) change init_irq_stacks() to __init function.
+Those don't have a character device, and so there is no way to call
+ioctl() on them.  That is why I'd like to have a system call that
+handles any two clock_t instances, using the most accurate back end
+based on the kinds of the two clocks.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
-Link: https://lore.kernel.org/r/20231124031513.81548-1-shijie@os.amperecomputing.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm64/kernel/irq.c    | 5 +++--
- drivers/base/arch_numa.c   | 2 +-
- include/asm-generic/numa.h | 2 ++
- 3 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-index bda49430c9ea..dab45f19df49 100644
---- a/arch/arm64/kernel/irq.c
-+++ b/arch/arm64/kernel/irq.c
-@@ -19,6 +19,7 @@
- #include <linux/kprobes.h>
- #include <linux/scs.h>
- #include <linux/seq_file.h>
-+#include <asm/numa.h>
- #include <linux/vmalloc.h>
- #include <asm/daifflags.h>
- #include <asm/vmap_stack.h>
-@@ -48,13 +49,13 @@ static void init_irq_scs(void)
- }
- 
- #ifdef CONFIG_VMAP_STACK
--static void init_irq_stacks(void)
-+static void __init init_irq_stacks(void)
- {
- 	int cpu;
- 	unsigned long *p;
- 
- 	for_each_possible_cpu(cpu) {
--		p = arch_alloc_vmap_stack(IRQ_STACK_SIZE, cpu_to_node(cpu));
-+		p = arch_alloc_vmap_stack(IRQ_STACK_SIZE, early_cpu_to_node(cpu));
- 		per_cpu(irq_stack_ptr, cpu) = p;
- 	}
- }
-diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-index 00fb4120a5b3..bce0902dccb4 100644
---- a/drivers/base/arch_numa.c
-+++ b/drivers/base/arch_numa.c
-@@ -144,7 +144,7 @@ void __init early_map_cpu_to_node(unsigned int cpu, int nid)
- unsigned long __per_cpu_offset[NR_CPUS] __read_mostly;
- EXPORT_SYMBOL(__per_cpu_offset);
- 
--static int __init early_cpu_to_node(int cpu)
-+int __init early_cpu_to_node(int cpu)
- {
- 	return cpu_to_node_map[cpu];
- }
-diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
-index 1a3ad6d29833..c32e0cf23c90 100644
---- a/include/asm-generic/numa.h
-+++ b/include/asm-generic/numa.h
-@@ -35,6 +35,7 @@ int __init numa_add_memblk(int nodeid, u64 start, u64 end);
- void __init numa_set_distance(int from, int to, int distance);
- void __init numa_free_distance(void);
- void __init early_map_cpu_to_node(unsigned int cpu, int nid);
-+int __init early_cpu_to_node(int cpu);
- void numa_store_cpu_info(unsigned int cpu);
- void numa_add_cpu(unsigned int cpu);
- void numa_remove_cpu(unsigned int cpu);
-@@ -46,6 +47,7 @@ static inline void numa_add_cpu(unsigned int cpu) { }
- static inline void numa_remove_cpu(unsigned int cpu) { }
- static inline void arch_numa_init(void) { }
- static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
-+static inline int early_cpu_to_node(int cpu) { return 0; }
- 
- #endif	/* CONFIG_NUMA */
- 
--- 
-2.43.0
+Thanks,
+Richard
 
 
