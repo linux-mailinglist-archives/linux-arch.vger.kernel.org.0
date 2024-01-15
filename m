@@ -1,162 +1,141 @@
-Return-Path: <linux-arch+bounces-1372-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1373-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFDAE82D814
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 12:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A49B582DCA1
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 16:50:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CAA528230E
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 11:06:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54675283E5E
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 15:50:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F402C69F;
-	Mon, 15 Jan 2024 11:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 283C21774F;
+	Mon, 15 Jan 2024 15:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="If4u5sBw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fdZAE68O"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C43628DD1;
-	Mon, 15 Jan 2024 11:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=B8snCTk6m/S/IySGz0MUr7RGvF9ztHAy1wNv3isU/8A=; b=If4u5sBwSs6B37nBXDgiTbTUGN
-	lDo8qxPOFMMLR9tdUyLFo9NhxhiAei6ak3C/e+2MynMriUcITyfJLZRCR7Ly9EwLVRyTpXgvcUB3V
-	dwGg8WGAGKz7K/mPA9CiHN8UfYztvfbPPXOI0b0S+WLTsoNs8EV0O1R9IOUUphih0SDSGEtoXqkyc
-	uB4sWSh8b+qMXC/2xsfM+PilLtcS9vlGpghLJvk9GXVZXiWY3hrSNwUQ65+M5e30MzDBuRHWV1QU/
-	jXo3DcbVxcVsJSrnfHOPq2fWintWikuBFLjvQHJE8GaX60F8EKAbY9S+jDwY+ZggmQThypOLb+Xcb
-	DtnjfwcQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60190)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rPKnW-0002Kh-1U;
-	Mon, 15 Jan 2024 11:06:30 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rPKnV-0002tb-9h; Mon, 15 Jan 2024 11:06:29 +0000
-Date: Mon, 15 Jan 2024 11:06:29 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
- <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB19717BA1;
+	Mon, 15 Jan 2024 15:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dbd99c08cd6so7005346276.0;
+        Mon, 15 Jan 2024 07:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705333783; x=1705938583; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SL7TyLa6aUw4gCp8WNPrFTXBo1ubO4C/088ALvqvncI=;
+        b=fdZAE68OFBp4GPejeD3x4tZhnc1JCB1IhT3IFWQgiBrlL5h1VsHznBc7VBg+1ZeLH8
+         qrjbxPX7eZV1L1AD1qMJYQKjFqDETDjO61joQrfzwXuSKz/6ylxQdT4v+s4Nj6BJe/vn
+         E/porRuOMaujnqEmxYJU0Jvw8fR2Hnbnk7NXkYFY8SkZ2M2EcdijdS9XfVs5ax2pw8Ny
+         AbxIpKi+n3s1DdQTY7L/nTiTY/suC3AqOilH3ZjRhLISpya8DIo7dki2ryD9YjwGLqWR
+         iPEz003Si2ZzzAvWw2+tmcaitYraYuMKwxczuoXXOnUc+C5Oycf7hcWGHSAAw99Ozcmx
+         jygg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705333783; x=1705938583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SL7TyLa6aUw4gCp8WNPrFTXBo1ubO4C/088ALvqvncI=;
+        b=CS83+SMrmENV0G2exeyJDYQ7WWT7OsqybnKrt3s8cTjK/W62jwwPhZe4KzjW7WeqOP
+         G7QsP52QgH7+Kx0IQYT4cUZbg1XIEgj5wVKJSYtEYf90xRO41rcrhQiVUbanSvYn4//N
+         idzG+QQf4wSW5bqZkX3D/DL22H9DBCF1tOx/XvgKZYmytgpF7+Mjl6dkLfjF9uV1EKWd
+         N3Am7d9Hi9PcHZobtbIJcYpJPix3nm3fXdK7659vrJfvMTa7RVCaeWDy25J8QlVDJKX1
+         IPneGuw2jNaaSWVaBvIa4q33YEWSBprINe3L0aqXDFkBh3BYcw/qcurmIOTnyvrmtr75
+         JcDA==
+X-Gm-Message-State: AOJu0YyqUUij0LaN+TQBjFmDq9ll32MDNi08+V+MvjMCIJgP4sHzdLpP
+	12tLPgiQqyED/tH/aZXo/9R4UdYAewEyeXD3Q4A=
+X-Google-Smtp-Source: AGHT+IHRvjvqz812fgPuK5VrHIBc03d7H7tW5k/POpwadt/5R3fqa0Hh1ZXXjPW5NBRtuM6eFswRhIcAM5+PcEeg3oo=
+X-Received: by 2002:a25:c503:0:b0:db7:dad0:76d2 with SMTP id
+ v3-20020a25c503000000b00db7dad076d2mr2809380ybe.110.1705333783459; Mon, 15
+ Jan 2024 07:49:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20231228122411.3189-1-maimon.sagi@gmail.com> <f254c189-463e-43a3-bc09-9a8869ebf819@app.fastmail.com>
+ <CAMuE1bF0Hho4VwO6w3f+9z3j5TtscYzuAjj10MFt2mZXG2P8dQ@mail.gmail.com>
+ <84d8e9d7-09ce-4781-8dfa-a74bb0955ae8@app.fastmail.com> <ZZ-ZNHgDsZwg9CaW@hoboy.vegasvil.org>
+In-Reply-To: <ZZ-ZNHgDsZwg9CaW@hoboy.vegasvil.org>
+From: Sagi Maimon <maimon.sagi@gmail.com>
+Date: Mon, 15 Jan 2024 17:49:32 +0200
+Message-ID: <CAMuE1bF4sSeiDr-jyebF6F8oRxGs1b2gtT39fTJ2JeaFabr6Ng@mail.gmail.com>
+Subject: Re: [PATCH v3] posix-timers: add multi_clock_gettime system call
+To: Richard Cochran <richardcochran@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>, tglx@linutronix.de, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Sohil Mehta <sohil.mehta@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Palmer Dabbelt <palmer@sifive.com>, Kees Cook <keescook@chromium.org>, 
+	Alexey Gladkov <legion@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
+	Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
-> >
-> > From: James Morse <james.morse@arm.com>
-> >
-> > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-> > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-> > says "Each processor in the system must be declared in the ACPI
-> > namespace"). Having two descriptions allows firmware authors to get
-> > this wrong.
-> >
-> > If CPUs are described in the MADT/APIC, they will be brought online
-> > early during boot. Once the register_cpu() calls are moved to ACPI,
-> > they will be based on the DSDT description of the CPUs. When CPUs are
-> > missing from the DSDT description, they will end up online, but not
-> > registered.
-> >
-> > Add a helper that runs after acpi_init() has completed to register
-> > CPUs that are online, but weren't found in the DSDT. Any CPU that
-> > is registered by this code triggers a firmware-bug warning and kernel
-> > taint.
-> >
-> > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-> > is configured.
-> 
-> So why is this a kernel problem?
+On Thu, Jan 11, 2024 at 9:31=E2=80=AFAM Richard Cochran
+<richardcochran@gmail.com> wrote:
+>
+> On Tue, Jan 02, 2024 at 12:29:59PM +0100, Arnd Bergmann wrote:
+>
+> > I think Andy's suggestion of exposing time offsets instead
+> > of absolute times would actually achieve that: If the
+> > interface is changed to return the offset against
+> > CLOCK_MONOTONIC, CLOCK_MONOTONIC_RAW or CLOCK_BOOTTIME
+> > (not sure what is best here), then the new syscall can use
+> > getcrosststamp() where supported for the best results or
+> > fall back to gettimex64() or gettime64() otherwise to
+> > provide a consistent user interface.
+>
+> Yes, it makes more sense to provide the offset, since that is what the
+> user needs in the end.
+>
+Make sense will be made on the next patch.
+> Can we change the name of the system call to "clock compare"?
+>
+> int clock_compare(clockid_t a, clockid_t b,
+>                   int64_t *offset, int64_t *error);
+>
+> returns: zero or error code,
+>  offset =3D a - b
+>  error  =3D maximum error due to asymmetry
+>
+> If clocks a and b are both System-V clocks, then *error=3D0 and *offset
+> can be returned directly from the kernel's time keeping state.
+>
+> If getcrosststamp() is supported on a or b, then invoke it.
+>
+> otherwise do this:
+>
+>    t1 =3D gettime(a)
+>    t2 =3D gettime(b)
+>    t3 - gettime(c)
+>
+>    *offset =3D (t1 + t3)/2 - t2
+>    *error  =3D (t3 - t1)/2
+>
+> There is no need for repeated measurement, since user space can call
+> again when `error` is unacceptable.
+>
+Thanks for your notes, all of them will be done on the next patch (it
+will take some time due to work overload).
+The only question that I have is: why not implement it as an IOCTL?
+It makes more sense to me since it is close to another IOCTL, the
+"PTP_SYS_OFFSET" family.
+Does it make sense to you?
 
-So what are you proposing should be the behaviour here? What this
-statement seems to be saying is that QEMU as it exists today only
-describes the first CPU in DSDT.
-
-As this patch series changes when arch_register_cpu() gets called (as
-described in the paragraph above) we obviously need to preserve the
-_existing_ behaviour to avoid causing regressions. So, if changing the
-kernel causes user visible regressions (e.g. sysfs entries to
-disappear) then it obviously _is_ a kernel problem that needs to be
-solved.
-
-We can't say "well fix QEMU then" without invoking the wrath of Linus.
-
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > index 6a542e0ce396..0511f2bc10bc 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -791,6 +791,25 @@ void __init acpi_processor_init(void)
-> >         acpi_pcc_cpufreq_init();
-> >  }
-> >
-> > +static int __init acpi_processor_register_missing_cpus(void)
-> > +{
-> > +       int cpu;
-> > +
-> > +       if (acpi_disabled)
-> > +               return 0;
-> > +
-> > +       for_each_online_cpu(cpu) {
-> > +               if (!get_cpu_device(cpu)) {
-> > +                       pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
-> > +                       add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-> > +                       arch_register_cpu(cpu);
-> 
-> Which part of this code is related to ACPI?
-
-That's a good question, and I suspect it would be more suited to being
-placed in drivers/base/cpu.c except for the problem that the error
-message refers to ACPI.
-
-As long as we keep the acpi_disabled test, I guess that's fine.
-cpu_dev_register_generic() there already tests acpi_disabled.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> Thanks,
+> Richard
+>
+>
+>
 
