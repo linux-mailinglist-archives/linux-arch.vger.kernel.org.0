@@ -1,147 +1,122 @@
-Return-Path: <linux-arch+bounces-1370-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1371-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8CA982D7DF
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 11:55:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6063782D7EF
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 12:00:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80FD31F220D3
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 10:55:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 176001F22279
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jan 2024 11:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974C41E4B9;
-	Mon, 15 Jan 2024 10:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4778C1E865;
+	Mon, 15 Jan 2024 11:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4IVxdbM"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="b9q0o4tQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BBB18E00;
-	Mon, 15 Jan 2024 10:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC42C43142;
-	Mon, 15 Jan 2024 10:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705316150;
-	bh=rfREZzmiD9nPW8TbesDDnUUTWye4kt++Bv0KP8PLvFk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=A4IVxdbM5n6+Wri6LKPCFt4boNRWCZk+x+FvjGA0rMzBKnTq0PG2P4HgdoibE34JU
-	 7I+sl3ic4kVgy6alkJ1V+WOxCGZ2ZCdHvSZazXxPfmb5arAkTMCAyiEierrpoLCjzM
-	 Ygj8ldj/YeV7xxWj3T+cJucDy6g0wviAclEb83PQYKh4IA3J10TosGkmbLnZg7vRG5
-	 klaKs9ycUq3mSQ8r8jOJecX0Mq/uJGiy1/elHSc22WoW1AxZktex9NE9JrxYS5mS2+
-	 cE8gPHQUwUZeynpCd6W3njl/YBfE5cxvvdBerqY16hvAfFGT43Lf9OM8ZBsaDE8gEI
-	 oLYOyEDKggW0A==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50eaaf2c7deso9635020e87.2;
-        Mon, 15 Jan 2024 02:55:49 -0800 (PST)
-X-Gm-Message-State: AOJu0YxdnEmOWayncYpTcwpapO5T9U7QvQyR1lgCXFPUaZhDDk0Xgoa4
-	sLHZZC3R7KyEeShjc05qn4OEMu7gpa2F7aSXYxA=
-X-Google-Smtp-Source: AGHT+IHjiob4d9Y9lHe/Mg25bV/9NI9KuHdlICb0KG40svce27wXXneGwYvZf40noCzmA0/mYLev+nDZBuyx7BNLBuM=
-X-Received: by 2002:a05:6512:130c:b0:50e:df4f:44d7 with SMTP id
- x12-20020a056512130c00b0050edf4f44d7mr2867593lfu.90.1705316148087; Mon, 15
- Jan 2024 02:55:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E522C683;
+	Mon, 15 Jan 2024 11:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D5A1440E01A9;
+	Mon, 15 Jan 2024 11:00:25 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id sfiRGpzfaODp; Mon, 15 Jan 2024 11:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1705316423; bh=oP77XyZj9HhicA6zK+E2uirUhsgRReQ/mwWlYJegOQA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b9q0o4tQ50g+7Sr5DKT5AfeuDncxgpLRIIudonC6h0msPRkM2sMP9vfEa+BuCZbl1
+	 Uqte3mOzZ+IpLU3RpLCzC92861U8l/LPzTnMMy+hXGuck4FLADjlPxWUXGi9TX58Sa
+	 ysB5lW8rptHc7ilcZGNrQt29I8S59GnvuP2RDdAgJyOl4KXT8oAlwcXNxsvFdSuuZW
+	 c0hLIp6HwzsEe6sFYqF/yeglM0EPf+m2FmVvCmEkarZH1Oti1fjhPfEap9JSNdQryq
+	 7Btd8LUDHVJ/vxXOTnidM6NyotTX50FuXaHub7bKxt7VwPqfjS6irr6TxnouG1KufG
+	 4BVKfTLTqr73UuSvSrZbaO/gMA5hlhZWIqHPvV2GtBuHzoovogDt0JcOwlDkbmWjFJ
+	 oLKRKGMSUy5l/1A5ReOZId7WfIjRnEuQykO4K/9d57TvWCON/BAlGvRX1O/IF+ak/x
+	 ijvYQidLBTIAmKJK7aKKLCiIOR9Zau8RftkXynt+Uk1yQrHEkzjH3HSR06A3xHKPaf
+	 67x4l5jVNR9iJzhPeorcAEWYwPfx8VWHkauCWe2Zd04ccFdd5M5pY1D8NtkY+ssykL
+	 ko4wsKO98DMsDEu/qo8GAu9HDua195gnEZgQd2RAlbTltZIxzksvnR2fT0ljic0SEu
+	 Fk8eYp/HJEpH1SwTYxISl7RI=
+Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8C6BE40E016C;
+	Mon, 15 Jan 2024 11:00:01 +0000 (UTC)
+Date: Mon, 15 Jan 2024 12:00:00 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>, nathan@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, bhelgaas@google.com, arnd@arndb.de,
+	zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+	jmorris@namei.org, serge@hallyn.com, javierm@redhat.com,
+	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on
+ bootparam.h
+Message-ID: <20240115110000.GEZaUQMBwGAibwR_Yp@fat_crate.local>
+References: <20240112095000.8952-1-tzimmermann@suse.de>
+ <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
+ <3e2f70ab-c4de-4fae-9365-4f6f77c847c5@suse.de>
+ <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240112095000.8952-1-tzimmermann@suse.de> <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
- <3e2f70ab-c4de-4fae-9365-4f6f77c847c5@suse.de>
-In-Reply-To: <3e2f70ab-c4de-4fae-9365-4f6f77c847c5@suse.de>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 15 Jan 2024 11:55:36 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
-Message-ID: <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on bootparam.h
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: nathan@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
 
-On Mon, 15 Jan 2024 at 08:58, Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> Hi
->
-> Am 12.01.24 um 18:28 schrieb Ard Biesheuvel:
-> > On Fri, 12 Jan 2024 at 10:50, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>
-> >> Reduce build time in some cases by removing unnecessary include statements
-> >> for <asm/bootparam.h>. Reorganize some header files accordingly.
-> >>
-> >> While working on the kernel's boot-up graphics, I noticed that touching
-> >> include/linux/screen_info.h triggers a complete rebuild of the kernel
-> >> on x86. It turns out that the architecture's PCI and EFI headers include
-> >> <asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
-> >> the drivers have any business with boot parameters or the screen_info
-> >> state.
-> >>
-> >> The patchset moves code from bootparam.h and efi.h into separate header
-> >> files and removes obsolete include statements on x86. I did
-> >>
-> >>    make allmodconfig
-> >>    make -j28
-> >>    touch include/linux/screen_info.h
-> >>    time make -j28
-> >>
-> >> to measure the time it takes to rebuild. Results without the patchset
-> >> are around 20 minutes.
-> >>
-> >>    real    20m46,705s
-> >>    user    354m29,166s
-> >>    sys     28m27,359s
-> >>
-> >> And with the patchset applied it goes down to less than one minute.
-> >>
-> >>    real    0m56,643s
-> >>    user    4m0,661s
-> >>    sys     0m32,956s
-> >>
-> >> The test system is an Intel i5-13500.
-> >>
-> >> v5:
-> >>          * silence clang warnings for real-mode code (Nathan)
-> >>          * revert boot/compressed/misc.h (kernel test robot)
-> >> v4:
-> >>          * fix fwd declaration in compressed/misc.h (Ard)
-> >> v3:
-> >>          * keep setup_header in bootparam.h (Ard)
-> >>          * implement arch_ima_efi_boot_mode() in source file (Ard)
-> >> v2:
-> >>          * only keep struct boot_params in bootparam.h (Ard)
-> >>          * simplify arch_ima_efi_boot_mode define (Ard)
-> >>          * updated cover letter
-> >>
-> >> Thomas Zimmermann (4):
-> >>    arch/x86: Move UAPI setup structures into setup_data.h
-> >>    arch/x86: Move internal setup_data structures into setup_data.h
-> >>    arch/x86: Implement arch_ima_efi_boot_mode() in source file
-> >>    arch/x86: Do not include <asm/bootparam.h> in several files
-> >>
-> >
-> > This looks ok to me, thanks for sticking with it.
-> >
-> > For the series,
-> >
-> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
->
-> Thank you so much. Can this series go through the x86 tree?
->
+On Mon, Jan 15, 2024 at 11:55:36AM +0100, Ard Biesheuvel wrote:
+> But please be aware that we are in the middle of the merge window
 
-Yes, this should be taken through the -tip tree. But I am not a -tip maintainer.
+Yes, and the merge window has been suspended too:
 
-But please be aware that we are in the middle of the merge window
-right now, and I suspect that the -tip maintainers may have some
-feedback of their own. So give it at least a week or so, and ping this
-thread again to ask how to proceed.
+https://lore.kernel.org/r/CAHk-=wjMWpmXtKeiN__vnNO4TcttZR-8dVvd_oBq%2BhjeSsWUwg@mail.gmail.com
 
-Also, please trim the cc list a bit when you do - this is mostly a x86
-specific reshuffle of headers so no need to keep all the other
-subsystem maintainers on cc while we finish up the discussion.
+> right now, and I suspect that the -tip maintainers may have some
+> feedback of their own. So give it at least a week or so, and ping this
+> thread again to ask how to proceed.
+
+From: Documentation/process/maintainer-tip.rst
+
+"Merge window
+^^^^^^^^^^^^
+
+Please do not expect large patch series to be handled during the merge
+window or even during the week before.  Such patches should be submitted in
+mergeable state *at* *least* a week before the merge window opens.
+Exceptions are made for bug fixes and *sometimes* for small standalone
+drivers for new hardware or minimally invasive patches for hardware
+enablement.
+
+During the merge window, the maintainers instead focus on following the
+upstream changes, fixing merge window fallout, collecting bug fixes, and
+allowing themselves a breath. Please respect that.
+
+The release candidate -rc1 is the starting point for new patches to be
+applied which are targeted for the next merge window."
+
+So pls be patient.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
