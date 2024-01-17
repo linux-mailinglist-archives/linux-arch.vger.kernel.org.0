@@ -1,81 +1,62 @@
-Return-Path: <linux-arch+bounces-1384-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1385-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B62982FEC1
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jan 2024 03:22:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D63083054A
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jan 2024 13:30:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C9DA1C23BE1
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jan 2024 02:22:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F126E281744
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jan 2024 12:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914F11864;
-	Wed, 17 Jan 2024 02:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227F817FD;
+	Wed, 17 Jan 2024 12:30:08 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288F217E9;
-	Wed, 17 Jan 2024 02:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 184C82F30;
+	Wed, 17 Jan 2024 12:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705458166; cv=none; b=ddNM45kuj7D1rP/lTpOYM9rVZCjVqlUrTmFOsR5r1ALeOL8TtAEyeGtGUrGTO9e8pVKiX+FQHxqYpDRCaXe4DYrW/WvbY7ZFYGfMxn/xJOTh+cZ1MMa9iL+JljOhEFHUTUP8VHt+vtHerHoj2fIJ8kmonAG9/rSjC4IIUg+zGDU=
+	t=1705494608; cv=none; b=XEKh6MEERtG+2/jZPLB6j/jhyqR5cAaOCaqucrXOQAzr6aXXJ0DQ+08szyVgL8gmW8EMsisQ80bH8uIeukfS+a77FV1C7GY9A7t2sg30IniSrtnU0vMJBU66lbVwcYKZH0ptX2gzhFz6wsAnGx6RdxWf3j3PiHiIakHb2ZpMJbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705458166; c=relaxed/simple;
-	bh=tjALmxBXd+DQQfMR8Vt2M3FgcBoGxOGfirrdXlPsCzE=;
-	h=Received:X-Google-DKIM-Signature:X-Gm-Message-State:
-	 X-Google-Smtp-Source:X-Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=fpsC/x51VsnfqbUDM0p2RJUgYn8z6680ZwryEosA1Tv0fSWGNpa4Spgnn2ljLAKrd0BSBZUhbbtB5EjG/f884R4rtFVfUDFahVQ7kSM6g2d+AwFEnd5tcbVs9Gr8jeV60wyBnnOpLiRkxgqthVka3Blu3yZo3QTbOSlyuE8PD2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6e0af93fdaaso2743778a34.3;
-        Tue, 16 Jan 2024 18:22:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705458163; x=1706062963;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZvCzHdCCoUAYXVnW660xRj2+vdtdV/6HpzjQHQyUWDg=;
-        b=Tf1BAQ1F1E1AB3kfFhoUA9iitz+MtlUAbNil35kah3J1p7rz7DcThbb7pRfRujZiCl
-         4S/8wKIg1fpIVNd2UWD2xVPRyaPLUDzxyWui8cBu5augkR+k/WX5Yn2yKBksPzJf+Q8Y
-         x7yqT2X2uW3XGw83K08IFXXRNh0xePF7vyi7UCJCFivxTljbsAQ4s0M0VlEf4WeKK1uu
-         +c/WTdk27J46r3bZVaVglr6rhIuCGsbdKVOTScr1FKG940eYPQreV+4F9BU9Gb+STwmZ
-         kgqBzLaYw+KJh9T/LhTh82FxFwTVFhFR9i6OIT/A4vb3fG6aByljVAeeynNrEkGVgTtP
-         PjMw==
-X-Gm-Message-State: AOJu0YzzAD0Ds9i/1xSg4eeCulho8/7PbFY5ndsVoXOmdSzJVlss44Tr
-	+EMjJqWfs7WzBW4qagBEEkI=
-X-Google-Smtp-Source: AGHT+IG7lJq8taiu2dFLP1BoUfxhekVtzTOyRXf1mavjJxh6yyLEVNpTV0pczEs0cRrNHW+EnYQYNg==
-X-Received: by 2002:a9d:6488:0:b0:6e0:16cb:4b4d with SMTP id g8-20020a9d6488000000b006e016cb4b4dmr9345003otl.29.1705458163117;
-        Tue, 16 Jan 2024 18:22:43 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id y27-20020aa79e1b000000b006d9ac481eccsm258477pfq.220.2024.01.16.18.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jan 2024 18:22:42 -0800 (PST)
-Date: Wed, 17 Jan 2024 02:22:40 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com, arnd@arndb.de,
-	bp@alien8.de, brijesh.singh@amd.com, dan.j.williams@intel.com,
-	dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-	jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-	kys@microsoft.com, linux-hyperv@vger.kernel.org, luto@kernel.org,
-	mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
-	sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-	tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-	Jason@zx2c4.com, nik.borisov@suse.com, mikelley@microsoft.com,
-	x86@kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, Tianyu.Lan@microsoft.com,
-	rick.p.edgecombe@intel.com, andavis@redhat.com, mheslin@redhat.com,
-	vkuznets@redhat.com, xiaoyao.li@intel.com
-Subject: Re: [PATCH v3 08/10] x86/hyperv: Use TDX GHCI to access some MSRs in
- a TDX VM with the paravisor
-Message-ID: <Zac58P0MgEQ_ITOf@liuwe-devbox-debian-v2>
-References: <20230824080712.30327-1-decui@microsoft.com>
- <20230824080712.30327-9-decui@microsoft.com>
- <f488fede-5c28-4840-af3c-3faa9a31caa0@intel.com>
+	s=arc-20240116; t=1705494608; c=relaxed/simple;
+	bh=vfpWLFzxvHh1WPoKbrU7KkeTlkCsXClFVEql7NOpBFo=;
+	h=Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To; b=bOjOjO7BdbbBKXZC8e3GdKl5qI1SfaEllISyBbLAA17BuDaPgVrRG06PLwbgn9C3h+aEMY+6LlK3Ya59RQssLte7pEANmDlGwMGGCv/n8dN7QImwhCYly8tIedbeiOC7znJC8qC7u3lV2Cuz53OMuGeI72jB+l/NG2fZ5lG5JvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 688B211FB;
+	Wed, 17 Jan 2024 04:30:51 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.37.172])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 86E8B3F766;
+	Wed, 17 Jan 2024 04:30:03 -0800 (PST)
+Date: Wed, 17 Jan 2024 12:30:00 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
+References: <20231127134505.GI436702@nvidia.com>
+ <ZW4NAzI_jvwoq8dL@arm.com>
+ <20231204182330.GK1493156@nvidia.com>
+ <ZW9cF0ALVwgvcQMy@arm.com>
+ <20231205175127.GJ2692119@nvidia.com>
+ <ZW97VdHYH3HYVyd5@arm.com>
+ <20231205195130.GM2692119@nvidia.com>
+ <ZXBWXodu2rxQ7Szz@arm.com>
+ <20231206125919.GP2692119@nvidia.com>
+ <20240116185121.GB980613@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -84,43 +65,125 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f488fede-5c28-4840-af3c-3faa9a31caa0@intel.com>
+In-Reply-To: <20240116185121.GB980613@nvidia.com>
 
-Hi Dave
-
-I was away and only saw your email now. Sorry for the late reply.
-
-On Mon, Dec 04, 2023 at 07:10:29AM -0800, Dave Hansen wrote:
-> On 8/24/23 01:07, Dexuan Cui wrote:
-> > +#ifdef CONFIG_INTEL_TDX_GUEST
-> > +static void hv_tdx_msr_write(u64 msr, u64 val)
-> > +{
-> > +	struct tdx_hypercall_args args = {
-> > +		.r10 = TDX_HYPERCALL_STANDARD,
-> > +		.r11 = EXIT_REASON_MSR_WRITE,
-> > +		.r12 = msr,
-> > +		.r13 = val,
-> > +	};
-> > +
-> > +	u64 ret = __tdx_hypercall(&args);
-> > +
-> > +	WARN_ONCE(ret, "Failed to emulate MSR write: %lld\n", ret);
-> > +}
+On Tue, Jan 16, 2024 at 02:51:21PM -0400, Jason Gunthorpe wrote:
+> Hey Catalin,
 > 
-> First of all, I'd really appreciate if you could seek out explicit acks
-> for this kind of stuff before merging it.  This surprised me.
+> I'm just revising this and I'm wondering if you know why ARM64 has this:
 > 
+> #define __raw_writeq __raw_writeq
+> static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> {
+> 	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
+> }
+> 
+> Instead of
+> 
+> #define __raw_writeq __raw_writeq
+> static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> {
+> 	asm volatile("str %x0, %1" : : "rZ" (val), "m" (*(volatile u64 *)addr));
+> }
+> 
+> ?? Like x86 has.
 
-I eyeballed the code and thought it only touched only the Hyper-V files,
-so I merged this series without waiting.
+I believe this is for the same reason as doing so in all of our other IO
+accessors.
 
-> Can you please merge these generic things back into the main TDX code?
-> There's nothing Hyper-V specific about any of this code.  Basically, you
-> can make a hv_tdx_whatever() variant, but make _that_ in the generic TDX
-> code and then export only _that_.
+We've deliberately ensured that our IO accessors use a single base register
+with no offset as this is the only form that HW can represent in ESR_ELx.ISS.SRT
+when reporting a stage-2 abort, which a hypervisor may use for emulating IO.
 
-The code is still there. Dexuan, can you send a patch to do the
-refactoring?
+Mark.
 
-Wei.
+> 
+> The codegen for a 64 byte unrolled copy loop is way better with "m" on gcc:
+> 
+> "r" constraint (gcc 13.2.0):
+> 
+> .L3:
+>         ldr     x3, [x1]
+>         str x3, [x0]
+>         ldr     x3, [x1, 8]
+>         add     x4, x0, 8
+>         str x3, [x4]
+>         ldr     x3, [x1, 16]
+>         add     x4, x0, 16
+>         str x3, [x4]
+>         ldr     x3, [x1, 24]
+>         add     x4, x0, 24
+>         str x3, [x4]
+>         ldr     x3, [x1, 32]
+>         add     x4, x0, 32
+>         str x3, [x4]
+>         ldr     x3, [x1, 40]
+>         add     x4, x0, 40
+>         str x3, [x4]
+>         ldr     x3, [x1, 48]
+>         add     x4, x0, 48
+>         str x3, [x4]
+>         ldr     x3, [x1, 56]
+>         add     x4, x0, 56
+>         str x3, [x4]
+>         add     x1, x1, 64
+>         add     x0, x0, 64
+>         cmp     x2, x1
+>         bhi     .L3
+> 
+> "m" constraint:
+> 
+> .L3:
+>         ldp     x10, x9, [x1]
+>         ldp     x8, x7, [x1, 16]
+>         ldp     x6, x5, [x1, 32]
+>         ldp     x4, x3, [x1, 48]
+>         str x10, [x0]
+>         str x9, [x0, 8]
+>         str x8, [x0, 16]
+>         str x7, [x0, 24]
+>         str x6, [x0, 32]
+>         str x5, [x0, 40]
+>         str x4, [x0, 48]
+>         str x3, [x0, 56]
+>         add     x1, x1, 64
+>         add     x0, x0, 64
+>         cmp     x2, x1
+>         bhi     .L3
+> 
+> clang 17 doesn't do any better either way, it doesn't seem to do
+> anything with 'm', but I guess it could..
+> 
+> clang 17 (either):
+> 
+> .LBB0_2:                                // =>This Inner Loop Header: Depth=1
+>         ldp     x9, x10, [x1]
+>         add     x14, x0, #8
+>         add     x18, x0, #40
+>         ldp     x11, x12, [x1, #16]
+>         add     x2, x0, #48
+>         add     x3, x0, #56
+>         ldp     x13, x15, [x1, #32]
+>         ldp     x16, x17, [x1, #48]
+>         str     x9, [x0]
+>         str     x10, [x14]
+>         add     x9, x0, #16
+>         add     x10, x0, #24
+>         add     x14, x0, #32
+>         str     x11, [x9]
+>         str     x12, [x10]
+>         str     x13, [x14]
+>         str     x15, [x18]
+>         str     x16, [x2]
+>         str     x17, [x3]
+>         add     x1, x1, #64
+>         add     x0, x0, #64
+>         cmp     x1, x8
+>         b.lo    .LBB0_2
+> 
+> It doesn't matter for this series, but it seems like something ARM64
+> might want to look at to improve..
+> 
+> Jason
+> 
 
