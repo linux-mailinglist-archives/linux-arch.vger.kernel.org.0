@@ -1,147 +1,160 @@
-Return-Path: <linux-arch+bounces-1402-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1403-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C9708320BA
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jan 2024 22:10:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0748E832857
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 12:07:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF6A01C22B16
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jan 2024 21:10:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3087A1C210AA
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 11:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3682E850;
-	Thu, 18 Jan 2024 21:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOjcivrW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587264C615;
+	Fri, 19 Jan 2024 11:07:24 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EE714270;
-	Thu, 18 Jan 2024 21:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DB91D690;
+	Fri, 19 Jan 2024 11:07:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705612253; cv=none; b=BYnylEICddo/lcVSCyl8pw+jBpZfj0zMzvshEkwDrOUnoGsaL7lLNi+W3nkEPx7BaMUTSlZZkWCW1xVNR+G0KpTm8QHCNkQ5V1FBdq9irt29XzSma1W0PND5iKJGBAw6rX+df868bApXsEJ19eiHGK04USadwQDiye6HjcmO1Do=
+	t=1705662444; cv=none; b=OpC6NQdPQ79ClxzjN4Fy/nQWT6EYThleJ4acdTu5bM3hmvISAubgv365aX6F/m2NEWus6y9Qx8YNxhzksJpqPzpBRW03E62uHNT/tNYuQhd1L6ye7jjD9bJlBYhNWrUQFsToEYNuNtwWGDXmJgwYZcbriPI+ZhbBAiohBRUBfNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705612253; c=relaxed/simple;
-	bh=f4pgnl8yd020hjFNUjJcTz/Gx6KZT1fbOEGiRHoWS0I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YjM5n//9w76i08Kfxt3/jLRsNEb/uSucSNVE1aTWOB3WtVE4S/4EVNx8y6piYuyCMzLlTL8Lupb2DN5zc7C5u6KcGOSQ4i8MYkyvy49g2opjEh+iUVa3IzYEGWYZzdfnbk+dPAPz7nGWiOzbTHjj63R4ztVsO0irA81r5GB8emM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOjcivrW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF08C433C7;
-	Thu, 18 Jan 2024 21:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705612252;
-	bh=f4pgnl8yd020hjFNUjJcTz/Gx6KZT1fbOEGiRHoWS0I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZOjcivrWeVqiQ8DXbRajgXxCSi0AX3o34/4vHt4xY0ZnhzaET53Cz7aexMT8aHn4h
-	 M5ArFyBw3UfbVpaf4/Z9R5jHEzG3cMVLydldQ+Gz+dB6E/xbSzGvtvCAhWKP3jTkVs
-	 NeVoUXPOeaCC1aJFFLAMZi3JyZP5FBbanivHS3DIiDvoTRmSVlVFrh9gK+zgS4JuPx
-	 a2NLXYIWfKGkWvFn23pJBDYEqqiOLFyGNR2wEEAtGQdnKptgaikIvDuNwf3KNWUSCq
-	 wP+zvTqLzIH15uhXn7/NUWueHheuyrpj/mKTsg6rzfFSF0P0QejjHhX6c+rmg9EklJ
-	 5GQ+WBkWh5hgQ==
-Date: Thu, 18 Jan 2024 21:10:43 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 36/39] selftests/arm64: Add GCS signal tests
-Message-ID: <94263c5c-817f-4dcf-8418-6c7e3c058557@sirena.org.uk>
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-36-201c483bd775@kernel.org>
- <875y0x7f1m.fsf@linaro.org>
+	s=arc-20240116; t=1705662444; c=relaxed/simple;
+	bh=QG7E3xZDv1be+XkDSOyaOlT8BoYaqVCBOneMyW01fZw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=j68ye8g8w1bSYi9zObeLwc4/F2q5zCPcyuN8ovul5tX331dZwV764kit0bULKJLifuYqiM9CKtbyRaADJSJeApQ/9WIXfOcG6FiRw++UcQYdL/LKAXuC5/7oZRjjNEck2RZrcicxCNlMF+P3ur4kTsWYRinkwBXqTrTJ5xc/sWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373A6C433F1;
+	Fri, 19 Jan 2024 11:07:21 +0000 (UTC)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guo Ren <guoren@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.8
+Date: Fri, 19 Jan 2024 19:07:00 +0800
+Message-Id: <20240119110700.335741-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="doBW+2ZTusCkWc8M"
-Content-Disposition: inline
-In-Reply-To: <875y0x7f1m.fsf@linaro.org>
-X-Cookie: FEELINGS are cascading over me!!!
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 0dd3ee31125508cd67f7e7172247f05b7fd1753a:
 
---doBW+2ZTusCkWc8M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Linux 6.7 (2024-01-07 12:18:38 -0800)
 
-On Sat, Dec 16, 2023 at 11:12:37PM -0300, Thiago Jung Bauermann wrote:
-> Mark Brown <broonie@kernel.org> writes:
+are available in the Git repository at:
 
-> > +/* This should be includable from some standard header, but which? */
-> > +#ifndef SEGV_CPERR
-> > +#define SEGV_CPERR 10
-> > +#endif
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.8
 
-> One suggestion is include/uapi/asm-generic/siginfo.h. It already has
-> SEGV_MTEAERR and SEGV_MTESERR, as well as si_codes specific to other
-> arches.
+for you to fetch changes up to 6e441fa3ac475be73c03c9a85bd305d66ea476a6:
 
-Sadly the testsuite is being very clever with redefining siginfo_t which
-means it conflicts with that header.  I'll update the comment.
+  MAINTAINERS: Add BPF JIT for LOONGARCH entry (2024-01-17 12:43:13 +0800)
 
-> > +	if (!get_current_context(td, &context.uc, sizeof(context))) {
-> > +		fprintf(stderr, "Failed getting context\n");
-> > +		return 1;
-> > +	}
+----------------------------------------------------------------
+LoongArch changes for v6.8
 
-> At this point, before any function call is made, can the test check that
-> *(gcspr + 8) == 0? This would detect the issue I mentioned in
-> patch 24 of gcs_restore_signal() not zeroing the location of the cap.
+1, Raise minimum clang version to 18.0.0;
+2, Enable initial Rust support for LoongArch;
+3, Add built-in dtb support for LoongArch;
+4, Use generic interface to support crashkernel=X,[high,low];
+5, Some bug fixes and other small changes;
+6, Update the default config file.
 
-Sure.
+----------------------------------------------------------------
+Binbin Zhou (9):
+      dt-bindings: loongarch: Add CPU bindings for LoongArch
+      dt-bindings: loongarch: Add Loongson SoC boards compatibles
+      dt-bindings: interrupt-controller: loongson,liointc: Fix dtbs_check warning for reg-names
+      dt-bindings: interrupt-controller: loongson,liointc: Fix dtbs_check warning for interrupt-names
+      LoongArch: Allow device trees be built into the kernel
+      LoongArch: dts: DeviceTree for Loongson-2K0500
+      LoongArch: dts: DeviceTree for Loongson-2K1000
+      LoongArch: dts: DeviceTree for Loongson-2K2000
+      LoongArch: Parsing CPU-related information from DTS
 
-> > +	if (gcs->gcspr != gcspr) {
-> > +		fprintf(stderr, "Got GCSPR %llx but expected %lx\n",
-> > +			gcs->gcspr, gcspr);
-> > +		return 1;
-> > +	}
+Hengqi Chen (2):
+      LoongArch: BPF: Support 64-bit pointers to kfuncs
+      LoongArch: BPF: Prevent out-of-bounds memory access
 
-> I suggest adding a new check here to ensure that gcs->reserved == 0.
+Huacai Chen (4):
+      LoongArch: Add a missing call to efi_esrt_init()
+      LoongArch: Change SHMLBA from SZ_64K to PAGE_SIZE
+      LoongArch: Let cores_io_master cover the largest NR_CPUS
+      LoongArch: Update Loongson-3 default config file
 
-This would mean that you couldn't use an old kselftest build to verify
-a new kernel that starts using the reserved bits.  It's niche but it
-does seem like something that should work.
+Tiezhu Yang (2):
+      LoongArch: Fix definition of ftrace_regs_set_instruction_pointer()
+      MAINTAINERS: Add BPF JIT for LOONGARCH entry
 
---doBW+2ZTusCkWc8M
-Content-Type: application/pgp-signature; name="signature.asc"
+WANG Rui (2):
+      scripts/min-tool-version.sh: Raise minimum clang version to 18.0.0 for loongarch
+      LoongArch: Enable initial Rust support
 
------BEGIN PGP SIGNATURE-----
+WANG Xuerui (1):
+      modpost: Ignore relaxation and alignment marker relocs on LoongArch
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWpk9IACgkQJNaLcl1U
-h9D18Qf/dkanHMRcVOLBO0KY2XdPTIfY1GyOkjJY1kaVS8NrmmBXUrDbi21xRyjY
-hrG/NK4XolQfikIXkTHDmzK4oPapXDow6he4iR1c9zU0DnLSMp4VoXZ7ocIMAoBi
-tQ10946KiS7b3/zM+TNvOJeQcoToWb8HdVsvesPbs3kMHXTGFOCXIIGP+at5Xn+d
-jm35bqd8SAcCA57Xci4zNZm6G/40We/QeI3oAQjjrGQuCHeecQQAz1qMinbc5udk
-98yjraA9J1Q0v5JAuH1ssAczoXX2hM7H7ZJZFu2x/lXqoq2bvjEDsJUJHybrb4d+
-R77h7JGFnnC+PGVQbXKJpz1bueqP8w==
-=5ri/
------END PGP SIGNATURE-----
+Xi Ruoyao (1):
+      LoongArch: Fix and simplify fcsr initialization on execve()
 
---doBW+2ZTusCkWc8M--
+Youling Tang (1):
+      LoongArch: Use generic interface to support crashkernel=X,[high,low]
+
+ Documentation/admin-guide/kernel-parameters.txt    |  24 +-
+ .../interrupt-controller/loongson,liointc.yaml     |  18 +-
+ .../devicetree/bindings/loongarch/cpus.yaml        |  61 +++
+ .../devicetree/bindings/loongarch/loongson.yaml    |  34 ++
+ Documentation/rust/arch-support.rst                |  13 +-
+ MAINTAINERS                                        |   7 +
+ arch/loongarch/Kbuild                              |   1 +
+ arch/loongarch/Kconfig                             |  22 +
+ arch/loongarch/Makefile                            |   6 +-
+ arch/loongarch/boot/dts/Makefile                   |   5 +-
+ arch/loongarch/boot/dts/loongson-2k0500-ref.dts    |  88 ++++
+ arch/loongarch/boot/dts/loongson-2k0500.dtsi       | 266 +++++++++++
+ arch/loongarch/boot/dts/loongson-2k1000-ref.dts    | 183 ++++++++
+ arch/loongarch/boot/dts/loongson-2k1000.dtsi       | 492 +++++++++++++++++++++
+ arch/loongarch/boot/dts/loongson-2k2000-ref.dts    |  72 +++
+ arch/loongarch/boot/dts/loongson-2k2000.dtsi       | 300 +++++++++++++
+ arch/loongarch/configs/loongson3_defconfig         |  55 ++-
+ arch/loongarch/include/asm/bootinfo.h              |   6 +-
+ arch/loongarch/include/asm/crash_core.h            |  12 +
+ arch/loongarch/include/asm/elf.h                   |   5 -
+ arch/loongarch/include/asm/ftrace.h                |   2 +-
+ arch/loongarch/include/asm/shmparam.h              |  12 -
+ arch/loongarch/kernel/acpi.c                       |   2 +-
+ arch/loongarch/kernel/efi.c                        |   2 +
+ arch/loongarch/kernel/elf.c                        |   5 -
+ arch/loongarch/kernel/env.c                        |  34 +-
+ arch/loongarch/kernel/head.S                       |  10 +
+ arch/loongarch/kernel/process.c                    |   1 +
+ arch/loongarch/kernel/setup.c                      |  56 +--
+ arch/loongarch/kernel/smp.c                        |   5 +-
+ arch/loongarch/net/bpf_jit.c                       |  10 +-
+ scripts/generate_rust_target.rs                    |   7 +
+ scripts/min-tool-version.sh                        |   2 +
+ scripts/mod/modpost.c                              |  19 +-
+ 34 files changed, 1735 insertions(+), 102 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/loongarch/cpus.yaml
+ create mode 100644 Documentation/devicetree/bindings/loongarch/loongson.yaml
+ create mode 100644 arch/loongarch/boot/dts/loongson-2k0500-ref.dts
+ create mode 100644 arch/loongarch/boot/dts/loongson-2k0500.dtsi
+ create mode 100644 arch/loongarch/boot/dts/loongson-2k1000-ref.dts
+ create mode 100644 arch/loongarch/boot/dts/loongson-2k1000.dtsi
+ create mode 100644 arch/loongarch/boot/dts/loongson-2k2000-ref.dts
+ create mode 100644 arch/loongarch/boot/dts/loongson-2k2000.dtsi
+ create mode 100644 arch/loongarch/include/asm/crash_core.h
+ delete mode 100644 arch/loongarch/include/asm/shmparam.h
 
