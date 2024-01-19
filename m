@@ -1,169 +1,287 @@
-Return-Path: <linux-arch+bounces-1404-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1405-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33DEF83293D
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 12:52:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8114B832AD7
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 14:57:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6FFC287229
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 11:52:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5E7A1C2442C
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 13:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7544EB4B;
-	Fri, 19 Jan 2024 11:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600D95381A;
+	Fri, 19 Jan 2024 13:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Sc1Vpb/R"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SwhzfapH"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD544C600;
-	Fri, 19 Jan 2024 11:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E7F53811;
+	Fri, 19 Jan 2024 13:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705665170; cv=none; b=q6dNHNw8qdtL2Td0Mdrnz/RSIRpwiIrNT5ja+ayRBjxZEbbzvms5PgJ2herwiSWS765Abi4enRD9xwqWQgZ1teUrdiaD+Aas8/MRFyEHBQkNxn5u9olz3uzAooLuQ03luNud+uIaA4ESv1pSv/r7jSh+wO1hvngS/P5HKXhv/vs=
+	t=1705672621; cv=none; b=idpl+n8DsnIh5tbls+FYCVV7ccELA6buJwlzv+9gsbzTLVmItWU9lKvYh/KzhIuEDtvj+T5Q17VNYttbdOstm13g4TQs7lNpK6KV9lK4jj7Ip32VWTrhFjfeClraqdseEiMzr9z999Qe8D+Hb4C6Z2XMg8MQlwibER6fVXL+uJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705665170; c=relaxed/simple;
-	bh=Rt/U4LeEYbelRH6EwCkWjSLyEfhtCIGZFLcpiMjeHEc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VzGxoaq50YOuY+AVu+5CdNwD8ZzbcQPjO0aTIhV7UT2j2pEG5lkmuFmwGbLtDLl4gm3xtsjqNSGIpXcMLF93dQjOenkMP27MePVPxzyzgXcrLXWUmF1DK4Bb8Hi78H5hoakGOVA8+O8zih9ftWBgpuL+Sk8sLF2gcF3+ho8Q+/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Sc1Vpb/R; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1705672621; c=relaxed/simple;
+	bh=Dzk81ME8LvQSamL1SNsZWxijV64H7yv3CiEQR/Wgfog=;
+	h=Content-Type:Message-ID:Date:Subject:To:Cc:References:From:
+	 In-Reply-To:MIME-Version; b=WM9exwHIWIRyXUArO4rJkD5NrwYaZnAzlFqn13TRjeGurxuIuJG5CqIu71m2QaN3CDiefJl6UpCJpBSgoazYCyeELZBX8WbgPPtulXWSDXCCmAt+LEkjg7Gv6jXb2fSjsFuVJeXNSiVvtCkBwwXUSIpUYyoiNordgYEN7cYfTNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SwhzfapH; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40JBbCl4015198;
-	Fri, 19 Jan 2024 11:52:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Rt/U4LeEYbelRH6EwCkWjSLyEfhtCIGZFLcpiMjeHEc=;
- b=Sc1Vpb/R7TGUYisMZc7RPKesd/UZGB96K+viRPxAD+Yojlo4HFu93njZ7CMDPcX1NU4D
- KVqkX/AvpWnxMrIE7Jr9cVXlLSnlpFIYRDECE8FZRiYou4Z8enH3wyDOOjoQsuzRj1Al
- 6hZD8Ci4vOnTCAd1hZniItFg2sJAkrvYkLPODmxlTmXUuHnLlBBAfedP1sF9/EB/Nu2/
- +tVZU9d4sqlj/zf0DSn6HP40HDeuInmcdmm6PpOmJkBYL4q5qKQvbaF6Gz27hTLT+yGW
- U6K7MHGCCAgvTtyvNreNvX+ZQ8p3MgCJXlbV/5OYyGjr3SXBT2M8PHDdoEgck6697sro Rw== 
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40JDqjlg013770;
+	Fri, 19 Jan 2024 13:56:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ message-id : date : subject : to : cc : references : from : in-reply-to :
+ mime-version; s=pp1; bh=4yJ1PvlhKF5ebvPj66SGf04iGsGLKVD6KL8an/YURt4=;
+ b=SwhzfapH2CJruLYlbjfqzI9nWYPgcRJJTaRXb0q/3r3xVnpWD9BU5b+39QWItCxadFkZ
+ 4+jQSFAs457HkKR44nSzxPfsp8Fqy2uRkAE0pcPaMRcBlGaBElcg42nfcvswb6wPkXGw
+ XZ76Iv+/VroLTOPOFVeDfpF+f+RycD+oehmWGA+IAcl2rwqywMYG56wAhTZ/ffjQt0Sq
+ 83jbCaRcLlooLIGocIoNV+A1o2Hpv1IcCgmqSbZD7onoDnVDWuf3WklTNrVIgkwGZf/p
+ MMTJxNTiGuIr9pgGpiOrK5EaP29rrQXHlUQqtd7A/ip6JpCcvIOGbTJWgGOXHit+ulAC wg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqrc50avs-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqtbf02ub-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 11:52:27 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40JBqBAi029441;
-	Fri, 19 Jan 2024 11:52:27 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqrc50aus-1
+	Fri, 19 Jan 2024 13:56:17 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40JDu55W025157;
+	Fri, 19 Jan 2024 13:56:17 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vqtbf02tn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 11:52:27 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40JAVFuV011222;
-	Fri, 19 Jan 2024 11:52:24 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vm5801hpw-1
+	Fri, 19 Jan 2024 13:56:16 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40JAfoWI009413;
+	Fri, 19 Jan 2024 13:56:15 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vm5up1vhr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 11:52:24 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40JBqMXs17433312
+	Fri, 19 Jan 2024 13:56:15 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40JDuCUU18285260
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 19 Jan 2024 11:52:22 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5F3E62004D;
-	Fri, 19 Jan 2024 11:52:22 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7677C20040;
-	Fri, 19 Jan 2024 11:52:21 +0000 (GMT)
-Received: from [9.171.27.207] (unknown [9.171.27.207])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 19 Jan 2024 11:52:21 +0000 (GMT)
-Message-ID: <b16b959a206a0cebb9b733b7f325e4343d8060ae.camel@linux.ibm.com>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
-        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
-        Nathan
- Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>, Gerd Bayer <gbayer@linux.ibm.com>
-Date: Fri, 19 Jan 2024 12:52:21 +0100
-In-Reply-To: <96451909f0a9ac1eec71b81ee2db49ac66d9ced5.camel@linux.ibm.com>
-References: <637dcc4d69c380bd939dfdd1b14a5c82c2ddfaa4.camel@linux.ibm.com>
-	 <20231127175115.GC1165737@nvidia.com>
-	 <002043477bba726f7dfb38573bf33990e38e3a51.camel@linux.ibm.com>
-	 <20240116173330.GA980613@nvidia.com>
-	 <ddd56db15bd2c87073a2f839e06cdb80d693272c.camel@linux.ibm.com>
-	 <20240117132613.GH734935@nvidia.com> <20240117175518.GJ734935@nvidia.com>
-	 <8e043042f425b4c574d1d3c3ed686253c8cd3517.camel@linux.ibm.com>
-	 <20240118140039.GL734935@nvidia.com>
-	 <071e2d2e301769d523dd613e77c6541a61bd496b.camel@linux.ibm.com>
-	 <20240118162129.GO734935@nvidia.com>
-	 <96451909f0a9ac1eec71b81ee2db49ac66d9ced5.camel@linux.ibm.com>
-Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 (3.50.2-1.fc39) 
+	Fri, 19 Jan 2024 13:56:12 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 340A32004B;
+	Fri, 19 Jan 2024 13:56:12 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5F61B20040;
+	Fri, 19 Jan 2024 13:56:11 +0000 (GMT)
+Received: from [9.171.41.26] (unknown [9.171.41.26])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 19 Jan 2024 13:56:11 +0000 (GMT)
+Content-Type: multipart/mixed; boundary="------------efg6hB0FNWC65xkaiJmoB8uN"
+Message-ID: <fc3fd07a-218d-406c-918b-e7f701968eb0@linux.ibm.com>
+Date: Fri, 19 Jan 2024 14:56:10 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: Several tst-robust* tests time out with recent Linux kernel
+Content-Language: en-US
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>
+Cc: "xry111@xry111.site" <xry111@xry111.site>,
+        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <4bda9f2e06512e375e045f9e72edb205104af19c.camel@xry111.site>
+ <d69d50445284a5e0d98a64862877c1e6ec22a9a8.camel@xry111.site>
+ <20231114153100.GY8262@noisy.programming.kicks-ass.net>
+ <20231114154017.GI4779@noisy.programming.kicks-ass.net>
+ <87ttpowajb.fsf@oldenburg.str.redhat.com>
+ <20231114201402.GA25315@noisy.programming.kicks-ass.net>
+ <822f3a867e5661ce61cea075a00ce04a4e4733f3.camel@intel.com>
+ <20231115085102.GY3818@noisy.programming.kicks-ass.net>
+ <564119521b61b5a38f9bdfe6c7a41fcbb07049c9.camel@intel.com>
+ <158f6a47727a40c163e3fa6041a24388549c68f2.camel@intel.com>
+From: Stefan Liebler <stli@linux.ibm.com>
+In-Reply-To: <158f6a47727a40c163e3fa6041a24388549c68f2.camel@intel.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -eYrsRMX54MPeWXAppdYmCFuQVsAPpYK
+X-Proofpoint-ORIG-GUID: S7FEZ5rPc-g0aukt1pdcD6Xvm8J5u36f
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: p-KB6q3zymEWtsOOTmhQYjIDYJeCRen_
-X-Proofpoint-GUID: as3VKn3SFOc7GT1cyGh7TKojN1A1HKqi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-19_06,2024-01-19_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 impostorscore=0 spamscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 lowpriorityscore=0 bulkscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401190058
+ definitions=2024-01-19_08,2024-01-19_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ phishscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401190074
 
-On Thu, 2024-01-18 at 17:25 +0100, Niklas Schnelle wrote:
-> On Thu, 2024-01-18 at 12:21 -0400, Jason Gunthorpe wrote:
-> > On Thu, Jan 18, 2024 at 04:59:47PM +0100, Niklas Schnelle wrote:
-> > > On Thu, 2024-01-18 at 10:00 -0400, Jason Gunthorpe wrote:
-> > > > On Thu, Jan 18, 2024 at 02:46:40PM +0100, Niklas Schnelle wrote:
-> > >=20
----8<---
-> >=20
-> >=20
-> > > I did test your patches too and by accident confirmed again that thes=
-e
-> > > do need commit 80df7d6af7f6 ("s390/pci: fix max size calculation in
-> > > zpci_memcpy_toio()") from the s390 feature branch to get the mlx5
-> > > driver to detect Write-Combining as supported. Note, as far as I know
-> > > Alexander Gordeev is targeting that one for v6.8-rc2 since we had qui=
-te
-> > > a few changes for v6.8-rc1.
-> >=20
-> > OK, but we can still run these two things in parallel?
-> >=20
-> > Jason
->=20
-> Sure, it's not worse without my patch than what we had before and
-> clearly __iowrite64_copy() has been completely broken for ages without
-> anyone noticing and is fixed by your patches even without my fix for
-> the too strict issue in that at least it then copies what it is
-> supposed to copy even if it does so with 8*8 byte stores.
->=20
-> Thanks,
-> Niklas
->=20
+This is a multi-part message in MIME format.
+--------------efg6hB0FNWC65xkaiJmoB8uN
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-FYI Alexander ended up doing a second v6.8-rc1 pull request and my
-change has now landed in Linus' tree as commit 80df7d6af7f6 ("s390/pci:
-fix max size calculation in zpci_memcpy_toio()").
+On 17.11.23 02:22, Edgecombe, Rick P wrote:
+> A bit more info...
+> 
+> The error returned to userspace is originating from:
+> https://github.com/torvalds/linux/blob/master/kernel/futex/pi.c#L295
+> 
+> 'uval' is often zero in that error case, but sometimes just a
+> mismatching value like: uval=0x567, task_pid_vnr()=0x564
+> 
+> 
+> Depending on the number of CPUs the VM is running on it reproduces or
+> not. When it does reproduce, the newly added path here is taken:
+> https://github.com/torvalds/linux/blob/master/kernel/futex/pi.c#L1185
+> The path is taken a lot during the test, sometimes >400 times before
+> the above linked error is generated during the syscall. When it doesn't
+> reproduce, I never saw that new path taken.
+> 
+> More print statements make the reproduction less reliable, so it does
+> seem to have a race in the mix at least somewhat. Otherwise, I haven't
+> tried to understand what is going on here with all this highwire
+> locking.
+> 
+> Hope it helps.
+Hi,
 
-Thanks,
-Niklas
+I've also observed fails in glibc testcase nptl/tst-robust8pi with:
+mutex_timedlock of 66 in thread 7 failed with 22
+=> pthread_mutex_timedlock returns 22=EINVAL
+
+I've saw it on s390x. There I've used kernel with
+commit 120d99901eb288f1d21db3976df4ba347b28f9c7
+s390/vfio-ap: do not reset queue removed from host config
+
+But I also saw it on a x86_64 kvm-guest with Fedora 39 and
+copr-repository with vanilla kernel:
+Linux fedora 6.7.0-0.rc8.20240107gt52b1853b.366.vanilla.fc39.x86_64 #1
+SMP PREEMPT_DYNAMIC Sun Jan  7 06:17:30 UTC 2024 x86_64 GNU/Linux
+
+And reported it to libc-alpha ("FAILING nptl/tst-robust8pi"
+https://sourceware.org/pipermail/libc-alpha/2024-January/154150.html)
+where Florian Weimer pointed me to this thread.
+
+I've reduced the test (see attachement) and now have only one process
+with three threads. I only use one mutex with attributes like the
+original testcase: PTHREAD_MUTEX_ROBUST_NP, PTHREAD_PROCESS_SHARED,
+PTHREAD_PRIO_INHERIT.
+Every thread is doing a loop with pthread_mutex_timedlock(abstime={0,0})
+and if locked, pthread_mutex_unlock.
+
+I've added some uprobes before and after the futex-syscall in
+__futex_lock_pi64(in pthread_mutex_timedlock) and futex_unlock_pi(in
+pthread_mutex_unlock). For me __ASSUME_FUTEX_LOCK_PI2 is not available,
+but __ASSUME_TIME64_SYSCALLS is defined.
+
+For me it looks like this (simplified ubprobes-trace):
+<thread> <timestamp>: <probe>
+t1 4309589.419744: before syscall in __futex_lock_pi64
+
+t3 4309589.419745: before syscall in futex_unlock_pi
+t2 4309589.419745: before syscall in __futex_lock_pi64
+
+t3 4309589.419747: after syscall in futex_unlock_pi
+t2 4309589.419747: after syscall in __futex_lock_pi64 ret=-22=EINVAL
+
+t1 4309589.419748: after syscall in __futex_lock_pi64 ret=-110=ETIMEDOUT
+
+Can you please have a look again?
+
+Bye,
+Stefan Liebler
+--------------efg6hB0FNWC65xkaiJmoB8uN
+Content-Type: text/x-csrc; charset=UTF-8; name="tst-robust8pi-20240118.c"
+Content-Disposition: attachment; filename="tst-robust8pi-20240118.c"
+Content-Transfer-Encoding: base64
+
+Ly9DRkxBR1M9LXB0aHJlYWQKLy9MREZMQUdTPS1scHRocmVhZAojaW5jbHVkZSA8c3RkaW8u
+aD4KI2luY2x1ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8cHRocmVhZC5oPgojaW5jbHVkZSA8
+YXNzZXJ0Lmg+CiNpbmNsdWRlIDxlcnJuby5oPgojaW5jbHVkZSA8dW5pc3RkLmg+CgojZGVm
+aW5lIE5VTV9USFJFQURTIDMKI2RlZmluZSBUSFJFQURfRlVOQyB0aHJfZnVuYwojZGVmaW5l
+IFVTRV9CQVJSSUVSIDEKI2lmbmRlZiBST1VORFMKIyBkZWZpbmUgUk9VTkRTIDEwMDAwMDAw
+MAojZW5kaWYKCnR5cGVkZWYgc3RydWN0IHRocl9pbmZvCnsKICBpbnQgbnI7CiAgcHRocmVh
+ZF90IHRocmVhZDsKfSBfX2F0dHJpYnV0ZV9fICgoYWxpZ25lZCAoMjU2KSkpIHRocl9pbmZv
+X3Q7CgojZGVmaW5lIFRIUl9JTklUKCkJCQkJXAogIHRocl9pbmZvX3QgKnRociA9ICh0aHJf
+aW5mb190ICopIGFyZzsKCiNkZWZpbmUgVEhSX1BSSU5URihmbXQsIC4uLikJCQlcCiAgcHJp
+bnRmICgiIyVkOiAiIGZtdCwgdGhyLT5uciwgX19WQV9BUkdTX18pCgojZGVmaW5lIFRIUl9Q
+VVRTKG1zZykJCQkJXAogIHByaW50ZiAoIiMlZDogIiBtc2cgIlxuIiwgdGhyLT5ucikKCiNp
+ZiBVU0VfQkFSUklFUiAhPSAwCnN0YXRpYyBwdGhyZWFkX2JhcnJpZXJfdCB0aHJzX2JhcnJp
+ZXI7CiNlbmRpZgoKc3RhdGljIHB0aHJlYWRfbXV0ZXhfdCBtdHg7CnN0YXRpYyBjb25zdCBz
+dHJ1Y3QgdGltZXNwZWMgYmVmb3JlID0geyAwLCAwIH07CgovKiAjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAg
+IHRocmVhZCBmdW5jCiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyAgKi8KCnN0YXRpYyB2b2lkICoKdGhyX2Z1bmMg
+KHZvaWQgKmFyZykKewogIFRIUl9JTklUICgpOwogIGludCBzdGF0ZSA9IDA7CiAgaW50IGZj
+dDsKCiNpZiAwCiAgLyogMyB0aHJlYWRzLCAxeGZjdD0wPXB0aHJlYWRfbXV0ZXhfbG9jaywg
+MnhmY3Q9MT1wdGhyZWFkX211dGV4X3RpbWVkbG9jazogRUlOVkFMLiAgKi8KICBmY3QgPSAo
+dGhyLT5uciArIDEpICUgMjsKI2VsaWYgMAogIC8qIDMgdGhyZWFkcywgMnhmY3Q9MD1wdGhy
+ZWFkX211dGV4X2xvY2ssIDF4ZmN0PTE9cHRocmVhZF9tdXRleF90aW1lZGxvY2s6IG5vIGZh
+aWxzLiAgKi8KICBmY3QgPSAodGhyLT5ucikgJSAyOwojZWxpZiAxCiAgLyogPjMgdGhyZWFk
+cywgZmN0PTE9b25seSBwdGhyZWFkX211dGV4X3RpbWVkbG9jazogRUlOVkFMLiAgKi8KICBm
+Y3QgPSAxOwojZW5kaWYKCiAgaW50IHJvdW5kID0gMDsKICBUSFJfUFJJTlRGICgic3RhcnRl
+ZDogZmN0PSVkXG4iLCBmY3QpOwojaWYgVVNFX0JBUlJJRVIgIT0gMAogIHB0aHJlYWRfYmFy
+cmllcl93YWl0ICgmdGhyc19iYXJyaWVyKTsKI2VuZGlmCiAgd2hpbGUgKDEpCiAgICB7Cgog
+ICAgICBpZiAoc3RhdGUgPT0gMCkKCXsKCSAgcm91bmQgKys7CgkgIGludCBlOwoKCSAgc3dp
+dGNoIChmY3QpCgkgICAgewoJICAgIGNhc2UgMDoKCSAgICAgIGUgPSBwdGhyZWFkX211dGV4
+X2xvY2sgKCZtdHgpOwoJICAgICAgaWYgKGUgIT0gMCkKCQl7CgkJICBUSFJfUFJJTlRGICgi
+bXV0ZXhfbG9jayBmYWlsZWQgd2l0aCAlZCAocm91bmQ9JWQpXG4iLCBlLCByb3VuZCk7CgkJ
+ICBleGl0ICgxKTsKCQl9CgkgICAgICBzdGF0ZSA9IDE7CgkgICAgICBicmVhazsKCSAgICBj
+YXNlIDE6CgkgICAgICBlID0gcHRocmVhZF9tdXRleF90aW1lZGxvY2sgKCZtdHgsICZiZWZv
+cmUpOwoJICAgICAgaWYgKGUgIT0gMCAmJiBlICE9IEVUSU1FRE9VVCkKCQl7CgkJICBUSFJf
+UFJJTlRGICgibXV0ZXhfdGltZWRsb2NrIGZhaWxlZCB3aXRoICVkIChyb3VuZD0lZClcbiIs
+IGUsIHJvdW5kKTsKCQkgIGV4aXQgKDEpOwoJCX0KCSAgICAgIGJyZWFrOwoJICAgIGRlZmF1
+bHQ6CgkgICAgICBlID0gcHRocmVhZF9tdXRleF90cnlsb2NrICgmbXR4KTsKCSAgICAgIGlm
+IChlICE9IDAgJiYgZSAhPSBFQlVTWSkKCQl7CgkJICBUSFJfUFJJTlRGICgibXV0ZXhfdHJ5
+bG9jayBmYWlsZWQgd2l0aCAlZCAocm91bmQ9JWQpXG4iLCBlLCByb3VuZCk7CgkJICBleGl0
+ICgxKTsKCQl9CgkgICAgICBicmVhazsKCSAgICB9CgoJICBpZiAoZSA9PSBFT1dORVJERUFE
+KQoJICAgIHB0aHJlYWRfbXV0ZXhfY29uc2lzdGVudCAoJm10eCk7CgoJICBpZiAoZSA9PSAw
+IHx8IGUgPT0gRU9XTkVSREVBRCkKCSAgICBzdGF0ZSA9IDE7Cgl9CiAgICAgIGVsc2UKCXsK
+CSAgaW50IGUgPSBwdGhyZWFkX211dGV4X3VubG9jayAoJm10eCk7CgkgIGlmIChlICE9IDAp
+CgkgICAgewoJICAgICAgVEhSX1BSSU5URiAoIm11dGV4X3VubG9jayBvZiBmYWlsZWQgd2l0
+aCAlZCAocm91bmQ9JWQpXG4iLCBlLCByb3VuZCk7CgkgICAgICBleGl0ICgxKTsKCSAgICB9
+CgkgIHN0YXRlID0gMDsKCX0KCiAgICAgIGlmIChyb3VuZCA+PSBST1VORFMpCgl7CgkgIFRI
+Ul9QUklOVEYgKCJSRUFDSEVEIHJvdW5kICVkLiA9PiBleGl0XG4iLCBST1VORFMpOwoJICBp
+ZiAoc3RhdGUgIT0gMCkKCSAgICB7CgkgICAgICBpbnQgZSA9IHB0aHJlYWRfbXV0ZXhfdW5s
+b2NrICgmbXR4KTsKCSAgICAgIGlmIChlICE9IDApCgkJewoJCSAgVEhSX1BSSU5URiAoIm11
+dGV4X3VubG9ja0BleGl0IG9mIGZhaWxlZCB3aXRoICVkIChyb3VuZD0lZClcbiIsIGUsIHJv
+dW5kKTsKCQkgIGV4aXQgKDEpOwoJCX0KCSAgICB9CgkgIGJyZWFrOwoJfQogICAgfQoKICBy
+ZXR1cm4gTlVMTDsKfQoKaW50Cm1haW4gKHZvaWQpCnsKICBpbnQgaTsKICBwcmludGYgKCJt
+YWluOiBzdGFydCAlZCB0aHJlYWRzLlxuIiwgTlVNX1RIUkVBRFMpOwoKI2lmIFVTRV9CQVJS
+SUVSICE9IDAKICBwdGhyZWFkX2JhcnJpZXJfaW5pdCAoJnRocnNfYmFycmllciwgTlVMTCwg
+TlVNX1RIUkVBRFMgKyAxKTsKI2VuZGlmCgogIHB0aHJlYWRfbXV0ZXhhdHRyX3QgbWE7CiAg
+aWYgKHB0aHJlYWRfbXV0ZXhhdHRyX2luaXQgKCZtYSkgIT0gMCkKICAgIHsKICAgICAgcHV0
+cyAoIm11dGV4YXR0cl9pbml0IGZhaWxlZCIpOwogICAgICByZXR1cm4gMDsKICAgIH0KICBp
+ZiAocHRocmVhZF9tdXRleGF0dHJfc2V0cm9idXN0ICgmbWEsIFBUSFJFQURfTVVURVhfUk9C
+VVNUX05QKSAhPSAwKQogICAgewogICAgICBwdXRzICgibXV0ZXhhdHRyX3NldHJvYnVzdCBm
+YWlsZWQiKTsKICAgICAgcmV0dXJuIDE7CiAgICB9CiAgaWYgKHB0aHJlYWRfbXV0ZXhhdHRy
+X3NldHBzaGFyZWQgKCZtYSwgUFRIUkVBRF9QUk9DRVNTX1NIQVJFRCkgIT0gMCkKICAgIHsK
+ICAgICAgcHV0cyAoIm11dGV4YXR0cl9zZXRwc2hhcmVkIGZhaWxlZCIpOwogICAgICByZXR1
+cm4gMTsKICAgIH0KICBpZiAocHRocmVhZF9tdXRleGF0dHJfc2V0cHJvdG9jb2wgKCZtYSwg
+UFRIUkVBRF9QUklPX0lOSEVSSVQpICE9IDApCiAgICB7CiAgICAgIHB1dHMgKCJwdGhyZWFk
+X211dGV4YXR0cl9zZXRwcm90b2NvbCBmYWlsZWQiKTsKICAgICAgcmV0dXJuIDE7CiAgICB9
+CgogIGlmIChwdGhyZWFkX211dGV4X2luaXQgKCZtdHgsICZtYSkgIT0gMCkKICAgIHsKICAg
+ICAgcHV0cyAoInB0aHJlYWRfbXV0ZXhfaW5pdCBmYWlsZWQiKTsKICAgICAgcmV0dXJuIDE7
+CiAgICB9CgogIHRocl9pbmZvX3QgdGhyc1tOVU1fVEhSRUFEU107CiAgZm9yIChpID0gMDsg
+aSA8IE5VTV9USFJFQURTOyBpKyspCiAgICB7CiAgICAgIHRocnNbaV0ubnIgPSBpOwogICAg
+ICBhc3NlcnQgKHB0aHJlYWRfY3JlYXRlICgmKHRocnNbaV0udGhyZWFkKSwgTlVMTCwgVEhS
+RUFEX0ZVTkMsICYodGhyc1tpXSkpCgkgICAgICA9PSAwKTs7CiAgICB9CgojaWYgVVNFX0JB
+UlJJRVIgIT0gMAogIC8qIEFsbCB0aHJlYWRzIHN0YXJ0IHdvcmsgYWZ0ZXIgdGhpcyBiYXJy
+aWVyLiAgKi8KICBwdGhyZWFkX2JhcnJpZXJfd2FpdCAoJnRocnNfYmFycmllcik7CiNlbmRp
+ZgoKICBmb3IgKGkgPSAwOyBpIDwgTlVNX1RIUkVBRFM7IGkrKykKICAgIHsKICAgICAgcHRo
+cmVhZF9qb2luICh0aHJzW2ldLnRocmVhZCwgTlVMTCk7CiAgICB9CgojaWYgVVNFX0JBUlJJ
+RVIgIT0gMAogIHB0aHJlYWRfYmFycmllcl9kZXN0cm95ICgmdGhyc19iYXJyaWVyKTsKI2Vu
+ZGlmCgogIHByaW50ZiAoIm1haW46IGVuZC5cbiIpOwogIHJldHVybiBFWElUX1NVQ0NFU1M7
+Cn0K
+
+--------------efg6hB0FNWC65xkaiJmoB8uN--
+
 
