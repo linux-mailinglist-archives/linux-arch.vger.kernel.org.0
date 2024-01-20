@@ -1,79 +1,104 @@
-Return-Path: <linux-arch+bounces-1406-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1407-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A94C8330E6
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 23:50:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5674833630
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Jan 2024 22:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E30D1C2152C
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jan 2024 22:50:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34E6DB21B10
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Jan 2024 21:10:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41EF359147;
-	Fri, 19 Jan 2024 22:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABBFD14F8D;
+	Sat, 20 Jan 2024 21:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FIqtugHR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3JVAx1d"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A3957888;
-	Fri, 19 Jan 2024 22:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EB414F85;
+	Sat, 20 Jan 2024 21:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705704611; cv=none; b=Yx3D94HcGqCgI9RkwBjUlIICpehuSfa8odb1R6ePI1bKdWTW+BRhlQSZ2BkRleCt7cQhZ0+kMzWm8QerpvfhUQHWk/VfhHDQhA+uFor0fo3TitXOJV7wegu1soaCYyYDtpYBdfhYRGdD7EYXqQWqTA5NAQmaF+NnDjef1X/i5yc=
+	t=1705784990; cv=none; b=c0p7UrWgn0v9N98kDZaac3LnNRl3qrNyeuafK8hHOwaNtAhAiH6AjSauDRxlI+sapxyO0E8MIvA/B3664t7JdTaCEasp/7S/shjl3w3X2GTCPK3Qfja6gIJURejoF+lGvT18nBei7SaBpXVB2/mmul0hMc1/FvpU9tjL3bTeMl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705704611; c=relaxed/simple;
-	bh=9U6ungNWwzmVSFdxVrZ0DAY4ZU2skUCpAiaiBwTMOaA=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=e/a9BPiSmCKzrGai1hfj8hEQr8BtHA+jC77ksdMWMMlaNWHfVs4z7/c3NLOQSa9tMiPqStyf2ZzXd+hYjfv6onQnI2gZKXBoDwQipFxxmohZXw+IzdlkfXxYSuXiEstVz9DasJjbOH5dqWn4CBKzkgJ1aeU1+m0AdZNHulwPzTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FIqtugHR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DB3C0C43394;
-	Fri, 19 Jan 2024 22:50:10 +0000 (UTC)
+	s=arc-20240116; t=1705784990; c=relaxed/simple;
+	bh=4qgLOd9+lbH3Kbu84onZLztZgw4zMTuXW5joJu6tgV4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bgY4opEr881FYFl1Iif/ByeGmSXePy5MCYzEzTexq4jJ8oAL1bdmyc4yoT9Q7KPjT5sffxUQ5YsJgvLUtarah2WCI7UGtBNX4ayPiodAk7Iz6G0JqFnCyowf4jq5WhI73BbJbRKDYF9d5ggFphMPqc0Bs+0rNkHcachMZlpDyWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3JVAx1d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C3EAC43390;
+	Sat, 20 Jan 2024 21:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705704610;
-	bh=9U6ungNWwzmVSFdxVrZ0DAY4ZU2skUCpAiaiBwTMOaA=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=FIqtugHRbLBbM+qKZAd+f/2YrjemlVs2f613eJBtXEhDV0Gp/15KS/IJi9nlJpiID
-	 sM3spS1H6TpDG72x3IN6OHI5k92EpW6MseTqaDmOsklit5iPfAuP2EdcWyJ4gXvSID
-	 pCrFT/nyTm3KoDIB1rEKYsJtMGRkbGjcxOPFz/4GtA1ihPErdm+2ffVPlsN7Ot5PpJ
-	 U4fF0CNYo/9b7ZIMIy+tSYdu6t42aKjBCJGjvs9fjolm//8wbJBpVQ1Q93SdIfn2TV
-	 jaDAqVZYee+6ZNFtdaQ4hMiHYI9EhbMN3g9dbYgwO1BE1vaDBqeQIoOjRDFITdl6WH
-	 BNglo7G0nDMfA==
+	s=k20201202; t=1705784990;
+	bh=4qgLOd9+lbH3Kbu84onZLztZgw4zMTuXW5joJu6tgV4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Q3JVAx1dr7/DmuB+/yI2CdLuXSn2QhR/aAQsiCxHJoxNdYGJDZykTy8bfepNkBaWC
+	 fyrri6bdqzeQ7JkDfdfxcHZdfEFlwFairsw2Flzvuou8t1LDne0Yjsb/jFYXKrD8qd
+	 fRFsB5YSc58MfEM4BTbPV6zDBq1wttUmrNXmKceU3SaOdzA6o5mx33c4k6D8hy4v6T
+	 0R8TUFHsfTiG7CU9C8W7DrYp8C0gFCMRH9ZdRCeZheSYagCxzekxmi+RhRgGQ3RlQG
+	 cWbmoTuSY2dzUSm68ko6YI4j9IdFiX07VyiaaPj4fvfc3IRzZVSYqatO4Z8qlJDRBO
+	 7UMRKyo0B4Msw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFB44D8C97A;
-	Fri, 19 Jan 2024 22:50:10 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch changes for v6.8
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240119110700.335741-1-chenhuacai@loongson.cn>
-References: <20240119110700.335741-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <loongarch.lists.linux.dev>
-X-PR-Tracked-Message-Id: <20240119110700.335741-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.8
-X-PR-Tracked-Commit-Id: 6e441fa3ac475be73c03c9a85bd305d66ea476a6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 24fdd5189914b36102cb51626a890a2d84501993
-Message-Id: <170570461076.3214.11103143930063535274.pr-tracker-bot@kernel.org>
-Date: Fri, 19 Jan 2024 22:50:10 +0000
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09F97D8C970;
+	Sat, 20 Jan 2024 21:09:50 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/2] riscv: Enable percpu page first chunk allocator
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <170578499003.24348.2691177844867923598.git-patchwork-notify@kernel.org>
+Date: Sat, 20 Jan 2024 21:09:50 +0000
+References: <20231212213457.132605-1-alexghiti@rivosinc.com>
+In-Reply-To: <20231212213457.132605-1-alexghiti@rivosinc.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, ryabinin.a.a@gmail.com,
+ glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+ vincenzo.frascino@arm.com, arnd@arndb.de, dennis@kernel.org, tj@kernel.org,
+ cl@linux.com, akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-arch@vger.kernel.org, linux-mm@kvack.org
 
-The pull request you sent on Fri, 19 Jan 2024 19:07:00 +0800:
+Hello:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.8
+This series was applied to riscv/linux.git (fixes)
+by Dennis Zhou <dennis@kernel.org>:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/24fdd5189914b36102cb51626a890a2d84501993
+On Tue, 12 Dec 2023 22:34:55 +0100 you wrote:
+> While working with pcpu variables, I noticed that riscv did not support
+> first chunk allocation in the vmalloc area which may be needed as a fallback
+> in case of a sparse NUMA configuration.
+> 
+> patch 1 starts by introducing a new function flush_cache_vmap_early() which
+> is needed since a new vmalloc mapping is established and directly accessed:
+> on riscv, this would likely fail in case of a reordered access or if the
+> uarch caches invalid entries in TLB.
+> Note that most architectures do not include asm-generic/cacheflush.h so to
+> avoid build failures, this patch implements the new function on each of
+> those architectures. For all architectures except riscv, this new function
+> is implemented as a no-op to keep the existing behaviour but it likely
+> needs another implementation.
+> 
+> [...]
 
-Thank you!
+Here is the summary with links:
+  - [v2,1/2] mm: Introduce flush_cache_vmap_early()
+    https://git.kernel.org/riscv/c/7a92fc8b4d20
+  - [v2,2/2] riscv: Enable pcpu page first chunk allocator
+    https://git.kernel.org/riscv/c/6b9f29b81b15
 
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
