@@ -1,171 +1,197 @@
-Return-Path: <linux-arch+bounces-1425-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1426-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B54D7836EFB
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 19:07:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E47B836FF7
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 19:30:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30CBD1F2D4B7
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 18:07:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAD90B25036
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 18:17:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDE871EF1A;
-	Mon, 22 Jan 2024 17:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="RX/YM9Pw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEEF47799;
+	Mon, 22 Jan 2024 17:44:57 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21AF1366;
-	Mon, 22 Jan 2024 17:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA05F47A6D;
+	Mon, 22 Jan 2024 17:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705944612; cv=none; b=uuceAu28MuarZOoszuwrF8Fmc2A4kI/6lUCdM8bDdRlnDXhSn7F11WD1dNT4pVKOv2NNV6Rryadlk4vBzz60sAoQr3mH7ziBwCMuKumFQQEbc+MWZExKPFXVoJvVjmPy1cxQp9hFEw8Fga4UuvQfjEegH0IY0Ep13Hu70pT8R4A=
+	t=1705945497; cv=none; b=N/2i96pxdMTPnXr2LA8oD2oR700u8WWurtt5lBwFUVJtzKKugApZFmH7IDhhWWRSIKf7jJGxexH67AN+k/TARvBxS4O6fiK178dXT+xlVS6jXO7W3Pj8U6XJvOFlL8bS41dLPu+842uj21ANMSTARgyr7AFo/XNMOyZMs65zhx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705944612; c=relaxed/simple;
-	bh=oisddIVCSvEu5TDLFqhbkrWXTfVLsyPwSrs8LV1BFts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ov81L58ca6egF+63MSD9qAnm/gt7yU9hfqQGH2NB9h6eeXp3+QQoDiHmgYk83OxMjJKVHfUUMfYSCu8CXkg8ltGz+qIKPUPPgvXn0zbwrHzMiG/5vC4PFuSRBmrOgwAmdhQCpo/05n3H7VT3uICwFYbfVWtPP99rs7a4KObis4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=RX/YM9Pw; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=tqeHdyzk9+LqVKL+Enz5ftndgdvcVseYfwgC7K5xJtc=; b=RX/YM9PwgXxnH0nCr+3iTk8zEu
-	evRNa8qak5GpCSjIuF9kG8Ay111DoUzbNpfuCblFeFkBV/fTl433eI5+zAwCHTum0KS01/4Egw5yl
-	CtcuTmz+CxuTQRXWXGvmhc7nGHZlb2VvQz+1yrMEKR7yDDAIdbmQaT5B4MQMK5DwYKhXFzXm9VySw
-	jZW0uiJxM2NHvoRc0cunafkRBO7+IXV3Ba5DRwtXMnzKPSFxTpf0q/YJhA0/0zbu9jdfzOawjKtoM
-	VbvdA1aeq1giRiAjuDGeujTIeI1BX41XMKWx1yFIWgavtQCfYdrinAa3q975nzSh5mU9bJXuzi2RC
-	xS+GfMUg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34032)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rRy7a-0001Gs-09;
-	Mon, 22 Jan 2024 17:30:06 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rRy7Z-0001C6-GD; Mon, 22 Jan 2024 17:30:05 +0000
-Date: Mon, 22 Jan 2024 17:30:05 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+	s=arc-20240116; t=1705945497; c=relaxed/simple;
+	bh=1uo9SR5jLKvSqbQJuOZ/gWcBzY/vu6zvyq0QbExF35o=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qBE+AJHGZ+FPMfO2d+VDyqhuhgT/cfxS1OAU6WLqM04BnLa+RZybO73JN2e31BxRDVQ1Sd0NF6D1RjA3+RRPmFEcwRS1yQHRAQ/qvlT5meengAPpPkyv48VGY1a5k7QVu30vcWHwYGnJCkgL6kRSbL6WtACXQZ/zlDorwiaf9E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TJcwh1ZKDz6JBTC;
+	Tue, 23 Jan 2024 01:41:56 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 11383140A86;
+	Tue, 23 Jan 2024 01:44:51 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 22 Jan
+ 2024 17:44:50 +0000
+Date: Mon, 22 Jan 2024 17:44:49 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <Za6mHRJVjb6M1mun@shell.armlinux.org.uk>
+CC: Russell King <rmk+kernel@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
+	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
+	<justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 04/21] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <20240122174449.00002f78@Huawei.com>
+In-Reply-To: <CAJZ5v0je=-oVnSumZs=dzcyVuVUeVeTgO7yOnjGg1igyrS7EHQ@mail.gmail.com>
 References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
- <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
- <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
- <20240122160227.00002d83@Huawei.com>
- <CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
+	<E1rDOg7-00Dvjq-VZ@rmk-PC.armlinux.org.uk>
+	<CAJZ5v0je=-oVnSumZs=dzcyVuVUeVeTgO7yOnjGg1igyrS7EHQ@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Mon, Jan 22, 2024 at 05:22:46PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Jan 22, 2024 at 5:02 PM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Mon, 15 Jan 2024 11:06:29 +0000
-> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> >
-> > > On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
-> > > > On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
-> > > > >
-> > > > > From: James Morse <james.morse@arm.com>
-> > > > >
-> > > > > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-> > > > > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-> > > > > says "Each processor in the system must be declared in the ACPI
-> > > > > namespace"). Having two descriptions allows firmware authors to get
-> > > > > this wrong.
-> > > > >
-> > > > > If CPUs are described in the MADT/APIC, they will be brought online
-> > > > > early during boot. Once the register_cpu() calls are moved to ACPI,
-> > > > > they will be based on the DSDT description of the CPUs. When CPUs are
-> > > > > missing from the DSDT description, they will end up online, but not
-> > > > > registered.
-> > > > >
-> > > > > Add a helper that runs after acpi_init() has completed to register
-> > > > > CPUs that are online, but weren't found in the DSDT. Any CPU that
-> > > > > is registered by this code triggers a firmware-bug warning and kernel
-> > > > > taint.
-> > > > >
-> > > > > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-> > > > > is configured.
-> > > >
-> > > > So why is this a kernel problem?
-> > >
-> > > So what are you proposing should be the behaviour here? What this
-> > > statement seems to be saying is that QEMU as it exists today only
-> > > describes the first CPU in DSDT.
-> >
-> > This confuses me somewhat, because I'm far from sure which machines this
-> > is true for in QEMU.  I'm guessing it's a legacy thing with
-> > some old distro version of QEMU - so we'll have to paper over it anyway
-> > but for current QEMU I'm not sure it's true.
-> >
-> > Helpfully there are a bunch of ACPI table tests so I've been checking
-> > through all the multi CPU cases.
-> >
-> > CPU hotplug not enabled.
-> > pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
-> > pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
-> > q35/DSDT.acpihmat - 2x Processor entries. -smp 2
-> > virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
-> > q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
-> > virt/DSDT.topology - 8x ACPI0007 entries
-> >
-> > I've also looked at the code and we have various types of
-> > CPU hotplug on x86 but they all build appropriate numbers of
-> > Processor() entries in DSDT.
-> > Arm likewise seems to build the right number of ACPI0007 entries
-> > (and doesn't yet have CPU HP support).
-> >
-> > If anyone can add a reference on why this is needed that would be very
-> > helpful.
-> 
-> Yes, it would.
-> 
-> Personally, I would prefer to assume that it is not necessary until it
-> turns out that (1) there is firmware with this issue actually in use
-> and (2) updating the firmware in question to follow the specification
-> is not practical.
-> 
-> Otherwise, we'd make it easier to ship non-compliant firmware for no
-> good reason.
+On Mon, 18 Dec 2023 21:30:50 +0100
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-If Salil can't come up with a reason, then I'm in favour of dropping
-the patch like already done for patch 2. If the code change serves no
-useful purpose, there's no point in making the change.
+> On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@armlinux=
+.org.uk> wrote:
+> >
+> > From: James Morse <james.morse@arm.com>
+> >
+> > To allow ACPI to skip the call to arch_register_cpu() when the _STA
+> > value indicates the CPU can't be brought online right now, move the
+> > arch_register_cpu() call into acpi_processor_get_info(). =20
+>=20
+> This kind of looks backwards to me and has a potential to become
+> super-confusing.
+>=20
+> I would instead add a way for the generic code to ask the platform
+> firmware whether or not the given CPU is enabled and so it can be
+> registered.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Hi Rafael,
+
+The ACPI interpreter isn't up at this stage so we'd need to pull that
+forwards. I'm not sure if we can pull the interpreter init early enough.
+
+Perhaps pushing the registration back in all cases is the way to go?
+Given the acpi interpretter is initialized via subsys_initcall() it would
+need to be after that - I tried pushing cpu_dev_register_generic()
+immediately after acpi_bus_init() and that seems fine.
+We can't leave the rest of cpu_dev_init() that late because a bunch
+of other stuff relies on it (CPU freq blows up first as a core_init()
+on my setup).
+
+So to make this work we need it to always move the registration later
+than the necessary infrastructure, perhaps to subsys_initcall_sync()
+as is done for missing CPUs (we'd need to combine the two given that
+needs to run after this, or potentially just stop checking for acpi_disabled
+and don't taint the kernel!).  I think this is probably the most consistent
+option on basis it at least moves the registration to the same point
+whatever is going on and can easily use the arch callback you suggest
+to hide away the logic on deciding if a CPU is there or not.
+
+What do you think is the best way to do this?
+
+
+>=20
+> > Systems can still be booted with 'acpi=3Doff', or not include ano
+> > ACPI description at all. For these, the CPUs continue to be
+> > registered by cpu_dev_register_generic().
+> >
+> > This moves the CPU register logic back to a subsys_initcall(),
+> > while the memory nodes will have been registered earlier. =20
+>=20
+> Isn't this somewhat risky?
+>=20
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > ---
+> > Changes since RFC v2:
+> >  * Fixup comment in acpi_processor_get_info() (Gavin Shan)
+> >  * Add comment in cpu_dev_register_generic() (Gavin Shan)
+> > ---
+> >  drivers/acpi/acpi_processor.c | 12 ++++++++++++
+> >  drivers/base/cpu.c            |  6 +++++-
+> >  2 files changed, 17 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
+r.c
+> > index 0511f2bc10bc..e7ed4730cbbe 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_dev=
+ice *device)
+> >                         cpufreq_add_device("acpi-cpufreq");
+> >         }
+> >
+> > +       /*
+> > +        * Register CPUs that are present. get_cpu_device() is used to =
+skip
+> > +        * duplicate CPU descriptions from firmware.
+> > +        */
+> > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > +           !get_cpu_device(pr->id)) {
+> > +               int ret =3D arch_register_cpu(pr->id);
+> > +
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +
+> >         /*
+> >          *  Extra Processor objects may be enumerated on MP systems with
+> >          *  less than the max # of CPUs. They should be ignored _iff
+> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> > index 47de0f140ba6..13d052bf13f4 100644
+> > --- a/drivers/base/cpu.c
+> > +++ b/drivers/base/cpu.c
+> > @@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(void)
+> >  {
+> >         int i, ret;
+> >
+> > -       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
+> > +       /*
+> > +        * When ACPI is enabled, CPUs are registered via
+> > +        * acpi_processor_get_info().
+> > +        */
+> > +       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
+> >                 return;
+> >
+> >         for_each_present_cpu(i) {
+> > --
+> > 2.30.2
+> >
+> > =20
+>=20
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 
