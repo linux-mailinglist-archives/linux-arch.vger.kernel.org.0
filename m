@@ -1,150 +1,141 @@
-Return-Path: <linux-arch+bounces-1430-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1431-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 688CF8372A9
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 20:35:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85BF4837591
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 22:42:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 189D1294615
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 19:35:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3698B22C1A
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 21:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A0D3F8C4;
-	Mon, 22 Jan 2024 19:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NLUHDki6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18536482EF;
+	Mon, 22 Jan 2024 21:42:25 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96EC3B790;
-	Mon, 22 Jan 2024 19:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B1647A47
+	for <linux-arch@vger.kernel.org>; Mon, 22 Jan 2024 21:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705952103; cv=none; b=U0PRKLaR9hZtOSTnoBsNNSKbhMRkD4NM17299HDhY3N5h4F0qYyBuAViZ6DvF/zcGFZXYKo54MQ9s7nkCXGUiUuKztNh4MqiyU+CZvHdGvvUmfEKVSuoFD0lGMm3d69JtdGE2vhuqhx2YG6r53b4BfvatKkB4L/SCzV5oR6Rbf0=
+	t=1705959745; cv=none; b=MwtTr5fZW4lWGGzzsgpSA3xO8Bihk/2+BJTQSHDjBB5RfSg3A3rGpnJIOpu3DbDUOsCjr4WsGDv11ZYiwYqTx9LHVlLTIOtBFeP/YGJwsP9LsrgmcXzvQdvgnuUICrf5kcYCIOm4hu66MEZ3v54WhFacAi7W9Le6UEP6tMn7Ki0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705952103; c=relaxed/simple;
-	bh=vdvpcTidybzQ1RK072QFzF5p8j2Hvk8YbCbq1G5RlCs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jP83d0Emhd+jp748QHz+iBLwKdq9BBAOcwuo2iPX/cQjK6aUDkCQDH76j87c7hC4lMhfAy4owdog3v9PffPUBBfN6a1IVE6BIDaq+ZnUosj18/b2amFX/HVV7WXUMLix5Dl1tjn2y1IwofnOc23iN2XXfmuWR3Fpgrfe3GgewVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NLUHDki6; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-50e7abe4be4so4737029e87.2;
-        Mon, 22 Jan 2024 11:35:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705952099; x=1706556899; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dsyX6o96ll0tborqmT2tH2D5yYkTiItob646Hhae/V0=;
-        b=NLUHDki6j21vUA3iMM5sEiD3mJs/BfCmFlXnWEGxUelkswe9SCLBsiRC4rbyePxeVi
-         qmMPWLmvFXKG3LDjCxW9VyUHwJqDDjOA3VFEBZnM00hLkts82ITWcpgfFIHITe//f8tS
-         OZ9dOtsu90PenqHumlvepYSXywBnK6z3HUiqu+ln6XgmQGzvKRy+2i/ZiRc0zYkx5OPb
-         dZ8c+ZaQeXSwaXqQ3Q9PG20v0R1whS9yawOIzVl+tdEOCtbV4KfBRnY/rbsM63GsruOF
-         gsEhv2MiMRbL6Q/ieopTKNHhqG4V+8zqPYVHeqNQDVuIb7/qBMNXZs0RG5o1cIHyI7Vr
-         vviw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705952099; x=1706556899;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dsyX6o96ll0tborqmT2tH2D5yYkTiItob646Hhae/V0=;
-        b=d431WbVy2xgROFyETDwyL9YB4dB+J0o1+RzPQUGF04StFuBzr8XdH2PlSnNiR4Y6+Q
-         MO4F7YqPRK9n2K/bEtPUFRif44fDMLsEaVB4EzB0ZCM2VKctqJJgSaXt8/oPTZSEMd6D
-         nDCJnAfgnZOtKsSGQV29qqSGSBaOuIqaK7G4iNDNSW9l6VOwmkGm4cK+PPuVU6c1Qzv2
-         d0knVMXTHYzqdsCP0CFHa0QRmARm+tZ00UQb41Cj4VILWPC7LrHqWK9LN1bTYbqPTgeE
-         dYJoNxiq43MeFr8a5u9pjstmoyt6bnRNe2q3sew59toKQgQ+2F9PSHXwCV/wLLytLzMU
-         dJZg==
-X-Gm-Message-State: AOJu0YxDMZ/th8aNhetDaYfyROQgYtH4pyFv7k6cOt4+80XT1cOG7ETW
-	3AzZzxiQPzJsEXsuPDV73vWWLc35mP9V8WU2RWBkoHORo7WI4XdgVnPwrs8H8nsboJ69qreTGly
-	7fQFJzD0IoPeczsOXvK0P0XOhHA==
-X-Google-Smtp-Source: AGHT+IFitbZJ/8g2IdDBY826s8oZ0mtT6w1M0vukl8ff9CMkxM1Ayl6tSHcD4WdNXux41i0H/QurAc2g/9qBGoSonow=
-X-Received: by 2002:ac2:5471:0:b0:50e:67c5:9854 with SMTP id
- e17-20020ac25471000000b0050e67c59854mr1869713lfn.123.1705952098697; Mon, 22
- Jan 2024 11:34:58 -0800 (PST)
+	s=arc-20240116; t=1705959745; c=relaxed/simple;
+	bh=io+7IaJFn/feWesqaRgk9TY52nteThiIZlX7mv4DhKE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=X5nbWwkW6QK9k/O9pxAx7cT9ewMpfd/xS/VLKFCEChqnxykj2LT4x8kgmo2hGIOtr817w6N69J7Ib5OoVBzlE0gjf4V/6IzcRLtWdyS6saAszg6U4eQv9atfsQiPAZZdOk7HU1pwJP2gj++Q05IUAVeexpX0j66O64pPtOYIOkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-133-d2RyxRAbOJurcsKymIa9DQ-1; Mon, 22 Jan 2024 21:42:17 +0000
+X-MC-Unique: d2RyxRAbOJurcsKymIa9DQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 22 Jan
+ 2024 21:41:49 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 22 Jan 2024 21:41:48 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Guenter Roeck' <linux@roeck-us.net>, Charlie Jenkins
+	<charlie@rivosinc.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>, Xiao Wang
+	<xiao.w.wang@intel.com>, Evan Green <evan@rivosinc.com>, Guo Ren
+	<guoren@kernel.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: RE: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and
+ ip_fast_csum
+Thread-Topic: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and
+ ip_fast_csum
+Thread-Index: AQHaTVGn8AUolzpWZEe7KQadoytUPLDmCvsQgAAHpwCAAEjwsA==
+Date: Mon, 22 Jan 2024 21:41:48 +0000
+Message-ID: <be959a4bb660466faba5ade7976485c8@AcuMS.aculab.com>
+References: <20240108-optimize_checksum-v15-0-1c50de5f2167@rivosinc.com>
+ <20240108-optimize_checksum-v15-5-1c50de5f2167@rivosinc.com>
+ <2c8e98b6-336e-4bc7-81ba-5a4d35ac868a@roeck-us.net>
+ <6b0dc20f392c488a9080651a2a2cd4bd@AcuMS.aculab.com>
+ <1dd253a5-9fe9-4d0a-b0cd-3775f089ca0c@roeck-us.net>
+In-Reply-To: <1dd253a5-9fe9-4d0a-b0cd-3775f089ca0c@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122090851.851120-7-ardb+git@google.com> <20240122090851.851120-11-ardb+git@google.com>
-In-Reply-To: <20240122090851.851120-11-ardb+git@google.com>
-From: Brian Gerst <brgerst@gmail.com>
-Date: Mon, 22 Jan 2024 14:34:46 -0500
-Message-ID: <CAMzpN2jcWxCy=H-1uvS7kN8gVohee2_cMwyC0SbSEwEoedo3WQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/5] x86/head64: Replace pointer fixups with PIE codegen
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
-	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-On Mon, Jan 22, 2024 at 4:14=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
-> wrote:
->
-> From: Ard Biesheuvel <ardb@kernel.org>
->
-> Some of the C code in head64.c may be called from a different virtual
-> address than it was linked at. Currently, we deal with this by using
-> ordinary, position dependent codegen, and fixing up all symbol
-> references on the fly. This is fragile and tricky to maintain. It is
-> also unnecessary: we can use position independent codegen (with hidden
-> visibility) to ensure that all compiler generated symbol references are
-> RIP-relative, removing the need for fixups entirely.
->
-> It does mean we need explicit references to kernel virtual addresses to
-> be generated by hand, so generate those using a movabs instruction in
-> inline asm in the handful places where we actually need this.
->
-> While at it, move these routines to .inittext where they belong.
->
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/Makefile                 |  11 ++
->  arch/x86/boot/compressed/Makefile |   2 +-
->  arch/x86/include/asm/init.h       |   2 -
->  arch/x86/include/asm/setup.h      |   2 +-
->  arch/x86/kernel/Makefile          |   4 +
->  arch/x86/kernel/head64.c          | 117 +++++++-------------
->  6 files changed, 60 insertions(+), 78 deletions(-)
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 1a068de12a56..bed0850d91b0 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -168,6 +168,17 @@ else
->          KBUILD_CFLAGS +=3D -mcmodel=3Dkernel
->          KBUILD_RUSTFLAGS +=3D -Cno-redzone=3Dy
->          KBUILD_RUSTFLAGS +=3D -Ccode-model=3Dkernel
-> +
-> +       PIE_CFLAGS :=3D -fpie -mcmodel=3Dsmall \
-> +                     -include $(srctree)/include/linux/hidden.h
-> +
-> +       ifeq ($(CONFIG_STACKPROTECTOR),y)
-> +               ifeq ($(CONFIG_SMP),y)
-> +                       PIE_CFLAGS +=3D -mstack-protector-guard-reg=3Dgs
-> +               endif
+RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAyMiBKYW51YXJ5IDIwMjQgMTc6MTYNCj4gDQo+
+IE9uIDEvMjIvMjQgMDg6NTIsIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBGcm9tOiBHdWVudGVy
+IFJvZWNrDQo+ID4+IFNlbnQ6IDIyIEphbnVhcnkgMjAyNCAxNjo0MA0KPiA+Pg0KPiA+PiBIaSwN
+Cj4gPj4NCj4gPj4gT24gTW9uLCBKYW4gMDgsIDIwMjQgYXQgMDM6NTc6MDZQTSAtMDgwMCwgQ2hh
+cmxpZSBKZW5raW5zIHdyb3RlOg0KPiA+Pj4gU3VwcGxlbWVudCBleGlzdGluZyBjaGVja3N1bSB0
+ZXN0cyB3aXRoIHRlc3RzIGZvciBjc3VtX2lwdjZfbWFnaWMgYW5kDQo+ID4+PiBpcF9mYXN0X2Nz
+dW0uDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9mZi1ieTogQ2hhcmxpZSBKZW5raW5zIDxjaGFybGll
+QHJpdm9zaW5jLmNvbT4NCj4gPj4+IC0tLQ0KPiA+Pg0KPiA+PiBXaXRoIHRoaXMgcGF0Y2ggaW4g
+dGhlIHRyZWUsIHRoZSBhcm06bXBzMi1hbjM4NSBxZW11IGVtdWxhdGlvbiBnZXRzIGEgYmFkIGhp
+Y2N1cC4NCj4gPj4NCj4gPj4gWyAgICAxLjgzOTU1Nl0gVW5oYW5kbGVkIGV4Y2VwdGlvbjogSVBT
+UiA9IDAwMDAwMDA2IExSID0gZmZmZmZmZjENCj4gPj4gWyAgICAxLjgzOTgwNF0gQ1BVOiAwIFBJ
+RDogMTY0IENvbW06IGt1bml0X3RyeV9jYXRjaCBUYWludGVkOiBHICAgICAgICAgICAgICAgICBO
+IDYuOC4wLXJjMSAjMQ0KPiA+PiBbICAgIDEuODM5OTQ4XSBIYXJkd2FyZSBuYW1lOiBHZW5lcmlj
+IERUIGJhc2VkIHN5c3RlbQ0KPiA+PiBbICAgIDEuODQwMDYyXSBQQyBpcyBhdCBfX2NzdW1faXB2
+Nl9tYWdpYysweDgvMHhiNA0KPiA+PiBbICAgIDEuODQwNDA4XSBMUiBpcyBhdCB0ZXN0X2NzdW1f
+aXB2Nl9tYWdpYysweDNkLzB4YTQNCj4gPj4gWyAgICAxLjg0MDQ5M10gcGMgOiBbPDIxMjEyZjM0
+Pl0gICAgbHIgOiBbPDIxMTE3ZmQ1Pl0gICAgcHNyOiAwMTAwMDIwYg0KPiA+PiBbICAgIDEuODQw
+NTg2XSBzcCA6IDIxODBiZWJjICBpcCA6IDQ2YzdmMGQyICBmcCA6IDIxMjc1YjM4DQo+ID4+IFsg
+ICAgMS44NDA2NjRdIHIxMDogMjEyNzZiNjAgIHI5IDogMjEyNzViMjggIHI4IDogMjE0NjVjZmMN
+Cj4gPj4gWyAgICAxLjg0MDc1MV0gcjcgOiAwMDAwMzA4NSAgcjYgOiAyMTI3NWI0ZSAgcjUgOiAy
+MTM4NzAyYyAgcjQgOiAwMDAwMDAwMQ0KPiA+PiBbICAgIDEuODQwODQ3XSByMyA6IDJjMDAwMDAw
+ICByMiA6IDFhYzdmMGQyICByMSA6IDIxMjc1YjM5ICByMCA6IDIxMjc1YjI5DQo+ID4+IFsgICAg
+MS44NDA5NDJdIHhQU1I6IDAxMDAwMjBiDQo+ID4+DQo+ID4+IFRoaXMgdHJhbnNsYXRlcyB0bzoN
+Cj4gPj4NCj4gPj4gUEMgaXMgYXQgX19jc3VtX2lwdjZfbWFnaWMgKGFyY2gvYXJtL2xpYi9jc3Vt
+aXB2Ni5TOjE1KQ0KPiA+PiBMUiBpcyBhdCB0ZXN0X2NzdW1faXB2Nl9tYWdpYyAoLi9hcmNoL2Fy
+bS9pbmNsdWRlL2FzbS9jaGVja3N1bS5oOjYwDQo+ID4+IC4vYXJjaC9hcm0vaW5jbHVkZS9hc20v
+Y2hlY2tzdW0uaDoxNjMgbGliL2NoZWNrc3VtX2t1bml0LmM6NjE3KQ0KPiA+Pg0KPiA+PiBPYnZp
+b3VzbHkgSSBjYW4gbm90IHNheSBpZiB0aGlzIGlzIGEgcHJvYmxlbSB3aXRoIHFlbXUgb3IgYSBw
+cm9ibGVtIHdpdGgNCj4gPj4gdGhlIExpbnV4IGtlcm5lbC4gR2l2ZW4gdGhhdCwgYW5kIHRoZSBw
+cmVzdW1hYmx5IGxvdyBpbnRlcmVzdCBpbg0KPiA+PiBydW5uaW5nIG1wczItYW4zODUgd2l0aCBM
+aW51eCwgSSdsbCBzaW1wbHkgZGlzYWJsZSB0aGF0IHRlc3QuIEp1c3QgdGFrZQ0KPiA+PiBpdCBh
+cyBhIGhlYWRzIHVwIHRoYXQgdGhlcmUgX21heV8gYmUgYSBwcm9ibGVtIHdpdGggdGhpcyBvbiBh
+cm0NCj4gPj4gbm9tbXUgc3lzdGVtcy4NCj4gPg0KPiA+IENhbiB5b3UgZHJvcCBpbiBhIGRpc2Fz
+c2VtYmx5IG9mIF9fY3N1bV9pcHY2X21hZ2ljID8NCj4gPiBBY3R1YWxseSBJIHRoaW5rIGl0IGlz
+Og0KPiANCj4gSXQgaXMsIGFzIHBlciB0aGUgUEMgcG9pbnRlciBhYm92ZS4gSSBkb24ndCBrbm93
+IGFueXRoaW5nIGFib3V0IGFybSBhc3NlbWJsZXIsDQo+IG11Y2ggbGVzcyBhYm91dCBpdHMgYmVo
+YXZpb3Igd2l0aCBUSFVNQiBjb2RlLg0KDQpEb2Vzbid0IGxvb2sgbGlrZSB0aHVtYiB0byBtZSAo
+b2Zmc2V0IDggaXMgdHdvIDQtYnl0ZSBpbnN0cnVjdGlvbnMpIGFuZA0KdGhlIGNvZGUgSSBmb3Vu
+ZCBsb29rcyBsaWtlIGFybSB0byBtZS4NCihJIGhhdmVuJ3Qgd3JpdHRlbiBhbnkgYXJtIGFzbSBz
+aW5jZSBiZWZvcmUgdGhleSBpbnZlbnRlZCB0aHVtYiEpDQoNCj4gPiBFTlRSWShfX2NzdW1faXB2
+Nl9tYWdpYykNCj4gPiAJCXN0cglsciwgW3NwLCAjLTRdIQ0KPiA+IAkJYWRkcwlpcCwgcjIsIHIz
+DQo+ID4gCQlsZG1pYQlyMSwge3IxIC0gcjMsIGxyfQ0KPiA+DQo+ID4gU28gdGhlIGZhdWx0IGlz
+IChwcm9iYWJseSkgYSBtaXNhbGlnbmVkIGxkbWlhID8NCj4gPiBBcmUgdGhleSBldmVyIHN1cHBv
+cnRlZD8NCj4gPg0KPiANCj4gR29vZCBxdWVzdGlvbi4gTXkgcHJpbWFyeSBndWVzcyBpcyB0aGF0
+IHRoaXMgbmV2ZXIgd29ya2VkLiBBcyBJIHNhaWQsDQo+IHRoaXMgd2FzIGp1c3QgaW50ZW5kZWQg
+dG8gYmUgaW5mb3JtYXRpb25hbCwgKHByb2JhYmx5KSBubyByZWFzb24gdG8gYm90aGVyLg0KPiAN
+Cj4gT2YgY291cnNlIG9uZSBtaWdodCBhc2sgaWYgaXQgbWFrZXMgc2Vuc2UgdG8gZXZlbiBrZWVw
+IHRoZSBhcm0gbm9tbXUgY29kZQ0KPiBpbiB0aGUga2VybmVsLCBidXQgdGhhdCBpcyBvZiBjb3Vy
+c2UgYSBkaWZmZXJlbnQgcXVlc3Rpb24uIEkgZG8gd29uZGVyIHRob3VnaA0KPiBpZiBhbnlvbmUg
+YnV0IG1lIGlzIHJ1bm5pbmcgaXQuDQoNCklmIGl0IGlzIGFuIGFsaWdubWVudCBmYXVsdCBpdCBp
+c24ndCBhICdub21tdScgYnVnLg0KDQpBbmQgdHJhZGl0aW9uYWxseSBhcm0gZGlkbid0IHN1cHBv
+cnQgbWlzYWxpZ25lZCB0cmFuc2ZlcnMgKHdlbGwgbm90DQppbiBhbnl3YXkgYW55IG90aGVyIGNw
+dSBkaWQhKS4NCkl0IG1pZ2h0IGJlIHRoYXQgdGhlIGtlcm5lbCBhc3N1bWVzIHRoYXQgYWxsIGV0
+aGVybmV0IHBhY2tldHMgYXJlDQphbGlnbmVkLCBidXQgdGhlIHRlc3Qgc3VpdGUgaXNuJ3QgYWxp
+Z25pbmcgdGhlIGJ1ZmZlci4NCldoaWNoIHdvdWxkIG1ha2UgaXQgYSB0ZXN0IHN1aXRlIGJ1Zy4N
+Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
+LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
+OiAxMzk3Mzg2IChXYWxlcykNCg==
 
-This compiler flag requires GCC 8.1 or later.  When I posted a patch
-series[1] to convert the stack protector to a normal percpu variable
-instead of the fixed offset, there was pushback over requiring GCC 8.1
-to keep stack protector support.  I added code to objtool to convert
-code from older compilers, but there hasn't been any feedback since.
-Similar conversion code would be needed in objtool for this unless the
-decision is made to require GCC 8.1 for stack protector support going
-forward.
-
-Brian Gerst
-
-[1] https://lore.kernel.org/lkml/20231115173708.108316-1-brgerst@gmail.com/
 
