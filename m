@@ -1,147 +1,139 @@
-Return-Path: <linux-arch+bounces-1427-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1428-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9E3836FE8
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 19:28:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E7D0836FFB
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 19:31:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 111391F2AB01
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 18:28:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C62B528DB76
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 18:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5F851C23;
-	Mon, 22 Jan 2024 18:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC1755775;
+	Mon, 22 Jan 2024 18:03:54 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8814851023;
-	Mon, 22 Jan 2024 18:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8163155769;
+	Mon, 22 Jan 2024 18:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705946420; cv=none; b=COhhDyP3I0brm5h6VOn3XOFfDk7henD/Vkk9Rh2HVGKouaNvo2hl9PKnE0CzQU6hvnsFQ0ox9O8eI51UGWS8yaIrbRdyKta/xHGpyO0sB7bvsRApiwizSk6FXMDGHSsAUMuFbK+f35fHaU6bki18IAXlPUqW1ZGh0c9hSTnBgkQ=
+	t=1705946633; cv=none; b=m0KmqlLQghRNEXDewsogkOIUMCFgHCBnXSM6ia7mJDb6mtcaxnjSdqym3OU+oBoFT7P/0g8oB4zN5nlwevKMuTOD6oU6JRWEuEu8E8I40x3deC59gCIWuaE7mPS/CJBOU20bHkEgXNCtfDKNWXFqbta092g6hXjYqRySriResLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705946420; c=relaxed/simple;
-	bh=1QPBYp1cuVlPzvmIrkvDtRmi9tk3BbCt5QfOkc4KoTA=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oNYcKz0LIXIuDfoVseADQ+wbhY/PxzZL+hDYsVttKEi4SsPnzZaEvgJeVY86/PdCMllRsfJ7z+6xvqJFvlpntca6QpEyLQvycsXODO/hMhE8btP6tezSbS1hs/wPOfifpYHKKmWXlqhUbH54CNAbwQOnuWcay96BUo5/yZ1Kumw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TJdGS60Srz67ZCr;
-	Tue, 23 Jan 2024 01:57:20 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id DA1F61400F4;
-	Tue, 23 Jan 2024 02:00:14 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 22 Jan
- 2024 18:00:14 +0000
-Date: Mon, 22 Jan 2024 18:00:13 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Russell King <rmk+kernel@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include
- 'present'
-Message-ID: <20240122180013.000016d5@Huawei.com>
-In-Reply-To: <CAJZ5v0g9nfLrEf9u4Ksw6BOWJQ9iv8Z-O8RsLU6jR5zk0ahxRw@mail.gmail.com>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOgD-00Dvk2-3h@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0g9nfLrEf9u4Ksw6BOWJQ9iv8Z-O8RsLU6jR5zk0ahxRw@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1705946633; c=relaxed/simple;
+	bh=Fh6Mfh+ZfjN747uqw1yJY2/Biltz7BVQb6iuhi4PHr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rtYADGuDh0NnJf/KSD0EaVAZwzDP+83qmyrNq3aJbF6eaaL4zEHzuUOBidWZEHKK/FuussvfY1sMjZQQKETkS0R1RqfmQcrhQuE5xbQOiXUxVnM7a2pwlIxiP6UVOI/rPJbviGnkIq1v5O8BuInAHhnRzcnulglq3Jv0xPHmU1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-68197b99138so219246d6.1;
+        Mon, 22 Jan 2024 10:03:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705946631; x=1706551431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s26G0NnkppbXguh7peNPWPJ5jelauHZoMn0Xk4NSQUw=;
+        b=f9sj8dapz8X8s4X3rV7CprJ4yVeGEoaicBNlidoCaSjayweKFDw/PcvRUBrg/YCxmi
+         a+rpuUJYG3ww7Tx71XUdvnDc+IHZ1UIltCJM38MJzu6ACo1VbbFBz3hQUPvoXJgRVtdm
+         +Duv+eDNfM9T1ILJmxw3/p/26plcEi8Ums4q43FDoD/YPhnW1+La3M2la2iSAHWfUres
+         BGz/iiWlr4lGOQwwjbBwLrLIsvNyr5Ysj+qQYg86jmvBmIxsBOp0clHXDDB3mH1iaWDz
+         SmcR4vaTtgHc/S8updpLDKvE0HmyemNypUaJewLmInX+1YNwdh8irNp9j0fQHwUn0hVw
+         hizw==
+X-Gm-Message-State: AOJu0YzpKSZgMLO8owwP/NzVyChGP+JCTvPwJk7rJh7QVSnjZaC68sV5
+	Ofp8gX/ZrAQWnZ27ua6C5rk3IOTIQfe9P70ZQsBG8GnWKFwqkZezKhpIcwIiF8bqUoCYGSSdJ+y
+	F/qM9B7On8XvDtCou/+FbN1VApeiPS5Zjyos=
+X-Google-Smtp-Source: AGHT+IHydxkoIcTGgPnithAm3ZZ3Lbs6GLo4uCDeUNHWYMYJDcQ7kkQEBWJsEM9NkDfdwTNwYrCyeGF8yf+5uFu9gbc=
+X-Received: by 2002:a4a:cb87:0:b0:599:9e03:68da with SMTP id
+ y7-20020a4acb87000000b005999e0368damr789760ooq.0.1705946610762; Mon, 22 Jan
+ 2024 10:03:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOg7-00Dvjq-VZ@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0je=-oVnSumZs=dzcyVuVUeVeTgO7yOnjGg1igyrS7EHQ@mail.gmail.com> <20240122174449.00002f78@Huawei.com>
+In-Reply-To: <20240122174449.00002f78@Huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Jan 2024 19:03:19 +0100
+Message-ID: <CAJZ5v0gePAsbRecOXDZ+q-Ds+nsoSBq6VU89ikuQoxds7TeQ3g@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 04/21] ACPI: processor: Register all CPUs from acpi_processor_get_info()
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, 
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Mon, 18 Dec 2023 21:35:16 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
-
-> On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@armlinux=
-.org.uk> wrote:
+On Mon, Jan 22, 2024 at 6:44=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Mon, 18 Dec 2023 21:30:50 +0100
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>
+> > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@armlin=
+ux.org.uk> wrote:
+> > >
+> > > From: James Morse <james.morse@arm.com>
+> > >
+> > > To allow ACPI to skip the call to arch_register_cpu() when the _STA
+> > > value indicates the CPU can't be brought online right now, move the
+> > > arch_register_cpu() call into acpi_processor_get_info().
 > >
-> > From: James Morse <james.morse@arm.com>
+> > This kind of looks backwards to me and has a potential to become
+> > super-confusing.
 > >
-> > The code behind ACPI_HOTPLUG_CPU allows a not-present CPU to become
-> > present. =20
->=20
-> Right.
->=20
-> > This isn't the only use of HOTPLUG_CPU. On arm64 and riscv
-> > CPUs can be taken offline as a power saving measure. =20
->=20
-> But still there is the case in which a non-present CPU can become
-> present, isn't it there?
+> > I would instead add a way for the generic code to ask the platform
+> > firmware whether or not the given CPU is enabled and so it can be
+> > registered.
+>
+> Hi Rafael,
+>
+> The ACPI interpreter isn't up at this stage so we'd need to pull that
+> forwards. I'm not sure if we can pull the interpreter init early enough.
 
-Not yet defined by the architectures (and I'm assuming it probably never wi=
-ll be).
+Well, this patch effectively defers the AP registration to the time
+when acpi_processor_get_info() runs and the interpreter is up and
+running then.
 
-The original proposal we took to ARM was to do exactly that - they pushed
-back hard on the basis there was no architecturally safe way to implement i=
-t.
-Too much of the ARM arch has to exist from the start of time.
+For consistency, it would be better to defer the AP registration in
+general to that point.
 
-https://lore.kernel.org/linux-arm-kernel/cbaa6d68-6143-e010-5f3c-ec62f879ad=
-95@arm.com/
-is one of the relevant threads of the kernel side of that discussion.
+> Perhaps pushing the registration back in all cases is the way to go?
+> Given the acpi interpretter is initialized via subsys_initcall() it would
+> need to be after that - I tried pushing cpu_dev_register_generic()
+> immediately after acpi_bus_init() and that seems fine.
 
-Not to put specific words into the ARM architects mouths, but the
-short description is that there is currently no demand for working
-out how to make physical CPU hotplug possible, as such they will not
-provide an architecturally compliant way to do it for virtual CPU hotplug a=
-nd
-another means is needed (which is why this series doesn't use the present b=
-it
-for that purpose and we have the Online capable bit in MADT/GICC)
+Sounds promising.
 
-It was a 'fun' dance of several years to get to that clarification.
-As another fun fact, the same is defined for x86, but I don't think
-anyone has used it yet (GICC for ARM has an online capable bit in the flags=
- to
-enable this, which was remarkably similar to the online capable bit in the
-flags of the Local APIC entries as added fairly recently).
+> We can't leave the rest of cpu_dev_init() that late because a bunch
+> of other stuff relies on it (CPU freq blows up first as a core_init()
+> on my setup).
 
->=20
-> > On arm64 an offline CPU may be disabled by firmware, preventing it from
-> > being brought back online, but it remains present throughout.
-> >
-> > Adding code to prevent user-space trying to online these disabled CPUs
-> > needs some additional terminology.
-> >
-> > Rename the Kconfig symbol CONFIG_ACPI_HOTPLUG_PRESENT_CPU to reflect
-> > that it makes possible CPUs present. =20
->=20
-> Honestly, I don't think that this change is necessary or even useful.
+I see.
 
-Whilst it's an attempt to avoid future confusion, the rename is
-not something I really care about so my advice to Russell is drop
-it unless you are attached to it!
+> So to make this work we need it to always move the registration later
+> than the necessary infrastructure, perhaps to subsys_initcall_sync()
+> as is done for missing CPUs (we'd need to combine the two given that
+> needs to run after this, or potentially just stop checking for acpi_disab=
+led
+> and don't taint the kernel!).  I think this is probably the most consiste=
+nt
+> option on basis it at least moves the registration to the same point
+> whatever is going on and can easily use the arch callback you suggest
+> to hide away the logic on deciding if a CPU is there or not.
 
-Jonathan
-
-
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
+I agree.
 
