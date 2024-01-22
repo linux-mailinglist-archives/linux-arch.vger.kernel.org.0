@@ -1,208 +1,152 @@
-Return-Path: <linux-arch+bounces-1421-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1422-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A758E836D9D
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 18:35:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08542836DCB
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 18:39:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C89DB1C280B9
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 17:35:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BCF81F27C0E
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 17:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A573FE20;
-	Mon, 22 Jan 2024 16:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="FupSG+b4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF35E41761;
+	Mon, 22 Jan 2024 16:53:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84063D0BB;
-	Mon, 22 Jan 2024 16:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BAA3D967
+	for <linux-arch@vger.kernel.org>; Mon, 22 Jan 2024 16:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705942082; cv=none; b=sIMgLAq0OD7QAWWc1BvayIB2h4w+FItiT6XbUOqDWvGdBGv4z8Xd+sYDEC8hXZqzea37Hb4VytuStnoFI2D8wQXn+KACz0+7FwHtU3F2ww4edvzShUzoaXT5HJ4DBSLEOjUow1TRxFkgzmFHn53QS/aNlIOl3OZHf+4tus2drRU=
+	t=1705942393; cv=none; b=FiUF84ewtVGR9dksLgf0eyvUxFN/XI4OOb0kJV9p0pwbDhxCE1ogv5PsoU6DXChMnS73Cy2GLGUm/OjXhU1Kn7GxQMRXgEFB/5qdg3UimHecu3kOzW8jq9XsKrhH8Pz6FBRnI6IezjdyOL0r2tgcbhXVSB9XUtoVRnsx+70qBIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705942082; c=relaxed/simple;
-	bh=lIPyg3S025BUz4/YnOih7drXs+pDN+PJEyx3Of/a6Gc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l0eJM1Dg6qRCH9cf8Tk6J/CsY1uYjrCbQOzsq3Ml+mrGrOpzhKiMgVuuphwJ6VXUayF3TkfmK44E5SCLTBm8HpTTUKfWhWdm6Yw1PAe+ovrOZY6mg2WQuN/4VC6ZyVQPNSj+xShrk+v9GpOGjHDn4IxcldNOVppqtNZrxIdwzps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=FupSG+b4; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1705942070; x=1706546870; i=deller@gmx.de;
-	bh=lIPyg3S025BUz4/YnOih7drXs+pDN+PJEyx3Of/a6Gc=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=FupSG+b4mEwvFzcy/BBAb2Ot4IjTlZINC3SKHE4Txi3CrPNcKfGnOLYQuF4ER5K+
-	 /CL1HpfmXz9U1NRj1MY8nrFC5CiyJQfCdZP/I9FOZYyhrV4aa6sy2A1KURzUcaOV5
-	 MYsxE1RqC4xP/n4gv5LD+mzRtjtbzuAEpMg5LFIu71PBSt+pgts5SUEf1oVkOfKZX
-	 qtXjbPjHfbv/vNEex0WrSQDJIthSGJa6ZJ+0nRM/AHnPbCnQTZ9hnSVO1Fwm6+EFU
-	 uQqPDPfbUYWps8yK5k5CPDUKowVxdIcG+RRyP7P8uGa2FKL0CZIqwhKzU0zi82E//
-	 8V1B1aLQBvQryUT0Ng==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.55] ([94.134.156.47]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0X8u-1rDZMw16yy-00wV65; Mon, 22
- Jan 2024 17:47:50 +0100
-Message-ID: <b5e98501-6262-4b04-bbae-238e4956f904@gmx.de>
-Date: Mon, 22 Jan 2024 17:47:49 +0100
+	s=arc-20240116; t=1705942393; c=relaxed/simple;
+	bh=yB3S6jwurrEU9VAq2uFfd3p+Gn+5Y72CDpba3esPKqE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=BVbNWYBLALUDqTeBjYfFNSuF8hhIhx1qlQsQdn6WGESvlMCMRipGpJuaVmIeeQOGKmeYSs+ZrsqPxcQ+4xzaEFYdQ/2KPzcA1RkOezfJeSFvrc2dN3gilcE3lCNA46UbgykMwxnyCeMod9hFiO/srRqcT+w/WBommuiooDA3ef8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-258-veqgJaI3Peyfp47kXADBow-1; Mon, 22 Jan 2024 16:53:09 +0000
+X-MC-Unique: veqgJaI3Peyfp47kXADBow-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 22 Jan
+ 2024 16:52:42 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 22 Jan 2024 16:52:42 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Guenter Roeck' <linux@roeck-us.net>, Charlie Jenkins
+	<charlie@rivosinc.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>, Xiao Wang
+	<xiao.w.wang@intel.com>, Evan Green <evan@rivosinc.com>, Guo Ren
+	<guoren@kernel.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: RE: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and
+ ip_fast_csum
+Thread-Topic: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and
+ ip_fast_csum
+Thread-Index: AQHaTVGn8AUolzpWZEe7KQadoytUPLDmCvsQ
+Date: Mon, 22 Jan 2024 16:52:42 +0000
+Message-ID: <6b0dc20f392c488a9080651a2a2cd4bd@AcuMS.aculab.com>
+References: <20240108-optimize_checksum-v15-0-1c50de5f2167@rivosinc.com>
+ <20240108-optimize_checksum-v15-5-1c50de5f2167@rivosinc.com>
+ <2c8e98b6-336e-4bc7-81ba-5a4d35ac868a@roeck-us.net>
+In-Reply-To: <2c8e98b6-336e-4bc7-81ba-5a4d35ac868a@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] modules: Ensure 64-bit alignment on __ksymtab_*
- sections
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: deller@kernel.org, linux-kernel@vger.kernel.org,
- Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-modules@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20231122221814.139916-1-deller@kernel.org>
- <20231122221814.139916-3-deller@kernel.org>
- <ZYUlpxlg/WooxGWZ@bombadil.infradead.org>
- <1b73bc5a-1948-4e67-9ec5-b238723b3a48@gmx.de>
- <ZYXtPL7Ds1SUKPLT@bombadil.infradead.org>
- <59bc81b5-820e-40ff-9159-c03e429af9a6@gmx.de>
- <Za6Td6cx3JbTfnCZ@bombadil.infradead.org>
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <Za6Td6cx3JbTfnCZ@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rYWNfsdJBYydO+e9IW/6LWf91uPZpCyLwqwk8OWokVoUL2t3Tli
- 2xkCUlGTSIjoRM7jMLcLgY0z9OBPLd/mhJhbUffjVULEsigtpNZjfxR7GBRsJKSo/lRhVc3
- hqrAwWO52dauqV58tSiApSPnZfVPA/YKLLgWNZRh6yP33ms0Nk93yJDkMFe+oIWslL0Z8Iq
- YmpB6dH5RRZkxHgLgZOIw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:DYeAATLUhG0=;4Bmjmu6zM29l8nJzQYU6xm3iR5+
- GI9950LiKjtT/U74gMfkcidZu3ES26tdejQgirDoqAJwusliYsasuBHw9eOAR+Av/Cxv3qO6r
- lIUn7MQbMuL2cdbUYXnSGlNz+GnotLoamrO+5y4vMdky6Sj0LrGb9TtdjlE7OHRHdZKBE6cIO
- wE0HhvpG3XxvuqgNqbOZSzFlJ477A+WzwRrFKImDB+7v239UfgNxMl2YmdJOGqD4Bnm7RHbbe
- oUH2JDdRpZFsLwUVf4iXadWCrz0zcbkvSp+dsWLoyTGubVVqjUwpkq6KAoIUZD2xEC4w9Aym4
- Oa2cf1iKuI1qnqolIUuZVHHqX+JxCcTftfRBvYQdMEhiYUFfpv2G4JUCkpSsUnC8m1yEM5m6z
- s7MANV1MURKZmIp3g+S4mLvnGFlDFQWXL3A/Rt/ok2LSaz4F1D1OkLLymTxeLYnKqR+OsaJC8
- BBEzAyJQYXmvdrdbFXATBt3zTxatnIvEXUCD8LhnbSlbzT+feeXqoBaC1U1iwTd40AeWp4eWy
- Z1ZuOYTCTXZA3BFYj+WreFL60KU9nBCmpBtiCQUNIKZuL0XyJeU0JtW9Dg+PEL6dH8ekvpAy/
- T+yySRs6LNnK7L2Y0xvjE9VeV953G3K6DrgTnEF5Bdm+5ucUcOt9oskT/1C2TF8fJrzq6+Yzz
- U7pwG/7V0jVJvXIHiGXV81dysQ3EbtaaasddyrGQfyWuNN13+wMQRH9F6TjxyHsLjhyLglAjO
- oNjQt9zvJrA0DjmAh/hTLzuxiCFPY2Je0ERkMP8wuft6YOlbepOcvvSem2aA9SmTIVl41hCH7
- PZcANsLO8C2NAD3onxvP8/nFN0j2Pxr6Y5GkR+AK3AwdHffKaoPSoRCYic8MN11fCoIFJjNWZ
- /fVCU6OdfPXsCvXRinuw+SE0zIRMQmMx3yeR2mnh38Va0WEdOv+KAIUaGEEnrrMmVAx9+z3U7
- fZaLVg==
 
-On 1/22/24 17:10, Luis Chamberlain wrote:
-> On Sat, Dec 30, 2023 at 08:33:24AM +0100, Helge Deller wrote:
->> Your selftest code is based on perf.
->> AFAICS we don't have perf on parisc/hppa,
->
-> I see!
->
->> so I can't test your selftest code
->> on that architecture.
->> I assume you tested on x86, where the CPU will transparently take care =
-of
->> unaligned accesses. This is probably why the results are within
->> the noise.
->> But on some platforms the CPU raises an exception on unaligned accesses
->> and jumps into special exception handler assembler code inside the kern=
-el.
->> This is much more expensive than on x86, which is why we track on paris=
-c
->> in /proc/cpuinfo counters on how often this exception handler is called=
-:
->> IRQ:       CPU0       CPU1
->>    3:       1332          0         SuperIO  ttyS0
->>    7:    1270013          0         SuperIO  pata_ns87415
->>   64:  320023012  320021431             CPU  timer
->>   65:   17080507   20624423             CPU  IPI
->> UAH:   10948640      58104   Unaligned access handler traps
->>
->> This "UAH" field could theoretically be used to extend your selftest.
->
-> Nice!
->
->> But is it really worth it? The outcome is very much architecture and CP=
-U
->> specific, maybe it's just within the noise as you measured.
->
-> It's within the noise for x86_64, but given what you suggest
-> for parisc where it is much more expensive, we should see a non-noise
-> delta. Even just time on loading the module should likely result in
-> a considerable delta than on x86_64. You may just need to play a bit
-> with the default values at build time.
+From: Guenter Roeck
+> Sent: 22 January 2024 16:40
+>=20
+> Hi,
+>=20
+> On Mon, Jan 08, 2024 at 03:57:06PM -0800, Charlie Jenkins wrote:
+> > Supplement existing checksum tests with tests for csum_ipv6_magic and
+> > ip_fast_csum.
+> >
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+>=20
+> With this patch in the tree, the arm:mps2-an385 qemu emulation gets a bad=
+ hiccup.
+>=20
+> [    1.839556] Unhandled exception: IPSR =3D 00000006 LR =3D fffffff1
+> [    1.839804] CPU: 0 PID: 164 Comm: kunit_try_catch Tainted: G          =
+       N 6.8.0-rc1 #1
+> [    1.839948] Hardware name: Generic DT based system
+> [    1.840062] PC is at __csum_ipv6_magic+0x8/0xb4
+> [    1.840408] LR is at test_csum_ipv6_magic+0x3d/0xa4
+> [    1.840493] pc : [<21212f34>]    lr : [<21117fd5>]    psr: 0100020b
+> [    1.840586] sp : 2180bebc  ip : 46c7f0d2  fp : 21275b38
+> [    1.840664] r10: 21276b60  r9 : 21275b28  r8 : 21465cfc
+> [    1.840751] r7 : 00003085  r6 : 21275b4e  r5 : 2138702c  r4 : 00000001
+> [    1.840847] r3 : 2c000000  r2 : 1ac7f0d2  r1 : 21275b39  r0 : 21275b29
+> [    1.840942] xPSR: 0100020b
+>=20
+> This translates to:
+>=20
+> PC is at __csum_ipv6_magic (arch/arm/lib/csumipv6.S:15)
+> LR is at test_csum_ipv6_magic (./arch/arm/include/asm/checksum.h:60
+> ./arch/arm/include/asm/checksum.h:163 lib/checksum_kunit.c:617)
+>=20
+> Obviously I can not say if this is a problem with qemu or a problem with
+> the Linux kernel. Given that, and the presumably low interest in
+> running mps2-an385 with Linux, I'll simply disable that test. Just take
+> it as a heads up that there _may_ be a problem with this on arm
+> nommu systems.
 
-I don't know if it will be a "considerable" amount of time.
+Can you drop in a disassembly of __csum_ipv6_magic ?
+Actually I think it is:
+ENTRY(__csum_ipv6_magic)
+=09=09str=09lr, [sp, #-4]!
+=09=09adds=09ip, r2, r3
+=09=09ldmia=09r1, {r1 - r3, lr}
 
->> IMHO we should always try to natively align structures, and if we see
->> we got it wrong in kernel code, we should fix it.
->
-> This was all motivated by the first review criteria of these patches
-> as if they were stable worthy or not. Even if we don't consider them
-> stable material, given the test is now written and easily extended to
-> test on parisc with just timing information and UAH I think it would
-> be nice to have this data for a few larger default factor values so we
-> can compare against x86_64 while we're at it.
->
-> If you don't feel like doing that test that's fine too, we can just
-> ignore that.
+So the fault is (probably) a misaligned ldmia ?
+Are they ever supported?
 
-I can do that test, but I won't have time for that in the next few weeks..=
-.
+=09David
 
-> I'll still apply the patches
-Yes, please do!
-Even if I don't test now, I (or others) will test at a later point.
+=09=09adcs=09ip, ip, r1
+=09=09adcs=09ip, ip, r2
+=09=09adcs=09ip, ip, r3
+=09=09adcs=09ip, ip, lr
+=09=09ldmia=09r0, {r0 - r3}
+=09=09adcs=09r0, ip, r0
+=09=09adcs=09r0, r0, r1
+=09=09adcs=09r0, r0, r2
+=09=09ldr=09r2, [sp, #4]
+=09=09adcs=09r0, r0, r3
+=09=09adcs=09r0, r0, r2
+=09=09adcs=09r0, r0, #0
+=09=09ldmfd=09sp!, {pc}
+ENDPROC(__csum_ipv6_magic)
 
-> but, I figured I'd ask to collect information while the test was already
-> written and it should now be easy to compare / contrast differences.
-Ok.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-Helge
 
