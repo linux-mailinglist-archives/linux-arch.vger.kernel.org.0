@@ -1,146 +1,229 @@
-Return-Path: <linux-arch+bounces-1433-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1434-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16501837675
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 23:44:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1128E8377CA
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 00:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0DE3287116
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 22:44:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9460A1F2413E
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jan 2024 23:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF1D10797;
-	Mon, 22 Jan 2024 22:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B7D84E1BC;
+	Mon, 22 Jan 2024 23:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLHYMEdJ"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="xNDp7+iw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A19918C20;
-	Mon, 22 Jan 2024 22:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281324D59A
+	for <linux-arch@vger.kernel.org>; Mon, 22 Jan 2024 23:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705963460; cv=none; b=HdWqdY6acF/pmZG92JZ2QKm6fSv9v74uosjJmkyLDOoeC5OuekXOLh6IYWGowtaFlPXalgnou1LJKSr86sr8dPAnNyqttvb8seNMYxdHMd890nPLbiHmjXO5eFNc9vur21U3TYIJp9Be+DH3AOVcmS44DmluXj7uQ67N/bL5FU0=
+	t=1705966761; cv=none; b=n/K0cBmx2I/+t/z1U+xzY48jpJSqBXuAOh0GTJVitOIbVeaNYQBPMdsrzlUe4QZdn0Y6gBpetJL1qiq6fOcN0qKNCXyXk2mEsjpFxjmHO4of3+IiF9Lw+U4Pil/uIK0V1xocEUgyMHiet0yp7Tkedy+R4sbgbpJG45VqX07I2rU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705963460; c=relaxed/simple;
-	bh=3ZJ7NcHOCt+uRRkFfJmhYkl2OuZDA6RPu5bNjKRanJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AaORUGjWRCn39VXVSRSu3Zi9MdbJDwc2WeJE1t3odn9z+29BX76a1cFhaNu84Gy13v3+IQCQVMvtjAWZUuSL1u+ZzSCEz+vFqL8OjeZHQOcn3GiatDa8h3LPsQJhdzpLphDelLYYIz2ic4iYHQUX2Bc3PApHRWZTXzxg6KbVozo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLHYMEdJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D254BC433F1;
-	Mon, 22 Jan 2024 22:44:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705963459;
-	bh=3ZJ7NcHOCt+uRRkFfJmhYkl2OuZDA6RPu5bNjKRanJM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TLHYMEdJOaYU4N2nkXJatHz+9NlQBwCFlgDjalZHBKdLUFrKpYZAwJbyzqLoSa4WO
-	 TGpfchmYGVFGaRUfdzCH4VM4ydKiZs2OJoUUJTgwW9+D3CE8yZsjtE17Z1+54x17XD
-	 /KRqsHzPioAkpcnRMDy8guO9/htmxzlPscrL7IDekXS0bglmUJeoBLb06KgeN5oqA8
-	 eJXu/lYfUPEd0Nr73YgKs4Zzai1dKTKzz6DmLHhjj/ELQ5weYQpAF0HXilz/cObz/1
-	 0ojyCVVOjazDuR7Tzm+scnQFxX2nckEo1m6/c5aa5tXj1lQZ+eirLkjYShoyMZe38z
-	 O4dZTXCYwxk8g==
-Date: Mon, 22 Jan 2024 15:44:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Brian Gerst <brgerst@gmail.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 4/5] x86/head64: Replace pointer fixups with PIE
- codegen
-Message-ID: <20240122224417.GC141255@dev-fedora.aadp>
-References: <20240122090851.851120-7-ardb+git@google.com>
- <20240122090851.851120-11-ardb+git@google.com>
- <CAMzpN2jcWxCy=H-1uvS7kN8gVohee2_cMwyC0SbSEwEoedo3WQ@mail.gmail.com>
+	s=arc-20240116; t=1705966761; c=relaxed/simple;
+	bh=xiGA4Dzc0wWP4EkQIjvNOdHLkFhWn5Xs0+/0KaZ9By0=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=ExZSykVoFMUi6hOCdWSLH7oeH4qw9E8ohbK+/BgD2bGZBaFuFqgJCIoA2RqXLiZb+yE+07uei3a1jkiJsEZ546MUOpNZBQC6s1zrwcmfIH6vG35My4By+s03GNg2tLIuanWDdKscNaXPY2AnCOq/TMlo8f5RlcQtgKg/9YbDugI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=xNDp7+iw; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5ce9555d42eso3191657a12.2
+        for <linux-arch@vger.kernel.org>; Mon, 22 Jan 2024 15:39:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1705966757; x=1706571557; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V1Z7TMO+jlXXWWyWCZcJYVQVsmcsD5xU6FxCleKovtY=;
+        b=xNDp7+iwFHLS/nxXeukqJC3W6XEZOTB9HCb878W6yEGzt4PzxoLwWDFZl467uQ24ut
+         RccOCE1WEjXSMVY9uXhWKhdcEtmpRm0hVuNO5nkdOBJgMPynjmzdAzDXfut3RcWPm1Z/
+         zCsOzlmKkTPqNqsNZ3j36/CVmHOnNIMU5TCrlnL7Z5mIWbxUUmQzUMLddhqErMkt2fpF
+         ra8sheeIAdupxaZ/1dUyNSGqRD4hXM0DX0lVht8AFDTIU8I0JwMopfFjsgDFN2Mm5jRe
+         ZXr8ZcNSYUXBtOTf5224xLIVW7Gw63Y66WGFIj2m3oVQFIKorL4JtK2SZh/5QQ+SIvSq
+         4iyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705966757; x=1706571557;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V1Z7TMO+jlXXWWyWCZcJYVQVsmcsD5xU6FxCleKovtY=;
+        b=W4J3Jbhxm4Q4UpVFoRrgt33j6OZJC4U6F34rEXjFrkDXes9GuYujc/S+0O+l2DHgEF
+         CmINPQ/5UmFV5v6S3Wlkdjbuj2xuC7R0+yWSSyCTsZFfQgNINv4dKb34C2UTAVfNl67U
+         /X3sze2B9USz/9ojYSIWy2O0P7JsErpYiyb3gtn/XfPDKh9PoGnku/SrTZ6nVmkbabc2
+         OHLRPmNEXiMWeGJNk7eWxUl6Ae/pXk5pFfitFd5u6jqGK4daX6Idc8OSnXkVpzzs5ayO
+         Q5HXZNxEcuvDLJv2TjUev+bI4cxaiAwH/y1Vmc4g4umHQixnKoH4I1g++J7BuqCTGSyL
+         HXeA==
+X-Gm-Message-State: AOJu0YyH16noPwkq26S63V/P9AOqGCCMpbX9Y2aAL4vbG28hTWDHdND9
+	VDKk7wH4dUzhEpqe1Rm4A3aOTEY7bIhuMEkBAOjjDxBmAWu3dS0XiE4h+VGFtQg=
+X-Google-Smtp-Source: AGHT+IHroItpJWznNEfKh19g/GnSygUrkdpTMXX24mBVJc3jFJvJ6LRrEv7NQ8110mvxwpmF/jHprQ==
+X-Received: by 2002:a05:6a20:3089:b0:19a:e284:5b21 with SMTP id 9-20020a056a20308900b0019ae2845b21mr4838334pzn.74.1705966757110;
+        Mon, 22 Jan 2024 15:39:17 -0800 (PST)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with ESMTPSA id v14-20020aa7808e000000b006dbc4cb72ebsm6170406pff.201.2024.01.22.15.39.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 15:39:16 -0800 (PST)
+Date: Mon, 22 Jan 2024 15:39:16 -0800 (PST)
+X-Google-Original-Date: Mon, 22 Jan 2024 15:39:05 PST (-0800)
+Subject:     RE: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and ip_fast_csum
+In-Reply-To: <be959a4bb660466faba5ade7976485c8@AcuMS.aculab.com>
+CC: linux@roeck-us.net, charlie@rivosinc.com, Conor Dooley <conor@kernel.org>,
+  samuel.holland@sifive.com, xiao.w.wang@intel.com, Evan Green <evan@rivosinc.com>, guoren@kernel.org,
+  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+  Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: David.Laight@ACULAB.COM
+Message-ID: <mhng-b5f26a34-7632-4423-9f07-3224170bae9f@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMzpN2jcWxCy=H-1uvS7kN8gVohee2_cMwyC0SbSEwEoedo3WQ@mail.gmail.com>
 
-On Mon, Jan 22, 2024 at 02:34:46PM -0500, Brian Gerst wrote:
-> On Mon, Jan 22, 2024 at 4:14 AM Ard Biesheuvel <ardb+git@google.com> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Some of the C code in head64.c may be called from a different virtual
-> > address than it was linked at. Currently, we deal with this by using
-> > ordinary, position dependent codegen, and fixing up all symbol
-> > references on the fly. This is fragile and tricky to maintain. It is
-> > also unnecessary: we can use position independent codegen (with hidden
-> > visibility) to ensure that all compiler generated symbol references are
-> > RIP-relative, removing the need for fixups entirely.
-> >
-> > It does mean we need explicit references to kernel virtual addresses to
-> > be generated by hand, so generate those using a movabs instruction in
-> > inline asm in the handful places where we actually need this.
-> >
-> > While at it, move these routines to .inittext where they belong.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/Makefile                 |  11 ++
-> >  arch/x86/boot/compressed/Makefile |   2 +-
-> >  arch/x86/include/asm/init.h       |   2 -
-> >  arch/x86/include/asm/setup.h      |   2 +-
-> >  arch/x86/kernel/Makefile          |   4 +
-> >  arch/x86/kernel/head64.c          | 117 +++++++-------------
-> >  6 files changed, 60 insertions(+), 78 deletions(-)
-> >
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 1a068de12a56..bed0850d91b0 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -168,6 +168,17 @@ else
-> >          KBUILD_CFLAGS += -mcmodel=kernel
-> >          KBUILD_RUSTFLAGS += -Cno-redzone=y
-> >          KBUILD_RUSTFLAGS += -Ccode-model=kernel
-> > +
-> > +       PIE_CFLAGS := -fpie -mcmodel=small \
-> > +                     -include $(srctree)/include/linux/hidden.h
-> > +
-> > +       ifeq ($(CONFIG_STACKPROTECTOR),y)
-> > +               ifeq ($(CONFIG_SMP),y)
-> > +                       PIE_CFLAGS += -mstack-protector-guard-reg=gs
-> > +               endif
+On Mon, 22 Jan 2024 13:41:48 PST (-0800), David.Laight@ACULAB.COM wrote:
+> From: Guenter Roeck
+>> Sent: 22 January 2024 17:16
+>> 
+>> On 1/22/24 08:52, David Laight wrote:
+>> > From: Guenter Roeck
+>> >> Sent: 22 January 2024 16:40
+>> >>
+>> >> Hi,
+>> >>
+>> >> On Mon, Jan 08, 2024 at 03:57:06PM -0800, Charlie Jenkins wrote:
+>> >>> Supplement existing checksum tests with tests for csum_ipv6_magic and
+>> >>> ip_fast_csum.
+>> >>>
+>> >>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>> >>> ---
+>> >>
+>> >> With this patch in the tree, the arm:mps2-an385 qemu emulation gets a bad hiccup.
+>> >>
+>> >> [    1.839556] Unhandled exception: IPSR = 00000006 LR = fffffff1
+>> >> [    1.839804] CPU: 0 PID: 164 Comm: kunit_try_catch Tainted: G                 N 6.8.0-rc1 #1
+>> >> [    1.839948] Hardware name: Generic DT based system
+>> >> [    1.840062] PC is at __csum_ipv6_magic+0x8/0xb4
+>> >> [    1.840408] LR is at test_csum_ipv6_magic+0x3d/0xa4
+>> >> [    1.840493] pc : [<21212f34>]    lr : [<21117fd5>]    psr: 0100020b
+>> >> [    1.840586] sp : 2180bebc  ip : 46c7f0d2  fp : 21275b38
+>> >> [    1.840664] r10: 21276b60  r9 : 21275b28  r8 : 21465cfc
+>> >> [    1.840751] r7 : 00003085  r6 : 21275b4e  r5 : 2138702c  r4 : 00000001
+>> >> [    1.840847] r3 : 2c000000  r2 : 1ac7f0d2  r1 : 21275b39  r0 : 21275b29
+>> >> [    1.840942] xPSR: 0100020b
+>> >>
+>> >> This translates to:
+>> >>
+>> >> PC is at __csum_ipv6_magic (arch/arm/lib/csumipv6.S:15)
+>> >> LR is at test_csum_ipv6_magic (./arch/arm/include/asm/checksum.h:60
+>> >> ./arch/arm/include/asm/checksum.h:163 lib/checksum_kunit.c:617)
+>> >>
+>> >> Obviously I can not say if this is a problem with qemu or a problem with
+>> >> the Linux kernel. Given that, and the presumably low interest in
+>> >> running mps2-an385 with Linux, I'll simply disable that test. Just take
+>> >> it as a heads up that there _may_ be a problem with this on arm
+>> >> nommu systems.
+>> >
+>> > Can you drop in a disassembly of __csum_ipv6_magic ?
+>> > Actually I think it is:
+>> 
+>> It is, as per the PC pointer above. I don't know anything about arm assembler,
+>> much less about its behavior with THUMB code.
 > 
-> This compiler flag requires GCC 8.1 or later.  When I posted a patch
-> series[1] to convert the stack protector to a normal percpu variable
-> instead of the fixed offset, there was pushback over requiring GCC 8.1
-> to keep stack protector support.  I added code to objtool to convert
-> code from older compilers, but there hasn't been any feedback since.
-> Similar conversion code would be needed in objtool for this unless the
-> decision is made to require GCC 8.1 for stack protector support going
-> forward.
+> Doesn't look like thumb to me (offset 8 is two 4-byte instructions) and
+> the code I found looks like arm to me.
+> (I haven't written any arm asm since before they invented thumb!)
 > 
-> Brian Gerst
+>> > ENTRY(__csum_ipv6_magic)
+>> > 		str	lr, [sp, #-4]!
+>> > 		adds	ip, r2, r3
+>> > 		ldmia	r1, {r1 - r3, lr}
+>> >
+>> > So the fault is (probably) a misaligned ldmia ?
+>> > Are they ever supported?
+>> >
+>> 
+>> Good question. My primary guess is that this never worked. As I said,
+>> this was just intended to be informational, (probably) no reason to bother.
+>> 
+>> Of course one might ask if it makes sense to even keep the arm nommu code
+>> in the kernel, but that is of course a different question. I do wonder though
+>> if anyone but me is running it.
 > 
-> [1] https://lore.kernel.org/lkml/20231115173708.108316-1-brgerst@gmail.com/
+> If it is an alignment fault it isn't a 'nommu' bug.
+> 
+> And traditionally arm didn't support misaligned transfers (well not
+> in anyway any other cpu did!).
+> It might be that the kernel assumes that all ethernet packets are
+> aligned, but the test suite isn't aligning the buffer.
+> Which would make it a test suite bug.
 
-I was going to comment on this as well, as that flag was only supported
-in clang 12.0.0 and newer. It should not be too big of a deal for us
-though, as I was already planning on bumping the minimum supported
-version of clang for building the kernel to 13.0.1 (but there may be
-breakage reports if this series lands before that):
+From talking to Evan and Vineet, I think you're right and this is a test 
+suite bug: specifically the tests weren't respecting NET_IP_ALIGN.  That 
+didn't crop up for ip_fast_csum() as it just uses ldr which supports 
+misaligned accesses on the M3 (at least as far as I can tell).
 
-https://lore.kernel.org/20240110165339.GA3105@dev-arch.thelio-3990X/
+So I think the right fix is something like
 
-Cheers,
-Nathan
+    diff --git a/lib/checksum_kunit.c b/lib/checksum_kunit.c
+    index 225bb7701460..2dd282e27dd4 100644
+    --- a/lib/checksum_kunit.c
+    +++ b/lib/checksum_kunit.c
+    @@ -5,6 +5,7 @@
+    
+     #include <kunit/test.h>
+     #include <asm/checksum.h>
+    +#include <asm/checksum.h>
+     #include <net/ip6_checksum.h>
+    
+     #define MAX_LEN 512
+    @@ -15,6 +16,7 @@
+     #define IPv4_MAX_WORDS 15
+     #define NUM_IPv6_TESTS 200
+     #define NUM_IP_FAST_CSUM_TESTS 181
+    +#define SUPPORTED_ALIGNMENT (1 << NET_IP_ALIGN)
+    
+     /* Values for a little endian CPU. Byte swap each half on big endian CPU. */
+     static const u32 random_init_sum = 0x2847aab;
+    @@ -486,7 +488,7 @@ static void test_csum_fixed_random_inputs(struct kunit *test)
+     	__sum16 result, expec;
+    
+     	assert_setup_correct(test);
+    -	for (align = 0; align < TEST_BUFLEN; ++align) {
+    +	for (align = 0; align < TEST_BUFLEN; align += SUPPORTED_ALIGNMENT) {
+     		memcpy(&tmp_buf[align], random_buf,
+     		       min(MAX_LEN, TEST_BUFLEN - align));
+     		for (len = 0; len < MAX_LEN && (align + len) < TEST_BUFLEN;
+    @@ -513,7 +515,7 @@ static void test_csum_all_carry_inputs(struct kunit *test)
+    
+     	assert_setup_correct(test);
+     	memset(tmp_buf, 0xff, TEST_BUFLEN);
+    -	for (align = 0; align < TEST_BUFLEN; ++align) {
+    +	for (align = 0; align < TEST_BUFLEN; align += SUPPORTED_ALIGNMENT) {
+     		for (len = 0; len < MAX_LEN && (align + len) < TEST_BUFLEN;
+     		     ++len) {
+     			/*
+    @@ -553,7 +555,7 @@ static void test_csum_no_carry_inputs(struct kunit *test)
+    
+     	assert_setup_correct(test);
+     	memset(tmp_buf, 0x4, TEST_BUFLEN);
+    -	for (align = 0; align < TEST_BUFLEN; ++align) {
+    +	for (align = 0; align < TEST_BUFLEN; align += SUPPORTED_ALIGNMENT) {
+     		for (len = 0; len < MAX_LEN && (align + len) < TEST_BUFLEN;
+     		     ++len) {
+     			/*
+
+but I haven't even build tested it...
+
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
