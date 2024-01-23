@@ -1,102 +1,145 @@
-Return-Path: <linux-arch+bounces-1440-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1441-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF688838B82
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 11:16:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F5ED838BB5
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 11:26:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AA9C289C51
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 10:16:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA5581F2277A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 10:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6875F5A10B;
-	Tue, 23 Jan 2024 10:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66A85A780;
+	Tue, 23 Jan 2024 10:26:10 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAAAB5A110
-	for <linux-arch@vger.kernel.org>; Tue, 23 Jan 2024 10:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E599658126;
+	Tue, 23 Jan 2024 10:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706004989; cv=none; b=E2Y/ObZihcfe+E636m6zuAwYloMa9qgbg5Ytcu7VHB+BMcyruYNibucg7Mvbb7azU4qJeJ4j5qRppKw6PS5M9OgIuMz8TGTN5oPVfI1mc52wdZz1bYU+oQU/4+zvFU7qwbbh7T7fz6P7CxjmK7j6Y0B54f9jfKjq/ZoTbEWzA94=
+	t=1706005570; cv=none; b=N/KEeD1T3nNmM0MshVjj4QFKtyCXGOGNo8bvvVj/Q1J4B2CyO9h5K0F//TYyqHsvG7RBgsDfl5dNxhb5KAtr3FsPI2vixaETbXSTZ5fSmwLaMXv4wwiPgAtwr9sTmAaS5Dh+CvOynkJpdWeKbjNFEXBwUTjaTcK3j7G6IBkQP0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706004989; c=relaxed/simple;
-	bh=ZJzzt+kCw+JOY/lQZt/D5cRgMP0CjOuRiNu9AtaiFBk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=HYpen2iJ2bLZsVIWwxX+WgbxFvtn3q+Pu36JQiK1PizMlgUXf58LLTCu5HnE4OHw+7CH3cb2A7g+2TlSEPwb2PZloNoVwOS57SrC7o8FoT7rYBQauawhUb7TatHIMElDkYv31K4N4nSWtntsVgeyQQ4YeOvwzNGFURjESR0vE4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-76-TSOlSA3yNlmz_Bo-aU5ewQ-1; Tue, 23 Jan 2024 10:16:23 +0000
-X-MC-Unique: TSOlSA3yNlmz_Bo-aU5ewQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 23 Jan
- 2024 10:16:06 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 23 Jan 2024 10:16:06 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Guenter Roeck' <linux@roeck-us.net>, Charlie Jenkins
-	<charlie@rivosinc.com>, Palmer Dabbelt <palmer@dabbelt.com>
-CC: Conor Dooley <conor@kernel.org>, "samuel.holland@sifive.com"
-	<samuel.holland@sifive.com>, "xiao.w.wang@intel.com" <xiao.w.wang@intel.com>,
-	Evan Green <evan@rivosinc.com>, "guoren@kernel.org" <guoren@kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, Paul Walmsley
-	<paul.walmsley@sifive.com>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: RE: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and
- ip_fast_csum
-Thread-Topic: [PATCH v15 5/5] kunit: Add tests for csum_ipv6_magic and
- ip_fast_csum
-Thread-Index: AQHaTVGn8AUolzpWZEe7KQadoytUPLDmCvsQgAAHpwCAAEjwsIAAOnOOgACYElA=
-Date: Tue, 23 Jan 2024 10:16:06 +0000
-Message-ID: <86411bbab15c42b8819aeb923fe42644@AcuMS.aculab.com>
-References: <be959a4bb660466faba5ade7976485c8@AcuMS.aculab.com>
- <mhng-b5f26a34-7632-4423-9f07-3224170bae9f@palmer-ri-x1c9>
- <Za8AXnKCm4cPyVbp@ghost> <e548f697-650e-4333-9f39-19a472b7d90a@roeck-us.net>
-In-Reply-To: <e548f697-650e-4333-9f39-19a472b7d90a@roeck-us.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1706005570; c=relaxed/simple;
+	bh=FUcwLqqqNQfLITWpcgPePxChaMrTvzUqpYt/KMz8MZs=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CX95qIGem2bFjX7CMCUVbQavCMvtvNoSNWyFMAnqARnDlSLdvSr1LvfB9TCug+PiKvI/nPXBwh65dsMy5/a2t4+VVWqGNhrtjItfNIpEuWnWo4uyvoZZy/Duv7VLHuexJG1vJnCeMhfEjFjb/VhwDft0AYdQkdCxMOXFNE1WvwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TK37w3nrBz6JB35;
+	Tue, 23 Jan 2024 18:23:08 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 56FC3140A86;
+	Tue, 23 Jan 2024 18:26:05 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Jan
+ 2024 10:26:04 +0000
+Date: Tue, 23 Jan 2024 10:26:03 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
+	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 17/21] ACPI: add support to register CPUs based
+ on the _STA enabled bit
+Message-ID: <20240123102603.00004244@Huawei.com>
+In-Reply-To: <20240102145320.000062f9@Huawei.com>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOhC-00DvlI-Pp@rmk-PC.armlinux.org.uk>
+	<ZYBDJG1g7SH7AiM1@shell.armlinux.org.uk>
+	<20240102145320.000062f9@Huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAyMyBKYW51YXJ5IDIwMjQgMDE6MDYNCi4uLg0K
-PiA+PiAgICAgKyNkZWZpbmUgU1VQUE9SVEVEX0FMSUdOTUVOVCAoMSA8PCBORVRfSVBfQUxJR04p
-DQo+ID4+ICAgICAgLyogVmFsdWVzIGZvciBhIGxpdHRsZSBlbmRpYW4gQ1BVLiBCeXRlIHN3YXAg
-ZWFjaCBoYWxmIG9uIGJpZyBlbmRpYW4gQ1BVLiAqLw0KPiA+PiAgICAgIHN0YXRpYyBjb25zdCB1
-MzIgcmFuZG9tX2luaXRfc3VtID0gMHgyODQ3YWFiOw0KPiA+PiAgICAgQEAgLTQ4Niw3ICs0ODgs
-NyBAQCBzdGF0aWMgdm9pZCB0ZXN0X2NzdW1fZml4ZWRfcmFuZG9tX2lucHV0cyhzdHJ1Y3Qga3Vu
-aXQgKnRlc3QpDQo+ID4+ICAgICAgCV9fc3VtMTYgcmVzdWx0LCBleHBlYzsNCj4gPj4gICAgICAJ
-YXNzZXJ0X3NldHVwX2NvcnJlY3QodGVzdCk7DQo+ID4+ICAgICAtCWZvciAoYWxpZ24gPSAwOyBh
-bGlnbiA8IFRFU1RfQlVGTEVOOyArK2FsaWduKSB7DQo+ID4+ICAgICArCWZvciAoYWxpZ24gPSAw
-OyBhbGlnbiA8IFRFU1RfQlVGTEVOOyBhbGlnbiArPSBTVVBQT1JURURfQUxJR05NRU5UKSB7DQou
-Li4NCg0KVGhhdCBpcyBhbGwgd3JvbmcuDQpORVRfSVBfQUxJR04gaXMgdGhlIG9mZnNldCBmb3Ig
-dGhlIGJhc2Ugb2YgZXRoZXJuZXQgZnJhbWVzLg0KSWYgemVybyB0aGUgSVAgaGVhZGVyIHdpbGwg
-KHVzdWFsbHkpIGJlIG1pc2FsaWduZWQuDQpJZiB0d28gdGhlIG1hYyBhZGRyZXNzZXMgYXJlIG1p
-c2FsaWduZWQgaW4gb3JkZXIgdG8gYWxpZ24NCnRoZSBJUCBoZWFkZXIgKDYrNisyIGJ5dGVzIGlu
-KS4NCkkgZG9uJ3QgdGhpbmsgYW55IG90aGVyIHZhbHVlcyBhcmUgYWN0dWFsbHkgdmFsaWQsIGJ1
-dA0KdGhlcmUgaXMgYWx3YXlzIHRoYXQgcG9zc2liaWxpdHkuDQoNClNvIHRoZSBkZWZpbml0aW9u
-IHNob3VsZCByZWFsbHkgYmU6DQojZGVmaW5lIFNVUFBPUlRFRF9BTElHTk1FTlQgKE5FVF9JUF9B
-TElHTiA/IDQgOiAxKQ0KDQooV2hpY2ggbWlnaHQgaGFwcGVuIHRvIGJlIHRoZSBzYW1lIHZhbHVl
-cyA6LSkNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
-eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
-aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Tue, 2 Jan 2024 14:53:20 +0000
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+
+> On Mon, 18 Dec 2023 13:03:32 +0000
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> 
+> > On Wed, Dec 13, 2023 at 12:50:38PM +0000, Russell King wrote:  
+> > > From: James Morse <james.morse@arm.com>
+> > > 
+> > > acpi_processor_get_info() registers all present CPUs. Registering a
+> > > CPU is what creates the sysfs entries and triggers the udev
+> > > notifications.
+> > > 
+> > > arm64 virtual machines that support 'virtual cpu hotplug' use the
+> > > enabled bit to indicate whether the CPU can be brought online, as
+> > > the existing ACPI tables require all hardware to be described and
+> > > present.
+> > > 
+> > > If firmware describes a CPU as present, but disabled, skip the
+> > > registration. Such CPUs are present, but can't be brought online for
+> > > whatever reason. (e.g. firmware/hypervisor policy).
+> > > 
+> > > Once firmware sets the enabled bit, the CPU can be registered and
+> > > brought online by user-space. Online CPUs, or CPUs that are missing
+> > > an _STA method must always be registered.    
+> > 
+> > ...
+> >   
+> > > @@ -526,6 +552,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
+> > >  		acpi_processor_make_not_present(device);
+> > >  		return;
+> > >  	}
+> > > +
+> > > +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
+> > > +		arch_unregister_cpu(pr->id);    
+> > 
+> > This change isn't described in the commit log, but seems to be the cause
+> > of the build error identified by the kernel build bot that is fixed
+> > later in this series. I'm wondering whether this should be in a
+> > different patch, maybe "ACPI: Check _STA present bit before making CPUs
+> > not present" ?  
+> 
+> Would seem a bit odd to call arch_unregister_cpu() way before the code
+> is added to call the matching arch_registers_cpu()
+> 
+> Mind you this eject doesn't just apply to those CPUs that are registered
+> later I think, but instead to all.  So we run into the spec hole that
+> there is no way to identify initially 'enabled' CPUs that might be disabled
+> later.
+> 
+> > 
+> > Or maybe my brain isn't working properly (due to being Covid positive.)
+> > Any thoughts, Jonathan?  
+> 
+> I'll go with a resounding 'not sure' on where this change belongs.
+> I blame my non existent start of the year hangover.
+> Hope you have recovered!
+
+Looking again, I think you were right, move it to that earlier patch.
+
+J
+> 
+> Jonathan
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 
