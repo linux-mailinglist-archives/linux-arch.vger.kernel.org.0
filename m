@@ -1,120 +1,116 @@
-Return-Path: <linux-arch+bounces-1477-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1478-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8808E839914
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 20:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B35E839918
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 20:06:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A85F1F2D53D
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 19:05:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 058791F2A283
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 19:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87A11292F3;
-	Tue, 23 Jan 2024 19:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567E512A141;
+	Tue, 23 Jan 2024 19:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gv1+sAfN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L0OZLtn2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674B0129A6E
-	for <linux-arch@vger.kernel.org>; Tue, 23 Jan 2024 19:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2410C129A71;
+	Tue, 23 Jan 2024 19:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706036438; cv=none; b=kpPUZ2YTS5tKJzV5/C/if0W1Tj//5DUe/jEhktIEDtGLdQ02Z7A34ZX/7+jhUQcilTWvnKOq9tGPyvFpcQjNftjYU97ctMKR6S4B9VMDBgXQkyFr1iKUUuwHTn3CH30SbpFAiehNrje+eNQRok5EyetdGvqX6J4iM5A0aTBNA4w=
+	t=1706036447; cv=none; b=TShEXiuWz8LRP6BbOp1enwFL/6UxCeLSL3fH3lO5aV8fz3eZZud8FumnNo81699wubdd62lV1Jt6HN/zyqbPs6drQY6BsvQU2VyWaZEWb1jGCimIh15/LtgT7gRT4QfcoGvaVK63/NgkKmTIvA/pcOTH9yNcFcU3XOPi1n5CuCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706036438; c=relaxed/simple;
-	bh=ZKIUReDJHL8PnaXbcu3q7fLjNP7xT5ogthRdWpyN2Kk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fwpStrHMaznvhp+bC69VpKTEyiXFmtLJJakpZRx6uhA4n7YcMU7/Q2nJbcQnQ09pmF3R5nPIFtYpWUGnQ8RvPT/1neC7fTbQUdHCXveaTG7hY3eouIi2hTnPlZLvl1De59FLkKdeJ+Jr+H22wEkzKoaUHWbf3kvG/PVxVIMdTkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gv1+sAfN; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5cf1f4f6c3dso2368691a12.2
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jan 2024 11:00:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706036437; x=1706641237; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WmD7dH3qV8pv67RKjqLHiAxOFddNPr4ehUigPqKBvas=;
-        b=Gv1+sAfN9oQ3ohxET0P9VDHpRQAScBVhCmZBc7zYVHpZsHYZUKmv/zdyjt9WEKgZUC
-         zxPwGNyddiGL1WMgPYI5ISVdReZtuDL6NuVZg/OrJLfog33zn6lejW9cdM1B3MuNpxGP
-         mCDO83y6C53ZboG0jqDd8C2WGM2c2ykc4OrtNLlQk+90cOZOKugEbccgQbAbpGhJk0xD
-         Zu6ENNWKGnAQfQz12L7ds3RmjzbdWm0HJLGoEP14AHgr/Z8dpmiCaXJHWWXNEWXE+3nY
-         mywZEP2Ckp1jT5UKZp0arJL0mRXqfef5ok6DGc9RZG4hs/AfijlhgWmiymEjVcN/WeP2
-         xcbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706036437; x=1706641237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WmD7dH3qV8pv67RKjqLHiAxOFddNPr4ehUigPqKBvas=;
-        b=btarO8mh2AB8ickk0n6JImDuvwGmAF7imSpqwBeCa1SuGegCdgZVgPq2dM3GCgsXRq
-         6Zvkt24S+9NITKQVUGtV2GmGlScwBQCc1LjJtPV2OJ+lKB6IwyCFOAwC93igaYfBLp+3
-         F0l23dKIbS3UqdQHsz/RuURVUVTDzvJpUM7LcHC6ve84o5WpwfqRfycrGWHYqC/yIe5u
-         1qVusCfkY0RULvn0THXF5YolBj3VRIIR2GgWf68ZGYXetjtzapurw8N1/vH0OUE+b/NV
-         oIhGyAFYlyq5igvIieqxTwkF6vf8AtCo8x5kLTloO08Bid9y1tGPYtIjAzf9ek0pvqv+
-         G4XA==
-X-Gm-Message-State: AOJu0YyYqHCAH9oCSdcKsLaA4kWQWLjenREcbBBP3xPIGf5djq31yjBa
-	FVSJbJ8/NteXznp0NkX+skb+CR4UjWnOJFkHwNHvgD4Ag9PEGLXp2OfSihOSFAUEQX6asbMwH0H
-	8PaSuMT+Uf67e1vDpcscAPbUZyqoW7R+bO5e6tQ==
-X-Google-Smtp-Source: AGHT+IFtt2avi3/WFpubHex5rv8MfO7wLgxXcE6UTmcf3PTwqa8lOjnkVcGgZpxjZjETxZcvz2YZkN830u6srUK93C4=
-X-Received: by 2002:a05:6a20:3d95:b0:19b:1da3:cb99 with SMTP id
- s21-20020a056a203d9500b0019b1da3cb99mr3801518pzi.5.1706036435251; Tue, 23 Jan
- 2024 11:00:35 -0800 (PST)
+	s=arc-20240116; t=1706036447; c=relaxed/simple;
+	bh=mAcYNzDoP9dhqdN5/WCgwNX1TFh0slvAugab5Iyw3Q4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gUhWncAvW8O1t5B1E5R+tkW1jM2G8ao4lnYTtF7G2KtYb4P6Eh9wx8hkCJRMr7AlU/xNIleZwipMFqFAENmqqnhjERWcfTs5hjYtSWInFv62grcQnzMsADtFG/x7pvuCfFDepu6/If/eVT+KH52ViSBi8BB3OwlpF+N2j5pSVu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L0OZLtn2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1C4C433F1;
+	Tue, 23 Jan 2024 19:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706036446;
+	bh=mAcYNzDoP9dhqdN5/WCgwNX1TFh0slvAugab5Iyw3Q4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L0OZLtn2Z/NdUeupW/M5s5pCK5P8odLNmtkcv+CKPZ4nf/oENpI/yNat+pGtFFq3X
+	 OzgyS6peNQtfc+xxDL7vh9rKXfTlzdmY7DCOubGrrQxw9pYiBOZjzfxMgmkDhp73Gw
+	 Nf6cXihcMPzsR73GINhOTYTg1j16jMYCNyJ5uRnZs7qiXHyq/0BMp2znDV5SJqkuPD
+	 LgKqLzPq4ATdWlahOMJiQvxUMAYUhYdVALWbKekfQrS1jD+fPN65nGIe38XQop9Rgn
+	 biGdPjiSlFlxrOQmtSLb/4yBvgdqOIpyBZ9oZ5ABicZykVJaGr6ovLn2RI345FShNO
+	 fBqVA3c4naZsg==
+Date: Tue, 23 Jan 2024 19:00:40 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org, andre.draszik@linaro.org,
+	peter.griffin@linaro.org, semen.protsenko@linaro.org,
+	kernel-team@android.com, willmcvicker@google.com
+Subject: Re: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
+Message-ID: <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
+References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123153421.715951-1-tudor.ambarus@linaro.org> <20240123153421.715951-22-tudor.ambarus@linaro.org>
-In-Reply-To: <20240123153421.715951-22-tudor.ambarus@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Tue, 23 Jan 2024 13:00:24 -0600
-Message-ID: <CAPLW+4=dtRQT3QMfXLPE_0=TfANTZVa-Jm1Kt9CVTH64hUsGCA@mail.gmail.com>
-Subject: Re: [PATCH 21/21] MAINTAINERS: add Tudor Ambarus as R for the samsung
- SPI driver
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ZFvdDX3POLjhPB0W"
+Content-Disposition: inline
+In-Reply-To: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+X-Cookie: Stay together, drag each other down.
+
+
+--ZFvdDX3POLjhPB0W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 23, 2024 at 9:34=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
-.org> wrote:
->
-> I'm working with the samsung SPI driver and I'd like to review further
-> patches on this driver. Add myself as reviewer.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
+On Tue, Jan 23, 2024 at 03:33:59PM +0000, Tudor Ambarus wrote:
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> The patch set cleans a bit the driver and adds support for gs101 SPI.
+>=20
+> Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
+> in asm-generic/io.h. This will allow devices that require 32 bits
+> register accesses to write data in chunks of 8 or 16 bits (a typical use
+> case is SPI, where clients can request transfers in words of 8 bits for
+> example). GS101 only allows 32bit register accesses otherwise it raisses
+> a Serror Interrupt and hangs the system, thus the accessors are needed
+> here. If the accessors are fine, I expect they'll be queued either to
+> the SPI tree or to the ASM header files tree, but by providing an
+> immutable tag, so that the other tree can merge them too.
+>=20
+> The SPI patches were tested with the spi-loopback-test on the gs101
+> controller.
 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8d1052fa6a69..b9cde7ed8489 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19404,6 +19404,7 @@ F:      include/linux/clk/samsung.h
->
->  SAMSUNG SPI DRIVERS
->  M:     Andi Shyti <andi.shyti@kernel.org>
-> +R:     Tudor Ambarus <tudor.ambarus@linaro.org>
->  L:     linux-spi@vger.kernel.org
->  L:     linux-samsung-soc@vger.kernel.org
->  S:     Maintained
-> --
-> 2.43.0.429.g432eaa2c6b-goog
->
+The reformatting in this series will conflict with the SPI changes in:
+
+   https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.o=
+rg
+
+Can you please pull those into this series or otherwise coordinate?
+
+--ZFvdDX3POLjhPB0W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWwDNcACgkQJNaLcl1U
+h9DZOwf+Ie3iPAFWZDhGjymlNYKyWlq4LFxg7+2Vp7ig+SrrcB/PL94lyjnBRN40
+V2N6WCZ7+wHOQAjvi0p61ln9UkAdbN1AVeNPu4KNrne6NQpWCDzbV/yNatC5tHrD
+AlOjNznAsCTv4RVfJRxOLJ4RqiB2O7RglT2e+eMWF8xzNFSjYPa6j3iZnTHBeBeE
+6eZDgJj26a/NHMmdjia/TDOfUQQJVUcQfQt0QGSafk1zQL8LQRQS+adF64DP1fbj
+mZv5aIj2LRKc2AS1Arl7u0OOeqvhrn1hdV5t7au9/Ck8hsdJSm84sh49DQODaW0r
+q+GYaW+ejEf37M+7HFSdmTMocRZxcA==
+=/oRc
+-----END PGP SIGNATURE-----
+
+--ZFvdDX3POLjhPB0W--
 
