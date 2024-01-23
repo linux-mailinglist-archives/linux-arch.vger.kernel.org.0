@@ -1,232 +1,314 @@
-Return-Path: <linux-arch+bounces-1491-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1492-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF09839AD3
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 22:06:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA685839AE2
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 22:13:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C44F28C1D2
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 21:06:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B5F7288A46
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jan 2024 21:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E333F1A27C;
-	Tue, 23 Jan 2024 21:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A941A27A;
+	Tue, 23 Jan 2024 21:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fooOJ8Om"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="khPcMMPP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E472C1B7;
-	Tue, 23 Jan 2024 21:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849422C1A7;
+	Tue, 23 Jan 2024 21:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706043955; cv=none; b=PZGgKQfIcpLItRIESsVFLtkqYg1Lwmphhj2HIWvAJoDe1kKGhi+AfeOLGbge0zM+S6UuoQH85IEUXXZqvZ1EvADRJ95h5Kng8h7H5btNL0v2oUtcx1kkR+9MMMdUtgguXQ/0YswmKCIroBkSVUkjr8Aqux21B6b30+4UoKSDGsQ=
+	t=1706044378; cv=none; b=WVre5vNC6dqw+kjwY2ZbUSeRl5ekrB1JxFeykWwG9Vgripi45jouaUJm3U9/alwSLDyJAa3NFpqmsltyzUWZ42pKcpRzQ1e1AtqzPBUHUtscsi8VvTTq1uIEJKDIybWDP/7OSISTb9H8LMrMhk/S3dvWzx77YTuT1BE7iJuyTAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706043955; c=relaxed/simple;
-	bh=m2HBN4VZRC/C+9nNuZ2wRcZhlWr2WEDdSTFp4kKy/w0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Nt5Xsf00D9gnfkhfNqvVT7kQxyEuNOPx8B3RlcLG6KamIWvfq3WEZDDDuFaAWs/rZ+mzI1zThJL2mObQTweLD/wuHNkKBnE1PzRoqzlrKXc03fVTAyMDFOSYiA9QqlZiO7D9XA4oU6vezyim+S4yIaC2zOeQcX/KrFk3PCGLm5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fooOJ8Om; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7367C433C7;
-	Tue, 23 Jan 2024 21:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706043955;
-	bh=m2HBN4VZRC/C+9nNuZ2wRcZhlWr2WEDdSTFp4kKy/w0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=fooOJ8OmjLLi2sPby3Nl9MIdlHEvrfpFAihuYVxQo7hw3kXFFU5BBhxtw9Es1zdAj
-	 uoOB0eSr5ODQnl0ytYcy3OkfxpRzQjFJnBKHZ+fDCK4snp9/hH0t4zU8HwzlbMDR3/
-	 6Tehk2Yr5ZO4dq1HTqpQ6d5YAaspS+XcH8hzvVwTpn0ASuhQKN1mQ0SmO1glocZcQh
-	 F9OwjtAM5s13GqLhpK3eXiVzhE8v353r8oXsa0D6rKk/mOrD4YWC4g6FNOARHFrJgH
-	 slQkXMU46b2Z4Y1akcI+nN92cTY2qvr2mqsrUq7FPm2h/3xD6dzXXXdBBeHkAQn8DD
-	 i3/gzB5+uueSg==
-Date: Tue, 23 Jan 2024 15:05:53 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Philipp Stanner <pstanner@redhat.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Randy Dunlap <rdunlap@infradead.org>, NeilBrown <neilb@suse.de>,
-	John Sanpe <sanpeqf@gmail.com>,
-	Kent Overstreet <kent.overstreet@gmail.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Uladzislau Koshchanka <koshchanka@gmail.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
-	Rae Moar <rmoar@google.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	"wuqiang.matt" <wuqiang.matt@bytedance.com>,
-	Yury Norov <yury.norov@gmail.com>, Jason Baron <jbaron@akamai.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arch@vger.kernel.org, stable@vger.kernel.org,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v5 RESEND 5/5] lib, pci: unify generic pci_iounmap()
-Message-ID: <20240123210553.GA326783@bhelgaas>
+	s=arc-20240116; t=1706044378; c=relaxed/simple;
+	bh=y2tVhOoHqbkrgoEwdopUBYrq/O3nTt8UTKN6fH85W78=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b47DgCbvjNGRBE3Ebg5V7gh7K+Sc2Bc/JxfMIDG4/pEXp972M30NWoNcTy/KS/EPzf+9SH3JXPLNGbiN35ibrSOLKJqZyJUONQIr0OY/9WwT4N2DN9k1sdSgSqf33PX1tc8H5JWGt4z8tqLaOLFFV3DsETJdC9AShM4i/jWzfYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=khPcMMPP; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=SHg3OZ8rSfuStuI/t9nj9uzIE/yE48Lbl7/EYKvNYzQ=; b=khPcMMPPOS3B4SHAZHQpR7RIZd
+	z0s3275zIx+WRubbX4rCLVwWchIc3qCgsHQ3SwLBSBDibxOjWpdZE7n17u5PeYPR8bEUixN8TdGnV
+	tUzdOJ3cH38ZGg96a3RPK0Le/3lPA3HHqYnWBDe2Rr1Qq0ALcz2XOY+hOSS7f6wFs59Dvxa1eMwF+
+	fUimAV6KLbZbkzTlDfLDOyXIbY1cevpyffkEOj8oZWaSIA7Shw/Bpk6kPVR6XctAKYol+IABzZfTt
+	UA0Q4XsCOoepZOTZ96m6rptCs2EJNYKdmVTmM6SbZdtMydRWeBJQChp3Fz2W54mOdTUEaQh5PNI9s
+	x197biww==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56660)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rSO4f-00036p-05;
+	Tue, 23 Jan 2024 21:12:49 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rSO4b-0002Gq-Oh; Tue, 23 Jan 2024 21:12:45 +0000
+Date: Tue, 23 Jan 2024 21:12:45 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include
+ 'present'
+Message-ID: <ZbArzbC19L1YxLHi@shell.armlinux.org.uk>
+References: <CAJZ5v0h7wsLt8d3ZoLXsK1=crAx66T42WDKNoHcg8CiHpAjS8g@mail.gmail.com>
+ <Za/q9jivG4OdZM0f@shell.armlinux.org.uk>
+ <CAJZ5v0gwe02uzAQoX0QDHo35OTEozpbnqC6vukjM3aE6HMq9WQ@mail.gmail.com>
+ <ZbADTBLDEFtdglho@shell.armlinux.org.uk>
+ <CAJZ5v0jh-EdrnjkJep++UDo+Uv4hmR7VV4KYVdF4CK2K+5XLtg@mail.gmail.com>
+ <ZbAMjZoybVfiAGcT@shell.armlinux.org.uk>
+ <CAJZ5v0gt=MR1JGsPZnZG_AqudA-KMmb4BOa_A6H9B6+Rhe_+JQ@mail.gmail.com>
+ <ZbAdAdqqfXRuY3Xj@shell.armlinux.org.uk>
+ <CAJZ5v0gsqbeJc4qX-AefOqu53=rDme2XzFXacWz_0zbVBoaXjw@mail.gmail.com>
+ <ZbAoJO8f66Dg0lGF@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240111085540.7740-6-pstanner@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZbAoJO8f66Dg0lGF@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, Jan 11, 2024 at 09:55:40AM +0100, Philipp Stanner wrote:
-> The implementation of pci_iounmap() is currently scattered over two
-> files, drivers/pci/iomap.c and lib/iomap.c. Additionally,
-> architectures can define their own version.
+On Tue, Jan 23, 2024 at 08:57:08PM +0000, Russell King (Oracle) wrote:
+> On Tue, Jan 23, 2024 at 09:17:18PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Jan 23, 2024 at 9:09 PM Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > >
+> > > On Tue, Jan 23, 2024 at 08:27:05PM +0100, Rafael J. Wysocki wrote:
+> > > > On Tue, Jan 23, 2024 at 7:59 PM Russell King (Oracle)
+> > > > <linux@armlinux.org.uk> wrote:
+> > > > >
+> > > > > On Tue, Jan 23, 2024 at 07:26:57PM +0100, Rafael J. Wysocki wrote:
+> > > > > > On Tue, Jan 23, 2024 at 7:20 PM Russell King (Oracle)
+> > > > > > <linux@armlinux.org.uk> wrote:
+> > > > > > >
+> > > > > > > On Tue, Jan 23, 2024 at 06:43:59PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > > On Tue, Jan 23, 2024 at 5:36 PM Russell King (Oracle)
+> > > > > > > > <linux@armlinux.org.uk> wrote:
+> > > > > > > > >
+> > > > > > > > > On Tue, Jan 23, 2024 at 05:15:54PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > > > > On Tue, Jan 23, 2024 at 2:28 PM Russell King (Oracle)
+> > > > > > > > > > <linux@armlinux.org.uk> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On Mon, Jan 22, 2024 at 06:00:13PM +0000, Jonathan Cameron wrote:
+> > > > > > > > > > > > On Mon, 18 Dec 2023 21:35:16 +0100
+> > > > > > > > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > > On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > From: James Morse <james.morse@arm.com>
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > The code behind ACPI_HOTPLUG_CPU allows a not-present CPU to become
+> > > > > > > > > > > > > > present.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Right.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > > This isn't the only use of HOTPLUG_CPU. On arm64 and riscv
+> > > > > > > > > > > > > > CPUs can be taken offline as a power saving measure.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > But still there is the case in which a non-present CPU can become
+> > > > > > > > > > > > > present, isn't it there?
+> > > > > > > > > > > >
+> > > > > > > > > > > > Not yet defined by the architectures (and I'm assuming it probably never will be).
+> > > > > > > > > > > >
+> > > > > > > > > > > > The original proposal we took to ARM was to do exactly that - they pushed
+> > > > > > > > > > > > back hard on the basis there was no architecturally safe way to implement it.
+> > > > > > > > > > > > Too much of the ARM arch has to exist from the start of time.
+> > > > > > > > > > > >
+> > > > > > > > > > > > https://lore.kernel.org/linux-arm-kernel/cbaa6d68-6143-e010-5f3c-ec62f879ad95@arm.com/
+> > > > > > > > > > > > is one of the relevant threads of the kernel side of that discussion.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Not to put specific words into the ARM architects mouths, but the
+> > > > > > > > > > > > short description is that there is currently no demand for working
+> > > > > > > > > > > > out how to make physical CPU hotplug possible, as such they will not
+> > > > > > > > > > > > provide an architecturally compliant way to do it for virtual CPU hotplug and
+> > > > > > > > > > > > another means is needed (which is why this series doesn't use the present bit
+> > > > > > > > > > > > for that purpose and we have the Online capable bit in MADT/GICC)
+> > > > > > > > > > > >
+> > > > > > > > > > > > It was a 'fun' dance of several years to get to that clarification.
+> > > > > > > > > > > > As another fun fact, the same is defined for x86, but I don't think
+> > > > > > > > > > > > anyone has used it yet (GICC for ARM has an online capable bit in the flags to
+> > > > > > > > > > > > enable this, which was remarkably similar to the online capable bit in the
+> > > > > > > > > > > > flags of the Local APIC entries as added fairly recently).
+> > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > > On arm64 an offline CPU may be disabled by firmware, preventing it from
+> > > > > > > > > > > > > > being brought back online, but it remains present throughout.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Adding code to prevent user-space trying to online these disabled CPUs
+> > > > > > > > > > > > > > needs some additional terminology.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Rename the Kconfig symbol CONFIG_ACPI_HOTPLUG_PRESENT_CPU to reflect
+> > > > > > > > > > > > > > that it makes possible CPUs present.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Honestly, I don't think that this change is necessary or even useful.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Whilst it's an attempt to avoid future confusion, the rename is
+> > > > > > > > > > > > not something I really care about so my advice to Russell is drop
+> > > > > > > > > > > > it unless you are attached to it!
+> > > > > > > > > > >
+> > > > > > > > > > > While I agree that it isn't a necessity, I don't fully agree that it
+> > > > > > > > > > > isn't useful.
+> > > > > > > > > > >
+> > > > > > > > > > > One of the issues will be that while Arm64 will support hotplug vCPU,
+> > > > > > > > > > > it won't be setting ACPI_HOTPLUG_CPU because it doesn't support
+> > > > > > > > > > > the present bit changing. So I can see why James decided to rename
+> > > > > > > > > > > it - because with Arm64's hotplug vCPU, the idea that ACPI_HOTPLUG_CPU
+> > > > > > > > > > > somehow enables hotplug CPU support is now no longer true.
+> > > > > > > > > > >
+> > > > > > > > > > > Keeping it as ACPI_HOTPLUG_CPU makes the code less obvious, because it
+> > > > > > > > > > > leads one to assume that it ought to be enabled for Arm64's
+> > > > > > > > > > > implementatinon, and that could well cause issues in the future if
+> > > > > > > > > > > people make the assumption that "ACPI_HOTPLUG_CPU" means hotplug CPU
+> > > > > > > > > > > is supported in ACPI. It doesn't anymore.
+> > > > > > > > > >
+> > > > > > > > > > On x86 there is no confusion AFAICS.  It's always meant "as long as
+> > > > > > > > > > the platform supports it".
+> > > > > > > > >
+> > > > > > > > > That's x86, which supports physical CPU hotplug. We're introducing
+> > > > > > > > > support for Arm64 here which doesn't support physical CPU hotplug.
+> > > > > > > > >
+> > > > > > > > >                                                 ACPI-based      Physical        Virtual
+> > > > > > > > > Arch    HOTPLUG_CPU     ACPI_HOTPLUG_CPU        Hotplug         Hotplug         Hotplug
+> > > > > > > > > Arm64   Y               N                       Y               N               Y
+> > > > > > > > > x86     Y               Y                       Y               Y               Y
+> > > > > > > > >
+> > > > > > > > > So ACPI_HOTPLUG_CPU becomes totally misnamed with the introduction
+> > > > > > > > > of hotplug on Arm64.
+> > > > > > > > >
+> > > > > > > > > If we want to just look at stuff from an x86 perspective, then yes,
+> > > > > > > > > it remains correct to call it ACPI_HOTPLUG_CPU. It isn't correct as
+> > > > > > > > > soon as we add Arm64, as I already said.
+> > > > > > > >
+> > > > > > > > And if you rename it, it becomes less confusing for ARM64, but more
+> > > > > > > > confusing for x86, which basically is my point.
+> > > > > > > >
+> > > > > > > > IMO "hotplug" covers both cases well enough and "hotplug present" is
+> > > > > > > > only accurate for one of them.
+> > > > > > > >
+> > > > > > > > > And honestly, a two line quip to my reasoned argument is not IMHO
+> > > > > > > > > an acceptable reply.
+> > > > > > > >
+> > > > > > > > Well, I'm not even sure how to respond to this ...
+> > > > > > >
+> > > > > > > The above explanation you give would have been useful...
+> > > > > > >
+> > > > > > > I don't see how "hotplug" covers both cases. As I've tried to point
+> > > > > > > out many times now, ACPI_HOTPLUG_CPU is N for Arm64, yet it supports
+> > > > > > > ACPI based hotplug. How does ACPI_HOTPLUG_CPU cover Arm64 if it's
+> > > > > > > N there?
+> > > > > >
+> > > > > > But IIUC this change is preliminary for changing it (or equivalent
+> > > > > > option with a different name) to Y, isn't it?
+> > > > >
+> > > > > No. As I keep saying, ACPI_HOTPLUG_CPU ends up N on Arm64 even when
+> > > > > it supports hotplug CPU via ACPI.
+> > > > >
+> > > > > Even with the full Arm64 patch set here, under arch/ we still only
+> > > > > have:
+> > > > >
+> > > > > arch/loongarch/Kconfig: select ACPI_HOTPLUG_PRESENT_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
+> > > > > arch/x86/Kconfig:       select ACPI_HOTPLUG_PRESENT_CPU         if ACPI_PROCESSOR && HOTPLUG_CPU
+> > > > >
+> > > > > To say it yet again, ACPI_HOTPLUG_(PRESENT_)CPU is *never* set on
+> > > > > Arm64.
+> > > >
+> > > > Allright, so ARM64 is not going to use the code that is conditional on
+> > > > ACPI_HOTPLUG_CPU today.
+> > > >
+> > > > Fair enough.
+> > > >
+> > > > > > > IMHO it totally doesn't, and moreover, it goes against what
+> > > > > > > one would logically expect - and this is why I have a problem with
+> > > > > > > your effective NAK for this change. I believe you are basically
+> > > > > > > wrong on this for the reasons I've given - that ACPI_HOTPLUG_CPU
+> > > > > > > will be N for Arm64 despite it supporting ACPI-based CPU hotplug.
+> > > > > >
+> > > > > > So I still have to understand how renaming it for all architectures
+> > > > > > (including x86) is supposed to help.
+> > > > > >
+> > > > > > It will still be the same option under a different name.  How does
+> > > > > > that change things technically?
+> > > > >
+> > > > > Do you think that it makes any sense to have support for ACPI-based
+> > > > > hotplug CPU
+> > > >
+> > > > So this is all about what you and I mean by "ACPI-based hotplug CPU".
+> > > >
+> > > > > *and* having it functional with a configuration symbol
+> > > > > named "ACPI_HOTPLUG_CPU" to be set to N ? That's essentially what
+> > > > > you are advocating for...
+> > > >
+> > > > Setting ACPI_HOTPLUG_CPU to N means that you are not going to compile
+> > > > the code that is conditional on it.
+> > > >
+> > > > That code allows the processor driver to be removed from CPUs and
+> > > > arch_unregister_cpu() to be called from within acpi_bus_trim()  (among
+> > > > other things).  On the way up, it allows arch_register_cpu() to be
+> > > > called from within acpi_bus_scan().  If these things are not done,
+> > > > what I mean by "ACPI-based hotplug CPU" is not supported.
+> > >
+> > > Even on Arm64, arch_register_cpu() and arch_unregister_cpu() will be
+> > > called when the CPU in the VM is hot-removed or hot-added...
+> > 
+> > In a different way, however.
 > 
-> To have only one version, it's necessary to create a helper function,
-> iomem_is_ioport(), that tells pci_iounmap() whether the passed address
-> points to an ioport or normal memory.
+> This is getting tiresome. The goal posts keep moving. This isn't a
+> discussion, this is a "you're wrong and I'm going to keep changing my
+> argument if you agree with me to make you always wrong".
 > 
-> iomem_is_ioport() can be provided through two different ways:
->   1. The architecture itself provides it. As of today, the version
->      coming from lib/iomap.c de facto is the x86-specific version and
->      comes into play when CONFIG_GENERIC_IOMAP is selected. This rather
->      confusing naming is an artifact left by the removal of IA64.
->   2. As a default version in include/asm-generic/io.h for those
->      architectures that don't use CONFIG_GENERIC_IOMAP, but also don't
->      provide their own version of iomem_is_ioport().
-> 
-> Once all architectures that support ports provide iomem_is_ioport(), the
-> arch-specific definitions for pci_iounmap() can be removed and the archs
-> can use the generic implementation, instead.
-> 
-> Create a unified version of pci_iounmap() in drivers/pci/iomap.c.
-> Provide the function iomem_is_ioport() in include/asm-generic/io.h
-> (generic) and lib/iomap.c ("pseudo-generic" for x86).
-> 
-> Remove the CONFIG_GENERIC_IOMAP guard around
-> ARCH_WANTS_GENERIC_PCI_IOUNMAP so that configs that set
-> CONFIG_GENERIC_PCI_IOMAP without CONFIG_GENERIC_IOMAP still get the
-> function.
-> 
-> Add TODOs for follow-up work on the "generic is not generic but
-> x86-specific"-Problem.
-> ...
+> Sorry, no point continuing this.
 
-> +++ b/drivers/pci/iomap.c
-> @@ -135,44 +135,30 @@ void __iomem *pci_iomap_wc(struct pci_dev *dev, int bar, unsigned long maxlen)
->  EXPORT_SYMBOL_GPL(pci_iomap_wc);
->  
->  /*
-> - * pci_iounmap() somewhat illogically comes from lib/iomap.c for the
-> - * CONFIG_GENERIC_IOMAP case, because that's the code that knows about
-> - * the different IOMAP ranges.
-> + * This check is still necessary due to legacy reasons.
->   *
-> - * But if the architecture does not use the generic iomap code, and if
-> - * it has _not_ defined it's own private pci_iounmap function, we define
-> - * it here.
-> - *
-> - * NOTE! This default implementation assumes that if the architecture
-> - * support ioport mapping (HAS_IOPORT_MAP), the ioport mapping will
-> - * be fixed to the range [ PCI_IOBASE, PCI_IOBASE+IO_SPACE_LIMIT [,
-> - * and does not need unmapping with 'ioport_unmap()'.
-> - *
-> - * If you have different rules for your architecture, you need to
-> - * implement your own pci_iounmap() that knows the rules for where
-> - * and how IO vs MEM get mapped.
-> - *
-> - * This code is odd, and the ARCH_HAS/ARCH_WANTS #define logic comes
-> - * from legacy <asm-generic/io.h> header file behavior. In particular,
-> - * it would seem to make sense to do the iounmap(p) for the non-IO-space
-> - * case here regardless, but that's not what the old header file code
-> - * did. Probably incorrectly, but this is meant to be bug-for-bug
-> - * compatible.
+Let me be clear why I'm exhasperated by this.
 
-Moving this comment update to the patch that adds the ioport_unmap()
-call would make that patch more consistent and simplify this patch.
+I've been giving you a technical argument (Arm64 supporting ACPI
+hotplug CPU, but ACPI_HOTPLUG_CPU=n) for many many emails. You
+seemed to misunderstand that, expecting ACPI_HOTPLUG_CPU to become
+Y later in the series.
 
-> + * TODO: Have all architectures that provide their own pci_iounmap() provide
-> + * iomem_is_ioport() instead. Remove this #if afterwards.
->   */
->  #if defined(ARCH_WANTS_GENERIC_PCI_IOUNMAP)
->  
-> -void pci_iounmap(struct pci_dev *dev, void __iomem *p)
-> +/**
-> + * pci_iounmap - Unmapp a mapping
-> + * @dev: PCI device the mapping belongs to
-> + * @addr: start address of the mapping
-> + *
-> + * Unmapp a PIO or MMIO mapping.
+When that became clear that it wasn't, you've changed tack. It then
+became about whether two functions get called or not.
 
-s/Unmapp/Unmap/ (twice)
+When I pointed out that they are still going to be called, oh no,
+it's not about whether those two functions will be called but
+how they get called.
 
-> + */
-> +void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
+Essentially, what this comes down to is that _you_ have no technical
+argument against the change, just _you_ don't personally want it
+and it doesn't matter what justification I come up with, you're
+always going to tell me something different.
 
-Maybe move the "p" to "addr" rename to the patch that fixes the
-pci_iounmap() #ifdef problem, since that's a trivial change that
-already has to do with handling both PIO and MMIO?  Then this patch
-would be a little more focused.
+So why not state that you personally don't want it in the first
+place? Why this game of cat and mouse and the constantly changing
+arguments. I guess it's to waste developers time.
 
-The kernel-doc addition could possibly also move there since it isn't
-related to the unification.
+Well, I'm calling you out for this, because I'm that pissed off
+at the amount of time you're causing to be wasted.
 
->  {
-> -#ifdef ARCH_HAS_GENERIC_IOPORT_MAP
-> -	uintptr_t start = (uintptr_t) PCI_IOBASE;
-> -	uintptr_t addr = (uintptr_t) p;
-> -
-> -	if (addr >= start && addr < start + IO_SPACE_LIMIT) {
-> -		ioport_unmap(p);
-> +#ifdef CONFIG_HAS_IOPORT_MAP
-> +	if (iomem_is_ioport(addr)) {
-> +		ioport_unmap(addr);
->  		return;
->  	}
->  #endif
-> -	iounmap(p);
-> +
-> +	iounmap(addr);
->  }
-
-> + * If CONFIG_GENERIC_IOMAP is selected and the architecture does NOT provide its
-> + * own version, ARCH_WANTS_GENERIC_IOMEM_IS_IOPORT makes sure that the generic
-> + * version from asm-generic/io.h is NOT used and instead the second "generic"
-> + * version from this file here is used.
-> + *
-> + * There are currently two generic versions because of a difficult cleanup
-> + * process. Namely, the version in lib/iomap.c once was really generic when IA64
-> + * still existed. Today, it's only really used by x86.
-> + *
-> + * TODO: Move this function to x86-specific code.
-
-Some of these TODOs look fairly simple.  Are they actually hard, or
-could they just be done now?
-
-It seems like implementing iomem_is_ioport() for the other arches
-would be straightforward and if done first, could make this patch look
-tidier.
-
-Or if the TODOs can't be done now, maybe the iomem_is_ioport()
-addition could be done as a separate patch to make the unification
-more obvious.
-
-> + */
-> +#if defined(ARCH_WANTS_GENERIC_IOMEM_IS_IOPORT)
-> +bool iomem_is_ioport(void __iomem *addr)
->  {
-> -	IO_COND(addr, /* nothing */, iounmap(addr));
-> +	unsigned long port = (unsigned long __force)addr;
-> +
-> +	if (port > PIO_OFFSET && port < PIO_RESERVED)
-> +		return true;
-> +
-> +	return false;
->  }
-> -EXPORT_SYMBOL(pci_iounmap);
-> -#endif /* CONFIG_PCI */
-> +#endif /* ARCH_WANTS_GENERIC_IOMEM_IS_IOPORT */
-> -- 
-> 2.43.0
-> 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
