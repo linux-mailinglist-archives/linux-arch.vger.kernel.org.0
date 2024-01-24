@@ -1,127 +1,224 @@
-Return-Path: <linux-arch+bounces-1503-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1504-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E17583A0D1
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 06:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5051E83A418
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 09:26:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD29D1F22209
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 05:01:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFFD11F23190
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 08:26:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895C9C8E1;
-	Wed, 24 Jan 2024 05:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C140617562;
+	Wed, 24 Jan 2024 08:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XoW63TPl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAHO44G3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EDCC2D3
-	for <linux-arch@vger.kernel.org>; Wed, 24 Jan 2024 05:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1D11754C;
+	Wed, 24 Jan 2024 08:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706072467; cv=none; b=umF3vZPfdYkN9GVyX2ykpyywz4adRFqPlREkH0yTuCixlKxV07veQlQs9DpX91SrNjbn87phqba1t93asWV/6bk1LiKkWQddYp0EaMV9Eu2LOFH8gZhfW9VyinMGDPxrDYQwqRrC1o7ZLRiNSC0NSEKl1s7ynkjgjGGYP+u/0gE=
+	t=1706084791; cv=none; b=azg58C92mt6QaD7UWCQ9yplJtW2kmrdPlEuQOjHbsTKXjXB7ZSkD0VLGPagbr7u/sk7xLfy57AZ32tZV8DhWveXqzpumeadVC9MQ+COogX4x8hfuAR615DK+Uv/Xwq9vw7n7OePc6nGTMIPvdh05PoTUUABFK9e7N2Z8Ri64hzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706072467; c=relaxed/simple;
-	bh=Lr34oEPG56izAEfXVC+VzS7CMs5oRhBgTumF1Fjwtvs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E6jJPCpuJToe9sIwpxek8mOQANLx/nOovEt23X24nbtftWMCftiTldFRlPtU/W7IT7c13HaPcSJ+Udtli0BQcUPnslsE2iCnFnJwYhfEfyqGABdwIIquYTIFjQhFklflb01jfLp5HNXx9+5JWz9Pe/nkeSqk/GDkv2jMoI4RVMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XoW63TPl; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40e76109cdeso56213845e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jan 2024 21:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706072464; x=1706677264; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg+yXoqVMruWKFx75OynXl2HLLDpn2EH7QUiBIIbeGI=;
-        b=XoW63TPl5WtLYSkUE/4LBkViMglt0tEd1TAFAWxv8l/ayF02uhKSm8kpm0z6vTUqK6
-         Y/KGEDGCb0VXjG0wyg0fyZfheWPgEpJQNfeQQojqoA8EtdPPrKv3tbLawTBFv9Ams6Ca
-         /p0jXsBk8HNjgNWmkV6/WKxTIRm2JpyOcgRzYVosIpg9dC8NCEQnPM1OADC+6XP8NceM
-         CFPuAVPk8rvJ8IFSLGjOw+7qg9EglH4NvNSK19vkmeNWxQVUtpbM9ywRAdAl0XxhK6eP
-         gef57ITw7xYX4B1AG8ULZX+La5qAEbIeSP0VW2PGE0hz/pB6Ogo7NFqYRXq+OX9x5GiT
-         ecgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706072464; x=1706677264;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg+yXoqVMruWKFx75OynXl2HLLDpn2EH7QUiBIIbeGI=;
-        b=O4M5+zwxpYPPwAKWQVd/52RrZT9ck1I6sno0AfeqbvqOMI6isJBuQd7nOfQPbDe588
-         UQpnQHkLT/4lHMTfL08t7LsfGz0AjYg2DvuOvYqHWniBtZFB6Bs6I9MfulGPkDcWNNZT
-         N1G4Cuk5K4ONZy1bnCmAezLwYhglOzubaufaoFm0yWjSsHV/M6SfjIc2sEJFrmr2tIHo
-         QWPMbiX10n4bx8cM2TaHucTJZevLQOyWZqArGiH/fld65tjfNu+Htq7XP613MJmBRdcw
-         5XbduMP4uH9s/GWCtWHS3tVr0l7PuBow8oOjwSB8gEh/f16Z2Vre2GxF1h72dOiIX4Vk
-         s5HQ==
-X-Gm-Message-State: AOJu0Yy9Ja7tPT/BQclUASqRQwk4vBLO4Rm+JHQFgGNhj1wF+u9t2Y/Z
-	gRqcQd6qWMg/l/xc7Bw+W/7lROGME/jnsmZgVyKofOr62oDXIgKaDeZo7s3osm4=
-X-Google-Smtp-Source: AGHT+IEF+sQIT0s3TeYunlfmOn2bN96e3yfHNUoZvFh1cXGgZ/0DgRMpBSUOVh9lxQLIL7MTkSj4YQ==
-X-Received: by 2002:a05:600c:84ce:b0:40e:44c2:92be with SMTP id er14-20020a05600c84ce00b0040e44c292bemr706757wmb.143.1706072464015;
-        Tue, 23 Jan 2024 21:01:04 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id t21-20020a05600c451500b0040e3ac9f4c8sm48185934wmo.28.2024.01.23.21.01.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 21:01:03 -0800 (PST)
-Message-ID: <7c998d34-919b-46e7-8942-75da94d5ac21@linaro.org>
-Date: Wed, 24 Jan 2024 05:01:01 +0000
+	s=arc-20240116; t=1706084791; c=relaxed/simple;
+	bh=pN/fnpKTCdTdr8iz9bwG3YmYtng5FDKPG7zFExOlM7M=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z1Hwr+3SbvUGgdmSzBNutinmtuv7PHuTsgxCms96NfJewCc4cFG15M9JH8zHgNNFnV70ghaa8be/Mj//tbbY9l2kvaeCBEH85e5C1B7TAmLiPOKDLtO65kqPNr7BqR1sLKGabnfE6WLWNEl1EllXktMweMbiLmjfM9XdOTDhVvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAHO44G3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16461C433F1;
+	Wed, 24 Jan 2024 08:26:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706084791;
+	bh=pN/fnpKTCdTdr8iz9bwG3YmYtng5FDKPG7zFExOlM7M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PAHO44G39yPBF/MgmuviKNTwso+xJAhQJNnI7vrKh7xtaTw5HRxq4YOltrCobA6uB
+	 lTO4y+mIRErko6Pnme3gZxS5vBhpGHGuPGbOq/wHOfciVjcNLir85Ko8bVTVPSdneL
+	 6LQOglCNNspZqn4JyzX4RwFXXAyJ9CCenYH06qLo1yomaSejBa2VEQ3WBNM2Ia0y07
+	 PRqioGakxW4w3uoy7QdZ+kIWthohCs66X50Djk9GcJwM4Xgsg2LnctteY2FFZj5Qbe
+	 0vW1bjstAMyBo116Wfpw+BqjzrLOjNr/gUX1te3tnr1+TciPd1e0erJdWsXrEbkbAZ
+	 p6jNkSqrEgq/Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rSYaa-00EG6y-Jr;
+	Wed, 24 Jan 2024 08:26:28 +0000
+Date: Wed, 24 Jan 2024 08:26:28 +0000
+Message-ID: <86ede787d7.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+In-Reply-To: <20240124012723.GD1455070@nvidia.com>
+References: <20231205175127.GJ2692119@nvidia.com>
+	<ZW97VdHYH3HYVyd5@arm.com>
+	<20231205195130.GM2692119@nvidia.com>
+	<ZXBWXodu2rxQ7Szz@arm.com>
+	<20231206125919.GP2692119@nvidia.com>
+	<20240116185121.GB980613@nvidia.com>
+	<ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
+	<20240117123618.GD734935@nvidia.com>
+	<ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
+	<ZbAj34vdVuMrmdFD@arm.com>
+	<20240124012723.GD1455070@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arch@vger.kernel.org, andre.draszik@linaro.org,
- peter.griffin@linaro.org, semen.protsenko@linaro.org,
- kernel-team@android.com, willmcvicker@google.com
-References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
- <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jgg@nvidia.com, catalin.marinas@arm.com, mark.rutland@arm.com, schnelle@linux.ibm.com, leon@kernel.org, arnd@arndb.de, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, michaelgur@mellanox.com, nathan@kernel.org, ndesaulniers@google.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-
-
-On 1/23/24 19:00, Mark Brown wrote:
-> On Tue, Jan 23, 2024 at 03:33:59PM +0000, Tudor Ambarus wrote:
+On Wed, 24 Jan 2024 01:27:23 +0000,
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 > 
->> The patch set cleans a bit the driver and adds support for gs101 SPI.
->>
->> Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
->> in asm-generic/io.h. This will allow devices that require 32 bits
->> register accesses to write data in chunks of 8 or 16 bits (a typical use
->> case is SPI, where clients can request transfers in words of 8 bits for
->> example). GS101 only allows 32bit register accesses otherwise it raisses
->> a Serror Interrupt and hangs the system, thus the accessors are needed
->> here. If the accessors are fine, I expect they'll be queued either to
->> the SPI tree or to the ASM header files tree, but by providing an
->> immutable tag, so that the other tree can merge them too.
->>
->> The SPI patches were tested with the spi-loopback-test on the gs101
->> controller.
+> On Tue, Jan 23, 2024 at 08:38:55PM +0000, Catalin Marinas wrote:
+> > (fixed Marc's email address)
+> > 
+> > On Wed, Jan 17, 2024 at 01:29:06PM +0000, Mark Rutland wrote:
+> > > On Wed, Jan 17, 2024 at 08:36:18AM -0400, Jason Gunthorpe wrote:
+> > > > On Wed, Jan 17, 2024 at 12:30:00PM +0000, Mark Rutland wrote:
+> > > > > On Tue, Jan 16, 2024 at 02:51:21PM -0400, Jason Gunthorpe wrote:
+> > > > > > I'm just revising this and I'm wondering if you know why ARM64 has this:
+> > > > > > 
+> > > > > > #define __raw_writeq __raw_writeq
+> > > > > > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> > > > > > {
+> > > > > > 	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
+> > > > > > }
+> > > > > > 
+> > > > > > Instead of
+> > > > > > 
+> > > > > > #define __raw_writeq __raw_writeq
+> > > > > > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> > > > > > {
+> > > > > > 	asm volatile("str %x0, %1" : : "rZ" (val), "m" (*(volatile u64 *)addr));
+> > > > > > }
+> > > > > > 
+> > > > > > ?? Like x86 has.
+> > > > > 
+> > > > > I believe this is for the same reason as doing so in all of our other IO
+> > > > > accessors.
+> > > > > 
+> > > > > We've deliberately ensured that our IO accessors use a single base register
+> > > > > with no offset as this is the only form that HW can represent in ESR_ELx.ISS.SRT
+> > > > > when reporting a stage-2 abort, which a hypervisor may use for
+> > > > > emulating IO.
+> > > > 
+> > > > Wow, harming bare metal performace to accommodate imperfect emulation
+> > > > sounds like a horrible reason :(
+> > > 
+> > > Having working functionality everywhere is a very good reason. :)
+> > > 
+> > > > So what happens with this patch where IO is done with STP? Are you
+> > > > going to tell me I can't do it because of this?
+> > > 
+> > > I'm not personally going to make that judgement, but it's certainly something
+> > > for Catalin and Will to consider (and I've added Marc in case he has any
+> > > opinion).
+> > 
+> > Good point, I missed this part. We definitely can't use STP in the I/O
+> > accessors, we'd have a big surprise when running the same code in a
+> > guest with emulated I/O.
 > 
-> The reformatting in this series will conflict with the SPI changes in:
+> Unfortunately there is no hard distinction in KVM/qemu for "emulated
+> IO" and "VFIO MMIO". Even devices using VFIO can get funneled down the
+> emulated path for legitimate reasons.
 > 
->    https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.org
-> 
-> Can you please pull those into this series or otherwise coordinate?
+> Again, userspace is already widely deployed using complex IO
+> accessors. ST4 has been out there for years and at this moment this
+> patch with STP is already being deployed in production environments.
 
-ah, I haven't noticed Sam's updates. I'll rebase on top of his set and
-adapt if necessary. I'll review that set in a sec.
+Then you will get to keep the pieces. Good luck.
 
-Cheers,
-ta
+> Even if you refuse to take STP to mainline it *will* be running in VMs
+> under ARM hypervisors.
+
+A hypervisor can't do anything with it. If you cared to read the
+architecture, you'd know by now. So your VM will be either dead, or
+dog slow, depending on your hypervisor. In any case, I'm sure it will
+reflect positively on your favourite software.
+
+> What exactly do you think should be done about that?
+
+Well, you could use KVM_CAP_ARM_NISV_TO_USER in userspace and see
+everything slow down. Your call.
+
+> I thought the guiding mantra here was that any time KVM does not
+> perfectly emulate bare metal it is a bug. "We can't assume all VMs are
+> Linux!". Indeed we recently had some long and *very* theoretical
+> discussions about possible incompatibilties due to kvm changes in the
+> memory attributes thread.
+>
+> But here it seems to be just shrugging off something so catastrophic
+> as performance IO accessors *that are widely deployed already* don't
+> work reliably in VMs!?!?
+> 
+> "Oh well, don't use them"!?
+
+Exactly.
+
+You can also take this to the ARM architects and get them to update
+the architecture to mandate full syndrome information for all
+load/store instructions, and you'll get something useful in 2034.
+Maybe.
+
+Or you can stop whining and try to get better performance out of what
+we have today.
+
+> Damn I hope it crashes the VM and doesn't corrupt the MMIO. I just
+> debugged a x86 KVM issue with it corrupting VFIO MMIO and that was a
+> total nightmare to find.
+> 
+> > If eight STRs without other operations interleaved give us the
+> > write-combining on most CPUs (with Normal NC), we should go with this
+> > instead of STP.
+> 
+> __iowrite64_copy() is a performance IO accessor, we should not degrade
+> it because buggy hypervisors might exist that have a problem with STP
+> or other instructions. :( :(
+> 
+> Anyhow, I know nothing about whatever this issue is - Mark said:
+> 
+>  > FWIW, IIUC the immediate-offset forms *without* writeback can still
+>  > be reported usefully in ESR_ELx,
+> 
+> Which excludes the post/pre increment forms - but does STP and ST4
+> also have some kind of problem because the emulation path can't know
+> about wider than a 64 bit access?
+> 
+> What is the plan for ST64B? Don't get to use that either?
+
+ST64 has full syndrome information, making it possible to emulate.
+
+In any case, there is no magic there. Everything is documented, and
+has been for the past... 15 years?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
