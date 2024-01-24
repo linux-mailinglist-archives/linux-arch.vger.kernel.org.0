@@ -1,362 +1,349 @@
-Return-Path: <linux-arch+bounces-1524-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1525-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9DA83B243
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 20:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD67F83B277
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 20:44:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAE161F238FF
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 19:26:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44A4E1F25583
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 19:44:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91147132C0D;
-	Wed, 24 Jan 2024 19:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73099132C34;
+	Wed, 24 Jan 2024 19:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lwi3OVoS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hP8xbFd3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F2F131755;
-	Wed, 24 Jan 2024 19:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706124400; cv=fail; b=aVER2tH4F+19dGh6OnXupG5Fxk66tmkhCCD4N/tC9/FYGphi54ogQAAMemNUVT9D2F5YaMkTcHp4X/xDiG5EoR5IpxQgU07Hk1sVD0EoRDn78P+QyedzfUlquUg4Z41rBiRx3bjmU8zfcRpRou35PFEU4qWRfbu7FRUtZvw8qgc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706124400; c=relaxed/simple;
-	bh=XuNvkOy5iTUuHIlP9vAPlw5o1XpaVkEZPxVnj3LURY8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=nYQrDuf9AXwUYMrSebqIm149UK9o74+vb44jPrtSIIP4MixC+UhBIgKnOo1w8NOeuHRVwd3US3qeCbx4TvnF7zoPhbKl4ev9OSctAxB5qf3YUWgEApK8dKtlDGXZUahsaRXyTIxC1fYlcfo/mEaprPfy5/yRK7DE4/7XZew4OE4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lwi3OVoS; arc=fail smtp.client-ip=40.107.94.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aReAtsp7Rm8+FvB4q38jajFw6gbAPZMssr+ypIEbn1z+CfKcTys0LDOrVxKj9eaWjXpjc28h5irT+StT7DOcO2nJ/8r0D5m47I/O7GGZYI8+DSFYzP6+A8vzV9JDNwN1XyBKYK3E6Pm0S+wkUftEzxT3pOEShr4B4EM8ZxNjm/vC5ow1oaYyzX301AHXTlUd0rBqzN4TS7VBgAE3bqeI0DKFuQjvXSGOPJhGkw7Ppiu3A2TKg666Ucl+THwyrmkJTxyvHzrwVuisCPrKyKJ4SAe301ArfYTg32gDJSktqTmPYORHI6a4AY43iXYsbGogwVwwqEMN9k1BEEmcgND4aw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iTWGVMtQ6LVFosCF9oDG9sRYV5ePMC2wfmztTsiIjTU=;
- b=IeLtnYinCIIqMU8p97TCDjObYJ+MPMjb8zs9v9vIz/ydYV3Y1X8CkEXuifkb65uQrbdD70LfKqxiZrvSl+7EJwsxIJgd0b0BKUs+18QyV2paYVFK4AyfHmKHawm7jnohDUQcUR3ykwsdfK9p2szL/6Zbwvc5vEX5uip3Ii1zivQE+xULrGekEXhn88Zq8K7v6Us9AyVo8Ou+B0Twnr2/hc/aTnrE4lPeUQMXEYIrl5kUIUaYUZJg81ymdS9ibqzJzUBEJDp4OLLP7cI+Oaxnsg65W+8GCe0YyIIFCeAguQBKvvLpuo0sqOKipPVBZ++gsN2UMXa0HEz9uW6V6jQyJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iTWGVMtQ6LVFosCF9oDG9sRYV5ePMC2wfmztTsiIjTU=;
- b=lwi3OVoSoM/0ak1C2PQ9W8JdS6gQpJkubGHJUj4MCEXHZ41MQ8uMcUIYEB3uCIneEbDaS6CyvLB/fgUnKCEoPU60gSj/NQqdbhbQFFqatgMca7Pjk1fcif68kzwfwFzD+peiVb7n1yDn5rT9IZbEj3BPF95CiAcTnxb2RGXDq0zmKUiSd708y2AiPK0SV/9DctM6lHdzkJRCNM5D60oBeysaKcBmzfevDoUik1tHIyV/YJz1xIbBVi/0rfuvLKztgIUxWxi08NE0EYTcNd+ZPknvJjTHd44Zbhlbjt6BpfdXrTBYmJ/0YXjlGVeho6I3kpXvXFwebjaoZSsjX9tlxQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB6881.namprd12.prod.outlook.com (2603:10b6:510:1b7::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.32; Wed, 24 Jan
- 2024 19:26:35 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7228.022; Wed, 24 Jan 2024
- 19:26:35 +0000
-Date: Wed, 24 Jan 2024 15:26:34 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <20240124192634.GJ1455070@nvidia.com>
-References: <20231206125919.GP2692119@nvidia.com>
- <20240116185121.GB980613@nvidia.com>
- <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
- <20240117123618.GD734935@nvidia.com>
- <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
- <ZbAj34vdVuMrmdFD@arm.com>
- <ZbD2n-BKGbDgMfsB@FVFF77S0Q05N.cambridge.arm.com>
- <ZbEFPbT7vl6HN4lk@arm.com>
- <20240124132719.GF1455070@nvidia.com>
- <ZbFHPTUaBmbHYnwx@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbFHPTUaBmbHYnwx@arm.com>
-X-ClientProxiedBy: SN6PR05CA0032.namprd05.prod.outlook.com
- (2603:10b6:805:de::45) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74565133408
+	for <linux-arch@vger.kernel.org>; Wed, 24 Jan 2024 19:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706125458; cv=none; b=suZkPI97ZHyFolAGh12qyAYXvg7iHceFUrURKDXloeoJXxH9KSVeOoguag+WGqoeL+mNGu3beKLTot68gXhG3iBVG/NRotrGc6LMmllmiemLza+P2JGyFoLtTITlGNkiLe43M0bmV6ZAGveb8j2kURCBvlR18g+n3x9ogYP92rQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706125458; c=relaxed/simple;
+	bh=Y0BInIUdk4yuoZppNHHuU1yH/Sj5lmRVubqlY2C/Ka8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=swFBi3rFvJX3YN2uu2ihOjHoaE5LrbfwfCxjF+LNkAf54AUVjPhcfJlIphPRi4JsfoUDDx/UTUTndG/HNQPSVTHKwujTxI+2g1Zqo3a+dHsVcLD3Cfjsh09uTuwWMxPSZKsmvwL/RlnpHCks9W1HujZ3Oxq7++AUSSMF4W7cpXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hP8xbFd3; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6da9c834646so5862882b3a.3
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jan 2024 11:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706125447; x=1706730247; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BbdqVnsqT1MfuMPV9yVF8MwJ35PguBwNIQWD7kRhJBg=;
+        b=hP8xbFd3zHMkhMHNbiTh3xfgBl4rLOZTIC3DdOBIkEqr4TVO4DuV4wfjuq2dy0cSTc
+         UJd0FK8wRU1zDR9SSdr5xGJrGpJxcsp50jc8cEgKKmWeraAJpnQZc41/h9V9P7NvMN7o
+         5ELxnGrQc4tCVYVP8v34KEITMqEPVbyMtlBuN0ZbdYP+01JGxL/Xvrj63Vd1QrVXwudg
+         dqALYvkIgSTlFfKWgEX9KjYYn5N1t8qkNtP7Lue78TP0NeHGKli85jk+GE+09uS4lU/D
+         g/lJzwVw018N0MKlA4zOPnOJiW4pYFHk5l3KVweib6aeMhlrRQwqDE5/mBZhFIKI3NS0
+         Kgpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706125447; x=1706730247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BbdqVnsqT1MfuMPV9yVF8MwJ35PguBwNIQWD7kRhJBg=;
+        b=koac8+VXrfGEOmK0rb6eeU8RHNKpGLRYJDlnKqRI2Q/SiUKIRd2y9pNEvsNkSQhl2T
+         R6TmBDTmwDijUp96uiYNGnuoNJ3rgjrdIqilUSoOncjswmtCCMRSazgMf2Rf1kze905s
+         bv/UvX0YC6NJQU+dZJ9QoEfvVpUqO9nkuOYaTJ8k5wNUa28vIyDvCV7gsxxCC6i7iKkw
+         ex7+pg1JUhM3MBFx/g/gVD3963vCgMZdT6LaAgnfO5PUGiCoVVa5Bf3legk0kRfIKRwj
+         uAGDq9obKnPdFDzoo14rJ/rYw8eLsoyXr6B7Qxxa8WDlgWRScySyaEwkURBCundPkw9L
+         Ykfg==
+X-Gm-Message-State: AOJu0YyLzugMCES078t0lZIAshPVPAyc2a2YzhSS+yW8eP1j+vmK09Np
+	wxOneDA258YxLrKptCRZ9hhdcl8hIywoxkJ7NN+IEupi/wgGnNvj3A4Ck1ZjnVa46yGhGG+F9vU
+	UzcSWhQBjVMYE7oui8/r7OIUpERF7jS7XoIVUyQWr4fyC02ZDuHM=
+X-Google-Smtp-Source: AGHT+IEeKzGMh3dWiDOUkgwjs2ILhPK9w1YiiPZeGdGStN9pC4F6sjJskNUaLWaC3ky6tgs08Zs76K5q2qe/6TErc08=
+X-Received: by 2002:a62:5f85:0:b0:6db:ec12:5ba4 with SMTP id
+ t127-20020a625f85000000b006dbec125ba4mr51632pfb.34.1706125446716; Wed, 24 Jan
+ 2024 11:44:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB6881:EE_
-X-MS-Office365-Filtering-Correlation-Id: 725abe3f-e0dd-49c0-7afc-08dc1d12610b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	6928DowHpeC5V6twb7n1F5vUGyDM3RluQeQZH0uLblmIE7nhWofg5yR+ZxeMkwDkV5g7pGZ1t8ABPwTocUQRVo6nyVTG91A36DOEV5F6GDZjMbE8B3/2mflG/FioiVb32EgdhSw4Vy8jebFC1TcFMqiSyXY2aIDVrhOgms9AqJ/esSpHl+RQD4G8KqeB92oUY6kf3WW3hnO09f+CO3I6gOlwOP4AD5Oc+J7/9oA2qyY5tKlazQN8LZ/NluDmPDlBP86mxEgnlX7Akl8MUJzLg34BzLm1DzbN0uhaP382LIFj4jq14ZGk7ikDTxr0yJv/LQbPxoGSsrGI00/fgQdkiowAoOukQBUJmVyEs4F92LaLSzZJgxuVww2qkfl+/YCJe4I/Or8RcHD7GlsSa52FSrXHCRijKMKYgsLbcRmO+THB27hyV4h0WiAr8YyVvWLkCEntmbPhP0hGPZYwnJi8x7NEMRamkN/3d9y4nvmxKakFIpTLecXv4NOoke0RstB93LvYS8JEskEzoXDXzljOD00alrFc0zxbLYKGzi/5mYAVfub857caOxYTZfd+mTS0BxnPt9ARcETtqJ12p7Ic9+vEdXZASHAu9dakKtPzjrY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(346002)(396003)(376002)(136003)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(26005)(1076003)(2616005)(83380400001)(478600001)(6512007)(966005)(4326008)(6506007)(316002)(41300700001)(36756003)(5660300002)(8676002)(66476007)(66556008)(6916009)(54906003)(86362001)(2906002)(38100700002)(6486002)(33656002)(7416002)(8936002)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Al5D6HZPeT3jVJxYSS5NjIBX/obqmhvbkyOGYUr/VQihjMwASICC9tcMcjEN?=
- =?us-ascii?Q?8tlZdSu67esGFTjja9rnMWicfMA8e5ZDglZjqzBBXKh2k4Ug9Pqnng7Hq6Kt?=
- =?us-ascii?Q?VGz5+50h2CKk1cHKSIYfW1gJrqRFsNPBd8cpUPFvYUx3qP+E/XtItnShj2eL?=
- =?us-ascii?Q?bdQmqRMkasS9b6yGPoHgQXPWTNfRLjjySKolRmUyyUXFvLkiWJ5TmS1QSRup?=
- =?us-ascii?Q?ZPr0kahCSOuxNvYQSCWN7DH5iGomRn3ryPZOaIsySya8eQTLr6xkM8gUF7qI?=
- =?us-ascii?Q?cbf+5PaSgiTBa9z5ns8ZkGBvL7VIChhKRjyGHnRXL/UuvAc+t4MTINfu3tnq?=
- =?us-ascii?Q?4U6Bnf4WNkvxR26UjOV3EAvoOUF3+U1Rmz2O9SnVZcXLiBAcoW82MgSArCs6?=
- =?us-ascii?Q?uMbxvIjoIVHJ4IU1/AeI5mmPf2zGiB31GlS9AJYZmIbX6ZCtGR/C7ZLMScuM?=
- =?us-ascii?Q?G6Z5u5fjae5N+KW1pBy91XheqMeg4j7LjnqHi0pZBt7ofSL9MldmMmdPOb+r?=
- =?us-ascii?Q?puNXu8cZwkThtKFnLkooZwyumeJpkTNQ5y4FFwLS2fWBGNSROF6maXBxuTZL?=
- =?us-ascii?Q?EHEypkt4sx/lOp5TkMmcIB8vipM5z5dxAk1YGSHEM5CHLGM3XNS8gjY4VxGG?=
- =?us-ascii?Q?kJPvRcjqxJI3RarCl3B629VhfSyhzn5GM//zwZx7mNE2inzFD+sdgAkzvWc0?=
- =?us-ascii?Q?1e4XvST6vHIBNy9eWjiAyPs6Chw0wm/nXuzYwgVdOT2bFIVNiSCW++uosKH/?=
- =?us-ascii?Q?z2i00B0lSII0wI9G/dlKBI8Z/jOampicp4IP0miMVoC2IUtxnOU3VgHNUQZR?=
- =?us-ascii?Q?AVM1jO+NJ+64595fu0YloXGuAxHxYmg+X205PazZqUXw8/kpGM4/dyy/Dg8N?=
- =?us-ascii?Q?Ebs5HijoqrDib98ql9XEiGekauUEOzefTvjTEWcsKPqUaj+FM5FkMbrLQWB7?=
- =?us-ascii?Q?1e7uLpzVLRVDSZ/mLS9dF/F5sWTkPYtP/6fF4zb80oh+Xc4mHmcs0YdXXvIM?=
- =?us-ascii?Q?1SqBqlsjZ9Nu3wEiO2EmUo6EU5c4PhaqbxLMiMHCAeGCYbUUWsE0GbcUyzQC?=
- =?us-ascii?Q?KlZShQ0MLJlNso2veHdNyChF8I/pquyKhCWv2XniDjwMjDI+1mIwzNOHw3Mn?=
- =?us-ascii?Q?00Y3LXnSUrhAE3D3ogV51dDEiSyziaB0Vj2UNKNUABC9ZDtsWJ7SFLxAZx+i?=
- =?us-ascii?Q?hSjyBpiLsQf/hr3adXo2cxUdiFMu4KrNBkwLR01UdpY9762UgjXYbRbze3QC?=
- =?us-ascii?Q?TD5xXj1TCSHSctcPJPx7xmSMCBeg4xoF+XQWTbg89oxm6SjIr+tg29It7YPR?=
- =?us-ascii?Q?TKIyw002hTerchImnicnp+g6797k7TSqg3V+SfwmAgpr9oxC5zv6SHqpRww/?=
- =?us-ascii?Q?W0X+G+5GNiRgaPtlSV/sLQIgcfi7WeCnyV3HKgUpQK+DqH3vDiqo6qwcu9Je?=
- =?us-ascii?Q?S708JoX5HLbbpVz8DBiWZO3MLS7JGPLeEc9XzBm2llZYInaJIDEdoNQMOtYQ?=
- =?us-ascii?Q?MWz+LHhZc2woAJ63zpuR5fJ6K4oCUvWlwh5RNpPwhFs5/lH7MmpNljoGWwey?=
- =?us-ascii?Q?jx1XKR2rAVRRW6V6Hq0BbOBOHg2ouv/CG4aO7k26?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 725abe3f-e0dd-49c0-7afc-08dc1d12610b
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2024 19:26:35.7066
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HFOVd7aUYn+yf6r9ri2JO3qyA+kuaY5HvWMvpRWEXO/jtVsvO0hcqyM3iWuRNP5g
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6881
+References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+ <20240123153421.715951-20-tudor.ambarus@linaro.org> <CAPLW+4=5ra6rBRwYYckzutawJoGw_kJahLaYmDzct2Dyuw0qQg@mail.gmail.com>
+ <ab53dbc6-dad5-4278-a1d2-9f963d08eedc@linaro.org>
+In-Reply-To: <ab53dbc6-dad5-4278-a1d2-9f963d08eedc@linaro.org>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Wed, 24 Jan 2024 13:43:55 -0600
+Message-ID: <CAPLW+4njDgYO6bxVAL6hc-b_bVxjKcJnYpNGcNGpFsFg1LMc-Q@mail.gmail.com>
+Subject: Re: [PATCH 19/21] spi: s3c64xx: add support for google,gs101-spi
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de, 
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
+	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 05:22:05PM +0000, Catalin Marinas wrote:
-> On Wed, Jan 24, 2024 at 09:27:19AM -0400, Jason Gunthorpe wrote:
-> > On Wed, Jan 24, 2024 at 12:40:29PM +0000, Catalin Marinas wrote:
-> > 
-> > > > Just to be clear, that means we should drop this patch ("arm64/io: add
-> > > > memcpy_toio_64") for now, right?
-> > > 
-> > > In its current form yes, but that doesn't mean that memcpy_toio_64()
-> > > cannot be reworked differently.
-> > 
-> > I gave up on touching memcpy_toio_64(), it doesn't work very well
-> > because of the weak alignment
-> > 
-> > Instead I followed your suggestion to fix __iowrite64_copy()
-> 
-> I forgot the details. Was it to introduce an __iowrite512_copy()
-> function or to simply use __iowrite64_copy() with a count of 8?
+On Wed, Jan 24, 2024 at 4:40=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
+.org> wrote:
+>
+> Hi, Sam! Thanks for the review!
+>
+> On 1/23/24 19:25, Sam Protsenko wrote:
+> > On Tue, Jan 23, 2024 at 9:34=E2=80=AFAM Tudor Ambarus <tudor.ambarus@li=
+naro.org> wrote:
+> >>
+> >> Add support for GS101 SPI. All the SPI nodes on GS101 have 64 bytes
+> >> FIFOs, infer the FIFO size from the compatible. GS101 allows just 32bi=
+t
+> >> register accesses, otherwise a Serror Interrupt is raised. Do the writ=
+e
+> >> reg accesses in 32 bits.
+> >>
+> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> >> ---
+> >
+> > I counted 3 different features in this patch. Would be better to split
+> > it correspondingly into 3 patches, to make patches atomic:
+> >
+> >   1. I/O width
+> >   2. FIFO size
+>
+> I kept these 2 in the same patch as gs101 to exemplify their use by
+> gs101. But I'm also fine splitting the patch in 3, will do in v2.
+>
+> >   3. Adding support for gs101
+> >
+> > And I'm not really convinced about FIFO size change.
+>
+> I'll explain why it's needed below.
+>
+> >
+> >>  drivers/spi/spi-s3c64xx.c | 50 +++++++++++++++++++++++++++++++++-----=
+-
+> >>  1 file changed, 43 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> >> index 62671b2d594a..c4ddd2859ba4 100644
+> >> --- a/drivers/spi/spi-s3c64xx.c
+> >> +++ b/drivers/spi/spi-s3c64xx.c
+> >> @@ -20,6 +20,7 @@
+> >>
+> >>  #define MAX_SPI_PORTS                          12
+> >>  #define S3C64XX_SPI_QUIRK_CS_AUTO              BIT(1)
+> >> +#define S3C64XX_SPI_GS1O1_32BIT_REG_IO_WIDTH   BIT(2)
+> >>  #define AUTOSUSPEND_TIMEOUT                    2000
+> >>
+> >>  /* Registers and bit-fields */
+> >> @@ -131,6 +132,7 @@ struct s3c64xx_spi_dma_data {
+> >>   * @rx_lvl_offset: Bit offset of RX_FIFO_LVL bits in SPI_STATUS regit=
+er.
+> >>   * @tx_st_done: Bit offset of TX_DONE bit in SPI_STATUS regiter.
+> >>   * @clk_div: Internal clock divider
+> >> + * @fifosize: size of the FIFO
+> >>   * @quirks: Bitmask of known quirks
+> >>   * @high_speed: True, if the controller supports HIGH_SPEED_EN bit.
+> >>   * @clk_from_cmu: True, if the controller does not include a clock mu=
+x and
+> >> @@ -149,6 +151,7 @@ struct s3c64xx_spi_port_config {
+> >>         int     tx_st_done;
+> >>         int     quirks;
+> >>         int     clk_div;
+> >> +       unsigned int fifosize;
+> >>         bool    high_speed;
+> >>         bool    clk_from_cmu;
+> >>         bool    clk_ioclk;
+> >> @@ -175,6 +178,7 @@ struct s3c64xx_spi_port_config {
+> >>   * @tx_dma: Local transmit DMA data (e.g. chan and direction)
+> >>   * @port_conf: Local SPI port configuartion data
+> >>   * @port_id: Port identification number
+> >> + * @fifosize: size of the FIFO for this port
+> >>   */
+> >>  struct s3c64xx_spi_driver_data {
+> >>         void __iomem                    *regs;
+> >> @@ -194,6 +198,7 @@ struct s3c64xx_spi_driver_data {
+> >>         struct s3c64xx_spi_dma_data     tx_dma;
+> >>         const struct s3c64xx_spi_port_config    *port_conf;
+> >>         unsigned int                    port_id;
+> >> +       unsigned int                    fifosize;
+> >>  };
+> >>
+> >>  static void s3c64xx_flush_fifo(struct s3c64xx_spi_driver_data *sdd)
+> >> @@ -403,7 +408,7 @@ static bool s3c64xx_spi_can_dma(struct spi_control=
+ler *host,
+> >>         struct s3c64xx_spi_driver_data *sdd =3D spi_controller_get_dev=
+data(host);
+> >>
+> >>         if (sdd->rx_dma.ch && sdd->tx_dma.ch)
+> >> -               return xfer->len > FIFO_DEPTH(sdd);
+> >> +               return xfer->len > sdd->fifosize;
+> >>
+> >>         return false;
+> >>  }
+> >> @@ -447,12 +452,22 @@ static int s3c64xx_enable_datapath(struct s3c64x=
+x_spi_driver_data *sdd,
+> >>                                         xfer->tx_buf, xfer->len / 4);
+> >>                                 break;
+> >>                         case 16:
+> >> -                               iowrite16_rep(regs + S3C64XX_SPI_TX_DA=
+TA,
+> >> -                                       xfer->tx_buf, xfer->len / 2);
+> >> +                               if (sdd->port_conf->quirks &
+> >> +                                   S3C64XX_SPI_GS1O1_32BIT_REG_IO_WID=
+TH)
+> >> +                                       iowrite16_32_rep(regs + S3C64X=
+X_SPI_TX_DATA,
+> >> +                                                        xfer->tx_buf,=
+ xfer->len / 2);
+> >> +                               else
+> >> +                                       iowrite16_rep(regs + S3C64XX_S=
+PI_TX_DATA,
+> >> +                                                     xfer->tx_buf, xf=
+er->len / 2);
+> >>                                 break;
+> >>                         default:
+> >> -                               iowrite8_rep(regs + S3C64XX_SPI_TX_DAT=
+A,
+> >> -                                       xfer->tx_buf, xfer->len);
+> >> +                               if (sdd->port_conf->quirks &
+> >> +                                   S3C64XX_SPI_GS1O1_32BIT_REG_IO_WID=
+TH)
+> >> +                                       iowrite8_32_rep(regs + S3C64XX=
+_SPI_TX_DATA,
+> >> +                                                       xfer->tx_buf, =
+xfer->len);
+> >> +                               else
+> >> +                                       iowrite8_rep(regs + S3C64XX_SP=
+I_TX_DATA,
+> >> +                                                    xfer->tx_buf, xfe=
+r->len);
+> >>                                 break;
+> >>                         }
+> >>                 }
+> >> @@ -696,7 +711,7 @@ static int s3c64xx_spi_transfer_one(struct spi_con=
+troller *host,
+> >>                                     struct spi_transfer *xfer)
+> >>  {
+> >>         struct s3c64xx_spi_driver_data *sdd =3D spi_controller_get_dev=
+data(host);
+> >> -       const unsigned int fifo_len =3D FIFO_DEPTH(sdd);
+> >> +       const unsigned int fifo_len =3D sdd->fifosize;
+> >>         const void *tx_buf =3D NULL;
+> >>         void *rx_buf =3D NULL;
+> >>         int target_len =3D 0, origin_len =3D 0;
+> >> @@ -1145,6 +1160,11 @@ static int s3c64xx_spi_probe(struct platform_de=
+vice *pdev)
+> >>                 sdd->port_id =3D pdev->id;
+> >>         }
+> >>
+> >> +       if (sdd->port_conf->fifosize)
+> >> +               sdd->fifosize =3D sdd->port_conf->fifosize;
+> >> +       else
+> >> +               sdd->fifosize =3D FIFO_DEPTH(sdd);
+> >> +
+> >>         sdd->cur_bpw =3D 8;
+> >>
+> >>         sdd->tx_dma.direction =3D DMA_MEM_TO_DEV;
+> >> @@ -1234,7 +1254,7 @@ static int s3c64xx_spi_probe(struct platform_dev=
+ice *pdev)
+> >>         dev_dbg(&pdev->dev, "Samsung SoC SPI Driver loaded for Bus SPI=
+-%d with %d Targets attached\n",
+> >>                                         sdd->port_id, host->num_chipse=
+lect);
+> >>         dev_dbg(&pdev->dev, "\tIOmem=3D[%pR]\tFIFO %dbytes\n",
+> >> -                                       mem_res, FIFO_DEPTH(sdd));
+> >> +                                       mem_res, sdd->fifosize);
+> >>
+> >>         pm_runtime_mark_last_busy(&pdev->dev);
+> >>         pm_runtime_put_autosuspend(&pdev->dev);
+> >> @@ -1362,6 +1382,18 @@ static const struct dev_pm_ops s3c64xx_spi_pm =
+=3D {
+> >>                            s3c64xx_spi_runtime_resume, NULL)
+> >>  };
+> >>
+> >> +static const struct s3c64xx_spi_port_config gs101_spi_port_config =3D=
+ {
+> >> +       .fifosize       =3D 64,
+> >
+> > I think if you rework the the .fifo_lvl_mask, replacing it with
+> > .fifosize, you should also do next things in this series:
+> >   1. Rework it for all supported (existing) chips in this driver
+> >   2. Provide fifosize property for each SPI node for all existing dts
+> > that use this driver
+> >   3. Get rid of .fifo_lvl_mask for good. But the compatibility with
+> > older kernels has to be taken into the account here as well.
+>
+> We can't get rid of the .fifo_lvl_mask entirely because we need to be
+> backward compatible with the device tree files that we have now.
+>
+> >
+> > Otherwise it looks like a half attempt and not finished, only creating
+> > a duplicated property/struct field for the same (already existing)
+> > thing. Because it's completely possible to do the same using just
+> > .fifo_lvl_mask without introducing new fields or properties. If it
+>
+> Using fifo_lvl_mask works but is wrong on multiple levels.
+> As the code is now, the device tree spi alias is used as an index in the
+> fifo_lvl_mask to determine the FIFO depth. I find it unacceptable to
+> have a dependency on an alias in a driver. Not specifying an alias will
+> make the probe fail, which is even worse. Also, the fifo_lvl_mask value
 
-Count of 8
+Ok, I think that's a valid point. I probably missed the alias part
+when reading the patch description. I also understand we can't just
+remove .fifo_lvl_mask right now, as we have to keep the compatibility
+with older/existing out-of-tree device trees, so that the user can
+update the kernel image separately.
 
-> Just invoking __iowrite64_copy() with a count of 8 wouldn't work well
-> even if we have the writeq generating STR with an offset (well, it also
-> increments the pointers, so I don't think Mark's optimisation would
-> help). The copy implies loads and these would be interleaved with stores
-> and potentially get in the way of write combining. An
-> __iowrite512_copy() or maybe even an optimised __iowrite64_copy() for
-> count 8 could do the loads first followed by the stores. You can use a
-> special path in __iowrite64_copy() with __builtin_contant_p().
+> does not reflect the FIFO level reg field. This is incorrect as we use
+> partial register fields and is misleading. Other problem is that the
+> fifo_lvl_mask value is used to determine the FIFO depth which is also
+> incorrect. The FIFO depth is dictated by the SoC implementing the IP,
+> not by the FIFO_LVL register field. Having in mind these reasons I
+> marked the fifo_lvl_mask and the port_id as deprecated in the next
+> patch, we shouldn't use fifo_lvl_mask or the alias anymore.
+>
+> In what concerns your first 2 points, to rework all the compatibles and
+> to introduce a fifosize property, I agree it would be nice to do it, but
+> it's not mandatory, we can work in an incremental fashion. Emphasizing
+> what is wrong, marking things as deprecated and guiding contributors on
+> how things should be handled is good too, which I tried in the next
+> patch. Anyway, I'll check what the reworking would involve, and if I
+> think it wouldn't take me a terrible amount of time, I'll do it.
+>
 
-I did exactly the latter like this:
+From what I understand, that shouldn't be very hard to do, just a
+matter of adding fifosize property to all dts's existing upstream.
+That would also provide a good example to follow for anyone who wants
+to add the support for new compatibles. But of course I can't ask you
+to do the extra work. My point is, with that item done, the first
+transition step would be finished right away. And the remaining step
+would be to have a strategy for .fifo_lvl_mask removal. I wonder what
+maintainers can suggest on that matter, and if it's doable at all.
 
-static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
-						 const u64 *from, size_t count)
-{
-	switch (count) {
-	case 8:
-		asm volatile("stp %x0, %x1, [%8, #16 * 0]\n"
-			     "stp %x2, %x3, [%8, #16 * 1]\n"
-			     "stp %x4, %x5, [%8, #16 * 2]\n"
-			     "stp %x6, %x7, [%8, #16 * 3]\n"
-			     :
-			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
-			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
-		break;
-	case 4:
-		asm volatile("stp %x0, %x1, [%4, #16 * 0]\n"
-			     "stp %x2, %x3, [%4, #16 * 1]\n"
-			     :
-			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-			       "rZ"(from[3]), "r"(to));
-		break;
-	case 2:
-		asm volatile("stp %x0, %x1, [%2, #16 * 0]\n"
-			     :
-			     : "rZ"(from[0]), "rZ"(from[1]), "r"(to));
-		break;
-	case 1:
-		__raw_writeq(*from, to);
-		break;
-	default:
-		BUILD_BUG();
-	}
-}
+Btw, just a thought: maybe also add "deprecated" comment to each line
+of code where .fifo_lvl_mask is being assigned, just to make sure
+noone follows that style in the future (as people often tend to
+copy-paste existing implementation)? Because obviously we can't remove
+those lines for now.
 
-void __iowrite64_copy_full(void __iomem *to, const void *from, size_t count);
+> > seems to much -- maybe just use .fifo_lvl_mask for now, and do all
+> > that reworking properly later, in a separate patch series?
+> >
+>
+> But that means to add gs101 and then to come with patches updating what
+> I just proposed, and I'm not thrilled about it.
+>
 
-static inline void __const_iowrite64_copy(void __iomem *to, const void *from,
-					  size_t count)
-{
-	if (count == 8 || count == 4 || count == 2 || count == 1) {
-		__const_memcpy_toio_aligned64(to, from, count);
-		dgh();
-	} else {
-		__iowrite64_copy_full(to, from, count);
-	}
-}
+Got it. That's fine with me. I think we don't have to have everything
+super-granular w.r.t. patch series split. But I'd still argue that
+splitting this particular patch by 3 patches would make things more
+atomic and thus better.
 
-#define __iowrite64_copy(to, from, count)                  \
-	(__builtin_constant_p(count) ?                     \
-		 __const_iowrite64_copy(to, from, count) : \
-		 __iowrite64_copy_full(to, from, count))
-
-And the out of line __iowrite64_copy_full() generates good
-assembly that loops 8/4/2/1 sized blocks.
-
-I was going to send it out yesterday but am waiting for some
-conclusion on the STP.
-
-https://github.com/jgunthorpe/linux/commits/mlx5_wc/
-
-> void __iowrite64_copy(void __iomem *to, const void *from,
-> 		      size_t count)
-> {
-> 	u64 __iomem *dst = to;
-> 	const u64 *src = from;
-> 	const u64 *end = src + count;
-> 
-> 	/*
-> 	 * Try a 64-byte write, the CPUs tend to write-combine them.
-> 	 */
-> 	if (__builtin_contant_p(count) && count == 8) {
-> 		__raw_writeq(*src, dst);
-> 		__raw_writeq(*(src + 1), dst + 1);
-> 		__raw_writeq(*(src + 2), dst + 2);
-> 		__raw_writeq(*(src + 3), dst + 3);
-> 		__raw_writeq(*(src + 4), dst + 4);
-> 		__raw_writeq(*(src + 5), dst + 5);
-> 		__raw_writeq(*(src + 6), dst + 6);
-> 		__raw_writeq(*(src + 7), dst + 7);
-> 		return;
-> 	}
-
-I already looked at this, clang with the "Qo" constraint does:
-
-ffffffc08086e6ec:       f9400029        ldr     x9, [x1]
-ffffffc08086e6f0:       91002008        add     x8, x0, #0x8
-ffffffc08086e6f4:       f9000009        str     x9, [x0]
-ffffffc08086e6f8:       f9400429        ldr     x9, [x1, #8]
-ffffffc08086e6fc:       f9000109        str     x9, [x8]
-ffffffc08086e700:       91004008        add     x8, x0, #0x10
-ffffffc08086e704:       f9400829        ldr     x9, [x1, #16]
-ffffffc08086e708:       f9000109        str     x9, [x8]
-ffffffc08086e70c:       91006008        add     x8, x0, #0x18
-ffffffc08086e710:       f9400c29        ldr     x9, [x1, #24]
-ffffffc08086e714:       f9000109        str     x9, [x8]
-ffffffc08086e718:       91008008        add     x8, x0, #0x20
-ffffffc08086e71c:       f9401029        ldr     x9, [x1, #32]
-ffffffc08086e720:       f9000109        str     x9, [x8]
-ffffffc08086e724:       9100a008        add     x8, x0, #0x28
-ffffffc08086e728:       f9401429        ldr     x9, [x1, #40]
-ffffffc08086e72c:       f9000109        str     x9, [x8]
-ffffffc08086e730:       9100c008        add     x8, x0, #0x30
-ffffffc08086e734:       f9401829        ldr     x9, [x1, #48]
-ffffffc08086e738:       f9000109        str     x9, [x8]
-ffffffc08086e73c:       f9401c28        ldr     x8, [x1, #56]
-ffffffc08086e740:       9100e009        add     x9, x0, #0x38
-ffffffc08086e744:       f9000128        str     x8, [x9]
-
-Which is not good. Gcc is a better, but not perfect.
-
-> What we don't have is inlining of __iowrite64_copy() but if we need that
-> we can move away from a weak symbol to a static inline.
-
-Yes I did this as well. It helps s390 and x86 nicely too.
-
-> Give this a go and see if it you get write-combining in your hardware.
-> If the loads interleaves with stores get in the way, maybe we can resort
-> to inline asm.
-
-For reference the actual assembly (see post_send_nop()) that fails is:
-
-   13534:       d503201f        nop
-   13538:       93407ea1        sxtw    x1, w21
-   1353c:       f100403f        cmp     x1, #0x10
-   13540:       54000488        b.hi    135d0 <post_send_nop.isra.0+0x260>  // b.pmore
-   13544:       a9408a63        ldp     x3, x2, [x19, #8]
-   13548:       f84086c4        ldr     x4, [x22], #8
-   1354c:       f9400042        ldr     x2, [x2]
-   13550:       8b030283        add     x3, x20, x3
-   13554:       8b030042        add     x2, x2, x3
-   13558:       f9000044        str     x4, [x2]
-   1355c:       91002294        add     x20, x20, #0x8
-   13560:       11000ab5        add     w21, w21, #0x2
-   13564:       f101029f        cmp     x20, #0x40
-   13568:       54fffe81        b.ne    13538 <post_send_nop.isra.0+0x1c8>  // b.any
-   1356c:       d50320df        hint    #0x6
-
-Not very good code the compiler wrote (the main issue is that it
-reloads the dest pointer every iteration), but still, all those loads
-are coming from memory that was recently touched so should be in-cache
-most of the time. So it isn't like we are sitting around waiting for a
-lengthy dcache fill and timing out the WC buffer.
-
-However, it is 136 instructions, so it feels like the issue may be the
-write combining buffer auto-flushes in less. Maybe it auto-flushes
-after 128/64/32/16/8 cycles now. I know there has been a tension to
-reduce WC latency vs maximum aggregation.
-
-The suggestion that it should not have any interleaving instructions
-and use STP came from our CPU architecture team.
-
-The assembly I have been able to get tested from this series that did
-works is this:
-
-ffffffc08086ec84:       d5033e9f        dsb     st
-ffffffc08086ec88:       f941de6b        ldr     x11, [x19, #952]
-ffffffc08086ec8c:       f941da6c        ldr     x12, [x19, #944]
-ffffffc08086ec90:       f940016b        ldr     x11, [x11]
-ffffffc08086ec94:       8b0c016b        add     x11, x11, x12
-ffffffc08086ec98:       a9002969        stp     x9, x10, [x11]
-ffffffc08086ec9c:       a9012168        stp     x8, x8, [x11, #16]
-ffffffc08086eca0:       a9022168        stp     x8, x8, [x11, #32]
-ffffffc08086eca4:       a9032168        stp     x8, x8, [x11, #48]
-ffffffc08086eca8:       d50320df        hint    #0x6
-
-The revised __iowrite64_copy() version also creates this assembly.
-
-The ST4 based thing in userspace also works.
-
-Remember there are two related topics here.. mlx5 would like high
-frequency of large TLP generation, but doesn't care about raw
-performance. If the 24 instructions clang generates does that then
-great.
-
-hns/broadcom/others need the large TLP and care about performance. In
-that case the stp block is the best we can do in the kernel as st4 is
-off the table.
-
-I would like the architecture code to do a good job for performance
-since it is a generic API for all drivers.
-
-Regarding the 8x STR option, I have to get that tested.
-
-Jason
+> Cheers,
+> ta
 
