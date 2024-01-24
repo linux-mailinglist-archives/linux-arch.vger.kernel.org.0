@@ -1,110 +1,132 @@
-Return-Path: <linux-arch+bounces-1505-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1506-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FA3183A46F
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 09:45:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E27983A549
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 10:24:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48397282818
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 08:45:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA0421F22B18
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jan 2024 09:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3751717997;
-	Wed, 24 Jan 2024 08:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BA218E2A;
+	Wed, 24 Jan 2024 09:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Nzo1kG4/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uqGqtlSM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103C917BA5;
-	Wed, 24 Jan 2024 08:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23401B597
+	for <linux-arch@vger.kernel.org>; Wed, 24 Jan 2024 09:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706085923; cv=none; b=WJDxy4ZvnW5GtVDzzynv9+rxNjk1QpMQLypqIVztW1fuITt5eILyWtzPRd4Bc7ul5ToR8MUGnSs/NeYPQuW/IDbV2ICrS8fW0iCHR0fN08AMGAA3AY4y4T8viXQfbqFzJcNNTm0WJp62hoMTxQSXrFv/se3S6Af36mIrwdaYhMM=
+	t=1706088109; cv=none; b=KmEbuQ7S22SWeJ0tpMwciHQCXlehrCKAVSywWSkf8GtjceYD6GdkePcsuoLVioKn5RCDTIYl1kCn6q/nnbr3i6d2qzk4ZmlUpOUimkLLtW1hiLALzytKKlO/Khdt4eGtOX5t2dOQuTScCA2SWmCOK095ufUwhDCxVvhQPWHi/vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706085923; c=relaxed/simple;
-	bh=/nsD3d+E0lLEEpr6zHa2aA4SWpngDZwV5I8Z0fUog+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHuEkWpfAwS4xcK45M9uFOFRtZsJ5tN1gpxHFoRdHDnuWJyebVUYI8lbb5cHX/Rz2cmMN1tBFllXTzxzOUh5zIQVyw4Qw2hYVmEDOLB34opdhCESZyFcnyUOEPGAghJIn8gpUa/U94rXShaceDDkttze2jg0JFo37lz8QIAWs/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Nzo1kG4/; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=5lEen0G4yFCsLlAF+wT6cjA+TZeTYFwLA6f1OlJb35c=; b=Nzo1kG4/6uJi4JkVCN2GnsVPSP
-	MSCm4FbOrhPHehb1KUJVrH1BJ3z9cxxbnwCC0zxjG3bD8+skV/uIfdTD6Xjbum3MAfAlH46N/Wp+6
-	L7YV4CDoxK1vWQMcHAQgVJyJHoNDrjkuxOIry+Y5WoNfp7WvmbHn0uuneIMiaw3MbPLQllmBXaukX
-	TYMxIFTn6SoI9/QX7eY4T0qhBicf+VgU4zXx/IN3Fy2G80u7atBOa9GDJ5r57T/AsDstwl/th3j5P
-	hRfBkIRpb/e4q3+Na04s1TcgWKeqoYLVLCnejFkjHgtXQ41c1OGcmGHfEku7EHHcuxCj7+We0ZUXO
-	+zL7lf9w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41124)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rSYsi-0003f3-2f;
-	Wed, 24 Jan 2024 08:45:13 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rSYse-0002ld-Qu; Wed, 24 Jan 2024 08:45:08 +0000
-Date: Wed, 24 Jan 2024 08:45:08 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include
- 'present'
-Message-ID: <ZbDOFJeRjdaXtVJu@shell.armlinux.org.uk>
-References: <CAJZ5v0gwe02uzAQoX0QDHo35OTEozpbnqC6vukjM3aE6HMq9WQ@mail.gmail.com>
- <ZbADTBLDEFtdglho@shell.armlinux.org.uk>
- <CAJZ5v0jh-EdrnjkJep++UDo+Uv4hmR7VV4KYVdF4CK2K+5XLtg@mail.gmail.com>
- <ZbAMjZoybVfiAGcT@shell.armlinux.org.uk>
- <CAJZ5v0gt=MR1JGsPZnZG_AqudA-KMmb4BOa_A6H9B6+Rhe_+JQ@mail.gmail.com>
- <ZbAdAdqqfXRuY3Xj@shell.armlinux.org.uk>
- <CAJZ5v0gsqbeJc4qX-AefOqu53=rDme2XzFXacWz_0zbVBoaXjw@mail.gmail.com>
- <ZbAoJO8f66Dg0lGF@shell.armlinux.org.uk>
- <ZbArzbC19L1YxLHi@shell.armlinux.org.uk>
- <CAJZ5v0jvek=W-FNhiY_0DQha2wDCUv7YW_4jaHUeX0DbYJOX6Q@mail.gmail.com>
+	s=arc-20240116; t=1706088109; c=relaxed/simple;
+	bh=eF+zjiEZUQuKsPtg6bAJeNDrxHW3hVhj8Si24oj2+Z4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WiUDcVHfEQJrDrbJrIKsYKiRizzb9xNIPoLr6xPAYm+mfQhfOqlgg6HKgjoasN53tJTTsy0gb52b53Pe0U+O+VyKC2jTHC6XZ4sSy2+kKEasmEL4iVKcLgwzhrbLyxPUfyzAuGGlpjNoBaHm7t80YZr7Tt0y6fNyb5hwiCIGn/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uqGqtlSM; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50ea9daac4cso5653972e87.3
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jan 2024 01:21:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706088105; x=1706692905; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IC++pEzL4ZnERNcYi29RUcf4swv7sgMAYOvkDj2rEI0=;
+        b=uqGqtlSMa38hdsgpvsN2tMQiJ80+RdNx3Tmk/6FuI8BJw2K9hrFnim09ElK7tdplUz
+         i8+klwrWgorbEuPAI2v0Hh1tyZ3EZ5U/JR6B70gu0hyM++U8I1TNiojF6oTWvS/MUX9o
+         4KKSfRm+6mlgLmMnb8eXdKoJbsbinj5cevwI0DcfSIVgK+DELDto8FEOeUpu2rW4pEwG
+         vSLcwuxy5LTqymLeKgMcDm1+VBx5kUUN81Fike9LdfypAeZG1y/Z57jcNVutDd4tt9Cn
+         wfvapFDUjSLusXfQMxLKo6Kb/yYti/XBnn5mj4zS6C5lQwrLO56AjkDPq6ij/yXJSxRG
+         gXxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706088105; x=1706692905;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IC++pEzL4ZnERNcYi29RUcf4swv7sgMAYOvkDj2rEI0=;
+        b=TmUepzpAwNIxFECZTBFTZftDPVLq0QmJm+gG08NxAwJDv63ftNGjxLiEG6WfZmeiwq
+         wR+GYUK+iruV58qlLJqIncublBQbDbk1oWrRWXM6aGjPa+m3/Mxw3ki+c8PjlXSnnPV/
+         0u/H5Y4Ovo3r5w5eiCZRnMo2tM/+96aQ7qwFhe9SeuOBUjedDepjWEAUs/VlzaXWcWX4
+         pPxQgboAKgYLxgtn7eeoSgubjlvDAEOMhWTYcYaJCPWN8L1+9z5A2BsU3cVjyr17Ju5v
+         2E1AGvjUT1ERRd1DivDdnW8DE0UZNV2lISSf0b6Nw24dpRuVgL2na9QSZ0IGpJFd6HVi
+         637Q==
+X-Gm-Message-State: AOJu0YwaYY3ycQuDg0cLagJCadK5ToMD9SGUn282uYFvG7QahyhmwtRy
+	LvOyfvDtI9zESh+lET5WYDGYXrDQZZFcH3vyCbFt30izhzETLndPj81WegJT2tI=
+X-Google-Smtp-Source: AGHT+IEoYvX5ImUeYU+16v/15tdK/S4Fr5ldyMNN4WvuO6GvQxlrpO1w2+L1HPxfqJrOi6yJv0guLA==
+X-Received: by 2002:a05:6512:6d3:b0:50e:e0af:4efb with SMTP id u19-20020a05651206d300b0050ee0af4efbmr3997062lff.104.1706088104912;
+        Wed, 24 Jan 2024 01:21:44 -0800 (PST)
+Received: from draszik.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id q20-20020a05600c46d400b0040e395cd20bsm48914383wmo.7.2024.01.24.01.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jan 2024 01:21:44 -0800 (PST)
+Message-ID: <4b8bc0bf2f1fd87183276816522e92f7b0c3b1fd.camel@linaro.org>
+Subject: Re: [PATCH 08/21] spi: s3c64xx: move error check up to avoid
+ rechecking
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, broonie@kernel.org, 
+	andi.shyti@kernel.org, arnd@arndb.de
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org,  alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-arch@vger.kernel.org, peter.griffin@linaro.org,
+ semen.protsenko@linaro.org,  kernel-team@android.com,
+ willmcvicker@google.com
+Date: Wed, 24 Jan 2024 09:21:43 +0000
+In-Reply-To: <20240123153421.715951-9-tudor.ambarus@linaro.org>
+References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+	 <20240123153421.715951-9-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1-1 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jvek=W-FNhiY_0DQha2wDCUv7YW_4jaHUeX0DbYJOX6Q@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Tue, Jan 23, 2024 at 11:05:43PM +0100, Rafael J. Wysocki wrote:
-> > So why not state that you personally don't want it in the first
-> > place? Why this game of cat and mouse and the constantly changing
-> > arguments. I guess it's to waste developers time.
-> >
-> > Well, I'm calling you out for this, because I'm that pissed off
-> > at the amount of time you're causing to be wasted.
-> 
-> And I don't have to suffer this kind of abuse.  Sorry.
+Hi Tudor,
 
-And I've had enough of this crap, so I'm not walking away. Good
-riddance.
+On Tue, 2024-01-23 at 15:34 +0000, Tudor Ambarus wrote:
+> @@ -538,13 +538,8 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_d=
+river_data *sdd,
+> =C2=A0			cpu_relax();
+> =C2=A0			status =3D readl(regs + S3C64XX_SPI_STATUS);
+> =C2=A0		}
+> -
+> =C2=A0	}
+> =C2=A0
+> -	/* If timed out while checking rx/tx status return error */
+> -	if (!val)
+> -		return -EIO;
+> -
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+This change behaviour of this function. The loop just above adjusts val and=
+ it is used to
+determine if there was a timeout or not:
+
+	if (val && !xfer->rx_buf) {
+		val =3D msecs_to_loops(10);
+		status =3D readl(regs + S3C64XX_SPI_STATUS);
+		while ((TX_FIFO_LVL(status, sdd)
+			|| !S3C64XX_SPI_ST_TX_DONE(status, sdd))
+		       && --val) {
+			cpu_relax();
+			status =3D readl(regs + S3C64XX_SPI_STATUS);
+		}
+
+
+That doesn't work anymore now.
+
+Cheers,
+Andre'
+
 
