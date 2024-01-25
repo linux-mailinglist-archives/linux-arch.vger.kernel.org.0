@@ -1,186 +1,176 @@
-Return-Path: <linux-arch+bounces-1678-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1679-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCC1D83CBD8
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 20:04:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D82283CC17
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 20:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F15681C20B98
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:04:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAA6EB22D51
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D19E31350E6;
-	Thu, 25 Jan 2024 19:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91211350E6;
+	Thu, 25 Jan 2024 19:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZaJP7JCo"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KZBQyURt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7074D134732
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 19:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7611350CB
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 19:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706209474; cv=none; b=lUVPMiefBoBSXEVw09bpqjB0OFwpMdPEG/Zkqb2W59iWaCJf7Nsv4JdkI6exz4Y5NRh+VwLrZhrFyOx4DGdlhUS6m8G8nCI34RM+IYcNGPBbjjWNuPaNWjokXilXqln+7to5SHsS3+Zj2C9d4L+HAl4nvgpkcWXOdyn/q0PboCA=
+	t=1706210814; cv=none; b=SqkOcgXpfrS4vgDVnC0G09jFn44mZ+be64JlllicYrk+Zgr+p/jMpCxDWcHrVPm3OgTl5tjGWSR1H2RadciTxCxE+CXToIlrnK3kYPAaqOVTeYi6G9XNXOJfKUaouAC4U9uFEitWfHDuo3U1zMF8L6/UKc/98NeX6scWYbJCq6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706209474; c=relaxed/simple;
-	bh=kyz7VN/4ZcUerMlxwf3NWPLVw11KuWBrkD6c9Je0eew=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VhJ5fq2dugX/0baDWnUdka+h49PSdXJTvzGy5TLo5Z2MIJMQA4u/wpQ9+4651dOcZOWzTAkKXMAqhVC1VDVk96lqyL2vIi/hjg+uRrY0vnFtIkgfp0xr7T1uWCv23QsHWCpRrTk4yArfH1rnYAiRuNo768XWCzperf3A97RGLxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZaJP7JCo; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-290b219a60cso3037172a91.0
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 11:04:32 -0800 (PST)
+	s=arc-20240116; t=1706210814; c=relaxed/simple;
+	bh=ylFJKzXqxkLLZFj7AHYMJMyVTFRolbBhbtaZYtJqeFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bsK+JoT7PfmIX4ukEZ9w3/84vt2zPF2VZ/hTsWfhXE3tPYkdx73riy/EuL57EcJMgGWFHJqGQsonwIjfxUXzg3t++RUr68/Hr1783n6scSdwtbWzuwvJw/d3cuPeKzCgH1xEVyhGcJg2KgY9f0B9ixXPMeSGrw+SFh5WCXIgQ8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KZBQyURt; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d75ea3a9b6so39006255ad.2
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 11:26:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706209472; x=1706814272; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wmh1WjBejQi02ZPJBsuRfWlQ6TdlM/kcPPZwBwZbKTI=;
-        b=ZaJP7JCoksK9xmxs3TW8E55u1+gmSRRj+9KhpQJVKrhQ3P0NKojfHvg8lYd1mID3Gt
-         g827fEqPOuGOBCrIsQHuceUPTryDjcKkKPe3CI/+9N4kPOdW707osLI3qqMwPZK5zHNj
-         cXhVGUaG1rRpoS//cZDP4cOr0GPh7QVs26tO3/gBjkXZG6IGsYcmb3OUkb8M+lgCWmrm
-         0AAUgVDFlkCXE0pepJpkrtwMcMQSnZ2CbSkBlxUKOdT99WHreWI88Oei+aO/B4cMZTJB
-         PIFrfITALKtsEg9JaJbw8MTEOhLGj/hy+tlRcTQlKReL/tZcBFGdLClbD8RAixPHPE7a
-         oAgA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706210812; x=1706815612; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQXEmk/KhfqrXjoSGAenKDc1hYdrFqHQSs6fJFT2dl0=;
+        b=KZBQyURtNBdCg+5WsV/2PlC507i7ad612vIfMFRBP61Vt34euQ9shTDsWKVCx5hgMI
+         ftGD0bO4VvQTdRtXnx8ZZdLoLiK3pma0F7er3An7b7T+4W6+I0MIJ70eqEyPMMF09A0g
+         YSzG4J6gLjld9tJzfWAoddgdoWygvrWA3L5G+Y6b6JCRnCnNzYRpSNq2bd9Zvon50qtj
+         XLYFV2/qZebdyPJTyi1L1crYRtgU8e3OIiZwR9kTpy/hH7ioaB1mU/E1Z03FtiQp+la1
+         pu0mlEAbIo15jeplcDLgWN0LsZIVMz82cCms/hxMhs0yaQEGVGUH3ORluIOMfSDKgovk
+         M4/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706209472; x=1706814272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wmh1WjBejQi02ZPJBsuRfWlQ6TdlM/kcPPZwBwZbKTI=;
-        b=BLaWkEwn8uB9QF/bhsJYjwa3jBd6fj3hz0Mb0o0wsWLIuy2sjXnX3TSwAD8Vz63uca
-         0JI7c2xR/0DJW7RxAYPXu9ClKocbXP5H/gYdJisqKzOb70+iH8ZfHtxUGqqPG/4gyobt
-         x01we+DRa27606QKfkAvAaeRkoN6WU4qIIV4X8q64TX7daoJYO4EySnmxBLISssCXuG4
-         ueL+ulfrRW6p2f3rL4ecyll0IJAnFbNdJkGfKbopijISOw5r5cH4AgRRjVguZkgbELg6
-         vYYWkd4EVpfVII3VkO1LjxGgxCGIDGAjlom33jJDosOcR4IZe1XiJfCHT8TrxBQGCOKM
-         ThAw==
-X-Gm-Message-State: AOJu0YyoRBKOcs8+qZLC5DgH6BDpamIpRsY8cSn5pK81WnnjXXlui43X
-	YG8HIAU5QvxToqRK/am2AR5tm5uvvZFauxyc2KH3/VW6zXNStDaRGdO17RWg1Sckeyjy5NVTajh
-	8mV0foQW9jQJS8VCxzLITBFOyKlNSRubzgkW0iw==
-X-Google-Smtp-Source: AGHT+IG6YlwnSeWpwQZCjQC/4bwVfXO3ZLqyr7wz2ahkS1E5zXvVRkZg7RSC50vQwXZpquzQdqmKHy32ABLJfpuTPnM=
-X-Received: by 2002:a17:90b:912:b0:286:8dd6:db65 with SMTP id
- bo18-20020a17090b091200b002868dd6db65mr57262pjb.91.1706209471761; Thu, 25 Jan
- 2024 11:04:31 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706210812; x=1706815612;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UQXEmk/KhfqrXjoSGAenKDc1hYdrFqHQSs6fJFT2dl0=;
+        b=IvkmkUder+03ufSExoDVxnfSv4MrGJvDSgXd9Y28kbYpvoCG0ldD4XgXJxJ5QK0sRi
+         ariXOFm+HxAG1/D1yC+ZeaYKoAWGqZPoNgi21gzRBQ1H2geWWRAzcVeZW1x5f+n6WUuV
+         E7ZG8YdG4ya/epu3co1ti711LEEpJviKAkD+DjukSssxin6Py9U6H1Ttqa87hSpOVYPd
+         3dNPU4oi5rMXEikdCUI33gD6cs7YO8R1y/JoLRJQRsaCC1qdBpq2W5ZSpuHt0DViWvZj
+         IpVIzyjhG+FRN9McX1hEjQZDCflH0XqojFSSWbb3WSmIDDtD838L6SePCgpB2t9pc9o2
+         NwZw==
+X-Gm-Message-State: AOJu0YzuKEv0qX/P8lKgXqEVOsvrzE3CUs6Cx+NFRrIAHMumgXOZA8Oa
+	25Ao8kTpLMiM6IVEifB0BeGka5N3SUP6cw9kWIZOfy6/HMrFTRGhsrlraUbMxi0=
+X-Google-Smtp-Source: AGHT+IEjKhTyFXdeaj6bJIwWSc4zBffLzTHNmIGLnbACUsqZozte6YVSrp4zqdesGPXDBC/y4GWPyA==
+X-Received: by 2002:a17:903:2350:b0:1d4:97:b8e with SMTP id c16-20020a170903235000b001d400970b8emr186405plh.79.1706210812431;
+        Thu, 25 Jan 2024 11:26:52 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id l11-20020a17090270cb00b001d757e49a70sm6544821plt.112.2024.01.25.11.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 11:26:52 -0800 (PST)
+Date: Thu, 25 Jan 2024 11:26:47 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
+	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, waylingii@gmail.com,
+	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
+	panqinglin2020@iscas.ac.cn, willy@infradead.org,
+	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
+	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
+	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 24/28] riscv: select config for shadow stack and
+ landing pad instr support
+Message-ID: <ZbK198Vovbw2CwrR@debug.ba.rivosinc.com>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-25-debug@rivosinc.com>
+ <20240125-snitch-boogieman-5b4a0b142e61@spud>
+ <ZbKkgNX7xfU5KO8X@debug.ba.rivosinc.com>
+ <20240125-implement-coagulant-3058e743a098@spud>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org> <20240125145007.748295-8-tudor.ambarus@linaro.org>
-In-Reply-To: <20240125145007.748295-8-tudor.ambarus@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Thu, 25 Jan 2024 13:04:20 -0600
-Message-ID: <CAPLW+4kGGtG2BxeN0wRXMD5M2TR+eMUHZpL2KDaEFubBCP7jdg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/28] spi: s3c64xx: remove unneeded (void *) casts in of_match_table
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240125-implement-coagulant-3058e743a098@spud>
 
-On Thu, Jan 25, 2024 at 8:50=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
-.org> wrote:
+On Thu, Jan 25, 2024 at 06:44:48PM +0000, Conor Dooley wrote:
+>On Thu, Jan 25, 2024 at 10:12:16AM -0800, Deepak Gupta wrote:
+>> On Thu, Jan 25, 2024 at 06:04:26PM +0000, Conor Dooley wrote:
+>> > On Wed, Jan 24, 2024 at 10:21:49PM -0800, debug@rivosinc.com wrote:
+>> > > From: Deepak Gupta <debug@rivosinc.com>
+>> > >
+>> > > This patch selects config shadow stack support and landing pad instr
+>> > > support. Shadow stack support and landing instr support is hidden behind
+>> > > `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wires up path
+>> > > to enumerate CPU support and if cpu support exists, kernel will support
+>> > > cpu assisted user mode cfi.
+>> > >
+>> > > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> > > ---
+>> > >  arch/riscv/Kconfig | 15 +++++++++++++++
+>> > >  1 file changed, 15 insertions(+)
+>> > >
+>> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> > > index 9d386e9edc45..437b2f9abf3e 100644
+>> > > --- a/arch/riscv/Kconfig
+>> > > +++ b/arch/riscv/Kconfig
+>> > > @@ -163,6 +163,7 @@ config RISCV
+>> > >  	select SYSCTL_EXCEPTION_TRACE
+>> > >  	select THREAD_INFO_IN_TASK
+>> > >  	select TRACE_IRQFLAGS_SUPPORT
+>> > > +	select RISCV_USER_CFI
+>> >
+>> > This select makes no sense to me, it will unconditionally enable
+>> > RISCV_USER_CFI. I don't think that that is your intent, since you have a
+>> > detailed option below that allows the user to turn it on or off.
+>> >
+>> > If you remove it, the commit message will need to change too FYI.
+>> >
+>>
+>> Selecting this config puts support in Kernel so that it can run tasks who wants
+>> to enable hardware assisted control flow integrity for themselves. But apps still
+>> always need to optin using `prctls`. Those prctls are stubs and return EINVAL when
+>> this config is not selected. Not selecting this config means, kernel will not support
+>> enabling this feature for user mode.
 >
-> of_device_id::data is an opaque pointer. No explicit cast is needed.
-> Remove unneeded (void *) casts in of_match_table. While here align the
-> compatible and data members.
+>I don't think you understand me. "select RISCV_USER_CFI" will
+>unconditionally build it into the kernel, making stubs etc useless.
+>You're talking like (and the rest of your commit implements it!) that
+>this feature can be enabled in menuconfig etc. Having this select
+>will always enable the config option, rendering the choice below
+>redundant. Try turning it off in menuconfig.
+
+Aah got it now. Thanks.
+I'll fix this messaging and select in next version.
+
 >
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  drivers/spi/spi-s3c64xx.c | 45 +++++++++++++++++++++++----------------
->  1 file changed, 27 insertions(+), 18 deletions(-)
+>Oh and if it were valid to have here, you put it in out of order. That's
+>an alphanumerically sorted list :)
+
+Thanks for pointing that out. Will fix it.
 >
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index 230fda2b3417..137faf9f2697 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -1511,32 +1511,41 @@ static const struct platform_device_id s3c64xx_sp=
-i_driver_ids[] =3D {
->  };
+>Cheers,
+>Conor.
 >
->  static const struct of_device_id s3c64xx_spi_dt_match[] =3D {
-> -       { .compatible =3D "samsung,s3c2443-spi",
-> -                       .data =3D (void *)&s3c2443_spi_port_config,
 
-I support removing (void *) cast. But this new braces style:
 
-      },
-      {
-
-seems to bloat the code a bit. For my taste, having something like },
-{ on the same line would be more compact, and more canonical so to
-speak. Or even preserving the existing style would be ok too, for that
-matter.
-
-Assuming the braces style is fixed, you can add:
-
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
-> +       {
-> +               .compatible =3D "samsung,s3c2443-spi",
-> +               .data =3D &s3c2443_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,s3c6410-spi",
-> -                       .data =3D (void *)&s3c6410_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,s3c6410-spi",
-> +               .data =3D &s3c6410_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,s5pv210-spi",
-> -                       .data =3D (void *)&s5pv210_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,s5pv210-spi",
-> +               .data =3D &s5pv210_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,exynos4210-spi",
-> -                       .data =3D (void *)&exynos4_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,exynos4210-spi",
-> +               .data =3D &exynos4_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,exynos7-spi",
-> -                       .data =3D (void *)&exynos7_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,exynos7-spi",
-> +               .data =3D &exynos7_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,exynos5433-spi",
-> -                       .data =3D (void *)&exynos5433_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,exynos5433-spi",
-> +               .data =3D &exynos5433_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,exynos850-spi",
-> -                       .data =3D (void *)&exynos850_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,exynos850-spi",
-> +               .data =3D &exynos850_spi_port_config,
->         },
-> -       { .compatible =3D "samsung,exynosautov9-spi",
-> -                       .data =3D (void *)&exynosautov9_spi_port_config,
-> +       {
-> +               .compatible =3D "samsung,exynosautov9-spi",
-> +               .data =3D &exynosautov9_spi_port_config,
->         },
-> -       { .compatible =3D "tesla,fsd-spi",
-> -                       .data =3D (void *)&fsd_spi_port_config,
-> +       {
-> +               .compatible =3D "tesla,fsd-spi",
-> +               .data =3D &fsd_spi_port_config,
->         },
->         { },
->  };
-> --
-> 2.43.0.429.g432eaa2c6b-goog
->
 
