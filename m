@@ -1,239 +1,135 @@
-Return-Path: <linux-arch+bounces-1670-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1671-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E201083CB12
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F09983CB2B
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:34:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6201E1F26A13
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:31:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E33E31F2240C
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5ABD137C37;
-	Thu, 25 Jan 2024 18:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD50135A53;
+	Thu, 25 Jan 2024 18:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ndRNjLNt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4wtXRhi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1ED13667A
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 18:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E34413399E;
+	Thu, 25 Jan 2024 18:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706207187; cv=none; b=V6ZebKFUSOFc5dGBwdjIDoqR1aiFPmMmxxvfOTu7BJXWMVEEn+nyfe/RgoE6axaiRzXUf9cX6eLsBEVhNy2+2TxN7WYILD/ZjfKWG5wxM0io0TrNQ0LkHO+zswcWZo76L20rcC0gSRgNYbaB6tyxdGH5HkX/IbPpuu607I3A2TY=
+	t=1706207470; cv=none; b=c6rcsRGiysT06u3B5vfAPAB0vetgxUznZ0YdgRa8m+qHFR3pBgOTKGRqdwoOroTAd9nQHzOGYnLVSI/TNOvOGRmenBkRZs9gXELYD4xyNVL6UlqqQWT9qFCVnD59gj8ZRq9MpJhC9B01ARFKtzEE/t26RiOtAUwk0mxxiDhAhf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706207187; c=relaxed/simple;
-	bh=jx00gY1ANnXUmZbXujxCZw5ack5kqcVrRKjf2wSzAGE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H8sNJhoMExmoTbtyZpIARcNafIjIqPi03uNwKdGEiOwxw033te1LNT89CK6v7wAhT/zC9zlkgCkLod0NXTuwpFIeBHHgtPE2uTA09wtC5HRnc2Re8IQdZ53qzevVWU5b6GYx5YROp98zWPmtmDyvsXX6Zycxzdh0f4vNlStpbQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ndRNjLNt; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5d3907ff128so2538932a12.3
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 10:26:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706207184; x=1706811984; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyuZ0gVdBuvlPmtjlhSz8uJtD77t/nVDJ3cBvemqEj0=;
-        b=ndRNjLNtyb2HSEDOmH/SyIDmrte0pVJhbjx5ZFOqTVaN7zTiNt5Hv0poqPgH1fvEvW
-         o4qDLhKbdvSU8IfpisXd196IA9OWyysxT9b6MZ/eBWwz+s+GogE5RDlWdvAZ6Pv7CqeX
-         d1nZwoWmgxZh8V3wrRsluC8eWBvyzqJMrD1yWLdPmXld+IZZ2zckxZ7vER8J/2glMQMQ
-         DNtMgs5Iwnxpov8tsBR+gQpM/ZaS8IorzAJ5KtBQs0MLqSmcIN6bJGDpJOdOaNkkBFXq
-         Tq0YI3Ng8+ZVomByK6VtS5pDVUXFVyRFuNVKXd5CbYV60X5g0mGS76qtBFj6D+YS6wIs
-         im9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706207184; x=1706811984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xyuZ0gVdBuvlPmtjlhSz8uJtD77t/nVDJ3cBvemqEj0=;
-        b=ikVmlAyMAFuq1hAGk3qt/7uTzOW0xHZzCps5bFrNg2wxjHp8w3K2H8CT00HoShFHzj
-         1c0EcqNSWRtJVRRMN+V/LcZy4vcNofpm46NMM0bAtQD8kfIrdF/OCUpa8+nG0HIJoBmT
-         XhZurE3+DB+mwbhGEhE9ACbsO7yyG+pisJII+3nrRpVwuWp0S/hv/l4OhIs7SyHC5H1Z
-         /m/tFFUz4wyppMkXP4kLSRf6j9fQP5sqmPipdCH8vrRgVuOWsgjfNx0Lk2BZE4Y+Fl8w
-         EtKElimfJxKgSwC6edduLg4n4mIPedW/18YPhFnk4EJ+Iq8PFW6zCCwUK0c01s4Oh1ar
-         GKZA==
-X-Gm-Message-State: AOJu0YxOEbq7abhz6O21KvNu1WjodMgspwFYnz9aPEaZzPi6j/dDM1OH
-	osqm9uEDETdJ7K3Ob2zPTu1+RstP5Sk6JNH4kGQXmEaa7J8HT65vGPO+qdSk1nQ=
-X-Google-Smtp-Source: AGHT+IFBV2oC78chsLzac9k77DXS5/WbnhoEAPatEDRZ6lhNeqqRGgEsUCPUu1zeHuG1e8R3Jwt8hg==
-X-Received: by 2002:a05:6a20:1453:b0:199:ad49:ea79 with SMTP id a19-20020a056a20145300b00199ad49ea79mr78878pzi.63.1706207184482;
-        Thu, 25 Jan 2024 10:26:24 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id j38-20020a635526000000b005cf7c4bb938sm13685563pgb.94.2024.01.25.10.26.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 10:26:24 -0800 (PST)
-Date: Thu, 25 Jan 2024 10:26:19 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
-	kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
-	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
-	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
-	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
-	xiao.w.wang@intel.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, waylingii@gmail.com,
-	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
-	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
-	panqinglin2020@iscas.ac.cn, willy@infradead.org,
-	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
-	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
-	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
-	cuiyunhui@bytedance.com, bhe@redhat.com, ruscur@russell.cc,
-	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il,
-	zhangqing@loongson.cn, catalin.marinas@arm.com, revest@chromium.org,
-	josh@joshtriplett.org, joey.gouly@arm.com, shr@devkernel.io,
-	omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 05/28] riscv: zicfiss/zicfilp enumeration
-Message-ID: <ZbKny7ZAG5FWHwwF@debug.ba.rivosinc.com>
-References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-6-debug@rivosinc.com>
- <20240125-unscathed-coeditor-31f04e811489@spud>
+	s=arc-20240116; t=1706207470; c=relaxed/simple;
+	bh=LTM9Rq0ah24lwvVn1y8YRCHc6j5ROIsgGb706zCSPEw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=QK91g528v5d+AXFY78YA3hDlkK0LNcTjXrSxCoH2thZf/M86CwAzMsdd1F6896a2xY+YCkvjD3I5APkkkkeMFvOd27VQK4gSkBrzbryZkUf5seE7PTLJ4pDzOzFeSZcOLECPd0lVgNJjzyatQvm/QHfZxxnmCZvK9aqfHnNOjFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4wtXRhi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC4DC433F1;
+	Thu, 25 Jan 2024 18:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706207469;
+	bh=LTM9Rq0ah24lwvVn1y8YRCHc6j5ROIsgGb706zCSPEw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=S4wtXRhiDkmqHfxDMkUhXRmGNOlc2t6Dxgow2TFcrq/mWLHuIVpkF9dTF3+NdSXEw
+	 jZmifn0eFFKIR8Hf3ZuJ1j0R6xhj4QvHqIz9eeW9NbXopCjBKQQJ0CZF2PDzpL1Jjl
+	 zHbWVTgyhu11TS7DO4fXyVOMnXjWjP7l3x6q0o5Xqug0ySRSOwCA95u2546yaYGRFw
+	 8c0o6Y8RJu0qV+KNPupq3A4FZK8BPZy50azhxOYhmYcBFK/zC7qj6gfujx6g4V140i
+	 n6tmfWv63Jx/zDFXdWVrAHs8lCM8GhxbySSBkxwbNzQ0FbR7fC3hxlKeYpfyZjTjGm
+	 LMjxQ2FYEQPAg==
+Date: Thu, 25 Jan 2024 12:31:07 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Philipp Stanner <pstanner@redhat.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Randy Dunlap <rdunlap@infradead.org>, NeilBrown <neilb@suse.de>,
+	John Sanpe <sanpeqf@gmail.com>,
+	Kent Overstreet <kent.overstreet@gmail.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Uladzislau Koshchanka <koshchanka@gmail.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
+	Rae Moar <rmoar@google.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	"wuqiang.matt" <wuqiang.matt@bytedance.com>,
+	Yury Norov <yury.norov@gmail.com>, Jason Baron <jbaron@akamai.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v5 RESEND 2/5] lib: move pci_iomap.c to drivers/pci/
+Message-ID: <20240125183107.GA393314@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240125-unscathed-coeditor-31f04e811489@spud>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3abf071d12de5b69e146665dfb57386e3b0ddfe0.camel@redhat.com>
 
-On Thu, Jan 25, 2024 at 05:59:24PM +0000, Conor Dooley wrote:
->Yo,
->
->Series is RFC, so not gonna review it in depth, just wanted to comment
->on this particular patch.
->
->On Wed, Jan 24, 2024 at 10:21:30PM -0800, debug@rivosinc.com wrote:
->> From: Deepak Gupta <debug@rivosinc.com>
->>
->> This patch adds support for detecting zicfiss and zicfilp. zicfiss and zicfilp
->> stands for unprivleged integer spec extension for shadow stack and branch
->> tracking on indirect branches, respectively.
->>
->> This patch looks for zicfiss and zicfilp in device tree and accordinlgy lights
->> up bit in cpu feature bitmap. Furthermore this patch adds detection utility
->> functions to return whether shadow stack or landing pads are supported by
->> cpu.
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/cpufeature.h | 18 ++++++++++++++++++
->>  arch/riscv/include/asm/hwcap.h      |  2 ++
->>  arch/riscv/include/asm/processor.h  |  1 +
->>  arch/riscv/kernel/cpufeature.c      |  2 ++
->>  4 files changed, 23 insertions(+)
->>
->> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
->> index a418c3112cd6..216190731c55 100644
->> --- a/arch/riscv/include/asm/cpufeature.h
->> +++ b/arch/riscv/include/asm/cpufeature.h
->> @@ -133,4 +133,22 @@ static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, const unsi
->>  	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
->>  }
->>
->> +static inline bool cpu_supports_shadow_stack(void)
->> +{
->> +#ifdef CONFIG_RISCV_USER_CFI
->
->In passing, I don't see any reason for not using IS_ENABLED() here.
+On Thu, Jan 25, 2024 at 03:54:51PM +0100, Philipp Stanner wrote:
+> On Tue, 2024-01-23 at 14:20 -0600, Bjorn Helgaas wrote:
+> > On Thu, Jan 11, 2024 at 09:55:37AM +0100, Philipp Stanner wrote:
+> > > This file is guarded by an #ifdef CONFIG_PCI. It, consequently,
+> > > does not
+> > > belong to lib/ because it is not generic infrastructure.
+> > > 
+> > > Move the file to drivers/pci/ and implement the necessary changes
+> > > to
+> > > Makefiles and Kconfigs.
+> > > ...
+> > 
+> > > --- a/drivers/pci/Kconfig
+> > > +++ b/drivers/pci/Kconfig
+> > > @@ -13,6 +13,11 @@ config FORCE_PCI
+> > >         select HAVE_PCI
+> > >         select PCI
+> > >  
+> > > +# select this to provide a generic PCI iomap,
+> > > +# without PCI itself having to be defined
+> > > +config GENERIC_PCI_IOMAP
+> > > +       bool
+> > 
+> > > --- a/lib/pci_iomap.c
+> > > +++ b/drivers/pci/iomap.c
+> > > @@ -9,7 +9,6 @@
+> > >  
+> > >  #include <linux/export.h>
+> > >  
+> > > -#ifdef CONFIG_PCI
+> > 
+> > IIUC, in the case where CONFIG_GENERIC_PCI_IOMAP=y but CONFIG_PCI was
+> > not set, pci_iomap.c was compiled but produced no code because the
+> > entire file was wrapped with this #ifdef.
+> > 
+> > But after this patch, it looks like pci_iomap_range(),
+> > pci_iomap_wc_range(), etc., *will* be compiled?
+> > 
+> > Is that what you intend, or did I miss something?
+> 
+> They *will* be compiled when BOTH, CONFIG_PCI and
+> CONFIG_GENERIC_PCI_IOMAP have been set.
 
-No reason. I should probably do that. More readable.
-Thanks.
+I was asking about CONFIG_GENERIC_PCI_IOMAP=y but CONFIG_PCI unset.
 
->
->> +	return riscv_isa_extension_available(NULL, ZICFISS);
->> +#else
->> +	return false;
->> +#endif
->> +}
->> +
->> +static inline bool cpu_supports_indirect_br_lp_instr(void)
->> +{
->> +#ifdef CONFIG_RISCV_USER_CFI
->> +	return riscv_isa_extension_available(NULL, ZICFILP);
->> +#else
->> +	return false;
->> +#endif
->> +}
->> +
->>  #endif
->> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
->> index 06d30526ef3b..918165cfb4fa 100644
->> --- a/arch/riscv/include/asm/hwcap.h
->> +++ b/arch/riscv/include/asm/hwcap.h
->> @@ -57,6 +57,8 @@
->>  #define RISCV_ISA_EXT_ZIHPM		42
->>  #define RISCV_ISA_EXT_SMSTATEEN		43
->>  #define RISCV_ISA_EXT_ZICOND		44
->> +#define RISCV_ISA_EXT_ZICFISS	45
->> +#define RISCV_ISA_EXT_ZICFILP	46
->>
->>  #define RISCV_ISA_EXT_MAX		64
->>
->> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
->> index f19f861cda54..ee2f51787ff8 100644
->> --- a/arch/riscv/include/asm/processor.h
->> +++ b/arch/riscv/include/asm/processor.h
->> @@ -13,6 +13,7 @@
->>  #include <vdso/processor.h>
->>
->>  #include <asm/ptrace.h>
->> +#include <asm/hwcap.h>
->>
->>  #ifdef CONFIG_64BIT
->>  #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
->> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
->> index 98623393fd1f..16624bc9a46b 100644
->> --- a/arch/riscv/kernel/cpufeature.c
->> +++ b/arch/riscv/kernel/cpufeature.c
->> @@ -185,6 +185,8 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
->>  	__RISCV_ISA_EXT_DATA(svnapot, RISCV_ISA_EXT_SVNAPOT),
->>  	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
->> +	__RISCV_ISA_EXT_DATA(zicfiss, RISCV_ISA_EXT_ZICFISS),
->> +	__RISCV_ISA_EXT_DATA(zicfilp, RISCV_ISA_EXT_ZICFILP),
->
->Anything you add to this array, you need to document in a dt-binding.
+But the Makefile contains this:
 
-You mean Documentation/devicetree/bindings/riscv/extensions.yaml
-(or possibly any other yaml if needed?)
+  ifdef CONFIG_PCI
+  obj-$(CONFIG_GENERIC_PCI_IOMAP) += iomap.o
+  endif
 
->Also, you added these in the wrong place. There's a massive comment
->before the array describing the order entries must be in, please take a
->look.
+So iomap.c will not be compiled when CONFIG_PCI is unset, which is
+what I missed.
 
-I see the comment.
-In my defense, looks like I missed it when I was rebasing.
-
-Will fix it.
-
->
->Thanks,
->Conor.
->
->
->>  };
->>
->>  const size_t riscv_isa_ext_count = ARRAY_SIZE(riscv_isa_ext);
->> --
->> 2.43.0
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
-
+Bjorn
 
