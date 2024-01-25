@@ -1,80 +1,80 @@
-Return-Path: <linux-arch+bounces-1560-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1561-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4227383BB9A
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 09:17:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 979D583BBAB
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 09:18:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9092280E43
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 08:17:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5168B21FF2
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 08:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89F5117581;
-	Thu, 25 Jan 2024 08:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21C8175AD;
+	Thu, 25 Jan 2024 08:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EirxkGFG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TFix/3bw"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D846317588
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 08:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E0717581
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 08:18:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706170631; cv=none; b=cfuaZrAd5uIJBOA3pEeyFukqZrlRXj2i5iSexeRzHzFYI4gwnBPcj9Ul3FVILC+WEbtSexT9tGpqJBtmhPkt3QpitoZ5ZxAlxjp3vWAbydwAPe24JHGQeN3A/yPtIjyDGre7mv71mBv/Wy4KSezYrzK/EUVcrPe1XUU4kRqNvBU=
+	t=1706170696; cv=none; b=lXBHFGEkbpTVpisCzFdesahJb91lQCVecQpCoJjxskjYvIM+scELunFcPi7vSa94VwmDTwEJtU27LslkAnO2LtR1UQR3Gx0ZGtT69gRN2ZyETMG9dZgj4klW6nH30n0LuWD1LryLj+wRBqFyF9XW4T8i7aiBSfypiH1JDDQaT5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706170631; c=relaxed/simple;
-	bh=4yhaE1qqa9NZTdcUT/69EaMxPMmUDfecZuq6FiE7C1A=;
+	s=arc-20240116; t=1706170696; c=relaxed/simple;
+	bh=1Cdj96ruUWkOMFCx+HXr5U6F+uD2KtXlvHZKAxRf9bU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EiT15T5oSCzyObumBwXdu523RzLl6qz/8GTOROStoLIwhsxncrU3zoGrz04e35T8MFBEymY6Bc1RZ5RRP4YiiXF38gnG55UfhPulwTynlSNQ0hC1zhpFQ98a4m2QcKQOC9f8BqtEdVZJy2fwKosLTjdkEJJzoUNhY69H3s4RUuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EirxkGFG; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=VA+vrFiSQ3ta9ocmzEgZJv3YQurozitiasqKvp/p1VSvjGnsxx+iVO5xycKuK+Lq+Dj1qjix5YugqrAON9lNBXcUJfQH1zlxP5bHSerOUkAXkbItkH2N76acvfEmwQGgDBzqnu11iuYuPeER73a3tMTezLVTu2vW3bJBS4JfzIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TFix/3bw; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706170628;
+	s=mimecast20190719; t=1706170693;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=UZLvbQ/sj/IqlociRX/ySFK6it2BLTBR7c6/FUndS40=;
-	b=EirxkGFG6lF8Nbs1IygF13xw0NegjRD5b5c6B3+jfIMfiMFncc9+EEMSqyf6ecloR0GcIj
-	Q6zesGSLSAn1GdfV/l68DTjzVZdq1pBdY8ZH80gRkvLLkast+bWZ07InbEhM8DfX+JPI9Z
-	l2QcEsw9MzbQ7mDz/zR6aPYMvMUAPQU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=uXqJgm/c2OUlFe0pydromqbBJfahkXAhDOZB8V8CPy0=;
+	b=TFix/3bwqCJi/Bmefa54vWyP3vmv+ARAV4oXl5gUkd8psdNuT2MgIN07yIsuJLcH/UVZlf
+	e0foH/DRzzLeQj2DvjTeaw5e9S6NbrWQPxs5qDCcaVaBWMQq2Q5I8gzPlZbBqYlgPzaCw4
+	Pggblqn+zETf31F+ZVfMaYlWFi3wYbg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-308-iv6U6URYM-q0omJ6jMLtvA-1; Thu, 25 Jan 2024 03:17:06 -0500
-X-MC-Unique: iv6U6URYM-q0omJ6jMLtvA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-40e53200380so55305285e9.3
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 00:17:06 -0800 (PST)
+ us-mta-462-pIn9UpV1MVSdzUO_ose5-g-1; Thu, 25 Jan 2024 03:18:12 -0500
+X-MC-Unique: pIn9UpV1MVSdzUO_ose5-g-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40e8810b5f3so61021595e9.3
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 00:18:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706170625; x=1706775425;
+        d=1e100.net; s=20230601; t=1706170691; x=1706775491;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
+         :references:cc:to:content-language:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UZLvbQ/sj/IqlociRX/ySFK6it2BLTBR7c6/FUndS40=;
-        b=JcTbSrXXeePKZRCfhlAs0jheWAIMtP6ve46rYX5Qf3CF0CJrn9qCNrTQigVKtvNsrc
-         EZhYuzhW7ssVoNceI41ARLJDnCtp+qWDF/H56wpq3DStDmHhtZPOxLrQME3bNGDdw3hH
-         079Ae7wny9fysQ745qp0zaAuzaPs5tmtyAcOnj3r36VBQq8KZ2GlVmMOvtY+dhvAvY5o
-         +O72pOna1o+HhobQV02b/CVrlEqY6VrkSfP7rR5vzQ3pVyHz24czGArvR9a9cf1llRsS
-         UmM3oAAzz6A/gu77ccVVDbXFMVJtEEcoRQc/P1D6Cm7EMOtR0ATGB7akmdWNy5SMdxiz
-         ainQ==
-X-Gm-Message-State: AOJu0YyzZGEzSeIHtpMBSEJs45lE2GpnKEvSbMYaO7eNNR6FnYZg34Ml
-	+GncohonmUIk7jJyihfF/LMM8qhQLkXTB4QPPbGfbtVkY9DzLf/thxSTX+rLH+zu2aTTyuzrRaW
-	QbIMYRxpcTYJlSXMSSEuU6OEAIawCqf1u1DFUo2fJX3g4fYLikM7WSVTJEpU=
-X-Received: by 2002:a05:600c:4f4d:b0:40e:a32c:988d with SMTP id m13-20020a05600c4f4d00b0040ea32c988dmr107884wmq.4.1706170625362;
-        Thu, 25 Jan 2024 00:17:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHBXG0c1n69CXCyo5Gso5jszoyqCLj5BPA212FZgRTdtFdTJYJL0uYG9mHoKZFGV423EU1+WQ==
-X-Received: by 2002:a05:600c:4f4d:b0:40e:a32c:988d with SMTP id m13-20020a05600c4f4d00b0040ea32c988dmr107862wmq.4.1706170624814;
-        Thu, 25 Jan 2024 00:17:04 -0800 (PST)
+        bh=uXqJgm/c2OUlFe0pydromqbBJfahkXAhDOZB8V8CPy0=;
+        b=aqekjPlKbjD1Od4bFxwDzaX7et4v7ZlvAXkassk2Hjq1kCCi6L9JEobEXIbhIJB4Kk
+         KIg77xRj6+OPeC9tVkuRAy8+3w65j3arvF0WadEXf1Rue7+4xle7bm6cLo4Sd2v2s+tj
+         hCyc8fU3XL5NqUwodTXvQn3tekJrz+n5Zxp0d+Ueao85fzAP+PeDZDxOZvv+z0x2WTZe
+         U9UDd7pkCLjonYFnid0CZUOjAHlCeO7Qabm7IDZUtEs16DCPyiiD6iFGLLbsCaXEIwG4
+         wTZm9QS11uEpUP0czxYjLq5H0hgggGUGAYkjJcu0EtLL23zUhwNwg6Emy+B1g3dqy0Ax
+         7jlw==
+X-Gm-Message-State: AOJu0Ywr9+Bs/60NRDbT8mM6gXNGjdmjnVyU74WRsASPd7NWusyuebYB
+	47I303fOUQCdkUxFqqBjdB//D4AMwHNPJkB4mr7ePJSat2+QznUPsel1tLa2RcB4xuoJ55Si/b/
+	zy4/Vu/B33rC/QlmXy3zQh3aMijvUYGCO3bZqlm76rplhdc3WfbPp0KxmMh4=
+X-Received: by 2002:a05:600c:c8b:b0:40e:4b11:663d with SMTP id fj11-20020a05600c0c8b00b0040e4b11663dmr267238wmb.66.1706170690823;
+        Thu, 25 Jan 2024 00:18:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEshtEkNFMkm00s60/JsUTo/oUqMCiWSuFJI5nmGq2+g7C4FvJZO0iTHAUzos0dIk+wNed0Hw==
+X-Received: by 2002:a05:600c:c8b:b0:40e:4b11:663d with SMTP id fj11-20020a05600c0c8b00b0040e4b11663dmr267209wmb.66.1706170690365;
+        Thu, 25 Jan 2024 00:18:10 -0800 (PST)
 Received: from ?IPV6:2003:cb:c70a:7600:9a0b:ceef:a304:b9a7? (p200300cbc70a76009a0bceefa304b9a7.dip0.t-ipconnect.de. [2003:cb:c70a:7600:9a0b:ceef:a304:b9a7])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05600c4fce00b0040d30af488asm1658538wmq.40.2024.01.25.00.17.02
+        by smtp.gmail.com with ESMTPSA id o14-20020a05600c4fce00b0040d30af488asm1658538wmq.40.2024.01.25.00.18.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jan 2024 00:17:04 -0800 (PST)
-Message-ID: <a6f3ccf5-26a0-45f1-adaa-56a8df569548@redhat.com>
-Date: Thu, 25 Jan 2024 09:17:01 +0100
+        Thu, 25 Jan 2024 00:18:09 -0800 (PST)
+Message-ID: <2f34f6aa-99fa-4545-b706-a1d50864f9e9@redhat.com>
+Date: Thu, 25 Jan 2024 09:18:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,7 +82,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 08/28] mm: Define VM_SHADOW_STACK for RISC-V
+Subject: Re: [RFC PATCH v1 09/28] mm: abstract shadow stack vma behind
+ `arch_is_shadow_stack`
+Content-Language: en-US
 To: debug@rivosinc.com, rick.p.edgecombe@intel.com, broonie@kernel.org,
  Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
  ajones@ventanamicro.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -107,8 +109,7 @@ Cc: corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com,
  linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-9-debug@rivosinc.com>
-Content-Language: en-US
+ <20240125062739.1339782-10-debug@rivosinc.com>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -155,63 +156,59 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240125062739.1339782-9-debug@rivosinc.com>
+In-Reply-To: <20240125062739.1339782-10-debug@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 25.01.24 07:21, debug@rivosinc.com wrote:
 > From: Deepak Gupta <debug@rivosinc.com>
 > 
-> VM_SHADOW_STACK is defined by x86 as vm flag to mark a shadow stack vma.
+> x86 has used VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) to encode shadow
+> stack VMA. VM_SHADOW_STACK is thus not possible on 32bit. Some arches may
+> need a way to encode shadow stack on 32bit and 64bit both and they may
+> encode this information differently in VMAs.
 > 
-> x86 uses VM_HIGH_ARCH_5 bit but that limits shadow stack vma to 64bit only.
-> arm64 follows same path
-> https://lore.kernel.org/lkml/20231009-arm64-gcs-v6-12-78e55deaa4dd@kernel.org/#r
+> This patch changes checks of VM_SHADOW_STACK flag in generic code to call
+> to a function `arch_is_shadow_stack` which will return true if arch
+> supports shadow stack and vma is shadow stack else stub returns false.
 > 
-> On RISC-V, write-only page table encodings are shadow stack pages. This patch
-> re-defines VM_WRITE only to be VM_SHADOW_STACK.
-> 
-> Next set of patches will set guard rail that no other mm flow can set VM_WRITE
-> only in vma except when specifically creating shadow stack.
+> There was a suggestion to name it as `vma_is_shadow_stack`. I preferred to
+> keep `arch` prefix in there because it's each arch specific.
 > 
 > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->   include/linux/mm.h | 14 +++++++++++++-
->   1 file changed, 13 insertions(+), 1 deletion(-)
+>   include/linux/mm.h | 18 +++++++++++++++++-
+>   mm/gup.c           |  5 +++--
+>   mm/internal.h      |  2 +-
+>   3 files changed, 21 insertions(+), 4 deletions(-)
 > 
 > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 418d26608ece..dfe0e8118669 100644
+> index dfe0e8118669..15c70fc677a3 100644
 > --- a/include/linux/mm.h
 > +++ b/include/linux/mm.h
-> @@ -352,7 +352,19 @@ extern unsigned int kobjsize(const void *objp);
+> @@ -352,6 +352,10 @@ extern unsigned int kobjsize(const void *objp);
 >    * for more details on the guard size.
 >    */
 >   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
-> -#else
-> +#endif
-> +
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +/*
-> + * On RISC-V pte encodings for shadow stack is R=0, W=1, X=0 and thus RISCV
-> + * choosing to use similar mechanism on vm_flags where VM_WRITE only means
-> + * VM_SHADOW_STACK. RISCV as well doesn't support VM_SHADOW_STACK to be set
-> + * with VM_SHARED.
-> + */
-> +#define VM_SHADOW_STACK	VM_WRITE
-> +#endif
-> +
-> +#ifndef VM_SHADOW_STACK
->   # define VM_SHADOW_STACK	VM_NONE
+> +static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
+> +{
+> +	return (vm_flags & VM_SHADOW_STACK);
+> +}
 >   #endif
 >   
+>   #ifdef CONFIG_RISCV_USER_CFI
+> @@ -362,10 +366,22 @@ extern unsigned int kobjsize(const void *objp);
+>    * with VM_SHARED.
+>    */
+>   #define VM_SHADOW_STACK	VM_WRITE
+> +
+> +static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
+> +{
+> +	return ((vm_flags & (VM_WRITE | VM_READ | VM_EXEC)) == VM_WRITE);
+> +}
+> +
 
-That just screams for trouble. Can we find a less hacky way, please?
-
-Maybe just start with 64bit support only and do it like the other archs. 
-No need to be special.
-
-When wanting to support 32bit, we'll just finally clean up this high 
-flag mess and allow for more vm flags on 32bit as well.
+Please no such hacks just to work around the 32bit vmflags limitation.
 
 -- 
 Cheers,
