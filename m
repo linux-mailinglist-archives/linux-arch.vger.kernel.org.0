@@ -1,108 +1,167 @@
-Return-Path: <linux-arch+bounces-1693-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1695-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FD883CDC0
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 21:47:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F5183CE8B
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 22:26:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2050B2555C
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 20:46:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 203511F25DF8
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 21:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB870137C48;
-	Thu, 25 Jan 2024 20:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B82713A262;
+	Thu, 25 Jan 2024 21:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="inllMIu8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QK8SP0Nn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="C2sMW8cn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37096137C2E
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 20:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A876F13A253;
+	Thu, 25 Jan 2024 21:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706215611; cv=none; b=Lav+dilcJ/L5puRaFCPClyVEgL0cULLngqB9c+yqTMWdvIlX0neeyYELJr3PCrt6wpIL8WjK6vtGaYUFkuw/N84WkbH77zzVcPk4K0Hl1KdJanIC6/68Tz5dhdgAVzC750TmqbPQgnAWmIkkfM2O3ay+4beiC4OD+qygH5fPOQE=
+	t=1706218001; cv=none; b=bybJKuIwNwrEDG1n4185puD/OIb4jODL8C9icDeLhNQn9eOWg9weJZIXHpfRc3yH/tMSBmKgpvRNGX89jo4DYX508959/VeOAF8LEMFCsNH6D04VREoUAKLoGtpBeivU/s6FF2ytQ3mZM6DGimzDT0lBmOga+l7mriPbqA8SYFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706215611; c=relaxed/simple;
-	bh=ouunYuQuL5e9JirkoCcY+XKKJDTYYnL7iTYoEB+yr0I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q1YQP67gCtkoAmGJonqLWoSN6FXlLTxEFe1o2pywWV7rI6fP10sBQaW/RUUKnSpIF7HeAgVYIhqtvxm0/e09EP0ZUn0ax5d9sBhsRZ7OfT1wtgUZn8Jr46n0H+PmZ0ivoNPD2TkrTRYn1d2xVNV3obLeGk5+0r+AzPtEN2hkFOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=inllMIu8; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4bdb7f016b3so101146e0c.0
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 12:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706215609; x=1706820409; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cJCIsrO2o9NvHQxNMc03LGFVf6NoDfQO8EJsLkzfJx0=;
-        b=inllMIu8HFYT4M4kiZG+LNl2W7MilGUTPVhyBU+ow3xeXd7dTkh2uttcXmpIEy7cyD
-         mcuadvSBymclXJTtmT5tRMTPOBcoEqP40DyuGcHa+dvOKkYny180GeRRV+qY0mIXQWje
-         MPCk2v37C33/NX8KixV4OAcurcQjwIpw/huh+qeE/C2PiFlfPXhDAXBjS9aooOp75s2N
-         k6LhDW7OO1pVDVsqmvqhUvKZgw4bNHkPDQh+P7DozD+RkkGScxte7OHJg5jMHRbkp8Td
-         aY1J0Vo22TfabQDytuYZnXezb0JhglIzwDR9eN+VZvHTzQ6/1t+Z7x5xzPcngdTFWirO
-         O4Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706215609; x=1706820409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cJCIsrO2o9NvHQxNMc03LGFVf6NoDfQO8EJsLkzfJx0=;
-        b=Q5DD7mlFcoO5CG/XJOwvVFVuW0I9qXF8Gxk2c/OHcXEkfA3PRF3uqAnZrv0fZadnD0
-         S0YQKEzhw3c6V0otawbUyHoX68QfXoR/jhGxH6LSWxdZqXK4GV5S7ACK/FEcxZYxH0Q1
-         54yVLfcu9brLY3RPeEMoUUF/q51Ryd8kBg2GTmEmxBNy48jK8Puvq2dceHB6Aa3zKVrV
-         0LIBfbZeiMW/nEPvqP+YMkCfIhdotsBB0eA1lFtyC5bjLbVppZgPPrBdjt1/LY5SSyDT
-         dpzSHa+THVg0tq2wVeXYJidwg+gL+OTLxcdSMyps1U8xSE43u55LMllbTXy+UaF8UpxE
-         VX1Q==
-X-Gm-Message-State: AOJu0YwtkzcGg5xyOSpx/JPd3IU742YEV1xJx+0xEB+ZNq5FWkh0Bnct
-	blcF4I4c8mah7ihW9CZkObepkLjSAUFQdBUzUHDGEDgfYM6XTmuW2jGTp0mQ20xTxZnhriaNANg
-	hjYXaygOHNAmDEaOc4MMqgVJ2Z4x2IMNkpSA+
-X-Google-Smtp-Source: AGHT+IHI8Q8dDZexTdG1oWiuWwKZqI7C18nLfjSkoGLgeVlXiyjEX7qqaULmDSBIhQnv0IiiZWJY1/qCHVluRpNXcEk=
-X-Received: by 2002:a05:6122:58e:b0:4b6:cde4:5217 with SMTP id
- i14-20020a056122058e00b004b6cde45217mr292246vko.29.1706215608955; Thu, 25 Jan
- 2024 12:46:48 -0800 (PST)
+	s=arc-20240116; t=1706218001; c=relaxed/simple;
+	bh=B/g0KfVrN0Gqw2KKiCNZ2MwRrOUESPX1O0BAPrvSEjA=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=k+8WGAXJCFvq/RzwmM11v3VLyUpoY955gpZSX9AQ0cwN9LCuZkuTGQTfJ+rNHBF8O82uGHti4gV7snCofjLYJ8bPtr04yS9GWH8B1j3wPkA/fDoj8QS1LZpKKQ/9PPNqcr5LUpuBoOH9uR7hPXZ0BGR839eI0FPb5oms62xGpvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=QK8SP0Nn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=C2sMW8cn; arc=none smtp.client-ip=66.111.4.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.nyi.internal (Postfix) with ESMTP id A406D5C00F5;
+	Thu, 25 Jan 2024 16:26:38 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute1.internal (MEProxy); Thu, 25 Jan 2024 16:26:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1706217998; x=1706304398; bh=qpZFUm5hoy
+	UFSrZ1IxH2YPgLg1vDc0KKMVjTRgl2rig=; b=QK8SP0Nnse0H+PKqzFqPep9Eaj
+	bFXXf5kjhp0BbqieJzJWYnxWIgyvg8HsOD39bYgIF+e4vTJn82B8CKgYZRf+AZdx
+	MTYOWvDeO/W0at49Yu1e9RV/9V6xpHDfYki020xa0B7C3WKM+hHAWqjMOoVeVZoA
+	fs7YZAhSMqi8XjJCMwenVuh6IYtQDvL9I5rINgrLsS/xdz+EI87khxKBiYY/XL+k
+	bEJHaTtn5y98n+YeyLf/k+3u1pyXLbYRlv1O3QLf5W4QiZAe9wqRvMBKOsM/IE6Q
+	au4QOp7IIsIBXMRZr6coDZsfVrGiMWfyyOLEsb4Ys/LzDvY0h5PfQoqsvLvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1706217998; x=1706304398; bh=qpZFUm5hoyUFSrZ1IxH2YPgLg1vD
+	c0KKMVjTRgl2rig=; b=C2sMW8cnE4/luDTxawebBPVlYXW16RsCLV4ctJZhaaYK
+	VDwwwJmoAoBFA7kPsEG9uy1yM5GxmsKIlNfwmbK3+gr9Z3EhVIy/dzietHPFUukm
+	pIj8YUTdaJdnJXj2zmSzmAI25Gyic96NSab/Td4xk3w83oRNo48TeQaW9WZAsfTM
+	ut3ql2yLcnJE+7olFwqRl7G+mKp2iFkyvGdORNrlenQcEJ7c8MDL1dnXJ8xB2WcG
+	rvV7YlC7F+OTjlspL/qbAQ5GoD+6zCvxw1QIp3AeekS/tiWmqOZlPD/Q9G7Bjff4
+	pgTbmS0C/38BPcuv8pPnZXpZKzjQkSUBE28NY6Gz4g==
+X-ME-Sender: <xms:DtKyZQdv4ugAirEr53Ddfnb5hEwiKXbAk4uKJ3WY5CvuL4Y6cUDA0w>
+    <xme:DtKyZZKkPau6TiEpRYxZWelLmygMXFMLznkMrTWpS4qd6ldyLuzHoR8eZxFF7BPif
+    0i0BwS0FjczD56yhpc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdelhedgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:DtKyZXKp1BlRrGpLl2j_wtnuVlGkXDDBhYgdoUQPH5q_Ew6voXwB5g>
+    <xmx:DtKyZbESVomnS7EoKFMzRddRPuksuKMe5MNEOy8SJSAIpmYcEVWG3w>
+    <xmx:DtKyZcnwwSgv-nFvLSPXv3uXKjSBpo36uKF6rnTTIlgYR4pckQfAzQ>
+    <xmx:DtKyZSsDdHfxXbC4wk5AtsFKsmbUhk6GJLkb9tbPnhVoX9d5GEZS7A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 22736B6008D; Thu, 25 Jan 2024 16:26:38 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-119-ga8b98d1bd8-fm-20240108.001-ga8b98d1b
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125112818.2016733-19-ardb+git@google.com> <20240125112818.2016733-35-ardb+git@google.com>
-In-Reply-To: <20240125112818.2016733-35-ardb+git@google.com>
-From: Kevin Loughlin <kevinloughlin@google.com>
-Date: Thu, 25 Jan 2024 12:46:38 -0800
-Message-ID: <CAGdbjmLEsj1cSnxoneSrDy2J2SFenjEdoYa_zoDQQhtU1nccMA@mail.gmail.com>
-Subject: Re: [PATCH v2 16/17] x86/sev: Drop inline asm LEA instructions for
- RIP-relative references
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <01d24044-6cac-4034-a9de-5b69c2dab139@app.fastmail.com>
+In-Reply-To: <20240125145007.748295-26-tudor.ambarus@linaro.org>
+References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
+ <20240125145007.748295-26-tudor.ambarus@linaro.org>
+Date: Thu, 25 Jan 2024 22:23:53 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Tudor Ambarus" <tudor.ambarus@linaro.org>,
+ "Mark Brown" <broonie@kernel.org>, "Andi Shyti" <andi.shyti@kernel.org>
+Cc: "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Alim Akhtar" <alim.akhtar@samsung.com>, linux-spi@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ "Peter Griffin" <peter.griffin@linaro.org>,
+ "Sam Protsenko" <semen.protsenko@linaro.org>, kernel-team@android.com,
+ "William McVicker" <willmcvicker@google.com>
+Subject: Re: [PATCH v2 25/28] asm-generic/io.h: add iowrite{8,16}_32 accessors
+Content-Type: text/plain
 
-On Thu, Jan 25, 2024 at 3:33=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
-> wrote:
+On Thu, Jan 25, 2024, at 15:50, Tudor Ambarus wrote:
+> This will allow devices that require 32 bits register accesses to write
+> data in chunks of 8 or 16 bits.
 >
-> The SEV code that may run early is now built with -fPIC and so there is
-> no longer a need for explicit RIP-relative references in inline asm,
-> given that is what the compiler will emit as well.
+> One SoC that requires 32 bit register accesses is the google gs101. A
+> typical use case is SPI, where the clients can request transfers in words
+> of 8 bits.
 >
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/mm/mem_encrypt_identity.c | 37 +++-----------------
->  1 file changed, 5 insertions(+), 32 deletions(-)
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-snp_cpuid_get_table() in arch/x86/kernel/sev-shared.c (a helper
-function to provide the same inline assembly pattern for RIP-relative
-references) would also no longer be needed, as all calls to it would
-now be made in position-independent code. We can therefore eliminate
-the function as part of this commit.
+My feeling is that this operation is rare enough that I'd prefer
+it to be open-coded in the driver than made generic here. Making
+it work for all corner cases is possible but probably not worth
+it.
+
+> +#ifndef writesb_l
+> +#define writesb_l writesb_l
+> +static inline void writesb_l(volatile void __iomem *addr, const void 
+> *buffer,
+> +			     unsigned int count)
+> +{
+> +	if (count) {
+> +		const u8 *buf = buffer;
+> +
+> +		do {
+> +			__raw_writel(*buf++, addr);
+> +		} while (--count);
+> +	}
+> +}
+> +#endif
+
+There are architectures where writesb() requires an extra
+barrier before and/or after the loop. I think there are
+others that get the endianess wrong in the generic version
+you have here.
+
+> +#ifndef iowrite8_32_rep
+> +#define iowrite8_32_rep iowrite8_32_rep
+> +static inline void iowrite8_32_rep(volatile void __iomem *addr,
+> +				   const void *buffer,
+> +				   unsigned int count)
+> +{
+> +	writesb_l(addr, buffer, count);
+> +}
+> +#endif
+
+This one is wrong for architectures that have a custom inl()
+helper and need to multiplex between inl() and writel() in
+iowrite32(), notably x86.
+
+For completeness you would need to add the out-of-line version
+in lib/iomap.c for those, plus the corresponding insb_32()
+and possibly the respective big-endian versions of those.
+
+If you keep the helper in a driver that is only used on
+regular architectures like arm64, it will work reliably.
+
+      Arnd
 
