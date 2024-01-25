@@ -1,149 +1,147 @@
-Return-Path: <linux-arch+bounces-1702-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1703-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3518883CF6F
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 23:35:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BEFA83CF9F
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 23:50:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C71501F227CF
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 22:35:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 595801C22DCB
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 22:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 639C410A3B;
-	Thu, 25 Jan 2024 22:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBFB111B5;
+	Thu, 25 Jan 2024 22:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VO+BhBcB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUIlhYzO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E7111193
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 22:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977DF67C45;
+	Thu, 25 Jan 2024 22:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706222103; cv=none; b=Z3SGllC5cKabsqx4qgE+zY8ba0MDhQZbcJk/mzHGpe3dakCM1SNs494rdWkDuYf1iivK3T5vvdE+CFLOI5Q9qZ9bKIiZulejppL54kD5jmlo+ac5UGbnWeqCRfX8ltPe186Ru9BErlQ2lFPIKphEI8lqwbhFw5t496ZOhJ+5cDo=
+	t=1706223034; cv=none; b=dnI3Vk/FTCGReTia2v4y63bzXUr+dahB5U3aq9W//Nyp5yIoajSEpZeJbWMf2XvSUL4CAb6crqBiZ5fxbnNg0ySH5rfVR6UPm7/ICvvU/NVgVxLXE6EgVJIpEC4O8pCdwIYjDTdzvgpNXGcE9ayceebvtOTLyAmPPgrtX+AphLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706222103; c=relaxed/simple;
-	bh=PWubl/XtYBpas/AdivCCWYMQQNqPtjT7WZPtVgnZW+E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s4cKE/1d7EW8QhOKtB8x+yYC2zmqsthtTcmvq+KAapH5Yy4WwbIZZr2AG77Tp2dKThltleFpFO39Rz1tf+YCn9rn23h4cThYoDn1hfYUxUrJNeP9l1XzSQ3L01kGsItIlI2Bg72M8DcG6agtz5Nr3WZWtbyj6dFjXNUfhqTwvng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VO+BhBcB; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5ca29c131ebso184073a12.0
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 14:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706222101; x=1706826901; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Eb0c3haY7NyGtB+8UjAu5Wtfyd5HZxv9SnvbZwJOFM=;
-        b=VO+BhBcBfOPmcG1cPgDAU5nnE9lVBnxh4uTePyfceSP+NDbNp+77ub6+WkdDe2IWGh
-         //oOTFgFYLmVobOMyrt3vO+Fp9VefZ7ZC/Y07TKGM+0vDiL05geJOKM0DtKiOlzcq97q
-         ig1UYrbMCjq3bDQCUt6bTIgqmidkKMkzVvb8wMvNd+52YMdTDhRBJLB66eygo9dZJnZy
-         1pHmHEsshFa1TViFRsy+va8Qi8aAKLFoER0dYXy85NZpYa4zvdmRTykZNxtxNCX/Tf6D
-         oPpxwPMmQEsEWrhoPphPT+zmUd27avLnH+OnK8HJGY4uANbt3drRJkNwK1qnzwtxZGvN
-         UBfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706222101; x=1706826901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Eb0c3haY7NyGtB+8UjAu5Wtfyd5HZxv9SnvbZwJOFM=;
-        b=qY4GmtJhEVQgiXE+EfUNudCRluQXvZJ+vHXMOVKjWetJkrum4naVp5xRBsfh+HYGRx
-         O7XuGXmtKoVvlcc921sbp5Ez7IaIoVXX7S9dbs2OXcT6V7PP2xLFgzmxzNUcgnxJR729
-         Rrw4zBw4v8fpVDgCEHgtC1EpCJlRKVRowaIU0aX+HhdAoy0GjuRhKVAd5a1V/9ndMElu
-         FoYMB6qzQ+emsaWgGZycXEmX8zCPpWl+vD40Bw/24MIfY6slYn3prWPlUAIgnYvnmKwp
-         y7h/q/nDVfUdgLpFMrYeYmB/JIVcV6jumsYuLKycynS4fKXLhwMaJmgmnj5mRYC9z8/8
-         1ZFQ==
-X-Gm-Message-State: AOJu0YxA+SG9W0zGFM/PIc8n9Np2nTzD/ld3UJygdJgsch9rMsVeNk80
-	qDHxh5NYP4TZXtJMPaUMIXf64xr/BNK85msmTTAfLQJnBaZQLRsl+YZOZ1bTIYAFzKVHmDbPVPB
-	wzt2uIlbZ627fI57eNS1Yuz1pgAvcWpWJBU3bNA==
-X-Google-Smtp-Source: AGHT+IHK8NjbfVjiOJVvhHwvTy+ErZQG3JChXcCNJ9tq7pj1tBuCcj9cSgMmIm2WuK9z6omDkmihzA64FOxWzj9qVZk=
-X-Received: by 2002:a05:6a20:2453:b0:19a:66a4:7966 with SMTP id
- t19-20020a056a20245300b0019a66a47966mr509176pzc.55.1706222100868; Thu, 25 Jan
- 2024 14:35:00 -0800 (PST)
+	s=arc-20240116; t=1706223034; c=relaxed/simple;
+	bh=HknESiBZP/3axcY3RqkHCvBDkhixmbUnM9EvB+nTOiY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IA/bk+c0NZ12gfmqNbuhPF+VUgQDu1I4bwrgAuD8x8VmJk3Vhqm32c3Mk/h3SKMGjv7jq1WUB8vqI4rkqV8RRRXBsEOR/7aZHWXctcQc3rIwXUSolYStV+suGQW9DW8LfS+qRKN6y82UY7f9pVLNdzk6ODjWOVADbA0sJZJ6LEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUIlhYzO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B33C433C7;
+	Thu, 25 Jan 2024 22:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706223034;
+	bh=HknESiBZP/3axcY3RqkHCvBDkhixmbUnM9EvB+nTOiY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lUIlhYzO2hYjp0MgLM2dleVO+Zexpipxm/zy6F0Ssv6SQKHTR63fPuIvUpOuv4Kg5
+	 1wODYS/7wZjSriL8kKkDa717tpBJ6IMMSTWSIFqjMBHp77+ZrRxHuiqxggS/kSdj+J
+	 jU9DGMVCBx6e1ayVR5zER+mrG+JJz6hUnKVF0NaEjHHWZJbfmKkJmcPbi1Ohduv9rG
+	 AHTNJ8PveLJyG72+YrrZiAWjnZdJ16u4d7xC5JQlTrRq3wpUjyPWyWb8pe+vA7WfgF
+	 wYyJf4Ky0CoRd7Ax7/EbLIeZo8UA8/h0bbev9ADF29+bbgi7P85Gb97ucI6VmLf+vU
+	 3R4A17ZQCo5iA==
+Date: Thu, 25 Jan 2024 23:50:27 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: broonie@kernel.org, arnd@arndb.de, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, alim.akhtar@samsung.com, 
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
+	andre.draszik@linaro.org, peter.griffin@linaro.org, semen.protsenko@linaro.org, 
+	kernel-team@android.com, willmcvicker@google.com
+Subject: Re: [PATCH 07/21] spi: s3c64xx: use bitfield access macros
+Message-ID: <ri7gerw4ov4jnmmkhtumhhtgfgxtr6kpsopdxjlx6fylbqznna@3qgvejyhjirw>
+References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+ <20240123153421.715951-8-tudor.ambarus@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
- <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk> <7c998d34-919b-46e7-8942-75da94d5ac21@linaro.org>
- <zbxkm5jbngci5dp3oxcjccnltpht7wsyrvvekozwcsfv5ly3r4@ms3c3bzxgqqx>
-In-Reply-To: <zbxkm5jbngci5dp3oxcjccnltpht7wsyrvvekozwcsfv5ly3r4@ms3c3bzxgqqx>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Thu, 25 Jan 2024 16:34:49 -0600
-Message-ID: <CAPLW+4m_AAnsXdpcwrDL2dJNq6+2sRg0fv4nB1tpF3ufMX=TNA@mail.gmail.com>
-Subject: Re: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>, arnd@arndb.de, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
-	Andi Shyti <andi.shyti@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240123153421.715951-8-tudor.ambarus@linaro.org>
 
-On Thu, Jan 25, 2024 at 4:25=E2=80=AFPM Andi Shyti <andi.shyti@kernel.org> =
-wrote:
->
-> Hi Tudor,
->
-> > >> The patch set cleans a bit the driver and adds support for gs101 SPI=
-.
-> > >>
-> > >> Apart of the SPI patches, I added support for iowrite{8,16}_32 acces=
-sors
-> > >> in asm-generic/io.h. This will allow devices that require 32 bits
-> > >> register accesses to write data in chunks of 8 or 16 bits (a typical=
- use
-> > >> case is SPI, where clients can request transfers in words of 8 bits =
-for
-> > >> example). GS101 only allows 32bit register accesses otherwise it rai=
-sses
-> > >> a Serror Interrupt and hangs the system, thus the accessors are need=
-ed
-> > >> here. If the accessors are fine, I expect they'll be queued either t=
-o
-> > >> the SPI tree or to the ASM header files tree, but by providing an
-> > >> immutable tag, so that the other tree can merge them too.
-> > >>
-> > >> The SPI patches were tested with the spi-loopback-test on the gs101
-> > >> controller.
-> > >
-> > > The reformatting in this series will conflict with the SPI changes in=
-:
-> > >
-> > >    https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@li=
-naro.org
-> > >
-> > > Can you please pull those into this series or otherwise coordinate?
-> >
-> > ah, I haven't noticed Sam's updates. I'll rebase on top of his set and
-> > adapt if necessary. I'll review that set in a sec.
->
-> it's a long series, please give it a few days before resending
-> it.
->
+Hi Tudor,
 
-Also, I recommend splitting it up in a way I suggested before:
+On Tue, Jan 23, 2024 at 03:34:06PM +0000, Tudor Ambarus wrote:
+> Use the bitfield access macros in order to clean and to make the driver
+> easier to read.
 
-  1. First add gs101 support with minimal amount of patches (without
-.fifosize introduction, etc)
-  2. Then do all those cleanups and reworks on top of that
+most of the changes done here are allignment. I would mention it
+in the log.
 
-The reason why I think it's better than doing that vice-versa is that
-I feel (2) can take a lot of time/review rounds to get polished and
-accepted. So this way you can make sure gs101 support gets applied
-sooner. It'll also make it easier to do the backporting work later, if
-that's ever needed.
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
 
-> Thanks,
-> Andi
+...
+
+> -#define S3C64XX_SPI_CLKSEL_SRCMSK	(3<<9)
+> -#define S3C64XX_SPI_CLKSEL_SRCSHFT	9
+> -#define S3C64XX_SPI_ENCLK_ENABLE	(1<<8)
+> -#define S3C64XX_SPI_PSR_MASK		0xff
+> -
+> -#define S3C64XX_SPI_MODE_CH_TSZ_BYTE		(0<<29)
+> -#define S3C64XX_SPI_MODE_CH_TSZ_HALFWORD	(1<<29)
+> -#define S3C64XX_SPI_MODE_CH_TSZ_WORD		(2<<29)
+> -#define S3C64XX_SPI_MODE_CH_TSZ_MASK		(3<<29)
+> -#define S3C64XX_SPI_MODE_BUS_TSZ_BYTE		(0<<17)
+> -#define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD	(1<<17)
+> -#define S3C64XX_SPI_MODE_BUS_TSZ_WORD		(2<<17)
+> -#define S3C64XX_SPI_MODE_BUS_TSZ_MASK		(3<<17)
+> +#define S3C64XX_SPI_CH_CFG			0x00
+> +#define S3C64XX_SPI_CLK_CFG			0x04
+> +#define S3C64XX_SPI_MODE_CFG			0x08
+> +#define S3C64XX_SPI_CS_REG			0x0C
+> +#define S3C64XX_SPI_INT_EN			0x10
+> +#define S3C64XX_SPI_STATUS			0x14
+> +#define S3C64XX_SPI_TX_DATA			0x18
+> +#define S3C64XX_SPI_RX_DATA			0x1C
+> +#define S3C64XX_SPI_PACKET_CNT			0x20
+> +#define S3C64XX_SPI_PENDING_CLR			0x24
+> +#define S3C64XX_SPI_SWAP_CFG			0x28
+> +#define S3C64XX_SPI_FB_CLK			0x2C
+> +
+> +#define S3C64XX_SPI_CH_HS_EN			BIT(6)	/* High Speed Enable */
+> +#define S3C64XX_SPI_CH_SW_RST			BIT(5)
+> +#define S3C64XX_SPI_CH_SLAVE			BIT(4)
+> +#define S3C64XX_SPI_CPOL_L			BIT(3)
+> +#define S3C64XX_SPI_CPHA_B			BIT(2)
+> +#define S3C64XX_SPI_CH_RXCH_ON			BIT(1)
+> +#define S3C64XX_SPI_CH_TXCH_ON			BIT(0)
+> +
+> +#define S3C64XX_SPI_CLKSEL_SRCMSK		GENMASK(10, 9)
+> +#define S3C64XX_SPI_ENCLK_ENABLE		BIT(8)
+> +#define S3C64XX_SPI_PSR_MASK			GENMASK(15, 0)
+
+I find it easier as 0xff to be honest, but I'm not going to be
+picky.
+
+> +
+> +#define S3C64XX_SPI_MODE_CH_TSZ_MASK		GENMASK(30, 29)
+> +#define S3C64XX_SPI_MODE_CH_TSZ_BYTE		0
+> +#define S3C64XX_SPI_MODE_CH_TSZ_HALFWORD	1
+> +#define S3C64XX_SPI_MODE_CH_TSZ_WORD		2
+
+I personally find this pattern harder to read. Perhaps you can
+already define these as FIELD_PREP here.
+
+> +#define S3C64XX_SPI_MAX_TRAILCNT_MASK		GENMASK(28, 19)
+> +#define S3C64XX_SPI_MODE_BUS_TSZ_MASK		GENMASK(18, 17)
+
+...
+
+> -#define S3C64XX_SPI_FBCLK_MSK			(3<<0)
+> +#define S3C64XX_SPI_FBCLK_MASK			GENMASK(1, 0)
+
+0x3 to me is more understandable than (3<<0) and GENMASK(1, 0).
+Bit operation defines should be used when they really simplify
+the reading. But when they make it more difficult, then, I don't
+see the point.
+
+Overall looks good, though.
+
+Andi
 
