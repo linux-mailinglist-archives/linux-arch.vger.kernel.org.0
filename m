@@ -1,243 +1,192 @@
-Return-Path: <linux-arch+bounces-1583-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1584-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A67983C509
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 15:42:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2E583C543
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 15:50:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 934341C22285
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 14:42:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A043295B83
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 14:50:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98336E2DA;
-	Thu, 25 Jan 2024 14:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFE973173;
+	Thu, 25 Jan 2024 14:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CIqZLFcg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F606E2BE;
-	Thu, 25 Jan 2024 14:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C646EB75
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 14:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706193768; cv=none; b=j3r3DXqrfz30ufF3kd/DxqHHFm9HaviolvCyVunL78NRb0FpDDG4fAwOr4y7ggEtcVBrB5P3WDik8qyNDjaxa4lEdF0p/PNpE+OtWBp//gJJMYcPIqTMnOBBqT6U0lr3hz6S3QFoJmwm4L8UxOpnNUifvr4bYrW06gtbE16S45Y=
+	t=1706194214; cv=none; b=gx+WWPO2APzRI2lTfDPnsC9viiwS59zsmPJS8tOia0V3DJ9/P6uRisGZBFFBuh4wzBGk2TEvNi1LLQnWCgGl84tDJwgCpHbXYSiwG4dOE63uuCySie91chN/XJwSfiLVV/vGfV+Y4oUO+1odlxdQlj8I67hu6ECsu9LSFeNoCf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706193768; c=relaxed/simple;
-	bh=JaK07Zkj3cT2yhn6Ow34x5ujcw/CKNJtlZf/Ls0PoA8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pbZslrDJaKPlwZU1G/h2QbxCOX5IXjCYd0FuK7kpCBywYl9zdvdP2GwZmHkKlMDyVqxi2o6lB2TQL2FBbE9LtLoQ2orphGEFRwLn6bk8N4E1S9QAwaLQxLKzh3SkZIbo0RJon7wKVk4STGvKxys8SEIL5WLxkMudBbWKZj+XoF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3bc21303a35so1267870b6e.0;
-        Thu, 25 Jan 2024 06:42:46 -0800 (PST)
+	s=arc-20240116; t=1706194214; c=relaxed/simple;
+	bh=Q0ynWyqlB+TEhw6MG3HTpcZ4T0RZOvGsOvLniQtNrzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d20An4yQW8Xbhi7rTyYLZcvGvwol5527/SgXQNBfEbyoLLUBbZfkJzP1/SmVQbC7Ly9CWa/F4JpfUYQuALlJFwL2opLBlVNBfgmek8g7GdPWZfMwG5QGT0ZS9Dveb4XJYoluqrqKHlDi5EXnxlPBlHWW7hKLYHJJtciojYhD4n4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CIqZLFcg; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40ed232ea06so5614055e9.1
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 06:50:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706194211; x=1706799011; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ZI/5KwC+xCytuTFH+W+O2jy1GV4Q+e+HfUN4cLRoNQ=;
+        b=CIqZLFcgStI76l5gK60XB9FOirDUKaEc+dBxdcFYGFCNWAAXXzM0pSoFMUL5nViQfc
+         Ezv+kXdCJFk11rkDi3oVOvZd4PwQwaPgOCI2P6rFsot6/Y5h5fFzxWZ3rJVZk3xxX3+r
+         u11M/A+boLvDERrtQk5fMfGrTZ/Ov64geFky2TA48/YnlkC0VZbmi1ylWzXs7pcz7/Cg
+         IlLjsyVytN6Zw1EECIzQ+OF+P+x/t5vFgasO1ZlPh0hKaUmIW46hTGIzVCJXtNFhXGYo
+         ZnK9xCH/0/ZrjLgpvgqKjCJ1EjMTuJZAURH5JiFBTDiWTxz06zEFKCLLXPoXQuoHMJfs
+         0Ppg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706193766; x=1706798566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WansAIK1kV2qngBkKGzUZEv8a9oLEEFRWHM6D4Yzd+M=;
-        b=IoiMUcqNl7waglleg4DMIDbjGLYPOtueAM47JFRrHhPGkxwxuLLsVS9de59v5QoP9B
-         5Uc5KkUmSuyqw8j1K7AmEDhnU4r287eMQqUbdfVvONklySaCn3eqHmds9fCpNOZUIMEf
-         bMWfE0WQmvEOQ3JtfjtspI4FU9p6H8lllR+/9DfJwge3Lzkzs+mFM8/pl2eUbyx4nZ1o
-         t9m1BHY3hwL4HBI5nMdY2oj8YImSrEwLyosoO/DZ9MB0WhNop5w6Hf2/0nEg1sTiG0gC
-         s7em5sXAcOw5RfiDD//kODRQEDIXIvo7iPyUinOQTFFpFJVzB1j5GDcAFqurlHi4S/er
-         RgTA==
-X-Gm-Message-State: AOJu0YyFgNwgV1M4/ZtQ2OUQEOPW6B+T/bT7jf4AzXMzJusQqhM/5GsG
-	yedihfax1gzKbOeQSJpvXrPLZ+dbTEZWcrOSLDNkyylxlcX9nlcIPwPkztqeyFH7K8ejlVNKHyv
-	uT616HujBtSTzsDE/UQwXwV2W3eg=
-X-Google-Smtp-Source: AGHT+IHrMMS6irD8BFopNOqV65JYF32HklaFUv2M5fjsXBTp38AaiSFl3qoFRWI4K+lpO8xVl3bxSYdmwfq7Su82484=
-X-Received: by 2002:a05:6870:618a:b0:214:dbdd:a173 with SMTP id
- a10-20020a056870618a00b00214dbdda173mr987239oah.3.1706193766071; Thu, 25 Jan
- 2024 06:42:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706194211; x=1706799011;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7ZI/5KwC+xCytuTFH+W+O2jy1GV4Q+e+HfUN4cLRoNQ=;
+        b=uXBX0+oZ8at3kOwB6qtzgC72sh4BpWlOEkqmtonp+8idqp6HfhUY47ZIF3mUiAuA1O
+         vSmiEjV+eTzXkd1cd3TKUfHNbtc7WgoP6wnXPeeyGAF46AnrT6FtVtlJ/VSSpEuxJCbi
+         0pwCod2ViT41/O0Exj0TGktIdskMlU+LDCq0gyt4eyE68fT8DiuRsnyt0su5UFRUouru
+         VDYupKf0u/hk3/UwESrSrhQQVfUF0yipSjeH16sQJco398FcZ6ipJ3v/rqaPIj3t2t7M
+         EsaxMmtnIXRAiEEqSs38HLHY+Uswpz+qT2GSaN5VxZom4tr2Hb9yD+dCO1N/QfQfl0Ys
+         S+cA==
+X-Gm-Message-State: AOJu0YxSVucIBihGuyX4C7WGjVJJKMfNMSa4Ca7bcsgvblQiUq1xWEOv
+	8SX2QPit57Gyj9yFsi2nO78pAz6kdiiEG4isFcU5xCEpUHjC/E+sFiHQsHyU3O0=
+X-Google-Smtp-Source: AGHT+IErX2MgfpP0Fe4RLqMkR9jYxbhETFvxJ2DoDmgkGrm1I0WK2BsVFDTJMWeO23FcBD4LNFaINA==
+X-Received: by 2002:adf:f28f:0:b0:337:c6ee:204a with SMTP id k15-20020adff28f000000b00337c6ee204amr824782wro.93.1706194210889;
+        Thu, 25 Jan 2024 06:50:10 -0800 (PST)
+Received: from ta2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
+        by smtp.gmail.com with ESMTPSA id v17-20020a05600c471100b0040d91fa270fsm2875875wmo.36.2024.01.25.06.50.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 06:50:10 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: broonie@kernel.org,
+	andi.shyti@kernel.org,
+	arnd@arndb.de
+Cc: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	alim.akhtar@samsung.com,
+	linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	andre.draszik@linaro.org,
+	peter.griffin@linaro.org,
+	semen.protsenko@linaro.org,
+	kernel-team@android.com,
+	willmcvicker@google.com,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH v2 00/28] spi: s3c64xx: winter cleanup and gs101 support
+Date: Thu, 25 Jan 2024 14:49:38 +0000
+Message-ID: <20240125145007.748295-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
- <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
- <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk> <20240122160227.00002d83@Huawei.com>
- <CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
- <Za6mHRJVjb6M1mun@shell.armlinux.org.uk> <20240123092725.00004382@Huawei.com> <3A26D95F-7366-4354-A010-318A98660076@oracle.com>
-In-Reply-To: <3A26D95F-7366-4354-A010-318A98660076@oracle.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Jan 2024 15:42:34 +0100
-Message-ID: <CAJZ5v0h1na9BQiT6a4dK==8anmt15S4sArktzuLiSyScvw=bqg@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-To: Miguel Luis <miguel.luis@oracle.com>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	"Russell King (Oracle)" <linux@armlinux.org.uk>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>, 
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, 
-	"acpica-devel@lists.linuxfoundation.org" <acpica-devel@lists.linuxfoundation.org>, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>, 
-	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, "jianyong.wu@arm.com" <jianyong.wu@arm.com>, 
-	"justin.he@arm.com" <justin.he@arm.com>, James Morse <james.morse@arm.com>, 
-	"vishnu@os.amperecomputing.com" <vishnu@os.amperecomputing.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
 Hi,
 
-On Thu, Jan 25, 2024 at 2:56=E2=80=AFPM Miguel Luis <miguel.luis@oracle.com=
-> wrote:
->
-> Hi
->
-> > On 23 Jan 2024, at 08:27, Jonathan Cameron <jonathan.cameron@huawei.com=
-> wrote:
-> >
-> > On Mon, 22 Jan 2024 17:30:05 +0000
-> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> >
-> >> On Mon, Jan 22, 2024 at 05:22:46PM +0100, Rafael J. Wysocki wrote:
-> >>> On Mon, Jan 22, 2024 at 5:02=E2=80=AFPM Jonathan Cameron
-> >>> <Jonathan.Cameron@huawei.com> wrote:
-> >>>>
-> >>>> On Mon, 15 Jan 2024 11:06:29 +0000
-> >>>> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> >>>>
-> >>>>> On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
-> >>>>>> On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@a=
-rmlinux.org.uk> wrote:
-> >>>>>>>
-> >>>>>>> From: James Morse <james.morse@arm.com>
-> >>>>>>>
-> >>>>>>> ACPI has two descriptions of CPUs, one in the MADT/APIC table, th=
-e other
-> >>>>>>> in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Proces=
-sors"
-> >>>>>>> says "Each processor in the system must be declared in the ACPI
-> >>>>>>> namespace"). Having two descriptions allows firmware authors to g=
-et
-> >>>>>>> this wrong.
-> >>>>>>>
-> >>>>>>> If CPUs are described in the MADT/APIC, they will be brought onli=
-ne
-> >>>>>>> early during boot. Once the register_cpu() calls are moved to ACP=
-I,
-> >>>>>>> they will be based on the DSDT description of the CPUs. When CPUs=
- are
-> >>>>>>> missing from the DSDT description, they will end up online, but n=
-ot
-> >>>>>>> registered.
-> >>>>>>>
-> >>>>>>> Add a helper that runs after acpi_init() has completed to registe=
-r
-> >>>>>>> CPUs that are online, but weren't found in the DSDT. Any CPU that
-> >>>>>>> is registered by this code triggers a firmware-bug warning and ke=
-rnel
-> >>>>>>> taint.
-> >>>>>>>
-> >>>>>>> Qemu TCG only describes the first CPU in the DSDT, unless cpu-hot=
-plug
-> >>>>>>> is configured.
-> >>>>>>
-> >>>>>> So why is this a kernel problem?
-> >>>>>
-> >>>>> So what are you proposing should be the behaviour here? What this
-> >>>>> statement seems to be saying is that QEMU as it exists today only
-> >>>>> describes the first CPU in DSDT.
-> >>>>
-> >>>> This confuses me somewhat, because I'm far from sure which machines =
-this
-> >>>> is true for in QEMU.  I'm guessing it's a legacy thing with
-> >>>> some old distro version of QEMU - so we'll have to paper over it any=
-way
-> >>>> but for current QEMU I'm not sure it's true.
-> >>>>
-> >>>> Helpfully there are a bunch of ACPI table tests so I've been checkin=
-g
-> >>>> through all the multi CPU cases.
-> >>>>
-> >>>> CPU hotplug not enabled.
-> >>>> pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
-> >>>> pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
-> >>>> q35/DSDT.acpihmat - 2x Processor entries. -smp 2
-> >>>> virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
-> >>>> q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
-> >>>> virt/DSDT.topology - 8x ACPI0007 entries
-> >>>>
-> >>>> I've also looked at the code and we have various types of
-> >>>> CPU hotplug on x86 but they all build appropriate numbers of
-> >>>> Processor() entries in DSDT.
-> >>>> Arm likewise seems to build the right number of ACPI0007 entries
-> >>>> (and doesn't yet have CPU HP support).
-> >>>>
-> >>>> If anyone can add a reference on why this is needed that would be ve=
-ry
-> >>>> helpful.
-> >>>
-> >>> Yes, it would.
-> >>>
-> >>> Personally, I would prefer to assume that it is not necessary until i=
-t
-> >>> turns out that (1) there is firmware with this issue actually in use
-> >>> and (2) updating the firmware in question to follow the specification
-> >>> is not practical.
-> >>>
-> >>> Otherwise, we'd make it easier to ship non-compliant firmware for no
-> >>> good reason.
-> >>
-> >> If Salil can't come up with a reason, then I'm in favour of dropping
-> >> the patch like already done for patch 2. If the code change serves no
-> >> useful purpose, there's no point in making the change.
-> >>
-> >
-> > Salil's out today, but I've messaged him to follow up later in the week=
-.
-> >
-> > It 'might' be the odd cold plug path where QEMU half comes up, then ext=
-ra
-> > CPUs are added, then it boots. (used by some orchestration frameworks)
-> > I don't have a set up for that and I won't get to creating one today an=
-yway
-> > (we all love start of the year planning workshops!)
-> >
-> > I've +CC'd a few people have run tests on the various iterations of thi=
-s
-> > work in the past.  Maybe one of them can shed some light on this?
-> >
->
-> IIUC, this patch covers a scenario for non compliant firmware and in whic=
-h my
-> tests for AArch64 using RFC v2 have been unable to trigger its error mess=
-age so
-> far. This does not mean, however, this patch should not be taken forward =
-though.
->
-> It seems benevolent enough detecting non compliant firmware and still pro=
-ceed
-> while having whoever uses that firmware to get to know that.
+Special attention is needed for:
+``asm-generic/io.h: add iowrite{8,16}_32 accessors``
+as it's not under SPI's umbrella.
 
-There is one issue with this approach, though.
+If the accessors are fine, I expect they'll be queued either to the
+SPI tree or to the ASM header files tree, but by providing an immutable
+tag, so that the other tree can merge them too.
 
-If this is done by Linux and Linux is used as a main testing vehicle
-for whoever produced that firmware, it may pass the tests and be
-shipped causing a problem for the rest of the industry (because other
-operating systems will not support that firmware and now they will be
-put in an awkward position).
+The spi dt-bindings patches can be queued through the SPI tree, but
+they'll need an immutable tag too. They'll be needed in the samsung tree
+as I'll follow with patches for the samsung device trees to use the
+"samsung,spi-fifosize" property.
 
-I've seen enough breakage resulting from a similar policy in some
-other OS and with Linux on the receiving end that I'd rather avoid
-doing this to someone else.
+The patch set cleans a bit the driver and adds support for gs101 SPI.
+For the cleaning part, I removed the unfortunate dependency between the
+SPI of_alias and the fifo_lvl_mask array from the driver.  The SPI
+of_alias was used as an index into the fifo_lvl_mask to determine the
+FIFO depth of the SPI node. Changing the alias ID into the device tree
+would make the driver choose a wrong FIFO size configuration, if not
+accessing past the fifo_lvl_mask array boundaries. Not specifying an SPI
+alias would make the driver fail to probe, which is wrong too.
 
-So if the firmware is not compliant, the best way to go is to ask
-whoever ships it to please fix their stuff, or if other OSes already
-work around the non-compliance, it's time to update the spec to
-reflect the reality (aka "industry practice").
+Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
+in asm-generic/io.h. This will allow devices that require 32 bits
+register accesses to write data in chunks of 8 or 16 bits (a typical use
+case is SPI, where clients can request transfers in words of 8 bits for
+example). GS101 only allows 32bit register accesses otherwise it raisses
+a Serror Interrupt and hangs the system, thus the accessors are needed
+here.
+
+The first 3 patches are fixes and they are intentionally put at the
+beginning of the series so that they can be easily queued to the stable
+kernels.
+
+The SPI patches were tested with the spi-loopback-test on the gs101
+controller.
 
 Thanks!
+ta
+
+Changes in v2:
+- move fixes at the beginning of the series so that they can be queued
+  easily to the stable kernels.
+- break the dependency between the SPI of_alias, the fifo_lvl_mask and
+  the FIFO depth. Provide alternatives to either infer the FIFO size
+  from the compatible, where the SoC uses the same FIFO size for all the
+  instances of the IP, or by using the "samsung,spi-fifosize" dt
+  property, where the SoC uses different FIFO sizes for the instances of
+  the IP.
+- split patches or other cosmetic changes, collect R-b tags.
+
+Tudor Ambarus (28):
+  spi: s3c64xx: explicitly include <linux/io.h>
+  spi: s3c64xx: explicitly include <linux/bits.h>
+  spi: s3c64xx: avoid possible negative array index
+  spi: dt-bindings: samsung: add google,gs101-spi compatible
+  spi: dt-bindings: samsung: add samsung,spi-fifosize property
+  spi: s3c64xx: sort headers alphabetically
+  spi: s3c64xx: remove unneeded (void *) casts in of_match_table
+  spi: s3c64xx: remove else after return
+  spi: s3c64xx: use bitfield access macros
+  spi: s3c64xx: use full mask for {RX, TX}_FIFO_LVL
+  spi: s3c64xx: move common code outside if else
+  spi: s3c64xx: check return code of dmaengine_slave_config()
+  spi: s3c64xx: propagate the dma_submit_error() error code
+  spi: s3c64xx: rename prepare_dma() to s3c64xx_prepare_dma()
+  spi: s3c64xx: return ETIMEDOUT for wait_for_completion_timeout()
+  spi: s3c64xx: simplify s3c64xx_wait_for_pio()
+  spi: s3c64xx: drop blank line between declarations
+  spi: s3c64xx: fix typo, s/configuartion/configuration
+  spi: s3c64xx: downgrade dev_warn to dev_dbg for optional dt props
+  spi: s3c64xx: add support for inferring fifosize from the compatible
+  spi: s3c64xx: infer fifosize from the compatible
+  spi: s3c64xx: drop dependency on of_alias where possible
+  spi: s3c64xx: retrieve the FIFO size from the device tree
+  spi: s3c64xx: mark fifo_lvl_mask as deprecated
+  asm-generic/io.h: add iowrite{8,16}_32 accessors
+  spi: s3c64xx: add iowrite{8,16}_32_rep accessors
+  spi: s3c64xx: add support for google,gs101-spi
+  MAINTAINERS: add Tudor Ambarus as R for the samsung SPI driver
+
+ .../devicetree/bindings/spi/samsung,spi.yaml  |   6 +
+ MAINTAINERS                                   |   1 +
+ drivers/spi/spi-s3c64xx.c                     | 530 ++++++++++--------
+ include/asm-generic/io.h                      |  50 ++
+ include/asm-generic/iomap.h                   |   2 +
+ 5 files changed, 345 insertions(+), 244 deletions(-)
+
+-- 
+2.43.0.429.g432eaa2c6b-goog
+
 
