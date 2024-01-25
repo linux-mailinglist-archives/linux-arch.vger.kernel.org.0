@@ -1,105 +1,113 @@
-Return-Path: <linux-arch+bounces-1656-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1657-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A681383C991
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:14:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7E4F83C99B
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:15:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 355711F296AB
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 17:14:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24942B232FC
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 17:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4BD131758;
-	Thu, 25 Jan 2024 17:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F0BC7316D;
+	Thu, 25 Jan 2024 17:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="W5o3TfmG"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="wWxB6UTz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215B513F00D
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 17:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB3C130E2E
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 17:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706202429; cv=none; b=MHxwGKarpq1LNwkBhhwTGspXjw8UdkHUh5OcaEUYfxTeinfmSo5IxqMWiUzt9mySZEnRlpQ6o4vih8Hj7dP0KjnlpOine10cdg4flEHD4bjO1iKPMUKqDLGqtczD1np39LAgAq/7X0OFwdTTUj0n9a26qAmwndxuA0mugLjE0ro=
+	t=1706202562; cv=none; b=b4fW3PIIrDNGLvxZrvbmk77UsPPXGiwzvZCzv4BV4QtmNbHujcaWHxvg4vVn4Rvz8M9d12dqZhAD+Jw1RQ2tf6FOYUdyWacAkXgX3vHgor8K7KMNYNgZlNXJkP4l+68+1GvS6H/AZkNY8CtRC5XfQ2io2vwpvlIr2I+n8kxe3Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706202429; c=relaxed/simple;
-	bh=D67xfWj49rEWhxKLXVTx8zZvTyjJJP7GfOM5AXkQED8=;
+	s=arc-20240116; t=1706202562; c=relaxed/simple;
+	bh=SYP5SuCzecJg/AbMI+aiTjZqTA04WqjPusKcUYsXjXM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tz0cu3caaBNEnoBW1kN0CIVkqUt0CeVOUsbuus+luXcJzT/yicMr68GBmtZhqL50cCSzMFE4k4Ijh/laoHO62e7d1WbhYHf0SgAI+HKM7wfFuXjdOk50qif4btwx9V8+0HYqqPPZOFv0MbInluJP87T339wIYsL8XN46b18Ez7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=W5o3TfmG; arc=none smtp.client-ip=209.85.210.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=nNOCnJCOzpXxE7DGKj9RfmwYQU7fCV9M/cua/sncMxrOJTHksTq5gc7cOApgZP5OWRaKbuHWiTmIfd95VzoCYeOzbCza3mBRIh/u3NJtfW8zZVfbFwqc2gFwb9a649Po6av/w2rz8leqWqTgFYwHtuMJrE7FZW55KAG1bdLKqz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=wWxB6UTz; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ddc1b30458so1704972b3a.1
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 09:07:07 -0800 (PST)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6dbb003be79so808697b3a.0
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 09:09:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706202427; x=1706807227; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706202560; x=1706807360; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w+Y205/Bj9/UaPGsjWa2kZTirfJ1VaurSr0W2Uv0l3s=;
-        b=W5o3TfmG1qYIQsYSVDvRFTtYt/tcqX4EtviBfEh4+vk8nv4TA3jgBqwyUCRH8hc6Ey
-         K7m6hdSNilDw+iVPVHFW50Jt5Hic4nxmABkZJX1h9hhknC07AgbQl3dM2Pkvkx5854UE
-         LLxtoyeq2nVcG25Di3wRg3+AcibCUtxCg9+I50tdgZLKpNn47dCdOTZZlRTx2YalPWnb
-         tY2llH67aDUY3PjHZtwagEOJMdfja36GeILOw97OuyaMvg5+u7zFk8wZwS//dRisk0rm
-         rmPTLmWZ9d8Jzmx50fTs7ImswwosfMKW+2s2hEkykxm4MhH26vQnUQ9lXltkp3rlc7n+
-         keZg==
+        bh=EemHHEVJxCejDW2IGmWybsIfYtaSynaTSK4azEaq/DU=;
+        b=wWxB6UTzC752chpv9Ex6QtzPlDcXZCYcUzrQ39rHeCXZCx0ugi59QuQ5HcMpjSm2fS
+         6lAivpF8m4CyLmGbvvFo9dr6Ve6NuXhKeRS5/kxBJ24Rf9QTbnzvCpUgAZ1K8xSfi3o+
+         9dAaOzASZoMzm2tnA5qQoUdKon0uPc042Zor/AJTthSQMkg1DWUGrbDkjjc++8V3imHl
+         +RlWnYje6UplVxu8RdlbYeY8EoNa/qaZPjylUEDaxLEQq4r5Bj5mNfrenqAepVh+P1EU
+         qAO8x9NbM4c5eGD4CvKZ+MC2e6FupknCCBBthBiBpn6rfcINTVglRhcmFkzmHSTWn2cr
+         FI1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706202427; x=1706807227;
+        d=1e100.net; s=20230601; t=1706202560; x=1706807360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w+Y205/Bj9/UaPGsjWa2kZTirfJ1VaurSr0W2Uv0l3s=;
-        b=c57kTtcthzMaCWyvm7aX43GdraByAewtuL+T7NxWuzow7Ent1N++Qis23nBQZxTpee
-         VCl7SZv+Pcjl6RCoUkTgP1u+DDRALBzjZXdLHNk9Y52aGudNiLIHVbeeQ/2YNpTF8hN9
-         7EmrTEuZj1dyNgY60LJQC6/ggXQTPlg06MscOVUKeRYnP/ueV7X4fTHsNxYCsAsc2u9F
-         QwhQXYHgb3pa8civvMp/iK9RVBzd6Sd+6DR5iMwXt5vS8QxtgRrixl35pGto9PIQ6iCV
-         d1xcAsOwwkRtsN/o4QVfiKgG+mPmPKxbNKz879uGmdIzA4URaU91lumPlxmQvQf+TKlI
-         +gzw==
-X-Gm-Message-State: AOJu0Ywl+Z1YUYWYFdCKRWT2diiRPMY7k0u3ybDYsKYOCO0a1Z9G4/1X
-	j2IoLa/15MI1RY16XUlr3MxKQYKc1Cb4Z3X4byoyQm3DqA64U6KZZUcRbpmOPbc=
-X-Google-Smtp-Source: AGHT+IHYeX7pTsc6T2+Oj8CHwr5rzy78ADNZC7lkEDYMAD93a3MlR2jkEuTYyjSwB5kHgHqSGlWjog==
-X-Received: by 2002:a05:6a00:2b56:b0:6dd:8a23:b2c7 with SMTP id du22-20020a056a002b5600b006dd8a23b2c7mr21796pfb.5.1706202427107;
-        Thu, 25 Jan 2024 09:07:07 -0800 (PST)
+        bh=EemHHEVJxCejDW2IGmWybsIfYtaSynaTSK4azEaq/DU=;
+        b=vm37WH2bUfS8+yUn7i/10477ZFMokJQzKa2x6Z3JuzjNCYT6AvrEd3ZcM2MkWys3f7
+         DGdRITMH1y799iYGy+pqObDXUYlgtxXY7PEyvHnkoUrRKk0lPQFmlBGO8BZmsY+8f82l
+         GdpBhlwIexZarrxrTlWheSomlLbNGtotFSCJU1RQjuqgQGyjaHIJyeLUJqfpjL9L8RKq
+         81ETFi9XO5fW/rZ7Rqmvjz/UTzlGuZwz/Kd1KlaGqCuh1s1WdFL8L6Iy4TaqsBM/0930
+         xl65vGMMw4Iq05bcxu7LKiM/tPT4PUBcUxJwaDWJl858MXZfmU7QS4q5IFMPiR532ZIS
+         r3uQ==
+X-Gm-Message-State: AOJu0Yy4kQz3rDddODwxzo+UPiMjRW1D99jFpwCUC1iUKdg5NRGr55rF
+	QWJDYSGF1mJL824uc0kbQYplFHNCkhxmmWHSTVHlmNB4dBu8u8pg5R1r6awiWhM=
+X-Google-Smtp-Source: AGHT+IG/zy1hPfIMx5+FBiFJ5BLS8zAqpVXvwWyHDpqTcM52HEkGIjepOlIdme6VNMNiF/zcKBKxqQ==
+X-Received: by 2002:a05:6a00:b4f:b0:6db:ac96:f530 with SMTP id p15-20020a056a000b4f00b006dbac96f530mr221939pfo.24.1706202559878;
+        Thu, 25 Jan 2024 09:09:19 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id lc9-20020a056a004f4900b006db105027basm16031068pfb.50.2024.01.25.09.07.03
+        by smtp.gmail.com with ESMTPSA id w128-20020a626286000000b006dde0724247sm180477pfb.149.2024.01.25.09.09.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 09:07:06 -0800 (PST)
-Date: Thu, 25 Jan 2024 09:07:02 -0800
+        Thu, 25 Jan 2024 09:09:19 -0800 (PST)
+Date: Thu, 25 Jan 2024 09:09:14 -0800
 From: Deepak Gupta <debug@rivosinc.com>
-To: David Hildenbrand <david@redhat.com>
+To: Stefan O'Rear <sorear@fastmail.com>
 Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
-	kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	"kito.cheng@sifive.com" <kito.cheng@sifive.com>,
+	Kees Cook <keescook@chromium.org>,
+	Andrew Jones <ajones@ventanamicro.com>, paul.walmsley@sifive.com,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Conor Dooley <conor.dooley@microchip.com>, cleger@rivosinc.com,
+	Atish Patra <atishp@atishpatra.org>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Albert Ou <aou@eecs.berkeley.edu>,
 	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
-	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
-	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
-	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	"Eric W. Biederman" <ebiederm@xmission.com>, shuah@kernel.org,
+	Christian Brauner <brauner@kernel.org>, guoren <guoren@kernel.org>,
+	samitolvanen@google.com, Evan Green <evan@rivosinc.com>,
+	xiao.w.wang@intel.com, Anup Patel <apatel@ventanamicro.com>,
 	mchitale@ventanamicro.com, waylingii@gmail.com,
-	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
-	shikemeng@huaweicloud.com, charlie@rivosinc.com,
+	greentime.hu@sifive.com, Heiko Stuebner <heiko@sntech.de>,
+	Jisheng Zhang <jszhang@kernel.org>, shikemeng@huaweicloud.com,
+	david@redhat.com, Charlie Jenkins <charlie@rivosinc.com>,
 	panqinglin2020@iscas.ac.cn, willy@infradead.org,
-	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	Vincent Chen <vincent.chen@sifive.com>,
+	Andy Chiu <andy.chiu@sifive.com>, Greg Ungerer <gerg@kernel.org>,
 	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
 	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
-	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
-	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
-	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
+	cuiyunhui@bytedance.com, bhe@redhat.com, ruscur@russell.cc,
+	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il,
+	zhangqing@loongson.cn, Catalin Marinas <catalin.marinas@arm.com>,
 	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
 	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
 	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
 	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org, linux-arch@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 09/28] mm: abstract shadow stack vma behind
- `arch_is_shadow_stack`
-Message-ID: <ZbKVNm5ubV8yQtSE@debug.ba.rivosinc.com>
+Subject: Re: [RFC PATCH v1 02/28] riscv: envcfg save and restore on trap
+ entry/exit
+Message-ID: <ZbKVutBWoelt33GM@debug.ba.rivosinc.com>
 References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-10-debug@rivosinc.com>
- <2f34f6aa-99fa-4545-b706-a1d50864f9e9@redhat.com>
+ <20240125062739.1339782-3-debug@rivosinc.com>
+ <23d023c0-27cf-44fa-be0a-000d1534ef86@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -108,66 +116,95 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <2f34f6aa-99fa-4545-b706-a1d50864f9e9@redhat.com>
+In-Reply-To: <23d023c0-27cf-44fa-be0a-000d1534ef86@app.fastmail.com>
 
-On Thu, Jan 25, 2024 at 09:18:07AM +0100, David Hildenbrand wrote:
->On 25.01.24 07:21, debug@rivosinc.com wrote:
->>From: Deepak Gupta <debug@rivosinc.com>
+On Thu, Jan 25, 2024 at 02:19:29AM -0500, Stefan O'Rear wrote:
+>On Thu, Jan 25, 2024, at 1:21 AM, debug@rivosinc.com wrote:
+>> From: Deepak Gupta <debug@rivosinc.com>
 >>
->>x86 has used VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) to encode shadow
->>stack VMA. VM_SHADOW_STACK is thus not possible on 32bit. Some arches may
->>need a way to encode shadow stack on 32bit and 64bit both and they may
->>encode this information differently in VMAs.
+>> envcfg CSR defines enabling bits for cache management instructions and soon
+>> will control enabling for control flow integrity and pointer masking features.
 >>
->>This patch changes checks of VM_SHADOW_STACK flag in generic code to call
->>to a function `arch_is_shadow_stack` which will return true if arch
->>supports shadow stack and vma is shadow stack else stub returns false.
+>> Control flow integrity enabling for forward cfi and backward cfi is controlled
+>> via envcfg and thus need to be enabled on per thread basis.
 >>
->>There was a suggestion to name it as `vma_is_shadow_stack`. I preferred to
->>keep `arch` prefix in there because it's each arch specific.
+>> This patch creates a place holder for envcfg CSR in `thread_info` and adds
+>> logic to save and restore on trap entry and exits.
+>
+>Should only be "restore"?  I don't see saving.
+
+It's always saved in `thread_info` and user mode can't change it.
+So no point saving it.
+
+>
 >>
->>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->>---
->>  include/linux/mm.h | 18 +++++++++++++++++-
->>  mm/gup.c           |  5 +++--
->>  mm/internal.h      |  2 +-
->>  3 files changed, 21 insertions(+), 4 deletions(-)
+>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> ---
+>>  arch/riscv/include/asm/thread_info.h | 1 +
+>>  arch/riscv/kernel/asm-offsets.c      | 1 +
+>>  arch/riscv/kernel/entry.S            | 4 ++++
+>>  3 files changed, 6 insertions(+)
 >>
->>diff --git a/include/linux/mm.h b/include/linux/mm.h
->>index dfe0e8118669..15c70fc677a3 100644
->>--- a/include/linux/mm.h
->>+++ b/include/linux/mm.h
->>@@ -352,6 +352,10 @@ extern unsigned int kobjsize(const void *objp);
->>   * for more details on the guard size.
->>   */
->>  # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
->>+static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
->>+{
->>+	return (vm_flags & VM_SHADOW_STACK);
->>+}
+>> diff --git a/arch/riscv/include/asm/thread_info.h
+>> b/arch/riscv/include/asm/thread_info.h
+>> index 574779900bfb..320bc899a63b 100644
+>> --- a/arch/riscv/include/asm/thread_info.h
+>> +++ b/arch/riscv/include/asm/thread_info.h
+>> @@ -57,6 +57,7 @@ struct thread_info {
+>>  	long			user_sp;	/* User stack pointer */
+>>  	int			cpu;
+>>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
+>> +	unsigned long envcfg;
+>>  #ifdef CONFIG_SHADOW_CALL_STACK
+>>  	void			*scs_base;
+>>  	void			*scs_sp;
+>> diff --git a/arch/riscv/kernel/asm-offsets.c
+>> b/arch/riscv/kernel/asm-offsets.c
+>> index a03129f40c46..cdd8f095c30c 100644
+>> --- a/arch/riscv/kernel/asm-offsets.c
+>> +++ b/arch/riscv/kernel/asm-offsets.c
+>> @@ -39,6 +39,7 @@ void asm_offsets(void)
+>>  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+>>  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+>>  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+>> +	OFFSET(TASK_TI_ENVCFG, task_struct, thread_info.envcfg);
+>>  #ifdef CONFIG_SHADOW_CALL_STACK
+>>  	OFFSET(TASK_TI_SCS_SP, task_struct, thread_info.scs_sp);
 >>  #endif
->>  #ifdef CONFIG_RISCV_USER_CFI
->>@@ -362,10 +366,22 @@ extern unsigned int kobjsize(const void *objp);
->>   * with VM_SHARED.
->>   */
->>  #define VM_SHADOW_STACK	VM_WRITE
->>+
->>+static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
->>+{
->>+	return ((vm_flags & (VM_WRITE | VM_READ | VM_EXEC)) == VM_WRITE);
->>+}
->>+
+>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+>> index 54ca4564a926..63c3855ba80d 100644
+>> --- a/arch/riscv/kernel/entry.S
+>> +++ b/arch/riscv/kernel/entry.S
+>> @@ -129,6 +129,10 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
+>>  	addi s0, sp, PT_SIZE_ON_STACK
+>>  	REG_S s0, TASK_TI_KERNEL_SP(tp)
+>>
+>> +	/* restore envcfg bits for current thread */
+>> +	REG_L s0, TASK_TI_ENVCFG(tp)
+>> +	csrw CSR_ENVCFG, s0
+>> +
 >
->Please no such hacks just to work around the 32bit vmflags limitation.
+>This is redundant if we're repeatedly processing interrupts or exceptions
+>within a single task.  We should only be writing envcfg when switching
+>between tasks or as part of the prctl.
+>
+>We need to use an ALTERNATIVE for this since the oldest supported hardware
+>does not have envcfg csrs.
 
-As I said in another response. Noted.
-And if there're no takers for 32bit on riscv (which highly likely is the case)
-This will go away in next version of patchsets.
+Yeah fixing that in next series. Thanks
 
 >
->-- 
->Cheers,
+>-s
 >
->David / dhildenb
->
+>>  	/* Save the kernel shadow call stack pointer */
+>>  	scs_save_current
+>>
+>> --
+>> 2.43.0
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
