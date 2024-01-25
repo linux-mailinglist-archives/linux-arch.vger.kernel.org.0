@@ -1,157 +1,169 @@
-Return-Path: <linux-arch+bounces-1672-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1673-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F289183CB6A
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:45:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FD9283CB76
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:46:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AA00B254A0
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:45:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 350F91C221FA
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B32137C3D;
-	Thu, 25 Jan 2024 18:44:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC82813475F;
+	Thu, 25 Jan 2024 18:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l1olWlRk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6tH+ufY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D12F137C20
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 18:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A567131E40;
+	Thu, 25 Jan 2024 18:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706208255; cv=none; b=TQ94ayK/elVT/MNM0xdAKIRc+esAWJNC0oH/7YXuME+XwenxjswvAOTMN8U/7+WQlDSj/noE9sl2ABHrHH/+iupNPExy9mISnIrT60r6Nv2r6GTTYmE2ttrcFCvrO2eTVMP0vKNRawCYtkKJFxKxLDIHj3E4QJVOVrdaqcnRbfQ=
+	t=1706208303; cv=none; b=ALeJM8qR2YkyLjWcvibFz12NK4nruQeTrwH16SNx7NMUkjhxbu3gimqhR871qJ3Zo780jw7gQBi639ZWRHPX/I2fJtXky1I06oWHTkBdrsT0MyLm6oBYabioB7zMX2E5nh6BF7LBPrBs4vQ9aq7C+UuXbqrqoI5BP4k+ze9dK4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706208255; c=relaxed/simple;
-	bh=awSLOrEXP9rFT2y8LOhZ/9MdiMBuYZIY+MSqb9WthkE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RLL+3SUrSlNX6mnt5hhh78rG911QsLlt//Os49N+IdIM/xiq9NtV4cscBCmtFCy0186JmIUskJb6b+eqnqD31DK3PcixixaROUc1YXp+PBdb0YaEGDbi3LPb5/aOOLBwXkvhHHsBWy7q6lXr20m9b03UlI2f9wCqFVEDp2wDcJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=l1olWlRk; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40e76626170so78400785e9.2
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 10:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706208251; x=1706813051; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UrYJdLBwLw70S4ObciiJY9LJFq5pZvqC5Of2nJ/JVJM=;
-        b=l1olWlRk4TjO8OAIsZZryqaOk/GF9PstHdjIOXjr+HkBDWxypi/BYkIypXPBcWxDiy
-         cLhcvAunUVILJSecCliRaPKAzA/E7Vq82JX8UIHyHvHe4gZQ0+Y3NQOo4RBUMiFfVt0U
-         oWzz5EGlZBN/QnuXdxEuz1HF0LHovGxS17EwYfPdAkydnDk7bCG8DSH6njZZbpbqMmwl
-         AMGFsHRaWC8cOgJkzLguVKS9lpKS27X8RUHJKzbY7uNTPcAHo8d65dlcNEJm7Hfqoz1M
-         iSPp3NSv6XEr8Ot9yLDs6rKSYfuuZoXJTD/voGPF81fhd626RaJjFeOx0y2VmyvcVCgE
-         WK6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706208251; x=1706813051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UrYJdLBwLw70S4ObciiJY9LJFq5pZvqC5Of2nJ/JVJM=;
-        b=tpQkADuvo789zGHfENYvAQ/RjROpsiME5hygR+NMucdY3Jpqk6/Y4uuTt90qANh1HX
-         3pjRe+iDsfCabPvJ8MFO5n5tKDenfWY2UatwjUql0hocYYwPjneOUnM6aj8bOQRKjdpT
-         kbk3BNyiC9jkkdwWHXpwoTU1zdsKIw/Cbyv3qpgDyM1altUnhlCIFrYhKaGqly/1oexf
-         m4eo5VThOcwHbfycnPgVvhdHQHHtIrEgajZKHxfkCLKP0L900fAm/5x1vFdfu6Sg4ZfI
-         /U0JGTd3O8qh3HrslLSWVAX/YtAM9RZOMQV74zvt7X0xFYCRTPXXX6rMOLWh1G//cZaD
-         /4mA==
-X-Gm-Message-State: AOJu0YzVk7hb2SvgTLgcqrbyQ0Fxp+4eyGHyQgYGO2BUcbMUB4HFabBP
-	kULhyNrCfVSrxvntexQlubuwZKRTOxiclESPaY3Sz+nY39Uvh5xMSPGo1PL/QHc=
-X-Google-Smtp-Source: AGHT+IE+cIhZxK3kunbbIhBn/MOUJGzmsMnmINwXcGYl+d9le2UEsWFf+v6SdKU9oWvk60jPYq4SJg==
-X-Received: by 2002:a05:600c:365a:b0:40e:b174:8b0b with SMTP id y26-20020a05600c365a00b0040eb1748b0bmr120888wmq.40.1706208251067;
-        Thu, 25 Jan 2024 10:44:11 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id k10-20020a05600c1c8a00b0040e451fd602sm3426678wms.33.2024.01.25.10.44.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jan 2024 10:44:10 -0800 (PST)
-Message-ID: <40ba9481-4aea-4a72-87bd-c2db319be069@linaro.org>
-Date: Thu, 25 Jan 2024 18:44:08 +0000
+	s=arc-20240116; t=1706208303; c=relaxed/simple;
+	bh=YOmQgkz1P+8Zi0uUakZsNY3tJ1wB079WwZ+pgQHgPOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OhLSRKFyZcidVzBZRcWtIIlZOP1Dm7GokLdaEcXqvD9KTF9CSSzNaXEaIYiisgQr+ONkIpDE+U+cBahx4NnBAtGAP0Qraw6h5bprvl1+wp6GNQlS1FIGpEjsgkx4uXFAhF4tlIYN6MuQF9ut4FGThDWuok8XupFAUhosuwo8Jh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6tH+ufY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85938C433F1;
+	Thu, 25 Jan 2024 18:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706208303;
+	bh=YOmQgkz1P+8Zi0uUakZsNY3tJ1wB079WwZ+pgQHgPOk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W6tH+ufYN63e0ec9n24c1FtjKPLogyll3pPVDTlBw5IyIKQC21WfMzoutf7aFwp1Z
+	 xe1NAaXx662qjwLMcjlFuhZjalF6dGCmXAC1FHFz0ddkNaiHUOfDhJM6x6DmmMmkUw
+	 7S2cKN4hWcysnuC7LU/m2G6zl5xoPsA2LUzDZ6X2QgRaLeccd/2B/tBSEGFoXdT8Vc
+	 NNsI2SDXMeBpu23AB23V7I3NydxCuDXf3g8idaSoTYDRd534DYw2vQHNfYHKMfd9gl
+	 AdBHKLvMPFSwVsq8AlJP48Qc0Sf21tREDkJm1q+KjsG+y7BIQJy2bKH7eFVzDH2xSV
+	 2m8nlYs+rsSkQ==
+Date: Thu, 25 Jan 2024 18:44:48 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
+	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, waylingii@gmail.com,
+	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
+	panqinglin2020@iscas.ac.cn, willy@infradead.org,
+	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
+	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
+	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 24/28] riscv: select config for shadow stack and
+ landing pad instr support
+Message-ID: <20240125-implement-coagulant-3058e743a098@spud>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-25-debug@rivosinc.com>
+ <20240125-snitch-boogieman-5b4a0b142e61@spud>
+ <ZbKkgNX7xfU5KO8X@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 21/28] spi: s3c64xx: infer fifosize from the compatible
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arch@vger.kernel.org, andre.draszik@linaro.org,
- peter.griffin@linaro.org, semen.protsenko@linaro.org,
- kernel-team@android.com, willmcvicker@google.com
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-22-tudor.ambarus@linaro.org>
- <2086b88e-45fc-4224-b00f-0840d446d042@sirena.org.uk>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <2086b88e-45fc-4224-b00f-0840d446d042@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="e/FrbnVtGEexHgLP"
+Content-Disposition: inline
+In-Reply-To: <ZbKkgNX7xfU5KO8X@debug.ba.rivosinc.com>
 
 
+--e/FrbnVtGEexHgLP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 1/25/24 17:18, Mark Brown wrote:
-> On Thu, Jan 25, 2024 at 02:49:59PM +0000, Tudor Ambarus wrote:
-> 
->> Infer the FIFO size from the compatible, where all the instances of the
->> SPI IP have the same FIFO size. This way we no longer depend on the SPI
->> alias from the device tree to select the FIFO size, thus we remove the
->> dependency of the driver on the SPI alias.
-> 
->>  static const struct s3c64xx_spi_port_config s3c2443_spi_port_config = {
->> -	.fifo_lvl_mask	= { 0x7f },
->> +	.fifosize	= 64,
->>  	.rx_lvl_offset	= 13,
->>  	.tx_st_done	= 21,
->>  	.clk_div	= 2,
-> 
-> I'm having real trouble associating the changelog with the change here.
-> This appears to be changing from specifying the mask for the FIFO level
-> register to specifying the size of the FIFO and unrelated to anything to
-> do with looking things up from the compatible?
+On Thu, Jan 25, 2024 at 10:12:16AM -0800, Deepak Gupta wrote:
+> On Thu, Jan 25, 2024 at 06:04:26PM +0000, Conor Dooley wrote:
+> > On Wed, Jan 24, 2024 at 10:21:49PM -0800, debug@rivosinc.com wrote:
+> > > From: Deepak Gupta <debug@rivosinc.com>
+> > >=20
+> > > This patch selects config shadow stack support and landing pad instr
+> > > support. Shadow stack support and landing instr support is hidden beh=
+ind
+> > > `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wires up p=
+ath
+> > > to enumerate CPU support and if cpu support exists, kernel will suppo=
+rt
+> > > cpu assisted user mode cfi.
+> > >=20
+> > > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> > > ---
+> > >  arch/riscv/Kconfig | 15 +++++++++++++++
+> > >  1 file changed, 15 insertions(+)
+> > >=20
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index 9d386e9edc45..437b2f9abf3e 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -163,6 +163,7 @@ config RISCV
+> > >  	select SYSCTL_EXCEPTION_TRACE
+> > >  	select THREAD_INFO_IN_TASK
+> > >  	select TRACE_IRQFLAGS_SUPPORT
+> > > +	select RISCV_USER_CFI
+> >=20
+> > This select makes no sense to me, it will unconditionally enable
+> > RISCV_USER_CFI. I don't think that that is your intent, since you have a
+> > detailed option below that allows the user to turn it on or off.
+> >=20
+> > If you remove it, the commit message will need to change too FYI.
+> >=20
+>=20
+> Selecting this config puts support in Kernel so that it can run tasks who=
+ wants
+> to enable hardware assisted control flow integrity for themselves. But ap=
+ps still
+> always need to optin using `prctls`. Those prctls are stubs and return EI=
+NVAL when
+> this config is not selected. Not selecting this config means, kernel will=
+ not support
+> enabling this feature for user mode.
 
-Let me try to explain everything.
+I don't think you understand me. "select RISCV_USER_CFI" will
+unconditionally build it into the kernel, making stubs etc useless.
+You're talking like (and the rest of your commit implements it!) that
+this feature can be enabled in menuconfig etc. Having this select
+will always enable the config option, rendering the choice below
+redundant. Try turning it off in menuconfig.
 
-In the driver there is a weird dependency between the SPI of_alias ID,
-s3c64xx_spi_port_config.fifo_lvl_mask and the IP's FIFO depth.
+Oh and if it were valid to have here, you put it in out of order. That's
+an alphanumerically sorted list :)
 
-s3c64xx_spi_port_config.fifo_lvl_mask is not a 1:1 match with the
-SPI_STATUSn.{RX, TX}_FIFO_LVL register field. Those fields are defined
-in the datasheet as:
-+#define S3C64XX_SPI_ST_RX_FIFO_LVL		GENMASK(23, 15)
-+#define S3C64XX_SPI_ST_TX_FIFO_LVL		GENMASK(14, 6)
+Cheers,
+Conor.
 
-Thus the register mask is on 9 bits, but the driver used either 0x1ff or
-0x7f, which was not reflecting the real register mask. Patch 10/28
-updates the driver to use the full register mask regardless of the FIFO
-depth configuration.
 
-Another problem with s3c64xx_spi_port_config.fifo_lvl_mask is that it
-was used as a way to determine the FIFO depth. The SPI of_alias ID was
-used as an index in this array to determine the FIFO depth with
-something like
-	fifo_depth = (fifo_lvl_mask[alias_id] >> 1) + 1
-For example, if one wanted to specify a 64 FIFO length (0x40), it would
-have configured the FIFO level to 127 (0x7f).
+--e/FrbnVtGEexHgLP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The patch set breaks this weird dependencies. Obviously the FIFO depth
-must be tightly tied by the compatible and not by an alias. I tied the
-FIFO depth to the compatible in 2 ways:
-1/ For SoCs that have all the SPI nodes with the same FIFO depth, I
-chose to deduce the FIFO depth from the compatible. Instead of
-specifying "samsung,spi-fifosize" for all the gs101 SPI nodes in the
-device tree, I chose to infer it from the compatible. I know for sure
-that all the gs101 SPI nodes have 64 bytes FIFO depths, thus don't
-pollute the device tree with superfluous info. (patches 20/28 and 21/28)
-2/ For SoCs that have instances of the SPI IP with different FIFO
-depths, specify the node's FIFO depth via the "samsung,spi-fifosize" dt
-property. (patch 23/28)
+-----BEGIN PGP SIGNATURE-----
 
-Hope this helps. Please tell if you want me to elaborate on something.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbKsIAAKCRB4tDGHoIJi
+0s4rAPwLj36cq4OCVYXidwGHQqrZUowdECj4uRLcWI43EFSS4AEAt/7J8GXw81Mv
+lW2W0+1Wk7ntO8Qb5WDzqbK7NusmQwo=
+=Mape
+-----END PGP SIGNATURE-----
+
+--e/FrbnVtGEexHgLP--
 
