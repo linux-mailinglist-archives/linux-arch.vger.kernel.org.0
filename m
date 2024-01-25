@@ -1,71 +1,71 @@
-Return-Path: <linux-arch+bounces-1669-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1670-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DBD183CA9E
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:12:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E201083CB12
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 19:31:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B36BF1C25C69
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:12:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6201E1F26A13
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 18:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 255B3134732;
-	Thu, 25 Jan 2024 18:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5ABD137C37;
+	Thu, 25 Jan 2024 18:26:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PSmPiuhN"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ndRNjLNt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C74A133994
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 18:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1ED13667A
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 18:26:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706206344; cv=none; b=Rpaqt+p+OW3j0BCvq2Uir0HlUiWAzzpYkCmaT08mmVp/kJJ1gdb2PUFxo9gW6kxdCMvnnDzLAwObyobO/J5HKpA/UoaSXNuCAMJD5CugJTadHdwk3dyXyVKXy+10mYaT4Nc+p9p/JXEianp8zaRbAxPXry7UhYDjGLsICohlzeg=
+	t=1706207187; cv=none; b=V6ZebKFUSOFc5dGBwdjIDoqR1aiFPmMmxxvfOTu7BJXWMVEEn+nyfe/RgoE6axaiRzXUf9cX6eLsBEVhNy2+2TxN7WYILD/ZjfKWG5wxM0io0TrNQ0LkHO+zswcWZo76L20rcC0gSRgNYbaB6tyxdGH5HkX/IbPpuu607I3A2TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706206344; c=relaxed/simple;
-	bh=cw8O2hqO9U01pVygNFVazLWDXfPwaESFBRTWSuf70Mw=;
+	s=arc-20240116; t=1706207187; c=relaxed/simple;
+	bh=jx00gY1ANnXUmZbXujxCZw5ack5kqcVrRKjf2wSzAGE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i/eVnrGrwvwVdQL80AVCJm1jkCXguBLdqJ+Y2OsuJ658mpF2yC573FOIvz65DVF+2S2oViuxQV/ZWejs6uYwT/6y4AY2XJoawXRjm4GaZ9aS3P6hn2lNvchaH/rcWL0fAjFr0fRk1MqhSA+0W9Rb6S2kjOjGo1Nu+KGaCAdoXZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PSmPiuhN; arc=none smtp.client-ip=209.85.210.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=H8sNJhoMExmoTbtyZpIARcNafIjIqPi03uNwKdGEiOwxw033te1LNT89CK6v7wAhT/zC9zlkgCkLod0NXTuwpFIeBHHgtPE2uTA09wtC5HRnc2Re8IQdZ53qzevVWU5b6GYx5YROp98zWPmtmDyvsXX6Zycxzdh0f4vNlStpbQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ndRNjLNt; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ddd19552e6so570004b3a.1
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 10:12:21 -0800 (PST)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5d3907ff128so2538932a12.3
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 10:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706206341; x=1706811141; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706207184; x=1706811984; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOQ7PY5RMwdW49c44PeUD39W3uvEolKYcNoKx9tZHuc=;
-        b=PSmPiuhN30ywzqBwEXa18j6bNFIJk7vf9IKQb4UwB5mPxikSB6Xr9t1kniyFIFKh6D
-         +U5OVWOS7q6VP5w0jxF/2822a1RyoGNob1HK09yoRfl23bf+eZepnUwoNw8ArT8W9mcz
-         svuYdYGGShpvNg+qrwugl7uUwqdu43lKdFtDIQJUJEbL6rLVRVuXb7JcW7f0/IGBQe5E
-         HuobNgHYb0I75pa8kqAC1f2aJBitzR5r3RIq2L7TqOU7iDBxrgw/jw90lqHkhDoamF5C
-         QwfcYIvk+FvvH2HvfUGfQ55nmgttPk8uCTzGYx2CbnHqCo9qX9uDRzy1sVzv1gYzHMkb
-         y/cw==
+        bh=xyuZ0gVdBuvlPmtjlhSz8uJtD77t/nVDJ3cBvemqEj0=;
+        b=ndRNjLNtyb2HSEDOmH/SyIDmrte0pVJhbjx5ZFOqTVaN7zTiNt5Hv0poqPgH1fvEvW
+         o4qDLhKbdvSU8IfpisXd196IA9OWyysxT9b6MZ/eBWwz+s+GogE5RDlWdvAZ6Pv7CqeX
+         d1nZwoWmgxZh8V3wrRsluC8eWBvyzqJMrD1yWLdPmXld+IZZ2zckxZ7vER8J/2glMQMQ
+         DNtMgs5Iwnxpov8tsBR+gQpM/ZaS8IorzAJ5KtBQs0MLqSmcIN6bJGDpJOdOaNkkBFXq
+         Tq0YI3Ng8+ZVomByK6VtS5pDVUXFVyRFuNVKXd5CbYV60X5g0mGS76qtBFj6D+YS6wIs
+         im9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706206341; x=1706811141;
+        d=1e100.net; s=20230601; t=1706207184; x=1706811984;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oOQ7PY5RMwdW49c44PeUD39W3uvEolKYcNoKx9tZHuc=;
-        b=wbzR9Q+szocSW5CbSjCzVCZz796ReHdRlxWhPhdxi/fo+qMjdaXNMmxNjeqgvVJdNy
-         MjZn3Qnh6lK5Q0rXODWy8mezgKdFfTb4SFEg4kWEKBenIKrcAi7LWyATIlJb/T8F+N/v
-         ODnsOq4LJp6IqWfV6MDNK84ROC3eVXkAgqO1ZVdSfhaIpgmHknI1dfkCOKtLBCgViURz
-         5f7QM3xunJ6taNfibIsIb/OEkNM99QkQN/Nu8K4pdPggZ75d67OXxCHxTp/zEcxhPzvi
-         w7BUhidMfDiN9h36kf1PJDMu3rvd8QjbAmNPUlOuQPwdRohEdB+6yJjiuey1QmnhTG0E
-         gQbA==
-X-Gm-Message-State: AOJu0Yy+NKp0CayP7Fy3qRftft4+kPNJ1tGTwrFh4ZwdZ2jkDweP83q5
-	xALRh+Os72DycGVAPJpGZAZ9cPK12afQBK9qK0UaCjkPVKxn/Vg59MxxBqfXEt4=
-X-Google-Smtp-Source: AGHT+IGPUyyPX5hM1Yrkm5iskfPCqBeEPRsk5d1X3OtxSMKWSiBaRZNyP6s8gkZ7PqF+fErCTpo4Gg==
-X-Received: by 2002:a17:902:b284:b0:1d4:2d8d:3536 with SMTP id u4-20020a170902b28400b001d42d8d3536mr91755plr.71.1706206340832;
-        Thu, 25 Jan 2024 10:12:20 -0800 (PST)
+        bh=xyuZ0gVdBuvlPmtjlhSz8uJtD77t/nVDJ3cBvemqEj0=;
+        b=ikVmlAyMAFuq1hAGk3qt/7uTzOW0xHZzCps5bFrNg2wxjHp8w3K2H8CT00HoShFHzj
+         1c0EcqNSWRtJVRRMN+V/LcZy4vcNofpm46NMM0bAtQD8kfIrdF/OCUpa8+nG0HIJoBmT
+         XhZurE3+DB+mwbhGEhE9ACbsO7yyG+pisJII+3nrRpVwuWp0S/hv/l4OhIs7SyHC5H1Z
+         /m/tFFUz4wyppMkXP4kLSRf6j9fQP5sqmPipdCH8vrRgVuOWsgjfNx0Lk2BZE4Y+Fl8w
+         EtKElimfJxKgSwC6edduLg4n4mIPedW/18YPhFnk4EJ+Iq8PFW6zCCwUK0c01s4Oh1ar
+         GKZA==
+X-Gm-Message-State: AOJu0YxOEbq7abhz6O21KvNu1WjodMgspwFYnz9aPEaZzPi6j/dDM1OH
+	osqm9uEDETdJ7K3Ob2zPTu1+RstP5Sk6JNH4kGQXmEaa7J8HT65vGPO+qdSk1nQ=
+X-Google-Smtp-Source: AGHT+IFBV2oC78chsLzac9k77DXS5/WbnhoEAPatEDRZ6lhNeqqRGgEsUCPUu1zeHuG1e8R3Jwt8hg==
+X-Received: by 2002:a05:6a20:1453:b0:199:ad49:ea79 with SMTP id a19-20020a056a20145300b00199ad49ea79mr78878pzi.63.1706207184482;
+        Thu, 25 Jan 2024 10:26:24 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id jy13-20020a17090342cd00b001d720fa139fsm10390442plb.70.2024.01.25.10.12.17
+        by smtp.gmail.com with ESMTPSA id j38-20020a635526000000b005cf7c4bb938sm13685563pgb.94.2024.01.25.10.26.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 10:12:20 -0800 (PST)
-Date: Thu, 25 Jan 2024 10:12:16 -0800
+        Thu, 25 Jan 2024 10:26:24 -0800 (PST)
+Date: Thu, 25 Jan 2024 10:26:19 -0800
 From: Deepak Gupta <debug@rivosinc.com>
 To: Conor Dooley <conor@kernel.org>
 Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
@@ -85,21 +85,19 @@ Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
 	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
 	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
 	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
-	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
-	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
-	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
-	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 24/28] riscv: select config for shadow stack and
- landing pad instr support
-Message-ID: <ZbKkgNX7xfU5KO8X@debug.ba.rivosinc.com>
+	cuiyunhui@bytedance.com, bhe@redhat.com, ruscur@russell.cc,
+	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il,
+	zhangqing@loongson.cn, catalin.marinas@arm.com, revest@chromium.org,
+	josh@joshtriplett.org, joey.gouly@arm.com, shr@devkernel.io,
+	omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 05/28] riscv: zicfiss/zicfilp enumeration
+Message-ID: <ZbKny7ZAG5FWHwwF@debug.ba.rivosinc.com>
 References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-25-debug@rivosinc.com>
- <20240125-snitch-boogieman-5b4a0b142e61@spud>
+ <20240125062739.1339782-6-debug@rivosinc.com>
+ <20240125-unscathed-coeditor-31f04e811489@spud>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -108,75 +106,126 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20240125-snitch-boogieman-5b4a0b142e61@spud>
+In-Reply-To: <20240125-unscathed-coeditor-31f04e811489@spud>
 
-On Thu, Jan 25, 2024 at 06:04:26PM +0000, Conor Dooley wrote:
->On Wed, Jan 24, 2024 at 10:21:49PM -0800, debug@rivosinc.com wrote:
+On Thu, Jan 25, 2024 at 05:59:24PM +0000, Conor Dooley wrote:
+>Yo,
+>
+>Series is RFC, so not gonna review it in depth, just wanted to comment
+>on this particular patch.
+>
+>On Wed, Jan 24, 2024 at 10:21:30PM -0800, debug@rivosinc.com wrote:
 >> From: Deepak Gupta <debug@rivosinc.com>
 >>
->> This patch selects config shadow stack support and landing pad instr
->> support. Shadow stack support and landing instr support is hidden behind
->> `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wires up path
->> to enumerate CPU support and if cpu support exists, kernel will support
->> cpu assisted user mode cfi.
+>> This patch adds support for detecting zicfiss and zicfilp. zicfiss and zicfilp
+>> stands for unprivleged integer spec extension for shadow stack and branch
+>> tracking on indirect branches, respectively.
+>>
+>> This patch looks for zicfiss and zicfilp in device tree and accordinlgy lights
+>> up bit in cpu feature bitmap. Furthermore this patch adds detection utility
+>> functions to return whether shadow stack or landing pads are supported by
+>> cpu.
 >>
 >> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 >> ---
->>  arch/riscv/Kconfig | 15 +++++++++++++++
->>  1 file changed, 15 insertions(+)
+>>  arch/riscv/include/asm/cpufeature.h | 18 ++++++++++++++++++
+>>  arch/riscv/include/asm/hwcap.h      |  2 ++
+>>  arch/riscv/include/asm/processor.h  |  1 +
+>>  arch/riscv/kernel/cpufeature.c      |  2 ++
+>>  4 files changed, 23 insertions(+)
 >>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 9d386e9edc45..437b2f9abf3e 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -163,6 +163,7 @@ config RISCV
->>  	select SYSCTL_EXCEPTION_TRACE
->>  	select THREAD_INFO_IN_TASK
->>  	select TRACE_IRQFLAGS_SUPPORT
->> +	select RISCV_USER_CFI
+>> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
+>> index a418c3112cd6..216190731c55 100644
+>> --- a/arch/riscv/include/asm/cpufeature.h
+>> +++ b/arch/riscv/include/asm/cpufeature.h
+>> @@ -133,4 +133,22 @@ static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, const unsi
+>>  	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+>>  }
+>>
+>> +static inline bool cpu_supports_shadow_stack(void)
+>> +{
+>> +#ifdef CONFIG_RISCV_USER_CFI
 >
->This select makes no sense to me, it will unconditionally enable
->RISCV_USER_CFI. I don't think that that is your intent, since you have a
->detailed option below that allows the user to turn it on or off.
+>In passing, I don't see any reason for not using IS_ENABLED() here.
+
+No reason. I should probably do that. More readable.
+Thanks.
+
 >
->If you remove it, the commit message will need to change too FYI.
+>> +	return riscv_isa_extension_available(NULL, ZICFISS);
+>> +#else
+>> +	return false;
+>> +#endif
+>> +}
+>> +
+>> +static inline bool cpu_supports_indirect_br_lp_instr(void)
+>> +{
+>> +#ifdef CONFIG_RISCV_USER_CFI
+>> +	return riscv_isa_extension_available(NULL, ZICFILP);
+>> +#else
+>> +	return false;
+>> +#endif
+>> +}
+>> +
+>>  #endif
+>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+>> index 06d30526ef3b..918165cfb4fa 100644
+>> --- a/arch/riscv/include/asm/hwcap.h
+>> +++ b/arch/riscv/include/asm/hwcap.h
+>> @@ -57,6 +57,8 @@
+>>  #define RISCV_ISA_EXT_ZIHPM		42
+>>  #define RISCV_ISA_EXT_SMSTATEEN		43
+>>  #define RISCV_ISA_EXT_ZICOND		44
+>> +#define RISCV_ISA_EXT_ZICFISS	45
+>> +#define RISCV_ISA_EXT_ZICFILP	46
+>>
+>>  #define RISCV_ISA_EXT_MAX		64
+>>
+>> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+>> index f19f861cda54..ee2f51787ff8 100644
+>> --- a/arch/riscv/include/asm/processor.h
+>> +++ b/arch/riscv/include/asm/processor.h
+>> @@ -13,6 +13,7 @@
+>>  #include <vdso/processor.h>
+>>
+>>  #include <asm/ptrace.h>
+>> +#include <asm/hwcap.h>
+>>
+>>  #ifdef CONFIG_64BIT
+>>  #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
+>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+>> index 98623393fd1f..16624bc9a46b 100644
+>> --- a/arch/riscv/kernel/cpufeature.c
+>> +++ b/arch/riscv/kernel/cpufeature.c
+>> @@ -185,6 +185,8 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>>  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+>>  	__RISCV_ISA_EXT_DATA(svnapot, RISCV_ISA_EXT_SVNAPOT),
+>>  	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+>> +	__RISCV_ISA_EXT_DATA(zicfiss, RISCV_ISA_EXT_ZICFISS),
+>> +	__RISCV_ISA_EXT_DATA(zicfilp, RISCV_ISA_EXT_ZICFILP),
 >
+>Anything you add to this array, you need to document in a dt-binding.
 
-Selecting this config puts support in Kernel so that it can run tasks who wants
-to enable hardware assisted control flow integrity for themselves. But apps still
-always need to optin using `prctls`. Those prctls are stubs and return EINVAL when
-this config is not selected. Not selecting this config means, kernel will not support
-enabling this feature for user mode.
+You mean Documentation/devicetree/bindings/riscv/extensions.yaml
+(or possibly any other yaml if needed?)
 
-I'll edit commit message to better reflect this.
+>Also, you added these in the wrong place. There's a massive comment
+>before the array describing the order entries must be in, please take a
+>look.
 
+I see the comment.
+In my defense, looks like I missed it when I was rebasing.
+
+Will fix it.
+
+>
 >Thanks,
 >Conor.
 >
->>  	select UACCESS_MEMCPY if !MMU
->>  	select ZONE_DMA32 if 64BIT
+>
+>>  };
 >>
->> @@ -182,6 +183,20 @@ config HAVE_SHADOW_CALL_STACK
->>  	# https://github.com/riscv-non-isa/riscv-elf-psabi-doc/commit/a484e843e6eeb51f0cb7b8819e50da6d2444d769
->>  	depends on $(ld-option,--no-relax-gp)
->>
->> +config RISCV_USER_CFI
->> +	bool "riscv userspace control flow integrity"
->> +	help
->> +	  Provides CPU assisted control flow integrity to userspace tasks.
->> +	  Control flow integrity is provided by implementing shadow stack for
->> +	  backward edge and indirect branch tracking for forward edge in program.
->> +	  Shadow stack protection is a hardware feature that detects function
->> +	  return address corruption. This helps mitigate ROP attacks.
->> +	  Indirect branch tracking enforces that all indirect branches must land
->> +	  on a landing pad instruction else CPU will fault. This mitigates against
->> +	  JOP / COP attacks. Applications must be enabled to use it, and old user-
->> +	  space does not get protection "for free".
->> +	  default y
->> +
->>  config ARCH_MMAP_RND_BITS_MIN
->>  	default 18 if 64BIT
->>  	default 8
+>>  const size_t riscv_isa_ext_count = ARRAY_SIZE(riscv_isa_ext);
 >> --
 >> 2.43.0
 >>
