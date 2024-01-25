@@ -1,292 +1,221 @@
-Return-Path: <linux-arch+bounces-1559-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1560-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3D8983BA9D
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 08:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4227383BB9A
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 09:17:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E35B285126
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 07:29:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9092280E43
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 08:17:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154E1125D9;
-	Thu, 25 Jan 2024 07:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89F5117581;
+	Thu, 25 Jan 2024 08:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="4WWqHOsK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fWat02Ra"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EirxkGFG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3848C125BC;
-	Thu, 25 Jan 2024 07:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D846317588
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 08:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706167768; cv=none; b=apiliaazNwPVs9edMDwjjAsK0aMZRe+//eOKaqCjmhk/kSPzQ5GXfBiCj4MExo8A4F8ymwVSkM+ermJzM9iNOWanmSxywWWpMnDz+bkd2sUsyUuc71YFiMF8y+ppc8gAtJ3jxHiQd4UPYIJAYgprjzXGJveIMapksasT77kzqoc=
+	t=1706170631; cv=none; b=cfuaZrAd5uIJBOA3pEeyFukqZrlRXj2i5iSexeRzHzFYI4gwnBPcj9Ul3FVILC+WEbtSexT9tGpqJBtmhPkt3QpitoZ5ZxAlxjp3vWAbydwAPe24JHGQeN3A/yPtIjyDGre7mv71mBv/Wy4KSezYrzK/EUVcrPe1XUU4kRqNvBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706167768; c=relaxed/simple;
-	bh=UDDxqmJwRwfGRdgYCAAJVPgdb8XBmMphX3vXWn1q41I=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=uQoWbb8KsreKxmzEQ6vdGydt64xYL3pA85rjhgY2aRbPXUx5fAlqUPVEu2OITEx6thOWVV93ADKKoJBl772KhoPHDhkzwY7VDVpBRHsFkxZqwq9CYVsHW6jV2YoAvGVAyi0Z6qabtJ+N6Wrwt8No6nnZII72tobscSF0TKt4uhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=4WWqHOsK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fWat02Ra; arc=none smtp.client-ip=66.111.4.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 235435C0095;
-	Thu, 25 Jan 2024 02:29:22 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Thu, 25 Jan 2024 02:29:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1706167762; x=1706254162; bh=4/dVYBNNL2
-	9STF+/5i846JO1dRke2hCM5JY24OM2ohU=; b=4WWqHOsKiWwKd8AZBn+R9MaRq0
-	o0JaKbYFyW1luubvbv1noVg4Mrlyko5Yl9zZQ9oFnJbyiGuYS7z88GjP7CJIs2br
-	hNDgqGEqd1rUryx+AXqc9lrHmRsxIuFSJPVZU3v4ktv52E1ynPbcBVdRtTmTJAtI
-	s/gj2vUSM6K8Y6Rh/Fdg7QKAg9xJu0jvqDT0Ghado7JWD9OfSkTZukPkTEa0eoV1
-	P+glLGXM4mPNKhUbNuzfGkWf8bCvKxecsOzjgpFm4q+chrU/67Z+NHVa2cg7BetI
-	bO3PXjBoaU64EOk9/7Jwbbc2hbtn2LHIZTC79gp2NFhNT1o3ZS9IlRWZwx7g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1706167762; x=1706254162; bh=4/dVYBNNL29STF+/5i846JO1dRke
-	2hCM5JY24OM2ohU=; b=fWat02Ravbdkseak+cwCvRDzjBa5R3ohoLp788UPLofv
-	rx9dBbDLsxArc9EKJFXMNMGVWNVSAFGNIBdIuV3eFy3w9mrgPWlfaN0BN2hcY6u2
-	tw7d7oc3yXSUKQ8e2Dcx8QNfo+vGCcfZVzAe/FQS/aMwnYId6tpw8tVVke7aspC1
-	y2lx357GjC6shwfhUBv7miFC8bP9CUO8B/HHSp7w2DXcOtqOen7uUG2jnwnk0Huu
-	ZG/qWxU8QUzm8rKCo9yQbju23D0FyEAli+asS7URM2Lo4dxhJXfLWc8CLg85/PXs
-	Ru9AiU2I/Sxr7bFJDEsy++quS8tVXbugzmhRwb0Y6Q==
-X-ME-Sender: <xms:0Q2yZZgHwcn24DiOahZrGqrGnvBpm-ZsPC_8Kn5L39IlgEZSHNZ1qg>
-    <xme:0Q2yZeDnGGz0_0LGliPx0EXvN9Z7BqjAb-cT42_DFhjNS2uO7XwrZqOOh34j47MFo
-    ASeabRK48YLNgAjhA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdelvddguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
-    thgvfhgrnhcuqfdktfgvrghrfdcuoehsohhrvggrrhesfhgrshhtmhgrihhlrdgtohhmqe
-    enucggtffrrghtthgvrhhnpefhtefgffelieduudekgeevueegudegueefhfehhfffiefg
-    keffvedtuefggfehteenucffohhmrghinhepvghnthhrhidrshgspdhinhhfrhgruggvrg
-    gurdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mhepshhorhgvrghrsehfrghsthhmrghilhdrtghomh
-X-ME-Proxy: <xmx:0Q2yZZFSzmAP28-Yw_tJzgxRNKSU-3toWvfbDhR3b_mTG3GoJbIhxw>
-    <xmx:0Q2yZeTZlrYF9hZBDnW4R9U05tXmpA06fYTF9UblXerse7ooEN6SfQ>
-    <xmx:0Q2yZWxicRgvULAInvriUjS8D6tUBpvVKhQKcf__ndRa8KL4ZWTYEw>
-    <xmx:0g2yZbKM5BS9-p4l4K3R6W0ZsBQxfxzHydoICT-YiYLwle95QXW8Uw>
-Feedback-ID: i84414492:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 7A9091700093; Thu, 25 Jan 2024 02:29:21 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-119-ga8b98d1bd8-fm-20240108.001-ga8b98d1b
+	s=arc-20240116; t=1706170631; c=relaxed/simple;
+	bh=4yhaE1qqa9NZTdcUT/69EaMxPMmUDfecZuq6FiE7C1A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EiT15T5oSCzyObumBwXdu523RzLl6qz/8GTOROStoLIwhsxncrU3zoGrz04e35T8MFBEymY6Bc1RZ5RRP4YiiXF38gnG55UfhPulwTynlSNQ0hC1zhpFQ98a4m2QcKQOC9f8BqtEdVZJy2fwKosLTjdkEJJzoUNhY69H3s4RUuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EirxkGFG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706170628;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=UZLvbQ/sj/IqlociRX/ySFK6it2BLTBR7c6/FUndS40=;
+	b=EirxkGFG6lF8Nbs1IygF13xw0NegjRD5b5c6B3+jfIMfiMFncc9+EEMSqyf6ecloR0GcIj
+	Q6zesGSLSAn1GdfV/l68DTjzVZdq1pBdY8ZH80gRkvLLkast+bWZ07InbEhM8DfX+JPI9Z
+	l2QcEsw9MzbQ7mDz/zR6aPYMvMUAPQU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-308-iv6U6URYM-q0omJ6jMLtvA-1; Thu, 25 Jan 2024 03:17:06 -0500
+X-MC-Unique: iv6U6URYM-q0omJ6jMLtvA-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-40e53200380so55305285e9.3
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 00:17:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706170625; x=1706775425;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UZLvbQ/sj/IqlociRX/ySFK6it2BLTBR7c6/FUndS40=;
+        b=JcTbSrXXeePKZRCfhlAs0jheWAIMtP6ve46rYX5Qf3CF0CJrn9qCNrTQigVKtvNsrc
+         EZhYuzhW7ssVoNceI41ARLJDnCtp+qWDF/H56wpq3DStDmHhtZPOxLrQME3bNGDdw3hH
+         079Ae7wny9fysQ745qp0zaAuzaPs5tmtyAcOnj3r36VBQq8KZ2GlVmMOvtY+dhvAvY5o
+         +O72pOna1o+HhobQV02b/CVrlEqY6VrkSfP7rR5vzQ3pVyHz24czGArvR9a9cf1llRsS
+         UmM3oAAzz6A/gu77ccVVDbXFMVJtEEcoRQc/P1D6Cm7EMOtR0ATGB7akmdWNy5SMdxiz
+         ainQ==
+X-Gm-Message-State: AOJu0YyzZGEzSeIHtpMBSEJs45lE2GpnKEvSbMYaO7eNNR6FnYZg34Ml
+	+GncohonmUIk7jJyihfF/LMM8qhQLkXTB4QPPbGfbtVkY9DzLf/thxSTX+rLH+zu2aTTyuzrRaW
+	QbIMYRxpcTYJlSXMSSEuU6OEAIawCqf1u1DFUo2fJX3g4fYLikM7WSVTJEpU=
+X-Received: by 2002:a05:600c:4f4d:b0:40e:a32c:988d with SMTP id m13-20020a05600c4f4d00b0040ea32c988dmr107884wmq.4.1706170625362;
+        Thu, 25 Jan 2024 00:17:05 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHBXG0c1n69CXCyo5Gso5jszoyqCLj5BPA212FZgRTdtFdTJYJL0uYG9mHoKZFGV423EU1+WQ==
+X-Received: by 2002:a05:600c:4f4d:b0:40e:a32c:988d with SMTP id m13-20020a05600c4f4d00b0040ea32c988dmr107862wmq.4.1706170624814;
+        Thu, 25 Jan 2024 00:17:04 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70a:7600:9a0b:ceef:a304:b9a7? (p200300cbc70a76009a0bceefa304b9a7.dip0.t-ipconnect.de. [2003:cb:c70a:7600:9a0b:ceef:a304:b9a7])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05600c4fce00b0040d30af488asm1658538wmq.40.2024.01.25.00.17.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jan 2024 00:17:04 -0800 (PST)
+Message-ID: <a6f3ccf5-26a0-45f1-adaa-56a8df569548@redhat.com>
+Date: Thu, 25 Jan 2024 09:17:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ab343d4b-d8b0-47fc-8040-83313a3d735e@app.fastmail.com>
-In-Reply-To: <20240125062739.1339782-8-debug@rivosinc.com>
-References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-8-debug@rivosinc.com>
-Date: Thu, 25 Jan 2024 02:29:01 -0500
-From: "Stefan O'Rear" <sorear@fastmail.com>
-To: debug <debug@rivosinc.com>, rick.p.edgecombe@intel.com,
- broonie@kernel.org, Szabolcs.Nagy@arm.com,
- "kito.cheng@sifive.com" <kito.cheng@sifive.com>,
- "Kees Cook" <keescook@chromium.org>,
- "Andrew Jones" <ajones@ventanamicro.com>, paul.walmsley@sifive.com,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Conor Dooley" <conor.dooley@microchip.com>, cleger@rivosinc.com,
- "Atish Patra" <atishp@atishpatra.org>, "Alexandre Ghiti" <alex@ghiti.fr>,
- =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>,
- "Alexandre Ghiti" <alexghiti@rivosinc.com>
-Cc: "Jonathan Corbet" <corbet@lwn.net>, "Albert Ou" <aou@eecs.berkeley.edu>,
- oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
- "Eric W. Biederman" <ebiederm@xmission.com>, shuah@kernel.org,
- "Christian Brauner" <brauner@kernel.org>, guoren <guoren@kernel.org>,
- samitolvanen@google.com, "Evan Green" <evan@rivosinc.com>,
- xiao.w.wang@intel.com, "Anup Patel" <apatel@ventanamicro.com>,
- mchitale@ventanamicro.com, waylingii@gmail.com, greentime.hu@sifive.com,
- "Heiko Stuebner" <heiko@sntech.de>, "Jisheng Zhang" <jszhang@kernel.org>,
- shikemeng@huaweicloud.com, david@redhat.com,
- "Charlie Jenkins" <charlie@rivosinc.com>, panqinglin2020@iscas.ac.cn,
- willy@infradead.org, "Vincent Chen" <vincent.chen@sifive.com>,
- "Andy Chiu" <andy.chiu@sifive.com>, "Greg Ungerer" <gerg@kernel.org>,
- jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
- ancientmodern4@gmail.com, mathis.salmen@matsal.de,
- cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
- ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
- baruch@tkos.co.il, zhangqing@loongson.cn,
- "Catalin Marinas" <catalin.marinas@arm.com>, revest@chromium.org,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 08/28] mm: Define VM_SHADOW_STACK for RISC-V
+To: debug@rivosinc.com, rick.p.edgecombe@intel.com, broonie@kernel.org,
+ Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
+ ajones@ventanamicro.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ conor.dooley@microchip.com, cleger@rivosinc.com, atishp@atishpatra.org,
+ alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com
+Cc: corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com,
+ akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+ shuah@kernel.org, brauner@kernel.org, guoren@kernel.org,
+ samitolvanen@google.com, evan@rivosinc.com, xiao.w.wang@intel.com,
+ apatel@ventanamicro.com, mchitale@ventanamicro.com, waylingii@gmail.com,
+ greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+ shikemeng@huaweicloud.com, charlie@rivosinc.com, panqinglin2020@iscas.ac.cn,
+ willy@infradead.org, vincent.chen@sifive.com, andy.chiu@sifive.com,
+ gerg@kernel.org, jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+ ancientmodern4@gmail.com, mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+ bhe@redhat.com, chenjiahao16@huawei.com, ruscur@russell.cc,
+ bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il,
+ zhangqing@loongson.cn, catalin.marinas@arm.com, revest@chromium.org,
  josh@joshtriplett.org, joey.gouly@arm.com, shr@devkernel.io,
  omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com,
  linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
  linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 07/28] riscv: kernel handling on trap entry/exit for user
- cfi
-Content-Type: text/plain
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-9-debug@rivosinc.com>
+Content-Language: en-US
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20240125062739.1339782-9-debug@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 25, 2024, at 1:21 AM, debug@rivosinc.com wrote:
+On 25.01.24 07:21, debug@rivosinc.com wrote:
 > From: Deepak Gupta <debug@rivosinc.com>
->
-> Carves out space in arch specific thread struct for cfi status and shadow stack
-> in usermode on riscv.
->
-> This patch does following
-> - defines a new structure cfi_status with status bit for cfi feature
-> - defines shadow stack pointer, base and size in cfi_status structure
-> - defines offsets to new member fields in thread in asm-offsets.c
-> - Saves and restore shadow stack pointer on trap entry (U --> S) and exit
->   (S --> U)
->
+> 
+> VM_SHADOW_STACK is defined by x86 as vm flag to mark a shadow stack vma.
+> 
+> x86 uses VM_HIGH_ARCH_5 bit but that limits shadow stack vma to 64bit only.
+> arm64 follows same path
+> https://lore.kernel.org/lkml/20231009-arm64-gcs-v6-12-78e55deaa4dd@kernel.org/#r
+> 
+> On RISC-V, write-only page table encodings are shadow stack pages. This patch
+> re-defines VM_WRITE only to be VM_SHADOW_STACK.
+> 
+> Next set of patches will set guard rail that no other mm flow can set VM_WRITE
+> only in vma except when specifically creating shadow stack.
+> 
 > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->  arch/riscv/include/asm/processor.h   |  1 +
->  arch/riscv/include/asm/thread_info.h |  3 +++
->  arch/riscv/include/asm/usercfi.h     | 24 ++++++++++++++++++++++++
->  arch/riscv/kernel/asm-offsets.c      |  5 ++++-
->  arch/riscv/kernel/entry.S            | 25 +++++++++++++++++++++++++
->  5 files changed, 57 insertions(+), 1 deletion(-)
->  create mode 100644 arch/riscv/include/asm/usercfi.h
->
-> diff --git a/arch/riscv/include/asm/processor.h 
-> b/arch/riscv/include/asm/processor.h
-> index ee2f51787ff8..d4dc298880fc 100644
-> --- a/arch/riscv/include/asm/processor.h
-> +++ b/arch/riscv/include/asm/processor.h
-> @@ -14,6 +14,7 @@
+>   include/linux/mm.h | 14 +++++++++++++-
+>   1 file changed, 13 insertions(+), 1 deletion(-)
 > 
->  #include <asm/ptrace.h>
->  #include <asm/hwcap.h>
-> +#include <asm/usercfi.h>
-> 
->  #ifdef CONFIG_64BIT
->  #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
-> diff --git a/arch/riscv/include/asm/thread_info.h 
-> b/arch/riscv/include/asm/thread_info.h
-> index 320bc899a63b..6a2acecec546 100644
-> --- a/arch/riscv/include/asm/thread_info.h
-> +++ b/arch/riscv/include/asm/thread_info.h
-> @@ -58,6 +58,9 @@ struct thread_info {
->  	int			cpu;
->  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
->  	unsigned long envcfg;
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +	struct cfi_status       user_cfi_state;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 418d26608ece..dfe0e8118669 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -352,7 +352,19 @@ extern unsigned int kobjsize(const void *objp);
+>    * for more details on the guard size.
+>    */
+>   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+> -#else
 > +#endif
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  	void			*scs_base;
->  	void			*scs_sp;
-> diff --git a/arch/riscv/include/asm/usercfi.h 
-> b/arch/riscv/include/asm/usercfi.h
-> new file mode 100644
-> index 000000000000..080d7077d12c
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/usercfi.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0
-> + * Copyright (C) 2023 Rivos, Inc.
-> + * Deepak Gupta <debug@rivosinc.com>
+> +
+> +#ifdef CONFIG_RISCV_USER_CFI
+> +/*
+> + * On RISC-V pte encodings for shadow stack is R=0, W=1, X=0 and thus RISCV
+> + * choosing to use similar mechanism on vm_flags where VM_WRITE only means
+> + * VM_SHADOW_STACK. RISCV as well doesn't support VM_SHADOW_STACK to be set
+> + * with VM_SHARED.
 > + */
-> +#ifndef _ASM_RISCV_USERCFI_H
-> +#define _ASM_RISCV_USERCFI_H
-> +
-> +#ifndef __ASSEMBLY__
-> +#include <linux/types.h>
-> +
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +struct cfi_status {
-> +	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
-> +	unsigned long rsvd : ((sizeof(unsigned long)*8) - 1);
-> +	unsigned long user_shdw_stk; /* Current user shadow stack pointer */
-> +	unsigned long shdw_stk_base; /* Base address of shadow stack */
-> +	unsigned long shdw_stk_size; /* size of shadow stack */
-> +};
-> +
-> +#endif /* CONFIG_RISCV_USER_CFI */
-> +
-> +#endif /* __ASSEMBLY__ */
-> +
-> +#endif /* _ASM_RISCV_USERCFI_H */
-> diff --git a/arch/riscv/kernel/asm-offsets.c 
-> b/arch/riscv/kernel/asm-offsets.c
-> index cdd8f095c30c..5e1f412e96ba 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -43,8 +43,11 @@ void asm_offsets(void)
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  	OFFSET(TASK_TI_SCS_SP, task_struct, thread_info.scs_sp);
->  #endif
-> -
->  	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +	OFFSET(TASK_TI_CFI_STATUS, task_struct, thread_info.user_cfi_state);
-> +	OFFSET(TASK_TI_USER_SSP, task_struct, 
-> thread_info.user_cfi_state.user_shdw_stk);
-> +#endif
->  	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
->  	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
->  	OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 63c3855ba80d..410659e2eadb 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -49,6 +49,21 @@ SYM_CODE_START(handle_exception)
->  	REG_S x5,  PT_T0(sp)
->  	save_from_x6_to_x31
-> 
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +	/*
-> +	* we need to save cfi status only when previous mode was U
-> +	*/
-> +	csrr s2, CSR_STATUS
-> +	andi s2, s2, SR_SPP
-> +	bnez s2, skip_bcfi_save
-> +	/* load cfi status word */
-> +	lw s3, TASK_TI_CFI_STATUS(tp)
-> +	andi s3, s3, 1
-> +	beqz s3, skip_bcfi_save
-> +	csrr s3, CSR_SSP
-> +	REG_S s3, TASK_TI_USER_SSP(tp) /* save user ssp in thread_info */
-> +skip_bcfi_save:
-> +#endif
->  	/*
->  	 * Disable user-mode memory access as it should only be set in the
->  	 * actual user copy routines.
-> @@ -141,6 +156,16 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
->  	 * structures again.
->  	 */
->  	csrw CSR_SCRATCH, tp
-> +
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +	lw s3, TASK_TI_CFI_STATUS(tp)
-> +	andi s3, s3, 1
-> +	beqz s3, skip_bcfi_resume
-> +	REG_L s3, TASK_TI_USER_SSP(tp) /* restore user ssp from thread struct */
-> +	csrw CSR_SSP, s3
-> +skip_bcfi_resume:
+> +#define VM_SHADOW_STACK	VM_WRITE
 > +#endif
 > +
+> +#ifndef VM_SHADOW_STACK
+>   # define VM_SHADOW_STACK	VM_NONE
+>   #endif
+>   
 
-We shouldn't need any of this in the entry/exit code, at least as long as
-the kernel itself is not using Zicfiss.  ssp can keep its value in the
-kernel and swap it on task switches.  Our entry/exit code is rather short
-and I'd like to keep it that way.
+That just screams for trouble. Can we find a less hacky way, please?
 
--s
+Maybe just start with 64bit support only and do it like the other archs. 
+No need to be special.
 
->  1:
->  	REG_L a0, PT_STATUS(sp)
->  	/*
-> -- 
-> 2.43.0
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+When wanting to support 32bit, we'll just finally clean up this high 
+flag mess and allow for more vm flags on 32bit as well.
+
+-- 
+Cheers,
+
+David / dhildenb
+
 
