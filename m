@@ -1,79 +1,80 @@
-Return-Path: <linux-arch+bounces-1613-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1614-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B012F83C5EB
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 16:00:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5612983C77F
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 17:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F3B3294A1C
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 15:00:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31F1BB2333F
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jan 2024 16:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7BA745E0;
-	Thu, 25 Jan 2024 14:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1E874E17;
+	Thu, 25 Jan 2024 16:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YydD7APD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hcIQjCT8"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92665745D8
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 14:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C6C745C8
+	for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 16:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706194503; cv=none; b=toqrMLzwG/cgp3WMx2ksUxttM3wlBtf/vylU43Lam9DVXo4qAN+vw3SVHM8+0LGCS594CxJVDHuSi9Bag1OVAtd5hxABfsxZ0EP5OsLOuSy/sRZJ8er9W7wFLOSuWQCQVviTpq3XyGtRBfO+egHDoY/cflcnISCe/fQYrVyWcDc=
+	t=1706198819; cv=none; b=ng6n+4S0mm4NCrIR0w6jpU+sHSRx7dNggRiwNuIC1GySv2uXL/3opwttcK4s3MjlJkA66gmpiwi+hogzGvIq5IbtEZTjQSo73rhmtBrWh45u5vMUjyxPWgznt1mGDBBOjenKuWE+Xklz1bV/3XTZUtzLHaFt9BuyRTxO/WWtcL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706194503; c=relaxed/simple;
-	bh=GWjDGV8CYjMd0IGt9BAFpsRRMtiip3hSJ/HWJHLVBjM=;
+	s=arc-20240116; t=1706198819; c=relaxed/simple;
+	bh=mxpNg8/1ezqQlLi/nL6WpBh0YQxmcWqg4k8WpwRk6L8=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i9DzMlzkhl7AFUKlmSxBIhKIWpVLD9JzbkBOIPsD7fRq+AyRtZ0oBSXOCRBkaqi76ZHIsZWANI+JNzIAVhzhaGZlIGoMKC/JdGi9y9P2weQl/rlHrjTCiRbvZ1aamIfkJFltAkyR/go+xVTa2EXMIVlGrH2cdwihIOFGuc9d8GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YydD7APD; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:MIME-Version; b=QaIjA01gxHYlZxAuB25ZyieywRkLW/Ak4pDcC+fJurbIkHQ050t5sv1r4678i16PNipXFD6xCnXNQlkdsKM3sC2pEpzHqHh/IeZ0adkuOgarexYCoL1fWyJnFOd5u4HrvmpGb8CCIyHpq6sfKc2uFlz9RU0yggxck/XdXJSG7pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hcIQjCT8; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706194500;
+	s=mimecast20190719; t=1706198816;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=x/WGCtIXBNMJl2nmRzGlu8C3YqwIcqmDWHTn6bi35uU=;
-	b=YydD7APDjT75ofggEIobYscDB0VsAVamQIsoaJzgpxmh5OYR3ckv5MoEoUCL1efTNOVzRG
-	GH54gNwmAN8fdgjdbhel8333VzX42vMkhAk8q+rVRaHGI2w0pW/+424/2Vh3qATCKPcv3a
-	9enT/0oHbhZFx6oU/VBRGv+XOprs4G4=
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
- [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=mxpNg8/1ezqQlLi/nL6WpBh0YQxmcWqg4k8WpwRk6L8=;
+	b=hcIQjCT8o75xvYc/QecNfaHM6s9bJBxD5kPdtnTz5c3OyqEbeB1+aNm6+31ZoU8gMyMfJz
+	rL50WqLCnPV/ak5+eeb58kaNNvhQ7jA00OZoLzNBX9RkMQhqqVnEMTj+RULcXdM6ZWUlXZ
+	16quqrS5fDJevCrdWRmBeQ5FML+OTvw=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-39-IqgiS4wQOKmg5k2KnMVNvQ-1; Thu, 25 Jan 2024 09:54:57 -0500
-X-MC-Unique: IqgiS4wQOKmg5k2KnMVNvQ-1
-Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-7cda2e17239so264515241.0
-        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 06:54:57 -0800 (PST)
+ us-mta-651-Zak9_1llOp2cVEQ95GPhWA-1; Thu, 25 Jan 2024 11:06:54 -0500
+X-MC-Unique: Zak9_1llOp2cVEQ95GPhWA-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-51014392d2eso314884e87.0
+        for <linux-arch@vger.kernel.org>; Thu, 25 Jan 2024 08:06:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706194496; x=1706799296;
+        d=1e100.net; s=20230601; t=1706198813; x=1706803613;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=x/WGCtIXBNMJl2nmRzGlu8C3YqwIcqmDWHTn6bi35uU=;
-        b=n5h6Edli3Wxizs03T0gSohLYK6s++lfHI0pHrnsS3QHjqpDgQD5gYVBAqIuHDvRiLc
-         OVwO6qksaQk8OtMju7TuMwJQfDojnsdxycLSD2M5fQmA+3FRg4pOBY3wTMe443uYt+NI
-         ZGgJ2A3TQJpZk0Kd2oz4AJ8mZ6dYDmKiEtjNHz7smv9aDU2HMvzenXY6K3Rt5UIdeyZZ
-         /FmtX+70ZhgNYBU+Lio1j74e4QMcPiZNWARnGp9DDQkXLhD6VXkRs66uQWnre1fdLs5b
-         +mmQmkf6bk/6ay4yEOhTi7LOrZ7UkaRj8lXTB41PV8anjpwb6nR5fhw5DPZ4HCbTcmku
-         FhBg==
-X-Gm-Message-State: AOJu0Yw0Api1yNby/H4n3vUkxjPnhkpRUOGO66tRopE8klxpOtFHIKGY
-	mJyEfjhRBnz2GpMAKu74GIQalFCmUkRsqxLgg9vSqA1vxVFH8w1lzgdxIjgS/ZtKtov7Nwh1U1F
-	EoOFchF0SKgce2DzQE8HQnOVcnZGjbkKlx2KE7fphY2w8i59dFe/mva1fRPk=
-X-Received: by 2002:a05:6122:808:b0:4b7:3417:b5a4 with SMTP id 8-20020a056122080800b004b73417b5a4mr1787309vkj.1.1706194496310;
-        Thu, 25 Jan 2024 06:54:56 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHIYCSHR2Jl31Q/OOVV4bhgLrJrw/iGrIP8lwwani5ULr2nzz2L5voOwsgw/ZamIwqY+BdBxw==
-X-Received: by 2002:a05:6122:808:b0:4b7:3417:b5a4 with SMTP id 8-20020a056122080800b004b73417b5a4mr1787280vkj.1.1706194495913;
-        Thu, 25 Jan 2024 06:54:55 -0800 (PST)
-Received: from pstanner-thinkpadt14sgen1.remote.csb (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05620a101400b0078398696088sm4525202qkj.116.2024.01.25.06.54.52
+        bh=mxpNg8/1ezqQlLi/nL6WpBh0YQxmcWqg4k8WpwRk6L8=;
+        b=F3tj/wu/Cx82V87LUXPmxVqcljwd4+n42oapwQMbGd0nKgIrEmoq+jY43n1Ffe4hjp
+         k6MsrvSOC3+fZifbyH512gAxqd4zWGX3JqGqkFVTvmxKVdIMo5rRyd1+p7LcfqcuVS7d
+         F6yoRDzHvbBpkbDNm0Rjxh+fQ5MqjkmOqq+p8Jhqy0JpljUNQnwptc17nWTh1sGcL4Zf
+         27ehsywpCkbt+gy0rOMvUV9ylkJI1AZCFaYa8ugdefrCC9+zalZA6eMkQeB+jMNBlX71
+         hYyxi7iFnbu+WpXc4J0fCrVhMTiY4lcIex+idTOZH0POqeWov4w0ofXF0uGmKnpmYlhZ
+         OEDQ==
+X-Gm-Message-State: AOJu0Ywhu/wlH83DEuBe64xPJrzs6yknFBVhw+NFwC9f/EyTEVJlbOzp
+	rzbnPd/lh5/wxtW8GzeY/WtUXTon8cynF1jRxxDa9FEAUvkLvi0+G0eQzxnwNjHTImj7i0n69hM
+	21i2lgHWIw/e7HwZ0t+ee1TDpgizOaJWTBM5l7OBzCJ7I4A8hOrp7vy3MbwY=
+X-Received: by 2002:a05:6512:60c:b0:50e:7f87:f5aa with SMTP id b12-20020a056512060c00b0050e7f87f5aamr12424lfe.3.1706198812931;
+        Thu, 25 Jan 2024 08:06:52 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFBkcCfKPSYS4yUtZFQ7r7nSyx1JvC1HiMYB6WLPCzF5Q9dQrseRgsbWq9zVsViEq5CRZzQeQ==
+X-Received: by 2002:a05:6512:60c:b0:50e:7f87:f5aa with SMTP id b12-20020a056512060c00b0050e7f87f5aamr12394lfe.3.1706198812557;
+        Thu, 25 Jan 2024 08:06:52 -0800 (PST)
+Received: from pstanner-thinkpadt14sgen1.remote.csb (nat-pool-muc-u.redhat.com. [149.14.88.27])
+        by smtp.gmail.com with ESMTPSA id je1-20020a05600c1f8100b0040e5cf9a6c7sm3073530wmb.13.2024.01.25.08.06.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 06:54:55 -0800 (PST)
-Message-ID: <3abf071d12de5b69e146665dfb57386e3b0ddfe0.camel@redhat.com>
-Subject: Re: [PATCH v5 RESEND 2/5] lib: move pci_iomap.c to drivers/pci/
+        Thu, 25 Jan 2024 08:06:52 -0800 (PST)
+Message-ID: <13319e46cf2a8caa0b397ef67db7d406261a64b0.camel@redhat.com>
+Subject: Re: [PATCH v5 RESEND 1/5] lib/pci_iomap.c: fix cleanup bugs in
+ pci_iounmap()
 From: Philipp Stanner <pstanner@redhat.com>
 To: Bjorn Helgaas <helgaas@kernel.org>
 Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, 
@@ -89,10 +90,11 @@ Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
  Gleixner <tglx@linutronix.de>, Marco Elver <elver@google.com>, Andrew
  Morton <akpm@linux-foundation.org>, Ben Dooks <ben.dooks@codethink.co.uk>,
  dakr@redhat.com, linux-kernel@vger.kernel.org,  linux-pci@vger.kernel.org,
- linux-arch@vger.kernel.org, stable@vger.kernel.org
-Date: Thu, 25 Jan 2024 15:54:51 +0100
-In-Reply-To: <20240123202022.GA325908@bhelgaas>
-References: <20240123202022.GA325908@bhelgaas>
+ linux-arch@vger.kernel.org, stable@vger.kernel.org,  Arnd Bergmann
+ <arnd@kernel.org>
+Date: Thu, 25 Jan 2024 17:06:38 +0100
+In-Reply-To: <20240123184622.GA322265@bhelgaas>
+References: <20240123184622.GA322265@bhelgaas>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
@@ -103,68 +105,124 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2024-01-23 at 14:20 -0600, Bjorn Helgaas wrote:
-> On Thu, Jan 11, 2024 at 09:55:37AM +0100, Philipp Stanner wrote:
-> > This file is guarded by an #ifdef CONFIG_PCI. It, consequently,
-> > does not
-> > belong to lib/ because it is not generic infrastructure.
+On Tue, 2024-01-23 at 12:46 -0600, Bjorn Helgaas wrote:
+> On Thu, Jan 11, 2024 at 09:55:36AM +0100, Philipp Stanner wrote:
+> > pci_iounmap() in lib/pci_iomap.c is supposed to check whether an
+> > address
+> > is within ioport-range IF the config specifies that ioports exist.
+> > If
+> > so, the port should be unmapped with ioport_unmap(). If not, it's a
+> > generic MMIO address that has to be passed to iounmap().
 > >=20
-> > Move the file to drivers/pci/ and implement the necessary changes
-> > to
-> > Makefiles and Kconfigs.
-> > ...
+> > The bugs are:
+> > =C2=A0 1. ioport_unmap() is missing entirely, so this function will
+> > never
+> > =C2=A0=C2=A0=C2=A0=C2=A0 actually unmap a port.
 >=20
-> > --- a/drivers/pci/Kconfig
-> > +++ b/drivers/pci/Kconfig
-> > @@ -13,6 +13,11 @@ config FORCE_PCI
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select HAVE_PCI
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select PCI
-> > =C2=A0
-> > +# select this to provide a generic PCI iomap,
-> > +# without PCI itself having to be defined
-> > +config GENERIC_PCI_IOMAP
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool
+> The preceding comment suggests that in this default implementation,
+> the ioport does not need unmapping, and it wasn't something it was
+> supposed to do but just failed to do:
 >=20
-> > --- a/lib/pci_iomap.c
-> > +++ b/drivers/pci/iomap.c
-> > @@ -9,7 +9,6 @@
-> > =C2=A0
-> > =C2=A0#include <linux/export.h>
-> > =C2=A0
-> > -#ifdef CONFIG_PCI
+> =C2=A0* NOTE! This default implementation assumes that if the architectur=
+e
+> =C2=A0* support ioport mapping (HAS_IOPORT_MAP), the ioport mapping will
+> =C2=A0* be fixed to the range [ PCI_IOBASE, PCI_IOBASE+IO_SPACE_LIMIT [,
+> =C2=A0* and does not need unmapping with 'ioport_unmap()'.
+> =C2=A0*
+> =C2=A0* If you have different rules for your architecture, you need to
+> =C2=A0* implement your own pci_iounmap() that knows the rules for where
+> =C2=A0* and how IO vs MEM get mapped.
 >=20
-> IIUC, in the case where CONFIG_GENERIC_PCI_IOMAP=3Dy but CONFIG_PCI was
-> not set, pci_iomap.c was compiled but produced no code because the
-> entire file was wrapped with this #ifdef.
->=20
-> But after this patch, it looks like pci_iomap_range(),
-> pci_iomap_wc_range(), etc., *will* be compiled?
->=20
-> Is that what you intend, or did I miss something?
+> Almost all ioport_unmap() implementations are empty, so in most cases
+> it's a no-op (parisc is an exception).
 
-They *will* be compiled when BOTH, CONFIG_PCI and
-CONFIG_GENERIC_PCI_IOMAP have been set. It's a bit hard to see that in
-the patch's diff. Here, look closely:
+That sounds correct.
 
---- a/drivers/pci/Makefile
-+++ b/drivers/pci/Makefile
-@@ -14,6 +14,7 @@ ifdef CONFIG_PCI   <-----------
- obj-$(CONFIG_PROC_FS)		+=3D proc.o
- obj-$(CONFIG_SYSFS)		+=3D slot.o
- obj-$(CONFIG_ACPI)		+=3D pci-acpi.o
-+obj-$(CONFIG_GENERIC_PCI_IOMAP) +=3D iomap.o  <------------
- endif
+>=20
+> I'm happy to add the ioport_unmap() even just for symmetry, but if we
+> do, I think we should update or remove that comment.
 
-So if I am not mistaken it behaves 100% as it did before
+Yes, I think it's the right way: either all architectures should
+provide ioport_unmap(), empty or not, or all should use a centralized
+PCI function
 
-I prefered Makefile-logic over even more C Preprocessor to implement
-that. The preprocessor has caused us so much trouble... :(
+I can remove the wrong statement.
+
+>=20
+> > =C2=A0 2. the #ifdef for the ioport-ranges accidentally also guards
+> > =C2=A0=C2=A0=C2=A0=C2=A0 iounmap(), potentially compiling an empty func=
+tion. This would
+> > =C2=A0=C2=A0=C2=A0=C2=A0 cause the mapping to be leaked.
+> >=20
+> > Implement the missing call to ioport_unmap().
+> >=20
+> > Move the guard so that iounmap() will always be part of the
+> > function.
+>=20
+> I think we should fix this bug in a separate patch because the
+> ioport_unmap() is much more subtle and doesn't need to be complicated
+> with this fix.
+
+If we agree that one is a bug and the other isn't, then ACK, we should
+probably split it.
+
+>=20
+> > CC: <stable@vger.kernel.org> # v5.15+
+> > Fixes: 316e8d79a095 ("pci_iounmap'2: Electric Boogaloo: try to make
+> > sense of it all")
+> > Reported-by: Danilo Krummrich <dakr@redhat.com>
+>=20
+> Is there a URL we can include for Danilo's report?=C2=A0 I found
+> https://lore.kernel.org/all/a6ef92ae-0747-435b-822d-d0229da4683c@redhat.c=
+om/
+> ,
+> but I'm not sure that's the right part of the conversation.
+
+He pointed out it's a bug in an offlist conversation with me. The link
+you provided is his only public statement about the topic.
+The Reported-by served more acknowledging the contribution than issue-
+tracking
+
 
 P.
 
-
 >=20
-> Bjorn
+> > Suggested-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Philipp Stanner <pstanner@redhat.com>
+> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> > =C2=A0lib/pci_iomap.c | 6 ++++--
+> > =C2=A01 file changed, 4 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/lib/pci_iomap.c b/lib/pci_iomap.c
+> > index ce39ce9f3526..6e144b017c48 100644
+> > --- a/lib/pci_iomap.c
+> > +++ b/lib/pci_iomap.c
+> > @@ -168,10 +168,12 @@ void pci_iounmap(struct pci_dev *dev, void
+> > __iomem *p)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uintptr_t start =3D (ui=
+ntptr_t) PCI_IOBASE;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uintptr_t addr =3D (uin=
+tptr_t) p;
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (addr >=3D start && addr =
+< start + IO_SPACE_LIMIT)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (addr >=3D start && addr =
+< start + IO_SPACE_LIMIT) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ioport_unmap(p);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iounmap(p);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > =C2=A0#endif
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iounmap(p);
+> > =C2=A0}
+> > =C2=A0EXPORT_SYMBOL(pci_iounmap);
+> > =C2=A0
+> > --=20
+> > 2.43.0
+> >=20
 >=20
 
 
