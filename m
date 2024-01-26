@@ -1,133 +1,120 @@
-Return-Path: <linux-arch+bounces-1728-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1729-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF3383E291
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 20:32:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B32B83E2A7
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 20:34:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B331286D21
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 19:32:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA88AB2408D
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 19:34:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B40225CD;
-	Fri, 26 Jan 2024 19:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20129224EC;
+	Fri, 26 Jan 2024 19:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DMYIKWJD"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="CYryvNhP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A395A22EF9
-	for <linux-arch@vger.kernel.org>; Fri, 26 Jan 2024 19:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA0E225CE;
+	Fri, 26 Jan 2024 19:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706297526; cv=none; b=KGKmu2b/57cVYz2L0HzyxZ0Od91TsOlnV2YdfBmOU4xr8k2rAWXFlNAMK+b0jVt8swe4sJV+6k/g9af9ljzDUZHnKLDXghP9jQhsqu1QICTOKnkoZqtNUOF3xrCdaAdW765Y3196k97/HK0L5+Guzi84/JvjFZwZc8cdKaxiIyc=
+	t=1706297643; cv=none; b=JngSd0klYSeBmaOxuB3lLpJ8a+S8wDuuksF23krnds09Z+cEOTwD9Ztb7Iomj3iId2AdFnbpcoVt6cr4sB/COnDi+oJYcB7yaK2ilzMPzmbSzSSnLa5CiFv12xq9vr6daFuYlEcIVBDYdFyggDnG+4GaHeO4p89vIXDmESWq/Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706297526; c=relaxed/simple;
-	bh=4bn/sB8tSLsIIPq6gl/AUEyattz3mYuuGWSOuaRmbWQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o4LHigzp05zQdpd1YGB9z3lQWkJd6Yp91HWvqsnUhl1X6NTxCbb/MKX0JnPldurHE31WOAsmq5OhMPgbYAXkzpWBwCrZZvzybHhwQusu78csb2P4FKO2C5p7I5JNqJ9L57iRkeh9CcGYMNDaPMTuwOKd/6vIJZx73Qjw8VMMr4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DMYIKWJD; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-29036dc3a63so459728a91.3
-        for <linux-arch@vger.kernel.org>; Fri, 26 Jan 2024 11:32:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706297524; x=1706902324; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mq0DzuapwNb+at6/+GR6PN1NNqZZZWZopm5NTAYFnRg=;
-        b=DMYIKWJDqTAOuFhNETjb8mZC6i1h+fNlcYZMfPJgLiYKSoD8DoLO0CKUOzLcGRdG85
-         Rqewz9nU7w89gb8jlOr/KQdxN/oEdxkFOJwXrCbJmu+EjXgqgnbsBM6AbDlEQG5PtJRv
-         6aqxB6GZkMxOL2XidhUFm10q2i8Gfr5xUH7SaS5mI3eYffAcgbJahxclw31Nw66YKq4y
-         aaTh2gviG6RgOh/wduSVnrkAG/NWgjhgRzhvEjBqL3vpamU5xlDZro4EudclfLtA6B+v
-         VAlLEhNND+PNSZ/opNarHyp+DheHKLq73dUOR0nuEB5nhfs1nY6YhPDNsCoLyaSjt/6Y
-         vKXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706297524; x=1706902324;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mq0DzuapwNb+at6/+GR6PN1NNqZZZWZopm5NTAYFnRg=;
-        b=NquWFswq2OCfmtT9j4sdRURBtcsJ592wV57evtJD1Imuin7K0Ttmw7B89b8ZMusqSF
-         lJzqvp8eqwrE25KcORYlv99b5jD6TveKUmhT4+YQBTuTWUkF4QtClQ3ZAj+cWBUBJduX
-         JXwvsPR9lRsbIGk4ScUjVQvQ+FfqgMG1/zMqJnTDqnDhatr6hboLsKsOuM9krqQ0zQ6I
-         zlQ/vuKaDd9Yw++UwKBi7XWps307nXKTxFi1cbrPV+I9QHcga/GXdyVXJVU4EClpwfly
-         1tJGz4ykXRIfQmkQAftkmwO7bWITLnGMEoMFylKAb+kKxB5tTNvd5SNLpRPIl0RfeCww
-         XwtA==
-X-Gm-Message-State: AOJu0YzPTMiA9Qti6fWkIRCH4BuRBHDZrSKUCprQwaKeZcxSyXnyoPGl
-	Irq1yYzpgwtmNRrDu/eLafFW/svt96kdhlMDjsk6VTDWYq1d91DvnHNhxm1e5LqJLss03H5Uqnp
-	Q3YPPhNYCN3WWTf7WCxsjukClvonIxEnVkxr/mw==
-X-Google-Smtp-Source: AGHT+IFBa6CU0gSHmGQst+5z4PcIsnVzYeH5WRcM7mrPV+jhkrgM9ohuUe97W/fJAYEGMiqNHQkddJwK/+eLNatKOUA=
-X-Received: by 2002:a17:90b:3758:b0:290:3b83:8897 with SMTP id
- ne24-20020a17090b375800b002903b838897mr515505pjb.40.1706297524016; Fri, 26
- Jan 2024 11:32:04 -0800 (PST)
+	s=arc-20240116; t=1706297643; c=relaxed/simple;
+	bh=X2tv7YC7rvxoUUooCnssnmB276xID1n7i+KGcjgXyaY=;
+	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=gCl4el3NiA+Pecvm/NWYSFxFxHuBbPcvn5MPZ30MpzEGYh3RPzZxup4vvJ4ywUPj2GkjFZE+H3vD8wJJbwfZS5uNhduzFdz0ESnLpKN0k76XNTtsF4gE3eUUsGqb2eQNy4Q44UXShqCB4Qw7FvQNNcVJOp6hzBxqlweJ/Sn6eYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=CYryvNhP; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1706297639;
+	bh=X2tv7YC7rvxoUUooCnssnmB276xID1n7i+KGcjgXyaY=;
+	h=Date:From:To:Subject:From;
+	b=CYryvNhPZbC7x2vM29ob6YlU9y7XqdYN1eE+S0JMTNZyFT6FwPl1FFNqD+a7/3OUg
+	 363JrNqGqicCxn1V0gzmJktc5SGfN5Q8hC5GwNmbXcb319GcfZRSAdMDf2LQIX6oC+
+	 lSxIcSLX3c/Ymagubv0PVRA6dDJJAjaAz/H1FkwBC/ixYQx0tXlnzCzCx5cOvEkold
+	 HkWWXgW0zcyim0acOvi0AoVPw1CIgk4mbGbJYNaEAr8+JhoLp0wx9vgkrPYTNu79IF
+	 KbWX5iKoCx6k/HjFrH1cjNfKeof6FDhCfoj/1KDcMcAr8o0JhZK5J+EMm/O1D8m9xo
+	 XOnbGShcIXNUQ==
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TM7D72M8NzVDZ;
+	Fri, 26 Jan 2024 14:33:59 -0500 (EST)
+Message-ID: <e523b29c-0fd0-4b7c-bf8c-d3424ee2c031@efficios.com>
+Date: Fri, 26 Jan 2024 14:33:57 -0500
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-17-tudor.ambarus@linaro.org> <CAPLW+4mLWU-8H=qESe9csXm=e_ByvP=nc7MEJzknv+XAUjqUZg@mail.gmail.com>
- <36a664b1-666d-4fc4-90d9-35b42e56973d@linaro.org>
-In-Reply-To: <36a664b1-666d-4fc4-90d9-35b42e56973d@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Fri, 26 Jan 2024 13:31:53 -0600
-Message-ID: <CAPLW+4mPMBszTFcs_wUZgmksiRQ13SprQYYu3tShvkRXmZ_Mkg@mail.gmail.com>
-Subject: Re: [PATCH v2 16/28] spi: s3c64xx: simplify s3c64xx_wait_for_pio()
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Dan Williams <dan.j.williams@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ Matthew Wilcox <willy@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-mm
+ <linux-mm@kvack.org>, linux-arch@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-cxl@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Subject: [REGRESSION] v5.13: FS_DAX unavailable on 32-bit ARM
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 26, 2024 at 1:56=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
-.org> wrote:
->
-> On 1/25/24 20:43, Sam Protsenko wrote:
-> > On Thu, Jan 25, 2024 at 8:50=E2=80=AFAM Tudor Ambarus <tudor.ambarus@li=
-naro.org> wrote:
-> >>
-> >> s3c64xx_spi_transfer_one() makes sure that for PIO the xfer->len is
-> >> always smaller than the fifo size. Since we can't receive more that th=
-e
-> >> FIFO size, droop the loop handling, the code becomes less misleading.
-> >
-> > Drop (spelling)?
->
-> oh yeah, thanks.
->
-> >
-> > For the patch: how exactly it was tested to make sure there is no regre=
-ssion?
->
-> no regression testing for the entire patch set, I have just a gs101 on
-> my hands.
->
-> However, we shouldn't refrain ourselves on improving things when we
-> think they're straight forward and they worth it. In this particular
+Hi,
 
-This patch clearly brings a functional change. The way I see things,
-the risk of having a regression outweighs the benefits of this
-refactoring. I don't think it's even methodologically right to apply
-such changes without thoroughly testing it first. It might be ok for
-super-easy one-line cleanups, but that's not one of those.
+This commit introduced in v5.13 prevents building FS_DAX on 32-bit ARM,
+even on ARMv7 which does not have virtually aliased dcaches:
 
-> case, for PIO, s3c64xx_spi_transfer_one() does:
->         xfer->len =3D fifo_len - 1;
-> then in s3c64xx_enable_datapath() we write xfer->len and then in
-> s3c64xx_wait_for_pio() we code did the following:
->         loops =3D xfer->len / FIFO_DEPTH(sdd);
-> loops is always zero, this is bogus and we shall remove it.
->
+commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
 
-[snip]
+It used to work fine before: I have customers using dax over pmem on ARMv7, but
+this regression will likely prevent them from upgrading their kernel.
+
+The root of the issue here is the fact that DAX was never designed to handle
+virtually aliased dcache (VIVT and VIPT with aliased dcache). It touches the
+pages through their linear mapping, which is not consistent with the userspace
+mappings on virtually aliased dcaches.
+
+I can see a few ways forward to address this:
+
+A) I have prepared a patch series introducing cache_is_aliasing() with new Kconfig
+    options:
+
+   * ARCH_HAS_CACHE_ALIASING
+   * ARCH_HAS_CACHE_ALIASING_DYNAMIC
+
+and implemented it for all architectures. The "DYNAMIC" implementation
+implements cache_is_aliasing() as a runtime check, which is what is needed
+on architectures like 32-bit ARM.
+
+With this we can basically narrow down the list of architectures which are
+unsupported by DAX to those which are really affected, without actually solving
+the issue for architectures with virtually aliased dcaches.
+
+B) Another approach would be to dig into what exactly DAX is doing with the linear
+    mapping, and try to fix this. I see two options there:
+
+B.1) Either we extend vmap to allow vmap'd pages to be aligned on specific multiples,
+      and use a coloring trick based on SHMLBA like userspace mappings do for all DAX
+      internal pages accesses, or
+
+B.2) We introduce flush_dcache_folio() at relevant spots (perhaps dax_flush() ?) to
+      synchronize the linear mapping wrt userspace mappings. (would this work ?)
+
+Any thoughts on how to best move forward with this issue are welcome.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
