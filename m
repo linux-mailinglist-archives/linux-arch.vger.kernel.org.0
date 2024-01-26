@@ -1,129 +1,213 @@
-Return-Path: <linux-arch+bounces-1724-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1725-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 217D983DF63
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 18:02:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93B4B83DF7F
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 18:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B71B3B22549
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 17:02:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55C511C215A5
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jan 2024 17:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CF31E87E;
-	Fri, 26 Jan 2024 17:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDD11EA7C;
+	Fri, 26 Jan 2024 17:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YZUgsIQj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17E31EA71;
-	Fri, 26 Jan 2024 17:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706288517; cv=none; b=CSI87BxPOp20aHcWEf5qJAsXBmThoqkP3LKz0mssmMsT/OS3GS5TIEAuxMFE0GkO0F5TNfW0pZn71E0bdsHWSucY4yZMRHpesjO3LZ686RxmNQBzBgwuWPPSauve1hqSb2k0nCnJGLiajwG62+SNZhphWeCkzokUJ3/fOhVdbCI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706288517; c=relaxed/simple;
-	bh=6GPERIrZxF09zkQWtn0tgp8Ki0MeI06mRjUPdBNea5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fYp6WgK6LLbppvgR2DDo2F83tBxmylasy1KWDA+ngxtPZp6cMlV4m3z8pHFnKFIdALd6sIfqi75AWrvLuLc8qakakDg8wm5D0OZk3qfRIXb75H/XTKucZCzIR4yGr3/vVFF1YzNMO4KshnMcGZ9oHurCPBDmhsnEDh8HVyoUYSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56F8B1FB;
-	Fri, 26 Jan 2024 09:02:38 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D4953F762;
-	Fri, 26 Jan 2024 09:01:45 -0800 (PST)
-Date: Fri, 26 Jan 2024 17:01:42 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-	rppt@kernel.org, hughd@google.com, pcc@google.com,
-	steven.price@arm.com, anshuman.khandual@arm.com,
-	vincenzo.frascino@arm.com, david@redhat.com, eugenis@google.com,
-	kcc@google.com, hyesoo.yu@samsung.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v3 19/35] arm64: mte: Discover tag storage memory
-Message-ID: <ZbPldp5j_nDHWvHJ@raptor>
-References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-20-alexandru.elisei@arm.com>
- <5b8ce251-0790-4e2c-b5b1-0d2aeacbdd92@kernel.org>
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C87C1E87E;
+	Fri, 26 Jan 2024 17:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706289003; cv=fail; b=MdCp57MfClDnLT2HBLuC50hAbI1buIOr1B/kqPFthylw8e590lsAmNjWVBU0VgTFf6WAeRAaoBDeA/dVWAuOzhkF/8VwbqfpQmct4CnPuWb3VPsVuWYcmSMoP9HuskpOLDT0rd7nxft//dDQkSzajkuY8oejM/z7A9ke9bZKqCQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706289003; c=relaxed/simple;
+	bh=akzzGuyJ2ambuPdIF461qRLgzBIefK6K1klbxI4gCLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=O+FbqF32UtqmTSiXQ0JaJ/Vu1Ws/tGyArWyL0hPzstbp07YhkwT8sdso8DI9Tdv1mIUW3YkCj8swPoRuGz8TibvziAHbFtAIkDhlZxzivS0NwAlP+GUtqVDdfDhe8P5KdmTFcM40J3VN5++rW7u47XQj5DzwLBcjlqD+gakNLeA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YZUgsIQj; arc=fail smtp.client-ip=40.107.244.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nk+khtqUzE7vMKUZCfWQrRCwM6ia8q4DdW2EiB18aw0zc14SBNGPcbS9TWaAJnCB+HEu7wDgnAe/lppvGTWwR43XlTBO42crWB6DQMn6YVuypV7FYCDrn/55OkwXG5ZF8lvVG1SAZJPjLJItktGy6tlUEeYDORX6p8Rkc+oUPh2ucmqjIfV57Lyf2oV/UGqzhZAcoVZc4mdrdBE+2hat0HUpnFiCmFU2CEo9fzONTfL7iBNXXM9s9eYCEQFXC6YMKhwnh5RlfFms9wgbf8SWlr5rDGdWE6FbvpAEzdPDSBdBx5FSuEOUEluR/1Av0qXCIGrXQyla4FEggezK4NNbmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B4TQuGh8mAUa4VzaUM0TVZf5bmjFQqFYYTpbN6KiQwg=;
+ b=GeeTW9r5NljfaM3p9ElWh/5oCEAJ8xb4WlXIhmExMMHCCI3PFY4N4rQ17QImYEDNUQo9IdKJ8ERy5tLCuD/HtxNCjy9fb2Vaka8lpXK0QLcQ5JWNshJg25j/UHfc5JeReXy6bxQvz8FH1L6sWfmAsEEjBkBLkkhP47BakgZ9wMWA+jy0A6GjFsLyy392bt9eWyrXHOmb2Ww1HRuG0R/e5JnHud2xI1f50nK9aC2qzhDkEA4HsIQdHQjlSAA+7JDDq/FbZJKqkyFfokjuUsVi8PC/vEOTtHc2dMx+YWItsw/AIWYtmZ+APpuDzXL2TsBxckHb6kXxOqCGyqdDmz/QJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B4TQuGh8mAUa4VzaUM0TVZf5bmjFQqFYYTpbN6KiQwg=;
+ b=YZUgsIQjUj72MDnsjjOYpqA8yVS9uuigH/UeIBlUc+KrRXLa8mLwDW+pAI7Cai1OzpmK8HQTHCbiP7pi2oF0/Zk9GBBlBnc7S+LmvGRJYdC8o2X/69aYIrU4P54eEN6NHIziN/aLYlvw4HI+P/k4Ddg/cocL+rqxpKB8IzNt5ag+uvUP/cQGEcJx6aXtxDst/dRPKxVg26i53K2AX3BRdFzVG/o9coNgmDGZZPbpcbiUQYbtGRle3zEU82qzopfduQcKYgrRIRw6nAu7sniFPNT3Ke82y73YDmssEN6Cah8cvWEGrZKYMlU1bb3Q+DrWHixQeA0tNeQttyjC5vQewg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SJ2PR12MB7991.namprd12.prod.outlook.com (2603:10b6:a03:4d1::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.24; Fri, 26 Jan
+ 2024 17:09:58 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7228.022; Fri, 26 Jan 2024
+ 17:09:57 +0000
+Date: Fri, 26 Jan 2024 13:09:56 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <20240126170956.GW1455070@nvidia.com>
+References: <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
+ <ZbAj34vdVuMrmdFD@arm.com>
+ <20240124012723.GD1455070@nvidia.com>
+ <86ede787d7.wl-maz@kernel.org>
+ <20240124130638.GE1455070@nvidia.com>
+ <86bk9a97rt.wl-maz@kernel.org>
+ <20240124155225.GG1455070@nvidia.com>
+ <ZbFO6ZXq99AWerlQ@arm.com>
+ <20240125012924.GL1455070@nvidia.com>
+ <ZbPalOaGu4XjMb0R@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZbPalOaGu4XjMb0R@arm.com>
+X-ClientProxiedBy: SN6PR01CA0002.prod.exchangelabs.com (2603:10b6:805:b6::15)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b8ce251-0790-4e2c-b5b1-0d2aeacbdd92@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ2PR12MB7991:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f2e6b8c-fc5e-41b6-734c-08dc1e919f9f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	SrnNBRaMehhqnVu7zo2y+fXEImYtnRKaFyvnpKcoUFKmkbSB+PD+cfsXOjWUUEfABxITFZEt3zyevbXOXGLvQk9/rX6lQvPtvlolGOBDkDm5JWn2YL5wI7GqO1EMr3TFfall0eS3RpdyGkj7w2wEPs1XY6DvlCaoq3H1u55umgXRk/3mqU+e2j+gYkkUJ5szCKLFSyl/SDauociItJZ7/48nfbKgQfgxs8+AJ59cdLRzV0zOYwhdZoyLWvij6hrB8ZLGqeKf+ah7ajWiWFjcac/SNcLbLDPeh445tRolEVec94y2yywA03zEZbRDa64fq7oVR7kerGmjGiNo7d/Bfjc/VoZ8AFkQugNYN08/H2ayNdD4du9F7JcISvPWnO0zl1dl+HBzSLqN2c+ntnl5moMIpu2pvdBylOgb9WzUwT6q9NfRDq79RcQ4M6gl/Mbj0WF0uCIcMc1ZWwXXzdePYMkVwSUCGsum5pHWzZ18+CnosMiuEhfyxddkpPU3P6rTQFpnLXDIuX0fCgT8cOZNVP4spHBvd89soFuIXCdzQH+SCXvLESo8MIDSWaaCUhsh
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(366004)(346002)(396003)(376002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(54906003)(7416002)(5660300002)(6916009)(66476007)(33656002)(36756003)(8936002)(2906002)(66946007)(316002)(4326008)(8676002)(66556008)(86362001)(41300700001)(478600001)(6486002)(1076003)(83380400001)(6512007)(38100700002)(2616005)(6506007)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?I9dLNIlFSz3nslOq8mr2wEHQy4mZoXcPEk3dRVv5FcysUt5eCl+VzBLNlrq+?=
+ =?us-ascii?Q?dbU/OdKse2jHX8Ue4uev0eaDGAA5n1FRI9rCjoJNFT0LxDaEYKIHHQjAnYCp?=
+ =?us-ascii?Q?hxlrHdVlCM80RoNHpVnKpvFgs735E+AQQ6YzoZigWGTkdLqWmhwQR99YOk3z?=
+ =?us-ascii?Q?9b3LH8PKfXAj4R8S2Y6zTxQtn/YBf4Ml8CnUv8XBaseMFr0N3v7iklBF0oZ6?=
+ =?us-ascii?Q?AGvSpUq7fGuS24aXGbPStAk55b8Kqo2jOzpQUnpFdfxUia2CLZXQjfMcH/RZ?=
+ =?us-ascii?Q?kzMKkiaOpD820+rBm3LqB4R21EcBu+fVcPo4bfCZsi/pxd6a5+S8YO4PTPmE?=
+ =?us-ascii?Q?GepW4vYyRS6mSQKhvY0Sob8Am2afB+ci2ePusxxiIdlVmgFsb8g91aVRjops?=
+ =?us-ascii?Q?noi5NRCAg9bz8ABCoinYnharYLIV7iWd1zb0go6Te6RJiJ9EsUFq5cmJxdlb?=
+ =?us-ascii?Q?gIfUCklsD+WFTEOycm8zoirLPx6kDuvCG0uKt4Z0iiUbOnSK0YGvhxM6h52T?=
+ =?us-ascii?Q?sAdVTtVfVi/K4fsKD9Abp9w2C6s8nKMzoeaKSVbBEgCVZ5EXQgFgIWe3xJbd?=
+ =?us-ascii?Q?uzgksCn7hgT7HBJLhiK8139EDwwg4yhxdMjJSAMn936RtowWEAVjjkHuU1g5?=
+ =?us-ascii?Q?qgyJSDQfpputTQ9ZjKRCBsV/PVUBJnaq4BHn5zT3TcXIh1N6vtYJ7yqP6E8L?=
+ =?us-ascii?Q?axnn0bL09i47eQS3Tnj5wtZ4DpDdlmvwrw2xiFlfAeEsDdvVMBUT+xW92mTY?=
+ =?us-ascii?Q?ElznDoGqOZFQT0nzNZRuXHq94acMRd0ZtPNom8KExh1yTZNzLYTmP9QEVaas?=
+ =?us-ascii?Q?jSYnmddpiR1e/kkSbDOFd5PKnwLXJMBeusRUZP0xX1Ug5ScMGPsen4ui/DR7?=
+ =?us-ascii?Q?357IC1OE54jv178x9ZaFDNZKL+EqQ/KeJIAdCPo4Se4bsnk3Oybs+PATezsr?=
+ =?us-ascii?Q?A3RlyhDwqFCXw1/hyPGsuyDU/5ZdIiKZq4pDoHVurFsf9g4T5+UqNL9g5Ws3?=
+ =?us-ascii?Q?piW5X3v4QwNDTYudzxSa13JnVID2X23cHZ5SFzBHG9Ssc0N3FAMPN7fQP3LQ?=
+ =?us-ascii?Q?vFViVaMoTYWhzCvmrBK1cpQWAqlEhSzHBQkgu/v+YocpMukKEPYd6bbDWztl?=
+ =?us-ascii?Q?D+C/xvpL9Lze2B0F64I87FVkTfjDXne0byWYfL3ny/S70cJ004uyPd1jJXz9?=
+ =?us-ascii?Q?1lFED04q/TXqi3zNgcCRBy7ueEIp9FnJJev0JxvuNNfKPk/vDbBxcL2aHQww?=
+ =?us-ascii?Q?uyMX9RJUqs7f5hzaSgeCiMQoK5kvcmMCslS3cnxaelmnxeJnXRv6mPg7p708?=
+ =?us-ascii?Q?AP9M2cl3/KLlPvLoDe2r8dO3Me0EmyC0zQaCd+nSeYo9JW39Ao0F4HorWUHw?=
+ =?us-ascii?Q?L4/0MeJlAegIUWBq+l9shzoopMGTqpI7VEleJ11zkwpFCFEMjPHC7wvAZh0r?=
+ =?us-ascii?Q?VfnUdZpuLZ1clnporxsJQVcxM5x/qqymH0Mnea5Pm3kyWhn1lZ1riMKkQmB3?=
+ =?us-ascii?Q?BKj+EUSznldhsKQ3P5dmjsHVJvuf75C/dAh6+aPCw1gcCirc9E6bqZNfGeBH?=
+ =?us-ascii?Q?1VIjC2SlB7PmOxqvlBpfY36dvIclZgD9sFsaYVCJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f2e6b8c-fc5e-41b6-734c-08dc1e919f9f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 17:09:57.8480
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jwP8OqMq51fZdV8g7qfcDBwrPO8ZoaOvsXtYO4jGEIM9iZRE4dnJEksxOH5GKP95
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7991
 
-Hi Krzysztof,
+On Fri, Jan 26, 2024 at 04:15:16PM +0000, Catalin Marinas wrote:
+> > It looks to me like qemu turns on the KVM_CAP_ARM_NISV_TO_USER and
+> > then when it gets a NISV it always converts it to a data abort to the
+> > guest. See kvm_arm_handle_dabt_nisv() in qemu. So it is just a
+> > correctness issue, not a 'VM userspace can crash the VMM' security
+> > problem.
+> 
+> The VMM wasn't my concern but rather a guest getting killed or not
+> functioning correctly (user app killed).
 
-On Fri, Jan 26, 2024 at 09:50:58AM +0100, Krzysztof Kozlowski wrote:
-> On 25/01/2024 17:42, Alexandru Elisei wrote:
-> > Allow the kernel to get the base address, size, block size and associated
-> > memory node for tag storage from the device tree blob.
-> > 
-> 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC. It might happen, that command when run on an older
-> kernel, gives you outdated entries. Therefore please be sure you base
-> your patches on recent Linux kernel.
-> 
-> Tools like b4 or scripts_getmaintainer.pl provide you proper list of
-> people, so fix your workflow. Tools might also fail if you work on some
-> ancient tree (don't, use mainline), work on fork of kernel (don't, use
-> mainline) or you ignore some maintainers (really don't). Just use b4 and
-> all the problems go away.
-> 
-> You missed at least devicetree list (maybe more), so this won't be
-> tested by automated tooling. Performing review on untested code might be
-> a waste of time, thus I will skip this patch entirely till you follow
-> the process allowing the patch to be tested.
-> 
-> Please kindly resend and include all necessary To/Cc entries.
+Right, hopefully it is the latter.
 
-My mistake, the previous iteration of the series didn't include a
-devicetree binding and I forgot to update the To/Cc list. Thank you for the
-heads-up, hopefully you can have a look after I resend the series.
-
+> > Thus, IMHO, doing IO emulation for VFIO that doesn't support all the
+> > instructions actual existing SW uses to do IO is hard to justify. We
+> > are already on a slow path that only exists for technical correctness,
+> > it should be perfect. It is perfect on x86 because x86 KVM does SW
+> > instruction decode and emulation. ARM could too, but doesn't.
 > 
-> 
-> > A tag storage region represents the smallest contiguous memory region that
-> > holds all the tags for the associated contiguous memory region which can be
-> > tagged. For example, for a 32GB contiguous tagged memory the corresponding
-> > tag storage region is exactly 1GB of contiguous memory, not two adjacent
-> > 512M of tag storage memory, nor one 2GB tag storage region.
-> > 
-> > Tag storage is described as reserved memory; future patches will teach the
-> > kernel how to make use of it for data (non-tagged) allocations.
-> > 
-> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> > ---
-> > 
-> > Changes since rfc v2:
-> > 
-> > * Reworked from rfc v2 patch #11 ("arm64: mte: Reserve tag storage memory").
-> > * Added device tree schema (Rob Herring)
-> > * Tag storage memory is now described in the "reserved-memory" node (Rob
-> > Herring).
-> > 
-> >  .../reserved-memory/arm,mte-tag-storage.yaml  |  78 +++++++++
-> 
-> Please run scripts/checkpatch.pl and fix reported warnings. Some
-> warnings can be ignored, but the code here looks like it needs a fix.
-> Feel free to get in touch if the warning is not clear.
+> It could fall back to instruction decode, either in KVM or the VMM
+> (strong preference for the latter), but I'd only do this if it's
+> justified.
 
-Thank you for pointing it out, I'll move the binding to a separate patch.
+From a performance perspective, if the VMM is doing pure emulation and
+wants to memcpy lots of data to emulated vMMIO I'd look at it like this:
 
-Alex
+  1xST4 transfers 512 bits and requires one vmexit and one
+  instruction parse.
+
+  4xSTP is four instruction parses and four vmexits
+
+  8xSTR is no instruction parses and eight vmexits
+
+The instruction parse is not pure overhead, it saves on vmexit's which
+are expensive things (at least on x86). I don't have a sense how this
+stacks up on arm, but I wouldn't jump to it being horribly
+non-performing.
+
+> I don't think the issue here is VFIO, I doubt we'd ever see emulation
+> for hardware like mlx5.
+
+Sadly no :(
+
+It can happen in non-production corner cases due to the VFIO MSI emulation.
+
+There is a qemu bug prior to 8.something that causes it to happen at
+random, with VFIO, rarely.
+
+There is a non-prodcution debug mode in qemu where all VFIO MMIO is
+trapped. The qemu expectation is that this is functionally identical
+to non-trapping. (The E in qemu is emulation after all, kind of a core
+reason it exists)
+
+Finally, we do actually have an internal simulation tool that does
+software emulate mlx5 HW without VFIO.
+
+> But we are changing generic kernel functions
+> like memcpy_toio/__iowrite64_copy() that end up being used in other
+> drivers (e.g. USB, UART) for emulated devices. 
+
+I didn't touch memcpy_toio, I think given this problem we shouldn't
+touch it. I only touched __iowriteXX_copy() which did not look like it
+is being used in any drivers with emulation.
+
+Even if I got this wrong we can revert any impacted drivers to use
+memcpy_toio() instead.
+
+Jason
 
