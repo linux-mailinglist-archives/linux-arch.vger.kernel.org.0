@@ -1,162 +1,119 @@
-Return-Path: <linux-arch+bounces-1741-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1742-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82F3383F0F5
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jan 2024 23:39:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B24AF83F550
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Jan 2024 13:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C4701F214A8
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jan 2024 22:39:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B6BC2826B7
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Jan 2024 12:04:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D71C1D6B8;
-	Sat, 27 Jan 2024 22:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDEE2033F;
+	Sun, 28 Jan 2024 12:04:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEnq8nG6"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="vPPifL+Z"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDE515AF9;
-	Sat, 27 Jan 2024 22:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92925200DE
+	for <linux-arch@vger.kernel.org>; Sun, 28 Jan 2024 12:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706395169; cv=none; b=FH9vfSoe2rPApoyBjlIgNaKRuXKHhejzf3ZcgSjM5xf1juAfpkhjU1dR4v4tiHYwHI0e35rUEVTBGNhAbRtm3MsEklZRPbMnmAAz0FnbVl1YYUbwkxEty7CCp8vS2BGUNyjEYVIpi1nfUEFY8oG3mXQsiFHfyyKD9qOD/kuIHjU=
+	t=1706443451; cv=none; b=MNcb0awyphx9zCIl+8gPav74dNnthHut051Q/icFW1jZ98LGeMDTDuy3Z2sR74peaqc/q/NeYKFLKLf9eN3w7cNsExG5HATkGHkwzBX7cigysNzhCAGeJJGQGlIiVCtO5Rw6pEOWAzKLXq5AdrqrF/By+fcqffPVC87DxwACe3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706395169; c=relaxed/simple;
-	bh=KILTeulNNllPlgSx8Rimk1bazTt4jJRe8N47roW2STk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=tNIiW3em4CF3mqStbA6ZNDEm3UAwBQRwrfz8HMzcjQrok+8VnSBtt268vyIFVbytWFw2h2MeMceMGfLsXchiMS/Q5OcKRr93026LTAzaZz3Kq+lRxWYTBBIDbucZDgFGFhXEETN8DWukE7tJetId3OYjeqcSDdoxMoPo+Obk6ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEnq8nG6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66009C433F1;
-	Sat, 27 Jan 2024 22:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706395168;
-	bh=KILTeulNNllPlgSx8Rimk1bazTt4jJRe8N47roW2STk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=IEnq8nG6w8KAzYK9CYm5TyiDZpEF4UOBcq38OH/kDHd6DgpysPY4scZ00FAkKcup3
-	 HX09PCGMGQB84qgsiBJHIlrsYnASDHcdc4GXWzW77g2SvcboqNypn71najuV6HsVwd
-	 UcafB9IfC9RD6H76trkDG7SdxAcmhTjyx7YF7RJ6aeix88X3x999ojFH4NrCom+z67
-	 Q8rXaGTpKBVcq5NKC1Y08novzvGaiOT1rWnySkkB8ubGJ/5PQOmwZuiNRpO1XlRO+t
-	 lUsrH5LX1A0OGxDBxhH8/UBOY1H7afzXxugYqmy22awjLHYpj8fB2wXVNcFWJ8G+SB
-	 9S81rtqRHx6iw==
-Date: Sat, 27 Jan 2024 16:39:26 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Philipp Stanner <pstanner@redhat.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Randy Dunlap <rdunlap@infradead.org>, NeilBrown <neilb@suse.de>,
-	John Sanpe <sanpeqf@gmail.com>,
-	Kent Overstreet <kent.overstreet@gmail.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Uladzislau Koshchanka <koshchanka@gmail.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
-	Rae Moar <rmoar@google.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	"wuqiang.matt" <wuqiang.matt@bytedance.com>,
-	Yury Norov <yury.norov@gmail.com>, Jason Baron <jbaron@akamai.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Marco Elver <elver@google.com>,
+	s=arc-20240116; t=1706443451; c=relaxed/simple;
+	bh=VzbpvU0e9JzomL+t0EfKfndh1+wTmCO5Ucl/AxnJG3c=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=RLwQjWmTpX5UuqXEdfdr/ijHO1DPmOtZQxMpAWI42wmHaQ4DkDgfsp3QuCQBmTEzb2MLHUY5r22BSK9LDlExCyDatheXTeig+/Lw17e++mCogX3qBXFZ07p+GCgc4vpTrbLS5QBTau1q0XiyxX9dEVgvzjbV0dzKdePyoJ3EG4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=vPPifL+Z; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40ee9e21f89so19808275e9.0
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jan 2024 04:04:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706443448; x=1707048248; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HxcAjPK0N066N6P8kFzyYPkzX8zdfJo2IeOhtls9JxI=;
+        b=vPPifL+ZE0VnjQmk0/32mFDkxFYKVKSSsiwVCkjTYKnHq1HKo7SZ5DrjSy2/4GAJmA
+         z/vxC0TPfNyadqZlpWQCgbtO8UZzK1n4FJ5KGlKHOFLoj4OyuEULt614HiX880SlejW7
+         mwP7gjQMesUhvMio0uovydAFOBv1U2/EAs5MEnKV/9yTVokBiApC36VrzIxNjB2T4VZE
+         BhKBIJOVDdewpljAYXef9buWAffFPcO5XxndYon3+iFSsxboImOLNkRlcR6kWzaXD2iY
+         YmMxwm2ZjAuhltu8YmVSmgwT+Sw1ijVrugZUCtJhOEu9XuBka+mLwrVsQcGr1W1zfPRC
+         aQcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706443448; x=1707048248;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HxcAjPK0N066N6P8kFzyYPkzX8zdfJo2IeOhtls9JxI=;
+        b=T4GqWdBNZXiLUdutX6hqnKa+kmbOlAuR9qIZxc5vFKlgni1kgPJ1xnU7wRYfG5w/J8
+         epYYDZB8azhm49CYWBb498IzI+B1JONKgzjVOpUIPBeqNMPlFrzCIYz0QZPgVaCcfK44
+         hUM47W7Osp6Lj3VnxwGZ7xOZa4IjIlqJOnAraN1T3gqO2Q+jLC2XaJQHm8LUytk7n/+/
+         F4df3L4/E0fOo9BYKNR9v69fbes087AoVyCtzPruCLJsOndonRS0D2VxH6z8E5l8CIT3
+         urVJNyyiNE5nJefxE2cTTPVVlzR/W16d+xqRJnQptM1G7WlgL6MDiIQId+ngu6sjmpFm
+         uK2Q==
+X-Gm-Message-State: AOJu0Yx+/hGNm5gIa8ufMePMj9C0gt9t9ZdHf3N9uiLOM+NrGTfMRyJ3
+	4GYC/N6BHJzjwUrqQVuiGUfNpyg5dCLHCPpKk5weQUcRNLexLwBsDdMw0c3fFwU=
+X-Google-Smtp-Source: AGHT+IGp9QOplulvd/Y9t4bqyDTHP2SEbLG4SLRuZKPDPzRKkEqnxw5vDg9O8Y6f+J4FCQikbsMYxA==
+X-Received: by 2002:a05:600c:34c4:b0:40e:ee82:18 with SMTP id d4-20020a05600c34c400b0040eee820018mr1937031wmq.14.1706443447739;
+        Sun, 28 Jan 2024 04:04:07 -0800 (PST)
+Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id m16-20020a05600c4f5000b0040eee561e4dsm3859911wmq.41.2024.01.28.04.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jan 2024 04:04:07 -0800 (PST)
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+To: Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arch@vger.kernel.org, stable@vger.kernel.org,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v5 RESEND 5/5] lib, pci: unify generic pci_iounmap()
-Message-ID: <20240127223926.GA461814@bhelgaas>
+	Nick Piggin <npiggin@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH -fixes] riscv: Flush the tlb when a page directory is freed
+Date: Sun, 28 Jan 2024 13:04:05 +0100
+Message-Id: <20240128120405.25876-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <70b8db3ec0f8730fdd23dae21edc1a93d274b048.camel@redhat.com>
 
-On Fri, Jan 26, 2024 at 02:59:20PM +0100, Philipp Stanner wrote:
-> On Tue, 2024-01-23 at 15:05 -0600, Bjorn Helgaas wrote:
-> > On Thu, Jan 11, 2024 at 09:55:40AM +0100, Philipp Stanner wrote:
-> ...
+The riscv privileged specification mandates to flush the TLB whenever a
+page directory is modified, so add that to tlb_flush().
 
-> > > -void pci_iounmap(struct pci_dev *dev, void __iomem *p)
-> > > +/**
-> > > + * pci_iounmap - Unmapp a mapping
-> > > + * @dev: PCI device the mapping belongs to
-> > > + * @addr: start address of the mapping
-> > > + *
-> > > + * Unmapp a PIO or MMIO mapping.
-> > > + */
-> > > +void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
-> > 
-> > Maybe move the "p" to "addr" rename to the patch that fixes the
-> > pci_iounmap() #ifdef problem, since that's a trivial change that
-> > already has to do with handling both PIO and MMIO?  Then this patch
-> > would be a little more focused.
-> > 
-> > The kernel-doc addition could possibly also move there since it isn't
-> > related to the unification.
-> 
-> You mean the one from my devres-patch-series? Or documentation
-> specifically about pci_iounmap()?
+Fixes: c5e9b2c2ae82 ("riscv: Improve tlb_flush()")
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
+ arch/riscv/include/asm/tlb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I had in mind the patch that fixes the pci_iounmap() #ifdef problem,
-which (if you split it out from 1/5) would be a relatively trivial
-patch.  Or the kernel-doc addition could be its own separate patch.
-The point is that this unification patch is fairly complicated, so
-anything we can do to move things unrelated to unification elsewhere
-makes this one easier to review.
+diff --git a/arch/riscv/include/asm/tlb.h b/arch/riscv/include/asm/tlb.h
+index 1eb5682b2af6..50b63b5c15bd 100644
+--- a/arch/riscv/include/asm/tlb.h
++++ b/arch/riscv/include/asm/tlb.h
+@@ -16,7 +16,7 @@ static void tlb_flush(struct mmu_gather *tlb);
+ static inline void tlb_flush(struct mmu_gather *tlb)
+ {
+ #ifdef CONFIG_MMU
+-	if (tlb->fullmm || tlb->need_flush_all)
++	if (tlb->fullmm || tlb->need_flush_all || tlb->freed_tables)
+ 		flush_tlb_mm(tlb->mm);
+ 	else
+ 		flush_tlb_mm_range(tlb->mm, tlb->start, tlb->end,
+-- 
+2.39.2
 
-> > It seems like implementing iomem_is_ioport() for the other arches
-> > would be straightforward and if done first, could make this patch
-> > look
-> > tidier.
-> 
-> That would be the cleanest solution. But the cleaner you want to be,
-> the more time you have to spend ;)
-> I can take another look and see if I could do that with reasonable
-> effort.
-> Otherwise I'd go for:
-> 
-> > Or if the TODOs can't be done now, maybe the iomem_is_ioport()
-> > addition could be done as a separate patch to make the unification
-> > more obvious.
-
-It looks like iomem_is_ioport() is basically the guards in
-pci_iounmap() implementations that, if true, prevent calling
-iounmap(), so it it seems like they should be trivial, e.g.,
-
-  return !__is_mmio(addr); # alpha
-
-  return (addr < VMALLOC_START || addr >= VMALLOC_END); # arm
-
-  return isa_vaddr_is_ioport(addr) || pcibios_vaddr_is_ioport(addr); # microblaze
-
-Unless they're significantly more complicated than that, I don't see
-the point of deferring them.
-
-> > > + */
-> > > +#if defined(ARCH_WANTS_GENERIC_IOMEM_IS_IOPORT)
-> > > +bool iomem_is_ioport(void __iomem *addr)
-> > >  {
-> > > -       IO_COND(addr, /* nothing */, iounmap(addr));
-> > > +       unsigned long port = (unsigned long __force)addr;
-> > > +
-> > > +       if (port > PIO_OFFSET && port < PIO_RESERVED)
-> > > +               return true;
-> > > +
-> > > +       return false;
-> > >  }
-> > > -EXPORT_SYMBOL(pci_iounmap);
-> > > -#endif /* CONFIG_PCI */
-> > > +#endif /* ARCH_WANTS_GENERIC_IOMEM_IS_IOPORT */
-> > > -- 
-> > > 2.43.0
-> > > 
-> > 
-> 
 
