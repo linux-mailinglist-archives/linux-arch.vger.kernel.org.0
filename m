@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-1748-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1749-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6230D8400CB
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 10:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D261E840110
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 10:13:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 943E31C224FE
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 09:01:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 105A41C22C1F
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 09:13:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE9854BF4;
-	Mon, 29 Jan 2024 09:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1101D55763;
+	Mon, 29 Jan 2024 09:13:27 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B1B54BEC;
-	Mon, 29 Jan 2024 09:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28EC154FAD;
+	Mon, 29 Jan 2024 09:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706518900; cv=none; b=ZXNdP/L7fG7wYCT3DUjhmVYNJ4Ss1RUUx4YOk6nlLzZHBNWBr3d13lD8pDicgE+g0kCXI7oIDrm7ZTbV8R73BvJdIeXrKz/9o5qt5vZIMf1GQuc51VgHQgwcwuFFZ0oMmsQlGfO4tLcl/P5OU4YKU34y1xQiAMH4EcQWPLVYtPk=
+	t=1706519607; cv=none; b=qVNAfWkEUfdXn8Eh4fNSsd7PJu4Dr0K2z3DH7mjTGKxzdBbcBB76Ue3J2u4lWe7HOVOQxgVWveL99l1lTqbbYI7xt/CIpNKwjppZPpfU/8Tzim/hB9HF5zvFi0yNDA8PLmBYutmpXNn298IwpSy8bNfB/pmmYrNKzEh89sySmEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706518900; c=relaxed/simple;
-	bh=NjN9E54AVBkTjoChmDcx3fbIsw+sShP0t24cgP7LPCY=;
+	s=arc-20240116; t=1706519607; c=relaxed/simple;
+	bh=cXt+OGtv30hUZByKLrVjTnqqtdTy72PNWwKZLJAJgSw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g9O60f+Z8l8TUVOA94BVTqR/etwfI6gSPGEW12P/eHABT+VXtdqQ/IpAdX3jjG5B4dY8zheU6wmgzjlm1IUHX0sxYW2zfcRU15rNYNB4D2XxSlr54WbfmzKrTLQgjTOjB25KrflsBiQaWlsrIXAAtJVQDkoZ/QW1+iU77DkZlys=
+	 In-Reply-To:Content-Type; b=nHRDLvl1iDb4xzqDGpH0Z4rzet/XrkMpFTZnRgAsrvmTqhFBbddtm/L48cUtH8HuZlS4T5MbOAunqrqT4nfDqzUdT6TovlTdWlitLLzgjkD6FKK2BpHXz3BeXjZsVxYYDTafu6VuTFctYkq5tWDDqwfgD7oA4VNeuGyZPxrO+48=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE03D1FB;
-	Mon, 29 Jan 2024 01:02:20 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 334BF1FB;
+	Mon, 29 Jan 2024 01:14:07 -0800 (PST)
 Received: from [10.162.42.11] (a077893.blr.arm.com [10.162.42.11])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E8013F762;
-	Mon, 29 Jan 2024 01:01:25 -0800 (PST)
-Message-ID: <966a1a84-76dc-40da-bde2-251d2a81ee31@arm.com>
-Date: Mon, 29 Jan 2024 14:31:23 +0530
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 091873F762;
+	Mon, 29 Jan 2024 01:13:11 -0800 (PST)
+Message-ID: <8b5dfed3-f881-4f0a-be81-d7fcf3be0deb@arm.com>
+Date: Mon, 29 Jan 2024 14:43:08 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 04/35] mm: page_alloc: Partially revert "mm:
- page_alloc: remove stale CMA guard code"
+Subject: Re: [PATCH RFC v3 05/35] mm: cma: Don't append newline when
+ generating CMA area name
 Content-Language: en-US
 To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
  will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
@@ -60,57 +60,53 @@ Cc: pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
  linux-arch@vger.kernel.org, linux-mm@kvack.org,
  linux-trace-kernel@vger.kernel.org
 References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-5-alexandru.elisei@arm.com>
+ <20240125164256.4147-6-alexandru.elisei@arm.com>
 From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20240125164256.4147-5-alexandru.elisei@arm.com>
+In-Reply-To: <20240125164256.4147-6-alexandru.elisei@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
-
 On 1/25/24 22:12, Alexandru Elisei wrote:
-> The patch f945116e4e19 ("mm: page_alloc: remove stale CMA guard code")
-> removed the CMA filter when allocating from the MIGRATE_MOVABLE pcp list
-> because CMA is always allowed when __GFP_MOVABLE is set.
-> 
-> With the introduction of the arch_alloc_cma() function, the above is not
-> true anymore, so bring back the filter.
+> cma->name is displayed in several CMA messages. When the name is generated
+> by the CMA code, don't append a newline to avoid breaking the text across
+> two lines.
 
-This makes sense as arch_alloc_cma() now might prevent ALLOC_CMA being
-assigned to alloc_flags in gfp_to_alloc_flags_cma().
+An example of such mis-formatted CMA output from dmesg could be added
+here in the commit message to demonstrate the problem better.
 
-> 
-> This is a partially revert because the stale comment remains removed.
 > 
 > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 > ---
->  mm/page_alloc.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
+
+Regardless, LGTM.
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index a96d47a6393e..0fa34bcfb1af 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -2897,10 +2897,17 @@ struct page *rmqueue(struct zone *preferred_zone,
->  	WARN_ON_ONCE((gfp_flags & __GFP_NOFAIL) && (order > 1));
+> Changes since rfc v2:
+> 
+> * New patch. This is a fix, and can be merged independently of the other
+> patches.
+
+Right, need not be part of this series. Hence please send it separately to
+the MM list.
+
+> 
+>  mm/cma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/cma.c b/mm/cma.c
+> index 7c09c47e530b..f49c95f8ee37 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -204,7 +204,7 @@ int __init cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
+>  	if (name)
+>  		snprintf(cma->name, CMA_MAX_NAME, name);
+>  	else
+> -		snprintf(cma->name, CMA_MAX_NAME,  "cma%d\n", cma_area_count);
+> +		snprintf(cma->name, CMA_MAX_NAME,  "cma%d", cma_area_count);
 >  
->  	if (likely(pcp_allowed_order(order))) {
-> -		page = rmqueue_pcplist(preferred_zone, zone, order,
-> -				       migratetype, alloc_flags);
-> -		if (likely(page))
-> -			goto out;
-> +		/*
-> +		 * MIGRATE_MOVABLE pcplist could have the pages on CMA area and
-> +		 * we need to skip it when CMA area isn't allowed.
-> +		 */
-> +		if (!IS_ENABLED(CONFIG_CMA) || alloc_flags & ALLOC_CMA ||
-> +				migratetype != MIGRATE_MOVABLE) {
-> +			page = rmqueue_pcplist(preferred_zone, zone, order,
-> +					migratetype, alloc_flags);
-> +			if (likely(page))
-> +				goto out;
-> +		}
->  	}
->  
->  	page = rmqueue_buddy(preferred_zone, zone, order, alloc_flags,
+>  	cma->base_pfn = PFN_DOWN(base);
+>  	cma->count = size >> PAGE_SHIFT;
 
