@@ -1,63 +1,65 @@
-Return-Path: <linux-arch+bounces-1802-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1808-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D12B84136B
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 20:27:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34BC08414E0
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 22:07:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4E97B241B7
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 19:27:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 641931C2369A
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 21:07:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C451613D51E;
-	Mon, 29 Jan 2024 19:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A7E15958F;
+	Mon, 29 Jan 2024 21:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dsewV60v"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="Lkdopncz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEE676023;
-	Mon, 29 Jan 2024 19:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74211157E79;
+	Mon, 29 Jan 2024 21:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706556412; cv=none; b=RidLqjO4iURrDsX0bs1GvXM5qk0N2nKLBjE85trFuzfLr19G2o2XQ+DKv1lknOw8n5ukb75ZPmadNDLvPPmX6GrV/pf9OaU9el25XUBAbPJCLlfGaqxAzSXSi2KKMyYzeULTznm0hwRaAeDmTMaRlGXvYFaZpp9U5i57CUOS03I=
+	t=1706562415; cv=none; b=qyfey159aNjsRXmNAIuO6wqrIJP2EJlU++zSHRX7/txjnBsavi0MqPu/B2prPD3CAyVAnrix4tfzQqmyWuH0NYtT7esMZpYfHa7b02CUdTE+eAtn1KXJIbyPxZpgx2xe86LDEwoa9qvIShVanA4uFyZ4pe9A5+VtlICTgIOwuqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706556412; c=relaxed/simple;
-	bh=0DCssUbSMzZG0WW8U5N3x7j24bKA4wfldkB5+LDWwFQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lEhqsYlBYpRoU+54rulEJppnwUzC+IP6nku896V/eSf19CVVOESOZf/E2/itmM/8BF5a52ZJnsfNKuLi3gzzKIVgZxOIu1heQ0mg6YiFWumW1tUn+t7TfJyHrgBdJxlUX3b0VmzP66DKInBfwew+N7zKXCH2rOvIdT//9s7U0b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dsewV60v; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=M1jujuKLf3xpruhDR2flI4/MXT9+iY7sBsE2JSjaJ8k=; b=dsewV60v9w6yB9nt1NnbKQcKrt
-	vs1tUjLgte/Y8/eVUZw0tp4OdcDd/1aOSTr0te2/7Ri1VsyL4zE7Y05iM5U8Sx5e8yQU2yAmNWgO8
-	Rp+Mx84CubR+TVZ4CElMitOr7g17G6b1xhmr8kPm6FkeTdi+tpTvKIEpGfk9hmvEDpN8NERbZAot4
-	Nmp6AFlEDwR08x4/fFbTK3D+kCF0yMECJMixu+0sIr8TdnvS4lt6ldfAe6g21vOJpz/duKBw12tkK
-	P/Yv8yLABZiaFa6gfwV2++5kivIJqLG6WOlZDczDtwzaiI0YqUZuysI4jXEeqpN38mzqcnCDd9Gt5
-	8560ml8w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rUXHN-0000000E683-3D7U;
-	Mon, 29 Jan 2024 19:26:49 +0000
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: masahiroy@kernel.org,
-	deller@gmx.de
-Cc: mcgrof@kernel.org,
-	arnd@arndb.de,
+	s=arc-20240116; t=1706562415; c=relaxed/simple;
+	bh=K4VVElaY97sQQYGeAc34aX8mm/VX8BZpgLKGb7Mk6Jw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=H6HHiJRg33l68beldp2p1F2cI/KdBIobKMn1uyrxH8zrk0PYW4cz1dCC4cM0YGgERWoqnrlTM8N+0FXsWFz7t5PXd+1vJa8vAUnv8xiI0fyO8lHxlL+IGl6KvlJolqLY1KYX3PzSqXs9YKYgAEfwgYjurtCdxFGjoFxyBhVfoSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=Lkdopncz; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1706562409;
+	bh=K4VVElaY97sQQYGeAc34aX8mm/VX8BZpgLKGb7Mk6Jw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Lkdopncz71c/Xl8mEy9+xgP1NtQ66UgWekcmwJxHLJvM0Aca1KjAyRvIf2eBppTfA
+	 eZ8z0XfJkpuZOySPd7Yggh59oZyscBGePayQYNc5YKDttLWgiQipIpHSmwj57Wyr38
+	 GTmJaOFafjQb5Z/imJKsaVn1B6/DwDPda8fOPrSPS7BM+U9u4Z0ZNa8kZjwU3phykv
+	 5wvXn8+EQ4/w+kmzBGYd4HJy2x9lNF09xj6ciQy+Vd/bqBRlV72eADDunRpghi4Oa7
+	 IFwDnQqDUgVhH5dED782CRDoSNZ/oc5o3bimfkdPxtSGoY0InQnXcc597lRHv5Bh20
+	 yoNbHpGbs/bTw==
+Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TP17s0mCGzVQZ;
+	Mon, 29 Jan 2024 16:06:49 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Dan Williams <dan.j.williams@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-mm@kvack.org,
 	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] modules: Add missing entry for __ex_table
-Date: Mon, 29 Jan 2024 11:26:43 -0800
-Message-ID: <20240129192644.3359978-5-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240129192644.3359978-1-mcgrof@kernel.org>
-References: <20240129192644.3359978-1-mcgrof@kernel.org>
+	Matthew Wilcox <willy@infradead.org>,
+	linux-cxl@vger.kernel.org,
+	nvdimm@lists.linux.dev
+Subject: [RFC PATCH 0/7] Introduce cache_is_aliasing() to fix DAX regression
+Date: Mon, 29 Jan 2024 16:06:24 -0500
+Message-Id: <20240129210631.193493-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,33 +67,94 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-From: Helge Deller <deller@gmx.de>
+This commit introduced in v5.13 prevents building FS_DAX on 32-bit ARM,
+even on ARMv7 which does not have virtually aliased dcaches:
 
-The entry for __ex_table was missing, which may make __ex_table
-become 1- or 2-byte aligned in modules.
-Add the entry to ensure it gets 32-bit aligned.
+commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- scripts/module.lds.S | 1 +
- 1 file changed, 1 insertion(+)
+It used to work fine before: I have customers using dax over pmem on
+ARMv7, but this regression will likely prevent them from upgrading their
+kernel.
 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index b00415a9ff27..488f61b156b2 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -26,6 +26,7 @@ SECTIONS {
- 	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
- 	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
- 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
-+	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
- 
- 	__patchable_function_entries : { *(__patchable_function_entries) }
- 
+The root of the issue here is the fact that DAX was never designed to
+handle virtually aliased dcache (VIVT and VIPT with aliased dcache). It
+touches the pages through their linear mapping, which is not consistent
+with the userspace mappings on virtually aliased dcaches. 
+
+This patch series introduces cache_is_aliasing() with new Kconfig
+options:
+
+  * ARCH_HAS_CACHE_ALIASING
+  * ARCH_HAS_CACHE_ALIASING_DYNAMIC
+
+and implements it for all architectures. The "DYNAMIC" implementation
+implements cache_is_aliasing() as a runtime check, which is what is
+needed on architectures like 32-bit ARMV6 and ARMV6K.
+
+With this we can basically narrow down the list of architectures which
+are unsupported by DAX to those which are really affected.
+
+Feedback is welcome,
+
+Thanks,
+
+Mathieu
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: linux-cxl@vger.kernel.org
+Cc: nvdimm@lists.linux.dev
+
+Mathieu Desnoyers (7):
+  Introduce cache_is_aliasing() across all architectures
+  dax: Fix incorrect list of cache aliasing architectures
+  erofs: Use dax_is_supported()
+  ext2: Use dax_is_supported()
+  ext4: Use dax_is_supported()
+  fuse: Introduce fuse_dax_is_supported()
+  xfs: Use dax_is_supported()
+
+ arch/arc/Kconfig                    |  1 +
+ arch/arm/include/asm/cachetype.h    |  3 ++
+ arch/arm/mm/Kconfig                 |  2 ++
+ arch/csky/Kconfig                   |  1 +
+ arch/m68k/Kconfig                   |  1 +
+ arch/mips/Kconfig                   |  1 +
+ arch/mips/include/asm/cachetype.h   |  9 +++++
+ arch/nios2/Kconfig                  |  1 +
+ arch/nios2/include/asm/cachetype.h  | 10 ++++++
+ arch/parisc/Kconfig                 |  1 +
+ arch/sh/Kconfig                     |  1 +
+ arch/sparc/Kconfig                  |  1 +
+ arch/sparc/include/asm/cachetype.h  | 14 ++++++++
+ arch/xtensa/Kconfig                 |  1 +
+ arch/xtensa/include/asm/cachetype.h | 10 ++++++
+ fs/Kconfig                          |  2 +-
+ fs/erofs/super.c                    | 10 +++---
+ fs/ext2/super.c                     | 14 ++++----
+ fs/ext4/super.c                     | 52 ++++++++++++++---------------
+ fs/fuse/file.c                      |  2 +-
+ fs/fuse/fuse_i.h                    | 36 +++++++++++++++++++-
+ fs/fuse/inode.c                     | 47 +++++++++++++-------------
+ fs/fuse/virtio_fs.c                 |  4 +--
+ fs/xfs/xfs_super.c                  | 20 +++++++----
+ include/linux/cacheinfo.h           |  8 +++++
+ include/linux/dax.h                 |  9 +++++
+ mm/Kconfig                          | 10 ++++++
+ 27 files changed, 198 insertions(+), 73 deletions(-)
+ create mode 100644 arch/mips/include/asm/cachetype.h
+ create mode 100644 arch/nios2/include/asm/cachetype.h
+ create mode 100644 arch/sparc/include/asm/cachetype.h
+ create mode 100644 arch/xtensa/include/asm/cachetype.h
+
 -- 
-2.42.0
+2.39.2
 
 
