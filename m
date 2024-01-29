@@ -1,383 +1,158 @@
-Return-Path: <linux-arch+bounces-1771-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1772-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DEBA840880
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 15:35:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A577F840915
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 15:55:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8A3B28C03C
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 14:35:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D7CC1F23697
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 14:55:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C73154BFB;
-	Mon, 29 Jan 2024 14:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC97E152E0F;
+	Mon, 29 Jan 2024 14:55:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FsznFDoc"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="zshAlN5d"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C26A154BF5
-	for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 14:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E7D152E1A;
+	Mon, 29 Jan 2024 14:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706538803; cv=none; b=dBLTbJXrjav+yZRtobTVtv6hVvP/LmvKsGDGBVplqN6JPzlxOfQAIa21JoYkix9CMKHdn+NqYt8+xbX/Hgsw2Xw1gbxgpVauDKSG0NMgJdv+r6V9NjvEGltowtCSOr9P2brW4QkWVUwE7b91W1hpcZW6Eew7J6oV5z+hhUox0k8=
+	t=1706540144; cv=none; b=ZnTLyDBY9qGNtnV5HI1KpfrW9xx3jvALLy93RJ6VPfwGvD1HwkpABbxx16IPUAw/P1+tTSjeJMtoIUm5DuJAxs7l/tORM009G54JWHnucUwA3YM8eyPoWGeSFbeYgYkM5LN7durqk1mWZUvo7XCqs2Ev//yiwbfOj/ueapQPN4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706538803; c=relaxed/simple;
-	bh=TSmfVJpTFAI5Bi+X9dzLq2pbCeH7Qo4+UMUFhytmPFY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iZmI0C6UYnrS+RtSetU5xBeJYUci+aFOyjmY/lXGLuXPxU+4DrUAyqNa2jpbKkP8f1vFyy0gvjDvOosCuWavyhA+Uqp8TdUYXYorOeqGIWxtV7xWPKIu9Hc6Q4PKTO25w2XkRi4e4nfqC9mRXW/C5SR55kezbQLkb6drhU+PDQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FsznFDoc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706538800;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zfDWyrOXB1mD+zgjXEawbz7aquFQMadFUbUPJ1Y1hbE=;
-	b=FsznFDocCupYWsMqAUNRBq9dPEl8IbZptn+Eu9A79OnTnoLAxolJ8xdDtm/TRdCAOSR7YP
-	oiKVSQuHNKjZI/9xDIXlBosk3hUxN2d9mxs0cqAH0Bh8n2ElZRO6bHz5vV6lw5e3CHV5W7
-	KL4S/pgmYwbTYG9a5QT3h5Ve1iPxu1Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-434-G5xnxcuDPh6_dHlX6DUXrg-1; Mon, 29 Jan 2024 09:33:13 -0500
-X-MC-Unique: G5xnxcuDPh6_dHlX6DUXrg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D140685A597;
-	Mon, 29 Jan 2024 14:33:11 +0000 (UTC)
-Received: from t14s.fritz.box (unknown [10.39.194.46])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E6EB5AD1;
-	Mon, 29 Jan 2024 14:33:07 +0000 (UTC)
-From: David Hildenbrand <david@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org,
-	David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-	Nick Piggin <npiggin@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org
-Subject: [PATCH v1 9/9] mm/memory: optimize unmap/zap with PTE-mapped THP
-Date: Mon, 29 Jan 2024 15:32:21 +0100
-Message-ID: <20240129143221.263763-10-david@redhat.com>
-In-Reply-To: <20240129143221.263763-1-david@redhat.com>
-References: <20240129143221.263763-1-david@redhat.com>
+	s=arc-20240116; t=1706540144; c=relaxed/simple;
+	bh=N1VX0f01FK+lMbnRSIPKyBtfZOPatHcFypn75HDFeM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c4JhHawlGg0ehqrr1PZPNqSfMwpllSQvyrY5UwO62VHeyHu7fAWLEKyUWIzBeSfyfOM36Pw+fNsRdqQZHrZsghsrJJZNjAZ4YxbDRq/PraelWXY0wcEkAuV0N1R18LBiUaE6hpTfAQGAU4Xw4hlLmGhzAop3EO0d7YMCLbTX4oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=zshAlN5d; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=M1dyK4/mPjmXezB9OECra+eUv49q0u5KCO/rCTgyWjo=; b=zshAlN5dO4KSpCUyuhnHvqGFw5
+	Gh7/mHP6cgVBHrE5nMDsXFPalTDr1ZzFPzRd+TI3s6neNq9Af58Vp3/mYT3mH1KRmbTzeAaN4hL6H
+	fwQhoOIa1yKFj+i7nMitwQv1yOG0Pz0nUWKhd2M/o536j+TlvQga+8v5LJ3avKX49iZjAYE3R321y
+	O2ps7v/NwXnLCZBPRDhB722lFSCJPiCiWdXOhGxpRCt+7PfqIGluNFkn4mXrYxw2Koq2c9Rr4ObDV
+	7YwmV/eFjDI793/wrAU7O0xFV+v50tPaN/a1bIX95nRfhzCTLPIOqUuhcS09c50fU0hLrjkOGJEos
+	mD5qTJTg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60316)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rUT2l-0000YR-0u;
+	Mon, 29 Jan 2024 14:55:27 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rUT2f-0004dh-CJ; Mon, 29 Jan 2024 14:55:21 +0000
+Date: Mon, 29 Jan 2024 14:55:21 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
+ functional) devices
+Message-ID: <Zbe8WQRASx6D6RaG@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk>
+ <20231215161539.00000940@Huawei.com>
+ <5760569.DvuYhMxLoT@kreacher>
+ <20240102143925.00004361@Huawei.com>
+ <20240111101949.000075dc@Huawei.com>
+ <ZZ/CR/6Voec066DR@shell.armlinux.org.uk>
+ <20240112115205.000043b0@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240112115205.000043b0@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Similar to how we optimized fork(), let's implement PTE batching when
-consecutive (present) PTEs map consecutive pages of the same large
-folio.
+Hi Jonathan,
 
-Most infrastructure we need for batching (mmu gather, rmap) is already
-there. We only have to add get_and_clear_full_ptes() and
-clear_full_ptes(). Similarly, extend zap_install_uffd_wp_if_needed() to
-process a PTE range.
+On Fri, Jan 12, 2024 at 11:52:05AM +0000, Jonathan Cameron wrote:
+> On Thu, 11 Jan 2024 10:26:15 +0000
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> > @@ -2381,16 +2388,38 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+> >   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
+> >   * @device: Pointer to the &struct acpi_device to check
+> >   *
+> > - * Check if the device is present and has no unmet dependencies.
+> > + * Check if the device is functional or enabled and has no unmet dependencies.
+> >   *
+> > - * Return true if the device is ready for enumeratino. Otherwise, return false.
+> > + * Return true if the device is ready for enumeration. Otherwise, return false.
+> >   */
+> >  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
+> >  {
+> >  	if (device->flags.honor_deps && device->dep_unmet)
+> >  		return false;
+> >  
+> > -	return acpi_device_is_present(device);
+> > +	/*
+> > +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
+> > +	 * (!present && functional) for certain types of devices that should be
+> > +	 * enumerated. Note that the enabled bit should not be set unless the
+> > +	 * present bit is set.
+> > +	 *
+> > +	 * However, limit this only to processor devices to reduce possible
+> > +	 * regressions with firmware.
+> > +	 */
+> > +	if (device->status.functional)
+> > +		return true;
 
-We won't bother sanity-checking the mapcount of all subpages, but only
-check the mapcount of the first subpage we process.
+I have a report from within Oracle that this causes testing failures
+with QEMU using -smp cpus=2,maxcpus=4. I think it needs to be:
 
-To keep small folios as fast as possible force inlining of a specialized
-variant using __always_inline with nr=1.
+	if (!device->status.present)
+		return device->status.functional;
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/pgtable.h | 66 +++++++++++++++++++++++++++++
- mm/memory.c             | 92 +++++++++++++++++++++++++++++------------
- 2 files changed, 132 insertions(+), 26 deletions(-)
+	if (device->status.enabled)
+		return true;
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index aab227e12493..f0feae7f89fb 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -580,6 +580,72 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
- }
- #endif
- 
-+#ifndef get_and_clear_full_ptes
-+/**
-+ * get_and_clear_full_ptes - Clear PTEs that map consecutive pages of the same
-+ *			     folio, collecting dirty/accessed bits.
-+ * @mm: Address space the pages are mapped into.
-+ * @addr: Address the first page is mapped at.
-+ * @ptep: Page table pointer for the first entry.
-+ * @nr: Number of entries to clear.
-+ * @full: Whether we are clearing a full mm.
-+ *
-+ * May be overridden by the architecture; otherwise, implemented as a simple
-+ * loop over ptep_get_and_clear_full(), merging dirty/accessed bits into
-+ * returned PTE.
-+ *
-+ * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-+ * some PTEs might be write-protected.
-+ *
-+ * Context: The caller holds the page table lock.  The PTEs map consecutive
-+ * pages that belong to the same folio.  The PTEs are all in the same PMD.
-+ */
-+static inline pte_t get_and_clear_full_ptes(struct mm_struct *mm,
-+		unsigned long addr, pte_t *ptep, unsigned int nr, int full)
-+{
-+	pte_t pte, tmp_pte;
-+
-+	pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-+	while (--nr) {
-+		ptep++;
-+		addr += PAGE_SIZE;
-+		tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-+		if (pte_dirty(tmp_pte))
-+			pte = pte_mkdirty(pte);
-+		if (pte_young(tmp_pte))
-+			pte = pte_mkyoung(pte);
-+	}
-+	return pte;
-+}
-+#endif
-+
-+#ifndef clear_full_ptes
-+/**
-+ * clear_full_ptes - Clear PTEs that map consecutive pages of the same folio.
-+ * @mm: Address space the pages are mapped into.
-+ * @addr: Address the first page is mapped at.
-+ * @ptep: Page table pointer for the first entry.
-+ * @nr: Number of entries to clear.
-+ * @full: Whether we are clearing a full mm.
-+ *
-+ * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-+ * some PTEs might be write-protected.
-+ *
-+ * Context: The caller holds the page table lock.  The PTEs map consecutive
-+ * pages that belong to the same folio.  The PTEs are all in the same PMD.
-+ */
-+static inline void clear_full_ptes(struct mm_struct *mm, unsigned long addr,
-+		pte_t *ptep, unsigned int nr, int full)
-+{
-+	for (;;) {
-+		ptep_get_and_clear_full(mm, addr, ptep, full);
-+		if (--nr == 0)
-+			break;
-+		ptep++;
-+		addr += PAGE_SIZE;
-+	}
-+}
-+#endif
- 
- /*
-  * If two threads concurrently fault at the same page, the thread that
-diff --git a/mm/memory.c b/mm/memory.c
-index a2190d7cfa74..38a010c4d04d 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1515,7 +1515,7 @@ static inline bool zap_drop_file_uffd_wp(struct zap_details *details)
-  */
- static inline void
- zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
--			      unsigned long addr, pte_t *pte,
-+			      unsigned long addr, pte_t *pte, int nr,
- 			      struct zap_details *details, pte_t pteval)
- {
- 	/* Zap on anonymous always means dropping everything */
-@@ -1525,20 +1525,27 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
- 	if (zap_drop_file_uffd_wp(details))
- 		return;
- 
--	pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-+	for (;;) {
-+		/* the PFN in the PTE is irrelevant. */
-+		pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-+		if (--nr == 0)
-+			break;
-+		pte++;
-+		addr += PAGE_SIZE;
-+	}
- }
- 
--static inline void zap_present_folio_pte(struct mmu_gather *tlb,
-+static __always_inline void zap_present_folio_ptes(struct mmu_gather *tlb,
- 		struct vm_area_struct *vma, struct folio *folio,
--		struct page *page, pte_t *pte, pte_t ptent, unsigned long addr,
--		struct zap_details *details, int *rss, bool *force_flush,
--		bool *force_break)
-+		struct page *page, pte_t *pte, pte_t ptent, unsigned int nr,
-+		unsigned long addr, struct zap_details *details, int *rss,
-+		bool *force_flush, bool *force_break)
- {
- 	struct mm_struct *mm = tlb->mm;
- 	bool delay_rmap = false;
- 
- 	if (!folio_test_anon(folio)) {
--		ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
-+		ptent = get_and_clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
- 		if (pte_dirty(ptent)) {
- 			folio_mark_dirty(folio);
- 			if (tlb_delay_rmap(tlb)) {
-@@ -1548,36 +1555,49 @@ static inline void zap_present_folio_pte(struct mmu_gather *tlb,
- 		}
- 		if (pte_young(ptent) && likely(vma_has_recency(vma)))
- 			folio_mark_accessed(folio);
--		rss[mm_counter(folio)]--;
-+		rss[mm_counter(folio)] -= nr;
- 	} else {
- 		/* We don't need up-to-date accessed/dirty bits. */
--		ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
--		rss[MM_ANONPAGES]--;
-+		clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
-+		rss[MM_ANONPAGES] -= nr;
- 	}
-+	/* Checking a single PTE in a batch is sufficient. */
- 	arch_check_zapped_pte(vma, ptent);
--	tlb_remove_tlb_entry(tlb, pte, addr);
-+	tlb_remove_tlb_entries(tlb, pte, nr, addr);
- 	if (unlikely(userfaultfd_pte_wp(vma, ptent)))
--		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
-+		zap_install_uffd_wp_if_needed(vma, addr, pte, nr, details,
-+					      ptent);
- 
- 	if (!delay_rmap) {
--		folio_remove_rmap_pte(folio, page, vma);
-+		folio_remove_rmap_ptes(folio, page, nr, vma);
-+
-+		/* Only sanity-check the first page in a batch. */
- 		if (unlikely(page_mapcount(page) < 0))
- 			print_bad_pte(vma, addr, ptent, page);
- 	}
--	if (unlikely(__tlb_remove_page(tlb, page, delay_rmap))) {
-+	if (unlikely(__tlb_remove_folio_pages(tlb, page, nr, delay_rmap))) {
- 		*force_flush = true;
- 		*force_break = true;
- 	}
- }
- 
--static inline void zap_present_pte(struct mmu_gather *tlb,
-+/*
-+ * Zap or skip one present PTE, trying to batch-process subsequent PTEs that map
-+ * consecutive pages of the same folio.
-+ *
-+ * Returns the number of processed (skipped or zapped) PTEs (at least 1).
-+ */
-+static inline int zap_present_ptes(struct mmu_gather *tlb,
- 		struct vm_area_struct *vma, pte_t *pte, pte_t ptent,
--		unsigned long addr, struct zap_details *details,
--		int *rss, bool *force_flush, bool *force_break)
-+		unsigned int max_nr, unsigned long addr,
-+		struct zap_details *details, int *rss, bool *force_flush,
-+		bool *force_break)
- {
-+	const fpb_t fpb_flags = FPB_IGNORE_DIRTY | FPB_IGNORE_SOFT_DIRTY;
- 	struct mm_struct *mm = tlb->mm;
- 	struct folio *folio;
- 	struct page *page;
-+	int nr;
- 
- 	page = vm_normal_page(vma, addr, ptent);
- 	if (!page) {
-@@ -1587,14 +1607,29 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
- 		tlb_remove_tlb_entry(tlb, pte, addr);
- 		VM_WARN_ON_ONCE(userfaultfd_wp(vma));
- 		ksm_might_unmap_zero_page(mm, ptent);
--		return;
-+		return 1;
- 	}
- 
- 	folio = page_folio(page);
- 	if (unlikely(!should_zap_folio(details, folio)))
--		return;
--	zap_present_folio_pte(tlb, vma, folio, page, pte, ptent, addr, details,
--			      rss, force_flush, force_break);
-+		return 1;
-+
-+	/*
-+	 * Make sure that the common "small folio" case is as fast as possible
-+	 * by keeping the batching logic separate.
-+	 */
-+	if (unlikely(folio_test_large(folio) && max_nr != 1)) {
-+		nr = folio_pte_batch(folio, addr, pte, ptent, max_nr, fpb_flags,
-+				     NULL);
-+
-+		zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, nr,
-+				       addr, details, rss, force_flush,
-+				       force_break);
-+		return nr;
-+	}
-+	zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, 1, addr,
-+			       details, rss, force_flush, force_break);
-+	return 1;
- }
- 
- static unsigned long zap_pte_range(struct mmu_gather *tlb,
-@@ -1609,6 +1644,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 	pte_t *start_pte;
- 	pte_t *pte;
- 	swp_entry_t entry;
-+	int nr;
- 
- 	tlb_change_page_size(tlb, PAGE_SIZE);
- 	init_rss_vec(rss);
-@@ -1622,7 +1658,9 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 		pte_t ptent = ptep_get(pte);
- 		struct folio *folio = NULL;
- 		struct page *page;
-+		int max_nr;
- 
-+		nr = 1;
- 		if (pte_none(ptent))
- 			continue;
- 
-@@ -1630,10 +1668,12 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			break;
- 
- 		if (pte_present(ptent)) {
--			zap_present_pte(tlb, vma, pte, ptent, addr, details,
--					rss, &force_flush, &force_break);
-+			max_nr = (end - addr) / PAGE_SIZE;
-+			nr = zap_present_ptes(tlb, vma, pte, ptent, max_nr,
-+					      addr, details, rss, &force_flush,
-+					      &force_break);
- 			if (unlikely(force_break)) {
--				addr += PAGE_SIZE;
-+				addr += nr * PAGE_SIZE;
- 				break;
- 			}
- 			continue;
-@@ -1687,8 +1727,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			WARN_ON_ONCE(1);
- 		}
- 		pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
--		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
--	} while (pte++, addr += PAGE_SIZE, addr != end);
-+		zap_install_uffd_wp_if_needed(vma, addr, pte, 1, details, ptent);
-+	} while (pte += nr, addr += PAGE_SIZE * nr, addr != end);
- 
- 	add_mm_rss_vec(mm, rss);
- 	arch_leave_lazy_mmu_mode();
+	return !acpi_device_is_processor(device);
+
+So we can better understand the history here, let's list it as a
+truth table. P=present, F=functional, E=enabled, Orig=how the code
+is in mainline, James=James' original proposal, Rafael=the proposed
+replacement but seems to be buggy, Rmk=the fixed version that passes
+tests:
+
+P F E	Orig	James	Rafael		Rmk
+0 0 0	0	0	0		0
+0 0 1	0	0	0		0
+0 1 0	1	1	1		1
+0 1 1	1	0	1		1
+1 0 0	1	0	!processor	!processor
+1 0 1	1	1	1		1
+1 1 0	1	0	1		!processor
+1 1 1	1	1	1		1
+
+Any objections to this?
+
 -- 
-2.43.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
