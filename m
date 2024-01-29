@@ -1,196 +1,222 @@
-Return-Path: <linux-arch+bounces-1776-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1777-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12C7A840A28
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 16:35:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C237841199
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 19:05:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37C061C21843
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 15:35:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60CE41C21C64
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 18:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390AE15443C;
-	Mon, 29 Jan 2024 15:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261FD3F9DC;
+	Mon, 29 Jan 2024 18:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u+u97NKp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A005153BC6;
-	Mon, 29 Jan 2024 15:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFC73F9CE
+	for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 18:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706542511; cv=none; b=WNZe8QnOueebGLiCLsUHDh/gAPij+saLCPTwhCKdsxkGznywMLtxE6w5ScOW4hjf/V4HyN/2mqVCjRwo0prC16oKNvBE8Pd4AqBt7tnKdgjUJYHEcCqO1RkMCbpG3FqMIqoBiPxcbFf3gEWV3/k2RRMAVP7lwKn5sU5UzUWszfA=
+	t=1706551531; cv=none; b=uyz0BSjE0rtZDd5Z/15S8q5uASWakWHBknbcS0W/TtUUAlzxzxZdCCVqQzMEzKuKqfVAJPLRF05Gk6JDc8WfCj76cQM6yHdpJt8PMa8yx7nb7vRbJeNz4Qty6I/Hzd4xLDJJf2ZTri1pOTs86YlxwCT3EVB+tdwFC1hRl6r0HOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706542511; c=relaxed/simple;
-	bh=oqnGdtTv/k7O49UAKeLaHEMigeXSQOzpobeqbQwsRC0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bPLC4zhtyD4bU50kQ5nQKdGp9+5+fo5d5TJ5aRxiheqn2QQKb+GvBSYu9K2H4RRkuKkSXUdxu4oz9DRHxOKmlMySBZFJnqG32noFb8rFGiMUMl5G2YkvQ/ReVPNa6bzyq+pjsQDKs420imoenUeTntTcIb8uoUorvWjokVcguNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-210cd12fae2so25259fac.0;
-        Mon, 29 Jan 2024 07:35:09 -0800 (PST)
+	s=arc-20240116; t=1706551531; c=relaxed/simple;
+	bh=YdhZ66KOErP/puxhjIeE2xj8p2TmW0k7m++j4/SciGY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tqNmDIKEoT4EYK3wxnpsfaVPbp+IHsoQGICQPkLZ/iwoKjcscAqwnUM/9EIkRbUEcPbGgfAR4OPJx2h5b/wElDur+7ULrwkW9tVjAgXMHHhdTo7O3p4vlPTkId2Z1mYaLFNWMvz2mdDRficafba7eYuQ056j/1dcCDxxNsGkMbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u+u97NKp; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc22f3426aeso5716627276.1
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 10:05:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706551528; x=1707156328; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0dgHDmyiuf24yKbMsV5rC/PIHquqMJzNMfIw3GnnTIc=;
+        b=u+u97NKp6UC4HnYs6s2q0nQfUi8jWB4uOaoeESTWWQHvNDyPc6lSQpF7s8niY15gVf
+         UbGwEgk4FUZlVVWVlk878dJiMjYOdslph8C12B0DCfKIqnZ8NdDInhAfQ1vKRJgsZej+
+         Auo0bBNnyX2hHqdw/8Q9EhhxgPCEhB/4nEKqmmomglkLSzzdqYO8gEQBzTulTv9xx/bp
+         Q0RDUpdDmM9FhV4oEBqAqqAP4QiB4yUSZJyYfZuBT6i/QT5UYI5DUQxG6vPtKbnnGTH1
+         SM6lFm/C2/XHift2BahCUAMpnpypPof57eSzhpxCYoELt2n5xi9STbsdE0lP94gumbR6
+         GQzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706542508; x=1707147308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TG+8XeCHdsIlnW4L47AUTukqeea8Ay75J0VzHSz+j7A=;
-        b=Twa9prJe/xBthuLdZL8KpXHwppEh7BLCz6JGLBRsCNNLLjxF39VqYtZ2F2R5h+YEpr
-         Gt6/me2moiVq0hPU2hNf+a9COMR1bLm+5J6zGm6NFf9xi+X4qOEmlPfZm5wXrdouxNvz
-         +FI769+JpwDznPPZZ13kYDSfxUh0MwPH2rmtCzon6QGEtRMJCslxqcQeqDlN0SqEopgB
-         gcVBxuu8CPd9v8ceVp3tkjQMSVmx7+/ZrJdNC66cuWGg0y1lDDr3aUmctu2s3Od0jgQt
-         oLwWaNTTEzXEDTZs7MYHHorb3avTGz4bc23NV855AP8EAtjYlx5Pik3+E7vn972jJoHs
-         lQZg==
-X-Forwarded-Encrypted: i=0; AJvYcCWivtAILoZlBgyc8Hp0ORscZpsAnxqYMh/fjI5p6X+eFspXzltgbFcJn+aLewMld/OHzT6lLVJmgdQteGngui6Jm4Wx5cXCwLmF+BLAKQiccmNfQWjPheCfsJTmNAAo9/W6+FCp5kNAK9v7qkGTbqlhghnwhyp3SR498xZsQa+Ad9lfpvlH8gdPlcjTfXnyojvhfpeMGBGmo+mhx9OWJ7es/Ervw5GNtxX+adYh9Z7CrCZQdGWngK18sPQFiWvcnHc8PgRgqNts2mBGkkBfOxIjsiWsW49LI6otzGfK2t736aK6iTqqQgwb+OP/Pdyzg4D8T3bd+kIItrrJ3XaJcx8eLkv6n1Clw3bd/oRaug7g
-X-Gm-Message-State: AOJu0YzTLLTp9Lnb0CkAwCS2FdUSWTg8RDFNyM8Z/AhT2jLTf5O2DZO/
-	dm79IWnfNajpDMPwzIhXeJxWxsl/xpSCcWzcg5q1CCygHk4RLy6U/EawPuAn56nzeovVIyKVv5N
-	B4Ulk8YS2aLBN9fcXwko46xjSbE8=
-X-Google-Smtp-Source: AGHT+IHhrTU6Vx9l5tJAOVsHqvjFv8owslRWENpfX2JETljBTVS4w/It4UoW1njjPVf/6maja2wtMQZ5MonYr2C+WRA=
-X-Received: by 2002:a05:6870:230d:b0:214:fddf:99f7 with SMTP id
- w13-20020a056870230d00b00214fddf99f7mr7432263oao.5.1706542508620; Mon, 29 Jan
- 2024 07:35:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706551528; x=1707156328;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0dgHDmyiuf24yKbMsV5rC/PIHquqMJzNMfIw3GnnTIc=;
+        b=LJvzRgE14Z6ALaGiA/BTfjazGGm0MaYOKAJuU9tiupVP1WuFTQRrxHPCZRO5wvYydw
+         jJ0N7ZmC3N2x9j00PE461dK4eX/Vftbxd34ez/efgK+PQD//WVWR1lXJAYCORrLHivtS
+         oQK/gmfjGmkd/Z1RyZv3V/eL80TU21owEXsk+cyYxCS8ug/FwsvoUTXWjSH0vp+U6t5d
+         SpsSfb97siXiiBZ7Ug6+BlvW01uR/HCNo38lVWSNaoBhh19XqHqAGoXJ0Fvcu20ojkOt
+         nCb6jNEZKJqc9rgIsu9jZVW0KpyGQBToh5q5UHS8d7PiTWaJFNnBVspRVvo4GPMkz57n
+         qW0Q==
+X-Gm-Message-State: AOJu0Yx7ezr04HwNDrvnS/RXeaHqqG1+DoFaz7qgDyqmfAPKhQxWTO21
+	Z74f/LlDwdDFs7Z5KxLKp6L7m3eLWdWptuC2CqreyT3ZGfKygVdR+TL4D/Nmvla2xeO7iQ==
+X-Google-Smtp-Source: AGHT+IGaATphYw3isIigM+VeGOYOeH4enRg6wjibBlkhiC3PQiWztkmu11zGrZOwDGivx7JkOKdoPSL7
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:a25:8908:0:b0:dc3:696e:ffae with SMTP id
+ e8-20020a258908000000b00dc3696effaemr1936135ybl.3.1706551528335; Mon, 29 Jan
+ 2024 10:05:28 -0800 (PST)
+Date: Mon, 29 Jan 2024 19:05:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk>
- <20231215161539.00000940@Huawei.com> <5760569.DvuYhMxLoT@kreacher>
- <20240102143925.00004361@Huawei.com> <20240111101949.000075dc@Huawei.com>
- <ZZ/CR/6Voec066DR@shell.armlinux.org.uk> <20240112115205.000043b0@Huawei.com>
- <Zbe8WQRASx6D6RaG@shell.armlinux.org.uk> <CAJZ5v0iba93EhQB2k3LMdb2YczndbRmF5WGRYHhnqCHq6TQJ0A@mail.gmail.com>
- <ZbfBYgdLzvEX/VjN@shell.armlinux.org.uk>
-In-Reply-To: <ZbfBYgdLzvEX/VjN@shell.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 29 Jan 2024 16:34:57 +0100
-Message-ID: <CAJZ5v0gr3ZmLY9m+rYGP36zQYNH4ohL=zbym4LS3Eq+Qt4nZLA@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or functional) devices
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6464; i=ardb@kernel.org;
+ h=from:subject; bh=3TIgd8JH8leGyvCOvibsMg9R6VNfjDFus1JZk+AZ7Zs=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7i/N3XHfs68hwrlq/xO1Tou0aE1lPb6fL/mVP5vzJ8
+ VrOzTy/o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAEwk/jgjw78vwX51p59YF/JM
+ 799+tWSLWe/KJNc+hdU6mQxtRa+70hj+R0w3TQm7uXryiQkLjjyfIio1Y/+lf93qm3/8mDH76nd eZz4A
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240129180502.4069817-21-ardb+git@google.com>
+Subject: [PATCH v3 00/19] x86: Confine early 1:1 mapped startup code
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 29, 2024 at 4:17=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Jan 29, 2024 at 04:05:42PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Jan 29, 2024 at 3:55=E2=80=AFPM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > >
-> > > Hi Jonathan,
-> > >
-> > > On Fri, Jan 12, 2024 at 11:52:05AM +0000, Jonathan Cameron wrote:
-> > > > On Thu, 11 Jan 2024 10:26:15 +0000
-> > > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> > > > > @@ -2381,16 +2388,38 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependen=
-cies);
-> > > > >   * acpi_dev_ready_for_enumeration - Check if the ACPI device is =
-ready for enumeration
-> > > > >   * @device: Pointer to the &struct acpi_device to check
-> > > > >   *
-> > > > > - * Check if the device is present and has no unmet dependencies.
-> > > > > + * Check if the device is functional or enabled and has no unmet=
- dependencies.
-> > > > >   *
-> > > > > - * Return true if the device is ready for enumeratino. Otherwise=
-, return false.
-> > > > > + * Return true if the device is ready for enumeration. Otherwise=
-, return false.
-> > > > >   */
-> > > > >  bool acpi_dev_ready_for_enumeration(const struct acpi_device *de=
-vice)
-> > > > >  {
-> > > > >     if (device->flags.honor_deps && device->dep_unmet)
-> > > > >             return false;
-> > > > >
-> > > > > -   return acpi_device_is_present(device);
-> > > > > +   /*
-> > > > > +    * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to=
- return
-> > > > > +    * (!present && functional) for certain types of devices that=
- should be
-> > > > > +    * enumerated. Note that the enabled bit should not be set un=
-less the
-> > > > > +    * present bit is set.
-> > > > > +    *
-> > > > > +    * However, limit this only to processor devices to reduce po=
-ssible
-> > > > > +    * regressions with firmware.
-> > > > > +    */
-> > > > > +   if (device->status.functional)
-> > > > > +           return true;
-> > >
-> > > I have a report from within Oracle that this causes testing failures
-> > > with QEMU using -smp cpus=3D2,maxcpus=3D4. I think it needs to be:
-> > >
-> > >         if (!device->status.present)
-> > >                 return device->status.functional;
-> > >
-> > >         if (device->status.enabled)
-> > >                 return true;
-> > >
-> > >         return !acpi_device_is_processor(device);
-> >
-> > The above is fine by me.
-> >
-> > > So we can better understand the history here, let's list it as a
-> > > truth table. P=3Dpresent, F=3Dfunctional, E=3Denabled, Orig=3Dhow the=
- code
-> > > is in mainline, James=3DJames' original proposal, Rafael=3Dthe propos=
-ed
-> > > replacement but seems to be buggy, Rmk=3Dthe fixed version that passe=
-s
-> > > tests:
-> > >
-> > > P F E   Orig    James   Rafael          Rmk
-> > > 0 0 0   0       0       0               0
-> > > 0 0 1   0       0       0               0
-> > > 0 1 0   1       1       1               1
-> > > 0 1 1   1       0       1               1
-> > > 1 0 0   1       0       !processor      !processor
-> > > 1 0 1   1       1       1               1
-> > > 1 1 0   1       0       1               !processor
-> > > 1 1 1   1       1       1               1
-> > >
-> > > Any objections to this?
-> >
-> > So AFAIAC it can return false if not enabled, but present and
-> > functional.  [Side note: I'm wondering what "functional" means then,
-> > but whatever.]
->
-> From ACPI v6.5 (bit 3 is our "status.functional":
->
->  _STA may return bit 0 clear (not present) with bit [3] set (device is
->  functional). This case is used to indicate a valid device for which no
->  device driver should be loaded (for example, a bridge device.) Children
->  of this device may be present and valid. OSPM should continue
->  enumeration below a device whose _STA returns this bit combination.
->
-> So, for this case, acpi_dev_ready_for_enumeration() returning true for
-> this case is correct, since we're supposed to enumerate it and child
-> devices.
->
-> It's probably also worth pointing out that in the above table, the two
-> combinations with P=3D0 E=3D1 goes against the spec, but are included for
-> completness.
+From: Ard Biesheuvel <ardb@kernel.org>
 
-The difference between the last two columns is the present and
-functional, but not enabled combination AFAICS, for which my patch
-just returned true, but the firmware disagrees with that.
+This is a follow-up to my RFC [0] that proposed to build the entire core
+kernel with -fPIC, to reduce the likelihood that code that runs
+extremely early from the 1:1 mapping of memory will misbehave.
 
-It is kind of analogous to the "not present and functional" case
-covered by the spec, which is why it is fine by me to return "false"
-then (for processors), but the spec is not crystal clear about it.
+This is needed to address reports that SEV boot on Clang built kernels
+is broken, due to the fact that this early code attempts to access
+virtual kernel address that are not mapped yet. Kevin has suggested some
+workarounds to this [1] but this is really something that requires a
+more rigorous approach, rather than addressing a couple of symptoms of
+the underlying defect.
+
+As it turns out, the use of fPIE for the entire kernel is neither
+necessary nor sufficient, and has its own set of problems, including the
+fact that the PIE small C code model uses FS rather than GS for the
+per-CPU register, and only recent GCC and Clang versions permit this to
+be overridden on the command line.
+
+But the real problem is that even position independent code is not
+guaranteed to execute correctly at any offset unless all statically
+initialized pointer variables use the same translation as the code.
+
+So instead, this v2 and later proposes another solution, taking the
+following approach:
+- clean up and refactor the startup code so that the primary startup
+  code executes from the 1:1 mapping but nothing else;
+- define a new text section type .pi.text and enforce that it can only
+  call into other .pi.text sections;
+- (tbd) require that objects containing .pi.text sections are built with
+  -fPIC, and disallow any absolute references from such objects.
+
+The latter point is not implemented yet in this v3, but this could be
+done rather straight-forwardly. (The EFI stub already does something
+similar across all architectures)
+
+Changes since v2: [2]
+- move command line parsing out of early startup code entirely
+- fix LTO and instrumentation related build warnings reported by Nathan
+- omit PTI related PGD/P4D setters when creating the early page tables,
+  instead of pulling that code into the 'early' set
+
+[0] https://lkml.kernel.org/r/20240122090851.851120-7-ardb%2Bgit%40google.com
+[1] https://lore.kernel.org/all/20240111223650.3502633-1-kevinloughlin@google.com/T/#u
+[2] https://lkml.kernel.org/r/20240125112818.2016733-19-ardb%2Bgit%40google.com
+
+Cc: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Dionna Glaze <dionnaglaze@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Brian Gerst <brgerst@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+Ard Biesheuvel (19):
+  efi/libstub: Add generic support for parsing mem_encrypt=
+  x86/boot: Move mem_encrypt= parsing to the decompressor
+  x86/startup_64: Drop long return to initial_code pointer
+  x86/startup_64: Simplify calculation of initial page table address
+  x86/startup_64: Simplify CR4 handling in startup code
+  x86/startup_64: Drop global variables keeping track of LA57 state
+  x86/startup_64: Simplify virtual switch on primary boot
+  x86/head64: Replace pointer fixups with PIE codegen
+  x86/head64: Simplify GDT/IDT initialization code
+  asm-generic: Add special .pi.text section for position independent
+    code
+  x86: Move return_thunk to __pitext section
+  x86/head64: Move early startup code into __pitext
+  modpost: Warn about calls from __pitext into other text sections
+  x86/coco: Make cc_set_mask() static inline
+  x86/sev: Make all code reachable from 1:1 mapping __pitext
+  x86/sev: Avoid WARN() in early code
+  x86/sev: Use PIC codegen for early SEV startup code
+  x86/sev: Drop inline asm LEA instructions for RIP-relative references
+  x86/startup_64: Don't bother setting up GS before the kernel is mapped
+
+ arch/x86/Makefile                              |   8 +
+ arch/x86/boot/compressed/Makefile              |   2 +-
+ arch/x86/boot/compressed/misc.c                |  22 +++
+ arch/x86/boot/compressed/pgtable_64.c          |   2 -
+ arch/x86/boot/compressed/sev.c                 |   6 +
+ arch/x86/coco/core.c                           |   7 +-
+ arch/x86/include/asm/coco.h                    |   8 +-
+ arch/x86/include/asm/desc.h                    |   3 +-
+ arch/x86/include/asm/init.h                    |   2 -
+ arch/x86/include/asm/mem_encrypt.h             |   8 +-
+ arch/x86/include/asm/pgtable_64.h              |  12 +-
+ arch/x86/include/asm/pgtable_64_types.h        |  15 +-
+ arch/x86/include/asm/setup.h                   |   4 +-
+ arch/x86/include/asm/sev.h                     |   6 +-
+ arch/x86/include/uapi/asm/bootparam.h          |   2 +
+ arch/x86/kernel/Makefile                       |   7 +
+ arch/x86/kernel/cpu/common.c                   |   2 -
+ arch/x86/kernel/head64.c                       | 206 +++++++-------------
+ arch/x86/kernel/head_64.S                      | 156 +++++----------
+ arch/x86/kernel/sev-shared.c                   |  54 +++--
+ arch/x86/kernel/sev.c                          |  27 ++-
+ arch/x86/kernel/vmlinux.lds.S                  |   3 +-
+ arch/x86/lib/Makefile                          |  13 --
+ arch/x86/lib/memcpy_64.S                       |   3 +-
+ arch/x86/lib/memset_64.S                       |   3 +-
+ arch/x86/lib/retpoline.S                       |   2 +-
+ arch/x86/mm/Makefile                           |   2 +-
+ arch/x86/mm/kasan_init_64.c                    |   3 -
+ arch/x86/mm/mem_encrypt_boot.S                 |   3 +-
+ arch/x86/mm/mem_encrypt_identity.c             |  98 +++-------
+ drivers/firmware/efi/libstub/efi-stub-helper.c |   8 +
+ drivers/firmware/efi/libstub/efistub.h         |   2 +-
+ drivers/firmware/efi/libstub/x86-stub.c        |   6 +
+ include/asm-generic/vmlinux.lds.h              |   3 +
+ include/linux/init.h                           |  12 ++
+ scripts/mod/modpost.c                          |  11 +-
+ tools/objtool/check.c                          |  26 +--
+ 37 files changed, 319 insertions(+), 438 deletions(-)
+
+
+base-commit: aa8eff72842021f52600392b245fb82d113afa8a
+-- 
+2.43.0.429.g432eaa2c6b-goog
+
 
