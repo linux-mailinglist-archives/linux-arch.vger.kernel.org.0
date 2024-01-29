@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-1747-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1748-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAC8D840089
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 09:44:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6230D8400CB
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 10:01:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89E981F26882
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 08:44:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 943E31C224FE
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 09:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51325524D5;
-	Mon, 29 Jan 2024 08:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE9854BF4;
+	Mon, 29 Jan 2024 09:01:40 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B8CB54BCC;
-	Mon, 29 Jan 2024 08:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B1B54BEC;
+	Mon, 29 Jan 2024 09:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706517874; cv=none; b=QK/A/pSlEnlnUDePUQUFRz5Flbr77eN/GZ4V3fUzOFw1CbYOgAUtmGld/ijoRHRDNOmHykaa9wYt0c+5C8eVPzJk1OyC3oeBE4NxdKIjwLVTYucFZ4nE0kV8qsxrmTM/c1yN1Y5Z5rLxEjSEqOayLnCewmVLStoqvdTKv8zS5I8=
+	t=1706518900; cv=none; b=ZXNdP/L7fG7wYCT3DUjhmVYNJ4Ss1RUUx4YOk6nlLzZHBNWBr3d13lD8pDicgE+g0kCXI7oIDrm7ZTbV8R73BvJdIeXrKz/9o5qt5vZIMf1GQuc51VgHQgwcwuFFZ0oMmsQlGfO4tLcl/P5OU4YKU34y1xQiAMH4EcQWPLVYtPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706517874; c=relaxed/simple;
-	bh=MjJD+Ju24rDZFA9W3lNsMnwl/3iRcy6XP1BuXxb2O30=;
+	s=arc-20240116; t=1706518900; c=relaxed/simple;
+	bh=NjN9E54AVBkTjoChmDcx3fbIsw+sShP0t24cgP7LPCY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ns3ZiSjbFnoTOaXaI2ry+y6OAtZ8kTBOIuLlFC3l4FDUZamzebKSAS8211cPwltgkIvsfB92xoFXCkoMhhQWWbtIy5TFdS897/mz6xYl8iF9aYdNajt3HfaTJ6GHM9m6pmie12+5YyojBWWMRqvszwTBbMCGg1QSmxLsiGaFfOI=
+	 In-Reply-To:Content-Type; b=g9O60f+Z8l8TUVOA94BVTqR/etwfI6gSPGEW12P/eHABT+VXtdqQ/IpAdX3jjG5B4dY8zheU6wmgzjlm1IUHX0sxYW2zfcRU15rNYNB4D2XxSlr54WbfmzKrTLQgjTOjB25KrflsBiQaWlsrIXAAtJVQDkoZ/QW1+iU77DkZlys=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11ED01FB;
-	Mon, 29 Jan 2024 00:45:14 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE03D1FB;
+	Mon, 29 Jan 2024 01:02:20 -0800 (PST)
 Received: from [10.162.42.11] (a077893.blr.arm.com [10.162.42.11])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C240E3F762;
-	Mon, 29 Jan 2024 00:44:19 -0800 (PST)
-Message-ID: <a5f593c7-0e5f-46e9-a394-a2c0dad03c8f@arm.com>
-Date: Mon, 29 Jan 2024 14:14:16 +0530
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E8013F762;
+	Mon, 29 Jan 2024 01:01:25 -0800 (PST)
+Message-ID: <966a1a84-76dc-40da-bde2-251d2a81ee31@arm.com>
+Date: Mon, 29 Jan 2024 14:31:23 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 03/35] mm: page_alloc: Add an arch hook to filter
- MIGRATE_CMA allocations
+Subject: Re: [PATCH RFC v3 04/35] mm: page_alloc: Partially revert "mm:
+ page_alloc: remove stale CMA guard code"
 Content-Language: en-US
 To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
  will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
@@ -60,67 +60,57 @@ Cc: pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
  linux-arch@vger.kernel.org, linux-mm@kvack.org,
  linux-trace-kernel@vger.kernel.org
 References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-4-alexandru.elisei@arm.com>
+ <20240125164256.4147-5-alexandru.elisei@arm.com>
 From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20240125164256.4147-4-alexandru.elisei@arm.com>
+In-Reply-To: <20240125164256.4147-5-alexandru.elisei@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
 On 1/25/24 22:12, Alexandru Elisei wrote:
-> As an architecture might have specific requirements around the allocation
-> of CMA pages, add an arch hook that can disable allocations from
-> MIGRATE_CMA, if the allocation was otherwise allowed.
+> The patch f945116e4e19 ("mm: page_alloc: remove stale CMA guard code")
+> removed the CMA filter when allocating from the MIGRATE_MOVABLE pcp list
+> because CMA is always allowed when __GFP_MOVABLE is set.
 > 
-> This will be used by arm64, which will put tag storage pages on the
-> MIGRATE_CMA list, and tag storage pages cannot be tagged. The filter will
-> be used to deny using MIGRATE_CMA for __GFP_TAGGED allocations.
+> With the introduction of the arch_alloc_cma() function, the above is not
+> true anymore, so bring back the filter.
 
-Just wondering how allocation requests would be blocked for direct
-alloc_contig_range() requests ?
+This makes sense as arch_alloc_cma() now might prevent ALLOC_CMA being
+assigned to alloc_flags in gfp_to_alloc_flags_cma().
 
+> 
+> This is a partially revert because the stale comment remains removed.
 > 
 > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 > ---
->  include/linux/pgtable.h | 7 +++++++
->  mm/page_alloc.c         | 3 ++-
->  2 files changed, 9 insertions(+), 1 deletion(-)
+>  mm/page_alloc.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index 6d98d5fdd697..c5ddec6b5305 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -905,6 +905,13 @@ static inline void arch_do_swap_page(struct mm_struct *mm,
->  static inline void arch_free_pages_prepare(struct page *page, int order) { }
->  #endif
->  
-> +#ifndef __HAVE_ARCH_ALLOC_CMA
-
-Same as last patch i.e __HAVE_ARCH_ALLOC_CMA could be avoided via
-a direct check on #ifndef arch_alloc_cma instead.
-
-> +static inline bool arch_alloc_cma(gfp_t gfp)
-> +{
-> +	return true;
-> +}
-> +#endif
-> +
->  #ifndef __HAVE_ARCH_UNMAP_ONE
->  /*
->   * Some architectures support metadata associated with a page. When a
 > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 27282a1c82fe..a96d47a6393e 100644
+> index a96d47a6393e..0fa34bcfb1af 100644
 > --- a/mm/page_alloc.c
 > +++ b/mm/page_alloc.c
-> @@ -3157,7 +3157,8 @@ static inline unsigned int gfp_to_alloc_flags_cma(gfp_t gfp_mask,
->  						  unsigned int alloc_flags)
->  {
->  #ifdef CONFIG_CMA
-> -	if (gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
-> +	if (gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE &&
-> +	    arch_alloc_cma(gfp_mask))
->  		alloc_flags |= ALLOC_CMA;
->  #endif
->  	return alloc_flags;
+> @@ -2897,10 +2897,17 @@ struct page *rmqueue(struct zone *preferred_zone,
+>  	WARN_ON_ONCE((gfp_flags & __GFP_NOFAIL) && (order > 1));
+>  
+>  	if (likely(pcp_allowed_order(order))) {
+> -		page = rmqueue_pcplist(preferred_zone, zone, order,
+> -				       migratetype, alloc_flags);
+> -		if (likely(page))
+> -			goto out;
+> +		/*
+> +		 * MIGRATE_MOVABLE pcplist could have the pages on CMA area and
+> +		 * we need to skip it when CMA area isn't allowed.
+> +		 */
+> +		if (!IS_ENABLED(CONFIG_CMA) || alloc_flags & ALLOC_CMA ||
+> +				migratetype != MIGRATE_MOVABLE) {
+> +			page = rmqueue_pcplist(preferred_zone, zone, order,
+> +					migratetype, alloc_flags);
+> +			if (likely(page))
+> +				goto out;
+> +		}
+>  	}
+>  
+>  	page = rmqueue_buddy(preferred_zone, zone, order, alloc_flags,
 
