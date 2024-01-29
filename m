@@ -1,134 +1,177 @@
-Return-Path: <linux-arch+bounces-1796-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1797-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A64348411C0
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 19:10:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CECF8411D7
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 19:14:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A296A1C2375D
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 18:10:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCACE289A69
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 18:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C92815B311;
-	Mon, 29 Jan 2024 18:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90FE3F9FF;
+	Mon, 29 Jan 2024 18:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PI2zoCmS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXDLE8ku"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF54A15B2E3
-	for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 18:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C7F6F06A;
+	Mon, 29 Jan 2024 18:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706551577; cv=none; b=EJ4m2RWlyOIdnVwQ+wp7AOijJjGJmp5hPzYm5tYkdGxvAzb/52JRzkbN+xy+V9Ng7UKHcGW0lFAa1wY3PM7KAwYXxXqGgKnVKAzjS5VpItXuN63VbgK+3HIcxIMySiqEYq9Y4qpYPM+Q6Z/38DlRkUl0aKvcs8/fw3p66cdf5cc=
+	t=1706552067; cv=none; b=KuKhZ70gmIADPOeFh8xOI6GA4Robvo6SrHZd+N6zrBJYjx04Wfk8w/xZcY0RGQ29cCwh3OfU/Eove6DYtVar0eV7BVv4MjOY2PVGBF/ZQZ1utGeHP1Nf6R+dMArt8PN0pWAcIuMmR+WEw7JMSRsUoUwp/10MKLooenMpL854vkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706551577; c=relaxed/simple;
-	bh=q9aqq8TxofJ+IbL58aBuKCqKThJaXrgTFJRKYbTq++8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=p0LesRM/MHG99POJd4zd3V2vaWZbPV1VwMe42pGAgvOHAuwCf7JK1ILcF2mQZ5ztTAbxatKcgmGtHoDPe118grYO/7eRhndPbhB+dji/UfGN5iducPqttegETiCj39MUFRhfWxpDQIuOHGFGd7INrneN6/Arr3zNpC5Ccp5eE0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PI2zoCmS; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5efe82b835fso61584447b3.0
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 10:06:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706551574; x=1707156374; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M59gqHs6X4RPZ31jkw+MshCoOf2mD10mD/ghxicfQU0=;
-        b=PI2zoCmSh14+b4AA5jJR2sX2z9H17Q65a3h8bGjuLx9dY9bwym/qVfeZOru9Wwm0lx
-         wiohVPoecIwJ0lUbMKsVumbnStU26Ng9U9ds8aL5kS5HJoIoqSxYHtvBrjVI3Uqj0Xru
-         h96xMahc+oVaWvAm3bOxq9VcC6XzxhrZaGwCupwwFmldsahlIGhZBnMtlNKJRjpvmWB/
-         S09VbtlXvSrTCWErgmoXiDi9vBZn5MQZyn6NLg/pLFj7Q0iD05slwkq4oEUsWaC1zXAU
-         Y5zkQ6mD/1Kg6a7NSXJIHuKw7j+dv8AMXu4ZwBHxghuqhDjDHhpVHfMDbjbI8DBk2kfR
-         ausA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706551574; x=1707156374;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M59gqHs6X4RPZ31jkw+MshCoOf2mD10mD/ghxicfQU0=;
-        b=EjUpOpjnMBOUrn2W9MRuejqPn0o9W94kIUZxQO/mDONw579dIrPhQaAluiubkBfZBI
-         F2vKG5b9LBh1QG+UAEgzjsaHWBhviyB25tFOohEA+2AyoJ847SXH+leEVT/MLhHMhjYe
-         D9KME0b0EhtQJ7ORpAm/EtcaHv4Iqtyl0wrl7mUexqBpj3HvvLloNypdeo+L/o4VPG8y
-         9NmtdtHlPaknQYkDfLBQMYg15qyHLa5fjjxUBHtX5SOGUZb0nAjFo43vvvQX5pFTLmxH
-         WRQMSq3UfovT+LKum19LzvJQGCFKTdCSDNV+oi4/r7D3YMz2lAk5ggqWSCYs5rW5Br1I
-         /IFA==
-X-Gm-Message-State: AOJu0YzBrpDq6DlSaGlxGAuZSuw8L3pPLN8VvYCeypyfZrtJcmpxqOiZ
-	GWdb4gUoKcOzw7sisyg1KeFu9LdZSM1p8px7U0kh4wpCbj3iA8x0UZQVGE4Frqi0fyycFw==
-X-Google-Smtp-Source: AGHT+IFKsXEen3EWZg9GhnUEMC4esMp++s/hxM7yTCMDL5+CtA/pBJk6xsNb+SSidJj/K445XegU9it+
-X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a81:9a88:0:b0:5fb:63fc:fac8 with SMTP id
- r130-20020a819a88000000b005fb63fcfac8mr2074385ywg.8.1706551574143; Mon, 29
- Jan 2024 10:06:14 -0800 (PST)
-Date: Mon, 29 Jan 2024 19:05:22 +0100
-In-Reply-To: <20240129180502.4069817-21-ardb+git@google.com>
+	s=arc-20240116; t=1706552067; c=relaxed/simple;
+	bh=OpaHHXwWGswZFGgb6hF5IDAZmEE7mu74bOfKnOSfzPg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=RGtRFNkDkLUr2CsPMdlzEEA+Iv0/XjqYJjujzFibk6XEpjR/H1qJUqQ61IU6Cjh5GEar3P24yWWW97jdcBwxL1QmNpYBzvhdaFBX4giiBDM8IBioLtAE9vSUBPb1kdJfoHP60QIjxgOnsrvhddioGNiQjchpNLQwjg/KhMxCQcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXDLE8ku; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09AFC433F1;
+	Mon, 29 Jan 2024 18:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706552067;
+	bh=OpaHHXwWGswZFGgb6hF5IDAZmEE7mu74bOfKnOSfzPg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=NXDLE8kuzXd3yrrulQlwOwX6prTbYlVlaN/5nKI8326saPS5c5t5pMaevyjiE/7Ga
+	 asEObt9UrGivLe/03HIquXhXALcI5iSHGjDdsezhEyLNLrAVQUGVyxwdFbiSzhoxnB
+	 lKkQsSw/v8s+08VNSbUYYi9NFulNIjOUVK6B9IMCryJRkTyqmoBHmXL08sl/xYxBdn
+	 oBjD/2gZCkopu8FEPCYda/NVnJd20YuVR5xcEExreQArVAv64wuohAI8ZIlh5sGVGc
+	 2vSmZv26y319DnH4JUDeCDURSfUqwy10ElKWbduL0dnQYGCKbUIbn8gI5uoNAKkykk
+	 eW1agFIi5COdA==
+Date: Mon, 29 Jan 2024 12:14:25 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Philipp Stanner <pstanner@redhat.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Randy Dunlap <rdunlap@infradead.org>, NeilBrown <neilb@suse.de>,
+	John Sanpe <sanpeqf@gmail.com>,
+	Kent Overstreet <kent.overstreet@gmail.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Uladzislau Koshchanka <koshchanka@gmail.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
+	Rae Moar <rmoar@google.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	"wuqiang.matt" <wuqiang.matt@bytedance.com>,
+	Yury Norov <yury.norov@gmail.com>, Jason Baron <jbaron@akamai.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org, stable@vger.kernel.org,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v5 RESEND 5/5] lib, pci: unify generic pci_iounmap()
+Message-ID: <20240129181425.GA469470@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1282; i=ardb@kernel.org;
- h=from:subject; bh=ZbpL85fPGajjpfnYR9ri/bu07iizUhPZX6zRx/L0fxw=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7iyezZ8/20v2498Hj1helL98vOvzjH/OrvzFPD01z6
- WVvCTv1u6OUhUGMg0FWTJFFYPbfdztPT5SqdZ4lCzOHlQlkCAMXpwBMpDqI4a/I1ZMTrb8Ks7u2
- Rx90kNBJu3H3p+ZT9ir3nhQO89melQIMf0WfiB3aZdCac9RvY2/CzGcL9fXyZjqd61Fv+sBuM7d mGQcA
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240129180502.4069817-40-ardb+git@google.com>
-Subject: [PATCH v3 19/19] x86/startup_64: Don't bother setting up GS before
- the kernel is mapped
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e655978d5f06ca58f36d531a9f789420fe959fd1.camel@redhat.com>
 
-From: Ard Biesheuvel <ardb@kernel.org>
+On Mon, Jan 29, 2024 at 11:43:34AM +0100, Philipp Stanner wrote:
+> On Sat, 2024-01-27 at 16:39 -0600, Bjorn Helgaas wrote:
+> > On Fri, Jan 26, 2024 at 02:59:20PM +0100, Philipp Stanner wrote:
+> > > On Tue, 2024-01-23 at 15:05 -0600, Bjorn Helgaas wrote:
+> > > > On Thu, Jan 11, 2024 at 09:55:40AM +0100, Philipp Stanner wrote:
+> > > ...
+> > 
+> > > > > -void pci_iounmap(struct pci_dev *dev, void __iomem *p)
+> > > > > +/**
+> > > > > + * pci_iounmap - Unmapp a mapping
+> > > > > + * @dev: PCI device the mapping belongs to
+> > > > > + * @addr: start address of the mapping
+> > > > > + *
+> > > > > + * Unmapp a PIO or MMIO mapping.
+> > > > > + */
+> > > > > +void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
+> > > > 
+> > > > Maybe move the "p" to "addr" rename to the patch that fixes the
+> > > > pci_iounmap() #ifdef problem, since that's a trivial change that
+> > > > already has to do with handling both PIO and MMIO?  Then this
+> > > > patch
+> > > > would be a little more focused.
+> > > > 
+> > > > The kernel-doc addition could possibly also move there since it
+> > > > isn't
+> > > > related to the unification.
+> > > 
+> > > You mean the one from my devres-patch-series? Or documentation
+> > > specifically about pci_iounmap()?
+> > 
+> > I had in mind the patch that fixes the pci_iounmap() #ifdef problem,
+> > which (if you split it out from 1/5) would be a relatively trivial
+> > patch.  Or the kernel-doc addition could be its own separate patch.
+> > The point is that this unification patch is fairly complicated, so
+> > anything we can do to move things unrelated to unification elsewhere
+> > makes this one easier to review.
+> 
+> I think it should be a separate patch, then, as it doesn't belong by
+> 100% to any of the patches here. If I had to pick one, I'd have
+> included the docu into patch #2 or #3.
+> 
+> Let's make it a separate one, following as a 6th patch in this series
 
-The code that executes from the early 1:1 mapping of the kernel should
-set up the kernel page tables and nothing else. C code that is linked
-into this code path is severely restricted in what it can do, and is
-therefore required to remain uninstrumented. It also built with -fPIC
-and without stack protector support.
+Sounds good.
 
-This makes it unnecessary to enable per-CPU variable access this early,
-and for the boot CPU, the initialization that occurs in the common CPU
-startup path is sufficient.
+> > > > It seems like implementing iomem_is_ioport() for the other arches
+> > > > would be straightforward and if done first, could make this patch
+> > > > look
+> > > > tidier.
+> > > 
+> > > That would be the cleanest solution. But the cleaner you want to
+> > > be,
+> > > the more time you have to spend ;)
+> > > I can take another look and see if I could do that with reasonable
+> > > effort.
+> > > Otherwise I'd go for:
+> > > 
+> > > > Or if the TODOs can't be done now, maybe the iomem_is_ioport()
+> > > > addition could be done as a separate patch to make the
+> > > > unification
+> > > > more obvious.
+> > 
+> > It looks like iomem_is_ioport() is basically the guards in
+> > pci_iounmap() implementations that, if true, prevent calling
+> > iounmap(), so it it seems like they should be trivial, e.g.,
+> > 
+> >   return !__is_mmio(addr); # alpha
+> > 
+> >   return (addr < VMALLOC_START || addr >= VMALLOC_END); # arm
+> > 
+> >   return isa_vaddr_is_ioport(addr) || pcibios_vaddr_is_ioport(addr);
+> > # microblaze
+> > 
+> > Unless they're significantly more complicated than that, I don't see
+> > the point of deferring them.
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/kernel/head_64.S | 7 -------
- 1 file changed, 7 deletions(-)
+> ...
+> This series' purpose actually always has been to move PCI functions to
+> where they belong, i.e. from lib/ to drivers/pci.
+> I originally didn't want to touch pci_iounmap(), since I deemed it too
+> complicated. Arnd pushed for unifying it.
+> 
+> Anyways, investing much more time into this is beyond my time budget. I
+> only started this series to have a cleaner basis to do the devres
+> functions.
+> 
+> So my suggestions is that we either go with this cleanup here, which
+> improves the situation at least somewhat, or we simply drop patch #5
+> and leave pci_iounmap() as the last pci_ function in lib/
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index e671caafd932..ae211cb62a1e 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -76,13 +76,6 @@ SYM_CODE_START_LOCAL(primary_startup_64)
- 	/* Set up the stack for verify_cpu() */
- 	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
- 
--	/* Setup GSBASE to allow stack canary access for C code */
--	movl	$MSR_GS_BASE, %ecx
--	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
--	movl	%edx, %eax
--	shrq	$32,  %rdx
--	wrmsr
--
- 	call	startup_64_setup_env
- 
- 	/* Now switch to __KERNEL_CS so IRET works reliably */
--- 
-2.43.0.429.g432eaa2c6b-goog
+OK, let's drop #5 for now.  It definitely seems like where we should
+go in the future, but I think it will make more sense when we can
+include a few of the simple conversions that will show how it all fits
+together.
 
+Bjorn
 
