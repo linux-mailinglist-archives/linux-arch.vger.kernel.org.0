@@ -1,232 +1,200 @@
-Return-Path: <linux-arch+bounces-1761-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1762-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CA158405F1
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 14:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61B7884085E
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 15:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13F5C281AAD
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 13:04:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C99828272A
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 14:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 334B361688;
-	Mon, 29 Jan 2024 13:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272BA152DF4;
+	Mon, 29 Jan 2024 14:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Iqvpnmy6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57795627E5;
-	Mon, 29 Jan 2024 13:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE4A151CDC
+	for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 14:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706533442; cv=none; b=jJjV3NWEqLWsYgcvUYko8/sJNs+W3LbyvN/MipSd2Xb3/CkzmUBJix8MyG1lYJtv78nma+SOqBk38aOr0szq0a1HmJN0ZO1Gn/qpjBmo6pRfrTG2uHesU6MKADlB+fdRljvRNSijJu5/BZr8tO1J0S1a7wrtVqzPRWiO+6k+g7A=
+	t=1706538756; cv=none; b=CuptZqOAxgETIdRsOeWG6crMnLx6PpV3w4IDYa21ZqNwxZpLqP1WjBBCGCc/bjqqrwbFvKpUtBzxGBfdwtcmMTJKeXuT/Ga7T/+LMJwBOC2Vv296CW4OJu0NHpZiLVwQF0jYeYgxVnhimDJqstWtw9WrL2zI4JG9XAEzQORGA8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706533442; c=relaxed/simple;
-	bh=MW5KypFg1nPfOH+4Z7+YG9/XkLK+cVPVSXFwwG/gf9E=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hl2CS7t2n56jw+0eeN2dUSa7casXH90d43P9jwfty0SuDl2nEQx4vl2QIh9jVYJYPow71gpQ9jlYCaCd8+r2YZFla0GK4qcDlwLBvpfYCCHdhV15xhKGkRJASD9hYmZ6MkRn6BbHnOOOs1OBIv9aa8R6I8oRSgJTCqe+z6q9cDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TNpM75yZdz6K9JK;
-	Mon, 29 Jan 2024 21:00:51 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8F10A140A1B;
-	Mon, 29 Jan 2024 21:03:55 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 29 Jan
- 2024 13:03:54 +0000
-Date: Mon, 29 Jan 2024 13:03:54 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>,
-	<vishnu@os.amperecomputing.com>, <miguel.luis@oracle.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <20240129130354.0000042b@Huawei.com>
-In-Reply-To: <20240123092725.00004382@Huawei.com>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
-	<ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
-	<20240122160227.00002d83@Huawei.com>
-	<CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
-	<Za6mHRJVjb6M1mun@shell.armlinux.org.uk>
-	<20240123092725.00004382@Huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1706538756; c=relaxed/simple;
+	bh=4KscbxAYCjj2PD8V1wCvHcnFXsKmpE5jCNYRuVMCyW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JZBttUGVbhHJSneNK0SUOMFPCWO5+n4GMf5NNcUdMDBjGSB2bx639ZpXkqW1h+oRIsvG3tfP1euMlwRtm4NvcBQmKnc7UeSWHnlIQv3CPpRtZPnBMgYDCw7kHuTLNNw0fNMStgbB6hc/P3S7HbCnfW3YajsBKOwDeWfyW3t18Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Iqvpnmy6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706538753;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UhBdOI+JB6L0dCFGLAOqO2pJABjn3Znd2yV65wClG/w=;
+	b=Iqvpnmy6mMOPZYG3tx6bZyM1BBxCV+4385uaRT74evBaBlOh3R6HgGA6282djlwpn0ZbeE
+	xpmrbEGCe8wFspedK7kQ1URAAT4MbKHIiT6zUZxjDHa8AWqylfV9qr3YdfR1y99pJlWW/N
+	8v0S5RIQtE24HcSrrIXkIm0/j7+r6rE=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-Kz5-1HWrO6SlttN34_aWHQ-1; Mon,
+ 29 Jan 2024 09:32:29 -0500
+X-MC-Unique: Kz5-1HWrO6SlttN34_aWHQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 979933C13A90;
+	Mon, 29 Jan 2024 14:32:27 +0000 (UTC)
+Received: from t14s.fritz.box (unknown [10.39.194.46])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 75D74C3F;
+	Mon, 29 Jan 2024 14:32:22 +0000 (UTC)
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	Nick Piggin <npiggin@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org
+Subject: [PATCH v1 0/9] mm/memory: optimize unmap/zap with PTE-mapped THP
+Date: Mon, 29 Jan 2024 15:32:12 +0100
+Message-ID: <20240129143221.263763-1-david@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On Tue, 23 Jan 2024 09:27:25 +0000
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+This series is based on [1] and must be applied on top of it.
+Similar to what we did with fork(), let's implement PTE batching
+during unmap/zap when processing PTE-mapped THPs.
 
-> On Mon, 22 Jan 2024 17:30:05 +0000
-> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
->=20
-> > On Mon, Jan 22, 2024 at 05:22:46PM +0100, Rafael J. Wysocki wrote: =20
-> > > On Mon, Jan 22, 2024 at 5:02=E2=80=AFPM Jonathan Cameron
-> > > <Jonathan.Cameron@huawei.com> wrote:   =20
-> > > >
-> > > > On Mon, 15 Jan 2024 11:06:29 +0000
-> > > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> > > >   =20
-> > > > > On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote=
-:   =20
-> > > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kerne=
-l@armlinux.org.uk> wrote:   =20
-> > > > > > >
-> > > > > > > From: James Morse <james.morse@arm.com>
-> > > > > > >
-> > > > > > > ACPI has two descriptions of CPUs, one in the MADT/APIC table=
-, the other
-> > > > > > > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Pr=
-ocessors"
-> > > > > > > says "Each processor in the system must be declared in the AC=
-PI
-> > > > > > > namespace"). Having two descriptions allows firmware authors =
-to get
-> > > > > > > this wrong.
-> > > > > > >
-> > > > > > > If CPUs are described in the MADT/APIC, they will be brought =
-online
-> > > > > > > early during boot. Once the register_cpu() calls are moved to=
- ACPI,
-> > > > > > > they will be based on the DSDT description of the CPUs. When =
-CPUs are
-> > > > > > > missing from the DSDT description, they will end up online, b=
-ut not
-> > > > > > > registered.
-> > > > > > >
-> > > > > > > Add a helper that runs after acpi_init() has completed to reg=
-ister
-> > > > > > > CPUs that are online, but weren't found in the DSDT. Any CPU =
-that
-> > > > > > > is registered by this code triggers a firmware-bug warning an=
-d kernel
-> > > > > > > taint.
-> > > > > > >
-> > > > > > > Qemu TCG only describes the first CPU in the DSDT, unless cpu=
--hotplug
-> > > > > > > is configured.   =20
-> > > > > >
-> > > > > > So why is this a kernel problem?   =20
-> > > > >
-> > > > > So what are you proposing should be the behaviour here? What this
-> > > > > statement seems to be saying is that QEMU as it exists today only
-> > > > > describes the first CPU in DSDT.   =20
-> > > >
-> > > > This confuses me somewhat, because I'm far from sure which machines=
- this
-> > > > is true for in QEMU.  I'm guessing it's a legacy thing with
-> > > > some old distro version of QEMU - so we'll have to paper over it an=
-yway
-> > > > but for current QEMU I'm not sure it's true.
-> > > >
-> > > > Helpfully there are a bunch of ACPI table tests so I've been checki=
-ng
-> > > > through all the multi CPU cases.
-> > > >
-> > > > CPU hotplug not enabled.
-> > > > pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
-> > > > pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
-> > > > q35/DSDT.acpihmat - 2x Processor entries. -smp 2
-> > > > virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
-> > > > q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
-> > > > virt/DSDT.topology - 8x ACPI0007 entries
-> > > >
-> > > > I've also looked at the code and we have various types of
-> > > > CPU hotplug on x86 but they all build appropriate numbers of
-> > > > Processor() entries in DSDT.
-> > > > Arm likewise seems to build the right number of ACPI0007 entries
-> > > > (and doesn't yet have CPU HP support).
-> > > >
-> > > > If anyone can add a reference on why this is needed that would be v=
-ery
-> > > > helpful.   =20
-> > >=20
-> > > Yes, it would.
-> > >=20
-> > > Personally, I would prefer to assume that it is not necessary until it
-> > > turns out that (1) there is firmware with this issue actually in use
-> > > and (2) updating the firmware in question to follow the specification
-> > > is not practical.
-> > >=20
-> > > Otherwise, we'd make it easier to ship non-compliant firmware for no
-> > > good reason.   =20
-> >=20
-> > If Salil can't come up with a reason, then I'm in favour of dropping
-> > the patch like already done for patch 2. If the code change serves no
-> > useful purpose, there's no point in making the change.
-> >  =20
->=20
-> Salil's out today, but I've messaged him to follow up later in the week.
->=20
-> It 'might' be the odd cold plug path where QEMU half comes up, then extra
-> CPUs are added, then it boots. (used by some orchestration frameworks)
+We collect consecutive PTEs that map consecutive pages of the same large
+folio, making sure that the other PTE bits are compatible, and (a) adjust
+the refcount only once per batch, (b) call rmap handling functions only
+once per batch, (c) perform batch PTE setting/updates and (d) perform TLB
+entry removal once per batch.
 
-I poked this on x86 - it only applies with hotplug enabled anyway so
-same result as doing the hotplug later - All possible Processor() entries
-already exist in DSDT. Hence this isn't the source of the mysterious
-broken configuration.
+Ryan was previously working on this in the context of cont-pte for
+arm64, int latest iteration [2] with a focus on arm6 with cont-pte only.
+This series implements the optimization for all architectures, independent
+of such PTE bits, teaches MMU gather/TLB code to be fully aware of such
+large-folio-pages batches as well, and amkes use of our new rmap batching
+function when removing the rmap.
 
-If anyone does poke this path, the old discussion between James
-and Salil provides some instructions (mostly the thread is about
-another issue).
-https://op-lists.linaro.org/archives/list/linaro-open-discussions@op-lists.=
-linaro.org/thread/DNAGB2FB5ALVLV2BYWYOCLKGNF77PNXS/
+To achieve that, we have to enlighten MMU gather / page freeing code
+(i.e., everything that consumes encoded_page) to process unmapping
+of consecutive pages that all belong to the same large folio. I'm being
+very careful to not degrade order-0 performance, and it looks like I
+managed to achieve that.
 
-Also on x86 a test involving smp 2,max-cpus=3D4 and adding cpu-id 3
-(so skipping 2) doesn't boot. (this is without Salil's QEMU patches).
-I guess there are some well known rules in there that I don't know about
-and QEMU isn't preventing people shooting themselves in the foot.
+While this series should -- similar to [1] -- be beneficial for adding
+cont-pte support on arm64[2], it's one of the requirements for maintaining
+a total mapcount[3] for large folios with minimal added overhead and
+further changes[4] that build up on top of the total mapcount.
 
-As I'm concerned, drop this patch.
-If there are platforms out there doing this wrong they'll surface once
-we get this into more test farms (so linux-next).  If we need this
-'fix' we can apply it when we have a problem firmware to point at.
+Independent of all that, this series results in a speedup during munmap()
+and similar unmapping (process teardown, MADV_DONTNEED on larger ranges)
+with PTE-mapped THP, which is the default with THPs that are smaller than
+a PMD (for example, 16KiB to 1024KiB mTHPs for anonymous memory[5]).
 
-Thanks,
+On an Intel Xeon Silver 4210R CPU, munmap'ing a 1GiB VMA backed by
+PTE-mapped folios of the same size (stddev < 1%) results in the following
+runtimes for munmap() in seconds (shorter is better):
 
-Jonathan
+Folio Size | mm-unstable |      New | Change
+---------------------------------------------
+      4KiB |    0.058110 | 0.057715 |   - 1%
+     16KiB |    0.044198 | 0.035469 |   -20%
+     32KiB |    0.034216 | 0.023522 |   -31%
+     64KiB |    0.029207 | 0.018434 |   -37%
+    128KiB |    0.026579 | 0.014026 |   -47%
+    256KiB |    0.025130 | 0.011756 |   -53%
+    512KiB |    0.024292 | 0.010703 |   -56%
+   1024KiB |    0.023812 | 0.010294 |   -57%
+   2048KiB |    0.023785 | 0.009910 |   -58%
 
-> I don't have a set up for that and I won't get to creating one today anyw=
-ay
-> (we all love start of the year planning workshops!)
+CCing especially s390x folks, because they have a tlb freeing hooks that
+needs adjustment. Only tested on x86-64 for now, will have to do some more
+stress testing. Compile-tested on most other architectures. The PPC
+change is negleglible and makes my cross-compiler happy.
 
->=20
-> I've +CC'd a few people have run tests on the various iterations of this
-> work in the past.  Maybe one of them can shed some light on this?
->=20
-> Jonathan
->=20
->=20
->=20
->=20
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+[1] https://lkml.kernel.org/r/20240129124649.189745-1-david@redhat.com
+[2] https://lkml.kernel.org/r/20231218105100.172635-1-ryan.roberts@arm.com
+[3] https://lkml.kernel.org/r/20230809083256.699513-1-david@redhat.com
+[4] https://lkml.kernel.org/r/20231124132626.235350-1-david@redhat.com
+[5] https://lkml.kernel.org/r/20231207161211.2374093-1-ryan.roberts@arm.com
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc: Nick Piggin <npiggin@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+
+David Hildenbrand (9):
+  mm/memory: factor out zapping of present pte into zap_present_pte()
+  mm/memory: handle !page case in zap_present_pte() separately
+  mm/memory: further separate anon and pagecache folio handling in
+    zap_present_pte()
+  mm/memory: factor out zapping folio pte into zap_present_folio_pte()
+  mm/mmu_gather: pass "delay_rmap" instead of encoded page to
+    __tlb_remove_page_size()
+  mm/mmu_gather: define ENCODED_PAGE_FLAG_DELAY_RMAP
+  mm/mmu_gather: add __tlb_remove_folio_pages()
+  mm/mmu_gather: add tlb_remove_tlb_entries()
+  mm/memory: optimize unmap/zap with PTE-mapped THP
+
+ arch/powerpc/include/asm/tlb.h |   2 +
+ arch/s390/include/asm/tlb.h    |  30 ++++--
+ include/asm-generic/tlb.h      |  40 ++++++--
+ include/linux/mm_types.h       |  37 ++++++--
+ include/linux/pgtable.h        |  66 +++++++++++++
+ mm/memory.c                    | 167 +++++++++++++++++++++++----------
+ mm/mmu_gather.c                |  63 +++++++++++--
+ mm/swap.c                      |  12 ++-
+ mm/swap_state.c                |  12 ++-
+ 9 files changed, 347 insertions(+), 82 deletions(-)
+
+-- 
+2.43.0
 
 
