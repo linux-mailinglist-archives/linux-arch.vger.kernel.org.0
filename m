@@ -1,108 +1,177 @@
-Return-Path: <linux-arch+bounces-1855-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1856-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B96684295D
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 17:34:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59E15842A08
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 17:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 389F32928E1
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 16:34:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEFD7B24104
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 16:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 766F285C6F;
-	Tue, 30 Jan 2024 16:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 989136A011;
+	Tue, 30 Jan 2024 16:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K95DzjwF"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="O3j0OrZH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A1638DDF;
-	Tue, 30 Jan 2024 16:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E657086ADC;
+	Tue, 30 Jan 2024 16:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706632402; cv=none; b=A/AhCHqTgv1XFs50GV9Bxmq6waOWEggEbbAVEZNHRhOEydLTBlyijAdaUMG6IUdIRpDcZJjMmAzyIV+mLMfl0WbbfFKS7Y6hxL4bo5o4AKexLSTQSGm1evxv37wYWLo85kDGagMr/jJKWYhaloUnh3IiI512CXeWk5VuMUFgVW0=
+	t=1706633591; cv=none; b=EKHxJ3fA+ILWUQd9x7CBnQDnY4R7bPScxhDL6I+NVJQXqH+h64t2OQKAiltORg/XPqs1jZvg299eazWGgfLzol133jwEcS4RDfWh6Je3KiLRxn3f4OkSWd0dZHmwIgq+NHlSIA+2pNMbtQPtg+xfISc++vmLVyXjqtr5KYoXvLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706632402; c=relaxed/simple;
-	bh=7lcXGcjnNomt+i2x6M1dhs33eS+R8FWYGL8TkfLV164=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f60AhquwWo7KUhYLjPFMh5XTZnEL6gVeJgYeMOjjnMfoebo7qXeLPFMRyNWrYkzwj0b8AkKuKwo0wq4IQi/o0ZHgJ+xT2Iv+mts5gCQoMmoWEsOJhh7a29Fc5e3fb67Aj322S0cuXdNciLx8cJZ5KI6uc6Ty3u/z9OENpAuCxF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K95DzjwF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22BFC433F1;
-	Tue, 30 Jan 2024 16:33:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706632401;
-	bh=7lcXGcjnNomt+i2x6M1dhs33eS+R8FWYGL8TkfLV164=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=K95DzjwFeGX+F/y1ok9451Ib5LX5ZEJ4E0D+ZjuWleALpCIE99fi41NAKHj9en2NJ
-	 U5FmJ4e7R9SPvgRO9UpMYC0FnSlPxSYr5QNk8tao0YmswsccE/Vl+rHAK0X4AM7+zv
-	 w+WWKlwsAQ9kQ4bZmzCCmWpJwlYiZ5bxnArZsciBJPudRelHCtZXEfb+owvFN3mOO5
-	 Wnp6/fiKK0egb1O1NW0nmzC1CY2OPog7wPVXXfN/3N1Shgcv2aquiT72aMGNDVBh7U
-	 mnEXz8gU1Xvu213BsRH5Cvcicvwj6r3FElH/WtLuqCP+4bNSM1XmDmTtnMujAmDP4n
-	 +PAfg5gfC7gkA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 3E4A2CE14F0; Tue, 30 Jan 2024 08:33:21 -0800 (PST)
-Date: Tue, 30 Jan 2024 08:33:21 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Andrea Parri <parri.andrea@gmail.com>
+	s=arc-20240116; t=1706633591; c=relaxed/simple;
+	bh=Y0wTQsFQxBGihii2XUTlKjm4PLqLm9Iv8iRpB5W6oiU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bjKCaPid54xCcpoxWexp/m3dIN+c+tYNVDF/Y60Zcs6EL9zMAo2S67p01d5LOEx63YiwXL2CuBlHNaHM6Qt2GLtmcANThAvHwpJBnDWn8uAXEhghoanIVhSBSlJtaQQI4agxIEo+zIxIwyCoEdTmABgWdRGfiuJZExPGGwmXt1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=O3j0OrZH; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1706633582;
+	bh=Y0wTQsFQxBGihii2XUTlKjm4PLqLm9Iv8iRpB5W6oiU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=O3j0OrZHAaPVHqKNJDlGd9sdFDBgJv7ZTPNfF/geXnNU8X+vdyJrGNeG7jc2PmFcT
+	 vHVBTx2cw/X2mEB4vo+xPPWOPtfj3AJKyF1VL4ekbW/3UeTl1bhrPL7GJsbsUA4Xjf
+	 QN5n1PkrJytSFnG4MMAUxz0Hshp1lnfrHlGiViw5dhz+dbt5tSbQFQdUYOVz5zEo+z
+	 dkhR8Eo1aBMX3GoMv7Wy6G2ZBwdyZyWjGByfMC4pdfKcGaepdNqVweTXxNJdIP/9Jx
+	 3w/wriketsu8SXr0KY8sxsTXpUqpeoZdN4oQeD4+Ioed20ctoxadZGPgNX63/gVKyG
+	 2ldjjViqgwmkA==
+Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TPWSZ2LkgzVCQ;
+	Tue, 30 Jan 2024 11:53:02 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Dan Williams <dan.j.williams@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>
 Cc: linux-kernel@vger.kernel.org,
-	"E."@paulmck-thinkpad-p17-gen-1.smtp.subspace.kernel.org,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Paul@paulmck-thinkpad-p17-gen-1.smtp.subspace.kernel.org,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: Re: [PATCH doc] Emphasize that failed atomic operations give no
- ordering
-Message-ID: <db3d2a7e-a459-46e1-9c79-2b4e1d503ce5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <63d9d6f6-05e8-473d-9d09-ce8d3a33ca39@paulmck-laptop>
- <ZbkdqYFlFOdcZ63m@andrea>
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-mm@kvack.org,
+	linux-arch@vger.kernel.org,
+	Matthew Wilcox <willy@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-cxl@vger.kernel.org,
+	nvdimm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Subject: [RFC PATCH v2 0/8] Introduce dcache_is_aliasing() to fix DAX regression
+Date: Tue, 30 Jan 2024 11:52:47 -0500
+Message-Id: <20240130165255.212591-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbkdqYFlFOdcZ63m@andrea>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 30, 2024 at 05:02:49PM +0100, Andrea Parri wrote:
-> On Tue, Jan 30, 2024 at 06:53:38AM -0800, Paul E. McKenney wrote:
-> > The ORDERING section of Documentation/atomic_t.txt can easily be read as
-> > saying that conditional atomic RMW operations that fail are ordered when
-> > those operations have the _acquire() or _release() prefixes.  This is
-> 
-> s/prefixes/suffixes
+This commit introduced in v5.13 prevents building FS_DAX on 32-bit ARM,
+even on ARMv7 which does not have virtually aliased dcaches:
 
-Good catch, fixed.
+commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
 
-> > not the case, therefore update this section to make it clear that failed
-> > conditional atomic RMW operations provide no ordering.
-> > 
-> > Reported-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> You may want to add a "subsystem" to the subject line, git-log suggests
-> "Documentation/atomic_t".  Anyway,
+It used to work fine before: I have customers using DAX over pmem on
+ARMv7, but this regression will likely prevent them from upgrading their
+kernel.
 
-Good point, done.
+The root of the issue here is the fact that DAX was never designed to
+handle virtually aliased dcache (VIVT and VIPT with aliased dcache). It
+touches the pages through their linear mapping, which is not consistent
+with the userspace mappings on virtually aliased dcaches.
 
-> Acked-by: Andrea Parri <parri.andrea@gmail.com>
+This patch series introduces dcache_is_aliasing() with the new Kconfig
+option ARCH_HAS_CACHE_ALIASING and implements it for all architectures.
+The implementation of dcache_is_aliasing() is either evaluated to a
+constant at compile-time or a runtime check, which is what is needed on
+ARM.
 
-Thank you!
+With this we can basically narrow down the list of architectures which
+are unsupported by DAX to those which are really affected.
 
-							Thanx, Paul
+Note that the order of the series was completely changed based on the
+feedback received on v1, cache_is_aliasing() is renamed to
+dcache_is_aliasing(), ARCH_HAS_CACHE_ALIASING_DYNAMIC is gone,
+dcache_is_aliasing() vs ARCH_HAS_CACHE_ALIASING relationship is
+simplified, and the dax_is_supported() check was moved to its rightful
+place in all filesystems.
+
+Feedback is welcome,
+
+Thanks,
+
+Mathieu
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-cxl@vger.kernel.org
+Cc: nvdimm@lists.linux.dev
+Cc: linux-fsdevel@vger.kernel.org
+
+Mathieu Desnoyers (8):
+  dax: Introduce dax_is_supported()
+  erofs: Use dax_is_supported()
+  ext2: Use dax_is_supported()
+  ext4: Use dax_is_supported()
+  fuse: Use dax_is_supported()
+  xfs: Use dax_is_supported()
+  Introduce dcache_is_aliasing() across all architectures
+  dax: Fix incorrect list of dcache aliasing architectures
+
+ arch/arc/Kconfig                    |  1 +
+ arch/arc/include/asm/cachetype.h    |  9 +++++++++
+ arch/arm/Kconfig                    |  1 +
+ arch/arm/include/asm/cachetype.h    |  2 ++
+ arch/csky/Kconfig                   |  1 +
+ arch/csky/include/asm/cachetype.h   |  9 +++++++++
+ arch/m68k/Kconfig                   |  1 +
+ arch/m68k/include/asm/cachetype.h   |  9 +++++++++
+ arch/mips/Kconfig                   |  1 +
+ arch/mips/include/asm/cachetype.h   |  9 +++++++++
+ arch/nios2/Kconfig                  |  1 +
+ arch/nios2/include/asm/cachetype.h  | 10 ++++++++++
+ arch/parisc/Kconfig                 |  1 +
+ arch/parisc/include/asm/cachetype.h |  9 +++++++++
+ arch/sh/Kconfig                     |  1 +
+ arch/sh/include/asm/cachetype.h     |  9 +++++++++
+ arch/sparc/Kconfig                  |  1 +
+ arch/sparc/include/asm/cachetype.h  | 14 ++++++++++++++
+ arch/xtensa/Kconfig                 |  1 +
+ arch/xtensa/include/asm/cachetype.h | 10 ++++++++++
+ fs/Kconfig                          |  1 -
+ fs/erofs/super.c                    |  5 ++++-
+ fs/ext2/super.c                     |  6 +++++-
+ fs/ext4/super.c                     |  5 ++++-
+ fs/fuse/dax.c                       |  7 +++++++
+ fs/xfs/xfs_iops.c                   |  2 +-
+ include/linux/cacheinfo.h           |  6 ++++++
+ include/linux/dax.h                 |  9 +++++++++
+ mm/Kconfig                          |  6 ++++++
+ 29 files changed, 142 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arc/include/asm/cachetype.h
+ create mode 100644 arch/csky/include/asm/cachetype.h
+ create mode 100644 arch/m68k/include/asm/cachetype.h
+ create mode 100644 arch/mips/include/asm/cachetype.h
+ create mode 100644 arch/nios2/include/asm/cachetype.h
+ create mode 100644 arch/parisc/include/asm/cachetype.h
+ create mode 100644 arch/sh/include/asm/cachetype.h
+ create mode 100644 arch/sparc/include/asm/cachetype.h
+ create mode 100644 arch/xtensa/include/asm/cachetype.h
+
+-- 
+2.39.2
+
 
