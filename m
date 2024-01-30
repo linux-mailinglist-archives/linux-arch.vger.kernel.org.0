@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-1838-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1839-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BB5F84201B
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:50:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF807842054
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:00:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9B60B2BC76
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:49:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9A49289644
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10212605D5;
-	Tue, 30 Jan 2024 09:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01CE6087E;
+	Tue, 30 Jan 2024 09:55:38 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1305E59B4E;
-	Tue, 30 Jan 2024 09:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FA96086F;
+	Tue, 30 Jan 2024 09:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706608087; cv=none; b=SekgRKvgjxll/SfiGxup745QKTEOLZK+xwCzXLiRdgJnYwuFUpYoelpZfoKn+4Ry50yMOcgbww/Tx+Em4vYhxjCpYjqfVqZj/TynuoCvGXRxZJ5mBlOatXBe9/q5ZreSDT72gVBnE9B6SH8Zvi45tdh3ku9NdsKpi3U9h/u+YMg=
+	t=1706608538; cv=none; b=Drj0rhUslqQcC3+lcKaabPa6Ym4sdc9ByaxDQhF/vZ5+DLEZLTg+mXZiwC6EvgKwqtiIncicvi+5laA3luY1rix9EmfrMSbI8SDNsskzYANa+lIHef7CfBVQ4YpBTZDa138KmZCkiA6AbWS15hy95xrCc5IKHrgqEiS8o91U0FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706608087; c=relaxed/simple;
-	bh=v+6f5JbxnVnth39cGl4EmMu1BCx3bWHnFMyuWrpHkzw=;
+	s=arc-20240116; t=1706608538; c=relaxed/simple;
+	bh=WOZTw9Y83EwkyuXjcCeSq0YNMpNnO41d25R46ljQ2+Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=APPY93SKzgIO6Whcy5k4TkDDbs3gUwNgO6f+bFoVJyP1R8Z8b3qPAllcrmPQL1hVpg9008liiDwh8rJ4OrWGxwr/TyhPLHpDeU2p316AgCTkNmCfvommccS8p/6LriV4PZ/cx4dimWMlyCfOQUGqBwQ5ZgwHC42/T57K+pC+nvQ=
+	 In-Reply-To:Content-Type; b=USIAou9NO1wrwt7z/vTwtkgF0f+/ir3tfHcHxGpkMXxM/tpFPzr+GdneRxta2uAqhthb33SKzCH66NzVju1Zdyzj0qhYmN+tHcRHZECF730T9fRELvcAX/xf3LERdPpWCslXX4hoVN8Sf5We92yrdYaiZhjE19/7IKhdwNrB5+s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F710DA7;
-	Tue, 30 Jan 2024 01:48:48 -0800 (PST)
-Received: from [10.57.79.54] (unknown [10.57.79.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B3083F738;
-	Tue, 30 Jan 2024 01:48:01 -0800 (PST)
-Message-ID: <bec84017-b1c9-48e7-a206-c4c8a651ee83@arm.com>
-Date: Tue, 30 Jan 2024 09:48:00 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E839DA7;
+	Tue, 30 Jan 2024 01:56:19 -0800 (PST)
+Received: from [10.163.41.110] (unknown [10.163.41.110])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5569D3F738;
+	Tue, 30 Jan 2024 01:55:23 -0800 (PST)
+Message-ID: <1e03aec4-705a-41b6-b258-0b8944d9dc0c@arm.com>
+Date: Tue, 30 Jan 2024 15:25:20 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,327 +42,196 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 9/9] mm/memory: optimize unmap/zap with PTE-mapped THP
-Content-Language: en-GB
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- Matthew Wilcox <willy@infradead.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
- Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org
-References: <20240129143221.263763-1-david@redhat.com>
- <20240129143221.263763-10-david@redhat.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20240129143221.263763-10-david@redhat.com>
+Subject: Re: [PATCH RFC v3 11/35] mm: Allow an arch to hook into folio
+ allocation when VMA is known
+Content-Language: en-US
+To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
+ will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
+ james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ arnd@arndb.de, akpm@linux-foundation.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+ mhiramat@kernel.org, rppt@kernel.org, hughd@google.com
+Cc: pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
+ david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20240125164256.4147-1-alexandru.elisei@arm.com>
+ <20240125164256.4147-12-alexandru.elisei@arm.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20240125164256.4147-12-alexandru.elisei@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/01/2024 14:32, David Hildenbrand wrote:
-> Similar to how we optimized fork(), let's implement PTE batching when
-> consecutive (present) PTEs map consecutive pages of the same large
-> folio.
+
+
+On 1/25/24 22:12, Alexandru Elisei wrote:
+> arm64 uses VM_HIGH_ARCH_0 and VM_HIGH_ARCH_1 for enabling MTE for a VMA.
+> When VM_HIGH_ARCH_0, which arm64 renames to VM_MTE, is set for a VMA, and
+> the gfp flag __GFP_ZERO is present, the __GFP_ZEROTAGS gfp flag also gets
+> set in vma_alloc_zeroed_movable_folio().
 > 
-> Most infrastructure we need for batching (mmu gather, rmap) is already
-> there. We only have to add get_and_clear_full_ptes() and
-> clear_full_ptes(). Similarly, extend zap_install_uffd_wp_if_needed() to
-> process a PTE range.
+> Expand this to be more generic by adding an arch hook that modifes the gfp
+> flags for an allocation when the VMA is known.
 > 
-> We won't bother sanity-checking the mapcount of all subpages, but only
-> check the mapcount of the first subpage we process.
+> Note that __GFP_ZEROTAGS is ignored by the page allocator unless __GFP_ZERO
+> is also set; from that point of view, the current behaviour is unchanged,
+> even though the arm64 flag is set in more places.  When arm64 will have
+> support to reuse the tag storage for data allocation, the uses of the
+> __GFP_ZEROTAGS flag will be expanded to instruct the page allocator to try
+> to reserve the corresponding tag storage for the pages being allocated.
+
+Right but how will pushing __GFP_ZEROTAGS addition into gfp_t flags further
+down via a new arch call back i.e arch_calc_vma_gfp() while still maintaining
+(vma->vm_flags & VM_MTE) conditionality improve the current scenario. Because
+the page allocator could have still analyzed alloc flags for __GFP_ZEROTAGS
+for any additional stuff.
+
+OR this just adds some new core MM paths to get __GFP_ZEROTAGS which was not
+the case earlier via this call back.
+
 > 
-> To keep small folios as fast as possible force inlining of a specialized
-> variant using __always_inline with nr=1.
+> The flags returned by arch_calc_vma_gfp() are or'ed with the flags set by
+> the caller; this has been done to keep an architecture from modifying the
+> flags already set by the core memory management code; this is similar to
+> how do_mmap() -> calc_vm_flag_bits() -> arch_calc_vm_flag_bits() has been
+> implemented. This can be revisited in the future if there's a need to do
+> so.
 > 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 > ---
->  include/linux/pgtable.h | 66 +++++++++++++++++++++++++++++
->  mm/memory.c             | 92 +++++++++++++++++++++++++++++------------
->  2 files changed, 132 insertions(+), 26 deletions(-)
+>  arch/arm64/include/asm/page.h    |  5 ++---
+>  arch/arm64/include/asm/pgtable.h |  3 +++
+>  arch/arm64/mm/fault.c            | 19 ++++++-------------
+>  include/linux/pgtable.h          |  7 +++++++
+>  mm/mempolicy.c                   |  1 +
+>  mm/shmem.c                       |  5 ++++-
+>  6 files changed, 23 insertions(+), 17 deletions(-)
 > 
+> diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
+> index 2312e6ee595f..88bab032a493 100644
+> --- a/arch/arm64/include/asm/page.h
+> +++ b/arch/arm64/include/asm/page.h
+> @@ -29,9 +29,8 @@ void copy_user_highpage(struct page *to, struct page *from,
+>  void copy_highpage(struct page *to, struct page *from);
+>  #define __HAVE_ARCH_COPY_HIGHPAGE
+>  
+> -struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
+> -						unsigned long vaddr);
+> -#define vma_alloc_zeroed_movable_folio vma_alloc_zeroed_movable_folio
+> +#define vma_alloc_zeroed_movable_folio(vma, vaddr) \
+> +	vma_alloc_folio(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, 0, vma, vaddr, false)
+>  
+>  void tag_clear_highpage(struct page *to);
+>  #define __HAVE_ARCH_TAG_CLEAR_HIGHPAGE
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 79ce70fbb751..08f0904dbfc2 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -1071,6 +1071,9 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
+>  
+>  #endif /* CONFIG_ARM64_MTE */
+>  
+> +#define __HAVE_ARCH_CALC_VMA_GFP
+> +gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, gfp_t gfp);
+> +
+>  /*
+>   * On AArch64, the cache coherency is handled via the set_pte_at() function.
+>   */
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 55f6455a8284..4d3f0a870ad8 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -937,22 +937,15 @@ void do_debug_exception(unsigned long addr_if_watchpoint, unsigned long esr,
+>  NOKPROBE_SYMBOL(do_debug_exception);
+>  
+>  /*
+> - * Used during anonymous page fault handling.
+> + * If this is called during anonymous page fault handling, and the page is
+> + * mapped with PROT_MTE, initialise the tags at the point of tag zeroing as this
+> + * is usually faster than separate DC ZVA and STGM.
+>   */
+> -struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
+> -						unsigned long vaddr)
+> +gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, gfp_t gfp)
+>  {
+> -	gfp_t flags = GFP_HIGHUSER_MOVABLE | __GFP_ZERO;
+> -
+> -	/*
+> -	 * If the page is mapped with PROT_MTE, initialise the tags at the
+> -	 * point of allocation and page zeroing as this is usually faster than
+> -	 * separate DC ZVA and STGM.
+> -	 */
+>  	if (vma->vm_flags & VM_MTE)
+> -		flags |= __GFP_ZEROTAGS;
+> -
+> -	return vma_alloc_folio(flags, 0, vma, vaddr, false);
+> +		return __GFP_ZEROTAGS;
+> +	return 0;
+>  }
+>  
+>  void tag_clear_highpage(struct page *page)
 > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index aab227e12493..f0feae7f89fb 100644
+> index c5ddec6b5305..98f81ca08cbe 100644
 > --- a/include/linux/pgtable.h
 > +++ b/include/linux/pgtable.h
-> @@ -580,6 +580,72 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+> @@ -901,6 +901,13 @@ static inline void arch_do_swap_page(struct mm_struct *mm,
 >  }
 >  #endif
 >  
-> +#ifndef get_and_clear_full_ptes
-> +/**
-> + * get_and_clear_full_ptes - Clear PTEs that map consecutive pages of the same
-> + *			     folio, collecting dirty/accessed bits.
-> + * @mm: Address space the pages are mapped into.
-> + * @addr: Address the first page is mapped at.
-> + * @ptep: Page table pointer for the first entry.
-> + * @nr: Number of entries to clear.
-> + * @full: Whether we are clearing a full mm.
-> + *
-> + * May be overridden by the architecture; otherwise, implemented as a simple
-> + * loop over ptep_get_and_clear_full(), merging dirty/accessed bits into
-> + * returned PTE.
-> + *
-> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-> + * some PTEs might be write-protected.
-> + *
-> + * Context: The caller holds the page table lock.  The PTEs map consecutive
-> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
-> + */
-> +static inline pte_t get_and_clear_full_ptes(struct mm_struct *mm,
-> +		unsigned long addr, pte_t *ptep, unsigned int nr, int full)
+> +#ifndef __HAVE_ARCH_CALC_VMA_GFP
+> +static inline gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, gfp_t gfp)
 > +{
-> +	pte_t pte, tmp_pte;
-> +
-> +	pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-> +	while (--nr) {
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +		tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-> +		if (pte_dirty(tmp_pte))
-> +			pte = pte_mkdirty(pte);
-> +		if (pte_young(tmp_pte))
-> +			pte = pte_mkyoung(pte);
-> +	}
-> +	return pte;
+> +	return 0;
 > +}
 > +#endif
 > +
-> +#ifndef clear_full_ptes
-> +/**
-> + * clear_full_ptes - Clear PTEs that map consecutive pages of the same folio.
-
-I know its implied from "pages of the same folio" (and even more so for the
-above variant due to mention of access/dirty), but I wonder if its useful to
-explicitly state that "all ptes being cleared are present at the time of the call"?
-
-> + * @mm: Address space the pages are mapped into.
-> + * @addr: Address the first page is mapped at.
-> + * @ptep: Page table pointer for the first entry.
-> + * @nr: Number of entries to clear.
-> + * @full: Whether we are clearing a full mm.
-> + *
-> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-> + * some PTEs might be write-protected.
-> + *
-> + * Context: The caller holds the page table lock.  The PTEs map consecutive
-> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
-> + */
-> +static inline void clear_full_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr, int full)
-> +{
-> +	for (;;) {
-> +		ptep_get_and_clear_full(mm, addr, ptep, full);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +	}
-> +}
-> +#endif
->  
->  /*
->   * If two threads concurrently fault at the same page, the thread that
-> diff --git a/mm/memory.c b/mm/memory.c
-> index a2190d7cfa74..38a010c4d04d 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1515,7 +1515,7 @@ static inline bool zap_drop_file_uffd_wp(struct zap_details *details)
->   */
->  static inline void
->  zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
-> -			      unsigned long addr, pte_t *pte,
-> +			      unsigned long addr, pte_t *pte, int nr,
->  			      struct zap_details *details, pte_t pteval)
->  {
->  	/* Zap on anonymous always means dropping everything */
-> @@ -1525,20 +1525,27 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
->  	if (zap_drop_file_uffd_wp(details))
->  		return;
->  
-> -	pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-> +	for (;;) {
-> +		/* the PFN in the PTE is irrelevant. */
-> +		pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-> +		if (--nr == 0)
-> +			break;
-> +		pte++;
-> +		addr += PAGE_SIZE;
-> +	}
->  }
->  
-> -static inline void zap_present_folio_pte(struct mmu_gather *tlb,
-> +static __always_inline void zap_present_folio_ptes(struct mmu_gather *tlb,
->  		struct vm_area_struct *vma, struct folio *folio,
-> -		struct page *page, pte_t *pte, pte_t ptent, unsigned long addr,
-> -		struct zap_details *details, int *rss, bool *force_flush,
-> -		bool *force_break)
-> +		struct page *page, pte_t *pte, pte_t ptent, unsigned int nr,
-> +		unsigned long addr, struct zap_details *details, int *rss,
-> +		bool *force_flush, bool *force_break)
->  {
->  	struct mm_struct *mm = tlb->mm;
->  	bool delay_rmap = false;
->  
->  	if (!folio_test_anon(folio)) {
-> -		ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
-> +		ptent = get_and_clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
->  		if (pte_dirty(ptent)) {
->  			folio_mark_dirty(folio);
->  			if (tlb_delay_rmap(tlb)) {
-> @@ -1548,36 +1555,49 @@ static inline void zap_present_folio_pte(struct mmu_gather *tlb,
->  		}
->  		if (pte_young(ptent) && likely(vma_has_recency(vma)))
->  			folio_mark_accessed(folio);
-> -		rss[mm_counter(folio)]--;
-> +		rss[mm_counter(folio)] -= nr;
->  	} else {
->  		/* We don't need up-to-date accessed/dirty bits. */
-> -		ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
-> -		rss[MM_ANONPAGES]--;
-> +		clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
-> +		rss[MM_ANONPAGES] -= nr;
->  	}
-> +	/* Checking a single PTE in a batch is sufficient. */
->  	arch_check_zapped_pte(vma, ptent);
-> -	tlb_remove_tlb_entry(tlb, pte, addr);
-> +	tlb_remove_tlb_entries(tlb, pte, nr, addr);
->  	if (unlikely(userfaultfd_pte_wp(vma, ptent)))
-> -		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
-> +		zap_install_uffd_wp_if_needed(vma, addr, pte, nr, details,
-> +					      ptent);
->  
->  	if (!delay_rmap) {
-> -		folio_remove_rmap_pte(folio, page, vma);
-> +		folio_remove_rmap_ptes(folio, page, nr, vma);
-> +
-> +		/* Only sanity-check the first page in a batch. */
->  		if (unlikely(page_mapcount(page) < 0))
->  			print_bad_pte(vma, addr, ptent, page);
-
-Is there a case for either removing this all together or moving it into
-folio_remove_rmap_ptes()? It seems odd to only check some pages.
-
-
->  	}
-> -	if (unlikely(__tlb_remove_page(tlb, page, delay_rmap))) {
-> +	if (unlikely(__tlb_remove_folio_pages(tlb, page, nr, delay_rmap))) {
->  		*force_flush = true;
->  		*force_break = true;
->  	}
->  }
->  
-> -static inline void zap_present_pte(struct mmu_gather *tlb,
-> +/*
-> + * Zap or skip one present PTE, trying to batch-process subsequent PTEs that map
-
-Zap or skip *at least* one... ?
-
-> + * consecutive pages of the same folio.
-> + *
-> + * Returns the number of processed (skipped or zapped) PTEs (at least 1).
-> + */
-> +static inline int zap_present_ptes(struct mmu_gather *tlb,
->  		struct vm_area_struct *vma, pte_t *pte, pte_t ptent,
-> -		unsigned long addr, struct zap_details *details,
-> -		int *rss, bool *force_flush, bool *force_break)
-> +		unsigned int max_nr, unsigned long addr,
-> +		struct zap_details *details, int *rss, bool *force_flush,
-> +		bool *force_break)
->  {
-> +	const fpb_t fpb_flags = FPB_IGNORE_DIRTY | FPB_IGNORE_SOFT_DIRTY;
->  	struct mm_struct *mm = tlb->mm;
->  	struct folio *folio;
+>  #ifndef __HAVE_ARCH_FREE_PAGES_PREPARE
+>  static inline void arch_free_pages_prepare(struct page *page, int order) { }
+>  #endif
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 10a590ee1c89..f7ef52760b32 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -2168,6 +2168,7 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
+>  	pgoff_t ilx;
 >  	struct page *page;
-> +	int nr;
 >  
->  	page = vm_normal_page(vma, addr, ptent);
->  	if (!page) {
-> @@ -1587,14 +1607,29 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
->  		tlb_remove_tlb_entry(tlb, pte, addr);
->  		VM_WARN_ON_ONCE(userfaultfd_wp(vma));
->  		ksm_might_unmap_zero_page(mm, ptent);
-> -		return;
-> +		return 1;
->  	}
+> +	gfp |= arch_calc_vma_gfp(vma, gfp);
+>  	pol = get_vma_policy(vma, addr, order, &ilx);
+>  	page = alloc_pages_mpol(gfp | __GFP_COMP, order,
+>  				pol, ilx, numa_node_id());
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index d7c84ff62186..14427e9982f9 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -1585,7 +1585,7 @@ static struct folio *shmem_swapin_cluster(swp_entry_t swap, gfp_t gfp,
+>   */
+>  static gfp_t limit_gfp_mask(gfp_t huge_gfp, gfp_t limit_gfp)
+>  {
+> -	gfp_t allowflags = __GFP_IO | __GFP_FS | __GFP_RECLAIM;
+> +	gfp_t allowflags = __GFP_IO | __GFP_FS | __GFP_RECLAIM | __GFP_ZEROTAGS;
+>  	gfp_t denyflags = __GFP_NOWARN | __GFP_NORETRY;
+>  	gfp_t zoneflags = limit_gfp & GFP_ZONEMASK;
+>  	gfp_t result = huge_gfp & ~(allowflags | GFP_ZONEMASK);
+> @@ -2038,6 +2038,7 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
+>  		gfp_t huge_gfp;
 >  
->  	folio = page_folio(page);
->  	if (unlikely(!should_zap_folio(details, folio)))
-> -		return;
-> -	zap_present_folio_pte(tlb, vma, folio, page, pte, ptent, addr, details,
-> -			      rss, force_flush, force_break);
-> +		return 1;
+>  		huge_gfp = vma_thp_gfp_mask(vma);
+> +		huge_gfp |= arch_calc_vma_gfp(vma, huge_gfp);
+>  		huge_gfp = limit_gfp_mask(huge_gfp, gfp);
+>  		folio = shmem_alloc_and_add_folio(huge_gfp,
+>  				inode, index, fault_mm, true);
+> @@ -2214,6 +2215,8 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
+>  	vm_fault_t ret = 0;
+>  	int err;
+>  
+> +	gfp |= arch_calc_vma_gfp(vmf->vma, gfp);
 > +
-> +	/*
-> +	 * Make sure that the common "small folio" case is as fast as possible
-> +	 * by keeping the batching logic separate.
-> +	 */
-> +	if (unlikely(folio_test_large(folio) && max_nr != 1)) {
-> +		nr = folio_pte_batch(folio, addr, pte, ptent, max_nr, fpb_flags,
-> +				     NULL);
-> +
-> +		zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, nr,
-> +				       addr, details, rss, force_flush,
-> +				       force_break);
-> +		return nr;
-> +	}
-> +	zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, 1, addr,
-> +			       details, rss, force_flush, force_break);
-> +	return 1;
->  }
->  
->  static unsigned long zap_pte_range(struct mmu_gather *tlb,
-> @@ -1609,6 +1644,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  	pte_t *start_pte;
->  	pte_t *pte;
->  	swp_entry_t entry;
-> +	int nr;
->  
->  	tlb_change_page_size(tlb, PAGE_SIZE);
->  	init_rss_vec(rss);
-> @@ -1622,7 +1658,9 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  		pte_t ptent = ptep_get(pte);
->  		struct folio *folio = NULL;
->  		struct page *page;
-> +		int max_nr;
->  
-> +		nr = 1;
->  		if (pte_none(ptent))
->  			continue;
->  
-> @@ -1630,10 +1668,12 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  			break;
->  
->  		if (pte_present(ptent)) {
-> -			zap_present_pte(tlb, vma, pte, ptent, addr, details,
-> -					rss, &force_flush, &force_break);
-> +			max_nr = (end - addr) / PAGE_SIZE;
-> +			nr = zap_present_ptes(tlb, vma, pte, ptent, max_nr,
-> +					      addr, details, rss, &force_flush,
-> +					      &force_break);
->  			if (unlikely(force_break)) {
-> -				addr += PAGE_SIZE;
-> +				addr += nr * PAGE_SIZE;
->  				break;
->  			}
->  			continue;
-> @@ -1687,8 +1727,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  			WARN_ON_ONCE(1);
->  		}
->  		pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-> -		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
-> -	} while (pte++, addr += PAGE_SIZE, addr != end);
-> +		zap_install_uffd_wp_if_needed(vma, addr, pte, 1, details, ptent);
-> +	} while (pte += nr, addr += PAGE_SIZE * nr, addr != end);
->  
->  	add_mm_rss_vec(mm, rss);
->  	arch_leave_lazy_mmu_mode();
-
+>  	/*
+>  	 * Trinity finds that probing a hole which tmpfs is punching can
+>  	 * prevent the hole-punch from ever completing: noted in i_private.
 
