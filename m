@@ -1,39 +1,39 @@
-Return-Path: <linux-arch+bounces-1844-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1845-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AA91842331
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 12:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D9CC842338
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 12:36:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF74D1C23B7A
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:35:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41F2E1C23BDA
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238DC66B5C;
-	Tue, 30 Jan 2024 11:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDBB167739;
+	Tue, 30 Jan 2024 11:36:06 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F7D679E6;
-	Tue, 30 Jan 2024 11:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9456772A;
+	Tue, 30 Jan 2024 11:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706614509; cv=none; b=U72MQLbDiZ4SlZsWdX90epSbMVKNK+m1h7YI975QG9g8uEVL/raIKyFYeXsLV2kR+0nWRioP6w27liTpKtPP3q7FqAnwwth6fkqKlmEkjVe9M8zwKPd5JZ6pUxZSuxjiKG9CXW8HCvRs7V9L/YA+3PrOfVkYbKltvuRt8Rk6lmY=
+	t=1706614566; cv=none; b=gw8gwFbopdgSq4jJ7/alF33sZunpjxibM6eH4soA9wqKln6I/4sXPiPgKlsMBJjQByuG6nToshSaOio2QO68XXanD3VmueMeiS43P0jGAPPEmvOAkSz1C0CTok4NN8V3WN1mLxvJjWxAyY5kKi7iH33e7sed1mldvKUgrME9XSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706614509; c=relaxed/simple;
-	bh=07SSko51loIQzP9kc9KW4dZdkNU2a4AGreSz0PL6Uc8=;
+	s=arc-20240116; t=1706614566; c=relaxed/simple;
+	bh=WAaU6v81gufqF9xiusdx5rm8WpIZ9KbQZ5T5pInSwSg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pzkiyRKCtTLTSr4HnOwY7ylqpJzpinCPj9RkSthvfc6GG5FTlKoPbEWq9j4T4O+vz7rEMmhWv9Pj01XTI+HmRdvIMGOhoTyijzZ/MPyplsdVXyahp25LKWyauiprrHR9w2grpVgxZxO8mHcXc8lQWjvkAIJj/LAPLP1LILrzg5Q=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZTzTGyEMoGRxngaBRnPMKaFHznaIRT80fyQauKbtUT12YAbw//HmrQl7EK3NI9mHvvdBpSpxR5/LlEkUGJeouMSDEjcMZ9eEZSgTYnB/P2FMPc8xicmfkYhZMy5RVt/8Fwna8fYj7TDKXciOFY0Bb2QBfy/PM6ya0ssTPa4wC8s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB835DA7;
-	Tue, 30 Jan 2024 03:35:48 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09868DA7;
+	Tue, 30 Jan 2024 03:36:47 -0800 (PST)
 Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABE033F5A1;
-	Tue, 30 Jan 2024 03:34:59 -0800 (PST)
-Date: Tue, 30 Jan 2024 11:34:57 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4B3C3F5A1;
+	Tue, 30 Jan 2024 03:35:57 -0800 (PST)
+Date: Tue, 30 Jan 2024 11:35:47 +0000
 From: Alexandru Elisei <alexandru.elisei@arm.com>
 To: Anshuman Khandual <anshuman.khandual@arm.com>
 Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
@@ -50,12 +50,11 @@ Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
 	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v3 11/35] mm: Allow an arch to hook into folio
- allocation when VMA is known
-Message-ID: <Zbje4T5tZ5k707Wg@raptor>
+Subject: Re: [PATCH RFC v3 08/35] mm: cma: Introduce cma_alloc_range()
+Message-ID: <ZbjfEzlNgprdxfxX@raptor>
 References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-12-alexandru.elisei@arm.com>
- <1e03aec4-705a-41b6-b258-0b8944d9dc0c@arm.com>
+ <20240125164256.4147-9-alexandru.elisei@arm.com>
+ <61a3dbb7-25b6-4f49-aa70-9a8aaeb53365@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,189 +63,252 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1e03aec4-705a-41b6-b258-0b8944d9dc0c@arm.com>
+In-Reply-To: <61a3dbb7-25b6-4f49-aa70-9a8aaeb53365@arm.com>
 
 Hi,
 
-On Tue, Jan 30, 2024 at 03:25:20PM +0530, Anshuman Khandual wrote:
+On Tue, Jan 30, 2024 at 10:50:00AM +0530, Anshuman Khandual wrote:
 > 
 > 
 > On 1/25/24 22:12, Alexandru Elisei wrote:
-> > arm64 uses VM_HIGH_ARCH_0 and VM_HIGH_ARCH_1 for enabling MTE for a VMA.
-> > When VM_HIGH_ARCH_0, which arm64 renames to VM_MTE, is set for a VMA, and
-> > the gfp flag __GFP_ZERO is present, the __GFP_ZEROTAGS gfp flag also gets
-> > set in vma_alloc_zeroed_movable_folio().
+> > Today, cma_alloc() is used to allocate a contiguous memory region. The
+> > function allows the caller to specify the number of pages to allocate, but
+> > not the starting address. cma_alloc() will walk over the entire CMA region
+> > trying to allocate the first available range of the specified size.
 > > 
-> > Expand this to be more generic by adding an arch hook that modifes the gfp
-> > flags for an allocation when the VMA is known.
+> > Introduce cma_alloc_range(), which makes CMA more versatile by allowing the
+> > caller to specify a particular range in the CMA region, defined by the
+> > start pfn and the size.
 > > 
-> > Note that __GFP_ZEROTAGS is ignored by the page allocator unless __GFP_ZERO
-> > is also set; from that point of view, the current behaviour is unchanged,
-> > even though the arm64 flag is set in more places.  When arm64 will have
-> > support to reuse the tag storage for data allocation, the uses of the
-> > __GFP_ZEROTAGS flag will be expanded to instruct the page allocator to try
-> > to reserve the corresponding tag storage for the pages being allocated.
+> > arm64 will make use of this function when tag storage management will be
+> > implemented: cma_alloc_range() will be used to reserve the tag storage
+> > associated with a tagged page.
 > 
-> Right but how will pushing __GFP_ZEROTAGS addition into gfp_t flags further
-> down via a new arch call back i.e arch_calc_vma_gfp() while still maintaining
-> (vma->vm_flags & VM_MTE) conditionality improve the current scenario. Because
-
-I'm afraid I don't follow you.
-
-> the page allocator could have still analyzed alloc flags for __GFP_ZEROTAGS
-> for any additional stuff.
+> Basically, you would like to pass on a preferred start address and the
+> allocation could just fail if a contig range is not available from such
+> a starting address ?
 > 
-> OR this just adds some new core MM paths to get __GFP_ZEROTAGS which was not
-> the case earlier via this call back.
+> Then why not just change cma_alloc() to take a new argument 'start_pfn'.
+> Why create a new but almost similar allocator ?
 
-Before this patch: vma_alloc_zeroed_movable_folio() sets __GFP_ZEROTAGS.
-After this patch: vma_alloc_folio() sets __GFP_ZEROTAGS.
+I tried doing that, and I gave up because:
 
-This patch is about adding __GFP_ZEROTAGS for more callers.
+- It made cma_alloc() even more complex and hard to follow.
+
+- What value should 'start_pfn' be to tell cma_alloc() that it should be
+  ignored? Or, to put it another way, what pfn number is invalid on **all**
+  platforms that Linux supports?
+
+I can give it another go if we can come up with an invalid value for
+'start_pfn'.
+
+> 
+> But then I am wondering why this could not be done in the arm64 platform
+> code itself operating on a CMA area reserved just for tag storage. Unless
+> this new allocator has other usage beyond MTE, this could be implemented
+> in the platform itself.
+
+I had the same idea in the previous iteration, David Hildenbrand suggested
+this approach [1].
+
+[1] https://lore.kernel.org/linux-fsdevel/2aafd53f-af1f-45f3-a08c-d11962254315@redhat.com/
 
 Thanks,
 Alex
 
 > 
 > > 
-> > The flags returned by arch_calc_vma_gfp() are or'ed with the flags set by
-> > the caller; this has been done to keep an architecture from modifying the
-> > flags already set by the core memory management code; this is similar to
-> > how do_mmap() -> calc_vm_flag_bits() -> arch_calc_vm_flag_bits() has been
-> > implemented. This can be revisited in the future if there's a need to do
-> > so.
-> > 
 > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 > > ---
-> >  arch/arm64/include/asm/page.h    |  5 ++---
-> >  arch/arm64/include/asm/pgtable.h |  3 +++
-> >  arch/arm64/mm/fault.c            | 19 ++++++-------------
-> >  include/linux/pgtable.h          |  7 +++++++
-> >  mm/mempolicy.c                   |  1 +
-> >  mm/shmem.c                       |  5 ++++-
-> >  6 files changed, 23 insertions(+), 17 deletions(-)
 > > 
-> > diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
-> > index 2312e6ee595f..88bab032a493 100644
-> > --- a/arch/arm64/include/asm/page.h
-> > +++ b/arch/arm64/include/asm/page.h
-> > @@ -29,9 +29,8 @@ void copy_user_highpage(struct page *to, struct page *from,
-> >  void copy_highpage(struct page *to, struct page *from);
-> >  #define __HAVE_ARCH_COPY_HIGHPAGE
+> > Changes since rfc v2:
+> > 
+> > * New patch.
+> > 
+> >  include/linux/cma.h        |  2 +
+> >  include/trace/events/cma.h | 59 ++++++++++++++++++++++++++
+> >  mm/cma.c                   | 86 ++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 147 insertions(+)
+> > 
+> > diff --git a/include/linux/cma.h b/include/linux/cma.h
+> > index 63873b93deaa..e32559da6942 100644
+> > --- a/include/linux/cma.h
+> > +++ b/include/linux/cma.h
+> > @@ -50,6 +50,8 @@ extern int cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
+> >  					struct cma **res_cma);
+> >  extern struct page *cma_alloc(struct cma *cma, unsigned long count, unsigned int align,
+> >  			      bool no_warn);
+> > +extern int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+> > +			   unsigned tries, gfp_t gfp);
+> >  extern bool cma_pages_valid(struct cma *cma, const struct page *pages, unsigned long count);
+> >  extern bool cma_release(struct cma *cma, const struct page *pages, unsigned long count);
 > >  
-> > -struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
-> > -						unsigned long vaddr);
-> > -#define vma_alloc_zeroed_movable_folio vma_alloc_zeroed_movable_folio
-> > +#define vma_alloc_zeroed_movable_folio(vma, vaddr) \
-> > +	vma_alloc_folio(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, 0, vma, vaddr, false)
+> > diff --git a/include/trace/events/cma.h b/include/trace/events/cma.h
+> > index 25103e67737c..a89af313a572 100644
+> > --- a/include/trace/events/cma.h
+> > +++ b/include/trace/events/cma.h
+> > @@ -36,6 +36,65 @@ TRACE_EVENT(cma_release,
+> >  		  __entry->count)
+> >  );
 > >  
-> >  void tag_clear_highpage(struct page *to);
-> >  #define __HAVE_ARCH_TAG_CLEAR_HIGHPAGE
-> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> > index 79ce70fbb751..08f0904dbfc2 100644
-> > --- a/arch/arm64/include/asm/pgtable.h
-> > +++ b/arch/arm64/include/asm/pgtable.h
-> > @@ -1071,6 +1071,9 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
-> >  
-> >  #endif /* CONFIG_ARM64_MTE */
-> >  
-> > +#define __HAVE_ARCH_CALC_VMA_GFP
-> > +gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, gfp_t gfp);
+> > +TRACE_EVENT(cma_alloc_range_start,
 > > +
-> >  /*
-> >   * On AArch64, the cache coherency is handled via the set_pte_at() function.
-> >   */
-> > diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> > index 55f6455a8284..4d3f0a870ad8 100644
-> > --- a/arch/arm64/mm/fault.c
-> > +++ b/arch/arm64/mm/fault.c
-> > @@ -937,22 +937,15 @@ void do_debug_exception(unsigned long addr_if_watchpoint, unsigned long esr,
-> >  NOKPROBE_SYMBOL(do_debug_exception);
+> > +	TP_PROTO(const char *name, unsigned long start, unsigned long count,
+> > +		 unsigned tries),
+> > +
+> > +	TP_ARGS(name, start, count, tries),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__string(name, name)
+> > +		__field(unsigned long, start)
+> > +		__field(unsigned long, count)
+> > +		__field(unsigned, tries)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		__assign_str(name, name);
+> > +		__entry->start = start;
+> > +		__entry->count = count;
+> > +		__entry->tries = tries;
+> > +	),
+> > +
+> > +	TP_printk("name=%s start=%lx count=%lu tries=%u",
+> > +		  __get_str(name),
+> > +		  __entry->start,
+> > +		  __entry->count,
+> > +		  __entry->tries)
+> > +);
+> > +
+> > +TRACE_EVENT(cma_alloc_range_finish,
+> > +
+> > +	TP_PROTO(const char *name, unsigned long start, unsigned long count,
+> > +		 unsigned attempts, int err),
+> > +
+> > +	TP_ARGS(name, start, count, attempts, err),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__string(name, name)
+> > +		__field(unsigned long, start)
+> > +		__field(unsigned long, count)
+> > +		__field(unsigned, attempts)
+> > +		__field(int, err)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		__assign_str(name, name);
+> > +		__entry->start = start;
+> > +		__entry->count = count;
+> > +		__entry->attempts = attempts;
+> > +		__entry->err = err;
+> > +	),
+> > +
+> > +	TP_printk("name=%s start=%lx count=%lu attempts=%u err=%d",
+> > +		  __get_str(name),
+> > +		  __entry->start,
+> > +		  __entry->count,
+> > +		  __entry->attempts,
+> > +		  __entry->err)
+> > +);
+> > +
+> >  TRACE_EVENT(cma_alloc_start,
 > >  
-> >  /*
-> > - * Used during anonymous page fault handling.
-> > + * If this is called during anonymous page fault handling, and the page is
-> > + * mapped with PROT_MTE, initialise the tags at the point of tag zeroing as this
-> > + * is usually faster than separate DC ZVA and STGM.
-> >   */
-> > -struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
-> > -						unsigned long vaddr)
-> > +gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, gfp_t gfp)
-> >  {
-> > -	gfp_t flags = GFP_HIGHUSER_MOVABLE | __GFP_ZERO;
-> > -
-> > -	/*
-> > -	 * If the page is mapped with PROT_MTE, initialise the tags at the
-> > -	 * point of allocation and page zeroing as this is usually faster than
-> > -	 * separate DC ZVA and STGM.
-> > -	 */
-> >  	if (vma->vm_flags & VM_MTE)
-> > -		flags |= __GFP_ZEROTAGS;
-> > -
-> > -	return vma_alloc_folio(flags, 0, vma, vaddr, false);
-> > +		return __GFP_ZEROTAGS;
-> > +	return 0;
-> >  }
-> >  
-> >  void tag_clear_highpage(struct page *page)
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index c5ddec6b5305..98f81ca08cbe 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -901,6 +901,13 @@ static inline void arch_do_swap_page(struct mm_struct *mm,
-> >  }
+> >  	TP_PROTO(const char *name, unsigned long count, unsigned int align),
+> > diff --git a/mm/cma.c b/mm/cma.c
+> > index 543bb6b3be8e..4a0f68b9443b 100644
+> > --- a/mm/cma.c
+> > +++ b/mm/cma.c
+> > @@ -416,6 +416,92 @@ static void cma_debug_show_areas(struct cma *cma)
+> >  static inline void cma_debug_show_areas(struct cma *cma) { }
 > >  #endif
 > >  
-> > +#ifndef __HAVE_ARCH_CALC_VMA_GFP
-> > +static inline gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, gfp_t gfp)
+> > +/**
+> > + * cma_alloc_range() - allocate pages in a specific range
+> > + * @cma:   Contiguous memory region for which the allocation is performed.
+> > + * @start: Starting pfn of the allocation.
+> > + * @count: Requested number of pages
+> > + * @tries: Number of tries if the range is busy
+> > + * @no_warn: Avoid printing message about failed allocation
+> > + *
+> > + * This function allocates part of contiguous memory from a specific contiguous
+> > + * memory area, from the specified starting address. The 'start' pfn and the the
+> > + * 'count' number of pages must be aligned to the CMA bitmap order per bit.
+> > + */
+> > +int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+> > +		    unsigned tries, gfp_t gfp)
 > > +{
-> > +	return 0;
+> > +	unsigned long bitmap_maxno, bitmap_no, bitmap_start, bitmap_count;
+> > +	unsigned long i = 0;
+> > +	struct page *page;
+> > +	int err = -EINVAL;
+> > +
+> > +	if (!cma || !cma->count || !cma->bitmap)
+> > +		goto out_stats;
+> > +
+> > +	trace_cma_alloc_range_start(cma->name, start, count, tries);
+> > +
+> > +	if (!count || start < cma->base_pfn ||
+> > +	    start + count > cma->base_pfn + cma->count)
+> > +		goto out_stats;
+> > +
+> > +	if (!IS_ALIGNED(start | count, 1 << cma->order_per_bit))
+> > +		goto out_stats;
+> > +
+> > +	bitmap_start = (start - cma->base_pfn) >> cma->order_per_bit;
+> > +	bitmap_maxno = cma_bitmap_maxno(cma);
+> > +	bitmap_count = cma_bitmap_pages_to_bits(cma, count);
+> > +
+> > +	spin_lock_irq(&cma->lock);
+> > +	bitmap_no = bitmap_find_next_zero_area(cma->bitmap, bitmap_maxno,
+> > +					       bitmap_start, bitmap_count, 0);
+> > +	if (bitmap_no != bitmap_start) {
+> > +		spin_unlock_irq(&cma->lock);
+> > +		err = -EEXIST;
+> > +		goto out_stats;
+> > +	}
+> > +	bitmap_set(cma->bitmap, bitmap_start, bitmap_count);
+> > +	spin_unlock_irq(&cma->lock);
+> > +
+> > +	for (i = 0; i < tries; i++) {
+> > +		mutex_lock(&cma_mutex);
+> > +		err = alloc_contig_range(start, start + count, MIGRATE_CMA, gfp);
+> > +		mutex_unlock(&cma_mutex);
+> > +
+> > +		if (err != -EBUSY)
+> > +			break;
+> > +	}
+> > +
+> > +	if (err) {
+> > +		cma_clear_bitmap(cma, start, count);
+> > +	} else {
+> > +		page = pfn_to_page(start);
+> > +
+> > +		/*
+> > +		 * CMA can allocate multiple page blocks, which results in
+> > +		 * different blocks being marked with different tags. Reset the
+> > +		 * tags to ignore those page blocks.
+> > +		 */
+> > +		for (i = 0; i < count; i++)
+> > +			page_kasan_tag_reset(nth_page(page, i));
+> > +	}
+> > +
+> > +out_stats:
+> > +	trace_cma_alloc_range_finish(cma->name, start, count, i, err);
+> > +
+> > +	if (err) {
+> > +		count_vm_events(CMA_ALLOC_FAIL, count);
+> > +		if (cma)
+> > +			cma_sysfs_account_fail_pages(cma, count);
+> > +	} else {
+> > +		count_vm_events(CMA_ALLOC_SUCCESS, count);
+> > +		cma_sysfs_account_success_pages(cma, count);
+> > +	}
+> > +
+> > +	return err;
 > > +}
-> > +#endif
 > > +
-> >  #ifndef __HAVE_ARCH_FREE_PAGES_PREPARE
-> >  static inline void arch_free_pages_prepare(struct page *page, int order) { }
-> >  #endif
-> > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> > index 10a590ee1c89..f7ef52760b32 100644
-> > --- a/mm/mempolicy.c
-> > +++ b/mm/mempolicy.c
-> > @@ -2168,6 +2168,7 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
-> >  	pgoff_t ilx;
-> >  	struct page *page;
-> >  
-> > +	gfp |= arch_calc_vma_gfp(vma, gfp);
-> >  	pol = get_vma_policy(vma, addr, order, &ilx);
-> >  	page = alloc_pages_mpol(gfp | __GFP_COMP, order,
-> >  				pol, ilx, numa_node_id());
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index d7c84ff62186..14427e9982f9 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -1585,7 +1585,7 @@ static struct folio *shmem_swapin_cluster(swp_entry_t swap, gfp_t gfp,
-> >   */
-> >  static gfp_t limit_gfp_mask(gfp_t huge_gfp, gfp_t limit_gfp)
-> >  {
-> > -	gfp_t allowflags = __GFP_IO | __GFP_FS | __GFP_RECLAIM;
-> > +	gfp_t allowflags = __GFP_IO | __GFP_FS | __GFP_RECLAIM | __GFP_ZEROTAGS;
-> >  	gfp_t denyflags = __GFP_NOWARN | __GFP_NORETRY;
-> >  	gfp_t zoneflags = limit_gfp & GFP_ZONEMASK;
-> >  	gfp_t result = huge_gfp & ~(allowflags | GFP_ZONEMASK);
-> > @@ -2038,6 +2038,7 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
-> >  		gfp_t huge_gfp;
-> >  
-> >  		huge_gfp = vma_thp_gfp_mask(vma);
-> > +		huge_gfp |= arch_calc_vma_gfp(vma, huge_gfp);
-> >  		huge_gfp = limit_gfp_mask(huge_gfp, gfp);
-> >  		folio = shmem_alloc_and_add_folio(huge_gfp,
-> >  				inode, index, fault_mm, true);
-> > @@ -2214,6 +2215,8 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
-> >  	vm_fault_t ret = 0;
-> >  	int err;
-> >  
-> > +	gfp |= arch_calc_vma_gfp(vmf->vma, gfp);
 > > +
-> >  	/*
-> >  	 * Trinity finds that probing a hole which tmpfs is punching can
-> >  	 * prevent the hole-punch from ever completing: noted in i_private.
+> >  /**
+> >   * cma_alloc() - allocate pages from contiguous area
+> >   * @cma:   Contiguous memory region for which the allocation is performed.
+> 
 
