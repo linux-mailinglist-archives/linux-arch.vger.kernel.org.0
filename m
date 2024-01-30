@@ -1,104 +1,149 @@
-Return-Path: <linux-arch+bounces-1868-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1869-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC7A2842FA0
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 23:25:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 658FA843106
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 00:18:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AA191C23B31
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 22:25:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A085B253CC
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 23:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41AB7BAF2;
-	Tue, 30 Jan 2024 22:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9C857993B;
+	Tue, 30 Jan 2024 23:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fO00VUs/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sxdcQwez"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE25E7BAE9;
-	Tue, 30 Jan 2024 22:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3123278B70
+	for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 23:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706653539; cv=none; b=qMSIlZ27qWQ+WtMu/Hex9FeITmTShIJ4LpN3yIPZYK91OIwITd3ObwlHzT3i6wRqrQb+oonbd10JFv0ufMpp3X1/m3h2C5OCDZJFKotlNGAHMktS+FqP8squECtL6s796W8CsnJlPv9bdIU2VrCnYGO83iB0w/BJpkFlx8LPn5o=
+	t=1706656584; cv=none; b=ET1zBL2OaGmE21JjXYyd4oJZEqAovNedFTyLwarZk61o4ZeSCVaE315mw71qus9qe3pay6LojvDOLPG+SK/FgaToVXS8oymyGgqGqBKouvxMW8cFPD4hxXLB9CQAdREWn0P3gJJwwALyfL/cgXBnbaXsYGJPS7wWG5zavfwOhBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706653539; c=relaxed/simple;
-	bh=rti7mztnsIyooNfSUewv1B47KEAqojy4aPd6GMveyvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gb1BM/xoYIqevLnkece06GMYHEEUFAFne5IyI2VUmrvhdGL+bnDjeBaABIWZK6XU3Tof0ueUaMMoTco6Npph1AXMXeZ7sqOKURlIi8jBhs89hJhLets3FqjUR2se2ruWU/rOTEPm2GyrfeDAUJspDL/4GTmQ6duQLmUcr0bRVGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fO00VUs/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE7FC433C7;
-	Tue, 30 Jan 2024 22:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706653539;
-	bh=rti7mztnsIyooNfSUewv1B47KEAqojy4aPd6GMveyvA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fO00VUs/gI+wGkwjc7jhpJr7obyerwaweKgya4sJydDpMHVoKb7EhVRPXdC5Q1f6i
-	 fECcU0vEJBELW/NhZlaWocrbjP2U+uEJ6kRlcGBDfN3ZMvHYVFhekB4wM+dJwNh0Xm
-	 IaXlGii3VZFl0y0R7Wj3oybOq+r1VVjafJxEUSmY//0/z1JmrsMxAl+kiyRzAH3Jm3
-	 yICd5+m5x5mjfZU2/x1SdI1nRrPz3GTTU6kJDSxD8m1/Xu/Cs8HrQqGaAKx35AFxEn
-	 5LnX51uzCTqXHb0fC5XueWQiBwc5pBL4R8b43w8B5M0bh0vqHS6FTZ1dnRqqvwmDZI
-	 lQ7knF2lwQMFA==
-Date: Tue, 30 Jan 2024 16:25:36 -0600
-From: Rob Herring <robh@kernel.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>, andi.shyti@kernel.org, arnd@arndb.de,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org,
-	peter.griffin@linaro.org, semen.protsenko@linaro.org,
-	kernel-team@android.com, willmcvicker@google.com
-Subject: Re: [PATCH v2 05/28] spi: dt-bindings: samsung: add
- samsung,spi-fifosize property
-Message-ID: <20240130222536.GA2523173-robh@kernel.org>
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-6-tudor.ambarus@linaro.org>
- <7ef86704-3e40-4d39-a69d-a30719c96660@sirena.org.uk>
- <1c58deef-bc0f-4889-bf40-54168ce9ff7c@linaro.org>
- <55af5d4a-7bc9-4ae7-88c5-5acae4666450@sirena.org.uk>
- <f2ec664b-cd67-4cae-9c0d-5a435c72f121@linaro.org>
- <f44d5c58-234d-45ec-8027-47df079e2f16@sirena.org.uk>
- <96f9306f-3445-484b-bd3c-82e708681f1b@linaro.org>
+	s=arc-20240116; t=1706656584; c=relaxed/simple;
+	bh=8HUiHdc+ibKN+Ur+tXnhLRORbN73eAOd7u4PFL/scZQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VHg8SHwLIMI8JBl75yD70JblExWhDq9U+WUONwBdkr9glsxbZAEl6lID2TLtvMyW1UJg7tSyH0rvr1mnweMjr2FkXWWstrLbuBh4JAwR79Dkel1TpCMU+fHC80CVojjr1IM+ae54B5viGXchUgzru/h8Svqj5sxJ5uCyb6xtPg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sxdcQwez; arc=none smtp.client-ip=209.85.222.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-7d2df857929so1974200241.3
+        for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 15:16:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706656581; x=1707261381; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X5dtCbU1Q3SdQupNf6FgVTBSHBjEi2YVyb9X02Fgq+c=;
+        b=sxdcQwezfSLgVaSQ8rr0d/EC3e2v63lGwwlaTIUZDKEm/kTdyK+fwuf14qitt8tLqS
+         1zqGaXdbpqTgrRoT8FkIe+QYGpmMj829KUSTBni2gpOsWynelRJ3n6XkAyxARG18ESKR
+         rFgXMVrZ6PmG5SqprNS5+HxlSr/8ORWiV9VBrHoQfO7lQZDW0If+B8axCkvBv7ivYg2f
+         hCKFKATKvW2nGDQlwCMGTfl5T+Qfhl6MVkJ0sM6h6o7LC/oWWOpfrNbzAVZTqbQZAJcy
+         ObjYgOKqj9igk+zunjMi7bQv/sj//0R1WA/UqnVmn9EK2SeDmddAk0Ma91XzhmSpYUSq
+         yYhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706656581; x=1707261381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X5dtCbU1Q3SdQupNf6FgVTBSHBjEi2YVyb9X02Fgq+c=;
+        b=LvjcR6efdjGW68tP4v4TA4KknEoMJvTmH7nO+FaYbl7SNxYPCDaqsGAsrg4iSr7cL1
+         3TMzz05cK7OSOrA/NQ05c1LuSgI9bF6UuCayI+LOG0w/ySO+odv17/OoIyDs3vsvDMVv
+         +JC2Zk+Idb86sbe1brRkgePScOY9YrgpWP/TGyxButbwM6ux83KIGo9a3ok+wyIyzTMF
+         9qByd0lRPHhzFR9wl3UyImGBEX2UYiYUhqyrUHf5dsMVw9y+JWH4pCBgp+1KoPwEPhIG
+         GWLklpGhWo/pppoKJN0M7Uub7mBcU9QelKXXTrMIr2fPmMFiB1biJZw3cGamMdlME5WN
+         AQ5A==
+X-Gm-Message-State: AOJu0Yz9/fdWhG7eE6Oz37nVTtaArID8MRSu/RyhyJEgVYwgfDQZRg3y
+	lRIh+fJQKBxsquzdpxbyGvDCKr31xDLtPeE6eBB3+oA7B6lGH/yN53xxaKeLcFvPdY9AMUg96+N
+	24Sd80EsNPlPOX+eKaMI402cXbaWMe+HJjrBd
+X-Google-Smtp-Source: AGHT+IHVeZnWZzX9x8MwziS5Z9VLveTfJkLYZmbBNObwr2EDXGgzT2Yz8dfelIQ/4Pz45SqzPUgDy83l9kcP8lU4+j0=
+X-Received: by 2002:a05:6102:3bf0:b0:46b:3e99:7813 with SMTP id
+ be16-20020a0561023bf000b0046b3e997813mr5251130vsb.9.1706656580881; Tue, 30
+ Jan 2024 15:16:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96f9306f-3445-484b-bd3c-82e708681f1b@linaro.org>
+References: <20240129180502.4069817-21-ardb+git@google.com> <20240129180502.4069817-35-ardb+git@google.com>
+In-Reply-To: <20240129180502.4069817-35-ardb+git@google.com>
+From: Kevin Loughlin <kevinloughlin@google.com>
+Date: Tue, 30 Jan 2024 15:16:09 -0800
+Message-ID: <CAGdbjmKDZ8R+EjR-u09r9c4Y8Y0HjWaXPARSKsW0R5zVBSLPPA@mail.gmail.com>
+Subject: Re: [PATCH v3 14/19] x86/coco: Make cc_set_mask() static inline
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 25, 2024 at 07:01:10PM +0000, Tudor Ambarus wrote:
-> 
-> 
-> On 1/25/24 17:45, Mark Brown wrote:
-> > On Thu, Jan 25, 2024 at 05:30:53PM +0000, Tudor Ambarus wrote:
-> >> On 1/25/24 17:26, Mark Brown wrote:
-> > 
-> >>> OK, so just the compatible is enough information then?
-> > 
-> >> For gs101, yes. All the gs101 SPI instances are configured with 64 bytes
-> >> FIFO depths. So instead of specifying the FIFO depth for each SPI node,
-> >> we can infer the FIFO depth from the compatible.
-> > 
-> > But this is needed for other SoCs?  This change is scattered through a
-> 
-> There are SoCs that have multiple instances of the SPI IP, and they
-> configure them with different FIFO depths. See
-> "samsung,exynosautov9-spi" for example: SPI0, SPI1, and SPI6 are
-> configured by the SoC to use 256 bytes FIFO depths, while all the other
-> 8 SPI instances use 64 bytes FIFOs. I tried to explain the entire logic
-> of the series in another reply, see it here:
-> https://lore.kernel.org/linux-arm-kernel/40ba9481-4aea-4a72-87bd-c2db319be069@linaro.org/T/#u
+On Mon, Jan 29, 2024 at 10:06=E2=80=AFAM Ard Biesheuvel <ardb+git@google.co=
+m> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Setting the cc_mask global variable may be done early in the boot while
+> running fromm a 1:1 translation. This code is built with -fPIC in order
+> to support this.
+>
+> Make cc_set_mask() static inline so it can execute safely in this
+> context as well.
+>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/coco/core.c        | 7 +------
+>  arch/x86/include/asm/coco.h | 8 +++++++-
+>  2 files changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+> index eeec9986570e..d07be9d05cd0 100644
+> --- a/arch/x86/coco/core.c
+> +++ b/arch/x86/coco/core.c
+> @@ -14,7 +14,7 @@
+>  #include <asm/processor.h>
+>
+>  enum cc_vendor cc_vendor __ro_after_init =3D CC_VENDOR_NONE;
+> -static u64 cc_mask __ro_after_init;
+> +u64 cc_mask __ro_after_init;
+>
+>  static bool noinstr intel_cc_platform_has(enum cc_attr attr)
+>  {
+> @@ -148,8 +148,3 @@ u64 cc_mkdec(u64 val)
+>         }
+>  }
+>  EXPORT_SYMBOL_GPL(cc_mkdec);
+> -
+> -__init void cc_set_mask(u64 mask)
+> -{
+> -       cc_mask =3D mask;
+> -}
+> diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+> index 6ae2d16a7613..ecc29d6136ad 100644
+> --- a/arch/x86/include/asm/coco.h
+> +++ b/arch/x86/include/asm/coco.h
+> @@ -13,7 +13,13 @@ enum cc_vendor {
+>  extern enum cc_vendor cc_vendor;
+>
+>  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+> -void cc_set_mask(u64 mask);
+> +static inline void cc_set_mask(u64 mask)
 
-We have some common properties for fifo size. In fact, there was just a 
-discussion recently on Samsung UART (Is that the same block?) about 
-this. So if you do use a property here, use a common one.
+In the inline functions I changed/added to core.c in [0], I saw an
+objtool warning on clang builds when using inline instead of
+__always_inline; I did not see the same warning for gcc . Should we
+similarly use __always_inline to strictly-enforce here?
 
-Rob
+[0] https://lore.kernel.org/lkml/20240130220845.1978329-2-kevinloughlin@goo=
+gle.com/#Z31arch:x86:coco:core.c
 
