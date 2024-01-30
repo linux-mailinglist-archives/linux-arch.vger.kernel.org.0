@@ -1,170 +1,261 @@
-Return-Path: <linux-arch+bounces-1840-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1841-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8C9A8420ED
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:15:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA54B842324
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 12:33:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE6A41C276DA
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:15:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 010071C20A55
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:33:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F87E6089A;
-	Tue, 30 Jan 2024 10:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aTLvInhO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BDB066B4C;
+	Tue, 30 Jan 2024 11:33:25 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF80C6089B;
-	Tue, 30 Jan 2024 10:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C921467729;
+	Tue, 30 Jan 2024 11:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706609683; cv=none; b=FlKVzI8T3yY45ONBHEbPslHkaYPsxes+orGWnLXT6GoQ2ViDy6zC+fihfluSIrZytZpooI0mIzmU8nj3jUJ1yBz3RujKrnAZriMyyiL9PEB80x+0f1EqOLx+IOxCm76MI4OvUBypOd3Y5f9NtirKFdvS3aUNvq6SyBNzFlim1J4=
+	t=1706614404; cv=none; b=vBzUC+BEpEn4n84TB1XHk6ndbtuKx/8SUpu0Y01pRWorOAz2MHe/TaYGCHCcw8zlqI7uCvheXTfC2ba0zBXQTl7/rcQaSo6afq1KPpE/PfJ4fluH/nWc4SBj+Coz+4JZJ2RRJZFx0CS/RVM64Y8qgnlQnEvR371rAH9vTKcw4E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706609683; c=relaxed/simple;
-	bh=4OenpZVY4dbk5nXvN+goEJzBtcGnmrWCa+AaSJWh1NA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ZfHUdpJKY+Qvhnl0QemOZyRxl5af3NpxlMg5FD9Y5wPuKDhtUp6TVK63M1M11MAumdyYgI5bcIrIvzZ9XSvu0sKkY0g/lFrJH6Wuu8TLtnLTFwIRobnc2Ye90yM9gp7XMe1UxbHoBnrF9zmBO1xG49QKFNC98a0brVkzgwPeSJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aTLvInhO; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40UA9WOL004459;
-	Tue, 30 Jan 2024 10:12:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=upER89UEQid8jme3NrL4nYMZx1b2Ukd4Ox1S4tv0K6E=;
- b=aTLvInhOgDFtWo+hahWtXRW09lRICEdOe3b6Q91S9mNs/doIfakYKAP0nELHZTabo3Xg
- emX1+QOw8fLbkvWGYH1yxzvaV8W6LTEfZPvgpYGm9wDsoakTbsfI5RY7ar2PCYMBSOPq
- m3eyJCkFL1IA8GOsm9jgpa3/xVeFB3E20CbVwqmKV9WZkAds106b3Cof77cRTc2banBx
- 1+isQ3N2tZrLrNX7J20FGlaR0GskVO5Q734Ry6t2XXfx3PjB0jAHNhiIxbqGRkxohIa6
- KhvS9S/a9P+JocfuHX+35v9aXyKGeuTW0ba+qYmYiHaKe8alZWRIUFWeXpOFlSPTMg9y SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vxy40g1q3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jan 2024 10:12:07 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40UAAtYa007474;
-	Tue, 30 Jan 2024 10:12:06 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vxy40g1pp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jan 2024 10:12:06 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40U7Z93l007979;
-	Tue, 30 Jan 2024 10:12:05 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vwdnkwxkq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jan 2024 10:12:05 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40UAC20W12386846
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 30 Jan 2024 10:12:02 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 33E5D20065;
-	Tue, 30 Jan 2024 10:12:02 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 652AC2005A;
-	Tue, 30 Jan 2024 10:12:01 +0000 (GMT)
-Received: from [9.179.18.183] (unknown [9.179.18.183])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 30 Jan 2024 10:12:01 +0000 (GMT)
-Message-ID: <eacbf3b3-b004-4086-8db1-82e75407bbaa@linux.ibm.com>
-Date: Tue, 30 Jan 2024 11:12:01 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: Several tst-robust* tests time out with recent Linux kernel
-Content-Language: en-US
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>
-Cc: "xry111@xry111.site" <xry111@xry111.site>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <4bda9f2e06512e375e045f9e72edb205104af19c.camel@xry111.site>
- <d69d50445284a5e0d98a64862877c1e6ec22a9a8.camel@xry111.site>
- <20231114153100.GY8262@noisy.programming.kicks-ass.net>
- <20231114154017.GI4779@noisy.programming.kicks-ass.net>
- <87ttpowajb.fsf@oldenburg.str.redhat.com>
- <20231114201402.GA25315@noisy.programming.kicks-ass.net>
- <822f3a867e5661ce61cea075a00ce04a4e4733f3.camel@intel.com>
- <20231115085102.GY3818@noisy.programming.kicks-ass.net>
- <564119521b61b5a38f9bdfe6c7a41fcbb07049c9.camel@intel.com>
- <158f6a47727a40c163e3fa6041a24388549c68f2.camel@intel.com>
- <fc3fd07a-218d-406c-918b-e7f701968eb0@linux.ibm.com>
- <eeb6d178dff61dfebf5a3ce9675486a3271b748c.camel@intel.com>
-From: Stefan Liebler <stli@linux.ibm.com>
-In-Reply-To: <eeb6d178dff61dfebf5a3ce9675486a3271b748c.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zAaT6FhW-QCX8Kl-edW71T0vd8GHnCfD
-X-Proofpoint-GUID: QnaFMkxqxQUKrl7I6Cwi0p6BjCr660eX
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1706614404; c=relaxed/simple;
+	bh=iYeZRBQMYetEM+TK5yHlgX6GcwqR9jGOdY9NNlijHeI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JnNG0P5FvhwG3Cd6UOqZaR8H4RrXt5Ai5rtYR5pcSG1+OUDNtl8fG1Sudeydh9SonyCekVNIRJS0kshi/87l9HhXQWOxWAioaM63XfDFHOs6gGscT2BLoqO2eg62Gv8jgQjLdFf6wwaVijkgzkpI/vUeWWztgrI+psLwdgIjdTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 121DBDA7;
+	Tue, 30 Jan 2024 03:34:03 -0800 (PST)
+Received: from raptor (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA3D43F5A1;
+	Tue, 30 Jan 2024 03:33:13 -0800 (PST)
+Date: Tue, 30 Jan 2024 11:33:07 +0000
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+	rppt@kernel.org, hughd@google.com, pcc@google.com,
+	steven.price@arm.com, vincenzo.frascino@arm.com, david@redhat.com,
+	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v3 09/35] mm: cma: Introduce cma_remove_mem()
+Message-ID: <ZbjecxWRUrBfOEdn@raptor>
+References: <20240125164256.4147-1-alexandru.elisei@arm.com>
+ <20240125164256.4147-10-alexandru.elisei@arm.com>
+ <830691cf-cb96-443e-b6eb-2adfe2edd587@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-30_05,2024-01-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 malwarescore=0 suspectscore=0 adultscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401300074
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <830691cf-cb96-443e-b6eb-2adfe2edd587@arm.com>
 
-On 29.01.24 23:23, Edgecombe, Rick P wrote:
-> On Fri, 2024-01-19 at 14:56 +0100, Stefan Liebler wrote:
->> I've reduced the test (see attachement) and now have only one process
->> with three threads.
-> 
-> This tests fails on my setup as well:
-> main: start 3 threads.
-> #0: started: fct=1
-> #1: started: fct=1
-> #2: started: fct=1
-> #2: mutex_timedlock failed with 22 (round=28772)
-> 
-> But, after this patch:
-> https://lore.kernel.org/all/20240116130810.ji1YCxpg@linutronix.de/
-> 
-> ...the attached test hangs.
-> 
-> However, the glibc test that was failing for me "nptl/tst-robustpi8"
-> passes with the linked patch applied. So I think that patch fixes the
-> issue I hit.
-> 
-> What is passing supposed to look like on the attached test?
+Hi,
 
-kernel commit "futex: Prevent the reuse of stale pi_state"
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/patch/?id=e626cb02ee8399fd42c415e542d031d185783903
+I really appreciate the feedback you have given me so far. I believe the
+commit message isn't clear enough and there has been a confusion.
 
-fixes the issue on s390x.
+A CMA user adds a CMA area to the cma_areas array with
+cma_declare_contiguous_nid() or cma_init_reserved_mem().
+init_cma_reserved_pageblock() then iterates over the array and activates
+all cma areas.
 
-With this commit, the test runs to the end:
-main: start 3 threads.
-#0: started: fct=1
-#1: started: fct=1
-#2: started: fct=1
-#2: REACHED round 100000000. => exit
-#0: REACHED round 100000000. => exit
-#1: REACHED round 100000000. => exit
-main: end.
+The function cma_remove_mem() is intended to be used to remove a cma area
+from the cma_areas array **before** the area has been activated.
 
-If you want you can reduce the number of rounds by compiling with
--DROUNDS=XYZ or manually adjusting the ROUNDS macro define.
+Usecase: a driver (in this case, the arm64 dynamic tag storage code)
+manages several cma areas. The driver successfully adds the first area to
+the cma_areas array. When the driver tries to adds the second area, the
+function fails. Without cma_remove_mem(), the driver has no way to prevent
+the first area from being freed to the page allocator. cma_remove_mem() is
+about providing a means to do cleanup in case of error.
+
+Does that make more sense now?
+
+Ok Tue, Jan 30, 2024 at 11:20:56AM +0530, Anshuman Khandual wrote:
+> 
+> 
+> On 1/25/24 22:12, Alexandru Elisei wrote:
+> > Memory is added to CMA with cma_declare_contiguous_nid() and
+> > cma_init_reserved_mem(). This memory is then put on the MIGRATE_CMA list in
+> > cma_init_reserved_areas(), where the page allocator can make use of it.
+> 
+> cma_declare_contiguous_nid() reserves memory in memblock and marks the
+
+You forgot about about cma_init_reserved_mem() which does the same thing,
+but yes, you are right.
+
+> for subsequent CMA usage, where as cma_init_reserved_areas() activates
+> these memory areas through init_cma_reserved_pageblock(). Standard page
+> allocator only receives these memory via free_reserved_page() - only if
+
+I don't think that's correct. init_cma_reserved_pageblock() clears the
+PG_reserved page flag, sets the migratetype to MIGRATE_CMA and then frees
+the page. After that, the page is available to the standard page allocator
+to use for allocation. Otherwise, what would be the point of the
+MIGRATE_CMA migratetype?
+
+> the page block activation fails.
+
+For the sake of having a complete picture, I'll add that that only happens
+if cma->reserve_pages_on_error is false. If the CMA user sets the field to
+'true' (with cma_reserve_pages_on_error()), then the pages in the CMA
+region are kept PG_reserved if activation fails.
+
+> 
+> > 
+> > If a device manages multiple CMA areas, and there's an error when one of
+> > the areas is added to CMA, there is no mechanism for the device to prevent
+> 
+> What kind of error ? init_cma_reserved_pageblock() fails ? But that will
+> not happen until cma_init_reserved_areas().
+
+I think I haven't been clear enough. When I say that "an area is added
+to CMA", I mean that the memory region is added to cma_areas array, via
+cma_declare_contiguous_nid() or cma_init_reserved_mem(). There are several
+ways in which either function can fail.
+
+> 
+> > the rest of the areas, which were added before the error occured, from
+> > being later added to the MIGRATE_CMA list.
+> 
+> Why is this mechanism required ? cma_init_reserved_areas() scans over all
+> CMA areas and try and activate each of them sequentially. Why is not this
+> sufficient ?
+
+This patch is about removing a struct cma from the cma_areas array after it
+has been added to the array, with cma_declare_contiguous_nid() or
+cma_init_reserved_mem(), to prevent the area from being activated in
+cma_init_reserved_areas(). Sorry for the confusion.
+
+I'll add a check in cma_remove_mem() to fail if the cma area has been
+activated, and a comment to the function to explain its usage.
+
+> 
+> > 
+> > Add cma_remove_mem() which allows a previously reserved CMA area to be
+> > removed and thus it cannot be used by the page allocator.
+> 
+> Successfully activated CMA areas do not get used by the buddy allocator.
+
+I don't believe that is correct, see above.
+
+> 
+> > 
+> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> > ---
+> > 
+> > Changes since rfc v2:
+> > 
+> > * New patch.
+> > 
+> >  include/linux/cma.h |  1 +
+> >  mm/cma.c            | 30 +++++++++++++++++++++++++++++-
+> >  2 files changed, 30 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/cma.h b/include/linux/cma.h
+> > index e32559da6942..787cbec1702e 100644
+> > --- a/include/linux/cma.h
+> > +++ b/include/linux/cma.h
+> > @@ -48,6 +48,7 @@ extern int cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
+> >  					unsigned int order_per_bit,
+> >  					const char *name,
+> >  					struct cma **res_cma);
+> > +extern void cma_remove_mem(struct cma **res_cma);
+> >  extern struct page *cma_alloc(struct cma *cma, unsigned long count, unsigned int align,
+> >  			      bool no_warn);
+> >  extern int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+> > diff --git a/mm/cma.c b/mm/cma.c
+> > index 4a0f68b9443b..2881bab12b01 100644
+> > --- a/mm/cma.c
+> > +++ b/mm/cma.c
+> > @@ -147,8 +147,12 @@ static int __init cma_init_reserved_areas(void)
+> >  {
+> >  	int i;
+> >  
+> > -	for (i = 0; i < cma_area_count; i++)
+> > +	for (i = 0; i < cma_area_count; i++) {
+> > +		/* Region was removed. */
+> > +		if (!cma_areas[i].count)
+> > +			continue;
+> 
+> Skip previously added CMA area (now zeroed out) ?
+
+Yes, that's what I meant with the comment "Region was removed". Do you
+think I should reword the comment?
+
+> 
+> >  		cma_activate_area(&cma_areas[i]);
+> > +	}
+> >  
+> >  	return 0;
+> >  }
+> 
+> cma_init_reserved_areas() gets called via core_initcall(). Some how
+> platform/device needs to call cma_remove_mem() before core_initcall()
+> gets called ? This might be time sensitive.
+
+I don't understand your point.
+
+> 
+> > @@ -216,6 +220,30 @@ int __init cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
+> >  	return 0;
+> >  }
+> >  
+> > +/**
+> > + * cma_remove_mem() - remove cma area
+> > + * @res_cma: Pointer to the cma region.
+> > + *
+> > + * This function removes a cma region created with cma_init_reserved_mem(). The
+> > + * ->count is set to 0.
+> > + */
+> > +void __init cma_remove_mem(struct cma **res_cma)
+> > +{
+> > +	struct cma *cma;
+> > +
+> > +	if (WARN_ON_ONCE(!res_cma || !(*res_cma)))
+> > +		return;
+> > +
+> > +	cma = *res_cma;
+> > +	if (WARN_ON_ONCE(!cma->count))
+> > +		return;
+> > +
+> > +	totalcma_pages -= cma->count;
+> > +	cma->count = 0;
+> > +
+> > +	*res_cma = NULL;
+> > +}
+> > +
+> >  /**
+> >   * cma_declare_contiguous_nid() - reserve custom contiguous area
+> >   * @base: Base address of the reserved area optional, use 0 for any
+> 
+> But first please do explain what are the errors device or platform might
+
+cma_declare_contiguous_nid() and cma_init_reserved_mem() can fail in a
+number of ways, the code should be self documenting.
+
+> see on a previously marked CMA area so that removing them on way becomes
+> necessary preventing their activation via cma_init_reserved_areas().
+
+I've described how the function is supposed to be used at the top of my
+reply.
+
+Thanks,
+Alex
 
