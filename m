@@ -1,80 +1,40 @@
-Return-Path: <linux-arch+bounces-1833-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1834-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F301841EDB
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:09:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C829841F3B
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:20:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34D4E282676
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:09:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA5611F23A2C
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E45735FBA2;
-	Tue, 30 Jan 2024 09:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e3Nw3BYr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15B459B68;
+	Tue, 30 Jan 2024 09:19:14 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AD75813B
-	for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 09:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397DA5821A;
+	Tue, 30 Jan 2024 09:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706605741; cv=none; b=t3VF/tatlxtKCGb6gHTFsEKI39quVullYx1sTsjKHHkvAWWU+iyw7A/B5GonCZhSQdKl2S9RpGijIz5g5bt0tW1suvLlvlnZ8tlpOhqqr9VrjblLYPCJM0c58RtW4/LjQUNdLpRwrQF0IEOQ+EquDle2BMV49hzLveXlqhR06bY=
+	t=1706606354; cv=none; b=fD40v8V7tFO8FQlySS+DvEGgm+zaEWrMdyjcqCCUJkymy4F0p5EBT0WfJ0+cC+y9/DuFB3YuOl7GQLTHQ+gDICzl6BakY/um8eApJFu49yPpFav5xDuTYkJqWuryIkZRSBaR3FVFwMYGBCxw7wrrFd5R1yCiFm2MJqjXeQ8nd+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706605741; c=relaxed/simple;
-	bh=6KZlDE207AggioPvnEGLSJEy+2xD/mFXmNx88fLyvqo=;
+	s=arc-20240116; t=1706606354; c=relaxed/simple;
+	bh=96TAfdDkpHCSucUS9AjQOlifrvIEsXlMGa/QpT4c67U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C9LaeZSaD++jd0PhOGu8IEi3+xmf9ta44ACJAFzw3qYMQO1ROv8hoOTTFnq18kaBrPSoyLsfh7YHf/PWO70dPhL3TQ0cxgMdzlN545DlpohU3e21j/CIupJFJ01zgsKrznK8VOcQLcW7AguZGi8gWeVrxPqnboMYKiDyCIoXqMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e3Nw3BYr; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706605739;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=iMFtN9YM7NI14gClvQJVTv8Klat8uVExXnf558gk9Hk=;
-	b=e3Nw3BYrPvr/Qqj5bP44qsCsQyI8RufPxLoQpOd6MkynTejInQPazK6VRVuq400SE254TF
-	hwUX7bUDKjsQFtnS/kucVhckt/bwg9V01OLpkpnnKuBANd2ctyK4Tl/93jrAgF8kmLZcMa
-	9IXh4GNwxCyb/AYfAkx0NucEZUgwUL0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-338-TID5SKY7N22W0fkvrRJWDw-1; Tue, 30 Jan 2024 04:08:57 -0500
-X-MC-Unique: TID5SKY7N22W0fkvrRJWDw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-40e74860cb0so29011245e9.3
-        for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 01:08:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706605736; x=1707210536;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iMFtN9YM7NI14gClvQJVTv8Klat8uVExXnf558gk9Hk=;
-        b=A9iCsNzOE9RukU/584ar/IMVEHxUI+3XzBom+WhEr80N1ejtsIrx4qbRlF/F3Ep13c
-         1bgBQZWpHGs+kt5IvHMEXw2qXxOzObD/JL360xTbhhRrQZWIaXAx+XRrK0g0/ySTBcjK
-         yGobUkEmrR51CgpxzXYytDRfBZ3s/ByhDGpiJdmcEPMzuD+Bnyw293XfwTeLYwHj6lrd
-         jw4CJbG5QiOyXscyQq4ejmq8hFAbOT/rGMssfEuWa1QWHYoMFxZIAHjQGkCkzd30I/E4
-         cRxlZ8N+kYC/mIUJItH3QlguKPt75VkCwoEOdgbqQEPVDW7fwx/8peFdywXtEHfYppTS
-         /RzA==
-X-Gm-Message-State: AOJu0Yy8q1DJTtU0tsvR+FXXC+NqzqrnvIcH0A0MdcFFhZwJYHL8tQeR
-	grNKiuWunARRjUGV0M8PFuts/d105LQiLXR697cy8AqWRkScSnOetV7gX3pPeWZ63esQ7e42I3j
-	4bC+WjXfg0gE4MegBymbH9b5qT/Agq7O87l7/MXw0z/ovoRgy4Un0sVzaZO4=
-X-Received: by 2002:a05:600c:2941:b0:40e:e912:8f74 with SMTP id n1-20020a05600c294100b0040ee9128f74mr6819508wmd.25.1706605736020;
-        Tue, 30 Jan 2024 01:08:56 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH6Uit37MZF9xsn/6TflWQzU2N4yu2GzCcbdJtN3Xh+ex/+Pyt9LHa3hTGrN/MJecJrHUxA/g==
-X-Received: by 2002:a05:600c:2941:b0:40e:e912:8f74 with SMTP id n1-20020a05600c294100b0040ee9128f74mr6819489wmd.25.1706605735651;
-        Tue, 30 Jan 2024 01:08:55 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:2700:bdf6:739b:9f9d:862f? (p200300cbc7082700bdf6739b9f9d862f.dip0.t-ipconnect.de. [2003:cb:c708:2700:bdf6:739b:9f9d:862f])
-        by smtp.gmail.com with ESMTPSA id b7-20020adfee87000000b0033aebf727b2sm5441018wro.60.2024.01.30.01.08.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 01:08:55 -0800 (PST)
-Message-ID: <af5d1332-bbcc-4110-a167-84f2bb592794@redhat.com>
-Date: Tue, 30 Jan 2024 10:08:53 +0100
+	 In-Reply-To:Content-Type; b=tGZJKOo+ShcY5XUJ61m/HZoC+k5iIhBipQpFxcQpP/0llzZKsFp1gKmJBdL2KWH6Z/GBEDpTQk3eZ4LQ5MMRnpzbgmRVEk0L7+GiX+OfH9VfsQbeb1J+IUhmzDdp8XedelEaXZaeARF8RPsti208RUGfVtiyoSw60KgopQqhMgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B99EBDA7;
+	Tue, 30 Jan 2024 01:19:52 -0800 (PST)
+Received: from [10.163.41.110] (unknown [10.163.41.110])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 860293F738;
+	Tue, 30 Jan 2024 01:18:56 -0800 (PST)
+Message-ID: <598c9762-83b3-4517-858c-8349d6dceec2@arm.com>
+Date: Tue, 30 Jan 2024 14:48:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,137 +42,304 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 9/9] mm/memory: optimize unmap/zap with PTE-mapped THP
+Subject: Re: [PATCH RFC v3 10/35] mm: cma: Fast track allocating memory when
+ the pages are free
 Content-Language: en-US
-To: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- Matthew Wilcox <willy@infradead.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
- Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org
-References: <20240129143221.263763-1-david@redhat.com>
- <20240129143221.263763-10-david@redhat.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240129143221.263763-10-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
+ will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
+ james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ arnd@arndb.de, akpm@linux-foundation.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+ mhiramat@kernel.org, rppt@kernel.org, hughd@google.com
+Cc: pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
+ david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20240125164256.4147-1-alexandru.elisei@arm.com>
+ <20240125164256.4147-11-alexandru.elisei@arm.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20240125164256.4147-11-alexandru.elisei@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Re-reading the docs myself:
 
-> +#ifndef get_and_clear_full_ptes
-> +/**
-> + * get_and_clear_full_ptes - Clear PTEs that map consecutive pages of the same
-> + *			     folio, collecting dirty/accessed bits.
-> + * @mm: Address space the pages are mapped into.
-> + * @addr: Address the first page is mapped at.
-> + * @ptep: Page table pointer for the first entry.
-> + * @nr: Number of entries to clear.
-> + * @full: Whether we are clearing a full mm.
-> + *
-> + * May be overridden by the architecture; otherwise, implemented as a simple
-> + * loop over ptep_get_and_clear_full(), merging dirty/accessed bits into
-> + * returned PTE.
 
-"into the"
+On 1/25/24 22:12, Alexandru Elisei wrote:
+> If the pages to be allocated are free, take them directly off the buddy
+> allocator, instead of going through alloc_contig_range() and avoiding
+> costly calls to lru_cache_disable().
+> 
+> Only allocations of the same size as the CMA region order are considered,
+> to avoid taking the zone spinlock for too long.
+> 
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 
-> + *
-> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-> + * some PTEs might be write-protected.
-> + *
-> + * Context: The caller holds the page table lock.  The PTEs map consecutive
-> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
-> + */
-> +static inline pte_t get_and_clear_full_ptes(struct mm_struct *mm,
-> +		unsigned long addr, pte_t *ptep, unsigned int nr, int full)
+This patch seems to be improving standard cma_alloc() as well as
+the previously added new allocator i.e cma_alloc_range() - via a
+new helper cma_alloc_pages_fastpath().
+
+Should not any standard cma_alloc() improvement be discussed as
+an independent patch separately irrespective of this series. OR
+it is some how related to this series which I might be missing ?
+
+> ---
+> 
+> Changes since rfc v2:
+> 
+> * New patch. Reworked from the rfc v2 patch #26 ("arm64: mte: Fast track
+> reserving tag storage when the block is free") (David Hildenbrand).
+> 
+>  include/linux/page-flags.h | 15 ++++++++++++--
+>  mm/Kconfig                 |  5 +++++
+>  mm/cma.c                   | 42 ++++++++++++++++++++++++++++++++++----
+>  mm/memory-failure.c        |  8 ++++----
+>  mm/page_alloc.c            | 23 ++++++++++++---------
+>  5 files changed, 73 insertions(+), 20 deletions(-)
+> 
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 735cddc13d20..b7237bce7446 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -575,11 +575,22 @@ TESTSCFLAG(HWPoison, hwpoison, PF_ANY)
+>  #define MAGIC_HWPOISON	0x48575053U	/* HWPS */
+>  extern void SetPageHWPoisonTakenOff(struct page *page);
+>  extern void ClearPageHWPoisonTakenOff(struct page *page);
+> -extern bool take_page_off_buddy(struct page *page);
+> -extern bool put_page_back_buddy(struct page *page);
+> +extern bool PageHWPoisonTakenOff(struct page *page);
+>  #else
+>  PAGEFLAG_FALSE(HWPoison, hwpoison)
+> +TESTSCFLAG_FALSE(HWPoison, hwpoison)
+>  #define __PG_HWPOISON 0
+> +static inline void SetPageHWPoisonTakenOff(struct page *page) { }
+> +static inline void ClearPageHWPoisonTakenOff(struct page *page) { }
+> +static inline bool PageHWPoisonTakenOff(struct page *page)
 > +{
-> +	pte_t pte, tmp_pte;
-> +
-> +	pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-> +	while (--nr) {
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +		tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-> +		if (pte_dirty(tmp_pte))
-> +			pte = pte_mkdirty(pte);
-> +		if (pte_young(tmp_pte))
-> +			pte = pte_mkyoung(pte);
-> +	}
-> +	return pte;
+> +      return false;
 > +}
 > +#endif
 > +
-> +#ifndef clear_full_ptes
-> +/**
-> + * clear_full_ptes - Clear PTEs that map consecutive pages of the same folio.
-> + * @mm: Address space the pages are mapped into.
-> + * @addr: Address the first page is mapped at.
-> + * @ptep: Page table pointer for the first entry.
-> + * @nr: Number of entries to clear.
-> + * @full: Whether we are clearing a full mm.
-
-Something went missing:
-
-May be overridden by the architecture; otherwise, implemented as a 
-simple loop over ptep_get_and_clear_full().
-
-
--- 
-Cheers,
-
-David / dhildenb
-
+> +#ifdef CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY
+> +extern bool take_page_off_buddy(struct page *page, bool poison);
+> +extern bool put_page_back_buddy(struct page *page, bool unpoison);
+>  #endif
+>  
+>  #if defined(CONFIG_PAGE_IDLE_FLAG) && defined(CONFIG_64BIT)
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index ffc3a2ba3a8c..341cf53898db 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -745,12 +745,16 @@ config DEFAULT_MMAP_MIN_ADDR
+>  config ARCH_SUPPORTS_MEMORY_FAILURE
+>  	bool
+>  
+> +config WANTS_TAKE_PAGE_OFF_BUDDY
+> +	bool> +
+>  config MEMORY_FAILURE
+>  	depends on MMU
+>  	depends on ARCH_SUPPORTS_MEMORY_FAILURE
+>  	bool "Enable recovery from hardware memory errors"
+>  	select MEMORY_ISOLATION
+>  	select RAS
+> +	select WANTS_TAKE_PAGE_OFF_BUDDY
+>  	help
+>  	  Enables code to recover from some memory failures on systems
+>  	  with MCA recovery. This allows a system to continue running
+> @@ -891,6 +895,7 @@ config CMA
+>  	depends on MMU
+>  	select MIGRATION
+>  	select MEMORY_ISOLATION
+> +	select WANTS_TAKE_PAGE_OFF_BUDDY
+>  	help
+>  	  This enables the Contiguous Memory Allocator which allows other
+>  	  subsystems to allocate big physically-contiguous blocks of memory.
+> diff --git a/mm/cma.c b/mm/cma.c
+> index 2881bab12b01..15663f95d77b 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -444,6 +444,34 @@ static void cma_debug_show_areas(struct cma *cma)
+>  static inline void cma_debug_show_areas(struct cma *cma) { }
+>  #endif
+>  
+> +/* Called with the cma mutex held. */
+> +static int cma_alloc_pages_fastpath(struct cma *cma, unsigned long start,
+> +				    unsigned long end)
+> +{
+> +	bool success = false;
+> +	unsigned long i, j;
+> +
+> +	/* Avoid contention on the zone lock. */
+> +	if (start - end != 1 << cma->order_per_bit)
+> +		return -EINVAL;
+> +
+> +	for (i = start; i < end; i++) {
+> +		if (!is_free_buddy_page(pfn_to_page(i)))
+> +			break;
+> +		success = take_page_off_buddy(pfn_to_page(i), false);
+> +		if (!success)
+> +			break;
+> +	}
+> +
+> +	if (success)
+> +		return 0;
+> +
+> +	for (j = start; j < i; j++)
+> +		put_page_back_buddy(pfn_to_page(j), false);
+> +
+> +	return -EBUSY;
+> +}
+> +
+>  /**
+>   * cma_alloc_range() - allocate pages in a specific range
+>   * @cma:   Contiguous memory region for which the allocation is performed.
+> @@ -493,7 +521,11 @@ int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+>  
+>  	for (i = 0; i < tries; i++) {
+>  		mutex_lock(&cma_mutex);
+> -		err = alloc_contig_range(start, start + count, MIGRATE_CMA, gfp);
+> +		err = cma_alloc_pages_fastpath(cma, start, start + count);
+> +		if (err) {
+> +			err = alloc_contig_range(start, start + count,
+> +						 MIGRATE_CMA, gfp);
+> +		}
+>  		mutex_unlock(&cma_mutex);
+>  
+>  		if (err != -EBUSY)
+> @@ -529,7 +561,6 @@ int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+>  	return err;
+>  }
+>  
+> -
+>  /**
+>   * cma_alloc() - allocate pages from contiguous area
+>   * @cma:   Contiguous memory region for which the allocation is performed.
+> @@ -589,8 +620,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>  
+>  		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
+>  		mutex_lock(&cma_mutex);
+> -		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
+> -				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
+> +		ret = cma_alloc_pages_fastpath(cma, pfn, pfn + count);
+> +		if (ret) {
+> +			ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
+> +					GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
+> +		}
+>  		mutex_unlock(&cma_mutex);
+>  		if (ret == 0) {
+>  			page = pfn_to_page(pfn);
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 4f9b61f4a668..b87b533a9871 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -157,7 +157,7 @@ static int __page_handle_poison(struct page *page)
+>  	zone_pcp_disable(page_zone(page));
+>  	ret = dissolve_free_huge_page(page);
+>  	if (!ret)
+> -		ret = take_page_off_buddy(page);
+> +		ret = take_page_off_buddy(page, true);
+>  	zone_pcp_enable(page_zone(page));
+>  
+>  	return ret;
+> @@ -1353,7 +1353,7 @@ static int page_action(struct page_state *ps, struct page *p,
+>  	return action_result(pfn, ps->type, result);
+>  }
+>  
+> -static inline bool PageHWPoisonTakenOff(struct page *page)
+> +bool PageHWPoisonTakenOff(struct page *page)
+>  {
+>  	return PageHWPoison(page) && page_private(page) == MAGIC_HWPOISON;
+>  }
+> @@ -2247,7 +2247,7 @@ int memory_failure(unsigned long pfn, int flags)
+>  		res = get_hwpoison_page(p, flags);
+>  		if (!res) {
+>  			if (is_free_buddy_page(p)) {
+> -				if (take_page_off_buddy(p)) {
+> +				if (take_page_off_buddy(p, true)) {
+>  					page_ref_inc(p);
+>  					res = MF_RECOVERED;
+>  				} else {
+> @@ -2578,7 +2578,7 @@ int unpoison_memory(unsigned long pfn)
+>  		ret = folio_test_clear_hwpoison(folio) ? 0 : -EBUSY;
+>  	} else if (ghp < 0) {
+>  		if (ghp == -EHWPOISON) {
+> -			ret = put_page_back_buddy(p) ? 0 : -EBUSY;
+> +			ret = put_page_back_buddy(p, true) ? 0 : -EBUSY;
+>  		} else {
+>  			ret = ghp;
+>  			unpoison_pr_info("Unpoison: failed to grab page %#lx\n",
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0fa34bcfb1af..502ee3eb8583 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6655,7 +6655,7 @@ bool is_free_buddy_page(struct page *page)
+>  }
+>  EXPORT_SYMBOL(is_free_buddy_page);
+>  
+> -#ifdef CONFIG_MEMORY_FAILURE
+> +#ifdef CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY
+>  /*
+>   * Break down a higher-order page in sub-pages, and keep our target out of
+>   * buddy allocator.
+> @@ -6687,9 +6687,9 @@ static void break_down_buddy_pages(struct zone *zone, struct page *page,
+>  }
+>  
+>  /*
+> - * Take a page that will be marked as poisoned off the buddy allocator.
+> + * Take a page off the buddy allocator, and optionally mark it as poisoned.
+>   */
+> -bool take_page_off_buddy(struct page *page)
+> +bool take_page_off_buddy(struct page *page, bool poison)
+>  {
+>  	struct zone *zone = page_zone(page);
+>  	unsigned long pfn = page_to_pfn(page);
+> @@ -6710,7 +6710,8 @@ bool take_page_off_buddy(struct page *page)
+>  			del_page_from_free_list(page_head, zone, page_order);
+>  			break_down_buddy_pages(zone, page_head, page, 0,
+>  						page_order, migratetype);
+> -			SetPageHWPoisonTakenOff(page);
+> +			if (poison)
+> +				SetPageHWPoisonTakenOff(page);
+>  			if (!is_migrate_isolate(migratetype))
+>  				__mod_zone_freepage_state(zone, -1, migratetype);
+>  			ret = true;
+> @@ -6724,9 +6725,10 @@ bool take_page_off_buddy(struct page *page)
+>  }
+>  
+>  /*
+> - * Cancel takeoff done by take_page_off_buddy().
+> + * Cancel takeoff done by take_page_off_buddy(), and optionally unpoison the
+> + * page.
+>   */
+> -bool put_page_back_buddy(struct page *page)
+> +bool put_page_back_buddy(struct page *page, bool unpoison)
+>  {
+>  	struct zone *zone = page_zone(page);
+>  	unsigned long pfn = page_to_pfn(page);
+> @@ -6736,17 +6738,18 @@ bool put_page_back_buddy(struct page *page)
+>  
+>  	spin_lock_irqsave(&zone->lock, flags);
+>  	if (put_page_testzero(page)) {
+> -		ClearPageHWPoisonTakenOff(page);
+> +		VM_WARN_ON_ONCE(PageHWPoisonTakenOff(page) && !unpoison);
+> +		if (unpoison)
+> +			ClearPageHWPoisonTakenOff(page);
+>  		__free_one_page(page, pfn, zone, 0, migratetype, FPI_NONE);
+> -		if (TestClearPageHWPoison(page)) {
+> +		if (!unpoison || (unpoison && TestClearPageHWPoison(page)))
+>  			ret = true;
+> -		}
+>  	}
+>  	spin_unlock_irqrestore(&zone->lock, flags);
+>  
+>  	return ret;
+>  }
+> -#endif
+> +#endif /* CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY */
+>  
+>  #ifdef CONFIG_ZONE_DMA
+>  bool has_managed_dma(void)
 
