@@ -1,208 +1,675 @@
-Return-Path: <linux-arch+bounces-1813-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1814-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F6BC841592
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 23:24:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EC0C841742
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 01:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 622AC1C2465A
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jan 2024 22:24:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6386F1C228D6
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 00:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD15159576;
-	Mon, 29 Jan 2024 22:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE18BEC9;
+	Tue, 30 Jan 2024 00:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aHuKSoNB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xcqssHLh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9C2604C5;
-	Mon, 29 Jan 2024 22:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706567044; cv=fail; b=FoNEpKQXsNDchDNBdkCp1nWlGXBbFWb1C3ALdw6QcXQOQjE4xGJre6vnFyTpucTjctO6tubYbwLeWczQd7nxc7uKhwhsPExAXUPBo7F/9lIHZcka8VF00a4BXlEHA/KxMjikwLpb/yVj7HqlSDTRvxFlExY2ZCiFC9i8T36EXz4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706567044; c=relaxed/simple;
-	bh=GQ7Tr/QUHvS/pV3x871z3zkdi5ASAeVJEGj0Yb0tlgE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=MovLZOG4IpuNMeBpYTUnG6uGgdv23eEuN3nUcn6AR4+YB5Da/fH7yV9nwhRV0VUM25j4U16oFGDu/CHcdy9ECS2+oAFmE1UTnnU8qTi286fc5srZRQ9hzcSV8TZGjbzXBUM9xVpBJdmZxj0MCtG2lXEL99SxcVszc6eDuTcRhdI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aHuKSoNB; arc=fail smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706567042; x=1738103042;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=GQ7Tr/QUHvS/pV3x871z3zkdi5ASAeVJEGj0Yb0tlgE=;
-  b=aHuKSoNBKg/RRBSQwGQTfIVDGvOZk3Ju386i6YtIVGR5OfjB1HxvKQ6i
-   CFC/OmJAY/vBAGKMcZR2lyYOeX4fy+0VPrwQOYSwEwpRrwzpBRUh4O7OY
-   LbD/8caREXlQfq+iF2FzOiXzcdC5SfpzZJ37Hf9krg6NEyCezS6wJJbsI
-   aM5iWs7WH3rnbJjHlWegaWfKHsmce2wGqhVkqSHv+QqBqjR19p6YgDsft
-   4n1kcnuBR5XrOuBke0grvMJxquGYHlCJrYol+F+5Xsy90BdEJOQC9fdvI
-   KKhbOXrIE1Er3qy4XnsIc4elyrJQyIGeUSRB+kIfFON5HJA9Lx2Hwv6z5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="24576580"
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="24576580"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 14:24:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="36292139"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Jan 2024 14:24:01 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 29 Jan 2024 14:24:01 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 29 Jan 2024 14:23:59 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 29 Jan 2024 14:23:59 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 29 Jan 2024 14:23:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EUP+wVoFwtK8KrQKJq73y4Hgeo4qVkowByWO2nln0DEgOTfe+VsUSzcJn4huuf4w2eAP1kNYYu6/skKVTu+xUSATwFVdOKzVuUHCldbcKF6OgcprYvMCWWioMYmuwHwFegsDLtYB1DweRIn0++eox5Vnd60lw45S7RFtlP8SylG5P22iQoO4RoF3YxLi+JL5UGG56b8fKOrJ5a1ay679tzoJlmaRGKlAcjBWBJbJDuBcMIpikoxZTWlPt9oSGpIeYtI70ApoQDRzzrClfAwvZvfu0WOrRNdB6VOHhQVWLLqo035DKOK7P0y1wX3RQ5Aq4ybL57WN6RA7lCVwGq3C2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GQ7Tr/QUHvS/pV3x871z3zkdi5ASAeVJEGj0Yb0tlgE=;
- b=VwanE/LShKTDNfFpaZ2EpRFX7bur+oIZeq9qPDrw/FcfDhLvTt2/y3+FTz7Vp3sKs5tMyx7gOi7wcS4+CwHmMjmE2uItAvi6UWcjz205yOHdO7MFS+50fEwwH/YEr1RqRPos5d7wobTssJmuPJit0nmrT8M2/Iymp/4O6xJ/j2/imeNrTpnBguexp5r3pl1a02FKuXPpQobZ2CcrpRPLwH9/Vsu7U/LIexAQidl+iqz7HSMIa38TzbTr89hN4pB0zpuISFuj3H7VD71mDAExR1o2ZmTJQIrCEQJ8b6esT2EtAezHXcml19LeranHvILlvc8eFTJ7mKNsFVxnSLupMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by CO1PR11MB4771.namprd11.prod.outlook.com (2603:10b6:303:9f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.32; Mon, 29 Jan
- 2024 22:23:58 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::5d40:83fd:94ac:d409]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::5d40:83fd:94ac:d409%7]) with mapi id 15.20.7228.029; Mon, 29 Jan 2024
- 22:23:58 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "peterz@infradead.org" <peterz@infradead.org>, "stli@linux.ibm.com"
-	<stli@linux.ibm.com>
-CC: "xry111@xry111.site" <xry111@xry111.site>, "hca@linux.ibm.com"
-	<hca@linux.ibm.com>, "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>, "linux-mm@kvack.org"
-	<linux-mm@kvack.org>, "libc-alpha@sourceware.org"
-	<libc-alpha@sourceware.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "linux-api@vger.kernel.org"
-	<linux-api@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>
-Subject: Re: Several tst-robust* tests time out with recent Linux kernel
-Thread-Topic: Several tst-robust* tests time out with recent Linux kernel
-Thread-Index: AQHaF2CkpUD9xWdoIUy/PHM3o7TKCbB7EvcAgAD1BQCAAbJyAIBj1VMAgBBFMIA=
-Date: Mon, 29 Jan 2024 22:23:58 +0000
-Message-ID: <eeb6d178dff61dfebf5a3ce9675486a3271b748c.camel@intel.com>
-References: <4bda9f2e06512e375e045f9e72edb205104af19c.camel@xry111.site>
-	 <d69d50445284a5e0d98a64862877c1e6ec22a9a8.camel@xry111.site>
-	 <20231114153100.GY8262@noisy.programming.kicks-ass.net>
-	 <20231114154017.GI4779@noisy.programming.kicks-ass.net>
-	 <87ttpowajb.fsf@oldenburg.str.redhat.com>
-	 <20231114201402.GA25315@noisy.programming.kicks-ass.net>
-	 <822f3a867e5661ce61cea075a00ce04a4e4733f3.camel@intel.com>
-	 <20231115085102.GY3818@noisy.programming.kicks-ass.net>
-	 <564119521b61b5a38f9bdfe6c7a41fcbb07049c9.camel@intel.com>
-	 <158f6a47727a40c163e3fa6041a24388549c68f2.camel@intel.com>
-	 <fc3fd07a-218d-406c-918b-e7f701968eb0@linux.ibm.com>
-In-Reply-To: <fc3fd07a-218d-406c-918b-e7f701968eb0@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.44.4-0ubuntu2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|CO1PR11MB4771:EE_
-x-ms-office365-filtering-correlation-id: f1ace142-8e39-4265-2cc9-08dc2118fc9e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +bQYxey/8Amm/jxuNovEE9PyEnrMCqc9dYFA34cbdiuRKZ17y99kw1ZufV/luuTe3m1P4MzzJbmlR1Aq3aU6mMe8aPpsi/hov+Vva2WBJ6Vn6GT1pQpaxMoSKbR4KckVjXeHTAANtb/2AFb6Q+c+Po586eDapLlP6CMhxFB36H0tFEzHYa/By2uBmBBCE0nxOq9LX1hKAv5cI1YFO76Nc8mUY6Lo7YF4rASB4t7fvENwoGKfiJI1oKnU8sT7LGnM9TuVVuDTurd9G/8gdtTBdXtTwIsfwB6yCG61qKn0dqEdaCgpSX4tEp6II9zN6oV43BMCOxQ9XLJeMZHWPlA4DV/OmAMSQX6OxskOPdP1usQQvqDRHJKDznk3t/sEQNHjUsPlfCkOzoDe55XWkTS+y+DihIxvnHyJmtkPglR0Kmv+G63IjlABYVEeLO8nV1yq8dI4ZnwQlLVqcuh5zz3ndvGiM9pVfiB/s1eMXxxUovCF5+f+oC5XOQrNkroLj7CauMt49nu3p5EL/QXziLRW4yoQIhck2Ld9vzHaq4HGXr9vTTLaa0533Tut9Dnln5jQz+hqVcZhc0oO3B8Z3C+XlJSnCpPufUXAFhJYvyRkYs4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(39860400002)(136003)(366004)(346002)(396003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(83380400001)(6512007)(6506007)(66946007)(478600001)(122000001)(316002)(38100700002)(4744005)(5660300002)(4326008)(8936002)(8676002)(41300700001)(2616005)(71200400001)(6486002)(966005)(7416002)(2906002)(64756008)(66476007)(54906003)(76116006)(110136005)(66556008)(66446008)(38070700009)(36756003)(86362001)(82960400001)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OHRaN0tTTktHUy9BMi9ZcVFGYnhCeE05Q2w5QmZLQk0vRnViK1N2WGZ4VEk5?=
- =?utf-8?B?YVNqR2FxSzVEVFNjMGtqaXJMVEtqbG41VXd5MWpLTk9lWUNKY1pDZTIzNlpL?=
- =?utf-8?B?c04vb1AvWnBOaU8yaDlQQ0VYeU5WalROMUxOV3V1dzZWZE80Sk5neHR5ZlVF?=
- =?utf-8?B?azJKbDVudHdsU1dzWjRnUlplUzZKQk82aWFEdmhjR083ZWZ0eUQyV01SNUVu?=
- =?utf-8?B?anY2S1J1dWNnaG8vMGJjbCtxN0EvTzVnZktTcCs3dlE3TmRxemlEdnFMV3lU?=
- =?utf-8?B?ZktvOVR6U2R5bFhSL05vQXJZR2s3MzhnR0drZFNkZEpGNENweFYweGR3UDRr?=
- =?utf-8?B?LzA1MFJJZzk4ejhZcEMvKzZkOWdkaW5IUVZhWHJzTVZIRFJzWWQzeDBlYlpq?=
- =?utf-8?B?NFRITlBCa0M2MGdmeExjV2dKdGJncTVjQWN4ZFY4WXNJb29YNWNOSXJReUk4?=
- =?utf-8?B?azBwbVZmVlJwS3RBeEQ0eFFmV09uMXpwd0F3c3VoZUNaRjYyczMrRVVuM3R6?=
- =?utf-8?B?YXdzZWwza3ZoQ3pqUzZtWnh0dEhwSUFJcGdteXE3QnVsanRJeWVaZjhienBu?=
- =?utf-8?B?MitPS2dCdFFCZ2RHOFFtQ1AxL0dSdStUMlFvcjgvQStBSFFZRkI3djJFS2d3?=
- =?utf-8?B?dHhMdzQ4OFowTUszRVk0UGw2SThPSzdFK1g4czd0bWtyTnRjdW4wUll1S292?=
- =?utf-8?B?eGJWOVoyZTNXNHNaMjUwQTU2T2dDajUrNXdWOGk2bTM3RUczc0p4OGg1OW80?=
- =?utf-8?B?WG9vNHp1NUpNVUdnYy9EU2NFQmhjajVXMWMzTCs3MTNORkMxbDd1cndvdWZy?=
- =?utf-8?B?S0d4NVc0SG5sSkozbmVuQWFFcHZYYi9mTWFqYmdBSGhEbDRCUERoTmpadkpR?=
- =?utf-8?B?R0E5ZXNLOUt6bWJCS0JHcFZsNno0OTlNZWFSWHRtKzB2ZFlUSGxhMnVqRXNx?=
- =?utf-8?B?NUtuUUl6c3pZNGN2dFBBU3pEWEpXZFdIQXZIcmJSanZQRUlTZ2ZCWE45ejJF?=
- =?utf-8?B?U1FKUlR3TTdtUXF3WjlNQVQ0QkhjMUIwNG9iM21pUHNKR2FzTTllL0FycGNJ?=
- =?utf-8?B?TFdtS0R5QndEejdLSmpEV1FwL2xmSFh2TkNtSExMRUQ0MHk2Q09sQ1VmME1p?=
- =?utf-8?B?VzlCV1NsVnBzUHU0ZGpoYlhrd3NmSmN3UkdKNTZVVlJVcFZycFpTNk5Ma21S?=
- =?utf-8?B?RWJuTnlGOVpVQmtnb0l4T1NTNWdERlRIM1NRbUVFZy9QR2hFekIyMis3MnVU?=
- =?utf-8?B?MGdtcFg4V21kTFIvL2wyNGp5amZodXI1TTQzbmkzMWkrOUZrVi9SU2w1bXZy?=
- =?utf-8?B?eVFwUzZrUWtEU1RDWHlUZGFnbkNuUW5NSDRIbTNGajJuMmZxNEt5MWRSYzhx?=
- =?utf-8?B?Nk4xd3hUV2g5UmUyWlNQQzN0dG5EMlFkN2tHTHhCZ3lwT2lmMUxRVmZUQ29V?=
- =?utf-8?B?b2ZxQUhhZkNCUWZONWlUMzdKS2RrSkxpSmV5ZEw0WllBNnp6THFJZ2xSYkpD?=
- =?utf-8?B?RlF3Mk15d3A3dTJUZ3V4SURyU0hGa25FZTBLbW4xaTlqbHRVRGxCZUlPTjZz?=
- =?utf-8?B?WmdTdnBNVk15MTh0Yms0a0hDQkdhNDRYS3ROUjQvWkViOFVTMmhvcE54YXpa?=
- =?utf-8?B?aUZNdnZmVUVPNmFwQWpiZ08rajBsNGQwd0FyaERNRzJScXlFYU9qdGpBVytp?=
- =?utf-8?B?b3duMjhCOUZ6QzJsTDlONCtjMGVod3Z3dnJpMjVMMjJ3dkJmeXEwOFkzZ2p5?=
- =?utf-8?B?clQrb0hQK3RTaG91NnBuajFEdDQrSDhGZitWZ2hSUUdOaGJnSjg5V21uNDF1?=
- =?utf-8?B?TXpwWWhqeTFVMTZzZURWRm1KQWdoQlVzZ05rdHk2OXg5S1dUNE9TeUNQRTVz?=
- =?utf-8?B?clFaU3NCTTM1MHRFZmhrMjdoTXVLK3dMekJpRjg4Y0R5L3RkUjVHMHdNMEJs?=
- =?utf-8?B?RnhKUGpNV0M3ZjlHQjZXemhlck1QM1RoY0NqVFJEbGFMM0doMVd2SGFkYUtV?=
- =?utf-8?B?T3U2YUd1Z3hSaFEwTVpyQnRmN29wVk5NTERwbEtUTVZSb2dsTGFxQ3NtdWhL?=
- =?utf-8?B?bE14VFpmVFpRUTRPKzFaNTlQK3dRQVZ3UUlBT0NnS1I2VzZzYW43R2JEVEJ1?=
- =?utf-8?B?OVduV0hHamZjUHB6aER4dFI4NTUzZFFtZTNMckN2ZDVWVlkyaWxFOU5BVHRn?=
- =?utf-8?B?Umc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9D44043C0254D04AAE8AFC45CF96B39A@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03843D68
+	for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 00:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706573074; cv=none; b=UHytByj3UyUJapGUqoM4f/W61x+80mvHWHjKVNuKIG1NbuUy5kblr8go8h0Od5yLhNgQde4/IPqcDhzTapKqsDzcINJBBPE2V8/0oUaE8p9mwuHRowyPRU3HngYFoX1iE/+NVS1KHV6MUp4iMw9c90bvr3S3uTPOylja3Ad4lBY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706573074; c=relaxed/simple;
+	bh=TqWtnt6/GVERFbO+52DdIFitQ3QyZb4sW4J+YHA9sv0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mwtnv8J9EUVc+agq4KGnHw9ebhx0qBpyN23thKn/Yut2Bcr/zarQPtcyaBfIDhbeBxehMn2TAwAOI1sZKI6SCEFt5TtkVe1MUrE2PujDBYlPXOhMtlk0Uj6AHAtOrbKfAzo+Ff821mbS+231/+19D/FUxFRysOE2IPGGR+q9VcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xcqssHLh; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d5ce88b51cso83175ad.0
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jan 2024 16:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706573072; x=1707177872; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XsMqf9pWxijCVSf9NKW4Fy1rCmOsTFbCNLYH99qokC8=;
+        b=xcqssHLhmnbJGoE3pXpUtivUhpYNAi29OXwVrlVXpueyW/Xftdx2v5v/DszWlzQN8y
+         7ulpVJ87ewZUaGahxDJL+WxgiysJo8LHU8JBs6ndG/g0EmOGRyV5II/crDndsIDUdx52
+         GcYxW7mEY2k0HF1ALuvqwzKBci+V1JpwdjmLzCDbmwGkzXq+BMrPrlf+GIJoG202PVn4
+         Z2ZWGxuS/vsdkyCtZ4opRpEmuLr9JQfSkGqPYMa6k6kAggYTlP9oDaGlqArlXa57Oz4n
+         P7xNZsM+14Ny+AF6MDgQAKjOz4x57sYgWpGmp6kSTHyGvKmu/okXu8XfErbH+K5sF/h9
+         KfKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706573072; x=1707177872;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XsMqf9pWxijCVSf9NKW4Fy1rCmOsTFbCNLYH99qokC8=;
+        b=Npx6b+ouJfZAK+CaNlp7l+43oqJMNHagtDnnESCLg02RYQmfepmKcXDFNqw0kvMZo4
+         k9fnelv+yhZRw7RR7cPiDhXZLGyZWeF8pQi3C3oYXbsF76iUqARXGHQZ2X5QCkokb7cG
+         a8+NtK/AUEciwGTO4NMSOQAhq/0gPH/t8iMN7oUZ/R12bxbFNM7lt03lrdrn+fj9xfc3
+         eHgyiRteubDFGL6xw8Fj2trFCAByXqfLpsO+AYBqbIsQ7QHXzmjo4Zrk4xpZZbxOyM7W
+         zIYO0/LyZf1s78eaaJ7SNlpV8uPlRrHvopKvHV8vmqfjL78YBfpc3hq9vgnFRV19uc/H
+         uGTQ==
+X-Gm-Message-State: AOJu0YxKTFXIrz5ASRmvym7tagawvAnljyXerINzSF0ZXszUJ9xQM6M1
+	a8lE5jI2exmpp9+xzh3r2XmmopM5+4G6kwJah5clKoQRhTzrXtlQWoia1bZOnR0G2k14phUbtkI
+	imx8hS1wQBCWtIsdM/8G33acylJ30i/RR8ePL
+X-Google-Smtp-Source: AGHT+IFyM5oCFBirmOpOeGwpkpTYbv6MnkTqUfPBLo5XRceX1ihVflhMS0aXC9nYBTQv8DrmkqFPshTcxb3N5LOfyxY=
+X-Received: by 2002:a17:902:e547:b0:1d7:806a:a13e with SMTP id
+ n7-20020a170902e54700b001d7806aa13emr100755plf.28.1706573071712; Mon, 29 Jan
+ 2024 16:04:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1ace142-8e39-4265-2cc9-08dc2118fc9e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jan 2024 22:23:58.0548
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3cQLx7OjSLoasygaBV68Np3bJnoZKBIJhr4PLKAV2o0mnhC4uA/pD6dxzW9ejKbqCTgWjZnDPsmK7j/YwF7ByD1M9Fq2HLGzY+Svntyhhtc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4771
-X-OriginatorOrg: intel.com
+References: <20240125164256.4147-1-alexandru.elisei@arm.com> <20240125164256.4147-24-alexandru.elisei@arm.com>
+In-Reply-To: <20240125164256.4147-24-alexandru.elisei@arm.com>
+From: Peter Collingbourne <pcc@google.com>
+Date: Mon, 29 Jan 2024 16:04:18 -0800
+Message-ID: <CAMn1gO5pGVRCErVF+Ca-4JgHRKEcq9sDGyEe--gEjj5ZLrB8sA@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 23/35] arm64: mte: Try to reserve tag storage in arch_alloc_page()
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
+	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, steven.price@arm.com, 
+	anshuman.khandual@arm.com, vincenzo.frascino@arm.com, david@redhat.com, 
+	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gRnJpLCAyMDI0LTAxLTE5IGF0IDE0OjU2ICswMTAwLCBTdGVmYW4gTGllYmxlciB3cm90ZToN
-Cj4gSSd2ZSByZWR1Y2VkIHRoZSB0ZXN0IChzZWUgYXR0YWNoZW1lbnQpIGFuZCBub3cgaGF2ZSBv
-bmx5IG9uZSBwcm9jZXNzDQo+IHdpdGggdGhyZWUgdGhyZWFkcy4NCg0KVGhpcyB0ZXN0cyBmYWls
-cyBvbiBteSBzZXR1cCBhcyB3ZWxsOg0KbWFpbjogc3RhcnQgMyB0aHJlYWRzLg0KIzA6IHN0YXJ0
-ZWQ6IGZjdD0xDQojMTogc3RhcnRlZDogZmN0PTENCiMyOiBzdGFydGVkOiBmY3Q9MQ0KIzI6IG11
-dGV4X3RpbWVkbG9jayBmYWlsZWQgd2l0aCAyMiAocm91bmQ9Mjg3NzIpDQoNCkJ1dCwgYWZ0ZXIg
-dGhpcyBwYXRjaDoNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDI0MDExNjEzMDgxMC5q
-aTFZQ3hwZ0BsaW51dHJvbml4LmRlLw0KDQouLi50aGUgYXR0YWNoZWQgdGVzdCBoYW5ncy4NCg0K
-SG93ZXZlciwgdGhlIGdsaWJjIHRlc3QgdGhhdCB3YXMgZmFpbGluZyBmb3IgbWUgIm5wdGwvdHN0
-LXJvYnVzdHBpOCINCnBhc3NlcyB3aXRoIHRoZSBsaW5rZWQgcGF0Y2ggYXBwbGllZC4gU28gSSB0
-aGluayB0aGF0IHBhdGNoIGZpeGVzIHRoZQ0KaXNzdWUgSSBoaXQuDQoNCldoYXQgaXMgcGFzc2lu
-ZyBzdXBwb3NlZCB0byBsb29rIGxpa2Ugb24gdGhlIGF0dGFjaGVkIHRlc3Q/DQo=
+On Thu, Jan 25, 2024 at 8:45=E2=80=AFAM Alexandru Elisei
+<alexandru.elisei@arm.com> wrote:
+>
+> Reserve tag storage for a page that is being allocated as tagged. This
+> is a best effort approach, and failing to reserve tag storage is
+> allowed.
+>
+> When all the associated tagged pages have been freed, return the tag
+> storage pages back to the page allocator, where they can be used again fo=
+r
+> data allocations.
+>
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> ---
+>
+> Changes since rfc v2:
+>
+> * Based on rfc v2 patch #16 ("arm64: mte: Manage tag storage on page
+> allocation").
+> * Fixed calculation of the number of associated tag storage blocks (Hyeso=
+o
+> Yu).
+> * Tag storage is reserved in arch_alloc_page() instead of
+> arch_prep_new_page().
+>
+>  arch/arm64/include/asm/mte.h             |  16 +-
+>  arch/arm64/include/asm/mte_tag_storage.h |  31 +++
+>  arch/arm64/include/asm/page.h            |   5 +
+>  arch/arm64/include/asm/pgtable.h         |  19 ++
+>  arch/arm64/kernel/mte_tag_storage.c      | 234 +++++++++++++++++++++++
+>  arch/arm64/mm/fault.c                    |   7 +
+>  fs/proc/page.c                           |   1 +
+>  include/linux/kernel-page-flags.h        |   1 +
+>  include/linux/page-flags.h               |   1 +
+>  include/trace/events/mmflags.h           |   3 +-
+>  mm/huge_memory.c                         |   1 +
+>  11 files changed, 316 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
+> index 8034695b3dd7..6457b7899207 100644
+> --- a/arch/arm64/include/asm/mte.h
+> +++ b/arch/arm64/include/asm/mte.h
+> @@ -40,12 +40,24 @@ void mte_free_tag_buf(void *buf);
+>  #ifdef CONFIG_ARM64_MTE
+>
+>  /* track which pages have valid allocation tags */
+> -#define PG_mte_tagged  PG_arch_2
+> +#define PG_mte_tagged          PG_arch_2
+>  /* simple lock to avoid multiple threads tagging the same page */
+> -#define PG_mte_lock    PG_arch_3
+> +#define PG_mte_lock            PG_arch_3
+> +/* Track if a tagged page has tag storage reserved */
+> +#define PG_tag_storage_reserved        PG_arch_4
+> +
+> +#ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+> +DECLARE_STATIC_KEY_FALSE(tag_storage_enabled_key);
+> +extern bool page_tag_storage_reserved(struct page *page);
+> +#endif
+>
+>  static inline void set_page_mte_tagged(struct page *page)
+>  {
+> +#ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+> +       /* Open code mte_tag_storage_enabled() */
+> +       WARN_ON_ONCE(static_branch_likely(&tag_storage_enabled_key) &&
+> +                    !page_tag_storage_reserved(page));
+> +#endif
+>         /*
+>          * Ensure that the tags written prior to this function are visibl=
+e
+>          * before the page flags update.
+> diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/includ=
+e/asm/mte_tag_storage.h
+> index 7b3f6bff8e6f..09f1318d924e 100644
+> --- a/arch/arm64/include/asm/mte_tag_storage.h
+> +++ b/arch/arm64/include/asm/mte_tag_storage.h
+> @@ -5,6 +5,12 @@
+>  #ifndef __ASM_MTE_TAG_STORAGE_H
+>  #define __ASM_MTE_TAG_STORAGE_H
+>
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <linux/mm_types.h>
+> +
+> +#include <asm/mte.h>
+> +
+>  #ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+>
+>  DECLARE_STATIC_KEY_FALSE(tag_storage_enabled_key);
+> @@ -15,6 +21,15 @@ static inline bool tag_storage_enabled(void)
+>  }
+>
+>  void mte_init_tag_storage(void);
+> +
+> +static inline bool alloc_requires_tag_storage(gfp_t gfp)
+> +{
+> +       return gfp & __GFP_TAGGED;
+> +}
+> +int reserve_tag_storage(struct page *page, int order, gfp_t gfp);
+> +void free_tag_storage(struct page *page, int order);
+> +
+> +bool page_tag_storage_reserved(struct page *page);
+>  #else
+>  static inline bool tag_storage_enabled(void)
+>  {
+> @@ -23,6 +38,22 @@ static inline bool tag_storage_enabled(void)
+>  static inline void mte_init_tag_storage(void)
+>  {
+>  }
+> +static inline bool alloc_requires_tag_storage(struct page *page)
+
+This function should take a gfp_t to match the
+CONFIG_ARM64_MTE_TAG_STORAGE case.
+
+Peter
+
+> +{
+> +       return false;
+> +}
+> +static inline int reserve_tag_storage(struct page *page, int order, gfp_=
+t gfp)
+> +{
+> +       return 0;
+> +}
+> +static inline void free_tag_storage(struct page *page, int order)
+> +{
+> +}
+> +static inline bool page_tag_storage_reserved(struct page *page)
+> +{
+> +       return true;
+> +}
+>  #endif /* CONFIG_ARM64_MTE_TAG_STORAGE */
+>
+> +#endif /* !__ASSEMBLY__ */
+>  #endif /* __ASM_MTE_TAG_STORAGE_H  */
+> diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.=
+h
+> index 88bab032a493..3a656492f34a 100644
+> --- a/arch/arm64/include/asm/page.h
+> +++ b/arch/arm64/include/asm/page.h
+> @@ -35,6 +35,11 @@ void copy_highpage(struct page *to, struct page *from)=
+;
+>  void tag_clear_highpage(struct page *to);
+>  #define __HAVE_ARCH_TAG_CLEAR_HIGHPAGE
+>
+> +#ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+> +void arch_alloc_page(struct page *, int order, gfp_t gfp);
+> +#define HAVE_ARCH_ALLOC_PAGE
+> +#endif
+> +
+>  #define clear_user_page(page, vaddr, pg)       clear_page(page)
+>  #define copy_user_page(to, from, vaddr, pg)    copy_page(to, from)
+>
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pg=
+table.h
+> index 2499cc4fa4f2..f30466199a9b 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -10,6 +10,7 @@
+>
+>  #include <asm/memory.h>
+>  #include <asm/mte.h>
+> +#include <asm/mte_tag_storage.h>
+>  #include <asm/pgtable-hwdef.h>
+>  #include <asm/pgtable-prot.h>
+>  #include <asm/tlbflush.h>
+> @@ -1069,6 +1070,24 @@ static inline void arch_swap_restore(swp_entry_t e=
+ntry, struct folio *folio)
+>                 mte_restore_page_tags_by_swp_entry(entry, &folio->page);
+>  }
+>
+> +#ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+> +
+> +#define __HAVE_ARCH_FREE_PAGES_PREPARE
+> +static inline void arch_free_pages_prepare(struct page *page, int order)
+> +{
+> +       if (tag_storage_enabled() && page_mte_tagged(page))
+> +               free_tag_storage(page, order);
+> +}
+> +
+> +#define __HAVE_ARCH_ALLOC_CMA
+> +static inline bool arch_alloc_cma(gfp_t gfp_mask)
+> +{
+> +       if (tag_storage_enabled() && alloc_requires_tag_storage(gfp_mask)=
+)
+> +               return false;
+> +       return true;
+> +}
+> +
+> +#endif /* CONFIG_ARM64_MTE_TAG_STORAGE */
+>  #endif /* CONFIG_ARM64_MTE */
+>
+>  #define __HAVE_ARCH_CALC_VMA_GFP
+> diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_=
+tag_storage.c
+> index d58c68b4a849..762c7c803a70 100644
+> --- a/arch/arm64/kernel/mte_tag_storage.c
+> +++ b/arch/arm64/kernel/mte_tag_storage.c
+> @@ -34,6 +34,31 @@ struct tag_region {
+>  static struct tag_region tag_regions[MAX_TAG_REGIONS];
+>  static int num_tag_regions;
+>
+> +/*
+> + * A note on locking. Reserving tag storage takes the tag_blocks_lock mu=
+tex,
+> + * because alloc_contig_range() might sleep.
+> + *
+> + * Freeing tag storage takes the xa_lock spinlock with interrupts disabl=
+ed
+> + * because pages can be freed from non-preemptible contexts, including f=
+rom an
+> + * interrupt handler.
+> + *
+> + * Because tag storage can be freed from interrupt contexts, the xarray =
+is
+> + * defined with the XA_FLAGS_LOCK_IRQ flag to disable interrupts when ca=
+lling
+> + * xa_store(). This is done to prevent a deadlock with free_tag_storage(=
+) being
+> + * called from an interrupt raised before xa_store() releases the xa_loc=
+k.
+> + *
+> + * All of the above means that reserve_tag_storage() cannot run concurre=
+ntly
+> + * with itself (no concurrent insertions), but it can run at the same ti=
+me as
+> + * free_tag_storage(). The first thing that reserve_tag_storage() does a=
+fter
+> + * taking the mutex is increase the refcount on all present tag storage =
+blocks
+> + * with the xa_lock held, to serialize against freeing the blocks. This =
+is an
+> + * optimization to avoid taking and releasing the xa_lock after each ite=
+ration
+> + * if the refcount operation was moved inside the loop, where it would h=
+ave had
+> + * to be executed for each block.
+> + */
+> +static DEFINE_XARRAY_FLAGS(tag_blocks_reserved, XA_FLAGS_LOCK_IRQ);
+> +static DEFINE_MUTEX(tag_blocks_lock);
+> +
+>  static u32 __init get_block_size_pages(u32 block_size_bytes)
+>  {
+>         u32 a =3D PAGE_SIZE;
+> @@ -364,3 +389,212 @@ static int __init mte_enable_tag_storage(void)
+>         return -EINVAL;
+>  }
+>  arch_initcall(mte_enable_tag_storage);
+> +
+> +static void page_set_tag_storage_reserved(struct page *page, int order)
+> +{
+> +       int i;
+> +
+> +       for (i =3D 0; i < (1 << order); i++)
+> +               set_bit(PG_tag_storage_reserved, &(page + i)->flags);
+> +}
+> +
+> +static void block_ref_add(unsigned long block, struct tag_region *region=
+, int order)
+> +{
+> +       int count;
+> +
+> +       count =3D min(1u << order, 32 * region->block_size_pages);
+> +       page_ref_add(pfn_to_page(block), count);
+> +}
+> +
+> +static int block_ref_sub_return(unsigned long block, struct tag_region *=
+region, int order)
+> +{
+> +       int count;
+> +
+> +       count =3D min(1u << order, 32 * region->block_size_pages);
+> +       return page_ref_sub_return(pfn_to_page(block), count);
+> +}
+> +
+> +static bool tag_storage_block_is_reserved(unsigned long block)
+> +{
+> +       return xa_load(&tag_blocks_reserved, block) !=3D NULL;
+> +}
+> +
+> +static int tag_storage_reserve_block(unsigned long block, struct tag_reg=
+ion *region, int order)
+> +{
+> +       int ret;
+> +
+> +       ret =3D xa_err(xa_store(&tag_blocks_reserved, block, pfn_to_page(=
+block), GFP_KERNEL));
+> +       if (!ret)
+> +               block_ref_add(block, region, order);
+> +
+> +       return ret;
+> +}
+> +
+> +static int order_to_num_blocks(int order, u32 block_size_pages)
+> +{
+> +       int num_tag_storage_pages =3D max((1 << order) / 32, 1);
+> +
+> +       return DIV_ROUND_UP(num_tag_storage_pages, block_size_pages);
+> +}
+> +
+> +static int tag_storage_find_block_in_region(struct page *page, unsigned =
+long *blockp,
+> +                                           struct tag_region *region)
+> +{
+> +       struct range *tag_range =3D &region->tag_range;
+> +       struct range *mem_range =3D &region->mem_range;
+> +       u64 page_pfn =3D page_to_pfn(page);
+> +       u64 block, block_offset;
+> +
+> +       if (!(mem_range->start <=3D page_pfn && page_pfn <=3D mem_range->=
+end))
+> +               return -ERANGE;
+> +
+> +       block_offset =3D (page_pfn - mem_range->start) / 32;
+> +       block =3D tag_range->start + rounddown(block_offset, region->bloc=
+k_size_pages);
+> +
+> +       if (block + region->block_size_pages - 1 > tag_range->end) {
+> +               pr_err("Block 0x%llx-0x%llx is outside tag region 0x%llx-=
+0x%llx\n",
+> +                       PFN_PHYS(block), PFN_PHYS(block + region->block_s=
+ize_pages + 1) - 1,
+> +                       PFN_PHYS(tag_range->start), PFN_PHYS(tag_range->e=
+nd + 1) - 1);
+> +               return -ERANGE;
+> +       }
+> +       *blockp =3D block;
+> +
+> +       return 0;
+> +
+> +}
+> +
+> +static int tag_storage_find_block(struct page *page, unsigned long *bloc=
+k,
+> +                                 struct tag_region **region)
+> +{
+> +       int i, ret;
+> +
+> +       for (i =3D 0; i < num_tag_regions; i++) {
+> +               ret =3D tag_storage_find_block_in_region(page, block, &ta=
+g_regions[i]);
+> +               if (ret =3D=3D 0) {
+> +                       *region =3D &tag_regions[i];
+> +                       return 0;
+> +               }
+> +       }
+> +
+> +       return -EINVAL;
+> +}
+> +
+> +bool page_tag_storage_reserved(struct page *page)
+> +{
+> +       return test_bit(PG_tag_storage_reserved, &page->flags);
+> +}
+> +
+> +int reserve_tag_storage(struct page *page, int order, gfp_t gfp)
+> +{
+> +       unsigned long start_block, end_block;
+> +       struct tag_region *region;
+> +       unsigned long block;
+> +       unsigned long flags;
+> +       int ret =3D 0;
+> +
+> +       VM_WARN_ON_ONCE(!preemptible());
+> +
+> +       if (page_tag_storage_reserved(page))
+> +               return 0;
+> +
+> +       /*
+> +        * __alloc_contig_migrate_range() ignores gfp when allocating the
+> +        * destination page for migration. Regardless, massage gfp flags =
+and
+> +        * remove __GFP_TAGGED to avoid recursion in case gfp stops being
+> +        * ignored.
+> +        */
+> +       gfp &=3D ~__GFP_TAGGED;
+> +       if (!(gfp & __GFP_NORETRY))
+> +               gfp |=3D __GFP_RETRY_MAYFAIL;
+> +
+> +       ret =3D tag_storage_find_block(page, &start_block, &region);
+> +       if (WARN_ONCE(ret, "Missing tag storage block for pfn 0x%lx", pag=
+e_to_pfn(page)))
+> +               return -EINVAL;
+> +       end_block =3D start_block + order_to_num_blocks(order, region->bl=
+ock_size_pages);
+> +
+> +       mutex_lock(&tag_blocks_lock);
+> +
+> +       /* Check again, this time with the lock held. */
+> +       if (page_tag_storage_reserved(page))
+> +               goto out_unlock;
+> +
+> +       /* Make sure existing entries are not freed from out under out fe=
+et. */
+> +       xa_lock_irqsave(&tag_blocks_reserved, flags);
+> +       for (block =3D start_block; block < end_block; block +=3D region-=
+>block_size_pages) {
+> +               if (tag_storage_block_is_reserved(block))
+> +                       block_ref_add(block, region, order);
+> +       }
+> +       xa_unlock_irqrestore(&tag_blocks_reserved, flags);
+> +
+> +       for (block =3D start_block; block < end_block; block +=3D region-=
+>block_size_pages) {
+> +               /* Refcount incremented above. */
+> +               if (tag_storage_block_is_reserved(block))
+> +                       continue;
+> +
+> +               ret =3D cma_alloc_range(region->cma, block, region->block=
+_size_pages, 3, gfp);
+> +               /* Should never happen. */
+> +               VM_WARN_ON_ONCE(ret =3D=3D -EEXIST);
+> +               if (ret)
+> +                       goto out_error;
+> +
+> +               ret =3D tag_storage_reserve_block(block, region, order);
+> +               if (ret) {
+> +                       cma_release(region->cma, pfn_to_page(block), regi=
+on->block_size_pages);
+> +                       goto out_error;
+> +               }
+> +       }
+> +
+> +       page_set_tag_storage_reserved(page, order);
+> +out_unlock:
+> +       mutex_unlock(&tag_blocks_lock);
+> +
+> +       return 0;
+> +
+> +out_error:
+> +       xa_lock_irqsave(&tag_blocks_reserved, flags);
+> +       for (block =3D start_block; block < end_block; block +=3D region-=
+>block_size_pages) {
+> +               if (tag_storage_block_is_reserved(block) &&
+> +                   block_ref_sub_return(block, region, order) =3D=3D 1) =
+{
+> +                       __xa_erase(&tag_blocks_reserved, block);
+> +                       cma_release(region->cma, pfn_to_page(block), regi=
+on->block_size_pages);
+> +               }
+> +       }
+> +       xa_unlock_irqrestore(&tag_blocks_reserved, flags);
+> +
+> +       mutex_unlock(&tag_blocks_lock);
+> +
+> +       return ret;
+> +}
+> +
+> +void free_tag_storage(struct page *page, int order)
+> +{
+> +       unsigned long block, start_block, end_block;
+> +       struct tag_region *region;
+> +       unsigned long flags;
+> +       int ret;
+> +
+> +       ret =3D tag_storage_find_block(page, &start_block, &region);
+> +       if (WARN_ONCE(ret, "Missing tag storage block for pfn 0x%lx", pag=
+e_to_pfn(page)))
+> +               return;
+> +
+> +       end_block =3D start_block + order_to_num_blocks(order, region->bl=
+ock_size_pages);
+> +
+> +       xa_lock_irqsave(&tag_blocks_reserved, flags);
+> +       for (block =3D start_block; block < end_block; block +=3D region-=
+>block_size_pages) {
+> +               if (WARN_ONCE(!tag_storage_block_is_reserved(block),
+> +                   "Block 0x%lx is not reserved for pfn 0x%lx", block, p=
+age_to_pfn(page)))
+> +                       continue;
+> +
+> +               if (block_ref_sub_return(block, region, order) =3D=3D 1) =
+{
+> +                       __xa_erase(&tag_blocks_reserved, block);
+> +                       cma_release(region->cma, pfn_to_page(block), regi=
+on->block_size_pages);
+> +               }
+> +       }
+> +       xa_unlock_irqrestore(&tag_blocks_reserved, flags);
+> +}
+> +
+> +void arch_alloc_page(struct page *page, int order, gfp_t gfp)
+> +{
+> +       if (tag_storage_enabled() && alloc_requires_tag_storage(gfp))
+> +               reserve_tag_storage(page, order, gfp);
+> +}
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index c022e473c17c..1ffaeccecda2 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -37,6 +37,7 @@
+>  #include <asm/esr.h>
+>  #include <asm/kprobes.h>
+>  #include <asm/mte.h>
+> +#include <asm/mte_tag_storage.h>
+>  #include <asm/processor.h>
+>  #include <asm/sysreg.h>
+>  #include <asm/system_misc.h>
+> @@ -950,6 +951,12 @@ gfp_t arch_calc_vma_gfp(struct vm_area_struct *vma, =
+gfp_t gfp)
+>
+>  void tag_clear_highpage(struct page *page)
+>  {
+> +       if (tag_storage_enabled() && !page_tag_storage_reserved(page)) {
+> +               /* Don't zero the tags if tag storage is not reserved */
+> +               clear_page(page_address(page));
+> +               return;
+> +       }
+> +
+>         /* Newly allocated page, shouldn't have been tagged yet */
+>         WARN_ON_ONCE(!try_page_mte_tagging(page));
+>         mte_zero_clear_page_tags(page_address(page));
+> diff --git a/fs/proc/page.c b/fs/proc/page.c
+> index 195b077c0fac..e7eb584a9234 100644
+> --- a/fs/proc/page.c
+> +++ b/fs/proc/page.c
+> @@ -221,6 +221,7 @@ u64 stable_page_flags(struct page *page)
+>  #ifdef CONFIG_ARCH_USES_PG_ARCH_X
+>         u |=3D kpf_copy_bit(k, KPF_ARCH_2,        PG_arch_2);
+>         u |=3D kpf_copy_bit(k, KPF_ARCH_3,        PG_arch_3);
+> +       u |=3D kpf_copy_bit(k, KPF_ARCH_4,        PG_arch_4);
+>  #endif
+>
+>         return u;
+> diff --git a/include/linux/kernel-page-flags.h b/include/linux/kernel-pag=
+e-flags.h
+> index 859f4b0c1b2b..4a0d719ffdd4 100644
+> --- a/include/linux/kernel-page-flags.h
+> +++ b/include/linux/kernel-page-flags.h
+> @@ -19,5 +19,6 @@
+>  #define KPF_SOFTDIRTY          40
+>  #define KPF_ARCH_2             41
+>  #define KPF_ARCH_3             42
+> +#define KPF_ARCH_4             43
+>
+>  #endif /* LINUX_KERNEL_PAGE_FLAGS_H */
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index b7237bce7446..03f03e6d735e 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -135,6 +135,7 @@ enum pageflags {
+>  #ifdef CONFIG_ARCH_USES_PG_ARCH_X
+>         PG_arch_2,
+>         PG_arch_3,
+> +       PG_arch_4,
+>  #endif
+>         __NR_PAGEFLAGS,
+>
+> diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflag=
+s.h
+> index 6ca0d5ed46c0..ba962fd10a2c 100644
+> --- a/include/trace/events/mmflags.h
+> +++ b/include/trace/events/mmflags.h
+> @@ -125,7 +125,8 @@ IF_HAVE_PG_HWPOISON(hwpoison)                        =
+                       \
+>  IF_HAVE_PG_IDLE(idle)                                                  \
+>  IF_HAVE_PG_IDLE(young)                                                 \
+>  IF_HAVE_PG_ARCH_X(arch_2)                                              \
+> -IF_HAVE_PG_ARCH_X(arch_3)
+> +IF_HAVE_PG_ARCH_X(arch_3)                                              \
+> +IF_HAVE_PG_ARCH_X(arch_4)
+>
+>  #define show_page_flags(flags)                                         \
+>         (flags) ? __print_flags(flags, "|",                             \
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 2bad63a7ec16..47932539cc50 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2804,6 +2804,7 @@ static void __split_huge_page_tail(struct folio *fo=
+lio, int tail,
+>  #ifdef CONFIG_ARCH_USES_PG_ARCH_X
+>                          (1L << PG_arch_2) |
+>                          (1L << PG_arch_3) |
+> +                        (1L << PG_arch_4) |
+>  #endif
+>                          (1L << PG_dirty) |
+>                          LRU_GEN_MASK | LRU_REFS_MASK));
+> --
+> 2.43.0
+>
 
