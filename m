@@ -1,80 +1,40 @@
-Return-Path: <linux-arch+bounces-1831-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1832-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8A2841E84
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:58:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7173E841EAB
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:04:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2805AB2E877
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 08:49:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D26628F034
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64D2B56B9E;
-	Tue, 30 Jan 2024 08:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uev4/vDg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7283260866;
+	Tue, 30 Jan 2024 09:03:43 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4EB43ABC
-	for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 08:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66EB6605CF;
+	Tue, 30 Jan 2024 09:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706604547; cv=none; b=GCZGQos983o+WYLPof2xOAADCNQwzdXoNTz3rqsVLOdLYWCEdCi6vOguVhM6aH4wkUFmZVbG2bfdL5m8b/OmaYhDrsr2MwPUQsNThLTjvyP5TaTrzluwgzmKeC072s+MW9Itm2of18IAEY9gHtyh67irgzIh+xl8JXq+BbZ08lc=
+	t=1706605423; cv=none; b=ab5W//+uVBz54c99z6K7Qi1CBImG+5iUfx1ch4gjaWzYdP+4aWSdzveC8jIwIlhTL+mnxi+WDSj3ttc2nJHDG3QgBDQNfzBK62qnF8yE/PG9yCw5KUWm2ssKvVV98b+Vkt4lK53khHemelqlOVukVBG5WW5MDHwz95Sd8qWD11M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706604547; c=relaxed/simple;
-	bh=lDHvUzDGp0g80avCSIGF2BmOR0m3AH/F2DgYJLL1Bv8=;
+	s=arc-20240116; t=1706605423; c=relaxed/simple;
+	bh=nBml0oiJ6D0UQzvGSde6AYnzRvh5VcdeBvdq6qBUeYg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KGS6sDplvGILV3JC9ioBxq+5395wSYh2CGCiUlCWVd49EG66/ONJZQUb+JvZTe9nYsp6MgxCKKVrEK/wIpF8587/ARCQkZUWzFhQ2/G7Tez5/VDdOK3HswGZM79X6LAzwgmOYxD+xl4lu84z9KxGaxzVZyNN6gBJSHIhdFTRv84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uev4/vDg; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706604544;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=tLfZl+fldZUWURuuVV8KM4xVht5va0e9XkE00pk9Viw=;
-	b=Uev4/vDgkPmzYjsjYrxBxxI5zH0wBb5tfEfwy7Y1WithnRSO6iiSLKFsDTUpKJkZVM4IQc
-	sqGAOhRCRHrbVeKMs9QLDJRsAPmQvV8Pr2wJH3DlrUN63oPJ4XDRc3AgfC1LLgI+TJ9rGo
-	uVKKmsaWEq+g4biGtQOcnAtWBq+0ZLc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-256-SAXxntQIPJGgaL5NmCUpCw-1; Tue, 30 Jan 2024 03:49:02 -0500
-X-MC-Unique: SAXxntQIPJGgaL5NmCUpCw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40fa6610ddfso535105e9.3
-        for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 00:49:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706604541; x=1707209341;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tLfZl+fldZUWURuuVV8KM4xVht5va0e9XkE00pk9Viw=;
-        b=nLDZmQb9slKd0sNujMRlTPcCqYcxtwKR0tHdLXqwNpU46QuzQ+1ZncA9MEO4IMXjtK
-         XSe4vBWEc+71rKpEiOE50AcloVflJv7J54Z2OX1CWbj/RXdMPxrdPuK138kOr0iftgwc
-         aRz7/Pzj1LC3WlAw87xYustz+HGPkHHrCli9odhmhT+O+WFNwS2QVltFXwcB/s3c3uOX
-         bcihh0nTjeBDxykgzXSEOzmBBaKflqF/oFe7QlinBgy6d87DTf21Vmerd2YUoz5HCVIQ
-         AjNY37tZpztBvHXx0t7pTtsi0o6mHeZQq/XEm6jZUj/rv/X6JACUZLhlpXK9boNtrtM4
-         bZ0w==
-X-Gm-Message-State: AOJu0YyiwNLygzgPiTSvaikApgZ+wrdoNIcCqPaFz+Y8EsHKQIXE32Rk
-	mv28qPcDl+YJQnw+aLPIkrT/IGOOt/sZjBXCieYvwdaEhOAI/R/ncJYk36/PzZPAa5gGU2B4Qf9
-	q3FMENYhhf/6afM1hjsgATdNbYd0PPsvb/7fKxiQ7Bo3HmQRAIPzO6Ep9fDY=
-X-Received: by 2002:a05:600c:450a:b0:40e:fc1e:5e18 with SMTP id t10-20020a05600c450a00b0040efc1e5e18mr2016002wmo.29.1706604541736;
-        Tue, 30 Jan 2024 00:49:01 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHIADSFu/VLFBneg+ablqaQ3sRSUSEyd5TXfS8n4CC9eUA/qPPKEbmU+QH7A9IQuAIWoIz5GQ==
-X-Received: by 2002:a05:600c:450a:b0:40e:fc1e:5e18 with SMTP id t10-20020a05600c450a00b0040efc1e5e18mr2015977wmo.29.1706604541358;
-        Tue, 30 Jan 2024 00:49:01 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:2700:bdf6:739b:9f9d:862f? (p200300cbc7082700bdf6739b9f9d862f.dip0.t-ipconnect.de. [2003:cb:c708:2700:bdf6:739b:9f9d:862f])
-        by smtp.gmail.com with ESMTPSA id r15-20020adfe68f000000b0033af51eafc6sm2538195wrm.104.2024.01.30.00.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 00:49:00 -0800 (PST)
-Message-ID: <5ee757bd-c940-4cb7-a113-f4501330896e@redhat.com>
-Date: Tue, 30 Jan 2024 09:49:00 +0100
+	 In-Reply-To:Content-Type; b=h+vhLJLTyYKkdJiMLfrDZv4avSsWiCOirj9gcSQUmHNJVZMlEJmbAtcbHlcXQ5L3ftaUc058yvRozBloYHld3MPkfx+IozyQMLOKUSQbBZ8BwpJ0fQGqeaB0Cya3l9MW9+JO5xgntkE63aHL+PtO6gLbAVJK0ZF+R75RjeLyN6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DCEA139F;
+	Tue, 30 Jan 2024 01:04:24 -0800 (PST)
+Received: from [10.57.79.54] (unknown [10.57.79.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA66B3F738;
+	Tue, 30 Jan 2024 01:03:37 -0800 (PST)
+Message-ID: <075975db-a59b-483a-95d7-0990442ebe6f@arm.com>
+Date: Tue, 30 Jan 2024 09:03:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,10 +42,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/9] mm/memory: factor out zapping of present pte into
- zap_present_pte()
-Content-Language: en-US
-To: Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 6/9] mm/mmu_gather: define ENCODED_PAGE_FLAG_DELAY_RMAP
+Content-Language: en-GB
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  Matthew Wilcox <willy@infradead.org>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
@@ -101,104 +60,109 @@ Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  linux-s390@vger.kernel.org
 References: <20240129143221.263763-1-david@redhat.com>
- <20240129143221.263763-2-david@redhat.com>
- <40e87333-4da9-4497-a117-9885986e376a@arm.com>
- <8d19d635-2f55-4c0d-958b-0640f99ff0ce@redhat.com>
- <cae11a08-2f5c-43ca-92fc-a78e9acf4dd8@arm.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <cae11a08-2f5c-43ca-92fc-a78e9acf4dd8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <20240129143221.263763-7-david@redhat.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20240129143221.263763-7-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 30.01.24 09:46, Ryan Roberts wrote:
-> On 30/01/2024 08:41, David Hildenbrand wrote:
->> On 30.01.24 09:13, Ryan Roberts wrote:
->>> On 29/01/2024 14:32, David Hildenbrand wrote:
->>>> Let's prepare for further changes by factoring out processing of present
->>>> PTEs.
->>>>
->>>> Signed-off-by: David Hildenbrand <david@redhat.com>
->>>> ---
->>>>    mm/memory.c | 92 ++++++++++++++++++++++++++++++-----------------------
->>>>    1 file changed, 52 insertions(+), 40 deletions(-)
->>>>
->>>> diff --git a/mm/memory.c b/mm/memory.c
->>>> index b05fd28dbce1..50a6c79c78fc 100644
->>>> --- a/mm/memory.c
->>>> +++ b/mm/memory.c
->>>> @@ -1532,13 +1532,61 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct
->>>> *vma,
->>>>        pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
->>>>    }
->>>>    +static inline void zap_present_pte(struct mmu_gather *tlb,
->>>> +        struct vm_area_struct *vma, pte_t *pte, pte_t ptent,
->>>> +        unsigned long addr, struct zap_details *details,
->>>> +        int *rss, bool *force_flush, bool *force_break)
->>>> +{
->>>> +    struct mm_struct *mm = tlb->mm;
->>>> +    bool delay_rmap = false;
->>>> +    struct folio *folio;
->>>
->>> You need to init this to NULL otherwise its a random value when calling
->>> should_zap_folio() if vm_normal_page() returns NULL.
->>
->> Right, and we can stop setting it to NULL in the original function. Patch #2
->> changes these checks, which is why it's only a problem in this patch.
+On 29/01/2024 14:32, David Hildenbrand wrote:
+> Nowadays, encoded pages are only used in mmu_gather handling. Let's
+> update the documentation, and define ENCODED_PAGE_BIT_DELAY_RMAP. While at
+> it, rename ENCODE_PAGE_BITS to ENCODED_PAGE_BITS.
 > 
-> Yeah I only noticed that after sending out this reply and moving to the next
-> patch. Still worth fixing this intermediate state I think.
+> If encoded page pointers would ever be used in other context again, we'd
+> likely want to change the defines to reflect their context (e.g.,
+> ENCODED_PAGE_FLAG_MMU_GATHER_DELAY_RMAP). For now, let's keep it simple.
+> 
+> This is a preparation for using the remaining spare bit to indicate that
+> the next item in an array of encoded pages is a "nr_pages" argument and
+> not an encoded page.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Absolutely, I didn't do path-by-patch compilation yet (I suspect the 
-compiler would complain).
+Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
 
--- 
-Cheers,
-
-David / dhildenb
+> ---
+>  include/linux/mm_types.h | 17 +++++++++++------
+>  mm/mmu_gather.c          |  5 +++--
+>  2 files changed, 14 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 8b611e13153e..1b89eec0d6df 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -210,8 +210,8 @@ struct page {
+>   *
+>   * An 'encoded_page' pointer is a pointer to a regular 'struct page', but
+>   * with the low bits of the pointer indicating extra context-dependent
+> - * information. Not super-common, but happens in mmu_gather and mlock
+> - * handling, and this acts as a type system check on that use.
+> + * information. Only used in mmu_gather handling, and this acts as a type
+> + * system check on that use.
+>   *
+>   * We only really have two guaranteed bits in general, although you could
+>   * play with 'struct page' alignment (see CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
+> @@ -220,21 +220,26 @@ struct page {
+>   * Use the supplied helper functions to endcode/decode the pointer and bits.
+>   */
+>  struct encoded_page;
+> -#define ENCODE_PAGE_BITS 3ul
+> +
+> +#define ENCODED_PAGE_BITS			3ul
+> +
+> +/* Perform rmap removal after we have flushed the TLB. */
+> +#define ENCODED_PAGE_BIT_DELAY_RMAP		1ul
+> +
+>  static __always_inline struct encoded_page *encode_page(struct page *page, unsigned long flags)
+>  {
+> -	BUILD_BUG_ON(flags > ENCODE_PAGE_BITS);
+> +	BUILD_BUG_ON(flags > ENCODED_PAGE_BITS);
+>  	return (struct encoded_page *)(flags | (unsigned long)page);
+>  }
+>  
+>  static inline unsigned long encoded_page_flags(struct encoded_page *page)
+>  {
+> -	return ENCODE_PAGE_BITS & (unsigned long)page;
+> +	return ENCODED_PAGE_BITS & (unsigned long)page;
+>  }
+>  
+>  static inline struct page *encoded_page_ptr(struct encoded_page *page)
+>  {
+> -	return (struct page *)(~ENCODE_PAGE_BITS & (unsigned long)page);
+> +	return (struct page *)(~ENCODED_PAGE_BITS & (unsigned long)page);
+>  }
+>  
+>  /*
+> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+> index ac733d81b112..6540c99c6758 100644
+> --- a/mm/mmu_gather.c
+> +++ b/mm/mmu_gather.c
+> @@ -53,7 +53,7 @@ static void tlb_flush_rmap_batch(struct mmu_gather_batch *batch, struct vm_area_
+>  	for (int i = 0; i < batch->nr; i++) {
+>  		struct encoded_page *enc = batch->encoded_pages[i];
+>  
+> -		if (encoded_page_flags(enc)) {
+> +		if (encoded_page_flags(enc) & ENCODED_PAGE_BIT_DELAY_RMAP) {
+>  			struct page *page = encoded_page_ptr(enc);
+>  			folio_remove_rmap_pte(page_folio(page), page, vma);
+>  		}
+> @@ -119,6 +119,7 @@ static void tlb_batch_list_free(struct mmu_gather *tlb)
+>  bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
+>  		bool delay_rmap, int page_size)
+>  {
+> +	int flags = delay_rmap ? ENCODED_PAGE_BIT_DELAY_RMAP : 0;
+>  	struct mmu_gather_batch *batch;
+>  
+>  	VM_BUG_ON(!tlb->end);
+> @@ -132,7 +133,7 @@ bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
+>  	 * Add the page and check if we are full. If so
+>  	 * force a flush.
+>  	 */
+> -	batch->encoded_pages[batch->nr++] = encode_page(page, delay_rmap);
+> +	batch->encoded_pages[batch->nr++] = encode_page(page, flags);
+>  	if (batch->nr == batch->max) {
+>  		if (!tlb_next_batch(tlb))
+>  			return true;
 
 
