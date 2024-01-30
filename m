@@ -1,80 +1,40 @@
-Return-Path: <linux-arch+bounces-1837-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1838-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDBD841F95
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:33:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BB5F84201B
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 10:50:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92C3C2895A6
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:33:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9B60B2BC76
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 09:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48ED0604B7;
-	Tue, 30 Jan 2024 09:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q2hjl6pI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10212605D5;
+	Tue, 30 Jan 2024 09:48:08 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1DB59B68
-	for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 09:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1305E59B4E;
+	Tue, 30 Jan 2024 09:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706607223; cv=none; b=L5w1GZ8lBXyRrklUbGldU0sK/WYkLysaHXoLJI3GSD/17oiihuBSMnyDXGM2AA3DuMRjwmCNxTynh1SyD5gULZU6Q2LgDC6yjer0YEecyq1WTLRoPBUc5u9R13scCD9TvrY2djnrgW9S8baSOYyaQSNibfS1ETOY7MRmqCgRrK4=
+	t=1706608087; cv=none; b=SekgRKvgjxll/SfiGxup745QKTEOLZK+xwCzXLiRdgJnYwuFUpYoelpZfoKn+4Ry50yMOcgbww/Tx+Em4vYhxjCpYjqfVqZj/TynuoCvGXRxZJ5mBlOatXBe9/q5ZreSDT72gVBnE9B6SH8Zvi45tdh3ku9NdsKpi3U9h/u+YMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706607223; c=relaxed/simple;
-	bh=wtG2w+BVmY9I4qEQwqYrx4XrB35b0l1YgsEy73E31FY=;
+	s=arc-20240116; t=1706608087; c=relaxed/simple;
+	bh=v+6f5JbxnVnth39cGl4EmMu1BCx3bWHnFMyuWrpHkzw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P/Yb2l8vqGRuQLqAxAYqKCK/dAK91HpqqLVbPLHYik2f/QSXJzBytVdFulImhnAMeX9bZAggCfbHPBz6hQ/wndK45zbUoVBfO3ULzpM1hbJT4LzJUAHUQ+0FKSgYGZ54hbOIk8gQVKokRBPZp20w41zuJ9T5Hy4t3yBPJoITd9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q2hjl6pI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706607220;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=r8m7uPOH6IrpXxOx1GhKy9Dm1H+TruM8yPB84uxSQyo=;
-	b=Q2hjl6pIRJrzDxEOM9l/LDK7KMZf+bBh9qiKQpIwq8pMz41KNgt+8Qh7Y8hO6iPya0Ab8c
-	7y3ifleiLVgUosz3FOtXwpjs/hhnJSTSB+6OvUrcbIve26Ot2ViewAq9lnG6P38vAfjZcO
-	i1OVcRERlrzZDn+wMWK5qfRJkufADEQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-eVHghAuYNUGTU58wMdu3Ow-1; Tue, 30 Jan 2024 04:33:38 -0500
-X-MC-Unique: eVHghAuYNUGTU58wMdu3Ow-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-40efbba82c8so5454805e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 01:33:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706607217; x=1707212017;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r8m7uPOH6IrpXxOx1GhKy9Dm1H+TruM8yPB84uxSQyo=;
-        b=uYxMBbUB2RE/YWHtdQLs3UWh1IWB184qN74jjDLBVLoiN0yH5JNHboJhQgK14NkrUM
-         oGSyHuDaiAavQtt64oIRz0kpeRvP96OR+VW4RrKUlHjWzBaVhcU96TsyZKsdzrWgjqxt
-         mfsgv17BGf96Ux6PhnCA2iQI7VhTW/Q7yTOucDkhpm/PONsryJez1d5XxT96zRx+Jxhs
-         AMpcBysdlPcHaxPID3dzI7OPwghZEaxhO5246lbt+HI6Zkvct2GI3aLJxnSSgUEz04Gx
-         NKuKaN53oSeUFtP2klHDelTkPIieP2WILmPi3OVqBI7bR4lb0UuIjg5hUBhdki1IxZnR
-         urWA==
-X-Gm-Message-State: AOJu0YzQ3yNMb03keb/0x3oSXm3eDV18qCu0dDTGieH2SnaAUpkf428c
-	m/5UFXcRZ6vRf48BDurXR3Vd8nqErR0UAZSMsoyD+WIL6Q50UxuFiMS6IyIKYVbU6kxbAy+Z9s5
-	pYPohuauISk26ehHWcs1xrSSSVwjBN1GdPVNhbg7xeaHBFwMwSyu85bcLGA4=
-X-Received: by 2002:a05:600c:3b29:b0:40f:a661:d2b with SMTP id m41-20020a05600c3b2900b0040fa6610d2bmr357994wms.13.1706607217274;
-        Tue, 30 Jan 2024 01:33:37 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHo+KOR5lw3BrW72Ij0NfPypWhmMPY/4ZK+I4aQGqcJQVUJ42v4Bg58uAsBy+D89KjoZDWwDQ==
-X-Received: by 2002:a05:600c:3b29:b0:40f:a661:d2b with SMTP id m41-20020a05600c3b2900b0040fa6610d2bmr357962wms.13.1706607216838;
-        Tue, 30 Jan 2024 01:33:36 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:2700:bdf6:739b:9f9d:862f? (p200300cbc7082700bdf6739b9f9d862f.dip0.t-ipconnect.de. [2003:cb:c708:2700:bdf6:739b:9f9d:862f])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05600c470900b0040d87100733sm12550857wmo.39.2024.01.30.01.33.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 01:33:36 -0800 (PST)
-Message-ID: <38ec930c-7175-4bd4-a364-527fcf583148@redhat.com>
-Date: Tue, 30 Jan 2024 10:33:35 +0100
+	 In-Reply-To:Content-Type; b=APPY93SKzgIO6Whcy5k4TkDDbs3gUwNgO6f+bFoVJyP1R8Z8b3qPAllcrmPQL1hVpg9008liiDwh8rJ4OrWGxwr/TyhPLHpDeU2p316AgCTkNmCfvommccS8p/6LriV4PZ/cx4dimWMlyCfOQUGqBwQ5ZgwHC42/T57K+pC+nvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F710DA7;
+	Tue, 30 Jan 2024 01:48:48 -0800 (PST)
+Received: from [10.57.79.54] (unknown [10.57.79.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B3083F738;
+	Tue, 30 Jan 2024 01:48:01 -0800 (PST)
+Message-ID: <bec84017-b1c9-48e7-a206-c4c8a651ee83@arm.com>
+Date: Tue, 30 Jan 2024 09:48:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,9 +42,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 7/9] mm/mmu_gather: add __tlb_remove_folio_pages()
-Content-Language: en-US
-To: Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 9/9] mm/memory: optimize unmap/zap with PTE-mapped THP
+Content-Language: en-GB
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  Matthew Wilcox <willy@infradead.org>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
@@ -100,191 +60,309 @@ Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  linux-s390@vger.kernel.org
 References: <20240129143221.263763-1-david@redhat.com>
- <20240129143221.263763-8-david@redhat.com>
- <e4c7c6a3-b641-4e92-b782-68d90917795f@arm.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <e4c7c6a3-b641-4e92-b782-68d90917795f@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20240129143221.263763-10-david@redhat.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20240129143221.263763-10-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 30.01.24 10:21, Ryan Roberts wrote:
-> On 29/01/2024 14:32, David Hildenbrand wrote:
->> Add __tlb_remove_folio_pages(), which will remove multiple consecutive
->> pages that belong to the same large folio, instead of only a single
->> page. We'll be using this function when optimizing unmapping/zapping of
->> large folios that are mapped by PTEs.
->>
->> We're using the remaining spare bit in an encoded_page to indicate that
->> the next enoced page in an array contains actually shifted "nr_pages".
->> Teach swap/freeing code about putting multiple folio references, and
->> delayed rmap handling to remove page ranges of a folio.
->>
->> This extension allows for still gathering almost as many small folios
->> as we used to (-1, because we have to prepare for a possibly bigger next
->> entry), but still allows for gathering consecutive pages that belong to the
->> same large folio.
->>
->> Note that we don't pass the folio pointer, because it is not required for
->> now. Further, we don't support page_size != PAGE_SIZE, it won't be
->> required for simple PTE batching.
->>
->> We have to provide a separate s390 implementation, but it's fairly
->> straight forward.
->>
->> Another, more invasive and likely more expensive, approach would be to
->> use folio+range or a PFN range instead of page+nr_pages. But, we should
->> do that consistently for the whole mmu_gather. For now, let's keep it
->> simple and add "nr_pages" only.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>   arch/s390/include/asm/tlb.h | 17 +++++++++++
->>   include/asm-generic/tlb.h   |  8 +++++
->>   include/linux/mm_types.h    | 20 ++++++++++++
->>   mm/mmu_gather.c             | 61 +++++++++++++++++++++++++++++++------
->>   mm/swap.c                   | 12 ++++++--
->>   mm/swap_state.c             | 12 ++++++--
->>   6 files changed, 116 insertions(+), 14 deletions(-)
->>
->> diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
->> index 48df896d5b79..abfd2bf29e9e 100644
->> --- a/arch/s390/include/asm/tlb.h
->> +++ b/arch/s390/include/asm/tlb.h
->> @@ -26,6 +26,8 @@ void __tlb_remove_table(void *_table);
->>   static inline void tlb_flush(struct mmu_gather *tlb);
->>   static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
->>   		struct page *page, bool delay_rmap, int page_size);
->> +static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
->> +		struct page *page, unsigned int nr_pages, bool delay_rmap);
->>   
->>   #define tlb_flush tlb_flush
->>   #define pte_free_tlb pte_free_tlb
->> @@ -52,6 +54,21 @@ static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
->>   	return false;
->>   }
->>   
->> +static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
->> +		struct page *page, unsigned int nr_pages, bool delay_rmap)
->> +{
->> +	struct encoded_page *encoded_pages[] = {
->> +		encode_page(page, ENCODED_PAGE_BIT_NR_PAGES),
->> +		encode_nr_pages(nr_pages),
->> +	};
->> +
->> +	VM_WARN_ON_ONCE(delay_rmap);
->> +	VM_WARN_ON_ONCE(page_folio(page) != page_folio(page + nr_pages - 1));
->> +
->> +	free_pages_and_swap_cache(encoded_pages, ARRAY_SIZE(encoded_pages));
->> +	return false;
->> +}
->> +
->>   static inline void tlb_flush(struct mmu_gather *tlb)
->>   {
->>   	__tlb_flush_mm_lazy(tlb->mm);
->> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
->> index 2eb7b0d4f5d2..428c3f93addc 100644
->> --- a/include/asm-generic/tlb.h
->> +++ b/include/asm-generic/tlb.h
->> @@ -69,6 +69,7 @@
->>    *
->>    *  - tlb_remove_page() / __tlb_remove_page()
->>    *  - tlb_remove_page_size() / __tlb_remove_page_size()
->> + *  - __tlb_remove_folio_pages()
->>    *
->>    *    __tlb_remove_page_size() is the basic primitive that queues a page for
->>    *    freeing. __tlb_remove_page() assumes PAGE_SIZE. Both will return a
->> @@ -78,6 +79,11 @@
->>    *    tlb_remove_page() and tlb_remove_page_size() imply the call to
->>    *    tlb_flush_mmu() when required and has no return value.
->>    *
->> + *    __tlb_remove_folio_pages() is similar to __tlb_remove_page(), however,
->> + *    instead of removing a single page, remove the given number of consecutive
->> + *    pages that are all part of the same (large) folio: just like calling
->> + *    __tlb_remove_page() on each page individually.
->> + *
->>    *  - tlb_change_page_size()
->>    *
->>    *    call before __tlb_remove_page*() to set the current page-size; implies a
->> @@ -262,6 +268,8 @@ struct mmu_gather_batch {
->>   
->>   extern bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
->>   		bool delay_rmap, int page_size);
->> +bool __tlb_remove_folio_pages(struct mmu_gather *tlb, struct page *page,
->> +		unsigned int nr_pages, bool delay_rmap);
->>   
->>   #ifdef CONFIG_SMP
->>   /*
->> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
->> index 1b89eec0d6df..198662b7a39a 100644
->> --- a/include/linux/mm_types.h
->> +++ b/include/linux/mm_types.h
->> @@ -226,6 +226,15 @@ struct encoded_page;
->>   /* Perform rmap removal after we have flushed the TLB. */
->>   #define ENCODED_PAGE_BIT_DELAY_RMAP		1ul
->>   
->> +/*
->> + * The next item in an encoded_page array is the "nr_pages" argument, specifying
->> + * the number of consecutive pages starting from this page, that all belong to
->> + * the same folio. For example, "nr_pages" corresponds to the number of folio
->> + * references that must be dropped. If this bit is not set, "nr_pages" is
->> + * implicitly 1.
->> + */
->> +#define ENCODED_PAGE_BIT_NR_PAGES		2ul
+On 29/01/2024 14:32, David Hildenbrand wrote:
+> Similar to how we optimized fork(), let's implement PTE batching when
+> consecutive (present) PTEs map consecutive pages of the same large
+> folio.
 > 
-> nit: Perhaps this should be called ENCODED_PAGE_BIT_NR_PAGES_NEXT? There are a
-> couple of places where you check for this bit on the current entry and advance
-> to the next. So the "_NEXT" might make things clearer?
+> Most infrastructure we need for batching (mmu gather, rmap) is already
+> there. We only have to add get_and_clear_full_ptes() and
+> clear_full_ptes(). Similarly, extend zap_install_uffd_wp_if_needed() to
+> process a PTE range.
+> 
+> We won't bother sanity-checking the mapcount of all subpages, but only
+> check the mapcount of the first subpage we process.
+> 
+> To keep small folios as fast as possible force inlining of a specialized
+> variant using __always_inline with nr=1.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  include/linux/pgtable.h | 66 +++++++++++++++++++++++++++++
+>  mm/memory.c             | 92 +++++++++++++++++++++++++++++------------
+>  2 files changed, 132 insertions(+), 26 deletions(-)
+> 
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index aab227e12493..f0feae7f89fb 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -580,6 +580,72 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+>  }
+>  #endif
+>  
+> +#ifndef get_and_clear_full_ptes
+> +/**
+> + * get_and_clear_full_ptes - Clear PTEs that map consecutive pages of the same
+> + *			     folio, collecting dirty/accessed bits.
+> + * @mm: Address space the pages are mapped into.
+> + * @addr: Address the first page is mapped at.
+> + * @ptep: Page table pointer for the first entry.
+> + * @nr: Number of entries to clear.
+> + * @full: Whether we are clearing a full mm.
+> + *
+> + * May be overridden by the architecture; otherwise, implemented as a simple
+> + * loop over ptep_get_and_clear_full(), merging dirty/accessed bits into
+> + * returned PTE.
+> + *
+> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
+> + * some PTEs might be write-protected.
+> + *
+> + * Context: The caller holds the page table lock.  The PTEs map consecutive
+> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
+> + */
+> +static inline pte_t get_and_clear_full_ptes(struct mm_struct *mm,
+> +		unsigned long addr, pte_t *ptep, unsigned int nr, int full)
+> +{
+> +	pte_t pte, tmp_pte;
+> +
+> +	pte = ptep_get_and_clear_full(mm, addr, ptep, full);
+> +	while (--nr) {
+> +		ptep++;
+> +		addr += PAGE_SIZE;
+> +		tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
+> +		if (pte_dirty(tmp_pte))
+> +			pte = pte_mkdirty(pte);
+> +		if (pte_young(tmp_pte))
+> +			pte = pte_mkyoung(pte);
+> +	}
+> +	return pte;
+> +}
+> +#endif
+> +
+> +#ifndef clear_full_ptes
+> +/**
+> + * clear_full_ptes - Clear PTEs that map consecutive pages of the same folio.
 
-Yes, makes sense, thanks for the suggestion.
+I know its implied from "pages of the same folio" (and even more so for the
+above variant due to mention of access/dirty), but I wonder if its useful to
+explicitly state that "all ptes being cleared are present at the time of the call"?
 
--- 
-Cheers,
+> + * @mm: Address space the pages are mapped into.
+> + * @addr: Address the first page is mapped at.
+> + * @ptep: Page table pointer for the first entry.
+> + * @nr: Number of entries to clear.
+> + * @full: Whether we are clearing a full mm.
+> + *
+> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
+> + * some PTEs might be write-protected.
+> + *
+> + * Context: The caller holds the page table lock.  The PTEs map consecutive
+> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
+> + */
+> +static inline void clear_full_ptes(struct mm_struct *mm, unsigned long addr,
+> +		pte_t *ptep, unsigned int nr, int full)
+> +{
+> +	for (;;) {
+> +		ptep_get_and_clear_full(mm, addr, ptep, full);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		addr += PAGE_SIZE;
+> +	}
+> +}
+> +#endif
+>  
+>  /*
+>   * If two threads concurrently fault at the same page, the thread that
+> diff --git a/mm/memory.c b/mm/memory.c
+> index a2190d7cfa74..38a010c4d04d 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1515,7 +1515,7 @@ static inline bool zap_drop_file_uffd_wp(struct zap_details *details)
+>   */
+>  static inline void
+>  zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
+> -			      unsigned long addr, pte_t *pte,
+> +			      unsigned long addr, pte_t *pte, int nr,
+>  			      struct zap_details *details, pte_t pteval)
+>  {
+>  	/* Zap on anonymous always means dropping everything */
+> @@ -1525,20 +1525,27 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
+>  	if (zap_drop_file_uffd_wp(details))
+>  		return;
+>  
+> -	pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
+> +	for (;;) {
+> +		/* the PFN in the PTE is irrelevant. */
+> +		pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
+> +		if (--nr == 0)
+> +			break;
+> +		pte++;
+> +		addr += PAGE_SIZE;
+> +	}
+>  }
+>  
+> -static inline void zap_present_folio_pte(struct mmu_gather *tlb,
+> +static __always_inline void zap_present_folio_ptes(struct mmu_gather *tlb,
+>  		struct vm_area_struct *vma, struct folio *folio,
+> -		struct page *page, pte_t *pte, pte_t ptent, unsigned long addr,
+> -		struct zap_details *details, int *rss, bool *force_flush,
+> -		bool *force_break)
+> +		struct page *page, pte_t *pte, pte_t ptent, unsigned int nr,
+> +		unsigned long addr, struct zap_details *details, int *rss,
+> +		bool *force_flush, bool *force_break)
+>  {
+>  	struct mm_struct *mm = tlb->mm;
+>  	bool delay_rmap = false;
+>  
+>  	if (!folio_test_anon(folio)) {
+> -		ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
+> +		ptent = get_and_clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
+>  		if (pte_dirty(ptent)) {
+>  			folio_mark_dirty(folio);
+>  			if (tlb_delay_rmap(tlb)) {
+> @@ -1548,36 +1555,49 @@ static inline void zap_present_folio_pte(struct mmu_gather *tlb,
+>  		}
+>  		if (pte_young(ptent) && likely(vma_has_recency(vma)))
+>  			folio_mark_accessed(folio);
+> -		rss[mm_counter(folio)]--;
+> +		rss[mm_counter(folio)] -= nr;
+>  	} else {
+>  		/* We don't need up-to-date accessed/dirty bits. */
+> -		ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
+> -		rss[MM_ANONPAGES]--;
+> +		clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
+> +		rss[MM_ANONPAGES] -= nr;
+>  	}
+> +	/* Checking a single PTE in a batch is sufficient. */
+>  	arch_check_zapped_pte(vma, ptent);
+> -	tlb_remove_tlb_entry(tlb, pte, addr);
+> +	tlb_remove_tlb_entries(tlb, pte, nr, addr);
+>  	if (unlikely(userfaultfd_pte_wp(vma, ptent)))
+> -		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
+> +		zap_install_uffd_wp_if_needed(vma, addr, pte, nr, details,
+> +					      ptent);
+>  
+>  	if (!delay_rmap) {
+> -		folio_remove_rmap_pte(folio, page, vma);
+> +		folio_remove_rmap_ptes(folio, page, nr, vma);
+> +
+> +		/* Only sanity-check the first page in a batch. */
+>  		if (unlikely(page_mapcount(page) < 0))
+>  			print_bad_pte(vma, addr, ptent, page);
 
-David / dhildenb
+Is there a case for either removing this all together or moving it into
+folio_remove_rmap_ptes()? It seems odd to only check some pages.
+
+
+>  	}
+> -	if (unlikely(__tlb_remove_page(tlb, page, delay_rmap))) {
+> +	if (unlikely(__tlb_remove_folio_pages(tlb, page, nr, delay_rmap))) {
+>  		*force_flush = true;
+>  		*force_break = true;
+>  	}
+>  }
+>  
+> -static inline void zap_present_pte(struct mmu_gather *tlb,
+> +/*
+> + * Zap or skip one present PTE, trying to batch-process subsequent PTEs that map
+
+Zap or skip *at least* one... ?
+
+> + * consecutive pages of the same folio.
+> + *
+> + * Returns the number of processed (skipped or zapped) PTEs (at least 1).
+> + */
+> +static inline int zap_present_ptes(struct mmu_gather *tlb,
+>  		struct vm_area_struct *vma, pte_t *pte, pte_t ptent,
+> -		unsigned long addr, struct zap_details *details,
+> -		int *rss, bool *force_flush, bool *force_break)
+> +		unsigned int max_nr, unsigned long addr,
+> +		struct zap_details *details, int *rss, bool *force_flush,
+> +		bool *force_break)
+>  {
+> +	const fpb_t fpb_flags = FPB_IGNORE_DIRTY | FPB_IGNORE_SOFT_DIRTY;
+>  	struct mm_struct *mm = tlb->mm;
+>  	struct folio *folio;
+>  	struct page *page;
+> +	int nr;
+>  
+>  	page = vm_normal_page(vma, addr, ptent);
+>  	if (!page) {
+> @@ -1587,14 +1607,29 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
+>  		tlb_remove_tlb_entry(tlb, pte, addr);
+>  		VM_WARN_ON_ONCE(userfaultfd_wp(vma));
+>  		ksm_might_unmap_zero_page(mm, ptent);
+> -		return;
+> +		return 1;
+>  	}
+>  
+>  	folio = page_folio(page);
+>  	if (unlikely(!should_zap_folio(details, folio)))
+> -		return;
+> -	zap_present_folio_pte(tlb, vma, folio, page, pte, ptent, addr, details,
+> -			      rss, force_flush, force_break);
+> +		return 1;
+> +
+> +	/*
+> +	 * Make sure that the common "small folio" case is as fast as possible
+> +	 * by keeping the batching logic separate.
+> +	 */
+> +	if (unlikely(folio_test_large(folio) && max_nr != 1)) {
+> +		nr = folio_pte_batch(folio, addr, pte, ptent, max_nr, fpb_flags,
+> +				     NULL);
+> +
+> +		zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, nr,
+> +				       addr, details, rss, force_flush,
+> +				       force_break);
+> +		return nr;
+> +	}
+> +	zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, 1, addr,
+> +			       details, rss, force_flush, force_break);
+> +	return 1;
+>  }
+>  
+>  static unsigned long zap_pte_range(struct mmu_gather *tlb,
+> @@ -1609,6 +1644,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>  	pte_t *start_pte;
+>  	pte_t *pte;
+>  	swp_entry_t entry;
+> +	int nr;
+>  
+>  	tlb_change_page_size(tlb, PAGE_SIZE);
+>  	init_rss_vec(rss);
+> @@ -1622,7 +1658,9 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>  		pte_t ptent = ptep_get(pte);
+>  		struct folio *folio = NULL;
+>  		struct page *page;
+> +		int max_nr;
+>  
+> +		nr = 1;
+>  		if (pte_none(ptent))
+>  			continue;
+>  
+> @@ -1630,10 +1668,12 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>  			break;
+>  
+>  		if (pte_present(ptent)) {
+> -			zap_present_pte(tlb, vma, pte, ptent, addr, details,
+> -					rss, &force_flush, &force_break);
+> +			max_nr = (end - addr) / PAGE_SIZE;
+> +			nr = zap_present_ptes(tlb, vma, pte, ptent, max_nr,
+> +					      addr, details, rss, &force_flush,
+> +					      &force_break);
+>  			if (unlikely(force_break)) {
+> -				addr += PAGE_SIZE;
+> +				addr += nr * PAGE_SIZE;
+>  				break;
+>  			}
+>  			continue;
+> @@ -1687,8 +1727,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>  			WARN_ON_ONCE(1);
+>  		}
+>  		pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+> -		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
+> -	} while (pte++, addr += PAGE_SIZE, addr != end);
+> +		zap_install_uffd_wp_if_needed(vma, addr, pte, 1, details, ptent);
+> +	} while (pte += nr, addr += PAGE_SIZE * nr, addr != end);
+>  
+>  	add_mm_rss_vec(mm, rss);
+>  	arch_leave_lazy_mmu_mode();
 
 
