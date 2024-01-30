@@ -1,104 +1,61 @@
-Return-Path: <linux-arch+bounces-1842-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1843-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BFBE84232D
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 12:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C5C4842330
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 12:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EE35B2CB5E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:33:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FDFEB24CD6
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jan 2024 11:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E5866B4C;
-	Tue, 30 Jan 2024 11:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WMHmAUIO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="kCUu1BNm";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="bEt7+Fb4";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ZN+0xaMa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B9967729;
+	Tue, 30 Jan 2024 11:34:25 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093B1679F0;
-	Tue, 30 Jan 2024 11:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023C867727;
+	Tue, 30 Jan 2024 11:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706614422; cv=none; b=YXI9GZIlphof2CqL29p28v/rH9P83uHwu4LHRuOtTN0v5HTq+kjh7Qu2UDs6P73WqWq7bsLCor2lZ9/L9i6e8bVBr2BsOshqu5Dr5Wr/9wEtGfjjMCvJjQdihOpDycTzpOn9sQbm0Ymydq75lUx9vq5Ozh7CFhGUvfL30u2LOG8=
+	t=1706614465; cv=none; b=jvb4vRVd3/cWRZpM11vzeAI7uu6U2nJwBV67vZJI+UMt1SnEbReCmnNPTT2XDBcAvE4riVhoHl45zC6a2W82HQvZbvgFZOf1awAQh/jzeZn+Zj0w8+qgsoVrEgiUxI0+4fVsoV2WN0dD8hKmbsRm4v+fgCG7KQsncsWKn/FSOEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706614422; c=relaxed/simple;
-	bh=KdleNc6ylNXLWRddKw+ypWGUY1aH6NyttfKk2hGcMgA=;
+	s=arc-20240116; t=1706614465; c=relaxed/simple;
+	bh=pAjrTyzRe9rW0CRcO2ECOckHgmDhMEmf2G6If/XzA94=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cvq4HIVg73Ibgnj5+LNpT2evIscX22xnlQOak4ZkMCENBPHoRONolTMvRHR8xRx7vUcPU4PZcZb6Vq5Q/dduM443MYiw8KDOvK6T+vgtdTocgBjjtMlcqUx52M5QanJl5OZpXhktcijIkWogx+oNgIguLo5xJn61oucxPIV4638=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WMHmAUIO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=kCUu1BNm; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=bEt7+Fb4; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ZN+0xaMa; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EBD8D222EC;
-	Tue, 30 Jan 2024 11:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1706614419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ul8XI1L/cZzOQhlwvI1+prP8LmIw3V5FpvNQXXSV384=;
-	b=WMHmAUIOA7jXezAvq0ZkXKvyPhWYRVDv6j4CkOfdnTknst0pMIebKWOKs36pgauuGiThav
-	4acrlDq3WeGHd+huaR6pHDvE8bPYMFc4AMbLCDaIX6NM9KxohY3i5pTv+Q3DpNJ+Vb22GV
-	m/GlA8vVgU5ZyaeZQdJmXSfimOZIL/Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1706614419;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ul8XI1L/cZzOQhlwvI1+prP8LmIw3V5FpvNQXXSV384=;
-	b=kCUu1BNm+2hjT4FskcjKJfLnyjAR22BERPd4NoVtsxfbAmqVrtwBy6Idg9dOpKpctlVkxW
-	ioqf2Qe7qSRH/nDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1706614417; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ul8XI1L/cZzOQhlwvI1+prP8LmIw3V5FpvNQXXSV384=;
-	b=bEt7+Fb4F6iuZ2rG1MhIuzS/7eZbMXnhx+Wvwe5rxC0rdbM0s85/aC6UZufC7+BB9Tl23E
-	aE9zv/1rzWgiyVfy151g+RHuv/mJ7ZPlKj+m/4P7P8DBQ/J2iift8xkLBFHsUZ+MfNLbyg
-	gqm3Nwd/p27Y1Vhtqja3VmJEQdNIQHw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1706614417;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ul8XI1L/cZzOQhlwvI1+prP8LmIw3V5FpvNQXXSV384=;
-	b=ZN+0xaMaQHPUiTqxVr6sHBw3gfPjXpy8jPFBkfD9rZmxSpx+iUGYygPweVaUCf56A9k1nz
-	gci3cDsnNWbLagDg==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id D997C13462;
-	Tue, 30 Jan 2024 11:33:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id MzMrNJHeuGWXDwAAn2gu4w
-	(envelope-from <jack@suse.cz>); Tue, 30 Jan 2024 11:33:37 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 7816AA0807; Tue, 30 Jan 2024 12:33:37 +0100 (CET)
-Date: Tue, 30 Jan 2024 12:33:37 +0100
-From: Jan Kara <jack@suse.cz>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, linux-kernel@vger.kernel.org,
-	Jan Kara <jack@suse.com>, linux-ext4@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-Subject: Re: [RFC PATCH 4/7] ext2: Use dax_is_supported()
-Message-ID: <20240130113337.frem6a3y5n2iibnh@quack3>
-References: <20240129210631.193493-1-mathieu.desnoyers@efficios.com>
- <20240129210631.193493-5-mathieu.desnoyers@efficios.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FBpuuWEY21q4qUtWJGcsoZf1qJOfKKkMPj7McQhYVtd2khNqexUejv+ll8blVVFtrQ9vlnoQV3g1te46sAp+RYtGDFgNaukL8fnlnRGokSDfM2vPKdIgfPEQzkNcnT0qCvivFKzlGdbx8A8N6F0KqxDlBRMIcT9Z8yfuiRKNi9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27850DA7;
+	Tue, 30 Jan 2024 03:35:05 -0800 (PST)
+Received: from raptor (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 092573F5A1;
+	Tue, 30 Jan 2024 03:34:15 -0800 (PST)
+Date: Tue, 30 Jan 2024 11:34:13 +0000
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
+	rppt@kernel.org, hughd@google.com, pcc@google.com,
+	steven.price@arm.com, vincenzo.frascino@arm.com, david@redhat.com,
+	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v3 10/35] mm: cma: Fast track allocating memory when
+ the pages are free
+Message-ID: <ZbjetR3La_qObrVx@raptor>
+References: <20240125164256.4147-1-alexandru.elisei@arm.com>
+ <20240125164256.4147-11-alexandru.elisei@arm.com>
+ <598c9762-83b3-4517-858c-8349d6dceec2@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -107,94 +64,298 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240129210631.193493-5-mathieu.desnoyers@efficios.com>
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spamd-Result: default: False [-2.60 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[14];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[kvack.org:email,intel.com:email,suse.cz:email,suse.com:email,linux-foundation.org:email,linux.dev:email,infradead.org:email,efficios.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -2.60
+In-Reply-To: <598c9762-83b3-4517-858c-8349d6dceec2@arm.com>
 
-On Mon 29-01-24 16:06:28, Mathieu Desnoyers wrote:
-> Use dax_is_supported() to validate whether the architecture has
-> virtually aliased caches at mount time.
+Hi,
+
+On Tue, Jan 30, 2024 at 02:48:53PM +0530, Anshuman Khandual wrote:
 > 
-> This is relevant for architectures which require a dynamic check
-> to validate whether they have virtually aliased data caches
-> (ARCH_HAS_CACHE_ALIASING_DYNAMIC=y).
 > 
-> Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Jan Kara <jack@suse.com>
-> Cc: linux-ext4@vger.kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: nvdimm@lists.linux.dev
-> Cc: linux-cxl@vger.kernel.org
-
-Looks good to me (although I share Dave's opinion it would be nice to CC
-the whole series to fsdevel - luckily we have lore these days so it is not
-that tedious to find the whole series :)). Feel free to add:
-
-Acked-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext2/super.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+> On 1/25/24 22:12, Alexandru Elisei wrote:
+> > If the pages to be allocated are free, take them directly off the buddy
+> > allocator, instead of going through alloc_contig_range() and avoiding
+> > costly calls to lru_cache_disable().
+> > 
+> > Only allocations of the same size as the CMA region order are considered,
+> > to avoid taking the zone spinlock for too long.
+> > 
+> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
 > 
-> diff --git a/fs/ext2/super.c b/fs/ext2/super.c
-> index 01f9addc8b1f..0398e7a90eb6 100644
-> --- a/fs/ext2/super.c
-> +++ b/fs/ext2/super.c
-> @@ -585,13 +585,13 @@ static int parse_options(char *options, struct super_block *sb,
->  			set_opt(opts->s_mount_opt, XIP);
->  			fallthrough;
->  		case Opt_dax:
-> -#ifdef CONFIG_FS_DAX
-> -			ext2_msg(sb, KERN_WARNING,
-> -		"DAX enabled. Warning: EXPERIMENTAL, use at your own risk");
-> -			set_opt(opts->s_mount_opt, DAX);
-> -#else
-> -			ext2_msg(sb, KERN_INFO, "dax option not supported");
-> -#endif
-> +			if (dax_is_supported()) {
-> +				ext2_msg(sb, KERN_WARNING,
-> +					 "DAX enabled. Warning: EXPERIMENTAL, use at your own risk");
-> +				set_opt(opts->s_mount_opt, DAX);
-> +			} else {
-> +				ext2_msg(sb, KERN_INFO, "dax option not supported");
-> +			}
->  			break;
->  
->  #if defined(CONFIG_QUOTA)
-> -- 
-> 2.39.2
+> This patch seems to be improving standard cma_alloc() as well as
+> the previously added new allocator i.e cma_alloc_range() - via a
+> new helper cma_alloc_pages_fastpath().
+
+Yes, that's correct.
+
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Should not any standard cma_alloc() improvement be discussed as
+> an independent patch separately irrespective of this series. OR
+> it is some how related to this series which I might be missing ?
+
+Yes, it's related to this series. I wrote this patch because it fixes a
+performance regression with Chrome when dynamic tag storage management is
+enabled [1]. I will bring back the commit message explaining that.
+
+[1] https://lore.kernel.org/linux-fsdevel/20231119165721.9849-27-alexandru.elisei@arm.com/
+
+Thanks,
+Alex
+
+> 
+> > ---
+> > 
+> > Changes since rfc v2:
+> > 
+> > * New patch. Reworked from the rfc v2 patch #26 ("arm64: mte: Fast track
+> > reserving tag storage when the block is free") (David Hildenbrand).
+> > 
+> >  include/linux/page-flags.h | 15 ++++++++++++--
+> >  mm/Kconfig                 |  5 +++++
+> >  mm/cma.c                   | 42 ++++++++++++++++++++++++++++++++++----
+> >  mm/memory-failure.c        |  8 ++++----
+> >  mm/page_alloc.c            | 23 ++++++++++++---------
+> >  5 files changed, 73 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> > index 735cddc13d20..b7237bce7446 100644
+> > --- a/include/linux/page-flags.h
+> > +++ b/include/linux/page-flags.h
+> > @@ -575,11 +575,22 @@ TESTSCFLAG(HWPoison, hwpoison, PF_ANY)
+> >  #define MAGIC_HWPOISON	0x48575053U	/* HWPS */
+> >  extern void SetPageHWPoisonTakenOff(struct page *page);
+> >  extern void ClearPageHWPoisonTakenOff(struct page *page);
+> > -extern bool take_page_off_buddy(struct page *page);
+> > -extern bool put_page_back_buddy(struct page *page);
+> > +extern bool PageHWPoisonTakenOff(struct page *page);
+> >  #else
+> >  PAGEFLAG_FALSE(HWPoison, hwpoison)
+> > +TESTSCFLAG_FALSE(HWPoison, hwpoison)
+> >  #define __PG_HWPOISON 0
+> > +static inline void SetPageHWPoisonTakenOff(struct page *page) { }
+> > +static inline void ClearPageHWPoisonTakenOff(struct page *page) { }
+> > +static inline bool PageHWPoisonTakenOff(struct page *page)
+> > +{
+> > +      return false;
+> > +}
+> > +#endif
+> > +
+> > +#ifdef CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY
+> > +extern bool take_page_off_buddy(struct page *page, bool poison);
+> > +extern bool put_page_back_buddy(struct page *page, bool unpoison);
+> >  #endif
+> >  
+> >  #if defined(CONFIG_PAGE_IDLE_FLAG) && defined(CONFIG_64BIT)
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index ffc3a2ba3a8c..341cf53898db 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -745,12 +745,16 @@ config DEFAULT_MMAP_MIN_ADDR
+> >  config ARCH_SUPPORTS_MEMORY_FAILURE
+> >  	bool
+> >  
+> > +config WANTS_TAKE_PAGE_OFF_BUDDY
+> > +	bool> +
+> >  config MEMORY_FAILURE
+> >  	depends on MMU
+> >  	depends on ARCH_SUPPORTS_MEMORY_FAILURE
+> >  	bool "Enable recovery from hardware memory errors"
+> >  	select MEMORY_ISOLATION
+> >  	select RAS
+> > +	select WANTS_TAKE_PAGE_OFF_BUDDY
+> >  	help
+> >  	  Enables code to recover from some memory failures on systems
+> >  	  with MCA recovery. This allows a system to continue running
+> > @@ -891,6 +895,7 @@ config CMA
+> >  	depends on MMU
+> >  	select MIGRATION
+> >  	select MEMORY_ISOLATION
+> > +	select WANTS_TAKE_PAGE_OFF_BUDDY
+> >  	help
+> >  	  This enables the Contiguous Memory Allocator which allows other
+> >  	  subsystems to allocate big physically-contiguous blocks of memory.
+> > diff --git a/mm/cma.c b/mm/cma.c
+> > index 2881bab12b01..15663f95d77b 100644
+> > --- a/mm/cma.c
+> > +++ b/mm/cma.c
+> > @@ -444,6 +444,34 @@ static void cma_debug_show_areas(struct cma *cma)
+> >  static inline void cma_debug_show_areas(struct cma *cma) { }
+> >  #endif
+> >  
+> > +/* Called with the cma mutex held. */
+> > +static int cma_alloc_pages_fastpath(struct cma *cma, unsigned long start,
+> > +				    unsigned long end)
+> > +{
+> > +	bool success = false;
+> > +	unsigned long i, j;
+> > +
+> > +	/* Avoid contention on the zone lock. */
+> > +	if (start - end != 1 << cma->order_per_bit)
+> > +		return -EINVAL;
+> > +
+> > +	for (i = start; i < end; i++) {
+> > +		if (!is_free_buddy_page(pfn_to_page(i)))
+> > +			break;
+> > +		success = take_page_off_buddy(pfn_to_page(i), false);
+> > +		if (!success)
+> > +			break;
+> > +	}
+> > +
+> > +	if (success)
+> > +		return 0;
+> > +
+> > +	for (j = start; j < i; j++)
+> > +		put_page_back_buddy(pfn_to_page(j), false);
+> > +
+> > +	return -EBUSY;
+> > +}
+> > +
+> >  /**
+> >   * cma_alloc_range() - allocate pages in a specific range
+> >   * @cma:   Contiguous memory region for which the allocation is performed.
+> > @@ -493,7 +521,11 @@ int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+> >  
+> >  	for (i = 0; i < tries; i++) {
+> >  		mutex_lock(&cma_mutex);
+> > -		err = alloc_contig_range(start, start + count, MIGRATE_CMA, gfp);
+> > +		err = cma_alloc_pages_fastpath(cma, start, start + count);
+> > +		if (err) {
+> > +			err = alloc_contig_range(start, start + count,
+> > +						 MIGRATE_CMA, gfp);
+> > +		}
+> >  		mutex_unlock(&cma_mutex);
+> >  
+> >  		if (err != -EBUSY)
+> > @@ -529,7 +561,6 @@ int cma_alloc_range(struct cma *cma, unsigned long start, unsigned long count,
+> >  	return err;
+> >  }
+> >  
+> > -
+> >  /**
+> >   * cma_alloc() - allocate pages from contiguous area
+> >   * @cma:   Contiguous memory region for which the allocation is performed.
+> > @@ -589,8 +620,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+> >  
+> >  		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
+> >  		mutex_lock(&cma_mutex);
+> > -		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
+> > -				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
+> > +		ret = cma_alloc_pages_fastpath(cma, pfn, pfn + count);
+> > +		if (ret) {
+> > +			ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
+> > +					GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
+> > +		}
+> >  		mutex_unlock(&cma_mutex);
+> >  		if (ret == 0) {
+> >  			page = pfn_to_page(pfn);
+> > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> > index 4f9b61f4a668..b87b533a9871 100644
+> > --- a/mm/memory-failure.c
+> > +++ b/mm/memory-failure.c
+> > @@ -157,7 +157,7 @@ static int __page_handle_poison(struct page *page)
+> >  	zone_pcp_disable(page_zone(page));
+> >  	ret = dissolve_free_huge_page(page);
+> >  	if (!ret)
+> > -		ret = take_page_off_buddy(page);
+> > +		ret = take_page_off_buddy(page, true);
+> >  	zone_pcp_enable(page_zone(page));
+> >  
+> >  	return ret;
+> > @@ -1353,7 +1353,7 @@ static int page_action(struct page_state *ps, struct page *p,
+> >  	return action_result(pfn, ps->type, result);
+> >  }
+> >  
+> > -static inline bool PageHWPoisonTakenOff(struct page *page)
+> > +bool PageHWPoisonTakenOff(struct page *page)
+> >  {
+> >  	return PageHWPoison(page) && page_private(page) == MAGIC_HWPOISON;
+> >  }
+> > @@ -2247,7 +2247,7 @@ int memory_failure(unsigned long pfn, int flags)
+> >  		res = get_hwpoison_page(p, flags);
+> >  		if (!res) {
+> >  			if (is_free_buddy_page(p)) {
+> > -				if (take_page_off_buddy(p)) {
+> > +				if (take_page_off_buddy(p, true)) {
+> >  					page_ref_inc(p);
+> >  					res = MF_RECOVERED;
+> >  				} else {
+> > @@ -2578,7 +2578,7 @@ int unpoison_memory(unsigned long pfn)
+> >  		ret = folio_test_clear_hwpoison(folio) ? 0 : -EBUSY;
+> >  	} else if (ghp < 0) {
+> >  		if (ghp == -EHWPOISON) {
+> > -			ret = put_page_back_buddy(p) ? 0 : -EBUSY;
+> > +			ret = put_page_back_buddy(p, true) ? 0 : -EBUSY;
+> >  		} else {
+> >  			ret = ghp;
+> >  			unpoison_pr_info("Unpoison: failed to grab page %#lx\n",
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 0fa34bcfb1af..502ee3eb8583 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -6655,7 +6655,7 @@ bool is_free_buddy_page(struct page *page)
+> >  }
+> >  EXPORT_SYMBOL(is_free_buddy_page);
+> >  
+> > -#ifdef CONFIG_MEMORY_FAILURE
+> > +#ifdef CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY
+> >  /*
+> >   * Break down a higher-order page in sub-pages, and keep our target out of
+> >   * buddy allocator.
+> > @@ -6687,9 +6687,9 @@ static void break_down_buddy_pages(struct zone *zone, struct page *page,
+> >  }
+> >  
+> >  /*
+> > - * Take a page that will be marked as poisoned off the buddy allocator.
+> > + * Take a page off the buddy allocator, and optionally mark it as poisoned.
+> >   */
+> > -bool take_page_off_buddy(struct page *page)
+> > +bool take_page_off_buddy(struct page *page, bool poison)
+> >  {
+> >  	struct zone *zone = page_zone(page);
+> >  	unsigned long pfn = page_to_pfn(page);
+> > @@ -6710,7 +6710,8 @@ bool take_page_off_buddy(struct page *page)
+> >  			del_page_from_free_list(page_head, zone, page_order);
+> >  			break_down_buddy_pages(zone, page_head, page, 0,
+> >  						page_order, migratetype);
+> > -			SetPageHWPoisonTakenOff(page);
+> > +			if (poison)
+> > +				SetPageHWPoisonTakenOff(page);
+> >  			if (!is_migrate_isolate(migratetype))
+> >  				__mod_zone_freepage_state(zone, -1, migratetype);
+> >  			ret = true;
+> > @@ -6724,9 +6725,10 @@ bool take_page_off_buddy(struct page *page)
+> >  }
+> >  
+> >  /*
+> > - * Cancel takeoff done by take_page_off_buddy().
+> > + * Cancel takeoff done by take_page_off_buddy(), and optionally unpoison the
+> > + * page.
+> >   */
+> > -bool put_page_back_buddy(struct page *page)
+> > +bool put_page_back_buddy(struct page *page, bool unpoison)
+> >  {
+> >  	struct zone *zone = page_zone(page);
+> >  	unsigned long pfn = page_to_pfn(page);
+> > @@ -6736,17 +6738,18 @@ bool put_page_back_buddy(struct page *page)
+> >  
+> >  	spin_lock_irqsave(&zone->lock, flags);
+> >  	if (put_page_testzero(page)) {
+> > -		ClearPageHWPoisonTakenOff(page);
+> > +		VM_WARN_ON_ONCE(PageHWPoisonTakenOff(page) && !unpoison);
+> > +		if (unpoison)
+> > +			ClearPageHWPoisonTakenOff(page);
+> >  		__free_one_page(page, pfn, zone, 0, migratetype, FPI_NONE);
+> > -		if (TestClearPageHWPoison(page)) {
+> > +		if (!unpoison || (unpoison && TestClearPageHWPoison(page)))
+> >  			ret = true;
+> > -		}
+> >  	}
+> >  	spin_unlock_irqrestore(&zone->lock, flags);
+> >  
+> >  	return ret;
+> >  }
+> > -#endif
+> > +#endif /* CONFIG_WANTS_TAKE_PAGE_OFF_BUDDY */
+> >  
+> >  #ifdef CONFIG_ZONE_DMA
+> >  bool has_managed_dma(void)
 
