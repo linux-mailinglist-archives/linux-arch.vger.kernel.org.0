@@ -1,168 +1,105 @@
-Return-Path: <linux-arch+bounces-1878-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1881-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 427CA8434DD
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 05:40:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3308C8436A5
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 07:26:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E08952886E1
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 04:40:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6625C1C21CA2
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 06:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5504817BC8;
-	Wed, 31 Jan 2024 04:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DDAF3EA90;
+	Wed, 31 Jan 2024 06:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eAHplHh2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E38D13FE2;
-	Wed, 31 Jan 2024 04:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B390C3EA7A;
+	Wed, 31 Jan 2024 06:25:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706676024; cv=none; b=ZA/h1NV5hCIsbNV/kPGmZuyPuXxwNG14btxKk1BEcNL0dWOLRUUz11KvmvhDk+SEoP1jSXibxU70DdAtli2XYBIC6zNFf12Fcp79TNlJE4rawobxmfTSeWcY7rYtgRV0rRxo6Xim1AWY+ET/YVb2TQEq+gY/jtFLmi6d5BWZw9k=
+	t=1706682355; cv=none; b=fg+R+MdYbyl/E6UpHrGvPrH92kBU3oXuxWns8pV5kjr9xOkSND+T7B4Nt0JoRfwYA5mKAnf5uBVBHZp+IU7uZBOjq8FWvld8HVHF3WSwZIaAuz0o0h3r8W1SLm7HbHMB534vaaEnim58T82zLk8CQ5LeLGsMGSPtwW+pWjOE1Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706676024; c=relaxed/simple;
-	bh=3R14n/VzZcxmNnLweehoAPfyjB2o8LMMfTdOUihMJJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=plDZY6P0eYCU92S/dlwxRLOVIieIscajYpzPOyvs14+QI+k5YJeJzW8OTc5LikRZrNsACTIz0VkZG9vmPRtxvx/mY0kddxErF2XOWomN7U3neoWywAbzEnm8X0UM0sVlND9nMmwlyhUgKAYKEVWcpY+g7wl3NG+iDk1RCR8jNl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4E6CDA7;
-	Tue, 30 Jan 2024 20:41:03 -0800 (PST)
-Received: from [10.163.41.195] (unknown [10.163.41.195])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 52C333F738;
-	Tue, 30 Jan 2024 20:40:06 -0800 (PST)
-Message-ID: <8cd39b48-7fb8-40b2-8d6c-e6fc2b48f86d@arm.com>
-Date: Wed, 31 Jan 2024 10:10:05 +0530
+	s=arc-20240116; t=1706682355; c=relaxed/simple;
+	bh=Dz+rEBJ1wZtGL4hQOfZUqa80XN/mQMePbBMimQSo/DE=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=I0cFyrxwB6CUjqhI5SpUDhovsFHQIqC5p+/pJU4IEqrPpVxsEzqW8DZe7ful/FQgKuPfcqY0guf8oFyyIOLM/i+dWAfcZQftqtWwmwQgDhs4WSvgXMxkfM3Ub88IyoFs6JNjvTG/OoZdaQ9yOBX9pHllMc/b6gEqgpKNbVlTRRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eAHplHh2; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706682353; x=1738218353;
+  h=from:to:cc:subject:date:message-id;
+  bh=Dz+rEBJ1wZtGL4hQOfZUqa80XN/mQMePbBMimQSo/DE=;
+  b=eAHplHh2S9pdRDzjgvzFHshNkiSArFrKroXo7QoWq/B812hZ6r8Z/UwD
+   sabFCxTq56v5R+WcUv2ELz6qFPZf7sxg0eB+f066YRfU0IdP7mHIu57yy
+   Mc1U3emt7Mo/Rk/kbsq9hBaM7ZcMRVcr6JVLNL8zaKW3+6KI6sCF6JimX
+   7fy5sWQwrIHjcSvWf3gIsHEi1pT9Mc7Izmj3Usuoh33qoWYC2+zxNHoG+
+   vLu8yFUWT8a05EKxed4Aq4Zislw0nUV2WtNDJkc5+W11qifFIaCHgrkVu
+   xk6sCzv6YdEKUzaPWVId1Vxj70GBMsQcPrznm3JoRUiacWEHobr+jEQM0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="16888137"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="16888137"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 22:25:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="3939842"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 22:25:50 -0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: arnd@arndb.de,
+	linus.walleij@linaro.org,
+	guoren@kernel.org,
+	bcain@quicinc.com,
+	jonas@southpole.se,
+	stefan.kristiansson@saunalahti.fi,
+	shorne@gmail.com
+Cc: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH 0/4] apply page shift to PFN instead of VA in pfn_to_virt
+Date: Wed, 31 Jan 2024 13:51:59 +0800
+Message-Id: <20240131055159.2506-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 06/35] mm: cma: Make CMA_ALLOC_SUCCESS/FAIL count
- the number of pages
-Content-Language: en-US
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
- maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
- yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
- mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
- vschneid@redhat.com, mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
- pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
- david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org
-References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-7-alexandru.elisei@arm.com>
- <0a71c87a-ae2c-4a61-8adb-3a51d6369b99@arm.com> <ZbeRQpGNnfXnjayQ@raptor>
- <2cb8288c-5378-4968-a75b-8462b41998c6@arm.com> <ZbjkTFEvSvyHNqmu@raptor>
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZbjkTFEvSvyHNqmu@raptor>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+
+This is a tiny fix to pfn_to_virt() for some platforms.
+
+The original implementaion of pfn_to_virt() takes PFN instead of PA as the
+input to macro __va, with PAGE_SHIFT applying to the converted VA, which
+is not right under most conditions, especially when there's an offset in
+__va.
 
 
+Yan Zhao (4):
+  asm-generic/page.h: apply page shift to PFN instead of VA in
+    pfn_to_virt
+  csky: apply page shift to PFN instead of VA in pfn_to_virt
+  Hexagon: apply page shift to PFN instead of VA in pfn_to_virt
+  openrisc: apply page shift to PFN instead of VA in pfn_to_virt
 
-On 1/30/24 17:28, Alexandru Elisei wrote:
-> Hi,
-> 
-> On Tue, Jan 30, 2024 at 10:22:11AM +0530, Anshuman Khandual wrote:
->>
->> On 1/29/24 17:21, Alexandru Elisei wrote:
->>> Hi,
->>>
->>> On Mon, Jan 29, 2024 at 02:54:20PM +0530, Anshuman Khandual wrote:
->>>>
->>>> On 1/25/24 22:12, Alexandru Elisei wrote:
->>>>> The CMA_ALLOC_SUCCESS, respectively CMA_ALLOC_FAIL, are increased by one
->>>>> after each cma_alloc() function call. This is done even though cma_alloc()
->>>>> can allocate an arbitrary number of CMA pages. When looking at
->>>>> /proc/vmstat, the number of successful (or failed) cma_alloc() calls
->>>>> doesn't tell much with regards to how many CMA pages were allocated via
->>>>> cma_alloc() versus via the page allocator (regular allocation request or
->>>>> PCP lists refill).
->>>>>
->>>>> This can also be rather confusing to a user who isn't familiar with the
->>>>> code, since the unit of measurement for nr_free_cma is the number of pages,
->>>>> but cma_alloc_success and cma_alloc_fail count the number of cma_alloc()
->>>>> function calls.
->>>>>
->>>>> Let's make this consistent, and arguably more useful, by having
->>>>> CMA_ALLOC_SUCCESS count the number of successfully allocated CMA pages, and
->>>>> CMA_ALLOC_FAIL count the number of pages the cma_alloc() failed to
->>>>> allocate.
->>>>>
->>>>> For users that wish to track the number of cma_alloc() calls, there are
->>>>> tracepoints for that already implemented.
->>>>>
->>>>> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
->>>>> ---
->>>>>  mm/cma.c | 4 ++--
->>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/mm/cma.c b/mm/cma.c
->>>>> index f49c95f8ee37..dbf7fe8cb1bd 100644
->>>>> --- a/mm/cma.c
->>>>> +++ b/mm/cma.c
->>>>> @@ -517,10 +517,10 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
->>>>>  	pr_debug("%s(): returned %p\n", __func__, page);
->>>>>  out:
->>>>>  	if (page) {
->>>>> -		count_vm_event(CMA_ALLOC_SUCCESS);
->>>>> +		count_vm_events(CMA_ALLOC_SUCCESS, count);
->>>>>  		cma_sysfs_account_success_pages(cma, count);
->>>>>  	} else {
->>>>> -		count_vm_event(CMA_ALLOC_FAIL);
->>>>> +		count_vm_events(CMA_ALLOC_FAIL, count);
->>>>>  		if (cma)
->>>>>  			cma_sysfs_account_fail_pages(cma, count);
->>>>>  	}
->>>> Without getting into the merits of this patch - which is actually trying to do
->>>> semantics change to /proc/vmstat, wondering how is this even related to this
->>>> particular series ? If required this could be debated on it's on separately.
->>> Having the number of CMA pages allocated and the number of CMA pages freed
->>> allows someone to infer how many tagged pages are in use at a given time:
->> That should not be done in CMA which is a generic multi purpose allocator.
+ arch/csky/include/asm/page.h     | 2 +-
+ arch/hexagon/include/asm/page.h  | 2 +-
+ arch/openrisc/include/asm/page.h | 2 +-
+ include/asm-generic/page.h       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-> Ah, ok. Let me rephrase that: Having the number of CMA pages allocated, the
-> number of failed CMA page allocations and the number of freed CMA pages
-> allows someone to infer how many CMA pages are in use at a given time.
-> That's valuable information for software designers and system
-> administrators, as it allows them to tune the number of CMA pages available
-> in a system.
-> 
-> Or put another way: what would you consider to be more useful?  Knowing the
-> number of cma_alloc()/cma_release() calls, or knowing the number of pages
-> that cma_alloc()/cma_release() allocated or freed?
 
-There is still value in knowing how many times cma_alloc() succeeded or failed
-regardless of the cumulative number pages involved over the time. Actually the
-count helps to understand how cma_alloc() performed overall as an allocator.
+base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+-- 
+2.17.1
 
-But on the cma_release() path there is no chances of failure apart from - just
-when the caller itself provides an wrong input. So there are no corresponding
-CMA_RELEASE_SUCCESS/CMA_RELEASE_FAIL vmstat counters in there - for a reason !
-
-Coming back to CMA based pages being allocated and freed, there is already an
-interface via sysfs (CONFIG_CMA_SYSFS) which gets updated in cma_alloc() path
-via cma_sysfs_account_success_pages() and cma_sysfs_account_fail_pages().
-
-#ls /sys/kernel/mm/cma/<name>
-alloc_pages_fail alloc_pages_success
-
-Why these counters could not meet your requirements ? Also 'struct cma' can
-be updated to add an element 'nr_pages_freed' to be tracked in cma_release(),
-providing free pages count as well.
-
-There are additional debug fs based elements (CONFIG_CMA_DEBUGFS) available.
-
-#ls /sys/kernel/debug/cma/<name>
-alloc  base_pfn  bitmap  count  free  maxchunk  order_per_bit  used
 
