@@ -1,150 +1,157 @@
-Return-Path: <linux-arch+bounces-1916-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1917-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2642A84413D
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 15:04:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4882784415F
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 15:09:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE98D2883CB
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 14:04:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D84B01F25AAC
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 14:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817A079DB8;
-	Wed, 31 Jan 2024 14:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E0883CBB;
+	Wed, 31 Jan 2024 14:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="WLhYD4V/";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="WLhYD4V/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYQ1foks"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D7956B9D;
-	Wed, 31 Jan 2024 14:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A6983CB7;
+	Wed, 31 Jan 2024 14:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706709835; cv=none; b=KqnzXkBtc3Q43GTitseB39PWa172hE4w13j6sikBANWgrCUeAXjNSoZH9Q3RtKX+hImiXPisqnPeVSgGqnKfKDNOKLB0ik5nMcIbb21Dx7Tne0uWZwklqMsru/jX5UA29qk4Y1GrDnBY3D9IDtWxG0uo0bZC8g0USShOGJZZzZ8=
+	t=1706710084; cv=none; b=CKKEvXcFQ1MyEcOdk5IEiC9ipnmqxA2e35iy2DwSnyVaxJKzMiX7Y7KxWLFTOGnlfa1u0mGkQR/zGp668kDnkUdy/PIZRPsu3+pbAOu2Zk1O2AnDjXYASUU/QavJAPg5KMVxSLT3jC2nU8PWyUGZiyID1nxg1JvU3K8IStUb8HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706709835; c=relaxed/simple;
-	bh=yK5tDuzjN62NKpY1IUEhVf1AyPpCBKY++LbxRsHYWaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJmhGH16zyr2Pzj47wm/QsITtiIBca4LC2cejiipW1OLciE7ZbBu4wV1rPTjSEAJnuUetoPdFtB2YL8j0X7FeTc4BeiZVIlJBgCmvohhnac7z6Dj4X2N7NAHyiZdANr7ThviBhrDpibv2W07p0+bsxy/98JO/QUbqJ5v3uzDgyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=WLhYD4V/; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=WLhYD4V/; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E1AE41FB8A;
-	Wed, 31 Jan 2024 14:03:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1706709827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m2cxDnakp497+YroEa+q5vx8Sh99BmyBojVBJFGfpzs=;
-	b=WLhYD4V/x/UZrHhY+6rCUJyqgymCrrsKeuLtGDQJmSHaoC3k23j7X0NG3vOMfDtXnIsMtY
-	jZ5h10f3ZWcsECbVFDV7u/QcfFFmgBDZc+aS1k+0Rtk506F6YwOW9pHPE/hJ/vKoBvOmPc
-	ryDw7jWI4W009OBH2S6hA4+jm0itigA=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1706709827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m2cxDnakp497+YroEa+q5vx8Sh99BmyBojVBJFGfpzs=;
-	b=WLhYD4V/x/UZrHhY+6rCUJyqgymCrrsKeuLtGDQJmSHaoC3k23j7X0NG3vOMfDtXnIsMtY
-	jZ5h10f3ZWcsECbVFDV7u/QcfFFmgBDZc+aS1k+0Rtk506F6YwOW9pHPE/hJ/vKoBvOmPc
-	ryDw7jWI4W009OBH2S6hA4+jm0itigA=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BDC6F1347F;
-	Wed, 31 Jan 2024 14:03:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id mJp5LENTumVaDwAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Wed, 31 Jan 2024 14:03:47 +0000
-Date: Wed, 31 Jan 2024 15:03:47 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: Yin Fengwei <fengwei.yin@intel.com>, linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-	Nick Piggin <npiggin@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, "Huang, Ying" <ying.huang@intel.com>
-Subject: Re: [PATCH v1 0/9] mm/memory: optimize unmap/zap with PTE-mapped THP
-Message-ID: <ZbpTQ80ebCUnAXW0@tiehlicka>
-References: <20240129143221.263763-1-david@redhat.com>
- <4ef64fd1-f605-4ddf-82e6-74b5e2c43892@intel.com>
- <ee94b8ca-9723-44c0-aa17-75c9678015c6@redhat.com>
+	s=arc-20240116; t=1706710084; c=relaxed/simple;
+	bh=5nR7Ertacn9PuZp1Bn/nWb7jPB+VBrlLCjXLDoq7d5k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iL+/gKFNu/tf2/gzRRuF3oqe5nX9sldUGyvIv1r2zy1EBP0wjxfqDwDkgRncpZav8HqrQsvRACiCxkUQMVvHdgbUeCTkNaxU19hkWw4580/B1hMeEwvHvETKFxxv6c13TZ+5isaLf5rqj8Wj5/DAbCFfxGl6rXLWzHAOqH45Joc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYQ1foks; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BBCC43601;
+	Wed, 31 Jan 2024 14:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706710083;
+	bh=5nR7Ertacn9PuZp1Bn/nWb7jPB+VBrlLCjXLDoq7d5k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iYQ1foksziyUWYW8tRQV+ff4NIPx+pD2QLp+msKwoB4/FOncHJiUe52cbJxGW58pZ
+	 68GXvryC227ayGT6fc5gJ4pwcggz7j1B53SnHc6AQZsw9aDT87svSQDKuqN7GcIPhm
+	 LwFIsszth8jeuDwoCP0AelpQi4yrHXtQMLGpxdx9H38b9rya03pygUvtOM23wpCK7R
+	 lACMem1wB+vEOK2igAPErOGXMTlIhdSGettMAy/TI7DUn9VyKqwPegQ0n/kG6nEOGM
+	 XL+L4/SmUjBFxNeUMyjvhUCBo6kGUD6NuXgan/80gs6rRn1oK67xRQ328YnLIKfqcB
+	 z1BXYU07RZS8g==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51124e31f72so916725e87.0;
+        Wed, 31 Jan 2024 06:08:03 -0800 (PST)
+X-Gm-Message-State: AOJu0Yw08C8o0f8Gx88lRA7ALlR7OjWEiNfp2rPi2YuZMzwxf/x2m8DK
+	ikemLoB6XJsZyInLEamhydVEiurIyoiefiWlqdZ3DJiInXvevEWBBNnjL1D3anTLpqphvILNYCk
+	rCTB0h2xjpBM20R2fI/eChrFUtF8=
+X-Google-Smtp-Source: AGHT+IEWOX5OhqEdfMQM4e2B9NE+FH+r8iCudVcs4e/r9DjBBtoSKBUY5Wgyaf1OXbZRbRm3omEFOmJJTybR5NzVdxo=
+X-Received: by 2002:a19:8c4e:0:b0:511:18e4:89bb with SMTP id
+ i14-20020a198c4e000000b0051118e489bbmr1384753lfj.39.1706710081908; Wed, 31
+ Jan 2024 06:08:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee94b8ca-9723-44c0-aa17-75c9678015c6@redhat.com>
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spamd-Result: default: False [0.40 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 R_RATELIMIT(0.00)[to_ip_from(RLmz57jmx331iqhbrcj9q94ym8)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 RCPT_COUNT_TWELVE(0.00)[26];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[intel.com,vger.kernel.org,linux-foundation.org,kvack.org,infradead.org,arm.com,kernel.org,linux.ibm.com,gmail.com,ellerman.id.au,csgroup.eu,arndb.de,lists.ozlabs.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.00)[28.90%]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: 0.40
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-24-ardb+git@google.com> <20240131134431.GJZbpOvz3Ibhg4VhCl@fat_crate.local>
+ <CAMj1kXF7T4morB+Z3BDy-UaeHoeU6fHtnaa-7HJY_NR3RVC5sg@mail.gmail.com>
+In-Reply-To: <CAMj1kXF7T4morB+Z3BDy-UaeHoeU6fHtnaa-7HJY_NR3RVC5sg@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 31 Jan 2024 15:07:50 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
+Message-ID: <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
+Subject: Re: [PATCH v3 03/19] x86/startup_64: Drop long return to initial_code pointer
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed 31-01-24 11:16:01, David Hildenbrand wrote:
-[...]
-> This 10000 pages limit was introduced in 53a59fc67f97 ("mm: limit mmu_gather
-> batching to fix soft lockups on !CONFIG_PREEMPT") where we wanted to handle
-> soft-lockups.
+On Wed, 31 Jan 2024 at 14:57, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 31 Jan 2024 at 14:45, Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Mon, Jan 29, 2024 at 07:05:06PM +0100, Ard Biesheuvel wrote:
+> > > From: Ard Biesheuvel <ardb@kernel.org>
+> > >
+> > > Since commit 866b556efa12 ("x86/head/64: Install startup GDT"), the
+> > > primary startup sequence sets the code segment register (CS) to __KERNEL_CS
+> > > before calling into the startup code shared between primary and
+> > > secondary boot.
+> > >
+> > > This means a simple indirect call is sufficient here.
+> > >
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > ---
+> > >  arch/x86/kernel/head_64.S | 35 ++------------------
+> > >  1 file changed, 3 insertions(+), 32 deletions(-)
+> > >
+> > > diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> > > index d4918d03efb4..4017a49d7b76 100644
+> > > --- a/arch/x86/kernel/head_64.S
+> > > +++ b/arch/x86/kernel/head_64.S
+> > > @@ -428,39 +428,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+> > >       movq    %r15, %rdi
+> > >
+> > >  .Ljump_to_C_code:
+> > > -     /*
+> > > -      * Jump to run C code and to be on a real kernel address.
+> > > -      * Since we are running on identity-mapped space we have to jump
+> > > -      * to the full 64bit address, this is only possible as indirect
+> > > -      * jump.  In addition we need to ensure %cs is set so we make this
+> > > -      * a far return.
+> > > -      *
+> > > -      * Note: do not change to far jump indirect with 64bit offset.
+> > > -      *
+> > > -      * AMD does not support far jump indirect with 64bit offset.
+> > > -      * AMD64 Architecture Programmer's Manual, Volume 3: states only
+> > > -      *      JMP FAR mem16:16 FF /5 Far jump indirect,
+> > > -      *              with the target specified by a far pointer in memory.
+> > > -      *      JMP FAR mem16:32 FF /5 Far jump indirect,
+> > > -      *              with the target specified by a far pointer in memory.
+> > > -      *
+> > > -      * Intel64 does support 64bit offset.
+> > > -      * Software Developer Manual Vol 2: states:
+> > > -      *      FF /5 JMP m16:16 Jump far, absolute indirect,
+> > > -      *              address given in m16:16
+> > > -      *      FF /5 JMP m16:32 Jump far, absolute indirect,
+> > > -      *              address given in m16:32.
+> > > -      *      REX.W + FF /5 JMP m16:64 Jump far, absolute indirect,
+> > > -      *              address given in m16:64.
+> > > -      */
+> > > -     pushq   $.Lafter_lret   # put return address on stack for unwinder
+> > >       xorl    %ebp, %ebp      # clear frame pointer
+> > > -     movq    initial_code(%rip), %rax
+> > > -     pushq   $__KERNEL_CS    # set correct cs
+> > > -     pushq   %rax            # target address in negative space
+> > > -     lretq
+> > > -.Lafter_lret:
+> > > -     ANNOTATE_NOENDBR
+> > > +     ANNOTATE_RETPOLINE_SAFE
+> > > +     callq   *initial_code(%rip)
+> > > +     int3
+> > >  SYM_CODE_END(secondary_startup_64)
+> > >
+> > >  #include "verify_cpu.S"
+> >
+> > objtool doesn't like it yet:
+> >
+> > vmlinux.o: warning: objtool: verify_cpu+0x0: stack state mismatch: cfa1=4+8 cfa2=-1+0
+> >
+> > Once we've solved this, I'll take this one even now - very nice cleanup!
+> >
+>
+> s/int3/RET seems to do the trick.
+>
 
-AFAIR at the time of this patch this was mostly just to put some cap on
-the number of batches to collect and free at once. If there is a lot of
-free memory and a large process exiting this could grow really high. Now
-that those pages^Wfolios can represent larger memory chunks it could
-mean more physical memory being freed but from which might make the
-operation take longer but still far from soft lockup triggering.
-
-Now latency might suck on !PREEMPT kernels with too many pages to
-free in a single batch but I guess this is somehow expected for this
-preemption model. The soft lockup has to be avoided because this can
-panic the machine in some configurations.
-
--- 
-Michal Hocko
-SUSE Labs
+or ud2, even better,
 
