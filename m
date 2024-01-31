@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-1932-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1933-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 884BF8444FA
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 17:50:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73487844502
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 17:51:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CF841F25274
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 16:50:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FE4C288E4B
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 16:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AFE12DD80;
-	Wed, 31 Jan 2024 16:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2232612DDB1;
+	Wed, 31 Jan 2024 16:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ZoeUO890"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Vfg3ZyYu"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3D112CDAA;
-	Wed, 31 Jan 2024 16:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005796AA7;
+	Wed, 31 Jan 2024 16:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706719802; cv=none; b=cqjZg3e0tCO0mvPKqI8x0U2wj4wkHxoIBqm65FlXrbnjQmAf54XHIj9CydiRCYk1vPjYjH56CDNsvEEB4Zdl25m4YizmoINsWtQ0mk03kOh/j3WR/3nAflO/1iBuVNcDrjGcnsbKFxTDl34NF7+Q+qyGCiI6BY3YQsR4M1ceLIw=
+	t=1706719813; cv=none; b=tucbRmMqABLx7DDg2Mt86tUhxIV0NrOBS/nXN9tYP2OWY6DOdVTtgma25PboS5kHnTDM5zdKlZnrHM1tGtFx1eIVkUI32pdx1X+QrEsuI7SMgbqmc1r+5bqZo0415xI+qNMZAq2FDFhFLxGnjoyEtZTiqxYUzQHoNKs57BTYPQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706719802; c=relaxed/simple;
-	bh=ZP11D8P/7O7D2C8VzXiubQDQkRY9I6FYqn0sWuW98rk=;
+	s=arc-20240116; t=1706719813; c=relaxed/simple;
+	bh=KMF9eAGOkqi5sf2htsxoVtMvkUncKmjULA9ffc9z/Sw=;
 	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=nCfNfttkAUc/l5jaEj8dhiWkDihmkrynmGxGJdMMKI3fCCjq343uFiOGkS8234puMRV+lLqAgqgGb7Y1YFqi+5hwdcVdg1ivZiH5QGuTUB1Pr8N9DqNQ1BCe1bOeav9+0jMONAcbnM8nmIw78ofK6iY1TshW9LMPXCO+xN19g8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ZoeUO890; arc=none smtp.client-ip=78.32.30.218
+	 Content-Disposition:Content-Type:Message-Id:Date; b=SOZD8Kw+oPMGbGBMAFiClG2da7Ho3R2At3mONLN3a1wuOTd/Mbs5VhLShKJVwj3ArxXbiq10LZAwv6PLvpqlY/q0F4h2B2dnXp4eWMS9BVD5Tgxx1bWiFCde+OCEliOAZoulOt71T75VYNUSQRO1IG4GVjwScMNjp2wO9pXN9wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Vfg3ZyYu; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,21 +37,21 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/T3kjNeWvzXmlVnxkBE8aEZDeW8R1tHMrqvuxLBRlmM=; b=ZoeUO8903Gktf6St0tQFCkWzlo
-	MznV4trPHKx08E6cz/qahICue6k8edh/dET1kA1i1P6luIjLkKE2djlh0ZVUEaoDPpUgD2Y7f4K/o
-	EUCHO8r8YAl1TnLbfAP9AiduskbovwPAfJ3WN7K6jLcuW9Q8BLwzW0030d0qDlirRQad2yl/5kdKD
-	2Zf/wrzQq+buDwu2ZIfrD7VbSPkihHFhSjQaJ9SMDPC9FKJqBVFcT8kOUy9+nGKo4tIbFab0wrfJM
-	6ubbreyEPvnYX8mFSgm6R6NNhXGyBJHclWSWL0FI9cNAH2wKzwo+t82M+l8FjIeFFEkbltZ8toKzb
-	bjbEUVSQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:35954 helo=rmk-PC.armlinux.org.uk)
+	bh=GTt+zTRDJEWcpx9Xy5W4TT50pzwG/YUzwyuwhrcyZOM=; b=Vfg3ZyYuaYmNOkoqPCz1o+2zX1
+	CHnbf95wXJ8iNQiPXvhkhc71pS2lEmL0BjG7UDAkKM1AmeyI7Hw99+IZwxMqV5xfG1dQOVWjNSrxK
+	nI3mFn7sO8gfuf0xTZKKwsKxmf2IzsZb34MG2VsL+7+xdTfxL6cE2U68ZrM3R26CuzvWpwCvBd1t4
+	4Llyd4+LA4apOlJDyKGd1H/tl8vBYcuWS08mc9fxhgh51HY0tUVfcCaZaue37+yhtiShI5us6dzOo
+	5eYvo3a6Z1EG6k7xWrBQKjDSZHMvLwt1uMzkpqvdjlF4ZhHXWeNk5U3HIqxksMV1sDVaOFFu97D/L
+	iESmz7Pw==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:35968 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rVDma-0003Tt-31;
-	Wed, 31 Jan 2024 16:49:52 +0000
+	id 1rVDmg-0003U8-0E;
+	Wed, 31 Jan 2024 16:49:58 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rVDmZ-0027YV-OU; Wed, 31 Jan 2024 16:49:51 +0000
+	id 1rVDme-0027Yb-Sj; Wed, 31 Jan 2024 16:49:56 +0000
 In-Reply-To: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
 References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
 From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
@@ -76,8 +76,8 @@ Cc: Salil Mehta <salil.mehta@huawei.com>,
 	 James Morse <james.morse@arm.com>,
 	 Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
 	 "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH RFC v4 03/15] ACPI: Move acpi_bus_trim_one() before
- acpi_scan_hot_remove()
+Subject: [PATCH RFC v4 04/15] ACPI: Rename acpi_processor_hotadd_init and
+ remove pre-processor guards
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -87,124 +87,100 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rVDmZ-0027YV-OU@rmk-PC.armlinux.org.uk>
+Message-Id: <E1rVDme-0027Yb-Sj@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 31 Jan 2024 16:49:51 +0000
+Date: Wed, 31 Jan 2024 16:49:56 +0000
 
 From: James Morse <james.morse@arm.com>
 
-A subsequent patch will change acpi_scan_hot_remove() to call
-acpi_bus_trim_one() instead of acpi_bus_trim(), meaning it can no longer
-rely on the prototype in the header file.
+acpi_processor_hotadd_init() will make a CPU present by mapping it
+based on its hardware id.
 
-Move these functions further up the file.
-No change in behaviour.
+'hotadd_init' is ambiguous once there are two different behaviours
+for cpu hotplug. This is for toggling the _STA present bit. Subsequent
+patches will add support for toggling the _STA enabled bit, named
+acpi_processor_make_enabled().
+
+Rename it acpi_processor_make_present() to make it clear this is
+for CPUs that were not previously present.
+
+Expose the function prototypes it uses to allow the preprocessor
+guards to be removed. The IS_ENABLED() check will let the compiler
+dead-code elimination pass remove this if it isn't going to be
+used.
 
 Signed-off-by: James Morse <james.morse@arm.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Gavin Shan <gshan@redhat.com>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
 Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- drivers/acpi/scan.c | 76 ++++++++++++++++++++++-----------------------
- 1 file changed, 38 insertions(+), 38 deletions(-)
+ drivers/acpi/acpi_processor.c | 14 +++++---------
+ include/linux/acpi.h          |  2 --
+ 2 files changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index fd2e8b3a5749..2c8ba4526278 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -244,6 +244,44 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
- 	return 0;
- }
+diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+index a68c475cdea5..fd8f3a0572cb 100644
+--- a/drivers/acpi/acpi_processor.c
++++ b/drivers/acpi/acpi_processor.c
+@@ -183,13 +183,15 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+ #endif /* CONFIG_X86 */
  
-+static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
-+{
-+	struct acpi_scan_handler *handler = adev->handler;
-+
-+	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
-+
-+	adev->flags.match_driver = false;
-+	if (handler) {
-+		if (handler->detach)
-+			handler->detach(adev);
-+
-+		adev->handler = NULL;
-+	} else {
-+		device_release_driver(&adev->dev);
-+	}
-+	/*
-+	 * Most likely, the device is going away, so put it into D3cold before
-+	 * that.
-+	 */
-+	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
-+	adev->flags.initialized = false;
-+	acpi_device_clear_enumerated(adev);
-+
-+	return 0;
-+}
-+
-+/**
-+ * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
-+ * @adev: Root of the ACPI namespace scope to walk.
-+ *
-+ * Must be called under acpi_scan_lock.
-+ */
-+void acpi_bus_trim(struct acpi_device *adev)
-+{
-+	acpi_bus_trim_one(adev, NULL);
-+}
-+EXPORT_SYMBOL_GPL(acpi_bus_trim);
-+
- static int acpi_scan_hot_remove(struct acpi_device *device)
+ /* Initialization */
+-#ifdef CONFIG_ACPI_HOTPLUG_CPU
+-static int acpi_processor_hotadd_init(struct acpi_processor *pr)
++static int acpi_processor_make_present(struct acpi_processor *pr)
  {
- 	acpi_handle handle = device->handle;
-@@ -2576,44 +2614,6 @@ int acpi_bus_scan(acpi_handle handle)
- }
- EXPORT_SYMBOL(acpi_bus_scan);
+ 	unsigned long long sta;
+ 	acpi_status status;
+ 	int ret;
  
--static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
++	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_CPU))
++		return -ENODEV;
++
+ 	if (invalid_phys_cpuid(pr->phys_id))
+ 		return -ENODEV;
+ 
+@@ -223,12 +225,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+ 	cpu_maps_update_done();
+ 	return ret;
+ }
+-#else
+-static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
 -{
--	struct acpi_scan_handler *handler = adev->handler;
--
--	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
--
--	adev->flags.match_driver = false;
--	if (handler) {
--		if (handler->detach)
--			handler->detach(adev);
--
--		adev->handler = NULL;
--	} else {
--		device_release_driver(&adev->dev);
--	}
--	/*
--	 * Most likely, the device is going away, so put it into D3cold before
--	 * that.
--	 */
--	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
--	adev->flags.initialized = false;
--	acpi_device_clear_enumerated(adev);
--
--	return 0;
+-	return -ENODEV;
 -}
--
--/**
-- * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
-- * @adev: Root of the ACPI namespace scope to walk.
-- *
-- * Must be called under acpi_scan_lock.
-- */
--void acpi_bus_trim(struct acpi_device *adev)
--{
--	acpi_bus_trim_one(adev, NULL);
--}
--EXPORT_SYMBOL_GPL(acpi_bus_trim);
--
- int acpi_bus_register_early_device(int type)
+-#endif /* CONFIG_ACPI_HOTPLUG_CPU */
+ 
+ static int acpi_processor_get_info(struct acpi_device *device)
  {
- 	struct acpi_device *device = NULL;
+@@ -335,7 +331,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
+ 	 *  because cpuid <-> apicid mapping is persistent now.
+ 	 */
+ 	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+-		int ret = acpi_processor_hotadd_init(pr);
++		int ret = acpi_processor_make_present(pr);
+ 
+ 		if (ret)
+ 			return ret;
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index b7165e52b3c6..76ad43f7860b 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -302,12 +302,10 @@ static inline int acpi_processor_evaluate_cst(acpi_handle handle, u32 cpu,
+ }
+ #endif
+ 
+-#ifdef CONFIG_ACPI_HOTPLUG_CPU
+ /* Arch dependent functions for cpu hotplug support */
+ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
+ 		 int *pcpu);
+ int acpi_unmap_cpu(int cpu);
+-#endif /* CONFIG_ACPI_HOTPLUG_CPU */
+ 
+ #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
+ int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
 -- 
 2.30.2
 
