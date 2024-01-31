@@ -1,93 +1,108 @@
-Return-Path: <linux-arch+bounces-1879-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1884-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7760884365A
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 07:00:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7268A8436C2
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 07:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09D27B211C4
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 06:00:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E876282B8D
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 06:29:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 892E73DBBC;
-	Wed, 31 Jan 2024 06:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD253E499;
+	Wed, 31 Jan 2024 06:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RUUJh4ZU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7F93DBB7;
-	Wed, 31 Jan 2024 06:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E8D3D56E;
+	Wed, 31 Jan 2024 06:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706680802; cv=none; b=t76wzt0gx18c7s/o1Zv72GPuaw9ToCWlzQqDW4QsH/u59KnjY/h7X8iNIMGPiNiQIZKJ6jCnhwUA+0xN4dWQHfhHHdXDhIu215OOusUguMJ1xRw2olkZ3RjyFuG6ayA49FiRfcA0hm8+g2RUF8+omzKH/jBa54HIVwr7qs9ySuc=
+	t=1706682593; cv=none; b=gZq7X9M31FLI/66EX0AP83nGavrq4m0Y9yWL86fDPgg5mPRMGffJ5yTM9A0cdHzLsTDQa/4ACFzDV+Vft3D3zkemzsY8USKrxwmqTEqcM4lqHt1zxYEByuqg1320s7ArHefPcNY0kvEzwIu9qWrO7FWQ40QlgYsWvqJbCBSAf9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706680802; c=relaxed/simple;
-	bh=LfvQ3qAas7dc9Kho/inAFjp0k7QeB/Phd/4o/C6refo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tCoTf3pTKm0ARbVDwOAX7Pu0qN1yhGurjYc67U5p9jHVXUImKjzgWYGHmuEUgF/RnLFjlLsuOFV+XqCuFPC5RiU3KTLXNMOHvrm3mEGnjdiMSkfVar62AL3PxTRySqwT6Gje7Lhu0MFbf38Om0uCiKlSa+a9Dr2I9BKhulF81dY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EAFADA7;
-	Tue, 30 Jan 2024 22:00:37 -0800 (PST)
-Received: from [10.163.41.195] (unknown [10.163.41.195])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B16933F738;
-	Tue, 30 Jan 2024 21:59:41 -0800 (PST)
-Message-ID: <1fcf38b4-b0ff-40ec-8ac0-730c8bfd57ff@arm.com>
-Date: Wed, 31 Jan 2024 11:29:39 +0530
+	s=arc-20240116; t=1706682593; c=relaxed/simple;
+	bh=2FW/d4u/muEUqMbOvxlTPNXE5CaRll4su+xJMlD1d+8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=JjRoAzAhv2xdkwmiRa5tlvyF+9pjXrVYKOER8oKao6oWGwwGTk5hJTylFJ+bzPjROh8CwLCpDUJT1kx8dF8D3dcVEPlHyEaR2D4oxYJY1HV3BpWsHRyS/VyFhupHuP3kDXzMWXVSNLZ4vf3owsDK1Shk9PNylHzSBk3UAPdCF0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RUUJh4ZU; arc=none smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706682592; x=1738218592;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=2FW/d4u/muEUqMbOvxlTPNXE5CaRll4su+xJMlD1d+8=;
+  b=RUUJh4ZU/6OkQmQ7HDqomPWqUT2m/bgt2kNtWCqxFj2GTdFqZxAr8LW2
+   /fdCmj2nSrTW9llp+C2XBvfrg1GxVTiHSbPMf1e8A607xI44Io5JGBVVb
+   z3EPGSf0aHAdvDhZVzUoW5vU2iIY6fTpAmTtwKYh62UZsKC2/6pfh0lrk
+   EvHjexpGPnHgjHfQCy2YJ05dLQGZeIyYiOjOmVG8UBa11hHsZdWeOH7eh
+   WVls0JYLhPuFRN11ibpOBCbES7IjVv5lducSp0nh5L4j2pVs+Dv6h/RZ9
+   RXq8WbNLmBl8vaQtwA/esepZ9ijolpZsDFebher0miwy4/qLv5fMQ4L/2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="434679669"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="434679669"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 22:29:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="822458493"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="822458493"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 22:29:47 -0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: arnd@arndb.de,
+	linus.walleij@linaro.org,
+	guoren@kernel.org,
+	bcain@quicinc.com,
+	jonas@southpole.se,
+	stefan.kristiansson@saunalahti.fi,
+	shorne@gmail.com
+Cc: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH 3/4] Hexagon: apply page shift to PFN instead of VA in pfn_to_virt
+Date: Wed, 31 Jan 2024 14:00:21 +0800
+Message-Id: <20240131060021.2749-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20240131055159.2506-1-yan.y.zhao@intel.com>
+References: <20240131055159.2506-1-yan.y.zhao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 07/35] mm: cma: Add CMA_RELEASE_{SUCCESS,FAIL}
- events
-Content-Language: en-US
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
- maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
- yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
- mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
- vschneid@redhat.com, mhiramat@kernel.org, rppt@kernel.org, hughd@google.com,
- pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
- david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org
-References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-8-alexandru.elisei@arm.com>
- <545bb7bd-31c7-4166-9f81-778b82ece6d4@arm.com> <ZbeRs-vIDWGlpcGV@raptor>
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZbeRs-vIDWGlpcGV@raptor>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
+Apply the page shift to PFN to get physical address for final VA.
+The macro __va should take physical address instead of PFN as input.
 
+Fixes: d6e81532b10d ("Hexagon: Make pfn accessors statics inlines")
+Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+---
+ arch/hexagon/include/asm/page.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 1/29/24 17:23, Alexandru Elisei wrote:
-> Hi,
-> 
-> On Mon, Jan 29, 2024 at 03:01:24PM +0530, Anshuman Khandual wrote:
->>
->> On 1/25/24 22:12, Alexandru Elisei wrote:
->>> Similar to the two events that relate to CMA allocations, add the
->>> CMA_RELEASE_SUCCESS and CMA_RELEASE_FAIL events that count when CMA pages
->>> are freed.
->> How is this is going to be beneficial towards analyzing CMA alloc/release
->> behaviour - particularly with respect to this series. OR just adding this
->> from parity perspective with CMA alloc side counters ? Regardless this
->> CMA change too could be discussed separately.
-> Added for parity and because it's useful for this series (see my reply to
-> the previous patch where I discuss how I've used the counters).
+diff --git a/arch/hexagon/include/asm/page.h b/arch/hexagon/include/asm/page.h
+index 10f1bc07423c..1d341590791a 100644
+--- a/arch/hexagon/include/asm/page.h
++++ b/arch/hexagon/include/asm/page.h
+@@ -135,7 +135,7 @@ static inline unsigned long virt_to_pfn(const void *kaddr)
+ 
+ static inline void *pfn_to_virt(unsigned long pfn)
+ {
+-	return (void *)((unsigned long)__va(pfn) << PAGE_SHIFT);
++	return __va(pfn << PAGE_SHIFT);
+ }
+ 
+ 
+-- 
+2.17.1
 
-As mentioned earlier, a new CONFIG_CMA_SYSFS element 'cma->nr_freed_pages'
-could be instrumented in cma_release()'s success path for this purpose.
-But again the failure path is not of much value as it could only happen
-when there is an invalid input from the caller i.e when cma_pages_valid()
-check fails.
 
