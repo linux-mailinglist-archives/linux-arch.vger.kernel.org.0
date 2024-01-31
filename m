@@ -1,239 +1,113 @@
-Return-Path: <linux-arch+bounces-1950-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1951-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864C0844953
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 22:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ED70844973
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 22:08:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13F1228AC71
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 21:02:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEB6028957F
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 21:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8422B38F96;
-	Wed, 31 Jan 2024 21:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C0638FA4;
+	Wed, 31 Jan 2024 21:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V0ivjRjN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IAmnWm2K"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6030E38DF1;
-	Wed, 31 Jan 2024 21:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706734964; cv=fail; b=LjHfFgHYBotVHsB2lXOTrbkYLvyAHEpFfzimgf4YfSRwqG1GV3K7qoa2hWPQlYD2z0EYcl/UWe5WFspL3aog71O0Dw6z7aOzJpTQHhv+6BSXUgcgKiL5P2NAR0k2xj41mPQlh/Pc5oHX9a9I7jqeAen4D9faHcZWB6OtnL/q5u4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706734964; c=relaxed/simple;
-	bh=a8KrKIWFalgBAC9gxi/aWImn2TjPttRO4oRESyH5lts=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EITXdkI568uzCPBjVeNf/7hPcExNcP2ycqhyvRxXyII92PO8Ua8yLao/3G8KfLFBWNeqhIBNKgsdR7ZZ+ghuJImib+oubWqZU/dAZkWEYl35gY6mZQjce1I1sz6BUQELHe3hsPNsCWzkOr7sOAuYOBW/sRnLUO1+dqgY74SBSEQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V0ivjRjN; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706734963; x=1738270963;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=a8KrKIWFalgBAC9gxi/aWImn2TjPttRO4oRESyH5lts=;
-  b=V0ivjRjN8RypYPmmW4TmHXnGgRMNe0+72cLlGJKsSOGvOoinR1yjRaBX
-   1+tLngXUeiZj5Qvxsz58q+eSHmzcERwaHaUGERjgxPB2IQmIss5SscnFg
-   pgXVH6oACpUV9Okjo+tMOxW5lU1a6U6GJZzi4rRak7UU9TtyOadLxWwjT
-   Dpy9L0Td7wklEFr/XNGjP/ZB7CTdSMpJS3G6HjyqzIaGjNv/4CHjdaqUm
-   zwb2ajKBQReUwdg8QFRY/twQONwZ8jbFwKgWN7kH5eKfLGfS0Zbx7+vFf
-   Q8ZvH82xa6P8Nfb/CanS8cUJlFBMm3XbxW+waiYrKrkB+n8FDZu1dA18f
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="17109193"
-X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="17109193"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 13:02:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="878896221"
-X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="878896221"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by FMSMGA003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 31 Jan 2024 13:02:39 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 31 Jan 2024 13:02:38 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Wed, 31 Jan 2024 13:02:38 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 31 Jan 2024 13:02:37 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cvjo/KbuuQHHp78c9L2xJM0UwPY0FqRMH42dIb5Svv/+OKEcOG/FMcsqWpKY3WeBVatVoWo4bFg/sRapVzv50l/Sy5h0n4tkA7zpH2GAqJpMHGaMFimPWbvBiOwKPSa+6Dy/bMO55Fhih1V4V4QweGpbT77bXQt6V283jHCU040JnOi22xMFPw+1EPs8U/nZ7AXozIZKLqWFv6KtbH8RrDcdada8ULcyy1YqDfnyQ6mUoOvaHFan71sL0AM7mUjkOqNtnqw/yJVUt44ng1kc82/Z4iRF36B5X4nDZOmTQnWI26k45cNsoHaaqzKEDZLbnVz+OdJAiHrS89BN8BF6rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1zr6IXfXIDFKRkqsZalTnOGJWkx072CyAb0yn8eUdr4=;
- b=mwi2j6R++30rEnHxR9i4zd1ILyyGH6dLs+l1qaNXDhLlHin49ais1R1QRexmtpyTb01kJMJd8PhcZbAXuMZWF4ZHnbAvZYZutp7IEGVUD52JyysAjRYWt4WwqfAVChoY8RlJX3IFo0nTCI7G8NRTsq0cE0I/NxRkP1brueKxmPW/rho+YwbPUN01Nod/mw9tSi3wzqEUVUrn7eEva/Xnc7xw0kc6RVN7khGw5/Xk6tg3+8D4/NZnEZwilSezxU6MViQz+UlazBCXhz2hn+XIFt7zntV120oKSvUerIZxnkflZor3HxnO93/TCLjZK9PlWR89EnhubAkMh90DY9ZrTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22; Wed, 31 Jan
- 2024 21:02:35 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6257:f90:c7dd:f0b2]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6257:f90:c7dd:f0b2%4]) with mapi id 15.20.7228.029; Wed, 31 Jan 2024
- 21:02:35 +0000
-Date: Wed, 31 Jan 2024 13:02:31 -0800
-From: Dan Williams <dan.j.williams@intel.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams
-	<dan.j.williams@intel.com>, Arnd Bergmann <arnd@arndb.de>, Dave Chinner
-	<david@fromorbit.com>
-CC: <linux-kernel@vger.kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>, <linux-mm@kvack.org>,
-	<linux-arch@vger.kernel.org>, Vishal Verma <vishal.l.verma@intel.com>, "Dave
- Jiang" <dave.jiang@intel.com>, Matthew Wilcox <willy@infradead.org>, "Russell
- King" <linux@armlinux.org.uk>, <nvdimm@lists.linux.dev>,
-	<linux-cxl@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<dm-devel@lists.linux.dev>
-Subject: RE: [RFC PATCH v3 2/4] dax: Check for data cache aliasing at runtime
-Message-ID: <65bab567665f3_37ad2943c@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20240131162533.247710-1-mathieu.desnoyers@efficios.com>
- <20240131162533.247710-3-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240131162533.247710-3-mathieu.desnoyers@efficios.com>
-X-ClientProxiedBy: MW4PR02CA0015.namprd02.prod.outlook.com
- (2603:10b6:303:16d::6) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51AD208C1;
+	Wed, 31 Jan 2024 21:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706735324; cv=none; b=K0laPuR+1fEVR48DacFtYSuUj69R36r85FSVMdX6YaUv9DIocNGeDgQN6wOv+9kVnBuqyhucRKVTCAmFaKEZw/ViPYRkew35tOKm7XSPXGPUeAGO+FsqY8S4NVScX8pF2aOcX0rKk1z8NfwtMp6n8f3PdBfhcBXgplN23GTk1Po=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706735324; c=relaxed/simple;
+	bh=mPdxKMA4TO8+Xlg5A+CwfU4Swk6EiBQt8M+MwAE+A9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=mz6xenj5MtIgRZhNMwxaI2ugppveAfK4At/jQ5Y6PlRus4jypgBSY81iN3ScIm9emzD10s8jP3vPqZLYGFUrWUNt2xJ2FIhKrt2CbXEdYpyVoyD7GBSpGQvH2KOJqRCWDXTDgQ9Oxm69HefmJxZtEmzYBWP3Kf0MXvEzzDcuhqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IAmnWm2K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C105C433C7;
+	Wed, 31 Jan 2024 21:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706735324;
+	bh=mPdxKMA4TO8+Xlg5A+CwfU4Swk6EiBQt8M+MwAE+A9o=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=IAmnWm2Khijpnkr6+s7eGe7eKAY9kr9n65yeY4+GU1D2/Waw3scOm98jGXxSqIVcB
+	 mJhI8uigahJTRcPJ55ywp+eCcK+NNsqA1FX+DvCoW1ASny01qN6+s+ojH2qt2jBJXk
+	 WUqomUxeDgp92F7cIZDY4q5Aa37xRgLxWY/4AAlWgRFMIscK7eKP7EPWRs6P58rOvD
+	 RU9cXdhVOSKqtLUNy/so4ROd77BJTh7+f/8ewTx2suyTei6oZ8xH2z4KkeQiX4J48J
+	 h/0Dxtr067sUwkqspHjIq0wR4EUT4Q/FuDO+bdccXugBMFpoPla+qb62iJBVJaVB4P
+	 JpSs40a0FSALw==
+Date: Wed, 31 Jan 2024 15:08:42 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Philipp Stanner <pstanner@redhat.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Randy Dunlap <rdunlap@infradead.org>, NeilBrown <neilb@suse.de>,
+	John Sanpe <sanpeqf@gmail.com>,
+	Kent Overstreet <kent.overstreet@gmail.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Uladzislau Koshchanka <koshchanka@gmail.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
+	Rae Moar <rmoar@google.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	"wuqiang.matt" <wuqiang.matt@bytedance.com>,
+	Yury Norov <yury.norov@gmail.com>, Jason Baron <jbaron@akamai.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6 0/4] Regather scattered PCI-Code
+Message-ID: <20240131210842.GA599075@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB5880:EE_
-X-MS-Office365-Filtering-Correlation-Id: d7a1ea31-f14c-4307-fa17-08dc229ff2e0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ukuos4hW0e9u9CRsOX0aHXJ4OglysIkG6wJCuTos36K/pqM7Xl1Hs/MJW82P1N/59SLaFbhLqkA4dELGtdEXa+NJdy5oJrw0mc7bdZ5mtTpeQ1n1128N8ItTcIDvoQJBPR5aVLfdgLxQpdIle80ZrGGY8qhn//RyIdlnu10C6F4WWubUeDTSdGw1EzC6eAAGt8pRiXglFGY9Rqppjr/Gul46OJkkZ90xeHtJNhLLK56L4rHX3DatTVgQYHNQUWSwuFzkFsICrQ+QV2VOjGoyzri+LonsSGl6J2b0jYXs00sYfP2rM5PODhV5p1gL0B3HTJ8UXgwRa5JuxJzPxLucCLQ9fc8jvXvUO0GQ+tM1X6IY2yNIHie0N9ioe7Rs7qouyas6v7D9nZYjhOE+ivREN7U7TRUFT4iNsWgzNvVx0flaRJ1vf7TvETpLZZC91JzIiiweeLrO7FpxETwAy1jLTiIW1cvkkSqLo8aieYB4riUJpqbUrWrud8Erd/nDVbzO7FoOObiry7rfzhqHyeWLNUqyGyCaXSXHPY20VXoZYa2yYsJAsrkF2IK4ZLEh3ee4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(396003)(366004)(346002)(39860400002)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(41300700001)(83380400001)(38100700002)(6512007)(9686003)(26005)(4326008)(8676002)(5660300002)(8936002)(7416002)(2906002)(478600001)(110136005)(6506007)(66946007)(6666004)(54906003)(66476007)(66556008)(6486002)(316002)(86362001)(82960400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I0JTBq8UYMS5ThZbO5MlAc1c78GE68vnfbQv8yCHdxVpKjhr2jnzVTq2d22n?=
- =?us-ascii?Q?5YLZWIsJqX6DgBjeM38sgvpmnyFYRc2YyKFH9kWfToBrpfjLM2w+P9K+6oVh?=
- =?us-ascii?Q?IEzxfIzb+TydjAx2R5jG0xsmU0y+JQp4vOwx8Mrr3PzTpSfNi+V/mVB9zAuT?=
- =?us-ascii?Q?uURVfhfV7LonrDhfzVXBPZF3mSjEHp/5Utgf9mqC7oRKtWdGIPbvoMR6z/K0?=
- =?us-ascii?Q?Ef73VxG49QGfFkPOmvpKPLPhCWAEVhJjiXE0jwyIN/uuD1Md37cTCzwtNrJP?=
- =?us-ascii?Q?OTEhzqakSU4Fy/z9kK2OpxsBb2dJi+6U5BA51oFvuMw+0xR7I6a34y7fGAtD?=
- =?us-ascii?Q?Av2AH4SfUs4sZZ0dhJRt+Bz2Lo5/9Z9udgOGXqaD5DZluuWslbrYfKhEZZe3?=
- =?us-ascii?Q?6pRUXo3ScBM3Of2tD+fIb1V5KRHYTNa1T6rEh7/cu6Uh52uiq2IrBMObIjfd?=
- =?us-ascii?Q?JLE9vdwAZKqYyrLD7zZZAuviQZGuWMzDGRq7VdwyU9Xf5wcugwKHbrj6v+M1?=
- =?us-ascii?Q?y3tvgE2CX4pXE+6S+3AYpHfJ2ctd4LJY85R1nCGAYq8kGygOuEgASXJaTVeR?=
- =?us-ascii?Q?Vx4aIF3tQJHZ4rs3g9Tjv5eIYSMLRRqpyRrRuHxz41XhEuvGsjoNVAm4riwK?=
- =?us-ascii?Q?uOF0eqpIiuhk4WSXYGRIgMJNhIWFa9MMhUVlAWGxpwWNNJnZkYvO8Nemirx3?=
- =?us-ascii?Q?o/xjbsK8PQrlGnNMWyKT+qaClFX6Zd36Bxt+HTs5wQLUR+BFnHJBqUKdayOL?=
- =?us-ascii?Q?8awSWTwXmr2a2lI8i9Xx37TCeL1KWIWWrYIQ7Z4+rsLuaNU6dqwkDMlTWuZr?=
- =?us-ascii?Q?ebZJPCtN8MQ+K45L3EVhhOMJBJ1dYsE3pSeEItahKL/0FSMR6uwDKGJZZ6AT?=
- =?us-ascii?Q?eQXGAgL+qrKr3Q9meVVdFcITfYpSR1pu30vzYYiTGXq95rKyCWjz+rgSfKyM?=
- =?us-ascii?Q?p6LrgsIWKs6Hc79KIg7KoWSqvzXDpwKiqNTr1IgkJoGM5fj0HAzlMHz9TiWY?=
- =?us-ascii?Q?GcXfaUiXvSHEriALTN7c5DukTIyfaQaRGYpmP6D+X4BoycDwbKvEwPaCePO3?=
- =?us-ascii?Q?/uET9EZkvnCiH6F0LKRrAG5Kjp1+x0esCOjzBSRHKVJIaNr8PDZ4xv9IHcir?=
- =?us-ascii?Q?Z4LZHt9aa384Rj4sXDhrZ596pDA2b+mM9lgvOEfTg3HsRNLLv497yR3rQ2DN?=
- =?us-ascii?Q?U3BInMmn4tyfroSaR/FgLxD4hafpoEHciwogWukwmgU9AeC8G/J+/ReC+qqi?=
- =?us-ascii?Q?nzkWYow09VuItwWRBHCjQ/6z193bJbhNRYoAsN7yN/qXiDxbQEQAbCBZmJ2d?=
- =?us-ascii?Q?seiLp4Ya3Xw561i+4Pj3AajX4bNfKxB725yzOj+MTmEZezkNeQoUhyzl1L/3?=
- =?us-ascii?Q?PSqTicIENAoNt7VL7nQ03J07zglU6TPTP/X5bk1qqVMeISX+a90NNCPAjDVt?=
- =?us-ascii?Q?1r8BJn8nonj2CMB1yK1qcX0HnqSsOQZc4W1XHOZRCuQWTrNIc/5cFRWPEw73?=
- =?us-ascii?Q?XyX9mkJi++JeTs8Z6Fc18VUTv+mcPLyQ9iyvEqMos2uiUGoGiOOQkCeaHIQw?=
- =?us-ascii?Q?5+d96freP5F1FNcjRQwniiV4+xXNwzICqeaq3E5nKlVBpay9aI621LHppIeF?=
- =?us-ascii?Q?vg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7a1ea31-f14c-4307-fa17-08dc229ff2e0
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 21:02:35.1249
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: edDio51DKHDj5cgPCqMWSpRVpzEbDLN1Pq29QX2IfOj5cTFgrxvCGkityzaMJTTWSSvIp8rKGBiItC6bIDCspyUZIZDbDV2wiB0kApnV+JI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5880
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240131090023.12331-1-pstanner@redhat.com>
 
-Mathieu Desnoyers wrote:
-> Replace the following fs/Kconfig:FS_DAX dependency:
-> 
->   depends on !(ARM || MIPS || SPARC)
-> 
-> By a runtime check within alloc_dax().
-> 
-> This is done in preparation for its use by each filesystem supporting
-> the "dax" mount option to validate whether DAX is indeed supported.
-> 
-> This is done in preparation for using cpu_dcache_is_aliasing() in a
-> following change which will properly support architectures which detect
-> data cache aliasing at runtime.
-> 
-> Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: nvdimm@lists.linux.dev
-> Cc: linux-cxl@vger.kernel.org
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: dm-devel@lists.linux.dev
-> ---
->  drivers/dax/super.c | 6 ++++++
->  fs/Kconfig          | 1 -
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> index 0da9232ea175..e9f397b8a5a3 100644
-> --- a/drivers/dax/super.c
-> +++ b/drivers/dax/super.c
-> @@ -445,6 +445,12 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
->  	dev_t devt;
->  	int minor;
->  
-> +	/* Unavailable on architectures with virtually aliased data caches. */
-> +	if (IS_ENABLED(CONFIG_ARM) ||
-> +	    IS_ENABLED(CONFIG_MIPS) ||
-> +	    IS_ENABLED(CONFIG_SPARC))
-> +		return NULL;
+On Wed, Jan 31, 2024 at 10:00:19AM +0100, Philipp Stanner wrote:
+> @Bjorn:
+> I decided that it's now actually possible to just embed the docu updates
+> to the respective patches, instead of a separate patch.
+> Also dropped the ioport_unmap() for now.
 
-This function returns ERR_PTR(), not NULL on failure.
+Thanks.  I didn't see any documentation updates (other than those
+related to the changed path names) in this series, so I assume the
+updates you mention would be in a future series.
 
-...and I notice this mistake is also made in include/linux/dax.h in the
-CONFIG_DAX=n case. That function also mentions:
+> ...
+> Philipp Stanner (4):
+>   lib/pci_iomap.c: fix cleanup bug in pci_iounmap()
+>   lib: move pci_iomap.c to drivers/pci/
+>   lib: move pci-specific devres code to drivers/pci/
+>   PCI: Move devres code from pci.c to devres.c
+> 
+>  Documentation/driver-api/device-io.rst |   2 +-
+>  Documentation/driver-api/pci/pci.rst   |   6 +
+>  MAINTAINERS                            |   1 -
+>  drivers/pci/Kconfig                    |   5 +
+>  drivers/pci/Makefile                   |   3 +-
+>  drivers/pci/devres.c                   | 450 +++++++++++++++++++++++++
+>  lib/pci_iomap.c => drivers/pci/iomap.c |   5 +-
+>  drivers/pci/pci.c                      | 249 --------------
+>  drivers/pci/pci.h                      |  24 ++
+>  lib/Kconfig                            |   3 -
+>  lib/Makefile                           |   1 -
+>  lib/devres.c                           | 208 +-----------
+>  12 files changed, 490 insertions(+), 467 deletions(-)
+>  create mode 100644 drivers/pci/devres.c
+>  rename lib/pci_iomap.c => drivers/pci/iomap.c (99%)
 
-    static inline struct dax_device *alloc_dax(void *private,
-                    const struct dax_operations *ops)
-    {
-            /*
-             * Callers should check IS_ENABLED(CONFIG_DAX) to know if this
-             * NULL is an error or expected.
-             */     
-            return NULL;
-    }               
-
-...and none of the callers validate the result, but now runtime
-validation is necessary. I.e. it is not enough to check
-IS_ENABLED(CONFIG_DAX) it also needs to check cpu_dcache_is_aliasing().
-
-With that, there are a few more fixup places needed, pmem_attach_disk(),
-dcssblk_add_store(), and virtio_fs_setup_dax().
+Applied to pci/devres for v6.9, thanks!
 
