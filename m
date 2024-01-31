@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-1931-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1932-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF5728444ED
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 17:50:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 884BF8444FA
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 17:50:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D47EB1C219C7
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 16:50:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CF841F25274
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 16:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D6912C557;
-	Wed, 31 Jan 2024 16:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AFE12DD80;
+	Wed, 31 Jan 2024 16:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="a8T9+UFZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ZoeUO890"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947BE12C536;
-	Wed, 31 Jan 2024 16:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3D112CDAA;
+	Wed, 31 Jan 2024 16:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706719799; cv=none; b=jRWhM/5xumzIQ/Y6tX3slI2cX73Mwe8iikgB37TG9h/4MVmD573GbDDYN2B3Vvv4aMMHG17N34ZRxUBE3+Fyl+VavPYF2DRjkEvsx7nV9Q2P567xaJp2Al+wbgzQ3wh6/gKY2APdlmgxy4LRvGgJlnmqw5wCT2ZRT2e6id7MFjY=
+	t=1706719802; cv=none; b=cqjZg3e0tCO0mvPKqI8x0U2wj4wkHxoIBqm65FlXrbnjQmAf54XHIj9CydiRCYk1vPjYjH56CDNsvEEB4Zdl25m4YizmoINsWtQ0mk03kOh/j3WR/3nAflO/1iBuVNcDrjGcnsbKFxTDl34NF7+Q+qyGCiI6BY3YQsR4M1ceLIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706719799; c=relaxed/simple;
-	bh=oglPI5j4SalFovZELHhLOqqFlAFobwCTFUVvb9MFaqQ=;
+	s=arc-20240116; t=1706719802; c=relaxed/simple;
+	bh=ZP11D8P/7O7D2C8VzXiubQDQkRY9I6FYqn0sWuW98rk=;
 	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=FmVzCQ/0GI7ClN2NYUMN0Yiqrit1sSvbKN/Hu8LDRjng36Nko9carSiLUqV9KOpZjnadWATRoUHG+bAwW3e0HZsFee2o47S0CRKvh3C9eif6Z6KeJeL66Bu5HjgeaL+vD57GwOBtzayxotvEVBdmu3kaH6LcPKCu0142JLBgpAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=a8T9+UFZ; arc=none smtp.client-ip=78.32.30.218
+	 Content-Disposition:Content-Type:Message-Id:Date; b=nCfNfttkAUc/l5jaEj8dhiWkDihmkrynmGxGJdMMKI3fCCjq343uFiOGkS8234puMRV+lLqAgqgGb7Y1YFqi+5hwdcVdg1ivZiH5QGuTUB1Pr8N9DqNQ1BCe1bOeav9+0jMONAcbnM8nmIw78ofK6iY1TshW9LMPXCO+xN19g8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ZoeUO890; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,21 +37,21 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4FviDP8LNcs5OH9XS9Lgt79F5tF9VpTSbqPgMlkIJeQ=; b=a8T9+UFZh5Erxcl19hYu8LnPoN
-	l8jkJTCH5Aga8DZg+RD7ezbHyq4OQdeKkSD6hzIRhev0EyFHx6P+dy6aq64Behg6QOGcwrXp31PcU
-	6AfPX8Jas4MhwqjfgDzG/9B7RObj1s/1widKHmpuiUi0IxczEPWs+On8ceu+z7LWHVipSzrH9j+MH
-	aVvsx/9nVkddyN/EWYjMHlRk9wKElTZSmbUv2SfQdepcYbj+SFzv+s4g5BVbd1CpZAAuNL4pp1eWO
-	8kBc76pSd4xlVd4TjgTaVkulutmldzJsN1KRBnCwIlrQ+A3b+5ptlUeZJLMI+uVTpzpitQ9YbzG+U
-	gmLrm9EQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:36844 helo=rmk-PC.armlinux.org.uk)
+	bh=/T3kjNeWvzXmlVnxkBE8aEZDeW8R1tHMrqvuxLBRlmM=; b=ZoeUO8903Gktf6St0tQFCkWzlo
+	MznV4trPHKx08E6cz/qahICue6k8edh/dET1kA1i1P6luIjLkKE2djlh0ZVUEaoDPpUgD2Y7f4K/o
+	EUCHO8r8YAl1TnLbfAP9AiduskbovwPAfJ3WN7K6jLcuW9Q8BLwzW0030d0qDlirRQad2yl/5kdKD
+	2Zf/wrzQq+buDwu2ZIfrD7VbSPkihHFhSjQaJ9SMDPC9FKJqBVFcT8kOUy9+nGKo4tIbFab0wrfJM
+	6ubbreyEPvnYX8mFSgm6R6NNhXGyBJHclWSWL0FI9cNAH2wKzwo+t82M+l8FjIeFFEkbltZ8toKzb
+	bjbEUVSQ==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:35954 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rVDmV-0003Tf-2S;
-	Wed, 31 Jan 2024 16:49:47 +0000
+	id 1rVDma-0003Tt-31;
+	Wed, 31 Jan 2024 16:49:52 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rVDmU-0027YP-Jz; Wed, 31 Jan 2024 16:49:46 +0000
+	id 1rVDmZ-0027YV-OU; Wed, 31 Jan 2024 16:49:51 +0000
 In-Reply-To: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
 References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
 From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
@@ -76,8 +76,8 @@ Cc: Salil Mehta <salil.mehta@huawei.com>,
 	 James Morse <james.morse@arm.com>,
 	 Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
 	 "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
- acpi_processor_get_info()
+Subject: [PATCH RFC v4 03/15] ACPI: Move acpi_bus_trim_one() before
+ acpi_scan_hot_remove()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -87,79 +87,124 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+Message-Id: <E1rVDmZ-0027YV-OU@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 31 Jan 2024 16:49:46 +0000
+Date: Wed, 31 Jan 2024 16:49:51 +0000
 
 From: James Morse <james.morse@arm.com>
 
-To allow ACPI to skip the call to arch_register_cpu() when the _STA
-value indicates the CPU can't be brought online right now, move the
-arch_register_cpu() call into acpi_processor_get_info().
+A subsequent patch will change acpi_scan_hot_remove() to call
+acpi_bus_trim_one() instead of acpi_bus_trim(), meaning it can no longer
+rely on the prototype in the header file.
 
-Systems can still be booted with 'acpi=off', or not include an
-ACPI description at all. For these, the CPUs continue to be
-registered by cpu_dev_register_generic().
-
-This moves the CPU register logic back to a subsys_initcall(),
-while the memory nodes will have been registered earlier.
+Move these functions further up the file.
+No change in behaviour.
 
 Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Gavin Shan <gshan@redhat.com>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
 Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
-Changes since RFC v2:
- * Fixup comment in acpi_processor_get_info() (Gavin Shan)
- * Add comment in cpu_dev_register_generic() (Gavin Shan)
----
- drivers/acpi/acpi_processor.c | 12 ++++++++++++
- drivers/base/cpu.c            |  6 +++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ drivers/acpi/scan.c | 76 ++++++++++++++++++++++-----------------------
+ 1 file changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index cf7c1cca69dd..a68c475cdea5 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_device *device)
- 			cpufreq_add_device("acpi-cpufreq");
- 	}
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index fd2e8b3a5749..2c8ba4526278 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -244,6 +244,44 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+ 	return 0;
+ }
  
-+	/*
-+	 * Register CPUs that are present. get_cpu_device() is used to skip
-+	 * duplicate CPU descriptions from firmware.
-+	 */
-+	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
-+	    !get_cpu_device(pr->id)) {
-+		int ret = arch_register_cpu(pr->id);
++static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
++{
++	struct acpi_scan_handler *handler = adev->handler;
 +
-+		if (ret)
-+			return ret;
++	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
++
++	adev->flags.match_driver = false;
++	if (handler) {
++		if (handler->detach)
++			handler->detach(adev);
++
++		adev->handler = NULL;
++	} else {
++		device_release_driver(&adev->dev);
 +	}
-+
- 	/*
- 	 *  Extra Processor objects may be enumerated on MP systems with
- 	 *  less than the max # of CPUs. They should be ignored _iff
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 47de0f140ba6..13d052bf13f4 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(void)
- {
- 	int i, ret;
- 
--	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
 +	/*
-+	 * When ACPI is enabled, CPUs are registered via
-+	 * acpi_processor_get_info().
++	 * Most likely, the device is going away, so put it into D3cold before
++	 * that.
 +	 */
-+	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
- 		return;
++	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
++	adev->flags.initialized = false;
++	acpi_device_clear_enumerated(adev);
++
++	return 0;
++}
++
++/**
++ * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
++ * @adev: Root of the ACPI namespace scope to walk.
++ *
++ * Must be called under acpi_scan_lock.
++ */
++void acpi_bus_trim(struct acpi_device *adev)
++{
++	acpi_bus_trim_one(adev, NULL);
++}
++EXPORT_SYMBOL_GPL(acpi_bus_trim);
++
+ static int acpi_scan_hot_remove(struct acpi_device *device)
+ {
+ 	acpi_handle handle = device->handle;
+@@ -2576,44 +2614,6 @@ int acpi_bus_scan(acpi_handle handle)
+ }
+ EXPORT_SYMBOL(acpi_bus_scan);
  
- 	for_each_present_cpu(i) {
+-static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+-{
+-	struct acpi_scan_handler *handler = adev->handler;
+-
+-	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
+-
+-	adev->flags.match_driver = false;
+-	if (handler) {
+-		if (handler->detach)
+-			handler->detach(adev);
+-
+-		adev->handler = NULL;
+-	} else {
+-		device_release_driver(&adev->dev);
+-	}
+-	/*
+-	 * Most likely, the device is going away, so put it into D3cold before
+-	 * that.
+-	 */
+-	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+-	adev->flags.initialized = false;
+-	acpi_device_clear_enumerated(adev);
+-
+-	return 0;
+-}
+-
+-/**
+- * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
+- * @adev: Root of the ACPI namespace scope to walk.
+- *
+- * Must be called under acpi_scan_lock.
+- */
+-void acpi_bus_trim(struct acpi_device *adev)
+-{
+-	acpi_bus_trim_one(adev, NULL);
+-}
+-EXPORT_SYMBOL_GPL(acpi_bus_trim);
+-
+ int acpi_bus_register_early_device(int type)
+ {
+ 	struct acpi_device *device = NULL;
 -- 
 2.30.2
 
