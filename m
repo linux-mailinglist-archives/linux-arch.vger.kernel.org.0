@@ -1,80 +1,80 @@
-Return-Path: <linux-arch+bounces-1900-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1901-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80AA7843C09
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 11:17:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90219843C65
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 11:25:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24BE228619A
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 10:17:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D5E21F303B9
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 10:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FBD69973;
-	Wed, 31 Jan 2024 10:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71BC369E16;
+	Wed, 31 Jan 2024 10:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VXtCMcLL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qd9wuoH1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0719C6996E
-	for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 10:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DCD6996E
+	for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 10:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706696170; cv=none; b=lBjXQ3/6PElZsQx7n10UJpO3ZAip9EYHHTy3EqH/UqcAksGbIqIfAJPuqGLFxIRtUhfCLfT8EGadqzKVtnDL7VreDx3hu0R4OAyU9TbutLYtP/Eu43kaIhq3O9Drz0U/z1ATTmrXTccoGFtj2c3N60uX1tpX/H4EhUO1AR7aVvM=
+	t=1706696513; cv=none; b=VsCzlFgElkwjdetvYcnef2IhwLraajMQ+2uBrcf7OpFLGmHbmbIb546N04+qUcikPfWqq0rm9W8TG2CZiwo6Xs44cvLlN3+UJuZGJ2lrnNhNqM0VLyo6nKl99rj5LF2jM7AuC6dAwJaBl8/QCO24/nuQFhtfGH0v4tzvPCPbsrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706696170; c=relaxed/simple;
-	bh=+fUuFbI+H/SuBr2rM99Lw5pc13uDCdDY1YWEmbLISaM=;
+	s=arc-20240116; t=1706696513; c=relaxed/simple;
+	bh=0zqss8RvmMMUa+8cez5lYzsk4Ra0zHoNq5EeNaViwIc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PH+54c6OeukVnWEbz/HRoYihuKTJHC+sZdCP6fvKeWfFiOxOQkfHStnGFyGsq/O0G1I5zqM8zzHUVQH8HQLAysMvW4IU48fWMHxSeUs8mXCo8AKNbgnSov4pZ5aSB/o5QuDnPFTVFOrb3U339/pN1gzLNcfpEvpp0V1dromK4xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VXtCMcLL; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=A29r0p2rea095CyFAiIJpIsviI00wLquYiYYLdURPrMwJaWGysvn7ZT6+UswGRq0r8QJKgP8TKkP9c7R6v4oQ55QafjRaGTStdEl/M8b0kCZCGZ60/c0rZHeU/QEPBL0zF7oXrhZiUg6GGNywDzcHwMngIsc8FRoI+skEc/aJbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qd9wuoH1; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706696166;
+	s=mimecast20190719; t=1706696510;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=olrIksRwu/OB7Bur4QOxK7MpIEfH+wiCW8yB+1Kffm8=;
-	b=VXtCMcLLumeJJEWpPzPK2zKyzbNBAB39Ahlsit9XtH2Q0xEmdEK9PecI+Iy473T7zzzBCQ
-	kWyZFD2cCWc76SA+/KSJADbLEv2LjU2b8oTBwotyElvpNjCH6UrjowUnWBLOI0TNLKe6v0
-	ilnsAvJ0u8eFL/UTEbGnlW2KuAy7psg=
+	bh=73RrgumU4dTEdpu7qb4tr6nfAzM+QJQ7avPpro2/7XU=;
+	b=Qd9wuoH1QbGg/9Ad1QAdYwfCY7XlEqMrDOY4p9DHtpn0M77lEdLuPpI5DmC/QsKteknj1h
+	mLjRcr6yH9BYNU2YTxo357Thx6/6oNIxPpeXxvkAeGiWdgZxr1eV7u3E2TNjMQSuSZ1b0B
+	wU2KSKEuePbOzSOn0JWbRVn6zj4Ebds=
 Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
  [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-384-0zb4Z6ONPcOueiT-VoefRQ-1; Wed, 31 Jan 2024 05:16:05 -0500
-X-MC-Unique: 0zb4Z6ONPcOueiT-VoefRQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-40efb04fa1fso14228285e9.0
-        for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 02:16:04 -0800 (PST)
+ us-mta-635-sbgcWaLTPzqpVfCYXuG1Jg-1; Wed, 31 Jan 2024 05:21:48 -0500
+X-MC-Unique: sbgcWaLTPzqpVfCYXuG1Jg-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-40f00a86728so9720045e9.2
+        for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 02:21:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706696163; x=1707300963;
+        d=1e100.net; s=20230601; t=1706696507; x=1707301307;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :references:cc:to:content-language:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=olrIksRwu/OB7Bur4QOxK7MpIEfH+wiCW8yB+1Kffm8=;
-        b=RjNOZ1UL2vSPbptqwCTHPNfZueDF27ypVrA9gSEDoH1fZj34Y1D8XykJ1hVoLHCkF/
-         psYphr4K+zacevf8Hi1Cw7QSp2yryQUPK3hyuhnEsBOjebDlVSy1m4eTF0sPNnpAi75T
-         SaBAPljdVnx8IsSwmdjo29RI4FXpOGUywY+YsSrQ2mHeVfeddQMhsb5wGzvEgmYQln1w
-         fiYWmExyKaKKvfxrlfCfi5+fpbQ6JZLRkAefDC1Qivhdoj+DtfIe9FcEeXXLYRYGl1P2
-         gMhngG5eeKcmkgX+ayq5zeRawH+L1azievWltzIxsCqtG0oZj91+pU6cUcmMuViTugFS
-         LEig==
-X-Gm-Message-State: AOJu0YyCfe9CZLa7VSmddvxsFAVzm5QqCMzPdWytBtAJAnYT8ZWET0sX
-	pNwMOIGBF6+BgqrAQtLyCG0i+Pb1b4VYYlrN6daUcMkj8ANT2rzH3lebedMRTyOJe9pGFI8CYfS
-	KUjCDGQ8dSvp8wj/A2+tVhORCGnm+cRVXjWUAnqGIIgy6LvnbOQGv56eDDfM=
-X-Received: by 2002:a05:600c:5487:b0:40e:6193:b1a5 with SMTP id iv7-20020a05600c548700b0040e6193b1a5mr854951wmb.39.1706696163442;
-        Wed, 31 Jan 2024 02:16:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEMAZswSvjgpfCfiIPLAZDAiPRc1TvD563CidrApjODUDhmgy6rYEXfqKL7+SBpHT/WE+OIlQ==
-X-Received: by 2002:a05:600c:5487:b0:40e:6193:b1a5 with SMTP id iv7-20020a05600c548700b0040e6193b1a5mr854918wmb.39.1706696162974;
-        Wed, 31 Jan 2024 02:16:02 -0800 (PST)
+        bh=73RrgumU4dTEdpu7qb4tr6nfAzM+QJQ7avPpro2/7XU=;
+        b=kP9YRomV5FqrAm3Huf+ZEpBqq64z9QN1vuo4ON08gSwNBQ/8aEnwJ8Y60d9ra2ny7t
+         M0t50vEiKoYHLdcBc242tcFMkk8B3FDsef4nsxOTsYpQjmW29UE/d7Bfw0TlTANGZYvf
+         SzUHrm4yrIAv8zrV6VUmsquJM2Nyy4voou+XgOGk77p5iVGL3SC9F/G5YVoHLYZZtYdw
+         +TAsDH1TjgZ5YzCvTkitgLYHnzj3xw6Z4fWCusoycSLJJNzm8+t0tLPDImBboOj8p3qY
+         p1x+/XgMtz3j7SnKUXGET1uToKxWaRjq5edvbft1dMnqfgO6XqRYyR0nox2aFj7P4t2I
+         OZyQ==
+X-Gm-Message-State: AOJu0YxB8L/QBsPdnPKnjV7G1zUqAROHYrqWZhLsHA2GkN9t1M1LsFAx
+	wsvB50c4m/2sjcFnD4rcycaFP/tOjSklP/VJ7Y3ieAPWyWlp2ppyLwx8dOaWMYGqNBCyEI6voHa
+	p480+gqWnbqY8w44eACRYUMCvjY7MGj/HX3vej4q8aAtnkbi0z0Pa2y2idi4=
+X-Received: by 2002:a05:600c:a52:b0:40e:fb93:96a8 with SMTP id c18-20020a05600c0a5200b0040efb9396a8mr1025152wmq.34.1706696507307;
+        Wed, 31 Jan 2024 02:21:47 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHm8H+S0GPo4hPZwIvn/3ceJOMxesbZa0lUxz7PX3mJ9EcmFB1akenvSvaaMhwHJInvhGC5ww==
+X-Received: by 2002:a05:600c:a52:b0:40e:fb93:96a8 with SMTP id c18-20020a05600c0a5200b0040efb9396a8mr1025123wmq.34.1706696506931;
+        Wed, 31 Jan 2024 02:21:46 -0800 (PST)
 Received: from [10.32.64.237] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id o7-20020a05600c4fc700b0040efb20fa6csm1144646wmq.47.2024.01.31.02.16.01
+        by smtp.gmail.com with ESMTPSA id j23-20020a05600c489700b0040e4733aecbsm1134749wmp.15.2024.01.31.02.21.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jan 2024 02:16:02 -0800 (PST)
-Message-ID: <ee94b8ca-9723-44c0-aa17-75c9678015c6@redhat.com>
-Date: Wed, 31 Jan 2024 11:16:01 +0100
+        Wed, 31 Jan 2024 02:21:46 -0800 (PST)
+Message-ID: <cf9adefc-8508-49a4-a7f0-784e345c5d80@redhat.com>
+Date: Wed, 31 Jan 2024 11:21:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,13 +82,11 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/9] mm/memory: optimize unmap/zap with PTE-mapped THP
+Subject: Re: [PATCH v1 9/9] mm/memory: optimize unmap/zap with PTE-mapped THP
 Content-Language: en-US
-To: Yin Fengwei <fengwei.yin@intel.com>, linux-kernel@vger.kernel.org,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Michal Hocko <mhocko@kernel.org>
+To: Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- Matthew Wilcox <willy@infradead.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Matthew Wilcox <willy@infradead.org>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
  Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
@@ -100,9 +98,10 @@ Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  Christian Borntraeger <borntraeger@linux.ibm.com>,
  Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
  linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, "Huang, Ying" <ying.huang@intel.com>
+ linux-s390@vger.kernel.org
 References: <20240129143221.263763-1-david@redhat.com>
- <4ef64fd1-f605-4ddf-82e6-74b5e2c43892@intel.com>
+ <20240129143221.263763-10-david@redhat.com>
+ <bec84017-b1c9-48e7-a206-c4c8a651ee83@arm.com>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -149,120 +148,69 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <4ef64fd1-f605-4ddf-82e6-74b5e2c43892@intel.com>
+In-Reply-To: <bec84017-b1c9-48e7-a206-c4c8a651ee83@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 31.01.24 03:20, Yin Fengwei wrote:
-> On 1/29/24 22:32, David Hildenbrand wrote:
->> This series is based on [1] and must be applied on top of it.
->> Similar to what we did with fork(), let's implement PTE batching
->> during unmap/zap when processing PTE-mapped THPs.
->>
->> We collect consecutive PTEs that map consecutive pages of the same large
->> folio, making sure that the other PTE bits are compatible, and (a) adjust
->> the refcount only once per batch, (b) call rmap handling functions only
->> once per batch, (c) perform batch PTE setting/updates and (d) perform TLB
->> entry removal once per batch.
->>
->> Ryan was previously working on this in the context of cont-pte for
->> arm64, int latest iteration [2] with a focus on arm6 with cont-pte only.
->> This series implements the optimization for all architectures, independent
->> of such PTE bits, teaches MMU gather/TLB code to be fully aware of such
->> large-folio-pages batches as well, and amkes use of our new rmap batching
->> function when removing the rmap.
->>
->> To achieve that, we have to enlighten MMU gather / page freeing code
->> (i.e., everything that consumes encoded_page) to process unmapping
->> of consecutive pages that all belong to the same large folio. I'm being
->> very careful to not degrade order-0 performance, and it looks like I
->> managed to achieve that.
+
+>> +
+>> +#ifndef clear_full_ptes
+>> +/**
+>> + * clear_full_ptes - Clear PTEs that map consecutive pages of the same folio.
+> 
+> I know its implied from "pages of the same folio" (and even more so for the
+> above variant due to mention of access/dirty), but I wonder if its useful to
+> explicitly state that "all ptes being cleared are present at the time of the call"?
+
+"Clear PTEs" -> "Clear present PTEs" ?
+
+That should make it clearer.
+
+[...]
+
+>>   	if (!delay_rmap) {
+>> -		folio_remove_rmap_pte(folio, page, vma);
+>> +		folio_remove_rmap_ptes(folio, page, nr, vma);
+>> +
+>> +		/* Only sanity-check the first page in a batch. */
+>>   		if (unlikely(page_mapcount(page) < 0))
+>>   			print_bad_pte(vma, addr, ptent, page);
+> 
+> Is there a case for either removing this all together or moving it into
+> folio_remove_rmap_ptes()? It seems odd to only check some pages.
 > 
 
-Let's CC Linus and Michal to make sure I'm not daydreaming.
+I really wanted to avoid another nasty loop here.
 
-Relevant patch:
-   https://lkml.kernel.org/r/20240129143221.263763-8-david@redhat.com
+In my thinking, for 4k folios, or when zapping subpages of large folios, 
+we still perform the exact same checks. Only when batching we don't. So 
+if there is some problem, there are ways to get it triggered. And these 
+problems are barely ever seen.
 
-Context: I'm adjusting MMU gather code to support batching of 
-consecutive pages that belong to the same large folio, when 
-unmapping/zapping PTEs.
+folio_remove_rmap_ptes() feels like the better place -- especially 
+because the delayed-rmap handling is effectively unchecked. But in 
+there, we cannot "print_bad_pte()".
 
-For small folios, there is no (relevant) change.
+[background: if we had a total mapcount -- iow cheap folio_mapcount(), 
+I'd check here that the total mapcount does not underflow, instead of 
+checking per-subpage]
 
-Imagine we have a PTE-mapped THP (2M folio -> 512 pages) and zap all 512 
-PTEs: Instead of adding 512 individual encoded_page entries, we add a 
-combined entry that expresses "page+nr_pages". That allows for "easily" 
-adding various other per-folio batching (refcount, rmap, swap freeing).
+> 
+>>   	}
+>> -	if (unlikely(__tlb_remove_page(tlb, page, delay_rmap))) {
+>> +	if (unlikely(__tlb_remove_folio_pages(tlb, page, nr, delay_rmap))) {
+>>   		*force_flush = true;
+>>   		*force_break = true;
+>>   	}
+>>   }
+>>   
+>> -static inline void zap_present_pte(struct mmu_gather *tlb,
+>> +/*
+>> + * Zap or skip one present PTE, trying to batch-process subsequent PTEs that map
+> 
+> Zap or skip *at least* one... ?
 
-The implication is, that we can now batch effective more pages with 
-large folios, exceeding the old 10000 limit. The number of involved 
-*folios* does not increase, though.
-
-> One possible scenario:
-> If all the folio is 2M size folio, then one full batch could hold 510M memory.
-> Is it too much regarding one full batch before just can hold (2M - 4096 * 2)
-> memory?
-
-Excellent point, I think there are three parts to it:
-
-(1) Batch pages / folio fragments per batch page
-
-Before this change (and with 4k folios) we have exactly one page (4k) 
-per encoded_page entry in the batch. Now, we can have (with 2M folios), 
-512 pages for every two encoded_page entries (page+nr_pages) in a batch 
-page. So an average ~256 pages per encoded_page entry.
-
-So one batch page can now store in the worst case ~256 times the number 
-of pages, but the number of folio fragments ("pages+nr_pages") would not 
-increase.
-
-The time it takes to perform the actual page freeing of a batch will not 
-be 256 times higher -- the time is expected to be much closer to the old 
-time (i.e., not freeing more folios).
-
-(2) Delayed rmap handling
-
-We limit batching early (see tlb_next_batch()) when we have delayed rmap 
-pending. Reason being, that we don't want to check for many entries if 
-they require delayed rmap handling, while still holding the page table 
-lock (see tlb_flush_rmaps()), because we have to remove the rmap before 
-dropping the PTL.
-
-Note that we perform the check whether we need delayed rmap handling per 
-page+nr_pages entry, not per page. So we won't perform more such checks.
-
-Once we set tlb->delayed_rmap (because we add one entry that requires 
-it), we already force a flush before dropping the PT lock. So once we 
-get a single delayed rmap entry in there, we will not batch more than we 
-could have in the same page table: so not more than 512 entries (x86-64) 
-in the worst case. So it will still be bounded, and not significantly 
-more than what we had before.
-
-So regarding delayed rmap handling I think this should be fine.
-
-(3) Total patched pages
-
-MAX_GATHER_BATCH_COUNT effectively limits the number of pages we 
-allocate (full batches), and thereby limits the number of pages we were 
-able to batch.
-
-The old limit was ~10000 pages, now we could batch ~5000 folio fragments 
-(page+nr_pages), resulting int the "times 256" increase in the worst 
-case on x86-64 as you point out.
-
-This 10000 pages limit was introduced in 53a59fc67f97 ("mm: limit 
-mmu_gather batching to fix soft lockups on !CONFIG_PREEMPT") where we 
-wanted to handle soft-lockups.
-
-As the number of effective folios we are freeing does not increase, I 
-*think* this should be fine.
-
-
-If any of that is a problem, we would have to keep track of the total 
-number of pages in our batch, and stop as soon as we hit our 10000 limit 
--- independent of page vs. folio fragment. Something I would like to 
-avoid of possible.
+Ack
 
 -- 
 Cheers,
