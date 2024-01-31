@@ -1,109 +1,137 @@
-Return-Path: <linux-arch+bounces-1888-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1889-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE9F98437FF
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 08:38:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2387484392C
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 09:35:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B4FA287365
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 07:38:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55F751C26857
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 08:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF7D53E25;
-	Wed, 31 Jan 2024 07:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525B953E3D;
+	Wed, 31 Jan 2024 08:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qugRA3lU"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Zwrvtkcc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E974F608
-	for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 07:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE3037149;
+	Wed, 31 Jan 2024 08:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706686676; cv=none; b=RsHWXBcNWoW8EVG394iGLszAGA4SNZNMA2k8yHVo24K4bfhsb9nby+7mjJvQ1krDavS7qEL7UJYn9JagBhV8bkiO2/SYOGQWuFAxwsHHnGVsx0GBidwP4BCAI0UMaWs1HLDA7sJ2ButjLkqTonOPPAbTTcJdYcwaGg8wqm4G8Hw=
+	t=1706690143; cv=none; b=J6AtOLzfvZGwbfuv4/1dMFE1ImrdH9OTCsfhBCZs8pUNOMuDe243i17JUJXPIetKSLf86xkccfBsUYmg9Y0RRZtzXB/dK5XFzx+hbnPDFjKa/FKVa7Cavt8pGjb38AazFBUhu+jAgSgqUDGiHu+XkSMu+eMuHg+LUEanMl71A1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706686676; c=relaxed/simple;
-	bh=TmG+rznpqqyErX4zfSJ54u90o8JuQXslthwDpqEjAiI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gMk2VZGNDzzxwXhoEbxUc+/PxYl+Nc9RSePY/Kpyn1w+UxcWntIpeQlRsZl4qIW9SUlmVZclFkYBcpN1zX9UwxA3cLHdIib1JQZQGZSqmcCQLhP/DhwzAOHIHs3z29PszWNQw+AZYOs0B+rWQXbTjOoYTTOMsoqk7N8xJgN3kWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qugRA3lU; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6040a879e1eso5092857b3.3
-        for <linux-arch@vger.kernel.org>; Tue, 30 Jan 2024 23:37:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706686672; x=1707291472; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TmG+rznpqqyErX4zfSJ54u90o8JuQXslthwDpqEjAiI=;
-        b=qugRA3lUGE+4iv2RbCrW9rOiaw+w1w3TnSsPYDomTVfsIhBg2yT8hCDktaLzV3YGPN
-         WBPsoZOl2KfuIr0rENOH+XOCCEeDvC3sZczUAKUMtG7ZqIdeEaKs1yFvO/WULHi4fXYc
-         QXg/hYuy920fMaLiFZcR5MURBY0NKyO505nTAXQiC2yHNPMZ2aENuRnHDJlfmFVDwVJl
-         7qt9yIFqWkVfGto8L5BeZSTJ3GlnL8D6EaEgkKMbzlDnoa/G03OPi52x9soysoVd0wst
-         agXaaPO1fxdI4jS0s22srNBdAFPD1+vYng+hLso2Z0EQi5ud482G+YaHuHAD5CMh49p0
-         UHOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706686672; x=1707291472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TmG+rznpqqyErX4zfSJ54u90o8JuQXslthwDpqEjAiI=;
-        b=iBCnpWiW3cCm07vXgtI7G7oVwFku3QCdaI0DWqu7VRsb9SIBKXapSZ9GqyyTg8ACkJ
-         r0dWpk49MZS0yz+5lK2IQSMlKQu8Jx0o5YAydIWu2wQqS1HSa83jJovkfyTRW6vebfcN
-         n1QBLktMXRtj2D5n4dVtosSlLh99ocU5EuFdarSiWKnzKYTa8vsYb3yr8Wc0mth1OkId
-         j5wZr+7CRLMF49rclvL4DY2W7SlAMnS0vCe2G40VFYIl3HJgADBvrJP1lhmu+jFbBSaz
-         PVMpew7LrZeT5orXAhN1ncX5usX/O8sdNrrtJCDb+LJsDq6ssvbLTzEbLgzMmTxx0Rfb
-         0jgg==
-X-Gm-Message-State: AOJu0Yz0Sh+C7b8qPIW4zeKXS8ZWmu9bwT1pJXQ5LZIMWRsUCNndAK/H
-	mfzcQr6GXfl+gpuMMrFOBy42yG9D6weJvCmfR19boYh1jNHw+c2oR+HA7PHZBSHDwuwDHrPZSTj
-	DsUzp5roc3vZoOYjoLxl6yD9DNl4vwmyFPP9Brw==
-X-Google-Smtp-Source: AGHT+IHYpXRaWLqQlh0oX2pZAjMnT3Ad18mWcU8jYVwFB0aAGnyeiCdKxqpu+uBFZ0ub/5leFryzgJhdACbtZXLSvtQ=
-X-Received: by 2002:a81:c545:0:b0:5ff:a52b:55ac with SMTP id
- o5-20020a81c545000000b005ffa52b55acmr594058ywj.34.1706686672385; Tue, 30 Jan
- 2024 23:37:52 -0800 (PST)
+	s=arc-20240116; t=1706690143; c=relaxed/simple;
+	bh=NxDDW81zyrs7kxVhirPfAM74ZB+GArrAzsWzsR1+ixE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BUpK7uIXMZ/QfebutzFrdosrwLxPFM914MJS0eYny1a2JI+ZB3kGat9zlW/kh006bQa71DKlviqhIfC7oMsQqhNXS26IdYHb0qof0C76LvRd/X9vomwun9FsyIF3kWNYi6f48WZD3LuEL+xU2o8eFFeJPLEPiUInInSM4lXwgM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Zwrvtkcc; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9450740E01A2;
+	Wed, 31 Jan 2024 08:35:37 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id D5H5JuvwD2rP; Wed, 31 Jan 2024 08:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706690135; bh=xURQLsUGYaQ4/5XRPeN2ACN4Xrra60hRGTkIk7Y7YVU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZwrvtkccKRg8bZ4jDh5jU+s8+WM4ifbbsjg+wXsL2donJtWAqneLDVYfm08FM62Ra
+	 YPLh191VjLFBI7rRLM6CEp1/ktGJlxM0IqwLUxDSdmwENcwn5igyTeiNC7+rS0QPyZ
+	 XRHo9AermmOti0ktm7qZoxExEgowg0+lKv+2otVwACXWH6wHRMlpJzrUhprR50DDbl
+	 zsrYKhO1EUgfIR7s9BElmeW8krpFJ8mvkwdh+f/bp3YNOFPvycYCdRez7qfhOllRHq
+	 xpiTcYQeroQSLbIPucbC3bnOej1Dujs+Lj2Fy90s9Z3+FURoXePGM6WXPdLev/ARYv
+	 6SGNY3znons6uz74ShM+Ny7fpDPthIsEWEsBfIH3mi+cdo7nDlFxdVnP8igtE0YNMC
+	 /wruhQizA/JXLI5vBXHWklIugIKP6mRFVidy2jENyI7cQzCWcuUpHjEy/HDksvBZ++
+	 4+U2FACoZwKIEYvuSjHWKfVfvkyJ/tapIMRU3CXVNTORUBUycxhSWP9QILGVJFIYGM
+	 8kgHS3WxhnRn6IisC5Se0f3zJMyitRRZSSmmz7pcc6CJMn0HJ+F07+YhzboVHsp6h/
+	 FZaQZNEjLmAWXALLxZhI4G+9H8gQ/yZOfq5PU2qxyaX/o2hA0YKAARjjKqortoq4Zx
+	 Y+YPK5O+MowySqghsgYgENrY=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 580E340E016C;
+	Wed, 31 Jan 2024 08:35:17 +0000 (UTC)
+Date: Wed, 31 Jan 2024 09:35:11 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 02/19] x86/boot: Move mem_encrypt= parsing to the
+ decompressor
+Message-ID: <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-23-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240131055159.2506-1-yan.y.zhao@intel.com>
-In-Reply-To: <20240131055159.2506-1-yan.y.zhao@intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 31 Jan 2024 08:37:40 +0100
-Message-ID: <CACRpkdY6dS_sedemVk-fGzhsyT_B5dXAeFX-PO+GcvCrt9Je5w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] apply page shift to PFN instead of VA in pfn_to_virt
-To: Yan Zhao <yan.y.zhao@intel.com>
-Cc: arnd@arndb.de, guoren@kernel.org, bcain@quicinc.com, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240129180502.4069817-23-ardb+git@google.com>
 
-On Wed, Jan 31, 2024 at 7:25=E2=80=AFAM Yan Zhao <yan.y.zhao@intel.com> wro=
-te:
+On Mon, Jan 29, 2024 at 07:05:05PM +0100, Ard Biesheuvel wrote:
+> +/*
+> + * Set the memory encryption xloadflag based on the mem_encrypt= command line
+> + * parameter, if provided. If not, the consumer of the flag decides what the
+> + * default behavior should be.
+> + */
+> +static void set_mem_encrypt_flag(struct setup_header *hdr)
 
-> This is a tiny fix to pfn_to_virt() for some platforms.
->
-> The original implementaion of pfn_to_virt() takes PFN instead of PA as th=
-e
-> input to macro __va, with PAGE_SHIFT applying to the converted VA, which
-> is not right under most conditions, especially when there's an offset in
-> __va.
+parse_mem_encrypt
 
-Ooops that's right, I wonder why I got it wrong.
-Arithmetic made it not regress :/
-Thank you so much for fixing this Yan!
+> +{
+> +	hdr->xloadflags &= ~(XLF_MEM_ENCRYPTION | XLF_MEM_ENCRYPTION_ENABLED);
+> +
+> +	if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT)) {
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+That's unconditionally enabled on x86:
 
-Arnd: I think you can take most of them through the arch tree.
+	select ARCH_HAS_MEM_ENCRYPT
 
-Yours,
-Linus Walleij
+in x86/Kconfig.
+
+Which sounds like you need a single XLF_MEM_ENCRYPT and simplify this
+more.
+
+> +		int on = cmdline_find_option_bool("mem_encrypt=on");
+> +		int off = cmdline_find_option_bool("mem_encrypt=off");
+> +
+> +		if (on || off)
+> +			hdr->xloadflags |= XLF_MEM_ENCRYPTION;
+> +		if (on > off)
+> +			hdr->xloadflags |= XLF_MEM_ENCRYPTION_ENABLED;
+> +	}
+> +}
+
+Otherwise, I like the simplification.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
