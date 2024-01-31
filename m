@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-1880-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1886-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39290843698
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 07:24:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 991B78436FF
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 07:54:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A31891F2886A
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 06:24:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB0011C2678D
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 06:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D244B3E47A;
-	Wed, 31 Jan 2024 06:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F367436B08;
+	Wed, 31 Jan 2024 06:54:09 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA093F8C7;
-	Wed, 31 Jan 2024 06:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27AA55C16;
+	Wed, 31 Jan 2024 06:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706682273; cv=none; b=Ba5O+mAcerI/js1cdBQBIc27u3S9eRKCu+xfQKvLDI2/Xsdkh52zoSVrZxeVUKSps1q6kNzEMD1sYpzQi1w9Ipjc7Ym1WwvYswFK4eZZT+924uithDYjhm3LTFPe6wdRJ0ELjL2FPI9RwQDJB8LBv6TqCLIM8X34eDTqueEzCko=
+	t=1706684049; cv=none; b=Tzi/JYdUl4ByHEyOE6a+Bz9Fz3XmmwgRKIXBH8rXDiJ4RWkRRmy5phRg4pKSrkJqSNgeyCmuKMXlWdBjbnnoKaAytodKo/odTa9oQt1wpbgKOXcyEXq6FsPPnUKJm2xU7xTZvuGRJv/SB3x8JKoTQbn8Hf+WpYZ1sJBmyZiAnn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706682273; c=relaxed/simple;
-	bh=Uiy2jl+TmsXsize8jHqdUqySPdi0wRe5XPyM63wYQ+A=;
+	s=arc-20240116; t=1706684049; c=relaxed/simple;
+	bh=Zdw5BUWFSFm+QflhlaaAobfZNFzFMokg/6LaDvxnxVI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MiJDIuHjX5w41KA+00TboYRpUhV8PKoetK0ZPIcf3iD0w24S+AR29uSE1pe66v4ae2lFddhNuHLwtIP/fO+xChI3UFY5jzAP4IW2L6Oijxq56gZW70WFZd5d4ZZ+cWmJlc8RE9uRqW32kB4XA+i/CWjNookkV6HcTBrDnKLv/KU=
+	 In-Reply-To:Content-Type; b=DEMQ1dT+Q3XnuRm+klkE1WzonKDXYMbB3PRnwMfxjwjhofBphcu2O2/WQW3bpLjg88kkrXSNY7pUZ+ccCH94Nb7P60dJU1kbJC1Bc8uuwDasPBfTLwgrxKznfrsuwg4ZdwawaYc1QsW0jZY7dRu1bhv8aEqEpwkiPHKHqzlkn2A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C95BCDA7;
-	Tue, 30 Jan 2024 22:25:13 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3D5ADA7;
+	Tue, 30 Jan 2024 22:54:50 -0800 (PST)
 Received: from [10.163.41.195] (unknown [10.163.41.195])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 307963F738;
-	Tue, 30 Jan 2024 22:24:18 -0800 (PST)
-Message-ID: <d22f63a0-f6de-44e1-874b-24d707907858@arm.com>
-Date: Wed, 31 Jan 2024 11:54:17 +0530
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE9C73F5A1;
+	Tue, 30 Jan 2024 22:53:53 -0800 (PST)
+Message-ID: <7612b843-cd31-4917-87c0-c26802c5bef2@arm.com>
+Date: Wed, 31 Jan 2024 12:23:51 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,7 +42,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 08/35] mm: cma: Introduce cma_alloc_range()
+Subject: Re: [PATCH RFC v3 11/35] mm: Allow an arch to hook into folio
+ allocation when VMA is known
 Content-Language: en-US
 To: Alexandru Elisei <alexandru.elisei@arm.com>
 Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
@@ -59,81 +60,60 @@ Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
  linux-arch@vger.kernel.org, linux-mm@kvack.org,
  linux-trace-kernel@vger.kernel.org
 References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-9-alexandru.elisei@arm.com>
- <61a3dbb7-25b6-4f49-aa70-9a8aaeb53365@arm.com> <ZbjfEzlNgprdxfxX@raptor>
+ <20240125164256.4147-12-alexandru.elisei@arm.com>
+ <1e03aec4-705a-41b6-b258-0b8944d9dc0c@arm.com> <Zbje4T5tZ5k707Wg@raptor>
 From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZbjfEzlNgprdxfxX@raptor>
+In-Reply-To: <Zbje4T5tZ5k707Wg@raptor>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 1/30/24 17:05, Alexandru Elisei wrote:
+On 1/30/24 17:04, Alexandru Elisei wrote:
 > Hi,
 > 
-> On Tue, Jan 30, 2024 at 10:50:00AM +0530, Anshuman Khandual wrote:
+> On Tue, Jan 30, 2024 at 03:25:20PM +0530, Anshuman Khandual wrote:
 >>
 >> On 1/25/24 22:12, Alexandru Elisei wrote:
->>> Today, cma_alloc() is used to allocate a contiguous memory region. The
->>> function allows the caller to specify the number of pages to allocate, but
->>> not the starting address. cma_alloc() will walk over the entire CMA region
->>> trying to allocate the first available range of the specified size.
+>>> arm64 uses VM_HIGH_ARCH_0 and VM_HIGH_ARCH_1 for enabling MTE for a VMA.
+>>> When VM_HIGH_ARCH_0, which arm64 renames to VM_MTE, is set for a VMA, and
+>>> the gfp flag __GFP_ZERO is present, the __GFP_ZEROTAGS gfp flag also gets
+>>> set in vma_alloc_zeroed_movable_folio().
 >>>
->>> Introduce cma_alloc_range(), which makes CMA more versatile by allowing the
->>> caller to specify a particular range in the CMA region, defined by the
->>> start pfn and the size.
+>>> Expand this to be more generic by adding an arch hook that modifes the gfp
+>>> flags for an allocation when the VMA is known.
 >>>
->>> arm64 will make use of this function when tag storage management will be
->>> implemented: cma_alloc_range() will be used to reserve the tag storage
->>> associated with a tagged page.
->> Basically, you would like to pass on a preferred start address and the
->> allocation could just fail if a contig range is not available from such
->> a starting address ?
+>>> Note that __GFP_ZEROTAGS is ignored by the page allocator unless __GFP_ZERO
+>>> is also set; from that point of view, the current behaviour is unchanged,
+>>> even though the arm64 flag is set in more places.  When arm64 will have
+>>> support to reuse the tag storage for data allocation, the uses of the
+>>> __GFP_ZEROTAGS flag will be expanded to instruct the page allocator to try
+>>> to reserve the corresponding tag storage for the pages being allocated.
+>> Right but how will pushing __GFP_ZEROTAGS addition into gfp_t flags further
+>> down via a new arch call back i.e arch_calc_vma_gfp() while still maintaining
+>> (vma->vm_flags & VM_MTE) conditionality improve the current scenario. Because
+> I'm afraid I don't follow you.
+
+I was just asking whether the overall scope of __GFP_ZEROTAGS flag is being
+increased to cover more core MM paths through this patch. I think you have
+already answered that below.
+
+> 
+>> the page allocator could have still analyzed alloc flags for __GFP_ZEROTAGS
+>> for any additional stuff.
 >>
->> Then why not just change cma_alloc() to take a new argument 'start_pfn'.
->> Why create a new but almost similar allocator ?
-> I tried doing that, and I gave up because:
-> 
-> - It made cma_alloc() even more complex and hard to follow.
-> 
-> - What value should 'start_pfn' be to tell cma_alloc() that it should be
->   ignored? Or, to put it another way, what pfn number is invalid on **all**
->   platforms that Linux supports?
-> 
-> I can give it another go if we can come up with an invalid value for
-> 'start_pfn'.
+>> OR this just adds some new core MM paths to get __GFP_ZEROTAGS which was not
+>> the case earlier via this call back.
+> Before this patch: vma_alloc_zeroed_movable_folio() sets __GFP_ZEROTAGS.
+> After this patch: vma_alloc_folio() sets __GFP_ZEROTAGS.
 
-Something negative might work. How about -1/-1UL ? A quick search gives
-some instances such as ...
-
-git grep "pfn == -1"
-
-mm/mm_init.c:   if (*start_pfn == -1UL)
-mm/vmscan.c:            if (pfn == -1)
-mm/vmscan.c:            if (pfn == -1)
-mm/vmscan.c:            if (pfn == -1)
-tools/testing/selftests/mm/hugepage-vmemmap.c:  if (pfn == -1UL) {
-
-Could not -1UL be abstracted as common macro MM_INVALID_PFN to be used in
-such scenarios including here ?
+Understood.
 
 > 
->> But then I am wondering why this could not be done in the arm64 platform
->> code itself operating on a CMA area reserved just for tag storage. Unless
->> this new allocator has other usage beyond MTE, this could be implemented
->> in the platform itself.
-> I had the same idea in the previous iteration, David Hildenbrand suggested
-> this approach [1].
-> 
-> [1] https://lore.kernel.org/linux-fsdevel/2aafd53f-af1f-45f3-a08c-d11962254315@redhat.com/
+> This patch is about adding __GFP_ZEROTAGS for more callers.
 
-There are two different cma_alloc() proposals here - including the next
-patch i.e mm: cma: Fast track allocating memory when the pages are free
-
-1) Augment cma_alloc() or add cma_alloc_range() with start_pfn parameter
-2) Speed up cma_alloc() for small allocation requests when pages are free
-
-The second one if separated out from this series could be considered on
-its own as it will help all existing cma_alloc() callers. The first one
-definitely needs an use case as provided in this series.
+Right, I guess that is the real motivation for this patch. But just wondering
+does this cover all possible anon fault paths for converting given vma_flag's
+VM_MTE flag into page alloc flag __GFP_ZEROTAGS ? Aren't there any other file
+besides (mm/shmem.c) which needs to be changed to include arch_calc_vma_gfp() ?
 
