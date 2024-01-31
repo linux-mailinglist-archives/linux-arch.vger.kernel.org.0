@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-1951-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1952-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ED70844973
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 22:08:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1E64844979
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 22:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEB6028957F
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 21:08:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E56471C22D0B
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 21:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C0638FA4;
-	Wed, 31 Jan 2024 21:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F7838FB9;
+	Wed, 31 Jan 2024 21:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IAmnWm2K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+UBbeYy"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51AD208C1;
-	Wed, 31 Jan 2024 21:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7682638DE4;
+	Wed, 31 Jan 2024 21:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706735324; cv=none; b=K0laPuR+1fEVR48DacFtYSuUj69R36r85FSVMdX6YaUv9DIocNGeDgQN6wOv+9kVnBuqyhucRKVTCAmFaKEZw/ViPYRkew35tOKm7XSPXGPUeAGO+FsqY8S4NVScX8pF2aOcX0rKk1z8NfwtMp6n8f3PdBfhcBXgplN23GTk1Po=
+	t=1706735386; cv=none; b=t6XNK0XOWZGII+lUZgt7kQUpNxr/Vi+zB4dwcKociyiGzbT2BFCPh1HdoJtoz4eZKEOeHDwNmoRwCz1Jw5XI6ADX4+9p70wDoywnQ03rAMCFs2FBma5BVeyff1Kn2QUcydPgbdzx3vLgOGoJGSotGwaDGRVMc7PwErqoI3lWQbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706735324; c=relaxed/simple;
-	bh=mPdxKMA4TO8+Xlg5A+CwfU4Swk6EiBQt8M+MwAE+A9o=;
+	s=arc-20240116; t=1706735386; c=relaxed/simple;
+	bh=7bVKxwIoaeqCS0+5AkL8/ahDS4KgCUDPD8Zj2gZaMa4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=mz6xenj5MtIgRZhNMwxaI2ugppveAfK4At/jQ5Y6PlRus4jypgBSY81iN3ScIm9emzD10s8jP3vPqZLYGFUrWUNt2xJ2FIhKrt2CbXEdYpyVoyD7GBSpGQvH2KOJqRCWDXTDgQ9Oxm69HefmJxZtEmzYBWP3Kf0MXvEzzDcuhqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IAmnWm2K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C105C433C7;
-	Wed, 31 Jan 2024 21:08:44 +0000 (UTC)
+	 Content-Disposition:In-Reply-To; b=FRBJHJi2IJlWT/pYH6zsXe4ApkqtgGPYu+N4noHLf+fua5NHpJv8SSNx28bkKm1XeophnJPNiQhOexaaSl0cqyg9WMgu3myUUpjiLsNzl2SU/gtFHW1o7AGPuACMKum3+bMzg7RDSDy2FGVvtOnUyvBskhsoLjGNnvoaOoMJUP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+UBbeYy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C33A8C433F1;
+	Wed, 31 Jan 2024 21:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706735324;
-	bh=mPdxKMA4TO8+Xlg5A+CwfU4Swk6EiBQt8M+MwAE+A9o=;
+	s=k20201202; t=1706735386;
+	bh=7bVKxwIoaeqCS0+5AkL8/ahDS4KgCUDPD8Zj2gZaMa4=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=IAmnWm2Khijpnkr6+s7eGe7eKAY9kr9n65yeY4+GU1D2/Waw3scOm98jGXxSqIVcB
-	 mJhI8uigahJTRcPJ55ywp+eCcK+NNsqA1FX+DvCoW1ASny01qN6+s+ojH2qt2jBJXk
-	 WUqomUxeDgp92F7cIZDY4q5Aa37xRgLxWY/4AAlWgRFMIscK7eKP7EPWRs6P58rOvD
-	 RU9cXdhVOSKqtLUNy/so4ROd77BJTh7+f/8ewTx2suyTei6oZ8xH2z4KkeQiX4J48J
-	 h/0Dxtr067sUwkqspHjIq0wR4EUT4Q/FuDO+bdccXugBMFpoPla+qb62iJBVJaVB4P
-	 JpSs40a0FSALw==
-Date: Wed, 31 Jan 2024 15:08:42 -0600
+	b=k+UBbeYyHR6ZTwLYivg54Ff5rluVBj9+W52TMTxMWv/37OJmHdLH8E0a3etwswaNe
+	 QBzJEApL416/pZKTTY5O7WK3aabKPkVIFJpfnHG4F+AtpIskS9lRo4MBFdzxAQFpVf
+	 qHGelaGAq/uEGGiR7kP7S6In6IichuUBevuOA86fu3ZarPyYhV5nHRKRsDs9LT1j80
+	 Peg0cBwOnDz7/fR+rSx4qCb1A9neoAFbbaQ6e5Ou2ZfojnMsWB5th1OoxPlbiDM1E4
+	 M15ObeoyW0z7wnwWo0ppwen/sgbGdvUQ8HzCQezH83al+Fbn+D8VNUw7eof4vlM4Az
+	 IxoHjjAJYunqQ==
+Date: Wed, 31 Jan 2024 15:09:44 -0600
 From: Bjorn Helgaas <helgaas@kernel.org>
 To: Philipp Stanner <pstanner@redhat.com>
 Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -63,9 +63,10 @@ Cc: Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Ben Dooks <ben.dooks@codethink.co.uk>, dakr@redhat.com,
 	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arch@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] Regather scattered PCI-Code
-Message-ID: <20240131210842.GA599075@bhelgaas>
+	linux-arch@vger.kernel.org, stable@vger.kernel.org,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v6 1/4] lib/pci_iomap.c: fix cleanup bug in pci_iounmap()
+Message-ID: <20240131210944.GA599710@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -74,40 +75,24 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240131090023.12331-1-pstanner@redhat.com>
+In-Reply-To: <20240131090023.12331-2-pstanner@redhat.com>
 
-On Wed, Jan 31, 2024 at 10:00:19AM +0100, Philipp Stanner wrote:
-> @Bjorn:
-> I decided that it's now actually possible to just embed the docu updates
-> to the respective patches, instead of a separate patch.
-> Also dropped the ioport_unmap() for now.
-
-Thanks.  I didn't see any documentation updates (other than those
-related to the changed path names) in this series, so I assume the
-updates you mention would be in a future series.
-
-> ...
-> Philipp Stanner (4):
->   lib/pci_iomap.c: fix cleanup bug in pci_iounmap()
->   lib: move pci_iomap.c to drivers/pci/
->   lib: move pci-specific devres code to drivers/pci/
->   PCI: Move devres code from pci.c to devres.c
+On Wed, Jan 31, 2024 at 10:00:20AM +0100, Philipp Stanner wrote:
+> The #ifdef for the ioport-ranges accidentally also guards iounmap(),
+> potentially compiling an empty function. This would cause the mapping to
+> be leaked.
 > 
->  Documentation/driver-api/device-io.rst |   2 +-
->  Documentation/driver-api/pci/pci.rst   |   6 +
->  MAINTAINERS                            |   1 -
->  drivers/pci/Kconfig                    |   5 +
->  drivers/pci/Makefile                   |   3 +-
->  drivers/pci/devres.c                   | 450 +++++++++++++++++++++++++
->  lib/pci_iomap.c => drivers/pci/iomap.c |   5 +-
->  drivers/pci/pci.c                      | 249 --------------
->  drivers/pci/pci.h                      |  24 ++
->  lib/Kconfig                            |   3 -
->  lib/Makefile                           |   1 -
->  lib/devres.c                           | 208 +-----------
->  12 files changed, 490 insertions(+), 467 deletions(-)
->  create mode 100644 drivers/pci/devres.c
->  rename lib/pci_iomap.c => drivers/pci/iomap.c (99%)
+> Move the guard so that iounmap() will always be part of the function.
 
-Applied to pci/devres for v6.9, thanks!
+I tweaked the subject and commit log to be more explicit about what
+the bug is.  Let me know if I got it wrong:
+
+  pci_iounmap(): Fix MMIO mapping leak
+
+  The #ifdef ARCH_HAS_GENERIC_IOPORT_MAP accidentally also guards iounmap(),
+  which means MMIO mappings are leaked.
+
+  Move the guard so we call iounmap() for MMIO mappings.
+
+Bjorn
 
