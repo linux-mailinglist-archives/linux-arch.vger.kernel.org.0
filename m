@@ -1,147 +1,239 @@
-Return-Path: <linux-arch+bounces-1948-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1950-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B5AF844912
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 21:43:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 864C0844953
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 22:02:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFB591F22DBF
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 20:43:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13F1228AC71
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jan 2024 21:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB0F383AA;
-	Wed, 31 Jan 2024 20:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8422B38F96;
+	Wed, 31 Jan 2024 21:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="ENa2o3JK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V0ivjRjN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6498322087
-	for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 20:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706733773; cv=none; b=W8a8YBkGW0uTHBfAwFuAI3ogylQcrFKgbWY9Uy+2uKjTLC38xQzUPOO2yTO6bokjj4qcPL90XfaZoVchDpfqVtA2eHCqcVjVrjccvbWYO8G1zFGLNbGjx8fTmuHFMbjuOJDL7xA4O9WXo5PQxuRHbIjzZqtusGkEFx9J5adjwog=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706733773; c=relaxed/simple;
-	bh=0ttANtOrcttr7NXaqt/G0w+9AjfKy+c5thEW3pDhz3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c/YhhAZ3jIvhhjmytvrWPtqamno6G81l0RP5tnhCwtgEBS8qpQE29yK9ynBvtb1vpCSdfaD5IStmDWOYZNK6fO4o584Un77Xz2b5gjiUBXUXE/B+qqbmLIu2HCgV1s7TJ575oAHeGO12g9PtPvOyJOsf2qrHTWEFUzehjAQ2Ca0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com; spf=pass smtp.mailfrom=fromorbit.com; dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b=ENa2o3JK; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fromorbit.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2909a632e40so120712a91.0
-        for <linux-arch@vger.kernel.org>; Wed, 31 Jan 2024 12:42:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1706733772; x=1707338572; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4HikurBEOhu9euC7gl0ui3GG6XowXvyoYxK7m1zGW+s=;
-        b=ENa2o3JK8jYa1RYoybqHhhajN7vXPeDGVwnPgMOyLNp2438iHE1aLCfbGsoBoRlcMr
-         dk6dT2YyrH45ZE7R1Uz323TWe/Tcclgb8Q9er/zT2Mlmpy8wO8+92J+8F5Im4EBUzxKe
-         14rf7XmzyXt9kUR2vEqHE8YYI5EZc24XCEi+0hSc0qQi0G/mAvR++ZyCA4cd/rN5iBIK
-         Rge4ciJ0yNpP/tgYTHXGYiIeW/QwlbhRhXBBSRfJ09rSLVDaq0TqOOUYncnxfsPaY1Xy
-         W9w50vs6qqh3wW476TzMrblmvTqMv5SAbrN9tcBohaB+Mh4cpGDLLcXwBEDzB+Fv+5lZ
-         2Kxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706733772; x=1707338572;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4HikurBEOhu9euC7gl0ui3GG6XowXvyoYxK7m1zGW+s=;
-        b=JF8PIG5rDcC+HdnzABiZJpfpZId39B7tQV4CEF+W4+5/nXmoFF2PRHtHd/NEYrQ2WY
-         zRHTlJw9Q1WAvaLa1Ae2jBijQjth46BAdHDCf5RcKqOwfsVRcgkDDhWN0zbEXrPIsGtA
-         PDpj75cBaGB1uywYkVAShmCmxPVe4e//6r/hEeMKx52v0GLoNQFs2Hl/s8Kuj2kT4uNq
-         mux81JPuo45BEIlStwbdhoFu1xPYF+Eq+l1ji9N6gZud4Wtf5gWfe14oNjJAKdObOyW4
-         s9p5moZ8vID9F8knrnD2lYVf+x75J7fEKN6DAQmr+XQF/sYnl7VMsm4/RVuRBzc5tOXQ
-         3ajw==
-X-Gm-Message-State: AOJu0YypRaRw6HEB/ypMq20CugBiHSdSAzqlXI+OsCuR4rOmLMwbDv1K
-	MESc3SsZwWlVgwNVM55GmyI0aeGYN4bOwmvj2f2RNRszkd9iIO/rIWPENmHaEUY=
-X-Google-Smtp-Source: AGHT+IFKgnjyHOHXjb8FWpmberef1nwD4qkIyOp+/vPJjvOfE+QEc5Mj2C0M+Fe+UDPDMwl9iwoIbw==
-X-Received: by 2002:a17:90b:2406:b0:295:cf9f:a1de with SMTP id nr6-20020a17090b240600b00295cf9fa1demr2928435pjb.12.1706733771727;
-        Wed, 31 Jan 2024 12:42:51 -0800 (PST)
-Received: from dread.disaster.area (pa49-181-38-249.pa.nsw.optusnet.com.au. [49.181.38.249])
-        by smtp.gmail.com with ESMTPSA id db16-20020a17090ad65000b0029608793122sm225215pjb.20.2024.01.31.12.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 12:42:51 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-	(envelope-from <david@fromorbit.com>)
-	id 1rVHPz-000JNE-2o;
-	Thu, 01 Feb 2024 07:42:47 +1100
-Date: Thu, 1 Feb 2024 07:42:47 +1100
-From: Dave Chinner <david@fromorbit.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>,
-	linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-xfs@vger.kernel.org
-Subject: Re: [RFC PATCH v2 7/8] Introduce dcache_is_aliasing() across all
- architectures
-Message-ID: <Zbqwx12WfXvZ6kk2@dread.disaster.area>
-References: <20240130165255.212591-1-mathieu.desnoyers@efficios.com>
- <20240130165255.212591-8-mathieu.desnoyers@efficios.com>
- <Zbm1CLy+YZWx2IuO@dread.disaster.area>
- <d30a890a-f64e-4082-8d8e-864bfb3c3800@efficios.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6030E38DF1;
+	Wed, 31 Jan 2024 21:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706734964; cv=fail; b=LjHfFgHYBotVHsB2lXOTrbkYLvyAHEpFfzimgf4YfSRwqG1GV3K7qoa2hWPQlYD2z0EYcl/UWe5WFspL3aog71O0Dw6z7aOzJpTQHhv+6BSXUgcgKiL5P2NAR0k2xj41mPQlh/Pc5oHX9a9I7jqeAen4D9faHcZWB6OtnL/q5u4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706734964; c=relaxed/simple;
+	bh=a8KrKIWFalgBAC9gxi/aWImn2TjPttRO4oRESyH5lts=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=EITXdkI568uzCPBjVeNf/7hPcExNcP2ycqhyvRxXyII92PO8Ua8yLao/3G8KfLFBWNeqhIBNKgsdR7ZZ+ghuJImib+oubWqZU/dAZkWEYl35gY6mZQjce1I1sz6BUQELHe3hsPNsCWzkOr7sOAuYOBW/sRnLUO1+dqgY74SBSEQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V0ivjRjN; arc=fail smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706734963; x=1738270963;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=a8KrKIWFalgBAC9gxi/aWImn2TjPttRO4oRESyH5lts=;
+  b=V0ivjRjN8RypYPmmW4TmHXnGgRMNe0+72cLlGJKsSOGvOoinR1yjRaBX
+   1+tLngXUeiZj5Qvxsz58q+eSHmzcERwaHaUGERjgxPB2IQmIss5SscnFg
+   pgXVH6oACpUV9Okjo+tMOxW5lU1a6U6GJZzi4rRak7UU9TtyOadLxWwjT
+   Dpy9L0Td7wklEFr/XNGjP/ZB7CTdSMpJS3G6HjyqzIaGjNv/4CHjdaqUm
+   zwb2ajKBQReUwdg8QFRY/twQONwZ8jbFwKgWN7kH5eKfLGfS0Zbx7+vFf
+   Q8ZvH82xa6P8Nfb/CanS8cUJlFBMm3XbxW+waiYrKrkB+n8FDZu1dA18f
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="17109193"
+X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
+   d="scan'208";a="17109193"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 13:02:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="878896221"
+X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
+   d="scan'208";a="878896221"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 31 Jan 2024 13:02:39 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 31 Jan 2024 13:02:38 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Wed, 31 Jan 2024 13:02:38 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 31 Jan 2024 13:02:37 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cvjo/KbuuQHHp78c9L2xJM0UwPY0FqRMH42dIb5Svv/+OKEcOG/FMcsqWpKY3WeBVatVoWo4bFg/sRapVzv50l/Sy5h0n4tkA7zpH2GAqJpMHGaMFimPWbvBiOwKPSa+6Dy/bMO55Fhih1V4V4QweGpbT77bXQt6V283jHCU040JnOi22xMFPw+1EPs8U/nZ7AXozIZKLqWFv6KtbH8RrDcdada8ULcyy1YqDfnyQ6mUoOvaHFan71sL0AM7mUjkOqNtnqw/yJVUt44ng1kc82/Z4iRF36B5X4nDZOmTQnWI26k45cNsoHaaqzKEDZLbnVz+OdJAiHrS89BN8BF6rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1zr6IXfXIDFKRkqsZalTnOGJWkx072CyAb0yn8eUdr4=;
+ b=mwi2j6R++30rEnHxR9i4zd1ILyyGH6dLs+l1qaNXDhLlHin49ais1R1QRexmtpyTb01kJMJd8PhcZbAXuMZWF4ZHnbAvZYZutp7IEGVUD52JyysAjRYWt4WwqfAVChoY8RlJX3IFo0nTCI7G8NRTsq0cE0I/NxRkP1brueKxmPW/rho+YwbPUN01Nod/mw9tSi3wzqEUVUrn7eEva/Xnc7xw0kc6RVN7khGw5/Xk6tg3+8D4/NZnEZwilSezxU6MViQz+UlazBCXhz2hn+XIFt7zntV120oKSvUerIZxnkflZor3HxnO93/TCLjZK9PlWR89EnhubAkMh90DY9ZrTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22; Wed, 31 Jan
+ 2024 21:02:35 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2%4]) with mapi id 15.20.7228.029; Wed, 31 Jan 2024
+ 21:02:35 +0000
+Date: Wed, 31 Jan 2024 13:02:31 -0800
+From: Dan Williams <dan.j.williams@intel.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams
+	<dan.j.williams@intel.com>, Arnd Bergmann <arnd@arndb.de>, Dave Chinner
+	<david@fromorbit.com>
+CC: <linux-kernel@vger.kernel.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>, <linux-mm@kvack.org>,
+	<linux-arch@vger.kernel.org>, Vishal Verma <vishal.l.verma@intel.com>, "Dave
+ Jiang" <dave.jiang@intel.com>, Matthew Wilcox <willy@infradead.org>, "Russell
+ King" <linux@armlinux.org.uk>, <nvdimm@lists.linux.dev>,
+	<linux-cxl@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<dm-devel@lists.linux.dev>
+Subject: RE: [RFC PATCH v3 2/4] dax: Check for data cache aliasing at runtime
+Message-ID: <65bab567665f3_37ad2943c@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20240131162533.247710-1-mathieu.desnoyers@efficios.com>
+ <20240131162533.247710-3-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240131162533.247710-3-mathieu.desnoyers@efficios.com>
+X-ClientProxiedBy: MW4PR02CA0015.namprd02.prod.outlook.com
+ (2603:10b6:303:16d::6) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d30a890a-f64e-4082-8d8e-864bfb3c3800@efficios.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB5880:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7a1ea31-f14c-4307-fa17-08dc229ff2e0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ukuos4hW0e9u9CRsOX0aHXJ4OglysIkG6wJCuTos36K/pqM7Xl1Hs/MJW82P1N/59SLaFbhLqkA4dELGtdEXa+NJdy5oJrw0mc7bdZ5mtTpeQ1n1128N8ItTcIDvoQJBPR5aVLfdgLxQpdIle80ZrGGY8qhn//RyIdlnu10C6F4WWubUeDTSdGw1EzC6eAAGt8pRiXglFGY9Rqppjr/Gul46OJkkZ90xeHtJNhLLK56L4rHX3DatTVgQYHNQUWSwuFzkFsICrQ+QV2VOjGoyzri+LonsSGl6J2b0jYXs00sYfP2rM5PODhV5p1gL0B3HTJ8UXgwRa5JuxJzPxLucCLQ9fc8jvXvUO0GQ+tM1X6IY2yNIHie0N9ioe7Rs7qouyas6v7D9nZYjhOE+ivREN7U7TRUFT4iNsWgzNvVx0flaRJ1vf7TvETpLZZC91JzIiiweeLrO7FpxETwAy1jLTiIW1cvkkSqLo8aieYB4riUJpqbUrWrud8Erd/nDVbzO7FoOObiry7rfzhqHyeWLNUqyGyCaXSXHPY20VXoZYa2yYsJAsrkF2IK4ZLEh3ee4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(396003)(366004)(346002)(39860400002)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(41300700001)(83380400001)(38100700002)(6512007)(9686003)(26005)(4326008)(8676002)(5660300002)(8936002)(7416002)(2906002)(478600001)(110136005)(6506007)(66946007)(6666004)(54906003)(66476007)(66556008)(6486002)(316002)(86362001)(82960400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I0JTBq8UYMS5ThZbO5MlAc1c78GE68vnfbQv8yCHdxVpKjhr2jnzVTq2d22n?=
+ =?us-ascii?Q?5YLZWIsJqX6DgBjeM38sgvpmnyFYRc2YyKFH9kWfToBrpfjLM2w+P9K+6oVh?=
+ =?us-ascii?Q?IEzxfIzb+TydjAx2R5jG0xsmU0y+JQp4vOwx8Mrr3PzTpSfNi+V/mVB9zAuT?=
+ =?us-ascii?Q?uURVfhfV7LonrDhfzVXBPZF3mSjEHp/5Utgf9mqC7oRKtWdGIPbvoMR6z/K0?=
+ =?us-ascii?Q?Ef73VxG49QGfFkPOmvpKPLPhCWAEVhJjiXE0jwyIN/uuD1Md37cTCzwtNrJP?=
+ =?us-ascii?Q?OTEhzqakSU4Fy/z9kK2OpxsBb2dJi+6U5BA51oFvuMw+0xR7I6a34y7fGAtD?=
+ =?us-ascii?Q?Av2AH4SfUs4sZZ0dhJRt+Bz2Lo5/9Z9udgOGXqaD5DZluuWslbrYfKhEZZe3?=
+ =?us-ascii?Q?6pRUXo3ScBM3Of2tD+fIb1V5KRHYTNa1T6rEh7/cu6Uh52uiq2IrBMObIjfd?=
+ =?us-ascii?Q?JLE9vdwAZKqYyrLD7zZZAuviQZGuWMzDGRq7VdwyU9Xf5wcugwKHbrj6v+M1?=
+ =?us-ascii?Q?y3tvgE2CX4pXE+6S+3AYpHfJ2ctd4LJY85R1nCGAYq8kGygOuEgASXJaTVeR?=
+ =?us-ascii?Q?Vx4aIF3tQJHZ4rs3g9Tjv5eIYSMLRRqpyRrRuHxz41XhEuvGsjoNVAm4riwK?=
+ =?us-ascii?Q?uOF0eqpIiuhk4WSXYGRIgMJNhIWFa9MMhUVlAWGxpwWNNJnZkYvO8Nemirx3?=
+ =?us-ascii?Q?o/xjbsK8PQrlGnNMWyKT+qaClFX6Zd36Bxt+HTs5wQLUR+BFnHJBqUKdayOL?=
+ =?us-ascii?Q?8awSWTwXmr2a2lI8i9Xx37TCeL1KWIWWrYIQ7Z4+rsLuaNU6dqwkDMlTWuZr?=
+ =?us-ascii?Q?ebZJPCtN8MQ+K45L3EVhhOMJBJ1dYsE3pSeEItahKL/0FSMR6uwDKGJZZ6AT?=
+ =?us-ascii?Q?eQXGAgL+qrKr3Q9meVVdFcITfYpSR1pu30vzYYiTGXq95rKyCWjz+rgSfKyM?=
+ =?us-ascii?Q?p6LrgsIWKs6Hc79KIg7KoWSqvzXDpwKiqNTr1IgkJoGM5fj0HAzlMHz9TiWY?=
+ =?us-ascii?Q?GcXfaUiXvSHEriALTN7c5DukTIyfaQaRGYpmP6D+X4BoycDwbKvEwPaCePO3?=
+ =?us-ascii?Q?/uET9EZkvnCiH6F0LKRrAG5Kjp1+x0esCOjzBSRHKVJIaNr8PDZ4xv9IHcir?=
+ =?us-ascii?Q?Z4LZHt9aa384Rj4sXDhrZ596pDA2b+mM9lgvOEfTg3HsRNLLv497yR3rQ2DN?=
+ =?us-ascii?Q?U3BInMmn4tyfroSaR/FgLxD4hafpoEHciwogWukwmgU9AeC8G/J+/ReC+qqi?=
+ =?us-ascii?Q?nzkWYow09VuItwWRBHCjQ/6z193bJbhNRYoAsN7yN/qXiDxbQEQAbCBZmJ2d?=
+ =?us-ascii?Q?seiLp4Ya3Xw561i+4Pj3AajX4bNfKxB725yzOj+MTmEZezkNeQoUhyzl1L/3?=
+ =?us-ascii?Q?PSqTicIENAoNt7VL7nQ03J07zglU6TPTP/X5bk1qqVMeISX+a90NNCPAjDVt?=
+ =?us-ascii?Q?1r8BJn8nonj2CMB1yK1qcX0HnqSsOQZc4W1XHOZRCuQWTrNIc/5cFRWPEw73?=
+ =?us-ascii?Q?XyX9mkJi++JeTs8Z6Fc18VUTv+mcPLyQ9iyvEqMos2uiUGoGiOOQkCeaHIQw?=
+ =?us-ascii?Q?5+d96freP5F1FNcjRQwniiV4+xXNwzICqeaq3E5nKlVBpay9aI621LHppIeF?=
+ =?us-ascii?Q?vg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7a1ea31-f14c-4307-fa17-08dc229ff2e0
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 21:02:35.1249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: edDio51DKHDj5cgPCqMWSpRVpzEbDLN1Pq29QX2IfOj5cTFgrxvCGkityzaMJTTWSSvIp8rKGBiItC6bIDCspyUZIZDbDV2wiB0kApnV+JI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5880
+X-OriginatorOrg: intel.com
 
-On Wed, Jan 31, 2024 at 09:58:21AM -0500, Mathieu Desnoyers wrote:
-> On 2024-01-30 21:48, Dave Chinner wrote:
-> > On Tue, Jan 30, 2024 at 11:52:54AM -0500, Mathieu Desnoyers wrote:
-> > > Introduce a generic way to query whether the dcache is virtually aliased
-> > > on all architectures. Its purpose is to ensure that subsystems which
-> > > are incompatible with virtually aliased data caches (e.g. FS_DAX) can
-> > > reliably query this.
-> > > 
-> > > For dcache aliasing, there are three scenarios dependending on the
-> > > architecture. Here is a breakdown based on my understanding:
-> > > 
-> > > A) The dcache is always aliasing:
-> > > 
-> > > * arc
-> > > * csky
-> > > * m68k (note: shared memory mappings are incoherent ? SHMLBA is missing there.)
-> > > * sh
-> > > * parisc
-> > 
-> > /me wonders why the dentry cache aliasing has problems on these
-> > systems.
-> > 
-> > Oh, dcache != fs/dcache.c (the VFS dentry cache).
-> > 
-> > Can you please rename this function appropriately so us dumb
-> > filesystem people don't confuse cpu data cache configurations with
-> > the VFS dentry cache aliasing when we read this code? Something like
-> > cpu_dcache_is_aliased(), perhaps?
+Mathieu Desnoyers wrote:
+> Replace the following fs/Kconfig:FS_DAX dependency:
 > 
-> Good point, will do. I'm planning go rename as follows for v3 to
-> eliminate confusion with dentry cache (and with "page cache" in
-> general):
+>   depends on !(ARM || MIPS || SPARC)
 > 
-> ARCH_HAS_CACHE_ALIASING -> ARCH_HAS_CPU_CACHE_ALIASING
-> dcache_is_aliasing() -> cpu_dcache_is_aliasing()
+> By a runtime check within alloc_dax().
 > 
-> I noticed that you suggested "aliased" rather than "aliasing",
-> but I followed what arm64 did for icache_is_aliasing(). Do you
-> have a strong preference one way or another ?
+> This is done in preparation for its use by each filesystem supporting
+> the "dax" mount option to validate whether DAX is indeed supported.
+> 
+> This is done in preparation for using cpu_dcache_is_aliasing() in a
+> following change which will properly support architectures which detect
+> data cache aliasing at runtime.
+> 
+> Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Vishal Verma <vishal.l.verma@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: nvdimm@lists.linux.dev
+> Cc: linux-cxl@vger.kernel.org
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: dm-devel@lists.linux.dev
+> ---
+>  drivers/dax/super.c | 6 ++++++
+>  fs/Kconfig          | 1 -
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index 0da9232ea175..e9f397b8a5a3 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+> @@ -445,6 +445,12 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
+>  	dev_t devt;
+>  	int minor;
+>  
+> +	/* Unavailable on architectures with virtually aliased data caches. */
+> +	if (IS_ENABLED(CONFIG_ARM) ||
+> +	    IS_ENABLED(CONFIG_MIPS) ||
+> +	    IS_ENABLED(CONFIG_SPARC))
+> +		return NULL;
 
-Not really.
+This function returns ERR_PTR(), not NULL on failure.
 
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+...and I notice this mistake is also made in include/linux/dax.h in the
+CONFIG_DAX=n case. That function also mentions:
+
+    static inline struct dax_device *alloc_dax(void *private,
+                    const struct dax_operations *ops)
+    {
+            /*
+             * Callers should check IS_ENABLED(CONFIG_DAX) to know if this
+             * NULL is an error or expected.
+             */     
+            return NULL;
+    }               
+
+...and none of the callers validate the result, but now runtime
+validation is necessary. I.e. it is not enough to check
+IS_ENABLED(CONFIG_DAX) it also needs to check cpu_dcache_is_aliasing().
+
+With that, there are a few more fixup places needed, pmem_attach_disk(),
+dcssblk_add_store(), and virtio_fs_setup_dax().
 
