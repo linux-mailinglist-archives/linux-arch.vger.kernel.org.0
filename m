@@ -1,185 +1,135 @@
-Return-Path: <linux-arch+bounces-1981-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1982-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FA92845EB4
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 18:39:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 948CA845EDC
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 18:49:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C871C1F242B1
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 17:39:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B58028AADC
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 17:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C3C46FBB2;
-	Thu,  1 Feb 2024 17:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B91957C6D4;
+	Thu,  1 Feb 2024 17:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PJ+teQ/7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4626FB88;
-	Thu,  1 Feb 2024 17:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9780A7C6DF
+	for <linux-arch@vger.kernel.org>; Thu,  1 Feb 2024 17:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706809136; cv=none; b=hPr1b6Nbmg16yTLAvC4i4/CnnPPS1Cx4DhhtpcTMbAsVlz6aFQBhmLzUsx2Amv2/vGz47kzSiICPWP9YdGKUVvO/ZcXzgD45F2fzgQRu0HujJVtq8b1zuQbBza5JodlA3E52nC1M/Z/yfHHtS2AkFHUcL60CbLUldwo/zTXVq8Y=
+	t=1706809736; cv=none; b=oGfT35H0+GNA0zmDNgRFwb8XHQ4hwISceKj70eELmIdKKj0tu2j06NCetNycKSJXYQwKchDCMnbWIqNf6rDfbHtTm4x1i7jU8ved7X8C81eT0OXHPvN7BCkou2qHkW730XBxN+T7tkSIgmjFpFF8DB5XjJD2fNrhtIxX6ks+A00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706809136; c=relaxed/simple;
-	bh=+jscayz1j5iTQ/gLXe+z+HvDEvJcz5+9nneP6cJ+HKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E1Oy54BLboD4+svxMA0HRo41tJ+2bcrddkoFADgqFDbHUU9IMwqoOxBzB8XccNQrhMK2fPukgZFprHGGr8nucHvaMzSTZqE3vJcZZ909Zyt9TD/4PZP6bdtBI/70ea3rkwmTNB3YCDoFwrTJm1ZJiJ9Zw5XjffuJO6ItZC22Hps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32134DA7;
-	Thu,  1 Feb 2024 09:39:36 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 95BF13F738;
-	Thu,  1 Feb 2024 09:38:48 -0800 (PST)
-Date: Thu, 1 Feb 2024 17:38:42 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, mhiramat@kernel.org,
-	rppt@kernel.org, hughd@google.com, pcc@google.com,
-	steven.price@arm.com, vincenzo.frascino@arm.com, david@redhat.com,
-	eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v3 31/35] khugepaged: arm64: Don't collapse MTE
- enabled VMAs
-Message-ID: <ZbvXImzAJNKQvamJ@raptor>
-References: <20240125164256.4147-1-alexandru.elisei@arm.com>
- <20240125164256.4147-32-alexandru.elisei@arm.com>
- <599769c3-0aef-4c5b-ac98-f109649862f7@arm.com>
+	s=arc-20240116; t=1706809736; c=relaxed/simple;
+	bh=Grgjp5eNCkIOqriHl4Vdp4WOeqDo3ixIM5+oKQyWaZo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iBi33fupgjEUUZJRdvj5/HI4e1ezkpALmCqSgLvmBcr5cOOLgBGwh1Xyb44c5S7fWLWVyQzWCYbNUEAVz2n6zbCR1KMwqk76k+zbW9EIcku/pia8oAKYhxg41nw0ZWBOEJ2oMyazRO5+c/0bve5Wj7kp241meBRMlCTDoFq7Zz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PJ+teQ/7; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55f2b0c5ae9so1612363a12.2
+        for <linux-arch@vger.kernel.org>; Thu, 01 Feb 2024 09:48:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1706809732; x=1707414532; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1AVzZb0NYW5XZP6aUzDR5tG81geNwdMzzdRW+0+Img=;
+        b=PJ+teQ/7o8eRX2hdhyG2FyPpKaTaaTrzhYClR0jlXTgzwhBxrJT9yFjzS3nsheOm3B
+         /deChve6FW8eoPkYJquJg8QpUmJX0AgxWTPwY0J9HxFf3Spf4ofSXwT1sczs/2SwnWUB
+         noumZTKpSqh5Qy+jr2eg4w1oPGi5l/hV8Wh8c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706809732; x=1707414532;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p1AVzZb0NYW5XZP6aUzDR5tG81geNwdMzzdRW+0+Img=;
+        b=JE7pK4N2hcbT7YjNez9oMPccyyMJgR1gcBqFkNErGRzeUCM03Spcx3C3W3K0BZS5pA
+         rHR1lef9bF05MV1TcTJeB0SCtMyXVnivstD6alHXL6eBYTFoMCHw6dvuq1lsJeQqc/e3
+         qMUwyDN9tcaETvTR9mguuyp0RMZ/+vJZ9ul+2PYmYtJL25KYLsklI6ri2g2MXRU0lfDF
+         1NNExVAyKeldUd41sztNUitXRhcHKvuT19ey3qw8i/tUr2s4nWr4vlpBMxfZTcW3HSAM
+         xq3F65ki4Eua89xEzIb10996ddec/i/j1wVjWSmB1LIiqB0VNiQqUo57aV7v3C20nJlN
+         pIwA==
+X-Gm-Message-State: AOJu0YwtnJvJe8C0jE6FaZduCf6At6L1CPtZnh/mrqeJkkH8dXP0TltI
+	dt97RmVLelwXl2FVO0HBDvjoZy+h0xiWX74+hvdp1kkouH9XcukPUhG6DspN+LmExMU/ItEs5DC
+	aUn3xxw==
+X-Google-Smtp-Source: AGHT+IGzqloL7VMQs1zQt3FQjyfULadDPksssVogHS0nWQufyUtyhPjhsnxTWKB1l2hhDFjWWz2caw==
+X-Received: by 2002:a05:6402:5213:b0:55f:7fe9:c567 with SMTP id s19-20020a056402521300b0055f7fe9c567mr4788874edd.1.1706809732510;
+        Thu, 01 Feb 2024 09:48:52 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVkzJMTBJe2Ab4wO3TAGrebkfeN3B8qfa5tSein/DTYEjI3n+cs2vraSeUdoSTG8ribgPopDHyb6ayO/MbbtsCr4/toQvk6k2BxSg==
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id es27-20020a056402381b00b0055c60ba9640sm24539edb.77.2024.02.01.09.48.51
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Feb 2024 09:48:52 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55f0b2c79cdso1586644a12.3
+        for <linux-arch@vger.kernel.org>; Thu, 01 Feb 2024 09:48:51 -0800 (PST)
+X-Received: by 2002:aa7:d6d1:0:b0:55f:1a79:8b8d with SMTP id
+ x17-20020aa7d6d1000000b0055f1a798b8dmr3775037edr.3.1706809731384; Thu, 01 Feb
+ 2024 09:48:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <599769c3-0aef-4c5b-ac98-f109649862f7@arm.com>
+References: <20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com>
+In-Reply-To: <20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 1 Feb 2024 09:48:34 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whUp8cDxLr3EKZ1e-83+MJcazjtmpjmXGG-Y+7xvRqoRg@mail.gmail.com>
+Message-ID: <CAHk-=whUp8cDxLr3EKZ1e-83+MJcazjtmpjmXGG-Y+7xvRqoRg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Handle delay slot for extable lookup
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ben Hutchings <ben@decadent.org.uk>, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	Xi Ruoyao <xry111@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 01, 2024 at 01:42:08PM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 1/25/24 22:12, Alexandru Elisei wrote:
-> > copy_user_highpage() will do memory allocation if there are saved tags for
-> > the destination page, and the page is missing tag storage.
-> > 
-> > After commit a349d72fd9ef ("mm/pgtable: add rcu_read_lock() and
-> > rcu_read_unlock()s"), collapse_huge_page() calls
-> > __collapse_huge_page_copy() -> .. -> copy_user_highpage() with the RCU lock
-> > held, which means that copy_user_highpage() can only allocate memory using
-> > GFP_ATOMIC or equivalent.
-> > 
-> > Get around this by refusing to collapse pages into a transparent huge page
-> > if the VMA is MTE-enabled.
-> 
-> Makes sense when copy_user_highpage() will allocate memory for tag storage.
-> 
-> > 
-> > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> > ---
-> > 
-> > Changes since rfc v2:
-> > 
-> > * New patch. I think an agreement on whether copy*_user_highpage() should be
-> > always allowed to sleep, or should not be allowed, would be useful.
-> 
-> This is a good question ! Even after preventing the collapse of MTE VMA here,
-> there still might be more paths where a sleeping (i.e memory allocating)
-> copy*_user_highpage() becomes problematic ?
+On Thu, 1 Feb 2024 at 07:46, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>  arch/alpha/include/asm/ptrace.h        | 1 +
+>  arch/arc/include/asm/ptrace.h          | 1 +
+>  arch/arm/include/asm/ptrace.h          | 1 +
+>  arch/csky/include/asm/ptrace.h         | 1 +
+>  arch/hexagon/include/uapi/asm/ptrace.h | 1 +
+>  arch/loongarch/include/asm/ptrace.h    | 1 +
+>  arch/m68k/include/asm/ptrace.h         | 1 +
+>  arch/microblaze/include/asm/ptrace.h   | 3 ++-
+>  arch/mips/include/asm/ptrace.h         | 2 ++
+>  arch/mips/kernel/ptrace.c              | 7 +++++++
+>  arch/nios2/include/asm/ptrace.h        | 3 ++-
+>  arch/openrisc/include/asm/ptrace.h     | 1 +
+>  arch/parisc/include/asm/ptrace.h       | 1 +
+>  arch/s390/include/asm/ptrace.h         | 1 +
+>  arch/sparc/include/asm/ptrace.h        | 2 ++
+>  arch/um/include/asm/ptrace-generic.h   | 1 +
+>  mm/memory.c                            | 4 ++--
+>  17 files changed, 28 insertions(+), 4 deletions(-)
 
-Exactly!
+The only user right now is mm/memory.c, and it doesn't even include
+<asm/ptrace.h>, but instead does the proper thing and includes
+<linux/ptrace.h>
 
-> 
-> > 
-> >  arch/arm64/include/asm/pgtable.h    | 3 +++
-> >  arch/arm64/kernel/mte_tag_storage.c | 5 +++++
-> >  include/linux/khugepaged.h          | 5 +++++
-> >  mm/khugepaged.c                     | 4 ++++
-> >  4 files changed, 17 insertions(+)
-> > 
-> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> > index 87ae59436162..d0473538c926 100644
-> > --- a/arch/arm64/include/asm/pgtable.h
-> > +++ b/arch/arm64/include/asm/pgtable.h
-> > @@ -1120,6 +1120,9 @@ static inline bool arch_alloc_cma(gfp_t gfp_mask)
-> >  	return true;
-> >  }
-> >  
-> > +bool arch_hugepage_vma_revalidate(struct vm_area_struct *vma, unsigned long address);
-> > +#define arch_hugepage_vma_revalidate arch_hugepage_vma_revalidate
-> > +
-> >  #endif /* CONFIG_ARM64_MTE_TAG_STORAGE */
-> >  #endif /* CONFIG_ARM64_MTE */
-> >  
-> > diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_tag_storage.c
-> > index ac7b9c9c585c..a99959b70573 100644
-> > --- a/arch/arm64/kernel/mte_tag_storage.c
-> > +++ b/arch/arm64/kernel/mte_tag_storage.c
-> > @@ -636,3 +636,8 @@ void arch_alloc_page(struct page *page, int order, gfp_t gfp)
-> >  	if (tag_storage_enabled() && alloc_requires_tag_storage(gfp))
-> >  		reserve_tag_storage(page, order, gfp);
-> >  }
-> > +
-> > +bool arch_hugepage_vma_revalidate(struct vm_area_struct *vma, unsigned long address)
-> > +{
-> > +	return !(vma->vm_flags & VM_MTE);
-> > +}
-> > diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-> > index f68865e19b0b..461e4322dff2 100644
-> > --- a/include/linux/khugepaged.h
-> > +++ b/include/linux/khugepaged.h
-> > @@ -38,6 +38,11 @@ static inline void khugepaged_exit(struct mm_struct *mm)
-> >  	if (test_bit(MMF_VM_HUGEPAGE, &mm->flags))
-> >  		__khugepaged_exit(mm);
-> >  }
-> > +
-> > +#ifndef arch_hugepage_vma_revalidate
-> > +#define arch_hugepage_vma_revalidate(vma, address) 1
-> 
-> Please replace s/1/true as arch_hugepage_vma_revalidate() returns bool ?
+So please make <linux/ptrace.h> just do
 
-Yeah, that's strange, I don't know why I used 1 there. Will change it to true,
-thanks for spotting it.
+     #ifndef exception_ip
+        #define exception_ip(x) instruction_pointer(x)
+    #endif
 
-> 
-> > +#endif
-> 
-> Right, above construct is much better than __HAVE_ARCH_XXXX based one.
+and all those non-MIPS architecture updates should just go away, and
+the diffstat should look something like
 
-Thanks!
+  arch/mips/kernel/ptrace.c          | 7 +++++++
+  include/linux/ptrace.h             | 4 ++++
+  mm/memory.c                        | 4 ++--
 
-Alex
+instead.
 
-> 
-> > +
-> >  #else /* CONFIG_TRANSPARENT_HUGEPAGE */
-> >  static inline void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
-> >  {
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index 2b219acb528e..cb9a9ddb4d86 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -935,6 +935,10 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
-> >  	 */
-> >  	if (expect_anon && (!(*vmap)->anon_vma || !vma_is_anonymous(*vmap)))
-> >  		return SCAN_PAGE_ANON;
-> > +
-> > +	if (!arch_hugepage_vma_revalidate(vma, address))
-> > +		return SCAN_VMA_CHECK;
-> > +
-> >  	return SCAN_SUCCEED;
-> >  }
-> >  
-> 
-> Otherwise this LGTM.
+                  Linus
 
