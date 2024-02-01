@@ -1,76 +1,142 @@
-Return-Path: <linux-arch+bounces-1964-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1965-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E575D8452E3
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 09:39:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C329F8453B9
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 10:22:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42028B236C0
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 08:39:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F58F285DFD
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 09:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680B7148314;
-	Thu,  1 Feb 2024 08:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zenithcraft24.com header.i=@zenithcraft24.com header.b="PfOmX+vh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8016115B0FD;
+	Thu,  1 Feb 2024 09:21:56 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zenithcraft24.com (mail.zenithcraft24.com [162.19.75.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6556815A495
-	for <linux-arch@vger.kernel.org>; Thu,  1 Feb 2024 08:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.19.75.17
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A2015B0F2;
+	Thu,  1 Feb 2024 09:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706776741; cv=none; b=mNkjqa3lXpeUtBBcRMu3pSsVou+axVVpsLbmTh+pafOm5fOt6k5adBNGFl2oVp3xOMA92EYeqEMTLglmtlf0ZHiDjzq96JJzPS9MqM6KsYvCRKFQBy9k5StMKlnPpagtMqENTkbKLrnHpPLji7OsFeuyyGg6l/O72TF9jL/f6ks=
+	t=1706779316; cv=none; b=I9+eBr/oku/6TpSjA1T6fqr2CabhMYcKF1Qe6GtIvcNZMyEoGm7BhMiWMKqZ4HM5rccWr7+UwSBHmI+c+61Q3ksOq9WXe7bwoNXGn4RfeKL8FZcIDbg7JwunjzbP9Tce/5yRIb3OvqiBAviosOHDrOhxY2lxNkUca3JV2tjFq2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706776741; c=relaxed/simple;
-	bh=5UWc1TjOSML5nno7hgQR2TsBISRW9C2IrWR2nSPzzy4=;
-	h=Message-ID:Date:From:To:Subject:MIME-Version:Content-Type; b=QFsNeWepZYT8lEKXGyfyfPDPrzwRhRlT5oWzbYf8n58Hx/yKvTMGtLFmXhrIEtGJLCNmtfAWFJOM/9KDM8BpXBO7VM7hmZgPL/8r1LpSaaIK7uAKkJL09OYi9snZ6TbxHcfjgu9mIJalFM54HOI5grECmA2iohTPv4bbYOnp7JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zenithcraft24.com; spf=pass smtp.mailfrom=zenithcraft24.com; dkim=pass (2048-bit key) header.d=zenithcraft24.com header.i=@zenithcraft24.com header.b=PfOmX+vh; arc=none smtp.client-ip=162.19.75.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zenithcraft24.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zenithcraft24.com
-Received: by mail.zenithcraft24.com (Postfix, from userid 1002)
-	id D9CAF23C06; Thu,  1 Feb 2024 08:30:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zenithcraft24.com;
-	s=mail; t=1706776247;
-	bh=5UWc1TjOSML5nno7hgQR2TsBISRW9C2IrWR2nSPzzy4=;
-	h=Date:From:To:Subject:From;
-	b=PfOmX+vh0uuBdH/N736577RDqDArrpRcD8EctWyyl7LuEbGak7Xy1LWEP+vD+jLQ1
-	 Ua6NGw2VsFhFkYLP/Zp3UJsaTL6EBYinW9w5BJKtdMmMBuWhJeIpLG9EQDNwRwHXIq
-	 GgAqkUFLC2tC6BEugDAzJsGPzM5N08k9kS1CwMdW2UdaxofoGPe3C4Iqt4MKgAEj2h
-	 zK+OcTibRDreLiW/JF94O8zyz9jVXlENloaHjaIvJODmEaq32RFZMzMeEUcK9QbxKs
-	 Y+Tb+4vgSpndUnKzkaAT7FjZoUaah+bly/UyU19OTVI/dYh4c8aWi27oC5SkfQtsvU
-	 +1RYOE9oDfzOw==
-Received: by mail.zenithcraft24.com for <linux-arch@vger.kernel.org>; Thu,  1 Feb 2024 08:30:44 GMT
-Message-ID: <20240201074500-0.1.9.60z.0.rbdhfw1ld6@zenithcraft24.com>
-Date: Thu,  1 Feb 2024 08:30:44 GMT
-From: "Roe Heyer" <roe.heyer@zenithcraft24.com>
-To: <linux-arch@vger.kernel.org>
-Subject: Website performance
-X-Mailer: mail.zenithcraft24.com
+	s=arc-20240116; t=1706779316; c=relaxed/simple;
+	bh=Xan/dqyZBR9aQDewxYQ4N13dX6KyR4YMrUZL8g38qlQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OGzba39z+tIbnbz5qoWOIIhhjFZJh22A4Q98RUZ2f6BZP0WdLkWnZFt/FpSj9Vb6jbTMvglJDjxZgd7Gq8AVrFU6Z818GOUQFxWz6s6YBlB2eTjHKE3sE5jBVLZ1UmFpqGmgAPcwzFfZtiqou6qTWS5WDzAiXef0Zl70j8G8vko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1878DA7;
+	Thu,  1 Feb 2024 01:22:35 -0800 (PST)
+Received: from [10.162.42.11] (a077893.blr.arm.com [10.162.42.11])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48A343F738;
+	Thu,  1 Feb 2024 01:21:41 -0800 (PST)
+Message-ID: <30278898-c4b2-4dd6-ba68-a19575f81a65@arm.com>
+Date: Thu, 1 Feb 2024 14:51:39 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 30/35] arm64: mte: ptrace: Handle pages with
+ missing tag storage
+Content-Language: en-US
+To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
+ will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
+ james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ arnd@arndb.de, akpm@linux-foundation.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+ mhiramat@kernel.org, rppt@kernel.org, hughd@google.com
+Cc: pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
+ david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20240125164256.4147-1-alexandru.elisei@arm.com>
+ <20240125164256.4147-31-alexandru.elisei@arm.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20240125164256.4147-31-alexandru.elisei@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello
-
-I am part of a team specializing in integrating websites with oroom.one -=
- a comprehensive tool providing CMS/CRM/Marketing automation and analytic=
-s in one.
-
-Our team can help effectively manage offers on the website, automate mark=
-eting activities, and analyze data - all integrated into one tool.
-
-I would be happy to explain how our integration can expand your online pr=
-esence. Are you interested?
 
 
-Best regards
-Roe Heyer
+On 1/25/24 22:12, Alexandru Elisei wrote:
+> A page can end up mapped in a MTE enabled VMA without the corresponding tag
+> storage block reserved. Tag accesses made by ptrace in this case can lead
+> to the wrong tags being read or memory corruption for the process that is
+> using the tag storage memory as data.
+> 
+> Reserve tag storage by treating ptrace accesses like a fault.
+> 
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> ---
+> 
+> Changes since rfc v2:
+> 
+> * New patch, issue reported by Peter Collingbourne.
+> 
+>  arch/arm64/kernel/mte.c | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+> index faf09da3400a..b1fa02dad4fd 100644
+> --- a/arch/arm64/kernel/mte.c
+> +++ b/arch/arm64/kernel/mte.c
+> @@ -412,10 +412,13 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
+>  	while (len) {
+>  		struct vm_area_struct *vma;
+>  		unsigned long tags, offset;
+> +		unsigned int fault_flags;
+> +		struct page *page;
+> +		vm_fault_t ret;
+>  		void *maddr;
+> -		struct page *page = get_user_page_vma_remote(mm, addr,
+> -							     gup_flags, &vma);
+>  
+> +get_page:
+> +		page = get_user_page_vma_remote(mm, addr, gup_flags, &vma);
+
+But if there is valid page returned here in the first GUP attempt, will there
+still be a subsequent handle_mm_fault() on the same vma and addr ?
+
+>  		if (IS_ERR(page)) {
+>  			err = PTR_ERR(page);
+>  			break;
+> @@ -433,6 +436,25 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
+>  			put_page(page);
+>  			break;
+>  		}
+> +
+> +		if (tag_storage_enabled() && !page_tag_storage_reserved(page)) {
+
+Should not '!page' be checked here as well ?
+
+> +			fault_flags = FAULT_FLAG_DEFAULT | \
+> +				      FAULT_FLAG_USER | \
+> +				      FAULT_FLAG_REMOTE | \
+> +				      FAULT_FLAG_ALLOW_RETRY | \
+> +				      FAULT_FLAG_RETRY_NOWAIT;
+> +			if (write)
+> +				fault_flags |= FAULT_FLAG_WRITE;
+> +
+> +			put_page(page);
+> +			ret = handle_mm_fault(vma, addr, fault_flags, NULL);
+> +			if (ret & VM_FAULT_ERROR) {
+> +				err = -EFAULT;
+> +				break;
+> +			}
+> +			goto get_page;
+> +		}
+> +
+>  		WARN_ON_ONCE(!page_mte_tagged(page));
+>  
+>  		/* limit access to the end of the page */
 
