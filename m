@@ -1,182 +1,172 @@
-Return-Path: <linux-arch+bounces-1962-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1963-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CA0D845255
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 09:06:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1574845276
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 09:12:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8B7A289A4A
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 08:06:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3B771C23551
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Feb 2024 08:12:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7BC159590;
-	Thu,  1 Feb 2024 08:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="FIdgrMal"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D85EA1586FA;
+	Thu,  1 Feb 2024 08:12:31 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0631F158D86
-	for <linux-arch@vger.kernel.org>; Thu,  1 Feb 2024 08:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11031586D3;
+	Thu,  1 Feb 2024 08:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706774767; cv=none; b=K2+8mYUW0SAaR4e557RtNVcBLeZV45tQi9vOtV/dgAs0x+/9JWXetzvWJLClw/3cHReZcdezCBMYo98zsbFQbZfYmz1uPtUDH2twbPPO6BxGxF8ghd43IXF9qHaaDnYPLfn8vbqHPUZYrrzLtzwluwyTv7I9HFwWsWj5wL8Bez8=
+	t=1706775151; cv=none; b=e+tEzq9r2Q9+kbbb16auwBc1G1Dqi2dN4UteYbKU3Lzpz96Q+m6n8uf4ZLYYx5F2ALu+pJy3xPgBvh9cyuqbGeeutUh2jdi7LeX7Tk/UHmSKqJLemsynX4PnMjpLw4kpy6w1ElHOEyc7dF91/A65FYp/w1WIfOlgBQRuZiW+vo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706774767; c=relaxed/simple;
-	bh=fX+LasV85//JB3JqayRg2DaHh21Pzpe/TlzJPEh9Cz8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Hw0DY8XRT+gRbW6bU8HsJVSstGTHm/5Azavtm4+SBJQWR4+OC86OxtrMEOL8mMVPbEQ9zzYkbj4ooU+lNebE/cmq8+/K+LH+o2HFXTFXMhF187WaYNX19Am9Iz1WN4WneNXdLD/7SEgrwYXMe0T1tYCvIgnP846wkLdouQ8sG20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=FIdgrMal; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5cdbc42f5efso171889a12.0
-        for <linux-arch@vger.kernel.org>; Thu, 01 Feb 2024 00:06:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1706774761; x=1707379561; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DTPGAhJtcf1MyPZRa7AekzLPzVB6P7R8lGN8K5e/uaY=;
-        b=FIdgrMalvruH1KXdta8buHKdfstw3XrRDaIWMiR1eZUjXomHIOUpqmWxPkzjTSU2P9
-         KnenHxF6FFkk5ynjYWdnd+eS0wAv/hzM2k6owZhljiaeySltzkyHY+ZcB4Mfe6hqBOWT
-         MVC1bNuCdQyG8ONUGuX21dtPiojidgfWBlCsgP1ImqDTxvVGIw/HRX+Jx00dvEXn6k8s
-         3L/4iXvYREEK6S/tC2YZB0FaEvlsOAP/2O7f48o1r6erGClLz8qSPzcH7XLXPQnP2onn
-         h/QKW4Mwa7JRy+b9DXAdrt5aMwIWvvo7XwVlRoS8Hg9UcsvnpdfGEqxhbngXJGQ7qq+u
-         6LSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706774761; x=1707379561;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DTPGAhJtcf1MyPZRa7AekzLPzVB6P7R8lGN8K5e/uaY=;
-        b=RvG1n9ulrJFOMzTbWNzI9Jl6u+17mBOUAzhLqfM8srX+LOSTG6t3eekz4D6FAPO+e4
-         u3elrQlUesv6N/gwc5a73pfxk6a+KRLuZZpR5iq89XTfweVFreUeWQwtqENGSXEWVkL9
-         F2heMn3f/MIh3UIj+gJRLYn42h79e584gVbY5Q+9Q6/gkkwXhX0zx4WALry0DG9us7a0
-         aqzETK/zEZmdYI5jtV2ZKzuCq8oaBOukufdVMHdEA2vReS9iZAWsr8P4bx0E1XYcEKUD
-         LRoh4sLDYRy9TU/nT1XECzLNEPGyCKZYKS466yWnfe2x1YA/K1WJiqejzP2Z8ryx7eaa
-         OKYQ==
-X-Forwarded-Encrypted: i=0; AJvYcCVFfYB3RTcnYecMak8JIQTVlbCvzKp0J2vo5XatvUcZpQk1/NGrVl4qqfB+Dcl7Mydr8u+mYP2hV6+vrZJbt4ecvHBIUQ6hVdEoEw==
-X-Gm-Message-State: AOJu0Yyldfj1sAV3mQeAikMGuhHeTWqO+ruQZMuhVfBlgF/utWp0k0HX
-	CIP5IqOnpqx9YNpTR2yhSo3iLgOo9rydQozOfUxPOzU6gxd5Z38TUj4ASkLeGSg=
-X-Google-Smtp-Source: AGHT+IEUnUoM51cECvFG4aDXlm1WeTlTFMHPR0fA3iZmMtXBOgbtIn54HRGZi2CYU2BKNTL6psaVlg==
-X-Received: by 2002:a62:cf02:0:b0:6dd:c870:2f7c with SMTP id b2-20020a62cf02000000b006ddc8702f7cmr4177620pfg.2.1706774761225;
-        Thu, 01 Feb 2024 00:06:01 -0800 (PST)
-Received: from C02DW0BEMD6R.bytedance.net ([203.208.167.153])
-        by smtp.gmail.com with ESMTPSA id d14-20020a056a00198e00b006de1da4ca81sm8389738pfl.55.2024.02.01.00.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 00:06:00 -0800 (PST)
-From: Qi Zheng <zhengqi.arch@bytedance.com>
-To: akpm@linux-foundation.org,
-	arnd@arndb.de
-Cc: muchun.song@linux.dev,
-	david@redhat.com,
-	willy@infradead.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 2/2] mm: pgtable: remove unnecessary split ptlock for kernel PMD page
-Date: Thu,  1 Feb 2024 16:05:41 +0800
-Message-Id: <63f0b3d2f9124ae5076963fb5505bd36daba0393.1706774109.git.zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <f023a6687b9f2109401e7522b727aa4708dc05f1.1706774109.git.zhengqi.arch@bytedance.com>
-References: <f023a6687b9f2109401e7522b727aa4708dc05f1.1706774109.git.zhengqi.arch@bytedance.com>
+	s=arc-20240116; t=1706775151; c=relaxed/simple;
+	bh=XWgkDI5LEjWrVN67JCy6YWdGvZ06tRRPL0Okk7aKAww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gcLyjfYzqndazkpj8lafKfk/Dn9ulQQR3dSFd5n1Aev8tbRQ11nstL/5rQGHTW79DbUFW/7G/kAnGsPpZTrCH5LjyfPl0a5lU3KocrkU4XmmCrjCO4O4GBCX3S3zNhSKKU9LVz5jTDTbvoA66x7yQhH4j6g7TB4OWnP3JoSjfew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F301DA7;
+	Thu,  1 Feb 2024 00:13:05 -0800 (PST)
+Received: from [10.162.42.11] (a077893.blr.arm.com [10.162.42.11])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8267D3F738;
+	Thu,  1 Feb 2024 00:12:11 -0800 (PST)
+Message-ID: <599769c3-0aef-4c5b-ac98-f109649862f7@arm.com>
+Date: Thu, 1 Feb 2024 13:42:08 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 31/35] khugepaged: arm64: Don't collapse MTE
+ enabled VMAs
+Content-Language: en-US
+To: Alexandru Elisei <alexandru.elisei@arm.com>, catalin.marinas@arm.com,
+ will@kernel.org, oliver.upton@linux.dev, maz@kernel.org,
+ james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ arnd@arndb.de, akpm@linux-foundation.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+ mhiramat@kernel.org, rppt@kernel.org, hughd@google.com
+Cc: pcc@google.com, steven.price@arm.com, vincenzo.frascino@arm.com,
+ david@redhat.com, eugenis@google.com, kcc@google.com, hyesoo.yu@samsung.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20240125164256.4147-1-alexandru.elisei@arm.com>
+ <20240125164256.4147-32-alexandru.elisei@arm.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20240125164256.4147-32-alexandru.elisei@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-For kernel PMD entry, we use init_mm.page_table_lock to protect it, so
-there is no need to allocate and initialize the split ptlock for kernel
-PMD page.
 
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- include/asm-generic/pgalloc.h | 10 ++++++++--
- include/linux/mm.h            | 21 ++++++++++++++++-----
- 2 files changed, 24 insertions(+), 7 deletions(-)
 
-diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-index 908bd9140ac2..57bd41adf760 100644
---- a/include/asm-generic/pgalloc.h
-+++ b/include/asm-generic/pgalloc.h
-@@ -139,7 +139,10 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long addr)
- 	ptdesc = pagetable_alloc(gfp, 0);
- 	if (!ptdesc)
- 		return NULL;
--	if (!pagetable_pmd_ctor(ptdesc)) {
-+
-+	if (mm == &init_mm) {
-+		__pagetable_pmd_ctor(ptdesc);
-+	} else if (!pagetable_pmd_ctor(ptdesc)) {
- 		pagetable_free(ptdesc);
- 		return NULL;
- 	}
-@@ -153,7 +156,10 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
- 	struct ptdesc *ptdesc = virt_to_ptdesc(pmd);
- 
- 	BUG_ON((unsigned long)pmd & (PAGE_SIZE-1));
--	pagetable_pmd_dtor(ptdesc);
-+	if (mm == &init_mm)
-+		__pagetable_pmd_dtor(ptdesc);
-+	else
-+		pagetable_pmd_dtor(ptdesc);
- 	pagetable_free(ptdesc);
- }
- #endif
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index e37db032764e..68ca71407177 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3048,26 +3048,37 @@ static inline spinlock_t *pmd_lock(struct mm_struct *mm, pmd_t *pmd)
- 	return ptl;
- }
- 
--static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
-+static inline void __pagetable_pmd_ctor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
- 
--	if (!pmd_ptlock_init(ptdesc))
--		return false;
- 	__folio_set_pgtable(folio);
- 	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+}
-+
-+static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
-+{
-+	if (!pmd_ptlock_init(ptdesc))
-+		return false;
-+
-+	__pagetable_pmd_ctor(ptdesc);
- 	return true;
- }
- 
--static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
-+static inline void __pagetable_pmd_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
- 
--	pmd_ptlock_free(ptdesc);
- 	__folio_clear_pgtable(folio);
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
-+static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
-+{
-+	pmd_ptlock_free(ptdesc);
-+	__pagetable_pmd_dtor(ptdesc);
-+}
-+
- /*
-  * No scalability reason to split PUD locks yet, but follow the same pattern
-  * as the PMD locks to make it easier if we decide to.  The VM should not be
--- 
-2.30.2
+On 1/25/24 22:12, Alexandru Elisei wrote:
+> copy_user_highpage() will do memory allocation if there are saved tags for
+> the destination page, and the page is missing tag storage.
+> 
+> After commit a349d72fd9ef ("mm/pgtable: add rcu_read_lock() and
+> rcu_read_unlock()s"), collapse_huge_page() calls
+> __collapse_huge_page_copy() -> .. -> copy_user_highpage() with the RCU lock
+> held, which means that copy_user_highpage() can only allocate memory using
+> GFP_ATOMIC or equivalent.
+> 
+> Get around this by refusing to collapse pages into a transparent huge page
+> if the VMA is MTE-enabled.
 
+Makes sense when copy_user_highpage() will allocate memory for tag storage.
+
+> 
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> ---
+> 
+> Changes since rfc v2:
+> 
+> * New patch. I think an agreement on whether copy*_user_highpage() should be
+> always allowed to sleep, or should not be allowed, would be useful.
+
+This is a good question ! Even after preventing the collapse of MTE VMA here,
+there still might be more paths where a sleeping (i.e memory allocating)
+copy*_user_highpage() becomes problematic ?
+
+> 
+>  arch/arm64/include/asm/pgtable.h    | 3 +++
+>  arch/arm64/kernel/mte_tag_storage.c | 5 +++++
+>  include/linux/khugepaged.h          | 5 +++++
+>  mm/khugepaged.c                     | 4 ++++
+>  4 files changed, 17 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 87ae59436162..d0473538c926 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -1120,6 +1120,9 @@ static inline bool arch_alloc_cma(gfp_t gfp_mask)
+>  	return true;
+>  }
+>  
+> +bool arch_hugepage_vma_revalidate(struct vm_area_struct *vma, unsigned long address);
+> +#define arch_hugepage_vma_revalidate arch_hugepage_vma_revalidate
+> +
+>  #endif /* CONFIG_ARM64_MTE_TAG_STORAGE */
+>  #endif /* CONFIG_ARM64_MTE */
+>  
+> diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_tag_storage.c
+> index ac7b9c9c585c..a99959b70573 100644
+> --- a/arch/arm64/kernel/mte_tag_storage.c
+> +++ b/arch/arm64/kernel/mte_tag_storage.c
+> @@ -636,3 +636,8 @@ void arch_alloc_page(struct page *page, int order, gfp_t gfp)
+>  	if (tag_storage_enabled() && alloc_requires_tag_storage(gfp))
+>  		reserve_tag_storage(page, order, gfp);
+>  }
+> +
+> +bool arch_hugepage_vma_revalidate(struct vm_area_struct *vma, unsigned long address)
+> +{
+> +	return !(vma->vm_flags & VM_MTE);
+> +}
+> diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
+> index f68865e19b0b..461e4322dff2 100644
+> --- a/include/linux/khugepaged.h
+> +++ b/include/linux/khugepaged.h
+> @@ -38,6 +38,11 @@ static inline void khugepaged_exit(struct mm_struct *mm)
+>  	if (test_bit(MMF_VM_HUGEPAGE, &mm->flags))
+>  		__khugepaged_exit(mm);
+>  }
+> +
+> +#ifndef arch_hugepage_vma_revalidate
+> +#define arch_hugepage_vma_revalidate(vma, address) 1
+
+Please replace s/1/true as arch_hugepage_vma_revalidate() returns bool ?
+
+> +#endif
+
+Right, above construct is much better than __HAVE_ARCH_XXXX based one.
+
+> +
+>  #else /* CONFIG_TRANSPARENT_HUGEPAGE */
+>  static inline void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
+>  {
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 2b219acb528e..cb9a9ddb4d86 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -935,6 +935,10 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+>  	 */
+>  	if (expect_anon && (!(*vmap)->anon_vma || !vma_is_anonymous(*vmap)))
+>  		return SCAN_PAGE_ANON;
+> +
+> +	if (!arch_hugepage_vma_revalidate(vma, address))
+> +		return SCAN_VMA_CHECK;
+> +
+>  	return SCAN_SUCCEED;
+>  }
+>  
+
+Otherwise this LGTM.
 
