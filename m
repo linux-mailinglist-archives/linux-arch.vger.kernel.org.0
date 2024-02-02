@@ -1,107 +1,140 @@
-Return-Path: <linux-arch+bounces-1998-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1999-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C68847307
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 16:21:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90678847462
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 17:13:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67144288330
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 15:21:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C828293C96
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 16:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2DC145B2F;
-	Fri,  2 Feb 2024 15:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8073E1487DC;
+	Fri,  2 Feb 2024 16:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSIRIvs+"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fupEQTET";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HnkcbCIS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825B013EFFB;
-	Fri,  2 Feb 2024 15:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E0A1482FC;
+	Fri,  2 Feb 2024 16:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706887276; cv=none; b=kfyGCcq7rnxedOcB/ax/hFbPOXLY1vQm+SM2ZD9MSZxZopaPGnLb3dHfe8hVrgVcEAB7Wni84mlOdf7Y4qvPY9GY9yop9HZb3l0vRtoz8xmk6v/sVRsLqo713lPtMYjkcIii86OEFRFVHp1/clOTv9JxS7Nr/WDcMi/pk+BI+R0=
+	t=1706890264; cv=none; b=iMWhvTROgz7oLx6ojiQj2lrkwdqx7IQ8tW3nd3DU+aOIIzqSB0kuWOHflor7gUSHjU6mMB4N3CCZlsfQQDuGACumMoEhojhwDCZvhmnAMY+ZjU6CQGu1DSqfcj6qHrCLLCGGghV1OqBXZO0uH6TsNkGLIMiKIapaiX8PoKyxqsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706887276; c=relaxed/simple;
-	bh=0yNhjRjjBrPSYkEE75fe6day5rjDcDN1mHZuJt/lews=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aF/sC/HuYG8Kf0BrnUzoTvQxYBxhJknoLeLCLMTbJ5DRKFtPL+GnfnZKLVNj4dHMsGQy67fYEESpq8GlaBdfdKN4hbpJRy+blyywcYtAAFoItQCYKzDm2MnJpkcNe+awxRIRJBvtKQPbls04hOM8NGVmU3zT78gtTejJCrdHQ/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSIRIvs+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06796C43390;
-	Fri,  2 Feb 2024 15:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706887276;
-	bh=0yNhjRjjBrPSYkEE75fe6day5rjDcDN1mHZuJt/lews=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dSIRIvs+4wdA9Qb4/7v7sD8tdZGV0n6oxoLE2/RTUoHkm0iJ6caDBcZzqdH81G1U3
-	 75k/pfM8KEeGqsAWhKgs6j92lHwtLthmfnTSHXtTFcSsdm+uiXseREZsG5iapXYyHJ
-	 YV1gHclPggUr7LSud8Tqr1bPUX+qh0+eBzsdEw7eq+FTtCpP9cowbs8qdmB0FgOoPu
-	 sBdQn8IKCJlTpdUoMF6VRACrFhnkDj5Dv176GRdDCIKwvqje9x+STwpe+BjZM7XCAf
-	 OxQ40t9B8jSARVk4+Vgug21pG4c5ZQkLqm/xMCm2hFQPHL7EdrBI47o5EB+HknWv3l
-	 BoWmZyCRklTKA==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2d070e2ba0bso22860751fa.1;
-        Fri, 02 Feb 2024 07:21:15 -0800 (PST)
-X-Gm-Message-State: AOJu0YyPjV1boNhQNmZAUbJUgd/8l4izNAGrU8MdXYW5TbcqUkLDu5+2
-	bZxAgPX5NVyax9Q+vPQlDJSnDAxaqWNxVaFSA0l/QqNJheEP2T79L2huWw4AO7NnNTmEVDSaTQu
-	QQqPuM1sCzBmIKGsus8X8q8LC9kE=
-X-Google-Smtp-Source: AGHT+IFTD6sDSKot6jHpqFbFtvWhvQ/uN/A1XNsAHhkuL0pWWgFr7u5/XFWoSG++5ez6Sy/OUYUnjK7k4dMycXdIVus=
-X-Received: by 2002:a2e:7405:0:b0:2cd:2771:a2fb with SMTP id
- p5-20020a2e7405000000b002cd2771a2fbmr772203ljc.2.1706887274531; Fri, 02 Feb
- 2024 07:21:14 -0800 (PST)
+	s=arc-20240116; t=1706890264; c=relaxed/simple;
+	bh=kX8+BVQxSYRnGw0819gNuu29AfOA1dT9NVBEToCHPrQ=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=ehLRdQc54/nsUd+Zi4ee6azgmjazyoVUgO1AKxicSoux5TF84pMcQFKR5NspJ1BKWRY4gTRPz33eoLGlv0AWoBnV/XOG4FbR5AieDGCuDaOKqClN4iB3AYL/TYSe2uzcyGN3xXedO5lsc0BTsKkMzDz+j80v0+6n7jQJQwE1mS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fupEQTET; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HnkcbCIS; arc=none smtp.client-ip=64.147.123.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 3FC5E3200B01;
+	Fri,  2 Feb 2024 11:10:56 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 02 Feb 2024 11:10:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1706890255; x=1706976655; bh=2b8pFnyFR4
+	gRpQFE8oYwKJiua/TdZSaJZKmQUS52IdY=; b=fupEQTETV1yFF8O5lK0uJpzGgm
+	WJeEipvRSfQVqK3q9QukriFXCuGrl/A5rFDj3uu2JsvDp5ku2WDg1MO28mFXvRtJ
+	4aGrFl7/muB1E8jWK+dvCmfzqxlUsORpkZlebWTMGimFoN8/K7EG/duu7yFEdhas
+	Ms56THyEbnQYqP9nDBJDdljvMdbxLcDTJVuR+9JfskKYDSNb87Uv8w2aJHP+bJ4i
+	r9OgdBuus4VBE6chImh9cyzTguslBBOiuSNCB2O9ET23C5/Ru9prZxG5KGDS6jZf
+	KBSbtiRKMthNqr5xgXvTudKZK1tnJw8U3vbFEjWPlA6yVbB8z+mvMbpEcp8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1706890255; x=1706976655; bh=2b8pFnyFR4gRpQFE8oYwKJiua/Td
+	ZSaJZKmQUS52IdY=; b=HnkcbCIShL5JS4xUYseORfLa1KOctLg5H1tdMbKPm1xz
+	IEn+/JtJillqyISbvGsqPZ19y5rapjIMMwJe0rI3y5NsBSX2D3sQwfSjqeDKgBgd
+	VBiF8ZcEG4wm783Drz+yWInsvT2TrRFx1G4Ym7Az5txpaJuJWkimG+ibtpTJWoIG
+	sju+zZxqHEr19YTO1lGIu9AjV1/qVeoiwocgH3SMMZZMznXiy8tF4k+pnD0akTf/
+	cZB5MrKdoKh/G2eKRRnKdlJoVEzEw4UAuCJ96Kb6Q/7BLKFx/gWbxbOiIgoe9V6J
+	xTb+hi2UY8iAhM4r9Axr0tymKQY9TmIte2RuflPWQg==
+X-ME-Sender: <xms:DhS9ZT-bfty49ak_TsE6Wgw5qsubM3RpoVgKWaIUMQQWpYCM5FghZw>
+    <xme:DhS9ZfvPbKnCmWhNwoIB46uEQ2m1BuUpOntcmHGosgAhq9AKhrs0DTj1v-7G8ERoS
+    LtpnzzTig0Nx5zqk3g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:DhS9ZRBo9ELzQQwzmG89xWC4GS7JN3HVwgzCOK_Ji1yddMyV8xRAJQ>
+    <xmx:DhS9ZfcaMisjyebEb4-8AO7Np9qKjUbem4QhkhQQHZSFN47bUDNugg>
+    <xmx:DhS9ZYMph7LnpU09I0VicOivZIzGqF0OsFzahIO194r_ytgJxU4LXA>
+    <xmx:DxS9ZXrn71Df2iQYM7II-hjuBT9B-NgKEGBTFjrCcEOvbEeG4-FYJQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 07AF7B6008D; Fri,  2 Feb 2024 11:10:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240129192644.3359978-1-mcgrof@kernel.org> <ZbrFoKUJQ8MIdzXD@bombadil.infradead.org>
- <ZbvdbdxOKZ9FUQuC@bombadil.infradead.org>
-In-Reply-To: <ZbvdbdxOKZ9FUQuC@bombadil.infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 3 Feb 2024 00:20:38 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATjKzUVR7DbJqb=yAinJ1YZo8tzwiXA79E9-VrDn11wwg@mail.gmail.com>
-Message-ID: <CAK7LNATjKzUVR7DbJqb=yAinJ1YZo8tzwiXA79E9-VrDn11wwg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] modules: few of alignment fixes
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: deller@gmx.de, arnd@arndb.de, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <819000e2-e638-4bfe-81d4-cb588f86adaa@app.fastmail.com>
+In-Reply-To: <20240202140550.9886-1-yan.y.zhao@intel.com>
+References: <20240202140550.9886-1-yan.y.zhao@intel.com>
+Date: Fri, 02 Feb 2024 17:10:33 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Yan Zhao" <yan.y.zhao@intel.com>,
+ "Linus Walleij" <linus.walleij@linaro.org>, guoren <guoren@kernel.org>,
+ "Brian Cain" <bcain@quicinc.com>, "Jonas Bonn" <jonas@southpole.se>,
+ "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
+ "Stafford Horne" <shorne@gmail.com>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org,
+ "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>
+Subject: Re: [PATCH] mm: Remove broken pfn_to_virt() on arch csky/hexagon/openrisc
+Content-Type: text/plain
 
-On Fri, Feb 2, 2024 at 3:05=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org>=
- wrote:
+On Fri, Feb 2, 2024, at 15:05, Yan Zhao wrote:
+> Remove the broken pfn_to_virt() on architectures csky/hexagon/openrisc.
 >
-> On Wed, Jan 31, 2024 at 02:11:44PM -0800, Luis Chamberlain wrote:
-> > On Mon, Jan 29, 2024 at 11:26:39AM -0800, Luis Chamberlain wrote:
-> > > Masahiro, if there no issues feel free to take this or I can take the=
-m in
-> > > too via the modules-next tree. Lemme know!
-> >
-> > I've queued this onto modules-testing to get winder testing [0]
+> The pfn_to_virt() on those architectures takes PFN instead of PA as the
+> input to macro __va(), with PAGE_SHIFT applying to the converted VA, which
+> is not right, especially when there's a non-zero offset in __va(). [1]
 >
-> I've moved it to modules-next as I've found no issues.
+> The broken pfn_to_virt() was noticed when checking how page_to_virt() is
+> unfolded on x86. It turns out that the one in linux/mm.h instead of in
+> asm-generic/page.h is compiled for x86. However, page_to_virt() in
+> asm-generic/page.h is found out expanding to pfn_to_virt() with a bug
+> described above. The pfn_to_virt() is found out not right as well on
+> architectures csky/hexagon/openrisc.
 >
->   Luis
+> Since there's no single caller on csky/hexagon/openrisc to pfn_to_virt()
+> and there are functions doing similar things as pfn_to_virt() --
+> - pfn_to_kaddr() in asm/page.h for csky,
+> - page_to_virt() in asm/page.h for hexagon, and
+> - page_to_virt() in linux/mm.h for openrisc,
+> just delete the pfn_to_virt() on those architectures.
+>
+> The pfn_to_virt() in asm-generic/page.h is not touched in this patch as
+> it's referenced by page_to_virt() in that header while the whole header is
+> going to be removed as a whole due to no one including it.
+>
+> Link:https://lore.kernel.org/all/20240131055159.2506-1-yan.y.zhao@intel.com [1]
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
 
+Nice changelog text!
 
-I believe this patch series is wrong.
+Applied it to the asm-generic tree now, thanks,
 
-
-
-I thought we agreed that the alignment must be added to
-individual asm code, not to the linker script.
-
-I am surprised that you came back to this.
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+    Arnd
 
