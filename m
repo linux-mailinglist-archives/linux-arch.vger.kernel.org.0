@@ -1,88 +1,89 @@
-Return-Path: <linux-arch+bounces-1993-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-1992-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04C7884705F
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 13:31:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BA3484705B
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 13:31:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D192B293C4
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 12:31:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E2D91C23DA8
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 12:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12A4145B14;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21953145B13;
 	Fri,  2 Feb 2024 12:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="MZV4wMb8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PFwE9yHU"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="fEI1zv/+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GM6TVMHq"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44E9433B9;
-	Fri,  2 Feb 2024 12:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B657414532C;
+	Fri,  2 Feb 2024 12:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706877044; cv=none; b=pM0zzrUiSv6DEMTaAlZrvAcnaZXVb2+QumKvhky1vTgDqDEt4ADaYounMr+CTv86MuanI6Fo4fYxzWRf90Q5wCmvpsEoPoAWLSpDldRFrYwjM2rNKk4lmYJUJRAnRPdkyzipdYGs+N4NPrASFuBEC4ZuxkkPW3kJeos0QLEjvOQ=
+	t=1706877044; cv=none; b=LDBidOcqXhwFocE7HosHPNWveLNzX2VGkS48U0HphDDgwTau7znFEbpjTmpgV1JQCUYqiNorVxlS6kpJABpwJeJEPvxp+DtW8DnfIGKSDI7dCQ7BgZpYZeQkR1SrBKprGePUUcYreQZrj+/C168rgmxzkIFOJ0aBonLx598OUHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706877044; c=relaxed/simple;
-	bh=pGqKeHOWkrrdSTGrMykY9rjwN9Hvy+fpNB0uLbEruW0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nUBMGfnh5j1n2KsKF6NYmzS17fafNxRuZ/IOQ+EnkGkZ4QesAnsoLHxngqlBs0luhmH2eFbC90ZFV50E4y7KkpQhArTrTNu5cJkqxWOGUCt4Q3WUNkmjC2+qLYT3ktOPmfwBRZSZ6gKK/Ymolm/3C+SXkx0kXdaCQKK2437VhE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=MZV4wMb8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PFwE9yHU; arc=none smtp.client-ip=66.111.4.28
+	bh=jqYI8HbcM9CNa56K9MGaAYkP5szfqvwINyuXO+HntBI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Bep3NYGnGTkljyORjsGCDC5Y2vdpfJKhJRj7uEXwAgIZMIgWIzEYPFXSznwb5E7lhRQm+Yq0j6Nvef+Sj3K+G6N7DJA9o886z/giusQ/ioJsVZBJR3O9zjkSV/sRr/nEVGsFwzn7D+ZOghHZshtJxhzgvN0fzPUuTHnavD4VqB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=fEI1zv/+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GM6TVMHq; arc=none smtp.client-ip=66.111.4.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id B35FB5C0172;
-	Fri,  2 Feb 2024 07:30:34 -0500 (EST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailout.nyi.internal (Postfix) with ESMTP id 8CDF65C0160;
+	Fri,  2 Feb 2024 07:30:36 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 02 Feb 2024 07:30:34 -0500
+  by compute4.internal (MEProxy); Fri, 02 Feb 2024 07:30:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1706877034; x=1706963434; bh=yR
-	uTU6WwnK4ASnLLJJkZtTcbcg4dpQfErooMSebUGYI=; b=MZV4wMb8fDxCIy14Hg
-	XrOXP9hayqNVHIn6LVzBCsDTLZQ4/6P5YWFrjNLcrcDioLZHFItwYbDwS4zY3bKN
-	md4GJ0OYkgqQfiVpL7cnqKCnJY2dj4P4zyg5gje3R3hljYr/+rtFR0eh40ixiDqQ
-	gbQdRVgcANZTa5BLzu0zFvRjLyH9oTl/pi3LtWKmtVyV5laYtETmc1VzQe6JWFFB
-	uCtXjswYTCCS1A+uUOvia0ukE9Oh9lZzW0WlTSpK1IyG5g/8UlyNaSfTBttY3mn1
-	l8CgIf0XxuPmtUNGCnY7dlpNJYnuRnpHlFFPooWX9CdyrsLVdiml81HUqasLJjNr
-	jx9Q==
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1706877036;
+	 x=1706963436; bh=3C5bFwJv9LWEX7uXH9OhbPn6aVzr7qyWAUolJmL7emQ=; b=
+	fEI1zv/+ZvFpkfpFRiLTSbFcBisWuJ2q1jjScOxUaTFUrgkBaxR7Dx3eZf25cfK3
+	CCgcfDN0Mp+DmtIBGMvaBhPgFah6cUtlcaagGHlj97CLyV1V3p/5jw7OtwdFh64a
+	HMQa5y/m/fAdJjMEvV/Q0eZ89mcIVI1Riga2COWISSsrwMoXl1biAun7d9Iem3JM
+	EJsIIbsWbJqGq5yN4S1pDLjjeDsbBOGGag/1fMXqkCs/ScLMbRqeJdXOG6T/rZGC
+	s00KA5riqpXZZ/sqaaNNV9dRJ0lagWb/DXUyBPlGEwCHFFKUDNZtGujoWsr2NybD
+	eYv4M7t3bTg1agwJRceaIQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1706877034; x=1706963434; bh=yRuTU6WwnK4AS
-	nLLJJkZtTcbcg4dpQfErooMSebUGYI=; b=PFwE9yHUFdVOGhRcB+PN/twkCb8qa
-	CT2vTPaqjAqbwxzFY1BRJYUKqk1rQq71oAmHvZzcjRnfoBzbx4jyPrBOkr8c2eSK
-	JEpO5uYcM7w5zI5h7Yg1LpdRIN2F2vKo6dcpKE+jUl2TbvONuRPQlr5Y1axA/oKv
-	/t2m8v7TA4dALlwpja3C8oXyMDImJcFuuyystXr5qEUuk9uXIUN6cYri28GYE9wd
-	fp+k15mOWcqBH11MCgALjCsmC+fnd5CVKwm4V/UiFTovT0mPK4L2OENRp2GEMI0T
-	ZWahw1f+PlH0AQKvlrw0QjGgqBqFQijjynVYEo+K8YX2r/mNKMI3X2iHg==
-X-ME-Sender: <xms:aOC8ZR2THUBA0oAJdPJCYig1GxLTLHdymPi8026KD9piA8dte4Z30g>
-    <xme:aOC8ZYHNdeuSqIwaJtZDhvwJbDQeRNotrbtcT8BxbMAUPsvv6BzTJBjng3b4B9tde
-    l1WSe009lw4mIwicSE>
-X-ME-Received: <xmr:aOC8ZR6-FmBcYPJmYf7-Qu-DnAlQ8wp3MSGJatIhKRgYgAOA4Kmemh1bVcOGnZOCwpaAHVJ1in6G0x0n_53h9DPS0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedggedtucetufdoteggodetrfdotf
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706877036; x=
+	1706963436; bh=3C5bFwJv9LWEX7uXH9OhbPn6aVzr7qyWAUolJmL7emQ=; b=G
+	M6TVMHqdzw6Ad4JtN7ng9dTBDFr/eJ0ih2VN0pFcxFRMqVse9IA4ZgGzwjEuvCz8
+	ZYuIoiL2km7nIa+V2fNKiCBS3hXbwKYKgfKJABkZ3O58hAPcwy3AmQvvJx5xoy6/
+	w6Yew322XWxbcGUF9VqlbmHmtI/kQqZFxP/WHKzEIwgIg1+Luc8NEAHeVxPuGU+E
+	ztCrKwLNLAlHT2j+alLLJ/jtu4feGjNtgYQTtunDXjuJxRD/O1ZNDNPRq2r4o1Jh
+	AZ1h8rdIffPFFY6kjHi7iGxfFTjq2U4DpsBRuyMgjprKJ6be/BB/h/kEbM00rSgp
+	jgGUDqGGjalnzB+Cei1Nw==
+X-ME-Sender: <xms:bOC8Zf7gvJ1zZerDDFjDAdukW7abAaeyZE0VvcvxglB51WbTjgoSdQ>
+    <xme:bOC8ZU4crtGOkNslH5cNYIjWYRM6qSCnlcZdbPe6dUOMLcQ-Rv06_wo9X-eL1xGJl
+    2zHAW_qWYIoU3-eE5c>
+X-ME-Received: <xmr:bOC8ZWd52GekhM7nlHvcqbNa0YowaXRUTTfA9Oi4BgvPZ_Fh2_yCffFwscfQVpKxPd5dKZoLDv7ECCzl4shmN_qjIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedgfeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeugfegvdeuueejkeejteek
-    kedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
-    lhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:aOC8Ze1SCeXfzkiTMkk1GdIrrtNLURJG2McgcnoNHiPZ1mPTrm3oZw>
-    <xmx:aOC8ZUEBORqqQJ5qH4tGuVN0NbAfAHqdPDRSMaM_fCMeg04wGqsHTw>
-    <xmx:aOC8Zf-KOGgTJjmVPVHlquKgKgDo-z6DOf8OM2rHQfXfLYHL3Y6eCQ>
-    <xmx:auC8ZfAIfcoj686uYaS8vQdkIPFDbGn9FtPWovQLe1aSbHoUkA9Xqw>
+    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepvedujefhfffhveekhfffkeetvefgteejkeeutdduieehieeg
+    feejtdelveejtedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:bOC8ZQKnFTbYHhwPBE3OwTXV6OYZ2ZTJZWPXJagNndElpdct2ITGsg>
+    <xmx:bOC8ZTKsX2kBC5OusDQMhfD3PlO4wTy93qo9QJ6-i4rm2L8Bl2feMg>
+    <xmx:bOC8ZZzZb22lNXgg9qApzY6i3Af3-uJ5O9wFTnDoDMZC3VfBW58dvg>
+    <xmx:bOC8ZQpWL5-RKpxUUmBF7763XuSCCExTi1onNIJzbh3DNDfY1OgmYQ>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Feb 2024 07:30:31 -0500 (EST)
+ 2 Feb 2024 07:30:34 -0500 (EST)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 0/3] Handle delay slot for extable lookup
-Date: Fri, 02 Feb 2024 12:30:25 +0000
-Message-Id: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
+Date: Fri, 02 Feb 2024 12:30:26 +0000
+Subject: [PATCH v2 1/3] ptrace: Introduce exception_ip arch hook
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -91,78 +92,97 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGHgvGUC/13MQQqDMBCF4avIrJuSxFRoV71HkTLGUQdaE5Igi
- uTuTe2uy3+Y9+0QKTBFuFU7BFo4sptL6FMFdsJ5JMF9adBSG6lqJWi15FP5erIX6mrIYC+psQh
- l4gMNvB7coy09cUwubIe+qO/1B2n5By1KSIGoG+xqItld7sNrGx2ms3VvaHPOH0aPv4mqAAAA
+Message-Id: <20240202-exception_ip-v2-1-e6894d5ce705@flygoat.com>
+References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
+In-Reply-To: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
 To: Oleg Nesterov <oleg@redhat.com>, 
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
  Andrew Morton <akpm@linux-foundation.org>, 
  Ben Hutchings <ben@decadent.org.uk>
 Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-mips@vger.kernel.org, linux-mm@kvack.org, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Xi Ruoyao <xry111@xry111.site>, 
- Linus Torvalds <torvalds@linux-foundation.org>
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1507;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2422;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=pGqKeHOWkrrdSTGrMykY9rjwN9Hvy+fpNB0uLbEruW0=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhtQ9D9JY1ZN+2RmLFb5hZLfOsy+9bCvKkvriW2thfXnT7
- /uJfxw7SlkYxLgYZMUUWUIElPo2NF5ccP1B1h+YOaxMIEMYuDgFYCJfqhn+cC75k3JAd+3LKVvn
- usV8ZJSyFj+8/pj27Yc2Zsps75JyUxkZmu2L7j6x/vtZ/aOn9yvl/du1WNX/Fa54pckROm/mR7b
- rnAA=
+ bh=jqYI8HbcM9CNa56K9MGaAYkP5szfqvwINyuXO+HntBI=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhtQ9D9L/qG88d2+OlHtP+o78T0s3chUbPZ8Uvzbu8jpWN
+ g75zrbzHaUsDGJcDLJiiiwhAkp9GxovLrj+IOsPzBxWJpAhDFycAjCRVzMYGR6pPn00Z3LOVYMf
+ +pd5H13RYA/4m6B+6ezjTK8Z5rkHPioy/FMONNv9ubG3cWFPxtH1qnK6706VPv38t/CF1H4RHyU
+ PKx4A
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Hi all,
+On architectures with delay slot, architecture level instruction
+pointer (or program counter) in pt_regs may differ from where
+exception was triggered.
 
-This series fixed extable handling for architecture delay slot (MIPS).
+Introduce exception_ip hook to invoke architecture code and determine
+actual instruction pointer to the exception.
 
-Please see previous discussions at [1].
-
-There are some other places in kernel not handling delay slots properly,
-such as uprobe and kgdb, I'll sort them later.
-
-Thanks!
-
-[1]: https://lore.kernel.org/lkml/75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site
-
-To: Oleg Nesterov <oleg@redhat.com>
-
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-
-To: Andrew Morton <akpm@linux-foundation.org>
-To: Ben Hutchings <ben@decadent.org.uk>
-
-Cc:  <linux-arch@vger.kernel.org>
-Cc:  <linux-kernel@vger.kernel.org>
-
-Cc:  <linux-mips@vger.kernel.org>
-
-Cc:  <linux-mm@kvack.org>
-
+Link: https://lore.kernel.org/lkml/00d1b813-c55f-4365-8d81-d70258e10b16@app.fastmail.com/
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-Changes in v2:
-- Reduce diffstat by implemente fallback macro in linux/ptrace.h (linus)
-- Link to v1: https://lore.kernel.org/r/20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com
-
----
-Jiaxun Yang (3):
-      ptrace: Introduce exception_ip arch hook
-      MIPS: Clear Cause.BD in instruction_pointer_set
-      mm/memory: Use exception ip to search exception tables
-
- arch/mips/include/asm/ptrace.h | 3 +++
+ arch/mips/include/asm/ptrace.h | 2 ++
  arch/mips/kernel/ptrace.c      | 7 +++++++
  include/linux/ptrace.h         | 4 ++++
- mm/memory.c                    | 4 ++--
- 4 files changed, 16 insertions(+), 2 deletions(-)
----
-base-commit: 06f658aadff0e483ee4f807b0b46c9e5cba62bfa
-change-id: 20240131-exception_ip-194e4ad0e6ca
+ 3 files changed, 13 insertions(+)
 
-Best regards,
+diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+index daf3cf244ea9..701a233583c2 100644
+--- a/arch/mips/include/asm/ptrace.h
++++ b/arch/mips/include/asm/ptrace.h
+@@ -154,6 +154,8 @@ static inline long regs_return_value(struct pt_regs *regs)
+ }
+ 
+ #define instruction_pointer(regs) ((regs)->cp0_epc)
++extern unsigned long exception_ip(struct pt_regs *regs);
++#define exception_ip(regs) exception_ip(regs)
+ #define profile_pc(regs) instruction_pointer(regs)
+ 
+ extern asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall);
+diff --git a/arch/mips/kernel/ptrace.c b/arch/mips/kernel/ptrace.c
+index d9df543f7e2c..59288c13b581 100644
+--- a/arch/mips/kernel/ptrace.c
++++ b/arch/mips/kernel/ptrace.c
+@@ -31,6 +31,7 @@
+ #include <linux/seccomp.h>
+ #include <linux/ftrace.h>
+ 
++#include <asm/branch.h>
+ #include <asm/byteorder.h>
+ #include <asm/cpu.h>
+ #include <asm/cpu-info.h>
+@@ -48,6 +49,12 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/syscalls.h>
+ 
++unsigned long exception_ip(struct pt_regs *regs)
++{
++	return exception_epc(regs);
++}
++EXPORT_SYMBOL(exception_ip);
++
+ /*
+  * Called by kernel/ptrace.c when detaching..
+  *
+diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+index eaaef3ffec22..90507d4afcd6 100644
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -393,6 +393,10 @@ static inline void user_single_step_report(struct pt_regs *regs)
+ #define current_user_stack_pointer() user_stack_pointer(current_pt_regs())
+ #endif
+ 
++#ifndef exception_ip
++#define exception_ip(x) instruction_pointer(x)
++#endif
++
+ extern int task_current_syscall(struct task_struct *target, struct syscall_info *info);
+ 
+ extern void sigaction_compat_abi(struct k_sigaction *act, struct k_sigaction *oact);
+
 -- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
+2.43.0
 
 
