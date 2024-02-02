@@ -1,185 +1,229 @@
-Return-Path: <linux-arch+bounces-2028-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2029-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C578847B86
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 22:31:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A35F6847C56
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 23:30:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8CC64B2787E
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 21:31:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C83561C21F22
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Feb 2024 22:30:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ACA0839E4;
-	Fri,  2 Feb 2024 21:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79C4126F1D;
+	Fri,  2 Feb 2024 22:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="kJYzCHo6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KsqblSve"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LEshHdlO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472DD7CF3F;
-	Fri,  2 Feb 2024 21:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A76126F1A
+	for <linux-arch@vger.kernel.org>; Fri,  2 Feb 2024 22:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706909490; cv=none; b=s6QGXtodnyuUIO+jZF/rDaMAXN1osLgR2lDfoTqYdav5rxLhLo3FK4G9ILFz73u2wPTLtQGMMI2UsBipG7fTslCO8NHPNn6LLQS6x9671bIRaeCnWrI2k1/JXOrm5kIkEfEF/zNct1j9k1jdDM/akgOI0bYIiFOAoO/yjc4Kwgk=
+	t=1706913015; cv=none; b=Q8jmN9/fmjE7iCkJi//syk/U9aJm4Zacsp5VOEi5Up7FLF++GvHAv4Q/XOiuatHGlgVzYzBD9rSw+W1Uge0fcwsw6I6MiUR+48yR/IvGlzGdoOGZh6/VPrKErT/gXc2yc19Afo2qlGbIfZl/EbbXItlBMmyP9xxz1wy/9V1/ryU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706909490; c=relaxed/simple;
-	bh=GZn2RPQk6SbEn/s/Sbfuic93/awRSAyfMfvV1+Vrw1w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LSoMHAPq/i83gj1bVtANQnVnXHt0wjg2TrcZ8XB2bV1DuA+n2BEV6rp+r0gYMir4Humaqu7WNRuWeUkovwR2IILm558b5dO1qZTOeyGC7WyeAUa/5G/o5fwoUOYV9wpSSXw2FNBIOcDCQQG75IUMH8dhPK6WUNlJwr2p4VZ6MZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=kJYzCHo6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KsqblSve; arc=none smtp.client-ip=64.147.123.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id 3DC403200A48;
-	Fri,  2 Feb 2024 16:31:26 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Fri, 02 Feb 2024 16:31:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1706909485;
-	 x=1706995885; bh=DYDb62ASAO+7468yzkEHNBIMHhgVPwqNfMHXZN7z5uY=; b=
-	kJYzCHo67NJQ+tGmByKa44EmqkmF2dI+rInMf7dUKlALkvfBwObk5SJ8JimFrvA3
-	aryt9i0hqElHcNR9A2RVfqU+H9VYSGbEJgcQyq+gzVSGAtX/x/OwEBXkUHHwSkWP
-	lXeZvBYZUo49eURQ5ZSDTJ81MpE55L/N+fJgYWErxyfMSaKnydVYqzeRk1X9lFYF
-	EXAdQ5l0Qkm4/qVVs6qu1DFGcM2vF6fQxgX8kbbwKbrvoqHg4OQ27V0TqlkR/9/+
-	KXvNSZmfgLpCja0wxebxTh9lQv1USNEiO1xVdSyecr3T24pnp2xxSa7oUMWaST8p
-	v0IzkXIvBCzKQmEdMPuf2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706909485; x=
-	1706995885; bh=DYDb62ASAO+7468yzkEHNBIMHhgVPwqNfMHXZN7z5uY=; b=K
-	sqblSve46eltPJrilQStnN11oNRppN3TF9Taba6gsmyPCf2t3Ojlo8qA8Gy7jVDJ
-	RFNmdhN/Lr70NAL0KZMROL0EGugO0A5h39guVya5JYU2WUDYY1AllwQIPg7i2ek9
-	IuZ9fZJh45t6LEJWhNWMPPlVCXoIl3JTEAEblqpqCDqlZNxDm2RTzUup82rxIsxa
-	xLAXxXTrE7a1SL8GbKQVZPAvG5n843MUrAC7R0CaoE+hD3mQDFjrV+EJBceq2aMO
-	tW6iRHX0nKJT1be3EFEk2xKQnCCIUKVm7EXakV+dH5zxT9vhX4efGoAAGoiFdxlR
-	5Ck6Oe0AyUlUt++C2ulQw==
-X-ME-Sender: <xms:LV-9ZVx48v-V-bwZB-wqFFpqrY6Ny-Mg4RoCswEqwytVJofBZWoTdw>
-    <xme:LV-9ZVQDJtfcF3FJav-8dOT4SX7Cf4k-HIirPYrOU4RKb30LjFlBSutKVqKPjy1-g
-    xB_X4DSy-PlM0rjMQ8>
-X-ME-Received: <xmr:LV-9ZfU6_aIZTRY3uhYQlrci08XJNR_VYarpk-kQz_2-1syiLWgNtoL_xVItA11STS_f_FKRZC_1HN5-UPjrKZAtsiP-H-Mhv9ySPJs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedgudegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeelueffheehgeeluedvlefghfeukeejteeuveeuhffftdfg
-    uefhgefgueekffeftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:LV-9ZXikif2PPF1vsmVBQ84PS5-rwOLZ--KwPBsSWDDEb3wZ8wHd2g>
-    <xmx:LV-9ZXCbQog9GHS81eQOYt3k07P96ecJ_6Z9TnELCXbMBeYTn1y7Mg>
-    <xmx:LV-9ZQJrKcjlsNDaEsPY6qYi4j6QeLlAP9TMOwPMlIdmHcURX2xH4g>
-    <xmx:LV-9Zb3KdCuyAXjjmzigjrPisMcR-k3h27zTUZBKTf6UeeK7UCw1gA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Feb 2024 16:31:23 -0500 (EST)
-Message-ID: <21ed604c-8607-43b7-853a-9bd1623bd918@flygoat.com>
-Date: Fri, 2 Feb 2024 21:31:22 +0000
+	s=arc-20240116; t=1706913015; c=relaxed/simple;
+	bh=OKtyV3UcUMJMPvy1ECKXZVqMjFEDtE8zKK3U8e5aNc4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iRyFinloAktBevtbqEMxJL5d6xeaD0viVJlyolXsPx4ypnnZCEjupgJjgkUls/C2p2LJuydGzKtJ+CVcSRo4+TNcD1QfVETjA1oyN1SbTZhQ9QUur3W5US3EyUZ20cQawk7xts6vccoNJUguId4yQV+GM8jPLnoE/SpRyFTHjvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LEshHdlO; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1d89f0ab02bso13645ad.1
+        for <linux-arch@vger.kernel.org>; Fri, 02 Feb 2024 14:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706913012; x=1707517812; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4gHfXsDd1+NPNrp7/zCgopLQIxA18bpbncOGieuL0yc=;
+        b=LEshHdlOppSpzoGJr8WruYK1DTNCt03hKGKI8sXlRdlXppWl4kSGtqrrZIHPL8AdgZ
+         yPAvHazvbYeP3UW10EuIS7/gfckqo//sFstRHgRNjY5QeZxqdpuBoOgVsFZyBRJfYfvm
+         QObiDtuZG5KFqWvrELcd5o+HSoNo3yPtOsgKz6NmKbd7moG56psGseipQeyHlMtGVVEa
+         ajtwZzlTbO3hkxPC30dn5gvEua/9cmXp2gJLpLSRAnd21tHC4cTCBNvl20ePBFTg90if
+         C3K+uIkPoptT6yZurR6Ezt+52XOd6VF4OGxtz3RacOZxirHfUmF7HjS6m1MvMXR2NUQr
+         bfoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706913012; x=1707517812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4gHfXsDd1+NPNrp7/zCgopLQIxA18bpbncOGieuL0yc=;
+        b=CHMQcaAHUqrQm1xGZZ/5NeJ/2QGzM16Lomsi8g7cgDuIrCTKMZM1goNcORyFncSoa9
+         F0jRnxlz19fWNIMSnx9mzDGHTFalgRtd8UEbCOqlQx0/H6l0ahZ1ow2mZC/Bk4SeHlnG
+         oZR5ePl06AWBLR3BHwt6+pKF0GBYlUZ47H07mtndacABIXMKOz0JRFS6sp9QfUnedosK
+         fzN6k1OMXfhCjiTHcLirkJcnMjA5D8V7g0950KQF9LYqkAS3W5orr3vL4mT+Iz4V8CjT
+         b5OTsXhU6jfo67mqSyKUmMQINghjNYzmsxWh1zP3KmNCqFPUYNJeh+0poK78yfPfrjTn
+         Nscw==
+X-Gm-Message-State: AOJu0Yx4DZjILKbC2+fdAsFI0Ly0qkPhhwPa1uVUci4EoUCkj5Cfl9Cu
+	U5vQghI+7tncwjqTiqvyLa1mkj5VECFsDJgUZhST2BwUJdbn0gDh/FmNO8YXRMSCkqR/tL+s4Qu
+	s4qZ8hcBLjQFCZZsdsTvVhk7GvB/ZQaPw9X6q
+X-Google-Smtp-Source: AGHT+IGYPtzOWKJUHpZOUv3WD2/u8xqCH2po02LT82xgQd99fQsVzRN06AKewo08mu5evakZqsXkrrjcw9wBJU3p9vw=
+X-Received: by 2002:a17:903:2349:b0:1d8:aada:a7e3 with SMTP id
+ c9-20020a170903234900b001d8aadaa7e3mr26544plh.3.1706913011645; Fri, 02 Feb
+ 2024 14:30:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] Handle delay slot for extable lookup
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Oleg Nesterov <oleg@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, Ben Hutchings <ben@decadent.org.uk>,
- linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- Xi Ruoyao <xry111@xry111.site>
-References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
- <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
-Content-Language: en-US
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Autocrypt: addr=jiaxun.yang@flygoat.com;
- keydata= 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
- HVO98ZmbMeg=
-In-Reply-To: <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240125164256.4147-1-alexandru.elisei@arm.com> <20240125164256.4147-23-alexandru.elisei@arm.com>
+In-Reply-To: <20240125164256.4147-23-alexandru.elisei@arm.com>
+From: Evgenii Stepanov <eugenis@google.com>
+Date: Fri, 2 Feb 2024 14:30:00 -0800
+Message-ID: <CAFKCwrhNE5PR7cu7tN8qMmSEUhdJ7ensGGrB-oodh-J_fdoRcw@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 22/35] arm64: mte: Enable tag storage if CMA areas
+ have been activated
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
+	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, 
+	yuzenghui@huawei.com, arnd@arndb.de, akpm@linux-foundation.org, 
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
+	mhiramat@kernel.org, rppt@kernel.org, hughd@google.com, pcc@google.com, 
+	steven.price@arm.com, anshuman.khandual@arm.com, vincenzo.frascino@arm.com, 
+	david@redhat.com, kcc@google.com, hyesoo.yu@samsung.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-在 2024/2/2 18:39, Linus Torvalds 写道:
-> On Fri, 2 Feb 2024 at 04:30, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>        ptrace: Introduce exception_ip arch hook
->>        MIPS: Clear Cause.BD in instruction_pointer_set
->>        mm/memory: Use exception ip to search exception tables
-> Just to clarify: does that second patch fix the problem that
-> __isa_exception_epc() does a __get_user()?
-
-No it only covers an obvious case when I was playing around exception_ip 
-with kgdb.
-There are still potential cases __isa_exception_epc may touch user space.
-
-> Because that mm/memory.c use of "exception_ip()" most definitely
-> cannot take a page fault.
+On Thu, Jan 25, 2024 at 8:44=E2=80=AFAM Alexandru Elisei
+<alexandru.elisei@arm.com> wrote:
 >
-> So if MIPS cannot do that whole exception IP thing without potentially
-> touching user space, I do worry that we might just have to add a
+> Before enabling MTE tag storage management, make sure that the CMA areas
+> have been successfully activated. If a CMA area fails activation, the pag=
+es
+> are kept as reserved. Reserved pages are never used by the page allocator=
+.
 >
->     #ifndef __MIPS__
+> If this happens, the kernel would have to manage tag storage only for som=
+e
+> of the memory, but not for all memory, and that would make the code
+> unreasonably complicated.
 >
-> around this all.
-
-It is possible to perform exception_ip() without touching user space by 
-saving "BadInstr" in pt_regs
-at exception entries. For newer hardware it's as simple as saving an 
-extra CP0 register, on older hardware
-we may have to read it from user space.
-
-+ Thomas (MIPS maintainer), what's your opinion?
-
-Thanks
+> Choose to disable tag storage management altogether if a CMA area fails t=
+o
+> be activated.
 >
-> Possibly somehow limited to just the microMIPS/MIPS16e case in Kconfig instead?
+> Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> ---
 >
->              Linus
+> Changes since v2:
+>
+> * New patch.
+>
+>  arch/arm64/include/asm/mte_tag_storage.h | 12 ++++++
+>  arch/arm64/kernel/mte_tag_storage.c      | 50 ++++++++++++++++++++++++
+>  2 files changed, 62 insertions(+)
+>
+> diff --git a/arch/arm64/include/asm/mte_tag_storage.h b/arch/arm64/includ=
+e/asm/mte_tag_storage.h
+> index 3c2cd29e053e..7b3f6bff8e6f 100644
+> --- a/arch/arm64/include/asm/mte_tag_storage.h
+> +++ b/arch/arm64/include/asm/mte_tag_storage.h
+> @@ -6,8 +6,20 @@
+>  #define __ASM_MTE_TAG_STORAGE_H
+>
+>  #ifdef CONFIG_ARM64_MTE_TAG_STORAGE
+> +
+> +DECLARE_STATIC_KEY_FALSE(tag_storage_enabled_key);
+> +
+> +static inline bool tag_storage_enabled(void)
+> +{
+> +       return static_branch_likely(&tag_storage_enabled_key);
+> +}
+> +
+>  void mte_init_tag_storage(void);
+>  #else
+> +static inline bool tag_storage_enabled(void)
+> +{
+> +       return false;
+> +}
+>  static inline void mte_init_tag_storage(void)
+>  {
+>  }
+> diff --git a/arch/arm64/kernel/mte_tag_storage.c b/arch/arm64/kernel/mte_=
+tag_storage.c
+> index 9a1a8a45171e..d58c68b4a849 100644
+> --- a/arch/arm64/kernel/mte_tag_storage.c
+> +++ b/arch/arm64/kernel/mte_tag_storage.c
+> @@ -19,6 +19,8 @@
+>
+>  #include <asm/mte_tag_storage.h>
+>
+> +__ro_after_init DEFINE_STATIC_KEY_FALSE(tag_storage_enabled_key);
+> +
+>  struct tag_region {
+>         struct range mem_range; /* Memory associated with the tag storage=
+, in PFNs. */
+>         struct range tag_range; /* Tag storage memory, in PFNs. */
+> @@ -314,3 +316,51 @@ void __init mte_init_tag_storage(void)
+>         num_tag_regions =3D 0;
+>         pr_info("MTE tag storage region management disabled");
+>  }
+> +
+> +static int __init mte_enable_tag_storage(void)
+> +{
+> +       struct range *tag_range;
+> +       struct cma *cma;
+> +       int i, ret;
+> +
+> +       if (num_tag_regions =3D=3D 0)
+> +               return 0;
+> +
+> +       for (i =3D 0; i < num_tag_regions; i++) {
+> +               tag_range =3D &tag_regions[i].tag_range;
+> +               cma =3D tag_regions[i].cma;
+> +               /*
+> +                * CMA will keep the pages as reserved when the region fa=
+ils
+> +                * activation.
+> +                */
+> +               if (PageReserved(pfn_to_page(tag_range->start)))
+> +                       goto out_disabled;
+> +       }
+> +
+> +       static_branch_enable(&tag_storage_enabled_key);
+> +       pr_info("MTE tag storage region management enabled");
+> +
+> +       return 0;
+> +
+> +out_disabled:
+> +       for (i =3D 0; i < num_tag_regions; i++) {
+> +               tag_range =3D &tag_regions[i].tag_range;
+> +               cma =3D tag_regions[i].cma;
+> +
+> +               if (PageReserved(pfn_to_page(tag_range->start)))
+> +                       continue;
+> +
+> +               /* Try really hard to reserve the tag storage. */
+> +               ret =3D cma_alloc(cma, range_len(tag_range), 8, true);
+> +               /*
+> +                * Tag storage is still in use for data, memory and/or ta=
+g
+> +                * corruption will ensue.
+> +                */
+> +               WARN_ON_ONCE(ret);
 
--- 
----
-Jiaxun Yang
+cma_alloc returns (page *), so this condition needs to be inverted,
+and the type of `ret` changed.
+Not sure how it slipped through, this is a compile error with clang.
 
+> +       }
+> +       num_tag_regions =3D 0;
+> +       pr_info("MTE tag storage region management disabled");
+> +
+> +       return -EINVAL;
+> +}
+> +arch_initcall(mte_enable_tag_storage);
+> --
+> 2.43.0
+>
 
