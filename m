@@ -1,111 +1,105 @@
-Return-Path: <linux-arch+bounces-2078-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2079-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E3C848D35
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Feb 2024 12:45:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 516E8848D85
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Feb 2024 13:16:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F7181F22380
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Feb 2024 11:45:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 841911C20FA3
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Feb 2024 12:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED452224C2;
-	Sun,  4 Feb 2024 11:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0196922618;
+	Sun,  4 Feb 2024 12:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="gvDqrOcG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPKMz2Ub"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E925F22313
-	for <linux-arch@vger.kernel.org>; Sun,  4 Feb 2024 11:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE472260C;
+	Sun,  4 Feb 2024 12:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707047134; cv=none; b=EzhWHyjkZm4w3llapr3B37P4uvIzZUq3BrV1GIFGQ36X5qjaMbGDNtnM4xRXRMaYe4wueh9swuv79VmHWcVTnjSRXOO919GC1g6/S1gcTyozXl5IySCJSKZQWR1hqqt9x4fCKm0BwnbQEO/DvMhdLPm0r7mglJhw2GxrlwX5hdg=
+	t=1707048933; cv=none; b=uJYh3aBXTjaogIMJHWnzbYSaH0YvrC4BREI499fn2uQKiLRyl5aJfRhMiLrInh1TvnPyc624dfCVNrMtUCCsTZCuylQ1BV/WcMl/hePfcjCmXYm5rNA3MYHKqiBKVp29lrDxM8Dx5WCdD4AyBrLKiuyGgraHve/PQin87iSpbmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707047134; c=relaxed/simple;
-	bh=qgF9mgJuwBON3XPXrWsmUJR+tGrDKBmgIGDGKxUWbwg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a+bOXBYZJ+gwwAA16WV7Jl3YPFEwy7WXfEOUsO743jnc/fWovrQc0wJ6jEz74TuPr69IF2BdfQE9fv6nrJ2LyQfkvMYLRxV3TPzONQYAbmec9xOReG7gL+odrn/2y1iBkVQIGLv3c6aXN+epNnz1/npHkumvzOh07boB7evU9k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=gvDqrOcG; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a370e7e1e02so211354666b.0
-        for <linux-arch@vger.kernel.org>; Sun, 04 Feb 2024 03:45:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1707047131; x=1707651931; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWi8x1miBJ1PGJBMtpIeIYYJwAHPliiF8cHXBoeQK6g=;
-        b=gvDqrOcGI+qfW2Yg1FJSAzMhM5mvboG757dGgBtsDT0Lh5JQWT6oeHO58uMWtg4ow9
-         UQkRjgYXyTq1p6kDCKMASLMum4BM5tHsWDN9JV5ghrKi/5HW/kvbDbuVZtke3CI1rdgd
-         X7aOOM0hEbdRGMjYLjcO7fd2BID/J5GN8L1Yg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707047131; x=1707651931;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VWi8x1miBJ1PGJBMtpIeIYYJwAHPliiF8cHXBoeQK6g=;
-        b=gEy9Mt9q/BRxkNWObCXAf3x5/3NKDEgGbptbf1jAl0O9WjiEPK3rpAB/KMoSczJR2w
-         i1Uq2z6Z5R5jkQbWUaQ+hCdk7CjXj3BMRKghJxIH25UUYGgSsnLx956Njpy3be6vS1wN
-         PnRRAIXgKBqkT+uZT2euW28CSe2zPoI98O3vk3p7dKeibX8izUwy86/Cj4JBx7lW6oCD
-         QwcoDHgXupPvF1JyznMmaURflyhQrcANPj0WqiK5aQp1yTxK7tGtcuvoSVqmjtV/iBHP
-         7lGzYkG9n9T+/MkZTu6/iYjuvJkB3n7EOdh2F8FnHqI3n2ecbgPlVhWDqrVWllRtVd2j
-         d49Q==
-X-Forwarded-Encrypted: i=0; AJvYcCXmuo1JB29wlbjPDnM+gsrt5cdSBQHqk4AezKAsD2VpVIfKxJp0tC3/n144I8FrhzqWtCeJlncEe1RXt/t020kws9Psxc/YVvihaQ==
-X-Gm-Message-State: AOJu0YwdP3FwijuoWCGfU1V62mVYn3wuwxarbIj9ieAs4SPMhjiBG2xQ
-	RW1X5Q1Z1fBcd+0rfRLol3TbGvt3XTjFSHMpDBcmeQ5ElmWe5iKPyflBhDGfNwcMqpoiTLd0jQP
-	0VOg=
-X-Google-Smtp-Source: AGHT+IGfpDfQb0x3CY+SpNkppZfeae1fjI1Ed5eL5Pj20Epq+xTS/OHFR+qHe6IJYwB/hsslNjkK8A==
-X-Received: by 2002:a17:906:1c59:b0:a37:69d4:b392 with SMTP id l25-20020a1709061c5900b00a3769d4b392mr2456663ejg.2.1707047130953;
-        Sun, 04 Feb 2024 03:45:30 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWZqnHZEoCVrGQ0Co24S8KNJUx46iz1kuaCTweBg3HLYp+PORjLigStQQilhmxrAEM2xX3sPbfUXjYFflyYp5uoPG2gxetqgfuCUQ==
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id ll9-20020a170907190900b00a26f1f36708sm3046128ejc.78.2024.02.04.03.45.29
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Feb 2024 03:45:29 -0800 (PST)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-56003c97d98so1852842a12.3
-        for <linux-arch@vger.kernel.org>; Sun, 04 Feb 2024 03:45:29 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUbcVYx2H8MT5cPKa1Q5iWRBYOrdt1E/MuFBOlwh4CsGx3+jzx1mlPNKxHZchgLauMuSxuOcbAgjwHIIi4wwCL5cm+VnBU27r/0lg==
-X-Received: by 2002:aa7:d294:0:b0:55f:8bba:d0ae with SMTP id
- w20-20020aa7d294000000b0055f8bbad0aemr3329700edq.23.1707047129481; Sun, 04
- Feb 2024 03:45:29 -0800 (PST)
+	s=arc-20240116; t=1707048933; c=relaxed/simple;
+	bh=4wQVnyZkqM9ZkKkYrxE4cjx2wJXAt5jGMzRqxojtYTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sA2/cDg/7XjhkZFmFcOQvjZyFwgH1IK7BSGtuemo1Stm8wMSYb6Ilv5UBdALW6ej9zVwcuRQIbijTRrb1hAWAnkMocOI2l/zigLk1El8oLVAkuk2Bs9O9369+LVB6dbFTIMKp/2whyYbfZk1RSLBLjIstFV6P1Ckx5kyRxqlBrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPKMz2Ub; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FD5C433F1;
+	Sun,  4 Feb 2024 12:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707048933;
+	bh=4wQVnyZkqM9ZkKkYrxE4cjx2wJXAt5jGMzRqxojtYTg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TPKMz2Ubcsw3jIma98yrbStdwh3KVrJIe0DpVO2pr10RTT41XeeKHATPQy5TkPeL7
+	 3nsQi9VE87S5ksghMe5LDHP8uqrDNlDaL8iVNHJnvk6qJFvjYhYTsu7oXQi2DSEISI
+	 TrVPWwtW/5VZNJK3UhXv9IVFl78OAP7d04j+D09v4zdskPXpAOtR2bhfrcLlB/5qCt
+	 clbOWmRgNmOTjfZAs7hJCvLYSBSVOq8ldozOcEGDD+hU57W/WZnC61z4B0hKP9xMxf
+	 /OXQQlx7cUPaK0nvR6Vwd8pl9bcKqg2gFhEVmi3L33a5KW6LiVXnxgGtD85d/oeEuA
+	 A7Jz5+A+0jhig==
+Date: Sun, 4 Feb 2024 13:15:24 +0100
+From: Mike Rapoport <rppt@kernel.org>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: akpm@linux-foundation.org, arnd@arndb.de, muchun.song@linux.dev,
+	david@redhat.com, willy@infradead.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm: pgtable: add missing flag and statistics for
+ kernel PTE page
+Message-ID: <Zb9_3K2Kp9d-dtcV@kernel.org>
+References: <f023a6687b9f2109401e7522b727aa4708dc05f1.1706774109.git.zhengqi.arch@bytedance.com>
+ <Zb9t7WtFbZofN5WZ@kernel.org>
+ <3b7e9435-d78e-4430-98d1-f4a839899425@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
- <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
- <eeb92d70-44d6-47f4-a059-66546be5f62a@flygoat.com> <CAHk-=wiUb1oKMHqrxZ6pA7OjNmtgw6giTKWiagUC2kt-ePCakg@mail.gmail.com>
- <716af17c-136b-4852-86ce-a23bafe34fbb@flygoat.com>
-In-Reply-To: <716af17c-136b-4852-86ce-a23bafe34fbb@flygoat.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 4 Feb 2024 11:45:13 +0000
-X-Gmail-Original-Message-ID: <CAHk-=wjvt75XFUWxPQQJZE0Wdi8HtSLtqQm2L-ZrqH7=2g3ByQ@mail.gmail.com>
-Message-ID: <CAHk-=wjvt75XFUWxPQQJZE0Wdi8HtSLtqQm2L-ZrqH7=2g3ByQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Handle delay slot for extable lookup
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ben Hutchings <ben@decadent.org.uk>, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	Xi Ruoyao <xry111@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b7e9435-d78e-4430-98d1-f4a839899425@bytedance.com>
 
-On Sun, 4 Feb 2024 at 11:03, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
-> Well this is the tricky part of my assumption.
-> In `exception_epc()` `__isa_exception_epc()` stuff is only called if we
-> are in delay slot.
-> It is impossible for a invalid instruction_pointer to be considered as
-> "in delay slot" by hardware.
+On Sun, Feb 04, 2024 at 07:39:38PM +0800, Qi Zheng wrote:
+> Hi Mike,
+> 
+> On 2024/2/4 18:58, Mike Rapoport wrote:
+> > On Thu, Feb 01, 2024 at 04:05:40PM +0800, Qi Zheng wrote:
+> > > For kernel PTE page, we do not need to allocate and initialize its split
+> > > ptlock, but as a page table page, it's still necessary to add PG_table
+> > > flag and NR_PAGETABLE statistics for it.
+> > > 
+> > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> > > ---
+> > >   include/asm-generic/pgalloc.h |  7 ++++++-
+> > >   include/linux/mm.h            | 21 ++++++++++++++++-----
+> > >   2 files changed, 22 insertions(+), 6 deletions(-)
+> > 
+> > This should also update the architectures that define
+> > __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL, otherwise NR_PAGETABLE counts will get
+> > wrong.
+> 
+> Yes, this patchset only focuses on the generic implementation. For those
+> architectures that define __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL, some reuse
+> the generic __pte_alloc_one_kernel(), but some have their own customized
+> implementations, which indeed need to be fixed.
+> 
+> I wasn't familiar with those architectures and didn't investigate why
+> they couldn't reuse the generic __pte_alloc_one_kernel(), so I didn't
+> fix them.
 
-Ok, I guess I'm convinced this is all safe. Not great, and not exactly
-giving me the warm fuzzies, but not buggy.
+But with your patch NR_PAGETABLE will underflow e.g. on arm and it'd be a
+regression for no good reason.
 
-         Linus
+> It would be better if there are maintainers corresponding to
+> the architecture who can help fix it. After all, they have a better
+> understanding of the historical background and have a testing
+> environment. ;)
+
+-- 
+Sincerely yours,
+Mike.
 
