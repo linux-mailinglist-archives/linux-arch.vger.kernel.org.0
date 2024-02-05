@@ -1,109 +1,158 @@
-Return-Path: <linux-arch+bounces-2089-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2090-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B8E08497EE
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Feb 2024 11:41:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD5C849A7A
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Feb 2024 13:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB10328591E
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Feb 2024 10:41:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5689FB23316
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Feb 2024 12:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83CB182DD;
-	Mon,  5 Feb 2024 10:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6C32C85A;
+	Mon,  5 Feb 2024 12:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hen6ilYr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiq7v3WH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E778E182D8;
-	Mon,  5 Feb 2024 10:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E072C859;
+	Mon,  5 Feb 2024 12:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707129679; cv=none; b=RLfaEviG9WXhj5XloNPT4jWkFbNvpoFh1J6lZRNWYQcGMZ8jBPxKN5wHnKj1lUo+uh1ckGRqM8HPRQD26oFs7irfyd0qaAf7WxI+c2NDkUaxd2VktO4rNHEcR8/NLEJ+apHre8/1bA4NrZNzZpzm8bOcD0wTJ2kNRfqx5iBYjPk=
+	t=1707136563; cv=none; b=Q039HIxyetQidiyk+auvmGWLw7iWVfJ0n0SnMdVp+yuIDbh7JsgGIbsHGEZVwSPSGQ1kkUgIsg9LTDlywJ/etFfmEtchCvVVKb1VBvzegAubMVUITkPwjupK3bYERsZ2bJF0XYqJrAYsXACVEC86K2I3JFnFzuBzqZv61ibUCoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707129679; c=relaxed/simple;
-	bh=wssURT5v7um6YcanCz/wfG32MiB35I/5gzvQQspAiwQ=;
+	s=arc-20240116; t=1707136563; c=relaxed/simple;
+	bh=W/gM23dRxGIQHhXX9oPXf9/doTEakFPicYrHGjQOU1o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jxndj2iSc/8LUcedVkGmD8G28xt7hHdOusilj4Wja+wUyKJULPwbbX4zhPqgw93aMZRmo1/2i2G09S6+q732Kp4926oFAgu2sZrvyEDexshvqoQa1ybSofISM8IeK4HVK1jxngOY5l8nDNyeA6HYj4WYppEkzYNIIDpM106tPFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hen6ilYr; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 03FCF40E023B;
-	Mon,  5 Feb 2024 10:41:08 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Vy97vtsPc2wl; Mon,  5 Feb 2024 10:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707129666; bh=OmsWebiGN1qyvPWoDA+cPPiX53nBdnIUWelFJrj95ow=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAqc8fxcX4EQ9Hwi0WrQOIw82PJebCvNzno++fG7KNEItPNlKk8E4OUlZAtFuJdM0XUSKmsnod0i/17M9UQX+znq4FbpL2bj1Ud2DLOpSXu23NXdGhp0JkBZe3kZeDR0Yo2dIuiKHGgoqfMBXD3HbQERVQyhtkeFVkaE4PzP+os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiq7v3WH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E9CC433F1;
+	Mon,  5 Feb 2024 12:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707136563;
+	bh=W/gM23dRxGIQHhXX9oPXf9/doTEakFPicYrHGjQOU1o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hen6ilYr/nMmO0Op77bBmLHDxGwIGP5TzW3PENBHg8qXtm7vv4s8QQwIMjbE68Rri
-	 hdGxQa5sv6ikRzOjZb4XFfY1G2Xi2WwhJcTHZwBm+uDvxqgsCowHPu5mzn6BGP8mEU
-	 G5l2B+yOZ6pjxWbKLfznwOxY/AlfPfYsY1sBYcKj5ziczH1Cbn4aEuZQeoy+XbsuDj
-	 78PXe5+OFPJRU8cZrzzKSrEHzV2eBrH03ULU9JOqPJR4o0ISwivZteEcznkvUN+n5U
-	 DtWhv1UMeSEFOCDu6aSHfvsYuFkng1Hmhpx3+sThg7cPFLbsIb9jUZf2Cr2bKjUlTg
-	 W3yk2kakDCCVuFi0G9fDkqEq6Oe+xmnQS9VNchkpbx1UxYsD6cuHDYlVp5OX8+imOw
-	 5aYTzhQ4uI+XOhtREqCqjG5Cd5tmp1CJJ/YRkuz/WAe2nnV+PsnT/jjRW8yzQQihQy
-	 zZRI4A/NR2Y4PTjTPQ5FI7tuHcCj3PnUEchCmjbxw99iNAWYZvPJOPcrHAHzqDF+xT
-	 e1kqH+q6slm7Rc3J4zQwLBXGbgwuJ14Ke+MSWMHP+qkm/2Dts03BN2jKxBqrBtUy6k
-	 bbWNkrSvCLedHDYsa5mN72aXbq0gvM15szPcN1s+XZJUQn6j4G4fZ/uDxsNZvMcYsb
-	 akKY3eE3Ush9ae87yS1mXAh0=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B16B940E00B2;
-	Mon,  5 Feb 2024 10:40:47 +0000 (UTC)
-Date: Mon, 5 Feb 2024 11:40:41 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 04/19] x86/startup_64: Simplify calculation of initial
- page table address
-Message-ID: <20240205104041.GNZcC7KctURKeu_3wf@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-25-ardb+git@google.com>
+	b=kiq7v3WH4BXjlBM5da8GhgVzNWrFmT69sXn2Z3kO+XSByinlTm+nldLGPza1A7/ZM
+	 wYC2Gg9vCokYw5fDYx/qQEg2c+CFP8iw+xofOVbNYvnsXNedFxCGd3ufs6VxoNBeXH
+	 50FKZLbJXyju+0fAQ40QoDCyBn6FtSNDMwDjUf/bYITVShxqCLWvtPS6T5UZsH074b
+	 a0LHJ05ccHIX0vYhq4C9uU5ICN03IOzpsz9v1K8Bnll82Jt9fqjDRwilIiy+Cj6O2j
+	 Bj2o/ErTqvL0oT0WwGQ3pMhdwKYHeSpKoUUHqRyRoHtoufMjdrU1igTNgB3FQOIkyG
+	 /jdgN58UpyTUQ==
+Date: Mon, 5 Feb 2024 12:35:53 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 13/38] KVM: arm64: Manage GCS registers for guests
+Message-ID: <825d2b35-fa10-43ad-b3b3-b29a77f3fed0@sirena.org.uk>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <20240203-arm64-gcs-v8-13-c9fec77673ef@kernel.org>
+ <868r3z6y6v.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="SWF5NMV/X92Kf8zP"
 Content-Disposition: inline
-In-Reply-To: <20240129180502.4069817-25-ardb+git@google.com>
+In-Reply-To: <868r3z6y6v.wl-maz@kernel.org>
+X-Cookie: No solicitors.
 
-On Mon, Jan 29, 2024 at 07:05:07PM +0100, Ard Biesheuvel wrote:
-> This is all very straight-forward, but the current code makes a mess of
-> this.
 
-That's because of a lot of histerical raisins and us not wanting to
-break this. I'm single-stepping through all these changes very carefully
-to make sure nothing breaks.
+--SWF5NMV/X92Kf8zP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thx.
+On Mon, Feb 05, 2024 at 09:46:16AM +0000, Marc Zyngier wrote:
+> On Sat, 03 Feb 2024 12:25:39 +0000,
+> Mark Brown <broonie@kernel.org> wrote:
 
--- 
-Regards/Gruss,
-    Boris.
+> > +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> > @@ -25,6 +25,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+> >  {
+> >  	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
+> >  	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
+> > +	if (has_gcs())
+> > +		ctxt_sys_reg(ctxt, GCSPR_EL0) = read_sysreg_s(SYS_GCSPR_EL0);
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> We have had this discussion in the past. This must be based on the
+> VM's configuration. Guarding the check with the host capability is a
+> valuable optimisation, but that's nowhere near enough. See the series
+> that I have posted on this very subject (you're on Cc), but you are
+> welcome to invent your own mechanism in the meantime.
+
+Right, which postdates the version you're replying to and isn't merged
+yet - the current code was what you were asking for at the time.  I'm
+expecting to update all these feature series to work with that once it
+gets finalised and merged but it's not there yet, I do see I forgot to
+put a note in v9 about that like I did for dpISA - sorry about that, I
+was too focused on the clone3() rework when rebasing onto the new
+kernel.
+
+This particular series isn't going to get merged for a while yet anyway
+due to the time it'll take for userspace testing, I'm expecting your
+series to be in by the time it becomes an issue.
+
+> > +	if (has_gcs()) {
+> > +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSPR_EL1),	SYS_GCSPR);
+> > +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSCR_EL1),	SYS_GCSCR);
+> > +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSCRE0_EL1),
+> > +			       SYS_GCSCRE0_EL1);
+> > +	}
+
+> For the benefit of the unsuspecting reviewers, and in the absence of a
+> public specification (which the XML drop isn't), it would be good to
+> have the commit message explaining the rationale of what gets saved
+> when.
+
+What are you looking for in terms of rationale here?  The KVM house
+style is often very reliant on reader context so it would be good to
+know what considerations you'd like to see explicitly addressed.  These
+registers shouldn't do anything when we aren't running the guest so
+they're not terribly ordering sensitive, the EL2 ones will need a bit
+more consideration in the face of nested virt.
+
+--SWF5NMV/X92Kf8zP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXA1iYACgkQJNaLcl1U
+h9Dczgf8Co+AEsFdqthpdeHca9wZHZrvIV4GyHYFYxQUc2QQcQF8l68f9qpa+7WU
+wwyKL5wu1uARGynhBiI1rGQHAv8lBunf5D4wkD3kJ8X/AtB0wSRFutA2Q35fQDo3
+HcJi94+8UvNTLtAgbLMmiyihG6PxVhpUfwA3SZCuun068j81Zcd1hX4hUlpuSEXr
+hm5Hy73ooZ/T/F5OrYsxxUuEbTRWHYhPq+CXEhWhtyTK9wRAzDes+UK6rXdjfOmj
+iFWAR4jYhFukgcENJvGgwKKvS1YUFxMABGAPJmIfjjX/3eVNriZDeh5DFHyrrp+R
+LPixjIxkXqN9p1+ZfpiReAfH4T+wRQ==
+=7b9C
+-----END PGP SIGNATURE-----
+
+--SWF5NMV/X92Kf8zP--
 
