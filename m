@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-2100-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2101-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE78D84BA7C
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Feb 2024 17:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5994784BAAC
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Feb 2024 17:13:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A485B290717
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Feb 2024 16:01:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E27283993
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Feb 2024 16:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4241339AB;
-	Tue,  6 Feb 2024 16:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40DCD134CC6;
+	Tue,  6 Feb 2024 16:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PV0B3eTO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlUHOAEn"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C414134CE4;
-	Tue,  6 Feb 2024 16:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E8E12D150;
+	Tue,  6 Feb 2024 16:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707235293; cv=none; b=ckmQvChR15+fdLewK1QxLdz1hQEbjxBXaHrPn+1NLFbncAp0Be0oUxOxqvTiuzBhDZMVw88rREtuxk5BMF65NfBYrxMQh+3gibFE6o0Ff6nREbP+ahkZR5giFH4Rm/OUA+i4tKdm1+aL7X1CbBTWuhsP0rezI9LESdhoLdvKAL4=
+	t=1707236023; cv=none; b=WgvtXJpotpWqbYafgSqkApBtXap+Ipeyai0cS4AYAI9cp/A8LTjjCr1+NlrhibPcave/sPRlJYCcwWa0F4R4HNTA7crCGkv07e2uy+sTBzZgr+p78FgCt9b9L+aWfdFXmg1VfvC3hbnA3eigU23lIdl+Wxmn0ho2a9wqycLCGA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707235293; c=relaxed/simple;
-	bh=aRQxl0C0V0705HuiquTkhHHqPboA18NaqgotYv9rCA8=;
+	s=arc-20240116; t=1707236023; c=relaxed/simple;
+	bh=c1sZ3YqjwLgIe/oUDK6sgpcyFQmmz43JxRT/kHAfLYc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h2mEI0WOsEOiPXPLgognY8Zh6RFkqDX+qNFVO+7CLVQ03VCs+rs2Ua3ll4yHAFFyOXsykoY3AVnsZvc+IfcmJ8MBV85E2sMqchT13eS+84NGZ5HJ6RWNnCGMjzoblEmyGCiUfKZifi63Kf3C7swE/LBFIgtBZsfQx9p83BqxR5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PV0B3eTO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E2BAC433F1;
-	Tue,  6 Feb 2024 16:01:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lk7XLtSLzyZjmFmXWIZ+7OguW3hjWarezo6Ls1CNi+4C2lCS89fyoeAVRNA4FmbB4i4a02tvYY/YzNkYlzb7coEiFMmmthvZWdGsQWNSp+xpwDGc47BJ3ZRcgWbe41EtFK0Eo7sy24aRKTYKLJgJyEPLD6FFxsKGaVdBIoXPgew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlUHOAEn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 040C0C433C7;
+	Tue,  6 Feb 2024 16:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707235291;
-	bh=aRQxl0C0V0705HuiquTkhHHqPboA18NaqgotYv9rCA8=;
+	s=k20201202; t=1707236022;
+	bh=c1sZ3YqjwLgIe/oUDK6sgpcyFQmmz43JxRT/kHAfLYc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PV0B3eTOaNjzcvWs65Me6RDLhFj8YGByJ83V31ytWUnS8qhWSmRMRl0l5zr6Ky/HI
-	 V8VB3bU4h1IvUqAnjW+GixZAPSitutZKlnNNQsb3zhPpetctNotMxhcs+16kpERvcI
-	 QJlKVt1MUAwmmTLtRKPv+7kMaAaYKnrgHOiLqelYjBoBJh2c90qyMuKpsBQaLV4ixc
-	 x4u/dAvjHm8aNECN3GpgyoQDyFjLJi59680J1T/oC03fzuisXQvW2y2jFqQGwm715y
-	 2X7DJSP2x6Oz8DlvjQGm4xWPmxiPaAXHidpqbvV2Qg4SWxurgjdXViSVHc8zyfhu2V
-	 +S947qR7PCFqA==
-Date: Tue, 6 Feb 2024 16:01:28 +0000
+	b=jlUHOAEnInU30oik5DPIGz6JgFHROuPeLJgpWMoanTiX/F9nJO8S6FQIWlQdpV0Jl
+	 +EDIKyTlUw2s35GBSvpYxBobPHMvDS0SlVxFSuBwIkCBsugAp3Y1sJefh6tdx+iDj+
+	 tieTWeVky5DPpTbCSVwM50ryLecIJm9jwCPPqQaursXXSEY7yGrP4HcFTkWBJtU3T3
+	 jW3naVUxR/lmiDVmyIxj7vLdUmdr0LLkzV0Z2/kZzNvqJ3+fm8i67rUkr8dMc9363H
+	 b6yV6+Swl4GpQUrVE1WOXEv91PrYQ6HbM4uAM0BNakq8Y//7aYn93KhFdff3kU5zjE
+	 vPE2F67S+zRnQ==
+Date: Tue, 6 Feb 2024 16:13:39 +0000
 From: Mark Brown <broonie@kernel.org>
 To: debug@rivosinc.com
 Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
@@ -70,11 +70,11 @@ Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
 	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org, linux-arch@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 15/28] riscv/mm: Implement map_shadow_stack()
- syscall
-Message-ID: <ZcJX2IJb0hOM5RF5@finisterre.sirena.org.uk>
+Subject: Re: [RFC PATCH v1 18/28] prctl: arch-agnostic prtcl for indirect
+ branch tracking
+Message-ID: <ZcJas4tZNzOJv6hW@finisterre.sirena.org.uk>
 References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-16-debug@rivosinc.com>
+ <20240125062739.1339782-19-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,60 +82,49 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3ywwgCSX0zhXuCNZ"
+	protocol="application/pgp-signature"; boundary="IzS+gDfE7WAJn9u1"
 Content-Disposition: inline
-In-Reply-To: <20240125062739.1339782-16-debug@rivosinc.com>
+In-Reply-To: <20240125062739.1339782-19-debug@rivosinc.com>
 X-Cookie: You might have mail.
 
 
---3ywwgCSX0zhXuCNZ
+--IzS+gDfE7WAJn9u1
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 10:21:40PM -0800, debug@rivosinc.com wrote:
+On Wed, Jan 24, 2024 at 10:21:43PM -0800, debug@rivosinc.com wrote:
 
-> As discussed extensively in the changelog for the addition of this
-> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
-> existing mmap() and madvise() syscalls do not map entirely well onto the
-> security requirements for guarded control stacks since they lead to
-> windows where memory is allocated but not yet protected or stacks which
-> are not properly and safely initialised. Instead a new syscall
-> map_shadow_stack() has been defined which allocates and initialises a
-> shadow stack page.
+> To allow userspace to enable this feature for itself, following prtcls are
+> defined:
+>  - PR_GET_INDIR_BR_LP_STATUS: Gets current configured status for indirect branch
+>    tracking.
+>  - PR_SET_INDIR_BR_LP_STATUS: Sets a configuration for indirect branch tracking
+>    Following status options are allowed
+>            - PR_INDIR_BR_LP_ENABLE: Enables indirect branch tracking on user
+>              thread.
+>            - PR_INDIR_BR_LP_DISABLE; Disables indirect branch tracking on user
+>              thread.
+>  - PR_LOCK_INDIR_BR_LP_STATUS: Locks configured status for indirect branch
+>    tracking for user thread.
 
-While I agree that this is very well written you probably want to update
-the references to guarded control stacks to whatever the RISC-V term is :P
+FWIW the arm64 BTI feature is enabled per page of executable memory
+rather than in CPU state so it'd be hard for us to adopt this interface.
+I don't think that's a blocker, just noting it.
 
-> --- a/include/uapi/asm-generic/mman.h
-> +++ b/include/uapi/asm-generic/mman.h
-> @@ -19,4 +19,5 @@
->  #define MCL_FUTURE	2		/* lock all future mappings */
->  #define MCL_ONFAULT	4		/* lock all pages that are faulted in */
-> =20
-> +#define SHADOW_STACK_SET_TOKEN (1ULL << 0)     /* Set up a restore token=
- in the shadow stack */
->  #endif /* __ASM_GENERIC_MMAN_H */
-
-For arm64 I also added a SHADOW_STACK_SET_MARKER for adding a top of
-stack marker, did you have any thoughts on that for RISC-V?  I think x86
-were considering adding it too, it'd be good if we could get things
-consistent.
-
---3ywwgCSX0zhXuCNZ
+--IzS+gDfE7WAJn9u1
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCV9cACgkQJNaLcl1U
-h9DovAf+LgWdOKedTbffoEJgm3iDVrzzlW/jko7UF4Sjg6Gv0ngCJGWQIzvYEk/w
-B/3v/8xatJ9n+VbKX606intt/LsnRYDNTB3OVDKogBCeRo6NPl26QjEqt8lQQtSa
-po1FZcEIfdjmxWOCphm0MYLR97sxtDs+07Y6SOdoEFyowqDP9y7VIHR4juOy0RyJ
-tpKpA1fORTVxP50RQT+V9GZ9zuV6FL2C5ULfahB+o6W6r/wmVlSWdsFkwdnayCKv
-9DqlaPDQoklRZRy6bgUPTHyc1b6suEgg2G6Om/Pzd7Z3snoiyeDBoqMgMWOhAa1r
-XYbr9H4oCPUEs0ONOGZmAcXzGu7kIQ==
-=mDMz
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCWrIACgkQJNaLcl1U
+h9CqHAf/YTvIwiIOAvwQ9XqrETCEC8PE7wl9yNsGNfr06ERBrjw436apeNtLMOPF
+3FujoE4HG2IAw0iXzAKOJAQhYyLVhioOqMhsFNIxGaCCaUFExzRAABZmkiZtVeQh
+GrmhU/kVDYaa/3z+egy9d4BDidA778b7Opw6GFgrwId1wg3Wl0zQG89h0VMFJMKw
+/8mvyHmbjdv+5ucF8fYE30+QXu6fAniENvRjHum6N8ReGyEZ9vf2pHlmGCVtzLUz
+nVsbKvjwR71Zlq2RHRmjrf6WsNCBkp/xx/1SwwTof4Y6tHkfEhBAVjQGLqwhi7w5
+d2s9KQp3hvWSCNUxDEapZF+m1vGRLQ==
+=UNVO
 -----END PGP SIGNATURE-----
 
---3ywwgCSX0zhXuCNZ--
+--IzS+gDfE7WAJn9u1--
 
