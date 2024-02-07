@@ -1,107 +1,79 @@
-Return-Path: <linux-arch+bounces-2113-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2114-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40A3C84CD3F
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Feb 2024 15:51:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5363E84D0EB
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Feb 2024 19:14:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F00E828B5CB
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Feb 2024 14:51:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07F111F285DA
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Feb 2024 18:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA1277E58E;
-	Wed,  7 Feb 2024 14:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5211712B175;
+	Wed,  7 Feb 2024 18:08:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="H39KQxHa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pDADnC07"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8137762B;
-	Wed,  7 Feb 2024 14:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2621012B15D;
+	Wed,  7 Feb 2024 18:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707317484; cv=none; b=uLx+MIy52Fnr1rhQJfpNwsmXPB5zdHCGTjayalXNk4RXZ5b96MRgLXtIxcV8FIB1ZVMPOBxbj1dEEWGGa9/9YCDwSY7SOB58Z/elGCo8hbGbvgbS/qY+aD6dQ3soiCuagzow/2pUIxceHWp7vyAttrmisQOlfAUHZ0iHKUJ1N54=
+	t=1707329331; cv=none; b=mLnazkxXPYiCG/MjjVkq6pLiO1nQlfhVOmYWa0dRfSdR7xr2zMyGaGN8CgV52VvpVGJF0ZLXj+j8Ci9sHz+35oTMd4XNjRlz4nAh+Ag9KzgbLiZKZ6Ib+JMpHMekpqZSluobEJ0OFwQGKNP7H0bVo9P39dCUinlRiHR1E5nTWzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707317484; c=relaxed/simple;
-	bh=OOAbHlyRd6MHrlmkd/eS+sHShxOzcKIxp2jLwSfF0uI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IUoGSfFEbqxTbtQ63vs7mvcHDVeiZwnko0A5/tDQRrBnBDUjE1jopR1ybjfh4gGLkhk1iORWfZRgLNhKQnZ9DPvGfcSq0eG1m42aikO2bQOThS6htjeu7MiyRvhOCMVPc8Tt75lvOdtc1w52dDIC6/rdybRGvseirQG1BgvueQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=H39KQxHa; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6CE7740E0192;
-	Wed,  7 Feb 2024 14:51:19 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 1zpc7Z4YBbwU; Wed,  7 Feb 2024 14:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707317477; bh=fX2I7dCXTcSn6Im5QL1hau5DXO0GnphgpIzn3tO3/5k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H39KQxHaDOeU+IPzVVl2coXNiV/RFBMlJ+rauVCMVyCxKfBrgE31Km/KpaSjaIwya
-	 21cu7wgUem8ZVTlivTa3+1nMfd+iggQjLzn08CDSyjzgafPaJhS2cTOJfaQezLO6Ys
-	 mpMCwUcT46xixuVTLwXLRU1s2qayhSasN39PRt5m8i1Fq3B6e08wCwoIFInSjqaFip
-	 +0scplbRZF34+iFWewB1Ui2ogPRuX+h8FlEImZsaL9R/rbsoLjC5iLmkckDxVRU8NK
-	 KGfKNOLXT2cS5HD08xakmKwvVg6SgRXkDGPuN3QXSnyJWWWGjIqZLedzjfWeoJHTE0
-	 TGvUXq6T3f4OEox1rOTd49a28CXH6iamAkPq4Pi7Is69fhU8E9IXA1JKRJ/X6Nqf5d
-	 N67fR0LPmk5Qfwu6TqO1Mb7Z140H4EJkO4CLP8fyQuaq4gy0hIWIzDEfGYT94lqvN4
-	 5wS5QjFl/OsjsqL4dYw/nzknxlqs95AkXGf82b8tlZpnHacDAYTkydQVnQBPbRj1xy
-	 75rfxlKLCE4qX5kImyxNAcykgTTyFI0jm1mYRlJkJsdEpIumOf9pPfmZ+3RUZVdClN
-	 uUDdTdnBqfl7CAot1EsBvxm4ixRYVS7Is+iEXSxqR3VGeLvLk8sWbDPJpLgdeZ6Neb
-	 lRwzsXz/oq93H7GJEm2EcshU=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2449240E00B2;
-	Wed,  7 Feb 2024 14:50:59 +0000 (UTC)
-Date: Wed, 7 Feb 2024 15:50:53 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 07/19] x86/startup_64: Simplify virtual switch on
- primary boot
-Message-ID: <20240207145053.GTZcOYze6ZBizogwf5@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-28-ardb+git@google.com>
+	s=arc-20240116; t=1707329331; c=relaxed/simple;
+	bh=YVGw57OtAK5zBdIGrEi7tz/VsEgsPoy2IrSnNQ2b0aI=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=uwgdVk6KMw/QR8To5uG8fg0+ejNGi+iZZ9Hxa/ixm6IkHz1NGYUfg4V+KyrF+eAdUD25amVQ6uHDUXwwhpp0DLH5C6zrJ+m+G5xGTvg0I5g3Gl7Yrqm4QB+x5q/+x0OjTGzfgFWTzkERza2CAOnCZy4vJYP229TtvLCBk/eR3yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pDADnC07; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A053C433F1;
+	Wed,  7 Feb 2024 18:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707329330;
+	bh=YVGw57OtAK5zBdIGrEi7tz/VsEgsPoy2IrSnNQ2b0aI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=pDADnC07xA8I6szpY3WSwXLnAYhtam9rUJRgcRLHFxcBrLtMfa9v3h7r+2Ea8fR9x
+	 Yijzo9/lrUToctR9gIdOM/AMtDQzN1Yl2MBGw7VuacoO6jm1povJnUUbsA51w+mUKj
+	 5DSD5wHRqGccWGoFnRyzyVtcRJ5+16jNKKs909lLFMTxxhOMdkC+2qw1bdsTUQ1kxg
+	 NVsnmxMtK84V3syc3Rv0fAFqO80NjsG4zwETxTvoXrQNxHXuKdPm7jWIxzN98Jzhgh
+	 TysJdK3DyQj7Rn2yKDDNjhVF5jDLdUR3sRtgBcolivu/CnYcV9TzS+Nf/e/zq08Tkp
+	 FdTBzNLj4IgDQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 737C7E2F2F1;
+	Wed,  7 Feb 2024 18:08:50 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v6.8-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240207121436.3845425-1-chenhuacai@loongson.cn>
+References: <20240207121436.3845425-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240207121436.3845425-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.8-2
+X-PR-Tracked-Commit-Id: cca5efe77a6a2d02b3da4960f799fa233e460ab1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 547ab8fc4cb04a1a6b34377dd8fad34cd2c8a8e3
+Message-Id: <170732933046.14404.13301953236605274396.pr-tracker-bot@kernel.org>
+Date: Wed, 07 Feb 2024 18:08:50 +0000
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240129180502.4069817-28-ardb+git@google.com>
 
-On Mon, Jan 29, 2024 at 07:05:10PM +0100, Ard Biesheuvel wrote:
-> +SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
-> +	UNWIND_HINT_END_OF_STACK
-> +	ANNOTATE_NOENDBR // above
-			^^^^^^^^^^
+The pull request you sent on Wed,  7 Feb 2024 20:14:36 +0800:
 
-leftover comment.
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.8-2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/547ab8fc4cb04a1a6b34377dd8fad34cd2c8a8e3
+
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
