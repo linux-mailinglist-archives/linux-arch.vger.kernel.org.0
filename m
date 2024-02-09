@@ -1,112 +1,132 @@
-Return-Path: <linux-arch+bounces-2155-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2156-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67E4384F52B
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Feb 2024 13:30:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAC1184F636
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Feb 2024 14:55:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68A5F1C21023
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Feb 2024 12:30:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CC6B1F23D8A
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Feb 2024 13:55:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C08336B1C;
-	Fri,  9 Feb 2024 12:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1054D107;
+	Fri,  9 Feb 2024 13:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MIwZgUUZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ps+CwaIk"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7435C1E503;
-	Fri,  9 Feb 2024 12:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44F0286AF;
+	Fri,  9 Feb 2024 13:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707481844; cv=none; b=ZsOUFhzWF5QLVpdrTEfdOObaCYlyJWVL/F1Gdp5jVtBqjJ2PSYrDXQBZ4h/kju/s3pgHW5j5xenYUoZhi3DVJNDTcDoMgXRsWXkYnzBMLfmilDoZrtv0Dck3OmpRpx0NXNU50PrAaWXdaHobRjqfwrb/X40AsGraYzm2TYaagGk=
+	t=1707486916; cv=none; b=fDKHH8QVgYILUYgkp/VYRCT1eJ7RGi/Cfyvc5j1qDT+eDVmIiaOaiJHUgx1M435iRXfUeI+/hzutKjbN5GMRZu7V2WYEbG6DuszQqT8lWNQxgNcpiT3xZXISuSVX6tloAUYdXQUQvgZd19OqGb60/SNxDbWt2jfTNwqxcZvFBgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707481844; c=relaxed/simple;
-	bh=uv5tY3bK883yOLeFdrV05/wqX5qFWeLR+48lvLQm/dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lGcApFgu2vcgXATn9nEl+7aSU7j8ANdWIIULHV5HNB8e+eNiwGl7uwWQQcO5MfXrzFxt+guPHzEVfVYGRgxHd5wI8WBnSHFGZA8tEAkIKr/THkNwo72if8BiovGozBg9M6WQzofuh6E5BpD6Cq8IHOHOjOk9f/MJ2+B3Nnj/tMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MIwZgUUZ; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51168572090so1532277e87.0;
-        Fri, 09 Feb 2024 04:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707481840; x=1708086640; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kj53K0srSTgaE2lo+BGlpZ9XqSxQFcHLvaITEUOH728=;
-        b=MIwZgUUZawE3B8ttVCg2ssn8Dj9fS9r1E4drUZ/T/P/cHJcEeTIza8cwU3nC8eV90Z
-         SFKyK6uF1vGT1GPiD+/RCeF+p8lQapp5X/MV0kKJmcAnpnKdAPEhmci/Aq24n9OOxm26
-         cqapuyj+EsOBEFAuni0EmRE8quN94z1E8+czQkykybvI1XRzUukRTMIQVrxoQ6EOvtzH
-         zL2PHcOiE0uNmVT+y4RPTW52jywxDh19iHzVrcQltnMOFx80LVjpS5Eic02pkAGV71XP
-         7rx4BNlQCz6+xUjtHmXn/3RcAQVUPFUTGsukfrTYrgH/BDzyBBXhtMSJZR9Ko2wriRx8
-         Aduw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707481840; x=1708086640;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kj53K0srSTgaE2lo+BGlpZ9XqSxQFcHLvaITEUOH728=;
-        b=IE6LeCMFP5YkO45QO5nYFeC5I6nSD3ldsRJVi11apot884UDzreIMyBITrhFt7Nzd4
-         aP1pAO0S1v8/CfT9TAhmtB4YOQWVoKpgMA8/NoRoc2cIE3cjEp15MUjQM6ivyGXfjFwW
-         E2Z6WWs5Cl5KqONrak3fEiV9Ry4DenEpK8H8aGT4Dy+aOZDfqL6ZSTfMOb0bc8pbcMzR
-         O+NgU9Ehlk8tih5JcNEhNF6zXY8OmT/I3YpVd9KWRmnVhVVC6e9OGolAzCyXwV5R3ojP
-         zhRSFnywb8uENezYyl4lY6ONuwWh1KpxoQxLoYnuS7ejHX3pA5UpLCGpd8t3hQapnvXB
-         n0PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgHaD6r4C+0l3NvFSsW3YiLb6wLTQJ6yuFuXhojcQ5wKX+GITfWbRBMICtG/Adg4iREICDoN3IwWB74Y1Pit1+I8ArZxOz+c1L4CT7wWV110h5DCcAEM7CIlhhPzFJGhVXhN5Hhue3E287LxUKm2OtDH/xTOixRwlORgbv65u9wqc66Q==
-X-Gm-Message-State: AOJu0YyZDaFvEjDSz4VcuY08GEFgcxPIlsJGA17rFFPBIsFLF8M65A7T
-	XMlZDyUkeS9u+XrkQyNJMqtOtxNIDkKkGUcX3IvalTBHAL8jMHA=
-X-Google-Smtp-Source: AGHT+IE0JGLdElzMLusS908kDQz2q4c097RomGl8DCTI3zHrLOkKj8VzGPXp8eEsk9o5kuAHNwATqA==
-X-Received: by 2002:ac2:484a:0:b0:511:722a:31b8 with SMTP id 10-20020ac2484a000000b00511722a31b8mr970340lfy.1.1707481840235;
-        Fri, 09 Feb 2024 04:30:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUC7aVbUgyYUFqe4BOWij8oOhFJX8hexIUGnct5ga5313HbMHAvP3Cs92Baul/FbBOgNDFd2NvFoKTtR6kkGhB+NrAu1MY1ipTYcNGm3U7NDBy+x9aQ0VYAoE+LsXZ8YE/rNriusgogeB9hnUidNP/6qIR4GfvBhcZkwKg/HAZnbBc5gU20dlUA1Gngf1WK1JwPFmy+UnWl3UO/cP0kj6NQBvzXxovEj1pM4e/D0QBot0IIx3lYapYAb7WuzkJ3aKGysPbnZjWGn3mCcMOa6MVPbzigA+sZLWLytRz8pq0gvM3me69ChBMNIJGNpUthAhozSaglc/m580qhYqAVTWUkq6PbgxtOKPCyUNJWAZejFgPrnkBnGkgjsqj9V8+TI1r3Lgw=
-Received: from p183 ([46.53.249.38])
-        by smtp.gmail.com with ESMTPSA id 10-20020a05600c230a00b0040fdf204fe7sm488009wmo.38.2024.02.09.04.30.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 04:30:39 -0800 (PST)
-Date: Fri, 9 Feb 2024 15:30:37 +0300
-From: Alexey Dobriyan <adobriyan@gmail.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org, Eric Biederman <ebiederm@xmission.com>,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v4] ELF: AT_PAGE_SHIFT_MASK -- supply userspace with
- available page shifts
-Message-ID: <acd02481-ca2e-412a-8c6b-d9dff1345139@p183>
-References: <ecb049aa-bcac-45c7-bbb1-4612d094935a@p183>
- <202402050445.0331B94A73@keescook>
+	s=arc-20240116; t=1707486916; c=relaxed/simple;
+	bh=N3GCSyWzae8ipltTZtYlaSxhj9Xw2wBHa2FcwP8g7/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N4rmUOmEf5dnFvvDbVjU+xt0SAx/FUpsCFMdoAOXqPFMzIaKgU3XAT+0Y5zJrd3s38oFWzep9kxgFppacNOf3F57uzUN6N5MGLZJrESnxd8eP3+2noHittVbiMsDAJ6ERs14EvbX6qjoAFom750H09XzDrxa7Bga1Txkp6nM6u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ps+CwaIk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB33C433F1;
+	Fri,  9 Feb 2024 13:55:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707486916;
+	bh=N3GCSyWzae8ipltTZtYlaSxhj9Xw2wBHa2FcwP8g7/o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ps+CwaIkHu8An+k1+IwBgTtQ/zOdHfUZKQqvM3AMg8hSYTf5GPy0ogxEaPowK5cEB
+	 x22/c7eWYdqQIXU3M/TOLL6llcXIEGjseYQ4zON0ar6IOG1+iGFSz4YgD3Fy6fNY0s
+	 AIaHOqBota5Ag8Wgrgk9YBsJKPqHN5R6zSNezrNhV/fJdLrvhG5H9IAxVMlfQls3Lq
+	 mkUVAPsnVb/CJ7CKCdBJIJJPwhKejCiLUlF6iGfEanShrol8prX8x6nV3rjat49VJo
+	 qTqqG2JMM/JO0Krv2lYhi3TqTdKMiBokeMON6uyY9lCclX9Tz1WtNmce3eSwhlcTBi
+	 a5SUmdSgGIg/w==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d0e2adfeefso417881fa.2;
+        Fri, 09 Feb 2024 05:55:16 -0800 (PST)
+X-Gm-Message-State: AOJu0Yxjziyoqw7Lo/IH3/z7F87mRTiFdT+0+MIEQf8uHC0j86ARkNeM
+	rsUb/2BmeCJd2+87ybkZ4CFg4p5NZ+ZMOuOSRCwzU6lRRDXnaZty63breq7JvHmsOJr2BA/XLnP
+	6A/7HLXVz/CdTxbtVTRXl+CZiCEo=
+X-Google-Smtp-Source: AGHT+IFzfYCUMVeJAdR5KbdODBHTfaJGN1S3G1HPU2EUPy206ZpoIQDXAotPe3HHWpVqkMhFeZeYhE7k9yL+FNm1FXY=
+X-Received: by 2002:a2e:9909:0:b0:2d0:cb36:2be0 with SMTP id
+ v9-20020a2e9909000000b002d0cb362be0mr1410808lji.9.1707486914397; Fri, 09 Feb
+ 2024 05:55:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202402050445.0331B94A73@keescook>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-27-ardb+git@google.com> <20240207132922.GSZcOFspSGaVluJo92@fat_crate.local>
+In-Reply-To: <20240207132922.GSZcOFspSGaVluJo92@fat_crate.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 9 Feb 2024 13:55:02 +0000
+X-Gmail-Original-Message-ID: <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com>
+Message-ID: <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com>
+Subject: Re: [PATCH v3 06/19] x86/startup_64: Drop global variables keeping
+ track of LA57 state
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 05, 2024 at 04:48:08AM -0800, Kees Cook wrote:
-> On Mon, Feb 05, 2024 at 12:51:43PM +0300, Alexey Dobriyan wrote:
-> > +#define ARCH_AT_PAGE_SHIFT_MASK					\
-> > +	do {							\
-> > +		u32 val = 1 << 12;				\
-> > +		if (boot_cpu_has(X86_FEATURE_PSE)) {		\
-> > +			val |= 1 << 21;				\
-> > +		}						\
-> > +		if (boot_cpu_has(X86_FEATURE_GBPAGES)) {	\
-> > +			val |= 1 << 30;				\
-> > +		}						\
-> 
-> Can we use something besides literal "12", "21", and "30" values here?
+On Wed, 7 Feb 2024 at 13:29, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, Jan 29, 2024 at 07:05:09PM +0100, Ard Biesheuvel wrote:
+> >  static inline bool pgtable_l5_enabled(void)
+> >  {
+> >       return __pgtable_l5_enabled;
+> >  }
+> >  #else
+> > -#define pgtable_l5_enabled() cpu_feature_enabled(X86_FEATURE_LA57)
+> > +#define pgtable_l5_enabled() !!(native_read_cr4() & X86_CR4_LA57)
+> >  #endif /* USE_EARLY_PGTABLE_L5 */
+>
+> Can we drop this ifdeffery and simply have __pgtable_l5_enabled always
+> present and contain the correct value?
+>
 
-Ehh, no, why? Inside x86_64 the page shifts are very specific numbers,
-they won't change.
+I was trying to get rid of global variable assignments and accesses
+from the 1:1 mapping, but since we cannot get rid of those entirely,
+we might just keep __pgtable_l5_enabled but use RIP_REL_REF() in the
+accessors, and move the assignment to the asm startup code.
+
+> So that we don't have an expensive CR4 read hidden in
+> pgtable_l5_enabled()?
+>
+
+Yeah, I didn't realize it was expensive. Alternatively, we might do
+something like
+
+static __always_inline bool pgtable_l5_enabled(void)
+{
+   unsigned long r;
+   bool ret;
+
+   asm(ALTERNATIVE_TERNARY(
+       "movq %%cr4, %[reg] \n\t btl %[la57], %k[reg]" CC_SET(c),
+       %P[feat], "stc", "clc")
+       : [reg] "=r" (r), CC_OUT(c) (ret)
+       : [feat] "i" (X86_FEATURE_LA57),
+         [la57] "i" (X86_CR4_LA57_BIT)
+       : "cc");
+   return ret;
+}
+
+but we'd still have two versions in that case.
+
+> For the sake of simplicity, pgtable_l5_enabled() can be defined outside
+> of CONFIG_X86_5LEVEL and since both vendors support 5level now, might as
+> well start dropping the CONFIG ifdeffery slowly...
+>
+> Other than that - a nice cleanup!
+>
+
+Thanks.
 
