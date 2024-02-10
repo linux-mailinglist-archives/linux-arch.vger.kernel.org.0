@@ -1,120 +1,125 @@
-Return-Path: <linux-arch+bounces-2170-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2171-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C58850142
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Feb 2024 01:41:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 229628503F9
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Feb 2024 11:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A11128DBA3
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Feb 2024 00:41:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 554321C2162E
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Feb 2024 10:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864184417;
-	Sat, 10 Feb 2024 00:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B5B3611F;
+	Sat, 10 Feb 2024 10:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AwRQBu2b"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fiAme/xL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23C13FFE
-	for <linux-arch@vger.kernel.org>; Sat, 10 Feb 2024 00:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D402E3FE;
+	Sat, 10 Feb 2024 10:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707525700; cv=none; b=keg8p3oBOzJ+Qk09PuSAwrU4W2VZbwB/K9aio4680Ca1fQwZvr+D/1YI4FuNWlq+Xq6PZty44vSVKNq5A/+BO7je/+ueyvG0seaaCrrljpWk82PkTFRc5JXOZqVHegRjehrGU/efiEVqT1mFCmw4F+ilkukfg9hdRzewg7n3pEc=
+	t=1707561674; cv=none; b=qbs4PwRY6Y6/dpwBEWhDNDQ+YSPzfKDIRFcxi/Ejmwcdx5aIl6frNU2pMcwCPvoDJuxa422hg+7ESWAu/MgV29HHTT5Orh6kWdtSUjqRCm5zdHEBIMhAMK1srTmQ0m6jqd7t9o2g9otCtvUBsxmazc3Mp9Mr116q7a2OhTbXLi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707525700; c=relaxed/simple;
-	bh=uaj+OYImc6pR0lmcssEWsxa5HoLz2yNaHuud4NFc32Q=;
+	s=arc-20240116; t=1707561674; c=relaxed/simple;
+	bh=x+rMoLaemDU7O0UiEISg9iBNvLvyhD2E78cUrJEqRBQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y0Mi+Auut4KGJ1Tj6BYJg4n7n2PrqzXG8LFbQjowhrtWhJ7tUhBbKGdPspKXpsP+NHzs65xwVdh9LPT+ZaxxgnmFiM7tO/TzauxiPir1IHitOBBc+PbtMdWW3mbZYcKeeC4wRJy90ONP0zjEwj+L8SsG8pXyjbOI2JtDLLtE8ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AwRQBu2b; arc=none smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-595aa5b1fe0so1009663eaf.2
-        for <linux-arch@vger.kernel.org>; Fri, 09 Feb 2024 16:41:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707525698; x=1708130498; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmaz8p75u7mzpXhtpMk9515wZM+iZMpymbDpuB6M7Z4=;
-        b=AwRQBu2b/SEdkRGb3LaDhy9zyZ8QRwItUrrc1MRRG+YGlJpNRTJTsAOtKl/AdFIYKM
-         eoiQDD6JSYFw1eBDXHkC4lnrft5XxzP9M8ThTpu78OAKIs1TYbQXxj5NG/5K4pCBPpTk
-         95tBFcTpyBBYuM2geeJzVBv+mOm5sxLq3Vo7A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707525698; x=1708130498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dmaz8p75u7mzpXhtpMk9515wZM+iZMpymbDpuB6M7Z4=;
-        b=e5ZEk8ILjl9o9ckPPwli1mfW1g5P1twfs05jggE8E+VUD+q2rZxT0Lj35njCW7EIzn
-         ql1ZK755shFoKAukH7iDZhaCIKgC+HXssiYONmNl6Jgvc/xUR+tnjPWziarApu67aS0g
-         FGRy89vYa/NCUkF7n4QylCnTuL1KXDxZCIDWE6EmVSRfPRs0IGvOvF6OxUgeQ/LuuWvB
-         y+Si28IrYi8BRiKWEycc+Z6iKBc5yuUt55tHDWN0wnZsJPuDJGhVFwbPoV5P2zHonGJv
-         3hftjR5PXQ9Gm0WlgiTBrh/+4z0mqmrymU7lmPIdEg/XZ8kUTT8ag7imv8N/jk0YJ99P
-         ubrg==
-X-Forwarded-Encrypted: i=1; AJvYcCWP1A6hAxbXn1Ht08HXs+WizuKFXnyTt8WsAzFpfWpyjogmQxzT627y7tkBj0aAciukh68Un7gUlzx1c56mMc1JbRdh7Vcz97C3fA==
-X-Gm-Message-State: AOJu0YzLwMH4vQtkEhplGhliM5TyBPP6i/Ly8g/4pTzm5U3vzzKfOXH3
-	Xx+cCDAQiHpqKDnEvNcBY+05mxJwUm0xhBbb3ILVO+XkOw5rnxidOAnDskG5og==
-X-Google-Smtp-Source: AGHT+IG50cX3SGHnouz2I5cJYHWcWTeXfMJQH2UtMUPyw9qByO/8KdBHnDefOiHuRW4TUWLAfnycOA==
-X-Received: by 2002:a05:6358:724f:b0:178:a555:c312 with SMTP id i15-20020a056358724f00b00178a555c312mr1170320rwa.32.1707525698012;
-        Fri, 09 Feb 2024 16:41:38 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV1gaS76qWGniXOEblPMj6bXYMyFR+efck6AVg6G3A8vKuWiPn+KoqjbTqNv9YfYlg2IZb+xuVWwlV5O8UyzUQV2NoAiKPGqmqD6zV25fXVPQDADkzbAxIYU9s7tHkeSlvVuzh7y+GoGdfoWlycnl1ITaJwPNnHtREkXShJ/2sRtBEMnuuVw/t46ogRWfJt8bHdkNc0cMaTOzXRpqAQvOwFSu+UZODy3aABjFGutVG8LyPP4aCzSTqL4WeqWBE3waMFtfjX2m8aZc99bhCxH8tkFx8J8x4SJELUVWzR7rBaJkxjCssHbBEqmKzsmbA0iFHo2Qp3Ojklc2xeWnvrSohQubEUS0cekPRummvncuOVAB1RCqPTKK5AzbS2mEIMJkUnpTo=
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id gx20-20020a17090b125400b00296e567aaf9sm2430047pjb.14.2024.02.09.16.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 16:41:37 -0800 (PST)
-Date: Fri, 9 Feb 2024 16:41:36 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=u1PeMY+WJrx+xLYGBTCZi0TxSwrfUnn0F26ugm/IKVgdn884fXpuULDdCoPcMb8BVc59JjRXV/Kpv7BBpXBpLHU3A94FCgKL7QSFrp2Mt2N99IIYkoyM5ucvwRACfNdYvs8m3dOwAv7wNMIbkPO/6xilVIMYl8nrV9J12wBurIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fiAme/xL; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4C03140E023B;
+	Sat, 10 Feb 2024 10:41:09 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id m99D3Vit8Jsc; Sat, 10 Feb 2024 10:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707561663; bh=dSjCyKghVnE+pRQUrxWXdE0XNE6p+IPHoxYYpdgP9us=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fiAme/xLbxI9xs3wkAhG1kZG5wyVoM4V1XKCVCC0swGLdmtiwa7MaO03/y4OHEjNs
+	 VaB3vxeu4id6Kq/X3yNPcD5f5H/NYek5IrpW5gjDvSo7KZJ8r7i46phk+mNGdmIHl3
+	 3fJ/+riwV4dPYtLefa9scDtwq+7ImGpJuJBcQ2POuVrgufM4PatyrqhUBuR6r76AvS
+	 CBfq9BO8MC9J0ItBR9jHj0WjYaV+Fiscoe75TZI1h+bBM5mpo2buAfzDkV3Q5saYhb
+	 RGdVnfvTTJzDN6G2d9QAfhJmOO6G1Nmu4Yk24+t8OqHVoVoq1DsEU2kRzOq0BeF1Yq
+	 godtyWo/kG9rZ7GBvqawDR8utdWnKcBb85Adej0ZoXeIpTm6PJ9gyZO/3zFFZyHlCe
+	 PRBTcGwwo+lewUlDtol/IGPfY0Hb9lw5efXRXrIHcHLeou+Uaka93qqvFjUtVDYKJe
+	 lyiE/dWBk5LHnmJawWmL6J61WY+c51s4HkceOHpviRgQG5g1Bo/IU0IFGWoaM22+xj
+	 Z1GhrW365Yh7OxZaGQ/llEAaPNQULy7aiaOmn+wa7OOH32rElcV5XnxMjA+qh7tCiR
+	 ksU2V4la9EECtnshreDatfablejJLgN0BBsdz1khmWYmC8j4NpQijZw9yT2GljUtXb
+	 /OfWu6tyQrxRaT1hEIqhwm1Q=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A027140E016D;
+	Sat, 10 Feb 2024 10:40:45 +0000 (UTC)
+Date: Sat, 10 Feb 2024 11:40:39 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Ingo Molnar <mingo@redhat.com>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org, Eric Biederman <ebiederm@xmission.com>,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v4] ELF: AT_PAGE_SHIFT_MASK -- supply userspace with
- available page shifts
-Message-ID: <202402091625.4DF63CDD0B@keescook>
-References: <ecb049aa-bcac-45c7-bbb1-4612d094935a@p183>
- <202402050445.0331B94A73@keescook>
- <acd02481-ca2e-412a-8c6b-d9dff1345139@p183>
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 06/19] x86/startup_64: Drop global variables keeping
+ track of LA57 state
+Message-ID: <20240210104039.GAZcdSp7dRbgqBy3fg@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-27-ardb+git@google.com>
+ <20240207132922.GSZcOFspSGaVluJo92@fat_crate.local>
+ <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <acd02481-ca2e-412a-8c6b-d9dff1345139@p183>
+In-Reply-To: <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com>
 
-On Fri, Feb 09, 2024 at 03:30:37PM +0300, Alexey Dobriyan wrote:
-> On Mon, Feb 05, 2024 at 04:48:08AM -0800, Kees Cook wrote:
-> > On Mon, Feb 05, 2024 at 12:51:43PM +0300, Alexey Dobriyan wrote:
-> > > +#define ARCH_AT_PAGE_SHIFT_MASK					\
-> > > +	do {							\
-> > > +		u32 val = 1 << 12;				\
-> > > +		if (boot_cpu_has(X86_FEATURE_PSE)) {		\
-> > > +			val |= 1 << 21;				\
-> > > +		}						\
-> > > +		if (boot_cpu_has(X86_FEATURE_GBPAGES)) {	\
-> > > +			val |= 1 << 30;				\
-> > > +		}						\
-> > 
-> > Can we use something besides literal "12", "21", and "30" values here?
-> 
-> Ehh, no, why? Inside x86_64 the page shifts are very specific numbers,
-> they won't change.
+On Fri, Feb 09, 2024 at 01:55:02PM +0000, Ard Biesheuvel wrote:
+> I was trying to get rid of global variable assignments and accesses
+> from the 1:1 mapping, but since we cannot get rid of those entirely,
+> we might just keep __pgtable_l5_enabled but use RIP_REL_REF() in the
+> accessors, and move the assignment to the asm startup code.
 
-Well, it's nicer to have meaningful words to describe these things. In
-fact, PAGE_SHIFT already exists for 12, and HPAGE_SHIFT already exists
-for 21. Please use those, and add another, perhaps GBPAGE_SHIFT, for 30.
+Yeah.
 
--Kees
+>    asm(ALTERNATIVE_TERNARY(
+>        "movq %%cr4, %[reg] \n\t btl %[la57], %k[reg]" CC_SET(c),
+>        %P[feat], "stc", "clc")
+>        : [reg] "=r" (r), CC_OUT(c) (ret)
+>        : [feat] "i" (X86_FEATURE_LA57),
+>          [la57] "i" (X86_CR4_LA57_BIT)
+>        : "cc");
+
+Creative :)
+
+> but we'd still have two versions in that case.
+
+Yap. RIP_REL_REF() ain't too bad ...
+
+Thx.
 
 -- 
-Kees Cook
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
