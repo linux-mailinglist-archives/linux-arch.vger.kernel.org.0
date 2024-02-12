@@ -1,285 +1,161 @@
-Return-Path: <linux-arch+bounces-2179-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2180-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 547B185105C
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:12:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F3FA8510A6
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:24:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF7E5B233B0
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:11:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3ACA280FA1
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:24:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F94F17C68;
-	Mon, 12 Feb 2024 10:11:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36A418030;
+	Mon, 12 Feb 2024 10:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cn+lP0go"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="lcKaCn4O"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A8F17C62
-	for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 10:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD2D17C74
+	for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 10:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707732714; cv=none; b=gvlbD6PKEYZ716KIvgHp9XvdvNH9Pg++Vr2R1cja+iMfwvgbhnTbU+7Dk6OskzLSGi66AbrT4l4lw008VcsOXTBkOKrlSSCt/TyVcYIoEkBMgDYWZfOfTc2LKf53deX+xlO91L8Fy1Xg0L6JdoarPGAfzl+odBrXvF3W7yu2zUw=
+	t=1707733437; cv=none; b=ATu5OsAF+kuIO8kwDI6yUFLHmhQitGQaTFsycJ2FbxlYaXre0FUduxnYG2jBbv1hWFetGg8DscPxzUYvQ4KltbCeGfpoEwETOcaXOiaBgHNo7FNVL9B8ZiZZ0Xhvaz8fyYtMkpp3FNNe6JruM9i1Dvyzs7EbEv816chpStJjStI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707732714; c=relaxed/simple;
-	bh=EsDLRCNgBBkHpMvWo3dkQLR5TLheexE1oSgsf7G0GBQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CpjwPbdbyf1ZCfNVn86z8S40WhiaEZinkPVws556lKB9lIN9bPFL60kgaMQ7pw47PzhygIgvyr/OBQ5pI0fEEDFI+2HiByDYKMYZk2swgZSQ7l2TcCNVacbfLUfTCd4jfd6SjrQxLJjaRelf9UMwiDXginEXUx/KSIbFvLqawLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cn+lP0go; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707732710;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=+2pRSCdMqyAZN8/VuuYCHaUNoBN7lwTPUXnd9XEGQ+w=;
-	b=cn+lP0goCPBVtsDhdpAR8yvB98CoHTvJlcValHa3p0dZl0mRvkUqZB7mbvsAOcvg9bW4r3
-	9YHTN1CCBjoUnY9IRLi7cARWyKJy9pJtDbBuuPcV8HIuHmhIuRifFA0o6Q3CdxVuNLSJoV
-	inKSjpx8JMC1kRTXf3cTa0ICgNkFMWM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-557-swtNSh1OPRiLq4bRsfJoBw-1; Mon, 12 Feb 2024 05:11:48 -0500
-X-MC-Unique: swtNSh1OPRiLq4bRsfJoBw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-410727c32bdso12709715e9.1
-        for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 02:11:47 -0800 (PST)
+	s=arc-20240116; t=1707733437; c=relaxed/simple;
+	bh=TLWj/r7Pgt5h2SbwNEGy7ntlN2xmuVp2ucImosJuV3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mgu4ph8f2VrGo+cBSbpzfYUu+LV0+Soh7obwKptGWc1K3E6nd/HzL77jONAg6Igsiuilm+u9egw5BzPQq9Sa3DMIJZ8d2nFZANEen21rfdLkeaS4WrRN+j5IEEPdYBhTWz9hl5n5FJ2ERYTfL57UDElyoayoP97bPP1BJM/gBXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=lcKaCn4O; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a34c5ca2537so368846466b.0
+        for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 02:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1707733434; x=1708338234; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
+        b=lcKaCn4O8jWvmQj4JVY2b3Hu8aDVbmgdz2MSKl3Gjad+fU4f4dik8oxq9eDiS+drGl
+         IjnyN318J4XOb1A1odLv62vyT/9YQR+VKcjQf+iI5YfGKGVq5MN02f5JMRnUVROj+ci+
+         bgN6ua1ifcd/6Xn2Cq3+expZKP7zP+BLuY3vmbwELmnICmFKL/TIImS6Y1Hxv7f/z8Xm
+         ogdt9pzj4EtkGrvtpwPOUXbxRPoezbAyZUlCuRGBfevvUbQZ4SGChvBUsrPg+3HsQK0a
+         R9Wo59Amv+y1NlFIeZZZHE9ocdY6qyuHG9QFjEZGS1YHvVA9YuCliQYtyVExkaKTnP0I
+         JU0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707732707; x=1708337507;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1707733434; x=1708338234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+2pRSCdMqyAZN8/VuuYCHaUNoBN7lwTPUXnd9XEGQ+w=;
-        b=rDUUzukzWYu2oe7JF8hwr72cg5F53FNelVb10HKJ+xkz1k+9Qb1eDH+kUpVfr9Ae8y
-         oGMC/qaE3n5OTGSxaZ3/LKPYmF1ZqMDn1VY65xlVP+5BPhds83Jcj7mR2GsQ7Q3UY7Gt
-         l4x7t2wWqNYxnpX3QoJy15IPHAwkQIipJgu1ObTdxcNhIRCrMz+4O1HFZ2r21+/Bksn5
-         uFbFQYAqZ/IuA+xhZ/KT553J3v/p2DVOxLOrYCNqRPufG4n31jnr9rCcP3G0IzdqRJKj
-         Or74YRZvYXRcK4hICZdxk4Z34g7zavcogBkBspPd/DxpxWkhNlfZyunF5BTAYMbXM3Wv
-         m7Ww==
-X-Gm-Message-State: AOJu0YxeVQb38LdxNIOLdydVLipXPd/rH+5cmXWjBh+Gh++fHamnb/yW
-	DV/zxzM6kFwbt5+OdZsqs1NgNkQt7ZYk0g4M2Nkn27nxIFO+G2UMPK6FFXMC2wne0+vEXNZ0Vgm
-	rJaCkMJMTLamzWRMWwInErZLwbX+Gi4YUlC28+f+Et/RGSlhghMBM6Bj0i1I=
-X-Received: by 2002:a05:600c:600e:b0:410:be25:12bf with SMTP id az14-20020a05600c600e00b00410be2512bfmr2510600wmb.38.1707732707081;
-        Mon, 12 Feb 2024 02:11:47 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH+hlQMe30T62KMwr+luZOaXUQu5EKvOVB62I9SuHj1bCg0U6QR5ufA6j/zcrcMvqTl++iPog==
-X-Received: by 2002:a05:600c:600e:b0:410:be25:12bf with SMTP id az14-20020a05600c600e00b00410be2512bfmr2510563wmb.38.1707732706666;
-        Mon, 12 Feb 2024 02:11:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVwkAeAYQR7Gfoxupr5qBG9m0EFbv7DDI7aCfZtMNyIROIXA/SOrjkaJ59sr8xsqiaVCkCmlEIRjxy3J0wXfxX4p/V/LReolwctKJtaf6B3xBn7OrP0bc+txI9JVmFNAWwZNO6OMGWo3IXumCONO6uNSMmNTfbFmAY4pOA1lJgpDYGCD7L+3n273ujqqyssnrkBYDPGUmeZCNVHvSm6nOQmhOiwdAGGkbh9s4spMdJMjZUHweVEwDvqzZu+WY2iXCqg6PvKFOcrzgEd0inHm2VWhnlxmT+IxhcswK98pkwM1pdbqKpMZ8Ajk1JT4NE78LQt/mXy49lkqHahYzz6hjzT+dfzIx4V3DXSeAokKyb1gnl/iSmZRlqLUCcOgsmg3+wwBBOuVupln+MiH6egoWuOb0D3bdc75Mj8jQ3mkZXn+noa+I0RKgGk58qf9AmfYfgmoUeVxAHFDz6H2fGJSuPdxMMemhULInkfywbgcL4XDyX9Z53mEt7zOhan4AtbDYaknEn4fCZ/1MCYlw3aWeqpmwzPFZmOAeLuSio1iOcsGub9eXKx0M2nKuxJ4n1jPEP1oNBvLg89cxTfdtPQA43Yj+xKlc5QfNDyXl6bRRX286HkHyWSz/FRQYbEwdh7nAxD+scmPiWtw4qBIOUM0qZ0NG8OHtJi963eUHH1Om8YBT7l+DoZEuPwB1JBihSLrOPpnPqsDQCQDEYMqPRaoFdAtOdGG27xai7PTo0pl2W0EdZROwY=
-Received: from ?IPV6:2003:cb:c730:2200:7229:83b1:524e:283a? (p200300cbc7302200722983b1524e283a.dip0.t-ipconnect.de. [2003:cb:c730:2200:7229:83b1:524e:283a])
-        by smtp.gmail.com with ESMTPSA id bd27-20020a05600c1f1b00b00410d3b8c4c1sm2565365wmb.31.2024.02.12.02.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Feb 2024 02:11:46 -0800 (PST)
-Message-ID: <6c66f7ca-4b14-4bbb-bf06-e81b3481b03f@redhat.com>
-Date: Mon, 12 Feb 2024 11:11:44 +0100
+        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
+        b=XBlsCC31d05sJZbciD4XLdnwDXZnd7MedWQDHJWmZCHTXm8Dg+WXKZjqoSd0N2XRhd
+         Z9F2qfmYQb7am/cJlnCm3jWARmAum78yvH1jj8lVTzGEtaBKEIz1nu7kqoW7KSsrc1+O
+         tx3w8bSwIiL821Y+h5yKpd419IOfUmOd2p7nyImtDqqPQlLrK24gOKR/LQaUscGiDNIp
+         4qWMcpWj9B8TNLQmOwvgQ9Vx2N6HmfyLepOiOPpv27sHReygvR5Hk6LRal+kc1iFbQTA
+         4tm6iDryuDvrJ5He7rE7ua/wv125jTggo27o3fv4oEIoxcCneyAgGD6SqiN4LCETAAl8
+         jjSg==
+X-Gm-Message-State: AOJu0YxqjSYeh2mflptwoCGM+mKT5iZUo06oWIATWgdRXmTVOJ+klv2c
+	9wZHTyO4o/mAwK5T77LDa7YjvCOIUVCWMBhGnP6hnnV/I6/quCb9lc2kwW8utfI=
+X-Google-Smtp-Source: AGHT+IEIVVAUpTpqdBT16MY7gnKOm8Wgm8lU/UhtOte8u9qNN7LVPAHblq+h85cUkD6/Ed6GGvCddQ==
+X-Received: by 2002:a17:906:a88b:b0:a3c:cebc:9e0e with SMTP id ha11-20020a170906a88b00b00a3ccebc9e0emr567479ejb.66.1707733433939;
+        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUPAzE+xdeF9TrZSKLD2pHEr88oRydbkgxmrvinHSvSQxUcUIyGSd4eufO2JDcBJ7dp7k0omkE0TZm5KqaV2RSmopwEH9KJUBeAuNEnCQZp/Na3kZyhqGhtsPoWUFMQWLjH8g1/XK5jmvnK3onAoGGYAjWJYmG20MsKxc8Yn9hXfF2DIBZZzGU6LHBehpCvPsVjofyX2DVddSWuIv/g8ypG3DrQoeVz4cIaOtpF0w2aQFPxniQSHtJKifQoI36QcqUz+GTeRa25cUcHcaFSIQmeIhQc0JSMEzlS4c0IEEQuh4BCexsaE+Q2RkgtWWZhpOa/zFS9tiBq7NOlJoD7GObmq5y2nTJbzou3e8N/JqJSg+NdzdwTTJUpVKPs29VIz44lxoHm6/kZeP4Smk1W08JaOjCzXRt8PuEeZ/ZindEfAW3sw5G8/+7SeMUmw0s+pjY5aq6PL8Es9QTI+gFjyh5aBJdPU11Mw/b8r+ggEfN9EqNFco+lICueODov2KMWeF9NjaBVj7iuEimn1MzGt8h09gt++g3M+hv8cjkxyNnKs568+BR8yc2MOxQQfPS10utFK8+zFVEhGgYzQdUVImLwxe37lmPhh60wZlbX9IzH8qQrJ6pXMKqI7ua/HuD+egoIQG7OQAblqLWyAAYzgzeBywNTlp4Txdjmklview3xwwTap1D5fOGoJcX3j6hu48qZsuyeGsyC9nsBmohNR1DagrdFR+BQPMd8gUJY++R62GwIzRAH4E9fbyPamjyvb3f65wE2mOTSc9FZUoRQcF639WAouaosGVNVx1Lb+cyBEU6FitjgZXDhOSgLIEDineFX73GZcKSrIBtz4oK2eq7mAoQvQNaGVZKmYrzVDunSfj481sy1kH7T62OUcjxcEqkvFA6AoU8syAnrTA/2MrCiJ2cTSBnstrRgHXEzdtHuRyNWjIHVyXNF4EoXfIjpHWpKwC
+ eFJ5J+101mb/s4Q/1cmQ4Wz11QZhp5DbbKlvzcjLsFg2m3gpryp3twJqX5TrxCAcFt/wAV3BkzPRN88+roOQEXkWbekKlM46Y71IoxRtiUkdHJN5WqFsqlTyD5KyCw2GGJTw3SH6T/MmHAr+oOwvKSIc3aC0hV24YWulCM2OsuRuhclbmlzyt6Y2JJxxnVKaEqRxDeMNsLrGMeiDbuUhtua8pSpKm3dNm1G1WDslPC35cV5XDKSWmKAb1/M2wkuq5SETC7B1gv6XnzZnlR1wQSLix+8+kin8J6JO3gm3X+McNhBRLrxx2loxFJMo2c/xjh7wF3wDssyxKjHX5A+5fcuPqv50ODa5GDub27T0Uc32g162GnVdCC+VeowGyq11KgvugkpIVtk10/sJDfMFGpZuviKTl3msRZRr3qrlPR4dQveuCxGTOo6Oyav0FytnJtGp3LnLOhGFP3ew0jwPCoPc6cw6K+VeKW8qiwGLv/Zb8bgVl3bujL9JS6Qo/52tJiC0ZuLRKF0FHpPoBy/q+YQhTYHMl18uxLehORfxoVvopoQWyWBYfdFhJ6Zw4rz8Q3MZWMxMDQ3CncpPaKx2ctow9uTjN8qQgbOhE/nRr55TRTZYeL2J9umD0EbRUOAPfKrtRYeRcln+faWGY1RFXS0SkOu8ul3zt4sehJkmrrwdGMZP7KTM7JcjoVtmgaa5ny3FdpkRXFN6TbIN0bGzTgwdO8Q47IPyS1xFnDgY3d3inqjDrNKZ+ApxxPH0VXmkBGBMUz3yomR0ChsvRgC5CMHBStwF4uSxPqonHfDFzPjINLbSkuK5J1iq1mGTAGg/z4AFlUd/6W2ARQswjf42gEBah0qBZ/jxD0NzH+A1BvfORnnJDXSaxlJzogY3Yqw7ulEjTbff7wBfEAQd1+H23TSbMHcfcEg8bJq1L8w8lzRqmE3x5zY1gHR9uI3y8tKtTr166Quq7EosM5SUUfT9LoO3vcs6beCXmhNk7
+ vesJ1Ft9sE1alaQEh
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id cd6-20020a170906b34600b00a34c07816e3sm61419ejb.73.2024.02.12.02.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
+Date: Mon, 12 Feb 2024 11:23:52 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: debug@rivosinc.com
+Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com, 
+	kito.cheng@sifive.com, keescook@chromium.org, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com, 
+	corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com, 
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com, shuah@kernel.org, 
+	brauner@kernel.org, guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com, 
+	xiao.w.wang@intel.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
+	waylingii@gmail.com, greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org, 
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com, 
+	panqinglin2020@iscas.ac.cn, willy@infradead.org, vincent.chen@sifive.com, 
+	andy.chiu@sifive.com, gerg@kernel.org, jeeheng.sia@starfivetech.com, 
+	mason.huo@starfivetech.com, ancientmodern4@gmail.com, mathis.salmen@matsal.de, 
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com, ruscur@russell.cc, 
+	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il, zhangqing@loongson.cn, 
+	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com, 
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 01/28] riscv: abstract envcfg CSR
+Message-ID: <20240212-cf2c44241bfd5e942a4e3752@orel>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-2-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/10] mm/mmu_gather: improve cond_resched() handling
- with large folios and expensive page freeing
-Content-Language: en-US
-To: Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- Matthew Wilcox <willy@infradead.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Yin Fengwei <fengwei.yin@intel.com>, Michal Hocko <mhocko@suse.com>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@linux.ibm.com>, Nick Piggin <npiggin@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Michael Ellerman
- <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org
-References: <20240209221509.585251-1-david@redhat.com>
- <20240209221509.585251-10-david@redhat.com>
- <f1578e92-4de0-4718-bf79-ec29e9a19fe0@arm.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <f1578e92-4de0-4718-bf79-ec29e9a19fe0@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240125062739.1339782-2-debug@rivosinc.com>
 
-Hi Ryan,
-
->> -static void tlb_batch_pages_flush(struct mmu_gather *tlb)
->> +static void __tlb_batch_free_encoded_pages(struct mmu_gather_batch *batch)
->>   {
->> -	struct mmu_gather_batch *batch;
->> -
->> -	for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
->> -		struct encoded_page **pages = batch->encoded_pages;
->> +	struct encoded_page **pages = batch->encoded_pages;
->> +	unsigned int nr, nr_pages;
->>   
->> +	/*
->> +	 * We might end up freeing a lot of pages. Reschedule on a regular
->> +	 * basis to avoid soft lockups in configurations without full
->> +	 * preemption enabled. The magic number of 512 folios seems to work.
->> +	 */
->> +	if (!page_poisoning_enabled_static() && !want_init_on_free()) {
+On Wed, Jan 24, 2024 at 10:21:26PM -0800, debug@rivosinc.com wrote:
+> From: Deepak Gupta <debug@rivosinc.com>
 > 
-> Is the performance win really worth 2 separate implementations keyed off this?
-> It seems a bit fragile, in case any other operations get added to free which are
-> proportional to size in future. Why not just always do the conservative version?
-
-I really don't want to iterate over all entries on the "sane" common 
-case. We already do that two times:
-
-a) free_pages_and_swap_cache()
-
-b) release_pages()
-
-Only the latter really is required, and I'm planning on removing the one 
-in (a) to move it into (b) as well.
-
-So I keep it separate to keep any unnecessary overhead to the setups 
-that are already terribly slow.
-
-No need to iterate a page full of entries if it can be easily avoided. 
-Especially, no need to degrade the common order-0 case.
-
+> This patch abstracts envcfg CSR in kernel (as is done for other homonyn
+> CSRs). CSR_ENVCFG is used as alias for CSR_SENVCFG or CSR_MENVCFG depending
+> on how kernel is compiled.
 > 
->>   		while (batch->nr) {
->> -			/*
->> -			 * limit free batch count when PAGE_SIZE > 4K
->> -			 */
->> -			unsigned int nr = min(512U, batch->nr);
->> +			nr = min(512, batch->nr);
+> Additionally it changes CBZE enabling to start using CSR_ENVCFG instead of
+> CSR_SENVCFG.
 > 
-> If any entries are for more than 1 page, nr_pages will also be encoded in the
-> batch, so effectively this could be limiting to 256 actual folios (half of 512).
-
-Right, in the patch description I state "256 folio fragments". It's up 
-to 512 folios (order-0).
-
-> Is it worth checking for ENCODED_PAGE_BIT_NR_PAGES_NEXT and limiting accordingly?
-
-At least with 4k page size, we never have more than 510 (IIRC) entries 
-per batch page. So any such optimization would only matter for large 
-page sizes, which I don't think is worth it.
-
-Which exact optimization do you have in mind and would it really make a 
-difference?
-
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/csr.h   | 2 ++
+>  arch/riscv/kernel/cpufeature.c | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 > 
-> nit: You're using 512 magic number in 2 places now; perhaps make a macro?
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 306a19a5509c..b3400517b0a9 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -415,6 +415,7 @@
+>  # define CSR_STATUS	CSR_MSTATUS
+>  # define CSR_IE		CSR_MIE
+>  # define CSR_TVEC	CSR_MTVEC
+> +# define CSR_ENVCFG CSR_MENVCFG
+>  # define CSR_SCRATCH	CSR_MSCRATCH
+>  # define CSR_EPC	CSR_MEPC
+>  # define CSR_CAUSE	CSR_MCAUSE
+> @@ -439,6 +440,7 @@
+>  # define CSR_STATUS	CSR_SSTATUS
+>  # define CSR_IE		CSR_SIE
+>  # define CSR_TVEC	CSR_STVEC
+> +# define CSR_ENVCFG CSR_SENVCFG
+>  # define CSR_SCRATCH	CSR_SSCRATCH
+>  # define CSR_EPC	CSR_SEPC
+>  # define CSR_CAUSE	CSR_SCAUSE
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index b3785ffc1570..98623393fd1f 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -725,7 +725,7 @@ arch_initcall(check_unaligned_access_all_cpus);
+>  void riscv_user_isa_enable(void)
+>  {
+>  	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICBOZ))
+> -		csr_set(CSR_SENVCFG, ENVCFG_CBZE);
+> +		csr_set(CSR_ENVCFG, ENVCFG_CBZE);
+>  }
+>  
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+> -- 
+> 2.43.0
+>
 
-I played 3 times with macro names (including just using something 
-"intuitive" like MAX_ORDER_NR_PAGES) but returned to just using 512.
-
-That cond_resched() handling is just absolutely disgusting, one way or 
-the other.
-
-Do you have a good idea for a macro name?
-
-> 
->>   
->>   			/*
->>   			 * Make sure we cover page + nr_pages, and don't leave
->> @@ -119,6 +120,37 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
->>   			cond_resched();
->>   		}
->>   	}
->> +
->> +	/*
->> +	 * With page poisoning and init_on_free, the time it takes to free
->> +	 * memory grows proportionally with the actual memory size. Therefore,
->> +	 * limit based on the actual memory size and not the number of involved
->> +	 * folios.
->> +	 */
->> +	while (batch->nr) {
->> +		for (nr = 0, nr_pages = 0;
->> +		     nr < batch->nr && nr_pages < 512; nr++) {
->> +			if (unlikely(encoded_page_flags(pages[nr]) &
->> +				     ENCODED_PAGE_BIT_NR_PAGES_NEXT))
->> +				nr_pages += encoded_nr_pages(pages[++nr]);
->> +			else
->> +				nr_pages++;
->> +		}
-> 
-> I guess worst case here is freeing (511 + 8192) * 64K pages = ~544M. That's up
-> from the old limit of 512 * 64K = 32M, and 511 pages bigger than your statement
-> in the commit log. Are you comfortable with this? I guess the only alternative
-> is to start splitting a batch which would be really messy. I agree your approach
-> is preferable if 544M is acceptable.
-
-Right, I have in the description:
-
-"if we cannot even free a single MAX_ORDER page on a system without 
-running into soft lockups, something else is already completely bogus.".
-
-That would be 8192 pages on arm64. Anybody freeing a PMD-mapped THP 
-would be in trouble already and should just reconsider life choices 
-running such a machine.
-
-We could have 511 more pages, yes. If 8192 don't trigger a soft-lockup, 
-I am confident that 511 more pages won't make a difference.
-
-But, if that ever is a problem, we can butcher this code as much as we 
-want, because performance with poisoning/zeroing is already down the drain.
-
-As you say, splitting even further is messy, so I rather avoid that 
-unless really required.
-
--- 
-Cheers,
-
-David / dhildenb
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
