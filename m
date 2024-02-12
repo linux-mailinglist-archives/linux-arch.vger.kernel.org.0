@@ -1,161 +1,169 @@
-Return-Path: <linux-arch+bounces-2180-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2181-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F3FA8510A6
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:24:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B00C8510D5
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:29:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3ACA280FA1
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:24:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E35C1C220EF
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36A418030;
-	Mon, 12 Feb 2024 10:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C777418021;
+	Mon, 12 Feb 2024 10:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="lcKaCn4O"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ewZU95JZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD2D17C74
-	for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 10:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25D2179B8;
+	Mon, 12 Feb 2024 10:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707733437; cv=none; b=ATu5OsAF+kuIO8kwDI6yUFLHmhQitGQaTFsycJ2FbxlYaXre0FUduxnYG2jBbv1hWFetGg8DscPxzUYvQ4KltbCeGfpoEwETOcaXOiaBgHNo7FNVL9B8ZiZZ0Xhvaz8fyYtMkpp3FNNe6JruM9i1Dvyzs7EbEv816chpStJjStI=
+	t=1707733774; cv=none; b=EttkAj+zji33FwdqQgP75l63Fot0DVD2AytoX6yAJnCmpar11x26oBNJS8XTYIchOotywXCjaXvoCw2fYrvuXohpYlgVMuiHdNsJqt20+mnLGWnnEm4ljpdf6nAkCI9E+YPUbwcJ0iyZwi3nWqhfoHY44NBnUfHsU5PvQri2nYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707733437; c=relaxed/simple;
-	bh=TLWj/r7Pgt5h2SbwNEGy7ntlN2xmuVp2ucImosJuV3s=;
+	s=arc-20240116; t=1707733774; c=relaxed/simple;
+	bh=lM1ikn/+ntRnbPmGODrfBa9eMNqWS/z2GjeqQpt4V0Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mgu4ph8f2VrGo+cBSbpzfYUu+LV0+Soh7obwKptGWc1K3E6nd/HzL77jONAg6Igsiuilm+u9egw5BzPQq9Sa3DMIJZ8d2nFZANEen21rfdLkeaS4WrRN+j5IEEPdYBhTWz9hl5n5FJ2ERYTfL57UDElyoayoP97bPP1BJM/gBXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=lcKaCn4O; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a34c5ca2537so368846466b.0
-        for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 02:23:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1707733434; x=1708338234; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
-        b=lcKaCn4O8jWvmQj4JVY2b3Hu8aDVbmgdz2MSKl3Gjad+fU4f4dik8oxq9eDiS+drGl
-         IjnyN318J4XOb1A1odLv62vyT/9YQR+VKcjQf+iI5YfGKGVq5MN02f5JMRnUVROj+ci+
-         bgN6ua1ifcd/6Xn2Cq3+expZKP7zP+BLuY3vmbwELmnICmFKL/TIImS6Y1Hxv7f/z8Xm
-         ogdt9pzj4EtkGrvtpwPOUXbxRPoezbAyZUlCuRGBfevvUbQZ4SGChvBUsrPg+3HsQK0a
-         R9Wo59Amv+y1NlFIeZZZHE9ocdY6qyuHG9QFjEZGS1YHvVA9YuCliQYtyVExkaKTnP0I
-         JU0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707733434; x=1708338234;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
-        b=XBlsCC31d05sJZbciD4XLdnwDXZnd7MedWQDHJWmZCHTXm8Dg+WXKZjqoSd0N2XRhd
-         Z9F2qfmYQb7am/cJlnCm3jWARmAum78yvH1jj8lVTzGEtaBKEIz1nu7kqoW7KSsrc1+O
-         tx3w8bSwIiL821Y+h5yKpd419IOfUmOd2p7nyImtDqqPQlLrK24gOKR/LQaUscGiDNIp
-         4qWMcpWj9B8TNLQmOwvgQ9Vx2N6HmfyLepOiOPpv27sHReygvR5Hk6LRal+kc1iFbQTA
-         4tm6iDryuDvrJ5He7rE7ua/wv125jTggo27o3fv4oEIoxcCneyAgGD6SqiN4LCETAAl8
-         jjSg==
-X-Gm-Message-State: AOJu0YxqjSYeh2mflptwoCGM+mKT5iZUo06oWIATWgdRXmTVOJ+klv2c
-	9wZHTyO4o/mAwK5T77LDa7YjvCOIUVCWMBhGnP6hnnV/I6/quCb9lc2kwW8utfI=
-X-Google-Smtp-Source: AGHT+IEIVVAUpTpqdBT16MY7gnKOm8Wgm8lU/UhtOte8u9qNN7LVPAHblq+h85cUkD6/Ed6GGvCddQ==
-X-Received: by 2002:a17:906:a88b:b0:a3c:cebc:9e0e with SMTP id ha11-20020a170906a88b00b00a3ccebc9e0emr567479ejb.66.1707733433939;
-        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUPAzE+xdeF9TrZSKLD2pHEr88oRydbkgxmrvinHSvSQxUcUIyGSd4eufO2JDcBJ7dp7k0omkE0TZm5KqaV2RSmopwEH9KJUBeAuNEnCQZp/Na3kZyhqGhtsPoWUFMQWLjH8g1/XK5jmvnK3onAoGGYAjWJYmG20MsKxc8Yn9hXfF2DIBZZzGU6LHBehpCvPsVjofyX2DVddSWuIv/g8ypG3DrQoeVz4cIaOtpF0w2aQFPxniQSHtJKifQoI36QcqUz+GTeRa25cUcHcaFSIQmeIhQc0JSMEzlS4c0IEEQuh4BCexsaE+Q2RkgtWWZhpOa/zFS9tiBq7NOlJoD7GObmq5y2nTJbzou3e8N/JqJSg+NdzdwTTJUpVKPs29VIz44lxoHm6/kZeP4Smk1W08JaOjCzXRt8PuEeZ/ZindEfAW3sw5G8/+7SeMUmw0s+pjY5aq6PL8Es9QTI+gFjyh5aBJdPU11Mw/b8r+ggEfN9EqNFco+lICueODov2KMWeF9NjaBVj7iuEimn1MzGt8h09gt++g3M+hv8cjkxyNnKs568+BR8yc2MOxQQfPS10utFK8+zFVEhGgYzQdUVImLwxe37lmPhh60wZlbX9IzH8qQrJ6pXMKqI7ua/HuD+egoIQG7OQAblqLWyAAYzgzeBywNTlp4Txdjmklview3xwwTap1D5fOGoJcX3j6hu48qZsuyeGsyC9nsBmohNR1DagrdFR+BQPMd8gUJY++R62GwIzRAH4E9fbyPamjyvb3f65wE2mOTSc9FZUoRQcF639WAouaosGVNVx1Lb+cyBEU6FitjgZXDhOSgLIEDineFX73GZcKSrIBtz4oK2eq7mAoQvQNaGVZKmYrzVDunSfj481sy1kH7T62OUcjxcEqkvFA6AoU8syAnrTA/2MrCiJ2cTSBnstrRgHXEzdtHuRyNWjIHVyXNF4EoXfIjpHWpKwC
- eFJ5J+101mb/s4Q/1cmQ4Wz11QZhp5DbbKlvzcjLsFg2m3gpryp3twJqX5TrxCAcFt/wAV3BkzPRN88+roOQEXkWbekKlM46Y71IoxRtiUkdHJN5WqFsqlTyD5KyCw2GGJTw3SH6T/MmHAr+oOwvKSIc3aC0hV24YWulCM2OsuRuhclbmlzyt6Y2JJxxnVKaEqRxDeMNsLrGMeiDbuUhtua8pSpKm3dNm1G1WDslPC35cV5XDKSWmKAb1/M2wkuq5SETC7B1gv6XnzZnlR1wQSLix+8+kin8J6JO3gm3X+McNhBRLrxx2loxFJMo2c/xjh7wF3wDssyxKjHX5A+5fcuPqv50ODa5GDub27T0Uc32g162GnVdCC+VeowGyq11KgvugkpIVtk10/sJDfMFGpZuviKTl3msRZRr3qrlPR4dQveuCxGTOo6Oyav0FytnJtGp3LnLOhGFP3ew0jwPCoPc6cw6K+VeKW8qiwGLv/Zb8bgVl3bujL9JS6Qo/52tJiC0ZuLRKF0FHpPoBy/q+YQhTYHMl18uxLehORfxoVvopoQWyWBYfdFhJ6Zw4rz8Q3MZWMxMDQ3CncpPaKx2ctow9uTjN8qQgbOhE/nRr55TRTZYeL2J9umD0EbRUOAPfKrtRYeRcln+faWGY1RFXS0SkOu8ul3zt4sehJkmrrwdGMZP7KTM7JcjoVtmgaa5ny3FdpkRXFN6TbIN0bGzTgwdO8Q47IPyS1xFnDgY3d3inqjDrNKZ+ApxxPH0VXmkBGBMUz3yomR0ChsvRgC5CMHBStwF4uSxPqonHfDFzPjINLbSkuK5J1iq1mGTAGg/z4AFlUd/6W2ARQswjf42gEBah0qBZ/jxD0NzH+A1BvfORnnJDXSaxlJzogY3Yqw7ulEjTbff7wBfEAQd1+H23TSbMHcfcEg8bJq1L8w8lzRqmE3x5zY1gHR9uI3y8tKtTr166Quq7EosM5SUUfT9LoO3vcs6beCXmhNk7
- vesJ1Ft9sE1alaQEh
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id cd6-20020a170906b34600b00a34c07816e3sm61419ejb.73.2024.02.12.02.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
-Date: Mon, 12 Feb 2024 11:23:52 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: debug@rivosinc.com
-Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com, 
-	kito.cheng@sifive.com, keescook@chromium.org, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com, 
-	corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com, 
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com, shuah@kernel.org, 
-	brauner@kernel.org, guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com, 
-	xiao.w.wang@intel.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
-	waylingii@gmail.com, greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org, 
-	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com, 
-	panqinglin2020@iscas.ac.cn, willy@infradead.org, vincent.chen@sifive.com, 
-	andy.chiu@sifive.com, gerg@kernel.org, jeeheng.sia@starfivetech.com, 
-	mason.huo@starfivetech.com, ancientmodern4@gmail.com, mathis.salmen@matsal.de, 
-	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com, ruscur@russell.cc, 
-	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il, zhangqing@loongson.cn, 
-	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com, 
-	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 01/28] riscv: abstract envcfg CSR
-Message-ID: <20240212-cf2c44241bfd5e942a4e3752@orel>
-References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-2-debug@rivosinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iqG8JbQ/Us0RtJAH6gJDUbU+Xm73c40s7MSP1TSrPyV2SLSK1j02t+XBqatSuMBqMmhHYuR9XZf1KB6hrDUqjL4UCm4dMIVA5gJoNlyzLVbZUCY7ZvTCA9Bv32hakX0l77A/TXrTkFHAG8mDKmavfIYaoIsO7q/06JF6gdwg8mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ewZU95JZ; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 54CE940E01A9;
+	Mon, 12 Feb 2024 10:29:28 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Qfqc-ypnMKxE; Mon, 12 Feb 2024 10:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707733765; bh=8zzxZzAd70wLVlqCQfwTbwt/dFp7veEPvkKLq3mmCGc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ewZU95JZ5AgG6rZJLPSyQ4+uco/ylQ/tMZeYqEi7wKs9BhYt/fG7UUUw5O9c+EANz
+	 PSom6AgWUMW2IS8WNEUftXLmPq3pN41pcL/lPl3Gs6sVikGhK3Uv147SDRM8qFdvI6
+	 O4ICiy7mrjH18ayfOBcEHRXSI6KU7zjCK+FPdkrx5XyyVDvrNUmK2FIFkjCrUY9t07
+	 nvzxQimDDhYzoLZ/30kpmiOwB5+s5SJLLA0GPjtbH2OhEd6GpQvU2vLDKH5OACoh1G
+	 x6of9WfDLm8z5xPXQIpU5179BSwfJtwmo/F5n+6nHTVmrW2ALHtwLNfqohPSK3dJex
+	 6mv7RMbVLCXcVyjluiK0DvUKxPZQJX35vKF2OgcMN8GTmDVlu+J/P8efvxpIzznLs5
+	 rSdU+n7H8mrAxoeQFuNMu3BI9kHDsGDETqPzTo1hCZU6qiXdg/ThRjEoX/Tb/EvajN
+	 MDn4GSgKo/gzOq5gv9mJ8vEjCA+/zEBCindjhc+OeCGhW1bIBjK1hsHd3hKxmzky79
+	 fYJiCPIT3BcOQJ7wOUlO0HtgmUFu/x4VyJL+53TbPc3MTLnVijXoCKik3ByfmwzdLN
+	 vFdwoJq+FzycmgelzaQn/+VPw3wnvDRgmxWLpW74v7xdmEab8qX0+E4Pv6uzS4FS+l
+	 1ln5F/fr/a3P8lcfbf0/v0YQ=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A5EF940E0192;
+	Mon, 12 Feb 2024 10:29:07 +0000 (UTC)
+Date: Mon, 12 Feb 2024 11:29:01 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 08/19] x86/head64: Replace pointer fixups with PIE
+ codegen
+Message-ID: <20240212102901.GVZcny7WeK_ZWt0HEP@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-29-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240125062739.1339782-2-debug@rivosinc.com>
+In-Reply-To: <20240129180502.4069817-29-ardb+git@google.com>
 
-On Wed, Jan 24, 2024 at 10:21:26PM -0800, debug@rivosinc.com wrote:
-> From: Deepak Gupta <debug@rivosinc.com>
+On Mon, Jan 29, 2024 at 07:05:11PM +0100, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
 > 
-> This patch abstracts envcfg CSR in kernel (as is done for other homonyn
-> CSRs). CSR_ENVCFG is used as alias for CSR_SENVCFG or CSR_MENVCFG depending
-> on how kernel is compiled.
+> Some of the C code in head64.c may be called from a different virtual
+> address than it was linked at. Currently, we deal with this by using
+
+Yeah, make passive pls: "Currently, this is done by using... "
+
+> ordinary, position dependent codegen, and fixing up all symbol
+> references on the fly. This is fragile and tricky to maintain. It is
+> also unnecessary: we can use position independent codegen (with hidden
+		   ^^^
+Ditto: "use ..."
+
+In the comments below too, pls, where it says "we".
+
+> visibility) to ensure that all compiler generated symbol references are
+> RIP-relative, removing the need for fixups entirely.
 > 
-> Additionally it changes CBZE enabling to start using CSR_ENVCFG instead of
-> CSR_SENVCFG.
+> It does mean we need explicit references to kernel virtual addresses to
+> be generated by hand, so generate those using a movabs instruction in
+> inline asm in the handful places where we actually need this.
 > 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > ---
->  arch/riscv/include/asm/csr.h   | 2 ++
->  arch/riscv/kernel/cpufeature.c | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+>  arch/x86/Makefile                 |  8 ++
+>  arch/x86/boot/compressed/Makefile |  2 +-
+>  arch/x86/include/asm/desc.h       |  3 +-
+>  arch/x86/include/asm/setup.h      |  4 +-
+>  arch/x86/kernel/Makefile          |  5 ++
+>  arch/x86/kernel/head64.c          | 88 +++++++-------------
+>  arch/x86/kernel/head_64.S         |  5 +-
+>  7 files changed, 51 insertions(+), 64 deletions(-)
 > 
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 306a19a5509c..b3400517b0a9 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -415,6 +415,7 @@
->  # define CSR_STATUS	CSR_MSTATUS
->  # define CSR_IE		CSR_MIE
->  # define CSR_TVEC	CSR_MTVEC
-> +# define CSR_ENVCFG CSR_MENVCFG
->  # define CSR_SCRATCH	CSR_MSCRATCH
->  # define CSR_EPC	CSR_MEPC
->  # define CSR_CAUSE	CSR_MCAUSE
-> @@ -439,6 +440,7 @@
->  # define CSR_STATUS	CSR_SSTATUS
->  # define CSR_IE		CSR_SIE
->  # define CSR_TVEC	CSR_STVEC
-> +# define CSR_ENVCFG CSR_SENVCFG
->  # define CSR_SCRATCH	CSR_SSCRATCH
->  # define CSR_EPC	CSR_SEPC
->  # define CSR_CAUSE	CSR_SCAUSE
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index b3785ffc1570..98623393fd1f 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -725,7 +725,7 @@ arch_initcall(check_unaligned_access_all_cpus);
->  void riscv_user_isa_enable(void)
->  {
->  	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICBOZ))
-> -		csr_set(CSR_SENVCFG, ENVCFG_CBZE);
-> +		csr_set(CSR_ENVCFG, ENVCFG_CBZE);
->  }
->  
->  #ifdef CONFIG_RISCV_ALTERNATIVE
-> -- 
-> 2.43.0
->
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 1a068de12a56..2b5954e75318 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -168,6 +168,14 @@ else
+>          KBUILD_CFLAGS += -mcmodel=kernel
+>          KBUILD_RUSTFLAGS += -Cno-redzone=y
+>          KBUILD_RUSTFLAGS += -Ccode-model=kernel
+> +
+> +	PIE_CFLAGS-$(CONFIG_STACKPROTECTOR)	+= -fno-stack-protector
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Main Makefile has
+
+KBUILD_CFLAGS += -fno-PIE
+
+and this ends up being:
+
+gcc -Wp,-MMD,arch/x86/kernel/.head64.s.d -nostdinc ... -fno-PIE ... -fpie ... -fverbose-asm -S -o arch/x86/kernel/head64.s arch/x86/kernel/head64.c
+
+Can you pls remove -fno-PIE from those TUs which use PIE_CFLAGS so that
+there's no confusion when staring at V=1 output?
+
+> +	PIE_CFLAGS-$(CONFIG_LTO)		+= -fno-lto
+> +
+> +	PIE_CFLAGS := -fpie -mcmodel=small $(PIE_CFLAGS-y) \
+> +		      -include $(srctree)/include/linux/hidden.h
+> +
+> +	export PIE_CFLAGS
+>  endif
+>  
+>  #
+
+Other than that, that code becomes much more readable, cool!
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
