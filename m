@@ -1,40 +1,81 @@
-Return-Path: <linux-arch+bounces-2178-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2179-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E355F850FD4
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:37:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547B185105C
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:12:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE4D282144
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 09:37:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF7E5B233B0
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B90912B89;
-	Mon, 12 Feb 2024 09:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F94F17C68;
+	Mon, 12 Feb 2024 10:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cn+lP0go"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FA5179B8;
-	Mon, 12 Feb 2024 09:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A8F17C62
+	for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 10:11:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707730646; cv=none; b=b/ofb3g9ZdYIlIZoNDqJxmWik8L8xgPqzxRy9d/858Tr9fUBQTAobKjHfcpCLlFsrdnscfpMLWa3TxCsgrJi5yUunvZCPHUYHisUnAL5xFxs5tRuW7RZjn+PLvtpuhKZEdQC4inZYc64c73VX90AmrhWUjft6xXY35r4Yu+oN6g=
+	t=1707732714; cv=none; b=gvlbD6PKEYZ716KIvgHp9XvdvNH9Pg++Vr2R1cja+iMfwvgbhnTbU+7Dk6OskzLSGi66AbrT4l4lw008VcsOXTBkOKrlSSCt/TyVcYIoEkBMgDYWZfOfTc2LKf53deX+xlO91L8Fy1Xg0L6JdoarPGAfzl+odBrXvF3W7yu2zUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707730646; c=relaxed/simple;
-	bh=ajK6QyGrpQajRxEmFqtR2vm1BVw9Pv1lp7YY/3BQk98=;
+	s=arc-20240116; t=1707732714; c=relaxed/simple;
+	bh=EsDLRCNgBBkHpMvWo3dkQLR5TLheexE1oSgsf7G0GBQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kr4Ws8cxewcUTj/DmvrGGvo4J3OdqMHYsPCSCMCKo51bsPgftFqXaI2FC8/YVSfvkX195y8zDuNyGdM0qhmgGGn3nQmZcIrHpFv1FeqWLRPFSUssl4ATwqFEB0Sx8DqrejSyJcki+k60Uoe4+SvW5w/5QNDMtElClQM1aGPIwbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC9BBDA7;
-	Mon, 12 Feb 2024 01:38:02 -0800 (PST)
-Received: from [10.57.78.115] (unknown [10.57.78.115])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B1643F762;
-	Mon, 12 Feb 2024 01:37:18 -0800 (PST)
-Message-ID: <04380249-3bf2-4702-a004-46465a9ae381@arm.com>
-Date: Mon, 12 Feb 2024 09:37:16 +0000
+	 In-Reply-To:Content-Type; b=CpjwPbdbyf1ZCfNVn86z8S40WhiaEZinkPVws556lKB9lIN9bPFL60kgaMQ7pw47PzhygIgvyr/OBQ5pI0fEEDFI+2HiByDYKMYZk2swgZSQ7l2TcCNVacbfLUfTCd4jfd6SjrQxLJjaRelf9UMwiDXginEXUx/KSIbFvLqawLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cn+lP0go; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707732710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=+2pRSCdMqyAZN8/VuuYCHaUNoBN7lwTPUXnd9XEGQ+w=;
+	b=cn+lP0goCPBVtsDhdpAR8yvB98CoHTvJlcValHa3p0dZl0mRvkUqZB7mbvsAOcvg9bW4r3
+	9YHTN1CCBjoUnY9IRLi7cARWyKJy9pJtDbBuuPcV8HIuHmhIuRifFA0o6Q3CdxVuNLSJoV
+	inKSjpx8JMC1kRTXf3cTa0ICgNkFMWM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-557-swtNSh1OPRiLq4bRsfJoBw-1; Mon, 12 Feb 2024 05:11:48 -0500
+X-MC-Unique: swtNSh1OPRiLq4bRsfJoBw-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-410727c32bdso12709715e9.1
+        for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 02:11:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707732707; x=1708337507;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+2pRSCdMqyAZN8/VuuYCHaUNoBN7lwTPUXnd9XEGQ+w=;
+        b=rDUUzukzWYu2oe7JF8hwr72cg5F53FNelVb10HKJ+xkz1k+9Qb1eDH+kUpVfr9Ae8y
+         oGMC/qaE3n5OTGSxaZ3/LKPYmF1ZqMDn1VY65xlVP+5BPhds83Jcj7mR2GsQ7Q3UY7Gt
+         l4x7t2wWqNYxnpX3QoJy15IPHAwkQIipJgu1ObTdxcNhIRCrMz+4O1HFZ2r21+/Bksn5
+         uFbFQYAqZ/IuA+xhZ/KT553J3v/p2DVOxLOrYCNqRPufG4n31jnr9rCcP3G0IzdqRJKj
+         Or74YRZvYXRcK4hICZdxk4Z34g7zavcogBkBspPd/DxpxWkhNlfZyunF5BTAYMbXM3Wv
+         m7Ww==
+X-Gm-Message-State: AOJu0YxeVQb38LdxNIOLdydVLipXPd/rH+5cmXWjBh+Gh++fHamnb/yW
+	DV/zxzM6kFwbt5+OdZsqs1NgNkQt7ZYk0g4M2Nkn27nxIFO+G2UMPK6FFXMC2wne0+vEXNZ0Vgm
+	rJaCkMJMTLamzWRMWwInErZLwbX+Gi4YUlC28+f+Et/RGSlhghMBM6Bj0i1I=
+X-Received: by 2002:a05:600c:600e:b0:410:be25:12bf with SMTP id az14-20020a05600c600e00b00410be2512bfmr2510600wmb.38.1707732707081;
+        Mon, 12 Feb 2024 02:11:47 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH+hlQMe30T62KMwr+luZOaXUQu5EKvOVB62I9SuHj1bCg0U6QR5ufA6j/zcrcMvqTl++iPog==
+X-Received: by 2002:a05:600c:600e:b0:410:be25:12bf with SMTP id az14-20020a05600c600e00b00410be2512bfmr2510563wmb.38.1707732706666;
+        Mon, 12 Feb 2024 02:11:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVwkAeAYQR7Gfoxupr5qBG9m0EFbv7DDI7aCfZtMNyIROIXA/SOrjkaJ59sr8xsqiaVCkCmlEIRjxy3J0wXfxX4p/V/LReolwctKJtaf6B3xBn7OrP0bc+txI9JVmFNAWwZNO6OMGWo3IXumCONO6uNSMmNTfbFmAY4pOA1lJgpDYGCD7L+3n273ujqqyssnrkBYDPGUmeZCNVHvSm6nOQmhOiwdAGGkbh9s4spMdJMjZUHweVEwDvqzZu+WY2iXCqg6PvKFOcrzgEd0inHm2VWhnlxmT+IxhcswK98pkwM1pdbqKpMZ8Ajk1JT4NE78LQt/mXy49lkqHahYzz6hjzT+dfzIx4V3DXSeAokKyb1gnl/iSmZRlqLUCcOgsmg3+wwBBOuVupln+MiH6egoWuOb0D3bdc75Mj8jQ3mkZXn+noa+I0RKgGk58qf9AmfYfgmoUeVxAHFDz6H2fGJSuPdxMMemhULInkfywbgcL4XDyX9Z53mEt7zOhan4AtbDYaknEn4fCZ/1MCYlw3aWeqpmwzPFZmOAeLuSio1iOcsGub9eXKx0M2nKuxJ4n1jPEP1oNBvLg89cxTfdtPQA43Yj+xKlc5QfNDyXl6bRRX286HkHyWSz/FRQYbEwdh7nAxD+scmPiWtw4qBIOUM0qZ0NG8OHtJi963eUHH1Om8YBT7l+DoZEuPwB1JBihSLrOPpnPqsDQCQDEYMqPRaoFdAtOdGG27xai7PTo0pl2W0EdZROwY=
+Received: from ?IPV6:2003:cb:c730:2200:7229:83b1:524e:283a? (p200300cbc7302200722983b1524e283a.dip0.t-ipconnect.de. [2003:cb:c730:2200:7229:83b1:524e:283a])
+        by smtp.gmail.com with ESMTPSA id bd27-20020a05600c1f1b00b00410d3b8c4c1sm2565365wmb.31.2024.02.12.02.11.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Feb 2024 02:11:46 -0800 (PST)
+Message-ID: <6c66f7ca-4b14-4bbb-bf06-e81b3481b03f@redhat.com>
+Date: Mon, 12 Feb 2024 11:11:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,10 +83,10 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 10/10] mm/memory: optimize unmap/zap with PTE-mapped
- THP
-Content-Language: en-GB
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/10] mm/mmu_gather: improve cond_resched() handling
+ with large folios and expensive page freeing
+Content-Language: en-US
+To: Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  Matthew Wilcox <willy@infradead.org>,
  Catalin Marinas <catalin.marinas@arm.com>,
@@ -62,308 +103,183 @@ Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
  linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  linux-s390@vger.kernel.org
 References: <20240209221509.585251-1-david@redhat.com>
- <20240209221509.585251-11-david@redhat.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20240209221509.585251-11-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+ <20240209221509.585251-10-david@redhat.com>
+ <f1578e92-4de0-4718-bf79-ec29e9a19fe0@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <f1578e92-4de0-4718-bf79-ec29e9a19fe0@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 09/02/2024 22:15, David Hildenbrand wrote:
-> Similar to how we optimized fork(), let's implement PTE batching when
-> consecutive (present) PTEs map consecutive pages of the same large
-> folio.
-> 
-> Most infrastructure we need for batching (mmu gather, rmap) is already
-> there. We only have to add get_and_clear_full_ptes() and
-> clear_full_ptes(). Similarly, extend zap_install_uffd_wp_if_needed() to
-> process a PTE range.
-> 
-> We won't bother sanity-checking the mapcount of all subpages, but only
-> check the mapcount of the first subpage we process. If there is a real
-> problem hiding somewhere, we can trigger it simply by using small
-> folios, or when we zap single pages of a large folio. Ideally, we had
-> that check in rmap code (including for delayed rmap), but then we cannot
-> print the PTE. Let's keep it simple for now. If we ever have a cheap
-> folio_mapcount(), we might just want to check for underflows there.
-> 
-> To keep small folios as fast as possible force inlining of a specialized
-> variant using __always_inline with nr=1.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Hi Ryan,
 
-Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
-
-> ---
->  include/linux/pgtable.h | 70 +++++++++++++++++++++++++++++++
->  mm/memory.c             | 92 +++++++++++++++++++++++++++++------------
->  2 files changed, 136 insertions(+), 26 deletions(-)
+>> -static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+>> +static void __tlb_batch_free_encoded_pages(struct mmu_gather_batch *batch)
+>>   {
+>> -	struct mmu_gather_batch *batch;
+>> -
+>> -	for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
+>> -		struct encoded_page **pages = batch->encoded_pages;
+>> +	struct encoded_page **pages = batch->encoded_pages;
+>> +	unsigned int nr, nr_pages;
+>>   
+>> +	/*
+>> +	 * We might end up freeing a lot of pages. Reschedule on a regular
+>> +	 * basis to avoid soft lockups in configurations without full
+>> +	 * preemption enabled. The magic number of 512 folios seems to work.
+>> +	 */
+>> +	if (!page_poisoning_enabled_static() && !want_init_on_free()) {
 > 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index aab227e12493..49ab1f73b5c2 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -580,6 +580,76 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->  }
->  #endif
->  
-> +#ifndef get_and_clear_full_ptes
-> +/**
-> + * get_and_clear_full_ptes - Clear present PTEs that map consecutive pages of
-> + *			     the same folio, collecting dirty/accessed bits.
-> + * @mm: Address space the pages are mapped into.
-> + * @addr: Address the first page is mapped at.
-> + * @ptep: Page table pointer for the first entry.
-> + * @nr: Number of entries to clear.
-> + * @full: Whether we are clearing a full mm.
-> + *
-> + * May be overridden by the architecture; otherwise, implemented as a simple
-> + * loop over ptep_get_and_clear_full(), merging dirty/accessed bits into the
-> + * returned PTE.
-> + *
-> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-> + * some PTEs might be write-protected.
-> + *
-> + * Context: The caller holds the page table lock.  The PTEs map consecutive
-> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
-> + */
-> +static inline pte_t get_and_clear_full_ptes(struct mm_struct *mm,
-> +		unsigned long addr, pte_t *ptep, unsigned int nr, int full)
-> +{
-> +	pte_t pte, tmp_pte;
-> +
-> +	pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-> +	while (--nr) {
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +		tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-> +		if (pte_dirty(tmp_pte))
-> +			pte = pte_mkdirty(pte);
-> +		if (pte_young(tmp_pte))
-> +			pte = pte_mkyoung(pte);
-> +	}
-> +	return pte;
-> +}
-> +#endif
-> +
-> +#ifndef clear_full_ptes
-> +/**
-> + * clear_full_ptes - Clear present PTEs that map consecutive pages of the same
-> + *		     folio.
-> + * @mm: Address space the pages are mapped into.
-> + * @addr: Address the first page is mapped at.
-> + * @ptep: Page table pointer for the first entry.
-> + * @nr: Number of entries to clear.
-> + * @full: Whether we are clearing a full mm.
-> + *
-> + * May be overridden by the architecture; otherwise, implemented as a simple
-> + * loop over ptep_get_and_clear_full().
-> + *
-> + * Note that PTE bits in the PTE range besides the PFN can differ. For example,
-> + * some PTEs might be write-protected.
-> + *
-> + * Context: The caller holds the page table lock.  The PTEs map consecutive
-> + * pages that belong to the same folio.  The PTEs are all in the same PMD.
-> + */
-> +static inline void clear_full_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr, int full)
-> +{
-> +	for (;;) {
-> +		ptep_get_and_clear_full(mm, addr, ptep, full);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +	}
-> +}
-> +#endif
->  
->  /*
->   * If two threads concurrently fault at the same page, the thread that
-> diff --git a/mm/memory.c b/mm/memory.c
-> index a3efc4da258a..3b8e56eb08a3 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1515,7 +1515,7 @@ static inline bool zap_drop_file_uffd_wp(struct zap_details *details)
->   */
->  static inline void
->  zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
-> -			      unsigned long addr, pte_t *pte,
-> +			      unsigned long addr, pte_t *pte, int nr,
->  			      struct zap_details *details, pte_t pteval)
->  {
->  	/* Zap on anonymous always means dropping everything */
-> @@ -1525,20 +1525,27 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
->  	if (zap_drop_file_uffd_wp(details))
->  		return;
->  
-> -	pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-> +	for (;;) {
-> +		/* the PFN in the PTE is irrelevant. */
-> +		pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-> +		if (--nr == 0)
-> +			break;
-> +		pte++;
-> +		addr += PAGE_SIZE;
-> +	}
->  }
->  
-> -static inline void zap_present_folio_pte(struct mmu_gather *tlb,
-> +static __always_inline void zap_present_folio_ptes(struct mmu_gather *tlb,
->  		struct vm_area_struct *vma, struct folio *folio,
-> -		struct page *page, pte_t *pte, pte_t ptent, unsigned long addr,
-> -		struct zap_details *details, int *rss, bool *force_flush,
-> -		bool *force_break)
-> +		struct page *page, pte_t *pte, pte_t ptent, unsigned int nr,
-> +		unsigned long addr, struct zap_details *details, int *rss,
-> +		bool *force_flush, bool *force_break)
->  {
->  	struct mm_struct *mm = tlb->mm;
->  	bool delay_rmap = false;
->  
->  	if (!folio_test_anon(folio)) {
-> -		ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
-> +		ptent = get_and_clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
->  		if (pte_dirty(ptent)) {
->  			folio_mark_dirty(folio);
->  			if (tlb_delay_rmap(tlb)) {
-> @@ -1548,36 +1555,49 @@ static inline void zap_present_folio_pte(struct mmu_gather *tlb,
->  		}
->  		if (pte_young(ptent) && likely(vma_has_recency(vma)))
->  			folio_mark_accessed(folio);
-> -		rss[mm_counter(folio)]--;
-> +		rss[mm_counter(folio)] -= nr;
->  	} else {
->  		/* We don't need up-to-date accessed/dirty bits. */
-> -		ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
-> -		rss[MM_ANONPAGES]--;
-> +		clear_full_ptes(mm, addr, pte, nr, tlb->fullmm);
-> +		rss[MM_ANONPAGES] -= nr;
->  	}
-> +	/* Checking a single PTE in a batch is sufficient. */
->  	arch_check_zapped_pte(vma, ptent);
-> -	tlb_remove_tlb_entry(tlb, pte, addr);
-> +	tlb_remove_tlb_entries(tlb, pte, nr, addr);
->  	if (unlikely(userfaultfd_pte_wp(vma, ptent)))
-> -		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
-> +		zap_install_uffd_wp_if_needed(vma, addr, pte, nr, details,
-> +					      ptent);
->  
->  	if (!delay_rmap) {
-> -		folio_remove_rmap_pte(folio, page, vma);
-> +		folio_remove_rmap_ptes(folio, page, nr, vma);
-> +
-> +		/* Only sanity-check the first page in a batch. */
->  		if (unlikely(page_mapcount(page) < 0))
->  			print_bad_pte(vma, addr, ptent, page);
->  	}
-> -	if (unlikely(__tlb_remove_page(tlb, page, delay_rmap))) {
-> +	if (unlikely(__tlb_remove_folio_pages(tlb, page, nr, delay_rmap))) {
->  		*force_flush = true;
->  		*force_break = true;
->  	}
->  }
->  
-> -static inline void zap_present_pte(struct mmu_gather *tlb,
-> +/*
-> + * Zap or skip at least one present PTE, trying to batch-process subsequent
-> + * PTEs that map consecutive pages of the same folio.
-> + *
-> + * Returns the number of processed (skipped or zapped) PTEs (at least 1).
-> + */
-> +static inline int zap_present_ptes(struct mmu_gather *tlb,
->  		struct vm_area_struct *vma, pte_t *pte, pte_t ptent,
-> -		unsigned long addr, struct zap_details *details,
-> -		int *rss, bool *force_flush, bool *force_break)
-> +		unsigned int max_nr, unsigned long addr,
-> +		struct zap_details *details, int *rss, bool *force_flush,
-> +		bool *force_break)
->  {
-> +	const fpb_t fpb_flags = FPB_IGNORE_DIRTY | FPB_IGNORE_SOFT_DIRTY;
->  	struct mm_struct *mm = tlb->mm;
->  	struct folio *folio;
->  	struct page *page;
-> +	int nr;
->  
->  	page = vm_normal_page(vma, addr, ptent);
->  	if (!page) {
-> @@ -1587,14 +1607,29 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
->  		tlb_remove_tlb_entry(tlb, pte, addr);
->  		VM_WARN_ON_ONCE(userfaultfd_wp(vma));
->  		ksm_might_unmap_zero_page(mm, ptent);
-> -		return;
-> +		return 1;
->  	}
->  
->  	folio = page_folio(page);
->  	if (unlikely(!should_zap_folio(details, folio)))
-> -		return;
-> -	zap_present_folio_pte(tlb, vma, folio, page, pte, ptent, addr, details,
-> -			      rss, force_flush, force_break);
-> +		return 1;
-> +
-> +	/*
-> +	 * Make sure that the common "small folio" case is as fast as possible
-> +	 * by keeping the batching logic separate.
-> +	 */
-> +	if (unlikely(folio_test_large(folio) && max_nr != 1)) {
-> +		nr = folio_pte_batch(folio, addr, pte, ptent, max_nr, fpb_flags,
-> +				     NULL);
-> +
-> +		zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, nr,
-> +				       addr, details, rss, force_flush,
-> +				       force_break);
-> +		return nr;
-> +	}
-> +	zap_present_folio_ptes(tlb, vma, folio, page, pte, ptent, 1, addr,
-> +			       details, rss, force_flush, force_break);
-> +	return 1;
->  }
->  
->  static unsigned long zap_pte_range(struct mmu_gather *tlb,
-> @@ -1609,6 +1644,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  	pte_t *start_pte;
->  	pte_t *pte;
->  	swp_entry_t entry;
-> +	int nr;
->  
->  	tlb_change_page_size(tlb, PAGE_SIZE);
->  	init_rss_vec(rss);
-> @@ -1622,7 +1658,9 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  		pte_t ptent = ptep_get(pte);
->  		struct folio *folio;
->  		struct page *page;
-> +		int max_nr;
->  
-> +		nr = 1;
->  		if (pte_none(ptent))
->  			continue;
->  
-> @@ -1630,10 +1668,12 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  			break;
->  
->  		if (pte_present(ptent)) {
-> -			zap_present_pte(tlb, vma, pte, ptent, addr, details,
-> -					rss, &force_flush, &force_break);
-> +			max_nr = (end - addr) / PAGE_SIZE;
-> +			nr = zap_present_ptes(tlb, vma, pte, ptent, max_nr,
-> +					      addr, details, rss, &force_flush,
-> +					      &force_break);
->  			if (unlikely(force_break)) {
-> -				addr += PAGE_SIZE;
-> +				addr += nr * PAGE_SIZE;
->  				break;
->  			}
->  			continue;
-> @@ -1687,8 +1727,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  			WARN_ON_ONCE(1);
->  		}
->  		pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-> -		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
-> -	} while (pte++, addr += PAGE_SIZE, addr != end);
-> +		zap_install_uffd_wp_if_needed(vma, addr, pte, 1, details, ptent);
-> +	} while (pte += nr, addr += PAGE_SIZE * nr, addr != end);
->  
->  	add_mm_rss_vec(mm, rss);
->  	arch_leave_lazy_mmu_mode();
+> Is the performance win really worth 2 separate implementations keyed off this?
+> It seems a bit fragile, in case any other operations get added to free which are
+> proportional to size in future. Why not just always do the conservative version?
+
+I really don't want to iterate over all entries on the "sane" common 
+case. We already do that two times:
+
+a) free_pages_and_swap_cache()
+
+b) release_pages()
+
+Only the latter really is required, and I'm planning on removing the one 
+in (a) to move it into (b) as well.
+
+So I keep it separate to keep any unnecessary overhead to the setups 
+that are already terribly slow.
+
+No need to iterate a page full of entries if it can be easily avoided. 
+Especially, no need to degrade the common order-0 case.
+
+> 
+>>   		while (batch->nr) {
+>> -			/*
+>> -			 * limit free batch count when PAGE_SIZE > 4K
+>> -			 */
+>> -			unsigned int nr = min(512U, batch->nr);
+>> +			nr = min(512, batch->nr);
+> 
+> If any entries are for more than 1 page, nr_pages will also be encoded in the
+> batch, so effectively this could be limiting to 256 actual folios (half of 512).
+
+Right, in the patch description I state "256 folio fragments". It's up 
+to 512 folios (order-0).
+
+> Is it worth checking for ENCODED_PAGE_BIT_NR_PAGES_NEXT and limiting accordingly?
+
+At least with 4k page size, we never have more than 510 (IIRC) entries 
+per batch page. So any such optimization would only matter for large 
+page sizes, which I don't think is worth it.
+
+Which exact optimization do you have in mind and would it really make a 
+difference?
+
+> 
+> nit: You're using 512 magic number in 2 places now; perhaps make a macro?
+
+I played 3 times with macro names (including just using something 
+"intuitive" like MAX_ORDER_NR_PAGES) but returned to just using 512.
+
+That cond_resched() handling is just absolutely disgusting, one way or 
+the other.
+
+Do you have a good idea for a macro name?
+
+> 
+>>   
+>>   			/*
+>>   			 * Make sure we cover page + nr_pages, and don't leave
+>> @@ -119,6 +120,37 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+>>   			cond_resched();
+>>   		}
+>>   	}
+>> +
+>> +	/*
+>> +	 * With page poisoning and init_on_free, the time it takes to free
+>> +	 * memory grows proportionally with the actual memory size. Therefore,
+>> +	 * limit based on the actual memory size and not the number of involved
+>> +	 * folios.
+>> +	 */
+>> +	while (batch->nr) {
+>> +		for (nr = 0, nr_pages = 0;
+>> +		     nr < batch->nr && nr_pages < 512; nr++) {
+>> +			if (unlikely(encoded_page_flags(pages[nr]) &
+>> +				     ENCODED_PAGE_BIT_NR_PAGES_NEXT))
+>> +				nr_pages += encoded_nr_pages(pages[++nr]);
+>> +			else
+>> +				nr_pages++;
+>> +		}
+> 
+> I guess worst case here is freeing (511 + 8192) * 64K pages = ~544M. That's up
+> from the old limit of 512 * 64K = 32M, and 511 pages bigger than your statement
+> in the commit log. Are you comfortable with this? I guess the only alternative
+> is to start splitting a batch which would be really messy. I agree your approach
+> is preferable if 544M is acceptable.
+
+Right, I have in the description:
+
+"if we cannot even free a single MAX_ORDER page on a system without 
+running into soft lockups, something else is already completely bogus.".
+
+That would be 8192 pages on arm64. Anybody freeing a PMD-mapped THP 
+would be in trouble already and should just reconsider life choices 
+running such a machine.
+
+We could have 511 more pages, yes. If 8192 don't trigger a soft-lockup, 
+I am confident that 511 more pages won't make a difference.
+
+But, if that ever is a problem, we can butcher this code as much as we 
+want, because performance with poisoning/zeroing is already down the drain.
+
+As you say, splitting even further is messy, so I rather avoid that 
+unless really required.
+
+-- 
+Cheers,
+
+David / dhildenb
 
 
