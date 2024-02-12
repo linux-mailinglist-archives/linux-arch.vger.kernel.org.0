@@ -1,169 +1,223 @@
-Return-Path: <linux-arch+bounces-2181-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2182-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B00C8510D5
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:29:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E9328510F4
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 11:33:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E35C1C220EF
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:29:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDC51B250D3
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Feb 2024 10:33:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C777418021;
-	Mon, 12 Feb 2024 10:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ewZU95JZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DE0208C1;
+	Mon, 12 Feb 2024 10:32:45 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25D2179B8;
-	Mon, 12 Feb 2024 10:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855EC38F86;
+	Mon, 12 Feb 2024 10:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707733774; cv=none; b=EttkAj+zji33FwdqQgP75l63Fot0DVD2AytoX6yAJnCmpar11x26oBNJS8XTYIchOotywXCjaXvoCw2fYrvuXohpYlgVMuiHdNsJqt20+mnLGWnnEm4ljpdf6nAkCI9E+YPUbwcJ0iyZwi3nWqhfoHY44NBnUfHsU5PvQri2nYg=
+	t=1707733965; cv=none; b=b3pxc0VfJ2uUDzfOu4eYL4fKBHK7wws3YuMfjMxKubmVEoAMXRyLXo5SIHl5Hv11m6QAhuHRTsO4GaJ5wQrg1pRe4woJ4v4ayxyonTz9NxXaWm63+7KVbFb4Kx80tT7FZkKImFfDpINFu+uTb0P/03724rCm+ZqnwRp5N39kkog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707733774; c=relaxed/simple;
-	bh=lM1ikn/+ntRnbPmGODrfBa9eMNqWS/z2GjeqQpt4V0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iqG8JbQ/Us0RtJAH6gJDUbU+Xm73c40s7MSP1TSrPyV2SLSK1j02t+XBqatSuMBqMmhHYuR9XZf1KB6hrDUqjL4UCm4dMIVA5gJoNlyzLVbZUCY7ZvTCA9Bv32hakX0l77A/TXrTkFHAG8mDKmavfIYaoIsO7q/06JF6gdwg8mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ewZU95JZ; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 54CE940E01A9;
-	Mon, 12 Feb 2024 10:29:28 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Qfqc-ypnMKxE; Mon, 12 Feb 2024 10:29:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707733765; bh=8zzxZzAd70wLVlqCQfwTbwt/dFp7veEPvkKLq3mmCGc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ewZU95JZ5AgG6rZJLPSyQ4+uco/ylQ/tMZeYqEi7wKs9BhYt/fG7UUUw5O9c+EANz
-	 PSom6AgWUMW2IS8WNEUftXLmPq3pN41pcL/lPl3Gs6sVikGhK3Uv147SDRM8qFdvI6
-	 O4ICiy7mrjH18ayfOBcEHRXSI6KU7zjCK+FPdkrx5XyyVDvrNUmK2FIFkjCrUY9t07
-	 nvzxQimDDhYzoLZ/30kpmiOwB5+s5SJLLA0GPjtbH2OhEd6GpQvU2vLDKH5OACoh1G
-	 x6of9WfDLm8z5xPXQIpU5179BSwfJtwmo/F5n+6nHTVmrW2ALHtwLNfqohPSK3dJex
-	 6mv7RMbVLCXcVyjluiK0DvUKxPZQJX35vKF2OgcMN8GTmDVlu+J/P8efvxpIzznLs5
-	 rSdU+n7H8mrAxoeQFuNMu3BI9kHDsGDETqPzTo1hCZU6qiXdg/ThRjEoX/Tb/EvajN
-	 MDn4GSgKo/gzOq5gv9mJ8vEjCA+/zEBCindjhc+OeCGhW1bIBjK1hsHd3hKxmzky79
-	 fYJiCPIT3BcOQJ7wOUlO0HtgmUFu/x4VyJL+53TbPc3MTLnVijXoCKik3ByfmwzdLN
-	 vFdwoJq+FzycmgelzaQn/+VPw3wnvDRgmxWLpW74v7xdmEab8qX0+E4Pv6uzS4FS+l
-	 1ln5F/fr/a3P8lcfbf0/v0YQ=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A5EF940E0192;
-	Mon, 12 Feb 2024 10:29:07 +0000 (UTC)
-Date: Mon, 12 Feb 2024 11:29:01 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 08/19] x86/head64: Replace pointer fixups with PIE
- codegen
-Message-ID: <20240212102901.GVZcny7WeK_ZWt0HEP@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-29-ardb+git@google.com>
+	s=arc-20240116; t=1707733965; c=relaxed/simple;
+	bh=rue4OxYXJdrpeRwQ0vv+gyD470QjAXZx/8+YrSZvDYk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=owyDTD7uK+JDBge2yzPLOsfP22HVBbFB+1HJKUcFrtVvuCzLtWnQqtKOKFjML/llJUH2IbpzH7O1Z/sOXycoKPlSK7CnCHXYcosnWw7i8JLhSnjWZMOLIKG1M4QETjoWN6NeZf7XqOqNg+2tI4g/QOvlPvT5Ayx7z4zEE5s2Goc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 255FEDA7;
+	Mon, 12 Feb 2024 02:33:23 -0800 (PST)
+Received: from [10.57.78.115] (unknown [10.57.78.115])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77AD83F762;
+	Mon, 12 Feb 2024 02:32:38 -0800 (PST)
+Message-ID: <590946ad-a538-4c99-947f-93455c2d96c6@arm.com>
+Date: Mon, 12 Feb 2024 10:32:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240129180502.4069817-29-ardb+git@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/10] mm/mmu_gather: improve cond_resched() handling
+ with large folios and expensive page freeing
+Content-Language: en-GB
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+ Matthew Wilcox <willy@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Yin Fengwei <fengwei.yin@intel.com>, Michal Hocko <mhocko@suse.com>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
+ <aneesh.kumar@linux.ibm.com>, Nick Piggin <npiggin@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Michael Ellerman
+ <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org
+References: <20240209221509.585251-1-david@redhat.com>
+ <20240209221509.585251-10-david@redhat.com>
+ <f1578e92-4de0-4718-bf79-ec29e9a19fe0@arm.com>
+ <6c66f7ca-4b14-4bbb-bf06-e81b3481b03f@redhat.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <6c66f7ca-4b14-4bbb-bf06-e81b3481b03f@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 29, 2024 at 07:05:11PM +0100, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
+On 12/02/2024 10:11, David Hildenbrand wrote:
+> Hi Ryan,
 > 
-> Some of the C code in head64.c may be called from a different virtual
-> address than it was linked at. Currently, we deal with this by using
-
-Yeah, make passive pls: "Currently, this is done by using... "
-
-> ordinary, position dependent codegen, and fixing up all symbol
-> references on the fly. This is fragile and tricky to maintain. It is
-> also unnecessary: we can use position independent codegen (with hidden
-		   ^^^
-Ditto: "use ..."
-
-In the comments below too, pls, where it says "we".
-
-> visibility) to ensure that all compiler generated symbol references are
-> RIP-relative, removing the need for fixups entirely.
+>>> -static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+>>> +static void __tlb_batch_free_encoded_pages(struct mmu_gather_batch *batch)
+>>>   {
+>>> -    struct mmu_gather_batch *batch;
+>>> -
+>>> -    for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
+>>> -        struct encoded_page **pages = batch->encoded_pages;
+>>> +    struct encoded_page **pages = batch->encoded_pages;
+>>> +    unsigned int nr, nr_pages;
+>>>   +    /*
+>>> +     * We might end up freeing a lot of pages. Reschedule on a regular
+>>> +     * basis to avoid soft lockups in configurations without full
+>>> +     * preemption enabled. The magic number of 512 folios seems to work.
+>>> +     */
+>>> +    if (!page_poisoning_enabled_static() && !want_init_on_free()) {
+>>
+>> Is the performance win really worth 2 separate implementations keyed off this?
+>> It seems a bit fragile, in case any other operations get added to free which are
+>> proportional to size in future. Why not just always do the conservative version?
 > 
-> It does mean we need explicit references to kernel virtual addresses to
-> be generated by hand, so generate those using a movabs instruction in
-> inline asm in the handful places where we actually need this.
+> I really don't want to iterate over all entries on the "sane" common case. We
+> already do that two times:
 > 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/Makefile                 |  8 ++
->  arch/x86/boot/compressed/Makefile |  2 +-
->  arch/x86/include/asm/desc.h       |  3 +-
->  arch/x86/include/asm/setup.h      |  4 +-
->  arch/x86/kernel/Makefile          |  5 ++
->  arch/x86/kernel/head64.c          | 88 +++++++-------------
->  arch/x86/kernel/head_64.S         |  5 +-
->  7 files changed, 51 insertions(+), 64 deletions(-)
+> a) free_pages_and_swap_cache()
 > 
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 1a068de12a56..2b5954e75318 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -168,6 +168,14 @@ else
->          KBUILD_CFLAGS += -mcmodel=kernel
->          KBUILD_RUSTFLAGS += -Cno-redzone=y
->          KBUILD_RUSTFLAGS += -Ccode-model=kernel
-> +
-> +	PIE_CFLAGS-$(CONFIG_STACKPROTECTOR)	+= -fno-stack-protector
+> b) release_pages()
+> 
+> Only the latter really is required, and I'm planning on removing the one in (a)
+> to move it into (b) as well.
+> 
+> So I keep it separate to keep any unnecessary overhead to the setups that are
+> already terribly slow.
+> 
+> No need to iterate a page full of entries if it can be easily avoided.
+> Especially, no need to degrade the common order-0 case.
 
-Main Makefile has
+Yeah, I understand all that. But given this is all coming from an array, (so
+easy to prefetch?) and will presumably all fit in the cache for the common case,
+at least, so its hot for (a) and (b), does separating this out really make a
+measurable performance difference? If yes then absolutely this optimizaiton
+makes sense. But if not, I think its a bit questionable.
 
-KBUILD_CFLAGS += -fno-PIE
+You're the boss though, so if your experience tells you this is neccessary, then
+I'm ok with that.
 
-and this ends up being:
+By the way, Matthew had an RFC a while back that was doing some clever things
+with batches further down the call chain (I think; be memory). Might be worth
+taking a look at that if you are planning a follow up change to (a).
 
-gcc -Wp,-MMD,arch/x86/kernel/.head64.s.d -nostdinc ... -fno-PIE ... -fpie ... -fverbose-asm -S -o arch/x86/kernel/head64.s arch/x86/kernel/head64.c
+> 
+>>
+>>>           while (batch->nr) {
+>>> -            /*
+>>> -             * limit free batch count when PAGE_SIZE > 4K
+>>> -             */
+>>> -            unsigned int nr = min(512U, batch->nr);
+>>> +            nr = min(512, batch->nr);
+>>
+>> If any entries are for more than 1 page, nr_pages will also be encoded in the
+>> batch, so effectively this could be limiting to 256 actual folios (half of 512).
+> 
+> Right, in the patch description I state "256 folio fragments". It's up to 512
+> folios (order-0).
+> 
+>> Is it worth checking for ENCODED_PAGE_BIT_NR_PAGES_NEXT and limiting accordingly?
+> 
+> At least with 4k page size, we never have more than 510 (IIRC) entries per batch
+> page. So any such optimization would only matter for large page sizes, which I
+> don't think is worth it.
 
-Can you pls remove -fno-PIE from those TUs which use PIE_CFLAGS so that
-there's no confusion when staring at V=1 output?
+Yep; agreed.
 
-> +	PIE_CFLAGS-$(CONFIG_LTO)		+= -fno-lto
-> +
-> +	PIE_CFLAGS := -fpie -mcmodel=small $(PIE_CFLAGS-y) \
-> +		      -include $(srctree)/include/linux/hidden.h
-> +
-> +	export PIE_CFLAGS
->  endif
->  
->  #
+> 
+> Which exact optimization do you have in mind and would it really make a difference?
 
-Other than that, that code becomes much more readable, cool!
+No I don't think it would make any difference, performance-wise. I'm just
+pointing out that in pathalogical cases you could end up with half the number of
+pages being freed at a time.
 
-Thx.
+> 
+>>
+>> nit: You're using 512 magic number in 2 places now; perhaps make a macro?
+> 
+> I played 3 times with macro names (including just using something "intuitive"
+> like MAX_ORDER_NR_PAGES) but returned to just using 512.
+> 
+> That cond_resched() handling is just absolutely disgusting, one way or the other.
+> 
+> Do you have a good idea for a macro name?
 
--- 
-Regards/Gruss,
-    Boris.
+MAX_NR_FOLIOS_PER_BATCH?
+MAX_NR_FOLIOS_PER_FREE?
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I don't think the name has to be perfect, because its private to the c file; but
+it ensures the 2 usages remain in sync if someone wants to change it in future.
+
+> 
+>>
+>>>                 /*
+>>>                * Make sure we cover page + nr_pages, and don't leave
+>>> @@ -119,6 +120,37 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+>>>               cond_resched();
+>>>           }
+>>>       }
+>>> +
+>>> +    /*
+>>> +     * With page poisoning and init_on_free, the time it takes to free
+>>> +     * memory grows proportionally with the actual memory size. Therefore,
+>>> +     * limit based on the actual memory size and not the number of involved
+>>> +     * folios.
+>>> +     */
+>>> +    while (batch->nr) {
+>>> +        for (nr = 0, nr_pages = 0;
+>>> +             nr < batch->nr && nr_pages < 512; nr++) {
+>>> +            if (unlikely(encoded_page_flags(pages[nr]) &
+>>> +                     ENCODED_PAGE_BIT_NR_PAGES_NEXT))
+>>> +                nr_pages += encoded_nr_pages(pages[++nr]);
+>>> +            else
+>>> +                nr_pages++;
+>>> +        }
+>>
+>> I guess worst case here is freeing (511 + 8192) * 64K pages = ~544M. That's up
+>> from the old limit of 512 * 64K = 32M, and 511 pages bigger than your statement
+>> in the commit log. Are you comfortable with this? I guess the only alternative
+>> is to start splitting a batch which would be really messy. I agree your approach
+>> is preferable if 544M is acceptable.
+> 
+> Right, I have in the description:
+> 
+> "if we cannot even free a single MAX_ORDER page on a system without running into
+> soft lockups, something else is already completely bogus.".
+> 
+> That would be 8192 pages on arm64. Anybody freeing a PMD-mapped THP would be in
+> trouble already and should just reconsider life choices running such a machine.
+> 
+> We could have 511 more pages, yes. If 8192 don't trigger a soft-lockup, I am
+> confident that 511 more pages won't make a difference.
+> 
+> But, if that ever is a problem, we can butcher this code as much as we want,
+> because performance with poisoning/zeroing is already down the drain.
+> 
+> As you say, splitting even further is messy, so I rather avoid that unless
+> really required.
+> 
+
+Yep ok, I understand the argument better now - thanks.
+
 
