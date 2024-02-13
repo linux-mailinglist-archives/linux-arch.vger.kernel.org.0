@@ -1,170 +1,197 @@
-Return-Path: <linux-arch+bounces-2283-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2284-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F18EF853074
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:24:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18E38530B2
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA1A3B21C82
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:24:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C63261C260C8
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B919E3D971;
-	Tue, 13 Feb 2024 12:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78B63D99C;
+	Tue, 13 Feb 2024 12:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oPNMu0/3";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oPNMu0/3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j1WUtniX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9875A3D54D;
-	Tue, 13 Feb 2024 12:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DAE482EE
+	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 12:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707827060; cv=none; b=MjomBmL9hWZIn8O0IV04LYrGCrDyNhTyinNP9Lf8fUYMDW1sboG0yAU/9TWOCqtVEmi+9FTYqqQe0hGYL2Xr0gqXbbWZu9kUVI/1leuKyP+8GyKpWYwMZyytwxflaLONH0XC4UYz8n25Dx8mQDV609Rc6JS6/GCv1jtHTcQOC1Q=
+	t=1707828123; cv=none; b=QmRzBQ0Mq1Ku/RpAvPkfzNdNhlMgMutlQgiVpFFCLZvUniJG+YMUN2HsBrIwkAWSDP+BJKNONS0LCRyiEuxBfRArXHvq4mW4VN83ZIgdo7Co+PyAWuAjLsc8n0LUEtjMMQQ6QS1n5hhPOfHtS/KrLyRj3iiTRGhyL+WAPzUokSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707827060; c=relaxed/simple;
-	bh=KM6zxaaoOFSyFZ5noXN1PyDk4COINjZTnbDT7nk2jc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nMROOOTTV6lrv4shUBU+r4D0+Omp/kAQe8tHl6VSmKumRzuuypBqZ9ZOKctQVpPmTnPnVfwoTJOJ5a4iBFHAqpupYxocioQPsPh7iNF13zxe0oeieoI+FCx1TROhqYg083xLwv1xMCx5r5qhA2aL+3M0JmgxhIaugBrXSi5KIls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oPNMu0/3; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oPNMu0/3; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B2D4722206;
-	Tue, 13 Feb 2024 12:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1707827056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zXbOiQIN7neMTyajtp5U/4Xc00nM1Z7564QKlnGLw3E=;
-	b=oPNMu0/3kyHrjKXlmWcSVvIaXSDVbOqkAyBWw+GM976X053z77ogsr0EDbHX/7ytpQYyy9
-	SyG7mHOiNYd83sIJtiREPWMY5thldH58zWZvsioUSDVozZuC7lw84nRpXvaSjzQ83Bc875
-	OeMyCboEUx7oHjBoCcViZ4MERhSiPOw=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1707827056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zXbOiQIN7neMTyajtp5U/4Xc00nM1Z7564QKlnGLw3E=;
-	b=oPNMu0/3kyHrjKXlmWcSVvIaXSDVbOqkAyBWw+GM976X053z77ogsr0EDbHX/7ytpQYyy9
-	SyG7mHOiNYd83sIJtiREPWMY5thldH58zWZvsioUSDVozZuC7lw84nRpXvaSjzQ83Bc875
-	OeMyCboEUx7oHjBoCcViZ4MERhSiPOw=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8BA931370C;
-	Tue, 13 Feb 2024 12:24:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4rhuIXBfy2WUCAAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Tue, 13 Feb 2024 12:24:16 +0000
-Date: Tue, 13 Feb 2024 13:24:11 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, vbabka@suse.cz,
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-	paulmck@kernel.org, pasha.tatashin@soleen.com,
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 00/35] Memory allocation profiling
-Message-ID: <Zctfa2DvmlTYSfe8@tiehlicka>
-References: <20240212213922.783301-1-surenb@google.com>
+	s=arc-20240116; t=1707828123; c=relaxed/simple;
+	bh=ZVMb7gP145nftz4xlnOVHAtrFJ5WUTtvWVYyLjZEiXc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=aR5XDjyRlGZIMXAaQK2zIgtC27R/iNN634SnBHmgT6HmdJ+yMpiIG1LcBG3SdZw0TJGBSJixjEFp2whGayorGNCKS4bp42uIHCI7L7irMae2NLesn90foRUdStbKXFv/KPOpIDTDQHQXe64u3YTCgVWWILypmmUmT+U2n9ECorg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j1WUtniX; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5ee22efe5eeso74282567b3.3
+        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 04:42:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707828121; x=1708432921; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4sKQKsqhQHcaBIiQ2PFPv13ZvWeRGhTtRzdxj6QxrA4=;
+        b=j1WUtniXpHFLyjoSnN7H1hqzQWvjDqLRv60/GhzjgRSljeqcoSxAexyrQrTveY80yk
+         So4pInRkWEe0UKaPRht5pTS8bBumtOi9BroSIBvucshFx9gKJvmxwE1H3vkagPTbG0kh
+         wk4ZYRDo3YmD8huksXtIPtwqTpl8oHZhLCaeZWaCNSJv0pmmiQkrrz/9iOnRn/NhCcqT
+         WdWjnIf7qM6mnlUwb9o7lOBR2UWE7FXQD1BBgwmJ3jK+40dE1W43Iy9OIYzG2coqk20O
+         ffC5ThylbOnYWAouC/FygUzRqEsZUhN3VnEoMXJf2dqvQ2K0Kd2NpbmyaPF3T/z+USN6
+         C/DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707828121; x=1708432921;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4sKQKsqhQHcaBIiQ2PFPv13ZvWeRGhTtRzdxj6QxrA4=;
+        b=sk9pERWNRLDVKx/DmHlnGC4X60sZ2jCoiiWj6iK0URzwPtaYj7Trvyec9bSAVAUAXY
+         0zCPkStW/hWXC0+DQd+gDJyXOHlopnxrZRFbp7CXNR1Wi+GFrA0EzTGMuncrr61TETxd
+         l7Y0XDtv/kAxg+zWbX8AIclMpNDP3i0KSNxmOZzFbMYiltkw9Wvr1gx7MdqSajRBU/gj
+         nFwzPHkhpVYWhfdG1onpialzr2IhLVF3KVlA/YybjfVyyjMbNUQU4vSRWjo5d+CcQ50y
+         0WQkAwN0++1/sWdgkQV5RVCu7AOCMFc3LG/IueMutLheMIBD5ySuT6ijigCIk5n0dFIX
+         55Zw==
+X-Gm-Message-State: AOJu0YzqT3vbnOr6zh5LnIoja0eKil345Icwx5twyuvDyRux/NT8ayJp
+	AMplyaiXRjXLFPRNs7oJYdEFii6n4gNLLdc9ZNFlz0Xuwz+5DA/q8LLN6Y63ypFj+SoK8Q==
+X-Google-Smtp-Source: AGHT+IFsUPajA+uJOUTqCizpG7tc2fhGX8nsZXyDmXGQA0A5u8p94jVknGR04nO4Syv60zafQ6BSfdJh
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:a05:6902:2511:b0:dc6:b813:5813 with SMTP id
+ dt17-20020a056902251100b00dc6b8135813mr344439ybb.9.1707828120922; Tue, 13 Feb
+ 2024 04:42:00 -0800 (PST)
+Date: Tue, 13 Feb 2024 13:41:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212213922.783301-1-surenb@google.com>
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b="oPNMu0/3"
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.07 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 TO_DN_SOME(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_GT_50(0.00)[73];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-0.06)[60.75%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 RCVD_DKIM_ARC_DNSWL_HI(-1.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	 TO_MATCH_ENVRCPT_SOME(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[linux-foundation.org,linux.dev,suse.cz,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 RCVD_IN_DNSWL_HI(-0.50)[2a07:de40:b281:104:10:150:64:97:from]
-X-Spam-Score: -3.07
-X-Rspamd-Queue-Id: B2D4722206
-X-Spam-Flag: NO
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5108; i=ardb@kernel.org;
+ h=from:subject; bh=OMc84jLqcYdv1xNch4EdvwfbPoPBMHzZEI4gviSqvx4=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0cgfjiYONH+z21bRwcN3nOu//4MfTozEPq2RSXLrOa
+ m2+rSLVUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbyZiLD/+xkvp3yQe3Tlhxy
+ yX94nOf65FfTe6uaG91s7BUVcsJE/zAyHJ9h/9Dv1kHV51q6Ao0yaulO0ZuXN19jqak1Ye4LeCb DDAA=
+X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
+Message-ID: <20240213124143.1484862-13-ardb+git@google.com>
+Subject: [PATCH v4 00/11] x86: Confine early 1:1 mapped startup code
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
-[...]
-> We're aiming to get this in the next merge window, for 6.9. The feedback
-> we've gotten has been that even out of tree this patchset has already
-> been useful, and there's a significant amount of other work gated on the
-> code tagging functionality included in this patchset [2].
+From: Ard Biesheuvel <ardb@kernel.org>
 
-I suspect it will not come as a surprise that I really dislike the
-implementation proposed here. I will not repeat my arguments, I have
-done so on several occasions already. 
+This is a follow-up to [0] which implemented rigorous build time checks
+to ensure that any code that is executed during early startup supports
+running from the initial 1:1 mapping of memory, which is how the kernel
+is entered from the decompressor or the EFI firmware.
 
-Anyway, I didn't go as far as to nak it even though I _strongly_ believe
-this debugging feature will add a maintenance overhead for a very long
-time. I can live with all the downsides of the proposed implementation
-_as long as_ there is a wider agreement from the MM community as this is
-where the maintenance cost will be payed. So far I have not seen (m)any
-acks by MM developers so aiming into the next merge window is more than
-little rushed. 
+Using PIC codegen and introducing new magic sections into generic code
+would create a maintenance burden, and more experimentation is needed
+there.  One issue with PIC codegen is that it still permits the compiler
+to make assumptions about the runtime address of global objects (modulo
+runtime relocation), which is incompatible with how the kernel is
+entered, i.e., running a fully linked and relocated executable from the
+wrong runtime address.
 
->  81 files changed, 2126 insertions(+), 695 deletions(-)
+The RIP_REL_REF() macro that was introduced recently [1] is actually
+more appropriate for this use case, as it hides the access from the
+compiler entirely, and so the compiler can never predict its result.
+
+To make incremental progress on this, this v4 drops the special
+instrumentation for .pi.text and PIC codegen, but retains all the
+cleanup work on the startup code to make it more maintainable and more
+obviously correct.
+
+In particular, this involves:
+- getting rid of early accesses to global objects, either by moving them
+  to the stack, deferring the access until later, or dropping the
+  globals entirely;
+- moving all code that runs early via the 1:1 mapping into .head.text,
+  and moving code that does not out of it, so that build time checks can
+  be added later to ensure that no inadvertent absolute references were
+  emitted into code that does not tolerate them;
+- removing fixup_pointer() and occurrences of __pa_symbol(), which rely
+  on the compiler emitting absolute references, and this is not
+  guaranteed. (Without -fpic, the compiler might still use RIP-relative
+  references in some cases)
+
+Changes since v3:
+- dropped half of the patches and added a couple of new ones
+- applied feedback from Boris to patches that were retained, mostly
+  related to some minor oversights on my part, and to some style issues
+
+[0] https://lkml.kernel.org/r/20240129180502.4069817-21-ardb%2Bgit%40google.com
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/sev&id=1c811d403afd73f0
+
+Cc: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Dionna Glaze <dionnaglaze@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Brian Gerst <brgerst@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+Ard Biesheuvel (11):
+  x86/startup_64: Simplify global variable accesses in GDT/IDT
+    programming
+  x86/startup_64: Replace pointer fixups with RIP-relative references
+  x86/startup_64: Simplify CR4 handling in startup code
+  x86/startup_64: Defer assignment of 5-level paging global variables
+  x86/startup_64: Simplify calculation of initial page table address
+  x86/startup_64: Simplify virtual switch on primary boot
+  efi/libstub: Add generic support for parsing mem_encrypt=
+  x86/boot: Move mem_encrypt= parsing to the decompressor
+  x86/sme: Move early SME kernel encryption handling into .head.text
+  x86/sev: Move early startup code into .head.text section
+  x86/startup_64: Drop global variables keeping track of LA57 state
+
+ arch/x86/boot/compressed/misc.c                |  15 ++
+ arch/x86/boot/compressed/misc.h                |   4 -
+ arch/x86/boot/compressed/pgtable_64.c          |  12 --
+ arch/x86/boot/compressed/sev.c                 |   3 +
+ arch/x86/boot/compressed/vmlinux.lds.S         |   1 +
+ arch/x86/include/asm/mem_encrypt.h             |   8 +-
+ arch/x86/include/asm/pgtable_64_types.h        |  58 +++----
+ arch/x86/include/asm/setup.h                   |   2 +-
+ arch/x86/include/asm/sev.h                     |  10 +-
+ arch/x86/include/uapi/asm/bootparam.h          |   1 +
+ arch/x86/kernel/cpu/common.c                   |   2 -
+ arch/x86/kernel/head64.c                       | 172 ++++++--------------
+ arch/x86/kernel/head_64.S                      |  91 ++++-------
+ arch/x86/kernel/sev-shared.c                   |  23 ++-
+ arch/x86/kernel/sev.c                          |  14 +-
+ arch/x86/lib/Makefile                          |  13 --
+ arch/x86/mm/kasan_init_64.c                    |   3 -
+ arch/x86/mm/mem_encrypt_identity.c             |  83 +++-------
+ drivers/firmware/efi/libstub/efi-stub-helper.c |   8 +
+ drivers/firmware/efi/libstub/efistub.h         |   2 +-
+ drivers/firmware/efi/libstub/x86-stub.c        |   3 +
+ 21 files changed, 186 insertions(+), 342 deletions(-)
+
+
+base-commit: 1c811d403afd73f04bde82b83b24c754011bd0e8
 -- 
-Michal Hocko
-SUSE Labs
+2.43.0.687.g38aa6559b0-goog
+
 
