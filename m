@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-2290-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2291-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6AB48530C1
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:43:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 909558530C3
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:44:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C2611F262F9
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:43:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 078CCB23F6A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EB45339F;
-	Tue, 13 Feb 2024 12:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2506D537ED;
+	Tue, 13 Feb 2024 12:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r4kCWYai"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Guw1y8z/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665B152F7E
-	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 12:42:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5801753397
+	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 12:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707828139; cv=none; b=hPT0n2fLfExx8C+fzGsnC2OEsqHcAQRBYxNg79rAg5NVAvW6CmC5dYzkN4ATACppeHOyT5hd9D/ZJKRX6GuLLe5cSXXz/dNRNsqFIObpK6T2AYuRKvHiShrZ4+xq+Q6MaGMPNHXU5rTiLDUJhtdH8SbuEfGGsKVdkr8HrbTgQRw=
+	t=1707828141; cv=none; b=hx5lvYIiwvU2Ec+Kt1Ei7AWHCqgO6ud+ay48Oq1taDha0GmhnLkiwPZbIyTjxz/9Xliar3q8TTX1azUN1E9A2EqqxLsphh51VzWfX+o9ZrOVPxuFZJW2uWrHgBRuCXFtPhbXJAysaTMa4Z16MEXoPAfcuHc9FvvMSRIJa5RNWis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707828139; c=relaxed/simple;
-	bh=V43RwcksINAVGLrcC9zNozM9sOBz5XCNbWyT4FUAcEc=;
+	s=arc-20240116; t=1707828141; c=relaxed/simple;
+	bh=CEh5RLJcC6IgrEQHXZSi19euYte1lfU4DaXYg20d8/k=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kCviCOZY80V5svsb6EWRDyMiZGCKm1KY7DV61Ps2vn/eFckdnE6jByb7t0J35yZrkvKtkE2xHjkr/5CGJbHvuQz1my1l1oLrbJA8ZzZJLKFLh88RES2iQnmc9FDYXS4iQvYHf+L3cjuwQzF25SNN1OABVNNEmrH9yQOXT5r0kNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r4kCWYai; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=Y9QMEmmW53qT9POHN1C66utfth7fuC47+RICVK5KZsl36lAZ6I5mfJEUNEoPY8OXwFVbSeBWNFR3QRj8zUV7PBjaIXxHBcmEk5xbC4Jc72E9bR9Tv/tB1gc5GD0rE1Q9axbKym+D9RkjTmBQHrkoRR37Hpb8+NdxofmflHVVzGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Guw1y8z/; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc657e9bdc4so6437718276.0
-        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 04:42:16 -0800 (PST)
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-411ce6e7708so861425e9.1
+        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 04:42:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707828135; x=1708432935; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1707828137; x=1708432937; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l9PGLkbb8+qoug2ZrrnwKu6zhcSycBxmHA7JvTLYhJc=;
-        b=r4kCWYai+0z+MLg4WaOkHuJmakMAZ91VFPT+1f408MTofIGUD3p/+pL28YA0p6yjft
-         owaf+C+2dj8bL8gawo2hWlD9l7eoy/9K62lSt96Iss77DODdXy2HVhVhwq6Twvh+Fxuv
-         1m9ToZNWOSH2epX0uxyGpfVC1F7kcuqu4LNPRACokkycXD5Dj4DtTOKUWsQNnUWhPeLT
-         yrkRt6Ag8abtKIut6lCVdWUI7Yw2HRhMFU3wJzzwk4ND3gIAvNxcRINNUn1OT5IwzdQw
-         bpFJW9eMqS6AwkzRpxF8rFSWDDoKdlTSmoaNznZyEw+YWCK7D44AeqE+hesjt82Vx6G5
-         68LQ==
+        bh=tmJq7yGJtig/x243U4iqbWlHcuxPy6IsUUTLst4tAO8=;
+        b=Guw1y8z/jNruQ44wvDkygVe5VYi84DDZ5PE2w6cL3ZngpqgHF3v+OUZUJz2KB7HaW2
+         zj2PazcKIkRqSWXmQ9uqXIBaFSgzX0+UCjZRRStktaUtBt3oVZXbGULZ5BXQM6ZDmxyC
+         SkoH/wyGrvZN9r6EmiidAc/x1saRWa3Kow7gvJhX4ZgE3Py8uufeG4i3Jh/DHYLb7/r9
+         MwtYzF4tI260ZUaqZqe0pjeBd1D5ITeHzPopfhyyP0V9+2pYQCqjDvEJ1IrM76YqrAkW
+         O6eaHbwqotPrxZTWhoVUZMUven4Ovkm/jX76kpVyHx0sA4Ajj3grY+j9bu16/Pj2dq/H
+         V8dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707828135; x=1708432935;
+        d=1e100.net; s=20230601; t=1707828137; x=1708432937;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l9PGLkbb8+qoug2ZrrnwKu6zhcSycBxmHA7JvTLYhJc=;
-        b=AZSuNqxLuErMSE3OS0aCbXiYD2Gy/PA8e4eBdJArxY5nhRi89FGCyMTmdQYmK7HLiH
-         0q4cv4aUw/nIB3B8I9vInoJsOPol3cPaj5Ci/6TgSNVvnFk1+P0iq2M1hiyjigF3EpNB
-         dLNnbkWXPLcnLgrYZBOxRgY4yrTopa+rnZvRUp3oyyiVHp9/BkIv5IQ9zlbuoQjZ+atm
-         8FhpAM2cv5qn1BIhKNXw1BLyXm2Urye4NRkplAhpGe1T+utYEKb5EhWGq/cMpYsFaS4s
-         nWOLhejwK0JKqk/6+bR3Lh0T0Tb0Z5FNm//2Hwq3PWqtApDHw3Ex8l4nSltBcnSoPhPj
-         0k/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWcDnT/AIQGS04SK1Ud6qqtMH1B0gUnbEB8EEHJs7LZWgIZFj+9DasydoV9aOAGdFFv7aDSBmYTg71dkqE3hJ5OvJ+5hyGQO0lyTQ==
-X-Gm-Message-State: AOJu0YznkN4Jta79JyjXp9i/XLDSNa3hYG+Ko8/q76KwO52nCEc/jHhF
-	QeSK6DVhnwONqfd2VezfiPPuPXPyL4z7yBsZhlUyRxTgB7NTiFdi2ruz+cMLmP3mPQSeSA==
-X-Google-Smtp-Source: AGHT+IGjASN7m5SPQBlNVx8g7TNhkNeiu4Ck9pU388+ZGMgbalmk2tWU7OABlbaYA4+Y9UUbzFj+uv94
+        bh=tmJq7yGJtig/x243U4iqbWlHcuxPy6IsUUTLst4tAO8=;
+        b=r7HgVW9810n6RxUM9Vu5NMLZFe9tAtRLQ5Sl8IQxiJThNwemIt/sTqosuA3ynbCc7I
+         w3ZvahNPLfOeVd27WUsK/csSzKsktCWN0XcSWk9FXSmMJuSx8FMdwsl3U3nAAMqUfsNV
+         gdCtiIo5qNe0rfldtg0tyBt+tOpbl02ZR4jcFen8/kEbaJk4+QOlXlZ2BhRmMoGrSFQc
+         cenZtR3R6VyrdmKWyPS2sXIj1tUZ1sArBtpg32Wx5nh5yeIiSPwekI6PfTDV5HqqTd+r
+         ze5X0nIRDA5olwNND4eIatpqQ3CVWSkBRPMt0zJg5TtsmE5HY7/4XrTxg0AE2IzzJW/U
+         y4eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ/RWwAvKNgv4KzLK5ylIasaQ36J6sDzlr8t9/iMAUpRsNz1W0UcLYGAjJE1yEjOxh2zF9bCksUE3CX5KX1y/JizXLMWpWxADEOg==
+X-Gm-Message-State: AOJu0YwVpY44zXapuVgNBQPuEyfrGZGIvE+CV+ndD439gGGisxn8P2U0
+	lFdhONHQzNW0k0XlxOjKHpB/46W1r5+t80gT2UCcMYJ5V0txZQm0D+I/4obngaHjRnQbLw==
+X-Google-Smtp-Source: AGHT+IGyQVWB+fo+LR59Bx8+rlXEeatDD6WUWmQdXk1EX1AAwc7fU6kdYHiiwnYm8ZP3Z4zYoEQQLvHS
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a25:c702:0:b0:dcc:9f24:692b with SMTP id
- w2-20020a25c702000000b00dcc9f24692bmr44649ybe.13.1707828135418; Tue, 13 Feb
- 2024 04:42:15 -0800 (PST)
-Date: Tue, 13 Feb 2024 13:41:50 +0100
+ (user=ardb job=sendgmr) by 2002:a05:6000:1e0c:b0:33b:4a51:f0ed with SMTP id
+ bj12-20020a0560001e0c00b0033b4a51f0edmr18827wrb.4.1707828137638; Tue, 13 Feb
+ 2024 04:42:17 -0800 (PST)
+Date: Tue, 13 Feb 2024 13:41:51 +0100
 In-Reply-To: <20240213124143.1484862-13-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240213124143.1484862-13-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3664; i=ardb@kernel.org;
- h=from:subject; bh=CIHrtmfTIHf1nWX5y4HvnUdj+zcQXCO5URm4j2f8Yss=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0cl/Gzc7Pj0827Z2x7tTrdlcrJTWWepkfL7+1Tvbfv
- L0+de/ajlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRZENGhp1XJhx+OvtJ0OQd
- t66/4Tg4Z981saPGcaoTv3fmC4oZKr1gZNjyhGdrtnH11bPX511KKZxqfenAYamIjWsevWM+0XN NcyYnAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2179; i=ardb@kernel.org;
+ h=from:subject; bh=SH5BCZpD7eT9rYWqZ8AiKPxoLpu9BlwPcI3lpvrnWyw=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0cn/7uaRP4tGTt8a01H99Oak74PEDlrXnFvfZ+AsXH
+ pF9buLQUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbycw7Df++Drjf+P264pyab
+ 4jnl+emnm7K3nNr8cPvT223G2e5TkmYxMhw42hws/q71rUN8xDQV3cq5AQunJUxU/O+a+Fn8zG3 +aFYA
 X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-Message-ID: <20240213124143.1484862-19-ardb+git@google.com>
-Subject: [PATCH v4 06/11] x86/startup_64: Simplify virtual switch on primary boot
+Message-ID: <20240213124143.1484862-20-ardb+git@google.com>
+Subject: [PATCH v4 07/11] efi/libstub: Add generic support for parsing mem_encrypt=
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -95,116 +95,59 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-The secondary startup code is used on the primary boot path as well, but
-in this case, the initial part runs from a 1:1 mapping, until an
-explicit cross-jump is made to the kernel virtual mapping of the same
-code.
+Parse the mem_encrypt= command line parameter from the EFI stub if
+CONFIG_ARCH_HAS_MEM_ENCRYPT=y, so that it can be passed to the early
+boot code by the arch code in the stub.
 
-On the secondary boot path, this jump is pointless as the code already
-executes from the mapping targeted by the jump. So combine this
-cross-jump with the jump from startup_64() into the common boot path.
-This simplifies the execution flow, and clearly separates code that runs
-from a 1:1 mapping from code that runs from the kernel virtual mapping.
-
-Note that this requires a page table switch, so hoist the CR3 assignment
-into startup_64() as well. And since absolute symbol references will no
-longer be permitted in .head.text once we enable the associated build
-time checks, a RIP-relative memory operand is used in the JMP
-instruction, referring to an absolute constant in the .init.rodata
-section.
-
-Given that the secondary startup code does not require a special
-placement inside the executable, move it to the .noinstr.text section.
+This avoids the need for the core kernel to do any string parsing very
+early in the boot.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head_64.S | 42 ++++++++++----------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ drivers/firmware/efi/libstub/efi-stub-helper.c | 8 ++++++++
+ drivers/firmware/efi/libstub/efistub.h         | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 6dcc2f7f4108..3fed0aafcb41 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -39,7 +39,6 @@ L4_START_KERNEL = l4_index(__START_KERNEL_map)
+diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
+index bfa30625f5d0..3dc2f9aaf08d 100644
+--- a/drivers/firmware/efi/libstub/efi-stub-helper.c
++++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+@@ -24,6 +24,8 @@ static bool efi_noinitrd;
+ static bool efi_nosoftreserve;
+ static bool efi_disable_pci_dma = IS_ENABLED(CONFIG_EFI_DISABLE_PCI_DMA);
  
- L3_START_KERNEL = pud_index(__START_KERNEL_map)
- 
--	.text
- 	__HEAD
- 	.code64
- SYM_CODE_START_NOALIGN(startup_64)
-@@ -126,9 +125,21 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	call	sev_verify_cbit
- #endif
- 
--	jmp 1f
-+	/*
-+	 * Switch to early_top_pgt which still has the identity mappings
-+	 * present.
-+	 */
-+	movq	%rax, %cr3
++int efi_mem_encrypt;
 +
-+	/* Branch to the common startup code at its kernel virtual address */
-+	ANNOTATE_RETPOLINE_SAFE
-+	jmp	*0f(%rip)
- SYM_CODE_END(startup_64)
- 
-+	__INITRODATA
-+0:	.quad	common_startup_64
-+
-+	.section .noinstr.text, "ax"
- SYM_CODE_START(secondary_startup_64)
- 	UNWIND_HINT_END_OF_STACK
- 	ANNOTATE_NOENDBR
-@@ -174,8 +185,15 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	addq	sme_me_mask(%rip), %rax
- #endif
-+	/*
-+	 * Switch to the init_top_pgt here, away from the trampoline_pgd and
-+	 * unmap the identity mapped ranges.
-+	 */
-+	movq	%rax, %cr3
- 
--1:
-+SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
-+	UNWIND_HINT_END_OF_STACK
-+	ANNOTATE_NOENDBR
- 
- 	/* Create a mask of CR4 bits to preserve */
- 	movl	$(X86_CR4_PAE | X86_CR4_LA57), %edx
-@@ -194,16 +212,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	btsl	$X86_CR4_PSE_BIT, %ecx
- 	movq	%rcx, %cr4
- 
--	/*
--	 * Switch to new page-table
--	 *
--	 * For the boot CPU this switches to early_top_pgt which still has the
--	 * identity mappings present. The secondary CPUs will switch to the
--	 * init_top_pgt here, away from the trampoline_pgd and unmap the
--	 * identity mapped ranges.
--	 */
--	movq	%rax, %cr3
+ bool __pure __efi_soft_reserve_enabled(void)
+ {
+ 	return !efi_nosoftreserve;
+@@ -75,6 +77,12 @@ efi_status_t efi_parse_options(char const *cmdline)
+ 			efi_noinitrd = true;
+ 		} else if (IS_ENABLED(CONFIG_X86_64) && !strcmp(param, "no5lvl")) {
+ 			efi_no5lvl = true;
++		} else if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT) &&
++			   !strcmp(param, "mem_encrypt") && val) {
++			if (parse_option_str(val, "on"))
++				efi_mem_encrypt = 1;
++			else if (parse_option_str(val, "off"))
++				efi_mem_encrypt = -1;
+ 		} else if (!strcmp(param, "efi") && val) {
+ 			efi_nochunk = parse_option_str(val, "nochunk");
+ 			efi_novamap |= parse_option_str(val, "novamap");
+diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+index 212687c30d79..a1c6ab24cd99 100644
+--- a/drivers/firmware/efi/libstub/efistub.h
++++ b/drivers/firmware/efi/libstub/efistub.h
+@@ -37,8 +37,8 @@ extern bool efi_no5lvl;
+ extern bool efi_nochunk;
+ extern bool efi_nokaslr;
+ extern int efi_loglevel;
++extern int efi_mem_encrypt;
+ extern bool efi_novamap;
 -
- 	/*
- 	 * Do a global TLB flush after the CR3 switch to make sure the TLB
- 	 * entries from the identity mapping are flushed.
-@@ -211,14 +219,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	btsl	$X86_CR4_PGE_BIT, %ecx
- 	movq	%rcx, %cr4
+ extern const efi_system_table_t *efi_system_table;
  
--	/* Ensure I am executing from virtual addresses */
--	movq	$1f, %rax
--	ANNOTATE_RETPOLINE_SAFE
--	jmp	*%rax
--1:
--	UNWIND_HINT_END_OF_STACK
--	ANNOTATE_NOENDBR // above
--
- #ifdef CONFIG_SMP
- 	/*
- 	 * For parallel boot, the APIC ID is read from the APIC, and then
+ typedef union efi_dxe_services_table efi_dxe_services_table_t;
 -- 
 2.43.0.687.g38aa6559b0-goog
 
