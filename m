@@ -1,104 +1,145 @@
-Return-Path: <linux-arch+bounces-2309-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2310-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7B0B853DAC
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 22:54:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70CA1853DF2
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 23:03:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9474228FB3A
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 21:54:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A308D1C28273
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 22:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2426633E5;
-	Tue, 13 Feb 2024 21:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9D2763115;
+	Tue, 13 Feb 2024 21:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWHFyXYV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rxb8wS3o"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892AA633E3;
-	Tue, 13 Feb 2024 21:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4256994D
+	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 21:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707861205; cv=none; b=bzxIn3Q1K0FtcppCNxzZBrcVC87qVA/PAMsz50rfnQ3Bq6Y+02GlGYwbA2n9Q0fzziaHNOFR/xIPCd7gJgAo/IZbR399tbc7NdXAd3+l80GXWSePkDsdqTD+P9Oz4PDtwmaJZbSacVSrJS1JmIvtj7aG6KJufIHOUdQJ3NsUQH0=
+	t=1707861535; cv=none; b=uljfIZxaJ7Mm1C4XcifGfFnX8yvoMfRUmZSctgrk9ysOyg6my2HD/WuL4xbxnyBQE6BTCQZi2e1UoDhG0xiyMNbfLGmLM+VYoM9+QbYY/2K5+5a+7cxmoRaL7HvIHGj/CNvTuNUqwwylJAwQSljeByzWx2Gh/y4FNczQuc8INtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707861205; c=relaxed/simple;
-	bh=ypsd4qCVKyRg4P72ROtfXjYfv/4viAmzHOaYW9On954=;
+	s=arc-20240116; t=1707861535; c=relaxed/simple;
+	bh=y3mhTelgi0cx53H62n2OpwC2+wJXIbkyAT/UHHyybvM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rliv6FSWhpkmkUn8fY31boHm9WHL06ZNZX11xM/27dvsQ4BLi7SVl7fytBw17Ff2M4JJyZgkpmTjkw+1QifU9gr1MtMaZfLc03Xu30qKb9eKUXCKqlikVqTFQWAXxf5oud5DryqeMzt1P5fWIPS5ik4KJkbbVcVwvz+XuCMgajU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWHFyXYV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 079F2C43330;
-	Tue, 13 Feb 2024 21:53:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707861205;
-	bh=ypsd4qCVKyRg4P72ROtfXjYfv/4viAmzHOaYW9On954=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DWHFyXYVp4iq6KvgaS58guwBLRO4XExU7t2Xq8mw2VriPS90cTmklK39DTLHbMghb
-	 wIMAVFxoUWt0XvMae99p6uHuzOoY/cKmvMxLsd3MdDT+6RpPsSbSZMi2j+cxxZU2B2
-	 BLL1d7piuoqfYl4/ZvXJBBxW0b99Xb4BAWMhleB50j00Oo9BYR7GNcX24YiOZ3hG9O
-	 wkQ2QvALdK1wGcZ45HVxQ2v5prPOYL6LrYqS7+M6NqYLMrhEzdrdUoOrG+NE1zYBI2
-	 epqXY96FACeQatfO+fJstw6VZyq81Irj/xicVZ1O4yfMecwV93KS3MrJsANbDTp0wx
-	 YMZcDwv68GjQQ==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50eac018059so6241550e87.0;
-        Tue, 13 Feb 2024 13:53:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX1uqVX96VY2S8Q/e+PwCCOBMrzbMkfnDQXhOZg0uY1BlfmS0KP70nDjuzcpLpkU2EVwWo2eU4COLGSdywTjJkgy6qe4saQezAJZiFT3rJKx5yiaipWqqarQWNUC6sfc5+ExsmslcqENA==
-X-Gm-Message-State: AOJu0YzfMLURR/RYcd/G2wlls7wgnH7OtFJ5Ck9K1XsMb7cpFDKl8YqW
-	d79Ut2zheQGm6PdahS+Jq+9QkXgdF2y5RbXEDgjT/kBG2xfjEB3MaEg7ZvV7/4Srt5ZxVtsOU0G
-	M3CGwXfcj7DxwtwJTDXfHEJBmG+c=
-X-Google-Smtp-Source: AGHT+IHI/s6AqAn4+gru9C0sK+MSMCHjVDZCoWnZOEyshAgWQ/HKDfdgJQ1z+yWdf4EQX/rZlJTNkQkm844cBmWgoGY=
-X-Received: by 2002:a05:6512:32bb:b0:511:6ff9:8b8d with SMTP id
- q27-20020a05651232bb00b005116ff98b8dmr506646lfe.59.1707861203095; Tue, 13 Feb
- 2024 13:53:23 -0800 (PST)
+	 To:Cc:Content-Type; b=RkI2Y5rn77E+gQxeYooRsximxGiGSsbnLvj/12Y4TJIVdo2ax/byApFpY1oh+tQqvz+Xz3FKm2ohi220qaajFkATgYCc1OuaqAOO1UWyNaGAIklUPs2NhLWrfVrJ82eJJQ68Xg5Bz1LVcEkGjx9NcfI9e2FjtgvPyQGbloOrw88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rxb8wS3o; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dc25e12cc63so187080276.0
+        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 13:58:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707861533; x=1708466333; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sj6FkWt0IHINoPp252M2H78r73QaJ+UAYuAK2lRmHyc=;
+        b=Rxb8wS3oMHnLIb34yoTtwMfqoD4BcyVNuvNgGPdVHWPCpCIa6nEGYA5xvYOo5c/pvz
+         J2+OGg5pEfmE2ho3y5XIHT7lyPc4URII+matfJ1wGhF8/rZuDswE4lvq0eGNeHmc4d6i
+         1TslSmbu7/OW47V4jOiZ5LOcxgKzmPryQ4zK+pmespbb8vXgJxMG8uIdRMZx91X4F4MZ
+         GLPJ/mSUpVJkzmEWH8AhXqdx7DmmTZO/C6XQK33qFlrmwPlyjLWoDnxwx87d60SE9xih
+         +mW7UIlKhjY11M0oWGgX7klJ3vobUHc6ZLro1BWt6iAV7lHw8VKFBSbHNeQIPKHeeCWG
+         zK8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707861533; x=1708466333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sj6FkWt0IHINoPp252M2H78r73QaJ+UAYuAK2lRmHyc=;
+        b=DPKgmsvWz6ot3egPLYnRlln4UDvTkyGdT/f26JNlVV5m9XCRUKSddneb6rtfBG5eY+
+         LKCZkjP806Y/DVQ9eBGjKzRgX3Tedojz6MvwbnZ6WA4VnFWKuek5jTgg55PNB9LIYzsX
+         wHQMj7+bvUCuPpShagG9/3MLncZI4c/n5Ex0gyDPMGrILeS0wKAvu0Ka/WjVFycdrxz0
+         KiAaXip543y9kqcOk8g/Mc+trqODAu3gkruYyn/MCt1O9h4tRAjdoWTzfYBgbmktRVqI
+         o3tLlKE3xxuMnZkmXXm5ei9QRI10ms5HbwyS8sWRILi15hY2OlbXtC1xyjRzxu12TQ81
+         iefQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6GZlDkSxFu8aUOyDXV2EvV0hWVamNt+ZOJNaZuHpn3e9GiyAhimUngXJnXHUH+knR1DrJuxZw7JznTTl3UhrCHSg9aYPNBksAvA==
+X-Gm-Message-State: AOJu0YwIs/A6Qinx1A/N0a/k0jVO2FFglLhwc4twzkXbT6XIQbWkjIAT
+	KYhNG7EVVe4SQZ6ljDbTdGZiu1m7LuGCGQkExPCAi7SjlqfjCWlypURiC8hg0/LgH02dDNP+yGC
+	wbkMBqu93prcluWRoJ0Q/zFFcK++faiZ1PFSK
+X-Google-Smtp-Source: AGHT+IG6l4h8KgCu1mcr/ZMWQbdEFueKYTFVYNMwYlVMCYSQKnQPu8RzycqvNzeYz47HXL5wboAvOGkSQgCimZvCNdM=
+X-Received: by 2002:a25:d815:0:b0:dc6:e7f6:254a with SMTP id
+ p21-20020a25d815000000b00dc6e7f6254amr127954ybg.8.1707861532899; Tue, 13 Feb
+ 2024 13:58:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-14-ardb+git@google.com> <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
-In-Reply-To: <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 13 Feb 2024 22:53:11 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
-Message-ID: <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
-Subject: Re: [PATCH v4 01/11] x86/startup_64: Simplify global variable
- accesses in GDT/IDT programming
-To: Borislav Petkov <bp@alien8.de>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
+References: <20240212213922.783301-1-surenb@google.com> <Zctfa2DvmlTYSfe8@tiehlicka>
+In-Reply-To: <Zctfa2DvmlTYSfe8@tiehlicka>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 13 Feb 2024 13:58:39 -0800
+Message-ID: <CAJuCfpEsWfZnpL1vUB2C=cxRi_WxhxyvgGhUg7WdAxLEqy6oSw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] Memory allocation profiling
+To: Michal Hocko <mhocko@suse.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 13 Feb 2024 at 21:06, Borislav Petkov <bp@alien8.de> wrote:
+On Tue, Feb 13, 2024 at 4:24=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
 >
-> On Tue, Feb 13, 2024 at 01:41:45PM +0100, Ard Biesheuvel wrote:
-> > @@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
-> >                    "movl %%eax, %%ss\n"
-> >                    "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
-> >
-> > -     startup_64_load_idt(physbase);
-> > +     startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
+> On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
+> [...]
+> > We're aiming to get this in the next merge window, for 6.9. The feedbac=
+k
+> > we've gotten has been that even out of tree this patchset has already
+> > been useful, and there's a significant amount of other work gated on th=
+e
+> > code tagging functionality included in this patchset [2].
 >
-> It took me a while to figure out that even if we pass in one of the two
-> GHCB handler pointers, we only set it if CONFIG_AMD_MEM_ENCRYPT.
+> I suspect it will not come as a surprise that I really dislike the
+> implementation proposed here. I will not repeat my arguments, I have
+> done so on several occasions already.
 >
-> I think this ontop of yours is a bit more readable as it makes it
-> perfectly clear *when* the pointer is valid.
->
+> Anyway, I didn't go as far as to nak it even though I _strongly_ believe
+> this debugging feature will add a maintenance overhead for a very long
+> time. I can live with all the downsides of the proposed implementation
+> _as long as_ there is a wider agreement from the MM community as this is
+> where the maintenance cost will be payed. So far I have not seen (m)any
+> acks by MM developers so aiming into the next merge window is more than
+> little rushed.
 
-Looks fine to me.
+We tried other previously proposed approaches and all have their
+downsides without making maintenance much easier. Your position is
+understandable and I think it's fair. Let's see if others see more
+benefit than cost here.
+Thanks,
+Suren.
 
-> Yeah, if handler is set, we set it for the X86_TRAP_VC vector
-> unconditionally but that can be changed later, if really needed.
 >
-
-We might call the parameter 'vc_handler' to make this clearer.
+> >  81 files changed, 2126 insertions(+), 695 deletions(-)
+> --
+> Michal Hocko
+> SUSE Labs
 
