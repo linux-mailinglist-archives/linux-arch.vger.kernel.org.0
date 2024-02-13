@@ -1,236 +1,157 @@
-Return-Path: <linux-arch+bounces-2261-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2262-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9B298522EE
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 01:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC83F852301
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 01:15:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90A02280722
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 00:10:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D137284F44
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 00:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DCE679C2;
-	Tue, 13 Feb 2024 00:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4FA256A;
+	Tue, 13 Feb 2024 00:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ot+1a5Ht"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=soleen.com header.i=@soleen.com header.b="hRFx8OzL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F52379EE
-	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 00:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182C864F
+	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 00:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707783009; cv=none; b=NGKZgex9F27MchvP8w2gN962sJnC7U+eRavIN7lZQnRmPX9MXwrN5E5uu0vOkiBAyOk0k1zaUt7AS1FTPafwsNLbciG70MbVxxl99XivyT5ACIaYXnKCgYEYJIqGfPCSeOZ9YB/BQFXmi5FkMgfBNraytb03EVKv2p+5JTAsehk=
+	t=1707783300; cv=none; b=FIoftzDEPp2pPeGn50QgdMBRy5uhT19jbQbv1VoxQyPbbBw355eMJdvWWiMFwacWG/zBYFbT/1xtU/nQKUs9hJBHYNxet0Z9LKQh5Ew+g25WMUdMJiTZ1SwNVg7xgc/6tzYjpo1MaPJKbmEdF7IsGU41tG5alreCeelMP8XDZm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707783009; c=relaxed/simple;
-	bh=Cn8xM3W1fFtR/5/yiI3lbiK+cKlzcW0/663LC3bcJ3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NYXDJ6VEJ/kWSMnPJA9oYkZqKTog8QSfTvTs17DsewlSGsDTihDqOZ5Zp72GCR1vj/Q/zfu5ziB8gdko+2nPovOejb5j/fkAVDjgY9rZNGT3KHFhJ88DQERvxlMVSGR6iV6DXUwrhOZi3NpRmIiK7km6VvDZvaEaAgf3cs+RWOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ot+1a5Ht; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e09493eb8eso2245305b3a.1
-        for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 16:10:07 -0800 (PST)
+	s=arc-20240116; t=1707783300; c=relaxed/simple;
+	bh=p+IVeRU3f9COk3wBMTH0iIf+8fVqKG0n9hzN9kdq2Xc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YB5DXj90Qked2+wfjhHp69Mddw1eCHR0Lq83hZKDb3wuxmbzLny2cdfFdQQNV7BOCCO5gqVeWaqXJRu+dQkSUEKgNtjHCJVsAr9aZn6+NjUL+2vF7RNDppTuJe5dtek6Cz8ztJWsHHrS16SN3Rb5J5imMVwBE2xhHkI2VeRGlvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=soleen.com; spf=none smtp.mailfrom=soleen.com; dkim=fail (0-bit key) header.d=soleen.com header.i=@soleen.com header.b=hRFx8OzL reason="key not found in DNS"; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=soleen.com
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6dc8b280155so2674180a34.0
+        for <linux-arch@vger.kernel.org>; Mon, 12 Feb 2024 16:14:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707783006; x=1708387806; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CVCj3/bUzmp/ihK8I5QTojP8ThiaEloYRG+XcmjM3wg=;
-        b=Ot+1a5Ht2YLq8o93C5ZvNMpcmu+vM5a8jx35ZLNBWEuvjqlexX5dxLpI6XUDk38aaz
-         ycjT1OFWIpKNryOJ9INI1sQACy5QWehca2yoT8Pj5lBGq40SsB9piPEKA8jv+rHYDkm1
-         Sf+NDZide1OE5+bxwG/F4R2CUe0ko5rKcn3OI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707783006; x=1708387806;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=soleen.com; s=google; t=1707783298; x=1708388098; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CVCj3/bUzmp/ihK8I5QTojP8ThiaEloYRG+XcmjM3wg=;
-        b=vyiyu3FujvlJGG/DLdNQ29jPSVi254qVMriKKKAUya7zc7SSxjn5IBPat4duAPaGIs
-         aqHhiv0brjKY6abEvQYcuarpCXCHSdzv8OfqBy3pUXHOpKGlYYs4nRqYdpJCBVoIKpAf
-         gVELh6mKYzArh20+Vg2aVgONStXvZEL6XFB6v56xLezMXMXDw4VMp0n85iQIQwzc6AEP
-         IydX85GXJnNvwzoEGcR1jwRDxJdz81iQXLj6juoQZsESkGSbsx8YPCKJi7nXdCAmf//k
-         tMWfYqoGGS3fLPUAvOvE6wDM81aphgLqHriBnj1PR2SXSMyIQDp7wK15j5OZ8S+BATEi
-         4CUw==
-X-Forwarded-Encrypted: i=1; AJvYcCVy4pknXdiUQA3LFkFvmuYMywDo1Wt4J7Mni6nqYI4d6OshsL6e0lBogsE9BmTVpXeMM/rBrigUKu7Y6ILu5kRAXIKdzwovMY6CbA==
-X-Gm-Message-State: AOJu0YzJFHxkmTM/GxnqnZIVLuwLigBWqdCPqAEoiPLYTgcEneI4OvMf
-	zqNKPYHl5P37225TuehZ87Nz2BOmWI5HIJYGxhLiYa9NZCqDhjTYA0Dn+x9UVw==
-X-Google-Smtp-Source: AGHT+IFAb5Y0OjFtRBdBi76LWWap6GYJ2vlFyUiWl2KnT6Jl5dQ3zxzCTPwpD04g4Ayonld7YB9n4A==
-X-Received: by 2002:a05:6a20:9585:b0:19e:5fd5:5244 with SMTP id iu5-20020a056a20958500b0019e5fd55244mr1519903pzb.1.1707783006571;
-        Mon, 12 Feb 2024 16:10:06 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXMk5K03F8OvcNP58pCH03c9Xh1q0R3zKG3V6LgreI39ZPp4ENmjuqg9HNOYn2JOhd5i3Dcos9pSuv7mqGH/NV7ZQC6zfETPnz24P3OIOdf/mv6CZgZwY2vYx6EGoiOg2xNJqsbxCHxzRFjiHhrzG/af2rpU2TkVUGVR/tfH57shjxuZFYYCssRTnw/WVDWIzcG9HRqx2oKw1uxIboRc88vlS8FWVbQ3ettKC9j3B8pWVHCT0GOShBVDA8wFQBHmI2e72ZEfLgSrYDoR33l79Kqa0TgiEGqCJYryx4jY7flqGZhOcKbalSLGFs388r+b6v3UcCDPb27pxwP3wBLF+9f5ryy9Qha3cIwlJsboN3MKsbL+mCkb6o5D3+Twe32ozBmQmyoHciMxfwddOjMklF69k5e2wE1tkvkfCeyOXKbED6IaKsd9wY50STBrOsjUT4FjQMhyoPllLfKte7AlgAJqCat+Ey39f7WNHINAStlBqz3CzMiG7HpGoOGFxfhydwk24UUP7aNFQiSPJMnEsgO81x3zQgRT/VQMGSDJpdo1Wmn6CujFLxlh7BgH4MBg7Rl41r4vho5XKHN/yODpxiE07lO6Ns1MgG0Qxxl78Y7wNnjav4kBKco6I/9QWaE+aKs5eRwUZu6MVIyYf9WGJVJouxQdkCiiYxXbc9ppFiLPa1VjNMEkXTbiAHLtC+P7UgZHt9NlwAKBf0U+iMViuzenKLyBs3u481L6eE5M+jOB0BF9KX4TA==
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id n5-20020a632705000000b005dc36279d6dsm1048821pgn.73.2024.02.12.16.10.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Feb 2024 16:10:02 -0800 (PST)
-Date: Mon, 12 Feb 2024 16:10:02 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
-	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-	mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-	liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-	peterz@infradead.org, juri.lelli@redhat.com,
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, peterx@redhat.com, david@redhat.com,
-	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
-Message-ID: <202402121606.687E798B@keescook>
-References: <20240212213922.783301-1-surenb@google.com>
- <20240212213922.783301-32-surenb@google.com>
+        bh=Zpkbch4s+SL6zR3ce+cP/IOGuaScUrbATNvaMsX6gQU=;
+        b=hRFx8OzLpzZfkX2KYjLz4MEK93nwhIERYV36+ueQxJxoEiHKMQL/1nEjdZ+7VSdbnf
+         siT39azOSxjFsh9kTAOIuasSKEjL0EFsOsuZ1OEiypY/Q3hVEUMNHWJWjqyTUj/IyQFT
+         tLV1wc7OS5h52ntKwWemX0veu7L2EfUlY9A7hdSorOd5CLoGWAIZ7u6C3IDp4GDa1eqD
+         epkpLwBxzRsy+dYvA+NpDHfSpCTF+zyOMqrG10Sb+ySK6Cm1hzKZ5DHceUiz02THdlF9
+         aF33k3ujEKG2VjS0Cn7Yf/4/qpOuWXFxZJbKA+6dw8lTQE4hLZDefHslyXT+60uZCqLy
+         eXnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707783298; x=1708388098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zpkbch4s+SL6zR3ce+cP/IOGuaScUrbATNvaMsX6gQU=;
+        b=b99aaEspTV2rrwv3e7XujHXnenZOTYupP3TQkl0hgGV6ltql5uNaqdcrQAqFZ/4nZO
+         dfhBS8kaRfOtPrGwnwaFQZxmdeUJ5tIZQG3KOALyEEXoS2oPfY7+7ONKndtEzUfGZmGL
+         vhLV0wwMKyPWoEAQgxxJXK7UNciOitSrJiOVevEkKrxD8WtafULMwqqMoNREMOS+ITd2
+         86r24WPCWw+4iAvZqnll/JqfQ4mJ7P9ahvqCY1k4BRG0svQVQ2rJVEyTy7A5RLrvioV+
+         bKlalsF7xG2Is6CCbGgC+d+U51Pzc276V4S0edeRDnmuTLY9XWICEIc60S63lcr9WtbG
+         lRFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUriftRJ1ijvUOB3cNEtBwCnIaK++rGhBoxrr/tdOwn7i7uS2FkNbfn6GWnND3uWJFXK5Sr1gE17mDBlkTy8OCySP/fqad94jJshg==
+X-Gm-Message-State: AOJu0YyPtVN7yH282oE124Uf7ZBCJzRxJ8FFx+WD3Zfx75uy74XxlI2+
+	K8nh/nMCULVzqbF6mDRJ2gWHM+ewm10DFSvLUXpush2FA62Rs6qcogIqDH9aBHgxdrGnl2WDwiQ
+	ylzxVsmAUpJXZooT+x6QGiaz/1bM+i7Y5srjzAw==
+X-Google-Smtp-Source: AGHT+IENA2I2vQZTmviXZDRj9zPa9m0qm240EbRNcQEFbOk5GS9Qd9oHISJT+KIV/8e+A1RHV9ji5tIu3nuHQqetP/o=
+X-Received: by 2002:a05:6830:12c2:b0:6e2:e953:6fee with SMTP id
+ a2-20020a05683012c200b006e2e9536feemr3152110otq.24.1707783298148; Mon, 12 Feb
+ 2024 16:14:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212213922.783301-32-surenb@google.com>
+References: <20240212213922.783301-1-surenb@google.com>
+In-Reply-To: <20240212213922.783301-1-surenb@google.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Mon, 12 Feb 2024 19:14:20 -0500
+Message-ID: <CA+CK2bBLD-mZ4ne56Awxbiy0EGpJq69k5qUKZwcXVB1Rt581TQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] Memory allocation profiling
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 12, 2024 at 01:39:17PM -0800, Suren Baghdasaryan wrote:
-> Include allocations in show_mem reports.
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/alloc_tag.h |  2 ++
->  lib/alloc_tag.c           | 38 ++++++++++++++++++++++++++++++++++++++
->  mm/show_mem.c             | 15 +++++++++++++++
->  3 files changed, 55 insertions(+)
-> 
-> diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-> index 3fe51e67e231..0a5973c4ad77 100644
-> --- a/include/linux/alloc_tag.h
-> +++ b/include/linux/alloc_tag.h
-> @@ -30,6 +30,8 @@ struct alloc_tag {
->  
->  #ifdef CONFIG_MEM_ALLOC_PROFILING
->  
-> +void alloc_tags_show_mem_report(struct seq_buf *s);
-> +
->  static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
->  {
->  	return container_of(ct, struct alloc_tag, ct);
-> diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
-> index 2d5226d9262d..54312c213860 100644
-> --- a/lib/alloc_tag.c
-> +++ b/lib/alloc_tag.c
-> @@ -96,6 +96,44 @@ static const struct seq_operations allocinfo_seq_op = {
->  	.show	= allocinfo_show,
->  };
->  
-> +void alloc_tags_show_mem_report(struct seq_buf *s)
-> +{
-> +	struct codetag_iterator iter;
-> +	struct codetag *ct;
-> +	struct {
-> +		struct codetag		*tag;
-> +		size_t			bytes;
-> +	} tags[10], n;
-> +	unsigned int i, nr = 0;
-> +
-> +	codetag_lock_module_list(alloc_tag_cttype, true);
-> +	iter = codetag_get_ct_iter(alloc_tag_cttype);
-> +	while ((ct = codetag_next_ct(&iter))) {
-> +		struct alloc_tag_counters counter = alloc_tag_read(ct_to_alloc_tag(ct));
-> +
-> +		n.tag	= ct;
-> +		n.bytes = counter.bytes;
-> +
-> +		for (i = 0; i < nr; i++)
-> +			if (n.bytes > tags[i].bytes)
-> +				break;
-> +
-> +		if (i < ARRAY_SIZE(tags)) {
-> +			nr -= nr == ARRAY_SIZE(tags);
-> +			memmove(&tags[i + 1],
-> +				&tags[i],
-> +				sizeof(tags[0]) * (nr - i));
-> +			nr++;
-> +			tags[i] = n;
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < nr; i++)
-> +		alloc_tag_to_text(s, tags[i].tag);
-> +
-> +	codetag_lock_module_list(alloc_tag_cttype, false);
-> +}
-> +
->  static void __init procfs_init(void)
->  {
->  	proc_create_seq("allocinfo", 0444, NULL, &allocinfo_seq_op);
-> diff --git a/mm/show_mem.c b/mm/show_mem.c
-> index 8dcfafbd283c..d514c15ca076 100644
-> --- a/mm/show_mem.c
-> +++ b/mm/show_mem.c
-> @@ -12,6 +12,7 @@
->  #include <linux/hugetlb.h>
->  #include <linux/mm.h>
->  #include <linux/mmzone.h>
-> +#include <linux/seq_buf.h>
->  #include <linux/swap.h>
->  #include <linux/vmstat.h>
->  
-> @@ -423,4 +424,18 @@ void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
->  #ifdef CONFIG_MEMORY_FAILURE
->  	printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_pages));
->  #endif
-> +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> +	{
-> +		struct seq_buf s;
-> +		char *buf = kmalloc(4096, GFP_ATOMIC);
+On Mon, Feb 12, 2024 at 4:39=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> Memory allocation, v3 and final:
+>
+> Overview:
+> Low overhead [1] per-callsite memory allocation profiling. Not just for d=
+ebug
+> kernels, overhead low enough to be deployed in production.
+>
+> We're aiming to get this in the next merge window, for 6.9. The feedback
+> we've gotten has been that even out of tree this patchset has already
+> been useful, and there's a significant amount of other work gated on the
+> code tagging functionality included in this patchset [2].
+>
+> Example output:
+>   root@moria-kvm:~# sort -h /proc/allocinfo|tail
+>    3.11MiB     2850 fs/ext4/super.c:1408 module:ext4 func:ext4_alloc_inod=
+e
+>    3.52MiB      225 kernel/fork.c:356 module:fork func:alloc_thread_stack=
+_node
+>    3.75MiB      960 mm/page_ext.c:270 module:page_ext func:alloc_page_ext
+>    4.00MiB        2 mm/khugepaged.c:893 module:khugepaged func:hpage_coll=
+apse_alloc_folio
+>    10.5MiB      168 block/blk-mq.c:3421 module:blk_mq func:blk_mq_alloc_r=
+qs
+>    14.0MiB     3594 include/linux/gfp.h:295 module:filemap func:folio_all=
+oc_noprof
+>    26.8MiB     6856 include/linux/gfp.h:295 module:memory func:folio_allo=
+c_noprof
+>    64.5MiB    98315 fs/xfs/xfs_rmap_item.c:147 module:xfs func:xfs_rui_in=
+it
+>    98.7MiB    25264 include/linux/gfp.h:295 module:readahead func:folio_a=
+lloc_noprof
+>     125MiB     7357 mm/slub.c:2201 module:slub func:alloc_slab_page
 
-Why 4096? Maybe use PAGE_SIZE instead?
+This kind of memory profiling would be an incredible asset in cloud
+environments.
 
-> +
-> +		if (buf) {
-> +			printk("Memory allocations:\n");
+Over the past year, we've encountered several kernel memory overhead
+issues. Two particularly severe cases involved excessively large IOMMU
+page tables (20GB per machine) and IOVA magazines (up to 8GB).
+Considering thousands of machines were affected, the cumulative memory
+waste was huge.
 
-This needs a printk prefix, or better yet, just use pr_info() or similar.
-
-> +			seq_buf_init(&s, buf, 4096);
-> +			alloc_tags_show_mem_report(&s);
-> +			printk("%s", buf);
-
-Once a seq_buf "consumes" a char *, please don't use any directly any
-more. This should be:
-
-			pr_info("%s", seq_buf_str(s));
-
-Otherwise %NUL termination isn't certain. Very likely, given the use
-case here, but let's use good hygiene. :)
-
-> +			kfree(buf);
-> +		}
-> +	}
-> +#endif
->  }
-> -- 
-> 2.43.0.687.g38aa6559b0-goog
-> 
-
--- 
-Kees Cook
+While we eventually resolved these issues with custom kernel profiling
+hacks (some based on this series) and kdump analysis, comprehensive
+memory profiling would have significantly accelerated the diagnostic
+process, pinpointing the precise source of the allocations.
 
