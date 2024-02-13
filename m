@@ -1,82 +1,87 @@
-Return-Path: <linux-arch+bounces-2284-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2285-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A18E38530B2
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:42:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F22A68530B5
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:42:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C63261C260C8
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:42:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A91CB281AD4
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78B63D99C;
-	Tue, 13 Feb 2024 12:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF604F1E6;
+	Tue, 13 Feb 2024 12:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j1WUtniX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pAmQAn5V"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DAE482EE
-	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 12:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D484CDE1
+	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 12:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707828123; cv=none; b=QmRzBQ0Mq1Ku/RpAvPkfzNdNhlMgMutlQgiVpFFCLZvUniJG+YMUN2HsBrIwkAWSDP+BJKNONS0LCRyiEuxBfRArXHvq4mW4VN83ZIgdo7Co+PyAWuAjLsc8n0LUEtjMMQQ6QS1n5hhPOfHtS/KrLyRj3iiTRGhyL+WAPzUokSc=
+	t=1707828127; cv=none; b=Zd2fOBES2GzVVEvNiWQZskWbBVdRri9WKcq0Dc3uWPZWzuOy/t4B5lUGTyXfAoKLMRdF4EgWw+N2GxwsO3pSOIBDcWwAqkka53Fou+VekeKbSiUFXhotnG6MZzUL701CjYSndsHqK1+9WkHy4DUSlaRPzJE6BPdoAjSyxJoEb18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707828123; c=relaxed/simple;
-	bh=ZVMb7gP145nftz4xlnOVHAtrFJ5WUTtvWVYyLjZEiXc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=aR5XDjyRlGZIMXAaQK2zIgtC27R/iNN634SnBHmgT6HmdJ+yMpiIG1LcBG3SdZw0TJGBSJixjEFp2whGayorGNCKS4bp42uIHCI7L7irMae2NLesn90foRUdStbKXFv/KPOpIDTDQHQXe64u3YTCgVWWILypmmUmT+U2n9ECorg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j1WUtniX; arc=none smtp.client-ip=209.85.128.201
+	s=arc-20240116; t=1707828127; c=relaxed/simple;
+	bh=YMvF0ORfuPi3XAD0k0pDL8v73CKkqlg6+lbGX9kyTzw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=sEPShTGGBprvraTFh8/GVxfoT30dcxbR3gtehoRRBUC2nKClJ4lDuQvwKb/U8MPdOTWcQk4fVfoa6pXu7cv9DZK02IjN4iGr8sEs4mcuZjMfxvo+5SWF7uxDyIqlG09zgrPl7MNzGUj+yynC3xYS64f6wDoLAxYAE3UqWbLVyA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pAmQAn5V; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5ee22efe5eeso74282567b3.3
-        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 04:42:01 -0800 (PST)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4114d21fca5so8010325e9.2
+        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 04:42:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707828121; x=1708432921; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4sKQKsqhQHcaBIiQ2PFPv13ZvWeRGhTtRzdxj6QxrA4=;
-        b=j1WUtniXpHFLyjoSnN7H1hqzQWvjDqLRv60/GhzjgRSljeqcoSxAexyrQrTveY80yk
-         So4pInRkWEe0UKaPRht5pTS8bBumtOi9BroSIBvucshFx9gKJvmxwE1H3vkagPTbG0kh
-         wk4ZYRDo3YmD8huksXtIPtwqTpl8oHZhLCaeZWaCNSJv0pmmiQkrrz/9iOnRn/NhCcqT
-         WdWjnIf7qM6mnlUwb9o7lOBR2UWE7FXQD1BBgwmJ3jK+40dE1W43Iy9OIYzG2coqk20O
-         ffC5ThylbOnYWAouC/FygUzRqEsZUhN3VnEoMXJf2dqvQ2K0Kd2NpbmyaPF3T/z+USN6
-         C/DA==
+        d=google.com; s=20230601; t=1707828123; x=1708432923; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IntT6izjYhpSpfiju4QdrJP91shTnHbBbhRa2UK23MU=;
+        b=pAmQAn5VoM14YoCzbhlVh1q1bcvPTbZt3lgoqXK8nnMG9szFe/AjcdWa7L/gpZQUj9
+         vxWXO6lTkT+A+KVnExB9AgrQwM0iqsRzeTSfcfLzq4Tk0IJx7wYnEzHDlYV6XCcZakvR
+         xZbwceDjSF42Z6CrQMwRu4oELsMTzUTIkFxsG+hoW0iYTIDlpLXQcJrfp9B+3yz+2ojl
+         oiLq7WeS8qPXy3l+/Dr6BA9tmGphjLdJa5IBeQiyWNl6s+5Nd4hgB+v+6ma1B4fKR82Y
+         BbtqQp3NOF9XhBm6/ezEPruQbFCQbi0f9EyJKFyIwDAPTqaU34F9LxbYLWy7sE8BLchf
+         ykNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707828121; x=1708432921;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4sKQKsqhQHcaBIiQ2PFPv13ZvWeRGhTtRzdxj6QxrA4=;
-        b=sk9pERWNRLDVKx/DmHlnGC4X60sZ2jCoiiWj6iK0URzwPtaYj7Trvyec9bSAVAUAXY
-         0zCPkStW/hWXC0+DQd+gDJyXOHlopnxrZRFbp7CXNR1Wi+GFrA0EzTGMuncrr61TETxd
-         l7Y0XDtv/kAxg+zWbX8AIclMpNDP3i0KSNxmOZzFbMYiltkw9Wvr1gx7MdqSajRBU/gj
-         nFwzPHkhpVYWhfdG1onpialzr2IhLVF3KVlA/YybjfVyyjMbNUQU4vSRWjo5d+CcQ50y
-         0WQkAwN0++1/sWdgkQV5RVCu7AOCMFc3LG/IueMutLheMIBD5ySuT6ijigCIk5n0dFIX
-         55Zw==
-X-Gm-Message-State: AOJu0YzqT3vbnOr6zh5LnIoja0eKil345Icwx5twyuvDyRux/NT8ayJp
-	AMplyaiXRjXLFPRNs7oJYdEFii6n4gNLLdc9ZNFlz0Xuwz+5DA/q8LLN6Y63ypFj+SoK8Q==
-X-Google-Smtp-Source: AGHT+IFsUPajA+uJOUTqCizpG7tc2fhGX8nsZXyDmXGQA0A5u8p94jVknGR04nO4Syv60zafQ6BSfdJh
+        d=1e100.net; s=20230601; t=1707828123; x=1708432923;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IntT6izjYhpSpfiju4QdrJP91shTnHbBbhRa2UK23MU=;
+        b=puzBLbWUdO0pY86+aW4EbrZIm2f9nO+DKtcWogsvjJwrJiRRq7UhgmS4mBeMMGRiiF
+         h//SLrsPDx43tNhlQlFgJGElF/Z44HsmbzutI8dv14m2BZKDJM4ZhHfp11sudO9nXGus
+         gUnrrqtVvQXKDFYphBcJnV2ZacpBddcFfJ5SH51KDrQNhQUsN2VkCG0VvSaTyQR661Z2
+         RZmDoLNZnovg49mTAT0wZRuL3zHiI3f6Tg69kyp9lBTqxKR1FBbqYXzpGDCzDBBCIdVe
+         hHtw/upye2gJw+ANYzq9jy9uo1mLdHEFdtxmx3fszh3UbHAN5uiptMGnKju2R29CDR7i
+         gWYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUVP+fOqGX//mefYayHeldGm+BC4/y3AWm45j3DSR6/QcrJ3YiglPrwy7Fk4BoxbKOuWxLIWwoINGMAcczU9MmtdKF+op09XmW4vA==
+X-Gm-Message-State: AOJu0YyzV+yuCokVemHLYOvlPcdgu/J9nWYRxBkEta/HiHlacXOMVoTl
+	9PyaEkC3QTlkSaWK5XaaSkcsAvhHGVtIVcEvX5TcDT0YunmkHvej/BNEqzHw66R46nSXdA==
+X-Google-Smtp-Source: AGHT+IGO4JBfeGvnTwxmmn7JIMK9YckhUWh4H18sWfV5jiwrBdxJzdJIlnTTVHSvArGFHZiJixRxORXb
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:6902:2511:b0:dc6:b813:5813 with SMTP id
- dt17-20020a056902251100b00dc6b8135813mr344439ybb.9.1707828120922; Tue, 13 Feb
- 2024 04:42:00 -0800 (PST)
-Date: Tue, 13 Feb 2024 13:41:44 +0100
+ (user=ardb job=sendgmr) by 2002:a05:600c:518a:b0:411:a802:700d with SMTP id
+ fa10-20020a05600c518a00b00411a802700dmr70870wmb.2.1707828123104; Tue, 13 Feb
+ 2024 04:42:03 -0800 (PST)
+Date: Tue, 13 Feb 2024 13:41:45 +0100
+In-Reply-To: <20240213124143.1484862-13-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240213124143.1484862-13-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5108; i=ardb@kernel.org;
- h=from:subject; bh=OMc84jLqcYdv1xNch4EdvwfbPoPBMHzZEI4gviSqvx4=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0cgfjiYONH+z21bRwcN3nOu//4MfTozEPq2RSXLrOa
- m2+rSLVUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbyZiLD/+xkvp3yQe3Tlhxy
- yX94nOf65FfTe6uaG91s7BUVcsJE/zAyHJ9h/9Dv1kHV51q6Ao0yaulO0ZuXN19jqak1Ye4LeCb DDAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6089; i=ardb@kernel.org;
+ h=from:subject; bh=BsdoewkQfg4v5NoT6opMjWi0Vrg2mA8a392y9Jxs7FU=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0cueOKzuMyz5W71o5TYp9kdW5Wa0xu5br/SkOjb++u
+ +9vHS9XRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZjIkguMDDu+bZC0ZT+Yvm5u
+ Ise2zLtZBuoPpiZea4wzc1/5zzhy1XOG/2G3FvnknSyvm3xqo5Hi+U/3rS7NzF25v9om6r3Ekno 9Nx4A
 X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-Message-ID: <20240213124143.1484862-13-ardb+git@google.com>
-Subject: [PATCH v4 00/11] x86: Confine early 1:1 mapped startup code
+Message-ID: <20240213124143.1484862-14-ardb+git@google.com>
+Subject: [PATCH v4 01/11] x86/startup_64: Simplify global variable accesses in
+ GDT/IDT programming
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -91,106 +96,173 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-This is a follow-up to [0] which implemented rigorous build time checks
-to ensure that any code that is executed during early startup supports
-running from the initial 1:1 mapping of memory, which is how the kernel
-is entered from the decompressor or the EFI firmware.
+There are two code paths in the startup code to program an IDT: one that
+runs from the 1:1 mapping and one that runs from the virtual kernel
+mapping. Currently, these are strictly separate because fixup_pointer()
+is used on the 1:1 path, which will produce the wrong value when used
+while executing from the virtual kernel mapping.
 
-Using PIC codegen and introducing new magic sections into generic code
-would create a maintenance burden, and more experimentation is needed
-there.  One issue with PIC codegen is that it still permits the compiler
-to make assumptions about the runtime address of global objects (modulo
-runtime relocation), which is incompatible with how the kernel is
-entered, i.e., running a fully linked and relocated executable from the
-wrong runtime address.
+Switch to RIP_REL_REF() so that the two code paths can be merged. Also,
+move the GDT and IDT descriptors to the stack so that they can be
+referenced directly, rather than via RIP_REL_REF().
 
-The RIP_REL_REF() macro that was introduced recently [1] is actually
-more appropriate for this use case, as it hides the access from the
-compiler entirely, and so the compiler can never predict its result.
+Rename startup_64_setup_env() to startup_64_setup_gdt_idt() while at it,
+to make the call from assembler self-documenting.
 
-To make incremental progress on this, this v4 drops the special
-instrumentation for .pi.text and PIC codegen, but retains all the
-cleanup work on the startup code to make it more maintainable and more
-obviously correct.
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ arch/x86/include/asm/setup.h |  2 +-
+ arch/x86/kernel/head64.c     | 56 +++++++-------------
+ arch/x86/kernel/head_64.S    |  4 +-
+ 3 files changed, 22 insertions(+), 40 deletions(-)
 
-In particular, this involves:
-- getting rid of early accesses to global objects, either by moving them
-  to the stack, deferring the access until later, or dropping the
-  globals entirely;
-- moving all code that runs early via the 1:1 mapping into .head.text,
-  and moving code that does not out of it, so that build time checks can
-  be added later to ensure that no inadvertent absolute references were
-  emitted into code that does not tolerate them;
-- removing fixup_pointer() and occurrences of __pa_symbol(), which rely
-  on the compiler emitting absolute references, and this is not
-  guaranteed. (Without -fpic, the compiler might still use RIP-relative
-  references in some cases)
-
-Changes since v3:
-- dropped half of the patches and added a couple of new ones
-- applied feedback from Boris to patches that were retained, mostly
-  related to some minor oversights on my part, and to some style issues
-
-[0] https://lkml.kernel.org/r/20240129180502.4069817-21-ardb%2Bgit%40google.com
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/sev&id=1c811d403afd73f0
-
-Cc: Kevin Loughlin <kevinloughlin@google.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Dionna Glaze <dionnaglaze@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: llvm@lists.linux.dev
-
-Ard Biesheuvel (11):
-  x86/startup_64: Simplify global variable accesses in GDT/IDT
-    programming
-  x86/startup_64: Replace pointer fixups with RIP-relative references
-  x86/startup_64: Simplify CR4 handling in startup code
-  x86/startup_64: Defer assignment of 5-level paging global variables
-  x86/startup_64: Simplify calculation of initial page table address
-  x86/startup_64: Simplify virtual switch on primary boot
-  efi/libstub: Add generic support for parsing mem_encrypt=
-  x86/boot: Move mem_encrypt= parsing to the decompressor
-  x86/sme: Move early SME kernel encryption handling into .head.text
-  x86/sev: Move early startup code into .head.text section
-  x86/startup_64: Drop global variables keeping track of LA57 state
-
- arch/x86/boot/compressed/misc.c                |  15 ++
- arch/x86/boot/compressed/misc.h                |   4 -
- arch/x86/boot/compressed/pgtable_64.c          |  12 --
- arch/x86/boot/compressed/sev.c                 |   3 +
- arch/x86/boot/compressed/vmlinux.lds.S         |   1 +
- arch/x86/include/asm/mem_encrypt.h             |   8 +-
- arch/x86/include/asm/pgtable_64_types.h        |  58 +++----
- arch/x86/include/asm/setup.h                   |   2 +-
- arch/x86/include/asm/sev.h                     |  10 +-
- arch/x86/include/uapi/asm/bootparam.h          |   1 +
- arch/x86/kernel/cpu/common.c                   |   2 -
- arch/x86/kernel/head64.c                       | 172 ++++++--------------
- arch/x86/kernel/head_64.S                      |  91 ++++-------
- arch/x86/kernel/sev-shared.c                   |  23 ++-
- arch/x86/kernel/sev.c                          |  14 +-
- arch/x86/lib/Makefile                          |  13 --
- arch/x86/mm/kasan_init_64.c                    |   3 -
- arch/x86/mm/mem_encrypt_identity.c             |  83 +++-------
- drivers/firmware/efi/libstub/efi-stub-helper.c |   8 +
- drivers/firmware/efi/libstub/efistub.h         |   2 +-
- drivers/firmware/efi/libstub/x86-stub.c        |   3 +
- 21 files changed, 186 insertions(+), 342 deletions(-)
-
-
-base-commit: 1c811d403afd73f04bde82b83b24c754011bd0e8
+diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
+index 5c83729c8e71..e61e68d71cba 100644
+--- a/arch/x86/include/asm/setup.h
++++ b/arch/x86/include/asm/setup.h
+@@ -48,7 +48,7 @@ extern unsigned long saved_video_mode;
+ extern void reserve_standard_io_resources(void);
+ extern void i386_reserve_resources(void);
+ extern unsigned long __startup_64(unsigned long physaddr, struct boot_params *bp);
+-extern void startup_64_setup_env(unsigned long physbase);
++extern void startup_64_setup_gdt_idt(void);
+ extern void early_setup_idt(void);
+ extern void __init do_early_exception(struct pt_regs *regs, int trapnr);
+ 
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index dc0956067944..9d7f12829f2d 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -22,6 +22,7 @@
+ #include <linux/cc_platform.h>
+ #include <linux/pgtable.h>
+ 
++#include <asm/asm.h>
+ #include <asm/processor.h>
+ #include <asm/proto.h>
+ #include <asm/smp.h>
+@@ -76,15 +77,6 @@ static struct desc_struct startup_gdt[GDT_ENTRIES] __initdata = {
+ 	[GDT_ENTRY_KERNEL_DS]           = GDT_ENTRY_INIT(DESC_DATA64, 0, 0xfffff),
+ };
+ 
+-/*
+- * Address needs to be set at runtime because it references the startup_gdt
+- * while the kernel still uses a direct mapping.
+- */
+-static struct desc_ptr startup_gdt_descr __initdata = {
+-	.size = sizeof(startup_gdt)-1,
+-	.address = 0,
+-};
+-
+ static void __head *fixup_pointer(void *ptr, unsigned long physaddr)
+ {
+ 	return ptr - (void *)_text + (void *)physaddr;
+@@ -569,12 +561,7 @@ void __init __noreturn x86_64_start_reservations(char *real_mode_data)
+  */
+ static gate_desc bringup_idt_table[NUM_EXCEPTION_VECTORS] __page_aligned_data;
+ 
+-static struct desc_ptr bringup_idt_descr = {
+-	.size		= (NUM_EXCEPTION_VECTORS * sizeof(gate_desc)) - 1,
+-	.address	= 0, /* Set at runtime */
+-};
+-
+-static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
++static void __head set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
+ {
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 	struct idt_data data;
+@@ -586,45 +573,42 @@ static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
+ #endif
+ }
+ 
+-/* This runs while still in the direct mapping */
+-static void __head startup_64_load_idt(unsigned long physbase)
++/* This may run while still in the direct mapping */
++static void __head startup_64_load_idt(void *handler)
+ {
+-	struct desc_ptr *desc = fixup_pointer(&bringup_idt_descr, physbase);
+-	gate_desc *idt = fixup_pointer(bringup_idt_table, physbase);
+-
+-
+-	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+-		void *handler;
++	struct desc_ptr desc = {
++		.address	= (unsigned long)&RIP_REL_REF(bringup_idt_table),
++		.size		= sizeof(bringup_idt_table) - 1,
++	};
++	gate_desc *idt = (gate_desc *)desc.address;
+ 
++	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
+ 		/* VMM Communication Exception */
+-		handler = fixup_pointer(vc_no_ghcb, physbase);
+ 		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
+-	}
+ 
+-	desc->address = (unsigned long)idt;
+-	native_load_idt(desc);
++	native_load_idt(&desc);
+ }
+ 
+ /* This is used when running on kernel addresses */
+ void early_setup_idt(void)
+ {
+-	/* VMM Communication Exception */
+-	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
++	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
+ 		setup_ghcb();
+-		set_bringup_idt_handler(bringup_idt_table, X86_TRAP_VC, vc_boot_ghcb);
+-	}
+ 
+-	bringup_idt_descr.address = (unsigned long)bringup_idt_table;
+-	native_load_idt(&bringup_idt_descr);
++	startup_64_load_idt(vc_boot_ghcb);
+ }
+ 
+ /*
+  * Setup boot CPU state needed before kernel switches to virtual addresses.
+  */
+-void __head startup_64_setup_env(unsigned long physbase)
++void __head startup_64_setup_gdt_idt(void)
+ {
++	struct desc_ptr startup_gdt_descr = {
++		.address	= (unsigned long)&RIP_REL_REF(startup_gdt),
++		.size		= sizeof(startup_gdt) - 1,
++	};
++
+ 	/* Load GDT */
+-	startup_gdt_descr.address = (unsigned long)fixup_pointer(startup_gdt, physbase);
+ 	native_load_gdt(&startup_gdt_descr);
+ 
+ 	/* New GDT is live - reload data segment registers */
+@@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
+ 		     "movl %%eax, %%ss\n"
+ 		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+ 
+-	startup_64_load_idt(physbase);
++	startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
+ }
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index d4918d03efb4..3cac98c61066 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -68,8 +68,6 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 	/* Set up the stack for verify_cpu() */
+ 	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 
+-	leaq	_text(%rip), %rdi
+-
+ 	/* Setup GSBASE to allow stack canary access for C code */
+ 	movl	$MSR_GS_BASE, %ecx
+ 	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
+@@ -77,7 +75,7 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 	shrq	$32,  %rdx
+ 	wrmsr
+ 
+-	call	startup_64_setup_env
++	call	startup_64_setup_gdt_idt
+ 
+ 	/* Now switch to __KERNEL_CS so IRET works reliably */
+ 	pushq	$__KERNEL_CS
 -- 
 2.43.0.687.g38aa6559b0-goog
 
