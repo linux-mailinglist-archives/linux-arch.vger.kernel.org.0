@@ -1,86 +1,85 @@
-Return-Path: <linux-arch+bounces-2278-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2279-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2824B852AC4
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 09:19:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5067E852B1A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 09:27:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5ABA21C21D02
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 08:19:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC7E01F2381E
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 08:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603811E497;
-	Tue, 13 Feb 2024 08:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC281B277;
+	Tue, 13 Feb 2024 08:27:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aQC6uG1A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oe1lbD0s"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D413249F3
-	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 08:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C38B1B592;
+	Tue, 13 Feb 2024 08:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707812242; cv=none; b=NH52hsD4QIlPMjpIBZwl+nXijJubiiQjkHr64FHbhKCjW3Mlvmp5WrUxEcZasuFdlEGFOPDHR2qYVQJI4ECruU7R1ylVhCPb5HFkA542wd/K8trKrsWxyxn3zedLfv6CT3xcLf2dtv8EtmIh4ygI63WKaq3zFATz3qdQxfo3ulw=
+	t=1707812849; cv=none; b=Y5/hEaECGh/Km9j16a8IHkxWZp8z40apHVFNt6DWLdL/ltro7MYB3vWJr+/5tS+F+7VWwo+3dNbyexpa2hFMNyL19LxNtcRosUiESBoOto+3K6qtnY4gMyewAZCqF+iK/mVH6dL1htmhcB5HACVbwMWOHgepdqFvQkIxSSv6kvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707812242; c=relaxed/simple;
-	bh=k0dlcOpqCeQ859XsaJEpqmX/eHez3ZKf32wZRP8twEM=;
+	s=arc-20240116; t=1707812849; c=relaxed/simple;
+	bh=uafGeBbQdA3tymCA3tWJBrlrcdnQCGekk71oGHgR4d0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rH+jg23hS933+QpuXnrdcfWsjbDJPhEEvgCmIpvSxTdV1uEiAMV6HzNsFzhuf2ch2DpoHCQvQXbdn6BwHCA5gfGZSYOZpXwnRM4lDYPWCBAZu20Tp5XI63YaeOa/Tiv/dWHK2w7d+m1wbUTLWn2Js3WhF92JiZWx6o4iOcTp1mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aQC6uG1A; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc74e33fe1bso3986885276.0
-        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 00:17:20 -0800 (PST)
+	 To:Cc:Content-Type; b=fEgSa+xb7NseCfuw93YE3yXnGYiIOSuGcGk8icdWxgL0h2GFSx4aXFsE/fdxct4+NIzsbzt8FCnR9oqQ4iBvq32/77nA+cyPKM7b6DqfRCPb/YUioIpwRK06QsOgwLLrCQFl5HPIA+etwo7/1SbXWYPrEnmhwbewgl65DCTn0+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oe1lbD0s; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a3832ef7726so469289166b.0;
+        Tue, 13 Feb 2024 00:27:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707812239; x=1708417039; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707812845; x=1708417645; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hC5Sp72DpOGszEFoskDK+zxBIS3uARFrNh6dT/DOYpw=;
-        b=aQC6uG1AXej3oTFT3m2fKoYa7LYFxfuAxPkLfo/+dHttTZeAGK1ACiZfvHg7uw0Mk1
-         NyffctXcL4SO7EBLTKauvlsluF9l45qqYYS/KQONb+jIPCiLK+c+WbNi/zBkjJmV5iQn
-         WsnqaAKYBSrfSkW7fXdosoOrkNwAzcUp43y8upwgTF2pjdBLkjHiuPGOfOCToa6iDsSZ
-         CavdtF6mFt5fTzar38xQes3PQzi0/e6CRsAp0GocFdrTQFzMDfarix1y1+EUFBjx1Fx0
-         EFHr6x3Um7GcCahg2w7MywWIgN9lVJvVg/DnGOrIZQvRXVxFAH/k3iDSS1SZW7/xRNNz
-         zarQ==
+        bh=iNGA8ZHGAdrm/kUeu0sTwlf3VcWW6Pp9gwsOjSJOS+s=;
+        b=Oe1lbD0sQSnEAzziF8TTz8fVz5XARWLd5y4xcYE8Xvycsf5EZPRTUpx/3qsKEitfXe
+         x3yKNpHeAZN3Gssw58XVHxM1VHK8pNqW6huyK2XvPX+Ry+9CVmkdJ7ZHC2OfNB2XybFA
+         17xqPjLqsgENJ5HzBSP7O9M+b0GmvFBylsPtjeh02o2MqraH/0WuQ17ce6dHl603qDCI
+         KjSZBg8RhrXSr1hQGuR90a8M1ps7hZn0FDQSi9vGKdIWLX3OexXUvjdjIEaWUhlkR2ko
+         Awtz8x+RHKoOgSlfSEmngWFCNKv2IsTkt4dShBJAPGEf5W4YVADo8/1ePS6yk35IzbQa
+         fa4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707812239; x=1708417039;
+        d=1e100.net; s=20230601; t=1707812845; x=1708417645;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hC5Sp72DpOGszEFoskDK+zxBIS3uARFrNh6dT/DOYpw=;
-        b=pkQkAqTqYqCk5+qO2eaO33ob7WkvrdZbpC6X1RcNCfXpcG/I47LLC6HLr/pR+NZbMY
-         v/iikJ6hnYRRtdAbtaQkdTgrFkHeSnbfIoZt+DEZALflYFqzuPMrCg0JlD6/hOwkwxR/
-         fBRN7Wz9IXgS+xvrvNodLeAiyZUCvyvqk/gwS6O7pizhajdZAwfklizIr6OK1OMeP9to
-         w5UtPdKqG96QhULboN7mDKHgO/qIM857iP/rL7NraYYFbWh1Cltv4kmIc28y/D1JdPKf
-         tRLP1R8MkfkCWJe2EL1tg3nKJk5HA22zFZROeNi7BXP9FcIG8nmi3WJXXw3mCqcMwwo2
-         Xutg==
-X-Gm-Message-State: AOJu0YwFOxNH1eY7qKl2fRWPjwMKCv7lJXFCZ6ZxsjaM9bdV8gDkJwSU
-	6877B2ER1uX/rfrn3Z9cn4LgRnYeA51R45bS9e5Rp51k4ckvmgOo1BFx1SF1o8KlILMPnJOgyc3
-	OCimxv9PK9n87xXfTTWaEWYLhG3UQGPsKn6cX
-X-Google-Smtp-Source: AGHT+IHjpakmjDseMf+FthsBajS4lohi+4SNf65A0StZavoAeiHzVp/HPng86atAuU0FiQuCDBbDYkv0F+8/PL8mBAs=
-X-Received: by 2002:a25:6841:0:b0:dcd:24b6:1aee with SMTP id
- d62-20020a256841000000b00dcd24b61aeemr45209ybc.47.1707812238953; Tue, 13 Feb
- 2024 00:17:18 -0800 (PST)
+        bh=iNGA8ZHGAdrm/kUeu0sTwlf3VcWW6Pp9gwsOjSJOS+s=;
+        b=jtqHJEranLT1GzDFLuWn8d505Y+pmX1UWEPTRgvpY8xdiJA+yE/AA68ZsIq9Df604X
+         XvsjmEm/lWwvYHqpbCOCsq7gi7T5zLwdFuxr0DZKBA5xhubji9KqWpvHEaC/LN3lh2NU
+         qRsKN3hQ3Ce96SOkGsPlp8LRSgs9tfRAUT1tUjztcrnAeicAuX3B9MvW1qUrqHt2KZYO
+         ZjIjFaUSMOb3nulROQn1qFsWxbvMN/WFVB8/htjYuATnrjx2TvPTX7uMURdyAM6gw7tE
+         Gjg9C4ndudtzJg/OsgQXJchKOb3ynKoSDtnPFlOYK1TBKNhGXyqnJNlCrPAARBzlMuua
+         ThCA==
+X-Forwarded-Encrypted: i=1; AJvYcCVrh2/ngeAji7dpL+z2DAjEoXj22MZRchb+NMjojeiXH/MaXBLAWI1hSwK3AE+nl6fT6UXTKzDg6TSDiJNrkrASOuIjN8i6C3OVVb/fEl8DrapGu7iAitRWQr5mP1tdu0CN1ZekpUPRk1qQ50RJLVuGgt3OnL/3ki1zs00c+NUUkpIM8zpSxAQcRaIlPCwTiRo6Vp7HAmqGH5GMgSRME3eQj+C1ce+xcLgZybL/jJk/vkcMve02MXjlpH4VR8j/1ayiUqUI5ZQiA6aUlu/scxxjaitjOD7V2CWqsg==
+X-Gm-Message-State: AOJu0YxJiMxKvyNyVyrbFX/absRDOGyfXHoufqJyR1vC3c6WUY5ftsrh
+	1ZgJNvN93RNz1RQ6QRIeIe6ZZa42FfolVjOKOHnRG8gUiUGRv36c8SAZzZ9UlyJv73bb0KGLzYk
+	d8JI87+u/5qI23hrqh5ofDXxJjTg=
+X-Google-Smtp-Source: AGHT+IHiWMLrwo5bn92RcxNVJHJJozT1VynVrAKPo4QX0LJ4mwZF+SLpK21LEEy+wgmtP5RFPridAor3NfrCIEw3scE=
+X-Received: by 2002:a17:906:ceca:b0:a38:3db5:a846 with SMTP id
+ si10-20020a170906ceca00b00a383db5a846mr5777021ejb.67.1707812845309; Tue, 13
+ Feb 2024 00:27:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-32-surenb@google.com>
- <202402121606.687E798B@keescook> <20240212192242.44493392@gandalf.local.home> <wvn5hh63omtqvs4e3jy7vfu7fvkikkzkhqbmcd7vdtmm7jta7s@qjagmjwle2z3>
-In-Reply-To: <wvn5hh63omtqvs4e3jy7vfu7fvkikkzkhqbmcd7vdtmm7jta7s@qjagmjwle2z3>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 13 Feb 2024 00:17:04 -0800
-Message-ID: <CAJuCfpE2hMx4rUSex3rX_wWiGOt=rX5FWms98Rd6WAaVqW6yvw@mail.gmail.com>
-Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Kees Cook <keescook@chromium.org>, 
-	akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-2-surenb@google.com>
+In-Reply-To: <20240212213922.783301-2-surenb@google.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 13 Feb 2024 10:26:48 +0200
+Message-ID: <CAHp75Vek3DEYLHnpUDBo_bYSd-ksN_66=LQ5s0Z+EhnNvhybpw@mail.gmail.com>
+Subject: Re: [PATCH v3 01/35] lib/string_helpers: Add flags param to string_get_size()
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
 	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
 	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
 	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
@@ -90,45 +89,106 @@ Cc: Steven Rostedt <rostedt@goodmis.org>, Kees Cook <keescook@chromium.org>,
 	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
 	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
 	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, ndesaulniers@google.com, 
-	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com, 
-	ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
-	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
-	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
 	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
 	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
 	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
+	cgroups@vger.kernel.org, Andy Shevchenko <andy@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
+	Paul Mackerras <paulus@samba.org>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	=?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 12, 2024 at 8:33=E2=80=AFPM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
+On Mon, Feb 12, 2024 at 11:39=E2=80=AFPM Suren Baghdasaryan <surenb@google.=
+com> wrote:
 >
-> On Mon, Feb 12, 2024 at 07:22:42PM -0500, Steven Rostedt wrote:
-> > On Mon, 12 Feb 2024 16:10:02 -0800
-> > Kees Cook <keescook@chromium.org> wrote:
-> >
-> > > >  #endif
-> > > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> > > > + {
-> > > > +         struct seq_buf s;
-> > > > +         char *buf =3D kmalloc(4096, GFP_ATOMIC);
-> > >
-> > > Why 4096? Maybe use PAGE_SIZE instead?
-> >
-> > Will it make a difference for architectures that don't have 4096 PAGE_S=
-IZE?
-> > Like PowerPC which has PAGE_SIZE of anywhere between 4K to 256K!
+> From: Kent Overstreet <kent.overstreet@linux.dev>
 >
-> it's just a string buffer
+> The new flags parameter allows controlling
+>  - Whether or not the units suffix is separated by a space, for
+>    compatibility with sort -h
+>  - Whether or not to append a B suffix - we're not always printing
+>    bytes.
+>
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-We should document that __show_mem() prints only the top 10 largest
-allocations, therefore as long as this buffer is large enough to hold
-10 records we should be good. Technically we could simply print one
-record at a time and then the buffer can be smaller.
+It seems most of my points from the previous review were refused...
+
+...
+
+You can move the below under --- cutter, so it won't pollute the git histor=
+y.
+
+> Cc: Andy Shevchenko <andy@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Cc: "Noralf Tr=C3=B8nnes" <noralf@tronnes.org>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> ---
+
+...
+
+> --- a/include/linux/string_helpers.h
+> +++ b/include/linux/string_helpers.h
+> @@ -17,14 +17,13 @@ static inline bool string_is_terminated(const char *s=
+, int len)
+
+...
+
+> -/* Descriptions of the types of units to
+> - * print in */
+> -enum string_size_units {
+> -       STRING_UNITS_10,        /* use powers of 10^3 (standard SI) */
+> -       STRING_UNITS_2,         /* use binary powers of 2^10 */
+> +enum string_size_flags {
+> +       STRING_SIZE_BASE2       =3D (1 << 0),
+> +       STRING_SIZE_NOSPACE     =3D (1 << 1),
+> +       STRING_SIZE_NOBYTES     =3D (1 << 2),
+>  };
+
+Do not kill documentation, I already said that. Or i.o.w. document this.
+Also the _SIZE is ambigous (if you don't want UNITS, use SIZE_FORMAT.
+
+Also why did you kill BASE10 here? (see below as well)
+
+...
+
+> --- a/lib/string_helpers.c
+> +++ b/lib/string_helpers.c
+> @@ -19,11 +19,17 @@
+>  #include <linux/string.h>
+>  #include <linux/string_helpers.h>
+>
+> +enum string_size_units {
+> +       STRING_UNITS_10,        /* use powers of 10^3 (standard SI) */
+> +       STRING_UNITS_2,         /* use binary powers of 2^10 */
+> +};
+
+Why do we need this duplication?
+
+...
+
+> +       enum string_size_units units =3D flags & flags & STRING_SIZE_BASE=
+2
+> +               ? STRING_UNITS_2 : STRING_UNITS_10;
+
+Double flags check is redundant.
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
