@@ -1,141 +1,267 @@
-Return-Path: <linux-arch+bounces-2299-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2300-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25D5A853A43
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 19:52:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26599853A5A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 19:57:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D67512906BA
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 18:52:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A070B1F25E2A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 18:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F822F9CE;
-	Tue, 13 Feb 2024 18:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0922910A1F;
+	Tue, 13 Feb 2024 18:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UzjSO5Pa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWRPB2Gx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DEF6087F;
-	Tue, 13 Feb 2024 18:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707850267; cv=none; b=orwnITpiSeIY/n15Ujl4mQ4KjleXWMC882l7wxyuAFy6jkWYuqXcc7YROo/91x2JD4ZScsxfuq3NGHSIJ/qOrsKnnU/d/BzukuoZ4xSmhpGJAOd0ITo9AR1QK9CatRZnOz3trM5U2jVHN2voWohLiE2m7nr5GXjoOTpGDTyjysg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707850267; c=relaxed/simple;
-	bh=jeWKaG7vs09dK29mGycWBK7NeH7Y5V4KDjtQm2EvQs0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GfdMdFBhZ1WVOebsRDfKR7tbJHoqdxWBb1SODoKGd/Vm0dhh4Zx/dFfrgmq3lSfuDLhUsrI+xLTje7J0PScs2v9gweH4pHUSQ7Sc/b5M1tGE0DoX5KLk++EEPrzYCeiVBX2vluuzkl+Zd5pd5KJ+OkW/iTsLFu4XhAyncqyPrIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UzjSO5Pa; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33b189ae5e8so2059417f8f.2;
-        Tue, 13 Feb 2024 10:51:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707850264; x=1708455064; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VZSu/ICCwgH/MzK/59qpKGnX2HpFwqdrjeqh9wkkz7E=;
-        b=UzjSO5Pay3+O0KvU6NAv44EN5wrL5MdNFK7RXFYQ0S8VYVqTLsHxP1IGIAD8P7Whps
-         XXgevXtQ1AwPbTaEnChPf47l/pH6+sn6QgcA1YVgrn+/csuhQnJ+27jS2hSgL757sEIU
-         p9yA56ehE2gZweVsezfyE2/uXHikrUMXCJx46CIP7E27kG97vFuHdZexLNf9BdkhkN6B
-         OZz0LgWNC8tmSAB5w6r2wxxlikc519k5guYj/gZYrOR49PLBcMRFZb91oTPDzLaXCoQi
-         dU8v0wbYd8At8Rx4SF8cUYlt+oUirNw4Y29WNI6VY/OOoGve27XsF2VzC06vO4VxNANd
-         jQAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707850264; x=1708455064;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VZSu/ICCwgH/MzK/59qpKGnX2HpFwqdrjeqh9wkkz7E=;
-        b=HS/dyugD9OUZIzGSeftA2dnU8RX5I7APogWgGXQ4Ko5K78j8aViiBQcd47gPnEmi48
-         ALNwAfyuavaKIPgF9qedyHkY005bUSTodK6Hjy+wwuWMbCqYp1HvjknCocKsFSPuXK27
-         vgcBpz0F9zZdaj9RCHj1J/XUcW9XewIiwbSoj/YXKNnj6ocoDIiMVgLsqZPpFFtDj5LM
-         iKQL+po8WmOL3FGlmlyOL2ouBXlr8MnIkGnFWh06fooGT6BSf39egF8Bs6jFg8mlCmVr
-         63vLfGLgfEJJmvRHene/jEtjYi4fu06InlbGe739jQTz8oVvcKHoXo7/AJH0CNV1V1+M
-         NWvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeS7ftFbG3+S6TG6YRUryxs5WLFHeu1L5HuUTXKppCp8K/wMVzZM25skNcXfkjrAtzuX4yIDJ3P2apv4Fdmz3uxxPlvzqgTvFJ5u4xy0vNGeWawozsFs0Nf+mTVmfFmULkIaAK7y6uAYU1gAHtwNhLF8Dm8XwVlzSZnCJph0bq2TfXhA==
-X-Gm-Message-State: AOJu0YwpN6Jn4pnSUVzi/FAsRl/20RWItXFc/5vUng48YOpaz9AiwUrp
-	m76umfB11TCHOV6PRpJ1sgn9KaWkB9If2w5NIfcNzLWsazQ94Mg=
-X-Google-Smtp-Source: AGHT+IG0G2DEzT2VVZoK3Ur9Db+zaKrR7asWSUiFE+IhNY+2eRdo3M5XI8ZHWzY4YMnBkLjtPRZSiQ==
-X-Received: by 2002:a5d:5143:0:b0:33c:d5a7:4fc with SMTP id u3-20020a5d5143000000b0033cd5a704fcmr126938wrt.16.1707850263837;
-        Tue, 13 Feb 2024 10:51:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVdWhlPicAlD80n1REmmnyM41Vxu9NbVAefRMubI/Mae9u8O2OkMFk6XQbd4ZfvDm6Va8tXFmGmYcPcwfefiYvg2PcwSGqStdmz55Is7vqjWps15xZhGuaBqlp/seoGUP3u47oqX4NIy1rbguTbKeH/VJd+PiEQIz2xpZcx4Er/BJ/f5647vYjL7OuDq2H1UXHelOuMORrC/08ImM5prPbDSW/Vl87TC6pkL+7CSw+0BePmnQYxRVJqbL+NXWtlkka1oCOQnV2M+eNAD0Dmpl4+FTjQt0mPHfYlUJzZxhqDqzHSBphi49Qg0di1VXrTgA/EnuuJoh4IvlgiSIM/OH2750HczDNW4VWRhbjE/D9FPZLRseGofHElYGO62mF+xzxLvXE=
-Received: from p183 ([46.53.249.38])
-        by smtp.gmail.com with ESMTPSA id dv5-20020a0560000d8500b0033b483d1abcsm10226994wrb.53.2024.02.13.10.51.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 10:51:03 -0800 (PST)
-Date: Tue, 13 Feb 2024 21:51:01 +0300
-From: Alexey Dobriyan <adobriyan@gmail.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org, Eric Biederman <ebiederm@xmission.com>,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v4] ELF: AT_PAGE_SHIFT_MASK -- supply userspace with
- available page shifts
-Message-ID: <54774e70-1e94-44f5-b318-fdfd5115041d@p183>
-References: <ecb049aa-bcac-45c7-bbb1-4612d094935a@p183>
- <202402050445.0331B94A73@keescook>
- <acd02481-ca2e-412a-8c6b-d9dff1345139@p183>
- <202402091625.4DF63CDD0B@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255E810A19;
+	Tue, 13 Feb 2024 18:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707850633; cv=fail; b=E3hZN0EU51iygcd5me82qgi2tW/lBW1abunRHD94xj+QOU05Pzx3quuAcGxnyIWct5WyvTM0UcaRjGC6x31NjZT+JU0KNojLU/SMuq1ozUdcTN4h07kKmhubYX/N10uuZRSCF/iy9STAcNca0ZJP0i4U3nsyAegFOczelHklAwA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707850633; c=relaxed/simple;
+	bh=bZg1mwnr0HavwHHubFOlYTFkz976GN8H878yWGtteA4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bfBApfzHjiFlZ+wb6dMXE5/gTyUf1ZEcO46q5JPUOjoE/bySxjy3Q59c2JCshOl2//4z9qa/7+1D2GpkG7ogtf6lhG7qrz274QaiPKyb3OgNN/gMCHjDEkUEned5ZEpJAYsJTowinCs3xBBTFObHJiFJIP3u0ShCKLxPKeNuRNQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWRPB2Gx; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707850632; x=1739386632;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=bZg1mwnr0HavwHHubFOlYTFkz976GN8H878yWGtteA4=;
+  b=RWRPB2GxSZa6p+LEzSP6PsS/W3K1AxfwsKMeSYy27Oova3B48eVtKFv2
+   1gZfgCc2WMbyJ9ulIM4zk3/WdW7bHF2iHqgvEjMxrc8BVxQoW8nqBmHzI
+   Dz4WyURo4N5kpI+BNFsdZflkWTFSyPwXDNtuy8qYug0T/uQJMRsOOrlel
+   vIjwUvLZVsV9bU4CQdm6m3eCmDtbrc5v1mR1QCvRuzj1yiEUEcofL5g17
+   zIMzY/BeogFqBWKXevOK3nH4g+Iqn0/HeGSS4qhf9XQfVzukcQo0IQNV8
+   j35eRAwX9mV4nar4XpnlxOpGgxUQv8d+xgFROmRQ0gW9tRlkIqnWF5b1I
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="2018679"
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="2018679"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 10:56:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="826192253"
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="826192253"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Feb 2024 10:56:54 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 13 Feb 2024 10:56:53 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 13 Feb 2024 10:56:53 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 13 Feb 2024 10:56:53 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kp/I1s4qvbkq8T/IkqIK/9X6NNVsWAjhnd/LGPJOqsD0+M25CRI3iIzFBbjeawW9H2OQwkBOXZXrZs+me1qE9uoyADS3ohf/UAEr3y5cBqYujFaHKENz6BGUHGZxCcMqusDJHlUrxFlwUgneY4a0uXDPZbX2aDVojMTJ16FJBz0xDWY90J7sj07p38u6yV8rHZsb3xoPUKXrvpaY0wFvyzPT707/56iBa+rcWWtyhqrDvqJmVTr24Nx4HwIe4TUvqEYdT6t0Wdbx0sTtmdL/03zyFtIw9yqAQ+PpJBaHfTkfGmzkZnzryUcSNxMatLsBrTahQNH4sgCPpnzqu+8itQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vdGKjsgJZNtSohmEcSM1zVdl8jCfxU+iOyZ5TLVlUbc=;
+ b=i82eij/XXEkbbZsWefyd6N0gRse3IKLhdoMWN8b+grscmj8w520xfVmRlEVSCqoJ6zDGc0Kumojyz9Gs9IOV+Zx6DS7qzE2mzvRLxbhjyo7tQkP4zr9lZL2we2JIdsiJA3+6CEjqPF5FmCsig3Ng3OW3UqvK8nkNEX6VgDZoa7h+RL6haliA3IfPpzX2DQSFWaLJD8TG9nUIDWxfLxW24Fv0b5EL84MJ/OiCmxgSKsB48gHlsVvocQc+r5PS3JcOQyAQzTIeCpv9d4bPPHuu+GtyRpjZsxULKY4OZx9d2wi7Kb6jS7QbmCelUlDUhQVH5tsixxIa/xuJ+tGzPF5Ljg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by IA1PR11MB6395.namprd11.prod.outlook.com (2603:10b6:208:3ac::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.39; Tue, 13 Feb
+ 2024 18:56:50 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2%4]) with mapi id 15.20.7270.036; Tue, 13 Feb 2024
+ 18:56:48 +0000
+Date: Tue, 13 Feb 2024 10:56:45 -0800
+From: Dan Williams <dan.j.williams@intel.com>
+To: Lukas Wunner <lukas@wunner.de>, Dan Williams <dan.j.williams@intel.com>
+CC: Linus Torvalds <torvalds@linux-foundation.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Dave Chinner
+	<david@fromorbit.com>, <linux-kernel@vger.kernel.org>, Andrew Morton
+	<akpm@linux-foundation.org>, Vishal Verma <vishal.l.verma@intel.com>, "Dave
+ Jiang" <dave.jiang@intel.com>, Matthew Wilcox <willy@infradead.org>, "Russell
+ King" <linux@armlinux.org.uk>, <linux-arch@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
+	<dm-devel@lists.linux.dev>, <nvdimm@lists.linux.dev>,
+	<linux-s390@vger.kernel.org>, Alasdair Kergon <agk@redhat.com>, Mike Snitzer
+	<snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>
+Subject: Re: [PATCH v5 5/8] virtio: Treat alloc_dax() -EOPNOTSUPP failure as
+ non-fatal
+Message-ID: <65cbbb6d24b71_5c7629450@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <20240212163101.19614-1-mathieu.desnoyers@efficios.com>
+ <20240212163101.19614-6-mathieu.desnoyers@efficios.com>
+ <65ca95d086dfd_d2d429470@dwillia2-xfh.jf.intel.com.notmuch>
+ <CAHk-=wiqaENZFBiAihFxdLr2E+kSM4P64M3uPzwT4-K9NiVSmw@mail.gmail.com>
+ <65caa3966caa_5a7f294cf@dwillia2-xfh.jf.intel.com.notmuch>
+ <20240213061823.GB27995@wunner.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240213061823.GB27995@wunner.de>
+X-ClientProxiedBy: MW4P220CA0023.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:303:115::28) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202402091625.4DF63CDD0B@keescook>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|IA1PR11MB6395:EE_
+X-MS-Office365-Filtering-Correlation-Id: a46b3185-d0ed-4d6b-56e8-08dc2cc5881c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4JakRCxpZjBiFfwAZrQ0i2WEAY8WZi8qnlasOQxWRHp4ZOrDtFEhqyulVJ6V2E8+9aanK1ayQC1BlXyrsuqavyJlgyAB9wbaNZZ878dooeWFp6jxro+daTB4fbZn9n9YLBGWX6LGSJouh47ompIdyhZ4P5vO2Bp+MbY6O6DjyQtPCcxiSBojFeiCmFcNr4smwWNMC+QKoIbnFWgLY4ftA0jxxaiI2ifi00Ba2h5IUdHwGB+iL/FKIfRl9w9NC/s37X8dZ/Lxfx2t0/zv1fEr80dMGq0lxoKJ4YzbAuKFtxVVD58ls9Yk8r7L7mNi0yAOtGb3OnO7XWmmVgmv/Yme5RBpGzjMj7bmcyi7W+/wWmMu272taTo22JflgFF1SovFIb+3poYHjXjyMfzxki5ajUCVNHqGlfMZUYjsRyyAoh6Bm2g04Pz53011J/VEFPLTSM6l+Z5UmATPeF5zLRP85u9WLgVbPcqXcY7hkSql3Ku0O/QtovB9En8oDizBy4tZk2CPZr5qs531Fw1RLflh1qybvURB2bZT/Pdgyq638/kboEO8N2e8Al16Qj3ME/5q
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(136003)(39860400002)(366004)(376002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(6506007)(41300700001)(478600001)(83380400001)(66476007)(26005)(66946007)(5660300002)(66556008)(8936002)(4326008)(8676002)(6486002)(6512007)(54906003)(316002)(6666004)(9686003)(86362001)(82960400001)(38100700002)(110136005)(7416002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kSPXZl4X++sSido70YWeqI8KiBJTxCpFjuazLeOmUuWe2YvQVJ+FzzWhQa4Q?=
+ =?us-ascii?Q?eNpDdgL8oyNxr1pYbENKapjX8LsDw1YEwbuWLTyjIQTu6CIpnv5PNnyy3PQG?=
+ =?us-ascii?Q?QR9BU5Kqvw4k3xbPGJz1ZIv/PGW1F0rB3kD5/mw2uxmMmW2mu0Jxucrmlip/?=
+ =?us-ascii?Q?6iRJuIFro+bCGlcfbJbYM4U969w6dQz+YHpQrSKbOOaioh07+MC26teHh9sX?=
+ =?us-ascii?Q?nnRGzsqDE38soy3oED1ZnKhtWDA8rOEN3lw1VUBT7zUpZeX3z3zOgyXmpHHq?=
+ =?us-ascii?Q?lNH24DocQiddA92S1x4Qbe3I/mKjJtjfX0KpyKMKMKHpgCDlcyvMkJO2pCzZ?=
+ =?us-ascii?Q?DaC2ZZdozDQbCjXifVwFwdFqSXhGDZ18HteZbI6a8EDlvy1/xshRE+9VPDIf?=
+ =?us-ascii?Q?0E8yWVuCBCqXv6q0UYos3aSkulxqSLRKCRG3cJzMPenIU6AwueGfBp17tcIA?=
+ =?us-ascii?Q?lUSmJd0+6SnIk9sxtil1h8beZyCp2u5AZp+lRFLHgHgQAgvMvoS4h12x12zZ?=
+ =?us-ascii?Q?0oEp0nfgTe6Y0tfWEe1xyTGp3wLVPrWaywitY/cdDGUxuHtIEj4Ko80W6Uxm?=
+ =?us-ascii?Q?BkuHeVJwXylIPSp2Q9yIoxapUagv3Gajw2BAcFhgkF4ZM9HJd7JTxv7kOkaA?=
+ =?us-ascii?Q?drnR7CSeu2kuU/CN2zOLPAYWAhnb0sEqhC9AL65rx+hOVHnzv5Kncf/sYFIF?=
+ =?us-ascii?Q?3eqwPeQU9HuKneUDbbtOl/g/iABa7Cq51TU5uOB4BpwtViignp/TsHaks9FJ?=
+ =?us-ascii?Q?a2YbLmzhMhHK/kIKlPhez38JKeQw1VWJLwDzIjDxptJRhnSiHhfUI8rRN8ok?=
+ =?us-ascii?Q?d7EH7yY5sLk5Ixsq/MIA13Z9imvS4J2Qa/biDykfpEtcssA8mhgQ2CHVzpK0?=
+ =?us-ascii?Q?6823zy1tEZGshlCkSWXJRkFJrwAojTz+XuurIhp21+5NTIZE3NTUgwNRunCS?=
+ =?us-ascii?Q?7vg5ZVomoEV8BazEShBGH3CnjonUQedU5IdTEqL9CSLywyfVNedyBIhV8x2k?=
+ =?us-ascii?Q?iJrgBBmWkySHWNiuVrhWjLLrMYOERGvVyIjPB8Y4Ebx4VtByGNgy1mNPRm7f?=
+ =?us-ascii?Q?aBqELFNHpg+TyeQwTWrmQDGNx05Je9fPYHDC+68dYaJmYYTMSLkOAA2EDTId?=
+ =?us-ascii?Q?uSFopZyLd4qvswm8k4RGkfMluD4gRVQtB9drAWft1Wjh7sp2XVtcWhJm1/qv?=
+ =?us-ascii?Q?ihgJEc2SEp3SJPG1Fb9JTPXw82QRykcUiRB77UvHImIQR8i55BmXCbycXFxf?=
+ =?us-ascii?Q?3gYLwxOHTH/n6c52NXEJBSfA4w81jQbJHfTG0Q/txXIKqkoViol7SCB7W+BR?=
+ =?us-ascii?Q?wn1taWxp6MhtRkcgP5bDtafQaJQjkStyrjsvgEE1o6nLKsHw/GNYHQvKA7mK?=
+ =?us-ascii?Q?R1G2cNpm4dNmmEe+VcIn04LCUFOHdWFdlC99dbPq89d8uqYJCv9ea2JXTP6u?=
+ =?us-ascii?Q?qVgaHSQck4uNFMXt0jJrTV9Nb7futr+L7HO4HN+ZmNhDIM1BplXe2Wia776R?=
+ =?us-ascii?Q?ERjyX9KeEOWoeVUaVdvAyP5MNwLjBwgklEjDiMxYtU5s6o64nUAey9LPa2Jl?=
+ =?us-ascii?Q?4+30iYBtwlUjQUDahcPLfSZuw8wWtWDrfSQd6mERDlEEMhjpRDySXK4n4uSe?=
+ =?us-ascii?Q?xw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a46b3185-d0ed-4d6b-56e8-08dc2cc5881c
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 18:56:48.5484
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 64QvyNHPRdaU/kQ6jUlMZBMxqQygW2rsHZQ0qIKNCgF7u6f/LsxoGUx9Sa2talKSVapkyQsBoiNarKTLqVKZf4S0fC0HKNZw31gKtm+1O6M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6395
+X-OriginatorOrg: intel.com
 
-On Fri, Feb 09, 2024 at 04:41:36PM -0800, Kees Cook wrote:
-> On Fri, Feb 09, 2024 at 03:30:37PM +0300, Alexey Dobriyan wrote:
-> > On Mon, Feb 05, 2024 at 04:48:08AM -0800, Kees Cook wrote:
-> > > On Mon, Feb 05, 2024 at 12:51:43PM +0300, Alexey Dobriyan wrote:
-> > > > +#define ARCH_AT_PAGE_SHIFT_MASK					\
-> > > > +	do {							\
-> > > > +		u32 val = 1 << 12;				\
-> > > > +		if (boot_cpu_has(X86_FEATURE_PSE)) {		\
-> > > > +			val |= 1 << 21;				\
-> > > > +		}						\
-> > > > +		if (boot_cpu_has(X86_FEATURE_GBPAGES)) {	\
-> > > > +			val |= 1 << 30;				\
-> > > > +		}						\
-> > > 
-> > > Can we use something besides literal "12", "21", and "30" values here?
-> > 
-> > Ehh, no, why? Inside x86_64 the page shifts are very specific numbers,
-> > they won't change.
+Lukas Wunner wrote:
+> On Mon, Feb 12, 2024 at 03:02:46PM -0800, Dan Williams wrote:
+> > However, Lukas, I think Linus is right, your DEFINE_FREE() should use
+> > IS_ERR_OR_NULL().
 > 
-> Well, it's nicer to have meaningful words to describe these things.
+> Uh... that's a negative, sir. ;)
+> 
+> IS_ERR_OR_NULL() results in...
+> * a superfluous NULL pointer check in x509_key_preparse() and
+> * a superfluous IS_ERR check in x509_cert_parse().
+> 
+> IS_ERR() results *only* in...
+> * a superfluous IS_ERR check in x509_cert_parse().
+> 
+> I can get rid of the IS_ERR() check by using assume().
+> 
+> I can *not* get rid of the NULL pointer check because the compiler
+> is compiled with -fno-delete-null-pointer-checks.  (The compiler
+> seems to ignore __attribute__((returns_nonnull)) due to that.)
+> 
+> 
+> > I.e. the problem is trying to use
+> > __free(x509_free_certificate) in x509_cert_parse().
+> > 
+> > > --- a/crypto/asymmetric_keys/x509_cert_parser.c
+> > > +++ b/crypto/asymmetric_keys/x509_cert_parser.c
+> > > @@ -60,24 +60,24 @@ void x509_free_certificate(struct x509_certificate *cert)
+> > >   */
+> > >  struct x509_certificate *x509_cert_parse(const void *data, size_t datalen)
+> > >  {
+> > > -       struct x509_certificate *cert;
+> > > -       struct x509_parse_context *ctx;
+> > > +       struct x509_certificate *cert __free(x509_free_certificate);
+> > 
+> > ...make this:
+> > 
+> >     struct x509_certificate *cert __free(kfree);
+> 
+> That doesn't work I'm afraid.  x509_cert_parse() needs
+> x509_free_certificate() to be called in the error path,
+> not kfree().  See the existing code in current mainline:
+> 
+> x509_cert_parse() populates three sub-allocations in
+> struct x509_certificate (pub, sig, id) and two
+> sub-sub-allocations (pub->key, pub->params).
+> 
+> So I'd have to add five additional local variables which
+> get freed by __cleanup().  One of them (pub->key) requires
+> kfree_sensitive() instead of kfree(), so I'd need an extra
+> DEFINE_FREE() for that.
+> 
+> I haven't tried it but I suspect the result would look
+> terrible and David Howells wouldn't like it.
 
-Not really. Inside specific arch page shifts are fixed, so using names
-is just more macros one need to remember.
+Ugh, that's what I was afraid of, so these cases are different.
 
-If I were to invent names (which I wouldn't), the best names are
+> > ...and Mathieu, this should be IS_ERR_OR_NULL() to skip an unnecessary
+> > call to virtio_fs_cleanup_dax() at function exit that the compiler
+> > should elide.
+> 
+> My recommendation is to check for !IS_ERR() in the DEFINE_FREE() clause
+> and amend virtio_fs_cleanup_dax() with a "if (!dax_dev) return;" for
+> defensiveness in case someone calls it with a NULL pointer.
 
-	PAGE_SHIFT
-	PAGE_SHIFT2
-	PAGE_SHIFT3
-	...
+The internal calls (kill_dax(), put_dax()) check for NULL already, so I
+don't think that's needed.
 
-with PAGE_SHIFT2, PAGE_SHIFT3 being optional macros if arch doesn't support
-multiple page sizes.
+> That's the best solution I could come up with for the x509_certificate
+> conversion.
+> 
+> Note that even with superfluous checks avoided, __cleanup() causes
+> gcc-12 to always generate two return paths.  It's very visible in
+> the generated code that all the stack unwinding code gets duplicated
+> in every function using __cleanup().  The existing Assembler code
+> of x509_key_preparse() and x509_cert_parse(), without __cleanup()
+> invocation, has only a single return path.
 
-> In fact, PAGE_SHIFT already exists for 12, and HPAGE_SHIFT already exists
-> for 21. Please use those, and add another, perhaps GBPAGE_SHIFT, for 30.
+I saw that too, some NULL checks can indeed be elided with a NULL check
+in the DEFINE_FREE(), but the multiple exit paths still someimtes result
+in __cleanup() using functions being larger than the goto equivalent.
 
-HPAGE_SHIFT is bad name, H doesn't describe anything unless arch is
-known. Hugepages is marketing name. If GBPAGE_SHIFT is good name,
-then HPAGE_SHIFT is bad name, it should've been MBPAGE_SHIFT, which
-wrong because it is 2 MiB not 1 MiB.
+> So __cleanup() bloats the code regardless of superfluous checks,
+> but future gcc versions might avoid that.  clang-15 generates much
+> more compact code (vmlinux is a couple hundred kBytes smaller),
+> but does weird things such as inlining x509_free_certificate()
+> in x509_cert_parse().
+> 
+> As you may have guessed, I've spent an inordinate amount of time
+> down that rabbit hole. ;(
 
-BTW parisc has REAL_HPAGE_SHIFT !
+Hey, this is new and interesting stuff, glad we are grappling with it at
+this level.
 
