@@ -1,99 +1,102 @@
-Return-Path: <linux-arch+bounces-2282-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2283-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3635A852EF8
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:19:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F18EF853074
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 13:24:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF5021F216D3
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 11:19:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA1A3B21C82
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 12:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698B2364B7;
-	Tue, 13 Feb 2024 11:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B919E3D971;
+	Tue, 13 Feb 2024 12:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZZEg/ZnC"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oPNMu0/3";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oPNMu0/3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB14E33CFC;
-	Tue, 13 Feb 2024 11:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9875A3D54D;
+	Tue, 13 Feb 2024 12:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707823163; cv=none; b=P5HWe+HAZtaEzB7MP5UduBL12fCj7ovmG/7oe/LO5aM6kIpRXSAvQZf5zUsX2vcs5CuC7AbU2cdmPLF3apVjINWHyGKpq/52GBF4fyG/VArFJAS7RJU0qYjfoeDh9oSAgK12DPW7POAKEHjRSASSnJ4CD6rlL+C7U1oKJt0SyYY=
+	t=1707827060; cv=none; b=MjomBmL9hWZIn8O0IV04LYrGCrDyNhTyinNP9Lf8fUYMDW1sboG0yAU/9TWOCqtVEmi+9FTYqqQe0hGYL2Xr0gqXbbWZu9kUVI/1leuKyP+8GyKpWYwMZyytwxflaLONH0XC4UYz8n25Dx8mQDV609Rc6JS6/GCv1jtHTcQOC1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707823163; c=relaxed/simple;
-	bh=U7WN3EXjdjDY+WOk1krQTvyOnm0+62Jv90SPNEBQJN4=;
+	s=arc-20240116; t=1707827060; c=relaxed/simple;
+	bh=KM6zxaaoOFSyFZ5noXN1PyDk4COINjZTnbDT7nk2jc4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iqNbBaSbLvDe9ahW9FsMtV4RD4+epPL3xLvkbY87LLLoL0RBwjU9jVUpBTMDJlUlQqcz18h6ZGKcDE4zwt1ThCuPQARR9eKjT0VsSynJoK0LxlKTIHukEqhOHkTWILNFd9zQwnPDw8zs0D3IScGtCLPjVkbzptM6H5QObPEE7Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZZEg/ZnC; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41DAI2V3018656;
-	Tue, 13 Feb 2024 11:18:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=kRixhbN6Ym1Zmusnenh11GI105dw0bqQnIm1JeLCSK8=;
- b=ZZEg/ZnCZtXf+0rAXEh14DIZ8Sye5Nhv5T7O/GHGqhe/UlUBxyyIjoPTy+kciAagGdPa
- GN5A8rXGjLKKzQq5azUSEepMOhG1uAfv2MPHyLvkEPgkJVSEpKyMUoV+o6akZPot8bgZ
- rQxFMy5cJURaY3EA+zCymd6cySK6yRVWgj83u6aX9PqjCXSbHQSP+a3F9lVtAQU03W7Z
- cNVAbaZ5MibgX3c9/TPRO+DvscRxn4PXsP2cu6rx6BmYvr6JcXO2Kf3VfGBOeM6ixewH
- ViLcLfXfoS/DiZeOOHY7DyW3aHWKQk7MwYu4CJoSHcMD61K/mv1ztVb85syzviIuF7VA cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w86hts9w4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 11:18:56 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41DB1fNm022081;
-	Tue, 13 Feb 2024 11:18:55 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w86hts9vm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 11:18:55 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41D8P7Jh016479;
-	Tue, 13 Feb 2024 11:18:54 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mymeuwd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 11:18:54 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41DBIpXF45809942
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 Feb 2024 11:18:53 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6A7F120040;
-	Tue, 13 Feb 2024 11:18:51 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E9C362004D;
-	Tue, 13 Feb 2024 11:18:50 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 13 Feb 2024 11:18:50 +0000 (GMT)
-Date: Tue, 13 Feb 2024 12:18:49 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Dan Williams <dan.j.williams@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Dave Chinner <david@fromorbit.com>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Russell King <linux@armlinux.org.uk>, linux-arch@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        dm-devel@lists.linux.dev, nvdimm@lists.linux.dev,
-        linux-s390@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Mikulas Patocka <mpatocka@redhat.com>
-Subject: Re: [PATCH v5 4/8] dcssblk: Handle alloc_dax() -EOPNOTSUPP failure
-Message-ID: <20240213111849.6534-A-hca@linux.ibm.com>
-References: <20240212163101.19614-1-mathieu.desnoyers@efficios.com>
- <20240212163101.19614-5-mathieu.desnoyers@efficios.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nMROOOTTV6lrv4shUBU+r4D0+Omp/kAQe8tHl6VSmKumRzuuypBqZ9ZOKctQVpPmTnPnVfwoTJOJ5a4iBFHAqpupYxocioQPsPh7iNF13zxe0oeieoI+FCx1TROhqYg083xLwv1xMCx5r5qhA2aL+3M0JmgxhIaugBrXSi5KIls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oPNMu0/3; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oPNMu0/3; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B2D4722206;
+	Tue, 13 Feb 2024 12:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1707827056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zXbOiQIN7neMTyajtp5U/4Xc00nM1Z7564QKlnGLw3E=;
+	b=oPNMu0/3kyHrjKXlmWcSVvIaXSDVbOqkAyBWw+GM976X053z77ogsr0EDbHX/7ytpQYyy9
+	SyG7mHOiNYd83sIJtiREPWMY5thldH58zWZvsioUSDVozZuC7lw84nRpXvaSjzQ83Bc875
+	OeMyCboEUx7oHjBoCcViZ4MERhSiPOw=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1707827056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zXbOiQIN7neMTyajtp5U/4Xc00nM1Z7564QKlnGLw3E=;
+	b=oPNMu0/3kyHrjKXlmWcSVvIaXSDVbOqkAyBWw+GM976X053z77ogsr0EDbHX/7ytpQYyy9
+	SyG7mHOiNYd83sIJtiREPWMY5thldH58zWZvsioUSDVozZuC7lw84nRpXvaSjzQ83Bc875
+	OeMyCboEUx7oHjBoCcViZ4MERhSiPOw=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8BA931370C;
+	Tue, 13 Feb 2024 12:24:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 4rhuIXBfy2WUCAAAD6G6ig
+	(envelope-from <mhocko@suse.com>); Tue, 13 Feb 2024 12:24:16 +0000
+Date: Tue, 13 Feb 2024 13:24:11 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+	paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+	ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, shakeelb@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v3 00/35] Memory allocation profiling
+Message-ID: <Zctfa2DvmlTYSfe8@tiehlicka>
+References: <20240212213922.783301-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -102,35 +105,66 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240212163101.19614-5-mathieu.desnoyers@efficios.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: v7etkd58sOZye-tw7r45w1hzzfW55uLg
-X-Proofpoint-GUID: ex2g2pAdh4h8FGNj8JP3P_9xuvlIPkmS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-13_06,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=800 malwarescore=0
- priorityscore=1501 spamscore=0 clxscore=1011 bulkscore=0 impostorscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2402130089
+In-Reply-To: <20240212213922.783301-1-surenb@google.com>
+X-Spam-Level: 
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b="oPNMu0/3"
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.07 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.com:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[73];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-0.06)[60.75%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	 RCVD_DKIM_ARC_DNSWL_HI(-1.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 DWL_DNSWL_MED(-2.00)[suse.com:dkim];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[linux-foundation.org,linux.dev,suse.cz,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 RCVD_IN_DNSWL_HI(-0.50)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Score: -3.07
+X-Rspamd-Queue-Id: B2D4722206
+X-Spam-Flag: NO
 
-On Mon, Feb 12, 2024 at 11:30:57AM -0500, Mathieu Desnoyers wrote:
-> In preparation for checking whether the architecture has data cache
-> aliasing within alloc_dax(), modify the error handling of dcssblk
-> dcssblk_add_store() to handle alloc_dax() -EOPNOTSUPP failures.
-> 
-> Considering that s390 is not a data cache aliasing architecture,
-> and considering that DCSSBLK selects DAX, a return value of -EOPNOTSUPP
-> from alloc_dax() should make dcssblk_add_store() fail.
-> 
-> Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-...
-> ---
->  drivers/s390/block/dcssblk.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
+[...]
+> We're aiming to get this in the next merge window, for 6.9. The feedback
+> we've gotten has been that even out of tree this patchset has already
+> been useful, and there's a significant amount of other work gated on the
+> code tagging functionality included in this patchset [2].
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+I suspect it will not come as a surprise that I really dislike the
+implementation proposed here. I will not repeat my arguments, I have
+done so on several occasions already. 
+
+Anyway, I didn't go as far as to nak it even though I _strongly_ believe
+this debugging feature will add a maintenance overhead for a very long
+time. I can live with all the downsides of the proposed implementation
+_as long as_ there is a wider agreement from the MM community as this is
+where the maintenance cost will be payed. So far I have not seen (m)any
+acks by MM developers so aiming into the next merge window is more than
+little rushed. 
+
+>  81 files changed, 2126 insertions(+), 695 deletions(-)
+-- 
+Michal Hocko
+SUSE Labs
 
