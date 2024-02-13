@@ -1,227 +1,730 @@
-Return-Path: <linux-arch+bounces-2314-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2315-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 371B6853E72
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 23:18:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF0CB853E9A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 23:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6E041F23EEC
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 22:17:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6BEF29288C
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Feb 2024 22:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41D462144;
-	Tue, 13 Feb 2024 22:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D0F62169;
+	Tue, 13 Feb 2024 22:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iRPAZtKi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t2w2IyHg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A8B626BC
-	for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 22:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEEA612F0;
+	Tue, 13 Feb 2024 22:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707862661; cv=none; b=chfYkxjOqxKCZYokzCIast12fHRR+r2WRb9ifyIscUBhylZdrTkGPxhHMa82bpVrRrlxqQC1c/Cv5YQE0rr59QLk5RJVOsk1sLM0bvcGosHn43WfqP5UtUp3LTJnMIqg2agJna4QkR+11Ca3dl2ZiFPH5aS089qJylc14thgzWI=
+	t=1707863341; cv=none; b=Vmk39cqTi1weaDBrlk3AF9VbzfHM7ke6rtQZN5/Y8x6YkUVMab6cDmgoHAuiiB3zibFlPW7w1WAXK7T90WLAv/mX1CFFSGhhN6XZaPsRq3J8dRFS/yWaIqw6X+kE1/CImMptR/ydF9RpGz4kkTzZTfVZj2YNfaGd9Uu2C8muRf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707862661; c=relaxed/simple;
-	bh=8rvVOGJK5G0bW1+vry5drj6mEJOTeH3T5v0nCt6fKJs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q5YgUCjrZg7CwexCi79lOlmFqeu37Yyn1pp4AHlPvhqNfrUVKZDFhkIcLJa0uXldA9xeARBKKO1+mSj7qJBZ4Rp43Zmcs54ldQ0bjcNdGr68en0vhVHfwHfdgCpfEHnfaOa8w2PPWkXNwtmAvRxcpRI3Pek6O9k5F2mtitUsF54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iRPAZtKi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707862658;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=eCcHtaszOKE9Vsf07irwuhOuZ163lqjSaVd6CZ9ODTE=;
-	b=iRPAZtKipeR0q8NnKKWo4IhHxjI7wwFqVhBJFUejpESTGt+l8mEjFVp+fHdWGYJNwWmSs/
-	KPMwkLId8ctih3dG8kxtZuZ5V84U5TQNDHke9xX7zlNn0O+XhMnfGqnO+VRxj7TSJ9FHoS
-	C7uU4VwYUCPtTijDLryz7w063j+SKJw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-632-I_tKenZRP42VE8ssNaf3RA-1; Tue, 13 Feb 2024 17:17:37 -0500
-X-MC-Unique: I_tKenZRP42VE8ssNaf3RA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-411ce6e7643so3877735e9.2
-        for <linux-arch@vger.kernel.org>; Tue, 13 Feb 2024 14:17:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707862656; x=1708467456;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eCcHtaszOKE9Vsf07irwuhOuZ163lqjSaVd6CZ9ODTE=;
-        b=AtLl8wIcPRjLQncm6W2J3yC0+MSInv8jctgnwYKKSOjXSNqTuZOGMjo43BqZxWTAeL
-         ZUXCS84Mu3sSex8Zvp3dfHbDEiZMsd0lsHfgz4PczONC1JBZhP2T3T2G5PhdK+8kjmOz
-         NwZ0V+ndn8LbqvKdE4ZZM+5H5UX/SBhSTC3RXME2KhISsfPxqTGqomgP+YjLnPy1JJKH
-         rKESbZoFZtK0x/rXbxtOlng9NUIXmx6kTOPZ5tbB/nbLHVvsARDZ0iGNBnpTwPe9g91T
-         OBIjCoEih6h82Ul6e2HZV1IXmpnxxJiL/ZF0ghf6BZTYGMv6gkHFiLoA7qIkivGKc2mm
-         joOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZuSFJPJON7sEhs4vvWGfNvCZjEs2CTSySneGmTwIUNvu80m4V6HegIyUhlnfQVJElelPk0QcTIk4yUvuUcBHqcvlYlhj+IA7wcA==
-X-Gm-Message-State: AOJu0YwsN+pPPnAThbDt/bOWv4Uf3bE0jN5HjtEXkirSYqDNahTY31qs
-	YgV0NBXXSqg6lpbDpwlsK+ShZ/I7AuMpAosgZakGc5ZLgWDaBEeOtfbgCsSKxo1yGYgDJ1eydW6
-	4tU247zTRavtrSSlyrWuj8XSwNLNmz+hIxkeVRcMsBu+hsHJLWCAroMF0FxE=
-X-Received: by 2002:a05:6000:104c:b0:33c:ddf4:742e with SMTP id c12-20020a056000104c00b0033cddf4742emr417684wrx.22.1707862656068;
-        Tue, 13 Feb 2024 14:17:36 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG0u4tRLYxr8Wbu4Etuf8Kb0cSQQoNXaCggyJ3xo82iccJCWEBHgyRkhNW4ZESCo8cWB0ObFw==
-X-Received: by 2002:a05:6000:104c:b0:33c:ddf4:742e with SMTP id c12-20020a056000104c00b0033cddf4742emr417626wrx.22.1707862655588;
-        Tue, 13 Feb 2024 14:17:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; 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
-Received: from ?IPV6:2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e? (p200300d82f3c3f007177eb0cd3d24b0e.dip0.t-ipconnect.de. [2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e])
-        by smtp.gmail.com with ESMTPSA id f14-20020a056000128e00b0033b50e0d493sm10564789wrx.59.2024.02.13.14.17.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 14:17:35 -0800 (PST)
-Message-ID: <6a0f5d8b-9c67-43f6-b25e-2240171265be@redhat.com>
-Date: Tue, 13 Feb 2024 23:17:32 +0100
+	s=arc-20240116; t=1707863341; c=relaxed/simple;
+	bh=vZqLSo1Xtsi0ak7mmoQ8v3xLCxkHkM2LtpTOgpPRFmQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ABNVDwGF83FB4+oR1H4/9NJOh2EGSrxfYrJnurgFwfVHiCMJ5ekdz+2aa72yHYIpWFQT6MlkRPshhGxwoGH7pKfTi0z7wl3+AzS3bfdPWnatXrYoMIbulzjyb/3PKGUnKRDT3rNwsdn6qK/xugQVe0Cx+M3kPp9cFFZj9YtTkQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t2w2IyHg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD0ACC433F1;
+	Tue, 13 Feb 2024 22:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707863340;
+	bh=vZqLSo1Xtsi0ak7mmoQ8v3xLCxkHkM2LtpTOgpPRFmQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t2w2IyHgeqgHLikRa/h/nT9gI5mu7QFU0ecfq2hWpQMpHtxjoHIjr0lCpaBQ1zf7m
+	 iLOGsWONIaCC1Fj1Ve8tuUZSZrXGyxuB6ima7YqaV4pGsEN8fFyO1F2qdEXLLNf7V4
+	 gAcon5U/kQcvP5vi90S5yWK7y0H+Pb5Pf1em6VfwFB7DS/t3tfrtNAM3OthfZlZUDl
+	 pHw8K16qreWSahEnkzK8Ws9aM1xTg09HH16WYXj0rT2BQbg5wW9hmLiNKWiOcz2irl
+	 eKhUKIp3mEUOgpO42u5lrKkVjV3EyPCyv010YHqVViai57xQ5G6xK/q/jlIUrOI5N8
+	 dw/hu94jXnnhA==
+Date: Tue, 13 Feb 2024 14:28:59 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Kees Cook <keescook@chromium.org>, akpm@linux-foundation.org,
+	kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+	paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, ndesaulniers@google.com,
+	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
+	ytcoode@gmail.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+	glider@google.com, elver@google.com, dvyukov@google.com,
+	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+	kernel-team@android.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH v3 13/35] lib: add allocation tagging support for memory
+ allocation profiling
+Message-ID: <20240213222859.GE6184@frogsfrogsfrogs>
+References: <20240212213922.783301-1-surenb@google.com>
+ <20240212213922.783301-14-surenb@google.com>
+ <202402121433.5CC66F34B@keescook>
+ <CAJuCfpGU+UhtcWxk7M3diSiz-b7H64_7NMBaKS5dxVdbYWvQqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/35] Memory allocation profiling
-Content-Language: en-US
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
- roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
- willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
- void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
- catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, tglx@linutronix.de,
- mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
- peterx@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
- rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
- yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
- hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
- ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
- ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, shakeelb@google.com,
- songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-References: <20240212213922.783301-1-surenb@google.com>
- <Zctfa2DvmlTYSfe8@tiehlicka>
- <CAJuCfpEsWfZnpL1vUB2C=cxRi_WxhxyvgGhUg7WdAxLEqy6oSw@mail.gmail.com>
- <9e14adec-2842-458d-8a58-af6a2d18d823@redhat.com>
- <2hphuyx2dnqsj3hnzyifp5yqn2hpgfjuhfu635dzgofr5mst27@4a5dixtcuxyi>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <2hphuyx2dnqsj3hnzyifp5yqn2hpgfjuhfu635dzgofr5mst27@4a5dixtcuxyi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpGU+UhtcWxk7M3diSiz-b7H64_7NMBaKS5dxVdbYWvQqA@mail.gmail.com>
 
-On 13.02.24 23:09, Kent Overstreet wrote:
-> On Tue, Feb 13, 2024 at 11:04:58PM +0100, David Hildenbrand wrote:
->> On 13.02.24 22:58, Suren Baghdasaryan wrote:
->>> On Tue, Feb 13, 2024 at 4:24 AM Michal Hocko <mhocko@suse.com> wrote:
->>>>
->>>> On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
->>>> [...]
->>>>> We're aiming to get this in the next merge window, for 6.9. The feedback
->>>>> we've gotten has been that even out of tree this patchset has already
->>>>> been useful, and there's a significant amount of other work gated on the
->>>>> code tagging functionality included in this patchset [2].
->>>>
->>>> I suspect it will not come as a surprise that I really dislike the
->>>> implementation proposed here. I will not repeat my arguments, I have
->>>> done so on several occasions already.
->>>>
->>>> Anyway, I didn't go as far as to nak it even though I _strongly_ believe
->>>> this debugging feature will add a maintenance overhead for a very long
->>>> time. I can live with all the downsides of the proposed implementation
->>>> _as long as_ there is a wider agreement from the MM community as this is
->>>> where the maintenance cost will be payed. So far I have not seen (m)any
->>>> acks by MM developers so aiming into the next merge window is more than
->>>> little rushed.
->>>
->>> We tried other previously proposed approaches and all have their
->>> downsides without making maintenance much easier. Your position is
->>> understandable and I think it's fair. Let's see if others see more
->>> benefit than cost here.
->>
->> Would it make sense to discuss that at LSF/MM once again, especially
->> covering why proposed alternatives did not work out? LSF/MM is not "too far"
->> away (May).
->>
->> I recall that the last LSF/MM session on this topic was a bit unfortunate
->> (IMHO not as productive as it could have been). Maybe we can finally reach a
->> consensus on this.
+On Mon, Feb 12, 2024 at 05:01:19PM -0800, Suren Baghdasaryan wrote:
+> On Mon, Feb 12, 2024 at 2:40 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Mon, Feb 12, 2024 at 01:38:59PM -0800, Suren Baghdasaryan wrote:
+> > > Introduce CONFIG_MEM_ALLOC_PROFILING which provides definitions to easily
+> > > instrument memory allocators. It registers an "alloc_tags" codetag type
+> > > with /proc/allocinfo interface to output allocation tag information when
+> >
+> > Please don't add anything new to the top-level /proc directory. This
+> > should likely live in /sys.
 > 
-> I'd rather not delay for more bikeshedding. Before agreeing to LSF I'd
-> need to see a serious proposl - what we had at the last LSF was people
-> jumping in with half baked alternative proposals that very much hadn't
-> been thought through, and I see no need to repeat that.
+> Ack. I'll find a more appropriate place for it then.
+> It just seemed like such generic information which would belong next
+> to meminfo/zoneinfo and such...
+
+Save yourself a cycle of "rework the whole fs interface only to have
+someone else tell you no" and put it in debugfs, not sysfs.  Wrangling
+with debugfs is easier than all the macro-happy sysfs stuff; you don't
+have to integrate with the "device" model; and there is no 'one value
+per file' rule.
+
+--D
+
+> >
+> > > the feature is enabled.
+> > > CONFIG_MEM_ALLOC_PROFILING_DEBUG is provided for debugging the memory
+> > > allocation profiling instrumentation.
+> > > Memory allocation profiling can be enabled or disabled at runtime using
+> > > /proc/sys/vm/mem_profiling sysctl when CONFIG_MEM_ALLOC_PROFILING_DEBUG=n.
+> > > CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT enables memory allocation
+> > > profiling by default.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > > ---
+> > >  Documentation/admin-guide/sysctl/vm.rst |  16 +++
+> > >  Documentation/filesystems/proc.rst      |  28 +++++
+> > >  include/asm-generic/codetag.lds.h       |  14 +++
+> > >  include/asm-generic/vmlinux.lds.h       |   3 +
+> > >  include/linux/alloc_tag.h               | 133 ++++++++++++++++++++
+> > >  include/linux/sched.h                   |  24 ++++
+> > >  lib/Kconfig.debug                       |  25 ++++
+> > >  lib/Makefile                            |   2 +
+> > >  lib/alloc_tag.c                         | 158 ++++++++++++++++++++++++
+> > >  scripts/module.lds.S                    |   7 ++
+> > >  10 files changed, 410 insertions(+)
+> > >  create mode 100644 include/asm-generic/codetag.lds.h
+> > >  create mode 100644 include/linux/alloc_tag.h
+> > >  create mode 100644 lib/alloc_tag.c
+> > >
+> > > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> > > index c59889de122b..a214719492ea 100644
+> > > --- a/Documentation/admin-guide/sysctl/vm.rst
+> > > +++ b/Documentation/admin-guide/sysctl/vm.rst
+> > > @@ -43,6 +43,7 @@ Currently, these files are in /proc/sys/vm:
+> > >  - legacy_va_layout
+> > >  - lowmem_reserve_ratio
+> > >  - max_map_count
+> > > +- mem_profiling         (only if CONFIG_MEM_ALLOC_PROFILING=y)
+> > >  - memory_failure_early_kill
+> > >  - memory_failure_recovery
+> > >  - min_free_kbytes
+> > > @@ -425,6 +426,21 @@ e.g., up to one or two maps per allocation.
+> > >  The default value is 65530.
+> > >
+> > >
+> > > +mem_profiling
+> > > +==============
+> > > +
+> > > +Enable memory profiling (when CONFIG_MEM_ALLOC_PROFILING=y)
+> > > +
+> > > +1: Enable memory profiling.
+> > > +
+> > > +0: Disabld memory profiling.
+> > > +
+> > > +Enabling memory profiling introduces a small performance overhead for all
+> > > +memory allocations.
+> > > +
+> > > +The default value depends on CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT.
+> > > +
+> > > +
+> > >  memory_failure_early_kill:
+> > >  ==========================
+> > >
+> > > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> > > index 104c6d047d9b..40d6d18308e4 100644
+> > > --- a/Documentation/filesystems/proc.rst
+> > > +++ b/Documentation/filesystems/proc.rst
+> > > @@ -688,6 +688,7 @@ files are there, and which are missing.
+> > >   ============ ===============================================================
+> > >   File         Content
+> > >   ============ ===============================================================
+> > > + allocinfo    Memory allocations profiling information
+> > >   apm          Advanced power management info
+> > >   bootconfig   Kernel command line obtained from boot config,
+> > >             and, if there were kernel parameters from the
+> > > @@ -953,6 +954,33 @@ also be allocatable although a lot of filesystem metadata may have to be
+> > >  reclaimed to achieve this.
+> > >
+> > >
+> > > +allocinfo
+> > > +~~~~~~~
+> > > +
+> > > +Provides information about memory allocations at all locations in the code
+> > > +base. Each allocation in the code is identified by its source file, line
+> > > +number, module and the function calling the allocation. The number of bytes
+> > > +allocated at each location is reported.
+> > > +
+> > > +Example output.
+> > > +
+> > > +::
+> > > +
+> > > +    > cat /proc/allocinfo
+> > > +
+> > > +      153MiB     mm/slub.c:1826 module:slub func:alloc_slab_page
+> > > +     6.08MiB     mm/slab_common.c:950 module:slab_common func:_kmalloc_order
+> > > +     5.09MiB     mm/memcontrol.c:2814 module:memcontrol func:alloc_slab_obj_exts
+> > > +     4.54MiB     mm/page_alloc.c:5777 module:page_alloc func:alloc_pages_exact
+> > > +     1.32MiB     include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+> > > +     1.16MiB     fs/xfs/xfs_log_priv.h:700 module:xfs func:xlog_kvmalloc
+> > > +     1.00MiB     mm/swap_cgroup.c:48 module:swap_cgroup func:swap_cgroup_prepare
+> > > +      734KiB     fs/xfs/kmem.c:20 module:xfs func:kmem_alloc
+> > > +      640KiB     kernel/rcu/tree.c:3184 module:tree func:fill_page_cache_func
+> > > +      640KiB     drivers/char/virtio_console.c:452 module:virtio_console func:alloc_buf
+> > > +      ...
+> > > +
+> > > +
+> > >  meminfo
+> > >  ~~~~~~~
+> > >
+> > > diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
+> > > new file mode 100644
+> > > index 000000000000..64f536b80380
+> > > --- /dev/null
+> > > +++ b/include/asm-generic/codetag.lds.h
+> > > @@ -0,0 +1,14 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > > +#ifndef __ASM_GENERIC_CODETAG_LDS_H
+> > > +#define __ASM_GENERIC_CODETAG_LDS_H
+> > > +
+> > > +#define SECTION_WITH_BOUNDARIES(_name)       \
+> > > +     . = ALIGN(8);                   \
+> > > +     __start_##_name = .;            \
+> > > +     KEEP(*(_name))                  \
+> > > +     __stop_##_name = .;
+> > > +
+> > > +#define CODETAG_SECTIONS()           \
+> > > +     SECTION_WITH_BOUNDARIES(alloc_tags)
+> > > +
+> > > +#endif /* __ASM_GENERIC_CODETAG_LDS_H */
+> > > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> > > index 5dd3a61d673d..c9997dc50c50 100644
+> > > --- a/include/asm-generic/vmlinux.lds.h
+> > > +++ b/include/asm-generic/vmlinux.lds.h
+> > > @@ -50,6 +50,8 @@
+> > >   *               [__nosave_begin, __nosave_end] for the nosave data
+> > >   */
+> > >
+> > > +#include <asm-generic/codetag.lds.h>
+> > > +
+> > >  #ifndef LOAD_OFFSET
+> > >  #define LOAD_OFFSET 0
+> > >  #endif
+> > > @@ -366,6 +368,7 @@
+> > >       . = ALIGN(8);                                                   \
+> > >       BOUNDED_SECTION_BY(__dyndbg_classes, ___dyndbg_classes)         \
+> > >       BOUNDED_SECTION_BY(__dyndbg, ___dyndbg)                         \
+> > > +     CODETAG_SECTIONS()                                              \
+> > >       LIKELY_PROFILE()                                                \
+> > >       BRANCH_PROFILE()                                                \
+> > >       TRACE_PRINTKS()                                                 \
+> > > diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+> > > new file mode 100644
+> > > index 000000000000..cf55a149fa84
+> > > --- /dev/null
+> > > +++ b/include/linux/alloc_tag.h
+> > > @@ -0,0 +1,133 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * allocation tagging
+> > > + */
+> > > +#ifndef _LINUX_ALLOC_TAG_H
+> > > +#define _LINUX_ALLOC_TAG_H
+> > > +
+> > > +#include <linux/bug.h>
+> > > +#include <linux/codetag.h>
+> > > +#include <linux/container_of.h>
+> > > +#include <linux/preempt.h>
+> > > +#include <asm/percpu.h>
+> > > +#include <linux/cpumask.h>
+> > > +#include <linux/static_key.h>
+> > > +
+> > > +struct alloc_tag_counters {
+> > > +     u64 bytes;
+> > > +     u64 calls;
+> > > +};
+> > > +
+> > > +/*
+> > > + * An instance of this structure is created in a special ELF section at every
+> > > + * allocation callsite. At runtime, the special section is treated as
+> > > + * an array of these. Embedded codetag utilizes codetag framework.
+> > > + */
+> > > +struct alloc_tag {
+> > > +     struct codetag                  ct;
+> > > +     struct alloc_tag_counters __percpu      *counters;
+> > > +} __aligned(8);
+> > > +
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> > > +
+> > > +static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
+> > > +{
+> > > +     return container_of(ct, struct alloc_tag, ct);
+> > > +}
+> > > +
+> > > +#ifdef ARCH_NEEDS_WEAK_PER_CPU
+> > > +/*
+> > > + * When percpu variables are required to be defined as weak, static percpu
+> > > + * variables can't be used inside a function (see comments for DECLARE_PER_CPU_SECTION).
+> > > + */
+> > > +#error "Memory allocation profiling is incompatible with ARCH_NEEDS_WEAK_PER_CPU"
+> >
+> > Is this enforced via Kconfig as well? (Looks like only alpha and s390?)
 > 
-> Like I mentioned, there's other work gated on this patchset; if people
-> want to hold this up for more discussion they better be putting forth
-> something to discuss.
-
-I'm thinking of ways on how to achieve Michal's request: "as long as 
-there is a wider agreement from the MM community". If we can achieve 
-that without LSF, great! (a bi-weekly MM meeting might also be an option)
-
--- 
-Cheers,
-
-David / dhildenb
-
+> Unfortunately ARCH_NEEDS_WEAK_PER_CPU is not a Kconfig option but
+> CONFIG_DEBUG_FORCE_WEAK_PER_CPU is, so that one is handled via Kconfig
+> (see "depends on !DEBUG_FORCE_WEAK_PER_CPU" in this patch). We have to
+> avoid both cases because of this:
+> https://elixir.bootlin.com/linux/latest/source/include/linux/percpu-defs.h#L75,
+> so I'm trying to provide an informative error here.
+> 
+> >
+> > > +#endif
+> > > +
+> > > +#define DEFINE_ALLOC_TAG(_alloc_tag, _old)                                   \
+> > > +     static DEFINE_PER_CPU(struct alloc_tag_counters, _alloc_tag_cntr);      \
+> > > +     static struct alloc_tag _alloc_tag __used __aligned(8)                  \
+> > > +     __section("alloc_tags") = {                                             \
+> > > +             .ct = CODE_TAG_INIT,                                            \
+> > > +             .counters = &_alloc_tag_cntr };                                 \
+> > > +     struct alloc_tag * __maybe_unused _old = alloc_tag_save(&_alloc_tag)
+> > > +
+> > > +DECLARE_STATIC_KEY_MAYBE(CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT,
+> > > +                     mem_alloc_profiling_key);
+> > > +
+> > > +static inline bool mem_alloc_profiling_enabled(void)
+> > > +{
+> > > +     return static_branch_maybe(CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT,
+> > > +                                &mem_alloc_profiling_key);
+> > > +}
+> > > +
+> > > +static inline struct alloc_tag_counters alloc_tag_read(struct alloc_tag *tag)
+> > > +{
+> > > +     struct alloc_tag_counters v = { 0, 0 };
+> > > +     struct alloc_tag_counters *counter;
+> > > +     int cpu;
+> > > +
+> > > +     for_each_possible_cpu(cpu) {
+> > > +             counter = per_cpu_ptr(tag->counters, cpu);
+> > > +             v.bytes += counter->bytes;
+> > > +             v.calls += counter->calls;
+> > > +     }
+> > > +
+> > > +     return v;
+> > > +}
+> > > +
+> > > +static inline void __alloc_tag_sub(union codetag_ref *ref, size_t bytes)
+> > > +{
+> > > +     struct alloc_tag *tag;
+> > > +
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > > +     WARN_ONCE(ref && !ref->ct, "alloc_tag was not set\n");
+> > > +#endif
+> > > +     if (!ref || !ref->ct)
+> > > +             return;
+> > > +
+> > > +     tag = ct_to_alloc_tag(ref->ct);
+> > > +
+> > > +     this_cpu_sub(tag->counters->bytes, bytes);
+> > > +     this_cpu_dec(tag->counters->calls);
+> > > +
+> > > +     ref->ct = NULL;
+> > > +}
+> > > +
+> > > +static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes)
+> > > +{
+> > > +     __alloc_tag_sub(ref, bytes);
+> > > +}
+> > > +
+> > > +static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_t bytes)
+> > > +{
+> > > +     __alloc_tag_sub(ref, bytes);
+> > > +}
+> > > +
+> > > +static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_tag *tag, size_t bytes)
+> > > +{
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > > +     WARN_ONCE(ref && ref->ct,
+> > > +               "alloc_tag was not cleared (got tag for %s:%u)\n",\
+> > > +               ref->ct->filename, ref->ct->lineno);
+> > > +
+> > > +     WARN_ONCE(!tag, "current->alloc_tag not set");
+> > > +#endif
+> > > +     if (!ref || !tag)
+> > > +             return;
+> > > +
+> > > +     ref->ct = &tag->ct;
+> > > +     this_cpu_add(tag->counters->bytes, bytes);
+> > > +     this_cpu_inc(tag->counters->calls);
+> > > +}
+> > > +
+> > > +#else
+> > > +
+> > > +#define DEFINE_ALLOC_TAG(_alloc_tag, _old)
+> > > +static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes) {}
+> > > +static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_t bytes) {}
+> > > +static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_tag *tag,
+> > > +                              size_t bytes) {}
+> > > +
+> > > +#endif
+> > > +
+> > > +#endif /* _LINUX_ALLOC_TAG_H */
+> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > index ffe8f618ab86..da68a10517c8 100644
+> > > --- a/include/linux/sched.h
+> > > +++ b/include/linux/sched.h
+> > > @@ -770,6 +770,10 @@ struct task_struct {
+> > >       unsigned int                    flags;
+> > >       unsigned int                    ptrace;
+> > >
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> > > +     struct alloc_tag                *alloc_tag;
+> > > +#endif
+> >
+> > Normally scheduling is very sensitive to having anything early in
+> > task_struct. I would suggest moving this the CONFIG_SCHED_CORE ifdef
+> > area.
+> 
+> Thanks for the warning! We will look into that.
+> 
+> >
+> > > +
+> > >  #ifdef CONFIG_SMP
+> > >       int                             on_cpu;
+> > >       struct __call_single_node       wake_entry;
+> > > @@ -810,6 +814,7 @@ struct task_struct {
+> > >       struct task_group               *sched_task_group;
+> > >  #endif
+> > >
+> > > +
+> > >  #ifdef CONFIG_UCLAMP_TASK
+> > >       /*
+> > >        * Clamp values requested for a scheduling entity.
+> > > @@ -2183,4 +2188,23 @@ static inline int sched_core_idle_cpu(int cpu) { return idle_cpu(cpu); }
+> > >
+> > >  extern void sched_set_stop_task(int cpu, struct task_struct *stop);
+> > >
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> > > +static inline struct alloc_tag *alloc_tag_save(struct alloc_tag *tag)
+> > > +{
+> > > +     swap(current->alloc_tag, tag);
+> > > +     return tag;
+> > > +}
+> > > +
+> > > +static inline void alloc_tag_restore(struct alloc_tag *tag, struct alloc_tag *old)
+> > > +{
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > > +     WARN(current->alloc_tag != tag, "current->alloc_tag was changed:\n");
+> > > +#endif
+> > > +     current->alloc_tag = old;
+> > > +}
+> > > +#else
+> > > +static inline struct alloc_tag *alloc_tag_save(struct alloc_tag *tag) { return NULL; }
+> > > +#define alloc_tag_restore(_tag, _old)
+> > > +#endif
+> > > +
+> > >  #endif
+> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > > index 0be2d00c3696..78d258ca508f 100644
+> > > --- a/lib/Kconfig.debug
+> > > +++ b/lib/Kconfig.debug
+> > > @@ -972,6 +972,31 @@ config CODE_TAGGING
+> > >       bool
+> > >       select KALLSYMS
+> > >
+> > > +config MEM_ALLOC_PROFILING
+> > > +     bool "Enable memory allocation profiling"
+> > > +     default n
+> > > +     depends on PROC_FS
+> > > +     depends on !DEBUG_FORCE_WEAK_PER_CPU
+> > > +     select CODE_TAGGING
+> > > +     help
+> > > +       Track allocation source code and record total allocation size
+> > > +       initiated at that code location. The mechanism can be used to track
+> > > +       memory leaks with a low performance and memory impact.
+> > > +
+> > > +config MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
+> > > +     bool "Enable memory allocation profiling by default"
+> > > +     default y
+> > > +     depends on MEM_ALLOC_PROFILING
+> > > +
+> > > +config MEM_ALLOC_PROFILING_DEBUG
+> > > +     bool "Memory allocation profiler debugging"
+> > > +     default n
+> > > +     depends on MEM_ALLOC_PROFILING
+> > > +     select MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
+> > > +     help
+> > > +       Adds warnings with helpful error messages for memory allocation
+> > > +       profiling.
+> > > +
+> > >  source "lib/Kconfig.kasan"
+> > >  source "lib/Kconfig.kfence"
+> > >  source "lib/Kconfig.kmsan"
+> > > diff --git a/lib/Makefile b/lib/Makefile
+> > > index 6b48b22fdfac..859112f09bf5 100644
+> > > --- a/lib/Makefile
+> > > +++ b/lib/Makefile
+> > > @@ -236,6 +236,8 @@ obj-$(CONFIG_OF_RECONFIG_NOTIFIER_ERROR_INJECT) += \
+> > >  obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+> > >
+> > >  obj-$(CONFIG_CODE_TAGGING) += codetag.o
+> > > +obj-$(CONFIG_MEM_ALLOC_PROFILING) += alloc_tag.o
+> > > +
+> > >  lib-$(CONFIG_GENERIC_BUG) += bug.o
+> > >
+> > >  obj-$(CONFIG_HAVE_ARCH_TRACEHOOK) += syscall.o
+> > > diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
+> > > new file mode 100644
+> > > index 000000000000..4fc031f9cefd
+> > > --- /dev/null
+> > > +++ b/lib/alloc_tag.c
+> > > @@ -0,0 +1,158 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +#include <linux/alloc_tag.h>
+> > > +#include <linux/fs.h>
+> > > +#include <linux/gfp.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/proc_fs.h>
+> > > +#include <linux/seq_buf.h>
+> > > +#include <linux/seq_file.h>
+> > > +
+> > > +static struct codetag_type *alloc_tag_cttype;
+> > > +
+> > > +DEFINE_STATIC_KEY_MAYBE(CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT,
+> > > +                     mem_alloc_profiling_key);
+> > > +
+> > > +static void *allocinfo_start(struct seq_file *m, loff_t *pos)
+> > > +{
+> > > +     struct codetag_iterator *iter;
+> > > +     struct codetag *ct;
+> > > +     loff_t node = *pos;
+> > > +
+> > > +     iter = kzalloc(sizeof(*iter), GFP_KERNEL);
+> > > +     m->private = iter;
+> > > +     if (!iter)
+> > > +             return NULL;
+> > > +
+> > > +     codetag_lock_module_list(alloc_tag_cttype, true);
+> > > +     *iter = codetag_get_ct_iter(alloc_tag_cttype);
+> > > +     while ((ct = codetag_next_ct(iter)) != NULL && node)
+> > > +             node--;
+> > > +
+> > > +     return ct ? iter : NULL;
+> > > +}
+> > > +
+> > > +static void *allocinfo_next(struct seq_file *m, void *arg, loff_t *pos)
+> > > +{
+> > > +     struct codetag_iterator *iter = (struct codetag_iterator *)arg;
+> > > +     struct codetag *ct = codetag_next_ct(iter);
+> > > +
+> > > +     (*pos)++;
+> > > +     if (!ct)
+> > > +             return NULL;
+> > > +
+> > > +     return iter;
+> > > +}
+> > > +
+> > > +static void allocinfo_stop(struct seq_file *m, void *arg)
+> > > +{
+> > > +     struct codetag_iterator *iter = (struct codetag_iterator *)m->private;
+> > > +
+> > > +     if (iter) {
+> > > +             codetag_lock_module_list(alloc_tag_cttype, false);
+> > > +             kfree(iter);
+> > > +     }
+> > > +}
+> > > +
+> > > +static void alloc_tag_to_text(struct seq_buf *out, struct codetag *ct)
+> > > +{
+> > > +     struct alloc_tag *tag = ct_to_alloc_tag(ct);
+> > > +     struct alloc_tag_counters counter = alloc_tag_read(tag);
+> > > +     s64 bytes = counter.bytes;
+> > > +     char val[10], *p = val;
+> > > +
+> > > +     if (bytes < 0) {
+> > > +             *p++ = '-';
+> > > +             bytes = -bytes;
+> > > +     }
+> > > +
+> > > +     string_get_size(bytes, 1,
+> > > +                     STRING_SIZE_BASE2|STRING_SIZE_NOSPACE,
+> > > +                     p, val + ARRAY_SIZE(val) - p);
+> > > +
+> > > +     seq_buf_printf(out, "%8s %8llu ", val, counter.calls);
+> > > +     codetag_to_text(out, ct);
+> > > +     seq_buf_putc(out, ' ');
+> > > +     seq_buf_putc(out, '\n');
+> > > +}
+> >
+> > /me does happy seq_buf dance!
+> >
+> > > +
+> > > +static int allocinfo_show(struct seq_file *m, void *arg)
+> > > +{
+> > > +     struct codetag_iterator *iter = (struct codetag_iterator *)arg;
+> > > +     char *bufp;
+> > > +     size_t n = seq_get_buf(m, &bufp);
+> > > +     struct seq_buf buf;
+> > > +
+> > > +     seq_buf_init(&buf, bufp, n);
+> > > +     alloc_tag_to_text(&buf, iter->ct);
+> > > +     seq_commit(m, seq_buf_used(&buf));
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static const struct seq_operations allocinfo_seq_op = {
+> > > +     .start  = allocinfo_start,
+> > > +     .next   = allocinfo_next,
+> > > +     .stop   = allocinfo_stop,
+> > > +     .show   = allocinfo_show,
+> > > +};
+> > > +
+> > > +static void __init procfs_init(void)
+> > > +{
+> > > +     proc_create_seq("allocinfo", 0444, NULL, &allocinfo_seq_op);
+> > > +}
+> >
+> > As mentioned, this really should be in /sys somewhere.
+> 
+> Ack.
+> 
+> >
+> > > +
+> > > +static bool alloc_tag_module_unload(struct codetag_type *cttype,
+> > > +                                 struct codetag_module *cmod)
+> > > +{
+> > > +     struct codetag_iterator iter = codetag_get_ct_iter(cttype);
+> > > +     struct alloc_tag_counters counter;
+> > > +     bool module_unused = true;
+> > > +     struct alloc_tag *tag;
+> > > +     struct codetag *ct;
+> > > +
+> > > +     for (ct = codetag_next_ct(&iter); ct; ct = codetag_next_ct(&iter)) {
+> > > +             if (iter.cmod != cmod)
+> > > +                     continue;
+> > > +
+> > > +             tag = ct_to_alloc_tag(ct);
+> > > +             counter = alloc_tag_read(tag);
+> > > +
+> > > +             if (WARN(counter.bytes, "%s:%u module %s func:%s has %llu allocated at module unload",
+> > > +                       ct->filename, ct->lineno, ct->modname, ct->function, counter.bytes))
+> > > +                     module_unused = false;
+> > > +     }
+> > > +
+> > > +     return module_unused;
+> > > +}
+> > > +
+> > > +static struct ctl_table memory_allocation_profiling_sysctls[] = {
+> > > +     {
+> > > +             .procname       = "mem_profiling",
+> > > +             .data           = &mem_alloc_profiling_key,
+> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > > +             .mode           = 0444,
+> > > +#else
+> > > +             .mode           = 0644,
+> > > +#endif
+> > > +             .proc_handler   = proc_do_static_key,
+> > > +     },
+> > > +     { }
+> > > +};
+> > > +
+> > > +static int __init alloc_tag_init(void)
+> > > +{
+> > > +     const struct codetag_type_desc desc = {
+> > > +             .section        = "alloc_tags",
+> > > +             .tag_size       = sizeof(struct alloc_tag),
+> > > +             .module_unload  = alloc_tag_module_unload,
+> > > +     };
+> > > +
+> > > +     alloc_tag_cttype = codetag_register_type(&desc);
+> > > +     if (IS_ERR_OR_NULL(alloc_tag_cttype))
+> > > +             return PTR_ERR(alloc_tag_cttype);
+> > > +
+> > > +     register_sysctl_init("vm", memory_allocation_profiling_sysctls);
+> > > +     procfs_init();
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +module_init(alloc_tag_init);
+> > > diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+> > > index bf5bcf2836d8..45c67a0994f3 100644
+> > > --- a/scripts/module.lds.S
+> > > +++ b/scripts/module.lds.S
+> > > @@ -9,6 +9,8 @@
+> > >  #define DISCARD_EH_FRAME     *(.eh_frame)
+> > >  #endif
+> > >
+> > > +#include <asm-generic/codetag.lds.h>
+> > > +
+> > >  SECTIONS {
+> > >       /DISCARD/ : {
+> > >               *(.discard)
+> > > @@ -47,12 +49,17 @@ SECTIONS {
+> > >       .data : {
+> > >               *(.data .data.[0-9a-zA-Z_]*)
+> > >               *(.data..L*)
+> > > +             CODETAG_SECTIONS()
+> > >       }
+> > >
+> > >       .rodata : {
+> > >               *(.rodata .rodata.[0-9a-zA-Z_]*)
+> > >               *(.rodata..L*)
+> > >       }
+> > > +#else
+> > > +     .data : {
+> > > +             CODETAG_SECTIONS()
+> > > +     }
+> > >  #endif
+> > >  }
+> >
+> > Otherwise, looks good.
+> 
+> Thanks!
+> 
+> >
+> > --
+> > Kees Cook
+> 
 
