@@ -1,81 +1,93 @@
-Return-Path: <linux-arch+bounces-2339-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2340-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB10E8546C0
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 11:01:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53F268546FF
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 11:20:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F5692815B0
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 10:01:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AEE028AAC6
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 10:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78953168CE;
-	Wed, 14 Feb 2024 10:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64FF2175B9;
+	Wed, 14 Feb 2024 10:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gh6Gp1MM"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="DNRgpeGh";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nX6r6YD0";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="DNRgpeGh";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nX6r6YD0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E112168CD
-	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 10:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688781757A;
+	Wed, 14 Feb 2024 10:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707904873; cv=none; b=Kdl5U3Zi20s27gNF01+xMwyakrI34zmgEyeWwe9LVHg5FRC1SoKD6khDLCU5DqFu1N4HsZFPmoVhjNeP6SLhzOrqc9llzlhOw/gOYrUgMlc+uOi0GKEqWFeTWc8Gu4WfsvI+PDR9cFgz0XEzVz2OvH+qkRelrbtzhulWmpARq0Q=
+	t=1707906036; cv=none; b=L14ozIf+XSinNjn4U9I6d70eZNHJ+MUIoLYY9ROA6owPrtLtvntRbh0lwGBeA25nbzpDvu988v7ups9jNIWl83tSAWhrQguzicE/TSYHCsndF9Mqt25aKqPp/y0YzAbWiI+YCgWsXqgUhVctHha/WDXoYxHucLbtDlOOPQR9DXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707904873; c=relaxed/simple;
-	bh=ISNhoVAHE5ea59GMSp6fB/xzP9AMMIXNtq+7KToWy/g=;
+	s=arc-20240116; t=1707906036; c=relaxed/simple;
+	bh=20sRNx8iOq0dxtbjIRX48x/rKE5QlAzFN67tIlBtgIA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LydPTEcUYbaXi8veYneVxKa7Awsm8lw8q0gZQ/dgqRe/UKWumFRGts4NP+p0mttSMoFXwDNJynH8CixQWA2P5ASSj4i1YE3kx1+QCcHQXS4OG+EwFU8hlLYWKSApoKHHpqWxeRbkZuLgO3sL2TYEPFIKpoqsTjnQ3VWSAGqIGX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gh6Gp1MM; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707904870;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 In-Reply-To:Content-Type; b=QYaClOI7qoHA195u3hu1jEGH31E/gm6Zw6kepovDgvyeeLr6oF8kys7cr7QtvkRI/D3WpSf6zxN0jnco3qIQpC3pbVygO1g6f/0XDMOsMmjnzVuWhqdTafDHaNJ9JaiS3LcbAf87d74Ec4sCTrXW71PIekRKRmCJkGuihgqj4LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=DNRgpeGh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nX6r6YD0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=DNRgpeGh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nX6r6YD0; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 110351FD18;
+	Wed, 14 Feb 2024 10:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1707906027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=SYtqzgv+BxOcacLu4368aIKcl3CwnG8tHFk8B9VUFvU=;
-	b=Gh6Gp1MMBKbx/xnXOKaKdkpT4d1GtLHT6BmnyzCs3O//x0QW9xs4uq0REnEzLpqYP4AUuh
-	Gl+GjhMCJhVw8X6Rj417QAGMX5D7LSn3CIrz5YNjWExJ59WIbDm68oX5cO1BuIq/lPyAB9
-	Zzt5Jiytu0suITVXX4kg5gW3U83CF44=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-CRoCaABXOrKDwjn17RmaUg-1; Wed, 14 Feb 2024 05:01:08 -0500
-X-MC-Unique: CRoCaABXOrKDwjn17RmaUg-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2d0fba43533so25708371fa.1
-        for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 02:01:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707904866; x=1708509666;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SYtqzgv+BxOcacLu4368aIKcl3CwnG8tHFk8B9VUFvU=;
-        b=kdTalq6+t3gOBYaYmIb8HVTLEJXr9qlKwA0/obPfZXP8WlqUuJjknMQePDmIbyb/k2
-         u8QSDPd8gAOfoQbONDDZD+4+iv3HLnrmyvdrvyTRzKxbm9SXbHIhpulaHp3xVyZ/7mT/
-         qzGYhZ+v+8O0ydQZFd92s+NXYJrkkj+DYnAAn4yheBLzwcUPoGXpo8V9KjVuzt1pRS9K
-         22ADGxcpKtiv+aDyPkUc+1fboyqkDiNwX6g9fsTAA/6JwyCWDeG1Vu65ktANVlg1t4Is
-         5ulbILcYQlj2mSn8iWAXncPvV+2u5MuwTnivKbX+GXslxsIBUbUdgeXKV5bq2klRo6Aj
-         qxEA==
-X-Forwarded-Encrypted: i=1; AJvYcCWuIEtUZibqyAP1oCKY+pDeDs8zFpniZoN2PmosQr4LDjpbPsQZqok2Nlv8JAjjCRQEeSryq9hL9iLXu7tfC2G3uGU9ED0iV2Ta0A==
-X-Gm-Message-State: AOJu0Yz+7a7unffeW/CtDvFf/7CBOQFr6SFLAUroulOlznKGIbbdKMqZ
-	LTctRLifC+G14YmECN8X/PIpx8/bMC7e42Lq+Sc1wdhwyJe37ON7cpPbrD+H6aQNX5cpr3n+J49
-	MljtvbiZABWluWpb7Ota2V3iJf6KBh7uKOoJ0pQhKSf/ILsH2yB/0Ph3mgvU=
-X-Received: by 2002:a2e:bb85:0:b0:2d0:de72:9d47 with SMTP id y5-20020a2ebb85000000b002d0de729d47mr1387335lje.8.1707904866640;
-        Wed, 14 Feb 2024 02:01:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEeBVBeETe/HNpRyfxbiQ4zG7pHiUv6kqZUWoyq8jvv2EQfYHAzza7a6OSmZLJjmPb8OFOyjg==
-X-Received: by 2002:a2e:bb85:0:b0:2d0:de72:9d47 with SMTP id y5-20020a2ebb85000000b002d0de729d47mr1387286lje.8.1707904866113;
-        Wed, 14 Feb 2024 02:01:06 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e? (p200300d82f3c3f007177eb0cd3d24b0e.dip0.t-ipconnect.de. [2003:d8:2f3c:3f00:7177:eb0c:d3d2:4b0e])
-        by smtp.gmail.com with ESMTPSA id z21-20020a05600c221500b004101f27737asm1416372wml.29.2024.02.14.02.01.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Feb 2024 02:01:05 -0800 (PST)
-Message-ID: <d7d132ca-8d0d-497e-bf8d-3c275960aaf9@redhat.com>
-Date: Wed, 14 Feb 2024 11:01:02 +0100
+	 in-reply-to:in-reply-to:references:references;
+	bh=FGladMXENrd0YjrbTrjIK8mVP0LFAbru1yEEbY+cSOQ=;
+	b=DNRgpeGhsDI+oSKTmcp+slsJEYfRS5HYFj3TT/mD1w+ZV1MzliTWcl4XEU6bVt3xTX9gBa
+	6c93XMG6n7uYcTsRNReflnsHj10orptTi2Vyl2Ll8/BiPXGvllIFrZYcU8UY4ckjh5/mYE
+	ecPjl2bd/Jyci9DykfeSrzt1k/0aaCY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1707906027;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FGladMXENrd0YjrbTrjIK8mVP0LFAbru1yEEbY+cSOQ=;
+	b=nX6r6YD0jPrpVOJ83kIFxVBq3vl0couSpQ2UrxdMnSPIbg4NKpFIEC32DvhFQkJALEvR40
+	eek/vbRuZR1rV0DQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1707906027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FGladMXENrd0YjrbTrjIK8mVP0LFAbru1yEEbY+cSOQ=;
+	b=DNRgpeGhsDI+oSKTmcp+slsJEYfRS5HYFj3TT/mD1w+ZV1MzliTWcl4XEU6bVt3xTX9gBa
+	6c93XMG6n7uYcTsRNReflnsHj10orptTi2Vyl2Ll8/BiPXGvllIFrZYcU8UY4ckjh5/mYE
+	ecPjl2bd/Jyci9DykfeSrzt1k/0aaCY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1707906027;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FGladMXENrd0YjrbTrjIK8mVP0LFAbru1yEEbY+cSOQ=;
+	b=nX6r6YD0jPrpVOJ83kIFxVBq3vl0couSpQ2UrxdMnSPIbg4NKpFIEC32DvhFQkJALEvR40
+	eek/vbRuZR1rV0DQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7241913A72;
+	Wed, 14 Feb 2024 10:20:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id wRKNG+qTzGW7RwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 14 Feb 2024 10:20:26 +0000
+Message-ID: <4bb7b1e4-d107-4708-bb65-ac44d4af9959@suse.cz>
+Date: Wed, 14 Feb 2024 11:20:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -85,14 +97,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 00/35] Memory allocation profiling
 Content-Language: en-US
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>,
- Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, vbabka@suse.cz,
- hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
- dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
- corbet@lwn.net, void@manifault.com, peterz@infradead.org,
- juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
- arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+To: Kent Overstreet <kent.overstreet@linux.dev>,
+ Suren Baghdasaryan <surenb@google.com>
+Cc: David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>,
+ akpm@linux-foundation.org, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+ mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+ liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
  dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
  axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
  dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
@@ -112,7 +124,8 @@ Cc: Kent Overstreet <kent.overstreet@linux.dev>,
  linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
  linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
  cgroups@vger.kernel.org
-References: <Zctfa2DvmlTYSfe8@tiehlicka>
+References: <20240212213922.783301-1-surenb@google.com>
+ <Zctfa2DvmlTYSfe8@tiehlicka>
  <CAJuCfpEsWfZnpL1vUB2C=cxRi_WxhxyvgGhUg7WdAxLEqy6oSw@mail.gmail.com>
  <9e14adec-2842-458d-8a58-af6a2d18d823@redhat.com>
  <2hphuyx2dnqsj3hnzyifp5yqn2hpgfjuhfu635dzgofr5mst27@4a5dixtcuxyi>
@@ -121,210 +134,94 @@ References: <Zctfa2DvmlTYSfe8@tiehlicka>
  <adbb77ee-1662-4d24-bcbf-d74c29bc5083@redhat.com>
  <r6cmbcmalryodbnlkmuj2fjnausbcysmolikjguqvdwkngeztq@45lbvxjavwb3>
  <CAJuCfpF4g1jeEwHVHjQWwi5kqS-3UqjMt7GnG0Kdz5VJGyhK3Q@mail.gmail.com>
- <a9b0440b-844e-4e45-a546-315d53322aad@redhat.com>
- <xbehqbtjp5wi4z2ppzrbmlj6vfazd2w5flz3tgjbo37tlisexa@caq633gciggt>
- <c842347d-5794-4925-9b95-e9966795b7e1@redhat.com>
- <CAJuCfpFB-WimQoC1s-ZoiAx+t31KRu1Hd9HgH3JTMssnskdvNw@mail.gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <CAJuCfpFB-WimQoC1s-ZoiAx+t31KRu1Hd9HgH3JTMssnskdvNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <ea5vqiv5rt5cdbrlrdep5flej2pysqbfvxau4cjjbho64652um@7rz23kesqdup>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ea5vqiv5rt5cdbrlrdep5flej2pysqbfvxau4cjjbho64652um@7rz23kesqdup>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=DNRgpeGh;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=nX6r6YD0
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.00 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 XM_UA_NO_VERSION(0.01)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 BAYES_HAM(-3.00)[100.00%];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[73];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,suse.cz:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FREEMAIL_CC(0.00)[redhat.com,suse.com,linux-foundation.org,cmpxchg.org,linux.dev,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -3.00
+X-Rspamd-Queue-Id: 110351FD18
+X-Spam-Flag: NO
 
-On 14.02.24 00:28, Suren Baghdasaryan wrote:
-> On Tue, Feb 13, 2024 at 3:22 PM David Hildenbrand <david@redhat.com> wrote:
->>
->> On 14.02.24 00:12, Kent Overstreet wrote:
->>> On Wed, Feb 14, 2024 at 12:02:30AM +0100, David Hildenbrand wrote:
->>>> On 13.02.24 23:59, Suren Baghdasaryan wrote:
->>>>> On Tue, Feb 13, 2024 at 2:50 PM Kent Overstreet
->>>>> <kent.overstreet@linux.dev> wrote:
->>>>>>
->>>>>> On Tue, Feb 13, 2024 at 11:48:41PM +0100, David Hildenbrand wrote:
->>>>>>> On 13.02.24 23:30, Suren Baghdasaryan wrote:
->>>>>>>> On Tue, Feb 13, 2024 at 2:17 PM David Hildenbrand <david@redhat.com> wrote:
->>>>>>>>>
->>>>>>>>> On 13.02.24 23:09, Kent Overstreet wrote:
->>>>>>>>>> On Tue, Feb 13, 2024 at 11:04:58PM +0100, David Hildenbrand wrote:
->>>>>>>>>>> On 13.02.24 22:58, Suren Baghdasaryan wrote:
->>>>>>>>>>>> On Tue, Feb 13, 2024 at 4:24 AM Michal Hocko <mhocko@suse.com> wrote:
->>>>>>>>>>>>>
->>>>>>>>>>>>> On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
->>>>>>>>>>>>> [...]
->>>>>>>>>>>>>> We're aiming to get this in the next merge window, for 6.9. The feedback
->>>>>>>>>>>>>> we've gotten has been that even out of tree this patchset has already
->>>>>>>>>>>>>> been useful, and there's a significant amount of other work gated on the
->>>>>>>>>>>>>> code tagging functionality included in this patchset [2].
->>>>>>>>>>>>>
->>>>>>>>>>>>> I suspect it will not come as a surprise that I really dislike the
->>>>>>>>>>>>> implementation proposed here. I will not repeat my arguments, I have
->>>>>>>>>>>>> done so on several occasions already.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Anyway, I didn't go as far as to nak it even though I _strongly_ believe
->>>>>>>>>>>>> this debugging feature will add a maintenance overhead for a very long
->>>>>>>>>>>>> time. I can live with all the downsides of the proposed implementation
->>>>>>>>>>>>> _as long as_ there is a wider agreement from the MM community as this is
->>>>>>>>>>>>> where the maintenance cost will be payed. So far I have not seen (m)any
->>>>>>>>>>>>> acks by MM developers so aiming into the next merge window is more than
->>>>>>>>>>>>> little rushed.
->>>>>>>>>>>>
->>>>>>>>>>>> We tried other previously proposed approaches and all have their
->>>>>>>>>>>> downsides without making maintenance much easier. Your position is
->>>>>>>>>>>> understandable and I think it's fair. Let's see if others see more
->>>>>>>>>>>> benefit than cost here.
->>>>>>>>>>>
->>>>>>>>>>> Would it make sense to discuss that at LSF/MM once again, especially
->>>>>>>>>>> covering why proposed alternatives did not work out? LSF/MM is not "too far"
->>>>>>>>>>> away (May).
->>>>>>>>>>>
->>>>>>>>>>> I recall that the last LSF/MM session on this topic was a bit unfortunate
->>>>>>>>>>> (IMHO not as productive as it could have been). Maybe we can finally reach a
->>>>>>>>>>> consensus on this.
->>>>>>>>>>
->>>>>>>>>> I'd rather not delay for more bikeshedding. Before agreeing to LSF I'd
->>>>>>>>>> need to see a serious proposl - what we had at the last LSF was people
->>>>>>>>>> jumping in with half baked alternative proposals that very much hadn't
->>>>>>>>>> been thought through, and I see no need to repeat that.
->>>>>>>>>>
->>>>>>>>>> Like I mentioned, there's other work gated on this patchset; if people
->>>>>>>>>> want to hold this up for more discussion they better be putting forth
->>>>>>>>>> something to discuss.
->>>>>>>>>
->>>>>>>>> I'm thinking of ways on how to achieve Michal's request: "as long as
->>>>>>>>> there is a wider agreement from the MM community". If we can achieve
->>>>>>>>> that without LSF, great! (a bi-weekly MM meeting might also be an option)
->>>>>>>>
->>>>>>>> There will be a maintenance burden even with the cleanest proposed
->>>>>>>> approach.
->>>>>>>
->>>>>>> Yes.
->>>>>>>
->>>>>>>> We worked hard to make the patchset as clean as possible and
->>>>>>>> if benefits still don't outweigh the maintenance cost then we should
->>>>>>>> probably stop trying.
->>>>>>>
->>>>>>> Indeed.
->>>>>>>
->>>>>>>> At LSF/MM I would rather discuss functonal
->>>>>>>> issues/requirements/improvements than alternative approaches to
->>>>>>>> instrument allocators.
->>>>>>>> I'm happy to arrange a separate meeting with MM folks if that would
->>>>>>>> help to progress on the cost/benefit decision.
->>>>>>> Note that I am only proposing ways forward.
->>>>>>>
->>>>>>> If you think you can easily achieve what Michal requested without all that,
->>>>>>> good.
->>>>>>
->>>>>> He requested something?
->>>>>
->>>>> Yes, a cleaner instrumentation. Unfortunately the cleanest one is not
->>>>> possible until the compiler feature is developed and deployed. And it
->>>>> still would require changes to the headers, so don't think it's worth
->>>>> delaying the feature for years.
->>>>>
->>>>
->>>> I was talking about this: "I can live with all the downsides of the proposed
->>>> implementationas long as there is a wider agreement from the MM community as
->>>> this is where the maintenance cost will be payed. So far I have not seen
->>>> (m)any acks by MM developers".
->>>>
->>>> I certainly cannot be motivated at this point to review and ack this,
->>>> unfortunately too much negative energy around here.
->>>
->>> David, this kind of reaction is exactly why I was telling Andrew I was
->>> going to submit this as a direct pull request to Linus.
->>>
->>> This is an important feature; if we can't stay focused ot the technical
->>> and get it done that's what I'll do.
->>
->> Kent, I started this with "Would it make sense" in an attempt to help
->> Suren and you to finally make progress with this, one way or the other.
->> I know that there were ways in the past to get the MM community to agree
->> on such things.
->>
->> I tried to be helpful, finding ways *not having to* bypass the MM
->> community to get MM stuff merged.
->>
->> The reply I got is mostly negative energy.
->>
->> So you don't need my help here, understood.
->>
->> But I will fight against any attempts to bypass the MM community.
+On 2/14/24 00:08, Kent Overstreet wrote:
+> On Tue, Feb 13, 2024 at 02:59:11PM -0800, Suren Baghdasaryan wrote:
+>> On Tue, Feb 13, 2024 at 2:50 PM Kent Overstreet
+>> <kent.overstreet@linux.dev> wrote:
+>> >
+>> > On Tue, Feb 13, 2024 at 11:48:41PM +0100, David Hildenbrand wrote:
+>> > > On 13.02.24 23:30, Suren Baghdasaryan wrote:
+>> > > > On Tue, Feb 13, 2024 at 2:17 PM David Hildenbrand <david@redhat.com> wrote:
+>> > > If you think you can easily achieve what Michal requested without all that,
+>> > > good.
+>> >
+>> > He requested something?
+>> 
+>> Yes, a cleaner instrumentation. Unfortunately the cleanest one is not
+>> possible until the compiler feature is developed and deployed. And it
+>> still would require changes to the headers, so don't think it's worth
+>> delaying the feature for years.
 > 
-> Well, I'm definitely not trying to bypass the MM community, that's why
-> this patchset is posted. Not sure why people can't voice their opinion
-> on the benefit/cost balance of the patchset over the email... But if a
-> meeting would be more productive I'm happy to set it up.
+> Hang on, let's look at the actual code.
+> 
+> This is what instrumenting an allocation function looks like:
+> 
+> #define krealloc_array(...)                     alloc_hooks(krealloc_array_noprof(__VA_ARGS__))
+> 
+> IOW, we have to:
+>  - rename krealloc_array to krealloc_array_noprof
+>  - replace krealloc_array with a one wrapper macro call
+> 
+> Is this really all we're getting worked up over?
+> 
+> The renaming we need regardless, because the thing that makes this
+> approach efficient enough to run in production is that we account at
+> _one_ point in the callstack, we don't save entire backtraces.
+> 
+> And thus we need to explicitly annotate which one that is; which means
+> we need _noprof() versions of functions for when the accounting is done
+> by an outer wraper (e.g. mempool).
+> 
+> And, as I keep saying: that alloc_hooks() macro will also get us _per
+> callsite fault injection points_, and we really need that because - if
+> you guys have been paying attention to other threads - whenever moving
+> more stuff to PF_MEMALLOC_* flags comes up (including adding
+> PF_MEMALLOC_NORECLAIM), the issue of small allocations not failing and
+> not being testable keeps coming up.
 
-If you can get the acks without any additional meetings, great. The 
-replies from Pasha and Johannes are encouraging, let's hope core 
-memory-allocator people will voice their opinion here.
-
-If you come to the conclusion that another meeting would help getting 
-maintainers's attention and sorting out some of the remaining concerns, 
-feel free to schedule a meeting with Dave R. I suspect only the slot 
-next week is already taken. In the past, we also had "special" meetings 
-just for things to make progress faster.
-
-If you're looking for ideas on what the agenda of such a meeting could 
-look like, I'll happily discuss that with you off-list.
-
-v2 was more than 3 months ago. If it's really about minor details here, 
-waiting another 3 months for LSF/MM is indeed not reasonable.
-
-Myself, I'll be happy not having to sit through another LSF/MM session 
-of that kind. The level of drama is exceptional and I'm hoping it won't 
-be the new norm in the MM space.
-
-Good luck!
-
--- 
-Cheers,
-
-David / dhildenb
-
+How exactly do you envision the fault injection to help here? The proposals
+are about scoping via a process flag, and the process may then call just
+about anything under that scope. So if our tool is per callsite fault
+injection points, how do we know which callsites to enable to focus the
+fault injection on the particular scope?
 
