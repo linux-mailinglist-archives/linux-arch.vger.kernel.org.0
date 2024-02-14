@@ -1,150 +1,197 @@
-Return-Path: <linux-arch+bounces-2382-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2383-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2189785560E
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 23:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8040855618
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 23:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54D971C272DA
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 22:37:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB8811C22031
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 22:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF36145B3C;
-	Wed, 14 Feb 2024 22:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39F4145332;
+	Wed, 14 Feb 2024 22:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="IES6jhft"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O2yMsy/4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9521D55E63;
-	Wed, 14 Feb 2024 22:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6F31420C9
+	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 22:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707950068; cv=none; b=DlqeRoCw8hs9QaTjaPqRo62V634ka3ry+GudMhXE4kjmN4DT3LdXjUNCM4ALHVFZixU94nYKhumLmWHUgJcIXpObT7BbEgQUbPYh2WlE4WIZexYwJeuI77U+Id8feO7R4dHRDHIewowhUo8OW5j/r5wxKvrFAK2hXKdsOlvttPo=
+	t=1707950181; cv=none; b=XFIeQ1ts13WA7CrVFRoxg8kinoB1+tRaIBqJqQ37veUY9sY2k2dPCyoTLfMAbZwIpCTuH6LO4c4jv0PcS0cBO7l23CXTqmrURktCszLq8pMn6EFo/+mg+PpqLVkIhpgf7aHXYA9JYdxC7PlEmz1Dca48VB8r7UdVILs88Fj9go0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707950068; c=relaxed/simple;
-	bh=lK16tJ+rA71j9sfNq9u1nc1gFyGNYENJD/MUcT/DOWk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=t2DsLKCy2cFq35bx5UD9JO4Hq7koKqR+1ekvs6vS6yVVAQxoVWf+X0yaTjpc1I1UB8GwIDhiQr8ZqgEbXzsrU7pVFMhoKHNkxjkEQ4dkIFnTU74dyLmmXJAo+Ss4+L5lhBbkVWpFNBPG4yCrjI6BPYXVhdFZQVPZBYVBBf0Iez4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=IES6jhft; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EMLfOc015876;
-	Wed, 14 Feb 2024 22:34:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=pp1;
- bh=YaCnxeC1vZNqMAlZsLhMKvaeenQEHMsIYJyTFNiF+AU=;
- b=IES6jhft/4uq7lMwuENFVDv/krEl3ke4G/iFa69Y00mhR+LGrrjemioUGrGBDrXdx651
- gCIeY5gKLljsxTRhQDAc6dq/WCZt4uCLI3zxZWhAr/2PGVKWbbTyYZBvBW0pcN0bBcsW
- 5NcGgUbSaCBHQtAc2TgwJB1YLqw3WsIRjzI2tacS8SE6RKsH9LqjynvC7hb1V8zZKfdg
- W4PgqqrwgrH6Gke8Oa96YvBJxdn94QNBRL2eYLVC5wSuVzXwjeD4uglbWDwtEirsMKyl
- VE7QLUog2vIi9F1DPzYJrh8B+ToUVGsb0bpMsFesTpCynhOTwXuV0/Btzb6Gi1reCnkf NA== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w95ew19u5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 22:34:11 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41ELXHgq024975;
-	Wed, 14 Feb 2024 22:34:11 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mfpgx64-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 22:34:11 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41EMY7hC39059812
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Feb 2024 22:34:10 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BE88A580D3;
-	Wed, 14 Feb 2024 22:34:07 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 15CB4580BE;
-	Wed, 14 Feb 2024 22:34:07 +0000 (GMT)
-Received: from [9.61.99.202] (unknown [9.61.99.202])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 Feb 2024 22:34:06 +0000 (GMT)
-Message-ID: <a406b535-dc55-4856-8ae9-5a063644a1af@linux.ibm.com>
-Date: Wed, 14 Feb 2024 16:34:06 -0600
+	s=arc-20240116; t=1707950181; c=relaxed/simple;
+	bh=C0crMXEshWXmvClKWRf7fOFqj/1UG01MNn2e/g61qyA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bEmVNRmbRrMTanbJBKqRXrcdLA/zkHaLOWCtaRRCpk8HSgEzFD7NzbtosWg69DSQvS9mwIu5VTyJzM09hOdBA/tkHMkNgpzbiHuGcdQQhAt4zO+3I/z0cZon/Yw4qXkI5ns4eMjHHPHXRemXTuBFMSs6nGRLyLury+e2gjsb4MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O2yMsy/4; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6d8bd612dso205199276.1
+        for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 14:36:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707950178; x=1708554978; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mIZ+3Vimc+Fu9uNEqwRF3MpLhrYbsxAAnrlrt3WNttw=;
+        b=O2yMsy/4oK8Y+fycjp+dTg7a95J3x8uffn5QQr/GODzExUn+5G+F1syIYtUOfWJzqr
+         VWnifaveFBOThJy2sKyI/Uy6uSfYCaWQ8rs+vnJ6uTAaToe3OeN7Ck4g35cRmc7SULgW
+         laJ2nuz+VS51bFFnqHVE7welFFlu4ndy4JVcGUEPx9hVfuSNHt7B6bMWePu/VzHNqW52
+         CA42MpX0muLR6BbAaA7ZcJvUVwHp9ISH7RboIY2VBPjOK9ogFCKNPaPmrRsHKi8s4PUD
+         Ih2VJvDYzSrud5HsdsKn4sU6PKEp9zXsfcrtDRXggHej6O7KHmSUtU8JvMr7ho9EnsKS
+         a7mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707950178; x=1708554978;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mIZ+3Vimc+Fu9uNEqwRF3MpLhrYbsxAAnrlrt3WNttw=;
+        b=hw0Bx8+smZRGJpxV8zNf402kHz9WCUsR2yePArxN6r1uPNA3OiKWthnmsqa7xd4mUH
+         Cv+n+AMqk5IOFunFfU+jikoqrRz9invaGdXmSUUsmasVTNCKlXh+KbqzuVmrQNdGxEzn
+         WxJzgWdVKC7yuUbySou5IbWiPCnMMxs4j4v3KtjkmCIkk0aNRmSBlIl7f1cdTlqxlZcv
+         mJC9b7H/QIIWtVo/PO+RAE1vcGRnvK+7yjbriWoqZvR4wXL1rkNcWJzJgLU4LlPpai+E
+         J3+XG8jcwe/S2vmvvyEoCRtTNwDfqW1CXt6Srfy83ZHyVgNbwGWvzBIlJj/Hy/NtkJMe
+         RIyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWyotQqxF+J/AvUPoU7VdmIViInoADUTh4pav9rxtixSY/FCEc39IagKGoHmrbn/uOao0umDnPi3hZzZn49xFmAKc9oRavS6wkIQw==
+X-Gm-Message-State: AOJu0YysVxipme/SQQMGsupj0Ae7J66Zw8zcx+xv/IzYdQomp/xcsoXn
+	b0vPc3v9tm/s2gKaMIPs+GtOg2Tg81zFl5dbdnqC1qYcNgfi5OV6cjn+qxoK1ZtATAeO+faMuim
+	KxKlTng1hNRc8mezobkuh5x7DrvZCA7uEr1AA
+X-Google-Smtp-Source: AGHT+IFGMo5QMzgB4haA8j4PHefAYH0QGMXhhajKI9bA2/lcKpgWtoNuuV25DDWG2rPEqNS3u8mi+lX2wk/W+0Ufusg=
+X-Received: by 2002:a25:208:0:b0:dc6:9c4f:9e85 with SMTP id
+ 8-20020a250208000000b00dc69c4f9e85mr3483617ybc.49.1707950178324; Wed, 14 Feb
+ 2024 14:36:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc: Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Nick Piggin <npiggin@au1.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, Arnd Bergmann <arnd@kernel.org>
-From: Peter Bergner <bergner@linux.ibm.com>
-Subject: [PATCH v2] uapi/auxvec: Define AT_HWCAP3 and AT_HWCAP4 aux vector,
- entries
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TJPk-bPkib7XFvVei_OFewI8h97C-DRW
-X-Proofpoint-ORIG-GUID: TJPk-bPkib7XFvVei_OFewI8h97C-DRW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-14_14,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- mlxlogscore=650 lowpriorityscore=0 suspectscore=0 bulkscore=0 mlxscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402140170
+References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-26-surenb@google.com>
+ <Zc09KRo7nMlSGpG6@dread.disaster.area>
+In-Reply-To: <Zc09KRo7nMlSGpG6@dread.disaster.area>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 14 Feb 2024 14:36:06 -0800
+Message-ID: <CAJuCfpGPyf9VzohFi8HzvT0XsW4bd3EAnCAb6xxedfJGtzZbBA@mail.gmail.com>
+Subject: Re: [PATCH v3 25/35] xfs: Memory allocation profiling fixups
+To: Dave Chinner <david@fromorbit.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Changes from v1:
-- Add Acked-by lines.
+On Wed, Feb 14, 2024 at 2:22=E2=80=AFPM Dave Chinner <david@fromorbit.com> =
+wrote:
+>
+> On Mon, Feb 12, 2024 at 01:39:11PM -0800, Suren Baghdasaryan wrote:
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> >
+> > This adds an alloc_hooks() wrapper around kmem_alloc(), so that we can
+> > have allocations accounted to the proper callsite.
+> >
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  fs/xfs/kmem.c |  4 ++--
+> >  fs/xfs/kmem.h | 10 ++++------
+> >  2 files changed, 6 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/fs/xfs/kmem.c b/fs/xfs/kmem.c
+> > index c557a030acfe..9aa57a4e2478 100644
+> > --- a/fs/xfs/kmem.c
+> > +++ b/fs/xfs/kmem.c
+> > @@ -8,7 +8,7 @@
+> >  #include "xfs_trace.h"
+> >
+> >  void *
+> > -kmem_alloc(size_t size, xfs_km_flags_t flags)
+> > +kmem_alloc_noprof(size_t size, xfs_km_flags_t flags)
+> >  {
+> >       int     retries =3D 0;
+> >       gfp_t   lflags =3D kmem_flags_convert(flags);
+> > @@ -17,7 +17,7 @@ kmem_alloc(size_t size, xfs_km_flags_t flags)
+> >       trace_kmem_alloc(size, flags, _RET_IP_);
+> >
+> >       do {
+> > -             ptr =3D kmalloc(size, lflags);
+> > +             ptr =3D kmalloc_noprof(size, lflags);
+> >               if (ptr || (flags & KM_MAYFAIL))
+> >                       return ptr;
+> >               if (!(++retries % 100))
+> > diff --git a/fs/xfs/kmem.h b/fs/xfs/kmem.h
+> > index b987dc2c6851..c4cf1dc2a7af 100644
+> > --- a/fs/xfs/kmem.h
+> > +++ b/fs/xfs/kmem.h
+> > @@ -6,6 +6,7 @@
+> >  #ifndef __XFS_SUPPORT_KMEM_H__
+> >  #define __XFS_SUPPORT_KMEM_H__
+> >
+> > +#include <linux/alloc_tag.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/sched.h>
+> >  #include <linux/mm.h>
+> > @@ -56,18 +57,15 @@ kmem_flags_convert(xfs_km_flags_t flags)
+> >       return lflags;
+> >  }
+> >
+> > -extern void *kmem_alloc(size_t, xfs_km_flags_t);
+> >  static inline void  kmem_free(const void *ptr)
+> >  {
+> >       kvfree(ptr);
+> >  }
+> >
+> > +extern void *kmem_alloc_noprof(size_t, xfs_km_flags_t);
+> > +#define kmem_alloc(...)                      alloc_hooks(kmem_alloc_no=
+prof(__VA_ARGS__))
+> >
+> > -static inline void *
+> > -kmem_zalloc(size_t size, xfs_km_flags_t flags)
+> > -{
+> > -     return kmem_alloc(size, flags | KM_ZERO);
+> > -}
+> > +#define kmem_zalloc(_size, _flags)   kmem_alloc((_size), (_flags) | KM=
+_ZERO)
+> >
+> >  /*
+> >   * Zone interfaces
+> > --
+> > 2.43.0.687.g38aa6559b0-goog
+>
+> These changes can be dropped - the fs/xfs/kmem.[ch] stuff is now
+> gone in linux-xfs/for-next.
 
-The powerpc toolchain keeps a copy of the HWCAP bit masks in our TCB for fast
-access by the __builtin_cpu_supports built-in function.  The TCB space for
-the HWCAP entries - which are created in pairs - is an ABI extension, so
-waiting to create the space for HWCAP3 and HWCAP4 until we need them is
-problematical.  Define AT_HWCAP3 and AT_HWCAP4 in the generic uapi header
-so they can be used in glibc to reserve space in the powerpc TCB for their
-future use.
+Thanks for the note. Will drop in the next submission.
 
-I scanned through the Linux and GLIBC source codes looking for unused AT_*
-values and 29 and 30 did not seem to be used, so they are what I went
-with.  This has received Acked-by's from both GLIBC and Linux kernel
-developers and no reservations or Nacks from anyone.
-
-Arnd, we seem to have consensus on the patch below.  Is this something
-you could take and apply to your tree? 
-
-Peter
-
-
-Signed-off-by: Peter Bergner <bergner@linux.ibm.com>
-Acked-by: Adhemerval Zanella <adhemerval.zanella@linaro.org> (glibc)
-Acked-by: Nicholas Piggin <npiggin@gmail.com> (powerpc)
-Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com> (arm)
-
----
- include/uapi/linux/auxvec.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/include/uapi/linux/auxvec.h b/include/uapi/linux/auxvec.h
-index 6991c4b8ab18..cc61cb9b3e9a 100644
---- a/include/uapi/linux/auxvec.h
-+++ b/include/uapi/linux/auxvec.h
-@@ -32,6 +32,8 @@
- #define AT_HWCAP2 26	/* extension of AT_HWCAP */
- #define AT_RSEQ_FEATURE_SIZE	27	/* rseq supported feature size */
- #define AT_RSEQ_ALIGN		28	/* rseq allocation alignment */
-+#define AT_HWCAP3 29	/* extension of AT_HWCAP */
-+#define AT_HWCAP4 30	/* extension of AT_HWCAP */
- 
- #define AT_EXECFN  31	/* filename of program */
- 
--- 
-2.39.3
-
+>
+> -Dave.
+> --
+> Dave Chinner
+> david@fromorbit.com
 
