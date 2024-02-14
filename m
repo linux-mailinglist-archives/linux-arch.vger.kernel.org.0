@@ -1,261 +1,180 @@
-Return-Path: <linux-arch+bounces-2349-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2350-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1BF5854D32
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 16:45:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C28B854D8E
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 17:02:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFF3F1C25A33
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 15:45:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30CD91C21ABB
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 16:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7395D91D;
-	Wed, 14 Feb 2024 15:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB3CF5EE7E;
+	Wed, 14 Feb 2024 16:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hGO7lM4H"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="pWIk5zuX";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="rrdpvnmv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B555D913;
-	Wed, 14 Feb 2024 15:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1BF5D916;
+	Wed, 14 Feb 2024 16:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707925509; cv=none; b=qdOHyvLFkJfD+ImEn3VKA9Dps36Fu2W6yijZw/2R1SK6JkY6Ls0E5efYskD8gBqyL8LtvZFe7h3T9T1863Aoz0P9SW8SXWJQtPuQzwbbRWi4o6DDpkMG8IYY8hjgOUfdougcMjbG6ANpMorjboBbJLar0tA1n6kgDGGhZfctg34=
+	t=1707926552; cv=none; b=qbXVTQ16XxtD7ly4Z9BvGkqLyJyCRz5F17G6RrubAh9GkLzIG5aHJQpH8PaGeOzFolal/BPXaafyXeadrEIjoxrRmw1PWjL4lsIKiM1umSQLYwHZBwhPxUjYUpR9EstYY3QMyP41ia3vcuMB7lVzNydraFnwvbwaHz5Dp8MKVyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707925509; c=relaxed/simple;
-	bh=y/YseAlbFStfyC5/x6Wgpk62mLEvMymc9X6KcW4hIOw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eYyIR/rHdoRYUqAS0RZFq6cRiQJpvlcqd/0axHGxsAupNAtufzC+Rdg6xjclVh61LnIU4idt1K/jDzbDz9bnEud6ER02lqJxCTswTBDpQGHHMbNno5923868XwSRtPYpBN5JyLpI2BvUqonU30ttz5He/TQHcJrXtw2XvC+Uz/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hGO7lM4H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D17EC43143;
-	Wed, 14 Feb 2024 15:45:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707925508;
-	bh=y/YseAlbFStfyC5/x6Wgpk62mLEvMymc9X6KcW4hIOw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hGO7lM4HYIa8cn2K3wKk/CHlq2nsziMAabXo3waBUr7MQX3DOAiajg0VIoxhaxVDR
-	 csl4f1qWAujqSn+Eq2zBJCz+PVJJziHKft9zP3l2edQ0CQJ6hIhMEwe0Bwq1MakQjR
-	 hjqJlrIxTIotjY54yXy0DQY8iJABzelES80mR1Cv3gy5vQuaHJhryMDWm3eC3QghQ/
-	 6AeuSztOx7UJg/IBoI4emcH0dWDRZFejVoXeoxJmWDVB7JvWns3tSS8FicLwnj/OQQ
-	 XmAre7hG1iacDCAFsl5DcLUj982K7QW+ExniW7MTBdkzOgENVXmWB76ZGfU6beN/a1
-	 Pt1gVLKj+2hng==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-511ac32fe38so757227e87.1;
-        Wed, 14 Feb 2024 07:45:08 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVMrnD0xjrVX3errYrweibljLg1htCLtoorwc91s4ACvOvHH5iT1QM5Yjmk0CEniF1w3WVENmN1mJQ71mrjGIRhK1QpAn3rtJtsCQ==
-X-Gm-Message-State: AOJu0YzcJxcjjorHhI4Ntko9YlLCIPWQAEGwbXxHRdmBRRKtmexFul9u
-	AfN8QHLP8qjFyNlLRiEaB+FdOr9khb0Osch6w8dT6Q1PVI3olAgcwG3XYB2Ua/6cqSqR4Y/4pb6
-	8jmXOPk7dilVppJYNCkiKwBgoIJY=
-X-Google-Smtp-Source: AGHT+IFgkzGYGretm1q6sj2tBMKJFCtgJ8NhF6XJ5u57pkikzLAtk8J3sLWu/ENM5H2iuY+jZjwJgXJ2njlB8etgBk8=
-X-Received: by 2002:a05:6512:53a:b0:511:5994:2c92 with SMTP id
- o26-20020a056512053a00b0051159942c92mr2327562lfc.7.1707925506771; Wed, 14 Feb
- 2024 07:45:06 -0800 (PST)
+	s=arc-20240116; t=1707926552; c=relaxed/simple;
+	bh=Vjmjh3llp7BlyhYgyDjPni4l/NzWqKQp3MPK/MYXb5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LUNPSW421jdDQgNNIvQy5/0kCVqHmyj+uBkzxFACJjD5tQHJLVuIBH9DczBUchISSzkgwPHm+VBKtD1iE1linvYMjDsXOdCXytcCEgbYBE6JToq+wrjtzhW9q6KIBJC7CXkWOPpRJrK3EgSP8HM//bZLf6qijJHuKiusE2+Lst0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=pWIk5zuX; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=rrdpvnmv; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D1B8421EB6;
+	Wed, 14 Feb 2024 16:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1707926549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pPXp/+cRrehfUHk2IR8IXdxKLmNDOpV5ikCDlFNmYEA=;
+	b=pWIk5zuXuhl6gONhU7unHCikdmp3ePqIfuVV/fRNzIjAZJu5zNcFPcZb7aimaNy3pgSpvQ
+	e3UGg7VHm+WzAzqFDPrnxAC3HZzgq5o4PcFY5z8ynJaPVtrYZ0HV43hukomLVaPd0BfiMD
+	VMJL5ZQsV6ebPnwnr8MqbkkfZka139g=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1707926548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pPXp/+cRrehfUHk2IR8IXdxKLmNDOpV5ikCDlFNmYEA=;
+	b=rrdpvnmvQplLj7Zw7mnKjtggZIVn2c3JHRtqp2UICpidV2uBqb6O4HFDkvPZAqOCRMfAzk
+	tayx2Yu8HmqHmbhsuk34DEtn1oEM6AWyk6PjCzgAShPTp4CJ6UKzhZSk2OrDA12CxO8k7u
+	nH3aZJD6781ON3G/cdM1hEKsMcMd+oY=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A66B913A72;
+	Wed, 14 Feb 2024 16:02:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BzUCKBTkzGW2MAAAD6G6ig
+	(envelope-from <mhocko@suse.com>); Wed, 14 Feb 2024 16:02:28 +0000
+Date: Wed, 14 Feb 2024 17:02:28 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+	vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+	paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+	ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, shakeelb@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v3 00/35] Memory allocation profiling
+Message-ID: <ZczkFH1dxUmx6TM3@tiehlicka>
+References: <20240212213922.783301-1-surenb@google.com>
+ <20240214062020.GA989328@cmpxchg.org>
+ <ZczSSZOWMlqfvDg8@tiehlicka>
+ <ifz44lao4dbvvpzt7zha3ho7xnddcdxgp4fkeacqleu5lo43bn@f3dbrmcuticz>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-24-ardb+git@google.com> <CAMzpN2jt3nTmDJ4y6zRFJMSGTcD8eQJY_MjbsnJ7my3hH8d9HA@mail.gmail.com>
-In-Reply-To: <CAMzpN2jt3nTmDJ4y6zRFJMSGTcD8eQJY_MjbsnJ7my3hH8d9HA@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 14 Feb 2024 16:44:55 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG6sYAVkKMA9EJk7+NmsbrDBL82xYpMon1WEeB_34SRuA@mail.gmail.com>
-Message-ID: <CAMj1kXG6sYAVkKMA9EJk7+NmsbrDBL82xYpMon1WEeB_34SRuA@mail.gmail.com>
-Subject: Re: [PATCH v4 11/11] x86/startup_64: Drop global variables keeping
- track of LA57 state
-To: Brian Gerst <brgerst@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ifz44lao4dbvvpzt7zha3ho7xnddcdxgp4fkeacqleu5lo43bn@f3dbrmcuticz>
+X-Spam-Level: 
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=rrdpvnmv
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-1.01 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 RCVD_IN_DNSWL_HI(-0.50)[2a07:de40:b281:106:10:150:64:167:received];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.com:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[73];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-0.00)[32.12%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	 RCVD_DKIM_ARC_DNSWL_HI(-1.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[cmpxchg.org,google.com,linux-foundation.org,suse.cz,linux.dev,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Score: -1.01
+X-Rspamd-Queue-Id: D1B8421EB6
+X-Spam-Flag: NO
 
-On Wed, 14 Feb 2024 at 16:24, Brian Gerst <brgerst@gmail.com> wrote:
->
-> On Tue, Feb 13, 2024 at 7:42=E2=80=AFAM Ard Biesheuvel <ardb+git@google.c=
-om> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > On x86_64, the core kernel is entered in long mode, which implies that
-> > paging is enabled. This means that the CR4.LA57 control bit is
-> > guaranteed to be in sync with the number of paging levels used by the
-> > kernel, and there is no need to store this in a variable.
-> >
-> > There is also no need to use variables for storing the calculations of
-> > pgdir_shift and ptrs_per_p4d, as they are easily determined on the fly.
-> >
-> > This removes the need for two different sources of truth for determinin=
-g
-> > whether 5-level paging is in use: CR4.LA57 always reflects the actual
-> > state, and never changes from the point of view of the 64-bit core
-> > kernel. The only potential concern is the cost of CR4 accesses, which
-> > can be mitigated using alternatives patching based on feature detection=
-.
-> >
-> > Note that even the decompressor does not manipulate any page tables
-> > before updating CR4.LA57, so it can also avoid the associated global
-> > variables entirely. However, as it does not implement alternatives
-> > patching, the associated ELF sections need to be discarded.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/boot/compressed/misc.h         |  4 --
-> >  arch/x86/boot/compressed/pgtable_64.c   | 12 ----
-> >  arch/x86/boot/compressed/vmlinux.lds.S  |  1 +
-> >  arch/x86/include/asm/pgtable_64_types.h | 58 ++++++++------------
-> >  arch/x86/kernel/cpu/common.c            |  2 -
-> >  arch/x86/kernel/head64.c                | 33 +----------
-> >  arch/x86/mm/kasan_init_64.c             |  3 -
-> >  arch/x86/mm/mem_encrypt_identity.c      |  9 ---
-> >  8 files changed, 27 insertions(+), 95 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed=
-/misc.h
-> > index bc2f0f17fb90..2b15ddd0e177 100644
-> > --- a/arch/x86/boot/compressed/misc.h
-> > +++ b/arch/x86/boot/compressed/misc.h
-> > @@ -16,9 +16,6 @@
-> >
-> >  #define __NO_FORTIFY
-> >
-> > -/* cpu_feature_enabled() cannot be used this early */
-> > -#define USE_EARLY_PGTABLE_L5
-> > -
-> >  /*
-> >   * Boot stub deals with identity mappings, physical and virtual addres=
-ses are
-> >   * the same, so override these defines.
-> > @@ -178,7 +175,6 @@ static inline int count_immovable_mem_regions(void)=
- { return 0; }
-> >  #endif
-> >
-> >  /* ident_map_64.c */
-> > -extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
-> >  extern void kernel_add_identity_map(unsigned long start, unsigned long=
- end);
-> >
-> >  /* Used by PAGE_KERN* macros: */
-> > diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/comp=
-ressed/pgtable_64.c
-> > index 51f957b24ba7..ae72f53f5e77 100644
-> > --- a/arch/x86/boot/compressed/pgtable_64.c
-> > +++ b/arch/x86/boot/compressed/pgtable_64.c
-> > @@ -9,13 +9,6 @@
-> >  #define BIOS_START_MIN         0x20000U        /* 128K, less than this=
- is insane */
-> >  #define BIOS_START_MAX         0x9f000U        /* 640K, absolute maxim=
-um */
-> >
-> > -#ifdef CONFIG_X86_5LEVEL
-> > -/* __pgtable_l5_enabled needs to be in .data to avoid being cleared al=
-ong with .bss */
-> > -unsigned int __section(".data") __pgtable_l5_enabled;
-> > -unsigned int __section(".data") pgdir_shift =3D 39;
-> > -unsigned int __section(".data") ptrs_per_p4d =3D 1;
-> > -#endif
-> > -
-> >  /* Buffer to preserve trampoline memory */
-> >  static char trampoline_save[TRAMPOLINE_32BIT_SIZE];
-> >
-> > @@ -125,11 +118,6 @@ asmlinkage void configure_5level_paging(struct boo=
-t_params *bp, void *pgtable)
-> >                         native_cpuid_eax(0) >=3D 7 &&
-> >                         (native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 =
-& 31)))) {
-> >                 l5_required =3D true;
-> > -
-> > -               /* Initialize variables for 5-level paging */
-> > -               __pgtable_l5_enabled =3D 1;
-> > -               pgdir_shift =3D 48;
-> > -               ptrs_per_p4d =3D 512;
-> >         }
-> >
-> >         /*
-> > diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/com=
-pressed/vmlinux.lds.S
-> > index 083ec6d7722a..06358bb067fe 100644
-> > --- a/arch/x86/boot/compressed/vmlinux.lds.S
-> > +++ b/arch/x86/boot/compressed/vmlinux.lds.S
-> > @@ -81,6 +81,7 @@ SECTIONS
-> >                 *(.dynamic) *(.dynsym) *(.dynstr) *(.dynbss)
-> >                 *(.hash) *(.gnu.hash)
-> >                 *(.note.*)
-> > +               *(.altinstructions .altinstr_replacement)
-> >         }
-> >
-> >         .got.plt (INFO) : {
-> > diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include=
-/asm/pgtable_64_types.h
-> > index 38b54b992f32..6a57bfdff52b 100644
-> > --- a/arch/x86/include/asm/pgtable_64_types.h
-> > +++ b/arch/x86/include/asm/pgtable_64_types.h
-> > @@ -6,7 +6,10 @@
-> >
-> >  #ifndef __ASSEMBLY__
-> >  #include <linux/types.h>
-> > +#include <asm/alternative.h>
-> > +#include <asm/cpufeatures.h>
-> >  #include <asm/kaslr.h>
-> > +#include <asm/processor-flags.h>
-> >
-> >  /*
-> >   * These are used to make use of C type-checking..
-> > @@ -21,63 +24,50 @@ typedef unsigned long       pgprotval_t;
-> >  typedef struct { pteval_t pte; } pte_t;
-> >  typedef struct { pmdval_t pmd; } pmd_t;
-> >
-> > -#ifdef CONFIG_X86_5LEVEL
-> > -extern unsigned int __pgtable_l5_enabled;
-> > -
-> > -#ifdef USE_EARLY_PGTABLE_L5
-> > -/*
-> > - * cpu_feature_enabled() is not available in early boot code.
-> > - * Use variable instead.
-> > - */
-> > -static inline bool pgtable_l5_enabled(void)
-> > +static __always_inline __pure bool pgtable_l5_enabled(void)
-> >  {
-> > -       return __pgtable_l5_enabled;
-> > -}
-> > -#else
-> > -#define pgtable_l5_enabled() cpu_feature_enabled(X86_FEATURE_LA57)
-> > -#endif /* USE_EARLY_PGTABLE_L5 */
-> > +       unsigned long r;
-> > +       bool ret;
-> >
-> > -#else
-> > -#define pgtable_l5_enabled() 0
-> > -#endif /* CONFIG_X86_5LEVEL */
-> > +       if (!IS_ENABLED(CONFIG_X86_5LEVEL))
-> > +               return false;
-> > +
-> > +       asm(ALTERNATIVE_TERNARY(
-> > +               "movq %%cr4, %[reg] \n\t btl %[la57], %k[reg]" CC_SET(c=
-),
-> > +               %P[feat], "stc", "clc")
-> > +               : [reg] "=3D&r" (r), CC_OUT(c) (ret)
-> > +               : [feat] "i"  (X86_FEATURE_LA57),
-> > +                 [la57] "i"  (X86_CR4_LA57_BIT)
-> > +               : "cc");
->
-> This should be more like _static_cpu_has(), where the runtime test is
-> out of line in a discardable section, and the inline part is just a
-> JMP or NOP.
->
+On Wed 14-02-24 10:01:14, Kent Overstreet wrote:
+> On Wed, Feb 14, 2024 at 03:46:33PM +0100, Michal Hocko wrote:
+> > On Wed 14-02-24 01:20:20, Johannes Weiner wrote:
+> > [...]
+> > > I agree we should discuss how the annotations are implemented on a
+> > > technical basis, but my take is that we need something like this.
+> > 
+> > I do not think there is any disagreement on usefulness of a better
+> > memory allocation tracking. At least for me the primary problem is the
+> > implementation. At LFSMM last year we have heard that existing tracing
+> > infrastructure hasn't really been explored much. Cover letter doesn't
+> > really talk much about those alternatives so it is really hard to
+> > evaluate whether the proposed solution is indeed our best way to
+> > approach this.
+> 
+> Michal, we covered this before.
 
-Why exactly? It matters very little in terms of space, a cross-section
-jump is 5 bytes, and movq+btl is 7 bytes.
+It is a good practice to summarize previous discussions in the cover
+letter. Especially when there are different approaches discussed over a
+longer time period or when the topic is controversial.
 
-If you are referring to the use of the C flag: this way, it is left up
-to the compiler to decide whether a branch or a conditional move is
-more suitable, rather than forcing the use of a branch in one of the
-two cases.
+I do not see anything like that here. Neither for the existing tracing
+infrastructure, page owner nor performance concerns discussed before
+etc. Look, I do not want to nit pick or insist on formalisms but having
+those data points layed out would make any further discussion much more
+smooth.
+
+-- 
+Michal Hocko
+SUSE Labs
 
