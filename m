@@ -1,168 +1,126 @@
-Return-Path: <linux-arch+bounces-2365-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2366-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD6C855395
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 21:00:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6BF8553BD
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 21:11:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00CF81F24CE2
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 20:00:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A5AB292892
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 20:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F1B13DB9D;
-	Wed, 14 Feb 2024 20:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB12C13DBAB;
+	Wed, 14 Feb 2024 20:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V0Dtva7q"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RR1NvtO6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B231D5D480
-	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 20:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADF51339B6;
+	Wed, 14 Feb 2024 20:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707940830; cv=none; b=lNTXky4eFkrHclUMT7u4M8sF6qIfj4AzZkPSm0HXPRjN1bl83B8lcDPoC7I5OtFHxmanveBuvolEQ7rbuPMXf4NhQN1+NNR3LIlU72YZfAS+2IzbGHvdCIXQFI+06FXWZDLMW9oX+vCvyw0V6cid6gz3TpvUAscJMOwT9nN3PH0=
+	t=1707941500; cv=none; b=gXZXt5xbXqRgD1CpdPIySE62tk7if53bFgnTWG7MnM6ThSy4vPr/7SW0kz7VJOTRQ5Y74+R87o+S3TVceEUV5gxUQHUd7aRzSdfQHPUjMkBrzpBk/PxeXCA31HBKj64LS3NgP157ZQmbNEVWQV+JKjYXvfpDajyMTgALTt4oZUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707940830; c=relaxed/simple;
-	bh=sG1eMeXm6V7HoOMCkcfIrnxVJDrJycSjo8dnKLtS7so=;
+	s=arc-20240116; t=1707941500; c=relaxed/simple;
+	bh=ugMuiBhXaOfS6JO62Z0RIeo0yfNv3ZBX5Go5vrWXW3E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MCtzN1b863GxrVUAJ34dALCed6igDnjlUabQIxRFxGntMsxxhbz7yDzKx8gHfmyWEkyL4J1ajio/GVr6/y75woe4U2LyrzhkY4WrlE+KudH6ivV2GHrifxcmXeMdd9p58WIEl0V8GgkYx4LfDBkRjt5wrTO3JVnx0kBa72YrmNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V0Dtva7q; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 14 Feb 2024 15:00:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1707940826;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pf30Mbuh5b/kObn023v7ccfUflKK/+7eCEEfg4Q4/Xo=;
-	b=V0Dtva7qS2reHkZJi6PJ+HEovBCR0hF1cHRtyU3vqEVbBd8vXfQIrh8jm2X0ifBBI4P+IO
-	H5vrvDEyaz0upotCLVyuYanif0dGbMLFqnWADl59CQ4rEdihhMwhzsvSw9R6sR/elwVruF
-	7JlRVAQ9ZPkvUkS27LLag/qy7F3NQ4g=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ct22FMbDZROsQUe7VG/+yvBuCqB2+rdyJ3kXH7Jwd2mnNUhUvbQ0fVf4cfOeGZdHBslvIt4rTBEPfBLzjzdKTBDITaOiezLzgfI/TjZWyTrTq+tERR/2wuUUbK/fwFfICiLbu49w+nYXRiV7RLzlcwM/q02NfyyXCXhe+tbR9zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=RR1NvtO6; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=nzG+mcwtKVReimCU6zx6inAB8xN7+k5Rvm7slPc1wIQ=; b=RR1NvtO6ycswu7Qr0ZPqrP4PWj
+	LNdeaqOqje4bdXi5DGOLcJDnCljck4gLPwvxmpGg8C/jn79uWuGkbeFakgpo4KvpoMMRm70tWfZDc
+	h3a/ClEjQy04HJCqcZoIa/UuoeMoErlzWJoYqeLBdkmpqNldKK5Ug+mvnI8Vi5gGJet7oyeLsxC8z
+	+uOHoreKUHyO7UI0Eg000CpPo780XBDKMyscM4NHbSlGKzsohlEU4AXPBnnT0TbasI2aUH2uGAqAv
+	VT5RE0ttZFCIN/1yTreaWG+Pgjj3ls1T3klTMs2e08Bnya7OFeXFa6z3SYcbhGwmuray0OLL9Q41J
+	vX72BgkQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1raLb0-0000000HUak-0HCQ;
+	Wed, 14 Feb 2024 20:11:06 +0000
+Date: Wed, 14 Feb 2024 20:11:05 +0000
+From: Matthew Wilcox <willy@infradead.org>
 To: Suren Baghdasaryan <surenb@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, axboe@kernel.dk, 
-	mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, 
-	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, 
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
-	42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
-	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 00/35] Memory allocation profiling
-Message-ID: <stxem77cvysbfllp46dtgsgawzdtkr662ymw3jgo564ekssna3@t7iw7azgyqvy>
-References: <9e14adec-2842-458d-8a58-af6a2d18d823@redhat.com>
- <2hphuyx2dnqsj3hnzyifp5yqn2hpgfjuhfu635dzgofr5mst27@4a5dixtcuxyi>
- <6a0f5d8b-9c67-43f6-b25e-2240171265be@redhat.com>
- <CAJuCfpEtOhzL65eMDk2W5SchcquN9hMCcbfD50a-FgtPgxh4Fw@mail.gmail.com>
- <adbb77ee-1662-4d24-bcbf-d74c29bc5083@redhat.com>
- <r6cmbcmalryodbnlkmuj2fjnausbcysmolikjguqvdwkngeztq@45lbvxjavwb3>
- <CAJuCfpF4g1jeEwHVHjQWwi5kqS-3UqjMt7GnG0Kdz5VJGyhK3Q@mail.gmail.com>
- <20240214085548.d3608627739269459480d86e@linux-foundation.org>
- <7c3walgmzmcygchqaylcz2un5dandlnzdqcohyooryurx6utxr@66adcw7f26c3>
- <CAJuCfpGi6g3rG8aVmXveSxKvXnfm+5gLKS=Q4ouQBDaTxSuhww@mail.gmail.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+	mgorman@suse.de, dave@stgolabs.net, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+	paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+	ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, shakeelb@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
+Subject: Re: [PATCH v3 01/35] lib/string_helpers: Add flags param to
+ string_get_size()
+Message-ID: <Zc0eWURJL64C3vqn@casper.infradead.org>
+References: <20240212213922.783301-1-surenb@google.com>
+ <20240212213922.783301-2-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpGi6g3rG8aVmXveSxKvXnfm+5gLKS=Q4ouQBDaTxSuhww@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20240212213922.783301-2-surenb@google.com>
 
-On Wed, Feb 14, 2024 at 11:24:23AM -0800, Suren Baghdasaryan wrote:
-> On Wed, Feb 14, 2024 at 9:52 AM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> >
-> > On Wed, Feb 14, 2024 at 08:55:48AM -0800, Andrew Morton wrote:
-> > > On Tue, 13 Feb 2024 14:59:11 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > > > > If you think you can easily achieve what Michal requested without all that,
-> > > > > > good.
-> > > > >
-> > > > > He requested something?
-> > > >
-> > > > Yes, a cleaner instrumentation. Unfortunately the cleanest one is not
-> > > > possible until the compiler feature is developed and deployed. And it
-> > > > still would require changes to the headers, so don't think it's worth
-> > > > delaying the feature for years.
-> > >
-> > > Can we please be told much more about this compiler feature?
-> > > Description of what it is, what it does, how it will affect this kernel
-> > > feature, etc.
-> > >
-> > > Who is developing it and when can we expect it to become available?
-> > >
-> > > Will we be able to migrate to it without back-compatibility concerns?
-> > > (I think "you need quite recent gcc for memory profiling" is
-> > > reasonable).
-> > >
-> > >
-> > >
-> > > Because: if the maintainability issues which Michel describes will be
-> > > significantly addressed with the gcc support then we're kinda reviewing
-> > > the wrong patchset.  Yes, it may be a maintenance burden initially, but
-> > > at some (yet to be revealed) time in the future, this will be addressed
-> > > with the gcc support?
-> >
-> > Even if we had compiler magic, after considering it more I don't think
-> > the patchset would be improved by it - I would still prefer to stick
-> > with the macro approach.
-> >
-> > There's also a lot of unresolved questions about whether the compiler
-> > approach would even end being what we need; we need macro expansion to
-> > happen in the caller of the allocation function
-> 
-> For the record, that's what this attribute will be doing. So it should
-> cover our usecase.
+On Mon, Feb 12, 2024 at 01:38:47PM -0800, Suren Baghdasaryan wrote:
+> -	string_get_size(size, 1, STRING_UNITS_2, buf, sizeof(buf));
+> +	string_get_size(size, 1, STRING_SIZE_BASE2, buf, sizeof(buf));
 
-That wasn't clear in the meeting we had the other day; all that was
-discussed there was the attribute syntax, as I recall.
+This patch could be a whole lot smaller if ...
 
-So say that does work out (and I don't think that's a given; if I were a
-compiler person I don't think I'd be interested in this strange half
-macro, half inline function beast); all that has accomplished is to get
-rid of the need for the renaming - the _noprof() versions of functions.
+> +++ b/include/linux/string_helpers.h
+> @@ -17,14 +17,13 @@ static inline bool string_is_terminated(const char *s, int len)
+>  	return memchr(s, '\0', len) ? true : false;
+>  }
+>  
+> -/* Descriptions of the types of units to
+> - * print in */
+> -enum string_size_units {
+> -	STRING_UNITS_10,	/* use powers of 10^3 (standard SI) */
+> -	STRING_UNITS_2,		/* use binary powers of 2^10 */
+> +enum string_size_flags {
+> +	STRING_SIZE_BASE2	= (1 << 0),
+> +	STRING_SIZE_NOSPACE	= (1 << 1),
+> +	STRING_SIZE_NOBYTES	= (1 << 2),
 
-So then how do you distinguish where in the callstack the accounting
-happens?
+you just added:
 
-If you say "it happens at the outermost wrapper", then what happens is
+#define	STRING_UNITS_10		0
+#define STRING_UNITS_2		STRING_SIZE_BASE2
 
- - Extra overhead for all the inner wrapper invocations, where they have
-   to now check "actually, we already have an alloc tag, don't do
-   anything". That's a cost, and given how much time we spent shaving
-   cycles and branches during development it's not one we want.
+and you wouldn't need to change any of the callers.
 
- - Inner allocations that shouldn't be accounted to the outer context
-   are now a major problem, because they silently will be accounted
-   there and never noticed.
-
-   With our approach, inner allocations are by default (i.e. when we
-   haven't switched them to the _noprof() variant) accounted to their
-   own alloc tag; that way, when we're reading the /proc/allocinfo
-   output, we can examine them and check if they should be collapsed to
-   the outer context. With this approach they won't be seen.
-
-So no, we still don't want the compiler approach.
 
