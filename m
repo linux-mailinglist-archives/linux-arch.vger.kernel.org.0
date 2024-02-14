@@ -1,60 +1,60 @@
-Return-Path: <linux-arch+bounces-2372-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2373-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A45EF85542B
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 21:45:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D2E85542D
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 21:45:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D757B1C23974
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 20:45:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8F5728A6B0
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 20:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E3213F011;
-	Wed, 14 Feb 2024 20:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E69141982;
+	Wed, 14 Feb 2024 20:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V8WdtHZm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jPkqsZIp"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E07C13EFFE
-	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 20:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5F313EFFE
+	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 20:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707943498; cv=none; b=cd3TVfUz7aPzUNqlCpzjDj4EUGlTihyFHWm/vQAOFQeTJ1mecqJwDQqWIvIC1KurNazYP21ogjBBJCatXjEqOVGPi21FkCSHmEBd2YtQ/ItsO38bKZRj6hSdxTL+yq86h0EHxtwUr0TcA1b9rp9SpjheHMveaxajDGKuQCUGoo4=
+	t=1707943500; cv=none; b=YheeeLTSi+JE3MKH2L+67+awVi1HsOq8I8Uur2F7r+UYZglHLH6yGElGp7hQ6xBJx8KynTDw2BkOiclDJkuQrrHG9WwrlRSM/AWJH8blA/+IwKscdfrBYzyloHo4spbkbnI31Jev25jDuSESdZ6B9y9fWZdsKSbb+aBYEgMvWU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707943498; c=relaxed/simple;
-	bh=iKdLPd0l+BlZy4NkWR4PBv4pdjA5DJYrKJe9pxJlmq0=;
+	s=arc-20240116; t=1707943500; c=relaxed/simple;
+	bh=gJjdcDN9SIZ57EMSsnxvz4s6wGh9ngGev4G0JhDn5Lw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kVjhZUYJdWJtZ57CQ58799wOXNBKrDW6k65GYrhRbLD1aKv3AHMKX4Rv8fpo7TaJh/Lx2iEkleKJhVNsJvYdD3OkLQas9jSNsMzcXDOTszuveO2P+XzN4TT6rVA1hyye4YzgZaUgpYSLvKFyovfvNldALLbqQxoNxUEq3FUgqJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V8WdtHZm; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=rHWEGwB/MRJvgYRGPAYnJl5QHMjIk4xfJqbQ2jsWVy7+zwWV5Ac/tbu9En/P5tFn7uf4yIYhp5RZZclz/huTieFSFaHCo5faDGWl+Q2IMF88GPT4xeFKceScL/z099fBpbikN5NxPe1npFyjrhRVPTeg8N6YacW6N9id5gkrhh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jPkqsZIp; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707943495;
+	s=mimecast20190719; t=1707943497;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fqQsnr9EFuS72Lg9egurC5IFPM5MYMM8dNEJpcWm/gk=;
-	b=V8WdtHZmbe2vZxJU8joebBEABK5VNBcggrocfYgl3J96CEanGA/auxFkuAA7o6Wo1mqvQi
-	+KK2LAp6Wgi67VNiimkNcgn03yRkc/ads/Q2i4ztU/1VgLvrnWVgtAgEv0KJ5x+o+kpzWD
-	dDGy8GgXPi4jc99lVT3DMtNG0+w4jho=
+	bh=M/Ux9HRgPwmdR3zuVPtEfBlFP5wVpYCc/8Whwmc2o7c=;
+	b=jPkqsZIpAhXubwcPIQoGJd4sJN/P/hl1VJhVEMIqk+U2e7zkIQu8pwMZJD+jV+eMSqHyKS
+	3xjOGiTSolq9lVvkwxGzLYsKIVo882ujB49Wdj6CzlZf0PhIGQxpCP+fKkUXEtBKZz1Gbv
+	oWCEEZyKBNE7EnIExK4hDC2JALzpXvw=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-226-pgh-LenmOMa4VgIEuXmFnA-1; Wed, 14 Feb 2024 15:44:50 -0500
-X-MC-Unique: pgh-LenmOMa4VgIEuXmFnA-1
+ us-mta-460-Ud6bEsrlM92gS6OHI6pxZA-1; Wed, 14 Feb 2024 15:44:54 -0500
+X-MC-Unique: Ud6bEsrlM92gS6OHI6pxZA-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A351185A782;
-	Wed, 14 Feb 2024 20:44:49 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDD578630C4;
+	Wed, 14 Feb 2024 20:44:52 +0000 (UTC)
 Received: from t14s.fritz.box (unknown [10.39.194.174])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 438201C066AA;
-	Wed, 14 Feb 2024 20:44:45 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4741B1C060B1;
+	Wed, 14 Feb 2024 20:44:49 +0000 (UTC)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org,
@@ -81,9 +81,9 @@ Cc: linux-mm@kvack.org,
 	linux-arch@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-s390@vger.kernel.org
-Subject: [PATCH v3 02/10] mm/memory: handle !page case in zap_present_pte() separately
-Date: Wed, 14 Feb 2024 21:44:27 +0100
-Message-ID: <20240214204435.167852-3-david@redhat.com>
+Subject: [PATCH v3 03/10] mm/memory: further separate anon and pagecache folio handling in zap_present_pte()
+Date: Wed, 14 Feb 2024 21:44:28 +0100
+Message-ID: <20240214204435.167852-4-david@redhat.com>
 In-Reply-To: <20240214204435.167852-1-david@redhat.com>
 References: <20240214204435.167852-1-david@redhat.com>
 Precedence: bulk
@@ -95,80 +95,60 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-We don't need uptodate accessed/dirty bits, so in theory we could
-replace ptep_get_and_clear_full() by an optimized ptep_clear_full()
-function. Let's rely on the provided pte.
+We don't need up-to-date accessed-dirty information for anon folios and can
+simply work with the ptent we already have. Also, we know the RSS counter
+we want to update.
 
-Further, there is no scenario where we would have to insert uffd-wp
-markers when zapping something that is not a normal page (i.e., zeropage).
-Add a sanity check to make sure this remains true.
+We can safely move arch_check_zapped_pte() + tlb_remove_tlb_entry() +
+zap_install_uffd_wp_if_needed() after updating the folio and RSS.
 
-should_zap_folio() no longer has to handle NULL pointers. This change
-replaces 2/3 "!page/!folio" checks by a single "!page" one.
-
-Note that arch_check_zapped_pte() on x86-64 checks the HW-dirty bit to
-detect shadow stack entries. But for shadow stack entries, the HW dirty
-bit (in combination with non-writable PTEs) is set by software. So for the
-arch_check_zapped_pte() check, we don't have to sync against HW setting
-the HW dirty bit concurrently, it is always set.
+While at it, only call zap_install_uffd_wp_if_needed() if there is even
+any chance that pte_install_uffd_wp_if_needed() would do *something*.
+That is, just don't bother if uffd-wp does not apply.
 
 Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/memory.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ mm/memory.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/mm/memory.c b/mm/memory.c
-index 5b0dc33133a6..4da6923709b2 100644
+index 4da6923709b2..7a3ebb6e5909 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -1497,10 +1497,6 @@ static inline bool should_zap_folio(struct zap_details *details,
- 	if (should_zap_cows(details))
- 		return true;
- 
--	/* E.g. the caller passes NULL for the case of a zero folio */
--	if (!folio)
--		return true;
--
- 	/* Otherwise we should only zap non-anon folios */
- 	return !folio_test_anon(folio);
- }
-@@ -1538,24 +1534,28 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
- 		int *rss, bool *force_flush, bool *force_break)
- {
- 	struct mm_struct *mm = tlb->mm;
--	struct folio *folio = NULL;
- 	bool delay_rmap = false;
-+	struct folio *folio;
- 	struct page *page;
- 
- 	page = vm_normal_page(vma, addr, ptent);
--	if (page)
--		folio = page_folio(page);
-+	if (!page) {
-+		/* We don't need up-to-date accessed/dirty bits. */
-+		ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
-+		arch_check_zapped_pte(vma, ptent);
-+		tlb_remove_tlb_entry(tlb, pte, addr);
-+		VM_WARN_ON_ONCE(userfaultfd_wp(vma));
-+		ksm_might_unmap_zero_page(mm, ptent);
-+		return;
-+	}
- 
-+	folio = page_folio(page);
+@@ -1552,12 +1552,9 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
+ 	folio = page_folio(page);
  	if (unlikely(!should_zap_folio(details, folio)))
  		return;
- 	ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
- 	arch_check_zapped_pte(vma, ptent);
- 	tlb_remove_tlb_entry(tlb, pte, addr);
- 	zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
--	if (unlikely(!page)) {
--		ksm_might_unmap_zero_page(mm, ptent);
--		return;
--	}
+-	ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
+-	arch_check_zapped_pte(vma, ptent);
+-	tlb_remove_tlb_entry(tlb, pte, addr);
+-	zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
  
  	if (!folio_test_anon(folio)) {
++		ptent = ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
  		if (pte_dirty(ptent)) {
+ 			folio_mark_dirty(folio);
+ 			if (tlb_delay_rmap(tlb)) {
+@@ -1567,8 +1564,17 @@ static inline void zap_present_pte(struct mmu_gather *tlb,
+ 		}
+ 		if (pte_young(ptent) && likely(vma_has_recency(vma)))
+ 			folio_mark_accessed(folio);
++		rss[mm_counter(folio)]--;
++	} else {
++		/* We don't need up-to-date accessed/dirty bits. */
++		ptep_get_and_clear_full(mm, addr, pte, tlb->fullmm);
++		rss[MM_ANONPAGES]--;
+ 	}
+-	rss[mm_counter(folio)]--;
++	arch_check_zapped_pte(vma, ptent);
++	tlb_remove_tlb_entry(tlb, pte, addr);
++	if (unlikely(userfaultfd_pte_wp(vma, ptent)))
++		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
++
+ 	if (!delay_rmap) {
+ 		folio_remove_rmap_pte(folio, page, vma);
+ 		if (unlikely(page_mapcount(page) < 0))
 -- 
 2.43.0
 
