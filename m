@@ -1,85 +1,86 @@
-Return-Path: <linux-arch+bounces-2362-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2363-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E6158552F2
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 20:10:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1765E85531E
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 20:20:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8272B24F2A
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 19:09:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3F6A1C21973
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Feb 2024 19:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C9B13A875;
-	Wed, 14 Feb 2024 19:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D117F13A880;
+	Wed, 14 Feb 2024 19:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hk1jdUmD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vzsyc/dB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA9A13A27C
-	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 19:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD7D13A86D
+	for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 19:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707937785; cv=none; b=MW9HAM+WZ2uiYXt8FmKhCmB7KxugKHPgUCy6DrQuoA+DpPv+Lb0mx9d198gRODVzDqbTG4uINoPPWzQK80lcE+/aYyC7kkN0Yv1d6QuHXoeRyIBkzzG7RlnBPITxmgF7EMpGHFgYY7Rc5Is4aGjB9LPVCurB9jLQJiVj89hjdno=
+	t=1707938405; cv=none; b=TmsEAS9RW6x0eFVwRA4r/RM4LVo7TqhjdEoyIBA88VxaNuzdo5lKUrjkeu6fSPE4GxCrwRY5ZWxHdmGzUU1C+oqV4/cmtRiFaQs1uNsc/iOiyKwBkPENQKfDKYGL6d/+brm7F+LM3oHBuiLQYJJnynjGqTpuUIvbY/i4fvV7LRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707937785; c=relaxed/simple;
-	bh=7dJubmbUsQFXN8Bmn/iqqhqzUqvL9YDW9A4PwCTZpGU=;
+	s=arc-20240116; t=1707938405; c=relaxed/simple;
+	bh=mthDvVI6cDtpS/5u1GLcBFHB8octCFvJ1gmdlmC2/g8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KHlpsWa8n3emEDidpiSvYPkvLfQnHlHbV0Rm/fQG0yWPEaDycD2YujRxsHguQVdab7hhV1bXbcXoI+5DP8QaeUl3PTtS55KLh+ln00VfZzfqFUmtXog7iZmzJ43U5XWsPEu4E8u87fb/kwAOixv44yIIy3+o1+L7yhl8kmxU8oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hk1jdUmD; arc=none smtp.client-ip=209.85.219.170
+	 To:Cc:Content-Type; b=l7wF2dB6ZD8+54OFCQbC+VzgrTnBj9ZuDL88Vun5ZWmTHSg3W7nut+Ol/9g9BnrxP/oEPRcy5j/A/Y/a22ET+J2NXWeoGwg7Zz2wRIJ15tb4G+q6OQnqM0uJNK8vFa6ZvBGNgAc39xNrQ1Cr2+pmgkaAjC6tULjScLyDg77XBPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vzsyc/dB; arc=none smtp.client-ip=209.85.219.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dcdb210cb6aso925919276.2
-        for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 11:09:43 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dcd7c526cc0so16906276.1
+        for <linux-arch@vger.kernel.org>; Wed, 14 Feb 2024 11:20:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707937782; x=1708542582; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1707938402; x=1708543202; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YYQ1iEqH1bC/aeDNG7RWtd5Zq4jRnkeS9Y1nPQkLhuU=;
-        b=hk1jdUmDKoWNYCVQNvuhe/KXccAzQclL6keyuwBfLLOD0iIZidK/XoMxQR4iofKF4M
-         LjE5RxqHumu9djxGPw17mEpxHFTr7hwvgOoqbtvn8kqsayViEua17ouNnxzcvaHG70hI
-         wyVHQyX5+EVFHepnaDFuwmlAMWXVUb0IliyeV9uWw7JuN7rVzti54/1UmAbx3VOCEVtL
-         RHeeUrBIwGZ9bdTGTexEcIhKe1Bg41NU8WWMsj9VHL4fiJjQi3pE/NyVPQe+T7MTxVSA
-         IKRi/StsaDC6aaNYt4BSZSRkW6iYxJvZ3zAxVnKbnyWPTpSVlQ6giq+f1FKDKmVQV8c+
-         IwlQ==
+        bh=BeLyV2BNkjBFN275c/stAXS4Zt5cMLEm0RT7xxWo7xU=;
+        b=vzsyc/dBYTal5mdxOeGdp4NEX35TDKlH+6+R5osTjObyVOFPKmuOckvRCA0hdvduJ1
+         pzqdXW65WXwkrdQkOriu8rD+jDKQUvYGf8lsGtOO59xihRS0NyFLNZ5GUY+VLqt+Fzxy
+         FZPzlfdh5Z7oQG7zCs1cn4HEOeGTZtyXMTij+JGAX5CjdG0AcTbvnOy4r/8bcyrhKv9A
+         EvCOKzrZGOcpjHarSD/RShWRdIstGU0OoU62vBfKjk4695S0fTBPLPJFOlwKva/y15MH
+         T0B8TsWnMiUa5Pbd/zKbwgXK5OIK5Dfkc7ApJIDV4xqpnfJS4q7EkFsjFRcsJVKvX5X2
+         r//A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707937782; x=1708542582;
+        d=1e100.net; s=20230601; t=1707938402; x=1708543202;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YYQ1iEqH1bC/aeDNG7RWtd5Zq4jRnkeS9Y1nPQkLhuU=;
-        b=eicfovZfQ7jm4+WkqS68QfRY13v0n6BSjoqWPIzxqyG/i2GZsRmlVKfq239wJZBFA1
-         /MC92bHT0STqR1SfHfnp1I23enRe0T8MrGTqDdWgeW+Ms1ArIFF+EcNr68qqQ9f4+WaW
-         +f+eRQrfRNWonbIWf6qkxxEfJVUJOGOHk8MLFYTUQwXhd4p9M74Y25eehRdRYtuGpxeA
-         6JHzhY/sTg4fp2gdqqQZBuzK1LYAnkR0vhGHU828rnMxcUBWZktZ5iQQO8j78OwMItwy
-         mRNnyxtm6KYwPF/Y3H/7bYjI4qEaLseuYMr9NOcW7OW34EKYmG0eXA1/avIvDaDE+FyB
-         pOhg==
-X-Forwarded-Encrypted: i=1; AJvYcCWYH2v3cbtJDFlUdv6Ymqcs4+bxCOKUcppdloDVONdFA9vkBLsgBvuw9n4QZrM+a1PPXKpUR61zzye5Etw1iITXaZRUDJGXM+F66Q==
-X-Gm-Message-State: AOJu0Yy+jmJ6Go6daLzcLJkhvhsSoJkkCVQkgouoRZ5w+ZteHbWkDSyq
-	jOoLvzGeIHxgze7zNeSz8kVZ1dc7hV+nA7UZX/rByz7hT5WyBCgok+sgLY3TBK67BI4bgvioFUZ
-	6bY145GAYRi8o3dnSPTVxQGQIjyVupi0mRkDm
-X-Google-Smtp-Source: AGHT+IE0myNa43nYnaJsvlAr1q2GXvgjSojXmvsXBpkzj6lBL3cERK/G4k9guWv0KYdWk2/nQyibRz7ihpshNEhuuEk=
-X-Received: by 2002:a25:2d01:0:b0:dcc:8114:5a54 with SMTP id
- t1-20020a252d01000000b00dcc81145a54mr3243973ybt.43.1707937782071; Wed, 14 Feb
- 2024 11:09:42 -0800 (PST)
+        bh=BeLyV2BNkjBFN275c/stAXS4Zt5cMLEm0RT7xxWo7xU=;
+        b=nfeX68F1fG3fIEi7ZABz+Na1XRBhOwpGWK496vDoNweEnbeqRrBEdlukCjJlLpSiSx
+         eSWtC9IxAdZB63fqh0CWJV2zdB++Iu0WsRt4+UklMPSpPWZFnRfCXnKEfvsOgZR8LAVF
+         RwX8puxYRsYmO2ytUY18ZJtaf2T1rZKey3MxylOX3iCg0OL9X0PMsRv+mXhIE2FEvpeu
+         1pu+wzbA/Jtj9s0U032+LO/7ZTFaNOCLbVg/W3D0NsWBwaUbnxdLBRzfol7w4yihsHV0
+         oR7iiJNUXmhDa3pt3C8Cmq1PPQTiJRvcD/P5JOLtPgbDBuYAZpcLm+QcAgLMKxRQBI32
+         kKmw==
+X-Forwarded-Encrypted: i=1; AJvYcCVf0/H2AX5RzjrK1FGED9GN0Zj3txZVHeuBDKzsuWg+Ybk7ooleuz/4MLHjvBE5HH5mWyKyx1lSdXhcAgRZH17cm5Ve/RRTjCKuQA==
+X-Gm-Message-State: AOJu0YxBhCC/8jlYiToFwVk1DSVPGv4zofjf2Kx/AxoO4QomglU7k3yy
+	z4mCTW8cmIkVr3HVn14OpZk98dmXLx7xwSCyOkArAoIYBorz78sOnnsm2m7NGb2vc6QZ00lxsvI
+	m+bgXxWu6mfNfIUSviQaIGRQvkk6Ne1TEUu0j
+X-Google-Smtp-Source: AGHT+IF2W3nFVUFRR9wPoi/qm4zOQswf3iODsFgqsQ39xkvihJBeUWVirJIMSGlhcPqgmo6BGDfddGXZmkzLZyBUkMg=
+X-Received: by 2002:a25:8708:0:b0:dc6:c617:7ca with SMTP id
+ a8-20020a258708000000b00dc6c61707camr3594670ybl.29.1707938402225; Wed, 14 Feb
+ 2024 11:20:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212213922.783301-1-surenb@google.com> <4f24986587b53be3f9ece187a3105774eb27c12f.camel@linux.intel.com>
-In-Reply-To: <4f24986587b53be3f9ece187a3105774eb27c12f.camel@linux.intel.com>
+References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-6-surenb@google.com>
+ <3cf2acae-cb8d-455a-b09d-a1fdc52f5774@suse.cz>
+In-Reply-To: <3cf2acae-cb8d-455a-b09d-a1fdc52f5774@suse.cz>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 14 Feb 2024 11:09:30 -0800
-Message-ID: <CAJuCfpGnnsMFu-2i6-d=n1N89Z3cByN4N1txpTv+vcWSBrC2eg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/35] Memory allocation profiling
-To: Tim Chen <tim.c.chen@linux.intel.com>
+Date: Wed, 14 Feb 2024 11:19:51 -0800
+Message-ID: <CAJuCfpH6O4tKP5=aD=PHnM8TpDLi_s6cRLHy-1i-7Eie0wqnFA@mail.gmail.com>
+Subject: Re: [PATCH v3 05/35] mm: introduce slabobj_ext to support slab object extensions
+To: Vlastimil Babka <vbabka@suse.cz>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
 	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
 	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
 	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
@@ -106,138 +107,210 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 14, 2024 at 10:54=E2=80=AFAM Tim Chen <tim.c.chen@linux.intel.c=
-om> wrote:
+On Wed, Feb 14, 2024 at 9:59=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
 >
-> On Mon, 2024-02-12 at 13:38 -0800, Suren Baghdasaryan wrote:
-> > Memory allocation, v3 and final:
+> On 2/12/24 22:38, Suren Baghdasaryan wrote:
+> > Currently slab pages can store only vectors of obj_cgroup pointers in
+> > page->memcg_data. Introduce slabobj_ext structure to allow more data
+> > to be stored for each slab object. Wrap obj_cgroup into slabobj_ext
+> > to support current functionality while allowing to extend slabobj_ext
+> > in the future.
 > >
-> > Overview:
-> > Low overhead [1] per-callsite memory allocation profiling. Not just for=
- debug
-> > kernels, overhead low enough to be deployed in production.
-> >
-> > We're aiming to get this in the next merge window, for 6.9. The feedbac=
-k
-> > we've gotten has been that even out of tree this patchset has already
-> > been useful, and there's a significant amount of other work gated on th=
-e
-> > code tagging functionality included in this patchset [2].
-> >
-> > Example output:
-> >   root@moria-kvm:~# sort -h /proc/allocinfo|tail
-> >    3.11MiB     2850 fs/ext4/super.c:1408 module:ext4 func:ext4_alloc_in=
-ode
-> >    3.52MiB      225 kernel/fork.c:356 module:fork func:alloc_thread_sta=
-ck_node
-> >    3.75MiB      960 mm/page_ext.c:270 module:page_ext func:alloc_page_e=
-xt
-> >    4.00MiB        2 mm/khugepaged.c:893 module:khugepaged func:hpage_co=
-llapse_alloc_folio
-> >    10.5MiB      168 block/blk-mq.c:3421 module:blk_mq func:blk_mq_alloc=
-_rqs
-> >    14.0MiB     3594 include/linux/gfp.h:295 module:filemap func:folio_a=
-lloc_noprof
-> >    26.8MiB     6856 include/linux/gfp.h:295 module:memory func:folio_al=
-loc_noprof
-> >    64.5MiB    98315 fs/xfs/xfs_rmap_item.c:147 module:xfs func:xfs_rui_=
-init
-> >    98.7MiB    25264 include/linux/gfp.h:295 module:readahead func:folio=
-_alloc_noprof
-> >     125MiB     7357 mm/slub.c:2201 module:slub func:alloc_slab_page
-> >
-> > Since v2:
-> >  - tglx noticed a circular header dependency between sched.h and percpu=
-.h;
-> >    a bunch of header cleanups were merged into 6.8 to ameliorate this [=
-3].
-> >
-> >  - a number of improvements, moving alloc_hooks() annotations to the
-> >    correct place for better tracking (mempool), and bugfixes.
-> >
-> >  - looked at alternate hooking methods.
-> >    There were suggestions on alternate methods (compiler attribute,
-> >    trampolines), but they wouldn't have made the patchset any cleaner
-> >    (we still need to have different function versions for accounting vs=
-. no
-> >    accounting to control at which point in a call chain the accounting
-> >    happens), and they would have added a dependency on toolchain
-> >    support.
-> >
-> > Usage:
-> > kconfig options:
-> >  - CONFIG_MEM_ALLOC_PROFILING
-> >  - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-> >  - CONFIG_MEM_ALLOC_PROFILING_DEBUG
-> >    adds warnings for allocations that weren't accounted because of a
-> >    missing annotation
-> >
-> > sysctl:
-> >   /proc/sys/vm/mem_profiling
-> >
-> > Runtime info:
-> >   /proc/allocinfo
-> >
-> > Notes:
-> >
-> > [1]: Overhead
-> > To measure the overhead we are comparing the following configurations:
-> > (1) Baseline with CONFIG_MEMCG_KMEM=3Dn
-> > (2) Disabled by default (CONFIG_MEM_ALLOC_PROFILING=3Dy &&
-> >     CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=3Dn)
-> > (3) Enabled by default (CONFIG_MEM_ALLOC_PROFILING=3Dy &&
-> >     CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=3Dy)
-> > (4) Enabled at runtime (CONFIG_MEM_ALLOC_PROFILING=3Dy &&
-> >     CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=3Dn && /proc/sys/vm/mem_profi=
-ling=3D1)
-> > (5) Baseline with CONFIG_MEMCG_KMEM=3Dy && allocating with __GFP_ACCOUN=
-T
-> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 >
-> Thanks for the work on this patchset and it is quite useful.
-> A clarification question on the data:
+> ...
 >
-> I assume Config (2), (3) and (4) has CONFIG_MEMCG_KMEM=3Dn, right?
+> > +static inline bool need_slab_obj_ext(void)
+> > +{
+> > +     /*
+> > +      * CONFIG_MEMCG_KMEM creates vector of obj_cgroup objects conditi=
+onally
+> > +      * inside memcg_slab_post_alloc_hook. No other users for now.
+> > +      */
+> > +     return false;
+> > +}
+> > +
+> > +static inline struct slabobj_ext *
+> > +prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
+> > +{
+> > +     struct slab *slab;
+> > +
+> > +     if (!p)
+> > +             return NULL;
+> > +
+> > +     if (!need_slab_obj_ext())
+> > +             return NULL;
+> > +
+> > +     slab =3D virt_to_slab(p);
+> > +     if (!slab_obj_exts(slab) &&
+> > +         WARN(alloc_slab_obj_exts(slab, s, flags, false),
+> > +              "%s, %s: Failed to create slab extension vector!\n",
+> > +              __func__, s->name))
+> > +             return NULL;
+> > +
+> > +     return slab_obj_exts(slab) + obj_to_index(s, slab, p);
+>
+> This is called in slab_post_alloc_hook() and the result stored to obj_ext=
+s
+> but unused. Maybe introduce this only in a later patch where it becomes
+> relevant?
 
-Yes, correct.
-
-> If so do you have similar data for config (2), (3) and (4) but with
-> CONFIG_MEMCG_KMEM=3Dy for comparison with (5)?
-
-I have data for these additional configs (didn't think there were that
-important):
-(6) Disabled by default (CONFIG_MEM_ALLOC_PROFILING=3Dy &&
-CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=3Dn)  && CONFIG_MEMCG_KMEM=3Dy
-(7) Enabled by default (CONFIG_MEM_ALLOC_PROFILING=3Dy &&
-CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=3Dy) && CONFIG_MEMCG_KMEM=3Dy
-
+Ack. I'll move it into the patch where we start using obj_exts.
 
 >
-> Tim
->
-> > Performance overhead:
-> > To evaluate performance we implemented an in-kernel test executing
-> > multiple get_free_page/free_page and kmalloc/kfree calls with allocatio=
-n
-> > sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
-> > affinity set to a specific CPU to minimize the noise. Below are results
-> > from running the test on Ubuntu 22.04.2 LTS with 6.8.0-rc1 kernel on
-> > 56 core Intel Xeon:
+> > --- a/mm/slab_common.c
+> > +++ b/mm/slab_common.c
+> > @@ -201,6 +201,54 @@ struct kmem_cache *find_mergeable(unsigned int siz=
+e, unsigned int align,
+> >       return NULL;
+> >  }
 > >
-> >                         kmalloc                 pgalloc
-> > (1 baseline)            6.764s                  16.902s
-> > (2 default disabled)    6.793s (+0.43%)         17.007s (+0.62%)
-> > (3 default enabled)     7.197s (+6.40%)         23.666s (+40.02%)
-> > (4 runtime enabled)     7.405s (+9.48%)         23.901s (+41.41%)
-> > (5 memcg)               13.388s (+97.94%)       48.460s (+186.71%)
-
-(6 default disabled+memcg)    13.332s (+97.10%)         48.105s (+184.61%)
-(7 default enabled+memcg)     13.446s (+98.78%)       54.963s (+225.18%)
-
-(6) shows a bit better performance than (5) but it's probably noise. I
-would expect them to be roughly the same. Hope this helps.
-
-> >
+> > +#ifdef CONFIG_SLAB_OBJ_EXT
+> > +/*
+> > + * The allocated objcg pointers array is not accounted directly.
+> > + * Moreover, it should not come from DMA buffer and is not readily
+> > + * reclaimable. So those GFP bits should be masked off.
+> > + */
+> > +#define OBJCGS_CLEAR_MASK    (__GFP_DMA | __GFP_RECLAIMABLE | \
+> > +                             __GFP_ACCOUNT | __GFP_NOFAIL)
+> > +
+> > +int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+> > +                     gfp_t gfp, bool new_slab)
 >
+> Since you're moving this function between files anyway, could you please
+> instead move it to mm/slub.c. I expect we'll eventually (maybe even soon)
+> move the rest of performance sensitive kmemcg hooks there as well to make
+> inlining possible.
+
+Will do.
+
+>
+> > +{
+> > +     unsigned int objects =3D objs_per_slab(s, slab);
+> > +     unsigned long obj_exts;
+> > +     void *vec;
+> > +
+> > +     gfp &=3D ~OBJCGS_CLEAR_MASK;
+> > +     vec =3D kcalloc_node(objects, sizeof(struct slabobj_ext), gfp,
+> > +                        slab_nid(slab));
+> > +     if (!vec)
+> > +             return -ENOMEM;
+> > +
+> > +     obj_exts =3D (unsigned long)vec;
+> > +#ifdef CONFIG_MEMCG
+> > +     obj_exts |=3D MEMCG_DATA_OBJEXTS;
+> > +#endif
+> > +     if (new_slab) {
+> > +             /*
+> > +              * If the slab is brand new and nobody can yet access its
+> > +              * obj_exts, no synchronization is required and obj_exts =
+can
+> > +              * be simply assigned.
+> > +              */
+> > +             slab->obj_exts =3D obj_exts;
+> > +     } else if (cmpxchg(&slab->obj_exts, 0, obj_exts)) {
+> > +             /*
+> > +              * If the slab is already in use, somebody can allocate a=
+nd
+> > +              * assign slabobj_exts in parallel. In this case the exis=
+ting
+> > +              * objcg vector should be reused.
+> > +              */
+> > +             kfree(vec);
+> > +             return 0;
+> > +     }
+> > +
+> > +     kmemleak_not_leak(vec);
+> > +     return 0;
+> > +}
+> > +#endif /* CONFIG_SLAB_OBJ_EXT */
+> > +
+> >  static struct kmem_cache *create_cache(const char *name,
+> >               unsigned int object_size, unsigned int align,
+> >               slab_flags_t flags, unsigned int useroffset,
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index 2ef88bbf56a3..1eb1050814aa 100644
+> > --- a/mm/slub.c
+> > +++ b/mm/slub.c
+> > @@ -683,10 +683,10 @@ static inline bool __slab_update_freelist(struct =
+kmem_cache *s, struct slab *sla
+> >
+> >       if (s->flags & __CMPXCHG_DOUBLE) {
+> >               ret =3D __update_freelist_fast(slab, freelist_old, counte=
+rs_old,
+> > -                                         freelist_new, counters_new);
+> > +                                         freelist_new, counters_new);
+> >       } else {
+> >               ret =3D __update_freelist_slow(slab, freelist_old, counte=
+rs_old,
+> > -                                         freelist_new, counters_new);
+> > +                                         freelist_new, counters_new);
+> >       }
+> >       if (likely(ret))
+> >               return true;
+> > @@ -710,13 +710,13 @@ static inline bool slab_update_freelist(struct km=
+em_cache *s, struct slab *slab,
+> >
+> >       if (s->flags & __CMPXCHG_DOUBLE) {
+> >               ret =3D __update_freelist_fast(slab, freelist_old, counte=
+rs_old,
+> > -                                         freelist_new, counters_new);
+> > +                                         freelist_new, counters_new);
+> >       } else {
+> >               unsigned long flags;
+> >
+> >               local_irq_save(flags);
+> >               ret =3D __update_freelist_slow(slab, freelist_old, counte=
+rs_old,
+> > -                                         freelist_new, counters_new);
+> > +                                         freelist_new, counters_new);
+>
+> I can see the mixing of tabs and spaces is wrong but perhaps not fix it a=
+s
+> part of the series?
+
+I'll fix them in the next version.
+
+>
+> >               local_irq_restore(flags);
+> >       }
+> >       if (likely(ret))
+> > @@ -1881,13 +1881,25 @@ static inline enum node_stat_item cache_vmstat_=
+idx(struct kmem_cache *s)
+> >               NR_SLAB_RECLAIMABLE_B : NR_SLAB_UNRECLAIMABLE_B;
+> >  }
+> >
+> > -#ifdef CONFIG_MEMCG_KMEM
+> > -static inline void memcg_free_slab_cgroups(struct slab *slab)
+> > +#ifdef CONFIG_SLAB_OBJ_EXT
+> > +static inline void free_slab_obj_exts(struct slab *slab)
+>
+> Right, freeing is already here, so makes sense put the allocation here as=
+ well.
+>
+> > @@ -3817,6 +3820,7 @@ void slab_post_alloc_hook(struct kmem_cache *s, s=
+truct obj_cgroup *objcg,
+> >               kmemleak_alloc_recursive(p[i], s->object_size, 1,
+> >                                        s->flags, init_flags);
+> >               kmsan_slab_alloc(s, p[i], init_flags);
+> > +             obj_exts =3D prepare_slab_obj_exts_hook(s, flags, p[i]);
+>
+> Yeah here's the hook used. Doesn't it generate a compiler warning? Maybe =
+at
+> least postpone the call until the result is further used.
+
+Yes, I'll move that into the patch where we start using it.
+
+Thanks for the review, Vlastimil!
+
+>
+> >       }
+> >
+> >       memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
 >
 
