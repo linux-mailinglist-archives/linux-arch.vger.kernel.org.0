@@ -1,163 +1,153 @@
-Return-Path: <linux-arch+bounces-2424-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2425-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22BA685718D
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Feb 2024 00:26:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DCE58571FB
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Feb 2024 00:53:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A680BB21A2F
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 23:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9259E1C226BD
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 23:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B376B14534F;
-	Thu, 15 Feb 2024 23:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8C1145B2F;
+	Thu, 15 Feb 2024 23:51:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AX8VvR4l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8707413B2AB;
-	Thu, 15 Feb 2024 23:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02338139589
+	for <linux-arch@vger.kernel.org>; Thu, 15 Feb 2024 23:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708039563; cv=none; b=rBmTRMmLwHyk6fskQHTNUzWcv20qDMxOU32C9/w3QE85W+G3la0PbIvArsgRG779zwQIkGbU2kgWQL6NfCEzTBBha3vldG2IMjtBhy85trEZ2wTz7A3eY4w3EXYasBCbVi/cZG816aX3o9jwU+LZNF133UxYz7/OUX2krmS6gUE=
+	t=1708041116; cv=none; b=ioCOPpO8VBpQ2pECXRKbroeVhz/sbbp/kcSVLyqkp9vbyWC7MDKQlqTxFNQZhDl6fR+b2tPXoPK+/kd/WoT8OF0532eUr6yxURuqV47UZbcQ+hQkN3IPsOBx/IEM+qxm63Qrz6cmfgYW4m0PfGqgDOru6Cq1WKXeneOHMMXoFtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708039563; c=relaxed/simple;
-	bh=XS5bJqlP4STQgp1DfmpPHfkB4RaRvPoEvv+ra766L+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gI1HFXSuCMFRc5NHOWZGJ1P9hJdHEvsoSuXX3VH88Sz9MZ1HcA8ybXqIey6j1FSz3hGEG5E4tqXSPLTVn6kyhbflJo7mbqI6TPFJrhm53IkWWaAFEGfq4b30CiNvb0qB4rIICedJNyIrGx14wm7k9egYhq+817EPlDv3CZ7bdwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6610C433F1;
-	Thu, 15 Feb 2024 23:25:55 +0000 (UTC)
-Date: Thu, 15 Feb 2024 18:27:29 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- akpm@linux-foundation.org, hannes@cmpxchg.org, roman.gushchin@linux.dev,
- mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
- liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
- peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
- rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
- yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
- hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
- ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
- ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com,
- vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, shakeelb@google.com,
- songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in
- show_mem()
-Message-ID: <20240215182729.659f3f1c@gandalf.local.home>
-In-Reply-To: <20240215181648.67170ed5@gandalf.local.home>
+	s=arc-20240116; t=1708041116; c=relaxed/simple;
+	bh=+Q5LCbfshzsAZdu2xMUBI5sVBfTSUWyS3SLTEBuBLFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tBjkyV16IfUf/3xehJ6j7zrZNdLcR2HXp+lzNGcMxil1dAiuBPZkhZZG4rN6ahH2OYYEadn2HQrsXjq06Nr/SwzYrOkwJGMhGxlTx7O5jCAbFXwQw1VHxmesEf8ZAWPVwZflYK+R6Yzi8lmS2I7fPnJA+RWTQgWJfIjPSmZlq5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AX8VvR4l; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 15 Feb 2024 18:51:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1708041111;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fn06dkJ1+mAaWpggeUdl7NGUJOJXRgTvflxoZrn/p3U=;
+	b=AX8VvR4luSIKxjOW3kIPF4f8jCsn0k7LGyQ/dc1uxcl77umiNOAVr6Tu53YSB1J9xNktKT
+	0U9aZdYfTGQtk/VNGVpka453ky7CfEdKYdVC+PyEzsFA+OPOAMQ5phcorB0KJ1vyZn5Tz1
+	MR90Q0CtrObSpQ3vR5b3OC1C1lIokhI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, david@redhat.com, 
+	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org, 
+	dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org, 
+	paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com, 
+	yuzhao@google.com, dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com, 
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
+	42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
+	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
+Message-ID: <jpmlfejxcmxa7vpsuyuzykahr6kz5vjb44ecrzfylw7z4un3g7@ia3judu4xkfp>
 References: <20240212213922.783301-1-surenb@google.com>
-	<20240212213922.783301-32-surenb@google.com>
-	<Zc3X8XlnrZmh2mgN@tiehlicka>
-	<CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
-	<Zc4_i_ED6qjGDmhR@tiehlicka>
-	<CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
-	<ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut>
-	<320cd134-b767-4f29-869b-d219793ba8a1@suse.cz>
-	<efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
-	<20240215180742.34470209@gandalf.local.home>
-	<20240215181648.67170ed5@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20240212213922.783301-32-surenb@google.com>
+ <Zc3X8XlnrZmh2mgN@tiehlicka>
+ <CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
+ <Zc4_i_ED6qjGDmhR@tiehlicka>
+ <CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
+ <ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut>
+ <320cd134-b767-4f29-869b-d219793ba8a1@suse.cz>
+ <efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
+ <20240215180742.34470209@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240215180742.34470209@gandalf.local.home>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 15 Feb 2024 18:16:48 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Thu, 15 Feb 2024 18:07:42 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On Thu, Feb 15, 2024 at 06:07:42PM -0500, Steven Rostedt wrote:
+> On Thu, 15 Feb 2024 15:33:30 -0500
+> Kent Overstreet <kent.overstreet@linux.dev> wrote:
 > 
-> >    text         data            bss     dec             hex filename
-> > 29161847        18352730        5619716 53134293        32ac3d5 vmlinux.orig
-> > 29162286        18382638        5595140 53140064        32ada60 vmlinux.memtag-off		(+5771)
-> > 29230868        18887662        5275652 53394182        32ebb06 vmlinux.memtag			(+259889)
-> > 29230746        18887662        5275652 53394060        32eba8c vmlinux.memtag-default-on	(+259767) dropped?
-> > 29276214        18946374        5177348 53399936        32ed180 vmlinux.memtag-debug		(+265643)  
+> > > Well, I think without __GFP_NOWARN it will cause a warning and thus
+> > > recursion into __show_mem(), potentially infinite? Which is of course
+> > > trivial to fix, but I'd myself rather sacrifice a bit of memory to get
+> > > this potentially very useful output, if I enabled the profiling. The
+> > > necessary memory overhead of page_ext and slabobj_ext makes the
+> > > printing buffer overhead negligible in comparison?  
+> > 
+> > __GFP_NOWARN is a good point, we should have that.
+> > 
+> > But - and correct me if I'm wrong here - doesn't an OOM kick in well
+> > before GFP_ATOMIC 4k allocations are failing? I'd expect the system to
+> > be well and truly hosed at that point.
+> > 
+> > If we want this report to be 100% reliable, then yes the preallocated
+> > buffer makes sense - but I don't think 100% makes sense here; I think we
+> > can accept ~99% and give back that 4k.
 > 
-> If you plan on running this in production, and this increases the size of
-> the text by 68k, have you measured the I$ pressure that this may induce?
-> That is, what is the full overhead of having this enabled, as it could
-> cause more instruction cache misses?
+> I just compiled v6.8-rc4 vanilla (with a fedora localmodconfig build) and
+> saved it off (vmlinux.orig), then I compiled with the following:
 > 
-> I wonder if there has been measurements of it off. That is, having this
-> configured in but default off still increases the text size by 68k. That
-> can't be good on the instruction cache.
+> Applied the patches but did not enable anything:	vmlinux.memtag-off
+> Enabled MEM_ALLOC_PROFILING:				vmlinux.memtag
+> Enabled MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT:		vmlinux.memtag-default-on
+> Enabled MEM_ALLOC_PROFILING_DEBUG:			vmlinux.memtag-debug
 > 
-
-I should have read the cover letter ;-)  (someone pointed me to that on IRC):
-
-> Performance overhead:
-> To evaluate performance we implemented an in-kernel test executing
-> multiple get_free_page/free_page and kmalloc/kfree calls with allocation
-> sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
-> affinity set to a specific CPU to minimize the noise. Below are results
-> from running the test on Ubuntu 22.04.2 LTS with 6.8.0-rc1 kernel on
-> 56 core Intel Xeon:
-
-These are micro benchmarks, were any larger benchmarks taken? As
-microbenchmarks do not always show I$ issues (because the benchmark itself
-will warm up the cache). The cache issue could slow down tasks at a bigger
-picture, as it can cause more cache misses.
-
-Running other benchmarks under perf and recording the cache misses between
-the different configs would be a good picture to show.
-
+> And here's what I got:
 > 
->                         kmalloc                 pgalloc
-> (1 baseline)            6.764s                  16.902s
-> (2 default disabled)    6.793s (+0.43%)         17.007s (+0.62%)
-> (3 default enabled)     7.197s (+6.40%)         23.666s (+40.02%)
-> (4 runtime enabled)     7.405s (+9.48%)         23.901s (+41.41%)
-> (5 memcg)               13.388s (+97.94%)       48.460s (+186.71%)
-
-
+>    text         data            bss     dec             hex filename
+> 29161847        18352730        5619716 53134293        32ac3d5 vmlinux.orig
+> 29162286        18382638        5595140 53140064        32ada60 vmlinux.memtag-off		(+5771)
+> 29230868        18887662        5275652 53394182        32ebb06 vmlinux.memtag			(+259889)
+> 29230746        18887662        5275652 53394060        32eba8c vmlinux.memtag-default-on	(+259767) dropped?
+> 29276214        18946374        5177348 53399936        32ed180 vmlinux.memtag-debug		(+265643)
 > 
-> Memory overhead:
-> Kernel size:
-> 
->    text           data        bss         dec         diff
-> (1) 26515311	      18890222    17018880    62424413
-> (2) 26524728	      19423818    16740352    62688898    264485
-> (3) 26524724	      19423818    16740352    62688894    264481
-> (4) 26524728	      19423818    16740352    62688898    264485
-> (5) 26541782	      18964374    16957440    62463596    39183
+> Just adding the patches increases the size by 5k. But the rest shows an
+> increase of 259k, and you are worried about 4k (and possibly less?)???
 
-Similar to my builds.
+Most of that is data (505024), not text (68582, or 66k).
 
+The data is mostly the alloc tags themselves (one per allocation
+callsite, and you compiled the entire kernel), so that's expected.
 
-> 
-> Memory consumption on a 56 core Intel CPU with 125GB of memory:
-> Code tags:           192 kB
-> PageExts:         262144 kB (256MB)
-> SlabExts:           9876 kB (9.6MB)
-> PcpuExts:            512 kB (0.5MB)
-> 
-> Total overhead is 0.2% of total memory.
+Of the text, a lot of that is going to be slowpath stuff - module load
+and unload hooks, formatt and printing the output, other assorted bits.
 
+Then there's Allocation and deallocating obj extensions vectors - not
+slowpath but not super fast path, not every allocation.
 
-All this, and we are still worried about 4k for useful debugging :-/
+The fastpath instruction count overhead is pretty small
+ - actually doing the accounting - the core of slub.c, page_alloc.c,
+   percpu.c
+ - setting/restoring the alloc tag: this is overhead we add to every
+   allocation callsite, so it's the most relevant - but it's just a few
+   instructions.
 
--- Steve
+So that's the breakdown. Definitely not zero overhead, but that fixed
+memory overhead (and additionally, the percpu counters) is the price we
+pay for very low runtime CPU overhead.
 
