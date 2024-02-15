@@ -1,139 +1,138 @@
-Return-Path: <linux-arch+bounces-2389-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2390-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB64D856617
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 15:39:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAB2E85662B
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 15:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B4AEB222AD
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 14:39:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6717B22191
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 14:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C99213246C;
-	Thu, 15 Feb 2024 14:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE26F132474;
+	Thu, 15 Feb 2024 14:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jsRvp+7k"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="mFnMCnWW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDC269DF0;
-	Thu, 15 Feb 2024 14:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EDC37156;
+	Thu, 15 Feb 2024 14:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708007984; cv=none; b=ILZ8QYz8RIg9PovoblJr3OlR6cTQuwnpPR6ipAdFhSD2iSw6dJt/1Js01VCErvCJw8yiGev/4Hae4pOaMMBDuXrPWddh5kymY9veUypRutCTpTQVlDYynqzcHTosh24MlqHYKDGI8iZ8/dju5M4X3i52FEUxb/nnbk/p2SgD7mY=
+	t=1708008226; cv=none; b=F9YS7W2MWRB6oJttrQp567zlyIU/7pMQWEgzMSZ0PnBKOXOC7KoWecjSKr23FLQ5fB4OlaQYs1hXXoKHAINq9EsqlRyh5Si65yYC+Ujcw8TUVveg9T2+mJKGc3bMeSYPOarMkkry9qsGRpv0alOdlQOZz5gLqy9E9YwPNIvvxXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708007984; c=relaxed/simple;
-	bh=MV9oKZSV6w9tYnhYunre9EcN7ovtDZaJe8D0pVI4U2A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F8s93wSPNV+OKLkToZQNnS7t+8dfLcQbAYh5lXg7ztgnwXBAgY2uw/1DrWNas/ZDbl/m2ubuJLGuhrQEMIdSUDfnLriFgg+TGxKJU6qcDrsvNIi5XtOq63XGXRmgvYWCGEIV1I6wfuUV/mB5dJrSD2yLccj38k8yQsNG8vU/PGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jsRvp+7k; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FEa0Td022512;
-	Thu, 15 Feb 2024 14:39:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=zZurr08+4rCmi2p87VmKajNXUbdSQeh/Ml+DyrXsBJY=;
- b=jsRvp+7kedzUhComLQF4tv0eXIaGM2RShLJ2AHhUnsUehPlEmIrFeKtHeBQz5x8W2Woo
- dszYEPUFXpbSvpkkEnusY9IZnLt8SdUFDybty+7BFnq7nFNLDdij9O5wT7PW4iQxl5wJ
- jp9yj+4qezufi7RtUIuh+N9PUHQvAhD7SEnm1MrDp0apd7Q2iIcNuRqfm7Oe1xGRawf8
- 5WOS4yk2pCniZ6WtFpuM1ZfEUvQVLWlTmeWJZNF/J/XymUhEFE6pFgwnQSM3aVuUkoDW
- 8x67oTWrjzw2PjJXN/HMdxiPLNqd6u15Aoo4kmmLmLcnPx4If9PYhvsiLs2NhZVS/5JM 8A== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9m1991pk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 14:39:32 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FDqAda004297;
-	Thu, 15 Feb 2024 14:39:30 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0ng2w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 14:39:30 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FEdR8s24511196
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 14:39:29 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 829C658062;
-	Thu, 15 Feb 2024 14:39:27 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CD1825805A;
-	Thu, 15 Feb 2024 14:39:26 +0000 (GMT)
-Received: from [9.61.99.202] (unknown [9.61.99.202])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 15 Feb 2024 14:39:26 +0000 (GMT)
-Message-ID: <a50cf258-b861-40e5-8ca9-dec7721400ec@linux.ibm.com>
-Date: Thu, 15 Feb 2024 08:39:26 -0600
+	s=arc-20240116; t=1708008226; c=relaxed/simple;
+	bh=ln3eEO71W6a/HB4BpqVFvAzjOL06V7sQyyqCuiIm4o8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=e4+tHHMsOm3J5P1+tOWwC9s0mF0mWQwuWQJCSFflk5uADX/lFuotGV1hPSR2MC+VxpoXkdbkl6Hs/ggq5erFIaVak/bukIoITRbqanMHI1mAaEnyfJIYO3T+VOhno22nMdqhg6Bbq6qaqzxObk2fD8eOzg0r1AJ7VDtPgXAxgBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=mFnMCnWW; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1708008217;
+	bh=ln3eEO71W6a/HB4BpqVFvAzjOL06V7sQyyqCuiIm4o8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mFnMCnWWSY/oz3cfgAglZzFkfce2dfZOYQ36NDRHuc70+Pbjjz2mWVQ6nWjD+rPZ1
+	 WnE4nMw6J5orU72fJQAg/GCstx2ZUapfZLe/PMqhyMNtmgHWX0clQFg34C+3CaNZyU
+	 1ly9rs6uD/lKyBlOHw6VZLJ05n39hjoOnRBll8RamfKOswbZWOhR28yN9vBd3pb8Vj
+	 hAoDrvplCH3rEk/qakzkdJgoqBMHOgnUMi8nxxYB9SB4+g81R+ABljrhLqNo17Tk/K
+	 wyk1n6kXqRHB/uXMNwYIuDE3W3Aj7ZZxG3nVplBs4j48GYzaE1PzLbw2SKxoFY1M/z
+	 YKY+fj3hAQcJQ==
+Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TbHqs08r0zZD5;
+	Thu, 15 Feb 2024 09:43:37 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Dan Williams <dan.j.williams@intel.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dave Chinner <david@fromorbit.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Fan Ni <fan.ni@samsung.com>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arch@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-xfs@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	nvdimm@lists.linux.dev
+Subject: [PATCH v2] nvdimm/pmem: Fix leak on dax_add_host() failure
+Date: Thu, 15 Feb 2024 09:43:24 -0500
+Message-Id: <20240215144324.95436-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] uapi/auxvec: Define AT_HWCAP3 and AT_HWCAP4 aux
- vector, entries
-Content-Language: en-US
-To: Arnd Bergmann <arnd@kernel.org>, linux-api@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Nick Piggin <npiggin@au1.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <a406b535-dc55-4856-8ae9-5a063644a1af@linux.ibm.com>
- <aa657f01-7cb1-43f4-947e-173fc8a53f1f@app.fastmail.com>
-From: Peter Bergner <bergner@linux.ibm.com>
-In-Reply-To: <aa657f01-7cb1-43f4-947e-173fc8a53f1f@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: U0zh-cXg3ppxx8BiWtZDI9TVoSkYhrAq
-X-Proofpoint-GUID: U0zh-cXg3ppxx8BiWtZDI9TVoSkYhrAq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-15_13,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- impostorscore=0 spamscore=0 priorityscore=1501 mlxlogscore=319
- phishscore=0 malwarescore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402150117
+Content-Transfer-Encoding: 8bit
 
-On 2/15/24 2:16 AM, Arnd Bergmann wrote:
-> On Wed, Feb 14, 2024, at 23:34, Peter Bergner wrote:
->> The powerpc toolchain keeps a copy of the HWCAP bit masks in our TCB for fast
->> access by the __builtin_cpu_supports built-in function.  The TCB space for
->> the HWCAP entries - which are created in pairs - is an ABI extension, so
->> waiting to create the space for HWCAP3 and HWCAP4 until we need them is
->> problematical.  Define AT_HWCAP3 and AT_HWCAP4 in the generic uapi header
->> so they can be used in glibc to reserve space in the powerpc TCB for their
->> future use.
->>
->> I scanned through the Linux and GLIBC source codes looking for unused AT_*
->> values and 29 and 30 did not seem to be used, so they are what I went
->> with.  This has received Acked-by's from both GLIBC and Linux kernel
->> developers and no reservations or Nacks from anyone.
->>
->> Arnd, we seem to have consensus on the patch below.  Is this something
->> you could take and apply to your tree? 
->>
-> 
-> I don't mind taking it, but it may be better to use the
-> powerpc tree if that is where it's actually being used.
+Fix a leak on dax_add_host() error, where "goto out_cleanup_dax" is done
+before setting pmem->dax_dev, which therefore issues the two following
+calls on NULL pointers:
 
-So this is not a powerpc only patch, but we may be the first arch
-to use it.  Szabolcs mentioned that aarch64 was pretty quickly filling
-up their AT_HWCAP2 and that they will eventually require using AT_HWCAP3
-as well.  If you still think this should go through the powerpc tree,
-I can check on that.
+out_cleanup_dax:
+        kill_dax(pmem->dax_dev);
+        put_dax(pmem->dax_dev);
 
-Peter
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Reviewed-by: Fan Ni <fan.ni@samsung.com>
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>
+Cc: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-cxl@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-xfs@vger.kernel.org
+Cc: dm-devel@lists.linux.dev
+Cc: nvdimm@lists.linux.dev
+---
+Changes since v1:
+- Add Reviewed-by tags.
+---
+ drivers/nvdimm/pmem.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 4e8fdcb3f1c8..9fe358090720 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -566,12 +566,11 @@ static int pmem_attach_disk(struct device *dev,
+ 	set_dax_nomc(dax_dev);
+ 	if (is_nvdimm_sync(nd_region))
+ 		set_dax_synchronous(dax_dev);
++	pmem->dax_dev = dax_dev;
+ 	rc = dax_add_host(dax_dev, disk);
+ 	if (rc)
+ 		goto out_cleanup_dax;
+ 	dax_write_cache(dax_dev, nvdimm_has_cache(nd_region));
+-	pmem->dax_dev = dax_dev;
+-
+ 	rc = device_add_disk(dev, disk, pmem_attribute_groups);
+ 	if (rc)
+ 		goto out_remove_host;
+-- 
+2.39.2
 
 
