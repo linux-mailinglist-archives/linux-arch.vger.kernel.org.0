@@ -1,183 +1,198 @@
-Return-Path: <linux-arch+bounces-2408-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2409-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD5ED856D1A
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 19:50:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEF49856D94
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 20:22:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D49128B8BA
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 18:50:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 657322850A9
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 19:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B950D1386C5;
-	Thu, 15 Feb 2024 18:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FaVsFLVE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63123139598;
+	Thu, 15 Feb 2024 19:22:43 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0293E1386A2
-	for <linux-arch@vger.kernel.org>; Thu, 15 Feb 2024 18:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B9113699A;
+	Thu, 15 Feb 2024 19:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708023015; cv=none; b=uEPFmB8HjQDoJm9S0e6B2yJ9dXKLe/huJ/DIK1o01ABB+kKZC72YNqbv8Z7V1wTqSfrodsq4G5GesyMGwspzs/wAKpEkeyH2TvtI0nHdW+X1q/aH2fg1loEhYVgy8IupWP12XKo2Z/LOmJs3/0S62kw4pAisXmwOqBtXJXDN92s=
+	t=1708024963; cv=none; b=X28GDQojdEgXZ6/Uy+yFWD1QO9QmT3EtTAOUdmNhh1diIwMwloFkl8pd5h6FiE4JCd94VqEaTHqtMlL0i0vZWpBhHsiHOVZHeCYOIuUslTiY/RnwLwdQbEmXecPOHDGNllVtB0vIn+3n0KnYookX2BD/lUDmyltVGBVZ3zbKZ5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708023015; c=relaxed/simple;
-	bh=S81pGoJ8PfU6aLi9PbShqhGOm1UW2ATW5Cnzr2dZfPM=;
+	s=arc-20240116; t=1708024963; c=relaxed/simple;
+	bh=gCJhOtMnRU8UWRkUPUSVOlRb9/TApbJfHXnwR2CW2HQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tt03yMZT5rr9oNzwxnDs2gKYsiGe3lBCVZ/Km4BZ/IpQ31G7JSN0IMOX7rLUqB0xNcNJq3CqLknpKe5t48NI6Q1v5WXbURfjKSJwBjtsxD06I/lc7DywUzVWA4pRXDZsRQR+a9v2x1CDLJ5hBLKdj54EgQm+63ZQ3g2L/TMs2rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FaVsFLVE; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dbed179f0faso1703875276.1
-        for <linux-arch@vger.kernel.org>; Thu, 15 Feb 2024 10:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708023013; x=1708627813; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WUlsSeO8LefyO4xLZYNJ9jNHAOJrLbOdsT9pDfMZXA8=;
-        b=FaVsFLVEmA/s7ZT+0qO05AKXq3N/CiEGTriEZX7A1DGDJu+w1odmSr6HyTCYMjbV/p
-         pHNLIglR5WAk9m6jUQDHKSke2WnBRfGXbEySMMp9AcsXTOBrKN6s8jk7R+7rZkDKyym7
-         cG6Erf05ctrJfX2/NfOlgZ+M1foaKS/+HcrI/4AsoM+HCmlwK6xolxVG8x7KJH8As5iS
-         9uL3wapXE+fnUbo4UBvkgIdVP3y/ZIZ9nGwUYohlCvChaCgEXpZUfFHhjlnz8NQgQMOc
-         XBbCXc8NQPcbL33CqBpVRI7h/IjT77LeRLlOXkLJePz+Asgvtpv6zvWhqFcu8Agg+KE+
-         9+4w==
+	 To:Cc:Content-Type; b=NmGPgXXC4zRaPFVcF0GYC39c6mcnrKAExCMOxLeCU0Ep87Z0fWuwPuT7q2Z5Ygh9m7BTDUP5Gf8Z1yCUb5O4WxIR1c/zPJT53Q7OtuhIiBfffGl3FpuqW4raU3jeT8PlodfSJ1bS+loNQ/4LvSNX24kAmosOqUhnmfEEsRTYdfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6e2f6c7e623so142059a34.1;
+        Thu, 15 Feb 2024 11:22:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708023013; x=1708627813;
+        d=1e100.net; s=20230601; t=1708024960; x=1708629760;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WUlsSeO8LefyO4xLZYNJ9jNHAOJrLbOdsT9pDfMZXA8=;
-        b=uhTETpTMmiZdeMH+EZKxpVUrf/XhLc9gI5Y/DN8BZRN8umxgivo7w+1npQOW1kOzM3
-         dfaKnhgOKSoC3pjKXnDfFx6ya9LxUcbjrIV5jguH8RcmNo0+qvKtjjRoQ9w3rPrNDoUv
-         QCYFini+cZOwaKqgXQk2t6G5NZ65AiXi0GigHuUG7AgYmjwirdnQwOUHXXHZJ3hfmy1q
-         WJFPRa3bQf1sC2BDD0INTNVeCC/sZuNbou5NhfDH0c34Ik7FLAUM7tf6fv8UuXw/fJVK
-         qcgrzVPs7FakcdozMK56KJPe1FJi6JsJHXoxNrdiF3ILI8VqwqxOZt0OnZY6/AkZu2rc
-         WDBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVhqvt2ltfx4hwTMH4hbGD3WjiBo0ouJhUglI+i2zGX5HHxmc9OBVVXgKcA9xb/ZQeZP0VlsL4JmuNEy3csXd0Tp+re6Lr66b17Jg==
-X-Gm-Message-State: AOJu0YwCBYBuXNjKLEkoPQS+D2heg9tntSR5gOo6YKcd9gbvuE37povD
-	9J/AjS9jypHeGTLqy/45xl0/kNaE3qa422JkpznOxwsE9lM6EsXqEI324VWDD3W6YqfrLQ/Z1Du
-	WYW6J5t+7N89iWWm8zpfZ/a+uDTrooRKb2tqn
-X-Google-Smtp-Source: AGHT+IHQQXGNaksc4ZLhdDELtvsfOEVbOUct07hRFV1UcZvxQkhvZT74vejiVn2ZOSoGey1AwcE3FMB7Y05S+V1u8DE=
-X-Received: by 2002:a25:ae28:0:b0:dc2:4fff:75ee with SMTP id
- a40-20020a25ae28000000b00dc24fff75eemr1999749ybj.3.1708023012635; Thu, 15 Feb
- 2024 10:50:12 -0800 (PST)
+        bh=atg7WI78HsTq5644XbnZluXts4d5OR/FFe0QfcIw1Ag=;
+        b=LD5KmZ/ub5r7pzqKRFVE0hPX3wJ4C13NOakKTw+4RR6ZrGdFx3Uk8QArcDbQZPPhGK
+         znxYzjj/NhLT/xisBkREF87qLw37ckwWLQPkm7hX2x4egNm3zYI1Z8n/q70AsEvUV1pf
+         SNn1eCKPCcsRsRhJlFyhS96ikm65rBNerz5UUCv1b+XEZQMl8loRUnFeHeQNW5J9lIv9
+         IGHGE/eg5lehrfoTP8DDKtuTLpqLVqzP/dPcZpPEsvFF3iPe9v7szUhMdu4tJODpwGOt
+         smyBV/krU/wgrNgyeWesXAv6NHD0PDBSFeTtbKT5VenTmy0t02jAJJF1qQvO+QiFp+Zo
+         hicA==
+X-Forwarded-Encrypted: i=1; AJvYcCX95oqFx5SPRBC1R71HfnWTOuHkTmkoAtNyXc6waEK6Gd6BhWP1mZ6P2wAbtHNqseNLytMA4Ddm8zmkFur+mq3oJGC3e0tj8lsHHuN+3JMdFsfKOt+mG2v+W6iElZlNsBXqDOPJWCAe1ApVVIToS1Q/8oebxQD+AdlGcIey9jFiUBML9apv//T0lb3IvDCwXfxWcWGi9mz7ZGRcd6DpIUdbHMS6De1MnD1fcramzepqYCHEzC1uMCUuhWU7cw9BbL7FO0W7XYAb9QSsSwIR+G5heSMfW63k/MlQ7noJuz6xAYvIYCQOwRMbgFTTgy4BrGWPIV8gDw==
+X-Gm-Message-State: AOJu0YwcPIrHfe5K3FnvwO4AYkBOryDotGVy5phuXX96dGxeiskM5B8r
+	2iajjG8sbl/+DqvR9AZbwdDtVEsxFYHXRuyw38evylrdJfmIfW7jS5GUe68Z7fKPz0VczDq8cyT
+	IZY5AwOfb6zyJSdCltfIudYnO/MYlcLbmxWI=
+X-Google-Smtp-Source: AGHT+IGH9nzxfJPZ0b9LL7NeSQVmLFmBC+x3c+fnaZmT/Dcf6w2GoSt64Z11xwqZfq7drVdSJDbhPxjptv1uaDnhYPo=
+X-Received: by 2002:a05:6820:1f8d:b0:59c:d8cd:ecee with SMTP id
+ eq13-20020a0568201f8d00b0059cd8cdeceemr110694oob.1.1708024960621; Thu, 15 Feb
+ 2024 11:22:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-32-surenb@google.com>
- <Zc3X8XlnrZmh2mgN@tiehlicka> <CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
- <Zc4_i_ED6qjGDmhR@tiehlicka> <CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
- <ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut> <Zc5a8MsJyt27jeJC@tiehlicka>
-In-Reply-To: <Zc5a8MsJyt27jeJC@tiehlicka>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 15 Feb 2024 10:49:59 -0800
-Message-ID: <CAJuCfpH2EF8DZhBp_7324ka7mnMkUdWyqTs+ZiMhwjm_nmcwZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
-To: Michal Hocko <mhocko@suse.com>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, akpm@linux-foundation.org, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk> <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 15 Feb 2024 20:22:29 +0100
+Message-ID: <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from acpi_processor_get_info()
+To: Russell King <rmk+kernel@armlinux.org.uk>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 15, 2024 at 10:41=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
-te:
+On Wed, Jan 31, 2024 at 5:50=E2=80=AFPM Russell King <rmk+kernel@armlinux.o=
+rg.uk> wrote:
 >
-> On Thu 15-02-24 13:29:40, Kent Overstreet wrote:
-> > On Thu, Feb 15, 2024 at 08:47:59AM -0800, Suren Baghdasaryan wrote:
-> > > On Thu, Feb 15, 2024 at 8:45=E2=80=AFAM Michal Hocko <mhocko@suse.com=
-> wrote:
-> > > >
-> > > > On Thu 15-02-24 06:58:42, Suren Baghdasaryan wrote:
-> > > > > On Thu, Feb 15, 2024 at 1:22=E2=80=AFAM Michal Hocko <mhocko@suse=
-.com> wrote:
-> > > > > >
-> > > > > > On Mon 12-02-24 13:39:17, Suren Baghdasaryan wrote:
-> > > > > > [...]
-> > > > > > > @@ -423,4 +424,18 @@ void __show_mem(unsigned int filter, nod=
-emask_t *nodemask, int max_zone_idx)
-> > > > > > >  #ifdef CONFIG_MEMORY_FAILURE
-> > > > > > >       printk("%lu pages hwpoisoned\n", atomic_long_read(&num_=
-poisoned_pages));
-> > > > > > >  #endif
-> > > > > > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> > > > > > > +     {
-> > > > > > > +             struct seq_buf s;
-> > > > > > > +             char *buf =3D kmalloc(4096, GFP_ATOMIC);
-> > > > > > > +
-> > > > > > > +             if (buf) {
-> > > > > > > +                     printk("Memory allocations:\n");
-> > > > > > > +                     seq_buf_init(&s, buf, 4096);
-> > > > > > > +                     alloc_tags_show_mem_report(&s);
-> > > > > > > +                     printk("%s", buf);
-> > > > > > > +                     kfree(buf);
-> > > > > > > +             }
-> > > > > > > +     }
-> > > > > > > +#endif
-> > > > > >
-> > > > > > I am pretty sure I have already objected to this. Memory alloca=
-tions in
-> > > > > > the oom path are simply no go unless there is absolutely no oth=
-er way
-> > > > > > around that. In this case the buffer could be preallocated.
-> > > > >
-> > > > > Good point. We will change this to a smaller buffer allocated on =
-the
-> > > > > stack and will print records one-by-one. Thanks!
-> > > >
-> > > > __show_mem could be called with a very deep call chains. A single
-> > > > pre-allocated buffer should just do ok.
-> > >
-> > > Ack. Will do.
-> >
-> > No, we're not going to permanently burn 4k here.
-> >
-> > It's completely fine if the allocation fails, there's nothing "unsafe"
-> > about doing a GFP_ATOMIC allocation here.
+> From: James Morse <james.morse@arm.com>
 >
-> Nobody is talking about safety. This is just a wrong thing to do when
-> you are likely under OOM situation. This is a situation when you
-> GFP_ATOMIC allocation is _likely_ to fail. Yes, yes you will get some
-> additional memory reservers head room, but you shouldn't rely on that
-> because that will make the output unreliable. Not something you want in
-> situation when you really want to know that information.
+> To allow ACPI to skip the call to arch_register_cpu() when the _STA
+> value indicates the CPU can't be brought online right now, move the
+> arch_register_cpu() call into acpi_processor_get_info().
 >
-> More over you do not need to preallocate a full page.
+> Systems can still be booted with 'acpi=3Doff', or not include an
+> ACPI description at all. For these, the CPUs continue to be
+> registered by cpu_dev_register_generic().
+>
+> This moves the CPU register logic back to a subsys_initcall(),
+> while the memory nodes will have been registered earlier.
+>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> Changes since RFC v2:
+>  * Fixup comment in acpi_processor_get_info() (Gavin Shan)
+>  * Add comment in cpu_dev_register_generic() (Gavin Shan)
+> ---
+>  drivers/acpi/acpi_processor.c | 12 ++++++++++++
+>  drivers/base/cpu.c            |  6 +++++-
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
+c
+> index cf7c1cca69dd..a68c475cdea5 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_devic=
+e *device)
+>                         cpufreq_add_device("acpi-cpufreq");
+>         }
+>
+> +       /*
+> +        * Register CPUs that are present. get_cpu_device() is used to sk=
+ip
+> +        * duplicate CPU descriptions from firmware.
+> +        */
+> +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> +           !get_cpu_device(pr->id)) {
+> +               int ret =3D arch_register_cpu(pr->id);
+> +
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+>         /*
+>          *  Extra Processor objects may be enumerated on MP systems with
+>          *  less than the max # of CPUs. They should be ignored _iff
 
-Folks, please stop arguing about it. We have more important things to
-do. I'll fix it to use a small preallocated buffer.
+This is interesting, because right below there is the following code:
+
+    if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+        int ret =3D acpi_processor_hotadd_init(pr);
+
+        if (ret)
+            return ret;
+    }
+
+and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
+with some extra things around it (more about that below).
+
+I do realize that acpi_processor_hotadd_init() is defined under
+CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
+consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
+
+So why are the two conditionals that almost contradict each other both
+needed?  It looks like the new code could be combined with
+acpi_processor_hotadd_init() to do the right thing in all cases.
+
+Now, acpi_processor_hotadd_init() does some extra things that look
+like they should be done by the new code too.
+
+1. It checks invalid_phys_cpuid() which appears to be a good idea to me.
+
+2. It uses locking around arch_register_cpu() which doesn't seem
+unreasonable either.
+
+3. It calls acpi_map_cpu() and I'm not sure why this is not done by
+the new code.
+
+The only thing that can be dropped from it is the _STA check AFAICS,
+because acpi_processor_add() won't even be called if the CPU is not
+present (and not enabled after the first patch).
+
+So why does the code not do 1 - 3 above?
+
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index 47de0f140ba6..13d052bf13f4 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(void)
+>  {
+>         int i, ret;
+>
+> -       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
+> +       /*
+> +        * When ACPI is enabled, CPUs are registered via
+> +        * acpi_processor_get_info().
+> +        */
+> +       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
+>                 return;
+
+Honestly, this looks like a quick hack to me and it absolutely
+requires an ACK from the x86 maintainers to go anywhere.
 
 >
+>         for_each_present_cpu(i) {
 > --
-> Michal Hocko
-> SUSE Labs
 
