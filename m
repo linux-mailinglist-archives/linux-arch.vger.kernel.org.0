@@ -1,231 +1,168 @@
-Return-Path: <linux-arch+bounces-2417-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2418-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECB1A856F9D
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 22:55:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF73D85705A
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 23:18:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 830AD1C2196E
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 21:55:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 202E51C2257C
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Feb 2024 22:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF431419A4;
-	Thu, 15 Feb 2024 21:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FEE145FE7;
+	Thu, 15 Feb 2024 22:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="XEuIaBAO";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="XEuIaBAO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z5wTSasA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A15B13F006;
-	Thu, 15 Feb 2024 21:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22869145B2D
+	for <linux-arch@vger.kernel.org>; Thu, 15 Feb 2024 22:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708034102; cv=none; b=cBj7xjeFX0CnaRmLo5+GMu814IteGRvAbFFAmyxA5v/sdHC9G/2mVdWmxWVwNovDFNwcr+TT6AFc3XT5N29EZoowDvlXIc0ps0q7nRZz6Nx3oTdtvdJYqPdVMy3uiD7piwKTRsn3rvKwC1f/cN8Vtu8s81h1m/n3sYegrxpFwBM=
+	t=1708035025; cv=none; b=oP0maxbUvOeF+J5Jkgj+OFoWtorqaqQX2rKK+dVYXpNidIQ39FAAf96+jsoUmh34JIrmzxfDMU9tIEwXLrwbeHG0jVzl47PNofRlxgf2jzAUBnhAhw9MtSewnOdGFYlL6VGMBVNcBrc0atHAfQVBphTxSuwTdgGBMCbzhIrziME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708034102; c=relaxed/simple;
-	bh=EB3SfacV8ivD3eAhKkH8T1nctItZs4WuWtn0yuuD5oQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ERMyOzAoHeyB7sZ8mBHak1f2Qe4Acir//PxV+OVOLTvuICh1rBWB4TaSDDr2SBbbnAyHkxuVPfslvb5oi2r73hhs4BZOwDawvLxqR1cSM167Tly291JhIGU6MC38N9+mTq0g92NU0wrFpmcXuyhIhXGV05lFQeggRF/luN0VsxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=XEuIaBAO; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=XEuIaBAO; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 6268E1FB3E;
-	Thu, 15 Feb 2024 21:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708034098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=78B4kvvPSh8JDp9MHEmUxKS9HotTbXRsyldcw+EPHkU=;
-	b=XEuIaBAOxeePupxKYra105qK2slJRCLUXGOEKQ/xnXZZAwW+48by16u68ar6eWKoaSYpjc
-	Tn/7hEvXdWLkIhptV62iov5EAoxylOrXOVNApwCagldQRDJOnig0gYDPyKJkkVw/yS/2ue
-	VFnq+zX2B3UORW2oSne33WmHN03TH+E=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708034098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=78B4kvvPSh8JDp9MHEmUxKS9HotTbXRsyldcw+EPHkU=;
-	b=XEuIaBAOxeePupxKYra105qK2slJRCLUXGOEKQ/xnXZZAwW+48by16u68ar6eWKoaSYpjc
-	Tn/7hEvXdWLkIhptV62iov5EAoxylOrXOVNApwCagldQRDJOnig0gYDPyKJkkVw/yS/2ue
-	VFnq+zX2B3UORW2oSne33WmHN03TH+E=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 38FD213A82;
-	Thu, 15 Feb 2024 21:54:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id QXBuDTKIzmWKTwAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Thu, 15 Feb 2024 21:54:58 +0000
-Date: Thu, 15 Feb 2024 22:54:53 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-	paulmck@kernel.org, pasha.tatashin@soleen.com,
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
-Message-ID: <Zc6ILbveSQvDtayj@tiehlicka>
-References: <20240212213922.783301-1-surenb@google.com>
- <20240212213922.783301-32-surenb@google.com>
- <Zc3X8XlnrZmh2mgN@tiehlicka>
- <CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
- <Zc4_i_ED6qjGDmhR@tiehlicka>
- <CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
- <ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut>
- <320cd134-b767-4f29-869b-d219793ba8a1@suse.cz>
- <efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
+	s=arc-20240116; t=1708035025; c=relaxed/simple;
+	bh=yyAnxZLHxtUIlmQo1r4GlPP4knPmSLoBXYbWMNr6yNA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hRivhIIWcTU+f2QBcclhmWzeQj7POVlIE8oIDUaTuxS+7tPd6IXHbv0721aHhnGi+6DW/4BH9KWDTn0hptMEpwE2Hcz6A+apc5bhcdywrJrCNAiL+LB1MNMWGmO+AOEnnUq2D0HSVj9zk02S/V9beMM4WO1WlEpxM/Q4fdqguTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z5wTSasA; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-607f2a88ba5so3534577b3.3
+        for <linux-arch@vger.kernel.org>; Thu, 15 Feb 2024 14:10:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708035022; x=1708639822; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DLHIWZhrv84d6KmPP8BZW5HG3tmTNG2nCmARo35gkoM=;
+        b=z5wTSasAintVb0xk9c/XL4+gc9g7V6vjS46FpEg3svDbR0wvkFu+frPuzmnvIbnuyn
+         zPDt6aPTkFLl54eHnlrY/EENJ0P7d0jenhQg1RYEeNEuNfW2Dppivd1tdTK+wRFMsKSZ
+         rLvtTc5ysaSpq8r8+O0Y+lIj5Bs4Ro3GIJ+6F9uiAR29Ll3ktHhUtwifaBBkuk8bHE5F
+         b1Lpmw1kiYTW/Z7dtGK0tcsV71lI6FJL7iN6n21M6bX7CUw5TLVhT9Q+oOM4MXwdaD6P
+         rHrqEWYELbgs//LtblzNVxGlsbE6U88eTBLXcFMq/5kBzWC1MBWS3qYsefyjgJIEbpHZ
+         EclQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708035022; x=1708639822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DLHIWZhrv84d6KmPP8BZW5HG3tmTNG2nCmARo35gkoM=;
+        b=ONVZccwkb7zqZ5zvjQYNRtQPZGj2H/jg8J4QyhnT0m4v1j1lMC3C15yRI7nVhVpXWx
+         sjnqNbzyNDHfDDjL6GCIrRjrU9H4CsmB5YxkdlUvwlH9BsxIJjWVPQN/dIk9a3wCiseR
+         LNji0neohkEv9YTB0+OOIU3vUEq8uCD8FyyCGGb8wVrg4mTSWYZaOeL+zE/F57QBSZGe
+         2R5Nb7SqvSSlEVcP5iUnlepGbHtcDqJjYcDShXtxw/C3ywrhhDlgR6T8rf2q+iNUlLeA
+         cvMaZe97YzdcRxQf5S0hP0S9NeLSv9La+Q330TqVSvivhFcaox30YOdK6XxFOAkTqCcr
+         0rOg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMInmLwou9JuLbEoEniHc9W9m6Kp5DrMKaktSlByOH9qUnK7YTcwmPeDnWoT/vhB500hCV5akB5BCpmo0y+Pemz4IBBNXdikjxRQ==
+X-Gm-Message-State: AOJu0YyWVlfdiOIOGNoMVb4zvzMAKb9qYp4iMqfhJMsbo0amdewAUoDM
+	O3AoAELtEVI2iS98ubfUbsU+B7x3QPUgbeSvBIlE+MOuIb4VoY8f1+mxnzdylFtrPHsnanx0qBi
+	8k4z8LE+NerlUh3j0ytjH6nzQ939Pwj3VdBpM
+X-Google-Smtp-Source: AGHT+IFPqVFbWR3loG0cymbC1adYDa/mthQjD5ce08MYwc/pTnwtNoukSoOp+DLhCLmSTzEm3k2gZM9hlQK2lswT1QI=
+X-Received: by 2002:a0d:cc81:0:b0:5ff:956a:1a05 with SMTP id
+ o123-20020a0dcc81000000b005ff956a1a05mr3845012ywd.14.1708035021851; Thu, 15
+ Feb 2024 14:10:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
-X-Spam-Level: 
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=XEuIaBAO
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-2.51 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 BAYES_HAM(-3.00)[100.00%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 TO_MATCH_ENVRCPT_SOME(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_GT_50(0.00)[73];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[suse.cz,google.com,linux-foundation.org,cmpxchg.org,linux.dev,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: -2.51
-X-Rspamd-Queue-Id: 6268E1FB3E
-X-Spam-Flag: NO
+References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-8-surenb@google.com>
+ <fbfab72f-413d-4fc1-b10b-3373cfc6c8e9@suse.cz> <tbqg7sowftykfj3rptpcbewoiy632fbgbkzemgwnntme4wxhut@5dlfmdniaksr>
+ <ab4b1789-910a-4cd6-802c-5012bf9d8984@suse.cz>
+In-Reply-To: <ab4b1789-910a-4cd6-802c-5012bf9d8984@suse.cz>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 15 Feb 2024 14:10:09 -0800
+Message-ID: <CAJuCfpH=tr1faWnn0CZ=V_Gg-0ysEsGPOje5U-DDy5x2V83pxA@mail.gmail.com>
+Subject: Re: [PATCH v3 07/35] mm/slab: introduce SLAB_NO_OBJ_EXT to avoid
+ obj_ext creation
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>, akpm@linux-foundation.org, mhocko@suse.com, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu 15-02-24 15:33:30, Kent Overstreet wrote:
-> On Thu, Feb 15, 2024 at 09:22:07PM +0100, Vlastimil Babka wrote:
-> > On 2/15/24 19:29, Kent Overstreet wrote:
-> > > On Thu, Feb 15, 2024 at 08:47:59AM -0800, Suren Baghdasaryan wrote:
-> > >> On Thu, Feb 15, 2024 at 8:45 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >> >
-> > >> > On Thu 15-02-24 06:58:42, Suren Baghdasaryan wrote:
-> > >> > > On Thu, Feb 15, 2024 at 1:22 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >> > > >
-> > >> > > > On Mon 12-02-24 13:39:17, Suren Baghdasaryan wrote:
-> > >> > > > [...]
-> > >> > > > > @@ -423,4 +424,18 @@ void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
-> > >> > > > >  #ifdef CONFIG_MEMORY_FAILURE
-> > >> > > > >       printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_pages));
-> > >> > > > >  #endif
-> > >> > > > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> > >> > > > > +     {
-> > >> > > > > +             struct seq_buf s;
-> > >> > > > > +             char *buf = kmalloc(4096, GFP_ATOMIC);
-> > >> > > > > +
-> > >> > > > > +             if (buf) {
-> > >> > > > > +                     printk("Memory allocations:\n");
-> > >> > > > > +                     seq_buf_init(&s, buf, 4096);
-> > >> > > > > +                     alloc_tags_show_mem_report(&s);
-> > >> > > > > +                     printk("%s", buf);
-> > >> > > > > +                     kfree(buf);
-> > >> > > > > +             }
-> > >> > > > > +     }
-> > >> > > > > +#endif
-> > >> > > >
-> > >> > > > I am pretty sure I have already objected to this. Memory allocations in
-> > >> > > > the oom path are simply no go unless there is absolutely no other way
-> > >> > > > around that. In this case the buffer could be preallocated.
-> > >> > >
-> > >> > > Good point. We will change this to a smaller buffer allocated on the
-> > >> > > stack and will print records one-by-one. Thanks!
-> > >> >
-> > >> > __show_mem could be called with a very deep call chains. A single
-> > >> > pre-allocated buffer should just do ok.
-> > >> 
-> > >> Ack. Will do.
-> > > 
-> > > No, we're not going to permanently burn 4k here.
-> > > 
-> > > It's completely fine if the allocation fails, there's nothing "unsafe"
-> > > about doing a GFP_ATOMIC allocation here.
-> > 
-> > Well, I think without __GFP_NOWARN it will cause a warning and thus
-> > recursion into __show_mem(), potentially infinite? Which is of course
-> > trivial to fix, but I'd myself rather sacrifice a bit of memory to get this
-> > potentially very useful output, if I enabled the profiling. The necessary
-> > memory overhead of page_ext and slabobj_ext makes the printing buffer
-> > overhead negligible in comparison?
-> 
-> __GFP_NOWARN is a good point, we should have that.
-> 
-> But - and correct me if I'm wrong here - doesn't an OOM kick in well
-> before GFP_ATOMIC 4k allocations are failing?
+On Thu, Feb 15, 2024 at 1:50=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
+>
+> On 2/15/24 22:37, Kent Overstreet wrote:
+> > On Thu, Feb 15, 2024 at 10:31:06PM +0100, Vlastimil Babka wrote:
+> >> On 2/12/24 22:38, Suren Baghdasaryan wrote:
+> >> > Slab extension objects can't be allocated before slab infrastructure=
+ is
+> >> > initialized. Some caches, like kmem_cache and kmem_cache_node, are c=
+reated
+> >> > before slab infrastructure is initialized. Objects from these caches=
+ can't
+> >> > have extension objects. Introduce SLAB_NO_OBJ_EXT slab flag to mark =
+these
+> >> > caches and avoid creating extensions for objects allocated from thes=
+e
+> >> > slabs.
+> >> >
+> >> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> >> > ---
+> >> >  include/linux/slab.h | 7 +++++++
+> >> >  mm/slub.c            | 5 +++--
+> >> >  2 files changed, 10 insertions(+), 2 deletions(-)
+> >> >
+> >> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> >> > index b5f5ee8308d0..3ac2fc830f0f 100644
+> >> > --- a/include/linux/slab.h
+> >> > +++ b/include/linux/slab.h
+> >> > @@ -164,6 +164,13 @@
+> >> >  #endif
+> >> >  #define SLAB_TEMPORARY            SLAB_RECLAIM_ACCOUNT    /* Object=
+s are short-lived */
+> >> >
+> >> > +#ifdef CONFIG_SLAB_OBJ_EXT
+> >> > +/* Slab created using create_boot_cache */
+> >> > +#define SLAB_NO_OBJ_EXT         ((slab_flags_t __force)0x20000000U)
+> >>
+> >> There's
+> >>    #define SLAB_SKIP_KFENCE        ((slab_flags_t __force)0x20000000U)
+> >> already, so need some other one?
 
-Not really, GFP_ATOMIC users can compete with reclaimers and consume
-those reserves.
+Indeed. I somehow missed it. Thanks for noticing, will fix this in the
+next version.
 
-> I'd expect the system to
-> be well and truly hosed at that point.
-
-It is OOMed...
- 
-> If we want this report to be 100% reliable, then yes the preallocated
-> buffer makes sense - but I don't think 100% makes sense here; I think we
-> can accept ~99% and give back that 4k.
-
-Think about that from the memory reserves consumers. The atomic reserve
-is a scarse resource and now you want to use it for debugging purposes
-for which you could have preallocated.
--- 
-Michal Hocko
-SUSE Labs
+> >
+> > What's up with the order of flags in that file? They don't seem to
+> > follow any particular ordering.
+>
+> Seems mostly in increasing order, except commit 4fd0b46e89879 broke it fo=
+r
+> SLAB_RECLAIM_ACCOUNT?
+>
+> > Seems like some cleanup is in order, but any history/context we should
+> > know first?
+>
+> Yeah noted, but no need to sidetrack you.
 
