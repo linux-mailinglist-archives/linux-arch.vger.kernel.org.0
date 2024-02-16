@@ -1,110 +1,119 @@
-Return-Path: <linux-arch+bounces-2430-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2431-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA5385729F
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Feb 2024 01:37:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A4FF8572E0
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Feb 2024 01:53:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A74EB21ED4
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Feb 2024 00:37:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4460F1F21354
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Feb 2024 00:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD93803;
-	Fri, 16 Feb 2024 00:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FAA810798;
+	Fri, 16 Feb 2024 00:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VQv3k7CK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7030A21;
-	Fri, 16 Feb 2024 00:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7301B101D5
+	for <linux-arch@vger.kernel.org>; Fri, 16 Feb 2024 00:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708043869; cv=none; b=a0F0mt1W04lorHIU8xeOcRSM7he30RAwwE8Rbju1S+W/0MgY3rlfbkPa15k/JsViw2hoRHLeSKpYauLj04JIY+TdzRVpYygAtSQDuJlzQoZR3bZIzG73HMxxCBts+nRmoKpBFPFrmqZ3GW+L20bsqpszZWs64zVzo4h6yl2Z7g4=
+	t=1708044641; cv=none; b=Bg25/I6WYfZvBi23hqStKVgIArI+KFZUageH+slH/p/HbihzaLUaWb+W0NNPbKWnzB8b1apbDBY3rCCQcGZUe6kgyVQLgjT6GMQ/rNufp0IaQBM4J7rHIuHGw4Uem4Aa9mHVm/0WOo/myhoJ4kSM4TuVU0Cr9yTqIEYoK29W210=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708043869; c=relaxed/simple;
-	bh=YpMrmy2WNszZOajuF+8g9MSTe1WwFvsOvg16QLWytFw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sNmOvAoJvr5pwPRGZ09iJyJBAzV2mVvBPipXBsvr6rgaSqlIwXuI9G43dSHPdyBgh6KZYpJKNdr+g98TkoKbqivgIoP1TBCGp/EDVyg0eoSWYKiK892MFUJwUqDGkcV5IaeI+n9HkmEapG6az5FdppmGRwItmNaUQWT3zJc5/0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6A9C433F1;
-	Fri, 16 Feb 2024 00:37:40 +0000 (UTC)
-Date: Thu, 15 Feb 2024 19:39:15 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- akpm@linux-foundation.org, hannes@cmpxchg.org, roman.gushchin@linux.dev,
- mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
- liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
- peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
- rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
- yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
- hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
- ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
- ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com,
- vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, shakeelb@google.com,
- songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in
- show_mem()
-Message-ID: <20240215193915.2d457718@gandalf.local.home>
-In-Reply-To: <uhagqnpumyyqsnf4qj3fxm62i6la47yknuj4ngp6vfi7hqcwsy@lm46eypwe2lp>
-References: <Zc3X8XlnrZmh2mgN@tiehlicka>
-	<CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
-	<Zc4_i_ED6qjGDmhR@tiehlicka>
-	<CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
-	<ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut>
-	<320cd134-b767-4f29-869b-d219793ba8a1@suse.cz>
-	<efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
-	<20240215180742.34470209@gandalf.local.home>
-	<jpmlfejxcmxa7vpsuyuzykahr6kz5vjb44ecrzfylw7z4un3g7@ia3judu4xkfp>
-	<20240215192141.03421b85@gandalf.local.home>
-	<uhagqnpumyyqsnf4qj3fxm62i6la47yknuj4ngp6vfi7hqcwsy@lm46eypwe2lp>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1708044641; c=relaxed/simple;
+	bh=yJvazTFR+86hv5uLjPrGm+ajAykGtrKmqRpojL3XFvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jAi9NoX3IB5ynMm2LfTI2fkfHHRa/G3vBvLxPQ46p9jmR0RnfUrUjIRYe+dnLriHbZe1pzwQ8JHG7k9dSr08x1exUHqAVegOkI3PsROfVcdV9NTj8gPtUAyZIoinnpjNPYJcfKefunXHuS5laAGP4VYBvy+Z+H0OmmgwgH9SWVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VQv3k7CK; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 15 Feb 2024 19:50:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1708044637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mLCxs+brit7Xt9ohcQIkEDEwu4CGUrETZSQhOqg+Gh4=;
+	b=VQv3k7CKQO7VvnNiO0UaPC3fRsfnv/HUGMdvgh4+aJJ2aWRJtV+YlrOeBfde8VCHgAcbY5
+	lXO47e7kbZbILN8ftGGc8KCEueNDr1rNHWaoOXL0Hdz+XHBXnlrz7urf5prbXjGBLGGyRP
+	hi3yRo88y4QRr5f5p0UTWDtVOke68ds=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, david@redhat.com, 
+	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org, 
+	dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org, 
+	paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com, 
+	yuzhao@google.com, dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com, 
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
+	42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
+	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
+Message-ID: <a3ha7fchkeugpthmatm5lw7chg6zxkapyimn3qio3pkoipg4tc@3j6xfdfoustw>
+References: <Zc4_i_ED6qjGDmhR@tiehlicka>
+ <CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
+ <ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut>
+ <320cd134-b767-4f29-869b-d219793ba8a1@suse.cz>
+ <efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
+ <20240215180742.34470209@gandalf.local.home>
+ <jpmlfejxcmxa7vpsuyuzykahr6kz5vjb44ecrzfylw7z4un3g7@ia3judu4xkfp>
+ <20240215192141.03421b85@gandalf.local.home>
+ <uhagqnpumyyqsnf4qj3fxm62i6la47yknuj4ngp6vfi7hqcwsy@lm46eypwe2lp>
+ <20240215193915.2d457718@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240215193915.2d457718@gandalf.local.home>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 15 Feb 2024 19:32:38 -0500
-Kent Overstreet <kent.overstreet@linux.dev> wrote:
-
-> > But where are the benchmarks that are not micro-benchmarks. How much
-> > overhead does this cause to those? Is it in the noise, or is it noticeable?  
+On Thu, Feb 15, 2024 at 07:39:15PM -0500, Steven Rostedt wrote:
+> On Thu, 15 Feb 2024 19:32:38 -0500
+> Kent Overstreet <kent.overstreet@linux.dev> wrote:
 > 
-> Microbenchmarks are how we magnify the effect of a change like this to
-> the most we'll ever see. Barring cache effects, it'll be in the noise.
+> > > But where are the benchmarks that are not micro-benchmarks. How much
+> > > overhead does this cause to those? Is it in the noise, or is it noticeable?  
+> > 
+> > Microbenchmarks are how we magnify the effect of a change like this to
+> > the most we'll ever see. Barring cache effects, it'll be in the noise.
+> > 
+> > Cache effects are a concern here because we're now touching task_struct
+> > in the allocation fast path; that is where the
+> > "compiled-in-but-turned-off" overhead comes from, because we can't add
+> > static keys for that code without doubling the amount of icache
+> > footprint, and I don't think that would be a great tradeoff.
+> > 
+> > So: if your code has fastpath allocations where the hot part of
+> > task_struct isn't in cache, then this will be noticeable overhead to
+> > you, otherwise it won't be.
 > 
-> Cache effects are a concern here because we're now touching task_struct
-> in the allocation fast path; that is where the
-> "compiled-in-but-turned-off" overhead comes from, because we can't add
-> static keys for that code without doubling the amount of icache
-> footprint, and I don't think that would be a great tradeoff.
-> 
-> So: if your code has fastpath allocations where the hot part of
-> task_struct isn't in cache, then this will be noticeable overhead to
-> you, otherwise it won't be.
+> All nice, but where are the benchmarks? This looks like it will have an
+> affect on cache and you can talk all you want about how it will not be an
+> issue, but without real world benchmarks, it's meaningless. Numbers talk.
 
-All nice, but where are the benchmarks? This looks like it will have an
-affect on cache and you can talk all you want about how it will not be an
-issue, but without real world benchmarks, it's meaningless. Numbers talk.
-
--- Steve
+Steve, you're being demanding. We provided sufficient benchmarks to show
+the overhead is low enough for production, and then I gave you a
+detailed breakdown of where our overhead is and where it'll show up. I
+think that's reasonable.
 
