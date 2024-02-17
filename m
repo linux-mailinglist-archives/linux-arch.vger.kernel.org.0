@@ -1,140 +1,150 @@
-Return-Path: <linux-arch+bounces-2469-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2470-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AAAE858A8D
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Feb 2024 01:09:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BD2F858F60
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Feb 2024 13:51:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FAA6B28DB9
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Feb 2024 00:09:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D230F1F21AAA
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Feb 2024 12:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 869BC4C70;
-	Sat, 17 Feb 2024 00:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D716E7A714;
+	Sat, 17 Feb 2024 12:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FAXamuuN"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DMG5e6QS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760B746AF
-	for <linux-arch@vger.kernel.org>; Sat, 17 Feb 2024 00:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED93657B6;
+	Sat, 17 Feb 2024 12:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708128531; cv=none; b=rvQiQyz+PJMlrhYtezJljEoZ52v1GE5D/rl6xiK2j2pf/Um8iyVNVuQcTzkv2LFgQmGtcn1lqIvSzG2ff7Eq37m2XYjHaV5xA0B0KH82nqzuckNGkA8l1TE/V2jY+p0ChzshgHGfCiAB2ABd2kLiPEmZKSmz9VwKevQwVb81wXE=
+	t=1708174297; cv=none; b=Ck9pUXeFRAUKW1ldphvJKe5dfdpyjSap/yPfnxdzTq3cFd/tbQoezzDZf2ODsM12F9pCsHthgCUsDpA50sCjxkzFfSb2tRxtM5pqGg5NVqtTyzRFrVkLm+bjfj3t4yLOVn0O7X4MxuxMDzHM49Pi+H1zm8QhIGxfpXbvrnoJJUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708128531; c=relaxed/simple;
-	bh=plU6YhEkyhkbfKgfjHrx3qjSg7IHeMnpyb2DBIHN9Rs=;
+	s=arc-20240116; t=1708174297; c=relaxed/simple;
+	bh=dOMpZYdm6byi7dSGtTU7CXpz9fL2H66oVNawiZq9BTw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JsiToyr4Z+fuvRPGrMMVWZuBDgNR51r1Gs18NxnlbjXljeMxFoKkQJBMbt7Z1NpfmXGCi6LfFyDCYlsun/U1XLl44qmKQQxwulYd7kgUhtFWyqGR1nivv66Fffg4qHS20LAKFn0X4qE9HkfMnk8S19InjLuIgnRpaneHPk7otNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FAXamuuN; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e10e50179bso1944038b3a.1
-        for <linux-arch@vger.kernel.org>; Fri, 16 Feb 2024 16:08:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708128528; x=1708733328; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S1txfacIBFBZ/O4tjcxs+bfhiTiZyaDvYXwzko6DwYw=;
-        b=FAXamuuNv/zQzAsTiczfELCzSiTGSx1i/N2NTp0zupFLDQsEIxjlp36niuZ2AP+LXG
-         uwz2r7+1poIRzYwVXiE5dopiurRDvewCRlMU4JDMQz2+foC3MvDRrVkWlpAZZy83/LUv
-         Teb8jXfQwKklL/wDFlt/TtF/74WCF3iwL7PHw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708128528; x=1708733328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S1txfacIBFBZ/O4tjcxs+bfhiTiZyaDvYXwzko6DwYw=;
-        b=IZrEi3vRRlgGiijDUE59RrVBckBmo/8yNAuO8yvkbWEKgpGRTqnmPhLuX422uyXgSX
-         /jIyTMuAI/sRuW+iNnCpnAW8oXjKSOhs2K5XZnqSgetkOWdjqb1YcXuVMBGAa2/psio+
-         PbWsCcJ2sQD+NMtulZCzK3GEnX1mUukwyIyG8iGQZ/z9e9OD9B/zQiJSJLHts/qObJTP
-         w/Aw6EF2O04BazajwMZKJIxSuOIFWhLI3JOyA53NDeyq9kSGkmkJct70oeSCH2SXWoJU
-         KzdCCepPWDfd68ThuuQ8YcvtJ7ewp/3xGWGwKidYci2BWOdvuHGXRvU+nJZrXAkuJ7+J
-         Ae0w==
-X-Forwarded-Encrypted: i=1; AJvYcCW2Vrg/s6nxH9qeROFGObo06tKmcevA2T5Jzj8LGfVSOUnX2xg8dcHocpYgjojy88DNyh9eQQqpdZTHDioKdxZYuOUEfBczDOHwFQ==
-X-Gm-Message-State: AOJu0YwO9KO3mPMlWmwO7hrCDa967OBoBHhd8CTHY96HP/8F57AjV0Gq
-	QNOYdmJKbZ7QqPEBcAsUA2VWRQWgG+S4Inq0qSAyD+dcJd1UygiAd1tURiyOsQ==
-X-Google-Smtp-Source: AGHT+IF+QQ/9SK4sTlRF7CviXNWL9OdNoE9iSFRsOXGRftVqcaAIHIRUQhIt4OYE39Err1qxKn5GJw==
-X-Received: by 2002:a05:6a21:3183:b0:19e:a9e6:c05 with SMTP id za3-20020a056a21318300b0019ea9e60c05mr7276163pzb.43.1708128527870;
-        Fri, 16 Feb 2024 16:08:47 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z3-20020aa79903000000b006e094bf05f4sm487826pff.213.2024.02.16.16.08.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 16:08:47 -0800 (PST)
-Date: Fri, 16 Feb 2024 16:08:46 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, peterx@redhat.com, david@redhat.com,
-	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 13/35] lib: add allocation tagging support for memory
- allocation profiling
-Message-ID: <202402161607.0208EB45C@keescook>
-References: <20240212213922.783301-1-surenb@google.com>
- <20240212213922.783301-14-surenb@google.com>
- <202402121433.5CC66F34B@keescook>
- <lvrwtp73y2upktswswekhhilrp2i742tmhcxi2c4gayyn24qd2@hdktbg3qutgb>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xhw6FfYZxC7XiaHLSb6mMR51DE/ziK/tXJmoThtAfueKMppC1p9JOkddYc8xH0UB7Kc07QTNBVDW+UrS6GhcXgJox8rfCjImi3YMgOUYSOZsHwf6snCI9sgGegLjBQCByN3Yo/N9ZMT2dUcDwXvoHZb+SVRRjBq6LmpJjsc13bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DMG5e6QS; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 40C1F40E01A9;
+	Sat, 17 Feb 2024 12:51:31 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 0hlCv3lIl4HE; Sat, 17 Feb 2024 12:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1708174288; bh=qo3uSORLj3aVIspHnZOOPPN2BG8DeKw0xfrzHn1JOsE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DMG5e6QSKeR9ubDYe2s0ZoiU51BCQvwIEuO4RCuRvQTeQ8TmKrZw5+z0J5aEFgswY
+	 dZB3Su8kRvsIYCLw1goi1lxlw6+XoLZtp9ebursTnwYRZDBmK6MHhFZwyrvaLbOCkY
+	 HOMZ81djkewhE8iCb1UTKOyl3n523ot7waAzw4wPFGGazCMtJm/BYWisD714CnvEoC
+	 jpv8QnvEsk0+TqoGEx5In9rBjZfucgWjYMKfShUM6qSJP6tYXHHUSOhg8u1xTn+TIe
+	 tQmZmiQgUNXNt54NgYCf+Nf0/wrlcI4CxHH0EBevuyQljR2U1pxFcTUCNU6gp+a/SV
+	 ry1dzpYHJexsOcX35pmggxd4d33+M7MfHqB+IU91Cm4A1vOYMd+NH3zAZOe1fUoNr7
+	 mwlT4BEmTe9n9NCUWR+WKjPvK+xO1xUVMIAq4PNqx774FWt2SsnnM33FYnDZN67fiH
+	 +JI6MkFtLSW8AXNjhY5aO/A+V4FU7WVTxX6P9HsFAxhGArFhushX1uBzCACkY+pfSV
+	 HjVBhjZAzsliTvBpnfQSatzLe6mx38Oj5YTXDQfbZLXRZ12nsIONnKJ7dUtkEeNLkE
+	 BM7/ooFdvOW1t2Du6u4bcg3yrmfN4sTGUW0leRQnLfBWqLyJPmSmTQgTHeHVn31o7j
+	 DsztjJPMNkNsAcDM3brtS7E0=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 969AB40E00B2;
+	Sat, 17 Feb 2024 12:51:10 +0000 (UTC)
+Date: Sat, 17 Feb 2024 13:51:02 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 02/11] x86/startup_64: Replace pointer fixups with
+ RIP-relative references
+Message-ID: <20240217125102.GSZdCrtgI-DnHA8DpK@fat_crate.local>
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-15-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <lvrwtp73y2upktswswekhhilrp2i742tmhcxi2c4gayyn24qd2@hdktbg3qutgb>
+In-Reply-To: <20240213124143.1484862-15-ardb+git@google.com>
 
-On Fri, Feb 16, 2024 at 06:26:06PM -0500, Kent Overstreet wrote:
-> On Mon, Feb 12, 2024 at 02:40:12PM -0800, Kees Cook wrote:
-> > On Mon, Feb 12, 2024 at 01:38:59PM -0800, Suren Baghdasaryan wrote:
-> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > > index ffe8f618ab86..da68a10517c8 100644
-> > > --- a/include/linux/sched.h
-> > > +++ b/include/linux/sched.h
-> > > @@ -770,6 +770,10 @@ struct task_struct {
-> > >  	unsigned int			flags;
-> > >  	unsigned int			ptrace;
-> > >  
-> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> > > +	struct alloc_tag		*alloc_tag;
-> > > +#endif
-> > 
-> > Normally scheduling is very sensitive to having anything early in
-> > task_struct. I would suggest moving this the CONFIG_SCHED_CORE ifdef
-> > area.
-> 
-> This is even hotter than the scheduler members; we actually do want it
-> up front.
+On Tue, Feb 13, 2024 at 01:41:46PM +0100, Ard Biesheuvel wrote:
+> @@ -201,25 +201,19 @@ unsigned long __head __startup_64(unsigned long physaddr,
+>  	load_delta += sme_get_me_mask();
+>  
+>  	/* Fixup the physical addresses in the page table */
+> -
+> -	pgd = fixup_pointer(early_top_pgt, physaddr);
+> -	p = pgd + pgd_index(__START_KERNEL_map);
+> -	if (la57)
+> -		*p = (unsigned long)level4_kernel_pgt;
+> -	else
+> -		*p = (unsigned long)level3_kernel_pgt;
+> -	*p += _PAGE_TABLE_NOENC - __START_KERNEL_map + load_delta;
+> -
+>  	if (la57) {
+> -		p4d = fixup_pointer(level4_kernel_pgt, physaddr);
+> -		p4d[511] += load_delta;
+> +		p4d = (p4dval_t *)&RIP_REL_REF(level4_kernel_pgt);
+> +		p4d[MAX_PTRS_PER_P4D - 1] += load_delta;
+>  	}
+>  
+> -	pud = fixup_pointer(level3_kernel_pgt, physaddr);
+> -	pud[510] += load_delta;
+> -	pud[511] += load_delta;
+> +	pud = &RIP_REL_REF(level3_kernel_pgt)->pud;
+> +	pud[PTRS_PER_PUD - 2] += load_delta;
+> +	pud[PTRS_PER_PUD - 1] += load_delta;
+> +
+> +	pgd = &RIP_REL_REF(early_top_pgt)->pgd;
 
-It is? I would imagine the scheduler would touch stuff more than the
-allocator, but whatever works. :)
+Let's do the pgd assignment above, where it was so that we have that
+natural order of p4d -> pgd -> pud ->pmd etc manipulations.
+
+> +	pgd[PTRS_PER_PGD - 1] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
+
+I see what you mean with pgd_index(__START_KERNEL_map) always being 511
+but this:
+
+	pgd[pgd_index(__START_KERNEL_map)] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
+
+says exactly what gets mapped there in the pagetable while
+
+	PTRS_PER_PGD - 1
+
+makes me wonder what's that last pud supposed to map.
+
+Other than that, my gut feeling right now is, this would need extensive
+testing so that we make sure there's no fallout from it.
+
+Thx.
 
 -- 
-Kees Cook
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
