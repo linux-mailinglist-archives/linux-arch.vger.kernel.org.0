@@ -1,84 +1,84 @@
-Return-Path: <linux-arch+bounces-2475-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2476-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D80E3859406
-	for <lists+linux-arch@lfdr.de>; Sun, 18 Feb 2024 03:21:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53898859A50
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Feb 2024 02:05:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E4932823FF
-	for <lists+linux-arch@lfdr.de>; Sun, 18 Feb 2024 02:21:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D738F1F212A8
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Feb 2024 01:05:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1BA21C10;
-	Sun, 18 Feb 2024 02:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04DB37EB;
+	Mon, 19 Feb 2024 01:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dy0+oSSo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fz+QvxkG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3E7A29
-	for <linux-arch@vger.kernel.org>; Sun, 18 Feb 2024 02:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D08163
+	for <linux-arch@vger.kernel.org>; Mon, 19 Feb 2024 01:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708222896; cv=none; b=MYKYUEl/o0vC734hzm3vjX1pAdQ99lZyS5XOd1/i6bKlUu0ehoeU410mEZADQ3+/lLBsW2JAsi4VGD4XsH1WjuZaeFZnbrXi4j2Za7KlqVhKP+t37PpnlmW2mkw8WNno6FUPHOqvutXS6sUXo5Ubs0EX/rAWxSftn+lpc/fJGeA=
+	t=1708304711; cv=none; b=LMJpQNGlSU0v9V50592LqONpwyZlL+uXYpBLqAcNQsEASFYUlj33ekxUBJxku65N4cZarV8sAATs9lMkK3Y9wlQJJPgBrrFX94TYxHokzHM5cQl/4e48YgzszC03Ajr3DLvi6L6kkuCbHZlRsM6ZGD0cx7ZU9QCG7xrcBhTRRh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708222896; c=relaxed/simple;
-	bh=sGLQWy2gJ22i5/11EUF6i6TeDZNPTR8RdMNYUPKuXtM=;
+	s=arc-20240116; t=1708304711; c=relaxed/simple;
+	bh=RN/oOnbxOXJRjgABecn+1xhjdfXant7wAu1DO9OYV0M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jufLUhn+OB+yBz0He96TwH85iRYFs48Zr4wHHc53lgT4dhVP2Kq4wg/wNq/wEEOdFPC/ZP1tZH6c08WwG+/2FoZbeSVpwUvkQZUPPAq3hu32tr0nFw6LCw2y1tEqjUcWbtY7ukOu4qQtaXBo56sKQsL1OiSqEVv2ZiDXbyYbmtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dy0+oSSo; arc=none smtp.client-ip=209.85.219.181
+	 To:Cc:Content-Type; b=Im6ddBRMMiNTIGZZ53Qz1rjCE5xOaLt91H24VXtQa8ca2L9jU+T3h0Y86/PJvJr/71E90uvJKWgAbJD+3iyeWy47LPfqeTZ4adGiQ5hJEBJ/oRxa3MfLMbWa8l7mNJZnQPFdnEvUtE5GdyoTyXYSdzReO9plOJNtRdtwNJHMR6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fz+QvxkG; arc=none smtp.client-ip=209.85.219.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc236729a2bso3041745276.0
-        for <linux-arch@vger.kernel.org>; Sat, 17 Feb 2024 18:21:33 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dc6dcd9124bso3563793276.1
+        for <linux-arch@vger.kernel.org>; Sun, 18 Feb 2024 17:05:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708222892; x=1708827692; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708304708; x=1708909508; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aGwMPlFmMn7i+PsCRsmYPKBrgHwqE0wRHG6PNy5zjw0=;
-        b=Dy0+oSSo/rLVLFYRNniJ8/xLna969/++gNkbWpS6mx2DBrdgoFAbwDKo7xwr5EaXEc
-         BxdvFTlyenLEwcJGQy5hh7gYtHG65bMckXjyD3oskfkiunAoXiTycAClPHN6Wtun9zVN
-         JD+KyRvBXIKOLfDUgllhnEXBged/RY5qcN5ZgvnvDxdQbsTWJEjnfv6/+0yPBPKJ39ld
-         N1sfaXsKEwSAdu7Fcsymy3YO8aLDkEiX+qeJI4YFI7QdKWay0Q6eUnpsUmOCeYLoGYX5
-         jVQMRCoKm1AlRWnExVzMTyMzwdyBte1Oka+Eh+wI18AhcMi56/IQzNmSZ3A6ClUI8o/+
-         c6yg==
+        bh=mIDaOHUmOnFQVc3Wwg+6+LPaeJ2ta81+Eqz5TMzPBys=;
+        b=fz+QvxkGr229b6bOrKWi9XavB8I5cjL/HDA9sjZn+pP0oqOmBxKuzRnbZm2bmE6Nue
+         0X98b9HQ0mJuVpQCJ8NsQDg7bMdv4O6KJJIzE6uqTskf5hlTpRx6+OMe0ARgOY0bFZZP
+         2QfpxR5ErVjv499/jVaEHj6IeV8mVNVWmXWCC4NkPE8oA+lEidFad5YsZfvgtKh3Orr/
+         hP0JbfDr5YYpgdcjnvL68K/qXF24lAuS2EDLWGYZeMwuDeXvtJBb4N5JExgrI8l5DAHr
+         B6lYOoDQJXe0Lhw9wpOcJKkd84rfPiGTDy54w80WJjCEq8y9G66FW8jcJBmU1Nibcmw/
+         qh9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708222892; x=1708827692;
+        d=1e100.net; s=20230601; t=1708304708; x=1708909508;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aGwMPlFmMn7i+PsCRsmYPKBrgHwqE0wRHG6PNy5zjw0=;
-        b=Rjoe0zNoV6C8sl5EgIx8iM5AXJT4A5RZhKhnf7Q93Cnz5OPRFlt+KMIYjFyiYsyzGe
-         Mdlb/p4xusGqgju1XdnSJYcL0IN0acxqKUIx7pFb76aNfqq8gvMzuykG9l32nB9N844a
-         ZvpD7f7MiQYIJu+ZlWQQKrkoREbV2BnJ6f9tLJHWJsM7jKhVjJ6+m0D7VpT0MQufeTdO
-         fqkTOUb+jarsm7VWfCQkwVqiE31f9A40r71854a7RkfZrHT4l/bgtbDXurDXaukSf4gr
-         Ja1pvJDdD/tPkAZR73xfWfKvob3F92tUEoUYoYWtSwqh3OCvOK1fpfbYjqL3lcklx7d9
-         dM6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVf7XVJWhO2z8wutj/7OBppZ/Cm0gJSsRp1i41byt3i/KzGzAYSaE795kEgwSWszMvYZSUMNrtZwztwAZAgljv63e0JBOAZ8Kms/A==
-X-Gm-Message-State: AOJu0YwQA83OIrafc0d6NeF2feYgD7GaeLsK3ECLizBxFwFj7VxfdQrN
-	0VYbMrb2qo1X+osOX3lEsgzYeI3HU7By5x/h/haiVf18SORAlv7ENDoTGTd9DtQH+XQDFxMRgCL
-	9N1W9Rt0ea15xgXXv+K079bIwzgHutKdrz0OK
-X-Google-Smtp-Source: AGHT+IFbcmWP0wuiiRTf0AlfSBMbSNfrD0N8TNtgVp/GNQHvOsL/OfZQsmBKdpZvPdO7G1/QjsP0VpRVVtpV4P/uhdk=
-X-Received: by 2002:a05:6902:268a:b0:dcd:4e54:9420 with SMTP id
- dx10-20020a056902268a00b00dcd4e549420mr9768527ybb.5.1708222891980; Sat, 17
- Feb 2024 18:21:31 -0800 (PST)
+        bh=mIDaOHUmOnFQVc3Wwg+6+LPaeJ2ta81+Eqz5TMzPBys=;
+        b=euAtxFEjsyPAjzfMXD5lvFmfeTSNFpUeMy06yRpofX+D3TPZvNWwLRKWQ9LsWUcxuA
+         1k0u8EEh/a9fVvQ9LuVISXE14RQr+vMw7cL/kOGCm2iyzm7Lc4jrJZlEycF5wUyH8zRW
+         3glyEIiqORYQOMQVU05zpeNg0I1thkmEqFma9nE1iZpEFJfKJdXYkI8/9sBnTYcatC40
+         QdSdp1bCwlWtHaf/A3fkogtZyIHtWt8w/eYz8DwDtfqnoTrJfwdvi5cFToeG7TYXWbD7
+         sxmFIAhm9AiYnKkwzTpeBruwN4nIYo+7WG8HJ71pYZTkoFrx9SStq/cV6oaWPQlP7LWs
+         5SIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAfI1i40wbLeiig2WZ5OkioiSGsweOdol01ydllaoVZMA/etaGwh6G2kDX5cScFXvsLzUY/1QEYZZqSLPQ6Fr0RaWkDbwGmS5LwA==
+X-Gm-Message-State: AOJu0Yxf7vtuCEX+6F+S2QvrGsDtvzpzJDruNTvwj1fDxsHkV2rA7mk7
+	XGaZhoIc3HJGLipTNd/1Mq5hRcfsEP/F6LYW5p4B+nvoUG0GfAIyPYUVvdJpZErwEvS+0tNJV3/
+	isJ94wllc1+brSigaQPg8nAPIMlzWLWjRsdrs
+X-Google-Smtp-Source: AGHT+IFAFF6IWWYhF0S9T//EmmWIuYGcDfDoGsA7me1Exr/qYPq0aAoDdEWC37Tru9GNL3XObftohrbEHommrFTiK+w=
+X-Received: by 2002:a5b:b43:0:b0:dcc:eb38:199c with SMTP id
+ b3-20020a5b0b43000000b00dcceb38199cmr10258615ybr.56.1708304707680; Sun, 18
+ Feb 2024 17:05:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-14-surenb@google.com>
- <f92ad1e3-2dde-4db2-9b76-96c6bbc6a208@suse.cz>
-In-Reply-To: <f92ad1e3-2dde-4db2-9b76-96c6bbc6a208@suse.cz>
+References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-33-surenb@google.com>
+ <f0a56027-472d-44a6-aba5-912bd50ee3ae@suse.cz>
+In-Reply-To: <f0a56027-472d-44a6-aba5-912bd50ee3ae@suse.cz>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Sun, 18 Feb 2024 02:21:18 +0000
-Message-ID: <CAJuCfpGemg-aXyiK1fHavdKuW+-9+DM5_4krLAdg+DQh=24Dvg@mail.gmail.com>
-Subject: Re: [PATCH v3 13/35] lib: add allocation tagging support for memory
- allocation profiling
+Date: Mon, 19 Feb 2024 01:04:54 +0000
+Message-ID: <CAJuCfpGUTu7uhcR-23=0d3Wnn8ZbDtNwTaFnukd9qYYVHS9aSA@mail.gmail.com>
+Subject: Re: [PATCH v3 32/35] codetag: debug: skip objext checking when it's
+ for objext itself
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
 	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
@@ -108,197 +108,116 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 16, 2024 at 8:57=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+On Fri, Feb 16, 2024 at 6:39=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wr=
 ote:
 >
-> On 2/12/24 22:38, Suren Baghdasaryan wrote:
-> > Introduce CONFIG_MEM_ALLOC_PROFILING which provides definitions to easi=
-ly
-> > instrument memory allocators. It registers an "alloc_tags" codetag type
-> > with /proc/allocinfo interface to output allocation tag information whe=
-n
-> > the feature is enabled.
-> > CONFIG_MEM_ALLOC_PROFILING_DEBUG is provided for debugging the memory
-> > allocation profiling instrumentation.
-> > Memory allocation profiling can be enabled or disabled at runtime using
-> > /proc/sys/vm/mem_profiling sysctl when CONFIG_MEM_ALLOC_PROFILING_DEBUG=
-=3Dn.
-> > CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT enables memory allocation
-> > profiling by default.
+> On 2/12/24 22:39, Suren Baghdasaryan wrote:
+> > objext objects are created with __GFP_NO_OBJ_EXT flag and therefore hav=
+e
+> > no corresponding objext themselves (otherwise we would get an infinite
+> > recursion). When freeing these objects their codetag will be empty and
+> > when CONFIG_MEM_ALLOC_PROFILING_DEBUG is enabled this will lead to fals=
+e
+> > warnings. Introduce CODETAG_EMPTY special codetag value to mark
+> > allocations which intentionally lack codetag to avoid these warnings.
+> > Set objext codetags to CODETAG_EMPTY before freeing to indicate that
+> > the codetag is expected to be empty.
 > >
 > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 > > ---
-> >  Documentation/admin-guide/sysctl/vm.rst |  16 +++
-> >  Documentation/filesystems/proc.rst      |  28 +++++
-> >  include/asm-generic/codetag.lds.h       |  14 +++
-> >  include/asm-generic/vmlinux.lds.h       |   3 +
-> >  include/linux/alloc_tag.h               | 133 ++++++++++++++++++++
-> >  include/linux/sched.h                   |  24 ++++
-> >  lib/Kconfig.debug                       |  25 ++++
-> >  lib/Makefile                            |   2 +
-> >  lib/alloc_tag.c                         | 158 ++++++++++++++++++++++++
-> >  scripts/module.lds.S                    |   7 ++
-> >  10 files changed, 410 insertions(+)
-> >  create mode 100644 include/asm-generic/codetag.lds.h
-> >  create mode 100644 include/linux/alloc_tag.h
-> >  create mode 100644 lib/alloc_tag.c
+> >  include/linux/alloc_tag.h | 26 ++++++++++++++++++++++++++
+> >  mm/slab.h                 | 25 +++++++++++++++++++++++++
+> >  mm/slab_common.c          |  1 +
+> >  mm/slub.c                 |  8 ++++++++
+> >  4 files changed, 60 insertions(+)
 > >
-> > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/ad=
-min-guide/sysctl/vm.rst
-> > index c59889de122b..a214719492ea 100644
-> > --- a/Documentation/admin-guide/sysctl/vm.rst
-> > +++ b/Documentation/admin-guide/sysctl/vm.rst
-> > @@ -43,6 +43,7 @@ Currently, these files are in /proc/sys/vm:
-> >  - legacy_va_layout
-> >  - lowmem_reserve_ratio
-> >  - max_map_count
-> > +- mem_profiling         (only if CONFIG_MEM_ALLOC_PROFILING=3Dy)
-> >  - memory_failure_early_kill
-> >  - memory_failure_recovery
-> >  - min_free_kbytes
-> > @@ -425,6 +426,21 @@ e.g., up to one or two maps per allocation.
-> >  The default value is 65530.
-> >
-> >
-> > +mem_profiling
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Enable memory profiling (when CONFIG_MEM_ALLOC_PROFILING=3Dy)
-> > +
-> > +1: Enable memory profiling.
-> > +
-> > +0: Disabld memory profiling.
->
->       Disable
-
-Ack.
-
+> > diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+> > index 0a5973c4ad77..1f3207097b03 100644
 >
 > ...
 >
-> > +allocinfo
-> > +~~~~~~~
-> > +
-> > +Provides information about memory allocations at all locations in the =
-code
-> > +base. Each allocation in the code is identified by its source file, li=
-ne
-> > +number, module and the function calling the allocation. The number of =
-bytes
-> > +allocated at each location is reported.
->
-> See, it even says "number of bytes" :)
-
-Yes, we are changing the output to bytes.
-
->
-> > +
-> > +Example output.
-> > +
-> > +::
-> > +
-> > +    > cat /proc/allocinfo
-> > +
-> > +      153MiB     mm/slub.c:1826 module:slub func:alloc_slab_page
->
-> Is "module" meant in the usual kernel module sense? In that case IIRC is
-> more common to annotate things e.g. [xfs] in case it's really a module, a=
-nd
-> nothing if it's built it, such as slub. Is that "slub" simply derived fro=
-m
-> "mm/slub.c"? Then it's just redundant?
-
-Sounds good. The new example would look like this:
-
-    > sort -rn /proc/allocinfo
-   127664128    31168 mm/page_ext.c:270 func:alloc_page_ext
-    56373248     4737 mm/slub.c:2259 func:alloc_slab_page
-    14880768     3633 mm/readahead.c:247 func:page_cache_ra_unbounded
-    14417920     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
-    13377536      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
-    11718656     2861 mm/filemap.c:1919 func:__filemap_get_folio
-     9192960     2800 kernel/fork.c:307 func:alloc_thread_stack_node
-     4206592        4 net/netfilter/nf_conntrack_core.c:2567
-func:nf_ct_alloc_hashtable
-     4136960     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod]
-func:ctagmod_start
-     3940352      962 mm/memory.c:4214 func:alloc_anon_folio
-     2894464    22613 fs/kernfs/dir.c:615 func:__kernfs_new_node
-     ...
-
-Note that [ctagmod] is the only allocation from a module in this example.
-
->
-> > +     6.08MiB     mm/slab_common.c:950 module:slab_common func:_kmalloc=
-_order
-> > +     5.09MiB     mm/memcontrol.c:2814 module:memcontrol func:alloc_sla=
-b_obj_exts
-> > +     4.54MiB     mm/page_alloc.c:5777 module:page_alloc func:alloc_pag=
-es_exact
-> > +     1.32MiB     include/asm-generic/pgalloc.h:63 module:pgtable func:=
-__pte_alloc_one
-> > +     1.16MiB     fs/xfs/xfs_log_priv.h:700 module:xfs func:xlog_kvmall=
-oc
-> > +     1.00MiB     mm/swap_cgroup.c:48 module:swap_cgroup func:swap_cgro=
-up_prepare
-> > +      734KiB     fs/xfs/kmem.c:20 module:xfs func:kmem_alloc
-> > +      640KiB     kernel/rcu/tree.c:3184 module:tree func:fill_page_cac=
-he_func
-> > +      640KiB     drivers/char/virtio_console.c:452 module:virtio_conso=
-le func:alloc_buf
-> > +      ...
-> > +
-> > +
-> >  meminfo
->
-> ...
->
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 0be2d00c3696..78d258ca508f 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -972,6 +972,31 @@ config CODE_TAGGING
-> >       bool
-> >       select KALLSYMS
+> > index c4bd0d5348cb..cf332a839bf4 100644
+> > --- a/mm/slab.h
+> > +++ b/mm/slab.h
+> > @@ -567,6 +567,31 @@ static inline struct slabobj_ext *slab_obj_exts(st=
+ruct slab *slab)
+> >  int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+> >                       gfp_t gfp, bool new_slab);
 > >
-> > +config MEM_ALLOC_PROFILING
-> > +     bool "Enable memory allocation profiling"
-> > +     default n
-> > +     depends on PROC_FS
-> > +     depends on !DEBUG_FORCE_WEAK_PER_CPU
-> > +     select CODE_TAGGING
-> > +     help
-> > +       Track allocation source code and record total allocation size
-> > +       initiated at that code location. The mechanism can be used to t=
-rack
-> > +       memory leaks with a low performance and memory impact.
 > > +
-> > +config MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-> > +     bool "Enable memory allocation profiling by default"
-> > +     default y
+> > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > +
+> > +static inline void mark_objexts_empty(struct slabobj_ext *obj_exts)
+> > +{
+> > +     struct slabobj_ext *slab_exts;
+> > +     struct slab *obj_exts_slab;
+> > +
+> > +     obj_exts_slab =3D virt_to_slab(obj_exts);
+> > +     slab_exts =3D slab_obj_exts(obj_exts_slab);
+> > +     if (slab_exts) {
+> > +             unsigned int offs =3D obj_to_index(obj_exts_slab->slab_ca=
+che,
+> > +                                              obj_exts_slab, obj_exts)=
+;
+> > +             /* codetag should be NULL */
+> > +             WARN_ON(slab_exts[offs].ref.ct);
+> > +             set_codetag_empty(&slab_exts[offs].ref);
+> > +     }
+> > +}
+> > +
+> > +#else /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
+> > +
+> > +static inline void mark_objexts_empty(struct slabobj_ext *obj_exts) {}
+> > +
+> > +#endif /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
+> > +
 >
-> I'd go with default n as that I'd select for a general distro.
+> I assume with alloc_slab_obj_exts() moved to slub.c, mark_objexts_empty()
+> could move there too.
 
-Well, we have MEM_ALLOC_PROFILING=3Dn by default, so if it was switched
-on manually, that is a strong sign that the user wants it enabled IMO.
-So, enabling this switch by default seems logical to me. If a distro
-wants to have the feature compiled in but disabled by default then
-this is perfectly doable, just need to set both options appropriately.
-Does my logic make sense?
+No, I think mark_objexts_empty() belongs here. This patch introduced
+the function and uses it. Makes sense to me to keep it all together.
 
 >
-> > +     depends on MEM_ALLOC_PROFILING
-> > +
-> > +config MEM_ALLOC_PROFILING_DEBUG
-> > +     bool "Memory allocation profiler debugging"
-> > +     default n
-> > +     depends on MEM_ALLOC_PROFILING
-> > +     select MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-> > +     help
-> > +       Adds warnings with helpful error messages for memory allocation
-> > +       profiling.
-> > +
+> >  static inline bool need_slab_obj_ext(void)
+> >  {
+> >  #ifdef CONFIG_MEM_ALLOC_PROFILING
+> > diff --git a/mm/slab_common.c b/mm/slab_common.c
+> > index 21b0b9e9cd9e..d5f75d04ced2 100644
+> > --- a/mm/slab_common.c
+> > +++ b/mm/slab_common.c
+> > @@ -242,6 +242,7 @@ int alloc_slab_obj_exts(struct slab *slab, struct k=
+mem_cache *s,
+> >                * assign slabobj_exts in parallel. In this case the exis=
+ting
+> >                * objcg vector should be reused.
+> >                */
+> > +             mark_objexts_empty(vec);
+> >               kfree(vec);
+> >               return 0;
+> >       }
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index 4d480784942e..1136ff18b4fe 100644
+> > --- a/mm/slub.c
+> > +++ b/mm/slub.c
+> > @@ -1890,6 +1890,14 @@ static inline void free_slab_obj_exts(struct sla=
+b *slab)
+> >       if (!obj_exts)
+> >               return;
+> >
+> > +     /*
+> > +      * obj_exts was created with __GFP_NO_OBJ_EXT flag, therefore its
+> > +      * corresponding extension will be NULL. alloc_tag_sub() will thr=
+ow a
+> > +      * warning if slab has extensions but the extension of an object =
+is
+> > +      * NULL, therefore replace NULL with CODETAG_EMPTY to indicate th=
+at
+> > +      * the extension for obj_exts is expected to be NULL.
+> > +      */
+> > +     mark_objexts_empty(obj_exts);
+> >       kfree(obj_exts);
+> >       slab->obj_exts =3D 0;
+> >  }
 >
 
