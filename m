@@ -1,86 +1,77 @@
-Return-Path: <linux-arch+bounces-2513-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2514-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C9B85C3E7
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 19:47:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 908FA85C418
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 19:57:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C80C01F23D87
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 18:47:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BD9328316F
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 18:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AAAE1353E0;
-	Tue, 20 Feb 2024 18:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Ev2f7jnX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FD212F58D;
+	Tue, 20 Feb 2024 18:57:14 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC529130AD9;
-	Tue, 20 Feb 2024 18:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FA8762E4
+	for <linux-arch@vger.kernel.org>; Tue, 20 Feb 2024 18:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708454752; cv=none; b=IGfDcPvzvECtlz1Xb1dSYBTIyQiapvNKGaaHHDXxF1X1tgdDETjb/3zv9Wa/6ayHXc1DfpI5FACo01oMVYtaK7JTCt0/lX0fJr7cofnbLAcGyHcHNLSo0o+FILm6p7gM/y++c5GOiNOw2Wg1QGoWWrRZIJPr7pjF7Ix9D9He5oY=
+	t=1708455434; cv=none; b=FfVF+ja+EksC72/4VVi/nwh0AWAYQyrHvC3fQ/tDsibZRCSr4Jex5IfLK/RATtPnwQBjiHDgfFpF+tNraH3svQBEK+7SvPCLfbS9F8Zq7Fg1cjAmV0xL44C9IKowD905778uSEB6fpqe/18WasWSU8gp6MveRO44CnNC7A/85Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708454752; c=relaxed/simple;
-	bh=WTrXf4SbMFDefrf4t0yXfJ+Qx9gR2qrGFB/qrjo+/UE=;
+	s=arc-20240116; t=1708455434; c=relaxed/simple;
+	bh=2AJMM3Na6vVTLu4s6ylsknzzYTfPF0vFcwg0MnVpps4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MEfUiRqkdpKlReHvyVYs5dtSfpEhKJlrZEQJKQfGugSxtxjKTDP/i1Gjj7epwCdzuB3Pi3ziuPEMN2E52f8huDv7CT+iXCqaqr1+f2TNO+rVKwWllw81JAc8UXxIMnU+i+Zos0ruWM7ZkYk6wa6D28k7HI1pkdvCgjw9SGCMOtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Ev2f7jnX reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A89EF40E0192;
-	Tue, 20 Feb 2024 18:45:40 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 7SLPSg4QRKna; Tue, 20 Feb 2024 18:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708454738; bh=M5JyPXMACvJDaoY+/xJBALRa25X6wvkga3r70XUpxdA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ev2f7jnXwAUt0ub/SLZVKPipxoDAEpL6j+bWEC9DDMKiixTTpnFZgXCRvxQ5lLu8I
-	 locy+RvHh/r5FQReiCaoe5R9/d4cOFG7YCQWxmmN2TCHbKl6E52UkoIK9N2eyU2U7L
-	 CF1DWmLKEN9G0sytRXX9DvzXclYaq6gHdw7MynBS3nzY5RAbBuL0vfkgRx3cHCIeeh
-	 wxqVVzkkJWsCK5WmtSvls8JqbhRVnpCIbosa32022myuucg7SOVu1tRvhX2VL6vPjs
-	 1HBxCcdKDSFs6TRtxmvTaBCALulRF74c0B0M8fbzxwPSyDQ54EFmSMjLsd7akdIJzP
-	 +DEOLtQzXPUi1M4729nWia7bSm7QsO/Cc9iZ05IGGvE10KYJvrzcn7Mq2kYRlQQ1n0
-	 5rPkjgscnRF67PkChNhBwZli2Jkz+Do0cFl/c04Omaiun4BsrhORUeFxOkQDCQ5eWd
-	 uC5DA7kxzfXQ1Bu7+Dk81WH92zi3eL0135xjSiiYGPD8p4AGcRoKgRE4zmSLO255B/
-	 oSVHUCtx+wnS3fwKjuvjcNy5Z+sGdV/vlKt0t6RJyDHjlYNtMVLJNBm1TTFT6LowXw
-	 wjWkTEJeBDk9oNDB9P4aIGmnPLPtWq1kuW2yJp/dd5JTuDa8GWAoJw3Rhmi0uVFZJa
-	 FEC5IeloOusbjbL1Qx7YFQgw=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AFABB40E01BB;
-	Tue, 20 Feb 2024 18:45:19 +0000 (UTC)
-Date: Tue, 20 Feb 2024 19:45:13 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
- paging global variables
-Message-ID: <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-17-ardb+git@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R1HCdLorff6TwYtx7Ou1ZsB9MR7hGeMZ0FBIimhJ3sFAGuJ+fPj14o40AHRqrP72e4k02852HMb6hD26vrPGRw9QCIWsQUM4pSNKRIKyVH5Ppk7Zl+rXl657VsOPeEFeh/68wXl1rIiJrTxLExf7w2vC8/59F65LwU3VxS1+ApM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=libc.org; arc=none smtp.client-ip=104.156.224.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libc.org
+Date: Tue, 20 Feb 2024 13:57:15 -0500
+From: Rich Felker <dalias@libc.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "corbet@lwn.net" <corbet@lwn.net>, "ardb@kernel.org" <ardb@kernel.org>,
+	"maz@kernel.org" <maz@kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"arnd@arndb.de" <arnd@arndb.de>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"sorear@fastmail.com" <sorear@fastmail.com>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <20240220185714.GO4163@brightrain.aerifal.cx>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
+ <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -89,48 +80,136 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240213124143.1484862-17-ardb+git@google.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On Tue, Feb 13, 2024 at 01:41:48PM +0100, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
->=20
-> Assigning the 5-level paging related global variables from the earliest
-> C code using explicit references that use the 1:1 translation of memory
-> is unnecessary, as the startup code itself does not rely on them to
-> create the initial page tables, and this is all it should be doing. So
-> defer these assignments to the primary C entry code that executes via
-> the ordinary kernel virtual mapping.
->=20
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/kernel/head64.c | 44 +++++++-------------
->  1 file changed, 14 insertions(+), 30 deletions(-)
+On Tue, Feb 20, 2024 at 06:41:05PM +0000, Edgecombe, Rick P wrote:
+> Hi,
+> 
+> I worked on the x86 kernel shadow stack support. I think it is an
+> interesting suggestion. Some questions below, and I will think more on
+> it.
+> 
+> On Tue, 2024-02-20 at 11:36 -0500, Stefan O'Rear wrote:
+> > While discussing the ABI implications of shadow stacks in the context
+> > of
+> > Zicfiss and musl a few days ago, I had the following idea for how to
+> > solve
+> > the source compatibility problems with shadow stacks in POSIX.1-2004
+> > and
+> > POSIX.1-2017:
+> > 
+> > 1. Introduce a "flexible shadow stack handling" option.  For what
+> > follows,
+> >    it doesn't matter if this is system-wide, per-mm, or per-vma.
+> > 
+> > 2. Shadow stack faults on non-shadow stack pages, if flexible shadow
+> > stack
+> >    handling is in effect, cause the affected page to become a shadow
+> > stack
+> >    page.  When this happens, the page filled with invalid address
+> > tokens.
+> 
+> Hmm, could the shadow stack underflow onto the real stack then? Not
+> sure how bad that is. INCSSP (incrementing the SSP register on x86)
+> loops are not rare so it seems like something that could happen.
 
-Whoops:
+Shadow stack underflow should fault on attempt to access
+non-shadow-stack memory as shadow-stack, no?
 
-arch/x86/kernel/head64.c: In function =E2=80=98x86_64_start_kernel=E2=80=99=
-:
-arch/x86/kernel/head64.c:442:17: error: =E2=80=98__pgtable_l5_enabled=E2=80=
-=99 undeclared (first use in this function); did you mean =E2=80=98pgtabl=
-e_l5_enabled=E2=80=99?
-  442 |                 __pgtable_l5_enabled    =3D 1;
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 pgtable_l5_enabled
-arch/x86/kernel/head64.c:442:17: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-make[4]: *** [scripts/Makefile.build:243: arch/x86/kernel/head64.o] Error=
- 1
-make[3]: *** [scripts/Makefile.build:481: arch/x86/kernel] Error 2
-make[2]: *** [scripts/Makefile.build:481: arch/x86] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/mnt/kernel/kernel/2nd/linux/Makefile:1921: .] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
+> >    Faults from non-shadow-stack accesses to a shadow-stack page which
+> > was
+> >    created by the previous paragraph will cause the page to revert to
+> >    non-shadow-stack usage, with or without clearing.
+> 
+> Won't this prevent catching stack overflows when they happen? An
+> overflow will just turn the shadow stack into normal stack and only get
+> detected when the shadow stack unwinds?
 
+I don't think that's as big a problem as it sounds like. It might make
+pinpointing the spot at which things went wrong take a little bit more
+work, but it should not admit any wrong-execution.
 
---=20
-Regards/Gruss,
-    Boris.
+> A related question would be how to handle the expanding nature of the
+> initial stack. I guess the initial stack could be special and have a
+> separate shadow stack.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+That seems fine.
+
+> >    Important: a shadow stack operation can only load a valid address
+> > from
+> >    a page if that page has been in continuous shadow stack use since
+> > the
+> >    address was written by another shadow stack operation; the
+> > flexibility
+> >    delays error reporting in cases of stray writes but it never
+> > allows for
+> >    corruption of shadow stack operation.
+> 
+> Shadow stacks currently have automatic guard gaps to try to prevent one
+> thread from overflowing onto another thread's shadow stack. This would
+> somewhat opens that up, as the stack guard gaps are usually maintained
+> by userspace for new threads. It would have to be thought through if
+> these could still be enforced with checking at additional spots.
+
+I would think the existing guard pages would already do that if a
+thread's shadow stack is contiguous with its own data stack.
+
+> > 3. Standards-defined operations which use a user-provided stack
+> >    (makecontext, sigaltstack, pthread_attr_setstack) use a subrange
+> > of the
+> >    provided stack for shadow stack storage.  I propose to use a
+> > shadow
+> >    stack size of 1/32 of the provided stack size, rounded up to a
+> > positive
+> >    integer number of pages, and place the shadow stack allocation at
+> > the
+> >    lowest page-aligned address inside the provided stack region.
+> > 
+> >    Since page usage is flexible, no change in page permissions is
+> >    immediately needed; this merely sets the initial shadow stack
+> > pointer for
+> >    the new context.
+> > 
+> >    If the shadow stack grew in the opposite direction to the
+> > architectural
+> >    stack, it would not be necessary to pick a fixed direction.
+> > 
+> > 4. SIGSTKSZ and MINSIGSTKSZ are increased by 2 pages to provide
+> > sufficient
+> >    space for a minimum-sized shadow stack region and worst case
+> > alignment.
+> 
+> Do all makecontext() callers ensure the size is greater than this?
+> 
+> I guess glibc's makecontext() could do this scheme to prevent leaking
+> without any changes to the kernel. Basically steal a little of the
+> stack address range and overwrite it with a shadow stack mapping. But
+> only if the apps leave enough room. If they need to be updated, then
+> they could be updated to manage their own shadow stacks too I think.
+
+From the musl side, I have always looked at the entirely of shadow
+stack stuff with very heavy skepticism, and anything that breaks
+existing interface contracts, introduced places where apps can get
+auto-killed because a late resource allocation fails, or requires
+applications to code around the existence of something that should be
+an implementation detail, is a non-starter. To even consider shadow
+stack support, it must truely be fully non-breaking.
+
+> > _Without_ doing this, sigaltstack cannot be used to recover from
+> > stack
+> > overflows if the shadow stack limit is reached first, and makecontext
+> > cannot be supported without memory leaks and unreportable error
+> > conditions.
+> 
+> FWIW, I think the makecontext() shadow stack leaking is a bad idea. I
+> would prefer the existing makecontext() interface just didn't support
+> shadow stack, rather than the leaking solution glibc does today.
+
+AIUI the proposal by Stefan makes it non-leaking because it's just
+using normal memory that reverts to normal usage on any
+non-shadow-stack access.
+
+Rich
 
