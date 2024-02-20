@@ -1,130 +1,169 @@
-Return-Path: <linux-arch+bounces-2494-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2495-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D24B985BA81
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 12:26:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F35F885BA8B
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 12:27:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A2381F2489E
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 11:26:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 235ED1C21736
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 11:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AEE664CC;
-	Tue, 20 Feb 2024 11:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C0867756;
+	Tue, 20 Feb 2024 11:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="O6lRSVZh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EA7664C6;
-	Tue, 20 Feb 2024 11:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90153664CF;
+	Tue, 20 Feb 2024 11:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708428409; cv=none; b=clYSJxp+VXa4n2zgJtQB1gyRZNgVG3wKSOnANhe2YOXpFFCh6BzPyQSC6nD0iwrb0wqZ4EGUzXYUL4Ra/ZMEkVoMgQU4GhAAM74VQ0iWaJl3PXsu0Dp/ziAdyJdGqOE1E+7SxK50nrQ7dBKm2C1bo+rzDX0MFlEg2V/2JgLynLM=
+	t=1708428451; cv=none; b=uDN8xS+cXldVwbYhT3DuKFoepLTkqYQroXkXTxCp7x2SaeC5E2NYA/tZuDRvmlcSN3rmvZ2iP9mO2Zb5hQIff/a6VkahLwNs3SthDGHxTPFnihEt/eiQJOZV3tEZybpF9JCAbpBGGuRWR50c/NGJx1lbh69wVx/dTeN/9deTymI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708428409; c=relaxed/simple;
-	bh=SkQ/sTEoMINt2E/gNw7cKAVDKtuqBdyfXNZsFkvtik4=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MkHluWVa8WBitNfELFrvpm8+MtocfwdVDw4NAPLcAq0rRLM/IU6VOYTl+TfOvyXbTRgF9PInCr+9e8PMGqX10PdLBJonBVHLo0aLsNr9amq1wBj9J6oGRmQxVkqaht0Lf0fwYY2kXZrvHPeGTMjT8YmPwz5tb0gq6fFn6rzKEGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4F9BFEC;
-	Tue, 20 Feb 2024 03:27:25 -0800 (PST)
-Received: from raptor (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE4513F762;
-	Tue, 20 Feb 2024 03:26:41 -0800 (PST)
-Date: Tue, 20 Feb 2024 11:26:38 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
-	maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, pcc@google.com, steven.price@arm.com,
-	anshuman.khandual@arm.com, david@redhat.com, eugenis@google.com,
-	kcc@google.com, hyesoo.yu@samsung.com, rppt@kernel.org,
-	akpm@linux-foundation.org, peterz@infradead.org,
-	konrad.wilk@oracle.com, willy@infradead.org, jgross@suse.com,
-	hch@lst.de, geert@linux-m68k.org, vitaly.wool@konsulko.com,
-	ddstreet@ieee.org, sjenning@redhat.com, hughd@google.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: arm64 MTE tag storage reuse - alternatives to MIGRATE_CMA
-Message-ID: <ZdSMbjGf2Fj98diT@raptor>
+	s=arc-20240116; t=1708428451; c=relaxed/simple;
+	bh=Mipp2WNrLFK4BBvNJ8I27aEf24TMVYEu5ip2QcqVhxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CGZ7SB5qw73LHRYGc2CIWp+FIP7azwMEBOy0EETU6BfQ8G1U7iObrE88/+c3vEvB8ZQc+36NwqJpEdzNaOrx9qGYE1CXDhLYXV2vw88DqYpShbCgckPGcm/aVzctpYlA1Evn5Tt0dimcQoEoHzgcyCW3YZogWTLhz5whKEvOV+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=O6lRSVZh; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=YAbiUOeHNTOOtMQq3T2dYQUt8NBgKEvDfS/NrGbV6TI=; b=O6lRSVZhxbh5i6u+BH25w3f3Cm
+	1Vw7wxiDSgvtyuvUnEQCtl4LHsD0HzY1J+QnwBBfWvzYrZnw4ZdEKbmD4OvhU0znyUN2QW3v3TQK6
+	acFANS/gPds8L+eRUinfOfYI/5P5/HHW8+MaTKOwBEFBIXcdD2h/rAjy4+NEGoLQ4VhzrvLbGSILa
+	e4bVQ4JEXiZ5ggyFjiYKM2SMFHyueGtUiByprCY7LB4A0i9T5NoqAM9yDfSyA8mANNn7sjoowzKXf
+	gZg39Bgc4AYxKTEmwc/LOvXE0VrkkOYgYtUo08k1FAqXJPZDFh0Fdt9VSeb+Bh6zHM/C3MKPJvsVF
+	UW/+AtXw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54660)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rcOHQ-0002Id-2W;
+	Tue, 20 Feb 2024 11:27:20 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rcOHM-0000pR-05; Tue, 20 Feb 2024 11:27:16 +0000
+Date: Tue, 20 Feb 2024 11:27:15 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <ZdSMk93c1I6x973h@shell.armlinux.org.uk>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+ <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Hello,
+On Thu, Feb 15, 2024 at 08:22:29PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Jan 31, 2024 at 5:50 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> > index cf7c1cca69dd..a68c475cdea5 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_device *device)
+> >                         cpufreq_add_device("acpi-cpufreq");
+> >         }
+> >
+> > +       /*
+> > +        * Register CPUs that are present. get_cpu_device() is used to skip
+> > +        * duplicate CPU descriptions from firmware.
+> > +        */
+> > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > +           !get_cpu_device(pr->id)) {
+> > +               int ret = arch_register_cpu(pr->id);
+> > +
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +
+> >         /*
+> >          *  Extra Processor objects may be enumerated on MP systems with
+> >          *  less than the max # of CPUs. They should be ignored _iff
+> 
+> This is interesting, because right below there is the following code:
+> 
+>     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+>         int ret = acpi_processor_hotadd_init(pr);
+> 
+>         if (ret)
+>             return ret;
+>     }
+> 
+> and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
+> with some extra things around it (more about that below).
+> 
+> I do realize that acpi_processor_hotadd_init() is defined under
+> CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
+> consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
+> 
+> So why are the two conditionals that almost contradict each other both
+> needed?  It looks like the new code could be combined with
+> acpi_processor_hotadd_init() to do the right thing in all cases.
+> 
+> Now, acpi_processor_hotadd_init() does some extra things that look
+> like they should be done by the new code too.
+> 
+> 1. It checks invalid_phys_cpuid() which appears to be a good idea to me.
+> 
+> 2. It uses locking around arch_register_cpu() which doesn't seem
+> unreasonable either.
+> 
+> 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
+> the new code.
+> 
+> The only thing that can be dropped from it is the _STA check AFAICS,
+> because acpi_processor_add() won't even be called if the CPU is not
+> present (and not enabled after the first patch).
+> 
+> So why does the code not do 1 - 3 above?
 
-This is a request to discuss alternatives to the current approach for
-reusing the MTE tag storage memory for data allocations [1]. Each iteration
-of the series uncovered new issues, the latest being that memory allocation
-is being performed in atomic contexts [2]; I would like to start a
-discussion regarding possible alternative, which would integrate better
-with the memory management code.
+Honestly, I'm out of my depth with this and can't answer your
+questions - and I really don't want to try fiddling with this code
+because it's just too icky (even in its current form in mainline)
+to be understandable to anyone who hasn't gained a detailed knowledge
+of this code.
 
-This is a high level overview of the current approach:
+It's going to require a lot of analysis - how acpi_map_cpuid() behaves
+in all circumstances, what this means for invalid_logical_cpuid() and
+invalid_phys_cpuid(), what paths will be taken in each case. This code
+is already just too hairy for someone who isn't an experienced ACPI
+hacker to be able to follow and I don't see an obvious way to make it
+more readable.
 
- * Tag storage pages are put on the MIGRATE_CMA lists, meaning they can be
-   used for data allocations like (almost) any other page in the system.
+James' additions make it even more complex and less readable.
 
- * When a page is allocated as tagged, the corresponding tag storage is
-   also allocated.
-
- * There's a static relationship between a page and the location in memory
-   where its tags are stored. Because of this, if the corresponding tag
-   storage is used for data, the tag storage page is migrated.
-
-Although this is the most generic approach because tag storage pages are
-treated like normal pages, it has some disadvantages:
-
- * HW KASAN (MTE in the kernel) cannot be used. The kernel allocates memory
-   in atomic context, where migration is not possible.
-
- * Tag storage pages cannot be themselves tagged, and this means that all
-   CMA pages, even those which aren't tag storage, cannot be used for
-   tagged allocations.
-
- * Page migration is costly, and a process that uses MTE can experience
-   measurable slowdowns if the tag storage it requires is in use for data.
-   There might be ways to reduce this cost (by reducing the likelihood that
-   tag storage pages are allocated), but it cannot be completely
-   eliminated.
-
- * Worse yet, a userspace process can use a tag storage page in such a way
-   that migration is effectively impossible [3],[4].  A malicious process
-   can make use of this to prevent the allocation of tag storage for other
-   processes in the system, leading to a degraded experience for the
-   affected processes. Worst case scenario, progress becomes impossible for
-   those processes.
-
-One alternative approach I'm looking at right now is cleancache. Cleancache
-was removed in v5.17 (commit 0a4ee518185e) because the only backend, the
-tmem driver, had been removed earlier (in v5.3, commit 814bbf49dcd0).
-
-With this approach, MTE tag storage would be implemented as a driver
-backend for cleancache. When a tag storage page is needed for storing tags,
-the page would simply be dropped from the cache (cleancache_get_page()
-returns -1).
-
-I believe this is a very good fit for tag storage reuse, because it allows
-tag storage to be allocated even in atomic contexts, which enables MTE in
-the kernel. As a bonus, all of the changes to MM from the current approach
-wouldn't be needed, as tag storage allocation can be handled entirely in
-set_ptes_at(), copy_*highpage() or arch_swap_restore().
-
-Is this a viable approach that would be upstreamable? Are there other
-solutions that I haven't considered? I'm very much open to any alternatives
-that would make tag storage reuse viable.
-
-[1] https://lore.kernel.org/all/20240125164256.4147-1-alexandru.elisei@arm.com/
-[2] https://lore.kernel.org/all/CAMn1gO7M51QtxPxkRO3ogH1zasd2-vErWqoPTqGoPiEvr8Pvcw@mail.gmail.com/
-[3] https://lore.kernel.org/linux-trace-kernel/4e7a4054-092c-4e34-ae00-0105d7c9343c@redhat.com/
-[4] https://lore.kernel.org/linux-trace-kernel/92833873-cd70-44b0-9f34-f4ac11b9e498@redhat.com/
-
-Thanks,
-Alex
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
