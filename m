@@ -1,229 +1,243 @@
-Return-Path: <linux-arch+bounces-2500-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2501-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC6185BE32
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 15:10:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D511385BF99
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 16:14:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0FF0B26050
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 14:09:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 065CB1C20B17
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 15:14:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07C9F6D1C4;
-	Tue, 20 Feb 2024 14:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F7E74E15;
+	Tue, 20 Feb 2024 15:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EhfWVbJ0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Xy5iv0Wr"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A366BFBD
-	for <linux-arch@vger.kernel.org>; Tue, 20 Feb 2024 14:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D75376020;
+	Tue, 20 Feb 2024 15:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708438053; cv=none; b=dzYC0KBMhL4z+RVhsahwTdy50XLJR/lp2V+MfgdPv+9aaiT39PgEJMPLdXc6Wgwh6gERi9Bcqj3mxNxQfv51fCBYNMkZfeRfFFncuH/WQkth6pYrvgwZn8sn+jXuTxQUJxsDUFDIU9p4ZOoaCqQyJy4aPYQJKlnNX+U3lAmJuzs=
+	t=1708442057; cv=none; b=CnBlQdVFUqyL+VOhxwF/dd/K7b9aUgVcNOl0NIFY6Oo00ZPiKnpK3jvquHdgisU5kksRSLMUfuYZS/ORznq9dY07RRXFBYF8VDIYkw8QoJKzTFkJU4c4hkcU64qUqZo/Mp6DbZ6+WXhTPMxQ7/nHBWNqcxOMOebLVOLEt6PTQ28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708438053; c=relaxed/simple;
-	bh=E/1SUYF3tv2F1OGwxNLmQh08FWlc1Ijdbb/2R+O4kIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cY4VGFO3gyAcDpVcKSNdtOn+u18TTpenU7sFMCCh+sQwxKBZWoW71ew7DSdCtVFU8H2Xl3LTp2nN5n7eYLhFxPr7eevnglTjRLynYkFXyBbl7pZ1iUES5yyZlCobh8uuP/msyGDE5JO6V7ODdjqComaX4gCzfzWIPq3heDa2ivk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EhfWVbJ0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708438050;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=TfSiB4xU3Pf2ASAqrc35eYDgyfR8LdcSqcXXHY4DB94=;
-	b=EhfWVbJ0J4fdaB2pi4s1GMvNjKhycibQ5lqOvV1/zus5B2Ed/WG7ZTEG2aC1CIJ1+BjUUi
-	QFvmpYUMYQrPMVR2hqYIt+CO2SKYkL/+v8dbPulH60mrOfw4ZN1Nr9ShXtwJgxECP0jBP3
-	+CDf8ndRpldibRWCYiYolXL3DG9U1uQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-561-wR0wQnzJN1SdOXaToOZloQ-1; Tue, 20 Feb 2024 09:07:26 -0500
-X-MC-Unique: wR0wQnzJN1SdOXaToOZloQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4126c262040so5731275e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 20 Feb 2024 06:07:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708438045; x=1709042845;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TfSiB4xU3Pf2ASAqrc35eYDgyfR8LdcSqcXXHY4DB94=;
-        b=k385SJgrB/rgPtGufqUOvmnD+9CprV6cO/50MAJUmucDa7hhsSt/jYKWZylxL618GE
-         JjFAYO/olGvoN/F2QMY72g12Lmmf2L6zHIxPGmISoy7o8eRPPOtOgAJxjyNLKzEiYxfL
-         tFzeiB+cbcwaUhEGIx8GvqO63MTDWxKSvq0JNDnChoTnY64Wwxp9jAfhAPXA0YPAUNEC
-         S1Av8LrMwYZnOdyonnUu6C9ZmXBQc1mWM3ybXh5WruabLkZOMsA9cc/yuL7uUFQ8bgvR
-         E9juJegurKDs+PZy7MWXIwJ+M9WnbT8/DMOkRDHb3gzNA1GmC26R5pbYUPOf8tRp+gGF
-         WuPA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHT9YOoXTmZficwgKNz0Ad4RxHjOOBHXFJDX3rvlvejBjLeQA9MUTNrrINMsk5Q133HFmOqzk4Ou/kyYCxZ/l1PpSyRW43z6KmCQ==
-X-Gm-Message-State: AOJu0Yyxcm03h15AW7bVbT6Gs+Vuy7P4KYfXjuq+I7FfS1qiHHyShyu5
-	DRt6tSHPBBkWG676OczpoLd6zgLKtx17JQolXdy+/7Yz9VYpZNA+9ZMaydcmRdtnS0GIdLtb6QA
-	RJgnwiNGmbqG2zQhLTDRscv9xDS/kyfLug3bqEYeu4DtipHTWVzjATwkNyYk=
-X-Received: by 2002:a05:600c:1d1a:b0:411:db41:687c with SMTP id l26-20020a05600c1d1a00b00411db41687cmr15038536wms.13.1708438044742;
-        Tue, 20 Feb 2024 06:07:24 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHlgR4p8fQNVJMnd6Ba7hnMrikj+Cav2h5yCFAosFZH5KGSXqMEspMFvnQvfnQxH3EKo9l5vg==
-X-Received: by 2002:a05:600c:1d1a:b0:411:db41:687c with SMTP id l26-20020a05600c1d1a00b00411db41687cmr15038492wms.13.1708438044298;
-        Tue, 20 Feb 2024 06:07:24 -0800 (PST)
-Received: from ?IPV6:2003:cb:c72a:bc00:9a2d:8a48:ef51:96fb? (p200300cbc72abc009a2d8a48ef5196fb.dip0.t-ipconnect.de. [2003:cb:c72a:bc00:9a2d:8a48:ef51:96fb])
-        by smtp.gmail.com with ESMTPSA id js21-20020a05600c565500b0040fdb244485sm14558144wmb.40.2024.02.20.06.07.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 06:07:23 -0800 (PST)
-Message-ID: <e0b7c884-4345-44b1-b8c0-2711a28a980e@redhat.com>
-Date: Tue, 20 Feb 2024 15:07:22 +0100
+	s=arc-20240116; t=1708442057; c=relaxed/simple;
+	bh=EerVHanUz2tefY83Hs9lDDnTHX9i7fSD2ZbOIE+Yu88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jjgmYzBoJ1KrSLSAEyP8cJzx51Q6ZPS9NSwT1j2zxdZeoB2PY51VIRlYPGoijTc2cckRZwh0Fd1FWWmigEmla4KO3udTFC8qlCvTRLMemxygb65FLyJn98cRDzMXRUiDpVxF6hMvEZ9C3qKL7y25YT07oHN9NjgbrjJLhPZAB1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Xy5iv0Wr; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=qgc8OUZCtZPjwVAIjMqiHy7ikwaI1Mbu1Mp1IdFRzDs=; b=Xy5iv0WrTLeAO0Yk5KZRnMdKyj
+	P5Il3QQ+baeCRbUTHw+M2pQGpzCvY2kVMWyp3dXDSELRc5Ju3nfd11YBuUEHjVI4tFW2/xraLQejU
+	8tft/vHldbP7aGpknVnTEenRzyIrR0qgmIZkTDpzWNYBWSARs/hgaqJkstanzehwL6LPfJLIeqFLo
+	gUb/82YcOQPZlEGA8PE5OTomL+YF+FqTubxG54uf45edRw2uSwN7RfBx+Du1NGHDAZjqfMWrmpglo
+	yS8bLYhbsuhKYbVHwDGhCbqZMUPo3WgWbTMTAIMeCbEX6XIBN4y0pMZBZKVgW6FRGfRXxX28yVi92
+	FpAy11Fw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45522)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rcRoq-00033P-2v;
+	Tue, 20 Feb 2024 15:14:05 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rcRok-0000xX-ST; Tue, 20 Feb 2024 15:13:58 +0000
+Date: Tue, 20 Feb 2024 15:13:58 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <ZdTBtt0oR6Q1RcAB@shell.armlinux.org.uk>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+ <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+ <ZdSMk93c1I6x973h@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: arm64 MTE tag storage reuse - alternatives to MIGRATE_CMA
-Content-Language: en-US
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev,
- maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
- yuzenghui@huawei.com, pcc@google.com, steven.price@arm.com,
- anshuman.khandual@arm.com, eugenis@google.com, kcc@google.com,
- hyesoo.yu@samsung.com, rppt@kernel.org, akpm@linux-foundation.org,
- peterz@infradead.org, konrad.wilk@oracle.com, willy@infradead.org,
- jgross@suse.com, hch@lst.de, geert@linux-m68k.org, vitaly.wool@konsulko.com,
- ddstreet@ieee.org, sjenning@redhat.com, hughd@google.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <ZdSMbjGf2Fj98diT@raptor>
- <70d77490-9036-48ac-afc9-4b976433070d@redhat.com> <ZdSojvNyaqli2rWE@raptor>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <ZdSojvNyaqli2rWE@raptor>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZdSMk93c1I6x973h@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
->>
->> With large folios in place, we'd likely want to investigate not working on
->> individual pages, but on (possibly large) folios instead.
+On Tue, Feb 20, 2024 at 11:27:15AM +0000, Russell King (Oracle) wrote:
+> On Thu, Feb 15, 2024 at 08:22:29PM +0100, Rafael J. Wysocki wrote:
+> > On Wed, Jan 31, 2024 at 5:50 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
+> > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> > > index cf7c1cca69dd..a68c475cdea5 100644
+> > > --- a/drivers/acpi/acpi_processor.c
+> > > +++ b/drivers/acpi/acpi_processor.c
+> > > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_device *device)
+> > >                         cpufreq_add_device("acpi-cpufreq");
+> > >         }
+> > >
+> > > +       /*
+> > > +        * Register CPUs that are present. get_cpu_device() is used to skip
+> > > +        * duplicate CPU descriptions from firmware.
+> > > +        */
+> > > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > > +           !get_cpu_device(pr->id)) {
+> > > +               int ret = arch_register_cpu(pr->id);
+> > > +
+> > > +               if (ret)
+> > > +                       return ret;
+> > > +       }
+> > > +
+> > >         /*
+> > >          *  Extra Processor objects may be enumerated on MP systems with
+> > >          *  less than the max # of CPUs. They should be ignored _iff
+> > 
+> > This is interesting, because right below there is the following code:
+> > 
+> >     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> >         int ret = acpi_processor_hotadd_init(pr);
+> > 
+> >         if (ret)
+> >             return ret;
+> >     }
+> > 
+> > and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
+> > with some extra things around it (more about that below).
+> > 
+> > I do realize that acpi_processor_hotadd_init() is defined under
+> > CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
+> > consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
+> > 
+> > So why are the two conditionals that almost contradict each other both
+> > needed?  It looks like the new code could be combined with
+> > acpi_processor_hotadd_init() to do the right thing in all cases.
+> > 
+> > Now, acpi_processor_hotadd_init() does some extra things that look
+> > like they should be done by the new code too.
+> > 
+> > 1. It checks invalid_phys_cpuid() which appears to be a good idea to me.
+> > 
+> > 2. It uses locking around arch_register_cpu() which doesn't seem
+> > unreasonable either.
+> > 
+> > 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
+> > the new code.
+> > 
+> > The only thing that can be dropped from it is the _STA check AFAICS,
+> > because acpi_processor_add() won't even be called if the CPU is not
+> > present (and not enabled after the first patch).
+> > 
+> > So why does the code not do 1 - 3 above?
 > 
-> Yes, that would be interesting. Since the backend has no way of controlling
-> what tag storage page will be needed for tags, and subsequently dropped
-> from the cache, we would have to figure out what to do if one of the pages
-> that is part of a large folio is dropped. The easiest solution that I can
-> see is to remove the entire folio from the cleancache, but that would mean
-> also dropping the rest of the pages from the folio unnecessarily.
-
-Right, but likely that won't be an issue. Things get interesting when 
-thinking about an efficient allocation approach.
-
+> Honestly, I'm out of my depth with this and can't answer your
+> questions - and I really don't want to try fiddling with this code
+> because it's just too icky (even in its current form in mainline)
+> to be understandable to anyone who hasn't gained a detailed knowledge
+> of this code.
 > 
->>
->>>
->>> I believe this is a very good fit for tag storage reuse, because it allows
->>> tag storage to be allocated even in atomic contexts, which enables MTE in
->>> the kernel. As a bonus, all of the changes to MM from the current approach
->>> wouldn't be needed, as tag storage allocation can be handled entirely in
->>> set_ptes_at(), copy_*highpage() or arch_swap_restore().
->>>
->>> Is this a viable approach that would be upstreamable? Are there other
->>> solutions that I haven't considered? I'm very much open to any alternatives
->>> that would make tag storage reuse viable.
->>
->> As raised recently, I had similar ideas with something like virtio-mem in
->> the past (wanted to call it virtio-tmem back then), but didn't have time to
->> look into it yet.
->>
->> I considered both, using special device memory as "cleancache" backend, and
->> using it as backend storage for something similar to zswap. We would not
->> need a memmap/"struct page" for that special device memory, which reduces
->> memory overhead and makes "adding more memory" a more reliable operation.
+> It's going to require a lot of analysis - how acpi_map_cpuid() behaves
+> in all circumstances, what this means for invalid_logical_cpuid() and
+> invalid_phys_cpuid(), what paths will be taken in each case. This code
+> is already just too hairy for someone who isn't an experienced ACPI
+> hacker to be able to follow and I don't see an obvious way to make it
+> more readable.
 > 
-> Hm... this might not work with tag storage memory, the kernel needs to
-> perform cache maintenance on the memory when it transitions to and from
-> storing tags and storing data, so the memory must be mapped by the kernel.
+> James' additions make it even more complex and less readable.
 
-The direct map will definitely be required I think (copy in/out data). 
-But memmap for tag memory will likely not be required. Of course, it 
-depends how to manage tag storage. Likely we have to store some 
-metadata, hopefully we can avoid the full memmap and just use something 
-else.
+As an illustration of the problems I'm having here, I was just writing
+a reply to this with a suggestion of transforming this code ultimately
+to:
 
-[...]
+	if (!get_cpu_device(pr->id)) {
+		int ret;
 
->> Similar to virtio-mem, there are ways for the hypervisor to request changes
->> to the memory consumption of a device (setting the requested size). So when
->> requested to consume less, clean pagecache pages can be dropped and the
->> memory can be handed back to the hypervisor.
->>
->> Of course, likely we would want to consider using "slower" memory in the
->> hypervisor to back such a device.
-> 
-> I'm not sure how useful that will be with tag storage reuse. KVM must
-> assume that **all** the memory that the guest uses is tagged and it needs
-> tag storage allocated (it's a known architectural limitation), so that will
-> leave even less tag storage memory to distribute between the host and the
-> guest(s).
+		if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id))
+			ret = acpi_processor_make_enabled(pr);
+		else
+			ret = acpi_processor_make_present(pr);
 
-Yes, I don't think this applies to tag storage.
+		if (ret)
+			return ret;
+	}
 
-> 
-> Adding to that, at the moment Android is going to be the major (only?) user
-> of tag storage reuse, and as far as I know pKVM is more restrictive with
-> regards to the emulated devices and the memory that is shared between
-> guests and the host.
+(acpi_processor_make_present() would be acpi_processor_hotadd_init()
+and acpi_processor_make_enabled() would be arch_register_cpu() at this
+point.)
 
-Right, what I described here does not have overlap with tag storage 
-besides requiring similar (cleancache) hooks.
+Then I realised that's a bad idea - because we really need to check
+that pr->id is valid before calling get_cpu_device() on it, so this
+won't work. That leaves us with:
+
+	int ret;
+
+	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+		/* x86 et.al. path */
+		ret = acpi_processor_make_present(pr);
+	} else if (!get_cpu_device(pr->id)) {
+		/* Arm64 path */
+		ret = acpi_processor_make_enabled(pr);
+	} else {
+		ret = 0;
+	}
+
+	if (ret)
+		return ret;
+
+Now, the next transformation would be to move !get_cpu_device(pr->id)
+into acpi_processor_make_enabled() which would eliminate one of those
+if() legs.
+
+Now, if we want to somehow make the call to arch_regster_cpu() common
+in these two paths, the next question is what are the _precise_
+semantics of acpi_map_cpu(), particularly with respect to it
+modifying pr->id. Is it guaranteed to always give the same result
+for the same processor described in ACPI? What acpi_map_cpu() anyway,
+I can find no documentation for it.
+
+Then there's the question whether calling acpi_unmap_cpu() should be
+done on the failure path if arch_register_cpu() fails, which is done
+for the x86 path but not the Arm64 path. Should it be done for the
+Arm64 path? I've no idea, but as Arm64 doesn't implement either of
+these two functions, I guess they could be stubbed out and thus be
+no-ops - but then we open a hole where if pr->id is invalid, we
+end up passing that invalid value to arch_register_cpu() which I'm
+quite sure will explode with a negative CPU number.
+
+So, to my mind, what you're effectively asking for is a total rewrite
+of all the code in and called by acpi_processor_get_info()... and that
+is not something I am willing to do (because it's too far outside of
+my knowledge area.)
+
+As I said in my reply to patch 1, I think your comments on patch 2
+make Arm64 vcpu hotplug unachievable in a reasonable time frame, and
+certainly outside the bounds of what I can do to progress this.
+
+So, at this point I'm going to stand down from further participation
+with this patch set as I believe I've reached the limit of what I can
+do to progress it.
 
 -- 
-Cheers,
-
-David / dhildenb
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
