@@ -1,131 +1,206 @@
-Return-Path: <linux-arch+bounces-2527-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2528-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ACC985CC1C
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 00:33:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B121885CC47
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 00:54:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E16501C22401
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 23:33:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66D95281EF3
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Feb 2024 23:54:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B33154451;
-	Tue, 20 Feb 2024 23:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxrhSwxu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E8F154C1D;
+	Tue, 20 Feb 2024 23:54:02 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD8814A0B2;
-	Tue, 20 Feb 2024 23:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBEE2C1B1
+	for <linux-arch@vger.kernel.org>; Tue, 20 Feb 2024 23:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708472004; cv=none; b=KvP5lsEE370sU9+08YcJu+oIW8U0g3/65zsX9cQMgOqpUhA47KkxJ+RMHJMq98yBvAaS+wh6Jxs0b5GyK19ataN6u9jBI0r9+O1NRDxDrmQ8w0iXV69Znr9+vAe5Wf+UL+p8Nh9CpuKB2kygLnYeD/1Nsk0sYzRP/s8PeEuAhYk=
+	t=1708473242; cv=none; b=TYpHy6gFoYAnM/ZkEoudxBdvzUk78Bv0iDtq7gObVvsKs/7EzOwgf2+qqohjovmL54BIrsZvMfvCLKVB8xdyC02F2ylThMJeUXorOxT3/g9MOoeP3NaBt6tyFxuXvKhHUok9d4nwUNna9EIBER7wzyXoyIs9maVI/M3x84txutM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708472004; c=relaxed/simple;
-	bh=Oh/h2cj0YS4RJY/SZoI+qEFikqUE0enIJADIQGhtwFo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d9riHinFGdHbqDNn501XOGSgzT3e9dHF9PRtZH/B0S39QvtOMPn2iKJoBY63J+5b/sFhlmt7tHiUvuCEb11Wd0O8V1p4DmKz4Rlsciwz6p8VzxMUnGDBz+Fv+qG3JuJYUZDtfdcf37PBQeK4r0Wv1ydZziUCm9rB/jf1tKrXlxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxrhSwxu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA45C43609;
-	Tue, 20 Feb 2024 23:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708472004;
-	bh=Oh/h2cj0YS4RJY/SZoI+qEFikqUE0enIJADIQGhtwFo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jxrhSwxuVnDXEHxeGI2cKothoQdm2XNc6DspariWSnsqPrHTDXHzP+oO9b6mEh1JP
-	 GePHxLj6X8TsqFZV46lkfcbUpQXEwaCUKDL9928VfS02XeJyRLRzLt9AOva30uggrd
-	 ViXSfZYX6J+2BtZLWE1xdqUAusxePdeSEmzodfZRoVip4p3vznM96wfOMFkscfqLmp
-	 G9t9g5Mx+y2aWSFp+DFezztEDq1zIBkKNjb8egJDlIvXgS2OsF+UOeWgauySxaxE4B
-	 XYfSQW5nuP6MtzHxWpnnS4SXeE0Tvgdf1kzm52hrpqC6p6sHGHxykVesI2xMwinlk5
-	 3B/FiaPSKMf1A==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-512bce554a5so2949571e87.3;
-        Tue, 20 Feb 2024 15:33:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUfM61AECOsShP6Mtr5XwsNZhuu8Nj9l02QGy5DAeVXasyMv2OWE3Y6UxPVMk0kdv2JfpBFGfBfxMtsP0HB3auKB6KdP5h5O6Hdzw==
-X-Gm-Message-State: AOJu0YyQnlPq86dSGP14Lb4LR/tfPTlxr3hkiHJHf76OSw4bWe+kO2Rj
-	B831DSqh+vzcQtrAQioZnQ/X0+CB4ZHERo01foBjeg8o5r63o/5Mh11ZDyjFd9cRMmdRiRw49yE
-	WlUofoFBq/ybAo8CddTsNHStxpFM=
-X-Google-Smtp-Source: AGHT+IGGKb1QYfhmS4BL89Gjr7JP7acVJpMUXlQ6aTbfqpDNvxNKr04Jgn8OxLX5iWG/7bA0RJikrf61Oc1D17UKBEU=
-X-Received: by 2002:a19:e009:0:b0:512:b340:a624 with SMTP id
- x9-20020a19e009000000b00512b340a624mr5025522lfg.6.1708472002228; Tue, 20 Feb
- 2024 15:33:22 -0800 (PST)
+	s=arc-20240116; t=1708473242; c=relaxed/simple;
+	bh=pv9M6nCH7P1FRo4VitsRtyecMjGHuwFYfQImuvaTZJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jKJnAii64QxIOnENUVF71hc799xm0daaum7+JsEpRI/hCAEMjZDrpTPv0pjdVzX7Pm33eJOPV6EMZA2qrjj9XbMINJIegxSo08jaRfWmYDKx4CFIJEEQvRCy2UF4HD0j05HRKQn9HjnXtWa1zVmIfLHHbMM/9bwp8jUjkdoVBko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=libc.org; arc=none smtp.client-ip=104.156.224.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libc.org
+Date: Tue, 20 Feb 2024 18:54:16 -0500
+From: "dalias@libc.org" <dalias@libc.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <20240220235415.GP4163@brightrain.aerifal.cx>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
+ <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
+ <20240220185714.GO4163@brightrain.aerifal.cx>
+ <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-17-ardb+git@google.com> <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
-In-Reply-To: <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 21 Feb 2024 00:33:08 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
-Message-ID: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
-Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
- paging global variables
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On Tue, 20 Feb 2024 at 19:45, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Feb 13, 2024 at 01:41:48PM +0100, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Assigning the 5-level paging related global variables from the earliest
-> > C code using explicit references that use the 1:1 translation of memory
-> > is unnecessary, as the startup code itself does not rely on them to
-> > create the initial page tables, and this is all it should be doing. So
-> > defer these assignments to the primary C entry code that executes via
-> > the ordinary kernel virtual mapping.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/kernel/head64.c | 44 +++++++-------------
-> >  1 file changed, 14 insertions(+), 30 deletions(-)
->
-> Whoops:
->
+On Tue, Feb 20, 2024 at 11:30:22PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2024-02-20 at 13:57 -0500, Rich Felker wrote:
+> > On Tue, Feb 20, 2024 at 06:41:05PM +0000, Edgecombe, Rick P wrote:
+> > > Hmm, could the shadow stack underflow onto the real stack then? Not
+> > > sure how bad that is. INCSSP (incrementing the SSP register on x86)
+> > > loops are not rare so it seems like something that could happen.
+> > 
+> > Shadow stack underflow should fault on attempt to access
+> > non-shadow-stack memory as shadow-stack, no?
+> 
+> Maybe I'm misunderstanding. I thought the proposal included allowing
+> shadow stack access to convert normal address ranges to shadow stack,
+> and normal writes to convert shadow stack to normal.
 
-Right, this is the same issue as in #11 - in both cases, the extern
-declaration of __pgtable_l5_enabled needs to be visible regardless of
-CONFIG_X86_5LEVEL.
+As I understood the original discussion of the proposal on IRC, it was
+only one-way (from shadow to normal). Unless I'm missing something,
+making it one-way is necessary to catch situations where the shadow
+stack would become compromised.
 
-I'll fix both cases for v5.
+> > > Shadow stacks currently have automatic guard gaps to try to prevent
+> > > one
+> > > thread from overflowing onto another thread's shadow stack. This
+> > > would
+> > > somewhat opens that up, as the stack guard gaps are usually
+> > > maintained
+> > > by userspace for new threads. It would have to be thought through
+> > > if
+> > > these could still be enforced with checking at additional spots.
+> > 
+> > I would think the existing guard pages would already do that if a
+> > thread's shadow stack is contiguous with its own data stack.
+> 
+> The difference is that the kernel provides the guard gaps, where this
+> would rely on userspace to do it. It is not a showstopper either.
+> 
+> I think my biggest question on this is how does it change the
+> capability for two threads to share a shadow stack. It might require
+> some special rules around the syscall that writes restore tokens. So
+> I'm not sure. It probably needs a POC.
 
-> arch/x86/kernel/head64.c: In function =E2=80=98x86_64_start_kernel=E2=80=
-=99:
-> arch/x86/kernel/head64.c:442:17: error: =E2=80=98__pgtable_l5_enabled=E2=
-=80=99 undeclared (first use in this function); did you mean =E2=80=98pgtab=
-le_l5_enabled=E2=80=99?
->   442 |                 __pgtable_l5_enabled    =3D 1;
->       |                 ^~~~~~~~~~~~~~~~~~~~
->       |                 pgtable_l5_enabled
-> arch/x86/kernel/head64.c:442:17: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-> make[4]: *** [scripts/Makefile.build:243: arch/x86/kernel/head64.o] Error=
- 1
-> make[3]: *** [scripts/Makefile.build:481: arch/x86/kernel] Error 2
-> make[2]: *** [scripts/Makefile.build:481: arch/x86] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/mnt/kernel/kernel/2nd/linux/Makefile:1921: .] Error 2
-> make: *** [Makefile:240: __sub-make] Error 2
->
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Why would they be sharing a shadow stack?
+
+> > From the musl side, I have always looked at the entirely of shadow
+> > stack stuff with very heavy skepticism, and anything that breaks
+> > existing interface contracts, introduced places where apps can get
+> > auto-killed because a late resource allocation fails, or requires
+> > applications to code around the existence of something that should be
+> > an implementation detail, is a non-starter. To even consider shadow
+> > stack support, it must truely be fully non-breaking.
+> 
+> The manual assembly stack switching and JIT code in the apps needs to
+> be updated. I don't think there is a way around it.
+
+Indeed, I'm not talking about programs with JIT/manual stack-switching
+asm, just anything using existing APIs for control of stack --
+pthread_setstack, makecontext, sigaltstack, etc.
+
+> I agree though that the late allocation failures are not great. Mark is
+> working on clone3 support which should allow moving the shadow stack
+> allocation to happen in userspace with the normal stack. Even for riscv
+> though, doesn't it need to update a new register in stack switching?
+
+If clone is called with signals masked, it's probably not necessary
+for the kernel to set the shadow stack register as part of clone3.
+
+> BTW, x86 shadow stack has a mode where the shadow stack is writable
+> with a special instruction (WRSS). It enables the SSP to be set
+> arbitrarily by writing restore tokens. We discussed this as an option
+> to make the existing longjmp() and signal stuff work more transparently
+> for glibc.
+> 
+> > 
+> > > > _Without_ doing this, sigaltstack cannot be used to recover from
+> > > > stack
+> > > > overflows if the shadow stack limit is reached first, and
+> > > > makecontext
+> > > > cannot be supported without memory leaks and unreportable error
+> > > > conditions.
+> > > 
+> > > FWIW, I think the makecontext() shadow stack leaking is a bad idea.
+> > > I
+> > > would prefer the existing makecontext() interface just didn't
+> > > support
+> > > shadow stack, rather than the leaking solution glibc does today.
+> > 
+> > AIUI the proposal by Stefan makes it non-leaking because it's just
+> > using normal memory that reverts to normal usage on any
+> > non-shadow-stack access.
+> > 
+> 
+> Right, but does it break any existing apps anyway (because of small
+> ucontext stack sizes)?
+> 
+> BTW, when I talk about "not supporting" I don't mean the app should
+> crash. I mean it should instead run normally, just without shadow stack
+> enabled. Not sure if that was clear. Since shadow stack is not
+> essential for an application to function, it is only security hardening
+> on top.
+> 
+> Although determining if an application supports shadow stack has turned
+> out to be difficult in practice. Handling dlopen() is especially hard.
+
+One reasonable thing to do, that might be preferable to overengineered
+solutions, is to disable shadow-stack process-wide if an interface
+incompatible with it is used (sigaltstack, pthread_create with an
+attribute setup using pthread_attr_setstack, makecontext, etc.), as
+well as if an incompatible library is is dlopened. This is much more
+acceptable than continuing to run with shadow stacks managed sloppily
+by the kernel and async killing the process on OOM, and is probably
+*more compatible* with apps than changing the minimum stack size
+requirements out from under them.
+
+The place where it's really needed to be able to allocate the shadow
+stack synchronously under userspace control, in order to harden normal
+applications that aren't doing funny things, is in pthread_create
+without a caller-provided stack.
+
+Rich
 
