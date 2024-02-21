@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-2629-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2630-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 515DD85E80E
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 20:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A80DF85E813
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 20:50:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06D4A282E1A
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 19:49:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED192823BB
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 19:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E59114D446;
-	Wed, 21 Feb 2024 19:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F9814F9FE;
+	Wed, 21 Feb 2024 19:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GuV3TJ3M"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O1TQT1uR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E678C14A09F
-	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 19:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF5814E2E0
+	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 19:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708544506; cv=none; b=OHlz/qiT2pHmcsmX9IhY4lFHDg1QZCtmRk/LCyMp8jtVWds1IExnsqHFdaRS0gn+1a0yUngEAS9diqg+etP33zXUvIs/BfnzUSSXezhRcSgzd/aG4C0AB15eUVu6nxIE8G9fGye5cQA0Iyju1Tgtniu2zPk3drgzCNMwogQ01JU=
+	t=1708544507; cv=none; b=XdyCET7nAf/9YzukTWrnRqCm8rLKCzmPcYPBRsseRYDHIQjIh8++7wdjy/rLlpfLAjpymcKTJIB+/IgYlWpQrgGuPNLUpNXOh9b2XAoKi7iusvwif5w7wVxuaoWCvARBDrSVHeNdAlfL96+4w8QENRqrWA0Q8Lof5ITi5FnW+RQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708544506; c=relaxed/simple;
-	bh=tyIikjJlrYyNLJoOHRGtPA/wKSTMkEiPDo19C/DYXH4=;
+	s=arc-20240116; t=1708544507; c=relaxed/simple;
+	bh=xJM3d3cNTLVIQIxe0J7q2btrWl4VSNh4tAtwnD/MBRk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XRNmaT/xOTx9b8sZ4y3TdC1AaMi1ZWXvz6IJc43KvmXlIhZYXzETqicAmPIbNLj/1RHY7s0g8nZ1yH94AehT43H765VWrRUe/kHUz8vkbzpfkrWseAEM+ZINvpS2RJ1x+yfKDeuWEySOj5Te+cDH9mTHqVau0xoK+Xugid25XPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GuV3TJ3M; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=WPoOePGt03q8mlOaaAawfmfuP0v40PS/ibFZLYtbEhjLfX75bJbTvhGUJrkzLM5I60vEJYuo7hgTDh3cHDsuYLLECQzkSdCEJFAHL1UtdMU/eyWsQzP+PKSTiwDjXOUw1Ol+8yW+/fzIEC2KCta2/E523EdabGhq0EBI8vltYo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O1TQT1uR; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-608835a1febso18654387b3.2
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:41:43 -0800 (PST)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-608405e0340so17681537b3.0
+        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:41:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708544503; x=1709149303; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708544505; x=1709149305; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4D2ym4tmaIuNf1w08quK73QR9EK/cyrgSXHS1sTLYhg=;
-        b=GuV3TJ3MrI71MbxE34f/5qi8JNdui5fJUINhuMdeX1pUpXOUTj7yHD3Eld8RsYWH8f
-         M/bNF47TLDvzMTaikAwQfx5WddNrQm6sqCLiOiARVX7t+xQ7Eq5H7GY4kcchBe3XFPMM
-         HAVGsc1rrSCkuU8pLk5mAWeFBMxrfkeRSXQp6E908UePDaoCInUbhxotyQX2qhK5w/wI
-         j2SdaGwjQqVMqvULZDe0ZO0V316WYJSGZI/mCCndvhtjVEoU8Bja0evFw0h1iM6XbYBG
-         qlc3/mtkzf3fQG2/AG70AhJGtroFax1I18GSPlZL8f4nBZRtDCg0p0AiAVunFN34nnap
-         p/4w==
+        bh=SFqjsc0WslhSBLDjO+3ojiIHoGv8W+Erk8fAgLgypEk=;
+        b=O1TQT1uRLoRpA/mZagg9jukZkX1wPpfxXHLxJD3GrNCGxQq71BgFAxn4s6nX40hDtv
+         I2SBLtdX21tweRlMKTto+knKrreFwop46rBW9xTcqswIgTt8w45gfwWRwU/G6Sxwu9cK
+         xWANYGw5Yvj0rzTDkar9ehThRUyfyiXJ1Cg0bnUE0ZZSzlIrDWyYi7xTAXzkGzn5wkpH
+         QWJ7urV9XGYZ9L+E0h78KxD+d+GPbrnJRJ5UN963/h61ojrNeuEGsl9nfmWnainnAD+g
+         AmeDQuMTwMhq1vwy60bKJN6MDG8XT6caOkl6d65Zvkvx83trSEQtFSfStEPcCn6t74LN
+         puuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708544503; x=1709149303;
+        d=1e100.net; s=20230601; t=1708544505; x=1709149305;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4D2ym4tmaIuNf1w08quK73QR9EK/cyrgSXHS1sTLYhg=;
-        b=NCKdpa5Py6IXBgwVfRBbtS0vB113whavWcY8up6mAh/DTpkEEQo0BYuapIaSWDoOhj
-         Ma0Q+vD/p1q9bxCeNgJAsjHC0ivKcZbBd1CprzUdJhLg9lZ/MZX13eMQf3bb7GbvcDAb
-         CuvhJ1tIisauzYD8p6E/ew4yuKYxKgW4Zk90dgWqYLswyJ9uxBuivhcdEUWqL4A9wy6l
-         N1+N9D6pQafga7O1TtcBVMDYZkdI8GumiK61WQB5qpPxfdaZaO1lMYi+RKWhpEyffjp9
-         VyeFC3maz5PPjVJ3iQy708zwqgJ27ZcUg2rWtq+0qYTiE6i4dwi5O28yV5rSec4rz0yD
-         lXcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUM4jX4kYkDv6C4KUXnNpFmVdTLggVwDXWx7Vmpj5/VyzQQHBPc4Sdc2/L+3jIx9sJAzinLo+fsxRuDbZDfMN+lzz0WRTSky1V1Fg==
-X-Gm-Message-State: AOJu0YxGO/VI0kL5zJxAsGatEmg04zBoF0wW1bzJffMrSIVgIb232Rmj
-	E6fcBqpWPULl4owy+NkCodnnSllq5sBmkKEMbm9ChR+XuJtUSbtJo59611VQD9TZwBlmMkHFJb1
-	RNg==
-X-Google-Smtp-Source: AGHT+IHUFqe0R6lIIi9NA0qHx8ZRtyarym315AvQcyj6s2JvP2F2gSCMg1vFWmN120oFVZKD/Z/VCxMwQvI=
+        bh=SFqjsc0WslhSBLDjO+3ojiIHoGv8W+Erk8fAgLgypEk=;
+        b=TIDakrEFudcia6NU+poGCd8JCaccSs9Th+25H4MCA07QsRA1VItkwpgw7bcdIZpv2G
+         oxzYS2Vn1Guk9FoVHt+NM6iRdT15FuXZoNJoLeSjeE6+Oe5v8E4WwCucfZ8hmwbN9FLY
+         4G5OM/SVsnmqZP2fYetOgmUNvq/hN0uCdG3L+N3+2POBAqJEkyoa/UOgLP25slrt11h0
+         PtAP24cVdqwzp6MkxNqWFSxJRrsuUMYBOFsFzGT3VcxDblrohRDtvB3JmFA8oxBsdCcT
+         mbHrwCZVsUtvv9iyG/4HatqybaW+2cDZFckjAqZQI4dzgtSzyvrvRmm5FFpBQvOcjWlA
+         5oIA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9ojDnfCw+koL2qaMk13kqTQ+7+yijdjNWl86jnSGhcCCRZ0yP2YR9bKfUsUFqyCp4CZdXusDAu3Qz783rg32rRnM9omeef7fcHQ==
+X-Gm-Message-State: AOJu0Yz7646GLxFgtrSID6Y1yRXc6VE1r7PGdW8S0ktXA5Xch/JfMTPU
+	d+GGMJ6g5mkHy+9DQgRDjLlmzyIBi8rdqdPC98pF8JIjdgmpKr3HJGhMfHz46EwPsYhH9xfClEJ
+	JXA==
+X-Google-Smtp-Source: AGHT+IFEtEW0GI6YMD3iPDE2fE3Szl49cxeT7/Q/vgrbPAzl796e5Nz4XS4xSM5+xHy4B42fIJc5lCjZ/j8=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:953b:9a4e:1e10:3f07])
- (user=surenb job=sendgmr) by 2002:a0d:e611:0:b0:607:9268:6665 with SMTP id
- p17-20020a0de611000000b0060792686665mr4677003ywe.10.1708544502298; Wed, 21
- Feb 2024 11:41:42 -0800 (PST)
-Date: Wed, 21 Feb 2024 11:40:34 -0800
+ (user=surenb job=sendgmr) by 2002:a0d:e692:0:b0:608:6894:120 with SMTP id
+ p140-20020a0de692000000b0060868940120mr1109228ywe.4.1708544504629; Wed, 21
+ Feb 2024 11:41:44 -0800 (PST)
+Date: Wed, 21 Feb 2024 11:40:35 -0800
 In-Reply-To: <20240221194052.927623-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,9 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221194052.927623-1-surenb@google.com>
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221194052.927623-22-surenb@google.com>
-Subject: [PATCH v4 21/36] lib: add codetag reference into slabobj_ext
+Message-ID: <20240221194052.927623-23-surenb@google.com>
+Subject: [PATCH v4 22/36] mm/slab: add allocation accounting into slab
+ allocation and free paths
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -105,46 +106,142 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-To store code tag for every slab object, a codetag reference is embedded
-into slabobj_ext when CONFIG_MEM_ALLOC_PROFILING=y.
+Account slab allocations using codetag reference embedded into slabobj_ext.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/memcontrol.h | 5 +++++
- lib/Kconfig.debug          | 1 +
- 2 files changed, 6 insertions(+)
+ mm/slab.h | 66 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ mm/slub.c |  9 ++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index f3584e98b640..2b010316016c 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1653,7 +1653,12 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
-  * if MEMCG_DATA_OBJEXTS is set.
-  */
- struct slabobj_ext {
-+#ifdef CONFIG_MEMCG_KMEM
- 	struct obj_cgroup *objcg;
-+#endif
-+#ifdef CONFIG_MEM_ALLOC_PROFILING
-+	union codetag_ref ref;
-+#endif
- } __aligned(8);
+diff --git a/mm/slab.h b/mm/slab.h
+index 13b6ba2abd74..c4bd0d5348cb 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -567,6 +567,46 @@ static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
+ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+ 			gfp_t gfp, bool new_slab);
  
- static inline void __inc_lruvec_kmem_state(void *p, enum node_stat_item idx)
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 7bbdb0ddb011..9ecfcdb54417 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -979,6 +979,7 @@ config MEM_ALLOC_PROFILING
- 	depends on !DEBUG_FORCE_WEAK_PER_CPU
- 	select CODE_TAGGING
- 	select PAGE_EXTENSION
-+	select SLAB_OBJ_EXT
- 	help
- 	  Track allocation source code and record total allocation size
- 	  initiated at that code location. The mechanism can be used to track
++static inline bool need_slab_obj_ext(void)
++{
++#ifdef CONFIG_MEM_ALLOC_PROFILING
++	if (mem_alloc_profiling_enabled())
++		return true;
++#endif
++	/*
++	 * CONFIG_MEMCG_KMEM creates vector of obj_cgroup objects conditionally
++	 * inside memcg_slab_post_alloc_hook. No other users for now.
++	 */
++	return false;
++}
++
++static inline struct slabobj_ext *
++prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
++{
++	struct slab *slab;
++
++	if (!p)
++		return NULL;
++
++	if (!need_slab_obj_ext())
++		return NULL;
++
++	if (s->flags & SLAB_NO_OBJ_EXT)
++		return NULL;
++
++	if (flags & __GFP_NO_OBJ_EXT)
++		return NULL;
++
++	slab = virt_to_slab(p);
++	if (!slab_obj_exts(slab) &&
++	    WARN(alloc_slab_obj_exts(slab, s, flags, false),
++		 "%s, %s: Failed to create slab extension vector!\n",
++		 __func__, s->name))
++		return NULL;
++
++	return slab_obj_exts(slab) + obj_to_index(s, slab, p);
++}
++
+ #else /* CONFIG_SLAB_OBJ_EXT */
+ 
+ static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
+@@ -589,6 +629,32 @@ prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
+ 
+ #endif /* CONFIG_SLAB_OBJ_EXT */
+ 
++#ifdef CONFIG_MEM_ALLOC_PROFILING
++
++static inline void alloc_tagging_slab_free_hook(struct kmem_cache *s, struct slab *slab,
++					void **p, int objects)
++{
++	struct slabobj_ext *obj_exts;
++	int i;
++
++	obj_exts = slab_obj_exts(slab);
++	if (!obj_exts)
++		return;
++
++	for (i = 0; i < objects; i++) {
++		unsigned int off = obj_to_index(s, slab, p[i]);
++
++		alloc_tag_sub(&obj_exts[off].ref, s->size);
++	}
++}
++
++#else
++
++static inline void alloc_tagging_slab_free_hook(struct kmem_cache *s, struct slab *slab,
++					void **p, int objects) {}
++
++#endif /* CONFIG_MEM_ALLOC_PROFILING */
++
+ #ifdef CONFIG_MEMCG_KMEM
+ void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
+ 		     enum node_stat_item idx, int nr);
+diff --git a/mm/slub.c b/mm/slub.c
+index 5dc7beda6c0d..a69b6b4c8df6 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3826,6 +3826,7 @@ void slab_post_alloc_hook(struct kmem_cache *s,	struct obj_cgroup *objcg,
+ 			  unsigned int orig_size)
+ {
+ 	unsigned int zero_size = s->object_size;
++	struct slabobj_ext *obj_exts;
+ 	bool kasan_init = init;
+ 	size_t i;
+ 	gfp_t init_flags = flags & gfp_allowed_mask;
+@@ -3868,6 +3869,12 @@ void slab_post_alloc_hook(struct kmem_cache *s,	struct obj_cgroup *objcg,
+ 		kmemleak_alloc_recursive(p[i], s->object_size, 1,
+ 					 s->flags, init_flags);
+ 		kmsan_slab_alloc(s, p[i], init_flags);
++		obj_exts = prepare_slab_obj_exts_hook(s, flags, p[i]);
++#ifdef CONFIG_MEM_ALLOC_PROFILING
++		/* obj_exts can be allocated for other reasons */
++		if (likely(obj_exts) && mem_alloc_profiling_enabled())
++			alloc_tag_add(&obj_exts->ref, current->alloc_tag, s->size);
++#endif
+ 	}
+ 
+ 	memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
+@@ -4346,6 +4353,7 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
+ 	       unsigned long addr)
+ {
+ 	memcg_slab_free_hook(s, slab, &object, 1);
++	alloc_tagging_slab_free_hook(s, slab, &object, 1);
+ 
+ 	if (likely(slab_free_hook(s, object, slab_want_init_on_free(s))))
+ 		do_slab_free(s, slab, object, object, 1, addr);
+@@ -4356,6 +4364,7 @@ void slab_free_bulk(struct kmem_cache *s, struct slab *slab, void *head,
+ 		    void *tail, void **p, int cnt, unsigned long addr)
+ {
+ 	memcg_slab_free_hook(s, slab, p, cnt);
++	alloc_tagging_slab_free_hook(s, slab, p, cnt);
+ 	/*
+ 	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
+ 	 * to remove objects, whose reuse must be delayed.
 -- 
 2.44.0.rc0.258.g7320e95886-goog
 
