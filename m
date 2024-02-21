@@ -1,120 +1,153 @@
-Return-Path: <linux-arch+bounces-2597-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2598-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F356685E559
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 19:16:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7994485E5EC
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 19:28:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78CB3B213FA
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 18:16:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3116B284857
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 18:28:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50CD285273;
-	Wed, 21 Feb 2024 18:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEC58563C;
+	Wed, 21 Feb 2024 18:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ov6cm/hg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J3+Zb8DB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1634942A8B;
-	Wed, 21 Feb 2024 18:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888A185268
+	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 18:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708539407; cv=none; b=NzaBqxI7wnYIq0Ksu4Ehda6RGB+yFjIxcK004WADPESsyGSGPPO9hT/G55JwOO1LxIDKaHiDYlUaMiLy2xGSYaes/ObjZaaTsxRPopxvOWAwQ9D7tYHBemKc7X49km3bNYLHd3F0+XeyDfGRp3VogRS1C8mGpX3La5yedZpxryc=
+	t=1708539980; cv=none; b=rb16U/ipwYlVWNef5aNWArIHWfUqkUf/47rdj8SOHSrX44EcpCwMkcjLSkj7TKuqQBVCiaPLGI9w84VdaN03nTqPwn3iww+wTIxB0Flp8iu3UsXdirXCw+VhrL6v1yn6hPUNaGngKu4yifsTjLUnt/SwQx8BGoIwbvA+hJWl1h4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708539407; c=relaxed/simple;
-	bh=csK/DsyAOVnlfATFEXn3F2y/yVFcNC3OQEkT5JeAyec=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QETOAmcgOuVTIdhj/j0sjngR3fPaEYLjLe1XHAIXz5zdrTNLa2UPx/r9UDBZO8YsM2z+FT8fnd0vvHjh+xeKEGiW2/CcBuRqSVdJBBpZQUuu1OVNfbJnUS2U/JNyz6AiE7kci9IfjGO4vqGuiLHTGdwHUp+TmcbDhKXIOCSFglI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ov6cm/hg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCEEC433F1;
-	Wed, 21 Feb 2024 18:16:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708539406;
-	bh=csK/DsyAOVnlfATFEXn3F2y/yVFcNC3OQEkT5JeAyec=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ov6cm/hg2mleRWqUd3r9/W+rkcAFVU7c27Hx8hcFb4M7UnzZrk5N2v269pkhvIIp6
-	 bYnBdTUndPV/TFw7qV/WyGz5Y5QL0nzqxYt/dpw22VmM8LawYB+liEKK4qt6TGiyDk
-	 QjYeo/CJfpAl1TAZ9ES5BuQc1+oqqSXYqQ4XvqrYCwSuthuV4CUrHLGWw1uQydZLOx
-	 AwoNAI6RkOBmr3gjndpgIT+LOuOI9T5Q22ViTkf+qm8p7en2UwVaM3vLN4MN3sD7yL
-	 3uBtCIJ1v9SEg1kQuOc2Sf9OQiw+ZsqkoXTxilnmDq1+1x53S/cyRAhhlK17+JAJew
-	 /3/DRkmjzoJ7g==
-Date: Wed, 21 Feb 2024 18:16:36 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 20/38] arm64/gcs: Ensure that new threads have a GCS
-Message-ID: <9400cfc3-0e87-4abd-afbc-172736d77a1b@sirena.org.uk>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <20240203-arm64-gcs-v8-20-c9fec77673ef@kernel.org>
- <874je399ld.fsf@linaro.org>
+	s=arc-20240116; t=1708539980; c=relaxed/simple;
+	bh=vXrmA+YUNbHeZInMv385ll0KIlZ9s0pW+epVCXD2DyE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZBrqFV3RXCzSkmXzmnwxQi95SIjdmtGp494sswLj06g76FOHNoo3XblGc0b0vf8ji+StxORcpJdZCCeeHoPbxIVc3wbtal53XgsVT56L3EIm+3Bn/MW0E5ODhaU0wuPz5zTF0hndV+Kpn81peJ7pdVMuI0DUcB8GeM8uW9XRFTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J3+Zb8DB; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dcbf82cdf05so1067367276.2
+        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 10:26:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708539977; x=1709144777; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vXrmA+YUNbHeZInMv385ll0KIlZ9s0pW+epVCXD2DyE=;
+        b=J3+Zb8DBBkreOEG4kHviLtCxTCWFW7dxUW2IgpbLFMfqcu/ambpyUkvdiTearxqjq7
+         scgkHr+EcfVdCDFWhJlFe/Q/lbZB3/f2k7FUfXaxGOopsN/qfyzioyjqN3t9q3AMxcs/
+         XB1Mb82/xx/b7WyQDwPbzf2lNJH6BsZiryalu0zYDMyOUxwE+ouWKmdP4Bj5UssYDymS
+         gVIE/9FsxRSJKtCxgNoce3+4bKfCWfWJiPqYGbAJt0sifLpth6YgcOVG5CMPr25K7Fin
+         pGkYdGt+PWryalhijrwoZzmJ9RqbIWsfJ8mpnIz2CHbiNtuKaaN6eePFhXapiQ+F/2jy
+         QNfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708539977; x=1709144777;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vXrmA+YUNbHeZInMv385ll0KIlZ9s0pW+epVCXD2DyE=;
+        b=Y8+TDDdai+/g958iwwLUpYeadYvRpaByTrk7um7SDljAd5oGhu5huKmh77m9uETrOO
+         2wcRjlLBZIktHLn9JKvXoN165WXuRvERh1lWNxq9aVdqTzokOs43MURylmUH53M/iAPW
+         dTIPJ9ThOm00pVntIAAHK+ScL3JX4XQBWmDxICZHF7OnJksD3lcSVVStuhkbVqlZo+mA
+         6VAYudg0Z7CH6LpLPCveDEqyNQK67Zoo/75wGltVjdPCK58YjCuLg/78vtAc8HNGzOx3
+         UmUepzqtLlBo3W7Jh07g2aPhHkxlgyqyl2ec4ER0AnkaOelfQbS/T6J6G3h0AFcsUhh/
+         nK5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW6U+rWS8SoMebnmtkVC+UJ3BGvSs/polbTdj+95gTl+zcnRLLUhtnY/T2IfzyqYJ6VS4XXt6LG7s2dqiHONqyLK5tgs0940oU9+Q==
+X-Gm-Message-State: AOJu0YxWacmcUySHMUbGDFZBGgaMiDxVc2r7oeq1ch2+q7zcobPHhJxN
+	ExpBc3wCRuX/imquox6PWX2Eb1fPCCjpwwo7mTYZk8jRqk/6CosQkgH/BYbZk7E4eUyA/MmfrLF
+	rOM+jwtcNwaMSYYFNqTK0gpi52QKK+6J4ReDx
+X-Google-Smtp-Source: AGHT+IFqS8tJn14NncAWY62WTNABteq4kVyKmIkcCAlDBmY1N2BQti8G3zCHf537pCEhp7uq+qbCNuxgh3NLwozuq4M=
+X-Received: by 2002:a5b:bcc:0:b0:dc7:32ae:f0a with SMTP id c12-20020a5b0bcc000000b00dc732ae0f0amr80411ybr.65.1708539977180;
+ Wed, 21 Feb 2024 10:26:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kWxKAN+nLkxhoap7"
-Content-Disposition: inline
-In-Reply-To: <874je399ld.fsf@linaro.org>
-X-Cookie: The second best policy is dishonesty.
+References: <Zc3X8XlnrZmh2mgN@tiehlicka> <CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
+ <Zc4_i_ED6qjGDmhR@tiehlicka> <CAJuCfpHq3N0h6dGieHxD6Au+qs=iKAifFrHAMxTsHTcDrOwSQA@mail.gmail.com>
+ <ruxvgrm3scv7zfjzbq22on7tj2fjouydzk33k7m2kukm2n6uuw@meusbsciwuut>
+ <320cd134-b767-4f29-869b-d219793ba8a1@suse.cz> <efxe67vo32epvmyzplmpd344nw2wf37azicpfhvkt3zz4aujm3@n27pl5j5zahj>
+ <20240215180742.34470209@gandalf.local.home> <20240215181648.67170ed5@gandalf.local.home>
+ <20240215182729.659f3f1c@gandalf.local.home> <mi5zw42r6c2yfg7fr2pfhfff6hudwizybwydosmdiwsml7vqna@a5iu6ksb2ltk>
+ <CAJuCfpEARb8t8pc8WVZYB=yPk6G_kYGmJTMOdgiMHaYYKW3fUA@mail.gmail.com>
+ <e017b7bc-d747-46e6-a89d-4ce558ed79b0@suse.cz> <c5bd4224-8c97-4854-a0d6-253fcd8bd92b@I-love.SAKURA.ne.jp>
+In-Reply-To: <c5bd4224-8c97-4854-a0d6-253fcd8bd92b@I-love.SAKURA.ne.jp>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 21 Feb 2024 10:26:04 -0800
+Message-ID: <CAJuCfpFyrUizGbS+ZnMdp4-chg8q49xtZgFhejHoSi76Du1Ocg@mail.gmail.com>
+Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Steven Rostedt <rostedt@goodmis.org>, Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com, 
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
+	42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
+	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Feb 21, 2024 at 5:22=E2=80=AFAM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> On 2024/02/21 3:27, Vlastimil Babka wrote:
+> > I'm sure more such scenarios exist, Cc: Tetsuo who I recall was an expe=
+rt on
+> > this topic.
+>
+> "[PATCH v3 10/35] lib: code tagging framework" says that codetag_lock_mod=
+ule_list()
+> calls down_read() (i.e. sleeping operation), and
+> "[PATCH v3 31/35] lib: add memory allocations report in show_mem()" says =
+that
+> __show_mem() calls alloc_tags_show_mem_report() after kmalloc(GFP_ATOMIC)=
+ (i.e.
+> non-sleeping operation) but alloc_tags_show_mem_report() calls down_read(=
+) via
+> codetag_lock_module_list() !?
+>
+> If __show_mem() might be called from atomic context (e.g. kmalloc(GFP_ATO=
+MIC)),
+> this will be a sleep in atomic bug.
+> If __show_mem() might be called while semaphore is held for write,
+> this will be a read-lock after write-lock deadlock bug.
+>
+> Not the matter of whether to allocate buffer statically or dynamically.
+> Please don't hold a lock when trying to report memory usage.
 
---kWxKAN+nLkxhoap7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for catching this, Tetsuo! Yes, we take the read-lock here to
+ensure that the list of modules is stable. I'm thinking I can replace
+the down_read() with down_read_trylock() and if we fail (there is a
+race with module load/unload) we will skip generating this report. The
+probability of racing with module load/unload while in OOM state I
+think is quite low, so skipping this report should not cause much
+information loss.
 
-On Mon, Feb 19, 2024 at 11:02:22PM -0300, Thiago Jung Bauermann wrote:
-> Mark Brown <broonie@kernel.org> writes:
-
-> > +		gcspr_el0 = addr + size - (2 * sizeof(u64));
-> > +		if (!gcs_consume_token(tsk, gcspr_el0)) {
-
-> Should this code validate the end of stack marker? Or doesn't it matter
-> whether the marker is correct or not?
-
-I don't think we specifically care, we're just looking for a token here.
-
---kWxKAN+nLkxhoap7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXWPgMACgkQJNaLcl1U
-h9BotQf9GJn/XYpiDfL/lza1ZizUnGoNmGMVjrNpXn5ZUEXw+EsNed40zfVPg2As
-MDBjwYmG0UWQjuOimqAPlqsQL2hNSgmuQpeOCdUJXv2+/WBRUOfix+1xhtnPUUlf
-VWqNyLLSjFbbzOAmYFiN1HTJkHsSs8FHbtskrWealJQ/wV+6GLXjkz4cP7dP84lL
-IZOifB9YSPxwaW7RKUtEJ3D6CfX0xZhD5eahzIbO4E74kha8flAy/1AuHvtlI/+O
-0oN9+6kUfQNptazvZMa8wZib2BDF1ORpASOrzn+hmFWgoUD2j2wbkMt/E8sH9ckT
-HygbfdF0QU3Xk7fxczBPUTsczeTLeA==
-=2YH/
------END PGP SIGNATURE-----
-
---kWxKAN+nLkxhoap7--
+>
+>
 
