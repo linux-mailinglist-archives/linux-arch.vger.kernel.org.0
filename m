@@ -1,51 +1,51 @@
-Return-Path: <linux-arch+bounces-2537-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2536-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EF1E85CD55
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 02:18:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E0E685CD51
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 02:18:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1A511C228BD
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 01:18:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8142284863
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 01:18:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAB96FCB;
-	Wed, 21 Feb 2024 01:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A935CA1;
+	Wed, 21 Feb 2024 01:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AlnvEmJ3"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DTuRs4Ru"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A357C2C9A;
-	Wed, 21 Feb 2024 01:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A00D46BF;
+	Wed, 21 Feb 2024 01:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708478264; cv=fail; b=eZg16nk8KQyQknYsv96+z/lqbWzB4PP7LhPb8C8imjDcwVTHD2QO+BuTpCE5MYQkGZorXmYokBDBlZt0H6e70czNojQpJXKX8uCUeb7CwMQsc+O/FBPh2xH7BTQ0KwSlTjsOQybyepDd83XyqkcFpddOBUdV1X0Fm2UfY2odq54=
+	t=1708478263; cv=fail; b=YqIPfg2iidLKqL7Dwh9aAxBZTZthwp2N3+/lkvOslgOFaPvJkGeXaVfmYBOkKJ32wErUdWCwSzcHZPBi11gG1ede2wkSSIrSMpTOY0oWGWM61XpQYxgvgjjL3imDcwRq15U+KcPngFScUgSUKKeNs7zFJXxlQP5AQ75NogLsLcI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708478264; c=relaxed/simple;
-	bh=e4m91W4UlLexF96Ehoh1+/PfJSahVk8Hic63bLrgQuo=;
+	s=arc-20240116; t=1708478263; c=relaxed/simple;
+	bh=7uzBHjAcC+WFWa3zp23Lhl8e8N4QKBudNzUWrDw367s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qDwpJuu+u9p4LBkld/kOeYGI1Z3zHHBNk34gJF6JKLgQNVnlf7jmzUtc6V6Z8SGqdotPVGwsStTqAY2LkvxOUHX7eYVm0MwgB2otwy5MHRQVL49dhtwXVApJmFev1cpyFpS8i1OQrJ4f99Vms9FI93iTJV32dbvzbhYWAeBdeH0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AlnvEmJ3; arc=fail smtp.client-ip=40.107.94.43
+	 Content-Type:MIME-Version; b=EPl6rrk3xpSsR4VwbuRyNfd/KgXkmYpsTcS6+ZdAL2cGqiOV8WS0xuetpCEciCd7UjPu8cTpnA8UCn0Z0G+1YvAN46u9/SZ6wPD7MnFVEnUFxBUiEmM5pLjY7ynqOgOSq71MnwdEqrwmrjKAkaGKeWJFXw7pwgqZbwvGaPk5BKQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DTuRs4Ru; arc=fail smtp.client-ip=40.107.93.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OVtwZz62wdgWteFNDOyItC5grrOL1Tj4/7ieud8SZsYQZMJldoY7hTfILSIw06DaHR4J3bVUpN3+h/8AYdB4woixifCf9SRv/HeRbEVOyMLMD6+eNeDXQdrhBya5I08aMNDO8KE9I6xVdCjRm1dW+/KTTh5pkXYDWE2/ptutxA8kRJ/pJf9Lo8tzg3LQSFAKmUK1wyaNyiIc+pbPTqBbgsW7b9yVuaaewZH6+k+SJ4htX4oaqhH5JGX/BU3XsIAjTQmOt2S22Z4j7OrnD9RGNAHJsO0hub+VBSHyPNUsXMEMTh4WkiLPovR/Eqlke5qhC9z56xzQP+I0xJeiwrUeew==
+ b=IF9YtUOOKUKaj+suKxk3wzvlTWIk+QK3nt/dOeBhws7A8o4Ixi9023GzMR9y4pMz3aBi5Ep8bKi3Ej7wIKA3CP1Ct1B8TCYwx1U5KbQU89xy8Lv6PaYisbTSalP8z40lZVoWMQjGJPKypH6fyrUgBfJX+ely8qCc2JOu0oRL4DnvWXgqbFvh5p5gu9Dum84NTP11b5Ka2YNOe21HtKfisBLPO7OT8naBClkLcRErTASF6IpUQDxe3iqv9HdXvTCrCDiv8tRp03SqHagc+Z2O3U9eFFP4gPPrurgr994O8I/oy/8tqmf1yE+kIW5a6qYTr/PqYBfL5EMl8qUMEcbdIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PRPh4dhsyZVmxVVomsPWCtm81IAZr2FMm5Xc6ZHkaQc=;
- b=OZ/YuBkZDNLcU5tMyls3jz04VSGkxj3mDUgrlOjA+5G+nkVAVJ7IRxXSJXXWffv8vEM3wurMU5OFDUCB0bQ+PengpC4bXw+zVqJLTMF6j2DpHJCKDEWwQK+AS5O6i0FDGDIUuKSGbbhOy6SAOy3ikIkuTqstaIp6DRENC7tdHj0KpCIlsp7Hs0H3NLc3OeG7TNI/uvxJSszbIOKda9dr9IbTs7ArM2VIJKmatUk+qBfboRza2gpTdPFPJa5/PdgMQpX6O5lOEhi7sGjAwKEXQb9uwiGB6LOQlA3FsPdvJStVVyxTdQUa5COVhRir4D6KYGqVEYuCF17dbp3cpbapfA==
+ bh=A8AAjccZiDocpI+iUhnHuPYfPmCAn0tQ1el49HyzkKg=;
+ b=BKbI5vgc3+vYcBLDfBxIeGVXiN5mrbXgFQZLE87wFRDhf79dYMNpKc85V+bssSifzpSduYe3uQD0s4X+EbywMY2Nx0Xq/UhqL18RnZgXDDvRPh0Yu8LzdwPD7EC2HP0sjw8oWqZ3kEJsqe+9s1lSXp12yRWzrN7Z/zMgqVxMxlUJvO0XjBHQFTM3J7WnIVDE8lutrpAt0GjV4JWHnsajLy1Dt/Ntq/Iog4xp+Gr4W/Xs8MPBxYdekvgI0TaEBt4hkEcaSLmRoQqOV2b8gGyEbBms5Wjlv4onIum/3zGw+yzp6dhhoUoS/C7wsOwK/wmvxp56XhZE4PJLKcL9a8MV7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PRPh4dhsyZVmxVVomsPWCtm81IAZr2FMm5Xc6ZHkaQc=;
- b=AlnvEmJ3js910k80SZfRiFl3lnuIhA813nk7syRboWIwlzprjGt9BCwqcTn2oInMG3x1Ohw+w5TgcMAYwWsy9jKUSOhWvEhep+wvFvwhM5RhQp/EtU9QtjQU4r5hSKwT0gdVCtZwalgAwE9Z2jg3tO6q2GJbCIq0/z2GMgz0f0PACA+PjgvonJs9+T8h0fAWjc97dTZ1fKzoQYHq+s08atJDnr1O9gnkey68ln/jF/sgBpEgJf/jKpSREo9sAvrD0OF/gj4/oQFzHeYdrWzWw+qPdGLb7V5OpVEIjMADcvgJw7hciYM97odIgos/tlm3fee34c8y6SNUDCzNM7SwoQ==
+ bh=A8AAjccZiDocpI+iUhnHuPYfPmCAn0tQ1el49HyzkKg=;
+ b=DTuRs4RuO3kRZ7VQ0o+K6SVfOREsUKEVc3nii+UbQr4jgMr33fcd01Kj9cpgXPeKADtt3rox1POh9L9U0EitZ5eIL+1TwLM1BFbqyUp8P6T8IhXTd9FHzvMREt+5NEnZG6FaMLBk22TlESRHOOlMWMhNfHwGZmWAyyuDpRXU9eWOLo+o8DoJCcdzhmRC4WnJVKhloUCh6nLv3EyNVxQdHEqy/2ShAWncGr7tRBnIBwLl0rOhQPwqTJYdRpDPddAUUoyNAokPO/3eeiPJ0IBYGgdhvPPRmOhwT6d8z6lTRQ8DNebEHq1Elx/sevt6Ijx8viW/coWljBdA6otgjuglFg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
@@ -97,16 +97,15 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	patches@lists.linux.dev,
 	Niklas Schnelle <schnelle@linux.ibm.com>,
 	Will Deacon <will@kernel.org>
-Subject: [PATCH 2/6] s390: Implement __iowrite32_copy()
-Date: Tue, 20 Feb 2024 21:17:06 -0400
-Message-ID: <2-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+Subject: [PATCH 3/6] s390: Stop using weak symbols for __iowrite64_copy()
+Date: Tue, 20 Feb 2024 21:17:07 -0400
+Message-ID: <3-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 In-Reply-To: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR20CA0064.namprd20.prod.outlook.com
- (2603:10b6:208:235::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+X-ClientProxiedBy: MN2PR01CA0065.prod.exchangelabs.com (2603:10b6:208:23f::34)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -115,84 +114,143 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN0PR12MB5714:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86fdd14e-590c-4538-a4bb-08dc327ad4c5
+X-MS-Office365-Filtering-Correlation-Id: e4e41e24-5250-43a7-18e4-08dc327ad4c7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	3yxRJxO5aIbj3hDw6tlkBvfl/bHS/toyc0WPFpJn7I/p4qar7U4TVNN77AMvfjdV1WeRhUbg8Yqlz2ogZhKh9FhfLfzYdjYYRpqQd4pq4ZUrGqbgmxiBRSd21KMIlt/Pk4K3icKslGo4eE1uskxPWUdt7rHVf3XGaD9FLgdKlcTEt6M8UHc9vdVrw3wRJPZdcUvDXztpWqQr+NgZpUajskPcwmZvkkkEsxM5uMgvHdrWirzZT05sCar3kdbEWh3cPrOdLQhC7olmYB8FH6JSAJT3lqDaSsycdULfQtmAQDm7Ve86qyIlBS6+rlOLfA/cQsg/JGZzYdbr5cNGeztpqiuo8M5vB4dQAld5uDGr3P9jTDK2qq/pIxDLWMhyeIYqvRhF29HM31jl23ItHjuXtrGk0HUXdUib4/9t63VTheCga88CxuOMFTw0XbIX+t5vK09M+KDvrFy6p2h/s+yFtUVSPA2e/ncrVnw9ZlVMZliRF+VeulRQnrGZ6HBccTJd0jGzqsnIa1iHoqqptWPQ42gqsSH63m96+0RI2OaeADOwEOrTmC9qsgz8n0bUduIuPxC6XCm/iaUkxcv6VhRXfLsTB8oN2HjCItjAf6/3N2w=
+	2obyQZaplIdlx9P1Oz/M8pb2d/0l3SYhM14cNXw+bZRp5q94u9zpGeU7u3PR+UWuEk26Q5VRDB11o5FmCtHAPiws4tcCzvd0QnS3ZM5YyGFnXL3yEvRVOmwhKoRm2NPch1ckyWWAtdQ63DdUllPaORwkAJM/70Yeg07wys+bPmFQups9tMp+8aR4DG78dsOG5pzECeNym8WbFt2I8cqzxgnmzwP6jmRyoHhQm4VYebGER/8mYY7Qn/Y2d9BtR3QuSmDBz81e3vmp7U5C7JYlbODqLU9jM+nkppY9x18vH9ujil48MEDhFuQxnrGUnckElNP+hEcIHmumfcTu3ejz8tT4GX44eZ6LAThp5blMiTnFNqOL7MOVF3syWmaSJJJmwssnLDbrltJ4YERoZVHk2sN6M6d+3+38g7r8B9hSDuzlSK5XtaVRM60eXNfK/tmP+5S5rQ01wubPi8x8TWJDbY+EAEqnUwCtCCdE4yBlihRLsF9vow43GCQ7Ic+75MRbPZ7higvmnRYOcDoKEtoqNI5410ANO9cOoBgIOuemES7H/FNDTEq92iHVfLBOuu8si9mroc1B6M9I74yX1U2jhxsLfL7l1LgZYZsSp6SIAII=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(921011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YTmOas5ayFNIiC+T9hc0t8eaVEE1/d8RO4aKgENd7USt9TyGZn+k83VSpHUQ?=
- =?us-ascii?Q?XYjr7pSWQUm0Zm4MN2ztkjI2k9aOZBqVIImVgIMRXlBPcLuFEUgFBMtRocN/?=
- =?us-ascii?Q?V29DhrJKroq/H9igV8UF7SL9CJG8FiP0jcZVI24LnwB9kzk1DHOHOwKDZU1Q?=
- =?us-ascii?Q?yde7QXwsgIKVQIIrMkn1CSqalOZ2uLBbnksyZw7g2ML429qjAEm3K7to4d0/?=
- =?us-ascii?Q?9VrrcNet1pJk3s0QP/4VHHiVA3Puacb5W8vCY94FnlPx8wVtXAA8LU6umHIG?=
- =?us-ascii?Q?NI8stIaTas+yOaB3pPvV6VlWBi+WaGE8mAdpvlsf/WYcUcXefmxTxuCx4PCX?=
- =?us-ascii?Q?zlC5kcDjtxtpDImK4aKdQkwN/EmozjbsKpUfOuNP8e7OJF6Qk6B2b98XBOc4?=
- =?us-ascii?Q?6STcLhYlhL+ivZZZwfx/v+q9zwTHhDS5+Fl1Bc/iNH5P/KVuJ6KDbKkDAiBK?=
- =?us-ascii?Q?gDy/JlQZH4L+3E9xO4U0Ylbh1bh41zrBJcXctaC00kPlZ0ioEeh/SV/nvdvk?=
- =?us-ascii?Q?sB3YjoVH6E1JOAWxbZmmTm5KqsVvGyZ+/vhr2I72hcEvaGohzKj0pg+DTUBm?=
- =?us-ascii?Q?KgBrccQOjs3kEyvbqDmGJHRjqbPF/8jlatTFCiaSPuIVW3HsY7XBV7KL5V+w?=
- =?us-ascii?Q?97NjEhzKIQW3JsqaxCMyBaZ/l+4b0QAoOlCcQdvQXOkzsCd5a/9uuHTre68F?=
- =?us-ascii?Q?d6OlGst+hBCJYy3EX7mnPfQFWhvfMaaf61UWgZgdekpzAobQipt+4Ty8DpWw?=
- =?us-ascii?Q?ysiik+gU1wyViqpKhdObu0fUopE5t9u7ZysP3Nmp1kMLyjeviFznMBgHxcsC?=
- =?us-ascii?Q?YqChlWzXnQIaEb57zKPh5csCj1Xrgev122RJmqI9KgIkk9FFXrY5/TZWdse3?=
- =?us-ascii?Q?GLmYcPdBGXuwij8jkWwQNcHBe51/nzhLR4NQjki7WQdyjE4cQFT5l6luaMan?=
- =?us-ascii?Q?i9Nx5uYE/jsaEwm6pXZAG2b7+KiN2bndH0t98TEtHj1vIVQNg+3Gm/1boh8R?=
- =?us-ascii?Q?rRy8GjvgrtAUdNzV4AYHstFUqwfGMC/bWTLBkpgpp2zaSIraAfN1U6UJDkDi?=
- =?us-ascii?Q?evt2Wd++ldJTZ2YJzUHqHMzMCa6FpgQ8Da0dHG2elEvH7DIIPDY241Gixjlc?=
- =?us-ascii?Q?D6aLXrWBO3S3UFZtfmG+12jRZArGKZAhc2eL5hZ2KzPFeEmUtxpWr57P5N2s?=
- =?us-ascii?Q?hXY3Tfbr3ENjPboE1CVf+k06WKBq+DWE+z//nuLXaqYzLitMLkbPJKRRs233?=
- =?us-ascii?Q?lpse3hc5YY6/nkjNaw5cUAZkPtgUwq/syN92HQqQZ1vmn2+0rMJsH83lrHhs?=
- =?us-ascii?Q?eXrLx9a0FczbjsEMEEs7GXgoQT8sdqxPzSOsU5TGzceF5HCIW1Tk9uwBt8Ds?=
- =?us-ascii?Q?TbCSzDOQyCWy8/GjmEGS+sZytJ7qU1ov4d/63MPn8/F6KTmlubuPrkzRk6Y+?=
- =?us-ascii?Q?i292kB8TBBlAkh6IZQfKWpiH0hiZCcTH5ef9cmt/6jdx2QHWBSWWVSuE0fv5?=
- =?us-ascii?Q?KTBuq+HN9Cavu+Uk71Ve1G2y8ot/vSE8ZIokKRm0abFnSirovycAgwtiH4Pi?=
- =?us-ascii?Q?/SOeituRddD0Qqqpxfxz2s1QckFuu8EqLLLSjyZx?=
+	=?us-ascii?Q?6QCh+3B4LZsdWASkKEXEQAaJ0ED+UcF0U4GCBjOfLcLx75/9jnIUF2ARb33H?=
+ =?us-ascii?Q?f6yeWP712AEZ8hFTu3iRTtyo6dD29WsVaU+QJzmRno9eY1M/Vg/669LNtwbC?=
+ =?us-ascii?Q?ZuOIu6SpJkwR328H9X3H9uG6FhGqzui/ipU3JTej7VWHrA50niCyMr5GTVKe?=
+ =?us-ascii?Q?KH6NX/OBYw67lydZnnWUa655l53PkuuOiy+GqpkDEL0GMwFCQf8jUPVxgmy4?=
+ =?us-ascii?Q?zAEdFSa4hct9d9VTwjxSy97xHxyc/ydfRMOgqcHh7dsuxdg3A0+YOsyMSPA7?=
+ =?us-ascii?Q?R4FrWp7QTj7Gq2eszmEb048NSQl1EI4iDQ79P9w5G9R8cqFIhK6PbmHBaaPO?=
+ =?us-ascii?Q?5/1tt/1jGXLgIrq/60tHS0ecyf4eUfQLVMUAuEMilUSbkSXzj9YvSK+1cidB?=
+ =?us-ascii?Q?kgxPnRR3oYdIf/iGj+eWMenWL5+y3q5ljq+FAaTrQYEgHq6GZvagYppK+qsF?=
+ =?us-ascii?Q?jmu4LY8EtU05iv0jSxSG5lM+oTHm4x0K0cEFlh7yamDdeoViKFrGbsVXUzxQ?=
+ =?us-ascii?Q?xSVjW7msgkXlRDPVO9yBYH0SuwjQrLfx2nFSgMMf1sooCezLVzC8W6e+mlxG?=
+ =?us-ascii?Q?5xVJinD2wySbljohKwZJ1zALrCFOl0MIzAIqHvZtmpuIo0GLhYpsHuOpVbse?=
+ =?us-ascii?Q?4bJIpTju3/eA4o4dQz3DNAaEa/krJwZTLqrP9ic5UH/UvfyFOjjX6+T2a3pP?=
+ =?us-ascii?Q?OsMPsr4qd5QeqrzMeiBiBUOpRT5Uwm7TKUDAwe8vdxgMgqz1CI045XwkGly/?=
+ =?us-ascii?Q?fbPC724c6+teOAo/FC7J+vemTthW6j8VqUHyUSeMHsJ34RV6AnXp//Sj6Prc?=
+ =?us-ascii?Q?NV07xRBSnbbFZXf+Is9whnaUSmUb+HNaMt7mK6hniBNgp2L3l7BwVuUhkNDv?=
+ =?us-ascii?Q?ZIYYUs8/q0303YM4C55p3XUBMtDEXYTPhd2SXacX2J98OV/jjzuw489a05tH?=
+ =?us-ascii?Q?7Yty6BFsHI7HGIBMuMnr2WOUZDcnEhCDeBNWFMKgIaFkEKQunpVJ/BRlIVhS?=
+ =?us-ascii?Q?aNWNhkSCWi6TTLYzLHD3Sjb965yODbIBaTqVOl8zQrJdEiX7RrOBdJ2G2T8u?=
+ =?us-ascii?Q?Qtm41MVud/wYPkqw6AkPZP/LaBNHdC2NT/eWfTHiGVjhEHhT7+K2q5oioFdm?=
+ =?us-ascii?Q?KtORKGsR/kYfxxW+YcA8+LdL7sSS6ur2Knw0gZKBL/F25xoX03IbAE8JUSqc?=
+ =?us-ascii?Q?dBDaJh0CyOaODmT/B657u63mZvQThIuDkg7mbEPbvLfiOZpBbS+ekJL6lXvr?=
+ =?us-ascii?Q?GyWo2l3817qlWDwQGlGcN1KNXjY5uIOFG5BWjPaICC5+mk9MA38BOuy98Boa?=
+ =?us-ascii?Q?boK4xIpNRDq+6XSEoEqEoJnUWHgGeR/srdZLJrggl+Q5Geb7tMIYIVYFHmmJ?=
+ =?us-ascii?Q?qmZHI46F/FzGg1ViPeMyFeZz9RGEVRivNSipjEFsPtFiPEDu68qFpsEPYZAn?=
+ =?us-ascii?Q?zjSHEuaQLLWHSgFngwQedRmoY1kixidX4P/Gks+w427U/P+SStnzK6m1blba?=
+ =?us-ascii?Q?XQlujQUyjS2rt1kxSjOCCDnQ1RX1FIc0NCIJJiRgXn2gmf+qIIFY5KtTNm0w?=
+ =?us-ascii?Q?HSkyXCXxdzFnGT6wXrTmYANYJlqpCQfbquB1Usoj?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86fdd14e-590c-4538-a4bb-08dc327ad4c5
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4e41e24-5250-43a7-18e4-08dc327ad4c7
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 01:17:11.8061
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 01:17:11.8126
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tg73HYJbMGHhYEl58jh/6me1JvXLicZLpyJN7/bN9FgQygsnZgoI3UgK3JmE1O5z
+X-MS-Exchange-CrossTenant-UserPrincipalName: yL3XbDf/mk345/2Zj4GGpRePm34LGu0jbT17qVuDzUMY4Q4pVgiTWc5QL9hYMB6T
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5714
 
-It is trivial to implement an inline to do this, so provide it in the s390
-headers. Like the 64 bit version it should just invoke zpci_memcpy_toio()
-with the correct size.
+Complete switching the __iowriteXX_copy() routines over to use #define and
+arch provided inline/macro functions instead of weak symbols.
+
+S390 has an implementation that simply calls another memcpy
+function. Inline this so the callers don't have to do two jumps.
 
 Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- arch/s390/include/asm/io.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/s390/include/asm/io.h | 7 +++++++
+ arch/s390/pci/pci.c        | 6 ------
+ include/linux/io.h         | 3 +++
+ lib/iomap_copy.c           | 7 +++----
+ 4 files changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/arch/s390/include/asm/io.h b/arch/s390/include/asm/io.h
-index 4453ad7c11aced..00704fc8a54b30 100644
+index 00704fc8a54b30..0fbc992d7a5ea7 100644
 --- a/arch/s390/include/asm/io.h
 +++ b/arch/s390/include/asm/io.h
-@@ -73,6 +73,14 @@ static inline void ioport_unmap(void __iomem *p)
- #define __raw_writel	zpci_write_u32
- #define __raw_writeq	zpci_write_u64
+@@ -81,6 +81,13 @@ static inline void __iowrite32_copy(void __iomem *to, const void *from,
+ }
+ #define __iowrite32_copy __iowrite32_copy
  
-+/* combine single writes by using store-block insn */
-+static inline void __iowrite32_copy(void __iomem *to, const void *from,
++static inline void __iowrite64_copy(void __iomem *to, const void *from,
 +				    size_t count)
 +{
-+	zpci_memcpy_toio(to, from, count * 4);
++	zpci_memcpy_toio(to, from, count * 8);
 +}
-+#define __iowrite32_copy __iowrite32_copy
++#define __iowrite64_copy __iowrite64_copy
 +
  #endif /* CONFIG_PCI */
  
  #include <asm-generic/io.h>
+diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+index 52a44e353796c0..fb81337a73eaab 100644
+--- a/arch/s390/pci/pci.c
++++ b/arch/s390/pci/pci.c
+@@ -249,12 +249,6 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
+ 	return 0;
+ }
+ 
+-/* combine single writes by using store-block insn */
+-void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
+-{
+-	zpci_memcpy_toio(to, from, count * 8);
+-}
+-
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 			   unsigned long prot)
+ {
+diff --git a/include/linux/io.h b/include/linux/io.h
+index 68cd551b6af112..fe12be9de6f7a6 100644
+--- a/include/linux/io.h
++++ b/include/linux/io.h
+@@ -21,7 +21,10 @@ void __iowrite32_copy(void __iomem *to, const void *from, size_t count);
+ #endif
+ 
+ void __ioread32_copy(void *to, const void __iomem *from, size_t count);
++
++#ifndef __iowrite64_copy
+ void __iowrite64_copy(void __iomem *to, const void *from, size_t count);
++#endif
+ 
+ #ifdef CONFIG_MMU
+ int ioremap_page_range(unsigned long addr, unsigned long end,
+diff --git a/lib/iomap_copy.c b/lib/iomap_copy.c
+index 8ddcbb53507dfe..2fd5712fb7c02b 100644
+--- a/lib/iomap_copy.c
++++ b/lib/iomap_copy.c
+@@ -60,9 +60,8 @@ EXPORT_SYMBOL_GPL(__ioread32_copy);
+  * time.  Order of access is not guaranteed, nor is a memory barrier
+  * performed afterwards.
+  */
+-void __attribute__((weak)) __iowrite64_copy(void __iomem *to,
+-					    const void *from,
+-					    size_t count)
++#ifndef __iowrite64_copy
++void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
+ {
+ #ifdef CONFIG_64BIT
+ 	u64 __iomem *dst = to;
+@@ -75,5 +74,5 @@ void __attribute__((weak)) __iowrite64_copy(void __iomem *to,
+ 	__iowrite32_copy(to, from, count * 2);
+ #endif
+ }
+-
+ EXPORT_SYMBOL_GPL(__iowrite64_copy);
++#endif
 -- 
 2.43.2
 
