@@ -1,125 +1,133 @@
-Return-Path: <linux-arch+bounces-2604-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2605-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C731185E722
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 20:20:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3B2585E729
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 20:22:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF630B246C5
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 19:20:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F76A282796
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 19:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A8785C51;
-	Wed, 21 Feb 2024 19:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A5C85C55;
+	Wed, 21 Feb 2024 19:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fM7bxuzf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJ87J93G"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E284D83A06;
-	Wed, 21 Feb 2024 19:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6C27FBBC;
+	Wed, 21 Feb 2024 19:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708543221; cv=none; b=LfEaDtLNfCxEXpkDasfer0/6tUxUNGHCBuQete8jVHb3bftuD1YwNE0Rw5INgggRD/GMf4ZACE7oqvKl3guoQaN2dq1s6tWdjF2AmJ2XP9qs4+kRY0UDtj6Sc/VEyX42c5x4Bn83ecjzVzTWiV4nzXJYZDS1agPmBFwpHR5cHvQ=
+	t=1708543337; cv=none; b=Id/2HroRQaAsWVMQWLRJKV5AsW7cE3ko0T31bXwzwues0mhony/viZfAYv0DS8rrtkrq2YHDhyNTGSfazXyPU1yTL9+VC9Ic73j2+n+nKNQuPf+6yKDDfe/rPyjpNGCdYYRluWot4CGh3g1f/ZZMwqrqksuKVp+d/TRhJfMFgS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708543221; c=relaxed/simple;
-	bh=LHJE1R6CeCVbz5voxdhxWZEEGGRoTCqvuitIhyGxW/Y=;
+	s=arc-20240116; t=1708543337; c=relaxed/simple;
+	bh=0OodqgNcvx8ntnlXtEmNl9CzN4cmy/3auP5St1YCfYo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SuSitFXWqsfJaHykw+zFaWa8/gefwcdPGkxu+n6pXT+I/9pm6HaO9MINfXB2LZVzPYZJliw5AoDeWRrSel+ZCxpd+Lam+FJ/ijXMMO7JEjtZzft7HsQFfQvKltcxO4cHMib+VJ2I9cGE/fnwpsc89mKFZQlRHKtNcksjYtkL4Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fM7bxuzf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5294CC433F1;
-	Wed, 21 Feb 2024 19:20:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jUuO+8eBkXoaWBFgwnRaxALBa54+9LIgV3WoS585/J0XiaoJACOoyfvQmESRWl3gIYURJMhVzqtRvJ/iQ/sEb1I/EW/d+PicNbZPcdlyAYTGf51DTSaTV4sT7vhA3ctRH77biiLnNZAaLXOuZJz5T/lD+N5uiE+Kws8FalKXxHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJ87J93G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3ECC433C7;
+	Wed, 21 Feb 2024 19:22:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708543220;
-	bh=LHJE1R6CeCVbz5voxdhxWZEEGGRoTCqvuitIhyGxW/Y=;
+	s=k20201202; t=1708543336;
+	bh=0OodqgNcvx8ntnlXtEmNl9CzN4cmy/3auP5St1YCfYo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fM7bxuzf37U7KgkBjE4t6xl7196zWQ3zUCNoJ+agd+QN1cy+Xyq7yQXJHO1ESLu+m
-	 WfRkNjkseH24zdDLgFE1SQHiWbwcIsKTde/kK/nypgvvdaArvLxpMbxTv/DpPdea0Y
-	 h/S2n8KTkPnE0y1deFIAUzbMSfmwY+RBO7FMARe9q8Qz3/FxPYnixoXp6/h5t4/vuP
-	 uoT778pZQf+ryGuzNashUCuvUxs+4C4xh9U2NIQYurkPfiYpJq05pv7AaQTTfFstDU
-	 3dg2YeZnziQRTHuGFAV/FX2fhdlhfvtEv0Qil9L1OpaX49KYycDzgKOwtGXtT8v3X9
-	 UMMPgrMEFWVIg==
-Date: Wed, 21 Feb 2024 19:20:11 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	b=XJ87J93G+evRIoU8Rda/h3gEh+MmBQn/ihau1koXbpG2vc7Q7X/Z3FDA+27G5eGKp
+	 adq/fFZsuxU9dGUvQ230eoKDaDysEUD69zfaKXCggxVmXhRcjlKBVEU0Q0k2rA3BAX
+	 vYHujOcAZrwDDP3o52EkzUI46Ox75hSNy38AGA5vguRG5WscWt6Sg9BGIIq/9CvBKy
+	 0RFb/VgnVQahUHpG96HdW0EROCdzv2pY9bcEZ1dAIkJDeQu+FTMCwMYjQo88bHW8fz
+	 y7YEBgT5m4GIfG0M10Xe1DX+64vISb2glhnZ3nFnLAeDL6LA7l90+0tr269uPe1yt8
+	 afMcW129BlMSA==
+Date: Wed, 21 Feb 2024 19:22:06 +0000
+From: Will Deacon <will@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 33/38] kselftest/arm64: Add a GCS test program built
- with the system libc
-Message-ID: <084d97c0-a84c-49e1-a1e2-d864dbfcce0e@sirena.org.uk>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <20240203-arm64-gcs-v8-33-c9fec77673ef@kernel.org>
- <87sf1n7uea.fsf@linaro.org>
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Message-ID: <20240221192205.GA7619@willie-the-truck>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2wtnap7o07IPW6JY"
-Content-Disposition: inline
-In-Reply-To: <87sf1n7uea.fsf@linaro.org>
-X-Cookie: The second best policy is dishonesty.
-
-
---2wtnap7o07IPW6JY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 19, 2024 at 11:15:57PM -0300, Thiago Jung Bauermann wrote:
+On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
+> +static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
+> +						 const u64 *from, size_t count)
+> +{
+> +	switch (count) {
+> +	case 8:
+> +		asm volatile("str %x0, [%8, #8 * 0]\n"
+> +			     "str %x1, [%8, #8 * 1]\n"
+> +			     "str %x2, [%8, #8 * 2]\n"
+> +			     "str %x3, [%8, #8 * 3]\n"
+> +			     "str %x4, [%8, #8 * 4]\n"
+> +			     "str %x5, [%8, #8 * 5]\n"
+> +			     "str %x6, [%8, #8 * 6]\n"
+> +			     "str %x7, [%8, #8 * 7]\n"
+> +			     :
+> +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
+> +			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
+> +			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
+> +		break;
+> +	case 4:
+> +		asm volatile("str %x0, [%4, #8 * 0]\n"
+> +			     "str %x1, [%4, #8 * 1]\n"
+> +			     "str %x2, [%4, #8 * 2]\n"
+> +			     "str %x3, [%4, #8 * 3]\n"
+> +			     :
+> +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
+> +			       "rZ"(from[3]), "r"(to));
+> +		break;
+> +	case 2:
+> +		asm volatile("str %x0, [%2, #8 * 0]\n"
+> +			     "str %x1, [%2, #8 * 1]\n"
+> +			     :
+> +			     : "rZ"(from[0]), "rZ"(from[1]), "r"(to));
+> +		break;
+> +	case 1:
+> +		__raw_writel(*from, to);
 
-> The only issue as can be seen above is that the can_call_function test
-> is failing. The child is getting a GCS Segmentation fault when returning
-> from fork().
+Shouldn't this be __raw_writeq?
 
-> I tried debugging it with GDB, but I don't see what's wrong since the
-> address in LR matches the first entry in GCSPR. Here is the
-> debug session:
-
-I'm simply not seeing this in my testing.  There's *something* going on
-somewhere, I had another report of a similarish thing elsewhere, but not
-in any way that I've ever been able to reproduce.  It smells like there
-might be something missing with the page tables...
-
---2wtnap7o07IPW6JY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXWTOoACgkQJNaLcl1U
-h9BQigf/fQNxlJZgGDgIILMsKObHoXWsq3JdCPlraW9xJegPTEC5/TbR57O6F0Ds
-/m4Si6b75N7h1+TLJWetmyKnGAMNBss9qHx2swhi78CdwKsefp4GKaivaFWVKxRx
-srdyCavP5tHvbc4O2WqN4A8HZY2ekXKnaXvmz/1DtfvKpV5hgYKBo99ISPLrMVpC
-gX/jBaUd5GFOX6ImWBzN30pXfHRJXBr0DiXBrTlxoevDfu7GvQN4qECSqBxM2s1F
-Q0vvblI/SBO9CX3h1Pnbdr4VleVLI3arjc4YTBiaPY8cVjHyb1RkUeUrRWVXRzU8
-pzYSSKqd4kQ61qa9FEiZhZs13o9otQ==
-=eqM2
------END PGP SIGNATURE-----
-
---2wtnap7o07IPW6JY--
+Will
 
