@@ -1,165 +1,124 @@
-Return-Path: <linux-arch+bounces-2581-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2582-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFB985DC75
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 14:53:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30D085E03E
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 15:51:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6BCC2857B9
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 13:53:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D73C21C23771
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 14:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFA87C093;
-	Wed, 21 Feb 2024 13:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129DA7FBB2;
+	Wed, 21 Feb 2024 14:51:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYWFYY21"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WRDAvBZz"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6532676C99;
-	Wed, 21 Feb 2024 13:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80423D393;
+	Wed, 21 Feb 2024 14:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708523600; cv=none; b=mv8H7iIi5f50H62oEtHw1Izhf5rR7mCA0fXRd6YmDPVEIa/+9lqyZx7SOyOXiQzhNSdp5yn2VG0YmH0vOJ+dbj5U1wifqTyKLiI6DW0NTVjZecbYjUine0sFmx5AYUZ0OQK0s0h0ptLkG6tMIPjXipXDzsJFDNyRb1BuMhnWCRY=
+	t=1708527067; cv=none; b=aAszj4kCp4eYo5yRtxtfhyyJIUb0M0itx5JpMhAZnFODi5nIXZMyM0OQMFp+T7oSLSBz1n5pxV0NnGc/5/62JtR02oU742eAlrNchCXgbOw8V/+voP2In9dWKnQv/E5SwfJg7WZMlgo1lEUgd36tpkDBosWdELH4ZuFQS0zQb3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708523600; c=relaxed/simple;
-	bh=2qDB6aCchFqvsRrIZrlOnBUWRusFLsK6a7t86lO4/kc=;
+	s=arc-20240116; t=1708527067; c=relaxed/simple;
+	bh=jR116JpyfvNBm06wmEVLlKKRHi5BQ5NesCFPXL2SImk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=myu69FE7P+NnX/+X6Qtt7TxnZjPsU1wcAz28khjxoE0gcTRqTiE51tjsPQbh6YrXQR/b6OYitj6wX1XlKBVf88Vfc2gXXh2pj2BXzjphcj6venRC0FFyyMU+PU9FO1voszbr5LL2dZ7x849d9+oJjdHKKXkdPpqAXUb4c7NTL1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYWFYY21; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8B9C433F1;
-	Wed, 21 Feb 2024 13:53:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=s8NMgyJ86LFugkhLrRG3SWmC3mK1FTvsyPbrMAbGn4HSwZcypA83E5ON/WKRMvznHEjIgQ/ywGdSrfHTOjOomc/VYeiqU20bIcwsMZHd+vGOeMpAN85ZRLLAMCTXQ9R6XDb0XGChJBIKrMpniB59Z4vStVSymGjeffK95DOd/hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WRDAvBZz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8107DC433C7;
+	Wed, 21 Feb 2024 14:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708523600;
-	bh=2qDB6aCchFqvsRrIZrlOnBUWRusFLsK6a7t86lO4/kc=;
+	s=k20201202; t=1708527066;
+	bh=jR116JpyfvNBm06wmEVLlKKRHi5BQ5NesCFPXL2SImk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XYWFYY21ChMcDnqRafHBvRB0QxejjlT/bZHLI49dgPa5dRacaD3UN0LLMesLDhEVK
-	 FQALDj09HDwKPE6W4jj/Eh1jqbUH+H+QnFzr8lEIlZA/imkC3dRk/JOQvq/V/1qmnf
-	 AKtPOLPebGuFFRe5xPIXDbSmUtlL944IsVvIA7rGpLNSg/1AcaSk659q46C8HRHywn
-	 bhl8FLesEaZJjbv9GARHL60svpyiaFNTpyRdOuK9i5QgdctkDvVHFN/fMwhmSVZRSB
-	 /NtzQjotaqwXeqdsZ0ePVwa6GV0m+bjLd5HQ/Rwg6sMIIZRNIfrgzJfc4uR31QEOgk
-	 nbyq6X4Uq/GjQ==
-Date: Wed, 21 Feb 2024 13:53:10 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "dalias@libc.org" <dalias@libc.org>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"musl@lists.openwall.com" <musl@lists.openwall.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"ardb@kernel.org" <ardb@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"sorear@fastmail.com" <sorear@fastmail.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
- in userspace
-Message-ID: <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
-References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
- <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
- <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
- <20240220185714.GO4163@brightrain.aerifal.cx>
- <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
- <20240220235415.GP4163@brightrain.aerifal.cx>
- <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
- <20240221012736.GQ4163@brightrain.aerifal.cx>
+	b=WRDAvBZzYYuE5uEfs/DEtOe7zPNcnoZYbwSu75Up2HHOCiaYs3dPtA3OFeS3aPijj
+	 cdCJEC4io72wTxOSQfnNvLnLW0c2gv6tih+AGJaN/cIIMfccENvgOGgW+Y4y73EviJ
+	 /95XICjCmk7hF5YBUPHW0H5+53rvT5IPFuNh9DzIoo/B/iZuLVvbEAjqaT79MVu+SO
+	 zoH5NBPAIyQheTU4QmU6vzAQxSV9MnS1mlP894VbFgkaw3S9I8y+HXI75doohUQtiO
+	 LrWh102L8ZI7FGNYQCmOW2aK0zb6kqrnVpxfNYFRZM3L9sb8iFhtUia1zIniN3qzQ2
+	 6qH0YCc10mUxQ==
+Date: Wed, 21 Feb 2024 14:50:51 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Maxwell Bland <mbland@motorola.com>
+Cc: linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+	agordeev@linux.ibm.com, akpm@linux-foundation.org,
+	andreyknvl@gmail.com, andrii@kernel.org, aneesh.kumar@kernel.org,
+	aou@eecs.berkeley.edu, ardb@kernel.org, arnd@arndb.de,
+	ast@kernel.org, borntraeger@linux.ibm.com, bpf@vger.kernel.org,
+	brauner@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, cl@linux.com, daniel@iogearbox.net,
+	dave.hansen@linux.intel.com, david@redhat.com, dennis@kernel.org,
+	dvyukov@google.com, glider@google.com, gor@linux.ibm.com,
+	guoren@kernel.org, haoluo@google.com, hca@linux.ibm.com,
+	hch@infradead.org, john.fastabend@gmail.com, jolsa@kernel.org,
+	kasan-dev@googlegroups.com, kpsingh@kernel.org,
+	linux-arch@vger.kernel.org, linux@armlinux.org.uk,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	lstoakes@gmail.com, mark.rutland@arm.com, martin.lau@linux.dev,
+	meted@linux.ibm.com, michael.christie@oracle.com, mjguzik@gmail.com,
+	mpe@ellerman.id.au, mst@redhat.com, muchun.song@linux.dev,
+	naveen.n.rao@linux.ibm.com, npiggin@gmail.com, palmer@dabbelt.com,
+	paul.walmsley@sifive.com, quic_nprakash@quicinc.com,
+	quic_pkondeti@quicinc.com, rick.p.edgecombe@intel.com,
+	ryabinin.a.a@gmail.com, ryan.roberts@arm.com,
+	samitolvanen@google.com, sdf@google.com, song@kernel.org,
+	surenb@google.com, svens@linux.ibm.com, tj@kernel.org,
+	urezki@gmail.com, vincenzo.frascino@arm.com, will@kernel.org,
+	wuqiang.matt@bytedance.com, yonghong.song@linux.dev,
+	zlim.lnx@gmail.com, awheeler@motorola.com
+Subject: Re: [PATCH 0/4] arm64: mm: support dynamic vmalloc/pmd configuration
+Message-ID: <20240221-ipod-uneaten-4da8b229f4a4@spud>
+References: <20240220203256.31153-1-mbland@motorola.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cNQgfjDz+IAKI+aZ"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="r+os/L6iBAa0yd7x"
 Content-Disposition: inline
-In-Reply-To: <20240221012736.GQ4163@brightrain.aerifal.cx>
-X-Cookie: The second best policy is dishonesty.
+In-Reply-To: <20240220203256.31153-1-mbland@motorola.com>
 
 
---cNQgfjDz+IAKI+aZ
+--r+os/L6iBAa0yd7x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Feb 20, 2024 at 08:27:37PM -0500, dalias@libc.org wrote:
-> On Wed, Feb 21, 2024 at 12:35:48AM +0000, Edgecombe, Rick P wrote:
+Hey Maxwell,
 
-> > (INCSSP, RSTORSSP, etc). These are a collection of instructions that
-> > allow limited control of the SSP. When shadow stack gets disabled,
-> > these suddenly turn into #UD generating instructions. So any other
-> > threads executing those instructions when shadow stack got disabled
-> > would be in for a nasty surprise.
+FYI:
 
-> This is the kernel's problem if that's happening. It should be
-> trapping these and returning immediately like a NOP if shadow stack
-> has been disabled, not generating SIGILL.
+>   mm/vmalloc: allow arch-specific vmalloc_node overrides
+>   mm: pgalloc: support address-conditional pmd allocation
 
-I'm not sure that's going to work out well, all it takes is some code
-that's looking at the shadow stack and expecting something to happen as
-a result of the instructions it's executing and we run into trouble.  A
-lot of things won't notice and will just happily carry on but I expect
-there are going to be things that care.  We also end up with an
-additional state for threads that have had shadow stacks transparently
-disabled, that's managable but still.
+With these two arch/riscv/configs/* are broken with calls to undeclared
+functions.
 
-> > > The place where it's really needed to be able to allocate the shadow
-> > > stack synchronously under userspace control, in order to harden
-> > > normal
-> > > applications that aren't doing funny things, is in pthread_create
-> > > without a caller-provided stack.
+>   arm64: separate code and data virtual memory allocation
+>   arm64: dynamic enforcement of pmd-level PXNTable
 
-> > Yea most apps don't do anything too tricky. Mostly shadow stack "just
-> > works". But it's no excuse to just crash for the others.
+And with these two the 32-bit and nommu builds are broken.
 
-> One thing to note here is that, to enable this, we're going to need
-> some way to detect "new enough kernel that shadow stack semantics are
-> all right". If there are kernels that have shadow stack support but
-> with problems that make it unsafe to use (this sounds like the case),
-> we can't turn it on without a way to avoid trying to use it on those.
+Cheers,
+Conor.
 
-If we have this automatic conversion of pages to shadow stack then we
-should have an API for enabling it, userspace should be able to use the
-presence of that API to determine if the feature is there.
-
---cNQgfjDz+IAKI+aZ
+--r+os/L6iBAa0yd7x
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXWAEUACgkQJNaLcl1U
-h9BTcAf+MujJo/pNOGU2neBJWmbVKrnAz60+j+uAD98t6m1YXtFChsz+YR6gQOA1
-7FEah97yBTtTiSGpgeKnKCJZMVaWEYHF0Oal7bU/cO0uO6DshP7BIWygF/xyL6/r
-AiFhQ5IAhgRYlGKzShiXTP3rx7ITjIS/1ejalkQ4vHwCOA/N0rsnZwJadUytQjJv
-bHJxu0pC95Sb9lZG3yrrOqZJdljkMsnb7ThBwPRENX0XmGz/Y8l0/FjQwiyWc+Bv
-i4HuekjDwxdxIknpEI/kciFlk8gjthTCrAloZNN/PGNExBEppzAMUg44bTcUkuuu
-CReIkIoN/x1s3gztzAkcLF2nu1EF6w==
-=wfib
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdYNywAKCRB4tDGHoIJi
+0gMuAP9F/qaVnaevMHMAFC79aMoA7T8MPtngzCYgeGKGkodjfwD+LfeSF0KgFWRs
+XPWMo+0cR11PZYg4ErTvrYapXzyvsgY=
+=uABL
 -----END PGP SIGNATURE-----
 
---cNQgfjDz+IAKI+aZ--
+--r+os/L6iBAa0yd7x--
 
