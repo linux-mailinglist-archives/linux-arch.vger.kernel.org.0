@@ -1,128 +1,122 @@
-Return-Path: <linux-arch+bounces-2553-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2554-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B60D85D532
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:09:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AD8685D555
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:20:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51A1286683
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 10:09:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CAE01F2308D
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 10:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF963D579;
-	Wed, 21 Feb 2024 10:09:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B773E3D970;
+	Wed, 21 Feb 2024 10:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ZTB+XIku"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nj/lNYal"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA22F3D39A;
-	Wed, 21 Feb 2024 10:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E64B3C493;
+	Wed, 21 Feb 2024 10:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708510186; cv=none; b=S/IR2Cim4Rrq5BiQtteGxUqx3cC9QOiPntjrog0ki/Ddi9cyXroh4QUwX9jcEVbLgB0UsHYyn9jrNRa7cPMdG+dmnZ1rIyl246l2RerpNY40c7G5nv3ZG5CNMu4vfRqxkXAtJzgJ8O8yFK/PjxgVb6LheA5f9vZtQEOeeGWjG+0=
+	t=1708510827; cv=none; b=pMdJFugv4OyxPOZQsDdMGS47aJetcem2IQrJB7Zs+DHm2tlgBHcrJpC2+BRBgJERL/y/0GaIPan2yDG2RGU8hsiOTDSxl+pVkAifwLDEldinG/RSOobNTCCoBPaIpuAb9KPMdzllmxWH3skifMYmCuSdAmTQBEvsCZv5ALC+EiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708510186; c=relaxed/simple;
-	bh=r5moT70R+oUVljSoprUOEoJfl4/tp6MaAnZM9QhoZhE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QPREaOB+sVHxFekEL9D+3fYk0PZ0Jwsc5xKw1AxfFNyXncnsFMs/5m9OoUIbOdfS6BvrU5p1NcNRHK2YDoRafiECY+gAzrcYurF8kuMyhAeBo1mRqhZlFlaJTKMdEpA2/Z3GjwhMlqnZK2MjG+fA96qvi3QaYGeLfnMThyjI+xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ZTB+XIku; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 48B7040E016D;
-	Wed, 21 Feb 2024 10:09:41 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Dsl6LZ2KmMpX; Wed, 21 Feb 2024 10:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708510179; bh=/J8Kak/gbtX4KB6FH/imEHmEzO+kxDuIp4ODj+Ng24s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZTB+XIkup8g+SSBh84HQ2Xcyp6++sEo5vmXc7I0izLOkKGf2BMVCAiuIUN+J+qKE5
-	 5CXWJw7yjMzTjlgXV3JCpNCYOoXoiFx0N65k9rOnoCecF58ILlHlP+X104H19IrP5x
-	 PsQj39A4azG3Q5napBKwLx6385WsADYKzPMRdone3iNlPF6ls5/y27AzgEZOcfXFQw
-	 lWbqGJCNC4m3IF5jso1uyaMo8UkdSULyXOdQWOz1jRXP4jAhWquWOmdZ5z+bN8XQPw
-	 VYHeqfvAL3o/89V8NqzTeZcUm+iI+5p+o49J4ToOX0bamV1i+rI+rhdzmAiv3Z6SsF
-	 aaMQztGzhLA5FRh5y2PMxY5D1GL7aixLW9EtqB0ykOv+dt6fcfxP9XWNe833tUFUby
-	 odn0T9fFKyFsodwduVs8L3rI3i0eaL3C8G/PsM9O0Ct1WaCxz2OM81e5IBp4yKNG+n
-	 qfakPcaaHBXJKZEmGY+FrShbtGhwRaRk17nPmVLWEnJ6lVPGg73U6RwpFCNxLt8la1
-	 4nQiuuUrt8RnSv5MYExPIxBjNzHQtizbfexkKVH3eJZ6DOOUVoXZFwFQD2Su6olgrF
-	 fq0EyD5JYRKf0RtFBIb85lRyDIePbLBFx00mc4wNiasrcsuuB02rQoU4Q6cLORr07a
-	 Z1GWl04RB1Hh1uCo6fBJHm8s=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F15C840E01A9;
-	Wed, 21 Feb 2024 10:09:21 +0000 (UTC)
-Date: Wed, 21 Feb 2024 11:09:16 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
- paging global variables
-Message-ID: <20240221100916.GCZdXLzHb-31GMw-f-@fat_crate.local>
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-17-ardb+git@google.com>
- <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
- <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
+	s=arc-20240116; t=1708510827; c=relaxed/simple;
+	bh=J/Fg/zm/+n9uEnP0C0R0wz9xzbBtvG5jZMNnhEcMT20=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KKfer3W/vTcApRwQqTRaX0YahMLGdov6DlFxqUF8l8Rg4b5vBgOF5UaePvYpbS8Zi8TO48SsNNpqA/iWcYLWsolgCezKchh0WN7zg0QOGoxs+1EI0jdn9y01UbdKNZIPzySPYfE5FWCFkI8zIAhOXKw/YJi4jgfvVTS5Xp5OKNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nj/lNYal; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CEBC43399;
+	Wed, 21 Feb 2024 10:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708510827;
+	bh=J/Fg/zm/+n9uEnP0C0R0wz9xzbBtvG5jZMNnhEcMT20=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nj/lNYaliWoEYd+4sH9piCA9d/x1dVqhiCeG8ZlF64RIgjb+5ceUHp28DmaTBne5n
+	 j6IiSfg71QrgNZsSdMhxSduBKni0wN7oEXP0+9xa9YUK+N4UCE63RgDTXDiwHoDqOG
+	 P5+xsqOolGumxMBkZrRiEt/kkqOtRAJgtIO48g1DhHqZu7gb6Ibxype+5kyoePLWck
+	 mRsz4P5pXk78GJzykgJFXdovEacpa8qlOVl8nGlzNmWDRpphWEobIUpVZU9hHpsfFZ
+	 wpzUJPwnXVjGOPe6qNdUtbTyhtKfFuGXKASXftKqQPdy6Jb3p/hDF8wYK3wOIVECHk
+	 Pm/1QM1K095Ug==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d10ad265d5so70812021fa.0;
+        Wed, 21 Feb 2024 02:20:27 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWg7ncb1+/oZkFmmqSKUlg0imh0WE07AtVTQc2LsthiqbtW485prHnW3TQcBSIYaVXkscrBN0GhYtuoudul+VoibWSQOuDx4Nd6gg==
+X-Gm-Message-State: AOJu0YzwAc/tjLy8LTVivpLHtVHTD7RtXbd31QEuV6Y5KDOLNE4Nx9bc
+	UF4KztKvkbAdFAFr0yohh/OUSeKHyCa++29ePk4rGJiFDLWfclK0e5hu/AsEwVJU8Tj2zOig6oK
+	TqFMwOVML4bx1PapWi75SVq2eSrM=
+X-Google-Smtp-Source: AGHT+IFXVRr6o+Ds+H6VMoLX3MlKc1OGh8SqQ0XgmfrWQ13UTJ9FYKk2LR8mqqmAIPxFvRQzIZcbdxnonFCsbBc9zFY=
+X-Received: by 2002:a2e:2c01:0:b0:2d2:4778:c825 with SMTP id
+ s1-20020a2e2c01000000b002d24778c825mr3470473ljs.41.1708510825347; Wed, 21 Feb
+ 2024 02:20:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-17-ardb+git@google.com> <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
+ <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com> <20240221100916.GCZdXLzHb-31GMw-f-@fat_crate.local>
+In-Reply-To: <20240221100916.GCZdXLzHb-31GMw-f-@fat_crate.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 21 Feb 2024 11:20:13 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGqHf3b3zho_0CPccTkgXRnTrxsG_qDjhP9P+US-u2AGw@mail.gmail.com>
+Message-ID: <CAMj1kXGqHf3b3zho_0CPccTkgXRnTrxsG_qDjhP9P+US-u2AGw@mail.gmail.com>
+Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
+ paging global variables
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 21, 2024 at 12:33:08AM +0100, Ard Biesheuvel wrote:
-> Right, this is the same issue as in #11 - in both cases, the extern
-> declaration of __pgtable_l5_enabled needs to be visible regardless of
-> CONFIG_X86_5LEVEL.
+On Wed, 21 Feb 2024 at 11:09, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Wed, Feb 21, 2024 at 12:33:08AM +0100, Ard Biesheuvel wrote:
+> > Right, this is the same issue as in #11 - in both cases, the extern
+> > declaration of __pgtable_l5_enabled needs to be visible regardless of
+> > CONFIG_X86_5LEVEL.
+>
+> Yap, I don't mind something like below.
+>
+> 5LEVEL will be practically enabled everywhere.
+>
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index 158da0fd01d2..eeb1744215f2 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -52,13 +52,11 @@ extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
+>  static unsigned int __initdata next_early_pgt;
+>  pmdval_t early_pmd_flags = __PAGE_KERNEL_LARGE & ~(_PAGE_GLOBAL | _PAGE_NX);
+>
+> -#ifdef CONFIG_X86_5LEVEL
+>  unsigned int __pgtable_l5_enabled __ro_after_init;
+>  unsigned int pgdir_shift __ro_after_init = 39;
+>  EXPORT_SYMBOL(pgdir_shift);
+>  unsigned int ptrs_per_p4d __ro_after_init = 1;
+>  EXPORT_SYMBOL(ptrs_per_p4d);
+> -#endif
+>
 
-Yap, I don't mind something like below.
+Just the below should be sufficient
 
-5LEVEL will be practically enabled everywhere.
+--- a/arch/x86/include/asm/pgtable_64_types.h
++++ b/arch/x86/include/asm/pgtable_64_types.h
+@@ -22,7 +22,7 @@ typedef struct { pteval_t pte; } pte_t;
+ typedef struct { pmdval_t pmd; } pmd_t;
 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 158da0fd01d2..eeb1744215f2 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -52,13 +52,11 @@ extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
- static unsigned int __initdata next_early_pgt;
- pmdval_t early_pmd_flags = __PAGE_KERNEL_LARGE & ~(_PAGE_GLOBAL | _PAGE_NX);
- 
 -#ifdef CONFIG_X86_5LEVEL
- unsigned int __pgtable_l5_enabled __ro_after_init;
- unsigned int pgdir_shift __ro_after_init = 39;
- EXPORT_SYMBOL(pgdir_shift);
- unsigned int ptrs_per_p4d __ro_after_init = 1;
- EXPORT_SYMBOL(ptrs_per_p4d);
--#endif
- 
- #ifdef CONFIG_DYNAMIC_MEMORY_LAYOUT
- unsigned long page_offset_base __ro_after_init = __PAGE_OFFSET_BASE_L4;
+ extern unsigned int __pgtable_l5_enabled;
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
++#ifdef CONFIG_X86_5LEVEL
+ #ifdef USE_EARLY_PGTABLE_L5
+ /*
 
