@@ -1,82 +1,82 @@
-Return-Path: <linux-arch+bounces-2653-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2654-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 622D785EA11
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 22:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A410085EAFF
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 22:36:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92AA11C23F56
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 21:24:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9F0A1C211B9
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 21:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598E51272B3;
-	Wed, 21 Feb 2024 21:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1517127B45;
+	Wed, 21 Feb 2024 21:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="CD/Z8BK7"
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="twlEEf1y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8124866B4E
-	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 21:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8E97CF03
+	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 21:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708550658; cv=none; b=bwuA+o9tsW4OYU/ZUas9264KkfMpilH3n+BmfgBw7ECF2jeHxEgbGj1lJS59URVWVZOyYaXhhwHfWbF6D8m+wtQBHjgOrufjHUgGlBYVSed1tOE/PJ/MYOFNRSOsonPE00XZm9IebyfFOXh/30CTNBqvFoMcOZ87wFyloul6vnY=
+	t=1708550773; cv=none; b=DFsXopsL6QzN431/ZmvMQNvVuX2nxHGiWKitH92Nzp5mXMZim2yYf/DxIdOszyIz4jWXhRr3yAhwQoYD92QV2RXRIUR3NFdkJGjSfiKVLOFp6whZikExImFXGsl1IKtbY9a8TxOjNVzxFtWfZ1z8eKez3dXRWXGOy5KPeo6Ahko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708550658; c=relaxed/simple;
-	bh=cZXkUcelidv55pcogEZ5q8CQsV5tGZzpTAAvQxpkWOQ=;
+	s=arc-20240116; t=1708550773; c=relaxed/simple;
+	bh=1oEaHzezRAll9SQ0JkGYVz7chMh/UI28PlbGaomS6oA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GdNXWjVHWX6BLrVXG2k6tDpZqVRViXsfTWjCo6NfkfIzfUaau0yY+5RFGLnu2Wc6x9GLsU4sWaM+Rmpj3H9KXpSYIreCbw8TLvILdZcn3oi2O6i3WAmxuttQ0k9O7gdAzgKmMDmth41YLxgixrwxv5kly2rcnj9LDwd15iXnvd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=CD/Z8BK7; arc=none smtp.client-ip=209.85.210.50
+	 To:Cc:Content-Type; b=NpHjlrdPm9C2xt5ASgwStSAtfeTXiTlAppUeb9zYyJhc+i+FJESn6sWThLSd77mkQQrGDE5x8UD3jvVnqJbMbRNrKFjMEqB4wgkcIF9AOl+AhUJo3ociulTqImtzf8jxfdkejJ6/EDKekBbSyrTjiA4g7LzTAA6Kx0oIqprIDR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=twlEEf1y; arc=none smtp.client-ip=209.85.167.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6e44c9a62b6so1817698a34.3
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 13:24:16 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3c15dd2a1fdso2682682b6e.2
+        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 13:26:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1708550656; x=1709155456; darn=vger.kernel.org;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1708550770; x=1709155570; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cZXkUcelidv55pcogEZ5q8CQsV5tGZzpTAAvQxpkWOQ=;
-        b=CD/Z8BK7Rp9L3i5Vl3s2KolMt7yZM3Q7SV1NrREyMTfzFMVwamp0srcydy69ptyQJn
-         QXSSqU31Y95owRZ167SQF3FdA3AuKMFckDCDMgq52UyBL2DglRABg7BatfCiiEhFvdrs
-         50eRs7e0ctmnkZhCHUQIzE22K+8+RjFGVMUOfer6IBBrxibv9FJqB8lZLekkBAUHlrcK
-         fK7XYKOrVx125m1pLAnDgz7S9JgR3h0CmVz/xvIlHXzYcZZ/DjgPKtk+CPQ9SH3PAId+
-         nvooirTukSELTOSVm+fMpwLm+WfP74t0mos9xXu9O7qBhtlU34sLNfg9keaEfyE0eDHQ
-         a3Uw==
+        bh=1oEaHzezRAll9SQ0JkGYVz7chMh/UI28PlbGaomS6oA=;
+        b=twlEEf1yUUSQY4M7jcQpxVobd+dWC5ezggwrEwNE60AZ8QeMObLxP14XTPx38VQ2eQ
+         TyrB4dnaVh7ipn13+vKwt6sJKS491Skg4KAMlL9NyxSI8HytAsFXSzZSk+umh+bpebcW
+         YHwErdKYko8+z7QnDr0g9jOg0w3y7Juvk+0CXSSikE8fwrDLZhKCz4YDBKFAX8UfBeYy
+         jUTHfw76ke8UM5rMB3x0u8xRuKsnecR7d8tvj0OaUwXWM9ceEuSwr94Fi6j2NKkbOyG0
+         vuocKoz75fJUtkV5Hsf7vnXoE01wfziYx61d427gMjkLIq2cHgMjI++ZqF99CfNbPmnQ
+         VnhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708550656; x=1709155456;
+        d=1e100.net; s=20230601; t=1708550770; x=1709155570;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cZXkUcelidv55pcogEZ5q8CQsV5tGZzpTAAvQxpkWOQ=;
-        b=BkXPPJ0FD9y/WU0RPlAJYbfB2LgCNwUNsOXLO8P/K8pyRV4+w14NychOWQCjPyzRr/
-         tDT3bfBSU2adG7IBkOy0lOVxU9cwuxh84cq7l6pFRTQjOYq1AT19LnrlpPt6xYQVdHg9
-         jGLZSSXZ42nSG6ISPu0S60mu+NXqRfC2d2v1lCqnPhnzJ/ndccQ+RzzDAQfD4pGpcelR
-         5v9L0MVgXhwj2qQ/TWD6322y0Y4xEVQ/BCDdHAj5+tdBOWESgiPmVNWHW+7qzRh+iYev
-         GukUCwGR8IKTP7/AavboinJSv9kg88XVisnuG3T3bfwY340/zpNWdQkCTJgIwhAtzmMN
-         YMiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1u+mtu8UgMnorPpnMVct9IQKZ6XWMAdX3pJactktD7TtjOO10peW/AJm6aFKIus8KufQY20LvF7EjPxeCdSYn5igZZV5o8FbKQw==
-X-Gm-Message-State: AOJu0YxQGWckqZf3Z0eEmupveHb0lQ6eCwSo8v8vUMdd0ztzUWqeWZ0+
-	2jN95/dpMajeP4KrRmK/dmsywuupRJXK7D1d0+sRJAjlTYzR2xdX+MSc2o1C1dj8jHoarACNBZv
-	C/UvL4t+hG2eNv+NFrXvXOOVznjfvLMgSUEiKtg==
-X-Google-Smtp-Source: AGHT+IFvWKjWPK3amI8VL9W53BBk35ttzb77PzRBdxcUJJDHyxRlktLp+XaDhvA82AT8l0qmpbPOUDFRSVqjGiC7KOY=
-X-Received: by 2002:a05:6830:1005:b0:6e2:eba0:ec4d with SMTP id
- a5-20020a056830100500b006e2eba0ec4dmr18796951otp.33.1708550655819; Wed, 21
- Feb 2024 13:24:15 -0800 (PST)
+        bh=1oEaHzezRAll9SQ0JkGYVz7chMh/UI28PlbGaomS6oA=;
+        b=InT8qoYLMUj7QmXlEqZJw5obrmYn+Itdy2194pEZHntFmf/FkIao/q+ZO10eLOiTUe
+         0yj3Qk50TLaWlaStexx8lbrT3B/0QovkzvK5RUp+bPmcRxpTeQqDROBjo31PgUQGKoQW
+         ZiKMBulY3wtPkqHduqOzyvphD2atWz9LDHfZvbG1ythYs2guLMz+AjF8qtroZOU+Td+1
+         jLiu5KOivtoskTGmD8LwRD8iQzNQ1QQXUc/wfqvD2bq6wojp2hLdNro2CyD6RCbQXDTh
+         OKaWd7A2Ych/eCNAarFT+al8edw+1ZcSem2NMJRdqvLfNWgSyC4tFsy50VvOTP/iWU/o
+         4nCw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxXZMW/rLlWhGOyeYki4hSXRY7tbK0rl3gGqECCfDrvMD14fhhE5p697i4bKSXzf76GjwtRFx0HrK2cBSqey0WPmoXLPXi7Tk1rQ==
+X-Gm-Message-State: AOJu0YxaMhy8hD1DW5zHYGXcD1J5tjjwG0LgeuuRX/FE9xvIhkyYND8T
+	aGZBcf6SVosxRWMvOueD43gKd2PdM+CjRDHyhPVPdwLrywBJSOG6EgNyRhSVBAevzF8hFKQJaF5
+	ZOLvVo+l8oXM4HcOqUKkg6SgtEI2aY1BWS4SFQA==
+X-Google-Smtp-Source: AGHT+IFZSNXNYlAy0AiXEzXx4upknBW0nGNBljw/bbiwmtTqAeSgHzhF6z+ApQTHTR9DUqPj2ju2fMwMSbPw53G4Luo=
+X-Received: by 2002:a05:6808:1208:b0:3c0:3d12:2002 with SMTP id
+ a8-20020a056808120800b003c03d122002mr24802049oil.13.1708550769929; Wed, 21
+ Feb 2024 13:26:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-6-surenb@google.com>
-In-Reply-To: <20240221194052.927623-6-surenb@google.com>
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-7-surenb@google.com>
+In-Reply-To: <20240221194052.927623-7-surenb@google.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 21 Feb 2024 16:23:39 -0500
-Message-ID: <CA+CK2bAAzRfsDYG+LVvp9LAJLpJoakhTAB3i6JiGDogvz8kfHg@mail.gmail.com>
-Subject: Re: [PATCH v4 05/36] fs: Convert alloc_inode_sb() to a macro
+Date: Wed, 21 Feb 2024 16:25:33 -0500
+Message-ID: <CA+CK2bDX7v8+NHi2ioxQ4KF+vBYA0JhR3=Sj6ZxBS0jD7i2Gmw@mail.gmail.com>
+Subject: Re: [PATCH v4 06/36] mm: enumerate all gfp flags
 To: Suren Baghdasaryan <surenb@google.com>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
 	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
@@ -101,22 +101,19 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
 	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>
+	cgroups@vger.kernel.org, =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Feb 21, 2024 at 2:41=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
 om> wrote:
 >
-> From: Kent Overstreet <kent.overstreet@linux.dev>
+> Introduce GFP bits enumeration to let compiler track the number of used
+> bits (which depends on the config options) instead of hardcoding them.
+> That simplifies __GFP_BITS_SHIFT calculation.
 >
-> We're introducing alloc tagging, which tracks memory allocations by
-> callsite. Converting alloc_inode_sb() to a macro means allocations will
-> be tracked by its caller, which is a bit more useful.
->
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
 
 Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
