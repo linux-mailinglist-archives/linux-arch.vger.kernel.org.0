@@ -1,235 +1,128 @@
-Return-Path: <linux-arch+bounces-2552-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2553-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB4A985D370
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 10:27:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B60D85D532
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0916B1C214AB
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 09:27:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51A1286683
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 10:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98DB383BF;
-	Wed, 21 Feb 2024 09:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF963D579;
+	Wed, 21 Feb 2024 10:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y6SAPo/o"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ZTB+XIku"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAC53D56B
-	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 09:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA22F3D39A;
+	Wed, 21 Feb 2024 10:09:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708507650; cv=none; b=K9mN3JJ2F1S6zSDjwPWA0MjNxHWQQJk5gRAsW6DCTVA1gVLAoORh9jaSJYkgBikWueZ2eFhg+1KH1zrZXYpH6iBUf2MPKxlyDGfc8grBJDixwy2HHsdqR9YjH6dUWP3IwO1dSIj60b3u8VqEw3JqYojyAVpW/pS5ogHDDbNFlKY=
+	t=1708510186; cv=none; b=S/IR2Cim4Rrq5BiQtteGxUqx3cC9QOiPntjrog0ki/Ddi9cyXroh4QUwX9jcEVbLgB0UsHYyn9jrNRa7cPMdG+dmnZ1rIyl246l2RerpNY40c7G5nv3ZG5CNMu4vfRqxkXAtJzgJ8O8yFK/PjxgVb6LheA5f9vZtQEOeeGWjG+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708507650; c=relaxed/simple;
-	bh=5QP0MuDrmxNzRblbI3qrO9Ljkt4BlG3Q0Bb0TpHHhGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jIn/AH0W1WpoTk25x7j8ELzsJVQ8E71WQha7kfFHjZ3NNbLz4qjhvkzRRyDKZKldqLWm+Deq7r2kcCZQzxyOYaHHpNgUBv/RxlRsq3GjiX1PYDVgj3VzCdQbLtaVj6h7ew38EDlkOTyLvmolHgg9t8Ov7SEb4HsHVeMe/Tz1Ock=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y6SAPo/o; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708507636;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=JqDQzqQUNVGgLXFQ47h2MyrP+vNxqZ2Sfg76FoOL2Z4=;
-	b=Y6SAPo/own6Y9bMWQqiGU4Gj2QqVahyM30URvU9hT6XBnsWh29MwZDWGcBeJJ66IEOQp9O
-	oEva/PvNNe1iHgCDppDKeqEPLYDYQbd27bIFJ70P6AxJ+Z3uAMQO5iEmmiTAA2+fA1DYuz
-	Y7JeIWGAydRBNj7Ph4d4HFXj0fwLRfA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-22-k5Pc1PflP7uwWOVs_EzAmQ-1; Wed, 21 Feb 2024 04:27:13 -0500
-X-MC-Unique: k5Pc1PflP7uwWOVs_EzAmQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4125670e7d1so18178805e9.1
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 01:27:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708507632; x=1709112432;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JqDQzqQUNVGgLXFQ47h2MyrP+vNxqZ2Sfg76FoOL2Z4=;
-        b=H6oUgY74jJMVEMOruvdP57SRC3sYFOEjTO5F/44baVItmJzHJebN+bY1yYP9ZFTPZL
-         LzT8bf8Yp26i9UAnGZnVVrkDed8CDl6hyeVoJHpdKIGp/YfmhxAQlVpN8qGgL6g85/TY
-         Cl7/8LUQ8ZyzKPskGg7G+mV7DROUa+TiPT1vuBti890DYAwTfacQth47SixxY4gpGYNm
-         tMbqjzDnqSJvJ7akppidmgMW8Ni3En8yJGv17fsbyIWpajnT22bGMVNbEu2UdystCCa8
-         FHsDW+nQ2vQvBAQKRLUD937COaGvV4Sm9d6PLD39a4WjPoku4gFLunAHHO4S7NcljjSV
-         zI6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVx8nuGbWu4CXcXmzEIqAaBVeObtYD1AiGY3bgYha2IT6KmTskcsqCV2F3l/3b7sLt4kh7tmVyDJd2d0pJw3YTzpx85MRHR/xnOnQ==
-X-Gm-Message-State: AOJu0YxV9vLUfUxQARxETLTlKfYvdfqwnyCiuiq8rkl/nRP4UnvkJerW
-	ohZg3q3r+V0lF+E3bdSyP/EaqloQhBFO5105o3w2Asmmdc1WmBax/5WRupZYbrjVJMPdKcI7fHL
-	7/a50ObtJUNH0ghFvOoVvHBybE3aZhX4gEsG+F4kqL85f36p4jZkvqcjTkss=
-X-Received: by 2002:a05:600c:19c7:b0:412:5296:9737 with SMTP id u7-20020a05600c19c700b0041252969737mr13136530wmq.12.1708507631761;
-        Wed, 21 Feb 2024 01:27:11 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFJ7FuH/em5oiRt/ZTOR4oMLbXYFTRabnhBDn5rQM4tupeTaNWMPYn2RFDHXi6wWaSGqKntiQ==
-X-Received: by 2002:a05:600c:19c7:b0:412:5296:9737 with SMTP id u7-20020a05600c19c700b0041252969737mr13136504wmq.12.1708507631270;
-        Wed, 21 Feb 2024 01:27:11 -0800 (PST)
-Received: from [10.32.64.237] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id jj2-20020a05600c6a0200b004126732390asm1837805wmb.37.2024.02.21.01.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 01:27:10 -0800 (PST)
-Message-ID: <cf5409c3-254a-459b-8969-429db2ec6439@redhat.com>
-Date: Wed, 21 Feb 2024 10:27:06 +0100
+	s=arc-20240116; t=1708510186; c=relaxed/simple;
+	bh=r5moT70R+oUVljSoprUOEoJfl4/tp6MaAnZM9QhoZhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QPREaOB+sVHxFekEL9D+3fYk0PZ0Jwsc5xKw1AxfFNyXncnsFMs/5m9OoUIbOdfS6BvrU5p1NcNRHK2YDoRafiECY+gAzrcYurF8kuMyhAeBo1mRqhZlFlaJTKMdEpA2/Z3GjwhMlqnZK2MjG+fA96qvi3QaYGeLfnMThyjI+xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ZTB+XIku; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 48B7040E016D;
+	Wed, 21 Feb 2024 10:09:41 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Dsl6LZ2KmMpX; Wed, 21 Feb 2024 10:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1708510179; bh=/J8Kak/gbtX4KB6FH/imEHmEzO+kxDuIp4ODj+Ng24s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZTB+XIkup8g+SSBh84HQ2Xcyp6++sEo5vmXc7I0izLOkKGf2BMVCAiuIUN+J+qKE5
+	 5CXWJw7yjMzTjlgXV3JCpNCYOoXoiFx0N65k9rOnoCecF58ILlHlP+X104H19IrP5x
+	 PsQj39A4azG3Q5napBKwLx6385WsADYKzPMRdone3iNlPF6ls5/y27AzgEZOcfXFQw
+	 lWbqGJCNC4m3IF5jso1uyaMo8UkdSULyXOdQWOz1jRXP4jAhWquWOmdZ5z+bN8XQPw
+	 VYHeqfvAL3o/89V8NqzTeZcUm+iI+5p+o49J4ToOX0bamV1i+rI+rhdzmAiv3Z6SsF
+	 aaMQztGzhLA5FRh5y2PMxY5D1GL7aixLW9EtqB0ykOv+dt6fcfxP9XWNe833tUFUby
+	 odn0T9fFKyFsodwduVs8L3rI3i0eaL3C8G/PsM9O0Ct1WaCxz2OM81e5IBp4yKNG+n
+	 qfakPcaaHBXJKZEmGY+FrShbtGhwRaRk17nPmVLWEnJ6lVPGg73U6RwpFCNxLt8la1
+	 4nQiuuUrt8RnSv5MYExPIxBjNzHQtizbfexkKVH3eJZ6DOOUVoXZFwFQD2Su6olgrF
+	 fq0EyD5JYRKf0RtFBIb85lRyDIePbLBFx00mc4wNiasrcsuuB02rQoU4Q6cLORr07a
+	 Z1GWl04RB1Hh1uCo6fBJHm8s=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F15C840E01A9;
+	Wed, 21 Feb 2024 10:09:21 +0000 (UTC)
+Date: Wed, 21 Feb 2024 11:09:16 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
+ paging global variables
+Message-ID: <20240221100916.GCZdXLzHb-31GMw-f-@fat_crate.local>
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-17-ardb+git@google.com>
+ <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
+ <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] mm: pgalloc: support address-conditional pmd
- allocation
-Content-Language: en-US
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Maxwell Bland <mbland@motorola.com>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
- "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
- "ardb@kernel.org" <ardb@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
- "ast@kernel.org" <ast@kernel.org>,
- "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "brauner@kernel.org" <brauner@kernel.org>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "cl@linux.com" <cl@linux.com>, "daniel@iogearbox.net"
- <daniel@iogearbox.net>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "dennis@kernel.org" <dennis@kernel.org>,
- "dvyukov@google.com" <dvyukov@google.com>,
- "glider@google.com" <glider@google.com>,
- "gor@linux.ibm.com" <gor@linux.ibm.com>,
- "guoren@kernel.org" <guoren@kernel.org>,
- "haoluo@google.com" <haoluo@google.com>,
- "hca@linux.ibm.com" <hca@linux.ibm.com>,
- "hch@infradead.org" <hch@infradead.org>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "jolsa@kernel.org" <jolsa@kernel.org>,
- "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
- "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "lstoakes@gmail.com" <lstoakes@gmail.com>,
- "mark.rutland@arm.com" <mark.rutland@arm.com>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "meted@linux.ibm.com" <meted@linux.ibm.com>,
- "michael.christie@oracle.com" <michael.christie@oracle.com>,
- "mjguzik@gmail.com" <mjguzik@gmail.com>,
- "mpe@ellerman.id.au" <mpe@ellerman.id.au>, "mst@redhat.com"
- <mst@redhat.com>, "muchun.song@linux.dev" <muchun.song@linux.dev>,
- "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
- "npiggin@gmail.com" <npiggin@gmail.com>,
- "palmer@dabbelt.com" <palmer@dabbelt.com>,
- "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
- "quic_nprakash@quicinc.com" <quic_nprakash@quicinc.com>,
- "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
- "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
- "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
- "samitolvanen@google.com" <samitolvanen@google.com>,
- "sdf@google.com" <sdf@google.com>, "song@kernel.org" <song@kernel.org>,
- "surenb@google.com" <surenb@google.com>,
- "svens@linux.ibm.com" <svens@linux.ibm.com>, "tj@kernel.org"
- <tj@kernel.org>, "urezki@gmail.com" <urezki@gmail.com>,
- "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
- "will@kernel.org" <will@kernel.org>,
- "wuqiang.matt@bytedance.com" <wuqiang.matt@bytedance.com>,
- "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "zlim.lnx@gmail.com" <zlim.lnx@gmail.com>,
- "awheeler@motorola.com" <awheeler@motorola.com>
-References: <20240220203256.31153-1-mbland@motorola.com>
- <20240220203256.31153-3-mbland@motorola.com>
- <838a05f0-568d-481d-b826-d2bb61908ace@csgroup.eu>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <838a05f0-568d-481d-b826-d2bb61908ace@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
 
-On 21.02.24 08:13, Christophe Leroy wrote:
-> 
-> 
-> Le 20/02/2024 à 21:32, Maxwell Bland a écrit :
->> [Vous ne recevez pas souvent de courriers de mbland@motorola.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
->>
->> While other descriptors (e.g. pud) allow allocations conditional on
->> which virtual address is allocated, pmd descriptor allocations do not.
->> However, adding support for this is straightforward and is beneficial to
->> future kernel development targeting the PMD memory granularity.
->>
->> As many architectures already implement pmd_populate_kernel in an
->> address-generic manner, it is necessary to roll out support
->> incrementally. For this purpose a preprocessor flag,
-> 
-> Is it really worth it ? It is only 48 call sites that need to be
-> updated. It would avoid that processor flag and avoid introducing that
-> pmd_populate_kernel_at() in kernel core.
+On Wed, Feb 21, 2024 at 12:33:08AM +0100, Ard Biesheuvel wrote:
+> Right, this is the same issue as in #11 - in both cases, the extern
+> declaration of __pgtable_l5_enabled needs to be visible regardless of
+> CONFIG_X86_5LEVEL.
 
-+1, let's avoid that if possible.
+Yap, I don't mind something like below.
+
+5LEVEL will be practically enabled everywhere.
+
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 158da0fd01d2..eeb1744215f2 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -52,13 +52,11 @@ extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
+ static unsigned int __initdata next_early_pgt;
+ pmdval_t early_pmd_flags = __PAGE_KERNEL_LARGE & ~(_PAGE_GLOBAL | _PAGE_NX);
+ 
+-#ifdef CONFIG_X86_5LEVEL
+ unsigned int __pgtable_l5_enabled __ro_after_init;
+ unsigned int pgdir_shift __ro_after_init = 39;
+ EXPORT_SYMBOL(pgdir_shift);
+ unsigned int ptrs_per_p4d __ro_after_init = 1;
+ EXPORT_SYMBOL(ptrs_per_p4d);
+-#endif
+ 
+ #ifdef CONFIG_DYNAMIC_MEMORY_LAYOUT
+ unsigned long page_offset_base __ro_after_init = __PAGE_OFFSET_BASE_L4;
 
 -- 
-Cheers,
+Regards/Gruss,
+    Boris.
 
-David / dhildenb
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
