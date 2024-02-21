@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-2570-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2571-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C7285D729
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 12:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 926D485D72B
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 12:38:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 523F91C22FFB
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:38:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5FCA1C22E53
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2074D9F8;
-	Wed, 21 Feb 2024 11:36:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274634E1D6;
+	Wed, 21 Feb 2024 11:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2qOAi1N"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xWTU47Dk"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC894644E
-	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551F24E1BC
+	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708515361; cv=none; b=jOjz15AvrxGOYM3Da7NwilS6iiZyC+DbGVwlniU9U+H3V23PaKp4cMgHGuAg1KkZQoqYTJQrKTPZjTN1uxLSmVILeeC/U5xmiaIAu54RI2n98De0sWKChJq6w1ejf8noztnHOW5psatxQcJZdMV+7ZWthAzlsdfgpBGChIbqxQo=
+	t=1708515364; cv=none; b=gdIFjXQVi0lh63bMcxkXIq5+ngFQ4x2pXY3r0iXmyGXdURk1aTbWQ/Bb4VN/yD+NdIdFieb9/VBelpYP85oBrtcr8aDB5eFMkgCEwrmVf0n9wf/pSxVc20amz8wOmes8YzTqwdzhZz+v4Uu0/xzYobWn1R9yNTW5ixX1RRVdfuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708515361; c=relaxed/simple;
-	bh=G1DG06D2aqp4pwBOMLdzbyqBLE1i1IBpz8O+pTeBX18=;
+	s=arc-20240116; t=1708515364; c=relaxed/simple;
+	bh=iv8WXooCR9hoiH3pMKa/9TfgmsuasaiYtcPtFFzw3QI=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TLii0nej7EI7Tlh8zU8bYXpro8PkJmvzoGE1MIoHgD6hnGugx+wQ6qb78rgAesCNP92KyQPIeOC2H8YSxKM3qqchfEveN79vFIV6YtKN4VyDHEXJSyMYyHiKM3bBSteY0U09IeboBuZ78GMq0TlBMjWzCCa3pNVv0pCsOjVfmus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H2qOAi1N; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=SndZMASpAwZtA2R4SLvbd4cBjm7NHnquIlxiRsU7x54GSxT4iCzA1gNtf7et4RZfOqb6EvdixKC6yLL312dmd8xRpbZG9Bt9osBJWKHEF2JVshE1g2f8/rBGU2TXfWe3WZc3tkuICQCEc2+XHTyDzhukZeIysGW4+cwFEhDLMzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xWTU47Dk; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-410e860c087so24505485e9.2
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 03:35:59 -0800 (PST)
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-33d10bd57d7so2183594f8f.3
+        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 03:36:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708515358; x=1709120158; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708515361; x=1709120161; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PTqJ99P6i6SBAIAH+IAXdMn7P2pIU1w2UuJtp90ikvg=;
-        b=H2qOAi1NnE+xdycvAp6K9GqJPLQFvq8M5o8OLDhNVnf1ra//QYJzEjZ1TqcuqrxuwV
-         Fhhnoky2dLlVvUJ8vGmprcNQQdkVbUEwVv5XSJFPV7qz2zWdZpnlkLGwaYdbM4RY7Lqs
-         jPAL6GCQM2j1z0o4PPCNc2UicoDdpeP3K8FFz2k/B0hgQbVMEaribaksN7qLnZQZyECF
-         qpea9OWuOr/lQgIm9dUtvxO59Tsm8VnM9Wg9p5Egde3BM2lvD/Aw9lx7Seoh5pp8dmY5
-         89uOkmOOcyI4JH4CInyTn/tyoV4hNiIEi1qAMQ91wo9FrFt0ONZkujX86YiLoxLqXnFT
-         vqPA==
+        bh=tevHFXJ+OOPc1/guz1Xb2v+32aOKjnUq6Qv962Lc8AE=;
+        b=xWTU47DkRFKzKWef6Xy3xIpCrckMs8ylSGlcHq6QG2fGWjUr25x7s0JdtdL4v+iT4k
+         /CJIZ/jWUUXvGNfbgu1unMo/ZbrSI9vY85IykkoTZjLCm4FD+p1T6vW/s/P614pfHMJz
+         nlUv+GOQjbXf5GfqvM4B5IFw6yZdRtIa5V3mLWVX6KMplqdp8Ykgo7B1Q4sOaIfbOkP7
+         HepGp0lf1xSk9v/4U3Mrp2+TjCKNKSvOrM32hOq0qKntB/tiOyS2VrjMX54deER415ek
+         MAhmGMDg5eoKvIPePnzOMOjIqsw+B0KqYmWg/xT6d7LN+UGqEis5P+yHGJlKCfwUVPE/
+         Ugzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708515358; x=1709120158;
+        d=1e100.net; s=20230601; t=1708515361; x=1709120161;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PTqJ99P6i6SBAIAH+IAXdMn7P2pIU1w2UuJtp90ikvg=;
-        b=kJ5UE4lnyVMRR+4gMEx+oaFS3mpgdQghu1PcWUOTlLSJNj2fkGsA4RDYFC5UZzPy8P
-         AllLP6sK6h1uhEOLA+9o1LuFdSfPX1w27uapt9Oh+YAh8y4AHcY3qg64v7cd2s/X4Mmd
-         jxHVyS+Bxk/pHOdvsD5thvyj48zYfvawKJ0HWz84fuQDsopCj6hMt7KZWWF3FwNReMKu
-         9DBOYPsgePGrsx6903zZB18/oosbX7MoswUE/u+LDcIYMaYPl1eKOjpzsfM8JRwxC23l
-         3mtBrDxPkwmaQdW1fpqppgASuqJXl6JIIilPF00CGxiUtDuF+NZ98q5EuxlOMs4e8Zy6
-         1aEA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9ulVJDbx/lHfkJNimy185k1RTr1arbcXC9WTYB1ZPYmUtrdDNSoUvWhAUfSwrV6CMidjAAeoc3zdq8vV65Clzdi4itGn0VzQnjg==
-X-Gm-Message-State: AOJu0YwvHsa6ExtIdv9ZWYjXtaun2IM9vxVLUJ1rwb1B65zaIOdIgCN1
-	GTueVKoY4wEjs9jpjFKfhSA2D1JVVkOkLZB2VAaBmsLm0aQP5sWE9fMbjEYz2vVeBACEgQ==
-X-Google-Smtp-Source: AGHT+IFITrStDY8qkTtuSdIIdzMUYcaY2nSms8BthZQq6Td2kpNAr50Wg4EXwQUrpgtDrocBPdUr8Ddn
+        bh=tevHFXJ+OOPc1/guz1Xb2v+32aOKjnUq6Qv962Lc8AE=;
+        b=C8wNqv8kbvuyF+ZjFQGPdCHmQX0vTkx4r61X9DkeS20H1AoehSholCiqT1q9vgUMqW
+         5+X8vrUfmky+av2ohDH9EE7e9YHrif1tUTdYR7PkwaR8Mw8Y1RmT9DLu5Ohx5phpvblz
+         j1yI5IqvzW3IEbg2ixPQCCjfypSkLBzhbfP6qmqpCrsockMZlIAh31tymO1ZrDLzRO76
+         uOk1/BcB/XK9uzltJpiw/9B+Egwia8Ptdpvj6M/1FFPxFFj8RbErLswlkBfjeRe50KcC
+         W5677oCCaIPF0HTHZwjSPdAXvrNYhvH2z1o2zLMfaNpyKE/ge30L6p0tp+ImFGOBsE/Q
+         kdLA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+r780lv0Ebch1Yw3b0QvTSznTkBAaWddymp7Wzy7brxPh3RDRZgaGWZskttzykxoNqLxeTx2fPSe1+aHMmxyF/kUJ8ie2Pqolcg==
+X-Gm-Message-State: AOJu0YzUcXotWdO1pcgCv25RYp5VgtvVsU9S9IWHUx1ZG3/7Ohqwm9hM
+	50xwHBpb3zd9OShaf2QTRnwlw3RKU2kTNqOcesOM8blHwl5qnNEOx0e3Jx4lYsRox4zKOg==
+X-Google-Smtp-Source: AGHT+IHrJdSqq3WRZEYfXkYjOhgk7FO7uJiJt+JPUYxdVmt4RCgu0u0vbJUG7dvL25hHy3uKZa8NbzKH
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:600c:1f17:b0:412:72d3:cfdb with SMTP id
- bd23-20020a05600c1f1700b0041272d3cfdbmr10352wmb.2.1708515358491; Wed, 21 Feb
- 2024 03:35:58 -0800 (PST)
-Date: Wed, 21 Feb 2024 12:35:17 +0100
+ (user=ardb job=sendgmr) by 2002:a5d:6d8f:0:b0:33d:4dc7:ee2 with SMTP id
+ l15-20020a5d6d8f000000b0033d4dc70ee2mr57756wrs.5.1708515360743; Wed, 21 Feb
+ 2024 03:36:00 -0800 (PST)
+Date: Wed, 21 Feb 2024 12:35:18 +0100
 In-Reply-To: <20240221113506.2565718-18-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221113506.2565718-18-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4361; i=ardb@kernel.org;
- h=from:subject; bh=i7YTwnF8QsOAYHIVebyuOmPcW0rncRMhxzgGUyIgY38=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/U/vplsk/HzNuOys4hb23w4nvt/7HBDut6vewlGn6
- NxOleWtHaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiIYsYGS7F3dGZ7vRpnUPq
- w7kBIQdLeRyv/F3AEvfgbefPCUflymwZGfYpGMxXyxfjX+4aMyFzvdIWPnWn14yXL3sF7Tljten 9XxYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3958; i=ardb@kernel.org;
+ h=from:subject; bh=PHNTEzBLgbyUsxeGtN9QWmwRz8NSWIe83iLY3QrvkGo=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/U9ZK1dd2mLOnCwavPTfm2Pn2/Vrn9zLPzbvtSdvW
+ JNl16R7HaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiPr6MDE0nLl1Z69QwX87h
+ H+/V5a/uLhVSuvys+d217dnHq66W6eYw/C+Zf6v8zv6ogAtOaxmU4y/sNfu1tKlEzUAxfNnSZ89 u/eUAAA==
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221113506.2565718-28-ardb+git@google.com>
-Subject: [PATCH v5 10/16] x86/startup_64: Simplify virtual switch on primary boot
+Message-ID: <20240221113506.2565718-29-ardb+git@google.com>
+Subject: [PATCH v5 11/16] x86/sme: Avoid SME/SVE related checks on non-SME/SVE platforms
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -95,135 +95,108 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-The secondary startup code is used on the primary boot path as well, but
-in this case, the initial part runs from a 1:1 mapping, until an
-explicit cross-jump is made to the kernel virtual mapping of the same
-code.
+Reorganize the early SME/SVE init code so that SME/SVE related calls are
+deferred until it has been determined that the platform actually
+supports this, and so those calls could actually make sense.
 
-On the secondary boot path, this jump is pointless as the code already
-executes from the mapping targeted by the jump. So combine this
-cross-jump with the jump from startup_64() into the common boot path.
-This simplifies the execution flow, and clearly separates code that runs
-from a 1:1 mapping from code that runs from the kernel virtual mapping.
-
-Note that this requires a page table switch, so hoist the CR3 assignment
-into startup_64() as well. And since absolute symbol references will no
-longer be permitted in .head.text once we enable the associated build
-time checks, a RIP-relative memory operand is used in the JMP
-instruction, referring to an absolute constant in the .init.rodata
-section.
-
-Given that the secondary startup code does not require a special
-placement inside the executable, move it to the .noinstr.text section.
-This requires the use of a subsection so that the payload is placed
-after the page aligned Xen hypercall page, as otherwise, objtool will
-complain about the resulting JMP instruction emitted by the assembler
-being unreachable.
+This removes logic from the early boot path that executes from the 1:1
+mapping when booting a CONFIG_AMD_MEM_ENCRYPT=y kernel on a system that
+does not implement that (i.e., 99% of distro kernels)
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head64.c  |  2 +-
- arch/x86/kernel/head_64.S | 43 ++++++++++----------
- 2 files changed, 23 insertions(+), 22 deletions(-)
+ arch/x86/include/asm/mem_encrypt.h | 4 ++--
+ arch/x86/kernel/head64.c           | 6 +++---
+ arch/x86/mm/mem_encrypt_identity.c | 8 +++-----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
+diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
+index b31eb9fd5954..b1437ba0b3b8 100644
+--- a/arch/x86/include/asm/mem_encrypt.h
++++ b/arch/x86/include/asm/mem_encrypt.h
+@@ -48,7 +48,7 @@ void __init sme_unmap_bootdata(char *real_mode_data);
+ void __init sme_early_init(void);
+ 
+ void __init sme_encrypt_kernel(struct boot_params *bp);
+-void __init sme_enable(struct boot_params *bp);
++void sme_enable(struct boot_params *bp);
+ 
+ int __init early_set_memory_decrypted(unsigned long vaddr, unsigned long size);
+ int __init early_set_memory_encrypted(unsigned long vaddr, unsigned long size);
+@@ -82,7 +82,7 @@ static inline void __init sme_unmap_bootdata(char *real_mode_data) { }
+ static inline void __init sme_early_init(void) { }
+ 
+ static inline void __init sme_encrypt_kernel(struct boot_params *bp) { }
+-static inline void __init sme_enable(struct boot_params *bp) { }
++static inline void sme_enable(struct boot_params *bp) { }
+ 
+ static inline void sev_es_init_vc_handling(void) { }
+ 
 diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index deaaea3280d9..0b827cbf6ee4 100644
+index 0b827cbf6ee4..b33f47489505 100644
 --- a/arch/x86/kernel/head64.c
 +++ b/arch/x86/kernel/head64.c
-@@ -553,7 +553,7 @@ static void __head startup_64_load_idt(void *vc_handler)
+@@ -98,9 +98,6 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
+ 	unsigned long vaddr, vaddr_end;
+ 	int i;
+ 
+-	/* Encrypt the kernel and related (if SME is active) */
+-	sme_encrypt_kernel(bp);
+-
+ 	/*
+ 	 * Clear the memory encryption mask from the .bss..decrypted section.
+ 	 * The bss section will be memset to zero later in the initialization so
+@@ -108,6 +105,9 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
+ 	 * attribute.
+ 	 */
+ 	if (sme_get_me_mask()) {
++		/* Encrypt the kernel and related */
++		sme_encrypt_kernel(bp);
++
+ 		vaddr = (unsigned long)__start_bss_decrypted;
+ 		vaddr_end = (unsigned long)__end_bss_decrypted;
+ 
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index 0166ab1780cc..7ddcf960e92a 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -45,6 +45,7 @@
+ #include <asm/sections.h>
+ #include <asm/cmdline.h>
+ #include <asm/coco.h>
++#include <asm/init.h>
+ #include <asm/sev.h>
+ 
+ #include "mm_internal.h"
+@@ -502,18 +503,15 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
+ 	native_write_cr3(__native_read_cr3());
  }
  
- /* This is used when running on kernel addresses */
--void early_setup_idt(void)
-+void noinstr early_setup_idt(void)
+-void __init sme_enable(struct boot_params *bp)
++void __head sme_enable(struct boot_params *bp)
  {
- 	void *handler = NULL;
+ 	const char *cmdline_ptr, *cmdline_arg, *cmdline_on;
+ 	unsigned int eax, ebx, ecx, edx;
+ 	unsigned long feature_mask;
+ 	unsigned long me_mask;
+ 	char buffer[16];
+-	bool snp;
+ 	u64 msr;
  
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index b92031d7e006..03268bf0214a 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -39,7 +39,6 @@ L4_START_KERNEL = l4_index(__START_KERNEL_map)
- 
- L3_START_KERNEL = pud_index(__START_KERNEL_map)
- 
--	.text
- 	__HEAD
- 	.code64
- SYM_CODE_START_NOALIGN(startup_64)
-@@ -126,9 +125,22 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	call	sev_verify_cbit
- #endif
- 
--	jmp 1f
-+	/*
-+	 * Switch to early_top_pgt which still has the identity mappings
-+	 * present.
-+	 */
-+	movq	%rax, %cr3
-+
-+	/* Branch to the common startup code at its kernel virtual address */
-+	ANNOTATE_RETPOLINE_SAFE
-+	jmp	*0f(%rip)
- SYM_CODE_END(startup_64)
- 
-+	__INITRODATA
-+0:	.quad	common_startup_64
-+
-+	.section .noinstr.text, "ax"
-+	.subsection 1
- SYM_CODE_START(secondary_startup_64)
- 	UNWIND_HINT_END_OF_STACK
- 	ANNOTATE_NOENDBR
-@@ -174,8 +186,15 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	addq	sme_me_mask(%rip), %rax
- #endif
-+	/*
-+	 * Switch to the init_top_pgt here, away from the trampoline_pgd and
-+	 * unmap the identity mapped ranges.
-+	 */
-+	movq	%rax, %cr3
- 
--1:
-+SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
-+	UNWIND_HINT_END_OF_STACK
-+	ANNOTATE_NOENDBR
- 
- 	/* Create a mask of CR4 bits to preserve */
- 	movl	$(X86_CR4_PAE | X86_CR4_LA57), %edx
-@@ -196,16 +215,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	btsl	$X86_CR4_PSE_BIT, %ecx
- 	movq	%rcx, %cr4
- 
--	/*
--	 * Switch to new page-table
--	 *
--	 * For the boot CPU this switches to early_top_pgt which still has the
--	 * identity mappings present. The secondary CPUs will switch to the
--	 * init_top_pgt here, away from the trampoline_pgd and unmap the
--	 * identity mapped ranges.
--	 */
--	movq	%rax, %cr3
+-	snp = snp_init(bp);
 -
- 	/*
- 	 * Do a global TLB flush after the CR3 switch to make sure the TLB
- 	 * entries from the identity mapping are flushed.
-@@ -213,14 +222,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	btsl	$X86_CR4_PGE_BIT, %ecx
- 	movq	%rcx, %cr4
+ 	/* Check for the SME/SEV support leaf */
+ 	eax = 0x80000000;
+ 	ecx = 0;
+@@ -546,7 +544,7 @@ void __init sme_enable(struct boot_params *bp)
+ 	feature_mask = (msr & MSR_AMD64_SEV_ENABLED) ? AMD_SEV_BIT : AMD_SME_BIT;
  
--	/* Ensure I am executing from virtual addresses */
--	movq	$1f, %rax
--	ANNOTATE_RETPOLINE_SAFE
--	jmp	*%rax
--1:
--	UNWIND_HINT_END_OF_STACK
--	ANNOTATE_NOENDBR // above
--
- #ifdef CONFIG_SMP
- 	/*
- 	 * For parallel boot, the APIC ID is read from the APIC, and then
+ 	/* The SEV-SNP CC blob should never be present unless SEV-SNP is enabled. */
+-	if (snp && !(msr & MSR_AMD64_SEV_SNP_ENABLED))
++	if (snp_init(bp) && !(msr & MSR_AMD64_SEV_SNP_ENABLED))
+ 		snp_abort();
+ 
+ 	/* Check if memory encryption is enabled */
 -- 
 2.44.0.rc0.258.g7320e95886-goog
 
