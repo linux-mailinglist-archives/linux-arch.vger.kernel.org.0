@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-2562-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2563-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EED785D719
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 12:36:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2ECA85D71B
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 12:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46882281E4A
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:36:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74C2BB24137
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:37:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3433482D0;
-	Wed, 21 Feb 2024 11:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0CEB4C600;
+	Wed, 21 Feb 2024 11:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GFm1YhzK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uMRV0uIH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5FD481AA
-	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14855482EF
+	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708515342; cv=none; b=jT+Xl97dQuJIdwVUimGXz7MamZxLlly5oWiR0sINxodwBmc/Tjw0S5for6DG6/3Ksi7v0ev37FVo1qSg+tUTxtUn64jxcRz4ZOhfRGXo/aEnFo/H7yi30ufWqXRySY/quGjiXa9vckLuv0sR9zDSEo+T62Cnf0rUJ78dv4X3Il8=
+	t=1708515344; cv=none; b=t4SKifCIOtJTWVRLdOc0Oza/c2Izm404OqAaLya8adcgDzHy19UCijdkQO+lw+XyB/TnJuvoKlTPqAilZOABhjnCmx6IO7wVLFVeJF7W5a2XFZ/2ezlbSaCrd/YPqUqISi2j7oNdgdHQUtJhlPmaP7WOCa1XtQ+brEJ8VLP2Huc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708515342; c=relaxed/simple;
-	bh=/B1OP6vbuA5phGZhjfg4uQ2vHMJ2nJmV3L2eYZwfJcM=;
+	s=arc-20240116; t=1708515344; c=relaxed/simple;
+	bh=2RZc+OzKZCl8YvmipTaTRDsbfIBsnndPUmVKA1yKSts=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=T+YILn2zkPvEeng6U89PlhnP3x0JR2LKa2oEHtgKPZjk5/IR4fECChnuk0KoFVLC5MIt4BjDCwZhGF7uKmdX6AzdBKBwoUeZZIZzJ+IaQFPJ8dyqLumHWcTqD1K/f7/lSv8vqBm6D/AGAAvl72A6aBpLy2W8owY22WARQzBYhkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GFm1YhzK; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=k89PP/ZYfifO1sooGUv2VntFuiC2JuDCHfRLdO5swEaEBkLDvhYb4DARlnDLMGYDKBGwrKwFd/gujLA4xKbh36T0i9JMb6MfZRxN6bfrQ7wYmywmtEwAZ2h+aqpEwHbAb3AFE7ZeVY/UwW/ZdwVEAA0a5POsTWOgrMZl1bqsWNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uMRV0uIH; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-33d3097ba9aso2578613f8f.2
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 03:35:40 -0800 (PST)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5ee22efe5eeso92702847b3.3
+        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 03:35:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708515339; x=1709120139; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708515342; x=1709120142; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwOWSXeXshx2pDY4YsRb8c4OJtdf4hRb8S0itmSW07o=;
-        b=GFm1YhzKXCOxWJ742d1dqiKQB7zcXqKlcJY29YH5vgmp2CT2n/lZZ7q5jZ//A8FmYu
-         UOY+2+kkyFTpnIWYAorBz47xlqkdP9wiO2VjdIp18JRtXbY/S5wP3cvhcr1LdPKwXweE
-         lIlRYHcnx4oS4uhh3urfQ2jCVxBuvri37Q2nTInwL7lA4zecL85vrHaYop89H2iDurNz
-         34ae5Cg6xoeYRxtTQ1Ifd08bC3pfUKcYgNC2TB16kYFBBEMH8lvVzTzTst+Nf+bWWIHs
-         grcfCCnmkI5JjRuWPky9iaBOzDqyNCFyeA9jx9QOexBMhlZguS6A9SJHJLpEhqGQRnAX
-         42QA==
+        bh=8Y5gC7csmOryHPxIGBtz1GA+4X+0n6cre/zcvSeIDBs=;
+        b=uMRV0uIHjXPynQUi/G1NZCFhb53bVLW+n95V///OG5499cUBjiIhG6wME9hKF2h0RT
+         uohTMmKBYwXZ89nm/hKdD9Zdmk64sy9YhMy3E0I8JPVhJZjGavl/pTJrYUzH6PYQCaKu
+         96w+LKfO3nWpX2TLm9WyVRRXUPKtRCVCaS4Rb1tI47jfXaSjcLM37ta5+k0I18y63c12
+         qiDuFO//ARXQIaMg166xpSbZ+jM3nJa89DKZ3pr9WtGF1mFE+he8L53i6iQVEoQHiWt7
+         0SzDlReV3V6w40D50HPPfqu3p/lQd4faBRvMfeK9EI9YmHTovfr8QRQyW9+1aMYD+QcM
+         z39Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708515339; x=1709120139;
+        d=1e100.net; s=20230601; t=1708515342; x=1709120142;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwOWSXeXshx2pDY4YsRb8c4OJtdf4hRb8S0itmSW07o=;
-        b=Jrs42utLELD4Wo0U5OAHJfWq/DuewaairtFFZ+yhpGbS8jDwI0KPjwQbG28VNZcBy7
-         pfQPowwQVF3VNGwAAVnymlLa4G92A7KrXyKj3MM9La8PbLvANx0TVlQAk5SEuvRz4SSk
-         TdWyTKGb4rcYkyDbJMx0L0Ux93NffX3nODjYOS3w/gt8/4i8XUmjJAwWYJfkga/BopwF
-         MNZzFobcOyu777UB/t7EuvODCl+u6xhu7DB4m/O+zw/Q8ogSzab9r/Q+KP/r+kT83leU
-         f5htA+7Xd09CvZ1kIiH4muiUBcTOAsoRk418PASTy6+m9x8pEMvS5Qvo/tx7MGJNuAfK
-         QHAA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1AlU6S0RfNAPvFFaxKtQWT7DXZcGEOtwJtA3em7icsOPoeOVVyOmV8vma8i9r/FsBiK70VZAzd1fUetcSkA6HyIkOfr+8fyI+Kg==
-X-Gm-Message-State: AOJu0YzfnAYwK9b9mxMjWWEHpxwqRuxMwb/wMjn5/0jP5dtuzMZ3h2zI
-	4TlUa221NpRO6W7+o6WPYGDjRJBk505D0mm/C4emPlzl0yop4hclarcoy/uGrvaKbvxQ8A==
-X-Google-Smtp-Source: AGHT+IHY0yDlZceW9DCshrucq0GT/cSofAVrcM+fPLiEfYoqdkQbvMcAdRHU8ZT9iCvMSz0OftA424pR
+        bh=8Y5gC7csmOryHPxIGBtz1GA+4X+0n6cre/zcvSeIDBs=;
+        b=N5s/VDAK3qJ34MuqnfaJGwYuYWVRjSyeChcViWbj7uPNVgx/0gla77kPgETyn0B9jQ
+         FHW/wbUiTxq0yMEvbwT0w1kIjwTGjP9Va/cMonXJ7d2Gf2952a0K6/LSciugm3eBvetU
+         riSb8S88zoDCywn4ueFF1YFSSh8K2fx7xRp/VGhjKhAumk6OiLAXlC0Eci6Gi3DD6zk6
+         ZaixZUJeBu9OBdMl23LISqh44jQTwYAMDNagGGYbDAQVZCc6H3PtEf0I+hH1Mcyq7Vug
+         njjn/uPPoeHdgEtJUUkWi0ZgkcFgTmWwNBdZcsSGD3rwH0jmFWAYoeMFuJuvFkuVyDtq
+         yoqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWOn71D50dIGR+IEbWw9BnRbUcxlLnaOaO7BrCiynKPM9lduSdebuCwPFBC/xuqLPHJqrp9Xq6okFtYGfL3Ucz++4Rv8mh49sE3iw==
+X-Gm-Message-State: AOJu0Yz1+btEu2975pNLrVDk2kzUzUxcqfO+NqrQ0EVdWoUjsJSf8LA4
+	mVt68rsK4QoKS2rWvVhTkYfZ6LyemisO73JBCXYx9TH07BONxxD7BgmuTPUZlw7XNOfBlQ==
+X-Google-Smtp-Source: AGHT+IFELx03HuT0Inbkk/6jf+jmcEOFUz77S85HuXmJ2/vo3Tmzp9E1tSdM6FzUvRXx2iV06N6VbqE/
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:6000:1c03:b0:33d:804f:7bb3 with SMTP id
- ba3-20020a0560001c0300b0033d804f7bb3mr2030wrb.7.1708515339021; Wed, 21 Feb
- 2024 03:35:39 -0800 (PST)
-Date: Wed, 21 Feb 2024 12:35:09 +0100
+ (user=ardb job=sendgmr) by 2002:a25:c06:0:b0:dbe:387d:a8ef with SMTP id
+ 6-20020a250c06000000b00dbe387da8efmr680600ybm.1.1708515341658; Wed, 21 Feb
+ 2024 03:35:41 -0800 (PST)
+Date: Wed, 21 Feb 2024 12:35:10 +0100
 In-Reply-To: <20240221113506.2565718-18-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221113506.2565718-18-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1451; i=ardb@kernel.org;
- h=from:subject; bh=HV5cVzg2bsj7zm/lufPEjuRMFtl5r6GlxXU96Wc4Zjs=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/TfS/Ie8Tyfs4TiZ2dY8/eqXuOJb6hbTC/44bpZM/
- NZ6Myeko5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAExk2llGhlXHMqck8tmt/CX0
- Ov6+atSy9U7+7FpOJUqvY+44crG28jH8D31+U3aHolG6bniHk2Phz7Pu3be/MxQ4L/q8NmmSX3w YDwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1903; i=ardb@kernel.org;
+ h=from:subject; bh=swM7c8C7m6s+syovcWAlr4I1pvzKmPTAbfvGRxDNNBo=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/bf72s8c5X6zfe4kzhLF88Ur7P10Jv1+c5Ij3Kphl
+ 3trnr9SRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZiISwXDP+Vl63+6nT136ee+
+ a7WfF7mxtuzU745WC96z5anM3cc8hWkM/0Nz2E7NSCsXY+vlOrVpn+zruNaY9l8JFYocrFU2Tpo M/AA=
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221113506.2565718-20-ardb+git@google.com>
-Subject: [PATCH v5 02/16] x86/startup_64: Use RIP_REL_REF() to assign phys_base
+Message-ID: <20240221113506.2565718-21-ardb+git@google.com>
+Subject: [PATCH v5 03/16] x86/startup_64: Use RIP_REL_REF() to access early_dynamic_pgts[]
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -95,44 +95,56 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-phys_base is assigned from code that executes from a 1:1 mapping so it
-cannot use a plain access from C. Replace the use of fixup_pointer()
-with RIP_REL_REF(), which is better and simpler.
-
-While at it, move the assignment to before the addition of the SME mask
-so there is no need to subtract it again, and drop the unnecessary
-addition (phys_base is statically initialized to 0x0)
+early_dynamic_pgts[] and next_early_pgt are accessed from code that
+executes from a 1:1 mapping so it cannot use a plain access from C.
+Replace the use of fixup_pointer() with RIP_REL_REF(), which is better
+and simpler.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head64.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ arch/x86/kernel/head64.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 1d6865eafe6a..f98f5b6a06b5 100644
+index f98f5b6a06b5..2ac904110f6a 100644
 --- a/arch/x86/kernel/head64.c
 +++ b/arch/x86/kernel/head64.c
-@@ -192,6 +192,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	 * and the address I am actually running at.
+@@ -170,6 +170,7 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
+ unsigned long __head __startup_64(unsigned long physaddr,
+ 				  struct boot_params *bp)
+ {
++	pmd_t (*early_pgts)[PTRS_PER_PMD] = RIP_REL_REF(early_dynamic_pgts);
+ 	unsigned long load_delta, *p;
+ 	unsigned long pgtable_flags;
+ 	pgdval_t *pgd;
+@@ -179,7 +180,6 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	pteval_t *mask_ptr;
+ 	bool la57;
+ 	int i;
+-	unsigned int *next_pgt_ptr;
+ 
+ 	la57 = check_la57_support(physaddr);
+ 
+@@ -231,15 +231,14 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	 * it avoids problems around wraparound.
  	 */
- 	load_delta = physaddr - (unsigned long)(_text - __START_KERNEL_map);
-+	RIP_REL_REF(phys_base) = load_delta;
  
- 	/* Is the address not 2M aligned? */
- 	if (load_delta & ~PMD_MASK)
-@@ -301,12 +302,6 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	for (; i < PTRS_PER_PMD; i++)
- 		pmd[i] &= ~_PAGE_PRESENT;
+-	next_pgt_ptr = fixup_pointer(&next_early_pgt, physaddr);
+-	pud = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
+-	pmd = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
++	pud = &early_pgts[0]->pmd;
++	pmd = &early_pgts[1]->pmd;
++	RIP_REL_REF(next_early_pgt) = 2;
  
--	/*
--	 * Fixup phys_base - remove the memory encryption mask to obtain
--	 * the true physical address.
--	 */
--	*fixup_long(&phys_base, physaddr) += load_delta - sme_get_me_mask();
--
- 	return sme_postprocess_startup(bp, pmd);
- }
+ 	pgtable_flags = _KERNPG_TABLE_NOENC + sme_get_me_mask();
  
+ 	if (la57) {
+-		p4d = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++],
+-				    physaddr);
++		p4d = &early_pgts[RIP_REL_REF(next_early_pgt)++]->pmd;
+ 
+ 		i = (physaddr >> PGDIR_SHIFT) % PTRS_PER_PGD;
+ 		pgd[i + 0] = (pgdval_t)p4d + pgtable_flags;
 -- 
 2.44.0.rc0.258.g7320e95886-goog
 
