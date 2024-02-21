@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-2569-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2570-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D31F285D728
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 12:38:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C7285D729
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 12:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31BE2B23572
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:38:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 523F91C22FFB
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Feb 2024 11:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48FDA4645B;
-	Wed, 21 Feb 2024 11:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2074D9F8;
+	Wed, 21 Feb 2024 11:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nOEY4Zuw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2qOAi1N"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA5E4DA11
-	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC894644E
+	for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 11:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708515360; cv=none; b=kbIOgn3PH9t8wIr6xPbfmi5ENBzeHGLI1wubxdDiB3CiIC6QGAVSGbRi6g6V6IZWDamExoO7BdrQsDJvhLh1B5HcgHlyJ6MM3D9nOZ4sqcWCenQsyLhsbxhriq8S8SJ+0lhOYXDHLgSk70ujQbh/C0hGAQ+3o7qANZHAMF+Wv0g=
+	t=1708515361; cv=none; b=jOjz15AvrxGOYM3Da7NwilS6iiZyC+DbGVwlniU9U+H3V23PaKp4cMgHGuAg1KkZQoqYTJQrKTPZjTN1uxLSmVILeeC/U5xmiaIAu54RI2n98De0sWKChJq6w1ejf8noztnHOW5psatxQcJZdMV+7ZWthAzlsdfgpBGChIbqxQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708515360; c=relaxed/simple;
-	bh=sFg81TTWm8wXNN7PrKjakH1R2yINKbC6VHscAn/WI6g=;
+	s=arc-20240116; t=1708515361; c=relaxed/simple;
+	bh=G1DG06D2aqp4pwBOMLdzbyqBLE1i1IBpz8O+pTeBX18=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=slPSsQIFL4chmYOtYhHXcGnmnk2NX16T2G3pR6j9l3yu+IfXBerdmyqSM+leQ0NJ6bvE+5UV/RC9OPHvybDx57/6x3rlAV8So4BRfQDf9wzAG9kI4X4/8WkB9G5xYjkWbVELJaPvnzOl70+9ClVLnoTde+t/V26HmqI2Yc/TJvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nOEY4Zuw; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=TLii0nej7EI7Tlh8zU8bYXpro8PkJmvzoGE1MIoHgD6hnGugx+wQ6qb78rgAesCNP92KyQPIeOC2H8YSxKM3qqchfEveN79vFIV6YtKN4VyDHEXJSyMYyHiKM3bBSteY0U09IeboBuZ78GMq0TlBMjWzCCa3pNVv0pCsOjVfmus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H2qOAi1N; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b269686aso10041732276.1
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 03:35:57 -0800 (PST)
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-410e860c087so24505485e9.2
+        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 03:35:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708515356; x=1709120156; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708515358; x=1709120158; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=StiHl4wqKJLROSGDCkKhKFhOVcRJSTp0SGrZr/uAC14=;
-        b=nOEY4ZuwYnUemy5QE8lfocHWUrTUBMlf7x2hSNcNuKDt0JVRMtBGocvfZUoG8yd6QW
-         IvFaKhOuDnTxRwG3f2ClgiC0OSs1qVW9wKn/JYqPIXM5sDQOjCMJcx5lEFQMxVmkbsG4
-         DXmqtlhGXMZMJbqSho8m4yiXLSgJMJE5F+McItHYyo248tCjyAfiK28zFYFksuD/sEP7
-         ftjbbhNhvdNYUnpk4ExA1AYDfYKJbYUjsyw9yaaVeKhyR8q2MK73WEk+7N42hRJ8zHhZ
-         49BZ2o1yREoTEcB5zdn6F5Jje0arYAFecz6I1qtppAJYhrs+RTOUZ5exO/keAuU3J7DA
-         zhDw==
+        bh=PTqJ99P6i6SBAIAH+IAXdMn7P2pIU1w2UuJtp90ikvg=;
+        b=H2qOAi1NnE+xdycvAp6K9GqJPLQFvq8M5o8OLDhNVnf1ra//QYJzEjZ1TqcuqrxuwV
+         Fhhnoky2dLlVvUJ8vGmprcNQQdkVbUEwVv5XSJFPV7qz2zWdZpnlkLGwaYdbM4RY7Lqs
+         jPAL6GCQM2j1z0o4PPCNc2UicoDdpeP3K8FFz2k/B0hgQbVMEaribaksN7qLnZQZyECF
+         qpea9OWuOr/lQgIm9dUtvxO59Tsm8VnM9Wg9p5Egde3BM2lvD/Aw9lx7Seoh5pp8dmY5
+         89uOkmOOcyI4JH4CInyTn/tyoV4hNiIEi1qAMQ91wo9FrFt0ONZkujX86YiLoxLqXnFT
+         vqPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708515356; x=1709120156;
+        d=1e100.net; s=20230601; t=1708515358; x=1709120158;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=StiHl4wqKJLROSGDCkKhKFhOVcRJSTp0SGrZr/uAC14=;
-        b=iyM35yD1FgW2uVmANozRRl2m7K/Ln9Fc2NP1mGoWccn8vtxbj96zTGI1K3WR50KAuz
-         IyUur/3Ga+tA1jIOzqh4uSQSppql1D7+sffCMiUPC8bARgD8aW+nPlOaMvtQ4iYn8Elz
-         vneZBdZK3d42D4sRMZFFw1jgxc6arS41KrOMK7TPc8C/EFwzmIw2utzP858ZLL0bmEfQ
-         XI+dCNVsRXgSGqmqx/m2GPU+p9vKrqJulc01xW5UjIBntcOtKoAVbAVOREY882eUkVoC
-         v9Su9HDXtedzE3eam7d3oE5p3hvGoAHCnQIGmR+IZUB3RRFZOCpoYNdbY22YKGd/yPiI
-         mnmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUXdQtjHkOVG/Zsy6U3tF44FEvrIYuaN2w//MkMNuWARyoX8dZOWMGtS8mecYCbzmkCik9IjDWdkxckt6cBQlZcSPV0DyWgVv+IlQ==
-X-Gm-Message-State: AOJu0Yzf5enecu9bD9xtkHX3C8A3FdNIAIPMBABDrNUTTJeKrVdDpgZ7
-	YXmKB5gdnkPbeE7lVN+4iJmi4UB8cnH7AX86yCXpW6QVmXmuDiy42kfiajju+mYfJ1wbUg==
-X-Google-Smtp-Source: AGHT+IH3u9lmmHz2WBCVjo782BmL6ANcoOP05nHtuzMs5I0/PWpWryQ5PAJpU7/DdMkawVIILbrYldDL
+        bh=PTqJ99P6i6SBAIAH+IAXdMn7P2pIU1w2UuJtp90ikvg=;
+        b=kJ5UE4lnyVMRR+4gMEx+oaFS3mpgdQghu1PcWUOTlLSJNj2fkGsA4RDYFC5UZzPy8P
+         AllLP6sK6h1uhEOLA+9o1LuFdSfPX1w27uapt9Oh+YAh8y4AHcY3qg64v7cd2s/X4Mmd
+         jxHVyS+Bxk/pHOdvsD5thvyj48zYfvawKJ0HWz84fuQDsopCj6hMt7KZWWF3FwNReMKu
+         9DBOYPsgePGrsx6903zZB18/oosbX7MoswUE/u+LDcIYMaYPl1eKOjpzsfM8JRwxC23l
+         3mtBrDxPkwmaQdW1fpqppgASuqJXl6JIIilPF00CGxiUtDuF+NZ98q5EuxlOMs4e8Zy6
+         1aEA==
+X-Forwarded-Encrypted: i=1; AJvYcCX9ulVJDbx/lHfkJNimy185k1RTr1arbcXC9WTYB1ZPYmUtrdDNSoUvWhAUfSwrV6CMidjAAeoc3zdq8vV65Clzdi4itGn0VzQnjg==
+X-Gm-Message-State: AOJu0YwvHsa6ExtIdv9ZWYjXtaun2IM9vxVLUJ1rwb1B65zaIOdIgCN1
+	GTueVKoY4wEjs9jpjFKfhSA2D1JVVkOkLZB2VAaBmsLm0aQP5sWE9fMbjEYz2vVeBACEgQ==
+X-Google-Smtp-Source: AGHT+IFITrStDY8qkTtuSdIIdzMUYcaY2nSms8BthZQq6Td2kpNAr50Wg4EXwQUrpgtDrocBPdUr8Ddn
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:6902:1001:b0:dcc:79ab:e522 with SMTP id
- w1-20020a056902100100b00dcc79abe522mr731868ybt.11.1708515356342; Wed, 21 Feb
- 2024 03:35:56 -0800 (PST)
-Date: Wed, 21 Feb 2024 12:35:16 +0100
+ (user=ardb job=sendgmr) by 2002:a05:600c:1f17:b0:412:72d3:cfdb with SMTP id
+ bd23-20020a05600c1f1700b0041272d3cfdbmr10352wmb.2.1708515358491; Wed, 21 Feb
+ 2024 03:35:58 -0800 (PST)
+Date: Wed, 21 Feb 2024 12:35:17 +0100
 In-Reply-To: <20240221113506.2565718-18-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -73,15 +73,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221113506.2565718-18-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2709; i=ardb@kernel.org;
- h=from:subject; bh=l8yZBrOFoYa/63WN0vjjrRhrZ18bZIs3VDCL1kGdQvs=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/Y/SAgpzDwQo/t+8UsaGgZGnNTtB0tP6SOMEvj7r9
- bnBk8M7SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwESuczEy7HkrtmrlmlsVE/6y
- rebZrWbY2Ru8c/L2xheu/8PPScle6mP4za68hrVhTciUbfzS0/YXybbfFL7BPKVxwclLnTWynnf ZmQE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4361; i=ardb@kernel.org;
+ h=from:subject; bh=i7YTwnF8QsOAYHIVebyuOmPcW0rncRMhxzgGUyIgY38=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/U/vplsk/HzNuOys4hb23w4nvt/7HBDut6vewlGn6
+ NxOleWtHaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiIYsYGS7F3dGZ7vRpnUPq
+ w7kBIQdLeRyv/F3AEvfgbefPCUflymwZGfYpGMxXyxfjX+4aMyFzvdIWPnWn14yXL3sF7Tljten 9XxYA
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221113506.2565718-27-ardb+git@google.com>
-Subject: [PATCH v5 09/16] x86/startup_64: Simplify calculation of initial page
- table address
+Message-ID: <20240221113506.2565718-28-ardb+git@google.com>
+Subject: [PATCH v5 10/16] x86/startup_64: Simplify virtual switch on primary boot
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -96,93 +95,135 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Determining the address of the initial page table to program into CR3
-involves:
-- taking the physical address
-- adding the SME encryption mask
+The secondary startup code is used on the primary boot path as well, but
+in this case, the initial part runs from a 1:1 mapping, until an
+explicit cross-jump is made to the kernel virtual mapping of the same
+code.
 
-On the primary entry path, the code is mapped using a 1:1 virtual to
-physical translation, so the physical address can be taken directly
-using a RIP-relative LEA instruction.
+On the secondary boot path, this jump is pointless as the code already
+executes from the mapping targeted by the jump. So combine this
+cross-jump with the jump from startup_64() into the common boot path.
+This simplifies the execution flow, and clearly separates code that runs
+from a 1:1 mapping from code that runs from the kernel virtual mapping.
 
-On the secondary entry path, the address can be obtained by taking the
-offset from the virtual kernel base (__START_kernel_map) and adding the
-physical kernel base.
+Note that this requires a page table switch, so hoist the CR3 assignment
+into startup_64() as well. And since absolute symbol references will no
+longer be permitted in .head.text once we enable the associated build
+time checks, a RIP-relative memory operand is used in the JMP
+instruction, referring to an absolute constant in the .init.rodata
+section.
 
-This is implemented in a slightly confusing way, so clean this up.
+Given that the secondary startup code does not require a special
+placement inside the executable, move it to the .noinstr.text section.
+This requires the use of a subsection so that the payload is placed
+after the page aligned Xen hypercall page, as otherwise, objtool will
+complain about the resulting JMP instruction emitted by the assembler
+being unreachable.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head_64.S | 25 ++++++--------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ arch/x86/kernel/head64.c  |  2 +-
+ arch/x86/kernel/head_64.S | 43 ++++++++++----------
+ 2 files changed, 23 insertions(+), 22 deletions(-)
 
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index deaaea3280d9..0b827cbf6ee4 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -553,7 +553,7 @@ static void __head startup_64_load_idt(void *vc_handler)
+ }
+ 
+ /* This is used when running on kernel addresses */
+-void early_setup_idt(void)
++void noinstr early_setup_idt(void)
+ {
+ 	void *handler = NULL;
+ 
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 426f6fdc0075..b92031d7e006 100644
+index b92031d7e006..03268bf0214a 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -111,13 +111,11 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	call	__startup_64
+@@ -39,7 +39,6 @@ L4_START_KERNEL = l4_index(__START_KERNEL_map)
  
- 	/* Form the CR3 value being sure to include the CR3 modifier */
--	addq	$(early_top_pgt - __START_KERNEL_map), %rax
-+	leaq	early_top_pgt(%rip), %rcx
-+	addq	%rcx, %rax
+ L3_START_KERNEL = pud_index(__START_KERNEL_map)
  
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	mov	%rax, %rdi
--	mov	%rax, %r14
--
--	addq	phys_base(%rip), %rdi
- 
- 	/*
- 	 * For SEV guests: Verify that the C-bit is correct. A malicious
-@@ -126,12 +124,6 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	 * the next RET instruction.
- 	 */
+-	.text
+ 	__HEAD
+ 	.code64
+ SYM_CODE_START_NOALIGN(startup_64)
+@@ -126,9 +125,22 @@ SYM_CODE_START_NOALIGN(startup_64)
  	call	sev_verify_cbit
--
--	/*
--	 * Restore CR3 value without the phys_base which will be added
--	 * below, before writing %cr3.
--	 */
--	 mov	%r14, %rax
  #endif
  
- 	jmp 1f
-@@ -171,18 +163,18 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	/* Clear %R15 which holds the boot_params pointer on the boot CPU */
- 	xorq	%r15, %r15
- 
-+	/* Derive the runtime physical address of init_top_pgt[] */
-+	movq	phys_base(%rip), %rax
-+	addq	$(init_top_pgt - __START_KERNEL_map), %rax
+-	jmp 1f
++	/*
++	 * Switch to early_top_pgt which still has the identity mappings
++	 * present.
++	 */
++	movq	%rax, %cr3
 +
- 	/*
- 	 * Retrieve the modifier (SME encryption mask if SME is active) to be
- 	 * added to the initial pgdir entry that will be programmed into CR3.
- 	 */
- #ifdef CONFIG_AMD_MEM_ENCRYPT
--	movq	sme_me_mask, %rax
--#else
--	xorq	%rax, %rax
-+	addq	sme_me_mask(%rip), %rax
- #endif
++	/* Branch to the common startup code at its kernel virtual address */
++	ANNOTATE_RETPOLINE_SAFE
++	jmp	*0f(%rip)
+ SYM_CODE_END(startup_64)
  
--	/* Form the CR3 value being sure to include the CR3 modifier */
--	addq	$(init_top_pgt - __START_KERNEL_map), %rax
- 1:
++	__INITRODATA
++0:	.quad	common_startup_64
++
++	.section .noinstr.text, "ax"
++	.subsection 1
+ SYM_CODE_START(secondary_startup_64)
+ 	UNWIND_HINT_END_OF_STACK
+ 	ANNOTATE_NOENDBR
+@@ -174,8 +186,15 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 	addq	sme_me_mask(%rip), %rax
+ #endif
++	/*
++	 * Switch to the init_top_pgt here, away from the trampoline_pgd and
++	 * unmap the identity mapped ranges.
++	 */
++	movq	%rax, %cr3
+ 
+-1:
++SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
++	UNWIND_HINT_END_OF_STACK
++	ANNOTATE_NOENDBR
  
  	/* Create a mask of CR4 bits to preserve */
-@@ -204,9 +196,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	movl	$(X86_CR4_PAE | X86_CR4_LA57), %edx
+@@ -196,16 +215,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
  	btsl	$X86_CR4_PSE_BIT, %ecx
  	movq	%rcx, %cr4
  
--	/* Setup early boot stage 4-/5-level pagetables. */
--	addq	phys_base(%rip), %rax
+-	/*
+-	 * Switch to new page-table
+-	 *
+-	 * For the boot CPU this switches to early_top_pgt which still has the
+-	 * identity mappings present. The secondary CPUs will switch to the
+-	 * init_top_pgt here, away from the trampoline_pgd and unmap the
+-	 * identity mapped ranges.
+-	 */
+-	movq	%rax, %cr3
 -
  	/*
- 	 * Switch to new page-table
- 	 *
+ 	 * Do a global TLB flush after the CR3 switch to make sure the TLB
+ 	 * entries from the identity mapping are flushed.
+@@ -213,14 +222,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	btsl	$X86_CR4_PGE_BIT, %ecx
+ 	movq	%rcx, %cr4
+ 
+-	/* Ensure I am executing from virtual addresses */
+-	movq	$1f, %rax
+-	ANNOTATE_RETPOLINE_SAFE
+-	jmp	*%rax
+-1:
+-	UNWIND_HINT_END_OF_STACK
+-	ANNOTATE_NOENDBR // above
+-
+ #ifdef CONFIG_SMP
+ 	/*
+ 	 * For parallel boot, the APIC ID is read from the APIC, and then
 -- 
 2.44.0.rc0.258.g7320e95886-goog
 
