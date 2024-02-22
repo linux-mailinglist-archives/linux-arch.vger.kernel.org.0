@@ -1,129 +1,151 @@
-Return-Path: <linux-arch+bounces-2675-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2676-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9BAB85EF39
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 03:38:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20A6885F523
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 11:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A7E91F2255F
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 02:38:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A5231C210FD
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 10:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8EA17BCA;
-	Thu, 22 Feb 2024 02:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC15639867;
+	Thu, 22 Feb 2024 10:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="jilndtav"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zlrfBg04"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3E717577
-	for <linux-arch@vger.kernel.org>; Thu, 22 Feb 2024 02:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FDE38FB9
+	for <linux-arch@vger.kernel.org>; Thu, 22 Feb 2024 10:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708569459; cv=none; b=U4j5CXwD3L48I+B2iaor4sjKTcJGmG/86bxh3T8Ck7DZqhcoAHEvzqbqcmwwrtyklvaBr9l0BiVKFH4qE5IOwfja/w2kA1rfU1lnJLBxEeJ/Feg7g/7v8bdsOZ77MozFGQaQqE6s8wycJfJC4g9LKy6BnDYBkOKH3cei08w3xoc=
+	t=1708596012; cv=none; b=vEqV5u7OiU938HtAOTIRcoh8yiCYpO1V1Z887gnjvL3DXG5altR3aWgbqO7rE6OcUH94Vc2nxmyrzNgdV+cwCOh+QgZ9AxYqJ/wZ/WXjHYb/AzsBdgmFxhA3v9/xlKSF7flwOWDkLa9LR+Nh48/AxmkguyxAjkKCDZWFef16zDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708569459; c=relaxed/simple;
-	bh=mYOv5YQT1yDdOTCAzi4OkkPsYH4iMvZEO+odMa9t9OU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mOreJzAG3plR9os5Y+qjZk1fUpBu161z0SOryv4Q1DXrs7qAjdHQxpkKjMWOXu3+pF7sbH0losgZ0PlsSUyZ2j/ZHijHvznXl67xe4kXuLJUJVdyI4UPD05s/CMs7nM4Nt+BeE41y/dEuwsPARI9rX96erTOfsRne+ZwPtHHIuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=jilndtav; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e22e63abf1so3451454b3a.3
-        for <linux-arch@vger.kernel.org>; Wed, 21 Feb 2024 18:37:37 -0800 (PST)
+	s=arc-20240116; t=1708596012; c=relaxed/simple;
+	bh=xY3a5A8TczyzS4EQy7YnxSv2e9KYZLcka7tIrv2ih1k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bEKXNSlcIGPyDQZ1i5p0/+qkRPPJqG/0thC7FJbvMYJMsSTJrYbTSUp70MYncKfzF25NNbH556pozimgbgrH1E4XW7CEKQnbc0DVtp1nbAZ882iXbDcgTpeac4RqP0DzdkD+bkFC1Gfqo258IXKyOU7pQoa9R5/ypz2l2SdZrnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zlrfBg04; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4704c69a3d9so1093322137.2
+        for <linux-arch@vger.kernel.org>; Thu, 22 Feb 2024 02:00:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708569457; x=1709174257; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K6YZh5OBHggNhG2iazj7ayAHylZjnHIget6Lw5n4A74=;
-        b=jilndtav6wK9tlin1vZ80mFJXVjji8doG7sZyl7JpysdxrkyxaOefh6QIAmLsoXFgj
-         wNTbNODr/2hOaE7wIOvZWUmgtrP0HweIbG2zpPvCS3A/rrjc3YTpU7k9x2/WEVCQT/SK
-         pJXf415f+RZt3z466pXUGS5I+zPL6761GDxu5FvNSVOlhEvuQUzT0VR1WkqlupHQSoI7
-         M7rGYjUmygHH3KA0VoUKceZbVHGW/oFAwZJf6Und66esSukQHLQWqE0FCkhyYSkbwLW6
-         v1whZDp+GwAJxQtw3Eu3DY+IQ+9l9VPoDjXTzyaccYq+V5w6JBJv6qylE8q7bsWSf0mQ
-         L3RQ==
+        d=google.com; s=20230601; t=1708596010; x=1709200810; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xY3a5A8TczyzS4EQy7YnxSv2e9KYZLcka7tIrv2ih1k=;
+        b=zlrfBg04Kyxp5cU/S+Rbn4i0cNrs6fdhkV+J1L6Ak7MObIRgzDD5LTI5LuNGF2wntu
+         8q4hCTwDAmLxRhzeMirRlwx0DKzhFbo9x/Y5uQw2oOyNgEAMRmCJphDpNHe9e6POG2Iv
+         1RTVfp7AB3h8VKhekGPVT75ZpLxsY4navma8mHg5u2kqQswLFgJ9zMltf/uQfkmsLNWq
+         F77rBkVMysLYOEAhZGradAofoWCU5IAU/b5p0v8645xs7xwEWIJfzMg0rtXSIhSR4oGM
+         lIE3lNUNHsiZs+VbLbs3KQXmutYvhf0mdMOIwE5L4OKmG86wC5usgZlhfU1kxRUtryLU
+         Ok2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708569457; x=1709174257;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1708596010; x=1709200810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K6YZh5OBHggNhG2iazj7ayAHylZjnHIget6Lw5n4A74=;
-        b=hCVaf0k5cXSFSSVkyfzTJa94Ajgr/VP4EIxKljKPfOk2m/RDNgc/mgMyITdYUi30Wp
-         Oulsjd3mn6ApYIekkG45ZZOhGssLoJpX99fXUjO2R8UXtCOHRVkEsaPasNPdDThtAF5j
-         wCUWwrbwMWviQbrMm1QOoILKnZs4L9+SQYJH66RL/teEDMMuUBgl/LSWMEX47HxHWruW
-         1pM1p2MF6ggF+QLcNLWVJHqu9lDNmXK0fuEB+rQ5h3yJCe+IHxyPSrUGySMNrsqYccgg
-         ax3Z/GA2Ejgz+4CBn0IorsTALWM/TKq/szs3rLKzljD4aS8ouNN/5xyvfrNiluTqpzRv
-         AG7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXdGKFpQtngjDmeFxtsgpzNR8kYQWQz3Ktj6Iw2kUHXeKi6DhYPK04kLeeT52twUVOmQuAaHm4wcqPx8VAhpL2EYmbq3ycVBuwo6g==
-X-Gm-Message-State: AOJu0YyBa8wO4QVOOygQCng5rxBRvL0EZIo0Fu98+8GzINpt8fR9wnkT
-	4IQVaJzeH+/+tRoVHhJaie8au0CrPLVnKRzuB/9nG60Zefi/gxUgb+4+Fs2y5ks=
-X-Google-Smtp-Source: AGHT+IE3upPGQXOLuSEUYyLoC9ayLGnKcG6FlBuS7HyfXj6mdUciEX9+OmA1mgOUixbXnJmCmqn9Pw==
-X-Received: by 2002:a62:e306:0:b0:6e4:cf7c:6c28 with SMTP id g6-20020a62e306000000b006e4cf7c6c28mr15413pfh.22.1708569457164;
-        Wed, 21 Feb 2024 18:37:37 -0800 (PST)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id kt21-20020a056a004bb500b006e465e1573esm6469705pfb.74.2024.02.21.18.37.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 18:37:36 -0800 (PST)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Wed, 21 Feb 2024 18:37:14 -0800
-Subject: [PATCH 4/4] parisc: checksum: Optimize from32to16
+        bh=xY3a5A8TczyzS4EQy7YnxSv2e9KYZLcka7tIrv2ih1k=;
+        b=rIE62YOaoktu343ZePzNBNPZeV7Z9uOyDzjXnVpy0uPfBqiVfRFm2pU8Au77NIPdit
+         L/q5mcy059vRq6x6sDj071s3+huNZE4KEqfr4jrdRVri05lmhZh5Uk8gdZXkY7oi92Kx
+         Q5PVxZN8m8uLX5pPApVc3hcNJJFM+xG8KEgP5r1mCIAsDx8hQUzxprALlzXQIuzjJMHL
+         47tiGk6K+HB5vK0a0Qu7Izv/CURmTHR6hGomzQ4t+wQX6jzG3xLXdpiWkzzzICFKNYro
+         xdJ2zmDJk1rMMwbp5b7BKGvoVdQREGOOmuZTftqyvDT2/5mjImIxanBCZPrWtf3dQHcY
+         E0GA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8GGwdvG3zxp5sZgnLmCSe1s5I+/2bdlAygHWXzS1UPlGIMEdM6pIQX07JFKUnTTFxR6HGKv9jSSoQx7wBx/xAAwHR+j/JkM3Xxg==
+X-Gm-Message-State: AOJu0YzKtOurh1fcruYRfStGClu3D/OhoS/LkkfsJYyIMt2V0zvtYd7y
+	VUm5w2SdafZQvTfDjZRnCiAu2BE1puh5FYS/HIYqhdqXdgq5JSRAjTA5j3Al3aLOMbpTae/thpw
+	oYYRxeYcTHHa6mhlZPqgtTlil3OXdqDLrmy7h
+X-Google-Smtp-Source: AGHT+IHtNH9SG5kviHG0Zp4ObgcElY0QaPwq/WKIrJZZn0CRZo740etRowxrv/bo9NQSJHSXY5Ib9q+PDO3ajLn3tTQ=
+X-Received: by 2002:a05:6102:1626:b0:470:4a6e:4a4e with SMTP id
+ cu38-20020a056102162600b004704a6e4a4emr14352031vsb.29.1708596009136; Thu, 22
+ Feb 2024 02:00:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240221-parisc_use_generic_checksum-v1-4-ad34d895fd1b@rivosinc.com>
-References: <20240221-parisc_use_generic_checksum-v1-0-ad34d895fd1b@rivosinc.com>
-In-Reply-To: <20240221-parisc_use_generic_checksum-v1-0-ad34d895fd1b@rivosinc.com>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708569451; l=833;
- i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=mYOv5YQT1yDdOTCAzi4OkkPsYH4iMvZEO+odMa9t9OU=;
- b=kcPBmJJuQfkQSLxjGXYurjNDqCrgbi6FLLWky02d0x0JjqeH/QjvkkY9LAedCaybC9FPI+/Uo
- 2tOaKUsjuarDrM9ZBbUaloDo2KRy4cHqTwp5CTnTJDmua6pJs9ksfxQ
-X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
- pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-25-surenb@google.com>
+In-Reply-To: <20240221194052.927623-25-surenb@google.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Thu, 22 Feb 2024 10:59:57 +0100
+Message-ID: <CAH5fLgiyouEuDGkbm3fB6WTOxAnTiDx=z6ADx7HN3BTMAO851g@mail.gmail.com>
+Subject: Re: [PATCH v4 24/36] rust: Add a rust helper for krealloc()
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replace the shifting and masking of x with a rotation. This generates
-better assembly.
+On Wed, Feb 21, 2024 at 8:41=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> From: Kent Overstreet <kent.overstreet@linux.dev>
+>
+> Memory allocation profiling is turning krealloc() into a nontrivial
+> macro - so for now, we need a helper for it.
+>
+> Until we have proper support on the rust side for memory allocation
+> profiling this does mean that all Rust allocations will be accounted to
+> the helper.
+>
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Alex Gaynor <alex.gaynor@gmail.com>
+> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Gary Guo <gary@garyguo.net>
+> Cc: "Bj=C3=B6rn Roy Baron" <bjorn3_gh@protonmail.com>
+> Cc: Benno Lossin <benno.lossin@proton.me>
+> Cc: Andreas Hindborg <a.hindborg@samsung.com>
+> Cc: Alice Ryhl <aliceryhl@google.com>
+> Cc: rust-for-linux@vger.kernel.org
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- arch/parisc/lib/checksum.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Currently, the Rust build doesn't work throughout the entire series
+since there are some commits where krealloc is missing before you
+introduce the helper. If you introduce the helper first before
+krealloc stops being an exported function, then the Rust build should
+work throughout the entire series. (Having both the helper and the
+exported function at the same time is not a problem.)
 
-diff --git a/arch/parisc/lib/checksum.c b/arch/parisc/lib/checksum.c
-index eaa660491e24..1ae8cc730d13 100644
---- a/arch/parisc/lib/checksum.c
-+++ b/arch/parisc/lib/checksum.c
-@@ -27,11 +27,8 @@
- 
- static inline unsigned short from32to16(unsigned int x)
- {
--	/* 32 bits --> 16 bits + carry */
--	x = (x & 0xffff) + (x >> 16);
--	/* 16 bits + carry --> 16 bits including carry */
--	x = (x & 0xffff) + (x >> 16);
--	return (unsigned short)x;
-+	x += ror32(x, 16);
-+	return (unsigned short)(x >> 16);
- }
- 
- unsigned int do_csum(const unsigned char *buff, int len)
+With the patch reordered:
 
--- 
-2.34.1
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
+Alice
 
