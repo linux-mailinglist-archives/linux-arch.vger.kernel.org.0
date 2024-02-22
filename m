@@ -1,82 +1,96 @@
-Return-Path: <linux-arch+bounces-2679-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2680-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC44085F9DD
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 14:33:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE57785FA7C
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 14:58:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D61561C2511B
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 13:33:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 894AD282503
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Feb 2024 13:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EEA612FF90;
-	Thu, 22 Feb 2024 13:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88262135410;
+	Thu, 22 Feb 2024 13:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3e5etia"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aanTBA7Q"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBDC1426D;
-	Thu, 22 Feb 2024 13:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F656133425;
+	Thu, 22 Feb 2024 13:58:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708608808; cv=none; b=WrCxZ2m+e1Oheswy85AVXDcoCa9ylQx2e8m0TQ+1y2e915WOnJdpqdFSfP+K9OB+tD2k+QPePMLtJ7Pc1m6rbKDF1jveSTqx/BNj1BvyOXQNV9W+NMi0C8XSxpfXjEB3eVTLRj0nu2SFmKaMcEIDkZT5lV3g0WSbnezDnAlKmRw=
+	t=1708610283; cv=none; b=hZefbuIgv0u/bIcmsB+v0T+GKW+P5WGMKmy8eT7OAmLaKaQaD1NUMYbRAPSGZtQVMvU0Houn8B0KqutAtjxztX+ZK19UEAgvnQlWSB7ZgfTgIbr0fPowLCGJ6XkEZ6BMHC7UgwxvgtfyWQb+scVvuOdB3ISZRa3pRM5L8APSdAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708608808; c=relaxed/simple;
-	bh=ek76lcOHd6638oPTS6Co2oHesqGce0rC+wixg+GWnxQ=;
+	s=arc-20240116; t=1708610283; c=relaxed/simple;
+	bh=qjmPfoVywGfr4jqsh5FJ/yxg8KOM8vjU9JBU7Z2KpR4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BjBc5O2NaDRcOqSMC6WvHzlLA67qmzprXc20Xtp47tUhg8dLCxRQ0Aeveqasng8aAeh+Rupaq95zuVU6MCdJMiLaxpZ1f+xMkXHOQoyNh3MmklQo8BilLaUpP8Ojf7/y1bEvRKhUwXpiL0bg6MIlG8QTcuNRS/2v1BlJEW2bbYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3e5etia; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62395C433F1;
-	Thu, 22 Feb 2024 13:33:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=C+TWLfofWNgZEafxNoAecDDqfXWlFwy+15gka/Opymyq/daCGqB5Hg8kQK2/mtXRPRg0tyZ0r3Whv5tFUZliwR7sQYBz+4ZnP0mkMmn87jY+R4tcLkmP1+kHzv841XfEUsn2qMO36LETTlCW71OWm9bJBQIHRn0uQ26c0+hlg+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aanTBA7Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D645C43390;
+	Thu, 22 Feb 2024 13:57:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708608807;
-	bh=ek76lcOHd6638oPTS6Co2oHesqGce0rC+wixg+GWnxQ=;
+	s=k20201202; t=1708610282;
+	bh=qjmPfoVywGfr4jqsh5FJ/yxg8KOM8vjU9JBU7Z2KpR4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a3e5etiaCTIf6mj5LJfPayGGRPCkqpzgVIw1FeLdsLBfQNoMAL/qYtEtGJibhp3oU
-	 XvqjYzMm14iBcabQH9ixoP1adKlIOXGttkEhHZ12Rn+NE7gvkO0FpJV0Zyj8nQwHej
-	 MjS2muDzwVxCuK7DRdg1nW1guor/t1KJ5KFDRVtVQGCSbEzRP9ZExfSI7/m4gQY7lu
-	 IH2ENW1K8nf3rbsVt1oRT1ORFvOCs/E01MBBu4hQdhIY6WX6HFJELx88n+Vg8H2giH
-	 DQ7AfczuUA1Y5ZtqJLYSw5zzQXVd8T4Ihv2M8i5skO8VC6v+6w6nuxJvbPeOJJ9KVr
-	 TwOSG7d+bkkgA==
-Date: Thu, 22 Feb 2024 13:33:10 +0000
+	b=aanTBA7Q5SU1zTtPDaMhX4nwG1EogaRTB6711DBMiXTmU8FRFzAcB7zQYgcUM2OaJ
+	 XHksqp0nMGR665Zm+lDgT+yDropmULnL8lKiWtjJKJ3NL1ecrCmrLU8OR7ZcsowhNV
+	 u+zivFcDWQqEkxqOD8K6xYSAKOOwaNrLKqXv3SiHTMwf1JJvLKTjXxiKAVOfTIyX6A
+	 QW2bcztZSCAVxYQoLX8XBJuGKkKkAorTgEuxggq4WcuU6lezBNTj3BInSRIVEXBTih
+	 tlOZte74whZIn/QZQ00VCk0r89EM0A76cAGvXtNTTd6uAX30BQpy9H3OHFzXJG137X
+	 8lNOIn1prx5Vg==
+Date: Thu, 22 Feb 2024 13:57:53 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com,
-	kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
-	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
-	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
-	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
-	xiao.w.wang@intel.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, waylingii@gmail.com,
-	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
-	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com,
-	panqinglin2020@iscas.ac.cn, willy@infradead.org,
-	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
-	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
-	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
-	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com,
-	ruscur@russell.cc, bgray@linux.ibm.com, alx@kernel.org,
-	baruch@tkos.co.il, zhangqing@loongson.cn, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com,
-	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 15/28] riscv/mm: Implement map_shadow_stack()
- syscall
-Message-ID: <6ad3e87a-25ab-4938-8d81-c5c609619586@sirena.org.uk>
-References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-16-debug@rivosinc.com>
- <ZcJX2IJb0hOM5RF5@finisterre.sirena.org.uk>
- <ZdaZj0pqaVJiNOUg@debug.ba.rivosinc.com>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "dalias@libc.org" <dalias@libc.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <c2426b69-5411-45fe-851a-219e1f4f9d3b@sirena.org.uk>
+References: <20240221012736.GQ4163@brightrain.aerifal.cx>
+ <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
+ <20240221145800.GR4163@brightrain.aerifal.cx>
+ <4a3809e8-61b2-4341-a868-292ba6e64e8a@sirena.org.uk>
+ <20240221175717.GS4163@brightrain.aerifal.cx>
+ <f4a54297767eb098d903404cbe8860d655d79bed.camel@intel.com>
+ <20240221183055.GT4163@brightrain.aerifal.cx>
+ <c3085fbe10193dfe59b25bc7da776e60779b0e8c.camel@intel.com>
+ <20240221190639.GU4163@brightrain.aerifal.cx>
+ <e3a432c0fa9f5fe837e9d2fc7b36304709a34428.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -84,54 +98,57 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="LxmbY0AjUg4WDPUw"
+	protocol="application/pgp-signature"; boundary="Y7x2ZPCVf8cy8GEb"
 Content-Disposition: inline
-In-Reply-To: <ZdaZj0pqaVJiNOUg@debug.ba.rivosinc.com>
+In-Reply-To: <e3a432c0fa9f5fe837e9d2fc7b36304709a34428.camel@intel.com>
 X-Cookie: I have accepted Provolone into my life!
 
 
---LxmbY0AjUg4WDPUw
+--Y7x2ZPCVf8cy8GEb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Feb 21, 2024 at 04:47:11PM -0800, Deepak Gupta wrote:
-> On Tue, Feb 06, 2024 at 04:01:28PM +0000, Mark Brown wrote:
+On Wed, Feb 21, 2024 at 07:22:21PM +0000, Edgecombe, Rick P wrote:
+> On Wed, 2024-02-21 at 14:06 -0500, dalias@libc.org wrote:
 
-> > > +#define SHADOW_STACK_SET_TOKEN (1ULL << 0)     /* Set up a restore token in the shadow stack */
+> > It's fine to turn RDSSP into an actual emulated read of the SSP, or
+> > at
+> > least an emulated load of zero so that uninitialized data is not left
+> > in the target register.
 
-> > For arm64 I also added a SHADOW_STACK_SET_MARKER for adding a top of
-> > stack marker, did you have any thoughts on that for RISC-V?  I think x86
-> > were considering adding it too, it'd be good if we could get things
-> > consistent.
+> We can't intercept RDSSP, but it becomes a NOP by default. (disclaimer
+> x86-only knowledge).
 
-> Please correct me on this. A token at the top which can't be consumed to restore
-> but *just* purely as marker, right?
+For arm64 we have a separate control GCSCRE0_EL1.nTR for access to
+GCSPR_EL0 (our SSP equivalent) we can use.
 
-Yes, for arm64 we just leave a zero word (which can't be a valid token)
-above the stack switch token, that does mean you can't exactly tell that
-the top of stack marker is there unless there's also a stack switch
-token below it.
+> > I have not looked at all the instructions that become #UD but I
+> > suspect they all have reasonable trivial ways to implement a
+> > "disabled" version of them that userspace can act upon reasonably.
 
-> It's a good design basic with not a lot of cost.
+> This would have to be thought through functionally and performance
+> wise. I'm not opposed if can come up with a fully fleshed out plan. How
+> serious are you in pursuing musl support, if we had something like
+> this?
 
-> I think risc-v should be able to converge on that.
+Same here, we have to be careful since it's defining ABI in a way that
+we don't normally provide ABI but if there's a clear case for doing it
+then...
 
-Great.
-
---LxmbY0AjUg4WDPUw
+--Y7x2ZPCVf8cy8GEb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXXTRUACgkQJNaLcl1U
-h9ChLQf/TR/+XFN8k0dkmk90JLlGHu3WaTQM0wqbCtUC2FExSxw4JGFIeRSKnUum
-10loLkMwAaklC1on36bhQcqVQ+qMOoVN0k9k+YJpi4iXFDo6LH95Z4Qwq37xUQOg
-EI+FqbA6BiCGk1OVOHibZO51nBBmQuwO4c/MYT24AYyoR2/uk6OPE+G1Mm7K4/M6
-zukeMbRS4LPn++luduEqROdMpJNdEBjeSELUQL8AjyUFemzG6ZlpojuJAvVNbVsN
-COBlGD75skhCaSfor7bhAv3iKrr+htaWDZ3zwkPMjlufoZjwYBUb+h3A7eE2G2YF
-wLkwHJN21WNLbqxqHXvjCFibtxling==
-=mXRS
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXXUuAACgkQJNaLcl1U
+h9CWhgf9ENKHpmQFWkFp9BvnSQpoqzt8GvTsea21+X/Sj2LF1t9awlhI1ZonFcLg
+kiWOH7voRFXaX11HTooF+5zW0lljzQzeKy6a4cAqvyhV93pQz5U7Tzuk5xqkLe3o
+mtXBUEWVIO/JPNSAwHNb44hXL7AjS1MEYgj0iqYvqWCYqikKit3kjOjJrc3jdb4y
+3NQgra/qAykoQji1F3ZFkEtRyHALvMWET9TzzVyrCoTYPzIRzCWnkkBxKsNMokGC
+nwxW+cuoESrLNygNc/V3CbbUqAYkdO7AbmSvBvzQ0pboXO5M+p4sPnapddZeoYiK
+JVmWfU7+hu6JUz1Bj5tBIoRL24Q7Og==
+=mhhY
 -----END PGP SIGNATURE-----
 
---LxmbY0AjUg4WDPUw--
+--Y7x2ZPCVf8cy8GEb--
 
