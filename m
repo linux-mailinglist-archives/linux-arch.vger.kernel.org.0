@@ -1,153 +1,182 @@
-Return-Path: <linux-arch+bounces-2690-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2691-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5B0D860832
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 02:27:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 646248608CD
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 03:25:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D58C1C21B95
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 01:27:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF11F1F22F56
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 02:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9701946C;
-	Fri, 23 Feb 2024 01:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58265B674;
+	Fri, 23 Feb 2024 02:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LpdCZBp9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MW/Wwdxp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEF979E1;
-	Fri, 23 Feb 2024 01:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD3FBE4A
+	for <linux-arch@vger.kernel.org>; Fri, 23 Feb 2024 02:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708651640; cv=none; b=Mae98+TuRCFSAVnVZQMayJ97e692BcoqtxAUDtgo3alq3GkzX40uEKI9l4eRDXJSWW6C+ki45r0iMU5y+VIhHiLYNjUSnQwgBC5fUdcB63NiBgyoc3s4kQDat0qU6aOPHT8b8n5x20zLbVcRZtnbPJLW7y0eGtgm1ROhbuO+pkk=
+	t=1708655105; cv=none; b=F2HDr1onrok2eBUsHKbzmJOGXoua76bh3IE0IKf6WhJBR3os5CLrqJz5Ghb9izUnLkgojO5fTRTpPVA6vMZ14xqC8xfF+ROIKj5jvAKgXaxmCLURYcTzFpQOhoVjQ39Mxo+B5ykn+StdyCMY8bva+6oLqoYU7fBnNtVGDPqcigs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708651640; c=relaxed/simple;
-	bh=VJfzL6GLEaZMoUqazrxisfj34PLQuSNA02WLHhDPT4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a8ETOUUteJk46Cx6DI6O8scVD/qI874fqH3Rt5rDk6qyTLdJQRjUj5237VMIilZRRRym635B+1M6d7ifQz0nCJNdG3u81a/po1KiVqucQj9Ml3OlpclyG27/mauYkm1rl6zTQmR5lKYPlaXIS/UR3KI3tYRihFq4lTqb0woUU/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LpdCZBp9; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708651638; x=1740187638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VJfzL6GLEaZMoUqazrxisfj34PLQuSNA02WLHhDPT4k=;
-  b=LpdCZBp9dhFIIgtBdS4jFXFuqQKkaB2vJ/hsogVcQYEdTIm2tKSaQ3wS
-   8G5JCIyHVhU213hGOCea465UhwZgyodbLd4M/iDu1BGwQW45RAHNxLtu6
-   XesxHPmEeXlKuLwkNgMkfcrhlo0DinziUKifjYi9w+1u/b3wgmuw0S8MD
-   QIez8EIi682kcMnGnTjFUIyBbPqgcxnS1nYy5mNobPyZIQrEZDdLBvD4G
-   MT8ZOHJp5GzvK+3mXAjUU6mP7umP1knqUmICgxfc1wGDLEBo5KcXltXMa
-   jaZWpp67OG6EqS3IgostuJF2qH8x4Shbnpg6W6k6mxoW4UjS+9DMk+DQd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="14072581"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="14072581"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 17:27:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="6192032"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 22 Feb 2024 17:27:11 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rdKL6-0006vK-2c;
-	Fri, 23 Feb 2024 01:27:02 +0000
-Date: Fri, 23 Feb 2024 09:26:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-	javierm@redhat.com, deller@gmx.de, suijingfeng@loongson.cn
-Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-sh@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	loongarch@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 2/3] arch: Remove struct fb_info from video helpers
-Message-ID: <202402230941.JZdvHHEX-lkp@intel.com>
-References: <20240221161431.8245-3-tzimmermann@suse.de>
+	s=arc-20240116; t=1708655105; c=relaxed/simple;
+	bh=PzfE8dvOzIfSG/xSCddRDMvBcZR0ITDteEVsQNyILMw=;
+	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
+	 MIME-Version:Content-Type; b=MY7du6zyjvgxcEL1lqSMI2WmIoryQqnuDD0PPBlPcNiJkjahpdFgDW9gKgtZBZhBGazCaUNX86vgsyoaE2EEuQeGaYkbRecbK4QvmTEWQRs+mQxY+8prSz5APr4qc23kC3rnZCOZN3gMieIOMpfoFAQXt9LnWwJvrzEyHF8S2S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MW/Wwdxp; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso270396a12.3
+        for <linux-arch@vger.kernel.org>; Thu, 22 Feb 2024 18:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708655103; x=1709259903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yvpsMbjqPU4UR9+5wWiHmUmCTwM1PMtLjxdFJ8jAgDo=;
+        b=MW/WwdxppZuCISdh5ukjVaVojPDfa8y2RJ9EMgTLHGmO75iCpbGn9eOMQOynBMj9Yk
+         +nHcnfM5AoyhqCq8WDWBF5mYyQ0l7RJIrKd+6dDMBx0DDyXNTnle9GNGeIET6VjoE5r+
+         ip+H99r3aucGAz50ztmNfyQ6n4RtZAMRKA8AJkeYUTnm2NsUVAgzm4MZlK5R04fc/yA6
+         mR/8Zc3FooUqY6XgJzf03hNheaOYJpKWtbd14YbhoPMPVwRXBw4vQ8lOV5UNbE7B1eb9
+         k7952iFSIPy9KB5OkO3aIAibOpIHFUe7YW0kQRG/JdPHJ+3ulfMCIxWWwr8sK0NQvXtW
+         thmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708655103; x=1709259903;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yvpsMbjqPU4UR9+5wWiHmUmCTwM1PMtLjxdFJ8jAgDo=;
+        b=JIo7uO46cWfyhz/dHJY91ZYWbJ6A86NOBSzBykOenYrz4PEbub8E9NhzL9YmlyFHGS
+         /n7s8sa+UIdbA1vWbQJiaTWCzrBdpV7kDaIkfcNIeIh9n//SsSoKPEE9w0txbdzKBGT1
+         4gXvpnLzfvCgppVbQ6HBxZ/czrgZNF4BNmHK3IFBBhUUMsO/MEOQ+H92JWSnWYb6HamA
+         YZkqr296aTwVaLtX6Ltd540vR4i4Ic6skyaHxKaERJNNlwvGHSbIoi6dwCWYyOlUykn7
+         s4U18K4FZfzM5FnHMQsvc2HAXZ5CwDIN92OPKucQ72ASjyfL5EKTxvAeQkly0BDdICbG
+         q/kg==
+X-Forwarded-Encrypted: i=1; AJvYcCVE91nFG6p7ut9d/bICKWgRX4yQVZGP2ZtaESyAs4gY6ngHB7NuvsOmteePURJf6i2ULr8kSOwEZbrBr6IJA0n8y0TpaFrA1MAECg==
+X-Gm-Message-State: AOJu0YyGJB3ma+6+iWVfuvJKl7QJJj5XYMwwfBN9+U/boZG1q0kKaSES
+	+HEauoghBY7kSejgAEOIAeNFR/SBawgvcdgrPKwAgRzH9L6zVuKIMbZdfJce62Y=
+X-Google-Smtp-Source: AGHT+IGXzUvLuIBqAH6IpfTDaGkH8Ve8NCjMdXcR7MwfrFmhzj20/am5IT7QTj11UMAitUQcB9a5gw==
+X-Received: by 2002:a05:6a20:e607:b0:19e:a353:81b0 with SMTP id my7-20020a056a20e60700b0019ea35381b0mr734946pzb.11.1708655102714;
+        Thu, 22 Feb 2024 18:25:02 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:902e:6d00:6c11:e63b])
+        by smtp.gmail.com with ESMTPSA id mf8-20020a170902fc8800b001d9fc6cb5f2sm10645873plb.203.2024.02.22.18.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 18:25:02 -0800 (PST)
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <20240203-arm64-gcs-v8-33-c9fec77673ef@kernel.org>
+ <87sf1n7uea.fsf@linaro.org>
+ <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 33/38] kselftest/arm64: Add a GCS test program built
+ with the system libc
+In-reply-to: <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
+Date: Thu, 22 Feb 2024 23:24:59 -0300
+Message-ID: <87ttlzsyro.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240221161431.8245-3-tzimmermann@suse.de>
-
-Hi Thomas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on deller-parisc/for-next arnd-asm-generic/master linus/master v6.8-rc5]
-[cannot apply to next-20240222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-Select-fbdev-helpers-with-CONFIG_VIDEO/20240222-001622
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20240221161431.8245-3-tzimmermann%40suse.de
-patch subject: [PATCH 2/3] arch: Remove struct fb_info from video helpers
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20240223/202402230941.JZdvHHEX-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240223/202402230941.JZdvHHEX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402230941.JZdvHHEX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ld: vmlinux.o: in function `fbcon_select_primary':
->> drivers/video/fbdev/core/fbcon.c:2944: undefined reference to `video_is_primary_device'
-   ld: vmlinux.o: in function `fb_io_mmap':
-   drivers/video/fbdev/core/fb_io_fops.c:164: undefined reference to `pgprot_framebuffer'
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +2944 drivers/video/fbdev/core/fbcon.c
+Mark Brown <broonie@kernel.org> writes:
 
-  2939	
-  2940	#ifdef CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY
-  2941	static void fbcon_select_primary(struct fb_info *info)
-  2942	{
-  2943		if (!map_override && primary_device == -1 &&
-> 2944		    video_is_primary_device(info->device)) {
-  2945			int i;
-  2946	
-  2947			printk(KERN_INFO "fbcon: %s (fb%i) is primary device\n",
-  2948			       info->fix.id, info->node);
-  2949			primary_device = info->node;
-  2950	
-  2951			for (i = first_fb_vc; i <= last_fb_vc; i++)
-  2952				con2fb_map_boot[i] = primary_device;
-  2953	
-  2954			if (con_is_bound(&fb_con)) {
-  2955				printk(KERN_INFO "fbcon: Remapping primary device, "
-  2956				       "fb%i, to tty %i-%i\n", info->node,
-  2957				       first_fb_vc + 1, last_fb_vc + 1);
-  2958				info_idx = primary_device;
-  2959			}
-  2960		}
-  2961	
+> On Mon, Feb 19, 2024 at 11:15:57PM -0300, Thiago Jung Bauermann wrote:
+>
+>> The only issue as can be seen above is that the can_call_function test
+>> is failing. The child is getting a GCS Segmentation fault when returning
+>> from fork().
+>
+>> I tried debugging it with GDB, but I don't see what's wrong since the
+>> address in LR matches the first entry in GCSPR. Here is the
+>> debug session:
+>
+> I believe based on prior discussions that you're running this using
+> shrinkwrap - can you confirm exactly how please, including things like
+> which firmware configuration you're using?  I'm using current git with
+>
+>   shrinkwrap run \
+>         --rtvar KERNEL=3Darch/arm64/boot/Image \
+>         --rtvar ROOTFS=3D${ROOTFS} \
+>         --rtvar CMDLINE=3D"${CMDLINE}" \
+>         --overlay=3Darch/v9.4.yaml ns-edk2.yaml
+>
+> and a locally built yocto and everything seems perfectly happy.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes, this is how I'm running it:
+
+  CMDLINE=3D"Image dtb=3Dfdt.dtb console=3DttyAMA0 earlycon=3Dpl011,0x1c090=
+000 root=3D/dev/vda2 ip=3Ddhcp maxcpus=3D1"
+
+  shrinkwrap run \
+      --rtvar=3DKERNEL=3DImage-gcs-v8-v6.7-rc4-14743-ga551a7d7af93 \
+      --rtvar=3DROOTFS=3D$HOME/VMs/ubuntu-aarch64.img \
+      --rtvar=3DCMDLINE=3D"$CMDLINE" \
+      ns-edk2.yaml
+
+I ran the following to set up the FVP VM:
+
+$ shrinkwrap build --overlay=3Darch/v9.4.yaml ns-edk2.yaml
+
+My rootfs is Ubuntu 22.04.3. In case it's useful, my kernel config is
+here:
+
+https://people.linaro.org/~thiago.bauermann/gcs/config-v6.8.0-rc2
+
+I tried removing "maxcpus=3D1" from the kernel command line, but it made
+no difference.
+
+I also tried resetting my Shrinkwrap setup and starting from scratch,
+but it also made no difference: I just pulled from the current main
+branch and removed Shrinkwrap's build and package directories, and also
+removed all Docker images and the one container I had.
+
+Here are some firmware versions from early boot:
+
+  NOTICE:  Booting Trusted Firmware
+  NOTICE:  BL1: v2.10.0   (release):v2.10.0
+  NOTICE:  BL1: Built : 00:07:29, Feb 23 2024
+     =E2=8B=AE
+  NOTICE:  BL2: v2.10.0   (release):v2.10.0
+  NOTICE:  BL2: Built : 00:07:29, Feb 23 2024
+     =E2=8B=AE
+  NOTICE:  BL31: v2.10.0  (release):v2.10.0
+  NOTICE:  BL31: Built : 00:07:29, Feb 23 2024
+     =E2=8B=AE
+  [  edk2 ] UEFI firmware (version  built at 00:06:55 on Feb 23 2024)
+  Press ESCAPE for boot options ...........UEFI Interactive Shell v2.2
+  EDK II
+  UEFI v2.70 (EDK II, 0x00010000)
+
+It looks like our main differences are the kernel config and the distro.
+
+--=20
+Thiago
 
