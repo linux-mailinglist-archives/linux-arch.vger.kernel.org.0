@@ -1,109 +1,116 @@
-Return-Path: <linux-arch+bounces-2694-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2695-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E50886101C
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 12:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B916486104B
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 12:26:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D12C1C23347
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 11:05:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9F541C21447
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 11:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31699657D5;
-	Fri, 23 Feb 2024 11:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808156310A;
+	Fri, 23 Feb 2024 11:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UuFagqGZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E64263121
-	for <linux-arch@vger.kernel.org>; Fri, 23 Feb 2024 11:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C77E5C911;
+	Fri, 23 Feb 2024 11:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708686338; cv=none; b=Hg7DvF/tJTLJsrMC9oRxJe0WWsspppne4L7St5Yz7V/YBLnrsU4JMX/RB6zBcjUMXN28rEgTeKucfO82tRCVXFJNx2SpuPm/RtabREelAa5963/7a5rfSgrYYMeM6EbwZjR2FBL1eh2FIZvNlgQaBsDBI/5fsuMTfMvrfBNBPNE=
+	t=1708687583; cv=none; b=DFmwvEOIzqSrOaUSgGMJPfE+jMYPFJ3lOKKWUwxHAvQ2wPfa1CsWctgsBWRac8cyuIytoENgXKiUHljC7nFMP4N5pRRtpsnugq0mWq8PSWx84H5EASb2VWgejBxXoAmPF9li7bBIw2VV3EE95AoWw7R/PjTOu0LF47SJZdjh+tY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708686338; c=relaxed/simple;
-	bh=f8K7B4fWzAJ9S0HMWxpxdex4kiotuVYmwyxdYOKndxs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=lKEs5KMvz7dbZq+sRPMgYbQZ0SGPxP5e9J8oenqrN3I81/wibZiynC06uGCISuywMzj5nPS0S9p77mv2PmN3I370cg1froCG6o/XQFWyDb+4exroVlORFxwdIbU9qlnUX6JGqwvDVVy/iQqmfKrlxS0z3Y8X/rq8n20fMxx9Mik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-130-H-3Osv-SP7aTaorVWrPjmg-1; Fri, 23 Feb 2024 11:05:31 +0000
-X-MC-Unique: H-3Osv-SP7aTaorVWrPjmg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Feb
- 2024 11:05:29 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 23 Feb 2024 11:05:29 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Niklas Schnelle' <schnelle@linux.ibm.com>, 'Jason Gunthorpe'
-	<jgg@nvidia.com>
-CC: Alexander Gordeev <agordeev@linux.ibm.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, Gerald Schaefer
-	<gerald.schaefer@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt
-	<justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky
-	<leon@kernel.org>, "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ingo Molnar
-	<mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Salil Mehta <salil.mehta@huawei.com>, Jijie Shao
-	<shaojijie@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner
-	<tglx@linutronix.de>, "x86@kernel.org" <x86@kernel.org>, Yisen Zhuang
-	<yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
-	<catalin.marinas@arm.com>, Leon Romanovsky <leonro@mellanox.com>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, Will Deacon <will@kernel.org>
-Subject: RE: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Topic: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Index: AQHaZGPOOI9/P4jwQk+N+/Phnt6M8bEW6XcggAAM2oCAAKwjYIAAJAwAgAABBTA=
-Date: Fri, 23 Feb 2024 11:05:29 +0000
-Message-ID: <3227d5224a9745e388738d016fdae87a@AcuMS.aculab.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
-	 <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
-	 <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
-	 <20240222223617.GC13330@nvidia.com>
-	 <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
- <61931c626d9bc54369d73fda8f8ee59bbb5e95bc.camel@linux.ibm.com>
-In-Reply-To: <61931c626d9bc54369d73fda8f8ee59bbb5e95bc.camel@linux.ibm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1708687583; c=relaxed/simple;
+	bh=ji5uTzd+emC2HMjDnotwfaplzIY/lJhoKEGU/JoWfzQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YxcUxSzlqcnnkuH+56tC9RIf+8AozNZ614qKKHkX9rFz5uGxFlTLFGknk/0m1r3GCU/mYvoqEuEIovs3G/BsoMscnQ9K3gjRrVmgXUz00p27zEV1zZ8KHAYheU9u6bdewTebom2J8ZXlalkLEg2S8uTstW8Do5aboVzLgAE8pvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UuFagqGZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA34C43399;
+	Fri, 23 Feb 2024 11:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708687582;
+	bh=ji5uTzd+emC2HMjDnotwfaplzIY/lJhoKEGU/JoWfzQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UuFagqGZtViV3iPl3qBCXD+2UPA/O44aOk65OgbuW5jyv/U9QQr+sGZtFPzpfWLbQ
+	 tREm1+Y7Aye8jyCKSid0Xy64AmhFYAjSrRggV2vnJuvz163mHXR68yq3HUttIWHq71
+	 cPNj/b29DGzKAEDyYHcGxDMhAtW7Za62ZqAyOV9PDfvpMQzf6GIOCI4KDDzcJ0bK/Z
+	 KRpmkIc4BIEPk2Wo4V7p5KFtpGnFFoszIBvlTRLbI8A6ezTxz+N6VG/9adQovsuNLm
+	 EP45PK/9pU1MdIqwczRjlIXASPmhqzowcIgNxyZPawbso8e3V8VTt+27bBF4216AV+
+	 OwIt85pim3m4A==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-563c0f13cabso329258a12.3;
+        Fri, 23 Feb 2024 03:26:22 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWrbMQ1CZ14kWMu2HIphIQTPcTZOXbLodFm/BRakIwTpUQHvmG2qBdmD4tBlFFCLX2eXgJrjz8b01UcbPxiR3yj6jgIpdTdXvXZbcTsrPJx3L6nouD7NF72Y9miE/QG3Ogs2/STzajoLZBuGcAGp/So1s5eiNWHtRnrR6HZHhcp7OYlWV59IMguL4N7Jyy1n66xRYaEK0f5j4ebJ6oR1UvCmE4dWvrVzZ4FIDLQbpNfp8CgO+yGSypI7ycfCKF1seHJzs0=
+X-Gm-Message-State: AOJu0YwjTV+nMFEUIipf1MvHt0YxcHpr7ZKYVdZm4ge9diEM8nGYIjY1
+	iMdrBYjdS0gfvk3bVjjFPwEWVtSMz391h6eYXI7Z/0+fSRAS98jO7jt7ifHJZfj/fdCYxVlBRty
+	rLlC8u6Fns1CYXuxHh8PNppRst3U=
+X-Google-Smtp-Source: AGHT+IE9uvJvCn7L0PhyRqMkyMRsnG/MzuLImMvhZ8F8J7qYEpE68QRfN2+IQzVgaRNo6pzxYl7OuOd7GkbSaCQ8b9g=
+X-Received: by 2002:aa7:d316:0:b0:565:85c8:2352 with SMTP id
+ p22-20020aa7d316000000b0056585c82352mr191517edq.7.1708687581160; Fri, 23 Feb
+ 2024 03:26:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+References: <20240131055159.2506-1-yan.y.zhao@intel.com> <20240131055740.2579-1-yan.y.zhao@intel.com>
+In-Reply-To: <20240131055740.2579-1-yan.y.zhao@intel.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Fri, 23 Feb 2024 19:26:09 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTEaTnUCJhyU-bw=em_fo9ZW6bK=eaahUVsHcXuwaM8rw@mail.gmail.com>
+Message-ID: <CAJF2gTTEaTnUCJhyU-bw=em_fo9ZW6bK=eaahUVsHcXuwaM8rw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] asm-generic/page.h: apply page shift to PFN instead
+ of VA in pfn_to_virt
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: arnd@arndb.de, linus.walleij@linaro.org, bcain@quicinc.com, 
+	jonas@southpole.se, stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Li4uDQo+ID4gPiA+ID4gKwkJaWYgKChfY291bnQgJSA4KSA+PSA0KSB7DQo+ID4gPiA+DQo+ID4g
-PiA+IElmIChfY291bnQgJiA0KSB7DQo+ID4gPg0KPiA+ID4gVGhhdCB3b3VsZCBiZSBvYmZ1c2Nh
-dGluZywgSU1ITy4gVGhlIGNvbXBpbGVyIGRvZXNuJ3QgbmVlZCBzdWNoIHRoaW5ncw0KPiA+ID4g
-dG8gZ2VuZXJhdGUgb3B0aW1hbCBjb2RlLg0KPiA+DQo+ID4gVHJ5IGl0OiBodHRwczovL2dvZGJv
-bHQub3JnL3ovRXZ2R3JUeHYzDQo+ID4gQW5kIGl0IGlzbid0IHRoYXQgb2JmdXNjYXRlZCAtIG5v
-IG1vcmUgc28gdGhhbiB5b3VyIHZlcnNpb24uDQo+IA0KPiBUaGUgZ29kYm9sdCBsaW5rIGRvZXMg
-Im4gJSA4ID4gNCIgaW5zdGVhZCBvZiAiLi4uID49IDQiIGFzIGluIEphc29uJ3MNCj4gb3JpZ2lu
-YWwgY29kZS4gV2l0aCAiPj0iIHRoZSBjb21waWxlZCBjb2RlIG1hdGNoZXMgdGhhdCBmb3IgIm4g
-JiA0Ii4NCg0KQnVnZ2VyIDotKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, Jan 31, 2024 at 2:27=E2=80=AFPM Yan Zhao <yan.y.zhao@intel.com> wro=
+te:
+>
+> Apply the page shift to PFN to get physical address for final VA.
+> The macro __va should take physical address instead of PFN as input.
+>
+> Fixes: 2d78057f0dd4 ("asm-generic/page.h: Make pfn accessors static inlin=
+es")
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> ---
+>  include/asm-generic/page.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/page.h b/include/asm-generic/page.h
+> index 9773582fd96e..4f1265207b9a 100644
+> --- a/include/asm-generic/page.h
+> +++ b/include/asm-generic/page.h
+> @@ -81,7 +81,7 @@ static inline unsigned long virt_to_pfn(const void *kad=
+dr)
+>  #define virt_to_pfn virt_to_pfn
+>  static inline void *pfn_to_virt(unsigned long pfn)
+>  {
+> -       return __va(pfn) << PAGE_SHIFT;
+> +       return __va(pfn << PAGE_SHIFT);
+Oh, that's a terrible bug; Thx for fixing it.
 
+Reviewed-by: Guo Ren <guoren@kernel.org>
+
+>  }
+>  #define pfn_to_virt pfn_to_virt
+>
+> --
+> 2.17.1
+>
+
+
+--=20
+Best Regards
+ Guo Ren
 
