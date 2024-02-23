@@ -1,85 +1,85 @@
-Return-Path: <linux-arch+bounces-2709-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2710-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98FFA861C71
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 20:27:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94876861F7B
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 23:18:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA1081C22F44
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 19:27:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC985289AE5
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Feb 2024 22:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48DA3143C54;
-	Fri, 23 Feb 2024 19:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C6E14CACF;
+	Fri, 23 Feb 2024 22:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OpCi4S7E"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VdEii+wV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E03143C6A
-	for <linux-arch@vger.kernel.org>; Fri, 23 Feb 2024 19:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6347C14CAA3
+	for <linux-arch@vger.kernel.org>; Fri, 23 Feb 2024 22:17:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708716416; cv=none; b=uMrRS+FGwjc1Cyi09k5CbymsRV546m70fwQO2AA1Blk1cANOU+fDjAt7g+8DfIBwPTj9ZNYPiShVhp9fAVIxHDA2kUcTv2VOieBDKeQD0znyLWFfCBt+BStqaMq41hTt62hU9Zw9bt4gV/Ru5OYECei0HkNj+4FSnYqDk76uMao=
+	t=1708726680; cv=none; b=uZLPQISf4py9UPktV8DV5dJQGY8NfEN6LyAQD2qWTKlrjPPAqROhzrHBJ13cO6ZzCWxe5saijasj9CX/KkddAOovuqd1S96Pv6Geezues+BbRPyBjIx86CfXcgRGU1Y5wkAPZ7eSQeB4hKmSAgSzkMri6kjKUIkEK5aL0iYFu4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708716416; c=relaxed/simple;
-	bh=R6zUV9LQ644WPBwU2nAdaKkCRupl6ITF2pP4ziWZMV0=;
+	s=arc-20240116; t=1708726680; c=relaxed/simple;
+	bh=mr+d1THQdIOXLBHXtZjKUSDXbb7TH7vTqrSqao2j71w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FtY02LU+vD8dP7Z8+24aw0qFDDqSlXPSuqNgo+PmaU+RhFI/dpjgUdNPxjhgQnRry4AzWVuautkhNOHkJcItLvRgQV5EkO73faMVFOEKhvLeG9VtPsS6qHVKa+baJoMD5nBafFXglugdKPHyoyM2QNdV2U6Z1MCsMo9YYT+G8pI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OpCi4S7E; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=Z96UKsgywOr8AKAXGQ5zSCHLakTHk7+nrg/v9PkWVPVENovqiK4rZrtr5sbiueQ//xBHrCKhHCPL2NoE+Jo9DCac2CUfyFTPZ+NcfBQECA5ZqLeqIWn30GWoSjAt3zroc+kZZOEjwl07slbgOg5hSwTeuPpQuMnjEe7hGH5cjTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VdEii+wV; arc=none smtp.client-ip=209.85.219.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc6d24737d7so1066840276.0
-        for <linux-arch@vger.kernel.org>; Fri, 23 Feb 2024 11:26:52 -0800 (PST)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dcc80d6004bso1373675276.0
+        for <linux-arch@vger.kernel.org>; Fri, 23 Feb 2024 14:17:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708716412; x=1709321212; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708726677; x=1709331477; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R6zUV9LQ644WPBwU2nAdaKkCRupl6ITF2pP4ziWZMV0=;
-        b=OpCi4S7EIle74AF4FZHaIEyLZXNxInq/DezUptdf3Dtyp+NkJo+dehUdZWG2qusLIi
-         bt8qF0ES+0LRUSPqWcX3BhMdXjaIdmafbMwRL9IPIvSNXVQcek1Jj0OLzR/dzhi+w7to
-         dAXnDGoFer1u6qbebk7TeotLVef6+Rz6kG/IIQYYpJYnHAms2nBdwshn2RMbFLixh9yV
-         eZZ0uK4Fjh1XP2wbWR9k7FrQhpvdHVp19ivE5SZkX2rlJbmBquB+IxJZ7azGQfDfOpLl
-         DtRq+AvFDvwCsisaBmPWMyn88TDIfYFY/bu64HZB+J1w9y9ZRnJSSKlJoV24LCl5T0vH
-         ZewQ==
+        bh=mr+d1THQdIOXLBHXtZjKUSDXbb7TH7vTqrSqao2j71w=;
+        b=VdEii+wVRnJp1mt3DLFbLstJLZ/qohvz+uwS06r5/nk3fYwfMxW+/vdbORHgEMfQ6V
+         //+/+IhByApeXKiHe8wSxfYEuEZYIUPOnqOQZs/vLMV8SWswH8kbRMouhgqB75Ssf/uE
+         9wzrB8/2WIi0puq4JAx0PnY9sMr3J/BpLlubAEBBrGUIz0LYmGSTC6ovFKL/TaZ2FTAJ
+         WR9c2RUwFoRHwqV7zoI6oijiyxTF6+ZGSqnwBQo20sbR2jP6ux0HC+h2PwG3qMs7sKSd
+         R0qd+leXxrawGLgwD1vKL0dy24+1d1jG4QB4Vav+gUykapzedxDSuQOBul5mVndE2dZg
+         TFTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708716412; x=1709321212;
+        d=1e100.net; s=20230601; t=1708726677; x=1709331477;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R6zUV9LQ644WPBwU2nAdaKkCRupl6ITF2pP4ziWZMV0=;
-        b=TMbz806gzpeks1DRwCz/IpwYeRZOnfrRvwQtwbwEnAmBQh2D7is/9Rz1+cp0p30eWd
-         KX4KVCnQ2aX4dVkr9O9jA/hapGkB2bK00a34p5LE1/7SgFp+enRmxNwuWlgDj5AJyOiw
-         4VVDa6RWpl2sGOiMEGkXMkLoCFKJVU9TfKXN1Cr2HFRLiwKhUqzajnfWTvkhDsYRmxN6
-         4RNV3QBOKTc0itF83QG6VwpXyVspJod665z+JH/E+5vEEO/HFJzif4KbnZzDOb3PGVav
-         aXX+MR6+AmI4hPDI/4AxDZdrCBtci8t80mdCONc/GZt1CAQ4DriuCPsi/bPpzA7KS2YU
-         nnHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkZGsq6KkCfx51LzQz92QWZ4nVxK7JgydWOD93nZKlDx9NxTzyhiV2tqi9UTsoUps1sPnCPaRNPtp+pioiph/1/ncpfVYs/Q4CYQ==
-X-Gm-Message-State: AOJu0YxHQdJr1bTGOvkWGsaC9WtjIaHaC/yIAIXVbmQIhgxB51CFWQ+S
-	aYmtnvsHQPj16sVDpgg6aj4Q4vlOO3HACCFBuKvntnE5X6je/lDYZWyl6R0yBVPk27ulRewclc8
-	UpjNTMSal3/85u66xDUr1JsqJwzIDBpazet52
-X-Google-Smtp-Source: AGHT+IE/Pl6hrmaYgXKRMYbWWj3alWqUpkDIYPYsJjZVZ7mPx6TO4HEVqSuGco97bbBAS2NUd8BFNQPQR2paQWXSoCg=
-X-Received: by 2002:a25:2653:0:b0:dc6:b088:e742 with SMTP id
- m80-20020a252653000000b00dc6b088e742mr843579ybm.8.1708716411749; Fri, 23 Feb
- 2024 11:26:51 -0800 (PST)
+        bh=mr+d1THQdIOXLBHXtZjKUSDXbb7TH7vTqrSqao2j71w=;
+        b=X390rFIhPPIG7JpjU/kDNc3b/HgHlmhSegwCvUfXCvPXfJjb7X4LQDUQL5dlZpGzN1
+         cvR0p5Nxr8SxfLQU8Gbwg5bBHSnHyaFlysnJjRi62BkwWP/kV2zw9HwXPsvdBFmoGpU6
+         IbksNMgmOCY73dDxq0fxYX3VJdoWfvQFogLvFVLMqM+NcQeE9dmyJJZ1MVGpqIriY7sa
+         4gJ7QFjxqOE32hWvjkrNvHgwOSudTnmQzFXbYHrC4u6YuOr8FgAl4irV2ThIYIuWYSEr
+         tDQW7IVbjUxwcnYSpoC2W97fO9650xnuIGeFJi9bD82GQ+nevVuipy64ivdG8oel41ug
+         kmpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWIrhsyhsGjudwehrw5YW2zKwv3FYNBmKgP0dNHJ8J4REuyRwokvQ2FuikYldArR7TEX36tg9cl4FKRX4fn7a44vJagZKfGjp272w==
+X-Gm-Message-State: AOJu0YwLHsKgudm8FRUXGsz3nwgOj/HECdJrODYP8/Bt5e0VivOfZR8V
+	EZbcmmAJatdFhB/kxzgbO8IGMx/HPnji72nOk/mFz8/OJEZ8f7Fvd33e40uHdmrT7MyittTgryC
+	thxng1l1s/lcjkwVkWA05QYDOFacUWysCpqXD
+X-Google-Smtp-Source: AGHT+IFvVslf3S11aDqNfvq204R/MIDJZtFxjw2mS4TXD0XUNA43SeY457VF5UW1NHR7Lcxr2CpVLic3B31+1rRIW2U=
+X-Received: by 2002:a25:a427:0:b0:dc7:47b7:9053 with SMTP id
+ f36-20020a25a427000000b00dc747b79053mr1214318ybi.15.1708726677063; Fri, 23
+ Feb 2024 14:17:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-7-surenb@google.com>
- <Zdc6LUWnPOBRmtZH@tiehlicka> <20240222132410.6e1a2599@meshulam.tesarici.cz>
-In-Reply-To: <20240222132410.6e1a2599@meshulam.tesarici.cz>
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-25-surenb@google.com>
+ <CAH5fLgiyouEuDGkbm3fB6WTOxAnTiDx=z6ADx7HN3BTMAO851g@mail.gmail.com>
+In-Reply-To: <CAH5fLgiyouEuDGkbm3fB6WTOxAnTiDx=z6ADx7HN3BTMAO851g@mail.gmail.com>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 23 Feb 2024 11:26:40 -0800
-Message-ID: <CAJuCfpGNoMa4G3o_us+Pn2wvAKxA2L=7WEif2xHT7tR76Mbw5g@mail.gmail.com>
-Subject: Re: [PATCH v4 06/36] mm: enumerate all gfp flags
-To: =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
-Cc: Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, kent.overstreet@linux.dev, 
+Date: Fri, 23 Feb 2024 14:17:44 -0800
+Message-ID: <CAJuCfpHBEX27ThkdMBag-rOwir0Aaie-EeAUgF6bem=3OX4EdA@mail.gmail.com>
+Subject: Re: [PATCH v4 24/36] rust: Add a rust helper for krealloc()
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
 	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
 	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
 	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
@@ -103,45 +103,59 @@ Cc: Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, kent.overstreet@l
 	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
 	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
+	cgroups@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 22, 2024 at 4:24=E2=80=AFAM 'Petr Tesa=C5=99=C3=ADk' via kernel=
--team
-<kernel-team@android.com> wrote:
+On Thu, Feb 22, 2024 at 2:00=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> w=
+rote:
 >
-> On Thu, 22 Feb 2024 13:12:29 +0100
-> Michal Hocko <mhocko@suse.com> wrote:
->
-> > On Wed 21-02-24 11:40:19, Suren Baghdasaryan wrote:
-> > > Introduce GFP bits enumeration to let compiler track the number of us=
-ed
-> > > bits (which depends on the config options) instead of hardcoding them=
-.
-> > > That simplifies __GFP_BITS_SHIFT calculation.
-> > >
-> > > Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> On Wed, Feb 21, 2024 at 8:41=E2=80=AFPM Suren Baghdasaryan <surenb@google=
+.com> wrote:
 > >
-> > I thought I have responded to this patch but obviously not the case.
-> > I like this change. Makes sense even without the rest of the series.
-> > Acked-by: Michal Hocko <mhocko@suse.com>
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> >
+> > Memory allocation profiling is turning krealloc() into a nontrivial
+> > macro - so for now, we need a helper for it.
+> >
+> > Until we have proper support on the rust side for memory allocation
+> > profiling this does mean that all Rust allocations will be accounted to
+> > the helper.
+> >
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > Cc: Miguel Ojeda <ojeda@kernel.org>
+> > Cc: Alex Gaynor <alex.gaynor@gmail.com>
+> > Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
+> > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > Cc: Gary Guo <gary@garyguo.net>
+> > Cc: "Bj=C3=B6rn Roy Baron" <bjorn3_gh@protonmail.com>
+> > Cc: Benno Lossin <benno.lossin@proton.me>
+> > Cc: Andreas Hindborg <a.hindborg@samsung.com>
+> > Cc: Alice Ryhl <aliceryhl@google.com>
+> > Cc: rust-for-linux@vger.kernel.org
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 >
-> Thank you, Michal. I also hope it can be merged without waiting for the
-> rest of the series.
+> Currently, the Rust build doesn't work throughout the entire series
+> since there are some commits where krealloc is missing before you
+> introduce the helper. If you introduce the helper first before
+> krealloc stops being an exported function, then the Rust build should
+> work throughout the entire series. (Having both the helper and the
+> exported function at the same time is not a problem.)
 
-Thanks Michal! I can post it separately. With the Ack I don't think it
-will delay the rest of the series.
-Thanks,
-Suren.
+Ack. I'll move it up in the series.
 
 >
-> Petr T
+> With the patch reordered:
 >
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+
+Thanks Alice!
+
 >
+> Alice
 
