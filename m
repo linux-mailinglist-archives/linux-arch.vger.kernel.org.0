@@ -1,196 +1,126 @@
-Return-Path: <linux-arch+bounces-2762-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2763-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83317869CEA
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 17:55:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22AE3869FEA
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 20:11:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CCD92880EC
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 16:55:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 496ABB2C804
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 19:09:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34DF3839C;
-	Tue, 27 Feb 2024 16:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5FB951004;
+	Tue, 27 Feb 2024 19:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0bqFZOxi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vDcLqfa0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D55122337
-	for <linux-arch@vger.kernel.org>; Tue, 27 Feb 2024 16:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517A04F896
+	for <linux-arch@vger.kernel.org>; Tue, 27 Feb 2024 19:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709052946; cv=none; b=Y3V23fCijfcdg0cULM+Fi04QpTDHD0y4orXvVFL7tPFsEpyeDjOdQ3nQiDzKmgXlRLPdZqYkpHr6+7O2BUVlODB7CfLSGutOHaNkqFeHgU88LC1DG6p7yt9SqUMiKXFJX41SfTdW0qa9r0PniyP43GUyvjIPl1BuaEoKI6p7gds=
+	t=1709060938; cv=none; b=YWvh6iZDyk2AbcBWzis8e58wIi3KamdKyxomfEoaTjRZAD+R/RSrMpgf9TJv3Zt+zGvxQE8x0boH+fn8lsFsOfLN0Nu1QDPLgEp8BwagC2nyklg4a6aIJiZeAtZf1AckDXQ+P2TW7f4yfDuiy9fcxhMrf4TC4lL1NkzxAV3RM7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709052946; c=relaxed/simple;
-	bh=WING8+ifDIdPqWo/GgNARqwiCxM6QeK8N+15oiAYs8U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZXooCZ+Jgz1HGThNxDsKU8F4aQHwbJel/DOTUI0krgYF0lLqM4bnWmEISzo+ut5GRiJRqXO5kWfnyKRkixm6GEojONu+T/rvZdMShQSdoszs8YidehZHQpSY1NtzGemSe/7y/Ra78d8/FfXI91Uro91BwtJZIXv1LVIQsknUqrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0bqFZOxi; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-60938adfed8so624307b3.0
-        for <linux-arch@vger.kernel.org>; Tue, 27 Feb 2024 08:55:44 -0800 (PST)
+	s=arc-20240116; t=1709060938; c=relaxed/simple;
+	bh=73wabGAltLGPlrbwx5dEuZuw5LGsvnG/XNxCGcyGdEc=;
+	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gna6m68UAgcL4+xBrmPviIMde78BGAVijrbtj7VdwOm/w1154yjMAUEypc2sgImFSUrDwgQ3/RpTeIISEaRWVeBjkVCw1OUQZQPsAAj4VKF3ukOWzce1iWn0I40l+CWq38q0Q3Aj+NyhgsJgCsNInlYA9utX/4Z/s6i29bB7t5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vDcLqfa0; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6da4a923b1bso3685097b3a.2
+        for <linux-arch@vger.kernel.org>; Tue, 27 Feb 2024 11:08:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709052943; x=1709657743; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WING8+ifDIdPqWo/GgNARqwiCxM6QeK8N+15oiAYs8U=;
-        b=0bqFZOxifsJ5NMk/8m7O9TZYcXJ4ZOagI0CeK7ew9Up7vZXassuRVZgV3R/hAaURqv
-         yipQfkJyTGrMRfSjlRKrdq4rMXzq+EopO8mvVXBysaMoXgk8PNFQW+b8ncZMj9oYX/ug
-         4KoRGbpZ7K/nMqn/kBhm0MJzWddgZMP/DRsBPrqhGzjEW+JFM4cP38yDFRQZI5+Vhg5s
-         FiESy5ktg21UABE/kurAAaft0GtHZkORBxkm2W74qjQFqXkvTOvIvTBo3qiZg5Z1OXFV
-         pzPo+VVQkodHYXIDfqiADzhsKkEboRV1fWgLjk3rDQ3UyI8O19BWJwc5Ewki5YStBmlf
-         qemQ==
+        d=linaro.org; s=google; t=1709060937; x=1709665737; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=aDa40DJKClW8mXYqnyP7bggV377JTuxgqEkMOwvAuyk=;
+        b=vDcLqfa0WUK0hRIAR49yMaDbMLLePg7UCxDiuzjeWczGsuWY8N8AFq7OL4j3Dec4RU
+         TCsGv5yrh1SCpqIn8mc7J4RRByf0t16mtu6V+D+2w+efHZDtWmkVUNa5fe7vXwKHfc/y
+         UPNAeN3wbr2QKxeb4BvC/hBchLASSdQ6/e5mYT1xUmlxdGdTYvcWKmKN4Ju+ce9plyvc
+         vIckt3dacJzm5mERoyqN53mbATQzwkMBqFUqcH8qOfSnBU1HIBOgsXZSosnRHfa4vuV+
+         +aroAjl/6R0kjN1Y+xFMm/BlycpghfEGPPIFFb3Juhj+uLYF4JIfWHKlm8McPqZ7gJzx
+         q8JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709052943; x=1709657743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WING8+ifDIdPqWo/GgNARqwiCxM6QeK8N+15oiAYs8U=;
-        b=qyrbBFjioWuqK+GiOl1oO+NFRHpAxjxKHkGT6t/Iq6s/fn0s1grO9R/2oKpo25bOFi
-         XvXLF0ldmakNo7+xv58Htf57uQ1ufSF0No1zXbpt3+TohvD9RrP2xkAxKCG4nFzCuR4o
-         svAMBY3XYbi2wKs8qbt2HxZv+c0JPfX0j27QzxJd+60YNH40txof7oC5i5ZtcRY+UNZd
-         nkiUHOM2nCp+z9gRwc0rlHQfBUfXlDz/Ky9pcipbYng00To11gkmQxT5yOCg2kA95Ha8
-         OwGylDFoeAQreywbk/WebVNfR9LSsuSvUGAXi/Rf85nlOvuVUNs1MMHEbRXpq60WJ+41
-         gYCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcP1/X3XNwNE0Wz3cpV+AaTDSfuCps4uVMLA8VQ1zFviXJcsAoJyb4682n56ct4FuCSvncW6R+Z2KCXuGBTKg97B7ilLYKZwfh1g==
-X-Gm-Message-State: AOJu0Yx3+T1esI9IRIadlvpSJbfXXA9VaIgzVe+MdwCUrHSp4+bk4Pf+
-	IGCEVYRTSWCeFa5rm7Ub3SK0bM8+gLol6McB2oALXTSTNKxxqbWK+MLa56zJU+4GvJwcgbvfey8
-	vLPb5MY2bUrhOEQxs7hFJV5O5xJ0XpBe4Jbc8
-X-Google-Smtp-Source: AGHT+IFx4IMLdqGd5Fz34j1UAm6oDJfltAQpGSG6yeY6HBGKjoGVypF3GR4a4leI/V5eKU8dpRmwS6ivB2dTqeub54A=
-X-Received: by 2002:a81:e245:0:b0:609:2857:af0 with SMTP id
- z5-20020a81e245000000b0060928570af0mr1933120ywl.25.1709052942967; Tue, 27 Feb
- 2024 08:55:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709060937; x=1709665737;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aDa40DJKClW8mXYqnyP7bggV377JTuxgqEkMOwvAuyk=;
+        b=F9FI51pBmIkHFarYaKKGwMkv3Tmn0WBvlrStPm27K0JcagdPuNey7mrxdeg1Gqnlim
+         a7Tsu0is63zXuKUzmDLzD+adwu9ItErU95lwMTgh0DSe7Y5eIb9/hBIYwK0O69dM7W3V
+         HP7SA+LTJRPTY1tJ3CakemMKboNZlEC7N4e30cgQTifD8fhoj/pEyhtUvSbwFhD5+o/Q
+         I3BkavWbtnu5K4PxKP3PTdf9qBsHXUTvF+Pf1KnTJ+4zbV2JQ3fgatMCKXasXLHyRsgy
+         x9eHWnWih68wqWIPm0KXdSipaPVXbHaEKgzSzofNl/YGNfyJ3eSmVGnNiXIqVLr4LkGl
+         e6WA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8dPhf10rG/grz/lhChuqJcnO/XOMSQZDGBzBeDGwYvXXeOPIil4qyFFnGsYPr5xZNnL1AtEh/Q0wDB2cut88wQj5jr33FeO47Rg==
+X-Gm-Message-State: AOJu0YzN2ufkvQ9MK6YhX049QRCx8tmjCUbbfLl6gSwYj+4MH6k98zfx
+	QPJO5t5jUZLq3+p+a1ioXwhejRZ5imrRAqxip+hydutoQDDj1ji1Ft0Po8Z8AS4=
+X-Google-Smtp-Source: AGHT+IGtXhFFwEJ+AgMWI6EdwH6IahppDs+nYPC080WdpMAQ57X/AOuTkrytFfwmna6ljKJ3aYPMfQ==
+X-Received: by 2002:a62:aa0c:0:b0:6e5:54a6:5a9c with SMTP id e12-20020a62aa0c000000b006e554a65a9cmr1287142pff.17.1709060936644;
+        Tue, 27 Feb 2024 11:08:56 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:d617:f08f:e330:49c1])
+        by smtp.gmail.com with ESMTPSA id u3-20020a62d443000000b006e24991dd5bsm6713883pfl.98.2024.02.27.11.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Feb 2024 11:08:56 -0800 (PST)
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <20240203-arm64-gcs-v8-33-c9fec77673ef@kernel.org>
+ <87sf1n7uea.fsf@linaro.org>
+ <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
+ <87ttlzsyro.fsf@linaro.org>
+ <4adb0c7e-34a1-4c50-b011-6e31ef8813a7@sirena.org.uk>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 33/38] kselftest/arm64: Add a GCS test program built
+ with the system libc
+In-reply-to: <4adb0c7e-34a1-4c50-b011-6e31ef8813a7@sirena.org.uk>
+Date: Tue, 27 Feb 2024 16:08:53 -0300
+Message-ID: <87plwh912y.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-16-surenb@google.com>
- <d6141a99-3409-447b-88ac-16c24b0a892e@suse.cz> <CAJuCfpGZ6W-vjby=hWd5F3BOCLjdeda2iQx_Tz-HcyjCAsmKVg@mail.gmail.com>
- <72cc5f0b-90cc-48a8-a026-412fa1186acd@suse.cz>
-In-Reply-To: <72cc5f0b-90cc-48a8-a026-412fa1186acd@suse.cz>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 27 Feb 2024 08:55:32 -0800
-Message-ID: <CAJuCfpF=uwxH93BF6905FAcvaihYD0iyT=rJS-REe4u_1Km22w@mail.gmail.com>
-Subject: Re: [PATCH v4 15/36] lib: introduce support for page allocation tagging
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Feb 27, 2024 at 1:30=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
->
->
-> On 2/26/24 18:11, Suren Baghdasaryan wrote:
-> > On Mon, Feb 26, 2024 at 9:07=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
-> wrote:
-> >>
-> >> On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> >>> Introduce helper functions to easily instrument page allocators by
-> >>> storing a pointer to the allocation tag associated with the code that
-> >>> allocated the page in a page_ext field.
-> >>>
-> >>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >>> Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> >>> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> >>
-> >> The static key usage seems fine now. Even if the page_ext overhead is =
-still
-> >> always paid when compiled in, you mention in the cover letter there's =
-a plan
-> >> for boot-time toggle later, so
-> >
-> > Yes, I already have a simple patch for that to be included in the next
-> > revision: https://github.com/torvalds/linux/commit/7ca367e80232345f471b=
-77b3ea71cf82faf50954
->
-> This opt-out logic would require a distro kernel with allocation
-> profiling compiled-in to ship together with something that modifies
-> kernel command line to disable it by default, so it's not very
-> practical. Could the CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT be
-> turned into having 3 possible choices, where one of them would
-> initialize mem_profiling_enabled to false?
 
-I was thinking about a similar approach of having the early boot
-parameter to be a tri-state with "0 | 1 | Never". The default option
-would be "Never" if CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=3Dn
-and "1" if CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=3Dy. Would that
-solve the problem for distributions?
+Mark Brown <broonie@kernel.org> writes:
 
+> [[PGP Signed Part:Undecided]]
+> On Thu, Feb 22, 2024 at 11:24:59PM -0300, Thiago Jung Bauermann wrote:
+>> Mark Brown <broonie@kernel.org> writes:
 >
-> Or, taking a step back, is it going to be a common usecase to pay the
-> memory overhead unconditionally, but only enable the profiling later
-> during runtime?
-
-I think that would be the option one would use in the early
-deployments, to be able to enable the feature on specific devices
-without a reboot. Pasha brought up also an option when we disable the
-feature initially (via early boot option) but can enable it and reboot
-the system that will come up with enabled option.
-
-As Kent mentioned, he has been working on a pointer compression
-mechanism to cut the overhead of each codtag reference from one
-pointer (8 bytes) to 2 bytes index. I'm yet to check the performance
-but if that works and we can fit this index into page flags, that
-would completely eliminate dependency on page_ext and this memory
-overhead will be gone. This mechanism is not mature enough and I don't
-want to include these optimizations into the initial patchset, that's
-why it's not included in this patchset.
-
-> Also what happens if someone would enable and disable it
-> multiple times during one boot? Would the statistics get all skewed
-> because some frees would be not accounted while it's disabled?
-
-Yes and this was discussed during last LSFMM when the runtime control
-was brought up for the first time. That loss of accounting while the
-feature is disabled seems to be expected and acceptable. One could
-snapshot the state before re-enabling the feature and then compare
-later results with the initial snapshot to figure out the allocation
-growth.
-
+>> My rootfs is Ubuntu 22.04.3. In case it's useful, my kernel config is
+>> here:
 >
-> >>
-> >> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> >
-> > Thanks!
-> >
-> >>
-> >>
+>> https://people.linaro.org/~thiago.bauermann/gcs/config-v6.8.0-rc2
 >
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+> Does using defconfig make a difference for you?
+
+No, I still get the same result with the defconfig.
+
+-- 
+Thiago
 
