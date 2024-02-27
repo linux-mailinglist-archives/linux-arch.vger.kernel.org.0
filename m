@@ -1,93 +1,93 @@
-Return-Path: <linux-arch+bounces-2755-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2756-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D997869194
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 14:18:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C3F869282
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 14:35:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B80E5291DBF
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 13:18:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39B551C246CA
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 13:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B2E13B790;
-	Tue, 27 Feb 2024 13:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0884013B2BA;
+	Tue, 27 Feb 2024 13:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="t+9keHML";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GRvXGAM1";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="F9IZKXKZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qeLIL82+"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Si4g5Sei";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nTgrsNPt";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Si4g5Sei";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nTgrsNPt"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C747D13B29C;
-	Tue, 27 Feb 2024 13:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BEB1332A7;
+	Tue, 27 Feb 2024 13:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709039918; cv=none; b=J6HhOwqO8aLyhKHRzbqDAUW0XdAKFLlFrwtTYh0fAJumKPeRJFN8WJ3tnyHY+Ff2CEiBgBfSaveztJ8OQ+eP/kI3tsGId1FbiEiEzhQQq3AQroo2pqd535BgzHQz0HXNkBPNIgU+mVBT9T5G+Y/i5l9ySB7pyh4OzxVvyuawYaw=
+	t=1709040954; cv=none; b=DvxX1szfwG4ztvYFOgXJfyZoFIFLymLWyMcQepGpkaPglLI22E6p3rTkIwmsmu2WapPH/ATDSDlWBqosF+yh5UQtwtmYNV1GgwFVG6WwcsZM9HtYL3qZ0k/7/6MfHSFrxSno15cI5Zj6cuVPBU02eQHmF/wREnAYfX08eol0QFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709039918; c=relaxed/simple;
-	bh=3gcuV61t2Hf8iIU8GS9e4WnOjtwy66ob4TygKymP7vI=;
+	s=arc-20240116; t=1709040954; c=relaxed/simple;
+	bh=IeeH8FW7appcHAym5VvThxokOlHOzDrVEXH8nPsBLP8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IrPhu2RKmpZTUucBCEEV2XJTBmLYYLnuOxs79OpuXnpQzbDUS75pI3Vo139VHtkzbe++WQ2ORJ/KcW67j6Z6Qt6/Brz+dTpZrI9Wh4zcsq5mXLNwCQwwKIOt6hWOsbKE9pnLjp+SCXFjBotoykA18TmkQYyeI7VvlS4qSX+quXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=t+9keHML; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=GRvXGAM1; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=F9IZKXKZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qeLIL82+; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:Content-Type; b=TrikIlBZvEatgXUMcSqAMsbhUP/Pimp8D1lY+GJ6nYeDVMEygFQL7enTDBHWglqWf/wnoSeEBSOORB9lHpUY0zPEX+i74PTCX7dxDoP+tyQxKypJ7cvypvcV/cxe2YtnWDb2cj28emrZRRkXYIyP6ePg43CSck3pgDDD7wmr2Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Si4g5Sei; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nTgrsNPt; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Si4g5Sei; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nTgrsNPt; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CD386222B1;
-	Tue, 27 Feb 2024 13:18:33 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 5CB6622445;
+	Tue, 27 Feb 2024 13:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1709039914; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1709040951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b5fxnH3MZSXNsSIAXZNKwmzfwaEYfCce0iXFeFygkQg=;
-	b=t+9keHMLh4mZ9U9FQ87VKQu8qlErdV098YFQ27/heTmhZppg6tdPU6yJ9Eo76VKzqONnnB
-	1DBPJEyQqJV/UxcctxZ22Xq3EhU0hSfd5ki6CR8KBtRG2fx3ZgjUmb8S2H5X+dAnVF5Svw
-	CMbh1JgO3q0lxv2gMts6lsIDlkbCUZg=
+	bh=k1BLeq7Vl9qJ6EYRJ54haTpHogCVSh3EPlNJp9vn1oU=;
+	b=Si4g5SeiWxr+Fxmg1mh1nKy7S726J5ngIFb3w5n1326Q+tVr5DbAT5m8N+TG2LIB03edoG
+	pcPuoEhcH+pjcb1S0qhxhtrOr9QQprUkGb+KMJgzqH9/+7TTJ4JA1h8XNMYT/lWVAPhSWF
+	ZXzwdohp08cA5HsNxeTq8KMrTzwp3Ls=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1709039914;
+	s=susede2_ed25519; t=1709040951;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b5fxnH3MZSXNsSIAXZNKwmzfwaEYfCce0iXFeFygkQg=;
-	b=GRvXGAM18yVMX0BW2K+RwWRfUhc/w+IroW6mjGbZVcLNZgZY0hFKcOseHovdH82tnqfTto
-	OlaadaQpT0hAOkDw==
+	bh=k1BLeq7Vl9qJ6EYRJ54haTpHogCVSh3EPlNJp9vn1oU=;
+	b=nTgrsNPt3BuR2Za3gx0Z1aZPJwCD4atXB95fQMBDER1s+A+MPzLOFn2uXXsSiMpEUe42Xp
+	nTNV5F9Y6gXm2tDg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1709039913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1709040951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b5fxnH3MZSXNsSIAXZNKwmzfwaEYfCce0iXFeFygkQg=;
-	b=F9IZKXKZt1gaRwhJRkHRlaQl1OHHL8G72P9VbBh9roM6E3f52yS+BVAhXmn3S2584WUvxJ
-	ENH/CybjETOcGt4IQKTDzjQUBrSJRyTn/xgopePYT59Kc+3X6u6ghbXOY8evc12MXdxiqu
-	DD9NtaFXXx+SvDohX/QhkhPtG+o3fsw=
+	bh=k1BLeq7Vl9qJ6EYRJ54haTpHogCVSh3EPlNJp9vn1oU=;
+	b=Si4g5SeiWxr+Fxmg1mh1nKy7S726J5ngIFb3w5n1326Q+tVr5DbAT5m8N+TG2LIB03edoG
+	pcPuoEhcH+pjcb1S0qhxhtrOr9QQprUkGb+KMJgzqH9/+7TTJ4JA1h8XNMYT/lWVAPhSWF
+	ZXzwdohp08cA5HsNxeTq8KMrTzwp3Ls=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1709039913;
+	s=susede2_ed25519; t=1709040951;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b5fxnH3MZSXNsSIAXZNKwmzfwaEYfCce0iXFeFygkQg=;
-	b=qeLIL82+HCy8ZAeUFMjZFYLviW9bzTdgWX6Cj9qpRxpNfNN2rVWl2yY3EOP1Z6qmCjOMY8
-	DkkhqX5V+tGh6EAA==
+	bh=k1BLeq7Vl9qJ6EYRJ54haTpHogCVSh3EPlNJp9vn1oU=;
+	b=nTgrsNPt3BuR2Za3gx0Z1aZPJwCD4atXB95fQMBDER1s+A+MPzLOFn2uXXsSiMpEUe42Xp
+	nTNV5F9Y6gXm2tDg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 31E4C13A58;
-	Tue, 27 Feb 2024 13:18:32 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0512013A58;
+	Tue, 27 Feb 2024 13:35:50 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([10.150.64.162])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Pt1+Cyjh3WWwLAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 27 Feb 2024 13:18:32 +0000
-Message-ID: <ae4f9958-813a-42c8-8e54-4ef19fd36d6c@suse.cz>
-Date: Tue, 27 Feb 2024 14:19:04 +0100
+	id B094ADbl3WX2MAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 27 Feb 2024 13:35:50 +0000
+Message-ID: <67453a56-d4c2-4dc8-a5db-0a4665e40856@suse.cz>
+Date: Tue, 27 Feb 2024 14:36:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -95,7 +95,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 31/36] lib: add memory allocations report in show_mem()
+Subject: Re: [PATCH v4 00/36] Memory allocation profiling
 Content-Language: en-US
 To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, hannes@cmpxchg.org,
@@ -124,192 +124,114 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, hannes@cmpxchg.org,
  linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
  cgroups@vger.kernel.org
 References: <20240221194052.927623-1-surenb@google.com>
- <20240221194052.927623-32-surenb@google.com>
 From: Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20240221194052.927623-32-surenb@google.com>
+In-Reply-To: <20240221194052.927623-1-surenb@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=F9IZKXKZ;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qeLIL82+
-X-Spamd-Result: default: False [1.20 / 50.00];
-	 ARC_NA(0.00)[];
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Si4g5Sei;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=nTgrsNPt
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.00 / 50.00];
 	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	 XM_UA_NO_VERSION(0.01)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
 	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 MID_RHS_MATCH_FROM(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BAYES_HAM(-0.00)[11.51%];
+	 TO_DN_SOME(0.00)[];
 	 RCVD_COUNT_THREE(0.00)[3];
-	 TO_MATCH_ENVRCPT_SOME(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	 DKIM_TRACE(0.00)[suse.cz:+];
 	 MX_GOOD(-0.01)[];
 	 RCPT_COUNT_GT_50(0.00)[74];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,linux.dev:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
 	 FROM_EQ_ENVFROM(0.00)[];
 	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
 	 FREEMAIL_CC(0.00)[linux.dev,suse.com,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,i-love.sakura.ne.jp,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
 	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Score: 1.20
-X-Rspamd-Queue-Id: CD386222B1
-X-Spam-Level: *
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Score: -3.00
+X-Rspamd-Queue-Id: 5CB6622445
 X-Spam-Flag: NO
-X-Spamd-Bar: +
 
 On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> Include allocations in show_mem reports.
+> Overview:
+> Low overhead [1] per-callsite memory allocation profiling. Not just for
+> debug kernels, overhead low enough to be deployed in production.
 > 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
-Nit: there's pr_notice() that's shorter than printk(KERN_NOTICE
-
-> ---
->  include/linux/alloc_tag.h |  7 +++++++
->  include/linux/codetag.h   |  1 +
->  lib/alloc_tag.c           | 38 ++++++++++++++++++++++++++++++++++++++
->  lib/codetag.c             |  5 +++++
->  mm/show_mem.c             | 26 ++++++++++++++++++++++++++
->  5 files changed, 77 insertions(+)
+> Example output:
+>   root@moria-kvm:~# sort -rn /proc/allocinfo
+>    127664128    31168 mm/page_ext.c:270 func:alloc_page_ext
+>     56373248     4737 mm/slub.c:2259 func:alloc_slab_page
+>     14880768     3633 mm/readahead.c:247 func:page_cache_ra_unbounded
+>     14417920     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
+>     13377536      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
+>     11718656     2861 mm/filemap.c:1919 func:__filemap_get_folio
+>      9192960     2800 kernel/fork.c:307 func:alloc_thread_stack_node
+>      4206592        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
+>      4136960     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
+>      3940352      962 mm/memory.c:4214 func:alloc_anon_folio
+>      2894464    22613 fs/kernfs/dir.c:615 func:__kernfs_new_node
+>      ...
 > 
-> diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-> index 29636719b276..85a24a027403 100644
-> --- a/include/linux/alloc_tag.h
-> +++ b/include/linux/alloc_tag.h
-> @@ -30,6 +30,13 @@ struct alloc_tag {
->  
->  #ifdef CONFIG_MEM_ALLOC_PROFILING
->  
-> +struct codetag_bytes {
-> +	struct codetag *ct;
-> +	s64 bytes;
-> +};
-> +
-> +size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sleep);
-> +
->  static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
->  {
->  	return container_of(ct, struct alloc_tag, ct);
-> diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-> index bfd0ba5c4185..c2a579ccd455 100644
-> --- a/include/linux/codetag.h
-> +++ b/include/linux/codetag.h
-> @@ -61,6 +61,7 @@ struct codetag_iterator {
->  }
->  
->  void codetag_lock_module_list(struct codetag_type *cttype, bool lock);
-> +bool codetag_trylock_module_list(struct codetag_type *cttype);
->  struct codetag_iterator codetag_get_ct_iter(struct codetag_type *cttype);
->  struct codetag *codetag_next_ct(struct codetag_iterator *iter);
->  
-> diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
-> index cb5adec4b2e2..ec54f29482dc 100644
-> --- a/lib/alloc_tag.c
-> +++ b/lib/alloc_tag.c
-> @@ -86,6 +86,44 @@ static const struct seq_operations allocinfo_seq_op = {
->  	.show	= allocinfo_show,
->  };
->  
-> +size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sleep)
-> +{
-> +	struct codetag_iterator iter;
-> +	struct codetag *ct;
-> +	struct codetag_bytes n;
-> +	unsigned int i, nr = 0;
-> +
-> +	if (can_sleep)
-> +		codetag_lock_module_list(alloc_tag_cttype, true);
-> +	else if (!codetag_trylock_module_list(alloc_tag_cttype))
-> +		return 0;
-> +
-> +	iter = codetag_get_ct_iter(alloc_tag_cttype);
-> +	while ((ct = codetag_next_ct(&iter))) {
-> +		struct alloc_tag_counters counter = alloc_tag_read(ct_to_alloc_tag(ct));
-> +
-> +		n.ct	= ct;
-> +		n.bytes = counter.bytes;
-> +
-> +		for (i = 0; i < nr; i++)
-> +			if (n.bytes > tags[i].bytes)
-> +				break;
-> +
-> +		if (i < count) {
-> +			nr -= nr == count;
-> +			memmove(&tags[i + 1],
-> +				&tags[i],
-> +				sizeof(tags[0]) * (nr - i));
-> +			nr++;
-> +			tags[i] = n;
-> +		}
-> +	}
-> +
-> +	codetag_lock_module_list(alloc_tag_cttype, false);
-> +
-> +	return nr;
-> +}
-> +
->  static void __init procfs_init(void)
->  {
->  	proc_create_seq("allocinfo", 0444, NULL, &allocinfo_seq_op);
-> diff --git a/lib/codetag.c b/lib/codetag.c
-> index b13412ca57cc..7b39cec9648a 100644
-> --- a/lib/codetag.c
-> +++ b/lib/codetag.c
-> @@ -36,6 +36,11 @@ void codetag_lock_module_list(struct codetag_type *cttype, bool lock)
->  		up_read(&cttype->mod_lock);
->  }
->  
-> +bool codetag_trylock_module_list(struct codetag_type *cttype)
-> +{
-> +	return down_read_trylock(&cttype->mod_lock) != 0;
-> +}
-> +
->  struct codetag_iterator codetag_get_ct_iter(struct codetag_type *cttype)
->  {
->  	struct codetag_iterator iter = {
-> diff --git a/mm/show_mem.c b/mm/show_mem.c
-> index 8dcfafbd283c..1e41f8d6e297 100644
-> --- a/mm/show_mem.c
-> +++ b/mm/show_mem.c
-> @@ -423,4 +423,30 @@ void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
->  #ifdef CONFIG_MEMORY_FAILURE
->  	printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_pages));
->  #endif
-> +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> +	{
-> +		struct codetag_bytes tags[10];
-> +		size_t i, nr;
-> +
-> +		nr = alloc_tag_top_users(tags, ARRAY_SIZE(tags), false);
-> +		if (nr) {
-> +			printk(KERN_NOTICE "Memory allocations:\n");
-> +			for (i = 0; i < nr; i++) {
-> +				struct codetag *ct = tags[i].ct;
-> +				struct alloc_tag *tag = ct_to_alloc_tag(ct);
-> +				struct alloc_tag_counters counter = alloc_tag_read(tag);
-> +
-> +				/* Same as alloc_tag_to_text() but w/o intermediate buffer */
-> +				if (ct->modname)
-> +					printk(KERN_NOTICE "%12lli %8llu %s:%u [%s] func:%s\n",
-> +					       counter.bytes, counter.calls, ct->filename,
-> +					       ct->lineno, ct->modname, ct->function);
-> +				else
-> +					printk(KERN_NOTICE "%12lli %8llu %s:%u func:%s\n",
-> +					       counter.bytes, counter.calls, ct->filename,
-> +					       ct->lineno, ct->function);
-> +			}
-> +		}
-> +	}
-> +#endif
->  }
+> Since v3:
+>  - Dropped patch changing string_get_size() [2] as not needed
+>  - Dropped patch modifying xfs allocators [3] as non needed,
+>    per Dave Chinner
+>  - Added Reviewed-by, per Kees Cook
+>  - Moved prepare_slab_obj_exts_hook() and alloc_slab_obj_exts() where they
+>    are used, per Vlastimil Babka
+>  - Fixed SLAB_NO_OBJ_EXT definition to use unused bit, per Vlastimil Babka
+>  - Refactored patch [4] into other patches, per Vlastimil Babka
+>  - Replaced snprintf() with seq_buf_printf(), per Kees Cook
+>  - Changed output to report bytes, per Andrew Morton and Pasha Tatashin
+>  - Changed output to report [module] only for loadable modules,
+>    per Vlastimil Babka
+>  - Moved mem_alloc_profiling_enabled() check earlier, per Vlastimil Babka
+>  - Changed the code to handle page splitting to be more understandable,
+>    per Vlastimil Babka
+>  - Moved alloc_tagging_slab_free_hook(), mark_objexts_empty(),
+>    mark_failed_objexts_alloc() and handle_failed_objexts_alloc(),
+>    per Vlastimil Babka
+>  - Fixed loss of __alloc_size(1, 2) in kvmalloc functions,
+>    per Vlastimil Babka
+>  - Refactored the code in show_mem() to avoid memory allocations,
+>    per Michal Hocko
+>  - Changed to trylock in show_mem() to avoid blocking in atomic context,
+>    per Tetsuo Handa
+>  - Added mm mailing list into MAINTAINERS, per Kees Cook
+>  - Added base commit SHA, per Andy Shevchenko
+>  - Added a patch with documentation, per Jani Nikula
+>  - Fixed 0day bugs
+>  - Added benchmark results [5], per Steven Rostedt
+>  - Rebased over Linux 6.8-rc5
+> 
+> Items not yet addressed:
+>  - An early_boot option to prevent pageext overhead. We are looking into
+>    ways for using the same sysctr instead of adding additional early boot
+>    parameter.
+
+I have reviewed the parts that integrate the tracking with page and slab
+allocators, and besides some details to improve it seems ok to me. The
+early boot option seems coming so that might eventually be suitable for
+build-time enablement in a distro kernel.
+
+The macros (and their potential spread to upper layers to keep the
+information useful enough) are of course ugly, but guess it can't be
+currently helped and I'm unable to decide whether it's worth it or not.
+That's up to those providing their success stories I guess. If there's
+at least a path ahead to replace that part with compiler support in the
+future, great. So I'm not against merging this. BTW, do we know Linus's
+opinion on the macros approach?
 
