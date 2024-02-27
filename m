@@ -1,213 +1,118 @@
-Return-Path: <linux-arch+bounces-2752-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2753-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A14A8868D2B
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 11:19:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D12868DCC
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 11:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69B8AB26131
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 10:18:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74E621C23F5D
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Feb 2024 10:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE701138491;
-	Tue, 27 Feb 2024 10:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cpyVIP79";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UuxALrSs";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cpyVIP79";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UuxALrSs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82EA13AA57;
+	Tue, 27 Feb 2024 10:37:28 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C0E138484;
-	Tue, 27 Feb 2024 10:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1A91386DB;
+	Tue, 27 Feb 2024 10:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709029134; cv=none; b=faLOVWTGVn8KJ/9dMrbr2iWhdyWhMVVTXpNr2TYyO1NlappalXJBSXuz0n6vrUahLQ3YiTRG8BvQwaw0Qi8mubAKCAeMU7s2pPdBv0l1mz4JruaWNheGIYPNc47NcPobp82hHQQBc8I7tP5Z/Cktm81M9FyD7Zu22Di2V6KaRGU=
+	t=1709030248; cv=none; b=e2HB7ZEgoM39YltPn05WXNxbXCu7t/YLApAQfbh0JD8HBA5QTK9Zqe3imnY7T2eyCeDGfxK92ozjtkiyYqsfcaadcM+lxOBc09xfhHQPmGI5JIel2hhuExbDN1z2OgqHTs8HBFtdNXXxK/d3u0VAgiFRaz+5O1rgNaCLUkXHPKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709029134; c=relaxed/simple;
-	bh=1kT4IadTcD9s8wVa7TvXCimMRyY5zCB8d4SK3JfJKpI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qgKJ2Fm289+Puk/7nac/sGMJuaegQ8skLupDzr47ksHrGhQIS/WQeUD973FLkW51H3dRglAf+/y6/fk3KiQiH5A+Yqo/HAfdbbcdpObIkUWcwRT/Cd7CLDqZ9tMGxl4gCJsmbenq+vFxkgc5iTwhnIawoSu03xXn0vWe8OhkR+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cpyVIP79; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UuxALrSs; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cpyVIP79; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UuxALrSs; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 5FBE01F44F;
-	Tue, 27 Feb 2024 10:18:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1709029129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q4pT87ICIgMrimfBYIsFt4403+jQ655os57F8M8rAV0=;
-	b=cpyVIP79rj0/sBrJvpdZDSi/YWGaVzMxOeOUTFZkxXRW5dBBpVG2nrSet3ziaxNcNhCRul
-	fsn2i6ZDMFIR8vZKMy1rHahvaELrlR9TdV1JOh9wud8P37gKHfMGsbCuw8Lz1zGjf4dOM9
-	gotsrvN12NpBYdL5ELH484nyYHkPZRY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1709029129;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q4pT87ICIgMrimfBYIsFt4403+jQ655os57F8M8rAV0=;
-	b=UuxALrSs0P8mLarP5bjo/PfJ0N2IwYv6LH6qdRMTKIyww8fRC4dOnMwu5xagQtZCCFsHZf
-	6lKfIVVRnWShjTBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1709029129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q4pT87ICIgMrimfBYIsFt4403+jQ655os57F8M8rAV0=;
-	b=cpyVIP79rj0/sBrJvpdZDSi/YWGaVzMxOeOUTFZkxXRW5dBBpVG2nrSet3ziaxNcNhCRul
-	fsn2i6ZDMFIR8vZKMy1rHahvaELrlR9TdV1JOh9wud8P37gKHfMGsbCuw8Lz1zGjf4dOM9
-	gotsrvN12NpBYdL5ELH484nyYHkPZRY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1709029129;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q4pT87ICIgMrimfBYIsFt4403+jQ655os57F8M8rAV0=;
-	b=UuxALrSs0P8mLarP5bjo/PfJ0N2IwYv6LH6qdRMTKIyww8fRC4dOnMwu5xagQtZCCFsHZf
-	6lKfIVVRnWShjTBw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B14DF13A65;
-	Tue, 27 Feb 2024 10:18:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UH3gKQi33WXqfQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 27 Feb 2024 10:18:48 +0000
-Message-ID: <4e648451-31a8-4293-bc14-e7ea01c889b1@suse.cz>
-Date: Tue, 27 Feb 2024 11:19:20 +0100
+	s=arc-20240116; t=1709030248; c=relaxed/simple;
+	bh=UopZteKsviPxCNjSny9cAIZSGOCRhXG4d51EkbeY/J4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XCPGvybBcpSehkwsbeW3ETUjqOvQJh2Dqv4c9EHJ3dDL+9eQR8MMKYYpRcaFsYa/gS4TWuGJLVjU2kEB1cM8DUgm3cZ1qzxi2JXnqRDAAGGRDWvftTrLFgNP2T12enj11+B9zikic0oK5fjBVb5uSqb8Fm91geDs32tRAaFncrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD64C433F1;
+	Tue, 27 Feb 2024 10:37:20 +0000 (UTC)
+Date: Tue, 27 Feb 2024 10:37:18 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Message-ID: <Zd27XtDg_NDzLXg-@arm.com>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 21/36] lib: add codetag reference into slabobj_ext
-Content-Language: en-US
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, mhocko@suse.com, hannes@cmpxchg.org,
- roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
- willy@infradead.org, liam.howlett@oracle.com,
- penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
- peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
- rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
- yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
- hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
- ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
- ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, shakeelb@google.com,
- songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-References: <20240221194052.927623-1-surenb@google.com>
- <20240221194052.927623-22-surenb@google.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20240221194052.927623-22-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Bar: /
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cpyVIP79;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=UuxALrSs
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-0.02 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 XM_UA_NO_VERSION(0.01)[];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 TO_DN_SOME(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.cz:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_GT_50(0.00)[74];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_MATCH_FROM(0.00)[];
-	 BAYES_HAM(-0.02)[51.67%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 FROM_HAS_DN(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 TO_MATCH_ENVRCPT_SOME(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,linux.dev:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FREEMAIL_CC(0.00)[linux.dev,suse.com,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,i-love.sakura.ne.jp,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: -0.02
-X-Rspamd-Queue-Id: 5FBE01F44F
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 
-On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> To store code tag for every slab object, a codetag reference is embedded
-> into slabobj_ext when CONFIG_MEM_ALLOC_PROFILING=y.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
+> +/*
+> + * This generates a memcpy that works on a from/to address which is aligned to
+> + * bits. Count is in terms of the number of bits sized quantities to copy. It
+> + * optimizes to use the STR groupings when possible so that it is WC friendly.
+> + */
+> +#define memcpy_toio_aligned(to, from, count, bits)                        \
+> +	({                                                                \
+> +		volatile u##bits __iomem *_to = to;                       \
+> +		const u##bits *_from = from;                              \
+> +		size_t _count = count;                                    \
+> +		const u##bits *_end_from = _from + ALIGN_DOWN(_count, 8); \
+> +                                                                          \
+> +		for (; _from < _end_from; _from += 8, _to += 8)           \
+> +			__const_memcpy_toio_aligned##bits(_to, _from, 8); \
+> +		if ((_count % 8) >= 4) {                                  \
+> +			__const_memcpy_toio_aligned##bits(_to, _from, 4); \
+> +			_from += 4;                                       \
+> +			_to += 4;                                         \
+> +		}                                                         \
+> +		if ((_count % 4) >= 2) {                                  \
+> +			__const_memcpy_toio_aligned##bits(_to, _from, 2); \
+> +			_from += 2;                                       \
+> +			_to += 2;                                         \
+> +		}                                                         \
+> +		if (_count % 2)                                           \
+> +			__const_memcpy_toio_aligned##bits(_to, _from, 1); \
+> +	})
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Do we actually need all this if count is not constant? If it's not
+performance critical anywhere, I'd rather copy the generic
+implementation, it's easier to read.
 
-> ---
->  include/linux/memcontrol.h | 5 +++++
->  lib/Kconfig.debug          | 1 +
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index f3584e98b640..2b010316016c 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -1653,7 +1653,12 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
->   * if MEMCG_DATA_OBJEXTS is set.
->   */
->  struct slabobj_ext {
-> +#ifdef CONFIG_MEMCG_KMEM
->  	struct obj_cgroup *objcg;
-> +#endif
-> +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> +	union codetag_ref ref;
-> +#endif
->  } __aligned(8);
->  
->  static inline void __inc_lruvec_kmem_state(void *p, enum node_stat_item idx)
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 7bbdb0ddb011..9ecfcdb54417 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -979,6 +979,7 @@ config MEM_ALLOC_PROFILING
->  	depends on !DEBUG_FORCE_WEAK_PER_CPU
->  	select CODE_TAGGING
->  	select PAGE_EXTENSION
-> +	select SLAB_OBJ_EXT
->  	help
->  	  Track allocation source code and record total allocation size
->  	  initiated at that code location. The mechanism can be used to track
+Otherwise, apart from the __raw_writeq() typo that Will mentioned, the
+patch looks fine to me.
+
+-- 
+Catalin
 
