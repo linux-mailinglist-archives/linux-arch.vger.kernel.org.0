@@ -1,84 +1,84 @@
-Return-Path: <linux-arch+bounces-2767-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2768-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F97786B668
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Feb 2024 18:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B8AE86B6B5
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Feb 2024 19:05:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A01061F2603F
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Feb 2024 17:51:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29B691F2295E
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Feb 2024 18:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83BA15E5A1;
-	Wed, 28 Feb 2024 17:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235A079B78;
+	Wed, 28 Feb 2024 18:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AGtlO26T"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="07Nj3u52"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C57215959D
-	for <linux-arch@vger.kernel.org>; Wed, 28 Feb 2024 17:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6F079B7E
+	for <linux-arch@vger.kernel.org>; Wed, 28 Feb 2024 18:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709142665; cv=none; b=F4zfeA8525i4UTrmeqOuaK4w+l+zJ5YaAdSrnbMKaADVSLdzxHdwK6Ihk6REI2c84/Uj9kPmE2JSfknglE+twXSXo8ol2nQHv2nVoxZ5gVVoRm26xmLOhgRusP1j1frFFsiJOvJIapS0XqvdD4MtM2lZAgN3EkkSV2SNcyZq6Cs=
+	t=1709143523; cv=none; b=Gpj8fChGvY79HUFSBgljwN1ikAG8lu1PAVBH3/aRNaYoQzqCfx6mpRHNHzMRHutujkCBVBZW3/4qmHw+l7it7y4MoM9/RKdtCzADFHdHUUQSnV1twoqxIYT31TZ15Toc4zmUbbbdDRTXchGeOLlXZi8m7Q35vbeofQ7E14khPX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709142665; c=relaxed/simple;
-	bh=Kjp9e87qYUvuVJ7M2OXAg9wWZf/QwADaOftlAlqHnSs=;
+	s=arc-20240116; t=1709143523; c=relaxed/simple;
+	bh=M5RWLefMMZcrjC6ohvg7ZMSlCbzmM6eu4zL9kM45cas=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cr96pchn8cufAj+Fsbrv9AjVgj0fAuuk3fEOBL+60NdonNwgHAhGxV0pPJGADusUid+5zbPWgZoj2yuHHakGdvuPnywdX5Y1dFk6Y3NUxxwJ68XmdOwUWz33OY/vBF0UuFdYo9xjY5uG53Lq/AbmmbA67y5rEC3doyrHwG3y01I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AGtlO26T; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=RSqyJoyqsoNWvVpcrtPwbKSMOS5yb1W4zx2Ab0zmUnBJVvWB+bc77qKJNipNDUxMYF5Cmymbr2IQaJckR3g8fuipE2qXoDFt8lQPuAITW5OBJuNdBdU64wYml1r5IsV9cUbTOEgDKQnpHPiE/qAAAvZSvJuisQsA3rfIArKAx94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=07Nj3u52; arc=none smtp.client-ip=209.85.219.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dcbcea9c261so46401276.3
-        for <linux-arch@vger.kernel.org>; Wed, 28 Feb 2024 09:51:03 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dc6dcd9124bso68573276.1
+        for <linux-arch@vger.kernel.org>; Wed, 28 Feb 2024 10:05:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709142662; x=1709747462; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709143520; x=1709748320; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VnQ/ab/JPnAloJ9klQyh8nICmNuzmA4WCeR9lmsJM4M=;
-        b=AGtlO26T+doUb5WQH6HpuNAonMJHI1VctQ6KnGaUDOiepgfP1rGunEp2EG/fAzIzgt
-         2jIqPjRYCt79wlj1VIm88MH5ngDdryRQHoOSIW2yXrvW1+SEYeglvKzZTlJ6Zf3g/NR7
-         uajrrj2JBMIzyvm4bcgTu6gTY4LlDUQLRpGFp6MlqBhwozTTw/lZe9bQDIwrGKZkUtgn
-         hPfl50UdRGiSn7mkOc+n1IoWaEdBdeo8HszJPN0zZK0RacuYwh86fvoEl2VZa9Ghun5O
-         Eyu7Yuo/iy5/V3RQoVduxsSei9kZcZMcu1t7C8S+2OXNwWpAE5Z+mfaF2ZnbZCtJATm6
-         590w==
+        bh=M5RWLefMMZcrjC6ohvg7ZMSlCbzmM6eu4zL9kM45cas=;
+        b=07Nj3u52kU5HkNbHmQi6GSJlFvm+hwSmH23kU9J3YIdBUAZcfVKU5HQ3RCYnYic0v6
+         QLRHfuCjI9k+jiAG3w+DoaSoumtOezIBDz1r8Kz8fHtyP7r7SZx31n43NzTdmop/PO2A
+         8mM/4NeVzeoWdN0ez7/q13ruSZDGpAfWv4C6Jt0Y0ZDccQI15hWg5epL5i0sGXGwRR2Z
+         QyHgs217g8YnqC7+n46M+BhjmuNXp3pKxFMqFRf5dLwy6cELVZXPEu+Ogd7PlX5F4r/Y
+         GY/qYMx/nxnzCGNBgbHCEaaY4EPWcJbvRoW29RCrocuMaX6hzZjZnlqLuzHzfEmrYQi9
+         uEOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709142662; x=1709747462;
+        d=1e100.net; s=20230601; t=1709143520; x=1709748320;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VnQ/ab/JPnAloJ9klQyh8nICmNuzmA4WCeR9lmsJM4M=;
-        b=UP9fyDhy66wNk3focmNdK+wJSbCA7GtLKM/375wRzGZIckltJLnt1GeWuw2fVpTH4L
-         ucPVvnSFu6NQs4JHV45spUWHOgbTYYFz1Al2CReP5TONGoA6fKefl848j1yeDDP+xxEB
-         NBJju6AuE3QDCUxodG7DCqrsllGB0AV+79sY3uncPn/P4rqcX5Xy0NQMGxaHToccwzYZ
-         wY+ZKFDSBAz3OkS+ggH3rJqSftvhAZUGBIK+amP4sXALndZ1GjT+eMRosL3A6UEN62Ni
-         hWFeqAdkDmYkjBhLnjJprdxZ0n8GncN+ibcxykEqjMQyhCAqjFqDZAi7dA+EpRsbptX3
-         9JZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVESbCKdbT5pKRvL2vpmtmbcdB23AWaG8C/tvo1ugNqkkMo5BPERQqFz9OCAJem5juUVkLJdi4Wqc2m7f79kXmXZ4uNpZvQ2yNl6Q==
-X-Gm-Message-State: AOJu0Yyn1jBf+uQ3gRq7azRV5VQwOLbGBWoebZ+9oSfD0FLKJN8RO3ee
-	NMRB5pI+WcGv7zZkZl9DwP5ezkji+gDnNCbtZ7ve7EXZkde2x60FyrK2TGh17yDkzSVKBjfl3UR
-	KTY6JfJNRbwZrcWFSJVTHzlqu3yhvY0UbpUvu
-X-Google-Smtp-Source: AGHT+IG/EeCjxcbMnwV3xlMkTlCAxh5CrdaPO3GQcKcWzYKjyw1uLk52luOW0XOEQwoUYKADdxDUo6eSBLFJyH16/wI=
-X-Received: by 2002:a25:9c08:0:b0:dcb:bff0:72b with SMTP id
- c8-20020a259c08000000b00dcbbff0072bmr3550ybo.31.1709142661963; Wed, 28 Feb
- 2024 09:51:01 -0800 (PST)
+        bh=M5RWLefMMZcrjC6ohvg7ZMSlCbzmM6eu4zL9kM45cas=;
+        b=d85s+zXVgpS0jwXg4FmmILHEd2foJhclyrtAJqDh7/f9Ma4laCWsCF4yQbdYza/Wr8
+         ABh8rJ5nvgj2H22fY7Ah9SzERXnFMPrWpP+q4y9DLKQJ0WcKAJiamwXYrBCG2F8uWrWT
+         aNihUzDEspqsjOQoQeOeuLSu9QzYnJ8/8vQMRypqwr43DQ2xdow29feDJX2cUgPIVjWr
+         dvffGURZSVezsCthJY7+Ko+vwDMdSt3C/lRaXe2vI4vh6p/8in+04GqMMvCmpkJfm5wU
+         aNcfSNAhX0rMCGgu/XJv3TbnwcI3U56N5VE8DkAo64stWx/KEB6xumUvSgPxzc3D7uAZ
+         Hejw==
+X-Forwarded-Encrypted: i=1; AJvYcCVytTSY080dCsgBdfdbReCay2ox552s0oArJyiRKReJYoCxnK9qNbfMVBZcs4sBLrPZUmgDeiPqXPAw+dhF6E4E61/N7qcOIY/txg==
+X-Gm-Message-State: AOJu0Yzk41tPKO2LXOe9lbkVp10wrJcy1FBG/3RTToncimGETzpRodVE
+	N4dliId4o7/bHxULKoBVYy6SmdRB9/Nh8QCsoDI4fZUtC7ncSEK0DTwyFGafKS3fHXautYIPXtA
+	Go8RRTr/IbCClWzXEjnjRbbXohiY09bpz0qP2
+X-Google-Smtp-Source: AGHT+IGXC8lezvXLfyLFgurkGO2/8+xbMmbLbWU2Dhx0X772e49nOZcLM0/mejcqQER1kvdSNB2vVup4Slt3VEZ2U4I=
+X-Received: by 2002:a25:4687:0:b0:dc2:398b:fa08 with SMTP id
+ t129-20020a254687000000b00dc2398bfa08mr21101yba.31.1709143520037; Wed, 28 Feb
+ 2024 10:05:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-20-surenb@google.com>
- <2daf5f5a-401a-4ef7-8193-6dca4c064ea0@suse.cz> <CAJuCfpGt+zfFzfLSXEjeTo79gw2Be-UWBcJq=eL1qAnPf9PaiA@mail.gmail.com>
- <6db0f0c8-81cb-4d04-9560-ba73d63db4b8@suse.cz>
-In-Reply-To: <6db0f0c8-81cb-4d04-9560-ba73d63db4b8@suse.cz>
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-15-surenb@google.com>
+ <1287d17e-9f9e-49a4-8db7-cf3bbbb15d02@suse.cz>
+In-Reply-To: <1287d17e-9f9e-49a4-8db7-cf3bbbb15d02@suse.cz>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 28 Feb 2024 17:50:50 +0000
-Message-ID: <CAJuCfpEgh1OiYNE_uKG-BqW2x97sOL9+AaTX4Jct3=WHzAv+kg@mail.gmail.com>
-Subject: Re: [PATCH v4 19/36] mm: create new codetag references during page splitting
+Date: Wed, 28 Feb 2024 18:05:08 +0000
+Message-ID: <CAJuCfpGSNut2st7vKYJE7NXb6BPjd=DFW_VEUKfw=hGyzUpqJw@mail.gmail.com>
+Subject: Re: [PATCH v4 14/36] lib: add allocation tagging support for memory
+ allocation profiling
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
 	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
@@ -108,106 +108,32 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 28, 2024 at 12:47=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> w=
-rote:
+On Wed, Feb 28, 2024 at 8:29=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
 >
-> On 2/27/24 17:38, Suren Baghdasaryan wrote:
-> > On Tue, Feb 27, 2024 at 2:10=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
-> wrote:
-> >>
-> >> On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> >> > When a high-order page is split into smaller ones, each newly split
-> >> > page should get its codetag. The original codetag is reused for thes=
-e
-> >> > pages but it's recorded as 0-byte allocation because original codeta=
-g
-> >> > already accounts for the original high-order allocated page.
-> >>
-> >> This was v3 but then you refactored (for the better) so the commit log
-> >> could reflect it?
+> On 2/21/24 20:40, Suren Baghdasaryan wrote:
 > >
-> > Yes, technically mechnism didn't change but I should word it better.
-> > Smth like this:
-> >
-> > When a high-order page is split into smaller ones, each newly split
-> > page should get its codetag. After the split each split page will be
-> > referencing the original codetag. The codetag's "bytes" counter
-> > remains the same because the amount of allocated memory has not
-> > changed, however the "calls" counter gets increased to keep the
-> > counter correct when these individual pages get freed.
+> > +static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes)
+> > +{
+> > + __alloc_tag_sub(ref, bytes);
+> > +}
+> > +
+> > +static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_=
+t bytes)
+> > +{
+> > + __alloc_tag_sub(ref, bytes);
+> > +}
+> > +
 >
-> Great, thanks.
-> The concern with __free_pages() is not really related to splitting, so fo=
-r
-> this patch:
->
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
->
-> >
-> >>
-> >> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >>
-> >> I was going to R-b, but now I recalled the trickiness of
-> >> __free_pages() for non-compound pages if it loses the race to a
-> >> speculative reference. Will the codetag handling work fine there?
-> >
-> > I think so. Each non-compoud page has its individual reference to its
-> > codetag and will decrement it whenever the page is freed. IIUC the
-> > logic in  __free_pages(), when it loses race to a speculative
-> > reference it will free all pages except for the first one and the
->
-> The "tail" pages of this non-compound high-order page will AFAICS not hav=
-e
-> code tags assigned, so alloc_tag_sub() will be a no-op (or a warning with
-> _DEBUG).
+> Nit: just notice these are now the same and maybe you could just drop bot=
+h
+> wrappers and rename __alloc_tag_sub to alloc_tag_sub?
 
-Yes, that is correct.
+Ack.
 
 >
-> > first one will be freed when the last put_page() happens. If prior to
-> > this all these pages were split from one page then all of them will
-> > have their own reference which points to the same codetag.
->
-> Yeah I'm assuming there's no split before the freeing. This patch about
-> splitting just reminded me of that tricky freeing scenario.
-
-Ah, I see. I thought you were talking about a page that was previously spli=
-t.
-
->
-> So IIUC the "else if (!head)" path of __free_pages() will do nothing abou=
-t
-> the "tail" pages wrt code tags as there are no code tags.
-> Then whoever took the speculative "head" page reference will put_page() a=
-nd
-> free it, which will end up in alloc_tag_sub(). This will decrement calls
-> properly, but bytes will become imbalanced, because that put_page() will
-> pass order-0 worth of bytes - the original order is lost.
-
-Yeah, that's true. put_page() will end up calling
-free_unref_page(&folio->page, 0) even if the original order was more
-than 0.
-
->
-> Now this might be rare enough that it's not worth fixing if that would be
-> too complicated, just FYI.
-
-Yeah. We can fix this by subtracting the "bytes" counter of the "head"
-page for all free_the_page(page + (1 << order), order) calls we do
-inside __free_pages(). But we can't simply use pgalloc_tag_sub()
-because the "calls" counter will get over-decremented (we allocated
-all of these pages with one call). I'll need to introduce a new
-pgalloc_tag_sub_bytes() API and use it here. I feel it's too targeted
-of a solution but OTOH this is a special situation, so maybe it's
-acceptable. WDYT?
-
->
->
-> > Every time
-> > one of these pages are freed that codetag's "bytes" and "calls"
-> > counters will be decremented. I think accounting will work correctly
-> > irrespective of where these pages are freed, in __free_pages() or by
-> > put_page().
-> >
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
 >
 
