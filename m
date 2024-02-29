@@ -1,127 +1,151 @@
-Return-Path: <linux-arch+bounces-2778-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2779-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7F3386D597
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 22:06:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9CF986D64B
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 22:45:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BCEF28CB1D
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 21:06:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F4EC1F22DD7
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 21:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031C213E7FD;
-	Thu, 29 Feb 2024 20:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417BE6D510;
+	Thu, 29 Feb 2024 21:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b9/CjJ8M"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6798B6D50A;
-	Thu, 29 Feb 2024 20:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EEE6D50C;
+	Thu, 29 Feb 2024 21:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709240105; cv=none; b=bIeMuZhjAgUBLtw9NVGokzHs71DhK6hlpeFEC8ZmD82M6/agbtoTiRU8mMJqRzhUmVXPUtjWmd1iAF8X4Wb9pqd7De/LIrh4AHEFlKde7EZLqTXr2havIdGM6q8R8iw4sJg5Nk1UvccYiURLUQz+QnGL+Kp7KZigpdX3l6OYKOg=
+	t=1709243150; cv=none; b=GG3N9TkZuspsS6yj6GPowgp5bLliBiRJnSNdI45+WsA1j3bJ2NZsIJSokOioOnGkY5ySclmXcfYVraoilJ/1nA541SEvR7Bxw/5yPfEAURxFZpQZJs01PXDprFQIuTLiKDVM+dUa0J9l8IVobdoUKUZiLTrlK+eUsEhZe3j0klQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709240105; c=relaxed/simple;
-	bh=GWMJIephgFCkyB7gv9JQpivlnHOMsUi+KcICdET6vg0=;
+	s=arc-20240116; t=1709243150; c=relaxed/simple;
+	bh=G4EYkzPzFZ97EhbBfqtvrgTbhgg2qWPt+odKPoorlmM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aCJXW9OcBhQ/xq8iYd/GDVL6flabKaLP1yQtgllp4wWrS6UuVP5M9RHNtPCdyz3DRcf0A8IonCqmraTbns99C/j5N/dlQqdS5h2LFbPbzYPy+D/dK1a879XVh391Wwzg63/3VsG9QiLRE4KJUNLYPIra0D5hkV0/cFuCuytUkx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="26211658"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="26211658"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 12:55:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="913992414"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="913992414"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 12:54:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy.shevchenko@gmail.com>)
-	id 1rfnQO-00000008nBm-1H3p;
-	Thu, 29 Feb 2024 22:54:40 +0200
-Date: Thu, 29 Feb 2024 22:54:40 +0200
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, peterx@redhat.com, david@redhat.com,
-	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
-	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Subject: Re: [PATCH v3 01/35] lib/string_helpers: Add flags param to
- string_get_size()
-Message-ID: <ZeDvEKtlB73mnOYy@smile.fi.intel.com>
-References: <20240212213922.783301-1-surenb@google.com>
- <20240212213922.783301-2-surenb@google.com>
- <CAHp75Vek3DEYLHnpUDBo_bYSd-ksN_66=LQ5s0Z+EhnNvhybpw@mail.gmail.com>
- <bicga3cv554ey4lby2twq3jw4tkkzx7mreakicf22sna63ye4x@x5di6km5x7fn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NqJlyBlLG3CE2ppbNiv1FSi1Ek/N/GdEcO8H49ZzhAR9SSajsSTRxKZqHy1t/BBDI61Aih9H9gNV2xQPMbSUvG2TtrwZrLljcqwWgWCCD0gKwUG9Md0yTsHPfV2J1pNo1/eAf3wm68Z+H88ieCpEFLqdbGLuO8B9S2krbi5c75E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b9/CjJ8M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9021C433C7;
+	Thu, 29 Feb 2024 21:45:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709243149;
+	bh=G4EYkzPzFZ97EhbBfqtvrgTbhgg2qWPt+odKPoorlmM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b9/CjJ8MOWWmJ77VMYivZMauQoKvUZky6TY1nilZ/ZH+J4l+3gH4vhVrEjDUmgAP6
+	 iTyd+A2kT0zdOhpzMbCpeKuawtG1hXwkF1OmrfbDy8bWOuauKzcnU4EDtBTWYK9njK
+	 rXp9msPg34jWdRG61D8CFJhzoWUmuN/823DH7FEhm9kePll/FcPWSlm+9q1lV2NV9S
+	 eojbqeNA6LFj4wleY/5QkiYVW9FItDzWhabFF86uEdJAqtkjVER2a5ZBOriDDJ2t4G
+	 9UqXiZTiMf9DBU0eiSIZ+/uwHTcL7ODurX4VIUJc7fvquTvcD55TuVqfWW/EO371it
+	 2irBvLnw8Y3WQ==
+Date: Thu, 29 Feb 2024 21:45:40 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 33/38] kselftest/arm64: Add a GCS test program built
+ with the system libc
+Message-ID: <c710a6b1-cf58-4e32-ada0-c0b256a62b2c@sirena.org.uk>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <20240203-arm64-gcs-v8-33-c9fec77673ef@kernel.org>
+ <87sf1n7uea.fsf@linaro.org>
+ <9b899b4e-7410-4c3b-967b-7794dac742e4@sirena.org.uk>
+ <87ttlzsyro.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+ic7W6qvciabkElL"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bicga3cv554ey4lby2twq3jw4tkkzx7mreakicf22sna63ye4x@x5di6km5x7fn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Tue, Feb 13, 2024 at 05:06:24PM -0500, Kent Overstreet wrote:
-> On Tue, Feb 13, 2024 at 10:26:48AM +0200, Andy Shevchenko wrote:
-> > On Mon, Feb 12, 2024 at 11:39 PM Suren Baghdasaryan <surenb@google.com> wrote:
-
-> > It seems most of my points from the previous review were refused...
-> 
-> Look, Andy, this is a pretty tiny part of the patchset, yet it's been
-> eating up a pretty disproprortionate amount of time and your review
-> feedback has been pretty unhelpful - asking for things to be broken up
-> in ways that would not be bisectable, or (as here) re-asking the same
-> things that I've already answered and that should've been obvious.
-> 
-> The code works. If you wish to complain about anything being broken, or
-> if you can come up with anything more actionable than what you've got
-> here, I will absolutely respond to that, but otherwise I'm just going to
-> leave things where they sit.
-
-I do not understand why I should do *your* job.
-Nevertheless, I have just sent my version of this change.
-Enjoy!
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <87ttlzsyro.fsf@linaro.org>
+X-Cookie: Marriage is the sole cause of divorce.
 
 
+--+ic7W6qvciabkElL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 22, 2024 at 11:24:59PM -0300, Thiago Jung Bauermann wrote:
+> Mark Brown <broonie@kernel.org> writes:
+
+> > I believe based on prior discussions that you're running this using
+> > shrinkwrap - can you confirm exactly how please, including things like
+> > which firmware configuration you're using?  I'm using current git with
+> >
+> >   shrinkwrap run \
+> >         --rtvar KERNEL=3Darch/arm64/boot/Image \
+> >         --rtvar ROOTFS=3D${ROOTFS} \
+> >         --rtvar CMDLINE=3D"${CMDLINE}" \
+> >         --overlay=3Darch/v9.4.yaml ns-edk2.yaml
+> >
+> > and a locally built yocto and everything seems perfectly happy.
+>=20
+> Yes, this is how I'm running it:
+>=20
+>   CMDLINE=3D"Image dtb=3Dfdt.dtb console=3DttyAMA0 earlycon=3Dpl011,0x1c0=
+90000 root=3D/dev/vda2 ip=3Ddhcp maxcpus=3D1"
+>=20
+>   shrinkwrap run \
+>       --rtvar=3DKERNEL=3DImage-gcs-v8-v6.7-rc4-14743-ga551a7d7af93 \
+
+I guess that's bitrotted?
+
+> My rootfs is Ubuntu 22.04.3. In case it's useful, my kernel config is
+> here:
+
+=2E..
+
+> https://people.linaro.org/~thiago.bauermann/gcs/config-v6.8.0-rc2
+
+Thanks, it seems to be something in your config that's making a
+difference - I can see issues with that.  Hopefully that'll help me get
+to the bottom of this quickly.  I spent a bunch of time fighting with
+Ubuntu images to get them running but once I did they didn't seem to
+make much difference.
+
+--+ic7W6qvciabkElL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXg+wQACgkQJNaLcl1U
+h9DZxgf/UlqOshXqv9IbI4UXiot4QEsHhZ0uPw/+cIwJW0LPVndUMhKWjgagc3yv
+HwCf2QQxjkRQTOAeO7dsMdW9WhMBi4cPzta19y3Z9rkAn8XuQM7LXg97WIQDNp7O
+3ommNUjVAxq47zUvZhrQC18uzEb8WggdwNqJhcgn4mo/2GwN9uZp2xEZt1CRjZuk
+9BOCuvR8dqbQvTXBik+7OZ45roOoTCLl8XUrmPk6VAlcK+DcBoDFt9jm9tgdG6zb
+1Ua3jh2YvNe6s/qM5auYh/qB/V6wlz4n5yT0zvnhbC5XXzhaHkjV1/We3jerpisD
+2teyFuaDxTwqX+5D8D871wwBTD3IPg==
+=WDVJ
+-----END PGP SIGNATURE-----
+
+--+ic7W6qvciabkElL--
 
