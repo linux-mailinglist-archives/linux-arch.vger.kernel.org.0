@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-2773-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2774-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50F386C6C9
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 11:24:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01D286C6FB
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 11:33:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FA522888FA
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 10:24:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DD2C1C213A1
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Feb 2024 10:33:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD43F63CB5;
-	Thu, 29 Feb 2024 10:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C46F979957;
+	Thu, 29 Feb 2024 10:33:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810A360BA7;
-	Thu, 29 Feb 2024 10:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EB57994D;
+	Thu, 29 Feb 2024 10:33:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709202292; cv=none; b=phWQ+yHtgnar1e7K2T7mAL2CNbieT8srYe4eYybTPl74ndI1dIc6SoKez2FTb62ZRHB8Jm/VATsTEXMFaxm5uEvkfQ61CwmqTIQGzaRzR6wxuCF0f4VL5AsYyKvn7jj094aGjM9A+V0lEUMZgZhQFa8PEJ6aayqWMK0m/W5sad0=
+	t=1709202793; cv=none; b=pXZ5VQJHXUX1tzWWkZ8yprFfHiId8/vXHfo4x7H4znPsBCZ+EhEb2C3w3o6Ti0MMwFLjnelSc6V5t9nBvwZrKWxmyaHbaIXs2IpGxL/1iD7s3uAlX477DYu4b6PokbXnEqQLGWYUR3lxaomI6i60WIu1sKZ/BIxwZiO0EGQX9g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709202292; c=relaxed/simple;
-	bh=hjCiYmjmUqBlBGGPp3oOg+AOV4QZY5js4NzUUHbvtPI=;
+	s=arc-20240116; t=1709202793; c=relaxed/simple;
+	bh=LzVIgurKSN0WZtrn243ryA0za0VzX5/llwTnhwb/8SY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UpSpCL716rDR/Rk4lQFDYnYVRvB7PJJ1nnv8f8b6ypIdixJUDCLMPzcZGEyZifXjr3CZ+OLQ5AmEzrjD5U/eKEDGaGSImH8KK6eJigODk9q6Mgj+CXyPzzaETiG8K6YCpoJEpcj8OI7QHc6YiekXAct4cCJXIz0agyHuG7dHjWc=
+	 Content-Type:Content-Disposition:In-Reply-To; b=abPNHZs5doU//lcM7ZncgHqyU/zaYBQZvAEoBM6Vj2JJUa8OVPDQuPdCXpUe9DM825sLTM/EdSL4qXU1nac9zk7KgT3+27s2EQuYqEJMJh3wCyLqfzYIn+YmrWWq1/xlbeQDgLF+qeU+w+2eD9Bzwrsymf5ysan9RkAgwViFNQA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CE5C433C7;
-	Thu, 29 Feb 2024 10:24:45 +0000 (UTC)
-Date: Thu, 29 Feb 2024 10:24:42 +0000
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BB0C43390;
+	Thu, 29 Feb 2024 10:33:06 +0000 (UTC)
+Date: Thu, 29 Feb 2024 10:33:04 +0000
 From: Catalin Marinas <catalin.marinas@arm.com>
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -64,11 +64,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	Niklas Schnelle <schnelle@linux.ibm.com>,
 	Will Deacon <will@kernel.org>
 Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Message-ID: <ZeBbamDoHIxzzfof@arm.com>
+Message-ID: <ZeBdYCa5Kxqas4O8@arm.com>
 References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
  <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <Zd27XtDg_NDzLXg-@arm.com>
- <20240228230616.GS13330@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -77,66 +75,36 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240228230616.GS13330@nvidia.com>
+In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 
-On Wed, Feb 28, 2024 at 07:06:16PM -0400, Jason Gunthorpe wrote:
-> On Tue, Feb 27, 2024 at 10:37:18AM +0000, Catalin Marinas wrote:
-> > On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
-> > > +/*
-> > > + * This generates a memcpy that works on a from/to address which is aligned to
-> > > + * bits. Count is in terms of the number of bits sized quantities to copy. It
-> > > + * optimizes to use the STR groupings when possible so that it is WC friendly.
-> > > + */
-> > > +#define memcpy_toio_aligned(to, from, count, bits)                        \
-> > > +	({                                                                \
-> > > +		volatile u##bits __iomem *_to = to;                       \
-> > > +		const u##bits *_from = from;                              \
-> > > +		size_t _count = count;                                    \
-> > > +		const u##bits *_end_from = _from + ALIGN_DOWN(_count, 8); \
-> > > +                                                                          \
-> > > +		for (; _from < _end_from; _from += 8, _to += 8)           \
-> > > +			__const_memcpy_toio_aligned##bits(_to, _from, 8); \
-> > > +		if ((_count % 8) >= 4) {                                  \
-> > > +			__const_memcpy_toio_aligned##bits(_to, _from, 4); \
-> > > +			_from += 4;                                       \
-> > > +			_to += 4;                                         \
-> > > +		}                                                         \
-> > > +		if ((_count % 4) >= 2) {                                  \
-> > > +			__const_memcpy_toio_aligned##bits(_to, _from, 2); \
-> > > +			_from += 2;                                       \
-> > > +			_to += 2;                                         \
-> > > +		}                                                         \
-> > > +		if (_count % 2)                                           \
-> > > +			__const_memcpy_toio_aligned##bits(_to, _from, 1); \
-> > > +	})
-> > 
-> > Do we actually need all this if count is not constant? If it's not
-> > performance critical anywhere, I'd rather copy the generic
-> > implementation, it's easier to read.
-> 
-> Which generic version?
+On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
+> +						 const u32 *from, size_t count)
+> +{
+> +	switch (count) {
+> +	case 8:
+> +		asm volatile("str %w0, [%8, #4 * 0]\n"
+> +			     "str %w1, [%8, #4 * 1]\n"
+> +			     "str %w2, [%8, #4 * 2]\n"
+> +			     "str %w3, [%8, #4 * 3]\n"
+> +			     "str %w4, [%8, #4 * 4]\n"
+> +			     "str %w5, [%8, #4 * 5]\n"
+> +			     "str %w6, [%8, #4 * 6]\n"
+> +			     "str %w7, [%8, #4 * 7]\n"
+> +			     :
+> +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
+> +			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
+> +			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
+> +		break;
 
-The current __iowriteXX_copy() in lib/iomap_copy.c (copy them over or
-add some preprocessor reuse the generic functions).
+BTW, talking of maintenance, would a series of __raw_writel() with
+Mark's recent patch for offset addressing generate similar code? I.e.:
 
-> The point is to maximize WC effects with non-constant values, so I
-> think we do need something like this. ie we can't just fall back to
-> looping over 64 bit stores one at a time.
+		__raw_writel(from[0], to);
+		__raw_writel(from[1], to + 1);
+		...
+		__raw_writel(from[7], to + 7);
 
-If that's a case you are also targeting and have seen it in practice,
-that's fine. But I had the impression that you are mostly after the
-constant count case which is already addressed by the other part of this
-patch. For the non-constant case, we have a DGH only at the end of
-whatever buffer was copied rather than after every 64-byte increments
-you'd get for a count of 8.
-
-> Most places I know about using this are performance paths, the entire
-> iocopy infrastructure was introduced as an x86 performance
-> optimization..
-
-At least the x86 case makes sense even from a maintenance perspective,
-it's just a much simpler "rep movsl". I just want to make sure we don't
-over-complicate this code on arm64 unnecessarily.
+(you may have mentioned it in previous threads, I did not check)
 
 -- 
 Catalin
