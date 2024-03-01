@@ -1,33 +1,34 @@
-Return-Path: <linux-arch+bounces-2782-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2783-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDE2F86E188
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Mar 2024 14:06:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 823FF86E18A
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Mar 2024 14:06:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F2B21F22D50
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Mar 2024 13:06:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0CB51C2089D
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Mar 2024 13:06:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4AB6A8AD;
-	Fri,  1 Mar 2024 13:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED2A6DCF5;
+	Fri,  1 Mar 2024 13:06:01 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51FC69E1C;
-	Fri,  1 Mar 2024 13:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B210C6CDA2;
+	Fri,  1 Mar 2024 13:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709298355; cv=none; b=KwnA41mGiuOf/Fo5xY+u5Kcg3tyBhAcToH93zhB/pypZiczG0s1C5A8bk6L94e//bShkLd6CR5m3fF+xIeeObGExPj0S2EGa4VtasQxTEAROEvqKk9DlyRwdcrkhu5tK4PE4+X50gurfuQW6rSuQusx2moEEYtTguDNdTjRxWJc=
+	t=1709298361; cv=none; b=qWe9cc7YzAZzRTfSVZ9Q4g6s3ECsG1JlbXlxE3bGlBtbe6JxgprGZzJ1Gd0yWV7jezxs447IcBuBjpi7HIH379YyOJcZhXwB7YKOX0LWWuO0FK08ecUPZcFZt8YcmR4nvVL0B56/IuLhP2QsbIyGtkefoxih+SdwdMhDmzMKH6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709298355; c=relaxed/simple;
-	bh=IiKch8zeWz42IEmKp8mhTIm+LF6IgS04Jf5vRlLvZpM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HcgR6ZkZcgxvZXHjVZ58T5vvXRjHPDr/+ntDY7Loy/xPcAZFn1iMqt/KAGmsr4zW9goCrN5LopJYOY3D8O78OIfvnQ/K7buPUH0gsTd0f8al3McU8bHtQMRuGdNogrf1XpDmDZv8vz2jBO41HiT2kMPbk1AcZBAU8OBqO/TIZhk=
+	s=arc-20240116; t=1709298361; c=relaxed/simple;
+	bh=CjDE5ydNR/BncURT9vZlYDlNHu0bNpYjqN4jeVRjGyo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rEQEvQUujosVusR+1TDIo2+9vGjtodoE5ABTV2kzBlQ6umH/rsfYxOIf6MWJVRnlG2E4IJllTHIMJXMmHIIWf0onT95ImVAv3ly93KzgrGgeC56x13upcDzQ/Ei3A6cLwA44ikwIU86Pk6GIYIB1D77s7zsJh+h0WwvCgM/MV2g=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4072BC433C7;
-	Fri,  1 Mar 2024 13:05:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264E1C433C7;
+	Fri,  1 Mar 2024 13:05:57 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -43,10 +44,12 @@ Cc: Huacai Chen <chenhuacai@kernel.org>,
 	linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 1/2] mmiowb: Rename mmiowb_spin_{lock, unlock}() to mmiowb_in_{lock, unlock}()
-Date: Fri,  1 Mar 2024 21:05:31 +0800
-Message-ID: <20240301130532.3953167-1-chenhuacai@loongson.cn>
+Subject: [PATCH 2/2] mmiowb: Hook up mmiowb helpers to mutexes as well as spinlocks
+Date: Fri,  1 Mar 2024 21:05:32 +0800
+Message-ID: <20240301130532.3953167-2-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240301130532.3953167-1-chenhuacai@loongson.cn>
+References: <20240301130532.3953167-1-chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -55,108 +58,97 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We are extending mmiowb tracking system from spinlock to mutex, so
-rename mmiowb_spin_{lock, unlock}() to mmiowb_in_{lock, unlock}() to
-reflect the fact. No functional changes.
+Commit fb24ea52f78e0d595852e ("drivers: Remove explicit invocations of
+mmiowb()") remove all mmiowb() in drivers, but it says:
 
+"NOTE: mmiowb() has only ever guaranteed ordering in conjunction with
+spin_unlock(). However, pairing each mmiowb() removal in this patch with
+the corresponding call to spin_unlock() is not at all trivial, so there
+is a small chance that this change may regress any drivers incorrectly
+relying on mmiowb() to order MMIO writes between CPUs using lock-free
+synchronisation."
+
+The mmio in radeon_ring_commit() is protected by a mutex rather than a
+spinlock, but in the mutex fastpath it behaves similar to spinlock. We
+can add mmiowb() calls in the radeon driver but the maintainer says he
+doesn't like such a workaround, and radeon is not the only example of
+mutex protected mmio.
+
+So we extend the mmiowb tracking system from spinlock to mutex, hook up
+mmiowb helpers to mutexes as well as spinlocks.
+
+Without this, we get such an error when run 'glxgears' on weak ordering
+architectures such as LoongArch:
+
+radeon 0000:04:00.0: ring 0 stalled for more than 10324msec
+radeon 0000:04:00.0: ring 3 stalled for more than 10240msec
+radeon 0000:04:00.0: GPU lockup (current fence id 0x000000000001f412 last fence id 0x000000000001f414 on ring 3)
+radeon 0000:04:00.0: GPU lockup (current fence id 0x000000000000f940 last fence id 0x000000000000f941 on ring 0)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+radeon 0000:04:00.0: scheduling IB failed (-35).
+[drm:radeon_gem_va_ioctl [radeon]] *ERROR* Couldn't update BO_VA (-35)
+
+Link: https://lore.kernel.org/dri-devel/29df7e26-d7a8-4f67-b988-44353c4270ac@amd.com/T/#t
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- include/asm-generic/mmiowb.h    | 8 ++++----
- include/linux/spinlock.h        | 6 +++---
- kernel/locking/spinlock_debug.c | 6 +++---
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ kernel/locking/mutex.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
-index 5698fca3bf56..eb2335f9f35e 100644
---- a/include/asm-generic/mmiowb.h
-+++ b/include/asm-generic/mmiowb.h
-@@ -40,13 +40,13 @@ static inline void mmiowb_set_pending(void)
- 		ms->mmiowb_pending = ms->nesting_count;
- }
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index cbae8c0b89ab..f51d09aec643 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -127,8 +127,10 @@ static inline struct task_struct *__mutex_trylock_common(struct mutex *lock, boo
+ 		}
  
--static inline void mmiowb_spin_lock(void)
-+static inline void mmiowb_in_lock(void)
- {
- 	struct mmiowb_state *ms = __mmiowb_state();
- 	ms->nesting_count++;
- }
- 
--static inline void mmiowb_spin_unlock(void)
-+static inline void mmiowb_in_unlock(void)
- {
- 	struct mmiowb_state *ms = __mmiowb_state();
- 
-@@ -59,7 +59,7 @@ static inline void mmiowb_spin_unlock(void)
- }
- #else
- #define mmiowb_set_pending()		do { } while (0)
--#define mmiowb_spin_lock()		do { } while (0)
--#define mmiowb_spin_unlock()		do { } while (0)
-+#define mmiowb_in_lock()		do { } while (0)
-+#define mmiowb_in_unlock()		do { } while (0)
- #endif	/* CONFIG_MMIOWB */
- #endif	/* __ASM_GENERIC_MMIOWB_H */
-diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
-index 3fcd20de6ca8..60eda70cddd0 100644
---- a/include/linux/spinlock.h
-+++ b/include/linux/spinlock.h
-@@ -185,7 +185,7 @@ static inline void do_raw_spin_lock(raw_spinlock_t *lock) __acquires(lock)
- {
- 	__acquire(lock);
- 	arch_spin_lock(&lock->raw_lock);
--	mmiowb_spin_lock();
-+	mmiowb_in_lock();
- }
- 
- static inline int do_raw_spin_trylock(raw_spinlock_t *lock)
-@@ -193,14 +193,14 @@ static inline int do_raw_spin_trylock(raw_spinlock_t *lock)
- 	int ret = arch_spin_trylock(&(lock)->raw_lock);
- 
- 	if (ret)
--		mmiowb_spin_lock();
-+		mmiowb_in_lock();
- 
- 	return ret;
- }
- 
- static inline void do_raw_spin_unlock(raw_spinlock_t *lock) __releases(lock)
- {
--	mmiowb_spin_unlock();
-+	mmiowb_in_unlock();
- 	arch_spin_unlock(&lock->raw_lock);
- 	__release(lock);
- }
-diff --git a/kernel/locking/spinlock_debug.c b/kernel/locking/spinlock_debug.c
-index 87b03d2e41db..632a88322433 100644
---- a/kernel/locking/spinlock_debug.c
-+++ b/kernel/locking/spinlock_debug.c
-@@ -114,7 +114,7 @@ void do_raw_spin_lock(raw_spinlock_t *lock)
- {
- 	debug_spin_lock_before(lock);
- 	arch_spin_lock(&lock->raw_lock);
--	mmiowb_spin_lock();
-+	mmiowb_in_lock();
- 	debug_spin_lock_after(lock);
- }
- 
-@@ -123,7 +123,7 @@ int do_raw_spin_trylock(raw_spinlock_t *lock)
- 	int ret = arch_spin_trylock(&lock->raw_lock);
- 
- 	if (ret) {
--		mmiowb_spin_lock();
-+		mmiowb_in_lock();
- 		debug_spin_lock_after(lock);
+ 		if (atomic_long_try_cmpxchg_acquire(&lock->owner, &owner, task | flags)) {
+-			if (task == curr)
++			if (task == curr) {
++				mmiowb_in_lock();
+ 				return NULL;
++			}
+ 			break;
+ 		}
  	}
- #ifndef CONFIG_SMP
-@@ -137,7 +137,7 @@ int do_raw_spin_trylock(raw_spinlock_t *lock)
+@@ -168,8 +170,10 @@ static __always_inline bool __mutex_trylock_fast(struct mutex *lock)
+ 	unsigned long curr = (unsigned long)current;
+ 	unsigned long zero = 0UL;
  
- void do_raw_spin_unlock(raw_spinlock_t *lock)
- {
--	mmiowb_spin_unlock();
-+	mmiowb_in_unlock();
- 	debug_spin_unlock(lock);
- 	arch_spin_unlock(&lock->raw_lock);
+-	if (atomic_long_try_cmpxchg_acquire(&lock->owner, &zero, curr))
++	if (atomic_long_try_cmpxchg_acquire(&lock->owner, &zero, curr)) {
++		mmiowb_in_lock();
+ 		return true;
++	}
+ 
+ 	return false;
  }
+@@ -178,6 +182,7 @@ static __always_inline bool __mutex_unlock_fast(struct mutex *lock)
+ {
+ 	unsigned long curr = (unsigned long)current;
+ 
++	mmiowb_in_unlock();
+ 	return atomic_long_try_cmpxchg_release(&lock->owner, &curr, 0UL);
+ }
+ #endif
+@@ -918,6 +923,7 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
+ 	 * Except when HANDOFF, in that case we must not clear the owner field,
+ 	 * but instead set it to the top waiter.
+ 	 */
++	mmiowb_in_unlock();
+ 	owner = atomic_long_read(&lock->owner);
+ 	for (;;) {
+ 		MUTEX_WARN_ON(__owner_task(owner) != current);
 -- 
 2.43.0
 
