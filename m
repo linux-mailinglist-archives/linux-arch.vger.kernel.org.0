@@ -1,72 +1,121 @@
-Return-Path: <linux-arch+bounces-2784-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2785-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F48486E931
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Mar 2024 20:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D818186F0BF
+	for <lists+linux-arch@lfdr.de>; Sat,  2 Mar 2024 16:03:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 842D1B2FF9C
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Mar 2024 18:53:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F28CAB23472
+	for <lists+linux-arch@lfdr.de>; Sat,  2 Mar 2024 15:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160D839AEA;
-	Fri,  1 Mar 2024 18:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83B317BD3;
+	Sat,  2 Mar 2024 15:03:15 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAB38C1B;
-	Fri,  1 Mar 2024 18:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from port70.net (port70.net [81.7.13.123])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7488713FFA;
+	Sat,  2 Mar 2024 15:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.7.13.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709319162; cv=none; b=cheF4U6b+hRQQ2NiIR09czDVxD3LrZYDzQyVF9O4/T+xrKNHbZsEpKHAdFMhJv4x8pQ6sQSCXyKqIMbNmo6dTQ2v7cFAxOnRr3xdhMY6Ij8UAbmY8EnEsjaaGNCj6kdY/ZXUASELI4dEHRs0yDnVkvV9BTgAQ09i5viSrqNuv/M=
+	t=1709391795; cv=none; b=AMYLg8N/4qrCqPw9ORGMPbZKu1LN5Sj6BdazhNyb8woUDMZAxjiSGspc+v8Ui5RMNu2eaLVacXZ2tLjjPjQqXlyMefomQ8Xw6+cuV1pk4Ut+2CirNqFKLMNypLKrk0898DM233sZizazGYmzwPN1393SOHfw9oXfc8Y9s3JemcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709319162; c=relaxed/simple;
-	bh=44S/7fMa4t3C3sreMd4jk5F0uk+BmeF1MV2xSiGfrrA=;
+	s=arc-20240116; t=1709391795; c=relaxed/simple;
+	bh=F+Ft9ySflUOsjYRoTJD/SuxsOSEZzbIMaYW9w/glpJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QjwjDv1rQGT/oFdo6ZeSv9Aua86UiMp76PljyAdWAEo41kSiEKd+3HrOMOoI3hwxoXnqVPHdpQ4KUcM4xkx6uzHh9mb+zOnNpGyCTfv8NgEE7fVYurG9FQ/4B1bb91VnKlVgzNeNaaK9HwTs0Ox43iWqrzGP339drIvLebFhPkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C1AC433F1;
-	Fri,  1 Mar 2024 18:52:34 +0000 (UTC)
-Date: Fri, 1 Mar 2024 18:52:32 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Message-ID: <ZeIj8HtdbKS3eqG6@arm.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=a0bMNapnZQa0/quYl7TDYybdZwf7CKj/0H0By6h7DqP9XawkWoSR+aIAMtq+XjSHGR1rjjEv7UbIHlii3pDBhvTZ+9nv5StBR3EHYqegB8MTHSfmLOJ6yzI5bt7hKDvjcTu39UnB1emDFSOJCsxwqSL1njDZSzUwlJnIcGug/gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=port70.net; spf=pass smtp.mailfrom=port70.net; arc=none smtp.client-ip=81.7.13.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=port70.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=port70.net
+Received: by port70.net (Postfix, from userid 1002)
+	id 691CEABEC0C7; Sat,  2 Mar 2024 15:57:02 +0100 (CET)
+Date: Sat, 2 Mar 2024 15:57:02 +0100
+From: Szabolcs Nagy <nsz@port70.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: "dalias@libc.org" <dalias@libc.org>,
+	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [musl] Re: [PATCH v8 00/38] arm64/gcs: Provide support for GCS
+ in userspace
+Message-ID: <20240302145702.GD1884416@port70.net>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+	"dalias@libc.org" <dalias@libc.org>,
+	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"musl@lists.openwall.com" <musl@lists.openwall.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"sorear@fastmail.com" <sorear@fastmail.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <22a53b78-10d7-4a5a-a01e-b2f3a8c22e94@app.fastmail.com>
+ <4c7bdf8fde9cc45174f10b9221fa58ffb450b755.camel@intel.com>
+ <20240220185714.GO4163@brightrain.aerifal.cx>
+ <9fc9c45ff6e14df80ad023e66ff7a978bd4ec91c.camel@intel.com>
+ <20240220235415.GP4163@brightrain.aerifal.cx>
+ <a57d6c7eada4b9a7c35addbc8556f5b53a0c3e6f.camel@intel.com>
+ <20240221012736.GQ4163@brightrain.aerifal.cx>
+ <d18f060d-37ac-48b1-9f67-a5c5db79b34e@sirena.org.uk>
+ <20240221145800.GR4163@brightrain.aerifal.cx>
+ <4a3809e8-61b2-4341-a868-292ba6e64e8a@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -75,55 +124,50 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+In-Reply-To: <4a3809e8-61b2-4341-a868-292ba6e64e8a@sirena.org.uk>
 
-On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
-> The kernel provides driver support for using write combining IO memory
-> through the __iowriteXX_copy() API which is commonly used as an optional
-> optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environment.
-> 
-> iomap_copy.c provides a generic implementation as a simple 4/8 byte at a
-> time copy loop that has worked well with past ARM64 CPUs, giving a high
-> frequency of large TLPs being successfully formed.
-> 
-> However modern ARM64 CPUs are quite sensitive to how the write combining
-> CPU HW is operated and a compiler generated loop with intermixed
-> load/store is not sufficient to frequently generate a large TLP. The CPUs
-> would like to see the entire TLP generated by consecutive store
-> instructions from registers. Compilers like gcc tend to intermix loads and
-> stores and have poor code generation, in part, due to the ARM64 situation
-> that writeq() does not codegen anything other than "[xN]". However even
-> with that resolved compilers like clang still do not have good code
-> generation.
-> 
-> This means on modern ARM64 CPUs the rate at which __iowriteXX_copy()
-> successfully generates large TLPs is very small (less than 1 in 10,000)
-> tries), to the point that the use of WC is pointless.
-> 
-> Implement __iowrite32/64_copy() specifically for ARM64 and use inline
-> assembly to build consecutive blocks of STR instructions. Provide direct
-> support for 64/32/16 large TLP generation in this manner. Optimize for
-> common constant lengths so that the compiler can directly inline the store
-> blocks.
-> 
-> This brings the frequency of large TLP generation up to a high level that
-> is comparable with older CPU generations.
-> 
-> As the __iowriteXX_copy() family of APIs is intended for use with WC
-> incorporate the DGH hint directly into the function.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+* Mark Brown <broonie@kernel.org> [2024-02-21 17:36:12 +0000]:
 
-Apart from the slightly more complicated code, I don't expect it to make
-things worse on any of the existing hardware.
+> On Wed, Feb 21, 2024 at 09:58:01AM -0500, dalias@libc.org wrote:
+> > On Wed, Feb 21, 2024 at 01:53:10PM +0000, Mark Brown wrote:
+> > > On Tue, Feb 20, 2024 at 08:27:37PM -0500, dalias@libc.org wrote:
+> > > > On Wed, Feb 21, 2024 at 12:35:48AM +0000, Edgecombe, Rick P wrote:
+> 
+> > > > > (INCSSP, RSTORSSP, etc). These are a collection of instructions that
+> > > > > allow limited control of the SSP. When shadow stack gets disabled,
+> > > > > these suddenly turn into #UD generating instructions. So any other
+> > > > > threads executing those instructions when shadow stack got disabled
+> > > > > would be in for a nasty surprise.
+> 
+> > > > This is the kernel's problem if that's happening. It should be
+> > > > trapping these and returning immediately like a NOP if shadow stack
+> > > > has been disabled, not generating SIGILL.
+> 
+> > > I'm not sure that's going to work out well, all it takes is some code
+> > > that's looking at the shadow stack and expecting something to happen as
+> > > a result of the instructions it's executing and we run into trouble.  A
+> 
+> > I said NOP but there's no reason it strictly needs to be a NOP. It
+> > could instead do something reasonable to convey the state of racing
+> > with shadow stack being disabled.
+> 
+> This feels like it's getting complicated and I fear it may be an uphill
+> struggle to get such code merged, at least for arm64.  My instinct is
 
-So, with the typo fix that Will mentioned:
+the aarch64 behaviour is already nop
+for gcs instructions when gcs is disabled.
+the isa was designed so async disable is
+possible.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+only x86 linux would have to emulate this.
+
+> that it's going to be much more robust and generally tractable to let
+> things run to some suitable synchronisation point and then disable
+> there, but if we're going to do that then userspace can hopefully
+> arrange to do the disabling itself through the standard disable
+> interface anyway.  Presumably it'll want to notice things being disabled
+> at some point anyway?  TBH that's been how all the prior proposals for
+> process wide disable I've seen were done.
+
+
 
