@@ -1,173 +1,190 @@
-Return-Path: <linux-arch+bounces-2818-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2819-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0BF18727AA
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:38:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0C628727CA
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F1328DA87
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 19:38:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCB761C27568
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 19:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5C593F8E4;
-	Tue,  5 Mar 2024 19:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD69D12A140;
+	Tue,  5 Mar 2024 19:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FRcoz8Mb"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cPMvx4Zv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JlMxRde3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wflow2-smtp.messagingengine.com (wflow2-smtp.messagingengine.com [64.147.123.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDA98664F
-	for <linux-arch@vger.kernel.org>; Tue,  5 Mar 2024 19:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2062C1292FC;
+	Tue,  5 Mar 2024 19:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709667532; cv=none; b=KunwUTjqjza2xKbRmQw4orbvE8vgUmTX/cAIpg0WxUgLyGySD3vwwi5ZsFkDvYcazunyDcXmdkIYF/h+470CUAsdnkvyvImdekexv3DsaAhvX6oT02k3NIcVH0Zhaa4xGXcP0vi/WAes/TqGldaleb6qucTU0F5HGH0Ipi/38Vs=
+	t=1709667614; cv=none; b=P0PtntIisTd5f9xqRvSkGMrZ99lCm3Smn2zWMFMBy3E0cW+sIYint2f/Q090Cq2JIKIJ8MUETU2ivpxxmi55li2a8u0qpajRMj2Lz7HuxdxTh5APYZ/77s3BUcRiW1ujsjywUfD1L19317ffjESZYF1AWYwQ9YoBE2NcK+VFx7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709667532; c=relaxed/simple;
-	bh=dbu7jPJNusoAIuT8pNXSfufXvY1iYoRgBC5JcoUfIfk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NwQ0N66lm4QgssVdgh0xQKR5NlZB0MwRwg4F7EDawC4G1bNKayUwp+Ykv8ghYz77XpOge9FDjvwmFInBu/oeke6RohmvBve6Nt2B8j6QAC/hRr+kpVyQCOoiCuyv/heZae+7fKC5W9o2iHbLAjJdChXUDvCUjrIWbK5UxoC6PRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FRcoz8Mb; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5672afabb86so2883718a12.3
-        for <linux-arch@vger.kernel.org>; Tue, 05 Mar 2024 11:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709667529; x=1710272329; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dbu7jPJNusoAIuT8pNXSfufXvY1iYoRgBC5JcoUfIfk=;
-        b=FRcoz8MbQeQDcV4GpXollhLmuyqntrRmwucMFDu5EmYMZ8nbOuOfvmIlvlgmVq1Qf4
-         c8lJN6BtQ/2TfFGDTo4HPiEpJzTWViGGaRilIyIcv/YXc0UkVYjdNrq+GnwgnSNZswFB
-         Pwg6nffta5e0uvgM3W0mPp9zxsYyvJlniRkpeGoe5zpcYBAQopGXC4Z+BTDR8JLdoEOD
-         V88jb3Ko2M9as9eI9Qr0iuz9SzXWQw5AjNC7hFnkfWYJw4EM1fEvnQS2lXdYIEDXZQnA
-         nY7tNeKRoWpelHmLrOxuSUqt3/up1X9b9cwQdhDzb5wYSPQ3D/F4hmnXwL7TSHyC3s1t
-         oqmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709667529; x=1710272329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dbu7jPJNusoAIuT8pNXSfufXvY1iYoRgBC5JcoUfIfk=;
-        b=V5HJZ+jHrrj28XGrDYUOcvsRSTpV00O4FqtYach5FgJJk8yDD5tiPJ3PnBySckEMZj
-         A+DwbpE5vVG6Sdfwnzh3XK9Sx14+lIzUF0S71hZ+inhGkSwoBC2zF5wbrNa8IZCI8dZn
-         iW0jMwMhdUCQU9/KTEIuUy9SLkkWn1ZQoySRYZ6BL6LlzV2nqXvzimNfDIysGV/ctjig
-         AapGxSM+jpK6CevWqFUVCRFYYr+jVIOeD/NvtRAkyTFU9qZEWaKoCSSmjuRLC4P7e3Q9
-         qPnQfoDDtzRU4eGlaWOAuC0qb8ML4yC4hEZvggXQiIM5r5bBhhh0Rgl4qmuWWPiMEPq0
-         alRA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgL/1ASfJ3h3/yoEJViwcTPDVUHLVDLbTxLNtU9u9Vx1T/TAIBT7ZuCYpsKZ65wYy4IUVF0jyAx5RmxaqqNxztFT1QhIJqnki1rg==
-X-Gm-Message-State: AOJu0YyKjV2s3DpS8NYVcdQYb2+8x2snqxYIC98JuzVyTJnmlF1HaQ0h
-	DA+upC781ZJhvwlCRfz9JHC/0aZ1Fof0u88+WWkQ4SMCtzBdarBOQ9dM4i7l8QJpWaS10sS4VYn
-	jW8jroAG7yX9WDCXlJvT32BH0IwDEvldNPS7c
-X-Google-Smtp-Source: AGHT+IE9+/I3bSukMGSV69NWucyK49DrCDskm5u3bRNu62YrXsb5GYolXDQb6+2mnF70pbKLSkXCgPSxIq5NsfN3srs=
-X-Received: by 2002:a17:906:b790:b0:a45:b36c:55c7 with SMTP id
- dt16-20020a170906b79000b00a45b36c55c7mr421516ejb.63.1709667528752; Tue, 05
- Mar 2024 11:38:48 -0800 (PST)
+	s=arc-20240116; t=1709667614; c=relaxed/simple;
+	bh=UdiRxD3hjdDoNoN6V/B0gO/ecb68kq+k4lK7Gr0p4hM=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=H5O8p7A+TykX98nYb79ShNPngJhoevIFJWaIB5Pkp/waNypgjZQ3TQBTmPWjGBfwdaHkZa223a8A7WWGfsEj8EDGk7BI4NWjATCqKlBAAYX4DWHbmj2HUyweJDIfPmstk0rZx3gSoM5f+bAu/hBIUtTihzOTJ9PufhigTmePU3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cPMvx4Zv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JlMxRde3; arc=none smtp.client-ip=64.147.123.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailflow.west.internal (Postfix) with ESMTP id C01C42CC021F;
+	Tue,  5 Mar 2024 14:40:07 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 05 Mar 2024 14:40:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1709667607;
+	 x=1709674807; bh=/FrVbuG+NmXdRaEhMkfyj7JdlCIJB5MvqaHthubPGLI=; b=
+	cPMvx4Zv2YoBIkL8xsE7Kw8/B90EvpPWMuFqT908td/fDqbbJ/EkWQFzK0Hy3reO
+	wy/kOMD4gaX5VmyMxrKqFBE/7DSCRTUsKCSEpFUH8GJGKnXTjgFK055Sy4Mc0atB
+	xVfzXYkCV8bCAUP6T5xsoBB67HXYLaJ86uAT5/JrCTrBzClb4O87cfVyUkzgMYLe
+	ceIazN91U9vao0obIvn24T7gpfGeNbefC5M2MqvzRBG/n+HfgTSLqx9tsH6eVsrs
+	kGPxOc3QSeh/ewvkWq493K+TzTsJTYL+BYkeZDTGBvpkILIUxIp80/mk/CS9ZEmL
+	6GNNgHPfBR7YI0JylkqKgA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1709667607; x=
+	1709674807; bh=/FrVbuG+NmXdRaEhMkfyj7JdlCIJB5MvqaHthubPGLI=; b=J
+	lMxRde3ko4PJQTtjaUXgAei17Q/G4wbmF53bN5Taddc0ZMMr1vEkooyUpR5UCz2/
+	sABteFvwgOFD4ygXhGI5F9wkZQp/YnFYKPkN3EoPTzLLBkUdyBZZ5Rymwi2u901b
+	pxUZCM2V5zkwLsZsCiBa3cVZQLqzO+IEI8eiEq+QEAlSgkIm0aZ3x/rI4XX6yWyL
+	xluEz90B+1jW1nyo9QMdzbeBxn8+M+3Xwh60Od7G6bz1SIAOaRtH94ZbQ8SeHZxJ
+	yDNp6Pgy5EOnYneBDlAAPmQMG7H8br2SUKfhLK5cIsx0pzEq1Vx+gv+it257b1HG
+	L2NhPYDf9sBgom+tdewRQ==
+X-ME-Sender: <xms:FHXnZQFzCqt-JaImtI40w0_QiFy9HkkcV9oC785SH8GBx1H1HvOkCQ>
+    <xme:FHXnZZX5p2EzAAScXeycJjZ5opYEuWOuM1lQlBmR9enRNj9JgfxSg8PFlooVUsyLL
+    7jffEYKtEZRX2FMTQA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheelgdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:FXXnZaJ6fcFaDhPVsmb7HXuXDRhO4pChJ6FsGuJV2oBbDnsj1e4tvw>
+    <xmx:FXXnZSEv1uxsvg7h2f-giJzRl1QHURRUvbBFRz7hDUDoJWesaAdxCw>
+    <xmx:FXXnZWV7OZJ6FdhEbAoskQw6BQK8iXDV649C39D0kdIKBUOopCeYvw>
+    <xmx:F3XnZZa6NaU2n6qyY4IJDUQVU0cMTgfowBETn8TnsJKRwBU0LMthDLjDaT0oVsX6>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id DD7D2B6008F; Tue,  5 Mar 2024 14:40:04 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com> <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
-In-Reply-To: <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 5 Mar 2024 11:38:37 -0800
-Message-ID: <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <b7ef0a2b-40e8-4fac-8396-fe0f394bf0e3@app.fastmail.com>
+In-Reply-To: 
+ <CAHS8izPbBHz=rr65ZtCy-+OGPbXXaY66_5EFSXw2bbhfGweRWg@mail.gmail.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-13-almasrymina@google.com>
+ <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
+ <CAHS8izPbBHz=rr65ZtCy-+OGPbXXaY66_5EFSXw2bbhfGweRWg@mail.gmail.com>
+Date: Tue, 05 Mar 2024 20:39:44 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mina Almasry" <almasrymina@google.com>
+Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+ "Matt Turner" <mattst88@gmail.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Andreas Larsson" <andreas@gaisler.com>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@google.com>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "David Ahern" <dsahern@kernel.org>,
+ "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
+ shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Pavel Begunkov" <asml.silence@gmail.com>, "David Wei" <dw@davidwei.uk>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Yunsheng Lin" <linyunsheng@huawei.com>,
+ "Shailend Chand" <shailend@google.com>,
+ "Harshitha Ramamurthy" <hramamurthy@google.com>,
+ "Shakeel Butt" <shakeelb@google.com>,
+ "Jeroen de Borst" <jeroendb@google.com>,
+ "Praveen Kaligineedi" <pkaligineedi@google.com>,
+ "Willem de Bruijn" <willemb@google.com>,
+ "Kaiyuan Zhang" <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH net-next v6 12/15] tcp: RX path for devmem TCP
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 5, 2024 at 4:54=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
+On Tue, Mar 5, 2024, at 20:22, Mina Almasry wrote:
+> On Tue, Mar 5, 2024 at 12:42=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
+
+>>
+>> This structure requires a special compat handler to run
+>> x86-32 binaries on x86-64 because of the different alignment
+>> requirements. Any uapi-visible structures should be defined
+>> to avoid this and just have no holes in them. Maybe extend
+>> one of the __u32 members to __u64 or add another 32-bit padding field?
+>>
 >
-> On 2024/3/5 10:01, Mina Almasry wrote:
->
-> ...
->
-> >
-> > Perf - page-pool benchmark:
-> > ---------------------------
-> >
-> > bench_page_pool_simple.ko tests with and without these changes:
-> > https://pastebin.com/raw/ncHDwAbn
-> >
-> > AFAIK the number that really matters in the perf tests is the
-> > 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
-> > cycles without the changes but there is some 1 cycle noise in some
-> > results.
-> >
-> > With the patches this regresses to 9 cycles with the changes but there
-> > is 1 cycle noise occasionally running this test repeatedly.
-> >
-> > Lastly I tried disable the static_branch_unlikely() in
-> > netmem_is_net_iov() check. To my surprise disabling the
-> > static_branch_unlikely() check reduces the fast path back to 8 cycles,
-> > but the 1 cycle noise remains.
-> >
->
-> The last sentence seems to be suggesting the above 1 ns regresses is caus=
-ed
-> by the static_branch_unlikely() checking?
+> Honestly the 32-bit fields as-is are somewhat comically large. I don't
+> think extending the __u32 -> __u64 is preferred because I don't see us
+> needing that much, so maybe I can add another 32-bit padding field.
+> Does this look good to you?
 
-Note it's not a 1ns regression, it's looks like maybe a 1 cycle
-regression (slightly less than 1ns if I'm reading the output of the
-test correctly):
+Having a reserved field works but requires that you check it for
+being zero already, so you can detect an incompatible caller.
 
-# clean net-next
-time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
-2.993 ns (step:0)
+> struct dmabuf_cmsg {
+>   __u64 frag_offset;
+>   __u32 frag_size;
+>   __u32 frag_token;
+>   __u32 dmabuf_id;
+>   __u32 ext; /* reserved for future flags */
+> };
 
-# with patches
-time_bench: Type:tasklet_page_pool01_fast_path Per elem: 9 cycles(tsc)
-3.679 ns (step:0)
+Maybe call it 'flags'?
 
-# with patches and with diff that disables static branching:
-time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
-3.248 ns (step:0)
+> Another option is to actually compress frag_token & dmabuf_id to be
+> 32-bit combined size if that addresses your concern. I prefer that
+> less in case they end up being too small for future use cases.
 
-I do see noise in the test results between run and run, and any
-regression (if any) is slightly obfuscated by the noise, so it's a bit
-hard to make confident statements. So far it looks like a ~0.25ns
-regression without static branch and about ~0.65ns with static branch.
+I don't know what either of those fields is. Is dmabuf_id not a
+file descriptor? If it is, it has to be 32 bits wide. Otherwise
+having two 16-bit fields and a 32-bit field would indeed add up
+to a multiple of the structure alignment on all architectures and
+solve the problem.
 
-Honestly when I saw all 3 results were within some noise I did not
-investigate more, but if this looks concerning to you I can dig
-further. I likely need to gather a few test runs to filter out the
-noise and maybe investigate the assembly my compiler is generating to
-maybe narrow down what changes there.
-
---=20
-Thanks,
-Mina
+        Arnd
 
