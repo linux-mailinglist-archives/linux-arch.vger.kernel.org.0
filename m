@@ -1,184 +1,419 @@
-Return-Path: <linux-arch+bounces-2822-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2823-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D902E872870
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 21:18:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4AB872944
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 22:17:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16B7DB2BB51
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:18:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEAD71C22BD9
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 21:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD5512882E;
-	Tue,  5 Mar 2024 20:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DA012BF35;
+	Tue,  5 Mar 2024 21:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WyStNYIa"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f+zkeIIL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5295C17BDC;
-	Tue,  5 Mar 2024 20:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6CB12BF13
+	for <linux-arch@vger.kernel.org>; Tue,  5 Mar 2024 21:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709669881; cv=none; b=ooxHAzupuagjH78U/yFHQRIuxx/4dISZZNXPLA5ZbGsQLOVasuZd4yLvNvSwmb/IQJjmCfvuukxmE5kF3ruy7odeOIOd8prvfTWJDToz+ufGjGyCXr7QJDNrnMFgHXk1escN8r6XViR+j412mNY9I/kmzPMnZSKTQwEfzOy9cX0=
+	t=1709673448; cv=none; b=r2r86nFUPngW1yrTm6/Fxl3NVUVxqnEQbXCXVx8Aox7p0wDqwfrgmDPARQNO3Zo6uARAQDIjjvBQYApyPHTEnxFcSVrKcDWNNeb8/rKDoDEG08RwjeGRNOQfsHLkCmSqzO8NnChHa9ctABusOSNR58utKeqawiiOs2bGk8+Wx4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709669881; c=relaxed/simple;
-	bh=6pEQdOMKnglEA7miuqAmY2L0CFdEnrgC3c/Lp1/D3p4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QbyRGHfZpKrOzZTznBnzXKufSbY18tpfBBrGGcIOKm2e0MPk95cnSmJT6PiITWnzPeRLYUBgbJKQZlFPV91ZbAXfhoOr8C4f9a53acvJarF1fOmmHhL36VWodOZh4+yJ39aaOUHZ3Wsz9AQwdA/P1XNau18qpm61KwiRvLvvHGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WyStNYIa; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dba177c596so1066565ad.0;
-        Tue, 05 Mar 2024 12:18:00 -0800 (PST)
+	s=arc-20240116; t=1709673448; c=relaxed/simple;
+	bh=Zzs14TQDrBLvAr1o9JtK6vm+FLEBbfjXCr1LPciToqM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ebpjf2s+Raiz+0l2K0u3Tn94LDqMPMfpBHoyF3PLdtKMME2maSrvAPrJE0Cfo6T2/XKzF/dx2nG7EB7w0lOEwwa3VDbKKiIRnyo/iFrglNtgiCe4utf/TOrApZg5SjajE7MjKI3P9kjxJbV+A8DmkvY9Y9gsjKdIxZ4fHhvSVYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f+zkeIIL; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-563bb51c36eso263770a12.2
+        for <linux-arch@vger.kernel.org>; Tue, 05 Mar 2024 13:17:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709669880; x=1710274680; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=u75UHgD7a/puwbE31XmdJlh2oHQkaeR2WPurDlkvFxs=;
-        b=WyStNYIa3X6srKZCcikYEpIpeTB4DSAbxUD/45FrVL/NlHz42qslPxKFwCULkPIKsK
-         ar97Ns3k+CC3bM5bKqqIZp7ez1YlBQJFIIs0c5TLTOW5BZLf0Ym4gTLQz5FlYVL5YXBQ
-         lyWTzYFY2ouQtW/yXK5esCYE7gK/jer1Oj8yyscFJqi4Feh26iXig3IBQU1lSRJa8JjY
-         yS0a10jViVwUCcvTJ1H/A8EuzktPuSK5iAYmAyCdsIAiOuchti1xCu02LG0VIUt84lBZ
-         CuHnOTDD6Sxh5e0XMIaVKwln0C/oz6n86ms1mTsm1o0b5PcSMBx9rp9RSYE7y/QNu8WY
-         epDg==
+        d=google.com; s=20230601; t=1709673443; x=1710278243; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LpvlKXjZceUyV7T13tDS41t/F1Xa1LPW/laeLkdBF1g=;
+        b=f+zkeIIL3MaYM5PZ+7iWNhbUPnElC1PozZSc3vG7/g0+xAiXtxTX0jGzm4OkukjKj+
+         Ewed6xKfesI0HEa5m7zQonRJ2pjlKxAUa8tBqiAUmr4RbgWi2/dbQKdauu2aIafD9DDi
+         Ghu9no2/qlPRW04bDfIx95FhJamSFgtmIL62MzhYo/wY9BAVKY4ctX4UJOFKGmUvD4B2
+         /dT+b0RVAl/VFXCxbdWtSXMiwW30ZHuxO/KNwghkR//2XF1E1t/OnGu0/kHEEYxV/ZFy
+         lYYuIyAgsMf7/qlF0Gb3IkvynzO+FN+vnrHlmF9kii3ZWz5hNnSh52TkqTYMD+AfZJnH
+         rP2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709669880; x=1710274680;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u75UHgD7a/puwbE31XmdJlh2oHQkaeR2WPurDlkvFxs=;
-        b=QcKc6RxbxeqZmy0Gfnmj65hyETPtl81dvE7vM9C/sy7sHBWwcrQX/Fp3jTrBZqY5xw
-         RjKyJO0yS6jv5MWZAPk/AH34xZshQe0t1+1QjIXXWEFq2a9DEXlhlAavIS4vP4TxeTBI
-         LMleXCGVLUR2yKwxG0wnceib+J8pOJwIS4iUNLab57BuVsIVfcN1q4Tly3SVBn57wDjG
-         cT8U7Y+AV8Qi69PXxUxVd2Ay0Ww325n3LhKDBeRVeL/T2Ksbq+4nAQhoxDirNM6o0pp4
-         UXPDXaIrzKCPqHzBVU6nPsAc+Cjxu1B7z3z9UOYxLp0TeUcM9sg7zKopuK7QpuYv0LDo
-         NlVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVmk3DRf4OZqnsNoqzNUXcivp8cW8QdgHRRrZq8j80Mq9/jLEy6suDbUBWovXlpRcQtt0sFNTIymyvJ4E4Y10Xd17rtX6vBLbTrjgqZ0EoyUa6sv1gDd/Y9ATEMmh3Zo7vO4P18BxAtmg==
-X-Gm-Message-State: AOJu0YyCmsIf4aoHS949buiKVjXpAEItWYTDWD/f2dy+zw2d1fS82d+4
-	wYoio8vXgatkpWm5HQvK5i6iiejIhNZShu5TKQ5T09LUssu1P85I
-X-Google-Smtp-Source: AGHT+IEzppj7Rc6MwIEzr5vFBm31zeBZGSTf6g/BXEVWUWYDnqM35wjDu6BJVJP5wIMvV3ydNl0ICQ==
-X-Received: by 2002:a17:902:e74a:b0:1dc:de7f:517e with SMTP id p10-20020a170902e74a00b001dcde7f517emr4239510plf.22.1709669879566;
-        Tue, 05 Mar 2024 12:17:59 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170903124b00b001db2b8b2da7sm10893418plh.122.2024.03.05.12.17.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 12:17:58 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0f5d6a76-98dc-4cbb-9896-da4891f1de5f@roeck-us.net>
-Date: Tue, 5 Mar 2024 12:17:55 -0800
+        d=1e100.net; s=20230601; t=1709673443; x=1710278243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LpvlKXjZceUyV7T13tDS41t/F1Xa1LPW/laeLkdBF1g=;
+        b=bS8Oi+5Co2cFHZfVWPmFYKPlSKBRX4wHIqPcNaOwbT+FM0m+Z3iOV2ORLyGztXKBCw
+         UwRfPg1efCgzwtAro6gRNFiBLqXMvQcQfQMDmqE8+sjm2I+8qoNZgzYW74m/ae2D8sA2
+         e3Lp0npTX1kNsV7TjCc2vvwVH99xceMaIlCaTf4HRpbPBu1qK01SnpcxC4fdjAERB5EY
+         dMsOuvDXlb7M3RDuq7PP/7kUlL1nUSK+mieawkgeXiwcZjeo5VoXxJBiKl2P2riCggG2
+         To+P3sv7DikFZ5v1U9Htw4h8uJTuoREsrj8hAKB4HrMsFDeco43A5jFGXYrMGhpxwdwd
+         HabA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgn6pYWhWpvmayUcSPfM+u7yZ+DVVOtoYjg+XubJ21twF3sgzgMgQERUXo0VLreAubdbH1BDuQBkPe1bOwxTcaLiQzC2z0E5r29g==
+X-Gm-Message-State: AOJu0YzQ+5fFeD2UPX7g19Ky17itkAU4n/bzcVwK3pe9q3NVWGXclrIr
+	CIYwsnA9aDJfju3qteOmcO88ulaNVyJ5AXTU9YubctAYKPQJImrr35DCZs5v3Hnb4Wdos3q3MWG
+	NLCnWHpY38jhZGi/+GsOiW1V7x9Yrmn3V3Frw
+X-Google-Smtp-Source: AGHT+IHlC+vBw635Kt73+dsHbQtM7EL6jyFCQWoNIhJRg5JiyGmYfM2wu4YJxtfkn8eGdUtq4eym/8JfbCk0TV4RoFA=
+X-Received: by 2002:a17:906:3c17:b0:a43:86f3:b00b with SMTP id
+ h23-20020a1709063c1700b00a4386f3b00bmr8581734ejg.0.1709673442968; Tue, 05 Mar
+ 2024 13:17:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/5] bug: Core support for suppressing warning
- backtraces
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>,
- Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
- Arthur Grillo <arthurgrillo@riseup.net>,
- Brendan Higgins <brendan.higgins@linux.dev>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
- <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
- <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
- Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
- linux-arch@vger.kernel.org
-References: <20240305184033.425294-1-linux@roeck-us.net>
- <20240305184033.425294-2-linux@roeck-us.net>
- <202403051149.547235C794@keescook>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <202403051149.547235C794@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-6-almasrymina@google.com> <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
+In-Reply-To: <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 5 Mar 2024 13:17:08 -0800
+Message-ID: <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
+To: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/5/24 11:54, Kees Cook wrote:
-> On Tue, Mar 05, 2024 at 10:40:29AM -0800, Guenter Roeck wrote:
->> [...]
->>   	warning = (bug->flags & BUGFLAG_WARNING) != 0;
->>   	once = (bug->flags & BUGFLAG_ONCE) != 0;
->>   	done = (bug->flags & BUGFLAG_DONE) != 0;
->>   
->> +	if (warning && IS_SUPPRESSED_WARNING(function))
->> +		return BUG_TRAP_TYPE_WARN;
->> +
-> 
-> I had to re-read __report_bug() more carefully, but yes, this works --
-> it's basically leaving early, like "once" does.
-> 
-> This looks like a reasonable approach!
-> 
-> Something very similar to this is checking that a warning happens. i.e.
-> you talk about drm selftests checking function return values, but I've
-> got a bunch of tests (LKDTM) that live outside of KUnit because I haven't
-> had a clean way to check for specific warnings/bugs. I feel like future
-> changes built on top of this series could add counters or something that
-> KUnit could examine. E.g. I did this manually for some fortify tests:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/hardening&id=4ce615e798a752d4431fcc52960478906dec2f0e
-> 
+On Tue, Mar 5, 2024 at 4:55=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
+> wrote:
+>
+> On 2024/3/5 10:01, Mina Almasry wrote:
+>
+> ...
+>
+> >
+> > The netdev_dmabuf_binding struct is refcounted, and releases its
+> > resources only when all the refs are released.
+> >
+> > Signed-off-by: Willem de Bruijn <willemb@google.com>
+> > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >
+> > RFC v6:
+> > - Validate rx queue index
+> > - Refactor new functions into devmem.c (Pavel)
+>
+> It seems odd that the functions or stucts in a file called devmem.c
+> are named after 'dmabuf' instead of 'devmem'.
+>
 
-Sounds like a good idea. It should be straightforward to add a counter
-to struct __suppressed_warning. This way the calling code could easily
-check if an expected warning backtrace actually happened.
+So my intention with this naming that devmem.c contains all the
+functions for all devmem tcp specific support. Currently the only
+devmem we support is dmabuf. In the future, other devmem may be
+supported and it can fit nicely in devmem.c. For example, if we want
+to extend devmem TCP to support NVMe devices, we need to add support
+for p2pdma, maybe, and we can add that support under the devmem.c
+umbrella rather than add new files.
 
+But I can rename to dmabuf.c if there is strong objection to the current na=
+me.
+
+> >
+>
+> ...
+>
+> > diff --git a/include/net/netmem.h b/include/net/netmem.h
+> > index d8b810245c1d..72e932a1a948 100644
+> > --- a/include/net/netmem.h
+> > +++ b/include/net/netmem.h
+> > @@ -8,6 +8,16 @@
+> >  #ifndef _NET_NETMEM_H
+> >  #define _NET_NETMEM_H
+> >
+> > +#include <net/devmem.h>
+> > +
+> > +/* net_iov */
+> > +
+> > +struct net_iov {
+> > +     struct dmabuf_genpool_chunk_owner *owner;
+> > +};
+> > +
+> > +/* netmem */
+> > +
+> >  /**
+> >   * typedef netmem_ref - a nonexistent type marking a reference to gene=
+ric
+> >   * network memory.
+> > diff --git a/net/core/Makefile b/net/core/Makefile
+> > index 821aec06abf1..592f955c1241 100644
+> > --- a/net/core/Makefile
+> > +++ b/net/core/Makefile
+> > @@ -13,7 +13,7 @@ obj-y                    +=3D dev.o dev_addr_lists.o =
+dst.o netevent.o \
+> >                       neighbour.o rtnetlink.o utils.o link_watch.o filt=
+er.o \
+> >                       sock_diag.o dev_ioctl.o tso.o sock_reuseport.o \
+> >                       fib_notifier.o xdp.o flow_offload.o gro.o \
+> > -                     netdev-genl.o netdev-genl-gen.o gso.o
+> > +                     netdev-genl.o netdev-genl-gen.o gso.o devmem.o
+> >
+> >  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) +=3D dev_addr_lists_test.o
+> >
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index fe054cbd41e9..bbea1b252529 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -155,6 +155,9 @@
+> >  #include <net/netdev_rx_queue.h>
+> >  #include <net/page_pool/types.h>
+> >  #include <net/page_pool/helpers.h>
+> > +#include <linux/genalloc.h>
+> > +#include <linux/dma-buf.h>
+> > +#include <net/devmem.h>
+> >
+> >  #include "dev.h"
+> >  #include "net-sysfs.h"
+> > diff --git a/net/core/devmem.c b/net/core/devmem.c
+> > new file mode 100644
+> > index 000000000000..779ad990971e
+> > --- /dev/null
+> > +++ b/net/core/devmem.c
+> > @@ -0,0 +1,293 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + *      Devmem TCP
+> > + *
+> > + *      Authors:     Mina Almasry <almasrymina@google.com>
+> > + *                   Willem de Bruijn <willemdebruijn.kernel@gmail.com=
+>
+> > + *                   Kaiyuan Zhang <kaiyuanz@google.com
+> > + */
+> > +
+> > +#include <linux/types.h>
+> > +#include <linux/mm.h>
+> > +#include <linux/netdevice.h>
+> > +#include <trace/events/page_pool.h>
+> > +#include <net/netdev_rx_queue.h>
+> > +#include <net/page_pool/types.h>
+> > +#include <net/page_pool/helpers.h>
+> > +#include <linux/genalloc.h>
+> > +#include <linux/dma-buf.h>
+> > +#include <net/devmem.h>
+> > +
+> > +/* Device memory support */
+> > +
+> > +#ifdef CONFIG_DMA_SHARED_BUFFER
+>
+> I still think it is worth adding its own config for devmem or dma-buf
+> for networking, thinking about the embeded system.
+>
+
+FWIW Willem did weigh on this previously and said he prefers to have
+it unguarded by a CONFIG, but I will submit to whatever the consensus
+here. It shouldn't be a huge deal to add a CONFIG technically
+speaking.
+
+> > +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
+> > +                                        struct gen_pool_chunk *chunk,
+> > +                                        void *not_used)
+>
+> It seems odd to still keep the netdev_ prefix as it is not really related
+> to netdev, perhaps use 'net_' or something better.
+>
+
+Yes, thanks for catching. I can change to net_devmem_ maybe or net_dmabuf_*=
+.
+
+> > +{
+> > +     struct dmabuf_genpool_chunk_owner *owner =3D chunk->owner;
+> > +
+> > +     kvfree(owner->niovs);
+> > +     kfree(owner);
+> > +}
+> > +
+> > +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *bindin=
+g)
+> > +{
+> > +     size_t size, avail;
+> > +
+> > +     gen_pool_for_each_chunk(binding->chunk_pool,
+> > +                             netdev_dmabuf_free_chunk_owner, NULL);
+> > +
+> > +     size =3D gen_pool_size(binding->chunk_pool);
+> > +     avail =3D gen_pool_avail(binding->chunk_pool);
+> > +
+> > +     if (!WARN(size !=3D avail, "can't destroy genpool. size=3D%lu, av=
+ail=3D%lu",
+> > +               size, avail))
+> > +             gen_pool_destroy(binding->chunk_pool);
+> > +
+> > +     dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+> > +                              DMA_BIDIRECTIONAL);
+>
+> For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
+>
+
+Yes, good catch. I suspect we want to reuse this code for TX path. But
+for now, I'll test with DMA_FROM_DEVICE and if I see no issues I'll
+apply this change.
+
+> > +     dma_buf_detach(binding->dmabuf, binding->attachment);
+> > +     dma_buf_put(binding->dmabuf);
+> > +     xa_destroy(&binding->bound_rxq_list);
+> > +     kfree(binding);
+> > +}
+> > +
+> > +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx=
+)
+> > +{
+> > +     void *new_mem;
+> > +     void *old_mem;
+> > +     int err;
+> > +
+> > +     if (!dev || !dev->netdev_ops)
+> > +             return -EINVAL;
+> > +
+> > +     if (!dev->netdev_ops->ndo_queue_stop ||
+> > +         !dev->netdev_ops->ndo_queue_mem_free ||
+> > +         !dev->netdev_ops->ndo_queue_mem_alloc ||
+> > +         !dev->netdev_ops->ndo_queue_start)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     new_mem =3D dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+> > +     if (!new_mem)
+> > +             return -ENOMEM;
+> > +
+> > +     err =3D dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
+> > +     if (err)
+> > +             goto err_free_new_mem;
+> > +
+> > +     err =3D dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
+> > +     if (err)
+> > +             goto err_start_queue;
+> > +
+> > +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
+> > +
+> > +     return 0;
+> > +
+> > +err_start_queue:
+> > +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
+>
+> It might worth mentioning why queue start with old_mem will always
+> success here as the return value seems to be ignored here.
+>
+
+So the old queue, we stopped it, and if we fail to bring up the new
+queue, then we want to start the old queue back up to get the queue
+back to a workable state.
+
+I don't see what we can do to recover if restarting the old queue
+fails. Seems like it should be a requirement that the driver tries as
+much as possible to keep the old queue restartable.
+
+I can improve this by at least logging or warning if restarting the
+old queue fails.
+
+> > +
+> > +err_free_new_mem:
+> > +     dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
+> > +
+> > +     return err;
+> > +}
+> > +
+> > +/* Protected by rtnl_lock() */
+> > +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
+> > +
+> > +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
+> > +{
+> > +     struct netdev_rx_queue *rxq;
+> > +     unsigned long xa_idx;
+> > +     unsigned int rxq_idx;
+> > +
+> > +     if (!binding)
+> > +             return;
+> > +
+> > +     if (binding->list.next)
+> > +             list_del(&binding->list);
+>
+> The above does not seems to be a good pattern to delete a entry, is
+> there any reason having a checking before the list_del()? seems like
+> defensive programming?
+>
+
+I think I needed to apply this condition to handle the case where
+netdev_unbind_dmabuf() is called when binding->list is not initialized
+or is empty.
+
+netdev_nl_bind_rx_doit() will call unbind to free a partially
+allocated binding in error paths, so, netdev_unbind_dmabuf() may be
+called with a partially initialized binding. This is why we check for
+binding->list is initialized here and check that rxq->binding =3D=3D
+binding below. The main point is that netdev_unbind_dmabuf() may be
+asked to unbind a partially bound dmabuf due to error paths.
+
+Maybe a comment here will test this better. I will double confirm the
+check is needed for the error paths in netdev_nl_bind_rx_doit().
+
+> > +
+> > +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> > +             if (rxq->binding =3D=3D binding) {
+>
+> It seems like defensive programming here too?
+>
+> > +                     /* We hold the rtnl_lock while binding/unbinding
+> > +                      * dma-buf, so we can't race with another thread =
+that
+> > +                      * is also modifying this value. However, the dri=
+ver
+> > +                      * may read this config while it's creating its
+> > +                      * rx-queues. WRITE_ONCE() here to match the
+> > +                      * READ_ONCE() in the driver.
+> > +                      */
+> > +                     WRITE_ONCE(rxq->binding, NULL);
+> > +
+> > +                     rxq_idx =3D get_netdev_rx_queue_index(rxq);
+> > +
+> > +                     netdev_restart_rx_queue(binding->dev, rxq_idx);
+> > +             }
+> > +     }
+> > +
+> > +     xa_erase(&netdev_dmabuf_bindings, binding->id);
+> > +
+> > +     netdev_dmabuf_binding_put(binding);
+> > +}
+> > +
+>
+
+
+--=20
 Thanks,
-Guenter
-
+Mina
 
