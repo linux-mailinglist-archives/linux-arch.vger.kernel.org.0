@@ -1,130 +1,185 @@
-Return-Path: <linux-arch+bounces-2820-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2821-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BAE8872804
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:54:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABEED872829
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 21:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 079C01F23844
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 19:54:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6196328443E
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A635BAE6;
-	Tue,  5 Mar 2024 19:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B6112881F;
+	Tue,  5 Mar 2024 20:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VEu5tKE3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GQCcdh2M"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803965C5FD
-	for <linux-arch@vger.kernel.org>; Tue,  5 Mar 2024 19:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6B386644
+	for <linux-arch@vger.kernel.org>; Tue,  5 Mar 2024 20:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709668450; cv=none; b=Vdm8mD0qTTxvQ9SiSM8hGAd2OSoUtXZ7ppDrruOOraj3LBclVRqzEOmsjh3hzn5COdtYoA5yLpp0AfK5WPeUq4xkhiMf/UrCeZH5512IQ77DtDPWu1cdB1G6/M8252XZ67J8pLS+6M9yi/k/pKbsVA53t96rQ4rIJkVe/3MHqxc=
+	t=1709668825; cv=none; b=fzDD/TaKn58UuhEKfZelPHL1sCBUJeEFzqhOQr1C47/iJG+OZ02KFddlt21a0tSiuA47Yc5hyjts1zo1wb9o+kj9Vq7rPBv56ZbtPx1HsP+6z/NdolOWP/cYv2gEudUPT6ta4jOidashAkQMv+f0RBrlpF+v9XLtMpimoiczl2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709668450; c=relaxed/simple;
-	bh=Thh+og9vWfifMZ7QUJajbgXYm3QoY+CJHcawNAefhMM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VWTeVDWQ5l9l5bdqyu+THooocOb2MigVqbysPUu3HBUFJRyxGpq8iChSjKhfEP/Jy8DhEPyIXbGdzt0Q5cf0GIgMmIzeP3vnsS3xD+7Ny8i5j4q7ITZhKHwKFMp2yc6tyafq3+EgXWSWwNo57VRRhmmjZVXcv2Vr7ybfELrxdTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=VEu5tKE3; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e5dddd3b95so92795b3a.1
-        for <linux-arch@vger.kernel.org>; Tue, 05 Mar 2024 11:54:08 -0800 (PST)
+	s=arc-20240116; t=1709668825; c=relaxed/simple;
+	bh=zvCIxr8VBjsKzdRKj72ITiWaaPuXwUFhasVmFGiaDtk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Tu+ID3pLgZdmNCqOuv1E4v6wPWYBvyabeHLIPLlArmd54EDWsKSDS+qufwGH/+BEDAodOAqYfq1CHKUENPkU8aZn2GHf8qL79ToHVf4UXHjoAuTtuQH8QboFy2Yf3zk01s1MWT2fLH6mj3X4KeDJdGbOVWhAOnn8axG4ow/ch3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GQCcdh2M; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a450bedffdfso346914866b.3
+        for <linux-arch@vger.kernel.org>; Tue, 05 Mar 2024 12:00:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1709668448; x=1710273248; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8OJiIuppva2X62G3XuKOpZ18Of2oWMu+/RVVvODtp4M=;
-        b=VEu5tKE3ZGEMGDvffumPkT0uy9dQ8tGrLGc5mS3ynHiKSCM4jxVM5Mk1gHagvtd+va
-         4Iwg26a4/Jq7rwllJwhLNbUP9PnQmbrV8ntmuSzHQaslvio2ZDd3/Xg2cJSCUEe9CPxH
-         Qc2vmlAQcaToA8ldYp9nPwe1NLKlztG9Emee4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709668448; x=1710273248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1709668821; x=1710273621; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8OJiIuppva2X62G3XuKOpZ18Of2oWMu+/RVVvODtp4M=;
-        b=k3CYhEDMMPvb0UognpDdvra5bwa+zaMI07vh2s0dxGyI9CIm5obTyzzppRD9AZ8ZUN
-         OnPJOUkEJE031SX+d5/gc8UIb+CJX5cyjhm+eZ91wiWBxigFqN7wXg5NP4zZxbGkV/Zx
-         ay3BChpMJVMKK/2DsNhZ3jzEUBx9/fXJh6+YmchExWFUVeKMDkK0B45LF4ml0Wkq8+Zb
-         tFGURpyytNfRAYHi14WZ3w/mLqmii7fN3/P6tlunIKRU5iNnunlGX8qkbEUE6G20fAfK
-         Uzk2Df+2x7LJkfuN0dyre0llLYM2rOLoHCgzYmXSkfJSkJ2faXbg2jTwQhRxykDjQdQX
-         vKMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcv/3oTGaFCQXDz1HhQRkBl9kuEzepbLkSOeKioK4Mgc5JIETtnRNAQegkyAEhsQKp9oOnKSfT5e5dLK9sXG9C8+NnoN3C945FEA==
-X-Gm-Message-State: AOJu0YyPPWqYOrj9jkH6NYXPkTkz6kBNBoZuZkj7quGPXn2OfFFgU46R
-	ZgyLPKHEiTqN1/530KmMtcIcZ5wrzhZd2xuXD7fZU0ItuXzMZPSbFzSKnR1NVg==
-X-Google-Smtp-Source: AGHT+IEPSGoV+PaXRY7JI9uSPnapXCs52p1ILPTe+H1wv+UxrhqJWz+AChv6CTzYH5Lp5odgHWXRGQ==
-X-Received: by 2002:a05:6a00:8cc:b0:6e6:1df9:af92 with SMTP id s12-20020a056a0008cc00b006e61df9af92mr4909513pfu.14.1709668447845;
-        Tue, 05 Mar 2024 11:54:07 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h5-20020aa786c5000000b006e52ce4ee2fsm9391340pfo.20.2024.03.05.11.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 11:54:07 -0800 (PST)
-Date: Tue, 5 Mar 2024 11:54:06 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	kunit-dev@googlegroups.com, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 1/5] bug: Core support for suppressing warning
- backtraces
-Message-ID: <202403051149.547235C794@keescook>
-References: <20240305184033.425294-1-linux@roeck-us.net>
- <20240305184033.425294-2-linux@roeck-us.net>
+        bh=Um7HQJN8N4J1bd3DjjlCtIBtcKYJjLGAY5O7WX29jhs=;
+        b=GQCcdh2MldH/YcpNngEOhJ93Lez+BG92jbvj3xTQKZfXfuaZNCzmOOZbV2gDMd4//R
+         RUDIXcB0aVfS9WSwFs7IJJQ/y1Qy/nicYVfdFQluHtxSMfgcamUEChzZrV6bE5RVAg+d
+         8x7sUhgoYrXyQAD3Q6LRJGRQxNsdjrhT6qN4tKbeqfoxWmkzMvDIL7erP/n5qj18xKHf
+         R8fBtNcxgwib9+mtc8yx+839STKOJlbtiDxY5Rzdvlj2/s7kRdLuo4E2+Lxyc/t5v71o
+         hE27KoRkiuOaRQejDkoDPRhF+QXyaz5wGJRSvG72AT2vKBH6JSBdgt/ZHxE3VsBBvnf8
+         rw+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709668821; x=1710273621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Um7HQJN8N4J1bd3DjjlCtIBtcKYJjLGAY5O7WX29jhs=;
+        b=f5JiKTvB7Ch7lmTa9dj7gpSWWASYYR8S+e41QQWdyKgU8+NtzRrQLnDxGdVKRJUNhY
+         0aNSeeyEqIymBB/VfNgcE3sIWxHPdMHlPW58TAUHFKbNM0WFwbAGSNvUREP+pReEdz93
+         yzcdiwC3nAUhL9JdQ/rmAGFXLNie4mh9cO292FDwDGTCWpwOP3YfxfSKM1T5MITUbyLO
+         G1cj1pSflKx9Oy/DQIs6Jl6mT9wVkiOji/3p4L3c9xMsQCADf0mIsP107eBh743A6STY
+         nSCZi7FnSBjZ6RV/PjZPHx6MBBpTT3HZ3ePvF6bzHnyUnemmdULuDg6TfvecXXy3A2uP
+         DdTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvlQsdL9dwxFCuaBXxaBcc+qC+1hdtwoqpruAz/JjXp5+OCm6U0a2+Fn3H1OM6j6OJl1lZ1nUWUSh0NUkoFnc7QbzXaPxCaX+6rQ==
+X-Gm-Message-State: AOJu0Ywtb+Ps6NypLmswCELaX9OMN45DFJgE2a0vW542BjZnUiKsWQCt
+	TItcJjU+gaOI12esyV06+ukFX+2G/dKNGLG8CWrZKKunB7rNuJzvvNhphwZuuQ5AndDCIz+O0G0
+	1eErDZgJq58n5G6WC+Fp6sX6FwUYz2XM+jZIA
+X-Google-Smtp-Source: AGHT+IHytdC7v7Vx7sLFDUTdLyz9HH4/B980RlTrZABliOPKZSD4E6pDWhlNI6pqEZujcxK31LaEVTdzhieo1tJYP+0=
+X-Received: by 2002:a17:906:394b:b0:a43:6146:a4df with SMTP id
+ g11-20020a170906394b00b00a436146a4dfmr7667230eje.21.1709668820535; Tue, 05
+ Mar 2024 12:00:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305184033.425294-2-linux@roeck-us.net>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-6-almasrymina@google.com> <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+In-Reply-To: <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 5 Mar 2024 12:00:08 -0800
+Message-ID: <CAHS8izPhvRDPVHr8mY2FffPCLYjKqaazjy5NFcnJSnLK+CdyCA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, shuah <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 05, 2024 at 10:40:29AM -0800, Guenter Roeck wrote:
-> [...]
->  	warning = (bug->flags & BUGFLAG_WARNING) != 0;
->  	once = (bug->flags & BUGFLAG_ONCE) != 0;
->  	done = (bug->flags & BUGFLAG_DONE) != 0;
->  
-> +	if (warning && IS_SUPPRESSED_WARNING(function))
-> +		return BUG_TRAP_TYPE_WARN;
-> +
+On Tue, Mar 5, 2024 at 1:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
+>
+> > +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> > +                    struct netdev_dmabuf_binding **out)
+> > +{
+> > +     struct netdev_dmabuf_binding *binding;
+> > +     static u32 id_alloc_next;
+> > +     struct scatterlist *sg;
+> > +     struct dma_buf *dmabuf;
+> > +     unsigned int sg_idx, i;
+> > +     unsigned long virtual;
+> > +     int err;
+> > +
+> > +     if (!capable(CAP_NET_ADMIN))
+> > +             return -EPERM;
+> > +
+> > +     dmabuf =3D dma_buf_get(dmabuf_fd);
+> > +     if (IS_ERR_OR_NULL(dmabuf))
+> > +             return -EBADFD;
+>
+> You should never need to use IS_ERR_OR_NULL() for a properly
+> defined kernel interface. This one should always return an
+> error or a valid pointer, so don't check for NULL.
+>
 
-I had to re-read __report_bug() more carefully, but yes, this works --
-it's basically leaving early, like "once" does.
+Thanks for clarifying. I will convert to IS_ERR().
 
-This looks like a reasonable approach!
+> > +     binding->attachment =3D dma_buf_attach(binding->dmabuf, dev->dev.=
+parent);
+> > +     if (IS_ERR(binding->attachment)) {
+> > +             err =3D PTR_ERR(binding->attachment);
+> > +             goto err_free_id;
+> > +     }
+> > +
+> > +     binding->sgt =3D
+> > +             dma_buf_map_attachment(binding->attachment, DMA_BIDIRECTI=
+ONAL);
+> > +     if (IS_ERR(binding->sgt)) {
+> > +             err =3D PTR_ERR(binding->sgt);
+> > +             goto err_detach;
+> > +     }
+>
+> Should there be a check to verify that this buffer
+> is suitable for network data?
+>
+> In general, dmabuf allows buffers that are uncached or reside
+> in MMIO space of another device, but I think this would break
+> when you get an skb with those buffers and try to parse the
+> data inside of the kernel on architectures where MMIO space
+> is not a normal pointer or unaligned access is disallowed on
+> uncached data.
+>
+>         Arnd
 
-Something very similar to this is checking that a warning happens. i.e.
-you talk about drm selftests checking function return values, but I've
-got a bunch of tests (LKDTM) that live outside of KUnit because I haven't
-had a clean way to check for specific warnings/bugs. I feel like future
-changes built on top of this series could add counters or something that
-KUnit could examine. E.g. I did this manually for some fortify tests:
+A key goal of this patch series is that the kernel does not try to
+parse the skb frags that reside in the dma-buf for that precise
+reason. This is achieved using patch "net: add support for skbs with
+unreadable frags" which disables the kernel touching the payload in
+these skbs, and "tcp: RX path for devmem TCP" which implements a uapi
+where the kernel hands the data in the dmabuf to the userspace via a
+cmsg that gives the user a pointer to the data in the dmabuf (offset +
+size).
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/hardening&id=4ce615e798a752d4431fcc52960478906dec2f0e
+So really AFACT the only restriction here is that the NIC should be
+able to DMA into the dmabuf that we're attaching, and dma_buf_attach()
+fails in this scenario so we're covered there.
 
--Kees
-
--- 
-Kees Cook
+--=20
+Thanks,
+Mina
 
