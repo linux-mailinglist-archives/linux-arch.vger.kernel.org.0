@@ -1,185 +1,184 @@
-Return-Path: <linux-arch+bounces-2821-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2822-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABEED872829
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 21:00:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D902E872870
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 21:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6196328443E
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:00:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16B7DB2BB51
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 20:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B6112881F;
-	Tue,  5 Mar 2024 20:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD5512882E;
+	Tue,  5 Mar 2024 20:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GQCcdh2M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WyStNYIa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6B386644
-	for <linux-arch@vger.kernel.org>; Tue,  5 Mar 2024 20:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5295C17BDC;
+	Tue,  5 Mar 2024 20:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709668825; cv=none; b=fzDD/TaKn58UuhEKfZelPHL1sCBUJeEFzqhOQr1C47/iJG+OZ02KFddlt21a0tSiuA47Yc5hyjts1zo1wb9o+kj9Vq7rPBv56ZbtPx1HsP+6z/NdolOWP/cYv2gEudUPT6ta4jOidashAkQMv+f0RBrlpF+v9XLtMpimoiczl2U=
+	t=1709669881; cv=none; b=ooxHAzupuagjH78U/yFHQRIuxx/4dISZZNXPLA5ZbGsQLOVasuZd4yLvNvSwmb/IQJjmCfvuukxmE5kF3ruy7odeOIOd8prvfTWJDToz+ufGjGyCXr7QJDNrnMFgHXk1escN8r6XViR+j412mNY9I/kmzPMnZSKTQwEfzOy9cX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709668825; c=relaxed/simple;
-	bh=zvCIxr8VBjsKzdRKj72ITiWaaPuXwUFhasVmFGiaDtk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tu+ID3pLgZdmNCqOuv1E4v6wPWYBvyabeHLIPLlArmd54EDWsKSDS+qufwGH/+BEDAodOAqYfq1CHKUENPkU8aZn2GHf8qL79ToHVf4UXHjoAuTtuQH8QboFy2Yf3zk01s1MWT2fLH6mj3X4KeDJdGbOVWhAOnn8axG4ow/ch3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GQCcdh2M; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a450bedffdfso346914866b.3
-        for <linux-arch@vger.kernel.org>; Tue, 05 Mar 2024 12:00:22 -0800 (PST)
+	s=arc-20240116; t=1709669881; c=relaxed/simple;
+	bh=6pEQdOMKnglEA7miuqAmY2L0CFdEnrgC3c/Lp1/D3p4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QbyRGHfZpKrOzZTznBnzXKufSbY18tpfBBrGGcIOKm2e0MPk95cnSmJT6PiITWnzPeRLYUBgbJKQZlFPV91ZbAXfhoOr8C4f9a53acvJarF1fOmmHhL36VWodOZh4+yJ39aaOUHZ3Wsz9AQwdA/P1XNau18qpm61KwiRvLvvHGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WyStNYIa; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dba177c596so1066565ad.0;
+        Tue, 05 Mar 2024 12:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709668821; x=1710273621; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Um7HQJN8N4J1bd3DjjlCtIBtcKYJjLGAY5O7WX29jhs=;
-        b=GQCcdh2MldH/YcpNngEOhJ93Lez+BG92jbvj3xTQKZfXfuaZNCzmOOZbV2gDMd4//R
-         RUDIXcB0aVfS9WSwFs7IJJQ/y1Qy/nicYVfdFQluHtxSMfgcamUEChzZrV6bE5RVAg+d
-         8x7sUhgoYrXyQAD3Q6LRJGRQxNsdjrhT6qN4tKbeqfoxWmkzMvDIL7erP/n5qj18xKHf
-         R8fBtNcxgwib9+mtc8yx+839STKOJlbtiDxY5Rzdvlj2/s7kRdLuo4E2+Lxyc/t5v71o
-         hE27KoRkiuOaRQejDkoDPRhF+QXyaz5wGJRSvG72AT2vKBH6JSBdgt/ZHxE3VsBBvnf8
-         rw+w==
+        d=gmail.com; s=20230601; t=1709669880; x=1710274680; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=u75UHgD7a/puwbE31XmdJlh2oHQkaeR2WPurDlkvFxs=;
+        b=WyStNYIa3X6srKZCcikYEpIpeTB4DSAbxUD/45FrVL/NlHz42qslPxKFwCULkPIKsK
+         ar97Ns3k+CC3bM5bKqqIZp7ez1YlBQJFIIs0c5TLTOW5BZLf0Ym4gTLQz5FlYVL5YXBQ
+         lyWTzYFY2ouQtW/yXK5esCYE7gK/jer1Oj8yyscFJqi4Feh26iXig3IBQU1lSRJa8JjY
+         yS0a10jViVwUCcvTJ1H/A8EuzktPuSK5iAYmAyCdsIAiOuchti1xCu02LG0VIUt84lBZ
+         CuHnOTDD6Sxh5e0XMIaVKwln0C/oz6n86ms1mTsm1o0b5PcSMBx9rp9RSYE7y/QNu8WY
+         epDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709668821; x=1710273621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Um7HQJN8N4J1bd3DjjlCtIBtcKYJjLGAY5O7WX29jhs=;
-        b=f5JiKTvB7Ch7lmTa9dj7gpSWWASYYR8S+e41QQWdyKgU8+NtzRrQLnDxGdVKRJUNhY
-         0aNSeeyEqIymBB/VfNgcE3sIWxHPdMHlPW58TAUHFKbNM0WFwbAGSNvUREP+pReEdz93
-         yzcdiwC3nAUhL9JdQ/rmAGFXLNie4mh9cO292FDwDGTCWpwOP3YfxfSKM1T5MITUbyLO
-         G1cj1pSflKx9Oy/DQIs6Jl6mT9wVkiOji/3p4L3c9xMsQCADf0mIsP107eBh743A6STY
-         nSCZi7FnSBjZ6RV/PjZPHx6MBBpTT3HZ3ePvF6bzHnyUnemmdULuDg6TfvecXXy3A2uP
-         DdTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvlQsdL9dwxFCuaBXxaBcc+qC+1hdtwoqpruAz/JjXp5+OCm6U0a2+Fn3H1OM6j6OJl1lZ1nUWUSh0NUkoFnc7QbzXaPxCaX+6rQ==
-X-Gm-Message-State: AOJu0Ywtb+Ps6NypLmswCELaX9OMN45DFJgE2a0vW542BjZnUiKsWQCt
-	TItcJjU+gaOI12esyV06+ukFX+2G/dKNGLG8CWrZKKunB7rNuJzvvNhphwZuuQ5AndDCIz+O0G0
-	1eErDZgJq58n5G6WC+Fp6sX6FwUYz2XM+jZIA
-X-Google-Smtp-Source: AGHT+IHytdC7v7Vx7sLFDUTdLyz9HH4/B980RlTrZABliOPKZSD4E6pDWhlNI6pqEZujcxK31LaEVTdzhieo1tJYP+0=
-X-Received: by 2002:a17:906:394b:b0:a43:6146:a4df with SMTP id
- g11-20020a170906394b00b00a436146a4dfmr7667230eje.21.1709668820535; Tue, 05
- Mar 2024 12:00:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709669880; x=1710274680;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u75UHgD7a/puwbE31XmdJlh2oHQkaeR2WPurDlkvFxs=;
+        b=QcKc6RxbxeqZmy0Gfnmj65hyETPtl81dvE7vM9C/sy7sHBWwcrQX/Fp3jTrBZqY5xw
+         RjKyJO0yS6jv5MWZAPk/AH34xZshQe0t1+1QjIXXWEFq2a9DEXlhlAavIS4vP4TxeTBI
+         LMleXCGVLUR2yKwxG0wnceib+J8pOJwIS4iUNLab57BuVsIVfcN1q4Tly3SVBn57wDjG
+         cT8U7Y+AV8Qi69PXxUxVd2Ay0Ww325n3LhKDBeRVeL/T2Ksbq+4nAQhoxDirNM6o0pp4
+         UXPDXaIrzKCPqHzBVU6nPsAc+Cjxu1B7z3z9UOYxLp0TeUcM9sg7zKopuK7QpuYv0LDo
+         NlVA==
+X-Forwarded-Encrypted: i=1; AJvYcCVmk3DRf4OZqnsNoqzNUXcivp8cW8QdgHRRrZq8j80Mq9/jLEy6suDbUBWovXlpRcQtt0sFNTIymyvJ4E4Y10Xd17rtX6vBLbTrjgqZ0EoyUa6sv1gDd/Y9ATEMmh3Zo7vO4P18BxAtmg==
+X-Gm-Message-State: AOJu0YyCmsIf4aoHS949buiKVjXpAEItWYTDWD/f2dy+zw2d1fS82d+4
+	wYoio8vXgatkpWm5HQvK5i6iiejIhNZShu5TKQ5T09LUssu1P85I
+X-Google-Smtp-Source: AGHT+IEzppj7Rc6MwIEzr5vFBm31zeBZGSTf6g/BXEVWUWYDnqM35wjDu6BJVJP5wIMvV3ydNl0ICQ==
+X-Received: by 2002:a17:902:e74a:b0:1dc:de7f:517e with SMTP id p10-20020a170902e74a00b001dcde7f517emr4239510plf.22.1709669879566;
+        Tue, 05 Mar 2024 12:17:59 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170903124b00b001db2b8b2da7sm10893418plh.122.2024.03.05.12.17.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Mar 2024 12:17:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0f5d6a76-98dc-4cbb-9896-da4891f1de5f@roeck-us.net>
+Date: Tue, 5 Mar 2024 12:17:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com> <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
-In-Reply-To: <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 5 Mar 2024 12:00:08 -0800
-Message-ID: <CAHS8izPhvRDPVHr8mY2FffPCLYjKqaazjy5NFcnJSnLK+CdyCA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, shuah <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/5] bug: Core support for suppressing warning
+ backtraces
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>,
+ Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
+ Arthur Grillo <arthurgrillo@riseup.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
+ <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
+ linux-arch@vger.kernel.org
+References: <20240305184033.425294-1-linux@roeck-us.net>
+ <20240305184033.425294-2-linux@roeck-us.net>
+ <202403051149.547235C794@keescook>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <202403051149.547235C794@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 5, 2024 at 1:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
->
-> > +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
-> > +                    struct netdev_dmabuf_binding **out)
-> > +{
-> > +     struct netdev_dmabuf_binding *binding;
-> > +     static u32 id_alloc_next;
-> > +     struct scatterlist *sg;
-> > +     struct dma_buf *dmabuf;
-> > +     unsigned int sg_idx, i;
-> > +     unsigned long virtual;
-> > +     int err;
-> > +
-> > +     if (!capable(CAP_NET_ADMIN))
-> > +             return -EPERM;
-> > +
-> > +     dmabuf =3D dma_buf_get(dmabuf_fd);
-> > +     if (IS_ERR_OR_NULL(dmabuf))
-> > +             return -EBADFD;
->
-> You should never need to use IS_ERR_OR_NULL() for a properly
-> defined kernel interface. This one should always return an
-> error or a valid pointer, so don't check for NULL.
->
+On 3/5/24 11:54, Kees Cook wrote:
+> On Tue, Mar 05, 2024 at 10:40:29AM -0800, Guenter Roeck wrote:
+>> [...]
+>>   	warning = (bug->flags & BUGFLAG_WARNING) != 0;
+>>   	once = (bug->flags & BUGFLAG_ONCE) != 0;
+>>   	done = (bug->flags & BUGFLAG_DONE) != 0;
+>>   
+>> +	if (warning && IS_SUPPRESSED_WARNING(function))
+>> +		return BUG_TRAP_TYPE_WARN;
+>> +
+> 
+> I had to re-read __report_bug() more carefully, but yes, this works --
+> it's basically leaving early, like "once" does.
+> 
+> This looks like a reasonable approach!
+> 
+> Something very similar to this is checking that a warning happens. i.e.
+> you talk about drm selftests checking function return values, but I've
+> got a bunch of tests (LKDTM) that live outside of KUnit because I haven't
+> had a clean way to check for specific warnings/bugs. I feel like future
+> changes built on top of this series could add counters or something that
+> KUnit could examine. E.g. I did this manually for some fortify tests:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/hardening&id=4ce615e798a752d4431fcc52960478906dec2f0e
+> 
 
-Thanks for clarifying. I will convert to IS_ERR().
+Sounds like a good idea. It should be straightforward to add a counter
+to struct __suppressed_warning. This way the calling code could easily
+check if an expected warning backtrace actually happened.
 
-> > +     binding->attachment =3D dma_buf_attach(binding->dmabuf, dev->dev.=
-parent);
-> > +     if (IS_ERR(binding->attachment)) {
-> > +             err =3D PTR_ERR(binding->attachment);
-> > +             goto err_free_id;
-> > +     }
-> > +
-> > +     binding->sgt =3D
-> > +             dma_buf_map_attachment(binding->attachment, DMA_BIDIRECTI=
-ONAL);
-> > +     if (IS_ERR(binding->sgt)) {
-> > +             err =3D PTR_ERR(binding->sgt);
-> > +             goto err_detach;
-> > +     }
->
-> Should there be a check to verify that this buffer
-> is suitable for network data?
->
-> In general, dmabuf allows buffers that are uncached or reside
-> in MMIO space of another device, but I think this would break
-> when you get an skb with those buffers and try to parse the
-> data inside of the kernel on architectures where MMIO space
-> is not a normal pointer or unaligned access is disallowed on
-> uncached data.
->
->         Arnd
-
-A key goal of this patch series is that the kernel does not try to
-parse the skb frags that reside in the dma-buf for that precise
-reason. This is achieved using patch "net: add support for skbs with
-unreadable frags" which disables the kernel touching the payload in
-these skbs, and "tcp: RX path for devmem TCP" which implements a uapi
-where the kernel hands the data in the dmabuf to the userspace via a
-cmsg that gives the user a pointer to the data in the dmabuf (offset +
-size).
-
-So really AFACT the only restriction here is that the NIC should be
-able to DMA into the dmabuf that we're attaching, and dma_buf_attach()
-fails in this scenario so we're covered there.
-
---=20
 Thanks,
-Mina
+Guenter
+
 
