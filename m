@@ -1,45 +1,46 @@
-Return-Path: <linux-arch+bounces-2808-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2809-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304DD871F8E
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 13:55:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBEDC871F9F
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 13:55:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BB771C22A58
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 12:55:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6067E2831E8
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Mar 2024 12:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA91E85944;
-	Tue,  5 Mar 2024 12:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E46B85931;
+	Tue,  5 Mar 2024 12:55:06 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B640B58AB6;
-	Tue,  5 Mar 2024 12:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD4F58AB6;
+	Tue,  5 Mar 2024 12:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709643292; cv=none; b=WNjjBZ0cH6it0nAGwU79vaNbgOi9IgmfHVlh6af3v3aCHN4v992VQYqgf3lvK7bpTDst+vTNF3hoBAmX4ELjdcfM4XftLv6apQ7aWlvEq6JJ8TOc43yrfWiT428Yt9KDGC0NQvF66FyUu5kpp9ZX+1DGAltRANgh1kBTUkJT9w8=
+	t=1709643306; cv=none; b=XJTUTrFGkaBYG2kD4epP1L+k+lHRP32YG/qDtzDGeaMX3qrL3XeDiBTxHTk3szCX90bZrv6FT84iuiZeAQSgCmcvNVKS3keFhH1Oqm+Vl1mRNjIlE2ljYGEHYlh9CcN+73PW9dzcaBX8npuU3enJFAumu2dSxB6QG+p/zkzikyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709643292; c=relaxed/simple;
-	bh=dBll0MMe1cd+COq57v39zRTivh0aNAY6WcRafFYM2J8=;
+	s=arc-20240116; t=1709643306; c=relaxed/simple;
+	bh=emH1T4ln4UNgH1FvQDF0gEv4wLTdY1+KrVbyFUTNXIs=;
 	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=RvhzBhkAw8qz3BVDSHI+CLCGlmP1Keqk6FfQCNlG+VaX2YwffXxybJfgJ/yfzPC6eOz461gcPnvGDIjnvAXuHZqnFWZVf+GVHFUZ6DTchEhJkBQrxzDrM4f/kY3k9oFJ+B+toY0dxPizz5C2AWU1r/+uDSr8I/ND2nFNOl5PtPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+	 In-Reply-To:Content-Type; b=fNQ0nGYfNrLvXidigpjWXcnkllgd43COsHnaVFNtG93rqKp/u/Rmp5Lu82TQUPs3Ml9HrS+FamWFzL0D9X6Ns6ePsxmu035AXA8PuOJhNkdz6WTwoNOsLrP+taWM+797EwNIWa3eFK3Jpcm8KcPPc6+AyOktg0DPJqonSiSOq78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4TpwVc6CY4zbcjb;
-	Tue,  5 Mar 2024 20:54:00 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TpwW20SkKz1vvwk;
+	Tue,  5 Mar 2024 20:54:22 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id D491214037C;
-	Tue,  5 Mar 2024 20:54:42 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id D89411402E1;
+	Tue,  5 Mar 2024 20:55:01 +0800 (CST)
 Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
  (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 5 Mar
- 2024 20:54:42 +0800
-Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
+ 2024 20:55:01 +0800
+Subject: Re: [RFC PATCH net-next v6 03/15] net: page_pool: factor out
+ page_pool recycle check
 To: Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
 	<linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
@@ -73,9 +74,10 @@ CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
  Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
  Kaligineedi <pkaligineedi@google.com>
 References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-4-almasrymina@google.com>
 From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
-Date: Tue, 5 Mar 2024 20:54:42 +0800
+Message-ID: <3732e5ba-9cfb-f6de-09e2-fab4f46a11d8@huawei.com>
+Date: Tue, 5 Mar 2024 20:55:01 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
  Thunderbird/52.2.0
 Precedence: bulk
@@ -84,38 +86,15 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240305020153.2787423-1-almasrymina@google.com>
+In-Reply-To: <20240305020153.2787423-4-almasrymina@google.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  dggpemm500005.china.huawei.com (7.185.36.74)
 
 On 2024/3/5 10:01, Mina Almasry wrote:
+> The check is duplicated in 2 places, factor it out into a common helper.
 
-...
-
-> 
-> Perf - page-pool benchmark:
-> ---------------------------
-> 
-> bench_page_pool_simple.ko tests with and without these changes:
-> https://pastebin.com/raw/ncHDwAbn
-> 
-> AFAIK the number that really matters in the perf tests is the
-> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
-> cycles without the changes but there is some 1 cycle noise in some
-> results.
-> 
-> With the patches this regresses to 9 cycles with the changes but there
-> is 1 cycle noise occasionally running this test repeatedly.
-> 
-> Lastly I tried disable the static_branch_unlikely() in
-> netmem_is_net_iov() check. To my surprise disabling the
-> static_branch_unlikely() check reduces the fast path back to 8 cycles,
-> but the 1 cycle noise remains.
-> 
-
-The last sentence seems to be suggesting the above 1 ns regresses is caused
-by the static_branch_unlikely() checking?
+Reviewed-by: Yunsheng Lin <linyunsheng@huawei.com>
 
