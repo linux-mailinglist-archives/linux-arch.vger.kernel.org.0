@@ -1,679 +1,171 @@
-Return-Path: <linux-arch+bounces-2848-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2841-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7393873EBA
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 19:27:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 333BF873E6A
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 19:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06F6B1C20D04
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 18:27:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51D181C210A7
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 18:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D479F143C44;
-	Wed,  6 Mar 2024 18:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14ACD604A7;
+	Wed,  6 Mar 2024 18:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HFlwXGHq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xSDSt4M9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45D3142916
-	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 18:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE5513BAFC
+	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 18:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709749501; cv=none; b=FHDeq67J3Mjb4RJAjgOggyvPoPZzpyMjl7KA7yZ0EPrUprchcWOd6CMrmcWMqbMP4W7Lh4PVHNyJDx+KIkmbF4tA5rwpd54yOOEYPRMPtU0uhfJzWxN9hZka7B99zssSAfdy0Iek6GQChX9pqOFJVZkPO5JhgZrOKgGX0wh2gMA=
+	t=1709749458; cv=none; b=RAaKytIJlvl1CcOipNRd5DEydvcd+XWUypmlxXVx/zw5ed6lAzzzHfq7Ph2EpZld40P652T/zWITiR7WogoDkc8KAwuOYP/vtEVrMdclKIJCN6B1j6KuwFBVjh6xC7zdn89/QQxYaRwOahq4iomgP3aPz1GmEUpvn/kQ+VX0M7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709749501; c=relaxed/simple;
-	bh=6Qs4+AjxStvPZ59uQrS75z0ksUS31776UxioDnITUPY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UBUz2iVp5ORmsCqFKJh+VWeBO7jGG9Naq/h1+Rl3LmcC4fDfWc/ulHNGVUJCp01rrSmTfQzpU34/UQxi1cyUXGEN/oJC9ONoFTH5lEScmu7EbTYvoKU/DprcxhRELMFAk5jrbXssZbU6oB0P9Twt/phA5LRfpoCO8SG1UyJqIpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HFlwXGHq; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcd1779adbeso4114166276.3
-        for <linux-arch@vger.kernel.org>; Wed, 06 Mar 2024 10:24:58 -0800 (PST)
+	s=arc-20240116; t=1709749458; c=relaxed/simple;
+	bh=WytS40ZdmsM5zwjaJMMr9w3erghzLSkCQiyje+s3eGY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=chel+otxsaMoIZ6KBGFbowI5DJQ+U1jGuCc3doI2fpqxR6n8Ha1AOTbbyfQT2tAVRSm8p3K+h9oDFPl1x9tEWxyROXKPOTYOWTF0hlRqVOplQ6Y2LbUyqty0geVWUG2mSZnmOyiNPT/cqIQu0yFi0Sn3BFm5rfiMWPuqxertCPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xSDSt4M9; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5ce942efda5so5838511a12.2
+        for <linux-arch@vger.kernel.org>; Wed, 06 Mar 2024 10:24:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709749498; x=1710354298; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JMcGt6EYvTroht8h7kHXMFTQxZQYrHbNcyZWU/g6ow=;
-        b=HFlwXGHq0SBN0tOU1obL0TnQglIg7wanebg13fKt5WaV8txQo1s7wzl8Vv0zzasKJP
-         QvI7Awq4WJnhU+hMhirZF3yPG+VNQg8hgiuaI3gAyaBMzLCVqCmGHMlx8XUz40eg7BfQ
-         eJRAeaP/rM5/I/bV+FfnwIWrgWYcmD/w6c0pzFfjdVy9LcwiUA3X1LSi8Uq8A8c/o6sj
-         UScS/QTqyhORxrjlYpC+SS+tr+K0/yIC+dmzh7ocJjwiI+zIBwGK05N9zEHM9QO6wchO
-         Rf0N7sw1+QTpQDAR+Uf8/tfVfPeVav6H/PbWGiSgWXPWlhgVmU9qROtuU7OVPVlTPSzO
-         Wkug==
+        d=linaro.org; s=google; t=1709749456; x=1710354256; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RWWS4LnVP/asDNzm/6wkKWnD1LdXMDQVgVaviFZ4aPg=;
+        b=xSDSt4M9UoLeDP7OmunKwSARN+zE8oqO+Vx00xIodsni+Jai1c6Oo1sgafAF+ggn6q
+         FjeR+7UjMDREMOatQi7cqH0B7Ae4eXdLJCD45B7kxTVv+ZozK6sG3NsyJgxYik7t23Uo
+         I0ekengU3Gg3M2aWWBhsUO/sdc7TYx2rKXZQ0pMH7BE87AKqmZucvGmabW7HZHTfBQ+J
+         60lJ/k6QKlIWfT5zhsXpqs4xz6SQKfIa2X6FzIJ0/QzGacD0Yq5s/JGxxasW4KQ5gwyk
+         +Ua95cMya9C8VrcfWP42WOvMQt2T9fHpseneaFXvE8I/EE5FeO3YmUh7cSLt2O8p6vSG
+         ZBXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709749498; x=1710354298;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JMcGt6EYvTroht8h7kHXMFTQxZQYrHbNcyZWU/g6ow=;
-        b=g4UJIWi+7skiTiowtnawejSq5lLitzI/LCNqcgvoVf7MV5LHYPJTRxxXyYp3yH8INO
-         nzCb4y9R6HE3pABVHH45sUmKqiUemUtS8hns11FtWTJARQf0Q87hTuPqXEOHzU93mZPO
-         qMC2IrIup48g66J1ej+2JZrc4KpwFikh2stg4BYzh1PW3qCp1FIjWiteqs9/WRm1WuWw
-         /q/PyN6vnPkO0TyVFN5SP5xJVN0YatLN9Qsco7WNfkzLb7VV3GtdPUUIeUIX2lW9Z1IO
-         boUhbpMHa6goq1m+hDKmWHHrdWVoizi2D9g+EUtZoD69sTdxKMOP5m31n9R09NiuNacm
-         duqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNO18ZObu0GOkjBzs1MKaTYrPGtoqxUlgg4q/JdQhV20YQQa3vMhi7w+AS7w5IejkrKriSJfNNob4eCi4v3w2ix4Xi9zElxqoj2A==
-X-Gm-Message-State: AOJu0YxGTkAZwRj4Kvidpb2b8bEDkpZEmn57VbfH2J124oawxQ6WsItc
-	GYr2FoSdHt5II7nup73jJ7vZcCOK+eQT3ItG3RLP5tyuyi+0IU7bFNB8nedm5t2ZcOcb4JYKJ4r
-	+iQ==
-X-Google-Smtp-Source: AGHT+IFmVfhA7vPBjAOd1wle9uwLugrDjdSWKUX3JS43rdSMKEljpI20cubFGlFPWCXFgrjwSeAgsiZP1KU=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:85f0:e3db:db05:85e2])
- (user=surenb job=sendgmr) by 2002:a05:6902:722:b0:dcd:875:4c40 with SMTP id
- l2-20020a056902072200b00dcd08754c40mr4233991ybt.10.1709749497766; Wed, 06 Mar
- 2024 10:24:57 -0800 (PST)
-Date: Wed,  6 Mar 2024 10:24:04 -0800
-In-Reply-To: <20240306182440.2003814-1-surenb@google.com>
+        d=1e100.net; s=20230601; t=1709749456; x=1710354256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RWWS4LnVP/asDNzm/6wkKWnD1LdXMDQVgVaviFZ4aPg=;
+        b=oJo2t9W/2z/fYdfDBjbqxrJzBwkDm/MD0M8ZAGt6klOIEXxM+C+/bwu68GzLgT6RR1
+         4xM56pO8tEu1uiNkbvHHHb67x5r5eUxrPDIjY/f0S0MU54Z2D8tk0F9w6uiohZgdFDbS
+         8llRjkeF0iZjWaV/4RfoNrW3RuVG65VCtpdP+r85HBFFvJiH3t5XuYgv5t/O6nubZR+2
+         cthHlx5HtnhuyBblOefbsqFuTYvlBIrZVfw77sqlmvxOGm1zv7vjvduPGq4L+ZhnWMIN
+         r/8ajN0SgGsHGFzsnkGNnB62jtiGBfMDX5Ul2B17itMd5fSXH4n9mQeMKAfbaLMt8YXk
+         BxGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTZATPi7IZsW3eDeZaE4WXIZovDaUres+6Pf4qxigzfTl6G6J6ItNm2NufjJCjD8LAZTrlCgHsATgyG7Iddsv+1btyL+0pXqBBDg==
+X-Gm-Message-State: AOJu0YzqgzXA6IqSm2bd8c3oVrO8cRw7eYrXS/6GycdTtt5OBCpmPu2f
+	y0/8MuPXimiIb2DyhbTppitFrBrb77Pd+MM/3lezCSss4/BLyGqRuJQmXt9D4CfkqAaQ4kOeJ5t
+	1qZTY3Jpb8Tn2la3w+W0jynrIdLAjlNEPY0/7eA==
+X-Google-Smtp-Source: AGHT+IHKPEqxOppMA9uKtWnzKAyEDN9QbdCsWR4IDnjuRlBVf+wG6gTH/NYYdjq2Jeob5XWC2zp4Hl1RW9kYPP1CSp8=
+X-Received: by 2002:a17:90a:8986:b0:29a:c886:243e with SMTP id
+ v6-20020a17090a898600b0029ac886243emr14404213pjn.39.1709749456443; Wed, 06
+ Mar 2024 10:24:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240306182440.2003814-1-surenb@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240306182440.2003814-7-surenb@google.com>
-Subject: [PATCH v5 06/37] mm: introduce slabobj_ext to support slab object extensions
-From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
-	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	surenb@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
+MIME-Version: 1.0
+References: <20240305184033.425294-1-linux@roeck-us.net>
+In-Reply-To: <20240305184033.425294-1-linux@roeck-us.net>
+From: =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date: Wed, 6 Mar 2024 12:24:05 -0600
+Message-ID: <CAEUSe79fwDAhTdAD3OecCAw=LRzajxA3b-B2r8YtVDPeH7LCtA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] Add support for suppressing warning backtraces
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, 
+	David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard <mripard@kernel.org>, 
+	=?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, 
+	linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently slab pages can store only vectors of obj_cgroup pointers in
-page->memcg_data. Introduce slabobj_ext structure to allow more data
-to be stored for each slab object. Wrap obj_cgroup into slabobj_ext
-to support current functionality while allowing to extend slabobj_ext
-in the future.
+Hello!
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- include/linux/memcontrol.h |  20 ++++---
- include/linux/mm_types.h   |   4 +-
- init/Kconfig               |   4 ++
- mm/kfence/core.c           |  14 ++---
- mm/kfence/kfence.h         |   4 +-
- mm/memcontrol.c            |  56 +++-----------------
- mm/page_owner.c            |   2 +-
- mm/slab.h                  |  52 +++++++++---------
- mm/slub.c                  | 106 ++++++++++++++++++++++++++++---------
- 9 files changed, 145 insertions(+), 117 deletions(-)
+On Tue, 5 Mar 2024 at 12:40, Guenter Roeck <linux@roeck-us.net> wrote:
+> Some unit tests intentionally trigger warning backtraces by passing bad
+> parameters to kernel API functions. Such unit tests typically check the
+> return value from such calls, not the existence of the warning backtrace.
+>
+> Such intentionally generated warning backtraces are neither desirable
+> nor useful for a number of reasons.
+> - They can result in overlooked real problems.
+> - A warning that suddenly starts to show up in unit tests needs to be
+>   investigated and has to be marked to be ignored, for example by
+>   adjusting filter scripts. Such filters are ad-hoc because there is
+>   no real standard format for warnings. On top of that, such filter
+>   scripts would require constant maintenance.
+>
+> One option to address problem would be to add messages such as "expected
+> warning backtraces start / end here" to the kernel log.  However, that
+> would again require filter scripts, it might result in missing real
+> problematic warning backtraces triggered while the test is running, and
+> the irrelevant backtrace(s) would still clog the kernel log.
+>
+> Solve the problem by providing a means to identify and suppress specific
+> warning backtraces while executing test code. Support suppressing multipl=
+e
+> backtraces while at the same time limiting changes to generic code to the
+> absolute minimum. Architecture specific changes are kept at minimum by
+> retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
+> CONFIG_KUNIT are enabled.
+>
+> The first patch of the series introduces the necessary infrastructure.
+> The second patch marks the warning message in drm_calc_scale() in the DRM
+> subsystem as intentional where warranted. This patch is intended to serve
+> as an example for the use of the functionality introduced with this serie=
+s.
+> The last three patches in the series introduce the necessary architecture
+> specific changes for x86, arm64, and loongarch.
+>
+> This series is based on the RFC patch and subsequent discussion at
+> https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-=
+4b08-ba81-d94f3b691c9a@moroto.mountain/
+> and offers a more comprehensive solution of the problem discussed there.
+>
+> Checkpatch note:
+>   Remaining checkpatch errors and warnings were deliberately ignored.
+>   Some are triggered by matching coding style or by comments interpreted
+>   as code, others by assembler macros which are disliked by checkpatch.
+>   Suggestions for improvements are welcome.
+>
+> Some questions:
+>
+> - Is the general approach promising ? If not, are there other possible
+>   solutions ?
+> - Function pointers are only added to the __bug_table section if both
+>   CONFIG_KUNIT and CONFIG_DEBUG_BUGVERBOSE are enabled. This avoids image
+>   size increases if CONFIG_KUNIT=3Dn. Downside is slightly more complex
+>   architecture specific assembler code. If function pointers were always
+>   added to the __bug_table section, vmlinux image size would increase by
+>   approximately 0.6-0.7%. Is the increased complexity in assembler code
+>   worth the reduced image size ? I think so, but I would like to hear
+>   other opinions.
+> - There are additional possibilities associated with storing the bug
+>   function name in the __bug_table section. It could be independent of
+>   KUNIT, it could be a configuration flag, and/or it could be used to
+>   display the name of the offending function in BUG/WARN messages.
+>   Is any of those of interest ?
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 394fd0a887ae..9a731523000d 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -349,8 +349,8 @@ struct mem_cgroup {
- extern struct mem_cgroup *root_mem_cgroup;
- 
- enum page_memcg_data_flags {
--	/* page->memcg_data is a pointer to an objcgs vector */
--	MEMCG_DATA_OBJCGS = (1UL << 0),
-+	/* page->memcg_data is a pointer to an slabobj_ext vector */
-+	MEMCG_DATA_OBJEXTS = (1UL << 0),
- 	/* page has been accounted as a non-slab kernel page */
- 	MEMCG_DATA_KMEM = (1UL << 1),
- 	/* the next bit after the last actual flag */
-@@ -388,7 +388,7 @@ static inline struct mem_cgroup *__folio_memcg(struct folio *folio)
- 	unsigned long memcg_data = folio->memcg_data;
- 
- 	VM_BUG_ON_FOLIO(folio_test_slab(folio), folio);
--	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJCGS, folio);
-+	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJEXTS, folio);
- 	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_KMEM, folio);
- 
- 	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
-@@ -409,7 +409,7 @@ static inline struct obj_cgroup *__folio_objcg(struct folio *folio)
- 	unsigned long memcg_data = folio->memcg_data;
- 
- 	VM_BUG_ON_FOLIO(folio_test_slab(folio), folio);
--	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJCGS, folio);
-+	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJEXTS, folio);
- 	VM_BUG_ON_FOLIO(!(memcg_data & MEMCG_DATA_KMEM), folio);
- 
- 	return (struct obj_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
-@@ -506,7 +506,7 @@ static inline struct mem_cgroup *folio_memcg_check(struct folio *folio)
- 	 */
- 	unsigned long memcg_data = READ_ONCE(folio->memcg_data);
- 
--	if (memcg_data & MEMCG_DATA_OBJCGS)
-+	if (memcg_data & MEMCG_DATA_OBJEXTS)
- 		return NULL;
- 
- 	if (memcg_data & MEMCG_DATA_KMEM) {
-@@ -552,7 +552,7 @@ static inline struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *ob
- static inline bool folio_memcg_kmem(struct folio *folio)
- {
- 	VM_BUG_ON_PGFLAGS(PageTail(&folio->page), &folio->page);
--	VM_BUG_ON_FOLIO(folio->memcg_data & MEMCG_DATA_OBJCGS, folio);
-+	VM_BUG_ON_FOLIO(folio->memcg_data & MEMCG_DATA_OBJEXTS, folio);
- 	return folio->memcg_data & MEMCG_DATA_KMEM;
- }
- 
-@@ -1632,6 +1632,14 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
- }
- #endif /* CONFIG_MEMCG */
- 
-+/*
-+ * Extended information for slab objects stored as an array in page->memcg_data
-+ * if MEMCG_DATA_OBJEXTS is set.
-+ */
-+struct slabobj_ext {
-+	struct obj_cgroup *objcg;
-+} __aligned(8);
-+
- static inline void __inc_lruvec_kmem_state(void *p, enum node_stat_item idx)
- {
- 	__mod_lruvec_kmem_state(p, idx, 1);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 5240bd7bca33..4ae4684d1add 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -169,7 +169,7 @@ struct page {
- 	/* Usage count. *DO NOT USE DIRECTLY*. See page_ref.h */
- 	atomic_t _refcount;
- 
--#ifdef CONFIG_MEMCG
-+#ifdef CONFIG_SLAB_OBJ_EXT
- 	unsigned long memcg_data;
- #endif
- 
-@@ -331,7 +331,7 @@ struct folio {
- 			};
- 			atomic_t _mapcount;
- 			atomic_t _refcount;
--#ifdef CONFIG_MEMCG
-+#ifdef CONFIG_SLAB_OBJ_EXT
- 			unsigned long memcg_data;
- #endif
- #if defined(WANT_PAGE_VIRTUAL)
-diff --git a/init/Kconfig b/init/Kconfig
-index bee58f7468c3..d160ab591308 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -929,6 +929,9 @@ config NUMA_BALANCING_DEFAULT_ENABLED
- 	  If set, automatic NUMA balancing will be enabled if running on a NUMA
- 	  machine.
- 
-+config SLAB_OBJ_EXT
-+	bool
-+
- menuconfig CGROUPS
- 	bool "Control Group support"
- 	select KERNFS
-@@ -962,6 +965,7 @@ config MEMCG
- 	bool "Memory controller"
- 	select PAGE_COUNTER
- 	select EVENTFD
-+	select SLAB_OBJ_EXT
- 	help
- 	  Provides control over the memory footprint of tasks in a cgroup.
- 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 8350f5c06f2e..964b8482275b 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -595,9 +595,9 @@ static unsigned long kfence_init_pool(void)
- 			continue;
- 
- 		__folio_set_slab(slab_folio(slab));
--#ifdef CONFIG_MEMCG
--		slab->memcg_data = (unsigned long)&kfence_metadata_init[i / 2 - 1].objcg |
--				   MEMCG_DATA_OBJCGS;
-+#ifdef CONFIG_MEMCG_KMEM
-+		slab->obj_exts = (unsigned long)&kfence_metadata_init[i / 2 - 1].obj_exts |
-+				 MEMCG_DATA_OBJEXTS;
- #endif
- 	}
- 
-@@ -645,8 +645,8 @@ static unsigned long kfence_init_pool(void)
- 
- 		if (!i || (i % 2))
- 			continue;
--#ifdef CONFIG_MEMCG
--		slab->memcg_data = 0;
-+#ifdef CONFIG_MEMCG_KMEM
-+		slab->obj_exts = 0;
- #endif
- 		__folio_clear_slab(slab_folio(slab));
- 	}
-@@ -1139,8 +1139,8 @@ void __kfence_free(void *addr)
- {
- 	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
- 
--#ifdef CONFIG_MEMCG
--	KFENCE_WARN_ON(meta->objcg);
-+#ifdef CONFIG_MEMCG_KMEM
-+	KFENCE_WARN_ON(meta->obj_exts.objcg);
- #endif
- 	/*
- 	 * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
-diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-index f46fbb03062b..084f5f36e8e7 100644
---- a/mm/kfence/kfence.h
-+++ b/mm/kfence/kfence.h
-@@ -97,8 +97,8 @@ struct kfence_metadata {
- 	struct kfence_track free_track;
- 	/* For updating alloc_covered on frees. */
- 	u32 alloc_stack_hash;
--#ifdef CONFIG_MEMCG
--	struct obj_cgroup *objcg;
-+#ifdef CONFIG_MEMCG_KMEM
-+	struct slabobj_ext obj_exts;
- #endif
- };
- 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 138bcfa18234..f99c63d5e9f2 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2980,13 +2980,6 @@ void mem_cgroup_commit_charge(struct folio *folio, struct mem_cgroup *memcg)
- }
- 
- #ifdef CONFIG_MEMCG_KMEM
--/*
-- * The allocated objcg pointers array is not accounted directly.
-- * Moreover, it should not come from DMA buffer and is not readily
-- * reclaimable. So those GFP bits should be masked off.
-- */
--#define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | \
--				 __GFP_ACCOUNT | __GFP_NOFAIL)
- 
- /*
-  * mod_objcg_mlstate() may be called with irq enabled, so
-@@ -3006,62 +2999,27 @@ static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
- 	rcu_read_unlock();
- }
- 
--int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
--				 gfp_t gfp, bool new_slab)
--{
--	unsigned int objects = objs_per_slab(s, slab);
--	unsigned long memcg_data;
--	void *vec;
--
--	gfp &= ~OBJCGS_CLEAR_MASK;
--	vec = kcalloc_node(objects, sizeof(struct obj_cgroup *), gfp,
--			   slab_nid(slab));
--	if (!vec)
--		return -ENOMEM;
--
--	memcg_data = (unsigned long) vec | MEMCG_DATA_OBJCGS;
--	if (new_slab) {
--		/*
--		 * If the slab is brand new and nobody can yet access its
--		 * memcg_data, no synchronization is required and memcg_data can
--		 * be simply assigned.
--		 */
--		slab->memcg_data = memcg_data;
--	} else if (cmpxchg(&slab->memcg_data, 0, memcg_data)) {
--		/*
--		 * If the slab is already in use, somebody can allocate and
--		 * assign obj_cgroups in parallel. In this case the existing
--		 * objcg vector should be reused.
--		 */
--		kfree(vec);
--		return 0;
--	}
--
--	kmemleak_not_leak(vec);
--	return 0;
--}
--
- static __always_inline
- struct mem_cgroup *mem_cgroup_from_obj_folio(struct folio *folio, void *p)
- {
- 	/*
- 	 * Slab objects are accounted individually, not per-page.
- 	 * Memcg membership data for each individual object is saved in
--	 * slab->memcg_data.
-+	 * slab->obj_exts.
- 	 */
- 	if (folio_test_slab(folio)) {
--		struct obj_cgroup **objcgs;
-+		struct slabobj_ext *obj_exts;
- 		struct slab *slab;
- 		unsigned int off;
- 
- 		slab = folio_slab(folio);
--		objcgs = slab_objcgs(slab);
--		if (!objcgs)
-+		obj_exts = slab_obj_exts(slab);
-+		if (!obj_exts)
- 			return NULL;
- 
- 		off = obj_to_index(slab->slab_cache, slab, p);
--		if (objcgs[off])
--			return obj_cgroup_memcg(objcgs[off]);
-+		if (obj_exts[off].objcg)
-+			return obj_cgroup_memcg(obj_exts[off].objcg);
- 
- 		return NULL;
- 	}
-@@ -3069,7 +3027,7 @@ struct mem_cgroup *mem_cgroup_from_obj_folio(struct folio *folio, void *p)
- 	/*
- 	 * folio_memcg_check() is used here, because in theory we can encounter
- 	 * a folio where the slab flag has been cleared already, but
--	 * slab->memcg_data has not been freed yet
-+	 * slab->obj_exts has not been freed yet
- 	 * folio_memcg_check() will guarantee that a proper memory
- 	 * cgroup pointer or NULL will be returned.
- 	 */
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 033e349f6479..d21d00a04e98 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -469,7 +469,7 @@ static inline int print_page_owner_memcg(char *kbuf, size_t count, int ret,
- 	if (!memcg_data)
- 		goto out_unlock;
- 
--	if (memcg_data & MEMCG_DATA_OBJCGS)
-+	if (memcg_data & MEMCG_DATA_OBJEXTS)
- 		ret += scnprintf(kbuf + ret, count - ret,
- 				"Slab cache page\n");
- 
-diff --git a/mm/slab.h b/mm/slab.h
-index 54deeb0428c6..0e61a5834c5f 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -87,8 +87,8 @@ struct slab {
- 	unsigned int __unused;
- 
- 	atomic_t __page_refcount;
--#ifdef CONFIG_MEMCG
--	unsigned long memcg_data;
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+	unsigned long obj_exts;
- #endif
- };
- 
-@@ -97,8 +97,8 @@ struct slab {
- SLAB_MATCH(flags, __page_flags);
- SLAB_MATCH(compound_head, slab_cache);	/* Ensure bit 0 is clear */
- SLAB_MATCH(_refcount, __page_refcount);
--#ifdef CONFIG_MEMCG
--SLAB_MATCH(memcg_data, memcg_data);
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+SLAB_MATCH(memcg_data, obj_exts);
- #endif
- #undef SLAB_MATCH
- static_assert(sizeof(struct slab) <= sizeof(struct page));
-@@ -541,42 +541,44 @@ static inline bool kmem_cache_debug_flags(struct kmem_cache *s, slab_flags_t fla
- 	return false;
- }
- 
--#ifdef CONFIG_MEMCG_KMEM
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+
- /*
-- * slab_objcgs - get the object cgroups vector associated with a slab
-+ * slab_obj_exts - get the pointer to the slab object extension vector
-+ * associated with a slab.
-  * @slab: a pointer to the slab struct
-  *
-- * Returns a pointer to the object cgroups vector associated with the slab,
-+ * Returns a pointer to the object extension vector associated with the slab,
-  * or NULL if no such vector has been associated yet.
-  */
--static inline struct obj_cgroup **slab_objcgs(struct slab *slab)
-+static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
- {
--	unsigned long memcg_data = READ_ONCE(slab->memcg_data);
-+	unsigned long obj_exts = READ_ONCE(slab->obj_exts);
- 
--	VM_BUG_ON_PAGE(memcg_data && !(memcg_data & MEMCG_DATA_OBJCGS),
-+#ifdef CONFIG_MEMCG
-+	VM_BUG_ON_PAGE(obj_exts && !(obj_exts & MEMCG_DATA_OBJEXTS),
- 							slab_page(slab));
--	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_KMEM, slab_page(slab));
-+	VM_BUG_ON_PAGE(obj_exts & MEMCG_DATA_KMEM, slab_page(slab));
- 
--	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
-+	return (struct slabobj_ext *)(obj_exts & ~MEMCG_DATA_FLAGS_MASK);
-+#else
-+	return (struct slabobj_ext *)obj_exts;
-+#endif
- }
- 
--int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
--				 gfp_t gfp, bool new_slab);
--void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
--		     enum node_stat_item idx, int nr);
--#else /* CONFIG_MEMCG_KMEM */
--static inline struct obj_cgroup **slab_objcgs(struct slab *slab)
-+#else /* CONFIG_SLAB_OBJ_EXT */
-+
-+static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
- {
- 	return NULL;
- }
- 
--static inline int memcg_alloc_slab_cgroups(struct slab *slab,
--					       struct kmem_cache *s, gfp_t gfp,
--					       bool new_slab)
--{
--	return 0;
--}
--#endif /* CONFIG_MEMCG_KMEM */
-+#endif /* CONFIG_SLAB_OBJ_EXT */
-+
-+#ifdef CONFIG_MEMCG_KMEM
-+void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
-+		     enum node_stat_item idx, int nr);
-+#endif
- 
- size_t __ksize(const void *objp);
- 
-diff --git a/mm/slub.c b/mm/slub.c
-index 0f3369f6188b..6ab9f8f38ac5 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -1881,13 +1881,78 @@ static inline enum node_stat_item cache_vmstat_idx(struct kmem_cache *s)
- 		NR_SLAB_RECLAIMABLE_B : NR_SLAB_UNRECLAIMABLE_B;
- }
- 
--#ifdef CONFIG_MEMCG_KMEM
--static inline void memcg_free_slab_cgroups(struct slab *slab)
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+
-+/*
-+ * The allocated objcg pointers array is not accounted directly.
-+ * Moreover, it should not come from DMA buffer and is not readily
-+ * reclaimable. So those GFP bits should be masked off.
-+ */
-+#define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | \
-+				__GFP_ACCOUNT | __GFP_NOFAIL)
-+
-+static int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
-+			       gfp_t gfp, bool new_slab)
- {
--	kfree(slab_objcgs(slab));
--	slab->memcg_data = 0;
-+	unsigned int objects = objs_per_slab(s, slab);
-+	unsigned long obj_exts;
-+	void *vec;
-+
-+	gfp &= ~OBJCGS_CLEAR_MASK;
-+	vec = kcalloc_node(objects, sizeof(struct slabobj_ext), gfp,
-+			   slab_nid(slab));
-+	if (!vec)
-+		return -ENOMEM;
-+
-+	obj_exts = (unsigned long)vec;
-+#ifdef CONFIG_MEMCG
-+	obj_exts |= MEMCG_DATA_OBJEXTS;
-+#endif
-+	if (new_slab) {
-+		/*
-+		 * If the slab is brand new and nobody can yet access its
-+		 * obj_exts, no synchronization is required and obj_exts can
-+		 * be simply assigned.
-+		 */
-+		slab->obj_exts = obj_exts;
-+	} else if (cmpxchg(&slab->obj_exts, 0, obj_exts)) {
-+		/*
-+		 * If the slab is already in use, somebody can allocate and
-+		 * assign slabobj_exts in parallel. In this case the existing
-+		 * objcg vector should be reused.
-+		 */
-+		kfree(vec);
-+		return 0;
-+	}
-+
-+	kmemleak_not_leak(vec);
-+	return 0;
- }
- 
-+static inline void free_slab_obj_exts(struct slab *slab)
-+{
-+	struct slabobj_ext *obj_exts;
-+
-+	obj_exts = slab_obj_exts(slab);
-+	if (!obj_exts)
-+		return;
-+
-+	kfree(obj_exts);
-+	slab->obj_exts = 0;
-+}
-+#else /* CONFIG_SLAB_OBJ_EXT */
-+static int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
-+			       gfp_t gfp, bool new_slab)
-+{
-+	return 0;
-+}
-+
-+static inline void free_slab_obj_exts(struct slab *slab)
-+{
-+}
-+#endif /* CONFIG_SLAB_OBJ_EXT */
-+
-+#ifdef CONFIG_MEMCG_KMEM
- static inline size_t obj_full_size(struct kmem_cache *s)
- {
- 	/*
-@@ -1966,15 +2031,15 @@ static void __memcg_slab_post_alloc_hook(struct kmem_cache *s,
- 		if (likely(p[i])) {
- 			slab = virt_to_slab(p[i]);
- 
--			if (!slab_objcgs(slab) &&
--			    memcg_alloc_slab_cgroups(slab, s, flags, false)) {
-+			if (!slab_obj_exts(slab) &&
-+			    alloc_slab_obj_exts(slab, s, flags, false)) {
- 				obj_cgroup_uncharge(objcg, obj_full_size(s));
- 				continue;
- 			}
- 
- 			off = obj_to_index(s, slab, p[i]);
- 			obj_cgroup_get(objcg);
--			slab_objcgs(slab)[off] = objcg;
-+			slab_obj_exts(slab)[off].objcg = objcg;
- 			mod_objcg_state(objcg, slab_pgdat(slab),
- 					cache_vmstat_idx(s), obj_full_size(s));
- 		} else {
-@@ -1995,18 +2060,18 @@ void memcg_slab_post_alloc_hook(struct kmem_cache *s, struct obj_cgroup *objcg,
- 
- static void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
- 				   void **p, int objects,
--				   struct obj_cgroup **objcgs)
-+				   struct slabobj_ext *obj_exts)
- {
- 	for (int i = 0; i < objects; i++) {
- 		struct obj_cgroup *objcg;
- 		unsigned int off;
- 
- 		off = obj_to_index(s, slab, p[i]);
--		objcg = objcgs[off];
-+		objcg = obj_exts[off].objcg;
- 		if (!objcg)
- 			continue;
- 
--		objcgs[off] = NULL;
-+		obj_exts[off].objcg = NULL;
- 		obj_cgroup_uncharge(objcg, obj_full_size(s));
- 		mod_objcg_state(objcg, slab_pgdat(slab), cache_vmstat_idx(s),
- 				-obj_full_size(s));
-@@ -2018,16 +2083,16 @@ static __fastpath_inline
- void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab, void **p,
- 			  int objects)
- {
--	struct obj_cgroup **objcgs;
-+	struct slabobj_ext *obj_exts;
- 
- 	if (!memcg_kmem_online())
- 		return;
- 
--	objcgs = slab_objcgs(slab);
--	if (likely(!objcgs))
-+	obj_exts = slab_obj_exts(slab);
-+	if (likely(!obj_exts))
- 		return;
- 
--	__memcg_slab_free_hook(s, slab, p, objects, objcgs);
-+	__memcg_slab_free_hook(s, slab, p, objects, obj_exts);
- }
- 
- static inline
-@@ -2038,15 +2103,6 @@ void memcg_slab_alloc_error_hook(struct kmem_cache *s, int objects,
- 		obj_cgroup_uncharge(objcg, objects * obj_full_size(s));
- }
- #else /* CONFIG_MEMCG_KMEM */
--static inline struct mem_cgroup *memcg_from_slab_obj(void *ptr)
--{
--	return NULL;
--}
--
--static inline void memcg_free_slab_cgroups(struct slab *slab)
--{
--}
--
- static inline bool memcg_slab_pre_alloc_hook(struct kmem_cache *s,
- 					     struct list_lru *lru,
- 					     struct obj_cgroup **objcgp,
-@@ -2314,7 +2370,7 @@ static __always_inline void account_slab(struct slab *slab, int order,
- 					 struct kmem_cache *s, gfp_t gfp)
- {
- 	if (memcg_kmem_online() && (s->flags & SLAB_ACCOUNT))
--		memcg_alloc_slab_cgroups(slab, s, gfp, true);
-+		alloc_slab_obj_exts(slab, s, gfp, true);
- 
- 	mod_node_page_state(slab_pgdat(slab), cache_vmstat_idx(s),
- 			    PAGE_SIZE << order);
-@@ -2324,7 +2380,7 @@ static __always_inline void unaccount_slab(struct slab *slab, int order,
- 					   struct kmem_cache *s)
- {
- 	if (memcg_kmem_online())
--		memcg_free_slab_cgroups(slab);
-+		free_slab_obj_exts(slab);
- 
- 	mod_node_page_state(slab_pgdat(slab), cache_vmstat_idx(s),
- 			    -(PAGE_SIZE << order));
--- 
-2.44.0.278.ge034bb2e1d-goog
+Thank you SO very much for this work! This is very much appreciated!
+We run into these warnings at LKFT all the time, and making sure that
+the noise doesn't drown the relevant signal is very important.
 
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
 
