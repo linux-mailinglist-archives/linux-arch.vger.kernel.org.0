@@ -1,395 +1,234 @@
-Return-Path: <linux-arch+bounces-2835-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2836-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C6478736AC
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 13:38:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66191873928
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 15:31:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7CD21F239E9
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 12:38:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88D8A1C21995
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 14:31:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F091E12FF8E;
-	Wed,  6 Mar 2024 12:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9449C7FBDC;
+	Wed,  6 Mar 2024 14:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BkUcN0eG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9223E48E;
-	Wed,  6 Mar 2024 12:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A394128EC;
+	Wed,  6 Mar 2024 14:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709728694; cv=none; b=YiY9wP3HKeIpJDgxbdci3mCiJVnxNPUjYfpgoZJdnPSy/6It7u7d+wZykNBNp666nKjHT/4SLEqb404SDPT5joL1O8goGSSX5rKYIP4WN/qKXuX6pw+L+2tHA7F+4FbTJhwROtr+8QI1z27xsgbmI/y2w1rn8wHCEj5ob5WEEPc=
+	t=1709735461; cv=none; b=VhWEmjxD1H9bRk6B36OqaFrsrFXgwNXOtZoGgoYvgnrOgJ9UXJ/xMFCZAT3zPsw9HNHLPAD25aZ/wcCQEWBXZ+OYUN0N3kWZ01W6erU2Anbb5FP6NFb9R6SYjJIV4xEoyk3pVOVgY5fJL7voiVWDgwl8M0v9umqYmYCyZUyQ6nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709728694; c=relaxed/simple;
-	bh=ZFawXI/ttd5h8nbrlHCh9gbaxPOBHPGNezO6lNgZuEE=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=terEYSESZmm1nrcuUbIgmL3np8RT68PEyD1DVPm9xzqTXzd2MpfNDpcYdZqGriQnM08plIzDUMWsh0j7Fc5Bz7dNofR43pDzmzy+SChmLrNtLuHG1CXBmJeIZZgX4orVSt7a7495RYVA0F969LxlmaiVYtdUqMaU/DhOxm1/tcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4TqX3C4WyXzSrCw;
-	Wed,  6 Mar 2024 20:35:51 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3A0C414011F;
-	Wed,  6 Mar 2024 20:38:07 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 6 Mar
- 2024 20:38:06 +0800
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to
- netdevice
-To: Mina Almasry <almasrymina@google.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
-	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
-	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
-	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
- Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
- Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com>
- <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
- <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-Date: Wed, 6 Mar 2024 20:38:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	s=arc-20240116; t=1709735461; c=relaxed/simple;
+	bh=c+oW+n9OmJ9otIOsnLXK3dE6Rc448U9Z9kACrJJIO2w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ANbOEJFCbfmiISM1+/VwGO2IVBhwFSEVkqHSxkf37W2sUZ08WcHnvRkoWEaJsBKZHwT7kBAborYakV+wdYG5ErmPPBIkl84uiMed5DAO41+DMZzINQ6rO9g+//sYKf2nBxBAgOw4yeOeBQ2AWo17mexz0R5IlrPVVkxUZYKEcbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BkUcN0eG; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33d90dfe73cso606411f8f.0;
+        Wed, 06 Mar 2024 06:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709735458; x=1710340258; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/gPi0O1pSzLWSoH4x6QWh1/CSGMtQOXhMfU653rtclc=;
+        b=BkUcN0eGswL7r3Gyb7iUrTMao72c3aWMjOp2Si5ae3bPuWcqzHEkTv8CPJlLyRm8Ox
+         Sq2ELWHdupgFz7LNmbHsaqrJjZ9oTDizBZZJ67Ub3rOf/rH32S3Pa8vauD2RwT857F3h
+         5dkxdK0vJFyO2hlJdBhe0CcoPixSix5k0nHmdDeuHx/pX0oD6ZwhNqDKpe3IarEQRUaP
+         BznYSGgjsPd0aywg6Csa8y0esKWvbVvCNpYxixoDqoXAGcRAJpBF0Kt7aeYMpY9ZJXnE
+         D/0ESEWfgBI2fVT9bwBMtCnwHbFOl/elYxTDX84+DKV5iXQ2DRYjfwSuH1jaENmY+mID
+         fMRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709735458; x=1710340258;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/gPi0O1pSzLWSoH4x6QWh1/CSGMtQOXhMfU653rtclc=;
+        b=mTtoXOmKXWqs/1COf/peUw78qTPEHEhGX+AVoLdUyZX6VdwHcrPKHuSg3WZpUe28vU
+         TW2qO4UxRH0X9M3Hnyc2h0UujgZhwSltshU3uQZFuWU/CKJI5IuxoOMDc6OetCUif2Gx
+         c28Qfem3kllF3yJdEAgVzJmyFFyYQlXJ/7g7lCDsnclJHJapvWae8LsMNY1O2ol0g9mO
+         8BXWR3xycYDmq0UK/W6GC5K8g2QiMXo82IE7Os85rAITrdsvv+Ch7ujYBc6ObTUjFpEa
+         rZVw0IxqU3ZfKQu5CyPFjNd2x+KnmZV7Vz79crvP1AYkFCm8LhKTIFt0CaB+kn3iMm5K
+         7NmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXwkUMB3lKxpbyoVok6CqIHoGygaeKj2bjXT6relNWY9UUNpCwPqER1AvS4qm2OqM8azU8er/V03sn9MQ7RLmN3Ebesy5QMu4E8f/zFQgjnwLiOXGO25rHZ4+borcCt7xuaJWGu4fOzogod8fa7YobCu/neJ3F80Wm/sAJiOUsTZJK4nZu8zk6HNCX3nJynnXiZTj09PXf2OUe8h0RWclmdFn1Q/Y4ltOFhmeuI3mYN1p0jF9YA00fB3gkLitE0ktM5IlI0Mbjjd3OJzAY35lzNawgP/iqYayx5LGPC0r4o6ufkbT9Rk/zSBQtny52HDn46k61KoxOlZz2aJqCWjTKaVEKyo0ju51GHCf9cSN1SXhPJkrJWlAH1uBIP3ir6En6Am3+xs/e9yPCfCafFmlMJUaAm8lOLC8rhRpU2FlXm9596lt+HdsbZMEuSe8DV9j+N7/yhFFK+4Iy7GRWYsYMI5UT1Oyka/ErInnukVw==
+X-Gm-Message-State: AOJu0YzDV2LJqTBRLrTt2NIUuJFlAwsMOPFkCIZudQzo5uSwJNOEeyqH
+	wL3fG91elIx9Ki3t5eQ9OlM1GaLuxgsbKkOlk4n1SiIV9F5PNDPy
+X-Google-Smtp-Source: AGHT+IEYb/zvAdaoWBUPDQ15vntU0mFqlnMjPDxyUnwJQKR8m4S+14qR/7MrevMi7+m6WnrGgoXePg==
+X-Received: by 2002:adf:f389:0:b0:33e:592c:d7da with SMTP id m9-20020adff389000000b0033e592cd7damr1501141wro.9.1709735457704;
+        Wed, 06 Mar 2024 06:30:57 -0800 (PST)
+Received: from [192.168.8.100] ([85.255.233.174])
+        by smtp.gmail.com with ESMTPSA id cc4-20020a5d5c04000000b0033e45e4f22bsm5982974wrb.73.2024.03.06.06.30.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Mar 2024 06:30:57 -0800 (PST)
+Message-ID: <417f293a-848e-4eb2-b690-c8696079b452@gmail.com>
+Date: Wed, 6 Mar 2024 14:29:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Mina Almasry <almasrymina@google.com>, David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>, shakeel.butt@linux.dev
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com>
+ <1b57dac2-4b04-4bec-b2d7-d0edb4fcabbc@davidwei.uk>
+ <CAHS8izM5O39mnTQ8mhcQE75amDT4G-3vcgozzjcYsAdd_-he1g@mail.gmail.com>
 Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izM5O39mnTQ8mhcQE75amDT4G-3vcgozzjcYsAdd_-he1g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500005.china.huawei.com (7.185.36.74)
 
-On 2024/3/6 5:17, Mina Almasry wrote:
-> On Tue, Mar 5, 2024 at 4:55 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+On 3/5/24 22:36, Mina Almasry wrote:
+> On Tue, Mar 5, 2024 at 1:55 PM David Wei <dw@davidwei.uk> wrote:
 >>
->> On 2024/3/5 10:01, Mina Almasry wrote:
+>> On 2024-03-04 18:01, Mina Almasry wrote:
+>>> +struct memory_provider_ops {
+>>> +     int (*init)(struct page_pool *pool);
+>>> +     void (*destroy)(struct page_pool *pool);
+>>> +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+>>> +     bool (*release_page)(struct page_pool *pool, struct page *page);
 >>
->> ...
->>
->>>
->>> The netdev_dmabuf_binding struct is refcounted, and releases its
->>> resources only when all the refs are released.
->>>
->>> Signed-off-by: Willem de Bruijn <willemb@google.com>
->>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
->>> Signed-off-by: Mina Almasry <almasrymina@google.com>
->>>
->>> ---
->>>
->>> RFC v6:
->>> - Validate rx queue index
->>> - Refactor new functions into devmem.c (Pavel)
->>
->> It seems odd that the functions or stucts in a file called devmem.c
->> are named after 'dmabuf' instead of 'devmem'.
->>
+>> For ZC Rx we added a scrub() function to memory_provider_ops that is
+>> called from page_pool_scrub(). Does TCP devmem not custom behaviour
+>> waiting for all netmem_refs to return before destroying the page pool?
+>> What happens if e.g. application crashes?
 > 
-> So my intention with this naming that devmem.c contains all the
-> functions for all devmem tcp specific support. Currently the only
-> devmem we support is dmabuf. In the future, other devmem may be
-> supported and it can fit nicely in devmem.c. For example, if we want
-> to extend devmem TCP to support NVMe devices, we need to add support
-> for p2pdma, maybe, and we can add that support under the devmem.c
-> umbrella rather than add new files.
+> (sorry for the long reply, but he refcounting is pretty complicated to
+> explain and I feel like we need to agree on how things currently work)
 > 
-> But I can rename to dmabuf.c if there is strong objection to the current name.
+> Yeah, the addition of the page_pool_scrub() function is a bit of a
+> head scratcher for me. Here is how the (complicated) refcounting works
+> for devmem TCP (assuming the driver is not doing its own recycling
+> logic which complicates things further):
+> 
+> 1. When a netmem_ref is allocated by the page_pool (from dmabuf or
+> page), the netmem_get_pp_ref_count_ref()==1 and belongs to the page
+> pool as long as the netmem is waiting in the pool for driver
+> allocation.
+> 
+> 2. When a netmem is allocated by the driver, no refcounting is
+> changed, but the ownership of the netmem_get_pp_ref_count_ref() is
+> implicitly transferred from the page pool to the driver. i.e. the ref
+> now belongs to the driver until an skb is formed.
+> 
+> 3. When the driver forms an skb using skb_rx_add_frag_netmem(), no
+> refcounting is changed, but the ownership of the
+> netmem_get_pp_ref_count_ref() is transferred from the driver to the
+> TCP stack.
+> 
+> 4. When the TCP stack hands the skb to the application, the TCP stack
+> obtains an additional refcount, so netmem_get_pp_ref_count_ref()==2,
+> and frees the skb using skb_frag_unref(), which drops the
+> netmem_get_pp_ref_count_ref()==1.
+> 
+> 5. When the user is done with the skb, the user calls the
+> DEVMEM_DONTNEED setsockopt which calls napi_pp_put_netmem() which
+> recycles the netmem back to the page pool. This doesn't modify any
+> refcounting, but the refcount ownership transfers from the userspace
+> back to the page pool, and we're back at step 1.
+> 
+> So all in all netmem can belong either to (a) the page pool, or (b)
+> the driver, or (c) the TCP stack, or (d) the application depending on
+> where exactly it is in the RX path.
+> 
+> When an application running devmem TCP crashes, the netmem that belong
+> to the page pool or driver are not touched, because the page pool is
+> not tied to the application in our case really. However, the TCP stack
+> notices the devmem socket of the application close, and when it does,
+> the TCP stack will:
+> 
+> 1. Free all the skbs in the sockets receive queue. This is not custom
+> behavior for devmem TCP, it's just standard for TCP to free all skbs
+> waiting to be received by the application.
+> 2. The TCP stack will free references that belong to the application.
+> Since the application crashed, it will not call the DEVMEM_DONTNEED
+> setsockopt, so we need to free those on behalf of the application.
+> This is done in this diff:
+> 
+> @@ -2498,6 +2498,15 @@ static void tcp_md5sig_info_free_rcu(struct
+> rcu_head *head)
+>   void tcp_v4_destroy_sock(struct sock *sk)
+>   {
+>    struct tcp_sock *tp = tcp_sk(sk);
+> + __maybe_unused unsigned long index;
+> + __maybe_unused void *netmem;
+> +
+> +#ifdef CONFIG_PAGE_POOL
+> + xa_for_each(&sk->sk_user_frags, index, netmem)
+> + WARN_ON_ONCE(!napi_pp_put_page((__force netmem_ref)netmem, false));
+> +#endif
+> +
+> + xa_destroy(&sk->sk_user_frags);
+> 
+>    trace_tcp_destroy_sock(sk);
+> 
+> To be honest, I think it makes sense for the TCP stack to be
+> responsible for putting the references that belong to it and the
+> application. To me, it does not make much sense for the page pool to
+> be responsible for putting the reference that belongs to the TCP stack
+> or driver via a page_pool_scrub() function, as those references do not
+> belong to the page pool really. I'm not sure why there is a diff
+> between our use cases here because I'm not an io_uring expert. Why do
+> you need to scrub all the references on page pool destruction? Don't
+> these belong to non-page pool components like io_uring stack or TCP
+> stack ol otherwise?
 
-Grepping 'dmabuf' seems to show that it may be common rename it to
-something as *_dmabuf.c.
+That one is about cleaning buffers that are in b/w 4 and 5, i.e.
+owned by the user, which devmem does at sock destruction. io_uring
+could get by without scrub, dropping user refs while unregistering
+ifq, but then it'd need to wait for all requests to finish so there
+is no step 4 in the meantime. Might change, can be useful, but it
+was much easier to hook into the pp release loop.
 
-> 
->>>
->>
->> ...
->>
->>> diff --git a/include/net/netmem.h b/include/net/netmem.h
->>> index d8b810245c1d..72e932a1a948 100644
->>> --- a/include/net/netmem.h
->>> +++ b/include/net/netmem.h
->>> @@ -8,6 +8,16 @@
->>>  #ifndef _NET_NETMEM_H
->>>  #define _NET_NETMEM_H
->>>
->>> +#include <net/devmem.h>
->>> +
->>> +/* net_iov */
->>> +
->>> +struct net_iov {
->>> +     struct dmabuf_genpool_chunk_owner *owner;
->>> +};
->>> +
->>> +/* netmem */
->>> +
->>>  /**
->>>   * typedef netmem_ref - a nonexistent type marking a reference to generic
->>>   * network memory.
->>> diff --git a/net/core/Makefile b/net/core/Makefile
->>> index 821aec06abf1..592f955c1241 100644
->>> --- a/net/core/Makefile
->>> +++ b/net/core/Makefile
->>> @@ -13,7 +13,7 @@ obj-y                    += dev.o dev_addr_lists.o dst.o netevent.o \
->>>                       neighbour.o rtnetlink.o utils.o link_watch.o filter.o \
->>>                       sock_diag.o dev_ioctl.o tso.o sock_reuseport.o \
->>>                       fib_notifier.o xdp.o flow_offload.o gro.o \
->>> -                     netdev-genl.o netdev-genl-gen.o gso.o
->>> +                     netdev-genl.o netdev-genl-gen.o gso.o devmem.o
->>>
->>>  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
->>>
->>> diff --git a/net/core/dev.c b/net/core/dev.c
->>> index fe054cbd41e9..bbea1b252529 100644
->>> --- a/net/core/dev.c
->>> +++ b/net/core/dev.c
->>> @@ -155,6 +155,9 @@
->>>  #include <net/netdev_rx_queue.h>
->>>  #include <net/page_pool/types.h>
->>>  #include <net/page_pool/helpers.h>
->>> +#include <linux/genalloc.h>
->>> +#include <linux/dma-buf.h>
->>> +#include <net/devmem.h>
->>>
->>>  #include "dev.h"
->>>  #include "net-sysfs.h"
->>> diff --git a/net/core/devmem.c b/net/core/devmem.c
->>> new file mode 100644
->>> index 000000000000..779ad990971e
->>> --- /dev/null
->>> +++ b/net/core/devmem.c
->>> @@ -0,0 +1,293 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>> +/*
->>> + *      Devmem TCP
->>> + *
->>> + *      Authors:     Mina Almasry <almasrymina@google.com>
->>> + *                   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
->>> + *                   Kaiyuan Zhang <kaiyuanz@google.com
->>> + */
->>> +
->>> +#include <linux/types.h>
->>> +#include <linux/mm.h>
->>> +#include <linux/netdevice.h>
->>> +#include <trace/events/page_pool.h>
->>> +#include <net/netdev_rx_queue.h>
->>> +#include <net/page_pool/types.h>
->>> +#include <net/page_pool/helpers.h>
->>> +#include <linux/genalloc.h>
->>> +#include <linux/dma-buf.h>
->>> +#include <net/devmem.h>
->>> +
->>> +/* Device memory support */
->>> +
->>> +#ifdef CONFIG_DMA_SHARED_BUFFER
->>
->> I still think it is worth adding its own config for devmem or dma-buf
->> for networking, thinking about the embeded system.
->>
-> 
-> FWIW Willem did weigh on this previously and said he prefers to have
-> it unguarded by a CONFIG, but I will submit to whatever the consensus
-> here. It shouldn't be a huge deal to add a CONFIG technically
-> speaking.
+Another concern is who and when can reset ifq / kill pp outside
+of io_uring/devmem. I assume it can happen on a whim, which is
+hard to handle gracefully.
 
-Grepping 'CONFIG_DMA_SHARED_BUFFER' show that the API user of dmabuf
-API does not seems to reuse the CONFIG_DMA_SHARED_BUFFER, instead they
-seem to define its own config, and select CONFIG_DMA_SHARED_BUFFER
-if necessary, it that any reason it is different here?
-
-> 
->>> +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
->>> +                                        struct gen_pool_chunk *chunk,
->>> +                                        void *not_used)
->>
->> It seems odd to still keep the netdev_ prefix as it is not really related
->> to netdev, perhaps use 'net_' or something better.
->>
-> 
-> Yes, thanks for catching. I can change to net_devmem_ maybe or net_dmabuf_*.
-
-FWIW, net_dmabuf_* seems like a better name technically.
-
-> 
->>> +{
->>> +     struct dmabuf_genpool_chunk_owner *owner = chunk->owner;
->>> +
->>> +     kvfree(owner->niovs);
->>> +     kfree(owner);
->>> +}
->>> +
->>> +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *binding)
->>> +{
->>> +     size_t size, avail;
->>> +
->>> +     gen_pool_for_each_chunk(binding->chunk_pool,
->>> +                             netdev_dmabuf_free_chunk_owner, NULL);
->>> +
->>> +     size = gen_pool_size(binding->chunk_pool);
->>> +     avail = gen_pool_avail(binding->chunk_pool);
->>> +
->>> +     if (!WARN(size != avail, "can't destroy genpool. size=%lu, avail=%lu",
->>> +               size, avail))
->>> +             gen_pool_destroy(binding->chunk_pool);
->>> +
->>> +     dma_buf_unmap_attachment(binding->attachment, binding->sgt,
->>> +                              DMA_BIDIRECTIONAL);
->>
->> For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
->>
-> 
-> Yes, good catch. I suspect we want to reuse this code for TX path. But
-> for now, I'll test with DMA_FROM_DEVICE and if I see no issues I'll
-> apply this change.
-> 
->>> +     dma_buf_detach(binding->dmabuf, binding->attachment);
->>> +     dma_buf_put(binding->dmabuf);
->>> +     xa_destroy(&binding->bound_rxq_list);
->>> +     kfree(binding);
->>> +}
->>> +
->>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
->>> +{
->>> +     void *new_mem;
->>> +     void *old_mem;
->>> +     int err;
->>> +
->>> +     if (!dev || !dev->netdev_ops)
->>> +             return -EINVAL;
->>> +
->>> +     if (!dev->netdev_ops->ndo_queue_stop ||
->>> +         !dev->netdev_ops->ndo_queue_mem_free ||
->>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
->>> +         !dev->netdev_ops->ndo_queue_start)
->>> +             return -EOPNOTSUPP;
->>> +
->>> +     new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
->>> +     if (!new_mem)
->>> +             return -ENOMEM;
->>> +
->>> +     err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
->>> +     if (err)
->>> +             goto err_free_new_mem;
->>> +
->>> +     err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
->>> +     if (err)
->>> +             goto err_start_queue;
->>> +
->>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
->>> +
->>> +     return 0;
->>> +
->>> +err_start_queue:
->>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
->>
->> It might worth mentioning why queue start with old_mem will always
->> success here as the return value seems to be ignored here.
->>
-> 
-> So the old queue, we stopped it, and if we fail to bring up the new
-> queue, then we want to start the old queue back up to get the queue
-> back to a workable state.
-> 
-> I don't see what we can do to recover if restarting the old queue
-> fails. Seems like it should be a requirement that the driver tries as
-> much as possible to keep the old queue restartable.
-
-Is it possible that we may have the 'old_mem' leaking if the driver
-fails to restart the old queue? how does the driver handle the
-firmware cmd failure for ndo_queue_start()? it seems a little
-tricky to implement it.
-
-> 
-> I can improve this by at least logging or warning if restarting the
-> old queue fails.
-
-Also the semantics of the above function seems odd that it is not
-only restarting rx queue, but also freeing and allocating memory
-despite the name only suggests 'restart', I am a litte afraid that
-it may conflict with future usecae when user only need the
-'restart' part, perhaps rename it to a more appropriate name.
-
-> 
->>> +
->>> +err_free_new_mem:
->>> +     dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
->>> +
->>> +     return err;
->>> +}
->>> +
->>> +/* Protected by rtnl_lock() */
->>> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
->>> +
->>> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
->>> +{
->>> +     struct netdev_rx_queue *rxq;
->>> +     unsigned long xa_idx;
->>> +     unsigned int rxq_idx;
->>> +
->>> +     if (!binding)
->>> +             return;
->>> +
->>> +     if (binding->list.next)
->>> +             list_del(&binding->list);
->>
->> The above does not seems to be a good pattern to delete a entry, is
->> there any reason having a checking before the list_del()? seems like
->> defensive programming?
->>
-> 
-> I think I needed to apply this condition to handle the case where
-> netdev_unbind_dmabuf() is called when binding->list is not initialized
-> or is empty.
-> 
-> netdev_nl_bind_rx_doit() will call unbind to free a partially
-> allocated binding in error paths, so, netdev_unbind_dmabuf() may be
-> called with a partially initialized binding. This is why we check for
-> binding->list is initialized here and check that rxq->binding ==
-> binding below. The main point is that netdev_unbind_dmabuf() may be
-> asked to unbind a partially bound dmabuf due to error paths.
-> 
-> Maybe a comment here will test this better. I will double confirm the
-> check is needed for the error paths in netdev_nl_bind_rx_doit().
-> 
->>> +
->>> +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
->>> +             if (rxq->binding == binding) {
->>
->> It seems like defensive programming here too?
->>
-
+-- 
+Pavel Begunkov
 
