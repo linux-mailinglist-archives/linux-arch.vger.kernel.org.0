@@ -1,219 +1,171 @@
-Return-Path: <linux-arch+bounces-2879-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2880-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01E5F873FA7
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 19:37:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BC27874006
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 19:57:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACC6428715B
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 18:37:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACEAB2822EF
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 18:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE341534FB;
-	Wed,  6 Mar 2024 18:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B2F13E7D5;
+	Wed,  6 Mar 2024 18:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D/UMJVvP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lhn3SYkm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28024152DE2
-	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 18:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2911C13E7CD;
+	Wed,  6 Mar 2024 18:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709749567; cv=none; b=k4qc12FnY9UtRQJzPMGQFv9TaXXp4BmQB1i4U5x/YaF1zIMTUpE+l9/0XP4Z9hsakmKOi+3muWNvMMv+9lB+HizaVthoSDguad8WpYX12BiL04Uugh/f3flY56QBEWbbwZwQkpub8bVmWBE/LOeSiO0DQMGJd8bWE4YbWYWxyhA=
+	t=1709751437; cv=none; b=Nw9KKhsYlwYx411lawVjCpxDQerV5UWhe7ZA8SOe5Okz72PyGnyxnBbm9V7pWh3QNQaPOvt7RId7hm4RwJRpKJq97uhWmN59gXKIo6j/KGTTrsieQx8+aDELq1OQm4H9/Tky1zdy51Q0IpXcseqJ6MTvRuqGZ3ms4iHCdfgRx8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709749567; c=relaxed/simple;
-	bh=WZ9Wfhph9SqMvpwjpOilQz7uq5chx2Sd29yINS9foKA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XMuzQaXS8iu/pbqzDeM4C0fbfAv3DT/W3lDFEeuIPygdPedF9BWdF9jY4HC/MJBMVJ45F8amDl6exvTpjk87a5veYQ82r6jqSSLF7AVbaMVxzGd7EEF9uhBaDMFhYh8WP1vWzPsjOeZrMh5QJ2s0fy0u4VXaJN7nUNYZy7A5/FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D/UMJVvP; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b267bf11so8287228276.2
-        for <linux-arch@vger.kernel.org>; Wed, 06 Mar 2024 10:26:04 -0800 (PST)
+	s=arc-20240116; t=1709751437; c=relaxed/simple;
+	bh=S1B66MxrwVuLPSQFyJ77+48RvxlkmOBerBkBYw8jSEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AALgQLtEpogct7i6fzGuUvobXwRY+r7/eRaDOEqJrAFmkN3YYjU+OmU+tU2hibW+BmelD2G4AA2VxSw22kZRUgaO6CUifC21K+GvQQ0E07w037O7y9SzT8+kNU4WARrW7KebJDH6ptZ+0thExzfTg91cRVUW9gvvOOStvlJIHY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lhn3SYkm; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so22156a12.0;
+        Wed, 06 Mar 2024 10:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709749564; x=1710354364; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yGhey761h+yk0goaaYaIkNpiVVUjQ3rocN1HojLD7sY=;
-        b=D/UMJVvP9HSPPg/+UMFUn2uZmSu2zF9hVOmrJ8EDa6yA8umDSMaFwniCa11IGfob6+
-         pPTYXHkvmUQZ7h5CbcIAv6z5Jc6pNpACFiOM0RanoRglnxOK2Us+/8PdMVd7VNPGpn5R
-         gEWA/O7R6ylKAL9OWCKGt56aPulT1OItTwVIqjTMjP9+CPPayXSqheN4JJYkAlh+YWpf
-         YWjsqWfjx5qQ3iirKrDcIsg76y44ErK7ViJMUMtFnB9PCUMx8lXIA1e+0+sCnVZW+Pdv
-         ZLCNBRifYQXpn7hbpYkEIZJjuiSaHX54snkLPAT8zxkbs7l/Bvf1uPpdw74AvHsWkS3N
-         vK9Q==
+        d=gmail.com; s=20230601; t=1709751435; x=1710356235; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=/3jW2QBDSgBnts4h6tssrFWwv5T7cgyrIwuez/CQaIA=;
+        b=lhn3SYkmlFol+BzsdKb7YdazOkLW2PJZzfOdmsR0s/NcAuz/ka7BXETPFfaGqPafjp
+         gy+pHbeH9MhOsUo9kJQkY3XtTnTbZJZfA04Hg51u3/8ftwgtwFp5lrkG84LiMDvl42rJ
+         lsmxwZk6NAMRbveon8tVoLKgozVisUObUDaIQ5dsPHI5ulFbj3lUloIfkXD9gBelqUx5
+         mrgOWKRSVtT3q9hjJCadVP2Ne0a/SGV7EUPsnS6F7ALXvQ6vIBDe5ay21AY9/bwzTRW0
+         H5T0GPVgfTeZBTVtnvAyDnN9BqTpZy+NJ8OYyE5GSGzLrzEBxy56Qlw57X28A2NFgM0u
+         x00w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709749564; x=1710354364;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yGhey761h+yk0goaaYaIkNpiVVUjQ3rocN1HojLD7sY=;
-        b=OKp207fHGliZijfCDpFqHfPP1WV00mP5a3bhA+yF+n9O9OwkWSDsdhxoK/wvpIIF0t
-         Xag/ARzGC5Gk8k5SHyfuY5HS/tAWnKDDACcyf65qNYB7U7FoneAvEwsUx5Ub6A47ru3S
-         dK6+AMT/3TKlwBa6tdTRmvXhbbl1Gvqun3NqAm3Rph212hh5bBHZS55OhhucxW4fClE0
-         56RHQz4HM7Md4P07qEmKXDT9dQ2l8IbJZlx61Ge+DJxtCG/2sqjsvGK9P7M01CvKcB8J
-         XvNx1jHzWCLCGThU9VkSkJ241Vx+OKJc9WVRLxnt44SBOJmMD7wdwoA+od1FrQF1/YGX
-         Uavw==
-X-Forwarded-Encrypted: i=1; AJvYcCUvZS/yh88pcv+DtD4oIYQSq/lEKi7GBwECzo/QN0ZOB5HglaPs69vp7r3JKDh5NaLYGLVwSNbsbhybH22wmJD68ILgSPJNFNI0Rw==
-X-Gm-Message-State: AOJu0Yydq/cttSRhkRvoXgTTSnwhYZ5aumVMpT9Zayk/AZ3B0ewpZiZa
-	bn1ZBK1dh/XDy7GpVF06C3Fk4739Hc9fBCBBzujhyuXY7eKUDWu4d298ySr2mQKbPp+QxCXfxMP
-	z2w==
-X-Google-Smtp-Source: AGHT+IGSwvnidbX0/rOv0INS3he6frJgJB+IsYvN52GAPjMVdVuwPoKCHiyeHTzcN2rL9OOwKUgSVjL4/4I=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:85f0:e3db:db05:85e2])
- (user=surenb job=sendgmr) by 2002:a25:2fc1:0:b0:dc6:ebd4:cca2 with SMTP id
- v184-20020a252fc1000000b00dc6ebd4cca2mr528159ybv.11.1709749563843; Wed, 06
- Mar 2024 10:26:03 -0800 (PST)
-Date: Wed,  6 Mar 2024 10:24:35 -0800
-In-Reply-To: <20240306182440.2003814-1-surenb@google.com>
+        d=1e100.net; s=20230601; t=1709751435; x=1710356235;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/3jW2QBDSgBnts4h6tssrFWwv5T7cgyrIwuez/CQaIA=;
+        b=QoN5fRQw+unj9dcBo+phAQgrEAClbih4PRYdxdzklm4TeLQt1Ose3DgAy7pQcCBgUR
+         UMQ3X1o7Zq5D8h3q1o1psTzV7v4jOzVFi8wZHzToGp9w6aLG2xFLV1Rw5aocCq2HAMJR
+         fC57dsnIhsjAmuLnJ3V8KqtdwOBL5w+wp1FChtsxG+a72QTbZgFy+t9uqa6/hlzwFzBY
+         ocwFpirN9WAD8XktKIo7fCCHBK+yHHZObafT8wmS+ml97m+tDv3w3bsVROzwwZ0vmtHo
+         UbkdtpkLhnb3APaTHfspTqFtCl7j4wLBee2AANcSM5hFQBjRZHCgIzLF38bh65Tle90P
+         G9jg==
+X-Forwarded-Encrypted: i=1; AJvYcCXW+dIk5DUg/v5PbvkPN3eZVOABqHPq+uCBT6LgS/G0eh3qyPviJ/BZFzd8vdGYKuNVroPrY+KFdoI/M8+WG3S0d9Z7u+vVaM3nRArv7ZjJheWJlFAMzqU1iO7Li5ufrOH0lYnzUvl9Jg==
+X-Gm-Message-State: AOJu0YwPHnz+EXHNM3CDwRoNk8UHpi/idFRTh9XbRv9zNYUFJ9PKvSaf
+	ncAkKUrpHmDUeKaeYKes/zqz2ly2EmZmT36LK5UyV3ay0RkToIZz
+X-Google-Smtp-Source: AGHT+IGiMoD748cTco9NIrvqXQZ2Af1R1FR7YjTHGXOpN+RqmiZs7H8a2bDhRE+JZP40vUT4bx0L6A==
+X-Received: by 2002:a17:90a:6c96:b0:29b:2fc9:197a with SMTP id y22-20020a17090a6c9600b0029b2fc9197amr12405643pjj.21.1709751435228;
+        Wed, 06 Mar 2024 10:57:15 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b001d739667fc3sm12881659plg.207.2024.03.06.10.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Mar 2024 10:57:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b0cb0228-2c07-4fec-9943-d8a631d5c9a9@roeck-us.net>
+Date: Wed, 6 Mar 2024 10:57:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240306182440.2003814-1-surenb@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240306182440.2003814-38-surenb@google.com>
-Subject: [PATCH v5 37/37] memprofiling: Documentation
-From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
-	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	surenb@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/5] Add support for suppressing warning backtraces
+Content-Language: en-US
+To: =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>,
+ Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
+ Arthur Grillo <arthurgrillo@riseup.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
+ <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com,
+ linux-arch@vger.kernel.org
+References: <20240305184033.425294-1-linux@roeck-us.net>
+ <CAEUSe79fwDAhTdAD3OecCAw=LRzajxA3b-B2r8YtVDPeH7LCtA@mail.gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CAEUSe79fwDAhTdAD3OecCAw=LRzajxA3b-B2r8YtVDPeH7LCtA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Kent Overstreet <kent.overstreet@linux.dev>
+Hi Daniel,
 
-Provide documentation for memory allocation profiling.
+On 3/6/24 10:24, Daniel Díaz wrote:
+[ ... ]
+> 
+> Thank you SO very much for this work! This is very much appreciated!
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- Documentation/mm/allocation-profiling.rst | 91 +++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 Documentation/mm/allocation-profiling.rst
+Thanks a lot for the feedback.
 
-diff --git a/Documentation/mm/allocation-profiling.rst b/Documentation/mm/allocation-profiling.rst
-new file mode 100644
-index 000000000000..8a862c7d3aab
---- /dev/null
-+++ b/Documentation/mm/allocation-profiling.rst
-@@ -0,0 +1,91 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===========================
-+MEMORY ALLOCATION PROFILING
-+===========================
-+
-+Low overhead (suitable for production) accounting of all memory allocations,
-+tracked by file and line number.
-+
-+Usage:
-+kconfig options:
-+ - CONFIG_MEM_ALLOC_PROFILING
-+ - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-+ - CONFIG_MEM_ALLOC_PROFILING_DEBUG
-+   adds warnings for allocations that weren't accounted because of a
-+   missing annotation
-+
-+Boot parameter:
-+  sysctl.vm.mem_profiling=0|1|never
-+
-+  When set to "never", memory allocation profiling overheads is minimized and it
-+  cannot be enabled at runtime (sysctl becomes read-only).
-+  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y, default value is "1".
-+  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n, default value is "never".
-+
-+sysctl:
-+  /proc/sys/vm/mem_profiling
-+
-+Runtime info:
-+  /proc/allocinfo
-+
-+Example output:
-+  root@moria-kvm:~# sort -g /proc/allocinfo|tail|numfmt --to=iec
-+        2.8M    22648 fs/kernfs/dir.c:615 func:__kernfs_new_node
-+        3.8M      953 mm/memory.c:4214 func:alloc_anon_folio
-+        4.0M     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
-+        4.1M        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
-+        6.0M     1532 mm/filemap.c:1919 func:__filemap_get_folio
-+        8.8M     2785 kernel/fork.c:307 func:alloc_thread_stack_node
-+         13M      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
-+         14M     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
-+         15M     3656 mm/readahead.c:247 func:page_cache_ra_unbounded
-+         55M     4887 mm/slub.c:2259 func:alloc_slab_page
-+        122M    31168 mm/page_ext.c:270 func:alloc_page_ext
-+===================
-+Theory of operation
-+===================
-+
-+Memory allocation profiling builds off of code tagging, which is a library for
-+declaring static structs (that typcially describe a file and line number in
-+some way, hence code tagging) and then finding and operating on them at runtime
-+- i.e. iterating over them to print them in debugfs/procfs.
-+
-+To add accounting for an allocation call, we replace it with a macro
-+invocation, alloc_hooks(), that
-+ - declares a code tag
-+ - stashes a pointer to it in task_struct
-+ - calls the real allocation function
-+ - and finally, restores the task_struct alloc tag pointer to its previous value.
-+
-+This allows for alloc_hooks() calls to be nested, with the most recent one
-+taking effect. This is important for allocations internal to the mm/ code that
-+do not properly belong to the outer allocation context and should be counted
-+separately: for example, slab object extension vectors, or when the slab
-+allocates pages from the page allocator.
-+
-+Thus, proper usage requires determining which function in an allocation call
-+stack should be tagged. There are many helper functions that essentially wrap
-+e.g. kmalloc() and do a little more work, then are called in multiple places;
-+we'll generally want the accounting to happen in the callers of these helpers,
-+not in the helpers themselves.
-+
-+To fix up a given helper, for example foo(), do the following:
-+ - switch its allocation call to the _noprof() version, e.g. kmalloc_noprof()
-+ - rename it to foo_noprof()
-+ - define a macro version of foo() like so:
-+   #define foo(...) alloc_hooks(foo_noprof(__VA_ARGS__))
-+
-+It's also possible to stash a pointer to an alloc tag in your own data structures.
-+
-+Do this when you're implementing a generic data structure that does allocations
-+"on behalf of" some other code - for example, the rhashtable code. This way,
-+instead of seeing a large line in /proc/allocinfo for rhashtable.c, we can
-+break it out by rhashtable type.
-+
-+To do so:
-+ - Hook your data structure's init function, like any other allocation function
-+ - Within your init function, use the convenience macro alloc_tag_record() to
-+   record alloc tag in your data structure.
-+ - Then, use the following form for your allocations:
-+   alloc_hooks_tag(ht->your_saved_tag, kmalloc_noprof(...))
--- 
-2.44.0.278.ge034bb2e1d-goog
+> We run into these warnings at LKFT all the time, and making sure that
+> the noise doesn't drown the relevant signal is very important.
+> 
+
+Can you send me a list of all the warnings you are seeing ? I do see
+lots of warnings when running drm tests in qemu, but I am not sure if
+those are caused by emulation problems or if they are expected.
+A list of warnings seen on real hardware would help me prepare
+additional patches to address (or, rather, suppress) those.
+
+Thanks,
+Guenter
 
 
