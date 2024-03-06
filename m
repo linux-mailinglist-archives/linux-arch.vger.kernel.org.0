@@ -1,171 +1,179 @@
-Return-Path: <linux-arch+bounces-2841-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2849-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333BF873E6A
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 19:24:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE251873EC3
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 19:27:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51D181C210A7
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 18:24:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B6951F22E2C
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 18:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14ACD604A7;
-	Wed,  6 Mar 2024 18:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C05DE143727;
+	Wed,  6 Mar 2024 18:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xSDSt4M9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z6Csgq/G"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE5513BAFC
-	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 18:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5E214374C
+	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 18:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709749458; cv=none; b=RAaKytIJlvl1CcOipNRd5DEydvcd+XWUypmlxXVx/zw5ed6lAzzzHfq7Ph2EpZld40P652T/zWITiR7WogoDkc8KAwuOYP/vtEVrMdclKIJCN6B1j6KuwFBVjh6xC7zdn89/QQxYaRwOahq4iomgP3aPz1GmEUpvn/kQ+VX0M7c=
+	t=1709749504; cv=none; b=UwcbPxfkEVz2HrmtaPhIBmmMd8HDggCOe1rwMrXkMoOEw3fLUA0ZbofhWWTO36Z9jKv2b3GabOoAKla/dm4gv/8UasiFNtcSeNXGJ/YesXzNQdTn5s0ufRPN5XBidvqhLnRpHxNXaAM5BTBL6jlBitHEseQwLuabtwuVFlSdjVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709749458; c=relaxed/simple;
-	bh=WytS40ZdmsM5zwjaJMMr9w3erghzLSkCQiyje+s3eGY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=chel+otxsaMoIZ6KBGFbowI5DJQ+U1jGuCc3doI2fpqxR6n8Ha1AOTbbyfQT2tAVRSm8p3K+h9oDFPl1x9tEWxyROXKPOTYOWTF0hlRqVOplQ6Y2LbUyqty0geVWUG2mSZnmOyiNPT/cqIQu0yFi0Sn3BFm5rfiMWPuqxertCPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xSDSt4M9; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5ce942efda5so5838511a12.2
-        for <linux-arch@vger.kernel.org>; Wed, 06 Mar 2024 10:24:17 -0800 (PST)
+	s=arc-20240116; t=1709749504; c=relaxed/simple;
+	bh=R2DVckge80A2ruR232rDSrP7/GV74FogObtaXjKjFt4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uGiBxNyx/aJ6XXonGtYdeTh9nYnUptfS8d/N8fm1spt+ajysjJZRoYRdJ4C9DBBaVEVU8RpfII68PasHeHcvsS7TFlPc08GVBa0AN4PAAPzQDn5evghdJamGl/neeK8vE0ALTfQEVXf2Fh66pg8cxX5vFpIaUU5RC82p4nUZJUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z6Csgq/G; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc746178515so2058362276.2
+        for <linux-arch@vger.kernel.org>; Wed, 06 Mar 2024 10:25:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709749456; x=1710354256; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RWWS4LnVP/asDNzm/6wkKWnD1LdXMDQVgVaviFZ4aPg=;
-        b=xSDSt4M9UoLeDP7OmunKwSARN+zE8oqO+Vx00xIodsni+Jai1c6Oo1sgafAF+ggn6q
-         FjeR+7UjMDREMOatQi7cqH0B7Ae4eXdLJCD45B7kxTVv+ZozK6sG3NsyJgxYik7t23Uo
-         I0ekengU3Gg3M2aWWBhsUO/sdc7TYx2rKXZQ0pMH7BE87AKqmZucvGmabW7HZHTfBQ+J
-         60lJ/k6QKlIWfT5zhsXpqs4xz6SQKfIa2X6FzIJ0/QzGacD0Yq5s/JGxxasW4KQ5gwyk
-         +Ua95cMya9C8VrcfWP42WOvMQt2T9fHpseneaFXvE8I/EE5FeO3YmUh7cSLt2O8p6vSG
-         ZBXA==
+        d=google.com; s=20230601; t=1709749500; x=1710354300; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6rH9mI3mTJcaBoi8NvQC9FpkTZd7d5upxL04jrJdHuE=;
+        b=z6Csgq/GpdiAe/2EPMOGSkC2HPAWpdm6wsmaT0tXTRd1oqJ1m+W2JXkygqBzBcF8WM
+         WtLuFAkHn6wjeSqx+vHHHzX9YJus/kVLjMfFZ5uMGWDRAG8BlsbKVphRki6kXGTA7b/2
+         Jn4G11pkF0ohN30bWz/KRrLyu4oeU329e/8QN9wuANcX5Q8seA4QvANEnVL7KR072tcp
+         o2uNxsBhwPM6ACBSZ8Vb7AIhQl8h83raKw/3BfZRGDloTI394CE91N5fWgiUW7xSUkBw
+         EbOj0f4H0BUf7T5MM73iceYQEPqAhCchgBVSM8oX/gDAFmtMKJ/F6IwqHjU1jJ+09erO
+         R5bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709749456; x=1710354256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RWWS4LnVP/asDNzm/6wkKWnD1LdXMDQVgVaviFZ4aPg=;
-        b=oJo2t9W/2z/fYdfDBjbqxrJzBwkDm/MD0M8ZAGt6klOIEXxM+C+/bwu68GzLgT6RR1
-         4xM56pO8tEu1uiNkbvHHHb67x5r5eUxrPDIjY/f0S0MU54Z2D8tk0F9w6uiohZgdFDbS
-         8llRjkeF0iZjWaV/4RfoNrW3RuVG65VCtpdP+r85HBFFvJiH3t5XuYgv5t/O6nubZR+2
-         cthHlx5HtnhuyBblOefbsqFuTYvlBIrZVfw77sqlmvxOGm1zv7vjvduPGq4L+ZhnWMIN
-         r/8ajN0SgGsHGFzsnkGNnB62jtiGBfMDX5Ul2B17itMd5fSXH4n9mQeMKAfbaLMt8YXk
-         BxGw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTZATPi7IZsW3eDeZaE4WXIZovDaUres+6Pf4qxigzfTl6G6J6ItNm2NufjJCjD8LAZTrlCgHsATgyG7Iddsv+1btyL+0pXqBBDg==
-X-Gm-Message-State: AOJu0YzqgzXA6IqSm2bd8c3oVrO8cRw7eYrXS/6GycdTtt5OBCpmPu2f
-	y0/8MuPXimiIb2DyhbTppitFrBrb77Pd+MM/3lezCSss4/BLyGqRuJQmXt9D4CfkqAaQ4kOeJ5t
-	1qZTY3Jpb8Tn2la3w+W0jynrIdLAjlNEPY0/7eA==
-X-Google-Smtp-Source: AGHT+IHKPEqxOppMA9uKtWnzKAyEDN9QbdCsWR4IDnjuRlBVf+wG6gTH/NYYdjq2Jeob5XWC2zp4Hl1RW9kYPP1CSp8=
-X-Received: by 2002:a17:90a:8986:b0:29a:c886:243e with SMTP id
- v6-20020a17090a898600b0029ac886243emr14404213pjn.39.1709749456443; Wed, 06
- Mar 2024 10:24:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709749500; x=1710354300;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6rH9mI3mTJcaBoi8NvQC9FpkTZd7d5upxL04jrJdHuE=;
+        b=cX/T9D5j4hXLfXubxrSXZdzPoM4ti6n4g+nKh/s5G2fuED74mdHoUNDUcBpPEMQsG4
+         9Zc33TMfB+ijRO5KBGEzIwUPhlp01v4++Sa39p5qPLmPgNVzPQrtEPMDrndF3U7UuJnY
+         D1q83QVI3kRNx5pji9eJaf6i2W/2peIxv5YVCK9VnFp+AMLB/OUTZSd5lxo2iAtf88pV
+         ZIfEtAOtEH94uJMn2SZ3H5P7/JwvuvHXNKTgXYNzwV07+x/mhA85BUOU0MmOpNio1APB
+         JI8HIcOlHDpsdkjIxr5mI15BJLLf6UF4sUNAOhDmsoNm2ENsgYmXP3264Y0I1O/S0xG5
+         uceA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGsJAgBc4OUjUXZRlvZxqNy2QdTml+BpQWDdSR8Fr71KmlgrorC+CCX9i/MKgJ+4MxvfBDaI1+qTad67ES2/NF3OaBcEv3jNe7og==
+X-Gm-Message-State: AOJu0Yx+RNEemHRC9ys9oRc8ql0AYggnfX0za2ZyD97HenHeRlQSUYpx
+	uEE0ygc+nI0lqVZb+r5hyPXAk/RKV7YtdPT3engFCdZGDXDSFWKTCvgAYqczdjxMSJ2MbKn/TuC
+	Yig==
+X-Google-Smtp-Source: AGHT+IHxR0olBWteUpSeEtMuXDZWp8I1meqV0Icf5ps5DXZSQPpSTLoMw3+arJQFndTmnzLC9JieP9mTFwI=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:85f0:e3db:db05:85e2])
+ (user=surenb job=sendgmr) by 2002:a05:6902:1885:b0:dc6:207e:e8b1 with SMTP id
+ cj5-20020a056902188500b00dc6207ee8b1mr3919663ybb.2.1709749499865; Wed, 06 Mar
+ 2024 10:24:59 -0800 (PST)
+Date: Wed,  6 Mar 2024 10:24:05 -0800
+In-Reply-To: <20240306182440.2003814-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240305184033.425294-1-linux@roeck-us.net>
-In-Reply-To: <20240305184033.425294-1-linux@roeck-us.net>
-From: =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date: Wed, 6 Mar 2024 12:24:05 -0600
-Message-ID: <CAEUSe79fwDAhTdAD3OecCAw=LRzajxA3b-B2r8YtVDPeH7LCtA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/5] Add support for suppressing warning backtraces
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, 
-	David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard <mripard@kernel.org>, 
-	=?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, kunit-dev@googlegroups.com, 
-	linux-arch@vger.kernel.org
+Mime-Version: 1.0
+References: <20240306182440.2003814-1-surenb@google.com>
+X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
+Message-ID: <20240306182440.2003814-8-surenb@google.com>
+Subject: [PATCH v5 07/37] mm: introduce __GFP_NO_OBJ_EXT flag to selectively
+ prevent slabobj_ext creation
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	surenb@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hello!
+Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocations
+when allocating slabobj_ext on a slab.
 
-On Tue, 5 Mar 2024 at 12:40, Guenter Roeck <linux@roeck-us.net> wrote:
-> Some unit tests intentionally trigger warning backtraces by passing bad
-> parameters to kernel API functions. Such unit tests typically check the
-> return value from such calls, not the existence of the warning backtrace.
->
-> Such intentionally generated warning backtraces are neither desirable
-> nor useful for a number of reasons.
-> - They can result in overlooked real problems.
-> - A warning that suddenly starts to show up in unit tests needs to be
->   investigated and has to be marked to be ignored, for example by
->   adjusting filter scripts. Such filters are ad-hoc because there is
->   no real standard format for warnings. On top of that, such filter
->   scripts would require constant maintenance.
->
-> One option to address problem would be to add messages such as "expected
-> warning backtraces start / end here" to the kernel log.  However, that
-> would again require filter scripts, it might result in missing real
-> problematic warning backtraces triggered while the test is running, and
-> the irrelevant backtrace(s) would still clog the kernel log.
->
-> Solve the problem by providing a means to identify and suppress specific
-> warning backtraces while executing test code. Support suppressing multipl=
-e
-> backtraces while at the same time limiting changes to generic code to the
-> absolute minimum. Architecture specific changes are kept at minimum by
-> retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
-> CONFIG_KUNIT are enabled.
->
-> The first patch of the series introduces the necessary infrastructure.
-> The second patch marks the warning message in drm_calc_scale() in the DRM
-> subsystem as intentional where warranted. This patch is intended to serve
-> as an example for the use of the functionality introduced with this serie=
-s.
-> The last three patches in the series introduce the necessary architecture
-> specific changes for x86, arm64, and loongarch.
->
-> This series is based on the RFC patch and subsequent discussion at
-> https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-=
-4b08-ba81-d94f3b691c9a@moroto.mountain/
-> and offers a more comprehensive solution of the problem discussed there.
->
-> Checkpatch note:
->   Remaining checkpatch errors and warnings were deliberately ignored.
->   Some are triggered by matching coding style or by comments interpreted
->   as code, others by assembler macros which are disliked by checkpatch.
->   Suggestions for improvements are welcome.
->
-> Some questions:
->
-> - Is the general approach promising ? If not, are there other possible
->   solutions ?
-> - Function pointers are only added to the __bug_table section if both
->   CONFIG_KUNIT and CONFIG_DEBUG_BUGVERBOSE are enabled. This avoids image
->   size increases if CONFIG_KUNIT=3Dn. Downside is slightly more complex
->   architecture specific assembler code. If function pointers were always
->   added to the __bug_table section, vmlinux image size would increase by
->   approximately 0.6-0.7%. Is the increased complexity in assembler code
->   worth the reduced image size ? I think so, but I would like to hear
->   other opinions.
-> - There are additional possibilities associated with storing the bug
->   function name in the __bug_table section. It could be independent of
->   KUNIT, it could be a configuration flag, and/or it could be used to
->   display the name of the offending function in BUG/WARN messages.
->   Is any of those of interest ?
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ include/linux/gfp_types.h | 11 +++++++++++
+ mm/slub.c                 |  2 ++
+ 2 files changed, 13 insertions(+)
 
-Thank you SO very much for this work! This is very much appreciated!
-We run into these warnings at LKFT all the time, and making sure that
-the noise doesn't drown the relevant signal is very important.
+diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+index 868c8fb1bbc1..e36e168d8cfd 100644
+--- a/include/linux/gfp_types.h
++++ b/include/linux/gfp_types.h
+@@ -52,6 +52,9 @@ enum {
+ #endif
+ #ifdef CONFIG_LOCKDEP
+ 	___GFP_NOLOCKDEP_BIT,
++#endif
++#ifdef CONFIG_SLAB_OBJ_EXT
++	___GFP_NO_OBJ_EXT_BIT,
+ #endif
+ 	___GFP_LAST_BIT
+ };
+@@ -93,6 +96,11 @@ enum {
+ #else
+ #define ___GFP_NOLOCKDEP	0
+ #endif
++#ifdef CONFIG_SLAB_OBJ_EXT
++#define ___GFP_NO_OBJ_EXT       BIT(___GFP_NO_OBJ_EXT_BIT)
++#else
++#define ___GFP_NO_OBJ_EXT       0
++#endif
+ 
+ /*
+  * Physical address zone modifiers (see linux/mmzone.h - low four bits)
+@@ -133,12 +141,15 @@ enum {
+  * node with no fallbacks or placement policy enforcements.
+  *
+  * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
++ *
++ * %__GFP_NO_OBJ_EXT causes slab allocation to have no object extension.
+  */
+ #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+ #define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
+ #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+ #define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
+ #define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
++#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
+ 
+ /**
+  * DOC: Watermark modifiers
+diff --git a/mm/slub.c b/mm/slub.c
+index 6ab9f8f38ac5..2ba5d7b2711d 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -1899,6 +1899,8 @@ static int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+ 	void *vec;
+ 
+ 	gfp &= ~OBJCGS_CLEAR_MASK;
++	/* Prevent recursive extension vector allocation */
++	gfp |= __GFP_NO_OBJ_EXT;
+ 	vec = kcalloc_node(objects, sizeof(struct slabobj_ext), gfp,
+ 			   slab_nid(slab));
+ 	if (!vec)
+-- 
+2.44.0.278.ge034bb2e1d-goog
 
-Greetings!
-
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
 
