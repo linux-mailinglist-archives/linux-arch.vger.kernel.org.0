@@ -1,201 +1,113 @@
-Return-Path: <linux-arch+bounces-2832-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2833-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2F4C872D13
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 03:55:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 382A2872EC6
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 07:24:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDCC41C220F7
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 02:55:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72D0BB222E3
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 06:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD78D11CAB;
-	Wed,  6 Mar 2024 02:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528C11BDDF;
+	Wed,  6 Mar 2024 06:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FfspCDPZ"
+	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="ZWtaks3O"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B33134B6
-	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 02:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAD91B818
+	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 06:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709693685; cv=none; b=mFr1KDsqEhB5kqNSVuJ/Kl291ZM+3i806g2x0agyqA4hW/xMoVqx2eoLbeiTH0MJdOlfXkwFJQCjwLL7z82JtMTK+aSzyLJMRCHCQaMVM9mzertQhrqsqbvu1RmccIkxgXywpGBMZrwZ6HsqKxOb8Y1qD/cGM1jxSxsJe/wXvSY=
+	t=1709706240; cv=none; b=a/hdO4khqpMGKC9tlDn0Md4QUabwAc1azyiSNiTRuH0ShMHVFCrdyizAh/GoelUtrEFXnWR8arcFipsvaxYiujhMmwbth2NzUFwsf0leJePuHvI9zbzkQxTQu2EbPovlCJghjjzrxLT8fbMtEKH0aYX71STqMdJ80VlmCDiIMAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709693685; c=relaxed/simple;
-	bh=rCsQQP7xgQocqgJZyTCewEFa4pqWP3bm2r+qfnB/Kdw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kxE22pNkBvmAazxPhgFZ9GPMuDJFxsGDYjpuFeF91v4z93EkGUxYwC7ZVRMNPUoxvB8QxfwuiIoLpSGs/f2RgJDjXG+p15Mr08X6Cz7TLLAVcPD7+wFa3SfZvQ+FoPNf2asLKLxOQ1NIO8yj2rLNxA4iv1G/19In90q7qIljn4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FfspCDPZ; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a3122b70439so180185466b.3
-        for <linux-arch@vger.kernel.org>; Tue, 05 Mar 2024 18:54:42 -0800 (PST)
+	s=arc-20240116; t=1709706240; c=relaxed/simple;
+	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BjmcjMarSTiMCbBSbTND0aoNtJWFCpuR2hCdolSiK/jF0n4CZlFvGN3XptgLlYFiJl5tCBnwrnvmBAO3rV/q21b9tko6EHzia5zhd3IuH++5A331M0mUGDB00ptr+dPNDc9xeVDjqMK2/xpjZ/P7OLo/qIoXS7X8+2jtkJyl58E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=ZWtaks3O; arc=none smtp.client-ip=57.128.172.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
+Received: from quicklyemailsend77.com (unknown [185.255.114.95])
+	by quicklyemailsend77.com (Postfix) with ESMTPA id 24C2A397791
+	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 03:51:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com 24C2A397791
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709693681; x=1710298481; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eS/C6JRe/LZxR5BB0/jvRViDTj3F8vBSe/WWRgNeFIA=;
-        b=FfspCDPZNW8S7Qf7wpydUp7nMkxbIvbEb4ID33aWUPwHOYvxyiL5+xjC/RGuYky5nJ
-         UXbu0gXQCFwnw50zF+4eh5urGT9USQAfcXkEasQoB328Tb8CE77MTWKT72cElYJh0wiU
-         E8M6JwS0IqClv/VPW882Nqjm33OxkixBNmv2B1WPXiL5arG8e00lOAa7AfTo3NB4z5xf
-         jcpIGJ9Llm7DNOCjp3Jw3H51L90Ew0/AcaBWuTDJDOQG4bdnCW1kNOzZmO/JeKseNhq8
-         VZCcpvUcpy7bLKHJluNjLXFu8vbMbxapQ9qoBZgzezbUe/OupdB7FZDjPG1+nCvQ0lcD
-         tgYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709693681; x=1710298481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eS/C6JRe/LZxR5BB0/jvRViDTj3F8vBSe/WWRgNeFIA=;
-        b=U64O2MmcWJCp54Od1gXryaep+ALG27gZEyhTrqWNuXLKeumcEFw4Kw+VIz1zc3yx1P
-         uYmuiA7s9mODwRaRBMlZ19XfncKpuIXr0EVN1y3Lup+jF8iQEcDeQKF8c3WdTK5p0lsG
-         7bG++tCQYfurAmCr47iTZTG2Cvao2vlWdHNtvflkidhDf2jIqnYxNHoiiKraYuXnp+Ie
-         1OQES9+Yd4yMCRwwp0Zw0+sw1YJ2pQ6c8x0raK2B6oFo3b87CMb3H754vwHcB040oDxe
-         aT4uFs3/sMmT86lbn0Z4XXdN8rF36wyCXOq/3PNS/ZktN6YqBYh58XAQdUyttC2q3UuN
-         8Ebw==
-X-Forwarded-Encrypted: i=1; AJvYcCVMbDqI5vhNAu2r1DvRS5M7X0pWULf1mZKXAmXdcoU12k/ADCE2Fq9cWKEQ1qDLZpO+1fieveoILTGBqo7I3X7hM2ouRLeuTVbvBg==
-X-Gm-Message-State: AOJu0Yzx5t3Pwg/wrNs/aMmNAy5tksK+mnyNkSGFhtJDTOkN+J3vGqGo
-	8aoOjqc+ewE/boQaeumXYl+BUIg4yX9L0gNwD1DMf1wnm9SdHy7URx5jk0sD4uenmz3KwByTep5
-	eQqubE2lAgmV5MfJznQJdxURSmEEoC9KGGr4r
-X-Google-Smtp-Source: AGHT+IEBCHh5at8F+COR4cGDllSpD2J7JpR+ODcNFG7XI5qKLEW8CmG66IZiYQuqBlnDkixdz9i/+yCx3p+Y4GqdUM0=
-X-Received: by 2002:a17:906:4551:b0:a45:270e:3617 with SMTP id
- s17-20020a170906455100b00a45270e3617mr5771839ejq.27.1709693680497; Tue, 05
- Mar 2024 18:54:40 -0800 (PST)
+	d=quicklyemailsend77.com; s=default; t=1709697102;
+	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
+	h=Reply-To:From:To:Subject:Date:From;
+	b=ZWtaks3O4BXxU35wD6N09vqsW25JkDp9hHD9sTyb6Vk04mr+oFNmCOAWn0VZqVEQX
+	 /AFwNA8HC/sDhN0CVurmOdBzJceSStp2zKXF67JqKjsDVIXyKnQZ1nI1ruKwfCSOSO
+	 Gfn2PiS8m8BXClmseImk10b3oHloFaF2aAr48D3yN7JRVOyjrT2eJhk2KR+K0wcRbd
+	 bQ533vHMnub1vF+/55MgXtq/96HHK2EQAchHq8WyoRaDJsfn4o3OfLg9agC3fmgLie
+	 kpZdnqSiM3gpgbHufhlFdtLrNPVJho0/HVG13ybyi+ma8/T5ijk/Z7Y8cvnWnK5Aw0
+	 frVu8Ox+zYv0A==
+Reply-To: joakimlarson@skendiaelevator.com
+From: info@quicklyemailsend77.com
+To: linux-arch@vger.kernel.org
+Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
+Date: 05 Mar 2024 19:51:40 -0800
+Message-ID: <20240305195140.BD0B7789D5BF2B38@quicklyemailsend77.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-10-almasrymina@google.com> <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
- <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com> <6562b8b0-6cc0-4652-b746-75549801c002@davidwei.uk>
-In-Reply-To: <6562b8b0-6cc0-4652-b746-75549801c002@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 5 Mar 2024 18:54:28 -0800
-Message-ID: <CAHS8izOExbcxNSW8b5UUO=Y2se8ypZfaoyoviQvqR-WVZ=7s-g@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
- memory provider
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+	charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 5, 2024 at 6:47=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-03-05 18:42, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 6:28=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
-:
-> >>
-> >> On 2024-03-04 18:01, Mina Almasry wrote:
-> >>> +     if (pool->p.queue)
-> >>> +             binding =3D READ_ONCE(pool->p.queue->binding);
-> >>> +
-> >>> +     if (binding) {
-> >>> +             pool->mp_ops =3D &dmabuf_devmem_ops;
-> >>> +             pool->mp_priv =3D binding;
-> >>> +     }
-> >>
-> >> This is specific to TCP devmem. For ZC Rx we will need something more
-> >> generic to let us pass our own memory provider backend down to the pag=
-e
-> >> pool.
-> >>
-> >> What about storing ops and priv void ptr in struct netdev_rx_queue
-> >> instead? Then we can both use it.
-> >
-> > Yes, this is dmabuf specific, I was thinking you'd define your own
-> > member of netdev_rx_queue, and then add something like this to
-> > page_pool_init:
-> >
-> > +       if (pool->p.queue)
-> > +               io_uring_metadata =3D READ_ONCE(pool->p.queue->io_uring=
-_metadata);
-> > +
-> > +       /* We don't support rx-queues that are configured for both
-> > io_uring & dmabuf binding */
-> > +       BUG_ON(io_uring_metadata && binding);
-> > +
-> > +       if (io_uring_metadata) {
-> > +               pool->mp_ops =3D &io_uring_ops;
-> > +               pool->mp_priv =3D io_uring_metadata;
-> > +       }
-> >
-> > I.e., we share the pool->mp_ops and the pool->mp_priv but we don't
-> > really need to share the same netdev_rx_queue member. For me it's a
-> > dma-buf specific data structure (netdev_dmabuf_binding) and for you
-> > it's something else.
->
-> This adds size to struct netdev_rx_queue and requires checks on whether
-> both are set. There can be thousands of these structs at any one time so
-> if we don't need to add size unnecessarily then that would be best.
->
-> We can disambiguate by comparing &mp_ops and then cast the void ptr to
-> our impl specific objects.
->
-> What do you not like about this approach?
->
 
-I was thinking it leaks page_pool specifics into a generic struct
-unrelated to the page pool like netdev_rx_queue. My mental model is
-that the rx-queue just says that it's bound to a dma-buf/io_uring
-unaware of page_pool internals, and the page pool internals figure out
-what to do from there.
-
-Currently netdev_rx_queue.h doesn't include net/page_pool/types.h for
-example because there is no dependency between netdev_rx_queue &
-page_pool, I think this change would add a dependency.
-
-But I concede it does not matter much AFAICT, I can certainly change
-the netdev_rx_queue to hold the mp_priv & mp_ops directly and include
-net/page_pool/types.h if you prefer that. I'll look into applying this
-change in the next iteration if there are no objections.
-
-> >
-> > page_pool_init() probably needs to validate that the queue is
-> > configured for dma-buf or io_uring but not both. If it's configured
-> > for both then the user is doing something funky we shouldn't support.
-> >
-> > Perhaps I can make the intention clearer by renaming 'binding' to
-> > something more specific to dma-buf like queue->dmabuf_binding, to make
-> > it clear that this is the dma-buf binding and not some other binding
-> > like io_uring?
-> >
+=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
+=20
+=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
+=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
+=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
+=20
+=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
+=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
+=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
+ =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
+=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
+=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
+=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
+=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
+=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
+=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
+=20
+1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
+=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
+=20
+2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
+=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
+=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
+=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
+=EB=B0=8F =EC=A1=B0=EA=B1=B4.
+3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
+=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
+=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
+=88=EA=B9=8C?
+=20
+=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
 
 
+Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
+=EB=A6=AC=EC=9E=90)
 
---=20
-Thanks,
-Mina
+=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
+ 94 Vara, Sweden
+
+=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
+Sweden
+
+joakimlarson@skendiaelevator.com
+https://skandiaelevator.com
+
 
