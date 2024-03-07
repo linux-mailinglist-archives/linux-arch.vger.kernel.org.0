@@ -1,295 +1,224 @@
-Return-Path: <linux-arch+bounces-2884-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2885-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E5438746A6
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 04:19:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A03874C8A
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 11:39:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A73A0B21705
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 03:19:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF30D1F21D46
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 10:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCFA134A8;
-	Thu,  7 Mar 2024 03:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844A81CA84;
+	Thu,  7 Mar 2024 10:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ychUmlpI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="di7EL8GO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86869E555;
-	Thu,  7 Mar 2024 03:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549EF1C6BE
+	for <linux-arch@vger.kernel.org>; Thu,  7 Mar 2024 10:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709781574; cv=none; b=Q/sVWaV6iZkLqPHHgDBiVAfKm1fV7y7DRQ5CIhoKMqhcm52GG0jbUWfHeEhzeuj67UtGZkOCao6j3rAX5Zj3spvZpn1MbT0BwGIOP9//ggOlK7H+TmyC3wnalJlI2Cd9IM9hZYJ6HNbIUNziA1fMGdoL1y4QlieqypY3rQ6HMaQ=
+	t=1709807939; cv=none; b=TCUm4QFxnnvH8AP5ttCtuGOyq59Qf+rDxAnxBul+rhrXOPFRK6QS2VjtAIsXrH8Ir1AgEXU6bsJErkO+wx6fkiF2svxVX63o4eJStRz+EGMf5ihCN7uy58KFdGgN8YlQg4lncQdpuXJgs4htZDevKM4wVeyAbD4hcWvL9fZF9EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709781574; c=relaxed/simple;
-	bh=hJ6fv3HI3NxvYP0IKsPxT4ASej2UnYY1+6Lcvw7UNHM=;
-	h=Content-Type:Message-ID:Date:MIME-Version:From:Subject:To:Cc:
-	 References:In-Reply-To; b=uw1MW/MKWD6s7tQw6yxQ3JMVMpc1HyPHLeG5H69y2O48AGYgqtJX7ZnOYMauM7fEr+tkgK0SNNBw2v4/J+26ZcAwtclUhppeyTq9iODj3cHz3bom1Ulbo2rD0FvHlzWDY1SWcyOiWyFv6BnWrIaSGQ7LMBHVsDElTTq2wOvspiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ychUmlpI; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:References:Cc:To:Subject:
-	From:MIME-Version:Date:Message-ID:Content-Type:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=K3TldHFnOYBYmyA+ZpDycxvkU6EpB6K91tOzErQkNoI=; b=ychUmlpIQkbhQ0W88gqlbMN+nk
-	N7kxwIp4Izr4S3lPCeFsCe0pWGa05MFzhPp2qPSYgcWyeCT567m7b6xEwRBOrMHS3lZSsqVyoUU4T
-	7y7F6/lnCPMAbpLWNT/KgSkRXbsb+WWVTPkheyVwlC0r9TITjgwaWMg0KgLhrms6g9S/ejbG7FBNm
-	SnHBJTcxh0jjHwmTLQ8nR9IGWHgPGEJJpwnf9Ij4MI5DdZHa+8y8x739teJjHUtKT2eoh77rLEGz6
-	MdP/Ix8fny+Mesi6BjfLkCNZ6bfubnyJsEeeVzha+mbjpED+NoQEjvZnt3DmNMWzWM6Xr/QhSH1JE
-	yw3U0gQw==;
-Received: from [50.53.50.0] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1ri4Hf-00000002oO9-0yJC;
-	Thu, 07 Mar 2024 03:19:03 +0000
-Content-Type: multipart/mixed; boundary="------------oaFa8uBlfstuVB17zCaypWJR"
-Message-ID: <10a95079-86e4-41bf-8e82-e387936c437d@infradead.org>
-Date: Wed, 6 Mar 2024 19:18:57 -0800
+	s=arc-20240116; t=1709807939; c=relaxed/simple;
+	bh=nAvH+QYsejJgff+C4MpGXYIkaykbqzz6diX16JIQfaQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cDC+2H4grCnysBBUKcQ8KpzFSCJDBBXT11960gHOOO5OFoKxf4HjpkZiUoeM/SVgAYO5rxGS9MNXDYaORYKzWIjC4IFrf7fg7EkqDa9hwPqVnUSumZOKx+z5csFCbmdniaW+AW3f4AZykeg/L18SCYlmqkq8Fd5p8Ra27Jow0xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=di7EL8GO; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709807936; x=1741343936;
+  h=date:from:to:cc:subject:message-id;
+  bh=nAvH+QYsejJgff+C4MpGXYIkaykbqzz6diX16JIQfaQ=;
+  b=di7EL8GOZmod0vYI9ryGhzkwRf3u+rwGinceDZTXew+pOUNLwP2+o5xI
+   utKuiQ00Oz3mTSFBs11Wk2zuZeeEAx+0rSQnpdtKutsorUWZKJ/VhOW4T
+   7Wb5ho+RRk0VrQxxdiRW2TpE6Z4OS1JmmqXFgxjh22cXFjTxLn1BBaH/u
+   wR5SbOyG3ML9L26glOMrSs3ogGDsxDcPm7aiPw9LG90CEZnDeSXZ3YT+J
+   25hoE1JBl7nat8YUlK7qaYykrFsSPK+BJKQUgjmb6tLWYwEKOWAm3PtuD
+   4UF0qQCnGCZEDRGyjnFoEhKyDwnSt4cKSAVtUnZ6wpcYoKuqDLot1jZaL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="26943437"
+X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
+   d="scan'208";a="26943437"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 02:38:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
+   d="scan'208";a="14735931"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 07 Mar 2024 02:38:55 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1riB9H-00054Z-2I;
+	Thu, 07 Mar 2024 10:38:51 +0000
+Date: Thu, 07 Mar 2024 18:38:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 5394f1e9b687bcf26595cabf83483e568676128d
+Message-ID: <202403071858.5iBbyfmu-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v5 37/37] memprofiling: Documentation
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
- hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
- dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
- penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
- peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org,
- muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
- pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
- dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
- keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
- gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
- penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
- glider@google.com, elver@google.com, dvyukov@google.com,
- shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
- aliceryhl@google.com, rientjes@google.com, minchan@google.com,
- kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
- linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-References: <20240306182440.2003814-1-surenb@google.com>
- <20240306182440.2003814-38-surenb@google.com>
-Content-Language: en-US
-In-Reply-To: <20240306182440.2003814-38-surenb@google.com>
 
-This is a multi-part message in MIME format.
---------------oaFa8uBlfstuVB17zCaypWJR
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 5394f1e9b687bcf26595cabf83483e568676128d  arch: define CONFIG_PAGE_SIZE_*KB on all architectures
 
-Hi,
-This includes some editing suggestions and some doc build fixes.
+elapsed time: 934m
 
+configs tested: 135
+configs skipped: 3
 
-On 3/6/24 10:24, Suren Baghdasaryan wrote:
-> From: Kent Overstreet <kent.overstreet@linux.dev>
-> 
-> Provide documentation for memory allocation profiling.
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  Documentation/mm/allocation-profiling.rst | 91 +++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 Documentation/mm/allocation-profiling.rst
-> 
-> diff --git a/Documentation/mm/allocation-profiling.rst b/Documentation/mm/allocation-profiling.rst
-> new file mode 100644
-> index 000000000000..8a862c7d3aab
-> --- /dev/null
-> +++ b/Documentation/mm/allocation-profiling.rst
-> @@ -0,0 +1,91 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===========================
-> +MEMORY ALLOCATION PROFILING
-> +===========================
-> +
-> +Low overhead (suitable for production) accounting of all memory allocations,
-> +tracked by file and line number.
-> +
-> +Usage:
-> +kconfig options:
-> + - CONFIG_MEM_ALLOC_PROFILING
-> + - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-> + - CONFIG_MEM_ALLOC_PROFILING_DEBUG
-> +   adds warnings for allocations that weren't accounted because of a
-> +   missing annotation
-> +
-> +Boot parameter:
-> +  sysctl.vm.mem_profiling=0|1|never
-> +
-> +  When set to "never", memory allocation profiling overheads is minimized and it
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-                                                      overhead is
-
-> +  cannot be enabled at runtime (sysctl becomes read-only).
-> +  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y, default value is "1".
-> +  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n, default value is "never".
-> +
-> +sysctl:
-> +  /proc/sys/vm/mem_profiling
-> +
-> +Runtime info:
-> +  /proc/allocinfo
-> +
-> +Example output:
-> +  root@moria-kvm:~# sort -g /proc/allocinfo|tail|numfmt --to=iec
-> +        2.8M    22648 fs/kernfs/dir.c:615 func:__kernfs_new_node
-> +        3.8M      953 mm/memory.c:4214 func:alloc_anon_folio
-> +        4.0M     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
-> +        4.1M        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
-> +        6.0M     1532 mm/filemap.c:1919 func:__filemap_get_folio
-> +        8.8M     2785 kernel/fork.c:307 func:alloc_thread_stack_node
-> +         13M      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
-> +         14M     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
-> +         15M     3656 mm/readahead.c:247 func:page_cache_ra_unbounded
-> +         55M     4887 mm/slub.c:2259 func:alloc_slab_page
-> +        122M    31168 mm/page_ext.c:270 func:alloc_page_ext
-> +===================
-> +Theory of operation
-> +===================
-> +
-> +Memory allocation profiling builds off of code tagging, which is a library for
-> +declaring static structs (that typcially describe a file and line number in
-
-                                  typically
-
-> +some way, hence code tagging) and then finding and operating on them at runtime
-
-                                                                        at runtime,
-
-> +- i.e. iterating over them to print them in debugfs/procfs.
-
-  i.e., iterating
-
-> +
-> +To add accounting for an allocation call, we replace it with a macro
-> +invocation, alloc_hooks(), that
-> + - declares a code tag
-> + - stashes a pointer to it in task_struct
-> + - calls the real allocation function
-> + - and finally, restores the task_struct alloc tag pointer to its previous value.
-> +
-> +This allows for alloc_hooks() calls to be nested, with the most recent one
-> +taking effect. This is important for allocations internal to the mm/ code that
-> +do not properly belong to the outer allocation context and should be counted
-> +separately: for example, slab object extension vectors, or when the slab
-> +allocates pages from the page allocator.
-> +
-> +Thus, proper usage requires determining which function in an allocation call
-> +stack should be tagged. There are many helper functions that essentially wrap
-> +e.g. kmalloc() and do a little more work, then are called in multiple places;
-> +we'll generally want the accounting to happen in the callers of these helpers,
-> +not in the helpers themselves.
-> +
-> +To fix up a given helper, for example foo(), do the following:
-> + - switch its allocation call to the _noprof() version, e.g. kmalloc_noprof()
-> + - rename it to foo_noprof()
-> + - define a macro version of foo() like so:
-> +   #define foo(...) alloc_hooks(foo_noprof(__VA_ARGS__))
-> +
-> +It's also possible to stash a pointer to an alloc tag in your own data structures.
-> +
-> +Do this when you're implementing a generic data structure that does allocations
-> +"on behalf of" some other code - for example, the rhashtable code. This way,
-> +instead of seeing a large line in /proc/allocinfo for rhashtable.c, we can
-> +break it out by rhashtable type.
-> +
-> +To do so:
-> + - Hook your data structure's init function, like any other allocation function
-
-maybe end the line above with a '.' like the following line.
-
-> + - Within your init function, use the convenience macro alloc_tag_record() to
-> +   record alloc tag in your data structure.
-> + - Then, use the following form for your allocations:
-> +   alloc_hooks_tag(ht->your_saved_tag, kmalloc_noprof(...))
-
-
-Finally, there are a number of documentation build warnings in this patch.
-I'm no ReST expert, but the attached patch fixes them for me.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        vdk_hs38_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                        neponset_defconfig   gcc  
+arm                          sp7021_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   clang
+arm64                               defconfig   gcc  
+csky                             alldefconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240307   clang
+i386         buildonly-randconfig-002-20240307   gcc  
+i386         buildonly-randconfig-003-20240307   clang
+i386         buildonly-randconfig-004-20240307   gcc  
+i386         buildonly-randconfig-005-20240307   gcc  
+i386         buildonly-randconfig-006-20240307   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240307   gcc  
+i386                  randconfig-002-20240307   gcc  
+i386                  randconfig-003-20240307   clang
+i386                  randconfig-004-20240307   gcc  
+i386                  randconfig-005-20240307   gcc  
+i386                  randconfig-006-20240307   clang
+i386                  randconfig-011-20240307   clang
+i386                  randconfig-012-20240307   gcc  
+i386                  randconfig-013-20240307   clang
+i386                  randconfig-014-20240307   clang
+i386                  randconfig-015-20240307   clang
+i386                  randconfig-016-20240307   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                           sun3_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     cu1830-neo_defconfig   gcc  
+mips                      maltasmvp_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         alldefconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                     tqm5200_defconfig   gcc  
+powerpc                     tqm8540_defconfig   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                ecovec24-romimage_defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                           sh2007_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-004-20240307   clang
+x86_64       buildonly-randconfig-006-20240307   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-003-20240307   clang
+x86_64                randconfig-006-20240307   clang
+x86_64                randconfig-014-20240307   clang
+x86_64                randconfig-015-20240307   clang
+x86_64                randconfig-016-20240307   clang
+x86_64                randconfig-073-20240307   clang
+x86_64                randconfig-075-20240307   clang
+x86_64                randconfig-076-20240307   clang
+x86_64                          rhel-8.3-func   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
 -- 
-#Randy
---------------oaFa8uBlfstuVB17zCaypWJR
-Content-Type: text/x-patch; charset=UTF-8;
- name="docum-mm-alloc-profiling-fix403.patch"
-Content-Disposition: attachment;
- filename="docum-mm-alloc-profiling-fix403.patch"
-Content-Transfer-Encoding: base64
-
-U2lnbmVkLW9mZi1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+Ci0t
-LQogRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5yc3QgfCAgIDI4ICsr
-KysrKysrKystLS0tLS0tLS0tCiBEb2N1bWVudGF0aW9uL21tL2luZGV4LnJzdCAgICAgICAg
-ICAgICAgICB8ICAgIDEgCiAyIGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDEz
-IGRlbGV0aW9ucygtKQoKZGlmZiAtLSBhL0RvY3VtZW50YXRpb24vbW0vYWxsb2NhdGlvbi1w
-cm9maWxpbmcucnN0IGIvRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5y
-c3QKLS0tIGEvRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5yc3QKKysr
-IGIvRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5yc3QKQEAgLTksMTEg
-KzksMTEgQEAgdHJhY2tlZCBieSBmaWxlIGFuZCBsaW5lIG51bWJlci4KIAogVXNhZ2U6CiBr
-Y29uZmlnIG9wdGlvbnM6Ci0gLSBDT05GSUdfTUVNX0FMTE9DX1BST0ZJTElORwotIC0gQ09O
-RklHX01FTV9BTExPQ19QUk9GSUxJTkdfRU5BQkxFRF9CWV9ERUZBVUxUCi0gLSBDT05GSUdf
-TUVNX0FMTE9DX1BST0ZJTElOR19ERUJVRwotICAgYWRkcyB3YXJuaW5ncyBmb3IgYWxsb2Nh
-dGlvbnMgdGhhdCB3ZXJlbid0IGFjY291bnRlZCBiZWNhdXNlIG9mIGEKLSAgIG1pc3Npbmcg
-YW5ub3RhdGlvbgorLSBDT05GSUdfTUVNX0FMTE9DX1BST0ZJTElORworLSBDT05GSUdfTUVN
-X0FMTE9DX1BST0ZJTElOR19FTkFCTEVEX0JZX0RFRkFVTFQKKy0gQ09ORklHX01FTV9BTExP
-Q19QUk9GSUxJTkdfREVCVUcKK2FkZHMgd2FybmluZ3MgZm9yIGFsbG9jYXRpb25zIHRoYXQg
-d2VyZW4ndCBhY2NvdW50ZWQgYmVjYXVzZSBvZiBhCittaXNzaW5nIGFubm90YXRpb24KIAog
-Qm9vdCBwYXJhbWV0ZXI6CiAgIHN5c2N0bC52bS5tZW1fcHJvZmlsaW5nPTB8MXxuZXZlcgpA
-QCAtMjksNyArMjksOCBAQCBzeXNjdGw6CiBSdW50aW1lIGluZm86CiAgIC9wcm9jL2FsbG9j
-aW5mbwogCi1FeGFtcGxlIG91dHB1dDoKK0V4YW1wbGUgb3V0cHV0OjoKKwogICByb290QG1v
-cmlhLWt2bTp+IyBzb3J0IC1nIC9wcm9jL2FsbG9jaW5mb3x0YWlsfG51bWZtdCAtLXRvPWll
-YwogICAgICAgICAyLjhNICAgIDIyNjQ4IGZzL2tlcm5mcy9kaXIuYzo2MTUgZnVuYzpfX2tl
-cm5mc19uZXdfbm9kZQogICAgICAgICAzLjhNICAgICAgOTUzIG1tL21lbW9yeS5jOjQyMTQg
-ZnVuYzphbGxvY19hbm9uX2ZvbGlvCkBAIC00MiwyMSArNDMsMjIgQEAgRXhhbXBsZSBvdXRw
-dXQ6CiAgICAgICAgICAxNU0gICAgIDM2NTYgbW0vcmVhZGFoZWFkLmM6MjQ3IGZ1bmM6cGFn
-ZV9jYWNoZV9yYV91bmJvdW5kZWQKICAgICAgICAgIDU1TSAgICAgNDg4NyBtbS9zbHViLmM6
-MjI1OSBmdW5jOmFsbG9jX3NsYWJfcGFnZQogICAgICAgICAxMjJNICAgIDMxMTY4IG1tL3Bh
-Z2VfZXh0LmM6MjcwIGZ1bmM6YWxsb2NfcGFnZV9leHQKKwogPT09PT09PT09PT09PT09PT09
-PQogVGhlb3J5IG9mIG9wZXJhdGlvbgogPT09PT09PT09PT09PT09PT09PQogCiBNZW1vcnkg
-YWxsb2NhdGlvbiBwcm9maWxpbmcgYnVpbGRzIG9mZiBvZiBjb2RlIHRhZ2dpbmcsIHdoaWNo
-IGlzIGEgbGlicmFyeSBmb3IKIGRlY2xhcmluZyBzdGF0aWMgc3RydWN0cyAodGhhdCB0eXBj
-aWFsbHkgZGVzY3JpYmUgYSBmaWxlIGFuZCBsaW5lIG51bWJlciBpbgotc29tZSB3YXksIGhl
-bmNlIGNvZGUgdGFnZ2luZykgYW5kIHRoZW4gZmluZGluZyBhbmQgb3BlcmF0aW5nIG9uIHRo
-ZW0gYXQgcnVudGltZQotLSBpLmUuIGl0ZXJhdGluZyBvdmVyIHRoZW0gdG8gcHJpbnQgdGhl
-bSBpbiBkZWJ1Z2ZzL3Byb2Nmcy4KK3NvbWUgd2F5LCBoZW5jZSBjb2RlIHRhZ2dpbmcpIGFu
-ZCB0aGVuIGZpbmRpbmcgYW5kIG9wZXJhdGluZyBvbiB0aGVtIGF0IHJ1bnRpbWUsCitpLmUu
-LCBpdGVyYXRpbmcgb3ZlciB0aGVtIHRvIHByaW50IHRoZW0gaW4gZGVidWdmcy9wcm9jZnMu
-CiAKIFRvIGFkZCBhY2NvdW50aW5nIGZvciBhbiBhbGxvY2F0aW9uIGNhbGwsIHdlIHJlcGxh
-Y2UgaXQgd2l0aCBhIG1hY3JvCi1pbnZvY2F0aW9uLCBhbGxvY19ob29rcygpLCB0aGF0Ci0g
-LSBkZWNsYXJlcyBhIGNvZGUgdGFnCi0gLSBzdGFzaGVzIGEgcG9pbnRlciB0byBpdCBpbiB0
-YXNrX3N0cnVjdAotIC0gY2FsbHMgdGhlIHJlYWwgYWxsb2NhdGlvbiBmdW5jdGlvbgotIC0g
-YW5kIGZpbmFsbHksIHJlc3RvcmVzIHRoZSB0YXNrX3N0cnVjdCBhbGxvYyB0YWcgcG9pbnRl
-ciB0byBpdHMgcHJldmlvdXMgdmFsdWUuCitpbnZvY2F0aW9uLCBhbGxvY19ob29rcygpLCB0
-aGF0OgorLSBkZWNsYXJlcyBhIGNvZGUgdGFnCistIHN0YXNoZXMgYSBwb2ludGVyIHRvIGl0
-IGluIHRhc2tfc3RydWN0CistIGNhbGxzIHRoZSByZWFsIGFsbG9jYXRpb24gZnVuY3Rpb24K
-Ky0gYW5kIGZpbmFsbHksIHJlc3RvcmVzIHRoZSB0YXNrX3N0cnVjdCBhbGxvYyB0YWcgcG9p
-bnRlciB0byBpdHMgcHJldmlvdXMgdmFsdWUuCiAKIFRoaXMgYWxsb3dzIGZvciBhbGxvY19o
-b29rcygpIGNhbGxzIHRvIGJlIG5lc3RlZCwgd2l0aCB0aGUgbW9zdCByZWNlbnQgb25lCiB0
-YWtpbmcgZWZmZWN0LiBUaGlzIGlzIGltcG9ydGFudCBmb3IgYWxsb2NhdGlvbnMgaW50ZXJu
-YWwgdG8gdGhlIG1tLyBjb2RlIHRoYXQKZGlmZiAtLSBhL0RvY3VtZW50YXRpb24vbW0vaW5k
-ZXgucnN0IGIvRG9jdW1lbnRhdGlvbi9tbS9pbmRleC5yc3QKLS0tIGEvRG9jdW1lbnRhdGlv
-bi9tbS9pbmRleC5yc3QKKysrIGIvRG9jdW1lbnRhdGlvbi9tbS9pbmRleC5yc3QKQEAgLTI2
-LDYgKzI2LDcgQEAgc2VlIHRoZSA6ZG9jOmBhZG1pbiBndWlkZSA8Li4vYWRtaW4tZ3VpZAog
-ICAgcGFnZV9jYWNoZQogICAgc2htZnMKICAgIG9vbQorICAgYWxsb2NhdGlvbi1wcm9maWxp
-bmcKIAogTGVnYWN5IERvY3VtZW50YXRpb24KID09PT09PT09PT09PT09PT09PT09Cg==
-
---------------oaFa8uBlfstuVB17zCaypWJR--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
