@@ -1,449 +1,295 @@
-Return-Path: <linux-arch+bounces-2883-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2884-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEB8874282
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 23:11:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E5438746A6
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 04:19:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A8FFB22D58
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Mar 2024 22:11:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A73A0B21705
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 03:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875681BC31;
-	Wed,  6 Mar 2024 22:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCFA134A8;
+	Thu,  7 Mar 2024 03:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="imSnvB/g"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ychUmlpI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CD21BC22
-	for <linux-arch@vger.kernel.org>; Wed,  6 Mar 2024 22:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86869E555;
+	Thu,  7 Mar 2024 03:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709763073; cv=none; b=J2XPY/8oTOzD5i0cFctECBr3B2M3FVsaqZ4+HeLUfw9SMeHeDRjOfvko6vP2Wh7umHm1mG3Ok57nqeZ+YdndZVaR2+26UIY+OcuFO8xtuQrPqBWbOY1dQzyI2l85U/eEpL18KGJnb62J6qk1dOB39Pn/e5XUdCz89odDmhGfLBI=
+	t=1709781574; cv=none; b=Q/sVWaV6iZkLqPHHgDBiVAfKm1fV7y7DRQ5CIhoKMqhcm52GG0jbUWfHeEhzeuj67UtGZkOCao6j3rAX5Zj3spvZpn1MbT0BwGIOP9//ggOlK7H+TmyC3wnalJlI2Cd9IM9hZYJ6HNbIUNziA1fMGdoL1y4QlieqypY3rQ6HMaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709763073; c=relaxed/simple;
-	bh=e+h5g7ggIAcqtCEsjbwW8QZ4XMZUN74BvuwxvFy1dqE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ilLTkWErX9HnyARCQVX+5vt5sLXEoLHZ/XVZ1C2u+wzVm/kgOeLWNhoLON3yBIJ998+A70/n81Ow8InZaTtTenu9aaxwzequ1p2eoMC+b3tA8i4OoGygU7k7L6ltrCKliwL3u1f2y79MkIqX8SF8vBplIZj7Lcehjz9MzDh0Y8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=imSnvB/g; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a45bb2a9c20so32515666b.0
-        for <linux-arch@vger.kernel.org>; Wed, 06 Mar 2024 14:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709763068; x=1710367868; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
-        b=imSnvB/glsrcOoPIl62eeq6tzX1mTcMOBOEqK11tyD8Q0h0/m3eXHCKa62zKxIl1k+
-         YqDAFu8QP4A/jo0OqqO3VFfTgffsuHGIPg60Dz2Y/rpwW/z69zYX6P14tfKr3BJFm0LV
-         rpolC4pkfuCAG7xI6MU71ZLwVokmsKyyEvQx9Fva5V6SFM/yuZnVjwezpSC75JLue0FE
-         VqBQp4fGnzQub8hM2Mst6i0IksmKfepM49kQxm+bK49O6M2u0qiSNE5TYZKaxqhaTXVl
-         pptv/cGgeHIqMbTyvqkUl4s18Xy1ph3NeNPUHutsXLXyE5u8Lh4Fy4W0+DQ39RUs8czE
-         25Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709763068; x=1710367868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
-        b=o/ZCTcPmkwXV8+Gs0pwxoFMvJuhaLT0rd+29BkkZgRzhFiZvKa3gR0v9Jo+Lv7DB3r
-         NZONWZ1joqtFQes7fv4U5IbN6N5iT4MJnWIXqcFCPLuhwhle395HTs/mR/E/cNctbPFM
-         MbxH+KmoRwFLAq8LMVn1pvptU2ySjcVWGzVPf8H5r22RPInZjcArqGuvd8LgMYE3CJzd
-         hOupa6DG/D/Wwirl0MURhxBdptuNlUee0cdiDwRHs7Y+agCcaM4Zc3JJKImIKlH855y9
-         kISSfHXIohebWXona2ghGRVfna+KOuduCcYAG+RIxT0Gfi094M+YJTnDjivnGP+5IogT
-         QauQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbNPXDJ/0aV6I7D3nLB+L/U9B0aQtlZ32KItyTBoOdJ0yIR1Up2dQqObJ9EI8vmOX4vzFuwZn5av45UQ5OC63QqTlJ0zNG4XbNkQ==
-X-Gm-Message-State: AOJu0YzPQVKenGQs3swWotXm5DEYYP7JvBL2Pg85MRYry28Z6SExvfU+
-	ZlV5efDPOKhG6TSlcBkjqu323ujd00+7zX8daRIxDKkSAFixE7ZM7Bx4Fa+T94c1bfXHI9lASSm
-	bvxQTAx+FU0z60khMpuiDM7KBADfulvnAnC+P
-X-Google-Smtp-Source: AGHT+IENXwD+VWczLj/dTM2/A1MFyK7LqUp0f5yPqTDI4m7+LrQO5mzGQIb3CxwkX+uMg5NpdLqf746V4nTchzug2EI=
-X-Received: by 2002:a17:906:3442:b0:a44:3ec9:1fd3 with SMTP id
- d2-20020a170906344200b00a443ec91fd3mr9663971ejb.30.1709763067483; Wed, 06 Mar
- 2024 14:11:07 -0800 (PST)
+	s=arc-20240116; t=1709781574; c=relaxed/simple;
+	bh=hJ6fv3HI3NxvYP0IKsPxT4ASej2UnYY1+6Lcvw7UNHM=;
+	h=Content-Type:Message-ID:Date:MIME-Version:From:Subject:To:Cc:
+	 References:In-Reply-To; b=uw1MW/MKWD6s7tQw6yxQ3JMVMpc1HyPHLeG5H69y2O48AGYgqtJX7ZnOYMauM7fEr+tkgK0SNNBw2v4/J+26ZcAwtclUhppeyTq9iODj3cHz3bom1Ulbo2rD0FvHlzWDY1SWcyOiWyFv6BnWrIaSGQ7LMBHVsDElTTq2wOvspiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ychUmlpI; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:References:Cc:To:Subject:
+	From:MIME-Version:Date:Message-ID:Content-Type:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=K3TldHFnOYBYmyA+ZpDycxvkU6EpB6K91tOzErQkNoI=; b=ychUmlpIQkbhQ0W88gqlbMN+nk
+	N7kxwIp4Izr4S3lPCeFsCe0pWGa05MFzhPp2qPSYgcWyeCT567m7b6xEwRBOrMHS3lZSsqVyoUU4T
+	7y7F6/lnCPMAbpLWNT/KgSkRXbsb+WWVTPkheyVwlC0r9TITjgwaWMg0KgLhrms6g9S/ejbG7FBNm
+	SnHBJTcxh0jjHwmTLQ8nR9IGWHgPGEJJpwnf9Ij4MI5DdZHa+8y8x739teJjHUtKT2eoh77rLEGz6
+	MdP/Ix8fny+Mesi6BjfLkCNZ6bfubnyJsEeeVzha+mbjpED+NoQEjvZnt3DmNMWzWM6Xr/QhSH1JE
+	yw3U0gQw==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1ri4Hf-00000002oO9-0yJC;
+	Thu, 07 Mar 2024 03:19:03 +0000
+Content-Type: multipart/mixed; boundary="------------oaFa8uBlfstuVB17zCaypWJR"
+Message-ID: <10a95079-86e4-41bf-8e82-e387936c437d@infradead.org>
+Date: Wed, 6 Mar 2024 19:18:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com> <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
- <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com> <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-In-Reply-To: <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 6 Mar 2024 14:10:55 -0800
-Message-ID: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v5 37/37] memprofiling: Documentation
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+ hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+ dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+ penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+ david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+ nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org,
+ muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+ pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
+ dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
+ keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
+ gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+ penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+ glider@google.com, elver@google.com, dvyukov@google.com,
+ shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+ aliceryhl@google.com, rientjes@google.com, minchan@google.com,
+ kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+ linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+References: <20240306182440.2003814-1-surenb@google.com>
+ <20240306182440.2003814-38-surenb@google.com>
+Content-Language: en-US
+In-Reply-To: <20240306182440.2003814-38-surenb@google.com>
 
-On Wed, Mar 6, 2024 at 4:38=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
->
-> On 2024/3/6 5:17, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 4:55=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:
-> >>
-> >> On 2024/3/5 10:01, Mina Almasry wrote:
-> >>
-> >> ...
-> >>
-> >>>
-> >>> The netdev_dmabuf_binding struct is refcounted, and releases its
-> >>> resources only when all the refs are released.
-> >>>
-> >>> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> >>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> >>> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >>>
-> >>> ---
-> >>>
-> >>> RFC v6:
-> >>> - Validate rx queue index
-> >>> - Refactor new functions into devmem.c (Pavel)
-> >>
-> >> It seems odd that the functions or stucts in a file called devmem.c
-> >> are named after 'dmabuf' instead of 'devmem'.
-> >>
-> >
-> > So my intention with this naming that devmem.c contains all the
-> > functions for all devmem tcp specific support. Currently the only
-> > devmem we support is dmabuf. In the future, other devmem may be
-> > supported and it can fit nicely in devmem.c. For example, if we want
-> > to extend devmem TCP to support NVMe devices, we need to add support
-> > for p2pdma, maybe, and we can add that support under the devmem.c
-> > umbrella rather than add new files.
-> >
-> > But I can rename to dmabuf.c if there is strong objection to the curren=
-t name.
->
-> Grepping 'dmabuf' seems to show that it may be common rename it to
-> something as *_dmabuf.c.
->
-> >
-> >>>
-> >>
-> >> ...
-> >>
-> >>> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> >>> index d8b810245c1d..72e932a1a948 100644
-> >>> --- a/include/net/netmem.h
-> >>> +++ b/include/net/netmem.h
-> >>> @@ -8,6 +8,16 @@
-> >>>  #ifndef _NET_NETMEM_H
-> >>>  #define _NET_NETMEM_H
-> >>>
-> >>> +#include <net/devmem.h>
-> >>> +
-> >>> +/* net_iov */
-> >>> +
-> >>> +struct net_iov {
-> >>> +     struct dmabuf_genpool_chunk_owner *owner;
-> >>> +};
-> >>> +
-> >>> +/* netmem */
-> >>> +
-> >>>  /**
-> >>>   * typedef netmem_ref - a nonexistent type marking a reference to ge=
-neric
-> >>>   * network memory.
-> >>> diff --git a/net/core/Makefile b/net/core/Makefile
-> >>> index 821aec06abf1..592f955c1241 100644
-> >>> --- a/net/core/Makefile
-> >>> +++ b/net/core/Makefile
-> >>> @@ -13,7 +13,7 @@ obj-y                    +=3D dev.o dev_addr_lists.=
-o dst.o netevent.o \
-> >>>                       neighbour.o rtnetlink.o utils.o link_watch.o fi=
-lter.o \
-> >>>                       sock_diag.o dev_ioctl.o tso.o sock_reuseport.o =
-\
-> >>>                       fib_notifier.o xdp.o flow_offload.o gro.o \
-> >>> -                     netdev-genl.o netdev-genl-gen.o gso.o
-> >>> +                     netdev-genl.o netdev-genl-gen.o gso.o devmem.o
-> >>>
-> >>>  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) +=3D dev_addr_lists_test.o
-> >>>
-> >>> diff --git a/net/core/dev.c b/net/core/dev.c
-> >>> index fe054cbd41e9..bbea1b252529 100644
-> >>> --- a/net/core/dev.c
-> >>> +++ b/net/core/dev.c
-> >>> @@ -155,6 +155,9 @@
-> >>>  #include <net/netdev_rx_queue.h>
-> >>>  #include <net/page_pool/types.h>
-> >>>  #include <net/page_pool/helpers.h>
-> >>> +#include <linux/genalloc.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <net/devmem.h>
-> >>>
-> >>>  #include "dev.h"
-> >>>  #include "net-sysfs.h"
-> >>> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> >>> new file mode 100644
-> >>> index 000000000000..779ad990971e
-> >>> --- /dev/null
-> >>> +++ b/net/core/devmem.c
-> >>> @@ -0,0 +1,293 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >>> +/*
-> >>> + *      Devmem TCP
-> >>> + *
-> >>> + *      Authors:     Mina Almasry <almasrymina@google.com>
-> >>> + *                   Willem de Bruijn <willemdebruijn.kernel@gmail.c=
-om>
-> >>> + *                   Kaiyuan Zhang <kaiyuanz@google.com
-> >>> + */
-> >>> +
-> >>> +#include <linux/types.h>
-> >>> +#include <linux/mm.h>
-> >>> +#include <linux/netdevice.h>
-> >>> +#include <trace/events/page_pool.h>
-> >>> +#include <net/netdev_rx_queue.h>
-> >>> +#include <net/page_pool/types.h>
-> >>> +#include <net/page_pool/helpers.h>
-> >>> +#include <linux/genalloc.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <net/devmem.h>
-> >>> +
-> >>> +/* Device memory support */
-> >>> +
-> >>> +#ifdef CONFIG_DMA_SHARED_BUFFER
-> >>
-> >> I still think it is worth adding its own config for devmem or dma-buf
-> >> for networking, thinking about the embeded system.
-> >>
-> >
-> > FWIW Willem did weigh on this previously and said he prefers to have
-> > it unguarded by a CONFIG, but I will submit to whatever the consensus
-> > here. It shouldn't be a huge deal to add a CONFIG technically
-> > speaking.
->
-> Grepping 'CONFIG_DMA_SHARED_BUFFER' show that the API user of dmabuf
-> API does not seems to reuse the CONFIG_DMA_SHARED_BUFFER, instead they
-> seem to define its own config, and select CONFIG_DMA_SHARED_BUFFER
-> if necessary, it that any reason it is different here?
->
-> >
-> >>> +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
-> >>> +                                        struct gen_pool_chunk *chunk=
-,
-> >>> +                                        void *not_used)
-> >>
-> >> It seems odd to still keep the netdev_ prefix as it is not really rela=
-ted
-> >> to netdev, perhaps use 'net_' or something better.
-> >>
-> >
-> > Yes, thanks for catching. I can change to net_devmem_ maybe or net_dmab=
-uf_*.
->
-> FWIW, net_dmabuf_* seems like a better name technically.
->
-> >
-> >>> +{
-> >>> +     struct dmabuf_genpool_chunk_owner *owner =3D chunk->owner;
-> >>> +
-> >>> +     kvfree(owner->niovs);
-> >>> +     kfree(owner);
-> >>> +}
-> >>> +
-> >>> +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *bind=
-ing)
-> >>> +{
-> >>> +     size_t size, avail;
-> >>> +
-> >>> +     gen_pool_for_each_chunk(binding->chunk_pool,
-> >>> +                             netdev_dmabuf_free_chunk_owner, NULL);
-> >>> +
-> >>> +     size =3D gen_pool_size(binding->chunk_pool);
-> >>> +     avail =3D gen_pool_avail(binding->chunk_pool);
-> >>> +
-> >>> +     if (!WARN(size !=3D avail, "can't destroy genpool. size=3D%lu, =
-avail=3D%lu",
-> >>> +               size, avail))
-> >>> +             gen_pool_destroy(binding->chunk_pool);
-> >>> +
-> >>> +     dma_buf_unmap_attachment(binding->attachment, binding->sgt,
-> >>> +                              DMA_BIDIRECTIONAL);
-> >>
-> >> For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
-> >>
-> >
-> > Yes, good catch. I suspect we want to reuse this code for TX path. But
-> > for now, I'll test with DMA_FROM_DEVICE and if I see no issues I'll
-> > apply this change.
-> >
-> >>> +     dma_buf_detach(binding->dmabuf, binding->attachment);
-> >>> +     dma_buf_put(binding->dmabuf);
-> >>> +     xa_destroy(&binding->bound_rxq_list);
-> >>> +     kfree(binding);
-> >>> +}
-> >>> +
-> >>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_i=
-dx)
-> >>> +{
-> >>> +     void *new_mem;
-> >>> +     void *old_mem;
-> >>> +     int err;
-> >>> +
-> >>> +     if (!dev || !dev->netdev_ops)
-> >>> +             return -EINVAL;
-> >>> +
-> >>> +     if (!dev->netdev_ops->ndo_queue_stop ||
-> >>> +         !dev->netdev_ops->ndo_queue_mem_free ||
-> >>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
-> >>> +         !dev->netdev_ops->ndo_queue_start)
-> >>> +             return -EOPNOTSUPP;
-> >>> +
-> >>> +     new_mem =3D dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
-> >>> +     if (!new_mem)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     err =3D dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem)=
-;
-> >>> +     if (err)
-> >>> +             goto err_free_new_mem;
-> >>> +
-> >>> +     err =3D dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem)=
-;
-> >>> +     if (err)
-> >>> +             goto err_start_queue;
-> >>> +
-> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
-> >>> +
-> >>> +     return 0;
-> >>> +
-> >>> +err_start_queue:
-> >>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
-> >>
-> >> It might worth mentioning why queue start with old_mem will always
-> >> success here as the return value seems to be ignored here.
-> >>
-> >
-> > So the old queue, we stopped it, and if we fail to bring up the new
-> > queue, then we want to start the old queue back up to get the queue
-> > back to a workable state.
-> >
-> > I don't see what we can do to recover if restarting the old queue
-> > fails. Seems like it should be a requirement that the driver tries as
-> > much as possible to keep the old queue restartable.
->
-> Is it possible that we may have the 'old_mem' leaking if the driver
-> fails to restart the old queue? how does the driver handle the
-> firmware cmd failure for ndo_queue_start()? it seems a little
-> tricky to implement it.
->
+This is a multi-part message in MIME format.
+--------------oaFa8uBlfstuVB17zCaypWJR
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I'm not sure what we can do to meaningfully recover from failure to
-restarting the old queue, except log it so the error is visible. In
-theory because we have not modifying any queue configurations
-restarting it would be straight forward, but since it's dealing with
-hardware then any failures are possible.
-
-> >
-> > I can improve this by at least logging or warning if restarting the
-> > old queue fails.
->
-> Also the semantics of the above function seems odd that it is not
-> only restarting rx queue, but also freeing and allocating memory
-> despite the name only suggests 'restart', I am a litte afraid that
-> it may conflict with future usecae when user only need the
-> 'restart' part, perhaps rename it to a more appropriate name.
->
-
-Oh, what we want here is just the 'restart' part. However, Jakub
-mandates that if you restart a queue (or a driver), you do it like
-this, hence the slightly more complicated implementation.
-
-https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
--13-almasrymina@google.com/#25590262
-https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
-
-> >
-> >>> +
-> >>> +err_free_new_mem:
-> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
-> >>> +
-> >>> +     return err;
-> >>> +}
-> >>> +
-> >>> +/* Protected by rtnl_lock() */
-> >>> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
-> >>> +
-> >>> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
-> >>> +{
-> >>> +     struct netdev_rx_queue *rxq;
-> >>> +     unsigned long xa_idx;
-> >>> +     unsigned int rxq_idx;
-> >>> +
-> >>> +     if (!binding)
-> >>> +             return;
-> >>> +
-> >>> +     if (binding->list.next)
-> >>> +             list_del(&binding->list);
-> >>
-> >> The above does not seems to be a good pattern to delete a entry, is
-> >> there any reason having a checking before the list_del()? seems like
-> >> defensive programming?
-> >>
-> >
-> > I think I needed to apply this condition to handle the case where
-> > netdev_unbind_dmabuf() is called when binding->list is not initialized
-> > or is empty.
-> >
-> > netdev_nl_bind_rx_doit() will call unbind to free a partially
-> > allocated binding in error paths, so, netdev_unbind_dmabuf() may be
-> > called with a partially initialized binding. This is why we check for
-> > binding->list is initialized here and check that rxq->binding =3D=3D
-> > binding below. The main point is that netdev_unbind_dmabuf() may be
-> > asked to unbind a partially bound dmabuf due to error paths.
-> >
-> > Maybe a comment here will test this better. I will double confirm the
-> > check is needed for the error paths in netdev_nl_bind_rx_doit().
-> >
-> >>> +
-> >>> +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> >>> +             if (rxq->binding =3D=3D binding) {
-> >>
-> >> It seems like defensive programming here too?
-> >>
->
+Hi,
+This includes some editing suggestions and some doc build fixes.
 
 
---=20
-Thanks,
-Mina
+On 3/6/24 10:24, Suren Baghdasaryan wrote:
+> From: Kent Overstreet <kent.overstreet@linux.dev>
+> 
+> Provide documentation for memory allocation profiling.
+> 
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  Documentation/mm/allocation-profiling.rst | 91 +++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/mm/allocation-profiling.rst
+> 
+> diff --git a/Documentation/mm/allocation-profiling.rst b/Documentation/mm/allocation-profiling.rst
+> new file mode 100644
+> index 000000000000..8a862c7d3aab
+> --- /dev/null
+> +++ b/Documentation/mm/allocation-profiling.rst
+> @@ -0,0 +1,91 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +===========================
+> +MEMORY ALLOCATION PROFILING
+> +===========================
+> +
+> +Low overhead (suitable for production) accounting of all memory allocations,
+> +tracked by file and line number.
+> +
+> +Usage:
+> +kconfig options:
+> + - CONFIG_MEM_ALLOC_PROFILING
+> + - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
+> + - CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> +   adds warnings for allocations that weren't accounted because of a
+> +   missing annotation
+> +
+> +Boot parameter:
+> +  sysctl.vm.mem_profiling=0|1|never
+> +
+> +  When set to "never", memory allocation profiling overheads is minimized and it
+
+                                                      overhead is
+
+> +  cannot be enabled at runtime (sysctl becomes read-only).
+> +  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y, default value is "1".
+> +  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n, default value is "never".
+> +
+> +sysctl:
+> +  /proc/sys/vm/mem_profiling
+> +
+> +Runtime info:
+> +  /proc/allocinfo
+> +
+> +Example output:
+> +  root@moria-kvm:~# sort -g /proc/allocinfo|tail|numfmt --to=iec
+> +        2.8M    22648 fs/kernfs/dir.c:615 func:__kernfs_new_node
+> +        3.8M      953 mm/memory.c:4214 func:alloc_anon_folio
+> +        4.0M     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
+> +        4.1M        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
+> +        6.0M     1532 mm/filemap.c:1919 func:__filemap_get_folio
+> +        8.8M     2785 kernel/fork.c:307 func:alloc_thread_stack_node
+> +         13M      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
+> +         14M     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
+> +         15M     3656 mm/readahead.c:247 func:page_cache_ra_unbounded
+> +         55M     4887 mm/slub.c:2259 func:alloc_slab_page
+> +        122M    31168 mm/page_ext.c:270 func:alloc_page_ext
+> +===================
+> +Theory of operation
+> +===================
+> +
+> +Memory allocation profiling builds off of code tagging, which is a library for
+> +declaring static structs (that typcially describe a file and line number in
+
+                                  typically
+
+> +some way, hence code tagging) and then finding and operating on them at runtime
+
+                                                                        at runtime,
+
+> +- i.e. iterating over them to print them in debugfs/procfs.
+
+  i.e., iterating
+
+> +
+> +To add accounting for an allocation call, we replace it with a macro
+> +invocation, alloc_hooks(), that
+> + - declares a code tag
+> + - stashes a pointer to it in task_struct
+> + - calls the real allocation function
+> + - and finally, restores the task_struct alloc tag pointer to its previous value.
+> +
+> +This allows for alloc_hooks() calls to be nested, with the most recent one
+> +taking effect. This is important for allocations internal to the mm/ code that
+> +do not properly belong to the outer allocation context and should be counted
+> +separately: for example, slab object extension vectors, or when the slab
+> +allocates pages from the page allocator.
+> +
+> +Thus, proper usage requires determining which function in an allocation call
+> +stack should be tagged. There are many helper functions that essentially wrap
+> +e.g. kmalloc() and do a little more work, then are called in multiple places;
+> +we'll generally want the accounting to happen in the callers of these helpers,
+> +not in the helpers themselves.
+> +
+> +To fix up a given helper, for example foo(), do the following:
+> + - switch its allocation call to the _noprof() version, e.g. kmalloc_noprof()
+> + - rename it to foo_noprof()
+> + - define a macro version of foo() like so:
+> +   #define foo(...) alloc_hooks(foo_noprof(__VA_ARGS__))
+> +
+> +It's also possible to stash a pointer to an alloc tag in your own data structures.
+> +
+> +Do this when you're implementing a generic data structure that does allocations
+> +"on behalf of" some other code - for example, the rhashtable code. This way,
+> +instead of seeing a large line in /proc/allocinfo for rhashtable.c, we can
+> +break it out by rhashtable type.
+> +
+> +To do so:
+> + - Hook your data structure's init function, like any other allocation function
+
+maybe end the line above with a '.' like the following line.
+
+> + - Within your init function, use the convenience macro alloc_tag_record() to
+> +   record alloc tag in your data structure.
+> + - Then, use the following form for your allocations:
+> +   alloc_hooks_tag(ht->your_saved_tag, kmalloc_noprof(...))
+
+
+Finally, there are a number of documentation build warnings in this patch.
+I'm no ReST expert, but the attached patch fixes them for me.
+
+-- 
+#Randy
+--------------oaFa8uBlfstuVB17zCaypWJR
+Content-Type: text/x-patch; charset=UTF-8;
+ name="docum-mm-alloc-profiling-fix403.patch"
+Content-Disposition: attachment;
+ filename="docum-mm-alloc-profiling-fix403.patch"
+Content-Transfer-Encoding: base64
+
+U2lnbmVkLW9mZi1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+Ci0t
+LQogRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5yc3QgfCAgIDI4ICsr
+KysrKysrKystLS0tLS0tLS0tCiBEb2N1bWVudGF0aW9uL21tL2luZGV4LnJzdCAgICAgICAg
+ICAgICAgICB8ICAgIDEgCiAyIGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDEz
+IGRlbGV0aW9ucygtKQoKZGlmZiAtLSBhL0RvY3VtZW50YXRpb24vbW0vYWxsb2NhdGlvbi1w
+cm9maWxpbmcucnN0IGIvRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5y
+c3QKLS0tIGEvRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5yc3QKKysr
+IGIvRG9jdW1lbnRhdGlvbi9tbS9hbGxvY2F0aW9uLXByb2ZpbGluZy5yc3QKQEAgLTksMTEg
+KzksMTEgQEAgdHJhY2tlZCBieSBmaWxlIGFuZCBsaW5lIG51bWJlci4KIAogVXNhZ2U6CiBr
+Y29uZmlnIG9wdGlvbnM6Ci0gLSBDT05GSUdfTUVNX0FMTE9DX1BST0ZJTElORwotIC0gQ09O
+RklHX01FTV9BTExPQ19QUk9GSUxJTkdfRU5BQkxFRF9CWV9ERUZBVUxUCi0gLSBDT05GSUdf
+TUVNX0FMTE9DX1BST0ZJTElOR19ERUJVRwotICAgYWRkcyB3YXJuaW5ncyBmb3IgYWxsb2Nh
+dGlvbnMgdGhhdCB3ZXJlbid0IGFjY291bnRlZCBiZWNhdXNlIG9mIGEKLSAgIG1pc3Npbmcg
+YW5ub3RhdGlvbgorLSBDT05GSUdfTUVNX0FMTE9DX1BST0ZJTElORworLSBDT05GSUdfTUVN
+X0FMTE9DX1BST0ZJTElOR19FTkFCTEVEX0JZX0RFRkFVTFQKKy0gQ09ORklHX01FTV9BTExP
+Q19QUk9GSUxJTkdfREVCVUcKK2FkZHMgd2FybmluZ3MgZm9yIGFsbG9jYXRpb25zIHRoYXQg
+d2VyZW4ndCBhY2NvdW50ZWQgYmVjYXVzZSBvZiBhCittaXNzaW5nIGFubm90YXRpb24KIAog
+Qm9vdCBwYXJhbWV0ZXI6CiAgIHN5c2N0bC52bS5tZW1fcHJvZmlsaW5nPTB8MXxuZXZlcgpA
+QCAtMjksNyArMjksOCBAQCBzeXNjdGw6CiBSdW50aW1lIGluZm86CiAgIC9wcm9jL2FsbG9j
+aW5mbwogCi1FeGFtcGxlIG91dHB1dDoKK0V4YW1wbGUgb3V0cHV0OjoKKwogICByb290QG1v
+cmlhLWt2bTp+IyBzb3J0IC1nIC9wcm9jL2FsbG9jaW5mb3x0YWlsfG51bWZtdCAtLXRvPWll
+YwogICAgICAgICAyLjhNICAgIDIyNjQ4IGZzL2tlcm5mcy9kaXIuYzo2MTUgZnVuYzpfX2tl
+cm5mc19uZXdfbm9kZQogICAgICAgICAzLjhNICAgICAgOTUzIG1tL21lbW9yeS5jOjQyMTQg
+ZnVuYzphbGxvY19hbm9uX2ZvbGlvCkBAIC00MiwyMSArNDMsMjIgQEAgRXhhbXBsZSBvdXRw
+dXQ6CiAgICAgICAgICAxNU0gICAgIDM2NTYgbW0vcmVhZGFoZWFkLmM6MjQ3IGZ1bmM6cGFn
+ZV9jYWNoZV9yYV91bmJvdW5kZWQKICAgICAgICAgIDU1TSAgICAgNDg4NyBtbS9zbHViLmM6
+MjI1OSBmdW5jOmFsbG9jX3NsYWJfcGFnZQogICAgICAgICAxMjJNICAgIDMxMTY4IG1tL3Bh
+Z2VfZXh0LmM6MjcwIGZ1bmM6YWxsb2NfcGFnZV9leHQKKwogPT09PT09PT09PT09PT09PT09
+PQogVGhlb3J5IG9mIG9wZXJhdGlvbgogPT09PT09PT09PT09PT09PT09PQogCiBNZW1vcnkg
+YWxsb2NhdGlvbiBwcm9maWxpbmcgYnVpbGRzIG9mZiBvZiBjb2RlIHRhZ2dpbmcsIHdoaWNo
+IGlzIGEgbGlicmFyeSBmb3IKIGRlY2xhcmluZyBzdGF0aWMgc3RydWN0cyAodGhhdCB0eXBj
+aWFsbHkgZGVzY3JpYmUgYSBmaWxlIGFuZCBsaW5lIG51bWJlciBpbgotc29tZSB3YXksIGhl
+bmNlIGNvZGUgdGFnZ2luZykgYW5kIHRoZW4gZmluZGluZyBhbmQgb3BlcmF0aW5nIG9uIHRo
+ZW0gYXQgcnVudGltZQotLSBpLmUuIGl0ZXJhdGluZyBvdmVyIHRoZW0gdG8gcHJpbnQgdGhl
+bSBpbiBkZWJ1Z2ZzL3Byb2Nmcy4KK3NvbWUgd2F5LCBoZW5jZSBjb2RlIHRhZ2dpbmcpIGFu
+ZCB0aGVuIGZpbmRpbmcgYW5kIG9wZXJhdGluZyBvbiB0aGVtIGF0IHJ1bnRpbWUsCitpLmUu
+LCBpdGVyYXRpbmcgb3ZlciB0aGVtIHRvIHByaW50IHRoZW0gaW4gZGVidWdmcy9wcm9jZnMu
+CiAKIFRvIGFkZCBhY2NvdW50aW5nIGZvciBhbiBhbGxvY2F0aW9uIGNhbGwsIHdlIHJlcGxh
+Y2UgaXQgd2l0aCBhIG1hY3JvCi1pbnZvY2F0aW9uLCBhbGxvY19ob29rcygpLCB0aGF0Ci0g
+LSBkZWNsYXJlcyBhIGNvZGUgdGFnCi0gLSBzdGFzaGVzIGEgcG9pbnRlciB0byBpdCBpbiB0
+YXNrX3N0cnVjdAotIC0gY2FsbHMgdGhlIHJlYWwgYWxsb2NhdGlvbiBmdW5jdGlvbgotIC0g
+YW5kIGZpbmFsbHksIHJlc3RvcmVzIHRoZSB0YXNrX3N0cnVjdCBhbGxvYyB0YWcgcG9pbnRl
+ciB0byBpdHMgcHJldmlvdXMgdmFsdWUuCitpbnZvY2F0aW9uLCBhbGxvY19ob29rcygpLCB0
+aGF0OgorLSBkZWNsYXJlcyBhIGNvZGUgdGFnCistIHN0YXNoZXMgYSBwb2ludGVyIHRvIGl0
+IGluIHRhc2tfc3RydWN0CistIGNhbGxzIHRoZSByZWFsIGFsbG9jYXRpb24gZnVuY3Rpb24K
+Ky0gYW5kIGZpbmFsbHksIHJlc3RvcmVzIHRoZSB0YXNrX3N0cnVjdCBhbGxvYyB0YWcgcG9p
+bnRlciB0byBpdHMgcHJldmlvdXMgdmFsdWUuCiAKIFRoaXMgYWxsb3dzIGZvciBhbGxvY19o
+b29rcygpIGNhbGxzIHRvIGJlIG5lc3RlZCwgd2l0aCB0aGUgbW9zdCByZWNlbnQgb25lCiB0
+YWtpbmcgZWZmZWN0LiBUaGlzIGlzIGltcG9ydGFudCBmb3IgYWxsb2NhdGlvbnMgaW50ZXJu
+YWwgdG8gdGhlIG1tLyBjb2RlIHRoYXQKZGlmZiAtLSBhL0RvY3VtZW50YXRpb24vbW0vaW5k
+ZXgucnN0IGIvRG9jdW1lbnRhdGlvbi9tbS9pbmRleC5yc3QKLS0tIGEvRG9jdW1lbnRhdGlv
+bi9tbS9pbmRleC5yc3QKKysrIGIvRG9jdW1lbnRhdGlvbi9tbS9pbmRleC5yc3QKQEAgLTI2
+LDYgKzI2LDcgQEAgc2VlIHRoZSA6ZG9jOmBhZG1pbiBndWlkZSA8Li4vYWRtaW4tZ3VpZAog
+ICAgcGFnZV9jYWNoZQogICAgc2htZnMKICAgIG9vbQorICAgYWxsb2NhdGlvbi1wcm9maWxp
+bmcKIAogTGVnYWN5IERvY3VtZW50YXRpb24KID09PT09PT09PT09PT09PT09PT09Cg==
+
+--------------oaFa8uBlfstuVB17zCaypWJR--
 
