@@ -1,226 +1,260 @@
-Return-Path: <linux-arch+bounces-2889-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2890-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AF9E8755FA
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 19:18:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 524C9875659
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 19:48:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CC05285B68
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 18:18:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C00631F21F21
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 18:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42CBB13329C;
-	Thu,  7 Mar 2024 18:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B11A3134CD4;
+	Thu,  7 Mar 2024 18:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H5aOzJ+M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G88Txh06"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13CA131E49
-	for <linux-arch@vger.kernel.org>; Thu,  7 Mar 2024 18:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B0112EBE1;
+	Thu,  7 Mar 2024 18:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709835490; cv=none; b=Ue5CWPNBfbXmqtCUsMIsTftQrIH7ZrX22IYIFt33/WrKTzZ2VbrGp3PwixQ/VFlaDM+f3qKw0JEKXzrEzc+/vzWUYtzjnurT5F0g9Sg9UmEy3hpRipQP0qY0FcydTm2OH1yVsjg9A0MqCSzoDHZRu0LEzT7LYzI2fK+8G9hbUj8=
+	t=1709837313; cv=none; b=Xyhm0/TW0rp8zIsaLcizDyRx//kzS0HzmVnh4o8mFaqBMg1bWHUCpp43QFdyeaUeJaqjMJpkJcxBLfJFARcDZhzgLWWWsA8gaiE8B4x1isJE+AFt7/tc8j/Q5nDlV4SmfZlL6v0DQp/oIiFNknMv42IN+j+Z+gwTJX/KzG6jhlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709835490; c=relaxed/simple;
-	bh=Gm1+12tqQKv7crZi1oC909n2tXEtrT/LTbYSqj5bPhw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q3nlC2QFv+5fdvQWFHGZhhvof6ZfP2sW1InG81+bg3u7bWrmJNxEtj8UwKFuMQCXOhit9HVhf+qN9cPdX+v7VM1gq2FLnm1M/wTgrP2FMEEehoF7YscRq7lWBqQfDXzOAq19VslG622gY0QpCMPqG2BZoydtyX8SRM3SApcgIaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H5aOzJ+M; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 7 Mar 2024 13:17:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1709835485;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iHaIxY/+BiJn46m1UxNdZN63kb5NNOFAVQARDvBki5g=;
-	b=H5aOzJ+MeszkUjW7Gdq8GIb9xZvvYFafE54Qajm1X53jP+9kSZaHykmws15lGZbxbVC4sP
-	xB+aj3bB+XZoL9vVS6ke4qTd3NSX0xuXSFczxjIN4xYv/lKG+5cGIuGnJ1kVWq3Q8k+XsG
-	i3YlKbhrl9zIpdvnTlhFtaDJQqe9fLg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, 
-	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	mgorman@suse.de, dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org, 
-	peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, 
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, 
-	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, 
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
-	42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
-	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, 
-	aliceryhl@google.com, rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	kernel-team@android.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v5 37/37] memprofiling: Documentation
-Message-ID: <hsyclfp3ketwzkebjjrucpb56gmalixdgl6uld3oym3rvssyar@fmjlbpdkrczv>
-References: <20240306182440.2003814-1-surenb@google.com>
- <20240306182440.2003814-38-surenb@google.com>
- <10a95079-86e4-41bf-8e82-e387936c437d@infradead.org>
+	s=arc-20240116; t=1709837313; c=relaxed/simple;
+	bh=ZlVuiwcY3+tKFvMTuVwdIuga51AzO7GCDg1uyB1uMmc=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=Cy1eVD9AFuSlwFwGx5V4xj71deghhLFeZbFIi7K97+cD9R7vGL1+e/F6ebvngdUIVkmumJ3JPinTc/NwsNyoTn1SFIMqv6u8r/vpmzdpMIwk+/5MQpngtl/KhtPt56oG1Ha7ne3fzV/RbWItPAMazRR+qzOBU1tdMbyGrgSxZHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G88Txh06; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dc75972f25so10513655ad.1;
+        Thu, 07 Mar 2024 10:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709837311; x=1710442111; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DM6xLHdRM5YVSpxA0XD8pf8TNWCksal/JAtwGJQYz8s=;
+        b=G88Txh06uLzX9d0vTLb/notD1X/oHcIipv2U84bd9yoJQ5zO+iXdjNgLvhDlbjx31V
+         gWWNXvuVQ9QLWd4nZic3b9NTLR4iXH9VEMGkmeMoKoQJYMlqqqn9/SQGrfT2/MMMqjzF
+         3I3BmBY6pgduhD+ntyjfS55zvCvb0jXw2tXumK+Qy3gE8mNN63i0LQq0oIolXqHVoBk/
+         xD6jdi5XK+bnDk72mI8SCoZiFe9eyZWOd64o/XxtTJKtG2Slsqo1lqjxlpYRsGfsFeOX
+         rCqaMcAmQTjTMbrba+HsFattfGTJhQlc5/0VIdzQ+ZdA7zOayNw1mjpkOZdcnVOdQ8JM
+         5eTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709837311; x=1710442111;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DM6xLHdRM5YVSpxA0XD8pf8TNWCksal/JAtwGJQYz8s=;
+        b=w84BkBjc8xnURgqmzLrjBdFDfcs9/rfWG+LZ8DVOUtnMVHQKPQOBD5W9oLKJdJb2Ae
+         MIesZ2RSVgvzBCa4ybQNYERY6JYcoTf/RmqUz9T1FroBKqQQsCtNq4gareFhuMGnwYE7
+         45CZ6KdrNJVBnUvjviwEEtdym3sE2mhJzuH6Jl0CeCMPrUIn+YftYvLNDmr0Nsrg3wzu
+         KEKWSD1iiyInnNLidkmg79/iMtxSg+o/bop9JkRYVhdinQwoAIqYHX4qm5Svf/QH3zXR
+         9IjV6Wtue4fnacB5dU2/TzT5aVClowXhxXpEYwEs00iagkwY2hb0cFqddqSJVm3ZWY46
+         UWDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXRw6wSt1Owk2KG5yniOG0ZEzZsPeHxFcKb1ZC28QHxb7jUzJejJg2/HUrRRqysEAqgdnRkDPjnzOIs31t9JP45rkFMVANgHtZLknJTTW1SHA0TkqG4thiHnCXXOtYPbgNlqHeG3Cn+Q/DVc5ngVXm1z8+cik3U4OqVqjdL5ntDN31VwWeT3A==
+X-Gm-Message-State: AOJu0YxCaHDYb6Y3XxtrLGWxdKsnwcwRmKGrRcWE+64OcKYQfTptJ5d9
+	CXa+XTDym837K1TCymQYsyGG4ms4bPSrMVrfFxiVAwUCw3jhXux/MMryg8wu
+X-Google-Smtp-Source: AGHT+IH5lwnw1qFd96pNJ/vPQHDXDUC4wmgRO3AqnHGRP5XlyBljbgEjm9qmvgc+7czvdNbAnqbARw==
+X-Received: by 2002:a17:902:db0a:b0:1dd:a34:7321 with SMTP id m10-20020a170902db0a00b001dd0a347321mr10432443plx.25.1709837311226;
+        Thu, 07 Mar 2024 10:48:31 -0800 (PST)
+Received: from localhost.localdomain (c-73-254-87-52.hsd1.wa.comcast.net. [73.254.87.52])
+        by smtp.gmail.com with ESMTPSA id p24-20020a170903249800b001dbcfb4766csm14922726plw.226.2024.03.07.10.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 10:48:30 -0800 (PST)
+From: mhkelley58@gmail.com
+X-Google-Original-From: mhklinux@outlook.com
+To: haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com,
+	arnd@arndb.de,
+	tytso@mit.edu,
+	Jason@zx2c4.com,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: [PATCH v2 1/1] x86/hyperv: Use Hyper-V entropy to seed guest random number generator
+Date: Thu,  7 Mar 2024 10:48:20 -0800
+Message-Id: <20240307184820.70589-1-mhklinux@outlook.com>
+X-Mailer: git-send-email 2.25.1
+Reply-To: mhklinux@outlook.com
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <10a95079-86e4-41bf-8e82-e387936c437d@infradead.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 06, 2024 at 07:18:57PM -0800, Randy Dunlap wrote:
-> Hi,
-> This includes some editing suggestions and some doc build fixes.
-> 
-> 
-> On 3/6/24 10:24, Suren Baghdasaryan wrote:
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > 
-> > Provide documentation for memory allocation profiling.
-> > 
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  Documentation/mm/allocation-profiling.rst | 91 +++++++++++++++++++++++
-> >  1 file changed, 91 insertions(+)
-> >  create mode 100644 Documentation/mm/allocation-profiling.rst
-> > 
-> > diff --git a/Documentation/mm/allocation-profiling.rst b/Documentation/mm/allocation-profiling.rst
-> > new file mode 100644
-> > index 000000000000..8a862c7d3aab
-> > --- /dev/null
-> > +++ b/Documentation/mm/allocation-profiling.rst
-> > @@ -0,0 +1,91 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +===========================
-> > +MEMORY ALLOCATION PROFILING
-> > +===========================
-> > +
-> > +Low overhead (suitable for production) accounting of all memory allocations,
-> > +tracked by file and line number.
-> > +
-> > +Usage:
-> > +kconfig options:
-> > + - CONFIG_MEM_ALLOC_PROFILING
-> > + - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-> > + - CONFIG_MEM_ALLOC_PROFILING_DEBUG
-> > +   adds warnings for allocations that weren't accounted because of a
-> > +   missing annotation
-> > +
-> > +Boot parameter:
-> > +  sysctl.vm.mem_profiling=0|1|never
-> > +
-> > +  When set to "never", memory allocation profiling overheads is minimized and it
-> 
->                                                       overhead is
-> 
-> > +  cannot be enabled at runtime (sysctl becomes read-only).
-> > +  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y, default value is "1".
-> > +  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n, default value is "never".
-> > +
-> > +sysctl:
-> > +  /proc/sys/vm/mem_profiling
-> > +
-> > +Runtime info:
-> > +  /proc/allocinfo
-> > +
-> > +Example output:
-> > +  root@moria-kvm:~# sort -g /proc/allocinfo|tail|numfmt --to=iec
-> > +        2.8M    22648 fs/kernfs/dir.c:615 func:__kernfs_new_node
-> > +        3.8M      953 mm/memory.c:4214 func:alloc_anon_folio
-> > +        4.0M     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
-> > +        4.1M        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
-> > +        6.0M     1532 mm/filemap.c:1919 func:__filemap_get_folio
-> > +        8.8M     2785 kernel/fork.c:307 func:alloc_thread_stack_node
-> > +         13M      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
-> > +         14M     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
-> > +         15M     3656 mm/readahead.c:247 func:page_cache_ra_unbounded
-> > +         55M     4887 mm/slub.c:2259 func:alloc_slab_page
-> > +        122M    31168 mm/page_ext.c:270 func:alloc_page_ext
-> > +===================
-> > +Theory of operation
-> > +===================
-> > +
-> > +Memory allocation profiling builds off of code tagging, which is a library for
-> > +declaring static structs (that typcially describe a file and line number in
-> 
->                                   typically
-> 
-> > +some way, hence code tagging) and then finding and operating on them at runtime
-> 
->                                                                         at runtime,
-> 
-> > +- i.e. iterating over them to print them in debugfs/procfs.
-> 
->   i.e., iterating
+From: Michael Kelley <mhklinux@outlook.com>
 
-i.e. latin id est, that is: grammatically my version is fine
+A Hyper-V host provides its guest VMs with entropy in a custom ACPI
+table named "OEM0".  The entropy bits are updated each time Hyper-V
+boots the VM, and are suitable for seeding the Linux guest random
+number generator (rng). See a brief description of OEM0 in [1].
 
-> 
-> > +
-> > +To add accounting for an allocation call, we replace it with a macro
-> > +invocation, alloc_hooks(), that
-> > + - declares a code tag
-> > + - stashes a pointer to it in task_struct
-> > + - calls the real allocation function
-> > + - and finally, restores the task_struct alloc tag pointer to its previous value.
-> > +
-> > +This allows for alloc_hooks() calls to be nested, with the most recent one
-> > +taking effect. This is important for allocations internal to the mm/ code that
-> > +do not properly belong to the outer allocation context and should be counted
-> > +separately: for example, slab object extension vectors, or when the slab
-> > +allocates pages from the page allocator.
-> > +
-> > +Thus, proper usage requires determining which function in an allocation call
-> > +stack should be tagged. There are many helper functions that essentially wrap
-> > +e.g. kmalloc() and do a little more work, then are called in multiple places;
-> > +we'll generally want the accounting to happen in the callers of these helpers,
-> > +not in the helpers themselves.
-> > +
-> > +To fix up a given helper, for example foo(), do the following:
-> > + - switch its allocation call to the _noprof() version, e.g. kmalloc_noprof()
-> > + - rename it to foo_noprof()
-> > + - define a macro version of foo() like so:
-> > +   #define foo(...) alloc_hooks(foo_noprof(__VA_ARGS__))
-> > +
-> > +It's also possible to stash a pointer to an alloc tag in your own data structures.
-> > +
-> > +Do this when you're implementing a generic data structure that does allocations
-> > +"on behalf of" some other code - for example, the rhashtable code. This way,
-> > +instead of seeing a large line in /proc/allocinfo for rhashtable.c, we can
-> > +break it out by rhashtable type.
-> > +
-> > +To do so:
-> > + - Hook your data structure's init function, like any other allocation function
-> 
-> maybe end the line above with a '.' like the following line.
-> 
-> > + - Within your init function, use the convenience macro alloc_tag_record() to
-> > +   record alloc tag in your data structure.
-> > + - Then, use the following form for your allocations:
-> > +   alloc_hooks_tag(ht->your_saved_tag, kmalloc_noprof(...))
-> 
-> 
-> Finally, there are a number of documentation build warnings in this patch.
-> I'm no ReST expert, but the attached patch fixes them for me.
-> 
-> -- 
-> #Randy
+Generation 2 VMs on Hyper-V use UEFI to boot. Existing EFI code in
+Linux seeds the rng with entropy bits from the EFI_RNG_PROTOCOL.
+Via this path, the rng is seeded very early during boot with good
+entropy. The ACPI OEM0 table is still provided in such VMs, though
+it isn't needed.
 
+But Generation 1 VMs on Hyper-V boot from BIOS. For these VMs, Linux
+doesn't currently get any entropy from the Hyper-V host. While this
+is not fundamentally broken because Linux can generate its own entropy,
+using the Hyper-V host provided entropy would get the rng off to a
+better start and would do so earlier in the boot process.
+
+Improve the rng seeding for Generation 1 VMs by having Hyper-V specific
+code in Linux take advantage of the OEM0 table to seed the rng. Because
+the OEM0 table is custom to Hyper-V, parse it directly in the Hyper-V
+code in the Linux kernel and use add_bootloader_randomness() to
+seed the rng.  Once the entropy bits are read from OEM0, zero them
+out in the table so they don't appear in /sys/firmware/acpi/tables/OEM0
+in the running VM.
+
+An equivalent change is *not* made for Linux VMs on Hyper-V for
+ARM64. Such VMs are always Generation 2 and the rng is seeded
+with entropy obtained via the EFI_RNG_PROTOCOL as described above.
+
+[1] https://download.microsoft.com/download/1/c/9/1c9813b8-089c-4fef-b2ad-ad80e79403ba/Whitepaper%20-%20The%20Windows%2010%20random%20number%20generation%20infrastructure.pdf
+
+Signed-off-by: Michael Kelley <mhklinux@outlook.com>
+---
+Changes in v2:
+* Tweaked commit message [Wei Liu]
+* Removed message when OEM0 table isn't found. Added debug-level
+  message when OEM0 is successfully used to add randomness. [Wei Liu]
+
+ arch/x86/kernel/cpu/mshyperv.c |  1 +
+ drivers/hv/hv_common.c         | 64 ++++++++++++++++++++++++++++++++++
+ include/asm-generic/mshyperv.h |  2 ++
+ 3 files changed, 67 insertions(+)
+
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 303fef824167..65c9cbdd2282 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -648,6 +648,7 @@ const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
+ 	.init.x2apic_available	= ms_hyperv_x2apic_available,
+ 	.init.msi_ext_dest_id	= ms_hyperv_msi_ext_dest_id,
+ 	.init.init_platform	= ms_hyperv_init_platform,
++	.init.guest_late_init	= ms_hyperv_late_init,
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 	.runtime.sev_es_hcall_prepare = hv_sev_es_hcall_prepare,
+ 	.runtime.sev_es_hcall_finish = hv_sev_es_hcall_finish,
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index 0285a74363b3..219c4371314d 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -20,6 +20,8 @@
+ #include <linux/sched/task_stack.h>
+ #include <linux/panic_notifier.h>
+ #include <linux/ptrace.h>
++#include <linux/random.h>
++#include <linux/efi.h>
+ #include <linux/kdebug.h>
+ #include <linux/kmsg_dump.h>
+ #include <linux/slab.h>
+@@ -347,6 +349,68 @@ int __init hv_common_init(void)
+ 	return 0;
+ }
+ 
++void __init ms_hyperv_late_init(void)
++{
++	struct acpi_table_header *header;
++	acpi_status status;
++	u8 *randomdata;
++	u32 length, i;
++
++	/*
++	 * Seed the Linux random number generator with entropy provided by
++	 * the Hyper-V host in ACPI table OEM0.  It would be nice to do this
++	 * even earlier in ms_hyperv_init_platform(), but the ACPI subsystem
++	 * isn't set up at that point. Skip if booted via EFI as generic EFI
++	 * code has already done some seeding using the EFI RNG protocol.
++	 */
++	if (!IS_ENABLED(CONFIG_ACPI) || efi_enabled(EFI_BOOT))
++		return;
++
++	status = acpi_get_table("OEM0", 0, &header);
++	if (ACPI_FAILURE(status) || !header)
++		return;
++
++	/*
++	 * Since the "OEM0" table name is for OEM specific usage, verify
++	 * that what we're seeing purports to be from Microsoft.
++	 */
++	if (strncmp(header->oem_table_id, "MICROSFT", 8))
++		goto error;
++
++	/*
++	 * Ensure the length is reasonable.  Requiring at least 32 bytes and
++	 * no more than 256 bytes is somewhat arbitrary.  Hyper-V currently
++	 * provides 64 bytes, but allow for a change in a later version.
++	 */
++	if (header->length < sizeof(*header) + 32 ||
++	    header->length > sizeof(*header) + 256)
++		goto error;
++
++	length = header->length - sizeof(*header);
++	randomdata = (u8 *)(header + 1);
++
++	pr_debug("Hyper-V: Seeding rng with %d random bytes from ACPI table OEM0\n",
++			length);
++
++	add_bootloader_randomness(randomdata, length);
++
++	/*
++	 * To prevent the seed data from being visible in /sys/firmware/acpi,
++	 * zero out the random data in the ACPI table and fixup the checksum.
++	 */
++	for (i = 0; i < length; i++) {
++		header->checksum += randomdata[i];
++		randomdata[i] = 0;
++	}
++
++	acpi_put_table(header);
++	return;
++
++error:
++	pr_info("Hyper-V: Ignoring malformed ACPI table OEM0\n");
++	acpi_put_table(header);
++}
++
+ /*
+  * Hyper-V specific initialization and die code for
+  * individual CPUs that is common across all architectures.
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 430f0ae0dde2..e861223093df 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -193,6 +193,7 @@ extern u64 (*hv_read_reference_counter)(void);
+ 
+ int __init hv_common_init(void);
+ void __init hv_common_free(void);
++void __init ms_hyperv_late_init(void);
+ int hv_common_cpu_init(unsigned int cpu);
+ int hv_common_cpu_die(unsigned int cpu);
+ 
+@@ -290,6 +291,7 @@ void hv_setup_dma_ops(struct device *dev, bool coherent);
+ static inline bool hv_is_hyperv_initialized(void) { return false; }
+ static inline bool hv_is_hibernation_supported(void) { return false; }
+ static inline void hyperv_cleanup(void) {}
++static inline void ms_hyperv_late_init(void) {}
+ static inline bool hv_is_isolation_supported(void) { return false; }
+ static inline enum hv_isolation_type hv_get_isolation_type(void)
+ {
+-- 
+2.25.1
 
 
