@@ -1,224 +1,200 @@
-Return-Path: <linux-arch+bounces-2885-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2886-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59A03874C8A
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 11:39:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F55874EB7
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 13:15:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF30D1F21D46
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 10:39:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6A131C2216E
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 12:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844A81CA84;
-	Thu,  7 Mar 2024 10:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="di7EL8GO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6622412A142;
+	Thu,  7 Mar 2024 12:15:39 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549EF1C6BE
-	for <linux-arch@vger.kernel.org>; Thu,  7 Mar 2024 10:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC444129A7D;
+	Thu,  7 Mar 2024 12:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709807939; cv=none; b=TCUm4QFxnnvH8AP5ttCtuGOyq59Qf+rDxAnxBul+rhrXOPFRK6QS2VjtAIsXrH8Ir1AgEXU6bsJErkO+wx6fkiF2svxVX63o4eJStRz+EGMf5ihCN7uy58KFdGgN8YlQg4lncQdpuXJgs4htZDevKM4wVeyAbD4hcWvL9fZF9EA=
+	t=1709813739; cv=none; b=KPTA8dK7cCg52Bmpo5MmX+2VioQPz3kiPv+WhJu8tFCWRgsXL+BwiwKYFzO59ypyyTGwSI3Ip/Xnk7cxB/XSdQsJ0TcQS7N28uxpcg+qU1A5ewvzFk2MbbWKYCY4eBfw4O4JE637bhSlMaDnkq50c8nfDWd+fnW4SpmZKYVL3PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709807939; c=relaxed/simple;
-	bh=nAvH+QYsejJgff+C4MpGXYIkaykbqzz6diX16JIQfaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cDC+2H4grCnysBBUKcQ8KpzFSCJDBBXT11960gHOOO5OFoKxf4HjpkZiUoeM/SVgAYO5rxGS9MNXDYaORYKzWIjC4IFrf7fg7EkqDa9hwPqVnUSumZOKx+z5csFCbmdniaW+AW3f4AZykeg/L18SCYlmqkq8Fd5p8Ra27Jow0xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=di7EL8GO; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709807936; x=1741343936;
-  h=date:from:to:cc:subject:message-id;
-  bh=nAvH+QYsejJgff+C4MpGXYIkaykbqzz6diX16JIQfaQ=;
-  b=di7EL8GOZmod0vYI9ryGhzkwRf3u+rwGinceDZTXew+pOUNLwP2+o5xI
-   utKuiQ00Oz3mTSFBs11Wk2zuZeeEAx+0rSQnpdtKutsorUWZKJ/VhOW4T
-   7Wb5ho+RRk0VrQxxdiRW2TpE6Z4OS1JmmqXFgxjh22cXFjTxLn1BBaH/u
-   wR5SbOyG3ML9L26glOMrSs3ogGDsxDcPm7aiPw9LG90CEZnDeSXZ3YT+J
-   25hoE1JBl7nat8YUlK7qaYykrFsSPK+BJKQUgjmb6tLWYwEKOWAm3PtuD
-   4UF0qQCnGCZEDRGyjnFoEhKyDwnSt4cKSAVtUnZ6wpcYoKuqDLot1jZaL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="26943437"
-X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
-   d="scan'208";a="26943437"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 02:38:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
-   d="scan'208";a="14735931"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 07 Mar 2024 02:38:55 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1riB9H-00054Z-2I;
-	Thu, 07 Mar 2024 10:38:51 +0000
-Date: Thu, 07 Mar 2024 18:38:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 5394f1e9b687bcf26595cabf83483e568676128d
-Message-ID: <202403071858.5iBbyfmu-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1709813739; c=relaxed/simple;
+	bh=33Uzy2N/rqj/7YQgQGuWOf/5Tv1toMJF0Qi0AcbhFw0=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=daHia+g5WZ7eODuIVAll5m8QwdGKqk00OLE0IvF8P6SZV7ETbWPIs2RfpKSz6iT7ggoEThqt1pPvRqiq3lSg0uJPztCHDmqMQnoSFsMn4ChBBZ9SznujZovIg76PZ12yj/2cv0iSKnwXhoarG6SjrIUj7nymYXGgpU8EkHdlcF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Tr7Vw2yQsz1Q9QH;
+	Thu,  7 Mar 2024 20:13:28 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7C1EA14059C;
+	Thu,  7 Mar 2024 20:15:27 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 7 Mar
+ 2024 20:15:26 +0800
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to
+ netdevice
+To: Mina Almasry <almasrymina@google.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
+	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
+	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
+ Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
+ Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-6-almasrymina@google.com>
+ <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
+ <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com>
+ <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
+ <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <76266a89-8ec1-6a4c-716b-da422f0b2cd5@huawei.com>
+Date: Thu, 7 Mar 2024 20:15:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 5394f1e9b687bcf26595cabf83483e568676128d  arch: define CONFIG_PAGE_SIZE_*KB on all architectures
+On 2024/3/7 6:10, Mina Almasry wrote:
 
-elapsed time: 934m
+...
 
-configs tested: 135
-configs skipped: 3
+>>>>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
+>>>>> +{
+>>>>> +     void *new_mem;
+>>>>> +     void *old_mem;
+>>>>> +     int err;
+>>>>> +
+>>>>> +     if (!dev || !dev->netdev_ops)
+>>>>> +             return -EINVAL;
+>>>>> +
+>>>>> +     if (!dev->netdev_ops->ndo_queue_stop ||
+>>>>> +         !dev->netdev_ops->ndo_queue_mem_free ||
+>>>>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
+>>>>> +         !dev->netdev_ops->ndo_queue_start)
+>>>>> +             return -EOPNOTSUPP;
+>>>>> +
+>>>>> +     new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+>>>>> +     if (!new_mem)
+>>>>> +             return -ENOMEM;
+>>>>> +
+>>>>> +     err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
+>>>>> +     if (err)
+>>>>> +             goto err_free_new_mem;
+>>>>> +
+>>>>> +     err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
+>>>>> +     if (err)
+>>>>> +             goto err_start_queue;
+>>>>> +
+>>>>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
+>>>>> +
+>>>>> +     return 0;
+>>>>> +
+>>>>> +err_start_queue:
+>>>>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
+>>>>
+>>>> It might worth mentioning why queue start with old_mem will always
+>>>> success here as the return value seems to be ignored here.
+>>>>
+>>>
+>>> So the old queue, we stopped it, and if we fail to bring up the new
+>>> queue, then we want to start the old queue back up to get the queue
+>>> back to a workable state.
+>>>
+>>> I don't see what we can do to recover if restarting the old queue
+>>> fails. Seems like it should be a requirement that the driver tries as
+>>> much as possible to keep the old queue restartable.
+>>
+>> Is it possible that we may have the 'old_mem' leaking if the driver
+>> fails to restart the old queue? how does the driver handle the
+>> firmware cmd failure for ndo_queue_start()? it seems a little
+>> tricky to implement it.
+>>
+> 
+> I'm not sure what we can do to meaningfully recover from failure to
+> restarting the old queue, except log it so the error is visible. In
+> theory because we have not modifying any queue configurations
+> restarting it would be straight forward, but since it's dealing with
+> hardware then any failures are possible.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Yes, we may need to have a clear semantics of how should the driver
+implement the above interface, for example if the driver should free
+the memory when fail to start a queue or the driver should restart
+the queue when fail to stop a queue? Otherwise we may have different
+driver implementing different behavior.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                        neponset_defconfig   gcc  
-arm                          sp7021_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                               defconfig   gcc  
-csky                             alldefconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240307   clang
-i386         buildonly-randconfig-002-20240307   gcc  
-i386         buildonly-randconfig-003-20240307   clang
-i386         buildonly-randconfig-004-20240307   gcc  
-i386         buildonly-randconfig-005-20240307   gcc  
-i386         buildonly-randconfig-006-20240307   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240307   gcc  
-i386                  randconfig-002-20240307   gcc  
-i386                  randconfig-003-20240307   clang
-i386                  randconfig-004-20240307   gcc  
-i386                  randconfig-005-20240307   gcc  
-i386                  randconfig-006-20240307   clang
-i386                  randconfig-011-20240307   clang
-i386                  randconfig-012-20240307   gcc  
-i386                  randconfig-013-20240307   clang
-i386                  randconfig-014-20240307   clang
-i386                  randconfig-015-20240307   clang
-i386                  randconfig-016-20240307   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     cu1830-neo_defconfig   gcc  
-mips                      maltasmvp_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         alldefconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                     tqm5200_defconfig   gcc  
-powerpc                     tqm8540_defconfig   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                           sh2007_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-004-20240307   clang
-x86_64       buildonly-randconfig-006-20240307   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-003-20240307   clang
-x86_64                randconfig-006-20240307   clang
-x86_64                randconfig-014-20240307   clang
-x86_64                randconfig-015-20240307   clang
-x86_64                randconfig-016-20240307   clang
-x86_64                randconfig-073-20240307   clang
-x86_64                randconfig-075-20240307   clang
-x86_64                randconfig-076-20240307   clang
-x86_64                          rhel-8.3-func   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
+From the disscusion you mentioned below, does it make senses to
+modeling rdma subsystem by using create_queue/modify_queue/destroy_queue
+semantics instead?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+>>>
+>>> I can improve this by at least logging or warning if restarting the
+>>> old queue fails.
+>>
+>> Also the semantics of the above function seems odd that it is not
+>> only restarting rx queue, but also freeing and allocating memory
+>> despite the name only suggests 'restart', I am a litte afraid that
+>> it may conflict with future usecae when user only need the
+>> 'restart' part, perhaps rename it to a more appropriate name.
+>>
+> 
+> Oh, what we want here is just the 'restart' part. However, Jakub
+> mandates that if you restart a queue (or a driver), you do it like
+> this, hence the slightly more complicated implementation.
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438-13-almasrymina@google.com/#25590262
+> https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+
+Thanks for the link.
+
+I like david's idea of "a more generic design where H/W queues are created
+and destroyed - e.g., queues unique to a process which makes the cleanup
+so much easier." , but it seems it is a lot of work for networking to
+implement that for now.
+
+> 
 
