@@ -1,143 +1,133 @@
-Return-Path: <linux-arch+bounces-2894-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2895-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 248EC8758DA
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 21:53:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C459D875BFB
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 02:30:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFBF41F22B28
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Mar 2024 20:53:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EA292838E2
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 01:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B5813A257;
-	Thu,  7 Mar 2024 20:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 401C4224CC;
+	Fri,  8 Mar 2024 01:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TOvuaa/3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WuK2qD6w"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA2241C60;
-	Thu,  7 Mar 2024 20:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF4523748;
+	Fri,  8 Mar 2024 01:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709844814; cv=none; b=SbthuC0hIbJk5ULBMM73nHqznkMageQiKXSgNG8B8we7RiUiJyyzqhu+zTmlQdl91/mCCmWAcOe0ck+vMPyPUGe7AFE+Y3DXD7ZUel3GNya5wUUXoAWdkZsvLw04WevsOHylRP/7N54c1gIFnqIpJX0xL8MNJB8/YXpyt5shmh0=
+	t=1709861443; cv=none; b=acwvILkXcLHMUu0rcqAYldOMXb21DFHE2Q6OcwEuFaQeNd76YMSBoY0gzv4GLFngisTUnB2PMh4CM5iTT05LV0YeCdkjIxoc7gWuLyjQd5Ru2Fm4MAXvBYjKMrMDszZ1G0Ivv1ZysAQPeNgOJHX8vkEMzqV2f2EtnzTCj6u6QH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709844814; c=relaxed/simple;
-	bh=zg0CO3XEyVe8+ghF9U9lAFrlk+J130/oBgEnLCNFpxY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UMod/kNMMLh6EsPAzXly5odvvb2UQGA9+ucjiYucD+Bdb/kVIJSzQhF9AXx67L9jzFHK8xM+WoDQZs5uHKcM88ajEvUZjgt6n0UMfcRypr5tHLNY4yxawAHk55i8t9RkKsb2sV2ZJFnsTLIYYHIaz79xt82AJ7YkoDzGERiApew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TOvuaa/3; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=p08jq4TIBI4zazg51JnXnjGH5Lu+du6lZuf9B2Rz4QQ=; b=TOvuaa/3wlEt4HaASAp9xkKucG
-	+PY7MI+cX1hSmkmfFLvtR4JkMMdWfcVn8YtHQDGiMS3PJt7AA09NmwT0+GjU4w7EvTcYU989bq3lA
-	Sh6H3anq6UeJdG7s5+p9HZ3DirzhzdP4JpB9MphGl6IsZAH4dOfsdtbzZJkSRJLswWFYPpauuyfXA
-	Sfzyecd0rAcXOKsin/ZW2uEow+r/lYb/9BCfKH8o5Krry/ndFvOqVqSjHrnsABA9QpX6LO/lLNPn5
-	mwcOKE/wR1613yI+3HUvjJwhhHwu/dOn5jZGJybhQAfPSWpxxpf3MHsWmV/YP2TEMLCSl1X1YJmQp
-	aZy2ZdFg==;
-Received: from [50.53.50.0] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1riKjl-00000006Lv6-1biU;
-	Thu, 07 Mar 2024 20:53:09 +0000
-Message-ID: <25a03dba-8d6b-4072-beae-7ea477fccbcb@infradead.org>
-Date: Thu, 7 Mar 2024 12:53:06 -0800
+	s=arc-20240116; t=1709861443; c=relaxed/simple;
+	bh=pWLPfbMGjAqOMIxZXwrouf7NrYnQYoQSjURpmCc84iU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BUYzwCOWas4t/4pTxnKmSP76T6Pb26ePU3ArqJPJ23CzwBFvlyl4EjADLRoflsCUSV6SghsVn6Nf18MrvElfDi/41s15rTgcp2rZwjZk2xbyRzaGPGCedGSUHNvc4UfQozlkP45UYEvFdoHHrb4PR87jz6Lq47L/85nyHmYLeP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WuK2qD6w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD44C433F1;
+	Fri,  8 Mar 2024 01:30:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709861442;
+	bh=pWLPfbMGjAqOMIxZXwrouf7NrYnQYoQSjURpmCc84iU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WuK2qD6wyzgEpkNGU94oUn6yHcPXxuUo3uJrLGDTiIGph4N/vCBqNc4nDv471KEn3
+	 sm7aoyIlj2FlbTUAzqmFeQZ3jZxx8uq02/lwxrUs6Fs5ne1P7sc9b+jogdt2cNh5om
+	 yy2pPOnMcP+HAkFrHyi8JDY6iodalicwb81v6rzeU0un9tw4HNH9vVQNofxBnlf4+6
+	 iDppG8XOmWfXjccjhAEBc5TroehEx0EzshUNRujMpMwMXGGAQ6kBNOJtKint9xVpy2
+	 SaraH4eSezKXfORbglRhjRO/jH8oAebaFTPdwegjG2bPLQMw9csoNK+YHGu0qpYXyY
+	 O/jGEtvZeHEeQ==
+Date: Thu, 7 Mar 2024 17:30:39 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+ <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
+Message-ID: <20240307173039.00e6fbb7@kernel.org>
+In-Reply-To: <20240305020153.2787423-2-almasrymina@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+	<20240305020153.2787423-2-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 37/37] memprofiling: Documentation
-Content-Language: en-US
-To: John Hubbard <jhubbard@nvidia.com>,
- Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
- mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
- roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
- willy@infradead.org, liam.howlett@oracle.com,
- penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
- peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
- rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
- yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
- hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
- ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
- ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, shakeelb@google.com,
- songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com,
- rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
- kernel-team@android.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
- linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-References: <20240306182440.2003814-1-surenb@google.com>
- <20240306182440.2003814-38-surenb@google.com>
- <10a95079-86e4-41bf-8e82-e387936c437d@infradead.org>
- <hsyclfp3ketwzkebjjrucpb56gmalixdgl6uld3oym3rvssyar@fmjlbpdkrczv>
- <f12e83ef-5881-4df8-87ae-86f8ca5a6ab4@infradead.org>
- <72bbe76c-fcf9-47c2-b583-63d5ad77b3c3@nvidia.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <72bbe76c-fcf9-47c2-b583-63d5ad77b3c3@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon,  4 Mar 2024 18:01:36 -0800 Mina Almasry wrote:
+> + * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
+> + *	Allocate memory for an RX queue. The memory returned in the form of
+> + *	a void * can be passed to ndo_queue_mem_free() for freeing or to
+> + *	ndo_queue_start to create an RX queue with this memory.
+> + *
+> + * void	(*ndo_queue_mem_free)(struct net_device *dev, void *);
+> + *	Free memory from an RX queue.
+> + *
+> + * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
+> + *	Start an RX queue at the specified index.
+> + *
+> + * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
+> + *	Stop the RX queue at the specified index.
+>   */
+>  struct net_device_ops {
+>  	int			(*ndo_init)(struct net_device *dev);
+> @@ -1679,6 +1693,16 @@ struct net_device_ops {
+>  	int			(*ndo_hwtstamp_set)(struct net_device *dev,
+>  						    struct kernel_hwtstamp_config *kernel_config,
+>  						    struct netlink_ext_ack *extack);
+> +	void *			(*ndo_queue_mem_alloc)(struct net_device *dev,
+> +						       int idx);
+> +	void			(*ndo_queue_mem_free)(struct net_device *dev,
+> +						      void *queue_mem);
+> +	int			(*ndo_queue_start)(struct net_device *dev,
+> +						   int idx,
+> +						   void *queue_mem);
+> +	int			(*ndo_queue_stop)(struct net_device *dev,
+> +						  int idx,
+> +						  void **out_queue_mem);
 
+The queue configuration object was quite an integral part of the design,
+I'm slightly worried that it's not here :) Also we may want to rename
+the about-to-be-merged ops from netdev_stat_ops and netdev_queue_ops,
+and add these there?
 
-On 3/7/24 12:15, John Hubbard wrote:
-> On 3/7/24 12:03, Randy Dunlap wrote:
->> On 3/7/24 10:17, Kent Overstreet wrote:
->>> On Wed, Mar 06, 2024 at 07:18:57PM -0800, Randy Dunlap wrote:
-> ...
->>>>> +- i.e. iterating over them to print them in debugfs/procfs.
->>>>
->>>>    i.e., iterating
->>>
->>> i.e. latin id est, that is: grammatically my version is fine
->>>
->>
->> Some of my web search hits say that a comma is required after "i.e.".
->> At least one of them says that it is optional.
->> And one says that it is not required in British English.
->>
->> But writing it with "that is":
->>
->>
->> hence code tagging) and then finding and operating on them at runtime
->> - that is iterating over them to print them in debugfs/procfs.
->>
->> is not good IMO. But it's your document.
->>
-> 
-> Technical writing often benefits from a small amount redundancy. Short
-> sentences and repetition of terms are helpful to most readers. And this
-> also stays out of the more advanced grammatical constructs, as a side
-> effect.
-> 
-> So, for example, something *approximately* like this, see what you
-> think:
-> 
-> Memory allocation profiling is based upon code tagging. Code tagging is
-> a library for declaring static structs (typically by associating a file
-> and line number with a descriptive string), and then finding and
-> operating on those structs at runtime. Memory allocation profiling's
-> runtime operation is simply: print the structs via debugfs/procfs.
+https://lore.kernel.org/all/20240306195509.1502746-2-kuba@kernel.org/
 
-Works for me.  Thanks.
-
--- 
-#Randy
+Very excited to hear that you made progress on this and ported GVE over!
 
