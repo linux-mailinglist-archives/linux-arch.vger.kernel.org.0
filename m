@@ -1,217 +1,178 @@
-Return-Path: <linux-arch+bounces-2902-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2903-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7F66876B65
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 20:53:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58188876DF3
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Mar 2024 00:48:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 754B0282750
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 19:53:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12A2E2831CD
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 23:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A31D5B5C8;
-	Fri,  8 Mar 2024 19:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18EE140846;
+	Fri,  8 Mar 2024 23:48:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FQIcIjit"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="L2SVzAze"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C1F5B21D
-	for <linux-arch@vger.kernel.org>; Fri,  8 Mar 2024 19:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CAF3CF5E
+	for <linux-arch@vger.kernel.org>; Fri,  8 Mar 2024 23:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709927617; cv=none; b=FVN+AvAt+SGjBmpzPiBxowrlf4URgiA3UI7gR2eKqzNV8IrsfPNAEekRn8iaDq7b0AVqOioNZW9PpAsbV7IkMsO4BNbkRnP5g4II5RUmY1CJknYkUDLWJgY4eR1af2+rPyFjjqCM7RkBK8vtxVctIb8B+TCrzDsX8rTcFYRSHyk=
+	t=1709941680; cv=none; b=hhfxF1kas0gdGAFhNr7b1eWESvecwa2WsUf6pL8PWGsK5HyxnoYd1eXuMvBs7tyrjwsQSg2awSJGbgUSILuMkKWVX9y2MtAwqn6q1TtacM6on37IOOD76J+gvy2/Ot/UnqaXqfwHv9Rvi2SOIKQGzRaeSCw1Sp+xyZ6eykIIrpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709927617; c=relaxed/simple;
-	bh=+JPchmRbdEWp2hPvsQ8mwR8SsWihb9svN/keL3PqCmM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mlUAmJri1kYI5CTY6evnqUhos91P01Ir0DgBSvPuPh4CHrlBoEuEiWfEsKQm4b+x8CNA577Bh6HCdYHR2X6RaRXXul33JTvxbOqLuDlGzEOitLf7CyxD5YILbKCpx4O0qpIZJDXqPXj8gXXAJ5LWrXgj95hvMEuWYyGSGRPpKR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FQIcIjit; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a450bedffdfso335984866b.3
-        for <linux-arch@vger.kernel.org>; Fri, 08 Mar 2024 11:53:34 -0800 (PST)
+	s=arc-20240116; t=1709941680; c=relaxed/simple;
+	bh=dchB7UCiRqdqw0lIYP5nDwZdV0ZR/CGk1fMQm9ZuI6c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=umZxbnHdHrxi8qMZTprX34dLk0g1+9cJ2Wuf4voebmZt+Yd7xVUvPpjq/9DRzf+5r3v5TqXk9BgoU8cxlyyol2kWxJLNuVAwXzKb9ivpDC3A9ir1K3z90d+5F1/xN6t9BzNiboG1Xo9F6Lkd941iE2+QXuIwyD7jjFHwe85pTls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=L2SVzAze; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-29bbff1505dso493936a91.0
+        for <linux-arch@vger.kernel.org>; Fri, 08 Mar 2024 15:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709927613; x=1710532413; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pd2ZoV00c/hvjjV6TuUocydSDT4SN2a80zpBvuI43a4=;
-        b=FQIcIjitCXslDz2GbbUrP/Dl2A1fHjodIwfcVwX7edPGJjzUe6ft0Dzx4S5sFwe1Vh
-         g88zviT2eLf5PmHmjVJB2aNpgv9n3ocJvS72MSrLxPfMODNwXkIqGml7VkVhyDJXPZ65
-         MjMUs4Lqmk59C5q9pviF7lrr5HVfpNnp9VtqWc7ZvnuMI0EGx3Q5NM/4uZGay3xcEJFy
-         qYcxb+eRfAcYnwP/UVfmW9ErY4qC/DPOwckI+rRsS39kszwhkv8lEpCyJ9PUorpE+Wmk
-         8YbTN6+zdx0SrM+L7muhYuk5uJr4h+Hit4pCKYkJfFmlBE74LLcVw8ZHHf4d82NY4qR1
-         jV5w==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1709941676; x=1710546476; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9az8igjncgnaY0U1W1wkJljIYsplkUiE6Xc4XiRbO+4=;
+        b=L2SVzAzePwXBRM6vqpB+QFbzZEMkhm600Z9LNU18bXT3rfz7fAe/P7ogRt60U4uG7i
+         HXLidI2y6SP+IL0S0e8jPXgk0ZTJpN0/8y7eullrSL868jS664cbUrjHCXR4O/6af6wp
+         ZFLM6nJH/aSwMmPRAQgT5BU9GqHvIXEaYVB8iHQqH1I3dbD8/HOv68ShDA3QuRuclBlr
+         9zrKlcKkyUVAbCme+7X6/7vFm8kDVZig93IjG7yddBQmcoZmtKttWjR3jTz/d2rjhG8X
+         +gu3mBdIQhOXdcGDqOlGqigx5LEmPztkJ7/Ngv2Sp4AYJ5m8wOa7K11omw88Hs+ppJ82
+         5Ogg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709927613; x=1710532413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pd2ZoV00c/hvjjV6TuUocydSDT4SN2a80zpBvuI43a4=;
-        b=sG8lVkFwmMlNovfGPf5mxSv81c/o1j1SBECRwK86dNb/J4cmYRztvZXozCkFVNLhn9
-         mvgKCr0+fWM4dDCL9/tUvhgpQiFnEE8t9aobwKhm8e8e7OA7b8Pb9XErGLU/MitobATa
-         dXODDijSaGS1ksAXDgxOir9F4jz1kjuhQKg79Jk9NgtOh8lh/Ay17tIks86Jlmy8FbYH
-         FQqKXmiCBhuj+aclxuqLNFi7IgHro1etXd18zm3yldXjVQbYwep8/yJP6o7pLSZs/XKp
-         eJhtrm+emKSGK8BTWz1wzBCwalwYYYAJ3PO/fttQgu+uRopgyjEMhi3q9/wHKE/A49v0
-         UTOg==
-X-Forwarded-Encrypted: i=1; AJvYcCWeKqwKS8oJv4t3G1N3QNBtPaQ+a7TZiEzr4ycTCFi55VnRJzNs1A7vzDfkhJXthnl5ZS8GBT76mGC/ZnTteWiZZmGL3CB65DdmhA==
-X-Gm-Message-State: AOJu0Yy0la1mPTcf6KVzVGN1NLxoftw/3RTTpLstG/GIo9d6/XevdxuC
-	4ry1JTz14dgEzi7+dlkXXqqcV3jsBX/snU3KtTCOR4nPVXyzh7A/xtquBth01+k3XJN4S7Pwpa5
-	lE8HdHw6IaCBCRCttcb8k7pPwoC2dZXjDXkWP
-X-Google-Smtp-Source: AGHT+IGdfTizwHQnCpRk5GeSjOHjssHLcb+cVFlrr45NHBDRApEdAye6AN9i0+rO/lWinEjVvgcrkAuNBm/bbSNX5ic=
-X-Received: by 2002:a17:907:76d7:b0:a3e:9aa3:7024 with SMTP id
- kf23-20020a17090776d700b00a3e9aa37024mr57660ejc.34.1709927612751; Fri, 08 Mar
- 2024 11:53:32 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709941676; x=1710546476;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9az8igjncgnaY0U1W1wkJljIYsplkUiE6Xc4XiRbO+4=;
+        b=IWAojahLo8c4scoFFcLhZ4J7bOPx7lLi4Z3yumC9WF1eg9NYUvlURox2pwKg/112ZO
+         PBGTXjm7Vj33JapjobIloTOcK2CLszisnCDDA5shG+a4KzUjqVNG6fFusGrGw9mqlw1x
+         k9mQeBRvYXQQJfBva34C9heRE5M9VUFwge2J4y38lYcX67KfbqBreXMLIrO4CW97BWWV
+         hoCkutE2y4LtmR0+ecFjfj8oI8mU6aFe+zj9iFQRpuYi8BKghvjfgOtBrwAXyULV71V4
+         t+6/OppVGInSQZmSJ4ekMtZIqOqRsPVV0+1iVxECWeuFmqzzV0fFh10sVKMbzqruzKm6
+         sxcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+38xDJmVr+EIzLZ+9UTSiOY1eMCGmedH+sLAezU28V4/+XVC7VoFi61KmbDHM3tQ/RkeRiXAtOpIuMia+nDhKmODQCUvQsjqC7A==
+X-Gm-Message-State: AOJu0Yyg9ER4XOlAyA2JV0gF68e1HijeP0eqJwTPECLtz4KCGqyOjf2e
+	oKHILFzMMTvupUHdnyXZ/ncfT2Kf4W+r9Chl6+cPnpDJd5sB8h0fcntf7UySbY4=
+X-Google-Smtp-Source: AGHT+IF8a9eHGDem6IS2N02q+0T3yH36EZ/hJ5LpJRaMKjh8ZuXGZ+UFipKrEBkF+ws+Cz/PyRkACw==
+X-Received: by 2002:a17:90b:1286:b0:29a:e097:50be with SMTP id fw6-20020a17090b128600b0029ae09750bemr690309pjb.31.1709941676412;
+        Fri, 08 Mar 2024 15:47:56 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1156:1:1cbd:da2b:a9f2:881? ([2620:10d:c090:500::5:2342])
+        by smtp.gmail.com with ESMTPSA id d15-20020a17090ad98f00b0029bbf42daeesm265183pjv.30.2024.03.08.15.47.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Mar 2024 15:47:56 -0800 (PST)
+Message-ID: <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+Date: Fri, 8 Mar 2024 15:47:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>
 References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <15625bac-dfec-4c4e-a828-d11424f7aced@davidwei.uk>
-In-Reply-To: <15625bac-dfec-4c4e-a828-d11424f7aced@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 8 Mar 2024 11:53:18 -0800
-Message-ID: <CAHS8izMC=q_DuR94i-NCKFVsW0JadX7NEbDfyT8PfG3tBwPv-Q@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20240305020153.2787423-2-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240305020153.2787423-2-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 7, 2024 at 8:57=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-03-04 18:01, Mina Almasry wrote:
-> > From: Jakub Kicinski <kuba@kernel.org>
-> >
-> > The page providers which try to reuse the same pages will
-> > need to hold onto the ref, even if page gets released from
-> > the pool - as in releasing the page from the pp just transfers
-> > the "ownership" reference from pp to the provider, and provider
-> > will wait for other references to be gone before feeding this
-> > page back into the pool.
-> >
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ---
-> >
-> > This is implemented by Jakub in his RFC:
-> > https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
-hat.com/T/
-> >
-> > I take no credit for the idea or implementation; I only added minor
-> > edits to make this workable with device memory TCP, and removed some
-> > hacky test code. This is a critical dependency of device memory TCP
-> > and thus I'm pulling it into this series to make it revewable and
-> > mergeable.
-> >
-> > RFC v3 -> v1
-> > - Removed unusued mem_provider. (Yunsheng).
-> > - Replaced memory_provider & mp_priv with netdev_rx_queue (Jakub).
-> >
-> > ---
-> >  include/net/page_pool/types.h | 12 ++++++++++
-> >  net/core/page_pool.c          | 43 +++++++++++++++++++++++++++++++----
-> >  2 files changed, 50 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/net/page_pool/types.h b/include/net/page_pool/type=
-s.h
-> > index 5e43a08d3231..ffe5f31fb0da 100644
-> > --- a/include/net/page_pool/types.h
-> > +++ b/include/net/page_pool/types.h
-> > @@ -52,6 +52,7 @@ struct pp_alloc_cache {
-> >   * @dev:     device, for DMA pre-mapping purposes
-> >   * @netdev:  netdev this pool will serve (leave as NULL if none or mul=
-tiple)
-> >   * @napi:    NAPI which is the sole consumer of pages, otherwise NULL
-> > + * @queue:   struct netdev_rx_queue this page_pool is being created fo=
-r.
-> >   * @dma_dir: DMA mapping direction
-> >   * @max_len: max DMA sync memory size for PP_FLAG_DMA_SYNC_DEV
-> >   * @offset:  DMA sync address offset for PP_FLAG_DMA_SYNC_DEV
-> > @@ -64,6 +65,7 @@ struct page_pool_params {
-> >               int             nid;
-> >               struct device   *dev;
-> >               struct napi_struct *napi;
-> > +             struct netdev_rx_queue *queue;
-> >               enum dma_data_direction dma_dir;
-> >               unsigned int    max_len;
-> >               unsigned int    offset;
-> > @@ -126,6 +128,13 @@ struct page_pool_stats {
-> >  };
-> >  #endif
-> >
-> > +struct memory_provider_ops {
-> > +     int (*init)(struct page_pool *pool);
-> > +     void (*destroy)(struct page_pool *pool);
-> > +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
-> > +     bool (*release_page)(struct page_pool *pool, struct page *page);
-> > +};
->
-> Separate question as I try to adapt bnxt to this and your queue
-> configuration API.
->
-> How does GVE handle the need to allocate kernel pages for headers and
-> dmabuf for payloads?
->
-> Reading the code, struct gve_rx_ring is the main per-ring object with a
-> page pool. gve_queue_page_lists are filled with page pool netmem
-> allocations from the page pool in gve_alloc_queue_page_list(). Are these
-> strictly used for payloads only?
->
+On 2024-03-04 18:01, Mina Almasry wrote:
+> This API enables the net stack to reset the queues used for devmem.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+>  include/linux/netdevice.h | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index c41019f34179..3105c586355d 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1435,6 +1435,20 @@ struct netdev_net_notifier {
+>   *			   struct kernel_hwtstamp_config *kernel_config,
+>   *			   struct netlink_ext_ack *extack);
+>   *	Change the hardware timestamping parameters for NIC device.
+> + *
+> + * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
+> + *	Allocate memory for an RX queue. The memory returned in the form of
+> + *	a void * can be passed to ndo_queue_mem_free() for freeing or to
+> + *	ndo_queue_start to create an RX queue with this memory.
+> + *
+> + * void	(*ndo_queue_mem_free)(struct net_device *dev, void *);
+> + *	Free memory from an RX queue.
+> + *
+> + * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
+> + *	Start an RX queue at the specified index.
+> + *
+> + * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
+> + *	Stop the RX queue at the specified index.
+>   */
+>  struct net_device_ops {
+>  	int			(*ndo_init)(struct net_device *dev);
+> @@ -1679,6 +1693,16 @@ struct net_device_ops {
+>  	int			(*ndo_hwtstamp_set)(struct net_device *dev,
+>  						    struct kernel_hwtstamp_config *kernel_config,
+>  						    struct netlink_ext_ack *extack);
+> +	void *			(*ndo_queue_mem_alloc)(struct net_device *dev,
+> +						       int idx);
+> +	void			(*ndo_queue_mem_free)(struct net_device *dev,
+> +						      void *queue_mem);
+> +	int			(*ndo_queue_start)(struct net_device *dev,
+> +						   int idx,
+> +						   void *queue_mem);
+> +	int			(*ndo_queue_stop)(struct net_device *dev,
+> +						  int idx,
+> +						  void **out_queue_mem);
+>  };
 
-You're almost correct. We actually don't use the gve queue page lists
-for devmem TCP, that's an unrelated GVE feature/code path for low
-memory VMs. The code in effect is the !qpl code. In that code, for
-incoming RX packets we allocate a new or recycled netmem from the page
-pool in gve_alloc_page_dqo(). These buffers are used for payload only
-in the case where header split is enabled. In the case header split is
-disabled, these buffers are used for the entire incoming packet.
+I'm working to port bnxt over to using this API. What are your thoughts
+on maybe pulling this out and use bnxt to drive it?
 
-> I found a struct gve_header_buf in both gve_rx_ring and struct
-> gve_per_rx_queue_mem_dpo. This is allocated in gve_rx_queue_mem_alloc()
-> using dma_alloc_coherent(). Is this where GVE stores headers?
->
-
-Yes, this is where GVE stores headers.
-
-> IOW, GVE only uses page pool to allocate memory for QPLs, and QPLs are
-> used by the device for split payloads. Is my understanding correct?
->
-
---=20
-Thanks,
-Mina
+>  
+>  /**
 
