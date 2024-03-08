@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-2898-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2899-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48BB3875CC3
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 04:36:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 551C1875CFA
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 04:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C93D1C21030
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 03:36:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE397B21C7C
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 03:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0EC2C1AA;
-	Fri,  8 Mar 2024 03:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC452C6A3;
+	Fri,  8 Mar 2024 03:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rm4QdZGl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZADXQRtg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABDC23775;
-	Fri,  8 Mar 2024 03:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820532C190;
+	Fri,  8 Mar 2024 03:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709869010; cv=none; b=KENJPlgkeWS8Jb60tO0RWZ0tYxJ/z0PNhGq5IdlPmZ+TRUwz+uwTs4Caog6Cq4D82bZSVNOlHHTAYQvQ6IlnByKtJgek8BQjrtr6btcfdlbbC56RIS05byoNcnjoAW0QDLdpZYESliC/uYjXssKGTc4mcZTs30JlMSwcCGYcesI=
+	t=1709870312; cv=none; b=jE+T3TVAaPGExfSWnw0azJsuKJv6Bjo+gI36j3pWmCSKe4ARCHTLXDsgj4JP3sjbwK8SLd38XPcNSv/m2BuQducyNYDZyGxZIqXLlpcTcQHV0eD51T5mRDnSWpe85OIp17ysvLqxuQ7eE3KVPts7BGaS2Qw+ohIVEqxv59smoKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709869010; c=relaxed/simple;
-	bh=vAK5UsAi1mlbmfS8eyss1ed3F+nyC6FU4MtAV8GtcKY=;
+	s=arc-20240116; t=1709870312; c=relaxed/simple;
+	bh=mF6Wbp6MtxfNFDHq0iHrXjjYNWZxisqag9vARhbWvOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NXylPHmYZ32wBJvabKcfva9uq45q4jjmcJIspdhil3hJMZ99gSiA59f1g0xGFO92LjeQPJnh3gcLDyCe3K1pGNGUmVFCNBmZpMFwipB52v8ckwRoOCqmY1RvZpp1roXCnTTQ/g5Y07dWubhcMJ28ZsAVVJ0MuJ7f7RA6mCwlI00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rm4QdZGl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406A1C433F1;
-	Fri,  8 Mar 2024 03:36:47 +0000 (UTC)
+	 MIME-Version:Content-Type; b=aKAPJFYD9DEFLLVE4606nXAd8E8OxP0B5e30PgkuP9WQk26yef/Lj4H8OIVd/PflCyZlyWEZjTE1w90LkK9HjdMXqCFyHZtOszITWqhhg0AhoR6QlXF0+tG/p8xz3o1k1FdFKCfWoCk1Y7RuhFuz2gwJu3tQ2IO6cXm9FwMgva4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZADXQRtg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA81C433F1;
+	Fri,  8 Mar 2024 03:58:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709869009;
-	bh=vAK5UsAi1mlbmfS8eyss1ed3F+nyC6FU4MtAV8GtcKY=;
+	s=k20201202; t=1709870312;
+	bh=mF6Wbp6MtxfNFDHq0iHrXjjYNWZxisqag9vARhbWvOU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Rm4QdZGlRLCr8AAepoUDwXNJRdT/41xTmy7pgW1hC/Vkc6H2ViLXJ61BdpMlwF47t
-	 wEiZLKsT0zHiG2vaTdBjyw8Yz2Jhir4s0t8rTTdInCx5QEDONETMnmxo2+grPUr68A
-	 1wYgYLcJoM+s4pjo+N3FD/kjR3CM/uidkwekXtRA1OmDZpHzegKXJooc6N/abyAZ/d
-	 GgwtlPgImcuZGYVCBU104HdirTzkdsXA7ah6zKSSw8gWaeFm3PGbV+wN0Ue2c0ZfvM
-	 o0hGEwYCGMHnOhPGoNDMRCNboOR4rsdMIGrUcszugDtYPt5QWmNqXKb6y1C9r+LSjB
-	 ENxvIiLB7g1Fg==
-Date: Thu, 7 Mar 2024 19:36:46 -0800
+	b=ZADXQRtggZVF7jCXRnr/Nx++UqGw2O1E+U/KttSTtzSSlM9bBjttGEo/A8hRic7ge
+	 O+gDFK9MJBHmJ2YDam/9YZE3gp0xxBazL1mTi5MDwug/eJk53dwV/etCOw6KZlAWuN
+	 2i1Oe8pKYSCdgSopwQohIoatN4yPvCX5Cuzbnr/d5jvVAjw1Ie2U1uJLT8OtOKVyTs
+	 N5lwkQbIk4pRTkVTCTO3QA4II1m8BzPZ9ti7U330EoXvcxzor4u0v+kBt/tUSkRAKp
+	 tt8z4/H4M6CWk2MTdlJfmcAQM/5mZHnYRX7fG89CTjTzKp4ec7OLIdHAisaNLAPPMH
+	 kRchFPzFcbV0A==
+Date: Thu, 7 Mar 2024 19:58:28 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
  Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
  <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
  Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
  <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
  Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
@@ -69,125 +69,118 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
  <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, Willem de Bruijn
  <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
  <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
  Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
  <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
  Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
-Message-ID: <20240307193646.70ef5243@kernel.org>
-In-Reply-To: <CAHS8izPyxn2LsOsxL98WAHse21tq3i9MCp_Xn8AA8sx5iettNQ@mail.gmail.com>
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf
+ to netdevice
+Message-ID: <20240307195828.183a76c2@kernel.org>
+In-Reply-To: <20240305020153.2787423-6-almasrymina@google.com>
 References: <20240305020153.2787423-1-almasrymina@google.com>
-	<20240305020153.2787423-2-almasrymina@google.com>
-	<20240307173039.00e6fbb7@kernel.org>
-	<CAHS8izPyxn2LsOsxL98WAHse21tq3i9MCp_Xn8AA8sx5iettNQ@mail.gmail.com>
+	<20240305020153.2787423-6-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 7 Mar 2024 18:08:24 -0800 Mina Almasry wrote:
-> On Thu, Mar 7, 2024 at 5:30=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
-rote:
-> > On Mon,  4 Mar 2024 18:01:36 -0800 Mina Almasry wrote: =20
-> > > + * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
-> > > + *   Allocate memory for an RX queue. The memory returned in the for=
-m of
-> > > + *   a void * can be passed to ndo_queue_mem_free() for freeing or to
-> > > + *   ndo_queue_start to create an RX queue with this memory.
-> > > + *
-> > > + * void      (*ndo_queue_mem_free)(struct net_device *dev, void *);
-> > > + *   Free memory from an RX queue.
-> > > + *
-> > > + * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
-> > > + *   Start an RX queue at the specified index.
-> > > + *
-> > > + * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
-> > > + *   Stop the RX queue at the specified index.
-> > >   */
-> > >  struct net_device_ops {
-> > >       int                     (*ndo_init)(struct net_device *dev);
-> > > @@ -1679,6 +1693,16 @@ struct net_device_ops {
-> > >       int                     (*ndo_hwtstamp_set)(struct net_device *=
-dev,
-> > >                                                   struct kernel_hwtst=
-amp_config *kernel_config,
-> > >                                                   struct netlink_ext_=
-ack *extack);
-> > > +     void *                  (*ndo_queue_mem_alloc)(struct net_devic=
-e *dev,
-> > > +                                                    int idx);
-> > > +     void                    (*ndo_queue_mem_free)(struct net_device=
- *dev,
-> > > +                                                   void *queue_mem);
-> > > +     int                     (*ndo_queue_start)(struct net_device *d=
-ev,
-> > > +                                                int idx,
-> > > +                                                void *queue_mem);
-> > > +     int                     (*ndo_queue_stop)(struct net_device *de=
-v,
-> > > +                                               int idx,
-> > > +                                               void **out_queue_mem)=
-; =20
-> >
-> > The queue configuration object was quite an integral part of the design,
-> > I'm slightly worried that it's not here :) =20
->=20
-> That was a bit of a simplification I'm making since we just want to
-> restart the queue. I thought it was OK to define some minimal version
-> here and extend it later with configuration? Because in this context
-> all we really need is to restart the queue, yes?
+On Mon,  4 Mar 2024 18:01:40 -0800 Mina Almasry wrote:
+> +	if (!dev || !dev->netdev_ops)
+> +		return -EINVAL;
 
-Right, I think it's perfectly fine for the time being.
-It works, and is internal to the kernel.
+too defensive
 
-> If extending with some configuration is a must please let me know what
-> configuration struct you're envisioning. Were you envisioning a stub?
-> Or some real configuration struct that we just don't use at the
-> moment? Or one that we use for this use case somehow?
+> +	if (!dev->netdev_ops->ndo_queue_stop ||
+> +	    !dev->netdev_ops->ndo_queue_mem_free ||
+> +	    !dev->netdev_ops->ndo_queue_mem_alloc ||
+> +	    !dev->netdev_ops->ndo_queue_start)
+> +		return -EOPNOTSUPP;
+> +
+> +	new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+> +	if (!new_mem)
+> +		return -ENOMEM;
+> +
+> +	err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
+> +	if (err)
+> +		goto err_free_new_mem;
+> +
+> +	err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
+> +	if (err)
+> +		goto err_start_queue;
+> +
+> +	dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
 
-I had some ideas about storing the configuration as rules,
-instead of directly in struct netdev_rx_queue.
-E.g. default queue length =3D 2000, but for select queues you may
-want a different length.
-But application binding to a queue would always take precedence,=20
-so even if the ideas ever materialize there will be no uAPI change.
+nice :)
 
-> > Also we may want to rename
-> > the about-to-be-merged ops from netdev_stat_ops and netdev_queue_ops,
-> > and add these there?
-> >
-> > https://lore.kernel.org/all/20240306195509.1502746-2-kuba@kernel.org/
->=20
-> Yeah, that sounds reasonable! Thanks! We could also keep the
-> netdev_stat_ops and add new netdev_queue_ops alongside them if you
-> prefer.
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +
+> +	if (rxq->binding)
 
-Up to you, after some soul searching we renamed the uAPI to call these
-stats qstats, I just forgot to rename the op struct. But it doesn't
-matter much.
+nit: a few places have an empty line between call and error check
 
-> > Very excited to hear that you made progress on this and ported GVE over=
-! =20
->=20
-> Actually, we're still discussing but it looks like my GVE queue API
-> implementation I proposed earlier may be a no-go. Likely someone from
-> the GVE team will follow up here with this piece, probably in a
-> separate series.
+> +		return -EEXIST;
 
-Well, it's going to be ready when it's ready :)
-Speaking of things which can be merged independently,
-feel free to post patch 3, maybe it can make v6.9..
+> +	if (!capable(CAP_NET_ADMIN))
+> +		return -EPERM;
 
-> For now I'm carrying my POC for the GVE implementation out of tree
-> with the rest of the driver changes:
->=20
-> https://github.com/mina/linux/commit/501b734c80186545281e9edb1bf313f5a2d8=
-cbee
+this can be a flag on the netlink policy, no?
+
+	flags: [ admin-perm ]
+
+on the op
+
+> +	dmabuf = dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
+
+
+> +	hdr = genlmsg_put(rsp, info->snd_portid, info->snd_seq,
+
+genlmsg_iput()
+
+> +static int netdev_netlink_notify(struct notifier_block *nb, unsigned long state,
+> +				 void *_notify)
+> +{
+> +	struct netlink_notify *notify = _notify;
+> +	struct netdev_dmabuf_binding *rbinding;
+> +
+> +	if (state != NETLINK_URELEASE || notify->protocol != NETLINK_GENERIC)
+> +		return NOTIFY_DONE;
+> +
+> +	rtnl_lock();
+> +
+> +	list_for_each_entry(rbinding, &netdev_rbinding_list, list) {
+> +		if (rbinding->owner_nlportid == notify->portid) {
+> +			netdev_unbind_dmabuf(rbinding);
+> +			break;
+> +		}
+> +	}
+> +
+> +	rtnl_unlock();
+> +
+> +	return NOTIFY_OK;
+> +}
+
+While you were not looking we added three new members to the netlink
+family:
+
+ * @sock_priv_size: the size of per-socket private memory
+ * @sock_priv_init: the per-socket private memory initializer
+ * @sock_priv_destroy: the per-socket private memory destructor
+
+You should be able to associate state with a netlink socket
+and have it auto-destroyed if the socket closes.
+LMK if that doesn't work for you, I was hoping it would fit nicely.
+
+I just realized now that the code gen doesn't know how to spit
+those members out, but I'll send a patch tomorrow, you can hack
+it manually until that gets in.
 
