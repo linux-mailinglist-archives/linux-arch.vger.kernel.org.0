@@ -1,136 +1,188 @@
-Return-Path: <linux-arch+bounces-2904-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2905-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C81876E04
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Mar 2024 00:53:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851BA876E1C
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Mar 2024 01:28:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B3F71C21E96
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Mar 2024 23:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 603E81C21DEA
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Mar 2024 00:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F843BBEE;
-	Fri,  8 Mar 2024 23:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9DF17F6;
+	Sat,  9 Mar 2024 00:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cKLX+2Aa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8B623769;
-	Fri,  8 Mar 2024 23:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039ADA38
+	for <linux-arch@vger.kernel.org>; Sat,  9 Mar 2024 00:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709941989; cv=none; b=mEsCvpZO/xGxHdy54eTcpxT9qN8sraMn1Cs5lZa2/8ykPFAEnWsbN0vaJ4NVgCLfDdBJrQ3XLOhMw+GMDe0L/TbOy0zeJqm+0/9WcaSaZ1Awhkw+Cr0hTZIA8UL7sKRoRqAcE6o4r9C73S2AkZZihEBDMBq2KLptrv2Dd0YqGb8=
+	t=1709944075; cv=none; b=ZVRNQefqKKEa5I7bkQ7XT71S52KRWOHDTr3fQA5RVJK1SKYQ6t+tP3ZD0Tlblv+WIcbFlmDegx8P1lnnUqGyfKHWHcoFOPUEes29vxGPEKapz10dWryulPmiByIQ2bLXlQDqUveWFeN1wyWdsreU6ZjyJdiVGCFV4wkSn+z/BOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709941989; c=relaxed/simple;
-	bh=t8OA91R3kyR2UyyWnJ2g3tEc5o5p3PwzgyzGpkHmokU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SuRbDiUIYOX9Ps5JO0FjehJ4zPdugp8aTf8K/m6oyjM6S2WQUwVl/kUL/0q8H5Ukmvoh80xREkX/kqRlGMF+XSh/io0VmBSMorI8EidpOe+hBCEPAGmH/ScPieA/V0oynobYsWOds2zoJ0fo2pn2TxpywcGJqB46QDnvzD1roYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso2154395a12.3;
-        Fri, 08 Mar 2024 15:53:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709941988; x=1710546788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+	s=arc-20240116; t=1709944075; c=relaxed/simple;
+	bh=UAHNOoQOfnXGU4ynjW3Di4sMLSMOx0hwkdhyKrO246c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lqDwmq3HBl2U1Qq3QzEIZs6nAUt9PyQk56XZxIW1NRgr54+jTArFOdqTS98ulJK47W+Gpo88qD3PB+5cP93EQhBtnFeYQGLHVghAdsUaXx8+FIovfs6f2wYvvnq68kzjv23VlqYfNYtLoqRhc1KSYsCZX64I1he9DMH+26ILxyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cKLX+2Aa; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a3fb8b0b7acso172051866b.2
+        for <linux-arch@vger.kernel.org>; Fri, 08 Mar 2024 16:27:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709944071; x=1710548871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qAaAtnWUg1rxpdk1BKsVfiXox0rISjedblr07JGTkYA=;
-        b=IDgKU9tNmT0Ao7TVwJZGynHeYEsQpbEvgk4C9AZk7O4NcxU4TH8sVaWgwdN3ErLqw8
-         jjUm3TvSX97sHxUhZVFcCjS1b4j70K3nmVhUdW6Jj1N8YxdHsLOAktGTT8cY3rylMyPh
-         BowQ74/w7Zk5C9/7c9tTHsRXrDfIvq9N5AsNdDmqiG9VYkNIOdyMTTupcD/lxEDuYv3y
-         K5WsVXWRwCWYcrFoJ0rY4NHHMREN7l0MQOR4dvq/am4LTbrHhTppn5xNXWB2qx/qoXXy
-         c+/fiSHE/1Cf8fxnFMSol/DYUReKP1YbhkCeY3P2Glao0GYQQoC7pm+Pv5ohqJWEVsto
-         cglg==
-X-Forwarded-Encrypted: i=1; AJvYcCWP5TAuy+NeQ7TRVXuav/21idlIT6CnYpEOErjLOcFpCz0AJtWxZi+gc0yROTwEubM+Uiaa5aDmAZp3wKlvi0fGEbQkfAVE48Cs7onUEy4L7Ut8uLlFbSrgAgDUMjZNffV2d9LP5vJt236C3SVWUDc3h2R5jhYDmSGEi5W6IhNqcSFvN92LhQ==
-X-Gm-Message-State: AOJu0YyiqhcnNIaHFNMjMAKXdaQ/e+ezStIt1XfcMgEqecgdvBhfOC1Y
-	fGXxFllgO7smG6vspWyDpyJ3JfaIzwrNhoqK4hHaNTHJU9yCLM96
-X-Google-Smtp-Source: AGHT+IF+FeulvTo1o6BjAN2xTdMb8Ul/K+KciGeAVDA7XkD632jeGsz0rIvfuwgHV41dXl5zLmsguw==
-X-Received: by 2002:a05:6a20:3424:b0:1a1:2fda:e785 with SMTP id i36-20020a056a20342400b001a12fdae785mr223595pzd.23.1709941987631;
-        Fri, 08 Mar 2024 15:53:07 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id u9-20020a62d449000000b006e57a3bf0e9sm263058pfl.82.2024.03.08.15.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Mar 2024 15:53:07 -0800 (PST)
-Date: Fri, 8 Mar 2024 23:53:02 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Michael Kelley <mhklinux@outlook.com>
-Cc: "wei.liu@kernel.org" <wei.liu@kernel.org>,
-	"haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-	"decui@microsoft.com" <decui@microsoft.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"tytso@mit.edu" <tytso@mit.edu>,
-	"Jason@zx2c4.com" <Jason@zx2c4.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	Saurabh Singh Sengar <ssengar@microsoft.com>,
-	Long Li <longli@microsoft.com>
-Subject: Re: [PATCH 1/1] x86/hyperv: Use Hyper-V entropy to seed guest random
- number generator
-Message-ID: <Zeuk3ixlvMFg1CDo@liuwe-devbox-debian-v2>
-References: <20240122160003.348521-1-mhklinux@outlook.com>
- <SN6PR02MB4157B61CA09C0DAF0BB994E1D4212@SN6PR02MB4157.namprd02.prod.outlook.com>
+        bh=EWYfh9XoJurOTi8J7CJKHaNZmYFNooi7e3RylW8C//Y=;
+        b=cKLX+2AaXAKsbJm0yJSoV5EfK47mkTHgBxnjzLm3Qi+mbVTJ0/35N0WYiav0SapGJM
+         cDyGrmHJrruoMoMLbe1jOUloQx5t4MAi4aNwOQY0tF21GKFBaIbyB/l1TEL/VySh/Mik
+         uhP1cbY/yn+43G6SGbVcuyZnEEPvvCMiXnZzryMRsh8Odw3H7pu5pO3+Xv/68hE6he8H
+         ZAR9cxuAP0O2ixXqz107LMaGDHHGH3a2etOdS48euG1nmkimVqQO91HOAsFYAgNUbZv7
+         gdlKD2Ge6lIpNV+E+cB7LDUcbiPqA15QcEwaIAxb+3xOnQn/QxOZXkzs8kwfH8dshzUL
+         sTKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709944071; x=1710548871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EWYfh9XoJurOTi8J7CJKHaNZmYFNooi7e3RylW8C//Y=;
+        b=nsy/Ci0nQ9VAfDTkmoiOynlw9TADGLy3cYStxnnkN3zVu6Jsn5I9MT2pHleq8vmbJU
+         UhpZw6g01v9xyxbdT+GI3eXYsvHYchSkWRGy0ZfCptYOHQw6Ak1jHMmuvmTRtcu0sE95
+         8BDEp3LYRmE0kIRETO9gyVIftKmuym28GtC1Cw5ffsDotPDw/AzxEtEbZ8loq9dTnOxf
+         7UzjpB+e8YzI29sziJiS2VehZAItfCZcv4nNanJodlhKPn8rp0m5J65AsL7Wjxi8+p1J
+         5xHEhRQXl0iIf26EbwEQsb5Y3EIMJbmHWeLni4VnD2TAyMPmSp+qxTkFc0EBmATXOhdF
+         x3Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCXs/mPESQiMEw6DwexHdzGBFFZH2gsgz8fz1mQC7mMfauHyeYCAzgTnp4j+NmvUXIDGQqgDlGv8wPyaAcTRAIi7WYuTbvl3tVSyTw==
+X-Gm-Message-State: AOJu0Ywc3Wjku2YJ7gT3uuUiYQgdnl96Ple6cIRm5Ok/ey2x/iozL9I/
+	3WomuQVQs4nSoTmBBsIkgwLPjCy3GxuS0DQx8Yvrgf8FglHGtFLTBai5x+Eq3App0TgTnNa/9gS
+	ajlyIYyceqlDpn03GZ6sld8H2bTOdL0PU9RK5
+X-Google-Smtp-Source: AGHT+IESd1pHYOts43futyrxfMXx/f2edur2d17Kl0AlPQ1Jsil6uEMQ/KupG2jdYDiEzWeJ95HiQuXNh787lBIftRY=
+X-Received: by 2002:a17:906:3c56:b0:a45:b631:1045 with SMTP id
+ i22-20020a1709063c5600b00a45b6311045mr133451ejg.21.1709944071018; Fri, 08 Mar
+ 2024 16:27:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB4157B61CA09C0DAF0BB994E1D4212@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-2-almasrymina@google.com> <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+In-Reply-To: <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 8 Mar 2024 16:27:39 -0800
+Message-ID: <CAHS8izPJbLSgvXn7pA6OQ89=dOCoXYYtTvM=7-0_MB2NxucazA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
+To: David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 06, 2024 at 05:43:41PM +0000, Michael Kelley wrote:
-> From: wei.liu@kernel.org @ 2024-03-04  6:57 UTC
-> > 
-> > > +void __init ms_hyperv_late_init(void)
-> > > +{
-> > > +	struct acpi_table_header *header;
-> > > +	acpi_status status;
-> > > +	u8 *randomdata;
-> > > +	u32 length, i;
-> > > +
-> > > +	/*
-> > > +	 * Seed the Linux random number generator with entropy provided by
-> > > +	 * the Hyper-V host in ACPI table OEM0.  It would be nice to do this
-> > > +	 * even earlier in ms_hyperv_init_platform(), but the ACPI subsystem
-> > > +	 * isn't set up at that point. Skip if booted via EFI as generic EFI
-> > > +	 * code has already done some seeding using the EFI RNG protocol.
-> > > +	 */
-> > > +	if (!IS_ENABLED(CONFIG_ACPI) || efi_enabled(EFI_BOOT))
-> > > +		return;
-> > > +
-> > > +	status = acpi_get_table("OEM0", 0, &header);
-> > > +	if (ACPI_FAILURE(status) || !header) {
-> > > +		pr_info("Hyper-V: ACPI table OEM0 not found\n");
-> > 
-> > I would like this to be a pr_debug() instead of pr_info(), considering
-> > using the negative case may cause users to think not having this table
-> > can be problematic.
-> > 
-> > Alternatively, we can remove this message here, and then ...
-> > 
-> > > +		return;
-> > > +	}
-> > > +
-> > 
-> > ... add a pr_debug() here to indicate that the table was found.
-> > 
-> > 	pr_info("Hyper-V: Seeding randomness with data from ACPI table OEM0\n");
-> 
-> You wrote the code as "pr_info()" but your comment suggests "pr_debug()".
-> I'm assuming pr_debug() is better because we don't really need any output
+On Fri, Mar 8, 2024 at 3:48=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
+>
+> On 2024-03-04 18:01, Mina Almasry wrote:
+> > This API enables the net stack to reset the queues used for devmem.
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >  include/linux/netdevice.h | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> >
+> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > index c41019f34179..3105c586355d 100644
+> > --- a/include/linux/netdevice.h
+> > +++ b/include/linux/netdevice.h
+> > @@ -1435,6 +1435,20 @@ struct netdev_net_notifier {
+> >   *                      struct kernel_hwtstamp_config *kernel_config,
+> >   *                      struct netlink_ext_ack *extack);
+> >   *   Change the hardware timestamping parameters for NIC device.
+> > + *
+> > + * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
+> > + *   Allocate memory for an RX queue. The memory returned in the form =
+of
+> > + *   a void * can be passed to ndo_queue_mem_free() for freeing or to
+> > + *   ndo_queue_start to create an RX queue with this memory.
+> > + *
+> > + * void      (*ndo_queue_mem_free)(struct net_device *dev, void *);
+> > + *   Free memory from an RX queue.
+> > + *
+> > + * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
+> > + *   Start an RX queue at the specified index.
+> > + *
+> > + * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
+> > + *   Stop the RX queue at the specified index.
+> >   */
+> >  struct net_device_ops {
+> >       int                     (*ndo_init)(struct net_device *dev);
+> > @@ -1679,6 +1693,16 @@ struct net_device_ops {
+> >       int                     (*ndo_hwtstamp_set)(struct net_device *de=
+v,
+> >                                                   struct kernel_hwtstam=
+p_config *kernel_config,
+> >                                                   struct netlink_ext_ac=
+k *extack);
+> > +     void *                  (*ndo_queue_mem_alloc)(struct net_device =
+*dev,
+> > +                                                    int idx);
+> > +     void                    (*ndo_queue_mem_free)(struct net_device *=
+dev,
+> > +                                                   void *queue_mem);
+> > +     int                     (*ndo_queue_start)(struct net_device *dev=
+,
+> > +                                                int idx,
+> > +                                                void *queue_mem);
+> > +     int                     (*ndo_queue_stop)(struct net_device *dev,
+> > +                                               int idx,
+> > +                                               void **out_queue_mem);
+> >  };
+>
+> I'm working to port bnxt over to using this API. What are your thoughts
+> on maybe pulling this out and use bnxt to drive it?
+>
 
-Yes, I meant to use pr_debug() here. Sorry for the confusion. The
-pr_info() was a c&p error.
+Sure thing, go for it! Thanks!
 
+I think we've going to have someone from GVE working on this in
+parallel. I see no issue with us aligning on what the core-net ndos
+would look like and implementing those in parallel for both drivers.
+We're not currently planning to make any changes to the ndos besides
+applying Jakub's feedback from this thread. If you find a need to
+deviate from this, let us know and we'll work on staying in line with
+that. Thanks!
+
+--=20
 Thanks,
-Wei.
+Mina
 
