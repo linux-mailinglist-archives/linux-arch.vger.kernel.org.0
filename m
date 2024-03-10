@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-2907-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2908-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFDA48774E1
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Mar 2024 03:06:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 277E98774EA
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Mar 2024 03:06:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE3FD1C20C79
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Mar 2024 02:06:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B1C11C2096C
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Mar 2024 02:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7132443E;
-	Sun, 10 Mar 2024 02:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9506C8E1;
+	Sun, 10 Mar 2024 02:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BZG3qtOl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kMIRydFx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986C61FD7
-	for <linux-arch@vger.kernel.org>; Sun, 10 Mar 2024 02:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415F25666
+	for <linux-arch@vger.kernel.org>; Sun, 10 Mar 2024 02:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036336; cv=none; b=ix2G1ulqk/FbNC2EGIUxLL6R+U4tQDQfdW6gyD3kfdYIp/GzhyrNj15tOG06vqMYduyPtVCEzj/WeyqOHbU9JfBeEr4XWQtsywWLUEaJZUbywY7lOSisUepDeSjvEg8Ok6xEKEE4gbx8QybU5rlU3qxS+DqiRttMJMNVk4fb54w=
+	t=1710036340; cv=none; b=P3k1wk+NqDsJlNSwmGL/g7OnlycESPnmCa35HLHmMl8b+qceGetTwBPRqrDkyTq1uLXGxERaODbRwyviFncVVGQjqvvbnBBi+LtElgP98LHbP6PnM3Qa4eUXmhWmE+73HSav4oZQLGWUYtTediwbepioqVerl8L8bWIDxySCy6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036336; c=relaxed/simple;
-	bh=ZSKBQS+8Mn7aJnZUbJUB/8XB7m9MXAj5PzIqShvjvqw=;
+	s=arc-20240116; t=1710036340; c=relaxed/simple;
+	bh=D2uX+Mnk+6vztSUZd5hP00XWtGAz0CoTxvXAkzGNj1I=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=jdpgx8t0qSMOllIMCC4k6qsIyqyeNeHlsyIJKccnewg+NuuHrc6LV3IWHuemC39vNsNOmd8BYvIhmVl3zwyWzfZHvEkKeFsJWRq+tDSbKi5NdB1G97l90W2izCLhmVqbyW8p1YUtX//MFtRMt5VY/YEOTuBZ6nqSKta3sL3TF+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BZG3qtOl; arc=none smtp.client-ip=209.85.219.202
+	 To:Content-Type; b=S54nUWcaC4a92wPAC5qCN9krBy2iZ1u60LBg9mdODfNaxRncDdG77JceFbiU6q9hTLegqOqlPUXSrQbCtjQbzSWB4sk7OYTej6G1VOy9MJGN0kQNJBNjS07pei9W0477Ig/x5v30RJ2O27AlgcWN0EL6QQo3oSoOVgMCqABHdXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kMIRydFx; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcdc3db67f0so4932857276.1
-        for <linux-arch@vger.kernel.org>; Sat, 09 Mar 2024 18:05:34 -0800 (PST)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a0a5bf550so28760947b3.3
+        for <linux-arch@vger.kernel.org>; Sat, 09 Mar 2024 18:05:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036333; x=1710641133; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1710036336; x=1710641136; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=s1Gx+zOxHa5G/G1Me70ulKh3Qhwa8FiZyBNMKmpUzIM=;
-        b=BZG3qtOl1Lk1bJytdZIVHW9ExdwmwN/JyuPocEHdNsRCuLVNgssy0pB7ZrYEQaeIYt
-         Xpch/sx+B2mZNpYIaXqj2ErUzL6DyoV9k51hqaseqtNGf+tFPDIRK0M4UZno+WFKhLzx
-         I/I7jVpTe4tOwOALJYHX3N8rV1W+aEpvY8fz70RitI7T1/f6kzlysPSkUjqFAx4JYqr7
-         RL4UC9w9/wJzj4mfBMoUr9SbFp/bd2Wl1eTTa5pbVD6pheNUauDUd02cBvj+dgS3dj0R
-         cif0w2wMFYBZxxJYd0amy0KrezZWmVQ9RRQYg5tMQh/H/faAl1wfckVzIhOyijqDmJWc
-         XsiA==
+        bh=T7XIYLAkcLSrj5FLrGjKI8q+UW4mZzYyudvGuQ4/TZo=;
+        b=kMIRydFxidKzY7BpYx9EUp/eSGgFea4GwwQrTWrZFWAG+5gWnMJU0Gbf6KDWEXRVbB
+         yt7yTV4W7LoKxr4bwuLNicNelGV0VJdo8+Xxc3tr9qWqEormXicnooeGM+XBHP/F8Lpv
+         MkZPbXBbSyvDxovJoSlKKkCQ8NeOEsoPsWWeQ/wCQOw3jDd+VazdaPjgJjjglqJ2YrqQ
+         DzXZQwEmve8ZRYv9vrjP3ObWuuQVtRPblfKrVNINjUlnr0Z/lkXrGfycXXpfWJCveve2
+         LkbG7/7/jskn+XiPH/2MRqGAtT1mcFiev5F2k5tRA7Uy3qUjHzrB0948Z1PAUaO33IXn
+         CXSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036333; x=1710641133;
+        d=1e100.net; s=20230601; t=1710036336; x=1710641136;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s1Gx+zOxHa5G/G1Me70ulKh3Qhwa8FiZyBNMKmpUzIM=;
-        b=BsEzdIAEYSgrI2FhAXd7GEZu4y7zNBzuVS+Pt3eSGgqDVV40BHeCBKtwZh97Zi0VMp
-         aEkFZwBqo3DC4f8Y3BYlxlifg8AGyyvARiSJkuJCQGuTJ9ZDcu/uWuR3sSRRZY7lLlTl
-         QYsufQNiads4IbKRoQ84jgWYv7+2vbvEJ4YTIHNg7CxOFGdZMjGqxVSEKIvThwfe+yRu
-         zM15xtp83/ZIrnqj3tKeBBFcsnkbESzguIUH3fWvh5Gh2jTaQSjkVJAN4Ym5GTavj6HD
-         xZBC0xvOLs2/Tbkupf1PkqzSa06hD1BkDoikNdSmrtsVqEIOSKaAR0MV70mqyIYTwVoR
-         jhLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwroDiCyK+tXVJ6oDGJ8deshEteVc3z7kJTW7dUEhPxAEgOu8hCSkPL7N+aE1mqV2wYlYLEIeqQ0JiELUTUpDog2S3OvoQHB1vIg==
-X-Gm-Message-State: AOJu0YxSr7aq6DiNg4UnccCiwcCFsRcB7x3jBCNNojNZJGWuWGBKMtaC
-	nsgiBKvle3u5tyHJ512POBUAWPNU7dhzehW4GeSIutG5Tz5NpzXCdA0/51yfRIf9jHux+oypGK+
-	GnQnnJQ==
-X-Google-Smtp-Source: AGHT+IF4u5R6JlS2lv4g7BW2szOoJKeUuXHhe4ENBdL2Zr6Mgb8g7E49MW+hNNmJV1buj1jkBdxVOnRyOcxA
+        bh=T7XIYLAkcLSrj5FLrGjKI8q+UW4mZzYyudvGuQ4/TZo=;
+        b=JI7nH2uSismuU6x5xsKmlJEBjHZ+3UpWGYQCIybD/ZmujyBbdt0hg/++w6ewN+xTi6
+         57CiRbWsq5aZuPI+pbNBjpIv7Ej7XkMYxkDjarx2NVSUpvLAsEniTa5BSNLsYGnenFwR
+         VUHfXksfiKqKMCoB/4B6jllSX+ZAx33PWF67kvEmjPKKcR+tMwKaiku1wMewyJei+Th+
+         90PEI9OCZG6ja5mVCb9YksZ8POtocehi+AXeV0nxuvMijQN8d162xVSwjdGj8sgai/ui
+         yfnfNptDF8EevRwmY0lKQbuDfLXcUdEeRJpP9k0bap908XXzYhop7XPSXQ7fqNfNOhE/
+         P1UA==
+X-Forwarded-Encrypted: i=1; AJvYcCVq4iWS2deDj2CyHicDlqcLEDMuiAg53recN6x2DfAv65kpNYfTmSMmMJKA7BJSTlBI3YEDDodVeN8zN2/yri3klh2y/w0SRlzJbQ==
+X-Gm-Message-State: AOJu0YwvqRuiuDU613iy02KKNb1gUVUS3FNAtynGXnplZOPNIAYJz99t
+	ddMjrfshow9r7ZXwFZkyCaJLNJRZafwM1/nKd4OfDG/mhqxnAufVrbmhY6itMwIr5nQ52FxLj6A
+	1pzkEdQ==
+X-Google-Smtp-Source: AGHT+IHgDNWM+Z4QXgFMm7GizvEhHToqcLHuZHJtXyYeO1MzHp7huAG4ihDQbMUHqCDQpOBGjLQSGQDO0YZe
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a05:6902:10c2:b0:dbd:b4e8:1565 with SMTP
- id w2-20020a05690210c200b00dbdb4e81565mr1091610ybu.4.1710036333476; Sat, 09
- Mar 2024 18:05:33 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:04:56 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:d7cd:0:b0:608:72fe:b8a1 with SMTP id
+ z196-20020a0dd7cd000000b0060872feb8a1mr953360ywd.4.1710036336387; Sat, 09 Mar
+ 2024 18:05:36 -0800 (PST)
+Date: Sat,  9 Mar 2024 18:04:57 -0800
 In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-2-irogers@google.com>
+Message-Id: <20240310020509.647319-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240310020509.647319-1-irogers@google.com>
 X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 01/13] tools bpf: Synchronize bpf.h with kernel uapi version
+Subject: [PATCH v1 02/13] libbpf: Make __printf define conditional
 From: Ian Rogers <irogers@google.com>
 To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -108,46 +108,34 @@ To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Commit 91051f003948 ("tcp: Dump bound-only sockets in inet_diag.")
-added BPF_TCP_BOUND_INACTIVE to the enum of tcp states in uapi's
-bpf.h. Synchronize the tools version of the file.
-
-To avoid future divergence add uapi/linux/bpf.h,
-include/uapi/linux/bpf_common.h and
-include/uapi/linux/bpf_perf_event.h to the check-headers.sh script.
+libbpf depends upon linux/err.h which has a linux/compiler.h
+dependency. In the kernel includes, as opposed to the tools version,
+linux/compiler.h includes linux/compiler_attributes.h which defines
+__printf. As the libbpf.c __printf definition isn't guarded by an
+ifndef, this leads to a duplicate definition compilation error when
+trying to update the tools/include/linux/compiler.h. Fix this by
+adding the missing ifndef.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/include/uapi/linux/bpf.h | 1 +
- tools/perf/check-headers.sh    | 3 +++
- 2 files changed, 4 insertions(+)
+ tools/lib/bpf/libbpf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 7f24d898efbb..754e68ca8744 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6904,6 +6904,7 @@ enum {
- 	BPF_TCP_LISTEN,
- 	BPF_TCP_CLOSING,	/* Now a valid state */
- 	BPF_TCP_NEW_SYN_RECV,
-+	BPF_TCP_BOUND_INACTIVE,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index afd09571c482..2152360b4b18 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -66,7 +66,9 @@
+  */
+ #pragma GCC diagnostic ignored "-Wformat-nonliteral"
  
- 	BPF_TCP_MAX_STATES	/* Leave at the end! */
- };
-diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-index 66ba33dbcef2..64dbf199dff9 100755
---- a/tools/perf/check-headers.sh
-+++ b/tools/perf/check-headers.sh
-@@ -6,6 +6,9 @@ NC='\033[0m' # No Color
+-#define __printf(a, b)	__attribute__((format(printf, a, b)))
++#ifndef __printf
++# define __printf(a, b)	__attribute__((format(printf, a, b)))
++#endif
  
- declare -a FILES
- FILES=(
-+  "include/uapi/linux/bpf.h"
-+  "include/uapi/linux/bpf_common.h"
-+  "include/uapi/linux/bpf_perf_event.h"
-   "include/uapi/linux/const.h"
-   "include/uapi/drm/drm.h"
-   "include/uapi/drm/i915_drm.h"
+ static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
+ static bool prog_is_subprog(const struct bpf_object *obj, const struct bpf_program *prog);
 -- 
 2.44.0.278.ge034bb2e1d-goog
 
