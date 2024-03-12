@@ -1,85 +1,82 @@
-Return-Path: <linux-arch+bounces-2938-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2939-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9306887954A
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 14:48:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A815687995E
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 17:50:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E0D21F22F76
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 13:48:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D51561C2166C
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 16:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 574E37A15A;
-	Tue, 12 Mar 2024 13:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A25134436;
+	Tue, 12 Mar 2024 16:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="a0mDb4pR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lDFatT0+"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="N1v+2M3S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NpKoQHpM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wfout2-smtp.messagingengine.com (wfout2-smtp.messagingengine.com [64.147.123.145])
+Received: from wfhigh4-smtp.messagingengine.com (wfhigh4-smtp.messagingengine.com [64.147.123.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270715B1E1;
-	Tue, 12 Mar 2024 13:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D18612BEA1;
+	Tue, 12 Mar 2024 16:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710251281; cv=none; b=C61Tlq9wpPL0nUlqZ4AH03jE/5XGYGQgtha7AS5yx/gmBl1gFSccYI0mXIjtknYGgECc4OiWSPWJAZweLSEFvXthZ+1LlV0go9kGL6KEisDG3AVI6RKoWQa9dde89NWw7eJyBm+RW6BUrMg3PUuE73XgUzcLL2opI39nC6+ry2A=
+	t=1710262237; cv=none; b=cmmp7V2pAhxfMkyG8Q1+w8UQ+gSCj49ThJnFspgt/gmkXsBgg5HH7jjwQ14FNaF3o5ef7nYyz06P5vhKOQk2txyMH3Iy5lRZ6DC/wpZsKw08VhKUzPkD18nFL+7dUf5VG/kAN+r7Np2kvu6JsTeotyHNF0pbe6TRx3YSa+o+gpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710251281; c=relaxed/simple;
-	bh=3PLdIJmYTKB6gkGFZ9Bne0cSJ5xec83W3smNXqUjWso=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=QUwEUZDeT0FbTV58vV5LmOh1cKsqTlbQczCSxxMJhjjnH77wDtgeek9vrhuQfbw0bmBPpK+LXOoiJw8ZzjqWeIQ6+LytWe1QcInbajogIxYUz27I1xV+G+vn7t3+GMiSzS8TktDNpeJba8V97LK8RK3qqBKNtJamP6i7DwTSOOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=a0mDb4pR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lDFatT0+; arc=none smtp.client-ip=64.147.123.145
+	s=arc-20240116; t=1710262237; c=relaxed/simple;
+	bh=zMVMZD++Xw9xE9a3A6ebUih4y5MNw3QJI955QGXTKfE=;
+	h=MIME-Version:Message-Id:Date:From:To:Cc:Subject:Content-Type; b=QuaKPwYCc7bn0IDuACdTs3ZebGhgl6q2h/7aOUfK7m0NnE7ZCF2qcaLZDi+w7IvDxV8VQRAumG9CJ3D1mtItik5Mgy8/p1LYfmBHclcAEfVbaAiaIOYz6Gde5v6a9i+LCzx2GQkvLSDI7SuvVof0WrzIH6Uo+NYrwsr395mG0Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=N1v+2M3S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NpKoQHpM; arc=none smtp.client-ip=64.147.123.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id CCA9A1C000A3;
-	Tue, 12 Mar 2024 09:47:55 -0400 (EDT)
+	by mailfhigh.west.internal (Postfix) with ESMTP id 2BD6218000A7;
+	Tue, 12 Mar 2024 12:50:34 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 12 Mar 2024 09:47:58 -0400
+  by compute5.internal (MEProxy); Tue, 12 Mar 2024 12:50:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1710251275;
-	 x=1710337675; bh=Bjy1wqXHISa4mvQY02jG8JIIsUcNLSlrmrkVMNTQWAQ=; b=
-	a0mDb4pRPVrLP1HPtkBSgW5ZnB73TtkkPT/FZBnpMqxewQgvPuWImXb3uDemLx/m
-	wSvjez4eA0/rIa1hZphVSvBUDbfuiNFsBl2VpcfTrTktFUy/J0PfsGGcg+sIxMUG
-	9DQRTtKVZ8CU6I24rKRRhdpmSDAiWDHQM+k6TYBv4xG1pe34dOYklPduJmIoFhpS
-	CrAzShryLlcID3SwMGy2utRETRh/LOuzSFiausMAYvZ/Uxxat6Nqx8w+P6ccrbET
-	gXnzd1Dz9q6/RYQhp6beKDT1olhi+7dRcUKjJy1xMJa4GqkfeQQcCkESrG/lKobW
-	Y0ll+aRUbwddS/axfJWbag==
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
+	 t=1710262233; x=1710348633; bh=L41tDme8S/qn61AryL+yWGfHDr+9J6uD
+	P9+pt+TYsJg=; b=N1v+2M3SlP4/TYtoTPi0xti4onV4s+W5eWiatD6xMEeMAMix
+	OOCT/rQMDEXfq4Tvv94ng5hy0ips/4YT4vpr3hNONUN7yonHOwsXrOpEfuyIsbua
+	IBkyuWd30GFRtJDohr8j4hIuBtpv4x68MjItpcG9VB5XyKM0AGNQhy8yKuEOLcMO
+	SQKyYUXBRvex21c9cJHZnAxZmefnMoZgWK+NQE2NIQmNJ8yavgZqhbxK5NxZYUoC
+	JolO8A1/e886IoOXGXJ5Lc0OMDIP1b/25cQR5+XYabtpwRtiqSmp/kvAL0HjGwIZ
+	seFcrkyDjyh6uKf6ZzDh0CF3pCsPQTjlMaeE6A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1710251275; x=
-	1710337675; bh=Bjy1wqXHISa4mvQY02jG8JIIsUcNLSlrmrkVMNTQWAQ=; b=l
-	DFatT0+nF31R7ZyBzAe8mHgWuGi+srr48TLHIeBwT4u5C1KeQc3pKqj0sk7w6Lqc
-	N2FyBjNcrgu5GBOEwZts/IFFVATcmzvDgx1rDTgGImMMqKxPXRkhIS+PmDaH1Isw
-	KTqSbP7U3dpgoK95KM6l9Iig8lRwh4nM7CuwYxeGwvg2q6xACelIyOvP5bwgJC9g
-	BXsjLudbuM7r10pO4VKbrARM1qCajmRD5WCFGArCa8URjWrAz+K/WrINwB73npMR
-	QiWrmvpe7HGRxh1UXdSXwgt/yufpBxFksDod08NIuFZKJ7nGnj3BAykGvVJF8ter
-	4O+SqYaU4F1kcF7SGIULA==
-X-ME-Sender: <xms:CV3wZZWs9P2zX9yCI8RlclX0s0av5QUUrtKdQO6JzPxaznGMxGvAQg>
-    <xme:CV3wZZl1jYtKseL0Oji4Uy3tb54p3lbwswOzMKrqDcc-5v0e7pEhPDaK3pijRwLA8
-    Kdf7HafcHX7jADKjo0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeefgdehiecutefuodetggdotefrodftvf
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1710262233; x=1710348633; bh=L41tDme8S/qn61AryL+yWGfHDr+9J6uDP9+
+	pt+TYsJg=; b=NpKoQHpMjJsPqdWfyLgbccV0P9YdEp2TVCiINxNrf2oAChoGxqo
+	W//mJJfxvCI3iJwcjIRxZaU92NPQ9AgVbD1qCVvYdBRr5HKPVO/4deR6wU9juT+z
+	cWNR18uYdY0cMaATgUfa6CqAZH6jCx8oTy3iG2n0FlVyjTprmiRefTLSitmvUaDe
+	ozhzax+tK/ZgRsmoaKQJg9rEys2c/iQpv2PJYl+mBbLNL8/S1kuoA+XL9cPjlSD7
+	HnFVjJQEJnYH4U/32yuAPHv8OQVkn3VmzlicQ8b+2W28uepzLJASm/HruJ8MN5M6
+	ndXumCdYgqZf/0tFdOVSft5MKa+ovLXWRBg==
+X-ME-Sender: <xms:2IfwZSd3KMUctAuXBpTqytWjAEVFErVDX3ILG5sdenGyyo_gRODgvQ>
+    <xme:2IfwZcPhMT90Nk-eaNIEdrRo3KFI3nS1TO3ZqU3Du9NSvx4_24_Io6L1spP5twxuq
+    yzETrhsq9Aghso5KaY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeefgdelfecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:CV3wZVbgTpEeWDXrLXE4N0-I43eo4OF7LhSGGIX-fmoGMnDWP1pDFQ>
-    <xmx:CV3wZcU0TmTecnXndyvJG_ls_NoyU3abBFWCmBnnsBMXA72Bo8Lnuw>
-    <xmx:CV3wZTk6lbB_Vd0gtjRgz0uuMUUrd08nj2Dx3KR_fu41JBuOTpEj1Q>
-    <xmx:CV3wZZecS909lb2jNM3D0mMNkhNEuuHtMGODT63XkGUlMgKkFgbSAw>
-    <xmx:C13wZXyNzd7ziPJAGYzgNhfiJVr7M3VjwuKuW8M3dg-HEXju4t1XwCi0-TI>
+    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:2YfwZTiqNurccSjszB9adnqPaa0eeA2ah5IONJg2AzXPBWJIov5DeA>
+    <xmx:2YfwZf81uJZ_pU8JX8hBIH2gdyNdRDSlrPAA0tEjZHrzA44NPh-wvQ>
+    <xmx:2YfwZevbSdIWuA1tXv9ISpg3DgJy56v_GMPsp03J6NHlVYGXNDdtqw>
+    <xmx:2YfwZWFhkuyUVB80AAT3J09iTdzUVA4u27nNANlpvCKfRCeCWOzd0g>
+    <xmx:2YfwZb9iM86DXngVpbF42P0DSKs4WpOLC2O5-MsUqHAYqz4at8obwKDAApo>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3AE4CB6008F; Tue, 12 Mar 2024 09:47:53 -0400 (EDT)
+	id E7C36B6008D; Tue, 12 Mar 2024 12:50:32 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
 Precedence: bulk
@@ -88,126 +85,99 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0a4e4505-cf04-4481-955c-1e35cf97ff8d@app.fastmail.com>
-In-Reply-To: 
- <CAMuE1bGkZ=ifyofCUfm4JVS__dgYG41kecS4TxBaHJvyJ607PQ@mail.gmail.com>
-References: <20240312095005.8909-1-maimon.sagi@gmail.com>
- <7bf7d444-4a08-4df4-9aa1-9cd28609d166@app.fastmail.com>
- <CAMuE1bGkZ=ifyofCUfm4JVS__dgYG41kecS4TxBaHJvyJ607PQ@mail.gmail.com>
-Date: Tue, 12 Mar 2024 14:47:32 +0100
+Message-Id: <84ad750e-7234-429f-b43c-17464fbfc58b@app.fastmail.com>
+Date: Tue, 12 Mar 2024 17:50:12 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Sagi Maimon" <maimon.sagi@gmail.com>
-Cc: "Richard Cochran" <richardcochran@gmail.com>,
- "Andy Lutomirski" <luto@kernel.org>, datglx@linutronix.de,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Johannes Weiner" <hannes@cmpxchg.org>,
- "Sohil Mehta" <sohil.mehta@intel.com>,
- "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
- "Nhat Pham" <nphamcs@gmail.com>, "Palmer Dabbelt" <palmer@sifive.com>,
- "Kees Cook" <keescook@chromium.org>,
- "Alexey Gladkov" <legion@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Miklos Szeredi" <mszeredi@redhat.com>,
- "Casey Schaufler" <casey@schaufler-ca.com>, reibax@gmail.com,
- "David S . Miller" <davem@davemloft.net>,
- "Christian Brauner" <brauner@kernel.org>, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- Netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v6] posix-timers: add clock_compare system call
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Anna-Maria Behnsen" <anna-maria@linutronix.de>,
+ "Yan Zhao" <yan.y.zhao@intel.com>
+Subject: [GIT PULL] asm-generic updates for 6.9
+Content-Type: text/plain
 
-On Tue, Mar 12, 2024, at 13:15, Sagi Maimon wrote:
-> On Tue, Mar 12, 2024 at 1:19=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->> On Tue, Mar 12, 2024, at 10:50, Sagi Maimon wrote:
->> > +     kc_a =3D clockid_to_kclock(clock_a);
->> > +     if (!kc_a) {
->> > +             error =3D -EINVAL;
->> > +             return error;
->> > +     }
->> > +
->> > +     kc_b =3D clockid_to_kclock(clock_b);
->> > +     if (!kc_b) {
->> > +             error =3D -EINVAL;
->> > +             return error;
->> > +     }
->>
->> I'm not sure if we really need to have it generic enough to
->> support any combination of clocks here. It complicates the
->> implementation a bit but it also generalizes the user space
->> side of it.
->>
->> Can you think of cases where you want to compare against
->> something other than CLOCK_MONOTONIC_RAW or CLOCK_REALTIME,
->> or are these going to be the ones that you expect to
->> be used anyway?
->>
-> sure, one example is syncing two different PHCs (which was originally
-> why we needed this syscall)
-> I hope that I have understand your note and that answers your question.
+The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
 
-Right, that is clearly a sensible use case.
+  Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
 
-I'm still trying to understand the implementation for the case
-where you have two different PHCs and both implement=20
-clock_get_crosstimespec(). Rather than averaging between
-two snapshots here, I would expect this to result in
-something like
+are available in the Git repository at:
 
-      ktime_a1 +=3D xtstamp_b.sys_monoraw - xtstamp_a1.sys_monoraw;
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.9
 
-in order get two device timestamps ktime_a1 and ktime_b
-that reflect the snapshots as if they were taken
-simulatenously. Am I missing some finer detail here,
-or is this something you should do?
+for you to fetch changes up to 5394f1e9b687bcf26595cabf83483e568676128d:
 
->> > +     if (crosstime_support_a) {
->> > +             ktime_a1 =3D xtstamp_a1.device;
->> > +             ktime_a2 =3D xtstamp_a2.device;
->> > +     } else {
->> > +             ktime_a1 =3D timespec64_to_ktime(ts_a1);
->> > +             ktime_a2 =3D timespec64_to_ktime(ts_a2);
->> > +     }
->> > +
->> > +     ktime_a =3D ktime_add(ktime_a1, ktime_a2);
->> > +
->> > +     ts_offs =3D ktime_divns(ktime_a, 2);
->> > +
->> > +     ts_a1 =3D ns_to_timespec64(ts_offs);
->>
->> Converting nanoseconds to timespec64 is rather expensive,
->> so I wonder if this could be changed to something cheaper,
->> either by returning nanoseconds in the end and consistently
->> working on those, or by doing the calculation on the
->> timespec64 itself.
->>
-> I prefer returning timespec64, so this system call aligns with other
-> system calls like clock_gettime for example.
-> As far as doing the calculation on timespec64 itself, that looks more
-> expansive to me, but I might be wrong.
+  arch: define CONFIG_PAGE_SIZE_*KB on all architectures (2024-03-06 19:29:09 +0100)
 
-In the general case, dividing a 64-bit variable by some other
-variable is really expensive and will take hundreds of cycles.
-This one is a bit cheaper because the division is done using
-a constant divider of NS_PER_SEC, which can get optimized fairly
-well on many systems by turning it into an equivalent 128-bit
-multiplication plus shift.
+----------------------------------------------------------------
+asm-generic updates for 6.9
 
-For the case where you start out with a timespec64, I would
-expect it to be cheaper to calculate the nanosecond difference
-between ts_a1 and ts_a2 to add half of that to the timespec
-than to average two large 64-bit values and convert that back
-to a timespec afterwards. This should be fairly easy to try
-out if you can test a 32-bit kernel. We could decide that
-there is no need to care about anything bug 64-bit kernels
-here, in which case your current version should be just as
-good for both the crosstime_support_a and !crosstime_support_a
-cases.
+Just two small updates this time:
 
-     Arnd
+ - A series I did to unify the definition of PAGE_SIZE through Kconfig,
+   intended to help with a vdso rework that needs the constant but
+   cannot include the normal kernel headers when building the compat
+   VDSO on arm64 and potentially others.
+
+ - a patch from Yan Zhao to remove the pfn_to_virt() definitions from
+   a couple of architectures after finding they were both incorrect
+   and entirely unused.
+
+----------------------------------------------------------------
+Arnd Bergmann (3):
+      arch: consolidate existing CONFIG_PAGE_SIZE_*KB definitions
+      arch: simplify architecture specific page size configuration
+      arch: define CONFIG_PAGE_SIZE_*KB on all architectures
+
+Yan Zhao (1):
+      mm: Remove broken pfn_to_virt() on arch csky/hexagon/openrisc
+
+ arch/Kconfig                       | 94 +++++++++++++++++++++++++++++++++++++-
+ arch/alpha/Kconfig                 |  1 +
+ arch/alpha/include/asm/page.h      |  2 +-
+ arch/arc/Kconfig                   |  3 ++
+ arch/arc/include/uapi/asm/page.h   |  6 +--
+ arch/arm/Kconfig                   |  1 +
+ arch/arm/include/asm/page.h        |  2 +-
+ arch/arm64/Kconfig                 | 29 ++++++------
+ arch/arm64/include/asm/page-def.h  |  2 +-
+ arch/csky/Kconfig                  |  1 +
+ arch/csky/include/asm/page.h       |  7 +--
+ arch/hexagon/Kconfig               | 24 ++--------
+ arch/hexagon/include/asm/page.h    | 12 +----
+ arch/loongarch/Kconfig             | 21 +++------
+ arch/loongarch/include/asm/page.h  | 10 +---
+ arch/m68k/Kconfig                  |  3 ++
+ arch/m68k/Kconfig.cpu              |  2 +
+ arch/m68k/include/asm/page.h       |  6 +--
+ arch/microblaze/Kconfig            |  1 +
+ arch/microblaze/include/asm/page.h |  2 +-
+ arch/mips/Kconfig                  | 58 ++---------------------
+ arch/mips/include/asm/page.h       | 16 +------
+ arch/nios2/Kconfig                 |  1 +
+ arch/nios2/include/asm/page.h      |  2 +-
+ arch/openrisc/Kconfig              |  1 +
+ arch/openrisc/include/asm/page.h   |  7 +--
+ arch/parisc/Kconfig                |  3 ++
+ arch/parisc/include/asm/page.h     | 10 +---
+ arch/powerpc/Kconfig               | 31 +++----------
+ arch/powerpc/include/asm/page.h    |  2 +-
+ arch/riscv/Kconfig                 |  1 +
+ arch/riscv/include/asm/page.h      |  2 +-
+ arch/s390/Kconfig                  |  1 +
+ arch/s390/include/asm/page.h       |  2 +-
+ arch/sh/include/asm/page.h         | 13 +-----
+ arch/sh/mm/Kconfig                 | 42 +++++------------
+ arch/sparc/Kconfig                 |  2 +
+ arch/sparc/include/asm/page_32.h   |  2 +-
+ arch/sparc/include/asm/page_64.h   |  3 +-
+ arch/um/Kconfig                    |  1 +
+ arch/um/include/asm/page.h         |  2 +-
+ arch/x86/Kconfig                   |  1 +
+ arch/x86/include/asm/page_types.h  |  2 +-
+ arch/xtensa/Kconfig                |  1 +
+ arch/xtensa/include/asm/page.h     |  2 +-
+ scripts/gdb/linux/constants.py.in  |  2 +-
+ scripts/gdb/linux/mm.py            |  2 +-
+ 47 files changed, 187 insertions(+), 254 deletions(-)
 
