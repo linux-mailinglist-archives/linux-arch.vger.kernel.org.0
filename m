@@ -1,183 +1,173 @@
-Return-Path: <linux-arch+bounces-2939-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2940-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A815687995E
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 17:50:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7A187999B
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 18:03:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D51561C2166C
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 16:50:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BC7E1F2158B
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Mar 2024 17:03:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A25134436;
-	Tue, 12 Mar 2024 16:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CAA137C3F;
+	Tue, 12 Mar 2024 17:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="N1v+2M3S";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NpKoQHpM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOCjO/h9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wfhigh4-smtp.messagingengine.com (wfhigh4-smtp.messagingengine.com [64.147.123.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D18612BEA1;
-	Tue, 12 Mar 2024 16:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651B0137C28;
+	Tue, 12 Mar 2024 17:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710262237; cv=none; b=cmmp7V2pAhxfMkyG8Q1+w8UQ+gSCj49ThJnFspgt/gmkXsBgg5HH7jjwQ14FNaF3o5ef7nYyz06P5vhKOQk2txyMH3Iy5lRZ6DC/wpZsKw08VhKUzPkD18nFL+7dUf5VG/kAN+r7Np2kvu6JsTeotyHNF0pbe6TRx3YSa+o+gpU=
+	t=1710262998; cv=none; b=dd6FZzC/jU2GbwxXnqtNclNQWNH7myJyAJqymL4P91eqZul4x3Xur8Zlv4FsNWmuGassPRGjgpazwdVgYBBsVWCMRDtn+2QSAuk81Mlhs6VHw/jrSjieZVm0PESol4WYGlkGncBxJ/FEbJN7uTRVvnPTHucejZBz5qycQhhLnxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710262237; c=relaxed/simple;
-	bh=zMVMZD++Xw9xE9a3A6ebUih4y5MNw3QJI955QGXTKfE=;
-	h=MIME-Version:Message-Id:Date:From:To:Cc:Subject:Content-Type; b=QuaKPwYCc7bn0IDuACdTs3ZebGhgl6q2h/7aOUfK7m0NnE7ZCF2qcaLZDi+w7IvDxV8VQRAumG9CJ3D1mtItik5Mgy8/p1LYfmBHclcAEfVbaAiaIOYz6Gde5v6a9i+LCzx2GQkvLSDI7SuvVof0WrzIH6Uo+NYrwsr395mG0Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=N1v+2M3S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NpKoQHpM; arc=none smtp.client-ip=64.147.123.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 2BD6218000A7;
-	Tue, 12 Mar 2024 12:50:34 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 12 Mar 2024 12:50:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
-	 t=1710262233; x=1710348633; bh=L41tDme8S/qn61AryL+yWGfHDr+9J6uD
-	P9+pt+TYsJg=; b=N1v+2M3SlP4/TYtoTPi0xti4onV4s+W5eWiatD6xMEeMAMix
-	OOCT/rQMDEXfq4Tvv94ng5hy0ips/4YT4vpr3hNONUN7yonHOwsXrOpEfuyIsbua
-	IBkyuWd30GFRtJDohr8j4hIuBtpv4x68MjItpcG9VB5XyKM0AGNQhy8yKuEOLcMO
-	SQKyYUXBRvex21c9cJHZnAxZmefnMoZgWK+NQE2NIQmNJ8yavgZqhbxK5NxZYUoC
-	JolO8A1/e886IoOXGXJ5Lc0OMDIP1b/25cQR5+XYabtpwRtiqSmp/kvAL0HjGwIZ
-	seFcrkyDjyh6uKf6ZzDh0CF3pCsPQTjlMaeE6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:message-id
-	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1710262233; x=1710348633; bh=L41tDme8S/qn61AryL+yWGfHDr+9J6uDP9+
-	pt+TYsJg=; b=NpKoQHpMjJsPqdWfyLgbccV0P9YdEp2TVCiINxNrf2oAChoGxqo
-	W//mJJfxvCI3iJwcjIRxZaU92NPQ9AgVbD1qCVvYdBRr5HKPVO/4deR6wU9juT+z
-	cWNR18uYdY0cMaATgUfa6CqAZH6jCx8oTy3iG2n0FlVyjTprmiRefTLSitmvUaDe
-	ozhzax+tK/ZgRsmoaKQJg9rEys2c/iQpv2PJYl+mBbLNL8/S1kuoA+XL9cPjlSD7
-	HnFVjJQEJnYH4U/32yuAPHv8OQVkn3VmzlicQ8b+2W28uepzLJASm/HruJ8MN5M6
-	ndXumCdYgqZf/0tFdOVSft5MKa+ovLXWRBg==
-X-ME-Sender: <xms:2IfwZSd3KMUctAuXBpTqytWjAEVFErVDX3ILG5sdenGyyo_gRODgvQ>
-    <xme:2IfwZcPhMT90Nk-eaNIEdrRo3KFI3nS1TO3ZqU3Du9NSvx4_24_Io6L1spP5twxuq
-    yzETrhsq9Aghso5KaY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeefgdelfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:2YfwZTiqNurccSjszB9adnqPaa0eeA2ah5IONJg2AzXPBWJIov5DeA>
-    <xmx:2YfwZf81uJZ_pU8JX8hBIH2gdyNdRDSlrPAA0tEjZHrzA44NPh-wvQ>
-    <xmx:2YfwZevbSdIWuA1tXv9ISpg3DgJy56v_GMPsp03J6NHlVYGXNDdtqw>
-    <xmx:2YfwZWFhkuyUVB80AAT3J09iTdzUVA4u27nNANlpvCKfRCeCWOzd0g>
-    <xmx:2YfwZb9iM86DXngVpbF42P0DSKs4WpOLC2O5-MsUqHAYqz4at8obwKDAApo>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E7C36B6008D; Tue, 12 Mar 2024 12:50:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
+	s=arc-20240116; t=1710262998; c=relaxed/simple;
+	bh=8n/02f2SOXoK5vgtrzv7GEjJRgXi58830FC1dkrTfl4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Cspjrz/V1wd1iESPhgf3JPYLRBPUVI/nTUtOgcgCDjv1Ez8elNwV6Vj/gKOTiHFt4pfg6Pws/rix64YuxPm25NQBmByGdCHwqHgItYO6udmO6pJZ2TS4x8UKdWyn70jyDSDgfK8PS0+lib62/H0iq8pckV1QAKIf0wy/hqtOj2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOCjO/h9; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1dd6412da28so941115ad.3;
+        Tue, 12 Mar 2024 10:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710262995; x=1710867795; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=WLftE/7MjlMuOSj897HlMQUMVZbmkOmcm7ijw8JWvLk=;
+        b=TOCjO/h9j9/oYEuEyo3YGECfbtb4ILdLfL2GJrPbCRaaDbbueU0XyC3+kQ6dn4Rnno
+         zUSiLazMocmjTPTFkSQ3/wsG7aYVEPSQp9vwmoudsBziwtM/akbrWDxDa+GYNzNm5zLy
+         EoT5Q62zoH/o4CaFAY/A+wiF04OaCxoFgrpFKoErVhX+ZUWpYcGBtMH0hqGAOXa2w9o4
+         mi1wNtb5WAJm+Cr5qsyOr15E6svu28i20WlE76pynyeYVSg5COfku99ck9V2tp5OhKwO
+         xqkNZ7JnkoRddCjlyho4GTy4rs26uWNMai0FbG1WCgtrKwm7XVA7BLz8FVZSQTaavzxa
+         Uvww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710262995; x=1710867795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WLftE/7MjlMuOSj897HlMQUMVZbmkOmcm7ijw8JWvLk=;
+        b=OQLiNhl/xFcKq096rVn8/mb/3cAUPfgx4aoE49rfbQch+g6xo+S34OFJnRdq29799U
+         i4kGmdHmx54b02YevxIHiyq9Tp3MUVWMsBSVMZ77f2+9BIYyYTcj0MWCxY1+4crUcJ4j
+         0GHubYei88bFYm09jbNAVQxkjqwz6hpFbfrETNk6FZNk0LAXDQHG+s1cq/lkmNYdc0Vm
+         ZRBmvSJ+JVOjMm5BUx08ALDi8WWtHyyf12+nI+6VROjDt1R0aPeeGhWrZc4jQunTn+BM
+         nUol+Gy0V47p7wjNKZ0wOalBzUl8+Uk4DFGn62wnS58IeoKVKZ93vMpYMnoYxOECQQ+O
+         sLYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnLYG8h4c9VVjLmlpewox7F6DiwN/nx/43kLSfvBL3Gb6w/9MTboKtobxJCmkNdFlZCGb/MHlwth1AH7+sK9gyGKEEIlGOiVcKYFQK7/WP5YAg21jpiv3HFfF7Z791XI9o4aYCzPvOf0slv2ogVry7mTjlJ+YJbD1MUoDdcOcj2Q9cCCX0RkJRn9dGSBJkK+yjv848s5iiWBsf0lsm36RbUa2wpU/stGT0Bp7V7EWnGb2QpZJRcfzvBeLwIGVuVQFGr52XZEjDaz9sxPFP2amvYmdaVAlkFQ==
+X-Gm-Message-State: AOJu0Yw2f5OruTwvVgd1DktL6ntLNN5/1hQGEKOCWQmFVcgGi7Hqsy0a
+	KQ371PIH06O8aoKysDCL3ZaOHjBwNq6ksnznxeWt7UKFoBdAL/MZZOBfxSgG
+X-Google-Smtp-Source: AGHT+IGoSNJSdzshXUinY0deqrpWSsXfjdp27VpnRBXFH0xqKuZltMGKwFFXD7x5fWGnOCLrPfDYHw==
+X-Received: by 2002:a17:902:7ec9:b0:1dd:b681:990e with SMTP id p9-20020a1709027ec900b001ddb681990emr2092458plb.36.1710262994820;
+        Tue, 12 Mar 2024 10:03:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r20-20020a170902c61400b001dd02f4c8fcsm6942533plr.139.2024.03.12.10.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Mar 2024 10:03:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-kselftest@vger.kernel.org
+Cc: David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org,
+	kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	netdev@lists.linux.dev,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 00/14] Add support for suppressing warning backtraces
+Date: Tue, 12 Mar 2024 10:02:55 -0700
+Message-Id: <20240312170309.2546362-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <84ad750e-7234-429f-b43c-17464fbfc58b@app.fastmail.com>
-Date: Tue, 12 Mar 2024 17:50:12 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Anna-Maria Behnsen" <anna-maria@linutronix.de>,
- "Yan Zhao" <yan.y.zhao@intel.com>
-Subject: [GIT PULL] asm-generic updates for 6.9
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
-  Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons.
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad-hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
 
-are available in the Git repository at:
+One option to address problem would be to add messages such as "expected
+warning backtraces start / end here" to the kernel log.  However, that
+would again require filter scripts, it might result in missing real
+problematic warning backtraces triggered while the test is running, and
+the irrelevant backtrace(s) would still clog the kernel log.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.9
+Solve the problem by providing a means to identify and suppress specific
+warning backtraces while executing test code. Support suppressing multiple
+backtraces while at the same time limiting changes to generic code to the
+absolute minimum. Architecture specific changes are kept at minimum by
+retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
+CONFIG_KUNIT are enabled.
 
-for you to fetch changes up to 5394f1e9b687bcf26595cabf83483e568676128d:
+The first patch of the series introduces the necessary infrastructure.
+The second patch introduces support for counting suppressed backtraces.
+This capability is used in patch three to implement unit tests.
+Patch four documents the new API.
+The next two patches add support for suppressing backtraces in drm_rect
+and dev_addr_lists unit tests. These patches are intended to serve as
+examples for the use of the functionality introduced with this series.
+The remaining patches implement the necessary changes for all
+architectures with GENERIC_BUG support.
 
-  arch: define CONFIG_PAGE_SIZE_*KB on all architectures (2024-03-06 19:29:09 +0100)
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
 
-----------------------------------------------------------------
-asm-generic updates for 6.9
+Design note:
+  Function pointers are only added to the __bug_table section if both
+  CONFIG_KUNIT and CONFIG_DEBUG_BUGVERBOSE are enabled to avoid image
+  size increases if CONFIG_KUNIT=n. There would be some benefits to
+  adding those pointers all the time (reduced complexity, ability to
+  display function names in BUG/WARNING messages). That change, if
+  desired, can be made later.
 
-Just two small updates this time:
+Checkpatch note:
+  Remaining checkpatch errors and warnings were deliberately ignored.
+  Some are triggered by matching coding style or by comments interpreted
+  as code, others by assembler macros which are disliked by checkpatch.
+  Suggestions for improvements are welcome.
 
- - A series I did to unify the definition of PAGE_SIZE through Kconfig,
-   intended to help with a vdso rework that needs the constant but
-   cannot include the normal kernel headers when building the compat
-   VDSO on arm64 and potentially others.
-
- - a patch from Yan Zhao to remove the pfn_to_virt() definitions from
-   a couple of architectures after finding they were both incorrect
-   and entirely unused.
-
-----------------------------------------------------------------
-Arnd Bergmann (3):
-      arch: consolidate existing CONFIG_PAGE_SIZE_*KB definitions
-      arch: simplify architecture specific page size configuration
-      arch: define CONFIG_PAGE_SIZE_*KB on all architectures
-
-Yan Zhao (1):
-      mm: Remove broken pfn_to_virt() on arch csky/hexagon/openrisc
-
- arch/Kconfig                       | 94 +++++++++++++++++++++++++++++++++++++-
- arch/alpha/Kconfig                 |  1 +
- arch/alpha/include/asm/page.h      |  2 +-
- arch/arc/Kconfig                   |  3 ++
- arch/arc/include/uapi/asm/page.h   |  6 +--
- arch/arm/Kconfig                   |  1 +
- arch/arm/include/asm/page.h        |  2 +-
- arch/arm64/Kconfig                 | 29 ++++++------
- arch/arm64/include/asm/page-def.h  |  2 +-
- arch/csky/Kconfig                  |  1 +
- arch/csky/include/asm/page.h       |  7 +--
- arch/hexagon/Kconfig               | 24 ++--------
- arch/hexagon/include/asm/page.h    | 12 +----
- arch/loongarch/Kconfig             | 21 +++------
- arch/loongarch/include/asm/page.h  | 10 +---
- arch/m68k/Kconfig                  |  3 ++
- arch/m68k/Kconfig.cpu              |  2 +
- arch/m68k/include/asm/page.h       |  6 +--
- arch/microblaze/Kconfig            |  1 +
- arch/microblaze/include/asm/page.h |  2 +-
- arch/mips/Kconfig                  | 58 ++---------------------
- arch/mips/include/asm/page.h       | 16 +------
- arch/nios2/Kconfig                 |  1 +
- arch/nios2/include/asm/page.h      |  2 +-
- arch/openrisc/Kconfig              |  1 +
- arch/openrisc/include/asm/page.h   |  7 +--
- arch/parisc/Kconfig                |  3 ++
- arch/parisc/include/asm/page.h     | 10 +---
- arch/powerpc/Kconfig               | 31 +++----------
- arch/powerpc/include/asm/page.h    |  2 +-
- arch/riscv/Kconfig                 |  1 +
- arch/riscv/include/asm/page.h      |  2 +-
- arch/s390/Kconfig                  |  1 +
- arch/s390/include/asm/page.h       |  2 +-
- arch/sh/include/asm/page.h         | 13 +-----
- arch/sh/mm/Kconfig                 | 42 +++++------------
- arch/sparc/Kconfig                 |  2 +
- arch/sparc/include/asm/page_32.h   |  2 +-
- arch/sparc/include/asm/page_64.h   |  3 +-
- arch/um/Kconfig                    |  1 +
- arch/um/include/asm/page.h         |  2 +-
- arch/x86/Kconfig                   |  1 +
- arch/x86/include/asm/page_types.h  |  2 +-
- arch/xtensa/Kconfig                |  1 +
- arch/xtensa/include/asm/page.h     |  2 +-
- scripts/gdb/linux/constants.py.in  |  2 +-
- scripts/gdb/linux/mm.py            |  2 +-
- 47 files changed, 187 insertions(+), 254 deletions(-)
+Changes since RFC:
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
 
