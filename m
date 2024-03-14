@@ -1,194 +1,451 @@
-Return-Path: <linux-arch+bounces-2991-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-2992-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBB8387B913
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Mar 2024 09:05:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0051087BA03
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Mar 2024 10:05:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90706281210
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Mar 2024 08:05:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4A55281EA7
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Mar 2024 09:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A02165D47E;
-	Thu, 14 Mar 2024 08:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDB56BFA0;
+	Thu, 14 Mar 2024 09:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9zTQjYV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THgkgzhD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027CB3209;
-	Thu, 14 Mar 2024 08:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D9E3EA6C;
+	Thu, 14 Mar 2024 09:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710403518; cv=none; b=XUMAmUGIoFBjZuQhexSpF/LUqlqo6kiz9USzo5SMmls9nIjuohdny8rN8mWt5H59EOdD9xqtWRoQudy6hDqSls6naE7aA3qyWWj0nuEHm5atj+KYIwL0nvJ0X/db6UCSsY3jRYxS9pmSmOgXKBMgr8zDISM5eqO5njJ9jcCtYZg=
+	t=1710407150; cv=none; b=RxwJZw5MmGkCIFfe6Km2xyhXOAuk/ODK0qql2vp1DVKjNYLKZzFo/Yk4uE/FZGJHT7hIaoW7JM154aEdNSxyq035vrfssa7TpY3JgQvwB8olJYgmbZNHw14el6qLnLCie/Z2+Cee3LN3BHvZw75FSZ1oPqYmApzX/Rd0XtzZ+TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710403518; c=relaxed/simple;
-	bh=VPLJfp9NdqW4M/VBucjQthlRIBFwdvxs0T0ZFaIybcs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NbnLEiOi88ZMR2SQDWSm7NsvIqqFzYsp90Q5juba7qKZEbi9fNU1EZPhoU6G8VEP7i4J3BlF+eTDVtQ4agstIGso6k0DFLjEbB3LDhTtFPl4YPCd2jR02isggDts48aQVyNqtnz7z+v7nOYEuM6vKoYhX1fnQO+nmMkHz/oLv8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9zTQjYV; arc=none smtp.client-ip=209.85.219.175
+	s=arc-20240116; t=1710407150; c=relaxed/simple;
+	bh=RVDzzH5i1FlQl8rgsxI9QOfCaS4ddm1ZBzsF1v2cvDk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=JhowXM5wovLvAhEKNGzA3QMU8/Sp1iz06e6o9NDH79EMxr5l4d5ySsOp+GXKCnUNYpVpei71WdRMKm1Ia/b9dK2/lcnDJhF8n+SmLCxCm1/0wWK/EY2m0mhMEHoQN8PhAcx8mfQ9uve3HhaeIIVVWdbvnEXaDO7S2M08oJAH6OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=THgkgzhD; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dbed179f0faso1306752276.1;
-        Thu, 14 Mar 2024 01:05:16 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33e9dfd343fso398345f8f.0;
+        Thu, 14 Mar 2024 02:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710403516; x=1711008316; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4HOd1NEFGrNPODCnQ0+xTI3Lih5dD4kxPSCpnwjc89U=;
-        b=Z9zTQjYVbeDIhI3XBbJrU9X5mAYmfU1nGHZOhvSb8pSsAHFb06ShFuSZS7XKaXdFVT
-         R+zmr7m/RqAdgPSDa3tptv8wVnl5J1CDmonRz81+cawCaYnkCG1Jlle3yC8Ot61E4GKa
-         N0FN6D4nYsqzAwR3mBakVY6V4+PQ6+t7vDofimlPENaF/ewAtIao4k03lm5+GbnP2GSR
-         BSnwSi/tV+6rjg9fNHzJ+F5zk9Wr2t18AyDTX+gL2b3UmDlBWTkOTVgZo0bHB5oMW/hG
-         0HxeK8kNfH14H+bDEp6anjg5vYX6gmv/Y62VxG12k62Nn8Mjm6igl5FRY/kh4hYuTjNj
-         rAbQ==
+        d=gmail.com; s=20230601; t=1710407147; x=1711011947; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=01PS9MyjvZ+fa5ZtYejHf1bfKehy4wrijtyd8vZ9ETI=;
+        b=THgkgzhD9sqR8ZBYf9fvXIbOLmp6GRuPyZI85WK1tIH8kqH29o6HiTqYFQ28J7xKeX
+         3Vgh316DJeR8wffFNOBLwEOEIPY93EECmcIC/Ha7M9cMrcWl+sxrfa7WDSZmAD3tOu78
+         Us/S++ulLTDfsnnk8kgwj0lEkHUZUEL52n/1oVzeQ9aP8iRLVSNopT1ivo+Jmhl6g06L
+         dNA1bc5YeKmRDdhBpcJyEeYEy0GlTu7jJ+B2rgepEOPo06T7X4n38MivuPmOFyyjPhMi
+         THmoX6NOQ+UTBtvw7R7KbaGODBRG80fqVvRPrGzkLMgEUVrm6s2/ojjmk9+aG2OhZto4
+         2j3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710403516; x=1711008316;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4HOd1NEFGrNPODCnQ0+xTI3Lih5dD4kxPSCpnwjc89U=;
-        b=ZjMvoKzB/Wo9o/Tj1C7RbiwGKtVO72zYUJTJ/yLiU+D0eh+39oqsILRtGo3RH9byYF
-         BcT0cXoMP5uNWDtLI6MY5E57zxajVJUNJdBj3yqxcfVeI0hM+or1epFAIxWl0zwpFjAG
-         mf7vWuNVaJOM3yfWXlApartwfkFPPdPlvT7u2MDFsqTyftlZkAIA4IvLvxtTgxSCRlqG
-         R6WHiAW+KTsg6Apl+ut567bK/H2ZEz20K1DJ4Q6Lh45v6TqZ/AKQHtfYiumnLePVamJB
-         kJmP7gcBTFUuOzswxwPr+ahx+ai0Kwncbp0MVgf1rsnkWMZ8/mwGco0ZuIczzpoc/LnJ
-         8Rjg==
-X-Forwarded-Encrypted: i=1; AJvYcCUspT3NBNtlTwt0sX9Hk3DfziFNzO6xCYl09T7GgoDqulnbOhMM+NTIvfLc9jjpasaHggg7lkDPYswh5sqqhZLPVswNtXCblby6qZDupVgvbu+c70+Fcq1X1CtlTDi+5enxg7Jys6ZDlU9qDl2B+UOuFch49q/MYsgnsNM1zizXjqgQ6DHgt+W94mTLPTkqLXMVB1WYo+0llYaHmw==
-X-Gm-Message-State: AOJu0Yyf8phbOHDhsX+ISYuYSO6ro68ZBgr6OClOv2FFRsrIH+lA/apa
-	sVdWJd1iKnDTwT2v8PFjuGG/tOEj7lgotT8nqIJ7fSQUW2Wv28NXLy4TuLm8GYQrRjMzB34U9T0
-	Sxv6rKTnRLBHu5bCXE1iuu3kVAF4=
-X-Google-Smtp-Source: AGHT+IHG7p1zVnVvA03Krk82xIr/ktb/SzmN4GOEef1FDRq7kQUCQbzOJ2eB2dFJWSa/KvrIuTgvQHqR+yHVnY00tOQ=
-X-Received: by 2002:a25:df89:0:b0:dc7:46fd:4998 with SMTP id
- w131-20020a25df89000000b00dc746fd4998mr635712ybg.13.1710403515840; Thu, 14
- Mar 2024 01:05:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710407147; x=1711011947;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=01PS9MyjvZ+fa5ZtYejHf1bfKehy4wrijtyd8vZ9ETI=;
+        b=o2ZBm2lkzFSk1n93jCKUrtM3wVJq437W45Lkcio8bX5P/ZKhN2daCRdPPdJsV+4OYc
+         0zNX3UOy9bIGTIALKZ5d1EqavbK4Spfi6gZ874t2TRjmPCrHCcR/N1eWIKI4/VqxY4Nw
+         rzm+umrZseW4mqixGo2yyPS713YMaldi/3ygHHYaMzEFliztp94F5z15BSe+ZX27etia
+         oner35yrcNE8k5Ujx2E58tqA+ITWxk3Vp19vrrz7JNn4IVrq1UvfevuV23xzJP38Zt5B
+         ZbOLsrCaofTBLzI+DRmZ0XsKsm6P1xm3hhsSqlSp/+nuyFe0DN3odx4XHCHJ6HEjjuJ5
+         EwJw==
+X-Forwarded-Encrypted: i=1; AJvYcCUqn9iXIY5bZ279Z8D5W5HFSE9N53c3OiSfmOb70D3DYXUUc2jRiYfeKyZlYlUhcR9bgK1MV71ieOPk1P0wN3LSwcQoebLe3q9sa21upoWf3L69F9Uv03kkRKt/2Dl38jQVDfvNAsDDTu3YALMPhVmI907/9P8UsbEgsUOKew==
+X-Gm-Message-State: AOJu0YyaTFCAyMT9REPDODCpGCGvThP2IaxBUbeA/6/hCUbXqvGwiKaV
+	MlUHxQKcU+nld7tRHrXKA7Q4wOY50tlcRNIIv3Rg0m98qxZXD+Pm
+X-Google-Smtp-Source: AGHT+IFFKd5FCs2i1AVIOZdOQmuDBOotWYgL/a1/GRZg2EFfeopIfGlwR3Fp1YHVJ9LqjKxUjgpRqw==
+X-Received: by 2002:a5d:4083:0:b0:33d:f56e:f867 with SMTP id o3-20020a5d4083000000b0033df56ef867mr647384wrp.67.1710407146731;
+        Thu, 14 Mar 2024 02:05:46 -0700 (PDT)
+Received: from ran.advaoptical.com ([82.166.23.19])
+        by smtp.gmail.com with ESMTPSA id w16-20020adfcd10000000b0033e5c54d0d9sm266265wrm.38.2024.03.14.02.05.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Mar 2024 02:05:46 -0700 (PDT)
+From: Sagi Maimon <maimon.sagi@gmail.com>
+To: richardcochran@gmail.com,
+	luto@kernel.org,
+	datglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	arnd@arndb.de,
+	geert@linux-m68k.org,
+	peterz@infradead.org,
+	hannes@cmpxchg.org,
+	sohil.mehta@intel.com,
+	rick.p.edgecombe@intel.com,
+	nphamcs@gmail.com,
+	palmer@sifive.com,
+	maimon.sagi@gmail.com,
+	keescook@chromium.org,
+	legion@kernel.org,
+	mark.rutland@arm.com,
+	mszeredi@redhat.com,
+	casey@schaufler-ca.com,
+	reibax@gmail.com,
+	davem@davemloft.net,
+	brauner@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH v7] posix-timers: add clock_compare system call
+Date: Thu, 14 Mar 2024 11:05:40 +0200
+Message-Id: <20240314090540.14091-1-maimon.sagi@gmail.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312095005.8909-1-maimon.sagi@gmail.com> <7bf7d444-4a08-4df4-9aa1-9cd28609d166@app.fastmail.com>
- <CAMuE1bGkZ=ifyofCUfm4JVS__dgYG41kecS4TxBaHJvyJ607PQ@mail.gmail.com> <0a4e4505-cf04-4481-955c-1e35cf97ff8d@app.fastmail.com>
-In-Reply-To: <0a4e4505-cf04-4481-955c-1e35cf97ff8d@app.fastmail.com>
-From: Sagi Maimon <maimon.sagi@gmail.com>
-Date: Thu, 14 Mar 2024 10:05:04 +0200
-Message-ID: <CAMuE1bEGcPPQUHdZ-sodCZyMragvSRtKfENOZ4wphQggr1fJWg@mail.gmail.com>
-Subject: Re: [PATCH v6] posix-timers: add clock_compare system call
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Richard Cochran <richardcochran@gmail.com>, Andy Lutomirski <luto@kernel.org>, datglx@linutronix.de, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Sohil Mehta <sohil.mehta@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Palmer Dabbelt <palmer@sifive.com>, Kees Cook <keescook@chromium.org>, 
-	Alexey Gladkov <legion@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Miklos Szeredi <mszeredi@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, reibax@gmail.com, 
-	"David S . Miller" <davem@davemloft.net>, Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 12, 2024 at 3:47=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Tue, Mar 12, 2024, at 13:15, Sagi Maimon wrote:
-> > On Tue, Mar 12, 2024 at 1:19=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
-rote:
-> >> On Tue, Mar 12, 2024, at 10:50, Sagi Maimon wrote:
-> >> > +     kc_a =3D clockid_to_kclock(clock_a);
-> >> > +     if (!kc_a) {
-> >> > +             error =3D -EINVAL;
-> >> > +             return error;
-> >> > +     }
-> >> > +
-> >> > +     kc_b =3D clockid_to_kclock(clock_b);
-> >> > +     if (!kc_b) {
-> >> > +             error =3D -EINVAL;
-> >> > +             return error;
-> >> > +     }
-> >>
-> >> I'm not sure if we really need to have it generic enough to
-> >> support any combination of clocks here. It complicates the
-> >> implementation a bit but it also generalizes the user space
-> >> side of it.
-> >>
-> >> Can you think of cases where you want to compare against
-> >> something other than CLOCK_MONOTONIC_RAW or CLOCK_REALTIME,
-> >> or are these going to be the ones that you expect to
-> >> be used anyway?
-> >>
-> > sure, one example is syncing two different PHCs (which was originally
-> > why we needed this syscall)
-> > I hope that I have understand your note and that answers your question.
->
-> Right, that is clearly a sensible use case.
->
-> I'm still trying to understand the implementation for the case
-> where you have two different PHCs and both implement
-> clock_get_crosstimespec(). Rather than averaging between
-> two snapshots here, I would expect this to result in
-> something like
->
->       ktime_a1 +=3D xtstamp_b.sys_monoraw - xtstamp_a1.sys_monoraw;
->
-> in order get two device timestamps ktime_a1 and ktime_b
-> that reflect the snapshots as if they were taken
-> simulatenously. Am I missing some finer detail here,
-> or is this something you should do?
->
-Since the raw monotonic clock and the PHC are not synthesized, that
-won't be accurate at all and depends on the frequency delta between
-them.
+Some user space applications need to read a couple of different clocks.
+Each read requires moving from user space to kernel space.
+Reading each clock separately (syscall) introduces extra
+unpredictable/unmeasurable delay. Minimizing this delay contributes to user
+space actions on these clocks (e.g. synchronization etc).
 
-> >> > +     if (crosstime_support_a) {
-> >> > +             ktime_a1 =3D xtstamp_a1.device;
-> >> > +             ktime_a2 =3D xtstamp_a2.device;
-> >> > +     } else {
-> >> > +             ktime_a1 =3D timespec64_to_ktime(ts_a1);
-> >> > +             ktime_a2 =3D timespec64_to_ktime(ts_a2);
-> >> > +     }
-> >> > +
-> >> > +     ktime_a =3D ktime_add(ktime_a1, ktime_a2);
-> >> > +
-> >> > +     ts_offs =3D ktime_divns(ktime_a, 2);
-> >> > +
-> >> > +     ts_a1 =3D ns_to_timespec64(ts_offs);
-> >>
-> >> Converting nanoseconds to timespec64 is rather expensive,
-> >> so I wonder if this could be changed to something cheaper,
-> >> either by returning nanoseconds in the end and consistently
-> >> working on those, or by doing the calculation on the
-> >> timespec64 itself.
-> >>
-> > I prefer returning timespec64, so this system call aligns with other
-> > system calls like clock_gettime for example.
-> > As far as doing the calculation on timespec64 itself, that looks more
-> > expansive to me, but I might be wrong.
->
-> In the general case, dividing a 64-bit variable by some other
-> variable is really expensive and will take hundreds of cycles.
-> This one is a bit cheaper because the division is done using
-> a constant divider of NS_PER_SEC, which can get optimized fairly
-> well on many systems by turning it into an equivalent 128-bit
-> multiplication plus shift.
->
-> For the case where you start out with a timespec64, I would
-> expect it to be cheaper to calculate the nanosecond difference
-> between ts_a1 and ts_a2 to add half of that to the timespec
-> than to average two large 64-bit values and convert that back
-> to a timespec afterwards. This should be fairly easy to try
-> out if you can test a 32-bit kernel. We could decide that
-> there is no need to care about anything bug 64-bit kernels
-> here, in which case your current version should be just as
-> good for both the crosstime_support_a and !crosstime_support_a
-> cases.
->
-sounds good, it will be done on the next patch.
->      Arnd
+Introduce a new system call clock_compare, which can be used to measure
+the offset between two clocks, from variety of types: PHC, virtual PHC
+and various system clocks (CLOCK_REALTIME, CLOCK_MONOTONIC, etc).
+The system call returns the clocks timestamps.
+
+When possible, use crosstimespec to sync read values.
+Else, read clock A twice (before, and after reading clock B) and average these
+times – to be as close as possible to the time we read clock B.
+
+Signed-off-by: Sagi Maimon <maimon.sagi@gmail.com>
+---
+ Addressed comments from:
+ - Arnd Bergman : https://www.spinics.net/lists/netdev/msg980859.html
+
+ Changes since version 6:
+ - cheaper implantation regarding timespec64 operations. 
+  
+ arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+ drivers/ptp/ptp_clock.c                |  34 ++++--
+ include/linux/posix-clock.h            |   2 +
+ include/linux/syscalls.h               |   4 +
+ include/uapi/asm-generic/unistd.h      |   5 +-
+ kernel/time/posix-clock.c              |  25 +++++
+ kernel/time/posix-timers.c             | 138 +++++++++++++++++++++++++
+ kernel/time/posix-timers.h             |   2 +
+ 8 files changed, 200 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 7e8d46f4147f..727930d27e05 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -383,6 +383,7 @@
+ 459	common	lsm_get_self_attr	sys_lsm_get_self_attr
+ 460	common	lsm_set_self_attr	sys_lsm_set_self_attr
+ 461	common	lsm_list_modules	sys_lsm_list_modules
++462	common	clock_compare		sys_clock_compare
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+index 15b804ba4868..37ce66d4159f 100644
+--- a/drivers/ptp/ptp_clock.c
++++ b/drivers/ptp/ptp_clock.c
+@@ -156,17 +156,31 @@ static int ptp_clock_adjtime(struct posix_clock *pc, struct __kernel_timex *tx)
+ 	return err;
+ }
+ 
++static int ptp_clock_getcrosstime(struct posix_clock *pc, struct system_device_crosststamp *xtstamp)
++{
++	struct ptp_clock *ptp = container_of(pc, struct ptp_clock, clock);
++	int err;
++
++	if (!ptp->info->getcrosststamp)
++		err = -EOPNOTSUPP;
++	else
++		err = ptp->info->getcrosststamp(ptp->info, xtstamp);
++
++	return err;
++}
++
+ static struct posix_clock_operations ptp_clock_ops = {
+-	.owner		= THIS_MODULE,
+-	.clock_adjtime	= ptp_clock_adjtime,
+-	.clock_gettime	= ptp_clock_gettime,
+-	.clock_getres	= ptp_clock_getres,
+-	.clock_settime	= ptp_clock_settime,
+-	.ioctl		= ptp_ioctl,
+-	.open		= ptp_open,
+-	.release	= ptp_release,
+-	.poll		= ptp_poll,
+-	.read		= ptp_read,
++	.owner			= THIS_MODULE,
++	.clock_adjtime		= ptp_clock_adjtime,
++	.clock_gettime		= ptp_clock_gettime,
++	.clock_getres		= ptp_clock_getres,
++	.clock_settime		= ptp_clock_settime,
++	.clock_getcrosstime	= ptp_clock_getcrosstime,
++	.ioctl			= ptp_ioctl,
++	.open			= ptp_open,
++	.release		= ptp_release,
++	.poll			= ptp_poll,
++	.read			= ptp_read,
+ };
+ 
+ static void ptp_clock_release(struct device *dev)
+diff --git a/include/linux/posix-clock.h b/include/linux/posix-clock.h
+index ef8619f48920..3a5b4bb3f56b 100644
+--- a/include/linux/posix-clock.h
++++ b/include/linux/posix-clock.h
+@@ -47,6 +47,8 @@ struct posix_clock_operations {
+ 
+ 	int  (*clock_settime)(struct posix_clock *pc,
+ 			      const struct timespec64 *ts);
++	int  (*clock_getcrosstime)(struct posix_clock *pc,
++				   struct system_device_crosststamp *xtstamp);
+ 
+ 	/*
+ 	 * Optional character device methods:
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 77eb9b0e7685..47c5de3bdb18 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -1188,6 +1188,10 @@ asmlinkage long sys_ni_syscall(void);
+ 
+ asmlinkage long sys_ni_posix_timers(void);
+ 
++asmlinkage long clock_compare(const clockid_t clock_a, const clockid_t clock_b,
++			      struct __kernel_timespec __user *tp_a,
++			      struct __kernel_timespec __user *tp_b,
++				  s64 __user *offs_err);
+ /*
+  * Kernel code should not call syscalls (i.e., sys_xyzyyz()) directly.
+  * Instead, use one of the functions which work equivalently, such as
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 75f00965ab15..537a35afd237 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -842,8 +842,11 @@ __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
+ #define __NR_lsm_list_modules 461
+ __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
+ 
++#define __NR_clock_compare 462
++__SYSCALL(__NR_clock_compare, sys_clock_compare)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 462
++#define __NR_syscalls 463
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/kernel/time/posix-clock.c b/kernel/time/posix-clock.c
+index 9de66bbbb3d1..68b2d6741036 100644
+--- a/kernel/time/posix-clock.c
++++ b/kernel/time/posix-clock.c
+@@ -327,9 +327,34 @@ static int pc_clock_settime(clockid_t id, const struct timespec64 *ts)
+ 	return err;
+ }
+ 
++static int pc_clock_get_crosstime(clockid_t id, struct system_device_crosststamp *xtstamp)
++{
++	struct posix_clock_desc cd;
++	int err;
++
++	err = get_clock_desc(id, &cd);
++	if (err)
++		return err;
++
++	if ((cd.fp->f_mode & FMODE_WRITE) == 0) {
++		err = -EACCES;
++		goto out;
++	}
++
++	if (cd.clk->ops.clock_getcrosstime)
++		err = cd.clk->ops.clock_getcrosstime(cd.clk, xtstamp);
++	else
++		err = -EOPNOTSUPP;
++out:
++	put_clock_desc(&cd);
++
++	return err;
++}
++
+ const struct k_clock clock_posix_dynamic = {
+ 	.clock_getres		= pc_clock_getres,
+ 	.clock_set		= pc_clock_settime,
+ 	.clock_get_timespec	= pc_clock_gettime,
+ 	.clock_adj		= pc_clock_adjtime,
++	.clock_get_crosstimespec	= pc_clock_get_crosstime,
+ };
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index b924f0f096fa..ea43527cd5e9 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -1426,6 +1426,144 @@ SYSCALL_DEFINE4(clock_nanosleep_time32, clockid_t, which_clock, int, flags,
+ 
+ #endif
+ 
++/**
++ * clock_compare - Get couple of clocks time stamps
++ * @clock_a:	clock a ID
++ * @clock_b:	clock b ID
++ * @tp_a:		Pointer to a user space timespec64 for clock a storage
++ * @tp_b:		Pointer to a user space timespec64 for clock b storage
++ *
++ * clock_compare gets time sample of two clocks.
++ * Supported clocks IDs: PHC, virtual PHC and various system clocks.
++ *
++ * In case of PHC that supports crosstimespec and the other clock is Monotonic raw
++ * or system time, crosstimespec will be used to synchronously capture
++ * system/device time stamp.
++ *
++ * In other cases: Read clock_a twice (before, and after reading clock_b) and
++ * average these times – to be as close as possible to the time we read clock_b.
++ *
++ * Returns:
++ *	0		Success. @tp_a and @tp_b contains the time stamps
++ *	-EINVAL		@clock a or b ID is not a valid clock ID
++ *	-EFAULT		Copying the time stamp to @tp_a or @tp_b faulted
++ *	-EOPNOTSUPP	Dynamic POSIX clock does not support crosstimespec()
++ **/
++SYSCALL_DEFINE5(clock_compare, const clockid_t, clock_a, const clockid_t, clock_b,
++		struct __kernel_timespec __user *, tp_a, struct __kernel_timespec __user *,
++		tp_b, s64 __user *, offs_err)
++{
++	struct timespec64 ts_a, ts_a1, ts_b, ts_a2;
++	struct system_device_crosststamp xtstamp_a1, xtstamp_a2, xtstamp_b;
++	const struct k_clock *kc_a, *kc_b;
++	ktime_t ktime_a;
++	s64 ts_offs_err = 0;
++	int error = 0;
++	bool crosstime_support_a = false;
++	bool crosstime_support_b = false;
++
++	kc_a = clockid_to_kclock(clock_a);
++	if (!kc_a) {
++		error = -EINVAL;
++		return error;
++	}
++
++	kc_b = clockid_to_kclock(clock_b);
++	if (!kc_b) {
++		error = -EINVAL;
++		return error;
++	}
++
++	// In case crosstimespec supported and b clock is Monotonic raw or system
++	// time, synchronously capture system/device time stamp
++	if (clock_a < 0) {
++		error = kc_a->clock_get_crosstimespec(clock_a, &xtstamp_a1);
++		if (!error) {
++			if (clock_b == CLOCK_MONOTONIC_RAW) {
++				ts_b = ktime_to_timespec64(xtstamp_a1.sys_monoraw);
++				ts_a1 = ktime_to_timespec64(xtstamp_a1.device);
++				goto out;
++			} else if (clock_b == CLOCK_REALTIME) {
++				ts_b = ktime_to_timespec64(xtstamp_a1.sys_realtime);
++				ts_a1 = ktime_to_timespec64(xtstamp_a1.device);
++				goto out;
++			} else {
++				crosstime_support_a = true;
++			}
++		}
++	}
++
++	// In case crosstimespec supported and a clock is Monotonic raw or system
++	// time, synchronously capture system/device time stamp
++	if (clock_b < 0) {
++		// Synchronously capture system/device time stamp
++		error = kc_b->clock_get_crosstimespec(clock_b, &xtstamp_b);
++		if (!error) {
++			if (clock_a == CLOCK_MONOTONIC_RAW) {
++				ts_a1 = ktime_to_timespec64(xtstamp_b.sys_monoraw);
++				ts_b = ktime_to_timespec64(xtstamp_b.device);
++				goto out;
++			} else if (clock_a == CLOCK_REALTIME) {
++				ts_a1 = ktime_to_timespec64(xtstamp_b.sys_realtime);
++				ts_b = ktime_to_timespec64(xtstamp_b.device);
++				goto out;
++			} else {
++				crosstime_support_b = true;
++			}
++		}
++	}
++
++	if (crosstime_support_a)
++		error = kc_a->clock_get_crosstimespec(clock_a, &xtstamp_a1);
++	else
++		error = kc_a->clock_get_timespec(clock_a, &ts_a1);
++
++	if (error)
++		return error;
++
++	if (crosstime_support_b)
++		error = kc_b->clock_get_crosstimespec(clock_b, &xtstamp_b);
++	else
++		error = kc_b->clock_get_timespec(clock_b, &ts_b);
++
++	if (error)
++		return error;
++
++	if (crosstime_support_a)
++		error = kc_a->clock_get_crosstimespec(clock_a, &xtstamp_a2);
++	else
++		error = kc_a->clock_get_timespec(clock_a, &ts_a2);
++
++	if (error)
++		return error;
++
++	if (crosstime_support_a) {
++		ktime_a = ktime_sub(xtstamp_a2.device, xtstamp_a1.device);
++		ts_offs_err = ktime_divns(ktime_a, 2);
++		ktime_a = ktime_add_ns(xtstamp_a1.device, (u64)ts_offs_err);
++		ts_a1 = ktime_to_timespec64(ktime_a);
++	} else {
++		ts_a = timespec64_sub(ts_a2, ts_a1);
++		ktime_a = timespec64_to_ktime(ts_a);
++		ts_offs_err = ktime_divns(ktime_a, 2);
++		timespec64_add_ns(&ts_a1, (u64)ts_offs_err);
++	}
++
++	if (crosstime_support_b)
++		ts_b = ktime_to_timespec64(xtstamp_b.device);
++out:
++	if (put_timespec64(&ts_a1, tp_a))
++		error = -EFAULT;
++
++	if (!error && put_timespec64(&ts_b, tp_b))
++		error = -EFAULT;
++
++	if (!error && copy_to_user(offs_err, &ts_offs_err, sizeof(ts_offs_err)))
++		error = -EFAULT;
++
++	return error;
++}
++
+ static const struct k_clock clock_realtime = {
+ 	.clock_getres		= posix_get_hrtimer_res,
+ 	.clock_get_timespec	= posix_get_realtime_timespec,
+diff --git a/kernel/time/posix-timers.h b/kernel/time/posix-timers.h
+index f32a2ebba9b8..b1f6075f35bb 100644
+--- a/kernel/time/posix-timers.h
++++ b/kernel/time/posix-timers.h
+@@ -11,6 +11,8 @@ struct k_clock {
+ 				      struct timespec64 *tp);
+ 	/* Returns the clock value in the root time namespace. */
+ 	ktime_t	(*clock_get_ktime)(const clockid_t which_clock);
++	int	(*clock_get_crosstimespec)(const clockid_t which_clock,
++					   struct system_device_crosststamp *xtstamp);
+ 	int	(*clock_adj)(const clockid_t which_clock, struct __kernel_timex *tx);
+ 	int	(*timer_create)(struct k_itimer *timer);
+ 	int	(*nsleep)(const clockid_t which_clock, int flags,
+-- 
+2.26.3
+
 
