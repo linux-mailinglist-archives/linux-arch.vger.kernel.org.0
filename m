@@ -1,158 +1,186 @@
-Return-Path: <linux-arch+bounces-3015-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3016-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F3287DF0B
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Mar 2024 18:48:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A09A187E117
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Mar 2024 00:27:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E1291F21815
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Mar 2024 17:48:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36FDA1F20FB2
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Mar 2024 23:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E3A1CD3F;
-	Sun, 17 Mar 2024 17:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F9482135A;
+	Sun, 17 Mar 2024 23:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CErTCt+h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TdrrpH9R"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B551CD3C;
-	Sun, 17 Mar 2024 17:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123C5210E7;
+	Sun, 17 Mar 2024 23:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710697681; cv=none; b=mUBl/GrCLWCQTcm/tPRaoKY8GW9a5/v9Ua/Z3PD4tlJsuewGuKiJjhoMwhqF9fe6bzY4tuzD5PHfariBFIU84opiW9MuvkPit+RB4ChH7o53hicXgzMmnke9dh6AtKcKA/v04MghYGB2U45I7jjh2SSpjUtkF+oezuhUeMXvahU=
+	t=1710718025; cv=none; b=UhzqEqbds6KZ57MLKSJXz8lmTyYrBIJ8WKhwUqmn2tmHGoA4FWJX1eLLHgLs/C/GCy1IsBAEoVrwU466q6FKxZabI82pg8CtMW95pRn2To3kaz+M6BG+dKv0OjkwskYzfzrMX4atbxi7TKzapJt3SPggLXKxwF9ZRtKAku5A1WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710697681; c=relaxed/simple;
-	bh=iFgr+b97KAvPfCR6ghGNye2kCkDZc+J9IWrRuv7n9io=;
-	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:To; b=Vh/R2Ki3QE9JVabIEWPEUayZ1Vu58t3/Nms0AxSkSZu307++WB2Q4IyG9A9Ndz96ZO10lfoBi1it/44R/8WgqZHyVbtpxuKllCw7cED8Orus9gh7LmzPNWZ1mKR6lZ8iHvG5y4niFe5D136N8S/nc9POcti7Pno6iHHVNwHNE1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CErTCt+h; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3c37970b52aso1472491b6e.0;
-        Sun, 17 Mar 2024 10:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710697678; x=1711302478; darn=vger.kernel.org;
-        h=to:date:message-id:subject:mime-version:content-transfer-encoding
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/nUQ6ib1+zRvwxKYZbx2Zz20+PnydyUeEfxBg3tXRtk=;
-        b=CErTCt+hFtHB4HKizyA9CHMXN6cONeSohumsxv8EumhoK24/jESl1f2u15CMZcckn+
-         S0NUePM9tGz3kgAJlFPBtUpNuPjqGGwRb1HP//C4j1gLze5V5jRk80RXPFb1ZhGr637f
-         lpL6WNwfUGbeOczo4zXFnkpXKPc78Gjqs/TK/K5Hq66xhmFSCcgQ/JTKhB/OyXk3s3cN
-         2dncy84c7fbILGSLNXNETPGEkx9fWbK6ef28Er2yBGvK75BxcWsrmLvu3O89Gk+6vpIa
-         4Wf6Bj03HPXWcg4kpmgfiRzyt63VGw9F6qWUJoNVi/aQI6Ybbubyfeuw/UbhDglz4DDU
-         EYZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710697678; x=1711302478;
-        h=to:date:message-id:subject:mime-version:content-transfer-encoding
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/nUQ6ib1+zRvwxKYZbx2Zz20+PnydyUeEfxBg3tXRtk=;
-        b=LO11AQlWJh4+wZ1lEdjWxW1GRez1UWDgz9RrGWSlFfJPDTt0wJGJKRjrgbAt9Wm7so
-         SCgjaqLTmJ2tqA/m+kasiUQ2cnL4XcSZDSpDoZ3cwv+WumF3mztXFObgvROc3w94XSQO
-         GXYVL/b88s4bhSCHOn5jaMIx0GwejGKyPq/+oB0yn+/wJoBQnvnPqCr8dw+btGZewI0i
-         Fn4HZ+2kTkZYpVSVWp5UbVeJjZMTvw0rxsJUd7Ujmt/51KJozVd1iGwHGPgWK+BjGmqM
-         D/aO6XGuVmbCI6zmWBoo8JGzJlHKcG5i5TCl9rhXGe8pek4qhQfqE6KdBHlIJ9M9peJc
-         xZ2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXRBTJ4rzJqdssCthT/cUby4k14kt9DZaTakjPqa2MxadJJSgMzmwDXYQOkZ3avnjn8vJA0bUOqXmGl0i07W1W/rUSRbZRJhp7WOeJ160v8jCUXw2sOrSwTxSjO9W4/qA==
-X-Gm-Message-State: AOJu0YwJYCwMkZxfuDrdcQOKS7GUVWiFEl2dzfFsPNx+pxyoFP4QV0o3
-	q8krcDHz+Ng5PWjV4pvZzIU3Owsbvh4BBjPQsU4+87zL1PqVfxOyShbPbbgeMNQ=
-X-Google-Smtp-Source: AGHT+IETYmdnuS52fXG2/Dt89v96pDkvRPSM6OlcsJ60BUTDT3kxBHZ0IX7t3LA+Shx4xVHhF0jpJg==
-X-Received: by 2002:a05:6871:60e:b0:220:be2c:6083 with SMTP id w14-20020a056871060e00b00220be2c6083mr12261987oan.49.1710697678171;
-        Sun, 17 Mar 2024 10:47:58 -0700 (PDT)
-Received: from smtpclient.apple ([2402:d0c0:11:86::1])
-        by smtp.gmail.com with ESMTPSA id u22-20020a62d456000000b006e6c10fc87fsm6730122pfl.46.2024.03.17.10.47.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 17 Mar 2024 10:47:57 -0700 (PDT)
-From: Alan Huang <mmpgouride@gmail.com>
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1710718025; c=relaxed/simple;
+	bh=J3mH4Lz+h6JdZbI06BLdCCwKx2xsG2E17TgdAzhbbZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=btJFOn9QEv83ans4bU3Rcqmc9g2LwViSHus1rIFsaDuv5lhCDusGI5IozldBItuN7uBovHZtVw/ZKlQvO8bmioufcg0MkR8DIy6DA0IAmsQfHXsihX5H+DI9rii0Tv5FfCVHPLMbjUMmVBttvPJWqvJs8t+VNHgDORE5kS/qasI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TdrrpH9R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63422C433C7;
+	Sun, 17 Mar 2024 23:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710718024;
+	bh=J3mH4Lz+h6JdZbI06BLdCCwKx2xsG2E17TgdAzhbbZs=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=TdrrpH9R5ddZPd3pLMl20GBDUGKcavhTcY/z3s1mBmsFgERaBEoJcVlFQ1VYU52CI
+	 ljPJdNYPCOt2S499Of5DHqXABFAEO8BTeSmn9meXzISylaLVzdeMd7GviPSi1YESvx
+	 qfG2ug+Gco9PLmYC2kwWOKui2rJ458RBcLHvb9FLmYuumOvmNXhPrWwJgdcw3qS4eD
+	 b5X7FwocaeGvEeeEqQyi4N8HCzXEpAM6y6CgMj1zTwuDLgMvTHW+xbZ3jjqG01xhT5
+	 Ef7Pek4XgfEB0W89KhIrhfu4WjugSGR4OmC03hwOSK6AhJ7bqPxEmq/SNLtESgkLzK
+	 uDZ2JzIiqyATg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 38D74CE0D83; Sun, 17 Mar 2024 16:02:27 -0700 (PDT)
+Date: Sun, 17 Mar 2024 16:02:27 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Alan Huang <mmpgouride@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	rcu@vger.kernel.org
+Subject: Re: Question about ISA2+pooncelock+pooncelock+pombonce litmus
+Message-ID: <17ddc858-a926-4f12-beda-3f54cb91bfbb@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <12E5C279-ADB1-463E-83E2-0A4F5D193754@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.300.61.1.2\))
-Subject: Question about ISA2+pooncelock+pooncelock+pombonce litmus
-Message-Id: <12E5C279-ADB1-463E-83E2-0A4F5D193754@gmail.com>
-Date: Mon, 18 Mar 2024 01:47:43 +0800
-To: linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- rcu@vger.kernel.org
-X-Mailer: Apple Mail (2.3774.300.61.1.2)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <12E5C279-ADB1-463E-83E2-0A4F5D193754@gmail.com>
 
-Hi,
+On Mon, Mar 18, 2024 at 01:47:43AM +0800, Alan Huang wrote:
+> Hi,
+> 
+> I’m playing with the LKMM, then I saw the ISA2+pooncelock+pooncelock+pombonce.
+> 
+> The original litmus is as follows:
+> ------------------------------------------------------
+> P0(int *x, int *y, spinlock_t *mylock)
+> {
+> 	spin_lock(mylock);
+> 	WRITE_ONCE(*x, 1);
+> 	WRITE_ONCE(*y, 1);
+> 	spin_unlock(mylock);
+> }
+> 
+> P1(int *y, int *z, spinlock_t *mylock)
+> {
+> 	int r0;
+> 
+> 	spin_lock(mylock);
+> 	r0 = READ_ONCE(*y);
+> 	WRITE_ONCE(*z, 1);
+> 	spin_unlock(mylock);
+> }
+> 
+> P2(int *x, int *z)
+> {
+> 	int r1;
+> 	int r2;
+> 
+> 	r2 = READ_ONCE(*z);
+> 	smp_mb();
+> 	r1 = READ_ONCE(*x);
+> }
+> 
+> exists (1:r0=1 /\ 2:r2=1 /\ 2:r1=0)
+> ------------------------------------------------------
+> Of course, the result is Never. 
+> 
+> But when I delete P0’s spin_lock and P1’s spin_unlock:
+> -------------------------------------------------------
+> P0(int *x, int *y, spinlock_t *mylock)
+> {
+> 	WRITE_ONCE(*x, 1);
+> 	WRITE_ONCE(*y, 1);
+> 	spin_unlock(mylock);
+> }
+> 
+> P1(int *y, int *z, spinlock_t *mylock)
+> {
+> 	int r0;
+> 
+> 	spin_lock(mylock);
+> 	r0 = READ_ONCE(*y);
+> 	WRITE_ONCE(*z, 1);
+> }
+> 
+> P2(int *x, int *z)
+> {
+> 	int r1;
+> 	int r2;
+> 
+> 	r2 = READ_ONCE(*z);
+> 	smp_mb();
+> 	r1 = READ_ONCE(*x);
+> }
+> 
+> exists (1:r0=1 /\ 2:r2=1 /\ 2:r1=0)
+> ------------------------------------------------------
+> Then herd told me the result is Sometimes.
 
-I=E2=80=99m playing with the LKMM, then I saw the =
-ISA2+pooncelock+pooncelock+pombonce.
+You mean like this?
 
-The original litmus is as follows:
-------------------------------------------------------
-P0(int *x, int *y, spinlock_t *mylock)
-{
-	spin_lock(mylock);
-	WRITE_ONCE(*x, 1);
-	WRITE_ONCE(*y, 1);
-	spin_unlock(mylock);
-}
+Test ISA2+pooncelock+pooncelock+pombonce Allowed
+States 8
+1:r0=0; 2:r1=0; 2:r2=0;
+1:r0=0; 2:r1=0; 2:r2=1;
+1:r0=0; 2:r1=1; 2:r2=0;
+1:r0=0; 2:r1=1; 2:r2=1;
+1:r0=1; 2:r1=0; 2:r2=0;
+1:r0=1; 2:r1=0; 2:r2=1;
+1:r0=1; 2:r1=1; 2:r2=0;
+1:r0=1; 2:r1=1; 2:r2=1;
+Ok
+Witnesses
+Positive: 1 Negative: 7
+Flag unmatched-unlock
+Condition exists (1:r0=1 /\ 2:r2=1 /\ 2:r1=0)
+Observation ISA2+pooncelock+pooncelock+pombonce Sometimes 1 7
+Time ISA2+pooncelock+pooncelock+pombonce 0.01
+Hash=f55b8515e48310f812aa676084f2cc88
 
-P1(int *y, int *z, spinlock_t *mylock)
-{
-	int r0;
+> Is this expected? 
 
-	spin_lock(mylock);
-	r0 =3D READ_ONCE(*y);
-	WRITE_ONCE(*z, 1);
-	spin_unlock(mylock);
-}
+There are no locks held initially, so why can't the following
+sequence of events unfold:
 
-P2(int *x, int *z)
-{
-	int r1;
-	int r2;
+o	P1() acquires the lock.
 
-	r2 =3D READ_ONCE(*z);
-	smp_mb();
-	r1 =3D READ_ONCE(*x);
-}
+o	P0() does WRITE_ONCE(*y, 1). (Yes, out of order)
 
-exists (1:r0=3D1 /\ 2:r2=3D1 /\ 2:r1=3D0)
-------------------------------------------------------
-Of course, the result is Never.=20
+o	P1() does READ_ONCE(*y), and gets 1.
 
-But when I delete P0=E2=80=99s spin_lock and P1=E2=80=99s spin_unlock:
--------------------------------------------------------
-P0(int *x, int *y, spinlock_t *mylock)
-{
-	WRITE_ONCE(*x, 1);
-	WRITE_ONCE(*y, 1);
-	spin_unlock(mylock);
-}
+o	P1() does WRITE_ONCE(*z, 1).
 
-P1(int *y, int *z, spinlock_t *mylock)
-{
-	int r0;
+o	P2() does READ_ONCE(*z) and gets 1.
 
-	spin_lock(mylock);
-	r0 =3D READ_ONCE(*y);
-	WRITE_ONCE(*z, 1);
-}
+o	P2() does smp_mb(), but there is nothing to order with.
 
-P2(int *x, int *z)
-{
-	int r1;
-	int r2;
+o	P2() does READ_ONCE(*x) and gets 0.
 
-	r2 =3D READ_ONCE(*z);
-	smp_mb();
-	r1 =3D READ_ONCE(*x);
-}
+o	P0() does WRITE_ONCE(*x, 1), but too late to affect P2().
 
-exists (1:r0=3D1 /\ 2:r2=3D1 /\ 2:r1=3D0)
-------------------------------------------------------
-Then herd told me the result is Sometimes.
+o	P0() releases the lock that is does not hold, which is why you see
+	the "Flag unmatched-unlock" in the output.  LKMM is complaining
+	that the litmus test is not legitimate, and rightly so!
 
-Is this expected?=20
+Or am I missing your point?
 
+							Thanx, Paul
 
