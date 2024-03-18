@@ -1,159 +1,112 @@
-Return-Path: <linux-arch+bounces-3020-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3021-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1213E87E3F1
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Mar 2024 08:16:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A637587E409
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Mar 2024 08:23:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4237A1C20CFE
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Mar 2024 07:16:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50419B20C9D
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Mar 2024 07:23:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65714225DD;
-	Mon, 18 Mar 2024 07:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1E6225DD;
+	Mon, 18 Mar 2024 07:23:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="4qfo7+Bo"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YTtGYkZr"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F3222612;
-	Mon, 18 Mar 2024 07:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E24224CC
+	for <linux-arch@vger.kernel.org>; Mon, 18 Mar 2024 07:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710746168; cv=none; b=HQJfVZvn4MSNC/XiKTrrSGEGIzSnFh2Qw7mhgbmrGeFp3o9QUDGNJsCoc4A6wXLPmMRHXTcMqU8uy3YnptP7Ub+Ab7KSCk6OEnbHkafA8NTiUht5w98XMENbx95fJXcipeUu5kPGvhPXuix7trev0J/0tik56wJ6U4mrUKviz+8=
+	t=1710746588; cv=none; b=k5F8x/tmXCJBMA9G2i5KPw8sfQmUeLjqbnXgC+gkFy6gVJ1uMqhkNroyP1A5tCenevXexxUFh0REA+enD90H3h35vzTI/RsxFNwDGDCGHtVUX0esd7q22kmDOdX34FfZrmKfoT0DW7O/Bnd70oynzdY8wf14/1eMtEdUnlDRQpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710746168; c=relaxed/simple;
-	bh=aLS6AX7W+AXgAh4hgoumByC0Igk0YWUJhR1plA7yRec=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ui3Ds9ViYvE1a9PJCV6tAWz4DjBbDS59rlVii12pDpQbpdib1UrHHKtLdFxzCz2fxgVxQaNCqtxN7VtrJIROp6An5X5wN51syqYBn76Bw1iIuStICCNby01DXahF5b8SKUPkyuMa33PsFohdJQ4SKkSkumzkEtHxQjOjU3Ay/ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=4qfo7+Bo; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 42I7ETdi910464
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Mon, 18 Mar 2024 00:14:34 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 42I7ETdi910464
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024031401; t=1710746075;
-	bh=lOgqPli4E6y6mgNZ3XzJ8MlzC1fqsi4wvgAp64a4zdg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=4qfo7+Bopd2+cAB5JZREDFFnwJ9EUBUQzcTriimHV5zBacAHniCvGQvo/sA6muLna
-	 r4PwVGXSNtnFAarpjPSIkcS/hfYgUg4ojZl9bimUFHmnM0P9CO9rh8dpDRYahLqOvt
-	 jnGim1lPI+5C7q/LXw9w5uKxwMQXRUaNszLu95FjFea3zs0mFNXuwyPH5LagxqX0vC
-	 DosUI2YMVafFXw+c4aHUHb5JuMOQj2w2l2V9R0IlbFLWugYYUIdGE6Z5Vy6yC1MuaW
-	 vy1Q4stBFIJ3UVxNPttVvgPU9sLEwyljSMMwcFiw0pKIcgh2pkDHDqZRXAoNS8IABG
-	 Eqfo27oqDTeqA==
-From: "Xin Li (Intel)" <xin@zytor.com>
-To: linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-arch@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        jgross@suse.com, boris.ostrovsky@oracle.com, arnd@arndb.de
-Subject: [PATCH v2 1/1] x86: Rename __{start,end}_init_task to __{start,end}_init_stack
-Date: Mon, 18 Mar 2024 00:14:29 -0700
-Message-ID: <20240318071429.910454-1-xin@zytor.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1710746588; c=relaxed/simple;
+	bh=xp9STLfI/VgEupEHLT1X7kTuOfhJvB+d2alWxqds6Hc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BOx7PaAuQhD2ZCL6jPplNE/odN1017nBdjejFjuY/VqC9X1aDfUuZMe47iVqDvQ2tvae4bOAbuRfy4a5Sh9G6HgiSqGgLinIMTG0106mcuBYTPM5eQ+lSXOu2V0YaKKtza+O+98mpCxDA1tMLjKn1uE+tdRj8ANbrN0cACcG6sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YTtGYkZr; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-568a53d2ce0so4525560a12.0
+        for <linux-arch@vger.kernel.org>; Mon, 18 Mar 2024 00:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1710746584; x=1711351384; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2+xmiNT0HV1PrVIMTOkvVdPBI7GhnHCBaeppqG3Ayo=;
+        b=YTtGYkZrvOW+Ev19SIJe4lMsLfEofb6a09Z7Slf82IZPmlQWGVF8suQJ57+9rlux4A
+         ym/Mehx66X9ABEQ6BPvJAerWpnB+iyaJc3wqWdcrUSxgAu9uDL2cGrRBHG7OIYSRlprH
+         lfoieN1aKZ4k68dkntwOjol3OfwXMTvgJEcf3DwUScdcmlxua6Um6YYyOEuHWK/7GZVG
+         +UcW/VdsALLwbuMKiGoE9dON6lFwfuVTSmkijlcHIDoAa0yN/GJcWsjtObS+Efh8i3pJ
+         5o7DzQZWpCtnysAfYlW+BrZST+s5I0pZUUv+tBr0XZKVcK+MdjqjQYBbSlumRzVVxId4
+         UGcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710746584; x=1711351384;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j2+xmiNT0HV1PrVIMTOkvVdPBI7GhnHCBaeppqG3Ayo=;
+        b=d+ygRY47L5eFAaPVTuipvpQsoP4K0u6LaojG3GxO5PwSFbKhO0E1e7IxewgAN61Tea
+         yWd+4YpLpfP8/hSZlMXL6EaOuwkwZtZtkyEFuaeMrgPwt/bsiaejKJNYmvIy379Zm5dd
+         DFmEwjLoLiorfJBl0/7Yy210SaBO5A2SQUosiocoST6bXrIndmYPHi0gabhHjUx988lD
+         LOFynMKlkKPDNI4UIe0eUygF06kCTGiQGsIx/o2GqX9lKE6PKQY80NHQBz4hR/d9MnKr
+         idajD2Pa3lawl7OBz8ZHZgIK40aUK4dpyBQQg/kPJCQcF0j19hds2XyeZR/7Lk/Vg4Ak
+         eIIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqsbQQlP99bRwcIk06xBG/YstaYkB/hZvBdEUkKqrgxImNy7VGWoSj5cMb77nRx1Hm2mZTW/Vbz0V2ylVy1Ls/zJ+KgVa/ntl7nA==
+X-Gm-Message-State: AOJu0YxQ9I4utSWS4s3/Cz7X4TJozUCHQXMO56Wpy7dvK/RPBZ/OSIDF
+	+Cp5w9RKQ8mewJ4DbqR1/tFF1XWUCMd6VDUvKPh5kBL2MY6FYHRvxNyT020Xv8W6Tauspw4liIN
+	O
+X-Google-Smtp-Source: AGHT+IG/FvP8FIPkOAjy1Sqh3yrjW0+6MsrVrNKO/gQxWJLTWjYkr4kGMhpQK7lOhCNJSTLGPpmMag==
+X-Received: by 2002:a17:907:7a93:b0:a46:74fe:904f with SMTP id mm19-20020a1709077a9300b00a4674fe904fmr8405153ejc.26.1710746583937;
+        Mon, 18 Mar 2024 00:23:03 -0700 (PDT)
+Received: from ?IPV6:2003:e5:873a:400:704b:6dbb:e7c0:786e? (p200300e5873a0400704b6dbbe7c0786e.dip0.t-ipconnect.de. [2003:e5:873a:400:704b:6dbb:e7c0:786e])
+        by smtp.gmail.com with ESMTPSA id wg8-20020a17090705c800b00a46cc48ab13sm218367ejb.62.2024.03.18.00.23.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Mar 2024 00:23:03 -0700 (PDT)
+Message-ID: <acb094b7-15b5-4a77-b461-a938f9d7e9e0@suse.com>
+Date: Mon, 18 Mar 2024 08:23:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] x86: Rename __{start,end}_init_task to
+ __{start,end}_init_stack
+Content-Language: en-US
+To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-arch@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ boris.ostrovsky@oracle.com, arnd@arndb.de
+References: <20240318071429.910454-1-xin@zytor.com>
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+In-Reply-To: <20240318071429.910454-1-xin@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The stack of a task has been separated from the memory of a task_struct
-struture for a long time on x86, as a result __{start,end}_init_task no
-longer mark the start and end of the init_task structure, but its stack
-only.
+On 18.03.24 08:14, Xin Li (Intel) wrote:
+> The stack of a task has been separated from the memory of a task_struct
+> struture for a long time on x86, as a result __{start,end}_init_task no
+> longer mark the start and end of the init_task structure, but its stack
+> only.
+> 
+> Rename __{start,end}_init_task to __{start,end}_init_stack.
+> 
+> Note other architectures are not affected because __{start,end}_init_task
+> are used on x86 only.
+> 
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
 
-Rename __{start,end}_init_task to __{start,end}_init_stack.
+Reviewed-by: Juergen Gross <jgross@suse.com>
 
-Note other architectures are not affected because __{start,end}_init_task
-are used on x86 only.
 
-Signed-off-by: Xin Li (Intel) <xin@zytor.com>
----
-
-Change since v1:
-* Revert an accident insane change, init_task to init_stack (Jürgen Groß).
----
- arch/x86/include/asm/processor.h  | 4 ++--
- arch/x86/kernel/head_64.S         | 2 +-
- arch/x86/xen/xen-head.S           | 2 +-
- include/asm-generic/vmlinux.lds.h | 6 +++---
- 4 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 811548f131f4..8b3a3f3bb859 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -636,10 +636,10 @@ static __always_inline void prefetchw(const void *x)
- #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
- 
- #else
--extern unsigned long __end_init_task[];
-+extern unsigned long __end_init_stack[];
- 
- #define INIT_THREAD {							\
--	.sp	= (unsigned long)&__end_init_task -			\
-+	.sp	= (unsigned long)&__end_init_stack -			\
- 		  TOP_OF_KERNEL_STACK_PADDING -				\
- 		  sizeof(struct pt_regs),				\
- }
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index d8198fbd70e5..c7babd7ebb0f 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -66,7 +66,7 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	mov	%rsi, %r15
- 
- 	/* Set up the stack for verify_cpu() */
--	leaq	(__end_init_task - TOP_OF_KERNEL_STACK_PADDING - PTREGS_SIZE)(%rip), %rsp
-+	leaq	(__end_init_stack - TOP_OF_KERNEL_STACK_PADDING - PTREGS_SIZE)(%rip), %rsp
- 
- 	/* Setup GSBASE to allow stack canary access for C code */
- 	movl	$MSR_GS_BASE, %ecx
-diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-index 04101b984f24..43eadf03f46d 100644
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -49,7 +49,7 @@ SYM_CODE_START(startup_xen)
- 	ANNOTATE_NOENDBR
- 	cld
- 
--	leaq	(__end_init_task - TOP_OF_KERNEL_STACK_PADDING - PTREGS_SIZE)(%rip), %rsp
-+	leaq	(__end_init_stack - TOP_OF_KERNEL_STACK_PADDING - PTREGS_SIZE)(%rip), %rsp
- 
- 	/* Set up %gs.
- 	 *
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 514d3002ad8a..cdfdcca23045 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -399,13 +399,13 @@
- 
- #define INIT_TASK_DATA(align)						\
- 	. = ALIGN(align);						\
--	__start_init_task = .;						\
-+	__start_init_stack = .;						\
- 	init_thread_union = .;						\
- 	init_stack = .;							\
- 	KEEP(*(.data..init_task))					\
- 	KEEP(*(.data..init_thread_info))				\
--	. = __start_init_task + THREAD_SIZE;				\
--	__end_init_task = .;
-+	. = __start_init_stack + THREAD_SIZE;				\
-+	__end_init_stack = .;
- 
- #define JUMP_TABLE_DATA							\
- 	. = ALIGN(8);							\
-
-base-commit: 7e19a79344df2ed5e106091c29338962261b0290
--- 
-2.44.0
+Juergen
 
 
