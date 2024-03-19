@@ -1,50 +1,50 @@
-Return-Path: <linux-arch+bounces-3037-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3038-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FEC08803ED
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 18:53:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AA53880460
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 19:08:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C30801F22B73
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 17:53:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2FB1C221C7
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 18:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E537208D4;
-	Tue, 19 Mar 2024 17:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC1E2B9D2;
+	Tue, 19 Mar 2024 18:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tp5kErN6"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p8+wG0uo"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12F62B9C1;
-	Tue, 19 Mar 2024 17:52:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49251208C1;
+	Tue, 19 Mar 2024 18:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710870774; cv=none; b=Kus+hbiNkunADQDYMc0haRcFYiK6YUG+nl2+WXoexxUlbJUL/w8ZwrnAT/hPeokXJcrFZjPCHVs8zu+0QdlHdHdrh1gzZxQdjAK4K+7uLzqg2rvLHQcTqbqVurr7YvJ/ErV7Uig+/G+IOqwoLKqizHC/MHMgpDlk1qM4zyI7Mak=
+	t=1710871726; cv=none; b=oZRqaY04rhLypEXew5IStVVK8LiOGjzurn/1yiMiQ0Dr8mImYL4X3ObzVRmaUTTMCgtCAz9GktFZxjGKOuU7ra+9EeDlHTUapXnBKlaIGqGN/f0ifS/Eg5iRPJyK3BX03oBXwomOgIKDcry6D00cz2rIgAUj2UJvat3euzOxBIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710870774; c=relaxed/simple;
-	bh=w+dyHbjX7gc0ioAKMxug+Uk+hBJ8l5PehIsqPnA7H6Y=;
+	s=arc-20240116; t=1710871726; c=relaxed/simple;
+	bh=/TLTNjLRNuhiV0mSLNL2wHkFZhyXdWLHNCfTEJYuONs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c3Ea70s//2D6Ib7xvdsYosTQdMzRsi4eF1vhQvv484AiTGltfWcquP7FRFt+XOaOhBxnP1LFpI6aLwiZyIx5c9v9nYx0nSeCBjJQXXcbGxK5dAoMV7v+Jxff3vLwcsXM0zSpXUPpcXJP0Z0Hd8hmzzBjeidy+s1IaLLjNhuVksQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tp5kErN6; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nhs4wt6szdz8gjuqRaEXdU9V430OuzUDsLS918IVYpU7qHeZzSrzdNnGcydCHXN5aFpge1/QLqSqKXPnRMOmy4MMbck1M5x4VxTTDPuEzgnAqG6GOaEj3tf2zu2HS05lo3ZVO1jLcSvrQXL8h6wR0EZb4fQVApPsSRB0OcrhhLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p8+wG0uo; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=6o4kZXWWhBj7TyRY/j0EqK3kig9yCh9grF6z6ubfGrk=; b=tp5kErN6B90TBrI1Ept7eFLHD6
-	PJf4vKxX+PkD0H2UCVyQ6NEmEoWS6nPMIOaMd3ZgenNnqiv36wSfVwyo5zYx3R9ex+nv0+C1kLEs5
-	r+6exMjyGjT1gBDvbR6+eFx5nR9rSXVdKN0X1X4C7LdIgvQwO189o7rkklEDNdWqERs8Sc3JfHhdr
-	9w6z3NwBJVwm8tCv1xkc96EqxTtgecruv3NYhRmHfeNjdcJZGiKKDX01OytzVrmIlVB/NojtbKdJ2
-	PgEopQJ7e1ZhbvamBkKMJcrbaNpuAlzkAgcs+qgf7pAIkmIGU7zwcmkPxAPCZzH0OovmgHNZuVW8q
-	1thoFD4w==;
+	bh=xgQvZBrHztRTAZp16CLgbseSLdtWf7Q9SsKAjuSvgJI=; b=p8+wG0uomF7unG72AzIrt36aSJ
+	BYw0KiYaxuAzk0130AC7NRgxOFgbF1lOguMjoN7QhozQa/Clk2e5rGFgjPuB1FrrgacJexHlXYV4C
+	yxHbBxRf3OYrLuI6WRiBjiXpzNkpiGDM2dSePR5KqCrGubYkqPIlg3tUEf/Voy4ux8DBaJraMJjEq
+	i8wiZLYx8XH5FCioMIeMIohRBC+ewn2hIsz8LU5QwnBlK/suikfwVzd4pWIjn1kih+eQmHiYtecIW
+	eCVd5DPvWPnEJYNL5yne6nCtZMXm861+a6KLunxMlHp3LTeyiKOnFY3VbQgcsShLTQmV5/PWm3xEj
+	nrGgB6iw==;
 Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rmddm-00000002RXq-3m49;
-	Tue, 19 Mar 2024 17:52:46 +0000
-Date: Tue, 19 Mar 2024 17:52:46 +0000
+	id 1rmdt9-00000002Ss5-1TtK;
+	Tue, 19 Mar 2024 18:08:39 +0000
+Date: Tue, 19 Mar 2024 18:08:39 +0000
 From: Matthew Wilcox <willy@infradead.org>
 To: Gregory Price <gourry.memverge@gmail.com>
 Cc: linux-mm@kvack.org, linux-api@vger.kernel.org,
@@ -54,9 +54,10 @@ Cc: linux-mm@kvack.org, linux-api@vger.kernel.org,
 	arnd@arndb.de, luto@kernel.org, akpm@linux-foundation.org,
 	shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
 Subject: Re: [RFC v3 3/3] ktest: sys_move_phys_pages ktest
-Message-ID: <ZfnQ7n_7cZvk9BkC@casper.infradead.org>
+Message-ID: <ZfnUp7OAr6PFGAq_@casper.infradead.org>
 References: <20240319172609.332900-1-gregory.price@memverge.com>
  <20240319172609.332900-4-gregory.price@memverge.com>
+ <ZfnQ7n_7cZvk9BkC@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,11 +66,18 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240319172609.332900-4-gregory.price@memverge.com>
+In-Reply-To: <ZfnQ7n_7cZvk9BkC@casper.infradead.org>
 
-On Tue, Mar 19, 2024 at 01:26:09PM -0400, Gregory Price wrote:
-> Implement simple ktest that looks up the physical address via
-> /proc/self/pagemap and migrates the page based on that information.
+On Tue, Mar 19, 2024 at 05:52:46PM +0000, Matthew Wilcox wrote:
+> On Tue, Mar 19, 2024 at 01:26:09PM -0400, Gregory Price wrote:
+> > Implement simple ktest that looks up the physical address via
+> > /proc/self/pagemap and migrates the page based on that information.
+> 
+> What?  LOL.  No.
 
-What?  LOL.  No.
+Also, how is this v3 and the first one to land on linux-mm?
+
+https://lore.kernel.org/linux-mm/?q=move_phys_pages
+
+Also, where is the syscall itself?  The only thing here is the ktest.
 
