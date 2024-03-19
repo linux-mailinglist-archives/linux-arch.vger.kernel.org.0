@@ -1,125 +1,109 @@
-Return-Path: <linux-arch+bounces-3030-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3031-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C5687F3ED
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 00:22:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0679487F63A
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 04:58:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80A912838E5
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Mar 2024 23:22:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 363491C21C20
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Mar 2024 03:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D0275E206;
-	Mon, 18 Mar 2024 23:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5377C08E;
+	Tue, 19 Mar 2024 03:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="U6+y+pDz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keAe1F3R"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDAE45D8F7;
-	Mon, 18 Mar 2024 23:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D981A7C082;
+	Tue, 19 Mar 2024 03:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710804139; cv=none; b=GJ+chdCpVJXfrmun+RkGBAP1Bk0mGiV1Ld4/l/HRHM3d0nahz7CioHd9s0ZD0JMhVr8rqv5O1xSdvZnm+qyWYnlpTq+CtVSksudUIWOY0cvcPT0xC+KFk3C+VurytszSGIkLbYXMSLLgY+a6CmJWHDujWt5T4DnOx04ahZCpn3Q=
+	t=1710820722; cv=none; b=egIgQUS3Qlog8vtGOESlPVooaQitU2Wg4vS/SRN2AJZN9Zvp8uUNSfglh/7vNI5Pxmn0TEldBpX0UHjZGbELlDZSPKIvGxe5tPlnixqBv9cx2z8Nqhu7gU/OfQr09CJwOvfE7NmAGf2z9n7KBu4nTo+6E3VYZAqALd52QQG3JSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710804139; c=relaxed/simple;
-	bh=OotrFEDPSRJwIaQ3u4I4spUR/2JA32XkaDt3CDv0uYI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NJL9goQph5P3RkehC1N4hNVHRhCzi+/T7bb4PCOgIXzEUjaKs6QCmz/8iEeyyRjaeD+QUVyyl8mtsdLTytQ+ki0PCbqVwMGdTenJtXDmeCliXCNf8nNmQ5ChmhqVLNVIAYO+WeUVdLBmoYux5TzUoAZ76dqWTN5xgwmr6A5fm20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=U6+y+pDz; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uDe90oU4m7kN4U29sr7WiiZQguijp+pDgJnuhirb2IY=; b=U6+y+pDzUahdjxZCjK02oc3MY0
-	jhjQNaWdPtpOUHeAQn3kyAp1Po1UThO3kSBTS0teWqL0zaNN0wzcr72e45m1tQR/NW4bsv7t93qOT
-	GIR1OlIoM597ZA5zMZBj2SWx3tJ185eBo4+ML7+NeW/6K1AgDTfPrXGaUtrA+ZdHvzJmEb1PwQTzO
-	KULWQZwts+KWeJGFjz2q2fzDEgcxB2JtvZ0qOih3gfF3HP/3w1vzhGrKf/74FyIryuVzfnUgk7UUi
-	nQfEygnz+caLPMXacklKQz5u9pHLYoW2cHy2stoESVq/FTDny7iHJSIKT1RY9D4ew/odWIo0+n6Ce
-	6xUA3AMg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rmMJ0-0000000AWy1-0ZBd;
-	Mon, 18 Mar 2024 23:22:10 +0000
-Date: Mon, 18 Mar 2024 16:22:10 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: David Wei <dw@davidwei.uk>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZfjMopBl27-7asBc@infradead.org>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <ZfegzB341oNc_Ocz@infradead.org>
- <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
+	s=arc-20240116; t=1710820722; c=relaxed/simple;
+	bh=mN37mmNJoVPK7QQbBgzp74gamlmqhD1FiCj4eiKeAF4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P8LiEJ2OE9XcnJmcsj2kwd/M6xbhCt0pf+eFMLgySZWSlNBDv6T4k1rqcwc/l6/Tn5fcJYdFehIsHgasnhktcd+WmSJP8Te57Xye/Ml9+G5p8OWLUJWDSmVvTQmUvV6LdS9JTgfiPypUqOkAlrDTVGxZ0t3muGaVJwxp4ohOAow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keAe1F3R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C8CC43399;
+	Tue, 19 Mar 2024 03:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710820722;
+	bh=mN37mmNJoVPK7QQbBgzp74gamlmqhD1FiCj4eiKeAF4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=keAe1F3RmmMP7Tie2NPjB+RHrEJqCcgRIqxePZoFdX+JZqG6E6EtVp1t0FF1W/3Gd
+	 2X4R/WXDYSBc2QOf9COgXT09ZHWEAsSuQr78UDso0juuyjzWgHwN9mLdr4VenzNl2E
+	 xLdqrdKG/B92gDxbtqLmGvqYEdUbKQs9csRJ4KGbo7ZyKL1qm4H9N9QLT0J+SwyBMJ
+	 /48VU9ImizfiBbW9o6GCsOC6S0BWPKOaD9DN9tjcEkaB0RIMVPjdP0woOrdA07+Vh5
+	 IGpVL3rNrQh8/UEHHzX7KNXONvCid8eps1A8QRs0UASlCMv0Y6whnMla0XYtnlesr9
+	 vL5J1poDQDfCw==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d094bc2244so68493201fa.1;
+        Mon, 18 Mar 2024 20:58:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX5+IYnkBL/n9/KUZ/HSKaG4XVKc+GF0M8yqZ2XqbPmI9HmLWX4OPaDRHpfw2fb3lPhmwiU/WTRX6DKRIdaF/iCQtc2+JZwlnSUIRdexIvHa3qRhLCET9n8GxJt+a9rombzpp1MCGaQPg==
+X-Gm-Message-State: AOJu0YyjJIntTgYkfUS83lLdK+azSqzafoy8AWhWDLa6XmGN989N81LW
+	5tjTujVKol3ELsLrDsVEde0qXDwxczEFsDyfAUbHC17LPd1u934o1LDlQrGsG0Dn8aj65TFwAwN
+	lLFWOU/13PejT4ZQrr2xTlk2AcIw=
+X-Google-Smtp-Source: AGHT+IFd2NGeNInZNlqtCpeiOvr1bD0MueLHfLC9SzxOiRd+5Xj4+sNLruulsJoDVw+pvqZy8NDOCch016Rg+/64beM=
+X-Received: by 2002:a2e:9092:0:b0:2d4:8db2:f79c with SMTP id
+ l18-20020a2e9092000000b002d48db2f79cmr771170ljg.50.1710820720895; Mon, 18 Mar
+ 2024 20:58:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20240315024435.350013-1-chenhuacai@loongson.cn>
+In-Reply-To: <20240315024435.350013-1-chenhuacai@loongson.cn>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 19 Mar 2024 11:58:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTjt+wcmbgZm-2WHNM+_3pMy7=BPYVy8B22M9qZZnuZWA@mail.gmail.com>
+Message-ID: <CAJF2gTTjt+wcmbgZm-2WHNM+_3pMy7=BPYVy8B22M9qZZnuZWA@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Select ARCH_HAS_CURRENT_STACK_POINTER in Kconfig
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, 
+	linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>, 
+	Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 17, 2024 at 07:49:43PM -0700, David Wei wrote:
-> I'm working on a similar proposal for zero copy Rx but to host memory
-> and depend on this memory provider API.
+On Fri, Mar 15, 2024 at 10:45=E2=80=AFAM Huacai Chen <chenhuacai@loongson.c=
+n> wrote:
+>
+> LoongArch has implemented the current_stack_pointer macro, so select
+> ARCH_HAS_CURRENT_STACK_POINTER in Kconfig. This will let it be used in
+> non-arch places (like HARDENED_USERCOPY).
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index f90949aa7cda..277d00acd581 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -15,6 +15,7 @@ config LOONGARCH
+>         select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+>         select ARCH_HAS_ACPI_TABLE_UPGRADE      if ACPI
+>         select ARCH_HAS_CPU_FINALIZE_INIT
+> +       select ARCH_HAS_CURRENT_STACK_POINTER
+>         select ARCH_HAS_FORTIFY_SOURCE
+>         select ARCH_HAS_KCOV
+>         select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+> --
+> 2.43.0
+>
+Yep, you forgot that.
 
-How do you need a different provider for that vs just udmabuf?
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-> Jakub also designed this API for hugepages too IIRC. Basically there's
-> going to be at least three fancy ways of providing pages (one of which
-> isn't actually pages, hence the merged netmem_t series) to drivers.
-
-How do hugepages different from a normal page allocation?  They should
-just a different ordered passed to the page allocator.
-
+--=20
+Best Regards
+ Guo Ren
 
