@@ -1,467 +1,406 @@
-Return-Path: <linux-arch+bounces-3051-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3052-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D38F388138E
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Mar 2024 15:42:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38200885DA1
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Mar 2024 17:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42741B23542
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Mar 2024 14:42:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2FC71F229AB
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Mar 2024 16:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D7248792;
-	Wed, 20 Mar 2024 14:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74C31A27D;
+	Thu, 21 Mar 2024 16:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K8FA6zDN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u803RRbo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F65481A0;
-	Wed, 20 Mar 2024 14:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F0CE54D
+	for <linux-arch@vger.kernel.org>; Thu, 21 Mar 2024 16:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710945765; cv=none; b=Ztlt/8n1UMpdZLR6vyck4ydvRIWn6g2Nw7nZZH/Fdy6IwxzpehhkpeFLbr4LKpX7YL0TRFU83HquJwil2wQi/XN9uATVSdVPliOg4l0g1v+wQ2fVZMC1hnjjvWByslgKNKQov0p6cw8tyubvf35F9cNkLC8IWusTYcebUgH0cew=
+	t=1711039033; cv=none; b=K9U9ndgeP6buymENYXSUwntkpdXuxikZ1uOMotfVhkw/hjqUuHsDw557njmhe1azsNTkJGuyjI7O8RwtbY4L7lPf3jQ3hWv1mBcj6hpx8PFhd8cvCoY6KQttYhsPM7S3edL8vplydSVeUADWlTrLflJvk1lhi1oe5RticDbBxaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710945765; c=relaxed/simple;
-	bh=MIsF5kkI3SJJdhDgYKRsR2pkphwYmwvVJzj4oC6fWfE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=upnUFI8GV+DvIfYMIZ4AJnX2K0gTrEHxO9lWyCy6Qxhq6TBtzszqjLstdzC/7KsFqeBJ0oCIJ+qV91lv94Cpi89hAG8xajMAuAtVMsPzTgGmECmPkt3D1UjIyR9AOwtyf81Gd+Bb+1TCccJ09xoV5MDxAdCyCDuAjtMawtMxnwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K8FA6zDN; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-609ed7ca444so64626107b3.1;
-        Wed, 20 Mar 2024 07:42:43 -0700 (PDT)
+	s=arc-20240116; t=1711039033; c=relaxed/simple;
+	bh=nXfkaShWfd/omgr6oAsoNsZp6U4Qoov4BwwUpupeQWU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Q4hLTo0j0uJUI7c4npYUZAoC/jO6EaGQLBC6YUEauiks8cikTVIbhjhRAv4KCp7F+Wkc0l5P5IlPsXNALLxyFT/qayVXntZkTjZat0uPPcWX3VzLhv4/s94eU5hCPdDGHO1vlNjkWSHIafaPLjMsbkS6zQBZUj+t7Q4wZ37JJ3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u803RRbo; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dbf618042daso1828960276.0
+        for <linux-arch@vger.kernel.org>; Thu, 21 Mar 2024 09:37:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710945763; x=1711550563; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBp7t6RwweSP3AcjkYZsGsSbnooWBNVHZWHK5RKW3Ig=;
-        b=K8FA6zDNP8sb4Kl9PzWxERB00pxRsewRqknsjaDDUPbMK0tyrYNRifbpVdrTT7C9FA
-         X2CS07XSOTojEoea28CvVV3fKWcystd+b1IstluqFdfuxWCCpwLwlWbRBLmM45oohscQ
-         xutkyYrw3fZbIvReZqIrzXGyoC6DsVGN3Y1G8Ukb1TS84CMnSBiS+NCXO3uT3zZpkneP
-         Rh6MZAse3C1Ep+SPhKEgn/MkZCnKGFjXfzeB2G74Q6mF+c1WYruQFUhIV4oZG3cyOYMW
-         NX7iXw33K3YvtlvXOzusV1QFM/kkn0+QpiUpoCvcx61o2Ot9frSOXeUGqXDtQHDMnoZs
-         Y+VQ==
+        d=google.com; s=20230601; t=1711039030; x=1711643830; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZtzEdHMO1nsPqRyTOFCp2rzxqc4SYrWbhYHVl+Yksck=;
+        b=u803RRboTmbeXp/Lp544dIKtYPZsmohtBlHOopJOZPTlQ085+hj5iMLhDK40ypxqOz
+         vWaTrSy0nR0+ahRwgeFl+5NAUgOsh/V/jKORGGGhKEhKdskt+LJee+uQGreoCfoXNJPE
+         E7/F0oGkkrzqaaCnzdkJVdmkRfAWp9QP03S3B09jEyZnCD3nnOGsJ0jXKY+lqrUGqyu2
+         L8PwU6eR/STY4QHo0S2mGUkMwD/sk3Ab9Ocqbhey+N4WW3p6LMh5p1ljRRE7a5gnMWBB
+         rnEM5nSLQG1tkOTkqmViP0Ab6sW97+8L92/Z+po+AZlmzYZKMIe9AHVFKJaPdSq63cNV
+         c9yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710945763; x=1711550563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SBp7t6RwweSP3AcjkYZsGsSbnooWBNVHZWHK5RKW3Ig=;
-        b=o5z6SJCcn9gYLEh0dJorvv5EJNrYSz+DEKRnmqSj1wTEJ85H/jeJE5O1tpatTT2yt5
-         7+DKcUjFUSItSzARm1tG8rUka3+e7oc3iWaQIulhfpTJfneIaUvk7V+KdamCJaFTLuUH
-         vnS4pR9qDCqqZQ3RnBM51jjZggXtu+s+hiS65skF0M5iF41EUgQzxys6s9RxP/vFVTT6
-         vXVrFQJd2QcIhCCBP4vPr6DKFwsOh/3iQX1Z7U2UjrpbeaSx2V7cnRWh0EKWPHWDZKH3
-         8LhbKfRBBJ+wis36STS8+oEatGrhoqS2CZ76ob1N1A2yJDlb1ksUfTPwgXkZLHNpIZUy
-         /DFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVj3nvO/wSQ2G7i7l0Ntzwp9O17OLB1qCkfiPKqJcnNeDUZRDKo3e+5EY8Lhy3Sd6of0qWS1MuEc+GnJbD594T4nRWRsb82FBXwZrYwdmVGYitzIdHjUDAyjLLzvh8IOhRx0GFytI8IpfWEVhOpT0dbHAwWzL6/53iVKfQNDDJ8slNR67PNiIhJxGw26OlWvErV4D9ecqa6Ga/WOA==
-X-Gm-Message-State: AOJu0YwlBvNO7myqb/OMdoxm+pApGhWPnqo62OWSjE0diO/4u4xHgAW5
-	NkecETtBzkuSjt2rBDrVXBcuYJDWpluTDaFl/q9IQZ5jcrDlWXBD6T4MT/DBy0j3ti9DDezcuIh
-	D6xGr6tic/g0jO8xdIHfBKEXGHW0=
-X-Google-Smtp-Source: AGHT+IEsQiFWtlat7AgEDVCBHwwgcLmaG/w2KzYaiwhVotv2pJm229/hp83EtQU74NoUMqGwHEKW0dLOXF0BVHTW5FY=
-X-Received: by 2002:a25:b2a2:0:b0:dd1:2dee:ea21 with SMTP id
- k34-20020a25b2a2000000b00dd12deeea21mr14589569ybj.8.1710945762460; Wed, 20
- Mar 2024 07:42:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711039030; x=1711643830;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZtzEdHMO1nsPqRyTOFCp2rzxqc4SYrWbhYHVl+Yksck=;
+        b=G5/mFx/MTXhR2kDKVJ3ChTkH/ln2FWA8upBzv2y5dWzE6gHOnHGOWCRYDSmGe9XsdG
+         qKgWV9MackzzGjVX68hSeOmPXGUtf0kZv6BcWIvZgXKe/UUxGWbectNVPLJPs7rwvu0E
+         ndOFDBcIZKGHkb6HJBc0rCr5U7MzFfnxkOGPjfl2o+JMMiyjt7xwUA4cvBNAF/x3cgpK
+         qLlHQR8CjQ/BVFeZ2AIA4ymSm5F9CC0EtI6kLFul0ufLbQrxt1N5zMGKfJFpGZEq764G
+         G/dVxEEv7z2TmSbQlf57ENzhrBjGY4G09cJrKwJyfsma2i81xf2GWQFgtMVaFHJNyKYB
+         Sutw==
+X-Forwarded-Encrypted: i=1; AJvYcCXvZk6/NMNeRq8ZHkuwPR+BCgagCe2Pu/3JOxvmZI3nFz9iHh87QK+123R/RFhQgbPlnfFCz5TtMmAiwDS69G31jLUcgh5aQQpncg==
+X-Gm-Message-State: AOJu0YwygATVhbbfnzCi96+gf/qXvTIOiQommqVQPXyIfWvBSmmRgGjB
+	3UQoyrK/Od56SFAg6Z2HxqisZldzN2cVkJ9QqxR7TMT1PY/1FpqvmyQGHIz0h/IiDAoJm2IxjaT
+	L2A==
+X-Google-Smtp-Source: AGHT+IHC69SQYVxvQ0JKFgn+XWn9kaco/tScCGiE8oHLMd2EppB6ElBhL02cnw+DSbIGpnq6CyJeTlj0IbA=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:a489:6433:be5d:e639])
+ (user=surenb job=sendgmr) by 2002:a05:6902:11cc:b0:dd9:2789:17fb with SMTP id
+ n12-20020a05690211cc00b00dd9278917fbmr720533ybu.3.1711039030449; Thu, 21 Mar
+ 2024 09:37:10 -0700 (PDT)
+Date: Thu, 21 Mar 2024 09:36:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240314090540.14091-1-maimon.sagi@gmail.com> <87a5n1m5j1.ffs@tglx>
- <CAMuE1bH_H9E+Zx365G9AtmWSmhW-kPPB+-=8s2rH4hpxqE+dHQ@mail.gmail.com> <874jd8n0ta.ffs@tglx>
-In-Reply-To: <874jd8n0ta.ffs@tglx>
-From: Sagi Maimon <maimon.sagi@gmail.com>
-Date: Wed, 20 Mar 2024 16:42:31 +0200
-Message-ID: <CAMuE1bHBky9NGP22PVHKdi2+WniwxiLSmMnwRM6wm36sU8W4jA@mail.gmail.com>
-Subject: Re: [PATCH v7] posix-timers: add clock_compare system call
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: richardcochran@gmail.com, luto@kernel.org, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de, 
-	geert@linux-m68k.org, peterz@infradead.org, hannes@cmpxchg.org, 
-	sohil.mehta@intel.com, rick.p.edgecombe@intel.com, nphamcs@gmail.com, 
-	palmer@sifive.com, keescook@chromium.org, legion@kernel.org, 
-	mark.rutland@arm.com, mszeredi@redhat.com, casey@schaufler-ca.com, 
-	reibax@gmail.com, davem@davemloft.net, brauner@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
+Message-ID: <20240321163705.3067592-1-surenb@google.com>
+Subject: [PATCH v6 00/37] Memory allocation profiling
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	surenb@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 14, 2024 at 8:08=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
-> wrote:
->
-> Sagi!
->
-> On Thu, Mar 14 2024 at 14:19, Sagi Maimon wrote:
-> > On Thu, Mar 14, 2024 at 1:12=E2=80=AFPM Thomas Gleixner <tglx@linutroni=
-x.de> wrote:
-> >> On Thu, Mar 14 2024 at 11:05, Sagi Maimon wrote:
-> >> > Some user space applications need to read a couple of different cloc=
-ks.
-> >> > Each read requires moving from user space to kernel space.
-> >> > Reading each clock separately (syscall) introduces extra
-> >> > unpredictable/unmeasurable delay. Minimizing this delay contributes =
-to user
-> >> > space actions on these clocks (e.g. synchronization etc).
-> >>
-> >> I asked for a proper description of the actual problem several times n=
-ow
-> >> and you still provide some handwaving blurb. Feel free to ignore me, b=
-ut
-> >> then please don't be surprised if I ignore you too.
-> >>
-> > Nobody is ignoring your notes, and I address any notes given by any
-> > maintainer in the most serious way.
-> > As far as explaining the actual problem this is the best that I can,
-> > but let me try to explain better:
-> > We did many tests with different CPU loading and compared sampling the
-> > same clock twice,
-> > once in user space and once by using the system call.
-> > We have noticed an improvement up to hundreds of nanoseconds while
-> > using the system call.
-> > Those results improved our ability to sync different PHCs
->
-> So let me express how I understand the problem - as far as I decoded it
-> from your writeups:
->
->   Synchronizing two PHCs requires to read timestamps from both and
->   correlate them. Currently this requires several seperate system calls.
->   This is subject to unmeasurable delays due to system call overhead,
->   preemption and interrupts which makes the correlation imprecise.
->
->   Therefore you want a system call, which samples two clocks at once, to
->   make the correlation more precise.
->
-> Right? For the further comments I assume this is what you are trying to
-> say and to solve
-You are right.
->
-> So far so good, except that I do not agree with that reasoning at all:
->
->    1. The delays are measurable and as precise as the cross time stamp
->       mechanism (hardware or software based) allows.
->
+Overview:
+Low overhead [1] per-callsite memory allocation profiling. Not just for
+debug kernels, overhead low enough to be deployed in production.
 
-Most of the PHCs do not support crosstime stamps.
+Example output:
+  root@moria-kvm:~# sort -rn /proc/allocinfo
+   127664128    31168 mm/page_ext.c:270 func:alloc_page_ext
+    56373248     4737 mm/slub.c:2259 func:alloc_slab_page
+    14880768     3633 mm/readahead.c:247 func:page_cache_ra_unbounded
+    14417920     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
+    13377536      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
+    11718656     2861 mm/filemap.c:1919 func:__filemap_get_folio
+     9192960     2800 kernel/fork.c:307 func:alloc_thread_stack_node
+     4206592        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
+     4136960     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
+     3940352      962 mm/memory.c:4214 func:alloc_anon_folio
+     2894464    22613 fs/kernfs/dir.c:615 func:__kernfs_new_node
+     ...
 
->    2. The system call overhead is completely irrelevant.
->
+Since v5 [2]:
+- Added Reviewed-by and Acked-by, per Vlastimil Babka and Miguel Ojeda
+- Changed pgalloc_tag_{add|sub} to use number of pages instead of order, per Matthew Wilcox
+- Changed pgalloc_tag_sub_bytes to pgalloc_tag_sub_pages and adjusted the usage, per Matthew Wilcox
+- Moved static key check before prepare_slab_obj_exts_hook(), per Vlastimil Babka
+- Fixed RUST helper, per Miguel Ojeda
+- Fixed documentation, per Randy Dunlap
+- Rebased over mm-unstable
 
-You are right in case of long preemption, but in other cases it is relevant=
-.
+Usage:
+kconfig options:
+ - CONFIG_MEM_ALLOC_PROFILING
+ - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
+ - CONFIG_MEM_ALLOC_PROFILING_DEBUG
+   adds warnings for allocations that weren't accounted because of a
+   missing annotation
 
->    3. The time deltas between the sample points are irrelevant within a
->       reasonable upper bound to the time delta between the two outer
->       sample points.
->
+sysctl:
+  /proc/sys/vm/mem_profiling
 
-See below
+Runtime info:
+  /proc/allocinfo
 
->    4. The alledged higher precision is based on a guesstimate and not on
->       correctness. Just because it behaves slightly better in testing
->       does not make it any more correct.
->
+Notes:
 
-See below
+[1]: Overhead
+To measure the overhead we are comparing the following configurations:
+(1) Baseline with CONFIG_MEMCG_KMEM=n
+(2) Disabled by default (CONFIG_MEM_ALLOC_PROFILING=y &&
+    CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=n)
+(3) Enabled by default (CONFIG_MEM_ALLOC_PROFILING=y &&
+    CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=y)
+(4) Enabled at runtime (CONFIG_MEM_ALLOC_PROFILING=y &&
+    CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=n && /proc/sys/vm/mem_profiling=1)
+(5) Baseline with CONFIG_MEMCG_KMEM=y && allocating with __GFP_ACCOUNT
+(6) Disabled by default (CONFIG_MEM_ALLOC_PROFILING=y &&
+    CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=n)  && CONFIG_MEMCG_KMEM=y
+(7) Enabled by default (CONFIG_MEM_ALLOC_PROFILING=y &&
+    CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT=y) && CONFIG_MEMCG_KMEM=y
 
->    5. The problem can be solved with maximal possible accuracy by using
->       the existing PTP IOCTLs.
->
-> See below.
->
-> >> Also why does reading two random clocks make any sense at all? Your co=
-de
-> >> allows to read CLOCK_TAI and CLOCK_THREAD_CPUTIME_ID. What for?
-> >>
-> > Initially we needed to sync some different PHCs for our user space
-> > application, that is why we came with this idea.
-> > The first idea was an IOCTL that returned samples of several PHCs for
-> > the need of synchronization.
-> > Richard Cochran suggested a system call instead, which will add the
-> > ability to get various system clocks, while this
-> > implementation is more complex then IOCTL, I think that he was right,
-> > for future usage.
->
-> Which future usage? We are not introducing swiss army knife interfaces
-> just because there might be an illusional use case somewhere in the
-> unspecified future.
->
-> Adding a system call needs a proper design and justification. Handwaving
-> future usage is not enough.
->
-> Documentation/process/adding-syscalls.rst is very clear about what is
-> required for a new system call.
->
-> >> This needs to be split up into:
-> >>
-> >>      1) Infrastructure in posix-timers.c
-> >>      2) Wire up the syscall in x86
-> >>      3) Infrastructure in posix-clock.c
-> >>      4) Usage in ptp_clock.c
-> >>
-> >> and not as a big lump of everything.
-> >>
-> > I know, but I think the benefit worth it
->
-> It's worth it because it makes review easier. It's well documented in
-> the process documentation that patches should do one thing and not a
-> whole lump of changes.
->
+Performance overhead:
+To evaluate performance we implemented an in-kernel test executing
+multiple get_free_page/free_page and kmalloc/kfree calls with allocation
+sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
+affinity set to a specific CPU to minimize the noise. Below are results
+from running the test on Ubuntu 22.04.2 LTS with 6.8.0-rc1 kernel on
+56 core Intel Xeon:
 
-No problem it will be split into two different patches.
+                        kmalloc                 pgalloc
+(1 baseline)            6.764s                  16.902s
+(2 default disabled)    6.793s  (+0.43%)        17.007s (+0.62%)
+(3 default enabled)     7.197s  (+6.40%)        23.666s (+40.02%)
+(4 runtime enabled)     7.405s  (+9.48%)        23.901s (+41.41%)
+(5 memcg)               13.388s (+97.94%)       48.460s (+186.71%)
+(6 def disabled+memcg)  13.332s (+97.10%)       48.105s (+184.61%)
+(7 def enabled+memcg)   13.446s (+98.78%)       54.963s (+225.18%)
 
-> >> > +             if (!error) {
-> >> > +                     if (clock_b =3D=3D CLOCK_MONOTONIC_RAW) {
-> >> > +                             ts_b =3D ktime_to_timespec64(xtstamp_a=
-1.sys_monoraw);
-> >> > +                             ts_a1 =3D ktime_to_timespec64(xtstamp_=
-a1.device);
-> >> > +                             goto out;
-> >> > +                     } else if (clock_b =3D=3D CLOCK_REALTIME) {
-> >> > +                             ts_b =3D ktime_to_timespec64(xtstamp_a=
-1.sys_realtime);
-> >> > +                             ts_a1 =3D ktime_to_timespec64(xtstamp_=
-a1.device);
-> >> > +                             goto out;
-> >> > +                     } else {
-> >> > +                             crosstime_support_a =3D true;
-> >>
-> >> Right. If clock_b is anything else than CLOCK_MONOTONIC_RAW or
-> >> CLOCK_REALTIME then this is true.
-> >>
-> >> > +                     }
-> >> > +             }
-> >>
-> >> So in case of an error, this just keeps going with an uninitialized
-> >> xtstamp_a1 and if the clock_b part succeeds it continues and operates =
-on
-> >> garbage.
-> >>
-> > On error  xtstamp_a1 will be taken again using clock_get_crosstimespec
-> > so no one will be operating on garbage.
->
-> It will not, because crosstime_support_a =3D=3D false. It will therefore
-> fall back to kc_a->clock_get_timespec(), no?
->
-> Sorry, I misread the code vs. using the uninitialized value, but this is
-> just unneccesary hard to follow.
->
-> >> > +     if (crosstime_support_a)
-> >> > +             error =3D kc_a->clock_get_crosstimespec(clock_a, &xtst=
-amp_a2);
-> >> > +     else
-> >> > +             error =3D kc_a->clock_get_timespec(clock_a, &ts_a2);
-> >> > +
-> >> > +     if (error)
-> >> > +             return error;
-> >>
-> >> The logic and the code flow here are unreadable garbage and there are
-> >> zero comments what this is supposed to do.
-> >>
-> > I will add comments.
-> > please no need to use negative words like "garbage" (not the first time=
-),
-> > please keep it professional and civilized.
->
-> Let me rephrase:
->
-> The code and the logic is incomprehensible unless I waste an unjustified
-> amount of time to decode it. Sorry, I don't have that time.
->
-> >> > +     if (crosstime_support_a) {
-> >> > +             ktime_a =3D ktime_sub(xtstamp_a2.device, xtstamp_a1.de=
-vice);
-> >> > +             ts_offs_err =3D ktime_divns(ktime_a, 2);
-> >> > +             ktime_a =3D ktime_add_ns(xtstamp_a1.device, (u64)ts_of=
-fs_err);
-> >> > +             ts_a1 =3D ktime_to_timespec64(ktime_a);
-> >>
-> >> This is just wrong.
-> >>
-> >>      read(a1);
-> >>      read(b);
-> >>      read(a2);
-> >>
-> >> You _CANNOT_ assume that (a1 + ((a2 - a1) / 2) is anywhere close to th=
-e
-> >> point in time where 'b' is read. This code is preemtible and
-> >> interruptible. I explained this to you before.
-> >>
-> >> Your explanation in the comment above the function is just wishful
-> >> thinking.
-> >>
-> > you explained it before, but still it is better then two consecutive
-> > user space calls which are also preemptible
-> > and the userspace to kernel context switch time is added.
->
-> It might be marginally better, but it is still just _pretending_ that it
-> does the right thing, is correct and better than the existing IOCTLs.
->
-> If your user space implementation has the same algorithm, then I'm
-> absolutely not surprised that the results are not useful. Why?
->
-> You simply cannot use the midpoint of the outer samples if you want to
-> have precise results if there is no guarantee that b was sampled exactly
-> in the midpoint of a1 and a2. A hardware implementation might give that
-> guarantee, but the kernel cannot.
->
-> But why using the midpoint in the first place?
->
-> There is absolutely no reason to do so because the sampling points a1, b
-> and a2 can be precisely determined with the precision of the cross time
-> stamp mechanism, which is best with a hardware based cross time stamp
-> obviously.
->
-> The whole point of ptp::info::getcrosststamp() is to get properly
-> correlated clock samples of
->
->       1) PHC clock
->       2) CLOCK_MONOTONIC_RAW
->       3) CLOCK_REALTIME
->
-> So if you take 3 samples:
->
->    get_cross_timestamp(a1);
->    get_cross_timestamp(b);
->    get_cross_timestamp(a2);
->
-> then each of them provides:
->
->     - device time
->     - correlated CLOCK_MONOTONIC_RAW
->     - correlated CLOCK_REALTIME
->
-> Ergo the obvious thing to do is:
->
->     d1 =3D b.sys_monoraw - a1.sys_monoraw;
->     d2 =3D a2.sys_monoraw - a1.sys_monoraw;
->
->     tsa =3D a1.device + ((a2.device - a1.device) * d1) / d2;
->
-> Which is maximaly precise under the assumption that in the time between
-> the sample points a1 and a2 neither the system clock nor the PCH clocks
-> are changing their frequency significantly. That is a valid assumption
-> when you put a reasonable upper bound on d2.
->
+Memory overhead:
+Kernel size:
 
-You are right.
-In fact, we are running this calculation on a user space application.
-We use the new system call to get pairs of mono and PHC and then run
-that calculation in user space.
-That is why the system call returns pairs of clock samples and not the
-diff between them.
+   text           data        bss         dec         diff
+(1) 26515311	      18890222    17018880    62424413
+(2) 26524728	      19423818    16740352    62688898    264485
+(3) 26524724	      19423818    16740352    62688894    264481
+(4) 26524728	      19423818    16740352    62688898    264485
+(5) 26541782	      18964374    16957440    62463596    39183
 
-> Even when the device does not implement getcrosststamp() then loop based
-> sampling like it is implemented in the PTP_SYS_OFFSET[_EXTENDED] IOTCLs
-> is providing reasonably accurate results to the extent possible.
->
-> Your algorithm is imprecise by definition and you can apply as much
-> testing as you want, it won't become magically correct. It's still a
-> guesstimate, i.e. an estimate made without using adequate or complete
-> information.
->
-> Now why a new syscall?
->
-> This can be done from user space with existing interfaces and the very
-> same precision today:
->
->      ioctl(fda, PTP_SYS_OFFSET*, &a1);
->      ioctl(fdb, PTP_SYS_OFFSET*, &b);
->      ioctl(fda, PTP_SYS_OFFSET*, &a2);
->
->      u64 d1 =3D timespec_delta_ns(b.sys_monoraw, a1.sys_monoraw);
->      u64 d2 =3D timespec_delta_ns(a2.sys_monoraw, a1.sys_monoraw);
->      u64 td =3D (timespec_delta_ns(a2.device, a1.device) * d1) / d2
->
->      tsa =3D timespec_add_ns(a1.device, td);
->      tsb =3D b.device;
->
-> with the extra benefit of:
->
->      1) The correct CLOCK_REALTIME at that sample point,
->         i.e. b.sys_realtime
->
->      2) The correct CLOCK_MONOTONIC_RAW at that sample point,
->         i.e. b.sys_monoraw
->
-If PTP_SYS_OFFSET IOCTL returns sys_monoraw, then you are right, but
-unfortunately the only IOCTL that returns sys_monoraw is
-PTP_SYS_OFFSET_PRECISE (getcrosststamp)
-And most of the drivers does not support it.
+Memory consumption on a 56 core Intel CPU with 125GB of memory:
+Code tags:           192 kB
+PageExts:         262144 kB (256MB)
+SlabExts:           9876 kB (9.6MB)
+PcpuExts:            512 kB (0.5MB)
 
-> It works with PTP_SYS_OFFSET_PRECISE and PTP_SYS_OFFSET[_EXTENDED], with
-> the obvious limitations of PTP_SYS_OFFSET[_EXTENDED], which are still
-> vastly superior to your proposed (a2 - a1) / 2 guestimate which is just
-> reading the PCH clocks with clock_get_timespec().
->
-It only works with PTP_SYS_OFFSET_PRECISE (which most of the NIC
-drivers does not support and I take it under consideration in my
-system call),
-PTP_SYS_OFFSET_EXTENDED ioctl returns system time before, PHC, system
-time after , and no monotic raw.
+Total overhead is 0.2% of total memory.
 
-> It is completely independent of the load, the syscall overhead and the
-> actual time delta between the sample points when you apply a reasonable
-> upper bound for d2, i.e. the time delta between the sample points a1 and
-> a2 to eliminate the issue that system clock and/or the PCH clocks change
-> their frequency significantly during that time. You'd need to do that in
-> the kernel too.
->
-> The actual frequency difference between PCH A and system clock is
-> completely irrelevant when the frequencies of both are stable accross
-> the sample period.
->
-> You might still argue that the time delta between the sample points a1
-> and a2 matters and is slightly shorter in the kernel, but that is a
-> non-argument because:
->
->   1) The kernel implementation does not guarantee atomicity of the
->      consecutive samples either. The time delta is just statistically
->      better, which is obviously useless when you want to make
->      guarantees.
->
->   2) It does not matter when the time delta is slightly larger because
->      you need a large frequency change of the involved clocks in the
->      sample interval between the sample points a1 and a2 to make an
->      actual difference in the resulting accuracy.
->
->      A typical temperature drift of a high quality cyrstal is less than
->      1ppm per degree Celsius and even if you assume that the overall
->      system drift is 10ppm per degree Celsius then still the actual
->      error for a bound time delta between the sample points a1 and a2 is
->      just somewhere in the irrelevant noise, unless you manage to blow
->      torch or ice spray your crystals during the sample interval.
->
->      If your clocks are not stable enough then nothing can cure it and
->      you cannot do high precision timekeeping with them.
->
+Benchmarks:
 
-You are right in case of long preemption (which still the system call
-is better), but in other cases it is relevant.
+Hackbench tests run 100 times:
+hackbench -s 512 -l 200 -g 15 -f 25 -P
+      baseline       disabled profiling           enabled profiling
+avg   0.3543         0.3559 (+0.0016)             0.3566 (+0.0023)
+stdev 0.0137         0.0188                       0.0077
 
-> So what is your new syscall solving that can't be done with the existing
-> IOCTLs other than providing worse precision results based on
-> guesstimates and some handwavy future use for random clock ids?
->
-> Nothing as far as I can tell, but I might be missing something important
-> here.
->
-Few points to consider:
-1) Most of the PHCs do not support cross time stamping.
-2) Users can implement your suggested code in user space while using
-the new system call to get pairs of mono and PHC
-     . This is what we did already in user space.
-3) User with less tight requirement will benefit high accuracy with
-the new system call
 
-> Thanks,
->
->         tglx
-> ---
-> arch/x86/kernel/tsc.c:119: "Math is hard, let's go shopping." - John Stul=
-tz
+hackbench -l 10000
+      baseline       disabled profiling           enabled profiling
+avg   6.4218         6.4306 (+0.0088)             6.5077 (+0.0859)
+stdev 0.0933         0.0286                       0.0489
+
+stress-ng tests:
+stress-ng --class memory --seq 4 -t 60
+stress-ng --class cpu --seq 4 -t 60
+Results posted at: https://evilpiepirate.org/~kent/memalloc_prof_v4_stress-ng/
+
+[2] https://lore.kernel.org/all/20240306182440.2003814-1-surenb@google.com/
+
+Kent Overstreet (13):
+  fix missing vmalloc.h includes
+  asm-generic/io.h: Kill vmalloc.h dependency
+  mm/slub: Mark slab_free_freelist_hook() __always_inline
+  scripts/kallysms: Always include __start and __stop symbols
+  fs: Convert alloc_inode_sb() to a macro
+  rust: Add a rust helper for krealloc()
+  mempool: Hook up to memory allocation profiling
+  mm: percpu: Introduce pcpuobj_ext
+  mm: percpu: Add codetag reference into pcpuobj_ext
+  mm: vmalloc: Enable memory allocation profiling
+  rhashtable: Plumb through alloc tag
+  MAINTAINERS: Add entries for code tagging and memory allocation
+    profiling
+  memprofiling: Documentation
+
+Suren Baghdasaryan (24):
+  mm: introduce slabobj_ext to support slab object extensions
+  mm: introduce __GFP_NO_OBJ_EXT flag to selectively prevent slabobj_ext
+    creation
+  mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
+  slab: objext: introduce objext_flags as extension to
+    page_memcg_data_flags
+  lib: code tagging framework
+  lib: code tagging module support
+  lib: prevent module unloading if memory is not freed
+  lib: add allocation tagging support for memory allocation profiling
+  lib: introduce support for page allocation tagging
+  lib: introduce early boot parameter to avoid page_ext memory overhead
+  mm: percpu: increase PERCPU_MODULE_RESERVE to accommodate allocation
+    tags
+  change alloc_pages name in dma_map_ops to avoid name conflicts
+  mm: enable page allocation tagging
+  mm: create new codetag references during page splitting
+  mm: fix non-compound multi-order memory accounting in __free_pages
+  mm/page_ext: enable early_page_ext when
+    CONFIG_MEM_ALLOC_PROFILING_DEBUG=y
+  lib: add codetag reference into slabobj_ext
+  mm/slab: add allocation accounting into slab allocation and free paths
+  mm/slab: enable slab allocation tagging for kmalloc and friends
+  mm: percpu: enable per-cpu allocation tagging
+  lib: add memory allocations report in show_mem()
+  codetag: debug: skip objext checking when it's for objext itself
+  codetag: debug: mark codetags for reserved pages as empty
+  codetag: debug: introduce OBJEXTS_ALLOC_FAIL to mark failed slab_ext
+    allocations
+
+ Documentation/admin-guide/sysctl/vm.rst       |  16 +
+ Documentation/filesystems/proc.rst            |  29 ++
+ Documentation/mm/allocation-profiling.rst     | 100 ++++++
+ Documentation/mm/index.rst                    |   1 +
+ MAINTAINERS                                   |  17 +
+ arch/alpha/kernel/pci_iommu.c                 |   2 +-
+ arch/alpha/lib/checksum.c                     |   1 +
+ arch/alpha/lib/fpreg.c                        |   1 +
+ arch/alpha/lib/memcpy.c                       |   1 +
+ arch/arm/kernel/irq.c                         |   1 +
+ arch/arm/kernel/traps.c                       |   1 +
+ arch/arm64/kernel/efi.c                       |   1 +
+ arch/loongarch/include/asm/kfence.h           |   1 +
+ arch/mips/jazz/jazzdma.c                      |   2 +-
+ arch/powerpc/kernel/dma-iommu.c               |   2 +-
+ arch/powerpc/kernel/iommu.c                   |   1 +
+ arch/powerpc/mm/mem.c                         |   1 +
+ arch/powerpc/platforms/ps3/system-bus.c       |   4 +-
+ arch/powerpc/platforms/pseries/vio.c          |   2 +-
+ arch/riscv/kernel/elf_kexec.c                 |   1 +
+ arch/riscv/kernel/probes/kprobes.c            |   1 +
+ arch/s390/kernel/cert_store.c                 |   1 +
+ arch/s390/kernel/ipl.c                        |   1 +
+ arch/x86/include/asm/io.h                     |   1 +
+ arch/x86/kernel/amd_gart_64.c                 |   2 +-
+ arch/x86/kernel/cpu/sgx/main.c                |   1 +
+ arch/x86/kernel/irq_64.c                      |   1 +
+ arch/x86/mm/fault.c                           |   1 +
+ drivers/accel/ivpu/ivpu_mmu_context.c         |   1 +
+ drivers/gpu/drm/gma500/mmu.c                  |   1 +
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |   1 +
+ .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   1 +
+ drivers/gpu/drm/i915/gt/shmem_utils.c         |   1 +
+ drivers/gpu/drm/i915/gvt/firmware.c           |   1 +
+ drivers/gpu/drm/i915/gvt/gtt.c                |   1 +
+ drivers/gpu/drm/i915/gvt/handlers.c           |   1 +
+ drivers/gpu/drm/i915/gvt/mmio.c               |   1 +
+ drivers/gpu/drm/i915/gvt/vgpu.c               |   1 +
+ drivers/gpu/drm/i915/intel_gvt.c              |   1 +
+ drivers/gpu/drm/imagination/pvr_vm_mips.c     |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   1 +
+ drivers/gpu/drm/omapdrm/omap_gem.c            |   1 +
+ drivers/gpu/drm/v3d/v3d_bo.c                  |   1 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_binding.c       |   1 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c           |   1 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_devcaps.c       |   1 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_drv.c           |   1 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c       |   1 +
+ drivers/gpu/drm/vmwgfx/vmwgfx_ioctl.c         |   1 +
+ drivers/gpu/drm/xen/xen_drm_front_gem.c       |   1 +
+ drivers/hwtracing/coresight/coresight-trbe.c  |   1 +
+ drivers/iommu/dma-iommu.c                     |   2 +-
+ .../marvell/octeon_ep/octep_pfvf_mbox.c       |   1 +
+ .../marvell/octeon_ep_vf/octep_vf_mbox.c      |   1 +
+ .../net/ethernet/microsoft/mana/hw_channel.c  |   1 +
+ drivers/parisc/ccio-dma.c                     |   2 +-
+ drivers/parisc/sba_iommu.c                    |   2 +-
+ drivers/platform/x86/uv_sysfs.c               |   1 +
+ drivers/scsi/mpi3mr/mpi3mr_transport.c        |   2 +
+ drivers/staging/media/atomisp/pci/hmm/hmm.c   |   2 +-
+ drivers/vfio/pci/pds/dirty.c                  |   1 +
+ drivers/virt/acrn/mm.c                        |   1 +
+ drivers/virtio/virtio_mem.c                   |   1 +
+ drivers/xen/grant-dma-ops.c                   |   2 +-
+ drivers/xen/swiotlb-xen.c                     |   2 +-
+ include/asm-generic/codetag.lds.h             |  14 +
+ include/asm-generic/io.h                      |   1 -
+ include/asm-generic/vmlinux.lds.h             |   3 +
+ include/linux/alloc_tag.h                     | 205 +++++++++++
+ include/linux/codetag.h                       |  81 +++++
+ include/linux/dma-map-ops.h                   |   2 +-
+ include/linux/fortify-string.h                |   5 +-
+ include/linux/fs.h                            |   6 +-
+ include/linux/gfp.h                           | 126 ++++---
+ include/linux/gfp_types.h                     |  11 +
+ include/linux/memcontrol.h                    |  56 ++-
+ include/linux/mempool.h                       |  73 ++--
+ include/linux/mm.h                            |   9 +
+ include/linux/mm_types.h                      |   4 +-
+ include/linux/page_ext.h                      |   1 -
+ include/linux/pagemap.h                       |   9 +-
+ include/linux/pds/pds_common.h                |   2 +
+ include/linux/percpu.h                        |  27 +-
+ include/linux/pgalloc_tag.h                   | 134 +++++++
+ include/linux/rhashtable-types.h              |  11 +-
+ include/linux/sched.h                         |  24 ++
+ include/linux/slab.h                          | 179 +++++-----
+ include/linux/string.h                        |   4 +-
+ include/linux/vmalloc.h                       |  60 +++-
+ include/rdma/rdmavt_qp.h                      |   1 +
+ init/Kconfig                                  |   4 +
+ kernel/dma/mapping.c                          |   4 +-
+ kernel/kallsyms_selftest.c                    |   2 +-
+ kernel/module/main.c                          |  29 +-
+ lib/Kconfig.debug                             |  31 ++
+ lib/Makefile                                  |   3 +
+ lib/alloc_tag.c                               | 243 +++++++++++++
+ lib/codetag.c                                 | 283 +++++++++++++++
+ lib/rhashtable.c                              |  28 +-
+ mm/compaction.c                               |   7 +-
+ mm/debug_vm_pgtable.c                         |   1 +
+ mm/filemap.c                                  |   6 +-
+ mm/huge_memory.c                              |   2 +
+ mm/kfence/core.c                              |  14 +-
+ mm/kfence/kfence.h                            |   4 +-
+ mm/memcontrol.c                               |  56 +--
+ mm/mempolicy.c                                |  52 +--
+ mm/mempool.c                                  |  36 +-
+ mm/mm_init.c                                  |  13 +-
+ mm/nommu.c                                    |  64 ++--
+ mm/page_alloc.c                               |  71 ++--
+ mm/page_ext.c                                 |  13 +
+ mm/page_owner.c                               |   2 +-
+ mm/percpu-internal.h                          |  26 +-
+ mm/percpu.c                                   | 120 +++----
+ mm/show_mem.c                                 |  26 ++
+ mm/slab.h                                     |  51 ++-
+ mm/slab_common.c                              |   6 +-
+ mm/slub.c                                     | 327 +++++++++++++++---
+ mm/util.c                                     |  44 +--
+ mm/vmalloc.c                                  |  88 ++---
+ rust/helpers.c                                |   8 +
+ scripts/kallsyms.c                            |  13 +
+ scripts/module.lds.S                          |   7 +
+ sound/pci/hda/cs35l41_hda.c                   |   1 +
+ 125 files changed, 2319 insertions(+), 652 deletions(-)
+ create mode 100644 Documentation/mm/allocation-profiling.rst
+ create mode 100644 include/asm-generic/codetag.lds.h
+ create mode 100644 include/linux/alloc_tag.h
+ create mode 100644 include/linux/codetag.h
+ create mode 100644 include/linux/pgalloc_tag.h
+ create mode 100644 lib/alloc_tag.c
+ create mode 100644 lib/codetag.c
+
+
+base-commit: a824831a082f1d8f9b51a4c0598e633d38555fcf
+-- 
+2.44.0.291.gc1ea87d7ee-goog
+
 
