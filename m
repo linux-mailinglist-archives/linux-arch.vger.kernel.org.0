@@ -1,186 +1,167 @@
-Return-Path: <linux-arch+bounces-3105-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3106-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92C94886DE5
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Mar 2024 14:56:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35E2A887200
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Mar 2024 18:41:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA4121F21F5E
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Mar 2024 13:56:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDAC0284C17
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Mar 2024 17:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D400345BFC;
-	Fri, 22 Mar 2024 13:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0C5C60258;
+	Fri, 22 Mar 2024 17:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NuAiMh/M"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F5320DDB;
-	Fri, 22 Mar 2024 13:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0125FDA3
+	for <linux-arch@vger.kernel.org>; Fri, 22 Mar 2024 17:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711115797; cv=none; b=VZ7HfOtrfpZZyExDsV5u8dIBAs7RAixa1kdSqOesGUbTD8FWY1mM9KOtlettH9nX5VIJZa6DfmWirhpHXAq6Xggorude4tJOiRo4mPBMZevPK5+wb5bSQXzy9kIAsTUzMykFuCp0PkpipYbpUu37xk2J17W59zCHwdwaOPNCTkw=
+	t=1711129243; cv=none; b=KaM0bYtmD0sjOp4vjLh9UQp1s0dk+0/9qaAMBkLoojCCKdCGtPPh3Uf3UH0Tn4IQOwaZUdbwIIJY1WNJtE8GGRc3xK9RseT5xBIs9DxzYNXbyg0W17956GCZFLqUqIJC/z7QLcJQyRpGNbF+ni04Pv7nAUObE3zX5K0/U4MlLkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711115797; c=relaxed/simple;
-	bh=Ejq6XsWxRwejHf2Ip37awA8RsMAYWh0XyVNSy+WBD60=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d9r9kDgka+I5AilzmCrBel/cheQJgMDHlHbi2xSeC2G/h7+R79g3ZfcGR8nO6VzjqKJWAUyMV2DU9AbmhvACtO+TMU4i9Mj9y/YUwIeZ5d7LkP1wDfhXJsnT3aa8B/jhbDujSq+GN/kKnfPwiRdoQHrRpRRhTtqGJu6RytlI6+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC550C433C7;
-	Fri, 22 Mar 2024 13:56:34 +0000 (UTC)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guo Ren <guoren@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.9
-Date: Fri, 22 Mar 2024 21:56:19 +0800
-Message-ID: <20240322135619.1423490-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1711129243; c=relaxed/simple;
+	bh=7T0QYgj6Z0QWJ7WZghtr6Q0zZ77ROAwtyZEJQAtnJrY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A8FI7NXMr68e7sdpmDWAJjuCRtjZsOMfTE0XEMO4dxd9CCgsQ82NGEYJ/s+HsMqTIwr088rcABgZDsipBdcJFM+TtnDvhQpfEFVe10PMIth0+RdkXPs8Zt/h/Abfd8HwVanliuTqm1eRlajeoyPkSApL1xgCO+cGxGaKKJSypbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NuAiMh/M; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a468004667aso340700966b.2
+        for <linux-arch@vger.kernel.org>; Fri, 22 Mar 2024 10:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711129239; x=1711734039; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7YM4J2ObtCNq8IqrJeUkrlLZCafy3cmXh0Ri66R+dm4=;
+        b=NuAiMh/MosGpuJph6/CXhnqgtnF7qTB4wgozIjMxlP7xwIMTBUkxGp7jiLeBJeNUA8
+         uf3RbWvwApbMZFE+1zAiSE/rUFH1AmO4Inn/LeR4eLLIyJhCb6kAZF5e/IqWygoVbAS0
+         YNddRISS5xPN/6moDsAN0RJLCFP7BYfwoyTBXRz81dPr4VwAGpuAx4kKX1ddy3i+i8J0
+         GW8CtvhZyNMxHOAbds+zU9+r9Ux6hPYEAFI7Xi+I0b4x9bRWTLPNpPCI2wo9BHwHpm54
+         90xv2NndkuSs6tCPxxNLMeQMMbA9UkVREUUY00h8sSJNFZUydz03W+30nass1/Zv6OwQ
+         wtCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711129239; x=1711734039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7YM4J2ObtCNq8IqrJeUkrlLZCafy3cmXh0Ri66R+dm4=;
+        b=q1eK91ls2qlSI64WEFXUD6wrUbVtF3IriDZubDdx4SEG3ed3WWgn0dQjRaDX0SCLF/
+         FTo+3z09xwt8QdnxImRqzQb4hP3JOCXbnmK7Cq4BDfHinKxwJ/6AahgY4XTF48dfqKzC
+         5hfG5DFVA06BI01A6+y+Ik0xBBJvHDMd7sK2+ElrOCYMzXBldkvtzL4B1BxzW89GSEDR
+         qia2vbB4If5hPXbbJJncJsvSU+JsXWX7Mfh2+h7D3jd7Xf9BB9DiUwLHfTDPXriF4gCW
+         /FDnGfE3cz6cv9MPi+sc5HpE94y7y8SRZmOEU0m8/O6D718mskn7Ft62j1iyk1HnxPWg
+         MNKg==
+X-Forwarded-Encrypted: i=1; AJvYcCVoeg+r/zqyzYleUxxer9wOL4Ds/IoyQDdmw+GWRMYcplYxAH1gJ6+JSfdACEYuTBDw1Dbia76U72mKtnagp6TPmTxJclYPbHr5NQ==
+X-Gm-Message-State: AOJu0YzuUv7LBcyutnbFdJiEjqt0+SEsHOEAWoyyu+zv8n3H1BrnLEuc
+	Y7lRydrYzoazSJbsf6Bd5caW8Y619WwOElI8v9+aNtDTzyI4e6saxgdarD76NRfY05V+U+loWlB
+	Ns+s2tL2yLLkaAmxitOtspL1zlmq7/h5wfLsR
+X-Google-Smtp-Source: AGHT+IH25NX6qQBoFnVnA4psBCYCRYBaiXOTPUtbfU8ggcYNeDelzQNuP6wH36Jj0kmkf8kYIMZ+vwfa54Dm4tCqR3s=
+X-Received: by 2002:a17:906:c2d4:b0:a46:befa:f0b0 with SMTP id
+ ch20-20020a170906c2d400b00a46befaf0b0mr293662ejb.45.1711129238808; Fri, 22
+ Mar 2024 10:40:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
+ <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk> <ZfjMopBl27-7asBc@infradead.org>
+In-Reply-To: <ZfjMopBl27-7asBc@infradead.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 22 Mar 2024 10:40:26 -0700
+Message-ID: <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>
+Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit e8f897f4afef0031fe618a8e94127a0934896aba:
+Hi Christoph,
 
-  Linux 6.8 (2024-03-10 13:38:09 -0700)
+Sorry for the late reply, I've been out for a few days.
 
-are available in the Git repository at:
+On Mon, Mar 18, 2024 at 4:22=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
+g> wrote:
+>
+> On Sun, Mar 17, 2024 at 07:49:43PM -0700, David Wei wrote:
+> > I'm working on a similar proposal for zero copy Rx but to host memory
+> > and depend on this memory provider API.
+>
+> How do you need a different provider for that vs just udmabuf?
+>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.9
+This was discussed on the io_uring ZC RFC in one of the earliest RFCs.
+Here is a link to Pavel's response:
 
-for you to fetch changes up to fea1c949f6ca5059e12de00d0483645debc5b206:
+https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
+-6-almasrymina@google.com/#25589471
 
-  LoongArch/crypto: Clean up useless assignment operations (2024-03-19 15:50:34 +0800)
+The UAPI of wrapping io_uring memory into a udmabuf just to use it
+with devmem TCP only for the user to have to unwrap it is undesirable
+to him.
 
-----------------------------------------------------------------
-LoongArch changes for v6.9
+> > Jakub also designed this API for hugepages too IIRC. Basically there's
+> > going to be at least three fancy ways of providing pages (one of which
+> > isn't actually pages, hence the merged netmem_t series) to drivers.
+>
+> How do hugepages different from a normal page allocation?  They should
+> just a different ordered passed to the page allocator.
+>
 
-1, Add objtool support for LoongArch;
-2, Add ORC stack unwinder support for LoongArch;
-3, Add kernel livepatching support for LoongArch;
-4, Select ARCH_HAS_CURRENT_STACK_POINTER in Kconfig;
-5, Select HAVE_ARCH_USERFAULTFD_MINOR in Kconfig;
-6, Some bug fixes and other small changes.
+Yes, that's more-or-less what's what the hugepage memory provider
+Jakub proposed does. The memory provider would allocate a hugepage and
+hold a reference to it. Then when the page_pool needs a page, it would
+allocate a PAGE_SIZE page from said hugepage region and provide it to
+the page_pool, and the pool back to the driver. This allows the
+hugepages to work without the page_pool and driver to be hugepage
+aware and to insert huge page specific processing in it.
 
-Note: There are conflicts in arch/loongarch/Kconfig and arch/loongarch/
-Makefile but can be simply fixed by adjusting context.
+Other designs for this hugepage use case are possible, I'm just
+describing Jakub's idea for it as a potential use-case for these
+hooks. For example technically the page_pool at the moment does
+support non-0 order allocations, but most drivers simply set the order
+to 0 and use the page pool only for PAGE_SIZE allocations. An
+alternative design could be to use this support in the page pool, but
+that requires every driver to adopt this rather than a core networking
+change that can apply transparently (to a large extent) to all
+page_pool drivers.
 
-----------------------------------------------------------------
-Huacai Chen (5):
-      LoongArch: Select ARCH_HAS_CURRENT_STACK_POINTER in Kconfig
-      LoongArch: Select HAVE_ARCH_USERFAULTFD_MINOR in Kconfig
-      LoongArch: Change __my_cpu_offset definition to avoid mis-optimization
-      LoongArch: Remove superfluous flush_dcache_page() definition
-      LoongArch: Define the __io_aw() hook as mmiowb()
-
-Jinyang He (1):
-      LoongArch: Add kernel livepatching support
-
-Max Kellermann (1):
-      LoongArch: Move {dmw,tlb}_virt_to_page() definition to page.h
-
-Tiezhu Yang (7):
-      objtool/LoongArch: Enable objtool to be built
-      objtool/LoongArch: Implement instruction decoder
-      objtool/x86: Separate arch-specific and generic parts
-      objtool/LoongArch: Enable orc to be built
-      objtool: Check local label in add_dead_ends()
-      objtool: Check local label in read_unwind_hints()
-      LoongArch: Add ORC stack unwinder support
-
-Yuli Wang (1):
-      LoongArch/crypto: Clean up useless assignment operations
-
- arch/loongarch/Kconfig                             |   8 +
- arch/loongarch/Kconfig.debug                       |  11 +
- arch/loongarch/Makefile                            |  23 +-
- arch/loongarch/crypto/crc32-loongarch.c            |   2 -
- arch/loongarch/include/asm/Kbuild                  |   3 +
- arch/loongarch/include/asm/bug.h                   |   1 +
- arch/loongarch/include/asm/cacheflush.h            |   3 -
- arch/loongarch/include/asm/exception.h             |   2 +
- arch/loongarch/include/asm/io.h                    |   2 +
- arch/loongarch/include/asm/module.h                |   7 +
- arch/loongarch/include/asm/orc_header.h            |  18 +
- arch/loongarch/include/asm/orc_lookup.h            |  31 ++
- arch/loongarch/include/asm/orc_types.h             |  58 +++
- arch/loongarch/include/asm/page.h                  |   3 +
- arch/loongarch/include/asm/percpu.h                |   7 +-
- arch/loongarch/include/asm/pgtable.h               |   3 -
- arch/loongarch/include/asm/qspinlock.h             |  18 -
- arch/loongarch/include/asm/stackframe.h            |   3 +
- arch/loongarch/include/asm/thread_info.h           |   2 +
- arch/loongarch/include/asm/unwind.h                |  20 +-
- arch/loongarch/include/asm/unwind_hints.h          |  28 ++
- arch/loongarch/kernel/Makefile                     |   4 +
- arch/loongarch/kernel/entry.S                      |   5 +
- arch/loongarch/kernel/fpu.S                        |   7 +
- arch/loongarch/kernel/genex.S                      |   6 +
- arch/loongarch/kernel/lbt.S                        |   3 +
- arch/loongarch/kernel/mcount_dyn.S                 |   6 +
- arch/loongarch/kernel/module.c                     |  22 +-
- arch/loongarch/kernel/relocate_kernel.S            |   7 +-
- arch/loongarch/kernel/rethook_trampoline.S         |   1 +
- arch/loongarch/kernel/setup.c                      |   2 +
- arch/loongarch/kernel/stacktrace.c                 |  41 ++
- arch/loongarch/kernel/traps.c                      |  42 +-
- arch/loongarch/kernel/unwind_orc.c                 | 528 +++++++++++++++++++++
- arch/loongarch/kernel/vmlinux.lds.S                |   3 +
- arch/loongarch/kvm/switch.S                        |   9 +-
- arch/loongarch/lib/clear_user.S                    |   3 +
- arch/loongarch/lib/copy_user.S                     |   3 +
- arch/loongarch/lib/memcpy.S                        |   3 +
- arch/loongarch/lib/memset.S                        |   3 +
- arch/loongarch/mm/tlb.c                            |  27 +-
- arch/loongarch/mm/tlbex.S                          |   9 +
- arch/loongarch/vdso/Makefile                       |   1 +
- include/linux/compiler.h                           |   9 +
- scripts/Makefile                                   |   7 +-
- tools/arch/loongarch/include/asm/inst.h            | 161 +++++++
- tools/arch/loongarch/include/asm/orc_types.h       |  58 +++
- tools/include/linux/bitops.h                       |  11 +
- tools/objtool/Makefile                             |   4 +
- tools/objtool/arch/loongarch/Build                 |   3 +
- tools/objtool/arch/loongarch/decode.c              | 356 ++++++++++++++
- .../objtool/arch/loongarch/include/arch/cfi_regs.h |  22 +
- tools/objtool/arch/loongarch/include/arch/elf.h    |  30 ++
- .../objtool/arch/loongarch/include/arch/special.h  |  33 ++
- tools/objtool/arch/loongarch/orc.c                 | 171 +++++++
- tools/objtool/arch/loongarch/special.c             |  15 +
- tools/objtool/arch/x86/Build                       |   1 +
- tools/objtool/arch/x86/orc.c                       | 188 ++++++++
- tools/objtool/check.c                              |  52 +-
- tools/objtool/include/objtool/elf.h                |   1 +
- tools/objtool/include/objtool/orc.h                |  14 +
- tools/objtool/orc_dump.c                           |  69 +--
- tools/objtool/orc_gen.c                            | 113 +----
- 63 files changed, 2040 insertions(+), 266 deletions(-)
- create mode 100644 arch/loongarch/include/asm/orc_header.h
- create mode 100644 arch/loongarch/include/asm/orc_lookup.h
- create mode 100644 arch/loongarch/include/asm/orc_types.h
- delete mode 100644 arch/loongarch/include/asm/qspinlock.h
- create mode 100644 arch/loongarch/include/asm/unwind_hints.h
- create mode 100644 arch/loongarch/kernel/unwind_orc.c
- create mode 100644 tools/arch/loongarch/include/asm/inst.h
- create mode 100644 tools/arch/loongarch/include/asm/orc_types.h
- create mode 100644 tools/objtool/arch/loongarch/Build
- create mode 100644 tools/objtool/arch/loongarch/decode.c
- create mode 100644 tools/objtool/arch/loongarch/include/arch/cfi_regs.h
- create mode 100644 tools/objtool/arch/loongarch/include/arch/elf.h
- create mode 100644 tools/objtool/arch/loongarch/include/arch/special.h
- create mode 100644 tools/objtool/arch/loongarch/orc.c
- create mode 100644 tools/objtool/arch/loongarch/special.c
- create mode 100644 tools/objtool/arch/x86/orc.c
- create mode 100644 tools/objtool/include/objtool/orc.h
+--=20
+Thanks,
+Mina
 
