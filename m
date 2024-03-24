@@ -1,154 +1,142 @@
-Return-Path: <linux-arch+bounces-3146-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3147-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 449B3887E26
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Mar 2024 18:37:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0867889231
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 08:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A66A8B20D61
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Mar 2024 17:37:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3052F2933B0
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 07:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4F5199B9;
-	Sun, 24 Mar 2024 17:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9859A1B5DD8;
+	Mon, 25 Mar 2024 00:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9tjCJ1Z"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iF7DWwIh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C24B1841;
-	Sun, 24 Mar 2024 17:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD8D2733F2;
+	Sun, 24 Mar 2024 23:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711301839; cv=none; b=dENBIx9hcwORn9tiutJQqCsPmpeV57/PxU4H9fle0Kg3huzXlNsCPMuzXX8CTc70+UUJbkAzU+3A5rGr8fntWjvU2g7g6eKj6T/2er1UoUZnsfs+50quskZUovjivylUMqhu0qL1iBjzNcHGA9hrPzGkoxNVLmRIid0tCY6HT/w=
+	t=1711323325; cv=none; b=V4i42sNwmFtejMoS6ppzpbJFpUqNNR6iU+iyog+EbCKmThdCMoybhazaS3dU8Nr23OUyz6qkz/AbangdluQmAr5yMEhRq+oiBv3/XnzjvNWbsoxNQYuauHUb3h0jrNQFSx9tNGR4vtByFbXUc010kkGyPumHyZJ7s35GkfyQCds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711301839; c=relaxed/simple;
-	bh=e8Wzt++tI0Y6lTciHZrwviD9JAPYs1UHfQ1N/92js8k=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=t/DcCGNQjP4Jbxzh0x99CMd+zMX35FCDQbog2yfHxov9zoOnkHBW0KrsPFtA4xMbDrcSdgYfvnSxCPiGu270meX9FnerEN8RSCgLKFnyqFmMXML88EFYOEF2ZLk2GU8bCWvSrRGasrIYo9dZXqZztpprmjP7OGPYVfA7PiDZDQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9tjCJ1Z; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-789fb1f80f5so259885485a.3;
-        Sun, 24 Mar 2024 10:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711301837; x=1711906637; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7A5SUwxxd4XjDHjkrEb2n2ZXL0/7LMjpgw75QRXKPIo=;
-        b=U9tjCJ1ZmAn4W1sQlddU2YtDArW9vMQs4On2X1DVYRqlxSzVHWtNuml0ac2AzbBJZJ
-         qGbPef81QRvLsk7ZxmPupjpvCrDKhWTxDr3V7kcwR53CxMZxO7ajLHjGoX+APMSPwe5m
-         snL9AhnJAK6toz7Csn2K7uak6UXps9Mp+xYWC0QnyMI2MMrHWxDIuXZh9a0xH9/r/nSW
-         XfRHiali/kF2ooatjFzX1gbNWhuIOg1vLqmnJo3COMSDKtsAlLLW3Krsp8zsg+y0+0ew
-         8BThdRBcTYgzKJlo5SRnxLklTzDZhwHAUlZ16BWdw8q9iT9K+6zkjYwXJTmOwM0yn7z1
-         Lw+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711301837; x=1711906637;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7A5SUwxxd4XjDHjkrEb2n2ZXL0/7LMjpgw75QRXKPIo=;
-        b=fIMAoKF/NNWQj4HeYdooFen9gkvvOAYHK+dPqJ0LNDOrdAXH1/pBO13yJYSgicGGxZ
-         AX0iwDFK5zmEJ/Lmh3vCYnBe6fNR79TCja+QSAHbCHcILwDgRa0wv9UFO7OFRUEyfA+L
-         w+8hAaCH0PCUgenpVUjLo38awSJYz4yCPMPoYiLiYhA8iMCQOEYAVsaqz9YV503Zh16u
-         DEhrmHBk3pQYApIlB/DmW291Dlu6QFLnN4JtUofE7hCMQmvpxlK8kuTDrR0NTpkyFG+Q
-         KX7DTes+VoxngKPvfUxOwRqznHZ+s0DtUHVhY5STc+SRwh//P+Pcjy2m987ZoUHVt43E
-         lI0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWBF7U0hxnl3+h0XkG0AhD3RutxhxBurW+97yc4ix9BGwRqxVm4ODHyN1s3wAJlx0fR+RUd2+doeKkveKrg3GeGnCdk0zoRiwb8tudkLFrtm2yrSaMKaVpUNUqaahkmKdrUzME7VFlh3mb5aHSx+eCns7lZWXkC4+8u12gYKwnZQ7Y+YnT8FaeyYQ/Lilb1xWIlMs+goZm4bua9iXWjmJkgAVk7mOlvBA==
-X-Gm-Message-State: AOJu0Yzrz6YcKKPNHOIoH8ZJvcXkb3KBCE9FRMtUmsUfTgDL12IooJzp
-	9FIwLUAYFgraXkqLFmf/lf7sl3PyjpHp6ck3C8cK9l6omTTrMYy2
-X-Google-Smtp-Source: AGHT+IFjpSfbEmAjCyadZ4oh3c1hlZvr8OuU2bvWGAJwDmJef8K4HA0yJIlXQ6FGAqvDYB9qnUMuMw==
-X-Received: by 2002:a05:620a:5d8a:b0:78a:1e39:2674 with SMTP id xx10-20020a05620a5d8a00b0078a1e392674mr5391270qkn.39.1711301837071;
-        Sun, 24 Mar 2024 10:37:17 -0700 (PDT)
-Received: from smtpclient.apple ([63.115.34.165])
-        by smtp.gmail.com with ESMTPSA id vq12-20020a05620a558c00b00789ea123bd5sm1491096qkn.59.2024.03.24.10.37.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 Mar 2024 10:37:16 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1711323325; c=relaxed/simple;
+	bh=w3DndtsjG6zas1wfMjz8RZMmPG7WJq8zOlcY33vgO1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rTGa00yHWOCy0w9IMnpQoUD3KDYqfX8zJuKF7G5p/jTW/laVf4vZcyQtujh32imp6F9s1ERucJSJIB8fOD4a3UhusvJjgPcHVOCP5uBemqwVo2T0NKQeDWirKAAGtt3IusoP0zZPFh5YbyqpItiOrGTj67v2cHiF9CoF13e3tTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iF7DWwIh; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ghVT0JSAZhWZjIMzPkaSyKQMLg9eo2J9vvVmkWYzHY0=; b=iF7DWwIhKNw1JXqENX4aC5VQuT
+	Q+y8J0fuVGe5AwYlRzm3NLZujnu/cR27zhXmnagtXn8d3D3rIzlQWL/6pWHpEyOsjyQKu9U2fsYdZ
+	0j1Mu5FqrQQdlfn/nychyLmO+m2AXW7q8ktbLO3WvzRguveQN+9kvatO/5ZHsKHKGvl81OGqJ/bIy
+	sZGsGxnt09H55+3KNacdrD6wCQHPICcVluG/tqUD+roC24jyBL7Ek0i83zLxKbvBPSHsaoG9qMe/T
+	QWvbXHUSflmRJN4m5L8+F8u1KOq4Yn6T495UloKN1oQ8QbpHceqV4E+DC4cZ93dBQ+vH4TaLdVtcg
+	S6F8ELJQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1roXMv-0000000Dtyv-0e3z;
+	Sun, 24 Mar 2024 23:35:13 +0000
+Date: Sun, 24 Mar 2024 16:35:13 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Christoph Hellwig <hch@infradead.org>, David Wei <dw@davidwei.uk>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <ZgC4sWfHFGTY9HzY@infradead.org>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com>
+ <ZfegzB341oNc_Ocz@infradead.org>
+ <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
+ <ZfjMopBl27-7asBc@infradead.org>
+ <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-From: comex <comexk@gmail.com>
-In-Reply-To: <174272a1-e21f-4d85-94ab-f0457bd1c93b@rowland.harvard.edu>
-Date: Sun, 24 Mar 2024 13:37:03 -0400
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Kent Overstreet <kent.overstreet@linux.dev>,
- Boqun Feng <boqun.feng@gmail.com>,
- rust-for-linux <rust-for-linux@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- llvm@lists.linux.dev,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>,
- Alice Ryhl <aliceryhl@google.com>,
- Andrea Parri <parri.andrea@gmail.com>,
- Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Nicholas Piggin <npiggin@gmail.com>,
- David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>,
- Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Akira Yokosawa <akiyks@gmail.com>,
- Daniel Lustig <dlustig@nvidia.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- kent.overstreet@gmail.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Marco Elver <elver@google.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- linux-arm-kernel@lists.infradead.org,
- linux-fsdevel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3088DF9A-6507-423B-8F0A-100B78DE1A26@gmail.com>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <C85BE4F4-5847-45B4-A973-76B184B35EDE@gmail.com>
- <174272a1-e21f-4d85-94ab-f0457bd1c93b@rowland.harvard.edu>
-To: Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
+On Fri, Mar 22, 2024 at 10:40:26AM -0700, Mina Almasry wrote:
+> Hi Christoph,
+> 
+> Sorry for the late reply, I've been out for a few days.
+> 
+> On Mon, Mar 18, 2024 at 4:22 PM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Sun, Mar 17, 2024 at 07:49:43PM -0700, David Wei wrote:
+> > > I'm working on a similar proposal for zero copy Rx but to host memory
+> > > and depend on this memory provider API.
+> >
+> > How do you need a different provider for that vs just udmabuf?
+> >
+> 
+> This was discussed on the io_uring ZC RFC in one of the earliest RFCs.
+> Here is a link to Pavel's response:
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438-6-almasrymina@google.com/#25589471
 
+Undesirable is not a good argument.  We need one proper API that
+different subsystems share for this use case (this is the same Feedback
+I gave Keith for the similar block proposal btw, not picking on the net
+folks here).
 
-> On Mar 24, 2024, at 11:22=E2=80=AFAM, Alan Stern =
-<stern@rowland.harvard.edu> wrote:
->=20
-> I don't know if this is what you meant by "in a weak memory model, the=20=
+If dmabuf/udmabuf doesn't work for that we need to enhance or replace
+it, but not come up with little subsystem specific side channels.
 
-> escape can =E2=80=98time travel'".  Regardless, it seems very clear =
-that any=20
-> compiler which swaps L1 and L2 in f() has a genuine bug.
-
-Yes, that=E2=80=99s what I meant.  Clang thinks it=E2=80=99s valid to =
-swap L1 and L2.  Though, for it to actually happen, they would have to =
-be in a loop, since the problematic optimization is =E2=80=9Cloop-invarian=
-t code motion".  Here=E2=80=99s a modified version of your f() that =
-shows the optimization in action:
-
-https://godbolt.org/z/bdaTjjvMs
-
-Anyway, my point is just that using LKMM doesn=E2=80=99t save you from =
-the bug.=
 
