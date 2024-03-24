@@ -1,127 +1,138 @@
-Return-Path: <linux-arch+bounces-3144-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3145-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2803A887C69
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Mar 2024 12:04:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC673887D71
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Mar 2024 16:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4C0A281793
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Mar 2024 11:04:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61F2F1F21264
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Mar 2024 15:22:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADCF175A5;
-	Sun, 24 Mar 2024 11:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t7zxPixu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0zP5b/bm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097FA18641;
+	Sun, 24 Mar 2024 15:22:45 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC92171B6;
-	Sun, 24 Mar 2024 11:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id BFA0518638
+	for <linux-arch@vger.kernel.org>; Sun, 24 Mar 2024 15:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711278267; cv=none; b=oVqCPF1Se4RQfCcQz+VHvJWsBxVZhclnn60wwuTydp8C2o/gqvxsqVTNxJpbSJ9gYpwudEQQUPjlO5onDr+uXVRvC9adJd+Ryv6TEmnagbQIScPISN5MZc2NkgfZmnL4PV/eXl0ZRHQpyDp1K1YGXT3NQXW7JFNNHFn2RH/u1To=
+	t=1711293764; cv=none; b=EhmoeCxNugq/GAGzzZw/4fwkGTrdjNonELM+hv36/zBkpvbNjuIeKR0ui36eNXSARGUSqxiDf6xmoKvp3wGEygMi2EaZvKLSsmqR31RWk09yeXN9LfmEH3q01Nf7sgInMN8YFZbKH+xbKM6TmH7VoBit05woKySQwfkiW5EKBmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711278267; c=relaxed/simple;
-	bh=oVWt1URKKwcX1yBL2A/VUlUd8pg+WwR5QCUkGAW00E8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZwhjuIlr3QFth+i4t4U5wl7GHSJk7sC2MqPyVjJYkzTWws5iEj6WS6rJvWGSIlH9myVN0xW+WrRtD8/hFeyd0L4ESQqN0r+JpvVoggfhrNewAkfOsLqr1z4Sj7udOA/m6FWVc45IvP7QgtDYgTaSeO1DCjNCtpgDNmL2oWodg5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t7zxPixu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0zP5b/bm; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1711278262;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2/mH+jshQDq36UblDsSyrijdM7u3yitlRALbmDQiFhQ=;
-	b=t7zxPixu7qaYG51JCvo1ZOQWA/ACxTuuj8zFnDgHzHPztgwklM3NQLGEeGfO8BtnUwz/9i
-	pMirW20R4/jgtZHyn4BZtu2Aw10yVVIbYif1WtvymjBtuXW6Zq1kE8o3Ub5vLfyVU7QfxG
-	0UvoNfkcKVyNQgQNJYAtQZTDia3pdd9N/ttYXkZL5zIN0Qlcjw7QPiLkgaz6k5y0x62R9d
-	gb4gV1ENpfo41Fs4Vh9hxDWidwK3q5uwumbcrHQ6ypY/0fa2+ZRexzovLfG0d0Iuv2RrWA
-	6nfB/08D+O2qpTLhxDIfCO1B7j8WuvenOW9n9RbCBDfUh2ZAZfAWfLtdRXNmtg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1711278262;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2/mH+jshQDq36UblDsSyrijdM7u3yitlRALbmDQiFhQ=;
-	b=0zP5b/bmPCg1ZQGyVupWSN3TpJwnNzP0yHkov/wwsnDRr2CvA/XIPR6n90Ossh1xnUewt0
-	gBjxUzMze3k1OaAQ==
-To: Thomas Gleixner <tglx@linutronix.de>, Sagi Maimon <maimon.sagi@gmail.com>
-Cc: richardcochran@gmail.com, luto@kernel.org, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- arnd@arndb.de, geert@linux-m68k.org, peterz@infradead.org,
- hannes@cmpxchg.org, sohil.mehta@intel.com, rick.p.edgecombe@intel.com,
- nphamcs@gmail.com, palmer@sifive.com, keescook@chromium.org,
- legion@kernel.org, mark.rutland@arm.com, mszeredi@redhat.com,
- casey@schaufler-ca.com, reibax@gmail.com, davem@davemloft.net,
- brauner@kernel.org, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
- netdev@vger.kernel.org
-Subject: Re: [PATCH v7] posix-timers: add clock_compare system call
-In-Reply-To: <875xxdhj8k.ffs@tglx>
-References: <878r29hjds.ffs@tglx> <875xxdhj8k.ffs@tglx>
-Date: Sun, 24 Mar 2024 12:04:20 +0100
-Message-ID: <87msqnrivf.fsf@kurt.kurt.home>
+	s=arc-20240116; t=1711293764; c=relaxed/simple;
+	bh=SuH1hMVA2o74FCs6AvGI7dXDMoRLsBXOu5zkwoZfD8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=paZMTEiA6+s/fwFzF4qP2nOmUsZTs7NyAreV2doy+2D64sZRYgSZhoZWJRkrp1D3lUgSUkJ5rrRL7vxwSqk2mDCZGptJsJkZgsOXfi1C0nBlMJww8vioO2prYY9kkgTEV7eFR3pl8vOckKWAi17a1gs+T7G44mJDYirci6o2Jm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 820911 invoked by uid 1000); 24 Mar 2024 11:22:41 -0400
+Date: Sun, 24 Mar 2024 11:22:41 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: comex <comexk@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+  Kent Overstreet <kent.overstreet@linux.dev>,
+  Boqun Feng <boqun.feng@gmail.com>,
+  rust-for-linux <rust-for-linux@vger.kernel.org>,
+  linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+  llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+  Alex Gaynor <alex.gaynor@gmail.com>,
+  Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+  =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+  Benno Lossin <benno.lossin@proton.me>,
+  Andreas Hindborg <a.hindborg@samsung.com>,
+  Alice Ryhl <aliceryhl@google.com>, Andrea Parri <parri.andrea@gmail.com>,
+  Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+  Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
+  Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
+  "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
+  Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+  Nathan Chancellor <nathan@kernel.org>,
+  Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+  Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+  Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+  Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+  "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>,
+  linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <174272a1-e21f-4d85-94ab-f0457bd1c93b@rowland.harvard.edu>
+References: <20240322233838.868874-1-boqun.feng@gmail.com>
+ <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+ <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+ <C85BE4F4-5847-45B4-A973-76B184B35EDE@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha512; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C85BE4F4-5847-45B4-A973-76B184B35EDE@gmail.com>
 
---=-=-=
-Content-Type: text/plain
+On Sat, Mar 23, 2024 at 05:40:23PM -0400, comex wrote:
+> That may be true, but the LLVM issue you cited isn’t a good example.  
+> In that issue, the function being miscompiled doesn’t actually use any 
+> barriers or atomics itself; only the scaffolding around it does.  The 
+> same issue would happen even if the scaffolding used LKMM atomics.
+> 
+> For anyone curious: The problematic optimization involves an 
+> allocation (‘p’) that is initially private to the function, but is 
+> returned at the end of the function.  LLVM moves a non-atomic store to 
+> that allocation across an external function call (to ‘foo’).  This 
+> reordering would be blatantly invalid if any other code could observe 
+> the contents of the allocation, but is valid if the allocation is 
+> private to the function.  LLVM assumes the latter: after all, the 
+> pointer to it hasn’t escaped.  Yet.  Except that in a weak memory 
+> model, the escape can ‘time travel’...
 
-On Sat Mar 23 2024, Thomas Gleixner wrote:
-> On Sat, Mar 23 2024 at 01:38, Thomas Gleixner wrote:
->> PTP_SYS_OFFSET_EXTENDED moves the outer sample points as close as
->> possible to the actual PCH read and provides both outer samples to user
->> space for analysis. It was introduced for a reason, no?
->
-> That said, it's a sad state of affairs that 16 drivers which did exist
-> before the introduction of the gettimex64() callback have not been
-> converted over to it within 4.5 years.
->
-> What's even worse is that 14 drivers have been merged _after_ the
-> gettimex64() callback got introduced without implementing it:
->
+It's hard to understand exactly what you mean, but consider the 
+following example:
 
-[...]
+int *globalptr;
+int x;
 
-> 2020-11-05   drivers/net/dsa/hirschmann/hellcreek_ptp.c
+int *f() {
+	int *p = kzalloc(sizeof(int));
 
-Oh, my bad. Let me switch this one to gettimex64() then.
+	L1: *p = 1;
+	L2: foo();
+	return p;
+}
 
-Thanks,
-Kurt
+void foo() {
+	smp_store_release(&x, 2);
+}
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+void thread0() {
+	WRITE_ONCE(globalptr, f());
+}
 
------BEGIN PGP SIGNATURE-----
+void thread1() {
+	int m, n;
+	int *q;
 
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmYACLQTHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgkX6D/0Up3j+XE9kDqSQoc2pu9NoxF6Srmub
-lTxnMPB7Vq5dkXM1EYUhK4Mji31dmYDdt70y0O9DrAke9RcGbWk3v45Yb2fMMWNe
-UHjol/JoZIuFdqOw8Tm8soYkB76mf1vTBgZvwDJrmBoJhVYHGZgpQhd7/VxRp1Kn
-TON3EpUj1kH9BoZTmzai8NFVivqMPrkdJTtErYZckaD7uO3lqxzTQsQ1C3SPaqZM
-TGe/WHSDudT6vov8ousEzNxoHPJt/JcJj9CFJnyYVk1wtaGBrbuU68tht4AgBd7o
-v6jiTKxpGFFqtMZISPLUgYasPwUjxCgsrEVxQmQGBzZOG+nHfP+kKKEwgafV+HSc
-jZOK52LBnaaVCdGIlwEMJUOpk8AVN6rReeUqWIHJEcezKUVn6Elo3RRyrH33aq5t
-L6sm3k1IzMGHwyhmLgp6ep/YDBHgWbSJ3qXyEr7Bet7Zq99IiynTLg11GX68QSc2
-MVBb1zldKucN3BnFl2B6sqwexbtxPNGNm5dXPJWKLLIdmh47kVFOH4+0fvwBpveu
-5Gwp5q+JZYSlqit9SfLkt2jRORt1MZmwxn4JH06+23CQ+fT/+uQBZMA8AfUtK4PJ
-7+R8WDXAZnr/ZDjXzv5zJbj49Z3X8CPKFFGWfQdCC16VMpUQPDLLslO4nZFnrXtM
-Ig6ltOiLusm+Ew==
-=e9pu
------END PGP SIGNATURE-----
---=-=-=--
+	m = smp_load_acquire(&x);
+	q = READ_ONCE(globalptr);
+	if (m && q)
+		n = *q;
+}
+
+(If you like, pretend each of these function definitions lives in a 
+different source file -- it doesn't matter.)
+
+With no optimization, whenever thread1() reads *q it will always obtain 
+1, thanks to the store-release in foo() and the load-acquire() in 
+thread1().  But if the compiler swaps L1 and L2 in f() then this is not 
+guaranteed.  On a weakly ordered architecture, thread1() could then get 
+0 from *q.
+
+I don't know if this is what you meant by "in a weak memory model, the 
+escape can ‘time travel'".  Regardless, it seems very clear that any 
+compiler which swaps L1 and L2 in f() has a genuine bug.
+
+Alan Stern
 
