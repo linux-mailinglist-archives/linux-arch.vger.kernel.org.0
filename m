@@ -1,228 +1,209 @@
-Return-Path: <linux-arch+bounces-3169-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3170-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C254E88AE0F
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 19:25:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09F3488AE37
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 19:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7856928E490
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 18:25:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77A121F6467F
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 18:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F5D142E84;
-	Mon, 25 Mar 2024 17:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD0384FCF;
+	Mon, 25 Mar 2024 17:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RnWX/esq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2gl4CyQ+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D238F13FD65;
-	Mon, 25 Mar 2024 17:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ED484D23
+	for <linux-arch@vger.kernel.org>; Mon, 25 Mar 2024 17:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711389200; cv=none; b=vFXrKpXBgKENRwenbj5tOhzKYTOJtOCeNaLnpiKq3ygpWk7i1txMn48Z4Turin+CU+3GKlb96c/dcG12vvwEwFzabiTWw09kBIx3XtLP5ME+C2ZU4vsXajG7TZmoyRd5jwKpg6gdrlCWpdfjkELSQDNP/E85jtKc6BbmwCoT1Nk=
+	t=1711389560; cv=none; b=oHiM8NP5Bc+Haous1HJYOJO8NGp4sF+gKPZCEi+GUfCi6NmJCf2wbQKJwIck+ElVLrhQsciefsbBUSAYmmgo8VldHQUYGoWs8nPwKZ14hnjOnKv8xITiQERHqOFRyVaNDaaUpVQ19WpvnvYYnNNnebPXo3Wqf/OAJDVx2A3VmQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711389200; c=relaxed/simple;
-	bh=d44to29QxAZRss/vImP1cjs/5S7S45VoMwPRc5E6CzI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eonAU2ogD2HF8aHVFSYNo6+SsGsZNNDpfKyaI4pAPEaR+Q9YrrUS2Fd7vnNNDkjLKXuSJHg1QtLRJuDEWJ4wHKlsiGP6bMF61NGZOQiLo6iuMAw4MN0FILtoN70WY6vx17r0Vwyv40tH+SHFqR29WZnJgXT7Q20hZm8G0AHpVvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RnWX/esq; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dffa5e3f2dso28792575ad.2;
-        Mon, 25 Mar 2024 10:53:18 -0700 (PDT)
+	s=arc-20240116; t=1711389560; c=relaxed/simple;
+	bh=YUkn5bDTJvtPOe4CbVEJJ+OysGCk8+HwOuI6bpiCxQQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Eam8W//SusJEduZlkJT3Fr+mAjBiuzmCucZQe8Pb/8Ahc5z+llwYwX4i9ygK9XQ+/T1O51yh7GxESHopo6wwuh3D828bSnOrO1cFL803vk41rTN5DL5Kz4xXcDd7MRNdJdTqJCNLu2NFcEI38rD7UV4Mq+IRItNe/E9tKvq/2HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2gl4CyQ+; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dc745927098so4259968276.3
+        for <linux-arch@vger.kernel.org>; Mon, 25 Mar 2024 10:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711389198; x=1711993998; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1711389553; x=1711994353; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e1SpZkZqM4zlQDRKNVTJpf19d/YZRyK65cuIsSmn1gc=;
-        b=RnWX/esq4t42NjM6G2nj+GFHvzZDPGgNvDv1Z9K8QzxkOKmJch/ZDGinyU+4dibZ10
-         gDxf+8XWkwp52srS6DJKP5bdZGIQGIRuCX3GmXpNF0lye32gFXgfHQEjKHu7oZ8ZshUr
-         gqS9x+tAEs49ZIIqZVIj1YHSnpPKnTmI8sfImGIy+eDmx+VxbV7langEkjfuJSA7lb99
-         D7msJPfYxzCQ9liAoh0+ak/pYDjs8TtSL9PYMqueNeVcJb3dA/K/KIjyfD6VELFUmlhE
-         diSmRyZi+OISw7Thx7iieAwwLBMOZfPAc9+EzTYfeYUdyQlddodTA/0fYuwL0haH0xTc
-         56xg==
+        bh=g1H2/sqpi/sh2ma0fgAVRjfY65QgsbrlBKsllNKG2ck=;
+        b=2gl4CyQ+Xvl6vMB2PNXMos2xXZYhPDH+8W1bFAYmkCRuJKlGz64+FLJnLY+nO7mmhv
+         4yXbp0XCZUoBDUViWSScVzKZwVJSPlUGmrz1GIYu6yiZOUXxz8R3vcj6t/hEXqf+Rzk5
+         ZwPOYWKGouwogs2vAb0YAbFQcXsI5JzizAjND9Xz5pYvi8KOYXq8jOjuVnXKrnBDEgmo
+         /me7luk2ASZqf/JphUm/ZFaLeWQXmQUy1LpfzrrNvofTtwWDW8XZW5acdeIEcUNJj+F/
+         urtUStjDpqISLSdRprneRNZz0QACMZzMiXWm2WhDTqNECfwxky/+a/gpNSLrZZZM+OjN
+         ArTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711389198; x=1711993998;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=e1SpZkZqM4zlQDRKNVTJpf19d/YZRyK65cuIsSmn1gc=;
-        b=QSAj7mRoRgq5tZPssTFljwc39UlKRgA61SWajh3/eEZHqDruRrlofnljbRU2GPN8ZX
-         /lEc+M6r30mhV+o+1pbnj3v50RzTfXTcZVRd40lA1MZZynF6ORsyySRvP/IuCe+3Zzvg
-         gX9iPtzo/pLY/OpcxZr236qEzOBJwbHvAZndqO8X/TAHo67nsd7C/+5Z1FYs2pnh9zbU
-         cpWpWSYKvVXxijvoupUiMiPKof4bzlIsF6dTTQ9cr5Cz42QcTjp48w3tMt/YLu95RWkq
-         MdAEQv+sFKRMLHZ+U78QTqnNY5QfEkoF/jS1D6kTlLzyLIHMiHy0N46+Q1B88tnRxl8M
-         L6ow==
-X-Forwarded-Encrypted: i=1; AJvYcCUXhdXEHqqKgOmIhn73qZ0aozdXcJ/T9iQ8i75xsHTou0FFrA/zmliZRf469BVBIe/YYqXha18YGxnD/8mAN83MAItOo0s2Q/3yhKRPFrv5oyDA3G1IceBx/F5Qlrh75wMMdHVhUYPbZlVgTvl6ocnl+PaeqB85XEDfdLxJzhnm2t2LHCY3xavksPVWIX4g8JNTNkdc3aorMDFKFFTt7p2uLlrJDMsBZDEE6lVR0GW/qMd76dG3soTtK6BfG15anj2khtZ5a9d7xiqsbe+79fRylSFBaTp291ATFwdPlaLKOiYHyO0RQUksVomw5NAe7A==
-X-Gm-Message-State: AOJu0Yzqb+GHdADRWe+OPcPY1PDY5fSOm9gc/keOSZjN/SZDO0OQX8QG
-	t/qx4ak8FttAYnnSODyyHfwReho7anceU6nQJH4Rz7CnFN8kFrMYZYhzO53v
-X-Google-Smtp-Source: AGHT+IHTc79fOqkfgWwaBqDmxHsREbiE6llQARC+UmxA2cQTIolFyUfUQoa6sVIdjGwuI2KMb1NDoA==
-X-Received: by 2002:a17:903:2301:b0:1e0:b5ef:91b with SMTP id d1-20020a170903230100b001e0b5ef091bmr4565322plh.50.1711389197737;
-        Mon, 25 Mar 2024 10:53:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902b10800b001e00d9680cesm4933234plr.130.2024.03.25.10.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 10:53:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-kselftest@vger.kernel.org
-Cc: David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org,
-	kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH v2 14/14] powerpc: Add support for suppressing warning backtraces
-Date: Mon, 25 Mar 2024 10:52:48 -0700
-Message-Id: <20240325175248.1499046-15-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240325175248.1499046-1-linux@roeck-us.net>
-References: <20240325175248.1499046-1-linux@roeck-us.net>
+        d=1e100.net; s=20230601; t=1711389553; x=1711994353;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g1H2/sqpi/sh2ma0fgAVRjfY65QgsbrlBKsllNKG2ck=;
+        b=YGB7WWPMLui4JkAFobs/ryctSUiyXieaCqCWIaWTxMmKbLvkG/FkwWBwH4YrGutqnv
+         TYvbWohfq2KaHVx6ioB/D3QzFW/AShlqg5032dc9BO14kl3ZTnnZkNQ92i0Y4g4rBA4V
+         X1rKoV3e4uTneZgHj441vpQoHG5D/vcLL3fVGO7Zg2Kq6f60uUSF4/o0XdxA37qfLHnk
+         7kRwTI2ceshi+MUeOfMnUNR3vjKiVbrWU0cz6DwcZVkO361QaluJyiuDKLDCxaBFfD4Z
+         uanb/AqEFEXkzKJGPGJ1Ls4sbgFXCtqLxOanuSg4f8ZsDnIFZrSXAs6cq7+bFoRjn73R
+         RNWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUD0Rh0rHyccqSd6Nyh48yntraBemjbeV1FKmPf2mpwiFKME7iTDWM/9yx5YD5dAk3AOYo6oDXxGS2AQ2m7h2F59gGakYx53GfPlQ==
+X-Gm-Message-State: AOJu0YzQlWaa0+HsEFNluCrVpTV9Ze0mtOCFjzvNKsBM67bE5fHsLPmM
+	70lHPLH1KDGPm6Dl51cPfC24MD2unvEMn9+mSgEqNY6WA3LctHelQiUDHCg6lj5DVDamm6789Fx
+	utyrjFGLdzxZu+dJ7FxldO3ZlWzch5EEvVVG+
+X-Google-Smtp-Source: AGHT+IEgRKkwT38dzLm3NHYgLzcPYKNKFESgwIB1AubKuEz+z0q+SxXd0EUwkL4MQOex5Dj9zrOPFPjYxYadJTqh2sQ=
+X-Received: by 2002:a25:acd6:0:b0:dc7:4067:9f85 with SMTP id
+ x22-20020a25acd6000000b00dc740679f85mr6265207ybd.58.1711389552854; Mon, 25
+ Mar 2024 10:59:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAJuCfpFnGmt8Q7ZT2Z+gvz=DkRzionXFZ0i5Y1B=UKF6LLqxXA@mail.gmail.com>
+ <20240325174934.229745-1-sj@kernel.org>
+In-Reply-To: <20240325174934.229745-1-sj@kernel.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Mon, 25 Mar 2024 10:59:01 -0700
+Message-ID: <CAJuCfpGiuCnMFtViD0xsoaLVO_gJddBQ1NpL6TpnsfN8z5P6fA@mail.gmail.com>
+Subject: Re: [PATCH v6 30/37] mm: vmalloc: Enable memory allocation profiling
+To: SeongJae Park <sj@kernel.org>
+Cc: mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org, 
+	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add name of functions triggering warning backtraces to the __bug_table
-object section to enable support for suppressing WARNING backtraces.
+On Mon, Mar 25, 2024 at 10:49=E2=80=AFAM SeongJae Park <sj@kernel.org> wrot=
+e:
+>
+> On Mon, 25 Mar 2024 14:56:01 +0000 Suren Baghdasaryan <surenb@google.com>=
+ wrote:
+>
+> > On Sat, Mar 23, 2024 at 6:05=E2=80=AFPM SeongJae Park <sj@kernel.org> w=
+rote:
+> > >
+> > > Hi Suren and Kent,
+> > >
+> > > On Thu, 21 Mar 2024 09:36:52 -0700 Suren Baghdasaryan <surenb@google.=
+com> wrote:
+> > >
+> > > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > > >
+> > > > This wrapps all external vmalloc allocation functions with the
+> > > > alloc_hooks() wrapper, and switches internal allocations to _noprof
+> > > > variants where appropriate, for the new memory allocation profiling
+> > > > feature.
+> > >
+> > > I just noticed latest mm-unstable fails running kunit on my machine a=
+s below.
+> > > 'git-bisect' says this is the first commit of the failure.
+> > >
+> > >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+> > >     [10:59:53] Configuring KUnit Kernel ...
+> > >     [10:59:53] Building KUnit Kernel ...
+> > >     Populating config with:
+> > >     $ make ARCH=3Dum O=3D../kunit.out/ olddefconfig
+> > >     Building with:
+> > >     $ make ARCH=3Dum O=3D../kunit.out/ --jobs=3D36
+> > >     ERROR:root:/usr/bin/ld: arch/um/os-Linux/main.o: in function `__w=
+rap_malloc':
+> > >     main.c:(.text+0x10b): undefined reference to `vmalloc'
+> > >     collect2: error: ld returned 1 exit status
+> > >
+> > > Haven't looked into the code yet, but reporting first.  May I ask you=
+r idea?
+> >
+> > Hi SeongJae,
+> > Looks like we missed adding "#include <linux/vmalloc.h>" inside
+> > arch/um/os-Linux/main.c in this patch:
+> > https://lore.kernel.org/all/20240321163705.3067592-2-surenb@google.com/=
+.
+> > I'll be posing fixes for all 0-day issues found over the weekend and
+> > will include a fix for this. In the meantime, to work around it you
+> > can add that include yourself. Please let me know if the issue still
+> > persists after doing that.
+>
+> Thank you, Suren.  The change made the error message disappears.  However=
+, it
+> introduced another one.
 
-To limit image size impact, the pointer to the function name is only added
-to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
-CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
-parameter is replaced with a (dummy) NULL parameter to avoid an image size
-increase due to unused __func__ entries (this is necessary because __func__
-is not a define but a virtual variable).
+Ok, let me investigate and I'll try to get a fix for it today evening.
+Thanks,
+Suren.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-- Rebased to v6.9-rc1
-- Added Tested-by:, Acked-by:, and Reviewed-by: tags
-- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option
-
- arch/powerpc/include/asm/bug.h | 37 +++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
-index 1db485aacbd9..5b06745d20aa 100644
---- a/arch/powerpc/include/asm/bug.h
-+++ b/arch/powerpc/include/asm/bug.h
-@@ -14,6 +14,9 @@
- 	 .section __bug_table,"aw"
- 5001:	 .4byte \addr - .
- 	 .4byte 5002f - .
-+#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
-+	 .4byte 0
-+#endif
- 	 .short \line, \flags
- 	 .org 5001b+BUG_ENTRY_SIZE
- 	 .previous
-@@ -32,30 +35,46 @@
- #endif /* verbose */
- 
- #else /* !__ASSEMBLY__ */
--/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3 to be FILE, LINE, flags and
--   sizeof(struct bug_entry), respectively */
-+/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3,%4 to be FILE, __func__, LINE, flags
-+   and sizeof(struct bug_entry), respectively */
- #ifdef CONFIG_DEBUG_BUGVERBOSE
-+
-+#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
-+# define HAVE_BUG_FUNCTION
-+# define __BUG_FUNC_PTR	"	.4byte %1 - .\n"
-+#else
-+# define __BUG_FUNC_PTR
-+#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
-+
- #define _EMIT_BUG_ENTRY				\
- 	".section __bug_table,\"aw\"\n"		\
- 	"2:	.4byte 1b - .\n"		\
- 	"	.4byte %0 - .\n"		\
--	"	.short %1, %2\n"		\
--	".org 2b+%3\n"				\
-+	__BUG_FUNC_PTR				\
-+	"	.short %2, %3\n"		\
-+	".org 2b+%4\n"				\
- 	".previous\n"
- #else
- #define _EMIT_BUG_ENTRY				\
- 	".section __bug_table,\"aw\"\n"		\
- 	"2:	.4byte 1b - .\n"		\
--	"	.short %2\n"			\
--	".org 2b+%3\n"				\
-+	"	.short %3\n"			\
-+	".org 2b+%4\n"				\
- 	".previous\n"
- #endif
- 
-+#ifdef HAVE_BUG_FUNCTION
-+# define __BUG_FUNC	__func__
-+#else
-+# define __BUG_FUNC	NULL
-+#endif
-+
- #define BUG_ENTRY(insn, flags, ...)			\
- 	__asm__ __volatile__(				\
- 		"1:	" insn "\n"			\
- 		_EMIT_BUG_ENTRY				\
--		: : "i" (__FILE__), "i" (__LINE__),	\
-+		: : "i" (__FILE__), "i" (__BUG_FUNC),	\
-+		  "i" (__LINE__),			\
- 		  "i" (flags),				\
- 		  "i" (sizeof(struct bug_entry)),	\
- 		  ##__VA_ARGS__)
-@@ -80,7 +99,7 @@
- 		if (x)						\
- 			BUG();					\
- 	} else {						\
--		BUG_ENTRY(PPC_TLNEI " %4, 0", 0, "r" ((__force long)(x)));	\
-+		BUG_ENTRY(PPC_TLNEI " %5, 0", 0, "r" ((__force long)(x)));	\
- 	}							\
- } while (0)
- 
-@@ -90,7 +109,7 @@
- 		if (__ret_warn_on)				\
- 			__WARN();				\
- 	} else {						\
--		BUG_ENTRY(PPC_TLNEI " %4, 0",			\
-+		BUG_ENTRY(PPC_TLNEI " %5, 0",			\
- 			  BUGFLAG_WARNING | BUGFLAG_TAINT(TAINT_WARN),	\
- 			  "r" (__ret_warn_on));	\
- 	}							\
--- 
-2.39.2
-
+>
+>     $ git diff
+>     diff --git a/arch/um/os-Linux/main.c b/arch/um/os-Linux/main.c
+>     index c8a42ecbd7a2..8fe274e9f3a4 100644
+>     --- a/arch/um/os-Linux/main.c
+>     +++ b/arch/um/os-Linux/main.c
+>     @@ -16,6 +16,7 @@
+>      #include <kern_util.h>
+>      #include <os.h>
+>      #include <um_malloc.h>
+>     +#include <linux/vmalloc.h>
+>
+>      #define PGD_BOUND (4 * 1024 * 1024)
+>      #define STACKSIZE (8 * 1024 * 1024)
+>     $
+>     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+>     [10:43:13] Configuring KUnit Kernel ...
+>     [10:43:13] Building KUnit Kernel ...
+>     Populating config with:
+>     $ make ARCH=3Dum O=3D../kunit.out/ olddefconfig
+>     Building with:
+>     $ make ARCH=3Dum O=3D../kunit.out/ --jobs=3D36
+>     ERROR:root:In file included from .../arch/um/kernel/asm-offsets.c:1:
+>     .../arch/x86/um/shared/sysdep/kernel-offsets.h:9:6: warning: no previ=
+ous prototype for =E2=80=98foo=E2=80=99 [-Wmissing-prototypes]
+>         9 | void foo(void)
+>           |      ^~~
+>     In file included from .../include/linux/alloc_tag.h:8,
+>                      from .../include/linux/vmalloc.h:5,
+>                      from .../arch/um/os-Linux/main.c:19:
+>     .../include/linux/bug.h:5:10: fatal error: asm/bug.h: No such file or=
+ directory
+>         5 | #include <asm/bug.h>
+>           |          ^~~~~~~~~~~
+>     compilation terminated.
+>
+>
+> Thanks,
+> SJ
+>
+> [...]
 
