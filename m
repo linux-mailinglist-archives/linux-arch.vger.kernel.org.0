@@ -1,147 +1,157 @@
-Return-Path: <linux-arch+bounces-3172-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3173-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC0EB88AF21
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 19:59:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D1FE88AF5A
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 20:06:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D2761FA087A
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 18:59:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BA102E2805
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Mar 2024 19:06:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58024A33;
-	Mon, 25 Mar 2024 18:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11ECC6AA1;
+	Mon, 25 Mar 2024 19:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Dq7T0k6+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="KrsZ3Dg+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDD64A21
-	for <linux-arch@vger.kernel.org>; Mon, 25 Mar 2024 18:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E221C290;
+	Mon, 25 Mar 2024 19:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711393185; cv=none; b=owufPpdMRDmSC3zhOZIBQxIeWJODWasWu/LU0o+Z1KTUuABxQhu6Gp6/Q0CAC8i3jOOq6KnwJSF8oFa4YWl3m/xexSmNeHUuhMY8RQvQIvXajDZL7GL4Muh+PmRX/n2chTBWE9uTptYRijvCbEg+c9Cb/Gz7/g2d6pBzEu6XgB4=
+	t=1711393538; cv=none; b=JNG4+w0vDsHhYeqtLJGM3URRTg9lrI7ks4FwDdcxj0vEeZHMs9KK2JuOw9uq2igw8/wme/AP0s0PA1iVYxkY7GdIkE/fQbkDWAmkX887KeiZdamXhwTWSQeMNZMaRK84/SbN4s1lOpu7HbGgbofSUlsUuxRe+onWaIAWQqV5knw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711393185; c=relaxed/simple;
-	bh=5gZosMRdgXPNa3JQMcKlsbHmM1gyLPrPMFgAM70+YQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k2mCpyj9btd32YHNiwpnvOwBQwIjh/+4JqUkRe5YMD+5058GfTKERcGFOqua7U6+3J/nKs/Qt4z9CBhRGr2dXeOEuyu910MmvWa/jYX8fRwjObBHx4MSfy0T/dQYkESVWH+JfEbY69ycn6ilABSrOJENWNW34O5CdSYB8zsItxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Dq7T0k6+; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 25 Mar 2024 14:59:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711393181;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VkxyhaTa5U3F8wqjsa7LRBFbMSJiyk7bCAom1K7zW40=;
-	b=Dq7T0k6+H7nOTJbABp2Z2wN8NULCHNW0C7jHxsGk8umchshL+Bt0+paSu3yXZ0U/Y4O7Qw
-	2Wpvlj/e3fmhSm/vChaqixf/iHXD+YHD9CLhy0X4PoAiONraZ+KcYsPwPUDyOPWoE0DhGp
-	ati/oPgLBYa7j6sRtKFgS2L5MNPZSGU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Philipp Stanner <pstanner@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+	s=arc-20240116; t=1711393538; c=relaxed/simple;
+	bh=2naQ2zIwUDbAjnJ5fx8ylGGomTwmKBGC8b+4Kf4kgXw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZKKwoXze11LAMBjxdcLVzxmfnYhIqJTKwRHRZTMtMLs5WArJ/m8wBv1TmosY7rRV2q5rQJ70apWVJoBkZFO5G/ZhrSkPJfdNjmMAdB7sA5OaCQnP/4pFCjYkgu1sZnn0cak1RdkTGJLw81Ezo/syNiCbRXO7Kmmc0C+YDy6LjEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=KrsZ3Dg+; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=/cOCj+3wz4G6mk7yJiOWKe+zWsog28msEXqYEYYF/PM=; b=KrsZ3Dg+BwR2PxtUZN7tRdXRM/
+	hzD6VT43T4jmCbBOlQa33Sar4qRrk34fr3Gcfdp4NQWyMpNKX4DH6J6albLyamFGb2CGEiZOtE5rW
+	nfLSP5bRkADNvscY10NWmVllXMUJQDKsyuMyDODwaUtYaCGTGsGnQon7XaddORjvYOehlVXeE6sfa
+	n/bIrGl+ZGAr/bWkdry+5ZKkzUgSzgmqpPyWvxvxDDYmJrN43CkrvCrpPuNbz7XsoF5Y7Liw6IIBe
+	NgZRaSze46IWt9cBigdGv5ZmmlmhThf/TXsUVgjI26u4CbbOLSlCdcwSS/EtJiOUe4764vjuRvM+Q
+	SpYZMTlA==;
+Received: from [177.34.169.255] (helo=[192.168.0.139])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1ropdK-00FBOo-Kv; Mon, 25 Mar 2024 20:05:23 +0100
+Message-ID: <0729b218-53f1-4139-b165-a324794a9abd@igalia.com>
+Date: Mon, 25 Mar 2024 16:05:06 -0300
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 05/14] drm: Suppress intentional warning backtraces in
+ scaling unit tests
+To: Guenter Roeck <linux@roeck-us.net>, linux-kselftest@vger.kernel.org
+Cc: David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>,
+ Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
+ Arthur Grillo <arthurgrillo@riseup.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
+ <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
+ kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ loongarch@lists.linux.dev, netdev@vger.kernel.org,
+ Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20240325175248.1499046-1-linux@roeck-us.net>
+ <20240325175248.1499046-6-linux@roeck-us.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <20240325175248.1499046-6-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 25, 2024 at 10:44:43AM -0700, Linus Torvalds wrote:
-> On Mon, 25 Mar 2024 at 06:57, Philipp Stanner <pstanner@redhat.com> wrote:
-> >
-> > On Fri, 2024-03-22 at 17:36 -0700, Linus Torvalds wrote:
-> > >
-> > > It's kind of like our "volatile" usage. If you read the C (and C++)
-> > > standards, you'll find that you should use "volatile" on data types.
-> > > That's almost *never* what the kernel does. The kernel uses
-> > > "volatile"
-> > > in _code_ (ie READ_ONCE() etc), and uses it by casting etc.
-> > >
-> > > Compiler people don't tend to really like those kinds of things.
-> >
-> > Just for my understanding: Why don't they like it?
-> 
-> So I actually think most compiler people are perfectly fine with the
-> kernel model of mostly doing 'volatile' not on the data structures
-> themselves, but as accesses through casts.
-> 
-> It's very traditional C, and there's actually nothing particularly odd
-> about it. Not even from a compiler standpoint.
-> 
-> In fact, I personally will argue that it is fundamentally wrong to
-> think that the underlying data has to be volatile. A variable may be
-> entirely stable in some cases (ie locks held), but not in others.
-> 
-> So it's not the *variable* (aka "object") that is 'volatile', it's the
-> *context* that makes a particular access volatile.
-> 
-> That explains why the kernel has basically zero actual volatile
-> objects, and 99% of all volatile accesses are done through accessor
-> functions that use a cast to mark a particular access volatile.
-> 
-> But I've had negative comments from compiler people who read the
-> standards as language lawyers (which honestly, I despise - it's always
-> possible to try to argue what the meaning of some wording is), and
-> particularly C++ people used to be very very antsy about "volatile".
-> 
-> They had some truly _serious_ problems with volatile.
-> 
-> The C++ people spent absolutely insane amounts of time arguing about
-> "volatile objects" vs "accesses", and how an access through a cast
-> didn't make the underlying object volatile etc.
+Hi Guenter,
 
-To be fair, "volatile" dates from an era when we didn't have the haziest
-understanding of what a working memory model for C would look like or
-why we'd even want one.
+On 3/25/24 14:52, Guenter Roeck wrote:
+> The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
+> intentionally trigger warning backtraces by providing bad parameters to
+> the tested functions. What is tested is the return value, not the existence
+> of a warning backtrace. Suppress the backtraces to avoid clogging the
+> kernel log.
+> 
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> - Rebased to v6.9-rc1
+> - Added Tested-by:, Acked-by:, and Reviewed-by: tags
+> 
+>   drivers/gpu/drm/tests/drm_rect_test.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
+> index 76332cd2ead8..75614cb4deb5 100644
+> --- a/drivers/gpu/drm/tests/drm_rect_test.c
+> +++ b/drivers/gpu/drm/tests/drm_rect_test.c
+> @@ -406,22 +406,28 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
+>   
+>   static void drm_test_rect_calc_hscale(struct kunit *test)
+>   {
+> +	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
+>   	const struct drm_rect_scale_case *params = test->param_value;
+>   	int scaling_factor;
+>   
+> +	START_SUPPRESSED_WARNING(drm_calc_scale);
 
-(Someone might want to think about depracating volatile on objects and
-adding compiler flag to disable it; I suspect it'd be a useful cleanup
-for the compiler guys if they could get rid of it.)
+I'm not sure if it is not that obvious only to me, but it would be nice
+to have a comment here, remembering that we provide bad parameters in
+some test cases.
 
-The way the kernel uses volatile in e.g. READ_ONCE() is fully in line
-with modern thinking, just done with the tools available at the time. A
-more modern version would be just
+Best Regards,
+- Maíra
 
-__atomic_load_n(ptr, __ATOMIC_RELAXED)
-
-Except C atomics only support pointer and integer types, READ_ONCE()
-supports anything up to machine word size - that's something the C
-people need to fix.
+>   	scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
+>   					      params->min_range, params->max_range);
+> +	END_SUPPRESSED_WARNING(drm_calc_scale);
+>   
+>   	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+>   }
+>   
+>   static void drm_test_rect_calc_vscale(struct kunit *test)
+>   {
+> +	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
+>   	const struct drm_rect_scale_case *params = test->param_value;
+>   	int scaling_factor;
+>   
+> +	START_SUPPRESSED_WARNING(drm_calc_scale);
+>   	scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
+>   					      params->min_range, params->max_range);
+> +	END_SUPPRESSED_WARNING(drm_calc_scale);
+>   
+>   	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+>   }
 
