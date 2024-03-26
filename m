@@ -1,213 +1,139 @@
-Return-Path: <linux-arch+bounces-3192-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3193-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4079788B99C
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 06:02:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CBB888BA0C
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 06:57:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63D741C2D195
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 05:02:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A1861F34BB6
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 05:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961EB7352D;
-	Tue, 26 Mar 2024 05:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11BF12AACA;
+	Tue, 26 Mar 2024 05:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GB4MOcbz"
+	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="DwQRSX7x"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B44D73514;
-	Tue, 26 Mar 2024 05:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0696129A7C
+	for <linux-arch@vger.kernel.org>; Tue, 26 Mar 2024 05:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711429361; cv=none; b=kClbWuiWgvHY0ORxPq5TtSF8R9SWSrG89TthBoX4Iow8V5E5M1SSJO0ye+qpgqKeeUKzEtKF+1v7vtRLvbBaCbPCdBocwMpxNjbHHxv0RT83V85w/eZfSuysBk6R5v7y59cZHMRcUkQ6cSPP1xLT9aQiBPiiDNMrCEndVQP7iKw=
+	t=1711432622; cv=none; b=KT+yH9audWF/wXLFky986al2qm9wWNS42+Q2Nu/6j+OJyzgqscDV5SWxqT33dHciB9geqXyYheOMM9wqxiysVAfvju+DtdmqptGD6tkIj84eq9BZxbJUz+XNQf8A2eb/obQFQbObTw7pjmRLj96mInGYpxrRmwiaKu67FimQ64M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711429361; c=relaxed/simple;
-	bh=kLFdQikJ3pP/Ye1r7/bcEA6VEXSjRgAqw+Lz3/ACtKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FCsp7CKgJirGiweLIJ8XLjo6Ax7TNTm51o89C6GwUWwhTILcxubs4Z6ekwG7U+stadmdbT56JyhpqioQTAeYsmSHgQ6yfRqGPETGawNWz+HMwG4PyhxxplZRlADVT6x/Df3mhbqhR13+3V0n5ymZH4O1muDfQsJYs7+122DEIVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GB4MOcbz; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e0d82d441bso8634785ad.3;
-        Mon, 25 Mar 2024 22:02:38 -0700 (PDT)
+	s=arc-20240116; t=1711432622; c=relaxed/simple;
+	bh=ND9Y2sxlabnYJnhIIV0KvAzdrK9FLJxwJWh3pj7SGmo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fX1F3euAITHf+EkpM+Bnb1c9uPIiatAam4jVRn92PTeDtfqNaz33+f88bB7N6HqwBb3jGC4JayNWq91YJaf+7BJ0jMQbJtgZ/tifAwPpDA35Z0FFpOfsNeq1RbuS2XuDBCR5ER1xo+hsqZ0BpU8SMx85KdacvGZKgNiA3bWe91w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=DwQRSX7x; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc6dcd9124bso4915643276.1
+        for <linux-arch@vger.kernel.org>; Mon, 25 Mar 2024 22:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711429358; x=1712034158; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nIhrywFoGE/FB0l12vjAjrM2buYxUGncKgITpiq2JlY=;
-        b=GB4MOcbz9MMYmlU+kOFLPmeDJzXHuC8R/qU/v/nUlRdmb22V6xOFZE2avaNtEdyPCa
-         debr9rX5j8HAIqliHiPn28L8di6b8mECzIM8kCXpj+HzlaeWkRlTJpL7pDWtLsfSpO1s
-         +qyQ1JjRaS70xcZIUMoNccS4Vulpivm2HX2V/VnDBzXO4Rw07Vlz/7SgHAm7QsIm01Ye
-         TF4edpxg0FmkKWt22V+SNckTPPBdVjl0VOeiuUjTW2vhHYT1VETogXM/9aR6a3Cr0SBg
-         C7QDvRBCvcRXkMREn02QpHFnucHP20t4oPVZNZA/d5mFy9fcyuBPGIthGtkaMK2y3MPd
-         YoEg==
+        d=umich.edu; s=google-2016-06-03; t=1711432620; x=1712037420; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PPkjY6tTJjq9XlGXu2wl3SzG0jXY288ke/okKd5Kw2o=;
+        b=DwQRSX7xXn0tiE7O/iVzvcILfAA5V+It8QlyxT+GeYMvSYtObXDUYJfIC0sJ4lbv9k
+         Trw5xlTNzUjYovObDw/DDLw4ybvqd/gNC3ZCzpyFxYLSP1cLkQM1sqR78bZPPqg2ECr3
+         pd9vvGgT+U+ZO3BHwiMYa+few2d+6Ai3cR29A4AzYy+BU86eQSAzjtGup+7kYoi3Hq+j
+         EExhVbzSq0roJ8/CfD2Rob3cBZyA1jje1QdRKEKDm92X/TJte/qplh/WlAn6b75vt9A8
+         gdWUQYFVAe8ukaSRtmN1nXAhQqrYPZwkPn7Lu1/HPd4tOWO264NF1OXno3nJrWAjf/0p
+         x0Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711429358; x=1712034158;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nIhrywFoGE/FB0l12vjAjrM2buYxUGncKgITpiq2JlY=;
-        b=ZrC0BzaRowVzsDFiICRdtwUctq8tnRxQ61lKPJ3qCs6i5FMEjRIg0JgokBltqcM/wx
-         VKfZEqB7oHxukiwsEHTFjz0DoaDt9XCT0HmUMf0Insm/n8NPmwB2nN8zj19KgNghAaIy
-         SxolG5WhBP0R9I6L4R8/WTbWUqlKhln0B/ChkoSz7aWFNKCosMTIzkr0jWcjJVkoQVRq
-         L4C/OSWz29e3DCLqe14WqUQoZegevtEQw5z+UmFukRqJyVeajMNrKFJnAr9RNG7H7qso
-         WWB1c9kLh9eU7Y7jL/o//0Ow44JYmsXaq+iWxhId5ce4pYKuk7Zp/pRVt/HWIGrB3dbv
-         1NWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGY+Ryn+zoyK7+XKacRpknyWime9SnyFszdTChVYsfq2fVLZEtOeXcVdnI/K8Ahuu5rj+F/Z8w26O1T0GwUIhHwysxw8b7G/h+yxdUqjM0MeZoS72oDoSywl93ZUIz4E+5lUsk8bDpQRaF8ePS4q74yvv3+XtGiuTZQPBiH9YtlEOmP3VYT8tNRfN6dSClm2jKatJKKIvFMWt/DduVFvIJ2AhmlUdGxGhojRcOgPSspyvijTuX4UsU4gu7CmHxLJtuqmIDlkpXvHSG9MQdVW1k9TQHHd6v1hp5ITmSdv5+lOFNjXDgQMz0r78vF6++1w==
-X-Gm-Message-State: AOJu0Yz8CSE56DFTTgjMBF9PjNpazfti9Bs+0LU1NF3G2Gta6sXmzl+h
-	/SaIeHKSPdjgzrBTmoDOTJyYSA/9r6sOO1/IVJFlIsU82MKRKRoA
-X-Google-Smtp-Source: AGHT+IEcTHB/02f9HaB1tS0cP2ZsRx971NBiGwEGqHnjokk6umDjAiHMd//taF/o4xULvRj25jCExA==
-X-Received: by 2002:a17:902:a586:b0:1e0:cd8a:581 with SMTP id az6-20020a170902a58600b001e0cd8a0581mr42211plb.23.1711429357721;
-        Mon, 25 Mar 2024 22:02:37 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170902690b00b001dd64048f78sm5700013plk.211.2024.03.25.22.02.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 22:02:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4799424e-8dfc-4848-8c4f-affedaec9dfe@roeck-us.net>
-Date: Mon, 25 Mar 2024 22:02:33 -0700
+        d=1e100.net; s=20230601; t=1711432620; x=1712037420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PPkjY6tTJjq9XlGXu2wl3SzG0jXY288ke/okKd5Kw2o=;
+        b=bNSnvrv6q/bnIZYPqklui7tBtpvoszDu2U1wN7Qy93x1YtgtIY4Q7XwSegoJ1RTd9v
+         Yf85N+yNXRBULfFnQ1iPj0/uP7rP7VUeRUprOqYTGlfZ5BCauL/mWAzGwzKtFz5LF4MS
+         l6Cy2LwE+XQ6PPIRUEoS3RdXoGQTONGVp7XxOwOWhfb6hKQlXem+npYMq9F0G5c+tDdt
+         xpqBHftTSrJ5uoATLL+EvRQi1iTXyhJ5JoBEFiqnr5rTlTHkttyAK8A2OhzNneADXDA5
+         czmPQUQamGSFxwy1Jc2DGVu3L6VNULEA0B+pt+3YSoE6IatISZJ4H/PJzOzrkWpiQxhM
+         eS6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVUDtQV33SnRqyV+tem0qmFiTEmnyPObSh+AKiJ4XYdYDRak2LeODZQZFXnZt5F1xYsuS/GqloRNtOq3pHFIEuEN+/pyl3fkZM/hw==
+X-Gm-Message-State: AOJu0YzfO3yP2QiFLcv1kdU1TG6yIHfFjqEmakw8XspUC81OUG8H/qy3
+	haPMklgGoslOhENzx2Rrouh1HnwVx3K0o6Nx4JDmoY5MUSvwOtif1tN7aXiWbQWBfCPjdXaNRfS
+	NCePaFFNomCvo9n3wTX4z6jvjfPLT1d2jlafrBQ==
+X-Google-Smtp-Source: AGHT+IEZ5qdBLVvKB5XTD+4JNcNopYd0Qw8YU24zs9LsT+BKNrCyfLvgj0YV5WuY7LflHPoWR30CvJt+jqecqoOosTk=
+X-Received: by 2002:a25:2fd2:0:b0:dc2:398b:fa08 with SMTP id
+ v201-20020a252fd2000000b00dc2398bfa08mr6083186ybv.31.1711432619981; Mon, 25
+ Mar 2024 22:56:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 05/14] drm: Suppress intentional warning backtraces in
- scaling unit tests
-Content-Language: en-US
-To: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>,
- Kees Cook <keescook@chromium.org>, Daniel Diaz <daniel.diaz@linaro.org>,
- David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>,
- Brendan Higgins <brendan.higgins@linux.dev>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
- <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
- <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
- Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
- kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- loongarch@lists.linux.dev, netdev@vger.kernel.org,
- Linux Kernel Functional Testing <lkft@linaro.org>
-References: <20240325175248.1499046-1-linux@roeck-us.net>
- <20240325175248.1499046-6-linux@roeck-us.net>
- <0729b218-53f1-4139-b165-a324794a9abd@igalia.com>
- <e880828b-552e-488e-9f31-3989bec276ae@roeck-us.net>
- <7f6a223f-f432-4e1b-a67e-3816448224a1@igalia.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <7f6a223f-f432-4e1b-a67e-3816448224a1@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240322233838.868874-1-boqun.feng@gmail.com> <20240322233838.868874-2-boqun.feng@gmail.com>
+ <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch> <CAH5fLggdVDccDwBa3z+3YfjKFLegh7ZvcSzfhnEbAGSk=THKrw@mail.gmail.com>
+ <497668ec-c2d5-4cb4-9c2d-8e6f7129a42e@lunn.ch>
+In-Reply-To: <497668ec-c2d5-4cb4-9c2d-8e6f7129a42e@lunn.ch>
+From: Trevor Gross <tmgross@umich.edu>
+Date: Tue, 26 Mar 2024 01:56:48 -0400
+Message-ID: <CALNs47uEE9f73mtoXtJ52wS4nCOjTVxUtyPfQexF1mzHg6W5JA@mail.gmail.com>
+Subject: Re: [WIP 1/3] rust: Introduce atomic module
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
+	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/25/24 18:09, Maíra Canal wrote:
-> On 3/25/24 16:24, Guenter Roeck wrote:
->> Hi,
->>
->> On Mon, Mar 25, 2024 at 04:05:06PM -0300, Maíra Canal wrote:
->>> Hi Guenter,
->>>
->>> On 3/25/24 14:52, Guenter Roeck wrote:
->>>> The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
->>>> intentionally trigger warning backtraces by providing bad parameters to
->>>> the tested functions. What is tested is the return value, not the existence
->>>> of a warning backtrace. Suppress the backtraces to avoid clogging the
->>>> kernel log.
->>>>
->>>> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>>> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
->>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>> ---
->>>> - Rebased to v6.9-rc1
->>>> - Added Tested-by:, Acked-by:, and Reviewed-by: tags
->>>>
->>>>    drivers/gpu/drm/tests/drm_rect_test.c | 6 ++++++
->>>>    1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
->>>> index 76332cd2ead8..75614cb4deb5 100644
->>>> --- a/drivers/gpu/drm/tests/drm_rect_test.c
->>>> +++ b/drivers/gpu/drm/tests/drm_rect_test.c
->>>> @@ -406,22 +406,28 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
->>>>    static void drm_test_rect_calc_hscale(struct kunit *test)
->>>>    {
->>>> +    DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
->>>>        const struct drm_rect_scale_case *params = test->param_value;
->>>>        int scaling_factor;
->>>> +    START_SUPPRESSED_WARNING(drm_calc_scale);
->>>
->>> I'm not sure if it is not that obvious only to me, but it would be nice
->>> to have a comment here, remembering that we provide bad parameters in
->>> some test cases.
->>
->> Sure. Something like this ?
->>
->>          /*
->>           * drm_rect_calc_hscale() generates a warning backtrace whenever bad
->>           * parameters are passed to it. This affects all unit tests with an
->>           * error code in expected_scaling_factor.
->>           */
->>
-> 
-> Yeah, perfect. With that, feel free to add my
-> 
-> Acked-by: Maíra Canal <mcanal@igalia.com>
-> 
+On Sat, Mar 23, 2024 at 10:10=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote=
+:
+> > > Is it possible to somehow poison rusts own atomics?  I would not be
+> > > too surprised if somebody with good Rust knowledge but new to the
+> > > kernel tries using Rusts atomics. Either getting the compiler to fail
+> > > the build, or it throws an Opps on first invocation would be good.
+> >
+> > We could try to get a flag added to the Rust standard library that
+> > removes the core::sync::atomic module entirely, then pass that flag.
+>
+> Just looking down the road a bit, are there other features in the
+> standard library which are not applicable to Linux kernel space?
+> Ideally we want a solution not just for atomics but a generic solution
+> which can disable a collection of features? Maybe one by one?
 
-Thanks!
-Guenter
+Clippy is an easy way to do this via the disallowed_* lints.
+disallowed_types [1] would be applicable here to forbid
+`core::atomic::Atomic*`.
 
+I don't think KCI currently checks clippy, but we probably want that
+at some point.
+
+- Trevor
+
+[1]: https://rust-lang.github.io/rust-clippy/master/index.html#/disallowed_=
+types
+
+> And i assume somebody will try to use Rust in uboot/barebox. It
+> probably has similar requirements to the Linux kernel? But what about
+> Zephyr? Or VxWorks? Darwin?
+>
+>         Andrew
+>
 
