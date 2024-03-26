@@ -1,239 +1,231 @@
-Return-Path: <linux-arch+bounces-3196-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3197-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969FB88C285
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 13:47:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D11A88C53A
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 15:35:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D13B1B20FB1
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 12:47:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 779CF1F3E45F
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Mar 2024 14:35:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F3F6AF85;
-	Tue, 26 Mar 2024 12:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC5013C3C0;
+	Tue, 26 Mar 2024 14:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="DeikNxfH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0826D139E;
-	Tue, 26 Mar 2024 12:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B8180C12;
+	Tue, 26 Mar 2024 14:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711457245; cv=none; b=IBTf+jFr+Ryz/oWCtPW+jwPzqOtRqqzL3t+Hby9L56GTsbtUXyk8J6rmEIkyS74tGB6jhSByQaeG83hz8efzzJnTJUqYuZTxeOtWxQhVRAupG+ihckYmZK50kkpSGLeIheqyZvzwC0otJuc+tftsxAgvO6NAkvc5SqJHQHJaKy4=
+	t=1711463728; cv=none; b=aaD5Z8BgM3g97IsHi3P16od05bB90Ip9N3IjpBkoYzulv+Q2NCtHgtRYEue2Hww7yG5CzLjHzonREIZXebCC2TNCVlix0gNBO0N5DvF9J2+kezIVu3AnZfBZY85SlKkQtYRARNZzsZUs0vn533OdF8NWq7ySWFob+oSgQSFRJ14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711457245; c=relaxed/simple;
-	bh=sGJsi5QL5OEY3rakPIBQalfrmkZhP62VUd/1rO/Tex0=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=DfJ3VN04r+4INdHxV48V0lQz7d8EB/2PUJWx4xT/AyraDzO1NeWNm5TTs4gNneBDn5ZyU0L1WgouB7fI+dbSciSGO++epSeV5V4pkSLMGKO2QxZBCzrx3syGdYVbPsKWz5GEmA2DiywhOEv3/abWddIsQNVDlfidgA0bjAM2jq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4V3qJ843l4z2BhYv;
-	Tue, 26 Mar 2024 20:44:40 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4E2C9140120;
-	Tue, 26 Mar 2024 20:47:19 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 26 Mar
- 2024 20:47:18 +0800
-Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
-To: Mina Almasry <almasrymina@google.com>, YiFei Zhu <zhuyifei@google.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
-	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
-	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
-	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
- Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
- Kaligineedi <pkaligineedi@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
- <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
- <CAHS8izPR+SioMKNv3=2ajK=GGOE26BTaxOMykHJfjttqYjx1wQ@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <ca9ab650-3f77-509c-7a29-6d7dd775b6d1@huawei.com>
-Date: Tue, 26 Mar 2024 20:47:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	s=arc-20240116; t=1711463728; c=relaxed/simple;
+	bh=G4VayLkDEdgGiDy8YMVdGzeBmWHF8revmHJsqsrO5+0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kEDv20bmLDybonU8p/kRc+Fzj1tVqrlrhmNyPlh8EjOu1wS5lPZGHONwwvWt4VOrmf0vrUVXi1N2XvresZwMRuWR4y86FE2g1/CRtju9De320p4CbVMsbSBPdA5kc3PP6T76PZnzrZ7gH1NL/Ls9R8yP9ls8dhIKF1MUXSC5Qts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=DeikNxfH; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+	:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+	Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+	:List-Post:List-Owner:List-Archive;
+	bh=2SVrI5jZNwjEti7fw19FvDvELk09Rp4DU6fIvhzRuqc=; b=DeikNxfHevZv6bG0ypUdd4QEVo
+	I334M9MJfjVTwzjB5W/+c8j7w0EXJWHbvBnR4M20jaWqZAGybfZZCFgT41Ffgi4rE6fDMgxy4pov2
+	LTAXZCe3z1bBvFXmG4S3F2nIl28mm8ITnduc1F7kNlDOjYFAc0kgEVsbXraPezLVrZilvOqjMhGAP
+	+Ofb+xNOnl+1AF6+UgXzjpQ8YWdVRntupIBjCQkRFTFjLjifbKiCi2OXspZoPcxQ3whohfO+C+D1h
+	IFiRwDWQshQKeJ9vRvWYkBSkfLy563bks+Lvx1ePOQI7jtOHk1VpPB+LDkTqHgVyWEM4X3xievIHh
+	3DIV/WNA==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1rp7tX-00Ew6P-2G;
+	Tue, 26 Mar 2024 14:35:19 +0000
+Date: Tue, 26 Mar 2024 14:35:19 +0000
+From: "Dr. David Alan Gilbert" <dave@treblig.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <ZgLdJwx1Mld-MJeX@gallifrey>
+References: <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+ <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+ <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+ <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+ <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+ <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+ <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
+ <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
+ <ZgIRXL5YM2AwBD0Y@gallifrey>
+ <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izPR+SioMKNv3=2ajK=GGOE26BTaxOMykHJfjttqYjx1wQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-17-amd64 (x86_64)
+X-Uptime: 14:11:37 up 83 days, 17:01,  1 user,  load average: 0.15, 0.06, 0.01
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-On 2024/3/26 8:28, Mina Almasry wrote:
-> On Tue, Mar 5, 2024 at 11:38 AM Mina Almasry <almasrymina@google.com> wrote:
->>
->> On Tue, Mar 5, 2024 at 4:54 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>
->>> On 2024/3/5 10:01, Mina Almasry wrote:
->>>
->>> ...
->>>
->>>>
->>>> Perf - page-pool benchmark:
->>>> ---------------------------
->>>>
->>>> bench_page_pool_simple.ko tests with and without these changes:
->>>> https://pastebin.com/raw/ncHDwAbn
->>>>
->>>> AFAIK the number that really matters in the perf tests is the
->>>> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
->>>> cycles without the changes but there is some 1 cycle noise in some
->>>> results.
->>>>
->>>> With the patches this regresses to 9 cycles with the changes but there
->>>> is 1 cycle noise occasionally running this test repeatedly.
->>>>
->>>> Lastly I tried disable the static_branch_unlikely() in
->>>> netmem_is_net_iov() check. To my surprise disabling the
->>>> static_branch_unlikely() check reduces the fast path back to 8 cycles,
->>>> but the 1 cycle noise remains.
->>>>
->>>
->>> The last sentence seems to be suggesting the above 1 ns regresses is caused
->>> by the static_branch_unlikely() checking?
->>
->> Note it's not a 1ns regression, it's looks like maybe a 1 cycle
->> regression (slightly less than 1ns if I'm reading the output of the
->> test correctly):
->>
->> # clean net-next
->> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
->> 2.993 ns (step:0)
->>
->> # with patches
->> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 9 cycles(tsc)
->> 3.679 ns (step:0)
->>
->> # with patches and with diff that disables static branching:
->> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
->> 3.248 ns (step:0)
->>
->> I do see noise in the test results between run and run, and any
->> regression (if any) is slightly obfuscated by the noise, so it's a bit
->> hard to make confident statements. So far it looks like a ~0.25ns
->> regression without static branch and about ~0.65ns with static branch.
->>
->> Honestly when I saw all 3 results were within some noise I did not
->> investigate more, but if this looks concerning to you I can dig
->> further. I likely need to gather a few test runs to filter out the
->> noise and maybe investigate the assembly my compiler is generating to
->> maybe narrow down what changes there.
->>
+* Linus Torvalds (torvalds@linux-foundation.org) wrote:
+> On Mon, 25 Mar 2024 at 17:05, Dr. David Alan Gilbert <dave@treblig.org> wrote:
+> >
+> > Isn't one of the aims of the Rust/C++ idea that you can't forget to access
+> > a shared piece of data atomically?
 > 
-> I did some more investigation here to gather more data to filter out
-> the noise, and recorded the summary here:
+> If that is an aim, it's a really *bad* one.
 > 
-> https://pastebin.com/raw/v5dYRg8L
-> 
-> Long story short, the page_pool benchmark results are consistent with
-> some outlier noise results that I'm discounting here. Currently
-> page_pool fast path is at 8 cycles
-> 
-> [ 2115.724510] time_bench: Type:tasklet_page_pool01_fast_path Per
-> elem: 8 cycles(tsc) 3.187 ns (step:0) - (measurement period
-> time:0.031870585 sec time_interval:31870585) - (invoke count:10000000
-> tsc_interval:86043192)
-> 
-> and with this patch series it degrades to 10 cycles, or about a 0.7ns
-> degradation or so:
+> Really.
+>
+> It very much should never have been an aim, and I hope it wasn't. I
+> think, and hope, that the source of the C++ and Rust bad decisions is
+> cluelessness, not active malice.
 
-Even if the absolute value for the overhead is small, we seems have a
-degradation of about 20% for tasklet_page_pool01_fast_path testcase,
-which seems scary.
+Oh that hit a nerve :-)
 
-I am assuming that every page is recyclable for tasklet_page_pool01_fast_path
-testcase, and that code path matters for page_pool, it would be good to
-remove any additional checking for that code path.
+> Take Rust - one big point of Rust is the whole "safe" thing, but it's
+> very much not a straightjacket like Pascal was. There's a "safe" part
+> to Rust, but equally importantly, there's also the "unsafe" part to
+> Rust.
+> 
+> The safe part is the one that most programmers are supposed to use.
+> It's the one that allows you to not have to worry too much about
+> things. It's the part that makes it much harder to screw up.
+> 
+> But the *unsafe* part is what makes Rust powerful. It's the part that
+> works behind the curtain. It's the part that may be needed to make the
+> safe parts *work*.
+> 
+> And yes, an application programmer might never actually need to use
+> it, and in fact in many projects the rule might be that unsafe Rust is
+> simply never even an option - but that doesn't mean that the unsafe
+> parts don't exist.
+> 
+> Because those unsafe parts are needed to make it all work in reality.
+> 
+> And you should never EVER base your whole design around the "safe"
+> part. Then you get a language that is a straight-jacket.
+> 
+> So I'd very strongly argue that the core atomics should be done the
+> "unsafe" way - allow people to specify exactly when they want exactly
+> what access. Allow people to mix and match and have overlapping
+> partial aliases, because if you implement things like locking, you
+> *need* those partially aliasing accesses, and you need to make
+> overlapping atomics where sometimes you access only one part of the
+> field.
+> 
+> And yes, that will be unsafe, and it might even be unportable, but
+> it's exactly the kind of thing you need in order to avoid having to
+> use assembly language to do your locking.
+> 
+> And by all means, you should relegate that to the "unsafe corner" of
+> the language. And maybe don't talk about the unsafe sharp edges in the
+> first chapter of the book about the language.
+> 
+> But you should _start_ the design of your language memory model around
+> the unsafe "raw atomic access operations" model.
+> 
+> Then you can use those strictly more powerful operations, and you
+> create an object model *around* it.
+> 
+> So you create safe objects like just an atomic counter. In *that*
+> corner of the language, you have the "safe atomics" - they aren't the
+> fundamental implementation, but they are the safe wrappers *around*
+> the more powerful (but unsafe) core.
+> 
+> With that "atomic counter" you cannot forget to do atomic accesses,
+> because that safe corner of the world doesn't _have_ anything but the
+> safe atomic accesses for every time you use the object.
+> 
+> See? Having the capability to do powerful and maybe unsafe things does
+> not force people to expose and use all that power. You can - and
+> should - wrap the powerful model with safer and simpler interfaces.
 
-And we already have pool->has_init_callback checking when we have to use
-a new page, it may make sense to refactor that to share the same checking
-for provider to avoid the overhead as much as possible.
+I'd agree it's important to get the primitives right; but 
+I'd argue that from a design point of view it's probably better to keep
+both in mind from early on; you need to create a safe interface which
+people can actually use most of the time, otherwise you're not getting
+any benefit; so yes get the bases right, but just keep a feel for how
+they'll get encapsulated so most of the more boring code can be safe.
 
-Also, I am not sure if it really matter that much, as with the introducing
-of netmem_is_net_iov() checking spreading in the networking, the overhead
-might add up for other case too.
+> This isn't something specific to atomics. Not even remotely. This is
+> quite fundamental. You often literally _cannot_ do interesting things
+> using only safe interfaces. You want safe memory allocations - but to
+> actually write the allocator itself, you want to have all those unsafe
+> escape methods - all those raw pointers with arbitrary arithmetic etc.
+> 
+> And if you don't have unsafe escapes, you end up doing what so many
+> languages did: the libraries are written in something more powerful
+> like C, because C literally can do things that other languages
+> *cannot* do.
 
+Yeh that's fine, I'm not at all arguing against that; but it doesn't
+mean you shouldn't keep an eye on how the safe side should look; even in the
+kernel.
+Get it right and those unsafe escapes shouldn't be needed too commonly;
+get it wrong and you'll either have painful abstractions or end up with
+unsafes shotgunned all over the place.
+
+> Don't let people fool you with talk about Turing machines and similar
+> smoke-and-mirror garbage. It's a bedtime story for first-year CS
+> students. It's not true.
+
+My infinitely long tape is still on back order.
+
+Dave
+
+> things. If your language doesn't have those unsafe escapes, your
+> language is inherently weaker, and inherently worse for it.
 > 
-> [  498.226127] time_bench: Type:tasklet_page_pool01_fast_path Per
-> elem: 10 cycles(tsc) 3.944 ns (step:0) - (measurement period
-> time:0.039442539 sec time_interval:39442539) - (invoke count:10000000
-> tsc_interval:106485268)
+>            Linus
 > 
-> I took the time to dig into where the degradation comes from, and to
-> my surprise we can shave off 1 cycle in perf by removing the
-> static_branch_unlikely check in netmem_is_net_iov() like so:
-> 
-> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> index fe354d11a421..2b4310ac1115 100644
-> --- a/include/net/netmem.h
-> +++ b/include/net/netmem.h
-> @@ -122,8 +122,7 @@ typedef unsigned long __bitwise netmem_ref;
->  static inline bool netmem_is_net_iov(const netmem_ref netmem)
->  {
->  #ifdef CONFIG_PAGE_POOL
-> -       return static_branch_unlikely(&page_pool_mem_providers) &&
-> -              (__force unsigned long)netmem & NET_IOV;
-> +       return (__force unsigned long)netmem & NET_IOV;
->  #else
->         return false;
->  #endif
-> 
-> With this change, the fast path is 9 cycles, only  a 1 cycle (~0.35ns)
-> regression:
-> 
-> [  199.184429] time_bench: Type:tasklet_page_pool01_fast_path Per
-> elem: 9 cycles(tsc) 3.552 ns (step:0) - (measurement period
-> time:0.035524013 sec time_interval:35524013) - (invoke count:10000000
-> tsc_interval:95907775)
-> 
-> I did some digging with YiFei on why the static_branch_unlikely
-> appears to be causing a 1 cycle regression, but could not get an
-> answer that makes sense. The # of instructions in
-> page_pool_return_page() with the static_branch_unlikely and without is
-> about the same in the compiled .o file, and my understanding is that
-> static_branch will cause code re-writing anyway so looking at the
-> compiled code may not be representative.
-> 
-> Worthy of note is that I get ~95% line rate of devmem TCP regardless
-> of the static_branch_unlikely() or not, so impact of the static_branch
-> is not large enough to be measurable end-to-end. I'm thinking I want
-> to drop the static_branch_unlikely() in the next RFC since it doesn't
-> improve the end-to-end throughput number and is resulting in a
-> measurable improvement in the page pool benchmark.
-> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
