@@ -1,160 +1,186 @@
-Return-Path: <linux-arch+bounces-3226-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3227-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EE5188EEDB
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 20:08:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 744FE88EF66
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 20:39:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A02211F2E705
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 19:08:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D25A29E9A4
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 19:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F395615216D;
-	Wed, 27 Mar 2024 19:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EEF150995;
+	Wed, 27 Mar 2024 19:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="gvtKHWYM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SKHszxO4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16496152162
-	for <linux-arch@vger.kernel.org>; Wed, 27 Mar 2024 19:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CAC1E52C;
+	Wed, 27 Mar 2024 19:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711566468; cv=none; b=V06OOPrApu+2WASbjkjp9us2iiTscOJSSAZ+O52sz7rjzQSKDZ85ouAXbMSCCfqaMghV2Xc37HNDYR/DU1s/lxnBj6jbZd78ijM7Pv1gt8eDIxakFd5RsOLG3Z6tFyZ1p3IjL+q1TAOGG59MCI++EZ0mGGaooAWjOzVvORHq3m0=
+	t=1711568368; cv=none; b=FcxLBpnxJPTGsCQKJMaOehbjOnGZv0TNC/pyZ6T7tdFg+uBHQwVGc16bCJcdyNA+71PziK55Za2q+3nBvJUVGuDRHK1jSOYkaQ+9cYpBwUfrfdDVkO+Pv/3MXf5WgcytgMqIv95wAePvIIhynu03vdW+N3nNEUjVYn9UexMxuxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711566468; c=relaxed/simple;
-	bh=jMoBfFRvYMHbxV9SVPKA1xW7pPTPIbFhe56hTJM1VbQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ntIKSixzhhHjVeHbcXgHcaBJDDpQh3ybFyEr9nXgR5wLHNV3Rn58Ao0Y6EcWVj1gvtzOw/PbK4uwfPQKM3/gcgTJ5eSMBxw3+PT92JikhR5z707wszo7tNX35jSeEcIlbahM3SMNG37I5bsqbDUAfSW736ihaX3roTVJnu8cx/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=gvtKHWYM; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56c12c73ed8so186877a12.2
-        for <linux-arch@vger.kernel.org>; Wed, 27 Mar 2024 12:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1711566465; x=1712171265; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WdyHGSi984C+8z92+nQdjQTGDoXLLzpQZD6STeLATA0=;
-        b=gvtKHWYMlYjqblR3bFTlrIy1WNW13rAyH524zsOXYlPyhELTWBOxG+KTSrQPMo01lz
-         rYvFP9ENb7BEf+E9fI4CCat3PU79Ef6QrA8Qh8jU9Hkc6+TmJfgcK6KbyO4/EDFucM+u
-         S0p5hHldtV3SlQeKm0S2ccOePV1Cn98q1lEZ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711566465; x=1712171265;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WdyHGSi984C+8z92+nQdjQTGDoXLLzpQZD6STeLATA0=;
-        b=pFJU9bCdmRAga6nm7Gr6l78PoVjiBH+9CEUXFhYDDtJJOoLVhAgtdCrMV9hHGuKHZD
-         VWjpry/bZjJATPjoBZmUzSpTmBW3LY1biqwAP4ZWmyCs4wwhoB9SrWz3DFAGn7zgvieQ
-         yx2u8WDh5/DF7MDpV3DuvbZ5sWKSrNZZzzcBXXn7YCEHXAByuyJQXJBoGe9yqBDRHP6v
-         u9sTM178/nK37iOg2I7Qe9tv8sx4XiHV8OenmIX6j4afQE6IpQP+xN2+hOOP1XoT94FG
-         IuN9329tPxWkAZy5lqWLnEncKwApFbvnhlDBN2zfuvYK9FN5c7XgH9YHHMl6g98PZz8H
-         nsdA==
-X-Forwarded-Encrypted: i=1; AJvYcCWc7AzH0/w9YDIi67wfV58e6OaRZT2UOesKHOXrxSRuB9XsetF5bQQExn3KezN2MOaNuJBnwh7hc1IP8ddfr7PgxnEPTidJ2pcDsw==
-X-Gm-Message-State: AOJu0YzJYUesD+djvyDodup6pKTOKtd59XCLYPAaJiuVBcNE3U2ctT6t
-	B9DragsXohXHdKvsQEw3seGoa+gzS0mRnowvhGXbi10gOzhLu4vGijO23suefAK/S6wy0HBWjZU
-	8Gf0=
-X-Google-Smtp-Source: AGHT+IFo5hmOH3BpQ1OGAilMcKGn8135RECsf4if4V1uD+DMwXEXLwJ0q9PscWgQysItsy7VXiJFRw==
-X-Received: by 2002:a17:906:b858:b0:a47:3900:7b2d with SMTP id ga24-20020a170906b85800b00a4739007b2dmr251312ejb.6.1711566465224;
-        Wed, 27 Mar 2024 12:07:45 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1709062ac600b00a4739b854cdsm5744745eje.33.2024.03.27.12.07.43
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 12:07:44 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4e0a65f37bso23276766b.0
-        for <linux-arch@vger.kernel.org>; Wed, 27 Mar 2024 12:07:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXheMdqqkqBEGQjGDWpk+O2kdY6jrw04s5MHMELjqAMJQ4jcl8zX3vAVgjk7ajVtlqqBZ+8P5EJ3TOjnzubFsKY0a6QKMZdEUmouQ==
-X-Received: by 2002:a17:906:6d5:b0:a4e:14b3:e7e1 with SMTP id
- v21-20020a17090606d500b00a4e14b3e7e1mr172960ejb.42.1711566462952; Wed, 27 Mar
- 2024 12:07:42 -0700 (PDT)
+	s=arc-20240116; t=1711568368; c=relaxed/simple;
+	bh=mgDCCV9DYm3gE81YovhkygNKHO9RS0DsGnhFgu3kHyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ohTEiRVoma0GCSa7EZZ90JwMYtXJic6dw9IzrR9wHmJQ9MtPyovNYumX29+ZdXjgF61t624A31HreBfXT0zzfYOWEhomcosS0n6pTOUuJuYSomT1MhJBycaoToZ++zc1eKJDPY3BzxV7cmdCFuSRbFmNes9+sEUpW4BKTRVKy5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SKHszxO4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3492BC433C7;
+	Wed, 27 Mar 2024 19:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711568368;
+	bh=mgDCCV9DYm3gE81YovhkygNKHO9RS0DsGnhFgu3kHyA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SKHszxO4HY0/TKQKrYd5xjeNheZExttn6ouZSQo7RamEADgZOHEGKOgxLgWnDAQsX
+	 TQk1EiCgbOjPSXUXVDKc1GHuMb8JYfr2n9dUTSMBL4fPlQCFaWvqtzr7SljGX8ozL0
+	 d+GxeE8i5/jrK3YAq+PzsRs9yg9Ub9Ye0zUWxbvydciwA80gaS/Cm+ZdJSIaW62wjN
+	 8mgdqhfJd0T7WESQFdfsQPBT5oU/lItq2D11cSo/Qk/7TSLc6IaPfRphmumfAFxMTP
+	 w0oml1KABCZkKYStlxNthCpMKTFGN6FZPoQQlay9J46ava0AXCk2S+OoNd/Q7U91J0
+	 LlcAACEC05P/g==
+Date: Wed, 27 Mar 2024 19:39:20 +0000
+From: Simon Horman <horms@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH v2 12/14] sh: Add support for suppressing warning
+ backtraces
+Message-ID: <20240327193920.GV403975@kernel.org>
+References: <20240325175248.1499046-1-linux@roeck-us.net>
+ <20240325175248.1499046-13-linux@roeck-us.net>
+ <20240327144431.GL403975@kernel.org>
+ <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
- <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
- <ZgIRXL5YM2AwBD0Y@gallifrey> <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
- <160DB953-1588-418E-A490-381009CD8DE0@gmail.com> <qyjrex54hbhvhw4gmn7b6l2hr45o56bwt6fazfalykwcp5zzkx@vwt7k3d6kdwt>
-In-Reply-To: <qyjrex54hbhvhw4gmn7b6l2hr45o56bwt6fazfalykwcp5zzkx@vwt7k3d6kdwt>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 27 Mar 2024 12:07:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com>
-Message-ID: <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com>
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: comex <comexk@gmail.com>, "Dr. David Alan Gilbert" <dave@treblig.org>, 
-	Philipp Stanner <pstanner@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	rust-for-linux <rust-for-linux@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Marco Elver <elver@google.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
 
-On Wed, 27 Mar 2024 at 11:51, Kent Overstreet <kent.overstreet@linux.dev> wrote:
->
-> On Wed, Mar 27, 2024 at 09:16:09AM -0700, comex wrote:
-> > Meanwhile, Rust intentionally lacks strict aliasing.
->
-> I wasn't aware of this. Given that unrestricted pointers are a real
-> impediment to compiler optimization, I thought that with Rust we were
-> finally starting to nail down a concrete enough memory model to tackle
-> this safely. But I guess not?
+On Wed, Mar 27, 2024 at 08:10:51AM -0700, Guenter Roeck wrote:
+> On 3/27/24 07:44, Simon Horman wrote:
+> > On Mon, Mar 25, 2024 at 10:52:46AM -0700, Guenter Roeck wrote:
+> > > Add name of functions triggering warning backtraces to the __bug_table
+> > > object section to enable support for suppressing WARNING backtraces.
+> > > 
+> > > To limit image size impact, the pointer to the function name is only added
+> > > to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
+> > > CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
+> > > parameter is replaced with a (dummy) NULL parameter to avoid an image size
+> > > increase due to unused __func__ entries (this is necessary because __func__
+> > > is not a define but a virtual variable).
+> > > 
+> > > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > ---
+> > > - Rebased to v6.9-rc1
+> > > - Added Tested-by:, Acked-by:, and Reviewed-by: tags
+> > > - Introduced KUNIT_SUPPRESS_BACKTRACE configuration option
+> > > 
+> > >   arch/sh/include/asm/bug.h | 26 ++++++++++++++++++++++----
+> > >   1 file changed, 22 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/sh/include/asm/bug.h b/arch/sh/include/asm/bug.h
+> > > index 05a485c4fabc..470ce6567d20 100644
+> > > --- a/arch/sh/include/asm/bug.h
+> > > +++ b/arch/sh/include/asm/bug.h
+> > > @@ -24,21 +24,36 @@
+> > >    * The offending file and line are encoded in the __bug_table section.
+> > >    */
+> > >   #ifdef CONFIG_DEBUG_BUGVERBOSE
+> > > +
+> > > +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
+> > > +# define HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC_PTR	"\t.long %O2\n"
+> > > +#else
+> > > +# define __BUG_FUNC_PTR
+> > > +#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
+> > > +
+> > 
+> > Hi Guenter,
+> > 
+> > a minor nit from my side: this change results in a Kernel doc warning.
+> > 
+> >       .../bug.h:29: warning: expecting prototype for _EMIT_BUG_ENTRY(). Prototype was for HAVE_BUG_FUNCTION() instead
+> > 
+> > Perhaps either the new code should be placed above the Kernel doc,
+> > or scripts/kernel-doc should be enhanced?
+> > 
+> 
+> Thanks a lot for the feedback.
+> 
+> The definition block needs to be inside CONFIG_DEBUG_BUGVERBOSE,
+> so it would be a bit odd to move it above the documentation
+> just to make kerneldoc happy. I am not really sure that to do
+> about it.
 
-Strict aliasing is a *horrible* mistake.
+FWIIW, I agree that would be odd.
+But perhaps the #ifdef could also move above the Kernel doc?
+Maybe not a great idea, but the best one I've had so far.
 
-It's not even *remotely* "tackle this safely". It's the exact
-opposite. It's completely broken.
-
-Anybody who thinks strict aliasing is a good idea either
-
- (a) doesn't understand what it means
-
- (b) has been brainwashed by incompetent compiler people.
-
-it's a horrendous crock that was introduced by people who thought it
-was too complicated to write out "restrict" keywords, and that thought
-that "let's break old working programs and make it harder to write new
-programs" was a good idea.
-
-Nobody should ever do it. The fact that Rust doesn't do the C strict
-aliasing is a good thing. Really.
-
-I suspect you have been fooled by the name. Because "strict aliasing"
-sounds like a good thing. It sounds like "I know these strictly can't
-alias". But despite that name, it's the complete opposite of that, and
-means "I will ignore actual real aliasing even if it exists, because I
-will make aliasing decisions on entirely made-up grounds".
-
-Just say no to strict aliasing. Thankfully, there's an actual compiler
-flag for that: -fno-strict-aliasing. It should absolutely have been
-the default.
-
-                 Linus
+> I'll wait for comments from others before making any changes.
+> 
+> Thanks,
+> Guenter
+> 
+> > >   #define _EMIT_BUG_ENTRY				\
+> > >   	"\t.pushsection __bug_table,\"aw\"\n"	\
+> > >   	"2:\t.long 1b, %O1\n"			\
+> > > -	"\t.short %O2, %O3\n"			\
+> > > -	"\t.org 2b+%O4\n"			\
+> > > +	__BUG_FUNC_PTR				\
+> > > +	"\t.short %O3, %O4\n"			\
+> > > +	"\t.org 2b+%O5\n"			\
+> > >   	"\t.popsection\n"
+> > >   #else
+> > >   #define _EMIT_BUG_ENTRY				\
+> > >   	"\t.pushsection __bug_table,\"aw\"\n"	\
+> > >   	"2:\t.long 1b\n"			\
+> > > -	"\t.short %O3\n"			\
+> > > -	"\t.org 2b+%O4\n"			\
+> > > +	"\t.short %O4\n"			\
+> > > +	"\t.org 2b+%O5\n"			\
+> > >   	"\t.popsection\n"
+> > >   #endif
+> > > +#ifdef HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC	__func__
+> > > +#else
+> > > +# define __BUG_FUNC	NULL
+> > > +#endif
+> > > +
+> > >   #define BUG()						\
+> > >   do {							\
+> > >   	__asm__ __volatile__ (				\
+> > 
+> > ...
+> 
 
