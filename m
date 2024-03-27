@@ -1,87 +1,144 @@
-Return-Path: <linux-arch+bounces-3250-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3251-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7198288F0DB
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 22:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A48188F11A
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 22:42:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B96C29C37F
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 21:25:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 603B629D37E
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Mar 2024 21:42:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69624153509;
-	Wed, 27 Mar 2024 21:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF1A153805;
+	Wed, 27 Mar 2024 21:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Ho0uWBKv"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P9fz0LZ6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1CF47A7F;
-	Wed, 27 Mar 2024 21:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4601115359D;
+	Wed, 27 Mar 2024 21:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711574718; cv=none; b=nAk5v6EfsViUsgYxMCSWx3sPMp9RZ9NqWRPdi1VuPRxHWwEYWlC4nzTZgLdA4AZsqbG6waRWPOISh+zYfI1eRFpF1oUNDE3EPTJCGgD6iGZ+SgHoKotYGT531I9MCdnJgrNrsh7UhEak84m9Uab97ymXaKothWHxVuNrP8cqvw0=
+	t=1711575716; cv=none; b=oANa7k0tNGRTs52yyYGE4EOGW/ffk83alwdY/KLbr8JC+xlVN/i1dYJFToDXdACsXsHIAJnM+1DBqwLt5M1Ge5VR9Un/9pP91NwmY1XraSjjggiRotdoyzCxcj8WHed01DgYBdZt/tcTHS2B9cvvIbZtEBUkEwkcXf87TyuI2to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711574718; c=relaxed/simple;
-	bh=JRSXPxdrQqrWLSPd70fIgarnQxXYvf0ykL1MJXBFB/U=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=LswJD2ti7Mp8wL2pCSGdDCNbUMRivP5t7lSG2D/uA5nOiQHLHaaNg659ecvpBDdOs2U9FeJ87KxS3Q7ILu8duSzZPYF+ltNsenMDnFyz7CALKLDKRrmOeOwIT5m52/U16kMTC0V+1shyyxHnwWAsNcTJ6y4i8l7PXlXt/94SWV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Ho0uWBKv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68782C433C7;
-	Wed, 27 Mar 2024 21:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1711574717;
-	bh=JRSXPxdrQqrWLSPd70fIgarnQxXYvf0ykL1MJXBFB/U=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Ho0uWBKvGFwgWY4CwVS1HcMdq7K6bPpP4DYyp/5qYDCJkxHKyU9vfNSJ7YDhaG3zs
-	 w3HHQhQsufkKDmNXyX7K32z9CSG2dRF1a/R+ETw4hPgnu3feqOxD1j3PpcNoutpnv1
-	 /CZN0jYTBBzf1bA4kpx/bG1sv4UaAmth1BnFQfHc=
-Date: Wed, 27 Mar 2024 14:25:16 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Samuel Holland <samuel.holland@sifive.com>
-Cc: linux-arm-kernel@lists.infradead.org, x86@kernel.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, Christoph
- Hellwig <hch@lst.de>, loongarch@lists.linux.dev,
- amd-gfx@lists.freedesktop.org, Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: [PATCH v3 12/14] drm/amd/display: Use
- ARCH_HAS_KERNEL_FPU_SUPPORT
-Message-Id: <20240327142516.e4b1f9ba6e2ec7bc300e4d58@linux-foundation.org>
-In-Reply-To: <20240327200157.1097089-13-samuel.holland@sifive.com>
-References: <20240327200157.1097089-1-samuel.holland@sifive.com>
-	<20240327200157.1097089-13-samuel.holland@sifive.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1711575716; c=relaxed/simple;
+	bh=Ka4yhsa8pA7IN8JWhrFeenVCI3gTYxePnH/a155TeVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n6JkD5zNzAxJe6z3yVu174hXuzi9ffWbD5CPwlfsYxGbR5/QQ7dDeoQBLgI0pSU5EhXNVfM8OgqEkhqgNXWljbHRnCVZRfsojX8BCE8xHqUklktSsAgKvph26AS880MO4Z1gko95XE6o7v5mIHuMkaYXlC9rCZpxXVkdA/k9DHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P9fz0LZ6; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 27 Mar 2024 17:41:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711575711;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dfpvhmi8rKro1b2dyL3uY2Ed1/z/apHoJwqWNRmO5B4=;
+	b=P9fz0LZ6KX4HbsV78Toh0xVvAAPtEhIh/vnyagTO6/lh+tTBkoFPRjJ/AFAokCzLbmN29U
+	CulIj0vF4mNJoUBAND7yLvIraMiM91VioMqDNlE8vn0vuML+CofPaw07zpuXQQmW+GZP2G
+	68JzFd6/7l4lnSoUl7RV9RRY1Pn48F8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: comex <comexk@gmail.com>, "Dr. David Alan Gilbert" <dave@treblig.org>, 
+	Philipp Stanner <pstanner@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	rust-for-linux <rust-for-linux@vger.kernel.org>, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Marco Elver <elver@google.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <psy7q3fbnjeyk7fu6wyfecpvgsaxel5vcc6cudftxgyvj4zuhf@3xhjikjjy5pn>
+References: <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+ <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
+ <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
+ <ZgIRXL5YM2AwBD0Y@gallifrey>
+ <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
+ <160DB953-1588-418E-A490-381009CD8DE0@gmail.com>
+ <qyjrex54hbhvhw4gmn7b6l2hr45o56bwt6fazfalykwcp5zzkx@vwt7k3d6kdwt>
+ <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com>
+ <bjorlxatlpzjlh6dfulham3u4mqsfqt7ir5wtayacaoefr2r7x@lmfcqzcobl3f>
+ <CAHk-=wiSiNtf4Z=Bvfs=sGJn6SYCZ=F7hvWwsQiOX4=V0Bgp_Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiSiNtf4Z=Bvfs=sGJn6SYCZ=F7hvWwsQiOX4=V0Bgp_Q@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 27 Mar 2024 13:00:43 -0700 Samuel Holland <samuel.holland@sifive.com> wrote:
-
-> Now that all previously-supported architectures select
-> ARCH_HAS_KERNEL_FPU_SUPPORT, this code can depend on that symbol instead
-> of the existing list of architectures. It can also take advantage of the
-> common kernel-mode FPU API and method of adjusting CFLAGS.
+On Wed, Mar 27, 2024 at 01:45:46PM -0700, Linus Torvalds wrote:
+> On Wed, 27 Mar 2024 at 12:41, Kent Overstreet <kent.overstreet@linux.dev> wrote:
+> >
+> > _But_: the lack of any aliasing guarantees means that writing through
+> > any pointer can invalidate practically anything, and this is a real
+> > problem.
 > 
-> ...
->
-> @@ -87,16 +78,9 @@ void dc_fpu_begin(const char *function_name, const int line)
->  	WARN_ON_ONCE(!in_task());
->  	preempt_disable();
->  	depth = __this_cpu_inc_return(fpu_recursion_depth);
-> -
->  	if (depth == 1) {
-> -#if defined(CONFIG_X86) || defined(CONFIG_LOONGARCH)
-> +		BUG_ON(!kernel_fpu_available());
->  		kernel_fpu_begin();
+> It's actually much less of a problem than you make it out to be.
+> 
+> A lot of common aliasing information is statically visible (offsets
+> off the same struct pointer etc).
+> 
+> The big problems tend to be
+> 
+>  (a) old in-order hardware that really wants the compiler to schedule
+> memory operations
+> 
+>  (b) vectorization and HPC
 
-For some reason kernel_fpu_available() was undefined in my x86_64
-allmodconfig build.  I just removed the statement.
+Yeah, I was being a bit dramatic given the current state of the world -
+OOO machines _mostly_ do a reasonable job of hiding the negative effects of
+this (although not always, when memory barriers are involved).
 
+But I think this is going to become important again in the future, for a
+couple reasons.
+
+On the hardware end, the Mill guys were pointing out years ago that
+register renaming is a big power bottleneck in modern processors; the
+actual functional units consume practically nothing compared to just
+moving data around. They never built anything, but there's at least one
+new startup I know of that's continuing their work. Yes, VLIW has been a
+bust repeatedly, but as we keep going wider and wider (because what else
+are we going to do?) I think it's going to happen eventually.
+
+On the compiler side, I'm taking the long view: it's really not just
+about a few reloads here and there, it's that you fundamentally can't do
+that much with code that's mutating arbitrary state; analysis that
+optimizations depend on is impossible. In the compiler you really want
+to be working with code that's pure functional - then all your
+optimizations are just algebra. And internally, compilers do this as
+much as they can (SSA form...), but - unrestricted pointers really put a
+limit on what they can do.
+
+The beautiful thing about Rust to me is that we finally might have a
+path out of this; the rules of Rust references constrain mutability in
+such a way that's almost as good as being purely functional, yet it's
+something we can actually do systems programming with.
+
+I think this is going to lead to substantially better code optimization
+in the future, and based on a much more sound model that means we won't
+constantly be fighting with compiler people because they're doing shady
+shit and breaking previously working code. Based on my experiences with
+writing iterator heavy code in both C and Rust, I think it already is.
 
