@@ -1,132 +1,310 @@
-Return-Path: <linux-arch+bounces-3267-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3268-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AEDF88FFEA
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Mar 2024 14:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DA4B890000
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Mar 2024 14:22:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5EA61F25350
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Mar 2024 13:15:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE8751F21856
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Mar 2024 13:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1921E7FBB9;
-	Thu, 28 Mar 2024 13:15:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D85811E8;
+	Thu, 28 Mar 2024 13:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B65ebx4A"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NGpA6mvg";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qbyHkPq/";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NY+qt2Vh";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="N4AgHX/b"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE022847C;
-	Thu, 28 Mar 2024 13:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DCE54BCB;
+	Thu, 28 Mar 2024 13:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711631741; cv=none; b=CcqGLN0yU00GaaHTFp14Fq70ZWgrPDhgUv9uy/8IBGCW8t5tcbDP3xQnUBriiDfjHJ8563JALoinOjJxp2YJ6T5Ms/nsH2jB/GXqFzbh5U8vF2XtM7sGnUC61A1DGUJ4lim8G2S+l8GQFBgAdUX5irJZd75Q+9qFHg4wz1Iq92Y=
+	t=1711632120; cv=none; b=rnPtN/52usULYpEJ3sYUDJAbA14sbQ3yC7mnokI6zxGlCsZHZbJM/1xN0B2ueVWikWItTD1kLioYCZ4HQhswIBR7nSv2r8JjVWMP8p6OTi+MZw/KYcwAFaWBtU7++WWIqo4GtkwZlEDkPw8ZD0+cDLsYDep4sbCmh7B0XjxLXy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711631741; c=relaxed/simple;
-	bh=Xo032l06yr/hR/jwn/WjJ3wew5ThoMRYTk7U+HZZzrE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uuzU9VXyOERrk8Fd1wYfmfD6BLOZy9JUyyw3V68f9pzS92ciMgL2jUE1Fa73wKM+U+zlE4d2m3VHPPrp2aNJj1FpCaSukalSzY6wysTVIjPLaWm8vLCSn1YvP0pSZT4+7z7QntS/nLBzWAi2Gt3pO4L8hdTwVfyOV0bIl/otTzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B65ebx4A; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711631738; x=1743167738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xo032l06yr/hR/jwn/WjJ3wew5ThoMRYTk7U+HZZzrE=;
-  b=B65ebx4Af8DFjJAYY5qvSyIryiU8E3lBdcEgf0P6v6wet68gIQ9/LwfC
-   5DGnALwQqE5T9cMrnFxvy3I+CWKOK8U5YZ1avX5HMtQUQ7QmhQ8E0Fkwg
-   6BlLLYAdXnigFA0ScQQwhzTEsF/B6j89EVzUHJ2ABw519hZlnyOBP1RQv
-   /SqZ1Tgttu2motYFGY/uvcShSDPy+zGITB5odxyXdPhNbwGwYAyy2vk1/
-   2lF94vr6QGWu5qIe1hflZb39jg6DtYq9w9vq+aeGpx4Azosk1A6SpE5Uq
-   orN8hkVdiJydoG5h3vtAkNhlgpri4hJEKKttaPINnO46hecwO2ZpGtbyD
-   A==;
-X-CSE-ConnectionGUID: m2FbL++mQkiFPsSLcdrCWA==
-X-CSE-MsgGUID: zilyCxbsRcm0ErALigs3RQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="6999352"
-X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="6999352"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 06:15:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="16637521"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Mar 2024 06:15:08 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rppb0-0002A6-01;
-	Thu, 28 Mar 2024 13:15:06 +0000
-Date: Thu, 28 Mar 2024 21:15:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-	javierm@redhat.com, deller@gmx.de, sui.jingfeng@linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-sh@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	loongarch@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>
-Subject: Re: [PATCH v2 3/3] arch: Rename fbdev header and source files
-Message-ID: <202403282102.OEKoBT3H-lkp@intel.com>
-References: <20240327204450.14914-4-tzimmermann@suse.de>
+	s=arc-20240116; t=1711632120; c=relaxed/simple;
+	bh=NcfMVdP8jG0B+5gpRT5h6O65Scej8O2oGnAGIFber+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pD4xJAcCqvkuvKR5dQ2X5ZkJyYCaC0DZUXqeLF1kN5BtIxeHdX/pugv6XmAveouZdlg46TfA9/Z5TCnxikUecsIZ9/7c9bW5MwYRd925GEGK4YevULFdfekLRTtEKjyBsMKfqjOdnBbjqKNtMmnn1u7/WtNBj3x17KGx73FfvfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NGpA6mvg; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qbyHkPq/; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NY+qt2Vh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=N4AgHX/b; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CBED233F29;
+	Thu, 28 Mar 2024 13:21:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711632115; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=nBV9RrkyQba5NE+tY7TfavXdtDbJlQ91iAXymXIDHBE=;
+	b=NGpA6mvg7SFLaMcdkaGNHlk4p5WZfQLCmZYijHyXug8BWvcnMg4XRWGmMu1m+NnOdC6/oC
+	jUDkV7nKO3ld0CJ6vYYPtZG6zQsO0ghndq5hj7VZO5H9ndGSF+6C+Jv4zy5f1GP2XU7Iw5
+	u0CBN7YO30G0WhadnZ9sTV5sfaFbfRk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711632115;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=nBV9RrkyQba5NE+tY7TfavXdtDbJlQ91iAXymXIDHBE=;
+	b=qbyHkPq/SEgcwQyQHpo6vxF0xg5dHYOQjze+ICf8/63zx8Mn9W7pDDngyKiNTe8VHCVPUo
+	9PaUNAeWEGZ03PCA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711632113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=nBV9RrkyQba5NE+tY7TfavXdtDbJlQ91iAXymXIDHBE=;
+	b=NY+qt2VhonCWz3P20U2cBtC00PDuVJUkY1lU9QraJMicGNmHTYKZDAep6Ak0qejrElOJmw
+	ljjsKl4gZ/2aPeG9JR3jsAaJgN6AGg8ImUaFNSjipl1Sggupx+9Zx+dXGr0aFH3B0gIIC0
+	28Xkvoj58+cjVxxwLR8+1wfXV43tRm4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711632113;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=nBV9RrkyQba5NE+tY7TfavXdtDbJlQ91iAXymXIDHBE=;
+	b=N4AgHX/br0WdmOd7rgZKyvHTXJi2A3IlhcmW3nOdAH5hh+27AJDHqSmhyc4owM/9a5dw0r
+	fcfmhq4WiuAmQ/CA==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id CB06813AB3;
+	Thu, 28 Mar 2024 13:21:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 3Tx/L/BuBWboPAAAn2gu4w
+	(envelope-from <tzimmermann@suse.de>); Thu, 28 Mar 2024 13:21:52 +0000
+Message-ID: <c114a614-8e65-42a2-8df6-5a3015e79c29@suse.de>
+Date: Thu, 28 Mar 2024 14:21:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327204450.14914-4-tzimmermann@suse.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] arch: Select fbdev helpers with CONFIG_VIDEO
+To: Helge Deller <deller@gmx.de>, arnd@arndb.de, javierm@redhat.com,
+ sui.jingfeng@linux.dev
+Cc: linux-arch@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-snps-arc@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>
+References: <20240327204450.14914-1-tzimmermann@suse.de>
+ <20240327204450.14914-2-tzimmermann@suse.de>
+ <70aefe08-b4c4-4738-a223-e4b04562cd56@gmx.de>
+Content-Language: en-US
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <70aefe08-b4c4-4738-a223-e4b04562cd56@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=NY+qt2Vh;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="N4AgHX/b"
+X-Rspamd-Queue-Id: CBED233F29
+X-Spam-Score: -5.30
+X-Spamd-Result: default: False [-5.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	XM_UA_NO_VERSION(0.01)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FREEMAIL_TO(0.00)[gmx.de,arndb.de,redhat.com,linux.dev];
+	URIBL_BLOCKED(0.00)[imap2.dmz-prg2.suse.org:rdns,imap2.dmz-prg2.suse.org:helo,suse.de:email,suse.de:dkim,intel.com:email,davemloft.net:email,gmx.de:email,zytor.com:email,hansenpartnership.com:email,linutronix.de:email,gaisler.com:email,alien8.de:email];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	FREEMAIL_ENVRCPT(0.00)[gmx.de];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[26];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-Hi Thomas,
+Hi
 
-kernel test robot noticed the following build errors:
+Am 28.03.24 um 13:39 schrieb Helge Deller:
+> On 3/27/24 21:41, Thomas Zimmermann wrote:
+>> Various Kconfig options selected the per-architecture helpers for
+>> fbdev. But none of the contained code depends on fbdev. Standardize
+>> on CONFIG_VIDEO, which will allow to add more general helpers for
+>> video functionality.
+>>
+>> CONFIG_VIDEO protects each architecture's video/ directory.
+>
+> Your patch in general looks good.
+> But is renaming the config option from CONFIG_FB_CORE to CONFIG_VIDEO
+> the best choice?
+> CONFIG_VIDEO might be mixed up with multimedia/video-streaming.
+>
+> Why not e.g. CONFIG_GRAPHICS_CORE?
+> I'm fine with CONFIG_VIDEO as well, but if someone has a better idea
+> we maybe should go with that instead now?
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.9-rc1 next-20240328]
-[cannot apply to tip/x86/core deller-parisc/for-next arnd-asm-generic/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We already have CONFIG_VIDEO in drivers/video/Kconfig specifically for 
+such low-level graphics code. For generic multimedia, we could have 
+CONFIG_MEDIA, CONFIG_STREAMING, etc. rather than renaming an established 
+Kconfig symbol.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-Select-fbdev-helpers-with-CONFIG_VIDEO/20240328-044735
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240327204450.14914-4-tzimmermann%40suse.de
-patch subject: [PATCH v2 3/3] arch: Rename fbdev header and source files
-config: um-randconfig-001-20240328 (https://download.01.org/0day-ci/archive/20240328/202403282102.OEKoBT3H-lkp@intel.com/config)
-compiler: gcc-12 (Ubuntu 12.3.0-9ubuntu2) 12.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403282102.OEKoBT3H-lkp@intel.com/reproduce)
+Best regards
+Thomas
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403282102.OEKoBT3H-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   /usr/bin/ld: drivers/video/fbdev/core/fb_io_fops.o: in function `fb_io_mmap':
->> fb_io_fops.c:(.text+0x251): undefined reference to `pgprot_framebuffer'
-   collect2: error: ld returned 1 exit status
+>
+> Helge
+>
+>> This
+>> allows for the use of more fine-grained control for each directory's
+>> files, such as the use of CONFIG_STI_CORE on parisc.
+>>
+>> v2:
+>> - sparc: rebased onto Makefile changes
+>>
+>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Andreas Larsson <andreas@gaisler.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>> Cc: x86@kernel.org
+>> Cc: "H. Peter Anvin" <hpa@zytor.com>
+>> ---
+>>   arch/parisc/Makefile      | 2 +-
+>>   arch/sparc/Makefile       | 4 ++--
+>>   arch/sparc/video/Makefile | 2 +-
+>>   arch/x86/Makefile         | 2 +-
+>>   arch/x86/video/Makefile   | 3 ++-
+>>   5 files changed, 7 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
+>> index 316f84f1d15c8..21b8166a68839 100644
+>> --- a/arch/parisc/Makefile
+>> +++ b/arch/parisc/Makefile
+>> @@ -119,7 +119,7 @@ export LIBGCC
+>>
+>>   libs-y    += arch/parisc/lib/ $(LIBGCC)
+>>
+>> -drivers-y += arch/parisc/video/
+>> +drivers-$(CONFIG_VIDEO) += arch/parisc/video/
+>>
+>>   boot    := arch/parisc/boot
+>>
+>> diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+>> index 2a03daa68f285..757451c3ea1df 100644
+>> --- a/arch/sparc/Makefile
+>> +++ b/arch/sparc/Makefile
+>> @@ -59,8 +59,8 @@ endif
+>>   libs-y                 += arch/sparc/prom/
+>>   libs-y                 += arch/sparc/lib/
+>>
+>> -drivers-$(CONFIG_PM) += arch/sparc/power/
+>> -drivers-$(CONFIG_FB_CORE) += arch/sparc/video/
+>> +drivers-$(CONFIG_PM)    += arch/sparc/power/
+>> +drivers-$(CONFIG_VIDEO) += arch/sparc/video/
+>>
+>>   boot := arch/sparc/boot
+>>
+>> diff --git a/arch/sparc/video/Makefile b/arch/sparc/video/Makefile
+>> index d4d83f1702c61..9dd82880a027a 100644
+>> --- a/arch/sparc/video/Makefile
+>> +++ b/arch/sparc/video/Makefile
+>> @@ -1,3 +1,3 @@
+>>   # SPDX-License-Identifier: GPL-2.0-only
+>>
+>> -obj-$(CONFIG_FB_CORE) += fbdev.o
+>> +obj-y    += fbdev.o
+>> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+>> index 15a5f4f2ff0aa..c0ea612c62ebe 100644
+>> --- a/arch/x86/Makefile
+>> +++ b/arch/x86/Makefile
+>> @@ -265,7 +265,7 @@ drivers-$(CONFIG_PCI)            += arch/x86/pci/
+>>   # suspend and hibernation support
+>>   drivers-$(CONFIG_PM) += arch/x86/power/
+>>
+>> -drivers-$(CONFIG_FB_CORE) += arch/x86/video/
+>> +drivers-$(CONFIG_VIDEO) += arch/x86/video/
+>>
+>>   ####
+>>   # boot loader support. Several targets are kept for legacy purposes
+>> diff --git a/arch/x86/video/Makefile b/arch/x86/video/Makefile
+>> index 5ebe48752ffc4..9dd82880a027a 100644
+>> --- a/arch/x86/video/Makefile
+>> +++ b/arch/x86/video/Makefile
+>> @@ -1,2 +1,3 @@
+>>   # SPDX-License-Identifier: GPL-2.0-only
+>> -obj-$(CONFIG_FB_CORE)        += fbdev.o
+>> +
+>> +obj-y    += fbdev.o
+>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Frankenstrasse 146, 90461 Nuernberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+HRB 36809 (AG Nuernberg)
+
 
